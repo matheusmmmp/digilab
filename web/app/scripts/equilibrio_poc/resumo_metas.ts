@@ -1,22 +1,28 @@
 /* LUTA_POC, LP5 (docs/PLANO_EQUILIBRIO_LUTA_POC.md, secao 2): le os JSON dos grupos da bancada e da a tabela das 20 metas, com o criterio,
    o valor e se passa. Os criterios sao sobre a estimativa pontual; o intervalo de Wilson a 95 % vai ao lado, so para leitura.
    uso (em web/app): node scripts/equilibrio_poc/resumo_metas.ts --faixa calibracao --fase lp5_0 -> resumo.json e resumo.md na pasta da fase */
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { FORMAS_ARENA } from "../../motor/index.ts";
 import { ESTAGIOS_LUTA, argumento, atira, juntar, novaConta, quantil, wilson, type Conta } from "./comum.ts";
 
 const faixa = argumento("faixa"), fase = argumento("fase");
-/* --pasta: so a fumaca (os JSON do --rapido, fora das medicoes) */
+/* --pasta: a fumaca (os JSON do --rapido, fora das medicoes) ou um ponto da grade (grade.ts). --parcial: so as metas dos grupos que
+   estao na pasta (a grade da LP5-1 nao roda os lideres, a vida e os torneios); nunca numa medida inteira */
+const parcial = process.argv.includes("--parcial");
 const pasta = argumento("pasta", ""), dir = pasta ? pasta.replace(/[\\/]?$/, "/") : fileURLToPath(new URL(`../medicoes/equilibrio_poc/${fase}/${faixa}/`, import.meta.url));
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type J = any;
 const ler = (g: string): J => JSON.parse(readFileSync(dir + `${g}.json`, "utf-8"));
-const G: Record<string, J> = Object.fromEntries(["lideres", "sparring", "vida", "treino", "estagio", "torneios", ...ESTAGIOS_LUTA.map(e => `formas_${e}`)].map(g => [g, ler(g)]));
+const TODOS = ["lideres", "sparring", "vida", "treino", "estagio", "torneios", ...ESTAGIOS_LUTA.map(e => `formas_${e}`)];
+if (parcial && !pasta) throw new Error("resumo: o --parcial so vale com --pasta (a grade)");
+const G: Record<string, J> = Object.fromEntries(TODOS.filter(g => !parcial || existsSync(dir + `${g}.json`)).map(g => [g, ler(g)]));
+const tem = (...gs: string[]) => gs.every(g => g in G);
+if (!Object.keys(G).length) throw new Error(`resumo: nenhum grupo em ${dir}`);
 const commits = new Set(Object.values(G).map(x => x.commit)), candidatos = new Set(Object.values(G).map(x => JSON.stringify(x.candidato)));
 if (commits.size !== 1) throw new Error(`resumo: os grupos sao de commits diferentes (${[...commits].join(", ")})`);
 if (candidatos.size !== 1) throw new Error("resumo: os grupos sao de candidatos diferentes");
-for (const [g, x] of Object.entries(G)) if ((x.rapido && !pasta) || x.faixa !== faixa || x.fase !== fase) throw new Error(`resumo: o grupo ${g} nao e desta medida`);
+for (const [g, x] of Object.entries(G)) if (((x.rapido || x.grade) && !pasta) || (x.grade && !parcial) || x.faixa !== faixa || x.fase !== fase) throw new Error(`resumo: o grupo ${g} nao e desta medida`);
 
 const r3 = (x: number) => Math.round(x * 1000) / 1000;
 const tx = (c: Conta) => { if (!c.n) throw new Error("resumo: conta vazia"); return c.v / c.n; };
@@ -27,6 +33,7 @@ const meta = (id: string, nome: string, criterio: string, passa: boolean, valore
 const dentro = (x: number, a: number, b: number) => x >= a && x <= b;
 
 /* ---------------------------------------------------------------- P1, P2, P3, D3 */
+if (tem("lideres")) {
 const L = G.lideres.dados;
 const lider = (k: string, sem: number, tip: number, pior: number | null) => {
   const x = L[k], s = tx(x.sem_treino.total), t = tx(x.tipico.total);
@@ -47,8 +54,9 @@ const lider = (k: string, sem: number, tip: number, pior: number | null) => {
   const h = L.npc_v5_myotismon.tipico.relogio_serie, p90 = quantil(h, .9);
   meta("D3", "a Cidadela cabe", "a serie de 3 (pet tipico) no p90 <= 180 s", p90 <= 180, { p90_s: p90, mediana_s: quantil(h, .5) });
 }
+}
 /* ---------------------------------------------------------------- P4, V2 */
-{
+if (tem("sparring")) {
   const S = G.sparring.dados, f = (e: string) => { const ps = S[e].pets as { n: number; v: number }[]; return ps.filter(p => p.v / p.n >= .8).length / ps.length; };
   const v = { adolescente: r3(f("adolescente")), adulto: r3(f("adulto")), crianca: r3(f("crianca")), mega: r3(f("mega")) };
   meta("P4", "o sparring nao trava", ">= 80 % dos pets tipicos a >= 0,8 contra as formas do estagio, no Champion e no Ultimate", v.adolescente >= .8 && v.adulto >= .8,
@@ -58,14 +66,14 @@ const lider = (k: string, sem: number, tip: number, pior: number | null) => {
   meta("V2", "a especie nao decide sozinha", "da melhor a pior especie <= 0,15, em cada estagio (o pet tipico contra as formas do estagio)", Object.values(amp).every(x => (x as number) <= .15), { amplitude: amp, por_especie: esp });
 }
 /* ---------------------------------------------------------------- P5 */
-{
+if (tem("vida")) {
   const vs = G.vida.dados.vidas as { mega: boolean; estagio: string; morte: string | null }[];
   const f = vs.filter(v => v.mega).length / vs.length, est: Record<string, number> = {};
   for (const v of vs) est[v.estagio] = (est[v.estagio] ?? 0) + 1;
   meta("P5", "o dono simulado chega ao fim", ">= 80 % das vidas chegam ao Mega", f >= .8, { fracao_mega: r3(f), vidas: vs.length, estagio_final: est, mortes: vs.filter(v => v.morte).length });
 }
 /* ---------------------------------------------------------------- T1, T2, T3 */
-{
+if (tem("treino")) {
   const T = G.treino.dados;
   const t1 = Object.fromEntries(ESTAGIOS_LUTA.map(e => [e, r3(tx(T.t1_tipico_contra_sem[e]))]));
   meta("T1", "o treino pesa", "o tipico contra o mesmo pet sem treino de 0,80 a 0,97, em cada estagio (8 mapas)", Object.values(t1).every(x => dentro(x as number, .8, .97)), { taxa: t1 });
@@ -85,7 +93,7 @@ const lider = (k: string, sem: number, tip: number, pior: number | null) => {
     { no_teto: noTeto, maior_degrau_4_pontos: degrau, rookie_teto_contra_tipico: tetoTip, curva });
 }
 /* ---------------------------------------------------------------- E1 */
-{
+if (tem("estagio")) {
   const E = G.estagio.dados, v = Object.fromEntries(Object.entries(E as Record<string, Conta>).map(([k, c]) => [k, r3(tx(c))]));
   const ok = ["crianca_tipico_contra_adolescente", "adolescente_tipico_contra_adulto", "adulto_tipico_contra_mega"].every(k => dentro(v[k] as number, .1, .35))
     && ["crianca_tipico_contra_adulto", "adolescente_tipico_contra_mega"].every(k => (v[k] as number) <= .05)
@@ -111,7 +119,7 @@ const lider = (k: string, sem: number, tip: number, pior: number | null) => {
     { sem_fim: r3(semFim), lutas: tot.n, empate_total: r3(tot.e / tot.n), empate_max_forma: r3(Math.max(...Object.values(emp))), formas_acima_de_2pc: piores });
 }
 /* ---------------------------------------------------------------- A1, V1, S1 */
-{
+if (tem(...ESTAGIOS_LUTA.map(e => `formas_${e}`))) {
   const a1: Record<string, unknown> = {}, v1: Record<string, unknown> = {}, s1: Record<string, unknown> = {};
   let okA = true, okV = true, okS = true;
   const empForaEspelho: Record<string, Record<string, number>> = {};
@@ -140,22 +148,23 @@ const lider = (k: string, sem: number, tip: number, pior: number | null) => {
     if (xs.some(x => !dentro(x, .35, .65)) || amp > .3 || Object.values(vence).some(g => g < 2)) okV = false;
     v1[e] = { amplitude: amp, taxa: taxaF, vence_quantas: vence, nomes: Object.fromEntries(fs.map(f => [f, FORMAS_ARENA[f].nome])) };
     /* S1: o espelho, por mapa */
-    const esp = Object.fromEntries(mapas.map(m => { const c = fs.reduce((a, f) => juntar(a, P[m][`${f}|${f}`]), novaConta()); return [m, r3(c.v / c.n)]; }));
+    /* a D-LP5-11: o lado A so nas lutas com vencedor; os empates ficam no D2 (e vao ao lado, para leitura) */
+    const esp = Object.fromEntries(mapas.map(m => { const c = fs.reduce((a, f) => juntar(a, P[m][`${f}|${f}`]), novaConta()); if (c.n === c.e) throw new Error(`resumo: o espelho do ${e} no ${m} so empatou`); return [m, r3(c.v / (c.n - c.e))]; }));
     if (Object.values(esp).some(x => !dentro(x, .45, .55))) okS = false;
-    /* so leitura, sem decidir (desvio D-LP5-0-6): o lado B e os empates do espelho, e o lado A sem os empates */
     const tudo = mapas.reduce((a, m) => fs.reduce((b, f) => juntar(b, P[m][`${f}|${f}`]), a), novaConta());
-    s1[e] = { lado_a: esp, leitura: { a: r3(tudo.v / tudo.n), b: r3((tudo.n - tudo.v - tudo.e) / tudo.n), empate: r3(tudo.e / tudo.n), a_sem_empates: r3(tudo.v / (tudo.n - tudo.e)) } };
+    s1[e] = { lado_a_com_vencedor: esp, leitura: { a: r3(tudo.v / tudo.n), b: r3((tudo.n - tudo.v - tudo.e) / tudo.n), empate: r3(tudo.e / tudo.n), a_sem_empates: r3(tudo.v / (tudo.n - tudo.e)) } };
     /* so leitura: os empates de cada forma fora do espelho (o D2 conta o espelho junto) */
     empForaEspelho[e] = Object.fromEntries(fs.map(f => { let em = 0, n = 0; for (const m of mapas) for (const y of fs) if (y !== f) for (const k of [`${f}|${y}`, `${y}|${f}`]) { em += P[m][k].e; n += P[m][k].n; } return [f, r3(em / n)]; }));
   }
   meta("A1", "de longe x de perto", "as que atiram contra as de perto: de 0,45 a 0,55 na soma dos 8 mapas; de 0,30 a 0,70 em cada mapa", okA, a1);
   meta("V1", "a variedade no estagio", "cada forma contra as outras de 0,35 a 0,65; amplitude <= 0,30; toda forma vence >= 2 outras", okV, v1);
-  const D2 = metas.find(m => m.id === "D2")!;
+  const D2 = metas.find(m => m.id === "D2");
+  if (!D2) throw new Error("resumo: o D2 sumiu");
   D2.valores.leitura_empate_fora_do_espelho = Object.fromEntries(Object.entries(empForaEspelho).map(([e, m]) => [e, { max: Math.max(...Object.values(m)), acima_de_2pc: Object.entries(m).filter(([, x]) => x > .02).map(([f, x]) => `${f} (${x})`) }]));
-  meta("S1", "o espelho", "o mesmo lutador dos dois lados: o lado A de 0,45 a 0,55 em cada mapa", okS, s1);
+  meta("S1", "o espelho", "o mesmo lutador dos dois lados: o lado A de 0,45 a 0,55 em cada mapa, so nas lutas com vencedor (D-LP5-11)", okS, s1);
 }
 /* ---------------------------------------------------------------- G1-G4 */
-{
+if (tem("torneios")) {
   const T = G.torneios.dados, liga = T.liga, g1 = liga.titulos / liga.tentativas;
   const porForma = Object.fromEntries(Object.entries(liga.por_forma as Record<string, { n: number; v: number }>).map(([f, x]) => [f, r3(x.v / x.n)]));
   const maxF = Math.max(...Object.values(porForma));
@@ -171,9 +180,9 @@ const lider = (k: string, sem: number, tip: number, pior: number | null) => {
 
 const ORDEM_METAS = ["P1", "P2", "P3", "P4", "P5", "T1", "T2", "T3", "E1", "D1", "D2", "D3", "A1", "V1", "V2", "G1", "G2", "G3", "G4", "S1"];
 metas.sort((a, b) => ORDEM_METAS.indexOf(a.id) - ORDEM_METAS.indexOf(b.id));
-if (metas.length !== 20 || metas.some(m => !ORDEM_METAS.includes(m.id))) throw new Error("resumo: as metas nao sao as 20 do plano");
+if ((!parcial && metas.length !== 20) || metas.some(m => !ORDEM_METAS.includes(m.id))) throw new Error("resumo: as metas nao sao as 20 do plano");
 const lutas = Object.values(G).reduce((a, x) => a + x.lutas, 0), segundos = Object.values(G).reduce((a, x) => a + x.segundos, 0);
-const saida = { tarefa: "LUTA_POC, LP5, o resumo das metas", fase, faixa, commit: [...commits][0], candidato: JSON.parse([...candidatos][0]), lutas, segundos_somados: r3(segundos),
+const saida = { tarefa: "LUTA_POC, LP5, o resumo das metas", fase, faixa, parcial, grupos: Object.keys(G), commit: [...commits][0], candidato: JSON.parse([...candidatos][0]), lutas, segundos_somados: r3(segundos),
   passam: metas.filter(m => m.passa).map(m => m.id), falham: metas.filter(m => !m.passa).map(m => m.id), metas };
 writeFileSync(dir + "resumo.json", JSON.stringify(saida, null, 1) + "\n");
 const curto = (v: Record<string, unknown>): string => JSON.stringify(v).replace(/"/g, "").slice(0, 220);

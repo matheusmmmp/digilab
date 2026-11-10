@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import {
   ACOES_DONO_JOGO_V11, ARENA_POR_ID, CAMPANHA_V6, CAT, CD, CMD, CTR, IDS_CENA, LIGA, LUGARES_V6, LUTAS_MAX_INSTALACAO, MAPA_FABRICA, MAPA_SALAO,
   MAPA_TORRE, Motor, NPC, STATS, TPD, alugueisFabrica, arenaDaLuta, caraterCanonico, caraterDoRivalSalao, chaveSprite, criarDono, criarRng,
-  formaLiga, formaRivalFabrica, formaRivalInstalacao, formaRivalSalao, hashSemente, mapaDoLugar, rivaisArena, sementeDaSerie, sementeLutaFabrica,
+  condicaoDe, formaLiga, formaRivalFabrica, formaRivalInstalacao, formaRivalSalao, hashSemente, mapaDoLugar, rivaisArena, sementeDaSerie, sementeLutaFabrica,
   type Exercicio, type Forma, type FormaAdultaNormal, type IdCena, type Stat, type StatsPoc, type VisaoDono,
 } from "../../motor/index.ts";
 import {
@@ -17,6 +17,7 @@ import {
   type Candidato, type Conta, type EstagioLuta, type Lado, type Luta1, type PetBancada,
 } from "./comum.ts";
 import { basesDa } from "./faixas.ts";
+import { candidatoDaLinha } from "./candidatos.ts";
 
 /** os tamanhos (PROPOSTOS, SEM FONTE; secao 4.1 e o desvio D-LP5-0-3) */
 export const TAM: Record<string, number> = {
@@ -110,12 +111,25 @@ function sparring(c: Candidato, bases: number[]) {
 
 /* ---------------------------------------------------------------- P5: a vida do dono simulado (o Motor de verdade) */
 const EXERCICIOS = Object.keys(CTR.exercicios) as Exercicio[];
+/** o Motor da vida com os numeros da luta do candidato, so nesta instancia (LP5-2; desvio D-LP5-1-2): o pet pelo lutador() do candidato,
+    com o treino, os chips e a condicao do Motor, e o rival da Arena pelo rivalCanonico(); o jogo nao muda. O v21 fica com o Motor de sempre,
+    e o teste confere que o remendo com os numeros do v21 da a mesma vida */
+export function motorDoCandidato(c: Candidato, semente: number, remendar = c.nome !== CANDIDATO_V21.nome): Motor {
+  const m = new Motor(semente);
+  if (!remendar) return m;
+  const x = m as unknown as Record<string, unknown>, rivalDoMotor = (x._rivalPoc as (...a: unknown[]) => { forma: string; stats: StatsPoc } | null).bind(m);
+  x.statsLutaPoc = () => lutador(c, m.forma, m.carater(), m.pontosDeLuta(), condicaoDe(m.e.saude));
+  x._rivalPoc = (rival: string, ...resto: unknown[]) => {
+    if (!rivaisArena(m.estagioAtual).includes(rival)) throw new Error(`bancada: a vida do candidato so luta na Arena, nao com ${rival}`);
+    const rv = rivalDoMotor(rival, ...resto);
+    return rv && { ...rv, stats: rivalCanonico(c, rv.forma, c.treinoRival.arena) };
+  };
+  return m;
+}
 function vida(c: Candidato, bases: number[]) {
-  /* a vida usa os numeros do jogo (o Motor.lutarPoc): so o candidato v21 e o jogo (desvio D-LP5-0-4) */
-  if (c.nome !== CANDIDATO_V21.nome) throw new Error(`bancada: a vida (P5) so roda o candidato v21; o ${c.nome} precisa entrar no Motor (LP5-2)`);
   const vidas: unknown[] = [];
   for (const base of bases) for (let i = 0; i < TAM.vidas; i++) {
-    const semente = hashSemente("equilibrio-poc-pet", base, i), m = new Motor(semente), dono = criarDono("atencioso");
+    const semente = hashSemente("equilibrio-poc-pet", base, i), m = motorDoCandidato(c, semente), dono = criarDono("atencioso");
     const r = criarRng(hashSemente("dono", semente, "atencioso")), passos = Math.round(TAM.diasVida * TPD / CD.passo), orc = Math.round(CD.porDia * TAM.diasVida);
     let gasto = 0, ex = 0, k = 0;
     const lutasEst: Record<string, { n: number; v: number }> = {};
@@ -250,7 +264,6 @@ function torneios(c: Candidato, bases: number[]) {
 
 /* ---------------------------------------------------------------- a linha de comando */
 export const GRUPOS = ["lideres", "sparring", "vida", "treino", "estagio", "formas_crianca", "formas_adolescente", "formas_adulto", "formas_mega", "torneios"] as const;
-export const CANDIDATOS: Readonly<Record<string, Candidato>> = { v21: CANDIDATO_V21 };
 function rodar(grupo: string, c: Candidato, bases: number[]): unknown {
   switch (grupo) {
     case "lideres": return lideres(c, bases);
@@ -268,13 +281,22 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const grupo = argumento("grupo"), faixa = argumento("faixa"), fase = argumento("fase"), nomeC = argumento("candidato", "v21");
   if (!/^lp5_[0-9a-z_]+$/.test(fase)) throw new Error(`bancada: fase invalida ${fase}`);
   if (faixa === "conferencia" && fase !== "lp5_4") throw new Error("bancada: a conferencia so roda na LP5-4 (secao 4.4)");
-  const c = CANDIDATOS[nomeC]; if (!c) throw new Error(`bancada: candidato desconhecido ${nomeC}`);
-  const rapido = process.argv.includes("--rapido");
+  const rapido = process.argv.includes("--rapido"), grade = process.argv.includes("--grade");
+  if (rapido && grade) throw new Error("bancada: --rapido ou --grade, nao os dois");
+  if (grade && faixa !== "calibracao") throw new Error("bancada: a grade so roda na calibracao");
+  const c = candidatoDaLinha(nomeC, argumento("candidato-json", ""), grade);
   if (rapido) Object.assign(TAM, RAPIDO);
-  const bases = rapido ? basesDa(faixa).slice(0, 1) : basesDa(faixa), t0 = Date.now(), commit = commitAtual();
+  /* a grade (grade.ts): os tamanhos menores e as primeiras bases da calibracao, para escolher entre candidatos; a medida inteira confere */
+  if (grade) {
+    const t = JSON.parse(argumento("tam")) as Record<string, number>;
+    for (const [k, x] of Object.entries(t)) { if (!(k in TAM) || !(Number.isInteger(x) && x >= 1)) throw new Error(`bancada: tamanho invalido ${k}=${x}`); TAM[k] = x; }
+  }
+  const nb = grade ? Number(argumento("bases")) : 0;
+  if (grade && !(Number.isInteger(nb) && nb >= 1 && nb <= 5)) throw new Error(`bancada: --bases de 1 a 5, nao ${nb}`);
+  const bases = rapido ? basesDa(faixa).slice(0, 1) : grade ? basesDa(faixa).slice(0, nb) : basesDa(faixa), t0 = Date.now(), commit = commitAtual();
   const dados = rodar(grupo, c, bases);
-  const saida = { tarefa: "LUTA_POC, LP5", rapido, grupo, fase, faixa, bases, commit, candidato: c, tamanhos: TAM, lutas: LUTAS, segundos: (Date.now() - t0) / 1000, dados, duracao: D };
-  const dir = rapido ? argumento("saida").replace(/[\\/]?$/, "/") : fileURLToPath(new URL(`../medicoes/equilibrio_poc/${fase}/${faixa}/`, import.meta.url));
+  const saida = { tarefa: "LUTA_POC, LP5", rapido, grade, grupo, fase, faixa, bases, commit, candidato: c, tamanhos: TAM, lutas: LUTAS, segundos: (Date.now() - t0) / 1000, dados, duracao: D };
+  const dir = rapido || grade ? argumento("saida").replace(/[\\/]?$/, "/") : fileURLToPath(new URL(`../medicoes/equilibrio_poc/${fase}/${faixa}/`, import.meta.url));
   mkdirSync(dir, { recursive: true });
   writeFileSync(dir + `${grupo}.json`, JSON.stringify(saida) + "\n");
   console.log(`${grupo}: ${LUTAS} lutas em ${saida.segundos.toFixed(1)} s -> ${dir}${grupo}.json`);

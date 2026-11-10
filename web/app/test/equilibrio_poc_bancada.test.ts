@@ -10,6 +10,8 @@ import {
   CANDIDATO_V21, ESTAGIOS_LUTA, TETO, TIPICO, npc, petDoEstagio, pontosNoTotal, rivalCanonico, rivalDaForma, statsLuta,
 } from "../scripts/equilibrio_poc/comum.ts";
 import { basesDa } from "../scripts/equilibrio_poc/faixas.ts";
+import { candidatoDe } from "../scripts/equilibrio_poc/candidatos.ts";
+import { motorDoCandidato } from "../scripts/equilibrio_poc/bancada.ts";
 
 const c = CANDIDATO_V21;
 
@@ -68,5 +70,32 @@ describe("o treino tipico (D-LP5-2) e os pets", () => {
     expect(basesDa("calibracao")).toEqual([86101, 86202, 86303, 86404, 86505]);
     expect(basesDa("conferencia")).toEqual([87101, 87202, 87303, 87404, 87505]);
     expect(() => basesDa("calibracao2")).toThrow(/faixa desconhecida/);
+  });
+});
+
+describe("os candidatos da rodada (LP5-1 a LP5-3)", () => {
+  test("o candidatoDe troca so o que se pede e falha alto no resto", () => {
+    const x = candidatoDe({ nome: "teste", pesoPonto: 10, gama: { vigor: .5 } });
+    expect(x.pesoPonto).toBe(10);
+    expect(x.gama.vigor).toBe(.5);
+    expect(x.gama.forca).toBe(1);
+    expect(x.mapa).toEqual(c.mapa);
+    expect(c.pesoPonto).toBe(CTR.pesoPontoCombate);
+    expect(() => candidatoDe({ nome: "teste", gama: { sorte: 1 } } as never)).toThrow();
+    expect(() => candidatoDe({ nome: "teste", pesoPonto: 0 })).toThrow();
+    expect(() => candidatoDe({ nome: "v21" })).toThrow();
+  });
+  test("o Motor remendado com os numeros do v21 luta igual ao Motor do jogo (a vida do P5)", () => {
+    const copia = candidatoDe({ nome: "copia_v21" });
+    for (const s of [11, 21, 23]) {
+      const a = new Motor(s), b = motorDoCandidato(copia, s, true);
+      for (const m of [a, b]) { m.liberar(CMD.mega); m.avancar(TICK_INICIAL + DUR_EVO.bebe + DUR_EVO.crianca + 15 - m.e.tick); m.treino.pontos = { vigor: 2, folego: 1, recuperacao: 1, forca: 2, mira: 1, guarda: 1.5 } as Stats; }
+      expect(b.estagioAtual).toBe("adolescente");
+      for (let k = 0; k < 3; k++) {
+        const rv = a.rivaisArenaPoc()[k];
+        expect(b.lutarPoc(rv, 1000 + k, "campo")).toEqual(a.lutarPoc(rv, 1000 + k, "campo"));
+      }
+      expect(b.sparring).toBe(a.sparring);
+    }
   });
 });
