@@ -114,7 +114,7 @@ export const ENFEITES_GRADE = {
     - os caminhos de terra (`raioCaminho`) da praca ao lar (ate o comedouro do layout), ao portao, a barraca e ao cais, pelos pontos de
       `caminhos`; cada um para antes da base do lugar (`folgaLugar` alem do raio dele) e so pinta grama da area andavel;
     - os lugares: o `alvo` de cada um (a grade poe no ponto que cabe mais perto dele, em `busca` celulas, com a `folga` de chao plano), a
-      `clareira` que ele abre na decoracao e o raio da `base` onde o caminho para; o cais na coluna `x`; o saco perto da praca;
+      `clareira` que ele abre na decoracao e o raio da `base` onde o caminho para; o cais na coluna `x`, com o meio do modelo `mar` celulas mar adentro da beira (o pier feito a mao sai da areia para o mar); o saco perto da praca;
     - os postes (IL-3), cerca de 6, so na praca e no caminho do cais, em grama ou areia; a lampada para o ponto mais perto do caminho;
     - os marcos (a IL-4 de 2026-11-08, revista: "espalha eles tambem pelo mapa"), cada um num canto da moldura, no ponto que cabe mais perto
       do da planta (`busca` celulas), com o entorno dele (extras, a rng propria): o carro meio coberto pelo mato no oeste, a geladeira na
@@ -137,7 +137,7 @@ export const PLANTA_ILHA = {
   lugares: {
     portao: { alvo: [31, -2.5], busca: 3, folga: 1, clareira: 3, base: 1.6 },
     barraca: { alvo: [48.5, 8.5], busca: 3, folga: 1, clareira: 3.4, base: 2.4 },
-    cais: { x: 38, clareira: 4.5 },
+    cais: { x: 38, clareira: 4.5, mar: 0.9 },
     saco: [22, 9],
   },
   postes: [[27.5, 13], [34.5, 13], [27.5, 19.5], [34.5, 19.5], [33.5, 26], [37, 30]],
