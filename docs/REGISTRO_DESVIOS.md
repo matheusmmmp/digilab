@@ -603,3 +603,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-10 — LUTA_POC, LP4: a chave ligada e a limpeza do combate por turnos (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp4`)](registro/2026-11.md)
 - [2026-11-10 — INDIVIDUALIDADE, I7: o plano APROVADO (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i7-plano`)](registro/2026-11.md)
 - [2026-11-10 — MOEDA: o plano dos Bits APROVADO (Gerente da V3, Claude Code, Opus 5.5, branch `v3-moeda-plano`)](registro/2026-11.md)
+- [2026-11-10 — MOEDA, MO1: os Bits se ganham (Gerente da V3, Claude Code, Opus 5.5, branch `v3-moeda`)](registro/2026-11.md)
