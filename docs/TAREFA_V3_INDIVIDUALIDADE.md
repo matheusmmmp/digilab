@@ -4,7 +4,7 @@ Coordenador: Matheus (sessão direta). Worker da etapa I0: Claude Code, Opus 5.5
 `v3-individualidade` (as etapas seguintes com sufixo, como `v3-individualidade-i0`). Status: **ABERTA; a proposta na `main` (#676);
 as IN-1 a IN-8 DECIDIDAS em 2026-11-07, pela recomendação; o I0 (a conferência) na `main` (#684); o I1 (a bateria como ferramenta)
 na `main` (#695); o plano do I2 APROVADO (#700); o I2a na `main` (#707); o I2b (a run da linha de base, faixa 85101…85505)
-na `main` (#718); o adendo 1 entregue (#746); o plano do I5 APROVADO (#747).**
+na `main` (#718); o adendo 1 na `main` (#746); o plano do I5 APROVADO, na `main` (#747); o I5a (as medidas e o orquestrador) entregue.**
 
 Categoria: documentacao. Origem: Matheus, 2026-11-07: depois da conversa sobre o connectome e a escala, direcionar a pesquisa para o
 temperamento herdado, o sinal do dono, a memória de episódios e o hábito, com uma medida comum de individualidade.
@@ -152,6 +152,21 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
 - **O plano do I5:** `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I5.md`, APROVADO pelo Matheus em 2026-11-09 ("Aprovo todas"), com as IH-1 a IH-7 decididas pela recomendação. É o hábito como medida, sobre as
   vidas do I2 rejogadas do log: três perfis por dia (SEQ, LUGAR e HORA) e a distintividade de cada pet contra o dono e o mundo da
   semente.
+
+## Resultado da etapa I5a (2026-11-10, Claude Code, Opus 5.5, branch `v3-individualidade-i5a`)
+
+- **As medidas** (`digilab/metrics.py`, IH-7): `perfis_habito_dia` (SEQ, LUGAR e HORA de um dia, com o mínimo de 16 decisões
+  acordadas), `distancia_entre_dias` (o D_si), `distancia_mesmo_dia` (o D_dono, o D_mundo e o D_braço), `distintividade_habito` (os H) e
+  `media_habito`. Os testes, contra casos feitos à mão, estão em `tests/test_individualidade_i5.py`.
+- **O orquestrador:** `experiments/run_v3_individualidade_i5.py`, com as configs `individualidade_i5.json` (a análise) e
+  `individualidade_i5_fumaca.json`.
+  - Ele lê o `vidas.tar.gz` do I2, rejoga cada vida e confere que o log refeito é o do disco e que há 96 decisões por dia.
+  - Grava o `perfis.jsonl`, e a análise sai desse arquivo.
+  - **A trava:** o cabeçalho APROVADO, a seção 11 do plano (o registro), o pacote, as bases e o K do I2, no máximo 4 processos e nada
+    por cima de uma pasta.
+- **A fumaça** (as sementes 101 e 202, K = 2, 14 dias, 24 vidas, 4 processos): o replay custou 3,1 s por vida, e a fumaça inteira
+  1 min 36 s. Duas fumaças seguidas deram a mesma análise. Estimativa para as 360 vidas do I2: uns 5 min de replay com 4 processos.
+- **As leituras do plano** estão no registro: D-IND-I5a-1 a 3.
 
 ## As etapas seguintes
 
