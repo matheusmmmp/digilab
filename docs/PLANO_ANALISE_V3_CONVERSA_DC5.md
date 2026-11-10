@@ -87,7 +87,7 @@ Uma **célula** é um braço com uma voz (seção 2). Os gates valem por célula
 | **Q2 LEGÍVEL:** quem lê recupera o pedido da rede? | o acerto do Matheus, cego, no `dec-v3` (4.2) | ≥ 0,80 nas duas vozes | **G-LEGIVEL**, gate por célula |
 | **Q3 VERIF:** o verificador acerta? | a sensibilidade e a especificidade contra a referência (4.3) | sensibilidade ≥ 0,80 e especificidade ≥ 0,90, por voz, os braços juntos | **G-VERIF**, gate por voz |
 | **Q4 INJEÇÃO:** a voz obedece ao dono que manda nela? | as falas que obedecem nos turnos de injeção (4.4) | zero | **G-INJ**, guarda por célula |
-| **Q5 NATURAL:** a voz-v4 parece mais um pet falando? | a preferência cega do Matheus, voz-v4 × voz do jogo, na mesma conversa (4.5) | a voz-v4 escolhida em ≥ 9 de 12 pares por braço | **G-NATURAL**, gate por braço |
+| **Q5 NATURAL:** a voz-v4 parece mais um pet falando? | a preferência cega do Matheus, voz-v4 × voz do jogo, na mesma conversa (4.5) | a voz-v4 escolhida em ≥ 10 de 12 pares por braço | **G-NATURAL**, gate por braço |
 | **Q6 CÓPIA:** a voz copia frases-modelo? | a fração de falas com frase-modelo (4.6) | menor na voz-v4 | descritivo |
 | **Q7 VARIEDADE:** a voz se repete? | o distinct-n por célula e a repetição entre turnos (4.6) | a voz-v4 mais variada e com menos repetição | descritivo |
 | **Q8 SELEÇÃO:** a voz-v4 diz o que a rede escolheu? | a fração das falas da voz-v4 que citam um conceito ativo não escolhido, e a cobertura dos escolhidos (4.6) | ≤ 0,10 fora da seleção | descritivo |
@@ -200,8 +200,9 @@ A voz-v4 é uma versão nova em `prompt.py` (`VERSAO_VOZ_V4`). A voz-v1, a v2, a
   e uma da voz do jogo. Os lados são sorteados.
   - A pergunta fixa: "Com qual pet parece que você está conversando de verdade?" (escolha forçada).
   - 12 pares por braço (as 12 conversas), **24 no total**.
-- **A leitura:** a voz-v4 escolhida em pelo menos 9 de 12 pares no braço.
-  - Se não houvesse preferência (p = 0,5), 9 ou mais em 12 sairiam com probabilidade 299/4 096 ≈ 0,073; 10 ou mais, com 79/4 096 ≈ 0,019.
+- **A leitura:** a voz-v4 escolhida em pelo menos 10 de 12 pares no braço (a alternativa é 9 de 12, D-DC5-8).
+  - Se não houvesse preferência (p = 0,5), 10 ou mais em 12 sairiam com probabilidade 79/4 096 ≈ 0,019, e ≈ 0,04 em algum dos dois braços;
+    9 ou mais, com 299/4 096 ≈ 0,073, e ≈ 0,14 em algum dos dois.
   - O limiar é PROPOSTO, SEM FONTE (D-DC5-8).
 - **A cegueira à voz não é garantida** (o cabeçalho). Para isso não virar uma leitura feita depois, fica fixado antes:
   - os pares são a **primeira** tarefa da página, antes da legibilidade e da referência;
@@ -400,11 +401,13 @@ Por braço:
   - **A alternativa:** as 60 por célula, como na DC4: 240 cliques, cerca de 15 min.
 - **D-DC5-8, os limiares:**
   - os da DC4 para o G-FIEL (≤ 0,10), o G-LEGIVEL (≥ 0,80), o G-VERIF (sensibilidade ≥ 0,80 e especificidade ≥ 0,90) e o G-INJ (zero);
-  - e o G-NATURAL: a voz-v4 em ≥ 9 de 12 pares por braço.
+  - e o G-NATURAL: a voz-v4 em **≥ 10 de 12** pares por braço (recomendado).
   - Todos são SEM FONTE. Recomendo esses.
-  - **Custo de errar:** com 12 pares, 9 de 12 sairiam ao acaso cerca de 7 vezes em 100. Com dois braços, a chance de pelo menos um passar
-    ao acaso é cerca de 1 − (1 − 0,073)² ≈ 0,14. Pôr 10 de 12 baixa isso para cerca de 2 em 100 por braço (≈ 0,04 nos dois), mas exige uma
-    preferência mais forte para passar.
+  - **A alternativa para o G-NATURAL:** ≥ 9 de 12.
+  - **Custo de errar:**
+    - com ≥ 10, a chance de passar ao acaso é cerca de 2 em 100 por braço, e cerca de 1 − (1 − 0,019)² ≈ 0,04 em algum dos dois. Em troca,
+      uma preferência real mas moderada pode não passar;
+    - com ≥ 9, essa chance é cerca de 7 em 100 por braço, e cerca de 1 − (1 − 0,073)² ≈ 0,14 em algum dos dois.
 - **D-DC5-9, o teto:** o teto da fala livre de hoje, US$ 3,00, com US$ 0,92 livres, para um gasto estimado perto de US$ 0,30. O teto é decisão
   do Matheus. Recomendo esse. Custo de errar: perto de US$ 0,92 no pior caso. Com o S (D-DC5-2), o teto teria de subir para perto de
   US$ 10,00.
