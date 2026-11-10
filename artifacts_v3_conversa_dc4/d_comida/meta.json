@@ -1,0 +1,34 @@
+{
+  "artefatos_sha256": {
+    "pedidos.jsonl": "6f374888b982488088fd0ff8460ee81dad483241c53a36f1ad392bc8a7f1ea07",
+    "resumo.json": "91e45ef42429aac9c2a6eeb61b3f903290e6fab7f682433c2db0c44a4b82b8cf"
+  },
+  "codigo_dc3_hoje_vs_run": {
+    "digilab/config.py": {
+      "hoje": "767a0a7ac1ce8653097e458687bca410a81cf161f3a6abb5214c89bb9442aaa8",
+      "run": "13ac680575f2fe0fc18281ca590f598260d6ea4b7d3bbee9ed3b2c247de89ea9"
+    },
+    "digilab/metrics.py": {
+      "hoje": "facb1c0f6cba9f0d90d8c44f929dee84585fbcecb1d746dcf82df41cc86d5908",
+      "run": "9cff75ae75e5111ca0459c398126003c4090d85ecef8a8cb7f0a5fa491208e6b"
+    },
+    "digilab/mundo.py": {
+      "hoje": "394e1cf2fa7a10ebbe6b3b312526b5b5894e2f98c9745e6588da77a9d307b137",
+      "run": "a759ec186ed9233baa5d6e583ab4cb836ed4b46c2b50df762eb4fd0b58a688a2"
+    }
+  },
+  "duracao_s": 2781.6178464889526,
+  "fim": "2026-11-09T22:21:28",
+  "inicio": "2026-11-09T21:35:06",
+  "plano": "docs/PLANO_ANALISE_V3_CONVERSA_DC4.md",
+  "plano_sha256": "aae239ac28d63099de6f666a6d11e02412c5ed8a48f7c313918827c38a9d1df9",
+  "processos": 4,
+  "python": "3.13.0",
+  "run_dc3": "artifacts_v3_conversa_dc3/run",
+  "run_dc3_sha256": {
+    "medidas.json": "2ff6072a3f2dc379effb85732cf7e3250e34378adfdbfb21e73258ab099bc0c8",
+    "meta.json": "5e09a5d527a343d350678a6d0517d19af3e506e26d0493fb4dd06943fc9b4111",
+    "vidas.tar.gz": "d2cdf2fb1ce4064133040184b3d8820f55e8bf419f1cb1f4c0edce518759d613"
+  },
+  "script_sha256": "30d73d4d2a6368dd295c6397f78fda4fe7d7afb3456f22d478aeb92d47fb96f9"
+}
