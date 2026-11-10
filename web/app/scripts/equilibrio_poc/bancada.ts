@@ -1,0 +1,282 @@
+/* LUTA_POC, LP5 (docs/PLANO_EQUILIBRIO_LUTA_POC.md, secoes 2 e 4.1): os grupos da bancada. Cada grupo roda as lutas das metas dele e grava
+   um JSON com as contas brutas (vitorias, lutas, empates, sem fim e o relogio em histograma); o resumo_metas.ts le os JSON e da a tabela.
+   Os tamanhos das amostras sao PROPOSTOS, SEM FONTE (secao 4.1; os cortes estao no desvio D-LP5-0-3).
+   uso (em web/app): node scripts/equilibrio_poc/bancada.ts --grupo <grupo> --faixa calibracao --fase lp5_0 [--candidato v21]
+   grupos: lideres, sparring, vida, treino, estagio, formas_crianca, formas_adolescente, formas_adulto, formas_mega, torneios */
+import { mkdirSync, writeFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import {
+  ACOES_DONO_JOGO_V11, ARENA_POR_ID, CAMPANHA_V6, CAT, CD, CMD, CTR, IDS_CENA, LIGA, LUGARES_V6, LUTAS_MAX_INSTALACAO, MAPA_FABRICA, MAPA_SALAO,
+  MAPA_TORRE, Motor, NPC, STATS, TPD, alugueisFabrica, arenaDaLuta, caraterCanonico, caraterDoRivalSalao, chaveSprite, criarDono, criarRng,
+  formaLiga, formaRivalFabrica, formaRivalInstalacao, formaRivalSalao, hashSemente, mapaDoLugar, rivaisArena, sementeDaSerie, sementeLutaFabrica,
+  type Exercicio, type Forma, type FormaAdultaNormal, type IdCena, type Stat, type StatsPoc, type VisaoDono,
+} from "../../motor/index.ts";
+import {
+  CANDIDATO_V21, ESTAGIOS_LUTA, TETO, TIPICO, argumento, commitAtual, contar, juntar, lutador, lutadorDoPet, lutar, novaConta, npc,
+  petDoEstagio, pontosNumStat, rivalCanonico, rivalDaForma, sementeLuta, taxa,
+  type Candidato, type Conta, type EstagioLuta, type Lado, type Luta1, type PetBancada,
+} from "./comum.ts";
+import { basesDa } from "./faixas.ts";
+
+/** os tamanhos (PROPOSTOS, SEM FONTE; secao 4.1 e o desvio D-LP5-0-3) */
+export const TAM: Record<string, number> = {
+  pets: 20,          // pets por estagio e por base (100 por estagio nas 5 bases)
+  lutas: 20,         // lutas por par (pet, rival, mapa) nas metas de um rival so (P1-P3, T1, G4) e no sparring (P4, V2)
+  lutasT2: 5,        // T2: um stat por vez, 8 mapas
+  lutasGrade: 2,     // T3: a grade dos pontos contra todas as formas do estagio
+  lutasE1: 4,        // E1: contra todas as formas do estagio de cima
+  lutasFormas: 25,   // A1, V1, S1: por par ordenado e mapa, em cada base
+  tentativas: 20,    // torneios: tentativas por pet (a Liga, a Torre, o Salao) e por pet-equivalente (a Fabrica)
+  vidas: 20,         // P5: vidas por base
+  diasVida: 4,       // P5: a vida vai ate o Mega ou ate 4 dias de jogo (o Mega precisa de ~2,4 dias)
+  seriesFabrica: 7,  // G3: a tentativa para no fim da 7a serie (21 lutas), para acabar
+};
+/** --rapido: a fumaca (1 pet, poucas lutas, 1 base), so para conferir que o grupo roda; o artefato vai para --saida, fora das medicoes */
+const RAPIDO = { pets: 1, lutas: 2, lutasT2: 1, lutasGrade: 1, lutasE1: 1, lutasFormas: 1, tentativas: 2, vidas: 1 };
+
+const LIDERES = LIGA.map(x => x.lider);
+const DESAFIANTES = ["npc_tier2_sentinela", "npc_tier2_porteiro", "npc_v5_puppetmon", "npc_v5_machinedramon"];
+
+/* ---------------------------------------------------------------- a duracao (D1, D2): toda luta conta, por estagio e por forma */
+class Duracao {
+  por_estagio: Record<string, Conta> = {};
+  por_forma: Record<string, Conta> = {};
+  add(est: string, formas: string[], r: Luta1): void {
+    contar(this.por_estagio[est] ??= novaConta(), r);
+    for (const f of new Set(formas)) contar(this.por_forma[f] ??= novaConta(), r);
+  }
+}
+const D = new Duracao();
+let LUTAS = 0;
+function luta(est: string, cena: IdCena, s: number, a: Lado, b: Lado): Luta1 {
+  const r = lutar(cena, s, a, b); LUTAS++; D.add(est, [a.forma, b.forma], r); return r;
+}
+/** uma serie sem cura para o pet (a Cidadela, a Liga, a Torre): vai ate a primeira que nao for vitoria ou ate n. Cada rival entra inteiro */
+function serie(est: string, s: number, pet: Lado, rivais: (j: number) => { lado: Lado; mapa: IdCena } | null, n: number): { vitorias: number; relogio: number } {
+  let vida0 = pet.stats.hp, v = 0, rel = 0;
+  for (let j = 0; j < n; j++) {
+    const rv = rivais(j); if (!rv) break;
+    const r = luta(est, rv.mapa, sementeDaSerie(s, j), { ...pet, ...(j ? { vida0 } : {}) }, rv.lado);
+    rel += r.relogio;
+    if (r.vencedor !== "a") break;
+    v++; vida0 = r.vidaA;
+  }
+  return { vitorias: v, relogio: rel };
+}
+const ladoPet = (c: Candidato, p: PetBancada, n: number): Lado => ({ forma: p.chave, stats: lutadorDoPet(c, p, n) });
+const petsDo = (bases: number[], est: EstagioLuta): PetBancada[] => bases.flatMap(b => Array.from({ length: TAM.pets }, (_, i) => petDoEstagio(b, i, est)));
+const add = (m: Record<string, Conta>, k: string, r: Luta1) => contar(m[k] ??= novaConta(), r);
+const lugarV6 = (k: string): number => { const c = CAMPANHA_V6.find(x => x.k === k); if (!c) throw new Error(`bancada: ${k} fora da campanha v6`); return c.lug; };
+
+/* ---------------------------------------------------------------- P1, P2, P3, D3: os lideres e os desafiantes */
+function lideres(c: Candidato, bases: number[]) {
+  const out: Record<string, unknown> = {};
+  for (const k of [...LIDERES, ...DESAFIANTES]) {
+    const n = NPC[k]!, est = n.est as EstagioLuta, mapa = mapaDoLugar(LUGARES_V6[lugarV6(k)]), ns = arenaDaLuta(k)?.lutas ?? 1;
+    const rival: Lado = { forma: k, stats: npc(c, k) }, pets = petsDo(bases, est), conds: Record<string, unknown> = {};
+    for (const [nome, pts] of [["sem_treino", 0], ["tipico", TIPICO[est]]] as const) {
+      const total = novaConta(), esp: Record<string, Conta> = {}, forma: Record<string, Conta> = {}, relSerie: Record<string, number> = {};
+      for (const p of pets) {
+        const lado = ladoPet(c, p, pts);
+        for (let q = 0; q < TAM.lutas; q++) {
+          const s = sementeLuta(p.base, p.i * TAM.lutas + q), r = serie(est, s, lado, () => ({ lado: rival, mapa }), ns);
+          const fake: Luta1 = { vencedor: r.vitorias === ns ? "a" : "b", fim: true, relogio: r.relogio, vidaA: 0 };
+          contar(total, fake); add(esp, p.especie, fake); add(forma, p.chave, fake);
+          if (ns > 1) { const b = String(Math.floor(r.relogio / 100)); relSerie[b] = (relSerie[b] ?? 0) + 1; }
+        }
+      }
+      conds[nome] = { pontos: pts, total, por_especie: esp, por_forma: forma, ...(ns > 1 ? { relogio_serie: relSerie } : {}) };
+    }
+    out[k] = { nome: n.nome, estagio: est, mapa, lutas_serie: ns, lider: LIDERES.includes(k), ...conds };
+  }
+  return out;
+}
+
+/* ---------------------------------------------------------------- P4, V2: o sparring (o pet tipico contra as formas do estagio, no Campo) */
+function sparring(c: Candidato, bases: number[]) {
+  const out: Record<string, unknown> = {};
+  for (const est of ESTAGIOS_LUTA) {
+    const rv = rivaisArena(est), rivais = rv.map(k => ({ forma: k, stats: rivalCanonico(c, k, c.treinoRival.arena) }));
+    const pets: unknown[] = [], esp: Record<string, Conta> = {};
+    for (const p of petsDo(bases, est)) {
+      const lado = ladoPet(c, p, TIPICO[est]), conta = novaConta();
+      rivais.forEach((b, j) => { for (let q = 0; q < TAM.lutas; q++) { const r = luta(est, "campo", sementeLuta(p.base, (p.i * rv.length + j) * TAM.lutas + q), lado, b); contar(conta, r); add(esp, p.especie, r); } });
+      pets.push({ base: p.base, i: p.i, chave: p.chave, especie: p.especie, n: conta.n, v: conta.v });
+    }
+    out[est] = { rivais: rv, pontos: TIPICO[est], pets, por_especie: esp };
+  }
+  return out;
+}
+
+/* ---------------------------------------------------------------- P5: a vida do dono simulado (o Motor de verdade) */
+const EXERCICIOS = Object.keys(CTR.exercicios) as Exercicio[];
+function vida(c: Candidato, bases: number[]) {
+  /* a vida usa os numeros do jogo (o Motor.lutarPoc): so o candidato v21 e o jogo (desvio D-LP5-0-4) */
+  if (c.nome !== CANDIDATO_V21.nome) throw new Error(`bancada: a vida (P5) so roda o candidato v21; o ${c.nome} precisa entrar no Motor (LP5-2)`);
+  const vidas: unknown[] = [];
+  for (const base of bases) for (let i = 0; i < TAM.vidas; i++) {
+    const semente = hashSemente("equilibrio-poc-pet", base, i), m = new Motor(semente), dono = criarDono("atencioso");
+    const r = criarRng(hashSemente("dono", semente, "atencioso")), passos = Math.round(TAM.diasVida * TPD / CD.passo), orc = Math.round(CD.porDia * TAM.diasVida);
+    let gasto = 0, ex = 0, k = 0;
+    const lutasEst: Record<string, { n: number; v: number }> = {};
+    m.liberar(CMD.mega);
+    for (let p = 0; p < passos && m.estagioAtual !== "mega" && !m.morte; p++) {
+      m.avancar(CD.passo);
+      if (m.morte) break;
+      const rest = orc - gasto, min = Math.max(0, rest - (passos - p - 1) * CD.maxPasso), max = Math.min(rest, CD.maxPasso);
+      const v: VisaoDono = { e: m.e, acao: m.acao, passo: p, passos, orc, gasto, min, max, atrasado: gasto < orc * (p + 1) / passos, chamados: m.chamadosAbertos() };
+      const acoes = dono.decidir(v, r).filter(a => ACOES_DONO_JOGO_V11.includes(a));
+      if (m.lesionadoDesde !== null && acoes.length) acoes[0] = "tratar_lesao";
+      for (const a of acoes) { m.observar(a); gasto++; }
+      if (m.morte) break;
+      const est = m.estagioAtual;
+      /* o dono treina os 6 exercicios, um por vez, ate o tipico do estagio (D-LP5-2) */
+      if (est !== "bebe" && m.treino.total < TIPICO[est as EstagioLuta] - 1e-9 && m.treino.podeTocar(m.e.tick) && !m.treino.pedePausa) m.treinar(EXERCICIOS[ex++ % EXERCICIOS.length]);
+      /* e luta como o dono de test/evolucao_canonica.test.ts: o sparring contra uma forma do estagio, no Campo */
+      if ((est === "adolescente" && m.sparring < CAT.sparring) || (est === "adulto" && m.lutas.lutas < 12)) {
+        const rv = m.rivaisArenaPoc(), s = hashSemente("equilibrio-poc", base, "vida", i, k++);
+        const res = m.lutarPoc(rv[s % rv.length], s, "campo"), u = res.serie[res.serie.length - 1];
+        D.add(est, [res.forma, u.contra], { vencedor: u.vencedor, fim: u.fim, relogio: u.relogio, vidaA: u.vidaA }); LUTAS++;
+        const L = lutasEst[est] ??= { n: 0, v: 0 }; L.n++; if (res.venceu) L.v++;
+      }
+    }
+    vidas.push({ base, i, semente, especie: m.especie, estagio: m.estagioAtual, mega: m.estagioAtual === "mega", morte: m.morte?.causa ?? null, tick: m.e.tick, treino: m.treino.total, lutas: lutasEst });
+  }
+  return { dias: TAM.diasVida, vidas };
+}
+
+/* ---------------------------------------------------------------- T1, T2, T3 */
+function treino(c: Candidato, bases: number[]) {
+  const t1: Record<string, Conta> = {}, t2: Record<string, Record<string, Conta>> = {}, t3: Record<string, Record<string, Conta>> = {}, t3r: Record<string, Conta> = {};
+  for (const est of ESTAGIOS_LUTA) {
+    const pets = petsDo(bases, est), rv = rivaisArena(est), rivais = rv.map(k => ({ forma: k, stats: rivalCanonico(c, k) }));
+    for (const p of pets) {
+      const sem = ladoPet(c, p, 0), tip = ladoPet(c, p, TIPICO[est]);
+      IDS_CENA.forEach((m, j) => { for (let q = 0; q < TAM.lutas; q++) contar(t1[est] ??= novaConta(), luta(est, m, sementeLuta(p.base, ((p.i * 8 + j) * TAM.lutas + q)), tip, sem)); });
+      if (est === "crianca" || est === "adulto") for (const st of STATS as readonly Stat[]) {
+        const um: Lado = { forma: p.chave, stats: lutador(c, p.forma, p.carater, pontosNumStat(st, TIPICO.crianca)) };
+        IDS_CENA.forEach((m, j) => { for (let q = 0; q < TAM.lutasT2; q++) contar((t2[est] ??= {})[st] ??= novaConta(), luta(est, m, sementeLuta(p.base, 1_000_000 + (p.i * 8 + j) * TAM.lutasT2 + q), um, sem)); });
+      }
+      for (let n = 0; n <= TETO[est]; n += 2) {
+        const lado = ladoPet(c, p, n);
+        rivais.forEach((b, j) => { for (let q = 0; q < TAM.lutasGrade; q++) contar((t3[est] ??= {})[String(n)] ??= novaConta(), luta(est, "campo", sementeLuta(p.base, 2_000_000 + (p.i * rv.length + j) * TAM.lutasGrade + q), lado, b)); });
+      }
+      if (est === "crianca") {
+        const teto = ladoPet(c, p, TETO.crianca);
+        IDS_CENA.forEach((m, j) => { for (let q = 0; q < TAM.lutas; q++) contar(t3r.crianca ??= novaConta(), luta(est, m, sementeLuta(p.base, 3_000_000 + (p.i * 8 + j) * TAM.lutas + q), teto, tip)); });
+      }
+    }
+  }
+  return { t1_tipico_contra_sem: t1, t2_um_stat_contra_sem: t2, t3_grade_contra_rivais: t3, t3_teto_contra_tipico: t3r, pontos_t2: TIPICO.crianca };
+}
+
+/* ---------------------------------------------------------------- E1: a evolucao contra o treino */
+function estagio(c: Candidato, bases: number[]) {
+  const out: Record<string, Conta> = {};
+  const contra = (nome: string, est: EstagioLuta, alvo: EstagioLuta, pts: number, desl: number) => {
+    const rv = rivaisArena(alvo), rivais = rv.map(k => ({ forma: k, stats: rivalCanonico(c, k) }));
+    for (const p of petsDo(bases, est)) {
+      const lado = ladoPet(c, p, pts);
+      rivais.forEach((b, j) => { for (let q = 0; q < TAM.lutasE1; q++) contar(out[nome] ??= novaConta(), luta(est, "campo", sementeLuta(p.base, desl + (p.i * rv.length + j) * TAM.lutasE1 + q), lado, b)); });
+    }
+  };
+  ESTAGIOS_LUTA.slice(0, 3).forEach((est, x) => {
+    const um = ESTAGIOS_LUTA[x + 1];
+    contra(`${est}_tipico_contra_${um}`, est, um, TIPICO[est], 4_000_000);
+    contra(`${est}_teto_contra_${um}`, est, um, TETO[est], 5_000_000);
+    if (x < 2) contra(`${est}_tipico_contra_${ESTAGIOS_LUTA[x + 2]}`, est, ESTAGIOS_LUTA[x + 2], TIPICO[est], 6_000_000);
+  });
+  return out;
+}
+
+/* ---------------------------------------------------------------- A1, V1, S1: as formas contra as formas */
+function formas(c: Candidato, bases: number[], est: EstagioLuta) {
+  const rv = rivaisArena(est), lados = rv.map(k => ({ forma: k, stats: rivalCanonico(c, k) }));
+  const pares: Record<string, Record<string, Conta>> = {};
+  for (const m of IDS_CENA) for (let x = 0; x < rv.length; x++) for (let y = 0; y < rv.length; y++) {
+    const conta = (pares[m] ??= {})[`${rv[x]}|${rv[y]}`] = novaConta();
+    for (const base of bases) for (let q = 0; q < TAM.lutasFormas; q++) contar(conta, luta(est, m, sementeLuta(base, 7_000_000 + q), lados[x], lados[y]));
+  }
+  return { estagio: est, formas: rv, pares };
+}
+
+/* ---------------------------------------------------------------- G1-G4: os torneios */
+function torneios(c: Candidato, bases: number[]) {
+  const pets = petsDo(bases, "mega");
+  /* G1, a Liga: os 6 Megas dos lideres, sem cura, cada um no mapa do lugar do lider */
+  const liga = { tentativas: 0, titulos: 0, por_forma: {} as Record<string, { n: number; v: number }>, vitorias: {} as Record<string, number> };
+  const megasLiga = LIGA.map((x, k) => { const f = formaLiga(k); return { lado: { forma: chaveSprite(f), stats: rivalDaForma(c, f, caraterCanonico(x.adulta), c.treinoRival.liga) }, mapa: mapaDoLugar(LUGARES_V6[ARENA_POR_ID[x.arena].lugar]) }; });
+  /* G2, a Torre de Batalha: Megas sorteados pela semente da tentativa, no Ringue, sem cura, ate 100 */
+  const torre = { tentativas: 0, no_teto: 0, recordes: [] as number[], vitorias: {} as Record<string, number> };
+  const megaTorre = (s: number, j: number) => { const f = formaRivalInstalacao(s, j); return { lado: { forma: chaveSprite(f), stats: rivalDaForma(c, f, caraterCanonico(f.adulta as FormaAdultaNormal), c.treinoRival.torre) }, mapa: MAPA_TORRE }; };
+  for (const p of pets) {
+    const lado = ladoPet(c, p, TIPICO.mega);
+    let recorde = 0;
+    const L = liga.por_forma[p.chave] ??= { n: 0, v: 0 };
+    for (let q = 0; q < TAM.tentativas; q++) {
+      const r = serie("mega", sementeLuta(p.base, 8_000_000 + p.i * TAM.tentativas + q), lado, j => megasLiga[j] ?? null, LIGA.length);
+      liga.tentativas++; L.n++; liga.vitorias[r.vitorias] = (liga.vitorias[r.vitorias] ?? 0) + 1;
+      if (r.vitorias === LIGA.length) { liga.titulos++; L.v++; }
+      const s = sementeLuta(p.base, 9_000_000 + p.i * TAM.tentativas + q), t = serie("mega", s, lado, j => megaTorre(s, j), LUTAS_MAX_INSTALACAO);
+      torre.tentativas++; if (t.vitorias === LUTAS_MAX_INSTALACAO) torre.no_teto++;
+      torre.vitorias[t.vitorias] = (torre.vitorias[t.vitorias] ?? 0) + 1; recorde = Math.max(recorde, t.vitorias);
+    }
+    torre.recordes.push(recorde);
+  }
+  /* G3, a Fabrica: o alugado escolhido (k % 3), sem troca; a vida passa dentro da serie de 3 */
+  const fab = { tentativas: 0, series: {} as Record<string, number> };
+  const megaFab = (f: Forma): Lado => ({ forma: chaveSprite(f), stats: rivalDaForma(c, f, caraterCanonico(f.adulta as FormaAdultaNormal), c.treinoRival.fabrica) });
+  for (const base of bases) for (let k = 0; k < TAM.pets * TAM.tentativas; k++) {
+    const s = sementeLuta(base, 10_000_000 + k), alugado = megaFab(alugueisFabrica(s)[k % 3]);
+    let vida0: number | null = null, v = 0;
+    for (let j = 0; j < 3 * TAM.seriesFabrica; j++) {
+      const r = luta("mega", MAPA_FABRICA, sementeLutaFabrica(s, j), { ...alugado, ...(vida0 !== null && j % 3 ? { vida0 } : {}) }, megaFab(formaRivalFabrica(s, j)));
+      if (r.vencedor !== "a") break;
+      v++; vida0 = r.vidaA;
+    }
+    fab.tentativas++; const se = String(Math.floor(v / 3)); fab.series[se] = (fab.series[se] ?? 0) + 1;
+  }
+  /* G4, o Salao: o pet tipico de cada estagio contra o rival sorteado do estagio, no Coliseu */
+  const salao: Record<string, Conta> = {};
+  for (const est of ESTAGIOS_LUTA) for (const p of petsDo(bases, est)) {
+    const lado = ladoPet(c, p, TIPICO[est]);
+    for (let q = 0; q < TAM.tentativas; q++) {
+      const s = sementeLuta(p.base, 11_000_000 + p.i * TAM.tentativas + q), f = formaRivalSalao(s, est);
+      contar(salao[est] ??= novaConta(), luta(est, MAPA_SALAO, s, lado, { forma: chaveSprite(f), stats: rivalDaForma(c, f, caraterDoRivalSalao(f), c.treinoRival.salao) }));
+    }
+  }
+  return { liga, torre, fabrica: fab, salao };
+}
+
+/* ---------------------------------------------------------------- a linha de comando */
+export const GRUPOS = ["lideres", "sparring", "vida", "treino", "estagio", "formas_crianca", "formas_adolescente", "formas_adulto", "formas_mega", "torneios"] as const;
+export const CANDIDATOS: Readonly<Record<string, Candidato>> = { v21: CANDIDATO_V21 };
+function rodar(grupo: string, c: Candidato, bases: number[]): unknown {
+  switch (grupo) {
+    case "lideres": return lideres(c, bases);
+    case "sparring": return sparring(c, bases);
+    case "vida": return vida(c, bases);
+    case "treino": return treino(c, bases);
+    case "estagio": return estagio(c, bases);
+    case "torneios": return torneios(c, bases);
+    default:
+      if (grupo.startsWith("formas_")) { const e = grupo.slice(7); if ((ESTAGIOS_LUTA as readonly string[]).includes(e)) return formas(c, bases, e as EstagioLuta); }
+      throw new Error(`bancada: grupo desconhecido ${JSON.stringify(grupo)} (${GRUPOS.join(", ")})`);
+  }
+}
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+  const grupo = argumento("grupo"), faixa = argumento("faixa"), fase = argumento("fase"), nomeC = argumento("candidato", "v21");
+  if (!/^lp5_[0-9a-z_]+$/.test(fase)) throw new Error(`bancada: fase invalida ${fase}`);
+  if (faixa === "conferencia" && fase !== "lp5_4") throw new Error("bancada: a conferencia so roda na LP5-4 (secao 4.4)");
+  const c = CANDIDATOS[nomeC]; if (!c) throw new Error(`bancada: candidato desconhecido ${nomeC}`);
+  const rapido = process.argv.includes("--rapido");
+  if (rapido) Object.assign(TAM, RAPIDO);
+  const bases = rapido ? basesDa(faixa).slice(0, 1) : basesDa(faixa), t0 = Date.now(), commit = commitAtual();
+  const dados = rodar(grupo, c, bases);
+  const saida = { tarefa: "LUTA_POC, LP5", rapido, grupo, fase, faixa, bases, commit, candidato: c, tamanhos: TAM, lutas: LUTAS, segundos: (Date.now() - t0) / 1000, dados, duracao: D };
+  const dir = rapido ? argumento("saida").replace(/[\\/]?$/, "/") : fileURLToPath(new URL(`../medicoes/equilibrio_poc/${fase}/${faixa}/`, import.meta.url));
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(dir + `${grupo}.json`, JSON.stringify(saida) + "\n");
+  console.log(`${grupo}: ${LUTAS} lutas em ${saida.segundos.toFixed(1)} s -> ${dir}${grupo}.json`);
+}
+export { taxa };
