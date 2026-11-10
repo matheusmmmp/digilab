@@ -1,7 +1,6 @@
 # TAREFA V3: a ilha onde só a água barra (ILHA_AGUA)
 
-**Estado: PROPOSTO.** Nada aqui está aprovado nem construído. Este documento é o plano; o código começa depois que o Matheus decidir as
-IA-1 a IA-5 da seção 6.
+**Estado: APROVADO** pelo Matheus em 2026-11-10 ("Eu aprovo"): as IA-1 a IA-5 da seção 6 ficam decididas pela recomendação.
 
 **Pedido do Matheus (2026-11-10):** "Eu não quero que tenha uma área que o pet não acesse. Eu quero que o pet consiga andar pela ilha
 inteira, só não atravesse a água. As barreiras têm que ser delimitadas pela água." Entre os dois caminhos apresentados, ele escolheu o B:
