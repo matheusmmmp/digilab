@@ -1,7 +1,8 @@
 # TAREFA V3 — LUTA_EFEITOS (2026-11-06)
 
 Coordenador: o Gerente da missão SPRITES_GERACAO (Claude Code, Opus 5.5). Worker: a definir por etapa. Worktree e branch: `v3-luta-efeitos`.
-Status: PROPOSTA (a seção 8 fica com o Matheus).
+Status: ENTREGUE (E1 a E5 na `main`; a E5 no #690, 2026-11-07). Era PROPOSTA (a seção 8 ficou com o Matheus); o status foi atualizado na
+organização de 2026-11-10.
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-06. O pedido foi deixar a luta em tempo real com os efeitos e o visual do Poké 2D Arena,
 um jogo de fã, comparando com o trailer de gameplay: "Veja algum trailer de gameplay dele e veja e compare o que pode ser implementado. E
