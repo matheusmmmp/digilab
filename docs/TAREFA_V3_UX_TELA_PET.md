@@ -918,5 +918,9 @@ As 4 falhas que vinham de antes (seção 28) eram testes atrasados em relação 
   aparece com o lugar na tela e some em 2,4 s (`ABRE_MS`), e por isso nunca ficava visível. O teste agora confere que o cadeado aberto
   existe (D-E2E-1).
 
-**Achado (fica para o Matheus):** pela mesma razão, o brilho do "acabou de abrir" da barraca nunca é visto no começo do jogo. O tempo dele
-corre mesmo com o lugar fora da tela.
+**O brilho espera o lugar aparecer** (o Matheus, 2026-11-10: "Sim, esperar"). Antes, o brilho do "acabou de abrir" corria 2,4 s desde a
+montagem, e o da barraca nunca era visto no começo do jogo.
+- Agora os `ABRE_MS` contam desde que o lugar fica no quadro por `VISTO_MS` (0,5 s) seguidos (`CadeadosDaIlha.tsx`). O meio segundo existe
+  porque o primeiro quadro, antes de a câmera assentar, passa por cima da barraca por uns 20 ms (medido com uma sonda no e2e).
+- O teste do destrave confere o caminho inteiro: com a barraca fora do quadro, o cadeado aberto espera escondido, mesmo depois de 4 s;
+  quando a câmera chega nela (`?cameradev=1`), ele aparece e some depois.
