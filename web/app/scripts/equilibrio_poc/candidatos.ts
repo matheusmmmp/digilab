@@ -33,7 +33,15 @@ export function candidatoDe(t: Troca): Candidato {
 }
 
 /** os candidatos com nome (os que entram nas medidas inteiras e no relato) */
-export const CANDIDATOS: Readonly<Record<string, Candidato>> = { v21: CANDIDATO_V21 };
+const E = (cr: number, ad: number, ul: number, me: number) => ({ crianca: cr, adolescente: ad, adulto: ul, mega: me });
+/** LP5-1, rodada 1: o w15_g02 da grade r1d (scripts/medicoes/equilibrio_poc/lp5_1/r1d), o de T1 mais perto da faixa entre os que passam
+    T3, E1 e D1 (a regra de escolha da secao 4.2). PROPOSTO, SEM FONTE */
+export const LP5_1_R1 = candidatoDe({
+  nome: "lp5_1_r1", pesoPonto: 15,
+  gama: { vigor: .02, recuperacao: .02, guarda: .06, forca: .02, mira: .14, folego: .14 },
+  mapa: { hp: 1300, vel: 60 }, multVida: E(.6, .9, 1.35, 2.025), multAtk: E(1, 1.5, 2.25, 3.375),
+});
+export const CANDIDATOS: Readonly<Record<string, Candidato>> = { v21: CANDIDATO_V21, lp5_1_r1: LP5_1_R1 };
 /** o candidato da linha de comando: --candidato <nome>, ou --candidato-json <arquivo> (so a grade) */
 export function candidatoDaLinha(nome: string, json: string, grade: boolean): Candidato {
   if (json) {

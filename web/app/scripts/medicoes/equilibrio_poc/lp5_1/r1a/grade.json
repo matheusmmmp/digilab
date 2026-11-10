@@ -1,0 +1,143 @@
+{
+ "fase": "lp5_1",
+ "bases": 1,
+ "grupos": [
+  "treino",
+  "estagio",
+  "sparring",
+  "formas_crianca",
+  "formas_adolescente",
+  "formas_adulto",
+  "formas_mega"
+ ],
+ "tam": {
+  "pets": 5,
+  "lutas": 4,
+  "lutasT2": 2,
+  "lutasGrade": 1,
+  "lutasE1": 2,
+  "lutasFormas": 3
+ },
+ "candidatos": [
+  {
+   "nome": "ref_w3_g1",
+   "pesoPonto": 3,
+   "gama": {
+    "vigor": 1,
+    "folego": 1,
+    "recuperacao": 1,
+    "forca": 1,
+    "mira": 1,
+    "guarda": 1
+   }
+  },
+  {
+   "nome": "w3_g02",
+   "pesoPonto": 3,
+   "gama": {
+    "vigor": 0.2,
+    "folego": 0.2,
+    "recuperacao": 0.2,
+    "forca": 0.2,
+    "mira": 0.2,
+    "guarda": 0.2
+   }
+  },
+  {
+   "nome": "w3_g035",
+   "pesoPonto": 3,
+   "gama": {
+    "vigor": 0.35,
+    "folego": 0.35,
+    "recuperacao": 0.35,
+    "forca": 0.35,
+    "mira": 0.35,
+    "guarda": 0.35
+   }
+  },
+  {
+   "nome": "w3_g05",
+   "pesoPonto": 3,
+   "gama": {
+    "vigor": 0.5,
+    "folego": 0.5,
+    "recuperacao": 0.5,
+    "forca": 0.5,
+    "mira": 0.5,
+    "guarda": 0.5
+   }
+  },
+  {
+   "nome": "w10_g008",
+   "pesoPonto": 10,
+   "gama": {
+    "vigor": 0.08,
+    "folego": 0.08,
+    "recuperacao": 0.08,
+    "forca": 0.08,
+    "mira": 0.08,
+    "guarda": 0.08
+   }
+  },
+  {
+   "nome": "w10_g012",
+   "pesoPonto": 10,
+   "gama": {
+    "vigor": 0.12,
+    "folego": 0.12,
+    "recuperacao": 0.12,
+    "forca": 0.12,
+    "mira": 0.12,
+    "guarda": 0.12
+   }
+  },
+  {
+   "nome": "w10_g02",
+   "pesoPonto": 10,
+   "gama": {
+    "vigor": 0.2,
+    "folego": 0.2,
+    "recuperacao": 0.2,
+    "forca": 0.2,
+    "mira": 0.2,
+    "guarda": 0.2
+   }
+  },
+  {
+   "nome": "w30_g005",
+   "pesoPonto": 30,
+   "gama": {
+    "vigor": 0.05,
+    "folego": 0.05,
+    "recuperacao": 0.05,
+    "forca": 0.05,
+    "mira": 0.05,
+    "guarda": 0.05
+   }
+  },
+  {
+   "nome": "w30_g008",
+   "pesoPonto": 30,
+   "gama": {
+    "vigor": 0.08,
+    "folego": 0.08,
+    "recuperacao": 0.08,
+    "forca": 0.08,
+    "mira": 0.08,
+    "guarda": 0.08
+   }
+  },
+  {
+   "nome": "w30_g012",
+   "pesoPonto": 30,
+   "gama": {
+    "vigor": 0.12,
+    "folego": 0.12,
+    "recuperacao": 0.12,
+    "forca": 0.12,
+    "mira": 0.12,
+    "guarda": 0.12
+   }
+  }
+ ]
+}
