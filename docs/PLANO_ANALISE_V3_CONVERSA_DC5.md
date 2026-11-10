@@ -1,7 +1,8 @@
 # PLANO DE ANÁLISE V3 — CONVERSA_PET, DC5: a voz nova (voz-v4) contra a voz do jogo (2026-11-10, worker, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** Nenhum número deste plano está decidido. Toda escolha está na seção 11 (D-DC5-1 a D-DC5-11), com a recomendação e o
-custo de errar, e espera o Matheus.
+**Status: APROVADO pelo Matheus** (2026-11-10, no chat da sessão da Gerente da CONVERSA_PET). A pergunta foi "Aprova as decisões da DC5
+como recomendadas, com o ≥ 10 de 12?", e a resposta, "Aprovar tudo". As decisões D-DC5-1 a D-DC5-11 da seção 11 ficam DECIDIDAS como
+recomendadas, e o G-NATURAL fica em ≥ 10 de 12 pares por braço (D-DC5-8).
 
 **Nada roda antes de cinco coisas:**
 - este cabeçalho com a marca "APROVADO pelo Matheus";
@@ -135,7 +136,7 @@ A voz-v4 é uma versão nova em `prompt.py` (`VERSAO_VOZ_V4`). A voz-v1, a v2, a
 5. **A rede escolhe o que dizer** (a seleção, D-DC5-5):
    - a voz recebe o pedido (no `dec-v3`) e **no máximo k conceitos**, escolhidos entre os ativos pela pontuação valor × confiança, da maior
      para a menor (empate: a ordem do catálogo);
-   - k = 1 no bebê e na criança, e k = 2 no adolescente e no adulto (PROPOSTO, SEM FONTE; segue o tamanho que a voz já pede por estágio);
+   - k = 1 no bebê e na criança, e k = 2 no adolescente e no adulto (DECIDIDO, SEM FONTE; segue o tamanho que a voz já pede por estágio);
    - **no `dec-v2`,** o conceito com o nome da intenção, se ativo, é sempre um dos escolhidos (ocupa uma das k vagas). Assim a seleção nunca
      faz a INTENÇÃO virar "nenhuma" (`prompt.py:686`). No `dec-v3`, o pedido vai sempre e não ocupa vaga;
    - a seleção é uma função pura do formato, no Python na DC5a; o espelho TypeScript, com teste de paridade, só entra no porte (DC5e). A voz
@@ -203,7 +204,7 @@ A voz-v4 é uma versão nova em `prompt.py` (`VERSAO_VOZ_V4`). A voz-v1, a v2, a
 - **A leitura:** a voz-v4 escolhida em pelo menos 10 de 12 pares no braço (a alternativa é 9 de 12, D-DC5-8).
   - Se não houvesse preferência (p = 0,5), 10 ou mais em 12 sairiam com probabilidade 79/4 096 ≈ 0,019, e ≈ 0,04 em algum dos dois braços;
     9 ou mais, com 299/4 096 ≈ 0,073, e ≈ 0,14 em algum dos dois.
-  - O limiar é PROPOSTO, SEM FONTE (D-DC5-8).
+  - O limiar é DECIDIDO, SEM FONTE (D-DC5-8).
 - **A cegueira à voz não é garantida** (o cabeçalho). Para isso não virar uma leitura feita depois, fica fixado antes:
   - os pares são a **primeira** tarefa da página, antes da legibilidade e da referência;
   - a página grava o tempo de cada par (do momento em que o par aparece até a escolha);
@@ -367,7 +368,7 @@ Por braço:
 | **DC5d** | a marcação (o Opus cego e o Matheus), os gates e o `RESULTADO_V3_CONVERSA_DC5.md` | PR de resultado |
 | **DC5e** | só se uma célula da voz-v4 for apta e o Matheus pedir: a voz-v4 e a seleção no jogo, **atrás de uma chave desligada**, com o espelho TypeScript da seleção e o teste de paridade. Desligada, o jogo de hoje sai igual | PR de código |
 
-## 11. As decisões (PROPOSTAS; cada uma com a recomendação e o custo de errar)
+## 11. As decisões (DECIDIDAS pelo Matheus em 2026-11-10, todas como recomendadas; cada uma com a recomendação e o custo de errar)
 
 - **D-DC5-1, as sementes:** a faixa nova 20262900–20263499, metade para a calibração e metade para a validação (seção 7). Recomendo sim.
   Custo de errar: nenhum material da DC4 é reusado, e uma faixa a mais fica ocupada.
@@ -416,7 +417,7 @@ Por braço:
   - a comparação com o `conversa-v1`, pelo mesmo motivo da DC4-8;
   - um modelo local maior.
   - Recomendo deixar fora. Custo de errar: se o G falhar, de novo não se sabe se o problema é o tamanho do modelo ou o modelo.
-- **D-DC5-11, os números menores do desenho** (todos PROPOSTOS, SEM FONTE). Na DC5a, os da voz e da seleção entram em `digilab/config.py`
+- **D-DC5-11, os números menores do desenho** (todos DECIDIDOS, SEM FONTE). Na DC5a, os da voz e da seleção entram em `digilab/config.py`
   com status e fonte, e os da rodada nas configs de `experiments/configs/v3_conversa_dc5/`:
 
 | número | onde se usa | valor proposto |
