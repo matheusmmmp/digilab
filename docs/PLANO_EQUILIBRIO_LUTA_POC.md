@@ -3,10 +3,10 @@
 Worker: Claude Code, Opus 5.5, worktree `D:\Trab\digilab\v3-luta-poc-lp5`, branch `v3-luta-poc-lp5`, 2026-11-10, a pedido do Gerente de
 sprites e luta (a sessão `local_a6f79153`). A tarefa é a `docs/TAREFA_V3_LUTA_POC.md`, a linha da LP5 na seção 5.1.
 
-**Status: PROPOSTO.** As decisões D-LP5-1 a D-LP5-10 (seção 8) esperam o Matheus. Todos os números novos deste plano (as faixas das metas,
-os tamanhos das amostras, as faixas de sementes) são PROPOSTOS, SEM FONTE. **Nenhuma luta de medição roda** antes de:
-- o Matheus aprovar este plano e as decisões;
-- as faixas de sementes entrarem na `FAIXAS_RESERVADAS` num commit próprio, pedidas ao coordenador (seção 5).
+**Status: APROVADO.** As decisões D-LP5-1 a D-LP5-10 (seção 8) estão DECIDIDAS como recomendadas: o Matheus, em 2026-11-10, "Tá, então
+faz toda a recomendação aí que você deu" (repassado pelo Gerente, que autorizou a reserva das faixas). Os números novos deste plano (as
+faixas das metas, os tamanhos das amostras) seguem PROPOSTOS, SEM FONTE: a régua foi aprovada, não a fonte deles. As faixas de sementes
+estão na `FAIXAS_RESERVADAS` desde o commit próprio da LP5-0 (seção 5).
 
 **A autorização:** o Matheus, em 2026-11-10: "Pode já fazer a LP5" (repassado pelo Gerente). Ela libera este plano, no papel. A calibração
 começa só depois da aprovação.
@@ -207,9 +207,9 @@ de maior folga na meta pior. Entre empates, fica o mais perto do de hoje.
 **O custo da rodada** (SEM FONTE): cada medida inteira ~5 a 15 min em 4 processos; uma grade de 10 a 20 pontos de 1 a 4 h; até 3 rodadas
 nas fases 1 a 3, mais a LP5-0 e a LP5-4: **de 6 a 30 h de máquina**, em cargas separadas.
 
-## 5. As sementes (PROPOSTA; reservadas num commit próprio depois da aprovação)
+## 5. As sementes (DECIDIDAS, D-LP5-6; reservadas no commit próprio da LP5-0)
 
-| uso | faixa PROPOSTA | como |
+| uso | faixa | como |
 |---|---|---|
 | **a calibração** (LP5-0 a LP5-3) | **`86101…86505`**: as bases 86101, 86202, 86303, 86404 e 86505 | por base, a semente do pet `i` é `hashSemente("equilibrio-poc-pet", base, i)` e a da luta `k`, `hashSemente("equilibrio-poc", base, k)` |
 | **a conferência** (LP5-4) | **`87101…87505`** | a mesma derivação; roda uma vez e não volta |
@@ -252,7 +252,7 @@ do `docs/registro/AAAA-MM.md` do mês, com o índice regenerado. **O merge é s�
 4. **O custo no celular** segue SEM FONTE, como na LP2. A rodada não o mede.
 5. **A duração alvo** (a D-LP5-8) é gosto do jogo, não medida: a faixa proposta é um ponto de partida para o Matheus.
 
-## 8. As decisões para o Matheus (todas PROPOSTAS)
+## 8. As decisões (todas DECIDIDAS como recomendadas, 2026-11-10)
 
 | # | a pergunta | a recomendação | o custo de errar |
 |---|---|---|---|
