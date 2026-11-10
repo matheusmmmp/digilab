@@ -176,3 +176,15 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
 | I2 | a linha de base descritiva no modular de hoje | `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md` e uma faixa pedida antes; a run; o `RESULTADO_V3_INDIVIDUALIDADE.md` |
 | Gate I | o Gate I no modular (IN-4), entre o I2 e o I3 | pela `docs/TAREFA_V2_GATE_I.md`, com os critérios no modular |
 | I3, I4, I5, I6 | o temperamento, o dono, o hábito como medida e a ficha | pela proposta, seção 5 |
+| I7 | o desenvolvimento contrafactual: a mesma vida com uma coisa diferente num dia, e o quanto o pet se afasta depois | `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md` (APROVADO); o I7a e o I7b, depois do I5b |
+
+## O plano do I7, o desenvolvimento contrafactual (2026-11-10, Claude Code, Opus 5.5, branch `v3-individualidade-i7-plano`)
+
+- **De onde vem:** a conversa de 2026-11-10 sobre como tirar da frente um achado. O Matheus escolheu a Q3, o desenvolvimento
+  contrafactual, pela recomendação.
+- **O plano:** `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md`, APROVADO pelo Matheus em 2026-11-10 ("Aprovo todas"), com as IR-1 a
+  IR-9 decididas pela recomendação.
+  - Cada pet do I2 é vivido de novo com uma única coisa diferente num dia (outra rng de política, ou um tapa), nos dias 2, 4, 6, 8 e 10.
+  - O afastamento do ramo é medido pelos perfis do I5, contra um gêmeo com outro acaso desde o nascimento.
+  - Três hipóteses rivais ficam escritas antes: a canalização, o ciclo que se reforça e o caos.
+- **Sem mecanismo novo** (IN-7). O I7a depende do I5a na `main` (#751), e o I7b roda depois do I5b.
