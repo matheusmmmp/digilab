@@ -303,3 +303,29 @@ prancha está em `docs/objetos3d/cais/voxel/prancha.jpg`.
 
 **O revisor** (um subagente que não fez o trabalho) deu APROVA COM RESSALVA: lê-se como voxel de verdade, e o barco é reconhecível. Ficam de
 fora os anéis de corda nos postes, a janela da cabine e os tons por tábua, que seriam pintura nova (D-OBJ-CAIS-V8).
+
+## 18. O cais feito à mão por script (2026-11-10, Gerente, Claude Code, Fable 5.2, branch `v3-objeto-cais-mao`)
+
+**O pedido:** depois do carro e da geladeira feitos por script (`docs/TAREFA_V3_MUNDO_ENFEITES.md`, seções 15 e 16), o Matheus pediu:
+"agora eu quero que você faça a mesma coisa com o cais". O cais em voxel da seção 17 sai do jogo.
+
+**O cais (`docs/objetos3d/cais/mao/`):**
+- `cais_mao.py`: segue o esboço 1 (o píer de tábuas, as estacas amarradas de corda, o musgo e o barquinho azul e amarelo com a cabine),
+  mas nada vem da Meshy. O píer agora sai da areia para o mar: uma rampa, a passarela e a ponta mais larga (um L), com o barco atracado ao
+  lado. As peças são sólidos simples: 11 tábuas de quinas vivas, cada uma com o tamanho e o giro um pouco diferentes (uma quebrada), 4
+  vigas, 7 estacas, 4 voltas de corda, o casco por seções, a cabine com o teto de lona, 2 cabos de amarrar, o barril, o caixote, a boia, o
+  musgo, as flores e o capim. A pintura é uma função da posição no espaço, só com cores chapadas. Os sólidos, o atlas e a escrita do glTF
+  são os do `carro_mao.py`;
+- `publicar_mao.py`: a procedência no `asset.extras`, a troca em `web/app/public/lugares/cais/` e o validador (0 erros, 0 avisos).
+
+**No jogo:** 1 704 triângulos (teto 2 414), 198 kB com o `License.txt` (teto 300 kB), um nó, uma malha, uma textura de 1024 px.
+- **As medidas do script estão em células da ilha**, e a altura da tabela (1,96) é a do modelo: a escala é 1.
+- **O pé do modelo fica no fundo do mar** (`FUNDO_AGUA`), não mais na areia: as estacas e o casco do barco entram na água.
+- **O meio do modelo fica 0,9 célula mar adentro** (`PLANTA_ILHA.lugares.cais.mar`). A vista centra o modelo pela caixa dele; sem isso, a
+  metade do píer ficava em cima da grama. Com isso a rampa começa na borda da areia, onde o caminho de terra chega.
+- O `web/app/test/lugares3d.test.ts` aceita as duas procedências (a marca de IA da Meshy ou o script do feito à mão, como nos enfeites) e
+  ganha o teste do cais: a procedência, a escala 1, o pé no fundo do mar e o avanço.
+
+**Não feito:** não houve revisor separado nem prancha de capturas no git; a conferência foi na vitrine e no jogo, no estilo da Ilha, de dia
+e de noite. O estilo Digital dentro do jogo, o celular e o e2e não foram conferidos. O toque no cais usa a caixa do modelo, que mudou de
+forma; o cais segue trancado. Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-CAIS-M1 a M4.
