@@ -600,3 +600,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-09 — INDIVIDUALIDADE, as decisões depois do I2 (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i5-plano`)](registro/2026-11.md)
 - [2026-11-09 — INDIVIDUALIDADE, I5: o plano APROVADO (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i5-plano`)](registro/2026-11.md)
 - [2026-11-10 — LUTA_POC, LP4: a chave ligada e a limpeza do combate por turnos (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp4`)](registro/2026-11.md)
+- [2026-11-10 — LUTA_POC, LP5: o plano do equilíbrio da luta em tempo real (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5`)](registro/2026-11.md)
