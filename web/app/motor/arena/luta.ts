@@ -31,9 +31,10 @@ export function configLuta(e: EntradaLuta, tabela: TabelaFormas = FORMAS_ARENA):
 /** a distancia do tiro da entrada (D-LP5-12): cada numero finito e na faixa, senao falha alto */
 export function conferirTiro(t: Tiro): Tiro {
   const ok = (x: unknown, min: number, max: number) => typeof x === "number" && Number.isFinite(x) && x >= min && x <= max;
-  if (!ok(t.distMin, 0, ACAO.alcanceDist) || !ok(t.esperaMax, 0, 10_000) || !ok(t.recuaAbaixo, 0, 1) || !ok(t.recuo, 0.1, 3) || !ok(t.recuaNaPrep, 0, 3))
+  if (!ok(t.distMin, 0, ACAO.alcanceDist) || !ok(t.esperaMax, 0, 10_000) || !ok(t.recuaAbaixo, 0, 1) || !ok(t.recuo, 0.1, 3) || !ok(t.recuaNaPrep, 0, 3)
+    || !ok(t.danoProj, 0.2, 2) || !ok(t.velProj, 0.3, 3))
     throw new Error(`arena: distancia do tiro invalida ${JSON.stringify(t)}`);
-  return { distMin: t.distMin, esperaMax: t.esperaMax, recuaAbaixo: t.recuaAbaixo, recuo: t.recuo, recuaNaPrep: t.recuaNaPrep };
+  return { distMin: t.distMin, esperaMax: t.esperaMax, recuaAbaixo: t.recuaAbaixo, recuo: t.recuo, recuaNaPrep: t.recuaNaPrep, danoProj: t.danoProj, velProj: t.velProj };
 }
 
 export interface ResultadoLuta {

@@ -73,7 +73,7 @@ function aplicarDano(L: Luta, at: Lutador, alvo: Lutador, dados: GolpeBase | nul
   const crit = L.r.combate() * 100 < at.st.crit, m = mult(L, at, alvo);
   const runa = at.buffAte > L.relogio ? 1.3 : 1;
   let d = at.st.atk * (100 / (100 + alvo.st.def)) * (1 - EQ.variacao + L.r.combate() * 2 * EQ.variacao) * (crit ? 1.5 : 1) * m * (hab ? at.st.hpot : 1) * runa
-    * (dados.proj ? EQ.danoDist : EQ.danoCorpo) * dados.fr;
+    * (dados.proj ? (L.cfg.tiro ? L.cfg.tiro.danoProj : EQ.danoDist) : EQ.danoCorpo) * dados.fr;
   d = Math.max(1, Math.round(d));
   const antes = alvo.hp;
   alvo.hp = Math.max(0, alvo.hp - d); at.dano += d; at.golpes++;
@@ -113,7 +113,7 @@ function soltarGolpe(L: Luta, u: Lutador): void {
   if (dados.proj) {
     const [px, py] = peito(u), sx = px + (u.viraEsq ? -1 : 1) * EQ.raio;
     const dx = u.mira![0] - sx, dy = u.mira![1] - py, d = dist(dx, dy) || 1;
-    const vel = dados.proj.vel * PX_POR_UNIDADE * L.cfg.pvel * (def(L).projVel?.(L.cena) ?? 1);
+    const vel = dados.proj.vel * PX_POR_UNIDADE * L.cfg.pvel * (L.cfg.tiro ? L.cfg.tiro.velProj : 1) * (def(L).projVel?.(L.cena) ?? 1);
     L.projeteis.push({ de: u, dados, hab, x: sx, y: py, altura: EQ.peito, vx: dx / d * vel, vy: dy / d * vel, resta: Math.max(u.alcance, ACAO.alcanceDist) * 1.8,
       t: 0, esq: dx < 0, fim: false, decidido: new Set() });
     return;

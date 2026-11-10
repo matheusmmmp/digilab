@@ -54,9 +54,11 @@ export const OPCOES_PADRAO = { forca: 1.5, pvel: 0.15, dific: "normal" as Dificu
     - recuaAbaixo: recua quando a distancia fica abaixo desta fracao do alcance (a POC: 0,5);
     - recuo: a velocidade do recuo de quem atira (x o movimento; a POC: o EQ.recuo, 1);
     - recuaNaPrep: a velocidade (x o movimento) com que ele se afasta na preparacao do tiro, se o alvo esta mais perto que a distMin ou que
-      o recuaAbaixo; 0 = parado, como na POC */
-export interface Tiro { distMin: number; esperaMax: number; recuaAbaixo: number; recuo: number; recuaNaPrep: number }
-export const TIRO_V21: Readonly<Tiro> = Object.freeze({ distMin: 0, esperaMax: 0, recuaAbaixo: 0.5, recuo: EQ.recuo, recuaNaPrep: 0 });
+      o recuaAbaixo; 0 = parado, como na POC;
+    - danoProj: o dano do projetil (no lugar do EQ.danoDist, 1 na POC) e velProj: a velocidade dele (x o OPCOES_PADRAO.pvel; 1 na POC).
+      Tiram forca de quem atira quando ele mantem distancia (D-LP5-13, 4: "Aprovo as 4") */
+export interface Tiro { distMin: number; esperaMax: number; recuaAbaixo: number; recuo: number; recuaNaPrep: number; danoProj: number; velProj: number }
+export const TIRO_V21: Readonly<Tiro> = Object.freeze({ distMin: 0, esperaMax: 0, recuaAbaixo: 0.5, recuo: EQ.recuo, recuaNaPrep: 0, danoProj: EQ.danoDist, velProj: 1 });
 
 /** movimento e tempos das acoes. PROPOSTO, PROTOTIPO */
 export const ACAO = {

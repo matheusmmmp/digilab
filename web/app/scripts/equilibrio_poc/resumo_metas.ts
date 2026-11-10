@@ -150,7 +150,8 @@ if (tem(...ESTAGIOS_LUTA.map(e => `formas_${e}`))) {
     /* S1: o espelho, por mapa */
     /* a D-LP5-11: o lado A so nas lutas com vencedor; os empates ficam no D2 (e vao ao lado, para leitura) */
     const esp = Object.fromEntries(mapas.map(m => { const c = fs.reduce((a, f) => juntar(a, P[m][`${f}|${f}`]), novaConta()); if (c.n === c.e) throw new Error(`resumo: o espelho do ${e} no ${m} so empatou`); return [m, r3(c.v / (c.n - c.e))]; }));
-    if (Object.values(esp).some(x => !dentro(x, .45, .55))) okS = false;
+    /* a D-LP5-13 (1): o S1 vigiado nos 7 mapas fora da Praia; a Praia vai ao lado, para leitura (a investigacao do nucleo e fora da LP5) */
+    if (Object.entries(esp).some(([m, x]) => m !== "praia" && !dentro(x, .45, .55))) okS = false;
     const tudo = mapas.reduce((a, m) => fs.reduce((b, f) => juntar(b, P[m][`${f}|${f}`]), a), novaConta());
     s1[e] = { lado_a_com_vencedor: esp, leitura: { a: r3(tudo.v / tudo.n), b: r3((tudo.n - tudo.v - tudo.e) / tudo.n), empate: r3(tudo.e / tudo.n), a_sem_empates: r3(tudo.v / (tudo.n - tudo.e)) } };
     /* so leitura: os empates de cada forma fora do espelho (o D2 conta o espelho junto) */
@@ -161,7 +162,7 @@ if (tem(...ESTAGIOS_LUTA.map(e => `formas_${e}`))) {
   const D2 = metas.find(m => m.id === "D2");
   if (!D2) throw new Error("resumo: o D2 sumiu");
   D2.valores.leitura_empate_fora_do_espelho = Object.fromEntries(Object.entries(empForaEspelho).map(([e, m]) => [e, { max: Math.max(...Object.values(m)), acima_de_2pc: Object.entries(m).filter(([, x]) => x > .02).map(([f, x]) => `${f} (${x})`) }]));
-  meta("S1", "o espelho", "o mesmo lutador dos dois lados: o lado A de 0,45 a 0,55 em cada mapa, so nas lutas com vencedor (D-LP5-11)", okS, s1);
+  meta("S1", "o espelho", "o mesmo lutador dos dois lados: o lado A de 0,45 a 0,55 em cada mapa fora da Praia, so nas lutas com vencedor (D-LP5-11 e D-LP5-13)", okS, s1);
 }
 /* ---------------------------------------------------------------- A2 (D-LP5-12): a distancia do tiro contra quem luta de perto */
 if (tem("tiro")) {
