@@ -260,8 +260,11 @@ código da cena:
   cartão. Ele se pula quando `Assets/evolucao_up` não existe, porque os pacotes ficam fora do git.
 - **Sem os assets** (outra máquina, o modo remoto sem a pasta), a Revelação mostra o aviso "A cena da evolução não tocou" e segue no
   cartão, como a seção 11 já fazia.
-- **A música e o efeito tocam só com o som ligado** em Ajustes, que segue desligado por padrão (`src/som.ts`). Com o som desligado, a
-  cena toca muda.
+- **O som passa a vir ligado por padrão** (Matheus, 2026-11-10, "Ligar por padrão", para a música da cena tocar sem passar por
+  Ajustes): em `src/som.ts`, só fica desligado se o jogador desligou (a chave do som gravada com `"0"`), e isso continua lembrado. Os
+  testes do som (`test/som.test.ts` e os dois e2e do som) passam a partir do padrão ligado. Sem a pasta `Assets/sons`, o aviso do mapa
+  de sons aparece na primeira vez que o jogo pede um som. O navegador só libera o áudio depois do primeiro gesto na página: se a cena
+  abre antes de qualquer clique (o pet evolui ao abrir o jogo), o som retoma no primeiro clique ou tecla (`aoGesto` em `src/som.ts`).
 - **O celular de referência continua sem medida** (a decisão 4 da seção 10).
 - **Na prévia** (`npm run dev`, o save do e2e `save_evolucao.json` com o som ligado): o mapa, os pacotes `tamers.bin` e
   `revelacao.bin`, a música `EVO.mp3` e o `sfx_evolution_sfx.mp3` vieram com 200. A cena tocou do Agumon no casulo ao Growlmon revelado,

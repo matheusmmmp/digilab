@@ -112,7 +112,7 @@ function Revelacao({ i, m, fechar }: { i: number; m: Motor; fechar: () => void }
   /* abre no topo (o foco inicial iria para o Continuar, embaixo, e rolaria a tela) */
   useEffect(() => { const d = ref.current; if (!d) return; abrirModal(d); d.scrollTop = 0; if (!cena) d.querySelector<HTMLElement>(".revel-tit")?.focus(); }, [cena]);
   useEffect(() => rotaDaTelaCheia("#/evolucao"), []);
-  /* so apresentacao: o efeito da evolucao (src/som.ts; desligado por padrao); a revelacao daqui e imediata, entao a queda cai no começo.
+  /* so apresentacao: o efeito da evolucao (src/som.ts; ligado por padrao); a revelacao daqui e imediata, entao a queda cai no começo.
      Com a cena, o efeito e a musica sao dela; a musica para quando a revelacao fecha */
   useEffect(() => {
     if (!cena) void SOM.tocarEvolucao(0);

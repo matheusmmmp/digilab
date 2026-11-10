@@ -1271,20 +1271,26 @@ test("mundo: o ovo novo choca na cena 3D", async ({ page }) => {
   expect(erros).toEqual([]);
 });
 
-/* UP-SOM: o som e desligado por padrao. Desligado, nenhuma requisicao de audio sai (nem em uma luta inteira); ligar e lembrado ao
-   recarregar e nao entra no save exportado; ligado com os arquivos ausentes, o aviso aparece e o jogo segue. */
-test("som: desligado por padrão não pede áudio nem em uma luta; ligar é lembrado e fica fora do save", async ({ page }) => {
+/* UP-SOM: o som e ligado por padrao (Matheus, 2026-11-10). Desligado pelo jogador, nenhuma requisicao de audio sai (nem em uma luta
+   inteira); ligar e desligar sao lembrados ao recarregar e nao entram no save exportado; ligado com os arquivos ausentes, o aviso aparece
+   e o jogo segue. */
+test("som: ligado por padrão; desligado não pede áudio nem em uma luta; a escolha é lembrada e fica fora do save", async ({ page }) => {
   test.setTimeout(180_000);
   await semear(page, SAVES.champion);
   const erros = vigiarErros(page), pedidos: string[] = [];
-  page.on("request", r => { if (/\/Assets\/sons\/|\.mp3(\?|$)/.test(r.url())) pedidos.push(r.url()); });
   await page.goto(APP + "#/pet/estado");
+  /* padrao ligado; o jogador desliga, e o desligado volta ao recarregar */
+  await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
+  await expect(page.getByRole("switch", { name: /Som do jogo/ })).toBeChecked();
+  await page.getByRole("switch", { name: /Som do jogo/ }).uncheck();
+  await page.reload();
+  page.on("request", r => { if (/\/Assets\/sons\/|\.mp3(\?|$)/.test(r.url())) pedidos.push(r.url()); });
   await irPara(page, "Lutar", "Arena", "lutar/arena");
   await page.getByTestId("poc-lutar").click();
   await expect(page.getByTestId("poc-resultado")).toBeVisible({ timeout: 90_000 });
   expect(pedidos, "pediu áudio com o som desligado").toEqual([]);
   await page.getByTestId("poc-resultado").getByRole("button", { name: "Continuar" }).click();
-  /* Configuração: padrão desligado; ligar e mexer no volume ficam no localStorage do app e voltam ao recarregar */
+  /* Configuração: o desligado foi lembrado; ligar e mexer no volume ficam no localStorage do app e voltam ao recarregar */
   await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
   const chave = page.getByRole("switch", { name: /Som do jogo/ }), vol = page.getByLabel("Volume do som");
   await expect(chave).not.toBeChecked();
@@ -1307,6 +1313,8 @@ test("som: ligado com os arquivos ausentes mostra o aviso e a tela segue", async
   await page.route(/\/Assets\/sons\//, r => r.fulfill({ status: 404, body: "ausente" }));
   await page.goto(APP + "#/pet/estado");
   await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
+  /* ja vem ligado (padrao): desliga e liga de novo, o gesto que pede o mapa */
+  await page.getByRole("switch", { name: /Som do jogo/ }).uncheck();
   await page.getByRole("switch", { name: /Som do jogo/ }).check();
   await expect(page.getByTestId("aviso-som").first()).toBeVisible();
   await expect(page.getByTestId("aviso-som").first()).toContainText("mapa de sons");
