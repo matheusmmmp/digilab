@@ -168,6 +168,15 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
   1 min 36 s. Duas fumaças seguidas deram a mesma análise. Estimativa para as 360 vidas do I2: uns 5 min de replay com 4 processos.
 - **As leituras do plano** estão no registro: D-IND-I5a-1 a 3.
 
+## Resultado da etapa I5b (2026-11-10, Claude Code, Opus 5.5, branch `v3-individualidade-i5b`)
+
+- **A análise única do I5** rodou sobre as 360 vidas do I2, com o registro antes (`977b33c`) e todos os logs refeitos iguais aos do disco.
+  O resultado está no `docs/RESULTADO_V3_INDIVIDUALIDADE.md`, seção 8, e o artefato em `artifacts_v3_individualidade_i5/`.
+- **O achado:** o H_dono não se distingue de zero em nenhum perfil nem braço, e o H_mundo fica acima de zero em todos. O pet se parece
+  com os outros pets do mesmo dono tanto quanto com ele mesmo em outro dia: o que separa os pets é o dono (D-IND-I5b-1).
+- **As expectativas:** a E1 não se confirma, a E2 sai ao contrário e a E3 se confirma sem separar a SEQ.
+- **O custo:** 2,0 s por vida, 3 min 53 s ao todo com 4 processos.
+
 ## As etapas seguintes
 
 | etapa | o quê | entrega |
@@ -188,3 +197,15 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
   - O afastamento do ramo é medido pelos perfis do I5, contra um gêmeo com outro acaso desde o nascimento.
   - Três hipóteses rivais ficam escritas antes: a canalização, o ciclo que se reforça e o caos.
 - **Sem mecanismo novo** (IN-7). O I7a depende do I5a na `main` (#751), e o I7b roda depois do I5b.
+
+## O adendo 1 do plano do I7 (2026-11-10, Claude Code, Opus 5.5, branch `v3-individualidade-i7-adendo1`)
+
+- **O adendo** está DECIDIDO pelo Matheus em 2026-11-10 ("E daí a gente parte para seguir as recomendações"), na seção 12 do
+  `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md`, depois da conferência das 29 referências (vault, seções 9 e 10). Ele traz:
+  - uma quarta hipótese, a H-TRANS (caos cedo, canalização depois);
+  - a régua crua e a forma em U como condições das frases;
+  - a expectativa da malha fechada;
+  - dois descritivos: o estado interno e o efeito comum do tapa.
+
+  As decisões A1-1 a A1-5 estão DECIDIDAS, todas pela recomendação.
+- **A D-IND-I5b-1** (o dono separa os pets) está confirmada pelo Matheus.
