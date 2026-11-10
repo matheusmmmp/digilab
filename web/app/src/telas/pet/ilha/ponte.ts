@@ -23,5 +23,6 @@ export function ponte(ilha: Ilha): THREE.Mesh {
   }
   const malha = new THREE.Mesh(m.geometria(), toon({ vertexColors: true }));
   malha.name = "ponte";
+  malha.frustumCulled = false;                 // a dobra do mundo muda onde a peca aparece (como as outras malhas dobradas da cena)
   return malha;
 }

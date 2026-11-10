@@ -31,21 +31,27 @@ export function caixasDaPonte(ilha: Pick<Ilha, "pontes" | "cel">): Caixa[] {
     const emX = agua(x, z - 1) || agua(x, z + 1) || !(agua(x - 1, z) || agua(x + 1, z));
     const passo = 1 / T.porCelula, y0 = T.altura, y1 = T.altura + T.espessura;
     for (let k = 0; k < T.porCelula; k++) {
-      const a = k * passo + T.fresta / 2, b = (k + 1) * passo - T.fresta / 2, tom = (x * 7 + z * 13 + k * 5) % PONTE_ILHA.cor.tabua.length;
+      /* o tom e o da tabua inteira: as celulas vizinhas ao longo dela dao o mesmo */
+      const a = k * passo + T.fresta / 2, b = (k + 1) * passo - T.fresta / 2, tom = ((emX ? x * 7 : z * 13) + k * 5) % PONTE_ILHA.cor.tabua.length;
       if (emX) out.push({ peca: "tabua", tom, min: [x + a, y0, z - (agua(x, z - 1) ? T.sobra : 0)], max: [x + b, y1, z + 1 + (agua(x, z + 1) ? T.sobra : 0)] });
       else out.push({ peca: "tabua", tom, min: [x - (agua(x - 1, z) ? T.sobra : 0), y0, z + a], max: [x + 1 + (agua(x + 1, z) ? T.sobra : 0), y1, z + b] });
     }
   }
-  for (const b of celulasDoCorrimao(ilha)) {
+  const beiras = celulasDoCorrimao(ilha), tem = (x: number, z: number, dx: number, dz: number) => beiras.some(o => o.x === x && o.z === z && o.dx === dx && o.dz === dz);
+  for (const b of beiras) {
+    /* os postes da beira: um em cada ponta; onde a beira continua na celula vizinha, um so, na divisa (quem o poe e a celula de antes) */
+    const ao = b.dx !== 0 ? b.z : b.x, antes = b.dx !== 0 ? tem(b.x, b.z - 1, b.dx, b.dz) : tem(b.x - 1, b.z, b.dx, b.dz);
+    const depois = b.dx !== 0 ? tem(b.x, b.z + 1, b.dx, b.dz) : tem(b.x + 1, b.z, b.dx, b.dz);
+    const pontas = [...(antes ? [] : [ao + C.poste / 2]), depois ? ao + 1 : ao + 1 - C.poste / 2];
     /* a linha da beira, recuada para dentro da celula */
     const fixo = b.dx !== 0 ? b.x + (b.dx > 0 ? 1 - C.recuo : C.recuo) : b.z + (b.dz > 0 ? 1 - C.recuo : C.recuo), m = C.pau / 2, p = C.poste / 2;
     const yT = PONTE_ILHA.tabuado.altura + PONTE_ILHA.tabuado.espessura;
     if (b.dx !== 0) {
       out.push({ peca: "corrimao", tom: 0, min: [fixo - m, yT + C.altura - C.pau, b.z], max: [fixo + m, yT + C.altura, b.z + 1] });
-      for (const e of [b.z + p, b.z + 1 - p]) out.push({ peca: "poste", tom: 0, min: [fixo - p, yT, e - p], max: [fixo + p, yT + C.altura, e + p] });
+      for (const e of pontas) out.push({ peca: "poste", tom: 0, min: [fixo - p, yT, e - p], max: [fixo + p, yT + C.altura, e + p] });
     } else {
       out.push({ peca: "corrimao", tom: 0, min: [b.x, yT + C.altura - C.pau, fixo - m], max: [b.x + 1, yT + C.altura, fixo + m] });
-      for (const e of [b.x + p, b.x + 1 - p]) out.push({ peca: "poste", tom: 0, min: [e - p, yT, fixo - p], max: [e + p, yT + C.altura, fixo + p] });
+      for (const e of pontas) out.push({ peca: "poste", tom: 0, min: [e - p, yT, fixo - p], max: [e + p, yT + C.altura, fixo + p] });
     }
   }
   return out;

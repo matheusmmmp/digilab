@@ -168,16 +168,17 @@ export const PLANTA_ILHA = {
 /** a planta da ilha onde so a agua barra o pet (docs/TAREFA_V3_ILHA_AGUA.md, IA3; o layout com agua, AGUA_POR_LAYOUT do motor): a ilha
     inteira fica dentro do mapa do motor, e a moldura e so mar. A praca, o saco, a barraca, o cais e os caminhos sao os da planta A (o
     mapa da agua foi desenhado em volta deles: o caminho da barraca passa pela ponte do norte). O que muda:
-    - o portao vem para dentro, na ponta norte da ilha, e o caminho dele para la;
+    - o portao vem para dentro, na ponta norte da ilha, e o caminho dele para la; o caminho do cais para na praia, dentro do mapa;
     - o ultimo poste do cais sai do mar;
     - os marcos vem para dentro (o carro no oeste, a geladeira na areia do sudeste, o trilho no leste), nos pontos da figura aprovada
       (IA-2), ja que nao ha mais moldura de terra;
-    - nao ha bosque nem vao: nada alto que nao seja do motor ou um enfeite entra na area (a regra 5 da ilha), e a moldura e mar.
+    - nao ha bosque nem vao: nada alto que nao seja do motor, um lugar ou um enfeite entra na area (a regra 5 da ilha; do entorno dos
+      marcos so entra o que e baixo), e a moldura e mar.
     `moldura`: as celulas de mar em volta do mapa do motor; `praia`: a terra a ate tantas celulas do mar vira areia (`praiaSul` da linha
     `sulDesde` para baixo, onde fica o cais). PROPOSTO, SEM FONTE */
 export const PLANTA_ILHA_AGUA: PlantaIlha = {
   ...PLANTA_ILHA,
-  caminhos: { ...PLANTA_ILHA.caminhos, portao: [[31, 16], [31, 5]] },
+  caminhos: { ...PLANTA_ILHA.caminhos, portao: [[31, 16], [31, 5]], cais: [[31, 16], [36, 24], [37.6, 27.4]] },
   lugares: { ...PLANTA_ILHA.lugares, portao: { alvo: [31, 3.5], busca: 3, folga: 1, clareira: 3, base: 1.6 } },
   postes: [[27.5, 13], [34.5, 13], [27.5, 19.5], [34.5, 19.5], [33.5, 24], [36.2, 26.6]],
   marcos: {
@@ -190,10 +191,11 @@ export const PLANTA_ILHA_AGUA: PlantaIlha = {
 };
 export const ILHA_AGUA = { moldura: 8, praia: 1, praiaSul: 2, sulDesde: 22 } as const;
 /** a ponte da ilha com agua (ponte.ts), em formas lisas e cores chapadas (o padrao cartoon de 2026-11-10), feita por codigo: o tabuado
-    (a altura sobre o chao, a espessura, quantas tabuas por celula e a fresta entre elas), o corrimao nas beiras que dao para a agua (a
+    (a altura sobre o chao e a espessura, baixas porque o pet, a bola e as sombras sao desenhados no chao; quantas tabuas por celula e
+    a fresta entre elas), o corrimao nas beiras que dao para a agua (a
     altura, a espessura do pau, o poste) e as cores. Em celulas. PROPOSTO, SEM FONTE */
 export const PONTE_ILHA = {
-  tabuado: { altura: 0.06, espessura: 0.1, porCelula: 4, fresta: 0.035, sobra: 0.12 },
+  tabuado: { altura: 0.01, espessura: 0.04, porCelula: 4, fresta: 0.035, sobra: 0.12 },
   corrimao: { altura: 0.62, pau: 0.07, poste: 0.11, recuo: 0.08 },
   cor: { tabua: [0xc98a4b, 0xb97c42, 0xd2955a], corrimao: 0x8a5a2e, poste: 0x6f4623 },
 } as const;

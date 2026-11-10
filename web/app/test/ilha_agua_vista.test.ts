@@ -6,10 +6,11 @@
      - a ilha de hoje (o layout sem agua) nao muda: os testes dela (ilha_grade, ilha_planta, ilha_enfeites, ilha_lugares) seguem como estao. */
 import { describe, expect, test } from "vitest";
 import { AGUA_ILHA, CMU_MVP, CMU_MVP_AGUA, PONTE, celulasSecas } from "../motor/index.ts";
-import { ILHA_AGUA, PLANTA_ILHA, PLANTA_ILHA_AGUA } from "../src/telas/pet/ilha/constantes.ts";
+import { ILHA_AGUA, PLANTA_ILHA, PLANTA_ILHA_AGUA, PONTE_ILHA } from "../src/telas/pet/ilha/constantes.ts";
 import { ilhaDe } from "../src/telas/pet/ilha/grade.ts";
 import { MODELOS } from "../src/telas/pet/ilha/modelos.ts";
-import { celulasDoCorrimao } from "../src/telas/pet/ilha/ponteConta.ts";
+import { listaDeFocos } from "../src/telas/pet/ilha/luzConta.ts";
+import { caixasDaPonte, celulasDoCorrimao } from "../src/telas/pet/ilha/ponteConta.ts";
 
 const CM = CMU_MVP_AGUA, W = CM.celulas_x, H = CM.celulas_y, secas = celulasSecas(CM)!;
 const seca = (x: number, z: number): boolean => x >= 0 && z >= 0 && x < W && z < H && secas[Math.floor(z) * W + Math.floor(x)];
@@ -19,7 +20,10 @@ describe("a grade da ilha com agua", () => {
 
   test("mesma entrada, mesma ilha; a ilha de hoje nao tem o modo da agua", () => {
     const b = ilhaDe(CM);
-    expect(JSON.stringify([ilha.celulas, ilha.objetos, ilha.extras, ilha.enfeites, ilha.lugares])).toBe(JSON.stringify([b.celulas, b.objetos, b.extras, b.enfeites, b.lugares]));
+    const tudo = (i: typeof ilha) => JSON.stringify([i.celulas, i.objetos, i.extras, i.enfeites, i.lugares, i.caminhos, [...i.escondidos], i.pontes]);
+    expect(tudo(ilha)).toBe(tudo(b));
+    /* o saco e a praca sao os mesmos nas duas plantas (lugares.ts le o saco da planta A) */
+    expect([PLANTA_ILHA_AGUA.lugares.saco, PLANTA_ILHA_AGUA.praca]).toEqual([PLANTA_ILHA.lugares.saco, PLANTA_ILHA.praca]);
     const hoje = ilhaDe(CMU_MVP);
     expect([ilha.comAgua, hoje.comAgua]).toEqual([true, false]);
     expect(hoje.planta).toBe(PLANTA_ILHA);
@@ -59,6 +63,16 @@ describe("a grade da ilha com agua", () => {
       expect(perto, `${x},${z}`).toBe(true);
     }
     expect(areia).toBeGreaterThan(100);
+    /* ao norte da linha `sulDesde` a praia tem `praia` celulas; dali para o sul, `praiaSul` */
+    const longe = (x: number, z: number, d: number) => { for (let dz = -d; dz <= d; dz++) for (let dx = -d; dx <= d; dx++) if (mar(x + dx, z + dz)) return false; return true; };
+    let larga = 0;
+    for (let z = 0; z < H; z++) for (let x = 0; x < W; x++) {
+      const c = ilha.cel(x, z)!;
+      if (c.tipo !== "areia") continue;
+      if (z < ILHA_AGUA.sulDesde) expect(longe(x, z, ILHA_AGUA.praia), `${x},${z}`).toBe(false);
+      else if (longe(x, z, ILHA_AGUA.praia)) larga++;
+    }
+    expect(larga).toBeGreaterThan(5);
   });
 
   test("as pontes da vista sao as do mapa do motor, pintadas como caminho", () => {
@@ -67,12 +81,42 @@ describe("a grade da ilha com agua", () => {
     expect(ilha.pontes).toEqual(doMapa);
     expect(doMapa.length).toBe(8);
     for (const [x, z] of ilha.pontes) expect(ilha.cel(x, z)!.tipo).toBe("caminho");
-    /* o corrimao so nas beiras que dao para a agua: cada celula de ponte tem agua de um lado pelo menos em uma das pontes */
+    /* as duas pontes atravessam o rio de oeste a leste: a agua fica ao norte e ao sul, e o corrimao so nessas 8 beiras */
     const beiras = celulasDoCorrimao(ilha);
-    expect(beiras.length).toBe(8);
-    for (const b of beiras) {
-      expect(ilha.pontes.some(([x, z]) => x === b.x && z === b.z)).toBe(true);
-      expect(ilha.cel(b.x + b.dx, b.z + b.dz)!.tipo).toBe("agua");
+    expect(beiras.map(b => [b.x, b.z, b.dx, b.dz]).sort()).toEqual(
+      [[42, 11, 0, -1], [43, 11, 0, -1], [42, 12, 0, 1], [43, 12, 0, 1], [43, 21, 0, -1], [44, 21, 0, -1], [43, 22, 0, 1], [44, 22, 0, 1]].sort());
+  });
+
+  test("as caixas da ponte: as tabuas atravessadas ao passo, sobrando so para a agua; o corrimao rente a agua; nada sobre a terra", () => {
+    const caixas = caixasDaPonte(ilha), T = PONTE_ILHA.tabuado, C = PONTE_ILHA.corrimao;
+    const naPonte = (x: number, z: number) => ilha.pontes.some(([px, pz]) => px === Math.floor(x) && pz === Math.floor(z));
+    const tabuas = caixas.filter(c => c.peca === "tabua"), paus = caixas.filter(c => c.peca === "corrimao"), postes = caixas.filter(c => c.peca === "poste");
+    expect([tabuas.length, paus.length, postes.length]).toEqual([8 * T.porCelula, 8, 12]);
+    for (const c of caixas) {
+      const [x0, y0, z0] = c.min, [x1, y1, z1] = c.max;
+      expect(x1 > x0 && y1 > y0 && z1 > z0, JSON.stringify(c)).toBe(true);
+      /* nenhuma caixa passa para a terra a oeste ou a leste; para o norte e o sul, so a sobra das tabuas sobre a agua */
+      for (const [x, z] of [[x0 + 1e-6, z0 + 1e-6], [x1 - 1e-6, z0 + 1e-6], [x0 + 1e-6, z1 - 1e-6], [x1 - 1e-6, z1 - 1e-6]]) {
+        const c0 = ilha.cel(Math.floor(x), Math.floor(z))!;
+        expect(naPonte(x, z) || (c.peca === "tabua" && c0.tipo === "agua"), `${c.peca} em ${x},${z}`).toBe(true);
+      }
+      if (c.peca === "tabua") {
+        /* quem atravessa anda em x: a tabua e estreita em x e comprida em z; baixa, porque o pet e a bola sao desenhados no chao */
+        expect(x1 - x0).toBeLessThan(1 / T.porCelula);
+        expect(z1 - z0).toBeGreaterThanOrEqual(1);
+        expect(z1 - z0).toBeLessThanOrEqual(1 + T.sobra + 1e-9);
+        expect(y1).toBeLessThanOrEqual(0.06);
+        expect(y0).toBeGreaterThan(0);
+      } else expect(y1).toBeCloseTo(T.altura + T.espessura + C.altura, 9);
+    }
+    /* a mesma tabua em duas celulas tem o mesmo tom */
+    for (const a of tabuas) for (const b of tabuas) if (a.min[0] === b.min[0] && Math.abs(a.min[2] - b.min[2]) <= 1.2) expect(a.tom).toBe(b.tom);
+    /* o corrimao fica a `recuo` da beira da agua, do lado de dentro da ponte */
+    for (const c of paus) {
+      const z = (c.min[2] + c.max[2]) / 2, borda = Math.round(z);
+      expect(Math.abs(z - borda)).toBeCloseTo(C.recuo, 9);
+      expect(ilha.cel(Math.floor(c.min[0]), z < borda ? borda : borda - 1)!.tipo).toBe("agua");
+      expect(c.max[0] - c.min[0]).toBe(1);
     }
   });
 
@@ -85,6 +129,7 @@ describe("a grade da ilha com agua", () => {
     const cais = ilha.lugares[2];
     expect([seca(cais.x, cais.z - 1), seca(cais.x, cais.z)]).toEqual([true, false]);
     expect(ilha.cel(Math.floor(cais.x), Math.floor(cais.z) - 1)!.tipo).toBe("areia");
+    expect(ilha.cel(Math.floor(cais.x), Math.floor(cais.z))!.nivel).toBe(-1);                 // o cais da para o mar, nao para o rio
     expect(ilha.enfeites.map(e => e.nome).sort()).toEqual(["carro", "geladeira", "poste", "poste", "poste", "poste", "poste", "poste", "trilho"]);
     for (const e of ilha.enfeites) expect(seca(e.x, e.z), `${e.nome} em ${e.x},${e.z}`).toBe(true);
     expect(seca(...PLANTA_ILHA_AGUA.lugares.saco)).toBe(true);
@@ -94,7 +139,11 @@ describe("a grade da ilha com agua", () => {
       /* nada alto que nao seja do motor (a regra 5 da ilha) */
       if (!o.doMotor && !ilha.escondidos.has(i)) expect(MODELOS[o.modelo].baixo, o.modelo).toBe(true);
     });
-    for (const o of ilha.extras) expect(seca(o.x, o.z), `${o.modelo} em ${o.x},${o.z}`).toBe(true);
+    for (const o of ilha.extras) {
+      expect(seca(o.x, o.z), `${o.modelo} em ${o.x},${o.z}`).toBe(true);
+      expect(MODELOS[o.modelo].baixo, o.modelo).toBe(true);
+    }
+    expect(ilha.extras.length).toBeGreaterThan(5);
     expect(ilha.objetos.length).toBeGreaterThan(100);
   });
 
@@ -110,12 +159,14 @@ describe("a grade da ilha com agua", () => {
       if (naPonte(x, z)) ponte++;
     }
     expect([molhou, ponte > 0]).toEqual([0, true]);
-    /* todos os caminhos da planta ficam em terra de ponta a ponta (o do cais para na areia) */
+    /* todos os caminhos da planta ficam em terra de ponta a ponta (o do cais para na praia) */
     ilha.caminhos.forEach((l, n) => {
       for (let k = 1; k < l.length; k++) for (let t = 0; t <= 100; t++) {
         const x = l[k - 1][0] + ((l[k][0] - l[k - 1][0]) * t) / 100, z = l[k - 1][1] + ((l[k][1] - l[k - 1][1]) * t) / 100;
-        if (z < H - 2) expect(seca(x, z), `caminho ${n} em ${x},${z}`).toBe(true);
+        expect(seca(x, z), `caminho ${n} em ${x},${z}`).toBe(true);
       }
     });
+    /* e nenhum foco de luz cai na agua */
+    for (const [x, z] of listaDeFocos(ilha)) expect(seca(x, z), `foco em ${x},${z}`).toBe(true);
   });
 });

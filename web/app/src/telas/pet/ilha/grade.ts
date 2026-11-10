@@ -333,7 +333,11 @@ export class Ilha {
     let j = this.area.h;
     while (this.cel(i, j + 1)?.tipo === "areia") j++;
     /* na ilha com agua a praia fica dentro do mapa: a ultima linha de terra da coluna, de sul para norte */
-    if (this.comAgua) { j = this.area.h - 1; while (j > 0 && this.cel(i, j)?.tipo === "agua") j--; }
+    if (this.comAgua) {
+      j = this.area.h - 1;
+      while (j > 0 && this.cel(i, j)?.tipo === "agua") j--;
+      if (this.cel(i, j + 1)?.nivel !== -1) throw new Error(`o cais na coluna ${i} da ilha ${this.cm.layout.nome} nao da para o mar`);
+    }
     if (this.cel(i, j)?.tipo !== "areia" || this.cel(i, j + 1)?.tipo !== "agua") throw new Error(`sem beira de mar para o cais na coluna ${i} da ilha ${this.cm.layout.nome}`);
     if (doMotor.some(o => Math.hypot(o.x - C.x, o.z - (j + 1)) < C.clareira)) throw new Error(`uma arvore do motor na clareira do cais na ilha ${this.cm.layout.nome}`);
     this.lugares.push({ nome: "cais", x: C.x, z: j + 1, giro: Math.PI, y: this.altura(C.x, j + 0.5) });
@@ -419,6 +423,8 @@ export class Ilha {
       this.abrir(x, z, G.clareira);
       const E = D.entorno;
       for (const [modelo, quantos, escala] of [["arbusto", E.arbusto, [0.8, 1.15]], ["grama_alta", E.grama_alta, [0.9, 1.3]], ["pedra", E.pedra, [0.6, 0.95]]] as const) {
+        /* na ilha com agua o marco fica onde o pet anda: do entorno so entra o que e baixo (a regra 5 da ilha) */
+        if (this.comAgua && !MODELOS[modelo].baixo) continue;
         for (let k = 0, tent = 0; k < quantos && tent < quantos * 60; tent++) {
           const a = r() * Math.PI * 2, d = G.clareira * 0.55 + r() * (E.raio - G.clareira * 0.55), ox = x + Math.cos(a) * d, oz = z + Math.sin(a) * d;
           if (!noLado(ox, oz) || !this.plana(ox, oz, 0, modelo === "pedra" ? ["grama", "areia"] : ["grama"])) continue;
