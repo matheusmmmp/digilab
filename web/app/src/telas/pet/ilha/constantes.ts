@@ -49,6 +49,21 @@ export const NOITE = {
 } as const;
 /** a luz fraca do ninho a noite: o raio (celulas) e a cor */
 export const LUZ_NINHO = { raio: 2.2, cor: "255,214,140" } as const;
+/** a hierarquia de luz (a regra 1 de "guiar o olhar sem texto", docs/pranchas/ux-ilha-luz/; LZ-1 a LZ-5 aprovadas pelo Matheus em
+    2026-11-09, "B com tudo"): liga por padrao com a proposta `escolhida`; `?luz=a|b|c` troca a proposta e `?luz=0` desliga (so para
+    comparar). Perto dos destinos (o lar, a praca e os lugares abertos, a `raio` celulas; o cais trancado nao acende, LUGAR_ABERTO) e dos caminhos (focos pequenos a cada `passo`
+    celulas, de `raioCaminho`) a cor fica inteira e puxa para a cor da luz do ninho (`quente`); longe deles ela escurece (`escuro`, o
+    fator) e perde saturacao (`dessat`). A borda de cada foco esfuma de `miolo` (a fracao do raio) ate o raio. No chao, nas flores e
+    nos tufos o efeito vale `pesoChao` (a grama nao fica cinza): quem muda e o que fica de pe. So de dia; o pet, as
+    sombras, os halos e as particulas nao mudam. Os numeros sao do desenho: PROPOSTO, SEM FONTE */
+export const LUZ_HIERARQUIA = {
+  raio: { lar: 7, praca: 7.5, portao: 6, barraca: 6.5, cais: 6 }, passo: 3, raioCaminho: 2.6, miolo: 0.2, pesoChao: 0.3, escolhida: "b",
+  propostas: {
+    a: { escuro: 0.78, dessat: 0.45, quente: 0.14 },
+    b: { escuro: 0.9, dessat: 0.25, quente: 0.08 },
+    c: { escuro: 1, dessat: 0, quente: 0.12 },
+  },
+} as const;
 
 /* os objetos do cuidado e a coreografia (docs/TAREFA_V3_HABITAT_OBJETOS.md): so vista, como o resto deste arquivo */
 /** o kit medico da lesao, ao lado do ninho, em celulas a partir do ninho do layout (o saco de pancada, desde a planta A, fica perto da
@@ -162,8 +177,10 @@ export const CHAMADO = { raio: 1.9, sai: 3, amplitude: 0.12, periodo: 260, tau: 
 export const LUGAR_LUZ = { cor: { portao: "110,240,230", barraca: "110,240,230", cais: "131,228,218" }, forca: 0.55 } as const;
 /** a luz dos enfeites a noite (enfeites.ts): o halo na lanterna, na fracao `altura` da altura do modelo, com `tamanho` celulas de
     diametro, em cascas (as fracoes do tamanho) de opacidade `forca` cada (aditiva), e o quanto os vidros brilham (emissiveIntensity).
-    PROPOSTO, SEM FONTE */
-export const ENFEITE_HALO = { altura: 0.86, tamanho: 1.1, cascas: [0.55, 0.78, 1], forca: 0.08, vidro: 1.6 } as const;
+    PROPOSTO, SEM FONTE. Com o poste em blocos (2026-11-08, docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 14): a altura 0,86 -> 0,77, o meio
+    dos vidros da lanterna nova (33,5 de 43,2 blocos; o 0,86 era o do lampiao antigo); a forca 0,08 -> 0,06 (o revisor leu o halo como um
+    anel no Digital, na primeira tentativa do retrabalho) */
+export const ENFEITE_HALO = { altura: 0.77, tamanho: 1.1, cascas: [0.55, 0.78, 1], forca: 0.06, vidro: 1.6 } as const;
 /** o ceu do estilo digital (estilos.ts; docs/TAREFA_V3_MAPA_DIGITAL.md, D1): a cor do horizonte do ceu pintado (a media da faixa de baixo
     da imagem), para a nevoa, a cor de baixo da luz do ceu de dia, azulada (a sombra do anime), e a nevoa mais longe que a da ilha (o fundo
     de anime tem as arvores de tras nitidas; a de 26 a 62 desbotava tudo, e a de 42 a 95 as deixava pesadas; D2). PROPOSTO, SEM FONTE */

@@ -697,7 +697,11 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave():
                       # a bateria da INDIVIDUALIDADE (I1): importa o orquestrador da C4 so pela vida (`viver`); nao le a chave
                       "experiments/sondas_individualidade.py",
                       # o orquestrador do I2 da INDIVIDUALIDADE: importa o da C4 pela vida, pela conferir_memoria e pelo COM_FACETAS; nao le a chave
-                      "experiments/run_v3_individualidade.py"}
+                      "experiments/run_v3_individualidade.py",
+                      # a medicao de desempenho (docs/DESEMPENHO_PERFIL_2026-11.md): importa o orquestrador da C4 pela vida e pela analise; nao le a chave
+                      "experiments/medir_desempenho_perfil.py",
+                      # a auditoria do PET_VIVO: so cita a pasta da run da C4 (memoria_autobio/run) para reler os logs; nao le a chave
+                      "experiments/auditoria_pet_vivo.py"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre"):
         if not (RAIZ / pasta).exists():

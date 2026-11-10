@@ -1,0 +1,27 @@
+{
+ "eventos": 1563,
+ "gzip9_bytes": 4680,
+ "interpretador": {
+  "executavel": "D:\\Trab\\digilab\\_ferramentas\\pypy3.12-v8.0.1-win64\\pypy3.exe",
+  "implementacao": "PyPy",
+  "maquina": "AMD64",
+  "sistema": "Windows-11-10.0.26300-SP0",
+  "versao": "3.12.15"
+ },
+ "log_bytes": 76657,
+ "melhor_de": 5,
+ "modo": "logs",
+ "msgspec": null,
+ "orjson": null,
+ "parede_script_s": 2.108,
+ "s": {
+  "de_jsonl": 0.00068,
+  "gzip_compress_6": 0.00041,
+  "gzip_compress_9": 0.00123,
+  "gzip_decompress": 0.00133,
+  "para_jsonl": 0.00249,
+  "so_json_dumps_por_linha": 0.00242,
+  "so_json_loads_por_linha": 0.00067,
+  "so_para_dict": 3e-05
+ }
+}
