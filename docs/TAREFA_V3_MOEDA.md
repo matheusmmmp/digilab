@@ -1,6 +1,6 @@
 # TAREFA V3 — MOEDA (2026-11-10)
 
-Coordenador: Matheus. Worker: Claude Code (Gerente da V3, Opus 5.5). Worktree e branch: `v3-moeda-plano` (o plano); as etapas MO1 a MO5 em `v3-moeda`. Status: ABERTA (o plano PROPOSTO espera as decisões M-1 a M-10).
+Coordenador: Matheus. Worker: Claude Code (Gerente da V3, Opus 5.5). Worktree e branch: `v3-moeda-plano` (o plano); as etapas MO1 a MO5 em `v3-moeda`. Status: ABERTA. O plano está aprovado: as M-1 a M-10 DECIDIDAS pelo Matheus em 2026-11-10 ("Aprovo as 10"); a próxima etapa é a MO1.
 
 Categoria: documentacao. Origem: Matheus, 2026-11-10: o Matheus pediu em 2026-11-10 uma rodada de planejamento da moeda do jogo (os Bits) e das melhorias da ilha, para aprovar.
 

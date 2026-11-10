@@ -1,6 +1,6 @@
-# Plano da moeda do jogo web: os Bits e as melhorias da ilha (2026-11-10, PROPOSTO)
+# Plano da moeda do jogo web: os Bits e as melhorias da ilha (2026-11-10)
 
-**Status:** planejamento, sem código. As decisões M-1 a M-10 (seção 9) esperam o Matheus. Todo número é PROPOSTO e SEM FONTE; os
+**Status:** planejamento, sem código. As decisões M-1 a M-10 (seção 9) estão **DECIDIDAS** pelo Matheus em 2026-11-10 ("Aprovo as 10"), todas com a opção recomendada. Todo número é PROPOSTO e SEM FONTE; os
 números se acertam na rodada de equilíbrio do fim (a regra "equilíbrio só no fim").
 
 **Origem:** o Matheus, em 2026-11-10: "uma rodada de planejamento para a gente setar uma moeda para o jogo". Ele quer que:
@@ -160,7 +160,7 @@ flowchart LR
 
 ## 9. Decisões para o Matheus
 
-Cada uma com a recomendação e o custo de errar.
+Cada uma com a recomendação e o custo de errar. **DECIDIDAS em 2026-11-10 pelo Matheus ("Aprovo as 10"), todas como recomendadas.** Os números continuam PROPOSTOS (M-10).
 
 - **M-1. O nome da moeda: Bits.** É a moeda dos Digimon World, e combina com a regra dos nomes Digimon na tela. Custo de errar: baixo;
   trocar o nome é só texto, antes do MO1.
