@@ -130,3 +130,26 @@ O susto fica pela regra, mas é o traço com o R_dia indistinguível de zero (se
 
 Pela tarefa, o Gate I no modular (IN-4) vem antes do I3. A bateria do I3 são os seis traços (7.4). As questões abertas para o Matheus são o
 incoerente duplicado (D-IND-I2b-1) e as facetas no sentido contrário.
+
+## 7. Adendo 1: as facetas dentro do dono (2026-11-09, descritivo, sem run)
+
+Este é o adendo 1 do plano (seção 13), decidido pelo Matheus em 2026-11-09 e commitado antes da conta (`39e4ae7`).
+- **O artefato:** `artifacts_v3_individualidade/facetas_por_dono.json`, gravado por
+  `experiments/descritivo_individualidade_facetas.py`. Ele lê o `medidas.json` do I2 e grava o sha256 dele.
+- **O que entra:** só os pets do REL+F, 60 por dono. O incoerente fica fora (D-IND-I2c-2).
+
+| dono | apego × `apego_dono` | neofilia × `cautela_comida` | ousadia × `ousadia_longe` |
+|---|---|---|---|
+| atencioso | indefinido (a faceta não varia) | indefinido (a faceta não varia) | +0,15 [−0,16; +0,43] |
+| relapso | +0,18 [−0,08; +0,42] | indefinido (a faceta não varia) | −0,13 [−0,41; +0,13] |
+| aleatório | −0,00 [−0,27; +0,25] | +0,08 [−0,09; +0,24] | −0,00 [−0,26; +0,24] |
+
+- **A frase que a leitura pode escrever (7.2):** dentro de cada dono, **nenhuma faceta acompanha o traço**. Todos os IC95 contêm 0.
+- **A conta sobre o `medidas.json`:** as facetas ficam no teto, `teto_faceta` = S/4 = 192 (`digilab/config.py`):
+  - no atencioso, o `apego_dono` é +192 nos 60 pets, e a `cautela_comida` é −192 nos 60;
+  - no relapso, a `cautela_comida` também é −192 nos 60;
+  - no aleatório, ela é −192 em 53 dos 60.
+- **O que isso diz:** a correlação no sentido contrário da seção 2 vem da diferença entre os donos. O relapso e o aleatório deixam o
+  `apego_dono` abaixo do teto e põem o apego medido acima do atencioso. Dentro do dono, a faceta quase não se move, porque está no teto.
+- **O que não diz:** a run não diz se a faceta causa algo no traço; isso é da sonda `sem_faceta` do I4. O teto é um número DECIDIDO
+  (ME-4), e o adendo não o calibra.

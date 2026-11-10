@@ -4,7 +4,7 @@
 import { expect, test } from "vitest";
 import { readFileSync } from "node:fs";
 import {
-  CENAS, ERRO_MIRA_POC, FORMAS_ARENA, IDS_CENA, LIMITE_MS, configLuta, criarLuta, formaArena, lutar, passo, rodarAteOFim, sementeArena, sorteiosPorFluxo,
+  CENAS, ERRO_MIRA_POC, FORMAS_ARENA, FORMAS_ARENA_POC, GOLPES_DA_POC, IDS_CENA, LIMITE_MS, configLuta, criarLuta, formaArena, lutar, passo, rodarAteOFim, sementeArena, sorteiosPorFluxo,
   type EntradaLuta, type Evento, type IdCena, type Luta, type Sorteios, type Stats,
 } from "../motor/arena/index.ts";
 import { DIGIMON_DA_FORMA, LUGARES_V6, NPC } from "../motor/index.ts";
@@ -29,8 +29,17 @@ test("a tabela tem as 60 formas do jogo, com o Digimon do catalogo, e os 10 riva
     expect(f.msGolpe, k).toBeGreaterThan(0);
     expect(f.golpe.t, k).toBeGreaterThan(0);
   }
-  /* o Gabumon nao tem projetil nos dados do jogo (a LP-8 e da LP3); o Agumon tem */
-  expect(FORMAS_ARENA.cirro_crianca_arisco.golpe.proj).toBeNull();
+  /* o Gabumon nao tem projetil nos dados do jogo; desde a LP3b (a LP-8) ele atira o proprio efeito de acerto, e a tabela da POC guarda o
+     golpe de antes. O Agumon tem o projetil do jogo */
+  expect(FORMAS_ARENA.cirro_crianca_arisco.golpe.proj).toEqual({ prefab: "Fx_Gabumon_Attack_Hit", vel: 30, tipo: "Guide" });
+  expect(FORMAS_ARENA_POC.cirro_crianca_arisco.golpe.proj).toBeNull();
+  expect(Object.keys(GOLPES_DA_POC).sort()).toEqual(["cirro_adolescente_brigao", "cirro_adolescente_guardiao", "cirro_adulto_furioso", "cirro_crianca_arisco", "ferrugem_adolescente_cacador"]);
+  for (const [k, g] of Object.entries(GOLPES_DA_POC)) {
+    expect(g.proj, k).toBeNull();
+    /* so o projetil muda: o instante, os acertos e o fatorRitmo (velocidade 30: (30/30)^kProj = 1) sao os da POC */
+    expect({ ...FORMAS_ARENA[k].golpe, proj: null }, k).toEqual(g);
+    expect(FORMAS_ARENA[k].habilidade, k).toBeNull();
+  }
   expect(FORMAS_ARENA.brasa_crianca_sereno.golpe.proj?.vel).toBe(30);
   expect(() => formaArena("ninguem")).toThrow(/ninguem/);
 });
@@ -47,8 +56,8 @@ test("replay bit a bit: a mesma entrada da a mesma luta, nos 8 mapas; outra seme
 
 test("os 8 mapas da POC rodam ate o fim, cada um com a regra dele aparecendo", () => {
   expect(IDS_CENA).toEqual(["campo", "coliseu", "floresta", "praia", "deserto", "castelo", "caverna", "ringue"]);
-  /* o Gabumon (corpo a corpo) contra o Agumon (projetil), os dois tanques, para a luta durar e as regras de tempo (o Coliseu aos 30 s,
-     a tempestade aos 12 s) aparecerem */
+  /* o Veemon (corpo a corpo) contra o Agumon (projetil), os dois tanques, para a luta durar e as regras de tempo (o Coliseu aos 30 s,
+     a tempestade aos 12 s) aparecerem. Era o Gabumon, que atira desde a LP3b (a LP-8) */
   const tanque: Stats = { ...ST, hp: 6000, atk: 60 };
   const regra: Record<IdCena, (ev: Evento[]) => boolean> = {
     campo: () => true,
@@ -62,7 +71,7 @@ test("os 8 mapas da POC rodam ate o fim, cada um com a regra dele aparecendo", (
   };
   for (const id of IDS_CENA) {
     expect(CENAS[id].nome.length, id).toBeGreaterThan(3);
-    const { ev, res } = jogar(entrada(id, 404, "cirro_crianca_arisco", "brasa_crianca_sereno", tanque, tanque));
+    const { ev, res } = jogar(entrada(id, 404, "ferrugem_crianca_arisco", "brasa_crianca_sereno", tanque, tanque));
     expect(res.fim, id).toBe(true);
     expect(res.relogio, id).toBeLessThan(LIMITE_MS);
     expect(ev.at(-1)?.tipo, id).toBe("fim");
@@ -103,7 +112,8 @@ test("fidelidade: o nucleo novo da o mesmo resultado que a POC (efb2ded) 1 contr
   expect(gab.lutas.length).toBe(480);
   const dif: string[] = [];
   for (const g of gab.lutas) {
-    const r = lutar(entrada(g.cena, g.semente, g.a, g.b, st, st));
+    /* a POC nao tinha o projetil da LP-8 (LP3b): a fidelidade e contra a tabela dela */
+    const r = lutar(entrada(g.cena, g.semente, g.a, g.b, st, st), sorteiosPorFluxo(g.semente), FORMAS_ARENA_POC);
     const obtido = { vencedor: r.vencedor, fim: r.fim, relogio: r.relogio, vidaA: r.vidaA, vidaB: r.vidaB };
     const esperado = { vencedor: g.vencedor, fim: g.fim, relogio: g.relogio, vidaA: g.vidaA, vidaB: g.vidaB };
     if (JSON.stringify(obtido) !== JSON.stringify(esperado)) dif.push(`${g.cena} ${g.a} x ${g.b} (${g.semente}): ${JSON.stringify(esperado)} -> ${JSON.stringify(obtido)}`);
