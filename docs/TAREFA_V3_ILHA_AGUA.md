@@ -139,3 +139,18 @@ A água no mundo do Python, sem mudar nenhuma vida de antes.
 - **Fica para a IA4:** ligar no jogo (a versão do pet e a passagem dos pets vivos), o pet que hoje atravessa os marcos, e a ida do pet
   até um lugar aberto, que é em linha reta e cruzaria o rio.
 
+
+## 11. Depois da IA4: os ajustes do desenho (planejamento futuro)
+
+**Estado: PROPOSTO.** O Matheus confirmou em 2026-11-10 que o desenho da ilha ainda vai ser ajustado e que entram mais árvores
+("você vai ajustar o desenho e botar mais árvores, né? Tá no plano. Planejamento futuro."). Nada desta seção está construído nem tem
+data; a ordem e a forma de cada item ele decide quando a IA4 estiver pronta.
+
+| Etapa | O que entrega | O que precisa ser decidido antes |
+|---|---|---|
+| IA5 | **Árvores na ilha.** Hoje a ilha com água não tem nenhuma: a regra é que nada alto fica onde o pet anda, e a moldura virou mar | Como a árvore convive com o pet. Recomendação: a árvore ocupa a célula dela e o pet a contorna, pelo mesmo desvio da água (o motor já sabe contornar um obstáculo). A outra forma é a árvore só de enfeite, que o pet atravessa |
+| IA6 | **O desenho da costa, do rio e das lagoas revisto** na tela (a forma, a largura da praia, mais uma lagoa ou um braço de rio). O mapa é uma lista de linhas de texto e muda sem mexer no código | Só o desenho novo. Cada mudança do mapa refaz o gabarito da paridade |
+| IA7 | **Relevo baixo onde o pet anda** (a IA-3 deixou para depois): colinas suaves, sem penhasco que barre | Se a vista sobe e desce o pet no terreno; é trabalho só de vista |
+| IA8 | **Os marcos como obstáculos:** o pet contorna o carro, o trilho, a geladeira e o portão em vez de atravessá-los | Junto com a IA5: é a mesma mecânica |
+
+O que **não** entra aqui: nado, barco, pesca e mata fechada onde o pet não entra (seções 1 e 7).
