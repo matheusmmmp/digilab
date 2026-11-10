@@ -88,7 +88,7 @@ describe("os marcos do Tamer e a uniao", () => {
     /* o Champion treinado sem medalha: chocou, chamados, Rookie, treino e Champion = Nv 5; as Regras (marco 6) abrem e os Itens (marco 5) nao */
     const e = sincronizar({ marcos: [], cartoes: [] }, marcosFeitos([champion], tamer(0)), true).estado;
     expect(nivelDe(e)).toBe(5);
-    expect(pecaAberta(e, "regras")).toBe(true);
+    expect(pecaAberta(e, "forcar")).toBe(true);
     expect(pecaAberta(e, "forcar")).toBe(true);
     expect(pecaAberta(e, "itens")).toBe(false);
     expect(pecaAberta(e, "fronteira")).toBe(false);
@@ -102,7 +102,7 @@ describe("as pecas", () => {
     expect(PECAS.crescer.marco).toBe(3); expect(PECAS.conversar.marco).toBe(3);
     expect(PECAS.lutar.marco).toBe(4);
     expect(PECAS.itens.marco).toBe(5);
-    expect(PECAS.regras.marco).toBe(6); expect(PECAS.forcar.marco).toBe(6);
+    expect("regras" in PECAS).toBe(false); expect(PECAS.forcar.marco).toBe(6);
     expect(PECAS.fronteira.marco).toBe(8);
   });
   test("o menu e a aba de cada peca; Pet e as outras abas nao tem trava", () => {
@@ -125,7 +125,7 @@ describe("as pecas", () => {
 describe("a ordem dos niveis e os cartoes", () => {
   test("do Nv 1 ao 9, um marco cada, na ordem do plano", () => {
     expect(CARTOES.map(c => c.n)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
-    expect(CARTOES.map(c => c.titulo)).toEqual(["Cuide dele", "Diário", "Crescer", "Lutar", "Itens", "Regras de luta", "3 medalhas", "Fronteira", "Campeão"]);
+    expect(CARTOES.map(c => c.titulo)).toEqual(["Cuide dele", "Diário", "Crescer", "Lutar", "Itens", "Forçar o treino", "3 medalhas", "Fronteira", "Campeão"]);
   });
   test("os textos cabem no plano (4.2): titulo de ate 3 palavras e frase de ate 8", () => {
     for (const c of CARTOES) {
@@ -146,7 +146,7 @@ describe("a primeira visita, o piso 4 e o nunca-desce", () => {
     expect(zero.estado).toEqual({ marcos: [], cartoes: [] });
     expect(nivelDe(zero.estado)).toBe(0);
     expect(zero.novos).toEqual([]);
-    for (const p of ["diario", "crescer", "lutar", "conversar", "itens", "regras", "fronteira"] as const) expect(pecaAberta(zero.estado, p), p).toBe(false);
+    for (const p of ["diario", "crescer", "lutar", "conversar", "itens", "forcar", "fronteira"] as const) expect(pecaAberta(zero.estado, p), p).toBe(false);
     const choca = sincronizar(zero.estado, marcosFeitos([new Motor(7)], tamer(0)), true);
     expect(nivelDe(choca.estado)).toBe(1);
     expect(choca.novos).toEqual([1]);
@@ -162,7 +162,7 @@ describe("a primeira visita, o piso 4 e o nunca-desce", () => {
     expect(cartoesPendentes(r.estado)).toEqual([]);
     for (const p of ["diario", "crescer", "lutar", "conversar"] as const) expect(pecaAberta(r.estado, p), p).toBe(true);
     expect(pecaAberta(r.estado, "itens")).toBe(false);
-    expect(pecaAberta(r.estado, "regras")).toBe(false);
+    expect(pecaAberta(r.estado, "forcar")).toBe(false);
     expect(pecaAberta(r.estado, "fronteira")).toBe(false);
   });
   test("so o Tamer nao vazio (sem pet) tambem entra pelo piso, com as medalhas que tem", () => {
@@ -174,7 +174,7 @@ describe("a primeira visita, o piso 4 e o nunca-desce", () => {
   test("um save de hoje no piso abre tudo o que abria antes, com os marcos que ele tem (Champion, 3 medalhas, Liga)", () => {
     const champ = sincronizar(null, marcosFeitos([champion], tamer(0)), true).estado;
     expect(champ.marcos).toEqual([1, 2, 3, 4, 6]);
-    for (const p of ["diario", "crescer", "lutar", "conversar", "regras", "forcar"] as const) expect(pecaAberta(champ, p), p).toBe(true);
+    for (const p of ["diario", "crescer", "lutar", "conversar", "forcar"] as const) expect(pecaAberta(champ, p), p).toBe(true);
     const liga = sincronizar(null, marcosFeitos([champion], tamer(6, true)), true).estado;
     expect(liga.marcos).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     for (const p of Object.keys(PECAS) as (keyof typeof PECAS)[]) expect(pecaAberta(liga, p), p).toBe(true);

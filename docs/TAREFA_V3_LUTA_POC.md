@@ -480,3 +480,58 @@ mais longas. O equilíbrio é da LP5.
 **A tela:** o desenho da LP3 não muda. O voo das cinco formas passa a ser o da simulação; o projétil só desenhado da LP3 saiu neste PR,
 depois do merge da LP3 na `main` (D-LP3b-6).
 
+
+## Resultado da LP4 (2026-11-10)
+
+Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp4`, a pedido do Gerente de sprites e luta, com a liberação do Matheus
+("Sim, abre a LP4", 2026-11-10, repassado). Os desvios estão em `docs/registro/2026-11.md`, seção "LUTA_POC, LP4". Três escolhas que perdem
+ou escondem dado são PROPOSTAS para o Matheus: a D-LP4-1, a D-LP4-2 e a D-LP4-3.
+
+**A chave ligada.** `LUTA_POC_LIGADA = true` (`web/app/motor/arena/constantes.ts`). Com isso, para todos e sem `?luta_poc=1`:
+- os ovos novos e o pet de exemplo nascem v21 (`VERSAO_PET = 21`);
+- só a v21 abre (`VERSOES_PET = [21]`), e o pet de teste v16 segue no laboratório;
+- o Importar só abre a v21;
+- a Arena, a Campanha e a Fronteira são as do palco novo.
+
+**O descarte 8 (PROPOSTA, D-LP4-2).** Roda uma vez, também onde o 7 já rodou pelo `?luta_poc=1`:
+- os pets v13 a v19 saem, o ativo e os guardados, com o aviso "A luta agora é na arena" e o arquivo para baixar;
+- no Tamer, sai a Fábrica do combate por turnos (v13 e v14), que não se refaz mais, com o registro de antes guardado no mesmo arquivo; o
+  recorde da Fábrica recomeça. O resto do Tamer fica byte a byte;
+- o registro do Tamer passa à versão 8.
+
+**O que saiu** (o inventário da seção 3.4):
+- o motor: `motor/combate_tr/`, `motor/combate.ts`, `motor/gambits_pet.ts`, as listas de gambits de `motor/bots.ts`, os fatores das arenas,
+  da Liga, do Salão e da Fábrica, as regras das arenas (fica a série da Cidadela), o `CV`, o `CV21E` e o `GA`, o `Motor.lutar`, o
+  `montarLuta`, os gambits (`"g"`), as cartas (`"k"`) e os chips de regra. Os eventos `"g"` e `"k"` no registro levantam erro;
+- as telas: `src/luta.ts`, o palco 1D (`palcoTR/`; os geradores de desenho que o palco 2D usa foram para `palcoPoc/`), a `TelaLuta`, a
+  `TelaArena`, a `TelaCampanha`, o `ModalResultado`, o `EditorRegras`, o `PainelAprendizado`, o `aprendizadoLuta.ts`, a `EscolhaCarta`, o mapa
+  3D da Exploração e o "Ver replay" do Diário. Os Cenários do Diário lutam na luta da POC; o Nv 6 da progressão passou a ser o Forçar;
+- os itens: só o chip de stat faz efeito. Os chips de regra e as cartas ficam no catálogo, sem efeito, porque o registro do Tamer os guarda,
+  e as medalhas e as revanches não os dão mais;
+- os testes e os scripts: os do combate por turnos, os gabaritos das versões antigas, `scripts/equilibrio_tr/` e
+  `scripts/gerar_gabarito_vidas_v13.ts`; no e2e, os specs das telas de antes, e os saves regerados na v21.
+
+**O pet de teste (PROPOSTA, D-LP4-3).** Ele não luta mais. Um save v16 com luta não abre e fica no armazenamento, com o erro visível.
+
+**O que não mudou.** As vidas v21 dos gabaritos da LP2 e da LP2b, com o replay bit a bit: o lugar dos gambits e das cartas na assinatura
+ficou. O Python ficou (LP-7). Os registros não se apagaram, e o G-NADA-PERDIDO passa.
+
+**Os documentos.** Os do combate por turnos levam a marca SUBSTITUÍDO, com o link para esta tarefa:
+- a `ESPEC_COMBATE_TR`, a `TAREFA_V2_COMBATE_TR` e a `TAREFA_V3_COMBATE_V14`;
+- os três `PLANO_EQUILIBRIO_COMBATE_TR*` e o `EQUILIBRIO_COMBATE_TR`;
+- a `TAREFA_V3_LUTA_EMPURRAO` e, no palco 1D, a `TAREFA_V3_LUTA_EFEITOS`.
+A `PLANO_V3` (a trilha B), a `TAREFA_V3_PONTE_LUTA`, o `DESIGN_MEDALHAS_ARENAS` e o `MAPA_REPOSITORIO` ganharam a nota do que mudou.
+
+**Os achados.**
+- O Mega da v21 quebrava (D-LP4-5): o conserto saiu junto com o `gp`.
+- A progressão pode travar (D-LP4-6, para a LP5; `web/app/scripts/medicoes/lp4_gazimon.json`):
+  - um Rookie sem treino não vence o Gazimon;
+  - com o treino típico, vence de 0 a 32 %;
+  - o dono simulado que luta contra o próprio estágio não chega à taxa do Ultimate.
+
+**Os testes novos:** `test/luta_poc_lp4.test.ts`:
+- a chave e as versões;
+- pela fonte, que nada do combate por turnos existe nem é importado;
+- os itens;
+- a Fábrica só v21.
+Também `test/tamer.test.ts`, com o descarte 8 e a Fábrica de antes, e `e2e_capturas/luta_poc_lp4.spec.ts`, com as capturas.
