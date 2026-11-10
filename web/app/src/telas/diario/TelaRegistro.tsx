@@ -2,18 +2,15 @@
    eventos, Verificar e Copiar, os filtros e as linhas (hora, tipo em icone, texto); a frase do "como funciona" e o aviso do Novo ovo ficam fechados. O tipo
    de cada linha e um icone (o nome vai no aria-label); "regras" e o aprendido (tracejado ciano). Verificar replay, copiar o registro, e o ovo novo em
    area de risco separada, com confirmacao. */
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Ban, Brain, ChevronRight, Copy, Dumbbell, Hand, HeartCrack, Layers, Medal, Package, PawPrint, RotateCcw, Swords, X, type LucideIcon } from "lucide-react";
-import { Motor, NOME_PET, type ItemHistorico, duracaoLuta } from "../../../motor/index.ts";
+import { Motor, NOME_PET, type ItemHistorico } from "../../../motor/index.ts";
 import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import { textoSave } from "../../save.ts";
 import { diaDe, hhmm } from "../pet/TelaPet.tsx";
-import { LUTA, REPLAY, reconstruirLuta, reverLuta } from "../../luta.ts";
-import { ENDERECO_LUTA } from "../../rotas.ts";
 import { Folha } from "../../componentes/Folha.tsx";
 import { ComoFunciona } from "../../componentes/Dica.tsx";
-import { PorqueLuta } from "../lutar/ModalResultado.tsx";
 
 type Filtro = "todos" | "voce" | "pet" | "luta" | "recusa" | "treino";
 /* tipo de cada linha do historico: [filtro, etiqueta, cor da etiqueta] (prancha DiarioRegistro) */
@@ -32,35 +29,8 @@ const ICONE_TIPO: Record<string, LucideIcon> = {
   dono: Hand, gambit: Brain, pet: PawPrint, recusa: Ban, luta: Swords, treino: Dumbbell, tamer: Medal, lesao: HeartCrack, carta: Layers, item: Package,
 };
 
-/** Ver replay (modal Resultado): a luta do evento idx refeita do registro, com o porque dela. So leitura. */
-function ReplayLuta({ idx, fechar }: { idx: number; fechar: () => void }) {
-  const { motor: m } = useJogo(), tit = useRef<HTMLHeadingElement>(null);
-  const [luta] = useState(() => { try { return reconstruirLuta(m, idx); } catch (err) { return err instanceof Error ? err.message : String(err); } });
-  useEffect(() => { tit.current?.focus(); }, []);
-  if (typeof luta === "string") return (
-    <section className="dl-card reg-replay" aria-labelledby="rep-tit"><h2 id="rep-tit" ref={tit} tabIndex={-1}>Replay da luta</h2>
-      <p className="reg-msg erro"><i aria-hidden="true">!</i>Não foi possível refazer a luta: {luta}</p>
-      <button type="button" className="dl-btn dl-btn--sec" onClick={fechar}>Fechar replay</button></section>
-  );
-  const { res, A, B } = luta, ev = m.log[idx];
-  const txt = res.pontosA === 1 ? `${A.nomeTela} venceu` : res.pontosA === 0 ? `${B.nomeTela} venceu` : "Empate";
-  return (
-    <section className="dl-card reg-replay" aria-labelledby="rep-tit">
-      <h2 id="rep-tit" ref={tit} tabIndex={-1}>Replay da luta</h2>
-      <p><b>{A.nomeTela} × {B.nomeTela}</b> · <span className="dl-lcd">D{diaDe(ev[0])} {hhmm(ev[0])}</span> · {txt} em {duracaoLuta(res)} ({res.fim === "ko" ? "nocaute" : "limite de tempo"}).</p>
-      <p className="dl-apoio">Refeita do registro (evento {idx + 1} de {m.log.length}): o pet reconstruído até a luta, o mesmo rival e a mesma semente.</p>
-      <PorqueLuta res={res} A={A} B={B} travadas={null} desafiado={m.desafiado === 1} />
-      <div className="reg-replay-bts">
-        <button type="button" className="dl-btn" onClick={() => { reverLuta(idx); if (LUTA.lutando) location.hash = ENDERECO_LUTA; }}>Ver a luta no palco</button>
-        <button type="button" className="dl-btn dl-btn--sec" onClick={fechar}>Fechar replay</button>
-      </div>
-    </section>
-  );
-}
-
 export function TelaRegistro({ irPet }: { irPet: () => void }) {
-  const { motor: m } = useJogo(), [replay, setReplay] = useState(() => { const x = REPLAY.pedido; REPLAY.pedido = null; return x; }),
-    [filtro, setFiltro] = useState<Filtro>(replay !== null ? "luta" : "todos"), [msg, setMsg] = useState<{ txt: string; erro?: boolean } | null>(null), [confirmar, setConfirmar] = useState(false), [evSel, setEvSel] = useState<number | null>(null);
+  const { motor: m } = useJogo(), [filtro, setFiltro] = useState<Filtro>("todos"), [msg, setMsg] = useState<{ txt: string; erro?: boolean } | null>(null), [confirmar, setConfirmar] = useState(false), [evSel, setEvSel] = useState<number | null>(null);
   const nh = m.historico.length;
   const vis = m.historico.slice(-80).reverse().filter(h => filtro === "todos" || TIPO_REG[h.quem][0] === filtro);
   /* detalhe: o evento tocado */
@@ -86,8 +56,7 @@ export function TelaRegistro({ irPet }: { irPet: () => void }) {
     catch { console.log(txt); setMsg({ txt: "Não foi possível copiar automaticamente. O registro está no console do navegador." }); }
   };
   return (
-    <div className={`tela dl rg2-tela lg${replay !== null ? " reg-tela--replay" : ""}`}>
-      {replay !== null && <ReplayLuta idx={replay} fechar={() => setReplay(null)} />}
+    <div className="tela dl rg2-tela lg">
       <section className="lg-destaque lg-linha rg2-topo" aria-label="Registro do pet">
         <span className="rg2-par"><small>semente</small><b className="lg-num lg-num--p">{m.semente}</b></span>
         <span className="rg2-par"><small>eventos</small><b className="lg-num lg-num--p">{m.log.length}</b></span>

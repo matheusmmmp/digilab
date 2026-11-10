@@ -142,7 +142,6 @@ export function trocarCerebroDoPet(c: Cerebro): void {
   if (j.erroSave) throw new Error("o save não abriu: o cérebro não troca");
   if (!podeTrocarCerebro(j.motor)) throw new Error(`este pet é da versão ${j.motor.versao} e não troca de cérebro`);
   if (j.motor.cerebroAtual === c) throw new Error(`o pet já decide com o cérebro ${c}`);
-  if (!ehCerebroTrocavel(j.motor.versao)) { j.motor = Motor.promoverV17(j.motor); j.revisao++; }
   mudarMotor(m => m.trocarCerebro(c));
 }
 /** quadros do palco (120 ms cada) com o ovo chocando: ~5 s, para o nascimento ser um momento e nao um corte. PROPOSTO, SEM FONTE */

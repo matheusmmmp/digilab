@@ -12,10 +12,10 @@
    - E4: a imagem fantasma no desvio (o dash da POC) e a aura com a habilidade pronta e na runa do Castelo;
    - E5: a barra com o dano atrasado, a camera lenta e o "K.O." no nocaute, a camera que acompanha os dois no chao 2D. */
 import { EQ_POC, GOLPES_DA_POC, PASSO_POC_MS, type DadosFormaPoc, type EventoPoc, type LutaPoc, type LutadorPoc } from "../../../../motor/index.ts";
-import { IMPACTO, COR_AZUL, COR_CURA, COR_TINTA, COR_VERMELHO } from "../palcoTR/efeitosTR.ts";
-import { anotarVidaTR, vidasNovasTR, type VidaTR } from "../palcoTR/nocauteTR.ts";
-import { VOO } from "../palcoTR/projeteisTR.ts";
-import { CHAO, type MarcaTR } from "../palcoTR/chaoTR.ts";
+import { IMPACTO, COR_AZUL, COR_CURA, COR_TINTA, COR_VERMELHO } from "./efeitos.ts";
+import { anotarVidaTR, vidasNovasTR, type VidaTR } from "./nocaute.ts";
+import { VOO } from "./projeteis.ts";
+import { CHAO, type MarcaTR } from "./chao.ts";
 
 export type LadoN = 0 | 1;
 export const passoDe = (L: LutaPoc): number => Math.round(L.relogio / PASSO_POC_MS);
@@ -219,4 +219,4 @@ export function puloDoEmpurrao(v: VisualPoc, lado: LadoN, passo: number): number
 }
 
 /** os passos da luta neste quadro da tela: os de sempre, ou 1 nos ultimos 36 de uma luta que acaba em nocaute (a camera lenta da E5) */
-export { passosDoQuadro, passosDaEspera, barraDoPasso, escuroDoPasso, koDoPasso, pixelsDoKO, NOCAUTE } from "../palcoTR/nocauteTR.ts";
+export { passosDoQuadro, passosDaEspera, barraDoPasso, escuroDoPasso, koDoPasso, pixelsDoKO, NOCAUTE } from "./nocaute.ts";

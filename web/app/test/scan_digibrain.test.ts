@@ -12,7 +12,7 @@ import { GIRO_CICLO_S, GIRO_GRAUS, MapaScan, PULSO_MS, VARREDURA_MS } from "../s
 /* o pet v11 do e2e do DigiBrain (e2e/jogo.spec.ts) */
 const LOG: [number, string, unknown][] = [[480, "t", 120], [600, "d", "acariciar"], [600, "t", 120], [720, "d", "tapa"], [720, "t", 120],
   [840, "dc", { tipo: "racao", x: 168, y: 248 }], [840, "t", 60]];
-const m = Motor.reproduzir(4242, LOG as never, 13), db = m.digibrain()!;
+const m = Motor.reproduzir(4242, LOG as never, 21), db = m.digibrain()!;
 const montar = (movel: boolean, movendo: boolean, mapa = db.mapa, decisao = db.decisao): string =>
   renderToStaticMarkup(h(MapaScan, { mapa, decisao, movel, movendo }));
 const contar = (s: string, re: RegExp): number => (s.match(re) ?? []).length;
@@ -105,7 +105,7 @@ describe("o custo de montar o SVG", () => {
     for (let k = 0; k < 400 && grande.mapa.arestas.length < 70; k++) {
       if (k % 5 === 0) log.push([t0, "d", "acariciar"]);
       log.push([t0, "t", 60]); t0 += 60;
-      const g = Motor.reproduzir(4242, log as never, 13).digibrain();
+      const g = Motor.reproduzir(4242, log as never, 21).digibrain();
       if (g?.decisao) grande = g;
     }
     const mapa = grande.mapa, decisao = grande.decisao;

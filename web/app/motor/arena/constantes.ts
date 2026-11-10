@@ -3,9 +3,9 @@
    Fonte: "EQ" = remaster/arena_equilibrio.md (as duas rodadas de 2026-10-29); "PROTOTIPO" = so o arena.html, SEM FONTE de medicao.
    Sairam com o 1 contra 1 (LP1, como no #448): as trocas, a investida do jogador e os status genericos da tela. */
 
-/** A chave da luta da POC no jogo (LP1), DESLIGADA: nada do jogo chama este nucleo; o pet continua no combate_tr. A LP2 liga o pet
-    numa VERSAO_PET nova. */
-export const LUTA_POC_LIGADA = false;
+/** A chave da luta da POC no jogo (LP1), LIGADA na LP4 (Matheus, 2026-11-10: "Sim, abre a LP4"): a luta do pet (a v21, motor/luta_poc.ts)
+    e esta simulacao, e o combate por turnos (combate_tr) saiu. Fica como constante porque o app e os testes a leem (src/lutaPoc.ts) */
+export const LUTA_POC_LIGADA = true;
 
 /** mundo logico em px de sprite (desenhado em 2x). PROPOSTO, PROTOTIPO */
 export const MUNDO = { w: 480, h: 280, esc: 2 } as const;

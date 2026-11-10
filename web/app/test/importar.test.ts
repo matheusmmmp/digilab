@@ -14,7 +14,7 @@ test("arquivo valido: o replay abre e da o mesmo pet", () => {
 test("arquivo invalido falha alto com o motivo", () => {
   expect(() => lerArquivo("{", "a")).toThrow(/JSON/);
   expect(() => lerArquivo(JSON.stringify({ semente: 1.5, log: [] }), "a")).toThrow(/semente/);
-  expect(() => lerArquivo(JSON.stringify({ semente: 1, log: [[999, "t", 1]], versao: 13 }), "a")).toThrow(/replay/);
+  expect(() => lerArquivo(JSON.stringify({ semente: 1, log: [[999, "t", 1]], versao: 21 }), "a")).toThrow(/replay/);
 });
 
 test("o pet de antes da luta em tempo real (v1-v12) nao abre pelo arquivo: o motivo diz a versao (COMBATE-TR, E2)", () => {

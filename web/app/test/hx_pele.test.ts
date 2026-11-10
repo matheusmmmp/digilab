@@ -146,7 +146,8 @@ describe("caixas da luta nas duas peles", () => {
     expect(semComentario).not.toMatch(/--hx-[a-z-]+\s*:|--hud-[a-z-]+\s*:/);
     expect(semComentario).not.toMatch(/animation|transition|@keyframes/);
     for (const [, nome] of semComentario.matchAll(/var\((--(?:hx|hud)-[a-z0-9-]+)/g)) expect(tokens, nome).toContain(nome + ":");
-    expect(readFileSync(new URL("../src/telas/lutar/TelaLuta.tsx", import.meta.url), "utf8")).toContain('import "../../estilo/luta_hud.css"');
+    /* desde a LP4 da LUTA_POC a tela da luta e a da POC (a TelaLuta do combate por turnos saiu) */
+    expect(readFileSync(new URL("../src/telas/lutar/palcoPoc/TelaLutaPoc.tsx", import.meta.url), "utf8")).toContain('import "../../../estilo/luta_hud.css"');
   });
 });
 

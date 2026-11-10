@@ -104,6 +104,11 @@ quando há o que aprender e não piora quando não há?** Mudar o cenário até 
 | **B2 · ligar a v14** | trocar os fatores, o relógio e as listas do jogo pelos da v14 | a conferência da B1 e o sim do Matheus | o motor da luta em `web/app/src/` | implementacao |
 | **B3 · a luta dentro do layout novo** | o HUD e o palco da luta na pele dos menus; conferência com a trilha L, sem mexer no motor da luta | a L1 e a L2 | `web/app/src/` (as telas da luta), `web/app/src/estilo/` | implementacao |
 
+**Desde 2026-11-08 a trilha B segue a `docs/TAREFA_V3_LUTA_POC.md`** (o Matheus: o combate por turnos sai, e a luta do jogo é a simulação em
+tempo real da POC). A B1 e a B2 ficam SUBSTITUÍDAS: as metas de equilíbrio R2 e R3 e o candidato v14 eram do combate por turnos, que saiu do
+jogo na LP4 (2026-11-10). Hoje a luta do pet é a v21: o núcleo em `web/app/motor/arena/`, o mapeamento dos 6 stats em `web/app/motor/luta_poc.ts`
+e o palco 2D em `web/app/src/telas/lutar/palcoPoc/`. O equilíbrio é o da LP5, uma rodada só, no fim.
+
 ## 5. As dependências e os arquivos compartilhados
 
 - **A ordem proposta (V3-D6):** C0 agora; a L1 e a B1 seguem em voo; depois a C1 (e a C5 junto do adendo 6); depois a C2, a L2 e a C3; a

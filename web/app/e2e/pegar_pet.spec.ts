@@ -8,13 +8,13 @@ import { fileURLToPath } from "node:url";
 const PREFIXO = "/" + basename(fileURLToPath(new URL("../../..", import.meta.url)));
 const APP = `${PREFIXO}/web/dist/`, CHAVE = "digilab-web-v21-sprites";
 /* um pet v19 bebe, acordado as 10h do primeiro dia */
-const SAVE = { semente: 4242, versao: 19, log: [[480, "t", 120]] };
+const SAVE = { semente: 4242, versao: 21, log: [[480, "t", 120]] };
 
 async function semear(page: Page): Promise<void> {
   await page.goto("/Assets/digilab_atlas_up.json");
   await page.evaluate(([chave, s]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 1, log: [] }));
-    localStorage.setItem(chave + "-descarte", "6"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
+    localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     localStorage.setItem(chave, s);
   }, [CHAVE, JSON.stringify(SAVE)] as const);
 }
