@@ -906,3 +906,32 @@ O Matheus respondeu "B com tudo" (2026-11-09) à prancha da seção 27: LZ-1 a L
 - As capturas (o script da prancha, Ilha e Digital, desktop e celular, Vidro e Militar) saem iguais às da B da prancha, sem erro de shader.
 
 **Não medido:** o custo no celular. São até 48 focos num laço do fragmento, e falta medir num aparelho de verdade.
+
+## 30. A prancha da câmera do primeiro dia (2026-11-10)
+
+O Matheus disse "Sim, a prancha" (2026-11-10) para a próxima regra de "guiar o olhar sem texto". A próxima que é só vista é a regra 6, a
+câmera do primeiro dia: a 1 (a luz) está na main, a 2 e a 3 já valem, a 4 já acontece e a 5 (os pássaros) precisa do motor. A seção 29
+fica com o PR #760.
+
+**O que foi feito (a prancha e um protótipo desligado):**
+- **A prancha** fica em `docs/pranchas/ux-ilha-abertura/` e na página https://claude.ai/artifact/3B6orUVm6UxnEuB37hRmZw. São três propostas,
+  A (o passeio, 7 s), B (o afastar, 5,2 s) e C (de cima, 4 s), com seis quadros a 1920 × 950 e a 390 × 844 e um vídeo de cada. Os vídeos
+  ficam fora do git, em `D:\Trab\digilab\capturas_ux_ilha_abertura\`.
+- **O protótipo** é uma lista de quadros-chave (o tempo, o ponto olhado, o zoom e a inclinação), em `aberturaConta.ts`, e um gancho em
+  `vista.ts` que troca o ponto olhado, o afastamento e a inclinação da câmera enquanto a abertura anda. Ele só liga com `?abertura=a|b|c`,
+  e `window.__abertura` para o tempo nas capturas. Sem o parâmetro, a vista é a de antes.
+- **O teste** é o `test/ilha_abertura.test.ts`. Ele confere:
+  - o parâmetro, e que um valor desconhecido falha alto;
+  - que toda proposta começa em 0 e acaba no pet, no zoom e na inclinação de sempre;
+  - que o caminho é contínuo e passa nos quadros-chave;
+  - que um tempo inválido falha alto;
+  - que a inclinação mantém a distância.
+
+**As decisões** AB-1 a AB-5 estão no `LEIA.md` da prancha, como PROPOSTAS: B; uma vez por save, depois que o ovo choca; qualquer toque
+interrompe; a HUD fica; todas as larguras, sem tocar com "reduzir movimento". Os números são PROPOSTO, SEM FONTE. A interpretação está em
+D-AB-1 e D-AB-2, em `docs/registro/2026-11.md`.
+
+**Fica para a etapa de código, depois da aprovação:**
+- tocar a proposta escolhida sem o parâmetro, uma vez por save;
+- a interrupção pelo toque;
+- um teste e2e do caminho inteiro.

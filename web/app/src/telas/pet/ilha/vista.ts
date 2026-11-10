@@ -41,6 +41,8 @@ import { MAO, Pendulo, alturaDepoisDeSoltar, soltarAcabou, tremorAgora } from ".
 import { ORBITA, aplicarOrbita, ligarControles, recentrar } from "../orbita.ts";
 import { CONSULTA_SOLTA, VISTA, despublicarVista, focoDoQuadro, ligarCameraLivre, publicarVista, type Limites, type MapaDaIlha, type Par } from "../cameraLivre.ts";
 import { CAMERA_DEV, ligarCameraDev } from "../cameraDev.ts";
+import { ABERTURA_PROPOSTA, inclinar, ligarAberturaDev, quadroDaAbertura, tempoDaAbertura } from "./aberturaConta.ts";
+import { PLANTA_ILHA } from "./constantes.ts";
 import { pixelsDoMapa } from "./minimapa.ts";
 import { PRESETS, Pos, SEM_CONTORNO } from "./pos.ts";
 import { SACO_NA_TELA, VIAGEM, ZOOM_LUGAR_MOVEL, lugarAberto, progressoViagem, type Lugar } from "../../../viagem.ts";
@@ -521,7 +523,15 @@ class VistaIlha {
     }
     this.petCel = cor.cel;
     /* o zoom do lugar: abaixo de 900 px a camera se aproxima do saco com a viagem (o saco e o pet ficam grandes no terco de cima) e volta ao sair */
-    const zoom = viagem > 0 ? this.zoomDaViagem(viagem, reduzido) : 1;
+    /* o prototipo da camera do primeiro dia (?abertura=a|b|c; aberturaConta.ts): o ponto olhado, o zoom e a inclinacao saem da abertura ate ela
+       acabar; sem o parametro, com o pet na mao, com um lugar aberto, coberta pelo veu ou com "reduzir movimento", nada muda */
+    const abre = ABERTURA_PROPOSTA && !this.naMao && viagem === 0 && !reduzido && !CENA.coberto
+      ? quadroDaAbertura(ABERTURA_PROPOSTA, tempoDaAbertura(agora), {
+        pet: this.petCel, ninho: this.itens.ninhoEm, praca: [PLANTA_ILHA.praca.x, PLANTA_ILHA.praca.z], portao: this.pontos.portao, barraca: this.pontos.barraca,
+        meio: [(this.petCel[0] + PLANTA_ILHA.praca.x) / 2, (this.petCel[1] + PLANTA_ILHA.praca.z) / 2],
+      }) : null;
+    const aberta = abre && !abre.acabou ? abre : null;
+    const zoom = aberta ? aberta.zoom : viagem > 0 ? this.zoomDaViagem(viagem, reduzido) : 1;
     if (this.afastBase * zoom !== this.afast) { this.afast = this.afastBase * zoom; this.orbitaVersao = -1; }
     this.atualizarOrbita();
     const pode = this.podeSoltar;
@@ -535,9 +545,10 @@ class VistaIlha {
         this.foco = [this.foco[0] + dx * k, this.foco[1] + dz * k];
       } else { this.foco = [alvo[0], alvo[1]]; this.focoVoltando = false; }
       if (viagem > 0) this.foco = this.focoDaViagem(this.foco, viagem, reduzido);
+      if (aberta) this.foco = aberta.foco;
     }
     const [px, pz] = this.foco, a = this.afast;
-    const { desloc, olhar } = this.orbitaVista;
+    const { olhar } = this.orbitaVista, desloc = aberta?.inclina ? inclinar(this.orbitaVista.desloc, aberta.inclina) : this.orbitaVista.desloc;
     this.camera.position.set(px + desloc[0] * a, desloc[1] * a, pz + desloc[2] * a);
     this.camera.lookAt(px + olhar[0] * a, olhar[1] * a, pz + olhar[2] * a);
     this.camera.updateMatrixWorld();
@@ -674,6 +685,8 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
   const soltarLivre = ligarCameraLivre(() => vista.podeSoltar, () => vista.elevacao0);
   /* a camera de desenvolvimento (?cameradev=1): window.__camera para as ferramentas */
   const soltarDev = ligarCameraDev(() => vista.alvosDev());
+  /* o prototipo da camera do primeiro dia (?abertura=): window.__abertura para as capturas da prancha */
+  const soltarAbertura = ligarAberturaDev();
   let vivo = true, quadro = 0, pedido = 0;
   /* os kits: na hora, ou, se a ilha abriu coberta pelo veu, quando ela ficar a vista (no maximo KITS_COBERTO_MS) */
   let kitsPedidos = false;
@@ -751,7 +764,7 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
   return () => {
     vivo = false;
     cancelAnimationFrame(pedido); obs.disconnect(); if (esperaKits) clearTimeout(esperaKits); canvas.removeEventListener("webglcontextlost", perdeu);
-    soltarControles(); soltarDev(); soltarLivre(); despublicarVista();
+    soltarControles(); soltarDev(); soltarAbertura(); soltarLivre(); despublicarVista();
     CENA.modo3d = false; CENA.cocoNoChao = false; CENA.ret = null; CENA.medir = null; CENA.mundo = null;
     vista.dispose();
   };
