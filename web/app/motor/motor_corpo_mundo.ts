@@ -31,7 +31,7 @@ import type { ConfigContrato } from "./contrato.ts";
 import { efeitoAcaoPet } from "./estado.ts";
 import { ACOES_DONO_V11, MotorCorpo, estadoNascimentoPy, type EventoCorpo, type PoliticaCorpo } from "./motor_corpo.ts";
 import type { ObservacaoLobos } from "./lobos.ts";
-import { Mundo, eventoDeixarComida, eventoLevarPet, lerDeixarComida, lerLevarPet, regiaoDe, type PercepcaoMundo } from "./mundo.ts";
+import { Mundo, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, lerDeixarComida, lerLevarPet, lerMudarIlha, regiaoDe, type PercepcaoMundo } from "./mundo.ts";
 import type { AcaoPet, EstadoVida } from "./tipos.ts";
 
 /** o que a consequencia do mundo devolve (o `ocorrido` do Python, com os nomes dele) */
@@ -145,7 +145,28 @@ export class MotorCorpoMundo extends MotorCorpo {
     this.mundo.levarPet(this.estado.tick, x, y);
   }
 
+  /** a troca de ilha (docs/TAREFA_V3_ILHA_AGUA.md, IA4; MotorMundo.mudar_ilha do Python): o mundo do pet passa para a ilha com agua
+   *  `nome`; o evento valida o nome e o Mundo a troca, antes do log */
+  mudarIlha(nome: string): void {
+    const ev = eventoMudarIlha(this.estado.tick, nome);
+    this.ilhaDoDono(lerMudarIlha(ev));
+    this.log.push({ tick: ev.tick, tipo: "mudar_ilha", valor: ev.valor });
+  }
+
+  /** o mudar_ilha sem o log do laco (o Motor do jogo grava o registro dele). Como o levar_pet, nao e contato nem cuidado: nao passa pelo
+   *  estado, pelo corpo nem pelo cerebro. Vale com o pet acordado ou dormindo */
+  ilhaDoDono(nome: string): void {
+    lerMudarIlha(eventoMudarIlha(this.estado.tick, nome));
+    this.conferirSincronia("antes de mudar_ilha");
+    this.mundo.mudarIlha(this.estado.tick, nome);
+  }
+
   override aplicarEvento(e: EventoCorpo): void {
+    if (e.tipo === "mudar_ilha") {
+      if (e.tick !== this.estado.tick) throw new Error(`evento no tick ${e.tick}, o motor esta no ${this.estado.tick}`);
+      this.mudarIlha(lerMudarIlha(e));
+      return;
+    }
     if (e.tipo === "levar_pet") {
       if (e.tick !== this.estado.tick) throw new Error(`evento no tick ${e.tick}, o motor esta no ${this.estado.tick}`);
       if (typeof e.valor !== "string") throw new Error(`levar_pet malformado: ${JSON.stringify(e)}`);

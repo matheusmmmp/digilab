@@ -8,9 +8,9 @@
    semeadura e os sorteios do CPython (random, getrandbits, randrange, randint). Nada disso usa o mulberry32 do jogo (motor/rng.ts).
 
    Os registros e o `ocorrido` usam os nomes em snake_case do Python de proposito: sao o mesmo dado, conferido campo a campo. */
-import { AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, C, CMU, PONTE, TERRA, type ConfigMundo } from "./constantes.ts";
+import { AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, C, CMU, LAYOUT_MUNDO_MVP_AGUA, PONTE, TERRA, type ConfigMundo, type LayoutMundo } from "./constantes.ts";
 import {
-  CONFIG_CONTRATO, bigodes, bloqueioEm, contratoLigado, controlar, livreMaisPerto, relativo, setorDe, solido, validarContrato, visivel, type Andar,
+  CONFIG_CONTRATO, CONFIG_CONTRATO_AGUA, bigodes, bloqueioEm, contratoLigado, controlar, livreMaisPerto, relativo, setorDe, solido, validarContrato, visivel, type Andar,
   type CategoriaSolido, type ConfigContrato, type Solido,
 } from "./contrato.ts";
 
@@ -300,7 +300,32 @@ export function direcaoDoCheiro(x: number, y: number, fontes: readonly FonteChei
 // ================================================================== os eventos do log (events.deixar_comida, deixar_bola)
 export const TIPOS_COMIDA_MUNDO = ["racao", "a", "b", "c"] as const;
 export type TipoComidaMundo = typeof TIPOS_COMIDA_MUNDO[number];
-export interface EventoMundo { tick: number; tipo: "deixar_comida" | "deixar_bola" | "levar_pet"; valor: string }
+export interface EventoMundo { tick: number; tipo: "deixar_comida" | "deixar_bola" | "levar_pet" | "mudar_ilha"; valor: string }
+
+/** a troca de ilha (docs/TAREFA_V3_ILHA_AGUA.md, IA4; events.mudar_ilha do Python): o nome do layout de destino, em minusculas, digitos e
+    sublinhado ASCII, de 1 a 32. Se a troca vale, quem confere e o Mundo.mudarIlha */
+const NOME_ILHA = /^[a-z0-9_]{1,32}$/;
+function nomeIlha(nome: unknown): string {
+  if (typeof nome !== "string" || !NOME_ILHA.test(nome)) throw new Error(`mudar_ilha com nome de layout invalido: ${String(nome)}`);
+  return nome;
+}
+export function eventoMudarIlha(tick: number, nome: unknown): EventoMundo {
+  return { tick, tipo: "mudar_ilha", valor: nomeIlha(nome) };
+}
+export function lerMudarIlha(e: { tipo: string; valor: unknown }): string {
+  if (e.tipo !== "mudar_ilha") throw new Error(`evento nao e mudar_ilha: ${e.tipo}`);
+  return nomeIlha(e.valor);
+}
+/** os destinos da troca de ilha (o ILHAS_DE_TROCA do Python), pelo nome: o layout (o mesmo de antes, so com outro nome e com a agua) e o
+    contrato que passa a valer (o controlador, que desvia da agua). DECIDIDO (2026-11-10: "Migram por evento") */
+export const ILHAS_DE_TROCA: Readonly<Record<string, { layout: LayoutMundo; contrato: ConfigContrato }>> = Object.freeze({
+  mvp_agua: { layout: LAYOUT_MUNDO_MVP_AGUA, contrato: CONFIG_CONTRATO_AGUA },
+});
+/** o registro da troca de ilha (o Mundo.troca_ilha do Python, com o `pet` que o motor poe) */
+export interface TrocaIlha {
+  tick: number; de: string; para: string; comidas: { id: number; de: [number, number]; para: [number, number] }[];
+  bola: { de: [number, number]; para: [number, number] }; pet: { de: [number, number]; para: [number, number] };
+}
 
 function posicaoMundo(x: unknown, y: unknown): [number, number] {
   if (typeof x !== "number" || typeof y !== "number" || !Number.isInteger(x) || !Number.isInteger(y))
@@ -418,7 +443,8 @@ export interface RegistroContrato {
 
 /** O mundo fisico (digilab/mundo.py, MotorMundo ligado): o mesmo estado, os mesmos sorteios e os mesmos registros. */
 export class Mundo {
-  readonly cm: ConfigMundo;
+  /** o mundo de agora: muda uma vez na vida, na troca de ilha (mudarIlha) */
+  cm: ConfigMundo;
   readonly efeitoFrutas: Record<string, number>;
   private readonly ganhoAlimentar: number;
   private readonly probSujeira: number;
@@ -458,13 +484,15 @@ export class Mundo {
   readonly regioes: { tick: number; de: number; para: number }[] = [];
   readonly visitas: { arvore: string; chegada: number; saida: number | null; decisoes: number }[] = [];
   // o contrato da P4 (desligado: nada disto muda o mundo de hoje)
-  readonly cct: ConfigContrato;
+  cct: ConfigContrato;                                         // muda uma vez na vida, na troca de ilha (mudarIlha)
   private solidos: readonly Solido[] = [];                     // os que colidem (as paredes, com a chave delas)
   private opacos: readonly Solido[] = [];                      // os que tapam (as paredes e os troncos)
   orientacao = 0;
   readonly contratoDecisoes: RegistroContrato[] = [];
   /** a agua (docs/TAREFA_V3_ILHA_AGUA.md): null no mapa sem agua, e nada muda */
-  readonly secas: readonly boolean[] | null;
+  secas: readonly boolean[] | null;
+  /** a troca de ilha (IA4): null ate o evento `mudar_ilha` */
+  trocaIlha: TrocaIlha | null = null;
 
   constructor(op: OpcoesMundo) {
     const cm = this.cm = op.cfg ?? CMU;
@@ -954,6 +982,44 @@ export class Mundo {
     this.levadas.push({ tick, de, pedido: [px, py], para: [this.pet[0], this.pet[1]] });
   }
 
+  /** a troca de ilha (docs/TAREFA_V3_ILHA_AGUA.md, IA4; o MotorMundo._aplicar_mudar_ilha e o Mundo.trocar_layout do Python): o mundo passa
+   *  do layout de hoje, sem agua, para `nome`, que e o mesmo (so o nome muda) com agua; o contrato passa a ser o do destino (o controlador,
+   *  que desvia dela); a comida, a bola e o pet que ficam na agua vao para a terra mais perto, e o destino que o pet tinha se perde. Nenhum
+   *  fluxo de acaso anda. Nao e contato nem cuidado. Vale com o pet acordado ou dormindo, uma vez so, e sem o contrato ligado antes */
+  mudarIlha(tick: number, nome: string): TrocaIlha {
+    nome = lerMudarIlha(eventoMudarIlha(tick, nome));
+    if (!Object.prototype.hasOwnProperty.call(ILHAS_DE_TROCA, nome)) throw new Error(`mudar_ilha para uma ilha desconhecida: ${nome}`);
+    if (contratoLigado(this.cct)) throw new Error("mudar_ilha roda com um pet (fora do grupo), sem o banheiro e sem o contrato ligado antes");
+    const { layout, contrato } = ILHAS_DE_TROCA[nome];
+    if (!contrato.controlador) throw new Error(`a ilha ${nome} tem agua e pede o controlador do contrato`);
+    this.atualizar(tick);
+    if (this.secas !== null || this.trocaIlha !== null)
+      throw new Error(`o mundo ${this.cm.layout.nome} ja tem agua: a troca de ilha vale uma vez, de um layout sem agua`);
+    const de = this.cm.layout.nome;
+    if (JSON.stringify({ ...layout, nome: de }) !== JSON.stringify(this.cm.layout))
+      throw new Error(`a troca de ilha so muda a agua: ${layout.nome} nao e o layout ${de} com outro nome`);
+    const cm: ConfigMundo = { ...this.cm, layout }, secas = celulasSecas(cm);
+    if (secas === null) throw new Error(`o layout ${layout.nome} nao tem agua: a troca de ilha e para a ilha com agua`);
+    this.cm = cm; this.secas = secas;
+    this.conferirAgua();
+    const comidas: TrocaIlha["comidas"] = [];
+    for (const c of this.comidas.values()) {
+      const [x, y] = this.emTerra(c.x, c.y);
+      if (x !== c.x || y !== c.y) { comidas.push({ id: c.id, de: [c.x, c.y], para: [x, y] }); c.x = x; c.y = y; }
+    }
+    const [bx, by] = this.bolaEm(tick), [x, y] = this.emTerra(bx, by);
+    this.bola = { x0: x, y0: y, x1: x, y1: y, t0: tick, d: 0 };
+    this.cct = validarContrato({ ...contrato });
+    this.montarContrato();
+    this.orientacao = 0;
+    this.contratoDecisoes.length = 0;
+    const petDe: [number, number] = [this.pet[0], this.pet[1]];
+    this.pet = this.petEmTerra(this.pet[0], this.pet[1]);
+    this.pendente = null;
+    this.trocaIlha = { tick, de, para: layout.nome, comidas, bola: { de: [bx, by], para: [x, y] }, pet: { de: petDe, para: [this.pet[0], this.pet[1]] } };
+    return this.trocaIlha;
+  }
+
   // ------------------------------------------------------------ leitura
   /** o MotorMundo.resumo_mundo_fisico, sem as rngs */
   resumo(): Record<string, unknown> {
@@ -965,6 +1031,7 @@ export class Mundo {
       rolagens: this.rolagens, decisoes: this.decisoes, regioes: this.regioes, visitas: this.visitas,
       manchas_abertas: [...this.manchasAbertas.values()].map(v => ({ ...v })),
       ...(contratoLigado(this.cct) ? { orientacao: this.orientacao, contrato_decisoes: this.contratoDecisoes } : {}),
+      ...(this.trocaIlha !== null ? { troca_ilha: JSON.parse(JSON.stringify(this.trocaIlha)) as TrocaIlha } : {}),
       ...(this.levadas.length > 0 ? { levadas: this.levadas.map(l => ({ ...l, de: [...l.de], pedido: [...l.pedido], para: [...l.para] })) } : {}),   // so com alguma levada: a vida de antes sai byte a byte
     };
   }
