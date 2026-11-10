@@ -71,11 +71,14 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    19 = o v18 com o "levar pet" (docs/TAREFA_V3_PEGAR_PET.md; PP-1 a PP-5, decididas pelo Matheus em 2026-11-07): o evento "lp" do
    registro poe o pet onde o dono o soltou (limitado ao mapa, PP-4), sem mexer no humor, no corpo nem no aprendizado (PP-1); com o pet
    dormindo, falha alto (PP-2). O resto e o v18 (a luta, o cerebro trocavel). Os v13 a v18 seguem vivos, sem o "lp"; so os ovos novos
-   nascem v19 */
-export const VERSAO_PET = 21;
-/** as versoes de pet que abrem: so a v21, a luta da POC (LUTA_POC, LP4: o descarte 7 tirou os v13 a v19, que lutavam pelo combate por
-    turnos; LP-6). A v16 e so a do laboratorio */
-export const VERSOES_PET: readonly number[] = [21];
+   nascem v19;
+   22 = a v21 que nasce na ilha onde so a agua barra o pet (docs/TAREFA_V3_ILHA_AGUA.md, IA4; "v22", Matheus, 2026-11-10): o mundo dela e
+   o `mvp_agua` (CMU_MVP_AGUA), com o controlador do contrato, que desvia da agua. O resto e a v21. Os v21 seguem vivos e passam para a
+   mesma ilha pelo evento "mi" do registro ("Migram por evento", Matheus, 2026-11-10); so os ovos novos nascem v22 */
+export const VERSAO_PET = 22;
+/** as versoes de pet que abrem: a v21, a luta da POC (LUTA_POC, LP4: o descarte 7 tirou os v13 a v19, que lutavam pelo combate por
+    turnos; LP-6), e a v22, a v21 que nasce na ilha com agua. A v16 e so a do laboratorio */
+export const VERSOES_PET: readonly number[] = [21, 22];
 /** a versao de pet do cerebro trocavel (o evento "cb") */
 export const VERSAO_V17 = 17;
 /** a versao de pet do empurrao de verdade na luta (a v17 com o RELOGIO_V18) */
@@ -84,13 +87,20 @@ export const VERSAO_V18 = 18;
 export const VERSAO_V19 = 19;
 /** a versao tem o cerebro trocavel, a ponte da luta e a bola no golpe da v17: a v17, a v18 (a v17 com o empurrao), a v19 (a v18 com o
     levar pet) e a v21 (a v19 com a luta da POC). Desde a LP4 so a v21 abre; as outras ficam no teste porque a v21 e feita delas */
-export const ehCerebroTrocavel = (versao: number): boolean => versao === VERSAO_V17 || versao === VERSAO_V18 || versao === VERSAO_V19 || versao === VERSAO_V21;
+export const ehCerebroTrocavel = (versao: number): boolean =>
+  versao === VERSAO_V17 || versao === VERSAO_V18 || versao === VERSAO_V19 || versao === VERSAO_V21 || versao === VERSAO_V22;
 /** 21 = a v19 com a luta da POC (docs/TAREFA_V3_LUTA_POC.md, LP2; as seis decisoes da LP2, Matheus, "Aprovo as 6", 2026-11-08): a luta do pet
     e a simulacao em tempo real de motor/arena/, 1 contra 1, com os numeros saidos dos 6 stats do pet (motor/luta_poc.ts); o evento "l" guarda
     o rival (uma forma do estagio do pet, na Arena, ou o NPC da Campanha), a semente e o mapa; sem gambits ("g"), cartas ("k") nem chips de
     regra; a Liga, a Torre, a Fabrica e o Salao desde a LP2b. O resto e a v19. A v20 fica para o #694 (a arvore). A chave LUTA_POC_LIGADA
     ligou na LP4 (Matheus, 2026-11-10): os ovos novos nascem v21, e so a v21 abre (VERSOES_PET) */
 export const VERSAO_V21 = 21;
+/** a versao de pet que nasce na ilha com agua (a v21 com o mundo `mvp_agua`; docs/TAREFA_V3_ILHA_AGUA.md, IA4) */
+export const VERSAO_V22 = 22;
+/** a versao luta pela luta da POC: a v21 e a v22 */
+export const ehLutaPoc = (versao: number): boolean => versao === VERSAO_V21 || versao === VERSAO_V22;
+/** a ilha com agua para onde os pets v21 passam (o evento "mi"; o destino do ILHAS_DE_TROCA) */
+export const ILHA_DOS_V21 = "mvp_agua";
 /** as versoes que abrem com a luta da POC (LP-6: os v13 a v19 saem, com aviso): desde a LP4, as mesmas de VERSOES_PET */
 export const VERSOES_PET_POC: readonly number[] = VERSOES_PET;
 /** os cerebros que o evento "cb" escolhe: o DigiBrain modular e o cerebro A (os lobos, a linha de base) */

@@ -37,37 +37,37 @@ afterEach(() => { vi.unstubAllGlobals(); });
 
 describe("o cerebro trocavel (a v17, na v21)", () => {
   test("sem \"cb\", a v21 decide com o A, e o replay refaz a vida", () => {
-    const m = new Motor(101);
+    const m = new Motor(101, 21);
     viver(m, 1.5);
     expect(m.cerebroAtual).toBe("a");
     expect(m.lab).toBeNull();
-    expect(Motor.reproduzir(101, copia(m.log), VERSAO_PET).assinatura()).toBe(m.assinatura());
+    expect(Motor.reproduzir(101, copia(m.log), 21).assinatura()).toBe(m.assinatura());
   });
 
   test("o ovo novo nasce com o modular por padrao, e com o A pela preferencia; o replay le o cerebro do registro", () => {
-    expect(VERSAO_PET).toBe(21);
+    expect(VERSAO_PET).toBe(22);
     expect(CHAVE_CEREBRO).toBe(CHAVE + "-cerebro");
     expect(cerebroDosOvos()).toBe("modular");
-    const m = ligarProduto(new Motor(303));
+    const m = ligarProduto(new Motor(303, 21));
     expect(m.log[1]).toEqual([TICK_INICIAL, "cb", { cerebro: "modular" }]);
     expect(m.cerebroAtual).toBe("modular"); expect(m.lab).not.toBeNull();
     escolherCerebroDosOvos("a");
     expect(dados[CHAVE_CEREBRO]).toBe("a");
-    const a = ligarProduto(new Motor(303));
+    const a = ligarProduto(new Motor(303, 21));
     expect(a.log[1]).toEqual([TICK_INICIAL, "cb", { cerebro: "a" }]);
     expect(a.cerebroAtual).toBe("a"); expect(a.lab).toBeNull();
     viver(m, 2); viver(a, 2);
     expect(m.lab!.motivos.length).toBe(2 * TPD / 15);              // toda decisao foi do modular
     expect(m.assinatura()).not.toBe(a.assinatura());
     for (const x of [m, a]) {
-      const r = Motor.reproduzir(303, copia(x.log), VERSAO_PET);
+      const r = Motor.reproduzir(303, copia(x.log), 21);
       expect(r.assinatura()).toBe(x.assinatura());
       expect(r.cerebroAtual).toBe(x.cerebroAtual);
     }
   });
 
   test("a troca no meio da vida: o que sai fica parado, o que entra decide, e o replay refaz evento a evento", () => {
-    const m = new Motor(404);
+    const m = new Motor(404, 21);
     viver(m, 1);
     const aAntes = JSON.stringify(m.cerebro!.estadoInterno());
     m.trocarCerebro("modular");
@@ -85,7 +85,7 @@ describe("o cerebro trocavel (a v17, na v21)", () => {
     viver(m, .5);
     expect(m.lab).toBe(mod);                                            // o mesmo modular, com o que aprendeu
     expect(mod.k).toBe(kAntes + TPD / 30);
-    const r = new Motor(404), log = copia(m.log);
+    const r = new Motor(404, 21), log = copia(m.log);
     for (const ev of log) r.aplicarEvento(ev);
     expect(r.assinatura()).toBe(m.assinatura());
     expect(JSON.stringify(r.lab!.estadoInterno())).toBe(JSON.stringify(m.lab!.estadoInterno()));
@@ -93,14 +93,14 @@ describe("o cerebro trocavel (a v17, na v21)", () => {
   });
 
   test("o que nao vale falha alto", () => {
-    const m = ligarProduto(new Motor(505));
+    const m = ligarProduto(new Motor(505, 21));
     expect(() => m.trocarCerebro("modular")).toThrow(/já decide/);
     expect(() => new Motor(505, VERSAO_PET_LAB).trocarCerebro("a")).toThrow(/v17/);
-    expect(() => new Motor(505).aplicarEvento([TICK_INICIAL, "cb", { cerebro: "b" }] as unknown as EventoRegistro)).toThrow(/inválida/);
-    expect(() => new Motor(505).aplicarEvento([TICK_INICIAL, "cb", { cerebro: "a", x: 1 }] as unknown as EventoRegistro)).toThrow(/inválida/);
+    expect(() => new Motor(505, 21).aplicarEvento([TICK_INICIAL, "cb", { cerebro: "b" }] as unknown as EventoRegistro)).toThrow(/inválida/);
+    expect(() => new Motor(505, 21).aplicarEvento([TICK_INICIAL, "cb", { cerebro: "a", x: 1 }] as unknown as EventoRegistro)).toThrow(/inválida/);
     expect(() => new Motor(505, VERSAO_PET_LAB).aplicarEvento([TICK_INICIAL, "cb", { cerebro: "modular" }])).toThrow(/v17/);
     /* o mesmo cerebro no meio da vida, no registro */
-    const v = new Motor(505); v.avancar(60);
+    const v = new Motor(505, 21); v.avancar(60);
     expect(() => v.aplicarEvento([v.e.tick, "cb", { cerebro: "a" }])).toThrow(/já decide/);
   });
 });
@@ -111,23 +111,24 @@ describe("no app", () => {
 
   test("a troca no pet ativo: o \"cb\" no registro gravado; a mesma troca de novo falha", () => {
     escolherCerebroDosOvos("a");
-    const antigo = ligarProduto(new Motor(606)); viver(antigo, .5);
+    const antigo = ligarProduto(new Motor(606, 21)); viver(antigo, .5);
     delete dados[CHAVE_CEREBRO];
     const a = armaz({ [CHAVE]: textoSave(antigo) });
     iniciarJogo(a);
-    expect(jogoAtual().motor.versao).toBe(VERSAO_PET);
+    expect(jogoAtual().motor.versao).toBe(21);
     expect(() => trocarCerebroDoPet("a")).toThrow(/já decide/);
     trocarCerebroDoPet("modular");
     const s = JSON.parse(a.d[CHAVE]!) as { versao: number; log: EventoRegistro[] };
-    expect(s.versao).toBe(VERSAO_PET);
-    expect(s.log.slice(0, -1)).toEqual(JSON.parse(JSON.stringify(antigo.log)));
+    expect(s.versao).toBe(21);
+    expect(s.log.slice(0, -2)).toEqual(JSON.parse(JSON.stringify(antigo.log)));
+    expect(s.log.at(-2)).toEqual([antigo.e.tick, "mi", { ilha: "mvp_agua" }]);          // o pet v21 passou para a ilha com agua ao abrir (ILHA_AGUA, IA4)
     expect(s.log.at(-1)).toEqual([antigo.e.tick, "cb", { cerebro: "modular" }]);
-    expect(Motor.reproduzir(606, s.log, VERSAO_PET).assinatura()).toBe(jogoAtual().motor.assinatura());
+    expect(Motor.reproduzir(606, s.log, 21).assinatura()).toBe(jogoAtual().motor.assinatura());
     expect(dados[CHAVE_CEREBRO]).toBeUndefined();                       // a troca do pet nao mexe na preferencia dos ovos
   });
 
   test("o ovo novo segue a preferencia", () => {
-    const a = armaz({ [CHAVE]: textoSave(new Motor(707)) });
+    const a = armaz({ [CHAVE]: textoSave(new Motor(707, 21)) });
     iniciarJogo(a);
     escolherCerebroDosOvos("a");
     novoPet();

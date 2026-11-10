@@ -39,7 +39,7 @@ describe("PE3: a vida com a marca da ponte da luta", () => {
     let comDor = 0, episodiosModular = 0;
     for (const v of VARIANTES) for (const s of SEMENTES) {
       const vida = viverComLutas(v, s, 2, true);
-      const m = new Motor(s);
+      const m = new Motor(s, 21);
       const dores = espiar(m);
       for (const ev of vida.log) m.aplicarEvento(ev);
       const laco = m.v11!.laco as MotorCorpoMundo, C = laco.corpo.C, S = laco.corpo.S;
@@ -60,7 +60,7 @@ describe("PE3: a vida com a marca da ponte da luta", () => {
 
   test("com o A ativo o modular parado nao recebe a luta; ao voltar, continua dali (3.7)", () => {
     const vida = viverComLutas("v21_cb", 101, 2, true);
-    const m = new Motor(101), entregues: number[] = [];
+    const m = new Motor(101, 21), entregues: number[] = [];
     const vistos = new WeakSet<object>();
     let doModular = 0, doA = 0;
     for (const ev of vida.log) {
@@ -90,8 +90,8 @@ describe("PE3: a vida com a marca da ponte da luta", () => {
     const tarde = nascer("v21_modular", 202);
     tarde.avancar(30);
     expect(() => tarde.ligarPonteLuta()).toThrow(/comeco|começo/);
-    expect(() => new Motor(101).aplicarEvento([480, "pl", { luta: false }] as unknown as EventoRegistro)).toThrow(/inválida/);
-    expect(() => new Motor(101).aplicarEvento([480, "pl", { luta: true, x: 1 }] as unknown as EventoRegistro)).toThrow(/inválida/);
+    expect(() => new Motor(101, 21).aplicarEvento([480, "pl", { luta: false }] as unknown as EventoRegistro)).toThrow(/inválida/);
+    expect(() => new Motor(101, 21).aplicarEvento([480, "pl", { luta: true, x: 1 }] as unknown as EventoRegistro)).toThrow(/inválida/);
     const sem = nascer("v21_modular", 303);
     expect(sem.ponteLuta).toBe(false);
     expect(m.ponteLuta).toBe(true);
@@ -100,14 +100,14 @@ describe("PE3: a vida com a marca da ponte da luta", () => {
   });
 
   test("a marca com eps (a PE4): so com eps verdadeiro e uma vez; o ovo do jogo a grava, e ela fica na assinatura", () => {
-    expect(() => new Motor(101).aplicarEvento([480, "pl", { luta: true, eps: false }] as unknown as EventoRegistro)).toThrow(/inválida/);
-    expect(() => new Motor(101).aplicarEvento([480, "pl", { eps: true }] as unknown as EventoRegistro)).toThrow(/inválida/);
+    expect(() => new Motor(101, 21).aplicarEvento([480, "pl", { luta: true, eps: false }] as unknown as EventoRegistro)).toThrow(/inválida/);
+    expect(() => new Motor(101, 21).aplicarEvento([480, "pl", { eps: true }] as unknown as EventoRegistro)).toThrow(/inválida/);
     const m = nascer("v21_modular", 101, "eps");
     expect(() => m.ligarPonteLuta(true)).toThrow(/uma vez/);
     expect(m.epsLuta).toBe(true);
     expect(m.assinatura()).not.toBe(nascer("v21_modular", 101, true).assinatura());
     expect(petDeTeste(101).epsLuta).toBe(false);
-    expect(ligarProduto(new Motor(101)).log.find(ev => ev[1] === "pl")?.[2]).toEqual({ luta: true, eps: true });
+    expect(ligarProduto(new Motor(101, 21)).log.find(ev => ev[1] === "pl")?.[2]).toEqual({ luta: true, eps: true });
   });
 
   test("o corpo e o modular sem a chave levantam erro (G2: a vida de hoje nao os usa)", () => {

@@ -12,7 +12,7 @@ describe("PE0: os pets v21 lutam, e o replay refaz as lutas", () => {
   for (const v of VARIANTES) for (const s of SEMENTES) {
     test(`${v} @${s}: nasce, chega a um estagio que luta, luta (Arena e serie) e o replay sai bit a bit`, () => {
       const vida = viverComLutas(v, s);
-      expect(vida.versao).toBe(VERSAO_PET);
+      expect(vida.versao).toBe(21);
       expect(vida.estagio, "o pet saiu do In-Training").not.toBe("bebe");
       expect(vida.lutas.length, "o pet lutou").toBeGreaterThan(5);
       expect(vida.lutas.some(l => l.rival !== "liga" && l.serie === 1), "na Arena").toBe(true);
