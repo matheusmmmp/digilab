@@ -118,7 +118,7 @@ from dataclasses import dataclass, replace
 from typing import Callable
 
 from .ambiente import PoliticaInstintoBola
-from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, N_PONTOS_LONGE_FIXO, TICKS_POR_DIA, Config, ConfigMundo
+from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, N_PONTOS_LONGE_FIXO, TICKS_POR_DIA, Config, ConfigMundo, LayoutMundo
 from .config import CONFIG_BANHEIRO, CONFIG_PQP_MUNDO, ConfigBanheiro, ConfigDonos, ConfigPetQuePensaMundo
 from .config import CONFIG_PALADAR, ConfigPaladar
 from .config import CONFIG_GENOMA, ConfigGenoma
@@ -139,6 +139,9 @@ from .events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_MAO, ACOES_TROCA_ARVORES, F
 from .events import deixar_bola as evento_deixar_bola
 from .events import levar_pet as evento_levar_pet
 from .events import ler_levar_pet
+from .events import mudar_ilha as evento_mudar_ilha
+from .events import ler_mudar_ilha
+from .config import ILHAS_DE_TROCA
 from .events import deixar_fruta as evento_deixar_fruta
 from .events import LutaSemChave, ler_deixar_fruta, ler_resumo_luta
 from .events import resumo_luta as evento_resumo_luta
@@ -791,6 +794,7 @@ class Mundo:
         self.quedas: list[dict] = []
         self.sumidas: list[dict] = []
         self.bolas_deixadas: list[dict] = []
+        self.troca_ilha: dict | None = None        # a troca de ilha (IA4): None ate o evento `mudar_ilha`
         self.rolagens: list[dict] = []
         # o banheiro (TAREFA_V2_BANHEIRO, secao 3): as necessidades no chao, so depois de `ligar_necessidades` (um motor com o banheiro);
         # sem ele, None e nada muda (nem o resumo). Um contador proprio: os ids das comidas nao mudam com o banheiro
@@ -861,6 +865,35 @@ class Mundo:
                 break
             x, y = px, py
         return x, y
+
+    def trocar_layout(self, layout: LayoutMundo, tick: int) -> dict:
+        """A troca de ilha (docs/TAREFA_V3_ILHA_AGUA.md, IA4): o mundo passa do layout de hoje, sem agua, para `layout`, que e o mesmo
+        (so o nome muda) com agua. O mundo ja vem atualizado ate o tick. A comida que fica na agua vai para a terra mais perto; a bola
+        para onde esta, ou na terra mais perto. Nenhum fluxo de acaso anda. Uma vez so por mundo. Devolve o registro (`troca_ilha`)."""
+        if self.tick_atualizado is None or tick != self.tick_atualizado:
+            raise RuntimeError(f"trocar_layout no tick {tick} com o mundo atualizado ate {self.tick_atualizado}")
+        if self.secas is not None or self.troca_ilha is not None:
+            raise ValueError(f"o mundo {self.cmf.layout.nome!r} ja tem agua: a troca de ilha vale uma vez, de um layout sem agua")
+        if replace(layout, nome=self.cmf.layout.nome) != self.cmf.layout:
+            raise ValueError(f"a troca de ilha so muda a agua: {layout.nome!r} nao e o layout {self.cmf.layout.nome!r} com outro nome")
+        de = self.cmf.layout.nome
+        cm = replace(self.cmf, layout=layout)
+        secas = celulas_secas(cm)
+        if secas is None:
+            raise ValueError(f"o layout {layout.nome!r} nao tem agua: a troca de ilha e para a ilha com agua")
+        self.cmf, self.secas = cm, secas
+        self._conferir_agua()
+        comidas = []
+        for c in self.comidas.values():
+            x, y = self.em_terra(c["x"], c["y"])
+            if (x, y) != (c["x"], c["y"]):
+                comidas.append({"id": c["id"], "de": [c["x"], c["y"]], "para": [x, y]})
+                c["x"], c["y"] = x, y
+        bx, by = self.bola_em(tick)
+        x, y = self.em_terra(bx, by)
+        self.bola = {"x0": x, "y0": y, "x1": x, "y1": y, "t0": tick, "d": 0}
+        self.troca_ilha = {"tick": tick, "de": de, "para": layout.nome, "comidas": comidas, "bola": {"de": [bx, by], "para": [x, y]}}
+        return self.troca_ilha
 
     def rolagem_seca(self, x0: int, y0: int, x1: int, y1: int) -> tuple[int, int]:
         """onde a bola que rola de (x0, y0) para (x1, y1) para: na margem (`ate_a_margem`) e, depois, encurtada ate que todo ponto por
@@ -1212,6 +1245,7 @@ class Mundo:
                 "passo_mundo": self.passo_mundo, "tick_atualizado": self.tick_atualizado, "arvores": [dict(a) for a in self.arvores],
                 "rngs": [r.getstate() for r in (self.rng_arvores, self.rng_bola)], "quedas": self.quedas, "sumidas": self.sumidas,
                 "bolas_deixadas": self.bolas_deixadas, "rolagens": self.rolagens,
+                **({} if self.troca_ilha is None else {"troca_ilha": self.troca_ilha}),
                 **({} if self.necessidades is None else {
                     "necessidades": [dict(n) for n in self.necessidades.values()], "prox_necessidade": self.prox_necessidade,
                     "recolhidas": self.recolhidas}),
@@ -2090,6 +2124,38 @@ class MotorMundo(MotorFrutas):
         self.levadas.append({"tick": self._tm(tick), "de": list(de), "pedido": [x, y], "para": list(self.pet)})
         self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o deixar_bola)
 
+    def mudar_ilha(self, nome: str) -> None:
+        """O mundo do pet passa para a ilha com agua `nome` (docs/TAREFA_V3_ILHA_AGUA.md, IA4; os pets v21 do jogo web que ja estavam
+        vivos). Valida o evento e a troca antes do log."""
+        evento = evento_mudar_ilha(self._estado.tick, nome)
+        self._aplicar_mudar_ilha(ler_mudar_ilha(evento))
+        self._log.anexar(evento)
+
+    def _aplicar_mudar_ilha(self, nome: str) -> None:
+        """So o mundo muda: o layout ganha a agua, o contrato passa a ser o do destino (o controlador, que desvia dela), o que esta na
+        agua vai para a terra mais perto (a comida, a bola e o pet) e o destino que o pet tinha se perde. Nao e contato nem cuidado: nao
+        passa pelo estado, pelo corpo nem pelo cerebro, como o levar_pet. Vale com o pet acordado ou dormindo. Com um pet (fora do
+        grupo), sem o banheiro e sem o contrato ligado antes; o destino desconhecido e a segunda troca falham alto."""
+        if not self.cmf.ligada:
+            raise MundoSemChave("mudar_ilha com ConfigMundo.ligada = False")
+        if nome not in ILHAS_DE_TROCA:
+            raise ValueError(f"mudar_ilha para uma ilha desconhecida: {nome!r}")
+        if self._grupo is not None or self.cbh.ligada or self.cct.ligada:
+            raise ValueError("mudar_ilha roda com um pet (fora do grupo), sem o banheiro e sem o contrato ligado antes")
+        layout, contrato = ILHAS_DE_TROCA[nome]
+        if not contrato.controlador:
+            raise ValueError(f"a ilha {nome!r} tem agua e pede o controlador do contrato")
+        tm = self._tm(self._estado.tick)
+        self.mundo.atualizar(tm)
+        reg = self.mundo.trocar_layout(layout, tm)
+        self.cmf, self.cct = self.mundo.cmf, contrato
+        self._montar_contrato()
+        de = self.pet
+        self.pet = self._pet_em_terra(*self.pet)
+        self._pendente = None
+        reg["pet"] = {"de": list(de), "para": list(self.pet)}
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o levar_pet)
+
     def _pet_em_terra(self, x: int, y: int) -> tuple[int, int]:
         """a agua (IA1): o pet solto na agua, ou tao rente a ela que o corpo a invade, cai no centro da celula de terra mais perto"""
         if self.mundo.secas is None or ct.bloqueio_em(x, y, self.cct.r_pet, self._solidos) is None:
@@ -2195,6 +2261,7 @@ class MotorMundo(MotorFrutas):
                 "bolas_deixadas": m.bolas_deixadas, "rolagens": m.rolagens, "decisoes": self.decisoes_mundo,
                 "regioes": self.regioes, "visitas": self.visitas,
                 "manchas_abertas": [dict(v) for v in self._manchas_abertas.values()],
+                **({} if m.troca_ilha is None else {"troca_ilha": m.troca_ilha}),
                 **({} if not self.cbh.ligada else {
                     "necessidades": [dict(n) for n in m.necessidades.values()], "prox_necessidade": m.prox_necessidade,
                     "recolhidas": m.recolhidas, "alivios": self.alivios, "recolhas": self.recolhas,
@@ -2262,6 +2329,8 @@ def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config 
             motor._aplicar_deixar_bola(*ler_deixar_bola(evento))
         elif evento.tipo == "levar_pet":
             motor._aplicar_levar_pet(*ler_levar_pet(evento))
+        elif evento.tipo == "mudar_ilha":
+            motor._aplicar_mudar_ilha(ler_mudar_ilha(evento))
         elif evento.tipo == "deixar_fruta":
             motor._aplicar_deixar_fruta(*ler_deixar_fruta(evento))
         elif evento.tipo == "sacudir_arvore":

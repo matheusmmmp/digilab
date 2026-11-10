@@ -2417,6 +2417,11 @@ CONFIG_CONTRATO = ConfigContrato()
 CONFIG_CONTRATO_LIGADO = ConfigContrato(sensores=True, controlador=True)
 # a ilha com agua (docs/TAREFA_V3_ILHA_AGUA.md, IA1): so o controlador, que e quem desvia da agua; o cone e as paredes ficam desligados
 CONFIG_CONTRATO_AGUA = ConfigContrato(controlador=True)
+# a troca de ilha no meio da vida (docs/TAREFA_V3_ILHA_AGUA.md, IA4; a IA-4 do Matheus: os pets vivos passam para a ilha nova): o evento
+# `mudar_ilha` leva o mundo do pet para um destino desta tabela, pelo nome: o layout (o mesmo de antes, so com outro nome e com a agua) e
+# o contrato que passa a valer (o controlador, que desvia da agua). DECIDIDO (2026-11-10: "Migram por evento")
+ILHAS_DE_TROCA = {LAYOUT_MUNDO_MVP_AGUA.nome: (LAYOUT_MUNDO_MVP_AGUA, CONFIG_CONTRATO_AGUA),
+                  LAYOUT_MUNDO_ILHA_AGUA.nome: (LAYOUT_MUNDO_ILHA_AGUA, CONFIG_CONTRATO_AGUA)}
 
 
 # =====================================================================

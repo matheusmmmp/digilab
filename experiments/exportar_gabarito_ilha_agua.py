@@ -54,24 +54,28 @@ PONTOS_BOLA = ((500, 240), (700, 150), (8, 470), (880, 260), (205, 368))
 VIDAS = (("a_v11_agua_202", 202), ("a_v11_agua_505", 505))
 
 
-def motor(semente: int, cm=CM, com_arvores: bool = False):
+def motor(semente: int, cm=CM, com_arvores: bool = False, contrato=CC):
     b = e0._bancada()
     espec = bv.EspecVida("atencioso", gl.BRACO_V11, semente)
     extras = {"cfg_sacudir": CS, "cfg_fruta_comida": CONFIG_FRUTA_COMO_COMIDA_LIGADA} if com_arvores else {}
     return e0.MotorMundoCorpoGravado(b.politica(espec, CONFIG_PADRAO), CONFIG_PADRAO, semente, obediencia_desligada=True, cfg_mundo=cm,
                                      cfg_corpo=b.cfg_corpo_de(espec), cfg_decisao_comida=CONFIG_DECISAO_NA_COMIDA_LIGADA,
-                                     cfg_bola_golpe=CONFIG_BOLA_NO_GOLPE_LIGADA, cfg_contrato=CC, **extras)
+                                     cfg_bola_golpe=CONFIG_BOLA_NO_GOLPE_LIGADA, cfg_contrato=contrato, **extras)
 
 
-def viver(semente: int, cm=CM, com_arvores: bool = False):
+def viver(semente: int, cm=CM, com_arvores: bool = False, troca: tuple | None = None):
     """a vida do roteiro; devolve o motor e o que o roteiro pediu (o ponto pedido e onde a coisa foi parar). Com `com_arvores` (so no
-    teste do Python, na ilha com arvores), o dono tambem poe a bola e sacode as arvores."""
-    m = motor(semente, cm, com_arvores)
+    teste do Python, na ilha com arvores), o dono tambem poe a bola e sacode as arvores. Com `troca` = (o tick, o mundo de antes), a vida
+    comeca no mundo de antes, sem agua e sem o contrato, e passa para `cm` no tick, pelo evento `mudar_ilha` (a IA4: o gabarito da troca
+    de ilha, experiments/exportar_gabarito_mudar_ilha.py)."""
+    m = motor(semente, cm, com_arvores) if troca is None else motor(semente, troca[1], com_arvores, None)
     arvores = [a[0] for a in cm.layout.arvores]
     if com_arvores != bool(arvores):
         raise ValueError(f"o layout {cm.layout.nome!r} e o roteiro nao combinam (com_arvores = {com_arvores})")
     fim, agora, k = DIAS * TICKS_POR_DIA, 0, {"c": 0, "l": 0, "s": 0, "b": 0, "p": 0}
     pedidos = {"comida": [], "levar": [], "bola": [], "ponte": [], "dormindo_em": []}
+    if troca is not None and any(troca[0] % p == 0 for p in (ROTEIRO_COMIDA, ROTEIRO_LEVAR, ROTEIRO_PONTE, ROTEIRO_SACODE, ROTEIRO_BOLA)):
+        raise ValueError(f"o tick da troca ({troca[0]}) cai num passo do roteiro")
     passos = (ROTEIRO_COMIDA, ROTEIRO_LEVAR, ROTEIRO_PONTE) + ((ROTEIRO_SACODE, ROTEIRO_BOLA) if com_arvores else ())
 
     def comida(t: int, x: int, y: int) -> None:
@@ -81,9 +85,13 @@ def viver(semente: int, cm=CM, com_arvores: bool = False):
         c = m.mundo.comidas[novo]
         pedidos["comida"].append({"tick": t, "id": novo, "pedido": [x, y], "ficou": [c["x"], c["y"]]})
 
-    for t in sorted({t for t in range(1, fim + 1) if any(t % p == 0 for p in passos)} | {fim}):
+    for t in sorted({t for t in range(1, fim + 1) if any(t % p == 0 for p in passos)} | {fim} | ({troca[0]} if troca else set())):
         m.avancar(t - agora)
         agora = t
+        if troca is not None and t == troca[0]:
+            dormindo, pet = m._estado.dormindo, list(m.pet)
+            m.mudar_ilha(cm.layout.nome)
+            pedidos["troca"] = {"tick": t, "dormindo": dormindo, "pet_antes": pet, **m.mundo.troca_ilha}
         if t % ROTEIRO_COMIDA == 0:
             comida(t, *PONTOS_COMIDA[k["c"] % len(PONTOS_COMIDA)])
             k["c"] += 1
@@ -153,22 +161,28 @@ def travessias(m, pedidos: dict, agua) -> int:
 
 
 def conferir(m, pedidos: dict) -> dict:
-    """os gates da agua nesta vida (G-AG-2 e G-AG-5); falha alto se algum nao vale"""
+    """os gates da agua nesta vida (G-AG-2 e G-AG-5); falha alto se algum nao vale. Na vida com a troca de ilha (`pedidos["troca"]`), o
+    que o roteiro fez antes dela nao conta (nao havia agua): confere-se o que ficou no mundo e tudo o que veio depois"""
+    desde = pedidos["troca"]["tick"] if "troca" in pedidos else 0
+    tm0 = m._tm(desde)
+    todos, pedidos = pedidos, {k: ([p for p in v if (p["tick"] if isinstance(p, dict) else p) >= desde] if isinstance(v, list) else v)
+                               for k, v in pedidos.items()}
     mundo, cm, r = m.mundo, m.cmf, CC.r_pet
     solidos, agua = solidos_da_agua(cm), AGUA_POR_LAYOUT[cm.layout.nome]
     # toda comida que ja existiu: as do dono (onde ficaram), as das arvores (as quedas e as sacudidas) e as que estao no chao
-    do_dono = {p["id"]: p["ficou"] for p in pedidos["comida"]}
+    do_dono = {p["id"]: (p["ficou"] if p["tick"] >= desde else None) for p in todos["comida"]}
     # (a fruta da queda natural que o pet ja comeu nao tem a posicao guardada: confere-se a que esta no chao ou sumiu)
     das_arvores = {i: None for q in mundo.quedas for i in q["colocadas"]}
     das_arvores.update({s["caiu"]: [s["x"], s["y"]] for s in (mundo.sacudidas or ()) if s["caiu"] is not None})
     if sorted([*do_dono, *das_arvores]) != list(range(ID_BOLA + 1, mundo.prox_id)):
         raise RuntimeError("ha comida que o roteiro nao viu nascer")
-    for ponto in [*do_dono.values(), *(p for p in das_arvores.values() if p is not None),
+    for ponto in [*(p for p in do_dono.values() if p is not None), *(p for p in das_arvores.values() if p is not None),
                   *([c["x"], c["y"]] for c in [*mundo.comidas.values(), *mundo.sumidas])]:
         if not mundo.seca(*ponto):
             raise RuntimeError(f"comida na agua: {ponto}")
     paradas = 0
-    for rol in mundo.rolagens:
+    rolagens = [rol for rol in mundo.rolagens if rol["tick"] >= tm0]
+    for rol in rolagens:
         for x, y in pontos_da_rolagem(rol, cm.atrito):
             if not mundo.seca(x, y):
                 raise RuntimeError(f"a bola na agua em ({x}, {y}): {rol}")
@@ -177,6 +191,10 @@ def conferir(m, pedidos: dict) -> dict:
         if not mundo.seca(*p["ficou"]):
             raise RuntimeError(f"a bola posta na agua: {p}")
     pontos = [tuple(p["ficou"]) for p in pedidos["levar"] + pedidos["ponte"]] + [tuple(q) for d in m.contrato_decisoes for q in (d["trajetoria"] or ())]
+    if "troca" in todos:                                             # logo depois da troca, a bola e o pet estao em terra
+        pontos.append(tuple(todos["troca"]["pet"]["para"]))
+        if not mundo.seca(*todos["troca"]["bola"]["para"]):
+            raise RuntimeError(f"a bola na agua depois da troca: {todos['troca']}")
     for x, y in pontos:
         if ct.bloqueio_em(x, y, r, solidos) is not None:
             raise RuntimeError(f"o pet na agua: ({x}, {y})")
@@ -184,7 +202,7 @@ def conferir(m, pedidos: dict) -> dict:
     movidos = {k: sum(p["pedido"] != p["ficou"] for p in pedidos[k]) for k in ("comida", "levar")}
     if not cruzou or not all(movidos.values()):
         raise RuntimeError(f"o roteiro precisa de uma travessia pela ponte ({cruzou}) e de uma comida e um pet tirados da agua ({movidos})")
-    return {"cruzou_pela_ponte": cruzou, "tirados_da_agua": movidos, "posicoes_do_pet": len(pontos), "rolagens": len(mundo.rolagens),
+    return {"cruzou_pela_ponte": cruzou, "tirados_da_agua": movidos, "posicoes_do_pet": len(pontos), "rolagens": len(rolagens),
             "rolagens_paradas_na_margem": int(paradas)}
 
 
