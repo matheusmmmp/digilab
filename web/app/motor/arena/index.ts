@@ -5,6 +5,6 @@ export * from "./tipos.ts";
 export { dist, seno, PI, DOIS_PI } from "./aritmetica.ts";
 export * from "./rng.ts";
 export { CENAS, IDS_CENA, iniciarCena, type DefCena } from "./cenas.ts";
-export { criarLuta, multAtr, passo, VENCE } from "./sim.ts";
+export { criarLuta, fatorElipse, multAtr, passo, VENCE } from "./sim.ts";
 export { FORMAS_ARENA, FORMAS_ARENA_POC, GOLPES_DA_POC } from "./formas.ts";
 export * from "./luta.ts";
