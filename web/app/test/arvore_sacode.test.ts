@@ -231,7 +231,7 @@ describe("o sacudir no Motor do jogo: nenhuma versao o tem (D-AS-S2-1)", () => {
   test("todas as versoes de hoje recusam o sacudirArvore e o \"sa\" no replay, antes do registro", () => {
     expect(VERSOES_COM_SACUDIR).toEqual([]);
     for (const v of VERSOES_PET) {
-      const g = ehDoGrupo(v) ? new GrupoDoJogo(101, v) : null, m = g ? g.motor("A") : new Motor(101, v);   // a v24 so nasce no grupo (CO4c)
+      const g = ehDoGrupo(v) ? new GrupoDoJogo(101, v) : null, m = g ? g.motor("A") : new Motor(101, v);   // a v25 so nasce no grupo (CO4c)
       m.avancar(60);
       const n = m.log.length, a = m.assinatura();
       expect(() => m.sacudirArvore("J1"), `v${v}`).toThrow(/nenhum pet sacode/);

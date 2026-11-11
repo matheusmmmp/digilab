@@ -1,5 +1,5 @@
 /* Os dois pets no jogo (docs/TAREFA_V3_COOPERACAO.md, etapa CO4d), a 390 e a 1280 px: do primeiro acesso ao brasao, os dois ovos chocam juntos
-   (o save e o do grupo, v24), os dois pets aparecem na ilha, o retrato do irmao fica no topo e o toque nele troca o pet em foco (quem a tela
+   (o save e o do grupo, v25), os dois pets aparecem na ilha, o retrato do irmao fica no topo e o toque nele troca o pet em foco (quem a tela
    mostra e quem recebe a acao do dono), o foco fica no save e volta ao reabrir, e a acao do dono vai ao pet em foco. Sem erro no console. */
 import { expect, test, type Page } from "@playwright/test";
 import { basename } from "node:path";
@@ -41,10 +41,10 @@ for (const [largura, altura] of [[390, 844], [1280, 800]] as const) {
     await brasao.locator(".br-card").first().click();
     await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
 
-    /* os dois ovos: o save do grupo, v24, com o primeiro em foco */
+    /* os dois ovos: o save do grupo, v25, com o primeiro em foco */
     await expect.poll(async () => (await lerSave(page))?.grupo).toBe(true);
     const s = (await lerSave(page))!;
-    expect([s.versao, s.foco]).toEqual([24, "A"]);
+    expect([s.versao, s.foco]).toEqual([25, "A"]);
     const g = await page.evaluate(() => (window as unknown as { __digilab: { grupo(): { ids: string[]; foco: string; ticks: number[] } } }).__digilab.grupo());
     expect(g.ids).toEqual(["A", "B"]);
     expect(g.ticks[0]).toBe(g.ticks[1]);

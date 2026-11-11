@@ -52,7 +52,7 @@ def test_a_fumaca_passa_e_a_run_pede_o_registro():
     if a2.TITULO_REGISTRO not in texto:
         with pytest.raises(RuntimeError, match="registro do adendo 2"):
             a2.modo_da_config(_cfg())
-    com = texto + f"\n{a2.TITULO_REGISTRO}\n\no registro.\n"
+    com = texto if a2.TITULO_REGISTRO in texto else texto + f"\n{a2.TITULO_REGISTRO}\n\no registro.\n"
     assert a2.modo_da_config(_cfg(), texto_plano=com) == a2.FASE
     sem_adendo = com.replace(a2.MARCA_ADENDO, "**O adendo 2 (seção 14) está PROPOSTO")
     with pytest.raises(RuntimeError, match="DECIDIDO"):
@@ -127,6 +127,16 @@ def test_o_rho_sobre_somas_feitas_a_mao():
         assert set(a2.chaves_de(nome, a2.IDADES, a2.JANELA)) <= todas, nome
         so = {c: cheio[c] for c in a2.chaves_de(nome, a2.IDADES, a2.JANELA)}
         assert a2.valor(nome, so, a2.IDADES, a2.JANELA) == a2.valor(nome, cheio, a2.IDADES, a2.JANELA), nome
+
+
+def test_o_perfil_zerado_fica_fora():
+    # D-IND-I7d-2: o SEQ do resto do dia t sem nenhum par de duas acordadas seguidas
+    assert a2._presente([0, 0, 0]) is None and a2._presente(None) is None and a2._presente([0, 2]) == [0, 2]
+    p = {"perfis": {("N", None): {3: {"SEQ": [0, 0]}, 4: {"SEQ": [1, 1]}}, ("G", None): {3: {"SEQ": [1, 0]}, 4: {"SEQ": [0, 1]}},
+                    ("E", 2): {3: {"SEQ": [1, 0]}, 4: {"SEQ": [1, 1]}}},
+         "parciais": {("E", 2): {"SEQ": [1, 0]}, ("N", 2): {"SEQ": [0, 0]}, ("G", 2): {"SEQ": [0, 1]}}}
+    x = a2.distancias_do_pet(p, "SEQ", (2,), 2, 4)
+    assert x["D"][("E", 2)] == {3: None, 4: 0.0} and x["D0"][("E", 2)] is None and x["DG0"][2] is None
 
 
 # ================================================================== a leitura (14.4)

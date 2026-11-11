@@ -3,7 +3,7 @@
    - o gesto do irmao depois da luta: o resultado e a reputacao (D-CO5-2), sem sorteio;
    - a medida ligada no jogo (o GrupoDoJogo) so mede: o grupo com ela da a mesma vida que um grupo sem ela (o G-SEM-DECISAO no jogo). */
 import { describe, expect, test } from "vitest";
-import { CONFIG_GRUPO_LIGADA, Grupo, GrupoDoJogo, TPD, VERSAO_V24, gestoDepoisDaLuta } from "../motor/index.ts";
+import { CONFIG_GRUPO_LIGADA, Grupo, GrupoDoJogo, TPD, VERSAO_V25, gestoDepoisDaLuta } from "../motor/index.ts";
 import { iconeDoAto, textoDoAto } from "../src/telas/pet/AtosDoIrmao.tsx";
 
 describe("os atos na tela", () => {
@@ -33,7 +33,7 @@ describe("o gesto do irmao depois da luta", () => {
   });
 
   test("no grupo do jogo, pela reputacao de agora", () => {
-    const g = new GrupoDoJogo(101, VERSAO_V24);
+    const g = new GrupoDoJogo(101, VERSAO_V25);
     expect(g.grupo.coop).not.toBeNull();
     expect(g.gestoDoIrmao("A", false)).toEqual({ irmao: "B", gesto: "consola" });
     expect(g.gestoDoIrmao("B", true)).toEqual({ irmao: "A", gesto: "comemora" });
@@ -44,7 +44,7 @@ describe("o gesto do irmao depois da luta", () => {
 describe("a medida ligada no jogo so mede", () => {
   test("o G-SEM-DECISAO no jogo: com a medida e sem ela, os dois pets vivem igual (a mesma assinatura)", () => {
     const viver = (medir: boolean) => {
-      const h = new GrupoDoJogo(202, VERSAO_V24, medir);
+      const h = new GrupoDoJogo(202, VERSAO_V25, medir);
       for (let k = 0; k < (2 * TPD) / 15; k++) { h.avancar(15); if (k % 8 === 0) h.agir(k % 16 === 0 ? "A" : "B", m => m.observar("alimentar")); }
       return h;
     };
@@ -52,7 +52,7 @@ describe("a medida ligada no jogo so mede", () => {
     expect(sem.grupo.coop).toBeNull();
     expect(g.assinatura()).toBe(sem.assinatura());
     expect(JSON.stringify(g.log)).toBe(JSON.stringify(sem.log));
-    const r = GrupoDoJogo.reproduzir(202, VERSAO_V24, g.log);
+    const r = GrupoDoJogo.reproduzir(202, VERSAO_V25, g.log);
     expect(r.assinatura()).toBe(g.assinatura());
     expect(g.grupo.coop!.atos.length).toBe(r.grupo.coop!.atos.length);
     /* a medida nao entra na assinatura nem no registro: ela e derivada (o G-SEM-DECISAO do motor esta no test/cooperacao.test.ts) */

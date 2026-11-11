@@ -273,6 +273,7 @@ desligada (o espelho é o `CCOOP` do `motor/constantes.ts`). Ela só mede: nenhu
   - há de 1 a 6 contenções por vida de 3 dias, 2 disputas neutras e 1 encostar;
   - nenhuma disputa é "anti", então o sinal −1 só é conferido nas chamadas sintéticas.
 - **Os desvios:** D-CO3-1 a D-CO3-8, no registro de 2026-11.
+
 ## CO4a, a água dentro do grupo (2026-11-11, Claude Code, Opus 5.5, branch `v3-cooperacao-co4a`)
 
 A CO4 virou quatro PRs (D-CO4-1):
@@ -363,5 +364,5 @@ A cooperação aparece sem número (D-MM-8), em `web/app/src/telas/pet/AtosDoIrm
 - **As capturas,** a 390 e 1280 px, no Militar e no Sci-fi, ficam em `D:\Trab\digilab\capturas_coop_co5\`, fora do git: o ato na ilha e,
   no celular, a linha.
   - **Aprovadas pelo Matheus** em 2026-11-11 (D-CO5-7).
-  - **A captura do gesto da luta espera um conserto da `main`:** a luta de todo pet v23 e v24 não termina no palco (D-CO5-5).
+  - **A captura do gesto da luta espera um conserto da `main`:** a luta de todo pet v23, v24 e v25 não termina no palco (D-CO5-5).
 - **Os desvios:** D-CO5-1 a D-CO5-6, no registro de 2026-11.

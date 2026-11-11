@@ -12,9 +12,9 @@
    As sementes: o primeiro pet usa a do grupo; o segundo, `derivarSemente("segundo-pet", s)` cortada aos 32 bits das sementes do jogo (D-CO4b-2).
    Os dois nascem juntos, no tick de nascimento do jogo (TICK_INICIAL), que e o comeco do relogio do mundo (D-CO4b-3).
 
-   Os pets sao da v24 (CO4c; motor/constantes.ts): o pet v24 so existe no grupo. O `avancar` de qualquer um dos dois anda o grupo inteiro,
+   Os pets sao da v25 (CO4c; motor/constantes.ts): o pet v25 so existe no grupo. O `avancar` de qualquer um dos dois anda o grupo inteiro,
    para o relogio do jogo e as telas, que leem o pet em foco, seguirem como hoje (src/jogo.ts). */
-import { CMU_MVP, CMU_MVP_AGUA, TICK_INICIAL, VERSAO_V24, ehDoGrupo, nasceNaAgua, type ConfigMundo } from "./constantes.ts";
+import { CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA, TICK_INICIAL, VERSAO_V25, ehDoGrupo, nasceNaAgua, nasceNaGrande, type ConfigMundo } from "./constantes.ts";
 import { CONFIG_GRUPO_LIGADA, Grupo, ROTULO_SEGUNDO_PET } from "./grupo.ts";
 import { CONFIG_COOPERACAO_LIGADA } from "./cooperacao.ts";
 import { Motor } from "./motor.ts";
@@ -40,7 +40,7 @@ export function sementeDoSegundoJogo(semente: number | bigint): number {
 
 /** o mundo de uma versao de pet (o mesmo do construtor do Motor) */
 export function mundoDaVersao(versao: number): ConfigMundo {
-  return nasceNaAgua(versao) ? CMU_MVP_AGUA : CMU_MVP;
+  return nasceNaGrande(versao) ? CMU_GRANDE : nasceNaAgua(versao) ? CMU_MVP_AGUA : CMU_MVP;
 }
 
 export class GrupoDoJogo {
@@ -53,7 +53,7 @@ export class GrupoDoJogo {
   /** `medir`: a medida da cooperacao (CO3), ligada no jogo; desligada so no teste do G-SEM-DECISAO (ela nao muda nada) */
   constructor(semente: number, versao: number, medir = true) {
     if (!Number.isInteger(semente) || semente < 0 || semente > 0xffffffff) throw new Error(`semente do grupo fora dos 32 bits: ${semente}`);
-    if (!ehDoGrupo(versao)) throw new Error(`o grupo do jogo e de pets v${VERSAO_V24}, nao v${versao}`);
+    if (!ehDoGrupo(versao)) throw new Error(`o grupo do jogo e de pets v${VERSAO_V25}, nao v${versao}`);
     this.semente = semente;
     this.versao = versao;
     this.grupo = new Grupo(mundoDaVersao(versao), semente, CONFIG_GRUPO_LIGADA,

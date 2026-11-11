@@ -63,6 +63,9 @@ export interface Passo {
   yPe?: number;
   /** o pet suspenso: na mao do dono, ou caindo logo depois de solto; null no chao */
   suspenso?: Suspenso | null;
+  /** um ponto do chao (celulas) para onde o pet olha, fora do golpe e do comer: o cantinho da TV do prototipo do gosto visual (cantinhoTv.ts),
+      que o vira para a TV ou para o outro lado; undefined ou null, o lado de sempre */
+  olharPara?: readonly [number, number] | null;
 }
 /** o pet fora do chao (mao.ts): `altura` em texels sobre o chao, `angulo` do pendulo (rad; positivo, o pe vai para a direita na tela),
     `tremor` em texels de lado e `sombra`, onde ele vai cair (celulas, ja no mapa; null: embaixo dele) */
@@ -405,7 +408,7 @@ export class Papel {
        bate e o da comida no "comeu a racao" (SA-4); fora deles, o do passo da posicao desenhada */
     const dir = this.v.set(1, 0, 0).applyQuaternion(p.camera.quaternion), h = Math.hypot(dir.x, dir.z) || 1;
     const naDireita = (x: number, z: number) => (x * dir.x + z * dir.z) / h;
-    const alvo = golpe?.alvo ?? (noClipe && comer.momento ? comer.alvo : null);
+    const alvo = golpe?.alvo ?? (noClipe && comer.momento ? comer.alvo : null) ?? p.olharPara ?? null;
     if (alvo) { const d = naDireita(alvo[0] - p.cel[0], alvo[1] - p.cel[1]); if (Math.abs(d) > LADO_MIN) this.lado = d > 0 ? 1 : -1; }
     /* suspenso (na mao ou caindo), o lado fica o de quando ele foi pego: o arrasto nao vira a folha (ela passaria pela largura 0) */
     else if (this.celAntes !== null && !sus) {
