@@ -574,3 +574,30 @@ O código da [DC5](PLANO_ANALISE_V3_CONVERSA_DC5.md) (APROVADO pelo Matheus em 2
 - **Os testes:** `tests/test_conversa_dc5a.py` (30), com a fumaça inteira nas sementes dos testes; o teste do registro da DC4 confere agora
   os arquivos da validação (D-DC5A-1).
 - **Os desvios:** D-DC5A-1 a 5, em `docs/registro/2026-11.md`.
+
+
+## DC5b — a calibração da voz-v4 (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5b`, 2026-11-11)
+
+A calibração da [DC5](PLANO_ANALISE_V3_CONVERSA_DC5.md), seção 10: só a metade da calibração da faixa (base 20262900), nos braços G e H, com a
+voz do jogo e a voz-v4. **Nenhuma fala da validação foi gerada.** É descritiva: a calibração não tem gate.
+
+- **A rodada:**
+  - foi pelo caminho normal, com o H10 conferindo antes;
+  - a primeira tentativa foi recusada porque a I7 da INDIVIDUALIDADE estava rodando, e a rodada esperou ela sair (D-DC5B-3);
+  - rodou de 02:25:39 a 04:21:54 de 2026-11-11, num processo só;
+  - deu 384 falas, 96 por célula, com os modelos pedidos devolvidos (gemma2:9b no G e no verificador, claude-haiku-5-5 no H).
+- **O gasto:** US$ 0,060 na rodada, contra a estimativa de US$ 0,098 e o limite de US$ 0,50 da config. O acumulado da fala livre foi de
+  US$ 2,077 a US$ 2,137, dentro do teto de US$ 3,00 (`meta.json`).
+- **O formato (D-DC5-3):** nenhuma fala genérica em nenhuma célula, abaixo dos 10 %. **O exemplo de formato não entra, e o texto da voz-v4
+  não muda:** não há voz-v4b (D-DC5B-2).
+- **O resumo descritivo** (`experiments/resumo_calibracao_dc5.py`, que grava `artifacts_v3_conversa_dc5/calibracao/resumo_calibracao.json`;
+  D-DC5B-1) tem, por célula:
+  - as frases-modelo da Q6;
+  - o distinct-1 e o distinct-2, cortados em 439 palavras, o total da célula mais curta;
+  - a repetição entre turnos, nas 9 sequências (3 ES e 6 conversas R);
+  - o que o verificador marcou;
+  - os "fica comigo" nos 10 pedidos de solidão do E3;
+  - as falas com "foi bom".
+- **Os artefatos** estão em `artifacts_v3_conversa_dc5/calibracao/`: as entradas, as falas, os pares, os pacotes do Opus, a meta e o resumo.
+- **Os testes:** `tests/test_resumo_calibracao_dc5.py` (3).
+- **Os desvios:** D-DC5B-1 a 3, em `docs/registro/2026-11.md`.

@@ -633,6 +633,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-10 — UX_TELA_PET, a câmera do primeiro dia no jogo (gerente da frente, Claude Code, Opus 5.5, branch `v3-ux-camera-abertura`)](registro/2026-11.md)
 - [2026-11-10 — CONVERSA_PET, DC5a, o código da voz-v4 e da avaliação (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5a`)](registro/2026-11.md)
 - [2026-11-10 — INDIVIDUALIDADE, I7a: as leituras do plano do I7 e o custo da fumaça (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i7a`)](registro/2026-11.md)
+- [2026-11-11 — CONVERSA_PET, DC5b, a calibração da voz-v4 (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5b`)](registro/2026-11.md)
 - [2026-11-10 — MMO: o plano do multijogador (Gerente da frente MMO, Claude Code, Opus 5.5, branch `v3-mmo`)](registro/2026-11.md)
 - [2026-11-10 — MMO: as duas pontuações e o reset no plano (Gerente da frente MMO, Claude Code, Opus 5.5, branch `v3-mmo`)](registro/2026-11.md)
 - [2026-11-11 — MMO: as decisões MMO-1 a MMO-19 aprovadas (Gerente da frente MMO, Claude Code, Opus 5.5, branch `v3-mmo`)](registro/2026-11.md)
@@ -677,3 +678,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — MITOLOGIA, E2: Piedmon e a montanha (Gerente da V3, Claude Code, Opus 5.5, branch `v3-mitologia-e2`)](registro/2026-11.md)
 - [2026-11-11 — MMO0: a medida Chrome × Node (Gerente da frente MMO, Claude Code, Opus 5.5, branch `v3-mmo0`)](registro/2026-11.md)
 - [2026-11-11 — ILHA_AGUA: a junção da ilha grande com a `main` e o merge (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-grande-ig4`)](registro/2026-11.md)
+- [2026-11-11 — MMO1: a conta dos pontos (Gerente da frente MMO, Claude Code, Opus 5.5, branch `v3-mmo1`)](registro/2026-11.md)
