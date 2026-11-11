@@ -460,6 +460,36 @@ export const CMU: ConfigMundo = {
    arvores, so com a racao do jogador. So o pet v12 o usa; a pesquisa e os outros gabaritos seguem com o CMU. PROPOSTO, SEM FONTE. */
 export const LAYOUT_MUNDO_MVP: LayoutMundo = { ...LAYOUT_MUNDO_PADRAO, nome: "mvp", arvores: [] };
 export const CMU_MVP: ConfigMundo = { ...CMU, layout: LAYOUT_MUNDO_MVP };
+/* O mundo da ilha (docs/TAREFA_V3_ARVORE_SACODE.md, AS-7; o espelho de config.LAYOUT_MUNDO_ILHA e CONFIG_MUNDO_ILHA): o layout do MVP
+   com tres frutiferas no bosque do lar (a planta A da ilha, PR #724), na casa: o Mundo so as aceita com o sacudir ligado (D-AS-S1-7).
+   O CMU_MVP nao muda. Nenhuma versao de pet o roda ainda (D-AS-S2-1): so o teste de paridade. Os pontos sao PROPOSTO, SEM FONTE. */
+export const LAYOUT_MUNDO_ILHA: LayoutMundo = {
+  ...LAYOUT_MUNDO_MVP, nome: "ilha", ninho: [11, 13], comedouro: [16, 15], bola_inicio: [21, 19],
+  arvores: [["J1", 9, 9, "a"], ["J2", 14, 7, "b"], ["J3", 6, 14, "c"]],
+};
+export const CMU_ILHA: ConfigMundo = { ...CMU_MVP, layout: LAYOUT_MUNDO_ILHA };
+/** o sacudir a arvore (docs/TAREFA_V3_ARVORE_SACODE.md, secao 3.2; o espelho da ConfigSacudir de digilab/config.py): o galho de cada
+    arvore nasce cheio com `galho_max` frutas e repoe uma a cada `recarga_galho_min` ticks. O modelo e DECIDIDO (AS-3); os numeros sao
+    PROPOSTOS, SEM FONTE (o equilibrio do fim). Desligada, nada muda */
+export interface ConfigSacudir { ligada: boolean; galho_max: number; recarga_galho_min: number }
+export const CONFIG_SACUDIR: ConfigSacudir = Object.freeze({ ligada: false, galho_max: 3, recarga_galho_min: 240 });
+export const CONFIG_SACUDIR_LIGADA: ConfigSacudir = Object.freeze({ ...CONFIG_SACUDIR, ligada: true });
+/** confere a ConfigSacudir como o __post_init__ do Python */
+export function validarSacudir(cs: ConfigSacudir): ConfigSacudir {
+  if (typeof cs.ligada !== "boolean") throw new Error(`ConfigSacudir.ligada e bool: ${String(cs.ligada)}`);
+  if (!Number.isInteger(cs.galho_max) || typeof cs.galho_max !== "number" || cs.galho_max < 1)
+    throw new Error(`ConfigSacudir.galho_max e inteiro >= 1: ${String(cs.galho_max)}`);
+  if (!Number.isInteger(cs.recarga_galho_min) || typeof cs.recarga_galho_min !== "number" || cs.recarga_galho_min < 1)
+    throw new Error(`ConfigSacudir.recarga_galho_min e inteiro >= 1: ${String(cs.recarga_galho_min)}`);
+  return cs;
+}
+/** a fruta do mundo como comida (AS-11; o espelho da ConfigFrutaComoComida): ligada, o laco do mundo nao entrega o aviso `frutaComida`
+    ao cerebro, e a fruta chega como a racao. Desligada (o padrao), a vida de hoje byte a byte */
+export interface ConfigFrutaComoComida { ligada: boolean }
+export const CONFIG_FRUTA_COMO_COMIDA: ConfigFrutaComoComida = Object.freeze({ ligada: false });
+export const CONFIG_FRUTA_COMO_COMIDA_LIGADA: ConfigFrutaComoComida = Object.freeze({ ligada: true });
+/** as versoes de pet que tem o sacudir a arvore (o evento "sa"): nenhuma ainda (D-AS-S2-1; o mundo das arvores e decisao do Matheus) */
+export const VERSOES_COM_SACUDIR: readonly number[] = Object.freeze([]);
 
 /* A ilha onde so a agua barra o pet (docs/TAREFA_V3_ILHA_AGUA.md; o espelho de digilab/config.py: AGUA_ILHA, AGUA_POR_LAYOUT e
    CONFIG_MUNDO_MVP_AGUA). A agua e uma linha de texto por linha de celulas, de cima para baixo, com um caractere por celula; ela barra o

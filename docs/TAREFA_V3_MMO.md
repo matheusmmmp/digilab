@@ -82,3 +82,26 @@ de sementes reservada.
 ## 8. Precisa do Matheus
 
 As decisões MMO-1 a MMO-19, na seção 14 do `docs/PLANO_V3_MMO.md`, cada uma com a recomendação e o custo de errar.
+
+## 9. MMO0: a medida Chrome × Node (2026-11-11)
+
+Pedido do Matheus, pela sessão do Gerente UX_TELA_PET: "Segue a proxima etapa do mmo". Sem servidor e sem tela.
+
+- **O que mede:** 20 vidas roteirizadas (`web/app/scripts/mmo0/vida.ts`), gravadas no Chrome instalado e conferidas no Node
+  (`web/app/scripts/mmo0/conferir.ts`). As sementes são 101 a 110 com o DigiBrain modular e 111 a 120 com o cérebro A. O ovo nasce como
+  no jogo (`src/produto.ts`, a `VERSAO_PET` 23).
+- **O resultado** (`web/app/scripts/medicoes/mmo0_chrome_node.json`, commit `8095061a`, Chrome 156.0.8078.81, Node v24.19.0):
+  - o Node aceita os 20 registros do Chrome, com 24 296 eventos;
+  - as **4 561 lutas dão o mesmo resultado** nos dois: venceu, lesão, a vida que sobrou e os passos de cada luta da série;
+  - o Node, vivendo o mesmo roteiro, grava **o mesmo registro** nas 20 vidas;
+  - o estado do pet (`m.e`) sai igual nas 20;
+  - **a assinatura sai diferente nas 20**, só no último bit: 48 números ao todo, com a maior diferença relativa de 6,4 × 10⁻¹⁵ e
+    nenhum valor que não seja número. Os números ficam na confiança da luta (`conf.assinatura()`, nas 20) e no texto do cérebro
+    (`pol.assinatura()`, em 6). A primeira divergência aparece entre o evento 34 e o 209.
+- **O que isso diz à MMO-5:** a regra aprovada fica de pé. O servidor confere pelo replay e calcula os pontos pelas lutas, que saem
+  iguais. Ele **não pode conferir pela assinatura**, que difere no último bit para um jogador honesto. Se uma luta um dia divergir, a conta
+  do servidor vale, com o aviso.
+- **A guarda:** `web/app/e2e/mmo0_chrome_node.spec.ts`, com duas vidas (101 modular e 111 A). Ela exige a mesma luta, o mesmo registro e
+  a assinatura diferente só em número, abaixo de 10⁻¹² (PROPOSTO, SEM FONTE).
+- **Os limites:** o roteiro não é um jogador. Ele não usa o tempo real, o "pular uma hora", a bola, levar o pet nem a troca de ilha. O
+  celular não foi medido. Vinte vidas mostram que a divergência das lutas é rara, não que não existe.
