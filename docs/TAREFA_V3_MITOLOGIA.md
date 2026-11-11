@@ -235,3 +235,24 @@ log (`web/app/motor/lendas_e2.ts`, `montanhaDe`). Nada muda no motor, na luta, n
 - a suíte inteira do Vitest tem 135 arquivos e 1334 testes, todos passando;
 - o `npm run tipos` passa;
 - o e2e da mitologia e o da Campanha (`luta_poc_lp3`) têm 13 testes, todos passando.
+
+## 13. A mitologia na ilha grande (2026-11-11)
+
+**A origem:** o Matheus pediu "agora segue com as pendências". A ilha grande (128 × 60, v24) entrou na main depois da E1. Os pets novos
+nascem nela, e a pedra do macaco ficava na célula 56,20, que lá é jardim (a mata da ilha grande vai da coluna 96 à 127).
+
+**O que mudou:**
+- A pedra tem uma célula por mapa (`pedraCelulaDe`).
+  - Nos mapas de 64 × 30 continua a 56,20.
+  - Na ilha grande fica a 104,28: em terra, na mata, sem árvore nem marco no raio de 2 células em que o pet a acha.
+- As pegadas na vista vão do ninho à pedra a cada 3,2 células. Na ilha grande elas passam pela ponte da fileira 33: em linha reta,
+  cruzariam o rio nas colunas 82 a 84.
+- O save do e2e da E1 foi gerado de novo, agora com a v24 e a pedra da ilha grande.
+
+Nada muda no motor, no log nem no save: a pedra é leitura do pet refeito do log, como antes. Um pet da v24 que tenha "achado" a pedra
+no jardim, entre o merge do #807 e este, perde o segredo no Códice até achá-la na mata. O "já ouvi" do oráculo fica.
+
+**Os testes:**
+- novo em `test/lendas_e1.test.ts`: nos três mapas, a pedra fica na mata, e o raio dela é terra livre;
+- a pedra na tela foi conferida com um save de 3,9 dias, levado à pedra de noite: o minimapa mostra o pet no leste, e o Jijimon conta a
+  pedra.

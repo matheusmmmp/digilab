@@ -116,7 +116,7 @@ export function passo(ina: Inato, e0: EstadoGosto, s: Sentido, carinho: boolean,
 }
 
 /* --- o "gosta mais de…" em palavras (GV-14: a parte de nascença e a de hoje, separadas) --- */
-const PALAVRAS: Record<Componente, [baixo: string, alto: string]> = {
+export const PALAVRAS: Record<Componente, [baixo: string, alto: string]> = {
   cor: ["cores suaves", "cores vivas"],
   brilho: ["imagens escuras", "imagens claras"],
   movimento: ["cenas calmas", "muito movimento"],

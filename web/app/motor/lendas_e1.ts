@@ -6,7 +6,7 @@
      - a pedra do macaco na mata (o pet perto dela a noite), as pegadas ate ela (muita exploracao na vida) e o dia 81 de vida;
      - as falas novas do oraculo e o enigma (o texto, por modelo, sem LLM; o criterio F0).
    Quem mostra fica em src/, atras da chave `mitologia`. */
-import { CMU_MVP, TICK_INICIAL, TPD, type ConfigMundo } from "./constantes.ts";
+import { CMU_MVP, LAYOUT_MUNDO_GRANDE, TICK_INICIAL, TPD, type ConfigMundo } from "./constantes.ts";
 import { NPC } from "./bots.ts";
 import { eNoite } from "./estado.ts";
 import { centroDaCelula, distancia } from "./mundo.ts";
@@ -27,8 +27,9 @@ export const CMIT_E1 = {
   /** o Myotismon: na janela do ultimo dia, ao menos `myoMinAcoes` acoes do dono com a mais repetida em >= `myoFracao`, ou ao menos
       `myoMesmoRival` lutas contra o mesmo rival */
   myoMinAcoes: 12, myoFracao: 0.75, myoMesmoRival: 6, myoJanela: TPD,
-  /** a pedra do macaco: a celula (na mata, em terra em todos os mapas de hoje) e o raio, em celulas, de onde o pet a "acha" a noite */
-  pedraCelula: [56, 20] as const, pedraRaioCelulas: 2,
+  /** a pedra do macaco: a celula (na mata, em terra nos mapas de 64 x 30) e o raio, em celulas, de onde o pet a "acha" a noite. Na ilha
+      grande (128 x 60, v24) a mata vai da coluna 96 a 127, e a pedra fica em `pedraCelulaGrande`, em terra e longe das arvores e dos marcos */
+  pedraCelula: [56, 20] as const, pedraCelulaGrande: [104, 28] as const, pedraRaioCelulas: 2,
   /** as pegadas: quantas decisoes de explorar na vida inteira (em qualquer lugar; elas levam do ninho a pedra na mata, D-E1-3) */
   pegadasExploracoes: 60,
   /** o dia de vida do evento raro (as 81 provacoes da estrada) */
@@ -160,9 +161,13 @@ export function myotismonJaApareceu(f: FontesE1, ate: number): boolean {
   return false;
 }
 
+/** a celula da pedra no mundo do pet (a ilha grande tem a sua, na mata dela) */
+export function pedraCelulaDe(cm: ConfigMundo = CMU_MVP): readonly [number, number] {
+  return cm.layout.nome === LAYOUT_MUNDO_GRANDE.nome ? CMIT_E1.pedraCelulaGrande : CMIT_E1.pedraCelula;
+}
 /** onde fica a pedra do macaco (subunidades do mundo) */
 export function pedraEm(cm: ConfigMundo = CMU_MVP): [number, number] {
-  return centroDaCelula(CMIT_E1.pedraCelula, cm);
+  return centroDaCelula(pedraCelulaDe(cm), cm);
 }
 
 /** o tick em que o pet achou a pedra: o fim de uma decisao, ou o ponto onde o dono o soltou, perto dela e de noite (null: ainda nao) */

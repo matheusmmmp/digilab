@@ -17,6 +17,8 @@ type Alvo = EventTarget & { getBoundingClientRect(): { left: number; top: number
 export function destinoNoPonto(el: Alvo, cx: number, cy: number): Destino | null {
   if (CENA.coberto || CENA.bolaNaMao || CENA.petNaMao) return null;
   if (noSprite(cx, cy, el.getBoundingClientRect(), CENA.ret)) return null;
+  /* a TV do cantinho (o prototipo do gosto visual; `tvEm` so existe com `?gosto_visual=1`) fica perto da barraca: o toque nela e dela */
+  if (CENA.mundo?.tvEm?.(cx, cy)) return null;
   const l = CENA.mundo?.lugarEm?.(cx, cy) ?? null;
   return l && LUGAR_ABERTO[l] ? LUGAR_DESTINO[l] : null;
 }

@@ -292,3 +292,77 @@ Esta parte deixa os dois pets viverem na ilha com água, onde o jogo nasce:
   - `tests/test_cooperacao_agua.py` refaz o gabarito byte a byte, rejoga o registro e confere que nenhum pet fica na água;
   - `web/app/test/grupo_agua.test.ts` é o G-PAR-GRUPO nesse mundo, decisão a decisão, com o registro do contrato.
 - **Os desvios:** D-CO4-1, D-CO4a-1 e D-CO4a-2, no registro de 2026-11.
+
+## CO4b, o Motor do jogo dentro do Grupo (2026-11-11, Claude Code, Opus 5.5, branch `v3-cooperacao-co4b`)
+
+- **O `GrupoDoJogo`** (`web/app/motor/grupo_jogo.ts`): dois `Motor`s inteiros (o corpo, o cérebro, os chamados, a evolução) no mesmo mundo.
+  - **O tempo:** anda pelo `Grupo`, um tick por vez. Os que decidem andam na vez sorteada, depois os outros, e no fim vêm o toque e a
+    disputa.
+  - **O registro:** é um só, `[tick, tipo, valor, pet]`. O `reproduzir` rejoga e falha alto.
+- **O Grupo** (`motor/grupo.ts`) aceita o `Motor` como membro (`entrarMotor`), o relógio que começa no nascimento e a semente do segundo
+  pet nos 32 bits do jogo.
+- **O `Motor`** (`motor/motor.ts`) e o laço (`motor/motor_corpo_mundo.ts`, `motor/motor_corpo.ts`):
+  - recebem a parte do mundo do grupo;
+  - ganham o passo de um tick;
+  - o pet do grupo não anda sozinho.
+  - Sem o grupo, nada muda.
+- **O teste:** `web/app/test/grupo_jogo.test.ts`.
+  - Dois dias de dois pets v23 na ilha com água, com um dono de roteiro.
+  - O mundo é um só: um pet come a ração que o dono deixou pelo outro.
+  - A vez sorteada, a percepção do outro e o toque.
+  - O G-REPLAY-2 no motor: a mesma assinatura, o registro de cada pet como projeção, e o replay recusa o evento desconhecido, o pet de
+    fora e o tick errado.
+- **Os desvios:** D-CO4b-1 a D-CO4b-5, no registro de 2026-11.
+
+## CO4c, o save e os dois ovos (2026-11-11, Claude Code, Opus 5.5, branch `v3-cooperacao-co4c`)
+
+- **A v24** (`motor/constantes.ts`): a v23 que nasce no grupo. O pet v24 só existe no grupo. O `VERSAO_PET` (o ovo de um pet só) segue 23.
+- **Os dois ovos** (`src/jornada.ts`, `chocarDoisOvos`): o primeiro é do brasão escolhido, e o segundo é surpresa ("Um brasão, o outro
+  surpresa"). Ficam atrás da chave `DOIS_OVOS_LIGADO`, desligada até a CO4d.
+- **O save do grupo** (`src/save.ts`): `{semente, log, versao, grupo: true, foco}`, na mesma chave. Abrir é refazer o registro do grupo.
+- **O jogo** (`src/jogo.ts`):
+  - o `Jogo` ganha o grupo e o pet em foco (`trocarGrupo`, `focar`);
+  - o `mudarMotor` passa pelo grupo;
+  - o `avancar` do pet em foco anda os dois.
+- **O teste** (`web/app/test/dois_ovos.test.ts`):
+  - os dois ovos;
+  - o G-REPLAY-2 no save (a mesma assinatura e o mesmo foco ao abrir);
+  - o save malformado como erro;
+  - o jogo com os dois pets: o relógio, a ação no pet em foco, a troca do foco e o grupo gravado;
+  - o pet de um pet só igual.
+- **Os desvios:** D-CO4c-1 a D-CO4c-5, no registro de 2026-11.
+
+## CO4d, as telas dos dois pets (2026-11-11, Claude Code, Opus 5.5, branch `v3-cooperacao-co4d`)
+
+Os dois ovos ficam jogáveis: a chave `DOIS_OVOS_LIGADO` ligou.
+
+- **Na ilha** (`src/telas/pet/ilha/vista.ts`, `papel.ts`): os dois pets aparecem. O pet em foco segue com a vista de hoje, e o irmão tem o
+  próprio seguidor e papel. Trocar o foco desliza a câmera.
+- **No topo** (`src/componentes/Topo.tsx`): o retrato do irmão troca o foco, com o ponto rosa quando ele chama.
+- **O relógio** (`src/tempo.ts`) freia pelo chamado de qualquer um.
+- **As medalhas:** os dois conhecem as do Tamer.
+- **O save nas telas:**
+  - a espera leva e traz o par inteiro;
+  - Ajustes e o Registro conferem e exportam o grupo;
+  - a herança, o importar do par e o Salão ficam para depois, com aviso (D-CO4d-5).
+- **Os testes:**
+  - `web/app/test/dois_pets_telas.test.ts`;
+  - `web/app/e2e/dois_pets.spec.ts`, a 390 e 1280 px: o brasão choca os dois, o irmão fica no topo, o foco troca e volta ao reabrir, e a
+    ação vai ao pet em foco.
+- **Os desvios:** D-CO4d-1 a D-CO4d-7, no registro de 2026-11.
+
+## CO5, a cooperação na tela (2026-11-11, Claude Code, Opus 5.5, branch `v3-cooperacao-co5`)
+
+A cooperação aparece sem número (D-MM-8), em `web/app/src/telas/pet/AtosDoIrmao.tsx`.
+
+- **Na ilha:** o ícone do ato, ao lado da cabeça do pet que o fez. O coração para deixar a comida e para encostar; a comida riscada para
+  pegar a de quem tinha fome.
+- **Em Últimas ações:** a linha do ato, do ponto de vista do pet em foco.
+- **No fim da luta do pet em foco:** o gesto do irmão (consola, comemora ou provoca), pelo resultado e pela reputação (`gestoDepoisDaLuta`,
+  `motor/grupo_jogo.ts`).
+- **A medida da CO3 ligou no jogo,** e só mede (o G-SEM-DECISAO no jogo, `web/app/test/coop_tela.test.ts`).
+- **As capturas,** a 390 e 1280 px, no Militar e no Sci-fi, ficam em `D:\Trab\digilab\capturas_coop_co5\`, fora do git: o ato na ilha e,
+  no celular, a linha.
+  - **Aprovadas pelo Matheus** em 2026-11-11 (D-CO5-7).
+  - **A captura do gesto da luta espera um conserto da `main`:** a luta de todo pet v23 a v26 não termina no palco (D-CO5-5).
+- **Os desvios:** D-CO5-1 a D-CO5-6, no registro de 2026-11.

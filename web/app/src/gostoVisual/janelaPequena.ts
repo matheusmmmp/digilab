@@ -1,3 +1,5 @@
+import { useSyncExternalStore } from "react";
+
 /* A janela pequena do protótipo P0: a Document Picture-in-Picture API (Chrome e Edge 116 ou mais novos), uma janela flutuante que fica
    por cima das outras. Sem a API, falha alto: o erro diz qual navegador tem, e o pet segue no cartão da própria página. */
 
@@ -25,4 +27,27 @@ export async function abrirJanelaPequena(): Promise<Window> {
   jan.document.documentElement.className = document.documentElement.className;
   jan.document.title = "O pet assistindo";
   return jan;
+}
+
+/* --- a janela da TV: uma só, fora dos componentes, porque o painel que a abre pode fechar e ela continua (UX-GV-1) --- */
+let janelaDaTv: Window | null = null;
+const ouvintes = new Set<() => void>();
+const avisar = (): void => { for (const f of ouvintes) f(); };
+export const janelaDaTvAtual = (): Window | null => janelaDaTv;
+export function useJanelaDaTv(): Window | null {
+  return useSyncExternalStore(f => { ouvintes.add(f); return () => { ouvintes.delete(f); }; }, janelaDaTvAtual, () => null);
+}
+/** abre a janela pequena da TV (precisa vir de um clique); fechar a janela pelo próprio "x" dela também a solta */
+export async function abrirJanelaDaTv(): Promise<void> {
+  if (janelaDaTv) return;
+  const j = await abrirJanelaPequena();
+  janelaDaTv = j;
+  j.addEventListener("pagehide", () => { if (janelaDaTv === j) { janelaDaTv = null; avisar(); } });
+  avisar();
+}
+export function fecharJanelaDaTv(): void {
+  const j = janelaDaTv;
+  janelaDaTv = null;
+  j?.close();
+  avisar();
 }
