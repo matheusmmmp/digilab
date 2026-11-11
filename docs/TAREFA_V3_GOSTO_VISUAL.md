@@ -100,3 +100,31 @@ e do save do pet:
 deslocam o "hoje" do "de nascença". O navegador do app bloqueia a captura da tela e a janela flutuante: os dois erros aparecem na tela,
 como pedido ("a tela não foi compartilhada: Permission denied"; "a janela pequena não abriu: … no window"). A captura real e a janela
 pequena ficam para o Matheus conferir no Chrome ou no Edge.
+
+## A espec do P1, a integração no cérebro e no corpo (2026-11-11, Claude Code, Opus 5.5, branch `v3-gosto-visual-p1-espec`)
+
+O pedido do Matheus, depois de ver o P0 rodando com um clipe de música: "quero que ele acesse o cérebro para ter esses feedbacks e isso
+afetar de forma biológica e química". A espec é a `docs/ESPEC_GOSTO_VISUAL_P1.md`, só documento e PROPOSTA:
+- a TV do jogo e o evento `sentido_tela` do modo livre;
+- um órgão da tela no molde da Audição, com a habituação como adaptação;
+- os emissores sobre químicos que já existem (o tédio, a curiosidade, a tristeza, o estresse e o susto);
+- o `GenomaVisao`, no molde do paladar;
+- o comportamento `olhar` no M-ARB e no M-PLAST;
+- a sonda das duas TVs no desenho genoma × dono;
+- as etapas P1a a P1f.
+
+**As decisões novas, GV-15 a GV-23, todas PROPOSTAS** (a tabela completa está na seção 10 da espec):
+
+| id | a decisão | a recomendação |
+|---|---|---|
+| GV-15 | a frequência do vetor da tela real no log | a média de 10 s, em 16 níveis, só quando muda (até ~27 KB por hora) |
+| GV-16 | o agrado no corpo ou só no sinal | os dois, cada um atrás da sua sub-chave; nenhum químico de prazer |
+| GV-17 | o som alto e o movimento demais como estressores | sim: o estresse acima de um corte alto, e o susto num salto de volume |
+| GV-18 | onde fica a habituação | no corpo, no molde do Ouvido |
+| GV-19 | o olhar como comportamento novo | sim, no fim da lista, atrás da sub-chave |
+| GV-20 | o que o pet vê na pesquisa | só a TV do jogo |
+| GV-21 | olhar tira tédio | sim, como atividade, com a variedade de hoje |
+| GV-22 | assistir junto tira solidão | fora da primeira versão |
+| GV-23 | a novidade da tela tira curiosidade | sim, pelo `estimulo_novidade` de hoje |
+
+Nenhum código do P1 antes da revisão do Matheus.

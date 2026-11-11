@@ -64,6 +64,16 @@ PROJETEIS_LP8 = {
 }
 VEL_LP8 = 30.0
 TIPO_LP8 = "Guide"
+# LP6-1 (docs/PLANO_LP6_SEGUNDO_GOLPE.md, secoes 3 e 4; decisoes 1 a 3 do Matheus, 2026-11-11): o golpe de apoio, do tipo que falta ao golpe
+# principal: um golpe de perto para quem atira, um tiro fraco e lento para quem bate de perto; as 7 com habilidade propria tambem. Reaproveita
+# a animacao do golpe (o Attack_1), mais rapido: o instante do golpe e a duracao do clipe sao RITMO_APOIO vezes os do golpe. O tiro fraco
+# usa o projetil generico do motor (sem prefab), na velocidade 20 do "Guide". O efeito de acerto e o generico do jogo. O `fr` do apoio e o do
+# golpe principal: o dano do apoio e uma fracao do principal, que a simulacao aplica (APOIO_LP6 em constantes.ts). PROPOSTOS, SEM FONTE;
+# um teste confere que batem com o APOIO_TABELA do TS
+RITMO_APOIO = 0.6
+VEL_APOIO = 20.0
+TIPO_APOIO = "Guide"
+HIT_APOIO = "Fx_Battle_Hit_A_Normal"
 
 
 def falha(msg: str) -> None:
@@ -130,6 +140,13 @@ def golpe_base(g: dict, onde: str) -> dict:
     return {"anim": g["anim"], "t": g["t"], "proj": proj, "hits": hits, "fr": fator_ritmo(g)}
 
 
+def golpe_apoio(g: dict, ms_golpe: int) -> tuple[dict, int]:
+    """o golpe de apoio (LP6-1) de uma forma, a partir do golpe principal `g` (ja na forma da tabela): o tipo oposto, o mesmo `fr`"""
+    proj = None if g["proj"] else {"prefab": None, "vel": VEL_APOIO, "tipo": TIPO_APOIO}
+    ap = {"anim": g["anim"], "t": g["t"] * RITMO_APOIO, "proj": proj, "hits": [{"prefab": HIT_APOIO, "atraso": 0.0}], "fr": g["fr"]}
+    return ap, round(ms_golpe * RITMO_APOIO)
+
+
 def sha(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
@@ -177,8 +194,9 @@ def gerar(dados: Path) -> str:
             recuos.append(f"{dig}: o golpe {g['anim']} usa a tag {tag_atk}")
         if sk and tag_sk != sk["anim"]:
             recuos.append(f"{dig}: a habilidade {sk['anim']} usa a tag {tag_sk}")
+        ap, ms_ap = golpe_apoio(g, ms_atk)
         item = {"digimon": dig, "nome": nome, "estagio": estagio, "atributo": atr, "generico": generico,
-                "golpe": g, "habilidade": sk, "msGolpe": ms_atk, "msHabilidade": ms_sk}
+                "golpe": g, "habilidade": sk, "msGolpe": ms_atk, "msHabilidade": ms_sk, "apoio": ap, "msApoio": ms_ap}
         linhas.append(f"  {json.dumps(chave)}: {json.dumps(item, ensure_ascii=False)},")
     if usados_lp8 != set(PROJETEIS_LP8):
         falha(f"LP-8: sem forma no jogo para {sorted(set(PROJETEIS_LP8) - usados_lp8)}")
@@ -195,7 +213,10 @@ def gerar(dados: Path) -> str:
 {rec}
    Os numeros sao do jogo; o uso deles na luta e PROPOSTO ate a LP5.
    LP-8 (a LP3b): {", ".join(sorted(PROJETEIS_LP8))} atiram o proprio efeito de acerto como projetil (velocidade {VEL_LP8:g}, "{TIPO_LP8}"; PROPOSTO,
-   SEM FONTE); o golpe deles na POC, sem projetil, fica em GOLPES_DA_POC (a fidelidade da LP1 usa FORMAS_ARENA_POC). */
+   SEM FONTE); o golpe deles na POC, sem projetil, fica em GOLPES_DA_POC (a fidelidade da LP1 usa FORMAS_ARENA_POC).
+   LP6-1: `apoio` e o golpe de apoio, do tipo que falta ao golpe (o de perto de quem atira, o tiro fraco de quem bate de perto), com o
+   instante e o clipe (msApoio) a {RITMO_APOIO:g} dos do golpe, o tiro a {VEL_APOIO:g} ("{TIPO_APOIO}", sem prefab), o acerto {HIT_APOIO} e o `fr` do golpe;
+   so vale com a chave `apoio` da luta (PROPOSTO, SEM FONTE). */
 import type {{ DadosForma, GolpeBase }} from "./tipos.ts";
 
 export const FORMAS_ARENA: Readonly<Record<string, DadosForma>> = {{

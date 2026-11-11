@@ -21,10 +21,10 @@
      de volta: Seguidor.pular), com a queda e o quique, e o foco volta ao pet em ~MAO.focoTauMs.
    Os kits carregam depois do terreno; se um modelo nao carrega, a cena cai na reserva (MundoReserva), com o erro no console. */
 import { comprimento, naRota, rotaEmTerra } from "./rotaConta.ts";
-import { ILHA_DEV_AGUA } from "./ilhaDev.ts";
+import { FOCO_DEV, ILHA_DEV_AGUA, ILHA_DEV_GRANDE } from "./ilhaDev.ts";
 import { ponte } from "./ponte.ts";
 import * as THREE from "three";
-import { CMU_MVP_AGUA, TPD, eNoite, noMapa, type Mundo } from "../../../../motor/index.ts";
+import { CMU_GRANDE, CMU_MVP_AGUA, TPD, eNoite, noMapa, type Mundo } from "../../../../motor/index.ts";
 import { habitatAtual, voltarParaIlha, type Habitat } from "../../../habitat.ts";
 import { jogoAtual } from "../../../jogo.ts";
 import { CENA, reservaDoPe } from "../cenaEstado.ts";
@@ -160,7 +160,7 @@ class VistaIlha {
     this.renderer.info.autoReset = false;
     this.pos = new Pos(this.renderer);
     /* ?ilha=agua (ilhaDev.ts): so a vista troca de ilha, para ver o desenho antes de o motor ligar a agua (a IA4) */
-    this.ilha = ilhaDe(ILHA_DEV_AGUA ? CMU_MVP_AGUA : mu.cm);
+    this.ilha = ilhaDe(ILHA_DEV_GRANDE ? CMU_GRANDE : ILHA_DEV_AGUA ? CMU_MVP_AGUA : mu.cm);
     this.cenaIlha = this.estilo.montar(this.ilha);
     this.fim = fimDaIlha(this.ilha);
     this.cenaIlha.cena.add(this.fim.grupo);
@@ -184,7 +184,7 @@ class VistaIlha {
     this.chaoLugar = Object.fromEntries(ORDEM_LUGARES.map(id => [id, chaoDoLugar(id, base)])) as Record<Lugar, number>;
     /* o portao e a barraca: marcadores provisorios no ponto de cada um, ate o modelo 3D chegar (carregarObjetos); nos estilos sem lugares, ficam */
     this.marcadores = montarMarcadores(base);
-    this.mitologia = new SinaisDaIlha(this.itens.ninhoEm, mu.cm.sub);
+    this.mitologia = new SinaisDaIlha(this.itens.ninhoEm, mu.cm);
     this.cenaIlha.cena.add(this.itens.raiz, this.papel.raiz, this.marcadores.raiz, this.mitologia.raiz);
     /* o cantinho da TV em volta da TV do #814 (so com a chave do P0; antes dos kits, para a decoracao sob o tapete sair da vista): o pet vai ate ele pela rota em terra */
     this.cantinho = cantinhoNaVista() ? montarCantinho(this.ilha, (de, para) => (this.ilha.comAgua ? rotaEmTerra(this.ilha.cm, de, para) : null)) : null;
@@ -649,6 +649,7 @@ class VistaIlha {
       if (viagem > 0) this.foco = this.focoDaViagem(this.foco, viagem, reduzido);
       if (aberta) this.foco = this.ab?.saida ? quadroDaSaida(this.ab.saida.de, agora - this.ab.saida.desde, this.foco, zoomDeSempre, TRANSICAO_MS).foco : aberta.foco;
     }
+    if (FOCO_DEV) this.foco = [FOCO_DEV[0], FOCO_DEV[1]];      /* a previa da ilha grande (ilhaDev.ts) */
     const [px, pz] = this.foco, a = this.afast;
     const { olhar } = this.orbitaVista, desloc = aberta?.inclina ? inclinar(this.orbitaVista.desloc, aberta.inclina) : this.orbitaVista.desloc;
     this.camera.position.set(px + desloc[0] * a, desloc[1] * a, pz + desloc[2] * a);

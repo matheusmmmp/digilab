@@ -181,6 +181,23 @@ class Memoria:
     def lugar_de(self, x: int, y: int) -> tuple[int, int]:
         return x // self.sub, y // self.sub
 
+    def deslocar(self, dx: int, dy: int, ajustar, regiao_de) -> int:
+        """A ida do mundo para a ilha maior (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG4; a IG-7: "deslocados junto com o lar"): cada
+        lugar lembrado anda (dx, dy), como o pet, a comida e a bola. `ajustar(x, y)` devolve o ponto que vale no mundo novo (dentro do
+        mapa e, se cair em celula fechada, na terra mais perto) e `regiao_de(x)` o indice da regiao dele; o lugar e refeito do ponto.
+        Vale para o lugar lembrado e para a memoria autobiografica (as tres camadas). Nada mais do episodio muda (o valor, a decisao, o
+        id). Devolve quantos episodios andaram."""
+        listas = [self.episodios] + ([self.recente, self.duradoura, self.central] if self.autobio else [])
+        n = 0
+        for lista in listas:
+            for e in lista:
+                x, y = ajustar(e["ponto"][0] + dx, e["ponto"][1] + dy)
+                e["ponto"] = (x, y) if isinstance(e["ponto"], tuple) else [x, y]
+                e["lugar"] = self.lugar_de(x, y)
+                e["regiao"] = regiao_de(x)
+                n += 1
+        return n
+
     def codificar(self, ep: dict) -> int:
         """guarda o episodio (os campos da docstring, sem o id) e devolve o id"""
         if ep["classe"] not in CLASSES_EPISODIO or ep["origem"] not in ORIGENS:

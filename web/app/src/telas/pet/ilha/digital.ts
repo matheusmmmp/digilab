@@ -1,16 +1,16 @@
 /* O toque digital do estilo Digital (docs/TAREFA_V3_MAPA_DIGITAL.md, etapa D3): so vista, sobre a mesma grade.
      - as particulas de dados: pequenos cristais ciano flutuando sobre a area e a moldura perto dela, que sobem e descem devagar e giram
        (o movimento e do shader, pelo uTempo da curva: parado com movimento reduzido); mais fortes a noite. Um InstancedMesh so;
-     - a grade no ceu: linhas ciano fracas, desenhadas por cima do ceu pintado (meridianos que saem de um ponto de fuga acima da imagem e
-       arcos em volta dele), so de dia; a noite fica o degrade de sempre;
+     - o portal no ceu (2026-11-11, no lugar da grade pintada, que era parada): os aneis concentricos girando ao norte da ilha, a coluna
+       de luz e os arcos grandes em volta da ilha inteira (portalDoCeu); de dia e de noite;
      - os fios entre os postes: cada poste ligado aos vizinhos mais perto (ate DIGITAL.fios.alcance celulas), um fio pendurado (uma
        parabola) do alto de um ao do outro. Uma malha de segmentos so.
    Tudo deterministico (a rng da grade com um sal proprio); as contas ficam em digitalConta.ts, sem DOM. Os numeros sao do desenho: PROPOSTO, SEM FONTE. */
 import * as THREE from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import { curvar } from "./cena.ts";
+import { CURVA, curvar } from "./cena.ts";
 import { DIGITAL, NUVENS_PINTADAS } from "./constantes.ts";
-import { lugaresDasParticulas, segmentosDosFios } from "./digitalConta.ts";
+import { aneisDoPortal, lugaresDasParticulas, segmentosDosFios, type AnelDoPortal } from "./digitalConta.ts";
 import { rng, type Ilha } from "./grade.ts";
 
 /** as particulas, e o que a vista chama quando a noite muda */
@@ -245,39 +245,6 @@ export function nuvensDesenhadas(grupo: THREE.Group, ilha: Ilha, desenho: "3d" |
   }
 }
 
-/** o ceu com a grade digital por cima: um canvas desenhado sobre a imagem (a pintada ou a das faixas), que vira a imagem da textura do ceu.
-    A grade cobre o ceu todo e fica mais fraca no alto (DIGITAL.grade.topo) */
-export function ceuComGrade(img: HTMLImageElement | ImageBitmap | HTMLCanvasElement): HTMLCanvasElement {
-  const G = DIGITAL.grade, c = document.createElement("canvas");
-  c.width = img.width; c.height = img.height;
-  const g = c.getContext("2d");
-  if (!g) throw new Error("canvas 2d indisponível");
-  g.imageSmoothingEnabled = false;
-  g.drawImage(img, 0, 0);
-  /* as linhas num canvas a parte, apagadas para cima por uma mascara, e so depois sobre o ceu */
-  const l = document.createElement("canvas");
-  l.width = c.width; l.height = c.height;
-  const gl = l.getContext("2d");
-  if (!gl) throw new Error("canvas 2d indisponível");
-  const w = c.width, h = c.height, cx = w / 2, cy = -h * G.fuga;
-  /* a espessura vale para a imagem pintada (1376 px de largura); num ceu menor, proporcional, com pelo menos 1 px */
-  gl.strokeStyle = G.cor; gl.lineWidth = Math.max(1, G.espessura * (w / 1376));
-  /* os meridianos: do ponto de fuga (acima da imagem) para baixo, em leque */
-  for (let k = -G.meridianos; k <= G.meridianos; k++) {
-    gl.beginPath(); gl.moveTo(cx, cy); gl.lineTo(cx + k * (w / G.meridianos) * 1.4, h); gl.stroke();
-  }
-  /* os paralelos: arcos em volta do ponto de fuga, mais juntos perto dele */
-  for (let k = 1; k <= G.paralelos; k++) {
-    const raio = (h - cy) * Math.pow(k / G.paralelos, 1.6);
-    gl.beginPath(); gl.arc(cx, cy, raio, 0, Math.PI); gl.stroke();
-  }
-  const mascara = gl.createLinearGradient(0, 0, 0, h);
-  mascara.addColorStop(0, `rgba(0,0,0,${G.topo})`); mascara.addColorStop(1, "rgba(0,0,0,1)");
-  gl.globalCompositeOperation = "destination-in"; gl.fillStyle = mascara; gl.fillRect(0, 0, w, h);
-  g.globalAlpha = G.alfa; g.drawImage(l, 0, 0);
-  return c;
-}
-
 /** os fios entre os postes: uma malha de segmentos (digitalConta.ts, segmentosDosFios) */
 export function fios(ilha: Ilha): THREE.LineSegments {
   const g = new THREE.BufferGeometry();
@@ -285,4 +252,116 @@ export function fios(ilha: Ilha): THREE.LineSegments {
   const l = new THREE.LineSegments(g, curvar(new THREE.LineBasicMaterial({ color: DIGITAL.fios.cor })));
   l.frustumCulled = false;
   return l;
+}
+
+/** a imagem de um anel do portal: branco no transparente, o circulo quase na borda do quadro; a cor e a opacidade sao do material */
+function imagemDoAnel(a: AnelDoPortal, lado: number): THREE.CanvasTexture {
+  const c = document.createElement("canvas");
+  c.width = c.height = lado;
+  const g = c.getContext("2d");
+  if (!g) throw new Error("canvas 2d indisponível");
+  const m = lado / 2, R = m * 0.94, fino = Math.max(1.5, lado / 340), passo = (Math.PI * 2) / a.partes;
+  g.strokeStyle = g.fillStyle = "#ffffff"; g.lineCap = "butt";
+  const circulo = (raio: number, largura: number, de = 0, ate = Math.PI * 2) => { g.lineWidth = largura; g.beginPath(); g.arc(m, m, raio, de, ate); g.stroke(); };
+  if (a.desenho === "linha") circulo(R, fino * 1.3);
+  else if (a.desenho === "dupla") { circulo(R, fino); circulo(R * 0.955, fino * 0.7); }
+  else if (a.desenho === "tracos") {
+    /* tracos longos e curtos alternados, com vaos */
+    for (let k = 0; k < a.partes; k++) circulo(R, fino * 2.2, k * passo, k * passo + passo * (k % 3 === 0 ? 0.82 : 0.4));
+    circulo(R * 0.93, fino * 0.6);
+  } else if (a.desenho === "marcas") {
+    circulo(R * 0.9, fino);
+    for (let k = 0; k < a.partes * 2; k++) {
+      const ang = k * passo / 2, longo = k % 4 === 0 ? 0.1 : 0.045;
+      g.lineWidth = fino; g.beginPath();
+      g.moveTo(m + Math.cos(ang) * R * 0.9, m + Math.sin(ang) * R * 0.9); g.lineTo(m + Math.cos(ang) * R * (0.9 + longo), m + Math.sin(ang) * R * (0.9 + longo)); g.stroke();
+    }
+  } else {
+    /* os blocos: quadradinhos de dados sobre a linha, uns cheios e outros so o contorno, com falhas */
+    circulo(R * 0.9, fino * 0.6);
+    const q = R * 0.07;
+    for (let k = 0; k < a.partes; k++) {
+      if (k % 5 === 3) continue;
+      g.save(); g.translate(m + Math.cos(k * passo) * R * 0.955, m + Math.sin(k * passo) * R * 0.955); g.rotate(k * passo);
+      if (k % 2) g.fillRect(-q / 2, -q / 2, q, q); else { g.lineWidth = fino * 0.8; g.strokeRect(-q / 2, -q / 2, q, q); }
+      g.restore();
+    }
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+/** o portal no ceu (DIGITAL.portal), no lugar da grade pintada: ao norte da ilha, os aneis concentricos girando cada um para um lado, a
+    coluna de luz com aneis deitados em volta, e os arcos grandes que cruzam o ceu em volta da ilha inteira. So vista, sem nevoa e sem
+    escrever profundidade; anda pelo uTempo da curva (parado com "reduzir movimento") */
+export function portalDoCeu(ilha: Ilha): { grupo: THREE.Group; noite: (n: boolean) => void } {
+  const P = DIGITAL.portal, grupo = new THREE.Group(), cx = ilha.x0 + ilha.larg / 2, cz = ilha.z0 + ilha.prof / 2, cor = new THREE.Color(P.cor);
+  const materiais: THREE.MeshBasicMaterial[] = [], giram: { o: THREE.Object3D; eixo: "y" | "z"; volta: number; fase: number }[] = [];
+  const material = (mapa: THREE.Texture | null, forca = 1) => {
+    const m = new THREE.MeshBasicMaterial({ color: cor, map: mapa, transparent: true, opacity: P.opacidade[0] * forca, depthWrite: false, fog: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending });
+    m.userData.forca = forca;
+    materiais.push(m);
+    return m;
+  };
+  /* os aneis concentricos, de pe, virados para a ilha */
+  const portal = new THREE.Group(), aneis = aneisDoPortal();
+  portal.position.set(cx, P.altura, cz - P.longe);
+  aneis.forEach((a, k) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(a.raio * 2 / 0.94, a.raio * 2 / 0.94), material(imagemDoAnel(a, a.raio > 16 ? 1024 : 512)));
+    m.position.z = -k * 0.05;
+    portal.add(m);
+    giram.push({ o: m, eixo: "z", volta: a.volta, fase: a.fase });
+  });
+  /* a coluna de luz: dois planos cruzados com o degrade (forte no meio, some para os lados e para cima) */
+  const C = P.coluna, cl = document.createElement("canvas");
+  cl.width = 64; cl.height = 256;
+  const gc = cl.getContext("2d");
+  if (!gc) throw new Error("canvas 2d indisponível");
+  const lados = gc.createLinearGradient(0, 0, 64, 0);
+  lados.addColorStop(0, "rgba(255,255,255,0)"); lados.addColorStop(0.42, "rgba(255,255,255,0.35)"); lados.addColorStop(0.5, "rgba(255,255,255,1)");
+  lados.addColorStop(0.58, "rgba(255,255,255,0.35)"); lados.addColorStop(1, "rgba(255,255,255,0)");
+  gc.fillStyle = lados; gc.fillRect(0, 0, 64, 256);
+  const sobe = gc.createLinearGradient(0, 0, 0, 256);
+  sobe.addColorStop(0, "rgba(0,0,0,0)"); sobe.addColorStop(0.35, "rgba(0,0,0,0.8)"); sobe.addColorStop(1, "rgba(0,0,0,1)");
+  gc.globalCompositeOperation = "destination-in"; gc.fillStyle = sobe; gc.fillRect(0, 0, 64, 256);
+  const luz = new THREE.CanvasTexture(cl);
+  luz.colorSpace = THREE.SRGBColorSpace;
+  for (const giro of [0, Math.PI / 2]) {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(C.largura, C.altura), material(luz, 0.75));
+    m.position.y = C.altura / 2 - P.altura; m.rotation.y = giro;
+    portal.add(m);
+  }
+  /* os aneis deitados em volta da coluna, cada vez menores para cima */
+  for (let k = 0; k < C.aneis; k++) {
+    const u = k / Math.max(1, C.aneis - 1), raio = C.raio[0] + (C.raio[1] - C.raio[0]) * u, a = aneis[(k + 1) % aneis.length];
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(raio * 2, raio * 2), material(imagemDoAnel({ ...a, raio, partes: 16 }, 256)));
+    m.rotation.x = -Math.PI / 2;
+    const eixo = new THREE.Group().add(m);
+    eixo.position.y = (u * 0.6 + 0.12) * C.altura - P.altura;
+    portal.add(eixo);
+    giram.push({ o: eixo, eixo: "y", volta: (k % 2 ? -1 : 1) * (18 + 9 * k), fase: a.fase });
+  }
+  grupo.add(portal);
+  /* os arcos grandes: circulos finos em volta da ilha inteira, inclinados, girando devagar em torno do eixo de pe */
+  const A = P.arcos, orbitas = new THREE.Group();
+  orbitas.position.set(cx, 0, cz);
+  A.inclina.forEach((graus, k) => {
+    const m = new THREE.Mesh(new THREE.TorusGeometry(A.raio + k * 3, A.espessura, 5, 220), material(null, 0.8));
+    m.rotation.set(THREE.MathUtils.degToRad(graus), 0, 0);
+    const eixo = new THREE.Group().add(m);
+    orbitas.add(eixo);
+    giram.push({ o: eixo, eixo: "y", volta: (k % 2 ? -1 : 1) * A.volta * (1 + k * 0.3), fase: k * 2.1 });
+  });
+  grupo.add(orbitas);
+  grupo.traverse(o => { o.frustumCulled = false; o.renderOrder = -1; });
+  let noite = false;
+  const quadro = () => {
+    const t = CURVA.uTempo.value, pulso = 1 + P.pulso[0] * Math.sin((t * Math.PI * 2) / P.pulso[1]), base = P.opacidade[noite ? 1 : 0] * pulso;
+    for (const g of giram) g.o.rotation[g.eixo] = g.fase + (t * Math.PI * 2) / g.volta;
+    for (const m of materiais) m.opacity = base * (m.userData.forca as number);
+  };
+  (portal.children[0] as THREE.Mesh).onBeforeRender = quadro;
+  quadro();
+  return { grupo, noite: n => { noite = n; } };
 }

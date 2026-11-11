@@ -1,0 +1,13 @@
+| test | plan before the run | seed band (bases, K per base) | calibration / pilot artifacts | validation (single run) |
+|---|---|---|---|---|
+| T0 | `PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md` (sha256 `311a00f6`); config `avaliacao.json` committed before the run: yes; approval date in run meta: not recorded in the run meta | 64101, 64202, 64303, 64404, 64505; K = 10 | 6 file(s) | 2026-10-26T10:12 to 2026-10-26T10:42; commit `5fc89430`, clean tree: yes; 8 processes |
+| T1 | `PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md` (sha256 `4b72b507`); config `l2_avaliacao.json` committed before the run: yes; approval date in run meta: 2026-10-29 | 67303, 67404, 67505; K = 150 | 3 file(s) | 2026-10-29T16:26 to 2026-10-29T21:43; commit `0a27d971`, clean tree: yes; 4 processes |
+| T2 | `PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md` (sha256 `449ac0b5`); config `longe_regular.json` committed before the run: yes; approval date in run meta: 2026-10-30 | 71101, 71202, 71303, 71404, 71505; K = 30 | 1 file(s) | 2026-10-31T14:18 to 2026-10-31T15:22; commit `7683c0e1`, clean tree: yes; 4 processes |
+| T3 | `PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md` (sha256 `b56988f4`); config `habito_intencao.json` committed before the run: yes; approval date in run meta: 2026-10-31 | 75101, 75202, 75303, 75404, 75505; K = 30 | 1 file(s) | 2026-10-31T22:11 to 2026-10-31T23:09; commit `4be65a03`, clean tree: yes; 4 processes |
+| T4 | `PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md` (sha256 `cd9f13a8`); config `redecidir_evento.json` committed before the run: yes; approval date in run meta: not recorded in the run meta | 76101, 76202, 76303, 76404, 76505; K = 30 | 1 file(s) | 2026-11-01T01:45 to 2026-11-01T02:57; commit `d0aff83e`, clean tree: yes; 4 processes |
+| T5 | `PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md` (sha256 `e719def3`); config `memoria_autobio.json` committed before the run: yes; approval date in run meta: not recorded in the run meta | 77101, 77202, 77303, 77404, 77505; K = 40 | 1 file(s) | 2026-11-01T18:45 to 2026-11-01T21:59; commit `a287ba20`, clean tree: yes; 4 processes |
+| T6 | `PLANO_ANALISE_V3_ACOES_NOVAS.md` (sha256 `9133b0ed`); config `acoes_novas.json` committed before the run: yes; approval date in run meta: 2026-11-05 | 78101, 78202, 78303, 78404, 78505; K = 40 | 1 file(s) | 2026-11-05T15:59 to 2026-11-05T17:38; commit `cff554fd`, clean tree: yes; 4 processes |
+
+Calibration / pilot = the `resultado.json` of calibration and pilot rounds, and the power / K files, found on disk for each test
+(T0: the three calibration rounds and the three repair rounds; T1: the pilot, the power file and the fixed K; T2 to T6: the power
+file of the addendum). Source of every field: the run `meta.json` (see the provenance file).
