@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import {
   DIGIMON_DA_FORMA, PALACIO_NA_TORRE, FORMAS_ARENA, IDS_CENA, LUGARES_V6, LUTA_POC_LIGADA, MAPA_DO_LUGAR, MAPA_STATS, Motor, NPC, STATS,
-  VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V22, VERSOES_PET, VERSOES_PET_POC, chaveSprite, formaDaChave, hashSemente, rivaisArena, statsDaLuta, statsDoPet, statsNpc,
+  VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V22, VERSAO_V23, VERSOES_PET, VERSOES_PET_POC, chaveSprite, formaDaChave, hashSemente, rivaisArena, statsDaLuta, statsDoPet, statsNpc,
   statsRivalArena, type EventoRegistro, type Stats,
 } from "../motor/index.ts";
 import { DIAS_V21, SEMENTES_V21, VARIANTES_V21, gravarV21, nascerV21, viverV21, type VidaV21 } from "./lp2_v21.ts";
@@ -15,9 +15,9 @@ const neutro = Object.fromEntries(STATS.map(k => [k, 10])) as Stats;
 describe("a chave e a versao", () => {
   test("a chave ligou na LP4: os ovos de hoje nascem v21, e so a v21 abre", () => {
     expect(LUTA_POC_LIGADA).toBe(true);
-    expect(VERSAO_PET).toBe(22);
-    expect(VERSOES_PET).toEqual([VERSAO_V21, 22]);
-    expect(VERSOES_PET_POC).toEqual([21, 22]);
+    expect(VERSAO_PET).toBe(23);
+    expect(VERSOES_PET).toEqual([VERSAO_V21, 22, 23]);
+    expect(VERSOES_PET_POC).toEqual([21, 22, 23]);
     for (const v of [13, 14, 15, 17, 18, 19]) expect(() => new Motor(101, v), `v${v}`).toThrow(/versão de pet desconhecida/);
     expect(new Motor(101, VERSAO_V21).versao).toBe(21);
     expect(() => new Motor(101, 20)).toThrow(/versão de pet desconhecida/);
@@ -168,6 +168,21 @@ describe("a vida da v22 (LP5-5): o gabarito e o replay bit a bit", () => {
       expect(m.versao).toBe(VERSAO_V22);
       expect(gravarV21(v, s, m, log, res)).toEqual(g);
       const r = Motor.reproduzir(s, log, VERSAO_V22);
+      expect(r.assinatura()).toBe(m.assinatura());
+    });
+  }
+});
+
+/* LUTA_POC, LP5-5: o gabarito da v23, a vida da versao nova, gravada depois dela entrar */
+const gab23 = JSON.parse(readFileSync(new URL("./gabaritos/lp2_vidas_v23.json", import.meta.url), "utf8")) as typeof gab;
+describe("a vida da v23 (LP5-5): o gabarito e o replay bit a bit", () => {
+  for (const v of VARIANTES_V21) for (const s of SEMENTES_V21) {
+    test(`v23 ${v} @${s}: a vida sai igual ao gabarito, e o replay do registro da a mesma assinatura`, () => {
+      const g = gab23.vidas.find(x => x.variante === v && x.semente === s)!;
+      const { m, log, res } = viverV21(v, s, DIAS_V21, true, VERSAO_V23);
+      expect(m.versao).toBe(VERSAO_V23);
+      expect(gravarV21(v, s, m, log, res)).toEqual(g);
+      const r = Motor.reproduzir(s, log, VERSAO_V23);
       expect(r.assinatura()).toBe(m.assinatura());
     });
   }
