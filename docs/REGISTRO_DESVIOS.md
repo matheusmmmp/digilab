@@ -654,5 +654,6 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — ILHA_AGUA, IA4: a ilha com água junto com os objetos em cartoon e a cooperação (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-agua-ia4`)](registro/2026-11.md)
 - [2026-11-11 — LUTA_POC, LP5-3: o fim da calibração (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-3`)](registro/2026-11.md)
 - [2026-11-11 — LUTA_POC, LP5-4: a conferência do `lp5_3` (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-4`)](registro/2026-11.md)
+- [2026-11-11 — LUTA_POC, LP5-5: o `lp5_3` no jogo, como a v23 (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-5`)](registro/2026-11.md)
 - [2026-11-11 — DIGIBRAIN_SCAN_LAB: o scan no pet do laboratório (Gerente da V3, Claude Code, Opus 5.5, branch `v3-digibrain-scan-lab`)](registro/2026-11.md)
 - [2026-11-11 — HABITAT_REACOES, HR1: as reações que faltavam na vista (Gerente da V3, Claude Code, Opus 5.5, branch `v3-habitat-hr1`)](registro/2026-11.md)

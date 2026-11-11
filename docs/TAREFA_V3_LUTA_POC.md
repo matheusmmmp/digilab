@@ -780,6 +780,18 @@ A tabela inteira está em `web/app/scripts/medicoes/equilibrio_poc/lp5_4/confere
 duas vezes, com os mesmos dados, por um arquivo escrito no meio da primeira (D-LP5-4-2). Nenhum número muda; o próximo passo é a LP5-5
 (o candidato no jogo, pela D-LP5-7), com a decisão do Matheus.
 
+## Resultado da LP5-5 (o `lp5_3` no jogo, como a v23)
+
+O Matheus: "Sim, liga". Os ovos novos nascem v23: a v22 (a ilha com água) com a luta da rodada de equilíbrio.
+
+- **O que entra na v23:** o mapeamento dos stats com os expoentes, a esquiva, a distância do tiro, o Gazimon em 76,8 e o rival do
+  Salão com o fator 0,8 (`motor/luta_poc.ts`, `LUTA_V23`; PROPOSTOS, SEM FONTE).
+- **O que fica:** os pets v21 e v22 lutam com os números deles; o gabarito da v22, gravado antes num commit próprio, sai igual depois
+  da mudança. A Fábrica, que é do Tamer, fica com os números da v21 (D-LP5-5-5).
+- **A prova:** o Motor v23 e a bancada com o `lp5_3` dão os mesmos números e a mesma luta. A suíte do web passa inteira.
+- **O que segue reprovado:** a Liga, a Torre, a Fábrica e o P5, para a tarefa do núcleo e da tabela das formas.
+- **Um aviso:** o plano da ilha grande (#796) também reserva a v23 (D-LP5-5-7).
+
 ## Resultado da LP3c (2026-11-10)
 
 Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp3c`, a pedido do Gerente de sprites e luta. O pedido seguiu a revisão dos

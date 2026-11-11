@@ -7,7 +7,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import {
   ACOES_DONO_JOGO_V11, ARENA_POR_ID, CAMPANHA_V6, CAT, CD, CMD, CTR, IDS_CENA, LIGA, LUGARES_V6, LUTAS_MAX_INSTALACAO, MAPA_FABRICA, MAPA_SALAO,
-  MAPA_TORRE, Motor, NPC, STATS, TPD, alugueisFabrica, arenaDaLuta, caraterCanonico, caraterDoRivalSalao, chaveSprite, criarDono, criarRng,
+  MAPA_TORRE, Motor, NPC, STATS, TPD, VERSAO_V22, alugueisFabrica, arenaDaLuta, caraterCanonico, caraterDoRivalSalao, chaveSprite, criarDono, criarRng,
   LIMITE_POC_MS, condicaoDe, configLutaPoc, criarLutaPoc, formaLiga, formaRivalFabrica, passoPoc, sorteiosPoc, formaRivalInstalacao, formaRivalSalao, hashSemente, mapaDoLugar, rivaisArena, sementeDaSerie, sementeLutaFabrica,
   type Exercicio, type Forma, type FormaAdultaNormal, type IdCena, type Stat, type StatsPoc, type TiroPoc, type EsquivaPoc, type VisaoDono,
 } from "../../motor/index.ts";
@@ -120,7 +120,8 @@ const EXERCICIOS = Object.keys(CTR.exercicios) as Exercicio[];
     com o treino, os chips e a condicao do Motor, e o rival da Arena pelo rivalCanonico(); o jogo nao muda. O v21 fica com o Motor de sempre,
     e o teste confere que o remendo com os numeros do v21 da a mesma vida */
 export function motorDoCandidato(c: Candidato, semente: number, remendar = c.nome !== CANDIDATO_V21.nome): Motor {
-  const m = new Motor(semente);
+  /* a bancada mediu sobre a v22 (a luta de sempre); a v23 e o candidato lp5_3 no jogo (LP5-5), e o teste confere que dao o mesmo */
+  const m = new Motor(semente, VERSAO_V22);
   if (!remendar) return m;
   const x = m as unknown as Record<string, unknown>, rivalDoMotor = (x._rivalPoc as (...a: unknown[]) => { forma: string; stats: StatsPoc } | null).bind(m);
   x.statsLutaPoc = () => lutador(c, m.forma, m.carater(), m.pontosDeLuta(), condicaoDe(m.e.saude));
