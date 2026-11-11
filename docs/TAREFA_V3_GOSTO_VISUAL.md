@@ -137,5 +137,6 @@ SEM FONTE). Ligada (só com o mundo físico, `drives_novos` e `gestos`; falha al
 `sentir_tela` exigido a cada tick, e os emissores da seção 4 da espec: o `atividade("assistir")` no tédio, o estresse acima do corte de
 volume e movimento, o susto no salto de volume e o `estimulo_agrado_tela` na tristeza. O grafo os declara (o sentido "tela", o
 `ReceptorSoma` e o gatilho `tela_acima`), e a `PercepcaoCorpo` tem os oito campos novos no fim. Desligada, as vidas do gabarito do P1a
-saem byte a byte. Testes novos em `tests/test_gosto_visual_corpo.py`. As escolhas estão em `docs/registro/2026-11.md`, D-GV-P1b-1 a 6.
+saem byte a byte. Testes novos em `tests/test_gosto_visual_corpo.py`. As escolhas estão em `docs/registro/2026-11.md`, D-GV-P1b-1 a 6; a D-GV-P1b-7 é o conserto do exportador do gabarito web do
+modular, que deixa de fora os campos vazios da tela na `PercepcaoCorpo` (os gabaritos da web saem byte a byte, sem regravar).
 Fica para a P1c: a TV, o motor chamando o `sentir_tela` (zeros sem olhar), o assistir e a novidade pelo corte.
