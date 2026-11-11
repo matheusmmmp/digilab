@@ -738,6 +738,8 @@ class VistaIlha {
       if (!vivo && !this.apagados.has(k)) { p.papel.raiz.visible = false; this.apagados.add(k); }
       if (vivo && this.apagados.has(k)) { p.papel.raiz.visible = true; this.apagados.delete(k); }
     }
+    const rets: Record<string, { x: number; y: number; w: number; h: number }> = {};
+    CENA.irmaos = rets;
     if (!j.grupo || j.emLab) return;
     const canvas: [number, number] = [this.renderer.domElement.width, this.renderer.domElement.height];
     for (const ident of j.grupo.ids) {
@@ -753,7 +755,7 @@ class VistaIlha {
         ppu = this.renderer.domElement.height / 2 / (prof * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)));
         pxPorTexel = Math.max(1, Math.round(TEXEL_ALVO * ppu));
       }
-      p.papel.atualizar({
+      rets[ident] = p.papel.atualizar({
         agora, dt: Math.min(0.05, dtMs / 1000), quadro, cel, motor: omu.pet, camera: this.camera, ppu, pxPorTexel, yPe, canvas,
         razao: this.renderer.getPixelRatio(), reduzido, noite, golpe: null, andandoVista: p.seguidor.caminhando, suspenso: null,
       });

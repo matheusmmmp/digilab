@@ -350,3 +350,19 @@ Os dois ovos ficam jogáveis: a chave `DOIS_OVOS_LIGADO` ligou.
   - `web/app/e2e/dois_pets.spec.ts`, a 390 e 1280 px: o brasão choca os dois, o irmão fica no topo, o foco troca e volta ao reabrir, e a
     ação vai ao pet em foco.
 - **Os desvios:** D-CO4d-1 a D-CO4d-7, no registro de 2026-11.
+
+## CO5, a cooperação na tela (2026-11-11, Claude Code, Opus 5.5, branch `v3-cooperacao-co5`)
+
+A cooperação aparece sem número (D-MM-8), em `web/app/src/telas/pet/AtosDoIrmao.tsx`.
+
+- **Na ilha:** o ícone do ato, ao lado da cabeça do pet que o fez. O coração para deixar a comida e para encostar; a comida riscada para
+  pegar a de quem tinha fome.
+- **Em Últimas ações:** a linha do ato, do ponto de vista do pet em foco.
+- **No fim da luta do pet em foco:** o gesto do irmão (consola, comemora ou provoca), pelo resultado e pela reputação (`gestoDepoisDaLuta`,
+  `motor/grupo_jogo.ts`).
+- **A medida da CO3 ligou no jogo,** e só mede (o G-SEM-DECISAO no jogo, `web/app/test/coop_tela.test.ts`).
+- **As capturas,** a 390 e 1280 px, no Militar e no Sci-fi, ficam em `D:\Trab\digilab\capturas_coop_co5\`, fora do git: o ato na ilha e,
+  no celular, a linha.
+  - **Aprovadas pelo Matheus** em 2026-11-11 (D-CO5-7).
+  - **A captura do gesto da luta espera um conserto da `main`:** a luta de todo pet v23 a v26 não termina no palco (D-CO5-5).
+- **Os desvios:** D-CO5-1 a D-CO5-6, no registro de 2026-11.

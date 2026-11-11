@@ -50,6 +50,7 @@ import { nivelDe } from "../../nivel.ts";
 import { ScanDigiBrain } from "../../componentes/ScanDigiBrain.tsx";
 import { ScanDigiBrainLab } from "../../componentes/ScanDigiBrainLab.tsx";
 import { duracao, previsaoEvo } from "../crescer/TelaEvolucao.tsx";
+import { AtosNaIlha, linhasDosAtos } from "./AtosDoIrmao.tsx";
 
 export const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
 export const diaDe = (t: number): number => Math.floor((t - TICK_INICIAL) / TPD) + 1;
@@ -520,11 +521,19 @@ type LinhaHist = Motor["historico"][number];
 const ultimasDoRegistro = (m: Motor, n: number): LinhaHist[] => m.historico.filter(h => h.quem === "dono" || h.quem === "pet" || h.quem === "recusa").slice(-n).reverse();
 const textoHist = (h: LinhaHist): string => h.quem === "pet" ? NOME_PET[h.a as keyof typeof NOME_PET] ?? h.a : h.a;
 function UltimasAcoes({ irRegistro, n = 8 }: { irRegistro: () => void; n?: number }) {
-  const { motor: m } = useJogo(), itens = ultimasDoRegistro(m, n);
+  const { motor: m } = useJogo();
+  /* os dois pets (CO5): os atos com o irmao entram na mesma lista, pela hora, sem numero (AtosDoIrmao.tsx) */
+  const itens: ({ tipo: "hist"; t: number; h: LinhaHist } | { tipo: "ato"; t: number; texto: string; pro: boolean })[] = [
+    ...ultimasDoRegistro(m, n).map(h => ({ tipo: "hist" as const, t: h.t, h })), ...linhasDosAtos(n).map(a => ({ tipo: "ato" as const, ...a }))]
+    .sort((a, b) => b.t - a.t).slice(0, n);
   return (
     <>
-      {itens.length ? <ol className="mod-registro">{itens.map((h, i) => {
-        const I = ICONE_QUEM[h.quem as keyof typeof ICONE_QUEM];
+      {itens.length ? <ol className="mod-registro">{itens.map((x, i) => {
+        if (x.tipo === "ato") {
+          const I = x.pro ? Heart : Users;
+          return <li key={i} data-quem="irmao"><time>{hhmm(x.t)}</time><span className="mod-registro-ic"><I size={18} aria-hidden="true" /></span><span>{x.texto}</span></li>;
+        }
+        const h = x.h, I = ICONE_QUEM[h.quem as keyof typeof ICONE_QUEM];
         return <li key={i} data-quem={h.quem}><time>{hhmm(h.t)}</time><span className="mod-registro-ic"><I size={18} aria-hidden="true" /></span>
           <span>{h.quem === "dono" ? "você: " : h.quem === "recusa" ? "recusou: " : ""}{textoHist(h)}</span></li>;
       })}</ol> : <p className="mod-vazio">nada no registro ainda</p>}
@@ -744,6 +753,7 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
       </div>
       {topo && largo && createPortal(<LinhaAgora aberto={atual === "digibrain"} sobPainel={atual !== null} aoAbrir={detalhesPet ? () => abrir("digibrain") : undefined} />, topo, "agora")}
       {!largo && <AgoraIcone aberto={atual === "digibrain"} sobPainel={atual !== null} aoAbrir={detalhesPet ? () => abrir("digibrain") : undefined} />}
+      <AtosNaIlha />
       <Prioridade abrirDetalhes={largo || detalhesPet ? abrirEstado : undefined} movel={!largo} />
       {largo ? (!atual && detalhesPet && (
         <aside className="pet-hud" ref={pilha} aria-label="Painéis do pet" {...arrPilha}>

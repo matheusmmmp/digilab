@@ -36,6 +36,8 @@ export const CENA: {
   modo3d: boolean;
   modoMundo: boolean;
   ret: { x: number; y: number; w: number; h: number } | null;
+  /** os dois pets (CO4d e CO5): o retangulo do papel de cada irmao do pet em foco, pelo id no grupo (o do pet em foco e o `ret`) */
+  irmaos: Record<string, { x: number; y: number; w: number; h: number }>;
   medir: null | (() => Promise<Record<string, unknown>>);
   mundo: VistaDoMundo | null;
   coberto: boolean;
@@ -51,7 +53,7 @@ export const CENA: {
   aoLugares: ((p: Readonly<Record<"saco" | "portao" | "barraca", readonly [number, number, number]>>) => void) | null;
   /** o consumidor dos objetos que falam (ObjetosDaIlha.tsx): os mesmos lugares e os px por celula na distancia do foco. null: ninguem quer */
   aoObjetos: ((p: Readonly<Record<"saco" | "portao" | "barraca", readonly [number, number, number]>>, pxPorCelula: number) => void) | null;
-} = { modo3d: false, modoMundo: false, ret: null, medir: null, mundo: null, coberto: false, bolaNaMao: false, petNaMao: false, maoPet: null, treino: null, cocoNoChao: false, zzX: null, cabeca: null, aoLugares: null, aoObjetos: null };
+} = { modo3d: false, modoMundo: false, ret: null, irmaos: {}, medir: null, mundo: null, coberto: false, bolaNaMao: false, petNaMao: false, maoPet: null, treino: null, cocoNoChao: false, zzX: null, cabeca: null, aoLugares: null, aoObjetos: null };
 
 /** o pe que a caixa do habitat reservava no celular antes do mobile minimo (M1): a altura do dock de entao (69 px) + a folga de 24 px + a barra de abas
     (--casca-barra, 64 px), medido em 390x844 e 360x800 (caixa de 687 e 643 px). Sem a barra a caixa ocupa a tela inteira por tras das acoes, mas a camera

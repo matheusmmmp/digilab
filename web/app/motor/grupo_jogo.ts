@@ -16,9 +16,19 @@
    para o relogio do jogo e as telas, que leem o pet em foco, seguirem como hoje (src/jogo.ts). */
 import { CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA, TICK_INICIAL, VERSAO_V26, ehDoGrupo, nasceNaAgua, nasceNaGrande, type ConfigMundo } from "./constantes.ts";
 import { CONFIG_GRUPO_LIGADA, Grupo, ROTULO_SEGUNDO_PET } from "./grupo.ts";
+import { CONFIG_COOPERACAO_LIGADA } from "./cooperacao.ts";
 import { Motor } from "./motor.ts";
 import type { EventoRegistro } from "./tipos.ts";
 import { derivarSemente } from "./mundo.ts";
+
+/** o gesto do irmao que assistiu a luta (D-MM-2; CO5): consola, comemora ou provoca */
+export type GestoDoIrmao = "consola" | "comemora" | "provoca";
+/** "Resultado e reputacao" (Matheus, 2026-11-11, D-CO5-2): com a reputacao do lutador vista pelo irmao (a medida da CO3) negativa, ele
+    provoca; senao, comemora a vitoria e consola a derrota e o empate. Sem sorteio, e nada muda a luta nem o registro: o gesto e derivado */
+export function gestoDepoisDaLuta(reputacao: number, venceu: boolean | null): GestoDoIrmao {
+  if (reputacao < 0) return "provoca";
+  return venceu === true ? "comemora" : "consola";
+}
 
 /** [tick do mundo, tipo, valor, pet]: pet null so no avanco do grupo ("t") */
 export type EventoGrupoJogo = [number, string, unknown, string | null];
@@ -40,13 +50,14 @@ export class GrupoDoJogo {
   readonly motores: Readonly<Record<string, Motor>>;
   readonly log: EventoGrupoJogo[] = [];
 
-  constructor(semente: number, versao: number) {
+  /** `medir`: a medida da cooperacao (CO3), ligada no jogo; desligada so no teste do G-SEM-DECISAO (ela nao muda nada) */
+  constructor(semente: number, versao: number, medir = true) {
     if (!Number.isInteger(semente) || semente < 0 || semente > 0xffffffff) throw new Error(`semente do grupo fora dos 32 bits: ${semente}`);
     if (!ehDoGrupo(versao)) throw new Error(`o grupo do jogo e de pets v${VERSAO_V26}, nao v${versao}`);
     this.semente = semente;
     this.versao = versao;
     this.grupo = new Grupo(mundoDaVersao(versao), semente, CONFIG_GRUPO_LIGADA,
-                           { tickInicial: TICK_INICIAL, sementeDoSegundo: sementeDoSegundoJogo });
+                           { tickInicial: TICK_INICIAL, sementeDoSegundo: sementeDoSegundoJogo, ...(medir ? { cooperacao: CONFIG_COOPERACAO_LIGADA } : {}) });   // a medida (CO3), ligada no jogo (CO5): so mede
     const motores: Record<string, Motor> = {};
     for (const ident of CONFIG_GRUPO_LIGADA.ids) {
       const s = Number(this.grupo.sementes[ident]);
@@ -140,6 +151,15 @@ export class GrupoDoJogo {
     }
     if (JSON.stringify(g.log) !== JSON.stringify(log)) throw new Error("o replay refez um registro do grupo diferente do lido");
     return g;
+  }
+
+  /** o gesto do irmao do `lutador` depois da luta dele, pela reputacao do lutador vista pelo irmao agora (CO5) */
+  gestoDoIrmao(lutador: string, venceu: boolean | null): { irmao: string; gesto: GestoDoIrmao } {
+    const irmao = this.ids.find(i => i !== lutador);
+    if (irmao === undefined || !this.ids.includes(lutador)) throw new Error(`lutador fora do grupo: ${lutador}`);
+    const c = this.grupo.coop;
+    if (c === null) throw new Error("o gesto do irmao le a medida da cooperacao, desligada");
+    return { irmao, gesto: gestoDepoisDaLuta(c.reputacao(lutador, irmao, this.tick), venceu) };
   }
 
   // ------------------------------------------------------------ leitura
