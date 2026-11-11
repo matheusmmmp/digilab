@@ -47,7 +47,8 @@ describe("a chave", () => {
     } };
     andar(raiz);
     /* o cantinho da TV (ilha/cantinhoTv.ts e cantinhoTvConta.ts; test/gosto_visual_tv.test.ts confere a chave dele) lê a chave e o estado da TV */
-    expect(quem.sort()).toEqual(["App.tsx", "cantinhoTv.ts", "cantinhoTvConta.ts"]);
+    /* desde a etapa 1 do PLANO_UX_GOSTO_VISUAL a tela Pet abre o painel da TV (PainelTv.tsx), também atrás da chave (gosto_visual_painel.test.ts) */
+    expect(quem.sort()).toEqual(["App.tsx", "TelaPet.tsx", "cantinhoTv.ts", "cantinhoTvConta.ts"]);
   });
   test("o protótipo fica fora do motor, do log e do save: não importa mudarMotor, aplicarEvento nem o save", () => {
     const dir = join(import.meta.dirname, "..", "src", "gostoVisual");
