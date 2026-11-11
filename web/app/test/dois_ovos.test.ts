@@ -4,7 +4,7 @@
      e o save malformado abre como erro visivel, sem gravar por cima;
    - o jogo com os dois pets: o relogio (o avancar do pet em foco) anda os dois, a acao do dono vai ao pet em foco, o foco troca e fica no
      save, e a mudanca grava o grupo;
-   - a chave DOIS_OVOS_LIGADO e desligada: o ovo do brasao de hoje segue de um pet so (v23), e o pet v23 salvo abre igual (o G-HOJE). */
+   - a chave DOIS_OVOS_LIGADO ligou na CO4d; o ovo de um pet so segue v23, e o pet v23 salvo abre igual (o G-HOJE). */
 import { describe, expect, test } from "vitest";
 import { DOIS_OVOS_LIGADO, ESPECIES, GrupoDoJogo, TPD, VERSAO_PET, VERSAO_V24, sementeDoSegundoJogo } from "../motor/index.ts";
 import { CHAVE, lerSave, textoSave, textoSaveGrupo, type Armazenamento } from "../src/save.ts";
@@ -30,8 +30,8 @@ describe("os dois ovos", () => {
     expect(especieDaSemente(sementeDoBrasao(ESP))).toBe(ESP);
   });
 
-  test("a chave e desligada: o ovo de um pet so segue v23", () => {
-    expect(DOIS_OVOS_LIGADO).toBe(false);
+  test("a chave ligou na CO4d: o ovo do brasao choca os dois; o ovo de um pet so (a heranca, o exemplo) segue v23", () => {
+    expect(DOIS_OVOS_LIGADO).toBe(true);
     expect(VERSAO_PET).toBe(23);
   });
 });

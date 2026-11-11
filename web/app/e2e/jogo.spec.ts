@@ -8,7 +8,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import { basename } from "node:path";
 import { fileURLToPath } from "node:url";
-import { VERSAO_PET } from "../motor/constantes";
+import { VERSAO_V24 } from "../motor/constantes";
 
 const SAVES: Record<string, { semente: number; log: unknown[]; versao?: number }> = JSON.parse(readFileSync(new URL("./saves.json", import.meta.url), "utf8"));
 // prefixo = nome da pasta do repositorio (/v1 ou o da worktree), como no servidor_local.py
@@ -360,7 +360,8 @@ test("luta da POC: a primeira abertura descarta os pets de antes, avisa, oferece
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), g: localStorage.getItem(c + "-guardados"), aviso: localStorage.getItem(c + "-aviso-poc"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!), marca: localStorage.getItem(c + "-descarte"), antigos: JSON.parse(localStorage.getItem(c + "-descartados")!) }), CHAVE);
-  expect(r.save.versao).toBe(VERSAO_PET);            /* o ovo novo nasce na versao atual (a v22: a v21 que nasce na ilha com agua) */
+  /* o ovo do brasao choca os dois pets (CO4d): o save e o do grupo, na v24 */
+  expect([r.save.versao, r.save.grupo]).toEqual([VERSAO_V24, true]);
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
   expect(r.marca).toBe("8");
@@ -393,7 +394,7 @@ test("luta da POC: o pet v19 de antes sai com o aviso, e o Tamer fica com as med
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), marca: localStorage.getItem(c + "-descarte"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!) }), CHAVE);
-  expect(r.save.versao).toBe(VERSAO_PET);
+  expect([r.save.versao, r.save.grupo]).toEqual([VERSAO_V24, true]);     /* os dois ovos (CO4d) */
   expect(r.save.semente).not.toBe(SAVE_ANTIGO_V19.semente);
   expect(r.marca).toBe("8");
   /* a medalha e o item dela ficam; sem a Fabrica de antes no registro, o Tamer fica como estava, mais os Bits (MOEDA, MO1: a 1a medalha e os
@@ -402,7 +403,8 @@ test("luta da POC: o pet v19 de antes sai com o aviso, e o Tamer fica com as med
   expect(r.tamer.log.filter((e: [string]) => e[0] !== "bits")).toEqual(tamer.log);
   expect(r.tamer.log.some((e: [string, { id?: string }]) => e[0] === "bits" && e[1].id === "medalha:campina")).toBe(true);
   /* o ovo novo conhece a medalha do Tamer (o "u" no registro dele) */
-  expect(r.save.log.filter((e: unknown[]) => e[1] === "u")).toEqual([[expect.any(Number), "u", { n: 1 }]]);
+  /* os dois pets (CO4d): o "u" no registro do grupo, um por pet */
+  expect(r.save.log.filter((e: unknown[]) => e[1] === "u")).toEqual([[expect.any(Number), "u", { n: 1 }, "A"], [expect.any(Number), "u", { n: 1 }, "B"]]);
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
   await expect(page.locator("dialog.aviso-poc")).toHaveCount(0);

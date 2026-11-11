@@ -671,3 +671,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — COOPERACAO, CO4a: a água dentro do grupo (Claude Code, Opus 5.5, branch `v3-cooperacao-co4a`)](registro/2026-11.md)
 - [2026-11-11 — COOPERACAO, CO4b: o Motor do jogo dentro do Grupo (Claude Code, Opus 5.5, branch `v3-cooperacao-co4b`)](registro/2026-11.md)
 - [2026-11-11 — COOPERACAO, CO4c: o save e os dois ovos (Claude Code, Opus 5.5, branch `v3-cooperacao-co4c`)](registro/2026-11.md)
+- [2026-11-11 — COOPERACAO, CO4d: as telas dos dois pets (Claude Code, Opus 5.5, branch `v3-cooperacao-co4d`)](registro/2026-11.md)

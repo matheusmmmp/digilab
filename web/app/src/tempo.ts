@@ -4,7 +4,7 @@
    um chamado abre; com chamado aberto o tempo cai para 1x ate atender (e volta depois). Durante a luta no palco e com o Resultado
    dela aberto o tempo nao anda (lutaPocTela.lutaSeguraTempo): o que passou ali e descartado, como na Pausa. */
 import { useEffect, useState } from "react";
-import { jogoAtual, mudarMotor } from "./jogo.ts";
+import { jogoAtual, mudarMotor, petsVivos } from "./jogo.ts";
 import { lutaSeguraTempo } from "./lutaPocTela.ts";
 
 export const VEL_1X = 1 / 60;
@@ -25,7 +25,7 @@ export function escolherVelocidade(v: number): void { velAntesChamado = null; ve
 /** chamado do bebe aberto: 1x ate atender ou a janela fechar; sem chamado, volta a velocidade de antes.
     Devolve true se acabou de frear. */
 export function ajustarVelocidadeChamado(): boolean {
-  const aberto = jogoAtual().motor.chamadosAbertos().length > 0;
+  const aberto = petsVivos().some(m => m.chamadosAbertos().length > 0);      // os dois pets (CO4d): o chamado de qualquer um freia
   if (aberto && velocidade > VEL_1X && velAntesChamado === null) { velAntesChamado = velocidade; velocidade = VEL_1X; avisar(); return true; }
   if (!aberto && velAntesChamado !== null) { velocidade = velAntesChamado; velAntesChamado = null; avisar(); }
   return false;
@@ -46,9 +46,11 @@ export function iniciarTempo(): () => void {
     if (n <= 0) return;
     acumulado -= n;
     mudarMotor(m => {
-      if (m.estagioAtual === "bebe") {
+      /* com os dois pets (CO4d), o avancar do pet em foco anda os dois, e o chamado de qualquer um para o tempo */
+      const pets = petsVivos();
+      if (pets.some(p => p.estagioAtual === "bebe")) {
         /* bebe: minuto a minuto, para parar no instante em que um chamado abre */
-        while (n-- > 0) { m.avancar(1); if (m.chamadosAbertos().length && velocidade > VEL_1X && velAntesChamado === null) { acumulado = 0; break; } }
+        while (n-- > 0) { m.avancar(1); if (pets.some(p => p.chamadosAbertos().length) && velocidade > VEL_1X && velAntesChamado === null) { acumulado = 0; break; } }
       } else m.avancar(n);
     }, "adiado");
     ajustarVelocidadeChamado();

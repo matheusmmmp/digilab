@@ -69,13 +69,22 @@ export const tamerAtual = (): Tamer => tamer;
 function medalhas(j: Jogo): { novas: MedalhaGanha[]; mudou: boolean } {
   if (j.emLab) return { novas: [], mudou: false };       // o pet de teste nao recebe nem da medalha ao Tamer
   if (!armazenamento || j.erroSave || j.erroTamer) return { novas: [], mudou: false };
-  const novas = conferirMedalhas(tamer, j.motor), itens = conferirItensDasMedalhas(tamer, j.motor), titulo = conferirCampeao(tamer, j.motor);
-  const recordes = conferirRecordes(tamer, j.motor);
-  /* os Bits (docs/PLANO_V3_MOEDA.md, MO1): os feitos novos do pet e a 1a medalha de cada lider. O pet de exemplo das boas-vindas, ainda nao
-     do jogador, nao paga: nem com a origem "exemplo", nem intocado depois de um descarte (o criterio do nivel do Tamer, nivel.ts) */
-  const bits = j.origem === "exemplo" || exemploIntocado(j.motor) ? [] : conferirBits(tamer, j.motor);
-  if (novas.length || itens.length || titulo || recordes.length || bits.length) gravarTamer(armazenamento, tamer);
-  return { novas, mudou: sincronizarPet(tamer, j.motor) };
+  /* os dois pets (CO4d): cada um ganha as medalhas e os feitos dele, e os dois conhecem o que o Tamer tem (o "u" no registro de cada um, pelo
+     grupo); com um pet so, o de sempre */
+  const g = j.grupo, pets: [string | null, Motor][] = g ? g.ids.map((i): [string, Motor] => [i, g.motor(i)]) : [[null, j.motor]];
+  const novas: MedalhaGanha[] = [];
+  let mudouTamer = false, mudou = false;
+  for (const [, m] of pets) {
+    const n = conferirMedalhas(tamer, m), itens = conferirItensDasMedalhas(tamer, m), titulo = conferirCampeao(tamer, m), recordes = conferirRecordes(tamer, m);
+    /* os Bits (docs/PLANO_V3_MOEDA.md, MO1): os feitos novos do pet e a 1a medalha de cada lider. O pet de exemplo das boas-vindas, ainda nao
+       do jogador, nao paga: nem com a origem "exemplo", nem intocado depois de um descarte (o criterio do nivel do Tamer, nivel.ts) */
+    const bits = j.origem === "exemplo" || exemploIntocado(m) ? [] : conferirBits(tamer, m);
+    novas.push(...n);
+    if (n.length || itens.length || titulo || recordes.length || bits.length) mudouTamer = true;
+  }
+  if (mudouTamer) gravarTamer(armazenamento, tamer);
+  for (const [i, m] of pets) mudou = (i !== null && g ? g.agir(i, x => sincronizarPet(tamer, x)) : sincronizarPet(tamer, m)) || mudou;
+  return { novas, mudou };
 }
 let exemplo: { semente: number; assinatura: string } | null = null;
 /** o pet e o de exemplo das boas-vindas, ainda intocado (so o tempo passou): a mesma conta do nivel do Tamer (nivelTela.ts, ehPetDoJogador) */
@@ -170,14 +179,57 @@ export function trocarGrupo(g: GrupoDoJogo, origem: Origem, nascendo = 0): void 
   gravar();
   avisar();
 }
+/** volta a um save dos dois pets guardado em texto (o pet anterior dos Cenarios; CO4d): o grupo refeito do registro, com o foco dele */
+export function trocarGrupoDoSave(d: { semente?: unknown; log?: unknown; versao?: unknown; foco?: unknown }): void {
+  if (!Number.isInteger(d.semente) || !Array.isArray(d.log) || typeof d.foco !== "string") throw new Error("o save dos dois pets não tem semente, registro e foco");
+  const g = GrupoDoJogo.reproduzir(d.semente as number, d.versao as number, d.log as Parameters<typeof GrupoDoJogo.reproduzir>[2]);
+  if (!g.ids.includes(d.foco)) throw new Error(`o save dos dois pets tem um pet em foco desconhecido: ${d.foco}`);
+  trocarGrupo(g, "save");
+  focar(d.foco);
+}
 /** muda o pet em foco do grupo (quem a tela mostra e quem recebe a acao do dono; CO-6). Sem grupo, falha */
 export function focar(ident: string): void {
   const j = jogoAtual();
   if (!j.grupo) throw new Error("so os dois pets tem foco");
   if (j.emLab) throw new Error("volte ao seu pet antes de trocar o foco");
   j.motor = j.grupo.motor(ident); j.foco = ident; j.revisao++;
-  pendente = true;
+  gravar();                       // o foco fica no save na hora (reabrir mostra o mesmo pet)
   avisar();
+}
+/** o save do jogo de hoje, em texto: o do grupo (os dois pets e o foco) ou o do pet ativo, mesmo com o pet de teste na tela. E o que se
+    copia, exporta, guarda na espera e confere (CO4d) */
+export function textoDoSaveAtual(): string {
+  const j = jogoAtual();
+  return j.grupo ? textoSaveGrupo(j.grupo, j.foco) : textoSave(motorReal());
+}
+/** o registro do que esta na tela, em texto (Ajustes e o Registro: copiar e exportar): o do grupo, ou o do pet na tela (o de teste, no
+    laboratorio) */
+export function textoDaTela(): string {
+  const j = jogoAtual();
+  return j.grupo && !j.emLab ? textoSaveGrupo(j.grupo, j.foco) : textoSave(j.motor);
+}
+/** o replay do que esta na tela da a mesma assinatura (Ajustes e o Registro): o do grupo inteiro, ou o do pet. Devolve quantos eventos */
+export function replayDaTelaConfere(): { ok: boolean; eventos: number } {
+  const j = jogoAtual();
+  if (j.grupo && !j.emLab) {
+    const g = j.grupo;
+    return { ok: GrupoDoJogo.reproduzir(g.semente, g.versao, g.log).assinatura() === g.assinatura(), eventos: g.log.length };
+  }
+  const m = j.motor;
+  return { ok: Motor.reproduzir(m.semente, m.log, m.versao).assinatura() === m.assinatura(), eventos: m.log.length };
+}
+/** os pets vivos do jogo de hoje: os dois do grupo, ou o ativo (o relogio freia pelo chamado de qualquer um; CO4d) */
+export function petsVivos(): Motor[] {
+  const j = jogoAtual();
+  if (j.grupo && !j.emLab) return j.grupo.ids.map(i => j.grupo!.motor(i));
+  return [j.motor];
+}
+/** o outro pet do grupo (o irmao do pet em foco), ou null com um pet so ou com o pet de teste na tela */
+export function irmaoEmFoco(): { ident: string; motor: Motor } | null {
+  const j = jogoAtual();
+  if (!j.grupo || j.emLab) return null;
+  const ident = j.grupo.ids.find(i => i !== j.foco)!;
+  return { ident, motor: j.grupo.motor(ident) };
 }
 /** o pet de hoje: o ativo, mesmo com o pet de teste na tela */
 export function motorReal(): Motor { const j = jogoAtual(); return j.emLab ?? j.motor; }

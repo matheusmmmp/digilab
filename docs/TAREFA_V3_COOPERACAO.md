@@ -306,3 +306,22 @@ Esta parte deixa os dois pets viverem na ilha com água, onde o jogo nasce:
   - o jogo com os dois pets: o relógio, a ação no pet em foco, a troca do foco e o grupo gravado;
   - o pet de um pet só igual.
 - **Os desvios:** D-CO4c-1 a D-CO4c-5, no registro de 2026-11.
+
+## CO4d, as telas dos dois pets (2026-11-11, Claude Code, Opus 5.5, branch `v3-cooperacao-co4d`)
+
+Os dois ovos ficam jogáveis: a chave `DOIS_OVOS_LIGADO` ligou.
+
+- **Na ilha** (`src/telas/pet/ilha/vista.ts`, `papel.ts`): os dois pets aparecem. O pet em foco segue com a vista de hoje, e o irmão tem o
+  próprio seguidor e papel. Trocar o foco desliza a câmera.
+- **No topo** (`src/componentes/Topo.tsx`): o retrato do irmão troca o foco, com o ponto rosa quando ele chama.
+- **O relógio** (`src/tempo.ts`) freia pelo chamado de qualquer um.
+- **As medalhas:** os dois conhecem as do Tamer.
+- **O save nas telas:**
+  - a espera leva e traz o par inteiro;
+  - Ajustes e o Registro conferem e exportam o grupo;
+  - a herança, o importar do par e o Salão ficam para depois, com aviso (D-CO4d-5).
+- **Os testes:**
+  - `web/app/test/dois_pets_telas.test.ts`;
+  - `web/app/e2e/dois_pets.spec.ts`, a 390 e 1280 px: o brasão choca os dois, o irmão fica no topo, o foco troca e volta ao reabrir, e a
+    ação vai ao pet em foco.
+- **Os desvios:** D-CO4d-1 a D-CO4d-7, no registro de 2026-11.

@@ -27,6 +27,7 @@ import * as THREE from "three";
 import { OVO, chaveSprite } from "../../../../motor/index.ts";
 import { CLIPES_REACOES, atlasAtual, chaveUp, desenharSprite, dimSprite, quadroAgora, type AtlasOk, type Clipe, type ClipeReacao } from "../../../atlas.ts";
 import { balancoOvo, jogoAtual } from "../../../jogo.ts";
+import type { Motor } from "../../../../motor/index.ts";
 import { SONO, alturaSono } from "../sono.ts";
 import { SEM_GESTO, comidaPerto, escolherComer, esquecerComer, marcarEmburrar, marcarDormir, gestoAgora, type EscolhaComer } from "../cenaAcao.ts";
 import { CENA } from "../cenaEstado.ts";
@@ -185,7 +186,16 @@ export class Papel {
   private readonly v = new THREE.Vector3();
   private readonly giro = new THREE.Quaternion();
 
-  constructor() {
+  /** o pet que este papel desenha (os dois pets, CO4d: cada um tem o seu papel); sem ele, o pet na tela, como hoje */
+  private readonly qual: (() => Motor) | null;
+  /** o pet deste papel e o ovo chocando (os dois ovos chocam juntos) */
+  private ctx(): { motor: Motor; nascendo: number } {
+    const j = jogoAtual();
+    return { motor: this.qual ? this.qual() : j.motor, nascendo: j.nascendo };
+  }
+
+  constructor(qual: (() => Motor) | null = null) {
+    this.qual = qual;
     /* o papel vai no passe transparente, depois da silhueta: onde ele aparece, cobre a silhueta; onde uma arvore o esconde, ela fica */
     const geo = new THREE.PlaneGeometry(1, 1).translate(0, 0.5, 0);
     this.papel = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ alphaTest: 0.5, side: THREE.DoubleSide, transparent: true }));
@@ -202,7 +212,7 @@ export class Papel {
   /** a folha (textura com a borda) do quadro de agora: do atlas, ou da grade de reserva */
   private folhaAgora(quadro: number, andando: boolean, agora: number, golpe: Passo["golpe"], comer: EscolhaComer, emburra: boolean, dormeQ: boolean, rosto: ClipeReacao | null, stun = false,
       acaoClipe: { clipe: Clipe; desde: number | null } | null = null): { folha: Folha; ovo: boolean } {
-    const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
+    const { motor: m, nascendo } = this.ctx(), a = atlasAtual();
     if (a.tipo !== "ok") {
       const f = fonteDoPet(quadro);
       return { folha: this.folha(`reserva|${f.chave}`, () => recortar(f.canvas, corteInteiro(f.canvas))), ovo: nascendo > 0 };
@@ -234,34 +244,34 @@ export class Papel {
   }
   /** a forma de agora tem este clipe no atlas? (sem atlas ou no ovo, nao) */
   private temClipe(c: Clipe): boolean {
-    const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
+    const { motor: m, nascendo } = this.ctx(), a = atlasAtual();
     return a.tipo === "ok" && nascendo <= 0 && !!a.dados.sprites[chaveUp(a.dados, chaveSprite(m.forma))]?.clipes?.[c];
   }
   /** a soma dos ms de um clipe da forma de agora (null sem ele) */
   private cicloDe(c: ClipeMomento): number | null {
-    const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
+    const { motor: m, nascendo } = this.ctx(), a = atlasAtual();
     if (a.tipo !== "ok" || nascendo > 0) return null;
     const k = a.dados.sprites[chaveUp(a.dados, chaveSprite(m.forma))]?.clipes?.[c];
     return k ? k.ms.reduce((x, y) => x + y, 0) : null;
   }
   /** a forma de agora tem o clipe Emburrar no atlas? (sem atlas, no ovo ou sem o clipe: fica o tremor de cenaAcao.ts) */
   private temEmburrar(): boolean {
-    const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
+    const { motor: m, nascendo } = this.ctx(), a = atlasAtual();
     return a.tipo === "ok" && nascendo <= 0 && !!a.dados.sprites[chaveUp(a.dados, chaveSprite(m.forma))]?.clipes?.Emburrar;
   }
   /** a forma de agora tem o clipe Dormir no atlas? (sem atlas, no ovo ou sem o clipe: fica o sono de sono.ts, achatado) */
   private temDormir(): boolean {
-    const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
+    const { motor: m, nascendo } = this.ctx(), a = atlasAtual();
     return a.tipo === "ok" && nascendo <= 0 && !!a.dados.sprites[chaveUp(a.dados, chaveSprite(m.forma))]?.clipes?.Dormir;
   }
   /** a forma de agora tem o clipe Stun no atlas? (a careta na mao das formas sem as reacoes de rosto; sem o atlas ou no ovo, nao) */
   private temStun(): boolean {
-    const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
+    const { motor: m, nascendo } = this.ctx(), a = atlasAtual();
     return a.tipo === "ok" && nascendo <= 0 && !!a.dados.sprites[chaveUp(a.dados, chaveSprite(m.forma))]?.clipes?.Stun;
   }
   /** a forma de agora tem as reacoes de rosto no atlas? (so os Digimon do estagio crianca; sem o atlas, no ovo ou sem elas: nada muda) */
   private temReacoes(): boolean {
-    const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
+    const { motor: m, nascendo } = this.ctx(), a = atlasAtual();
     return a.tipo === "ok" && nascendo <= 0 && CLIPES_REACOES.every(r => !!a.dados.sprites[chaveUp(a.dados, chaveSprite(m.forma))]?.clipes?.[r]);
   }
   /** onde fica o alto da cabeca no papel de um clipe de reacao (o quadro 0; so o rosto muda, entao e o da silhueta do Idle): a coluna central da
@@ -291,7 +301,7 @@ export class Papel {
   }
   /** a soma dos ms do clipe Comer do sprite de agora (um ciclo); null sem o atlas, no ovo ou num sprite sem o Comer: fica o gesto de hoje */
   private cicloComer(): number | null {
-    const { motor: m, nascendo } = jogoAtual(), a = atlasAtual();
+    const { motor: m, nascendo } = this.ctx(), a = atlasAtual();
     if (a.tipo !== "ok" || nascendo > 0) return null;
     const c = a.dados.sprites[chaveUp(a.dados, chaveSprite(m.forma))]?.clipes?.Comer;
     return c ? c.ms.reduce((x, y) => x + y, 0) : null;
@@ -338,7 +348,7 @@ export class Papel {
     if (sus) this.mudouEm = -1e9;
     const golpe = naMao ? null : p.golpe ?? null, andaBase = !sus && (!!p.andandoVista || p.agora - this.mudouEm < ANDANDO_MS);
     /* o comer (cenaAcao.ts, escolherComer): o laco cede ao passo e ao golpe; o "comeu a racao" cede so ao golpe, e o pet para de andar nele */
-    const mo0 = jogoAtual(), mu = mo0.motor.mundo, sub = mu?.cm.sub ?? 1, nCons = mu?.consumos.length ?? 0;
+    const mo0 = this.ctx(), mu = mo0.motor.mundo, sub = mu?.cm.sub ?? 1, nCons = mu?.consumos.length ?? 0;
     const ultimo = nCons > 0 ? (mu!.consumos[nCons - 1] as { id?: number }).id : undefined;
     const comer = escolherComer({
       chave: String(mo0.motor.semente), acao: mo0.nascendo > 0 ? "" : mo0.motor.acao, consumos: nCons,
@@ -384,7 +394,7 @@ export class Papel {
       this.papel.material.needsUpdate = this.silhueta.material.needsUpdate = true;
     }
     /* dormindo (sono.ts): o quadro parado achatado, respirando, num tom apagado */
-    const mo = jogoAtual().motor, dorme = !ovo && mo.acao === "dormir";
+    const mo = this.ctx().motor, dorme = !ovo && mo.acao === "dormir";
     /* a cena da acao do motor, o cocô e a reacao ao toque (cenaAcao.ts; so vista): o gesto do corpo sobre o desenho. Parado e acordado ele faz o da acao */
     const gesto0 = ovo || naMao ? SEM_GESTO : gestoAgora({ acao: mo.acao, sujeira: mo.e.sujeira, chave: String(mo.semente), comidaPerto: comidaPerto(mo.mundo) }, p.agora, p.reduzido, !andando && !dorme, velocidadeAtual() <= 0, noClipe || noMomento, emburra);
     /* a expressao se mexe 1 texel inteiro (reacao.ts, bobDaReacao); sem reacao, o gesto de sempre */
@@ -408,7 +418,7 @@ export class Papel {
     const ladoAlvo = dorme && virandoAgora(p.agora) ? -this.lado : this.lado;
     this.escalaX = p.reduzido || Math.abs(ladoAlvo - this.escalaX) <= passo ? ladoAlvo : this.escalaX + Math.sign(ladoAlvo - this.escalaX) * passo;
     /* o tamanho em pixels inteiros do canvas; o pulinho em texels inteiros; o ovo balanca um texel de lado */
-    const n = p.pxPorTexel, wpx = Math.round(folha.w * n * (achata || gesto.estica !== 1 ? 1 + (1 - alt) / 2 : 1)), hpx = Math.round(folha.h * n * alt), { nascendo } = jogoAtual();
+    const n = p.pxPorTexel, wpx = Math.round(folha.w * n * (achata || gesto.estica !== 1 ? 1 + (1 - alt) / 2 : 1)), hpx = Math.round(folha.h * n * alt), { nascendo } = this.ctx();
     const pulo = (andando && !p.reduzido && !ovo ? Math.round(Math.abs(Math.sin(p.agora / PULO_MS)) * PULO_TEXELS) * n : 0) + Math.round(gesto.alto) * n
       + (sus ? Math.round(sus.altura) * n : 0);
     const balanco = ovo && !p.reduzido ? balancoOvo(nascendo) * n : 0;
