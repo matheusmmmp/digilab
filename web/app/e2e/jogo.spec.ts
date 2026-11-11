@@ -983,6 +983,67 @@ test("treino: sem o atlas, os ícones de reserva", async ({ page }) => {
   await expect(page.locator(".treino-grade .treino-ic--reserva")).toHaveCount(6);
 });
 
+/* defeitos de tela vistos no promo (2026-11-06): depois de treinar com o pedido de pausa, o balao do Rookie mostrava as marcas cruas
+   "[sem pausa] [:treino puxado:]" e o "Por que ele disse isso" dizia "à toa ?"; na conversa, o balao estreito partia "Comi?" em "Com / i?" */
+async function treinarCansadoEVoltar(page: Page): Promise<void> {
+  await page.goto(APP + "#/crescer/treinar");
+  await expect(page.locator(".trn-estado")).toHaveText("pediu pausa");
+  const tr0 = await numLog(page, "tr");
+  await page.locator("button.treino-ex:not(.forcar):not([disabled])").first().click();
+  await expect.poll(() => numLog(page, "tr")).toBe(tr0 + 1);
+  await page.goto(APP + "#/pet");
+  await expect(page.locator(".cena-fala")).toBeVisible();
+}
+const MARCA_CRUA = /\[|\]|\[:|:\]/;
+test("fala: o balão do Rookie que treinou cansado troca as marcas por etiqueta e ícone, e o porquê diz o treino", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await semear(page, SAVE_TR_PAUSA);
+  const erros = vigiarErros(page);
+  await treinarCansadoEVoltar(page);
+  const balao = page.locator(".cena-fala .balao-txt");
+  expect(await balao.textContent()).not.toMatch(MARCA_CRUA);
+  await expect(balao.locator(".fala-acao")).toHaveText("sem pausa");
+  await expect(balao.locator(".fala-ic img[alt='treino puxado']")).toBeVisible();
+  await page.locator(".cena-fala").click();
+  const det = page.locator(".det-fala").first();
+  await expect(det.locator(".pet-status")).toContainText("treinou sem a pausa que pediu");
+  await expect(det.locator(".pet-status")).not.toContainText("à toa");
+  await expect(det.locator(".causa-icones .balao-q")).toHaveCount(0);
+  await expect(det.locator(".causa-icones .causa-ic img")).toHaveCount(1);
+  expect(erros).toEqual([]);
+});
+test("fala: sem o atlas, o balão do Rookie mostra a causa numa etiqueta, sem marcas cruas", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await semear(page, SAVE_TR_PAUSA);
+  await page.route(/\/Assets\/(digilab_atlas_up|digilab_decoracao_up|decoracao_up\/)/, r => r.abort());
+  await treinarCansadoEVoltar(page);
+  const balao = page.locator(".cena-fala .balao-txt");
+  expect(await balao.textContent()).not.toMatch(MARCA_CRUA);
+  await expect(balao.locator(".fala-acao")).toHaveText("sem pausa");
+  await expect(balao.locator(".fala-marca")).toHaveText("treino puxado");
+});
+for (const largura of [390, 1280]) {
+  test(`conversa: a resposta curta do pet cabe numa linha em ${largura} px`, async ({ page }) => {
+    await page.setViewportSize({ width: largura, height: largura >= 1100 ? 800 : 844 });
+    await semear(page, SAVE_TR_PAUSA);
+    /* a fala livre sem o modelo: o servidor de teste roda com --provedor nenhum, a resposta e fixa */
+    await page.route(/\/api\/fala-livre\/status$/, r => r.fulfill({ json: { ativo: true, modelo: "teste" } }));
+    await page.route(/\/api\/fala-livre$/, r => r.fulfill({ json: { fala: "Comi?", fatos_citados: [], fatos: [], estagio: "crianca", modelo: "teste", versao_prompt: "teste" } }));
+    await page.route(/\/api\/fala-livre\/verificar$/, r => r.fulfill({ json: { afirmacoes: [], nao_suportadas: 0 } }));
+    await page.goto(APP + "#/conversar/chat");
+    await page.getByRole("button", { name: "Livre", exact: true }).click();
+    await page.locator("#conv-msg").fill("Você comeu hoje?");
+    await page.getByRole("button", { name: "Enviar" }).click();
+    const resp = page.locator(".mc-conv__lista .mc-pilha .mc-balao", { hasText: "Comi?" });
+    await expect(resp).toBeVisible();
+    const linhas = await resp.evaluate(e => { const r = document.createRange(); r.selectNodeContents(e); return new Set([...r.getClientRects()].map(x => Math.round(x.top))).size; });
+    expect(linhas, "uma linha só").toBe(1);
+    const eu = page.locator(".mc-balao--eu", { hasText: "Você comeu hoje?" });
+    const [be, bl] = await Promise.all([eu.boundingBox(), page.locator(".mc-conv__lista").boundingBox()]);
+    expect(be!.x + be!.width, "a fala do dono continua à direita").toBeGreaterThan(bl!.x + bl!.width - 30);
+  });
+}
+
 /* ---------------------------------------------------------------- o mundo no jogo, etapa 2 (docs/TAREFA_V2_MVP_MUNDO_PRODUTO.md: o
    E2E-COMIDA e o E2E-CENA). save_mundo.json (e2e/gerar_save_mundo.mjs): um Gomamon v12 com fome, que come a racao posta perto dele em
    qualquer ponto da proxima hora de jogo (o relogio do app anda enquanto o teste mexe). A tela poe a racao pelo gesto (arrastar "Por

@@ -680,6 +680,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — CADEIA, etapa 3: o painel mostra o resultado da decisão anterior (Gerente da V3, Claude Code, Opus 5.5, branch `v3-cadeia-f3`)](registro/2026-11.md)
 - [2026-11-11 — HABITAT_REACOES, HR2 e HR3: o som do cuidado, a voz do pet e o bipe do chamado (Gerente da V3, Claude Code, Opus 5.5, branch `v3-habitat-hr2`)](registro/2026-11.md)
 - [2026-11-11 — LUTA_POC, LP6-1: o núcleo do golpe de apoio e da elipse por estágio (worker da LP6-1, Claude Code, Opus 5.5, branch `v3-luta-poc-lp6-1`)](registro/2026-11.md)
+- [2026-11-11 — LUTA_POC, LP6-2: o golpe de apoio e a elipse maior no palco (worker da LP6-2, Claude Code, Opus 5.5, branch `v3-luta-poc-lp6-2`)](registro/2026-11.md)
 - [2026-11-11 — MITOLOGIA: a chave começa ligada (Gerente da V3, Claude Code, Opus 5.5, branch `v3-mitologia-padrao`)](registro/2026-11.md)
 - [2026-11-11 — ARVORE_SACODE, S2: o sacudir no motor em TS, sem versão de pet (worker, Claude Code, Opus 5.5, branch `v3-arvore-sacode-s2`)](registro/2026-11.md)
 - [2026-11-11 — MUNDO_ENFEITES, a prancha da TV de tubo em cartoon (Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-objeto-tv`)](registro/2026-11.md)
