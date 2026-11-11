@@ -660,6 +660,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — LUTA_POC, LP5-4: a conferência do `lp5_3` (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-4`)](registro/2026-11.md)
 - [2026-11-11 — LUTA_POC, LP5-5: o `lp5_3` no jogo, como a v23 (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-5`)](registro/2026-11.md)
 - [2026-11-11 — DIGIBRAIN_SCAN_LAB: o scan no pet do laboratório (Gerente da V3, Claude Code, Opus 5.5, branch `v3-digibrain-scan-lab`)](registro/2026-11.md)
+- [2026-11-11 — UX_TELA_PET, D1e: o DigiBrain com o visual de scanner e a rede viva (sessão própria aberta pelo Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-digibrain-menu`)](registro/2026-11.md)
 - [2026-11-11 — HABITAT_REACOES, HR1: as reações que faltavam na vista (Gerente da V3, Claude Code, Opus 5.5, branch `v3-habitat-hr1`)](registro/2026-11.md)
 - [2026-11-11 — CADEIA, etapa 1: o cenário do lugar lembrado e as decisões D2, D4 e D5 (Gerente da V3, Claude Code, Opus 5.5, branch `v3-cadeia-f1`)](registro/2026-11.md)
 - [2026-11-11 — CADEIA, etapa 2: a cena só mastiga com o que comer e o lugar vazio no rosto (Gerente da V3, Claude Code, Opus 5.5, branch `v3-cadeia-f2`)](registro/2026-11.md)

@@ -474,10 +474,9 @@ for (const largura of [390, 1280]) {
     expect(db.decisao).not.toBeNull();
     await expect(raiz.locator("svg.mp")).toBeVisible();
     await expect(raiz.locator(".db-barras, .db-opcoes, .db-ultimas, .db-emo, .mp-nota")).toHaveCount(0);
-    await expect(raiz.locator(".mp-leg")).toBeHidden();                               /* a legenda mora na dica do "i" (D1b-7) */
     await raiz.getByRole("button", { name: "O que é este desenho" }).click();
-    await expect(raiz.locator("#db-dica")).toContainText("só desenho");
-    await expect(raiz.locator(".mp-leg")).toBeVisible();
+    await expect(raiz.locator("#db-dica")).toContainText("só desenho");                /* a rede e uma ilustracao (D1e), e a dica diz isso */
+    await expect(raiz.locator("#db-dica")).toContainText("mapa em texto");
     await page.keyboard.press("Escape");                                              /* o Esc com a dica aberta fecha so a dica */
     await expect(raiz.locator("#db-dica")).toBeHidden();
     await expect(raiz).toBeVisible();
@@ -504,11 +503,11 @@ for (const largura of [390, 1280]) {
     expect(erros).toEqual([]);
   });
 }
-/* o mapa dos pesos (ScanDigiBrain.tsx, MapaScan), no lugar do icone estatico: cada traco e um peso do motor (Motor.digibrain().mapa), e a cada
-   decisao acendem a regra, os candidatos com a chance e a acao escolhida (o "pesou mais" saiu no modal pequeno, D1b-6). Com "reduzir movimento" (D1-8, o contrato do
-   reduzir: zero animacao) so o destaque troca; o movimento sem o reduzir tem o teste logo abaixo */
+/* a rede viva (ScanDigiBrain.tsx, RedeVivaDesenho; D1e): o desenho e uma ilustracao, nao o mapa dos pesos. Do motor ele le so a decisao de agora:
+   o numero dela (data-n) e quantas entradas pesaram, que da quantos impulsos correm (o minimo de 4, mais 2 por entrada, ate 14). Sem texto e sem
+   os nos do motor. Com "reduzir movimento" (D1-8, o contrato do reduzir: zero animacao) nada anima; o movimento sem o reduzir tem o teste logo abaixo */
 for (const largura of [390, 1280]) {
-  test(`DigiBrain: o mapa dos pesos acende a cada decisão em ${largura} px`, async ({ page }) => {
+  test(`DigiBrain: a rede viva acompanha a decisão em ${largura} px`, async ({ page }) => {
     await page.setViewportSize({ width: largura, height: 800 });
     await page.emulateMedia({ reducedMotion: "reduce" });
     await semear(page, SAVE_V11);
@@ -518,58 +517,53 @@ for (const largura of [390, 1280]) {
     if (largura < 900) await abrirLeque(page);
     await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
     const raiz = page.locator("#pet-painel");
-    const mapa = raiz.locator("svg.mp");
-    await expect(mapa).toBeVisible();
+    const rede = raiz.locator("svg.mp.rv");
+    await expect(rede).toBeVisible();
     await expect(raiz.locator(".db-cab .db-icone, .db-folha-selo .db-icone")).toHaveCount(0);      /* o icone estatico saiu do painel */
-    /* o mapa e o do motor: o mesmo numero de pesos, a regra, a escolhida, os candidatos, as arestas acesas e o lobo destacado */
     const conferir = async (): Promise<number> => {
       const r = await page.evaluate(() => {
-        const s = document.querySelector(".digibrain svg.mp, dialog.folha[open] svg.mp")!, db = (window as any).__digilab.digibrain();
+        const s = document.querySelector("#pet-painel svg.mp.rv")!, db = (window as any).__digilab.digibrain();
         return {
-          n: Number(s.getAttribute("data-n")), pesos: s.querySelectorAll(".mp-pesos path").length, acesas: s.querySelectorAll(".mp-acesas path").length,
-          regra: [...s.querySelectorAll("[data-regra].mp-lit")].map(g => g.getAttribute("data-regra")),
-          esc: [...s.querySelectorAll(".mp-esc")].map(g => g.getAttribute("data-acao")),
-          cand: [...s.querySelectorAll(".mp-cand")].map(g => g.getAttribute("data-acao")).sort(),
-          pct: s.querySelectorAll(".mp-pct").length, top: [...s.querySelectorAll("[data-entrada].mp-lit")].map(g => g.getAttribute("data-entrada")).sort(),
-          dest: s.querySelectorAll(".mp-dest").length, regioes: [...s.querySelectorAll(".mp-reg")].map(t => t.textContent), db,
+          n: Number(s.getAttribute("data-n")), impulsos: s.querySelectorAll(".rv-impulsos path").length, dito: Number(s.getAttribute("data-impulsos")),
+          fios: s.querySelectorAll(".rv-fios path").length, pontos: s.querySelectorAll(".rv-pontos circle").length,
+          textos: s.querySelectorAll("text").length, nos: s.querySelectorAll("[data-entrada], [data-regra], [data-acao]").length,
+          onda: Number(document.querySelector("#pet-painel .scan-onda")!.getAttribute("data-n")),
+          estado: document.querySelector("#pet-painel .scan-estado")!.getAttribute("data-regra"), db,
         };
       });
-      const m = r.db.mapa, d = r.db.decisao;
-      expect(r.n).toBe(m.acesas.n);
-      expect(r.pesos).toBe(m.arestas.length);
-      expect(r.acesas).toBe(m.acesas.arestas.length);
-      expect(r.regra).toEqual([m.acesas.regra]);
-      expect(r.esc).toEqual([m.acesas.acao]);
-      expect(r.cand).toEqual(d.chances.map((c: { acao: string }) => c.acao).sort());
-      expect(r.pct).toBe(d.chances.length);
-      expect(r.top).toEqual(d.percepcao.map((p: { entrada: string }) => p.entrada).sort());
-      expect(r.dest).toBe(0);
-      expect(r.regioes).toEqual(["ações", "regras", "percepção"]);
+      const ac = r.db.mapa.acesas;
+      expect(r.n).toBe(ac.n);
+      expect(r.impulsos).toBe(Math.min(14, 4 + 2 * ac.arestas.length));
+      expect(r.dito).toBe(r.impulsos);
+      expect(r.fios).toBeGreaterThan(300);
+      expect(r.pontos).toBe(150);
+      expect(r.textos).toBe(0);
+      expect(r.nos).toBe(0);
+      /* a faixa de baixo e do motor: a onda e o estado atual sao os da mesma decisao */
+      expect(r.onda).toBe(ac.n);
+      expect(r.estado).toBe(r.db.decisao.regra);
       return r.n;
     };
     const n0 = await conferir();
-    /* sem animacao nem transicao no mapa */
-    const animado = await page.evaluate(() => {
-      const s = document.querySelector(".digibrain svg.mp, dialog.folha[open] svg.mp")!;
-      return { anim: s.getAnimations({ subtree: true }).length, trans: getComputedStyle(s.querySelector(".mp-acesas path, .mp-pesos path")!).transitionDuration };
+    /* com "reduzir movimento": sem animacao nenhuma, e os impulsos nao aparecem */
+    const parado = await page.evaluate(() => {
+      const s = document.querySelector("#pet-painel svg.mp.rv")!;
+      return { anim: s.getAnimations({ subtree: true }).length, impulso: getComputedStyle(s.querySelector(".rv-impulsos path")!).opacity };
     });
-    expect(animado).toEqual({ anim: 0, trans: "0s" });
-    await mapa.screenshot({ path: test.info().outputPath(`digibrain-mapa-${largura}-n${n0}.png`) });
-    /* o tempo anda e a proxima decisao acende o mapa de novo */
+    expect(parado).toEqual({ anim: 0, impulso: "0" });
+    /* o tempo anda e a proxima decisao chega ao desenho e a faixa */
     await expect.poll(() => page.evaluate(() => (window as any).__digilab.digibrain().mapa.acesas.n), { timeout: 30000 }).toBeGreaterThan(n0);
-    const n1 = await conferir();
-    expect(n1).toBeGreaterThan(n0);
-    await mapa.screenshot({ path: test.info().outputPath(`digibrain-mapa-${largura}-n${n1}.png`) });
+    await expect.poll(conferir).toBeGreaterThan(n0);
     expect(await raiz.innerText()).not.toMatch(/pensando|sentindo|conectoma|connectome/i);
     expect(erros).toEqual([]);
   });
 }
 
-/* o movimento do scan (D1-2, D1-8): sem "reduzir movimento", numa decisao NOVA a varredura passa uma vez e o pulso percorre as arestas acesas
-   logo depois, e os dois terminam (saem do DOM e nao deixam animacao); o primeiro quadro ao abrir nao pulsa; o unico movimento que fica e o
-   giro lento do plano (so no desktop). Em 10 min/s do pet as decisoes (uma a cada 15 min dele) chegam mais depressa que a animacao e so o
-   destaque troca, entao o teste poe o tempo em 1x (uma decisao a cada 15 s) */
-test("DigiBrain: sem reduzir o movimento, a varredura e o pulso passam numa decisão nova e terminam", async ({ page }) => {
+/* o movimento do scan (D1-2, D1-8, D1e): sem "reduzir movimento" os impulsos correm sem parar e alguns pontos piscam; numa decisao NOVA a
+   varredura passa uma vez e a rede acende uma vez logo depois, e os dois terminam (a varredura sai do DOM, a marca do surto sai da rede); o
+   primeiro quadro ao abrir nao acende. Em 10 min/s do pet as decisoes (uma a cada 15 min dele) chegam mais depressa que a animacao, entao o
+   teste poe o tempo em 1x (uma decisao a cada 15 s) */
+test("DigiBrain: sem reduzir o movimento, os impulsos correm, e a varredura e o surto passam numa decisão nova e terminam", async ({ page }) => {
   test.setTimeout(120_000);
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.emulateMedia({ reducedMotion: "no-preference" });
@@ -582,30 +576,36 @@ test("DigiBrain: sem reduzir o movimento, a varredura e o pulso passam numa deci
   await page.evaluate(() => { location.hash = "#/pet/estado"; });
   await expect(page.locator(".pet-tela")).toBeVisible();
   await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
-  const raiz = page.locator("#pet-painel");
-  await expect(raiz.locator("svg.mp")).toBeVisible();
-  /* o primeiro quadro, ao abrir, nao pulsa */
-  await expect(raiz.locator(".scan-varredura, .mp-pulso")).toHaveCount(0);
+  const raiz = page.locator("#pet-painel"), rede = raiz.locator("svg.mp.rv");
+  await expect(rede).toBeVisible();
+  /* o primeiro quadro, ao abrir, nao acende */
+  await expect(raiz.locator(".scan-varredura, .rv--surto")).toHaveCount(0);
   const animacoes = () => page.evaluate(() => (document.getAnimations() as any[])
     .filter(a => a.effect?.target?.closest?.("#pet-painel"))
     .map(a => { const t = a.effect.getTiming(); return { nome: a.animationName as string, duracao: t.duration as number, atraso: t.delay as number, infinita: t.iterations === Infinity }; }));
+  /* parado: os impulsos (um por caminho a vista), os pontos que piscam e o giro lento do plano, todos sem fim */
+  const antes = await animacoes();
+  expect(antes.filter(a => a.nome === "rv-impulso")).toHaveLength(Number(await rede.getAttribute("data-impulsos")));
+  expect(antes.filter(a => a.nome === "rv-pisca").length).toBeGreaterThan(0);
+  expect([...new Set(antes.map(a => a.nome))].sort()).toEqual(["rv-impulso", "rv-pisca", "scan-giro"]);
+  expect(antes.every(a => a.infinita)).toBe(true);
   /* uma decisao nova (1x e 1 min do pet por minuto do relogio, uma decisao a cada 15 min dele): o relogio falso salta 16 min (fastForward dispara cada timer uma vez: o passo do tempo cobre os 16 min e o repinte e um so), e o gap
      desde a decisao anterior e de mais de 2,15 s */
   await page.clock.fastForward(16 * 60_000);
   await expect(raiz.locator(".scan-varredura")).toBeAttached({ timeout: 10_000 });
+  await expect(rede).toHaveClass(/rv--surto/);
   const durante = await animacoes();
   expect(durante.filter(a => a.nome === "scan-varre")).toEqual([{ nome: "scan-varre", duracao: 1200, atraso: 0, infinita: false }]);
-  const acesas = await raiz.locator("svg.mp .mp-acesas path").count();
-  const pulsos = durante.filter(a => a.nome === "scan-pulso");
-  expect(pulsos, "um pulso por aresta acesa").toHaveLength(acesas);
-  expect(pulsos.every(p => p.duracao === 800 && p.atraso === 1200 && !p.infinita)).toBe(true);
-  /* e terminam: o timer do componente (no relogio falso) tira os dois do DOM, e do scan so fica o giro lento do plano */
+  const surtos = durante.filter(a => a.nome === "rv-surto");
+  expect(surtos, "o surto acende cada fio da rede").toHaveLength(await rede.locator(".rv-fios path").count());
+  expect(surtos.every(p => p.duracao === 800 && p.atraso === 1200 && !p.infinita)).toBe(true);
+  /* e terminam: o timer do componente (no relogio falso) tira a varredura do DOM e a marca do surto da rede */
   await page.clock.fastForward(3000);
   await expect(raiz.locator(".scan-varredura")).toHaveCount(0, { timeout: 6000 });
-  await expect(raiz.locator(".mp-pulso")).toHaveCount(0);
+  await expect(rede).not.toHaveClass(/rv--surto/);
   const depois = await animacoes();
-  expect(depois.map(a => a.nome)).toEqual(["scan-giro"]);
-  expect(depois[0]!.infinita).toBe(true);
+  expect([...new Set(depois.map(a => a.nome))].sort()).toEqual(["rv-impulso", "rv-pisca", "scan-giro"]);
+  expect(depois.every(a => a.infinita)).toBe(true);
   expect(erros).toEqual([]);
 });
 /* o scan e um dialogo modal: o foco fica preso enquanto aberto, o Esc fecha e o foco volta a quem abriu. A pilha (4a linha) desmonta enquanto o
@@ -635,39 +635,6 @@ test("DigiBrain: o scan prende o foco, o Esc fecha e o foco volta a quem abriu (
   }
   expect(erros).toEqual([]);
 });
-/* nenhum texto do desenho abaixo de 11 px na tela (a fonte do SVG e max(base, 11px / escala)); no celular so os rotulos acesos e os das candidatas */
-for (const [largura, altura] of [[390, 844], [1280, 800], [1920, 950]]) {
-  test(`DigiBrain: nenhum texto do mapa fica abaixo de 11 px em ${largura} px`, async ({ page }) => {
-    await page.setViewportSize({ width: largura!, height: altura! });
-    await semear(page, SAVE_V11);
-    const erros = vigiarErros(page);
-    await page.goto(APP + "#/pet/estado");
-    await expect(page.locator(".pet-tela")).toBeVisible();
-    if (largura! < 900) await abrirLeque(page);
-    await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
-    const mapa = page.locator("#pet-painel svg.mp");
-    await expect(mapa).toBeVisible();
-    await page.evaluate(() => document.fonts.ready);
-    const pequenos = await mapa.evaluate(svg => [...svg.querySelectorAll("text")]
-      .filter(t => getComputedStyle(t).display !== "none")
-      .map(t => ({ txt: t.textContent, h: t.getBoundingClientRect().height }))
-      .filter(t => t.h < 11));
-    expect(pequenos, "textos do mapa com menos de 11 px de altura").toEqual([]);
-    /* os rotulos de regiao (.mp-reg, .mp-sub) nao se sobrepoem entre si */
-    const colisoes = await page.evaluate(() => {
-      const c = (e: Element) => { const r = e.getBoundingClientRect(); return { l: r.left, r: r.right, t: r.top, b: r.bottom }; };
-      const cruza = (a: ReturnType<typeof c>, b: ReturnType<typeof c>) => a.l < b.r && b.l < a.r && a.t < b.b && b.t < a.b;
-      const rot = [...document.querySelectorAll("#pet-painel .mp-reg, #pet-painel .mp-sub")].filter(t => getComputedStyle(t).display !== "none");
-      const out: string[] = [];
-      rot.forEach((a, i) => {
-        rot.slice(i + 1).forEach(b => { if (cruza(c(a), c(b))) out.push(`"${a.textContent}" cobre "${b.textContent}"`); });
-      });
-      return out;
-    });
-    expect(colisoes, "rotulos de regiao que se sobrepoem").toEqual([]);
-    expect(erros).toEqual([]);
-  });
-}
 /* o zoom de 200% numa janela baixa (rev-a11y da D1b): uma janela de 1920 x 800 ou de 1280 x 720 com 200% vira 960 x 400 ou 640 x 360 em CSS, e
    uma janela ainda mais baixa, 960 x 300. Em todas, o campo cabe inteiro na janela, e o topo (o icone, o selo e os tres botoes) cabe na largura */
 for (const [l, a] of [[960, 400], [960, 300], [640, 360]] as const) {
@@ -744,42 +711,6 @@ test("DigiBrain: um clique fora fecha o modal", async ({ page }) => {
   await expect(abre).toBeFocused();
   expect(erros).toEqual([]);
 });
-/* o campo pequeno (D1c): so os rotulos do caminho aceso e das candidatas ficam a vista; o de outro ponto aparece ao passar o mouse (desktop) ou
-   ao tocar nele (celular), e tocar nao grava evento */
-for (const largura of [390, 1280]) {
-  test(`DigiBrain: os rotulos so no caminho aceso, o resto ao passar o mouse ou tocar (${largura} px)`, async ({ page }) => {
-    await page.setViewportSize({ width: largura, height: 800 });
-    await semear(page, SAVE_V11);
-    const erros = vigiarErros(page);
-    await page.goto(APP + "#/pet/estado");
-    await expect(page.locator(".pet-tela")).toBeVisible();
-    if (largura < 900) await abrirLeque(page);
-    await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
-    const raiz = page.locator("#pet-painel");
-    await expect(raiz.locator("svg.mp")).toBeVisible();
-    const r = await page.evaluate(() => {
-      const ac = (window as any).__digilab.digibrain().mapa.acesas;
-      const vis = (g: Element) => [...g.querySelectorAll("text")].some(t => getComputedStyle(t).display !== "none");
-      const nos = [...document.querySelectorAll("#pet-painel .mp-no")];
-      return {
-        caminho: ac.arestas.map((x: any) => x.entrada).sort(), regra: ac.regra, acao: ac.acao,
-        entradas: nos.filter(g => g.hasAttribute("data-entrada") && vis(g)).map(g => g.getAttribute("data-entrada")).sort(),
-        regras: nos.filter(g => g.hasAttribute("data-regra") && vis(g)).map(g => g.getAttribute("data-regra")),
-        acoesOk: nos.filter(g => g.hasAttribute("data-acao")).every(g => vis(g) === g.classList.contains("mp-cand")),
-        log: JSON.parse((window as any).__digilab.registro()).log.filter((e: unknown[]) => e[1] !== "t").length,
-      };
-    });
-    expect(r.entradas).toEqual(r.caminho);
-    expect(r.regras).toEqual([r.regra]);
-    expect(r.acoesOk).toBe(true);
-    const outro = raiz.locator(".mp-no[data-regra]:not(.mp-lit)").first(), rot = outro.locator("text");
-    await expect(rot).toBeHidden();
-    if (largura >= 900) { await outro.hover(); await expect(rot).toBeVisible(); }
-    else { await outro.locator("circle:not(.mp-alvo)").click(); await expect(outro).toHaveClass(/mp-toque/); await expect(rot).toBeVisible(); }
-    expect(await page.evaluate(() => JSON.parse((window as any).__digilab.registro()).log.filter((e: unknown[]) => e[1] !== "t").length)).toBe(r.log);
-    expect(erros).toEqual([]);
-  });
-}
 /* o "Atender" do cartao do chamado, dentro do scan aberto, grava um unico evento do dono. Um bebe v13 com o chamado de carinho em urgencia (55 min depois
    do inicio, restam 5 min da janela de 15: o cartao so aparece em urgencia, e o de fome so com a comida abaixo de FOME_FALA). O relogio da pagina fica parado (page.clock), senao a janela de
    5 min do pet fecharia em segundos de relogio antes do clique */
