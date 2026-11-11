@@ -717,6 +717,88 @@ def _mensagens_voz_v4(conceitos, estagio: str, situacao: str, fala_jogador, hist
     return msgs
 
 
+# voz-v4b (CONVERSA_PET, DC5a2; D-DC5B-5, a decisao do Matheus em 2026-11-11 depois da calibracao da DC5): a voz-v4 com cinco mudancas,
+# so quando pedida (`voz=VERSAO_VOZ_V4B`). (1) Na fala espontanea com [P], a fala comeca pelo pedido, que vai no topo do pedido a LLM, e so
+# depois diz no maximo um conceito; (2) sem EPISODIO a fala nao fala de lembranca (a regra 3), e a selecao nao escolhe a lembranca sem
+# episodio (`conceitos.selecionados_v4b`); (3) a regra 10 proibe repetir `CONFIG_VOZ_V4B.palavras_trecho_repetido` ou mais palavras
+# seguidas de uma fala anterior; (4) mais curta: no adulto, o pedido e no maximo mais uma frase, ou, sem pedido, ate duas frases; no
+# adolescente, ate duas frases; (5) a solidao e um convite para fazer algo junto, nunca pedir que o dono fique. Sem frase entre aspas, como
+# na voz-v4 (D-DC5-3). A voz-v4 e a voz do jogo nao mudam.
+VERSAO_VOZ_V4B = "voz-v4b"
+
+SISTEMA_VOZ_V4B = SISTEMA_VOZ_V4.replace(
+    "- Sem fala do dono (fala espontânea), diga a intenção por conta própria.",
+    "- Sem fala do dono (fala espontânea), diga a intenção por conta própria. Se a intenção é um PEDIDO, a fala começa pelo pedido; "
+    "depois dele, no máximo um conceito, se couber.").replace(
+    "- adolescente: uma ou duas frases, com opinião sua e, se couber, uma pergunta.\n- adulto: até três frases.",
+    "- adolescente: até duas frases, com opinião sua e, se couber, uma pergunta.\n"
+    "- adulto: com um PEDIDO, o pedido e no máximo mais uma frase; sem pedido, até duas frases.")
+assert SISTEMA_VOZ_V4B.count("no máximo um conceito") == 1 and "até três frases" not in SISTEMA_VOZ_V4B
+
+
+def _regras_voz_v4b() -> str:
+    from digilab.config import CONFIG_VOZ_V4B
+    n = CONFIG_VOZ_V4B.palavras_trecho_repetido
+    r = REGRAS_VOZ_V4.replace(" Sem EPISÓDIO, diga só que lembra de uma coisa.", " Sem EPISÓDIO, não fale de lembrança.").replace(
+        "7. Sem culpa, chantagem, ameaça nem apelo. Nunca peça que o dono fique, que não saia ou que não vá embora.",
+        "7. Sem culpa, chantagem, ameaça nem apelo. Nunca peça que o dono fique, que fique com você, que não saia, que não vá embora ou que "
+        "não te deixe.").replace(
+        "10. Não repita o que você já disse (nas suas falas anteriores desta conversa ou no bloco O QUE VOCÊ JÁ DISSE): diga de outro jeito",
+        f"10. Não repita o que você já disse (nas suas falas anteriores desta conversa ou no bloco O QUE VOCÊ JÁ DISSE): nunca use de novo {n} "
+        "ou mais palavras seguidas de uma fala sua anterior; diga de outro jeito")
+    if r.count("não fale de lembrança") != 1 or "não te deixe" not in r or f"de novo {n} ou mais" not in r:
+        raise RuntimeError("voz-v4b: as regras da voz-v4 mudaram, e a voz-v4b nao se monta")
+    return r
+
+
+REGRA_PEDIDO_VOZ_V4B = """12. A INTENÇÃO é um PEDIDO que você escolheu fazer ao dono agora ([P]). Faça esse pedido do seu jeito, curto, e cite P em fatos_citados; na fala espontânea, a fala começa por ele. Pelo sentido: fome é pedir comida; higiene é pedir para ser limpo ou para tomar banho; solidão é convidar o dono para fazer alguma coisa junto com você agora, nunca pedir que ele fique com você, que não vá embora ou que não te deixe. Peça só isso: sem culpa, chantagem nem cobrança. Pedir não é dizer como você está: estado do corpo ou do humor só se um CONCEITO diz."""
+
+TOPO_PEDIDO_VOZ_V4B = "COMECE A FALA POR ESTE PEDIDO AO DONO"
+
+
+def ids_selecionados_v4b(conceitos, estagio: str) -> dict:
+    """{id: conceito} so dos escolhidos pela selecao da voz-v4b, com os ids da tabela inteira, na ordem da tabela"""
+    from .conceitos import selecionados_v4b
+    sel = selecionados_v4b(conceitos, estagio)
+    return {cid: c for cid, c in ids_conceitos(conceitos).items() if c in sel}
+
+
+def _mensagens_voz_v4b(conceitos, estagio: str, situacao: str, fala_jogador, historico, estilo, comando: bool, ditas) -> list[dict]:
+    from .conceitos import VERSAO_DEC_V3
+    ditos = _historico_do_estagio(historico, estagio) if situacao == "conversa" else []
+    dono = fatos_do_dono([jog for jog, _ in ditos])
+    sistema = (estilo + "\n\n" if estilo else "") + SISTEMA_VOZ_V4B
+    if comando:
+        sistema += "\n\n" + COMANDO_NA_VOZ_V1
+    msgs = [{"role": "system", "content": sistema}]
+    for jog, pet in ditos:
+        msgs += [{"role": "user", "content": f"Jogador: {_jogador_em_uma_linha(jog)}"}, {"role": "assistant", "content": pet}]
+    ids = ids_selecionados_v4b(conceitos, estagio)
+    if conceitos.versao == VERSAO_DEC_V3 and situacao == "espontanea":
+        pedido = f"{TOPO_PEDIDO_VOZ_V4B}: {linha_pedido(conceitos.pedido)}\n"
+    elif conceitos.versao == VERSAO_DEC_V3:
+        pedido = f"INTENÇÃO (um pedido ao dono): {linha_pedido(conceitos.pedido)}\n"
+    else:
+        intencao = conceitos.intencao if any(c.nome == conceitos.intencao for c in ids.values()) else "nenhuma"
+        pedido = f"INTENÇÃO: {intencao}\n"
+    pedido += BLOCO_CONCEITOS_VOZ_V4 + "\n"
+    pedido += "\n".join(linha_conceito_v4(i, c) for i, c in ids.items()) if ids else "nenhum conceito escolhido agora"
+    pedido += "\n"
+    if dono:
+        pedido += BLOCO_DONO_CONVERSA_V1 + "\n" + "\n".join(f.linha() for f in dono) + "\n"
+    if ditas:
+        pedido += BLOCO_DITAS_VOZ_V4 + "\n" + "\n".join(f"- {_jogador_em_uma_linha(x)}" for x in ditas) + "\n"
+    pedido += f"ESTAGIO: {estagio}\n"
+    if comando:
+        pedido += BLOCO_COMANDO_V8 + "\n"
+    pedido += "\n" + _regras_voz_v4b() + ("\n" + REGRA_DONO_DISSE_VOZ_V4 if dono else "") \
+        + ("\n" + REGRA_PEDIDO_VOZ_V4B if conceitos.versao == VERSAO_DEC_V3 else "") + "\n\n"
+    pedido += ("SITUAÇÃO: fala espontânea." if situacao == "espontanea"
+               else f'SITUAÇÃO: conversa. Jogador: "{_jogador_em_uma_linha(fala_jogador)}"')
+    msgs.append({"role": "user", "content": pedido})
+    return msgs
+
+
 def linha_pedido(intencao: str) -> str:
     """A linha do pedido da voz-v3 (so palavras de catalogo: conceitos.PEDIDO_DITO)"""
     from .conceitos import PEDIDO_DITO
@@ -756,7 +838,7 @@ def voz_pedida(conceitos, voz: str | None) -> str:
     """a versao da voz: a do formato (`versao_voz`) sem pedido; a voz-v3b so com o dec-v3 (fora disso, erro: falhar alto)"""
     if voz is None:
         return versao_voz(conceitos)
-    if voz == VERSAO_VOZ_V4 and versao_voz(conceitos) in (VERSAO_VOZ_V2, VERSAO_VOZ_V3):     # DC5: a voz-v4 nos dois formatos do jogo
+    if voz in (VERSAO_VOZ_V4, VERSAO_VOZ_V4B) and versao_voz(conceitos) in (VERSAO_VOZ_V2, VERSAO_VOZ_V3):     # DC5: a voz-v4 e a v4b
         return voz
     if voz != VERSAO_VOZ_V3B or versao_voz(conceitos) != VERSAO_VOZ_V3:
         raise ValueError(f"a voz {voz!r} nao vale para o {conceitos.versao}: a voz-v3b so no dec-v3, a voz-v4 so no dec-v2 e no dec-v3")
@@ -776,11 +858,12 @@ def mensagens_voz(conceitos, estagio: str, situacao: str, fala_jogador: str | No
         raise ValueError("conversa sem fala do jogador")
     if comando and situacao != "conversa":
         raise ValueError("o comando so existe na conversa")
-    if voz_pedida(conceitos, voz) == VERSAO_VOZ_V4:                     # DC5: a voz-v4, so quando pedida
+    if voz_pedida(conceitos, voz) in (VERSAO_VOZ_V4, VERSAO_VOZ_V4B):   # DC5: a voz-v4 e a voz-v4b, so quando pedidas
         if ditas is not None and (situacao != "espontanea" or not isinstance(ditas, (list, tuple))
                                   or not all(isinstance(x, str) and x.strip() for x in ditas)):
             raise ValueError("voz-v4: as falas ja ditas sao uma lista de textos, so na fala espontanea")
-        return _mensagens_voz_v4(conceitos, estagio, situacao, fala_jogador, historico, estilo, comando, ditas)
+        montar = _mensagens_voz_v4b if voz == VERSAO_VOZ_V4B else _mensagens_voz_v4
+        return montar(conceitos, estagio, situacao, fala_jogador, historico, estilo, comando, ditas)
     if ditas is not None:
         raise ValueError("as falas ja ditas so existem na voz-v4")
     ids = ids_conceitos(conceitos)

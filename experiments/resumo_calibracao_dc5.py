@@ -21,6 +21,7 @@ sys.path.insert(0, str(RAIZ))
 
 from digilab import metrics as m  # noqa: E402
 from digilab.config import CONFIG_VOZ_V4 as CFG  # noqa: E402
+from digilab.config import CONFIG_VOZ_V4B  # noqa: E402
 
 FRASES_MODELO = "experiments/configs/v3_conversa_dc5/frases_modelo.json"
 
@@ -49,6 +50,29 @@ def fica_comigo(fala: str) -> bool:
                                                               for v in ("fica", "fique", "ficar"))
 
 
+def medidas_v4b(rc: list[dict], v: list[dict], especies: dict) -> dict:
+    """DC5a2 (D-DC5B-5), so nas rodadas com a especie (as falas com `forma`): a repeticao de trecho (`palavras_trecho_repetido` palavras
+    seguidas iguais a uma fala anterior da mesma sequencia) e a copia das citacoes do corpus da especie (`palavras_copia_citacao` palavras
+    seguidas iguais a uma citacao), contada so nas falas cuja especie tem citacao. A fala que copia 6 palavras ou mais o filtro do jogo ja troca pela
+    generica (`corpus.repete_citacao`): essas contam a parte, entre as falas da celula (`rc`)"""
+    seqs: dict[str, list[str]] = {}
+    for r in v:
+        s = sequencia_de(r)
+        if s is not None:
+            seqs.setdefault(s, []).append(r["fala"])
+    rep = [m.repeticao_de_trecho(f, CONFIG_VOZ_V4B.palavras_trecho_repetido) for f in seqs.values()]
+    cits = {r["id"]: [c["pt"] for c in especies[r["especie_corpus"]].citacoes] if r["especie_corpus"] else [] for r in v}
+    com = [r for r in v if cits[r["id"]]]
+    return {"repeticao_trecho": {"sequencias": len(rep), "consideradas": sum(x["consideradas"] for x in rep),
+                                 "repetem": sum(x["repetem"] for x in rep)},
+            "especie": {"com_especie_no_corpus": sum(r["especie_corpus"] is not None for r in v),
+                        "por_forma": dict(sorted(Counter(r["forma"] for r in v).items())),
+                        "com_citacoes": len(com),
+                        "genericas_por_citacao": sum((r["erro"] or "").startswith("repete_citacao") for r in rc),
+                        "copiam_citacao": sum(m.tem_trecho_igual(r["fala"], cits[r["id"]], CONFIG_VOZ_V4B.palavras_copia_citacao)
+                                              for r in com)}}
+
+
 def resumo(regs: list[dict], frases: dict) -> dict:
     if not regs:
         raise ValueError("calibracao sem falas")
@@ -57,6 +81,10 @@ def resumo(regs: list[dict], frases: dict) -> dict:
     validas = {c: [r for r in regs if r["celula"] == c and r["erro"] is None] for c in celulas}
     total = min(sum(len(m.palavras_normalizadas(r["fala"])) for r in v) for v in validas.values())
     out = {"falas": len(regs), "corte_distinct_palavras": total, "celulas": {}}
+    com_especie = any("forma" in r for r in regs)
+    if com_especie:
+        from digilab_fala_livre.corpus import carregar
+        especies = carregar()[0]
     for c in celulas:
         rc = [r for r in regs if r["celula"] == c]
         v = validas[c]
@@ -93,6 +121,8 @@ def resumo(regs: list[dict], frases: dict) -> dict:
             "com_foi_bom": sum(_contem_trecho(r["fala"], ("foi", "bom")) for r in v),
             "latencia_voz_media_s":sum(r["latencia_voz_s"] for r in v) / len(v),
         }
+        if com_especie:
+            out["celulas"][c].update(medidas_v4b(rc, v, especies))
     return out
 
 

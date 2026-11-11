@@ -601,3 +601,38 @@ voz do jogo e a voz-v4. **Nenhuma fala da validação foi gerada.** É descritiv
 - **Os artefatos** estão em `artifacts_v3_conversa_dc5/calibracao/`: as entradas, as falas, os pares, os pacotes do Opus, a meta e o resumo.
 - **Os testes:** `tests/test_resumo_calibracao_dc5.py` (3).
 - **Os desvios:** D-DC5B-1 a 3, em `docs/registro/2026-11.md`.
+
+
+## DC5a2 — a voz-v4b, o verificador da DC5 e a espécie (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5a2`, 2026-11-11)
+
+A decisão do Matheus depois da calibração da DC5b (D-DC5B-5, "Segue as recomendacoes e faca o merge"). **Nenhuma chamada a modelo:** a fumaça
+e os testes rodam com clientes falsos, nas sementes dos testes.
+
+- **A voz-v4b** (`digilab_fala_livre/prompt.py`, `VERSAO_VOZ_V4B`), só quando pedida, nos dois formatos do jogo:
+  - na fala espontânea com [P], o pedido vai no topo do pedido à LLM, e a fala começa por ele e diz depois no máximo um conceito;
+  - sem EPISÓDIO, a fala não fala de lembrança, e a seleção (`conceitos.selecionados_v4b`) não escolhe a lembrança sem episódio;
+  - a regra 10 proíbe repetir 4 ou mais palavras seguidas de uma fala anterior (`CONFIG_VOZ_V4B.palavras_trecho_repetido`);
+  - é mais curta: no adulto, o pedido e no máximo mais uma frase, ou até duas frases sem pedido; no adolescente, até duas frases;
+  - a solidão é convidar o dono para fazer algo junto, nunca pedir que ele fique.
+- **O verificador da DC5** (`verif-v8b` e `verif-v9b`): a v8 e a v9 com as variações do "fica comigo" (`padroes_de_manipulacao_dc5`).
+  - O orquestrador o usa nas duas vozes, pelo gancho novo `verificador_dos_conceitos` do serviço.
+  - O jogo segue com a v8 e a v9.
+- **A espécie:** com `com_especie`, cada entrada leva a `forma` do estágio dela, de uma linha da árvore do jogo sorteada por vida
+  (`entradas_dc5.linha_da_vida`). O estilo vem do corpus, como no jogo.
+- **As medidas** (`digilab/metrics.py`):
+  - `tem_trecho_igual` e `repeticao_de_trecho`, a repetição de 4 palavras;
+  - a cópia das citações em 5 palavras, no `resumo_calibracao_dc5.py`, só nas rodadas com a forma.
+- **O orquestrador:** a config escolhe o desenho. O de antes é a voz do jogo e a v4, sem espécie. O novo é a voz do jogo e a v4b, com a
+  espécie e o verificador da DC5.
+  - A recalibração é `experiments/configs/v3_conversa_dc5/calibracao_v4b.json`: a base 20262900, a pasta
+    `artifacts_v3_conversa_dc5/calibracao_v4b`, e o piso do gasto com a DC5b.
+  - A fumaça do desenho novo é `fumaca_v4b.json`.
+- **O que não muda, conferido por teste:**
+  - a voz-v4, pelo gabarito gravado antes, num commit próprio;
+  - a voz do jogo;
+  - a verif-v8 e a verif-v9 do jogo;
+  - as entradas sem espécie;
+  - o resumo da DC5b.
+- **A rubrica da DC5** foi revista no apelo e no convite, antes de qualquer validação.
+- **Os testes:** `tests/test_conversa_dc5a2.py`.
+- **Os desvios:** D-DC5B-5 e D-DC5A2-1 a 6, em `docs/registro/2026-11.md`.
