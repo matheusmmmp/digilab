@@ -25,16 +25,20 @@ OBJETOS = {
     "barraca": ("lugares", "docs/lugares3d", "a barraca do Tamer, o lugar do Diario", "o domo, o rolo da porta, a antena, os estais, as estacas, o banquinho, os livros",
                 "docs/objetos3d/barraca/esbocos/esboco_1_domo_costuras.png",
                 "A barraca de antes (a malha e a textura da Meshy) saiu do jogo; o historico esta em docs/TAREFA_V3_LUGARES_3D.md e em docs/objetos3d/barraca/."),
+    "tv": ("enfeites", "docs/enfeites", "a TV de tubo, um marco da ilha", "o gabinete, a moldura, a tela, os botoes, os pes, a antena, o musgo",
+           None, "A forma segue a televisionVintage do Kenney Furniture Kit (CC0) so como referencia de desenho: nenhum vertice e nenhum pixel dela esta nestes arquivos."),
     "portao": ("lugares", "docs/lugares3d", "o portao da arena, o lugar do Lutar", "os pilares, as pedras do arco, o portal, as flamulas, o musgo",
                "docs/objetos3d/portao/esbocos/esboco_1_pedra_blocos.png",
                "O portao de antes (a malha e a textura da Meshy) saiu do jogo; o historico esta em docs/TAREFA_V3_LUGARES_3D.md e em docs/objetos3d/portao/."),
 }
+DATAS = {"tv": "2026-11-11"}   # quando o objeto foi feito, se nao foi em 2026-11-10
 
 
 def main(nome: str, saida: str, lib: str) -> None:
     pasta, docs, oque, partes, esboco, antes = OBJETOS[nome]
     importlib.import_module(nome).main(saida)
     s, pub = Path(saida), RAIZ / "web" / "app" / "public" / pasta / nome
+    pub.mkdir(parents=True, exist_ok=True)
     g = json.loads((s / f"{nome}.gltf").read_text(encoding="utf-8"))
     g["asset"]["extras"] = {
         "gerado_por_ia": False,
@@ -54,7 +58,7 @@ def main(nome: str, saida: str, lib: str) -> None:
            "nenhum pixel e nenhum vertice dele esta nestes arquivos. " if esboco else "")
     (pub / "License.txt").write_text(
         f"DigiLab: {oque} ({', '.join(nomes)})\n\n"
-        f"Procedencia: feito a mao por script, sem IA, em 2026-11-10 (docs/objetos3d/cartoon/{nome}.py no repositorio do DigiLab).\n"
+        f"Procedencia: feito a mao por script, sem IA, em {DATAS.get(nome, '2026-11-10')} (docs/objetos3d/cartoon/{nome}.py no repositorio do DigiLab).\n"
         f"A malha ({partes}) e a textura (pintada pelo codigo, pela posicao no espaco)\n"
         "saem do script; a mesma entrada da sempre o mesmo arquivo. Nada vem de modelo gerado nem de imagem de terceiros.\n\n"
         f"{ref}{antes}\n\n"
@@ -62,6 +66,7 @@ def main(nome: str, saida: str, lib: str) -> None:
         "Aprovacao: as capturas ficam no PR dos objetos em cartoon.\n", encoding="utf-8", newline="\n")
     print("PUBLICAR", {a.name: a.stat().st_size for a in sorted(pub.glob("*"))}, "total", sum(a.stat().st_size for a in pub.glob(f"{nome}*")), "bytes")
     sai = RAIZ / docs / nome / "validacao.json"
+    sai.parent.mkdir(parents=True, exist_ok=True)
     subprocess.run(["node", str(RAIZ / "docs" / "itens3d" / "validar.cjs"), str(pub / f"{nome}.gltf"), str(sai)], check=True,
                    env={**os.environ, "NODE_PATH": str(Path(lib) / "node_modules")})
 

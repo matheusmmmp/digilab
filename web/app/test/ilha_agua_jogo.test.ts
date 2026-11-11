@@ -47,13 +47,13 @@ function viver(m: Motor, dias: number): number {
 
 describe("a versao 22: o ovo novo nasce na ilha com agua", () => {
   test("a v22 e a v21 com o mundo da agua e o controlador; a v21 segue abrindo", () => {
-    expect([VERSAO_PET, VERSAO_V22, VERSAO_V21]).toEqual([22, 22, 21]);
-    expect(VERSOES_PET).toEqual([21, 22]);
-    expect([versaoDoOvo(), versoesQueAbrem()]).toEqual([22, [21, 22]]);
-    expect([21, 22].map(v => [ehCerebroTrocavel(v), ehLutaPoc(v)])).toEqual([[true, true], [true, true]]);
+    expect([VERSAO_PET, VERSAO_V22, VERSAO_V21]).toEqual([23, 22, 21]);
+    expect(VERSOES_PET).toEqual([21, 22, 23]);
+    expect([versaoDoOvo(), versoesQueAbrem()]).toEqual([23, [21, 22, 23]]);
+    expect([21, 22, 23].map(v => [ehCerebroTrocavel(v), ehLutaPoc(v)])).toEqual([[true, true], [true, true], [true, true]]);
     expect(ehLutaPoc(VERSAO_PET_LAB)).toBe(false);
     const novo = new Motor(101), velho = new Motor(101, 21);
-    expect([novo.versao, novo.naIlhaComAgua, novo.podeMudarIlha]).toEqual([22, true, false]);
+    expect([novo.versao, novo.naIlhaComAgua, novo.podeMudarIlha]).toEqual([23, true, false]);
     expect([velho.versao, velho.naIlhaComAgua, velho.podeMudarIlha]).toEqual([21, false, true]);
     expect(novo.mundo!.cm).toEqual(CMU_MVP_AGUA);
     expect(novo.mundo!.cct).toEqual(CONFIG_CONTRATO_AGUA);
@@ -154,7 +154,7 @@ describe("no app", () => {
 
   test("o pet de exemplo de antes da v22 (v21) segue nao sendo do jogador, antes e depois de passar para a ilha com agua", () => {
     const hoje = petExemplo(), antigo = petExemplo(21);
-    expect([hoje.versao, antigo.versao]).toEqual([22, 21]);
+    expect([hoje.versao, antigo.versao]).toEqual([23, 21]);
     expect([ehPetDoJogador(hoje), ehPetDoJogador(antigo)]).toEqual([false, false]);
     antigo.avancar(90);
     expect(passarParaIlhaComAgua(antigo)).toBe(true);
@@ -186,7 +186,7 @@ describe("no app", () => {
     expect((JSON.parse(a.d[CHAVE]!) as { log: EventoRegistro[] }).log.at(-1)![1]).toBe("mi");
     novoPet();
     const ovo = jogoAtual().motor;
-    expect([ovo.versao, ovo.naIlhaComAgua, ovo.log.some(e => e[1] === "mi")]).toEqual([22, true, false]);
-    expect((JSON.parse(a.d[CHAVE]!) as { versao: number }).versao).toBe(22);
+    expect([ovo.versao, ovo.naIlhaComAgua, ovo.log.some(e => e[1] === "mi")]).toEqual([23, true, false]);
+    expect((JSON.parse(a.d[CHAVE]!) as { versao: number }).versao).toBe(23);
   });
 });
