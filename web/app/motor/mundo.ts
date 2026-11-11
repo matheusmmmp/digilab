@@ -1023,6 +1023,12 @@ export class Mundo {
   /** o raio da visao do pet (o grupo: quem ve o outro comer, quem esta a vista) */
   get raioDaVisao(): number { return this.raioVisao; }
 
+  /** a percepcao com que o pet decidiu (a cooperacao: as comidas maduras que ele via) */
+  get percepcaoDaDecisao(): PercepcaoMundo | null { return this.percepcao; }
+
+  /** a fome com que o pet decidiu (a cooperacao: a disputa "anti") */
+  get fomeDaDecisao(): number { return this.fomeAntes; }
+
   /** o alvo que ficou sem chegar (o grupo: a disputa de quem nao decidiu no tick) */
   get pendenteAtual(): Pendente | null { return this.pendente; }
 

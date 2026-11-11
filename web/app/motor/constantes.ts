@@ -607,3 +607,9 @@ export const CCO_V11: Partial<ConfigCorpo> = {
 /* Config.limiar_privacao do Python (Estado.em_privacao: algum de fome, higiene e energia abaixo disto); estado.ts usa o mesmo literal.
    Fica fora de C de proposito: C e conferido folha a folha contra o HTML antigo (test/constantes.test.mjs), que nao o tem */
 export const LIMIAR_PRIVACAO = .15;
+
+/** a cooperacao entre dois pets do mesmo dono (docs/TAREFA_V3_COOPERACAO.md, etapa CO3): o espelho da ConfigCooperacao do Python
+    (digilab/config.py, com o status e a fonte de cada numero em PARAMETROS_COOPERACAO), conferido por constantes.test.mjs. So mede
+    (motor/cooperacao.ts); desligada por padrao, e o jogo ainda nao a liga (a CO4 e a CO5). Os numeros sao PROPOSTOS, SEM FONTE, menos a
+    escala (a S do cerebro A) e o piso de fome (o fome_moderada do instinto, CO-9) */
+export const CCOOP = { escala: 1024, pisoFome: .45, meiaVida: 1440, kMeiaVida: 32, janelaNovidade: 1440 };
