@@ -87,6 +87,20 @@ O perfil do tipo comido vem do mundo (`estimulo_gosto`, chamado pelo `estimulo_c
 gosto nao le a fome (PL-6) e nao ha quimico de prazer (PL-1): o quanto o pet gosta de cada qualidade e do genoma (digilab/genoma_paladar.py)
 e entra no sinal do cerebro, nunca no corpo.
 
+O orgao da tela (GOSTO_VISUAL, P1b; docs/ESPEC_GOSTO_VISUAL_P1.md, secoes 2 e 4; GV-16, GV-17, GV-18, GV-21 e GV-23 pela recomendacao;
+`ConfigTela`, desligada: a vida de hoje). Ligado (so com o mundo fisico e com `drives_novos` e `gestos`; falha alto sem eles):
+  - sete canais (CANAIS_TELA), cada um um `Orgao` com o sentido "tela" e o quimico da adaptacao `adaptacao_tela_<canal>` (em
+    [0, teto_intensidade], com a meia-vida do orgao): a habituacao e a adaptacao, como no Ouvido;
+  - o estimulo: `sentir_tela(intensidades)`, os sete inteiros em [0, teto_intensidade] (sem olhar, o motor manda zeros e a adaptacao
+    decai); o tick exige um `sentir_tela` desde o tick anterior (falha alto), e a adaptacao anda depois das meias-vidas;
+  - os receptores: `tela_<canal>`, o nivel sem adaptacao, div_arred(S x I, teto_intensidade); e `novidade_tela`, a soma das partes
+    adaptadas e = max(0, I - a - limiar) dos sete canais, saturada (div_arred(S E, E + meia_saturacao); um `ReceptorSoma` no grafo);
+  - os emissores, sobre quimicos que ja existem (nenhum quimico de prazer): a `atividade("assistir")` no tedio, com a variedade DS-4
+    (GV-21); o estresse por tick com o volume ou o movimento acima do corte (o gatilho "tela_acima", GV-17); o susto quando o volume sobe
+    mais que `salto_volume` entre dois `sentir_tela` (GV-17); e o `estimulo_agrado_tela(agrado)`, que tira da tristeza
+    div_arred(ganho x agrado, S) (GV-16; quem chama e o cerebro/motor, na P1d). O corte do `novidade_tela` que conta como novidade (GV-23)
+    fica na ConfigTela; quem chama o `estimulo_novidade` e o motor, na P1c.
+
 Componente puro: nao e motor, nao sorteia (nenhuma rng), nao le o cerebro. A sujeira e o sono continuam estados do `Estado` (o motor
 sorteia a sujeira como hoje); o corpo so os le. Quem liga o corpo ao motor e o A (etapa 2, `MotorCorpo`).
 
@@ -99,9 +113,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 
-from .config import (CONFIG_EVOLUCAO_PESQUISA, CONFIG_LUTA_CORPO, CONFIG_OLFATO, CONFIG_OUVIDO, CONFIG_PADRAO, TICKS_POR_DIA, Config,
-                     ConfigCorpo, ConfigEvolucaoPesquisa, ConfigLutaCorpo, ConfigMundo, ConfigOlfato, ConfigOuvido)
-from .corpo_grafo import Emissor, Grafo, Leitura, Orgao, Quimico, Reacao, checar
+from .config import (CONFIG_EVOLUCAO_PESQUISA, CONFIG_LUTA_CORPO, CONFIG_OLFATO, CONFIG_OUVIDO, CONFIG_PADRAO, CONFIG_TELA, TICKS_POR_DIA,
+                     Config, ConfigCorpo, ConfigEvolucaoPesquisa, ConfigLutaCorpo, ConfigMundo, ConfigOlfato, ConfigOuvido, ConfigTela)
+from .corpo_grafo import Emissor, Grafo, Leitura, Orgao, Quimico, Reacao, ReceptorSoma, checar
 from .events import ACOES_PET_BANHEIRO, ACOES_PET_HOJE, FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario
 from .state import Estado
 
@@ -126,6 +140,12 @@ CANAIS_OLFATO = ("comida", "outro")                               # sub-chaves `
 SONS = ("comendo", "bola", "chamado", "emburrado")                # secao 5.4: o barulho de uma acao do outro pet
 LADOS = ("esq", "dir")
 PREFIXO_ADAPTACAO = "adaptacao_"
+# o orgao da tela (GOSTO_VISUAL, P1b): 4 canais da visao e 3 do som (secao 1.1 da espec)
+CANAIS_TELA = ("cor", "brilho", "movimento", "complexidade", "volume", "variacao", "timbre")
+CANAIS_ESTRESSE_TELA = ("movimento", "volume")                    # GV-17: o movimento demais e o som alto estressam
+CANAL_SUSTO_TELA = "volume"                                       # GV-17: o susto e um salto de volume
+ATIVIDADE_TELA = "assistir"                                       # GV-21: a atividade do tedio, so com a tela ligada
+RECEPTOR_NOVIDADE_TELA = "novidade_tela"
 
 
 def _nomes_por_lado(base: str, n: int) -> tuple[tuple[str, str | None], ...]:
@@ -140,6 +160,19 @@ def todos_receptores_orgaos() -> tuple[str, ...]:
     for som in SONS:
         nomes += [n for k in (1, 2) for n, _ in _nomes_por_lado(f"ouvido_{som}", k)]
     return tuple(nomes)
+
+
+def todos_receptores_tela() -> tuple[str, ...]:
+    """Os receptores da tela: o nivel de cada canal e a novidade (os campos da PercepcaoCorpo)."""
+    return tuple(f"tela_{c}" for c in CANAIS_TELA) + (RECEPTOR_NOVIDADE_TELA,)
+
+
+def orgaos_tela(ct: ConfigTela | None) -> tuple[Orgao, ...]:
+    """Os orgaos da tela ligados, um por canal, na ordem de CANAIS_TELA: o receptor e o nivel (`tela_<canal>`), a adaptacao e
+    `adaptacao_tela_<canal>`."""
+    if ct is None or not ct.ligada:
+        return ()
+    return tuple(Orgao(f"tela_{c}", f"{PREFIXO_ADAPTACAO}tela_{c}", "tela", c, None, ct.limiar, ct.meia_saturacao) for c in CANAIS_TELA)
 
 
 def orgaos_de(co: ConfigOlfato | None, cv: ConfigOuvido | None) -> tuple[Orgao, ...]:
@@ -158,14 +191,15 @@ def orgaos_de(co: ConfigOlfato | None, cv: ConfigOuvido | None) -> tuple[Orgao, 
 
 
 def quimicos_de(cc: ConfigCorpo, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
-                cfg_ouvido: ConfigOuvido | None = None) -> tuple[str, ...]:
+                cfg_ouvido: ConfigOuvido | None = None, cfg_tela: ConfigTela | None = None) -> tuple[str, ...]:
     """Os quimicos que o corpo tem com estas chaves: os cinco de hoje, os de cada orgao ligado e os da etapa 6 (a curiosidade so com o
-    mundo fisico); por ultimo, a adaptacao de cada orgao do Olfato e da Audicao ligado."""
+    mundo fisico); por ultimo, a adaptacao de cada orgao do Olfato e da Audicao ligado e, depois, a de cada canal da tela."""
     novos = tuple(n for n in NOVOS if n != "curiosidade" or com_mundo) if cc.drives_novos else ()
     return (QUIMICOS + (ORGAO_DIGESTAO if cc.digestao else ()) + (ORGAO_VIDA if cc.vida else ()) + novos
             + (GESTOS if cc.gestos else ()) + (BANHEIRO if cc.banheiro else ()) + (METABOLISMO if cc.metabolismo else ())
             + (PALADAR if cc.paladar else ())
-            + tuple(o.adaptacao for o in orgaos_de(cfg_olfato, cfg_ouvido)))
+            + tuple(o.adaptacao for o in orgaos_de(cfg_olfato, cfg_ouvido))
+            + tuple(o.adaptacao for o in orgaos_tela(cfg_tela)))
 
 
 TOLERANCIA_GRADE = 1e-6                                           # quanto um numero de hoje x C pode fugir de um inteiro (so erro de float)
@@ -278,6 +312,24 @@ PARAMETROS_OUVIDO: dict[str, tuple[str, str]] = {
     "afastamento_ouvidos": ("PROPOSTO", "lado do mundo (A): " + _FONTE_ORGAO),
     "som": ("PROPOSTO", "secao 5.4 (A do som), lado do mundo (A): " + _FONTE_ORGAO),
     "raio_som_celulas": ("PROPOSTO", "secao 5.4 (R_som = 16 celulas), lado do mundo (A): " + _FONTE_ORGAO),
+}
+# Status dos campos da ConfigTela (conferido por teste). Todos PROPOSTOS, SEM FONTE: o orgao e o mapa quimico da secao 4 da espec sao
+# desenho (nenhuma fonte da nota do vault sustenta o agrado visual em substancias); o porque de cada numero esta na docstring da ConfigTela.
+_FONTE_TELA = "docs/ESPEC_GOSTO_VISUAL_P1.md, secoes 2 e 4 (P1b): desenho nosso, SEM FONTE"
+PARAMETROS_TELA: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "GV-18 pela recomendacao (D-GV-P1-1): o orgao da tela no corpo, atras de chave desligada; " + _FONTE_TELA),
+    "limiar": ("PROPOSTO", "meio nivel do evento (C/30), " + _FONTE_TELA),
+    "meia_saturacao": ("PROPOSTO", "= C: S/2 com a soma das partes adaptadas valendo um canal inteiro, " + _FONTE_TELA),
+    "meia_vida_adaptacao": ("PROPOSTO", "60 ticks, a do Olfato e do Ouvido, " + _FONTE_TELA),
+    "k_adaptacao": ("PROPOSTO", "= k_meia_vida(meia_vida_adaptacao), a regra da secao 3 do corpo; SEM FONTE como a meia-vida"),
+    "teto_intensidade": ("PROPOSTO", "= C, " + _FONTE_TELA),
+    "tedio_assistir": ("PROPOSTO", "GV-21: a base do brincar (45000), " + _FONTE_TELA),
+    "ganho_humor_agrado": ("PROPOSTO", "GV-16: o humor do explorar (+0,01 = 4500), " + _FONTE_TELA),
+    "estresse_corte": ("PROPOSTO", "GV-17: 3C/4, o estresse_limiar dos drives, " + _FONTE_TELA),
+    "estresse_divisor": ("PROPOSTO", "GV-17: 256, o estresse_divisor dos drives, " + _FONTE_TELA),
+    "salto_volume": ("PROPOSTO", "GV-17: C/2 entre dois sentir_tela, " + _FONTE_TELA),
+    "susto_salto": ("PROPOSTO", "GV-17: a metade do tapa (90000), " + _FONTE_TELA),
+    "corte_novidade": ("PROPOSTO", "GV-23: S/2 no novidade_tela (o motor chama o estimulo_novidade, P1c), " + _FONTE_TELA),
 }
 
 
@@ -426,16 +478,19 @@ RECEPTOR_DE = {**DRIVE_DO_QUIMICO, **{n: n for n in NOVOS + GESTOS + BANHEIRO}, 
 
 
 def grafo_do_corpo(cfg: Config, cc: ConfigCorpo, t: TaxasCorpo, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
-                   cfg_ouvido: ConfigOuvido | None = None) -> Grafo:
+                   cfg_ouvido: ConfigOuvido | None = None, cfg_tela: ConfigTela | None = None) -> Grafo:
     """A tabela unica do corpo com estas chaves (secao 18). Os numeros de hoje vem das taxas (`t`) e os da etapa 6 da ConfigCorpo; os
     estimulos que vem de fora com quantidade variavel (a bola, a fruta, o andar, a comida podre) guardam so o sinal. Com a digestao, a
     comida (a racao, o comer, a fruta) entra no estomago (`alimento`) e a reacao da digestao a tira, junto com a fome. Com os orgaos do
     Olfato e da Audicao, o quimico da adaptacao de cada receptor (com a meia-vida do orgao) e o `Orgao`; com o Olfato social, os emissores
-    externos do cheiro proprio e do rastro."""
+    externos do cheiro proprio e do rastro. Com a tela (P1b), os orgaos dos sete canais, o receptor da soma (`novidade_tela`) e os
+    emissores da secao 4 da espec (o assistir no tedio, o estresse acima do corte, o susto do salto e o agrado na tristeza)."""
     C = cc.escala
+    tela = orgaos_tela(cfg_tela)
     orgaos = orgaos_de(cfg_olfato, cfg_ouvido)
     adaptacoes = {o.adaptacao: (cfg_olfato if o.sentido == "olfato" else cfg_ouvido) for o in orgaos}
-    nomes = quimicos_de(cc, com_mundo, cfg_olfato, cfg_ouvido)
+    adaptacoes.update({o.adaptacao: cfg_tela for o in tela})
+    nomes = quimicos_de(cc, com_mundo, cfg_olfato, cfg_ouvido, cfg_tela)
     quimicos = []
     for n in nomes:
         if n in adaptacoes:
@@ -536,7 +591,16 @@ def grafo_do_corpo(cfg: Config, cc: ConfigCorpo, t: TaxasCorpo, com_mundo: bool 
         # os emissores externos do Olfato social (secao 5.3): intensidade constante, destino mundo, sem leitura de quimico
         em += [Emissor("cheiro_proprio", "posicao", 0, (("cheiro_proprio", cfg_olfato.cheiro_pet),), destino="mundo"),
                Emissor("rastro", "decisao", 0, (("rastro", cfg_olfato.cheiro_marca),), destino="mundo")]
-    return Grafo(tuple(quimicos), reacoes, tuple(em), orgaos)
+    if not tela:
+        return Grafo(tuple(quimicos), reacoes, tuple(em), orgaos)
+    # a tela (P1b; secao 4 da espec): so sobre quimicos que ja existem. O estresse le o estimulo da tela (nao um quimico): sem laco novo
+    ct = cfg_tela
+    em += [Emissor(f"atividade:{ATIVIDADE_TELA}", "estimulo", 0, (("tedio", -ct.tedio_assistir),)),
+           Emissor("estresse_tela", "tela_acima", 2, (("estresse", 1),), (), ct.estresse_corte, ct.estresse_divisor),
+           Emissor("susto_tela", "estimulo", 0, (("susto", ct.susto_salto),)),
+           Emissor("agrado_tela", "estimulo", 0, (("tristeza", -ct.ganho_humor_agrado),))]
+    soma = ReceptorSoma(RECEPTOR_NOVIDADE_TELA, tuple(o.adaptacao for o in tela), ct.meia_saturacao)
+    return Grafo(tuple(quimicos), reacoes, tuple(em), orgaos + tela, (soma,))
 
 
 # ------------------------------------------------------------------ orgao 2: os limiares da Vida
@@ -565,7 +629,8 @@ class Corpo:
 
     def __init__(self, q: dict[str, int], cfg: Config | None = None, cc: ConfigCorpo | None = None,
                  cfg_evo: ConfigEvolucaoPesquisa | None = None, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
-                 cfg_ouvido: ConfigOuvido | None = None, cfg_luta: ConfigLutaCorpo | None = None) -> None:
+                 cfg_ouvido: ConfigOuvido | None = None, cfg_luta: ConfigLutaCorpo | None = None,
+                 cfg_tela: ConfigTela | None = None) -> None:
         self.cfg = cfg or CONFIG_PADRAO
         self.cfg_evo = cfg_evo or CONFIG_EVOLUCAO_PESQUISA
         self.cc = cc or ConfigCorpo(ligada=True)
@@ -575,19 +640,21 @@ class Corpo:
         self.co = cfg_olfato or CONFIG_OLFATO
         self.cv = cfg_ouvido or CONFIG_OUVIDO
         self.cl = cfg_luta or CONFIG_LUTA_CORPO
+        self.ct = cfg_tela or CONFIG_TELA
         if self.cl.ligada and not self.cc.gestos:
             raise ValueError("ConfigLutaCorpo.ligada exige ConfigCorpo.gestos (a dor da luta e o quimico dos gestos)")
         self.C = self.cc.escala
         self.S = self.cc.escala_receptor
         self.t = taxas_de(self.cfg, self.cc)
         self._conferir_orgaos()
+        self._conferir_tela()
         if self.cc.paladar and not com_mundo:
             raise ValueError("ConfigCorpo.paladar sem o mundo fisico: o perfil de gosto vem da comida do mapa (paladar, secao 3.1)")
         # secao 18: a tabela unica, conferida na carga (falha alto); a lista e a ordem dos quimicos saem dela
-        self.grafo = grafo_do_corpo(self.cfg, self.cc, self.t, com_mundo, self.co, self.cv)
+        self.grafo = grafo_do_corpo(self.cfg, self.cc, self.t, com_mundo, self.co, self.cv, self.ct)
         self.relato_grafo = checar(self.grafo)
         self.quimicos = self.grafo.nomes
-        if self.quimicos != quimicos_de(self.cc, com_mundo, self.co, self.cv):   # pragma: no cover - o grafo e montado de quimicos_de
+        if self.quimicos != quimicos_de(self.cc, com_mundo, self.co, self.cv, self.ct):   # pragma: no cover - o grafo e montado de quimicos_de
             raise RuntimeError("o grafo e a lista de quimicos divergem")
         if set(q) != set(self.quimicos):
             raise ValueError(f"quimicos do corpo: esperava {self.quimicos}, veio {sorted(q)}")
@@ -613,11 +680,17 @@ class Corpo:
         # orgao 2: os limiares dos receptores de estagio sobre a Vida
         self.limiares_estagio = limiares_estagio(self.cc, self.cfg_evo) if self.cc.vida else ()
         # os orgaos do Olfato e da Audicao: o estimulo de cada receptor (o ultimo que o mundo entregou) e se ele foi entregue neste tick
-        self.orgaos = self.grafo.orgaos
+        self.orgaos = tuple(o for o in self.grafo.orgaos if o.sentido != "tela")
         self._orgao_de = {o.receptor: o for o in self.orgaos}
-        self._adaptacoes = frozenset(o.adaptacao for o in self.orgaos)
+        self._adaptacoes = frozenset(o.adaptacao for o in self.grafo.orgaos)    # as da tela tambem: so o orgao as move
         self.estimulo: dict[str, int] = {o.receptor: 0 for o in self.orgaos}
         self._sentido = False
+        # o orgao da tela (P1b): um orgao por canal, o estimulo de cada canal (o ultimo `sentir_tela`; zero no nascimento) e se ele foi
+        # entregue neste tick
+        self.orgaos_tela = tuple(o for o in self.grafo.orgaos if o.sentido == "tela")
+        self._soma_tela = self.grafo.somas[0] if self.orgaos_tela else None
+        self.estimulo_tela: dict[str, int] = {o.canal: 0 for o in self.orgaos_tela}
+        self._sentido_tela = False
 
     def _conferir_orgaos(self) -> None:
         """Os orgaos so existem com o mundo fisico (o estimulo e a intensidade num ponto do mapa); a k da adaptacao e a da meia-vida
@@ -633,10 +706,33 @@ class Corpo:
             if leitura_orgao(c.teto_intensidade, 0, c.limiar, c.meia_saturacao, self.S) >= self.S:
                 raise ValueError(f"{nome}: a saturacao chega a S no teto da intensidade ({c.teto_intensidade}); o receptor e em [0, S)")
 
+    def _conferir_tela(self) -> None:
+        """A tela (P1b) so com o mundo fisico (a TV e um objeto do mapa) e com `drives_novos` e `gestos` (os emissores mexem no tedio, no
+        estresse e no susto); a k da adaptacao e a da meia-vida; a novidade no teto (os sete canais no maximo) fica abaixo de S, e o corte
+        da novidade tambem."""
+        c = self.ct
+        if not c.ligada:
+            return
+        if not self.com_mundo:
+            raise ValueError("ConfigTela.ligada sem o mundo fisico: a TV e um objeto do mapa (espec do P1, secao 1.1)")
+        if not (self.cc.drives_novos and self.cc.gestos):
+            raise ValueError("ConfigTela.ligada exige ConfigCorpo.drives_novos e ConfigCorpo.gestos: os emissores da tela mexem no tedio, "
+                             f"no estresse e no susto (espec do P1, secao 4); veio drives_novos {self.cc.drives_novos}, gestos "
+                             f"{self.cc.gestos}")
+        k = k_meia_vida(c.meia_vida_adaptacao, self.cc.bits_meia_vida)
+        if c.k_adaptacao != k:
+            raise ValueError(f"ConfigTela.k_adaptacao {c.k_adaptacao} nao e a da meia-vida {c.meia_vida_adaptacao}: {k}")
+        e = len(CANAIS_TELA) * max(0, c.teto_intensidade - c.limiar)
+        if e and div_arred(self.S * e, e + c.meia_saturacao) >= self.S:
+            raise ValueError(f"ConfigTela: a novidade chega a S com os sete canais no teto ({c.teto_intensidade}); o receptor e em [0, S)")
+        if c.corte_novidade >= self.S:
+            raise ValueError(f"ConfigTela.corte_novidade tem de ficar abaixo de S ({self.S}): {c.corte_novidade}")
+
     @classmethod
     def de_estado(cls, estado: Estado, cfg: Config | None = None, cc: ConfigCorpo | None = None,
                   cfg_evo: ConfigEvolucaoPesquisa | None = None, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
-                  cfg_ouvido: ConfigOuvido | None = None, cfg_luta: ConfigLutaCorpo | None = None) -> Corpo:
+                  cfg_ouvido: ConfigOuvido | None = None, cfg_luta: ConfigLutaCorpo | None = None,
+                  cfg_tela: ConfigTela | None = None) -> Corpo:
         """O corpo de um Estado de hoje (o do nascimento, por exemplo). Cada drive tem de cair na grade de C. A Vida e a do tick do
         Estado (C no nascimento). Os quimicos da etapa 6 comecam em 0 (`com_mundo`: a curiosidade existe)."""
         cc = cc or ConfigCorpo(ligada=True)
@@ -649,9 +745,9 @@ class Corpo:
         if cc.metabolismo:
             q["combustivel"] = cc.combustivel_inicial
             q["reserva"] = cc.reserva_inicial
-        for nome in quimicos_de(cc, com_mundo, cfg_olfato, cfg_ouvido):
+        for nome in quimicos_de(cc, com_mundo, cfg_olfato, cfg_ouvido, cfg_tela):
             q.setdefault(nome, 0)                          # os drives novos, os gestos e a adaptacao dos orgaos: zero no nascimento
-        return cls(q, cfg, cc, cfg_evo, com_mundo, cfg_olfato, cfg_ouvido, cfg_luta)
+        return cls(q, cfg, cc, cfg_evo, com_mundo, cfg_olfato, cfg_ouvido, cfg_luta, cfg_tela)
 
     # ---------------------------------------------------------- estimulos
 
@@ -714,10 +810,13 @@ class Corpo:
     def atividade(self, nome: str) -> None:
         """DS-4 (secao 17): a reducao do tedio pela atividade `nome` e div_arred(base x (J - r), J), com r as vezes que ela aparece na
         janela das ultimas J atividades antes desta; depois ela entra na janela e a mais antiga sai. "bola", "brincar" e "explorar" vem do
-        motor, uma vez por decisao; "dono_brinca", do acao_dono(BRINCAR). So com `drives_novos`."""
+        motor, uma vez por decisao; "dono_brinca", do acao_dono(BRINCAR). So com `drives_novos`. "assistir" (GV-21) so com a tela ligada
+        (o motor chama, P1c), com a mesma janela."""
         if not self.cc.drives_novos:
             raise ValueError("atividade do tedio sem a sub-chave drives_novos")
-        if nome not in ATIVIDADES:
+        if nome == ATIVIDADE_TELA and not self.orgaos_tela:
+            raise ValueError(f"atividade {ATIVIDADE_TELA!r} sem a ConfigTela ligada (GV-21)")
+        if nome not in ATIVIDADES and nome != ATIVIDADE_TELA:
             raise ValueError(f"atividade desconhecida: {nome!r} (so {ATIVIDADES})")
         base = -dict(self.grafo.emissor(f"atividade:{nome}").efeitos)["tedio"]
         J = self.cc.janela_tedio
@@ -909,6 +1008,57 @@ class Corpo:
         return {o.receptor: leitura_orgao(self.estimulo[o.receptor], self.q[o.adaptacao], o.limiar, o.meia_saturacao, self.S)
                 for o in self.orgaos}
 
+    # ---------------------------------------------------------- o orgao da tela (GOSTO_VISUAL, P1b)
+
+    def _exigir_tela(self, onde: str) -> None:
+        if not self.orgaos_tela:
+            raise ValueError(f"{onde} sem a ConfigTela ligada (o orgao da tela, P1b)")
+
+    def sentir_tela(self, intensidades: dict[str, int]) -> None:
+        """O estimulo da tela: um inteiro em [0, teto_intensidade] por canal, exatamente CANAIS_TELA (sem olhar, o motor manda zeros).
+        Nao mexe na adaptacao: ela anda no tick. Se o volume sobe mais que `salto_volume` desde o `sentir_tela` anterior (o estouro), o
+        susto sobe `susto_salto` na hora (GV-17). Fora da faixa, ou sem a tela ligada, falha alto."""
+        self._exigir_tela("sentir_tela")
+        if set(intensidades) != set(CANAIS_TELA):
+            raise ValueError(f"os canais da tela sao {sorted(CANAIS_TELA)}, veio {sorted(intensidades)}")
+        teto = self.ct.teto_intensidade
+        for c, v in intensidades.items():
+            if type(v) is not int or not 0 <= v <= teto:
+                raise ValueError(f"a intensidade da tela em {c} precisa ser inteiro em [0, {teto}]: {v!r}")
+        if intensidades[CANAL_SUSTO_TELA] - self.estimulo_tela[CANAL_SUSTO_TELA] > self.ct.salto_volume:
+            self._estimulo("susto_tela")
+        for c in CANAIS_TELA:
+            self.estimulo_tela[c] = intensidades[c]
+        self._sentido_tela = True
+
+    def _adaptar_tela(self) -> None:
+        """A adaptacao de cada canal da tela anda para o estimulo do tick, com a k da meia-vida dela."""
+        if not self._sentido_tela:
+            raise RuntimeError("tick com a tela sem `sentir_tela` desde o tick anterior: o estimulo estaria velho (sem olhar, o motor "
+                               "manda zeros)")
+        bits = self.cc.bits_meia_vida
+        for o in self.orgaos_tela:
+            qm = self.grafo.quimico(o.adaptacao)
+            self.q[o.adaptacao] = passo_adaptacao(self.q[o.adaptacao], self.estimulo_tela[o.canal], qm.k_meia_vida, bits)
+        self._sentido_tela = False
+
+    def leituras_tela(self) -> dict[str, int]:
+        """Os receptores da tela, na escala S, pelo nome: o nivel de cada canal (div_arred(S x I, teto_intensidade), sem adaptacao) e a
+        novidade (a soma das partes adaptadas e = max(0, I - a - limiar), saturada: div_arred(S E, E + meia_saturacao))."""
+        teto = self.ct.teto_intensidade
+        r = {o.receptor: div_arred(self.S * self.estimulo_tela[o.canal], teto) for o in self.orgaos_tela}
+        e = sum(max(0, self.estimulo_tela[o.canal] - self.q[o.adaptacao] - o.limiar) for o in self.orgaos_tela)
+        r[self._soma_tela.receptor] = div_arred(self.S * e, e + self._soma_tela.meia_saturacao) if e else 0
+        return r
+
+    def estimulo_agrado_tela(self, agrado: int) -> None:
+        """O agrado do que o pet olhou (GV-16; o cerebro/motor chama, P1d): a tristeza cai div_arred(ganho_humor_agrado x agrado, S), com
+        o agrado um inteiro em [0, S]. Sem a tela ligada, falha alto."""
+        self._exigir_tela("estimulo_agrado_tela")
+        if type(agrado) is not int or not 0 <= agrado <= self.S:
+            raise ValueError(f"o agrado da tela precisa ser inteiro em [0, S = {self.S}]: {agrado!r}")
+        self._somar({q: div_arred(d * agrado, self.S) for q, d in self.grafo.emissor("agrado_tela").efeitos})
+
     def emissoes_externas(self) -> dict[str, tuple[str, int]]:
         """O que o corpo emite para o mundo (secao 5.3), dos emissores externos da tabela: canal -> (gatilho, intensidade). Com o Olfato
         social, o cheiro proprio ("posicao") e o rastro ("decisao"); sem ele, nada. Intensidade constante: nada do estado vai junto."""
@@ -980,6 +1130,8 @@ class Corpo:
                 v = 1 if self.q[e.le[0].quimico] > e.limiar else 0
             elif e.gatilho == "abaixo":
                 v = 1 if self.q[e.le[0].quimico] < e.limiar else 0
+            elif e.gatilho == "tela_acima":                           # a tela (P1b): o estimulo do tick acima do corte
+                v = div_arred(sum(max(0, self.estimulo_tela[c] - e.limiar) for c in CANAIS_ESTRESSE_TELA), e.divisor)
             else:                                                     # pragma: no cover - checado na tabela
                 raise ValueError(f"gatilho {e.gatilho!r} fora da fase 2")
             if v:
@@ -992,6 +1144,8 @@ class Corpo:
                 self.q[qm.nome] = passo_meia_vida(self.q[qm.nome], qm.k_meia_vida, bits)
         if self.orgaos:
             self._adaptar()                                      # os orgaos: a adaptacao anda para o estimulo do tick
+        if self.orgaos_tela:
+            self._adaptar_tela()                                 # a tela (P1b): idem, canal a canal
         if self.cc.digestao:
             self.digerido_no_tick = self.digerido_tick          # o tick fechou: a taxa volta inteira no proximo
             self.digerido_tick = 0
@@ -1028,6 +1182,8 @@ class Corpo:
              for qm in self.grafo.receptores()}
         if self.orgaos:
             r.update(self.leituras_orgaos())
+        if self.orgaos_tela:
+            r.update(self.leituras_tela())
         return r
 
     def estagio(self) -> str:
@@ -1052,4 +1208,6 @@ class Corpo:
             d["metabolismo"] = {"resto_combustivel": self.resto_combustivel, "contas": dict(self.contas_metabolismo)}
         if self.orgaos:
             d["orgaos"] = {"estimulo": dict(self.estimulo), "sentido": self._sentido}
+        if self.orgaos_tela:
+            d["tela"] = {"estimulo": dict(self.estimulo_tela), "sentido": self._sentido_tela}
         return d

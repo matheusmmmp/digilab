@@ -4,17 +4,20 @@
    fora da tela Pet, ou com um painel por cima da cena, o toque não faz nada. Com o mouse, o cursor vira a mão sobre a TV. O teclado chega ao
    painel pela linha "TV" da pilha. Só com `?gosto_visual=1`. */
 import { useEffect } from "react";
+import { objetoNoPonto } from "../componentes/ObjetosDaIlha.tsx";
 import { CENA } from "../telas/pet/cenaEstado.ts";
 import { TOQUE, noSprite } from "../telas/pet/ToquePet.tsx";
 import { pedirPainelTv } from "./painelTvEstado.ts";
 
 type Alvo = EventTarget & { getBoundingClientRect(): { left: number; top: number }; style?: { cursor: string } };
 
-/** a TV está sob o ponto do cliente (px) e o toque é dela? (não com a cena coberta, a bola ou o pet na mão, nem sobre o pet) */
+/** a TV está sob o ponto do cliente (px) e o toque é dela? (não com a cena coberta, a bola ou o pet na mão, nem sobre o pet, a bola ou a
+    tigela: o objeto na frente da TV fica com o toque, como em ObjetosDaIlha.tsx) */
 export function tvNoPonto(el: Alvo, cx: number, cy: number): boolean {
   if (CENA.coberto || CENA.bolaNaMao || CENA.petNaMao) return false;
   if (noSprite(cx, cy, el.getBoundingClientRect(), CENA.ret)) return false;
-  return CENA.mundo?.tvEm?.(cx, cy) ?? false;
+  if (!(CENA.mundo?.tvEm?.(cx, cy) ?? false)) return false;
+  return objetoNoPonto(el, cx, cy) === null;
 }
 
 /** liga o toque na TV num alvo (a cena do habitat; nos testes, um EventTarget com o retângulo); devolve a função que desliga */
