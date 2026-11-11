@@ -1,7 +1,10 @@
-# PLANO LP6: o segundo golpe de cada Digimon (2026-11-11, PROPOSTO)
+# PLANO LP6: o segundo golpe e a arena do Ultimate e do Mega (2026-11-11)
 
-Status: PROPOSTO. A fase foi decidida pelo Matheus ("Sim, depois da LP5", 2026-11-11). O desenho abaixo espera a revisão dele.
-Tarefa-mãe: [TAREFA_V3_LUTA_POC.md](TAREFA_V3_LUTA_POC.md). Ela só começa depois da LP5-5 (a v22 no jogo).
+Status: as decisões 1 a 3 (o segundo golpe) foram DECIDIDAS pelo Matheus em 2026-11-11 ("pode seguir para o plano lp6"). A decisão 4 (a arena) segue
+PROPOSTA, com a recomendação aplicada até ele dizer outra coisa. A fase foi decidida antes ("Sim, depois da LP5"). Os números seguem PROPOSTOS, SEM FONTE.
+Tarefa-mãe: [TAREFA_V3_LUTA_POC.md](TAREFA_V3_LUTA_POC.md). A LP5 fechou na main em 2026-11-11 (#789, #798, #800: o `lp5_3` é a v23), e a LP6
+parte dela. O pedido do Matheus junta a pendência da arena do Ultimate e do Mega a esta fase ("pode seguir para o plano lp6 e a outra
+pendência do tamanho da arena").
 
 ## 1. Pergunta
 
@@ -58,23 +61,46 @@ habilidade (o cabeçalho de `formas.ts`). A LP6 segue o mesmo caminho:
 - Um clipe próprio para o apoio (uma pose-chave por Digimon, pelo método barato das ações geradas) fica como passo opcional depois,
   com o Fable 5.2 para a animação.
 
+## 4a. A arena do Ultimate e do Mega
+
+A pendência veio da LP5-1 (a D-LP5-15): **"a arena maior é só visual, ou dá mais espaço de verdade?"** A LP3c (#778) já resolveu a parte visual:
+os Megas cabem na tela e a escala não pula com o zoom. O que falta é o espaço da luta. Hoje toda luta, do Rookie ao Mega, acontece na mesma
+elipse do mundo lógico (`ELIPSE` em `web/app/motor/arena/constantes.ts`: rx 210, ry 84, num mundo de 480 × 280). Os corpos grandes se
+empurram, e o tiro com a distância mínima de 110 px quase não tem para onde recuar.
+
+A proposta: **a elipse cresce com o estágio dos dois lutadores** (o maior dos dois), atrás de uma chave própria (`arenaPorEstagio`,
+desligada):
+
+| o estágio | o fator da elipse (PROPOSTO, SEM FONTE) |
+|---|---|
+| In-Training, Rookie e Champion | 1,0 (a de hoje) |
+| Ultimate | 1,15 |
+| Mega | 1,3 |
+
+- **Tudo que é da cena escala junto:** as zonas, os obstáculos, a área segura que fecha, a linha da maré e os pontos de início.
+  O tamanho dos corpos, o alcance e a velocidade não mudam. É só o chão que cresce.
+- **O palco** enquadra a elipse maior pela câmera da LP3c, sem sprite novo.
+- **A calibração** entra na mesma rodada curta do segundo golpe (LP6-3), porque os dois mexem na distância entre os lutadores.
+
 ## 5. As etapas
 
 | etapa | o que entra | a chave |
 |---|---|---|
 | **LP6-0** | este plano revisado e as decisões da seção 7 | nenhuma |
-| **LP6-1: o núcleo** | o campo `apoio` nas formas (gerado, não à mão), a regra de quando ele sai, os testes: o replay bit a bit e a luta com a chave desligada igual à v22 | desligada |
-| **LP6-2: o palco** | o apoio no desenho (o clipe mais curto, o efeito de acerto, o tiro pequeno), as capturas no desktop e no celular, para a aprovação do Matheus antes do PR | desligada |
-| **LP6-3: a calibração** | uma rodada curta da bancada (`web/app/scripts/equilibrio_poc/`), só nos números do apoio e nos que ele mexer (o dano do projétil, o recuo), nas sementes de calibração, e a conferência nas 87xxx | desligada |
-| **LP6-4: no jogo** | uma `VERSAO_PET` nova com a chave ligada, como a LP5-5 fez com a v22 | ligada |
+| **LP6-1: o núcleo** | o campo `apoio` nas formas (gerado, não à mão), a regra de quando ele sai, a elipse por estágio (seção 4a), cada um com a sua chave; os testes: o replay bit a bit e a luta com as chaves desligadas igual à v23 | desligadas |
+| **LP6-2: o palco** | o apoio no desenho (o clipe mais curto, o efeito de acerto, o tiro pequeno) e a câmera na elipse maior, as capturas no desktop e no celular, para a aprovação do Matheus antes do PR | desligada |
+| **LP6-3: a calibração** | uma rodada curta da bancada (`web/app/scripts/equilibrio_poc/`), só nos números do apoio e da elipse e nos que eles mexerem (o dano do projétil, o recuo), nas sementes de calibração, e a conferência nas 87xxx | desligada |
+| **LP6-4: no jogo** | uma `VERSAO_PET` nova com a chave ligada, como a LP5-5 fez com a v23 | ligadas |
 
 ## 6. O que fica de fora
 
 - O controle do jogador na luta: o pet continua lutando sozinho.
-- As regras dos mapas, as séries sem cura da Liga e da Torre, e a arena do Ultimate e do Mega: cada uma tem tarefa ou decisão própria.
+- As regras dos mapas e as séries sem cura da Liga e da Torre: ficam com a investigação do núcleo.
 - Sprites novos gerados: só no passo opcional da seção 4.
 
-## 7. Decisões do Matheus (PROPOSTAS)
+## 7. Decisões do Matheus
+
+As decisões 1 a 3 foram DECIDIDAS como recomendadas ("pode seguir para o plano lp6", 2026-11-11). A 4 está PROPOSTA.
 
 1. **O apoio sai pela distância, com recarga própria (seção 3), ou ele ocupa o lugar da habilidade das 68 formas que a repetem?**
    - **Recomendado:** pela distância, com recarga própria. A habilidade sai pela recarga longa e na hora errada para o atirador.
@@ -86,3 +112,7 @@ habilidade (o cabeçalho de `formas.ts`). A LP6 segue o mesmo caminho:
 3. **O clipe do apoio:** reaproveitar o `Attack_1` (seção 4) ou gerar uma pose-chave por Digimon já na LP6-2?
    - **Recomendado:** reaproveitar o `Attack_1` na LP6-2. A pose-chave fica como passo opcional, depois das capturas.
    - **O custo de errar:** com o clipe reaproveitado, o apoio pode parecer igual ao golpe; as capturas mostram isso antes do PR.
+4. **A arena do Ultimate e do Mega: espaço de verdade (seção 4a) ou só o visual que a LP3c já fez?**
+   - **Recomendado:** espaço de verdade, com a elipse por estágio, atrás de chave, e calibrada junto com o segundo golpe.
+   - **O custo de errar:** com espaço de verdade, a luta do Mega fica mais longa, e os torneios e os NPCs mudam (a LP6-3 mede isso). Só o
+     visual mantém os corpos grandes se empurrando e o tiro sem espaço para recuar.
