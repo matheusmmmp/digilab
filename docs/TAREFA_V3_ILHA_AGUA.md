@@ -337,3 +337,37 @@ grava o `planta_livre.json`, e o teste confere a planta contra ele); o entorno d
 fechada como chão (agora recusam; só o próprio marco fica em cima do bloco dele); e a luz deixava de falhar alto nas ilhas antigas (o
 espaçamento agora só cresce na ilha grande). Fica registrado, sem correção: treze árvores ficam na areia da praia, e a geladeira tem
 uma árvore a 2 células. A tela não foi vista de novo depois dessas correções.
+
+### 12.11 IG4: o que foi construído (2026-11-11)
+
+**Esta etapa muda o jogo de hoje.** Todo pet que abrir passa a viver na ilha grande.
+
+- **A v23:** os ovos novos nascem v23, a v22 no mundo de 128 × 60, com as árvores e os marcos que o pet contorna. A v21 e a v22 seguem
+  abrindo.
+- **Os pets vivos migram por evento:** o pet v21 ou v22 ganha, uma vez, o evento `mi` para a ilha grande ao abrir (o save, um pet
+  guardado, um arquivo importado). São três caminhos: o v21 que nunca tinha passado para a água, o v21 que já tinha passado, e o v22,
+  que nasceu nela.
+- **A ida (IG-7, "deslocados junto com o lar"):** o lar de lá vira o lar de cá. O pet, a comida e a bola andam o mesmo deslocamento
+  (16 células para o leste e 15 para o sul); o que cair em água, árvore, marco ou fora do mapa vai para a terra mais perto. A bola para
+  onde está. Nada do pet muda além do mundo: não é contato nem cuidado.
+- **No Python e na web:** o mesmo `mudar_ilha`, agora com um destino de outro tamanho (`ILHAS_MAIORES`). A paridade é conferida por um
+  gabarito próprio, com os três caminhos (um deles com o pet dormindo).
+- **A ração e a bola do jogador** valem até o tamanho do mapa de cada pet; fora dele o jogo falha alto antes do registro.
+- **O pet de teste (v16)** e o pet morto ficam como estão.
+
+**O que a ida faz com o que o pet sabia:**
+
+- **As regiões mudam de lugar para o que estava longe do lar.** O deslocamento é o mesmo para tudo, e as faixas das regiões dobraram:
+  o que estava na casa ou no jardim de hoje continua na casa ou no jardim; o que estava no campo ou na mata de hoje (da coluna 34 em
+  diante) cai no jardim ou no campo da ilha grande.
+- **A orientação do pet volta ao começo e o registro das decisões do controlador começa vazio,** como na troca para a água.
+- **O cérebro A não guarda posição nem tamanho de mapa** (fora do grupo de dois pets, que não troca de ilha): não há memória de lugar
+  para deslocar.
+
+**Visto no jogo** (medida única desta sessão; capturas fora do git por mostrarem o pet): um pet v21 de verdade, que já tinha o `mi`
+para a água, ganhou o `mi` para a ilha grande ao recarregar e apareceu perto do lar, entre o carro e a lata; o botão Alimentar pôs a
+ração no comedouro novo. Desktop 1440 × 800 e celular 375 × 812, no mapa Digital.
+
+**O que não foi verificado:** a suíte inteira do Python; a ida até um lugar (a barraca, pela ponte) no jogo; o pet de teste e o mapa
+Ilha na tela depois da mudança; o custo no celular de verdade; uma aba antiga do jogo aberta ao mesmo tempo passa a ver "save que não
+abre" (o destino novo do evento), como na IA4.
