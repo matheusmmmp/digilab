@@ -148,6 +148,14 @@ def test_medicao_em_andamento_barra_a_run_de_pesquisa(repo, monkeypatch):
     assert len(m) == 1 and "outra run" in m[0] and "fase4_progressao" in m[0]
 
 
+def test_medicao_da_luta_em_tempo_real(monkeypatch):
+    """LUTA_POC LP5-0: a bancada nova (scripts/equilibrio_poc) tambem e medicao, e uma em andamento barra a outra."""
+    assert pre_run.conferir_medicao("web/app/scripts/equilibrio_poc/medir_tudo.ts") == []
+    monkeypatch.setenv("DIGILAB_PRE_RUN_PROCESSOS", json.dumps(["node scripts/equilibrio_poc/bancada.ts --grupo formas"]))
+    m = pre_run.conferir_medicao("scripts/equilibrio_poc/medir_tudo.ts")
+    assert len(m) == 1 and "outra run" in m[0] and "bancada.ts" in m[0]
+
+
 def test_script_que_nao_e_medicao():
     assert "não é uma medição" in pre_run.conferir_medicao("scripts/outra/coisa.ts")[0]
 

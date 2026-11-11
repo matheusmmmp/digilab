@@ -1,0 +1,28 @@
+{
+ "nome": "g04_f1_m8_v03_70",
+ "pesoPonto": 15,
+ "gama": {
+  "vigor": 0.04,
+  "recuperacao": 0.04,
+  "guarda": 0.12,
+  "forca": 0.04,
+  "mira": 0.8,
+  "folego": 0.3
+ },
+ "mapa": {
+  "hp": 1300,
+  "vel": 70
+ },
+ "multVida": {
+  "crianca": 0.6,
+  "adolescente": 0.9,
+  "adulto": 1.35,
+  "mega": 2.025
+ },
+ "multAtk": {
+  "crianca": 1,
+  "adolescente": 1.5,
+  "adulto": 2.25,
+  "mega": 3.375
+ }
+}
