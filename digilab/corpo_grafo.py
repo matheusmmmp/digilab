@@ -33,6 +33,13 @@ com a ConfigOlfato ou a ConfigOuvido ligadas:
     produz quimico em corpo nenhum. No degrau 1b ele nao le quimico (o cheiro nao carrega nada do estado); um emissor externo com leitura
     e do degrau 3 e falha alto aqui.
 
+Desde o orgao da tela (GOSTO_VISUAL, P1b; docs/ESPEC_GOSTO_VISUAL_P1.md, secoes 2 e 4), so com a ConfigTela ligada:
+  - o orgao com o sentido "tela": um por canal (CANAIS_TELA), com o quimico da adaptacao como os outros. O receptor do orgao e o NIVEL
+    (`tela_<canal>`, o estimulo sem adaptacao); a parte adaptada dos canais vai a um receptor so, a SOMA (`ReceptorSoma`, o
+    `novidade_tela`), que le as adaptacoes declaradas e nao emite nada (nao entra no laco de ganho);
+  - o gatilho "tela_acima" (fase 2): o emissor dispara com div_arred(soma de max(0, I - limiar), divisor) sobre o estimulo da tela (o
+    volume e o movimento), sem ler quimico (o estresse da tela; nenhuma aresta nova no laco de ganho).
+
 O criterio "fechado e automantido" e desenho nosso; a literatura citada para ele ainda nao foi lida (D-1). So biblioteca padrao; nao
 importa o corpo nem o cerebro.
 """
@@ -43,14 +50,15 @@ from dataclasses import dataclass
 
 GATILHOS_TICK = ("tick", "acordado", "dormindo", "noite_acordado", "dia_acordado", "sujeira", "privacao", "sem_privacao", "limiar",
                  "necessidades", "acima",      # banheiro: por necessidade na regiao (fase 1); um quimico acima do limiar (fase 2)
-                 "abaixo")                     # metabolismo: um quimico abaixo do limiar (fase 2), o espelho do "acima"
+                 "abaixo",                     # metabolismo: um quimico abaixo do limiar (fase 2), o espelho do "acima"
+                 "tela_acima")                 # a tela (P1b): o estimulo da tela acima do corte (fase 2), sem ler quimico
 LADOS_REACAO = ("acima", "abaixo")           # o lado do limiar de uma reacao com limiar (a transferencia do metabolismo)
 GATILHOS = GATILHOS_TICK + ("estimulo",)
 LEITURAS_RECEPTOR = ("drive", "falta")       # drive: S - div_arred(q S, C) (os drives de hoje); falta: div_arred(q S, C)
 DESTINOS = ("corpo", "mundo")                # o destino do que o emissor emite: um quimico do corpo, ou o mundo (o emissor externo)
 GATILHOS_EXTERNOS = ("posicao", "decisao")   # o externo: sempre na posicao do pet (o cheiro proprio); uma marca por decisao (o rastro)
 CANAIS_EXTERNOS = ("cheiro_proprio", "rastro")
-SENTIDOS = ("olfato", "ouvido")
+SENTIDOS = ("olfato", "ouvido", "tela")
 ORDEM_MEIA_VIDA = 10                         # "na mesma ordem": a maior meia-vida do par e menor que 10 vezes a menor
 
 
@@ -129,11 +137,22 @@ class Orgao:
 
 
 @dataclass(frozen=True)
+class ReceptorSoma:
+    """Um receptor sobre a parte adaptada de varios orgaos (a tela, P1b): E = soma de max(0, I - a - limiar) dos orgaos das `adaptacoes`
+    (cada um com o limiar dele), r = div_arred(S E, E + meia_saturacao). Le so as adaptacoes declaradas; nao emite nada."""
+
+    receptor: str                            # o nome do receptor para o cerebro (o campo da PercepcaoCorpo)
+    adaptacoes: tuple[str, ...]              # os quimicos da adaptacao dos orgaos somados
+    meia_saturacao: int
+
+
+@dataclass(frozen=True)
 class Grafo:
     quimicos: tuple[Quimico, ...]
     reacoes: tuple[Reacao, ...]
     emissores: tuple[Emissor, ...]
     orgaos: tuple[Orgao, ...] = ()
+    somas: tuple[ReceptorSoma, ...] = ()     # a tela (P1b): o `novidade_tela`
 
     @property
     def nomes(self) -> tuple[str, ...]:
@@ -174,7 +193,8 @@ def _forma(g: Grafo) -> None:
     nomes = g.nomes
     if len(set(nomes)) != len(nomes):
         raise GrafoInvalido(f"quimico repetido: {nomes}")
-    receptores = [q.receptor for q in g.quimicos if q.receptor is not None] + [o.receptor for o in g.orgaos]
+    receptores = ([q.receptor for q in g.quimicos if q.receptor is not None] + [o.receptor for o in g.orgaos]
+                  + [s.receptor for s in g.somas])
     if len(set(receptores)) != len(receptores):
         raise GrafoInvalido(f"receptor repetido: {receptores}")
     for q in g.quimicos:
@@ -207,6 +227,9 @@ def _forma(g: Grafo) -> None:
         for le in e.le:
             if type(le.num) is not int or type(le.den) is not int or le.num < 0 or le.den <= 0 or le.sinal not in (1, -1):
                 raise GrafoInvalido(f"{e.nome}: leitura {le!r}")
+        if e.gatilho == "tela_acima" and not (not e.le and e.divisor > 1 and e.fase == 2 and type(e.limiar) is int and e.limiar > 0):
+            raise GrafoInvalido(f"{e.nome}: o gatilho tela_acima le o estimulo da tela (nenhum quimico), com corte > 0 e divisor > 1, "
+                                "na fase 2")
         if e.gatilho == "abaixo" and not (len(e.le) == 1 and e.le[0].sinal == -1 and e.divisor == 1 and e.fase == 2):
             raise GrafoInvalido(f"{e.nome}: o gatilho abaixo le um quimico so, com sinal -1 (menos dele, mais efeito), sem divisor, "
                                 "na fase 2")
@@ -267,6 +290,11 @@ def _forma_orgaos(g: Grafo) -> None:
             raise GrafoInvalido(f"orgao {o.receptor}: o quimico da adaptacao {q.nome!r} tem meia-vida, teto e nenhum receptor")
         if o.adaptacao in tocados:
             raise GrafoInvalido(f"orgao {o.receptor}: so o orgao move a adaptacao {o.adaptacao!r}")
+    for s in g.somas:
+        if not s.adaptacoes or any(a not in vistos for a in s.adaptacoes) or len(set(s.adaptacoes)) != len(s.adaptacoes):
+            raise GrafoInvalido(f"receptor {s.receptor}: soma sobre adaptacoes que nao sao de orgao (ou repetidas): {s.adaptacoes!r}")
+        if type(s.meia_saturacao) is not int or s.meia_saturacao <= 0:
+            raise GrafoInvalido(f"receptor {s.receptor}: meia saturacao {s.meia_saturacao!r}")
 
 
 def _fechado(g: Grafo) -> None:
@@ -374,6 +402,8 @@ def checar(g: Grafo) -> dict:
         "sumidouros": {q: list(s) for q, s in sumidouros.items()}, "fontes": {q: list(s) for q, s in fontes.items()}}
     if g.orgaos:
         relato["orgaos"] = [o.receptor for o in g.orgaos]
+    if g.somas:
+        relato["somas"] = {s.receptor: list(s.adaptacoes) for s in g.somas}
     if g.externos():
         relato["externos"] = {e.nome: [list(x) for x in e.efeitos] for e in g.externos()}
     return relato
