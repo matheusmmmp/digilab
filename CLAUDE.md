@@ -11,7 +11,8 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
   controle e o fallback condicionado, não o cérebro final.
 - **A pesquisa** fica no Python e serve ao produto e aos mecanismos do DigiBrain: um pet com corpo químico, objetos, outro pet e um
   dono.
-- **O jogo** fica em `web/app/` e roda hoje o A v11. O modular entra por módulos, cada um com paridade.
+- **O jogo** fica em `web/app/`. Os ovos novos nascem com o DigiBrain modular (`web/app/src/cerebro.ts`); o A v11 fica como a escolha
+  em Ajustes e como a linha de base. O modular entra por módulos, cada um com paridade (D2 da auditoria da cadeia, Matheus, 2026-11-11).
 - **Onde a V3 está agora:** `docs/PAINEL_V3.md`, uma página. O plano é o `docs/PLANO_V3.md` (as trilhas C cérebro, L layout e B
   batalha). A V2 está congelada na tag `v2-final`, com o estado de cada tarefa em `docs/FECHAMENTO_V2.md`.
 

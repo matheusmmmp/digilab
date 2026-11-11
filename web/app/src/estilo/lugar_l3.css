@@ -148,11 +148,16 @@
 .aj-seta{ width:18px; height:18px; color:var(--hx-sec) }
 .aj input[type="checkbox"]{ width:44px; height:44px; flex:none; accent-color:var(--hx-btn-borda); cursor:pointer }
 .aj--volume{ cursor:default; margin-left:28px; width:calc(100% - 28px) }
+/* SOM-UP: tres volumes (geral, musica, efeitos): o nome e a porcentagem numa linha, o controle embaixo, na largura toda (no painel estreito ele ficava curto e cobria a porcentagem) */
+.aj--volume{ grid-template-columns:28px minmax(0,1fr); row-gap:0 }
+.aj--volume input[type="range"]{ grid-column:2 }
+.aj--volume .aj-nome{ white-space:nowrap }
 .aj--volume input[type="range"]{ min-height:44px; width:100%; accent-color:var(--hx-btn-borda) }
 .aj-lista .balao{ max-width:min(320px,72vw) }
 
 /* o painel dos Ajustes (nao e lugar): a 1920 perto do retrato, a esquerda; a 390 e a folha de sempre */
-.painel-tela--lugar-lado.painel-tela--ajustes{ left:24px; width:min(460px,calc(46vw - 36px)); top:calc(var(--casca-topo) + 20px) }
+/* o painel de Ajustes abre a direita do trilho de icones (12 px da borda, a largura do trilho e 12 px de folga), nao por baixo dele (2026-11-08) */
+.painel-tela--lugar-lado.painel-tela--ajustes{ left:calc(12px + var(--nav-larg, 0px) + 12px); width:min(460px,calc(46vw - 36px - var(--nav-larg, 0px))); top:calc(var(--casca-topo) + 20px) }
 
 /* o foco do teclado, depois das regras de selecao (que nao usam outline) */
 .ct2-tile:focus-visible, .ct2-brasao:focus-visible, .rg2-bt:focus-visible, .rg2-filtro:focus-visible, .rg2-linha:focus-visible, .md2-linha:focus-visible, .aj:focus-visible{
@@ -164,3 +169,6 @@
    (so na L3: Lutar, Diario e Ajustes; o Crescer da L2 fica como esta) */
 .painel-tela--lugar-lado:not(.painel-tela--d-crescer){ max-height:calc(100dvh - var(--casca-topo) - 20px - 48px) }
 .painel-tela--lugar-lado:not(.painel-tela--d-crescer) .hx-painel__corpo{ overflow-y:auto }
+/* o painel ao lado se arrasta pelo cabecalho (hudPet.ts, useArrastavelPorAlca; 2026-11-08) */
+.painel-tela--lugar-lado .hx-painel__cab{ cursor:grab; touch-action:none }
+.painel-tela--lugar-lado .hx-painel__cab :is(button, [role="tab"]){ cursor:pointer }

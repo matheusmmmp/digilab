@@ -13,13 +13,14 @@
 from __future__ import annotations
 
 import math
+import re
 import random
 from bisect import bisect_left
 from dataclasses import dataclass
 from typing import Iterable, Mapping, Sequence
 
 from .arena import ResultadoPartida
-from .config import CONFIG_METRICAS, TICKS_POR_DIA, ConfigMetricas
+from .config import CONFIG_METRICAS, TICKS_POR_DIA, ConfigMetricas, ConfigMundo
 from .events import ACOES_PET_HOJE
 from .policy import Observacao, Politica
 from .protocol import derivar_semente
@@ -2552,3 +2553,613 @@ def fala_nas_decisoes(decisoes: Sequence[tuple[int, str, str | None, Mapping[str
     out["por_conteudo"] = {n: sum(1 for x in linhas if x[2] and x[3] == c) for n, c in rotulos}
     out["abaixo_do_limiar"] = {n: sum(1 for x in linhas if x[2] and not x[5] and x[3] == c) for n, c in rotulos}
     return out
+
+
+# ------------------------------------------------------------ V3, INDIVIDUALIDADE (o I2a)
+# docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md, secoes 4.1 a 4.6 (APROVADO, 2026-11-07). Os tracos de uma janela da bateria
+# (experiments/sondas_individualidade.py), o ICC(1) com grupos desiguais, o eta2, o Spearman e a reta. SEM FONTE como escolha do plano;
+# o formalismo da repetibilidade e da norma de reacao e o de Dingemanse et al. (2010), 10.1016/j.tree.2009.07.013.
+
+TRACOS_INDIVIDUALIDADE = ("apego", "tedio", "neofilia", "ousadia", "brincar", "susto")
+JANELAS_INDIVIDUALIDADE = ("nula", "comida_nova", "longe", "bola", "susto")
+
+
+def _fracao_acordada(janela: Mapping, acao: str) -> float | None:
+    """a fracao da acao entre as decisoes acordadas da janela (n menos `dormir`); None se a janela dormiu inteira"""
+    acordadas = janela["n"] - janela["contagem"].get("dormir", 0)
+    if acordadas < 0 or janela["n"] < 1:
+        raise ValueError(f"janela incoerente: n {janela['n']}, contagem {janela['contagem']}")
+    return None if acordadas == 0 else janela["contagem"].get(acao, 0) / acordadas
+
+
+def tracos_individualidade(janelas: Mapping[str, Mapping]) -> dict[str, float | None]:
+    """Secao 4.1: os seis tracos de uma replica de um dia, das cinco janelas da mesma replica. None = janela invalida (dormiu inteira).
+    T-NEOFILIA e T-OUSADIA: 1.0 se comeu a comida posta (a latencia nao e None), 0.0 se nao; T-BRINCAR e T-SUSTO: a fracao na sonda menos
+    a da `nula`. Falha alto sem as cinco janelas exatas."""
+    if set(janelas) != set(JANELAS_INDIVIDUALIDADE):
+        raise ValueError(f"as janelas precisam ser {JANELAS_INDIVIDUALIDADE}, vieram {sorted(janelas)}")
+    nula = janelas["nula"]
+
+    def comeu(j: Mapping) -> float | None:
+        return None if _fracao_acordada(j, "comer") is None else (0.0 if j["latencia"] is None else 1.0)
+
+    def contra_nula(j: Mapping, acao: str) -> float | None:
+        a, b = _fracao_acordada(j, acao), _fracao_acordada(nula, acao)
+        return None if a is None or b is None else a - b
+
+    return {"apego": _fracao_acordada(nula, "chamar_atencao"), "tedio": _fracao_acordada(nula, "explorar"),
+            "neofilia": comeu(janelas["comida_nova"]), "ousadia": comeu(janelas["longe"]),
+            "brincar": contra_nula(janelas["bola"], "brincar"), "susto": contra_nula(janelas["susto"], "emburrar")}
+
+
+def icc1_grupos(grupos: Sequence[Sequence[float]]) -> dict:
+    """Secao 4.2: o ICC(1) de uma ANOVA de um fator com grupos desiguais. QM_entre e QM_dentro; n0 = (N - soma n_i^2 / N) / (k - 1);
+    s2_entre = max(0, (QM_entre - QM_dentro) / n0) (o componente negativo truncado em 0), s2_dentro = QM_dentro, R = s2_entre / (s2_entre +
+    s2_dentro). Com grupos iguais e sem truncar, e o icc_um_fator. Falha alto com menos de 2 grupos, grupo vazio, N - k < 1 ou sem variancia."""
+    if any(len(g) == 0 for g in grupos):
+        raise ValueError("icc1_grupos: nenhum grupo vazio")
+    return icc1_estatisticas([estatisticas_grupo(g) for g in grupos])
+
+
+def estatisticas_grupo(valores: Sequence[float]) -> tuple[int, float, float]:
+    """(n, media, soma dos quadrados dos desvios) de um grupo: o bastante para o ICC(1) e para reamostrar grupos inteiros no bootstrap"""
+    n = len(valores)
+    if n == 0:
+        raise ValueError("estatisticas_grupo: grupo vazio")
+    m = sum(valores) / n
+    return n, m, sum((v - m) ** 2 for v in valores)
+
+
+def icc1_estatisticas(estat: Sequence[tuple[int, float, float]]) -> dict:
+    """o icc1_grupos a partir das estatisticas de cada grupo (estatisticas_grupo); a mesma conta, uma vez so"""
+    k = len(estat)
+    if k < 2:
+        raise ValueError("icc1_grupos: pelo menos 2 grupos")
+    ns = [e[0] for e in estat]
+    n = sum(ns)
+    if n - k < 1:
+        raise ValueError("icc1_grupos: sem graus de liberdade dentro dos grupos (N - k < 1)")
+    gm = sum(e[0] * e[1] for e in estat) / n
+    qm_entre = sum(e[0] * (e[1] - gm) ** 2 for e in estat) / (k - 1)
+    qm_dentro = sum(e[2] for e in estat) / (n - k)
+    n0 = (n - sum(ni * ni for ni in ns) / n) / (k - 1)
+    s2_entre = max(0.0, (qm_entre - qm_dentro) / n0)
+    if s2_entre + qm_dentro <= 0.0:
+        raise ValueError("icc1_grupos indefinido: sem variancia")
+    return {"r": s2_entre / (s2_entre + qm_dentro), "s2_entre": s2_entre, "s2_dentro": qm_dentro, "n0": n0, "k": k, "n": n,
+            "truncado": qm_entre < qm_dentro}
+
+
+def eta2_grupos(grupos: Sequence[Sequence[float]]) -> float:
+    """Secao 4.3: a soma dos quadrados entre os grupos sobre a total. Falha alto com menos de 2 grupos, grupo vazio ou sem variancia."""
+    if len(grupos) < 2 or any(len(g) == 0 for g in grupos):
+        raise ValueError("eta2_grupos: pelo menos 2 grupos, nenhum vazio")
+    todos = [v for g in grupos for v in g]
+    gm = sum(todos) / len(todos)
+    sq_total = sum((v - gm) ** 2 for v in todos)
+    if sq_total <= 0.0:
+        raise ValueError("eta2_grupos indefinido: sem variancia")
+    return sum(len(g) * (sum(g) / len(g) - gm) ** 2 for g in grupos) / sq_total
+
+
+def _postos(xs: Sequence[float]) -> list[float]:
+    """os postos 1..n, com a media nos empates"""
+    ordem = sorted(range(len(xs)), key=lambda i: xs[i])
+    postos = [0.0] * len(xs)
+    i = 0
+    while i < len(ordem):
+        j = i
+        while j + 1 < len(ordem) and xs[ordem[j + 1]] == xs[ordem[i]]:
+            j += 1
+        for t in range(i, j + 1):
+            postos[ordem[t]] = (i + j) / 2.0 + 1.0
+        i = j + 1
+    return postos
+
+
+def spearman(xs: Sequence[float], ys: Sequence[float]) -> float:
+    """Secoes 4.4 e 4.5: a correlacao de Pearson dos postos (media nos empates). Falha alto com menos de 3 pares ou um lado constante."""
+    if len(xs) != len(ys) or len(xs) < 3:
+        raise ValueError("spearman: pelo menos 3 pares, listas do mesmo tamanho")
+    rx, ry = _postos(xs), _postos(ys)
+    mx, my = sum(rx) / len(rx), sum(ry) / len(ry)
+    sxx = sum((a - mx) ** 2 for a in rx)
+    syy = sum((b - my) ** 2 for b in ry)
+    if sxx == 0.0 or syy == 0.0:
+        raise ValueError("spearman indefinido: um dos lados e constante")
+    return sum((a - mx) * (b - my) for a, b in zip(rx, ry)) / math.sqrt(sxx * syy)
+
+
+def reta_mmq(xs: Sequence[float], ys: Sequence[float]) -> tuple[float, float]:
+    """Secao 4.5: (intercepto, inclinacao) de minimos quadrados de y em x, pela inclinacao_mmq"""
+    b = inclinacao_mmq(xs, ys)
+    return sum(ys) / len(ys) - b * sum(xs) / len(xs), b
+
+
+# ======================================================================================================================================
+# PET_VIVO, etapa 0 (docs/PLANO_ANALISE_V3_PET_VIVO.md, secoes 4 e 7; APROVADO em 2026-11-08, repassado pelo Gerente da V3): a auditoria da
+# escolha (A-1 a A-4) e a medida de "age pelo estado" (a SE-C). Uma distribuicao de comportamentos e um vetor de pesos inteiros, um por
+# comportamento na ordem fixa: P_b = W_b / T, com T = soma(W). O reflexo do sono e o "nada a fazer" sao o vetor de um so peso (o dormir, o
+# ocioso). As contas sao feitas em inteiros e viram float so no fim, por uma divisao de inteiros (o float mais proximo, igual em qualquer
+# maquina). Os cortes da regra de leitura (secao 5) ficam no script, nao aqui: aqui so as contas.
+
+def _total_positivo(pesos: Sequence[int]) -> int:
+    """a soma dos pesos, conferida: inteiros >= 0 (a soma de inteiros e int; um float a faria float) e soma positiva"""
+    t = sum(pesos)
+    if type(t) is not int or (pesos and min(pesos) < 0):
+        raise ValueError(f"PET_VIVO: os pesos sao inteiros >= 0: {list(pesos)}")
+    if t <= 0:
+        raise ValueError(f"PET_VIVO: a soma dos pesos nao e positiva: {list(pesos)}")
+    return t
+
+
+def pesos_por_comportamento(unidades: Sequence[tuple[int, int]], n: int) -> list[int]:
+    """W_b = a soma dos pesos das unidades (b, w) de cada comportamento b em [0, n): a distribuicao do sorteio proporcional (secao 0)"""
+    out = [0] * n
+    for b, w in unidades:
+        out[b] += w
+    return out
+
+
+def maximo_por_comportamento(unidades: Sequence[tuple[int, int]], n: int) -> list[int]:
+    """o peso da melhor unidade de cada comportamento: a distribuicao P1, "um alvo so por comportamento, com o mesmo maximo" (A-2)"""
+    out = [0] * n
+    for b, w in unidades:
+        if w > out[b]:
+            out[b] = w
+    return out
+
+
+def unidades_ativas_por_comportamento(unidades: Sequence[tuple[int, int]], n: int) -> list[int]:
+    """quantas unidades com w > 0 cada comportamento tem (A-2)"""
+    out = [0] * n
+    for b, w in unidades:
+        if w > 0:
+            out[b] += 1
+    return out
+
+
+def distribuicao(pesos: Sequence[int]) -> list[float]:
+    """P_b = W_b / T"""
+    t = _total_positivo(pesos)
+    return [w / t for w in pesos]
+
+
+def distancia_tv(p: Sequence[int], q: Sequence[int]) -> float:
+    """a distancia de variacao total entre P = p / soma(p) e Q = q / soma(q): soma |p_b Tq - q_b Tp| / (2 Tp Tq), em inteiros ate o fim"""
+    if len(p) != len(q):
+        raise ValueError("PET_VIVO: as duas distribuicoes tem tamanhos diferentes")
+    tp, tq = _total_positivo(p), _total_positivo(q)
+    return sum(abs(a * tq - b * tp) for a, b in zip(p, q)) / (2 * tp * tq)
+
+
+def diferenca_de_distribuicao(p: Sequence[int], q: Sequence[int]) -> list[float]:
+    """P_b - Q_b de cada comportamento (o Delta P da A-4), em inteiros ate o fim"""
+    if len(p) != len(q):
+        raise ValueError("PET_VIVO: as duas distribuicoes tem tamanhos diferentes")
+    tp, tq = _total_positivo(p), _total_positivo(q)
+    return [(a * tq - b * tp) / (tp * tq) for a, b in zip(p, q)]
+
+
+def diferenca_e_tv(p: Sequence[int], q: Sequence[int]) -> tuple[list[float], float]:
+    """(o Delta P de cada comportamento, a TV) numa conta so, com as somas conferidas uma vez: os mesmos valores de
+    `diferenca_de_distribuicao` e de `distancia_tv`"""
+    if len(p) != len(q):
+        raise ValueError("PET_VIVO: as duas distribuicoes tem tamanhos diferentes")
+    tp, tq = _total_positivo(p), _total_positivo(q)
+    nums = [a * tq - b * tp for a, b in zip(p, q)]
+    den = tp * tq
+    return [x / den for x in nums], sum(abs(x) for x in nums) / (2 * den)
+
+
+def entropia_bits(pesos: Sequence[int]) -> float:
+    """H(P) em bits (descritiva, secao 7.1: o pet que so reage tem H perto de 0)"""
+    t = _total_positivo(pesos)
+    return -sum((w / t) * math.log2(w / t) for w in pesos if w > 0)
+
+
+def partes_absolutas(partes: Mapping[str, int]) -> dict[str, float]:
+    """a parte de cada termo, |t| / soma |t| (A-1); com todos os termos 0, todas as partes 0"""
+    total = sum(abs(v) for v in partes.values())
+    return {k: (abs(v) / total if total else 0.0) for k, v in partes.items()}
+
+
+def inflacao(soma_p: Sequence[float], soma_p1: Sequence[float]) -> list[float | None]:
+    """rho_b = soma_k P_b / soma_k P1_b (A-2): rho > 1, o comportamento ganha pela multiplicidade; None se P1_b nunca foi positivo"""
+    if len(soma_p) != len(soma_p1):
+        raise ValueError("PET_VIVO: tamanhos diferentes")
+    return [(a / b if b > 0 else None) for a, b in zip(soma_p, soma_p1)]
+
+
+def mediana(valores: Sequence[float]) -> float | None:
+    """a mediana (a media dos dois do meio num numero par); None sem valores"""
+    xs = sorted(valores)
+    n = len(xs)
+    if not n:
+        return None
+    return xs[n // 2] if n % 2 else (xs[n // 2 - 1] + xs[n // 2]) / 2
+
+
+def tabela_do_alivio(canais: Mapping[tuple[str, str], Sequence[float]], nivel: float = 0.95) -> dict[tuple[str, str], dict]:
+    """a tabela do alivio A_r (A-4, PV-0-7): para cada (comportamento, receptor), a media por vida do canal do receptor no r das
+    consequencias do comportamento; o comportamento alivia o receptor se a media e > 0 e o limite de baixo do IC95 pelo t (sobre as vidas)
+    tambem. Com menos de duas vidas, nao alivia (o IC nao existe)."""
+    out = {}
+    for chave in sorted(canais):
+        ic = ic_t(list(canais[chave]), nivel)
+        alivia = ic["n"] >= 2 and ic["media"] is not None and ic["media"] > 0 and ic["ic_inferior"] is not None and ic["ic_inferior"] > 0
+        out[chave] = {"n": ic["n"], "media": ic["media"], "ic_inferior": ic["ic_inferior"], "ic_superior": ic["ic_superior"],
+                      "alivia": alivia}
+    return out
+
+
+def coerencia(movido_para: Mapping[str, float], alivio: Iterable[str], soma_tv: float) -> float | None:
+    """C_r = soma_k soma_{b em A_r} max(0, Delta P_b) / soma_k TV_k (A-4): a parte da massa movida que vai para quem alivia r. `movido_para`
+    = soma_k max(0, Delta P_b) por comportamento. None sem massa movida ou sem comportamento que alivie"""
+    alivio = tuple(alivio)
+    if not alivio or soma_tv <= 0:
+        return None
+    return sum(movido_para.get(b, 0.0) for b in alivio) / soma_tv
+
+
+def sensibilidade_coerente(movido_para: Mapping[str, float], alivio: Iterable[str], n: int) -> float | None:
+    """S_r x C_r = soma_k soma_{b em A_r} max(0, Delta P_b) / n (secao 7.1): a massa media, por decisao, movida para quem alivia r quando
+    a falta de r sobe de (falta - Delta) para (falta + Delta). None sem decisoes ou sem comportamento que alivie"""
+    alivio = tuple(alivio)
+    if not alivio or n <= 0:
+        return None
+    return sum(movido_para.get(b, 0.0) for b in alivio) / n
+
+
+def se_c(por_receptor: Mapping[str, float | None]) -> float | None:
+    """a SE-C de uma vida (secao 7.1): a media de S_r x C_r sobre os receptores com A_r nao vazia (os None ficam fora)"""
+    vals = [v for _, v in sorted(por_receptor.items()) if v is not None]
+    return sum(vals) / len(vals) if vals else None
+
+
+def media_inteira_por_comportamento(unidades: Sequence[tuple[int, int]], n: int) -> list[int]:
+    """um vetor inteiro proporcional a media dos w das unidades ativas de cada comportamento (a P^mu da A-2, so descritiva): W_b x (L / n_b),
+    com L o mmc dos n_b"""
+    soma = [0] * n
+    conta = [0] * n
+    for b, w in unidades:
+        if w > 0:
+            soma[b] += w
+            conta[b] += 1
+    L = 1
+    for c in conta:
+        if c:
+            L = L * c // math.gcd(L, c)
+    return [s * (L // c) if c else 0 for s, c in zip(soma, conta)]
+
+
+def quantis(valores: Sequence[float], qs: Sequence[float]) -> list[float]:
+    """os quantis pelo posto mais proximo (o valor de posto ceil(q x n), 1 <= posto <= n), sem interpolacao"""
+    xs = sorted(valores)
+    n = len(xs)
+    if not n:
+        raise ValueError("PET_VIVO: quantis de uma lista vazia")
+    return [xs[min(n, max(1, math.ceil(q * n))) - 1] for q in qs]
+
+
+# ================================================================== INDIVIDUALIDADE, I5: o habito como medida
+# docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I5.md (APROVADO pelo Matheus em 2026-11-09), secoes 2 a 4. Os perfis de um dia e a distintividade
+# de um pet (IH-7). As caixas (IH-3), o minimo de decisoes acordadas do dia (secao 2) e a distancia (IH-4, a `distancia_tv`) sao DECIDIDOS
+# no plano; SEM FONTE como escolha dele. O bootstrap, o replay e a leitura ficam no orquestrador (experiments/run_v3_individualidade_i5.py).
+
+ACOES_ACORDADAS_HABITO = ("ocioso", "comer", "brincar", "chamar_atencao", "explorar", "emburrar", "aliviar")   # as oito menos `dormir`
+PERFIS_HABITO = ("SEQ", "LUGAR", "HORA")
+BLOCO_CELULAS_HABITO = 4                         # IH-3: os blocos de 4 x 4 celulas
+FAIXAS_HORA_HABITO = 12                          # IH-3: a faixa de 2 h (12 por dia)
+MIN_ACORDADAS_DIA_HABITO = 16                    # secao 2: um dia com menos decisoes acordadas fica fora daquele pet
+CELULAS_X_HABITO, CELULAS_Y_HABITO, SUB_HABITO = ConfigMundo.celulas_x, ConfigMundo.celulas_y, ConfigMundo.sub   # 64 x 30 de 16
+BLOCOS_X_HABITO = -(-CELULAS_X_HABITO // BLOCO_CELULAS_HABITO)   # 16
+BLOCOS_Y_HABITO = -(-CELULAS_Y_HABITO // BLOCO_CELULAS_HABITO)   # 8 (a ultima linha de blocos tem so as celulas 28 e 29)
+CAIXAS_HABITO = {"SEQ": len(ACOES_ACORDADAS_HABITO) ** 2, "LUGAR": BLOCOS_X_HABITO * BLOCOS_Y_HABITO,
+                 "HORA": FAIXAS_HORA_HABITO * len(ACOES_ACORDADAS_HABITO)}                 # 49, 128 e 84 (secao 3)
+
+
+def perfis_habito_dia(decisoes: Sequence[Mapping], dia: int) -> dict | None:
+    """Os tres perfis do dia `dia` (1 = o nascimento), secao 3 do plano do I5, como contagens inteiras:
+    - SEQ: o par (a_t, a_t+1) de duas decisoes seguidas do dia, as duas acordadas (a caixa a_t x 7 + a_t+1);
+    - LUGAR: o bloco de 4 x 4 celulas da posicao (x, y) de cada decisao acordada (a caixa by x 16 + bx);
+    - HORA: a faixa de 2 h do tick no dia e a acao de cada decisao acordada (a caixa faixa x 7 + acao).
+    `decisoes` sao as do `MotorMundo.decisoes_mundo` (as chaves `tick`, `acao`, `x` e `y`, em subunidades), da vida inteira, em ordem de
+    tick. Devolve None se o dia tem menos de `MIN_ACORDADAS_DIA_HABITO` decisoes acordadas. Falha alto com acao desconhecida, tick fora de
+    ordem ou posicao fora do mapa."""
+    ini, fim = janela_dias(dia, dia)
+    ticks = [d["tick"] for d in decisoes]
+    if any(b <= a for a, b in zip(ticks, ticks[1:])):
+        raise ValueError("I5: as decisoes nao estao em ordem estrita de tick")
+    do_dia = [d for d in decisoes if ini <= d["tick"] < fim]
+    idx = {a: i for i, a in enumerate(ACOES_ACORDADAS_HABITO)}
+    for d in do_dia:
+        if d["acao"] != "dormir" and d["acao"] not in idx:
+            raise ValueError(f"I5: acao desconhecida {d['acao']!r}")
+    acordadas = [d for d in do_dia if d["acao"] != "dormir"]
+    if len(acordadas) < MIN_ACORDADAS_DIA_HABITO:
+        return None
+    n = len(ACOES_ACORDADAS_HABITO)
+    seq, lugar, hora = [0] * CAIXAS_HABITO["SEQ"], [0] * CAIXAS_HABITO["LUGAR"], [0] * CAIXAS_HABITO["HORA"]
+    for a, b in zip(do_dia, do_dia[1:]):
+        if a["acao"] != "dormir" and b["acao"] != "dormir":
+            seq[idx[a["acao"]] * n + idx[b["acao"]]] += 1
+    faixa_ticks = TICKS_POR_DIA // FAIXAS_HORA_HABITO
+    for d in acordadas:
+        cx, cy = d["x"] // SUB_HABITO, d["y"] // SUB_HABITO
+        if type(d["x"]) is not int or type(d["y"]) is not int or not (0 <= cx < CELULAS_X_HABITO and 0 <= cy < CELULAS_Y_HABITO):
+            raise ValueError(f"I5: posicao fora do mapa: ({d['x']}, {d['y']})")
+        lugar[(cy // BLOCO_CELULAS_HABITO) * BLOCOS_X_HABITO + cx // BLOCO_CELULAS_HABITO] += 1
+        hora[((d["tick"] - ini) // faixa_ticks) * n + idx[d["acao"]]] += 1
+    return {"SEQ": seq, "LUGAR": lugar, "HORA": hora}
+
+
+def distancia_entre_dias(perfil: Mapping[int, Sequence[int] | None], dias: Sequence[int]) -> float | None:
+    """O D_si (4.2): a media da `distancia_tv` entre os dias d < d' do proprio pet, sobre os pares de `dias` com os dois dias dentro (um dia
+    None fica fora). None com menos de dois dias dentro."""
+    dentro = [d for d in sorted(set(dias)) if perfil.get(d) is not None]
+    pares = [distancia_tv(perfil[a], perfil[b]) for i, a in enumerate(dentro) for b in dentro[i + 1:]]
+    return sum(pares) / len(pares) if pares else None
+
+
+def distancia_mesmo_dia(perfil: Mapping[int, Sequence[int] | None], outros: Sequence[Mapping[int, Sequence[int] | None]],
+                        dias: Sequence[int]) -> float | None:
+    """O D_dono e o D_mundo (4.2), e o D_braco (4.4): em cada dia d de `dias` com o pet dentro, a media da `distancia_tv` entre o dia d dele
+    e o dia d de cada outro pet com o dia d dentro; depois, a media sobre os dias com ao menos um par. None sem nenhum par."""
+    por_dia = []
+    for d in sorted(set(dias)):
+        if perfil.get(d) is None:
+            continue
+        ds = [distancia_tv(perfil[d], o[d]) for o in outros if o.get(d) is not None]
+        if ds:
+            por_dia.append(sum(ds) / len(ds))
+    return sum(por_dia) / len(por_dia) if por_dia else None
+
+
+def distintividade_habito(perfil: Mapping[int, Sequence[int] | None], do_dono: Sequence[Mapping[int, Sequence[int] | None]],
+                          do_mundo: Sequence[Mapping[int, Sequence[int] | None]], dias: Sequence[int]) -> dict:
+    """A distintividade de um pet num perfil (4.2): o D_si, o D_dono (os outros pets do mesmo braco e do mesmo dono), o D_mundo (os pets do
+    mesmo braco e da mesma semente, com os outros donos), o H_dono = D_dono - D_si e o H_mundo = D_mundo - D_si (None se um dos dois termos
+    e None) e os dias de `dias` com o pet dentro."""
+    d_si = distancia_entre_dias(perfil, dias)
+    d_dono, d_mundo = distancia_mesmo_dia(perfil, do_dono, dias), distancia_mesmo_dia(perfil, do_mundo, dias)
+    return {"D_si": d_si, "D_dono": d_dono, "D_mundo": d_mundo,
+            "H_dono": None if d_si is None or d_dono is None else d_dono - d_si,
+            "H_mundo": None if d_si is None or d_mundo is None else d_mundo - d_si,
+            "dias_dentro": sum(1 for d in sorted(set(dias)) if perfil.get(d) is not None)}
+
+
+def media_habito(valores: Sequence[float | None]) -> dict:
+    """a media dos valores que nao sao None (4.3) e quantos ficaram fora; a media e None se todos ficaram fora"""
+    vs = [v for v in valores if v is not None]
+    return {"media": sum(vs) / len(vs) if vs else None, "n": len(vs), "fora": len(valores) - len(vs)}
+
+
+# --- a variedade e a copia da fala, a DC5 da CONVERSA_PET (docs/PLANO_ANALISE_V3_CONVERSA_DC5.md, 4.6; APROVADO em 2026-11-10; medidas
+# nossas, SEM FONTE; o distinct-n e uma definicao da literatura de dialogo cuja fonte fica NAO CONFIRMADA no resumo, plano 4.6 e 12)
+def palavras_normalizadas(texto: str) -> list[str]:
+    """o texto normalizado da 4.6: minusculas, sem acentos, sem pontuacao, as palavras separadas por espaco"""
+    import unicodedata
+    if not isinstance(texto, str):
+        raise TypeError(f"texto precisa ser str: {type(texto).__name__}")
+    sem_acento = "".join(ch for ch in unicodedata.normalize("NFD", texto.lower()) if unicodedata.category(ch) != "Mn")
+    return "".join(ch if ch.isalnum() else " " for ch in sem_acento).split()
+
+
+def trechos_de_frases_modelo(frases: Sequence[str], min_palavras: int) -> list[tuple[str, ...]]:
+    """a lista da Q6: cada frase cortada em sentencas no ponto final, na interrogacao, na exclamacao e nas reticencias (tambem o caractere unico); cada sentenca
+    normalizada vira um trecho, e so ficam os de pelo menos `min_palavras` palavras (sem repetir, na ordem)"""
+    if min_palavras < 1:
+        raise ValueError(f"min_palavras >= 1: {min_palavras}")
+    out: list[tuple[str, ...]] = []
+    for f in frases:
+        for sentenca in re.split(r"[.!?…]+", f):
+            t = tuple(palavras_normalizadas(sentenca))
+            if len(t) >= min_palavras and t not in out:
+                out.append(t)
+    return out
+
+
+def _contem(palavras: Sequence[str], trecho: Sequence[str]) -> bool:
+    m = len(trecho)
+    return any(tuple(palavras[i:i + m]) == tuple(trecho) for i in range(len(palavras) - m + 1))
+
+
+def tem_frase_modelo(fala: str, trechos: Sequence[Sequence[str]]) -> bool:
+    """a fala contem um trecho da lista, normalizado, como sequencia de palavras (4.6, Q6)"""
+    p = palavras_normalizadas(fala)
+    return any(_contem(p, t) for t in trechos)
+
+
+def _ngramas(palavras: Sequence[str], n: int) -> list[tuple[str, ...]]:
+    return [tuple(palavras[i:i + n]) for i in range(len(palavras) - n + 1)]
+
+
+def distinct_n(falas: Sequence[str], n: int, total_palavras: int | None = None) -> dict:
+    """a fracao de n-gramas distintos sobre o total (4.6, Q7), nas falas em ordem, cortadas no mesmo total de palavras (`total_palavras`, o
+    menor entre as celulas; None = todas). Os n-gramas nao cruzam de uma fala para a outra. Falha alto sem n-grama."""
+    if n < 1:
+        raise ValueError(f"n >= 1: {n}")
+    resto = total_palavras
+    todos: list[tuple[str, ...]] = []
+    usadas = 0
+    for f in falas:
+        p = palavras_normalizadas(f)
+        if resto is not None:
+            p = p[:max(resto, 0)]
+            resto -= len(p)
+        usadas += len(p)
+        todos += _ngramas(p, n)
+        if resto is not None and resto <= 0:
+            break
+    if total_palavras is not None and usadas < total_palavras:
+        raise ValueError(f"distinct-{n}: so {usadas} palavras, o corte pede {total_palavras}")
+    if not todos:
+        raise ValueError(f"distinct-{n} sem n-grama")
+    return {"n": n, "distintos": len(set(todos)), "total": len(todos), "valor": len(set(todos)) / len(todos), "palavras": usadas}
+
+
+def repeticao_entre_turnos(falas: Sequence[str], n: int) -> dict:
+    """numa sequencia (uma conversa ou uma sequencia espontanea), as falas a partir da segunda que repetem um n-grama de palavras de uma fala
+    anterior da mesma sequencia (4.6, Q7)"""
+    if n < 1:
+        raise ValueError(f"n >= 1: {n}")
+    vistos: set = set()
+    repetem = 0
+    for i, f in enumerate(falas):
+        g = set(_ngramas(palavras_normalizadas(f), n))
+        if i > 0 and g & vistos:
+            repetem += 1
+        vistos |= g
+    return {"consideradas": max(len(falas) - 1, 0), "repetem": repetem}
+
+
+def tem_trecho_igual(fala: str, outras: Sequence[str], n: int) -> bool:
+    """a fala tem n ou mais palavras seguidas (normalizadas) iguais a um trecho de um dos outros textos (DC5a2, D-DC5B-5: a repeticao de
+    trecho da voz-v4b e a copia das citacoes do corpus da especie)"""
+    if n < 1:
+        raise ValueError(f"n >= 1: {n}")
+    g = set(_ngramas(palavras_normalizadas(fala), n))
+    return any(g & set(_ngramas(palavras_normalizadas(o), n)) for o in outras)
+
+
+def repeticao_de_trecho(falas: Sequence[str], n: int) -> dict:
+    """numa sequencia (uma conversa ou uma sequencia espontanea), as falas a partir da segunda com n ou mais palavras seguidas iguais a uma fala
+    anterior da mesma sequencia (DC5a2, D-DC5B-5)"""
+    repetem = sum(tem_trecho_igual(f, falas[:i], n) for i, f in enumerate(falas) if i > 0)
+    return {"consideradas": max(len(falas) - 1, 0), "repetem": repetem}
+
+
+def kappa_cohen(pares: Sequence[tuple[str, str]]) -> dict:
+    """o kappa de Cohen entre dois marcadores (DC5, 4.1). `pares` = (marcacao A, marcacao B) por item. Com a concordancia esperada igual a 1
+    o kappa nao e calculavel: sai None, com a concordancia bruta (o plano: "nao calculavel", e o gate fica nao medido)."""
+    if not pares:
+        raise ValueError("kappa sem itens")
+    n = len(pares)
+    cats = sorted({x for p in pares for x in p})
+    po = sum(a == b for a, b in pares) / n
+    pe = sum((sum(a == c for a, _ in pares) / n) * (sum(b == c for _, b in pares) / n) for c in cats)
+    kappa = None if pe >= 1 else (po - pe) / (1 - pe)
+    return {"n": n, "concordancia": po, "esperada": pe, "kappa": kappa, "calculavel": kappa is not None,
+            "por_categoria": {c: [sum(a == c for a, _ in pares), sum(b == c for _, b in pares)] for c in cats}}
+
+
+def ic_wilson(k: int, n: int, z: float = 1.959963984540054) -> list[float]:
+    """o IC de Wilson de uma fracao k/n (o IC95 por padrao; DC5, 4.1 e 4.2, como na DC4)"""
+    if n <= 0 or not 0 <= k <= n:
+        raise ValueError(f"Wilson com k={k}, n={n}")
+    p = k / n
+    centro = (p + z * z / (2 * n)) / (1 + z * z / n)
+    meia = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / (1 + z * z / n)
+    return [max(0.0, centro - meia), min(1.0, centro + meia)]
+
+
+# ================================================================== INDIVIDUALIDADE, I7: o desenvolvimento contrafactual
+# docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md (APROVADO pelo Matheus em 2026-11-10; adendo 1 DECIDIDO), secoes 3 e 12. As contas de um ramo
+# contra o original, a razao contra o gemeo e as inclinacoes. O replay, os ramos, o bootstrap e a leitura ficam no orquestrador
+# (experiments/run_v3_individualidade_i7.py). A distancia do estado interno (12.5) e PROPOSTA, SEM FONTE (o I7a a escreve; o registro a fixa).
+
+def distancias_ramo(ramo: Mapping[int, Sequence[int] | None], original: Mapping[int, Sequence[int] | None],
+                    dias: Sequence[int]) -> dict:
+    """D_b(d) (3.1): a `distancia_tv` entre o perfil do ramo e o do original em cada dia de `dias`; None no dia em que um dos dois esta fora
+    (ou nao existe)."""
+    return {d: (None if ramo.get(d) is None or original.get(d) is None else distancia_tv(ramo[d], original[d])) for d in sorted(set(dias))}
+
+
+def razao_de_somas(pares: Sequence[tuple[float | None, float | None]]) -> float | None:
+    """Phi (3.2): soma(D_b) / soma(D_G) sobre os pares com os dois termos; None sem par ou com a soma do gemeo 0 (a razao e de somas, nao a
+    media de razoes, porque um D_G de um dia pode ser 0)."""
+    dentro = [(a, b) for a, b in pares if a is not None and b is not None]
+    den = sum(b for _, b in dentro)
+    return None if not dentro or den == 0 else sum(a for a, _ in dentro) / den
+
+
+def soma_presente(pares: Sequence[tuple[float | None, float | None]]) -> float | None:
+    """a soma crua do D_b (12.2) sobre os mesmos pares da razao (os dois termos presentes); None sem par"""
+    dentro = [a for a, b in pares if a is not None and b is not None]
+    return sum(dentro) if dentro else None
+
+
+def inclinacao_ou_none(xs: Sequence[float], ys: Sequence[float | None]) -> float | None:
+    """a `inclinacao_mmq` sobre os pontos com y; None com menos de dois x distintos (as inclinacoes do I7, 3.3 e 12.2)"""
+    pts = [(x, y) for x, y in zip(xs, ys) if y is not None]
+    if len({x for x, _ in pts}) < 2:
+        return None
+    return inclinacao_mmq([x for x, _ in pts], [y for _, y in pts])
+
+
+def folhas_estado(estado, prefixo: str = "") -> dict:
+    """as folhas de um estado interno (dicionarios e listas aninhados), pelo caminho: {"a.b.0": valor}. Um dicionario ou uma lista vazios
+    viram uma folha propria (o caminho com o tipo), para que sumir ou aparecer conte."""
+    if isinstance(estado, Mapping):
+        if not estado:
+            return {prefixo + "{}": None}
+        out: dict = {}
+        for k in sorted(estado, key=str):
+            out.update(folhas_estado(estado[k], f"{prefixo}{k}."))
+        return out
+    if isinstance(estado, (list, tuple)):
+        if not estado:
+            return {prefixo + "[]": None}
+        out = {}
+        for i, v in enumerate(estado):
+            out.update(folhas_estado(v, f"{prefixo}{i}."))
+        return out
+    return {prefixo[:-1] if prefixo.endswith(".") else prefixo: estado}
+
+
+def distancia_estado(a: Mapping, b: Mapping) -> float:
+    """a distancia do estado interno (12.5, PROPOSTA, SEM FONTE): a fracao dos caminhos de folha (a uniao dos dois estados) em que o valor
+    difere ou o caminho so existe num deles. 0: os mesmos estados; 1: nenhuma folha em comum com o mesmo valor. Recebe as folhas
+    (`folhas_estado`)."""
+    caminhos = set(a) | set(b)
+    if not caminhos:
+        raise ValueError("I7: dois estados vazios")
+    falta = object()
+    return sum(1 for c in caminhos if a.get(c, falta) != b.get(c, falta) or (c in a) != (c in b)) / len(caminhos)
+
+
+def efeito_comum(ramos: Sequence[Sequence[int] | None], originais: Sequence[Sequence[int] | None]) -> float | None:
+    """C_E (12.5): a `distancia_tv` entre o perfil somado de todos os ramos e o perfil somado de todos os originais (os pares com os dois
+    perfis), dividida pela media das distancias de cada par. Perto de 1, o ramo empurra todos os pets para o mesmo lado; perto de 0, cada
+    pet muda para um lado. None sem par ou com a media 0."""
+    pares = [(r, o) for r, o in zip(ramos, originais) if r is not None and o is not None]
+    if not pares:
+        return None
+    media = sum(distancia_tv(r, o) for r, o in pares) / len(pares)
+    if media == 0:
+        return None
+    soma_r = [sum(c) for c in zip(*(r for r, _ in pares))]
+    soma_o = [sum(c) for c in zip(*(o for _, o in pares))]
+    return distancia_tv(soma_r, soma_o) / media
+
+
+def reencontrou(ramo: Sequence[Mapping], original: Sequence[Mapping], dia: int) -> bool:
+    """o reencontro (3.5): as decisoes do dia `dia` (a acao e a posicao) do ramo sao todas iguais as do original"""
+    ini, fim = janela_dias(dia, dia)
+
+    def chave(ds):
+        return [(d["tick"], d["acao"], d["x"], d["y"]) for d in ds if ini <= d["tick"] < fim]
+    a, b = chave(ramo), chave(original)
+    if not b:
+        raise ValueError(f"I7: o original nao tem decisoes no dia {dia}")
+    return a == b
+
+
+# ---------------------------------------------------------------- o adendo 2 do I7: historia ou sorteio (secao 14 do plano, DECIDIDO)
+def trajetoria_janela(ds: Sequence[float | None]) -> str | None:
+    """o tudo ou nada (14.5): "sempre0" se toda D presente da janela e 0, "nunca0" se toda e > 0, "misto" fora disso; None sem D presente"""
+    vs = [d for d in ds if d is not None]
+    if not vs:
+        return None
+    if any(d < 0 for d in vs):
+        raise ValueError("I7: distancia negativa")
+    if all(d == 0 for d in vs):
+        return "sempre0"
+    return "nunca0" if all(d > 0 for d in vs) else "misto"
+
+
+def fracao_amarrada(pares: Sequence[tuple[float | None, float | None]]) -> float | None:
+    """rho (14.4): soma(D_R) / soma(D_E) sobre os pares (D_R, D_E) com os dois termos; None sem par ou com a soma do E 0. E a razao de
+    somas do Phi com o E no lugar do gemeo."""
+    return razao_de_somas(pares)

@@ -1,0 +1,5769 @@
+{
+ "base": 20262200,
+ "prefixo": "conversa_dc4",
+ "braco_pet": "LAB+F",
+ "modo_dono": "atende",
+ "lugar": "comedouro",
+ "dias": 14,
+ "orcamento_por_dia": 16,
+ "n_vidas": 4,
+ "vidas_a_mais": [],
+ "vidas": [
+  {
+   "i": 0,
+   "dono": "atencioso",
+   "semente": 2970084817798576936,
+   "dias": 14,
+   "atendimentos": 76,
+   "log_sha256": "f571faa84d6cd5a871d90237d8f95e28732bd0bddab85bf50d5da8747df2c277",
+   "decisoes": 1344,
+   "falas": {
+    "fome": 31,
+    "higiene": 12,
+    "solidao": 41
+   }
+  },
+  {
+   "i": 1,
+   "dono": "relapso",
+   "semente": 15832455765188867216,
+   "dias": 14,
+   "atendimentos": 43,
+   "log_sha256": "d59444aad8984ee1419dd52e026879a809af624dc98741b15da372cf937d3e93",
+   "decisoes": 1344,
+   "falas": {
+    "fome": 27,
+    "higiene": 21,
+    "solidao": 12
+   }
+  },
+  {
+   "i": 2,
+   "dono": "aleatorio",
+   "semente": 10846694860059103464,
+   "dias": 14,
+   "atendimentos": 40,
+   "log_sha256": "83d59f2d9fdd989f73950ac78839781f182a087d5ddd5a81c9e59faf5b47d36b",
+   "decisoes": 1344,
+   "falas": {
+    "fome": 48,
+    "higiene": 25,
+    "solidao": 9
+   }
+  },
+  {
+   "i": 3,
+   "dono": "incoerente",
+   "semente": 14055564316802024111,
+   "dias": 14,
+   "atendimentos": 65,
+   "log_sha256": "d5c823ccb027d7fc0850c778ec6c119bb5e4e614e73f95c32fd8d60da3f38e31",
+   "decisoes": 1344,
+   "falas": {
+    "fome": 41,
+    "higiene": 21,
+    "solidao": 43
+   }
+  }
+ ],
+ "E3": [
+  {
+   "id": "E3-000",
+   "conjunto": "E3",
+   "vida": 2,
+   "dono": "aleatorio",
+   "semente_vida": 10846694860059103464,
+   "k": 729,
+   "tick": 10935,
+   "estagio": "adulto",
+   "pedido_rede": "fome",
+   "intencao_ia": "agitacao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 729,
+    "intencao": "fome",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 62,
+      "confianca": 40
+     },
+     {
+      "nome": "sono",
+      "valor": 388,
+      "confianca": 40
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 124,
+      "confianca": 31
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 31
+     },
+     {
+      "nome": "agitacao",
+      "valor": 992,
+      "confianca": 971
+     },
+     {
+      "nome": "aversao",
+      "valor": 869,
+      "confianca": 869,
+      "alvo": "ep45"
+     },
+     {
+      "nome": "frustracao",
+      "valor": 20,
+      "confianca": 40
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 519,
+      "confianca": 779
+     },
+     {
+      "nome": "lembranca",
+      "valor": 869,
+      "confianca": 869,
+      "alvo": "ep45",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "ruim"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 36,
+      "confianca": 34
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 691,
+      "confianca": 403
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-001",
+   "conjunto": "E3",
+   "vida": 1,
+   "dono": "relapso",
+   "semente_vida": 15832455765188867216,
+   "k": 1079,
+   "tick": 16185,
+   "estagio": "adulto",
+   "pedido_rede": "fome",
+   "intencao_ia": "indecisao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 1079,
+    "intencao": "fome",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 82,
+      "confianca": 98
+     },
+     {
+      "nome": "sono",
+      "valor": 384,
+      "confianca": 98
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 0,
+      "confianca": 3
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 12,
+      "confianca": 3
+     },
+     {
+      "nome": "agitacao",
+      "valor": 15,
+      "confianca": 25
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 606,
+      "confianca": 909
+     },
+     {
+      "nome": "lembranca",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "solidao",
+      "valor": 361,
+      "confianca": 492
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 413,
+      "confianca": 554
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-002",
+   "conjunto": "E3",
+   "vida": 0,
+   "dono": "atencioso",
+   "semente_vida": 2970084817798576936,
+   "k": 33,
+   "tick": 495,
+   "estagio": "crianca",
+   "pedido_rede": "fome",
+   "intencao_ia": "indecisao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 33,
+    "intencao": "fome",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 46,
+      "confianca": 422
+     },
+     {
+      "nome": "sono",
+      "valor": 208,
+      "confianca": 422
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 12,
+      "confianca": 3
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 3
+     },
+     {
+      "nome": "agitacao",
+      "valor": 8,
+      "confianca": 14
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 563,
+      "confianca": 844
+     },
+     {
+      "nome": "lembranca",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "solidao",
+      "valor": 253,
+      "confianca": 169
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 180,
+      "confianca": 482
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "crianca"
+    }
+   }
+  },
+  {
+   "id": "E3-003",
+   "conjunto": "E3",
+   "vida": 2,
+   "dono": "aleatorio",
+   "semente_vida": 10846694860059103464,
+   "k": 225,
+   "tick": 3375,
+   "estagio": "adulto",
+   "pedido_rede": "fome",
+   "intencao_ia": "indecisao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 225,
+    "intencao": "fome",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 102,
+      "confianca": 282
+     },
+     {
+      "nome": "sono",
+      "valor": 163,
+      "confianca": 282
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "agitacao",
+      "valor": 35,
+      "confianca": 58
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 653,
+      "confianca": 980
+     },
+     {
+      "nome": "lembranca",
+      "valor": 978,
+      "confianca": 978,
+      "alvo": "ep28",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 94,
+      "confianca": 0
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 323,
+      "confianca": 364
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-004",
+   "conjunto": "E3",
+   "vida": 2,
+   "dono": "aleatorio",
+   "semente_vida": 10846694860059103464,
+   "k": 1202,
+   "tick": 18030,
+   "estagio": "adulto",
+   "pedido_rede": "fome",
+   "intencao_ia": "aversao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 1202,
+    "intencao": "fome",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 614,
+      "confianca": 236
+     },
+     {
+      "nome": "sono",
+      "valor": 299,
+      "confianca": 236
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 0,
+      "confianca": 56
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 224,
+      "confianca": 56
+     },
+     {
+      "nome": "agitacao",
+      "valor": 1022,
+      "confianca": 1020
+     },
+     {
+      "nome": "aversao",
+      "valor": 1024,
+      "confianca": 1024,
+      "alvo": "ep140"
+     },
+     {
+      "nome": "frustracao",
+      "valor": 39,
+      "confianca": 77
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 721,
+      "confianca": 1009
+     },
+     {
+      "nome": "lembranca",
+      "valor": 1024,
+      "confianca": 1024,
+      "alvo": "ep140",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "ruim"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 870,
+      "confianca": 1024
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 729,
+      "confianca": 512
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-005",
+   "conjunto": "E3",
+   "vida": 1,
+   "dono": "relapso",
+   "semente_vida": 15832455765188867216,
+   "k": 1325,
+   "tick": 19875,
+   "estagio": "adulto",
+   "pedido_rede": "fome",
+   "intencao_ia": "aversao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 1325,
+    "intencao": "fome",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 482,
+      "confianca": 183
+     },
+     {
+      "nome": "sono",
+      "valor": 323,
+      "confianca": 183
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 0,
+      "confianca": 53
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 212,
+      "confianca": 53
+     },
+     {
+      "nome": "agitacao",
+      "valor": 1022,
+      "confianca": 1020
+     },
+     {
+      "nome": "aversao",
+      "valor": 1024,
+      "confianca": 1024,
+      "alvo": "ep161"
+     },
+     {
+      "nome": "frustracao",
+      "valor": 95,
+      "confianca": 189
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 658,
+      "confianca": 987
+     },
+     {
+      "nome": "lembranca",
+      "valor": 1024,
+      "confianca": 1024,
+      "alvo": "ep161",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "ruim"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 841,
+      "confianca": 1004
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 655,
+      "confianca": 405
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-006",
+   "conjunto": "E3",
+   "vida": 2,
+   "dono": "aleatorio",
+   "semente_vida": 10846694860059103464,
+   "k": 1158,
+   "tick": 17370,
+   "estagio": "adulto",
+   "pedido_rede": "fome",
+   "intencao_ia": "agitacao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 1158,
+    "intencao": "fome",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 328,
+      "confianca": 108
+     },
+     {
+      "nome": "sono",
+      "valor": 577,
+      "confianca": 108
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 0,
+      "confianca": 22
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 88,
+      "confianca": 22
+     },
+     {
+      "nome": "agitacao",
+      "valor": 1022,
+      "confianca": 1020
+     },
+     {
+      "nome": "aversao",
+      "valor": 954,
+      "confianca": 954,
+      "alvo": "ep125"
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 722,
+      "confianca": 936
+     },
+     {
+      "nome": "lembranca",
+      "valor": 954,
+      "confianca": 954,
+      "alvo": "ep125",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "ruim"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 380,
+      "confianca": 460
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 660,
+      "confianca": 392
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-007",
+   "conjunto": "E3",
+   "vida": 3,
+   "dono": "incoerente",
+   "semente_vida": 14055564316802024111,
+   "k": 928,
+   "tick": 13920,
+   "estagio": "adulto",
+   "pedido_rede": "fome",
+   "intencao_ia": "lembranca",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 928,
+    "intencao": "fome",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 46,
+      "confianca": 132
+     },
+     {
+      "nome": "sono",
+      "valor": 302,
+      "confianca": 132
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 588,
+      "confianca": 147
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 147
+     },
+     {
+      "nome": "agitacao",
+      "valor": 844,
+      "confianca": 840
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 47,
+      "confianca": 94
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 726,
+      "confianca": 870
+     },
+     {
+      "nome": "lembranca",
+      "valor": 1001,
+      "confianca": 1001,
+      "alvo": "ep129",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 148,
+      "confianca": 31
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 494,
+      "confianca": 279
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-008",
+   "conjunto": "E3",
+   "vida": 3,
+   "dono": "incoerente",
+   "semente_vida": 14055564316802024111,
+   "k": 1019,
+   "tick": 15285,
+   "estagio": "adulto",
+   "pedido_rede": "fome",
+   "intencao_ia": "lembranca",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 1019,
+    "intencao": "fome",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 33,
+      "confianca": 47
+     },
+     {
+      "nome": "sono",
+      "valor": 195,
+      "confianca": 47
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 344,
+      "confianca": 86
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 86
+     },
+     {
+      "nome": "agitacao",
+      "valor": 528,
+      "confianca": 702
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 775,
+      "confianca": 870
+     },
+     {
+      "nome": "lembranca",
+      "valor": 924,
+      "confianca": 924,
+      "alvo": "ep150",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 58,
+      "confianca": 8
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 437,
+      "confianca": 578
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-009",
+   "conjunto": "E3",
+   "vida": 1,
+   "dono": "relapso",
+   "semente_vida": 15832455765188867216,
+   "k": 74,
+   "tick": 1110,
+   "estagio": "adolescente",
+   "pedido_rede": "fome",
+   "intencao_ia": "indecisao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 74,
+    "intencao": "fome",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 51,
+      "confianca": 371
+     },
+     {
+      "nome": "sono",
+      "valor": 82,
+      "confianca": 371
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 160,
+      "confianca": 40
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 40
+     },
+     {
+      "nome": "agitacao",
+      "valor": 29,
+      "confianca": 49
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 639,
+      "confianca": 958
+     },
+     {
+      "nome": "lembranca",
+      "valor": 889,
+      "confianca": 889,
+      "alvo": "ep5",
+      "episodio": {
+       "acao": "brincar",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 282,
+      "confianca": 162
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 299,
+      "confianca": 584
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adolescente"
+    }
+   }
+  },
+  {
+   "id": "E3-010",
+   "conjunto": "E3",
+   "vida": 1,
+   "dono": "relapso",
+   "semente_vida": 15832455765188867216,
+   "k": 121,
+   "tick": 1815,
+   "estagio": "adolescente",
+   "pedido_rede": "higiene",
+   "intencao_ia": "indecisao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 121,
+    "intencao": "higiene",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 23,
+      "confianca": 74
+     },
+     {
+      "nome": "sono",
+      "valor": 322,
+      "confianca": 74
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 48,
+      "confianca": 12
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 12
+     },
+     {
+      "nome": "agitacao",
+      "valor": 7,
+      "confianca": 12
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 618,
+      "confianca": 927
+     },
+     {
+      "nome": "lembranca",
+      "valor": 772,
+      "confianca": 772,
+      "alvo": "ep9",
+      "episodio": {
+       "acao": "comer",
+       "classe": "racao",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 107,
+      "confianca": 123
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 340,
+      "confianca": 568
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adolescente"
+    }
+   }
+  },
+  {
+   "id": "E3-011",
+   "conjunto": "E3",
+   "vida": 2,
+   "dono": "aleatorio",
+   "semente_vida": 10846694860059103464,
+   "k": 1143,
+   "tick": 17145,
+   "estagio": "adulto",
+   "pedido_rede": "higiene",
+   "intencao_ia": "agitacao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 1143,
+    "intencao": "higiene",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 69,
+      "confianca": 66
+     },
+     {
+      "nome": "sono",
+      "valor": 330,
+      "confianca": 66
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 0,
+      "confianca": 15
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 60,
+      "confianca": 15
+     },
+     {
+      "nome": "agitacao",
+      "valor": 1022,
+      "confianca": 1020
+     },
+     {
+      "nome": "aversao",
+      "valor": 971,
+      "confianca": 971,
+      "alvo": "ep122"
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 661,
+      "confianca": 918
+     },
+     {
+      "nome": "lembranca",
+      "valor": 971,
+      "confianca": 971,
+      "alvo": "ep122",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "ruim"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 239,
+      "confianca": 254
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 588,
+      "confianca": 348
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-012",
+   "conjunto": "E3",
+   "vida": 2,
+   "dono": "aleatorio",
+   "semente_vida": 10846694860059103464,
+   "k": 326,
+   "tick": 4890,
+   "estagio": "adulto",
+   "pedido_rede": "higiene",
+   "intencao_ia": "indecisao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 326,
+    "intencao": "higiene",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 10,
+      "confianca": 311
+     },
+     {
+      "nome": "sono",
+      "valor": 229,
+      "confianca": 311
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 52,
+      "confianca": 13
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 13
+     },
+     {
+      "nome": "agitacao",
+      "valor": 21,
+      "confianca": 35
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 557,
+      "confianca": 835
+     },
+     {
+      "nome": "lembranca",
+      "valor": 860,
+      "confianca": 860,
+      "alvo": "ep16",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 119,
+      "confianca": 23
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 357,
+      "confianca": 347
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-013",
+   "conjunto": "E3",
+   "vida": 2,
+   "dono": "aleatorio",
+   "semente_vida": 10846694860059103464,
+   "k": 61,
+   "tick": 915,
+   "estagio": "adolescente",
+   "pedido_rede": "higiene",
+   "intencao_ia": "lembranca",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 61,
+    "intencao": "higiene",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 72,
+      "confianca": 270
+     },
+     {
+      "nome": "sono",
+      "valor": 240,
+      "confianca": 270
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 140,
+      "confianca": 35
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 35
+     },
+     {
+      "nome": "agitacao",
+      "valor": 42,
+      "confianca": 67
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 800,
+      "confianca": 980
+     },
+     {
+      "nome": "lembranca",
+      "valor": 924,
+      "confianca": 924,
+      "alvo": "ep2",
+      "episodio": {
+       "acao": "brincar",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 182,
+      "confianca": 138
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 442,
+      "confianca": 507
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adolescente"
+    }
+   }
+  },
+  {
+   "id": "E3-014",
+   "conjunto": "E3",
+   "vida": 1,
+   "dono": "relapso",
+   "semente_vida": 15832455765188867216,
+   "k": 892,
+   "tick": 13380,
+   "estagio": "adulto",
+   "pedido_rede": "higiene",
+   "intencao_ia": "curiosidade",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 892,
+    "intencao": "higiene",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 8,
+      "confianca": 204
+     },
+     {
+      "nome": "sono",
+      "valor": 424,
+      "confianca": 204
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 148,
+      "confianca": 37
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 37
+     },
+     {
+      "nome": "agitacao",
+      "valor": 251,
+      "confianca": 287
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 364,
+      "confianca": 546
+     },
+     {
+      "nome": "lembranca",
+      "valor": 896,
+      "confianca": 896,
+      "alvo": "ep37",
+      "episodio": {
+       "acao": "brincar",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 222,
+      "confianca": 231
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 438,
+      "confianca": 476
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-015",
+   "conjunto": "E3",
+   "vida": 3,
+   "dono": "incoerente",
+   "semente_vida": 14055564316802024111,
+   "k": 1230,
+   "tick": 18450,
+   "estagio": "adulto",
+   "pedido_rede": "higiene",
+   "intencao_ia": "agitacao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 1230,
+    "intencao": "higiene",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 5,
+      "confianca": 106
+     },
+     {
+      "nome": "sono",
+      "valor": 344,
+      "confianca": 106
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 0,
+      "confianca": 2
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 8,
+      "confianca": 2
+     },
+     {
+      "nome": "agitacao",
+      "valor": 968,
+      "confianca": 931
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 87,
+      "confianca": 174
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 533,
+      "confianca": 800
+     },
+     {
+      "nome": "lembranca",
+      "valor": 931,
+      "confianca": 931,
+      "alvo": "ep180",
+      "episodio": {
+       "acao": "brincar",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 681,
+      "confianca": 891
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 571,
+      "confianca": 507
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-016",
+   "conjunto": "E3",
+   "vida": 3,
+   "dono": "incoerente",
+   "semente_vida": 14055564316802024111,
+   "k": 1277,
+   "tick": 19155,
+   "estagio": "adulto",
+   "pedido_rede": "higiene",
+   "intencao_ia": "aversao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 1277,
+    "intencao": "higiene",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 44,
+      "confianca": 254
+     },
+     {
+      "nome": "sono",
+      "valor": 298,
+      "confianca": 254
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 188,
+      "confianca": 47
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 47
+     },
+     {
+      "nome": "agitacao",
+      "valor": 1022,
+      "confianca": 1020
+     },
+     {
+      "nome": "aversao",
+      "valor": 1024,
+      "confianca": 1024,
+      "alvo": "ep216"
+     },
+     {
+      "nome": "frustracao",
+      "valor": 83,
+      "confianca": 165
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 673,
+      "confianca": 1010
+     },
+     {
+      "nome": "lembranca",
+      "valor": 1024,
+      "confianca": 1024,
+      "alvo": "ep216",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "ruim"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 842,
+      "confianca": 1024
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 625,
+      "confianca": 402
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-017",
+   "conjunto": "E3",
+   "vida": 2,
+   "dono": "aleatorio",
+   "semente_vida": 10846694860059103464,
+   "k": 1327,
+   "tick": 19905,
+   "estagio": "adulto",
+   "pedido_rede": "higiene",
+   "intencao_ia": "aversao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 1327,
+    "intencao": "higiene",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 614,
+      "confianca": 140
+     },
+     {
+      "nome": "sono",
+      "valor": 311,
+      "confianca": 140
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 0,
+      "confianca": 24
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 96,
+      "confianca": 24
+     },
+     {
+      "nome": "agitacao",
+      "valor": 1022,
+      "confianca": 1020
+     },
+     {
+      "nome": "aversao",
+      "valor": 1024,
+      "confianca": 1024,
+      "alvo": "ep162"
+     },
+     {
+      "nome": "frustracao",
+      "valor": 180,
+      "confianca": 359
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 774,
+      "confianca": 1014
+     },
+     {
+      "nome": "lembranca",
+      "valor": 1024,
+      "confianca": 1024,
+      "alvo": "ep162",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "ruim"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 876,
+      "confianca": 1024
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 733,
+      "confianca": 512
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-018",
+   "conjunto": "E3",
+   "vida": 3,
+   "dono": "incoerente",
+   "semente_vida": 14055564316802024111,
+   "k": 563,
+   "tick": 8445,
+   "estagio": "adulto",
+   "pedido_rede": "higiene",
+   "intencao_ia": "lembranca",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 563,
+    "intencao": "higiene",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 84,
+      "confianca": 96
+     },
+     {
+      "nome": "sono",
+      "valor": 277,
+      "confianca": 96
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 8,
+      "confianca": 2
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 2
+     },
+     {
+      "nome": "agitacao",
+      "valor": 1022,
+      "confianca": 1020
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 804,
+      "confianca": 987
+     },
+     {
+      "nome": "lembranca",
+      "valor": 952,
+      "confianca": 952,
+      "alvo": "ep58",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 283,
+      "confianca": 215
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 602,
+      "confianca": 355
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-019",
+   "conjunto": "E3",
+   "vida": 1,
+   "dono": "relapso",
+   "semente_vida": 15832455765188867216,
+   "k": 1247,
+   "tick": 18705,
+   "estagio": "adulto",
+   "pedido_rede": "higiene",
+   "intencao_ia": "agitacao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 1247,
+    "intencao": "higiene",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 26,
+      "confianca": 26
+     },
+     {
+      "nome": "sono",
+      "valor": 513,
+      "confianca": 26
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 264,
+      "confianca": 66
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 66
+     },
+     {
+      "nome": "agitacao",
+      "valor": 1022,
+      "confianca": 1020
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 656,
+      "confianca": 837
+     },
+     {
+      "nome": "lembranca",
+      "valor": 859,
+      "confianca": 859,
+      "alvo": "ep126",
+      "episodio": {
+       "acao": "brincar",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 450,
+      "confianca": 624
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 705,
+      "confianca": 426
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-020",
+   "conjunto": "E3",
+   "vida": 0,
+   "dono": "atencioso",
+   "semente_vida": 2970084817798576936,
+   "k": 1331,
+   "tick": 19965,
+   "estagio": "adulto",
+   "pedido_rede": "solidao",
+   "intencao_ia": "lembranca",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 1331,
+    "intencao": "solidao",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 77,
+      "confianca": 126
+     },
+     {
+      "nome": "sono",
+      "valor": 178,
+      "confianca": 126
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 0,
+      "confianca": 23
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 92,
+      "confianca": 23
+     },
+     {
+      "nome": "agitacao",
+      "valor": 1022,
+      "confianca": 1020
+     },
+     {
+      "nome": "aversao",
+      "valor": 1024,
+      "confianca": 1024,
+      "alvo": "ep227"
+     },
+     {
+      "nome": "frustracao",
+      "valor": 52,
+      "confianca": 103
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 878,
+      "confianca": 1024
+     },
+     {
+      "nome": "lembranca",
+      "valor": 1024,
+      "confianca": 1024,
+      "alvo": "ep227",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "ruim"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 484,
+      "confianca": 584
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 768,
+      "confianca": 453
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-021",
+   "conjunto": "E3",
+   "vida": 1,
+   "dono": "relapso",
+   "semente_vida": 15832455765188867216,
+   "k": 909,
+   "tick": 13635,
+   "estagio": "adulto",
+   "pedido_rede": "solidao",
+   "intencao_ia": "lembranca",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 909,
+    "intencao": "solidao",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 51,
+      "confianca": 27
+     },
+     {
+      "nome": "sono",
+      "valor": 206,
+      "confianca": 27
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 308,
+      "confianca": 77
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 77
+     },
+     {
+      "nome": "agitacao",
+      "valor": 639,
+      "confianca": 597
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 816,
+      "confianca": 1004
+     },
+     {
+      "nome": "lembranca",
+      "valor": 1024,
+      "confianca": 1024,
+      "alvo": "ep91",
+      "episodio": {
+       "acao": "brincar",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 292,
+      "confianca": 400
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 534,
+      "confianca": 449
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-022",
+   "conjunto": "E3",
+   "vida": 0,
+   "dono": "atencioso",
+   "semente_vida": 2970084817798576936,
+   "k": 325,
+   "tick": 4875,
+   "estagio": "adulto",
+   "pedido_rede": "solidao",
+   "intencao_ia": "solidao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 325,
+    "intencao": "solidao",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 23,
+      "confianca": 536
+     },
+     {
+      "nome": "sono",
+      "valor": 110,
+      "confianca": 536
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 164,
+      "confianca": 41
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 41
+     },
+     {
+      "nome": "agitacao",
+      "valor": 355,
+      "confianca": 376
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 553,
+      "confianca": 829
+     },
+     {
+      "nome": "lembranca",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "solidao",
+      "valor": 861,
+      "confianca": 1024
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 260,
+      "confianca": 169
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-023",
+   "conjunto": "E3",
+   "vida": 2,
+   "dono": "aleatorio",
+   "semente_vida": 10846694860059103464,
+   "k": 1160,
+   "tick": 17400,
+   "estagio": "adulto",
+   "pedido_rede": "solidao",
+   "intencao_ia": "lembranca",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 1160,
+    "intencao": "solidao",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 348,
+      "confianca": 35
+     },
+     {
+      "nome": "sono",
+      "valor": 573,
+      "confianca": 35
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 0,
+      "confianca": 40
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 160,
+      "confianca": 40
+     },
+     {
+      "nome": "agitacao",
+      "valor": 1022,
+      "confianca": 1020
+     },
+     {
+      "nome": "aversao",
+      "valor": 1024,
+      "confianca": 1024,
+      "alvo": "ep126"
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 834,
+      "confianca": 958
+     },
+     {
+      "nome": "lembranca",
+      "valor": 1024,
+      "confianca": 1024,
+      "alvo": "ep126",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "ruim"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 409,
+      "confianca": 492
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 679,
+      "confianca": 407
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-024",
+   "conjunto": "E3",
+   "vida": 3,
+   "dono": "incoerente",
+   "semente_vida": 14055564316802024111,
+   "k": 499,
+   "tick": 7485,
+   "estagio": "adulto",
+   "pedido_rede": "solidao",
+   "intencao_ia": "agitacao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 499,
+    "intencao": "solidao",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 3,
+      "confianca": 102
+     },
+     {
+      "nome": "sono",
+      "valor": 651,
+      "confianca": 102
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 160,
+      "confianca": 40
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 40
+     },
+     {
+      "nome": "agitacao",
+      "valor": 1022,
+      "confianca": 1020
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 16,
+      "confianca": 31
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 348,
+      "confianca": 375
+     },
+     {
+      "nome": "lembranca",
+      "valor": 830,
+      "confianca": 830,
+      "alvo": "ep60",
+      "episodio": {
+       "acao": "comer",
+       "classe": "racao",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 247,
+      "confianca": 319
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 507,
+      "confianca": 327
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-025",
+   "conjunto": "E3",
+   "vida": 3,
+   "dono": "incoerente",
+   "semente_vida": 14055564316802024111,
+   "k": 1293,
+   "tick": 19395,
+   "estagio": "adulto",
+   "pedido_rede": "solidao",
+   "intencao_ia": "agitacao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 1293,
+    "intencao": "solidao",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 84,
+      "confianca": 181
+     },
+     {
+      "nome": "sono",
+      "valor": 295,
+      "confianca": 181
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 32,
+      "confianca": 8
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 8
+     },
+     {
+      "nome": "agitacao",
+      "valor": 1022,
+      "confianca": 1020
+     },
+     {
+      "nome": "aversao",
+      "valor": 978,
+      "confianca": 978,
+      "alvo": "ep224"
+     },
+     {
+      "nome": "frustracao",
+      "valor": 50,
+      "confianca": 99
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 653,
+      "confianca": 980
+     },
+     {
+      "nome": "lembranca",
+      "valor": 978,
+      "confianca": 978,
+      "alvo": "ep224",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "ruim"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 842,
+      "confianca": 1024
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 624,
+      "confianca": 405
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-026",
+   "conjunto": "E3",
+   "vida": 0,
+   "dono": "atencioso",
+   "semente_vida": 2970084817798576936,
+   "k": 970,
+   "tick": 14550,
+   "estagio": "adulto",
+   "pedido_rede": "solidao",
+   "intencao_ia": "lembranca",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 970,
+    "intencao": "solidao",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 41,
+      "confianca": 126
+     },
+     {
+      "nome": "sono",
+      "valor": 513,
+      "confianca": 126
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 272,
+      "confianca": 68
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 68
+     },
+     {
+      "nome": "agitacao",
+      "valor": 978,
+      "confianca": 954
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 689,
+      "confianca": 741
+     },
+     {
+      "nome": "lembranca",
+      "valor": 1001,
+      "confianca": 1001,
+      "alvo": "ep159",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 102,
+      "confianca": 10
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 488,
+      "confianca": 278
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-027",
+   "conjunto": "E3",
+   "vida": 0,
+   "dono": "atencioso",
+   "semente_vida": 2970084817798576936,
+   "k": 1029,
+   "tick": 15435,
+   "estagio": "adulto",
+   "pedido_rede": "solidao",
+   "intencao_ia": "agitacao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 1029,
+    "intencao": "solidao",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 105,
+      "confianca": 45
+     },
+     {
+      "nome": "sono",
+      "valor": 394,
+      "confianca": 45
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 272,
+      "confianca": 68
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 68
+     },
+     {
+      "nome": "agitacao",
+      "valor": 902,
+      "confianca": 820
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 581,
+      "confianca": 725
+     },
+     {
+      "nome": "lembranca",
+      "valor": 874,
+      "confianca": 874,
+      "alvo": "ep147",
+      "episodio": {
+       "acao": "brincar",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 79,
+      "confianca": 31
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 549,
+      "confianca": 323
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-028",
+   "conjunto": "E3",
+   "vida": 3,
+   "dono": "incoerente",
+   "semente_vida": 14055564316802024111,
+   "k": 290,
+   "tick": 4350,
+   "estagio": "adulto",
+   "pedido_rede": "solidao",
+   "intencao_ia": "lembranca",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 290,
+    "intencao": "solidao",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 16,
+      "confianca": 200
+     },
+     {
+      "nome": "sono",
+      "valor": 355,
+      "confianca": 200
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 228,
+      "confianca": 57
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 57
+     },
+     {
+      "nome": "agitacao",
+      "valor": 1017,
+      "confianca": 1013
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 798,
+      "confianca": 977
+     },
+     {
+      "nome": "lembranca",
+      "valor": 886,
+      "confianca": 886,
+      "alvo": "ep29",
+      "episodio": {
+       "acao": "brincar",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 749,
+      "confianca": 1024
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 537,
+      "confianca": 300
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E3-029",
+   "conjunto": "E3",
+   "vida": 1,
+   "dono": "relapso",
+   "semente_vida": 15832455765188867216,
+   "k": 1334,
+   "tick": 20010,
+   "estagio": "adulto",
+   "pedido_rede": "solidao",
+   "intencao_ia": "agitacao",
+   "conceitos": {
+    "versao": "dec-v3",
+    "k": 1334,
+    "intencao": "solidao",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 574,
+      "confianca": 81
+     },
+     {
+      "nome": "sono",
+      "valor": 293,
+      "confianca": 81
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 0,
+      "confianca": 37
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 148,
+      "confianca": 37
+     },
+     {
+      "nome": "agitacao",
+      "valor": 1022,
+      "confianca": 1020
+     },
+     {
+      "nome": "aversao",
+      "valor": 272,
+      "confianca": 1024,
+      "alvo": "ep163"
+     },
+     {
+      "nome": "frustracao",
+      "valor": 232,
+      "confianca": 464
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 778,
+      "confianca": 1021
+     },
+     {
+      "nome": "lembranca",
+      "valor": 1024,
+      "confianca": 1024,
+      "alvo": "ep163",
+      "episodio": {
+       "acao": "explorar",
+       "classe": "nao_havia",
+       "desfecho": "neutro"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 868,
+      "confianca": 1024
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 687,
+      "confianca": 428
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  }
+ ],
+ "E2": [
+  {
+   "id": "E2-000",
+   "conjunto": "E2",
+   "vida": 3,
+   "dono": "incoerente",
+   "semente_vida": 14055564316802024111,
+   "k": 1191,
+   "tick": 17865,
+   "estagio": "adulto",
+   "pedido_rede": null,
+   "intencao_ia": "fome",
+   "conceitos": {
+    "versao": "dec-v2",
+    "k": 1191,
+    "intencao": "fome",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 811,
+      "confianca": 1024
+     },
+     {
+      "nome": "sono",
+      "valor": 523,
+      "confianca": 1024
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 44,
+      "confianca": 11
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 11
+     },
+     {
+      "nome": "agitacao",
+      "valor": 434,
+      "confianca": 425
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 488,
+      "confianca": 463
+     },
+     {
+      "nome": "determinacao",
+      "valor": 683,
+      "confianca": 1024
+     },
+     {
+      "nome": "indecisao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "lembranca",
+      "valor": 876,
+      "confianca": 876,
+      "alvo": "ep0",
+      "episodio": {
+       "acao": "comer",
+       "classe": "racao",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 143,
+      "confianca": 215
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 406,
+      "confianca": 434
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E2-001",
+   "conjunto": "E2",
+   "vida": 1,
+   "dono": "relapso",
+   "semente_vida": 15832455765188867216,
+   "k": 389,
+   "tick": 5835,
+   "estagio": "adulto",
+   "pedido_rede": null,
+   "intencao_ia": "sono",
+   "conceitos": {
+    "versao": "dec-v2",
+    "k": 389,
+    "intencao": "sono",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 82,
+      "confianca": 603
+     },
+     {
+      "nome": "sono",
+      "valor": 496,
+      "confianca": 603
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 0,
+      "confianca": 9
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 36,
+      "confianca": 9
+     },
+     {
+      "nome": "agitacao",
+      "valor": 11,
+      "confianca": 18
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 375,
+      "confianca": 562
+     },
+     {
+      "nome": "lembranca",
+      "valor": 932,
+      "confianca": 932,
+      "alvo": "ep27",
+      "episodio": {
+       "acao": "comer",
+       "classe": "racao",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 215,
+      "confianca": 200
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 357,
+      "confianca": 570
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E2-002",
+   "conjunto": "E2",
+   "vida": 2,
+   "dono": "aleatorio",
+   "semente_vida": 10846694860059103464,
+   "k": 433,
+   "tick": 6495,
+   "estagio": "adulto",
+   "pedido_rede": null,
+   "intencao_ia": "bem_estar",
+   "conceitos": {
+    "versao": "dec-v2",
+    "k": 433,
+    "intencao": "bem_estar",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 49,
+      "confianca": 1024
+     },
+     {
+      "nome": "sono",
+      "valor": 403,
+      "confianca": 1024
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 460,
+      "confianca": 115
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 115
+     },
+     {
+      "nome": "agitacao",
+      "valor": 391,
+      "confianca": 592
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 32,
+      "confianca": 64
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "lembranca",
+      "valor": 1001,
+      "confianca": 1001,
+      "alvo": "ep53",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 256,
+      "confianca": 361
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E2-003",
+   "conjunto": "E2",
+   "vida": 3,
+   "dono": "incoerente",
+   "semente_vida": 14055564316802024111,
+   "k": 304,
+   "tick": 4560,
+   "estagio": "adulto",
+   "pedido_rede": null,
+   "intencao_ia": "agitacao",
+   "conceitos": {
+    "versao": "dec-v2",
+    "k": 304,
+    "intencao": "agitacao",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 51,
+      "confianca": 533
+     },
+     {
+      "nome": "sono",
+      "valor": 582,
+      "confianca": 533
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 404,
+      "confianca": 101
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 101
+     },
+     {
+      "nome": "agitacao",
+      "valor": 962,
+      "confianca": 928
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 423,
+      "confianca": 635
+     },
+     {
+      "nome": "lembranca",
+      "valor": 971,
+      "confianca": 971,
+      "alvo": "ep34",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 226,
+      "confianca": 164
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 463,
+      "confianca": 291
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E2-004",
+   "conjunto": "E2",
+   "vida": 1,
+   "dono": "relapso",
+   "semente_vida": 15832455765188867216,
+   "k": 437,
+   "tick": 6555,
+   "estagio": "adulto",
+   "pedido_rede": null,
+   "intencao_ia": "aversao",
+   "conceitos": {
+    "versao": "dec-v2",
+    "k": 437,
+    "intencao": "aversao",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 56,
+      "confianca": 528
+     },
+     {
+      "nome": "sono",
+      "valor": 202,
+      "confianca": 528
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 80,
+      "confianca": 20
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 20
+     },
+     {
+      "nome": "agitacao",
+      "valor": 6,
+      "confianca": 10
+     },
+     {
+      "nome": "aversao",
+      "valor": 938,
+      "confianca": 938,
+      "alvo": "ep21"
+     },
+     {
+      "nome": "frustracao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 610,
+      "confianca": 915
+     },
+     {
+      "nome": "lembranca",
+      "valor": 938,
+      "confianca": 938,
+      "alvo": "ep21",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "ruim"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 130,
+      "confianca": 156
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 420,
+      "confianca": 563
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E2-005",
+   "conjunto": "E2",
+   "vida": 3,
+   "dono": "incoerente",
+   "semente_vida": 14055564316802024111,
+   "k": 1182,
+   "tick": 17730,
+   "estagio": "adulto",
+   "pedido_rede": null,
+   "intencao_ia": "fome",
+   "conceitos": {
+    "versao": "dec-v2",
+    "k": 1182,
+    "intencao": "fome",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 887,
+      "confianca": 1024
+     },
+     {
+      "nome": "sono",
+      "valor": 565,
+      "confianca": 1024
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 0,
+      "confianca": 46
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 184,
+      "confianca": 46
+     },
+     {
+      "nome": "agitacao",
+      "valor": 166,
+      "confianca": 176
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 527,
+      "confianca": 478
+     },
+     {
+      "nome": "determinacao",
+      "valor": 683,
+      "confianca": 1024
+     },
+     {
+      "nome": "indecisao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "lembranca",
+      "valor": 853,
+      "confianca": 853,
+      "alvo": "ep147",
+      "episodio": {
+       "acao": "explorar",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 192,
+      "confianca": 185
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 601,
+      "confianca": 398
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E2-006",
+   "conjunto": "E2",
+   "vida": 1,
+   "dono": "relapso",
+   "semente_vida": 15832455765188867216,
+   "k": 211,
+   "tick": 3165,
+   "estagio": "adulto",
+   "pedido_rede": null,
+   "intencao_ia": "sono",
+   "conceitos": {
+    "versao": "dec-v2",
+    "k": 211,
+    "intencao": "sono",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 23,
+      "confianca": 800
+     },
+     {
+      "nome": "sono",
+      "valor": 463,
+      "confianca": 800
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 176,
+      "confianca": 44
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 44
+     },
+     {
+      "nome": "agitacao",
+      "valor": 32,
+      "confianca": 54
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 224,
+      "confianca": 336
+     },
+     {
+      "nome": "lembranca",
+      "valor": 966,
+      "confianca": 966,
+      "alvo": "ep17",
+      "episodio": {
+       "acao": "comer",
+       "classe": "racao",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 31,
+      "confianca": 46
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 293,
+      "confianca": 589
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E2-007",
+   "conjunto": "E2",
+   "vida": 0,
+   "dono": "atencioso",
+   "semente_vida": 2970084817798576936,
+   "k": 183,
+   "tick": 2745,
+   "estagio": "adulto",
+   "pedido_rede": null,
+   "intencao_ia": "bem_estar",
+   "conceitos": {
+    "versao": "dec-v2",
+    "k": 183,
+    "intencao": "bem_estar",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 28,
+      "confianca": 740
+     },
+     {
+      "nome": "sono",
+      "valor": 292,
+      "confianca": 740
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 424,
+      "confianca": 106
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 106
+     },
+     {
+      "nome": "agitacao",
+      "valor": 89,
+      "confianca": 148
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 16
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 284,
+      "confianca": 426
+     },
+     {
+      "nome": "lembranca",
+      "valor": 1001,
+      "confianca": 1001,
+      "alvo": "ep20",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 128,
+      "confianca": 192
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 374,
+      "confianca": 612
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E2-008",
+   "conjunto": "E2",
+   "vida": 2,
+   "dono": "aleatorio",
+   "semente_vida": 10846694860059103464,
+   "k": 560,
+   "tick": 8400,
+   "estagio": "adulto",
+   "pedido_rede": null,
+   "intencao_ia": "agitacao",
+   "conceitos": {
+    "versao": "dec-v2",
+    "k": 560,
+    "intencao": "agitacao",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 13,
+      "confianca": 381
+     },
+     {
+      "nome": "sono",
+      "valor": 221,
+      "confianca": 381
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 76,
+      "confianca": 19
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 19
+     },
+     {
+      "nome": "agitacao",
+      "valor": 1022,
+      "confianca": 1020
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 591,
+      "confianca": 887
+     },
+     {
+      "nome": "lembranca",
+      "valor": 777,
+      "confianca": 777,
+      "alvo": "ep59",
+      "episodio": {
+       "acao": "comer",
+       "classe": "racao",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 93,
+      "confianca": 123
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 735,
+      "confianca": 433
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E2-009",
+   "conjunto": "E2",
+   "vida": 0,
+   "dono": "atencioso",
+   "semente_vida": 2970084817798576936,
+   "k": 1328,
+   "tick": 19920,
+   "estagio": "adulto",
+   "pedido_rede": null,
+   "intencao_ia": "aversao",
+   "conceitos": {
+    "versao": "dec-v2",
+    "k": 1328,
+    "intencao": "aversao",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 69,
+      "confianca": 214
+     },
+     {
+      "nome": "sono",
+      "valor": 251,
+      "confianca": 214
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 0,
+      "confianca": 2
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 8,
+      "confianca": 2
+     },
+     {
+      "nome": "agitacao",
+      "valor": 1022,
+      "confianca": 1020
+     },
+     {
+      "nome": "aversao",
+      "valor": 1024,
+      "confianca": 1024,
+      "alvo": "ep227"
+     },
+     {
+      "nome": "frustracao",
+      "valor": 57,
+      "confianca": 113
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 683,
+      "confianca": 1024
+     },
+     {
+      "nome": "lembranca",
+      "valor": 1024,
+      "confianca": 1024,
+      "alvo": "ep227",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "ruim"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 450,
+      "confianca": 552
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 733,
+      "confianca": 438
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E2-010",
+   "conjunto": "E2",
+   "vida": 3,
+   "dono": "incoerente",
+   "semente_vida": 14055564316802024111,
+   "k": 1111,
+   "tick": 16665,
+   "estagio": "adulto",
+   "pedido_rede": null,
+   "intencao_ia": "determinacao",
+   "conceitos": {
+    "versao": "dec-v2",
+    "k": 1111,
+    "intencao": "determinacao",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 464,
+      "confianca": 835
+     },
+     {
+      "nome": "sono",
+      "valor": 254,
+      "confianca": 835
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 168,
+      "confianca": 42
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 42
+     },
+     {
+      "nome": "agitacao",
+      "valor": 47,
+      "confianca": 79
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 1024,
+      "confianca": 1024
+     },
+     {
+      "nome": "indecisao",
+      "valor": 350,
+      "confianca": 378
+     },
+     {
+      "nome": "lembranca",
+      "valor": 943,
+      "confianca": 943,
+      "alvo": "ep59",
+      "episodio": {
+       "acao": "comer",
+       "classe": "racao",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 41,
+      "confianca": 62
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 255,
+      "confianca": 508
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E2-011",
+   "conjunto": "E2",
+   "vida": 0,
+   "dono": "atencioso",
+   "semente_vida": 2970084817798576936,
+   "k": 337,
+   "tick": 5055,
+   "estagio": "adulto",
+   "pedido_rede": null,
+   "intencao_ia": "indecisao",
+   "conceitos": {
+    "versao": "dec-v2",
+    "k": 337,
+    "intencao": "indecisao",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 54,
+      "confianca": 513
+     },
+     {
+      "nome": "sono",
+      "valor": 248,
+      "confianca": 513
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 180,
+      "confianca": 45
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 45
+     },
+     {
+      "nome": "agitacao",
+      "valor": 292,
+      "confianca": 374
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 511,
+      "confianca": 766
+     },
+     {
+      "nome": "lembranca",
+      "valor": 830,
+      "confianca": 830,
+      "alvo": "ep19",
+      "episodio": {
+       "acao": "comer",
+       "classe": "racao",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 431,
+      "confianca": 647
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 407,
+      "confianca": 401
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E2-012",
+   "conjunto": "E2",
+   "vida": 3,
+   "dono": "incoerente",
+   "semente_vida": 14055564316802024111,
+   "k": 999,
+   "tick": 14985,
+   "estagio": "adulto",
+   "pedido_rede": null,
+   "intencao_ia": "lembranca",
+   "conceitos": {
+    "versao": "dec-v2",
+    "k": 999,
+    "intencao": "lembranca",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 64,
+      "confianca": 597
+     },
+     {
+      "nome": "sono",
+      "valor": 308,
+      "confianca": 597
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 208,
+      "confianca": 52
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 52
+     },
+     {
+      "nome": "agitacao",
+      "valor": 886,
+      "confianca": 878
+     },
+     {
+      "nome": "aversao",
+      "valor": 978,
+      "confianca": 978,
+      "alvo": "ep146"
+     },
+     {
+      "nome": "frustracao",
+      "valor": 8,
+      "confianca": 15
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 508,
+      "confianca": 615
+     },
+     {
+      "nome": "lembranca",
+      "valor": 978,
+      "confianca": 978,
+      "alvo": "ep146",
+      "episodio": {
+       "acao": "chamar_atencao",
+       "classe": "sem_alvo",
+       "desfecho": "ruim"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 80,
+      "confianca": 95
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 402,
+      "confianca": 328
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E2-013",
+   "conjunto": "E2",
+   "vida": 0,
+   "dono": "atencioso",
+   "semente_vida": 2970084817798576936,
+   "k": 135,
+   "tick": 2025,
+   "estagio": "adulto",
+   "pedido_rede": null,
+   "intencao_ia": "solidao",
+   "conceitos": {
+    "versao": "dec-v2",
+    "k": 135,
+    "intencao": "solidao",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 10,
+      "confianca": 680
+     },
+     {
+      "nome": "sono",
+      "valor": 257,
+      "confianca": 680
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 232,
+      "confianca": 58
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 58
+     },
+     {
+      "nome": "agitacao",
+      "valor": 54,
+      "confianca": 87
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 42,
+      "confianca": 84
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 306,
+      "confianca": 459
+     },
+     {
+      "nome": "lembranca",
+      "valor": 1001,
+      "confianca": 1001,
+      "alvo": "ep14",
+      "episodio": {
+       "acao": "brincar",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 560,
+      "confianca": 840
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 290,
+      "confianca": 393
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  },
+  {
+   "id": "E2-014",
+   "conjunto": "E2",
+   "vida": 1,
+   "dono": "relapso",
+   "semente_vida": 15832455765188867216,
+   "k": 431,
+   "tick": 6465,
+   "estagio": "adulto",
+   "pedido_rede": null,
+   "intencao_ia": "curiosidade",
+   "conceitos": {
+    "versao": "dec-v2",
+    "k": 431,
+    "intencao": "curiosidade",
+    "conceitos": [
+     {
+      "nome": "fome",
+      "valor": 41,
+      "confianca": 197
+     },
+     {
+      "nome": "sono",
+      "valor": 285,
+      "confianca": 197
+     },
+     {
+      "nome": "bem_estar",
+      "valor": 104,
+      "confianca": 26
+     },
+     {
+      "nome": "mal_estar",
+      "valor": 0,
+      "confianca": 26
+     },
+     {
+      "nome": "agitacao",
+      "valor": 11,
+      "confianca": 18
+     },
+     {
+      "nome": "aversao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "frustracao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "determinacao",
+      "valor": 0,
+      "confianca": 0
+     },
+     {
+      "nome": "indecisao",
+      "valor": 311,
+      "confianca": 467
+     },
+     {
+      "nome": "lembranca",
+      "valor": 952,
+      "confianca": 952,
+      "alvo": "ep37",
+      "episodio": {
+       "acao": "brincar",
+       "classe": "sem_alvo",
+       "desfecho": "bom"
+      }
+     },
+     {
+      "nome": "solidao",
+      "valor": 118,
+      "confianca": 141
+     },
+     {
+      "nome": "curiosidade",
+      "valor": 353,
+      "confianca": 578
+     }
+    ]
+   },
+   "estado": {
+    "identidade": {
+     "estagio": "adulto"
+    }
+   }
+  }
+ ],
+ "sequencias": [
+  {
+   "id": "Q0",
+   "vida": 0,
+   "k0": 91,
+   "entradas": [
+    {
+     "id": "Q0-t0",
+     "conjunto": "R",
+     "vida": 0,
+     "dono": "atencioso",
+     "semente_vida": 2970084817798576936,
+     "k": 91,
+     "tick": 1365,
+     "estagio": "adolescente",
+     "pedido_rede": "fome",
+     "intencao_ia": "sono",
+     "conceitos": {
+      "versao": "dec-v3",
+      "k": 91,
+      "intencao": "fome",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 90,
+        "confianca": 121
+       },
+       {
+        "nome": "sono",
+        "valor": 421,
+        "confianca": 121
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 60,
+        "confianca": 15
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 0,
+        "confianca": 15
+       },
+       {
+        "nome": "agitacao",
+        "valor": 25,
+        "confianca": 41
+       },
+       {
+        "nome": "aversao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "frustracao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 405,
+        "confianca": 607
+       },
+       {
+        "nome": "lembranca",
+        "valor": 820,
+        "confianca": 820,
+        "alvo": "ep0",
+        "episodio": {
+         "acao": "comer",
+         "classe": "racao",
+         "desfecho": "bom"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 191,
+        "confianca": 226
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 361,
+        "confianca": 622
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adolescente"
+      }
+     }
+    },
+    {
+     "id": "Q0-t1",
+     "conjunto": "R",
+     "vida": 0,
+     "dono": "atencioso",
+     "semente_vida": 2970084817798576936,
+     "k": 92,
+     "tick": 1380,
+     "estagio": "adolescente",
+     "pedido_rede": null,
+     "intencao_ia": "lembranca",
+     "conceitos": {
+      "versao": "dec-v2",
+      "k": 92,
+      "intencao": "lembranca",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 92,
+        "confianca": 611
+       },
+       {
+        "nome": "sono",
+        "valor": 459,
+        "confianca": 611
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 0,
+        "confianca": 2
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 8,
+        "confianca": 2
+       },
+       {
+        "nome": "agitacao",
+        "valor": 41,
+        "confianca": 68
+       },
+       {
+        "nome": "aversao",
+        "valor": 978,
+        "confianca": 978,
+        "alvo": "ep6"
+       },
+       {
+        "nome": "frustracao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 530,
+        "confianca": 576
+       },
+       {
+        "nome": "lembranca",
+        "valor": 978,
+        "confianca": 978,
+        "alvo": "ep6",
+        "episodio": {
+         "acao": "chamar_atencao",
+         "classe": "sem_alvo",
+         "desfecho": "ruim"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 185,
+        "confianca": 233
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 374,
+        "confianca": 606
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adolescente"
+      }
+     }
+    },
+    {
+     "id": "Q0-t2",
+     "conjunto": "R",
+     "vida": 0,
+     "dono": "atencioso",
+     "semente_vida": 2970084817798576936,
+     "k": 93,
+     "tick": 1395,
+     "estagio": "adolescente",
+     "pedido_rede": null,
+     "intencao_ia": "lembranca",
+     "conceitos": {
+      "versao": "dec-v2",
+      "k": 93,
+      "intencao": "lembranca",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 95,
+        "confianca": 559
+       },
+       {
+        "nome": "sono",
+        "valor": 417,
+        "confianca": 559
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 0,
+        "confianca": 2
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 8,
+        "confianca": 2
+       },
+       {
+        "nome": "agitacao",
+        "valor": 35,
+        "confianca": 59
+       },
+       {
+        "nome": "aversao",
+        "valor": 1001,
+        "confianca": 1001,
+        "alvo": "ep6"
+       },
+       {
+        "nome": "frustracao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 586,
+        "confianca": 660
+       },
+       {
+        "nome": "lembranca",
+        "valor": 1001,
+        "confianca": 1001,
+        "alvo": "ep6",
+        "episodio": {
+         "acao": "chamar_atencao",
+         "classe": "sem_alvo",
+         "desfecho": "ruim"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 180,
+        "confianca": 233
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 391,
+        "confianca": 606
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adolescente"
+      }
+     }
+    },
+    {
+     "id": "Q0-t3",
+     "conjunto": "R",
+     "vida": 0,
+     "dono": "atencioso",
+     "semente_vida": 2970084817798576936,
+     "k": 94,
+     "tick": 1410,
+     "estagio": "adolescente",
+     "pedido_rede": null,
+     "intencao_ia": "aversao",
+     "conceitos": {
+      "versao": "dec-v2",
+      "k": 94,
+      "intencao": "aversao",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 97,
+        "confianca": 215
+       },
+       {
+        "nome": "sono",
+        "valor": 398,
+        "confianca": 215
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 0,
+        "confianca": 2
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 8,
+        "confianca": 2
+       },
+       {
+        "nome": "agitacao",
+        "valor": 31,
+        "confianca": 52
+       },
+       {
+        "nome": "aversao",
+        "valor": 1001,
+        "confianca": 1001,
+        "alvo": "ep6"
+       },
+       {
+        "nome": "frustracao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 487,
+        "confianca": 730
+       },
+       {
+        "nome": "lembranca",
+        "valor": 1001,
+        "confianca": 1001,
+        "alvo": "ep6",
+        "episodio": {
+         "acao": "chamar_atencao",
+         "classe": "sem_alvo",
+         "desfecho": "ruim"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 184,
+        "confianca": 233
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 400,
+        "confianca": 606
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adolescente"
+      }
+     }
+    },
+    {
+     "id": "Q0-t4",
+     "conjunto": "R",
+     "vida": 0,
+     "dono": "atencioso",
+     "semente_vida": 2970084817798576936,
+     "k": 95,
+     "tick": 1425,
+     "estagio": "adolescente",
+     "pedido_rede": null,
+     "intencao_ia": "indecisao",
+     "conceitos": {
+      "versao": "dec-v2",
+      "k": 95,
+      "intencao": "indecisao",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 229,
+        "confianca": 273
+       },
+       {
+        "nome": "sono",
+        "valor": 375,
+        "confianca": 273
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 44,
+        "confianca": 11
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 0,
+        "confianca": 11
+       },
+       {
+        "nome": "agitacao",
+        "valor": 43,
+        "confianca": 72
+       },
+       {
+        "nome": "aversao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "frustracao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 683,
+        "confianca": 1024
+       },
+       {
+        "nome": "lembranca",
+        "valor": 912,
+        "confianca": 912,
+        "alvo": "ep0",
+        "episodio": {
+         "acao": "comer",
+         "classe": "racao",
+         "desfecho": "bom"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 161,
+        "confianca": 241
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 289,
+        "confianca": 591
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adolescente"
+      }
+     }
+    },
+    {
+     "id": "Q0-t5",
+     "conjunto": "R",
+     "vida": 0,
+     "dono": "atencioso",
+     "semente_vida": 2970084817798576936,
+     "k": 96,
+     "tick": 1440,
+     "estagio": "adolescente",
+     "pedido_rede": null,
+     "intencao_ia": "indecisao",
+     "conceitos": {
+      "versao": "dec-v2",
+      "k": 96,
+      "intencao": "indecisao",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 210,
+        "confianca": 338
+       },
+       {
+        "nome": "sono",
+        "valor": 369,
+        "confianca": 338
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 40,
+        "confianca": 10
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 0,
+        "confianca": 10
+       },
+       {
+        "nome": "agitacao",
+        "valor": 38,
+        "confianca": 63
+       },
+       {
+        "nome": "aversao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "frustracao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 637,
+        "confianca": 955
+       },
+       {
+        "nome": "lembranca",
+        "valor": 935,
+        "confianca": 935,
+        "alvo": "ep0",
+        "episodio": {
+         "acao": "comer",
+         "classe": "racao",
+         "desfecho": "bom"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 161,
+        "confianca": 241
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 299,
+        "confianca": 591
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adolescente"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "Q1",
+   "vida": 3,
+   "k0": 870,
+   "entradas": [
+    {
+     "id": "Q1-t0",
+     "conjunto": "R",
+     "vida": 3,
+     "dono": "incoerente",
+     "semente_vida": 14055564316802024111,
+     "k": 870,
+     "tick": 13050,
+     "estagio": "adulto",
+     "pedido_rede": "solidao",
+     "intencao_ia": "aversao",
+     "conceitos": {
+      "versao": "dec-v3",
+      "k": 870,
+      "intencao": "solidao",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 98,
+        "confianca": 16
+       },
+       {
+        "nome": "sono",
+        "valor": 482,
+        "confianca": 16
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 108,
+        "confianca": 27
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 0,
+        "confianca": 27
+       },
+       {
+        "nome": "agitacao",
+        "valor": 1010,
+        "confianca": 1000
+       },
+       {
+        "nome": "aversao",
+        "valor": 1024,
+        "confianca": 1024,
+        "alvo": "ep116"
+       },
+       {
+        "nome": "frustracao",
+        "valor": 8,
+        "confianca": 15
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 726,
+        "confianca": 943
+       },
+       {
+        "nome": "lembranca",
+        "valor": 1024,
+        "confianca": 1024,
+        "alvo": "ep116",
+        "episodio": {
+         "acao": "chamar_atencao",
+         "classe": "sem_alvo",
+         "desfecho": "ruim"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 71,
+        "confianca": 62
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 622,
+        "confianca": 334
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adulto"
+      }
+     }
+    },
+    {
+     "id": "Q1-t1",
+     "conjunto": "R",
+     "vida": 3,
+     "dono": "incoerente",
+     "semente_vida": 14055564316802024111,
+     "k": 871,
+     "tick": 13065,
+     "estagio": "adulto",
+     "pedido_rede": null,
+     "intencao_ia": "agitacao",
+     "conceitos": {
+      "versao": "dec-v2",
+      "k": 871,
+      "intencao": "agitacao",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 100,
+        "confianca": 193
+       },
+       {
+        "nome": "sono",
+        "valor": 516,
+        "confianca": 193
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 248,
+        "confianca": 62
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 0,
+        "confianca": 62
+       },
+       {
+        "nome": "agitacao",
+        "valor": 935,
+        "confianca": 977
+       },
+       {
+        "nome": "aversao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "frustracao",
+        "valor": 8,
+        "confianca": 15
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 632,
+        "confianca": 875
+       },
+       {
+        "nome": "lembranca",
+        "valor": 1024,
+        "confianca": 1024,
+        "alvo": "ep117",
+        "episodio": {
+         "acao": "chamar_atencao",
+         "classe": "sem_alvo",
+         "desfecho": "bom"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 93,
+        "confianca": 0
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 598,
+        "confianca": 350
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adulto"
+      }
+     }
+    },
+    {
+     "id": "Q1-t2",
+     "conjunto": "R",
+     "vida": 3,
+     "dono": "incoerente",
+     "semente_vida": 14055564316802024111,
+     "k": 872,
+     "tick": 13080,
+     "estagio": "adulto",
+     "pedido_rede": "fome",
+     "intencao_ia": "lembranca",
+     "conceitos": {
+      "versao": "dec-v3",
+      "k": 872,
+      "intencao": "fome",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 104,
+        "confianca": 150
+       },
+       {
+        "nome": "sono",
+        "valor": 594,
+        "confianca": 150
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 236,
+        "confianca": 59
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 0,
+        "confianca": 59
+       },
+       {
+        "nome": "agitacao",
+        "valor": 942,
+        "confianca": 957
+       },
+       {
+        "nome": "aversao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "frustracao",
+        "valor": 8,
+        "confianca": 15
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 688,
+        "confianca": 739
+       },
+       {
+        "nome": "lembranca",
+        "valor": 994,
+        "confianca": 994,
+        "alvo": "ep117",
+        "episodio": {
+         "acao": "chamar_atencao",
+         "classe": "sem_alvo",
+         "desfecho": "bom"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 106,
+        "confianca": 8
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 571,
+        "confianca": 352
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adulto"
+      }
+     }
+    },
+    {
+     "id": "Q1-t3",
+     "conjunto": "R",
+     "vida": 3,
+     "dono": "incoerente",
+     "semente_vida": 14055564316802024111,
+     "k": 873,
+     "tick": 13095,
+     "estagio": "adulto",
+     "pedido_rede": null,
+     "intencao_ia": "aversao",
+     "conceitos": {
+      "versao": "dec-v2",
+      "k": 873,
+      "intencao": "aversao",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 109,
+        "confianca": 1024
+       },
+       {
+        "nome": "sono",
+        "valor": 878,
+        "confianca": 1024
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 128,
+        "confianca": 32
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 0,
+        "confianca": 32
+       },
+       {
+        "nome": "agitacao",
+        "valor": 955,
+        "confianca": 946
+       },
+       {
+        "nome": "aversao",
+        "valor": 1001,
+        "confianca": 1001,
+        "alvo": "ep118"
+       },
+       {
+        "nome": "frustracao",
+        "valor": 8,
+        "confianca": 15
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "lembranca",
+        "valor": 1001,
+        "confianca": 1001,
+        "alvo": "ep118",
+        "episodio": {
+         "acao": "chamar_atencao",
+         "classe": "sem_alvo",
+         "desfecho": "ruim"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 33,
+        "confianca": 16
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 594,
+        "confianca": 368
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adulto"
+      }
+     }
+    },
+    {
+     "id": "Q1-t4",
+     "conjunto": "R",
+     "vida": 3,
+     "dono": "incoerente",
+     "semente_vida": 14055564316802024111,
+     "k": 874,
+     "tick": 13110,
+     "estagio": "adulto",
+     "pedido_rede": null,
+     "intencao_ia": "aversao",
+     "conceitos": {
+      "versao": "dec-v2",
+      "k": 874,
+      "intencao": "aversao",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 325,
+        "confianca": 412
+       },
+       {
+        "nome": "sono",
+        "valor": 590,
+        "confianca": 412
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 120,
+        "confianca": 30
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 0,
+        "confianca": 30
+       },
+       {
+        "nome": "agitacao",
+        "valor": 970,
+        "confianca": 936
+       },
+       {
+        "nome": "aversao",
+        "valor": 1001,
+        "confianca": 1001,
+        "alvo": "ep118"
+       },
+       {
+        "nome": "frustracao",
+        "valor": 8,
+        "confianca": 15
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 598,
+        "confianca": 897
+       },
+       {
+        "nome": "lembranca",
+        "valor": 1001,
+        "confianca": 1001,
+        "alvo": "ep118",
+        "episodio": {
+         "acao": "chamar_atencao",
+         "classe": "sem_alvo",
+         "desfecho": "ruim"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 29,
+        "confianca": 16
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 654,
+        "confianca": 368
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adulto"
+      }
+     }
+    },
+    {
+     "id": "Q1-t5",
+     "conjunto": "R",
+     "vida": 3,
+     "dono": "incoerente",
+     "semente_vida": 14055564316802024111,
+     "k": 875,
+     "tick": 13125,
+     "estagio": "adulto",
+     "pedido_rede": null,
+     "intencao_ia": "aversao",
+     "conceitos": {
+      "versao": "dec-v2",
+      "k": 875,
+      "intencao": "aversao",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 337,
+        "confianca": 296
+       },
+       {
+        "nome": "sono",
+        "valor": 538,
+        "confianca": 296
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 112,
+        "confianca": 28
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 0,
+        "confianca": 28
+       },
+       {
+        "nome": "agitacao",
+        "valor": 968,
+        "confianca": 931
+       },
+       {
+        "nome": "aversao",
+        "valor": 1001,
+        "confianca": 1001,
+        "alvo": "ep118"
+       },
+       {
+        "nome": "frustracao",
+        "valor": 8,
+        "confianca": 15
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 752,
+        "confianca": 981
+       },
+       {
+        "nome": "lembranca",
+        "valor": 1001,
+        "confianca": 1001,
+        "alvo": "ep118",
+        "episodio": {
+         "acao": "chamar_atencao",
+         "classe": "sem_alvo",
+         "desfecho": "ruim"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 31,
+        "confianca": 16
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 668,
+        "confianca": 368
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adulto"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "Q2",
+   "vida": 1,
+   "k0": 983,
+   "entradas": [
+    {
+     "id": "Q2-t0",
+     "conjunto": "R",
+     "vida": 1,
+     "dono": "relapso",
+     "semente_vida": 15832455765188867216,
+     "k": 983,
+     "tick": 14745,
+     "estagio": "adulto",
+     "pedido_rede": "fome",
+     "intencao_ia": "lembranca",
+     "conceitos": {
+      "versao": "dec-v3",
+      "k": 983,
+      "intencao": "fome",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 44,
+        "confianca": 130
+       },
+       {
+        "nome": "sono",
+        "valor": 302,
+        "confianca": 130
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 80,
+        "confianca": 20
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 0,
+        "confianca": 20
+       },
+       {
+        "nome": "agitacao",
+        "valor": 189,
+        "confianca": 241
+       },
+       {
+        "nome": "aversao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "frustracao",
+        "valor": 8,
+        "confianca": 15
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 619,
+        "confianca": 782
+       },
+       {
+        "nome": "lembranca",
+        "valor": 872,
+        "confianca": 872,
+        "alvo": "ep10",
+        "episodio": {
+         "acao": "chamar_atencao",
+         "classe": "sem_alvo",
+         "desfecho": "bom"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 139,
+        "confianca": 144
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 350,
+        "confianca": 520
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adulto"
+      }
+     }
+    },
+    {
+     "id": "Q2-t1",
+     "conjunto": "R",
+     "vida": 1,
+     "dono": "relapso",
+     "semente_vida": 15832455765188867216,
+     "k": 984,
+     "tick": 14760,
+     "estagio": "adulto",
+     "pedido_rede": null,
+     "intencao_ia": "indecisao",
+     "conceitos": {
+      "versao": "dec-v2",
+      "k": 984,
+      "intencao": "indecisao",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 46,
+        "confianca": 429
+       },
+       {
+        "nome": "sono",
+        "valor": 289,
+        "confianca": 429
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 40,
+        "confianca": 10
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 0,
+        "confianca": 10
+       },
+       {
+        "nome": "agitacao",
+        "valor": 187,
+        "confianca": 238
+       },
+       {
+        "nome": "aversao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "frustracao",
+        "valor": 8,
+        "confianca": 15
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 683,
+        "confianca": 1024
+       },
+       {
+        "nome": "lembranca",
+        "valor": 903,
+        "confianca": 903,
+        "alvo": "ep16",
+        "episodio": {
+         "acao": "explorar",
+         "classe": "sem_alvo",
+         "desfecho": "bom"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 101,
+        "confianca": 151
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 442,
+        "confianca": 534
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adulto"
+      }
+     }
+    },
+    {
+     "id": "Q2-t2",
+     "conjunto": "R",
+     "vida": 1,
+     "dono": "relapso",
+     "semente_vida": 15832455765188867216,
+     "k": 985,
+     "tick": 14775,
+     "estagio": "adulto",
+     "pedido_rede": null,
+     "intencao_ia": "indecisao",
+     "conceitos": {
+      "versao": "dec-v2",
+      "k": 985,
+      "intencao": "indecisao",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 86,
+        "confianca": 379
+       },
+       {
+        "nome": "sono",
+        "valor": 345,
+        "confianca": 379
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 116,
+        "confianca": 29
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 0,
+        "confianca": 29
+       },
+       {
+        "nome": "agitacao",
+        "valor": 192,
+        "confianca": 247
+       },
+       {
+        "nome": "aversao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "frustracao",
+        "valor": 8,
+        "confianca": 15
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 583,
+        "confianca": 874
+       },
+       {
+        "nome": "lembranca",
+        "valor": 929,
+        "confianca": 929,
+        "alvo": "ep17",
+        "episodio": {
+         "acao": "comer",
+         "classe": "racao",
+         "desfecho": "bom"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 106,
+        "confianca": 159
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 328,
+        "confianca": 573
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adulto"
+      }
+     }
+    },
+    {
+     "id": "Q2-t3",
+     "conjunto": "R",
+     "vida": 1,
+     "dono": "relapso",
+     "semente_vida": 15832455765188867216,
+     "k": 986,
+     "tick": 14790,
+     "estagio": "adulto",
+     "pedido_rede": null,
+     "intencao_ia": "indecisao",
+     "conceitos": {
+      "versao": "dec-v2",
+      "k": 986,
+      "intencao": "indecisao",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 81,
+        "confianca": 189
+       },
+       {
+        "nome": "sono",
+        "valor": 360,
+        "confianca": 189
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 108,
+        "confianca": 27
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 0,
+        "confianca": 27
+       },
+       {
+        "nome": "agitacao",
+        "valor": 190,
+        "confianca": 244
+       },
+       {
+        "nome": "aversao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "frustracao",
+        "valor": 8,
+        "confianca": 15
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 477,
+        "confianca": 715
+       },
+       {
+        "nome": "lembranca",
+        "valor": 929,
+        "confianca": 929,
+        "alvo": "ep17",
+        "episodio": {
+         "acao": "comer",
+         "classe": "racao",
+         "desfecho": "bom"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 106,
+        "confianca": 159
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 308,
+        "confianca": 574
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adulto"
+      }
+     }
+    },
+    {
+     "id": "Q2-t4",
+     "conjunto": "R",
+     "vida": 1,
+     "dono": "relapso",
+     "semente_vida": 15832455765188867216,
+     "k": 987,
+     "tick": 14805,
+     "estagio": "adulto",
+     "pedido_rede": null,
+     "intencao_ia": "indecisao",
+     "conceitos": {
+      "versao": "dec-v2",
+      "k": 987,
+      "intencao": "indecisao",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 128,
+        "confianca": 342
+       },
+       {
+        "nome": "sono",
+        "valor": 344,
+        "confianca": 342
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 104,
+        "confianca": 26
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 0,
+        "confianca": 26
+       },
+       {
+        "nome": "agitacao",
+        "valor": 188,
+        "confianca": 241
+       },
+       {
+        "nome": "aversao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "frustracao",
+        "valor": 8,
+        "confianca": 15
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 663,
+        "confianca": 995
+       },
+       {
+        "nome": "lembranca",
+        "valor": 948,
+        "confianca": 948,
+        "alvo": "ep69",
+        "episodio": {
+         "acao": "comer",
+         "classe": "racao",
+         "desfecho": "bom"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 111,
+        "confianca": 167
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 293,
+        "confianca": 569
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adulto"
+      }
+     }
+    },
+    {
+     "id": "Q2-t5",
+     "conjunto": "R",
+     "vida": 1,
+     "dono": "relapso",
+     "semente_vida": 15832455765188867216,
+     "k": 988,
+     "tick": 14820,
+     "estagio": "adulto",
+     "pedido_rede": null,
+     "intencao_ia": "indecisao",
+     "conceitos": {
+      "versao": "dec-v2",
+      "k": 988,
+      "intencao": "indecisao",
+      "conceitos": [
+       {
+        "nome": "fome",
+        "valor": 132,
+        "confianca": 187
+       },
+       {
+        "nome": "sono",
+        "valor": 115,
+        "confianca": 187
+       },
+       {
+        "nome": "bem_estar",
+        "valor": 96,
+        "confianca": 24
+       },
+       {
+        "nome": "mal_estar",
+        "valor": 0,
+        "confianca": 24
+       },
+       {
+        "nome": "agitacao",
+        "valor": 186,
+        "confianca": 238
+       },
+       {
+        "nome": "aversao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "frustracao",
+        "valor": 8,
+        "confianca": 15
+       },
+       {
+        "nome": "determinacao",
+        "valor": 0,
+        "confianca": 0
+       },
+       {
+        "nome": "indecisao",
+        "valor": 613,
+        "confianca": 919
+       },
+       {
+        "nome": "lembranca",
+        "valor": 947,
+        "confianca": 947,
+        "alvo": "ep15",
+        "episodio": {
+         "acao": "comer",
+         "classe": "racao",
+         "desfecho": "bom"
+        }
+       },
+       {
+        "nome": "solidao",
+        "valor": 111,
+        "confianca": 167
+       },
+       {
+        "nome": "curiosidade",
+        "valor": 309,
+        "confianca": 573
+       }
+      ]
+     },
+     "estado": {
+      "identidade": {
+       "estagio": "adulto"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

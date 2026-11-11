@@ -1,0 +1,58 @@
+{
+ "pesoPonto": 15,
+ "gama": {
+  "vigor": 0.02,
+  "recuperacao": 0.02,
+  "guarda": 0.06,
+  "forca": 0.02,
+  "mira": 0.14,
+  "folego": 0.14
+ },
+ "mapa": {
+  "hp": 1300,
+  "vel": 60
+ },
+ "multVida": {
+  "crianca": 0.6,
+  "adolescente": 0.9,
+  "adulto": 1.35,
+  "mega": 2.025
+ },
+ "multAtk": {
+  "crianca": 1,
+  "adolescente": 1.5,
+  "adulto": 2.25,
+  "mega": 3.375
+ },
+ "tiro": {
+  "distMin": 110,
+  "esperaMax": 1500,
+  "recuo": 1.5,
+  "recuaNaPrep": 2,
+  "recuaAbaixo": 0.75,
+  "danoProj": 0.7,
+  "velProj": 1
+ },
+ "nome": "n0500",
+ "esquiva": {
+  "ligada": 1,
+  "gamaMira": 0.6,
+  "gamaFolego": 0.6,
+  "kAtento": 0.5,
+  "pertoChance": 0,
+  "pertoReacao": 200,
+  "contraMs": 0
+ },
+ "npcTotal": {
+  "npc_tier1_brutamontes": 480,
+  "npc_tier2_sentinela": 360,
+  "npc_tier2_carcereiro": 450,
+  "npc_tier2_porteiro": 450,
+  "npc_v6_youkomon": 450,
+  "npc_v5_myotismon": 550,
+  "npc_v6_marinbullmon": 550,
+  "npc_v5_puppetmon": 450,
+  "npc_v5_machinedramon": 360,
+  "npc_v5_piedmon": 550
+ }
+}

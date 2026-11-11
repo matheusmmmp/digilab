@@ -10,8 +10,8 @@
    conhece as 5 medalhas das evolucoes (o evento "u" no comeco do registro dele), para a escada chegar ao Ultimate como antes. */
 import { ACOES_DONO_JOGO_V11, CAT, CD, CMD, CTR, Motor, TPD, criarDono, criarRng, hashSemente, type EventoRegistro, type Exercicio, type TipoDono, type VisaoDono } from "../motor/index.ts";
 import { jogoAtual, motorReal, sairDoLab, trocarMotor } from "./jogo.ts";
-import { LUTA, previa } from "./luta.ts";
 import { CHAVE, textoSave } from "./save.ts";
+import { lutaPocLigada } from "./lutaPoc.ts";
 
 export const CHAVE_GUARDADOS = CHAVE + "-guardados";
 export interface Guardado { semente: number; log: EventoRegistro[]; versao: number }
@@ -48,8 +48,6 @@ export function ativarGuardado(i: number): void {
   g[i] = JSON.parse(textoSave(jogoAtual().motor)) as Guardado;
   gravarGuardados(g);
   trocarMotor(m, "save");
-  LUTA.rivalFixo = null;
-  previa("arena");
 }
 
 /** apaga o guardado i (a tela confirma antes); o ativo nunca e apagado por aqui */
@@ -87,7 +85,12 @@ export function petDaReceita(r: Receita, tratarLesao = false): Motor {
     const rest = orc - gasto, min = Math.max(0, rest - (passos - p - 1) * CD.maxPasso), max = Math.min(rest, CD.maxPasso);
     const v: VisaoDono = { e: m.e, acao: m.acao, passo: p, passos, orc, gasto, min, max, atrasado: gasto < orc * (p + 1) / passos, chamados: m.chamadosAbertos() };
     for (const a of dono.decidir(v, rng)) if (ACOES_DONO_JOGO_V11.includes(a)) { m.observar(a); gasto++; }
-    if (m.estagioAtual === "adolescente" && m.sparring < CAT.sparring) m.lutar("aleatorio", hashSemente("sparring", r.semente, p));
+    /* o sparring do Champion ate o minimo: uma luta por passo na Arena, contra uma forma do estagio sorteada da semente, no Campo de treino (o
+       mapa sem regra). Desde a LP4 (LUTA_POC) a luta da POC; antes, o bot aleatorio do combate por turnos. PROPOSTO, SEM FONTE */
+    if (m.estagioAtual === "adolescente" && m.sparring < CAT.sparring) {
+      const rivais = m.rivaisArenaPoc(), s = hashSemente("sparring", r.semente, p);
+      m.lutarPoc(rivais[s % rivais.length], s, "campo");
+    }
     if (tratarLesao && m.lesionadoDesde !== null) { m.observar("tratar_lesao"); gasto++; }
     /* treino: sem forcar (para abaixo do limite), respeitando o intervalo e a meta do dia */
     const dia = Math.floor(m.e.tick / TPD);
@@ -101,6 +104,8 @@ export function petDaReceita(r: Receita, tratarLesao = false): Motor {
 /** primeiro acesso a esta versao: cria a escada de exemplo, se ainda nao houver guardados */
 export function semearGuardados(): boolean {
   try { if (localStorage.getItem(CHAVE_GUARDADOS) !== null) return false; } catch { return false; }
+  /* com a luta da POC ligada (LP2), a escada (pets v19, que lutam por outras regras) nao e semeada: os guardados comecam vazios */
+  if (lutaPocLigada()) { gravarGuardados([]); return true; }
   gravarGuardados(ESCADA.map(r => JSON.parse(textoSave(petDaReceita(r))) as Guardado));
   return true;
 }

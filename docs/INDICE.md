@@ -10,7 +10,10 @@ citados. Status: PROPOSTO (`docs/TAREFA_V2_INFRA_MULTIAGENTE.md`).
 
 ## Nível 1: onde o projeto está (no começo de cada sessão)
 
-- [`PAINEL_V2.md`](PAINEL_V2.md): o estado da V2 em uma página (marcos, runs, decisões abertas, riscos), curado pelo coordenador.
+- [`PAINEL_V3.md`](PAINEL_V3.md): o estado da V3 em uma página (trilhas, missões, decisões abertas, riscos), curado pelo coordenador.
+  O plano é o [`PLANO_V3.md`](PLANO_V3.md). A V2 está congelada na tag `v2-final` ([`FECHAMENTO_V2.md`](FECHAMENTO_V2.md)); o
+  [`PAINEL_V2.md`](PAINEL_V2.md) fica só como histórico.
+- [`ONDE_VAI_CADA_DOCUMENTO.md`](ONDE_VAI_CADA_DOCUMENTO.md): o destino de cada tipo de documento, dentro e fora do repositório.
 - [`ESTADO_ATUAL.md`](ESTADO_ATUAL.md): o índice derivado das tarefas, dos planos e dos últimos desvios. Gerado por
   `tools/gerar_estado_atual.py`; não é fonte.
 
@@ -37,14 +40,15 @@ citados. Status: PROPOSTO (`docs/TAREFA_V2_INFRA_MULTIAGENTE.md`).
 | tipo de informação | onde mora |
 |---|---|
 | funcionalidade implementada | o código da `main` e os testes; o mapa arquivo a arquivo em [`MAPA_REPOSITORIO.md`](MAPA_REPOSITORIO.md) |
-| decisão aprovada | a seção 3 do [`PAINEL_V2.md`](PAINEL_V2.md), as "decisões que valem" do `CLAUDE.md`, a seção de decisões de cada tarefa, o [registro de desvios](REGISTRO_DESVIOS.md) |
-| hipótese científica | [`PLANO_V2_PESQUISA.md`](PLANO_V2_PESQUISA.md), [`PREDICOES_V2.md`](PREDICOES_V2.md) |
-| proposta ainda não aprovada | [`futuro/`](futuro/), as tarefas e os campos com status PROPOSTO |
-| experimento planejado | `PLANO_ANALISE_V2_*.md` (commitado antes da run) |
-| resultado observado | `RESULTADO_V2_*.md` e os artefatos `artifacts_*/` que eles citam |
-| problema conhecido | a seção 4 (riscos) do [`PAINEL_V2.md`](PAINEL_V2.md) e o [registro de desvios](REGISTRO_DESVIOS.md) |
-| próxima tarefa | a seção 3 do [`PAINEL_V2.md`](PAINEL_V2.md) e a seção 8 do [`ROADMAP_V2.md`](ROADMAP_V2.md) |
-| tarefa de uma frente | `TAREFA_V2_<FRENTE>.md`, pelo [modelo](modelos/TAREFA_V2_MODELO.md) |
+| decisão aprovada | a seção 2 do [`PAINEL_V3.md`](PAINEL_V3.md), as "decisões que valem" do `CLAUDE.md`, a seção de decisões de cada tarefa, o [registro de desvios](REGISTRO_DESVIOS.md) |
+| hipótese científica | o [`PLANO_V3.md`](PLANO_V3.md) e os planos de análise da frente; os da V2 em [`PLANO_V2_PESQUISA.md`](PLANO_V2_PESQUISA.md) e [`PREDICOES_V2.md`](PREDICOES_V2.md) |
+| proposta ainda não aprovada | as tarefas e os campos com status PROPOSTO; [`futuro/`](futuro/) só para ideia de mecânica ou de código ainda sem tarefa |
+| levantamento, revisão, crítica, auditoria | fora do repositório, no vault `DigiLab Research` (ver [`ONDE_VAI_CADA_DOCUMENTO.md`](ONDE_VAI_CADA_DOCUMENTO.md)) |
+| experimento planejado | `PLANO_ANALISE_V3_*.md` (commitado antes da run); os `_V2_` das frentes herdadas |
+| resultado observado | `RESULTADO_V3_*.md` (e os `_V2_`) e os artefatos `artifacts_*/` que eles citam |
+| problema conhecido | a seção 3 (riscos) do [`PAINEL_V3.md`](PAINEL_V3.md) e o [registro de desvios](REGISTRO_DESVIOS.md) |
+| próxima tarefa | as seções 1 e 2 do [`PAINEL_V3.md`](PAINEL_V3.md) |
+| tarefa de uma frente | `TAREFA_V3_<FRENTE>.md`, pelo [modelo](modelos/TAREFA_V3_MODELO.md) (`python tools/nova_tarefa.py <FRENTE> --fase V3`) |
 | literatura verificada | [`referencias/`](referencias/) e as regras em [`REGRAS_CITACAO_DIGILAB.md`](referencias/REGRAS_CITACAO_DIGILAB.md) |
 
 ## Nível 3: história e detalhe (só quando a frente pedir)
@@ -52,6 +56,8 @@ citados. Status: PROPOSTO (`docs/TAREFA_V2_INFRA_MULTIAGENTE.md`).
 - [`historico/LEIA.md`](historico/LEIA.md): o que cada etapa construiu (o resumo antigo do `CLAUDE.md`, seção a seção).
 - [`V2_TRABALHO_PARALELO.md`](V2_TRABALHO_PARALELO.md): os papéis de coordenador e worker, as worktrees, as sementes e a GPU.
 - [`infra/`](infra/): esta infraestrutura (a matriz de capacidades, a auditoria, o guia operacional, o teste do ChatGPT Work).
+
+Os três abaixo são da V2, apesar do nome (o glossário V2 × V3 está no `PLANO_V3.md`, seção 8):
 
 - [`TAREFA_V2_V3.md`](TAREFA_V2_V3.md): handoff para investigar o espaço de ações e oportunidades de escolha do DigiBrain V3.
 - [`TAREFA_V2_V3_CREDITO_CANAL.md`](TAREFA_V2_V3_CREDITO_CANAL.md): a V3-9, o crédito do "querer" por canal até o alvo (o desenho, PROPOSTO).

@@ -10,6 +10,7 @@ import { chocarDoBrasao, fecharEscolhaBrasao, guardarAtivoNoProximoOvo, marcarCo
 import { tamerAtual } from "../jogo.ts";
 import { SeloMedalha } from "./Medalha.tsx";
 import { abrirModal } from "./modal.ts";
+import { emitirMusica } from "../somEventos.ts";
 import { Deco } from "./Deco.tsx";
 import { Peca } from "./Imagens.tsx";
 import { BotaoContinuar, BotaoHx } from "./hx/index.ts";
@@ -24,6 +25,8 @@ export function EscolherBrasao({ podeVoltar }: { podeVoltar: boolean }) {
   const ref = useRef<HTMLDialogElement>(null), a = useAtlas(), [msg, setMsg] = useState(""), desk = useDesktop();
   const [ritmo, setRitmo] = useState<Ritmo>("rapida");
   useEffect(() => { abrirModal(ref.current); }, []);
+  /* SOM-UP: a musica do nascimento do Digimon UP enquanto o jogador escolhe o brasao */
+  useEffect(() => { emitirMusica("jornada", { lugar: "nascimento" }); return () => emitirMusica("jornada", null); }, []);
   const escolher = (esp: Especie) => {
     try { chocarDoBrasao(esp, guardarAtivoNoProximoOvo(), ritmo); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
   };
@@ -102,7 +105,7 @@ export function Conclusao({ m, fechar }: { m: Motor; fechar: () => void }) {
 
 /* ------------------------------------------------ como jogar (pranchas PvComoCuidar, PvComoEnsinar, PvComoCrescer)
    P-9 (docs/PLANO_V3_PROGRESSAO_TUTORIAL.md, decidido em 2026-11-06): uma pagina so, a "Cuide". A "Ensine" dizia "Elogie ou repreenda", que os pets v11 nao tem
-   (docs/DECISAO_PRODUTO_SEM_ELOGIO_BRONCA.md), e o resto vem com os cartoes dos niveis (CartaoNivel.tsx): o Crescer no Nv 3 e as Regras de luta no Nv 6 */
+   (docs/DECISAO_PRODUTO_SEM_ELOGIO_BRONCA.md), e o resto vem com os cartoes dos niveis (CartaoNivel.tsx): o Crescer no Nv 3 e o Forcar no Nv 6 (as Regras de luta sairam com o combate por turnos, LP4) */
 const PAGINAS: { tit: string; txt: string; sprites: string[]; chips?: [string, string][]; faixa?: string }[] = [
   { tit: "Cuide", txt: "Ele chama quando tem fome, fica sujo ou quer carinho. Atender logo conta.", sprites: ["brasa_bebe"], chips: [["emoji_carne", ""]] },
 ];

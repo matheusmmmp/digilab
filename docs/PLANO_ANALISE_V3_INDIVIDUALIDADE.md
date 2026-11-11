@@ -228,3 +228,42 @@ Antes da primeira vida, numa seção nova no fim deste plano, ficam:
 | **IP-7** | as réplicas e a janela | **as do I1:** 3 réplicas, 240 ticks, às 10 h | mudar agora pede regravar o gabarito de novo; o R_rep da run mostra se faltam réplicas |
 | **IP-8** | onde as contas moram | **ICC, componentes, η² e a reta no `digilab/metrics.py`**; o bootstrap no orquestrador | as contas no orquestrador ficam duplicadas no I3 e no I4 |
 | **IP-9** | a faixa | **pedida ao Gerente**, com 60 sementes em 5 bases, como as da C4 | uma faixa improvisada quebra a regra das sementes |
+
+## 12. O registro da run
+
+Escrito em 2026-11-08, antes da primeira vida da faixa, no branch `v3-individualidade-i2b`.
+- **O commit do código:** `ad207f7` (a `main` com o I2a, #707). O registro entra num commit próprio por cima dele, que não muda código.
+- **Os sha256** (o conteúdo no commit `ad207f7`):
+  - o orquestrador `experiments/run_v3_individualidade.py`: `b702ee2c7aaae7bfef3c0d76d04d2254ef5f8db9aee0de57f17407b4aa5b04d8`;
+  - a bateria `experiments/sondas_individualidade.py`: `569088c5ce135d97f961ea2e9c71ba9acb1b925a7d95840ada4da69f3e10f621`;
+  - o `digilab/metrics.py`: `46d0022ae6dd6c2f58346d1b8425fdb1441c065540668fe9ea767021a509ac54`;
+  - a config: `c82081abde15e771976483a8a4c5a3818501874ae443de7c9e8e972860eb0958`.
+- **A config:** `experiments/configs/v3_individualidade/individualidade.json`: o REL e o REL+F, os quatro donos, o `comedouro`, 14 dias,
+  16 passos do dono por dia, as bases 85101, 85202, 85303, 85404 e 85505 com K = 12, num total de 480 vidas.
+- **O comando:**
+  `python experiments/run_v3_individualidade.py --config experiments/configs/v3_individualidade/individualidade.json --processos 4`,
+  com a saída em `artifacts_v3_individualidade/` (fora do git).
+- **A faixa:** 85101…85505, reservada em `experiments/bancada/faixas.py` e aprovada pelo Matheus em 2026-11-07 ("Aprovo a faixa").
+- **A suíte do dia:** `python -m pytest tests/ -q` no commit `ad207f7`: 5108 passed, 7 skipped, em 3 h 13 min (Python 3.13.0).
+- **A run roda uma vez.** Se ela cair por bug, a pasta vai para `artifacts_v3_individualidade/caida_1/`, o conserto vai num PR e o
+  desvio vai para o registro, antes de rodar de novo.
+
+## 13. Adendo 1: as facetas dentro do dono (descritivo, sem run; 2026-11-09)
+
+**Status do adendo: DECIDIDO pelo Matheus em 2026-11-09** (a escolha "Descritivo dentro do dono", depois do resultado do I2). Escrito e
+commitado antes da conta.
+
+- **A pergunta:** as três correlações da 4.4 saíram no sentido contrário ao esperado (`docs/RESULTADO_V3_INDIVIDUALIDADE.md`, seção 2).
+  Como o dono move muito o traço (η² alto), a inversão pode vir do dono mover o traço e a faceta juntos. O adendo olha a mesma
+  correlação dentro de cada dono.
+- **Os dados:** só os artefatos do I2 (`artifacts_v3_individualidade/medidas.json`). Nenhuma vida nova, nenhuma semente nova.
+- **A conta:** a mesma da 4.4 (`facetas` do orquestrador), com o mesmo bootstrap (2 000 reamostras sobre os pets, a mesma rng), sobre
+  os pets do REL+F de cada dono, separadamente:
+  - o atencioso, o relapso e o aleatório, com 60 pets cada;
+  - o incoerente fica fora, porque as vidas dele são as do atencioso (D-IND-I2b-1).
+- **O artefato:** `artifacts_v3_individualidade/facetas_por_dono.json`, gravado por `experiments/descritivo_individualidade_facetas.py`,
+  com o sha256 do `medidas.json` lido.
+- **A leitura:** só descritiva, com as frases da 7.2: "a faceta acompanha o traço dentro do dono D" só se o IC95 excluir 0.
+  - **Não se lê causa:** a correlação dentro do dono ainda não separa a faceta que move o traço do traço que move a faceta. Isso é da
+    sonda `sem_faceta` do I4.
+  - **Não se ajusta nada:** o adendo não muda o I2, a regra 7.4 nem o I3.

@@ -635,3 +635,422 @@ pendências que o relato do #668 deixou, num PR próprio (branch `v3-ux-digibrai
 
 **Fica com o Matheus:** a M3 num celular de verdade, com `?medir3d=1`. O porquê do cérebro modular no mesmo campo (D1-9) é a próxima etapa,
 com prancha.
+
+## 21. A gota sobre a cabeça do pet (2026-11-08)
+
+**O pedido:** o Matheus disse que "a gotinha que tá na cabeça do pet, ele tá bem esquisita, ela tá fora do formato". Essa gota é o emote do
+medo da mão e do esforço do cocô. Ela é só vista; o motor, o save e os gabaritos não mudam.
+
+**Duas causas:**
+- a grade `gota` (`src/grades.ts`) era um losango de 7 × 5;
+- todo emote desenhado em grade, e não pelo atlas, ganhava um retângulo branco por trás (`src/telas/pet/PalcoPet.tsx`), e a gota aparecia
+  dentro de uma caixa.
+
+**O conserto:**
+- a gota passa a ter forma de lágrima, 7 × 8, com o brilho em `w`;
+- o retângulo dá lugar ao `contornoGrade`, um contorno branco de 1 unidade que segue o desenho, como o contorno do sprite do pet. O
+  contorno vale para todos os emotes de grade (gota, interrogação, raiva, lágrima, x, espiral).
+
+Depois, o Matheus disse que "o da raiva ainda tá feio", e a grade `raiva` virou a marca de raiva dos animes: quatro cantos vermelhos de 9 × 9 com a quina virada para o centro.
+
+O antes e o depois estão em `docs/pranchas/ux-gota/gota_antes_depois.png`. As medidas (7 × 8 e o contorno de 1 unidade) são PROPOSTO,
+SEM FONTE.
+
+## 22. Etapa I1: a prancha da ilha A, "Objetos que falam" (2026-11-07)
+
+O Matheus pediu uma ilha mais interativa, com referências como Animal Crossing. O gerente mostrou três direções: A, "Objetos que falam"; B,
+"Quintal que atrai"; e C, "Ilha que cresce". A resposta dele foi: "Siga com as recomendações". Isso quer dizer a A primeiro, a C depois e a
+B como pesquisa. Também vale para as duas perguntas: tocar no objeto acompanha a barra de ações, e o fio aparece só no toque e quando o pet
+vai até um objeto. Esta etapa faz só a prancha da A, sem código do jogo (branch `v3-ux-ilha-a`, a partir da `v3-ux-integra`).
+
+**O que foi feito:**
+- **A prancha:** `docs/pranchas/ux-ilha-a/`, desenhada sobre capturas reais da Tela Pet. Tem cinco estados (nada tocado, etiqueta aberta, fio
+  ao tocar no pet, pet indo até a tigela, toque na árvore), a 1920 e a 390, nas peles Vidro e Militar, mais uma versão com as notas da
+  fonte. As 30 imagens estão em `D:\Trab\digilab\capturas_ux_ilha_aprovar\prancha_a\`.
+- **Os números:** saem do motor no momento da captura (`window.__digilab`), em `dados.json` (gerado pelo `gerar_dados.py`).
+- **A fonte de cada um dos cinco pontos** está no `LEIA.md` da prancha. Três lacunas:
+  - as frutas na árvore e o gesto de sacudir: o jogo roda o `CMU_MVP`, sem árvores;
+  - o "diário novo": o jogo não guarda o que foi lido;
+  - o paladar, que ainda não existe no TS.
+- **O alvo do fio** pede um getter só de leitura no `Mundo` do TS.
+- **As perguntas I1-1 a I1-10** e a lista do que a direção C vai precisar estão no `PERGUNTAS.md` e no `LEIA.md`.
+
+**Fica com o Matheus:** aprovar as telas e responder as perguntas I1-1 a I1-10. O código da A só começa depois disso.
+
+**Rodada 2 (o Matheus respondeu, 2026-11-07):**
+
+> "Que fio, eu pedi pra ser drag and drop. [...] Não tem fio nenhum. Acredito que a ideia de clicar na árvore, ela sacudir, é interessante
+> para cair a flor, né? A fruta. Daí segue a recomendação para as outras opções."
+
+- **O fio saiu por inteiro,** e a I1-2 (o getter do alvo) e a I1-10 caíram com ele.
+- **Clicar no pet é carinho, e segurar o leva** (I1-1). Isso já existe no jogo (PEGAR_PET, #673 e #674). O estado "fio ao tocar no pet"
+  virou "segurar e arrastar o pet", desenhado como o jogo já faz.
+- **Tocar na árvore a sacode e faz cair uma fruta** (I1-3). Isso pede motor novo, e o PERGUNTAS.md descreve a tarefa própria: Python
+  primeiro, depois o TS com paridade, numa versão de pet nova e atrás de uma chave desligada. Nenhum motor mudou aqui.
+- **As I1-4 a I1-9 ficaram DECIDIDAS** pela recomendação.
+- **As capturas foram refeitas** sobre a main com o #689, com pets v19. As da rodada 1 estão em `prancha_a\antes\`.
+
+**O código da A (o Matheus: "Aprovar e codar", 2026-11-07):** só a vista, no mesmo PR #691.
+- **Os selos dos lugares** (`src/componentes/ObjetosDaIlha.tsx`):
+  - no saco, os treinos de hoje e o ✓, ou a hora da próxima vez;
+  - na barraca, o ponto de diário novo. A marca da última abertura do Diário fica no `localStorage` (`<CHAVE>-diario-visto`), fora do save;
+  - o selo cede ao aviso da necessidade do pet (I1-6).
+- **As etiquetas curtas** aparecem no hover da tigela, da bola e dos três lugares, e no objeto que é o alvo atual (I1-4).
+- **O cartão da tigela e da bola** traz o número, a linha "come/brinca mais ou menos" (I1-8) e o gesto pelo caminho da barra:
+  `agir("alimentar")` e o `porBolaEm` do "Pôr bola" (I1-9).
+- **O clique e o segurar no pet** continuam os da PEGAR_PET (I1-1).
+- **As contas** ficam em `src/telas/pet/objetosIlha.ts`, e os testes em `test/objetos_ilha.test.ts`.
+- **Interpretações:** D-I1-1 a D-I1-4, em `docs/registro/2026-11.md`.
+- **Pendente do #694:** a árvore que dá fruta.
+
+## 23. A tela Pet mais limpa: os ícones no hover, o minimapa menor, as faixas por 5 s e o pet que anda até o lugar (2026-11-08)
+
+O Matheus, sobre a tela Pet já com a ilha A (#691):
+> "Eu não quero que fique aparecendo esses ícones o tempo todo na tela. Eu quero que eles só fiquem aparentes se o jogador passar o mouse por cima,
+> sabe? E daí fique bem translúcido. O minimapa tá muito grande, diminui um pouco o minimapa também."
+
+> "[...] na batalha, o Pet vai até o portal, ele não teleporta até lá, ele vai correndo na velocidade dele mesmo, sabe? [...] o modal vai até o local
+> preparado já, mas o Pet ele demora um pouquinho para chegar."
+
+> "[...] o menu à esquerda, um sobreposto ao outro. [...] aquele menu do estado da fome e o agora dormindo, eles não precisam estar ali, eles estão
+> ocupando muito, muito espaço. Então, tira eles, ou quando notifica, deixa eles durante 5 segundos e daí eles saem."
+
+**O que foi feito (só vista; o motor, o save, o registro e o replay não mudam):**
+- **Os ícones da ilha só aparecem com o mouse sobre o objeto, translúcidos** (opacidade 0,55):
+  - os selos do saco e da barraca (`ObjetosDaIlha.tsx`) e as etiquetas da tigela, da bola e dos lugares;
+  - a etiqueta do alvo atual do pet não aparece mais sozinha; ela só ganha o destaque quando o mouse está sobre ela;
+  - o cadeado do lugar trancado (`CadeadosDaIlha.tsx`, `nivel.css`) fica invisível e continua clicável. Ele aparece com o mouse sobre o lugar ou
+    sobre ele, e inteiro com o foco do teclado. O toque no lugar trancado continua abrindo o motivo.
+- **O minimapa** passou de 232 para 176 px (`MINIMAPA_PX`, `minimapa.css`). O "seguir o pet" e a altura da pilha da direita acompanham.
+- **As faixas "Agora" e do resumo** (a fome, "quer carinho", o Estado) aparecem por 5 s quando mudam e depois saem (`NOTIFICA_MS`, `hudPet.ts`).
+  A fome crítica, que antes ficava, também sai. Com o DigiBrain aberto, a linha do agora fica, e ao fechá-lo ela volta por 5 s, para o foco voltar a
+  ela. O cartão do chamado e a morte continuam como antes, e o balão da fala continua com os 15 s.
+- **O pet anda até o lugar no ritmo dele** (`ilha/vista.ts`, `petNaViagem`): a câmera e o painel chegam em 0,7 s, como antes, e o pet vai do ponto
+  em que estava desenhado até o lugar a 3,5 células por segundo, no máximo 6 s (`PET_VIAGEM_CEL_MS`, `PET_VIAGEM_MAX_MS`). A volta é igual. Com
+  "reduzir movimento", chega na hora.
+- **O painel de Ajustes** abre à direita do trilho de ícones, não por baixo dele (`lugar_l3.css`).
+- **O Estado com outro painel aberto:** com os Ajustes ou um lugar aberto, a lista das necessidades da pilha da direita virava duas colunas e o
+  texto se sobrepunha (`pet.css`, sem o `.app--pet`). Agora continua uma coluna (`pet_hud.css`).
+
+**Os números** (0,55, 176 px, 5 s, 3,5 células por segundo, 6 s) são de interface: PROPOSTO, SEM FONTE. As interpretações estão em D-TP23-1 a
+D-TP23-3, em `docs/registro/2026-11.md`.
+
+**Os painéis arrastáveis** (o Matheus: "Sim, arrastáveis", 2026-11-08):
+- **O que se arrasta:** a pilha da direita (Estado, Evolução, Últimas ações e DigiBrain) e o painel ao lado (os Ajustes e cada lugar). Eles se
+  arrastam pelo cabeçalho (`useArrastavelPorAlca`, `hudPet.ts`). O resto do painel continua a clicar e a rolar, e um arraste não vira clique.
+- **A posição** fica no navegador, como a do balão e a do alerta, e nunca no save.
+- **Voltar ao lugar:** o botão "Voltar os painéis ao lugar" fica em Ajustes > Visual > Painéis.
+- **Celular:** a folha de baixo não se arrasta.
+
+## 24. A prancha do layout da ilha inicial (2026-11-08)
+
+O Matheus pediu de novo uma análise do layout da ilha, com referências de outros jogos:
+> "As árvores estão longe do patch, não tem nenhuma árvore perto do ninho dele. [...] qual que seria o melhor layout dessa ilha inicial? Para a
+> gente modelar e deixar bem interessante, não apenas vários postes aleatórios, um monte de árvore aleatória e os outros objetos um do lado do
+> outro."
+
+**O que foi feito (só a prancha; nenhum código do jogo mudou):**
+- **A prancha:** `docs/pranchas/ux-ilha-layout/`, com a planta de hoje (tirada dos dados do jogo) e três propostas: A, o lar no bosque e a
+  praça; B, a vila em roda; e C, a trilha.
+- **O levantamento** das referências fica no Obsidian (`20 Temas/Layout da ilha inicial.md`). Ele cobre Animal Crossing, Stardew, Tamagotchi
+  Plaza, Cult of the Lamb, Slime Rancher, Digimon World, Pokémon Sleep, Lynch e Upton, os weenies, o prospect-refuge e a arte de florestas.
+- **A página para escolher:** https://claude.ai/artifact/Tq149bn7Jmaq9btokYVavK.
+
+**As decisões:** IL-1 a IL-4 foram DECIDIDAS pela recomendação, na resposta do Matheus "A, com IL-2 a IL-4" (2026-11-08). Fica a planta A,
+com as frutíferas do sacudir no bosque do lar, os postes nos caminhos e o ferro-velho num canto. A parte do motor (o ninho, a tigela, a bola e
+as três frutíferas) vai para o `CMU_ILHA` do #694, e a parte da vista vai para uma etapa própria: uma prancha 3D e depois o código.
+
+## 25. O céu do estilo Digital sem a pintura de anime (2026-11-08)
+
+O Matheus pediu:
+> "busque referências para otimizar esse céu. Ele tá bem feio. Não é nada natural. E essa faixa digital que tá cobrindo ele, ela tá meio
+> esquisita, tá muito saturada, talvez. Deixa ela um pouco mais opaca."
+
+E depois:
+> "Não precisa ser um céu tão cartunesco assim. Ele tá destoando muito da arte do jogo. Se for alguma coisa mais pixelada [...]"
+
+**O que foi feito (só vista; o motor, o save e o registro não mudam):**
+- **O céu em pixel** (`CEU_SEM_PINTURA`, modo `"pixel"`, o padrão novo): o degradê em 11 faixas chapadas, em tons médios e com o horizonte
+  mais claro (`ceuEmFaixas`, `digital.ts`). As nuvens são em pixel, grades pequenas ampliadas sem filtro (`nuvensPixel`, `cena.ts`).
+- **As outras versões** ficam no `?ceu=`, só na página, para comparar:
+  - o modo `"suave"`, com o degradê liso e as nuvens fofas da ilha;
+  - o `"pintado"`, com o `ceu.jpg` e as nuvens de anime de antes.
+- **A grade digital** ficou com alfa de 0,5 para 0,16, num ciano apagado, só na metade de baixo do céu e sumindo para cima (`DIGITAL.grade`).
+- **A névoa** tem a cor do horizonte novo.
+- **Páginas:** a comparação está em https://claude.ai/artifact/UUbqNxNS1PHTntVhA93NUP. As referências estão no Obsidian, em
+  `20 Temas/Céu do jogo.md`.
+
+Os números são de desenho: PROPOSTO, SEM FONTE. A cor por hora do dia, o halo do sol e a sombra de nuvem ficam para depois.
+
+**A volta para o pintado (o Matheus, no mesmo dia):**
+> "Não, volta para aquela arte anterior. A arte anterior estava um pouco melhor. Só que não deixa ela tão forte. [...] Diminui um pouco a
+> tonalidade do azul dela. Um pouco, não tanto. [...] E cadê aquelas linhas no céu? Eu quero aquelas linhas no céu, só que não tão forte."
+
+- **O padrão voltou a ser o pintado,** com o `ceu.jpg` e as nuvens de anime. O azul ficou suavizado por `suavizarPintura`: a saturação fica
+  em 80 % e a imagem puxa 5 % para o branco.
+- **As linhas voltaram ao céu todo:** alfa de 0,3 (era 0,5), um ciano um pouco apagado, espessura de 2,5 (era 3) e mais fracas no alto
+  (`topo`, 55 %).
+- **O pixel e o suave** continuam só no `?ceu=`.
+
+**As nuvens numa camada só e no mundo (o Matheus, no mesmo dia):**
+> "não tá tendo duas nuvens, uma em cima da outra, né? [...] as nuvens não sejam uma arte fixa. Ela tem que acompanhar [...] naquele estilo que
+> tava no desenho."
+
+- **Eram duas camadas:** as nuvens pintadas no `ceu.jpg`, fixas na tela, e as nuvens de anime com contorno, no mundo.
+- **A pintura agora vira duas partes** (`separarNuvens`, `digital.ts`):
+  - o fundo é só o degradê do céu, com a cor de cada linha;
+  - as nuvens são recortadas da própria pintura, em três pedaços com as bordas esfumadas.
+- **Os pedaços ficam num anel em volta da ilha** (`nuvensDaPintura`, `NUVENS_PINTADAS`), virados para o centro. Eles acompanham a câmera quando
+  ela gira, e o anel dá uma volta a cada 25 min. Com "reduzir movimento", fica parado.
+- **As nuvens de anime saíram** do modo pintado, e a noite apaga as nuvens do anel como as outras.
+
+**As nuvens com desenho de jogo (o Matheus, no mesmo dia):**
+> "tem uma nuvem que ela se perde ali, ela parece uma nuvem gerada por inteligência artificial mesmo. Não tem como tu pegar uma referência de
+> nuvem em jogos assim?"
+
+- **Três desenhos no mesmo anel,** comparados em https://claude.ai/artifact/K6kaEGYj7D58u8aUG2jRbg:
+  - o recorte da pintura;
+  - a chapada desenhada;
+  - o 3D de pouco polígono.
+- **Ficou o 3D** (o Matheus: "3D de polígonos"): de 4 a 7 bolhas facetadas juntas numa malha só, com a base reta e dois tons chapados pela
+  altura (branco em cima, a faixa azulada embaixo), sem luz e sem textura (`nuvem3d` e `nuvensDesenhadas`, em `digital.ts`).
+- **Os outros dois** ficam no `?nuvens=`.
+- **As referências:** as nuvens de Animal Crossing estão sempre em movimento, segundo uma recriação de fã. Nas cenas low-poly e toon, o comum
+  são tons chapados. A forma (a base reta, os dois tons, as bolhas) é escolha de desenho: PROPOSTO, SEM FONTE.
+
+## 26. Etapa IL: a planta A na ilha 3D, só a vista (2026-11-08)
+
+O Matheus escolheu a planta A do layout da ilha inicial, com IL-1 a IL-4 ("A, com IL-2 a IL-4", 2026-11-08; a prancha do layout no PR #724).
+Esta etapa leva a parte da vista dessa planta ao 3D da ilha, sem mudar o motor (branch `v3-ux-ilha-planta-a`). A parte do motor (o ninho, a
+tigela, a bola e as frutíferas no `CMU_ILHA`, v20) é do #694.
+
+**A prancha:** `docs/pranchas/ux-ilha-planta-a/` e a página https://claude.ai/artifact/PUJBByRmETT758SSY7XCWv, com 16 cenas antes e depois a
+1920 × 950 e a 390 × 844, nas peles Vidro e Militar. As capturas (PNG) ficam fora do git, em `D:\Trab\digilab\capturas_ux_ilha_planta_a\`.
+- **Rodada 1:** a praça, os caminhos, os lugares, os postes, o ferro-velho e a moldura em bosques e vãos.
+- **Rodada 2,** com três pedidos novos do Matheus, todos de 2026-11-08:
+  - o fim da ilha: "adicionar um final [...] para ela não acabar no meio do nada";
+  - a IL-4 revista: "Espalha eles também pelo mapa";
+  - as regras de guiar o olhar sem texto.
+- **A aprovação:** "Aprovar todas" (2026-11-08), as PA-1 a PA-5 pela recomendação.
+
+**O que foi feito (só vista):**
+- **A planta** (`constantes.ts`, `PLANTA_ILHA`; `grade.ts`):
+  - a praça em (31, 16) e os caminhos de terra dela ao lar (até o comedouro do layout), ao portão, à barraca e ao cais;
+  - o portão no fim do caminho reto ao norte, com um vão na mata atrás; a barraca a leste, dentro da área (PA-2); o cais ao sul; o saco
+    em (22, 9), perto da praça (`lugares.ts`);
+  - 6 postes, só na praça e no caminho do cais (IL-3);
+  - o carro, a geladeira e o trilho espalhados, cada um com o seu entorno (a IL-4 revista): o carro meio coberto pelo mato no platô do
+    oeste, a geladeira na areia a leste do cais e o trilho na beira leste do rio;
+  - a moldura em bosques e vãos.
+  - Tudo o que a planta tira da vista só some (`escondidos`): a lista `objetos` não muda, e o gabarito E-G0 continua passando. O que ela
+    acrescenta (as árvores dos bosques, o entorno dos marcos) fica numa lista própria, `extras`, que a `cena.ts` desenha.
+- **O fim da ilha** (`fimDaIlha.ts`; `grade.ts`, `porBordas`; `FIM_ILHA`):
+  - o mar em volta da grade inteira, até o horizonte;
+  - a leste do rio, a mata sobe em dois degraus até o morro;
+  - as duas faixas de silhuetas ao longe (ilhas perto, morros longe) **saíram em 2026-11-10**, a pedido do Matheus: no céu elas liam
+    como manchas verdes soltas, além das nuvens. O `fimConta.ts` e o `FIM_ILHA.silhuetas` saíram junto (D-CEU-1, em
+    `docs/registro/2026-11.md`). O céu fica só com o degradê e as nuvens.
+- **O sinal só** (a regra 3; `itens.ts`, `CHAMADO`): a tigela, a bola e o saco dão um pulinho quando o pet chega perto. Com movimento
+  reduzido, nada. O vento na decoração fica (PA-4).
+- **A ida ao saco pela distância** (PA-3; `lugares.ts`, `idaDoTreino`; `TREINO_VEL` = 7 células por segundo, 0,9 s no mínimo): com o
+  saco perto da praça, a ida fixa de 0,9 s fazia o pet cruzar ~19 células.
+- **Os testes:**
+  - `test/ilha_planta.test.ts` (novo), PL-1 a PL-6: a praça e os caminhos, nenhum lugar sobre o caminho, a decoração do caminho escondida,
+    os bosques e os vãos, os degraus, e as contas do horizonte e das silhuetas;
+  - reescritos para a planta: o E-G10 de `test/ilha_enfeites.test.ts`, o LG-G1 a LG-G4 de `test/ilha_lugares.test.ts` e o saco e a ida
+    do treino em `test/lugares_ilha.test.ts`.
+- **Os desvios:** D-IL-1 a D-IL-6, em `docs/registro/2026-11.md`.
+
+**Fica como proposta, sem código:**
+- a regra 1, a luz em hierarquia: a paleta fica em `cena.ts` e `estilos.ts`, para depois do #728 (o céu);
+- a regra 4, esconder e revelar;
+- a regra 5, os pássaros, que precisam da árvore madura do #694;
+- a regra 6, a câmera do primeiro dia.
+
+## 27. A prancha da hierarquia de luz (2026-11-09)
+
+O Matheus disse "Sim, a prancha" (2026-11-09) para a regra 1 de "guiar o olhar sem texto", que a seção 26 deixou como proposta: a luz dá a
+prioridade, com os destinos quentes, os caminhos claros e a decoração mais apagada (Level Design Book, no Obsidian
+`20 Temas/Ensinar a olhar.md`).
+
+**O que foi feito (a prancha e um protótipo desligado):**
+- **A prancha** fica em `docs/pranchas/ux-ilha-luz/`. São capturas do jogo de hoje e das propostas A (forte), B (suave) e C (só quente), nos
+  mapas Ilha e Digital, no desktop e no celular, com o script que as refaz.
+- **O protótipo** é um termo no fragmento do `curvar` (`cena.ts`), pela posição no chão. Os focos e as regras puras ficam em `luzConta.ts`,
+  e os números em `LUZ_HIERARQUIA` (`constantes.ts`). Ele só liga com `?luz=a|b|c`: sem o parâmetro, nenhum material ganha o termo, e a
+  chave do programa fica a de antes.
+- **O teste** é o `test/ilha_luz.test.ts`. Ele confere que sem o parâmetro nada liga, que os aditivos, as sombras e as linhas ficam de fora,
+  que os focos cobrem o lar, a praça, os lugares e todo ponto dos caminhos dentro de 48, e que as propostas vão da forte à só quente.
+
+**As decisões** LZ-1 a LZ-5 estão no `LEIA.md` da prancha, como PROPOSTAS: B, sem o cais enquanto estiver trancado, sem efeito à noite, o chão
+com peso 0,3 e todos os mapas do `curvar`. Os números são PROPOSTO, SEM FONTE. A interpretação está em D-LZ-1, em `docs/registro/2026-11.md`.
+
+**Fica para a etapa de código:** ligar a proposta escolhida sem o parâmetro, medir o custo no celular e recapturar o e2e
+(o `--update-snapshots` só com o ok do Matheus).
+
+## 28. A hierarquia de luz ligada (2026-11-09)
+
+O Matheus respondeu "B com tudo" (2026-11-09) à prancha da seção 27: LZ-1 a LZ-5 aprovadas.
+
+**O que mudou:**
+- **A B liga por padrão** (`LUZ_HIERARQUIA.escolhida`), sem parâmetro. O `?luz=a|b|c` continua para comparar, e `?luz=0` desliga. Um
+  valor desconhecido levanta erro (`propostaDe`, `luzConta.ts`).
+- **O cais trancado não acende** (LZ-2): `listaDeFocos` pula os lugares fechados em `LUGAR_ABERTO`. O portão e a barraca trancados pelo
+  nível do Tamer continuam acesos (D-LZ-3).
+- **Já vinham do protótipo:** sem o efeito à noite (LZ-3), o chão com peso 0,3 (LZ-4) e todos os mapas do `curvar` (LZ-5).
+
+**Testes:**
+- `test/ilha_luz.test.ts`: a B sem parâmetro, o `?luz=0`, o erro, e o cais fora dos focos (com ele aberto, entra um foco a mais).
+- O Vitest inteiro: 1 461 testes passam.
+- O e2e inteiro: 184 passam e 4 falham. As 4 já falhavam antes desta mudança, no branch da prancha: as três da chave "Fala do pet" nos
+  Ajustes e o destrave do `niveis.spec.ts`. Nenhuma comparação de tela quebrou, e por isso o `--update-snapshots` não foi preciso.
+- As capturas (o script da prancha, Ilha e Digital, desktop e celular, Vidro e Militar) saem iguais às da B da prancha, sem erro de shader.
+
+**Não medido:** o custo no celular. São até 48 focos num laço do fragmento, e falta medir num aparelho de verdade.
+
+## 29. As 4 falhas antigas do e2e (2026-11-10)
+
+As 4 falhas que vinham de antes (seção 28) eram testes atrasados em relação à tela, não defeitos do jogo:
+- **`conversa_nova.spec.ts` e `fala_rede.spec.ts` (a chave "Fala do pet"):** os testes procuravam a linha antiga dos Ajustes (`.hx-linha`).
+  Os Ajustes viraram ícones, e agora os testes acham o botão pelo nome acessível ("Fala do pet").
+- **`fala_rede.spec.ts`, o pet de teste do modular:** o pet sai do ovo bebê, e o nível do Tamer tranca o Conversar até o Rookie (marco 3,
+  `nivel.ts`). O teste agora semeia a chave do nível com o Conversar aberto.
+- **`niveis.spec.ts`, o destrave com as dicas desligadas:** na planta A (#734), a barraca fica fora do primeiro quadro. O cadeado aberto só
+  aparece com o lugar na tela e some em 2,4 s (`ABRE_MS`), e por isso nunca ficava visível. O teste agora confere que o cadeado aberto
+  existe (D-E2E-1).
+
+**O brilho espera o lugar aparecer** (o Matheus, 2026-11-10: "Sim, esperar"). Antes, o brilho do "acabou de abrir" corria 2,4 s desde a
+montagem, e o da barraca nunca era visto no começo do jogo.
+- Agora os `ABRE_MS` contam desde que o lugar fica no quadro por `VISTO_MS` (0,5 s) seguidos (`CadeadosDaIlha.tsx`). O meio segundo existe
+  porque o primeiro quadro, antes de a câmera assentar, passa por cima da barraca por uns 20 ms (medido com uma sonda no e2e).
+- O teste do destrave confere o caminho inteiro: com a barraca fora do quadro, o cadeado aberto espera escondido, mesmo depois de 4 s;
+  quando a câmera chega nela (`?cameradev=1`), ele aparece e some depois.
+
+## 30. A prancha da câmera do primeiro dia (2026-11-10)
+
+O Matheus disse "Sim, a prancha" (2026-11-10) para a próxima regra de "guiar o olhar sem texto". A próxima que é só vista é a regra 6, a
+câmera do primeiro dia: a 1 (a luz) está na main, a 2 e a 3 já valem, a 4 já acontece e a 5 (os pássaros) precisa do motor. A seção 29
+fica com o PR #760.
+
+**O que foi feito (a prancha e um protótipo desligado):**
+- **A prancha** fica em `docs/pranchas/ux-ilha-abertura/` e na página https://claude.ai/artifact/3B6orUVm6UxnEuB37hRmZw. São três propostas,
+  A (o passeio, 7 s), B (o afastar, 5,2 s) e C (de cima, 4 s), com seis quadros a 1920 × 950 e a 390 × 844 e um vídeo de cada. Os vídeos
+  ficam fora do git, em `D:\Trab\digilab\capturas_ux_ilha_abertura\`.
+- **O protótipo** é uma lista de quadros-chave (o tempo, o ponto olhado, o zoom e a inclinação), em `aberturaConta.ts`, e um gancho em
+  `vista.ts` que troca o ponto olhado, o afastamento e a inclinação da câmera enquanto a abertura anda. Ele só liga com `?abertura=a|b|c`,
+  e `window.__abertura` para o tempo nas capturas. Sem o parâmetro, a vista é a de antes.
+- **O teste** é o `test/ilha_abertura.test.ts`. Ele confere:
+  - o parâmetro, e que um valor desconhecido falha alto;
+  - que toda proposta começa em 0 e acaba no pet, no zoom e na inclinação de sempre;
+  - que o caminho é contínuo e passa nos quadros-chave;
+  - que um tempo inválido falha alto;
+  - que a inclinação mantém a distância.
+
+**As decisões** AB-1 a AB-5 estão no `LEIA.md` da prancha, APROVADAS pelo Matheus em 2026-11-10 ("siga a recomendação."): B; uma vez por save, depois que o ovo choca; qualquer toque
+interrompe; a HUD fica; todas as larguras, sem tocar com "reduzir movimento". Os números são PROPOSTO, SEM FONTE. A interpretação está em
+D-AB-1 e D-AB-2, em `docs/registro/2026-11.md`.
+
+**Fica para a etapa de código:**
+- tocar a proposta escolhida sem o parâmetro, uma vez por save;
+- a interrupção pelo toque;
+- um teste e2e do caminho inteiro.
+
+## 31. A câmera do primeiro dia no jogo (2026-11-10)
+
+O Matheus aprovou AB-1 a AB-5 em 2026-11-10: "siga a recomendação." Esta etapa liga a proposta B no jogo, sem o parâmetro.
+
+**Como funciona:**
+- **O pedido (AB-2):** quando o ovo choca (`passarQuadroOvo`, em `src/jogo.ts`), o jogo grava `{semente, tocada: false}` na chave da página
+  `<chave>-abertura` (`src/abertura.ts`). A chave fica fora do save, do log e do replay. Recarregar antes de a abertura tocar não perde o
+  pedido.
+- **O toque:** a vista (`vista.ts`) toca a B quando o pet de agora tem o pedido. Ela só começa sem o pet na mão, sem lugar aberto e sem o véu.
+  No fim, a câmera chega ao pet no zoom de sempre, e o pedido fica marcado como tocado.
+- **A interrupção (AB-3):** um toque, uma tecla ou a roda em qualquer lugar da página encerram a abertura. Pegar o pet ou abrir um lugar
+  também. A câmera volta à de sempre em 0,4 s (`TRANSICAO_MS`, `quadroDaSaida` em `aberturaConta.ts`), e o pedido fica marcado.
+- **A HUD (AB-4)** fica como está.
+- **Onde vale (AB-5):** em todas as larguras. Com "reduzir movimento", a abertura é pulada, e o pedido fica marcado.
+- **O `?abertura=a|b|c`** continua tocando a proposta pedida a cada abertura da página, para refazer as capturas da prancha. Nesse modo, a
+  abertura não grava nada e não se interrompe.
+- **`data-abertura`:** a cena ganha `"tocando"` ou `"saindo"` enquanto a abertura manda na câmera. Os testes esperam por esse atributo.
+
+**Os testes:**
+- `test/ilha_abertura.test.ts`, com 10 testes, 5 deles novos: a saída pelo toque e o pedido (uma vez por pet, outro pet não herda, a chave
+  estragada não toca);
+- `e2e/abertura.spec.ts`, com 3 testes: toca uma vez e não volta ao recarregar; uma tecla interrompe; "reduzir movimento" pula, e sem pedido
+  nada acontece;
+- no `e2e/jogo.spec.ts`, o "mundo: o ovo novo choca na cena 3D" confere que o ovo que choca grava o pedido e que a abertura toca.
+
+A interpretação de "uma vez por save" está em D-AB-3, em `docs/registro/2026-11.md`.
+
+## 32. Etapa D1e: o DigiBrain com o visual de scanner e a rede viva (2026-11-11)
+
+O Matheus pediu em 2026-11-11, com uma imagem de referência: "eu quero que você altere o menu do DigiBrain para ficar mais parecido com
+isso, porém tirando aquela parte de percepção, memória, impulsos, emoção e social". A referência é um cartão com o ícone e o nome, um
+quadro escuro com cantos em colchete, uma rede de pontos e fios claros em anel, uma onda embaixo e um "estado atual". A coluna das cinco
+barras da referência não entra.
+
+A primeira versão desenhava no anel os pesos de verdade do motor, com os nomes. O Matheus viu as capturas e pediu outro desenho, no mesmo
+dia: "quero que faça outro desenho, algo mais lúdico e menos realmente como o cérebro efetivamente está funcionando"; "simule como o
+cérebro funcione mas não exatamente como as conexões estão acontecendo, algo que visualmente seja interessante". Esta seção descreve a
+segunda versão, que é a que ficou.
+
+É só o visual de um painel que já existe (o scan do DigiBrain, D1b e D1c). Por isso não houve prancha de 390 px antes do código: as
+capturas do jogo, em 1280 e em 375 px, foram ao Matheus pela sessão. O motor, o save e o replay não mudam.
+
+**O que mudou no scan do pet do cérebro A (`ScanDigiBrain.tsx`, `scan_digibrain.css`):**
+- **A rede viva** no lugar do mapa dos pesos. É uma ilustração: 150 pontos e entre 500 e 600 fios num anel, com impulsos coloridos correndo
+  por ela e alguns pontos piscando. Os pontos e os fios não são os nós nem os pesos do motor. Isso revoga, para o desenho, o "cada ponto é
+  um nó do motor" da D1. Do motor o desenho usa três coisas:
+  - a semente do pet, para cada pet ter a sua rede;
+  - quantas entradas pesaram na decisão de agora, que dá quantos impulsos correm (4 no mínimo, 2 a mais por entrada, 14 no máximo);
+  - a regra da decisão, que dá a cor dos impulsos.
+- **Os pesos de verdade** continuam no "mapa em texto", como antes.
+- **O quadro** quase preto, com a grade fraca e os quatro cantos em colchete.
+- **O título:** o nome "DigiBrain" ao lado do ícone no desktop. No celular fica só o ícone, como na D1c.
+- **A faixa de baixo**, nova, com dois dados do motor:
+  - **a onda** tem um pico por entrada com termo na decisão de agora (`mapa.acesas.arestas`): para cima a favor, para baixo contra, da
+    altura da força que o motor dá;
+  - **o estado atual** é a regra do instinto que valeu na decisão (`decisao.regra`), com o texto curto "tempo livre", "sono", "fome",
+    "precisando". O motor não tem um estado chamado "calmo". O rosto e a cor ao lado são o tom da regra (D-D1e-2).
+- **O tamanho** é o da D1c: 420 px de largura no desktop e a folha de 210 px no celular. No desktop o painel ficou 62 px mais alto, por
+  causa da faixa.
+- **O movimento:**
+  - os impulsos correm sem parar enquanto o tempo do jogo anda, e congelam com o jogo pausado ou num replay;
+  - numa decisão nova, a varredura passa e a rede inteira acende uma vez;
+  - o giro lento do plano continua no desktop;
+  - com "reduzir movimento", nada se move e os impulsos não aparecem.
+
+**O que saiu do desenho:** os nós com nome (entradas, regras e ações), as chances das candidatas, o destaque do caminho da decisão, os
+rótulos ao passar o mouse e a legenda da dica. A regra da decisão aparece no estado atual; o resto está no mapa em texto, menos as chances
+das candidatas, que hoje não aparecem em lugar nenhum do scan (questão aberta no PR).
+
+**O que não mudou:** o selo, o "i" (com texto novo), o mapa em texto, o fechar, o foco preso e o Esc.
+
+**O scan do cérebro modular** (`ScanDigiBrainLab.tsx`, #799) ganhou o mesmo visual. O Matheus pediu em 2026-11-11: "Sim, leve". É ele que
+os ovos novos abrem, desde a D2 da auditoria da cadeia. O que mudou nele:
+- **A rede viva** no lugar do mapa dos módulos (os 7 módulos, a soma e as opções com a chance). O número de impulsos sai de quantos módulos
+  contribuíram na escolha. A cor dos impulsos é sempre a neutra.
+- **A onda** tem um pico por módulo que contribuiu, na ordem do motor: para cima a favor, para baixo contra, da altura da parte dele sobre
+  a maior parte.
+- **No lugar do "estado atual" fica a "escolha":** a ação da unidade escolhida e a chance dela ("única" sem sorteio). O modular não tem as
+  regras do instinto, então não tem um estado com nome (D-D1e-12).
+- **O que o mapa dos módulos mostrava** continua no mapa em texto, que já tinha "O peso de cada módulo nesta escolha" e "As opções e a
+  chance de cada uma".
+- **A linha do resultado da decisão anterior** fica sob a faixa. No celular ela cabe numa linha só, cortada com reticências; inteira, está
+  no mapa em texto.
+- As capturas em `docs/pranchas/digibrain-lab/` foram refeitas.
+
+Com isso, a silhueta de cérebro e o CSS do mapa com nós e fios saíram dos dois scans.
+
+**O botão de expandir** da referência não entrou: o scan já é o painel aberto, e o botão não teria o que abrir.
+
+**Os testes:**
+- `test/scan_digibrain.test.ts`, 15 testes: a rede (a mesma semente dá a mesma rede, tudo dentro do quadro, sem texto nem nós do motor),
+  os impulsos pela decisão, as marcas de parada e de decisão nova, a onda, o estado atual e o contraste nas duas peles;
+- `test/scan_digibrain_lab.test.ts`, 5 testes: a onda dos módulos, a escolha com a chance, a faixa e a falha alta sem a opção escolhida;
+- `e2e/jogo.spec.ts`: "a rede viva acompanha a decisão" (390 e 1280 px) e "os impulsos correm, e a varredura e o surto passam numa decisão
+  nova e terminam" entram no lugar dos testes do mapa. Saíram os testes dos rótulos (o texto de 11 px e o rótulo ao passar o mouse), porque
+  o desenho não tem mais texto;
+- `e2e/lab_modular.spec.ts`: confere a rede viva e a faixa no pet do laboratório.
+
+Os desvios estão em `docs/registro/2026-11.md`, "UX_TELA_PET, D1e".
