@@ -81,7 +81,9 @@ def test_o_layout_do_mvp_nao_vaza_para_a_pesquisa():
                   Path("tests/test_levar_pet.py"),
                   Path("tests/gabarito_arvore_sacode.py"),          # o sacudir (ARVORE_SACODE, S1): a vida de hoje no MVP e o mundo da ilha
                   Path("tests/test_arvore_sacode.py"),
-                  Path("tests/test_ilha_agua.py")}                  # a agua (ILHA_AGUA, IA1): o MVP com agua tem a mesma terra do MVP
+                  Path("tests/test_ilha_agua.py"),
+                  Path("experiments/exportar_gabarito_mudar_ilha.py"),   # a troca de ilha (ILHA_AGUA, IA4): do MVP para o MVP com agua
+                  Path("tests/test_mudar_ilha.py")}                  # a agua (ILHA_AGUA, IA1): o MVP com agua tem a mesma terra do MVP
     citam = {p.relative_to(RAIZ) for pasta in ("digilab", "experiments", "tests", "tools") for p in (RAIZ / pasta).rglob("*.py")
              if nomes.search(p.read_text(encoding="utf-8"))}
     assert citam == permitidos
