@@ -145,6 +145,25 @@ describe("a esquiva pela perspicacia e pela velocidade (D-LP5-14)", () => {
   });
 });
 
+describe("a divisao dos stats do NPC (D-LP5-18)", () => {
+  test("sem divisao, o NPC divide igual; com divisao, o total fica e os pesos mudam os stats", () => {
+    expect(c.npcDivisao).toEqual({});
+    const k = "npc_tier2_carcereiro", w = { vigor: .6, folego: .6, recuperacao: .6, forca: .6, mira: 3, guarda: .6 };
+    const x = candidatoDe({ nome: "teste", esquiva: { ligada: 1 }, npcDivisao: { [k]: w } }), igual = candidatoDe({ nome: "teste", esquiva: { ligada: 1 } });
+    expect(npc(igual, k)).toEqual(npc(candidatoDe({ nome: "teste", esquiva: { ligada: 1 }, npcDivisao: { [k]: { vigor: 1, folego: 1, recuperacao: 1, forca: 1, mira: 1, guarda: 1 } } }), k));
+    expect(npc(x, k).perc!).toBeGreaterThan(npc(igual, k).perc!);
+    expect(npc(x, k).agil!).toBeLessThan(npc(igual, k).agil!);
+    expect(npc(x, "npc_v5_piedmon")).toEqual(npc(igual, "npc_v5_piedmon"));
+  });
+  test("divisao sem os 6 stats, com peso nao positivo, que nao soma 6 ou de um NPC que nao existe falha alto", () => {
+    const um = { vigor: 1, folego: 1, recuperacao: 1, forca: 1, mira: 1, guarda: 1 };
+    expect(() => candidatoDe({ nome: "teste", npcDivisao: { npc_tier2_carcereiro: { ...um, guarda: 2 } } })).toThrow();
+    expect(() => candidatoDe({ nome: "teste", npcDivisao: { npc_tier2_carcereiro: { ...um, guarda: 0, mira: 2 } } })).toThrow();
+    expect(() => candidatoDe({ nome: "teste", npcDivisao: { npc_tier2_carcereiro: { vigor: 6 } as never } })).toThrow();
+    expect(() => candidatoDe({ nome: "teste", npcDivisao: { npc_que_nao_ha: um } })).toThrow();
+  });
+});
+
 describe("o criterio do P1 a P3 (D-LP5-17)", () => {
   test("os limites saem do T1 do lp5_1_esq: o meio do caminho na escala logistica, com 0,10 de folga", () => {
     expect([limitesNpc("crianca", false), limitesNpc("adolescente", false), limitesNpc("adulto", false), limitesNpc("mega", false)])

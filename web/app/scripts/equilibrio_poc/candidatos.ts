@@ -4,7 +4,7 @@
    PROPOSTOS, SEM FONTE, ate o Matheus decidir. */
 import { readFileSync } from "node:fs";
 import { conferirEsquiva as conferirEsquivaPoc, conferirTiro as conferirTiroPoc } from "../../motor/arena/luta.ts";
-import { CANDIDATO_V21, esquivaDe, type Candidato } from "./comum.ts";
+import { CANDIDATO_V21, conferirDivisao, esquivaDe, type Candidato } from "./comum.ts";
 
 /** as trocas de um candidato: cada chave do Candidato, com as sub-chaves que mudam */
 export type Troca = { nome: string } & { [K in Exclude<keyof Candidato, "nome">]?: Partial<Candidato[K]> | number };
@@ -21,6 +21,17 @@ export function candidatoDe(t: Troca): Candidato {
       continue;
     }
     if (typeof v !== "object" || v === null) throw new Error(`candidato ${t.nome}: ${k} precisa ser um objeto`);
+    if (k === "npcDivisao") {
+      /* a divisao de um NPC (D-LP5-18) entra inteira: os 6 pesos, somando 6, e so de um NPC que o candidato tem */
+      const div = out[k] as Record<string, unknown>;
+      for (const [npcK, w] of Object.entries(v)) {
+        if (!(npcK in base.npcTotal)) throw new Error(`candidato ${t.nome}: npcDivisao.${npcK} nao e um NPC`);
+        if (typeof w !== "object" || w === null) throw new Error(`candidato ${t.nome}: npcDivisao.${npcK} precisa ser um objeto`);
+        conferirDivisao(npcK, w as Record<string, unknown>);
+        div[npcK] = { ...(w as Record<string, number>) };
+      }
+      continue;
+    }
     const alvo = atual as Record<string, number>;
     for (const [s, x] of Object.entries(v)) {
       if (!(s in alvo)) throw new Error(`candidato ${t.nome}: ${k}.${s} nao existe`);
