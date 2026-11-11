@@ -8,7 +8,7 @@
    semeadura e os sorteios do CPython (random, getrandbits, randrange, randint). Nada disso usa o mulberry32 do jogo (motor/rng.ts).
 
    Os registros e o `ocorrido` usam os nomes em snake_case do Python de proposito: sao o mesmo dado, conferido campo a campo. */
-import { AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, ARVORE_FECHADA, C, CMU, LAYOUT_MUNDO_MVP_AGUA, MARCO_FECHADO, PONTE, TERRA, type ConfigMundo, type LayoutMundo } from "./constantes.ts";
+import { AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, ARVORE_FECHADA, C, CMU, CMU_GRANDE, LAYOUT_MUNDO_GRANDE, LAYOUT_MUNDO_MVP, LAYOUT_MUNDO_MVP_AGUA, MARCO_FECHADO, PONTE, TERRA, type ConfigMundo, type LayoutMundo } from "./constantes.ts";
 import {
   CONFIG_CONTRATO, CONFIG_CONTRATO_AGUA, bigodes, bloqueioEm, contratoLigado, controlar, livreMaisPerto, relativo, setorDe, solido, validarContrato, visivel, type Andar,
   type CategoriaSolido, type ConfigContrato, type Solido,
@@ -321,7 +321,16 @@ export function lerMudarIlha(e: { tipo: string; valor: unknown }): string {
     contrato que passa a valer (o controlador, que desvia da agua). DECIDIDO (2026-11-10: "Migram por evento") */
 export const ILHAS_DE_TROCA: Readonly<Record<string, { layout: LayoutMundo; contrato: ConfigContrato }>> = Object.freeze({
   mvp_agua: { layout: LAYOUT_MUNDO_MVP_AGUA, contrato: CONFIG_CONTRATO_AGUA },
+  grande: { layout: LAYOUT_MUNDO_GRANDE, contrato: CONFIG_CONTRATO_AGUA },
 });
+/** a ida para a ilha grande (o ILHAS_MAIORES do Python; docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG4; a IG-7 do Matheus: "deslocados junto
+    com o lar"): os destinos do mudar_ilha que tem OUTRO tamanho e OUTRO layout. Por nome: o tamanho do mundo (celulas) e os layouts de
+    onde se pode vir (o mundo do produto de hoje, sem agua ou com ela). DECIDIDO (2026-11-11) */
+export const ILHAS_MAIORES: Readonly<Record<string, { celulas_x: number; celulas_y: number; origens: readonly LayoutMundo[] }>> = Object.freeze({
+  grande: { celulas_x: CMU_GRANDE.celulas_x, celulas_y: CMU_GRANDE.celulas_y, origens: [LAYOUT_MUNDO_MVP, LAYOUT_MUNDO_MVP_AGUA] },
+});
+/** o registro da ida para a ilha maior (o Mundo.troca_maior do Python, com o `pet` que o motor poe) */
+export interface TrocaMaior extends TrocaIlha { deslocamento: [number, number] }
 /** o registro da troca de ilha (o Mundo.troca_ilha do Python, com o `pet` que o motor poe) */
 export interface TrocaIlha {
   tick: number; de: string; para: string; comidas: { id: number; de: [number, number]; para: [number, number] }[];
@@ -467,7 +476,7 @@ export class Mundo {
   readonly rngAlvo: RandomPy;
   readonly bolaNoGolpe: boolean;
   pet: [number, number];
-  readonly comedouro: [number, number];
+  comedouro: [number, number];                               // muda na ida para a ilha maior (irParaMaior)
   bola: Bola;
   readonly arvores: Arvore[] = [];
   readonly comidas = new Map<number, Comida>();
@@ -500,6 +509,8 @@ export class Mundo {
   secas: readonly boolean[] | null;
   /** a troca de ilha (IA4): null ate o evento `mudar_ilha` */
   trocaIlha: TrocaIlha | null = null;
+  /** a ida para a ilha maior (IG4): null ate o `mudar_ilha` para um destino de ILHAS_MAIORES */
+  trocaMaior: TrocaMaior | null = null;
 
   constructor(op: OpcoesMundo) {
     const cm = this.cm = op.cfg ?? CMU;
@@ -1001,6 +1012,7 @@ export class Mundo {
   mudarIlha(tick: number, nome: string): TrocaIlha {
     nome = lerMudarIlha(eventoMudarIlha(tick, nome));
     if (!Object.prototype.hasOwnProperty.call(ILHAS_DE_TROCA, nome)) throw new Error(`mudar_ilha para uma ilha desconhecida: ${nome}`);
+    if (Object.prototype.hasOwnProperty.call(ILHAS_MAIORES, nome)) return this.irParaMaior(tick, nome);
     if (contratoLigado(this.cct)) throw new Error("mudar_ilha roda com um pet (fora do grupo), sem o banheiro e sem o contrato ligado antes");
     const { layout, contrato } = ILHAS_DE_TROCA[nome];
     if (!contrato.controlador) throw new Error(`a ilha ${nome} tem agua e pede o controlador do contrato`);
@@ -1033,6 +1045,47 @@ export class Mundo {
   }
 
   // ------------------------------------------------------------ leitura
+  /** a ida para a ilha maior (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG4; o Mundo.trocar_para_maior e o ramo dela no
+   *  MotorMundo._aplicar_mudar_ilha do Python): o mundo passa do layout de hoje (um dos `origens`) para o de `nome`, que tem outro
+   *  tamanho. Tudo o que tem posicao anda o deslocamento do ninho de la para o ninho de ca (IG-7): o comedouro passa a ser o do layout
+   *  novo, e a comida, a bola e o pet vao junto, para a terra mais perto se cairem em celula fechada ou fora do mapa. A bola para onde
+   *  esta; a orientacao volta ao setor 0 e o registro das decisoes do controlador comeca vazio, mesmo que ele ja viesse ligado. Nenhum
+   *  fluxo de acaso anda. Uma vez so por mundo; o mundo com arvores nao troca */
+  private irParaMaior(tick: number, nome: string): TrocaMaior {
+    const { layout, contrato } = ILHAS_DE_TROCA[nome], M = ILHAS_MAIORES[nome];
+    if (!contrato.controlador) throw new Error(`a ilha ${nome} tem agua e pede o controlador do contrato`);
+    this.atualizar(tick);
+    if (this.trocaMaior !== null) throw new Error(`o mundo ${this.cm.layout.nome} ja passou para a ilha maior: a troca vale uma vez`);
+    const de = this.cm.layout;
+    if (!M.origens.some(o => JSON.stringify(o) === JSON.stringify(de))) throw new Error(`a ilha maior ${layout.nome} nao recebe o mundo ${de.nome}`);
+    if (this.arvores.length > 0) throw new Error("a ida para a ilha maior nao leva arvores nem o banheiro");
+    const sub = this.cm.sub, dx = (layout.ninho[0] - de.ninho[0]) * sub, dy = (layout.ninho[1] - de.ninho[1]) * sub;
+    const bolaDe = this.bolaEm(tick);                               // no mundo de la, antes de trocar
+    const cm: ConfigMundo = { ...this.cm, layout, celulas_x: M.celulas_x, celulas_y: M.celulas_y }, secas = celulasSecas(cm);
+    if (secas === null) throw new Error(`o layout ${layout.nome} nao tem agua: a ilha maior e uma ilha com agua`);
+    this.cm = cm; this.secas = secas;
+    this.comedouro = centroDaCelula(layout.comedouro, cm);
+    this.conferirAgua();
+    const comidas: TrocaIlha["comidas"] = [];
+    for (const c of this.comidas.values()) {
+      const [x, y] = this.emTerra(...noMapa(c.x + dx, c.y + dy, cm));
+      comidas.push({ id: c.id, de: [c.x, c.y], para: [x, y] });
+      c.x = x; c.y = y;
+    }
+    const [x, y] = this.emTerra(...noMapa(bolaDe[0] + dx, bolaDe[1] + dy, cm));
+    this.bola = { x0: x, y0: y, x1: x, y1: y, t0: tick, d: 0 };
+    this.cct = validarContrato({ ...contrato });
+    this.montarContrato();
+    this.orientacao = 0;
+    this.contratoDecisoes.length = 0;
+    const petDe: [number, number] = [this.pet[0], this.pet[1]];
+    this.pet = this.petEmTerra(...noMapa(petDe[0] + dx, petDe[1] + dy, cm));
+    this.pendente = null;
+    this.trocaMaior = { tick, de: de.nome, para: layout.nome, deslocamento: [dx, dy], comidas, bola: { de: [bolaDe[0], bolaDe[1]], para: [x, y] },
+                        pet: { de: petDe, para: [this.pet[0], this.pet[1]] } };
+    return this.trocaMaior;
+  }
+
   /** o MotorMundo.resumo_mundo_fisico, sem as rngs */
   resumo(): Record<string, unknown> {
     return {
@@ -1044,6 +1097,7 @@ export class Mundo {
       manchas_abertas: [...this.manchasAbertas.values()].map(v => ({ ...v })),
       ...(contratoLigado(this.cct) ? { orientacao: this.orientacao, contrato_decisoes: this.contratoDecisoes } : {}),
       ...(this.trocaIlha !== null ? { troca_ilha: JSON.parse(JSON.stringify(this.trocaIlha)) as TrocaIlha } : {}),
+      ...(this.trocaMaior !== null ? { troca_maior: JSON.parse(JSON.stringify(this.trocaMaior)) as TrocaMaior } : {}),
       ...(this.levadas.length > 0 ? { levadas: this.levadas.map(l => ({ ...l, de: [...l.de], pedido: [...l.pedido], para: [...l.para] })) } : {}),   // so com alguma levada: a vida de antes sai byte a byte
     };
   }
