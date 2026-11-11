@@ -450,6 +450,8 @@ depois. As medidas e a paleta são PROPOSTO, SEM FONTE. Os desvios estão em `do
 - **O lugar:** a TV é um marco novo da grade (`ENFEITES_GRADE.tv`, clareira de 1,4). Na planta A ela fica na moldura do norte, atrás da
   barraca (o ponto 50, −3). Na ilha com água ela fica dentro do mapa, a leste da barraca (54, 11,5). O sorteio dela vem depois dos outros
   marcos, então o entorno deles não muda.
+- **O giro (2026-11-11, a UX-GV-3 de `docs/PLANO_UX_GOSTO_VISUAL.md`):** a TV fica em três quartos para a câmera, com a frente a 40° do
+  sul (`TV_TRES_QUARTOS`). Antes ela olhava para a área (planta A) ou para a praça (ilha com água).
 - **A máscara de luz saiu do script por enquanto:** o teste dos enfeites não aceita arquivo sem uso na pasta pública, e a tela ainda não
   acende (TV-3). A função `vidro` do `tv.py` continua marcando o que acenderia.
 

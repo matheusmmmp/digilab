@@ -11,6 +11,7 @@ import {
   DEUSES, diaDeVida, CMIT_E1, montanhaDe, myotismonNoTick, pedraEm, pegadasDe, sinaisDe, sinaisNoTick, type Deus,
 } from "../../../../motor/index.ts";
 import type { Motor } from "../../../../motor/motor.ts";
+import type { ConfigMundo } from "../../../../motor/constantes.ts";
 import { enigmaResolvidoEm } from "../../../mitologia.ts";
 import { toon } from "./cena.ts";
 
@@ -20,7 +21,10 @@ const POS_SINAL: Readonly<Record<Deus, readonly [number, number, number]>> = {
   diversao: [1.1, 2.2, 0.2], coragem: [-1.5, 0, 0.9], amizade: [1.5, 0, 1.1], conhecimento: [-1.3, 0, -1.2], sinceridade: [1.3, 0, -1.1],
 };
 const POS_PESSEGO: readonly [number, number] = [0.2, 1.5];
-const BALANCO = 0.12, PERIODO_MS = 4200, N_PEGADAS = 14;
+const BALANCO = 0.12, PERIODO_MS = 4200, ESPACO_PEGADA = 3.2;
+/** os pontos de passagem das pegadas por mapa, em celulas: na ilha grande, os dois lados da ponte da fileira 33 (sem eles a linha reta do
+    ninho a pedra cruza o rio nas colunas 82 a 84) */
+const VIA_PEGADAS: Readonly<Record<string, readonly (readonly [number, number])[]>> = { grande: [[79.5, 33.5], [84.5, 33.5]] };
 
 const malha = (geo: THREE.BufferGeometry, mat: THREE.Material, x = 0, y = 0, z = 0) => {
   const m = new THREE.Mesh(geo, mat);
@@ -111,7 +115,8 @@ export class SinaisDaIlha {
   private readonly aro: THREE.Mesh;
   private myoAntes: boolean | null = null;
 
-  constructor(ninhoEm: readonly [number, number], sub: number) {
+  constructor(ninhoEm: readonly [number, number], cm: ConfigMundo) {
+    const sub = cm.sub;
     this.ninho = ninhoEm;
     this.sinais = { diversao: nuvem(), coragem: chama(), amizade: flores(), conhecimento: marco(), sinceridade: broto() };
     for (const d of DEUSES) {
@@ -120,7 +125,7 @@ export class SinaisDaIlha {
       g.visible = false;
       this.raiz.add(g);
     }
-    const [px, py] = pedraEm();
+    const [px, py] = pedraEm(cm);
     const pedraIlha: [number, number] = [px / sub, py / sub];
     this.pedra.position.set(pedraIlha[0], 0, pedraIlha[1]);
     this.pedra.rotation.y = 0.6;
@@ -128,14 +133,20 @@ export class SinaisDaIlha {
     this.aro.rotation.x = Math.PI / 2.4;
     this.aro.visible = false;
     this.pedra.add(this.aro);
-    /* as pegadas: do ninho ate a pedra, em pares que se alternam de lado */
-    const matPegada = toon({ color: 0x5a3e28 }), [ax, az] = ninhoEm, [bx, bz] = pedraIlha;
-    const ang = Math.atan2(bx - ax, bz - az), nx = Math.cos(ang), nz = -Math.sin(ang);
-    for (let i = 1; i <= N_PEGADAS; i++) {
-      const t = i / (N_PEGADAS + 1), lado = i % 2 ? 0.12 : -0.12, p = pegada(matPegada);
-      p.position.set(ax + (bx - ax) * t + nx * lado, 0.02, az + (bz - az) * t + nz * lado);
-      p.rotation.y = ang;
-      this.pegadas.add(p);
+    /* as pegadas: do ninho ate a pedra, em pares que se alternam de lado, uma a cada ESPACO_PEGADA celulas. Na ilha grande o rio fica no
+       meio, e elas passam pela ponte (VIA_PEGADAS) em vez de cruzar a agua */
+    const matPegada = toon({ color: 0x5a3e28 });
+    const pontos: (readonly [number, number])[] = [ninhoEm, ...(VIA_PEGADAS[cm.layout.nome] ?? []), pedraIlha];
+    for (let s = 0; s + 1 < pontos.length; s++) {
+      const [ax, az] = pontos[s], [bx, bz] = pontos[s + 1];
+      const ang = Math.atan2(bx - ax, bz - az), nx = Math.cos(ang), nz = -Math.sin(ang);
+      const n = Math.max(1, Math.round(Math.hypot(bx - ax, bz - az) / ESPACO_PEGADA));
+      for (let i = s === 0 ? 1 : 0; i < n; i++) {
+        const t = i / n, lado = this.pegadas.children.length % 2 ? 0.12 : -0.12, p = pegada(matPegada);
+        p.position.set(ax + (bx - ax) * t + nx * lado, 0.02, az + (bz - az) * t + nz * lado);
+        p.rotation.y = ang;
+        this.pegadas.add(p);
+      }
     }
     this.pessego.position.set(ninhoEm[0] + POS_PESSEGO[0], 0, ninhoEm[1] + POS_PESSEGO[1]);
     const matMorcego = toon({ color: 0x241a33 });

@@ -1,14 +1,14 @@
 /* MITOLOGIA, E1 (docs/TAREFA_V3_MITOLOGIA.md, secao 10): os sinais dos cinco deuses, o termometro do Myotismon, a pedra do macaco, as
    pegadas, o dia raro e o enigma, como funcao pura do pet refeito do log. Registros sinteticos e uma vida de verdade com replay. */
 import { describe, expect, test } from "vitest";
-import { CD, CMU_MVP, TICK_INICIAL, TPD } from "../motor/constantes.ts";
+import { AGUA_POR_LAYOUT, CD, CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA, TICK_INICIAL, TPD, type ConfigMundo } from "../motor/constantes.ts";
 import { NPC } from "../motor/bots.ts";
 import {
-  CMIT_E1, ENIGMA, FALA_DIA_RARO, FALA_PEDRA, FALA_PEGADAS, diaDeVida, myotismonJaApareceu, myotismonNoTick, pedraAchadaDe, pedraEm, pegadasDe, sinaisDe,
+  CMIT_E1, ENIGMA, FALA_DIA_RARO, FALA_PEDRA, FALA_PEGADAS, diaDeVida, myotismonJaApareceu, myotismonNoTick, pedraAchadaDe, pedraCelulaDe, pedraEm, pegadasDe, sinaisDe,
   sinaisNoTick, tickDoDiaRaro, type FontesE1,
 } from "../motor/lendas_e1.ts";
 import { Motor } from "../motor/motor.ts";
-import { centroDaCelula } from "../motor/mundo.ts";
+import { centroDaCelula, regiaoDe } from "../motor/mundo.ts";
 import { hashSemente } from "../motor/rng.ts";
 
 const GAZIMON = "npc_tier1_brutamontes", total = NPC[GAZIMON]!.total;
@@ -83,6 +83,15 @@ describe("MITOLOGIA E1: a pedra, as pegadas e o dia raro", () => {
     expect([px, py]).toEqual(centroDaCelula(CMIT_E1.pedraCelula, CMU_MVP));
     expect(CMIT_E1.pedraCelula[0]).toBeGreaterThanOrEqual(48);
   });
+  test.each<[string, ConfigMundo]>([["64 x 30", CMU_MVP], ["64 x 30 com agua", CMU_MVP_AGUA], ["a ilha grande", CMU_GRANDE]])(
+    "em %s a pedra fica na mata, em terra livre, e nada fechado no raio em que o pet a acha", (_, cm) => {
+      const [cx, cy] = pedraCelulaDe(cm), [x] = pedraEm(cm);
+      expect(cm.layout.regioes[regiaoDe(x, cm)][0]).toBe("mata");
+      const mapa = AGUA_POR_LAYOUT[cm.layout.nome];
+      if (!mapa) return;
+      const r = CMIT_E1.pedraRaioCelulas;
+      for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) expect(mapa[cy + dy][cx + dx], `celula ${cx + dx},${cy + dy}`).toBe(".");
+    });
   test("o pet acha a pedra de noite, perto dela, por decisao ou levado pelo dono; de dia ou longe nao", () => {
     expect(pedraAchadaDe(vazio({}, { decisoes: [{ tick: DIA, x: px, y: py }] }))).toBeNull();
     expect(pedraAchadaDe(vazio({}, { decisoes: [{ tick: NOITE, x: px + 3 * 16, y: py }] }))).toBeNull();

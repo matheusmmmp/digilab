@@ -8,8 +8,12 @@ import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react"
 import { createPortal } from "react-dom";
 import {
   Activity, ArrowRight, Ban, Brain, ChevronDown, ChevronRight, Cross, Droplet, Drumstick, Ellipsis, Hand, Heart, HeartPulse, History, Music, PawPrint, Settings, Smile,
-  TrendingUp, Users, X, Zap, type LucideIcon,
+  TrendingUp, Users, X, Zap, type LucideIcon, Tv,
 } from "lucide-react";
+import { gostoVisualLigado } from "../../gostoVisual/chave.ts";
+import { PainelTv } from "../../gostoVisual/PainelTv.tsx";
+import { aoPedirPainelTv, marcarPainelTv } from "../../gostoVisual/painelTvEstado.ts";
+import { ocuparSinalTv } from "../../gostoVisual/sinalTv.ts";
 import {
   ACAO_CHAMADO, ALVOS_DESEJO, CAT, DO_ESP, NOME_ESP, EMOCAO_TXT, FATORES_TXT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
   chaveSprite, eNoite, expressarConfianca, nomeEstagio, nomeForma, nomeRivalConfianca, observacao, type AcaoDono, type Chamado, type MotivoVida, type Motor,
@@ -50,6 +54,7 @@ import { nivelDe } from "../../nivel.ts";
 import { ScanDigiBrain } from "../../componentes/ScanDigiBrain.tsx";
 import { ScanDigiBrainLab } from "../../componentes/ScanDigiBrainLab.tsx";
 import { duracao, previsaoEvo } from "../crescer/TelaEvolucao.tsx";
+import { AtosNaIlha, linhasDosAtos } from "./AtosDoIrmao.tsx";
 
 export const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
 export const diaDe = (t: number): number => Math.floor((t - TICK_INICIAL) / TPD) + 1;
@@ -136,8 +141,10 @@ const MODO_CURTO: Record<string, string> = { template: "frases prontas", moldura
 function BalaoFala({ v, abrir }: { v: VistaFala; abrir: () => void }) {
   const { motor: m } = useJogo(), mot = m.motivo;
   const chave = mot && mot.origem === "vida" ? `${mot.acao}|${mot.fatores.join(",")}|${mot.recusa?.acaoDono ?? ""}|${v.texto}` : v.texto;
-  const vis = useAviso(chave), arr = useArrastavel<HTMLButtonElement>("fala");
-  if (!vis || (!v.texto && !v.detalhe)) return null;
+  const vis = useAviso(chave), arr = useArrastavel<HTMLButtonElement>("fala"), naTela = vis && !!(v.texto || v.detalhe);
+  /* a fila dos sinais do prototipo do gosto visual: com a fala na tela, o sinal da TV espera (sinalTv.ts; sem a chave, ninguem le) */
+  useEffect(() => { ocuparSinalTv("fala", naTela); return () => ocuparSinalTv("fala", false); }, [naTela]);
+  if (!naTela) return null;
   return (
     <button type="button" className={v.classe + " cena-fala"} title={v.titulo} aria-haspopup="dialog" onClick={abrir} {...arr}>
       <span className="balao-txt">{v.balao}</span>{v.causa}<small>toque para ver o porquê</small></button>
@@ -493,7 +500,7 @@ function DockMovel() {
 function DockPet() { return useLargo() ? <DockLargo /> : <DockMovel />; }
 
 /* ------------------------------------------------ os paineis: empilhados a direita (>= 900 px) ou um por vez pela borda (celular) */
-type Painel = "estado" | "evolucao" | "acoes" | "digibrain" | "fala";
+type Painel = "estado" | "evolucao" | "acoes" | "digibrain" | "fala" | "tv";
 type PainelHud = "estado" | "evolucao" | "acoes";
 
 /** a proxima evolucao, so com o que o motor tem (previsaoEvo, o mesmo da tela Evolucao): a forma atual, o nivel que vem e, se o motor ja
@@ -520,11 +527,19 @@ type LinhaHist = Motor["historico"][number];
 const ultimasDoRegistro = (m: Motor, n: number): LinhaHist[] => m.historico.filter(h => h.quem === "dono" || h.quem === "pet" || h.quem === "recusa").slice(-n).reverse();
 const textoHist = (h: LinhaHist): string => h.quem === "pet" ? NOME_PET[h.a as keyof typeof NOME_PET] ?? h.a : h.a;
 function UltimasAcoes({ irRegistro, n = 8 }: { irRegistro: () => void; n?: number }) {
-  const { motor: m } = useJogo(), itens = ultimasDoRegistro(m, n);
+  const { motor: m } = useJogo();
+  /* os dois pets (CO5): os atos com o irmao entram na mesma lista, pela hora, sem numero (AtosDoIrmao.tsx) */
+  const itens: ({ tipo: "hist"; t: number; h: LinhaHist } | { tipo: "ato"; t: number; texto: string; pro: boolean })[] = [
+    ...ultimasDoRegistro(m, n).map(h => ({ tipo: "hist" as const, t: h.t, h })), ...linhasDosAtos(n).map(a => ({ tipo: "ato" as const, ...a }))]
+    .sort((a, b) => b.t - a.t).slice(0, n);
   return (
     <>
-      {itens.length ? <ol className="mod-registro">{itens.map((h, i) => {
-        const I = ICONE_QUEM[h.quem as keyof typeof ICONE_QUEM];
+      {itens.length ? <ol className="mod-registro">{itens.map((x, i) => {
+        if (x.tipo === "ato") {
+          const I = x.pro ? Heart : Users;
+          return <li key={i} data-quem="irmao"><time>{hhmm(x.t)}</time><span className="mod-registro-ic"><I size={18} aria-hidden="true" /></span><span>{x.texto}</span></li>;
+        }
+        const h = x.h, I = ICONE_QUEM[h.quem as keyof typeof ICONE_QUEM];
         return <li key={i} data-quem={h.quem}><time>{hhmm(h.t)}</time><span className="mod-registro-ic"><I size={18} aria-hidden="true" /></span>
           <span>{h.quem === "dono" ? "você: " : h.quem === "recusa" ? "recusou: " : ""}{textoHist(h)}</span></li>;
       })}</ol> : <p className="mod-vazio">nada no registro ainda</p>}
@@ -545,8 +560,8 @@ function EstadoPet({ detalhes, alternarDetalhes }: { detalhes: boolean; alternar
   );
 }
 
-const TITULO_PAINEL: Record<Painel, string> = { estado: "Estado atual", evolucao: "Evolução", acoes: "Últimas ações", digibrain: "DigiBrain", fala: "Por que ele disse isso" };
-const ICONE_PAINEL: Record<Exclude<Painel, "fala">, LucideIcon> = { estado: Activity, evolucao: TrendingUp, acoes: History, digibrain: Brain };
+const TITULO_PAINEL: Record<Painel, string> = { estado: "Estado atual", evolucao: "Evolução", acoes: "Últimas ações", digibrain: "DigiBrain", fala: "Por que ele disse isso", tv: "TV" };
+const ICONE_PAINEL: Record<Exclude<Painel, "fala">, LucideIcon> = { estado: Activity, evolucao: TrendingUp, acoes: History, digibrain: Brain, tv: Tv };
 
 /* o que fica aberto nos paineis empilhados: uma preferencia de tela, numa chave propria (fora do save, do registro e do replay) */
 interface AbertosHud { estado: boolean; evolucao: boolean; acoes: boolean; detalhes: boolean }
@@ -611,10 +626,31 @@ function LinhaDigiBrain({ abrir }: { abrir: () => void }) {
   );
 }
 
-function ConteudoPainel({ id, v, irRegistro, irEvolucao, detalhes, alternarDetalhes }: {
-  id: Painel; v: VistaFala; irRegistro: () => void; irEvolucao: () => void; detalhes: boolean; alternarDetalhes: () => void;
+/** a TV como a 5a linha da pilha (UX-GV-2 de docs/PLANO_UX_GOSTO_VISUAL.md): o caminho do teclado ate o painel da TV, e de quem nao achou a
+    TV na ilha. So existe com `?gosto_visual=1`; abre o painel flutuante, como a linha do DigiBrain */
+function LinhaTv({ abrir }: { abrir: () => void }) {
+  const desc = useId();
+  return (
+    <section className="hud-painel hud-painel--abre" data-painel-pet="tv" data-aberto="false">
+      <h2 className="hud-painel__cab">
+        <button type="button" className="hud-painel__bt" aria-haspopup="dialog" aria-controls="pet-painel" aria-label={TITULO_PAINEL.tv}
+          aria-describedby={desc} onClick={abrir}>
+          <Tv className="hud-painel__ic" aria-hidden="true" />
+          <span className="hud-painel__txt"><span className="hud-painel__tit">{TITULO_PAINEL.tv}</span>
+            <span className="hud-painel__resumo" id={desc}>o cantinho da TV</span></span>
+          <span className="hud-risca" aria-hidden="true" />
+          <ChevronRight className="hud-painel__seta" aria-hidden="true" />
+        </button>
+      </h2>
+    </section>
+  );
+}
+
+function ConteudoPainel({ id, v, irRegistro, irEvolucao, detalhes, alternarDetalhes, nome, movel }: {
+  id: Painel; v: VistaFala; irRegistro: () => void; irEvolucao: () => void; detalhes: boolean; alternarDetalhes: () => void; nome: string; movel: boolean;
 }) {
   switch (id) {
+    case "tv": return <PainelTv nome={nome} movel={movel} />;
     case "estado": return <EstadoPet detalhes={detalhes} alternarDetalhes={alternarDetalhes} />;
     case "evolucao": return <ProximaEvolucao irEvolucao={irEvolucao} />;
     case "acoes": return <UltimasAcoes irRegistro={irRegistro} />;
@@ -664,7 +700,7 @@ function LequePet({ tem, abrirDe, abrirConfig, abrirMeusPets }: {
         </button>
       )}
       <div className="mm-leque-paineis">
-        {(["evolucao", "acoes", "digibrain"] as const).filter(tem).map(id => {
+        {(["evolucao", "acoes", "digibrain", "tv"] as const).filter(tem).map(id => {
           const I = ICONE_PAINEL[id];
           return <BotaoMovel key={id} className="mm-caixa mm-forma mm-bt mm-bt48" rotulo={TITULO_PAINEL[id]} lado="dir" aria-label={TITULO_PAINEL[id]}
             onClick={() => abrirDe(id)}><I aria-hidden="true" /></BotaoMovel>;
@@ -703,10 +739,10 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
   useReservaDoHabitat(dock, largo);
   const vivo = nascendo === 0 && !m.morte, p = vivo ? previsaoEvo(m) : null, temEvo = !!p;
   /* "Exibir detalhes do pet" desligado (Ajustes): sem Estado, Evolucao, Ultimas acoes e DigiBrain; o porque da fala fica */
-  const tem = (id: Painel): boolean => id === "fala" ? nascendo === 0 : !detalhesPet ? false : id === "estado" || (nascendo === 0 && (id === "evolucao" ? temEvo : id === "digibrain" ? true : vivo));
+  const tem = (id: Painel): boolean => id === "tv" ? vivo && gostoVisualLigado() : id === "fala" ? nascendo === 0 : !detalhesPet ? false : id === "estado" || (nascendo === 0 && (id === "evolucao" ? temEvo : id === "digibrain" ? true : vivo));
   /* o painel que deixou de fazer sentido (o ovo chocando, o pet que morreu) fecha sozinho; no desktop Estado, Evolucao e Ultimas acoes
      ficam na pilha, e o painel flutuante e so o do DigiBrain e o do porque */
-  const valido = (q: Painel | null): q is Painel => q !== null && tem(q) && (!largo || q === "digibrain" || q === "fala");
+  const valido = (q: Painel | null): q is Painel => q !== null && tem(q) && (!largo || q === "digibrain" || q === "fala" || q === "tv");
   const atual = valido(aberto) ? aberto : null;
   const abrir = (q: Painel) => { gatilho.current = document.activeElement as HTMLElement | null; setAberto(aberto === q ? null : q); };
   /* do leque do retrato (celular): o item que abriu sai da arvore, entao o foco volta ao retrato */
@@ -725,6 +761,12 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
     }, 0);
   };
   useEffect(() => { if (atual) painel.current?.focus(); }, [atual]);
+  /* o prototipo do gosto visual (so com `?gosto_visual=1`): o toque na TV da ilha abre o painel da TV (se ja esta aberto, fica); a camera vai
+     ao cantinho enquanto ele esta aberto; e o chamado do pet passa na frente do sinal da TV */
+  const temTv = tem("tv"), chamando = vivo && petChama(m);
+  useEffect(() => (temTv ? aoPedirPainelTv(() => { gatilho.current = null; setAberto("tv"); }) : undefined), [temTv]);
+  useEffect(() => { marcarPainelTv(atual === "tv"); return () => marcarPainelTv(false); }, [atual]);
+  useEffect(() => { ocuparSinalTv("chamado", chamando); return () => ocuparSinalTv("chamado", false); }, [chamando]);
   /* o resumo do chamado abre o Estado: na pilha (desktop) ou o painel da borda (celular) */
   const abrirEstado = () => {
     if (!largo) { abrir("estado"); return; }
@@ -735,7 +777,8 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
   /* a pilha da direita se arrasta pelos cabecalhos (2026-11-08); a posicao fica no navegador, e Ajustes > Visual a volta ao lugar */
   const arrPilha = useArrastavelPorAlca("pilha", pilha, ".hud-painel__cab");
   const resumoEvo = p ? (p.falta > 0 ? `próxima forma em ${duracao(p.falta)}` : "tempo do estágio cumprido") : undefined;
-  const conteudo = (id: Painel) => <ConteudoPainel id={id} v={fala} irRegistro={irRegistro} irEvolucao={irEvolucao} detalhes={hud.detalhes} alternarDetalhes={() => mudarHud("detalhes")} />;
+  const conteudo = (id: Painel) => <ConteudoPainel id={id} v={fala} irRegistro={irRegistro} irEvolucao={irEvolucao} detalhes={hud.detalhes} alternarDetalhes={() => mudarHud("detalhes")}
+    nome={nomeForma(m.forma)} movel={!largo} />;
   return (
     <section className="pet-tela pet-home dl" aria-label="Tela do pet">
       <div className="pet-balcao">
@@ -744,14 +787,17 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
       </div>
       {topo && largo && createPortal(<LinhaAgora aberto={atual === "digibrain"} sobPainel={atual !== null} aoAbrir={detalhesPet ? () => abrir("digibrain") : undefined} />, topo, "agora")}
       {!largo && <AgoraIcone aberto={atual === "digibrain"} sobPainel={atual !== null} aoAbrir={detalhesPet ? () => abrir("digibrain") : undefined} />}
+      <AtosNaIlha />
       <Prioridade abrirDetalhes={largo || detalhesPet ? abrirEstado : undefined} movel={!largo} />
-      {largo ? (!atual && detalhesPet && (
+      {/* com "Exibir detalhes do pet" desligado a pilha some; com o prototipo do gosto visual fica so a linha "TV", o caminho do teclado */}
+      {largo ? (!atual && (detalhesPet || temTv) && (
         <aside className="pet-hud" ref={pilha} aria-label="Painéis do pet" {...arrPilha}>
-          <PainelHud id="estado" aberto={hud.estado} alternar={() => mudarHud("estado")}>{conteudo("estado")}</PainelHud>
-          {temEvo && <PainelHud id="evolucao" aberto={hud.evolucao} alternar={() => mudarHud("evolucao")} resumo={resumoEvo}>{conteudo("evolucao")}</PainelHud>}
-          {vivo && <PainelHud id="acoes" aberto={hud.acoes} alternar={() => mudarHud("acoes")} resumo={ult ? `${hhmm(ult.t)} · ${textoHist(ult)}` : "nada no registro ainda"}>
+          {detalhesPet && <PainelHud id="estado" aberto={hud.estado} alternar={() => mudarHud("estado")}>{conteudo("estado")}</PainelHud>}
+          {detalhesPet && temEvo && <PainelHud id="evolucao" aberto={hud.evolucao} alternar={() => mudarHud("evolucao")} resumo={resumoEvo}>{conteudo("evolucao")}</PainelHud>}
+          {detalhesPet && vivo && <PainelHud id="acoes" aberto={hud.acoes} alternar={() => mudarHud("acoes")} resumo={ult ? `${hhmm(ult.t)} · ${textoHist(ult)}` : "nada no registro ainda"}>
             <UltimasAcoes irRegistro={irRegistro} n={5} /></PainelHud>}
-          {nascendo === 0 && <LinhaDigiBrain abrir={() => abrir("digibrain")} />}
+          {detalhesPet && nascendo === 0 && <LinhaDigiBrain abrir={() => abrir("digibrain")} />}
+          {temTv && <LinhaTv abrir={() => abrir("tv")} />}
         </aside>
       )) : (
         <LequePet tem={tem} abrirDe={abrirDoLeque} abrirConfig={abrirConfig} abrirMeusPets={abrirMeusPets} />
