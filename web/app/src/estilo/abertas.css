@@ -167,3 +167,9 @@ dialog.res.ab-hx{
   .boas-vindas-tela.ab-hx .bv-pe .bv-conheco{ width:auto; min-width:220px; margin-top:0 }
   .boas-vindas-tela.ab-hx .bv-pe > span{ flex-basis:100% }
 }
+
+/* ---- MITOLOGIA, E0: o balao do oraculo Jijimon (BalaoOraculo.tsx) usa a faixa das dicas; no desktop fica no centro, acima da barra das acoes (fora do minimapa e da pilha a direita), no celular
+   fica fixo acima da barra das acoes (como o cartao de destrave), longe do topo do HUD ---- */
+@media (min-width:900px){ .oraculo-bit.dica-bit{ right:auto; left:50%; transform:translateX(-50%); bottom:104px; width:min(520px, calc(100vw - 2 * 340px)) } }
+@media (max-width:899px){ .oraculo-bit.dica-bit{ position:fixed; margin:0; left:14px; right:14px; bottom:124px; z-index:28; max-height:calc(100dvh - 124px - 80px); overflow:auto } }
+@media (max-width:899px) and (max-height:520px){ .oraculo-bit.dica-bit{ bottom:72px; max-height:calc(100dvh - 72px - 56px) } }

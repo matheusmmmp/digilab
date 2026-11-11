@@ -5,7 +5,7 @@
    Visual (2026-11-01, no lugar da Aparencia; #/config/aparencia leva a ela), e as dicas ficam no menu principal; nada aqui muda o motor, as regras ou o save, a nao ser pelas mesmas acoes de antes
    (tempo e ovo novo, via jogo.ts/tempo.ts). Opcoes das pranchas que o app nao tem ficam de fora. Rotas #/config/<parte> iguais. */
 import { useId } from "react";
-import { Activity, Camera, ChevronRight, Clock, Eye, FlaskConical, Info, Lightbulb, MessageCircle, RotateCcw, ScrollText, Volume1, Volume2, type LucideIcon } from "lucide-react";
+import { Activity, Camera, ChevronRight, Clock, Eye, FlaskConical, Info, Lightbulb, MessageCircle, Mountain, RotateCcw, ScrollText, Volume1, Volume2, type LucideIcon } from "lucide-react";
 import { Balao, propsBalao } from "../../componentes/Dica.tsx";
 import { escolherViagem, useViagemLigada } from "../../viagem.ts";
 import { useState } from "react";
@@ -23,6 +23,7 @@ import { AvisoSom } from "../../componentes/AvisoSom.tsx";
 import { SOM, useSom } from "../../som.ts";
 import { dicasLigadas, ligarDicas } from "../../dicas.ts";
 import { reverOTutorial } from "../../nivelTela.ts";
+import { ligarMitologia, useMitologia } from "../../mitologia.ts";
 import { ligarDetalhesPet, temPainelMovido, useDetalhesPet, voltarPaineis } from "../../hudPet.ts";
 import { textoSave } from "../../save.ts";
 import { useHabitat } from "../../habitat.ts";
@@ -57,7 +58,7 @@ function Aj({ ic: I, nome, rotulo, resumo, tag, novo, interruptor, abrir }: {
   );
 }
 function Principal({ abrir }: { abrir: (p: ParteConfig) => void }) {
-  const { motor: m } = useJogo(), tema = useTema(), pele = usePele(), habitat = useHabitat(), fl = useFalaLivre(), { velocidade } = useTempo(), viagem = useViagemLigada(), som = useSom();
+  const { motor: m } = useJogo(), tema = useTema(), pele = usePele(), habitat = useHabitat(), fl = useFalaLivre(), { velocidade } = useTempo(), viagem = useViagemLigada(), som = useSom(), mitologia = useMitologia();
   const [dicas, setDicas] = useState(dicasLigadas), detalhesPet = useDetalhesPet(), [revisto, setRevisto] = useState(false);
   useFalaLLM(); useLab();
   return (
@@ -69,6 +70,8 @@ function Principal({ abrir }: { abrir: (p: ParteConfig) => void }) {
       <span className="sr-only" role="status" aria-live="polite">{revisto ? "Tutorial reiniciado" : ""}</span>
       <Aj ic={Activity} nome="Detalhes do pet" rotulo="Exibir detalhes do pet" resumo="os painéis Estado atual, Evolução, Últimas ações e DigiBrain na tela do pet"
         interruptor={{ ligado: detalhesPet, mudar: ligarDetalhesPet }} />
+      <Aj ic={Mountain} nome="Mitologia" novo resumo="o oráculo Jijimon conta uma lenda depois de certas derrotas, e a ilha guarda sinais de um dia bem brincado; desligada, nada aparece"
+        interruptor={{ ligado: mitologia, mudar: ligarMitologia }} />
       <Aj ic={Camera} nome="Viagem da câmera" novo resumo="desligada, os lugares abrem num corte seco" interruptor={{ ligado: viagem, mudar: escolherViagem }} />
       <Aj ic={MessageCircle} nome="Fala" rotulo="Fala do pet" resumo={`modo ${NOME_MODO[fl.modo]} · ${rotuloLLM().texto}`} abrir={() => abrir("fala")} />
       <Aj ic={Volume2} nome="Som" rotulo="Som do jogo" resumo="a luta, o treino, o comer, os menus e a música da ilha e da evolução; desligado, nada é baixado" interruptor={{ ligado: som.ligado, mudar: v => SOM.ligar(v) }} />
@@ -226,7 +229,11 @@ function Sobre() {
           fica fora do repositório; sem ele, o jogo usa os sprites de reserva, de arte própria.</p>
         {/* os kits 3D da ilha (docs/TAREFA_V3_HABITAT_ILHA_3D.md, H1 e H-1): CC0, com as licencas em public/kits3d/ */}
         <p className="mc-credito-kits">As árvores, as plantas e as pedras da ilha são dos kits 3D de Quaternius (Stylized Nature MegaKit) e de Kay
-          Lousberg (KayKit Forest Nature Pack), em domínio público (CC0). O saco de pancada, o kit médico, o cocô, os postes de luz, o carro, a geladeira e o trilho foram gerados com a Meshy (meshy.ai) e consertados no Blender; o céu do mapa Digital também é da Meshy. A bola foi feita no Blender pelo próprio projeto, sem IA.</p></section>
+          Lousberg (KayKit Forest Nature Pack), em domínio público (CC0). O saco de pancada, o kit médico, o cocô, os postes de luz, o carro, a geladeira e o trilho foram gerados com a Meshy (meshy.ai) e consertados no Blender; o céu do mapa Digital também é da Meshy. A bola foi feita no Blender pelo próprio projeto, sem IA.</p>
+        {/* MITOLOGIA, E0 (docs/TAREFA_V3_MITOLOGIA.md): a lenda nao nomeia a obra na fala; o credito fica aqui (resposta 3 do Matheus, 2026-11-11) */}
+        <p className="mc-credito-lenda">A lenda que o oráculo Jijimon conta (Ajustes, Mitologia) é um mito próprio do projeto, no molde do macaco
+          que desafiou o Céu, da <i>Jornada ao Oeste</i> atribuída a Wu Cheng'en (século XVI, domínio público): o enredo recontado com palavras
+          nossas, sem texto de nenhuma tradução.</p></section>
     </>
   );
 }

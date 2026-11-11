@@ -71,7 +71,22 @@ export function quadroDaAbertura(p: Proposta, t: number, pontos: Record<Ponto, P
   };
 }
 
-/** o relogio do prototipo: comeca no primeiro quadro com a ilha a vista; `fixo` para o tempo (as capturas da prancha) */
+/** a saida pelo toque (AB-3): do quadro `de` em que a abertura parou ate a camera de sempre (`foco`, `zoom`, sem inclinacao), em
+    TRANSICAO_MS pela curva suave; `ms` e o tempo desde o toque. Depois do fim, a camera de sempre com `acabou` */
+export function quadroDaSaida(de: QuadroAbertura, ms: number, foco: Par, zoom: number, duracaoMs: number): QuadroAbertura {
+  if (!Number.isFinite(ms) || ms < 0) throw new Error(`quadroDaSaida: tempo invalido ${ms}`);
+  if (!(duracaoMs > 0)) throw new Error(`quadroDaSaida: duracao invalida ${duracaoMs}`);
+  if (ms >= duracaoMs) return { foco: [foco[0], foco[1]], zoom, inclina: 0, acabou: true };
+  const s = suavizar(ms / duracaoMs);
+  return {
+    foco: [de.foco[0] + (foco[0] - de.foco[0]) * s, de.foco[1] + (foco[1] - de.foco[1]) * s],
+    zoom: de.zoom + (zoom - de.zoom) * s,
+    inclina: de.inclina * (1 - s),
+    acabou: false,
+  };
+}
+
+/** o relogio da abertura: comeca no primeiro quadro com a ilha a vista; `fixo` para o tempo (as capturas da prancha) */
 export const RELOGIO_ABERTURA: { inicio: number | null; fixo: number | null } = { inicio: null, fixo: null };
 export function tempoDaAbertura(agora: number): number {
   if (RELOGIO_ABERTURA.fixo !== null) return RELOGIO_ABERTURA.fixo;
@@ -79,7 +94,9 @@ export function tempoDaAbertura(agora: number): number {
   RELOGIO_ABERTURA.inicio ??= agora;
   return Math.max(0, agora - RELOGIO_ABERTURA.inicio);
 }
-/** window.__abertura para as capturas: em(t) para o tempo em t ms, tocar() recomeca andando, duracao */
+/** o relogio comeca de novo no proximo quadro (a abertura de verdade, quando o ovo choca) */
+export function zerarRelogioAbertura(): void { RELOGIO_ABERTURA.inicio = null; RELOGIO_ABERTURA.fixo = null; }
+/** window.__abertura para as capturas (so com ?abertura=): em(t) para o tempo em t ms, tocar() recomeca andando, duracao */
 export function ligarAberturaDev(): () => void {
   const p = ABERTURA_PROPOSTA;
   if (!p) return () => {};
