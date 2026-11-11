@@ -20,7 +20,7 @@ um nome do catalogo que nao e conteudo de fala, e erro (400). A intencao e um PE
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from digilab.config import CONFIG_DECODIFICADOR, CONFIG_VOZ_V4, CONTEUDOS_FALA
 
@@ -190,3 +190,10 @@ def selecionados_v4(conceitos: Conceitos, estagio: str) -> tuple[Conceito, ...]:
         if c not in escolhidos:
             escolhidos.append(c)
     return tuple(escolhidos[:k])
+
+
+def selecionados_v4b(conceitos: Conceitos, estagio: str) -> tuple[Conceito, ...]:
+    """A selecao da voz-v4b (DC5a2, D-DC5B-5): a da voz-v4 sem a lembranca sem episodio. A voz-v4b nao fala de lembranca sem EPISODIO
+    (a regra 3), entao esse conceito nao ocupa vaga; a vaga vai ao seguinte. Funcao pura."""
+    sem = [c for c in conceitos.conceitos if not (c.nome == "lembranca" and c.episodio is None)]
+    return selecionados_v4(replace(conceitos, conceitos=tuple(sem)), estagio)

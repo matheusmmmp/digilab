@@ -3014,6 +3014,22 @@ def repeticao_entre_turnos(falas: Sequence[str], n: int) -> dict:
     return {"consideradas": max(len(falas) - 1, 0), "repetem": repetem}
 
 
+def tem_trecho_igual(fala: str, outras: Sequence[str], n: int) -> bool:
+    """a fala tem n ou mais palavras seguidas (normalizadas) iguais a um trecho de um dos outros textos (DC5a2, D-DC5B-5: a repeticao de
+    trecho da voz-v4b e a copia das citacoes do corpus da especie)"""
+    if n < 1:
+        raise ValueError(f"n >= 1: {n}")
+    g = set(_ngramas(palavras_normalizadas(fala), n))
+    return any(g & set(_ngramas(palavras_normalizadas(o), n)) for o in outras)
+
+
+def repeticao_de_trecho(falas: Sequence[str], n: int) -> dict:
+    """numa sequencia (uma conversa ou uma sequencia espontanea), as falas a partir da segunda com n ou mais palavras seguidas iguais a uma fala
+    anterior da mesma sequencia (DC5a2, D-DC5B-5)"""
+    repetem = sum(tem_trecho_igual(f, falas[:i], n) for i, f in enumerate(falas) if i > 0)
+    return {"consideradas": max(len(falas) - 1, 0), "repetem": repetem}
+
+
 def kappa_cohen(pares: Sequence[tuple[str, str]]) -> dict:
     """o kappa de Cohen entre dois marcadores (DC5, 4.1). `pares` = (marcacao A, marcacao B) por item. Com a concordancia esperada igual a 1
     o kappa nao e calculavel: sai None, com a concordancia bruta (o plano: "nao calculavel", e o gate fica nao medido)."""
