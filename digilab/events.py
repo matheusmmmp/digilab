@@ -437,6 +437,68 @@ def ler_sacudir_arvore(evento: Evento) -> str:
     return _id_arvore(evento.valor)
 
 
+# V3, GOSTO_VISUAL, P1c (docs/ESPEC_GOSTO_VISUAL_P1.md, secoes 1.1 e 1.2): a TV no mundo. Dois tipos novos do log, so com a ConfigTV
+# ligada (o motor confere a chave e a fonte; sem ela, levantam erro):
+#   `trocar_canal`  o dono poe o programa `programa` da TV do jogo (a fonte "grade"): o valor e o indice, um inteiro >= 0 canonico;
+#   `sentido_tela`  o modo livre gravado (a fonte "evento"): o que a TV passa, `fonte|n1|...|n7`, com a fonte em FONTES_SENTIDO_TELA e
+#                   cada nivel de 0 a NIVEL_MAX_TELA, na ordem dos canais da tela (corpo.CANAIS_TELA). O formato e o da espec (PROPOSTO).
+TIPO_TROCAR_CANAL = "trocar_canal"
+TIPO_SENTIDO_TELA = "sentido_tela"
+FONTES_SENTIDO_TELA = ("tela", "tv")             # a tela real do computador ou a TV do jogo, as duas pelo modo livre gravado
+NIVEL_MAX_TELA = 15                              # o formato do evento: 16 niveis por canal (GV-15); o corpo multiplica por C/15
+N_CANAIS_TELA = 7                                # os sete canais (4 da visao, 3 do som; corpo.CANAIS_TELA, conferido por teste)
+
+
+def _natural_canonico(texto: str) -> int:
+    """o inteiro >= 0 na forma canonica do log (so digitos ASCII, sem zero a esquerda)"""
+    if not texto.isascii() or not texto.isdigit() or (len(texto) > 1 and texto[0] == "0"):
+        raise ValueError(f"inteiro malformado no log: {texto!r}")
+    return int(texto)
+
+
+def trocar_canal(tick: int, programa: int) -> Evento:
+    """o dono poe o programa `programa` da grade na TV do jogo (se o indice existe, quem confere e o motor)"""
+    if type(programa) is not int or programa < 0:
+        raise ValueError(f"trocar_canal com programa invalido: {programa!r}")
+    return Evento(tick=tick, tipo=TIPO_TROCAR_CANAL, valor=str(programa))
+
+
+def ler_trocar_canal(evento: Evento) -> int:
+    if evento.tipo != TIPO_TROCAR_CANAL:
+        raise ValueError(f"evento nao e {TIPO_TROCAR_CANAL}: {evento.tipo!r}")
+    if type(evento.valor) is not str:
+        raise ValueError(f"trocar_canal malformado: {evento.valor!r}")
+    return _natural_canonico(evento.valor)
+
+
+def _niveis_tela(niveis) -> tuple[int, ...]:
+    if type(niveis) not in (tuple, list) or len(niveis) != N_CANAIS_TELA:
+        raise ValueError(f"sentido_tela com {N_CANAIS_TELA} niveis, veio {niveis!r}")
+    for n in niveis:
+        if type(n) is not int or not 0 <= n <= NIVEL_MAX_TELA:
+            raise ValueError(f"nivel do sentido_tela fora de 0 a {NIVEL_MAX_TELA}: {n!r}")
+    return tuple(niveis)
+
+
+def sentido_tela(tick: int, fonte: str, niveis) -> Evento:
+    """modo livre gravado: o que a TV passa a partir deste tick (a media de 10 s reais em 16 niveis, so na mudanca; GV-15)"""
+    if fonte not in FONTES_SENTIDO_TELA:
+        raise ValueError(f"fonte do sentido_tela em {FONTES_SENTIDO_TELA}: {fonte!r}")
+    n = _niveis_tela(niveis)
+    return Evento(tick=tick, tipo=TIPO_SENTIDO_TELA, valor="|".join((fonte,) + tuple(str(v) for v in n)))
+
+
+def ler_sentido_tela(evento: Evento) -> tuple[str, tuple[int, ...]]:
+    if evento.tipo != TIPO_SENTIDO_TELA:
+        raise ValueError(f"evento nao e {TIPO_SENTIDO_TELA}: {evento.tipo!r}")
+    if type(evento.valor) is not str:
+        raise ValueError(f"sentido_tela malformado: {evento.valor!r}")
+    partes = evento.valor.split("|")
+    if len(partes) != 1 + N_CANAIS_TELA or partes[0] not in FONTES_SENTIDO_TELA:
+        raise ValueError(f"sentido_tela malformado: {evento.valor!r}")
+    return partes[0], _niveis_tela([_natural_canonico(p) for p in partes[1:]])
+
+
 def _inteiro_do_log(texto: str) -> int:
     if not texto.isdigit():
         raise ValueError(f"inteiro malformado no log: {texto!r}")
