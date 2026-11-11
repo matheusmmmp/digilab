@@ -139,7 +139,7 @@ lendas, os sinais dos cinco deuses, o Myotismon como termômetro, a pedra do mac
 
 **O que entrou:**
 
-| peça | gatilho (PROPOSTO, SEM FONTE) | o que se vê |
+| peça | gatilho (DECIDIDO pelo Matheus em 2026-11-11, "Aprovo os gatilhos"; SEM FONTE) | o que se vê |
 |---|---|---|
 | **Coragem** (brasa) | vencer um líder da Campanha com `total` ≥ a força do pet | uma chama que não queima, perto do ninho, por um dia |
 | **Amizade** (cirro) | 3 dias seguidos com ≥ 3 carinhos e ≥ 2 brincadeiras do dono | duas flores que se viram uma para a outra, por um dia |

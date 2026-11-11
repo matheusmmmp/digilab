@@ -12,7 +12,7 @@ import { eNoite } from "./estado.ts";
 import { centroDaCelula, distancia } from "./mundo.ts";
 import { variadaDe, type FontesLenda } from "./lendas.ts";
 
-/** os numeros da E1, todos PROPOSTOS e SEM FONTE (D-E1-2 no registro) */
+/** os numeros da E1, DECIDIDOS pelo Matheus em 2026-11-11 ("Aprovo os gatilhos"; D-E1-2 no registro), SEM FONTE */
 export const CMIT_E1 = {
   /** Coragem: vencer um lider da Campanha com `total` >= esta razao x a forca do pet na entrada */
   razaoCoragem: 1.0,
