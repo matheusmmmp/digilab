@@ -184,7 +184,7 @@ class VistaIlha {
     this.chaoLugar = Object.fromEntries(ORDEM_LUGARES.map(id => [id, chaoDoLugar(id, base)])) as Record<Lugar, number>;
     /* o portao e a barraca: marcadores provisorios no ponto de cada um, ate o modelo 3D chegar (carregarObjetos); nos estilos sem lugares, ficam */
     this.marcadores = montarMarcadores(base);
-    this.mitologia = new SinaisDaIlha(this.itens.ninhoEm, mu.cm.sub);
+    this.mitologia = new SinaisDaIlha(this.itens.ninhoEm, mu.cm);
     this.cenaIlha.cena.add(this.itens.raiz, this.papel.raiz, this.marcadores.raiz, this.mitologia.raiz);
     /* o cantinho da TV em volta da TV do #814 (so com a chave do P0; antes dos kits, para a decoracao sob o tapete sair da vista): o pet vai ate ele pela rota em terra */
     this.cantinho = cantinhoNaVista() ? montarCantinho(this.ilha, (de, para) => (this.ilha.comAgua ? rotaEmTerra(this.ilha.cm, de, para) : null)) : null;
