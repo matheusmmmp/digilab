@@ -652,3 +652,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — ILHA_AGUA, IA4: a ilha com água junto com os objetos em cartoon e a cooperação (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-agua-ia4`)](registro/2026-11.md)
 - [2026-11-11 — DIGIBRAIN_SCAN_LAB: o scan no pet do laboratório (Gerente da V3, Claude Code, Opus 5.5, branch `v3-digibrain-scan-lab`)](registro/2026-11.md)
 - [2026-11-11 — HABITAT_REACOES, HR1: as reações que faltavam na vista (Gerente da V3, Claude Code, Opus 5.5, branch `v3-habitat-hr1`)](registro/2026-11.md)
+- [2026-11-11 — HABITAT_REACOES, HR2 e HR3: o som do cuidado, a voz do pet e o bipe do chamado (Gerente da V3, Claude Code, Opus 5.5, branch `v3-habitat-hr2`)](registro/2026-11.md)

@@ -9,6 +9,7 @@
      - Doente: lesao ou saude baixa;
      - Envergonhado: SEM GATILHO no jogo de hoje (o elogio nao existe nas acoes do dono dos pets v11): o quadro entra no atlas e fica sem ligacao. */
 import type { ClipeReacao } from "../../atlas.ts";
+import { emitirSom, emitirVoz } from "../../somEventos.ts";
 
 export type ReacaoRosto = ClipeReacao;
 
@@ -43,8 +44,9 @@ export function registrarAcaoDono(acao: string, agora: number, fome: number): vo
   if (acao === "tapa") {
     tapas = [...tapas.filter(t => agora - t < REACAO.janelaMedoMs), agora];
     evento = { reacao: tapas.length >= REACAO.tapasMedo ? "Medo" : "Triste", desde: agora, ms: REACAO.eventoMs };
+    emitirVoz("choro");                                       /* HR2: a voz do pet; o tapa seco (CC0) e da HR4 */
   } else if (acao === "acariciar") evento = { reacao: "Carinho", desde: agora, ms: REACAO.eventoMs };
-  else if (acao === "alimentar" && fome > REACAO.semFome) evento = { reacao: "Recusa", desde: agora, ms: REACAO.eventoMs };
+  else if (acao === "alimentar" && fome > REACAO.semFome) { evento = { reacao: "Recusa", desde: agora, ms: REACAO.eventoMs }; emitirSom("cuidado_recusa"); emitirVoz("resmungo"); }
 }
 /** um momento do pet que pede um rosto (momentos.ts, HR1: o Cansado ao acordar, o Triste do chamado perdido, a Recusa da fruta podre), por `ms` */
 export function registrarMomentoRosto(r: ReacaoRosto, agora: number, ms: number): void {

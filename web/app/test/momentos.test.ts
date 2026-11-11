@@ -8,7 +8,7 @@ import {
 } from "../src/telas/pet/momentos.ts";
 import { escolherReacao, esquecerReacaoRosto, type EntradaReacao } from "../src/telas/pet/reacao.ts";
 
-const BASE: EntradaMomentos = { chave: "p", nascendo: 0, dormindo: false, morto: false, acao: "ocioso", abertos: [], atendidos: 0, consumos: 0, ultimo: null };
+const BASE: EntradaMomentos = { chave: "p", nascendo: 0, dormindo: false, morto: false, acao: "ocioso", abertos: [], urgente: false, atendidos: 0, consumos: 0, ultimo: null };
 const em = (o: Partial<EntradaMomentos> = {}): EntradaMomentos => ({ ...BASE, ...o });
 const CICLO = 800, ciclo = () => CICLO;
 const CORPO: EntradaReacao = { chave: "p", humor: 0.7, energia: 0.9, saude: 1, lesionado: false, dormindo: false };
