@@ -5,7 +5,8 @@ Acha no comando um `python … experiments/run_v[23]_*.py` (o pedido dizia `run_
 `--config` e o `--processos` (as duas formas, `--x valor` e `--x=valor`) e chama o `pre_run.py` com eles. Se ele recusa, código 2 com os
 motivos. Um `--help` passa. Sem `--config`, código 2: o orquestrador também exige, e o gate não tem o que conferir.
 
-**As medições do combate** (`python … scripts/equilibrio_tr/*.py` e `npx tsx … scripts/equilibrio_tr/*.ts`, em `web/app`) passam pelo
+**As medições do combate** (`python … scripts/equilibrio_tr/*.py` e `npx tsx … scripts/equilibrio_tr/*.ts`, em `web/app`; desde a LUTA_POC
+LP5-0 também `node … scripts/equilibrio_poc/*.ts`, a bancada da luta em tempo real) passam pelo
 `pre_run.py --medicao`: só a regra de uma carga por vez, que a V3-D8 aplica a elas (INFRA_AGENTES E7).
 
 Como o H3, o hook lê o texto do comando: uma run lançada por um script que chama o orquestrador por dentro não passa por aqui (os
@@ -24,7 +25,7 @@ from _comum import bloquear, ler_evento, raiz_do_projeto  # noqa: E402
 
 SEPARADORES = re.compile(r"&&|\|\||;|\||\n")
 RUN = re.compile(r"(^|[\\/])experiments[\\/]+run_v[23]_[A-Za-z0-9_]+\.py$")
-MEDICAO = re.compile(r"(^|[\\/])scripts[\\/]+equilibrio_tr[\\/]+[A-Za-z0-9_]+\.(py|ts)$")
+MEDICAO = re.compile(r"(^|[\\/])scripts[\\/]+equilibrio_(?:tr|poc)[\\/]+[A-Za-z0-9_]+\.(py|ts)$")
 
 
 def tokens_de(pedaco: str) -> list[str]:

@@ -160,3 +160,25 @@ Antes da primeira vida rejogada, numa seção nova no fim deste plano, ficam:
 | **IH-5** | a janela | **os dias 8 a 14**, com os dias 1 a 7 no descritivo | a vida inteira mistura o bebê com o pet formado; só o fim deixa de fora o hábito que nasce cedo |
 | **IH-6** | as comparações | **o H_dono e o H_mundo, no mesmo dia**, com o D_braço só no descritivo | comparar com outros dias mistura o hábito com a mudança da vida; o par dos braços como leitura misturaria o hábito com o efeito das facetas |
 | **IH-7** | onde as contas moram | **os perfis e a distintividade no `digilab/metrics.py`**; o bootstrap no orquestrador | as contas no orquestrador ficam duplicadas quando o I6 (a ficha) precisar delas |
+
+## 11. O registro da análise
+
+Escrito em 2026-11-10, antes da primeira vida rejogada (seção 9).
+
+- **O código:** a `main` em `bfc44a5` (com o I5a, o #751, e o plano do I7, o #755). O branch `v3-individualidade-i5b` só acrescenta
+  esta seção e uma linha na lista do `tests/test_memoria_autobio.py` (abaixo); o orquestrador e as medidas não mudam.
+- **Os sha256:**
+  - `experiments/run_v3_individualidade_i5.py`: `40ac126b15fcf946bf8bd79df4ea735a1a3cc25e01e955eb7e752cd1fd500a1f`;
+  - `digilab/metrics.py`: `99e1fb194f215b1b072b728f17082c948762825cf8e42960742df23d023423a1`;
+  - `artifacts_v3_individualidade/vidas.tar.gz` (as vidas do I2, IH-1): `f07fb6ce2a5db78c494e34b00e364b12e08687b776d4bda5fc3d62e1409dd100`.
+- **O comando:**
+  `python experiments/run_v3_individualidade_i5.py --config experiments/configs/v3_individualidade/individualidade_i5.json --processos 4`,
+  com a saída em `artifacts_v3_individualidade_i5/`.
+- **A suíte do dia** (`python -m pytest tests/ -q`, em `bfc44a5`): 5 224 passaram, 8 pularam e 4 falharam, em 2 h 09 min. As 4 são
+  listas de arquivos que podem citar o pacote do modular ou as runs da C3 e da C4 (o G2 da separação), e nenhuma é de vida ou de replay:
+  - `tests/test_memoria_autobio.py::test_g2_separado_nada_fora_do_pacote_le_a_chave`: o orquestrador do I5 (o #751) cita a C4 pelas
+    fábricas da vida e não estava na lista. Consertado neste branch (a linha nova na lista), e o arquivo passa (135 passaram com o
+    `tests/test_individualidade_i5.py`).
+  - `tests/test_digibrain_etapa0.py` e `tests/test_digibrain_vidas.py`: o `experiments/entradas_dc4.py` (da CONVERSA_PET, DC4) fora da
+    lista. Não é desta frente e fica para a dona dela.
+  - `tests/test_redecidir_evento.py`: o `experiments/auditoria_pet_vivo.py` fora da lista. Também não é desta frente.

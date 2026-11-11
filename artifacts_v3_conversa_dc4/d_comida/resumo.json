@@ -1,0 +1,287 @@
+{
+  "conferencia": {
+    "campos_fora_da_comparacao": [
+      "custo"
+    ],
+    "logs_iguais_ao_tar": 1600,
+    "medidas_iguais": 1600,
+    "r_n_gravado_reproduzido_em_toda_decisao_fechada": true,
+    "vidas_refeitas": 1600
+  },
+  "descritivo": "D-COMIDA, sem gate; um descritivo a mais sobre a run da DC3, ja lida",
+  "plano": "docs/PLANO_ANALISE_V3_CONVERSA_DC4.md",
+  "por_dono": {
+    "aleatorio": {
+      "fome": {
+        "come_na_decisao_seguinte": 133,
+        "come_na_janela": 0,
+        "decisoes_ate_comer": {
+          "censurados": 0,
+          "media": 9.683051193147053,
+          "mediana": 8,
+          "n": 4903,
+          "p90": 19.0
+        },
+        "pareado": {
+          "de_nao_positivo_a_positivo": 3074,
+          "media_ate_comer": 228.44727717723842,
+          "media_hoje": -187.16092188456048,
+          "n": 4903,
+          "sinal_muda": 3098
+        },
+        "pedidos": 4903,
+        "r_n_ate_comer": {
+          "media": 228.44727717723842,
+          "n": 4903,
+          "negativo": 1671,
+          "nenhum": 0,
+          "positivo": 3230,
+          "zero": 2
+        },
+        "r_n_hoje": {
+          "media": -187.16092188456048,
+          "n": 4903,
+          "negativo": 4725,
+          "nenhum": 0,
+          "positivo": 178,
+          "zero": 0
+        },
+        "ticks_ate_cair": {
+          "censurados": 22,
+          "media": 160.78672403196066,
+          "mediana": 135,
+          "n": 4903,
+          "p90": 285.0
+        }
+      },
+      "solidao": {
+        "pedidos": 1208,
+        "ticks_ate_cair": {
+          "censurados": 32,
+          "media": 15.0,
+          "mediana": 15.0,
+          "n": 1208,
+          "p90": 15.0
+        }
+      }
+    },
+    "atencioso": {
+      "fome": {
+        "come_na_decisao_seguinte": 116,
+        "come_na_janela": 0,
+        "decisoes_ate_comer": {
+          "censurados": 8,
+          "media": 11.36115062430852,
+          "mediana": 10,
+          "n": 6335,
+          "p90": 22.0
+        },
+        "pareado": {
+          "de_nao_positivo_a_positivo": 3364,
+          "media_ate_comer": 82.1528370475739,
+          "media_hoje": -236.7374743164217,
+          "n": 6327,
+          "sinal_muda": 3385
+        },
+        "pedidos": 6335,
+        "r_n_ate_comer": {
+          "media": 82.1528370475739,
+          "n": 6327,
+          "negativo": 2843,
+          "nenhum": 8,
+          "positivo": 3484,
+          "zero": 0
+        },
+        "r_n_hoje": {
+          "media": -236.7813733228098,
+          "n": 6335,
+          "negativo": 6194,
+          "nenhum": 0,
+          "positivo": 141,
+          "zero": 0
+        },
+        "ticks_ate_cair": {
+          "censurados": 38,
+          "media": 185.68127679847547,
+          "mediana": 165,
+          "n": 6335,
+          "p90": 330.0
+        }
+      },
+      "solidao": {
+        "pedidos": 7414,
+        "ticks_ate_cair": {
+          "censurados": 508,
+          "media": 15.0,
+          "mediana": 15.0,
+          "n": 7414,
+          "p90": 15.0
+        }
+      }
+    },
+    "incoerente": {
+      "fome": {
+        "come_na_decisao_seguinte": 116,
+        "come_na_janela": 0,
+        "decisoes_ate_comer": {
+          "censurados": 8,
+          "media": 11.36115062430852,
+          "mediana": 10,
+          "n": 6335,
+          "p90": 22.0
+        },
+        "pareado": {
+          "de_nao_positivo_a_positivo": 3364,
+          "media_ate_comer": 82.1528370475739,
+          "media_hoje": -236.7374743164217,
+          "n": 6327,
+          "sinal_muda": 3385
+        },
+        "pedidos": 6335,
+        "r_n_ate_comer": {
+          "media": 82.1528370475739,
+          "n": 6327,
+          "negativo": 2843,
+          "nenhum": 8,
+          "positivo": 3484,
+          "zero": 0
+        },
+        "r_n_hoje": {
+          "media": -236.7813733228098,
+          "n": 6335,
+          "negativo": 6194,
+          "nenhum": 0,
+          "positivo": 141,
+          "zero": 0
+        },
+        "ticks_ate_cair": {
+          "censurados": 38,
+          "media": 185.68127679847547,
+          "mediana": 165,
+          "n": 6335,
+          "p90": 330.0
+        }
+      },
+      "solidao": {
+        "pedidos": 7413,
+        "ticks_ate_cair": {
+          "censurados": 508,
+          "media": 15.0,
+          "mediana": 15,
+          "n": 7413,
+          "p90": 15.0
+        }
+      }
+    },
+    "relapso": {
+      "fome": {
+        "come_na_decisao_seguinte": 63,
+        "come_na_janela": 0,
+        "decisoes_ate_comer": {
+          "censurados": 0,
+          "media": 10.99979879275654,
+          "mediana": 9.0,
+          "n": 4970,
+          "p90": 21.0
+        },
+        "pareado": {
+          "de_nao_positivo_a_positivo": 3010,
+          "media_ate_comer": 195.48088531187122,
+          "media_hoje": -209.09778672032192,
+          "n": 4970,
+          "sinal_muda": 3013
+        },
+        "pedidos": 4970,
+        "r_n_ate_comer": {
+          "media": 195.48088531187122,
+          "n": 4970,
+          "negativo": 1853,
+          "nenhum": 0,
+          "positivo": 3116,
+          "zero": 1
+        },
+        "r_n_hoje": {
+          "media": -209.09778672032192,
+          "n": 4970,
+          "negativo": 4862,
+          "nenhum": 0,
+          "positivo": 108,
+          "zero": 0
+        },
+        "ticks_ate_cair": {
+          "censurados": 46,
+          "media": 181.32818846466287,
+          "mediana": 150.0,
+          "n": 4970,
+          "p90": 330.0
+        }
+      },
+      "solidao": {
+        "pedidos": 2331,
+        "ticks_ate_cair": {
+          "censurados": 47,
+          "media": 15.0,
+          "mediana": 15.0,
+          "n": 2331,
+          "p90": 15.0
+        }
+      }
+    }
+  },
+  "secao": 6,
+  "todos": {
+    "fome": {
+      "come_na_decisao_seguinte": 428,
+      "come_na_janela": 0,
+      "decisoes_ate_comer": {
+        "censurados": 16,
+        "media": 10.916189461535048,
+        "mediana": 9,
+        "n": 22543,
+        "p90": 21.0
+      },
+      "pareado": {
+        "de_nao_positivo_a_positivo": 12812,
+        "media_ate_comer": 138.99671505304747,
+        "media_hoje": -219.8491587872331,
+        "n": 22527,
+        "sinal_muda": 12881
+      },
+      "pedidos": 22543,
+      "r_n_ate_comer": {
+        "media": 138.99671505304747,
+        "n": 22527,
+        "negativo": 9210,
+        "nenhum": 16,
+        "positivo": 13314,
+        "zero": 3
+      },
+      "r_n_hoje": {
+        "media": -219.88581821407976,
+        "n": 22543,
+        "negativo": 21975,
+        "nenhum": 0,
+        "positivo": 568,
+        "zero": 0
+      },
+      "ticks_ate_cair": {
+        "censurados": 144,
+        "media": 179.2995223001027,
+        "mediana": 150,
+        "n": 22543,
+        "p90": 330.0
+      }
+    },
+    "solidao": {
+      "pedidos": 18366,
+      "ticks_ate_cair": {
+        "censurados": 1095,
+        "media": 15.0,
+        "mediana": 15,
+        "n": 18366,
+        "p90": 15.0
+      }
+    }
+  },
+  "vidas_com_dono_que_atende": 800
+}
