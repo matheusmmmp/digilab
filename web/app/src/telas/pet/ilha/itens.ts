@@ -233,15 +233,16 @@ export class Itens {
   /** onde fica o ninho (celulas), para o minimapa */
   readonly ninhoEm: [number, number];
 
-  constructor(mu: Mundo) {
+  /** `saco`: o ponto do saco na planta da ilha (Ilha.planta.lugares.saco); sem ele, o da planta A */
+  constructor(mu: Mundo, saco?: readonly [number, number]) {
     const sub = (this.sub = mu.cm.sub), [nx, ny] = ninhoDe(mu.cm), n = ninho(), t = tigela();
     n.position.set(nx / sub, 0, ny / sub);
     t.position.set(mu.comedouro[0] / sub, 0, mu.comedouro[1] / sub);
     this.brilho.position.set(nx / sub, 0.05, ny / sub);
     this.brilho.visible = false;
     this.ninhoEm = [nx / sub, ny / sub];
-    /* o ponto do saco e de lugares.ts (junto com o do portao e o da barraca): o mesmo [3, -4] do ninho de sempre */
-    this.sacoEm = [...pontoDoLugar("saco", { ninho: [nx / sub, ny / sub], comedouro: [mu.comedouro[0] / sub, mu.comedouro[1] / sub], area: { w: mu.cm.celulas_x, h: mu.cm.celulas_y } })];
+    /* o ponto do saco e de lugares.ts (junto com o do portao e o da barraca), na planta que vale nesta ilha */
+    this.sacoEm = [...pontoDoLugar("saco", { ninho: [nx / sub, ny / sub], comedouro: [mu.comedouro[0] / sub, mu.comedouro[1] / sub], area: { w: mu.cm.celulas_x, h: mu.cm.celulas_y }, saco })];
     this.saco.g.position.set(this.sacoEm[0], 0, this.sacoEm[1]);
     this.kit.g.position.set(nx / sub + KIT_DESDE_NINHO[0], 0, ny / sub + KIT_DESDE_NINHO[1]);
     this.kit.g.rotation.y = -0.4;
