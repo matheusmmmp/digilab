@@ -176,3 +176,16 @@ Ficam fora:
 cada grade e antes da conferência.
 
 **A carga.** No máximo 4 processos e uma medida por vez (V3-D8), pelo gate `tools/pre_run.py --medicao`.
+
+**A R0 e a decisão da R1 (2026-11-11).**
+- **A R0** (PR #834): o `lp6_0` passa 6 de 21. Caem o P1, o P4, o G4 e o S1, e o A1 piora no Rookie (0,256) e no Champion (0,298).
+  - O apoio de perto prende quem atira junto do inimigo.
+- **A R1:** o Matheus escolheu a (a), "Grade do apoio (a)": uma grade nos números do apoio, registrada aqui antes de rodar.
+  - O dano do apoio em 0,3, 0,45 e 0,6.
+  - A recarga em 2, 3 e 4 vezes.
+  - A espera do tiro fraco em 1 500 e 3 000 ms.
+  - São 18 pontos, mais o controle `ctrl_arena`: a elipse ligada e o apoio desligado.
+  - O ritmo fica em 0,6 e a elipse em 1,15 e 1,3; os dois ficam para a R2.
+- **Como roda:** a grade usa a fase `lp6_3/r1`. Roda em todos os grupos, menos a vida, em 3 bases da calibração e com os tamanhos
+  inteiros. A regra de escolha é a da seção 4.2 do plano da LP5, com as 10 metas protegidas do `lp5_3`.
+- **Se nenhum ponto devolve o A1 e as protegidas,** a rodada para e volta ao Matheus com a (b), mudar a regra do apoio de perto no núcleo.
