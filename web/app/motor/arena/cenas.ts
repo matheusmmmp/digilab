@@ -4,7 +4,10 @@
    Coliseu fecha a partir de 30 s ate 50% em 30 s, 5%/s fora; Praia mare de 18 s, agua a 70%, 72 px; Deserto tempestade a cada 20 s por
    6 s, projeteis a 60%, mira 3x pior, areia puxa 26 px/s e deixa a 70%; Castelo runa de 1,2 s, +30% por 8 s, recarga de 12 s, pilar com
    3 golpes; Caverna lava 6%/s, erupcao a cada 7 s com 1,2 s de aviso, 10%, 28 px; Ringue empurrao 2x e 7x, 15% e 600 ms fora, medo da
-   borda a partir de 80%. */
+   borda a partir de 80%.
+   LP6-1 (a secao 4a do plano da LP6): a cena le a elipse da luta (L.el) e o fator dela (L.esc); com a `arenaPorEstagio`, os obstaculos, as
+   zonas, a linha da mare e a volta ao Ringue escalam pelo centro da elipse, e a area segura do Coliseu segue a elipse maior. As contas
+   com o fator 1 dao os mesmos bits de antes (x 1 e exato). */
 import { ELIPSE } from "./constantes.ts";
 import { PI, dist, seno } from "./aritmetica.ts";
 import { emCampo, evento, ferir, fugirZona, mudar, noElipse, normArena, paraCentro, ref } from "./nucleo.ts";
@@ -34,9 +37,9 @@ export const CENAS: Record<IdCena, DefCena> = {
     tick(c, L, dt) {
       const t = L.relogio / 1000; c.seguro = t < 30 ? 1 : 1 - 0.5 * Math.min(1, (t - 30) / 30);
       if (t >= 30 && !c.avisou) { c.avisou = true; evento(L, { tipo: "arena_fecha" }); }
-      for (const u of emCampo(L)) if (normArena(u.x, u.y) > c.seguro) ferir(L, u, 0.05 * dt / 1000, "fora da área segura");
+      for (const u of emCampo(L)) if (normArena(L, u.x, u.y) > c.seguro) ferir(L, u, 0.05 * dt / 1000, "fora da área segura");
     },
-    guia(c, _L, u) { const n = normArena(u.x, u.y); return n > c.seguro * 0.85 ? paraCentro(u, 2) : [0, 0]; },
+    guia(c, L, u) { const n = normArena(L, u.x, u.y); return n > c.seguro * 0.85 ? paraCentro(L, u, 2) : [0, 0]; },
   },
   floresta: {
     nome: "Floresta Green Shade",
@@ -49,7 +52,7 @@ export const CENAS: Record<IdCena, DefCena> = {
     nome: "Praia Shellfish",
     desc: "Maré. A água sobe e desce pela frente da arena a cada 18 s. Na água o movimento cai para 70%. As rochas bloqueiam corpos e projéteis.",
     obst: [[175, 146, 11, "rocha1"], [318, 168, 10, "rocha2"]],
-    tick(c, L) { const f = (seno(L.relogio / 18000 * PI * 2 - PI / 2) + 1) / 2; c.linha = ELIPSE.cy + ELIPSE.ry + 4 - f * 72; },
+    tick(c, L) { const f = (seno(L.relogio / 18000 * PI * 2 - PI / 2) + 1) / 2; c.linha = L.el.cy + L.el.ry + 4 * L.esc - f * 72 * L.esc; },
     mov(c, u) { return u.y > c.linha ? 0.7 : 1; },
     guia(c, _L, u) { return u.y > c.linha - 8 ? [0, -1.2] : [0, 0]; },
   },
@@ -108,9 +111,10 @@ export const CENAS: Record<IdCena, DefCena> = {
         for (let i = 0; i < 2; i++) {
           // uma erupcao mira perto de um lutador, a outra cai em qualquer lugar (com um so em campo, o sorteio pode nao achar ninguem)
           const alvo = i === 0 ? emCampo(L)[Math.floor(L.r.cena() * 2)] ?? null : null;
-          let x = alvo ? alvo.x + (L.r.cena() - 0.5) * 40 : ELIPSE.cx + (L.r.cena() - 0.5) * ELIPSE.rx * 1.4;
-          let y = alvo ? alvo.y + (L.r.cena() - 0.5) * 16 : ELIPSE.cy + (L.r.cena() - 0.5) * ELIPSE.ry * 1.4;
-          if (normArena(x, y) > 0.9) { x = ELIPSE.cx + (x - ELIPSE.cx) * 0.8; y = ELIPSE.cy + (y - ELIPSE.cy) * 0.8; }
+          const E = L.el;
+          let x = alvo ? alvo.x + (L.r.cena() - 0.5) * 40 : E.cx + (L.r.cena() - 0.5) * E.rx * 1.4;
+          let y = alvo ? alvo.y + (L.r.cena() - 0.5) * 16 : E.cy + (L.r.cena() - 0.5) * E.ry * 1.4;
+          if (normArena(L, x, y) > 0.9) { x = E.cx + (x - E.cx) * 0.8; y = E.cy + (y - E.cy) * 0.8; }
           c.erupcoes.push({ x, y, t: 0, explodiu: false });
         }
       }
@@ -139,23 +143,25 @@ export const CENAS: Record<IdCena, DefCena> = {
     semCerca: true, empurrao: 2, empurraoHab: 7,
     tick(_c, L) {
       for (const u of [L.a, L.b].filter(x => !x.morto)) {
-        if (u.foraAte) { if (L.relogio >= u.foraAte) { u.foraAte = 0; u.x = ELIPSE.cx + (u.lado === "a" ? -40 : 40); u.y = ELIPSE.cy; mudar(u, "stun"); u.atordoado = 500; } continue; }
-        if (normArena(u.x, u.y) > 1.02) {
+        if (u.foraAte) { if (L.relogio >= u.foraAte) { u.foraAte = 0; u.x = L.el.cx + (u.lado === "a" ? -40 : 40) * L.esc; u.y = L.el.cy; mudar(u, "stun"); u.atordoado = 500; } continue; }
+        if (normArena(L, u.x, u.y) > 1.02) {
           u.foraAte = L.relogio + 600; u.dash = 0;
           evento(L, { tipo: "queda_ringue", u: ref(u) }); ferir(L, u, 0.15, "fora do ringue", true);
         }
       }
     },
-    guia(_c, _L, u) { const n = normArena(u.x, u.y); return n > 0.8 ? paraCentro(u, 1.6 * (n - 0.8) / 0.2 + 0.4) : [0, 0]; },
+    guia(_c, L, u) { const n = normArena(L, u.x, u.y); return n > 0.8 ? paraCentro(L, u, 1.6 * (n - 0.8) / 0.2 + 0.4) : [0, 0]; },
   },
 };
 export const IDS_CENA = Object.keys(CENAS) as IdCena[];
 
-export function iniciarCena(id: IdCena): EstadoCena {
-  const c = CENAS[id];
+/** o estado inicial da cena; `esc` (LP6-1): o fator da elipse, que leva os obstaculos e as zonas pelo centro dela (1: os de sempre) */
+export function iniciarCena(id: IdCena, esc = 1): EstadoCena {
+  if (!(Number.isFinite(esc) && esc >= 1)) throw new Error(`arena: fator da elipse invalido (${esc})`);
+  const c = CENAS[id], ex = (x: number) => ELIPSE.cx + (x - ELIPSE.cx) * esc, ey = (y: number) => ELIPSE.cy + (y - ELIPSE.cy) * esc;
   return {
-    id, obst: (c.obst || []).map(([x, y, r, img, hp]) => ({ x, y, r, img, hp, max: hp })),
-    zonas: (c.zonas || []).map(([tipo, x, y, rx, ry]) => ({ tipo, x, y, rx, ry })), seguro: 1,
+    id, obst: (c.obst || []).map(([x, y, r, img, hp]) => ({ x: ex(x), y: ey(y), r: r * esc, img, hp, max: hp })),
+    zonas: (c.zonas || []).map(([tipo, x, y, rx, ry]) => ({ tipo, x: ex(x), y: ey(y), rx: rx * esc, ry: ry * esc })), seguro: 1,
     avisou: false, linha: Infinity, tempestade: false, runaCd: 0, prox: undefined, erupcoes: [],
   };
 }

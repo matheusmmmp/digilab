@@ -953,14 +953,17 @@ test("treino: com fadiga acima de 60 os exercícios viram Forçar, a folha confi
   /* o relogio da pagina e falso e, com o app de pe, para: o Forcar so fica habilitado ~3 min de jogo (o intervalo de 10 min passou, a
      fadiga ainda esta acima de 60), uns 300 ms a 10 min/s, e a espera do Playwright (que tenta de novo em intervalos que crescem ate 1 s)
      podia pular essa janela; o "Forçar mesmo assim" tambem podia cair depois dela. Com o relogio parado, o teste anda 100 ms por vez */
+  /* a fadiga cai com o relogio (10/h de jogo; de 75 a 60 sao 90 min = 9 s reais) e o "forcar" e decidido na hora do treino: com a maquina
+     carregada, o carregamento da pagina com o relogio solto gastava isso e a sessao saia normal. Entao o relogio para ANTES de carregar
+     (pauseAt logo apos o install) e so anda pelo runFor */
   await page.clock.install();
+  await page.clock.pauseAt(new Date(Date.now() + 500));
   await page.goto(APP + "#/crescer/treinar");
-  await expect(page.locator(".treino-ex.forcar")).toHaveCount(6);
-  await page.clock.pauseAt(new Date(await page.evaluate(() => Date.now()) + 250));
   const l0 = await numLog(page, "tr");
   /* o intervalo de 10 min passa com o relogio do app (10 min/s) */
   const habilitado = page.locator(".treino-ex.forcar:not([disabled])");
-  for (let i = 0; i < 40 && await habilitado.count() === 0; i++) await page.clock.runFor(100);
+  for (let i = 0; i < 60 && await habilitado.count() === 0; i++) await page.clock.runFor(100);
+  await expect(page.locator(".treino-ex.forcar")).toHaveCount(6);
   await habilitado.first().click();
   const folha = page.locator("dialog.folha[open]");
   await expect(folha).toContainText("Forçar levantar pedra?");

@@ -11,14 +11,12 @@ import { gostoVisualLigado } from "./chave.ts";
 import { capturarTela, type Captura } from "./captura.ts";
 import { abrirJanelaPequena } from "./janelaPequena.ts";
 import { ligarTvDoJogo } from "./tvDoJogo.ts";
+import { BALAO, desligarTv, publicarTv } from "./estadoTv.ts";
 import {
   COMPONENTES, NOME_COMPONENTE, alvos, chaveGuardada, doTexto, estadoInicial, gostaMaisDe, inatoDaSemente, paraTexto, passo, tempoJunto,
-  valores, type Componente, type EstadoGosto, type Inato, type Leitura, type Reacao, type Sentido,
+  valores, type Componente, type EstadoGosto, type Inato, type Leitura, type Sentido,
 } from "./gosto.ts";
 
-const BALAO: Record<Reacao, string> = {
-  adorando: "♥ adorando!", olhando: "olhando…", enjoou: "enjoei disso", nao_gosta: "não curti", curioso: "? o que é isso", distraido: "…",
-};
 const SOM_COMPONENTES: readonly Componente[] = ["volume", "variacao", "timbre"];
 
 export interface VistaPet {
@@ -106,6 +104,8 @@ function GostoVisualLigado() {
     return () => clearInterval(t);
   }, []);
   useEffect(() => () => captura?.parar(), [captura]);
+  /* o cantinho da TV na ilha (estadoTv.ts) desliga junto com o cartão */
+  useEffect(() => () => desligarTv(), []);
   useEffect(() => { if (!janela) return; const f = () => setJanela(null); janela.addEventListener("pagehide", f); return () => janela.removeEventListener("pagehide", f); }, [janela]);
 
   const sentir = (s: Sentido): void => {
@@ -113,19 +113,25 @@ function GostoVisualLigado() {
     carinho.current = false;
     estadoRef.current = e;
     setEstado(e); setLeitura(l); setSentido(s);
+    publicarTv({ sentido: s, reacao: l.reacao });
     try { localStorage.setItem(chaveGuardada(semente), paraTexto(e)); } catch (x) { setErro(`o gosto não foi guardado neste navegador: ${(x as Error).message}`); }
   };
   const ligar = async (): Promise<void> => {
     setErro(null);
-    try { setCaptura(await capturarTela(sentir, m => { setCaptura(null); setOrigem(null); setLeitura(null); setSentido(null); setErro(m); })); setOrigem("a sua tela"); }
+    try {
+      const c = await capturarTela(sentir, m => { setCaptura(null); setOrigem(null); setLeitura(null); setSentido(null); setErro(m); desligarTv(); });
+      setCaptura(c); setOrigem("a sua tela");
+      publicarTv({ ligada: true, origem: "tela", programa: null, video: c.video ?? null });
+    }
     catch (x) { setErro(`a tela não foi compartilhada: ${(x as Error).message}`); }
   };
   const ligarTv = (): void => {
     setErro(null);
-    const tv = ligarTvDoJogo(semente, (s, nome) => { setOrigem(`a TV do jogo, ${nome}`); sentir(s); });
+    const tv = ligarTvDoJogo(semente, (s, nome) => { setOrigem(`a TV do jogo, ${nome}`); publicarTv({ programa: nome }); sentir(s); });
     setCaptura({ parar: tv.parar, temSom: true }); setOrigem("a TV do jogo");
+    publicarTv({ ligada: true, origem: "jogo", programa: null, video: null });
   };
-  const desligar = (): void => { captura?.parar(); setCaptura(null); setOrigem(null); setLeitura(null); setSentido(null); };
+  const desligar = (): void => { captura?.parar(); setCaptura(null); setOrigem(null); setLeitura(null); setSentido(null); desligarTv(); };
   const flutuar = async (): Promise<void> => {
     setErro(null);
     try { setJanela(await abrirJanelaPequena()); } catch (x) { setErro(`a janela pequena não abriu: ${(x as Error).message}`); }
