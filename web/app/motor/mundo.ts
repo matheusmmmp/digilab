@@ -8,7 +8,7 @@
    semeadura e os sorteios do CPython (random, getrandbits, randrange, randint). Nada disso usa o mulberry32 do jogo (motor/rng.ts).
 
    Os registros e o `ocorrido` usam os nomes em snake_case do Python de proposito: sao o mesmo dado, conferido campo a campo. */
-import { C, CMU, type ConfigMundo } from "./constantes.ts";
+import { C, CMU, TPD, type ConfigMundo } from "./constantes.ts";
 import {
   CONFIG_CONTRATO, bigodes, contratoLigado, controlar, relativo, setorDe, solido, validarContrato, visivel, type Andar,
   type CategoriaSolido, type ConfigContrato, type Solido,
@@ -341,9 +341,9 @@ export type AcaoComAlvo = "explorar" | "comer" | "brincar";
 export interface EstadoNoMundo { fome: number; energia: number; humor: number; sujeira: number }
 export type EscolherAlvo = (acao: AcaoComAlvo, candidatos: AlvoMundo[], percepcao: PercepcaoMundo, u: number) => AlvoMundo | null;
 
-interface Comida { id: number; tipo: string; x: number; y: number; tick_posta: number; origem: string }
-interface Arvore { id: string; x: number; y: number; fruta: string; regiao: string; p: number; recarga_ate: number }
-interface Bola { x0: number; y0: number; x1: number; y1: number; t0: number; d: number }
+export interface Comida { id: number; tipo: string; x: number; y: number; tick_posta: number; origem: string }
+export interface Arvore { id: string; x: number; y: number; fruta: string; regiao: string; p: number; recarga_ate: number }
+export interface Bola { x0: number; y0: number; x1: number; y1: number; t0: number; d: number }
 
 const ACOES_COM_ALVO: readonly string[] = ["explorar", "comer", "brincar"];
 const FRUTAS = ["a", "b", "c"];
@@ -358,6 +358,7 @@ const objetoDo = (a: AlvoMundo): string | null => {
 const comparaStr = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
 
 export interface OpcoesMundo {
+  /** a semente do pet (os fluxos `alvo` e `mundo-sujeira`); sem `partilhado`, tambem a do mundo que ele cria (a vida de hoje) */
   semente: number | bigint;
   cfg?: ConfigMundo;
   efeitoFrutas?: Record<string, number>;
@@ -369,6 +370,11 @@ export interface OpcoesMundo {
       a direcao e a em que o pet vinha, de onde ele estava antes do passo ate a bola (direcaoDoGolpe); parado em cima dela, a sorteada. Fora da ConfigMundo de proposito, como o N_PONTOS_LONGE_FIXO do Python: um campo
       novo nela mudaria os gabaritos */
   bolaNoGolpe?: boolean;
+  /** CO2b (docs/TAREFA_V3_COOPERACAO.md): o mundo de todos (o do grupo), com a semente do grupo. Sem ele, o pet e dono do proprio
+      MundoPartilhado, com a semente do pet: o jogo de hoje, byte a byte */
+  partilhado?: MundoPartilhado;
+  /** o tick do mundo em que o pet entrou (um inicio de dia; so com `partilhado`): o relogio do pet comeca em 0 nele */
+  entrada?: number;
 }
 
 /** o registro do contrato numa decisao com alvo (o _registro_contrato do Python) */
@@ -377,75 +383,41 @@ export interface RegistroContrato {
   resultado: { parou_por: string; comeu: boolean; empurrou: boolean; bola_afastou: null }; trajetoria: [number, number][] | null;
 }
 
-/** O mundo fisico (digilab/mundo.py, MotorMundo ligado): o mesmo estado, os mesmos sorteios e os mesmos registros. */
-export class Mundo {
+/** O mundo fisico como componente (o `Mundo` de digilab/mundo.py; docs/futuro/dois_pets.md, secao 2, DP-1; CO2b): as arvores, as
+    comidas, a bola, os fluxos do mundo (`mundo-arvores`, `mundo-bola`) e os registros do mundo (as quedas, as comidas que sumiram, as
+    bolas deixadas e as rolagens). Nao sabe de pet: a posicao, o pendente, a percepcao guardada, os fluxos do pet (`alvo`,
+    `mundo-sujeira`) e os registros do pet ficam no `Mundo` de cada pet (o MotorMundo do Python). Tudo aqui usa o relogio do mundo.
+
+    A atualizacao (quedas, apodrecer, sumir) e idempotente por tick: a segunda chamada no mesmo tick nao faz nada, e um tick para tras
+    falha alto. Com dois pets, quem decide primeiro no tick a dispara. */
+export class MundoPartilhado {
   readonly cm: ConfigMundo;
-  readonly efeitoFrutas: Record<string, number>;
-  private readonly ganhoAlimentar: number;
-  private readonly probSujeira: number;
-  private readonly sujeiraMaxima: number;
-  readonly alcance: number;
-  private readonly intervalo: number;
-  private readonly raioPegar: number;
-  private readonly raioVisao: number;
-  private readonly raioMancha: number;
+  readonly semente: number | bigint;
   readonly rngArvores: RandomPy;
   readonly rngBola: RandomPy;
-  readonly rngSujeira: RandomPy;
-  readonly rngAlvo: RandomPy;
-  readonly bolaNoGolpe: boolean;
-  pet: [number, number];
+  readonly raioVisao: number;
+  readonly ninho: [number, number];
   readonly comedouro: [number, number];
   bola: Bola;
   readonly arvores: Arvore[] = [];
   readonly comidas = new Map<number, Comida>();
-  private proxId = ID_BOLA + 1;
-  private passoMundo = 0;
-  private pendente: { acao: AcaoComAlvo; alvo: AlvoMundo } | null = null;
-  private fomeAntes = 0;
-  private percepcao: PercepcaoMundo | null = null;
-  private readonly manchasAbertas = new Map<string, { arvore: string; chegada: number; saida: number | null; decisoes: number }>();
-  ultimosCandidatos: AlvoMundo[] | null = null;
-  // os registros (derivados; o replay reconstroi tudo)
+  private proxId_ = ID_BOLA + 1;
+  private passoMundo_ = 0;
+  private tickAtualizado_: number | null = null;
+  // os registros do mundo (derivados; o replay reconstroi tudo)
   readonly quedas: { tick: number; arvore: string; sorteadas: number; pontos: [number, number][]; colocadas: number[] }[] = [];
-  readonly consumos: Record<string, unknown>[] = [];
   readonly sumidas: Record<string, unknown>[] = [];
-  readonly deixadas: Record<string, unknown>[] = [];
   readonly bolasDeixadas: { tick: number; x: number; y: number }[] = [];
-  /** v19: cada vez que o dono levou o pet (o tick, de onde, o ponto pedido e onde ele caiu, ja no mapa) */
-  readonly levadas: { tick: number; de: [number, number]; pedido: [number, number]; para: [number, number] }[] = [];
   readonly rolagens: Record<string, unknown>[] = [];
-  readonly decisoes: Record<string, unknown>[] = [];
-  readonly regioes: { tick: number; de: number; para: number }[] = [];
-  readonly visitas: { arvore: string; chegada: number; saida: number | null; decisoes: number }[] = [];
-  // o contrato da P4 (desligado: nada disto muda o mundo de hoje)
-  readonly cct: ConfigContrato;
-  private solidos: readonly Solido[] = [];                     // os que colidem (as paredes, com a chave delas)
-  private opacos: readonly Solido[] = [];                      // os que tapam (as paredes e os troncos)
-  orientacao = 0;
-  readonly contratoDecisoes: RegistroContrato[] = [];
 
-  constructor(op: OpcoesMundo) {
-    const cm = this.cm = op.cfg ?? CMU;
+  constructor(cfg: ConfigMundo, semente: number | bigint) {
+    const cm = this.cm = cfg;
     if (!cm.ligada) throw new Error("o Mundo so existe com a ConfigMundo ligada");
-    const ef = op.efeitoFrutas ?? { a: 0, b: 0, c: 0 };
-    if (Object.keys(ef).sort().join() !== FRUTAS.join()) throw new Error(`efeitoFrutas precisa de a, b e c: ${Object.keys(ef)}`);
-    this.efeitoFrutas = { ...ef };
-    const es = op.estado ?? { ganhoAlimentar: C.ganhoAlim, probSujeiraPosRefeicao: C.probSujRef, sujeiraMaxima: C.sujMax, intervalo: C.intervalo };
-    this.ganhoAlimentar = es.ganhoAlimentar;
-    this.probSujeira = es.probSujeiraPosRefeicao;
-    this.sujeiraMaxima = es.sujeiraMaxima;
-    this.alcance = cm.velocidade * es.intervalo;
-    this.intervalo = es.intervalo;
-    this.raioPegar = cm.raio_pegar_celulas * cm.sub;
+    this.semente = semente;
+    this.rngArvores = new RandomPy(derivarSemente("mundo-arvores", semente));
+    this.rngBola = new RandomPy(derivarSemente("mundo-bola", semente));
     this.raioVisao = cm.raio_visao_celulas * cm.sub;
-    this.raioMancha = cm.raio_mancha_celulas * cm.sub;
-    this.rngArvores = new RandomPy(derivarSemente("mundo-arvores", op.semente));
-    this.rngBola = new RandomPy(derivarSemente("mundo-bola", op.semente));
-    this.rngSujeira = new RandomPy(derivarSemente("mundo-sujeira", op.semente));
-    this.rngAlvo = new RandomPy(derivarSemente("alvo", op.semente));
-    this.bolaNoGolpe = op.bolaNoGolpe ?? false;
-    this.pet =centroDaCelula(cm.layout.ninho, cm);
+    this.ninho = centroDaCelula(cm.layout.ninho, cm);
     this.comedouro = centroDaCelula(cm.layout.comedouro, cm);
     const [bx, by] = centroDaCelula(cm.layout.bola_inicio, cm);
     this.bola = { x0: bx, y0: by, x1: bx, y1: by, t0: 0, d: 0 };
@@ -459,29 +431,14 @@ export class Mundo {
       else throw new Error(`arvore ${id} fora do jardim e da mata: ${nome}`);
       this.arvores.push({ id, x: ax, y: ay, fruta, regiao: nome, p, recarga_ate: 0 });
     }
-    this.cct = validarContrato({ ...(op.contrato ?? CONFIG_CONTRATO) });
-    if (contratoLigado(this.cct)) this.montarContrato();
   }
 
-  /** as paredes na borda (so com a chave `paredes`; solidas e opacas) e os quadrados dos troncos (com a chave `sensores`; opacos, sem
-      colisao, P4-4), na ordem do Python (o _montar_contrato) */
-  private montarContrato(): void {
-    const cc = this.cct, cm = this.cm;
-    const largura = cm.celulas_x * cm.sub, altura = cm.celulas_y * cm.sub, e = cc.espessura_parede;
-    const paredes = cc.paredes
-      ? [solido(-e, -e, largura + e, 0, "parede", true, true), solido(-e, altura, largura + e, altura + e, "parede", true, true),
-         solido(-e, 0, 0, altura, "parede", true, true), solido(largura, 0, largura + e, altura, "parede", true, true)]
-      : [];
-    const meio = Math.floor(cc.lado_tronco / 2);
-    const troncos = cc.sensores
-      ? this.arvores.map(a => solido(a.x - meio, a.y - meio, a.x - meio + cc.lado_tronco, a.y - meio + cc.lado_tronco, "tronco", false, true))
-      : [];
-    this.solidos = Object.freeze(paredes);
-    this.opacos = Object.freeze([...paredes, ...troncos]);
-  }
+  get proxId(): number { return this.proxId_; }
+  get passoMundo(): number { return this.passoMundo_; }
+  get tickAtualizado(): number | null { return this.tickAtualizado_; }
 
   // ------------------------------------------------------------ a comida e a bola no tempo
-  private prazoMaduro(tipo: string): number {
+  prazoMaduro(tipo: string): number {
     return tipo === "racao" ? this.cm.maduro_racao_min : this.cm.maduro_fruta_min;
   }
 
@@ -500,8 +457,8 @@ export class Mundo {
     return [b.x0 + divArred((b.x1 - b.x0) * andou, b.d), b.y0 + divArred((b.y1 - b.y0) * andou, b.d)];
   }
 
-  private novaComida(tipo: string, x: number, y: number, tick: number, origem: string): Comida {
-    const c: Comida = { id: this.proxId++, tipo, x, y, tick_posta: tick, origem };
+  novaComida(tipo: string, x: number, y: number, tick: number, origem: string): Comida {
+    const c: Comida = { id: this.proxId_++, tipo, x, y, tick_posta: tick, origem };
     this.comidas.set(c.id, c);
     return c;
   }
@@ -513,13 +470,19 @@ export class Mundo {
     }
   }
 
-  /** os passos do mundo ate o tick: cada arvore fora da recarga sorteia a queda no fluxo `mundo-arvores` */
+  /** os passos do mundo ate o tick: cada arvore fora da recarga sorteia a queda no fluxo `mundo-arvores`. Idempotente por tick (quem
+      decide primeiro dispara); um tick para tras falha alto */
   atualizar(tick: number): void {
+    if (this.tickAtualizado_ !== null) {
+      if (tick < this.tickAtualizado_)
+        throw new Error(`o mundo nao volta no tempo: atualizado ate o tick ${this.tickAtualizado_}, pedido o ${tick}`);
+      if (tick === this.tickAtualizado_) return;
+    }
     const cm = this.cm, rng = this.rngArvores;
     const ate = Math.floor(tick / cm.passo_mundo_ticks);
-    while (this.passoMundo < ate) {
-      this.passoMundo++;
-      const tk = this.passoMundo * cm.passo_mundo_ticks;
+    while (this.passoMundo_ < ate) {
+      this.passoMundo_++;
+      const tk = this.passoMundo_ * cm.passo_mundo_ticks;
       for (const arv of this.arvores) {
         if (tk < arv.recarga_ate) continue;
         if (rng.random() >= arv.p) continue;
@@ -538,37 +501,232 @@ export class Mundo {
       }
     }
     this.removerSumidas(tick);
+    this.tickAtualizado_ = tick;
   }
 
   // ------------------------------------------------------------ percepcao
-  private fontesDeCheiro(tick: number): FonteCheiro[] {
+  fontesDeCheiro(tick: number): FonteCheiro[] {
     const f: FonteCheiro[] = [];
     for (const c of this.comidas.values())
       if (this.situacao(c, tick) === "madura") f.push([c.x, c.y, c.tipo === "racao" ? this.cm.cheiro_racao : this.cm.cheiro_fruta]);
     return f;
   }
 
-  /** pura: o que o pet percebe agora */
-  perceber(tick: number): PercepcaoMundo {
-    const [x, y] = this.pet;
+  /** pura: o que um pet em (x, y) percebe agora; `alvoPendente` e o do pet, `ve` o filtro do cone e da oclusao (o contrato; null: tudo) */
+  perceber(x: number, y: number, tick: number, alvoPendente: string | null, ve: ((ox: number, oy: number) => boolean) | null = null)
+      : PercepcaoMundo {
     const vistos: Visto[] = [];
-    /* com a chave `sensores`: so o que passa pelo cone em torno da orientacao e pela oclusao (o Mundo.perceber com o contrato) */
-    const sens = this.cct.sensores;
-    const ve = (ox: number, oy: number): boolean =>
-      !sens || visivel(x, y, ox, oy, this.orientacao, this.raioVisao, this.cct.cos_meio_cone, this.opacos);
     for (const c of this.comidas.values()) {
       const sit = this.situacao(c, tick);
       if (sit === null) continue;
       const dx = c.x - x, dy = c.y - y, d = distancia(dx, dy);
-      if (d <= this.raioVisao && ve(c.x, c.y)) vistos.push([c.id, sit === "madura" ? c.tipo : c.tipo + "_podre", dx, dy, d]);
+      if (d <= this.raioVisao && (ve === null || ve(c.x, c.y))) vistos.push([c.id, sit === "madura" ? c.tipo : c.tipo + "_podre", dx, dy, d]);
     }
     const [bx, by] = this.bolaEm(tick);
     const db = distancia(bx - x, by - y);
-    if (db <= this.raioVisao && ve(bx, by)) vistos.push([ID_BOLA, "bola", bx - x, by - y, db]);
+    if (db <= this.raioVisao && (ve === null || ve(bx, by))) vistos.push([ID_BOLA, "bola", bx - x, by - y, db]);
     vistos.sort((a, b) => a[4] - b[4] || comparaStr(a[1], b[1]) || a[0] - b[0]);
     const [cheiro, direcao] = direcaoDoCheiro(x, y, this.fontesDeCheiro(tick), this.cm);
-    const p: PercepcaoMundo = { x, y, regiao: regiaoDe(x, this.cm), vistos: vistos.slice(0, this.cm.max_vistos), cheiro,
-                                direcao_cheiro: direcao, alvo_pendente: this.pendente ? this.pendente.alvo.tipo : null };
+    return { x, y, regiao: regiaoDe(x, this.cm), vistos: vistos.slice(0, this.cm.max_vistos), cheiro, direcao_cheiro: direcao,
+             alvo_pendente: alvoPendente };
+  }
+
+  /** as comidas maduras a ate `raio` de (x, y), em (distancia, tipo, id), da mais perto (o "achou e comeu" do explorar, MF-1) */
+  madurasPerto(x: number, y: number, tick: number, raio: number): [number, string, number][] {
+    const perto: [number, string, number][] = [];
+    for (const c of this.comidas.values())
+      if (this.situacao(c, tick) === "madura") perto.push([distancia(c.x - x, c.y - y), c.tipo, c.id]);
+    perto.sort((p, q) => p[0] - q[0] || comparaStr(p[1], q[1]) || p[2] - q[2]);
+    return perto.filter(p => p[0] <= raio);
+  }
+
+  // ------------------------------------------------------------ o que muda o mundo
+  /** a comida sai do chao (alguem a comeu); a que nao esta no chao falha alto */
+  retirarComida(ident: number): Comida {
+    const c = this.comidas.get(ident);
+    if (c === undefined) throw new Error(`comida fora do chao: ${ident}`);
+    this.comidas.delete(ident);
+    return c;
+  }
+
+  /** alguem brincou com a bola: ela rola do ponto em que esta, no fluxo `mundo-bola` (vai mais longe no campo). Com `de` (a posicao de
+      quem bateu; a bolaNoGolpe), a direcao e a do golpe; o sorteio dela fica no fluxo, e a distancia sai a mesma */
+  rolarBola(tick: number, de: readonly [number, number] | null): void {
+    const cm = this.cm;
+    const [bx, by] = this.bolaEm(tick);
+    const sorteada = this.rngBola.randrange(16);
+    const golpe = de === null ? null : direcaoDoGolpe(de[0], de[1], bx, by);
+    const direcao = golpe ?? sorteada;
+    let celulas = this.rngBola.randint(cm.bola_min_celulas, cm.bola_max_celulas);
+    if (cm.layout.regioes[regiaoDe(bx, cm)][0] === "campo") celulas *= cm.mult_bola_campo;
+    const [x1, y1] = deslocar(bx, by, direcao, celulas * cm.sub, cm);
+    this.bola = { x0: bx, y0: by, x1, y1, t0: tick, d: distancia(x1 - bx, y1 - by) };
+    this.rolagens.push({ tick, de: [bx, by], para: [x1, y1], direcao, celulas });
+  }
+
+  /** a comida que o dono deixa (origem `dono`); tipo desconhecido ou posicao fora do mapa falha alto (como o log) */
+  deixarComida(tipo: string, x: number, y: number, tick: number): Comida {
+    lerDeixarComida(eventoDeixarComida(tick, tipo, x, y));
+    return this.novaComida(tipo, x, y, tick, "dono");
+  }
+
+  /** o dono poe a bola parada em (x, y); fora do mapa falha alto */
+  deixarBola(x: number, y: number, tick: number): void {
+    lerDeixarBola(eventoDeixarBola(tick, x, y));
+    this.bola = { x0: x, y0: y, x1: x, y1: y, t0: tick, d: 0 };
+    this.bolasDeixadas.push({ tick, x, y });
+  }
+
+  /** o Mundo.resumo do Python, sem as rngs: tudo o que o mundo guarda, sem o que e do pet */
+  resumo(): Record<string, unknown> {
+    return {
+      bola: { ...this.bola }, comidas: [...this.comidas.values()].map(c => ({ ...c })), prox_id: this.proxId_,
+      passo_mundo: this.passoMundo_, tick_atualizado: this.tickAtualizado_, arvores: this.arvores.map(a => ({ ...a })),
+      quedas: this.quedas, sumidas: this.sumidas, bolas_deixadas: this.bolasDeixadas, rolagens: this.rolagens,
+    };
+  }
+}
+
+/** A parte de um pet no mundo fisico (o MotorMundo ligado de digilab/mundo.py): a posicao, o alvo pendente, a percepcao da decisao, os
+    fluxos `alvo` e `mundo-sujeira`, os registros do pet (consumos, decisoes, regioes, visitas, comidas deixadas, levadas) e o contrato
+    da P4. O que e do mundo mora no `MundoPartilhado` (`comum`). Sem `partilhado`, o pet e dono do proprio, com a semente dele: o jogo de
+    hoje, byte a byte; os atributos de antes (`comidas`, `arvores`, `bola`, `quedas`...) leem de la.
+
+    Os metodos recebem o tick do pet; o mundo e os registros do mundo fisico usam o do mundo (o do pet mais a `entrada`). Com um pet so,
+    a entrada e 0 e os dois relogios sao o mesmo. */
+export class Mundo {
+  readonly cm: ConfigMundo;
+  readonly comum: MundoPartilhado;
+  readonly entrada: number;
+  readonly efeitoFrutas: Record<string, number>;
+  private readonly ganhoAlimentar: number;
+  private readonly probSujeira: number;
+  private readonly sujeiraMaxima: number;
+  readonly alcance: number;
+  private readonly intervalo: number;
+  private readonly raioPegar: number;
+  private readonly raioVisao: number;
+  private readonly raioMancha: number;
+  readonly rngSujeira: RandomPy;
+  readonly rngAlvo: RandomPy;
+  readonly bolaNoGolpe: boolean;
+  pet: [number, number];
+  private pendente: { acao: AcaoComAlvo; alvo: AlvoMundo } | null = null;
+  private fomeAntes = 0;
+  private percepcao: PercepcaoMundo | null = null;
+  private readonly manchasAbertas = new Map<string, { arvore: string; chegada: number; saida: number | null; decisoes: number }>();
+  ultimosCandidatos: AlvoMundo[] | null = null;
+  // os registros do pet (derivados; o replay reconstroi tudo)
+  readonly consumos: Record<string, unknown>[] = [];
+  readonly deixadas: Record<string, unknown>[] = [];
+  /** v19: cada vez que o dono levou o pet (o tick, de onde, o ponto pedido e onde ele caiu, ja no mapa) */
+  readonly levadas: { tick: number; de: [number, number]; pedido: [number, number]; para: [number, number] }[] = [];
+  readonly decisoes: Record<string, unknown>[] = [];
+  readonly regioes: { tick: number; de: number; para: number }[] = [];
+  readonly visitas: { arvore: string; chegada: number; saida: number | null; decisoes: number }[] = [];
+  // o contrato da P4 (desligado: nada disto muda o mundo de hoje)
+  readonly cct: ConfigContrato;
+  private solidos: readonly Solido[] = [];                     // os que colidem (as paredes, com a chave delas)
+  private opacos: readonly Solido[] = [];                      // os que tapam (as paredes e os troncos)
+  orientacao = 0;
+  readonly contratoDecisoes: RegistroContrato[] = [];
+
+  constructor(op: OpcoesMundo) {
+    const dado = op.partilhado;
+    const cm = this.cm = op.cfg ?? (dado ? dado.cm : CMU);
+    if (!cm.ligada) throw new Error("o Mundo so existe com a ConfigMundo ligada");
+    const ef = op.efeitoFrutas ?? { a: 0, b: 0, c: 0 };
+    if (Object.keys(ef).sort().join() !== FRUTAS.join()) throw new Error(`efeitoFrutas precisa de a, b e c: ${Object.keys(ef)}`);
+    this.efeitoFrutas = { ...ef };
+    const es = op.estado ?? { ganhoAlimentar: C.ganhoAlim, probSujeiraPosRefeicao: C.probSujRef, sujeiraMaxima: C.sujMax, intervalo: C.intervalo };
+    this.ganhoAlimentar = es.ganhoAlimentar;
+    this.probSujeira = es.probSujeiraPosRefeicao;
+    this.sujeiraMaxima = es.sujeiraMaxima;
+    this.alcance = cm.velocidade * es.intervalo;
+    this.intervalo = es.intervalo;
+    this.raioPegar = cm.raio_pegar_celulas * cm.sub;
+    this.raioVisao = cm.raio_visao_celulas * cm.sub;
+    this.raioMancha = cm.raio_mancha_celulas * cm.sub;
+    if (dado === undefined) {
+      if (op.entrada !== undefined && op.entrada !== 0) throw new Error("entrada so com um MundoPartilhado dado (o do grupo)");
+      this.comum = new MundoPartilhado(cm, op.semente);       // com um pet, ele e dono do proprio mundo (a semente do mundo e a do pet)
+      this.entrada = 0;
+    } else {                                                   // no grupo: o mundo e de todos, e o pet entra num tick dele
+      if (!(dado instanceof MundoPartilhado) || JSON.stringify(dado.cm) !== JSON.stringify(cm))
+        throw new Error("o MundoPartilhado dado tem de ter a mesma ConfigMundo do pet");
+      const e = op.entrada ?? 0;
+      if (!Number.isInteger(e) || e < 0 || e % TPD) throw new Error(`entrada tem de ser um inicio de dia do mundo (multiplo de ${TPD}): ${e}`);
+      this.comum = dado;
+      this.entrada = e;
+    }
+    this.rngSujeira = new RandomPy(derivarSemente("mundo-sujeira", op.semente));
+    this.rngAlvo = new RandomPy(derivarSemente("alvo", op.semente));
+    this.bolaNoGolpe = op.bolaNoGolpe ?? false;
+    this.pet = [this.comum.ninho[0], this.comum.ninho[1]];
+    this.cct = validarContrato({ ...(op.contrato ?? CONFIG_CONTRATO) });
+    if (contratoLigado(this.cct)) {
+      if (dado !== undefined) throw new Error("o contrato da P4 roda com um pet, fora do grupo");
+      this.montarContrato();
+    }
+  }
+
+  /** o tick do pet no relogio do mundo */
+  tm(tick: number): number {
+    return tick + this.entrada;
+  }
+
+  // ------------------------------------------------------------ o que e do mundo, lido de la (os atributos de antes)
+  get rngArvores(): RandomPy { return this.comum.rngArvores; }
+  get rngBola(): RandomPy { return this.comum.rngBola; }
+  get comedouro(): [number, number] { return this.comum.comedouro; }
+  get bola(): Bola { return this.comum.bola; }
+  get arvores(): Arvore[] { return this.comum.arvores; }
+  get comidas(): Map<number, Comida> { return this.comum.comidas; }
+  get quedas(): MundoPartilhado["quedas"] { return this.comum.quedas; }
+  get sumidas(): Record<string, unknown>[] { return this.comum.sumidas; }
+  get bolasDeixadas(): { tick: number; x: number; y: number }[] { return this.comum.bolasDeixadas; }
+  get rolagens(): Record<string, unknown>[] { return this.comum.rolagens; }
+
+  /** as paredes na borda (so com a chave `paredes`; solidas e opacas) e os quadrados dos troncos (com a chave `sensores`; opacos, sem
+      colisao, P4-4), na ordem do Python (o _montar_contrato) */
+  private montarContrato(): void {
+    const cc = this.cct, cm = this.cm;
+    const largura = cm.celulas_x * cm.sub, altura = cm.celulas_y * cm.sub, e = cc.espessura_parede;
+    const paredes = cc.paredes
+      ? [solido(-e, -e, largura + e, 0, "parede", true, true), solido(-e, altura, largura + e, altura + e, "parede", true, true),
+         solido(-e, 0, 0, altura, "parede", true, true), solido(largura, 0, largura + e, altura, "parede", true, true)]
+      : [];
+    const meio = Math.floor(cc.lado_tronco / 2);
+    const troncos = cc.sensores
+      ? this.arvores.map(a => solido(a.x - meio, a.y - meio, a.x - meio + cc.lado_tronco, a.y - meio + cc.lado_tronco, "tronco", false, true))
+      : [];
+    this.solidos = Object.freeze(paredes);
+    this.opacos = Object.freeze([...paredes, ...troncos]);
+  }
+
+  // ------------------------------------------------------------ a comida e a bola no tempo (o tick do pet)
+  situacao(c: { tipo: string; tick_posta: number }, tick: number): "madura" | "podre" | null {
+    return this.comum.situacao(c, this.tm(tick));
+  }
+
+  bolaEm(tick: number): [number, number] {
+    return this.comum.bolaEm(this.tm(tick));
+  }
+
+  atualizar(tick: number): void {
+    this.comum.atualizar(this.tm(tick));
+  }
+
+  // ------------------------------------------------------------ percepcao
+  /** pura: o que o pet percebe agora */
+  perceber(tick: number): PercepcaoMundo {
+    const [x, y] = this.pet;
+    /* com a chave `sensores`: so o que passa pelo cone em torno da orientacao e pela oclusao (o Mundo.perceber com o contrato) */
+    const sens = this.cct.sensores;
+    const ve = sens
+      ? (ox: number, oy: number): boolean => visivel(x, y, ox, oy, this.orientacao, this.raioVisao, this.cct.cos_meio_cone, this.opacos)
+      : null;
+    const p = this.comum.perceber(x, y, this.tm(tick), this.pendente ? this.pendente.alvo.tipo : null, ve);
     if (sens) p.orientacao = this.orientacao;
     return p;
   }
@@ -653,9 +811,9 @@ export class Mundo {
 
   // ------------------------------------------------------------ a consequencia
   private comer(ident: number, como: string, tick: number, e: EstadoNoMundo): [Record<string, unknown>, EstadoNoMundo] {
-    const c = this.comidas.get(ident)!;
-    this.comidas.delete(ident);
-    const sit = this.situacao(c, tick);
+    const c = this.comum.retirarComida(ident);
+    const tm = this.tm(tick);                                   // o registro do consumo e do mundo: o relogio do mundo
+    const sit = this.comum.situacao(c, tm);
     let { fome, humor, sujeira } = e;
     if (sit === "madura" && c.tipo === "racao") {
       fome = Math.min(1, fome + this.ganhoAlimentar);
@@ -666,24 +824,10 @@ export class Mundo {
     } else {
       humor = Math.min(1, Math.max(0, humor + this.cm.efeito_podre));
     }
-    const reg = { tick, id: c.id, tipo: c.tipo, origem: c.origem, tick_posta: c.tick_posta, situacao: sit, como,
+    const reg = { tick: tm, id: c.id, tipo: c.tipo, origem: c.origem, tick_posta: c.tick_posta, situacao: sit, como,
                   fome_antes: e.fome, humor_antes: e.humor, fome_depois: fome, humor_depois: humor };
     this.consumos.push(reg);
     return [reg, { ...e, fome, humor, sujeira }];
-  }
-
-  /** `de`: onde o pet estava antes do passo que o levou a bola (com a bolaNoGolpe, o golpe sai na direcao em que ele vinha) */
-  private rolarBola(tick: number, de: readonly [number, number]): void {
-    const cm = this.cm;
-    const [bx, by] = this.bolaEm(tick);
-    /* o sorteio da direcao fica mesmo com o golpe: o fluxo mundo-bola segue o mesmo, e a distancia sai igual a de sempre */
-    const sorteada = this.rngBola.randrange(16);
-    const direcao = this.bolaNoGolpe ? direcaoDoGolpe(de[0], de[1], bx, by) ?? sorteada : sorteada;
-    let celulas = this.rngBola.randint(cm.bola_min_celulas, cm.bola_max_celulas);
-    if (cm.layout.regioes[regiaoDe(bx, cm)][0] === "campo") celulas *= cm.mult_bola_campo;
-    const [x1, y1] = deslocar(bx, by, direcao, celulas * cm.sub, cm);
-    this.bola = { x0: bx, y0: by, x1, y1, t0: tick, d: distancia(x1 - bx, y1 - by) };
-    this.rolagens.push({ tick, de: [bx, by], para: [x1, y1], direcao, celulas });
   }
 
   /** A consequencia de uma decisao (MotorMundo._consequencia): o estado vem depois do efeito de sempre da acao (o engine); sai o
@@ -726,15 +870,11 @@ export class Mundo {
       if (chegou && ac === "comer" && objetoDo(a!) === "comida") {
         [comeu, e] = this.comer(a!.id!, "comer", tick, e);
       } else if (chegou && ac === "explorar" && e.fome < this.cm.fome_max_comer_achado) {
-        const perto: [number, string, number][] = [];
-        for (const c of this.comidas.values())
-          if (this.situacao(c, tick) === "madura") perto.push([distancia(c.x - x1, c.y - y1), c.tipo, c.id]);
-        perto.sort((p, q) => p[0] - q[0] || comparaStr(p[1], q[1]) || p[2] - q[2]);
-        const alcancaveis = perto.filter(p => p[0] <= this.raioPegar);
+        const alcancaveis = this.comum.madurasPerto(x1, y1, this.tm(tick), this.raioPegar);
         if (alcancaveis.length) [comeu, e] = this.comer(alcancaveis[0][2], "achou", tick, e);
       } else if (chegou && ac === "brincar" && objetoDo(a!) === "bola") {
         e.humor = Math.min(1, e.humor + this.cm.ganho_humor_bola);
-        this.rolarBola(tick, [x0, y0]);
+        this.comum.rolarBola(this.tm(tick), this.bolaNoGolpe ? [x0, y0] : null);
         bola = true;
       }
       if (a !== null && !chegou) {
@@ -749,7 +889,7 @@ export class Mundo {
     } else {
       this.pendente = null;
     }
-    this.registrarDecisao(tick, acao, [x0, y0], regiaoAntes, a, ocorrido, regra);
+    this.registrarDecisao(this.tm(tick), acao, [x0, y0], regiaoAntes, a, ocorrido, regra);
     return { estado: e, ocorrido };
   }
 
@@ -780,6 +920,7 @@ export class Mundo {
     return reg;
   }
 
+  /** `tick`: o do mundo (os registros do mundo fisico) */
   private registrarDecisao(tick: number, acao: string, antes: [number, number], regiaoAntes: number, a: AlvoMundo | null,
                            ocorrido: Record<string, unknown> | null, regra: string | null): void {
     const [x1, y1] = this.pet;
@@ -805,15 +946,12 @@ export class Mundo {
 
   // ------------------------------------------------------------ o dono
   deixarComida(tick: number, tipo: string, x: number, y: number): void {
-    lerDeixarComida(eventoDeixarComida(tick, tipo, x, y));       // valida como o log
-    const c = this.novaComida(tipo, x, y, tick, "dono");
-    this.deixadas.push({ tick, id: c.id, tipo, x, y, pet: [this.pet[0], this.pet[1]] });
+    const c = this.comum.deixarComida(tipo, x, y, this.tm(tick));     // valida como o log
+    this.deixadas.push({ tick: this.tm(tick), id: c.id, tipo, x, y, pet: [this.pet[0], this.pet[1]] });
   }
 
   deixarBola(tick: number, x: number, y: number): void {
-    lerDeixarBola(eventoDeixarBola(tick, x, y));
-    this.bola = { x0: x, y0: y, x1: x, y1: y, t0: tick, d: 0 };
-    this.bolasDeixadas.push({ tick, x, y });
+    this.comum.deixarBola(x, y, this.tm(tick));
   }
 
   /** v19 (MotorMundo._aplicar_levar_pet do Python): o dono solta o pet em (x, y); fora do mapa, ele cai na borda mais proxima (noMapa,
@@ -824,18 +962,19 @@ export class Mundo {
     const de: [number, number] = [this.pet[0], this.pet[1]];
     this.pet = noMapa(px, py, this.cm);
     this.pendente = null;
-    this.levadas.push({ tick, de, pedido: [px, py], para: [this.pet[0], this.pet[1]] });
+    this.levadas.push({ tick: this.tm(tick), de, pedido: [px, py], para: [this.pet[0], this.pet[1]] });
   }
 
   // ------------------------------------------------------------ leitura
-  /** o MotorMundo.resumo_mundo_fisico, sem as rngs */
+  /** o MotorMundo.resumo_mundo_fisico, sem as rngs (as mesmas chaves de antes da separacao do MundoPartilhado) */
   resumo(): Record<string, unknown> {
+    const m = this.comum;
     return {
-      pet: [this.pet[0], this.pet[1]], bola: { ...this.bola }, comidas: [...this.comidas.values()].map(c => ({ ...c })),
-      prox_id: this.proxId, passo_mundo: this.passoMundo, arvores: this.arvores.map(a => ({ ...a })),
+      pet: [this.pet[0], this.pet[1]], bola: { ...m.bola }, comidas: [...m.comidas.values()].map(c => ({ ...c })),
+      prox_id: m.proxId, passo_mundo: m.passoMundo, arvores: m.arvores.map(a => ({ ...a })),
       pendente: this.pendente ? { acao: this.pendente.acao, alvo: { ...this.pendente.alvo } } : null,
-      quedas: this.quedas, consumos: this.consumos, sumidas: this.sumidas, deixadas: this.deixadas, bolas_deixadas: this.bolasDeixadas,
-      rolagens: this.rolagens, decisoes: this.decisoes, regioes: this.regioes, visitas: this.visitas,
+      quedas: m.quedas, consumos: this.consumos, sumidas: m.sumidas, deixadas: this.deixadas, bolas_deixadas: m.bolasDeixadas,
+      rolagens: m.rolagens, decisoes: this.decisoes, regioes: this.regioes, visitas: this.visitas,
       manchas_abertas: [...this.manchasAbertas.values()].map(v => ({ ...v })),
       ...(contratoLigado(this.cct) ? { orientacao: this.orientacao, contrato_decisoes: this.contratoDecisoes } : {}),
       ...(this.levadas.length > 0 ? { levadas: this.levadas.map(l => ({ ...l, de: [...l.de], pedido: [...l.pedido], para: [...l.para] })) } : {}),   // so com alguma levada: a vida de antes sai byte a byte
