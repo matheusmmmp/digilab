@@ -2,7 +2,7 @@
    a proposta (a escolhida, ou a de `?luz=`), quais materiais recebem o termo e os focos da planta A (docs/pranchas/ux-ilha-luz/, LZ-1 a
    LZ-5 aprovadas em 2026-11-09). Os numeros sao PROPOSTO, SEM FONTE. */
 import * as THREE from "three";
-import { LUZ_HIERARQUIA, PLANTA_ILHA } from "./constantes.ts";
+import { LUZ_HIERARQUIA } from "./constantes.ts";
 import type { Ilha } from "./grade.ts";
 import { LUGAR_ABERTO, type NomeLugar } from "../lugaresIlha.ts";
 
@@ -26,7 +26,7 @@ export const recebeLuz = (m: THREE.Material, proposta = LUZ_PROPOSTA): boolean =
 export function listaDeFocos(ilha: Ilha, aberto: Record<NomeLugar, boolean> = LUGAR_ABERTO): [number, number, number][] {
   const R = LUZ_HIERARQUIA.raio, L = ilha.cm.layout, f: [number, number, number][] = [];
   f.push([L.ninho[0] + 0.5, L.ninho[1] + 0.5, R.lar], [(L.ninho[0] + L.comedouro[0]) / 2 + 0.5, (L.ninho[1] + L.comedouro[1]) / 2 + 0.5, R.lar]);
-  f.push([PLANTA_ILHA.praca.x, PLANTA_ILHA.praca.z, R.praca]);
+  f.push([ilha.planta.praca.x, ilha.planta.praca.z, R.praca]);
   for (const l of ilha.lugares) if (aberto[l.nome as NomeLugar]) f.push([l.x, l.z, R[l.nome as keyof typeof R] ?? R.portao]);
   for (const c of ilha.caminhos) for (let k = 1; k < c.length; k++) {
     const [ax, az] = c[k - 1], [bx, bz] = c[k], n = Math.max(1, Math.round(Math.hypot(bx - ax, bz - az) / LUZ_HIERARQUIA.passo));

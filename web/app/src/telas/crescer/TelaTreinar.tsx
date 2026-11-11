@@ -19,6 +19,7 @@ import { useNivel } from "../../nivelTela.ts";
 import { pecaAberta } from "../../nivel.ts";
 import { hhmm } from "../pet/TelaPet.tsx";
 import { CENA } from "../pet/cenaEstado.ts";
+import { emitirMusica, emitirSom } from "../../somEventos.ts";
 
 /* icones de treino do UP (hexagonos pintados, nao pixel art): 54 x 61 no botao, como pede o guia (secao 6) */
 const ICONE_TREINO: Record<Exercicio, string> = { levantar_pedra: "treino_pedra", corrida: "treino_corrida", alvo: "treino_soco", esquiva: "treino_arrancada", meditar: "treino_cachoeira", resistencia: "treino_saco" };
@@ -111,11 +112,14 @@ function Medida({ rot, valor, marcas, sombrio }: { rot: string; valor: number; m
 export function TelaTreinar({ lutando = false }: { lutando?: boolean }) {
   const { motor: m, nascendo } = useJogo(), [msg, setMsg] = useState(""), [confirmar, setConfirmar] = useState<Exercicio | null>(null), [escolher, setEscolher] = useState(false);
   const t = m.treino, bebe = m.estagioAtual === "bebe", pode = t.podeTocar(m.e.tick), mult = t.forcaria ? CTR.multForcar : 1, tt = tetos(m), ult = ultimoExercicio(m.log);
+  /* SOM-UP: a musica do treino do Digimon UP enquanto a tela esta aberta */
+  useEffect(() => { emitirMusica("treino", { lugar: "treino" }); return () => emitirMusica("treino", null); }, []);
   const treinar = (ex: Exercicio) => {
     try {
       let texto = "";
       mudarMotor(mm => {
         const s = mm.treinar(ex);
+        emitirSom(`treino_${ex}`);                /* SOM-UP: o aparelho do treino (so som) */
         CENA.treino = performance.now();         /* a ilha mostra o pet no saco de pancada (so vista) */
         const g = Object.entries(s.ganho).map(([k, v]) => `+${dec(v as number, 2)} ${NOME_STAT[k as Stat] || k}`).join(", ");
         texto = s.enrolou ? "Ele enrolou: a sessão não rendeu." + (s.forcada ? " A sobrecarga entrou mesmo assim." : "")

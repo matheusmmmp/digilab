@@ -26,11 +26,11 @@ function viver(m: Motor, dias: number, longe: boolean): void {
 
 describe("o pet de teste do laboratorio (v16)", () => {
   test("a fabrica e a unica porta: o ovo padrao segue o padrao (a v15 do PR #525) e as versoes que abrem nao incluem o pet de teste", () => {
-    expect(VERSAO_PET).toBe(21);
-    expect(VERSOES_PET).toEqual([21]);
+    expect(VERSAO_PET).toBe(22);
+    expect(VERSOES_PET).toEqual([21, 22]);
     expect(VERSAO_PET_LAB).toBe(16);
-    expect(new Motor(101).versao).toBe(21);
-    expect(new Motor(101).lab).toBeNull();
+    expect(new Motor(101, 21).versao).toBe(21);
+    expect(new Motor(101, 21).lab).toBeNull();
     const p = petDeTeste(101);
     expect(p.versao).toBe(16);
     expect(p.lab).toBeInstanceOf(DigiBrain);
@@ -86,7 +86,7 @@ describe("o pet de teste do laboratorio (v16)", () => {
   });
 
   test("o ovo padrao nao traz o laboratorio na assinatura, e o pet v16 traz", () => {
-    const a = new Motor(101);
+    const a = new Motor(101, 21);
     a.avancar(60);
     expect(a.assinatura()).not.toContain('"lab"');
     const b = petDeTeste(101);

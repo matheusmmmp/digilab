@@ -7,7 +7,7 @@
 :root{ --hud-larg:288px }
 /* a caixa chanfrada: canto superior direito e inferior esquerdo, como a prancha */
 /* (:root[data-pele] .pet-tela na frente: vence as regras da pele Vidro para .pet-prioridade e .pet-pedido .chamado) */
-.hud-caixa, .pet-hud .hud-painel, .topo-pet, .topo-relogio,
+.hud-caixa, .pet-hud .hud-painel, .topo-pet, .topo-relogio, .topo-bits,
 :root[data-pele] .pet-tela .pet-alerta :is(.pet-prioridade, .chamado.dl-card){
   --ch:var(--hud-ch);
   border:1px solid var(--hx-borda); border-radius:0; box-shadow:none; color:var(--hx-texto); font-family:var(--hx-f);

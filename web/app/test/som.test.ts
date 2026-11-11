@@ -39,8 +39,11 @@ function falsos(opc: { ausentes?: string[]; salvo?: Record<string, string>; alea
 }
 const nomeDe = (t: { buffer: unknown }) => (t.buffer as { nome: string }).nome;
 
-test("desligado (padrao): nao toca nem pede arquivo", async () => {
-  const { dep, pedidos, tocados } = falsos(), som = criarSom(dep);
+test("ligado por padrao (Matheus, 2026-11-10); desligado pelo jogador, nao toca nem pede arquivo", async () => {
+  expect(criarSom(falsos().dep).estado().ligado).toBe(true);
+  const { dep, pedidos, tocados, loja } = falsos();
+  loja.set(CHAVE_SOM, "0");
+  const som = criarSom(dep);
   expect(som.estado().ligado).toBe(false);
   await som.tocar("golpe", "forma_a"); await som.tocarEvolucao(); await som.tocarMusica("4004");
   expect(pedidos).toEqual([]); expect(tocados).toEqual([]);
@@ -105,4 +108,17 @@ test("a evolucao toca o sfx e a musica usa inicio e laco em amostras", async () 
   await som.tocarEvolucao(0); expect(nomeDe(tocados[0])).toBe("evo.mp3");
   await som.tocarMusica("4004"); expect(nomeDe(tocados[1])).toBe("EVO.mp3");
   expect(ATRASO_MP3).toBe(1105);
+});
+test("contexto suspenso (sem gesto ainda): retoma no primeiro gesto do jogador, uma espera so", async () => {
+  const { dep } = falsos(), gestos: (() => void)[] = [];
+  let estado = "suspended", retomadas = 0;
+  const criar = dep.criarContexto;
+  dep.criarContexto = () => { const c = criar(); return Object.defineProperty({ ...c, resume: async () => { retomadas++; } }, "state", { get: () => estado }); };
+  dep.aoGesto = f => { gestos.push(f); };
+  const som = criarSom(dep);
+  await som.tocarEvolucao(); await som.tocarMusica("4004");
+  expect(gestos.length).toBe(1);
+  const antes = retomadas;
+  gestos[0](); estado = "running";
+  expect(retomadas).toBe(antes + 1);
 });

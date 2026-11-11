@@ -14,9 +14,11 @@ primeiro e o DigiBrain é modular, com o cérebro A como linha de base (`docs/PR
 
 1. `CLAUDE.md`: as regras não negociáveis, o método de pesquisa e o trabalho em paralelo. **Leia antes de propor qualquer coisa.**
 2. `docs/INDICE.md`: onde mora cada tipo de informação (implementado, decidido, hipótese, proposta, resultado, problema, próximo).
-3. `docs/PAINEL_V2.md`: o estado da V2 em uma página, curado pelo coordenador. `docs/ESTADO_ATUAL.md` é só um índice derivado dele e das
-   tarefas, nunca fonte.
-4. A frente: `docs/TAREFA_V2_<FRENTE>.md`, `docs/PLANO_ANALISE_V2_<FRENTE>.md`, `docs/RESULTADO_V2_<FRENTE>.md`.
+3. `docs/PAINEL_V3.md`: o estado da V3 em uma página, curado pelo coordenador. A V2 está congelada na tag `v2-final`
+   (`docs/FECHAMENTO_V2.md`; o `docs/PAINEL_V2.md` fica só como histórico). `docs/ESTADO_ATUAL.md` é só um índice derivado, nunca fonte.
+4. A frente: `docs/TAREFA_V3_<FRENTE>.md`, `docs/PLANO_ANALISE_V3_<FRENTE>.md`, `docs/RESULTADO_V3_<FRENTE>.md` (as frentes herdadas da
+   V2 continuam no `_V2_` delas).
+5. Onde cada tipo de documento vai (inclusive o que fica fora do repositório): `docs/ONDE_VAI_CADA_DOCUMENTO.md`.
 
 ## Separar o que é de verdade
 
@@ -29,10 +31,10 @@ primeiro e o DigiBrain é modular, com o cérebro A como linha de base (`docs/PR
 
 ## O que um agente de fora pode fazer
 
-- Pesquisar, comparar, propor hipótese, arquitetura ou tarefa. A proposta entra no repositório como `docs/TAREFA_V2_<FRENTE>.md`, gerada por
-  `python tools/nova_tarefa.py`, por PR do coordenador ou do Matheus.
+- Pesquisar, comparar, propor hipótese, arquitetura ou tarefa. A proposta entra no repositório como `docs/TAREFA_V3_<FRENTE>.md`, gerada por
+  `python tools/nova_tarefa.py <FRENTE> --fase V3`, por PR do coordenador ou do Matheus.
 - Revisar um PR: ler o corpo (o relato), o diff e o resumo do CI, e apontar inconsistências.
-- Escrever código, se a ferramenta deixar (o Codex): numa worktree ou branch próprio `v2-<frente>`, com PR contra a `main`.
+- Escrever código, se a ferramenta deixar (o Codex): numa worktree ou branch próprio `v3-<frente>`, com PR contra a `main`.
 
 ## O que nunca fazer
 

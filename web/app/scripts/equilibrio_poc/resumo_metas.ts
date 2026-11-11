@@ -1,6 +1,7 @@
 /* LUTA_POC, LP5 (docs/PLANO_EQUILIBRIO_LUTA_POC.md, secao 2): le os JSON dos grupos da bancada e da a tabela das 20 metas, com o criterio,
    o valor e se passa. Os criterios sao sobre a estimativa pontual; o intervalo de Wilson a 95 % vai ao lado, so para leitura.
    uso (em web/app): node scripts/equilibrio_poc/resumo_metas.ts --faixa calibracao --fase lp5_0 -> resumo.json e resumo.md na pasta da fase */
+import { limitesNpc, passaNpc } from "./criterios.ts";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { FORMAS_ARENA } from "../../motor/index.ts";
@@ -35,20 +36,21 @@ const dentro = (x: number, a: number, b: number) => x >= a && x <= b;
 /* ---------------------------------------------------------------- P1, P2, P3, D3 */
 if (tem("lideres")) {
 const L = G.lideres.dados;
-const lider = (k: string, sem: number, tip: number, pior: number | null) => {
-  const x = L[k], s = tx(x.sem_treino.total), t = tx(x.tipico.total);
+const lider = (k: string, desafiante: boolean) => {
+  /* o criterio da D-LP5-17 (criterios.ts); a pior especie so na leitura */
+  const x = L[k], s = tx(x.sem_treino.total), t = tx(x.tipico.total), { sem, tip } = limitesNpc(x.estagio, desafiante);
   const esp = Object.fromEntries(Object.entries(x.tipico.por_especie as Record<string, Conta>).map(([e, c]) => [e, r3(tx(c))]));
   const piorV = Math.min(...Object.values(esp) as number[]);
-  return { passa: s <= sem && t >= tip && (pior === null || piorV >= pior), v: { nome: x.nome, estagio: x.estagio, mapa: x.mapa, sem_treino: r3(s), ic_sem: ic(x.sem_treino.total), tipico: r3(t), ic_tipico: ic(x.tipico.total), pior_especie: piorV, por_especie: esp } };
+  return { passa: passaNpc(x.estagio, desafiante, s, t), v: { nome: x.nome, estagio: x.estagio, mapa: x.mapa, limite_sem: r3(sem), limite_tipico: r3(tip), sem_treino: r3(s), ic_sem: ic(x.sem_treino.total), tipico: r3(t), ic_tipico: ic(x.tipico.total), pior_especie: piorV, por_especie: esp } };
 };
-{ const g = lider("npc_tier1_brutamontes", .2, .7, .5); meta("P1", "o Gazimon", "sem treino <= 0,20; tipico >= 0,70; pior especie >= 0,50", g.passa, g.v); }
+{ const g = lider("npc_tier1_brutamontes", false); meta("P1", "o Gazimon", "sem treino <= 0,41; tipico >= 0,59 (a D-LP5-17); a pior especie so na leitura", g.passa, g.v); }
 {
-  const ls = ["npc_tier1_brutamontes", "npc_tier2_carcereiro", "npc_v6_youkomon", "npc_v5_myotismon", "npc_v6_marinbullmon", "npc_v5_piedmon"].map(k => lider(k, .2, .7, .5));
-  meta("P2", "os 6 lideres", "cada um: sem treino <= 0,20; tipico >= 0,70; pior especie >= 0,50 (a Cidadela, a serie de 3)", ls.every(x => x.passa), Object.fromEntries(ls.map(x => [x.v.nome, { ...x.v, passa: x.passa }])));
+  const ls = ["npc_tier1_brutamontes", "npc_tier2_carcereiro", "npc_v6_youkomon", "npc_v5_myotismon", "npc_v6_marinbullmon", "npc_v5_piedmon"].map(k => lider(k, false));
+  meta("P2", "os 6 lideres", "cada um, no estagio dele: sem treino <= 0,41/0,35/0,30/0,27; tipico >= 0,59/0,65/0,70/0,73 (a D-LP5-17; a Cidadela, a serie de 3)", ls.every(x => x.passa), Object.fromEntries(ls.map(x => [x.v.nome, { ...x.v, passa: x.passa }])));
 }
 {
-  const ds = ["npc_tier2_sentinela", "npc_tier2_porteiro", "npc_v5_puppetmon", "npc_v5_machinedramon"].map(k => lider(k, .35, .75, null));
-  meta("P3", "os 4 desafiantes", "cada um: sem treino <= 0,35; tipico >= 0,75", ds.every(x => x.passa), Object.fromEntries(ds.map(x => [x.v.nome, { ...x.v, passa: x.passa }])));
+  const ds = ["npc_tier2_sentinela", "npc_tier2_porteiro", "npc_v5_puppetmon", "npc_v5_machinedramon"].map(k => lider(k, true));
+  meta("P3", "os 4 desafiantes", "cada um: o limite do lider do estagio, +0,15 no sem treino e +0,05 no tipico (a D-LP5-17)", ds.every(x => x.passa), Object.fromEntries(ds.map(x => [x.v.nome, { ...x.v, passa: x.passa }])));
 }
 {
   const h = L.npc_v5_myotismon.tipico.relogio_serie, p90 = quantil(h, .9);

@@ -1,18 +1,11 @@
-DigiLab: o trilho com o vagao da ilha (trilho.gltf, trilho.bin, trilho_cor.png)
+DigiLab: o trilho com o vagao, um marco da ilha (trilho.gltf, trilho.bin, trilho_cor.png)
 
-Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus; refeito em 2026-11-07 (o
-retrabalho dos objetos, docs/objetos3d/REFERENCIAS.md), no lugar do modelo de 2026-11-06.
-Pelos termos de uso da Meshy (atualizados em 2026-09-19, secao 3.2), a saida de um plano pago e do cliente.
-Os termos proibem tirar a marca de IA (secao 2.4): a marca fica no asset.extras do trilho.gltf e neste arquivo.
+Procedencia: feito a mao por script, sem IA, em 2026-11-10 (docs/objetos3d/cartoon/trilho.py no repositorio do DigiLab).
+A malha (os dormentes, os trilhos, as rodas, o chassi, a caixa, as escotilhas, o teto de lona) e a textura (pintada pelo codigo, pela posicao no espaco)
+saem do script; a mesma entrada da sempre o mesmo arquivo. Nada vem de modelo gerado nem de imagem de terceiros.
 
-Como foi feito (docs/objetos3d/trem/ no repositorio):
-- esboco: Meshy Image to Image (nano-banana-2), so com prompt de estilo e a maquete B do proprio jogo; o esboco 1 (vagao de madeira)
-  escolhido pelo Matheus;
-- vistas: Meshy Image to Image com multivista, a partir do esboco;
-- malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
-- acabamento no Blender 4.5 LTS e em Python, por script: a malha da Meshy fica como veio; a textura pintada fica (sem achatar cores),
-  reduzida a 512 px e 256 cores; as normais vem de uma copia suavizada da malha, para o cel shading dar areas grandes de luz e sombra.
-As tarefas da Meshy (esboco, vistas, malha) estao no asset.extras do trilho.gltf.
+O desenho segue o esboco do objeto (docs/objetos3d/trem/esbocos/esboco_1_vagao_madeira.png), gerado pela Meshy para o DigiLab e usado so como referencia de desenho:
+nenhum pixel e nenhum vertice dele esta nestes arquivos. O vagao de antes (a malha e a textura da Meshy) saiu do jogo; o historico esta em docs/TAREFA_V3_MUNDO_ENFEITES.md e em docs/objetos3d/trem/.
 
-Uso: no jogo DigiLab, publicado. Credito: "Trilho com vagao gerado com a Meshy (meshy.ai)".
-Aprovacao: o Matheus escolheu o esboco em 2026-11-07; a aprovacao da captura na ilha fica no PR do retrabalho do trem.
+Uso: no jogo DigiLab, publicado. Autor: o projeto DigiLab (Matheus).
+Aprovacao: as capturas ficam no PR dos objetos em cartoon.
