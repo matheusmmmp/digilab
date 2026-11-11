@@ -1,0 +1,178 @@
+# TAREFA V3 — COOPERACAO (2026-11-11)
+
+Coordenador: o Gerente da V3 (Claude Code, Opus 5.5). Worker: um por etapa, a definir. Worktree e branch: `v3-cooperacao` (esta etapa,
+CO0); cada etapa de código terá a sua, `v3-cooperacao-co<n>`. Status: **ABERTA**, só o papel. As decisões CO-1 a CO-9 da seção 8
+foram DECIDIDAS em 2026-11-11, pela recomendação.
+
+Categoria: arquitetura. Origem: o Matheus, em 2026-11-11, a partir do levantamento "moral, mitologia e felicidade", feito no vault
+(`20 Temas/Síntese — moral, mitologia e felicidade.md`, fora do repositório).
+
+## 0. O que já está decidido
+
+**O que o Matheus decidiu em 2026-11-11:**
+
+- **D-MM-1 a D-MM-17:** "Aprovo as 17", pela recomendação da Síntese. As que esta tarefa usa:
+  - **D-MM-1:** a moral é híbrida. A felicidade do corpo escolhe entre as ações permitidas, e os deveres entram como restrição. Os deveres
+    crescem até a lei kantiana no Mega.
+  - **D-MM-2:** a moral só entra **depois** da luta. Nenhuma escolha do pet dentro da luta (a LP-3 continua).
+  - **D-MM-8:** a pontuação pró-social é o **efeito medido pelo motor**. A intenção passa a pesar mais com a idade. Não há número na tela
+    nem nota do dono. Há meia-vida, e a novidade cai pela metade na repetição.
+  - **D-MM-10:** nenhuma correção mexe nos stats da luta nem no corpo.
+  - **D-MM-14:** a felicidade é lexicográfica: o piso de cada pet, depois a média, nunca a soma.
+  - **D-MM-17:** a pergunta do dono não reabre.
+- **D-MM-18:** "Aprovo". A disposição para a hybris é inata, e a história de lutas do par a desperta. Ela fica para uma etapa
+  própria.
+- **"faça a cooperação no web primeiro":** a cooperação aparece **primeiro jogável no web**.
+  - Ela vem contra a recomendação de fazer o Python antes.
+  - A leitura do coordenador (desvio D-CO0-1): a paridade continua. A mecânica é escrita no Python e no TS no mesmo PR, e o gabarito sai
+    do Python. A run de pesquisa na bancada vem depois.
+- **"Um segundo pet meu":** os outros pets são **um segundo pet do mesmo dono, na mesma ilha**.
+- **"o chamado se dobra e o segundo pet não é opcional":** o segundo pet é obrigatório, e cada pet tem os próprios chamados.
+- **"Dois ovos no início":** os dois pets nascem juntos.
+
+**O que já existe e serve (FATO, `main` em `95b90b2e`):**
+
+- **O `Grupo` do Python** (`digilab/grupo.py`; `docs/TAREFA_V2_DOIS_PETS.md`; o desenho em `docs/futuro/dois_pets.md`, DP-1 a DP-14):
+  - N pets no mesmo `Mundo`, cada um com o seu motor, a sua rng e o seu cérebro;
+  - a vez sorteada no fluxo `mundo-ordem`, com Fisher-Yates por `randrange`, "para o TS repetir os mesmos números";
+  - a semente do segundo pet é `derivar_semente("segundo-pet", s)`;
+  - o registro do grupo, com o destino de cada evento (DP-3);
+  - a percepção social, só com o que é físico: a visão e o toque;
+  - a disputa (quem pega primeiro come; não há agressão, CV-3);
+  - o replay que falha alto.
+- **No web não existe grupo.**
+  - `web/app/motor/` tem um `Motor` por pet. O mundo (`motor/mundo.ts`) recebe o estado de **um** pet.
+  - O save (`src/save.ts`, `CHAVE = "digilab-web-v21-sprites"`) guarda um pet. A versão é `VERSAO_PET = 21`.
+  - O `dois_pets.md` (seção 12) já punha "o grupo em TypeScript" para "quando o produto voltar".
+- **A regra dos dois pets que esta tarefa herda** (`dois_pets.md`, seção 7):
+  - nenhum sinal de reforço sai do outro pet;
+  - nenhum parâmetro passa de um cérebro ao outro;
+  - só a consequência da própria ação atualiza o valor.
+
+## 1. Pergunta
+
+O jogo web pode ter dois pets do mesmo dono, nascidos de dois ovos, vivendo na mesma ilha? E a cooperação entre eles pode ficar
+**visível e jogável**? Ela é feita do que eles já fazem um com o outro (a disputa pela comida, a contenção, o encostar), medida pelo motor
+como pontuação pró-social e reputação. Tudo com o replay e a paridade com o Python intactos.
+
+Não é uma hipótese de pesquisa: é uma frente de produto. A pergunta de pesquisa ("a cooperação emerge e responde à reputação?") fica para
+a run da bancada, com plano próprio, fora desta tarefa.
+
+## 2. Depende de
+
+- **Na `main` já:** o `Grupo` do Python (as etapas 2, 3 e 8 da DOIS_PETS); o mundo físico e o corpo em TS (`mundo.ts`,
+  `motor_corpo_mundo.ts`); o modular como cérebro padrão (v17).
+- **Antes da CO4 (o save e a tela):** o SOM_UP (#781), os Bits (o plano #762 e a MO1 #765) e as tarefas da ilha (IA1 a IA4, #766, #767,
+  #771 e #777). Todas estão fora da `main` hoje e mexem nas telas da ilha, no save ou na `VERSAO_PET`.
+- **As CO1 a CO3 não esperam ninguém:** só tocam o motor e os testes.
+- **Arquivos disputados** (`docs/PLANO_V3.md`, seção 5): `App.tsx`, `pet.css`, `Nav.tsx` e `digilab/digibrain/`. Uma missão por vez.
+
+## 3. Mudança mínima, por etapa
+
+Um PR por etapa. Cada etapa de código entra atrás da `ConfigCooperacao` desligada (no Python, em `digilab/config.py`) e do espelho em
+`motor/constantes.ts`. Desligada, as vidas de hoje saem byte a byte.
+
+| etapa | o que faz | arquivos | o que NÃO muda |
+|---|---|---|---|
+| **CO0** (este PR) | a tarefa, só o papel | este arquivo; uma seção em `docs/registro/2026-11.md` | nada de código |
+| **CO1, os gabaritos** | **em commit próprio, antes de qualquer mudança:** o gabarito das vidas de hoje (um pet, o v21) e o de vidas do `Grupo` com dois pets e um dono, a chave desligada | `experiments/exportar_grupo.py` (novo); `web/app/test/gabaritos/grupo_*.json` | o motor; o `Grupo` |
+| **CO2, o grupo em TS** | o porte do `grupo.py` para `motor/grupo.ts`: o mundo partilhado, a ordem no tick, a percepção social (visão e toque), a disputa e o registro do grupo | `motor/grupo.ts` (novo); `motor/mundo.ts` (o mundo passa a ser partilhado, com o G2 de um pet só antes); `motor/index.ts`; os testes | as telas; a `VERSAO_PET`; o `engine.py`; o `grupo.py` |
+| **CO3, a cooperação no motor** | Python e TS no mesmo PR: os **atos sociais derivados** e a **pontuação** (seção 3.1), mais a **reputação de cada pet vista pelo outro**. Tudo como função do log: nada é estado salvo. **Não muda a decisão de nenhum pet** | `digilab/cooperacao.py` (novo, só biblioteca padrão); `motor/cooperacao.ts` (novo); a `ConfigCooperacao`; os testes de paridade | o cérebro; o corpo; a luta |
+| **CO4, os dois ovos** | uma `VERSAO_PET` nova (a próxima livre no merge). Com ela: o save com o registro do grupo; dois ovos no nascimento (semente `s` e `derivar_semente("segundo-pet", s)`); os chamados de cada um; a escolha de qual pet recebe a ação do dono | `src/save.ts`, as telas do ovo e da ilha, `motor/constantes.ts` | os pets das versões antigas, as assinaturas e os gabaritos (`web/app/CLAUDE.md`) |
+| **CO5, o que se vê** | a cooperação na tela, **sem número** (D-MM-8): o pet que deixou a fruta, o que pegou, o que encostou no irmão; o gesto depois da luta (D-MM-2): o irmão que assistiu consola, comemora ou provoca | as telas da ilha e o fim da luta | o núcleo da luta (`motor/arena/`), a LP-3 |
+
+Fica para depois desta tarefa, cada parte com a sua etapa e o seu ok: a reputação entrar na **percepção** do cérebro (CO6) e os deveres
+como **escudo** por estágio (CO7). Ver CO-3.
+
+### 3.1 Os atos e a pontuação (PROPOSTA)
+
+**Os atos da primeira etapa.** Só atos que já acontecem no `Grupo`, lidos do replay. Não há ação nova no `AcaoPet` (CO-2).
+
+| ato | como se reconhece no replay | sinal |
+|---|---|---|
+| **a disputa** (pegar a comida que o outro tinha como alvo) | o registro `disputas` do `Grupo` | **anti**, se o outro estava abaixo do piso de fome; **neutro**, se não |
+| **a contenção** (deixar a única comida à vista para o outro) | o pet, com o outro à vista e a comida como candidata, não a come, e o outro a come em seguida | **pró**, pelo efeito no corpo do outro |
+| **o encostar** | o contato do tipo `encostar` do `Grupo`, com o outro emburrado ou triste visto de fora (a ação que se vê) | **pró** |
+| **o resto** (comer, brincar, dormir, explorar) | — | neutro |
+
+**A pontuação** (a fórmula da nota *Moral do pet*, A3, em inteiros na escala S). Para o pet *i* e o ato *a*, com alvo *j*:
+
+- **o valor do ato:** `valor(a) = sinal(a) · efeito(a)`, em que o `efeito` é a variação do bem-estar do corpo de *j*, medida pelo motor;
+- **a novidade:** cai pela metade a cada repetição do mesmo ato com o mesmo alvo no dia;
+- **o acúmulo:** `P_i` decai por meia-vida e acumula `novidade · valor`;
+- **a reputação de *i* vista por *j*:** a mesma conta, só sobre os atos que *j* viu, pela visão do `Grupo`;
+- **a intenção:** o `peso_int(idade)` da nota fica **zero nesta tarefa**. Ainda não há estimativa do pet registrada, e ela entra com a
+  CO7.
+
+**Os números:**
+
+- todos PROPOSTOS, SEM FONTE: o piso de fome, a meia-vida, a janela do dia e o limiar do "triste visto de fora";
+- cada um vai para a `ConfigCooperacao` com status e fonte;
+- nenhum é calibrado nesta tarefa.
+
+## 4. Experimento e gate
+
+Não há run nesta tarefa. Os gates são de engenharia:
+
+| gate | o que confere | etapa |
+|---|---|---|
+| **G-HOJE** | com a chave desligada, as vidas de hoje (um pet, v21) saem byte a byte contra o gabarito da CO1, no Python e no TS | CO1 a CO5 |
+| **G-PAR-GRUPO** | o `grupo.ts` repete o `grupo.py`: a mesma ordem sorteada, as mesmas posições, os mesmos consumos, as mesmas disputas e o mesmo registro, bit a bit no Node | CO2 |
+| **G-PAR-COOP** | os atos, a `P_i` e a reputação do TS iguais aos do Python, nos mesmos logs | CO3 |
+| **G-REPLAY-2** | um save de dois pets refeito do registro dá a mesma assinatura, e um evento desconhecido levanta erro | CO4 |
+| **G-SEM-DECISAO** | ligar a pontuação não muda nenhuma ação de nenhum pet nem o corpo deles: a moral desta tarefa só mede | CO3 |
+
+- **O plano de análise e as sementes:** a run da bancada ("a contenção responde à reputação?") terá o seu
+  `docs/PLANO_ANALISE_V3_COOPERACAO.md` e uma faixa pedida ao coordenador. Os dois ficam **fora** desta tarefa.
+- **GPU:** não.
+
+## 5. Entrega
+
+- **Os testes:**
+  - na raiz, `python -m pytest tests/test_grupo*.py tests/test_cooperacao*.py -q` em cada etapa, e a suíte inteira antes do PR;
+  - em `web/app`, `npm test` e `npm run tipos`;
+  - o `npm run e2e` na CO4 e na CO5, que mexem nas telas e na `VERSAO_PET`.
+- **O registro:** uma seção própria no fim de `docs/registro/AAAA-MM.md`. **Não edite o índice `docs/REGISTRO_DESVIOS.md`:**
+  - ele é gerado (`python tools/gerar_indice_desvios.py`) por quem faz o merge;
+  - um conflito nele se resolve rodando o gerador, nunca à mão (`docs/TAREFA_V3_INDICE_DESVIOS.md`).
+- **O resumo da etapa:** vai no corpo do PR e numa seção no fim deste arquivo, nunca no `CLAUDE.md`.
+- **O PR:**
+  - contra a `main`, com o resumo e os números, cada um com o artefato;
+  - aviso ao coordenador; o merge é só pelo Matheus;
+  - o corpo segue `.github/pull_request_template.md`, e o CI (`tools/verificar_relato.py`) confere os campos.
+
+## 6. Fora desta tarefa
+
+- **a reputação na percepção do cérebro e os deveres como escudo:** são as CO6 e CO7, cada uma com o ok do Matheus;
+- **a hybris** (D-MM-18) e **a aura**;
+- **o panteão, as lendas e o oráculo:** é a E0 da mitologia, com tarefa própria;
+- **a run da bancada e o plano de análise dela;**
+- **a visita entre donos** (D-MM-12, espera o MMO), **o segundo dono** (DP-7) e **a comunicação** (o degrau 2, DP-6);
+- **a agressão entre pets** (CV-3) e **qualquer decisão do pet dentro da luta** (LP-3);
+- **a mudança nos pets das versões antigas** (eles continuam com um pet só);
+- **os sentidos do degrau 1b** (o cheiro e a audição do outro): a cooperação usa só a visão e o toque.
+
+## 7. Critérios de aceitação
+
+1. O G-HOJE passa no Python e no TS em todas as etapas, com o gabarito gravado no commit próprio da CO1, antes da mudança.
+2. O G-PAR-GRUPO passa (CO2) nos gabaritos da CO1, bit a bit no Node.
+3. O G-PAR-COOP e o G-SEM-DECISAO passam (CO3).
+4. O G-REPLAY-2 passa (CO4), e um pet v21 abre igual a antes.
+5. A CO5 tem as capturas a 390 e 1280 px nas duas peles, aprovadas pelo Matheus, e o e2e verde.
+6. Cada número novo está na `ConfigCooperacao` (e no espelho TS, conferido por `constantes.test.mjs`) com PROPOSTO e SEM FONTE.
+
+## 8. Precisa do Matheus
+
+**As CO-1 a CO-9 foram DECIDIDAS pelo Matheus em 2026-11-11 ("Aprovo as 9"), pela recomendação.** Os números continuam PROPOSTOS.
+
+| n.º | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| **CO-1** | a ordem das etapas | o motor primeiro (CO1 a CO3, sem tela nem versão nova), depois o save e a tela (CO4 e CO5), quando o SOM_UP, os Bits e a ilha estiverem na `main` | baixo: o motor não colide com ninguém; a tela antes disso colide com quatro PRs abertos |
+| **CO-2** | os atos da primeira etapa | **só os que já acontecem** (a disputa, a contenção, o encostar), sem ação nova no `AcaoPet`. "Dividir" de verdade (levar comida ao outro) é ação nova e fica para depois | médio: uma ação nova muda a decisão do cérebro, pede gabarito e mexe no `digibrain` disputado |
+| **CO-3** | a cooperação muda o que os pets fazem já nesta tarefa? | **não.** A CO3 só mede e mostra (o G-SEM-DECISAO). A reputação entra na percepção (CO6) e os deveres como escudo (CO7) em etapas próprias. A regra dos dois pets vale: nenhum reforço sai do outro | alto, se entrar junto: não se sabe se a mudança veio da medida ou da decisão, e o replay muda em duas frentes ao mesmo tempo |
+| **CO-4** | os saves de hoje (um pet) | **continuam como estão.** Os dois ovos valem para os jogos novos, na versão nova. Um pet antigo não ganha irmão (`web/app/CLAUDE.md`: as versões antigas não mudam) | alto, se migrar: um segundo pet inventado no meio de um log antigo quebra o replay dele |
+| **CO-5** | a luta | **cada pet luta sozinho**, como hoje (a POC é um contra um). O irmão assiste, e o gesto dele depois do nocaute é o ato social da luta (D-MM-2) | alto, se for dois contra um: reabre a LP e a rodada de equilíbrio |
+| **CO-6** | a ação do dono | **cada ação vai a um pet escolhido** (o pet em foco na tela). Deixar comida e bola no mundo serve aos dois, como no `Grupo` (o destino `mundo`) | médio: uma ação para os dois ao mesmo tempo não tem par no registro do grupo (DP-3) |
+| **CO-7** | o cérebro do segundo pet | **o mesmo do primeiro** (o modular), cada um com o seu estado; nenhum parâmetro passa de um ao outro | baixo |
+| **CO-8** | a herança entre os dois | **sem regra nova:** o jogo já cruza dois adultos do dono (`src/heranca.ts`); os irmãos podem ser pais, como hoje | baixo; se o Matheus quiser proibir, é uma linha na tela da herança |
+| **CO-9** | o piso de fome que separa a disputa "anti" da "neutra" | o `fome_moderada` do instinto (o mesmo limiar do chamado de fome, `motor/constantes.ts`, `chamadoPelaFome`), para não criar número novo | baixo: é PROPOSTO e se ajusta na rodada de equilíbrio |
