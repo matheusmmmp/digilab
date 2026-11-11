@@ -1,16 +1,16 @@
 /* O Motor do jogo dentro do Grupo (docs/TAREFA_V3_COOPERACAO.md, etapa CO4b; motor/grupo_jogo.ts):
-   - dois Motors inteiros (v25, CO4c) na ilha com agua, o tempo andando pelo grupo, um tick por vez na vez sorteada;
+   - dois Motors inteiros (v26, CO4c) na ilha com agua, o tempo andando pelo grupo, um tick por vez na vez sorteada;
    - o mundo e um so: a racao que o dono deixa por um pet pode ser comida pelo outro, e as comidas, a bola e as quedas sao as mesmas;
    - cada pet tem a percepcao do outro, os contatos e os chamados dele;
    - o G-REPLAY-2 no motor: o registro do grupo refeito da a mesma assinatura, e um evento desconhecido, fora do tick ou de um pet de fora falha
      alto;
    - o avancar de um pet do grupo anda o grupo inteiro (CO4c), e a acao do dono com o tempo dentro entra no registro na ordem certa;
-   - a v25 so existe no grupo, e o grupo so tem a v25; o pet sozinho de hoje nao muda (o G-HOJE segue nos testes de cada versao). */
+   - a v26 so existe no grupo, e o grupo so tem a v26; o pet sozinho de hoje nao muda (o G-HOJE segue nos testes de cada versao). */
 import { describe, expect, test } from "vitest";
 import { TICK_INICIAL, TPD } from "../motor/constantes.ts";
 import { GrupoDoJogo, Motor, derivarSemente, sementeDoSegundoJogo, type EventoGrupoJogo } from "../motor/index.ts";
 
-const VERSAO = 25;
+const VERSAO = 26;
 
 /** o dono de roteiro: a cada passo de 15 ticks, a racao a um pet (alternando), o carinho no outro de vez em quando e a limpeza */
 function viver(semente: number, passos: number): GrupoDoJogo {
@@ -106,9 +106,9 @@ describe("o Motor do jogo dentro do Grupo", () => {
     expect(() => g.grupo.acaoDono("A", "acariciar")).toThrow(/pelo Motor/);
   });
 
-  test("a v25 so existe no grupo, e o grupo so tem a v25; o pet sozinho de hoje anda como sempre", () => {
+  test("a v26 so existe no grupo, e o grupo so tem a v26; o pet sozinho de hoje anda como sempre", () => {
     expect(() => new Motor(101, VERSAO)).toThrow(/so nasce no grupo/);
-    expect(() => new GrupoDoJogo(101, 23)).toThrow(/v25/);
+    expect(() => new GrupoDoJogo(101, 23)).toThrow(/v26/);
     const so = new Motor(101, 23);
     expect(so.noGrupo).toBe(false);
     so.avancar(30);
