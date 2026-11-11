@@ -115,6 +115,8 @@ export class Ilha {
   /** as celulas fechadas do mapa do motor que nao sao agua (a ilha grande, IG3): a arvore e o marco em que o pet nao pisa. A arvore vira
       um objeto no centro da celula dela (porObjetos); o marco e o enfeite da planta, que fica em cima do bloco de celulas dele */
   readonly fechadas: { tipo: "arvore" | "marco"; x: number; z: number }[] = [];
+  /** as mesmas celulas, pela chave z * largura + x: o chao delas nao serve a nada que a planta poe (plana) */
+  private readonly celFechada = new Set<number>();
   /** a moldura e a praia desta ilha com agua (ILHA_AGUA ou ILHA_GRANDE) */
   private readonly aguaDaIlha: { moldura: number; praia: number; praiaSul: number; sulDesde: number };
 
@@ -199,6 +201,7 @@ export class Ilha {
           /* a arvore e o marco fechados sao terra para o desenho (o chao continua embaixo deles) */
           if (ch === ARVORE_FECHADA) this.fechadas.push({ tipo: "arvore", x, z });
           else if (ch === MARCO_FECHADO) this.fechadas.push({ tipo: "marco", x, z });
+          if (ch === ARVORE_FECHADA || ch === MARCO_FECHADO) this.celFechada.add(z * W + x);
           const d = z >= A.sulDesde ? A.praiaSul : A.praia;
           let praia = false;
           for (let dz = -d; dz <= d && !praia; dz++) for (let dx = -d; dx <= d; dx++) if (mar(x + dx, z + dz)) { praia = true; break; }
@@ -253,7 +256,6 @@ export class Ilha {
       const id = `fechada:${f.x},${f.z}`, h = sementeDoLayout(id);
       this.objetos.push({ modelo: h % 2 ? "pinheiro" : "arvore_redonda", x: f.x + 0.5, z: f.z + 0.5, giro: (h % 628) / 100, escala: 0.85 + ((h >>> 8) % 30) / 100, doMotor: id });
     }
-    const fechada = new Set(this.fechadas.map(f => f.z * this.area.w + f.x));
 
     /* a decoracao baixa da area: longe do ninho, do comedouro, do caminho e das arvores do motor */
     for (const [regiao, x0, x1] of this.cm.layout.regioes) {
@@ -265,7 +267,7 @@ export class Ilha {
         for (let k = 0, tent = 0; k < alvo && tent < alvo * 30; tent++) {
           const x = x0 + r() * (x1 - x0 + 1), z = r() * this.area.h;
           if (!plana(x, z, 0)) continue;
-          if (fechada.has(Math.floor(z) * this.area.w + Math.floor(x))) continue;      /* nada de decoracao debaixo da arvore nem do marco */
+          if (this.celFechada.has(Math.floor(z) * this.area.w + Math.floor(x))) continue;      /* nada de decoracao debaixo da arvore nem do marco */
           if (Math.hypot(x - ninho[0], z - ninho[1]) < 1.6 || Math.hypot(x - comedouro[0], z - comedouro[1]) < 1.4) continue;
           if (!longe(x, z, 1.2, alto) || !longe(x, z, 0.35)) continue;
           por(modelo, x, z, [0.8, 1.2]);
@@ -307,12 +309,14 @@ export class Ilha {
   }
 
   /* o chao plano em volta de (x, z): `folga` celulas de cada lado, no mesmo nivel e da mesma altura; `tipos`, os tipos aceitos */
-  private plana(x: number, z: number, folga: number, tipos: readonly Tipo[] = ["grama"]): boolean {
+  private plana(x: number, z: number, folga: number, tipos: readonly Tipo[] = ["grama"], comFechadas = false): boolean {
     const c0 = this.cel(Math.floor(x), Math.floor(z));
     if (!c0) return false;
     for (let dz = -folga; dz <= folga; dz++) for (let dx = -folga; dx <= folga; dx++) {
-      const c = this.cel(Math.floor(x) + dx, Math.floor(z) + dz);
+      const cx = Math.floor(x) + dx, cz = Math.floor(z) + dz, c = this.cel(cx, cz);
       if (!c || !tipos.includes(c.tipo) || c.nivel !== c0.nivel || c.cantos.some(h => h !== c.cantos[0])) return false;
+      /* a celula fechada do mapa (a arvore, o marco) nao serve de chao: so o proprio marco, que fica em cima do bloco dele, a aceita */
+      if (!comFechadas && this.naArea(cx, cz) && this.celFechada.has(cz * this.area.w + cx)) return false;
     }
     return true;
   }
@@ -432,7 +436,7 @@ export class Ilha {
     const M = P.marcos, r = rng(semente ^ P.sal ^ 0x3a7c05);
     for (const nome of ["carro", "geladeira", "trilho", "lata"] as const) {
       const G = ENFEITES_GRADE[nome], D = M[nome];
-      const [x, z] = this.pertoDe(D.ponto, M.busca, (x, z) => noLado(x, z) && this.plana(x, z, G.folga, this.comAgua ? ["grama", "areia"] : G.chao)
+      const [x, z] = this.pertoDe(D.ponto, M.busca, (x, z) => noLado(x, z) && this.plana(x, z, G.folga, this.comAgua ? ["grama", "areia"] : G.chao, true)
         && !this.caminhos.some(l => pertoDaLinha(x, z, l, P.raioCaminho + G.clareira))
         && !this.lugares.some(l => Math.hypot(l.x - x, l.z - z) < P.lugares[l.nome].clareira + G.clareira), "o enfeite " + nome);
       /* a frente para o ponto mais perto da area; dentro dela (a ilha com agua), para a praca */

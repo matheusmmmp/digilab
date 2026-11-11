@@ -27,7 +27,7 @@ MARCOS = {"carro": (30, 21, 3, 2), "lata": (34, 13, 2, 2), "geladeira": (103, 44
 # menos de FOLGA_CAMINHO deles nem dentro da praca
 CAMINHOS = (((28.5, 30.5), (40, 30.5), (64, 30.5)), ((64, 30.5), (64, 9)), ((64, 30.5), (74, 33), (80, 34), (84, 34), (92, 28), (101, 22)),
             ((64, 30.5), (68, 42), (72, 50)))
-FOLGA_CAMINHO, RAIO_PRACA = 2.2, 6.5
+FOLGA_CAMINHO, RAIO_PRACA = 2.2, 6.5        # PROPOSTO, SEM FONTE
 PONTES = (17, 33, 47)                 # as linhas de cima de cada ponte (duas linhas cada)
 LAGOS = ((87, 8, 6, 3.2), (27, 41, 7, 3.6), (52, 15, 3.2, 2))      # cx, cy, rx, ry
 BOSQUES = ((24, 17, 6, 3, 12), (36, 46, 8, 3, 12), (76, 13, 6, 3, 9), (104, 16, 6, 3, 12), (108, 40, 5, 4, 9), (58, 45, 6, 3, 8),
@@ -160,6 +160,10 @@ def main() -> None:
     assert ligada(linhas), "ha terra que o pet nao alcanca"
     assert set(linhas[0]) == set(linhas[1]) == set(linhas[-1]) == set(linhas[-2]) == {MAR} and all(l[:2] == l[-2:] == MAR * 2 for l in linhas), "a ilha encosta na borda do mapa"
     (AQUI / "mapa_proposto.txt").write_text("\n".join(linhas) + "\n", encoding="utf-8", newline="\n")
+    # os caminhos e a praca que o gerador deixou livres: o teste da vista (web/app/test/ilha_grande_vista.test.ts) confere a planta contra isto
+    import json
+    (AQUI / "planta_livre.json").write_text(json.dumps({"caminhos": CAMINHOS, "praca": list(LUGARES["praça"]), "raio_praca": RAIO_PRACA,
+                                                         "folga_caminho": FOLGA_CAMINHO}, indent=1) + "\n", encoding="utf-8", newline="\n")
     px, margem, topo = 8, 16, 44
     img = Image.new("RGB", (W * px + 2 * margem, topo + H * px + 30 * px + 3 * margem + 40), (24, 30, 40))
     d = ImageDraw.Draw(img)

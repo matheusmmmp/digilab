@@ -5,6 +5,7 @@
      - os lugares, os postes, a praca e os caminhos ficam em celulas em que o pet pisa, e todo lugar se alcanca a pe a partir do ninho;
      - a luz cabe no maximo de focos, e as ilhas de antes nao mudam (os testes delas conferem). */
 import { describe, expect, test } from "vitest";
+import { readFileSync } from "node:fs";
 import { AGUA_ILHA_GRANDE, ARVORE_FECHADA, CMU_GRANDE, CMU_MVP_AGUA, MARCO_FECHADO, PONTE, celulasSecas } from "../motor/index.ts";
 import { ILHA_GRANDE, LUZ_HIERARQUIA, PLANTA_ILHA_AGUA, PLANTA_ILHA_GRANDE } from "../src/telas/pet/ilha/constantes.ts";
 import { ilhaDe } from "../src/telas/pet/ilha/grade.ts";
@@ -50,9 +51,14 @@ describe("a grade da ilha grande", () => {
     ilha.objetos.forEach((o, i) => {
       if (o.doMotor !== null || ilha.escondidos.has(i)) return;
       expect(MODELOS[o.modelo].baixo, `${o.modelo} em ${o.x}, ${o.z}`).toBe(true);
-      expect(livre(o.x, o.z) || letra(o.x, o.z) === "." , `${o.modelo} em ${o.x}, ${o.z}`).toBe(true);
+      expect(livre(o.x, o.z), `${o.modelo} em ${o.x}, ${o.z}`).toBe(true);
     });
-    for (const o of ilha.extras) expect(MODELOS[o.modelo].baixo || o.modelo === "pedra", o.modelo).toBe(true);
+    /* o entorno dos marcos: baixo, e nunca em cima de uma celula fechada (nem do proprio marco) */
+    expect(ilha.extras.length).toBeGreaterThan(10);
+    for (const o of ilha.extras) {
+      expect(MODELOS[o.modelo].baixo || o.modelo === "pedra", o.modelo).toBe(true);
+      expect(livre(o.x, o.z), `${o.modelo} em ${o.x}, ${o.z}`).toBe(true);
+    }
   });
 
   test("cada marco fica em cima do bloco de celulas fechadas dele", () => {
@@ -79,7 +85,10 @@ describe("a grade da ilha grande", () => {
     expect(ilha.lugares.map(l => l.nome)).toEqual(["portao", "barraca", "cais"]);
     for (const l of ilha.lugares) {
       if (l.nome === "cais") { expect(ilha.cel(Math.floor(l.x), Math.floor(l.z))!.nivel).toBe(-1); continue; }   /* o cais fica no mar, rente a praia */
-      expect(livre(l.x, l.z), l.nome).toBe(true);
+      /* a base inteira do lugar fica em celulas livres: nenhuma arvore nem marco debaixo dele */
+      const base = P.lugares[l.nome as "portao"].base;
+      for (let dz = -base; dz <= base; dz += 0.5) for (let dx = -base; dx <= base; dx += 0.5)
+        if (Math.hypot(dx, dz) <= base) expect(livre(l.x + dx, l.z + dz), `${l.nome} em ${l.x + dx}, ${l.z + dz}`).toBe(true);
     }
     for (const e of ilha.enfeites) if (e.nome === "poste") expect(livre(e.x, e.z), `poste em ${e.x}, ${e.z}`).toBe(true);
     expect(ilha.enfeites.filter(e => e.nome === "poste").length).toBe(P.postes.length);
@@ -89,8 +98,15 @@ describe("a grade da ilha grande", () => {
     expect(caminho).toBeGreaterThan(Math.PI * P.praca.raio ** 2);
     for (const linha of ilha.caminhos) for (let k = 1; k < linha.length; k++) for (let t = 0; t <= 20; t++) {
       const x = linha[k - 1][0] + ((linha[k][0] - linha[k - 1][0]) * t) / 20, z = linha[k - 1][1] + ((linha[k][1] - linha[k - 1][1]) * t) / 20;
-      if (z < H - 9) expect(livre(x, z), `caminho em ${x}, ${z}`).toBe(true);        /* o fim do caminho do cais entra na praia e para nela */
+      expect(livre(x, z), `caminho em ${x}, ${z}`).toBe(true);
     }
+    /* os caminhos e a praca sao os que o gerador do mapa deixou livres de arvores (docs/pranchas/ilha-grande/gerar_figura.py grava o
+       planta_livre.json): se a planta mudar sem regerar o mapa, isto falha */
+    const G = JSON.parse(readFileSync(new URL("../../../docs/pranchas/ilha-grande/planta_livre.json", import.meta.url), "utf8")) as
+      { caminhos: [number, number][][]; praca: [number, number]; raio_praca: number; folga_caminho: number };
+    expect(ilha.caminhos).toEqual(G.caminhos);
+    expect(Math.hypot(P.praca.x - G.praca[0], P.praca.z - G.praca[1]) + P.praca.raio).toBeLessThanOrEqual(G.raio_praca);
+    expect(P.raioCaminho).toBeLessThan(G.folga_caminho);
     /* do ninho a praca, ao portao e a barraca (do outro lado do rio, pela ponte) ha caminho em terra */
     for (const alvo of [[P.praca.x, P.praca.z], ...ilha.lugares.filter(l => l.nome !== "cais").map(l => [l.x, l.z])] as [number, number][]) {
       const rota = rotaEmTerra(CM, ninho, alvo);
@@ -105,6 +121,14 @@ describe("a grade da ilha grande", () => {
     const focos = listaDeFocos(ilha);
     expect(focos.length).toBeLessThanOrEqual(LUZ_MAX);
     expect(focos.length).toBeGreaterThan(30);
+    /* no passo de sempre nao caberia (por isso o passo cresce so nesta ilha), e os focos ainda cobrem cada caminho de ponta a ponta */
+    let noPasso = 0;
+    for (const c of ilha.caminhos) for (let k = 1; k < c.length; k++)
+      noPasso += Math.max(1, Math.round(Math.hypot(c[k][0] - c[k - 1][0], c[k][1] - c[k - 1][1]) / LUZ_HIERARQUIA.passo)) + 1;
+    const dosCaminhos = focos.filter(x => x[2] === LUZ_HIERARQUIA.raioCaminho);
+    expect(noPasso).toBeGreaterThan(dosCaminhos.length);
+    for (const c of ilha.caminhos) for (const [x, z] of [c[0], c[c.length - 1]])
+      expect(dosCaminhos.some(q => q[0] === x && q[1] === z), `ponta do caminho em ${x}, ${z}`).toBe(true);
     /* na ilha de hoje os focos dos caminhos seguem no passo de sempre */
     const hoje = ilhaDe(CMU_MVP_AGUA), f = listaDeFocos(hoje);
     let n = 0;

@@ -330,3 +330,10 @@ o carro e a lata, a ponte do meio com o rio, e a praia do sul, em 1440 × 800; a
 **O que não foi verificado:** o cais não apareceu em nenhuma captura (a câmera olha para o norte e ele fica atrás dela); a barraca, a
 geladeira e o trilho não foram vistos; o custo num celular de verdade (a grade tem 11 840 células, contra 3 680 hoje); as nuvens
 em anel e o portal do céu foram feitos para a ilha de hoje e não foram revistos para o tamanho novo.
+
+**A revisão separada da IG3** (um agente de leitura, sobre os commits `93db73eb` e `f30e7a78`) não achou defeito que mude as ilhas de
+hoje, o save ou o replay. Três riscos, corrigidos: nada ligava os caminhos do gerador do mapa aos da planta da vista (o gerador agora
+grava o `planta_livre.json`, e o teste confere a planta contra ele); o entorno dos marcos, os lugares e os postes aceitavam uma célula
+fechada como chão (agora recusam; só o próprio marco fica em cima do bloco dele); e a luz deixava de falhar alto nas ilhas antigas (o
+espaçamento agora só cresce na ilha grande). Fica registrado, sem correção: treze árvores ficam na areia da praia, e a geladeira tem
+uma árvore a 2 células. A tela não foi vista de novo depois dessas correções.

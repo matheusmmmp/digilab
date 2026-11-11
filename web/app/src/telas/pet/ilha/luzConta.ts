@@ -2,7 +2,7 @@
    a proposta (a escolhida, ou a de `?luz=`), quais materiais recebem o termo e os focos da planta A (docs/pranchas/ux-ilha-luz/, LZ-1 a
    LZ-5 aprovadas em 2026-11-09). Os numeros sao PROPOSTO, SEM FONTE. */
 import * as THREE from "three";
-import { LUZ_HIERARQUIA } from "./constantes.ts";
+import { LUZ_HIERARQUIA, PLANTA_ILHA_GRANDE } from "./constantes.ts";
 import type { Ilha } from "./grade.ts";
 import { LUGAR_ABERTO, type NomeLugar } from "../lugaresIlha.ts";
 
@@ -28,9 +28,10 @@ export function listaDeFocos(ilha: Ilha, aberto: Record<NomeLugar, boolean> = LU
   f.push([L.ninho[0] + 0.5, L.ninho[1] + 0.5, R.lar], [(L.ninho[0] + L.comedouro[0]) / 2 + 0.5, (L.ninho[1] + L.comedouro[1]) / 2 + 0.5, R.lar]);
   f.push([ilha.planta.praca.x, ilha.planta.praca.z, R.praca]);
   for (const l of ilha.lugares) if (aberto[l.nome as NomeLugar]) f.push([l.x, l.z, R[l.nome as keyof typeof R] ?? R.portao]);
-  /* os focos dos caminhos: um a cada `passo` celulas. Na ilha grande os caminhos sao mais compridos e passariam do maximo do shader
-     (LUZ_MAX): o passo cresce de 10 em 10 % ate caber. Nas ilhas em que ja cabe, e o passo de sempre, e nada muda */
-  const fixos = f.length;
+  /* os focos dos caminhos: um a cada `passo` celulas. Na ilha grande (a planta dela) os caminhos sao mais compridos e passariam do
+     maximo do shader (LUZ_MAX): so nela o passo cresce de 10 em 10 % ate caber (os dois numeros: PROPOSTO, SEM FONTE). Nas outras e o
+     passo de sempre, e passar do maximo continua falhando alto */
+  const fixos = f.length, cresce = ilha.planta === PLANTA_ILHA_GRANDE;
   for (let passo = LUZ_HIERARQUIA.passo; ; passo *= 1.1) {
     f.length = fixos;
     for (const c of ilha.caminhos) for (let k = 1; k < c.length; k++) {
@@ -38,6 +39,6 @@ export function listaDeFocos(ilha: Ilha, aberto: Record<NomeLugar, boolean> = LU
       for (let t = 0; t <= n; t++) f.push([ax + ((bx - ax) * t) / n, az + ((bz - az) * t) / n, LUZ_HIERARQUIA.raioCaminho]);
     }
     if (f.length <= LUZ_MAX) return f;
-    if (passo > LUZ_HIERARQUIA.passo * 8) throw new Error(`luz: ${f.length} focos, o maximo e ${LUZ_MAX}`);
+    if (!cresce || passo > LUZ_HIERARQUIA.passo * 8) throw new Error(`luz: ${f.length} focos, o maximo e ${LUZ_MAX}`);
   }
 }
