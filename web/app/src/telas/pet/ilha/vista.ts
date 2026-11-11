@@ -46,7 +46,6 @@ import { CONSULTA_SOLTA, TRANSICAO_MS, VISTA, despublicarVista, focoDoQuadro, li
 import { CAMERA_DEV, ligarCameraDev } from "../cameraDev.ts";
 import { ABERTURA_PROPOSTA, inclinar, ligarAberturaDev, quadroDaAbertura, quadroDaSaida, tempoDaAbertura, zerarRelogioAbertura, type Ponto, type Proposta, type QuadroAbertura } from "./aberturaConta.ts";
 import { PROPOSTA_ESCOLHIDA, aberturaPendente, marcarAberturaTocada } from "../../../abertura.ts";
-import { PLANTA_ILHA } from "./constantes.ts";
 import { pixelsDoMapa } from "./minimapa.ts";
 import { PRESETS, Pos, SEM_CONTORNO } from "./pos.ts";
 import { SACO_NA_TELA, VIAGEM, ZOOM_LUGAR_MOVEL, lugarAberto, progressoViagem, type Lugar } from "../../../viagem.ts";
@@ -201,10 +200,11 @@ class VistaIlha {
       },
     };
     /* o ninho, o comedouro, a racao, a fruta e a bola (itens.ts) e o pet em papel */
-    this.itens = new Itens(mu);
-    /* o portao e a barraca onde a grade da ilha os poe (grade.ts, porLugares; a planta A), o saco perto da praca (lugares.ts) */
+    this.itens = new Itens(mu, this.ilha.planta.lugares.saco);
+    /* o portao e a barraca onde a grade da ilha os poe (grade.ts, porLugares), o saco no ponto da planta que vale nesta ilha (lugares.ts): o da
+       planta A cai na agua da ilha grande */
     const base: BaseDoMundo = { ninho: this.itens.ninhoEm, comedouro: [mu.comedouro[0] / mu.cm.sub, mu.comedouro[1] / mu.cm.sub], area: this.ilha.area,
-      grade: gradeDosLugares(this.ilha) };
+      grade: gradeDosLugares(this.ilha), saco: this.ilha.planta.lugares.saco };
     this.pontos = Object.fromEntries(ORDEM_LUGARES.map(id => [id, [...pontoLugarDe(id, base)]])) as Record<Lugar, [number, number]>;
     this.chaoLugar = Object.fromEntries(ORDEM_LUGARES.map(id => [id, chaoDoLugar(id, base)])) as Record<Lugar, number>;
     /* o portao e a barraca: marcadores provisorios no ponto de cada um, ate o modelo 3D chegar (carregarObjetos); nos estilos sem lugares, ficam */
@@ -497,8 +497,8 @@ class VistaIlha {
   /** onde fica cada ponto olhado pela abertura agora (celulas) */
   private pontosDaAbertura(): Record<Ponto, [number, number]> {
     return {
-      pet: this.petCel, ninho: this.itens.ninhoEm, praca: [PLANTA_ILHA.praca.x, PLANTA_ILHA.praca.z], portao: this.pontos.portao, barraca: this.pontos.barraca,
-      meio: [(this.petCel[0] + PLANTA_ILHA.praca.x) / 2, (this.petCel[1] + PLANTA_ILHA.praca.z) / 2],
+      pet: this.petCel, ninho: this.itens.ninhoEm, praca: [this.ilha.planta.praca.x, this.ilha.planta.praca.z], portao: this.pontos.portao, barraca: this.pontos.barraca,
+      meio: [(this.petCel[0] + this.ilha.planta.praca.x) / 2, (this.petCel[1] + this.ilha.planta.praca.z) / 2],
     };
   }
   /** um toque, uma tecla ou a roda: a abertura que toca volta ao pet (AB-3); a do ?abertura= nao se interrompe */
