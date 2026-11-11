@@ -59,6 +59,10 @@ select{border:2px solid var(--dl-border);background:var(--dl-surface);color:var(
 .dl-balao--sombria{background:var(--dl-dark-bg);color:var(--dl-dark-ink);border-color:var(--dl-dark);box-shadow:0 3px 0 #140820;font-weight:700}
 .dl-balao-tag{font-size:.6875rem;font-weight:800;color:#3A5288;border:1px solid #9FC2EF;border-radius:4px;padding:0 5px;margin-left:6px}
 .fala-marca{font-size:.75rem;font-weight:900;border:1px solid var(--dl-border);border-radius:4px;padding:0 4px}
+/* a acao do Rookie ("[sem pausa]") numa etiqueta, sem os colchetes; o icone do fator com a altura do emote (o saco do treino e grande) */
+.fala-acao{font-weight:900}
+.fala-ic{display:inline-flex;vertical-align:middle}
+.fala-ic img{width:auto;height:24px}
 
 /* a tela */
 .boas-vindas{display:grid;gap:4px}
