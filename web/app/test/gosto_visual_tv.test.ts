@@ -1,8 +1,9 @@
 // O cantinho da TV na ilha (src/telas/pet/ilha/cantinhoTv.ts e cantinhoTvConta.ts; o protótipo P0 do gosto visual,
-// docs/futuro/gosto_visual_pet.md, seção 14). Sem DOM (vitest em node). Cobre: com a chave desligada, o cantinho não entra na vista (a
-// vista só o monta atrás da chave) nem nas listas de lugares e enfeites, e a ilha fica a de hoje; com ela ligada, o chão do cantinho é
-// terra plana da área nas duas ilhas (com e sem água), só a decoração baixa sai, e o pet chega à almofada por terra; a pose de cada reação;
-// a ida e a volta do pet desenhado; o estado da TV que o cartão escreve e a cena lê, fora do motor e do save.
+// docs/futuro/gosto_visual_pet.md, seção 14), em volta da TV de tubo do #814 (o enfeite "tv"). Sem DOM (vitest em node). Cobre: com a chave
+// desligada, o cantinho não entra na vista (a vista só o monta atrás da chave) nem nas listas de lugares e enfeites, e a ilha fica a do #814
+// (a TV como o marco dela, uma só); com ela ligada, o cantinho fica na frente da TV, em terra plana da área nas duas ilhas (com e sem água),
+// sem criar outra TV, só a decoração baixa sai, e o pet chega à almofada por terra; a pose de cada reação; a ida e a volta do pet desenhado;
+// o estado da TV que o cartão escreve e a cena lê, fora do motor e do save.
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, test } from "vitest";
@@ -12,7 +13,7 @@ import { LUGARES, ORDEM_LUGARES } from "../src/telas/pet/ilha/lugares.ts";
 import { ENFEITES_MODELOS, LUGARES_MODELOS } from "../src/telas/pet/ilha/modelos.ts";
 import { comprimento, rotaEmTerra } from "../src/telas/pet/ilha/rotaConta.ts";
 import {
-  ALTURA_TV, CANTINHO_TV, INCLINA_CURIOSO, IdaAoCantinho, MODELO_TV, SENTADO_TEXELS, cantinhoNaVista, poseNoCantinho, pontosDoCantinho, prepararChao,
+  CANTINHO_TV, INCLINA_CURIOSO, IdaAoCantinho, SENTADO_TEXELS, TELA_DO_MODELO, cantinhoNaVista, poseNoCantinho, pontosDoCantinho, prepararChao, tvDaIlha,
 } from "../src/telas/pet/ilha/cantinhoTvConta.ts";
 import { BALAO, TV, desligarTv, publicarTv } from "../src/gostoVisual/estadoTv.ts";
 
@@ -33,55 +34,58 @@ describe("a chave desligada: a ilha de hoje", () => {
     expect(v).toMatch(/if \(this\.cantinho\) \{\s*this\.cenaIlha\.cena\.add\(this\.cantinho\.grupo\)/);
     /* fora daí, a vista só lê o cantinho por `this.cantinho?.` ou atrás de `this.cantinho ?` / `&& this.cantinho` */
     for (const linha of v.split("\n").filter(l => /cantinho\./.test(l) && !/this\.cantinho\?\./.test(l)))
-      expect(linha, linha).toMatch(/this\.cantinho \?|&& this\.cantinho|if \(this\.cantinho\)|this\.cantinho\.(carregarModelo|grupo)/);
+      expect(linha, linha).toMatch(/this\.cantinho \?|&& this\.cantinho|if \(this\.cantinho\)|this\.cantinho\.(carregarTela|grupo|quadro)/);
   });
-  test("o cantinho não entra nas listas de lugares nem de enfeites, e a ilha (as células, os objetos, os escondidos) sai a mesma", () => {
+  test("o cantinho não entra nas listas de lugares nem de enfeites, e a ilha (as células, os objetos, a TV do #814, os escondidos) sai a mesma", () => {
     expect(ORDEM_LUGARES).toEqual(["saco", "portao", "barraca"]);
     expect(Object.keys(LUGARES)).not.toContain("tv");
     expect(Object.keys(LUGARES_MODELOS)).not.toContain("tv");
-    expect(Object.keys(ENFEITES_MODELOS)).not.toContain("tv");
+    /* a TV é o enfeite do #814 (o mesmo modelo), uma só em cada ilha; nada do cantinho vira enfeite */
+    expect(ENFEITES_MODELOS.tv.arquivos).toEqual(["tv/tv.gltf"]);
     for (const cm of [CMU_MVP, CMU_MVP_AGUA]) {
       const a = ilhaDe(cm), b = ilhaDe(cm);
       expect(tudo(a)).toBe(tudo(b));
-      expect(a.enfeites.map(e => e.nome)).not.toContain("tv");
+      expect(a.enfeites.filter(e => e.nome === "tv")).toHaveLength(1);
+      expect(a.enfeites.map(e => e.nome).sort()).toEqual(Object.keys(ENFEITES_MODELOS).filter(n => n !== "poste").concat(Array(a.enfeites.filter(e => e.nome === "poste").length).fill("poste")).sort());
       expect(a.lugares.map(l => l.nome).sort()).toEqual(["barraca", "cais", "portao"]);
     }
+    /* o cantinho não desenha TV própria: nenhuma geometria de caixa nem glTF de TV novo, só o plano da tela sobre a do #814 */
+    const c = fonte("src/telas/pet/ilha/cantinhoTv.ts");
+    expect(c).not.toMatch(/RoundedBoxGeometry|BoxGeometry/);
+    expect(c).toMatch(/ENFEITES_MODELOS\.tv/);
   });
 });
 
 describe("a chave ligada: o lugar", () => {
-  test("o chão do cantinho é terra plana da área nas duas ilhas; só a decoração baixa sob o tapete sai da vista", () => {
-    for (const cm of [CMU_MVP, CMU_MVP_AGUA]) {
-      const ilha = ilhaDe(cm), antes = new Set(ilha.escondidos);
-      prepararChao(ilha);
-      const novos = [...ilha.escondidos].filter(i => !antes.has(i));
-      const [cx, cz] = CANTINHO_TV.centro;
-      for (const i of novos) {
-        const o = ilha.objetos[i]!;
-        expect(o.doMotor).toBeNull();
-        expect(Math.hypot(o.x - cx, o.z - cz)).toBeLessThan(CANTINHO_TV.clareira);
-      }
-      /* as células, os lugares e os enfeites não mudam */
-      const outra = ilhaDe(cm);
-      expect(JSON.stringify([ilha.celulas, ilha.objetos, ilha.enfeites, ilha.lugares])).toBe(JSON.stringify([outra.celulas, outra.objetos, outra.enfeites, outra.lugares]));
+  for (const cm of [CMU_MVP, CMU_MVP_AGUA]) test(`na frente da TV do #814, em terra plana da área, e só a decoração baixa sob o tapete sai da vista (${cm.layout.nome})`, () => {
+    const ilha = ilhaDe(cm), antes = new Set(ilha.escondidos), t = tvDaIlha(ilha), p = pontosDoCantinho(ilha);
+    expect([p.tv, p.giro]).toEqual([[t.x, t.z], t.giro]);
+    /* a almofada fica na frente da tela (+z do glTF girado), a pelo menos a distância pedida */
+    const f = [Math.sin(t.giro), Math.cos(t.giro)], frente = (p.assento[0] - t.x) * f[0]! + (p.assento[1] - t.z) * f[1]!;
+    expect(frente).toBeGreaterThanOrEqual(CANTINHO_TV.assento.frente);
+    for (const q of [p.assento, p.dono, p.tapete]) {
+      const c = ilha.cel(Math.floor(q[0]), Math.floor(q[1]))!;
+      expect([c.tipo !== "agua", c.nivel, ilha.naArea(q[0], q[1])]).toEqual([true, 0, true]);
     }
-  });
-  test("o cantinho fica longe do ninho, do saco, dos lugares e dos enfeites", () => {
-    const ilha = ilhaDe(CMU_MVP_AGUA), [cx, cz] = CANTINHO_TV.centro, R = CANTINHO_TV.clareira;
-    for (const e of ilha.enfeites) expect(Math.hypot(e.x - cx, e.z - cz), e.nome).toBeGreaterThan(R + 1);
-    for (const l of ilha.lugares) expect(Math.hypot(l.x - cx, l.z - cz), l.nome).toBeGreaterThan(R + 1);
-    expect(Math.hypot(22 - cx, 9 - cz)).toBeGreaterThan(R + 1);                 // o saco (PLANTA_ILHA.lugares.saco)
+    prepararChao(ilha, p);
+    for (const i of [...ilha.escondidos].filter(i => !antes.has(i))) expect(ilha.objetos[i]!.doMotor).toBeNull();
+    /* as células, os objetos, os lugares e os enfeites (a TV inclusive) não mudam */
+    const outra = ilhaDe(cm);
+    expect(JSON.stringify([ilha.celulas, ilha.objetos, ilha.enfeites, ilha.lugares])).toBe(JSON.stringify([outra.celulas, outra.objetos, outra.enfeites, outra.lugares]));
   });
   test("a almofada fica em terra, e o pet chega a ela por terra do ninho na ilha com água", () => {
-    const { assento, tv } = pontosDoCantinho(), secas = celulasSecas(CMU_MVP_AGUA)!, W = CMU_MVP_AGUA.celulas_x;
-    for (const p of [assento, tv]) expect(secas[Math.floor(p[1]) * W + Math.floor(p[0])]).toBe(true);
+    const ilha = ilhaDe(CMU_MVP_AGUA), { assento } = pontosDoCantinho(ilha), secas = celulasSecas(CMU_MVP_AGUA)!, W = CMU_MVP_AGUA.celulas_x;
+    expect(secas[Math.floor(assento[1]) * W + Math.floor(assento[0])]).toBe(true);
     const rota = rotaEmTerra(CMU_MVP_AGUA, [4.5, 15.5], assento);
     expect(rota[rota.length - 1]).toEqual(assento);
-    expect(comprimento(rota)).toBeLessThan(20);
+    expect(comprimento(rota)).toBeLessThan(80);
   });
-  test("o modelo da TV do Matheus: o caminho e a altura esperados", () => {
-    expect(MODELO_TV).toBe("enfeites/tv/tv.gltf");
-    expect(ALTURA_TV).toBeGreaterThan(1);
+  test("a tela no modelo: dentro da caixa do glTF da TV, na frente", () => {
+    const g = JSON.parse(fonte("public/enfeites/tv/tv.gltf")) as { accessors: { min?: number[]; max?: number[] }[] };
+    const cx = g.accessors.find(a => a.min?.length === 3)!, S = TELA_DO_MODELO;
+    expect(S.x - S.rx).toBeGreaterThan(cx.min![0]!); expect(S.x + S.rx).toBeLessThan(cx.max![0]!);
+    expect(S.y - S.ry).toBeGreaterThan(cx.min![1]!); expect(S.y + S.ry).toBeLessThan(cx.max![1]!);
+    expect(S.z).toBeGreaterThan(0); expect(S.z).toBeLessThan(cx.max![2]!);
   });
 });
 
@@ -100,7 +104,7 @@ describe("a chave ligada: o pet", () => {
     expect([0, 100, 200, 300].map(t => poseNoCantinho("adorando", t, true).altura)).toEqual([SENTADO_TEXELS, SENTADO_TEXELS, SENTADO_TEXELS, SENTADO_TEXELS]);
   });
   test("a ida: com a TV ligada o pet anda até a almofada e senta; desligada, volta para onde o motor diz e o cantinho solta", () => {
-    const { assento } = pontosDoCantinho(), ida = new IdaAoCantinho(assento, () => null), motor: [number, number] = [4.5, 15.5];
+    const { assento } = pontosDoCantinho(ilhaDe(CMU_MVP_AGUA)), ida = new IdaAoCantinho(assento, () => null), motor: [number, number] = [4.5, 15.5];
     expect(ida.passo(0, motor, motor, false, false)).toEqual({ cel: motor, andando: false, sentado: false, ativo: false });
     const meio = ida.passo(0, motor, motor, true, false);
     expect(meio.ativo && meio.andando && !meio.sentado).toBe(true);

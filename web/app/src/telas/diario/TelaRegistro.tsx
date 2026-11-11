@@ -11,6 +11,7 @@ import { textoSave } from "../../save.ts";
 import { diaDe, hhmm } from "../pet/TelaPet.tsx";
 import { Folha } from "../../componentes/Folha.tsx";
 import { ComoFunciona } from "../../componentes/Dica.tsx";
+import { Codice } from "../../componentes/Codice.tsx";
 
 type Filtro = "todos" | "voce" | "pet" | "luta" | "recusa" | "treino";
 /* tipo de cada linha do historico: [filtro, etiqueta, cor da etiqueta] (prancha DiarioRegistro) */
@@ -65,6 +66,8 @@ export function TelaRegistro({ irPet }: { irPet: () => void }) {
           <button type="button" className="rg2-bt" aria-label="Copiar registro" onClick={copiar}><Copy aria-hidden="true" />Copiar</button>
         </span>
       </section>
+      {/* MITOLOGIA, E1: o Codice das lendas (so com a chave `mitologia`) */}
+      <Codice />
       {/* a regiao viva fica sempre no DOM (so assim o leitor anuncia a primeira mensagem) */}
       <p className={msg ? `reg-msg${msg.erro ? " erro" : ""}` : "sr-so"} aria-live="polite">{msg && <><i aria-hidden="true">{msg.erro ? "!" : "✓"}</i>{msg.txt}</>}</p>
       <div className="rg2-filtros" role="group" aria-label="Filtrar o registro">

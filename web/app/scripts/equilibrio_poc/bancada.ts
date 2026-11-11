@@ -7,7 +7,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import {
   ACOES_DONO_JOGO_V11, ARENA_POR_ID, CAMPANHA_V6, CAT, CD, CMD, CTR, IDS_CENA, LIGA, LUGARES_V6, LUTAS_MAX_INSTALACAO, MAPA_FABRICA, MAPA_SALAO,
-  MAPA_TORRE, Motor, NPC, STATS, TPD, alugueisFabrica, arenaDaLuta, caraterCanonico, caraterDoRivalSalao, chaveSprite, criarDono, criarRng,
+  MAPA_TORRE, Motor, NPC, STATS, TPD, VERSAO_V22, alugueisFabrica, arenaDaLuta, caraterCanonico, caraterDoRivalSalao, chaveSprite, criarDono, criarRng,
   LIMITE_POC_MS, condicaoDe, configLutaPoc, criarLutaPoc, formaLiga, formaRivalFabrica, passoPoc, sorteiosPoc, formaRivalInstalacao, formaRivalSalao, hashSemente, mapaDoLugar, rivaisArena, sementeDaSerie, sementeLutaFabrica,
   type Exercicio, type Forma, type FormaAdultaNormal, type IdCena, type Stat, type StatsPoc, type TiroPoc, type EsquivaPoc, type VisaoDono,
 } from "../../motor/index.ts";
@@ -120,7 +120,8 @@ const EXERCICIOS = Object.keys(CTR.exercicios) as Exercicio[];
     com o treino, os chips e a condicao do Motor, e o rival da Arena pelo rivalCanonico(); o jogo nao muda. O v21 fica com o Motor de sempre,
     e o teste confere que o remendo com os numeros do v21 da a mesma vida */
 export function motorDoCandidato(c: Candidato, semente: number, remendar = c.nome !== CANDIDATO_V21.nome): Motor {
-  const m = new Motor(semente);
+  /* a bancada mediu sobre a v22 (a luta de sempre); a v23 e o candidato lp5_3 no jogo (LP5-5), e o teste confere que dao o mesmo */
+  const m = new Motor(semente, VERSAO_V22);
   if (!remendar) return m;
   const x = m as unknown as Record<string, unknown>, rivalDoMotor = (x._rivalPoc as (...a: unknown[]) => { forma: string; stats: StatsPoc } | null).bind(m);
   x.statsLutaPoc = () => lutador(c, m.forma, m.carater(), m.pontosDeLuta(), condicaoDe(m.e.saude));
@@ -255,10 +256,10 @@ function torneios(c: Candidato, bases: number[]) {
   const pets = petsDo(bases, "mega");
   /* G1, a Liga: os 6 Megas dos lideres, sem cura, cada um no mapa do lugar do lider */
   const liga = { tentativas: 0, titulos: 0, por_forma: {} as Record<string, { n: number; v: number }>, vitorias: {} as Record<string, number> };
-  const megasLiga = LIGA.map((x, k) => { const f = formaLiga(k); return { lado: { forma: chaveSprite(f), stats: rivalDaForma(c, f, caraterCanonico(x.adulta), c.treinoRival.liga) }, mapa: mapaDoLugar(LUGARES_V6[ARENA_POR_ID[x.arena].lugar]) }; });
+  const megasLiga = LIGA.map((x, k) => { const f = formaLiga(k); return { lado: { forma: chaveSprite(f), stats: rivalDaForma(c, f, caraterCanonico(x.adulta), c.treinoRival.liga, c.fatorRival.liga) }, mapa: mapaDoLugar(LUGARES_V6[ARENA_POR_ID[x.arena].lugar]) }; });
   /* G2, a Torre de Batalha: Megas sorteados pela semente da tentativa, no Ringue, sem cura, ate 100 */
   const torre = { tentativas: 0, no_teto: 0, recordes: [] as number[], vitorias: {} as Record<string, number> };
-  const megaTorre = (s: number, j: number) => { const f = formaRivalInstalacao(s, j); return { lado: { forma: chaveSprite(f), stats: rivalDaForma(c, f, caraterCanonico(f.adulta as FormaAdultaNormal), c.treinoRival.torre) }, mapa: MAPA_TORRE }; };
+  const megaTorre = (s: number, j: number) => { const f = formaRivalInstalacao(s, j); return { lado: { forma: chaveSprite(f), stats: rivalDaForma(c, f, caraterCanonico(f.adulta as FormaAdultaNormal), c.treinoRival.torre, c.fatorRival.torre) }, mapa: MAPA_TORRE }; };
   for (const p of pets) {
     const lado = ladoPet(c, p, TIPICO.mega);
     let recorde = 0;
@@ -275,12 +276,13 @@ function torneios(c: Candidato, bases: number[]) {
   }
   /* G3, a Fabrica: o alugado escolhido (k % 3), sem troca; a vida passa dentro da serie de 3 */
   const fab = { tentativas: 0, series: {} as Record<string, number> };
-  const megaFab = (f: Forma): Lado => ({ forma: chaveSprite(f), stats: rivalDaForma(c, f, caraterCanonico(f.adulta as FormaAdultaNormal), c.treinoRival.fabrica) });
+  /* o alugado e os rivais com o treino da Fabrica; so os rivais levam o fator (D-LP5-20) */
+  const megaFab = (f: Forma, fator: number): Lado => ({ forma: chaveSprite(f), stats: rivalDaForma(c, f, caraterCanonico(f.adulta as FormaAdultaNormal), c.treinoRival.fabrica, fator) });
   for (const base of bases) for (let k = 0; k < TAM.pets * TAM.tentativas; k++) {
-    const s = sementeLuta(base, 10_000_000 + k), alugado = megaFab(alugueisFabrica(s)[k % 3]);
+    const s = sementeLuta(base, 10_000_000 + k), alugado = megaFab(alugueisFabrica(s)[k % 3], 1);
     let vida0: number | null = null, v = 0;
     for (let j = 0; j < 3 * TAM.seriesFabrica; j++) {
-      const r = luta("mega", MAPA_FABRICA, sementeLutaFabrica(s, j), { ...alugado, ...(vida0 !== null && j % 3 ? { vida0 } : {}) }, megaFab(formaRivalFabrica(s, j)));
+      const r = luta("mega", MAPA_FABRICA, sementeLutaFabrica(s, j), { ...alugado, ...(vida0 !== null && j % 3 ? { vida0 } : {}) }, megaFab(formaRivalFabrica(s, j), c.fatorRival.fabrica));
       if (r.vencedor !== "a") break;
       v++; vida0 = r.vidaA;
     }
@@ -292,7 +294,7 @@ function torneios(c: Candidato, bases: number[]) {
     const lado = ladoPet(c, p, TIPICO[est]);
     for (let q = 0; q < TAM.tentativas; q++) {
       const s = sementeLuta(p.base, 11_000_000 + p.i * TAM.tentativas + q), f = formaRivalSalao(s, est);
-      contar(salao[est] ??= novaConta(), luta(est, MAPA_SALAO, s, lado, { forma: chaveSprite(f), stats: rivalDaForma(c, f, caraterDoRivalSalao(f), c.treinoRival.salao) }));
+      contar(salao[est] ??= novaConta(), luta(est, MAPA_SALAO, s, lado, { forma: chaveSprite(f), stats: rivalDaForma(c, f, caraterDoRivalSalao(f), c.treinoRival.salao, c.fatorRival.salao) }));
     }
   }
   return { liga, torre, fabrica: fab, salao };

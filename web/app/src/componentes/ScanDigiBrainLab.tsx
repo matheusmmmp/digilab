@@ -14,7 +14,8 @@ import { Brain, Info, List, X } from "lucide-react";
 import { ORDEM_TERMOS, type LeituraLab, type TermoLab } from "../../motor/index.ts";
 import { useJogo } from "../jogo.ts";
 import "../estilo/scan_digibrain.css";
-import { ConteudoDigiBrainLab, NOME_TERMO, rotuloUnidade } from "./DigiBrainLab.tsx";
+import { ConteudoDigiBrainLab, NOME_TERMO, rotuloUnidade, textoResultado } from "./DigiBrainLab.tsx";
+import { resultadoAnterior } from "../../motor/index.ts";
 import { abrirModal } from "./modal.ts";
 import {
   CEREBELO, DIVISAS, GIRO_CICLO_S, GIRO_GRAUS, PULSO_MS, SILHUETA, SeloForma, VARREDURA_MS, VB, Y_REGIOES, useDecisaoNova, useEscalaDoMapa,
@@ -127,7 +128,7 @@ function DicaLab({ aberta }: { aberta: boolean }) {
 export function ScanDigiBrainLab({ fechar, movel, replay = false, chamado }: { fechar: () => void; movel: boolean; replay?: boolean; chamado?: ReactNode }) {
   const { motor: m } = useJogo();
   if (!m.lab) throw new Error("o scan do modular so abre no pet do laboratorio (v16)");
-  const l = m.leituraLab();
+  const l = m.leituraLab(), res = resultadoAnterior(m.lab);
   const ref = useRef<HTMLDialogElement>(null), saindo = useRef(false);
   const giro = useRef<HTMLDivElement>(null), [verTexto, setVerTexto] = useState(false), [verDica, setVerDica] = useState(false);
   useEscalaDoMapa(giro, l !== null && !verTexto);
@@ -166,6 +167,8 @@ export function ScanDigiBrainLab({ fechar, movel, replay = false, chamado }: { f
               <div className="scan-giro" ref={giro}><MapaLab l={l} movel={movel} movendo={mov !== null} /></div>
             </>}
         </div>
+        {/* o resultado da decisao anterior numa linha (CADEIA, etapa 3): o que ele fez e o que mudou nele */}
+        {res && !verTexto && <p className="scan-resultado" data-testid="resultado-anterior" data-k={res.k}>{textoResultado(res)}</p>}
       </div>
       {chamado}
     </dialog>

@@ -167,3 +167,6 @@
 /* o mapa em texto do modular (ScanDigiBrainLab): os tokens escuros dos paineis (painel-hx.css) sem o fundo, a margem e a letra deles, que sao da
    folha do painel; aqui fica o vidro do scan e a letra do mapa em texto do A */
 .scan.scan--lab .scan-texto{ background:none; padding:10px 12px; font-size:14px }
+
+/* o resultado da decisao anterior sob o mapa do modular (CADEIA, etapa 3): uma linha curta, no texto secundario da pele */
+.scan.scan--lab .scan-resultado{ margin:6px 4px 0; font:500 13px/1.3 var(--hx-f); color:var(--hx-texto-2) }

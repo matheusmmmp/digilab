@@ -1,39 +1,33 @@
 /* O cantinho da TV na ilha (pedido do Matheus, 2026-11-11: "estou gerando uma tv 3d para o jogo, entao gere uma localidade onde o pet
    vai ficar assistindo a tv conosco"; o prototipo P0 do gosto visual, docs/futuro/gosto_visual_pet.md, secao 14). So vista e so com a
-   chave `?gosto_visual=1` (gostoVisual/chave.ts): desligada, a vista nem monta o cantinho e a ilha fica a de hoje. Fora do motor, do log
-   e do save: a TV le o estado solto que o cartao do P0 escreve (gostoVisual/estadoTv.ts), e o pet que anda ate o cantinho e senta e o
+   chave `?gosto_visual=1` (gostoVisual/chave.ts): desligada, a vista nem monta o cantinho e a ilha fica a do #814. Fora do motor, do log
+   e do save: a tela le o estado solto que o cartao do P0 escreve (gostoVisual/estadoTv.ts), e o pet que anda ate o cantinho e senta e o
    pet DESENHADO (como na viagem aos lugares, vista.ts): a posicao do motor nao muda.
-   - o lugar: um tapete oval, duas almofadas (a do pet e a do dono, vazia) e a TV sobre um movel baixo, em terra, num ponto livre da area
-     andavel a sudeste do comedouro (CANTINHO_TV). A decoracao baixa sob o tapete some da vista (Ilha.escondidos, como as clareiras dos
-     lugares); um ponto em agua, fora da area, fora do nivel 0 ou com um objeto do motor por perto falha alto;
-   - o desenho: geometria three simples no padrao cartoon de 2026-11-10 (formas lisas, cores chapadas, o toon de tres tons de cena.ts),
-     como os marcadores dos lugares (marcadoresLugar.ts) e a ponte (ponte.ts);
-   - a tela: uma textura dinamica no plano da tela. Com a captura do P0, o video da tela compartilhada (o mesmo elemento que captura.ts ja
-     usa para ler o quadro; nada e gravado); com a TV do jogo, um desenho dos programas sinteticos (tvDoJogo.ts) feito do vetor do segundo
-     (a cor, o brilho, o movimento, o detalhe e o som mudam a imagem); desligada, a tela escura;
+   - a TV e a de tubo do #814 (MUNDO_ENFEITES: o enfeite "tv", public/enfeites/tv/tv.gltf, posto pela grade como um marco perto da barraca,
+     e desenhado por enfeites.ts): o cantinho nao cria outra TV nem mexe nela. Em volta dela, na frente da tela, um tapete oval e duas
+     almofadas (a do pet e a do dono, vazia), em terra plana da area (cantinhoTvConta.ts, pontosDoCantinho). A decoracao baixa sob o
+     tapete some da vista;
+   - o desenho do tapete e das almofadas: geometria three simples no padrao cartoon de 2026-11-10 (formas lisas, cores chapadas, o toon de
+     tres tons de cena.ts), como os marcadores dos lugares (marcadoresLugar.ts) e a ponte (ponte.ts);
+   - a tela: com a TV do P0 ligada, uma textura dinamica num plano de cantos arredondados um fio a frente da peca "tela" do modelo (a medida
+     de docs/objetos3d/cartoon/tv.py, TELA_DO_MODELO; o plano passa pela mesma normalizacao do carregarVariante e pelo mesmo ponto e giro
+     do enfeite). Com a captura, o video da tela compartilhada (o mesmo elemento que captura.ts ja usa para ler o quadro; nada e gravado);
+     com a TV do jogo, um desenho dos programas sinteticos (tvDoJogo.ts) feito do vetor do segundo (a cor, o brilho, o movimento, o detalhe
+     e o som mudam a imagem). Desligada, o plano some e fica o vidro pintado do modelo, como no #814. Se o modelo nao carrega aqui, o erro
+     vai ao console e o cantinho fica sem a tela (a TV em si e a do enfeites.ts, que falha alto do jeito dela);
    - o pet: com a TV ligada ele vai ate a almofada (a rota em terra na ilha com agua, rotaConta.ts), senta (sobe a altura da almofada) e
      olha para a TV; as reacoes do P0 aparecem ali: inclina no "curioso", pula de leve no "adorando", vira para o outro lado no "nao curti"
      e no "enjoei", e o balao da reacao fica sobre ele. Desligada, ele volta para onde o motor diz.
-
-   O MODELO DA TV DO MATHEUS (a troca do marcador): o arquivo esperado e `web/app/public/enfeites/tv/tv.gltf` (MODELO_TV, com o .bin e as
-   texturas ao lado, como os outros enfeites). O carregador e o carregarVariante dos kits (cena.ts): ele recentra o modelo em x e z, poe a
-   base em y = 0 e normaliza a ALTURA para ALTURA_TV (2,2 celulas; o pet tem cerca de 1, e os objetos da ilha sao grandes perto dele), entao a escala e a origem do arquivo nao importam,
-   so a proporcao. A FRENTE da TV (a tela) olha para +z do glTF (como os outros modelos da ilha); o cantinho gira a TV para o pet e a camera.
-   O modelo e SO a TV: ela fica em cima do movel do cantinho (a ALTURA_MOVEL). A TELA: uma malha com "tela" ou "screen" no nome, com os UVs
-   de 0 a 1 cobrindo a tela, recebe a textura dinamica; sem ela, o cantinho poe um plano na face da frente (62 % da largura e 55 % da
-   altura da caixa, no meio). Sem o arquivo, fica o marcador cartoon, com um aviso no console (console.warn) e `data-tv-modelo="marcador"`
-   na caixa da cena; com ele, `data-tv-modelo="gltf"`. Um arquivo que existe e nao carrega e um erro no console (console.error) e o
-   marcador fica.
-   Os numeros e as contas sem three ficam em cantinhoTvConta.ts. Todos os numeros (o ponto, os tamanhos, as cores, as poses) sao do
-   desenho: PROPOSTO, SEM FONTE. */
+   Os numeros e as contas sem three ficam em cantinhoTvConta.ts. Todos os numeros (os tamanhos, as cores, as poses) sao do desenho:
+   PROPOSTO, SEM FONTE. */
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
-import { GEO_SOMBRA, carregarVariante, curvar, materialSombra, toon } from "./cena.ts";
-import { ALTURA_MOVEL, ALTURA_TV, CANTINHO_TV, IdaAoCantinho, MODELO_TV, MODELO_TV_TABELA, TELA_PASSO_MS, TELA_PX, poseNoCantinho, pontosDoCantinho,
-  prepararChao } from "./cantinhoTvConta.ts";
+import { carregarVariante, curvar, toon } from "./cena.ts";
+import { CANTINHO_TV, IdaAoCantinho, TELA_DO_MODELO, TELA_PASSO_MS, TELA_PX, poseNoCantinho, pontosDoCantinho, prepararChao,
+  type PontosCantinho } from "./cantinhoTvConta.ts";
 import { dobrarY, type Dobra } from "./curva.ts";
 import type { Ilha } from "./grade.ts";
+import { ENFEITES_MODELOS } from "./modelos.ts";
 import type { Ponto } from "./rotaConta.ts";
 import type { Suspenso } from "./papel.ts";
 import { BALAO, TV } from "../../../gostoVisual/estadoTv.ts";
@@ -43,11 +37,8 @@ export { cantinhoNaVista } from "./cantinhoTvConta.ts";
 
 /* ---------- o desenho (three e canvas) ---------- */
 
-/** as cores chapadas do cantinho. PROPOSTO, SEM FONTE */
-const COR = {
-  tapete: "#e9846b", borda: "#f6c77c", movel: "#b97d4b", gaveta: "#8e5a33", corpo: "#f08a4b", moldura: "#2f3640",
-  botao: "#f6d55c", antena: "#9aa3ab", ponta: "#e2574c", almofada: "#f6c945", almofadaDono: "#5cc2b5", balao: "#fffaf0", tinta: "#2f3640",
-} as const;
+/** as cores chapadas do cantinho (o tapete azul, para nao sumir sob a casca laranja da TV). PROPOSTO, SEM FONTE */
+const COR = { tapete: "#6fb3c4", borda: "#f6e2b3", almofada: "#f6c945", almofadaDono: "#e9846b", balao: "#fffaf0", tinta: "#2f3640" } as const;
 
 /** um numero de 0 a 359 do nome do programa (o tom de partida do desenho dele) */
 function tomDoTexto(t: string): number {
@@ -82,13 +73,6 @@ export function pintarPrograma(g: CanvasRenderingContext2D, w: number, h: number
   for (let y = 0; y < h; y += 3) g.fillRect(0, y, w, 1);
 }
 
-/** a tela desligada: o vidro escuro com um reflexo */
-function pintarDesligada(g: CanvasRenderingContext2D, w: number, h: number): void {
-  g.fillStyle = "#1f2b31"; g.fillRect(0, 0, w, h);
-  g.fillStyle = "rgba(255,255,255,0.08)";
-  g.beginPath(); g.moveTo(w * 0.12, 0); g.lineTo(w * 0.4, 0); g.lineTo(w * 0.18, h); g.lineTo(-w * 0.1, h); g.closePath(); g.fill();
-}
-
 function canvas2d(w: number, h: number): { c: HTMLCanvasElement; g: CanvasRenderingContext2D } {
   const c = document.createElement("canvas");
   c.width = w; c.height = h;
@@ -111,19 +95,27 @@ export interface Cantinho {
   ida: IdaAoCantinho;
   /** a TV do P0 esta ligada (a captura ou a TV do jogo; estadoTv.ts) */
   ligada: () => boolean;
-  pontos: ReturnType<typeof pontosDoCantinho>;
+  pontos: PontosCantinho;
   /** a pose do pet sentado (o suspenso do papel, papel.ts) e o ponto para onde ele olha */
   pose: (agora: number, reduzido: boolean) => { suspenso: Suspenso; olharPara: Ponto | null };
   quadro: (q: QuadroCantinho) => void;
-  /** troca o marcador pelo modelo do Matheus, se o arquivo existir (MODELO_TV); devolve o que ficou */
-  carregarModelo: (base: string) => Promise<"gltf" | "marcador">;
+  /** poe o plano da tela na TV do #814: carrega o mesmo glTF pelo carregarVariante, para o plano seguir a mesma normalizacao */
+  carregarTela: (base: string) => Promise<void>;
   dispose: () => void;
 }
 
-/** monta o cantinho na ilha (a vista so chama com a chave ligada, cantinhoNaVista); confere o chao e esconde a decoracao sob o tapete */
+/** a mascara da tela: um retangulo de cantos arredondados (o vidro da TV de tubo), branco no fundo preto */
+function mascaraTela(): THREE.CanvasTexture {
+  const { c, g } = canvas2d(64, 48);
+  g.fillStyle = "#000"; g.fillRect(0, 0, 64, 48);
+  g.fillStyle = "#fff"; g.beginPath(); g.roundRect(1, 1, 62, 46, 14); g.fill();
+  return new THREE.CanvasTexture(c);
+}
+
+/** monta o cantinho em volta da TV da ilha (a vista so chama com a chave ligada, cantinhoNaVista); esconde a decoracao sob o tapete */
 export function montarCantinho(ilha: Ilha, rota: (de: Ponto, para: Ponto) => Ponto[] | null): Cantinho {
-  prepararChao(ilha);
-  const p = pontosDoCantinho(), T = CANTINHO_TV, grupo = new THREE.Group(), y0 = ilha.altura(p.centro[0], p.centro[1]);
+  const p = pontosDoCantinho(ilha), T = CANTINHO_TV, grupo = new THREE.Group(), y0 = ilha.altura(p.assento[0], p.assento[1]);
+  prepararChao(ilha, p);
   grupo.name = "cantinho-tv";
   const geos: THREE.BufferGeometry[] = [], mats: THREE.Material[] = [], texs: THREE.Texture[] = [];
   const mat = (cor: string): THREE.Material => { const m = toon({ color: new THREE.Color(cor) }); mats.push(m); return m; };
@@ -135,55 +127,26 @@ export function montarCantinho(ilha: Ilha, rota: (de: Ponto, para: Ponto) => Pon
     pai.add(o);
     return o;
   };
-  /* o tapete oval com a borda */
+  /* o tapete oval com a borda, girado com a TV (a largura ao longo do lado dela) */
   const ovo = new THREE.CylinderGeometry(1, 1, 1, 48);
-  const borda = malha(ovo, mat(COR.borda), p.centro[0], y0 + T.tapete.alto * 0.4, p.centro[1], grupo);
-  borda.scale.set(T.tapete.larg / 2 + T.tapete.borda, T.tapete.alto * 0.8, T.tapete.prof / 2 + T.tapete.borda);
-  const tapete = malha(ovo.clone(), mat(COR.tapete), p.centro[0], y0 + T.tapete.alto * 0.5 + 0.01, p.centro[1], grupo);
-  tapete.scale.set(T.tapete.larg / 2, T.tapete.alto, T.tapete.prof / 2);
+  const borda = malha(ovo, mat(COR.borda), p.tapete[0], y0 + T.tapete.alto * 0.4, p.tapete[1], grupo);
+  borda.scale.set(T.tapete.larg / 2 + T.tapete.borda, T.tapete.alto * 0.8, T.tapete.prof / 2 + T.tapete.borda); borda.rotation.y = p.giro;
+  const tapete = malha(ovo.clone(), mat(COR.tapete), p.tapete[0], y0 + T.tapete.alto * 0.5 + 0.01, p.tapete[1], grupo);
+  tapete.scale.set(T.tapete.larg / 2, T.tapete.alto, T.tapete.prof / 2); tapete.rotation.y = p.giro;
   /* as almofadas: esferas achatadas */
   const bola = new THREE.SphereGeometry(1, 24, 14), topoTapete = y0 + T.tapete.alto + 0.01;
   const alm = malha(bola, mat(COR.almofada), p.assento[0], topoTapete + T.almofada.alto / 2, p.assento[1], grupo);
   alm.scale.set(T.almofada.raio, T.almofada.alto / 2, T.almofada.raio);
   const almDono = malha(bola.clone(), mat(COR.almofadaDono), p.dono[0], topoTapete + T.almofada.alto / 2, p.dono[1], grupo);
   almDono.scale.set(T.almofada.raioDono, T.almofada.alto / 2, T.almofada.raioDono);
-  /* a TV: o movel baixo e, em cima, a caixa arredondada com a tela, os botoes e a antena (a frente em +z, girada para o pet e a camera) */
-  const tv = new THREE.Group();
-  tv.position.set(p.tv[0], topoTapete, p.tv[1]); tv.rotation.y = T.tv.giro;
-  grupo.add(tv);
-  malha(new RoundedBoxGeometry(2.1, ALTURA_MOVEL, 1.1, 3, 0.08), mat(COR.movel), 0, ALTURA_MOVEL / 2, 0, tv);
-  malha(new RoundedBoxGeometry(1.6, 0.16, 0.04, 2, 0.02), mat(COR.gaveta), 0, ALTURA_MOVEL * 0.5, 0.56, tv);
-  const sombra = new THREE.Mesh(GEO_SOMBRA, materialSombra());
-  mats.push(sombra.material as THREE.Material);
-  sombra.scale.set(2.8, 1, 1.8); sombra.position.set(0, 0.012, 0); sombra.renderOrder = 1; sombra.frustumCulled = false;
-  tv.add(sombra);
-  /* o marcador da TV (sai quando o modelo do Matheus chega): o corpo tem ALTURA_TV com a antena */
-  const marcador = new THREE.Group(), CORPO = { w: 1.95, h: 1.4, d: 1.05 };
-  marcador.position.y = ALTURA_MOVEL;
-  tv.add(marcador);
-  malha(new RoundedBoxGeometry(CORPO.w, CORPO.h, CORPO.d, 4, 0.22), mat(COR.corpo), 0, CORPO.h / 2, 0, marcador);
-  malha(new RoundedBoxGeometry(1.42, 1.1, 0.06, 3, 0.07), mat(COR.moldura), -0.2, CORPO.h / 2, CORPO.d / 2, marcador);
-  const cil = new THREE.CylinderGeometry(0.1, 0.1, 0.09, 16).rotateX(Math.PI / 2);
-  malha(cil, mat(COR.botao), 0.72, CORPO.h * 0.64, CORPO.d / 2 + 0.02, marcador);
-  malha(cil.clone(), mat(COR.botao), 0.72, CORPO.h * 0.38, CORPO.d / 2 + 0.02, marcador);
-  const haste = ALTURA_TV - CORPO.h - 0.06, matAntena = mat(COR.antena), matPonta = mat(COR.ponta);
-  for (const lado of [-1, 1]) {
-    const a = lado * 0.42, braco = new THREE.Group();
-    braco.position.set(0, CORPO.h - 0.02, 0); braco.rotation.z = a;
-    marcador.add(braco);
-    malha(new THREE.CylinderGeometry(0.03, 0.03, haste / Math.cos(a), 8), matAntena, 0, haste / Math.cos(a) / 2, 0, braco);
-    malha(new THREE.SphereGeometry(0.075, 12, 8), matPonta, 0, haste / Math.cos(a), 0, braco);
-  }
-  /* a tela: a textura dinamica (o desenho da TV do jogo, ou o video da captura) num plano sem luz */
+  /* a tela: a textura dinamica (o desenho da TV do jogo, ou o video da captura) num plano sem luz, que entra quando o glTF da TV chega */
   const { c: telaC, g: telaG } = canvas2d(TELA_PX[0], TELA_PX[1]);
-  const texDesenho = new THREE.CanvasTexture(telaC);
+  const texDesenho = new THREE.CanvasTexture(telaC), mascara = mascaraTela();
   texDesenho.colorSpace = THREE.SRGBColorSpace;
-  texs.push(texDesenho);
-  pintarDesligada(telaG, TELA_PX[0], TELA_PX[1]);
-  const matTela = curvar(new THREE.MeshBasicMaterial({ map: texDesenho, toneMapped: false }));
+  texs.push(texDesenho, mascara);
+  const matTela = curvar(new THREE.MeshBasicMaterial({ map: texDesenho, alphaMap: mascara, alphaTest: 0.5, toneMapped: false }));
   mats.push(matTela);
-  const tela = malha(new THREE.PlaneGeometry(1.28, 0.96), matTela, -0.2, CORPO.h / 2, CORPO.d / 2 + 0.035, marcador);
-  tela.renderOrder = 1;
+  let tela: THREE.Mesh | null = null;
   /* o balao da reacao: um sprite sobre o pet sentado (o sprite nao passa pela dobra do shader: a altura dele desconta a dobra, como o papel) */
   const { c: balaoC, g: balaoG } = canvas2d(256, 96);
   const texBalao = new THREE.CanvasTexture(balaoC);
@@ -207,9 +170,9 @@ export function montarCantinho(ilha: Ilha, rota: (de: Ponto, para: Ponto) => Pon
     texBalao.needsUpdate = true;
   };
 
-  let video: HTMLVideoElement | null = null, texVideo: THREE.VideoTexture | null = null, pintadoEm = -1e9, ligadaAntes = false;
+  let video: HTMLVideoElement | null = null, texVideo: THREE.VideoTexture | null = null, pintadoEm = -1e9;
   const quadro = (q: QuadroCantinho) => {
-    /* a tela: o video da captura, o desenho do programa, ou desligada (pintada uma vez) */
+    /* a tela: o video da captura ou o desenho do programa */
     if (TV.ligada && TV.origem === "tela" && TV.video) {
       if (video !== TV.video) { texVideo?.dispose(); video = TV.video; texVideo = new THREE.VideoTexture(video); texVideo.colorSpace = THREE.SRGBColorSpace; }
       if (matTela.map !== texVideo) { matTela.map = texVideo; matTela.needsUpdate = true; }
@@ -220,9 +183,10 @@ export function montarCantinho(ilha: Ilha, rota: (de: Ponto, para: Ponto) => Pon
         /* com "reduzir movimento", o desenho muda so a cada segundo sentido, sem as formas andarem */
         pintarPrograma(telaG, TELA_PX[0], TELA_PX[1], TV.sentido, TV.programa, q.reduzido ? 0 : q.agora / 1000);
         texDesenho.needsUpdate = true; pintadoEm = q.agora;
-      } else if (!TV.ligada && ligadaAntes) { pintarDesligada(telaG, TELA_PX[0], TELA_PX[1]); texDesenho.needsUpdate = true; }
+      }
     }
-    ligadaAntes = TV.ligada;
+    /* desligada, o plano some e fica o vidro pintado do modelo (o #814) */
+    if (tela) tela.visible = TV.ligada;
     /* o balao: so com o pet sentado e uma reacao */
     const texto = q.sentado && TV.ligada && TV.reacao ? BALAO[TV.reacao] : "";
     if (texto !== textoBalao) { textoBalao = texto; if (texto) desenharBalao(texto); }
@@ -240,36 +204,19 @@ export function montarCantinho(ilha: Ilha, rota: (de: Ponto, para: Ponto) => Pon
     return { suspenso: { naMao: false, altura: r.altura, angulo: r.angulo, tremor: 0, sombra: null }, olharPara };
   };
 
-  const carregarModelo = async (base: string): Promise<"gltf" | "marcador"> => {
-    const url = new URL(MODELO_TV, base).href, r = await fetch(url, { method: "HEAD" }), tipo = r.headers.get("content-type") ?? "";
-    /* o servidor de desenvolvimento responde a pagina (text/html) para um arquivo que nao existe */
-    if (!r.ok || tipo.includes("text/html")) {
-      console.warn(`cantinho da TV: o modelo ${MODELO_TV} não existe (HTTP ${r.status}${tipo ? ", " + tipo : ""}); fica o marcador cartoon. ` +
-        `Para trocar: ponha o glTF em web/app/public/${MODELO_TV} (frente em +z, a malha da tela com "tela" no nome; a altura vira ${ALTURA_TV} células).`);
-      return "marcador";
-    }
-    const { pecas } = await carregarVariante(new GLTFLoader(), url, MODELO_TV_TABELA);
-    const modelo = new THREE.Group(), caixa = new THREE.Box3();
-    modelo.position.y = ALTURA_MOVEL;
-    let temTela = false;
-    for (const pc of pecas) {
-      const eTela = /tela|screen/i.test(pc.nome ?? "");
-      temTela ||= eTela;
-      const m = new THREE.Mesh(pc.geo, eTela ? matTela : pc.mat);
-      m.matrixAutoUpdate = false; m.matrix.copy(pc.local); m.frustumCulled = false;
-      if (!eTela) mats.push(pc.mat);
-      modelo.add(m);
-      if (!pc.geo.boundingBox) pc.geo.computeBoundingBox();
-      caixa.union(pc.geo.boundingBox!.clone().applyMatrix4(pc.local));
-    }
-    if (!temTela) {
-      /* sem a malha da tela: um plano na face da frente, no meio da caixa */
-      const tam = caixa.getSize(new THREE.Vector3());
-      malha(new THREE.PlaneGeometry(tam.x * 0.62, tam.y * 0.55), matTela, (caixa.min.x + caixa.max.x) / 2, caixa.min.y + tam.y * 0.5, caixa.max.z + 0.01, modelo).renderOrder = 1;
-    }
-    tv.remove(marcador);
-    tv.add(modelo);
-    return "gltf";
+  const carregarTela = async (base: string): Promise<void> => {
+    const m = ENFEITES_MODELOS.tv, { pecas } = await carregarVariante(new GLTFLoader(), new URL("enfeites/" + m.arquivos[0], base).href, m);
+    if (pecas.length !== 1) throw new Error(`a TV do #814 tem ${pecas.length} malhas; o cantinho espera uma (a tela pintada nela)`);
+    /* so a matriz da normalizacao interessa; a TV desenhada e a do enfeites.ts (o material toon desta copia sai na hora) */
+    for (const pc of pecas) pc.mat.dispose();
+    /* a mesma matriz do enfeite (enfeites.ts: o ponto, a altura do chao e o giro da grade; a TV nao tem lado de lampada) vezes a da normalizacao */
+    const M = new THREE.Matrix4().compose(new THREE.Vector3(p.tv[0], ilha.altura(p.tv[0], p.tv[1]), p.tv[1]),
+      new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), p.giro), new THREE.Vector3(1, 1, 1)).multiply(pecas[0]!.local);
+    const S = TELA_DO_MODELO, geo = new THREE.PlaneGeometry(2 * S.rx, 2 * S.ry).translate(S.x, S.y, S.z + S.folga);
+    geos.push(geo);
+    tela = new THREE.Mesh(geo, matTela);
+    tela.matrixAutoUpdate = false; tela.matrix.copy(M); tela.frustumCulled = false; tela.visible = TV.ligada; tela.renderOrder = 1;
+    grupo.add(tela);
   };
 
   const dispose = () => {
@@ -279,5 +226,5 @@ export function montarCantinho(ilha: Ilha, rota: (de: Ponto, para: Ponto) => Pon
     texVideo?.dispose();
     grupo.clear();
   };
-  return { grupo, ida, ligada: () => TV.ligada, pontos: p, pose, quadro, carregarModelo, dispose };
+  return { grupo, ida, ligada: () => TV.ligada, pontos: p, pose, quadro, carregarTela, dispose };
 }

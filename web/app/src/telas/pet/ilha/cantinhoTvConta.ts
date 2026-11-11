@@ -1,36 +1,31 @@
 /* Os numeros e as contas do cantinho da TV (cantinhoTv.ts; o prototipo P0 do gosto visual, docs/futuro/gosto_visual_pet.md, secao 14),
-   sem three e sem DOM, para o teste ler no node (como rotaConta.ts e ponteConta.ts): o ponto e os tamanhos, o modelo esperado da TV do
-   Matheus, a chave, o chao do cantinho, a pose do pet sentado e a ida dele ate a almofada. So vista: nada daqui entra no motor, no log
-   nem no save. Todos os numeros sao do desenho: PROPOSTO, SEM FONTE. */
+   sem three e sem DOM, para o teste ler no node (como rotaConta.ts e ponteConta.ts): o cantinho em volta da TV de tubo da ilha (o marco do
+   #814, MUNDO_ENFEITES: o enfeite "tv" que a grade poe, grade.ts, porMarcos), a chave, o chao do cantinho, a tela no modelo, a pose do pet
+   sentado e a ida dele ate a almofada. So vista: nada daqui entra no motor, no log nem no save, e a TV e a do #814 (nenhuma TV nova). Todos
+   os numeros sao do desenho: PROPOSTO, SEM FONTE. */
 import { TEXEL_ALVO, duracaoPetViagem } from "./constantes.ts";
 import type { Ilha } from "./grade.ts";
-import type { Modelo } from "./modelos.ts";
 import { comprimento, naRota, type Ponto } from "./rotaConta.ts";
 import { gostoVisualLigado } from "../../../gostoVisual/chave.ts";
 import type { Reacao } from "../../../gostoVisual/gosto.ts";
 
-/** o cantinho, em celulas do mundo (x leste, z sul). O centro e o do tapete: a sudeste do comedouro do layout (10,5; 15,5), longe do ninho,
-    do saco, dos caminhos e dos postes da praca, ao norte do lago do sudoeste da ilha com agua (que comeca na linha 22). Os deslocamentos
-    (da TV, da almofada do pet e da do dono) sao a partir do centro; a TV fica a leste (a direita na tela, longe do cartao do P0, que fica a
-    esquerda) e o pet a oeste, olhando para ela. PROPOSTO, SEM FONTE */
+/** o cantinho no referencial da TV: `frente` ao longo da frente dela (+z do glTF, que a grade gira para a praca) e `lado` a direita de quem
+    olha a tela, em celulas. A almofada do pet fica a `assento.frente` da TV ou mais longe, ate `assento.ate`, no primeiro ponto em que o tapete
+    inteiro cai em terra plana da area (na planta A a TV fica no plato, e o cantinho desce para o pe do barranco); a do dono (vazia: o lugar de
+    quem assiste junto) e o tapete oval vem a partir da almofada do pet. PROPOSTO, SEM FONTE */
 export const CANTINHO_TV = {
-  centro: [14, 19] as const,
-  /** o tapete oval: a largura (x), a profundidade (z) e a espessura; a borda e a faixa mais larga embaixo */
-  tapete: { larg: 5, prof: 3.3, alto: 0.05, borda: 0.2 },
-  /** a TV: o deslocamento do pe do movel, e o giro (a frente, +z, para o meio entre a almofada do pet e a camera, que olha do sul) */
-  tv: { desloc: [1.75, -0.45] as const, giro: Math.atan2(-0.75, 1) },
-  /** a almofada do pet e a do dono (vazia: o lugar de quem assiste junto) */
-  assento: [-1.45, 0.35] as const,
-  dono: [-0.55, 1.2] as const,
+  assento: { frente: 2.4, ate: 5, passo: 0.25, lado: -0.45 },
+  dono: { frente: 0.35, lado: 1.0 },
+  tapete: { frente: 0.3, lado: 0.3, larg: 3.8, prof: 2.6, alto: 0.05, borda: 0.2 },
   almofada: { raio: 0.42, alto: 0.24, raioDono: 0.55 },
-  /** o raio em que a decoracao baixa some e em que o chao tem de ser terra plana da area */
-  clareira: 3,
+  /** a folga em volta do tapete em que a decoracao baixa some da vista */
+  folga: 0.3,
 } as const;
 
-/** o modelo da TV do Matheus (em public/), a altura dele (celulas, so a TV, sem o movel) e a do movel do cantinho. PROPOSTO, SEM FONTE */
-export const MODELO_TV = "enfeites/tv/tv.gltf";
-export const ALTURA_TV = 2.2, ALTURA_MOVEL = 0.5;
-export const MODELO_TV_TABELA: Modelo = { arquivos: ["tv/tv.gltf"], altura: ALTURA_TV, vento: 0, sombra: 0, baixo: false };
+/** a tela no modelo da TV (as unidades do glTF, antes da normalizacao do carregarVariante): o centro, os raios e a face da frente da peca
+    "tela" de docs/objetos3d/cartoon/tv.py (TX, TY, TRX, TRY x 0,95 e Z1 + 0,034). A textura dinamica vai num plano um fio a frente dela,
+    com os cantos arredondados. PROPOSTO, SEM FONTE */
+export const TELA_DO_MODELO = { x: -0.105, y: 0.545, rx: 0.315, ry: 0.265 * 0.95, z: 0.394, folga: 0.004 } as const;
 
 /** quanto o pet sobe sentado na almofada (texels do sprite: a altura da almofada, um pouco afundada), o pulinho do "adorando" (texels) e o
     periodo dele (ms), e a inclinacao do "curioso" (rad). PROPOSTO, SEM FONTE */
@@ -42,23 +37,46 @@ export const TELA_PX = [160, 120] as const, TELA_PASSO_MS = 50;
 /** o cantinho entra na vista? So com a chave do P0 (`?gosto_visual=1`) */
 export const cantinhoNaVista = (busca?: string): boolean => gostoVisualLigado(busca);
 
-/** os pontos do cantinho no mundo (celulas) */
-export function pontosDoCantinho(): { centro: Ponto; tv: Ponto; assento: Ponto; dono: Ponto } {
-  const [cx, cz] = CANTINHO_TV.centro, mais = (d: readonly [number, number]): Ponto => [cx + d[0], cz + d[1]];
-  return { centro: [cx, cz], tv: mais(CANTINHO_TV.tv.desloc), assento: mais(CANTINHO_TV.assento), dono: mais(CANTINHO_TV.dono) };
+/** o cantinho no mundo (celulas): a TV (o ponto e o giro do enfeite da grade), a almofada do pet, a do dono e o tapete (o centro e o giro) */
+export interface PontosCantinho { tv: Ponto; giro: number; assento: Ponto; dono: Ponto; tapete: Ponto }
+
+/** a TV da ilha (o enfeite "tv" da grade); falha alto se a grade nao a pos */
+export function tvDaIlha(ilha: Ilha): { x: number; z: number; giro: number } {
+  const t = ilha.enfeites.find(e => e.nome === "tv");
+  if (!t) throw new Error(`a ilha ${ilha.cm.layout.nome} nao tem a TV (o enfeite "tv" da grade) para o cantinho`);
+  return t;
 }
 
-/** confere o chao do cantinho (terra plana da area, sem objeto do motor) e tira da vista a decoracao baixa dentro da clareira; falha alto */
-export function prepararChao(ilha: Ilha): void {
-  const [cx, cz] = CANTINHO_TV.centro, R = CANTINHO_TV.clareira;
-  for (let z = Math.floor(cz - R); z <= Math.ceil(cz + R); z++) for (let x = Math.floor(cx - R); x <= Math.ceil(cx + R); x++) {
-    if (Math.hypot(x + 0.5 - cx, z + 0.5 - cz) > R) continue;
-    const c = ilha.cel(x, z);
-    if (!c || !ilha.naArea(x, z) || c.tipo === "agua" || c.nivel !== 0)
-      throw new Error(`o cantinho da TV cai fora da terra plana da area na celula ${x},${z} (${c ? c.tipo + ", nivel " + c.nivel : "fora da grade"}) na ilha ${ilha.cm.layout.nome}`);
+/** as celulas sob o tapete (amostras no oval, de meia em meia celula) */
+function sobOTapete(centro: Ponto, giro: number): Ponto[] {
+  const T = CANTINHO_TV.tapete, a = T.larg / 2 + T.borda, b = T.prof / 2 + T.borda, f: Ponto = [Math.sin(giro), Math.cos(giro)], r: Ponto = [-f[1], f[0]];
+  const pts: Ponto[] = [];
+  for (let u = -a; u <= a + 1e-9; u += 0.5) for (let v = -b; v <= b + 1e-9; v += 0.5)
+    if ((u / a) ** 2 + (v / b) ** 2 <= 1) pts.push([centro[0] + r[0] * u + f[0] * v, centro[1] + r[1] * u + f[1] * v]);
+  return pts;
+}
+const terraPlana = (ilha: Ilha, p: Ponto): boolean => {
+  const c = ilha.cel(Math.floor(p[0]), Math.floor(p[1]));
+  return !!c && ilha.naArea(p[0], p[1]) && c.tipo !== "agua" && c.nivel === 0;
+};
+
+/** os pontos do cantinho em volta da TV da ilha; falha alto se nenhum ponto ate `assento.ate` cabe o tapete em terra plana da area */
+export function pontosDoCantinho(ilha: Ilha): PontosCantinho {
+  const t = tvDaIlha(ilha), C = CANTINHO_TV, f: Ponto = [Math.sin(t.giro), Math.cos(t.giro)], r: Ponto = [-f[1], f[0]];
+  const em = (frente: number, lado: number): Ponto => [t.x + f[0] * frente + r[0] * lado, t.z + f[1] * frente + r[1] * lado];
+  for (let d = C.assento.frente; d <= C.assento.ate + 1e-9; d += C.assento.passo) {
+    const tapete = em(d + C.tapete.frente, C.assento.lado + C.tapete.lado);
+    if (!sobOTapete(tapete, t.giro).every(p => terraPlana(ilha, p))) continue;
+    return { tv: [t.x, t.z], giro: t.giro, assento: em(d, C.assento.lado), dono: em(d + C.dono.frente, C.assento.lado + C.dono.lado), tapete };
   }
+  throw new Error(`o cantinho da TV nao cabe em terra plana da area na frente da TV (${t.x}, ${t.z}) da ilha ${ilha.cm.layout.nome}`);
+}
+
+/** tira da vista a decoracao baixa sob o tapete (Ilha.escondidos, como as clareiras dos lugares); falha alto com um objeto do motor ali */
+export function prepararChao(ilha: Ilha, p: PontosCantinho): void {
+  const T = CANTINHO_TV.tapete, R = Math.max(T.larg, T.prof) / 2 + T.borda + CANTINHO_TV.folga;
   ilha.objetos.forEach((o, i) => {
-    const perto = Math.hypot(o.x - cx, o.z - cz) < R;
+    const perto = Math.hypot(o.x - p.tapete[0], o.z - p.tapete[1]) < R;
     if (perto && o.doMotor !== null) throw new Error(`um objeto do motor (${o.doMotor}) dentro do cantinho da TV na ilha ${ilha.cm.layout.nome}`);
     if (perto) ilha.escondidos.add(i);
   });
