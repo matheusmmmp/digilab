@@ -58,3 +58,7 @@ export {
   CMIT_E1, DEUSES, ENIGMA, FALA_DIA_RARO, FALA_PEDRA, FALA_PEGADAS, FALA_PESSEGO, NOME_DEUS, SINAL_DEUS, diaDeVida, myotismonNoTick,
   myotismonJaApareceu, pedraAchadaDe, pedraEm, pegadasDe, sinaisDe, sinaisNoTick, tickDoDiaRaro, type Deus, type FontesE1, type SinalDeus,
 } from "./lendas_e1.ts";
+/* MITOLOGIA, E2: Piedmon e a montanha */
+export {
+  FALA_MONTANHA_FECHADA, FALA_PIEDMON_ANTES, FALA_PIEDMON_DERROTA, FALA_VITORIA_SEM_QUEDA, ehPiedmon, montanhaDe, type Montanha,
+} from "./lendas_e2.ts";

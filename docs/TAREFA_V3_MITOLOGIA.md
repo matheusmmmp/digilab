@@ -204,3 +204,34 @@ lendas, os sinais dos cinco deuses, o Myotismon como termômetro, a pedra do mac
     - o escurecimento do Myotismon;
     - o Códice no Diário.
   - O log, o save, a assinatura e os gabaritos continuam iguais.
+
+## 12. E2: Piedmon e a montanha (2026-11-11)
+
+**A origem:** era a opção da lista da E1 que ficou de fora. O Matheus pediu "segue as outras pendências".
+
+O Piedmon encarna o deus da Diversão, o do macaco (D-MM-4). A E2 faz dele o fecho da lenda. É só tela, como função pura do pet refeito do
+log (`web/app/motor/lendas_e2.ts`, `montanhaDe`). Nada muda no motor, na luta, no log nem no save.
+
+| peça | gatilho | o que se vê |
+|---|---|---|
+| **antes da luta** | o cartão de um dos dois Piedmon na Campanha (`npc_tier3_soberano` na Cidadela, `npc_v5_piedmon` na Montanha Espiral), com a chave ligada | uma linha do Jijimon no cartão |
+| **a derrota** | a primeira derrota para o Piedmon | o Jijimon fala do riso e da queda, uma vez |
+| **a lenda fechada** | a primeira vitória sobre o Piedmon com uma hybris antes (num tick anterior) | o Jijimon diz que o macaco saiu da montanha, uma vez; o aro dourado fica sobre a pedra para sempre; o Códice ganha "A montanha" |
+| **a vitória sem queda** | a primeira vitória sobre o Piedmon sem nenhuma hybris antes | o Jijimon diz que a lenda só se fecha para quem conheceu a montanha por dentro, uma vez |
+
+**Os arquivos:**
+- **novos:** `web/app/motor/lendas_e2.ts` e `web/app/test/lendas_e2.test.ts`, este com 5 testes;
+- **mudados:**
+  - `web/app/src/mitologia.ts`, onde o "já ouvi" ganha `piedmon`, `semQueda` e `montanha`, e a fila do oráculo fala deles;
+  - `web/app/src/telas/lutar/palcoPoc/TelaLugaresPoc.tsx`, com a linha no cartão;
+  - `web/app/src/telas/pet/ilha/mitologia.ts`, com o aro;
+  - `web/app/src/componentes/Codice.tsx`;
+  - `web/app/src/estilo/luta_poc.css`;
+  - `web/app/motor/index.ts`;
+  - `web/app/e2e/mitologia_e1.spec.ts`, onde a montanha aparece escondida sem o Piedmon vencido.
+
+**Os testes:**
+- o `test/lendas_e2.test.ts` tem 5 testes, todos passando;
+- a suíte inteira do Vitest tem 135 arquivos e 1334 testes, todos passando;
+- o `npm run tipos` passa;
+- o e2e da mitologia e o da Campanha (`luta_poc_lp3`) têm 13 testes, todos passando.
