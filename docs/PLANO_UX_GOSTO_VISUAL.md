@@ -469,3 +469,34 @@ verificou nenhuma fonte nova.
 - a TV em três quartos e os 40°;
 - a frase da privacidade e o selo;
 - o intervalo de 5 s do leitor de tela.
+
+---
+
+## 13. A etapa 1 do código: o painel da TV e a entrada (2026-11-11, Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-gosto-visual-c1`)
+
+**O que mudou** (tudo atrás de `?gosto_visual=1`):
+- **O cartão do canto saiu** (UX-GV-1). O estado dele foi para a sessão da TV (`web/app/src/gostoVisual/sessaoTv.ts`), fora dos componentes,
+  porque o painel fecha e a TV continua ligada.
+- **O painel da TV** (`PainelTv.tsx`) abre pelo sistema de painéis da tela Pet: a linha "TV" na pilha a partir de 900 px, e o item "TV" no
+  leque do retrato abaixo disso (UX-GV-2). No celular ele é uma folha baixa, recolhida em duas linhas, com o "Mais" (UX-GV-8).
+- **A ordem dos botões** (UX-GV-6): "Ligar a TV" é o principal. "Mostrar minha tela" e a frase da privacidade só aparecem onde o navegador
+  captura. Cancelar no seletor do Chrome não mostra erro.
+- **O selo da captura** fica fixo no topo enquanto a tela do dono é lida, com o Parar.
+- **A leitura em dois níveis** (UX-GV-4 e 5): a frase "Gosta mais de"; "De nascença, preferia…" só quando difere; o porquê com as três
+  origens separadas (`leituraGosto.ts`), a lista curta e o "Ver todos" em Imagem e Som; "O que está passando" numa faixa à parte.
+- **O motivo na frase da reação** (a PR-3): `motivoDaReacao` devolve o componente que mais pesou ("tem as cores de que ele gosta") ou o
+  que mais atrapalhou ("as cores são vivas demais para ele").
+- **Um carinho só** (UX-GV-7): o botão "Fazer carinho" e a contagem de carinhos saíram. A sessão lê quando foi o último Carinho do jogo
+  (`ultimoCarinhoEm`, em `telas/pet/reacao.ts`, só vista) e não escreve nada no motor.
+- **O leitor de tela:** uma região de status diz a TV ligando e desligando, e a reação quando ela muda, no máximo uma vez a cada 5 s.
+
+**Os testes:** `web/app/test/gosto_visual_painel.test.ts` (13 testes) e `web/app/e2e/gosto_visual_painel.spec.ts` (2 testes).
+
+**Não feito nesta etapa:**
+- o toque na TV da ilha, o ícone no lugar do balão, a fila dos sinais e o giro da TV: são da etapa 2 (o cantinho e as reações);
+- a janela pequena nova: é da etapa 3. Hoje ela abre com a vista antiga do P0, com o Carinho do jogo e o Parar;
+- a câmera indo ao cantinho ao abrir o painel (etapa 2);
+- com "Exibir detalhes do pet" desligado, a pilha some no desktop e a linha "TV" vai junto;
+- nenhum revisor (`rev-a11y`, `rev-cena`, `rev-replay`) viu a etapa, e o contraste não foi medido.
+
+Os desvios estão em `docs/registro/2026-11.md`, D-UXGV-14 a 18.
