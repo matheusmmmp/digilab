@@ -183,3 +183,76 @@ lendas, os sinais dos cinco deuses, o Myotismon como termômetro, a pedra do mac
   dia.
 - Com os gatilhos da tabela, em 10 dias aparecem: Conhecimento de 1 a 7 vezes, Amizade 3, Diversão de 1 a 6 e Sinceridade 1.
 - As pegadas abrem em uns 3 dias no pet curioso (a semente 101) e em semanas nos outros.
+
+## 11. A chave começa ligada (2026-11-11)
+
+**O pedido do Matheus:** "quero que a mitologia sempre esteja ativa, ela pode ser desligada, mas já começa ligada".
+
+**O que mudou:**
+- **O padrão da chave virou ligada.** Em `web/app/src/mitologia.ts`, o `mitologiaLigada` lê `CHAVE-mitologia !== "0"`: sem nada gravado,
+  a chave fica ligada, e só o "0" desliga. Quem desligou nos Ajustes continua desligado.
+- **Os pets que já existiam:**
+  - as derrotas de antes continuam caladas (D-E0-5);
+  - a pedra, as pegadas e o dia 81 já vividos o oráculo conta uma vez cada.
+- **Os e2e:**
+  - o "desligada" agora grava "0";
+  - o `oraculo_mitologia.spec.ts` ganhou o teste "sem nada gravado, a chave começa ligada".
+- **O que isso muda em relação à E0:** a regra "desligada por padrão, o jogo de hoje" (seção 3) deixou de valer.
+  - O que entra na tela de quem não mexeu nos Ajustes:
+    - o balão do oráculo, quando houver o que contar;
+    - os sinais e a pedra na ilha;
+    - o escurecimento do Myotismon;
+    - o Códice no Diário.
+  - O log, o save, a assinatura e os gabaritos continuam iguais.
+
+## 12. E2: Piedmon e a montanha (2026-11-11)
+
+**A origem:** era a opção da lista da E1 que ficou de fora. O Matheus pediu "segue as outras pendências".
+
+O Piedmon encarna o deus da Diversão, o do macaco (D-MM-4). A E2 faz dele o fecho da lenda. É só tela, como função pura do pet refeito do
+log (`web/app/motor/lendas_e2.ts`, `montanhaDe`). Nada muda no motor, na luta, no log nem no save.
+
+| peça | gatilho | o que se vê |
+|---|---|---|
+| **antes da luta** | o cartão de um dos dois Piedmon na Campanha (`npc_tier3_soberano` na Cidadela, `npc_v5_piedmon` na Montanha Espiral), com a chave ligada | uma linha do Jijimon no cartão |
+| **a derrota** | a primeira derrota para o Piedmon | o Jijimon fala do riso e da queda, uma vez |
+| **a lenda fechada** | a primeira vitória sobre o Piedmon com uma hybris antes (num tick anterior) | o Jijimon diz que o macaco saiu da montanha, uma vez; o aro dourado fica sobre a pedra para sempre; o Códice ganha "A montanha" |
+| **a vitória sem queda** | a primeira vitória sobre o Piedmon sem nenhuma hybris antes | o Jijimon diz que a lenda só se fecha para quem conheceu a montanha por dentro, uma vez |
+
+**Os arquivos:**
+- **novos:** `web/app/motor/lendas_e2.ts` e `web/app/test/lendas_e2.test.ts`, este com 5 testes;
+- **mudados:**
+  - `web/app/src/mitologia.ts`, onde o "já ouvi" ganha `piedmon`, `semQueda` e `montanha`, e a fila do oráculo fala deles;
+  - `web/app/src/telas/lutar/palcoPoc/TelaLugaresPoc.tsx`, com a linha no cartão;
+  - `web/app/src/telas/pet/ilha/mitologia.ts`, com o aro;
+  - `web/app/src/componentes/Codice.tsx`;
+  - `web/app/src/estilo/luta_poc.css`;
+  - `web/app/motor/index.ts`;
+  - `web/app/e2e/mitologia_e1.spec.ts`, onde a montanha aparece escondida sem o Piedmon vencido.
+
+**Os testes:**
+- o `test/lendas_e2.test.ts` tem 5 testes, todos passando;
+- a suíte inteira do Vitest tem 135 arquivos e 1334 testes, todos passando;
+- o `npm run tipos` passa;
+- o e2e da mitologia e o da Campanha (`luta_poc_lp3`) têm 13 testes, todos passando.
+
+## 13. A mitologia na ilha grande (2026-11-11)
+
+**A origem:** o Matheus pediu "agora segue com as pendências". A ilha grande (128 × 60, v24) entrou na main depois da E1. Os pets novos
+nascem nela, e a pedra do macaco ficava na célula 56,20, que lá é jardim (a mata da ilha grande vai da coluna 96 à 127).
+
+**O que mudou:**
+- A pedra tem uma célula por mapa (`pedraCelulaDe`).
+  - Nos mapas de 64 × 30 continua a 56,20.
+  - Na ilha grande fica a 104,28: em terra, na mata, sem árvore nem marco no raio de 2 células em que o pet a acha.
+- As pegadas na vista vão do ninho à pedra a cada 3,2 células. Na ilha grande elas passam pela ponte da fileira 33: em linha reta,
+  cruzariam o rio nas colunas 82 a 84.
+- O save do e2e da E1 foi gerado de novo, agora com a v24 e a pedra da ilha grande.
+
+Nada muda no motor, no log nem no save: a pedra é leitura do pet refeito do log, como antes. Um pet da v24 que tenha "achado" a pedra
+no jardim, entre o merge do #807 e este, perde o segredo no Códice até achá-la na mata. O "já ouvi" do oráculo fica.
+
+**Os testes:**
+- novo em `test/lendas_e1.test.ts`: nos três mapas, a pedra fica na mata, e o raio dela é terra livre;
+- a pedra na tela foi conferida com um save de 3,9 dias, levado à pedra de noite: o minimapa mostra o pet no leste, e o Jijimon conta a
+  pedra.
