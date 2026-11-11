@@ -2952,3 +2952,19 @@ class ConfigVozV4:
 CONFIG_VOZ_V4 = ConfigVozV4()
 PARAMETROS_VOZ_V4 = {f.name: ("DECIDIDO", "SEM FONTE; plano da DC5, D-DC5-5/D-DC5-11, aprovado pelo Matheus em 2026-11-10")
                      for f in fields(ConfigVozV4)}
+
+
+@dataclass(frozen=True)
+class ConfigVozV4B:
+    """A voz-v4b da DC5 (CONVERSA_PET, DC5a2; D-DC5B-5, a decisao do Matheus em 2026-11-11, "Segue as recomendacoes e faca o merge").
+    Os numeros da voz-v4 que nao mudam ficam em `ConfigVozV4`."""
+    # a regra 10 da voz-v4b e a medida da repeticao de trecho: quantas palavras seguidas iguais a uma fala anterior da mesma conversa ou
+    # sequencia contam como repetir a frase
+    palavras_trecho_repetido: int = 4
+    # a copia do corpus da especie: quantas palavras seguidas iguais a uma citacao contam como copia (o filtro do jogo reprova a partir de 6,
+    # `corpus.PALAVRAS_REPETIDAS`)
+    palavras_copia_citacao: int = 5
+
+
+CONFIG_VOZ_V4B = ConfigVozV4B()
+PARAMETROS_VOZ_V4B = {f.name: ("PROPOSTO", "SEM FONTE; a Gerente da CONVERSA_PET, 2026-11-11 (D-DC5B-5)") for f in fields(ConfigVozV4B)}
