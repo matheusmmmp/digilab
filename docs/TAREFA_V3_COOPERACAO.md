@@ -194,3 +194,24 @@ Gravados com o código da `main` (`9f72f060`) antes de qualquer mudança da fren
     log, a assinatura a cada 25 eventos de um replay incremental e no fim, e a impressão do mundo.
   - **Os arquivos pinados:** o sha256 de `grupo_python.json.gz`, `mundo_python.json` e `mvp_mundo_python.json`.
 - **O achado (D-CO1-1):** as disputas são raras. Há 2 em 5 vidas, mesmo com o comedouro comum em três delas (`n_disputas` no gabarito).
+
+## CO2a, o traço do grupo (2026-11-11, Gerente da V3, Claude Code, Opus 5.5, branch `v3-cooperacao-co2`)
+
+A CO2 foi dividida em três PRs, porque o porte é maior do que a seção 3 previa. Os motivos estão em D-CO2a-1, no registro de 2026-11.
+
+- **As três etapas:**
+  - **CO2a:** o traço do grupo no Python;
+  - **CO2b:** separar o `Mundo` do TS em mundo partilhado e parte de cada pet;
+  - **CO2c:** o `motor/grupo.ts` com o G-PAR-GRUPO.
+- **O pedido do Matheus nesta etapa (2026-11-11):** "cada pet vai ter um mundo separado, porém primeiro quero simular o mundo junto deles,
+  competindo pela comida".
+  - A CO2 é o mundo junto, partilhado pelos dois.
+  - O mundo de cada pet fica para uma etapa futura, sem desenho.
+- **O que esta etapa entrega:**
+  - **O exportador:** `experiments/exportar_gabarito_grupo_traco.py` grava `web/app/test/gabaritos/grupo_traco_python.json.gz`
+    (190 530 bytes).
+  - **O conteúdo:** as cinco vidas da CO1, com o traço por decisão de cada pet. O traço traz a percepção do mundo e a percepção social
+    antes, a ação, os candidatos, o ocorrido, o estado depois e o `_tick_social`. É o que o TS precisa para rejogar o grupo sem o engine,
+    a política e o dono do Python.
+  - **O teste:** `tests/test_cooperacao_traco.py` refaz o traço byte a byte. Ele também confere que o motor que grava não muda a vida: o
+    sha256 do resumo de cada vida é o mesmo da CO1.
