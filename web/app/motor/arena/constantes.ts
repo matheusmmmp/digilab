@@ -60,6 +60,18 @@ export const OPCOES_PADRAO = { forca: 1.5, pvel: 0.15, dific: "normal" as Dificu
 export interface Tiro { distMin: number; esperaMax: number; recuaAbaixo: number; recuo: number; recuaNaPrep: number; danoProj: number; velProj: number }
 export const TIRO_V21: Readonly<Tiro> = Object.freeze({ distMin: 0, esperaMax: 0, recuaAbaixo: 0.5, recuo: EQ.recuo, recuaNaPrep: 0, danoProj: EQ.danoDist, velProj: 1 });
 
+/** a esquiva pela perspicacia e pela velocidade (LUTA_POC, LP5, D-LP5-14: o Matheus, "Vamos daí fazer com o Mira e o Caráter Atento
+    juntos"). So vale quando a entrada da luta traz a `esquiva`; sem ela, a luta e a de sempre, byte a byte. Cada lutador traz nos Stats a
+    perspicacia (perc: perceber o golpe e reagir antes; a bancada a tira da mira e do carater atento) e a agilidade (agil: o pulo da
+    esquiva; do folego). 1 = o lutador neutro. Os numeros sao PROPOSTOS, SEM FONTE.
+    - kChance: o expoente da perc na chance de desviar (a chance da dificuldade x perc^kChance), ate o chanceMax;
+    - kReacao: o expoente da perc no tempo de reacao (a reacao da dificuldade / perc^kReacao);
+    - kDash: o expoente da agil na velocidade do pulo (ACAO.desvioCpu x agil^kDash);
+    - pertoChance: a chance base de ler o golpe de perto do outro (na preparacao, ao alcance) e pular para tras; 0 = so o tiro, como na POC;
+    - pertoReacao: o tempo de reacao base (ms) contra o golpe de perto;
+    - contraMs: depois de uma esquiva do golpe de perto, a recarga do ataque fica no maximo nisto (ms; o contra-ataque); 0 = sem */
+export interface Esquiva { kChance: number; kReacao: number; kDash: number; chanceMax: number; pertoChance: number; pertoReacao: number; contraMs: number }
+
 /** movimento e tempos das acoes. PROPOSTO, PROTOTIPO */
 export const ACAO = {
   entradaX: 130,             // px do centro onde cada lado entra

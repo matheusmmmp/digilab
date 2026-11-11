@@ -14,7 +14,7 @@ import { fileURLToPath } from "node:url";
 import {
   CMG, CTR, CIT, FORMAS_ARENA, TIRO_POC_V21, LIMITE_POC_MS, MAPA_STATS, STATS, TreinoPet,
   caraterCanonico, criarRng, rivaisArena, formaDaChave, hashSemente, lutarNucleoPoc, multEstagio, NPC, sorteiosPoc, statsDe,
-  type Carater, type Especie, type Estagio, type Exercicio, type Forma, type FormaAdultaNormal, type IdCena, type Stat, type Stats, type StatsPoc, type TiroPoc,
+  type Carater, type Especie, type Estagio, type Exercicio, type Forma, type FormaAdultaNormal, type IdCena, type Stat, type Stats, type StatsPoc, type TiroPoc, type EsquivaPoc,
 } from "../../motor/index.ts";
 
 /* ---------------------------------------------------------------- o candidato */
@@ -37,6 +37,9 @@ export interface Candidato {
   treinoRival: { arena: number; salao: number; liga: number; torre: number; fabrica: number };
   /** a distancia do tiro (o nucleo, D-LP5-12; hoje o TIRO_POC_V21, a luta da POC) */
   tiro: TiroPoc;
+  /** a esquiva pela perspicacia e pela velocidade (o nucleo, D-LP5-14): ligada 0 = a luta da POC. A perspicacia e
+      (mira / neutro)^gamaMira x (1 + kAtento x o eixo atento do carater); a agilidade, (folego / neutro)^gamaFolego */
+  esquiva: EsquivaPoc & { ligada: number; gamaMira: number; kAtento: number; gamaFolego: number };
 }
 const NPCS_V6 = ["npc_tier1_brutamontes", "npc_tier2_sentinela", "npc_tier2_carcereiro", "npc_tier2_porteiro", "npc_v6_youkomon",
   "npc_v5_myotismon", "npc_v6_marinbullmon", "npc_v5_puppetmon", "npc_v5_machinedramon", "npc_v5_piedmon"] as const;
@@ -50,13 +53,21 @@ export const CANDIDATO_V21: Candidato = Object.freeze({
   npcTotal: Object.fromEntries(NPCS_V6.map(k => { const n = NPC[k]; if (!n) throw new Error(`bancada: o NPC ${k} sumiu`); return [k, n.total]; })),
   treinoRival: { arena: 0, salao: 0, liga: 0, torre: 0, fabrica: 0 },
   tiro: { ...TIRO_POC_V21 },
+  esquiva: { ligada: 0, kChance: 1, kReacao: 1, kDash: 1, chanceMax: .95, pertoChance: 0, pertoReacao: 200, contraMs: 0, gamaMira: 1, kAtento: .5, gamaFolego: 1 },
 });
+/** a esquiva do candidato na entrada da luta: so ligada (senao a luta da POC, byte a byte) */
+export const esquivaDe = (c: Candidato): EsquivaPoc | undefined => {
+  if (c.esquiva.ligada !== 0 && c.esquiva.ligada !== 1) throw new Error(`bancada: esquiva.ligada e 0 ou 1 (${c.esquiva.ligada})`);
+  if (!c.esquiva.ligada) return undefined;
+  const { kChance, kReacao, kDash, chanceMax, pertoChance, pertoReacao, contraMs } = c.esquiva;
+  return { kChance, kReacao, kDash, chanceMax, pertoChance, pertoReacao, contraMs };
+};
 /** o tiro do candidato e o da POC? (entao a luta nao leva o `tiro` na entrada, e sai a de sempre, byte a byte) */
 export const tiroDaPoc = (t: TiroPoc): boolean => (Object.keys(TIRO_POC_V21) as (keyof TiroPoc)[]).every(k => t[k] === TIRO_POC_V21[k]);
 const ehEstagioLuta = (e: string): e is EstagioLuta => (ESTAGIOS_LUTA as readonly string[]).includes(e);
 
 /** os numeros da luta de 6 stats pelo candidato (a mesma conta do statsDaLuta, com os expoentes e os multiplicadores do candidato) */
-export function statsLuta(c: Candidato, s: Stats, est: Estagio, condicao: number): StatsPoc {
+export function statsLuta(c: Candidato, s: Stats, est: Estagio, condicao: number, atento = 0): StatsPoc {
   if (!ehEstagioLuta(est)) throw new Error(`bancada: o estagio ${est} nao luta`);
   for (const k of STATS) if (!(Number.isFinite(s[k]) && s[k] > 0)) throw new Error(`bancada: o stat ${k} precisa ser positivo (${s[k]})`);
   if (!(condicao > 0)) throw new Error(`bancada: condicao invalida (${condicao})`);
@@ -67,6 +78,8 @@ export function statsLuta(c: Candidato, s: Stats, est: Estagio, condicao: number
     cad: M.cad / r("recuperacao"), hcd: M.hcd / r("recuperacao"),
     crit: M.crit * r("mira"), erro: M.erro / r("mira"),
     hpot: M.hpot, esquiva: M.esquiva, atordoa: M.atordoa,
+    /* a perspicacia (a mira e o carater atento) e a agilidade (o folego), so com a esquiva ligada (D-LP5-14) */
+    ...(c.esquiva.ligada ? { perc: Math.max(.1, (s.mira / M.neutro) ** c.esquiva.gamaMira * (1 + c.esquiva.kAtento * atento)), agil: (s.folego / M.neutro) ** c.esquiva.gamaFolego } : {}),
   };
 }
 const somaPontos = (b: Stats, pontos: Stats | null, peso: number): Stats =>
@@ -75,7 +88,7 @@ const somaPontos = (b: Stats, pontos: Stats | null, peso: number): Stats =>
 export const caraterRival = (f: Forma): Partial<Carater> | null => f.adulta ? caraterCanonico(f.adulta as FormaAdultaNormal) : null;
 /** um lutador de uma forma, com carater, pontos e condicao */
 export function lutador(c: Candidato, f: Forma, car: Partial<Carater> | null, pontos: Stats | null, condicao = 1): StatsPoc {
-  return statsLuta(c, somaPontos(statsDe(f, car), pontos, c.pesoPonto), f.est, condicao);
+  return statsLuta(c, somaPontos(statsDe(f, car), pontos, c.pesoPonto), f.est, condicao, car?.atento ?? 0);
 }
 /** o rival canonico (a Arena, os torneios): a forma pela chave da tabela, sem treino ou com o treino do lugar */
 export function rivalCanonico(c: Candidato, chave: string, treino = 0): StatsPoc {
@@ -150,8 +163,8 @@ export const lutadorDoPet = (c: Candidato, p: PetBancada, n: number): StatsPoc =
 export const sementeLuta = (base: number, k: number): number => hashSemente("equilibrio-poc", base, k);
 export interface Lado { forma: string; stats: StatsPoc; vida0?: number }
 export interface Luta1 { vencedor: "a" | "b" | null; fim: boolean; relogio: number; vidaA: number }
-export function lutar(cena: IdCena, semente: number, a: Lado, b: Lado, tiro?: TiroPoc): Luta1 {
-  const r = lutarNucleoPoc({ cena, semente, a, b, ...(tiro && !tiroDaPoc(tiro) ? { tiro } : {}) }, sorteiosPoc(semente));
+export function lutar(cena: IdCena, semente: number, a: Lado, b: Lado, tiro?: TiroPoc, esquiva?: EsquivaPoc): Luta1 {
+  const r = lutarNucleoPoc({ cena, semente, a, b, ...(tiro && !tiroDaPoc(tiro) ? { tiro } : {}), ...(esquiva ? { esquiva } : {}) }, sorteiosPoc(semente));
   return { vencedor: r.vencedor, fim: r.fim, relogio: r.relogio, vidaA: r.vidaA };
 }
 /** um contador de vitorias, empates, lutas sem fim e o relogio (histograma em 100 ms) */

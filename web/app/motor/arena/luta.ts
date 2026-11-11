@@ -1,7 +1,7 @@
 /* A luta inteira, sem tela (LP1): a entrada (o mapa, as duas formas, os stats de cada lado e a semente) da sempre o mesmo resultado, que
    e o que o replay da LP2 vai refazer. Os dois lados sao a IA da arena na dificuldade "normal" (a LP-3); a tela da LP3 assiste passo a
    passo com a mesma configuracao. */
-import { ACAO, LIMITE_MS, OPCOES_PADRAO, type Tiro } from "./constantes.ts";
+import { ACAO, LIMITE_MS, OPCOES_PADRAO, type Esquiva, type Tiro } from "./constantes.ts";
 import { FORMAS_ARENA } from "./formas.ts";
 import type { DadosForma } from "./tipos.ts";
 import { sorteiosPorFluxo } from "./rng.ts";
@@ -19,14 +19,21 @@ export function formaArena(chave: string, tabela: TabelaFormas = FORMAS_ARENA) {
 }
 
 /** a entrada de uma luta; `vida0`: a vida com que o lado entra numa serie sem cura (sem ela, cheia) */
-export interface EntradaLuta { cena: IdCena; a: { forma: string; stats: Stats; vida0?: number }; b: { forma: string; stats: Stats; vida0?: number }; semente: number; tiro?: Tiro }
+export interface EntradaLuta { cena: IdCena; a: { forma: string; stats: Stats; vida0?: number }; b: { forma: string; stats: Stats; vida0?: number }; semente: number; tiro?: Tiro; esquiva?: Esquiva }
 
 /** a configuracao da luta 1 contra 1: os dois pela IA, com a dificuldade, o atributo e os projeteis do padrao da POC */
 export function configLuta(e: EntradaLuta, tabela: TabelaFormas = FORMAS_ARENA): ConfigLuta {
   return { cena: e.cena, dific: OPCOES_PADRAO.dific, forca: OPCOES_PADRAO.forca, pvel: OPCOES_PADRAO.pvel,
     a: { forma: formaArena(e.a.forma, tabela), stats: e.a.stats, ...(e.a.vida0 !== undefined ? { vida0: e.a.vida0 } : {}) },
     b: { forma: formaArena(e.b.forma, tabela), stats: e.b.stats, ...(e.b.vida0 !== undefined ? { vida0: e.b.vida0 } : {}) },
-    ...(e.tiro ? { tiro: conferirTiro(e.tiro) } : {}) };
+    ...(e.tiro ? { tiro: conferirTiro(e.tiro) } : {}), ...(e.esquiva ? { esquiva: conferirEsquiva(e.esquiva) } : {}) };
+}
+/** a esquiva da entrada (D-LP5-14): cada numero finito e na faixa, senao falha alto */
+export function conferirEsquiva(x: Esquiva): Esquiva {
+  const ok = (v: unknown, min: number, max: number) => typeof v === "number" && Number.isFinite(v) && v >= min && v <= max;
+  if (!ok(x.kChance, 0, 4) || !ok(x.kReacao, 0, 4) || !ok(x.kDash, 0, 4) || !ok(x.chanceMax, 0, 1) || !ok(x.pertoChance, 0, 1) || !ok(x.pertoReacao, 0, 2000) || !ok(x.contraMs, 0, 5000))
+    throw new Error(`arena: esquiva invalida ${JSON.stringify(x)}`);
+  return { kChance: x.kChance, kReacao: x.kReacao, kDash: x.kDash, chanceMax: x.chanceMax, pertoChance: x.pertoChance, pertoReacao: x.pertoReacao, contraMs: x.contraMs };
 }
 /** a distancia do tiro da entrada (D-LP5-12): cada numero finito e na faixa, senao falha alto */
 export function conferirTiro(t: Tiro): Tiro {

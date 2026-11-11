@@ -9,10 +9,10 @@ import {
   ACOES_DONO_JOGO_V11, ARENA_POR_ID, CAMPANHA_V6, CAT, CD, CMD, CTR, IDS_CENA, LIGA, LUGARES_V6, LUTAS_MAX_INSTALACAO, MAPA_FABRICA, MAPA_SALAO,
   MAPA_TORRE, Motor, NPC, STATS, TPD, alugueisFabrica, arenaDaLuta, caraterCanonico, caraterDoRivalSalao, chaveSprite, criarDono, criarRng,
   LIMITE_POC_MS, condicaoDe, configLutaPoc, criarLutaPoc, formaLiga, formaRivalFabrica, passoPoc, sorteiosPoc, formaRivalInstalacao, formaRivalSalao, hashSemente, mapaDoLugar, rivaisArena, sementeDaSerie, sementeLutaFabrica,
-  type Exercicio, type Forma, type FormaAdultaNormal, type IdCena, type Stat, type StatsPoc, type TiroPoc, type VisaoDono,
+  type Exercicio, type Forma, type FormaAdultaNormal, type IdCena, type Stat, type StatsPoc, type TiroPoc, type EsquivaPoc, type VisaoDono,
 } from "../../motor/index.ts";
 import {
-  CANDIDATO_V21, ESTAGIOS_LUTA, atira, tiroDaPoc, TETO, TIPICO, argumento, commitAtual, contar, juntar, lutador, lutadorDoPet, lutar, novaConta, npc,
+  CANDIDATO_V21, ESTAGIOS_LUTA, atira, esquivaDe, tiroDaPoc, TETO, TIPICO, argumento, commitAtual, contar, juntar, lutador, lutadorDoPet, lutar, novaConta, npc,
   petDoEstagio, pontosNumStat, rivalCanonico, rivalDaForma, sementeLuta, taxa,
   type Candidato, type Conta, type EstagioLuta, type Lado, type Luta1, type PetBancada,
 } from "./comum.ts";
@@ -52,8 +52,10 @@ const D = new Duracao();
 let LUTAS = 0;
 /** o tiro do candidato que roda (rodar() o poe; a luta so o leva quando ele nao e o da POC) */
 let TIRO: TiroPoc | undefined;
+/** a esquiva do candidato que roda (so ligada; D-LP5-14) */
+let ESQ: EsquivaPoc | undefined;
 function luta(est: string, cena: IdCena, s: number, a: Lado, b: Lado): Luta1 {
-  const r = lutar(cena, s, a, b, TIRO); LUTAS++; D.add(est, [a.forma, b.forma], r); return r;
+  const r = lutar(cena, s, a, b, TIRO, ESQ); LUTAS++; D.add(est, [a.forma, b.forma], r); return r;
 }
 /** uma serie sem cura para o pet (a Cidadela, a Liga, a Torre): vai ate a primeira que nao for vitoria ou ate n. Cada rival entra inteiro */
 function serie(est: string, s: number, pet: Lado, rivais: (j: number) => { lado: Lado; mapa: IdCena } | null, n: number): { vitorias: number; relogio: number } {
@@ -124,6 +126,7 @@ export function motorDoCandidato(c: Candidato, semente: number, remendar = c.nom
   x.statsLutaPoc = () => lutador(c, m.forma, m.carater(), m.pontosDeLuta(), condicaoDe(m.e.saude));
   /* o tiro do candidato pela entrada opcional do Motor (desvio D-LP5-1-11); o da POC fica fora, e a luta sai a de sempre */
   if (!tiroDaPoc(c.tiro)) m.tiroLutaPoc = { ...c.tiro };
+  const esq = esquivaDe(c); if (esq) m.esquivaLutaPoc = esq;
   x._rivalPoc = (rival: string, ...resto: unknown[]) => {
     if (!rivaisArena(m.estagioAtual).includes(rival)) throw new Error(`bancada: a vida do candidato so luta na Arena, nao com ${rival}`);
     const rv = rivalDoMotor(rival, ...resto);
@@ -230,7 +233,7 @@ function tiro(c: Candidato, bases: number[]) {
     for (const [tipo, alvos] of [["perto", perto], ["longe", longe]] as const) for (const x of longe) for (const y of alvos) for (const m of IDS_CENA) for (const base of bases)
       for (let q = 0; q < TAM.lutasTiro; q++) for (const ladoX of ["a", "b"] as const) {
         const s = sementeLuta(base, 12_000_000 + q), A = ladoX === "a" ? lados[x] : lados[y], B = ladoX === "a" ? lados[y] : lados[x];
-        const L = criarLutaPoc(configLutaPoc({ cena: m, semente: s, a: A, b: B, ...(TIRO && !tiroDaPoc(TIRO) ? { tiro: TIRO } : {}) }), sorteiosPoc(s));
+        const L = criarLutaPoc(configLutaPoc({ cena: m, semente: s, a: A, b: B, ...(TIRO && !tiroDaPoc(TIRO) ? { tiro: TIRO } : {}), ...(ESQ ? { esquiva: ESQ } : {}) }), sorteiosPoc(s));
         const quem = ladoX === "a" ? L.a : L.b, vistos = new Map<unknown, number>();
         while (!L.fim && L.relogio < LIMITE_POC_MS) {
           passoPoc(L);
@@ -298,7 +301,7 @@ function torneios(c: Candidato, bases: number[]) {
 /* ---------------------------------------------------------------- a linha de comando */
 export const GRUPOS = ["lideres", "sparring", "vida", "treino", "estagio", "formas_crianca", "formas_adolescente", "formas_adulto", "formas_mega", "torneios", "tiro"] as const;
 function rodar(grupo: string, c: Candidato, bases: number[]): unknown {
-  TIRO = c.tiro;
+  TIRO = c.tiro; ESQ = esquivaDe(c);
   switch (grupo) {
     case "tiro": return tiro(c, bases);
     case "lideres": return lideres(c, bases);

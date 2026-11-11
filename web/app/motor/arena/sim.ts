@@ -30,6 +30,7 @@ function conferirStats(l: Lado, cfg: ConfigLuta): void {
   for (const k of ["hp", "atk", "def", "vel", "cad", "crit", "hcd", "hpot", "esquiva", "atordoa", "erro"] as const)
     if (typeof s[k] !== "number" || !Number.isFinite(s[k])) throw new Error(`arena: stat ${k} do lado ${l} nao e numero (${String(s[k])})`);
   if (s.hp < 1) throw new Error(`arena: vida do lado ${l} menor que 1 (${s.hp})`);
+  for (const k of ["perc", "agil"] as const) if (s[k] !== undefined && !(typeof s[k] === "number" && Number.isFinite(s[k]) && s[k]! > 0)) throw new Error(`arena: ${k} do lado ${l} invalida (${String(s[k])})`);
   const v0 = cfg[l].vida0;
   if (v0 !== undefined && !(Number.isInteger(v0) && v0 >= 1 && v0 <= s.hp)) throw new Error(`arena: vida inicial do lado ${l} fora de [1, ${s.hp}] (${v0})`);
 }
@@ -46,7 +47,7 @@ function criarLutador(L: Luta, lado: Lado): Lutador {
     msAtk: forma.msGolpe, msSk: forma.msHabilidade,
     alcance: g.proj ? ACAO.alcanceDist : EQ.alcanceCorpo, raio: EQ.raio, alvo: null, fase,
     morto: false, dano: 0, golpes: 0, mira: null, dash: 0, dashCd: 0, dashDir: [0, 0], reacao: 0, desvioDir: [0, 0],
-    atordoado: 0, caiuEm: 0, foraAte: 0, escondido: false, naRuna: 0, buffAte: 0, bloq: 0, ladoDesvio: 0, esperaTiro: 0,
+    atordoado: 0, caiuEm: 0, foraAte: 0, escondido: false, naRuna: 0, buffAte: 0, bloq: 0, ladoDesvio: 0, esperaTiro: 0, nAtaque: 0, leuAtaque: -1, contraPend: false,
     acDano: 0, ultAmb: 0, ultNum: 0, decisao: "",
   };
 }
@@ -99,7 +100,7 @@ function aplicarDano(L: Luta, at: Lutador, alvo: Lutador, dados: GolpeBase | nul
 }
 
 function iniciarAtaque(L: Luta, u: Lutador, mira: [number, number], hab: boolean): void {
-  u.estado = "attack"; u.t = 0; u.golpeDado = false; u.mira = mira; u.viraEsq = mira[0] < u.x; u.usandoHab = !!hab;
+  u.estado = "attack"; u.t = 0; u.golpeDado = false; u.mira = mira; u.viraEsq = mira[0] < u.x; u.usandoHab = !!hab; u.nAtaque++;
   if (hab) {
     u.recSk = u.st.hcd * 1000;
     evento(L, { tipo: "habilidade", u: ref(u), propria: u.propria, anim: u.sk.anim, x: u.x, y: u.y });
@@ -130,15 +131,26 @@ function andar(L: Luta, u: Lutador, mx: number, my: number, vel: number, dt: num
 }
 
 function desviar(L: Luta, u: Lutador, dt: number): void {
-  const cfg = dific(L);
+  const cfg = dific(L), E = L.cfg.esquiva;
+  /* a esquiva (D-LP5-14): a perspicacia sobe a chance e encurta a reacao; sem a `esquiva`, a da POC */
+  const perc = E ? u.st.perc ?? 1 : 1, chance = E ? Math.min(E.chanceMax, cfg.desvio * perc ** E.kChance) : cfg.desvio, reacao = E ? cfg.reacao / perc ** E.kReacao : cfg.reacao;
   for (const p of L.projeteis) {
     if (p.de.lado === u.lado || p.decidido.has(u)) continue;
     const rx = u.x - p.x, ry = (u.y - EQ.peito) - p.y, vindo = rx * p.vx + ry * p.vy > 0;
     if (!vindo || dist(rx, ry) > 260) continue;
     p.decidido.add(u);
-    if (L.r.ia() < cfg.desvio) {
+    if (L.r.ia() < chance) {
       const v = dist(p.vx, p.vy) || 1, lado = L.r.ia() < 0.5 ? 1 : -1;
-      u.reacao = cfg.reacao; u.desvioDir = [-p.vy / v * lado, p.vx / v * lado];
+      u.reacao = reacao; u.desvioDir = [-p.vy / v * lado, p.vx / v * lado];
+    }
+  }
+  /* o golpe de perto do outro (D-LP5-14): lido uma vez por ataque, na preparacao e ao alcance; quem le pula para tras */
+  const o = u.alvo;
+  if (E && E.pertoChance > 0 && o && !o.morto && o.estado === "attack" && !o.golpeDado && !dadosDe(o).proj && u.leuAtaque !== o.nAtaque && u.reacao <= 0 && u.dash <= 0) {
+    const ox = u.x - o.x, oy = u.y - o.y, od = dist(ox, oy) || 1;
+    if (od <= EQ.alcanceCorpo + u.raio + EQ.investida) {
+      u.leuAtaque = o.nAtaque;
+      if (L.r.ia() < Math.min(E.chanceMax, E.pertoChance * perc ** E.kChance)) { u.reacao = E.pertoReacao / perc ** E.kReacao; u.desvioDir = [ox / od, oy / od]; u.contraPend = E.contraMs > 0; }
     }
   }
   if (u.reacao > 0) { u.reacao -= dt; if (u.reacao <= 0) { u.dash = ACAO.desvioCpuMs; u.dashDir = u.desvioDir; } }
@@ -186,7 +198,12 @@ function atualizar(L: Luta, u: Lutador, dt: number): void {
   sorteioDaTroca(L, u);
   u.viraEsq = dx < 0;
   desviar(L, u, dt);
-  if (u.dash > 0) { u.dash -= dt; andar(L, u, u.dashDir[0], u.dashDir[1], ACAO.desvioCpu, dt); mudar(u, "run"); return; }
+  if (u.dash > 0) {
+    const Es = L.cfg.esquiva;
+    u.dash -= dt; andar(L, u, u.dashDir[0], u.dashDir[1], Es ? ACAO.desvioCpu * (u.st.agil ?? 1) ** Es.kDash : ACAO.desvioCpu, dt); mudar(u, "run");
+    if (Es && u.dash <= 0 && u.contraPend) { u.contraPend = false; u.recarga = Math.min(u.recarga, Es.contraMs); }
+    return;
+  }
   // mira: o erro de mira do lutador (LP2; na POC, o da dificuldade), maior se o alvo esta numa moita ou se a arena atrapalha (tempestade)
   const e = u.st.erro * (o.escondido ? 4 : 1) * (def(L).erro?.(L.cena) ?? 1);
   const mira = (): [number, number] => [o.x + (L.r.ia() - 0.5) * 2 * e, o.y - EQ.peito + (L.r.ia() - 0.5) * e];

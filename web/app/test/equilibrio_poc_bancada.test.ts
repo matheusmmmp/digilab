@@ -116,3 +116,22 @@ describe("a distancia do tiro no nucleo (D-LP5-12)", () => {
     expect(candidatoDe({ nome: "teste", tiro: { distMin: 90, esperaMax: 800 } }).tiro.distMin).toBe(90);
   });
 });
+
+describe("a esquiva pela perspicacia e pela velocidade (D-LP5-14)", () => {
+  const A = { forma: "cirro_crianca_sereno", stats: statsRivalArena("cirro_crianca_sereno") };
+  const B = { forma: "brasa_crianca_arisco", stats: statsRivalArena("brasa_crianca_arisco") };
+  const neutra = { kChance: 1, kReacao: 1, kDash: 1, chanceMax: .95, pertoChance: 0, pertoReacao: 200, contraMs: 0 };
+  test("ligada com os lutadores neutros e sem o golpe de perto, da a luta da POC", () => {
+    for (const cena of ["campo", "floresta", "ringue"] as const) for (const s of [4, 5, 6]) {
+      const sem = lutarNucleoPoc({ cena, semente: s, a: A, b: B }, sorteiosPoc(s));
+      expect(lutarNucleoPoc({ cena, semente: s, a: A, b: B, esquiva: neutra }, sorteiosPoc(s))).toEqual(sem);
+    }
+  });
+  test("o candidato v21 nao liga a esquiva; a perspicacia so aparece ligada; fora da faixa falha alto", () => {
+    expect(c.esquiva.ligada).toBe(0);
+    expect(rivalCanonico(c, "cirro_crianca_sereno").perc).toBeUndefined();
+    const x = candidatoDe({ nome: "teste", esquiva: { ligada: 1, pertoChance: .3 } });
+    expect(rivalCanonico(x, "cirro_crianca_sereno").perc).toBeGreaterThan(rivalCanonico(x, "brasa_crianca_arisco").perc!);
+    expect(() => candidatoDe({ nome: "teste", esquiva: { ligada: 1, chanceMax: 2 } })).toThrow();
+  });
+});

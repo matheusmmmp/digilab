@@ -3,8 +3,8 @@
    Os candidatos com nome ficam no CANDIDATOS; os da grade (grade.ts) vem de um JSON e so rodam com --grade. Os numeros novos sao
    PROPOSTOS, SEM FONTE, ate o Matheus decidir. */
 import { readFileSync } from "node:fs";
-import { conferirTiro as conferirTiroPoc } from "../../motor/arena/luta.ts";
-import { CANDIDATO_V21, type Candidato } from "./comum.ts";
+import { conferirEsquiva as conferirEsquivaPoc, conferirTiro as conferirTiroPoc } from "../../motor/arena/luta.ts";
+import { CANDIDATO_V21, esquivaDe, type Candidato } from "./comum.ts";
 
 /** as trocas de um candidato: cada chave do Candidato, com as sub-chaves que mudam */
 export type Troca = { nome: string } & { [K in Exclude<keyof Candidato, "nome">]?: Partial<Candidato[K]> | number };
@@ -25,12 +25,13 @@ export function candidatoDe(t: Troca): Candidato {
     for (const [s, x] of Object.entries(v)) {
       if (!(s in alvo)) throw new Error(`candidato ${t.nome}: ${k}.${s} nao existe`);
       /* o treino dos rivais e o tiro podem ser 0 (o nucleo confere a faixa do tiro); o resto e positivo */
-      if (typeof x !== "number" || !Number.isFinite(x) || x < 0 || (x === 0 && k !== "treinoRival" && k !== "tiro")) throw new Error(`candidato ${t.nome}: ${k}.${s} invalido (${x})`);
+      if (typeof x !== "number" || !Number.isFinite(x) || x < 0 || (x === 0 && k !== "treinoRival" && k !== "tiro" && k !== "esquiva")) throw new Error(`candidato ${t.nome}: ${k}.${s} invalido (${x})`);
       alvo[s] = x;
     }
   }
   out.nome = t.nome;
   conferirTiroPoc(base.tiro);
+  const esq = esquivaDe(base); if (esq) conferirEsquivaPoc(esq);
   return Object.freeze(base);
 }
 
