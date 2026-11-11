@@ -100,7 +100,7 @@ desligada):
 
 ## 7. Decisões do Matheus
 
-As decisões 1 a 3 foram DECIDIDAS como recomendadas ("pode seguir para o plano lp6", 2026-11-11). A 4 está PROPOSTA. A 2 foi atualizada na LP6-3,
+As decisões 1 a 3 foram DECIDIDAS como recomendadas ("pode seguir para o plano lp6", 2026-11-11). A 4 foi DECIDIDA na LP6-3 (2026-11-11), com os números da calibração. A 2 foi atualizada na LP6-3,
 pela R2 (abaixo).
 
 1. **O apoio sai pela distância, com recarga própria (seção 3), ou ele ocupa o lugar da habilidade das 68 formas que a repetem?**
@@ -124,6 +124,9 @@ pela R2 (abaixo).
    - **Recomendado:** espaço de verdade, com a elipse por estágio, atrás de chave, e calibrada junto com o segundo golpe.
    - **O custo de errar:** com espaço de verdade, a luta do Mega fica mais longa, e os torneios e os NPCs mudam (a LP6-3 mede isso). Só o
      visual mantém os corpos grandes se empurrando e o tiro sem espaço para recuar.
+   - **DECIDIDA em 2026-11-11, na LP6-3:** espaço de verdade, com a elipse em **1,2 no Ultimate e 1,4 no Mega**, os números do
+     `lp6_3_u120` (D-LP6-3-9). O Matheus: "(a) 1,2 e 1,4 (Recommended)", repassado pelo Gerente. Os fatores 1,15 e 1,3 da seção 4a
+     ficam como a proposta original. A tabela da seção 4a não muda, e esta linha vale sobre ela.
 
 ## 8. A LP6-3: o que a rodada mede (registrado antes de qualquer luta, 2026-11-11)
 
