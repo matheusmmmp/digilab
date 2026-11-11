@@ -150,6 +150,70 @@ export function frenteDoTiro(a: AtlasOk, sprite: string, t: number): { fx: numbe
   frentes.set(ch, f); return f;
 }
 
+/** A borda cortada do export (LP6-2, o conserto pedido nas capturas): alguns clipes do jogo de origem trazem o efeito do golpe dentro do
+    proprio quadro, e o export do UP o corta na caixa comum (o Attack_1 do Gallantmon: a explosao termina numa linha reta). A arte alem da
+    caixa nao existe; o palco nao a inventa, so esfuma a faixa da borda onde o quadro encosta na caixa com uma faixa longa de pixels cheios.
+    PROPOSTO, SEM FONTE: ajustar nas capturas.
+    - largura: a faixa esfumada, em pixels do sprite;
+    - fracao: a parte da borda com pixels cheios a partir da qual ela conta como cortada (uma ponta de lanca na borda nao conta);
+    - alfa: o alfa a partir do qual um pixel conta como cheio */
+export const BORDA_CORTADA = { largura: 16, fracao: .2, alfa: 64 } as const;
+export type LadoCortado = "esq" | "dir" | "topo";
+/** os lados do quadro (w x h, os alfas em RGBA) que encostam na caixa (toca) e estao cortados: a fracao da borda com pixels cheios */
+export function ladosCortados(rgba: ArrayLike<number>, w: number, h: number, toca: Readonly<Record<LadoCortado, boolean>>): LadoCortado[] {
+  const cheio = (i: number, j: number) => rgba[(j * w + i) * 4 + 3] > BORDA_CORTADA.alfa, lados: LadoCortado[] = [];
+  const conta = (n: number, f: (k: number) => boolean) => { let c = 0; for (let k = 0; k < n; k++) if (f(k)) c++; return c / Math.max(1, n); };
+  if (toca.esq && conta(h, j => cheio(0, j)) >= BORDA_CORTADA.fracao) lados.push("esq");
+  if (toca.dir && conta(h, j => cheio(w - 1, j)) >= BORDA_CORTADA.fracao) lados.push("dir");
+  if (toca.topo && conta(w, i => cheio(i, 0)) >= BORDA_CORTADA.fracao) lados.push("topo");
+  return lados;
+}
+/** esfuma os lados cortados no lugar: o alfa cai em rampa ate 0 na borda, na faixa BORDA_CORTADA.largura */
+export function esfumarBordas(rgba: { [i: number]: number; length: number }, w: number, h: number, lados: readonly LadoCortado[]): void {
+  const L = BORDA_CORTADA.largura;
+  for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+    let f = 1;
+    for (const l of lados) { const d = l === "esq" ? i : l === "dir" ? w - 1 - i : j; if (d < L) f = Math.min(f, (d + .5) / L); }
+    if (f < 1) { const k = (j * w + i) * 4 + 3; rgba[k] = Math.round(rgba[k] * f); }
+  }
+}
+/** o quadro esfumado (null: nenhum lado cortado, o quadro do atlas serve), por sprite e quadro */
+const esfumados = new Map<string, HTMLCanvasElement | null>();
+function quadroEsfumado(a: AtlasOk, sprite: string, clipe: Clipe, iq: number): { cv: HTMLCanvasElement; q: Quadro } | null {
+  const k = chaveUp(a.dados, sprite), s = a.dados.sprites[k], cl = s?.clipes?.[clipe], img = a.imgClipes;
+  if (!s || !cl || !img || typeof document === "undefined") return null;
+  const q = cl.quadros[iq % cl.quadros.length]; if (!q || q[2] === 0) return null;
+  const ch = `${k}:${clipe}:${iq}`;
+  if (!esfumados.has(ch)) {
+    const toca = { esq: q[4] <= 0, dir: q[4] + q[2] >= s.caixa[0], topo: q[5] <= 0 };
+    let r: HTMLCanvasElement | null = null;
+    if (toca.esq || toca.dir || toca.topo) {
+      const cv = document.createElement("canvas"); cv.width = q[2]; cv.height = q[3];
+      const x = cv.getContext("2d", { willReadFrequently: true });
+      if (x) {
+        x.drawImage(img, q[0], q[1], q[2], q[3], 0, 0, q[2], q[3]);
+        const d = x.getImageData(0, 0, q[2], q[3]), lados = ladosCortados(d.data, q[2], q[3], toca);
+        if (lados.length) { esfumarBordas(d.data, q[2], q[3], lados); x.putImageData(d, 0, 0); r = cv; }
+      }
+    }
+    esfumados.set(ch, r);
+  }
+  const cv = esfumados.get(ch); return cv ? { cv, q } : null;
+}
+/** o sprite da luta: o desenharSprite do atlas, com o quadro esfumado onde o export o cortou na caixa (o mesmo lugar, a mesma escala e o
+    mesmo espelho) */
+function desenharSpriteLuta(ctx: CanvasRenderingContext2D, a: AtlasOk, sprite: string, x: number, y: number, es: number, iq: number,
+  opc: { espelho: boolean; clipe?: Clipe }): void {
+  const e = opc.clipe ? quadroEsfumado(a, sprite, opc.clipe, iq) : null;
+  if (!e) { desenharSprite(ctx, a, sprite, x, y, es, iq, opc); return; }
+  const s = a.dados.sprites[chaveUp(a.dados, sprite)]!;
+  ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.imageSmoothingEnabled = false;
+  x = Math.round(x); y = Math.round(y);
+  if (opc.espelho) { ctx.translate(x + s.caixa[0] * es, y); ctx.scale(-1, 1); x = 0; y = 0; }
+  ctx.drawImage(e.cv, 0, 0, e.q[2], e.q[3], x + e.q[4] * es, y + e.q[5] * es, e.q[2] * es, e.q[3] * es);
+  ctx.restore();
+}
+
 /** o usuario pediu menos movimento: sem tremida, clarao, poeira nem camera lenta (os numeros, o "K.O." e a barra ficam) */
 export const movimentoReduzido = (): boolean => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -476,7 +540,7 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
       fantasmas++;
       const fc = document.createElement("canvas"), m = 2 * es; fc.width = w * es + 2 * m; fc.height = h * es + 2 * m;
       const fx = fc.getContext("2d"); if (!fx) throw new Error("canvas 2d indisponível");
-      desenharSprite(fx, a, f.sprite, m, m, es, iq, opc);
+      desenharSpriteLuta(fx, a, f.sprite, m, m, es, iq, opc);
       fx.globalCompositeOperation = "source-atop"; fx.globalAlpha = POSTURA.fantasmaTinta; fx.fillStyle = ELEMENTO[els[i]].meio; fx.fillRect(0, 0, fc.width, fc.height);
       POSTURA.fantasmas.forEach((alfa, k) => {
         const p = v.hist[i][(k + 1) * (reduzido ? 2 : 3)]; if (!p) return;
@@ -489,7 +553,7 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
       rastros++;
       MOVIMENTO.rastroAlfa.forEach((alfa, k) => {
         const p = v.hist[i][(k + 1) * MOVIMENTO.rastroPassos]; if (!p) return;
-        const op = origem(p); ctx.globalAlpha = alfa; desenharSprite(ctx, a, f.sprite, op.x, op.y, es, iq, opc); ctx.globalAlpha = 1;
+        const op = origem(p); ctx.globalAlpha = alfa; desenharSpriteLuta(ctx, a, f.sprite, op.x, op.y, es, iq, opc); ctx.globalAlpha = 1;
       });
     }
     const branco = !reduzido && claraoPoc(v, passo, i);
@@ -498,10 +562,10 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
       claroes++;
       const fc = document.createElement("canvas"), m = 2 * es; fc.width = w * es + 2 * m; fc.height = h * es + 2 * m;
       const fx = fc.getContext("2d"); if (!fx) throw new Error("canvas 2d indisponível");
-      desenharSprite(fx, a, f.sprite, m, m, es, iq, opc);
+      desenharSpriteLuta(fx, a, f.sprite, m, m, es, iq, opc);
       fx.globalCompositeOperation = "source-atop"; fx.fillStyle = "#fff"; fx.fillRect(0, 0, fc.width, fc.height);
       ctx.drawImage(fc, Math.round(x0) - m, Math.round(y0) - m);
-    } else desenharSprite(ctx, a, f.sprite, x0, y0, es, iq, opc);
+    } else desenharSpriteLuta(ctx, a, f.sprite, x0, y0, es, iq, opc);
     ctx.globalAlpha = 1;
     /* a aura da habilidade pronta (E4, a "carregar" de antes): faiscas que sobem dos lados do corpo */
     if (u.recSk <= 0 && !u.morto && u.estado !== "attack") {

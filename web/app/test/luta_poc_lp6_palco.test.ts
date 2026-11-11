@@ -9,7 +9,7 @@ import {
 } from "../motor/index.ts";
 import { lutar as lutarArena } from "../motor/arena/luta.ts";
 import { aplicarEventosPoc, passosDoTiro, tempoDoAtaque, visualNovoPoc, type VooPoc } from "../src/telas/lutar/palcoPoc/visualPoc.ts";
-import { APOIO_POC, avancoDoApoio, caixaDoMundo, clipeDoLutador, geometriaPoc } from "../src/telas/lutar/palcoPoc/desenhoPoc.ts";
+import { APOIO_POC, BORDA_CORTADA, avancoDoApoio, caixaDoMundo, clipeDoLutador, esfumarBordas, geometriaPoc, ladosCortados } from "../src/telas/lutar/palcoPoc/desenhoPoc.ts";
 import { ladoDesenho, lutaMontadaDoEndereco } from "../src/lutaPocTela.ts";
 
 const T = LUTA_V23, ESQ = esquivaDaTabela(T)!;
@@ -114,5 +114,31 @@ describe("a luta montada das capturas", () => {
     expect(lig.entrada.apoio).toEqual(APOIO_LP6); expect(lig.entrada.arenaPorEstagio).toEqual(ARENA_POR_ESTAGIO_LP6); expect(lig.entrada.tiro).toEqual(T.tiro);
     expect(des.entrada.apoio).toBeUndefined(); expect(des.entrada.tiro).toEqual(T.tiro);
     expect(() => lutaMontadaDoEndereco(busca("talvez"))).toThrow(/palco_lp6/);
+  });
+});
+
+describe("a borda cortada do export (o conserto das capturas da LP6-2)", () => {
+  /* um quadro w x h com os pixels cheios onde cheio(i, j) */
+  const quadro = (w: number, h: number, cheio: (i: number, j: number) => boolean) => {
+    const d = new Array<number>(w * h * 4).fill(0);
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) if (cheio(i, j)) { const k = (j * w + i) * 4; d[k] = d[k + 1] = d[k + 2] = 200; d[k + 3] = 255; }
+    return d;
+  };
+  test("a explosao cortada na borda da caixa conta; a ponta de lanca e o lado que nao encosta na caixa, nao", () => {
+    const w = 40, h = 40, toca = { esq: true, dir: true, topo: true };
+    const explosao = quadro(w, h, (i, j) => i >= 20 && j >= 5 && j < 35);   /* encosta na direita em 30 de 40 linhas */
+    expect(ladosCortados(explosao, w, h, toca)).toEqual(["dir"]);
+    expect(ladosCortados(explosao, w, h, { esq: true, dir: false, topo: true })).toEqual([]);
+    const lanca = quadro(w, h, (i, j) => i >= 19 && i <= 20);              /* encosta no topo em 2 de 40 colunas */
+    expect(ladosCortados(lanca, w, h, toca)).toEqual([]);
+  });
+  test("o esfumado: o alfa cai em rampa ate a borda cortada, e o resto do quadro fica igual", () => {
+    const w = 40, h = 10, d = quadro(w, h, () => true), antes = [...d];
+    esfumarBordas(d, w, h, ["dir"]);
+    const alfa = (i: number) => d[(5 * w + i) * 4 + 3];
+    expect(alfa(w - 1)).toBeLessThan(20);
+    for (let i = w - BORDA_CORTADA.largura; i < w - 1; i++) expect(alfa(i)).toBeGreaterThan(alfa(i + 1));
+    for (let i = 0; i < w - BORDA_CORTADA.largura; i++) expect(alfa(i)).toBe(255);
+    for (let k = 0; k < d.length; k++) if (k % 4 !== 3) expect(d[k]).toBe(antes[k]);
   });
 });
