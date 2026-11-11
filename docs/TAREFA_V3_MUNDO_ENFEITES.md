@@ -316,3 +316,106 @@ pináculo.
 **O revisor** (um subagente Sonnet novo, que não fez o trabalho nem viu a tentativa 1): **APROVA COM RESSALVA** nas duas rodadas. A rodada 1 pediu o vidro âmbar à noite, o fuste mais claro, menos peso em cima, os braços curtos (compridos pareciam placa) e a hera mais limpa; a rodada 2 deu tudo por resolvido, menos o contraste do fuste e da hera à noite no Digital (ainda escuros), que não bloqueia. A prancha está em
 `docs/objetos3d/poste/blocos/prancha_poste_blocos.jpg`; as capturas (antes e blocos, Ilha e Digital, dia e noite) estão fora do git, em
 `D:\Trab\digilab\capturas_objetos3d\poste\blocos\`. Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-POSTE-1 a 9.
+
+## 15. O carro feito à mão por script (2026-11-09, Gerente, Claude Code, Fable 5.2, branch `v3-objeto-carro-mao`)
+
+**O pedido:** com o carro em cartoon (#739) no jogo, o Matheus achou que ele continuava "muito feio" e pediu uma revisão dos modelos 3D,
+a começar por ele. O defeito era da malha, não da pintura: a malha da Meshy é amassada e facetada, e a textura dela vem em ilhas
+pequenas, que viram cacos triangulares quando a cor é chapada. O carro foi refeito do zero, como o poste da seção 14.
+
+**O carro (`docs/objetos3d/carro/mao/`):**
+- `carro_mao.py`: a carroceria é uma superfície por seções (23 estações, 19 pontos cada: a soleira, a lateral, o ombro, a coluna e o
+  teto), com a linha de cima do esboço 1 (o capô, o para-brisa, o teto, o vidro de trás); as peças são sólidos simples (quatro rodas,
+  as molduras das caixas de roda, dois para-choques, dois faróis, os retrovisores, seis tufos de musgo, doze folhas de capim e quatro
+  flores). A pintura é uma função da posição no espaço: os vidros com a moldura e os riscos de brilho, a porta, a maçaneta, o corte do
+  capô, a grade, os piscas, as lanternas, a placa, a ferrugem (a barra de baixo, as manchas que escorrem, a volta das rodas), o musgo e o
+  buraco do teto com a terra. Só cores chapadas, sem degradê. O atlas é pintado a 2 048 px e reduzido a 1 024 px, em 128 cores. Sem IA,
+  sem Blender, determinístico;
+- `publicar_mao.py`: a procedência no `asset.extras`, a troca em `web/app/public/enfeites/carro/` e o validador (0 erros, 0 avisos).
+
+**No jogo:** 2 166 triângulos (teto 2 414), 177 821 bytes com o `License.txt` (teto 307 200), um nó, uma malha, uma textura. A altura
+(4,8), a sombra, a grade e o lugar do carro não mudam (E-G0, E-G10). O `web/app/test/ilha_enfeites.test.ts` ganha o teste da
+procedência. Os scripts do carro da Meshy ficam em `docs/objetos3d/carro/` como histórico.
+
+**Não feito:** não houve revisor separado nem prancha de capturas no git; a conferência foi na vitrine (`poc/vitrine.html`) e no jogo, no
+estilo da Ilha. O estilo Digital e o celular não foram conferidos. Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-CARRO-10 a 12.
+
+## 16. A geladeira feita à mão por script (2026-11-09, Gerente, Claude Code, Fable 5.2, branch `v3-objeto-geladeira-mao`)
+
+**O pedido:** depois do carro da seção 15, o Matheus pediu: "agora arrume essa geladeira também". A geladeira da Meshy tinha o mesmo
+defeito do carro (a malha amassada) e esperava créditos para ser refeita; pelo script ela não gasta crédito.
+
+**A geladeira (`docs/objetos3d/geladeira/mao/`):**
+- `geladeira_mao.py`: o corpo e as duas portas são seções de cantos redondos, como no esboço 1 (a geladeira retrô verde-menta); as peças
+  são sólidos simples (dois puxadores cromados, quatro dobradiças, o vaso de barro com o broto, as folhas da hera e cinco tufos de musgo
+  no pé). A pintura é uma função da posição no espaço, só com cores chapadas: os reflexos na diagonal, o emblema, as lascas de tinta com
+  ferrugem que escorre, a ferrugem do pé, a grade do motor atrás e os ramos da hera. A geladeira fica tombada 3,5 graus para o lado. Os
+  sólidos, o atlas e a escrita do glTF são os do `carro_mao.py`, que ganhou a função `exportar` (o carro sai byte a byte igual);
+- `publicar_mao.py`: a procedência no `asset.extras`, a troca em `web/app/public/enfeites/geladeira/` e o validador (0 erros, 0 avisos).
+
+**No jogo:** 1 880 triângulos (teto 2 414), 158 352 bytes com o `License.txt` (teto 307 200), um nó, uma malha, uma textura. A altura
+(3,0), a sombra, a grade e o lugar não mudam (E-G0, E-G10). O jogo vira a frente dos marcos para a área, então na praia do sul o jogador
+vê a geladeira de costas; por isso a hera também sobe por trás, ao lado da grade do motor. O `web/app/test/ilha_enfeites.test.ts` ganha o
+teste da procedência. Os arquivos da geladeira da Meshy ficam em `docs/enfeites/geladeira/` como histórico.
+
+**Não feito:** não houve revisor separado nem prancha de capturas no git; a conferência foi na vitrine e no jogo, no estilo da Ilha. O
+estilo Digital dentro do jogo e o celular não foram conferidos. Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-GEL-1 a 3.
+
+## 17. A lata gigante feita à mão por script, dentro do mapa (2026-11-10, Gerente, Claude Code, Fable 5.2, branch `v3-objeto-lata-mao`)
+
+**O pedido:** o Matheus, em 2026-11-10: a lata gigante "tá fora do mapa e ainda tá toda errada. Vê a malha dela, a textura dela e daí
+bota ela dentro do mapa".
+
+**O que estava errado:** a lata era a da D4 do mapa Digital (`docs/TAREFA_V3_MAPA_DIGITAL.md`, seção 12). Ela só existia no estilo
+Digital, presa ao horizonte: andava com a câmera e nunca ficava num ponto da ilha. A textura da Meshy, achatada em nove cores, tinha as
+faixas em manchas picotadas, bem longe do concept.
+
+**A lata nova (`docs/objetos3d/lata/mao/`):**
+- `lata_mao.py`: segue o concept 1 (a lata de refrigerante em faixas pastel, com o adesivo das cerejas), mas nada vem da Meshy. O corpo é
+  uma superfície de revolução de 32 lados (o fundo, o corpo, o ombro, o gargalo, a borda e a tampa rebaixada), com o anel de abrir em
+  cima. A pintura é uma função da posição: as faixas em onda pelo ângulo e pela altura (lisas, e a emenda de trás fecha), as cerejas com
+  a borda branca do adesivo, o metal da tampa e o furo de beber. Sem marca e sem texto. A lata fica limpa, como no concept (sem ferrugem
+  nem amassado), tombada 5 graus, com cinco tufos de musgo e oito folhas de capim no pé;
+- `publicar_mao.py`: a procedência no `asset.extras`, os arquivos em `web/app/public/enfeites/lata/` e o validador (0 erros, 0 avisos).
+
+**No jogo:**
+- **A lata vira um marco da grade,** o quarto, com o carro, a geladeira e o trilho: `ENFEITES_MODELOS.lata` (7 células de altura),
+  `ENFEITES_GRADE.lata` e `PLANTA_ILHA.marcos.lata`, no ponto (16, −5), ao norte, atrás da área, entre o lar e o portão. Ela aparece em
+  todo estilo que tem os enfeites, não só no Digital, e é vista do ninho por cima do barranco.
+- **A lata do horizonte sai:** a função `lata` (`digital.ts`), o `lugarDaLata` (`digitalConta.ts`), o `DIGITAL.lata` e a pasta
+  `web/app/public/mapa_digital/lata/`. O gancho `quadro` dos objetos (`cena.ts`, `vista.ts`) fica, sem uso hoje.
+- 904 triângulos (teto 2 414), 91 kB com o `License.txt` (teto 300 kB), um nó, uma malha, uma textura de 1024 px.
+- Os objetos da grade não mudam (E-G0); a clareira da lata só esconde decoração.
+
+**Os testes:** o `web/app/test/ilha_enfeites.test.ts` confere o arquivo e o lugar da lata como os dos outros marcos, e a procedência; o
+`web/app/test/mapa_digital.test.ts` troca os dois testes da D4 por um que confere que o Digital não tem mais a lata própria.
+
+**Não feito:** não houve revisor separado nem prancha de capturas no git; a conferência foi na vitrine e no jogo, no estilo da Ilha. O
+estilo Digital dentro do jogo, o celular e o e2e não foram conferidos. Os arquivos da lata da Meshy ficam em `docs/mapa_digital/lata/`
+como histórico. Os desvios estão em `docs/registro/2026-11.md`, D-OBJ-LATA-1 a 4.
+
+## 18. O poste e o trilho em cartoon, feitos à mão por script (2026-11-10, Gerente, Claude Code, Fable 5.2, branch `v3-objetos-cartoon`)
+
+**O pedido do Matheus (2026-11-10):** depois do levantamento do padrão dos objetos (cinco jeitos de fazer, cada um com uma cara), "então
+faz tudo em estilo cartoon pra ver como fica". É um teste para ele olhar: a decisão entre o cartoon e o voxel continua dele.
+
+**O que mudou:**
+
+- **O poste** (`docs/objetos3d/cartoon/poste.py`) troca o poste em blocos da seção 14. É o mesmo lampião de ferro verde com a hera: o pé,
+  a coluna e o colar são uma superfície de revolução, a lanterna e o chapéu são troncos de pirâmide, e a hera é uma faixa pintada em
+  espiral. 366 triângulos (teto 554). A máscara `poste_luz.png` acende os vidros à noite, como antes; o meio da lanterna fica a 0,77 da
+  altura, e o `ENFEITE_HALO` não muda.
+- **O trilho** (`docs/objetos3d/cartoon/trilho.py`) troca o vagão da Meshy. Segue o esboço 1 do trem: o vagão vermelho de tábuas, as três
+  escotilhas douradas de cada lado, o teto de lona e um trecho de trilho com cinco dormentes. 841 triângulos (teto 2 414).
+- **A base comum** (`docs/objetos3d/cartoon/comum.py`): a superfície de revolução, o prisma, o tronco de pirâmide, os tons pela normal e
+  a máscara de luz. Os sólidos, o atlas e a escrita do glTF continuam os do `carro_mao.py`. O `docs/objetos3d/cartoon/publicar.py`
+  publica qualquer um dos quatro objetos (o portão e a barraca estão no `docs/TAREFA_V3_LUGARES_3D.md`, seção 19).
+- A altura, a sombra e o lugar de cada um no mapa não mudam. O motor, o log e o save não mudam.
+- Sem IA, sem Blender e determinístico. Não gastou crédito da Meshy.
+
+**Os testes:** o `web/app/test/ilha_enfeites.test.ts` confere a procedência dos dois e a máscara do poste.
+
+**Não feito:** o saco, o kit e o cocô (os itens) e os kits da natureza continuam como estão. Não houve revisor separado nem prancha de
+capturas no git; a conferência foi na vitrine e no jogo, no estilo da Ilha, de dia. A noite (o poste aceso), o estilo Digital, o celular
+e o e2e não foram conferidos. Os arquivos do poste em blocos e do vagão da Meshy ficam em `docs/objetos3d/poste/` e
+`docs/objetos3d/trem/` como histórico. Os desvios estão em `docs/registro/2026-11.md`, D-CARTOON-1 a 5.

@@ -33,6 +33,9 @@ export interface Candidato {
   multAtk: Record<EstagioLuta, number>;
   /** o total de cada NPC (hoje o de bots.ts), dividido igualmente pelos 6 stats */
   npcTotal: Record<string, number>;
+  /** a divisao do total de um NPC pelos 6 stats (a D-LP5-9; D-LP5-18): o peso de cada stat, somando 6. Um NPC fora daqui divide igual
+      (hoje, todos) */
+  npcDivisao: Record<string, Record<Stat, number>>;
   /** os pontos de treino dos rivais de cada lugar (hoje 0), postos pela trajetoria do dono tipico da especie do rival */
   treinoRival: { arena: number; salao: number; liga: number; torre: number; fabrica: number };
   /** a distancia do tiro (o nucleo, D-LP5-12; hoje o TIRO_POC_V21, a luta da POC) */
@@ -51,6 +54,7 @@ export const CANDIDATO_V21: Candidato = Object.freeze({
   multVida: Object.fromEntries(ESTAGIOS_LUTA.map(e => [e, multEstagio(e)])) as Record<EstagioLuta, number>,
   multAtk: { crianca: 1, adolescente: 1, adulto: 1, mega: 1 },
   npcTotal: Object.fromEntries(NPCS_V6.map(k => { const n = NPC[k]; if (!n) throw new Error(`bancada: o NPC ${k} sumiu`); return [k, n.total]; })),
+  npcDivisao: {},
   treinoRival: { arena: 0, salao: 0, liga: 0, torre: 0, fabrica: 0 },
   tiro: { ...TIRO_POC_V21 },
   esquiva: { ligada: 0, kChance: 1, kReacao: 1, kDash: 1, chanceMax: .95, pertoChance: 0, pertoReacao: 200, contraMs: 0, gamaMira: 1, kAtento: .5, gamaFolego: 1 },
@@ -98,12 +102,20 @@ export function rivalCanonico(c: Candidato, chave: string, treino = 0): StatsPoc
 export function rivalDaForma(c: Candidato, f: Forma, car: Partial<Carater> | null, treino = 0): StatsPoc {
   return lutador(c, f, car, treino ? pontosNoTotal(f.esp, treino) : null);
 }
-/** o NPC pelo candidato: o total dividido igualmente pelos 6 stats, no estagio do lugar dele */
+/** o NPC pelo candidato: o total dividido pelos 6 stats (igual, ou pelos pesos do npcDivisao), no estagio do lugar dele */
 export function npc(c: Candidato, k: string): StatsPoc {
   const n = NPC[k], total = c.npcTotal[k];
   if (!n || total === undefined) throw new Error(`bancada: ${k} nao e um NPC da campanha v6`);
-  const v = total / STATS.length;
-  return statsLuta(c, Object.fromEntries(STATS.map(s => [s, v])) as Stats, n.est, 1);
+  const v = total / STATS.length, w = c.npcDivisao[k];
+  return statsLuta(c, Object.fromEntries(STATS.map(s => [s, v * (w ? w[s] : 1)])) as Stats, n.est, 1);
+}
+/** confere uma divisao de NPC: os 6 stats, cada peso positivo, a soma 6 (o total nao muda) */
+export function conferirDivisao(k: string, w: Record<string, unknown>): void {
+  const ks = Object.keys(w);
+  if (ks.length !== STATS.length || !STATS.every(s => s in w)) throw new Error(`bancada: a divisao de ${k} precisa dos 6 stats (${ks.join(", ")})`);
+  for (const s of STATS) { const x = w[s]; if (typeof x !== "number" || !Number.isFinite(x) || !(x > 0)) throw new Error(`bancada: a divisao de ${k}.${s} invalida (${String(x)})`); }
+  const soma = STATS.reduce((a, s) => a + (w[s] as number), 0);
+  if (Math.abs(soma - STATS.length) > 1e-9) throw new Error(`bancada: a divisao de ${k} soma ${soma}, nao ${STATS.length}`);
 }
 
 /* ---------------------------------------------------------------- o treino tipico (D-LP5-2) */

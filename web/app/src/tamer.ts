@@ -43,12 +43,18 @@
 
    A Fabrica da luta da POC (LUTA_POC, LP2b e LP4): registro versao 8, so com as tentativas `v: 21`. O combate por turnos saiu na LP4, e as
    tentativas v13 e v14 nao se refazem mais: saem do registro no descarte 8 (descartarPetsAntigos), que guarda o registro de antes no arquivo
-   dos descartados e conta as tentativas no aviso da luta nova; o recorde da Fabrica recomeca. O resto do Tamer fica. PROPOSTA da LP4. */
+   dos descartados e conta as tentativas no aviso da luta nova; o recorde da Fabrica recomeca. O resto do Tamer fica. PROPOSTA da LP4.
+
+   Os Bits, a moeda (docs/PLANO_V3_MOEDA.md, etapa MO1; M-1 a M-10 decididas pelo Matheus em 2026-11-10): registro versao 9 (le 1 a 8).
+   Evento "bits": um feito que valeu moeda (o id dele, o pet, o valor, a origem, o tick do pet e a hora de parede). A conta do feito e do
+   valor e a de src/bits.ts; aqui so se confere que o mesmo feito nao entra duas vezes. O saldo nao e guardado: e a soma dos "bits" (a MO2 e
+   a MO3 trazem o gasto, o evento "compra"). Nada disso entra no registro do pet. */
 import {
   ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, VERSAO_FABRICA_ATUAL, VERSOES_FABRICA, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto,
   cartaDe, ehInstalacao, itemDe, medalhaDoLider, nomeForma, temEfeito, type Estagio, type IdInstalacao, type Medalha,
 } from "../motor/index.ts";
 import { CHAVE, type Armazenamento } from "./save.ts";
+import { BITS, ORIGENS_BITS, ORIGENS_DO_TAMER, bitsDaMedalha, feitosDoPet, type OrigemBits } from "./bits.ts";
 
 export const CHAVE_TAMER = CHAVE + "-tamer";
 /** aviso pendente de que os pets antigos foram descartados (sai quando o jogador le) */
@@ -64,10 +70,10 @@ export const CHAVE_AVISO_POC = CHAVE + "-aviso-poc";
 /** versao do registro do Tamer: 1 = medalhas (parte 1); 2 = medalhas e itens (parte 3); 3 = e o titulo da Liga (parte 4a); 4 = e os
     recordes das instalacoes da Fronteira (parte 4b); 5 = e a Fabrica e o Salao (parte 4c); 6 = e a versao das regras de cada tentativa da
     Fabrica (campo `v`, equilibrio geral fase 3); 7 = so a Fabrica em tempo real (v: 13; COMBATE-TR, D-4; a v: 14 da B2 e a v: 21 da LP2b cabiam
-    nele); 8 = so a Fabrica da luta da POC (v: 21; LUTA_POC, LP4). Grava a 8; le as oito (a 7 e a 8 so com as tentativas v: 21: as outras saem
-    no descarte 8) */
-export const VERSAO_TAMER = 8;
-const VERSOES_TAMER = [1, 2, 3, 4, 5, 6, 7, 8];
+    nele); 8 = so a Fabrica da luta da POC (v: 21; LUTA_POC, LP4); 9 = e os Bits (evento "bits", MOEDA, MO1). Grava a 9; le as nove (da 7 em diante
+    so com as tentativas v: 21: as outras saem no descarte 8) */
+export const VERSAO_TAMER = 9;
+const VERSOES_TAMER = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 /** os eventos da Fabrica no registro do Tamer */
 const EVENTOS_FABRICA = ["fabrica", "fabrica_luta", "fabrica_troca"];
 
@@ -78,6 +84,8 @@ export interface MedalhaGanha { id: string; n: number; quando: number; pet: numb
 export interface ItemGanho { id: string; n: number; quando: number; origem: "medalha" | "revanche"; lider: string; pet: number; forma: string; est: Estagio; tick: number }
 /** uma carta que valeu numa luta (sai do inventario) */
 export interface CartaUsada { id: string; quando: number; pet: number; tick: number }
+/** Bits ganhos por um feito (src/bits.ts): o id do feito, o pet (semente; 0 no nivel do Tamer), o valor, a origem, o tick do pet e a hora */
+export interface BitsGanhos { id: string; pet: number; valor: number; origem: OrigemBits; tick: number; quando: number }
 /** um titulo da Liga dos Lideres: o contador (1 = o primeiro, o titulo do Tamer), a hora de parede e o pet que venceu as 6 (semente,
     forma e tick dele) */
 export interface Campeao { n: number; quando: number; pet: number; forma: string; tick: number }
@@ -96,7 +104,7 @@ export interface LutaSalao { est: Estagio; pet: number; forma: string; k: number
 /** Salao: uma tentativa (n = 1 a primeira), as lutas na ordem dos estagios, ate a primeira que nao foi vitoria */
 export interface TentativaSalao { n: number; quando: number; lutas: LutaSalao[] }
 export type EventoTamer = ["medalha", MedalhaGanha] | ["item", ItemGanho] | ["carta_usada", CartaUsada] | ["campeao", Campeao] | ["recorde", Recorde]
-  | ["fabrica", InicioFabrica] | ["fabrica_luta", EventoLutaFabrica] | ["fabrica_troca", TrocaFabrica] | ["salao", TentativaSalao];
+  | ["fabrica", InicioFabrica] | ["fabrica_luta", EventoLutaFabrica] | ["fabrica_troca", TrocaFabrica] | ["salao", TentativaSalao] | ["bits", BitsGanhos];
 /** um recorde da Fabrica ou do Salao, tirado das tentativas: o valor, a tentativa que o fez (a primeira que chegou nele) e a hora de parede */
 export interface RecordeTentativa { valor: number; n: number; quando: number }
 const ESTAGIOS: readonly string[] = ["bebe", "crianca", "adolescente", "adulto", "mega"];
@@ -117,6 +125,13 @@ export class Tamer {
   private quandoFabrica: number[][] = [];
   /** as tentativas do Salao */
   salao: TentativaSalao[] = [];
+  /** os Bits ganhos, na ordem, e as chaves dos feitos ja pagos (o mesmo feito nao paga duas vezes) */
+  ganhos: BitsGanhos[] = [];
+  private pagos = new Set<string>();
+  /** o saldo de Bits: a soma do que se ganhou (o gasto chega na MO2) */
+  get bits(): number { return this.ganhos.reduce((s, g) => s + g.valor, 0); }
+  /** o feito ja foi pago: os do Tamer (a medalha, o nivel) pelo id; os do pet pelo pet e pelo id */
+  pago(origem: OrigemBits, id: string, pet: number): boolean { return this.pagos.has(chaveFeito(origem, id, pet)); }
   /** a tentativa da Fabrica em andamento (null: nenhuma; a ultima acabou) */
   get fabricaAtual(): TentativaFabrica | null { const t = this.fabrica[this.fabrica.length - 1]; return t && !t.acabou ? t : null; }
   /** o recorde da Fabrica: a maior sequencia de series vencidas numa tentativa (null: nenhuma serie vencida ainda) */
@@ -160,9 +175,10 @@ export class Tamer {
 
   /** um evento do registro (replay): confere tudo antes de aplicar */
   aplicar(ev: EventoTamer): void {
-    if (!Array.isArray(ev) || !["medalha", "item", "carta_usada", "campeao", "recorde", "fabrica", "fabrica_luta", "fabrica_troca", "salao"].includes(ev[0]))
+    if (!Array.isArray(ev) || !["medalha", "item", "carta_usada", "campeao", "recorde", "fabrica", "fabrica_luta", "fabrica_troca", "salao", "bits"].includes(ev[0]))
       throw new Error("tipo de evento desconhecido no registro do Tamer: " + JSON.stringify(Array.isArray(ev) ? ev[0] : ev));
     if (ev[0] === "item") { this._item(ev[1]); return; }
+    if (ev[0] === "bits") { this._bits(ev[1]); return; }
     if (ev[0] === "fabrica") { this._fabrica(ev[1]); return; }
     if (ev[0] === "fabrica_luta") { this._fabricaLuta(ev[1]); return; }
     if (ev[0] === "fabrica_troca") { this._fabricaTroca(ev[1]); return; }
@@ -197,6 +213,21 @@ export class Tamer {
       if (ult && x.tick - ult.tick < CIT.espera) throw new Error(`carta de revanche antes da espera: ${x.tick - ult.tick} min de ${CIT.espera}`);
     } else throw new Error(`origem de item desconhecida no registro do Tamer: ${JSON.stringify(x.origem)}`);
     this.itens.push({ ...x });
+  }
+  private _bits(x: BitsGanhos): void {
+    this._campos(x, "Bits", ["pet", "valor", "tick", "quando"]);
+    if (typeof x.id !== "string" || !x.id) throw new Error("Bits sem o id do feito no registro do Tamer");
+    if (!ORIGENS_BITS.includes(x.origem)) throw new Error(`Bits de origem desconhecida no registro do Tamer: ${JSON.stringify(x.origem)}`);
+    if (!Number.isInteger(x.valor) || x.valor < 1) throw new Error(`Bits com valor inválido no registro do Tamer: ${JSON.stringify(x.valor)}`);
+    const k = chaveFeito(x.origem, x.id, x.pet);
+    if (this.pagos.has(k)) throw new Error(`o mesmo feito pago duas vezes no registro do Tamer: ${k}`);
+    this.pagos.add(k);
+    this.ganhos.push({ ...x });
+  }
+  /** paga o feito agora (grava o evento "bits") */
+  ganharBits(x: Omit<BitsGanhos, "quando">, quando: number = Date.now()): BitsGanhos {
+    this._gravar(["bits", { ...x, quando }]);
+    return this.ganhos[this.ganhos.length - 1];
   }
   private _usada(x: CartaUsada): void {
     if (!x || typeof x.id !== "string") throw new Error("carta usada sem id no registro do Tamer");
@@ -336,6 +367,28 @@ export class Tamer {
     t.log = log.map(ev => JSON.parse(JSON.stringify(ev)) as EventoTamer);
     return t;
   }
+}
+
+const chaveFeito = (origem: OrigemBits, id: string, pet: number): string => ORIGENS_DO_TAMER.includes(origem) ? id : `${pet}:${id}`;
+
+/** os Bits que o pet e o Tamer acabaram de ganhar (src/bits.ts): os feitos do pet ainda nao pagos e a 1a medalha de cada lider. Conferir
+    de novo nao paga duas vezes. Devolve os ganhos novos (ja aplicados) */
+export function conferirBits(t: Tamer, m: Motor, quando: number = Date.now()): BitsGanhos[] {
+  const novos: BitsGanhos[] = [];
+  for (const f of feitosDoPet(m)) if (!t.pago(f.origem, f.id, m.semente))
+    novos.push(t.ganharBits({ id: f.id, pet: m.semente, valor: f.valor, origem: f.origem, tick: f.tick }, quando));
+  for (const g of t.medalhas) {
+    const id = "medalha:" + g.id;
+    if (!t.pago("lider", id, g.pet)) novos.push(t.ganharBits({ id, pet: g.pet, valor: bitsDaMedalha(g.id), origem: "lider", tick: g.tick }, quando));
+  }
+  return novos;
+}
+/** os Bits dos niveis do Tamer de 1 ate `nivel` ainda nao pagos (o nivel e so da vista, nivelTela.ts: quem chama e ela). Devolve os novos */
+export function conferirBitsDoNivel(t: Tamer, nivel: number, quando: number = Date.now()): BitsGanhos[] {
+  const novos: BitsGanhos[] = [];
+  for (let n = 1; n <= nivel; n++) if (!t.pago("nivel", "nivel:" + n, 0))
+    novos.push(t.ganharBits({ id: "nivel:" + n, pet: 0, valor: BITS.nivel, origem: "nivel", tick: 0 }, quando));
+  return novos;
 }
 
 /** le o registro do Tamer (sem a chave: um Tamer novo, sem medalhas). Registro que nao reproduz falha alto */

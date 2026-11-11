@@ -11,8 +11,8 @@ const ts = readFileSync(join(DIR, "vitrine", "vitrine.ts"), "utf8");
 const html = readFileSync(join(DIR, "vitrine.html"), "utf8");
 
 describe("a vitrine dos objetos", () => {
-  test("percorre as tres tabelas de modelos e a lata do Digital", () => {
-    for (const t of ["LUGARES_MODELOS", "ENFEITES_MODELOS", "ITENS_MODELOS", "DIGITAL.lata"]) expect(ts).toContain(t);
+  test("percorre as tres tabelas de modelos (a lata gigante e um enfeite desde 2026-11-10)", () => {
+    for (const t of ["LUGARES_MODELOS", "ENFEITES_MODELOS", "ITENS_MODELOS"]) expect(ts).toContain(t);
   });
   test("desenha com o traco do Digital (o contorno da D5)", () => {
     expect(ts).toContain("CONTORNO_DIGITAL");
