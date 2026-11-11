@@ -118,13 +118,14 @@ from dataclasses import dataclass, replace
 from typing import Callable
 
 from .ambiente import PoliticaInstintoBola
-from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, N_PONTOS_LONGE_FIXO, TICKS_POR_DIA, Config, ConfigMundo
+from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, N_PONTOS_LONGE_FIXO, TICKS_POR_DIA, Config, ConfigMundo, LayoutMundo
 from .config import CONFIG_BANHEIRO, CONFIG_PQP_MUNDO, ConfigBanheiro, ConfigDonos, ConfigPetQuePensaMundo
 from .config import CONFIG_PALADAR, ConfigPaladar
 from .config import CONFIG_GENOMA, ConfigGenoma
 from .genoma import TIPO_EVENTO as TIPO_GENOMA, Genoma
 from .config import CONFIG_FRUTA_AO_LADO, ConfigFrutaAoLado
 from .config import CONFIG_CONTRATO, ConfigContrato
+from .config import AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, PONTE, TERRA
 from .config import CONFIG_BOLA_NO_GOLPE, CONFIG_DECISAO_NA_COMIDA, ConfigBolaNoGolpe, ConfigDecisaoNaComida
 from .config import CONFIG_FRUTA_COMO_COMIDA, CONFIG_SACUDIR, ConfigFrutaComoComida, ConfigSacudir
 from . import contrato as ct
@@ -138,6 +139,9 @@ from .events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_MAO, ACOES_TROCA_ARVORES, F
 from .events import deixar_bola as evento_deixar_bola
 from .events import levar_pet as evento_levar_pet
 from .events import ler_levar_pet
+from .events import mudar_ilha as evento_mudar_ilha
+from .events import ler_mudar_ilha
+from .config import ILHAS_DE_TROCA
 from .events import deixar_fruta as evento_deixar_fruta
 from .events import LutaSemChave, ler_deixar_fruta, ler_resumo_luta
 from .events import resumo_luta as evento_resumo_luta
@@ -232,6 +236,50 @@ def passo_ate(x: int, y: int, tx: int, ty: int, alcance: int, cm: ConfigMundo) -
 
 def centro_da_celula(celula: tuple, cm: ConfigMundo) -> tuple[int, int]:
     return celula[0] * cm.sub + cm.sub // 2, celula[1] * cm.sub + cm.sub // 2
+
+
+def celulas_secas(cm: ConfigMundo) -> tuple[bool, ...] | None:
+    """A agua do layout (docs/TAREFA_V3_ILHA_AGUA.md, IA1; config.AGUA_POR_LAYOUT, pelo nome): None no mapa sem agua (os layouts de antes); com agua, uma celula por
+    posicao (linha a linha, de cima para baixo), True onde o pet pisa (a terra e a ponte). O mapa do tamanho errado ou com um caractere
+    desconhecido falha alto."""
+    linhas = AGUA_POR_LAYOUT.get(cm.layout.nome)
+    if linhas is None:
+        return None
+    if len(linhas) != cm.celulas_y or any(type(l) is not str or len(l) != cm.celulas_x for l in linhas):
+        raise ValueError(f"a agua do layout {cm.layout.nome!r} nao tem {cm.celulas_y} linhas de {cm.celulas_x} celulas")
+    ruins = sorted({c for l in linhas for c in l} - {AGUA_MAR, AGUA_DOCE, TERRA, PONTE})
+    if ruins:
+        raise ValueError(f"a agua do layout {cm.layout.nome!r} tem caractere desconhecido: {ruins}")
+    return tuple(c in (TERRA, PONTE) for l in linhas for c in l)
+
+
+def solidos_da_agua(cm: ConfigMundo) -> tuple:
+    """Os solidos da agua, em subunidades: em cada linha, cada trecho seguido de celulas de agua; o mesmo trecho em linhas seguidas vira
+    um retangulo so. Na ordem de (y0, x0). A agua colide e nao tapa a visao; a categoria e `obstaculo` (a lista de categorias do contrato
+    nao muda: o gabarito dele a sorteia)."""
+    secas = celulas_secas(cm)
+    if secas is None:
+        return ()
+    nx, ny = cm.celulas_x, cm.celulas_y
+    abertos: dict[tuple[int, int], int] = {}
+    rets: list[tuple[int, int, int, int]] = []
+    for y in range(ny + 1):
+        trechos, x = set(), 0
+        while y < ny and x < nx:
+            if secas[y * nx + x]:
+                x += 1
+                continue
+            x0 = x
+            while x < nx and not secas[y * nx + x]:
+                x += 1
+            trechos.add((x0, x))
+        for k in sorted(abertos):
+            if k not in trechos:
+                rets.append((k[0], abertos.pop(k), k[1], y))
+        for k in trechos:
+            abertos.setdefault(k, y)
+    return tuple(ct.Solido(x0 * cm.sub, y0 * cm.sub, x1 * cm.sub, y1 * cm.sub, "obstaculo", True, False)
+                 for x0, y0, x1, y1 in sorted(rets, key=lambda r: (r[1], r[0])))
 
 
 def regiao_de(x: int, cm: ConfigMundo) -> int:
@@ -733,6 +781,11 @@ class Mundo:
             else:
                 raise ValueError(f"arvore {ident} fora do jardim e da mata: {nome}")
             self.arvores.append({"id": ident, "x": ax, "y": ay, "fruta": fruta, "regiao": nome, "p": p, "recarga_ate": 0})
+        # a agua (docs/TAREFA_V3_ILHA_AGUA.md, IA1): None no mapa sem agua, e nada muda. Com agua, o ninho, o comedouro, a bola e as
+        # arvores ficam em terra, e toda a terra se alcanca a pe a partir do ninho (o layout que nao cumpre falha alto)
+        self.secas = celulas_secas(cm)
+        if self.secas is not None:
+            self._conferir_agua()
         self.comidas: dict[int, dict] = {}
         self.prox_id = ID_BOLA + 1
         self.passo_mundo = 0
@@ -741,6 +794,7 @@ class Mundo:
         self.quedas: list[dict] = []
         self.sumidas: list[dict] = []
         self.bolas_deixadas: list[dict] = []
+        self.troca_ilha: dict | None = None        # a troca de ilha (IA4): None ate o evento `mudar_ilha`
         self.rolagens: list[dict] = []
         # o banheiro (TAREFA_V2_BANHEIRO, secao 3): as necessidades no chao, so depois de `ligar_necessidades` (um motor com o banheiro);
         # sem ele, None e nada muda (nem o resumo). Um contador proprio: os ids das comidas nao mudam com o banheiro
@@ -762,6 +816,106 @@ class Mundo:
         self.sacudidas: list[dict] | None = None
         self.rng_sacode: random.Random | None = None
         self.csa: ConfigSacudir | None = None
+
+    # ------------------------------------------------------------ a agua (docs/TAREFA_V3_ILHA_AGUA.md, IA1)
+    def _conferir_agua(self) -> None:
+        cm, secas, nx = self.cmf, self.secas, self.cmf.celulas_x
+        lay = cm.layout
+        pontos = [("ninho", lay.ninho), ("comedouro", lay.comedouro), ("bola_inicio", lay.bola_inicio)]
+        pontos += [(f"arvore {a[0]}", (a[1], a[2])) for a in lay.arvores]
+        for nome, (cx, cy) in pontos:
+            if not secas[cy * nx + cx]:
+                raise ValueError(f"layout {lay.nome!r}: {nome} na agua ({cx}, {cy})")
+        ini = lay.ninho[1] * nx + lay.ninho[0]
+        vistas, fila = {ini}, [ini]
+        while fila:
+            i = fila.pop()
+            x, y = i % nx, i // nx
+            for vx, vy in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                j = vy * nx + vx
+                if 0 <= vx < nx and 0 <= vy < cm.celulas_y and secas[j] and j not in vistas:
+                    vistas.add(j)
+                    fila.append(j)
+        ilhadas = sum(secas) - len(vistas)
+        if ilhadas:
+            raise ValueError(f"layout {lay.nome!r}: {ilhadas} celulas de terra que o pet nao alcanca a pe a partir do ninho")
+
+    def seca(self, x: int, y: int) -> bool:
+        """o ponto (dentro do mapa) esta em terra? Sem agua no mapa, sempre"""
+        return self.secas is None or self.secas[(y // self.cmf.sub) * self.cmf.celulas_x + x // self.cmf.sub]
+
+    def em_terra(self, x: int, y: int) -> tuple[int, int]:
+        """o ponto, se esta em terra; senao o centro da celula de terra mais perto (a conta do contrato: octil, o empate pelo indice)"""
+        if self.seca(x, y):
+            return x, y
+        cm = self.cmf
+        return centro_da_celula(ct.livre_mais_perto(self.secas, cm.celulas_x, (x // cm.sub, y // cm.sub)), cm)
+
+    def ate_a_margem(self, x0: int, y0: int, x1: int, y1: int) -> tuple[int, int]:
+        """o ultimo ponto em terra da linha de (x0, y0) a (x1, y1), antes da primeira agua: a bola para na margem. Os pontos da linha
+        sao os do `tapado` do contrato: p0 + (p1 - p0) k / n, com n = max(|dx|, |dy|)"""
+        if self.secas is None:
+            return x1, y1
+        dx, dy = x1 - x0, y1 - y0
+        n = max(abs(dx), abs(dy))
+        x, y = x0, y0
+        for k in range(1, n + 1):
+            px, py = x0 + div_arred(dx * k, n), y0 + div_arred(dy * k, n)
+            if not self.seca(px, py):
+                break
+            x, y = px, py
+        return x, y
+
+    def trocar_layout(self, layout: LayoutMundo, tick: int) -> dict:
+        """A troca de ilha (docs/TAREFA_V3_ILHA_AGUA.md, IA4): o mundo passa do layout de hoje, sem agua, para `layout`, que e o mesmo
+        (so o nome muda) com agua. O mundo ja vem atualizado ate o tick. A comida que fica na agua vai para a terra mais perto; a bola
+        para onde esta, ou na terra mais perto. Nenhum fluxo de acaso anda. Uma vez so por mundo. Devolve o registro (`troca_ilha`)."""
+        if self.tick_atualizado is None or tick != self.tick_atualizado:
+            raise RuntimeError(f"trocar_layout no tick {tick} com o mundo atualizado ate {self.tick_atualizado}")
+        if self.secas is not None or self.troca_ilha is not None:
+            raise ValueError(f"o mundo {self.cmf.layout.nome!r} ja tem agua: a troca de ilha vale uma vez, de um layout sem agua")
+        if replace(layout, nome=self.cmf.layout.nome) != self.cmf.layout:
+            raise ValueError(f"a troca de ilha so muda a agua: {layout.nome!r} nao e o layout {self.cmf.layout.nome!r} com outro nome")
+        de = self.cmf.layout.nome
+        cm = replace(self.cmf, layout=layout)
+        secas = celulas_secas(cm)
+        if secas is None:
+            raise ValueError(f"o layout {layout.nome!r} nao tem agua: a troca de ilha e para a ilha com agua")
+        self.cmf, self.secas = cm, secas
+        self._conferir_agua()
+        comidas = []
+        for c in self.comidas.values():
+            x, y = self.em_terra(c["x"], c["y"])
+            if (x, y) != (c["x"], c["y"]):
+                comidas.append({"id": c["id"], "de": [c["x"], c["y"]], "para": [x, y]})
+                c["x"], c["y"] = x, y
+        bx, by = self.bola_em(tick)
+        x, y = self.em_terra(bx, by)
+        self.bola = {"x0": x, "y0": y, "x1": x, "y1": y, "t0": tick, "d": 0}
+        self.troca_ilha = {"tick": tick, "de": de, "para": layout.nome, "comidas": comidas, "bola": {"de": [bx, by], "para": [x, y]}}
+        return self.troca_ilha
+
+    def rolagem_seca(self, x0: int, y0: int, x1: int, y1: int) -> tuple[int, int]:
+        """onde a bola que rola de (x0, y0) para (x1, y1) para: na margem (`ate_a_margem`) e, depois, encurtada ate que todo ponto por
+        onde ela passa tick a tick (a conta do `bola_em`, que arredonda pela distancia e pode sair 1 subunidade da linha) esteja em
+        terra. Sem agua, (x1, y1)."""
+        if self.secas is None:
+            return x1, y1
+        x1, y1 = self.ate_a_margem(x0, y0, x1, y1)
+        atrito = self.cmf.atrito
+        while True:
+            d = distancia(x1 - x0, y1 - y0)
+            px, py = x0, y0
+            for j in range(1, -(-d // atrito)):
+                qx, qy = x0 + div_arred((x1 - x0) * atrito * j, d), y0 + div_arred((y1 - y0) * atrito * j, d)
+                if not self.seca(qx, qy):
+                    break
+                px, py = qx, qy
+            else:
+                return x1, y1
+            if distancia(px - x0, py - y0) >= d:
+                raise RuntimeError(f"a rolagem da bola nao encurtou: ({x0}, {y0}) -> ({x1}, {y1})")
+            x1, y1 = px, py
 
     # ------------------------------------------------------------ dois pets, etapa 8: o rastro (secao 5.3)
     def ligar_marcas(self) -> None:
@@ -898,7 +1052,7 @@ class Mundo:
             if prox is None:                       # o galho estava cheio: o relogio comeca agora
                 prox = tick + self.csa.recarga_galho_min
             n -= 1
-            reg.update(motivo="caiu", caiu=c["id"], x=x, y=y, tipo=arv["fruta"])
+            reg.update(motivo="caiu", caiu=c["id"], x=c["x"], y=c["y"], tipo=arv["fruta"])     # onde a fruta ficou (a agua, IA1)
         self.galhos[ident] = {"no_galho": n, "repoe_em": prox}
         self.sacudidas.append(reg)
         return reg
@@ -915,6 +1069,7 @@ class Mundo:
             raise BanheiroSemMundo("necessidade num Mundo sem o banheiro ligado")
         if no_mapa(x, y, self.cmf) != (x, y):
             raise ValueError(f"necessidade fora do mapa: ({x}, {y})")
+        x, y = self.em_terra(x, y)
         n = {"id": self.prox_necessidade, "x": x, "y": y, "tick": tick}
         self.prox_necessidade += 1
         self.necessidades[n["id"]] = n
@@ -949,6 +1104,7 @@ class Mundo:
         return b["x0"] + div_arred((b["x1"] - b["x0"]) * andou, b["d"]), b["y0"] + div_arred((b["y1"] - b["y0"]) * andou, b["d"])
 
     def nova_comida(self, tipo: str, x: int, y: int, tick: int, origem: str) -> dict:
+        x, y = self.em_terra(x, y)                 # a agua (IA1): a comida que cairia na agua fica na terra mais perto
         c = {"id": self.prox_id, "tipo": tipo, "x": x, "y": y, "tick_posta": tick, "origem": origem}
         self.prox_id += 1
         self.comidas[c["id"]] = c
@@ -1056,7 +1212,7 @@ class Mundo:
         celulas = self.rng_bola.randint(cm.bola_min_celulas, cm.bola_max_celulas)
         if cm.layout.regioes[regiao_de(bx, cm)][0] == "campo":
             celulas *= cm.mult_bola_campo
-        x1, y1 = deslocar(bx, by, direcao, celulas * cm.sub, cm)
+        x1, y1 = self.rolagem_seca(bx, by, *deslocar(bx, by, direcao, celulas * cm.sub, cm))    # a agua (IA1): a bola para na margem
         self.bola = {"x0": bx, "y0": by, "x1": x1, "y1": y1, "t0": tick, "d": distancia(x1 - bx, y1 - by)}
         rolagem = {"tick": tick, "de": (bx, by), "para": (x1, y1), "direcao": direcao, "celulas": celulas}
         self.rolagens.append(rolagem)
@@ -1078,6 +1234,7 @@ class Mundo:
         """o dono poe a bola parada em (x, y); fora do mapa falha alto"""
         if no_mapa(x, y, self.cmf) != (x, y):
             raise ValueError(f"deixar_bola fora do mapa: ({x}, {y})")
+        x, y = self.em_terra(x, y)
         self.bola = {"x0": x, "y0": y, "x1": x, "y1": y, "t0": tick, "d": 0}
         self.bolas_deixadas.append({"tick": tick, "x": x, "y": y})
 
@@ -1088,6 +1245,7 @@ class Mundo:
                 "passo_mundo": self.passo_mundo, "tick_atualizado": self.tick_atualizado, "arvores": [dict(a) for a in self.arvores],
                 "rngs": [r.getstate() for r in (self.rng_arvores, self.rng_bola)], "quedas": self.quedas, "sumidas": self.sumidas,
                 "bolas_deixadas": self.bolas_deixadas, "rolagens": self.rolagens,
+                **({} if self.troca_ilha is None else {"troca_ilha": self.troca_ilha}),
                 **({} if self.necessidades is None else {
                     "necessidades": [dict(n) for n in self.necessidades.values()], "prox_necessidade": self.prox_necessidade,
                     "recolhidas": self.recolhidas}),
@@ -1239,6 +1397,13 @@ class MotorMundo(MotorFrutas):
                 raise ValueError("o contrato da P4 (ConfigContrato) roda com um pet, fora do grupo")
             self._montar_contrato()
 
+        if self.mundo.secas is not None:
+            # a agua (docs/TAREFA_V3_ILHA_AGUA.md, IA1): quem desvia dela e o controlador do contrato; o banheiro anda em linha reta
+            if not self.cct.controlador:
+                raise ValueError("o layout com agua exige o controlador do contrato (ConfigContrato.controlador)")
+            if self.cbh.ligada:
+                raise ValueError("o layout com agua nao roda com o banheiro (o aliviar anda em linha reta)")
+
         self._grupo = None
         self.ident: str | None = None
         self._social: PercepcaoSocial | None = None     # a percepcao social da decisao (None sozinho)
@@ -1275,7 +1440,7 @@ class MotorMundo(MotorFrutas):
         self._quadrados_troncos = {a["id"]: ct.Solido(a["x"] - meio, a["y"] - meio, a["x"] - meio + cc.lado_tronco,
                                                       a["y"] - meio + cc.lado_tronco, "tronco", False, True)
                                    for a in self.mundo.arvores} if cc.sensores else {}
-        self._solidos = paredes                                   # os que colidem (o controlador e os bigodes)
+        self._solidos = paredes + solidos_da_agua(cm)             # os que colidem (o controlador e os bigodes); a agua, IA1
         self._opacos = paredes + tuple(self._quadrados_troncos.values())
         self.orientacao = 0
         self.contrato_decisoes: list[dict] = []                   # por decisao com alvo: o que o controlador e os sensores registraram
@@ -1619,6 +1784,11 @@ class MotorMundo(MotorFrutas):
                 alvo = self.alvo_padrao(acao, cands)
             else:
                 self._validar_alvo(acao, alvo, cands)
+            if alvo is not None and alvo.id is None and self.mundo.secas is not None:
+                # a agua (IA1): o ponto escolhido na agua (o vagar, o cheiro, o lugar lembrado) vale a terra mais perto; o pendente o guarda
+                tx, ty = self.mundo.em_terra(alvo.x, alvo.y)
+                if (tx, ty) != (alvo.x, alvo.y):
+                    alvo = replace(alvo, x=tx, y=ty)
             andar = None
             if alvo is not None and self.cct.controlador:      # a P4: o controlador do contrato, nos ticks da decisao
                 cm = self.cmf
@@ -1949,10 +2119,49 @@ class MotorMundo(MotorFrutas):
         if self._estado.dormindo:
             raise RuntimeError(f"levar_pet com o pet dormindo (tick {tick}): o dono pega o pet acordado")
         de = self.pet
-        self.pet = no_mapa(x, y, self.cmf)
+        self.pet = self._pet_em_terra(*no_mapa(x, y, self.cmf))
         self._pendente = None
         self.levadas.append({"tick": self._tm(tick), "de": list(de), "pedido": [x, y], "para": list(self.pet)})
         self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o deixar_bola)
+
+    def mudar_ilha(self, nome: str) -> None:
+        """O mundo do pet passa para a ilha com agua `nome` (docs/TAREFA_V3_ILHA_AGUA.md, IA4; os pets v21 do jogo web que ja estavam
+        vivos). Valida o evento e a troca antes do log."""
+        evento = evento_mudar_ilha(self._estado.tick, nome)
+        self._aplicar_mudar_ilha(ler_mudar_ilha(evento))
+        self._log.anexar(evento)
+
+    def _aplicar_mudar_ilha(self, nome: str) -> None:
+        """So o mundo muda: o layout ganha a agua, o contrato passa a ser o do destino (o controlador, que desvia dela), o que esta na
+        agua vai para a terra mais perto (a comida, a bola e o pet) e o destino que o pet tinha se perde. Nao e contato nem cuidado: nao
+        passa pelo estado, pelo corpo nem pelo cerebro, como o levar_pet. Vale com o pet acordado ou dormindo. Com um pet (fora do
+        grupo), sem o banheiro e sem o contrato ligado antes; o destino desconhecido e a segunda troca falham alto."""
+        if not self.cmf.ligada:
+            raise MundoSemChave("mudar_ilha com ConfigMundo.ligada = False")
+        if nome not in ILHAS_DE_TROCA:
+            raise ValueError(f"mudar_ilha para uma ilha desconhecida: {nome!r}")
+        if self._grupo is not None or self.cbh.ligada or self.cct.ligada:
+            raise ValueError("mudar_ilha roda com um pet (fora do grupo), sem o banheiro e sem o contrato ligado antes")
+        layout, contrato = ILHAS_DE_TROCA[nome]
+        if not contrato.controlador:
+            raise ValueError(f"a ilha {nome!r} tem agua e pede o controlador do contrato")
+        tm = self._tm(self._estado.tick)
+        self.mundo.atualizar(tm)
+        reg = self.mundo.trocar_layout(layout, tm)
+        self.cmf, self.cct = self.mundo.cmf, contrato
+        self._montar_contrato()
+        de = self.pet
+        self.pet = self._pet_em_terra(*self.pet)
+        self._pendente = None
+        reg["pet"] = {"de": list(de), "para": list(self.pet)}
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o levar_pet)
+
+    def _pet_em_terra(self, x: int, y: int) -> tuple[int, int]:
+        """a agua (IA1): o pet solto na agua, ou tao rente a ela que o corpo a invade, cai no centro da celula de terra mais perto"""
+        if self.mundo.secas is None or ct.bloqueio_em(x, y, self.cct.r_pet, self._solidos) is None:
+            return x, y
+        cm = self.cmf
+        return centro_da_celula(ct.livre_mais_perto(self.mundo.secas, cm.celulas_x, (x // cm.sub, y // cm.sub)), cm)
 
     def sacudir_arvore(self, arvore: str) -> None:
         """O dono sacode a arvore (docs/TAREFA_V3_ARVORE_SACODE.md; os pets v20 do jogo web). Valida o evento e a arvore antes do log."""
@@ -2003,7 +2212,7 @@ class MotorMundo(MotorFrutas):
         if racao is None:
             raise ValueError(f"fruta ao lado sem racao deixada no tick {tm}: a fruta vai logo depois da racao, no mesmo passo")
         c = self.mundo.deixar_fruta_ao_lado(tipo, x, y, tm)
-        self.frutas_ao_lado.append({"tick": tm, "id": c["id"], "tipo": tipo, "x": x, "y": y, "racao": racao["id"]})
+        self.frutas_ao_lado.append({"tick": tm, "id": c["id"], "tipo": tipo, "x": c["x"], "y": c["y"], "racao": racao["id"]})
         self._n_eventos += 1                     # e um evento do log, mas NAO e contato
 
     def ao_lado_no_chao(self) -> dict[str, int]:
@@ -2052,6 +2261,7 @@ class MotorMundo(MotorFrutas):
                 "bolas_deixadas": m.bolas_deixadas, "rolagens": m.rolagens, "decisoes": self.decisoes_mundo,
                 "regioes": self.regioes, "visitas": self.visitas,
                 "manchas_abertas": [dict(v) for v in self._manchas_abertas.values()],
+                **({} if m.troca_ilha is None else {"troca_ilha": m.troca_ilha}),
                 **({} if not self.cbh.ligada else {
                     "necessidades": [dict(n) for n in m.necessidades.values()], "prox_necessidade": m.prox_necessidade,
                     "recolhidas": m.recolhidas, "alivios": self.alivios, "recolhas": self.recolhas,
@@ -2119,6 +2329,8 @@ def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config 
             motor._aplicar_deixar_bola(*ler_deixar_bola(evento))
         elif evento.tipo == "levar_pet":
             motor._aplicar_levar_pet(*ler_levar_pet(evento))
+        elif evento.tipo == "mudar_ilha":
+            motor._aplicar_mudar_ilha(ler_mudar_ilha(evento))
         elif evento.tipo == "deixar_fruta":
             motor._aplicar_deixar_fruta(*ler_deixar_fruta(evento))
         elif evento.tipo == "sacudir_arvore":

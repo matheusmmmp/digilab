@@ -71,11 +71,18 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    19 = o v18 com o "levar pet" (docs/TAREFA_V3_PEGAR_PET.md; PP-1 a PP-5, decididas pelo Matheus em 2026-11-07): o evento "lp" do
    registro poe o pet onde o dono o soltou (limitado ao mapa, PP-4), sem mexer no humor, no corpo nem no aprendizado (PP-1); com o pet
    dormindo, falha alto (PP-2). O resto e o v18 (a luta, o cerebro trocavel). Os v13 a v18 seguem vivos, sem o "lp"; so os ovos novos
-   nascem v19 */
-export const VERSAO_PET = 21;
-/** as versoes de pet que abrem: so a v21, a luta da POC (LUTA_POC, LP4: o descarte 7 tirou os v13 a v19, que lutavam pelo combate por
-    turnos; LP-6). A v16 e so a do laboratorio */
-export const VERSOES_PET: readonly number[] = [21];
+   nascem v19;
+   22 = a v21 que nasce na ilha onde so a agua barra o pet (docs/TAREFA_V3_ILHA_AGUA.md, IA4; "v22", Matheus, 2026-11-10): o mundo dela e
+   o `mvp_agua` (CMU_MVP_AGUA), com o controlador do contrato, que desvia da agua. O resto e a v21. Os v21 seguem vivos e passam para a
+   mesma ilha pelo evento "mi" do registro ("Migram por evento", Matheus, 2026-11-10); so os ovos novos nascem v22;
+   23 = a v22 com a luta da rodada de equilibrio (docs/PLANO_EQUILIBRIO_LUTA_POC.md, LP5-5; o candidato lp5_3; "Sim, liga", Matheus,
+   2026-11-11; D-LP5-7): o mesmo nucleo, a mesma ilha com agua, e a tabela da luta da v23 (motor/luta_poc.ts, LUTA_V23): o mapeamento dos
+   stats com os expoentes, a esquiva, a distancia do tiro, o Gazimon em 76,8 e o rival do Salao com o fator 0,8. Os v21 e os v22 seguem
+   vivos, com os numeros deles; so os ovos novos nascem v23 */
+export const VERSAO_PET = 23;
+/** as versoes de pet que abrem: a v21, a luta da POC (LUTA_POC, LP4: o descarte 7 tirou os v13 a v19, que lutavam pelo combate por
+    turnos; LP-6), e a v22, a v21 que nasce na ilha com agua. A v16 e so a do laboratorio */
+export const VERSOES_PET: readonly number[] = [21, 22, 23];
 /** a versao de pet do cerebro trocavel (o evento "cb") */
 export const VERSAO_V17 = 17;
 /** a versao de pet do empurrao de verdade na luta (a v17 com o RELOGIO_V18) */
@@ -84,13 +91,24 @@ export const VERSAO_V18 = 18;
 export const VERSAO_V19 = 19;
 /** a versao tem o cerebro trocavel, a ponte da luta e a bola no golpe da v17: a v17, a v18 (a v17 com o empurrao), a v19 (a v18 com o
     levar pet) e a v21 (a v19 com a luta da POC). Desde a LP4 so a v21 abre; as outras ficam no teste porque a v21 e feita delas */
-export const ehCerebroTrocavel = (versao: number): boolean => versao === VERSAO_V17 || versao === VERSAO_V18 || versao === VERSAO_V19 || versao === VERSAO_V21;
+export const ehCerebroTrocavel = (versao: number): boolean =>
+  versao === VERSAO_V17 || versao === VERSAO_V18 || versao === VERSAO_V19 || versao === VERSAO_V21 || versao === VERSAO_V22 || versao === VERSAO_V23;
 /** 21 = a v19 com a luta da POC (docs/TAREFA_V3_LUTA_POC.md, LP2; as seis decisoes da LP2, Matheus, "Aprovo as 6", 2026-11-08): a luta do pet
     e a simulacao em tempo real de motor/arena/, 1 contra 1, com os numeros saidos dos 6 stats do pet (motor/luta_poc.ts); o evento "l" guarda
     o rival (uma forma do estagio do pet, na Arena, ou o NPC da Campanha), a semente e o mapa; sem gambits ("g"), cartas ("k") nem chips de
     regra; a Liga, a Torre, a Fabrica e o Salao desde a LP2b. O resto e a v19. A v20 fica para o #694 (a arvore). A chave LUTA_POC_LIGADA
     ligou na LP4 (Matheus, 2026-11-10): os ovos novos nascem v21, e so a v21 abre (VERSOES_PET) */
 export const VERSAO_V21 = 21;
+/** a versao de pet que nasce na ilha com agua (a v21 com o mundo `mvp_agua`; docs/TAREFA_V3_ILHA_AGUA.md, IA4) */
+export const VERSAO_V22 = 22;
+/** a versao de pet com a luta da rodada de equilibrio (a v22 com a tabela LUTA_V23; LP5-5) */
+export const VERSAO_V23 = 23;
+/** a versao luta pela luta da POC: a v21, a v22 e a v23 */
+export const ehLutaPoc = (versao: number): boolean => versao === VERSAO_V21 || versao === VERSAO_V22 || versao === VERSAO_V23;
+/** a versao nasce na ilha com agua: a v22 e a v23 (a v23 e a v22 com a luta nova) */
+export const nasceNaAgua = (versao: number): boolean => versao === VERSAO_V22 || versao === VERSAO_V23;
+/** a ilha com agua para onde os pets v21 passam (o evento "mi"; o destino do ILHAS_DE_TROCA) */
+export const ILHA_DOS_V21 = "mvp_agua";
 /** as versoes que abrem com a luta da POC (LP-6: os v13 a v19 saem, com aviso): desde a LP4, as mesmas de VERSOES_PET */
 export const VERSOES_PET_POC: readonly number[] = VERSOES_PET;
 /** os cerebros que o evento "cb" escolhe: o DigiBrain modular e o cerebro A (os lobos, a linha de base) */
@@ -344,6 +362,12 @@ export const CHAMADO_FOME_CORPO = { limiar: .45 };
     CHAMADO_FOME_CORPO. Um por intervalo de CHAMADO_BEBE no maximo, com a janela de CAT.janelaChamado, os dois como hoje. PROPOSTO,
     SEM FONTE */
 export const CHAMADO_BEBE_CORPO: Record<Chamado, number> = { fome: .7, higiene: .9, carinho: .8 };
+/** o cuidado na hora certa do Rookie em diante (os Bits, docs/PLANO_V3_MOEDA.md, secao 2, decisao M-2 do Matheus de 2026-11-10): a acao do
+    dono conta quando o corpo estava abaixo destes limiares antes dela. So o feito do Tamer: o pet nao muda. A fome e a do instinto
+    (CHAMADO_FOME_CORPO: o pet so come abaixo dela), PROPOSTO, SEM FONTE. A higiene e o humor pagam abaixo de 25 %: DECIDIDO pelo Matheus
+    em 2026-11-11 ("abaixo de 25% ganha bits"); os do bebe (CHAMADO_BEBE_CORPO, 0,9 e 0,8) pagariam quase todo banho e carinho do Rookie,
+    cujo corpo cai em linha de 0,83 e 0,95 (medida desta etapa, test/bits.test.ts) */
+export const CUIDADO_NA_HORA: Record<Chamado, number> = { fome: .45, higiene: .25, carinho: .25 };
 export const ACAO_CHAMADO: Record<Chamado, readonly AcaoDono[]> = { fome: ["alimentar"], higiene: ["limpar"], carinho: ["acariciar", "brincar"] };
 export const FORMAS_AD: readonly FormaAdultaNormal[] = ["duelista", "furioso", "espelho", "muralha", "sentinela", "emboscador", "vigia", "tita"];
 export const LINHA_DA_FORMA = Object.fromEntries(LINHAS.flatMap(l => Object.keys(CAT.adulto[l].formas).map(f => [f, l]))) as Record<FormaAdultaNormal, Linha>;
@@ -436,6 +460,48 @@ export const CMU: ConfigMundo = {
    arvores, so com a racao do jogador. So o pet v12 o usa; a pesquisa e os outros gabaritos seguem com o CMU. PROPOSTO, SEM FONTE. */
 export const LAYOUT_MUNDO_MVP: LayoutMundo = { ...LAYOUT_MUNDO_PADRAO, nome: "mvp", arvores: [] };
 export const CMU_MVP: ConfigMundo = { ...CMU, layout: LAYOUT_MUNDO_MVP };
+
+/* A ilha onde so a agua barra o pet (docs/TAREFA_V3_ILHA_AGUA.md; o espelho de digilab/config.py: AGUA_ILHA, AGUA_POR_LAYOUT e
+   CONFIG_MUNDO_MVP_AGUA). A agua e uma linha de texto por linha de celulas, de cima para baixo, com um caractere por celula; ela barra o
+   corpo e nao tapa a visao, e a ponte e terra. O mapa fica na tabela, pelo nome do layout (o LayoutMundo nao ganha campo: os gabaritos de
+   antes o gravam campo a campo); o layout fora da tabela nao tem agua. O desenho e PROPOSTO, SEM FONTE. Quem roda um layout com agua precisa
+   do controlador do contrato (o Mundo confere e falha alto). */
+export const AGUA_MAR = "~", AGUA_DOCE = "r", TERRA = ".", PONTE = "=";
+export const AGUA_ILHA: readonly string[] = [
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~.......................~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~.................................~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~..............................rrrr......~~~~~~~~~~~~~",
+  "~~~~~~~~~...............................rrrrrr........~~~~~~~~~~",
+  "~~~~~~~..................................rrrr............~~~~~~~",
+  "~~~~~~.....................................rr.............~~~~~~",
+  "~~~~~......................................rr...............~~~~",
+  "~~~~.......................................rr................~~~",
+  "~~~~.......................................rr................~~~",
+  "~~~.......................................rr..................~~",
+  "~~~.......................................==..................~~",
+  "~~~.......................................==..................~~",
+  "~~~......................................rrr...................~",
+  "~~~......................................rr....................~",
+  "~~~......................................rr....................~",
+  "~~~......................................rr....................~",
+  "~~~.....................................rr....................~~",
+  "~~~.....................................rr....................~~",
+  "~~~......................................rr...................~~",
+  "~~~~......................................rrr................~~~",
+  "~~~~.......................................==...............~~~~",
+  "~~~~~.....rrrrr............................==..............~~~~~",
+  "~~~~~~...rrrrrrr...........................rr.............~~~~~~",
+  "~~~~~~~...rrrrr.............................rr..........~~~~~~~~",
+  "~~~~~~~~~....................................rr.......~~~~~~~~~~",
+  "~~~~~~~~~~~~..................................rr...~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~..............................rr~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+];
+export const LAYOUT_MUNDO_MVP_AGUA: LayoutMundo = { ...LAYOUT_MUNDO_MVP, nome: "mvp_agua" };
+export const CMU_MVP_AGUA: ConfigMundo = { ...CMU_MVP, layout: LAYOUT_MUNDO_MVP_AGUA };
+export const AGUA_POR_LAYOUT: Readonly<Record<string, readonly string[]>> = { [LAYOUT_MUNDO_MVP_AGUA.nome]: AGUA_ILHA };
 
 /* V2, o corpo do Creatures 3 por baixo dos drives (docs/TAREFA_V2_CORPO_DRIVES.md, etapa 7): espelho da ConfigCorpo de
    digilab/config.py, campo a campo (snake_case de proposito, conferido pelo nome contra o gabarito do Python). O motor do corpo e

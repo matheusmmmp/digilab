@@ -23,7 +23,7 @@ export interface Vida { variante: Variante; semente: number; versao: number; est
 
 /** `ponte` (PE3): grava no ovo a marca "pl" da ponte da luta, como o jogo faz nos ovos novos (src/produto.ts); "eps" (PE4) grava { luta, eps } */
 export function nascer(v: Variante, semente: number, ponte: boolean | "eps" = false): Motor {
-  const m = new Motor(semente);
+  const m = new Motor(semente, 21);
   m.ligarProduto({ chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true });
   m.trocarCerebro(v === "v21_a" ? "a" : "modular");
   if (ponte) m.ligarPonteLuta(ponte === "eps");
@@ -72,7 +72,7 @@ export function viverComLutas(v: Variante, semente: number, dias = DIAS, ponte: 
 
 /** o replay do registro evento a evento: depois de cada "l", as duas assinaturas (a mesma conta do resumir); o motor refeito sai junto */
 export function refazer(v: Vida): { m: Motor; lutas: Pick<Luta, "evento" | "confianca" | "modular">[] } {
-  const m = new Motor(v.semente), lutas: Pick<Luta, "evento" | "confianca" | "modular">[] = [];
+  const m = new Motor(v.semente, 21), lutas: Pick<Luta, "evento" | "confianca" | "modular">[] = [];
   v.log.forEach((ev, i) => {
     m.aplicarEvento(ev);
     if (ev[1] === "l") lutas.push({ evento: i, confianca: sha(JSON.stringify(m.conf.assinatura())),

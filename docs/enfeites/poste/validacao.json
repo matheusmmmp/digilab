@@ -2,7 +2,7 @@
  "uri": "poste.gltf",
  "mimeType": "model/gltf+json",
  "validatorVersion": "2.0.0-dev.3.10",
- "validatedAt": "2026-11-08T16:23:30.812Z",
+ "validatedAt": "2026-11-10T13:04:38.294Z",
  "issues": {
   "numErrors": 0,
   "numWarnings": 0,
@@ -13,14 +13,14 @@
  },
  "info": {
   "version": "2.0",
-  "generator": "docs/objetos3d/poste/blocos/poste_blocos.py",
+  "generator": "poste.py (DigiLab)",
   "resources": [
    {
     "pointer": "/buffers/0",
     "mimeType": "application/gltf-buffer",
     "storage": "external",
     "uri": "poste.bin",
-    "byteLength": 27300
+    "byteLength": 17108
    },
    {
     "pointer": "/images/0",
@@ -44,8 +44,8 @@
   "hasTextures": true,
   "hasDefaultScene": true,
   "drawCallCount": 1,
-  "totalVertexCount": 780,
-  "totalTriangleCount": 390,
+  "totalVertexCount": 466,
+  "totalTriangleCount": 366,
   "maxUVs": 1,
   "maxInfluences": 0,
   "maxAttributes": 3

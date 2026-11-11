@@ -77,6 +77,9 @@ não o mundo.
 
 ### 2.7 O que o DF tem e **não interessa** ao Digilab
 
+> **Reaberto em parte (D-MM-9, 2026-11-11):** as lendas voltaram com a mitologia autorada da V3 (`docs/TAREFA_V3_MITOLOGIA.md`; o
+> registro em `docs/registro/2026-11.md`). O resto da lista segue fora.
+
 Geração de mundo e história procedural, lendas, economia de tarefas, relações entre dezenas de agentes, facções e
 guerras. Pelo `CLAUDE.md` (não aumentar escopo) e pela tarefa da seção 7 (lista do que fica fora), nada disso entra.
 

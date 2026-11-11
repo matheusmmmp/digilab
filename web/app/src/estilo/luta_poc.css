@@ -34,3 +34,8 @@
 .poc-desafio button:disabled{ opacity:.55; cursor:default }
 /* o dock da luta (o mesmo da tela de antes, luta_hud.css): Sair do replay numa linha so no celular */
 .luta-tela--poc .luta-dock .luta-desistir{ white-space:nowrap }
+/* o nome no HUD do celular (LP3c): no lugar das reticencias, menor e com o espaco entre as letras curto, em ate duas linhas */
+@media (max-width:599px){
+  .luta-tela.luta-tela--poc .hud-nome{ font-size:10px; letter-spacing:0; white-space:normal; overflow-wrap:anywhere; text-overflow:clip;
+    display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; line-clamp:2 }
+}

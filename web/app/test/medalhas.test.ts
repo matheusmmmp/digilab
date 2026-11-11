@@ -18,7 +18,7 @@ const FIM_ROOKIE = DUR_EVO.bebe + DUR_EVO.crianca;
 /** vida com o dono simulado: cuida, trata lesao, luta na Campina no Rookie, faz as lutas de treino e treina.
     `medalhas(m, p)`: quando o Tamer "ganha" medalhas nesta vida (so v6) */
 function vida(tipo: "atencioso" | "aleatorio", semente: number, dias: number, medalhas?: (m: Motor, p: number) => void): Motor {
-  const m = new Motor(semente), dono = criarDono(tipo), r = criarRng(hashSemente("dono", semente, tipo));
+  const m = new Motor(semente, 21), dono = criarDono(tipo), r = criarRng(hashSemente("dono", semente, tipo));
   const passos = Math.round(dias * TPD / CD.passo), orc = Math.round(16 * dias);
   let gasto = 0;
   for (let p = 0; p < passos; p++) {
@@ -43,7 +43,7 @@ function vida(tipo: "atencioso" | "aleatorio", semente: number, dias: number, me
 }
 
 describe("a versao dos ovos novos", () => {
-  test("ovos novos sao v21 (v6 + confianca + vinculo B + o cerebro A e o corpo + o mundo fisico + o cerebro trocavel + a luta da POC)", () => { expect(VERSAO_PET).toBe(21); expect(new Motor(1).versao).toBe(21); });
+  test("ovos novos sao v23 (a v22 com a luta da rodada de equilibrio); a v21 (v6 + confianca + vinculo B + o cerebro A e o corpo + o mundo fisico + o cerebro trocavel + a luta da POC)", () => { expect(VERSAO_PET).toBe(23); expect(new Motor(1, 21).versao).toBe(21); });
 });
 
 describe("a trava (pet v21)", () => {
@@ -56,7 +56,7 @@ describe("a trava (pet v21)", () => {
     expect(r.alvo).toBe("adolescente"); expect(r.tempo).toBe(true); expect(r.pronto).toBe(false);
   });
   test("Rookie -> Champion: espera a 1a medalha e evolui no tick do evento u", () => {
-    const m = new Motor(77);
+    const m = new Motor(77, 21);
     m.avancar(FIM_ROOKIE + 120);
     expect(m.estagioAtual).toBe("crianca");
     const t = m.e.tick;
@@ -68,14 +68,14 @@ describe("a trava (pet v21)", () => {
     expect(m.esperandoMedalha()).toBeNull();
   });
   test("medalha antes da hora: o Rookie evolui no tempo de sempre", () => {
-    const m = new Motor(78);
+    const m = new Motor(78, 21);
     m.avancar(30); m.liberar(1);
     m.avancar(FIM_ROOKIE + 30);
     expect(m.estagioAtual).toBe("adolescente");
     expect(m.evolucoes[m.evolucoes.length - 1].tick).toBe(TICK_INICIAL + FIM_ROOKIE);   /* no tempo de sempre, sem esperar */
   });
   test("Champion -> Ultimate: pede 3 medalhas; com 1 e 2 espera", () => {
-    const m = new Motor(79);
+    const m = new Motor(79, 21);
     m.liberar(1);
     m.avancar(FIM_ROOKIE + 15);
     expect(m.estagioAtual).toBe("adolescente");
@@ -91,7 +91,7 @@ describe("a trava (pet v21)", () => {
     expect(m.evolucoes[m.evolucoes.length - 1].tick).toBe(m.e.tick);
   });
   test("o Champion dura o tempo inteiro mesmo quando o Rookie esperou a medalha (tempo desde a evolucao anterior)", () => {
-    const m = new Motor(80);
+    const m = new Motor(80, 21);
     m.avancar(FIM_ROOKIE + 600);
     expect(m.estagioAtual).toBe("crianca");
     m.liberar(1);
@@ -108,7 +108,7 @@ describe("a trava (pet v21)", () => {
     expect(m.estagioAtual).toBe("adulto");
   });
   test("Ultimate -> Mega: pede 5 medalhas; requisitosMega mostra tem e precisa", () => {
-    const m = new Motor(80);
+    const m = new Motor(80, 21);
     m.liberar(3);
     m.avancar(FIM_ROOKIE + 15);
     m.sparring = CAT.sparring;
@@ -130,7 +130,7 @@ describe("a trava (pet v21)", () => {
     expect(m.requisitosEvolucao()).toBeNull();
   });
   test("liberacao invalida falha alto", () => {
-    const m = new Motor(81);
+    const m = new Motor(81, 21);
     m.liberar(2);
     expect(() => m.liberar(2)).toThrow(/liberação inválida/);
     expect(() => m.liberar(1)).toThrow(/liberação inválida/);
@@ -153,17 +153,17 @@ describe("replay com o evento u", () => {
       if (mm.esperandoMedalha()) dar(mm, mm.esperandoMedalha()!.precisa);
     });
     expect(m.log.filter(e => e[1] === "u").length).toBeGreaterThanOrEqual(1);
-    const r = Motor.reproduzir(m.semente, m.log, VERSAO_PET);
+    const r = Motor.reproduzir(m.semente, m.log, 21);
     expect(r.assinatura()).toBe(m.assinatura());
     expect(r.medalhas).toBe(m.medalhas);
     expect(r.estagioAtual).toBe(m.estagioAtual);
     const semU = m.log.filter(e => e[1] !== "u");
     let outra: string;
-    try { outra = Motor.reproduzir(m.semente, semU, VERSAO_PET).assinatura(); } catch (err) { outra = "morreu: " + String(err); }
+    try { outra = Motor.reproduzir(m.semente, semU, 21).assinatura(); } catch (err) { outra = "morreu: " + String(err); }
     expect(outra).not.toBe(m.assinatura());
   });
   test("a assinatura dos v6 inclui as medalhas (um u no In-Training ja muda)", () => {
-    const a = new Motor(90), b = new Motor(90);
+    const a = new Motor(90, 21), b = new Motor(90, 21);
     a.avancar(30); b.avancar(30); b.liberar(1);
     a.avancar(30); b.avancar(30);
     expect(a.estagioAtual).toBe(b.estagioAtual);
@@ -171,13 +171,13 @@ describe("replay com o evento u", () => {
   });
   test("u fora de ordem e evento desconhecido: o replay falha alto", () => {
     const u: EventoRegistro = [TICK_INICIAL, "u", { n: 1 }];
-    expect(() => Motor.reproduzir(1, [u, [TICK_INICIAL, "u", { n: 1 }]], VERSAO_PET)).toThrow(/liberação inválida/);
-    expect(() => Motor.reproduzir(1, [[TICK_INICIAL, "x", 1] as unknown as EventoRegistro], VERSAO_PET)).toThrow(/desconhecido/);
-    const m = Motor.reproduzir(1, [u], VERSAO_PET);
+    expect(() => Motor.reproduzir(1, [u, [TICK_INICIAL, "u", { n: 1 }]], 21)).toThrow(/liberação inválida/);
+    expect(() => Motor.reproduzir(1, [[TICK_INICIAL, "x", 1] as unknown as EventoRegistro], 21)).toThrow(/desconhecido/);
+    const m = Motor.reproduzir(1, [u], 21);
     expect(m.medalhas).toBe(1);
   });
   test("o filho da heranca nasce na versao atual (v7) e recebe as medalhas depois da origem", () => {
-    const p = new Motor(91), q = new Motor(92);
+    const p = new Motor(91, 21), q = new Motor(92, 21);
     for (const x of [p, q]) {
       x.liberar(3); x.avancar(FIM_ROOKIE + 15); x.sparring = CAT.sparring;
       x.lutas = { lutas: 10, vitorias: 10, derrotas: 0, empates: 0, lesoes: 0, tratadas: 0 }; x.avancar(DUR_EVO.adolescente);
