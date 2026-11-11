@@ -648,4 +648,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — COOPERACAO, CO2a: o traço do grupo (Gerente da V3, Claude Code, Opus 5.5, branch `v3-cooperacao-co2`)](registro/2026-11.md)
 - [2026-11-11 — MITOLOGIA, E0: o oráculo, a hybris e a brincadeira variada (Gerente da V3, Claude Code, Opus 5.5, branch `v3-mitologia`)](registro/2026-11.md)
 - [2026-11-11 — COOPERACAO, CO2b: o mundo partilhado no TS (Claude Code, Opus 5.5, branch `v3-cooperacao-co2b`)](registro/2026-11.md)
+- [2026-11-11 — COOPERACAO, CO2c: o grupo em TS (Claude Code, Opus 5.5, branch `v3-cooperacao-co2c`)](registro/2026-11.md)
 - [2026-11-11 — ILHA_AGUA, IA4: a ilha com água junto com os objetos em cartoon e a cooperação (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-agua-ia4`)](registro/2026-11.md)
