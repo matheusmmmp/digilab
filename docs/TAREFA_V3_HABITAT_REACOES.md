@@ -44,3 +44,22 @@ O plano e o relato no corpo do PR.
 ## 8. Precisa do Matheus
 
 Nada: as HR-1 a HR-8 foram aprovadas em 2026-11-11 ("Aprovo as oito"), com a HR-5, baixar de 8 a 10 sons CC0 na HR4.
+
+## 9. HR1 (2026-11-11): as reações que faltavam na vista
+
+Branch `v3-habitat-hr1`. Só vista: um módulo novo, `web/app/src/telas/pet/momentos.ts`.
+
+- **Os clipes que nada disparava:**
+  - Feliz: ao nascer, ao atender o chamado, depois de comer bem, depois de tratar, no fim do pulinho do carinho e em laço ao brincar;
+  - Sacudir: ao limpar;
+  - Chamar: em laço com o chamado aberto;
+  - Die: na morte.
+- **Os instantes novos:** o acordar (Cansado), o chamado perdido (Triste), a fruta podre (Recusa) e o pet dormindo que vira de lado quando o
+  dono tenta pegar.
+- **Os ganchos:** `acoes.ts` (limpar, tratar), `ToquePet.tsx` (o carinho que relaxou), `PegarPet.tsx` (o pet dormindo), `reacao.ts`
+  (os rostos com duração própria), `ilha/papel.ts` (o clipe no corpo) e `main.tsx` (`__digilab.clipeMomento` e `__digilab.momento`
+  para o e2e).
+- **Os testes:** `test/momentos.test.ts` (12) e o e2e "momentos: limpar faz o pet sacudir com o clipe do atlas" (`e2e/jogo.spec.ts`),
+  que se pula sem o atlas de clipes.
+- **Os desvios:** D-HR1-1 a D-HR1-7 (`docs/registro/2026-11.md`).
+
