@@ -620,6 +620,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-10 — ILHA_AGUA, IA3: a vista da ilha com água (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-agua-ia3`)](registro/2026-11.md)
 - [2026-11-10 — ILHA_AGUA, IA4: a água ligada no jogo (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-agua-ia4`)](registro/2026-11.md)
 - [2026-11-10 — MOEDA: o plano dos Bits APROVADO (Gerente da V3, Claude Code, Opus 5.5, branch `v3-moeda-plano`)](registro/2026-11.md)
+- [2026-11-10 — MOEDA, MO1: os Bits se ganham (Gerente da V3, Claude Code, Opus 5.5, branch `v3-moeda`)](registro/2026-11.md)
 - [2026-11-10 — LUTA_POC, LP5-0: a bancada nova e o ponto de partida (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-0`)](registro/2026-11.md)
 - [2026-11-10 — LUTA_POC, LP5-1: a rodada 1 do mapeamento, parada pelo S1 (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-calib`)](registro/2026-11.md)
 - [2026-11-10 — CONVERSA_PET, DC4d, a marcação e o encerramento da DC4 (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc4d`)](registro/2026-11.md)

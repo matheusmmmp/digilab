@@ -9,8 +9,9 @@ import { ligarProduto } from "./produto.ts";
 import { podeTrocarCerebro, type Cerebro } from "./cerebro.ts";
 import { CHAVE_LAB } from "./lab.ts";
 import { CHAVE, gravarSave, lerSave, petExemplo, textoSave, type Armazenamento } from "./save.ts";
-import { CHAVE_TAMER, Tamer, conferirCampeao, conferirItensDasMedalhas, conferirMedalhas, conferirRecordes, gravarTamer, lerTamer, sincronizarPet, type MedalhaGanha } from "./tamer.ts";
+import { CHAVE_TAMER, Tamer, conferirBits, conferirBitsDoNivel, conferirCampeao, conferirItensDasMedalhas, conferirMedalhas, conferirRecordes, gravarTamer, lerTamer, sincronizarPet, type MedalhaGanha } from "./tamer.ts";
 import { versaoDoOvo } from "./lutaPoc.ts";
+import { assinaturaIntocada } from "./nivel.ts";
 import { emitirSom } from "./somEventos.ts";
 
 export type Origem = "save" | "exemplo" | "novo";
@@ -63,8 +64,17 @@ function medalhas(j: Jogo): { novas: MedalhaGanha[]; mudou: boolean } {
   if (!armazenamento || j.erroSave || j.erroTamer) return { novas: [], mudou: false };
   const novas = conferirMedalhas(tamer, j.motor), itens = conferirItensDasMedalhas(tamer, j.motor), titulo = conferirCampeao(tamer, j.motor);
   const recordes = conferirRecordes(tamer, j.motor);
-  if (novas.length || itens.length || titulo || recordes.length) gravarTamer(armazenamento, tamer);
+  /* os Bits (docs/PLANO_V3_MOEDA.md, MO1): os feitos novos do pet e a 1a medalha de cada lider. O pet de exemplo das boas-vindas, ainda nao
+     do jogador, nao paga: nem com a origem "exemplo", nem intocado depois de um descarte (o criterio do nivel do Tamer, nivel.ts) */
+  const bits = j.origem === "exemplo" || exemploIntocado(j.motor) ? [] : conferirBits(tamer, j.motor);
+  if (novas.length || itens.length || titulo || recordes.length || bits.length) gravarTamer(armazenamento, tamer);
   return { novas, mudou: sincronizarPet(tamer, j.motor) };
+}
+let exemplo: { semente: number; assinatura: string } | null = null;
+/** o pet e o de exemplo das boas-vindas, ainda intocado (so o tempo passou): a mesma conta do nivel do Tamer (nivelTela.ts, ehPetDoJogador) */
+function exemploIntocado(m: Motor): boolean {
+  if (!exemplo) { const e = petExemplo(); exemplo = { semente: e.semente, assinatura: assinaturaIntocada(e) }; }
+  return m.semente === exemplo.semente && assinaturaIntocada(m) === exemplo.assinatura;
 }
 /** a unica porta de mudanca do Tamer fora das medalhas (itens: a carta usada, a carta da revanche): aplica, grava e avisa. Com o
     registro do Tamer que nao abriu, falha (o app nao grava por cima dele) */
@@ -75,6 +85,15 @@ export function mudarTamer<T>(f: (t: Tamer) => T): T {
   gravarTamer(armazenamento, tamer);
   j.revisao++; avisar();
   return r;
+}
+/** os Bits dos niveis do Tamer (nivelTela.ts, quando o nivel confirmado sobe): paga os que faltam ate `nivel`, grava e avisa. Sem nada a
+    pagar, ou com o registro do Tamer que nao abriu, nao faz nada (a vista chama a cada confirmacao) */
+export function pagarNivel(nivel: number): void {
+  const j = jogoAtual();
+  if (!armazenamento || j.erroTamer || j.emLab) return;
+  if (!conferirBitsDoNivel(tamer, nivel).length) return;
+  gravarTamer(armazenamento, tamer);
+  j.revisao++; avisar();
 }
 export function jogoAtual(): Jogo {
   if (!jogo) throw new Error("jogo nao iniciado");

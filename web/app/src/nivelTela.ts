@@ -12,7 +12,7 @@
 import { VERSOES_PET } from "../motor/index.ts";
 import { useEffect, useSyncExternalStore } from "react";
 import { type Motor } from "../motor/index.ts";
-import { motorReal, tamerAtual, useJogo } from "./jogo.ts";
+import { motorReal, pagarNivel, tamerAtual, useJogo } from "./jogo.ts";
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados } from "./pets.ts";
 import { CHAVE, SEMENTE_EXEMPLO, petExemplo } from "./save.ts";
 import { dicasLigadas, pedirCartao, retirarCartao, esquecerDicasVistas } from "./dicas.ts";
@@ -117,6 +117,8 @@ const lerAgora = (): EstadoNivel => calcularNivel().estado;
 /** o efeito da casca: confirma o resultado (grava a chave, poe as travas, guarda os brilhos e o aviso dos lugares que abriram) */
 function confirmarNivel(): void {
   const r = calcularNivel(), antes = confirmado;
+  /* os Bits de cada nivel do Tamer (docs/PLANO_V3_MOEDA.md, MO1): pagos uma vez, a partir do nivel confirmado (com o piso dos saves antigos) */
+  pagarNivel(nivelDe(r.estado));
   definirTrancas({ saco: !pecaAberta(r.estado, "crescer"), portao: !pecaAberta(r.estado, "lutar"), barraca: !pecaAberta(r.estado, "diario") });
   if (antes !== null && r.estado === antes) return;
   confirmado = r.estado; versaoConfirmado++;

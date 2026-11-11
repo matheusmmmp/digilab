@@ -59,6 +59,10 @@
   .mm-relogio small{ font:600 12px/1 var(--hx-f); color:var(--hx-sec) }
   .mm-relogio b{ font:700 18px/1 var(--hx-f-num); font-variant-numeric:tabular-nums; color:var(--hx-num) }
   .mm-relogio .mm-salvo-erro{ align-self:center; width:18px; height:18px; color:var(--hx-perigo) }
+  /* o saldo de Bits (MOEDA, MO1): dentro da pilula do relogio, depois da hora, com um traco antes (abaixo dele havia o cartao do chamado) */
+  .mm-bits{ align-self:center; display:flex; align-items:center; gap:4px; margin-left:4px; padding-left:8px; border-left:1px solid var(--hx-borda) }
+  .mm-bits svg{ width:15px; height:15px; color:var(--hx-alerta) }
+  .mm-relogio .mm-bits b{ font:700 15px/1 var(--hx-f-num); font-variant-numeric:tabular-nums; color:var(--hx-num) }
   .mm-coluna{ position:absolute; top:14px; right:14px; display:flex; flex-direction:column; gap:10px; pointer-events:none }
   .mm-destinos{ display:flex; flex-direction:column; gap:10px }
   /* o .topo-bt de casca.css e pele-vidro.css (o Conversar) tem fundo e medida de 44 px do topo do desktop: a coluna usa a caixa da HUD */
