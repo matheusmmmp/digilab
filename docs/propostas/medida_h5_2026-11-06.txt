@@ -1,0 +1,30 @@
+Medida do custo do H5 (docs/TAREFA_V3_UX_TELA_PET.md, etapa A1), 2026-11-06.
+Worktree v3-hooks-a1 (base 389f389 + #589 + #590; nenhum arquivo de web/app mudado), DIGILAB_PORTA_E2E=8813, npm ci antes.
+Cada rodada: npm run tipos, npm test, npm run e2e, em sequencia, em web/app (o script: medir_h5.sh, fora do repo).
+
+rodada 1 tipos rc=0 4s
+rodada 1 test rc=0 110s
+rodada 1 e2e rc=1 709s
+rodada 2 tipos rc=0 8s
+rodada 2 test rc=0 139s
+rodada 2 e2e rc=1 502s
+rodada 3 tipos rc=0 9s
+rodada 3 test rc=0 169s
+rodada 3 e2e rc=0 481s
+FIM
+
+== rodada 1, resumo do e2e
+  3 failed
+    e2e\jogo.spec.ts:59:3 › jogo completo com save champion: o fluxo inteiro, e o replay do app igual 
+    e2e\jogo.spec.ts:900:1 › fronteira: com o título, a Torre de Batalha dá 7 vitórias seguidas sem cura e o recorde; o Palácio sem as travas 
+    e2e\jogo.spec.ts:1457:1 › treino: com fadiga acima de 60 os exercícios viram Forçar, a folha confirma e o treino entra no registro 
+  120 passed (11.7m)
+      Tests  822 passed (822)
+== rodada 2, resumo do e2e
+  1 failed
+    e2e\jogo.spec.ts:1457:1 › treino: com fadiga acima de 60 os exercícios viram Forçar, a folha confirma e o treino entra no registro 
+  122 passed (8.2m)
+      Tests  822 passed (822)
+== rodada 3, resumo do e2e
+  123 passed (7.5m)
+      Tests  822 passed (822)

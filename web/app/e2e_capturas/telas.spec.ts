@@ -13,11 +13,7 @@ const APP = `${PREFIXO}/web/dist/`, CHAVE = "digilab-web-v21-sprites";
 /* o mesmo pet v11 do teste do DigiBrain (e2e/jogo.spec.ts) */
 const SAVE_V11 = { semente: 4242, versao: 11, log: [[480, "t", 120], [600, "d", "acariciar"], [600, "t", 120], [720, "d", "tapa"], [720, "t", 120],
   [840, "d", "alimentar"], [840, "t", 60]] };
-/* a Exploracao de um pet v6 (docs/TAREFA_V2_EXPLORACAO.md): o save das arenas do e2e (a Cidadela e o proximo desafio) e o Tamer com as 3
-   primeiras medalhas: seis ilhas, vencidas, abertas e trancadas, e a Fronteira trancada */
-const SAVE_ARENAS = JSON.parse(readFileSync(new URL("../e2e/save_arenas.json", import.meta.url), "utf8"));
-const TAMER_3 = { versao: 1, log: ["campina", "torre", "floresta"].map((id, i) =>
-  ["medalha", { id, n: i + 1, quando: 1 + i, pet: SAVE_ARENAS.semente, forma: "DinoBeemon", tick: 900 + i }]) };
+/* a Exploracao de um pet v6 (o mapa 3D) saiu com as telas do combate de antes (LUTA_POC, LP4), e com ela o save das arenas */
 /* a Evolucao (docs/TAREFA_V2_EVOLUCAO.md): o pet v11 do e2e que vira Champion quando o relogio anda (o momento, em tela cheia: so a janela,
    sem a pagina inteira por baixo) e a aba com o pet v6 das arenas */
 const SAVE_EVO = JSON.parse(readFileSync(new URL("../e2e/save_evolucao.json", import.meta.url), "utf8"));
@@ -34,8 +30,7 @@ const TELAS: [string, string, object, object?][] = [
   ["lutar-campanha", "#/lutar/campanha", SAVES.champion], ["lutar-fronteira", "#/lutar/fronteira", SAVES.champion], ["lutar-medalhas", "#/lutar/medalhas", SAVES.champion],
   ["diario-registro", "#/diario/registro", SAVES.champion], ["diario-catalogo", "#/diario/catalogo", SAVES.champion], ["diario-cenarios", "#/diario/cenarios", SAVES.champion],
   ["conversar", "#/conversar/chat", SAVES.champion], ["config", "#/config", SAVES.champion], ["pet-v11", "#/pet/estado", SAVE_V11],
-  ["lutar-exploracao-v6", "#/lutar/campanha", SAVE_ARENAS, TAMER_3],
-  ["evolucao-momento", "#/crescer/evolucao", SAVE_EVO, TAMER_1], ["crescer-evolucao-v6", "#/crescer/evolucao", SAVE_ARENAS, TAMER_3],
+  ["evolucao-momento", "#/crescer/evolucao", SAVE_EVO, TAMER_1],
   ["treino-pausa", "#/crescer/treinar", SAVE_TR_PAUSA], ["treino-forcar", "#/crescer/treinar", SAVE_TR_FORCAR],
   ["pet-v12", "#/pet/estado", SAVE_MUNDO],
 ];
@@ -85,6 +80,14 @@ for (const [largura, altura] of LARGURAS.map(l => [l, l >= 1900 ? 950 : l >= 110
         || !!document.querySelector(".pet-cena .cena3d[data-pronto]"));
       /* a Exploracao: o mapa 3D tambem chega por import dinamico; espera ele desenhar (ou a tela cair no mapa 2D) */
       await page.waitForFunction(() => !document.querySelector(".camp-tela--expl") || !!document.querySelector(".mapa-expl[data-pronto]"));
+      /* o atlas (e o de clipes, ~32 MB) chega por fetch em tempo real; a cena le o atlas a cada quadro, mas com o relogio parado so ha os
+         quadros do runFor abaixo: se o atlas chegar depois, a captura fica com o pet de reserva (2026-11-06, M1 do mobile). O retrato do
+         topo so ganha a imagem quando o atlas fica pronto; sem ele (ou com o aviso de que nao carregou) a captura falha alto */
+      if (!reserva) {
+        await page.waitForFunction(() => !!document.querySelector(".topo-retrato img, .mm-retrato img") || !!document.querySelector(".avisos .aviso")
+          || !document.querySelector(".topo-retrato, .mm-retrato"), undefined, { timeout: 90_000 });
+        await expect(page.locator(".avisos .aviso", { hasText: "Atlas" })).toHaveCount(0);
+      }
       await page.clock.runFor(1000);
       /* o momento da evolucao: o pet evolui enquanto o relogio anda, e a revelacao abre */
       if (SO_JANELA.has(nome)) await page.locator("dialog.revelacao[open]").waitFor();

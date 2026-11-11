@@ -1,0 +1,14 @@
+{
+ "id": "01a1b335-260d-7539-b583-dbe088ec707a",
+ "type": "image-to-image",
+ "ai_model": "nano-banana-2",
+ "prompt": "Multiple views of the same giant soda can with pastel rainbow color blocks (mint, lilac, yellow, pink) and a big pair of red cherries on the front, silver top rim and pull tab, no text: front, side and back, same style, same colors, plain light grey background.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1794007967431,
+ "finished_at": 1794007994011,
+ "saldo": {
+  "antes": 572,
+  "depois": 566
+ }
+}

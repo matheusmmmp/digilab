@@ -1,28 +1,29 @@
-/* Treinar (docs/TAREFA_V2_TREINO.md: composicao propria a partir da terceira tela da referencia; antes, pranchas TreinoNormal, TreinoPausa,
-   TreinoForcar e TreinoDesktop): a sala clara com o pet grande na plataforma de luz, o estado do treino e o balao "pausa?"; o stat em foco
-   (o principal do ultimo exercicio: os pontos dele de 10, os do estagio e os da vida); fadiga com as marcas 40 (pede pausa) e 60 (so
-   forcar); sobrecarga roxa com 30 (aviso) e 60 (sombria); os 6 exercicios em grade 3 x 2 (acima de 60 todos viram FORCAR listrado e a
-   confirmacao e uma folha com o que ganha e o que custa); o treinado na vida, stat a stat; o ultimo treino. Sem minigame, sem nivel e sem
-   XP: o motor nao tem. Tudo o que aparece vem do motor (CTR, CMG, CSO, APTIDAO e o treino do pet). */
-import { useEffect, useRef, useState } from "react";
-import { Crosshair, Dumbbell, Flower2, Footprints, Shield, Wind, type LucideIcon } from "lucide-react";
+/* Treinar (docs/TAREFA_V2_TREINO.md; L2 de "Lugares da ilha", prancha crescer_treinar_*): o estado do treino numa palavra ("Pronto") e o ultimo treino
+   ("Corrida 07:31"; o intervalo vai para o balao), os 6 exercicios em grade 3 x 2 com o ganho de cada um e a estrela da aptidao, a fadiga e a
+   sobrecarga so em numero (as marcas 40/60 e 30/60 ficam na barra e no aria-label) e o Forcar. O pet treina no saco de pancada da propria ilha
+   (a sala e o resumo de stats de antes saíram: a ilha ja mostra o pet, e a prancha nao os desenha). Acima de 60 de fadiga todos viram FORCAR e a
+   confirmacao e uma folha com o que ganha e o que custa. Sem minigame, sem nivel e sem XP: o motor nao tem. Tudo o que aparece vem do motor (CTR, CMG,
+   CSO, APTIDAO e o treino do pet). */
+import { useEffect, useId, useRef, useState } from "react";
+import { Crosshair, Dumbbell, Flower2, Footprints, Shield, Star, Wind, type LucideIcon } from "lucide-react";
 import {
-  APTIDAO, CMG, CSO, CTR, NOME_ESP, NOME_EXERCICIO, NOME_STAT, STATS, corDominante, type EstagioTreino, type Exercicio, type Stat,
+  APTIDAO, CMG, CSO, CTR, NOME_ESP, NOME_EXERCICIO, NOME_STAT, STATS, type EstagioTreino, type Exercicio, type Stat,
 } from "../../../motor/index.ts";
 import { imagemAtlas, useAtlas } from "../../atlas.ts";
-import { PetGrande } from "../../componentes/Revelacao.tsx";
+import { ComDica, ComoFunciona } from "../../componentes/Dica.tsx";
 import { Seg, blocos, dec } from "../../componentes/Barras.tsx";
-import { Grade } from "../../componentes/Imagens.tsx";
-import { AMPULHETA } from "../../grades.ts";
 import { abrirModal } from "../../componentes/modal.ts";
 import { mudarMotor, useJogo } from "../../jogo.ts";
+import { PecaTrancada } from "../../componentes/PecaTrancada.tsx";
+import { useNivel } from "../../nivelTela.ts";
+import { pecaAberta } from "../../nivel.ts";
 import { hhmm } from "../pet/TelaPet.tsx";
 import { CENA } from "../pet/cenaEstado.ts";
+import { emitirMusica, emitirSom } from "../../somEventos.ts";
 
 /* icones de treino do UP (hexagonos pintados, nao pixel art): 54 x 61 no botao, como pede o guia (secao 6) */
 const ICONE_TREINO: Record<Exercicio, string> = { levantar_pedra: "treino_pedra", corrida: "treino_corrida", alvo: "treino_soco", esquiva: "treino_arrancada", meditar: "treino_cachoeira", resistencia: "treino_saco" };
 const EXERCICIOS = Object.keys(CTR.exercicios) as Exercicio[];
-const CORES_AMPULHETA = { k: "#173A8A", w: "#FFFFFF", y: "#F0B429" };
 const n1 = (x: number): string => dec(x, 1).replace(/,0$/, "");
 
 /* sem o atlas do UP (o CI, as capturas do repositorio): os icones do lucide */
@@ -38,62 +39,12 @@ function ultimoExercicio(log: readonly (readonly unknown[])[]): { tick: number; 
   return null;
 }
 
-/** a sala de treino: parede clara com janela e chao em CSS (o fundo do UP so com o atlas local), o pet grande e nitido na plataforma de
-    luz, o estado do treino e o balao "pausa?" quando o motor pede pausa */
-function Sala() {
-  const { motor: m, nascendo } = useJogo(), a = useAtlas(), t = m.treino, bebe = m.estagioAtual === "bebe", pode = t.podeTocar(m.e.tick);
-  const fundo = a.tipo === "ok" ? imagemAtlas(a, "fundo_treino").url : null;
-  const estado = bebe ? "o In-Training ainda não treina" : t.pedePausa ? "pediu pausa" : !pode ? `descansando: próximo em ${CTR.intervalo - (m.e.tick - t.ultimo!)} min`
-    : "pronto para treinar";
-  return (
-    <section className={`trn-sala${fundo ? " trn-sala--up" : ""}`} aria-label="Sala de treino" style={fundo ? { backgroundImage: `url(${fundo})` } : undefined}>
-      {!fundo && <span className="trn-janela" aria-hidden="true"><i /><i /></span>}
-      <span className="evm-plataforma trn-plataforma" aria-hidden="true"><i /><i /><i /></span>
-      {nascendo === 0 && <span className="trn-pet"><PetGrande f={m.forma} alvo={[180, 150]} cor={corDominante(m.tracos)} sombria={m.sombria} maxEscala={4} /></span>}
-      <span className={`trn-estado${t.pedePausa ? " trn-estado--pausa" : ""}`}>{estado}</span>
-      {t.pedePausa && <span className="dl-balao trn-balao"><Grade grade={AMPULHETA} escala={2} cores={CORES_AMPULHETA} alt="" /> pausa?</span>}
-    </section>
-  );
-}
-
-/** o nome do stat com a inicial maiuscula (NOME_STAT e minusculo, para ir no meio da frase) */
-const nomeStat = (k: Stat): string => NOME_STAT[k][0].toUpperCase() + NOME_STAT[k].slice(1);
-/** uma barra de 0 a `de` (o teto do stat, do estagio ou da vida) */
-const Barra = ({ v, de }: { v: number; de: number }) => <span className="trn-barra" aria-hidden="true"><i style={{ width: `${Math.min(100, v / de * 100)}%` }} /></span>;
 /** os tetos do estagio de treino (o Mega com os de CMG); null no In-Training, que nao treina */
 function tetos(m: { treino: { estagio: string } }): { est: EstagioTreino | "mega"; estagio: number; vida: number } | null {
   const est = m.treino.estagio;
   if (est === "mega") return { est, estagio: CMG.tetoEstagio, vida: CMG.tetoVida };
   if (!(est in CTR.tetoEstagio)) return null;
   return { est: est as EstagioTreino, estagio: CTR.tetoEstagio[est as EstagioTreino], vida: CTR.tetoVida };
-}
-/** o stat em foco: o principal do ultimo exercicio (o primeiro, sem treino), com os pontos dele de 10 e os do estagio e da vida. E o que o
-    motor tem no lugar do "nivel" da referencia */
-function StatFoco() {
-  const { motor: m } = useJogo(), t = m.treino, ult = ultimoExercicio(m.log), ex = ult?.ex ?? EXERCICIOS[0], st = CTR.exercicios[ex][0], tt = tetos(m);
-  return (
-    <section className="trn-card trn-foco" aria-labelledby="trn-foco-tit">
-      <span className="trn-foco-ic"><IconeTreino ex={ex} /></span>
-      <span className="trn-foco-txt">
-        <span className="trn-rot">{ult ? `stat do último treino · ${NOME_EXERCICIO[ex]}` : "stat em foco"}</span>
-        <b id="trn-foco-tit">{nomeStat(st)} +{n1(t.pontos[st])} <small>de {CTR.tetoStat}</small></b>
-        <Barra v={t.pontos[st]} de={CTR.tetoStat} />
-        <span className="trn-foco-sub">{tt ? `no estágio ${n1(t.pontosEst[tt.est] ?? 0)} de ${tt.estagio} · na vida ${n1(t.total)} de ${tt.vida}` : `na vida ${n1(t.total)} de ${CTR.tetoVida}`}</span>
-      </span>
-    </section>
-  );
-}
-/** o treinado na vida, stat a stat (de 0 a 10), e o total */
-function Vida() {
-  const { motor: m } = useJogo(), t = m.treino, tt = tetos(m);
-  return (
-    <section className="trn-card trn-vida" aria-labelledby="trn-vida-tit">
-      <h2 className="trn-tit" id="trn-vida-tit"><span>Treinado na vida</span><span className="dl-lcd">+{n1(t.total)} / {tt?.vida ?? CTR.tetoVida}</span></h2>
-      <ul className="trn-stats">
-        {STATS.map(k => <li key={k}><span>{nomeStat(k)}</span><Barra v={t.pontos[k]} de={CTR.tetoStat} /><b>+{n1(t.pontos[k])}</b></li>)}
-      </ul>
-    </section>
-  );
 }
 
 /** barra segmentada com os rotulos embaixo, cada um na posicao da sua marca */
@@ -130,20 +81,6 @@ function ConfirmarForcar({ ex, fechar, forcar }: { ex: Exercicio; fechar: () => 
   );
 }
 
-/** desktop (TreinoDesktop): o ultimo treino do registro e quando sai o proximo */
-function UltimoTreino() {
-  const { motor: m } = useJogo(), t = m.treino, pode = t.podeTocar(m.e.tick), ult = ultimoExercicio(m.log);
-  if (!ult) return <div className="dl-card treino-ult"><span className="dl-apoio">Nenhum treino ainda.</span></div>;
-  const ex = ult.ex, [pri, sec] = CTR.exercicios[ex];
-  return (
-    <div className="dl-card treino-ult">
-      <IconeTreino ex={ex} />
-      <span className="treino-ult-txt"><small>último treino · {hhmm(ult.tick)}</small><b>{NOME_EXERCICIO[ex]} · {NOME_STAT[pri]} e {NOME_STAT[sec]}</b></span>
-      {!pode && t.ultimo !== null && <span className="dl-lcd treino-ult-prox">próximo em {CTR.intervalo - (m.e.tick - t.ultimo)} min</span>}
-    </div>
-  );
-}
-
 /** desktop (TreinoDesktop): Forcar treino escolhe o exercicio e cai na mesma confirmacao de sempre; so abre com a fadiga
     no limite do motor (CTR.limiteForcar), como os proprios cards */
 function EscolherForcar({ escolher, fechar }: { escolher: (ex: Exercicio) => void; fechar: () => void }) {
@@ -159,14 +96,30 @@ function EscolherForcar({ escolher, fechar }: { escolher: (ex: Exercicio) => voi
   );
 }
 
+/** um medidor so em numero (L2): a barra com as marcas (o rotulo delas vai no aria-label) e o valor; a sobrecarga usa --hx-sombrio */
+function Medida({ rot, valor, marcas, sombrio }: { rot: string; valor: number; marcas: [number, string][]; sombrio?: boolean }) {
+  return (
+    <div className="trn2-med">
+      <span className="lg-rot">{rot}</span>
+      <span className={`trn2-barra${sombrio ? " trn2-barra--sombrio" : ""}`} role="img" aria-label={`${rot} ${valor.toFixed(0)} de 100; marcas ${marcas.map(([x, r]) => `${x}: ${r}`).join("; ")}`}>
+        <i style={{ width: `${Math.min(100, valor)}%` }} />{marcas.map(([x]) => <span key={x} className="lim" style={{ left: `${x}%` }} />)}
+      </span>
+      <em>{valor.toFixed(0)}</em>
+    </div>
+  );
+}
+
 export function TelaTreinar({ lutando = false }: { lutando?: boolean }) {
   const { motor: m, nascendo } = useJogo(), [msg, setMsg] = useState(""), [confirmar, setConfirmar] = useState<Exercicio | null>(null), [escolher, setEscolher] = useState(false);
-  const t = m.treino, bebe = m.estagioAtual === "bebe", pode = t.podeTocar(m.e.tick), mult = t.forcaria ? CTR.multForcar : 1;
+  const t = m.treino, bebe = m.estagioAtual === "bebe", pode = t.podeTocar(m.e.tick), mult = t.forcaria ? CTR.multForcar : 1, tt = tetos(m), ult = ultimoExercicio(m.log);
+  /* SOM-UP: a musica do treino do Digimon UP enquanto a tela esta aberta */
+  useEffect(() => { emitirMusica("treino", { lugar: "treino" }); return () => emitirMusica("treino", null); }, []);
   const treinar = (ex: Exercicio) => {
     try {
       let texto = "";
       mudarMotor(mm => {
         const s = mm.treinar(ex);
+        emitirSom(`treino_${ex}`);                /* SOM-UP: o aparelho do treino (so som) */
         CENA.treino = performance.now();         /* a ilha mostra o pet no saco de pancada (so vista) */
         const g = Object.entries(s.ganho).map(([k, v]) => `+${dec(v as number, 2)} ${NOME_STAT[k as Stat] || k}`).join(", ");
         texto = s.enrolou ? "Ele enrolou: a sessão não rendeu." + (s.forcada ? " A sobrecarga entrou mesmo assim." : "")
@@ -176,55 +129,58 @@ export function TelaTreinar({ lutando = false }: { lutando?: boolean }) {
     } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
   };
   const apt = APTIDAO[m.especie], fortes = STATS.filter(k => apt[k] > 1).sort((x, y) => apt[y] - apt[x]);
+  /* o estado numa palavra (L2, regra do texto); o intervalo e a frase do treino vao para o balao */
+  const estado = bebe ? "Não treina" : t.pedePausa ? "Pausa" : !pode ? "Descansa" : "Pronto";
+  const falta = !bebe && !pode && !t.pedePausa && t.ultimo !== null ? CTR.intervalo - (m.e.tick - t.ultimo) : null;
+  const idForcar = useId(), nivel = useNivel(), desabilitaForcar = !t.forcaria || bebe || !pode || lutando || nascendo > 0;
   return (
-    <div className="tela dl treino-tela trn">
-      <div className="treino-col-esq">
-        <Sala />
-        <StatFoco />
-        <Vida />
+    <div className="tela dl trn2-tela lg">
+      <div className="lg-destaque lg-linha" role="status">
+        <b className="trn2-status trn2-estado">{estado}</b>{falta !== null && <span className="lg-num lg-num--p">{falta}<small> min</small></span>}
+        {ult && (
+          <ComDica className="lg-sec lg-linha trn2-ultimo" rotulo={`Último treino: ${NOME_EXERCICIO[ult.ex]} às ${hhmm(ult.tick)}`} dica={<>Um treino por vez, com {CTR.intervalo} min de intervalo.</>}>
+            <span style={{ marginLeft: "auto" }}>{NOME_EXERCICIO[ult.ex]} {hhmm(ult.tick)}</span>
+          </ComDica>
+        )}
       </div>
-      <div className="treino-col-dir">
-        <section className="dl-card treino-medidores trn-medidores" aria-labelledby="trn-med-tit">
-          <h2 className="trn-tit" id="trn-med-tit">Cansaço</h2>
-          <Medidor titulo="Fadiga" valor={t.fadiga} n={blocos(t.fadiga / 100, 10)} cls={t.pedePausa ? "dl-seg--necessidade" : ""} marcas={[[CTR.limiarPausa, "pede pausa"], [CTR.limiteForcar, "só forçar"]]} />
-          <Medidor titulo="Sobrecarga" valor={t.sobrecarga} n={blocos(t.sobrecarga / 100, 10)} cls="dl-seg--sombrio" marcas={[[CSO.aviso, "aviso"], [CSO.sombrio, "sombria"]]} />
-        </section>
-        <section className="trn-exercicios" aria-labelledby="trn-ex-tit">
-          <h2 className="trn-tit treino-ex-tit" id="trn-ex-tit"><span>Exercícios</span><small>um treino por vez · {CTR.intervalo} min de intervalo</small></h2>
-          {bebe && <p className="dl-apoio" style={{ margin: 0 }}>O In-Training ainda não treina.</p>}
-          <div className="treino-grade" role="group" aria-label="Exercícios">
-            {EXERCICIOS.map(ex => {
-              const [pri, sec] = CTR.exercicios[ex], des = bebe || !pode || lutando || nascendo > 0;
-              return (
-                <button type="button" key={ex} className={`treino-ex${t.forcaria ? " forcar" : ""}`} disabled={des}
-                  aria-label={`${t.forcaria ? "Forçar" : "Treinar"} ${NOME_EXERCICIO[ex]}${t.forcaria ? ": gera sobrecarga" : ""}`}
-                  onClick={() => (t.forcaria ? setConfirmar(ex) : treinar(ex))}>
-                  {apt[pri] > 1 && <span className="treino-selo">aptidão</span>}
-                  <IconeTreino ex={ex} />
-                  <b>{NOME_EXERCICIO[ex]}</b>
-                  <span className="treino-ganho">+{n1(CTR.ganhoPri * mult)} {NOME_STAT[pri]} · +{n1(CTR.ganhoSec * mult)} {NOME_STAT[sec]}</span>
-                  {t.forcaria && <span className="treino-perigo"><span>FORÇAR<small>+ sobrecarga</small></span></span>}
-                </button>
-              );
-            })}
-          </div>
-          <p className="treino-legenda"><span className="treino-selo">aptidão</span>{fortes.length ? `${NOME_ESP[m.especie]} rende ${fortes.map(k => `${n1(apt[k])}× em ${NOME_STAT[k]}`).join(" e ")}.` : ""} Um treino por vez, com {CTR.intervalo} min de intervalo.</p>
-          <p className="dl-apoio trn-msg" aria-live="polite" style={{ margin: 0 }}>{msg}</p>
-        </section>
-        <section className="trn-ultimo">
-          <UltimoTreino />
-          <span className="treino-ult-bts">
-            <button type="button" className="dl-btn dl-btn--sec treino-forcar" disabled={!t.forcaria || bebe || !pode || lutando || nascendo > 0}
-              title={t.forcaria ? "rende mais e gera sobrecarga" : `abre com fadiga ${CTR.limiteForcar}`} onClick={() => setEscolher(true)}>
-              <span className="treino-forcar-faixa" aria-hidden="true" />Forçar treino</button>
-            {!t.forcaria && <small className="dl-apoio">abre com fadiga {CTR.limiteForcar}</small>}
-          </span>
-        </section>
-        <details className="dl-apoio trn-como"><summary>Como o treino funciona</summary>
-          <p>Um toque por sessão, com pelo menos 10 min entre elas. Cada exercício sobe um stat principal e um secundário (com a aptidão do brasão e retorno decrescente; tetos de +10 por stat e +36 na vida). A fadiga reduz o ganho e passa com o tempo acordado e com o sono; com fadiga 40 ele pede pausa. Com fadiga 60 o botão vira <b>Forçar</b>: rende mais, mas gera <b>sobrecarga</b>, que não some na evolução. Sobrecarga alta na virada para Ultimate leva à <b>forma sombria</b>. Cada ponto treinado vale 3 pontos de stat no combate. Na arena o treino muda o perfil (stats normalizados); na campanha vale o ganho inteiro.</p>
-        </details>
-        {escolher && <EscolherForcar escolher={ex => { setEscolher(false); setConfirmar(ex); }} fechar={() => setEscolher(false)} />}
+      <div className="trn2-grade treino-grade" role="group" aria-label="Exercícios">
+        {EXERCICIOS.map(ex => {
+          const [pri, sec] = CTR.exercicios[ex], des = bebe || !pode || lutando || nascendo > 0, forte = apt[pri] > 1;
+          return (
+            <button type="button" key={ex} className={`treino-ex${t.forcaria ? " forcar" : ""}`} disabled={des}
+              aria-label={`${t.forcaria ? "Forçar" : "Treinar"} ${NOME_EXERCICIO[ex]}${forte ? ": aptidão" : ""}${t.forcaria ? ": gera sobrecarga" : ""}, +${n1(CTR.ganhoPri * mult)} ${NOME_STAT[pri]} +${n1(CTR.ganhoSec * mult)} ${NOME_STAT[sec]}`}
+              onClick={() => (t.forcaria ? setConfirmar(ex) : treinar(ex))}>
+              {forte && <span className="lg-etq lg-etq--alerta"><Star aria-hidden="true" /></span>}
+              <IconeTreino ex={ex} />
+              <b>{NOME_EXERCICIO[ex]}</b>
+              <small>+{n1(CTR.ganhoPri * mult)} {NOME_STAT[pri]} +{n1(CTR.ganhoSec * mult)} {NOME_STAT[sec]}</small>
+              {t.forcaria && <span className="treino-perigo"><span>FORÇAR</span></span>}
+            </button>
+          );
+        })}
       </div>
+      <p className="trn2-msg lg-sec" aria-live="polite" style={{ margin: 0 }}>{msg}</p>
+      <section className="trn2-cansaco" aria-label="Cansaço" style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        <Medida rot="Fadiga" valor={t.fadiga} marcas={[[CTR.limiarPausa, "pede pausa"], [CTR.limiteForcar, "só forçar"]]} />
+        <Medida rot="Sobrecarga" valor={t.sobrecarga} marcas={[[CSO.aviso, "aviso"], [CSO.sombrio, "sombria"]]} sombrio />
+      </section>
+      <div className="lg-linha">
+        {/* o Forcar abre no Champion (Nv 6, P-4): antes, o botao trancado com o marco; o motor nao muda */}
+        {pecaAberta(nivel, "forcar")
+          ? <ComDica foco={false} idBalao={idForcar} dica={t.forcaria ? "Rende mais e gera sobrecarga." : <>Abre com fadiga {CTR.limiteForcar}.</>}>
+            <button type="button" className="dl-btn dl-btn--sec treino-forcar" disabled={desabilitaForcar} aria-describedby={idForcar} onClick={() => setEscolher(true)}>
+              <span className="treino-forcar-faixa" aria-hidden="true" />Forçar</button>
+          </ComDica>
+          : <PecaTrancada peca="forcar" />}
+        {tt && <span className="lg-sec" style={{ marginLeft: "auto" }}>estágio <b className="lg-num lg-num--p">{n1(t.pontosEst[tt.est] ?? 0)}/{tt.estagio}</b></span>}
+      </div>
+      <ComoFunciona>
+        Um toque por sessão, com pelo menos {CTR.intervalo} min entre elas. Cada exercício sobe um stat principal e um secundário (com a aptidão do brasão e retorno decrescente; tetos de +{CTR.tetoStat} por stat e +{tt?.vida ?? CTR.tetoVida} na vida).
+        {fortes.length ? ` A estrela é a aptidão do brasão: ${NOME_ESP[m.especie]} rende ${fortes.map(k => `${n1(apt[k])}× em ${NOME_STAT[k]}`).join(" e ")}.` : ""} A fadiga reduz o ganho e passa com o tempo
+        acordado e com o sono; com fadiga {CTR.limiarPausa} ele pede pausa. Com fadiga {CTR.limiteForcar} o botão vira <b>Forçar</b>: rende mais, mas gera <b>sobrecarga</b>, que não some na evolução. Sobrecarga alta na virada
+        para Ultimate leva à <b>forma sombria</b>. Cada ponto treinado vale 3 pontos de stat no combate. Na arena o treino muda o perfil (stats normalizados); na campanha vale o ganho inteiro.
+      </ComoFunciona>
+      {escolher && <EscolherForcar escolher={ex => { setEscolher(false); setConfirmar(ex); }} fechar={() => setEscolher(false)} />}
       {confirmar && <ConfirmarForcar ex={confirmar} fechar={() => setConfirmar(null)} forcar={() => treinar(confirmar)} />}
     </div>
   );

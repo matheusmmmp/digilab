@@ -83,6 +83,7 @@ describe("execucao direta e o registro do pet", () => {
     const antes = m.log.map(e => [...e]), n = antes.length;
     await conversar("vai comer", "alimentar");
     expect(pedidos[pedidos.length - 1].voz).toBeUndefined();          /* os v11 nao tem a voz propria (a mentira) */
+    expect(pedidos.find(p => p.situacao === "conversa")?.comando).toBe(true);           /* CONVERSA_PET M1 (D1): a conversa pede o comando (livre-v9), nao a voz */
     /* o gemeo: o mesmo registro ate antes, mais o clique no botao Alimentar (Motor.observar, como acoes.agir) */
     const gemeo = Motor.reproduzir(m.semente, antes as never, m.versao);
     gemeo.observar("alimentar");
@@ -123,5 +124,35 @@ describe("execucao direta e o registro do pet", () => {
     await conversar("vamos brincar", "brincar");
     expect(m.log.slice(n).map(e => e[2])).toEqual(["limpar", "brincar"]);
     expect(fl.lerLog().map(r => r.comando_executado)).toEqual([true, true]);
+  });
+});
+
+describe("conversa nova (CONVERSA_PET M2): chave desligada e historico de fronteira", () => {
+  const conversaPedido = () => pedidos.filter(p => p.situacao === "conversa").slice(-1)[0];
+  const verifPedido = () => pedidos.filter(p => "fatos_citados" in p && !("situacao" in p)).slice(-1)[0];
+  test("desligada (padrao): o pedido nao leva prompt e o historico e o de hoje (pares)", async () => {
+    jogoNovo(); fl.escolherConversaNova(false);
+    await conversar("oi", null); await conversar("tudo bem?", null);
+    const p = conversaPedido();
+    expect(p.prompt).toBeUndefined(); expect(p.comando).toBe(true);
+    expect(p.historico).toEqual([["oi", "Tá bom!"]]);
+    expect(fl.FL.fronteira).toEqual([]);
+    /* M2b: a verificacao da chave desligada sai como a de hoje (sem prompt) */
+    const v = verifPedido(); expect(v).toBeDefined(); expect("prompt" in v).toBe(false);
+  });
+  test("ligada: prompt conversa-v1 e so as trocas desta sessao e do estagio atual, com o estagio; guardada fora do registro do pet", async () => {
+    const m = jogoNovo(); fl.escolherConversaNova(true);
+    const estagio = (estadoDe => (estadoDe.identidade as { estagio: string }).estagio)(fl.estadoDoPet(m));
+    expect(dados[save.CHAVE + "-conversa-nova"]).toBe("1");
+    fl.FL.sessao = [["velha", "do log"]];                       /* o log antigo nao vai ao prompt */
+    fl.FL.fronteira.push(["de outro estagio", "x", estagio === "bebe" ? "adulto" : "bebe"]);
+    await conversar("oi", null); await conversar("e agora?", "alimentar");
+    const p = conversaPedido();
+    expect(p.prompt).toBe("conversa-v1"); expect(p.comando).toBe(true);
+    expect(p.historico).toEqual([["oi", "Tá bom!", estagio]]);
+    expect(verifPedido().prompt).toBe("conversa-v1");           /* M2b: ligada, a verificacao e a do verif-v6 */
+    expect(JSON.stringify(m.log)).not.toContain("conversa");   /* o registro do pet so tem o comando do catalogo */
+    fl.escolherConversaNova(false);
+    expect(dados[save.CHAVE + "-conversa-nova"]).toBe("0");
   });
 });

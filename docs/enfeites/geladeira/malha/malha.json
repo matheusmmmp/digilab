@@ -1,0 +1,14 @@
+{
+ "id": "01a1b193-9160-7618-aa5b-8800a7de5d4e",
+ "type": "multi-image-to-3d",
+ "ai_model": null,
+ "prompt": null,
+ "status": "SUCCEEDED",
+ "consumed_credits": 30,
+ "created_at": 1793980601530,
+ "finished_at": 1793980663803,
+ "saldo": {
+  "antes": 680,
+  "depois": 650
+ }
+}

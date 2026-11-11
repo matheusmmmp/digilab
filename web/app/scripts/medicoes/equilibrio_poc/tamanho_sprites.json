@@ -1,0 +1,88 @@
+{
+ "tarefa": "LUTA_POC, o tamanho dos sprites contra a arena",
+ "atlas": "digilab_atlas_up_clipes.png",
+ "mundo": {
+  "w": 480,
+  "h": 280,
+  "esc": 2
+ },
+ "elipse": {
+  "cx": 240,
+  "cy": 172,
+  "rx": 210,
+  "ry": 84
+ },
+ "corpo_px": 36,
+ "entrada_px": 260,
+ "alcance_tiro_px": 150,
+ "estagios": {
+  "crianca": {
+   "formas": 8,
+   "faltam": [],
+   "largura_px": {
+    "mediana": 50,
+    "min": 41,
+    "max": 58
+   },
+   "altura_px": {
+    "mediana": 54,
+    "min": 42,
+    "max": 56
+   },
+   "sprites_na_largura_da_arena": 8.4,
+   "sprite_contra_corpo_do_nucleo": 1.39,
+   "distancia_de_entrada_em_sprites": 5.2
+  },
+  "adolescente": {
+   "formas": 16,
+   "faltam": [],
+   "largura_px": {
+    "mediana": 66,
+    "min": 49,
+    "max": 72
+   },
+   "altura_px": {
+    "mediana": 63,
+    "min": 56,
+    "max": 80
+   },
+   "sprites_na_largura_da_arena": 6.4,
+   "sprite_contra_corpo_do_nucleo": 1.83,
+   "distancia_de_entrada_em_sprites": 3.9
+  },
+  "adulto": {
+   "formas": 16,
+   "faltam": [],
+   "largura_px": {
+    "mediana": 83,
+    "min": 38,
+    "max": 126
+   },
+   "altura_px": {
+    "mediana": 88,
+    "min": 64,
+    "max": 113
+   },
+   "sprites_na_largura_da_arena": 5.1,
+   "sprite_contra_corpo_do_nucleo": 2.31,
+   "distancia_de_entrada_em_sprites": 3.1
+  },
+  "mega": {
+   "formas": 16,
+   "faltam": [],
+   "largura_px": {
+    "mediana": 101,
+    "min": 57,
+    "max": 120
+   },
+   "altura_px": {
+    "mediana": 104,
+    "min": 74,
+    "max": 137
+   },
+   "sprites_na_largura_da_arena": 4.2,
+   "sprite_contra_corpo_do_nucleo": 2.81,
+   "distancia_de_entrada_em_sprites": 2.6
+  }
+ }
+}

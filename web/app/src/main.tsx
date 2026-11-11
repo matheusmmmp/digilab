@@ -15,9 +15,12 @@ import { iniciarTema } from "./tema.ts";
 import { iniciarTempo } from "./tempo.ts";
 import { CHAVE_GUARDADOS, semearGuardados } from "./pets.ts";
 import { descartarPetsAntigos } from "./tamer.ts";
+import { lutaPocLigada } from "./lutaPoc.ts";
 import { ligarEscala } from "../motor/index.ts";
-import { comerAgora, reacaoAtual } from "./telas/pet/cenaAcao.ts";
+import { comerAgora, dormirAgora, emburrarAgora, reacaoAtual } from "./telas/pet/cenaAcao.ts";
 import { CENA } from "./telas/pet/cenaEstado.ts";
+import { reacaoRostoAgora } from "./telas/pet/reacao.ts";
+import { clipeMomentoAgora, motivoAgora } from "./telas/pet/momentos.ts";
 import { lugaresNomeados } from "./telas/pet/vistaMundo.ts";
 import "./estilo/tokens.css";
 import "./estilo/base.css";
@@ -34,6 +37,7 @@ import "./estilo/mundo.css";
 import "./estilo/hud.css";
 import "./estilo/casca.css";
 import "./estilo/tailwind.css";
+import "./estilo/minimapa.css";
 /* as peles por ultimo: os seletores levam :root[data-pele="xcom|vidro"] e vencem tambem os CSS importados pelas telas */
 import "./estilo/pele-xcom.css";
 import "./estilo/pele-vidro.css";
@@ -49,7 +53,7 @@ ligarEscala(new URLSearchParams(location.search).get("escala") !== "0");
 /* descarte unico dos pets antigos (decisoes do Matheus): os v1-v5 na chegada das medalhas do Tamer
    (docs/DESIGN_MEDALHAS_ARENAS.md) e os v6 de antes do combate V21D (docs/VALIDACAO_V21D.md); o aviso fica pendente para o
    App; roda uma vez por versao do descarte (tamer.CHAVE_DESCARTE). Antes de abrir o save */
-try { descartarPetsAntigos(localStorage, CHAVE_GUARDADOS); } catch (err) { console.error("descarte dos pets antigos falhou", err); }
+try { descartarPetsAntigos(localStorage, CHAVE_GUARDADOS, lutaPocLigada()); } catch (err) { console.error("descarte dos pets antigos falhou", err); }
 iniciarJogo(localStorage);
 /* a constante CLIPES_UP (ligada desde a H1b da ilha) liga os clipes do UP; ?clipes_up=1 tambem os liga naquela aba, como antes */
 carregarAtlas(ATLAS_URL, CLIPES_UP || new URLSearchParams(location.search).get("clipes_up") === "1");
@@ -74,7 +78,9 @@ Object.assign(window, { __digilab: { assinatura: () => jogoAtual().motor.assinat
   mundo: lerMundo, cena: () => CENA.mundo && { pet: [...CENA.mundo.pet], bola: CENA.mundo.bola ?? null, modo3d: CENA.modo3d, ret: CENA.ret },
   reacao: () => reacaoAtual(performance.now()),
   /* o que tocou no comer no ultimo quadro da ilha: "clipe", "gesto" ou null (cenaAcao.ts, escolherComer; docs/TAREFA_V3_SPRITES_ACOES.md, M4) */
-  comer: () => comerAgora().tocou, cenaPara: (x: number, y: number) => CENA.mundo?.paraTela(x, y) ?? null } });
+  comer: () => comerAgora().tocou, emburrar: () => emburrarAgora(), dormir: () => dormirAgora(), reacaoRosto: () => reacaoRostoAgora(), clipeMomento: () => clipeMomentoAgora(), momento: () => motivoAgora(), cenaPara: (x: number, y: number) => CENA.mundo?.paraTela(x, y) ?? null,
+  /* o pet na mao (PegarPet.tsx; docs/TAREFA_V3_PEGAR_PET.md, P2) */
+  petNaMao: () => CENA.petNaMao } });
 /* varios pets: no primeiro acesso a esta versao, a escada de pets guardados de exemplo (fraco -> forte), depois da
    primeira pintura para nao atrasar a abertura */
 setTimeout(() => { try { semearGuardados(); } catch (err) { console.error("pets guardados de exemplo:", err); } }, 400);

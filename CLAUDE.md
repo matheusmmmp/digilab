@@ -11,7 +11,8 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
   controle e o fallback condicionado, não o cérebro final.
 - **A pesquisa** fica no Python e serve ao produto e aos mecanismos do DigiBrain: um pet com corpo químico, objetos, outro pet e um
   dono.
-- **O jogo** fica em `web/app/` e roda hoje o A v11. O modular entra por módulos, cada um com paridade.
+- **O jogo** fica em `web/app/`. Os ovos novos nascem com o DigiBrain modular (`web/app/src/cerebro.ts`); o A v11 fica como a escolha
+  em Ajustes e como a linha de base. O modular entra por módulos, cada um com paridade (D2 da auditoria da cadeia, Matheus, 2026-11-11).
 - **Onde a V3 está agora:** `docs/PAINEL_V3.md`, uma página. O plano é o `docs/PLANO_V3.md` (as trilhas C cérebro, L layout e B
   batalha). A V2 está congelada na tag `v2-final`, com o estado de cada tarefa em `docs/FECHAMENTO_V2.md`.
 
@@ -69,7 +70,7 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
   (`python tools/nova_tarefa.py <FRENTE> --fase V3 ...`). As frentes herdadas da V2 continuam no `TAREFA_V2_*` delas.
 - **Um PR por tarefa ou etapa,** com o relato no corpo do PR. O worker entrega e para. **O merge é só do Matheus.**
 - **O desvio** (interpretação, número escolhido, achado) vai numa seção própria no fim de `docs/registro/AAAA-MM.md` (o mês da data),
-  com data, nome e worker, e com uma linha no fim do índice `docs/REGISTRO_DESVIOS.md`.
+  com data, nome e worker. O índice `docs/REGISTRO_DESVIOS.md` é gerado (`tools/gerar_indice_desvios.py`), e o worker não o edita.
 - **O resumo da etapa não vai no CLAUDE.md.** Vai no corpo do PR e numa seção no fim do documento da frente: o `RESULTADO_V3_*.md` da
   run, ou o `TAREFA_V3_*.md` da etapa de código (o `_V2_` numa frente herdada). O coordenador põe uma linha no `docs/PAINEL_V3.md`. Este arquivo só muda com o ok do
   Matheus.
@@ -120,6 +121,7 @@ evolutivo com IA, inspirado em Tamagotchi e Digimon.
 | a v1: arena, confirmatória, educação, linhagem, pergunta do dono | `docs/historico/claude/v1_pesquisa.md` |
 | o combate (V2, V2.1, correções, equilíbrio, treino, M1) | `docs/historico/claude/combate.md` |
 | a rodada de saúde do repositório | `docs/TAREFA_V2_SAUDE.md` |
+| documentação fora do repositório: auditorias, temas, revisão de escopo, produção e divulgação (vídeo promo com agentes, levantamentos de ferramentas, pipelines propostos) | o vault Obsidian `C:\Users\mathe\Documents\DigiLab Research` (índice em `00 Início/Índice.md`); nada ali é fonte de verdade sobre o código |
 
 Antes de mexer numa frente, leia a tarefa dela e a seção dela em `docs/historico/claude/`.
 

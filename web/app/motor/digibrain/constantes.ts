@@ -74,6 +74,7 @@ export const CONFIG_DIGIBRAIN_LAB = {
   controle_mem: "rel",
   credito_corrida: false,
   facetas_mem: false,
+  fala_unidades: false,
   g_apr_constante: 0,
   intencao_cheiro: true,
   intencao_suspensa: false,
@@ -87,6 +88,21 @@ export const CONFIG_DIGIBRAIN_LAB = {
   persistencia: true,
   redecidir_evento: false,
 } as const;
+
+/** a ConfigDigibrain que o M-ADAPT recebe: a do laboratorio, com a subchave `fala_unidades` (DC3d) ligada ou nao */
+export type ConfigDigibrainModular = Omit<typeof CONFIG_DIGIBRAIN_LAB, "fala_unidades"> & { readonly fala_unidades: boolean };
+/** o laboratorio com a subchave `fala_unidades` ligada (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1 e A1.1; o braco LAB+F da DC3): so o pet de
+ *  teste com a marca "fu" no registro (motor.ts) */
+export const CONFIG_DIGIBRAIN_LAB_FALA: ConfigDigibrainModular = { ...CONFIG_DIGIBRAIN_LAB, fala_unidades: true };
+
+/** As unidades de fala (digilab/config.py, CONTEUDOS_FALA e TERMO_DO_CONTEUDO; DC3, 3.1): com a `fala_unidades`, o `chamar_atencao` vira
+ *  (chamar_atencao, c) com c em CONTEUDOS_FALA; o termo do receptor de cada conteudo no W0 do chamar. Conferidas contra o gabarito da DC3d
+ *  (test/gabaritos/digibrain_fala_unidades.json.gz) por test/digibrain_fala_unidades.test.ts. */
+export const CONTEUDOS_FALA = ["fome", "higiene", "solidao"] as const;
+export type ConteudoFala = typeof CONTEUDOS_FALA[number];
+export const TERMO_DO_CONTEUDO = [["fome", "fome_sem_comida"], ["higiene", "u_higiene"], ["solidao", "u_solidao"]] as const;
+/** a ConfigFalaUnidades (digilab/config.py): `ganho_conteudo` = 3S/2, PROPOSTO, SEM FONTE (fixado na DC3a pela condicao da 3.1) */
+export const CONFIG_FALA_UNIDADES = { ganho_conteudo: 1536 } as const;
 
 /** os numeros do Config e da ConfigMundo que o M-SENS le: o passo do cerebro (Config.intervalo_decisao_ticks), a noite (Config.inicio_noite_tick,
  *  fim_noite_tick) e a visao (ConfigMundo.sub, raio_visao_celulas, max_vistos). Conferidos contra o motor e contra constantes_python.json. */
@@ -102,3 +118,20 @@ export const RECEPTORES_DIGIBRAIN = ["fome", "higiene", "energia", "humor", "sau
 export const COMPORTAMENTOS_DIGIBRAIN = ["ocioso", "dormir", "comer", "brincar", "chamar_atencao", "explorar", "emburrar"] as const;
 export const CARACTERISTICAS_DIGIBRAIN = ["vies", ...RECEPTORES_DIGIBRAIN.map(r => `u_${r}`), "noite", "dormindo", "sem_cuidado", "comida_vista",
   "sem_comida", "bola_vista", "fome_sem_comida", "cuidado_humor", "F", "V", "E"] as const;
+
+
+/** A ConfigDecodificador (digilab/config.py, DC1): os pesos e os limiares do `dec-v1`, PROPOSTOS, SEM FONTE. Conferida folha a folha contra
+ *  test/gabaritos/decodificador_python.json por test/decodificador.test.ts. */
+export const CONFIG_DECODIFICADOR = {
+  limiar_valor: 512, limiar_confianca: 512, limiar_desfecho: 128, piso_sonda: 640, ganho_v: 4, ganho_sigma: 8, n_sp_teto: 8,
+  fins_frustrantes: ["desistiu", "sumiu", "trocou"],
+  p_fome_urgencia: 2, p_fome_fracao: 1, p_fome_intencao: 1, p_fome_pista: 1,
+  p_sono_urgencia: 2, p_sono_fracao: 1, p_sono_reflexo: 1, p_sono_noite: 1,
+  p_agitacao_e: 3, p_agitacao_urgencia: 2,
+  p_frustracao_f: 2, p_frustracao_fim: 1, p_frustracao_n_sp: 1,
+  p_determinacao_c: 2, p_determinacao_persistencia: 1,
+  p_indecisao_margem: 2, p_indecisao_sondas: 1,
+  p_solidao_urgencia: 2, p_solidao_fracao: 1,
+  p_curiosidade_urgencia: 1, p_curiosidade_tedio: 1, p_curiosidade_g_exp: 1, p_curiosidade_fracao: 1,
+} as const;
+export type ConfigDecodificador = typeof CONFIG_DECODIFICADOR;

@@ -1,0 +1,9 @@
+{
+  "descricao": "INDIVIDUALIDADE, I7: o desenvolvimento contrafactual, os ramos sobre as vidas do I2 (docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md; IR-1)",
+  "fase": "individualidade-i7",
+  "plano": "docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md",
+  "vidas": "artifacts_v3_individualidade/vidas.tar.gz",
+  "unidades": {"bases": [85101, 85202, 85303, 85404, 85505], "k": 12, "prefixo": "digibrain_prototipo"},
+  "dias": 14,
+  "orcamento_por_dia": 16
+}

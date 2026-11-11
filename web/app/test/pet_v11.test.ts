@@ -30,27 +30,28 @@ function viverDias(m: Motor, dias: number): AcaoDono[] {
     if (m.lesionadoDesde !== null) fazer("tratar_lesao");
     if (m.estagioAtual === "crianca" && m.medalhas === 0) m.liberar(1);
     if ((m.estagioAtual === "crianca" || m.estagioAtual === "adolescente") && m.treino.podeTocar(m.e.tick) && p % 3 === 0) m.treinar("levantar_pedra");
-    if (m.estagioAtual === "adolescente" && p % 6 === 0) m.lutar("aleatorio", 1000 + p);
+    /* a luta da POC (LP4): uma forma do estagio, no Campo de treino */
+    if (m.estagioAtual === "adolescente" && p % 6 === 0) { const rv = m.rivaisArenaPoc(); m.lutarPoc(rv[p % rv.length], 1000 + p, "campo"); }
   }
   return feitas;
 }
 
 describe("o pet v11 no Motor", () => {
   test("o pet v11: o cerebro A e o laco do corpo, sem educacao, mentira nem obediencia (os ovos novos sao v13: o v12 com a luta em tempo real)", () => {
-    expect(VERSAO_PET).toBe(17);
-    const m = new Motor(4242, 13);
-    expect(m.versao).toBe(13);
+    expect(VERSAO_PET).toBe(24);
+    const m = new Motor(4242, 21);
+    expect(m.versao).toBe(21);
     expect(m.cerebro).not.toBeNull();
     expect(m.e).toBe(m.v11!.laco.estado);
-    expect(m.disciplina).toBe(0);
+    expect(m.edu.disciplina).toBe(0);
     for (const a of ["elogiar", "repreender", "petisco", "levar_ao_banheiro"] as AcaoDono[]) expect(() => m.observar(a)).toThrow(/v11/);
     /* a fala com mentira (o evento "fl" dos pets v7-v10) nao existe mais: no registro, e evento desconhecido */
-    expect(() => Motor.reproduzir(1, [[480, "fl", "acordou"] as unknown as EventoRegistro])).toThrow(/desconhecido/);
+    expect(() => Motor.reproduzir(1, [[480, "fl", "acordou"] as unknown as EventoRegistro], 21)).toThrow(/desconhecido/);
     expect(m.log).toEqual([]);
   });
 
   test("alguns dias: decide pelo cerebro, aprende com o corpo, tem vontade, evolui pelo carater do v11, e o replay da a mesma vida", () => {
-    const m = new Motor(4242, 13), feitas = viverDias(m, 4);
+    const m = new Motor(4242, 21), feitas = viverDias(m, 4);
     expect(m.e).toBe(m.v11!.laco.estado);
     /* o cerebro decidiu cada decisao do pet e aprendeu: pesos fora do prior, carinhos e tapas creditados */
     const c = m.cerebro!;
@@ -80,7 +81,7 @@ describe("o pet v11 no Motor", () => {
   });
 
   test("o carater da evolucao e o do cerebro no tick da evolucao", () => {
-    const m = new Motor(777, 13);
+    const m = new Motor(777, 21);
     let carEsperado = null;
     for (let p = 0; p < 5000 && !m.evolucoes.some(x => x.estagio === "adolescente"); p++) {
       if (m.estagioAtual === "crianca" && m.medalhas === 0) m.liberar(1);
@@ -97,7 +98,7 @@ describe("o pet v11 no Motor", () => {
   });
 
   test("o tratar so cura: nao e contato e nao passa pelo corpo", () => {
-    const m = new Motor(99, 13);
+    const m = new Motor(99, 21);
     m.avancar(30);
     m.lesionadoDesde = m.e.tick;
     const antes = { ...m.e }, corpo = JSON.stringify(m.v11!.laco.corpo.paraDict());

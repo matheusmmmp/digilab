@@ -1,25 +1,23 @@
-/* Evolucao (docs/TAREFA_V2_EVOLUCAO.md: composicao propria na linguagem da moldura nova e do momento da evolucao; antes, pranchas EvoArvore e
-   EvoPorque): a forma atual em destaque (o pet na plataforma de luz, o nome, o estagio e quanto falta), a proxima evolucao com as medalhas
-   que faltam, a arvore, o porque da forma atual e o historico em linha do tempo, com "Ver a revelacao de novo" em cada evolucao.
-   A arvore: de cima para baixo (In-Training, 2 Rookie,
-   4 Champion e, embaixo de cada um, os 2 arquetipos do Ultimate da linha, o Mega (pets v5) e a sombria), resumo (forma atual, quanto falta, o porque se
-   evoluisse agora), com estados percorrido/agora/possivel/provavel/fechado/sombria, detalhe
-   do no no toque (nunca so no hover, guia 13), por que da forma atual e historico. A forma futura ainda nao
-   decidida pelo motor aparece como silhueta, sem nome (guia, secao 5). */
-import { useLayoutEffect, useRef, useState } from "react";
-import { GitBranch, History, Info, Sparkles } from "lucide-react";
+/* Evolucao (docs/TAREFA_V2_EVOLUCAO.md; L2 de "Lugares da ilha", prancha crescer_evolucao_*, regra do texto): a forma atual (o pet, o nome, o
+   estagio e o brasao), o tempo ate a proxima evolucao, o que o nivel pede (os selos das medalhas do Tamer e as lutas de treino, em numero) e a arvore
+   so da linha do pet; o historico e o porque ficam fechados e o "Como funciona" tambem. Nenhuma frase a vista: o lugar de cada medalha, os 80%, o que
+   leva a cada no vao para o balao (foco e hover) e para o aria-label. A arvore: In-Training, 2 Rookie, 4 Champion (so a do pet com sprite; as outras
+   linhas, nos pequenos e pontilhados), os 2 arquetipos do Ultimate da linha e a sombria, e o Mega (pets v5), com estados percorrido/agora/possivel/
+   fechado/sombria. A forma futura ainda nao decidida pelo motor aparece como "?", sem nome (guia, secao 5). */
+import { useId, type ReactNode } from "react";
+import { Check, ChevronRight, Heart, History, Hourglass, Info, Swords } from "lucide-react";
 import {
-  CAT, CDJ, CLE, CMD, CMG, CSO, DESC_PASSIVA, DESC_TECNICA, FORMAS_AD, LINHAS, LINHA_DA_FORMA, NOME_ARQ, NOME_V2, SOMBRIA, TICK_INICIAL, TPD,
+  CAT, CDJ, CLE, CMD, CMG, CSO, DESC_PASSIVA, DESC_TECNICA, FORMAS_AD, LINHAS, LINHA_DA_FORMA, MEDALHAS, NOME_ARQ, NOME_V2, SOMBRIA, TICK_INICIAL, TPD,
   caraterPrevisto, chaveSprite, corDominante, formaAdultaDe, linhaDoCarater, nomeArquetipo, nomeEstagio, nomeForma, type Carater, type Forma, type FormaAdultaNormal, type Motor,
 } from "../../../motor/index.ts";
-import { dimSprite, imagemAtlas, silhuetaAtlas, useAtlas } from "../../atlas.ts";
-import { Numeros, rotuloRel } from "../../componentes/Barras.tsx";
+import { imagemAtlas, silhuetaAtlas, useAtlas } from "../../atlas.ts";
+import { rotuloRel } from "../../componentes/Barras.tsx";
 import { Deco } from "../../componentes/Deco.tsx";
-import { SeloMedalha } from "../../componentes/Medalha.tsx";
+import { ComDica, ComoFunciona } from "../../componentes/Dica.tsx";
 import { PetGrande, Porque, reverEvolucao } from "../../componentes/Revelacao.tsx";
 import { BRASAO } from "../../decoracao.ts";
 import { tamerAtual, useJogo } from "../../jogo.ts";
-import { medalhasQueFaltam, textoFalta } from "../../tamer.ts";
+import { comoGanhar, medalhasQueFaltam, textoFalta } from "../../tamer.ts";
 import { diaDe, hhmm } from "../pet/TelaPet.tsx";
 
 export function duracao(min: number): string {
@@ -78,30 +76,27 @@ export function requisito(g: Forma): string {
 }
 
 type EstadoNo = "agora" | "percorrido" | "possivel" | "fechado";
-type Aresta = [string, string, "percorrido" | "provavel" | "possivel" | "fechado" | "sombria", "elbow" | "reta" | "chave"];
-const SUB_RAMO: Record<string, string> = { sereno: `cuidado ≥ ${CAT.limiarCuidado * 100}%`, arisco: `cuidado < ${CAT.limiarCuidado * 100}%` };
 
-/** no da arvore (prancha EvoArvore): o card inteiro e o botao; molduras por estado (percorrido, agora, possivel,
-    fechado, sombria); o sprite em 1x, cortado no card quando e maior; forma ainda nao decidida = silhueta sem nome */
-function No({ g, estado, provavel, sombriaNo, sombriaAgora, sub, escolher, v6 }: { g: Forma; estado: EstadoNo; provavel: boolean; sombriaNo: boolean; sombriaAgora: boolean; sub: string; escolher: (det: string) => void; v6?: boolean }) {
-  const a = useAtlas(), spr = chaveSprite(g), id = idNo(g), revelado = estado === "agora" || estado === "percorrido";
-  const img = a.tipo === "ok" ? (revelado ? imagemAtlas(a, spr, 1, { sombria: sombriaNo, recortar: true }) : silhuetaAtlas(a, spr, { recortar: true })) : null;
-  const cls = ["evo-no", `evo-no--${g.est}`, estado, provavel ? "provavel" : "", sombriaNo ? "sombria" : "", estado === "agora" && sombriaAgora ? "sombria-agora" : ""].filter(Boolean).join(" ");
-  const det = (revelado ? nomeForma(g) : "Forma ainda não decidida") + ": " + (sombriaNo ? "forma sombria da linha (sobrecarga alta na virada para Ultimate)" : requisito(g));
+/** um no da arvore da linha do pet: so o estado e (revelado) o sprite; o que leva ate ele vai no balao e no aria-label. `g` nulo: a forma da
+    linha ainda nao existe (o pet ainda nao tem linha) */
+function No({ g, estado, sombriaNo, sombriaAgora, rotuloEst, nomeGenerico }: { g: Forma | null; estado: EstadoNo; sombriaNo: boolean; sombriaAgora: boolean; rotuloEst: string; nomeGenerico: string }) {
+  const a = useAtlas(), revelado = !!g && (estado === "agora" || estado === "percorrido");
+  const img = g && a.tipo === "ok" && revelado ? imagemAtlas(a, chaveSprite(g), 1, { sombria: sombriaNo && sombriaAgora, recortar: true }) : null;
+  const det = !g ? `${nomeGenerico}: forma ainda não decidida`
+    : (revelado ? nomeForma(g) : "Forma ainda não decidida") + ": " + (sombriaNo ? "forma sombria da linha (sobrecarga alta na virada para Ultimate)" : requisito(g));
+  const nome = revelado ? nomeForma(g!) : !g ? nomeGenerico : sombriaNo ? "forma sombria da linha" : g.est === "adulto" ? `${nomeGenerico}, arquétipo ${NOME_ARQ[g.adulta!]}` : "forma não decidida";
+  const cls = `evl-no evl-no--${estado}${sombriaNo ? " evl-no--sombria" : ""}`;
   return (
-    <button type="button" className={cls} data-id={id + (sombriaNo ? "_s" : "")} aria-label={(revelado ? nomeForma(g) : "forma ainda não decidida") + ", " + (sombriaNo ? "sombria, " : "") + estado} onClick={() => escolher(det)}>
-      {estado === "percorrido" && <span className="evo-ok" aria-hidden="true"><svg viewBox="0 0 12 12" width="10" height="10"><path d="M2 6.5 5 9l5-6" /></svg></span>}
-      {estado === "agora" && <span className="evo-agora">AGORA</span>}
-      <span className="evo-img">{img && <img className="dl-pix" src={img.url} width={img.w} height={img.h} alt="" style={revelado ? {} : { opacity: .45 }} />}</span>
-      <span className="evo-rot">{revelado ? nomeForma(g) : "?"}</span>
-      {sub && <span className="evo-sub">{sub}</span>}
-    </button>
+    <ComDica papel="img" className={cls} rotulo={`${nome}, ${sombriaNo && !revelado ? "sombria, " : ""}${rotuloEst}`} dica={det}>
+      {revelado ? (img ? <img className="dl-pix" src={img.url} width={img.w} height={img.h} alt="" /> : <span aria-hidden="true">{nomeForma(g!).slice(0, 2)}</span>)
+        : <span aria-hidden="true">{estado === "fechado" && !sombriaNo ? "" : "?"}</span>}
+    </ComDica>
   );
 }
 
-function Arvore({ m, p }: { m: Motor; p: ReturnType<typeof previsaoEvo> }) {
-  const [det, setDet] = useState<string | null>(null), arv = useRef<HTMLDivElement>(null), [linhas, setLinhas] = useState<{ w: number; h: number; d: [string, string][] }>({ w: 0, h: 0, d: [] });
-  const f = m.forma, esp = m.especie, idDe = idNo, evs = m.evolucoes;
+/** a arvore so da linha do pet (as outras linhas do Champion viram nos pequenos e pontilhados, sem texto) */
+function Arvore({ m }: { m: Motor }) {
+  const f = m.forma, esp = m.especie, evs = m.evolucoes, idDe = idNo;
   const bebe: Forma = { esp, est: "bebe" };
   const cri: Forma[] = (["sereno", "arisco"] as const).map(r => ({ esp, est: "crianca", ramo: r }));
   const ado: Forma[] = LINHAS.map(l => ({ esp, est: "adolescente", ramo: "sereno", linha: l }));
@@ -109,172 +104,120 @@ function Arvore({ m, p }: { m: Motor; p: ReturnType<typeof previsaoEvo> }) {
   const somDe = (l: string): Forma => { const x = CSO.formas[l as keyof typeof CSO.formas]; return { esp, est: "adulto", ramo: "sereno", linha: l as Forma["linha"], adulta: x.nome as Forma["adulta"] }; };
   const megaDe = (l: string): Forma => ({ ...aduDe(l)[0], est: "mega" });
   const caminho = new Set([idDe(bebe), ...evs.map(x => idDe(x.forma))]);
-  const atualId = idDe(f), provId = p ? idDe(p.prox) : null;
+  const atualId = idDe(f);
   const adu = LINHAS.flatMap(aduDe), meg = LINHAS.map(megaDe);
   /* o que ainda da para alcancar a partir da forma atual (o Mega: nunca a sombria) */
   const alcance = new Set(f.est === "bebe" ? [...cri, ...ado, ...adu, ...meg].map(idDe) : f.est === "crianca" ? [...ado, ...adu, ...meg].map(idDe)
     : f.est === "adolescente" ? [...adu, ...meg].filter(x => x.linha === f.linha).map(idDe)
-    : f.est === "adulto" && !m.sombria ? [idDe(megaDe(f.linha!))] : []);
+    : f.est === "adulto" && !m.sombria ? [idDe(megaDe(f.linha ?? linhaDe(f)))] : []);
   const estado = (id: string): EstadoNo => id === atualId ? "agora" : caminho.has(id) ? "percorrido" : alcance.has(id) ? "possivel" : "fechado";
-  const tipo = (a: string, b: string): Aresta[2] => caminho.has(a) && (caminho.has(b) || b === atualId) ? "percorrido" : a === atualId && b === provId ? "provavel"
-    : estado(b) === "fechado" || estado(a) === "fechado" ? "fechado" : "possivel";
-  /* arestas: bebe -> criancas; a crianca atual (ou as duas, no bebe) -> adolescentes; adolescente -> adultos da linha e a sombria */
-  const criDe = f.est === "bebe" ? cri : cri.filter(c => caminho.has(idDe(c)) || idDe(c) === atualId);
-  const arestas: Aresta[] = [
-    ...cri.map(c => [idDe(bebe), idDe(c), tipo(idDe(bebe), idDe(c)), "elbow"] as Aresta),
-    ...criDe.flatMap(c => ado.map(x => [idDe(c), idDe(x), tipo(idDe(c), idDe(x)), "elbow"] as Aresta)),
-    ...ado.flatMap(x => aduDe(x.linha!).map((y, k) => [idDe(x) + "#" + k, idDe(y), tipo(idDe(x), idDe(y)), "reta"] as Aresta)),
-    ...ado.flatMap(x => aduDe(x.linha!).map((y, k) => [idDe(y) + "#" + k, idDe(megaDe(x.linha!)), tipo(idDe(y), idDe(megaDe(x.linha!))), "reta"] as Aresta)),
-    ...ado.map(x => [idDe(x), idDe(somDe(x.linha!)) + "_s", "sombria", "chave"] as Aresta),
-  ];
-  const chave = arestas.map(x => x.join(">")).join("|");
-  /* linhas da arvore a partir das posicoes dos nos (a arvore e HTML; so as linhas sao SVG): cotovelo entre niveis,
-     retas do Champion aos dois adultos (a segunda passa atras do primeiro) e o colchete tracejado ate a sombria */
-  useLayoutEffect(() => {
-    const medir = () => {
-      const el = arv.current; if (!el || !el.offsetParent) return;
-      /* com o zoom do desktop (escala.ts) as medidas da tela vem multiplicadas; o SVG desenha em px de CSS: divide pela
-         escala real da propria arvore */
-      const r0 = el.getBoundingClientRect(), z = el.offsetWidth > 0 ? r0.width / el.offsetWidth : 1, pos: Record<string, DOMRect> = {};
-      el.querySelectorAll<HTMLElement>(".evo-no").forEach(n => { pos[n.dataset.id!] = n.getBoundingClientRect(); });
-      const ordem = { fechado: 0, sombria: 0, possivel: 1, provavel: 2, percorrido: 3 };
-      const d = [...arestas].sort((x, y) => ordem[x[2]] - ordem[y[2]]).flatMap(([a0, b, c, forma]) => {
-        const [a, k] = a0.split("#"), A = pos[a], Bn = pos[b]; if (!A || !Bn) return [];
-        const L = (x: number) => (x - r0.left) / z, T = (y: number) => (y - r0.top) / z;
-        if (forma === "elbow") {
-          const x1 = L(A.left + A.width / 2), y1 = T(A.bottom), x2 = L(Bn.left + Bn.width / 2), y2 = T(Bn.top), ym = (y1 + y2) / 2;
-          return [[`M${x1} ${y1} V${ym} H${x2} V${y2}`, c] as [string, string]];
-        }
-        if (forma === "reta") { const x = L(A.left + A.width / 2) + (k === "0" ? -8 : 8); return [[`M${x} ${T(A.bottom)} V${T(Bn.top)}`, c] as [string, string]]; }
-        const x = L(A.left) - 2, y1 = T(A.top + A.height / 2), y2 = T(Bn.top + Bn.height / 2);
-        return [[`M${x + 2} ${y1} H${x - 4} V${y2} H${x + 4}`, c] as [string, string]];
-      });
-      setLinhas({ w: el.offsetWidth, h: el.offsetHeight, d });
-    };
-    medir();
-    /* remede quando a arvore muda de tamanho (layout do desktop, fontes, sprites que chegam depois), nao so no resize */
-    const ro = typeof ResizeObserver === "function" ? new ResizeObserver(medir) : null;
-    if (arv.current) ro?.observe(arv.current);
-    addEventListener("resize", medir);
-    return () => { ro?.disconnect(); removeEventListener("resize", medir); };
-  }, [chave]);
-  const no = (g: Forma, sub: string, sombriaNo = false) => (
+  /* a linha do pet: so de depois do Rookie */
+  const L = f.est === "bebe" || f.est === "crianca" ? null : linhaDe(f);
+  const no = (g: Forma, sombriaNo = false) => (
     <No key={idDe(g) + (sombriaNo ? "_s" : "")} g={g} estado={sombriaNo ? (m.sombria && idDe(g) === atualId ? "agora" : "fechado") : estado(idDe(g))}
-      provavel={!sombriaNo && idDe(g) === provId} sombriaNo={sombriaNo} sombriaAgora={m.sombria} sub={sub} escolher={setDet} />
+      sombriaNo={sombriaNo} sombriaAgora={m.sombria} rotuloEst={sombriaNo ? (m.sombria && idDe(g) === atualId ? "agora" : "fechada") : { agora: "agora", percorrido: "percorrido", possivel: "possível", fechado: "fechada" }[estado(idDe(g))]} nomeGenerico={nomeEstagio(g)} />
   );
-  return <>
-    <div className="evo-arv" ref={arv} role="group" aria-label="Árvore de evolução">
-      <svg className="evo-linhas" aria-hidden="true" width={linhas.w} height={linhas.h} viewBox={`0 0 ${linhas.w} ${linhas.h}`}>
-        {linhas.d.map(([d, c], i) => <path key={i} className={`evo-aresta ${c}`} d={d} />)}
-      </svg>
-      <div className="evo-nivel evo-nivel--bebe">{no(bebe, "")}</div>
-      <div className="evo-nivel evo-nivel--crianca">{cri.map(c => no(c, SUB_RAMO[c.ramo!]))}</div>
-      <div className="evo-nivel evo-nivel--linhas">
-        {ado.map(x => (
-          <div className="evo-coluna" key={x.linha}>
-            {no(x, CAT.adolescente[x.linha!].eixo)}
-            {aduDe(x.linha!).map(y => no(y, NOME_ARQ[y.adulta!]))}
-            {no(megaDe(x.linha!), "Mega")}
-            {no(somDe(x.linha!), "sombria", true)}
-          </div>
-        ))}
-      </div>
+  const generico = (rot: string) => <No key={rot} g={null} estado="possivel" sombriaNo={false} sombriaAgora={false} rotuloEst="possível" nomeGenerico={rot} />;
+  const fila = (rot: string, nos: ReactNode) => <div className="evl-fila" key={rot}><span className="lg-rot">{rot}</span><div className="evl-nos">{nos}</div></div>;
+  return (
+    <div className="evl-arv" role="group" aria-label="Árvore de evolução">
+      {fila("In-Training", no(bebe))}
+      {fila("Rookie", cri.map(c => no(c)))}
+      {fila("Champion", ado.map(x => no(x)))}
+      {fila("Ultimate", L ? [...aduDe(L).map(y => no(y)), no(somDe(L), true)] : generico("Ultimate"))}
+      {fila("Mega", L ? no(megaDe(L)) : generico("Mega"))}
     </div>
-    <ul className="evo-legenda" aria-label="Legenda da árvore">
-      <li><span className="evo-mini percorrido" />percorrido</li><li><span className="evo-mini agora" />agora</li>
-      <li><span className="evo-mini possivel" />possível</li><li><span className="evo-mini provavel" />se evoluísse agora</li>
-      <li><span className="evo-mini fechado" />fechado</li><li><span className="evo-mini sombria" />sombria</li>
-    </ul>
-    {det ? <p className="dl-card evo-no-det" aria-live="polite">{det}</p> : <p className="dl-apoio" style={{ margin: 0 }}>Toque num nó para ver o que leva até ele.</p>}
-  </>;
+  );
 }
 
 export function TelaEvolucao() {
-  const { motor: m } = useJogo(), f = m.forma, evs = m.evolucoes, p = previsaoEvo(m), t = tamerAtual();
+  const { motor: m } = useJogo(), f = m.forma, evs = m.evolucoes, p = previsaoEvo(m), t = tamerAtual(), idMed = useId();
   /* pets v6: as medalhas do Tamer que a proxima evolucao pede (null nos v1-v5 e sem proxima evolucao) */
   const rMed = m.requisitosEvolucao()?.medalhas ?? null, faltaMed = !!rMed && !rMed.ok, prontoMed = !!m.esperandoMedalha();
-  const espera = !!p && p.falta <= 0 && (f.est === "adolescente" || f.est === "adulto" || (f.est === "crianca" && faltaMed)), ult = evs[evs.length - 1];
+  const espera = !!p && p.falta <= 0 && (f.est === "adolescente" || f.est === "adulto" || (f.est === "crianca" && faltaMed));
   const rMega = f.est === "adulto" ? m.requisitosMega() : null;
-  /* pets v4: alem das 10 lutas, a taxa de vitoria do adolescente precisa chegar a 80% */
-  const taxa = m.taxaVitoria(), faltaTaxa = m.sparring >= CAT.sparring && (taxa ?? 0) < CLE.limiarTaxa;
+  const ult = evs[evs.length - 1];
   const det = (x: typeof evs[number]) => x.estagio === "mega" ? `vínculo ${virgula(x.vinculo!)}; ${x.sparring} lutas no Ultimate`
     : x.estagio === "crianca" ? `cuidado ${(x.cuidado! * 100).toFixed(0)}%`
     : x.estagio === "adolescente" ? `caráter: ${fmtCar(x.carater!)}` : `${NOME_ARQ[x.adulta!]}; caráter: ${fmtCar(x.carater!)}; ${x.sparring} lutas de treino`;
-  /* o que falta, na espera (o tempo ja passou): as lutas e as vitorias do estagio, no Mega o vinculo e, nos pets v6, por
-     ultimo as medalhas do Tamer */
-  const med = (): string => { const fm = medalhasQueFaltam(t, rMed!.precisa); return fm.length === 1 ? `a ${fm[0].nome}` : `${rMed!.precisa - rMed!.tem} medalhas do Tamer`; };
-  const falta = (): string => {
-    if (rMega) return !rMega.lutas ? `${CAT.sparring - m.lutas.lutas} lutas` : !rMega.taxa ? `vitórias ${Math.round((taxa ?? 0) * 100)}% de ${Math.round(CLE.limiarTaxa * 100)}%`
-      : !rMega.vinculo ? `vínculo ${virgula(m.vinc.valor)} de ${virgula(CMG.vinculo)}` : faltaMed ? med() : "";
-    if (f.est === "crianca") return faltaMed ? med() : "";
-    return m.sparring < CAT.sparring ? `${CAT.sparring - m.sparring} lutas` : faltaTaxa ? `vitórias ${Math.round((taxa ?? 0) * 100)}% de ${Math.round(CLE.limiarTaxa * 100)}%`
-      : faltaMed ? med() : "";
-  };
   const alvo = p ? nomeEstagio(p.prox) : "", cor = corDominante(m.tracos), arq = nomeArquetipo(f), br = BRASAO[m.especie];
+  /* os selos: so a conta do Tamer (a prancha; pergunta 7 da secao L2/L3): as que ele tem, e as que faltam com o lugar de cada uma no balao */
+  const precisa = rMed?.precisa ?? 0, tem = Math.min(t.n, precisa), ganhas = MEDALHAS.filter(x => t.tem(x.id)), faltam = medalhasQueFaltam(t, precisa);
+  const comLutas = f.est === "adolescente" || !!rMega, nLutas = rMega ? m.lutas.lutas : m.sparring;
+  const pctVit = Math.round(CLE.limiarTaxa * 100);
   return (
-    <div className="tela dl evo-tela evt">
-      <div className="evo-principal">
-        {/* a forma atual em destaque: o pet na plataforma de luz, como no momento da evolucao */}
-        <section className="evt-heroi" aria-label="Forma atual">
-          <span className="evm-estilhacos" aria-hidden="true"><i /><i /><i /><i /></span>
-          <div className="evt-heroi-palco">
-            <span className="evm-plataforma evt-plataforma" aria-hidden="true"><i /><i /><i /></span>
-            <span className="evt-heroi-pet"><PetGrande f={f} alvo={[150, 130]} cor={cor} sombria={m.sombria} /></span>
-          </div>
-          <div className="evt-heroi-txt">
-            <span className="evt-rot">forma atual</span>
-            <b className="evt-nome">{nomeForma(f)}</b>
-            <span className="evt-estagio">{nomeEstagio(f)}{arq ? ` · ${arq}` : ""}</span>
-            <span className="evt-brasao"><Deco nome={br.peca} largura={30} altura={20} className="evm-brasao-img" />brasão {br.nome}</span>
-            <span className="evt-prazo"><b>{p ? (espera ? falta() || "pronto" : duracao(Math.max(0, p.falta))) : "forma final"}</b>
-              <small>{p ? (espera ? `falta para virar ${alvo}` : `até virar ${alvo}`) : "não há próxima evolução"}</small></span>
-          </div>
-        </section>
-        <section className="evt-painel evt-arvore" aria-labelledby="evt-arv-tit">
-          <h2 className="evt-tit" id="evt-arv-tit"><GitBranch size={18} aria-hidden="true" />Árvore de {br.nome}</h2>
-          <Arvore m={m} p={p} />
-        </section>
-      </div>
-      <div className="evo-lado">
-        <section className="evt-painel evt-prox" aria-labelledby="evt-prox-tit">
-          <h2 className="evt-tit" id="evt-prox-tit"><Sparkles size={18} aria-hidden="true" />{p ? `Próxima evolução: ${alvo}` : "Forma final"}</h2>
+    <div className="tela dl evl lg">
+      <section className="evl-topo" aria-label="Forma atual">
+        <span className="evl-palco" aria-hidden="true"><PetGrande f={f} alvo={[90, 70]} cor={cor} sombria={m.sombria} maxEscala={3} /></span>
+        <div className="evl-nome">
+          <b>{nomeForma(f)}</b>
+          <div className="lg-linha"><span className="lg-etq">{nomeEstagio(f)}{arq ? ` · ${arq}` : ""}</span><span className="lg-linha" style={{ gap: 4 }}><Deco nome={br.peca} largura={30} altura={20} alt="" />{br.nome}</span></div>
+        </div>
+        <ComDica className="evl-prazo" lado="dir" rotulo={p ? `${espera ? "Falta" : "Faltam"} ${duracao(Math.max(0, p.falta))} para ${alvo}` : "Forma final"} dica={p ? <>Se evoluísse agora: {p.porque}.</> : <>Não há próxima evolução.</>}>
+          <span className="lg-linha"><Hourglass aria-hidden="true" /><b className="lg-num">{p ? (espera ? (prontoMed ? "Pronto" : "Espera") : duracao(Math.max(0, p.falta))) : "Final"}</b></span>
+          {p && <small>{espera ? "para" : "até"} {alvo}</small>}
+        </ComDica>
+      </section>
+      {(rMed || comLutas) && (
+        <div className="lg-destaque evl-reqs" role="group" aria-label={p ? `O que a evolução para ${alvo} pede` : "O que a evolução pede"}>
           {rMed && (
-            <div className="evt-selos" aria-label={`medalhas do Tamer: ${rMed.tem} de ${rMed.precisa}`}>
-              {Array.from({ length: rMed.precisa }, (_, k) => <SeloMedalha key={k} n={k + 1} ganha={k < rMed.tem} tam={26} />)}
-              <span>{rMed.tem} de {rMed.precisa} medalhas do Tamer</span>
-            </div>
+            <span className="evl-req evl-medalhas" aria-describedby={idMed}>
+              <span className="evl-selos">
+                {Array.from({ length: precisa }, (_, k) => {
+                  const ganha = k < tem, md = ganha ? ganhas[k] : faltam[k - tem];
+                  return (
+                    <ComDica key={k} papel="img" rotulo={`${md?.nome ?? "Medalha"}, ${ganha ? "ganha" : "falta"}`} dica={<><b>{md?.nome ?? "Medalha"}</b>{ganha ? "." : <>: {comoGanhar(md!)}.</>}</>}>
+                      <span className={`evl-selo${ganha ? "" : " evl-selo--falta"}`}><i>{ganha ? <Check aria-hidden="true" /> : k + 1}</i></span>
+                    </ComDica>
+                  );
+                })}
+              </span>
+              <small>medalhas</small><b className="lg-num lg-num--p">{tem}/{precisa}</b>
+              <span className="evo-medalha-txt sr-so" id={idMed} role="status">{prontoMed ? <b>Pronto para evoluir. </b> : null}{textoFalta(t, precisa) || "Medalhas do Tamer."}</span>
+            </span>
           )}
-          {faltaMed && <p className={`evo-medalha${prontoMed ? " pronto" : ""}`} role="status">{prontoMed ? <b>Pronto para evoluir. </b> : null}{textoFalta(t, rMed!.precisa)}</p>}
-          <Numeros itens={[
-            ...[["experiência de combate: cada vitória o deixa mais preciso na luta",
-              /* desde o v13 cada vitoria vale a novidade dela (motor.ts), entao o total e fracionario */
-              `${virgula(m.vitoriasVida)} ${m.vitoriasVida === 1 ? "vitória" : "vitórias"}${m.vitoriasVida * CLE.expPorVitoria >= CLE.expMax ? " (máximo)" : ""}`] as [string, string]],
-            ...((f.est === "adolescente" || rMega) ? [["vitórias nas lutas deste estágio (precisa de 80% para evoluir)",
-              m.lutas.lutas ? `${m.lutas.vitorias} de ${m.lutas.lutas}` : "nenhuma luta"] as [string, string]] : []),
-            /* a forma futura ainda nao foi decidida pelo motor: mostra so o porque, sem o nome */
-            [p ? `se evoluísse agora: ${p.porque}` : `passiva: ${DESC_PASSIVA[f.adulta!]}`, p ? (p.prox.est === "mega" ? nomeForma(p.prox) : "?") : NOME_ARQ[f.adulta!]],
-          ]} />
-        </section>
-        {ult && <section className="evt-painel revel-porque evt-porque"><h2 className="evt-tit"><Info size={18} aria-hidden="true" />Por que {nomeForma(f)}?</h2><Porque x={ult} /></section>}
-        <section className="evt-painel evt-hist" aria-labelledby="evt-hist-tit">
-          <h2 className="evt-tit" id="evt-hist-tit"><History size={18} aria-hidden="true" />Histórico</h2>
-          <ol className="evo-hist evt-linha">
-            <li><span className="evt-ponto" aria-hidden="true" /><span className="t">D1 {hhmm(TICK_INICIAL)}</span><span>nasceu: <b>{nomeForma({ esp: m.especie, est: "bebe" })}</b></span></li>
+          {comLutas && (
+            <ComDica className="evl-req" rotulo={`Lutas de treino: ${nLutas} de ${CAT.sparring}`}
+              dica={<>Lutas de treino na Arena: {CAT.sparring} para virar {alvo}, com {pctVit}% ou mais de vitórias{m.lutas.lutas ? ` (agora ${m.lutas.vitorias} de ${m.lutas.lutas})` : ""}.</>}>
+              <Swords aria-hidden="true" /><b className="lg-num lg-num--p">{nLutas}/{CAT.sparring}</b><small>lutas</small>
+            </ComDica>
+          )}
+          {rMega && !rMega.vinculo && (
+            <ComDica className="evl-req" rotulo={`Vínculo ${virgula(m.vinc.valor)} de ${virgula(CMG.vinculo)}`} dica={<>Vínculo mínimo para o Mega: {virgula(CMG.vinculo)}.</>}>
+              <Heart aria-hidden="true" /><b className="lg-num lg-num--p">{virgula(m.vinc.valor)}/{virgula(CMG.vinculo)}</b>
+            </ComDica>
+          )}
+        </div>
+      )}
+      <Arvore m={m} />
+      <div className="evl-bts">
+        <details className="evl-det">
+          <summary><History aria-hidden="true" />Histórico<ChevronRight className="lg-seta" aria-hidden="true" /></summary>
+          <ol className="evl-hist">
+            <li><span className="t">D1 {hhmm(TICK_INICIAL)}</span><span>nasceu: <b>{nomeForma({ esp: m.especie, est: "bebe" })}</b></span></li>
             {evs.map((x, i) => (
-              <li key={i}><span className="evt-ponto evt-ponto--evo" aria-hidden="true" /><span className="t">D{diaDe(x.tick)} {hhmm(x.tick)}</span>
+              <li key={i}><span className="t">D{diaDe(x.tick)} {hhmm(x.tick)}</span>
                 <span>virou <b>{nomeForma(x.forma)}</b> ({det(x)})</span>
-                <button type="button" className="evt-rever" aria-label={`Ver a revelação de novo: ${nomeForma(x.forma)}`} onClick={() => reverEvolucao(i)}>Ver a revelação de novo</button></li>
+                <button type="button" className="evl-rever" aria-label={`Ver a revelação de novo: ${nomeForma(x.forma)}`} onClick={() => reverEvolucao(i)}>Ver a revelação de novo</button></li>
             ))}
           </ol>
-        </section>
-        <section className="evt-painel evt-como">
-          <p className="evo-selo"><Deco nome={br.peca} className="evo-selo-img" /><span>brasão <b>{br.nome}</b>: as formas da árvore são as deste brasão.</span></p>
-          <p style={{ margin: 0 }}>Cada evolução é decidida pelo que o pet viveu: cuidado, caráter e lutas de treino.</p>
-          <details className="dl-apoio"><summary>Como funciona</summary>
-            <p>Uma moeda por transição (os contadores zeram a cada evolução). <b>In-Training → Rookie</b> ({m.dur.bebe / 60} h): o <b>cuidado</b> decide o ramo; o In-Training chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco. <b>Rookie → Champion</b> ({m.dur.crianca / 60} h): o <b>caráter dominante</b> decide a linha e a técnica. <b>Champion → Ultimate</b> ({m.dur.adolescente / 60} h e 10 lutas de treino na arena): o <b>eixo complementar</b> da linha decide o arquétipo e a passiva (as duas formas da linha são o mesmo Ultimate).<> <b>Ultimate → Mega</b> ({m.dur.adulto / 60} h, {CAT.sparring} lutas com {CLE.limiarTaxa * 100}% ou mais de vitórias e vínculo {virgula(CMG.vinculo)} ou mais): o mesmo arquétipo, mais forte. A forma sombria não chega ao Mega.</><> Além disso, cada evolução depois do Rookie pede <b>medalhas do Tamer</b>: {CMD.adolescente} para virar Champion, {CMD.adulto} para Ultimate e {CMD.mega} para Mega. Se o pet cumpre o resto e falta medalha, ele espera pronto e evolui assim que você ganhar a medalha.</> Caráter: quanto os traços do pet estão acima de um pet comum em cada eixo.</p>
+        </details>
+        {ult && (
+          <details className="evl-det evl-porque">
+            <summary><Info aria-hidden="true" />Porquê<ChevronRight className="lg-seta" aria-hidden="true" /></summary>
+            <div className="revel-porque"><Porque x={ult} /></div>
           </details>
-        </section>
+        )}
       </div>
+      <ComoFunciona>
+        Cada evolução é decidida pelo que o pet viveu: cuidado, caráter e lutas de treino. Uma moeda por transição (os contadores zeram a cada evolução).
+        <b> In-Training → Rookie</b> ({m.dur.bebe / 60} h): o <b>cuidado</b> decide o ramo; o In-Training chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco.
+        <b> Rookie → Champion</b> ({m.dur.crianca / 60} h): o <b>caráter dominante</b> decide a linha e a técnica.
+        <b> Champion → Ultimate</b> ({m.dur.adolescente / 60} h e 10 lutas de treino na arena): o <b>eixo complementar</b> da linha decide o arquétipo e a passiva (as duas formas da linha são o mesmo Ultimate).
+        <b> Ultimate → Mega</b> ({m.dur.adulto / 60} h, {CAT.sparring} lutas com {pctVit}% ou mais de vitórias e vínculo {virgula(CMG.vinculo)} ou mais): o mesmo arquétipo, mais forte. A forma sombria não chega ao Mega.
+        {" "}Cada evolução depois do Rookie pede também <b>medalhas do Tamer</b>: {CMD.adolescente} para virar Champion, {CMD.adulto} para Ultimate e {CMD.mega} para Mega. Se o pet cumpre o resto e falta medalha, ele espera pronto e evolui assim que você ganhar a medalha.
+        {" "}Na árvore: o verde é o caminho, o claro é agora, o tracejado é possível, o pontilhado é fechado e o roxo é a sombria (sobrecarga alta na virada para Ultimate).
+      </ComoFunciona>
     </div>
   );
 }

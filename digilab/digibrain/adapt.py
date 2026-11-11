@@ -24,6 +24,12 @@ as urgencias, o reflexo e o gesto do dono desde a decisao anterior); o `explorar
 `escolher_alvo` (o ponto que o motor sorteou), e nas decisoes seguintes o passeio e entregue como `Alvo.ponto`. O motivo ganha `do_passeio`
 no alvo, e o fim do passeio sem credito pelo gesto traz `credito: "gesto"`. Desligada, nenhum campo novo.
 
+Com a subchave `fala_unidades` (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1), o M-IMPULSO divide o `chamar_atencao` nas tres unidades de
+fala (o conteudo so na chave da escolha, `[chamar_atencao, c, None]`); a acao entregue ao motor e o chamar de hoje, e a opcao de fala credita
+a linha de H do conteudo. A consequencia da opcao de fala (o r_n que o P2 credita, o V e o E, o episodio) le o corpo de depois na
+decisao seguinte, antes da acao seguinte (o adendo 1 do plano, A1.1: o intervalo contem o cuidado do dono); o mundo de depois e o de
+hoje. Desligada, nenhum campo novo; ligada, nenhum campo novo no motivo (o conteudo esta na `escolha`).
+
 **O alvo** (`escolher_alvo`): o candidato do motor do tipo (e do id) da unidade escolhida; o `u` do motor e ignorado. **A excecao unica**
 (a PE-14 revista): em EXPLORAR, o lugar lembrado do M-MEM e entregue como `Alvo.ponto(x, y)`, fora da lista do motor, que o valida por
 conta propria (`MotorMundo._validar_alvo`: so em EXPLORAR, coordenadas inteiras dentro do mapa). Brincar sem bola a vista nao tem alvo
@@ -56,8 +62,9 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from ..config import (CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO,
-                      VERSAO_PET_DIGIBRAIN, Config, ConfigDigibrain, ConfigDigibrainInatos, ConfigLutaMemoria, ConfigMundo)
+from ..config import (CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, CONTEUDOS_FALA,
+                      VERSAO_PET_DIGIBRAIN, Config, ConfigDigibrain, ConfigDigibrainInatos, ConfigFalaUnidades, ConfigLutaMemoria,
+                      ConfigMundo)
 from ..events import AcaoPet, AcaoUsuario, LutaSemChave, resumo_luta
 from ..modelo_mundo import raiz_inteira
 from ..mundo import ACOES_COM_ALVO, Alvo
@@ -111,9 +118,10 @@ class Modulos:
 
 
 def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: ConfigDigibrainInatos,
-                   serie_e_doadora: tuple | None, semente: int | None = None, luta: bool = False) -> Modulos:
+                   serie_e_doadora: tuple | None, semente: int | None = None, luta: bool = False,
+                   cfg_fala: ConfigFalaUnidades | None = None) -> Modulos:
     return Modulos(sens=Sens(cfg, cm, inatos), afeto=Afeto(cfg, cd, inatos, serie_e_doadora), estado=EstadoDinamico(cfg, cd, inatos),
-                   impulso=Impulso(inatos, cd), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
+                   impulso=Impulso(inatos, cd, cfg_fala), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
                                  None if semente is None else random.Random(derivar_semente(semente, "mem_emb")),
                                  luta), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem), plast=Plasticidade(cd, inatos),
                    pers=Personalidade(inatos.eta_faceta, inatos.teto_faceta, True) if cd.facetas_mem else None)
@@ -126,6 +134,8 @@ def intencao_da_unidade(unidade: dict) -> Intencao:
         return Intencao(a, "ponto", None, tuple(ident))
     if tipo == "passeio":                             # o passeio (AN-2): o ponto fixo, entregue ao motor como o lugar lembrado
         return Intencao(a, "ponto", None, tuple(ident), True)
+    if a is AcaoPet.CHAMAR_ATENCAO:                   # a unidade de fala (DC3, 3.1): o conteudo fica so na chave; o mundo e o do chamar
+        return Intencao(a, None, None)
     return Intencao(a, tipo, ident if tipo in ("comida", "bola") else None)
 
 
@@ -135,9 +145,14 @@ class DigiBrain:
     nome = "digibrain"
     versao_pet = VERSAO_PET_DIGIBRAIN
 
+    def mundo_deslocado(self, dx: int, dy: int, ajustar, regiao_de) -> int:
+        """o gancho da ida para a ilha maior (MotorMundo._aplicar_mudar_ilha, IG4): os lugares que o M-MEM lembra andam com o mundo"""
+        return self.m.mem.deslocar(dx, dy, ajustar, regiao_de)
+
     def __init__(self, cfg: Config | None = None, cfg_digibrain: ConfigDigibrain | None = None, cfg_mundo: ConfigMundo | None = None,
                  inatos: ConfigDigibrainInatos | None = None, serie_e_doadora: tuple | None = None,
-                 semente: int | None = None, cfg_luta_memoria: ConfigLutaMemoria | None = None) -> None:
+                 semente: int | None = None, cfg_luta_memoria: ConfigLutaMemoria | None = None,
+                 cfg_fala: ConfigFalaUnidades | None = None) -> None:
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         if not self.cd.ligada:
             raise DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada")
@@ -148,7 +163,7 @@ class DigiBrain:
         self.luta_memoria = (cfg_luta_memoria or CONFIG_LUTA_MEMORIA).ligada     # a ponte da luta (PE2)
         if self.luta_memoria and not self.cd.memoria_autobio:
             raise ValueError("luta_memoria so com a memoria_autobio (docs/TAREFA_V3_PONTE_LUTA.md, 3.2)")
-        self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente, self.luta_memoria)
+        self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente, self.luta_memoria, cfg_fala)
         self._lutas: list[dict] = []                  # os resumos desde a decisao anterior (so com a luta_memoria)
         self._pc_antes_luta = None                    # o corpo da ultima consequencia fechada (so com a luta_memoria)
         self.k = 0
@@ -166,7 +181,7 @@ class DigiBrain:
         if obs.corpo is None or obs.mundo is None:
             raise ValueError("o DigiBrain modular decide com o corpo e o mundo na Observacao (obs.corpo e obs.mundo)")
         if self._pendencia is not None:
-            self._fechar(self._pendencia)
+            self._fechar(self._pendencia, obs)
             self._pendencia = None
         m, cd = self.m, self.cd
         k = self.k
@@ -380,9 +395,15 @@ class DigiBrain:
             raise RuntimeError("sem a memoria_autobio, o M-MEM nao tem a recente")
         if not cd.passeio and (m.estado.passeios or any(x["chave"][1] == "passeio" for x in unidades)):
             raise RuntimeError("sem o passeio, o M-ESTADO nao abre passeio")
+        fala = [x["chave"][1] for x in unidades if x["acao"] == "chamar_atencao"]
+        if fala != (list(CONTEUDOS_FALA) if cd.fala_unidades else [None]):
+            raise RuntimeError(f"as unidades do chamar {fala} nao sao as da fala_unidades {'ligada' if cd.fala_unidades else 'desligada'}")
 
-    def _fechar(self, p: dict) -> None:
-        """a consequencia da decisao anterior aos modulos"""
+    def _fechar(self, p: dict, obs_seguinte: Observacao) -> None:
+        """a consequencia da decisao anterior aos modulos. Com a `fala_unidades` (o adendo 1 do plano da DC3, A1.1), a opcao de fala (as
+        tres unidades do chamar) le o corpo de depois na percepcao da decisao seguinte (`obs_seguinte`, antes da acao seguinte): o
+        intervalo contem o passo inteiro, com o cuidado do dono. As outras opcoes, e o chamar desligada a subchave, leem o corpo do tick
+        da acao, como hoje. A ultima decisao da vida nao tem decisao seguinte e fica sem fechar, como toda ultima decisao de hoje."""
         it, m, S = p["intencao"], self.m, self.S
         acao = it.acao
         if p["corpo"] is None or p["transicao"] is None:
@@ -394,6 +415,10 @@ class DigiBrain:
             raise RuntimeError(f"a decisao de {acao.value} ficou sem o consequencia_mundo")
         pc0 = p["sens"]["pc"]
         pc1 = p["corpo"][1].corpo
+        if self.cd.fala_unidades and acao is AcaoPet.CHAMAR_ATENCAO:     # A1.1: a fala ate a decisao seguinte
+            if p["unidade"]["chave"][1] not in CONTEUDOS_FALA:
+                raise RuntimeError(f"a fala da decisao {p['k']} sem conteudo com a fala_unidades ligada")
+            pc1 = obs_seguinte.corpo
         pm1 = p["transicao"].observacao_seguinte.mundo
         if pc1 is None or pm1 is None:
             raise RuntimeError("a consequencia sem o corpo ou sem o mundo de depois")

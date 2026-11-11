@@ -1,0 +1,11 @@
+DigiLab: a barraca do Tamer, o lugar do Diario (barraca.gltf, barraca.bin, barraca_cor.png)
+
+Procedencia: feito a mao por script, sem IA, em 2026-11-10 (docs/objetos3d/cartoon/barraca.py no repositorio do DigiLab).
+A malha (o domo, o rolo da porta, a antena, os estais, as estacas, o banquinho, os livros) e a textura (pintada pelo codigo, pela posicao no espaco)
+saem do script; a mesma entrada da sempre o mesmo arquivo. Nada vem de modelo gerado nem de imagem de terceiros.
+
+O desenho segue o esboco do objeto (docs/objetos3d/barraca/esbocos/esboco_1_domo_costuras.png), gerado pela Meshy para o DigiLab e usado so como referencia de desenho:
+nenhum pixel e nenhum vertice dele esta nestes arquivos. A barraca de antes (a malha e a textura da Meshy) saiu do jogo; o historico esta em docs/TAREFA_V3_LUGARES_3D.md e em docs/objetos3d/barraca/.
+
+Uso: no jogo DigiLab, publicado. Autor: o projeto DigiLab (Matheus).
+Aprovacao: as capturas ficam no PR dos objetos em cartoon.

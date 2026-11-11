@@ -4,23 +4,27 @@
    replay, tempo de teste, fala, som); tudo o que e visual (a pele, o tema, o mapa, a camera e o visual GBA HD/HD-2D) fica na subarea
    Visual (2026-11-01, no lugar da Aparencia; #/config/aparencia leva a ela), e as dicas ficam no menu principal; nada aqui muda o motor, as regras ou o save, a nao ser pelas mesmas acoes de antes
    (tempo e ovo novo, via jogo.ts/tempo.ts). Opcoes das pranchas que o app nao tem ficam de fora. Rotas #/config/<parte> iguais. */
-import type { ReactNode } from "react";
+import { useId } from "react";
+import { Activity, Camera, ChevronRight, Clock, Eye, FlaskConical, Info, Lightbulb, MessageCircle, Mountain, RotateCcw, ScrollText, Volume1, Volume2, type LucideIcon } from "lucide-react";
+import { Balao, propsBalao } from "../../componentes/Dica.tsx";
+import { escolherViagem, useViagemLigada } from "../../viagem.ts";
 import { useState } from "react";
 import "../../estilo/menus_config.css";
 import { Motor } from "../../../motor/index.ts";
 import { Deco } from "../../componentes/Deco.tsx";
-import { BotaoHx, ChipHx, LinhaHx } from "../../componentes/hx/index.ts";
-import { Peca } from "../../componentes/Imagens.tsx";
+import { BotaoHx, ChipHx } from "../../componentes/hx/index.ts";
 import { ICONE } from "../../decoracao.ts";
 import { FALA_LLM, ligarFalaLLM, rotuloLLM, useFalaLLM } from "../../fala.ts";
-import { escolherModo, useFalaLivre, type ModoFala } from "../../falaLivre.ts";
+import { escolherConversaNova, escolherFalaRede, escolherModo, useFalaLivre, type ModoFala } from "../../falaLivre.ts";
 import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import type { ParteConfig } from "../../rotas.ts";
 import { AvisoSom } from "../../componentes/AvisoSom.tsx";
 import { SOM, useSom } from "../../som.ts";
 import { dicasLigadas, ligarDicas } from "../../dicas.ts";
-import { ligarDetalhesPet, useDetalhesPet } from "../../hudPet.ts";
+import { reverOTutorial } from "../../nivelTela.ts";
+import { ligarMitologia, useMitologia } from "../../mitologia.ts";
+import { ligarDetalhesPet, temPainelMovido, useDetalhesPet, voltarPaineis } from "../../hudPet.ts";
 import { textoSave } from "../../save.ts";
 import { useHabitat } from "../../habitat.ts";
 import { usePele } from "../../pele.ts";
@@ -35,57 +39,53 @@ const TITULO: Record<ParteConfig, string> = { principal: "Ajustes", visual: "Vis
 const NOME_MODO: Record<ModoFala, string> = { template: "frases prontas", moldura: "moldura", livre: "livre" };
 export const nomeVelocidade = (v: number): string => VELOCIDADES.find(([, x]) => x === v)?.[0] ?? `${v} min/s`;
 
-/** linha do menu: icone (decoracao), titulo, resumo e seta */
-function Linha({ ic, titulo, resumo, tag, abrir }: { ic: ReactNode; titulo: string; resumo: string; tag?: string; abrir: () => void }) {
+/** uma linha da lista de Ajustes (L3 de "Lugares da ilha", prancha ajustes_*): so o icone e o nome (a etiqueta, se houver); o resumo de antes vai para o balao e
+    para o aria-label. `interruptor`: a linha e um interruptor (a linha inteira e o alvo); senao e um botao que abre a parte. */
+function Aj({ ic: I, nome, rotulo, resumo, tag, novo, interruptor, abrir }: {
+  ic: LucideIcon; nome: string; rotulo?: string; resumo: string; tag?: string; novo?: boolean;
+  interruptor?: { ligado: boolean; mudar: (v: boolean) => void; desligado?: boolean }; abrir?: () => void;
+}) {
+  const id = useId(), cls = "aj" + (novo ? " aj--novo" : ""), nomeAcessivel = `${rotulo ?? nome}${tag ? `, ${tag}` : ""}`;
+  const miolo = <><I className="aj-ic" aria-hidden="true" /><span className="aj-nome"><b>{nome}</b>{tag && <span className="lg-etq lg-etq--alerta">{tag}</span>}</span></>;
   return (
-    <LinhaHx onClick={abrir} secundario={<span aria-hidden="true">›</span>}>
-      <span className="mc-menu__ic" aria-hidden="true">{ic}</span>
-      <span className="mc-menu__txt"><b>{titulo}{tag && <ChipHx tom="alerta">{tag}</ChipHx>}</b><small>{resumo}</small></span>
-    </LinhaHx>
+    <span className="dica-alvo dica-alvo--sem-foco aj-alvo" {...propsBalao(false)}>
+      {interruptor
+        ? <label className={cls}>{miolo}<input type="checkbox" role="switch" aria-label={nomeAcessivel} aria-describedby={id} checked={interruptor.ligado} disabled={interruptor.desligado}
+            onChange={e => interruptor.mudar((e.target as HTMLInputElement).checked)} /></label>
+        : <button type="button" className={cls} aria-label={nomeAcessivel} aria-describedby={id} onClick={abrir}>{miolo}<ChevronRight className="aj-seta" aria-hidden="true" /></button>}
+      <Balao id={id} lado="cima">{resumo}</Balao>
+    </span>
   );
 }
 function Principal({ abrir }: { abrir: (p: ParteConfig) => void }) {
-  const { motor: m } = useJogo(), tema = useTema(), pele = usePele(), habitat = useHabitat(), fl = useFalaLivre(), { velocidade } = useTempo();
-  const [dicas, setDicas] = useState(dicasLigadas), detalhesPet = useDetalhesPet();
+  const { motor: m } = useJogo(), tema = useTema(), pele = usePele(), habitat = useHabitat(), fl = useFalaLivre(), { velocidade } = useTempo(), viagem = useViagemLigada(), som = useSom(), mitologia = useMitologia();
+  const [dicas, setDicas] = useState(dicasLigadas), detalhesPet = useDetalhesPet(), [revisto, setRevisto] = useState(false);
   useFalaLLM(); useLab();
   return (
-    <>
-      <h3 className="mc-sec">Jogo</h3>
-      <div className="mc-menu"><Linha ic={<Deco nome={ICONE.pets} />} titulo="Visual" resumo={resumoVisual(pele, tema, habitat, !!m.mundo)} abrir={() => abrir("visual")} /></div>
-      <section className="mc-bloco" aria-label="Dicas">
-        <label className="mc-interruptor"><span><b>Mostrar dicas</b><small>o Professor Agumon explica cada coisa nova, uma vez</small></span>
-          <input type="checkbox" role="switch" checked={dicas} onChange={e => { ligarDicas((e.target as HTMLInputElement).checked); setDicas(dicasLigadas()); }} /></label>
-        <label className="mc-interruptor"><span><b>Exibir detalhes do pet</b><small>os painéis Estado atual, Evolução, Últimas ações e DigiBrain na tela do pet</small></span>
-          <input type="checkbox" role="switch" checked={detalhesPet} onChange={e => ligarDetalhesPet((e.target as HTMLInputElement).checked)} /></label>
-      </section>
-      <h3 className="mc-sec">Fala</h3>
-      <div className="mc-menu"><Linha ic={<Peca nome="emoji_feliz" escala={2} />} titulo="Fala do pet" resumo={`modo ${NOME_MODO[fl.modo]} · ${rotuloLLM().texto}`} abrir={() => abrir("fala")} /></div>
-      <h3 className="mc-sec">Dados</h3>
-      <div className="mc-menu">
-        <Linha ic={<Deco nome={ICONE.registro} />} titulo="Registro e replay" resumo={`semente ${m.semente} · ${m.log.length} eventos · exportar`} abrir={() => abrir("dados")} />
-        <Linha ic={<Deco nome={ICONE.tempo} />} titulo="Tempo" tag="TESTE" resumo={velocidade === 0 ? "pausado" : `velocidade ${nomeVelocidade(velocidade)}`} abrir={() => abrir("dados")} />
-      </div>
-      <h3 className="mc-sec">Laboratório</h3>
-      <div className="mc-menu"><Linha ic={<Peca nome="emoji_estrela" escala={2} />} titulo="Laboratório" tag="EXPERIMENTAL" resumo={labLigado() ? "modo ligado · o pet de teste com o DigiBrain modular" : "desligado · o jogo é o de hoje"} abrir={() => abrir("laboratorio")} /></div>
-      <h3 className="mc-sec">Sobre</h3>
-      <div className="mc-menu"><Linha ic={<Deco nome="Digivice_Circle_01" />} titulo="Sobre o Digilab" resumo="versão, créditos e procedência" abrir={() => abrir("sobre")} /></div>
-      <h3 className="mc-sec">Som</h3>
-      <Som />
-    </>
-  );
-}
-/** liga/desliga e volume do som (src/som.ts); ficam no localStorage do app, nao no save. Ligar e o gesto que o navegador pede */
-function Som() {
-  const som = useSom();
-  return (
-    <section className="mc-bloco" aria-label="Som">
-      <label className="mc-interruptor"><span><b>Som do jogo</b><small>golpes e impactos na luta e o efeito da evolução; desligado, nada é baixado</small></span>
-        <input type="checkbox" role="switch" checked={som.ligado} onChange={e => SOM.ligar((e.target as HTMLInputElement).checked)} /></label>
-      <label className="mc-interruptor"><span><b>Volume</b><small>{Math.round(som.volume * 100)}%</small></span>
-        <input type="range" min={0} max={1} step={0.05} value={som.volume} aria-label="Volume do som" disabled={!som.ligado}
-          onChange={e => SOM.volume(Number((e.target as HTMLInputElement).value))} /></label>
+    <div className="aj-lista lg">
+      <Aj ic={Eye} nome="Visual" resumo={resumoVisual(pele, tema, habitat, !!m.mundo)} abrir={() => abrir("visual")} />
+      <Aj ic={Lightbulb} nome="Dicas" resumo="o Professor Agumon explica cada coisa nova, uma vez" interruptor={{ ligado: dicas, mudar: v => { ligarDicas(v); setDicas(dicasLigadas()); } }} />
+      <Aj ic={RotateCcw} nome="Rever o tutorial" tag={revisto ? "feito" : undefined} resumo="os cartões dos níveis e as dicas do Professor Agumon voltam, cada um no seu momento (com as dicas ligadas)"
+        abrir={() => { reverOTutorial(); setRevisto(true); }} />
+      <span className="sr-only" role="status" aria-live="polite">{revisto ? "Tutorial reiniciado" : ""}</span>
+      <Aj ic={Activity} nome="Detalhes do pet" rotulo="Exibir detalhes do pet" resumo="os painéis Estado atual, Evolução, Últimas ações e DigiBrain na tela do pet"
+        interruptor={{ ligado: detalhesPet, mudar: ligarDetalhesPet }} />
+      <Aj ic={Mountain} nome="Mitologia" novo resumo="o oráculo Jijimon conta lendas, os cinco deuses deixam sinais na ilha e o Diário ganha o Códice das lendas; desligada, nada aparece"
+        interruptor={{ ligado: mitologia, mudar: ligarMitologia }} />
+      <Aj ic={Camera} nome="Viagem da câmera" novo resumo="desligada, os lugares abrem num corte seco" interruptor={{ ligado: viagem, mudar: escolherViagem }} />
+      <Aj ic={MessageCircle} nome="Fala" rotulo="Fala do pet" resumo={`modo ${NOME_MODO[fl.modo]} · ${rotuloLLM().texto}`} abrir={() => abrir("fala")} />
+      <Aj ic={Volume2} nome="Som" rotulo="Som do jogo" resumo="a luta, o treino, o comer, os menus e a música da ilha e da evolução; desligado, nada é baixado" interruptor={{ ligado: som.ligado, mudar: v => SOM.ligar(v) }} />
+      {som.ligado && (<>
+        <Volume rotulo="Volume do som" nome="Geral" v={som.volume} mudar={v => SOM.volume(v)} />
+        <Volume rotulo="Volume da música" nome="Música" v={som.volMusica} mudar={v => SOM.volumeMusica(v)} />
+        <Volume rotulo="Volume dos efeitos" nome="Efeitos" v={som.volEfeitos} mudar={v => SOM.volumeEfeitos(v)} />
+      </>)}
       <AvisoSom />
-    </section>
+      <Aj ic={ScrollText} nome="Registro" rotulo="Registro e replay" resumo={`semente ${m.semente} · ${m.log.length} eventos · exportar`} abrir={() => abrir("dados")} />
+      <Aj ic={Clock} nome="Tempo" tag="teste" resumo={velocidade === 0 ? "pausado" : `velocidade ${nomeVelocidade(velocidade)}`} abrir={() => abrir("dados")} />
+      <Aj ic={FlaskConical} nome="Laboratório" tag="experimental" resumo={labLigado() ? "modo ligado · o pet de teste com o DigiBrain modular" : "desligado · o jogo é o de hoje"} abrir={() => abrir("laboratorio")} />
+      <Aj ic={Info} nome="Sobre" resumo="versão, créditos e procedência" abrir={() => abrir("sobre")} />
+    </div>
   );
 }
 /** a subarea Visual: os menus (a pele) e o habitat (o tema, o mapa, a camera e o visual) */
@@ -104,6 +104,20 @@ function Visual() {
       </div>
       <p className="mc-apoio">Sistema segue o claro ou escuro do aparelho. Os menus são sempre escuros; o tema vale para o habitat, o balão, o retrato e o relógio.</p>
       <EscolhaHabitat temMundo={!!m.mundo} />
+      <VoltarPaineis />
+    </>
+  );
+}
+/** os paineis e avisos arrastados (a pilha da direita, o painel de um lugar ou dos Ajustes, o balao, o alerta) voltam ao lugar de sempre (2026-11-08) */
+function VoltarPaineis() {
+  const [movido, setMovido] = useState(temPainelMovido);
+  return (
+    <>
+      <h3 className="mc-sec" id="cfg-paineis">Painéis</h3>
+      <p className="mc-apoio">Arraste um painel pelo título para mudá-lo de lugar. A posição fica neste navegador.</p>
+      <BotaoHx disabled={!movido} onClick={() => { voltarPaineis(); setMovido(false); }}>
+        <RotateCcw aria-hidden="true" />Voltar os painéis ao lugar
+      </BotaoHx>
     </>
   );
 }
@@ -163,7 +177,8 @@ function Dados({ irPet }: { irPet: () => void }) {
   );
 }
 function Fala() {
-  const llm = useFalaLLM(), fl = useFalaLivre(), r = rotuloLLM();
+  const llm = useFalaLLM(), fl = useFalaLivre(), r = rotuloLLM(), { motor: pet } = useJogo();
+  const redeSemEfeito = fl.falaRede && pet.conceitosDec() === null;      /* DC2b: pet sem decisao do modular, a chave nao muda nada */
   const modos: [ModoFala, string, string, string?][] = [
     ["template", "Frases prontas", "Sempre as mesmas frases do jogo. Nunca erra, mas repete."],
     ["moldura", "Moldura", "O modelo completa uma moldura com os fatos do pet."],
@@ -185,6 +200,15 @@ function Fala() {
           </button>
         ))}
       </div>
+      <section className="mc-bloco">
+        <label className="mc-interruptor"><span><b>Conversa nova (teste)</b><small>Só no modo Livre: prompt novo da conversa, com a memória só desta sessão e do estágio de agora.</small></span>
+          <input type="checkbox" role="switch" checked={fl.conversaNova} disabled={fl.modo !== "livre"} onChange={ev => escolherConversaNova((ev.target as HTMLInputElement).checked)} /></label>
+      </section>
+      <section className="mc-bloco">
+        <label className="mc-interruptor"><span><b>Fala pela rede (teste)</b><small>Só no modo Livre: a fala nasce do que o cérebro modular decidiu por último; o modelo só põe em palavras e não vê o resto do pet.</small></span>
+          <input type="checkbox" role="switch" checked={fl.falaRede} disabled={fl.modo !== "livre"} onChange={ev => escolherFalaRede((ev.target as HTMLInputElement).checked)} /></label>
+        {redeSemEfeito && <p className="mc-apoio" role="status">Este pet não tem uma decisão do cérebro modular: a chave não muda nada e a fala segue como antes.</p>}
+      </section>
       <p className="mc-apoio">Em todos os modos, a fala não decide nada e o que você escreve na conversa não ensina o pet.</p>
     </>
   );
@@ -205,10 +229,22 @@ function Sobre() {
           fica fora do repositório; sem ele, o jogo usa os sprites de reserva, de arte própria.</p>
         {/* os kits 3D da ilha (docs/TAREFA_V3_HABITAT_ILHA_3D.md, H1 e H-1): CC0, com as licencas em public/kits3d/ */}
         <p className="mc-credito-kits">As árvores, as plantas e as pedras da ilha são dos kits 3D de Quaternius (Stylized Nature MegaKit) e de Kay
-          Lousberg (KayKit Forest Nature Pack), em domínio público (CC0). A bola, o saco de pancada, o kit médico e o cocô foram gerados com a Meshy (meshy.ai) e consertados no Blender.</p></section>
+          Lousberg (KayKit Forest Nature Pack), em domínio público (CC0). O saco de pancada, o kit médico, o cocô, os postes de luz, o carro, a geladeira e o trilho foram gerados com a Meshy (meshy.ai) e consertados no Blender; o céu do mapa Digital também é da Meshy. A bola foi feita no Blender pelo próprio projeto, sem IA.</p>
+        {/* MITOLOGIA, E0 (docs/TAREFA_V3_MITOLOGIA.md): a lenda nao nomeia a obra na fala; o credito fica aqui (resposta 3 do Matheus, 2026-11-11) */}
+        <p className="mc-credito-lenda">A lenda que o oráculo Jijimon conta (Ajustes, Mitologia) é um mito próprio do projeto, no molde do macaco
+          que desafiou o Céu, da <i>Jornada ao Oeste</i> atribuída a Wu Cheng'en (século XVI, domínio público): o enredo recontado com palavras
+          nossas, sem texto de nenhuma tradução.</p></section>
     </>
   );
 }
+/** um volume do som (SOM-UP, SD-5: o geral, a musica e os efeitos) */
+function Volume({ rotulo, nome, v, mudar }: { rotulo: string; nome: string; v: number; mudar: (v: number) => void }) {
+  return (
+    <label className="aj aj--volume"><Volume1 className="aj-ic" aria-hidden="true" /><span className="aj-nome">{nome} <b>{Math.round(v * 100)}%</b></span>
+      <input type="range" min={0} max={1} step={0.05} value={v} aria-label={rotulo} aria-valuetext={`${Math.round(v * 100)}%`} onChange={e => mudar(Number((e.target as HTMLInputElement).value))} /></label>
+  );
+}
+
 export function TelaConfig({ parte, abrir, irPet }: { parte: ParteConfig; abrir: (p: ParteConfig) => void; fechar: () => void; irPet: () => void }) {
   return (
     <section className="mc mc-cfg" aria-label={TITULO[parte]}>

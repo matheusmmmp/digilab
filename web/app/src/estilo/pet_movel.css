@@ -1,0 +1,159 @@
+/* A tela Pet no celular, "mobile minimo" (M1; docs/PROPOSTAS_V3_UX_TELA_PET.md, "Mobile mínimo"; prancha aprovada em docs/pranchas/ux-mobile/minimo.css).
+   TUDO sob @media (max-width:899px): a partir de 900 px nada aqui vale, e o desktop sai igual. Classes novas (mm-*), para nao brigar com as da HUD do desktop.
+   So os tokens --hx-* e --hud-* das duas peles (tokens.css, pele-vidro.css, pele-xcom.css); nenhuma cor nova: o texto sobre o rosa cheio sai da classe
+   hx-chip--necessidade (hud.css e pele-vidro.css), a mesma do chip de hoje. As medidas (48, 52, 62, 74 px, as margens) sao de layout, nao de jogo.
+   A forma: redondo no Vidro, reto no Militar (a pele Militar nao tem raio). O "body" nos seletores das classes reaproveitadas (hx-btn, topo-bt) e
+   so para vencer, em especificidade, o fundo translucido que pele-vidro.css (linha 156) poe nelas. */
+@media (max-width:899px){
+  /* sem a barra de abas, a tela Pet vai ate o pe da tela (as folhas, M2, ficam como estao: la a barra continua sendo medida) */
+  .app--pet{ --casca-barra:0px }
+  /* a cena ocupa a tela inteira, por tras das acoes (como no desktop): o pe da tela nao reserva mais a altura do dock */
+  .app--habitat.app--pet .habitat{ bottom:0 }
+
+  /* ---------- a caixa da HUD nas duas peles (o fundo das caixas de pet_hud.css, pele-vidro.css e pele-xcom.css) */
+  .mm-caixa, .mm-rotulo{ background:linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)); border:1px solid var(--hx-borda); color:var(--hx-texto);
+    -webkit-backdrop-filter:var(--hud-desfoque); backdrop-filter:var(--hud-desfoque) }
+  :root[data-pele="vidro"] .mm-caixa{ box-shadow:var(--hud-brilho), var(--hx-sombra) }
+  :root[data-pele="xcom"] :is(.mm-caixa, .mm-rotulo){ border-top:2px solid var(--hx-borda-topo); background:var(--xcom-cantos), linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)) border-box }
+  :root[data-pele="vidro"] .mm-forma{ border-radius:50% }
+  :root[data-pele="vidro"] .mm-pilula{ border-radius:24px }
+  :root[data-pele="xcom"] :is(.mm-forma, .mm-pilula){ border-radius:0 }
+
+  /* ---------- o botao so de icone: alvo de 44 px ou mais, foco visivel, o toque afunda (e respeita prefers-reduced-motion) */
+  .mm-bt{ position:relative; display:grid; place-items:center; padding:0; font:inherit; cursor:pointer; pointer-events:auto; touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none; -webkit-touch-callout:none }
+  /* o anel de foco leva um halo escuro por fora: o --hx-foco claro sozinho some sobre a grama clara do Vidro (~1,2:1); o halo (--hx-miolo) da o contraste */
+  /* o halo escuro vence as sombras das peles (:root[data-pele] ... box-shadow), senão o anel claro fica sozinho sobre a cena clara */
+  :root[data-pele] body .mm-bt:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:0; box-shadow:0 0 0 5px var(--hx-miolo) !important }
+  .mm-bt:active{ filter:brightness(.8) }
+  @media (prefers-reduced-motion:no-preference){
+    .mm-bt{ transition:transform .08s ease-out }
+    .mm-bt:active{ transform:scale(.92) }
+  }
+  .mm-bt svg{ display:block; width:22px; height:22px; stroke-width:2 }
+  .mm-bt48{ width:48px; height:48px }
+
+  /* ---------- o nome do botao, ao segurar o dedo e no foco do teclado (BotaoMovel.tsx) */
+  .mm-rotulo{ position:absolute; z-index:3; padding:8px 12px; white-space:nowrap; font:600 15px/1 var(--hx-f); letter-spacing:.04em; text-transform:none;
+    pointer-events:none; -webkit-backdrop-filter:none; backdrop-filter:none }
+  :root[data-pele="vidro"] .mm-rotulo{ border-radius:8px }
+  :root[data-pele="xcom"] .mm-rotulo{ border-radius:0 }
+  .mm-rotulo[data-lado="cima"]{ left:50%; bottom:calc(100% + 14px); translate:-50% 0 }
+  .mm-rotulo[data-lado="baixo"]{ left:0; top:calc(100% + 10px) }
+  .mm-rotulo[data-lado="esq"]{ right:calc(100% + 10px); top:50%; translate:0 -50% }
+  .mm-rotulo[data-lado="dir"]{ left:calc(100% + 10px); top:50%; translate:0 -50% }
+
+  /* ---------- o topo: o retrato e a hora (canto de cima a esquerda), a coluna dos destinos (a direita) */
+  .mm-topo{ position:fixed; inset:0; z-index:20; pointer-events:none }
+  .mm-topo > *{ pointer-events:auto }
+  .mm-retrato{ position:absolute; top:14px; left:14px; width:56px; height:56px; padding:3px; border-width:2px }
+  .mm-retrato img{ display:block; width:100%; height:100%; object-fit:contain; border-radius:inherit; pointer-events:none; -webkit-user-drag:none }
+  .mm-retrato[aria-expanded="true"]{ border-color:var(--hx-escolhido-borda) }
+  :root[data-pele="vidro"] .mm-retrato[aria-expanded="true"]{ box-shadow:var(--hx-escolhido-brilho), var(--hx-sombra) }
+  /* o ponto rosa: ha uma necessidade (a mesma regra do aviso e da acao rosa) */
+  .mm-ponto{ position:absolute; top:-4px; right:-4px; width:16px; height:16px; background:var(--hx-necessidade); border:2px solid var(--hx-miolo) }
+  :root[data-pele="vidro"] .mm-ponto{ border-radius:50% }
+  .mm-relogio{ position:absolute; top:26px; left:80px; height:32px; max-width:calc(100vw - 80px - 76px); overflow:hidden; display:flex; align-items:baseline; gap:6px; padding:6px 12px 0; white-space:nowrap }
+  /* larguras estreitas e zoom: o dia sai e a hora fica, e a pilula nunca passa por baixo da coluna da direita */
+  @media (max-width:300px){ .mm-relogio small{ display:none } }
+  .mm-relogio small{ font:600 12px/1 var(--hx-f); color:var(--hx-sec) }
+  .mm-relogio b{ font:700 18px/1 var(--hx-f-num); font-variant-numeric:tabular-nums; color:var(--hx-num) }
+  .mm-relogio .mm-salvo-erro{ align-self:center; width:18px; height:18px; color:var(--hx-perigo) }
+  /* o saldo de Bits (MOEDA, MO1): dentro da pilula do relogio, depois da hora, com um traco antes (abaixo dele havia o cartao do chamado) */
+  .mm-bits{ align-self:center; display:flex; align-items:center; gap:4px; margin-left:4px; padding-left:8px; border-left:1px solid var(--hx-borda) }
+  .mm-bits svg{ width:15px; height:15px; color:var(--hx-alerta) }
+  .mm-relogio .mm-bits b{ font:700 15px/1 var(--hx-f-num); font-variant-numeric:tabular-nums; color:var(--hx-num) }
+  .mm-coluna{ position:absolute; top:14px; right:14px; display:flex; flex-direction:column; gap:10px; pointer-events:none }
+  .mm-destinos{ display:flex; flex-direction:column; gap:10px }
+  /* o .topo-bt de casca.css e pele-vidro.css (o Conversar) tem fundo e medida de 44 px do topo do desktop: a coluna usa a caixa da HUD */
+  :root[data-pele] body .mm-coluna .topo-bt.mm-bt{ width:48px; height:48px; border:1px solid var(--hx-borda);
+    background:linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)); color:var(--hx-texto) }
+  :root[data-pele="xcom"] body .mm-coluna .topo-bt.mm-bt{ border-top:2px solid var(--hx-borda-topo); background:var(--xcom-cantos), linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)) border-box }
+
+  /* ---------- sobre o pet: o icone do que ele faz (a linha do agora so em icone; o toque abre o DigiBrain) */
+  /* o icone preso ao pet (LinhaAgora.tsx, AgoraIcone): a ancora e o ponto logo acima da cabeca (a cena publica o retangulo do pet); o icone fica 14 px acima dele,
+     o bico incluido. O left/top de reserva vale ate a cena subir */
+  .mm-agora-ancora{ position:absolute; z-index:6; left:50%; top:43.5%; width:0; height:0; pointer-events:none }
+  .mm-agora{ position:absolute; left:-24px; top:-62px; width:48px; height:48px; display:grid; place-items:center }
+  .mm-agora::after{ content:""; position:absolute; left:50%; bottom:-8px; width:12px; height:8px; translate:-50% 0; background:var(--hx-borda); clip-path:polygon(0 0, 100% 0, 50% 100%) }
+  /* um fundo proprio quase opaco (--hud-fundo-* sobre --hx-miolo): o icone passa de 3:1 sobre o pior pixel, e sem o desfoque, que nao teria o que mostrar */
+  :root[data-pele] body .mm-agora{ background:linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)), linear-gradient(var(--hx-miolo), var(--hx-miolo));
+    -webkit-backdrop-filter:none; backdrop-filter:none }
+  :root[data-pele="xcom"] body .mm-agora{ background:var(--xcom-cantos), linear-gradient(180deg, var(--hud-fundo-1), var(--hud-fundo-2)) border-box, linear-gradient(var(--hx-miolo), var(--hx-miolo)) border-box }
+  .mm-agora--desenho{ pointer-events:none }
+  .mm-agora[data-sob-painel="true"]{ display:none }
+  /* o aprendido mudou a escolha: ciano tracejado, a forma do chip aprendido (hud.css) */
+  :root[data-pele] .mm-agora[data-caso="aprendido"]{ color:var(--hx-aprendido); border:1.5px dashed var(--hx-aprendido) }
+  :root[data-pele="xcom"] .mm-agora[data-caso="aprendido"]{ border-top:2px dashed var(--hx-aprendido) }
+  .mm-agora[data-caso="aprendido"]::after{ background:var(--hx-aprendido) }
+  .mm-agora-q{ position:absolute; top:-8px; right:-8px; width:20px; height:20px; display:grid; place-items:center; font:700 13px/1 var(--hx-f); color:var(--hx-sec);
+    background:var(--hx-miolo); border:1px solid var(--hx-sec); border-radius:50% }
+
+  /* ---------- so quando existe: o aviso da necessidade (o icone e o %), rosa cheio como o .hx-chip--necessidade (a cor do texto vem da classe) */
+  :root[data-pele] body .mm-aviso.hx-chip--necessidade{ position:absolute; z-index:6; left:50%; top:35.5%; translate:-50% 0; min-height:44px; display:flex; align-items:center; gap:6px;
+    padding:0 14px 0 10px; background:var(--hx-necessidade); border:0; border-radius:24px; font:700 19px/1 var(--hx-f-num); letter-spacing:0; text-transform:none;
+    font-variant-numeric:tabular-nums; pointer-events:auto }
+  :root[data-pele="xcom"] body .mm-aviso.hx-chip--necessidade{ border-radius:0 }
+  /* o rosa cheio sobre a grama clara ganha um contorno escuro (--hx-miolo) para destacar da cena */
+  :root[data-pele] body .mm-aviso.hx-chip--necessidade{ box-shadow:0 0 0 2px var(--hx-miolo) }
+  .mm-aviso svg{ width:22px; height:22px; stroke-width:2.4 }
+
+  /* ---------- o chamado urgente e a morte, como hoje: o cartao abaixo do retrato e a esquerda da coluna */
+  .app--pet .pet-alerta{ top:84px; left:14px; right:76px; width:auto; max-width:360px; translate:none }
+
+  /* ---------- embaixo, so as acoes: circulos so com icone; o verde/azul de acao da pele (--hx-btn-*) */
+  .app--pet .pet-dock{ left:0; right:0; width:auto; translate:none; bottom:calc(30px + env(safe-area-inset-bottom, 0px)); align-items:center }
+  .pet-dock .mm-acoes{ position:relative; display:flex; flex-wrap:wrap; justify-content:center; align-items:center; align-content:center; gap:16px; min-height:74px; padding:0; border:0; background:none; pointer-events:none }
+  .pet-dock .mm-acoes::before{ content:none }
+  :root[data-pele] body .pet-dock :is(.mm-acao, .mm-extra, .mm-mais .racao-bt){
+    display:grid; place-items:center; gap:0; padding:0; min-width:0; min-height:0; color:var(--hx-btn-ink); border:2px solid var(--hx-btn-borda);
+    /* a cor de acao (--hx-btn-bg) sobre um fundo quase opaco (--hx-miolo): o icone passa de 3:1 sobre o pior pixel nas duas peles, e o desfoque, que nao teria o que mostrar, sai */
+    background:linear-gradient(var(--hx-btn-bg), var(--hx-btn-bg)), linear-gradient(var(--hx-miolo), var(--hx-miolo));
+    box-shadow:none; font-size:0; letter-spacing:0; -webkit-backdrop-filter:none; backdrop-filter:none }
+  :root[data-pele="vidro"] body .pet-dock :is(.mm-acao, .mm-extra, .mm-mais .racao-bt){ border-radius:50%; box-shadow:var(--hx-sombra) }
+  :root[data-pele="xcom"] body .pet-dock :is(.mm-acao, .mm-extra, .mm-mais .racao-bt){ border-radius:0 }
+  :root[data-pele] body .pet-dock .mm-acao{ width:62px; height:62px }
+  :root[data-pele] body .pet-dock .mm-acao svg{ width:26px; height:26px }
+  /* a acao que resolve a necessidade cresce e fica rosa; a vontade aprendida ganha so o contorno ciano tracejado (M1-13) */
+  :root[data-pele] body .pet-dock .mm-acao.acao-destaque--sugerida{ width:74px; height:74px; color:var(--hx-necessidade); border-color:var(--hx-necessidade) }
+  :root[data-pele] body .pet-dock .mm-acao.acao-destaque--sugerida svg{ width:30px; height:30px }
+  :root[data-pele="vidro"] body .pet-dock .mm-acao.acao-destaque--sugerida{
+    box-shadow:0 0 0 4px color-mix(in srgb, var(--hx-necessidade) 24%, transparent), 0 0 18px color-mix(in srgb, var(--hx-necessidade) 50%, transparent) }
+  :root[data-pele="xcom"] body .pet-dock .mm-acao.acao-destaque--sugerida{ border-width:3px }
+  :root[data-pele] body .pet-dock :is(.mm-acao, .mm-extra).acao-destaque--aprendida, :root[data-pele] body .pet-dock .mm-extra.mm-sug--aprendida{ border-color:var(--hx-aprendido); border-style:dashed }
+  :root[data-pele] body .pet-dock .mm-extra.mm-sug:not(.mm-sug--aprendida){ color:var(--hx-necessidade); border-color:var(--hx-necessidade) }
+  :root[data-pele] body .pet-dock .acao-mais[aria-expanded="true"]{ color:var(--hx-texto); border-color:var(--hx-escolhido-borda) }
+  /* a sugerida mora no Mais: o Mais leva a marca (o ponto rosa; ciano tracejado se for a vontade aprendida) */
+  .acao-mais[data-marca]::after{ content:""; position:absolute; top:-3px; right:-3px; width:14px; height:14px; background:var(--hx-necessidade); border:2px solid var(--hx-miolo) }
+  .acao-mais[data-marca="aprendida"]::after{ background:var(--hx-miolo); border:2px dashed var(--hx-aprendido) }
+  :root[data-pele="vidro"] .acao-mais[data-marca]::after{ border-radius:50% }
+  /* o Mais: uma fileira de circulos de 52 px acima das acoes (sem backdrop-filter nem transform nos pais: o fantasma da racao e position:fixed) */
+  .pet-dock .mm-mais{ position:absolute; left:0; right:0; bottom:calc(100% + 18px); display:flex; justify-content:center; gap:12px; pointer-events:none }
+  :root[data-pele] body .pet-dock .mm-extra, :root[data-pele] body .pet-dock .mm-mais .racao-bt{ width:52px; height:52px }
+  :root[data-pele] body .pet-dock .mm-extra svg{ width:22px; height:22px }
+  .mm-segura{ position:relative; flex:none; pointer-events:none }
+  .mm-mais .racao-barra{ display:block }
+  .mm-mais .racao-bt{ position:relative; pointer-events:auto; cursor:pointer }
+  .mm-mais .racao-bt > span{ position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0 }
+  .mm-mais .racao-bt svg, .mm-mais .racao-bt img{ width:24px; height:24px }
+  :root[data-pele] body .pet-dock .mm-mais .racao-bt--ativo{ color:var(--hx-texto); border-color:var(--hx-escolhido-borda) }
+
+  /* ---------- por gesto: o toque no retrato abre os vitais e os paineis (TelaPet.tsx, LequePet); o leque fica acima do painel aberto (.pet-painel, z 7) */
+  /* o "Tamer Nv N" (P-8) fica no alto do leque; os vitais e os paineis descem 52 px (prancha ajustes_390) */
+  .mm-tamer{ position:absolute; z-index:8; top:84px; left:14px; pointer-events:none }
+  .mm-vitais{ position:absolute; z-index:8; top:136px; left:14px; display:flex; gap:4px; padding:6px 8px; pointer-events:auto }
+  .mm-vit{ width:46px; min-height:44px; display:grid; justify-items:center; align-content:center; gap:3px }
+  .mm-vit svg{ width:18px; height:18px; color:var(--hx-rotulo) }
+  .mm-vit b{ font:700 16px/1 var(--hx-f-num); font-variant-numeric:tabular-nums; padding:1px 4px }
+  .mm-vit b:not(.hx-chip--necessidade){ color:var(--hx-num) }
+  /* abaixo do limiar: a forma (o numero numa caixa cheia) e a cor da necessidade */
+  .mm-vit--baixa svg{ color:var(--hx-necessidade) }
+  :root[data-pele] body .mm-vit b.hx-chip--necessidade{ min-height:0; padding:1px 4px; border:0; border-radius:0; background:var(--hx-necessidade); font:700 16px/1 var(--hx-f-num); letter-spacing:0; text-transform:none }
+  .mm-vit--critica svg{ color:var(--hx-perigo) }
+  .mm-vit--critica b{ box-shadow:inset 0 0 0 2px var(--hx-perigo) }
+  /* altura baixa (paisagem, zoom): a coluna dos paineis quebra em mais colunas e, se ainda nao couber, rola; o padding deixa o anel de foco inteiro */
+  .mm-leque-paineis{ position:absolute; z-index:8; top:202px; left:12px; display:flex; flex-direction:column; flex-wrap:wrap; align-content:flex-start; gap:10px; padding:6px;
+    max-height:calc(100dvh - 202px - 14px); max-width:calc(100vw - 76px - 12px); overflow:visible; pointer-events:none }
+  /* a rolagem só com a altura baixa (paisagem, zoom): fora dela o balão do nome sai da caixa sem ser cortado */
+  @media (max-height:520px){ .mm-leque-paineis{ overflow:auto } }
+}

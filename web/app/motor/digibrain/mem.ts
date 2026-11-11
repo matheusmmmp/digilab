@@ -14,6 +14,8 @@ export const CLASSES_EPISODIO = ["racao", "a", "b", "c", "podre", "nao_havia"] a
 export const ORIGENS = ["consumo", "visita"] as const;
 export const CLASSES_AUTOBIO = [...CLASSES_EPISODIO, "bola", "sem_alvo"] as const;
 export const ORIGENS_AUTOBIO = ["consumo", "visita", "evento"] as const;
+/** a origem a mais da ponte da luta (PE3; so com a `luta_memoria`): `luta` */
+export const ORIGEM_LUTA = "luta";
 /** os receptores cuja subida conta para o `theta_sig` (3.3) */
 export const AFETIVOS = ["dor", "susto", "estresse"] as const;
 /** TIPOS_ALVO_DIGIBRAIN (digilab/config.py): a ordem das classes a vista no episodio */
@@ -34,10 +36,10 @@ export interface EntradaEpisodio {
 export interface Episodio extends EntradaEpisodio { id: number; lugar: [number, number]; ponto: any }
 /** o episodio completo (M0) guardado na recente, na duradoura ou na central */
 export interface EpisodioAutobio {
-  decisao: number; tick: number; ponto: any; regiao: number; vista: string[]; cheiro: boolean; noite: boolean; acao: [string, string | null, any];
-  objeto: { id: number; classe: string } | null; dono: string[]; outro: null; corpo_antes: Record<string, number>;
+  decisao: number; tick: number; ponto: any; regiao: number; vista: string[]; cheiro: boolean; noite: boolean; acao: [string, string | null, any] | [string, string];
+  objeto: { id: number; classe: string } | null; dono: string[]; outro: string | null; corpo_antes: Record<string, number>;
   corpo_depois: Record<string, number>; delta: Record<string, number>; V_antes: number; V_depois: number; E_antes: number; E_depois: number;
-  r: number; r_n: number; sigma: number; classe: string; origem: string; categoria: [string, string, number]; fome_antes: number | null;
+  r: number; r_n: number; sigma: number; classe: string; origem: string; categoria: [string, string, number]; resultado?: number; vida_perdida_s?: number; fome_antes: number | null;
   hora: number; rep: number; rec: number; memoria: string; id?: number; lugar?: [number, number];
 }
 export interface Lembrado { recuperado: number | null; sim: number; memoria: string | null; sigma: number }
@@ -103,6 +105,36 @@ export function episodioAutobio(
   };
 }
 
+/** o resumo pronto de uma luta na Observacao (ponte da luta, PE3; espelho de `Sens.resumir_lutas`): em inteiros */
+export interface ResumoLuta { rival: string; resultado: number; vida_perdida_s: number; tick: number }
+
+/** o episodio da luta (ponte da luta, PE3; espelho de `mem.episodio_luta`), ou null se ela nao vira episodio: a regra de hoje, sem limiar novo
+ *  (|sigma| ou a subida da dor, do susto ou do estresse >= `theta_sig`). `afeto` e o V e o E de agora (a luta nao os mexe), `cons` o r e o r_n */
+export function episodioLuta(
+  sens: Pick<SaidaSens, "objetos" | "ha_cheiro" | "contexto" | "falta" | "minuto" | "pos" | "regiao">, recs: readonly string[], l0: readonly number[],
+  l1: readonly number[], afeto: { V: number; E: number }, cons: { r: number; r_n: number }, resumo: ResumoLuta, k: number, tick: number,
+  p: Pick<InatosMem, "theta_sig">,
+): EpisodioAutobio | null {
+  const corpoAntes: Record<string, number> = {}, corpoDepois: Record<string, number> = {};
+  const n = Math.min(recs.length, l0.length, l1.length);
+  for (let i = 0; i < n; i++) { corpoAntes[recs[i]!] = l0[i]!; corpoDepois[recs[i]!] = l1[i]!; }
+  let subida = 0;
+  for (const r of AFETIVOS) if (r in corpoDepois) subida = Math.max(subida, corpoDepois[r]! - corpoAntes[r]!);
+  if (Math.abs(cons.r_n) < p.theta_sig && subida < p.theta_sig) return null;
+  const rival = resumo.rival, sigma = cons.r_n;
+  const vistas = new Set(sens.objetos.map(x => x.classe as string));
+  const delta: Record<string, number> = {};
+  for (let i = 0; i < n; i++) delta[recs[i]!] = l1[i]! - l0[i]!;
+  return {
+    decisao: k, tick, ponto: [sens.pos[0], sens.pos[1]], regiao: sens.regiao, vista: TIPOS_ALVO_DIGIBRAIN.filter(c => vistas.has(c)),
+    cheiro: Boolean(sens.ha_cheiro), noite: sens.contexto.noite > 0, acao: ["lutar", rival], objeto: null, dono: [], outro: rival,
+    corpo_antes: corpoAntes, corpo_depois: corpoDepois, delta, V_antes: afeto.V, V_depois: afeto.V, E_antes: afeto.E, E_depois: afeto.E,
+    r: cons.r, r_n: cons.r_n, sigma, classe: rival, origem: ORIGEM_LUTA, categoria: ["lutar", rival, sinal(sigma)],
+    resultado: resumo.resultado, vida_perdida_s: resumo.vida_perdida_s,
+    fome_antes: sens.falta["fome"] ?? null, hora: sens.minuto, rep: 0, rec: 0, memoria: "recente",
+  };
+}
+
 export class Memoria {
   p: InatosMem;
   S: number;
@@ -123,18 +155,39 @@ export class Memoria {
   saidas_autobio: { id: number; sigma: number }[] = [];
   dia = 0;
   minuto: number | null = null;
+  /** a ponte da luta (PE3): a origem `luta`; desligada, nenhum campo novo */
+  luta: boolean;
 
-  constructor(cfgMundo: ConfigMundoMem, inatosOuNulo: InatosMem | null, cd: ConfigDigibrainMem) {
+  constructor(cfgMundo: ConfigMundoMem, inatosOuNulo: InatosMem | null, cd: ConfigDigibrainMem, luta = false) {
     this.p = inatosOuNulo ?? INATOS_MODULAR;
     this.S = this.p.escala;
     this.sub = cfgMundo.sub;
     if (cd.facetas_mem) throw new Error("M-MEM: facetas_mem fica fora do laboratorio (LAB-1)");
     if (cd.controle_mem !== "rel") throw new Error(`M-MEM: o controle_mem ${JSON.stringify(cd.controle_mem)} e controle de pesquisa, fora do laboratorio (so "rel")`);
     this.autobio = cd.memoria_autobio;
+    this.luta = luta;
+    if (luta && !cd.memoria_autobio) throw new Error("M-MEM: a origem luta so com a memoria_autobio");
   }
 
   lugarDe(x: number, y: number): [number, number] {
     return [Math.floor(x / this.sub), Math.floor(y / this.sub)];
+  }
+
+  /** a ida do mundo para a ilha maior (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG4; a IG-7: "deslocados junto com o lar"; o
+   *  Memoria.deslocar do Python): cada lugar lembrado anda (dx, dy), como o pet, a comida e a bola. `ajustar(x, y)` devolve o ponto que
+   *  vale no mundo novo (dentro do mapa e, se cair em celula fechada, na terra mais perto) e `regiaoDe(x)` o indice da regiao dele; o
+   *  lugar e refeito do ponto. Vale para o lugar lembrado e para a memoria autobiografica (as tres camadas). Nada mais do episodio muda.
+   *  Devolve quantos episodios andaram */
+  deslocar(dx: number, dy: number, ajustar: (x: number, y: number) => [number, number], regiaoDe: (x: number) => number): number {
+    const listas: { ponto: any; lugar?: [number, number]; regiao: number }[][] = this.autobio
+      ? [this.episodios, this.recente, this.duradoura, this.central] : [this.episodios];
+    let n = 0;
+    for (const lista of listas) for (const e of lista) {
+      const [x, y] = ajustar(e.ponto[0] + dx, e.ponto[1] + dy);
+      e.ponto = [x, y]; e.lugar = this.lugarDe(x, y); e.regiao = regiaoDe(x);
+      n++;
+    }
+    return n;
   }
 
   /** guarda o episodio (sem o id) e devolve o id */
@@ -167,7 +220,9 @@ export class Memoria {
   /** guarda o episodio completo (de `episodioAutobio`) na recente e devolve o id */
   codificarAutobio(ep: EpisodioAutobio): number {
     if (!this.autobio) throw new Error("M-MEM: o episodio completo so com a memoria_autobio");
-    if (!(CLASSES_AUTOBIO as readonly string[]).includes(ep.classe) || !(ORIGENS_AUTOBIO as readonly string[]).includes(ep.origem)) {
+    if (ep.origem === ORIGEM_LUTA) {                  // a ponte da luta (PE3): a classe e o rival, e o outro tambem
+      if (!this.luta || typeof ep.outro !== "string" || ep.outro === "" || ep.classe !== ep.outro) throw new Error(`M-MEM: episodio de luta ${JSON.stringify(ep)}`);
+    } else if (!(CLASSES_AUTOBIO as readonly string[]).includes(ep.classe) || !(ORIGENS_AUTOBIO as readonly string[]).includes(ep.origem)) {
       throw new Error(`M-MEM: episodio ${JSON.stringify(ep)}`);
     }
     if (ep.origem === "visita" && (ep.sigma > 0 || ep.classe !== "nao_havia")) throw new Error("M-MEM: a visita sem comida tem sigma <= 0 e a classe nao_havia");
@@ -243,7 +298,7 @@ export class Memoria {
     if (lembranca.recuperado === null) return null;
     const e = this.guardados().find(x => x.id === lembranca.recuperado);
     if (e === undefined) throw new Error(`M-MEM: o episodio ${lembranca.recuperado} lembrado nao esta guardado`);
-    const [acao, tipo] = e.acao;
+    const acao = e.acao[0], tipo = e.acao[1];       // a luta tem (lutar, rival); nenhuma unidade casa com ela
     const alvo = e.objeto !== null ? e.objeto.classe : tipo;       // a classe de alvo do episodio
     return { id: e.id!, L: mul(this.p.w_lem, e.sigma, this.S), acao, alvo, lugar: [e.lugar![0], e.lugar![1]], so_comportamento: e.classe === "sem_alvo" };
   }

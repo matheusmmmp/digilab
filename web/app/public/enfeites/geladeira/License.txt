@@ -1,0 +1,12 @@
+DigiLab: a geladeira abandonada da ilha (geladeira.gltf, geladeira.bin, geladeira_cor.png)
+
+Procedencia: feito a mao por script, sem IA, em 2026-11-09, no repositorio do DigiLab (licenca do projeto).
+O modelo e a textura saem de docs/objetos3d/geladeira/mao/geladeira_mao.py: o corpo e as portas por secoes de cantos redondos, as pecas
+(puxadores, dobradicas, vaso, broto, folhas da hera, musgo) e a pintura de cada uma estao no codigo; o mesmo script gera sempre os mesmos
+arquivos. Nada vem de modelo, textura ou imagem de terceiros. A geladeira anterior, gerada pela Meshy, saiu.
+
+Referencia de desenho: o esboco 1 do retrabalho dos objetos (docs/objetos3d/geladeira/esbocos/esboco_1_retro_duas_portas.png), gerado pela
+Meshy (meshy.ai, plano Pro, conta do Matheus) como imagem de conceito; ele so guiou a forma e as cores, e nao entra nos arquivos.
+A geladeira refeita a mao foi pedida pelo Matheus em 2026-11-09 (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 16).
+
+Uso: no jogo DigiLab, publicado.

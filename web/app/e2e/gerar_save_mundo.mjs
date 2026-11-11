@@ -10,8 +10,10 @@ import { writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import * as M from "../motor/index.ts";
 
-const { CMU_MVP, VERSAO_PET, Motor, deslocar } = M;
-if (VERSAO_PET !== 13) throw new Error("o save do mundo e de pets v13 (o v12 com a luta em tempo real); a versao de hoje e " + VERSAO_PET);
+const { CMU_MVP, Motor, deslocar } = M;
+/* o save do mundo e de pets v21 (o v12 com o cerebro trocavel e a luta da POC; LUTA_POC, LP4), no mundo sem agua; desde a v22 (ILHA_AGUA, IA4)
+   a versao e pedida de forma explicita, e o save passa para a ilha com agua ao abrir no jogo */
+const VERSAO_PET = 21;
 const PASSO_DONO = 120, ESPERA = 240, OFFSETS = [0, 10, 20, 30, 40, 50, 60];
 
 /** o lugar "perto do pet" da tela: 2 celulas (perto_max_celulas) para leste (a direcao 0), dentro do mapa */

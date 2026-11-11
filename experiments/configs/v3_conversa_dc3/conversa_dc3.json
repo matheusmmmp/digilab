@@ -1,0 +1,18 @@
+{
+  "descricao": "A run unica da DC3, a rede escolhendo falar (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, APROVADO pelo Matheus em 2026-11-07; so roda com a faixa em FAIXAS_RESERVADAS e o registro da run, a secao 13 do plano, a DC3b): os bracos LAB (o REL da C4) e LAB+F (o mesmo com a fala_unidades) nas 8 celulas (4 donos x o dono que ignora e o que atende), so o comedouro, bases 79101, 79202, 79303, 79404 e 79505, K = 40 por base (DC3-5) (200 unidades), 14 dias, orcamento 16. 3 200 vidas, uma vez, da main limpa, com ate 4 processos.",
+  "plano": "docs/PLANO_ANALISE_V3_CONVERSA_DC3.md",
+  "fase": "conversa_dc3",
+  "unidades": {
+    "bases": [
+      79101,
+      79202,
+      79303,
+      79404,
+      79505
+    ],
+    "k": 40,
+    "prefixo": "digibrain_prototipo"
+  },
+  "dias": 14,
+  "orcamento_por_dia": 16
+}

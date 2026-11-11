@@ -126,6 +126,31 @@ FAIXAS_RESERVADAS = (
     (50001, 50020, "analise de poder, piloto"), (60001, 60160, "confirmatoria"), (69001, 69001, "M1, gate G1"),
     (80001, 82004, "linhagem E1 (piloto, genomas e ambientes)"),
     (20260900, 20261800, "fala, voz, comando e bootstraps (sementes de 2026-09/10 e semente + i)"),
+    (20261900, 20262899, "CONVERSA_PET (conversa com o pet): 20261900-20262199 a reavaliacao do comando na M1 (faixa pedida ao coordenador e "
+                         "aprovada pelo Matheus em 2026-11-06 com a decisao D1-D7; a missao M1 acrescenta a linha); 20262200-20262499 a "
+                         "calibracao da DC4 e 20262500-20262899 a validacao da DC4, uma vez (docs/PLANO_ANALISE_V3_CONVERSA_DC4.md, secao 7; "
+                         "DC4-1, aprovada pelo Matheus em 2026-11-08; as subfaixas do conversa-v1 nunca rodaram, e a avaliacao antiga, "
+                         "se voltar, pede faixa nova)"),
+    (20262900, 20263499, "CONVERSA_PET, DC5: 20262900-20263199 a calibracao da DC5 e 20263200-20263499 a validacao da DC5, uma vez "
+                         "(docs/PLANO_ANALISE_V3_CONVERSA_DC5.md, secao 7; D-DC5-1, pedida a Gerente da CONVERSA_PET e aprovada pelo "
+                         "Matheus em 2026-11-10)"),
+    (79101, 79505, "CONVERSA_PET, DC3: a rede escolhendo falar, a run unica (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, secao 3; "
+                   "conferida livre pelo Gerente da CONVERSA_PET e aprovada pelo Matheus em 2026-11-07, DC3-8)"),
+    (85101, 85505, "INDIVIDUALIDADE, I2: a linha de base descritiva, a run unica (docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md, secao 2, IP-9; "
+                   "bases 85101, 85202, 85303, 85404 e 85505, K = 12; conferida livre e proposta pelo Gerente da V3 em 2026-11-07; "
+                   "aprovada pelo Matheus em 2026-11-07, \"Aprovo a faixa\"; reusada pelo I7, o desenvolvimento contrafactual, que vive de "
+                   "novo as mesmas vidas: docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md, IR-1, aprovada pelo Matheus em 2026-11-10, "
+                   "\"Aprovo todas\")"),
+    (86101, 86505, "equilibrio da luta em tempo real (jogo web, LUTA_POC LP5): a calibracao, LP5-0 a LP5-3 "
+                   "(docs/PLANO_EQUILIBRIO_LUTA_POC.md, secao 5; D-LP5-6; bases 86101, 86202, 86303, 86404 e 86505; "
+                   "aprovada pelo Matheus em 2026-11-10, \"Ta, entao faz toda a recomendacao ai que voce deu\", repassado pelo "
+                   "Gerente, que autorizou a reserva)"),
+    (87101, 87505, "equilibrio da luta em tempo real (jogo web, LUTA_POC LP5): a conferencia, uma vez, na LP5-4 "
+                   "(docs/PLANO_EQUILIBRIO_LUTA_POC.md, secao 5; D-LP5-6; mesma derivacao da calibracao; aprovada junto)"),
+    (88101, 88505, "INDIVIDUALIDADE, I7, adendo 2: historia ou sorteio, a run unica dos 360 pets novos "
+                   "(docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md, secao 14, AD2-1; bases 88101, 88202, 88303, 88404 e 88505, K = 12; "
+                   "aprovada pelo Matheus em 2026-11-11, \"Aprova as recomendacoes e segue\"; conferida livre nesta tabela em 2026-11-11, "
+                   "o ok do Gerente da V3 pedido no PR do I7c)"),
 )
 
 

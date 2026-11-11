@@ -1,0 +1,33 @@
+{
+ "descricao": "A validacao da DC5 (DC5c; docs/PLANO_ANALISE_V3_CONVERSA_DC5.md, secoes 5, 7, 10 e 15), uma vez: a base 20263200 da subfaixa da validacao (D-DC5-1), os 4 roteiros da validacao. Pelo adendo da DC5c (secao 15): a voz do jogo e a voz-v4b, as duas com a especie (as formas sorteadas como o jogo sorteia, a decisao do Matheus de 2026-11-11) e com o verificador da DC5 (verif-v8b e verif-v9b). O piso do gasto soma o fim da recalibracao da voz-v4b.",
+ "fase": "validacao",
+ "unidades": {
+  "bases": [
+   20263200
+  ]
+ },
+ "plano": "docs/PLANO_ANALISE_V3_CONVERSA_DC5.md",
+ "orcamento_por_dia": 16,
+ "bracos": [
+  "G",
+  "H"
+ ],
+ "vozes": [
+  "jogo",
+  "v4b"
+ ],
+ "teto_usd": 3.0,
+ "dias": 14,
+ "n_e3_por_pedido": 20,
+ "n_e2": 30,
+ "min_ep_e2": 10,
+ "n_sequencias": 3,
+ "n_es": 6,
+ "roteiros": "experiments/configs/v3_conversa_dc5/roteiros_validacao.json",
+ "saida": "artifacts_v3_conversa_dc5/validacao",
+ "especie": true,
+ "verificador_dc5": true,
+ "metas_anteriores": [
+  "artifacts_v3_conversa_dc5/calibracao_v4b/meta.json"
+ ]
+}

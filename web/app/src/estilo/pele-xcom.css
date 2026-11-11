@@ -12,7 +12,7 @@
     linear-gradient(var(--hx-rotulo), var(--hx-rotulo)) right 3px bottom 3px / 9px 1px no-repeat padding-box,
     linear-gradient(var(--hx-rotulo), var(--hx-rotulo)) right 3px bottom 3px / 1px 9px no-repeat padding-box;
 }
-:root[data-pele="xcom"] :is(.hud-caixa, .pet-hud .hud-painel, .pet-etiqueta-db, .topo-pet, .topo-relogio),
+:root[data-pele="xcom"] :is(.hud-caixa, .pet-hud .hud-painel, .topo-pet, .topo-relogio, .topo-bits),
 :root[data-pele="xcom"] body .pet-tela .pet-alerta :is(.pet-prioridade, .chamado.dl-card),
 :root[data-pele="xcom"] body .hx-nav::before{
   border-top:2px solid var(--hx-borda-topo);
@@ -37,7 +37,7 @@
 :root[data-pele="xcom"] .pet-dock .dock .dock-bt:hover{ border-color:var(--hx-borda-topo) }
 
 /* ---------- conteudo das telas no painel (painel-hx.css): os --dl-* e --ui-* teal da M4 em grafite; o verde de sinalizacao segue so na acao */
-:root[data-pele="xcom"] :is(.painel-tela .painel-tela__folha, .pet-painel .pet-painel__folha){
+:root[data-pele="xcom"] :is(.painel-tela .painel-tela__folha, .pet-painel .pet-painel__folha, .scan--lab .scan-texto){
   --dl-hex:#1C1F22; --dl-surface:#16191C; --dl-surface-2:#1C1F22;
   --dl-border:#545C59; --dl-border-shadow:#2C3130; --dl-navy:#454D4A; --dl-navy-deep:#1E2321;
   --dl-disabled:#23272A; --dl-disabled-ink:#9DA89F; --dl-rim:#16191C; --dl-plate:#30363A; --dl-plate-hi:#6E7872;

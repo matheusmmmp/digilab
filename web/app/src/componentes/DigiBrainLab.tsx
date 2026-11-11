@@ -2,12 +2,14 @@
    useJogo(): todo numero sai de `Motor.leituraLab()` (motor/digibrain/leitura.ts, o ultimo motivo do M-ADAPT em inteiros) e do historico; a
    tela so escolhe o texto e formata. Nenhum rotulo diz "pensando", "sentindo" ou "querendo": dizem o modulo ou o que o motivo guarda. O painel
    do A v11 (DigiBrain.tsx) segue igual para os pets v11. */
-import { NOME_PET, ORDEM_TERMOS, type AcaoPet, type LeituraLab, type TermoLab } from "../../motor/index.ts";
+import { NOME_PET, ORDEM_TERMOS, type AcaoPet, type ConceitosDec, type LeituraLab, type NomeConceito, type ResultadoLab, type TermoLab } from "../../motor/index.ts";
+import { CONFIG_DECODIFICADOR } from "../../motor/digibrain/constantes.ts";
+import { resultadoAnterior } from "../../motor/index.ts";
 import { useJogo } from "../jogo.ts";
 import { hhmm } from "../telas/pet/TelaPet.tsx";
 import "../estilo/lab.css";
 
-const NOME_TERMO: Record<TermoLab, string> = {
+export const NOME_TERMO: Record<TermoLab, string> = {
   memoria: "Lugar lembrado", inato: "Inato", lembranca: "Lembrança", objeto: "Objeto à vista", incentivo: "Incentivo (P1)", persistencia: "Persistência", habito: "Hábito (P2)",
 };
 const NOME_SONDA: Record<string, string> = {
@@ -19,6 +21,18 @@ const ACAO_INF: Record<string, string> = {
 };
 const maiuscula = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
 
+/** o resultado da decisao anterior numa linha (CADEIA, etapa 3): o que ele fez, o que aconteceu, o corpo e o que ficou nele. Nenhum "pensou" */
+export function textoResultado(r: ResultadoLab): string {
+  const partes: string[] = [maiuscula(rotuloUnidade(r.escolha))];
+  if (r.comeu) partes.push(`comeu ${r.comeu.tipo === "racao" ? "ração" : "uma fruta"}${r.comeu.situacao === "podre" ? " podre" : ""}`);
+  else if (r.chegou === true) partes.push(r.escolha[1] === "ponto" ? "chegou e não havia comida" : "chegou");
+  else if (r.chegou === false) partes.push("não chegou");
+  if (r.efeito !== "igual") partes.push(r.efeito === "melhorou" ? "o corpo melhorou" : "o corpo piorou");
+  if (r.memoria) partes.push(r.memoria === "consumo" ? "o lugar ficou na memória" : "a visita vazia ficou na memória");
+  if (r.aprendeu) partes.push("o hábito aprendeu");
+  return partes.join("; ") + ".";
+}
+
 /** o rotulo de uma unidade, da chave [acao, tipo, id]: o que o motivo guarda, sem inventar nome de lugar (LM5-4) */
 export function rotuloUnidade(chave: readonly [string, string | null, unknown]): string {
   const [acao, tipo, ident] = chave, verbo = ACAO_INF[acao] ?? acao;
@@ -29,8 +43,30 @@ export function rotuloUnidade(chave: readonly [string, string | null, unknown]):
   if (tipo === "bola") return `${verbo} com a bola`;
   return verbo;
 }
+const NOME_CONCEITO: Record<NomeConceito, string> = {
+  fome: "Fome", sono: "Sono", bem_estar: "Bem-estar", mal_estar: "Mal-estar", agitacao: "Agitação", aversao: "Aversão aprendida", frustracao: "Frustração",
+  determinacao: "Determinação", indecisao: "Indecisão", lembranca: "Lembrança ativa", solidao: "Solidão", curiosidade: "Curiosidade",
+};
+const pctS = (v: number): number => Math.round((v * 100) / 1024);
 const dez = (permil: number): number => Math.round(permil / 10);
 const pct = (permil: number, sinal: boolean): string => (sinal && permil > 0 ? "+" : "") + String(dez(permil)).replace("-", "−") + "%";
+
+/** os conceitos do decodificador dec-v1 (DC1), so leitura: o que os sinais do motivo dizem, com valor e confianca; nao muda a vida e ainda nao fala */
+function Conceitos({ c }: { c: ConceitosDec }) {
+  const lista = [...c.conceitos].sort((a, b) => b.valor - a.valor);
+  return (
+    <section aria-labelledby="dl-conc" data-versao={c.versao}>
+      <h3 className="db-sec" id="dl-conc">Conceitos lidos do motivo</h3>
+      <div className="db-agora"><b>{NOME_CONCEITO[c.intencao]}</b><small>conceito de maior valor{c.intencao === "lembranca" ? " (a lembrança decidiu a escolha)" : ""} · {c.versao}</small></div>
+      <ul className="db-barras" data-testid="conceitos-dec">
+        {lista.map(x => <li key={x.nome} data-conceito={x.nome} data-acima={x.valor >= CONFIG_DECODIFICADOR.limiar_valor}><span>{NOME_CONCEITO[x.nome]}{x.alvo ? <small> · {x.alvo}</small> : null}</span>
+          <span className="db-trilho" aria-hidden="true"><b style={{ width: pctS(x.valor) + "%" }} /></span>
+          <em>{pctS(x.valor)}% · confiança {pctS(x.confianca)}%</em></li>)}
+      </ul>
+      <p className="db-vazio">Cada conceito é uma conta fixa sobre os sinais do motivo (urgências, afeto, opções, sondas). Só leitura: não muda o que ele faz.</p>
+    </section>
+  );
+}
 
 function Barras({ l }: { l: LeituraLab }) {
   const zeradas = ORDEM_TERMOS.filter(t => l.zeradas.includes(t));
@@ -50,7 +86,7 @@ function Barras({ l }: { l: LeituraLab }) {
 
 /** o conteudo do painel do modular, o mesmo no desktop (coluna) e no celular (folha) */
 export function ConteudoDigiBrainLab() {
-  const { motor: m } = useJogo(), l = m.leituraLab();
+  const { motor: m } = useJogo(), l = m.leituraLab(), conc = m.conceitosDec(), res = m.lab ? resultadoAnterior(m.lab) : null;
   const ultimas = m.historico.filter(h => h.quem === "pet").slice(-5).reverse();
   if (l === null) return <div className="db-conteudo"><p className="db-vazio">Ainda não decidiu nada.</p></div>;
   const peso = l.barras.find(b => b.termo === "lembranca");
@@ -63,6 +99,11 @@ export function ConteudoDigiBrainLab() {
           {l.sem_lugar && <small>Sem o lugar lembrado, teria escolhido: {rotuloUnidade(l.sem_lugar).toLowerCase()}.</small>}
           {l.reflexo && <small>Reflexo do sono: sem sorteio.</small>}
           {l.nada_a_fazer && <small>Nenhuma opção com peso: nada a fazer.</small>}</div>
+      </section>
+      <section aria-labelledby="dl-res">
+        <h3 className="db-sec" id="dl-res">O que aconteceu antes</h3>
+        {res ? <p className="db-resultado" data-testid="resultado-anterior" data-k={res.k}>{textoResultado(res)}</p>
+          : <p className="db-vazio">A decisão anterior ainda não fechou.</p>}
       </section>
       <section aria-labelledby="dl-lemb">
         <h3 className="db-sec" id="dl-lemb">Lembrança da vez</h3>
@@ -98,6 +139,7 @@ export function ConteudoDigiBrainLab() {
         {l.reflexo ? <p className="db-vazio">No reflexo do sono, nenhuma sonda decide.</p>
           : <ul className="db-chips">{l.sondas.filter(s => s.nome in NOME_SONDA).map(s => <li key={s.nome} data-sonda={s.nome} data-muda={s.mudaria}>{NOME_SONDA[s.nome]}: {s.mudaria ? "muda" : "não muda"}</li>)}</ul>}
       </section>
+      {conc !== null && <Conceitos c={conc} />}
       <section aria-labelledby="dl-ult">
         <h3 className="db-sec" id="dl-ult">Últimas ações</h3>
         <ol className="db-ultimas">{ultimas.map((h, i) => <li key={i}><span className="dl-lcd">{hhmm(h.t)}</span>{NOME_PET[h.a as AcaoPet] ?? h.a}</li>)}</ol>

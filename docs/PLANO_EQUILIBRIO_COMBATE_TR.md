@@ -1,5 +1,7 @@
 # Plano — rodada de equilíbrio do combate em tempo real
 
+> **SUBSTITUÍDO** pela [`docs/TAREFA_V3_LUTA_POC.md`](TAREFA_V3_LUTA_POC.md) (2026-11-08): a luta do jogo é a simulação da POC. O combate por turnos saiu do jogo na LP4 (2026-11-10); este documento fica como registro.
+
 Status: **registrado antes da rodada; nenhum número foi ajustado.** Pedido do Matheus, 2026-10-30 (coordenação): "abrir o plano da
 rodada de equilíbrio do combate em tempo real". As decisões da seção 7 foram DECIDIDAS pelo Matheus em 2026-10-30, pela recomendação
 ("após isso segue as recomendações"). A calibração roda depois do merge deste plano.

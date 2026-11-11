@@ -1,0 +1,14 @@
+{
+ "id": "01a1b46a-10ed-765f-9b9a-e49c8aa237e1",
+ "type": "image-to-image",
+ "ai_model": "nano-banana-2",
+ "prompt": "Multiple views of the same stone arch gate with two thick round pillars of light grey stone blocks, a pointed stone cap on top, a red cloth banner and a yellow cloth banner without symbols on the pillars, and a glowing cyan digital grid portal surface filling the arch: front, side and back, same style, same colors, plain light grey background.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1794028212725,
+ "finished_at": 1794028236519,
+ "saldo": {
+  "antes": 482,
+  "depois": 476
+ }
+}

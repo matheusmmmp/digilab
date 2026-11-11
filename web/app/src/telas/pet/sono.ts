@@ -19,13 +19,13 @@ export function alturaSono(agora: number, reduzido: boolean): number {
   return reduzido ? SONO.achata : SONO.achata + Math.sin((agora / SONO.respiraMs) * Math.PI * 2) * SONO.respira;
 }
 
-/** o "zz" subindo do alto do pet (x, y, w em px de CSS; K = px do canvas por px de CSS): o "z" claro com sombra escura, em escala inteira */
-export function desenharZz(cx: CanvasRenderingContext2D, K: number, x: number, y: number, w: number, agora: number, reduzido: boolean, pal: Paleta): void {
+/** o "zz" subindo do alto do pet (x, y, w em px de CSS; K = px do canvas por px de CSS; `ancoraX`: o x do topo da cabeca, do quadro Dormir): o "z" claro com sombra escura, em escala inteira */
+export function desenharZz(cx: CanvasRenderingContext2D, K: number, x: number, y: number, w: number, agora: number, reduzido: boolean, pal: Paleta, ancoraX: number | null = null): void {
   const g = S.zz, fases = reduzido ? [0.35] : [0, 0.5];
   for (const [i, f0] of fases.entries()) {
     const f = reduzido ? f0 : ((agora / SONO.zzMs) + f0) % 1;
     const esc = Math.max(1, Math.round((i === 0 ? 4 : 3) * K));
-    const bx = Math.round((x + w * 0.6 + f * 12) * K), by = Math.round((y + 4 - g.length * esc / K - f * SONO.zzSobe) * K);
+    const bx = Math.round(((ancoraX === null ? x + w * 0.6 : ancoraX + 2) + f * 12) * K), by = Math.round((y + 4 - g.length * esc / K - f * SONO.zzSobe) * K);
     cx.save();
     cx.globalAlpha = reduzido ? 0.9 : Math.min(1, (1 - f) * 1.6);
     cx.setTransform(esc, 0, 0, esc, bx + esc, by + esc);

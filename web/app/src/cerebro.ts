@@ -5,7 +5,7 @@
      - a troca do pet ativo: um "cb" no registro dele, na hora. Um pet v15 passa a v17 antes (Motor.promoverV17: o mesmo registro, a
        mesma vida). Os pets v13 e v14 nao trocam (a luta e a bola deles sao outras). */
 import { useEffect, useState } from "react";
-import { VERSAO_V15, VERSAO_V17, type Motor } from "../motor/index.ts";
+import { VERSAO_V15, ehCerebroTrocavel, type Motor } from "../motor/index.ts";
 
 export type Cerebro = "modular" | "a";
 /** a chave da preferencia: a CHAVE do save (save.ts) com "-cerebro" (literal aqui para o save.ts poder importar daqui; um teste confere) */
@@ -30,8 +30,8 @@ export function escolherCerebroDosOvos(c: Cerebro): void {
 }
 /** grava no ovo novo (v17, logo depois das chaves do produto) o cerebro dos ovos novos. Os pets de outras versoes passam sem mudar */
 export function nascerComCerebro(m: Motor): Motor {
-  if (m.versao === VERSAO_V17) m.trocarCerebro(cerebroDosOvos());
+  if (ehCerebroTrocavel(m.versao)) m.trocarCerebro(cerebroDosOvos());
   return m;
 }
 /** o pet troca de cerebro? v17 sim; v15 sim, passando a v17; as outras nao */
-export const podeTrocarCerebro = (m: Motor): boolean => m.versao === VERSAO_V17 || m.versao === VERSAO_V15;
+export const podeTrocarCerebro = (m: Motor): boolean => ehCerebroTrocavel(m.versao) || m.versao === VERSAO_V15;

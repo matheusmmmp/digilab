@@ -8,7 +8,8 @@ import { QUADROS_CHOCANDO, balancoOvo, gravarPendente, iniciarJogo, jogoAtual, m
 const armaz = (dados: Record<string, string> = {}) => {
   let escritas = 0;
   const a: Armazenamento & { dados: Record<string, string>; escritas: () => number } = {
-    dados, getItem: k => (k in dados ? dados[k] : null), setItem(k, v) { dados[k] = v; escritas++; }, escritas: () => escritas,
+    /* conta so o save do pet: o registro do Tamer (os Bits, docs/PLANO_V3_MOEDA.md) grava na chave dele, no ritmo dos feitos */
+    dados, getItem: k => (k in dados ? dados[k] : null), setItem(k, v) { dados[k] = v; if (k === CHAVE) escritas++; }, escritas: () => escritas,
   };
   return a;
 };
@@ -57,7 +58,7 @@ describe("jogo", () => {
     expect(QUADROS_CHOCANDO).toBe(40);
     expect(j.nascendo).toBe(QUADROS_CHOCANDO);
     /* e o cerebro dos ovos novos (src/cerebro.ts): o modular por padrao */
-    const log = [[TICK_INICIAL, "p", { chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true }], [TICK_INICIAL, "cb", { cerebro: "modular" }]];
+    const log = [[TICK_INICIAL, "p", { chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true }], [TICK_INICIAL, "cb", { cerebro: "modular" }], [TICK_INICIAL, "pl", { luta: true, eps: true }]];
     expect(j.motor.log).toEqual(log);
     expect(j.motor.produto).toEqual({ chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true });
     expect(JSON.parse(a.dados[CHAVE])).toEqual({ semente: j.motor.semente, log, versao: VERSAO_PET });

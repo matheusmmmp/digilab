@@ -1,7 +1,10 @@
 /* O laboratorio do modular no jogo (docs/TAREFA_V3_LAB_MODULAR.md, LM5b; LAB-2, LM5-5, LM5-7 a LM5-9). O pet de teste (v16, motor/pet_lab.ts) tem
    um espaco proprio do save, CHAVE-lab, no mesmo formato {semente, log, versao}: nunca se mistura com o save do pet de hoje (CHAVE) nem com os
    pets guardados (CHAVE-guardados). So um por vez. A chave do laboratorio (CHAVE-lab-ligado) e uma preferencia de tela e vem desligada.
-   Abrir mostra o pet de teste na tela Pet sem trocar o pet ativo (jogo.ts: abrirLab). Descartar apaga so CHAVE-lab. Nao ha opcao de baixar o log. */
+   Abrir mostra o pet de teste na tela Pet sem trocar o pet ativo (jogo.ts: abrirLab). Descartar apaga so CHAVE-lab. Nao ha opcao de baixar o log.
+   DC3d da CONVERSA_PET: a "Fala com conteudo (teste)" (CHAVE-lab-fala) tambem e uma preferencia de tela, desligada por padrao. Ela so vale no ovo
+   de teste chocado com ela ligada: o ovo ganha a marca "fu" no comeco do registro (o modular com a `fala_unidades`), e o replay le a marca, nao a
+   preferencia. Um pet de teste ja chocado segue como esta no registro. */
 import { useEffect, useState } from "react";
 import { Motor, VERSAO_PET_LAB, petDeTeste, type EventoRegistro } from "../motor/index.ts";
 import { ligarProduto } from "./produto.ts";
@@ -9,6 +12,7 @@ import { CHAVE, textoSave } from "./save.ts";
 
 export const CHAVE_LAB = CHAVE + "-lab";
 export const CHAVE_LAB_LIGADO = CHAVE + "-lab-ligado";
+export const CHAVE_LAB_FALA = CHAVE + "-lab-fala";
 
 const ouvintes = new Set<() => void>();
 const avisar = (): void => { for (const o of ouvintes) o(); };
@@ -25,6 +29,15 @@ export function labLigado(): boolean {
 }
 export function ligarLab(on: boolean): void {
   try { localStorage.setItem(CHAVE_LAB_LIGADO, on ? "1" : "0"); } catch { /* preferencia de tela: sem armazenamento, so nao lembra */ }
+  avisar();
+}
+
+/** DC3d: a fala com conteudo nos ovos de teste novos: desligada ate o jogador ligar (preferencia de tela, fora do save) */
+export function falaComConteudo(): boolean {
+  try { return localStorage.getItem(CHAVE_LAB_FALA) === "1"; } catch { return false; }
+}
+export function ligarFalaComConteudo(on: boolean): void {
+  try { localStorage.setItem(CHAVE_LAB_FALA, on ? "1" : "0"); } catch { /* preferencia de tela: sem armazenamento, so nao lembra */ }
   avisar();
 }
 
@@ -52,6 +65,7 @@ export function chocarOvoLab(): Motor {
   /* as chaves do produto, como em todo ovo novo do jogo (src/produto.ts): sem elas o bebe chamava pelo relogio (fome a cada 30 min,
      carinho a cada 45), sem olhar o corpo (o Matheus, 2026-11-04). Os pets de teste ja chocados seguem como estao no registro */
   const m = ligarProduto(petDeTeste((Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0));
+  if (falaComConteudo()) m.ligarFalaUnidades();       // DC3d: a marca "fu", depois das chaves do produto e da ponte da luta
   gravarPetLab(m);
   avisar();
   return m;

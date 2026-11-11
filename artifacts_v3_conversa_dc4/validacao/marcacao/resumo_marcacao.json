@@ -1,0 +1,107 @@
+{
+ "legibilidade": {
+  "G": {
+   "n": 60,
+   "acertos": 44,
+   "nada": 14,
+   "matriz": {
+    "fome": {
+     "fome": 15,
+     "higiene": 0,
+     "solidao": 0,
+     "nada": 5
+    },
+    "higiene": {
+     "fome": 1,
+     "higiene": 17,
+     "solidao": 0,
+     "nada": 2
+    },
+    "solidao": {
+     "fome": 1,
+     "higiene": 0,
+     "solidao": 12,
+     "nada": 7
+    }
+   },
+   "acerto": 0.7333333333333333,
+   "fracao_nada": 0.23333333333333334
+  },
+  "H": {
+   "n": 60,
+   "acertos": 59,
+   "nada": 0,
+   "matriz": {
+    "solidao": {
+     "fome": 0,
+     "higiene": 0,
+     "solidao": 20,
+     "nada": 0
+    },
+    "fome": {
+     "fome": 20,
+     "higiene": 0,
+     "solidao": 0,
+     "nada": 0
+    },
+    "higiene": {
+     "fome": 0,
+     "higiene": 19,
+     "solidao": 1,
+     "nada": 0
+    }
+   },
+   "acerto": 0.9833333333333333,
+   "fracao_nada": 0.0
+  },
+  "S": {
+   "n": 60,
+   "acertos": 56,
+   "nada": 0,
+   "matriz": {
+    "higiene": {
+     "fome": 0,
+     "higiene": 17,
+     "solidao": 3,
+     "nada": 0
+    },
+    "solidao": {
+     "fome": 0,
+     "higiene": 0,
+     "solidao": 20,
+     "nada": 0
+    },
+    "fome": {
+     "fome": 19,
+     "higiene": 1,
+     "solidao": 0,
+     "nada": 0
+    }
+   },
+   "acerto": 0.9333333333333333,
+   "fracao_nada": 0.0
+  }
+ },
+ "pares": {
+  "HxG": {
+   "n": 12,
+   "escolhas": {
+    "H": 11,
+    "G": 1
+   },
+   "lado_esquerdo_escolhido": 9
+  },
+  "SxG": {
+   "n": 12,
+   "escolhas": {
+    "S": 10,
+    "G": 2
+   },
+   "lado_esquerdo_escolhido": 6
+  }
+ },
+ "nao_marcado": {
+  "referencia": "0 de 48",
+  "injecao": "0 de 36"
+ }
+}

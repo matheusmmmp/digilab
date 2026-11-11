@@ -10,7 +10,12 @@
 
    Fora do laboratorio (LAB-1; os modulos falham alto se vierem ligados): `facetas_mem` (o M-PERS), `redecidir_evento` (C3), `credito_corrida`
    (C2), `intencao_suspensa` (L-2) e os controles. A rng do EMB nao entra (so o REL e aceito). A rng de politica e a do motor
-   (`semente + 1_000_003`), passada ao `agir` e entregue so ao M-ARB. Aritmetica so inteira. */
+   (`semente + 1_000_003`), passada ao `agir` e entregue so ao M-ARB. Aritmetica so inteira.
+
+   A subchave `fala_unidades` (DC3d; docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1 e o adendo 1, A1.1): o M-IMPULSO divide o `chamar_atencao` nas
+   tres unidades de fala (o conteudo so na chave da escolha, [chamar_atencao, c, null]); a acao entregue ao motor e o chamar de hoje, e a
+   opcao de fala credita a linha de H do conteudo. A consequencia da opcao de fala le o corpo de depois na percepcao da decisao seguinte (o
+   `obs` do `agir` seguinte, antes da acao seguinte); o mundo de depois e o de hoje. Desligada (todo pet de hoje), nada muda. */
 import { leituraReceptor, type PercepcaoCorpoLobos } from "../lobos.ts";
 import type { OcorridoMundo, PoliticaCorpoMundo } from "../motor_corpo_mundo.ts";
 import type { OcorridoCorpo, ObservacaoLobos, TransicaoLobos } from "../lobos.ts";
@@ -19,12 +24,12 @@ import type { AcaoPet } from "../tipos.ts";
 import { chaveJson, raizInteira, type ChaveUnidade } from "./_comum.ts";
 import { Afeto } from "./afeto.ts";
 import { Arbitragem, type RngPolitica } from "./arb.ts";
-import { CONFIG_DIGIBRAIN_LAB, CONFIG_MODULAR_MUNDO, INATOS_MODULAR } from "./constantes.ts";
+import { CONFIG_DIGIBRAIN_LAB, CONFIG_MODULAR_MUNDO, CONTEUDOS_FALA, INATOS_MODULAR, type ConfigDigibrainModular } from "./constantes.ts";
 import { EstadoDinamico, type OpcaoFim } from "./estado.ts";
 import { Impulso, type UnidadeImpulso } from "./impulso.ts";
-import { Memoria, episodioAutobio } from "./mem.ts";
+import { Memoria, episodioAutobio, episodioLuta } from "./mem.ts";
 import { Plasticidade, type OpcaoCredito } from "./plast.ts";
-import { COMIDAS_BOAS, Sens, classeDoTipo, type ObservacaoModular } from "./sens.ts";
+import { COMIDAS_BOAS, Sens, classeDoTipo, type ObservacaoModular, type ResumoLutaSens } from "./sens.ts";
 
 /** o `VERSAO_PET_DIGIBRAIN` do Python (a DM-5); o pet de teste do jogo tem a versao propria (VERSAO_PET_LAB, motor/constantes.ts) */
 export const VERSAO_PET_DIGIBRAIN = 13;
@@ -39,15 +44,19 @@ export interface Intencao { acao: AcaoPet; tipo_alvo: string | null; id_alvo: nu
 export function intencaoDaUnidade(unidade: UnidadeImpulso): Intencao {
   const [acao, tipo, ident] = unidade.chave;
   if (tipo === "ponto") return { acao: acao as AcaoPet, tipo_alvo: "ponto", id_alvo: null, ponto: ident as readonly [number, number] };
+  /* a unidade de fala (DC3, 3.1): o conteudo fica so na chave; o mundo e o do chamar */
+  if (acao === "chamar_atencao") return { acao: acao as AcaoPet, tipo_alvo: null, id_alvo: null, ponto: null };
   return { acao: acao as AcaoPet, tipo_alvo: tipo, id_alvo: tipo === "comida" || tipo === "bola" ? (ident as number) : null, ponto: null };
 }
 
 export class DigibrainDesligado extends Error {}
+/** a ponte da luta sem a chave ligada (o `LutaSemChave` do Python) */
+export class LutaSemChave extends Error {}
 
 const ACOES_COM_ALVO: readonly string[] = ["explorar", "comer", "brincar"];
 
-/** a configuracao do laboratorio como o M-ADAPT a recebe (a ConfigDigibrain do braco REL) */
-export type ConfigLab = typeof CONFIG_DIGIBRAIN_LAB;
+/** a configuracao do laboratorio como o M-ADAPT a recebe (a ConfigDigibrain do braco REL, com a `fala_unidades` ligada ou nao) */
+export type ConfigLab = ConfigDigibrainModular;
 
 export interface Pendencia {
   k: number; intencao: Intencao; unidade: UnidadeImpulso; sens: Dict; g_apr: number; pediu: boolean; alvo: AlvoMundo | null;
@@ -73,9 +82,13 @@ export class DigiBrain implements PoliticaCorpoMundo {
   private pendencia: Pendencia | null = null;
   private gestosAgora: [string, number][] = [];
   private readonly gestos: Record<string, number> = {};
+  /** a ponte da luta (PE3; a `ConfigLutaMemoria` do Python): desligada, o DigiBrain nao ganha campo, estado nem gancho novo */
+  lutaMemoria: boolean;
+  private lutas: ResumoLutaSens[] = [];                  // os resumos desde a decisao anterior (so com a luta_memoria)
+  private pcAntesLuta: Dict | null = null;               // o corpo da ultima consequencia fechada (so com a luta_memoria)
 
   /** `inatos`: os valores de partida (a ConfigDigibrainInatos); so o G-PAR-VIDA dos fins passa outros (digibrain_modular_fins.json.gz) */
-  constructor(cd: ConfigLab = CONFIG_DIGIBRAIN_LAB, inatos: typeof INATOS_MODULAR = INATOS_MODULAR) {
+  constructor(cd: ConfigLab = CONFIG_DIGIBRAIN_LAB, inatos: typeof INATOS_MODULAR = INATOS_MODULAR, lutaMemoria = false) {
     if (!cd.ligada) throw new DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada");
     this.cd = cd;
     this.inatos = inatos;
@@ -85,7 +98,9 @@ export class DigiBrain implements PoliticaCorpoMundo {
     this.afeto = new Afeto(cfg, cd, inatos, null);
     this.estado = new EstadoDinamico(cfg, cd, inatos);
     this.impulso = new Impulso(inatos, cd);
-    this.mem = new Memoria({ sub: CONFIG_MODULAR_MUNDO.sub }, inatos, cd);
+    this.lutaMemoria = lutaMemoria;
+    if (lutaMemoria && !cd.memoria_autobio) throw new Error("luta_memoria so com a memoria_autobio (docs/TAREFA_V3_PONTE_LUTA.md, 3.2)");
+    this.mem = new Memoria({ sub: CONFIG_MODULAR_MUNDO.sub }, inatos, cd, lutaMemoria);
     this.arb = new Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem);
     this.plast = new Plasticidade(cd, inatos);
   }
@@ -98,7 +113,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
       throw new Error("o DigiBrain modular decide com o corpo e o mundo na Observacao (obs.corpo e obs.mundo)");
     }
     if (this.pendencia !== null) {
-      this.fechar(this.pendencia);
+      this.fechar(this.pendencia, obs);
       this.pendencia = null;
     }
     const cd = this.cd, k = this.k;
@@ -107,7 +122,9 @@ export class DigiBrain implements PoliticaCorpoMundo {
       corpo: obs.corpo, vetor_estado: obs.v, ticks_desde_cuidado: obs.tdc,
       mundo: { x: m.x, y: m.y, regiao: m.regiao, direcao_cheiro: m.direcao_cheiro, vistos: m.vistos },
     };
-    const sens = this.sens.codificar(oMod);
+    const lutas = this.lutaMemoria ? this.lutas : null;
+    if (this.lutaMemoria) this.lutas = [];
+    const sens = lutas === null ? this.sens.codificar(oMod) : this.sens.codificar(oMod, lutas);
     const receptores = this.sens.receptores!;
     this.plast.montar(receptores);
     const afeto = this.afeto.ler(sens);
@@ -117,6 +134,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
     const consolidacao = this.mem.consolidar(k);
     const lembranca = this.mem.lembrar(sens);
     const termoLem = this.mem.termoLembranca(lembranca);
+    const episodiosLuta = this.lutaMemoria ? this.episodiosLuta(sens, afeto, tick) : null;
     const memoria = cd.m_mem ? this.mem.recuperar(sens, afeto) : null;
     const [unidades, z] = this.impulso.unidades(
       sens, afeto, ctx, this.plast, memoria, this.afeto.drives(receptores), termoLem === null ? null : [termoLem, this.mem.casa], null);
@@ -148,6 +166,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
       unidades: termoLem === null ? [] : unidades.filter(x => this.mem.casa(termoLem, x)).map(x => chaveJson(x.chave)),
     };
     motivo["consolidacao"] = consolidacao;
+    if (this.lutaMemoria) motivo["lutas"] = episodiosLuta;      // a ponte da luta (PE3): desligada, nenhum campo novo
     this.pendencia = {
       k, intencao, unidade, sens, g_apr: afeto.g_apr, pediu: false, alvo: null, corpo: null, transicao: null, mundo: null,
       tick, afeto: { V: afeto.V, E: afeto.E }, gestos: this.gestosAgora,
@@ -203,6 +222,38 @@ export class DigiBrain implements PoliticaCorpoMundo {
     p.mundo = [ocorrido, obsDepois];
   }
 
+  /** liga a `luta_memoria` num DigiBrain que ainda nao decidiu (a marca `pl` do registro chega depois de o pet nascer): idempotente */
+  ligarLutaMemoria(): void {
+    if (this.lutaMemoria) return;
+    if (this.k !== 0 || this.pendencia !== null) throw new Error("a luta_memoria liga antes da primeira decisao");
+    if (!this.cd.memoria_autobio) throw new Error("luta_memoria so com a memoria_autobio (docs/TAREFA_V3_PONTE_LUTA.md, 3.2)");
+    this.lutaMemoria = true;
+    this.mem.luta = true;
+  }
+
+  /** o resumo pronto da luta (ponte da luta, PE3; espelho de `DigiBrain.receber_luta`), so guardado ate a decisao seguinte. Sem a chave, falha alto */
+  receberLuta(rival: string, resultado: number, vidaPerdidaS: number, tick: number): void {
+    if (!this.lutaMemoria) throw new LutaSemChave("receberLuta exige a luta_memoria ligada (ponte da luta, PE3)");
+    this.sens.resumirLutas([{ rival, resultado, vida_perdida_s: vidaPerdidaS, tick }]);     // a validacao do resumo
+    this.lutas.push({ rival, resultado, vida_perdida_s: vidaPerdidaS, tick });
+  }
+
+  /** a ponte da luta (PE3): cada resumo da Observacao vira, se a regra de hoje o aceita, um episodio de origem `luta`. O corpo de antes e o da
+   *  ultima consequencia fechada (sem ela, antes = depois); o V e o E nao andam */
+  private episodiosLuta(sens: Dict, afeto: Dict, tick: number): Dict[] {
+    const out: Dict[] = [];
+    for (const resumo of sens["lutas"] as ResumoLutaSens[]) {
+      const recs = this.sens.receptores!;
+      const antes = this.pcAntesLuta !== null ? this.pcAntesLuta : sens["pc"];
+      const cons = this.afeto.sigmaLuta(antes, sens["pc"], recs);
+      const l0 = recs.map(r => leituraReceptor(antes as PercepcaoCorpoLobos, r, this.S));
+      const l1 = recs.map(r => sens["leitura"][r] as number);
+      const ep = episodioLuta(sens as any, recs, l0, l1, { V: afeto["V"], E: afeto["E"] }, cons, resumo, this.k, tick, this.inatos);
+      out.push({ ...resumo, episodio: ep === null ? null : this.mem.codificarAutobio(ep) });
+    }
+    return out;
+  }
+
   /** o gesto do dono, so registrado: nenhum modulo o recebe como sinal (o corpo o sente pelos receptores) */
   receberAcaoDono(acao: string, tick: number): void {
     this.gestosAgora.push([acao, tick]);
@@ -239,17 +290,25 @@ export class DigiBrain implements PoliticaCorpoMundo {
     if (!cd.p1 && !this.plast.desfechoZero()) throw new Error("sem o P1, o desfecho e o andar ficam em 0");
     if (!cd.p2 && !this.plast.habitoZero()) throw new Error("sem o P2, o habito fica em 0");
     if (!cd.m_mem && this.mem.episodios.length) throw new Error("sem o M-MEM, a memoria fica vazia");
+    const fala = unidades.filter(x => x.acao === "chamar_atencao").map(x => x.chave[1]);
+    if (JSON.stringify(fala) !== JSON.stringify(cd.fala_unidades ? [...CONTEUDOS_FALA] : [null]))
+      throw new Error(`as unidades do chamar ${JSON.stringify(fala)} nao sao as da fala_unidades ${cd.fala_unidades ? "ligada" : "desligada"}`);
   }
 
-  /** a consequencia da decisao anterior aos modulos */
-  private fechar(p: Pendencia): void {
+  /** a consequencia da decisao anterior aos modulos. Com a `fala_unidades` (A1.1), a opcao de fala le o corpo de depois na percepcao da
+   *  decisao seguinte (`obsSeguinte`, antes da acao seguinte); as outras opcoes, e o chamar desligada a subchave, leem o corpo do tick da acao */
+  private fechar(p: Pendencia, obsSeguinte: ObservacaoMundoLobos): void {
     const it = p.intencao, S = this.S, acao = it.acao;
     if (p.corpo === null || p.transicao === null) throw new Error(`a decisao de ${acao} ficou sem o gancho de consequencia (o corpo e o observar)`);
     const comAlvo = ACOES_COM_ALVO.includes(acao);
     if (comAlvo && !p.pediu) throw new Error(`a decisao de ${acao} tinha alvo, e o motor nao pediu o alvo`);
     if (comAlvo && p.mundo === null) throw new Error(`a decisao de ${acao} ficou sem o consequencia_mundo`);
     const pc0 = p.sens["pc"];
-    const pc1 = p.corpo[1].corpo;
+    let pc1 = p.corpo[1].corpo;
+    if (this.cd.fala_unidades && acao === "chamar_atencao") {           // A1.1: a fala ate a decisao seguinte
+      if (!(CONTEUDOS_FALA as readonly unknown[]).includes(p.unidade.chave[1])) throw new Error(`a fala da decisao ${p.k} sem conteudo com a fala_unidades ligada`);
+      pc1 = obsSeguinte.corpo;
+    }
     const pm1 = (p.transicao.observacaoSeguinte as ObservacaoMundoLobos).mundo;
     if (pc1 === undefined || pm1 === undefined) throw new Error("a consequencia sem o corpo ou sem o mundo de depois");
     const ocorrido: OcorridoMundo | null = p.mundo === null ? null : p.mundo[0];
@@ -291,6 +350,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
         episodio = this.mem.codificar({ ...base, ponto: chave[2] as readonly [number, number], classe: "nao_havia", origem: "visita", r: 0, r_n: 0 });
       }
     }
+    if (this.lutaMemoria) this.pcAntesLuta = pc1;       // o corpo de antes da proxima luta (nenhum efeito nos modulos)
     // a C4, M0 e M1: o episodio completo, que a lembranca le
     const ida = chave[1] === "ponto" ? (fins.find(f => JSON.stringify(chaveJson(f.chave)) === JSON.stringify(chaveJson(chave)))?.r ?? null) : null;
     const desfecho = { comeu: classeComida, chegou: ocorrido !== null && ocorrido.chegou, r_ida: ida };

@@ -21,10 +21,12 @@ const MAPA = lerJson(aqui("./mapa_constantes.json"));
 const PY = lerJson(aqui("./gabaritos/constantes_python.json"));
 /* objetos de constantes do motor web cobertos pela tabela (todas as folhas numericas de cada um) */
 const RAIZES = ["C", "CB", "CTP", "CDJ", "CME", "CEM", "CVI", "COB", "CTR", "APTIDAO", "CSO", "CCOND", "CD", "CT", "CA", "CE",
-  "CV", "CV21", "CAT", "CCP", "GA", "DUR_EVO", "CHAMADO_BEBE", "BASE_CARATER", "DESLOC_CARATER", "CAMPANHA", "LUGARES"];
+  "CAT", "CCP", "DUR_EVO", "CHAMADO_BEBE", "BASE_CARATER", "DESLOC_CARATER", "CAMPANHA", "LUGARES"];
+/* LUTA_POC, LP4 (LP-7): o CV, o CV21 e o GA (o combate por turnos e os gambits) sairam da comparacao: a luta da web e a da POC, e o Python fica
+   congelado. O CV21 segue no motor so porque o perfil das formas (catalogo.perfilDe) le os numeros dele */
 /* so no motor em TS: pets v4 (educacao-v1), v5 (evolucao canonica) e v6 (medalhas do Tamer, arenas e a escala propria) nao existem no HTML; a escala (CESC, pets v1-v5) tambem nao existe no HTML e e conferida contra a ConfigEscala;
    conferidas so contra o Python (as v5 quase todas so_web; as v6 todas) */
-const RAIZES_V4 = ["CED", "CLE", "CHE", "DUR_CLASSICA", "CMG", "CAMPANHA_V5", "LUGARES_V5", "CMD", "MEDALHAS", "CAMPANHA_V6", "LUGARES_V6", "ARENAS", "CESC", "CIT", "CMEN", "CCF", "CV21E", "CESC_V9", "FATOR_LIDER_V9", "CIT_V9", "FATOR_LIGA_V9", "CURA_LIGA_V9", "FATOR_SALAO_V9", "FATOR_RIVAL_FABRICA_V9", "CVB", "CLB", "CLB_V11", "CCO_V11", "CCP_V11", "DESLOC_CARATER_V11"];   /* CVB: pets v10 (vinculo B); CLB: o cerebro A (motor/lobos.ts, W-PORTE etapa 2); CLB_V11: o aprendiz dos pets v11 (etapa 3); CCO_V11: o corpo dos pets v11 (a etapa 4 do metabolismo); CCP_V11 e DESLOC_CARATER_V11: o carater dos pets v11 (PW-4 opcao (b), etapa 4 parte 3) */   /* CMEN: pets v7 (voz propria); CCF: pets v8 (confianca, M1); CV21E: pets v9 (combate equilibrado); CESC_V9 e FATOR_LIDER_V9: pets v9 (progressao, fase 2); CIT_V9, FATOR_LIGA_V9, CURA_LIGA_V9, FATOR_SALAO_V9 e FATOR_RIVAL_FABRICA_V9: pets v9 (fim de jogo e itens, fase 3) */
+const RAIZES_V4 = ["CCOOP", "CED", "CLE", "CHE", "DUR_CLASSICA", "CMG", "CAMPANHA_V5", "LUGARES_V5", "CMD", "MEDALHAS", "CAMPANHA_V6", "LUGARES_V6", "ARENAS", "CESC", "CIT", "CMEN", "CCF", "CESC_V9", "CIT_V9", "CVB", "CLB", "CLB_V11", "CCO_V11", "CCP_V11", "DESLOC_CARATER_V11"];   /* CVB: pets v10 (vinculo B); CLB: o cerebro A (motor/lobos.ts, W-PORTE etapa 2); CLB_V11: o aprendiz dos pets v11 (etapa 3); CCO_V11: o corpo dos pets v11 (a etapa 4 do metabolismo); CCP_V11 e DESLOC_CARATER_V11: o carater dos pets v11 (PW-4 opcao (b), etapa 4 parte 3) */   /* CMEN: pets v7 (voz propria); CCF: pets v8 (confianca, M1); CV21E: pets v9 (combate equilibrado); CESC_V9 e FATOR_LIDER_V9: pets v9 (progressao, fase 2); CIT_V9, FATOR_LIGA_V9, CURA_LIGA_V9, FATOR_SALAO_V9 e FATOR_RIVAL_FABRICA_V9: pets v9 (fim de jogo e itens, fase 3) */
 const FONTES = [["ts", MOTOR_TS], ["html", carregarMotor(RAIZES)]];
 const raizDe = cam => cam.match(/^[^.[]+/)[0];
 
@@ -111,23 +113,6 @@ for (const [fonte, WEB] of FONTES) {
   });
 
 }
-
-/* V21E nos pets v9 (docs/EQUILIBRIO_GERAL.md, fase 1): as chaves booleanas da web = as ligadas na config da variante da fase 1 (as
-   quatro da V21D e as cinco da V21E), e cada uma e campo da ConfigCombateV21E (padrao False no Python) */
-test("ts: chaves_v21e: toda chave booleana do CV21E tem par; valor = config da variante da fase 1", () => {
-  const web = new Map(Object.entries(MOTOR_TS.CV21E).filter(([, v]) => typeof v === "boolean").map(([k, v]) => ["CV21E." + k, v]));
-  assert.deepEqual(MAPA.chaves_v21e.map(e => e.web).sort(), [...web.keys()].sort());
-  const erros = [];
-  for (const e of MAPA.chaves_v21e) {
-    if (pegar(PY, e.py) !== false) erros.push(`${e.py} precisa existir e ser desligado por padrao no Python`);
-    const c = pegar(lerJson(RAIZ_REPO + e.arquivo), e.chave);
-    if (web.get(e.web) !== c) erros.push(`${e.web} = ${web.get(e.web)} × ${e.arquivo}:${e.chave} = ${c}`);
-  }
-  const cfg = lerJson(RAIZ_REPO + "experiments/configs/v21e/calibracao.json").regras_v21;
-  const ligadas = Object.keys(cfg).filter(k => cfg[k]).sort();
-  assert.deepEqual(MAPA.chaves_v21e.map(e => e.chave.replace("regras_v21.", "")).sort(), ligadas, "a web liga exatamente as chaves ligadas na config");
-  assert.deepEqual(erros, []);
-});
 
 test("o teste pega uma diferenca (controle negativo)", () => {
   const e = MAPA.pares[0], p = pegar(PY, e.py);

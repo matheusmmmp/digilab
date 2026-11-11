@@ -76,7 +76,17 @@ def test_o_layout_do_mvp_nao_vaza_para_a_pesquisa():
                   Path("tests/test_gabarito_mvp_produto_web.py"),
                   Path("experiments/run_v2_digibrain_prototipo.py"),     # PPM-3: a avaliacao do prototipo do modular roda no MVP
                   Path("experiments/exportar_gabarito_decisao_na_comida.py"),   # a chave do produto (b), no mundo do pet v12
-                  Path("tests/test_decisao_na_comida.py")}
+                  Path("tests/test_decisao_na_comida.py"),
+                  Path("experiments/exportar_gabarito_levar_pet.py"),   # o levar pet (PEGAR_PET, P1), no mundo do pet v19
+                  Path("tests/test_levar_pet.py"),
+                  Path("tests/gabarito_arvore_sacode.py"),          # o sacudir (ARVORE_SACODE, S1): a vida de hoje no MVP e o mundo da ilha
+                  Path("tests/test_arvore_sacode.py"),
+                  Path("tests/test_ilha_agua.py"),
+                  Path("experiments/exportar_gabarito_mudar_ilha.py"),   # a troca de ilha (ILHA_AGUA, IA4): do MVP para o MVP com agua
+                  Path("tests/test_mudar_ilha.py"),
+                  Path("tests/test_ilha_grande.py"),
+                  Path("experiments/exportar_gabarito_ilha_maior.py"),   # a ida para a ilha grande (IG4): do MVP, sem agua ou com ela
+                  Path("tests/test_ilha_maior.py")}                # a ilha grande (secao 12): compara as regioes e os pontos com os do MVP                  # a agua (ILHA_AGUA, IA1): o MVP com agua tem a mesma terra do MVP
     citam = {p.relative_to(RAIZ) for pasta in ("digilab", "experiments", "tests", "tools") for p in (RAIZ / pasta).rglob("*.py")
              if nomes.search(p.read_text(encoding="utf-8"))}
     assert citam == permitidos

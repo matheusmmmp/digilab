@@ -1,5 +1,12 @@
 # TAREFA V3 — PONTE_LUTA (2026-11-04)
 
+> **Na luta da POC (LUTA_POC, LP2 e LP4).** O combate por turnos (`web/app/motor/combate_tr/`, o `GambitsPet`, o `ResultadoLuta` dele) saiu do
+> jogo na LP4 (2026-11-10, `docs/TAREFA_V3_LUTA_POC.md`). A ponte ficou: o resumo da luta (o rival, o resultado e a vida perdida em S) tem o
+> mesmo formato e sai agora do resultado da luta da POC (`Motor._aplicarResumo`: o dano é a vida do começo da luta menos a do fim, e a vida
+> máxima é a dos stats). O ε pelo `g_exp` (a PE4) era o do controlador do combate por turnos e não tem lugar na luta nova: a marca `eps` ainda
+> é lida e fica na assinatura, mas não muda nada. O pet de teste v16 não luta mais (PROPOSTA da LP4); os testes da PE0 e da PE3 rodam nos
+> pets v21 (o modular, o A e um `"cb"` entre duas lutas), e o gabarito das lutas da PE0 (v16 e v17) saiu com as versões antigas (LP-6).
+
 Coordenador: Gerente da V3 (Claude Code). Worker: Claude Code, Opus 5.5, worktree `v3-ponte-luta`. Worktree e branch: `v3-ponte-luta`. Status: ENTREGUE (só o papel); as PL-1 a PL-9 (seção 8) DECIDIDAS pelo Matheus em 2026-11-04, todas pela recomendação ("Aprovo e mescle"); o código (PE0 em diante) liberado.
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-04: o Matheus pediu o cérebro presente na luta, aprendendo com ela; o Gerente mostrou três opções e ele aprovou ligar o cérebro à luta, começando por esta tarefa no papel.
@@ -303,3 +310,40 @@ desligada.** Os desvios D-PE2-1 a D-PE2-3 estão em `docs/registro/2026-11.md`.
   episódios, no replay do mundo; a consolidação guarda um por categoria `("lutar", rival, sinal)`; a seção 7: com a dor zerada nenhum módulo anda). **G2:** os gabaritos da C4
   (`test_gabarito_memoria_autobio`), da LM0 (`test_gabarito_digibrain_modular*`), do G0 e do corpo seguem byte a byte; nenhum arquivo de gabarito foi tocado.
 - **Limite:** nada na web (o espelho TS e o `"pl"` do ovo são a PE3). O A não recebe nada (3.7): o gancho só existe no DigiBrain.
+
+## 12. PE3, o resumo da etapa (2026-11-06, Sonnet 5.5, branch `v3-ponte-luta-pe3`)
+
+**Resposta: a dor da luta e o episódio `luta` já chegam ao jogo (v16 e v17 com a marca `"pl"`), com o corpo e o M-MEM conferidos contra o Python.** Os desvios D-PE3-1 a
+D-PE3-7 estão em `docs/registro/2026-11.md`.
+
+- **O espelho TS:** `Corpo.estimuloLuta` e `CONFIG_LUTA_CORPO` (`motor/corpo.ts`), o evento `lt` do `MotorCorpo` (`motor/motor_corpo.ts`: `resumoLuta`, `aplicarResumoLuta`,
+  `lerResumoLuta`), `DigiBrain.receberLuta`/`ligarLutaMemoria`, `Sens.resumirLutas`, `Afeto.sigmaLuta`, `episodioLuta` e a origem `luta` (`motor/digibrain/`).
+- **A marca e o `_lutar`:** `Motor.ligarPonteLuta()` grava `"pl"` (`{ luta: true }`, depois do `"cb"`) no ovo novo pelo `ligarProduto` (`src/produto.ts`, que também cobre o ovo
+  de teste do laboratório); `Motor._lutar` calcula a vida perdida em S de cada luta da série (D-PE3-3) e entrega o resumo ao corpo (qualquer cérebro) e, só com o modular
+  ativo, ao `DigiBrain` (3.7). Sem a marca, o `_lutar` é o de hoje.
+- **G-PAR:** `experiments/exportar_gabarito_digibrain_modular.py --luta` grava `web/app/test/gabaritos/digibrain_modular_luta.json.gz` (3 vidas, 6 resumos cada); o
+  `test/digibrain_modular_vida.test.ts` confere a dor de cada resumo, cada decisão (ação, motivo com as lutas, assinatura) e o estado interno no fim; o pytest
+  (`tests/test_gabarito_digibrain_modular_web.py`) confere que o arquivo bate com uma execução nova.
+- **G2:** o gabarito da PE0 e todos os de hoje passam sem mudar nenhum arquivo deles; **G1:** `test/ponte_luta_pe3.test.ts` (20 vidas com a marca: v16, v17 modular, v17 A e v17 com um
+  `"cb"` no meio × 5 sementes; replay bit a bit; a dor exata; o A ativo não entrega nada ao modular; a marca só nos v16/v17, uma vez) e o e2e (`e2e/ponte_luta.spec.ts` com os saves `_ponte`).
+- **Limite:** nada do ε (PE4). Os v16/v17 vivos sem a marca seguem como hoje (PL-7); nenhum save de hoje ganha a marca.
+
+## 13. PE4, o resumo da etapa (2026-11-06, Sonnet 5.5, branch `v3-ponte-luta-pe4`)
+
+**Resposta: o cérebro já muda a luta por um parâmetro só, o ε, pelo `g_exp` da última decisão do modular, nos ovos novos (marca `{ luta: true, eps: true }`).** Os desvios D-PE4-1 a
+D-PE4-3 estão em `docs/registro/2026-11.md`.
+
+- **A conta:** `ε da luta = min(1, ε de hoje × g_exp / e0)` em `estiloDoPet` (`motor/gambits_pet.ts`), com o fator `Motor.fatorEpsLuta()` (`motor/motor.ts`): lê o `afeto.g_exp`
+  do `ultimoMotivo` do modular no começo da luta (a série inteira usa a mesma leitura), sem decisão nova nem rng. Com o A ativo, ou antes da primeira decisão, o ε é o de hoje (3.7).
+- **A marca (D-PE4-1):** só `{ luta: true, eps: true }` liga; os saves com `{ luta: true }` (PE3) e os sem marca seguem com o ε de hoje, byte a byte. O `ligarProduto` grava `eps`.
+- **Testes:** `test/ponte_luta_pe4.test.ts` (T-PL-4: `g_exp = e0` dá o ε de hoje, `256` metade, `1024` o dobro cortado em 1; o ε lido é o da última decisão e a leitura não mexe no
+  modular; 20 vidas com `eps` — v16, v17 modular, v17 A e v17 com um `"cb"` no meio × 5 sementes — refazem bit a bit; com o A o fator é nulo; a validação da marca). **G2:** o gabarito da
+  PE0, o da PE3 e os testes da PE3 (marca `{ luta: true }`) passam sem mudar nenhum arquivo de gabarito.
+- **Limite:** não se mediu se o pet luta melhor; é outra pergunta (PL-8). O A não recebe nada. Fica a PE5 (a lembrança do rival), só se o Matheus decidir (PL-6).
+
+## Decisões depois da PE4 (2026-11-07)
+
+Decididas pelo Matheus no chat em 2026-11-07 ("Sim, as duas"), pela recomendação do Gerente da V3:
+
+- **A D-PE3-3 fica DECIDIDA como está:** a vida perdida em S de uma luta é `Math.round(dano × S / vida máxima)`, cortada em [0, S], com o dano cortado na vida que o pet tinha (`docs/registro/2026-11.md`, D-PE3-3). Custo de errar aceito: o golpe final que passa da vida não dói a mais.
+- **A PE5 (PL-6) espera a rodada de equilíbrio da luta:** o empurrão (v18) e os efeitos da luta estão mudando agora, e a confiança M1 já lê o rival. Custo de errar aceito: até lá, o pet não lembra de um rival em particular.

@@ -1,0 +1,382 @@
+{
+ "tarefa": "LUTA_POC, LP5, a grade",
+ "fase": "lp5_3",
+ "bases": 3,
+ "tam": {},
+ "grupos": [
+  "torneios"
+ ],
+ "segundos": 20.646,
+ "tabela": [
+  {
+   "nome": "t0",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "t0",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8
+    }
+   },
+   "passam": [
+    "D1"
+   ],
+   "falham": [
+    "D2",
+    "G1",
+    "G2",
+    "G3",
+    "G4"
+   ],
+   "metas": {
+    "D1": {
+     "passa": true,
+     "curto": "20.75|28.85 23.25|28.35 22.25|28.65 19.05|27.55; min forma 14.15"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.05; sem fim 0"
+    },
+    "G1": {
+     "passa": false,
+     "curto": "{\"titulos\":0,\"max_forma\":0,\"por_forma\":{\"limo_adulto_emboscador\":0,\"brasa_adulto"
+    },
+    "G2": {
+     "passa": false,
+     "curto": "{\"recorde_mediano\":1,\"no_teto\":0,\"recorde_min\":1,\"recorde_max\":2}"
+    },
+    "G3": {
+     "passa": false,
+     "curto": "{\"ao_menos_uma_serie\":0.002,\"series\":{\"0\":1198,\"1\":2},\"tentativas\":1200}"
+    },
+    "G4": {
+     "passa": false,
+     "curto": "{\"taxa\":{\"crianca\":0.678,\"adolescente\":0.838,\"adulto\":0.927,\"mega\":0.832}}"
+    }
+   }
+  },
+  {
+   "nome": "t5",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "t5",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8
+    },
+    "treinoRival": {
+     "salao": 5,
+     "liga": 5,
+     "torre": 5,
+     "fabrica": 5
+    }
+   },
+   "passam": [
+    "D1"
+   ],
+   "falham": [
+    "D2",
+    "G1",
+    "G2",
+    "G3",
+    "G4"
+   ],
+   "metas": {
+    "D1": {
+     "passa": true,
+     "curto": "20.65|28.05 23.85|28.35 23.65|30.05 18.95|27.45; min forma 15.95"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.072; sem fim 0"
+    },
+    "G1": {
+     "passa": false,
+     "curto": "{\"titulos\":0,\"max_forma\":0,\"por_forma\":{\"limo_adulto_emboscador\":0,\"brasa_adulto"
+    },
+    "G2": {
+     "passa": false,
+     "curto": "{\"recorde_mediano\":1,\"no_teto\":0,\"recorde_min\":1,\"recorde_max\":2}"
+    },
+    "G3": {
+     "passa": false,
+     "curto": "{\"ao_menos_uma_serie\":0.001,\"series\":{\"0\":1199,\"1\":1},\"tentativas\":1200}"
+    },
+    "G4": {
+     "passa": false,
+     "curto": "{\"taxa\":{\"crianca\":0.532,\"adolescente\":0.76,\"adulto\":0.843,\"mega\":0.785}}"
+    }
+   }
+  },
+  {
+   "nome": "t10",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "t10",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8
+    },
+    "treinoRival": {
+     "salao": 10,
+     "liga": 10,
+     "torre": 10,
+     "fabrica": 10
+    }
+   },
+   "passam": [
+    "D1"
+   ],
+   "falham": [
+    "D2",
+    "G1",
+    "G2",
+    "G3",
+    "G4"
+   ],
+   "metas": {
+    "D1": {
+     "passa": true,
+     "curto": "21.05|28.35 24.05|32.25 24.05|31.85 18.65|27.75; min forma 13.55"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.132; sem fim 0"
+    },
+    "G1": {
+     "passa": false,
+     "curto": "{\"titulos\":0,\"max_forma\":0,\"por_forma\":{\"limo_adulto_emboscador\":0,\"brasa_adulto"
+    },
+    "G2": {
+     "passa": false,
+     "curto": "{\"recorde_mediano\":2,\"no_teto\":0,\"recorde_min\":1,\"recorde_max\":5}"
+    },
+    "G3": {
+     "passa": false,
+     "curto": "{\"ao_menos_uma_serie\":0.003,\"series\":{\"0\":1197,\"1\":3},\"tentativas\":1200}"
+    },
+    "G4": {
+     "passa": false,
+     "curto": "{\"taxa\":{\"crianca\":0.414,\"adolescente\":0.617,\"adulto\":0.753,\"mega\":0.735}}"
+    }
+   }
+  },
+  {
+   "nome": "t20",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "t20",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8
+    },
+    "treinoRival": {
+     "salao": 20,
+     "liga": 20,
+     "torre": 20,
+     "fabrica": 20
+    }
+   },
+   "passam": [
+    "D1"
+   ],
+   "falham": [
+    "D2",
+    "G1",
+    "G2",
+    "G3",
+    "G4"
+   ],
+   "metas": {
+    "D1": {
+     "passa": true,
+     "curto": "21.65|29.45 24.05|32.15 24.25|33.65 19.15|29.15; min forma 14.95"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.225; sem fim 0"
+    },
+    "G1": {
+     "passa": false,
+     "curto": "{\"titulos\":0,\"max_forma\":0,\"por_forma\":{\"limo_adulto_emboscador\":0,\"brasa_adulto"
+    },
+    "G2": {
+     "passa": false,
+     "curto": "{\"recorde_mediano\":2,\"no_teto\":0,\"recorde_min\":1,\"recorde_max\":6}"
+    },
+    "G3": {
+     "passa": false,
+     "curto": "{\"ao_menos_uma_serie\":0.002,\"series\":{\"0\":1198,\"1\":2},\"tentativas\":1200}"
+    },
+    "G4": {
+     "passa": false,
+     "curto": "{\"taxa\":{\"crianca\":0.33,\"adolescente\":0.438,\"adulto\":0.629,\"mega\":0.623}}"
+    }
+   }
+  }
+ ]
+}

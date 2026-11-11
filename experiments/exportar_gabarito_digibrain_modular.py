@@ -422,7 +422,87 @@ def fins() -> bytes:
     return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
 
 
+# ---------------------------------------------------------------------------------------------------------------------------------------
+# PE3 da ponte da luta (docs/TAREFA_V3_PONTE_LUTA.md, 3.5): o G-PAR do corpo e do M-MEM com a luta. Arquivo novo e enxuto, como o dos fins: vidas
+# curtas do mundo (as mesmas do laboratorio) em que, entre os avancos do log, entram resumos de luta ESCRITOS A MAO (o Python nao simula a luta:
+# recebe o resumo pronto, evento `lt`), com a `ConfigLutaCorpo` e a `ConfigLutaMemoria` ligadas. Por decisao: a acao, o motivo (com o campo `lutas`
+# e o id do episodio) e a assinatura; por resumo: a dor do corpo antes e depois; mais o log, o sha256 do estado interno e a assinatura final. O TS
+# rejoga o log (MotorCorpoMundo com a dor da luta e o DigiBrain com a `luta_memoria`) e confere tudo. Sementes dos testes; nao sao vidas de pesquisa.
+ARQUIVO_LUTA = f"{PREFIXO}luta.json.gz"
+VIDAS_LUTA = (("atencioso", "longe_fixo", 101), ("relapso", "comedouro", 202), ("incoerente", "longe_fixo", 404))
+# (a fracao do log em que o resumo entra, o rival, o resultado, a vida perdida em S): derrota com dor, empate sem dor, derrota que passa de S
+# (cortada em S), vitoria com pouca dor, outra derrota contra o mesmo rival (a categoria repetida)
+RESUMOS_LUTA = ((0.15, "muralha", -1, 700), (0.30, "sombra", 0, 0), (0.45, "muralha", -1, 1500), (0.60, "sombra", 1, 40),
+                (0.75, "muralha", -1, 900), (0.90, "liga:lider1", -1, 300))
+
+
+def _vida_luta(dono: str, lugar: str, semente: int) -> dict:
+    from digilab.config import CONFIG_LUTA_CORPO_LIGADA, CONFIG_LUTA_MEMORIA_LIGADA
+    from digilab.digibrain.adapt import DigiBrain
+    from digilab.events import LogDeEventos, resumo_luta
+    from digilab.motor_corpo import com_corpo
+    from digilab.mundo import MotorMundo, reproduzir_mundo
+    from digilab.temperamento import NEUTRO
+
+    motor0, _, _ = viver(dono, lugar, semente, gravar=False)
+    base = list(motor0.log)
+    eventos, usados = [], 0
+    pos = {int(f * len(base)): r for f, *r in RESUMOS_LUTA}
+    for i, ev in enumerate(base):
+        if i in pos:
+            rival, resultado, vida = pos[i]
+            eventos.append(resumo_luta(ev.tick, rival, resultado, vida))
+            usados += 1
+        eventos.append(ev)
+    if usados != len(RESUMOS_LUTA):
+        raise RuntimeError("dois resumos cairam na mesma posicao do log")
+    fp, fm0 = orq.fabricas(BRACO, dono, semente, DIAS, orq.ORCAMENTO_POR_DIA, conserto=True)
+    cc = orq.bancada(DIAS, orq.ORCAMENTO_POR_DIA).cfg_corpo_de(orq.bv.EspecVida(dono, orq.gl.BRACO_V11, semente))
+    cerebro = DigiBrain(CONFIG_PADRAO, config_laboratorio(), orq.CM, semente=semente, cfg_luta_memoria=CONFIG_LUTA_MEMORIA_LIGADA)
+    registro = orq.Registro(cerebro, CONFIG_DIGIBRAIN_INATOS.escala)
+    dores: list[dict] = []
+
+    def fm(politica, cfg, s):
+        m = com_corpo(MotorMundo)(politica, cfg, s, NEUTRO, "brasa", obediencia_desligada=True, cfg_mundo=orq.CM, cfg_corpo=cc,
+                                  cfg_luta_corpo=CONFIG_LUTA_CORPO_LIGADA)
+        original = m.corpo.estimulo_luta
+
+        def estimulo(vida_perdida_s, _o=original, _m=m):
+            antes = _m.corpo.q["dor"]
+            _o(vida_perdida_s)
+            dores.append({"tick": _m._estado.tick, "vida_perdida_s": vida_perdida_s, "dor_antes": antes, "dor_depois": _m.corpo.q["dor"]})
+        m.corpo.estimulo_luta = estimulo
+        return m
+
+    g = Gravador(cerebro)
+    try:
+        motor = reproduzir_mundo(LogDeEventos(eventos), lambda cfg=None: registro, CONFIG_PADRAO, semente, fabrica_motor=fm)
+    finally:
+        g.soltar()
+    n = len(cerebro.motivos)
+    decisoes = [{"k": k, "acao": cerebro.motivos[k]["acao"], "assinatura": g.assinaturas[k], "motivo": paraj(cerebro.motivos[k])} for k in range(n)]
+    episodios = [e for e in cerebro.m.mem._guardados() if e["origem"] == "luta"]
+    return {"dono": dono, "lugar": lugar, "semente": semente, "dias": DIAS, "resumos": [list(r[1:]) for r in RESUMOS_LUTA], "dores": dores,
+            "decisoes": decisoes, "episodios_luta": len(episodios),
+            "log": [ev.para_dict() for ev in motor.log], "log_sha256": hashlib.sha256(motor.log.para_jsonl().encode("utf-8")).hexdigest(),
+            "estado": hashlib.sha256(_texto(paraj(cerebro.estado_interno())).encode("utf-8")).hexdigest(), "assinatura_final": g.assinar()}
+
+
+def luta() -> bytes:
+    """o gz (mtime 0, nivel 9) das vidas com resumos de luta"""
+    vidas = [_vida_luta(*v) for v in VIDAS_LUTA]
+    for v in vidas:
+        if v["episodios_luta"] < 2 or len(v["dores"]) != len(RESUMOS_LUTA):
+            raise RuntimeError(f"a vida {v['dono']}/{v['lugar']}/{v['semente']} nao tem o que o G-PAR confere: {v['episodios_luta']} episodios")
+    return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
+
+
 if __name__ == "__main__":
+    if "--luta" in sys.argv:                          # so o arquivo da PE3 da ponte da luta
+        b = luta()
+        (PASTA / ARQUIVO_LUTA).write_bytes(b)
+        print(f"{PASTA / ARQUIVO_LUTA} ({len(b) / 1024 / 1024:.2f} MiB)")
+        sys.exit(0)
     if "--fins" in sys.argv:                          # so o arquivo dos fins da LM4
         b = fins()
         (PASTA / ARQUIVO_FINS).write_bytes(b)
