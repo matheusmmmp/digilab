@@ -65,7 +65,7 @@ export function CenaEvolucao({ antes, depois, sombria, aoFim }: { antes: string;
         prontos.set(i, p);
         p.then(v => { if (vivo) feitos.set(i, v); else v.forEach(b => b.close()); }, (e: unknown) => acabar(`quadro ${i} do pacote ${seq[i].pacote} não decodificou: ${String(e)}`));
       };
-      setProgresso(null); void SOM.tocarMusica(bgm); void SOM.tocarEvolucao(revela); revelouRef.current = true;
+      setProgresso(null); void SOM.pedirMusica("evolucao", bgm); void SOM.tocarEvolucao(revela); revelouRef.current = true;
       /* o relogio so anda com o quadro pronto: se a decodificacao atrasar, a cena segura em vez de pular. Tudo pelo performance.now
          (o carimbo do requestAnimationFrame pode estar noutra base) */
       let t = 0, antes0 = performance.now(), mostrado = -1;

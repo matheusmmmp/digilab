@@ -623,6 +623,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-10 — CONVERSA_PET, DC5, a aprovação do plano de análise (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5`)](registro/2026-11.md)
 - [2026-11-10 — CONVERSA_PET, DC5a, o código da voz-v4 e da avaliação (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5a`)](registro/2026-11.md)
 - [2026-11-10 — INDIVIDUALIDADE, I7a: as leituras do plano do I7 e o custo da fumaça (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i7a`)](registro/2026-11.md)
+- [2026-11-10 — SOM_UP: os sons do Digimon UP no jogo (Gerente da V3, Claude Code, Opus 5.5, branch `v3-som-up`)](registro/2026-11.md)
 - [2026-11-10 — LUTA_POC, LP5: a esquiva pela perspicácia e pela velocidade (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-calib`)](registro/2026-11.md)
 - [2026-11-10 — LUTA_POC, LP3c: o desenho do tiro, da câmera e do fim (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp3c`)](registro/2026-11.md)
 - [2026-11-11 — COOPERACAO, CO0: a tarefa no papel (coordenador, Gerente da V3, Claude Code, Opus 5.5, branch `v3-cooperacao`)](registro/2026-11.md)

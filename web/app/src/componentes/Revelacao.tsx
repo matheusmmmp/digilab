@@ -116,7 +116,7 @@ function Revelacao({ i, m, fechar }: { i: number; m: Motor; fechar: () => void }
      Com a cena, o efeito e a musica sao dela; a musica para quando a revelacao fecha */
   useEffect(() => {
     if (!cena) void SOM.tocarEvolucao(0);
-    return () => { SOM.pararEvolucao(); if (tocouCena.current) SOM.pararMusica(); };
+    return () => { SOM.pararEvolucao(); if (tocouCena.current) void SOM.pedirMusica("evolucao", null); };
   }, []);
   return (
     <dialog className="revelacao evm ab-hx dl" ref={ref} aria-labelledby="revel-tit" onClose={fechar}>
