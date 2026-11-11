@@ -390,6 +390,28 @@ def ler_levar_pet(evento: Evento) -> tuple[int, int]:
     return _ponto_solto(_inteiro_com_sinal_do_log(partes[0]), _inteiro_com_sinal_do_log(partes[1]))
 
 
+TIPO_MUDAR_ILHA = "mudar_ilha"       # o pet passa para a ilha com agua no meio da vida (docs/TAREFA_V3_ILHA_AGUA.md, IA4)
+_NOME_ILHA = re.compile(r"[a-z0-9_]{1,32}")
+
+
+def _nome_ilha(nome) -> str:
+    """o nome do layout de destino no log: minusculas, digitos e sublinhado ASCII, de 1 a 32; se a troca vale, quem confere e o motor"""
+    if type(nome) is not str or _NOME_ILHA.fullmatch(nome) is None:
+        raise ValueError(f"mudar_ilha com nome de layout invalido: {nome!r}")
+    return nome
+
+
+def mudar_ilha(tick: int, nome: str) -> Evento:
+    """o mundo do pet passa a ser o layout `nome` (o mesmo de antes, com a agua); o jogo web, os pets v21 que ja estavam vivos"""
+    return Evento(tick=tick, tipo=TIPO_MUDAR_ILHA, valor=_nome_ilha(nome))
+
+
+def ler_mudar_ilha(evento: Evento) -> str:
+    if evento.tipo != TIPO_MUDAR_ILHA:
+        raise ValueError(f"evento nao e {TIPO_MUDAR_ILHA}: {evento.tipo!r}")
+    return _nome_ilha(evento.valor)
+
+
 TIPO_SACUDIR = "sacudir_arvore"      # o dono sacode a arvore (docs/TAREFA_V3_ARVORE_SACODE.md, S1): so com a ConfigSacudir ligada
 _ID_ARVORE = re.compile(r"[A-Za-z0-9]{1,16}")
 
