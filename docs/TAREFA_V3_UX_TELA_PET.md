@@ -844,11 +844,12 @@ tigela, a bola e as frutíferas no `CMU_ILHA`, v20) é do #694.
   - a moldura em bosques e vãos.
   - Tudo o que a planta tira da vista só some (`escondidos`): a lista `objetos` não muda, e o gabarito E-G0 continua passando. O que ela
     acrescenta (as árvores dos bosques, o entorno dos marcos) fica numa lista própria, `extras`, que a `cena.ts` desenha.
-- **O fim da ilha** (`fimDaIlha.ts`, `fimConta.ts`; `grade.ts`, `porBordas`; `FIM_ILHA`):
+- **O fim da ilha** (`fimDaIlha.ts`; `grade.ts`, `porBordas`; `FIM_ILHA`):
   - o mar em volta da grade inteira, até o horizonte;
   - a leste do rio, a mata sobe em dois degraus até o morro;
-  - duas faixas de silhuetas (ilhas perto, morros longe) seguem o ponto olhado. O pé delas vai a cada quadro para o horizonte do mar
-    curvo, e a cor é a da névoa puxada para a sombra do céu, sem cor nova (PA-5).
+  - as duas faixas de silhuetas ao longe (ilhas perto, morros longe) **saíram em 2026-11-10**, a pedido do Matheus: no céu elas liam
+    como manchas verdes soltas, além das nuvens. O `fimConta.ts` e o `FIM_ILHA.silhuetas` saíram junto (D-CEU-1, em
+    `docs/registro/2026-11.md`). O céu fica só com o degradê e as nuvens.
 - **O sinal só** (a regra 3; `itens.ts`, `CHAMADO`): a tigela, a bola e o saco dão um pulinho quando o pet chega perto. Com movimento
   reduzido, nada. O vento na decoração fica (PA-4).
 - **A ida ao saco pela distância** (PA-3; `lugares.ts`, `idaDoTreino`; `TREINO_VEL` = 7 células por segundo, 0,9 s no mínimo): com o
