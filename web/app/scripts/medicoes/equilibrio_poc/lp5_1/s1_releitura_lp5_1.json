@@ -1,0 +1,207 @@
+{
+ "tarefa": "LUTA_POC, LP5-1, o S1 relido pela D-LP5-11",
+ "fase": "lp5_1",
+ "commit_da_medida": "91111a218bfcd3ae04e56a9bdbc1f66a67a86fae",
+ "estagios": {
+  "crianca": {
+   "campo": {
+    "lado_a_com_vencedor": 0.478,
+    "lutas_com_vencedor": 856,
+    "empates": 144,
+    "fora_da_faixa": false
+   },
+   "coliseu": {
+    "lado_a_com_vencedor": 0.479,
+    "lutas_com_vencedor": 856,
+    "empates": 144,
+    "fora_da_faixa": false
+   },
+   "floresta": {
+    "lado_a_com_vencedor": 0.464,
+    "lutas_com_vencedor": 850,
+    "empates": 150,
+    "fora_da_faixa": false
+   },
+   "praia": {
+    "lado_a_com_vencedor": 0.472,
+    "lutas_com_vencedor": 936,
+    "empates": 64,
+    "fora_da_faixa": false
+   },
+   "deserto": {
+    "lado_a_com_vencedor": 0.479,
+    "lutas_com_vencedor": 895,
+    "empates": 105,
+    "fora_da_faixa": false
+   },
+   "castelo": {
+    "lado_a_com_vencedor": 0.493,
+    "lutas_com_vencedor": 873,
+    "empates": 127,
+    "fora_da_faixa": false
+   },
+   "caverna": {
+    "lado_a_com_vencedor": 0.516,
+    "lutas_com_vencedor": 891,
+    "empates": 109,
+    "fora_da_faixa": false
+   },
+   "ringue": {
+    "lado_a_com_vencedor": 0.483,
+    "lutas_com_vencedor": 835,
+    "empates": 165,
+    "fora_da_faixa": false
+   }
+  },
+  "adolescente": {
+   "campo": {
+    "lado_a_com_vencedor": 0.48,
+    "lutas_com_vencedor": 1606,
+    "empates": 394,
+    "fora_da_faixa": false
+   },
+   "coliseu": {
+    "lado_a_com_vencedor": 0.479,
+    "lutas_com_vencedor": 1606,
+    "empates": 394,
+    "fora_da_faixa": false
+   },
+   "floresta": {
+    "lado_a_com_vencedor": 0.486,
+    "lutas_com_vencedor": 1608,
+    "empates": 392,
+    "fora_da_faixa": false
+   },
+   "praia": {
+    "lado_a_com_vencedor": 0.436,
+    "lutas_com_vencedor": 1856,
+    "empates": 144,
+    "fora_da_faixa": true
+   },
+   "deserto": {
+    "lado_a_com_vencedor": 0.453,
+    "lutas_com_vencedor": 1729,
+    "empates": 271,
+    "fora_da_faixa": false
+   },
+   "castelo": {
+    "lado_a_com_vencedor": 0.457,
+    "lutas_com_vencedor": 1691,
+    "empates": 309,
+    "fora_da_faixa": false
+   },
+   "caverna": {
+    "lado_a_com_vencedor": 0.514,
+    "lutas_com_vencedor": 1741,
+    "empates": 259,
+    "fora_da_faixa": false
+   },
+   "ringue": {
+    "lado_a_com_vencedor": 0.506,
+    "lutas_com_vencedor": 1544,
+    "empates": 456,
+    "fora_da_faixa": false
+   }
+  },
+  "adulto": {
+   "campo": {
+    "lado_a_com_vencedor": 0.486,
+    "lutas_com_vencedor": 1668,
+    "empates": 332,
+    "fora_da_faixa": false
+   },
+   "coliseu": {
+    "lado_a_com_vencedor": 0.489,
+    "lutas_com_vencedor": 1668,
+    "empates": 332,
+    "fora_da_faixa": false
+   },
+   "floresta": {
+    "lado_a_com_vencedor": 0.485,
+    "lutas_com_vencedor": 1665,
+    "empates": 335,
+    "fora_da_faixa": false
+   },
+   "praia": {
+    "lado_a_com_vencedor": 0.42,
+    "lutas_com_vencedor": 1860,
+    "empates": 140,
+    "fora_da_faixa": true
+   },
+   "deserto": {
+    "lado_a_com_vencedor": 0.486,
+    "lutas_com_vencedor": 1771,
+    "empates": 229,
+    "fora_da_faixa": false
+   },
+   "castelo": {
+    "lado_a_com_vencedor": 0.506,
+    "lutas_com_vencedor": 1738,
+    "empates": 262,
+    "fora_da_faixa": false
+   },
+   "caverna": {
+    "lado_a_com_vencedor": 0.501,
+    "lutas_com_vencedor": 1770,
+    "empates": 230,
+    "fora_da_faixa": false
+   },
+   "ringue": {
+    "lado_a_com_vencedor": 0.48,
+    "lutas_com_vencedor": 1597,
+    "empates": 403,
+    "fora_da_faixa": false
+   }
+  },
+  "mega": {
+   "campo": {
+    "lado_a_com_vencedor": 0.487,
+    "lutas_com_vencedor": 1691,
+    "empates": 309,
+    "fora_da_faixa": false
+   },
+   "coliseu": {
+    "lado_a_com_vencedor": 0.488,
+    "lutas_com_vencedor": 1692,
+    "empates": 308,
+    "fora_da_faixa": false
+   },
+   "floresta": {
+    "lado_a_com_vencedor": 0.496,
+    "lutas_com_vencedor": 1684,
+    "empates": 316,
+    "fora_da_faixa": false
+   },
+   "praia": {
+    "lado_a_com_vencedor": 0.452,
+    "lutas_com_vencedor": 1863,
+    "empates": 137,
+    "fora_da_faixa": false
+   },
+   "deserto": {
+    "lado_a_com_vencedor": 0.456,
+    "lutas_com_vencedor": 1753,
+    "empates": 247,
+    "fora_da_faixa": false
+   },
+   "castelo": {
+    "lado_a_com_vencedor": 0.467,
+    "lutas_com_vencedor": 1751,
+    "empates": 249,
+    "fora_da_faixa": false
+   },
+   "caverna": {
+    "lado_a_com_vencedor": 0.498,
+    "lutas_com_vencedor": 1784,
+    "empates": 216,
+    "fora_da_faixa": false
+   },
+   "ringue": {
+    "lado_a_com_vencedor": 0.486,
+    "lutas_com_vencedor": 1613,
+    "empates": 387,
+    "fora_da_faixa": false
+   }
+  }
+ }
+}

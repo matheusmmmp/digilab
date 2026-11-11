@@ -260,7 +260,7 @@ class ServicoFalaLivre:
         especie = self.especies.get(forma.removesuffix(" sombrio")) if forma is not None else None
         with self.trava:
             r = gerar_voz(self.cliente, conceitos, estagio, situacao, jog, hist, semente, especie=especie, comando=comando,
-                          voz=self.voz_dos_conceitos(conceitos))
+                          voz=self.voz_dos_conceitos(conceitos), ditas=self.ditas_da_voz(situacao))
             verif = None
             if r.erro is None:                         # fala generica (erro) nao e fala da LLM: nao ha o que conferir
                 dono = [f for f in r.fatos if f["tipo"] == TIPO_DONO_DISSE]
@@ -274,6 +274,11 @@ class ServicoFalaLivre:
     def voz_dos_conceitos(self, conceitos: dec.Conceitos) -> str | None:
         """a voz da rede pedida ao `gerar_voz`: None, a do formato (o jogo: voz-v1/v2/v3). A DC4 (o `ServicoDC4` do orquestrador) pede a
         voz-v3b no dec-v3 (decisao do Matheus em 2026-11-09); o verificador nao muda (`_verificador_dos_conceitos`)."""
+        return None
+
+    def ditas_da_voz(self, situacao: str):
+        """as ultimas falas espontaneas do pet que vao a voz: None no jogo (a voz do jogo nao as recebe). So a DC5 (o `ServicoDC5` do
+        orquestrador, com a voz-v4) as pede, na fala espontanea (plano da DC5, 3.4)."""
         return None
 
     @staticmethod
