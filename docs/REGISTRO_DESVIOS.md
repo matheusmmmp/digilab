@@ -614,3 +614,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-10 — INDIVIDUALIDADE, I7a: as leituras do plano do I7 e o custo da fumaça (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i7a`)](registro/2026-11.md)
 - [2026-11-10 — LUTA_POC, LP3c: o desenho do tiro, da câmera e do fim (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp3c`)](registro/2026-11.md)
 - [2026-11-11 — COOPERACAO, CO0: a tarefa no papel (coordenador, Gerente da V3, Claude Code, Opus 5.5, branch `v3-cooperacao`)](registro/2026-11.md)
+- [2026-11-11 — COOPERACAO, CO1: os gabaritos (Gerente da V3, Claude Code, Opus 5.5, branch `v3-cooperacao-co1`)](registro/2026-11.md)
