@@ -1239,5 +1239,147 @@
     }
    ]
   }
+ },
+ "adendo_comedouro6": {
+  "grande_128x60|modular|comedouro6": {
+   "media": {
+    "postas": 13.2,
+    "comidas": 13,
+    "fracao_no_prazo": 0.804,
+    "mediana_ticks": 132,
+    "fracao_fome_baixa": 0.017,
+    "fome_media": 0.644,
+    "celulas_andadas_por_dia": 124.2,
+    "cobertura": 0.081,
+    "ms_por_dia": 60.8
+   },
+   "vidas": [
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.692,
+     "mediana_ticks": 150,
+     "fracao_fome_baixa": 0.033,
+     "fome_media": 0.606,
+     "celulas_andadas_por_dia": 134,
+     "cobertura": 0.091,
+     "ms_por_dia": 90
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.846,
+     "mediana_ticks": 135,
+     "fracao_fome_baixa": 0.008,
+     "fome_media": 0.665,
+     "celulas_andadas_por_dia": 128,
+     "cobertura": 0.083,
+     "ms_por_dia": 58
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.923,
+     "mediana_ticks": 75,
+     "fracao_fome_baixa": 0.038,
+     "fome_media": 0.662,
+     "celulas_andadas_por_dia": 133,
+     "cobertura": 0.072,
+     "ms_por_dia": 60
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.846,
+     "mediana_ticks": 150,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.642,
+     "celulas_andadas_por_dia": 114,
+     "cobertura": 0.084,
+     "ms_por_dia": 50
+    },
+    {
+     "postas": 14,
+     "comidas": 13,
+     "fracao_no_prazo": 0.714,
+     "mediana_ticks": 150,
+     "fracao_fome_baixa": 0.008,
+     "fome_media": 0.646,
+     "celulas_andadas_por_dia": 112,
+     "cobertura": 0.076,
+     "ms_por_dia": 46
+    }
+   ]
+  },
+  "grande_128x60|a|comedouro6": {
+   "media": {
+    "postas": 6,
+    "comidas": 3.6,
+    "fracao_no_prazo": 0.234,
+    "mediana_ticks": 237,
+    "fracao_fome_baixa": 0.645,
+    "fome_media": 0.209,
+    "celulas_andadas_por_dia": 19.4,
+    "cobertura": 0.017,
+    "ms_por_dia": 18.4
+   },
+   "vidas": [
+    {
+     "postas": 4,
+     "comidas": 1,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": 270,
+     "fracao_fome_baixa": 0.825,
+     "fome_media": 0.094,
+     "celulas_andadas_por_dia": 11,
+     "cobertura": 0.014,
+     "ms_por_dia": 16
+    },
+    {
+     "postas": 5,
+     "comidas": 2,
+     "fracao_no_prazo": 0.4,
+     "mediana_ticks": 225,
+     "fracao_fome_baixa": 0.75,
+     "fome_media": 0.144,
+     "celulas_andadas_por_dia": 11,
+     "cobertura": 0.013,
+     "ms_por_dia": 17
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.769,
+     "mediana_ticks": 180,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.615,
+     "celulas_andadas_por_dia": 55,
+     "cobertura": 0.032,
+     "ms_por_dia": 33
+    },
+    {
+     "postas": 4,
+     "comidas": 1,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": 255,
+     "fracao_fome_baixa": 0.825,
+     "fome_media": 0.096,
+     "celulas_andadas_por_dia": 10,
+     "cobertura": 0.014,
+     "ms_por_dia": 13
+    },
+    {
+     "postas": 4,
+     "comidas": 1,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": 255,
+     "fracao_fome_baixa": 0.825,
+     "fome_media": 0.096,
+     "celulas_andadas_por_dia": 10,
+     "cobertura": 0.01,
+     "ms_por_dia": 13
+    }
+   ]
+  }
  }
 }

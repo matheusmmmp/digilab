@@ -680,3 +680,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — ILHA_AGUA: a junção da ilha grande com a `main` e o merge (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-grande-ig4`)](registro/2026-11.md)
 - [2026-11-11 — MMO1: a conta dos pontos (Gerente da frente MMO, Claude Code, Opus 5.5, branch `v3-mmo1`)](registro/2026-11.md)
 - [2026-11-11 — ILHA_AGUA, IG5: a medida do pet na ilha grande (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-grande-ig5`)](registro/2026-11.md)
+- [2026-11-11 — ILHA_AGUA, IG5: as decisões da IG-6 e o adendo do comedouro (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-grande-ig5`)](registro/2026-11.md)

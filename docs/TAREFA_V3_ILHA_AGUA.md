@@ -503,3 +503,17 @@ da ilha grande por causa da distância ao ninho. Um cenário a mais, `comedouro6
 leste do ninho, no lugar do comedouro (que fica a 8). Com os dois cérebros, as mesmas sementes e o mesmo dono. **A leitura:** a
 hipótese se sustenta se, no A, a fração comida em 240 ticks do `comedouro6` voltar para perto da do mundo de hoje (0,437; a menos de
 0,10) e a do modular não piorar mais de 0,10 contra o comedouro de hoje da ilha grande (0,815).
+
+**O resultado do adendo** (no mesmo artefato, chave `adendo_comedouro6`; médias de cinco sementes, na ilha grande):
+
+| Cérebro | Ração no comedouro (8 células do ninho) | Ração a 6 células do ninho |
+|---|---|---|
+| A | 0,324 comida em 240 ticks; fome baixa em 0,555 dos passos | 0,234; fome baixa em 0,645 |
+| modular | 0,815; 0,005 | 0,804; 0,017 |
+
+**A hipótese não se sustenta.** Com a ração a 6 células do ninho o A comeu menos, não mais (0,234 contra 0,324), longe do 0,437 do
+mundo de hoje. A piora do A no comedouro da ilha grande não vem da distância entre o ninho e o comedouro. A causa não foi achada. O A
+come pouco nos dois mundos e varia muito entre as sementes (são 4 a 8 rações postas por vida).
+
+**A recomendação muda:** não mexer no lugar do comedouro. A decisão do Matheus era mudar "com a medida da hipótese antes"; a medida
+diz que mudar não ajuda. Fica a mudança da memória (128 células), que não depende disto. A confirmar com ele.

@@ -136,8 +136,7 @@ describe("a medida da IG5", () => {
   test.skipIf(process.env.MEDIR_IG5_ADENDO !== "1")("roda o adendo do comedouro a 6 celulas e o acrescenta ao artefato", () => {
     const g = JSON.parse(readFileSync(ARQUIVO, "utf8")) as Record<string, unknown>;
     g.adendo_comedouro6 = medirAdendo();
-    writeFileSync(ARQUIVO, JSON.stringify(g, null, 1) + "
-", "utf8");
+    writeFileSync(ARQUIVO, JSON.stringify(g, null, 1) + String.fromCharCode(10), "utf8");
   }, 3_600_000);
 
   test.skipIf(process.env.MEDIR_IG5 !== "1")("roda a medida e grava o artefato", () => {
