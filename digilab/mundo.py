@@ -141,7 +141,7 @@ from .events import levar_pet as evento_levar_pet
 from .events import ler_levar_pet
 from .events import mudar_ilha as evento_mudar_ilha
 from .events import ler_mudar_ilha
-from .config import ILHAS_DE_TROCA
+from .config import ILHAS_DE_TROCA, ILHAS_MAIORES
 from .events import deixar_fruta as evento_deixar_fruta
 from .events import LutaSemChave, ler_deixar_fruta, ler_resumo_luta
 from .events import resumo_luta as evento_resumo_luta
@@ -805,6 +805,7 @@ class Mundo:
         self.sumidas: list[dict] = []
         self.bolas_deixadas: list[dict] = []
         self.troca_ilha: dict | None = None        # a troca de ilha (IA4): None ate o evento `mudar_ilha`
+        self.troca_maior: dict | None = None       # a ida para a ilha maior (IG4): None ate o `mudar_ilha` para um destino de ILHAS_MAIORES
         self.rolagens: list[dict] = []
         # o banheiro (TAREFA_V2_BANHEIRO, secao 3): as necessidades no chao, so depois de `ligar_necessidades` (um motor com o banheiro);
         # sem ele, None e nada muda (nem o resumo). Um contador proprio: os ids das comidas nao mudam com o banheiro
@@ -904,6 +905,41 @@ class Mundo:
         self.bola = {"x0": x, "y0": y, "x1": x, "y1": y, "t0": tick, "d": 0}
         self.troca_ilha = {"tick": tick, "de": de, "para": layout.nome, "comidas": comidas, "bola": {"de": [bx, by], "para": [x, y]}}
         return self.troca_ilha
+
+    def trocar_para_maior(self, layout: LayoutMundo, celulas_x: int, celulas_y: int, origens: tuple, tick: int) -> dict:
+        """A ida para a ilha maior (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG4): o mundo passa do layout de hoje (um dos `origens`) para
+        `layout`, que tem outro tamanho. O mundo ja vem atualizado ate o tick. Tudo o que tem posicao anda o deslocamento do ninho de la
+        para o ninho de ca (IG-7): o ninho e o comedouro passam a ser os do layout novo, e a comida e a bola vao junto, para a terra mais
+        perto se cairem em celula fechada ou fora do mapa. A bola para onde esta. Nenhum fluxo de acaso anda. Uma vez so por mundo; o
+        mundo com arvores ou com o banheiro nao troca (as posicoes deles nao tem destino). Devolve o registro (`troca_maior`)."""
+        if self.tick_atualizado is None or tick != self.tick_atualizado:
+            raise RuntimeError(f"trocar_para_maior no tick {tick} com o mundo atualizado ate {self.tick_atualizado}")
+        if self.troca_maior is not None:
+            raise ValueError(f"o mundo {self.cmf.layout.nome!r} ja passou para a ilha maior: a troca vale uma vez")
+        if self.cmf.layout not in origens:
+            raise ValueError(f"a ilha maior {layout.nome!r} nao recebe o mundo {self.cmf.layout.nome!r}")
+        if self.arvores or self.necessidades is not None:
+            raise ValueError("a ida para a ilha maior nao leva arvores nem o banheiro")
+        de, sub = self.cmf.layout, self.cmf.sub
+        dx, dy = (layout.ninho[0] - de.ninho[0]) * sub, (layout.ninho[1] - de.ninho[1]) * sub
+        bola_de = self.bola_em(tick)                              # no mundo de la, antes de trocar
+        cm = replace(self.cmf, layout=layout, celulas_x=celulas_x, celulas_y=celulas_y)
+        secas = celulas_secas(cm)
+        if secas is None:
+            raise ValueError(f"o layout {layout.nome!r} nao tem agua: a ilha maior e uma ilha com agua")
+        self.cmf, self.secas = cm, secas
+        self.ninho, self.comedouro = centro_da_celula(layout.ninho, cm), centro_da_celula(layout.comedouro, cm)
+        self._conferir_agua()
+        comidas = []
+        for c in self.comidas.values():
+            x, y = self.em_terra(*no_mapa(c["x"] + dx, c["y"] + dy, cm))
+            comidas.append({"id": c["id"], "de": [c["x"], c["y"]], "para": [x, y]})
+            c["x"], c["y"] = x, y
+        x, y = self.em_terra(*no_mapa(bola_de[0] + dx, bola_de[1] + dy, cm))
+        self.bola = {"x0": x, "y0": y, "x1": x, "y1": y, "t0": tick, "d": 0}
+        self.troca_maior = {"tick": tick, "de": de.nome, "para": layout.nome, "deslocamento": [dx, dy], "comidas": comidas,
+                            "bola": {"de": list(bola_de), "para": [x, y]}}
+        return self.troca_maior
 
     def rolagem_seca(self, x0: int, y0: int, x1: int, y1: int) -> tuple[int, int]:
         """onde a bola que rola de (x0, y0) para (x1, y1) para: na margem (`ate_a_margem`) e, depois, encurtada ate que todo ponto por
@@ -1256,6 +1292,7 @@ class Mundo:
                 "rngs": [r.getstate() for r in (self.rng_arvores, self.rng_bola)], "quedas": self.quedas, "sumidas": self.sumidas,
                 "bolas_deixadas": self.bolas_deixadas, "rolagens": self.rolagens,
                 **({} if self.troca_ilha is None else {"troca_ilha": self.troca_ilha}),
+                **({} if self.troca_maior is None else {"troca_maior": self.troca_maior}),
                 **({} if self.necessidades is None else {
                     "necessidades": [dict(n) for n in self.necessidades.values()], "prox_necessidade": self.prox_necessidade,
                     "recolhidas": self.recolhidas}),
@@ -2150,18 +2187,28 @@ class MotorMundo(MotorFrutas):
             raise MundoSemChave("mudar_ilha com ConfigMundo.ligada = False")
         if nome not in ILHAS_DE_TROCA:
             raise ValueError(f"mudar_ilha para uma ilha desconhecida: {nome!r}")
-        if self._grupo is not None or self.cbh.ligada or self.cct.ligada:
+        maior = ILHAS_MAIORES.get(nome)      # a ilha de outro tamanho (IG4): pode vir depois da agua, com o contrato ja ligado
+        if self._grupo is not None or self.cbh.ligada or (self.cct.ligada and maior is None):
             raise ValueError("mudar_ilha roda com um pet (fora do grupo), sem o banheiro e sem o contrato ligado antes")
         layout, contrato = ILHAS_DE_TROCA[nome]
         if not contrato.controlador:
             raise ValueError(f"a ilha {nome!r} tem agua e pede o controlador do contrato")
         tm = self._tm(self._estado.tick)
         self.mundo.atualizar(tm)
-        reg = self.mundo.trocar_layout(layout, tm)
-        self.cmf, self.cct = self.mundo.cmf, contrato
-        self._montar_contrato()
         de = self.pet
-        self.pet = self._pet_em_terra(*self.pet)
+        if maior is None:
+            reg = self.mundo.trocar_layout(layout, tm)
+            self.cmf, self.cct = self.mundo.cmf, contrato
+            self._montar_contrato()
+            self.pet = self._pet_em_terra(*self.pet)
+        else:
+            # como na troca para a agua, a orientacao volta ao setor 0 e o registro das decisoes do controlador comeca vazio (as de antes
+            # estao nas coordenadas do mapa de la), mesmo que o controlador ja viesse ligado
+            reg = self.mundo.trocar_para_maior(layout, *maior, tm)
+            self.cmf, self.cct = self.mundo.cmf, contrato
+            self._montar_contrato()
+            dx, dy = reg["deslocamento"]
+            self.pet = self._pet_em_terra(*no_mapa(de[0] + dx, de[1] + dy, self.cmf))
         self._pendente = None
         reg["pet"] = {"de": list(de), "para": list(self.pet)}
         self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o levar_pet)
@@ -2272,6 +2319,7 @@ class MotorMundo(MotorFrutas):
                 "regioes": self.regioes, "visitas": self.visitas,
                 "manchas_abertas": [dict(v) for v in self._manchas_abertas.values()],
                 **({} if m.troca_ilha is None else {"troca_ilha": m.troca_ilha}),
+                **({} if m.troca_maior is None else {"troca_maior": m.troca_maior}),
                 **({} if not self.cbh.ligada else {
                     "necessidades": [dict(n) for n in m.necessidades.values()], "prox_necessidade": m.prox_necessidade,
                     "recolhidas": m.recolhidas, "alivios": self.alivios, "recolhas": self.recolhas,

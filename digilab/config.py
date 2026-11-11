@@ -2498,7 +2498,15 @@ CONFIG_CONTRATO_AGUA = ConfigContrato(controlador=True)
 # `mudar_ilha` leva o mundo do pet para um destino desta tabela, pelo nome: o layout (o mesmo de antes, so com outro nome e com a agua) e
 # o contrato que passa a valer (o controlador, que desvia da agua). DECIDIDO (2026-11-10: "Migram por evento")
 ILHAS_DE_TROCA = {LAYOUT_MUNDO_MVP_AGUA.nome: (LAYOUT_MUNDO_MVP_AGUA, CONFIG_CONTRATO_AGUA),
-                  LAYOUT_MUNDO_ILHA_AGUA.nome: (LAYOUT_MUNDO_ILHA_AGUA, CONFIG_CONTRATO_AGUA)}
+                  LAYOUT_MUNDO_ILHA_AGUA.nome: (LAYOUT_MUNDO_ILHA_AGUA, CONFIG_CONTRATO_AGUA),
+                  LAYOUT_MUNDO_GRANDE.nome: (LAYOUT_MUNDO_GRANDE, CONFIG_CONTRATO_AGUA)}
+# a ida para a ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG4; a IG-7 do Matheus: o pet, a comida e a bola dos pets vivos vao
+# "deslocados junto com o lar"): os destinos do `mudar_ilha` que tem OUTRO tamanho e OUTRO layout. Por nome: o tamanho do mundo (celulas)
+# e os layouts de onde se pode vir (o mundo do produto de hoje, sem agua ou com ela). Nessa troca tudo o que tem posicao anda o
+# deslocamento do ninho de la para o ninho de ca, e o que cair em celula fechada vai para a terra mais perto. Vale uma vez por mundo, e
+# pode vir depois da troca para a agua (os pets v21 que ja passaram, e os v22, que nasceram nela). DECIDIDO (2026-11-11)
+ILHAS_MAIORES = {LAYOUT_MUNDO_GRANDE.nome: (CONFIG_MUNDO_GRANDE.celulas_x, CONFIG_MUNDO_GRANDE.celulas_y,
+                                            (LAYOUT_MUNDO_MVP, LAYOUT_MUNDO_MVP_AGUA))}
 
 
 # =====================================================================
