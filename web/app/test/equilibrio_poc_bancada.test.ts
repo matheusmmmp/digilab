@@ -11,7 +11,7 @@ import {
 } from "../scripts/equilibrio_poc/comum.ts";
 import { basesDa } from "../scripts/equilibrio_poc/faixas.ts";
 import { limitesNpc, passaNpc } from "../scripts/equilibrio_poc/criterios.ts";
-import { candidatoDe, LP5_1_ESQ, LP5_1_R2, LP5_2 } from "../scripts/equilibrio_poc/candidatos.ts";
+import { candidatoDe, LP5_1_ESQ, LP5_1_R2, LP5_2, LP5_3 } from "../scripts/equilibrio_poc/candidatos.ts";
 import { motorDoCandidato } from "../scripts/equilibrio_poc/bancada.ts";
 
 const c = CANDIDATO_V21;
@@ -134,6 +134,10 @@ describe("a esquiva pela perspicacia e pela velocidade (D-LP5-14)", () => {
     const x = candidatoDe({ nome: "teste", esquiva: { ligada: 1, pertoChance: .3 } });
     expect(rivalCanonico(x, "cirro_crianca_sereno").perc).toBeGreaterThan(rivalCanonico(x, "brasa_crianca_arisco").perc!);
     expect(() => candidatoDe({ nome: "teste", esquiva: { ligada: 1, chanceMax: 2 } })).toThrow();
+  });
+  test("o lp5_3 (D-LP5-20) e o lp5_2 com o fator do Salao em 0,8, e so isso", () => {
+    expect(LP5_3.fatorRival).toEqual({ salao: .8, liga: 1, torre: 1, fabrica: 1 });
+    expect({ ...LP5_3, nome: "", fatorRival: null }).toEqual({ ...LP5_2, nome: "", fatorRival: null });
   });
   test("o lp5_2 (D-LP5-17) e o lp5_1_esq com o Gazimon em 76,8, e so isso", () => {
     expect(LP5_2.npcTotal.npc_tier1_brutamontes).toBe(76.8);
