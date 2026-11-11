@@ -64,7 +64,7 @@ async function abrir(ctx: BrowserContext): Promise<{ page: Page; erros: string[]
   await page.goto(`${PREFIXO}/web/app/package.json`);
   await page.evaluate(([chave, s]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 1, log: [] }));
-    localStorage.setItem(chave + "-descarte", "6"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
+    localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     localStorage.setItem(chave, s);
   }, [CHAVE, JSON.stringify(SAVE)] as const);
   const erros: string[] = [];

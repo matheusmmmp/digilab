@@ -1,5 +1,7 @@
 # Plano da terceira rodada de equilíbrio do combate em tempo real (em cima da luta v18)
 
+> **SUBSTITUÍDO** pela [`docs/TAREFA_V3_LUTA_POC.md`](TAREFA_V3_LUTA_POC.md) (2026-11-08): a luta do jogo é a simulação da POC. O combate por turnos saiu do jogo na LP4 (2026-11-10); este documento fica como registro.
+
 Worker: Claude Code, Opus 5.5, worktree `D:\Trab\digilab\v3-luta-equilibrio-r3`, branch `v3-luta-equilibrio-r3`, 2026-11-07.
 **Status: APROVADO pelo Matheus em 2026-11-08.** As decisões D-R3-1 a D-R3-9 (seção 6) estão DECIDIDAS pela recomendação: "Aprovo as 9", em 2026-11-08, em resposta a "Aprova as D-R3-1 a D-R3-9 pela recomendação do plano?" (repassado pelo coordenador de sprites e luta, a sessão `local_a6f79153`).
 Os números novos da rodada seguem PROPOSTOS até ele decidir cada um. **Nenhuma luta roda** antes do merge deste plano na `main` (o merge é do Matheus) e

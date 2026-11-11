@@ -1,0 +1,62 @@
+{
+ "tarefa": "LUTA_POC, LP4, D-LP4-6",
+ "mapa": "campo",
+ "rival": "npc_tier1_brutamontes",
+ "hp_rival": 864,
+ "lutas_por_pet": 200,
+ "treino_8": {
+  "vigor": 2,
+  "folego": 1,
+  "recuperacao": 1,
+  "forca": 2,
+  "mira": 1,
+  "guarda": 1
+ },
+ "pets": [
+  {
+   "semente": 11,
+   "especie": "cirro",
+   "forma": "cirro_crianca_arisco",
+   "hp_sem_treino": 397,
+   "vitoria_sem_treino": 0,
+   "hp_com_8": 737,
+   "vitoria_com_8": 0
+  },
+  {
+   "semente": 21,
+   "especie": "ferrugem",
+   "forma": "ferrugem_crianca_arisco",
+   "hp_sem_treino": 737,
+   "vitoria_sem_treino": 0,
+   "hp_com_8": 1077,
+   "vitoria_com_8": 0.32
+  },
+  {
+   "semente": 23,
+   "especie": "brasa",
+   "forma": "brasa_crianca_arisco",
+   "hp_sem_treino": 510,
+   "vitoria_sem_treino": 0,
+   "hp_com_8": 851,
+   "vitoria_com_8": 0.195
+  },
+  {
+   "semente": 101,
+   "especie": "cirro",
+   "forma": "cirro_crianca_arisco",
+   "hp_sem_treino": 397,
+   "vitoria_sem_treino": 0,
+   "hp_com_8": 737,
+   "vitoria_com_8": 0
+  },
+  {
+   "semente": 202,
+   "especie": "cirro",
+   "forma": "cirro_crianca_arisco",
+   "hp_sem_treino": 397,
+   "vitoria_sem_treino": 0,
+   "hp_com_8": 737,
+   "vitoria_com_8": 0
+  }
+ ]
+}

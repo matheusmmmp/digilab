@@ -4,7 +4,8 @@ Coordenador: Matheus (sessão direta). Worker da etapa I0: Claude Code, Opus 5.5
 `v3-individualidade` (as etapas seguintes com sufixo, como `v3-individualidade-i0`). Status: **ABERTA; a proposta na `main` (#676);
 as IN-1 a IN-8 DECIDIDAS em 2026-11-07, pela recomendação; o I0 (a conferência) na `main` (#684); o I1 (a bateria como ferramenta)
 na `main` (#695); o plano do I2 APROVADO (#700); o I2a na `main` (#707); o I2b (a run da linha de base, faixa 85101…85505)
-na `main` (#718); o adendo 1 entregue (#746); o plano do I5 APROVADO (#747).**
+na `main` (#718); o adendo 1 na `main` (#746); o plano do I5 APROVADO, na `main` (#747); o I5a na `main` (#751); o I5b na `main` (#768); o plano do I7 e o adendo 1 na `main` (#755, #769); o I7a (as medidas e
+o orquestrador) entregue.**
 
 Categoria: documentacao. Origem: Matheus, 2026-11-07: depois da conversa sobre o connectome e a escala, direcionar a pesquisa para o
 temperamento herdado, o sinal do dono, a memória de episódios e o hábito, com uma medida comum de individualidade.
@@ -153,6 +154,30 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
   vidas do I2 rejogadas do log: três perfis por dia (SEQ, LUGAR e HORA) e a distintividade de cada pet contra o dono e o mundo da
   semente.
 
+## Resultado da etapa I5a (2026-11-10, Claude Code, Opus 5.5, branch `v3-individualidade-i5a`)
+
+- **As medidas** (`digilab/metrics.py`, IH-7): `perfis_habito_dia` (SEQ, LUGAR e HORA de um dia, com o mínimo de 16 decisões
+  acordadas), `distancia_entre_dias` (o D_si), `distancia_mesmo_dia` (o D_dono, o D_mundo e o D_braço), `distintividade_habito` (os H) e
+  `media_habito`. Os testes, contra casos feitos à mão, estão em `tests/test_individualidade_i5.py`.
+- **O orquestrador:** `experiments/run_v3_individualidade_i5.py`, com as configs `individualidade_i5.json` (a análise) e
+  `individualidade_i5_fumaca.json`.
+  - Ele lê o `vidas.tar.gz` do I2, rejoga cada vida e confere que o log refeito é o do disco e que há 96 decisões por dia.
+  - Grava o `perfis.jsonl`, e a análise sai desse arquivo.
+  - **A trava:** o cabeçalho APROVADO, a seção 11 do plano (o registro), o pacote, as bases e o K do I2, no máximo 4 processos e nada
+    por cima de uma pasta.
+- **A fumaça** (as sementes 101 e 202, K = 2, 14 dias, 24 vidas, 4 processos): o replay custou 3,1 s por vida, e a fumaça inteira
+  1 min 36 s. Duas fumaças seguidas deram a mesma análise. Estimativa para as 360 vidas do I2: uns 5 min de replay com 4 processos.
+- **As leituras do plano** estão no registro: D-IND-I5a-1 a 3.
+
+## Resultado da etapa I5b (2026-11-10, Claude Code, Opus 5.5, branch `v3-individualidade-i5b`)
+
+- **A análise única do I5** rodou sobre as 360 vidas do I2, com o registro antes (`977b33c`) e todos os logs refeitos iguais aos do disco.
+  O resultado está no `docs/RESULTADO_V3_INDIVIDUALIDADE.md`, seção 8, e o artefato em `artifacts_v3_individualidade_i5/`.
+- **O achado:** o H_dono não se distingue de zero em nenhum perfil nem braço, e o H_mundo fica acima de zero em todos. O pet se parece
+  com os outros pets do mesmo dono tanto quanto com ele mesmo em outro dia: o que separa os pets é o dono (D-IND-I5b-1).
+- **As expectativas:** a E1 não se confirma, a E2 sai ao contrário e a E3 se confirma sem separar a SEQ.
+- **O custo:** 2,0 s por vida, 3 min 53 s ao todo com 4 processos.
+
 ## As etapas seguintes
 
 | etapa | o quê | entrega |
@@ -161,3 +186,55 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
 | I2 | a linha de base descritiva no modular de hoje | `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md` e uma faixa pedida antes; a run; o `RESULTADO_V3_INDIVIDUALIDADE.md` |
 | Gate I | o Gate I no modular (IN-4), entre o I2 e o I3 | pela `docs/TAREFA_V2_GATE_I.md`, com os critérios no modular |
 | I3, I4, I5, I6 | o temperamento, o dono, o hábito como medida e a ficha | pela proposta, seção 5 |
+| I7 | o desenvolvimento contrafactual: a mesma vida com uma coisa diferente num dia, e o quanto o pet se afasta depois | `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md` (APROVADO); o I7a e o I7b, depois do I5b |
+
+## O plano do I7, o desenvolvimento contrafactual (2026-11-10, Claude Code, Opus 5.5, branch `v3-individualidade-i7-plano`)
+
+- **De onde vem:** a conversa de 2026-11-10 sobre como tirar da frente um achado. O Matheus escolheu a Q3, o desenvolvimento
+  contrafactual, pela recomendação.
+- **O plano:** `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md`, APROVADO pelo Matheus em 2026-11-10 ("Aprovo todas"), com as IR-1 a
+  IR-9 decididas pela recomendação.
+  - Cada pet do I2 é vivido de novo com uma única coisa diferente num dia (outra rng de política, ou um tapa), nos dias 2, 4, 6, 8 e 10.
+  - O afastamento do ramo é medido pelos perfis do I5, contra um gêmeo com outro acaso desde o nascimento.
+  - Três hipóteses rivais ficam escritas antes: a canalização, o ciclo que se reforça e o caos.
+- **Sem mecanismo novo** (IN-7). O I7a depende do I5a na `main` (#751), e o I7b roda depois do I5b.
+
+## O adendo 1 do plano do I7 (2026-11-10, Claude Code, Opus 5.5, branch `v3-individualidade-i7-adendo1`)
+
+- **O adendo** está DECIDIDO pelo Matheus em 2026-11-10 ("E daí a gente parte para seguir as recomendações"), na seção 12 do
+  `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md`, depois da conferência das 29 referências (vault, seções 9 e 10). Ele traz:
+  - uma quarta hipótese, a H-TRANS (caos cedo, canalização depois);
+  - a régua crua e a forma em U como condições das frases;
+  - a expectativa da malha fechada;
+  - dois descritivos: o estado interno e o efeito comum do tapa.
+
+  As decisões A1-1 a A1-5 estão DECIDIDAS, todas pela recomendação.
+- **A D-IND-I5b-1** (o dono separa os pets) está confirmada pelo Matheus.
+
+## Resultado da etapa I7a (2026-11-10, Claude Code, Opus 5.5, branch `v3-individualidade-i7a`)
+
+- **As medidas** (`digilab/metrics.py`, a seção do I7):
+  - `distancias_ramo` (a D_b(d));
+  - `razao_de_somas` (o Φ) e `soma_presente` (a régua crua);
+  - `inclinacao_ou_none` (o γ e o β);
+  - `folhas_estado` e `distancia_estado` (o estado interno, 12.5, PROPOSTA);
+  - `efeito_comum` (o C_E) e `reencontrou`.
+
+  Os testes, contra casos feitos à mão, estão em `tests/test_individualidade_i7.py`.
+- **O orquestrador:** `experiments/run_v3_individualidade_i7.py`, com as configs `individualidade_i7.json` (a run) e
+  `individualidade_i7_fumaca.json`.
+  - **Os ramos:**
+    - o N, o G, o A(t) e o E(t) vividos pelo laço do dono, com o embrulho do ramo (`DonoRamo`);
+    - o E°(t), o log do I2 com o tapa inserido, rejogado.
+  - **As conferências:** o G-I7-0 a 3 falham alto, e cada ramo é vivido duas vezes (IR-6).
+  - **A análise:** o bootstrap sobre as sementes soma agregados por semente; a leitura segue a 7.2 com o adendo 1 (a H-TRANS, a régua
+    crua e o U).
+  - **A trava:** o cabeçalho APROVADO, a seção `## 13. O registro da análise`, as bases e o K do I2, os 14 dias, no máximo 4 processos
+    e nada por cima de uma pasta.
+- **A fumaça** (as sementes 101 e 202, K = 1, 14 dias, 12 pets, 4 processos, com a suíte inteira de outra sessão rodando ao lado):
+  - todas as conferências passaram;
+  - levou 12 min 20 s de parede, 62 s por pet com 4 processos e 244 s por pet dentro de cada processo;
+  - uma pet sozinha, num processo, levou 93 s (cada ramo, vivido duas vezes, 5 s).
+- **O custo passa do dobro da estimativa do plano** (45 s por pet e 1 h 10 min). A projeção para as 360 pets é de cerca de 6 h com 4
+  processos. Pela seção 8 do plano, a IR-6 volta ao Matheus antes da run.
+- **As leituras do plano** estão no registro: D-IND-I7a-1 a 8.

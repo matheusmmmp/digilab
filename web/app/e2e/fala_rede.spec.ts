@@ -7,14 +7,16 @@ import { fileURLToPath } from "node:url";
 
 const PREFIXO = "/" + basename(fileURLToPath(new URL("../../..", import.meta.url)));
 const APP = `${PREFIXO}/web/dist/`, CHAVE = "digilab-web-v21-sprites";
-const SAVE = { semente: 4242, versao: 13, log: [[480, "t", 120], [600, "d", "acariciar"], [600, "t", 120]] };
+const SAVE = { semente: 4242, versao: 21, log: [[480, "t", 120], [600, "d", "acariciar"], [600, "t", 120]] };
 
 async function semear(page: Page, save?: object): Promise<void> {
   await page.goto("/Assets/digilab_atlas_up.json");
   await page.evaluate(([chave, s]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 1, log: [] }));
-    localStorage.setItem(chave + "-descarte", "6"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
+    localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     if (s) localStorage.setItem(chave, s);
+    /* o nivel do Tamer com o Conversar aberto (marco 3, nivel.ts): o pet de teste do modular sai do ovo bebe, e sem a chave o Conversar fica trancado */
+    localStorage.setItem(chave + "-nivel", JSON.stringify({ marcos: [1, 2, 3], cartoes: [1, 2, 3] }));
   }, [CHAVE, save ? JSON.stringify(save) : ""] as const);
 }
 type Pedido = Record<string, any>;
@@ -41,7 +43,7 @@ async function enviar(page: Page, pedidos: Pedido[], txt: string): Promise<void>
 const irPara = (page: Page, rota: string) => page.evaluate(r => { location.hash = r; }, rota);
 async function ligarRede(page: Page): Promise<void> {
   await irPara(page, "#/config");
-  await page.locator(".mc-cfg .hx-linha", { hasText: "Fala do pet" }).click();
+  await page.locator(".mc-cfg").getByRole("button", { name: "Fala do pet" }).click();   /* os Ajustes em icones: o nome acessivel */
   await page.getByRole("radio", { name: /^Livre/ }).click();                  /* em Ajustes os modos sao radios */
   const chave = page.getByRole("switch", { name: /Fala pela rede/ });
   await expect(chave).not.toBeChecked();                                   /* desligada por padrao */

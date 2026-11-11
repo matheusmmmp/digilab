@@ -1,0 +1,207 @@
+{
+ "tarefa": "LUTA_POC, LP5-0, a sonda das formas da vida do Motor",
+ "commit": "4905c56e33b90bf92c58c7784aebe13497f2de02",
+ "faixa": "calibracao",
+ "pets_por_base": 20,
+ "donos": {
+  "atencioso": {
+   "formas_distintas": {
+    "crianca": 4,
+    "adolescente": 4,
+    "adulto": 4,
+    "mega": 4
+   },
+   "formas": {
+    "crianca": {
+     "ferrugem_crianca_sereno": 22,
+     "brasa_crianca_sereno": 27,
+     "cirro_crianca_sereno": 24,
+     "limo_crianca_sereno": 27
+    },
+    "adolescente": {
+     "ferrugem_adolescente_colosso": 22,
+     "brasa_adolescente_colosso": 27,
+     "cirro_adolescente_colosso": 24,
+     "limo_adolescente_colosso": 27
+    },
+    "adulto": {
+     "ferrugem_adulto_vigia": 22,
+     "brasa_adulto_vigia": 27,
+     "cirro_adulto_vigia": 24,
+     "limo_adulto_vigia": 27
+    },
+    "mega": {
+     "ferrugem_adulto_tita": 22,
+     "brasa_adulto_tita": 27,
+     "cirro_adulto_tita": 24,
+     "limo_adulto_tita": 27
+    }
+   }
+  },
+  "relapso": {
+   "formas_distintas": {
+    "crianca": 4,
+    "adolescente": 14,
+    "adulto": 14,
+    "mega": 14
+   },
+   "formas": {
+    "crianca": {
+     "ferrugem_crianca_arisco": 22,
+     "brasa_crianca_arisco": 27,
+     "cirro_crianca_arisco": 24,
+     "limo_crianca_arisco": 27
+    },
+    "adolescente": {
+     "ferrugem_adolescente_guardiao": 8,
+     "brasa_adolescente_brigao": 4,
+     "brasa_adolescente_guardiao": 9,
+     "cirro_adolescente_guardiao": 10,
+     "cirro_adolescente_colosso": 10,
+     "limo_adolescente_guardiao": 8,
+     "ferrugem_adolescente_colosso": 8,
+     "limo_adolescente_colosso": 10,
+     "limo_adolescente_cacador": 3,
+     "brasa_adolescente_colosso": 11,
+     "brasa_adolescente_cacador": 3,
+     "ferrugem_adolescente_brigao": 6,
+     "cirro_adolescente_brigao": 4,
+     "limo_adolescente_brigao": 6
+    },
+    "adulto": {
+     "ferrugem_adulto_espelho": 8,
+     "brasa_adulto_duelista": 4,
+     "brasa_adulto_espelho": 9,
+     "cirro_adulto_espelho": 10,
+     "cirro_adulto_vigia": 10,
+     "limo_adulto_espelho": 8,
+     "ferrugem_adulto_vigia": 8,
+     "limo_adulto_vigia": 10,
+     "limo_adulto_sentinela": 3,
+     "brasa_adulto_vigia": 11,
+     "brasa_adulto_sentinela": 3,
+     "ferrugem_adulto_duelista": 6,
+     "cirro_adulto_duelista": 4,
+     "limo_adulto_duelista": 6
+    },
+    "mega": {
+     "ferrugem_adulto_muralha": 8,
+     "brasa_adulto_furioso": 4,
+     "brasa_adulto_muralha": 9,
+     "cirro_adulto_muralha": 10,
+     "cirro_adulto_tita": 10,
+     "limo_adulto_muralha": 8,
+     "ferrugem_adulto_tita": 8,
+     "limo_adulto_tita": 10,
+     "limo_adulto_emboscador": 3,
+     "brasa_adulto_tita": 11,
+     "brasa_adulto_emboscador": 3,
+     "ferrugem_adulto_furioso": 6,
+     "cirro_adulto_furioso": 4,
+     "limo_adulto_furioso": 6
+    }
+   }
+  },
+  "aleatorio": {
+   "formas_distintas": {
+    "crianca": 4,
+    "adolescente": 15,
+    "adulto": 15,
+    "mega": 15
+   },
+   "formas": {
+    "crianca": {
+     "ferrugem_crianca_arisco": 22,
+     "brasa_crianca_arisco": 27,
+     "cirro_crianca_arisco": 24,
+     "limo_crianca_arisco": 27
+    },
+    "adolescente": {
+     "ferrugem_adolescente_brigao": 4,
+     "brasa_adolescente_colosso": 15,
+     "cirro_adolescente_brigao": 3,
+     "cirro_adolescente_colosso": 14,
+     "limo_adolescente_brigao": 5,
+     "ferrugem_adolescente_colosso": 9,
+     "cirro_adolescente_guardiao": 6,
+     "limo_adolescente_guardiao": 4,
+     "limo_adolescente_colosso": 15,
+     "brasa_adolescente_guardiao": 8,
+     "cirro_adolescente_cacador": 1,
+     "brasa_adolescente_brigao": 4,
+     "ferrugem_adolescente_guardiao": 8,
+     "limo_adolescente_cacador": 3,
+     "ferrugem_adolescente_cacador": 1
+    },
+    "adulto": {
+     "ferrugem_adulto_duelista": 4,
+     "brasa_adulto_vigia": 15,
+     "cirro_adulto_duelista": 3,
+     "cirro_adulto_vigia": 14,
+     "limo_adulto_duelista": 5,
+     "ferrugem_adulto_vigia": 9,
+     "cirro_adulto_espelho": 6,
+     "limo_adulto_espelho": 4,
+     "limo_adulto_vigia": 15,
+     "brasa_adulto_espelho": 8,
+     "cirro_adulto_sentinela": 1,
+     "brasa_adulto_duelista": 4,
+     "ferrugem_adulto_espelho": 8,
+     "limo_adulto_sentinela": 3,
+     "ferrugem_adulto_sentinela": 1
+    },
+    "mega": {
+     "ferrugem_adulto_furioso": 4,
+     "brasa_adulto_tita": 15,
+     "cirro_adulto_furioso": 3,
+     "cirro_adulto_tita": 14,
+     "limo_adulto_furioso": 5,
+     "ferrugem_adulto_tita": 9,
+     "cirro_adulto_muralha": 6,
+     "limo_adulto_muralha": 4,
+     "limo_adulto_tita": 15,
+     "brasa_adulto_muralha": 8,
+     "cirro_adulto_emboscador": 1,
+     "brasa_adulto_furioso": 4,
+     "ferrugem_adulto_muralha": 8,
+     "limo_adulto_emboscador": 3,
+     "ferrugem_adulto_emboscador": 1
+    }
+   }
+  },
+  "incoerente": {
+   "formas_distintas": {
+    "crianca": 4,
+    "adolescente": 4,
+    "adulto": 4,
+    "mega": 4
+   },
+   "formas": {
+    "crianca": {
+     "ferrugem_crianca_sereno": 22,
+     "brasa_crianca_sereno": 27,
+     "cirro_crianca_sereno": 24,
+     "limo_crianca_sereno": 27
+    },
+    "adolescente": {
+     "ferrugem_adolescente_colosso": 22,
+     "brasa_adolescente_colosso": 27,
+     "cirro_adolescente_colosso": 24,
+     "limo_adolescente_colosso": 27
+    },
+    "adulto": {
+     "ferrugem_adulto_vigia": 22,
+     "brasa_adulto_vigia": 27,
+     "cirro_adulto_vigia": 24,
+     "limo_adulto_vigia": 27
+    },
+    "mega": {
+     "ferrugem_adulto_tita": 22,
+     "brasa_adulto_tita": 27,
+     "cirro_adulto_tita": 24,
+     "limo_adulto_tita": 27
+    }
+   }
+  }
+ }
+}

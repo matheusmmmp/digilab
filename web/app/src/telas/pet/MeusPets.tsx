@@ -3,12 +3,11 @@
    Um pet por vez: o jogo guarda o registro de um pet so; ovo novo e no Registro, com confirmacao. */
 import { useEffect, useMemo, useRef, useState } from "react";
 import "../../estilo/menus_config.css";
-import { DO_ESP, Motor, NOME_EST, OVO, chaveSprite, lutadorPet, nomeEstagio, nomeForma, vidaExibida } from "../../../motor/index.ts";
+import { DO_ESP, Motor, NOME_EST, OVO, chaveSprite, nomeEstagio, nomeForma } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { abrirModal } from "../../componentes/modal.ts";
 import { BotaoHx, ChipHx, PainelHx } from "../../componentes/hx/index.ts";
 import { trocarMotor, useJogo } from "../../jogo.ts";
-import { LUTA, previa } from "../../luta.ts";
 import { CHAVE } from "../../save.ts";
 import { abrirGuardado, ativarGuardado, lerGuardados } from "../../pets.ts";
 import { abrirHeranca, podeSerPai } from "../../heranca.ts";
@@ -27,7 +26,6 @@ export function voltarAoAnterior(): string {
   if (!Number.isInteger(d?.semente) || !Array.isArray(d?.log)) throw new Error("pet anterior guardado não tem semente e registro");
   trocarMotor(Motor.reproduzir(d.semente, d.log, d.versao ?? 1), "save");
   try { localStorage.removeItem(CHAVE_ANTERIOR); } catch { /* ja trocou */ }
-  LUTA.rivalFixo = null; previa("arena");
   return "Pet anterior restaurado pelo replay do registro guardado.";
 }
 
@@ -45,13 +43,13 @@ function Guardados({ ativar, cruzar }: { ativar: (i: number) => void; cruzar: ((
       {cruzar && <p className="mc-apoio">Seu pet é adulto: ele pode cruzar com outro adulto. O filho herda o temperamento dos dois e o brasão de um deles; nada aprendido passa adiante.</p>}
       <ul className="mc-lista">
         {lista.map((g, i) => {
-          const img = a.tipo === "ok" ? imagemAtlas(a, chaveSprite(g.forma)) : null, p = lutadorPet(g, "", true).cond;
+          const img = a.tipo === "ok" ? imagemAtlas(a, chaveSprite(g.forma)) : null;
           return (
             <li key={i} className="mc-guardado">
               <span className="mc-palco mc-palco--congelado">{img && <img className="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>
               <span className="mc-guardado__txt"><b>{nomeForma(g.forma)}</b>
                 <span><ChipHx tom="rotulo">{nomeEstagio(g.forma)}</ChipHx> dia {diaDe(g.e.tick)}</span>
-                <span className="mc-apoio">vida {Math.round(vidaExibida(p, g.forma.est, g.treino.total, g.versao)).toLocaleString("pt-BR")} · treino +{dec(g.treino.total, 0)}</span></span>
+                <span className="mc-apoio">vida {Math.round(g.statsLutaPoc().hp).toLocaleString("pt-BR")} · treino +{dec(g.treino.total, 0)}</span></span>
               <span className="mc-guardado__bts">
                 <BotaoHx onClick={() => ativar(i)}>Ativar</BotaoHx>
                 {cruzar && podeSerPai(g) &&

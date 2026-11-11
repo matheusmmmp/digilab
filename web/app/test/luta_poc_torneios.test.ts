@@ -69,11 +69,11 @@ describe("as series: o rival, o mapa e a vida que passa de uma luta para a outra
 });
 
 describe("a Fabrica da luta da POC", () => {
-  test("a versao 21 entra no registro do Tamer; a de hoje segue a 14 com a chave desligada; sem fator de rival", () => {
-    expect(VERSOES_FABRICA).toEqual([13, 14, 21]);
-    expect(VERSAO_FABRICA_ATUAL).toBe(14);
-    expect(regraFabrica(VERSAO_FABRICA_POC).poc).toBe(true);
-    expect(() => regraFabrica(VERSAO_FABRICA_POC, 0.5)).toThrow(/fator/);
+  test("a versao 21 e a unica do registro do Tamer desde a LP4 (as 13 e 14 sairam com o combate por turnos); sem fator de rival", () => {
+    expect(VERSOES_FABRICA).toEqual([21]);
+    expect(VERSAO_FABRICA_ATUAL).toBe(21);
+    expect(regraFabrica(VERSAO_FABRICA_POC)).toEqual({ versao: 21 });
+    for (const v of [13, 14]) expect(() => regraFabrica(v), `v${v}`).toThrow(/desconhecida/);
     expect(MAPA_FABRICA).toBe("campo");
   });
   test("as series de 3 sem cura, a troca pelo derrotado (que entra inteiro) e o fim na primeira derrota; deterministica", () => {
@@ -83,8 +83,7 @@ describe("a Fabrica da luta da POC", () => {
       expect(b.resumo).toBe(a.resumo);
       const L = a.t.lutas;
       L.forEach((l, i) => {
-        expect(l.res).toBeNull();
-        expect(l.poc!.fim || l.poc!.relogio > 0).toBe(true);
+        expect(l.poc.fim || l.poc.relogio > 0).toBe(true);
         if (!i) return;
         const ant = L[i - 1], mesmaSerie = Math.floor(l.k / LUTAS_SERIE_FABRICA) === Math.floor(ant.k / LUTAS_SERIE_FABRICA);
         const hpMax = a.t.statsPoc(l.alugado).hp;

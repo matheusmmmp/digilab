@@ -3,7 +3,7 @@
    (D1c da UX_TELA_PET): o A v11 abre so no ScanDigiBrain. */
 import type { AcaoPet, RegraLobos } from "../../motor/index.ts";
 import { useJogo } from "../jogo.ts";
-import { lutaSeguraTempo } from "../luta.ts";
+import { lutaSeguraTempo } from "../lutaPocTela.ts";
 import { estadoSelo, type EstadoSelo } from "../seloDigiBrain.ts";
 import { useTempo } from "../tempo.ts";
 

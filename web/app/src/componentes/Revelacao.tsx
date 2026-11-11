@@ -14,9 +14,8 @@ import { S, gradeDe, imagemGrade, paleta } from "../grades.ts";
 import { Deco } from "./Deco.tsx";
 import { SeloMedalha } from "./Medalha.tsx";
 import { abrirModal, rotaDaTelaCheia } from "./modal.ts";
-import { ehLuta } from "../rotas.ts";
 import { SOM } from "../som.ts";
-import { useLuta } from "../luta.ts";
+import { useLutaPoc } from "../lutaPocTela.ts";
 import { CENA_EVOLUCAO_UP } from "../evolucaoUp.ts";
 import { CenaEvolucao } from "./CenaEvolucao.tsx";
 import { tamerAtual, useJogo } from "../jogo.ts";
@@ -178,7 +177,7 @@ export function reverEvolucao(i: number): void {
 }
 /** acompanha as evolucoes: abre a revelacao quando o motor registra uma nova nesta sessao; Continuar leva a Crescer · Evolucao */
 export function RevelacaoEvolucao({ continuar }: { continuar?: () => void }) {
-  const jogo = useJogo(), { motor: m } = jogo, luta = useLuta(), [, redesenhar] = useState(0);
+  const jogo = useJogo(), { motor: m } = jogo, luta = useLutaPoc(), [, redesenhar] = useState(0);
   useEffect(() => { const o = () => redesenhar(x => x + 1); ouvintes.add(o); return () => { ouvintes.delete(o); }; }, []);
   useEffect(() => {
     const n = m.evolucoes.length;
@@ -191,6 +190,6 @@ export function RevelacaoEvolucao({ continuar }: { continuar?: () => void }) {
     if (n > VISTAS.n) { VISTAS.n = n; VISTAS.pendente = n - 1; redesenhar(x => x + 1); }
   });
   const i = VISTAS.pendente;
-  if (i === null || !m.evolucoes[i] || luta.lutando || ehLuta(location.hash)) return null;
+  if (i === null || !m.evolucoes[i] || luta.palco !== null) return null;
   return <Revelacao key={i} i={i} m={m} fechar={() => { VISTAS.pendente = null; redesenhar(x => x + 1); continuar?.(); }} />;
 }

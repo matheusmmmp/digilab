@@ -36,7 +36,7 @@ async function semear(page: Page): Promise<void> {
   /* sem pet ativo nem boas-vindas: so a luta montada (o save e semeado por uma pagina da mesma origem que nao e o app) */
   await page.goto("/motor/index.ts");
   await page.evaluate((chave) => {
-    localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-descarte", "7");
+    localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-descarte", "8");
     localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
   }, CHAVE);
 }

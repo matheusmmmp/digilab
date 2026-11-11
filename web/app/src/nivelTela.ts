@@ -12,7 +12,7 @@
 import { useEffect, useSyncExternalStore } from "react";
 import { type Motor } from "../motor/index.ts";
 import { motorReal, tamerAtual, useJogo } from "./jogo.ts";
-import { CHAVE_GUARDADOS, ESCADA, abrirGuardado, lerGuardados, petDaReceita } from "./pets.ts";
+import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados } from "./pets.ts";
 import { CHAVE, petExemplo } from "./save.ts";
 import { dicasLigadas, pedirCartao, retirarCartao, esquecerDicasVistas } from "./dicas.ts";
 import { definirTrancas } from "./trancas.ts";
@@ -32,18 +32,16 @@ let semeadas: { sementes: ReadonlySet<number>; assinaturas: ReadonlySet<string> 
 function pecasSemeadas() {
   if (!semeadas) {
     const exemplo = petExemplo();
-    /* so as sementes sao baratas; as assinaturas da escada (a simulacao dos pets) saem na primeira vez que uma semente bate */
-    semeadas = { sementes: new Set([exemplo.semente, ...ESCADA.map(r => r.semente)]), assinaturas: new Set() };
+    /* desde a LP2 da LUTA_POC (e para todos desde a LP4) a escada de exemplo nao e semeada: so o pet de exemplo */
+    semeadas = { sementes: new Set([exemplo.semente]), assinaturas: new Set() };
     (semeadas.assinaturas as Set<string>).add(assinaturaIntocada(exemplo));
   }
   return semeadas;
 }
-let escadaFeita = false;
-/** o pet e do jogador: nao e o de exemplo nem um da escada semeada ainda intocado (o criterio do ativo e dos guardados) */
+/** o pet e do jogador: nao e o de exemplo ainda intocado (o criterio do ativo e dos guardados) */
 export function ehPetDoJogador(m: Motor): boolean {
   const s = pecasSemeadas();
   if (!s.sementes.has(m.semente)) return true;
-  if (!escadaFeita) { for (const r of ESCADA) (s.assinaturas as Set<string>).add(assinaturaIntocada(petDaReceita(r))); escadaFeita = true; }
   return !ehPetIntocado(m, s.assinaturas);
 }
 
