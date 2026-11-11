@@ -74,11 +74,12 @@ function Principal({ abrir }: { abrir: (p: ParteConfig) => void }) {
         interruptor={{ ligado: mitologia, mudar: ligarMitologia }} />
       <Aj ic={Camera} nome="Viagem da câmera" novo resumo="desligada, os lugares abrem num corte seco" interruptor={{ ligado: viagem, mudar: escolherViagem }} />
       <Aj ic={MessageCircle} nome="Fala" rotulo="Fala do pet" resumo={`modo ${NOME_MODO[fl.modo]} · ${rotuloLLM().texto}`} abrir={() => abrir("fala")} />
-      <Aj ic={Volume2} nome="Som" rotulo="Som do jogo" resumo="golpes e impactos na luta e o efeito da evolução; desligado, nada é baixado" interruptor={{ ligado: som.ligado, mudar: v => SOM.ligar(v) }} />
-      {som.ligado && (
-        <label className="aj aj--volume"><Volume1 className="aj-ic" aria-hidden="true" /><span className="aj-nome"><b>{Math.round(som.volume * 100)}%</b></span>
-          <input type="range" min={0} max={1} step={0.05} value={som.volume} aria-label="Volume do som" aria-valuetext={`${Math.round(som.volume * 100)}%`} onChange={e => SOM.volume(Number((e.target as HTMLInputElement).value))} /></label>
-      )}
+      <Aj ic={Volume2} nome="Som" rotulo="Som do jogo" resumo="a luta, o treino, o comer, os menus e a música da ilha e da evolução; desligado, nada é baixado" interruptor={{ ligado: som.ligado, mudar: v => SOM.ligar(v) }} />
+      {som.ligado && (<>
+        <Volume rotulo="Volume do som" nome="Geral" v={som.volume} mudar={v => SOM.volume(v)} />
+        <Volume rotulo="Volume da música" nome="Música" v={som.volMusica} mudar={v => SOM.volumeMusica(v)} />
+        <Volume rotulo="Volume dos efeitos" nome="Efeitos" v={som.volEfeitos} mudar={v => SOM.volumeEfeitos(v)} />
+      </>)}
       <AvisoSom />
       <Aj ic={ScrollText} nome="Registro" rotulo="Registro e replay" resumo={`semente ${m.semente} · ${m.log.length} eventos · exportar`} abrir={() => abrir("dados")} />
       <Aj ic={Clock} nome="Tempo" tag="teste" resumo={velocidade === 0 ? "pausado" : `velocidade ${nomeVelocidade(velocidade)}`} abrir={() => abrir("dados")} />
@@ -236,6 +237,14 @@ function Sobre() {
     </>
   );
 }
+/** um volume do som (SOM-UP, SD-5: o geral, a musica e os efeitos) */
+function Volume({ rotulo, nome, v, mudar }: { rotulo: string; nome: string; v: number; mudar: (v: number) => void }) {
+  return (
+    <label className="aj aj--volume"><Volume1 className="aj-ic" aria-hidden="true" /><span className="aj-nome">{nome} <b>{Math.round(v * 100)}%</b></span>
+      <input type="range" min={0} max={1} step={0.05} value={v} aria-label={rotulo} aria-valuetext={`${Math.round(v * 100)}%`} onChange={e => mudar(Number((e.target as HTMLInputElement).value))} /></label>
+  );
+}
+
 export function TelaConfig({ parte, abrir, irPet }: { parte: ParteConfig; abrir: (p: ParteConfig) => void; fechar: () => void; irPet: () => void }) {
   return (
     <section className="mc mc-cfg" aria-label={TITULO[parte]}>

@@ -55,6 +55,7 @@ import { abrirEscolhaBrasao, concluiuJornada, conclusaoVista, useEscolhaBrasao }
 import { dicasDoMomento, type IdDica } from "./dicas.ts";
 import { CHAVE } from "./save.ts";
 import { AnuncioNivel, CartaoMotivo } from "./componentes/CartaoNivel.tsx";
+import { useSomDoJogo } from "./somJogo.ts";
 import { CadeadosDaIlha } from "./componentes/CadeadosDaIlha.tsx";
 import { ObjetosDaIlha } from "./componentes/ObjetosDaIlha.tsx";
 import { marcarDiarioVisto } from "./telas/pet/objetosIlha.ts";
@@ -102,6 +103,7 @@ function rotaDeAbertura(n: EstadoNivel): Rota {
 
 export function App() {
   const jogo = useJogo(), atlas = useAtlas(), deco = useDecoracao(), nivel = useNivelRaiz();
+  useSomDoJogo();   /* SOM-UP: os efeitos e a musica da ilha e do ovo */
   /* a luta da POC (LP3): o palco a tela inteira enquanto ha luta para mostrar; ?luta_poc=1&palco_poc=... monta uma luta direto no nucleo */
   const lutaPoc = useLutaPoc();
   useEffect(() => {

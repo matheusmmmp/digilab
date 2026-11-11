@@ -101,7 +101,8 @@ export function marcosFeitos(pets: readonly Motor[], t: Tamer): number[] {
 }
 /** a assinatura de um pet INTOCADO: a semente, a versao e o registro sem o tempo ("t"). O pet de exemplo das boas-vindas e os da escada semeada (pets.ts) so valem
     como "nao e do jogador" enquanto so o tempo passou neles: um evento a mais (um cuidado, um treino, uma luta) o faz do jogador, ativo ou guardado (um criterio so) */
-export const assinaturaIntocada = (m: Motor): string => JSON.stringify([m.semente, m.versao, m.log.filter(e => e[1] !== "t")]);
+/*  A passagem para a ilha com agua ("mi"; ILHA_AGUA, IA4) e do jogo, nao do jogador: tambem nao conta */
+export const assinaturaIntocada = (m: Motor): string => JSON.stringify([m.semente, m.versao, m.log.filter(e => e[1] !== "t" && e[1] !== "mi")]);
 /** o pet esta intocado, igual a um dos semeados (`semeados` = as assinaturas do exemplo e da escada) */
 export const ehPetIntocado = (m: Motor, semeados: ReadonlySet<string>): boolean => semeados.has(assinaturaIntocada(m));
 /** o aviso de leitor de tela do que abriu ("Diario aberto"; "Crescer e Conversar abertos"), pelos marcos novos; "" se nenhum abre uma peca */

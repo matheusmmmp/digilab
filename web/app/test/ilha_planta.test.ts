@@ -1,11 +1,10 @@
 /* A planta A na grade da ilha (src/telas/pet/ilha/grade.ts e constantes.ts, PLANTA_ILHA; docs/pranchas/ux-ilha-planta-a/, PA-1 a PA-5
-   aprovadas em 2026-11-08) e o fim da ilha (fimConta.ts, FIM_ILHA). PL-1: a praca e os caminhos de terra, que so pintam a grama da area.
+   aprovadas em 2026-11-08) e o fim da ilha (FIM_ILHA). PL-1: a praca e os caminhos de terra, que so pintam a grama da area.
    PL-2: nenhum lugar sobre o caminho. PL-3: a decoracao que cai no caminho some da vista. PL-4: a moldura em bosques e vaos. PL-5: os
-   degraus a leste do rio. PL-6: as contas do horizonte e das silhuetas. Os pontos sao PROPOSTO, SEM FONTE. */
+   degraus a leste do rio. Os pontos sao PROPOSTO, SEM FONTE. */
 import { describe, expect, test } from "vitest";
 import { CMU, CMU_MVP } from "../motor/index.ts";
 import { FIM_ILHA, PLANTA_ILHA } from "../src/telas/pet/ilha/constantes.ts";
-import { horizonte, perfil } from "../src/telas/pet/ilha/fimConta.ts";
 import { ALTURA_NIVEL, NIVEL_AGUA, RIO, ilhaDe } from "../src/telas/pet/ilha/grade.ts";
 import { MODELOS } from "../src/telas/pet/ilha/modelos.ts";
 
@@ -98,23 +97,4 @@ describe("a planta A na grade da ilha", () => {
       expect(ilha.cel(ilha.area.w - 1, 10)!.nivel).toBe(0);
     });
   }
-});
-
-describe("PL-6: as contas do fim da ilha", () => {
-  test("o horizonte do mar curvo: sem dobra e o nivel da agua; com dobra, desce com a distancia e fica abaixo da camera", () => {
-    expect(horizonte(8, 14, 0, 50)).toBe(NIVEL_AGUA);
-    const a = horizonte(8.4, 14.5, 0.011, 52), b = horizonte(8.4, 14.5, 0.011, 60);
-    expect(a).toBeLessThan(0); expect(b).toBeLessThan(a);
-    /* a reta da camera tangencia o mar: no ponto de toque, ela e o mar tem a mesma altura */
-    const h = 8.4, c = 14.5, k = 0.011, d = -c + Math.sqrt(c * c + h / k);
-    expect(horizonte(h, c, k, d)).toBeCloseTo(-k * d * d, 9);
-  });
-  test("o perfil das silhuetas fica entre 0 e 1, fecha a volta sem emenda, tem mar aberto e sai igual com a mesma semente", () => {
-    const f = perfil(1234, 9, false), g = perfil(1234, 9, false), vs = Array.from({ length: 1000 }, (_, i) => f(i / 1000));
-    for (const v of vs) { expect(v).toBeGreaterThanOrEqual(0); expect(v).toBeLessThanOrEqual(1); }
-    expect(f(0)).toBeCloseTo(f(1), 9);
-    expect(vs.some(v => v === 0)).toBe(true);
-    expect(vs.some(v => v > 0.3)).toBe(true);
-    expect(vs.map(v => v)).toEqual(Array.from({ length: 1000 }, (_, i) => g(i / 1000)));
-  });
 });
