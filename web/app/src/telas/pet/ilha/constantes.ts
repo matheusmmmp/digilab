@@ -108,6 +108,8 @@ export const ENFEITES_GRADE = {
   trilho: { quantos: 1, folga: 1, chao: ["grama"], clareira: 2.2 },
   /* a lata gigante (2026-11-10): saiu do horizonte do Digital e virou um marco da grade, ao norte, atras da area */
   lata: { quantos: 1, folga: 2, chao: ["grama"], clareira: 3.2 },
+  /* a TV de tubo (2026-11-11, secao 20 da tarefa): um marco pequeno, perto da barraca do Tamer */
+  tv: { quantos: 1, folga: 1, chao: ["grama"], clareira: 1.4 },
 } as const;
 /** a planta A da ilha inicial (docs/pranchas/ux-ilha-layout/, IL-1 a IL-4 DECIDIDAS em 2026-11-08; a vista em docs/pranchas/ux-ilha-planta-a/):
     so a parte da vista, em celulas do mundo (x leste, z sul), a mesma em todo mapa de 64 x 30. O ninho, a tigela, a bola e as frutiferas sao
@@ -135,7 +137,7 @@ export interface PlantaIlha {
   caminhos: Readonly<Record<"lar" | "portao" | "barraca" | "cais", readonly (readonly [number, number])[]>>;
   lugares: { portao: LugarDaPlanta; barraca: LugarDaPlanta; cais: { x: number; clareira: number; mar: number }; saco: readonly [number, number] };
   postes: readonly (readonly [number, number])[];
-  marcos: { busca: number; carro: MarcoDaPlanta; geladeira: MarcoDaPlanta; trilho: MarcoDaPlanta; lata: MarcoDaPlanta };
+  marcos: { busca: number; carro: MarcoDaPlanta; geladeira: MarcoDaPlanta; trilho: MarcoDaPlanta; lata: MarcoDaPlanta; tv: MarcoDaPlanta };
   bosques: readonly (readonly [number, number, number, number])[]; vaos: readonly (readonly [number, number, number, number])[];
   sal: number;
   bosque: { porCelula: number; entreArvores: number; escalaArvore: readonly [number, number]; arbustos: number; entreArbustos: number;
@@ -163,6 +165,8 @@ export const PLANTA_ILHA = {
     geladeira: { ponto: [50, 31.2], entorno: { arbusto: 0, grama_alta: 0, pedra: 3, raio: 2 } },
     trilho: { ponto: [69, 21], entorno: { arbusto: 4, grama_alta: 6, pedra: 2, raio: 2.8 } },
     lata: { ponto: [16, -5], entorno: { arbusto: 3, grama_alta: 8, pedra: 2, raio: 3.8 } },
+    /* a TV (2026-11-11): na moldura do norte, atras da barraca. PROPOSTO, SEM FONTE */
+    tv: { ponto: [50, -3], entorno: { arbusto: 1, grama_alta: 4, pedra: 1, raio: 2.2 } },
   },
   bosques: [[8, -6, 8, 4.2], [-6, 4, 3.4, 4.6], [-6, 25.6, 3.2, 2.6], [19, -8, 4, 3.4], [44, -6, 6, 3.6], [-5, -6, 4, 3.4], [56, -6, 6, 3.6]],
   vaos: [[31, -6, 5, 5]],
@@ -192,10 +196,47 @@ export const PLANTA_ILHA_AGUA: PlantaIlha = {
     /* a lata gigante (o marco de 2026-11-10, que na planta A fica na moldura do norte) vem para dentro, no noroeste, entre o carro e o
        saco; o ponto e desta sessao, fora da figura aprovada (IA-2), que e de antes da lata. PROPOSTO, SEM FONTE */
     lata: { ponto: [16, 6], entorno: { arbusto: 3, grama_alta: 8, pedra: 2, raio: 3.8 } },
+    /* a TV (2026-11-11) vem para dentro, a leste da barraca; fora da figura aprovada (IA-2). PROPOSTO, SEM FONTE */
+    tv: { ponto: [54, 11.5], entorno: { arbusto: 1, grama_alta: 4, pedra: 1, raio: 2.2 } },
   },
   bosques: [], vaos: [],
 };
 export const ILHA_AGUA = { moldura: 8, praia: 1, praiaSul: 2, sulDesde: 22 } as const;
+/** a ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG3; o layout `grande` do motor, 128 x 60 celulas): a moldura de mar em volta,
+    a praia mais larga (a ilha e maior) e a linha a partir da qual vale a praia do sul. PROPOSTO, SEM FONTE */
+export const ILHA_GRANDE = { moldura: 10, praia: 2, praiaSul: 3, sulDesde: 44 } as const;
+/** a planta da ilha grande: a praca no meio, o lar a oeste (o ninho e o comedouro do layout), o portao na ponta norte, a barraca do
+    outro lado do rio (o caminho passa pela ponte do meio) e o cais na praia do sul. As arvores e os marcos NAO estao aqui: sao celulas
+    fechadas do mapa do motor (a arvore e o marco em que o pet nao pisa), e a grade os poe no lugar delas; os pontos dos marcos abaixo
+    sao o centro do bloco de celulas de cada um no mapa (`busca` 0: o marco fica exatamente ali). Os caminhos sao os que o gerador do
+    mapa deixa livres de arvores (docs/pranchas/ilha-grande/gerar_figura.py, CAMINHOS). Nao ha bosque nem vao. PROPOSTO, SEM FONTE */
+export const PLANTA_ILHA_GRANDE: PlantaIlha = {
+  ...PLANTA_ILHA,
+  praca: { x: 64, z: 30.5, raio: 5.2 },
+  caminhos: {
+    lar: [[40, 30.5], [64, 30.5]],
+    portao: [[64, 30.5], [64, 9]],
+    barraca: [[64, 30.5], [74, 33], [80, 34], [84, 34], [92, 28], [101, 22]],
+    cais: [[64, 30.5], [68, 42], [72, 50]],
+  },
+  lugares: {
+    portao: { alvo: [64, 7], busca: 3, folga: 1, clareira: 3, base: 1.6 },
+    barraca: { alvo: [102, 21], busca: 3, folga: 1, clareira: 3.4, base: 2.4 },
+    cais: { x: 72, clareira: 4.5, mar: 0.9 },
+    saco: [24, 24],
+  },
+  postes: [[58.5, 27], [69.5, 27], [58.5, 34], [69.5, 34], [62, 20], [66, 13], [50, 28.5], [36, 28.5], [76, 35.5], [88, 32.5], [96, 26.5], [66, 38], [70, 46]],
+  marcos: {
+    busca: 0,
+    carro: { ponto: [31.5, 22], entorno: { arbusto: 0, grama_alta: 8, pedra: 1, raio: 3 } },
+    geladeira: { ponto: [103.5, 44.5], entorno: { arbusto: 0, grama_alta: 0, pedra: 3, raio: 2 } },
+    trilho: { ponto: [111, 32.5], entorno: { arbusto: 0, grama_alta: 6, pedra: 2, raio: 3 } },
+    lata: { ponto: [35, 14], entorno: { arbusto: 0, grama_alta: 8, pedra: 2, raio: 3.4 } },
+    /* a TV (o marco de 2026-11-11, #814): do lado da barraca, a nordeste; uma celula fechada do mapa */
+    tv: { ponto: [96.5, 17.5], entorno: { arbusto: 0, grama_alta: 4, pedra: 1, raio: 2.2 } },
+  },
+  bosques: [], vaos: [],
+};
 /** a ponte da ilha com agua (ponte.ts), em formas lisas e cores chapadas (o padrao cartoon de 2026-11-10), feita por codigo: o tabuado
     (a altura sobre o chao e a espessura, baixas porque o pet, a bola e as sombras sao desenhados no chao; quantas tabuas por celula e
     a fresta entre elas), o corrimao nas beiras que dao para a agua (a
@@ -266,16 +307,25 @@ export const CONTORNO_DIGITAL = { tinta: 0x15222a, forca: 1, largura: 3, limiar:
 
 /** o toque digital do estilo Digital (digital.ts; docs/TAREFA_V3_MAPA_DIGITAL.md, D3): as particulas (quantas, o sal da rng, a margem
     alem da area, a altura acima do chao, o tamanho, a cor, a opacidade de dia e de noite, o sobe e desce, a velocidade e o giro), a
-    grade no ceu (a cor, a opacidade, a espessura, os meridianos de cada lado, os paralelos e o ponto de fuga acima da imagem, em alturas
-    dela) e os fios (o alto do poste onde prendem, a fracao da altura; o alcance; quantos por poste; a queda por celula de vao; os
+    portal no ceu (abaixo; a grade pintada de 2026-11-08, com os meridianos e os paralelos, saiu em 2026-11-11) e os fios (o alto do poste onde prendem, a fracao da altura; o alcance; quantos por poste; a queda por celula de vao; os
     segmentos; a cor). PROPOSTO, SEM FONTE */
 export const DIGITAL = {
   particulas: { quantas: 140, sal: 0xd161a1, margem: 3, altura: [0.6, 3.2], tamanho: 0.06, cor: 0x7ff3ff, opacidade: [0.55, 0.95],
     sobe: 0.25, vel: 0.8, giro: 0.9 },
-  /* a grade mais discreta (2026-11-08: "tá muito saturada [...] Deixa ela um pouco mais opaca"): o ciano dessaturado, fraca e so na faixa de baixo do
-     ceu, sumindo para cima a partir de `desde` (a fracao da altura da imagem) */
-  /* e de novo no mesmo dia: "cadê aquelas linhas no céu? Eu quero aquelas linhas no céu, só que não tão forte": no ceu todo outra vez, mais fracas
-     no alto (`topo`, a fracao da forca la em cima) */
-  grade: { cor: "#b0e8f0", alfa: 0.3, espessura: 2.5, meridianos: 9, paralelos: 8, fuga: 0.25, topo: 0.55 },
+  /* o portal no ceu (2026-11-11, o Matheus: as linhas do ceu "estao bem feias, elas estao estaticas", com duas imagens de referencia: arcos
+     grandes cruzando o ceu, aneis concentricos e uma coluna de luz). Entra no lugar da grade pintada, que deixa de ser desenhada. E do mundo
+     (digital.ts, portalDoCeu), ao norte da ilha, e anda pelo uTempo (parado com "reduzir movimento"):
+       - `longe` e `altura`: a que distancia do centro da ilha e a que altura fica o centro do portal (celulas);
+       - `aneis`: quantos aneis concentricos, do raio `raio[0]` ao `raio[1]`; cada um gira para um lado, o de dentro mais depressa
+         (`volta`, segundos por volta do de dentro e do de fora); os desenhos se alternam (digitalConta.ts, aneisDoPortal);
+       - `coluna`: a largura e a altura da coluna de luz, e os aneis deitados em volta dela (quantos, o raio do de baixo e do de cima);
+       - `arcos`: os arcos grandes em volta da ilha inteira (o raio, a espessura, a inclinacao de cada um em graus e os segundos por volta);
+       - `cor`, e a opacidade de dia e de noite; `pulso`: quanto a opacidade oscila e em quantos segundos. PROPOSTO, SEM FONTE */
+  /* 2026-11-11, no mesmo dia: "as linhas no ceu estao muito claras, deixa um pouco mais transparente, simulando que e longe e cobre o mundo
+     todo": o portal mais longe e maior, mais arcos em volta do mundo, e tudo com a metade da forca */
+  portal: { longe: 102, altura: 20, aneis: 7, raio: [8, 56], volta: [70, 340], sal: 0x9a7e11,
+    coluna: { largura: 9, altura: 90, aneis: 4, raio: [7.5, 3] },
+    arcos: { raio: 98, espessura: 0.1, inclina: [58, -44, 71, 24, -66], volta: 520 },
+    cor: "#bff6ff", opacidade: [0.28, 0.42], pulso: [0.12, 9] },
   fios: { alto: 0.93, alcance: 10, porPoste: 2, queda: 0.06, segmentos: 12, cor: 0x2b2a33 },
 } as const;

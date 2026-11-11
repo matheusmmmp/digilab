@@ -38,6 +38,9 @@ export interface Candidato {
   npcDivisao: Record<string, Record<Stat, number>>;
   /** os pontos de treino dos rivais de cada lugar (hoje 0), postos pela trajetoria do dono tipico da especie do rival */
   treinoRival: { arena: number; salao: number; liga: number; torre: number; fabrica: number };
+  /** o fator nos 6 stats dos rivais de cada torneio (hoje 1; D-LP5-20): o rival da forma com os stats vezes o fator, antes do mapeamento.
+      O alugado da Fabrica nao leva o fator */
+  fatorRival: { salao: number; liga: number; torre: number; fabrica: number };
   /** a distancia do tiro (o nucleo, D-LP5-12; hoje o TIRO_POC_V21, a luta da POC) */
   tiro: TiroPoc;
   /** a esquiva pela perspicacia e pela velocidade (o nucleo, D-LP5-14): ligada 0 = a luta da POC. A perspicacia e
@@ -56,6 +59,7 @@ export const CANDIDATO_V21: Candidato = Object.freeze({
   npcTotal: Object.fromEntries(NPCS_V6.map(k => { const n = NPC[k]; if (!n) throw new Error(`bancada: o NPC ${k} sumiu`); return [k, n.total]; })),
   npcDivisao: {},
   treinoRival: { arena: 0, salao: 0, liga: 0, torre: 0, fabrica: 0 },
+  fatorRival: { salao: 1, liga: 1, torre: 1, fabrica: 1 },
   tiro: { ...TIRO_POC_V21 },
   esquiva: { ligada: 0, kChance: 1, kReacao: 1, kDash: 1, chanceMax: .95, pertoChance: 0, pertoReacao: 200, contraMs: 0, gamaMira: 1, kAtento: .5, gamaFolego: 1 },
 });
@@ -99,8 +103,11 @@ export function rivalCanonico(c: Candidato, chave: string, treino = 0): StatsPoc
   const f = formaDaChave(chave);
   return lutador(c, f, caraterRival(f), treino ? pontosNoTotal(f.esp, treino) : null);
 }
-export function rivalDaForma(c: Candidato, f: Forma, car: Partial<Carater> | null, treino = 0): StatsPoc {
-  return lutador(c, f, car, treino ? pontosNoTotal(f.esp, treino) : null);
+export function rivalDaForma(c: Candidato, f: Forma, car: Partial<Carater> | null, treino = 0, fator = 1): StatsPoc {
+  if (fator === 1) return lutador(c, f, car, treino ? pontosNoTotal(f.esp, treino) : null);
+  if (!(Number.isFinite(fator) && fator > 0)) throw new Error(`bancada: o fator do rival precisa ser positivo (${fator})`);
+  const s = somaPontos(statsDe(f, car), treino ? pontosNoTotal(f.esp, treino) : null, c.pesoPonto);
+  return statsLuta(c, Object.fromEntries(STATS.map(k => [k, s[k] * fator])) as Stats, f.est, 1, car?.atento ?? 0);
 }
 /** o NPC pelo candidato: o total dividido pelos 6 stats (igual, ou pelos pesos do npcDivisao), no estagio do lugar dele */
 export function npc(c: Candidato, k: string): StatsPoc {

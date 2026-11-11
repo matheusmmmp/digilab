@@ -1,0 +1,8 @@
+# A grade lp5_3/r1 (lp5_3; 3 base(s); 21 s)
+
+| candidato | passam | D1 | D2 | G1 | G2 | G3 | G4 |
+|---|---|---|---|---|---|---|---|
+| t0 | 1 | **ok** 20.75/28.85 23.25/28.35 22.25/28.65 19.05/27.55; min forma 14.15 | max 0.05; sem fim 0 | {"titulos":0,"max_forma":0,"por_forma":{"limo_adulto_emboscador":0,"brasa_adulto | {"recorde_mediano":1,"no_teto":0,"recorde_min":1,"recorde_max":2} | {"ao_menos_uma_serie":0.002,"series":{"0":1198,"1":2},"tentativas":1200} | {"taxa":{"crianca":0.678,"adolescente":0.838,"adulto":0.927,"mega":0.832}} |
+| t5 | 1 | **ok** 20.65/28.05 23.85/28.35 23.65/30.05 18.95/27.45; min forma 15.95 | max 0.072; sem fim 0 | {"titulos":0,"max_forma":0,"por_forma":{"limo_adulto_emboscador":0,"brasa_adulto | {"recorde_mediano":1,"no_teto":0,"recorde_min":1,"recorde_max":2} | {"ao_menos_uma_serie":0.001,"series":{"0":1199,"1":1},"tentativas":1200} | {"taxa":{"crianca":0.532,"adolescente":0.76,"adulto":0.843,"mega":0.785}} |
+| t10 | 1 | **ok** 21.05/28.35 24.05/32.25 24.05/31.85 18.65/27.75; min forma 13.55 | max 0.132; sem fim 0 | {"titulos":0,"max_forma":0,"por_forma":{"limo_adulto_emboscador":0,"brasa_adulto | {"recorde_mediano":2,"no_teto":0,"recorde_min":1,"recorde_max":5} | {"ao_menos_uma_serie":0.003,"series":{"0":1197,"1":3},"tentativas":1200} | {"taxa":{"crianca":0.414,"adolescente":0.617,"adulto":0.753,"mega":0.735}} |
+| t20 | 1 | **ok** 21.65/29.45 24.05/32.15 24.25/33.65 19.15/29.15; min forma 14.95 | max 0.225; sem fim 0 | {"titulos":0,"max_forma":0,"por_forma":{"limo_adulto_emboscador":0,"brasa_adulto | {"recorde_mediano":2,"no_teto":0,"recorde_min":1,"recorde_max":6} | {"ao_menos_uma_serie":0.002,"series":{"0":1198,"1":2},"tentativas":1200} | {"taxa":{"crianca":0.33,"adolescente":0.438,"adulto":0.629,"mega":0.623}} |

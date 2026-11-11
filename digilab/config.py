@@ -1841,8 +1841,9 @@ class ConfigMundo:
     raio_mancha_celulas: int = 3
 
     def __post_init__(self) -> None:
-        if self.celulas_x * self.sub != 1024 or self.celulas_y * self.sub != 480:
-            raise ValueError("o mapa da tarefa e 64 x 30 celulas de 16 subunidades (secao 3)")
+        # o mapa da tarefa (secao 3) e o da ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG-2: 128 x 60); nenhum outro tamanho
+        if (self.celulas_x, self.celulas_y, self.sub) not in ((64, 30, 16), (128, 60, 16)):
+            raise ValueError("o mapa e 64 x 30 celulas de 16 subunidades (secao 3) ou 128 x 60 (a ilha grande)")
         if self.velocidade <= 0 or self.atrito <= 0:
             raise ValueError("velocidade e atrito precisam ser positivos")
         if self.mult_queda <= 0.0:
@@ -1922,6 +1923,82 @@ LAYOUT_MUNDO_MVP_AGUA = replace(LAYOUT_MUNDO_MVP, nome="mvp_agua")
 AGUA_POR_LAYOUT = {LAYOUT_MUNDO_ILHA_AGUA.nome: AGUA_ILHA, LAYOUT_MUNDO_MVP_AGUA.nome: AGUA_ILHA}
 CONFIG_MUNDO_ILHA_AGUA = replace(CONFIG_MUNDO_ILHA, layout=LAYOUT_MUNDO_ILHA_AGUA)
 CONFIG_MUNDO_MVP_AGUA = replace(CONFIG_MUNDO_MVP, layout=LAYOUT_MUNDO_MVP_AGUA)
+
+# A ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secao 12; IG-1 a IG-9 DECIDIDAS pelo Matheus em 2026-11-11: "Mundo maior no motor", "128 x 60",
+# as arvores e os marcos como obstaculos na mesma versao): o mundo do produto com 128 x 60 celulas. O mapa tem dois caracteres a mais, a
+# ARVORE_FECHADA e o MARCO_FECHADO: celulas de terra em que o pet nao pisa, como a agua (o mesmo solido, o mesmo desvio; nao tapam a
+# visao). A arvore daqui e so obstaculo: nao da fruta e nao esta em `layout.arvores` (a que sacode e da docs/TAREFA_V3_ARVORE_SACODE.md).
+# O mapa e o de docs/pranchas/ilha-grande/mapa_proposto.txt (gerar_figura.py; um teste confere que sao iguais): PROPOSTO, SEM FONTE.
+# As regioes sao as quatro de sempre com as faixas dobradas (IG-5). O ninho, o comedouro e a bola ficam na casa, na casa e no campo, como
+# no MVP (la: 4, 10 e 40 de 64): os pontos sao desta sessao, PROPOSTO, SEM FONTE. So o jogo usa este mundo (IG-8): a bancada e as runs de
+# pesquisa ficam nos de antes.
+ARVORE_FECHADA, MARCO_FECHADO = "T", "#"
+AGUA_ILHA_GRANDE = (
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.............~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.........T.................~~~~~~..~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...........................................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~............................................rrrr~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~..............................................rrrrrrrr~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~..................................................rrrrrrrrrr....~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~............................................T.........rrrrrrrrrr.......~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~.....................................................T..........rr........~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~..............T..............................T.....T.......T.....rr.........~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~.........##..............rrrr...................T.....T...........rr.....T....~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~......T...##.............rrrrrr....................................rr........T.~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~.....T....................rrrrrr.................T..T..T...........rrr......T...~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~....T.......................rrrr...................................rrr............~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~...........T...................................................T......==.....#.......~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~.....T..T................................................................==...............~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~......T........T............................................................rr...................~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~............................................................................rrrr.......................~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~...................###......................................................rr...........................~~~~~~~~~~~~",
+    "~~~~~~~~~~.......T............###.....................................................rrr.............................~~~~~~~~~~",
+    "~~~~~~~~~~~.......................................................................T..rrr......T........................~~~~~~~~~",
+    "~~~~~~~~~~~~.........................................................................rr.................................~~~~~~~~",
+    "~~~~~~~~~~~~...............................................................T........rrr.............................T...~~~~~~~~",
+    "~~~~~~~~~~~~~............................................................T.........rrr...................................~~~~~~~",
+    "~~~~~~~~~~~~~~.....................................................................rr.............................T.......~~~~~~",
+    "~~~~~~~~~~~~~.....................................................................rrr......................................~~~~~",
+    "~~~~~~~~~~~~~.....................................................................rr........................................~~~~",
+    "~~~~~~~~~~~~.....................................................................rrr.........................................~~~",
+    "~~~~~~~~~~~...T..................................................................rr...........................##.............~~~",
+    "~~~~~~~~~~.......................................................................rr...........................##.............~~~",
+    "~~~~~~~~~~.......................................................................==...........................##............~~~~",
+    "~~~~~~~~~~.......................................................................==.......T..T.............................~~~~~",
+    "~~~~~~~~~~...T...................................................................rr.......................................~~~~~~",
+    "~~~~~~~~~~~....T...T.............................................................rr...........................T........~~~~~~~~~",
+    "~~~~~~~~~~~......T.......rrrr....................................................rrr.......................T.........~~~~~~~~~~~",
+    "~~~~~~~~~~~...........rrrrrrrrrr..................................................rr....................T...........~~~~~~~~~~~~",
+    "~~~~~~~~~~~..........rrrrrrrrrrrr.............................................T...rrr..T........T...........T...T..~~~~~~~~~~~~~",
+    "~~~~~~~~~~~.........rrrrrrrrrrrrrr...................T.............................rr.........................T....~~~~~~~~~~~~~",
+    "~~~~~~~~~~..........rrrrrrrrrrrrrr.................................................rrr...........T................~~~~~~~~~~~~~~",
+    "~~~~~~~~~~...........rrrrrrrrrrrr.............................................T.....rrr................T..T.......~~~~~~~~~~~~~~",
+    "~~~~~~~~~~............rrrrrrrrrr..T........T................T...T....................rr...........................~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~..............rrrr........................T........T......................rrr...............#......T...~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~........................T..T..T............T..............................rrr......T.................~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~..............T...T.................T....................................rrr........T............~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~............T....T....................T..T...T........................==..................~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~.................T............................................==.......T.....~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...T.....T...............T................................rr.........~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~........................................................rrrr....~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~........................................~~~~~~~~~~~~....~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~....................T...............~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~............................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~..............~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+)                                                                                        # PROPOSTO, SEM FONTE
+LAYOUT_MUNDO_GRANDE = replace(LAYOUT_MUNDO_MVP, nome="grande", regioes=(("casa", 0, 31), ("jardim", 32, 67), ("campo", 68, 95), ("mata", 96, 127)),
+                              ninho=(20, 30), comedouro=(28, 30), bola_inicio=(72, 32))                              # PROPOSTO, SEM FONTE
+AGUA_POR_LAYOUT[LAYOUT_MUNDO_GRANDE.nome] = AGUA_ILHA_GRANDE
+CONFIG_MUNDO_GRANDE = replace(CONFIG_MUNDO_MVP, layout=LAYOUT_MUNDO_GRANDE, celulas_x=128, celulas_y=60)             # PROPOSTO, SEM FONTE
 
 
 # =====================================================================
@@ -2495,7 +2572,15 @@ CONFIG_CONTRATO_AGUA = ConfigContrato(controlador=True)
 # `mudar_ilha` leva o mundo do pet para um destino desta tabela, pelo nome: o layout (o mesmo de antes, so com outro nome e com a agua) e
 # o contrato que passa a valer (o controlador, que desvia da agua). DECIDIDO (2026-11-10: "Migram por evento")
 ILHAS_DE_TROCA = {LAYOUT_MUNDO_MVP_AGUA.nome: (LAYOUT_MUNDO_MVP_AGUA, CONFIG_CONTRATO_AGUA),
-                  LAYOUT_MUNDO_ILHA_AGUA.nome: (LAYOUT_MUNDO_ILHA_AGUA, CONFIG_CONTRATO_AGUA)}
+                  LAYOUT_MUNDO_ILHA_AGUA.nome: (LAYOUT_MUNDO_ILHA_AGUA, CONFIG_CONTRATO_AGUA),
+                  LAYOUT_MUNDO_GRANDE.nome: (LAYOUT_MUNDO_GRANDE, CONFIG_CONTRATO_AGUA)}
+# a ida para a ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG4; a IG-7 do Matheus: o pet, a comida e a bola dos pets vivos vao
+# "deslocados junto com o lar"): os destinos do `mudar_ilha` que tem OUTRO tamanho e OUTRO layout. Por nome: o tamanho do mundo (celulas)
+# e os layouts de onde se pode vir (o mundo do produto de hoje, sem agua ou com ela). Nessa troca tudo o que tem posicao anda o
+# deslocamento do ninho de la para o ninho de ca, e o que cair em celula fechada vai para a terra mais perto. Vale uma vez por mundo, e
+# pode vir depois da troca para a agua (os pets v21 que ja passaram, e os v22, que nasceram nela). DECIDIDO (2026-11-11)
+ILHAS_MAIORES = {LAYOUT_MUNDO_GRANDE.nome: (CONFIG_MUNDO_GRANDE.celulas_x, CONFIG_MUNDO_GRANDE.celulas_y,
+                                            (LAYOUT_MUNDO_MVP, LAYOUT_MUNDO_MVP_AGUA))}
 
 
 # =====================================================================
@@ -3026,3 +3111,65 @@ class ConfigVozV4:
 CONFIG_VOZ_V4 = ConfigVozV4()
 PARAMETROS_VOZ_V4 = {f.name: ("DECIDIDO", "SEM FONTE; plano da DC5, D-DC5-5/D-DC5-11, aprovado pelo Matheus em 2026-11-10")
                      for f in fields(ConfigVozV4)}
+
+
+# =====================================================================
+# V3, a cooperacao entre dois pets do mesmo dono (docs/TAREFA_V3_COOPERACAO.md, etapa CO3; secao 3.1; D-MM-8). Os atos sociais derivados
+# (a disputa, a contencao, o encostar) e a pontuacao pro-social de cada pet e a reputacao dele vista pelo outro, medidos pelo motor como
+# funcao do log (digilab/cooperacao.py). Desligada por padrao: o grupo de hoje, byte a byte. Ligada, so mede: nenhuma acao e nenhum corpo
+# muda (CO-3; o G-SEM-DECISAO). O espelho em TS e o CCOOP de web/app/motor/constantes.ts.
+
+
+@dataclass(frozen=True)
+class ConfigCooperacao:
+    """ligada                a medida do grupo (o Grupo a chama no fim de cada decisao e de cada tick); desligada, nada e medido
+    escala                 S, a escala dos efeitos, dos valores e da pontuacao (a do cerebro A)
+    piso_fome              a fome do perdedor abaixo da qual a disputa e "anti" (CO-9: o fome_moderada do instinto, policy.py)
+    meia_vida_pontuacao    a meia-vida da pontuacao e da reputacao, em ticks do mundo (um dia)
+    k_meia_vida_pontuacao  = corpo.k_meia_vida(meia_vida_pontuacao), na escala 2**16 (a regra da secao 3 do corpo; o tick nao a recalcula)
+    janela_novidade        a janela em que a repeticao do mesmo ato com o mesmo alvo cai pela metade, em ticks do mundo (o dia do mundo)"""
+
+    ligada: bool = False
+    escala: int = _S
+    piso_fome: float = 0.45
+    meia_vida_pontuacao: int = 1440
+    k_meia_vida_pontuacao: int = 32
+    janela_novidade: int = 1440
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigCooperacao.ligada e bool: {self.ligada!r}")
+        for nome in ("escala", "meia_vida_pontuacao", "k_meia_vida_pontuacao", "janela_novidade"):
+            v = getattr(self, nome)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigCooperacao.{nome} tem de ser inteiro positivo: {v!r}")
+        if not 0.0 < self.piso_fome < 1.0:
+            raise ValueError(f"ConfigCooperacao.piso_fome em (0, 1): {self.piso_fome!r}")
+
+
+CONFIG_COOPERACAO = ConfigCooperacao()
+CONFIG_COOPERACAO_LIGADA = ConfigCooperacao(ligada=True)
+PARAMETROS_COOPERACAO = {
+    "ligada": ("DECIDIDO", "CO-3 (Matheus, 2026-11-11): a CO3 so mede e mostra; desligada, o grupo de hoje"),
+    "escala": ("DECIDIDO", "PE-12: S = 1024, a do cerebro A (ConfigLobos.bits_ponto_fixo = 10)"),
+    "piso_fome": ("PROPOSTO", "CO-9 (2026-11-11): o fome_moderada do instinto (digilab/policy.py, `fome < 0.45`), SEM FONTE"),
+    "meia_vida_pontuacao": ("PROPOSTO", "SEM FONTE: um dia do mundo (secao 3.1; Moral do pet, A3: 'decai por meia-vida no tempo do jogo')"),
+    "k_meia_vida_pontuacao": ("PROPOSTO", "= corpo.k_meia_vida(meia_vida_pontuacao)"),
+    "janela_novidade": ("PROPOSTO", "SEM FONTE: o dia do mundo (secao 3.1: 'cai pela metade a cada repeticao ... no dia')"),
+}
+
+
+@dataclass(frozen=True)
+class ConfigVozV4B:
+    """A voz-v4b da DC5 (CONVERSA_PET, DC5a2; D-DC5B-5, a decisao do Matheus em 2026-11-11, "Segue as recomendacoes e faca o merge").
+    Os numeros da voz-v4 que nao mudam ficam em `ConfigVozV4`."""
+    # a regra 10 da voz-v4b e a medida da repeticao de trecho: quantas palavras seguidas iguais a uma fala anterior da mesma conversa ou
+    # sequencia contam como repetir a frase
+    palavras_trecho_repetido: int = 4
+    # a copia do corpus da especie: quantas palavras seguidas iguais a uma citacao contam como copia (o filtro do jogo reprova a partir de 6,
+    # `corpus.PALAVRAS_REPETIDAS`)
+    palavras_copia_citacao: int = 5
+
+
+CONFIG_VOZ_V4B = ConfigVozV4B()
+PARAMETROS_VOZ_V4B = {f.name: ("PROPOSTO", "SEM FONTE; a Gerente da CONVERSA_PET, 2026-11-11 (D-DC5B-5)") for f in fields(ConfigVozV4B)}

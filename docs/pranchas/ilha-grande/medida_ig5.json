@@ -1,0 +1,1385 @@
+{
+ "sementes": [
+  101,
+  202,
+  303,
+  404,
+  505
+ ],
+ "dias": 5,
+ "passo": 30,
+ "prazo": 240,
+ "fome_baixa": 0.2,
+ "fome_do_dono": 0.6,
+ "perto_do_comedouro": 3,
+ "mundos": {
+  "hoje_64x30": 23,
+  "grande_128x60": 24
+ },
+ "cenarios": {
+  "hoje_64x30|modular|comedouro": {
+   "media": {
+    "postas": 13,
+    "comidas": 12.6,
+    "fracao_no_prazo": 0.8,
+    "mediana_ticks": 120,
+    "fracao_fome_baixa": 0.008,
+    "fome_media": 0.641,
+    "celulas_andadas_por_dia": 123.2,
+    "cobertura": 0.223,
+    "ms_por_dia": 50.4
+   },
+   "vidas": [
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.692,
+     "mediana_ticks": 120,
+     "fracao_fome_baixa": 0.021,
+     "fome_media": 0.62,
+     "celulas_andadas_por_dia": 136,
+     "cobertura": 0.271,
+     "ms_por_dia": 82
+    },
+    {
+     "postas": 13,
+     "comidas": 12,
+     "fracao_no_prazo": 0.692,
+     "mediana_ticks": 120,
+     "fracao_fome_baixa": 0.021,
+     "fome_media": 0.613,
+     "celulas_andadas_por_dia": 128,
+     "cobertura": 0.234,
+     "ms_por_dia": 52
+    },
+    {
+     "postas": 13,
+     "comidas": 12,
+     "fracao_no_prazo": 0.769,
+     "mediana_ticks": 135,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.637,
+     "celulas_andadas_por_dia": 131,
+     "cobertura": 0.207,
+     "ms_por_dia": 41
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.923,
+     "mediana_ticks": 120,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.651,
+     "celulas_andadas_por_dia": 114,
+     "cobertura": 0.195,
+     "ms_por_dia": 38
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.923,
+     "mediana_ticks": 105,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.683,
+     "celulas_andadas_por_dia": 107,
+     "cobertura": 0.21,
+     "ms_por_dia": 39
+    }
+   ]
+  },
+  "hoje_64x30|modular|perto": {
+   "media": {
+    "postas": 13.6,
+    "comidas": 13.2,
+    "fracao_no_prazo": 0.899,
+    "mediana_ticks": 39,
+    "fracao_fome_baixa": 0.013,
+    "fome_media": 0.71,
+    "celulas_andadas_por_dia": 121.8,
+    "cobertura": 0.296,
+    "ms_por_dia": 38.2
+   },
+   "vidas": [
+    {
+     "postas": 14,
+     "comidas": 14,
+     "fracao_no_prazo": 0.929,
+     "mediana_ticks": 45,
+     "fracao_fome_baixa": 0.008,
+     "fome_media": 0.72,
+     "celulas_andadas_por_dia": 132,
+     "cobertura": 0.392,
+     "ms_por_dia": 39
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.923,
+     "mediana_ticks": 60,
+     "fracao_fome_baixa": 0.058,
+     "fome_media": 0.67,
+     "celulas_andadas_por_dia": 128,
+     "cobertura": 0.251,
+     "ms_por_dia": 39
+    },
+    {
+     "postas": 14,
+     "comidas": 13,
+     "fracao_no_prazo": 0.786,
+     "mediana_ticks": 15,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.711,
+     "celulas_andadas_por_dia": 131,
+     "cobertura": 0.312,
+     "ms_por_dia": 41
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 1,
+     "mediana_ticks": 45,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.722,
+     "celulas_andadas_por_dia": 106,
+     "cobertura": 0.254,
+     "ms_por_dia": 30
+    },
+    {
+     "postas": 14,
+     "comidas": 13,
+     "fracao_no_prazo": 0.857,
+     "mediana_ticks": 30,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.727,
+     "celulas_andadas_por_dia": 112,
+     "cobertura": 0.269,
+     "ms_por_dia": 42
+    }
+   ]
+  },
+  "hoje_64x30|modular|longe": {
+   "media": {
+    "postas": 10.4,
+    "comidas": 8.8,
+    "fracao_no_prazo": 0.183,
+    "mediana_ticks": 426,
+    "fracao_fome_baixa": 0.375,
+    "fome_media": 0.305,
+    "celulas_andadas_por_dia": 107,
+    "cobertura": 0.229,
+    "ms_por_dia": 29.2
+   },
+   "vidas": [
+    {
+     "postas": 12,
+     "comidas": 11,
+     "fracao_no_prazo": 0.083,
+     "mediana_ticks": 510,
+     "fracao_fome_baixa": 0.279,
+     "fome_media": 0.315,
+     "celulas_andadas_por_dia": 111,
+     "cobertura": 0.231,
+     "ms_por_dia": 30
+    },
+    {
+     "postas": 8,
+     "comidas": 6,
+     "fracao_no_prazo": 0.125,
+     "mediana_ticks": 435,
+     "fracao_fome_baixa": 0.575,
+     "fome_media": 0.222,
+     "celulas_andadas_por_dia": 105,
+     "cobertura": 0.175,
+     "ms_por_dia": 29
+    },
+    {
+     "postas": 13,
+     "comidas": 12,
+     "fracao_no_prazo": 0.154,
+     "mediana_ticks": 390,
+     "fracao_fome_baixa": 0.108,
+     "fome_media": 0.434,
+     "celulas_andadas_por_dia": 121,
+     "cobertura": 0.248,
+     "ms_por_dia": 31
+    },
+    {
+     "postas": 13,
+     "comidas": 12,
+     "fracao_no_prazo": 0.385,
+     "mediana_ticks": 390,
+     "fracao_fome_baixa": 0.204,
+     "fome_media": 0.406,
+     "celulas_andadas_por_dia": 108,
+     "cobertura": 0.271,
+     "ms_por_dia": 32
+    },
+    {
+     "postas": 6,
+     "comidas": 3,
+     "fracao_no_prazo": 0.167,
+     "mediana_ticks": 405,
+     "fracao_fome_baixa": 0.708,
+     "fome_media": 0.147,
+     "celulas_andadas_por_dia": 90,
+     "cobertura": 0.22,
+     "ms_por_dia": 24
+    }
+   ]
+  },
+  "hoje_64x30|a|comedouro": {
+   "media": {
+    "postas": 8.2,
+    "comidas": 6.4,
+    "fracao_no_prazo": 0.437,
+    "mediana_ticks": 240,
+    "fracao_fome_baixa": 0.45,
+    "fome_media": 0.326,
+    "celulas_andadas_por_dia": 30.2,
+    "cobertura": 0.073,
+    "ms_por_dia": 12.8
+   },
+   "vidas": [
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.615,
+     "mediana_ticks": 195,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.596,
+     "celulas_andadas_por_dia": 55,
+     "cobertura": 0.107,
+     "ms_por_dia": 19
+    },
+    {
+     "postas": 5,
+     "comidas": 2,
+     "fracao_no_prazo": 0.4,
+     "mediana_ticks": 195,
+     "fracao_fome_baixa": 0.75,
+     "fome_media": 0.147,
+     "celulas_andadas_por_dia": 10,
+     "cobertura": 0.037,
+     "ms_por_dia": 9
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.769,
+     "mediana_ticks": 165,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.609,
+     "celulas_andadas_por_dia": 65,
+     "cobertura": 0.153,
+     "ms_por_dia": 16
+    },
+    {
+     "postas": 5,
+     "comidas": 2,
+     "fracao_no_prazo": 0.2,
+     "mediana_ticks": 300,
+     "fracao_fome_baixa": 0.75,
+     "fome_media": 0.138,
+     "celulas_andadas_por_dia": 10,
+     "cobertura": 0.035,
+     "ms_por_dia": 9
+    },
+    {
+     "postas": 5,
+     "comidas": 2,
+     "fracao_no_prazo": 0.2,
+     "mediana_ticks": 345,
+     "fracao_fome_baixa": 0.75,
+     "fome_media": 0.14,
+     "celulas_andadas_por_dia": 11,
+     "cobertura": 0.035,
+     "ms_por_dia": 11
+    }
+   ]
+  },
+  "hoje_64x30|a|perto": {
+   "media": {
+    "postas": 8,
+    "comidas": 6.2,
+    "fracao_no_prazo": 0.443,
+    "mediana_ticks": 210,
+    "fracao_fome_baixa": 0.465,
+    "fome_media": 0.324,
+    "celulas_andadas_por_dia": 32.6,
+    "cobertura": 0.1,
+    "ms_por_dia": 11.4
+   },
+   "vidas": [
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.923,
+     "mediana_ticks": 150,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.63,
+     "celulas_andadas_por_dia": 69,
+     "cobertura": 0.172,
+     "ms_por_dia": 16
+    },
+    {
+     "postas": 5,
+     "comidas": 2,
+     "fracao_no_prazo": 0.4,
+     "mediana_ticks": 195,
+     "fracao_fome_baixa": 0.75,
+     "fome_media": 0.144,
+     "celulas_andadas_por_dia": 9,
+     "cobertura": 0.036,
+     "ms_por_dia": 7
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.692,
+     "mediana_ticks": 180,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.609,
+     "celulas_andadas_por_dia": 66,
+     "cobertura": 0.216,
+     "ms_por_dia": 15
+    },
+    {
+     "postas": 5,
+     "comidas": 2,
+     "fracao_no_prazo": 0.2,
+     "mediana_ticks": 270,
+     "fracao_fome_baixa": 0.75,
+     "fome_media": 0.14,
+     "celulas_andadas_por_dia": 9,
+     "cobertura": 0.04,
+     "ms_por_dia": 9
+    },
+    {
+     "postas": 4,
+     "comidas": 1,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": 255,
+     "fracao_fome_baixa": 0.825,
+     "fome_media": 0.096,
+     "celulas_andadas_por_dia": 10,
+     "cobertura": 0.037,
+     "ms_por_dia": 10
+    }
+   ]
+  },
+  "hoje_64x30|a|longe": {
+   "media": {
+    "postas": 4.4,
+    "comidas": 1,
+    "fracao_no_prazo": 0.067,
+    "mediana_ticks": 290,
+    "fracao_fome_baixa": 0.825,
+    "fome_media": 0.092,
+    "celulas_andadas_por_dia": 12.8,
+    "cobertura": 0.05,
+    "ms_por_dia": 9.8
+   },
+   "vidas": [
+    {
+     "postas": 4,
+     "comidas": 1,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": 300,
+     "fracao_fome_baixa": 0.825,
+     "fome_media": 0.092,
+     "celulas_andadas_por_dia": 11,
+     "cobertura": 0.049,
+     "ms_por_dia": 10
+    },
+    {
+     "postas": 4,
+     "comidas": 1,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": 330,
+     "fracao_fome_baixa": 0.825,
+     "fome_media": 0.09,
+     "celulas_andadas_por_dia": 13,
+     "cobertura": 0.05,
+     "ms_por_dia": 10
+    },
+    {
+     "postas": 6,
+     "comidas": 3,
+     "fracao_no_prazo": 0.333,
+     "mediana_ticks": 240,
+     "fracao_fome_baixa": 0.675,
+     "fome_media": 0.176,
+     "celulas_andadas_por_dia": 24,
+     "cobertura": 0.086,
+     "ms_por_dia": 9
+    },
+    {
+     "postas": 4,
+     "comidas": 0,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": null,
+     "fracao_fome_baixa": 0.9,
+     "fome_media": 0.052,
+     "celulas_andadas_por_dia": 7,
+     "cobertura": 0.03,
+     "ms_por_dia": 10
+    },
+    {
+     "postas": 4,
+     "comidas": 0,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": null,
+     "fracao_fome_baixa": 0.9,
+     "fome_media": 0.052,
+     "celulas_andadas_por_dia": 9,
+     "cobertura": 0.033,
+     "ms_por_dia": 10
+    }
+   ]
+  },
+  "grande_128x60|modular|comedouro": {
+   "media": {
+    "postas": 13,
+    "comidas": 12.8,
+    "fracao_no_prazo": 0.815,
+    "mediana_ticks": 111,
+    "fracao_fome_baixa": 0.005,
+    "fome_media": 0.656,
+    "celulas_andadas_por_dia": 127.8,
+    "cobertura": 0.075,
+    "ms_por_dia": 62
+   },
+   "vidas": [
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.769,
+     "mediana_ticks": 90,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.673,
+     "celulas_andadas_por_dia": 137,
+     "cobertura": 0.076,
+     "ms_por_dia": 80
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.923,
+     "mediana_ticks": 120,
+     "fracao_fome_baixa": 0.004,
+     "fome_media": 0.666,
+     "celulas_andadas_por_dia": 128,
+     "cobertura": 0.074,
+     "ms_por_dia": 62
+    },
+    {
+     "postas": 13,
+     "comidas": 12,
+     "fracao_no_prazo": 0.692,
+     "mediana_ticks": 120,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.636,
+     "celulas_andadas_por_dia": 138,
+     "cobertura": 0.069,
+     "ms_por_dia": 59
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.923,
+     "mediana_ticks": 75,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.696,
+     "celulas_andadas_por_dia": 113,
+     "cobertura": 0.077,
+     "ms_por_dia": 54
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.769,
+     "mediana_ticks": 150,
+     "fracao_fome_baixa": 0.021,
+     "fome_media": 0.611,
+     "celulas_andadas_por_dia": 123,
+     "cobertura": 0.077,
+     "ms_por_dia": 55
+    }
+   ]
+  },
+  "grande_128x60|modular|perto": {
+   "media": {
+    "postas": 13.2,
+    "comidas": 13,
+    "fracao_no_prazo": 0.896,
+    "mediana_ticks": 54,
+    "fracao_fome_baixa": 0.002,
+    "fome_media": 0.707,
+    "celulas_andadas_por_dia": 121.2,
+    "cobertura": 0.101,
+    "ms_por_dia": 49.6
+   },
+   "vidas": [
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.923,
+     "mediana_ticks": 60,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.72,
+     "celulas_andadas_por_dia": 136,
+     "cobertura": 0.143,
+     "ms_por_dia": 44
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.846,
+     "mediana_ticks": 60,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.715,
+     "celulas_andadas_por_dia": 120,
+     "cobertura": 0.101,
+     "ms_por_dia": 47
+    },
+    {
+     "postas": 14,
+     "comidas": 13,
+     "fracao_no_prazo": 0.786,
+     "mediana_ticks": 45,
+     "fracao_fome_baixa": 0.008,
+     "fome_media": 0.687,
+     "celulas_andadas_por_dia": 127,
+     "cobertura": 0.084,
+     "ms_por_dia": 49
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 1,
+     "mediana_ticks": 60,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.714,
+     "celulas_andadas_por_dia": 109,
+     "cobertura": 0.076,
+     "ms_por_dia": 53
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.923,
+     "mediana_ticks": 45,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.7,
+     "celulas_andadas_por_dia": 114,
+     "cobertura": 0.101,
+     "ms_por_dia": 55
+    }
+   ]
+  },
+  "grande_128x60|modular|longe": {
+   "media": {
+    "postas": 10,
+    "comidas": 9.2,
+    "fracao_no_prazo": 0.139,
+    "mediana_ticks": 714,
+    "fracao_fome_baixa": 0.462,
+    "fome_media": 0.248,
+    "celulas_andadas_por_dia": 112.8,
+    "cobertura": 0.073,
+    "ms_por_dia": 50.6
+   },
+   "vidas": [
+    {
+     "postas": 11,
+     "comidas": 10,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": 675,
+     "fracao_fome_baixa": 0.4,
+     "fome_media": 0.262,
+     "celulas_andadas_por_dia": 117,
+     "cobertura": 0.079,
+     "ms_por_dia": 51
+    },
+    {
+     "postas": 9,
+     "comidas": 8,
+     "fracao_no_prazo": 0.111,
+     "mediana_ticks": 780,
+     "fracao_fome_baixa": 0.471,
+     "fome_media": 0.252,
+     "celulas_andadas_por_dia": 106,
+     "cobertura": 0.068,
+     "ms_por_dia": 53
+    },
+    {
+     "postas": 9,
+     "comidas": 9,
+     "fracao_no_prazo": 0.222,
+     "mediana_ticks": 765,
+     "fracao_fome_baixa": 0.533,
+     "fome_media": 0.217,
+     "celulas_andadas_por_dia": 122,
+     "cobertura": 0.067,
+     "ms_por_dia": 56
+    },
+    {
+     "postas": 12,
+     "comidas": 11,
+     "fracao_no_prazo": 0.25,
+     "mediana_ticks": 510,
+     "fracao_fome_baixa": 0.325,
+     "fome_media": 0.315,
+     "celulas_andadas_por_dia": 121,
+     "cobertura": 0.081,
+     "ms_por_dia": 51
+    },
+    {
+     "postas": 9,
+     "comidas": 8,
+     "fracao_no_prazo": 0.111,
+     "mediana_ticks": 840,
+     "fracao_fome_baixa": 0.579,
+     "fome_media": 0.196,
+     "celulas_andadas_por_dia": 98,
+     "cobertura": 0.071,
+     "ms_por_dia": 42
+    }
+   ]
+  },
+  "grande_128x60|a|comedouro": {
+   "media": {
+    "postas": 7,
+    "comidas": 4.8,
+    "fracao_no_prazo": 0.324,
+    "mediana_ticks": 258,
+    "fracao_fome_baixa": 0.555,
+    "fome_media": 0.259,
+    "celulas_andadas_por_dia": 25.2,
+    "cobertura": 0.026,
+    "ms_por_dia": 17.2
+   },
+   "vidas": [
+    {
+     "postas": 8,
+     "comidas": 6,
+     "fracao_no_prazo": 0.375,
+     "mediana_ticks": 285,
+     "fracao_fome_baixa": 0.45,
+     "fome_media": 0.324,
+     "celulas_andadas_por_dia": 36,
+     "cobertura": 0.041,
+     "ms_por_dia": 21
+    },
+    {
+     "postas": 5,
+     "comidas": 2,
+     "fracao_no_prazo": 0.2,
+     "mediana_ticks": 270,
+     "fracao_fome_baixa": 0.75,
+     "fome_media": 0.14,
+     "celulas_andadas_por_dia": 12,
+     "cobertura": 0.014,
+     "ms_por_dia": 13
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.846,
+     "mediana_ticks": 180,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.593,
+     "celulas_andadas_por_dia": 56,
+     "cobertura": 0.046,
+     "ms_por_dia": 25
+    },
+    {
+     "postas": 5,
+     "comidas": 2,
+     "fracao_no_prazo": 0.2,
+     "mediana_ticks": 300,
+     "fracao_fome_baixa": 0.75,
+     "fome_media": 0.142,
+     "celulas_andadas_por_dia": 11,
+     "cobertura": 0.015,
+     "ms_por_dia": 13
+    },
+    {
+     "postas": 4,
+     "comidas": 1,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": 255,
+     "fracao_fome_baixa": 0.825,
+     "fome_media": 0.096,
+     "celulas_andadas_por_dia": 11,
+     "cobertura": 0.012,
+     "ms_por_dia": 14
+    }
+   ]
+  },
+  "grande_128x60|a|perto": {
+   "media": {
+    "postas": 8,
+    "comidas": 6.2,
+    "fracao_no_prazo": 0.452,
+    "mediana_ticks": 210,
+    "fracao_fome_baixa": 0.465,
+    "fome_media": 0.32,
+    "celulas_andadas_por_dia": 27.8,
+    "cobertura": 0.028,
+    "ms_por_dia": 19.6
+   },
+   "vidas": [
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.769,
+     "mediana_ticks": 180,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.592,
+     "celulas_andadas_por_dia": 58,
+     "cobertura": 0.06,
+     "ms_por_dia": 32
+    },
+    {
+     "postas": 5,
+     "comidas": 2,
+     "fracao_no_prazo": 0.4,
+     "mediana_ticks": 210,
+     "fracao_fome_baixa": 0.75,
+     "fome_media": 0.144,
+     "celulas_andadas_por_dia": 9,
+     "cobertura": 0.011,
+     "ms_por_dia": 12
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.692,
+     "mediana_ticks": 180,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.619,
+     "celulas_andadas_por_dia": 53,
+     "cobertura": 0.05,
+     "ms_por_dia": 28
+    },
+    {
+     "postas": 5,
+     "comidas": 2,
+     "fracao_no_prazo": 0.4,
+     "mediana_ticks": 225,
+     "fracao_fome_baixa": 0.75,
+     "fome_media": 0.147,
+     "celulas_andadas_por_dia": 9,
+     "cobertura": 0.01,
+     "ms_por_dia": 14
+    },
+    {
+     "postas": 4,
+     "comidas": 1,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": 255,
+     "fracao_fome_baixa": 0.825,
+     "fome_media": 0.096,
+     "celulas_andadas_por_dia": 10,
+     "cobertura": 0.011,
+     "ms_por_dia": 12
+    }
+   ]
+  },
+  "grande_128x60|a|longe": {
+   "media": {
+    "postas": 4,
+    "comidas": 0.6,
+    "fracao_no_prazo": 0,
+    "mediana_ticks": 345,
+    "fracao_fome_baixa": 0.855,
+    "fome_media": 0.074,
+    "celulas_andadas_por_dia": 10.2,
+    "cobertura": 0.012,
+    "ms_por_dia": 14
+   },
+   "vidas": [
+    {
+     "postas": 4,
+     "comidas": 1,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": 300,
+     "fracao_fome_baixa": 0.825,
+     "fome_media": 0.092,
+     "celulas_andadas_por_dia": 12,
+     "cobertura": 0.015,
+     "ms_por_dia": 14
+    },
+    {
+     "postas": 4,
+     "comidas": 1,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": 375,
+     "fracao_fome_baixa": 0.825,
+     "fome_media": 0.088,
+     "celulas_andadas_por_dia": 14,
+     "cobertura": 0.017,
+     "ms_por_dia": 14
+    },
+    {
+     "postas": 4,
+     "comidas": 0,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": null,
+     "fracao_fome_baixa": 0.9,
+     "fome_media": 0.052,
+     "celulas_andadas_por_dia": 5,
+     "cobertura": 0.006,
+     "ms_por_dia": 13
+    },
+    {
+     "postas": 4,
+     "comidas": 1,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": 360,
+     "fracao_fome_baixa": 0.825,
+     "fome_media": 0.088,
+     "celulas_andadas_por_dia": 11,
+     "cobertura": 0.014,
+     "ms_por_dia": 16
+    },
+    {
+     "postas": 4,
+     "comidas": 0,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": null,
+     "fracao_fome_baixa": 0.9,
+     "fome_media": 0.052,
+     "celulas_andadas_por_dia": 9,
+     "cobertura": 0.01,
+     "ms_por_dia": 13
+    }
+   ]
+  }
+ },
+ "retornos": {
+  "hoje_64x30|modular|20": {
+   "soltos": 5,
+   "voltaram": 5,
+   "menor_media": 0.24,
+   "mediana_ticks": 465,
+   "vidas": [
+    {
+     "solto": true,
+     "menor": 0.2,
+     "voltou": true,
+     "ticks": 315
+    },
+    {
+     "solto": true,
+     "menor": 0.5,
+     "voltou": true,
+     "ticks": 135
+    },
+    {
+     "solto": true,
+     "menor": 0.2,
+     "voltou": true,
+     "ticks": 765
+    },
+    {
+     "solto": true,
+     "menor": 0.1,
+     "voltou": true,
+     "ticks": 690
+    },
+    {
+     "solto": true,
+     "menor": 0.2,
+     "voltou": true,
+     "ticks": 465
+    }
+   ]
+  },
+  "hoje_64x30|modular|40": {
+   "soltos": 5,
+   "voltaram": 5,
+   "menor_media": 1.18,
+   "mediana_ticks": 825,
+   "vidas": [
+    {
+     "solto": true,
+     "menor": 0.2,
+     "voltou": true,
+     "ticks": 585
+    },
+    {
+     "solto": true,
+     "menor": 1.1,
+     "voltou": true,
+     "ticks": 555
+    },
+    {
+     "solto": true,
+     "menor": 1.2,
+     "voltou": true,
+     "ticks": 825
+    },
+    {
+     "solto": true,
+     "menor": 1.7,
+     "voltou": true,
+     "ticks": 1140
+    },
+    {
+     "solto": true,
+     "menor": 1.7,
+     "voltou": true,
+     "ticks": 945
+    }
+   ]
+  },
+  "hoje_64x30|a|20": {
+   "soltos": 5,
+   "voltaram": 0,
+   "menor_media": 19.6,
+   "mediana_ticks": null,
+   "vidas": [
+    {
+     "solto": true,
+     "menor": 18,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 20,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 20,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 20,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 20,
+     "voltou": false,
+     "ticks": null
+    }
+   ]
+  },
+  "hoje_64x30|a|40": {
+   "soltos": 5,
+   "voltaram": 0,
+   "menor_media": 39.58,
+   "mediana_ticks": null,
+   "vidas": [
+    {
+     "solto": true,
+     "menor": 37.9,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 40,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 40,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 40,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 40,
+     "voltou": false,
+     "ticks": null
+    }
+   ]
+  },
+  "grande_128x60|modular|20": {
+   "soltos": 5,
+   "voltaram": 5,
+   "menor_media": 0.62,
+   "mediana_ticks": 345,
+   "vidas": [
+    {
+     "solto": true,
+     "menor": 0.5,
+     "voltou": true,
+     "ticks": 270
+    },
+    {
+     "solto": true,
+     "menor": 0.1,
+     "voltou": true,
+     "ticks": 255
+    },
+    {
+     "solto": true,
+     "menor": 0.1,
+     "voltou": true,
+     "ticks": 345
+    },
+    {
+     "solto": true,
+     "menor": 1,
+     "voltou": true,
+     "ticks": 345
+    },
+    {
+     "solto": true,
+     "menor": 1.4,
+     "voltou": true,
+     "ticks": 420
+    }
+   ]
+  },
+  "grande_128x60|modular|40": {
+   "soltos": 5,
+   "voltaram": 5,
+   "menor_media": 0.66,
+   "mediana_ticks": 675,
+   "vidas": [
+    {
+     "solto": true,
+     "menor": 0.8,
+     "voltou": true,
+     "ticks": 675
+    },
+    {
+     "solto": true,
+     "menor": 0.1,
+     "voltou": true,
+     "ticks": 585
+    },
+    {
+     "solto": true,
+     "menor": 0.1,
+     "voltou": true,
+     "ticks": 900
+    },
+    {
+     "solto": true,
+     "menor": 0.8,
+     "voltou": true,
+     "ticks": 645
+    },
+    {
+     "solto": true,
+     "menor": 1.5,
+     "voltou": true,
+     "ticks": 1200
+    }
+   ]
+  },
+  "grande_128x60|modular|70": {
+   "soltos": 5,
+   "voltaram": 1,
+   "menor_media": 43.54,
+   "mediana_ticks": 1320,
+   "vidas": [
+    {
+     "solto": true,
+     "menor": 1.6,
+     "voltou": true,
+     "ticks": 1320
+    },
+    {
+     "solto": true,
+     "menor": 52.1,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 36.8,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 70,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 57.2,
+     "voltou": false,
+     "ticks": null
+    }
+   ]
+  },
+  "grande_128x60|a|20": {
+   "soltos": 5,
+   "voltaram": 0,
+   "menor_media": 20,
+   "mediana_ticks": null,
+   "vidas": [
+    {
+     "solto": true,
+     "menor": 20,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 20,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 20,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 20,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 20,
+     "voltou": false,
+     "ticks": null
+    }
+   ]
+  },
+  "grande_128x60|a|40": {
+   "soltos": 5,
+   "voltaram": 0,
+   "menor_media": 40,
+   "mediana_ticks": null,
+   "vidas": [
+    {
+     "solto": true,
+     "menor": 40,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 40,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 40,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 40,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 40,
+     "voltou": false,
+     "ticks": null
+    }
+   ]
+  },
+  "grande_128x60|a|70": {
+   "soltos": 5,
+   "voltaram": 0,
+   "menor_media": 70,
+   "mediana_ticks": null,
+   "vidas": [
+    {
+     "solto": true,
+     "menor": 70,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 70,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 70,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 70,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 70,
+     "voltou": false,
+     "ticks": null
+    }
+   ]
+  }
+ },
+ "adendo_comedouro6": {
+  "grande_128x60|modular|comedouro6": {
+   "media": {
+    "postas": 13.2,
+    "comidas": 13,
+    "fracao_no_prazo": 0.804,
+    "mediana_ticks": 132,
+    "fracao_fome_baixa": 0.017,
+    "fome_media": 0.644,
+    "celulas_andadas_por_dia": 124.2,
+    "cobertura": 0.081,
+    "ms_por_dia": 60.8
+   },
+   "vidas": [
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.692,
+     "mediana_ticks": 150,
+     "fracao_fome_baixa": 0.033,
+     "fome_media": 0.606,
+     "celulas_andadas_por_dia": 134,
+     "cobertura": 0.091,
+     "ms_por_dia": 90
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.846,
+     "mediana_ticks": 135,
+     "fracao_fome_baixa": 0.008,
+     "fome_media": 0.665,
+     "celulas_andadas_por_dia": 128,
+     "cobertura": 0.083,
+     "ms_por_dia": 58
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.923,
+     "mediana_ticks": 75,
+     "fracao_fome_baixa": 0.038,
+     "fome_media": 0.662,
+     "celulas_andadas_por_dia": 133,
+     "cobertura": 0.072,
+     "ms_por_dia": 60
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.846,
+     "mediana_ticks": 150,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.642,
+     "celulas_andadas_por_dia": 114,
+     "cobertura": 0.084,
+     "ms_por_dia": 50
+    },
+    {
+     "postas": 14,
+     "comidas": 13,
+     "fracao_no_prazo": 0.714,
+     "mediana_ticks": 150,
+     "fracao_fome_baixa": 0.008,
+     "fome_media": 0.646,
+     "celulas_andadas_por_dia": 112,
+     "cobertura": 0.076,
+     "ms_por_dia": 46
+    }
+   ]
+  },
+  "grande_128x60|a|comedouro6": {
+   "media": {
+    "postas": 6,
+    "comidas": 3.6,
+    "fracao_no_prazo": 0.234,
+    "mediana_ticks": 237,
+    "fracao_fome_baixa": 0.645,
+    "fome_media": 0.209,
+    "celulas_andadas_por_dia": 19.4,
+    "cobertura": 0.017,
+    "ms_por_dia": 18.4
+   },
+   "vidas": [
+    {
+     "postas": 4,
+     "comidas": 1,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": 270,
+     "fracao_fome_baixa": 0.825,
+     "fome_media": 0.094,
+     "celulas_andadas_por_dia": 11,
+     "cobertura": 0.014,
+     "ms_por_dia": 16
+    },
+    {
+     "postas": 5,
+     "comidas": 2,
+     "fracao_no_prazo": 0.4,
+     "mediana_ticks": 225,
+     "fracao_fome_baixa": 0.75,
+     "fome_media": 0.144,
+     "celulas_andadas_por_dia": 11,
+     "cobertura": 0.013,
+     "ms_por_dia": 17
+    },
+    {
+     "postas": 13,
+     "comidas": 13,
+     "fracao_no_prazo": 0.769,
+     "mediana_ticks": 180,
+     "fracao_fome_baixa": 0,
+     "fome_media": 0.615,
+     "celulas_andadas_por_dia": 55,
+     "cobertura": 0.032,
+     "ms_por_dia": 33
+    },
+    {
+     "postas": 4,
+     "comidas": 1,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": 255,
+     "fracao_fome_baixa": 0.825,
+     "fome_media": 0.096,
+     "celulas_andadas_por_dia": 10,
+     "cobertura": 0.014,
+     "ms_por_dia": 13
+    },
+    {
+     "postas": 4,
+     "comidas": 1,
+     "fracao_no_prazo": 0,
+     "mediana_ticks": 255,
+     "fracao_fome_baixa": 0.825,
+     "fome_media": 0.096,
+     "celulas_andadas_por_dia": 10,
+     "cobertura": 0.01,
+     "ms_por_dia": 13
+    }
+   ]
+  }
+ }
+}

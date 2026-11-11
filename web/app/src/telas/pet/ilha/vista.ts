@@ -21,10 +21,10 @@
      de volta: Seguidor.pular), com a queda e o quique, e o foco volta ao pet em ~MAO.focoTauMs.
    Os kits carregam depois do terreno; se um modelo nao carrega, a cena cai na reserva (MundoReserva), com o erro no console. */
 import { comprimento, naRota, rotaEmTerra } from "./rotaConta.ts";
-import { ILHA_DEV_AGUA } from "./ilhaDev.ts";
+import { FOCO_DEV, ILHA_DEV_AGUA, ILHA_DEV_GRANDE } from "./ilhaDev.ts";
 import { ponte } from "./ponte.ts";
 import * as THREE from "three";
-import { CMU_MVP_AGUA, TPD, eNoite, noMapa, type Mundo } from "../../../../motor/index.ts";
+import { CMU_GRANDE, CMU_MVP_AGUA, TPD, eNoite, noMapa, type Mundo } from "../../../../motor/index.ts";
 import { habitatAtual, voltarParaIlha, type Habitat } from "../../../habitat.ts";
 import { jogoAtual } from "../../../jogo.ts";
 import { CENA, reservaDoPe } from "../cenaEstado.ts";
@@ -54,7 +54,7 @@ import { LUGARES, ORDEM_LUGARES, chaoDoLugar, estadoDoLugar, gradeDosLugares, id
 import { Apagador, montarMarcadores, type Marcadores } from "./marcadoresLugar.ts";
 import { TRANCAS } from "../../../trancas.ts";
 import { mitologiaLigada } from "../../../mitologia.ts";
-import { NuvemDoDia } from "./mitologia.ts";
+import { SinaisDaIlha } from "./mitologia.ts";
 
 const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -70,8 +70,8 @@ class VistaIlha {
   private readonly lida: CameraLida;
   private readonly papel = new Papel();
   private readonly itens: Itens;
-  /** MITOLOGIA, E0: a nuvem do dia da brincadeira variada (so com a chave `mitologia`) */
-  private readonly nuvem: NuvemDoDia;
+  /** MITOLOGIA, E0 e E1: os sinais dos deuses, a pedra, as pegadas, o pessego e o Myotismon (so com a chave `mitologia`) */
+  private readonly mitologia: SinaisDaIlha;
   /** o ponto de cada lugar da ilha (celulas; lugares.ts) e a altura do chao no pe dele (celulas; o portao e a barraca ficam na moldura) */
   private readonly pontos: Record<Lugar, [number, number]>;
   private readonly chaoLugar: Record<Lugar, number>;
@@ -155,7 +155,7 @@ class VistaIlha {
     this.renderer.info.autoReset = false;
     this.pos = new Pos(this.renderer);
     /* ?ilha=agua (ilhaDev.ts): so a vista troca de ilha, para ver o desenho antes de o motor ligar a agua (a IA4) */
-    this.ilha = ilhaDe(ILHA_DEV_AGUA ? CMU_MVP_AGUA : mu.cm);
+    this.ilha = ilhaDe(ILHA_DEV_GRANDE ? CMU_GRANDE : ILHA_DEV_AGUA ? CMU_MVP_AGUA : mu.cm);
     this.cenaIlha = this.estilo.montar(this.ilha);
     this.fim = fimDaIlha(this.ilha);
     this.cenaIlha.cena.add(this.fim.grupo);
@@ -179,8 +179,8 @@ class VistaIlha {
     this.chaoLugar = Object.fromEntries(ORDEM_LUGARES.map(id => [id, chaoDoLugar(id, base)])) as Record<Lugar, number>;
     /* o portao e a barraca: marcadores provisorios no ponto de cada um, ate o modelo 3D chegar (carregarObjetos); nos estilos sem lugares, ficam */
     this.marcadores = montarMarcadores(base);
-    this.nuvem = new NuvemDoDia(this.itens.ninhoEm);
-    this.cenaIlha.cena.add(this.itens.raiz, this.papel.raiz, this.marcadores.raiz, this.nuvem.raiz);
+    this.mitologia = new SinaisDaIlha(this.itens.ninhoEm, mu.cm.sub);
+    this.cenaIlha.cena.add(this.itens.raiz, this.papel.raiz, this.marcadores.raiz, this.mitologia.raiz);
     CURVA.uVento.value = 1;
     const il = this.ilha;
     this.mapa = { imagem: new ImageData(pixelsDoMapa(il, this.estilo.paleta), il.larg, il.prof), x0: il.x0, z0: il.z0, larg: il.larg, prof: il.prof, area: il.area };
@@ -631,6 +631,7 @@ class VistaIlha {
       if (viagem > 0) this.foco = this.focoDaViagem(this.foco, viagem, reduzido);
       if (aberta) this.foco = this.ab?.saida ? quadroDaSaida(this.ab.saida.de, agora - this.ab.saida.desde, this.foco, zoomDeSempre, TRANSICAO_MS).foco : aberta.foco;
     }
+    if (FOCO_DEV) this.foco = [FOCO_DEV[0], FOCO_DEV[1]];      /* a previa da ilha grande (ilhaDev.ts) */
     const [px, pz] = this.foco, a = this.afast;
     const { olhar } = this.orbitaVista, desloc = aberta?.inclina ? inclinar(this.orbitaVista.desloc, aberta.inclina) : this.orbitaVista.desloc;
     this.camera.position.set(px + desloc[0] * a, desloc[1] * a, pz + desloc[2] * a);
@@ -646,7 +647,7 @@ class VistaIlha {
     this.objetos?.quadro?.(this.foco, this.estilo.dobra, this.dirDobra, Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * this.camera.aspect);
     this.aplicarTrancas();
     this.itens.sincronizar(mu, m.e.tick, noite, agora, dtMs, m.lesionadoDesde !== null, reduzido, m.e.sujeira, this.naMao ? motorCel : this.petCel);
-    this.nuvem.sincronizar(m, mitologiaLigada(), agora, reduzido);
+    this.mitologia.sincronizar(m, mitologiaLigada(), agora, reduzido);
     /* o pet longe do foco (a camera solta, a viagem, a volta depois de soltar o pet): o chao sob ele desce pela dobra (yPe), e o tamanho do papel vale
        na distancia dele (senao o texel deixa de ser inteiro e o pet cresce ou encolhe com a distancia ao foco). Com o pet na mao o tamanho fica o do
        foco, como na P2 da PEGAR_PET (o chaoSob conta a altura da mao com ele) */
@@ -735,7 +736,7 @@ class VistaIlha {
     }, true, pode);
   }
 
-  dispose(): void { this.marcadores.dispose(); this.papel.dispose(); this.pos.dispose(); this.renderer.dispose(); }
+  dispose(): void { this.mitologia.descartar(); this.marcadores.dispose(); this.papel.dispose(); this.pos.dispose(); this.renderer.dispose(); }
 
   /** a queda de qualidade (regra 10, PROPOSTO): sem vento, metade da grama e pixelRatio 1; so uma vez */
   baixarQualidade(): void {
