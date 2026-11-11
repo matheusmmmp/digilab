@@ -307,3 +307,26 @@ o número de decisões (agora confere). Ficam registrados, sem correção:
   ilha grande, um lugar lembrado a mais de 64 células não atrai. É assunto da IG-6, junto com o cheiro de 24 células.
 - **A vista** (`src/telas/pet/ilha/grade.ts`) desenharia a árvore e o marco fechados como chão livre: é a IG3.
 - **O `Motor` do jogo** recusaria a ração além de x = 1023 ou y = 479 num pet do mundo grande, falhando alto: é a IG4.
+
+### 12.10 IG3: o que foi construído (2026-11-11)
+
+- **A vista desenha a ilha grande** a partir do mapa do motor (`grade.ts`): a terra, o mar em volta, a praia, o rio, os lagos e as
+  pontes. Cada árvore fechada do mapa vira uma árvore no centro da célula dela (pinheiro ou árvore redonda, pela célula, sem sorteio).
+  Cada marco (o carro, a lata, a geladeira, o trilho) fica em cima do bloco de células fechadas dele.
+- **A planta da ilha grande** (`PLANTA_ILHA_GRANDE`): a praça no meio, o lar a oeste, o portão na ponta norte, a barraca do outro lado
+  do rio (o caminho passa pela ponte do meio), o cais na praia do sul e 13 postes. A praia é mais larga que a da ilha de hoje.
+- **O mapa foi regerado** para nenhuma árvore cair nos caminhos nem na praça: o gerador da figura conhece os caminhos da planta. O
+  número de árvores (79) e de células livres (4 087) ficou igual; as posições mudaram. O gabarito da paridade, o `config.py` e o
+  `constantes.ts` foram regerados com ele (a pilha ainda não tinha sido mergeada).
+- **A luz:** os focos dos caminhos passariam do máximo do shader (54 contra 48); na ilha grande o espaçamento cresce até caber. Nas
+  ilhas de hoje o espaçamento é o de sempre.
+- **A prévia:** `?ilha=grande` desenha a ilha grande sem mexer no motor, e `?foco=x,z` aponta a câmera para um ponto (só na prévia).
+  O pet da prévia continua no mundo dele, então aparece no canto noroeste, no mar: é esperado até a IG4.
+- **O jogo de hoje não muda:** sem o parâmetro, a vista desenha a ilha do mundo do pet, como antes.
+
+**Visto na tela** (medida única desta sessão; capturas fora do git por mostrarem o pet): a praça com os postes e o caminho do portão,
+o carro e a lata, a ponte do meio com o rio, e a praia do sul, em 1440 × 800; a praça em 375 × 812; nos mapas Digital e Ilha.
+
+**O que não foi verificado:** o cais não apareceu em nenhuma captura (a câmera olha para o norte e ele fica atrás dela); a barraca, a
+geladeira e o trilho não foram vistos; o custo num celular de verdade (a grade tem 11 840 células, contra 3 680 hoje); as nuvens
+em anel e o portal do céu foram feitos para a ilha de hoje e não foram revistos para o tamanho novo.

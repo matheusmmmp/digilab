@@ -7,8 +7,8 @@
      (com a cachoeira onde ele desce do plato) e a mata densa; ao sul, a areia e o mar. Na borda do mapa do motor fica o pe do penhasco
      (norte e oeste), o rio (leste) ou a areia (sul): o pet para ali porque o motor o prende, e a vista mostra um limite.
    A vista (cena.ts) so desenha o que esta aqui. Todos os numeros sao do desenho: PROPOSTO, SEM FONTE. */
-import { AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, PONTE, celulasSecas, type ConfigMundo } from "../../../../motor/index.ts";
-import { ENFEITES_GRADE, FIM_ILHA, ILHA_AGUA, PLANTA_ILHA, PLANTA_ILHA_AGUA, type PlantaIlha } from "./constantes.ts";
+import { AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, ARVORE_FECHADA, LAYOUT_MUNDO_GRANDE, MARCO_FECHADO, PONTE, celulasSecas, type ConfigMundo } from "../../../../motor/index.ts";
+import { ENFEITES_GRADE, FIM_ILHA, ILHA_AGUA, ILHA_GRANDE, PLANTA_ILHA, PLANTA_ILHA_AGUA, PLANTA_ILHA_GRANDE, type PlantaIlha } from "./constantes.ts";
 import { ENFEITES_MODELOS, MODELOS, MODELO_ARVORE_DO_MOTOR, type NomeEnfeite, type NomeLugar, type NomeModelo } from "./modelos.ts";
 
 /** a moldura em volta da area andavel, em celulas (pelo menos 8 de cada lado, secao 5) */
@@ -112,14 +112,21 @@ export class Ilha {
   readonly planta: PlantaIlha;
   /** as celulas de ponte do layout com agua (ponte.ts as desenha); vazio sem agua */
   readonly pontes: [number, number][] = [];
+  /** as celulas fechadas do mapa do motor que nao sao agua (a ilha grande, IG3): a arvore e o marco em que o pet nao pisa. A arvore vira
+      um objeto no centro da celula dela (porObjetos); o marco e o enfeite da planta, que fica em cima do bloco de celulas dele */
+  readonly fechadas: { tipo: "arvore" | "marco"; x: number; z: number }[] = [];
+  /** a moldura e a praia desta ilha com agua (ILHA_AGUA ou ILHA_GRANDE) */
+  private readonly aguaDaIlha: { moldura: number; praia: number; praiaSul: number; sulDesde: number };
 
   constructor(cm: ConfigMundo) {
     this.cm = cm;
     const W = cm.celulas_x, H = cm.celulas_y, L = cm.layout;
     this.area = { w: W, h: H };
     this.comAgua = celulasSecas(cm) !== null;
-    this.planta = this.comAgua ? PLANTA_ILHA_AGUA : PLANTA_ILHA;
-    const M = this.comAgua ? { oeste: ILHA_AGUA.moldura, leste: ILHA_AGUA.moldura, norte: ILHA_AGUA.moldura, sul: ILHA_AGUA.moldura } : MOLDURA;
+    /* a ilha grande (o layout `grande` do motor) tem a planta e a praia dela; as outras ilhas com agua, as de sempre */
+    const grande = this.comAgua && L.nome === LAYOUT_MUNDO_GRANDE.nome, A = this.aguaDaIlha = grande ? ILHA_GRANDE : ILHA_AGUA;
+    this.planta = !this.comAgua ? PLANTA_ILHA : grande ? PLANTA_ILHA_GRANDE : PLANTA_ILHA_AGUA;
+    const M = this.comAgua ? { oeste: A.moldura, leste: A.moldura, norte: A.moldura, sul: A.moldura } : MOLDURA;
     this.x0 = -M.oeste; this.z0 = -M.norte;
     this.larg = W + M.oeste + M.leste; this.prof = H + M.norte + M.sul;
     this.rioX = W + RIO.desde;
@@ -175,7 +182,7 @@ export class Ilha {
   /* as celulas da ilha com agua, do mapa do motor (AGUA_POR_LAYOUT): o mar (fora do mapa e onde o mapa diz) no nivel -1, a agua doce
      (o rio e a lagoa) no nivel 0, a ponte como caminho, e a terra em grama, ou em areia a ate `praia` celulas do mar (`praiaSul` no sul) */
   private porAgua(): void {
-    const W = this.area.w, H = this.area.h, L = this.cm.layout, linhas = AGUA_POR_LAYOUT[L.nome], A = ILHA_AGUA;
+    const W = this.area.w, H = this.area.h, L = this.cm.layout, linhas = AGUA_POR_LAYOUT[L.nome], A = this.aguaDaIlha;
     const mar = (x: number, z: number) => x < 0 || z < 0 || x >= W || z >= H || linhas[z][x] === AGUA_MAR;
     for (let j = 0; j < this.prof; j++) for (let i = 0; i < this.larg; i++) {
       const x = this.x0 + i, z = this.z0 + j;
@@ -189,6 +196,9 @@ export class Ilha {
         if (ch === AGUA_DOCE) tipo = "agua";
         else if (ch === PONTE) { tipo = "caminho"; this.pontes.push([x, z]); }
         else {
+          /* a arvore e o marco fechados sao terra para o desenho (o chao continua embaixo deles) */
+          if (ch === ARVORE_FECHADA) this.fechadas.push({ tipo: "arvore", x, z });
+          else if (ch === MARCO_FECHADO) this.fechadas.push({ tipo: "marco", x, z });
           const d = z >= A.sulDesde ? A.praiaSul : A.praia;
           let praia = false;
           for (let dz = -d; dz <= d && !praia; dz++) for (let dx = -d; dx <= d; dx++) if (mar(x + dx, z + dz)) { praia = true; break; }
@@ -237,6 +247,13 @@ export class Ilha {
     /* as arvores do layout do motor, no centro da celula delas (as unicas coisas altas dentro da area) */
     for (const [id, x, y] of this.cm.layout.arvores)
       this.objetos.push({ modelo: MODELO_ARVORE_DO_MOTOR, x: x + 0.5, z: y + 0.5, giro: (sementeDoLayout(id) % 628) / 100, escala: 1, doMotor: id });
+    /* as arvores fechadas do mapa (a ilha grande): tambem do motor (o pet as contorna), no centro da celula delas, sem sorteio (o modelo,
+       o giro e o tamanho saem da celula). Contam como coisa alta do motor: nada as esconde, e os lugares guardam a clareira delas */
+    for (const f of this.fechadas) if (f.tipo === "arvore") {
+      const id = `fechada:${f.x},${f.z}`, h = sementeDoLayout(id);
+      this.objetos.push({ modelo: h % 2 ? "pinheiro" : "arvore_redonda", x: f.x + 0.5, z: f.z + 0.5, giro: (h % 628) / 100, escala: 0.85 + ((h >>> 8) % 30) / 100, doMotor: id });
+    }
+    const fechada = new Set(this.fechadas.map(f => f.z * this.area.w + f.x));
 
     /* a decoracao baixa da area: longe do ninho, do comedouro, do caminho e das arvores do motor */
     for (const [regiao, x0, x1] of this.cm.layout.regioes) {
@@ -248,6 +265,7 @@ export class Ilha {
         for (let k = 0, tent = 0; k < alvo && tent < alvo * 30; tent++) {
           const x = x0 + r() * (x1 - x0 + 1), z = r() * this.area.h;
           if (!plana(x, z, 0)) continue;
+          if (fechada.has(Math.floor(z) * this.area.w + Math.floor(x))) continue;      /* nada de decoracao debaixo da arvore nem do marco */
           if (Math.hypot(x - ninho[0], z - ninho[1]) < 1.6 || Math.hypot(x - comedouro[0], z - comedouro[1]) < 1.4) continue;
           if (!longe(x, z, 1.2, alto) || !longe(x, z, 0.35)) continue;
           por(modelo, x, z, [0.8, 1.2]);
