@@ -164,3 +164,74 @@ data; a ordem e a forma de cada item ele decide quando a IA4 estiver pronta.
 | IA8 | **Os marcos como obstáculos:** o pet contorna o carro, o trilho, a geladeira e o portão em vez de atravessá-los | Junto com a IA5: é a mesma mecânica |
 
 O que **não** entra aqui: nado, barco, pesca e mata fechada onde o pet não entra (seções 1 e 7).
+
+## 12. A ilha grande (a v23): o plano
+
+**Estado: PROPOSTO.** Três decisões do Matheus já valem (IG-1 a IG-3); as outras (IG-4 a IG-9) e a figura esperam a resposta dele.
+Nenhum código desta seção existe.
+
+O pedido, em 2026-11-11: "A ilha, ela é muito pequena. Eu quero que aumente ela pra parecer uma ilha de verdade."
+
+### 12.1 O que já está decidido (pergunta desta sessão, 2026-11-11, com a recomendação e o custo de errar)
+
+| # | Decisão | Resposta do Matheus |
+|---|---|---|
+| IG-1 | Como a ilha cresce | **"Mundo maior no motor (Recomendado)"**: o mapa do motor cresce e o pet anda por tudo |
+| IG-2 | O tamanho | **"128 x 60"** (a recomendação era 96 × 48; o Matheus escolheu o maior, 4 vezes a área) |
+| IG-3 | As árvores e os marcos como obstáculos (IA5 e IA8 da seção 11) | **"Sim, tudo na v23 (Recomendado)"**: uma versão e uma migração só |
+
+Com isto a IA5 e a IA8 da seção 11 deixam de ser etapas à parte. A IA6 (o desenho da costa e do rio) é a figura desta seção. A IA7 (o
+relevo baixo) continua para depois.
+
+### 12.2 O que existe hoje (FATO VERIFICADO, lido na main de 2026-11-11)
+
+- O tamanho do mundo é parâmetro: `ConfigMundo.celulas_x` e `celulas_y` (64 e 30), com 16 subunidades por célula.
+- A água é uma linha de texto por linha de células (`AGUA_POR_LAYOUT`), com o mar, a água doce, a terra e a ponte. Hoje são 1 321
+  células de terra.
+- As **regiões** (casa, jardim, campo, mata) são faixas de x fixas no layout (0–15, 16–33, 34–47, 48–63). O corpo, a política e o
+  DigiBrain modular (`sens`, `mem`, `adapt`) leem o nome da região.
+- Os sentidos e o passo são em células: a visão 6, o cheiro 24, o passo do cheiro 8; a velocidade é 4 subunidades por tick.
+- A troca de ilha por evento (`mudar_ilha`, o `mi` do jogo) já existe e leva o pet para a terra mais perto (IA4).
+
+### 12.3 A figura do mapa proposto
+
+`docs/pranchas/ilha-grande/mapa_proposto.png` (gerada por `gerar_figura.py`, na mesma pasta; o texto do mapa em `mapa_proposto.txt`).
+128 × 60 células, 4 082 de terra livre (3,1 vezes a de hoje), um rio com três pontes, dois lagos e um laguinho, 84 árvores em oito
+bosques e soltas, e os quatro marcos ocupando as células deles. A ilha de hoje aparece embaixo, na mesma escala. É um ponto de
+partida: PROPOSTO, SEM FONTE.
+
+### 12.4 A mecânica nova
+
+- **A árvore e o marco são células fechadas**, como a água: o pet contorna pelo mesmo desvio. No mapa viram dois caracteres novos.
+  Nenhuma regra de desvio nova.
+- **A fruta não entra aqui.** A árvore desta seção é só obstáculo. A árvore que sacode e dá fruta é de outra frente
+  (`docs/TAREFA_V3_ARVORE_SACODE.md`).
+- **A v23** é a v22 no mundo de 128 × 60. Os ovos novos nascem v23; a v21 e a v22 seguem abrindo.
+
+### 12.5 As etapas (um PR cada, com revisor separado antes do PR, como na IA-5)
+
+| Etapa | O que entrega | Muda o jogo de hoje? |
+|---|---|---|
+| IG1 | **O mundo grande no Python:** o layout de 128 × 60, as células fechadas de árvore e de marco, as regiões novas, os testes e o gabarito. Atrás de chave: as vidas de hoje saem byte a byte | Não |
+| IG2 | **O mesmo no motor da web,** com a paridade contra o gabarito do Python | Não |
+| IG3 | **A vista:** a grade desenha a ilha grande (as árvores, os marcos no lugar das células deles, os lugares, as pontes, a praia), o minimapa e a câmera; página de pré-visualização | Não |
+| IG4 | **Ligar:** a v23, e a migração dos pets v21 e v22 por evento | **Sim** |
+| IG5 | **Medir e ajustar:** o custo do desvio num celular de verdade e o tempo que o pet leva para chegar na comida; os ajustes que a medida pedir | Depende |
+
+### 12.6 O que falta o Matheus decidir
+
+| # | A pergunta | A recomendação | O custo de errar |
+|---|---|---|---|
+| IG-4 | A figura (12.3) serve como ponto de partida? | **Sim.** O mapa é texto e muda sem mexer no código até a IG4 | Depois da IG4, mudar o mapa é outra versão de pet |
+| IG-5 | As regiões no mundo grande | **As mesmas quatro, com as faixas de x dobradas** (0–31, 32–67, 68–95, 96–127) | As regiões alimentam o cérebro. Com faixas diferentes, o que o pet aprendeu sobre "casa" e "mata" muda de lugar na migração |
+| IG-6 | A velocidade e os sentidos (a visão 6, o cheiro 24) | **Não mexer agora.** Medir na IG5 e ajustar com número | Sem mexer, o pet pode demorar o dobro para cruzar a ilha e não sentir a comida longe. Mexendo sem medir, muda o comportamento do pet sem evidência. É o risco que a recomendação de 96 × 48 evitava |
+| IG-7 | Onde ficam o pet, a comida e a bola dos pets vivos na migração | **Deslocados junto com o lar** (o lar de hoje vai para o lar novo), e o que cair em água, árvore ou marco vai para a terra mais perto | Se ficarem nas coordenadas de hoje, o pet acorda no canto noroeste do mar |
+| IG-8 | O cérebro modular e a pesquisa | **Só o jogo usa o mundo grande.** A bancada e as runs de pesquisa ficam no mundo de hoje | Se a pesquisa trocar de mundo, os resultados já gravados deixam de ser comparáveis |
+| IG-9 | Quem constrói | **Esta sessão,** com revisor separado a cada etapa | O motor é de outra frente; se houver sessão dona mexendo nele, os PRs colidem |
+
+### 12.7 O que não foi verificado
+
+- **O custo do desvio:** o mapa tem 7 680 células, 4 vezes o de hoje, e o custo no celular já não estava medido com 1 920.
+- **O efeito no pet:** nenhuma vida rodou no mundo grande. Não sei se o pet acha a comida, nem quanto tempo leva.
+- **A vista:** a grade, a câmera, o minimapa e a luz foram feitos para 64 × 30; o que quebra com 128 × 60 só aparece na IG3.
+- **O DigiBrain modular** (`sens`, `mem`, `adapt`) com as regiões novas: lido por alto, não testado.
