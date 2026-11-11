@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 import * as M from "../motor/index.ts";
 
 const { TPD, VERSAO_PET, Motor } = M;
-const SEMENTE = 4242, PASSO_DONO = 120, DIA = [540, 1020], SUJEIRA = 3, BOT = "agressivo";
+const SEMENTE = 4242, PASSO_DONO = 120, DIA = [540, 1020], SUJEIRA = 3;
 
 function rookie() {
   const m = new Motor(SEMENTE, VERSAO_PET);
@@ -35,7 +35,9 @@ while (!(coco.e.sujeira >= SUJEIRA && deDia(coco))) {
 const kit = rookie();
 for (let s = 1; kit.lesionadoDesde === null; s++) {
   if (s > 200) throw new Error("nenhuma lesao em 200 lutas");
-  kit.lutar(BOT, s);
+  /* a luta da POC (LUTA_POC, LP4): uma forma do estagio, no Campo de treino, ate a primeira lesao */
+  const rv = kit.rivaisArenaPoc();
+  kit.lutarPoc(rv[s % rv.length], s, "campo");
 }
 
 const saves = {};

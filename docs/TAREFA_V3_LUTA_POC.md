@@ -480,3 +480,309 @@ mais longas. O equilíbrio é da LP5.
 **A tela:** o desenho da LP3 não muda. O voo das cinco formas passa a ser o da simulação; o projétil só desenhado da LP3 saiu neste PR,
 depois do merge da LP3 na `main` (D-LP3b-6).
 
+
+## Resultado da LP4 (2026-11-10)
+
+Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp4`, a pedido do Gerente de sprites e luta, com a liberação do Matheus
+("Sim, abre a LP4", 2026-11-10, repassado). Os desvios estão em `docs/registro/2026-11.md`, seção "LUTA_POC, LP4". Três escolhas que perdem
+ou escondem dado foram DECIDIDAS pelo Matheus em 2026-11-10 ("Aprovo tudo", repassado pelo Gerente, junto com as capturas): a D-LP4-1, a
+D-LP4-2 e a D-LP4-3. O risco do Gazimon (D-LP4-6) fica para a LP5.
+
+**A chave ligada.** `LUTA_POC_LIGADA = true` (`web/app/motor/arena/constantes.ts`). Com isso, para todos e sem `?luta_poc=1`:
+- os ovos novos e o pet de exemplo nascem v21 (`VERSAO_PET = 21`);
+- só a v21 abre (`VERSOES_PET = [21]`), e o pet de teste v16 segue no laboratório;
+- o Importar só abre a v21;
+- a Arena, a Campanha e a Fronteira são as do palco novo.
+
+**O descarte 8 (DECIDIDO, Matheus, 2026-11-10, D-LP4-2).** Roda uma vez, também onde o 7 já rodou pelo `?luta_poc=1`:
+- os pets v13 a v19 saem, o ativo e os guardados, com o aviso "A luta agora é na arena" e o arquivo para baixar;
+- no Tamer, sai a Fábrica do combate por turnos (v13 e v14), que não se refaz mais, com o registro de antes guardado no mesmo arquivo; o
+  recorde da Fábrica recomeça. O resto do Tamer fica byte a byte;
+- o registro do Tamer passa à versão 8.
+
+**O que saiu** (o inventário da seção 3.4):
+- o motor: `motor/combate_tr/`, `motor/combate.ts`, `motor/gambits_pet.ts`, as listas de gambits de `motor/bots.ts`, os fatores das arenas,
+  da Liga, do Salão e da Fábrica, as regras das arenas (fica a série da Cidadela), o `CV`, o `CV21E` e o `GA`, o `Motor.lutar`, o
+  `montarLuta`, os gambits (`"g"`), as cartas (`"k"`) e os chips de regra. Os eventos `"g"` e `"k"` no registro levantam erro;
+- as telas: `src/luta.ts`, o palco 1D (`palcoTR/`; os geradores de desenho que o palco 2D usa foram para `palcoPoc/`), a `TelaLuta`, a
+  `TelaArena`, a `TelaCampanha`, o `ModalResultado`, o `EditorRegras`, o `PainelAprendizado`, o `aprendizadoLuta.ts`, a `EscolhaCarta`, o mapa
+  3D da Exploração e o "Ver replay" do Diário. Os Cenários do Diário lutam na luta da POC; o Nv 6 da progressão passou a ser o Forçar;
+- os itens: só o chip de stat faz efeito. Os chips de regra e as cartas ficam no catálogo, sem efeito, porque o registro do Tamer os guarda,
+  e as medalhas e as revanches não os dão mais;
+- os testes e os scripts: os do combate por turnos, os gabaritos das versões antigas, `scripts/equilibrio_tr/` e
+  `scripts/gerar_gabarito_vidas_v13.ts`; no e2e, os specs das telas de antes, e os saves regerados na v21.
+
+**O pet de teste (DECIDIDO, Matheus, 2026-11-10, D-LP4-3).** Ele não luta mais. Um save v16 com luta não abre e fica no armazenamento, com o erro visível.
+
+**O que não mudou.** As vidas v21 dos gabaritos da LP2 e da LP2b, com o replay bit a bit: o lugar dos gambits e das cartas na assinatura
+ficou. O Python ficou (LP-7). Os registros não se apagaram, e o G-NADA-PERDIDO passa.
+
+**Os documentos.** Os do combate por turnos levam a marca SUBSTITUÍDO, com o link para esta tarefa:
+- a `ESPEC_COMBATE_TR`, a `TAREFA_V2_COMBATE_TR` e a `TAREFA_V3_COMBATE_V14`;
+- os três `PLANO_EQUILIBRIO_COMBATE_TR*` e o `EQUILIBRIO_COMBATE_TR`;
+- a `TAREFA_V3_LUTA_EMPURRAO` e, no palco 1D, a `TAREFA_V3_LUTA_EFEITOS`.
+A `PLANO_V3` (a trilha B), a `TAREFA_V3_PONTE_LUTA`, o `DESIGN_MEDALHAS_ARENAS` e o `MAPA_REPOSITORIO` ganharam a nota do que mudou.
+
+**Os achados.**
+- O Mega da v21 quebrava (D-LP4-5): o conserto saiu junto com o `gp`.
+- A progressão pode travar (D-LP4-6, para a LP5; `web/app/scripts/medicoes/lp4_gazimon.json`):
+  - um Rookie sem treino não vence o Gazimon;
+  - com o treino típico, vence de 0 a 32 %;
+  - o dono simulado que luta contra o próprio estágio não chega à taxa do Ultimate.
+
+**Os testes novos:** `test/luta_poc_lp4.test.ts`:
+- a chave e as versões;
+- pela fonte, que nada do combate por turnos existe nem é importado;
+- os itens;
+- a Fábrica só v21.
+Também `test/tamer.test.ts`, com o descarte 8 e a Fábrica de antes, e `e2e_capturas/luta_poc_lp4.spec.ts`, com as capturas.
+
+## Resultado da LP5-0 (2026-11-10)
+
+Worker: Claude Code (Opus 5.5), worktree `D:\Trab\digilab\v3-luta-poc-lp5`, branch `v3-luta-poc-lp5-0`, a pedido do Gerente de sprites e
+luta. O plano é o `docs/PLANO_EQUILIBRIO_LUTA_POC.md`, APROVADO: as D-LP5-1 a D-LP5-10 foram decididas como recomendadas ("Tá, então faz toda a
+recomendação aí que você deu", o Matheus, 2026-11-10, repassado). Os desvios estão em `docs/registro/2026-11.md`, seção "LUTA_POC, LP5-0".
+Nenhum número do jogo mudou.
+
+**O que entrou:**
+- as faixas `86101…86505` (calibração) e `87101…87505` (conferência) na `FAIXAS_RESERVADAS`, num commit próprio;
+- o H10 e o `pre_run --medicao` reconhecem `scripts/equilibrio_poc/`;
+- a bancada nova `web/app/scripts/equilibrio_poc/`:
+  - o candidato e o `CANDIDATO_V21`, que refaz os números do jogo (`web/app/test/equilibrio_poc_bancada.test.ts`);
+  - o treino típico pelo `TreinoPet.sessao`;
+  - os 10 grupos das metas;
+  - o `medir_tudo`, em até 4 processos;
+  - o `resumo_metas`;
+  - a prova de reprodução, que refaz o `lp4_gazimon.json` campo a campo;
+  - a sonda das formas do Motor.
+
+**O ponto de partida** (a calibração, o candidato v21: 1 427 674 lutas;
+`web/app/scripts/medicoes/equilibrio_poc/lp5_0/calibracao/resumo.json` e `resumo.md`). Passam 5 das 20 metas: P3, P4, P5, D3 e V2.
+
+- **O treino decide tudo.** O pet típico vence o mesmo pet sem treino em 1,00 de cada estágio (T1). Contra as formas do estágio, 2 pontos
+  levam o Rookie de 0,51 a 0,91, e do Champion em diante a curva chega a 1,00 aos 12 pontos (T3). O típico de um estágio vence as formas do
+  estágio seguinte de 0,94 a 1,00, e o Rookie típico vence 0,92 contra os Ultimates (E1). A evolução não pesa contra o treino.
+- **Os stats não pesam igual (T2).** Com 8 pontos num stat só, o fôlego dá 0,50 no Rookie e 0,60 no Ultimate, e a mira dá 0,74 e 0,81. O
+  vigor, a força, a guarda e a recuperação dão de 0,96 a 1,00.
+- **Os líderes (P1, P2).** O Gazimon trava: o Rookie típico vence 0,30. Por espécie, a brasa vence 0,55, o limo 0,47, a ferrugem 0,01 e o
+  cirro 0,00. A Cidadela (o Myotismon, a série de 3) dá 0,72, com a pior espécie a 0,48. Os outros quatro líderes vencem de 0,97 a 1,00
+  com o típico e perdem sem treino.
+- **Os desafiantes, o sparring e a vida passam (P3, P4, P5).** O dono simulado que treina chega ao Mega nas 100 vidas.
+- **As formas (V1, A1).** Sem treino, uma forma contra as outras do estágio vai de 0,10 a 0,77 no Rookie e de 0,001 a 0,97 nos outros
+  estágios. As que atiram vencem as de perto de 0,26 a 0,44.
+- **A duração (D1).** A mediana vai de 11,1 s a 16,2 s, abaixo dos 15 s em três estágios. O p90 fica entre 19,8 e 47,8 s, e 7 formas têm
+  mediana abaixo de 8 s.
+- **Os empates (D2).** Passam de 2 % em 4 Rookies, também fora do espelho (até 5,9 %).
+- **Os torneios.**
+  - A Liga sai em todas as tentativas (G1). A Torre tem o recorde mediano de 35 (G2).
+  - A Fábrica, de Mega canônico contra Mega canônico, vence uma série em 0,018 (G3).
+  - O Salão vence de 0,97 a 1,00 (G4).
+- **O espelho (S1) reprova pelos empates, não pelo lado** (D-LP5-0-6). Sem os empates, o lado A fica em 0,48 a 0,51. Pela regra do plano,
+  a rodada para aqui, e o achado vai ao Gerente antes de qualquer ajuste.
+
+**As hipóteses da seção 1 do plano:**
+- o treino que compõe: confirmada, a curva satura em poucos pontos;
+- a mira que pesa pouco: confirmada em parte, porque o fôlego pesa menos ainda;
+- o Gazimon que ficou forte sem o `eps`: o único líder que trava.
+
+A calibração (LP5-1) espera a leitura do S1 pelo Matheus.
+
+## Resultado da LP5-1 (a rodada 1 do mapeamento, parada pelo S1)
+
+**A régua do S1** passou a contar só as lutas com vencedor (a D-LP5-11, decidida pelo Matheus em 2026-11-10). **A rodada 1** foi uma
+grade em quatro partes (r1a a r1d, 49 pontos, `web/app/scripts/medicoes/equilibrio_poc/lp5_1/r1*/tabela.md`) e a medida inteira do
+candidato escolhido, o `lp5_1_r1` (1 364 118 lutas em 252 s, 4 processos; `lp5_1/calibracao/resumo.md`). Os desvios são o D-LP5-1-1 a 6
+(`docs/registro/2026-11.md`).
+
+**Passam 4 das 20 metas: T3, E1, D1 e D3** (na LP5-0 passavam P3, P4, P5, D3 e V2).
+
+- **O treino ganhou teto (T1, T3).** O expoente baixo com o ponto mais pesado satura a curva. O típico contra o mesmo pet sem treino fica
+  em 0,77 no Rookie, 0,89 no Champion, 0,93 no Ultimate e 0,94 no Mega (o T1 pede de 0,80 a 0,97). No teto, contra as formas do estágio,
+  fica de 0,72 a 0,86, e o maior degrau de 4 pontos é 0,17.
+- **A evolução pesa mais que o treino (E1).** O típico contra o estágio seguinte fica de 0,13 a 0,16 (o teto, de 0,12 a 0,17), e dois
+  estágios acima fica em 0.
+- **A duração (D1):** a mediana fica de 16,4 a 17,3 s em todos os estágios, com o p90 abaixo de 20 s.
+- **O que não fecha com o mapeamento** (o D-LP5-1-5):
+  - o fôlego não pesa (T2): de 0,47 a 0,49;
+  - a variedade vem da tabela das formas (V1): a amplitude fica de 0,41 a 0,43 do Champion ao Mega;
+  - a espécie pesa (V2): a amplitude entre as espécies fica de 0,09 a 0,25, e a brasa é a pior no Rookie, no Champion e no Mega;
+  - o sparring trava (P4): de 0,69 a 0,87 de média. Por isso só 15 de 100 vidas chegam ao Mega (P5), e 72 ficam no Champion;
+  - os dois últimos passaram na LP5-0 só porque o pet típico vencia tudo.
+- **De longe x de perto (A1):** o movimento base de 60 aproxima a soma de 0,50 (0,48 a 0,58; o A1 pede de 0,45 a 0,55).
+- **Os líderes e os torneios** ficam para a LP5-2 e a LP5-3: os NPCs e os rivais dos torneios ainda têm os números da v21.
+
+**A rodada para pelo S1** (D-LP5-1-4). Na Praia, o lado A fica de 0,42 a 0,46. Com o v21 (a LP5-0 relida pela régua nova) isso vale em
+todos os estágios, e com o `lp5_1_r1` do Champion ao Mega. É o núcleo, não o candidato. A LP5-2 espera a decisão do Matheus sobre o S1 e sobre as metas que o
+mapeamento não fecha.
+
+### A distância do tiro (D-LP5-12)
+
+O núcleo ganhou o `Tiro` desligado. A luta de hoje sai igual: o teste confere, e a fidelidade da LP1 dá 3276 de 3276. O candidato da
+bancada leva o tiro, e a meta nova é o A2 (PROPOSTA, SEM FONTE). Os desvios são o D-LP5-1-7 a 10.
+
+- **O ponto de partida do A2** (o v21, as 5 bases): contra quem luta de perto, a mediana da distância no tiro é 48 a 52 px, e de 26 % a
+  46 % dos tiros saem a 48 px ou menos. Contra quem atira, a mediana é 132 px. O A2 pede pelo menos 90 px e no máximo 15 %.
+- **As grades:** o recuo na preparação do tiro é a alavanca que move. A 2 vezes o movimento, o A2 passa (100 a 108 px, 6 % a 8 %).
+  Mas as que atiram passam a vencer as de perto de 0,67 a 0,92 (o A1), e o S1 na Praia não muda.
+- **A ordem das fases não muda:** o tiro é parte do mapeamento (LP5-1), antes dos NPCs. Mas o ponto de partida ganha o A2, e o
+  `lp5_1_r1` precisa ser medido de novo com o tiro, nas rodadas 2 e 3 da LP5-1.
+
+### As rodadas 2 e 3 e o fim da LP5-1
+
+O Matheus aprovou as 4 decisões ("Aprovo as 4"; a D-LP5-13). **O candidato da LP5-1 é o `lp5_1_r2`:**
+- o mapeamento da rodada 1;
+- o tiro: distância mínima 110 px, recuo na preparação a 2 vezes o movimento;
+- o dano do projétil a 0,7.
+
+A medida inteira está em `web/app/scripts/medicoes/equilibrio_poc/lp5_1_r2/calibracao/resumo.md` (1 412 931 lutas). Os desvios são o
+D-LP5-1-11 a 16.
+
+- **Passam 6 das 21 metas: T1, T3, E1, D1, D3 e A2.**
+  - **O treino:** o T1 dá 0,81, 0,86, 0,93 e 0,94, do Rookie ao Mega.
+  - **A evolução (E1):** o típico contra o estágio seguinte dá de 0,15 a 0,17.
+  - **A duração (D1):** a mediana fica de 21 a 24 s.
+  - **O tiro (A2):** a mediana fica de 100 a 108 px, com 7 % a 9 % dos tiros a 48 px ou menos.
+- **O que fica para o Matheus** (o D-LP5-1-16):
+  - o V2: a amplitude fica de 0,07 a 0,22, e a rodada 3 não a move;
+  - o A1: a soma fica de 0,45 a 0,56, mas os mapas vão de 0,11 a 0,77, pelas regras dos mapas;
+  - o D2: os empates ficam em 3,6 %;
+  - o S1: o Ringue do Rookie fica em 0,449.
+- **A rodada 3** (16 pontos) não mudou nenhum número.
+
+A LP5-1 fecha pela regra das 3 rodadas. A LP5-2 (os NPCs, o sparring e a vida) parte do `lp5_1_r2`. Nele, o P4 dá de 0,69 a 0,86 de
+média, e só 10 de 100 vidas chegam ao Mega.
+
+### A esquiva ligada (D-LP5-16)
+
+O Matheus: "pode ligar esquiva nova e fazer o merge". O candidato `lp5_1_esq` é o `lp5_1_r2` com a esquiva da D-LP5-14 ligada, no
+ponto `m6_f6_p0` da grade `lp5_1/r4e`, o único da grade com 6 metas. A leitura do golpe de perto fica desligada: ligada (0,35), o E1
+reprova e o A1 pende para quem atira. A medição inteira (`lp5_1_esq/calibracao`, commit `dea4e71c`, 1 412 957 lutas) dá 8 de 21 metas,
+contra 6 do `lp5_1_r2`:
+
+- **passam a mais o P4 e o S1.** O P4: a fração dos pets a 0,8 ou mais vai de 0,45/0,46 a 0,85/0,98 no Champion e no Ultimate. O S1:
+  o Ringue do Rookie vai de 0,449 a 0,451, na beira da faixa;
+- **a mira ganha peso:** no T2, de 0,53 a 0,62 no Rookie e de 0,53 a 0,60 no Ultimate. O fôlego segue morto (0,48 e 0,49);
+- **o P5 sobe, mas reprova:** 19 de 100 vidas chegam ao Mega, contra 10;
+- **nenhuma meta que passava cai:** o T1 dá 0,83/0,90/0,94/0,96, o E1 0,17, a mediana do D1 de 21,6 a 24,7 s;
+- **o que piora um pouco:** o V2 do Rookie (de 0,21 a 0,25, aceito como reprovado na D-LP5-15) e o A1 do Ultimate (de 0,56 a 0,58).
+
+No jogo, a luta segue no v21: a esquiva só entra com o v22, na LP5-5. A LP5-2 parte do `lp5_1_esq`.
+
+## Resultado da LP5-2 (as rodadas 1 e 2 do total dos NPCs, paradas num ponto de decisão)
+
+O Matheus: "Sim, segue". A LP5-2 parte do `lp5_1_esq`. Pela D-LP5-9, o total de cada NPC vem primeiro, e a divisão dos stats só entra
+se o total não fechar o P1 a P3 em 2 rodadas. As duas grades (`lp5_2/r1` e `lp5_2/r2`) multiplicam os 10 totais pelo mesmo fator. Cada
+NPC só depende do total dele, então uma grade dá a curva de cada um. As grades rodam só o grupo `lideres`, com 2 bases da calibração
+(86101, 86201), cerca de 18 000 lutas por ponto e 4 processos.
+
+- **A rodada 1** (de 0,5 a 1,3 vez o total de hoje) quase não move nada. O Gazimon sem treino vai de 0,43 a 0,30, e o típico de 0,61 a
+  0,50.
+- **A rodada 2** (de 0,1 a 8 vezes) também não fecha. Nenhuma das metas P1, P2 e P3 passa em nenhum ponto. Dois NPCs passam sozinhos:
+  - **o MarinBullmon** com 1,3 vez o total (143): sem treino 0,18, típico 0,74, pior espécie 0,64;
+  - **o Tortomon** com 3 vezes o total (216): sem treino 0,31, típico 0,77.
+- **Por que o total não fecha:**
+  - **a alavanca ficou fraca.** Com os expoentes da LP5-1 (0,02 no vigor e na força, 0,14 na mira e no fôlego), mesmo 8 vezes o total
+    move pouco cada razão;
+  - **a distância entre o pet sem treino e o típico é curta.** Ela fica em 0,45 ou menos contra qualquer NPC. O T1 (o típico contra o
+    mesmo pet sem treino) é 0,83 no Rookie, e com ele a conta logística dá uns 0,55 para o típico quando o pet sem treino fica em 0,20.
+    O P1 pede 0,70: só fecharia com o T1 perto de 0,93;
+  - **a pior espécie é a forma, não o total.** O cirro do Rookie fica de 0,00 a 0,16 contra o Gazimon em todo o caminho, e a brasa
+    passa de 0,85. É o mesmo achado do V2, aceito como reprovado na D-LP5-15.
+
+A divisão dos stats (a D-LP5-9) mexe no mesmo lado do NPC e não encurta a distância do pet, nem muda a forma. Por isso a fase parou
+aqui, com a decisão levada ao Matheus no PR. Nenhum número do candidato mudou.
+
+### O critério novo e a rodada 3 (D-LP5-17)
+
+O Matheus: "Segue sua recomendação". O critério do P1 a P3 passou a sair do T1 do `lp5_1_esq`: o líder fica no meio do caminho entre o
+pet sem treino e o típico, na escala logística, com 0,10 de folga. Os limites são 0,41/0,59, 0,35/0,65, 0,30/0,70 e 0,27/0,73, do
+Rookie ao Mega, e o desafiante tem +0,15 e +0,05. A pior espécie vai só à leitura. O código está em
+`web/app/scripts/equilibrio_poc/criterios.ts`, com teste.
+
+- **A rodada 3** (`lp5_2/r3`): 7 pontos, cada NPC com a própria faixa de totais, 3 bases (86101, 86201, 86301), cerca de 28 000 lutas
+  por ponto.
+  - **o Gazimon** passa de 0,65 a 0,8 vez o total. Pela regra de escolha (a maior folga), fica em 0,8 vez: 76,8;
+  - **o MarinBullmon e o Tortomon** já passam com o total de hoje, então não mudam;
+  - **os outros 7** (o Guardromon, o Youkomon, o Myotismon, o Piedmon, o Devidramon, o Puppetmon e o Machinedramon) não passam em
+    nenhum total. A distância entre o pet sem treino e o típico contra eles fica de 0,10 a 0,25, e o critério pede de 0,20 a 0,46;
+  - **com 3 bases, o Puppetmon e o Machinedramon dão uns 0,09 a mais no sem treino** que com 2, no mesmo total. A mistura das formas
+    Mega muda de uma base para outra, e o erro passa do binomial.
+- **A medida inteira do `lp5_2`** (`lp5_2/calibracao`, commit `9270f774`, 1 412 957 lutas) dá **9 de 21 metas**: as 8 do `lp5_1_esq` e
+  o P1 (o Gazimon: sem treino 0,380, típico 0,627). O P2 e o P3 reprovam pelos 7 NPCs de cima.
+- **O P5 não lê as alavancas da LP5-2.** O dono simulado só luta na Arena, então o total dos NPCs não entra na vida. O treino dos
+  rivais da Arena está em 0 e só sobe, o que deixaria os rivais mais fortes. O P5 segue em 19 de 100 vidas no Mega: 73 param no
+  Champion. Lá, o pet da vida faz as 10 lutas de sparring e vence 0,67 delas (670 de 1 000), contra 0,85 do pet típico na bancada
+  `sparring`. A causa provável é a vida, não o rival (a condição pela saúde, o caráter, o treino perto de 21 pontos e não 22), mas ela
+  não foi medida.
+
+### A divisão dos stats e a leitura da vida (D-LP5-18)
+
+O Matheus aprovou as duas recomendações ("Aprovo como recomendadas.").
+
+**A divisão dos stats dos 7 NPCs não fecha nenhum deles.**
+- A grade `lp5_2/r4` cruzou 12 divisões com 4 totais.
+- O mais perto foi o Devidramon: 0,513 sem treino e 0,686 com o típico (`fol_t2`), contra ≤ 0,50 e ≥ 0,70; falta 0,014.
+- Depois vêm o Guardromon (falta 0,039), o Youkomon (0,070), o Myotismon (0,109), o Piedmon (0,111), o Machinedramon (0,176) e o
+  Puppetmon (0,186).
+- Os 7 ficam reprovados e vão à investigação do núcleo e à tarefa da tabela das formas. O `lp5_2` não muda.
+
+**A leitura da vida explica o P5.**
+- As 100 vidas chegam ao Champion como colosso. O colosso típico vence 0,712 do sparring, contra 0,885 a 0,899 das outras formas, e o
+  0,85 da bancada é a média das quatro.
+- O dono luta com o treino em ~14 pontos, não em 22; com os 22, a taxa sobe só +0,05.
+- A condição é 1,05, um bônus, e o caráter quase não pesa.
+- Com 0,67 por luta, a chance de ≥ 8 de 10 é de 0,31, perto das 27 vidas que passam.
+- Os números estão em `web/app/scripts/medicoes/equilibrio_poc/lp5_2/leitura_vida/` e no registro (D-LP5-18-1 a 5).
+
+## Resultado da LP3c (2026-11-10)
+
+Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp3c`, a pedido do Gerente de sprites e luta. O pedido seguiu a revisão dos
+sprites da luta (Fable 5.2) e a decisão do Matheus "Desenho agora, motor na LP5". O Matheus aprovou as capturas em 2026-11-10 ("Aprovo,
+abre o PR"; o recado chegou pelo Gerente). Os desvios estão em `docs/registro/2026-11.md`, seção "LUTA_POC, LP3c".
+
+**Só o desenho.** Mudaram só `src/telas/lutar/palcoPoc/desenhoPoc.ts`, `visualPoc.ts`, `src/lutaPocTela.ts` e `src/estilo/luta_poc.css`.
+O motor (`motor/arena/`), o replay e os gabaritos ficaram byte a byte. A distância do tiro, que deixa o atirador encostar no alvo, é da
+LP5.
+
+**O que mudou:**
+1. **A origem do tiro:** o tiro nasce na frente do sprite, no quadro do disparo. A frente é lida nos pixels do `Attack_1`: de 20 a 108 px
+   do sprite a partir do meio do corpo, com mediana 50, em 53 formas e habilidades que atiram. Antes, o tiro nascia a 18 px do mundo do
+   centro. O acerto cai na borda do corpo do alvo. No meio do voo, o desenho segue o caminho do motor, com a diferença das duas pontas
+   repartida pela fração do voo (`VooPoc.f`). O tiro que nasce e acerta no mesmo passo, que a simulação nunca põe em `L.projeteis`,
+   ganha um voo montado do dano.
+2. **O voo visível:** a até 3 passos do disparo ou do acerto, a tela anda 1 passo por quadro (`RITMO_TIRO`, `passosDoTiro`). Os passos e
+   o fim são os mesmos, e o movimento reduzido fica como antes.
+3. **O projétil das 5 formas da LP-8:**
+   - o efeito que voa fica 2,2× maior e é somado ao fundo duas vezes;
+   - ganha o brilho e a cabeça do elemento.
+4. **A câmera e a escala:**
+   - a escala inteira dos sprites é fixa na luta;
+   - a câmera conta a altura do corpo (Idle, Run, Stun e `Attack_1`);
+   - no deitado, os corpos ficam centrados entre o HUD e o dock.
+   WarGreymon × SlashAngemon cabe inteiro em 1920×950.
+5. **O sprite pelo corpo:** a caixa é posta pelo meio do primeiro quadro do Idle, não pelo meio da caixa. Os pés ficam na linha do corpo.
+6. **O fim:** o `Die` segura o último quadro com corpo, e o vencedor vai ao `Idle`.
+7. **Os menores:**
+   - o número do dano e o estouro ancoram no corpo;
+   - no celular, o nome do HUD vai em até duas linhas, a 10 px, sem reticências.
+
+**Os números novos** são PROPOSTOS, SEM FONTE: `DESENHO_POC` (pes 4, margem [70, 24], nivelSprite 0,5, hud 84, dock 96), `TIRO_POC` e
+`RITMO_TIRO`.
+
+**As capturas:** 5 pares, em 1920×950 e em 390 px, com o antes e o depois e as tiras de tiro. Ficam fora do git, na pasta de notas do
+Gerente (`lp3c_capturas/`), com os scripts que as refazem.
+
+**O teste novo:** `web/app/test/luta_poc_lp3c.test.ts`. Ele confere:
+- que o ritmo dos tiros não muda o fim dos 5 pares;
+- a fração do voo;
+- que todo dano de tiro tem um voo;
+- a posição pelo corpo;
+- o `Die` segurado e o `Idle` do vencedor.
+
+**O que fica de fora:**
+- **A distância do tiro:** é do motor, na LP5.
+- **A sobreposição no golpe de perto:** o que resta vem do avanço desenhado no próprio `Attack_1` (o Veemon), e não sai sem mexer na
+  pose.
+- **O HerculesKabuterimon:** com 19 letras, o nome ainda quebra no meio da palavra no celular.
+- **O atlas novo `digilab_atlas_up_luta`:** ligá-lo é decisão do Matheus. Ele daria `Hurt_1` e `Hurt_2`, `Knockback`, `Win` e `Lose`
+  nos 262 sprites.

@@ -7,16 +7,18 @@
      seguindo o estado da simulacao; o tempo do clipe e o da luta (os passos de 16 ms). Nada se acrescenta as poses.
    - Os projeteis voam com o desenho do jogo (os prefabs de Assets/arena_up/efeitos, efeitosJogo.ts), por cima do rastro e do brilho do
      elemento (E2); o projetil nosso (LP-8) do mesmo jeito.
-   - Os efeitos da LUTA_EFEITOS (E1 a E5) vem dos geradores de pixel do palcoTR/ (a mesma grade, as mesmas cores, os mesmos numeros). */
+   - Os efeitos da LUTA_EFEITOS (E1 a E5) vem dos geradores de pixel do palco de antes (portados para efeitos.ts, projeteis.ts, chao.ts,
+     posturas.ts, elementos.ts e nocaute.ts na LP4: a mesma grade, as mesmas cores, os mesmos numeros). */
 import { CENAS, ELIPSE_POC, EQ_POC, MUNDO_POC, PASSO_POC_MS, type IdCena, type LutadorPoc } from "../../../../motor/index.ts";
-import { chaveUp, desenharSprite, dimSprite, quadroDoClipe, type AtlasOk, type Clipe } from "../../../atlas.ts";
+import { chaveUp, desenharSprite, quadroDoClipe, type AtlasOk, type Clipe, type Quadro } from "../../../atlas.ts";
 import { zoomAtual } from "../../../escala.ts";
-import { imagemMapa, prontas } from "../palcoTR/cenasTR.ts";
-import { ELEMENTO, elementoDoSprite, type ElementoTR } from "../palcoTR/elementosTR.ts";
-import { COR_FORTE, COR_TINTA, MOVIMENTO, faiscaDoPasso, pixelsDoTexto, poeiraDoPasso } from "../palcoTR/efeitosTR.ts";
-import { VOO, pixelsDaCabeca, pixelsDoEstouro, pixelsDoRastro, type PixelTR } from "../palcoTR/projeteisTR.ts";
-import { CHAO, alfaDaMarca, pixelsDaCratera, pixelsDaOnda, pixelsDaTelegrafia, pixelsDoArrasto, poeiraDaNuvem } from "../palcoTR/chaoTR.ts";
-import { POSTURA, pixelsDaAura } from "../palcoTR/posturasTR.ts";
+import { imagemMapa, prontas } from "./imagensMapa.ts";
+import { ELEMENTO, elementoDoSprite, type ElementoTR } from "./elementos.ts";
+import { COR_FORTE, COR_TINTA, MOVIMENTO, faiscaDoPasso, pixelsDoTexto, poeiraDoPasso } from "./efeitos.ts";
+import { VOO, pixelsDaCabeca, pixelsDoEstouro, pixelsDoRastro, type PixelTR } from "./projeteis.ts";
+import { ACERTO_MOTOR, type VooPoc } from "./visualPoc.ts";
+import { CHAO, alfaDaMarca, pixelsDaCratera, pixelsDaOnda, pixelsDaTelegrafia, pixelsDoArrasto, poeiraDaNuvem } from "./chao.ts";
+import { POSTURA, pixelsDaAura } from "./posturas.ts";
 import { efeitosAtuais, folhaEfeito, type EfeitoRef } from "./efeitosJogo.ts";
 import {
   TELA_POC, claraoPoc, escuroDoPasso, koDoPasso, lutadorN, nivelDoQuadro, passoDe, pixelsDoKO, preparoDaHabilidade, puloDoEmpurrao, tremidaPoc,
@@ -51,9 +53,79 @@ const img = (arq: string): HTMLImageElement | null => prontas.get(arq) ?? null;
 
 /** Os tamanhos desta tela. PROPOSTOS, SEM FONTE: ajustar nas capturas.
     - efeito: quantos pixels do mundo vale um pixel da folha de efeito do jogo (as folhas sao de alta resolucao);
-    - pes: quantos pixels do mundo o sprite desce abaixo do y do lutador (os pes na elipse);
-    - margem: a folga (mundo) em volta dos dois lutadores que a camera deixa na tela no zoom */
-export const DESENHO_POC = { efeito: .22, pes: 9, margem: [70, 90] } as const;
+    - pes: quantos pixels do mundo a linha dos pes (o fim do corpo no primeiro quadro do Idle, com a sombra) desce abaixo do y do lutador
+      (LP3c: pelo corpo, nao pela caixa; a caixa variava ate 10 px entre as formas);
+    - margem: a folga (mundo) em volta dos dois lutadores que a camera deixa na tela no zoom (x; y: abaixo dos pes e acima da cabeca);
+    - nivelSprite (LP3c): a escala inteira dos sprites e fixa na luta, a da camera no nivel de zoom nivelSprite (0 o mundo inteiro, 1 o
+      primeiro zoom): o zoom mexe no mundo, nao pula o sprite;
+    - hud e dock (LP3c): a altura (px de CSS) que o HUD de cima e o dock de baixo cobrem, que a cabeca e os pes evitam */
+export const DESENHO_POC = { efeito: .22, pes: 4, margem: [70, 24], nivelSprite: .5, hud: 84, dock: 96 } as const;
+
+/** O tiro e o acerto no desenho (LP3c). PROPOSTO, SEM FONTE: ajustar nas capturas.
+    - borda: onde o tiro acerta, em fracao da meia-largura do corpo do alvo (1: a borda do corpo);
+    - alturaAlvo: a altura do acerto, em fracao da altura do corpo do alvo (dos pes);
+    - colunas: quantas colunas da frente do quadro do disparo dao a altura da boca;
+    - escalaNosso e brilhoNosso: o efeito do jogo das 5 formas da LP-8 (o efeito de acerto que voa) maior e somado ao fundo mais vezes;
+      halo: o raio (em pixels de efeito) do brilho do elemento em volta dele */
+export const TIRO_POC = { borda: .9, alturaAlvo: .5, colunas: 4, escalaNosso: 2.2, brilhoNosso: 2, halo: 7 } as const;
+
+/** o corpo de um sprite no primeiro quadro do Idle, em pixels do sprite dentro da caixa: o meio (cx), a meia-largura, o topo e a linha dos
+    pes (o fim do quadro, com a sombra); a caixa comum dos clipes nao e centrada no corpo (LP3c: a mediana passava de 15 px) */
+export interface CorpoSprite { cx: number; meia: number; topo: number; pes: number; caixa: number; topoMax: number }
+const corpos = new Map<string, CorpoSprite>();
+export function corpoDoSprite(a: AtlasOk, sprite: string): CorpoSprite {
+  const k = chaveUp(a.dados, sprite), c0 = corpos.get(k); if (c0) return c0;
+  const s = a.dados.sprites[k]; if (!s) throw new Error("corpo: sprite sem caixa: " + sprite);
+  const q = (s.clipes?.Idle?.quadros ?? s.quadros)[0];
+  /* topoMax: o ponto mais alto dos quadros da luta (Idle, Run, Stun e Attack_1: as asas, os bracos levantados e o golpe passam do primeiro
+     quadro; o SlashAngemon sobe 70 px no golpe). A camera usa este */
+  const todos = (["Idle", "Run", "Stun", "Attack_1"] as const).flatMap(n => s.clipes?.[n]?.quadros ?? []).filter(x => x[2] > 0);
+  const topoMax = todos.length ? Math.min(...todos.map(x => x[5])) : 0;
+  const c: CorpoSprite = q && q[2] > 0 ? { cx: q[4] + q[2] / 2, meia: q[2] / 2, topo: q[5], pes: q[5] + q[3], caixa: s.caixa[0], topoMax: Math.min(topoMax, q[5]) }
+    : { cx: s.caixa[0] / 2, meia: s.caixa[0] / 2, topo: 0, pes: s.caixa[1], caixa: s.caixa[0], topoMax: 0 };
+  corpos.set(k, c); return c;
+}
+/** a altura do corpo (pixels do sprite, dos pes ao topo) */
+export const alturaDoCorpo = (c: CorpoSprite): number => c.pes - c.topo;
+/** a origem (canto de cima, px do canvas) da caixa do sprite com o meio do corpo em X e a linha dos pes em Yp; o espelho vira em volta da caixa */
+export function origemDoSprite(c: CorpoSprite, X: number, Yp: number, es: number, espelho: boolean): { x: number; y: number } {
+  return { x: X - (espelho ? c.caixa - c.cx : c.cx) * es, y: Yp - c.pes * es };
+}
+/** o quadro de um clipe sem os quadros vazios do fim (o ultimo do Die e vazio em quase todas as chaves): volta ao ultimo com desenho */
+export function quadroComCorpo(quadros: readonly Quadro[], i: number): number {
+  let j = Math.min(i, quadros.length - 1);
+  while (j > 0 && quadros[j][2] === 0) j--;
+  return j;
+}
+
+/** a frente do sprite no quadro do disparo (o Attack_1 no tempo t do ataque), virado para a direita: quanto a frente passa do meio do corpo
+    (fx) e a altura dela acima dos pes (fy), em pixels do sprite. Le os pixels do quadro (a coluna mais a frente com desenho e a altura media
+    das TIRO_POC.colunas da frente); sem canvas, o retangulo do quadro e VOO.altura */
+const frentes = new Map<string, { fx: number; fy: number }>();
+export function frenteDoTiro(a: AtlasOk, sprite: string, t: number): { fx: number; fy: number } {
+  const k = chaveUp(a.dados, sprite), s = a.dados.sprites[k], c = corpoDoSprite(a, sprite);
+  const cl = s?.clipes?.Attack_1; if (!cl) return { fx: c.meia, fy: alturaDoCorpo(c) * VOO.altura };
+  const iq = quadroComCorpo(cl.quadros, quadroDoClipe(cl.ms, cl.loop, t)), q = cl.quadros[iq], ch = `${k}:${iq}`;
+  const f0 = frentes.get(ch); if (f0) return f0;
+  let f = { fx: q[4] + q[2] - c.cx, fy: c.pes - (q[5] + q[3] * (1 - VOO.altura)) };
+  const img = a.imgClipes;
+  if (img && typeof document !== "undefined" && q[2] > 0 && q[3] > 0) {
+    const cv = document.createElement("canvas"); cv.width = q[2]; cv.height = q[3];
+    const x = cv.getContext("2d", { willReadFrequently: true });
+    if (x) {
+      x.drawImage(img, q[0], q[1], q[2], q[3], 0, 0, q[2], q[3]);
+      const d = x.getImageData(0, 0, q[2], q[3]).data, cheia = (i: number, j: number) => d[(j * q[2] + i) * 4 + 3] > 64;
+      let dir = -1;
+      for (let i = q[2] - 1; i >= 0 && dir < 0; i--) { let n = 0; for (let j = 0; j < q[3]; j++) if (cheia(i, j)) n++; if (n >= 2) dir = i; }
+      if (dir >= 0) {
+        let soma = 0, n = 0;
+        for (let i = dir; i > dir - TIRO_POC.colunas && i >= 0; i--) for (let j = 0; j < q[3]; j++) if (cheia(i, j)) { soma += j; n++; }
+        f = { fx: q[4] + dir + 1 - c.cx, fy: c.pes - (q[5] + soma / n) };
+      }
+    }
+  }
+  frentes.set(ch, f); return f;
+}
 
 /** o usuario pediu menos movimento: sem tremida, clarao, poeira nem camera lenta (os numeros, o "K.O." e a barra ficam) */
 export const movimentoReduzido = (): boolean => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -69,8 +141,10 @@ export function elementoDoLado(f: LadoDesenhoPoc): ElementoTR {
   try { return elementoDoSprite(f.chave); } catch { return elementoDoSprite(f.sprite); }
 }
 /** o clipe de um lutador e o tempo dentro dele (ms da luta): o estado da simulacao vira o clipe do atlas */
-export function clipeDoLutador(u: LutadorPoc, extraMs: number): { clipe: Clipe; t: number } {
+export function clipeDoLutador(u: LutadorPoc, extraMs: number, fim = false): { clipe: Clipe; t: number } {
   if (u.morto || u.estado === "die") return { clipe: "Die", t: u.t + extraMs };
+  /* a luta acabou (LP3c): quem ficou de pe volta ao Idle, em vez de congelar no quadro do ataque */
+  if (fim) return { clipe: "Idle", t: extraMs };
   const c: Record<LutadorPoc["estado"], Clipe> = { idle: "Idle", run: "Run", attack: "Attack_1", stun: "Stun", die: "Die" };
   return { clipe: c[u.estado], t: u.t };
 }
@@ -83,20 +157,42 @@ export const yDe = (g: GeoPoc, y: number): number => g.Hp * g.oy + (y - g.cy) * 
 
 /** a camera do quadro: a escala de base cabe o mundo inteiro (480 x 280); o zoom a sobe em niveis de um terco (E5: 1, 1,33 e 1,67), sem
     tirar nenhum dos dois da tela; o centro fica dentro do mundo. Os sprites ficam sempre em escala inteira de pixel (es) */
-export function geometriaPoc(Wp: number, Hp: number, K: number, W: number, H: number, v: VisualPoc, L: LutaPoc, passo: number, reduzido: boolean): GeoPoc {
+export function geometriaPoc(Wp: number, Hp: number, K: number, W: number, H: number, v: VisualPoc, L: LutaPoc, passo: number, reduzido: boolean,
+  alturas: readonly [number, number] = [0, 0]): GeoPoc {
   /* o mundo inteiro cabe em efit; no celular em pe a base aproxima um quarto (a camera acompanha os dois, e o mundo inteiro volta quando
      eles se afastam) */
-  const efit = Math.min(Wp / MW, Hp / MH), e0 = H > W ? efit * 1.25 : efit, vivos = [L.a, L.b].filter(u => !u.foraAte);
-  const xs = vivos.map(u => u.x), ys = vivos.map(u => u.y);
+  const efit = Math.min(Wp / MW, Hp / MH), e0 = H > W ? efit * 1.25 : efit, vivos = ([0, 1] as const).filter(i => !lutadorN(L, i).foraAte);
+  /* LP3c: a escala inteira dos sprites fica a mesma na luta inteira (a do nivel DESENHO_POC.nivelSprite); antes, round(e) pulava ~25 % no zoom */
+  const es = Math.max(1, Math.round(e0 * (1 + DESENHO_POC.nivelSprite / 3)));
+  const xs = vivos.map(i => lutadorN(L, i).x), ys = vivos.map(i => lutadorN(L, i).y);
   const dx = xs.length ? Math.max(...xs) - Math.min(...xs) : 0, dy = ys.length ? Math.max(...ys) - Math.min(...ys) : 0;
-  const cabe = Math.min(Wp / (dx + 2 * DESENHO_POC.margem[0]), Hp / (dy + 2 * DESENHO_POC.margem[1]));
+  /* a altura do corpo (alturas: pixels do sprite acima dos pes) entra na conta: o corpo inteiro, o HUD e o dock cabem (os Megas saiam) */
+  const hud = DESENHO_POC.hud * K, dock = DESENHO_POC.dock * K, corpo = Math.max(0, ...vivos.map(i => alturas[i])) * es;
+  const livreY = Math.max(Hp * .3, Hp - hud - dock - corpo);
+  const cabe = Math.min(Wp / (dx + 2 * DESENHO_POC.margem[0]), livreY / (dy + DESENHO_POC.pes + 2 * DESENHO_POC.margem[1]));
   const e = Math.max(efit, Math.min(cabe, e0 * (1 + nivelDoQuadro(v.cam, passo, reduzido) / 3)));
   const prender = (c: number, meia: number, max: number) => (meia * 2 >= max ? max / 2 : Math.max(meia, Math.min(max - meia, c)));
   const cam = v.cam ?? { cx: CX, cy: CY - 30 };
   const oy = H > W ? .62 : .52;
-  const cx = prender(cam.cx, Wp / 2 / e, MW), cy = prender(cam.cy, Hp / 2 / e, MH);
-  return { K, W, H, Wp, Hp, e, es: Math.max(1, Math.round(e)), e0, cx, cy, oy };
+  const cx = prender(cam.cx, Wp / 2 / e, MW);
+  let cy = prender(cam.cy, Hp / 2 / e, MH);
+  /* no deitado, os corpos inteiros no meio da faixa livre entre o HUD e o dock (a folga sobra para os golpes, que passam do corpo); em pe
+     (o cartao do mapa cobre o alto), so a cabeca mais alta abaixo do HUD e, se couber, os pes acima do dock */
+  if (vivos.length) {
+    const yTela = (y: number) => Hp * oy + (y - cy) * e;
+    /* pelo centro suave da camera (o meio dos peitos), nao pelos pes de agora: a camera nao treme com o passo */
+    const meioPes = cam.cy + EQ_POC.peito + DESENHO_POC.pes;
+    const topo = yTela(meioPes - dy / 2) - corpo, pes = yTela(meioPes + dy / 2 + DESENHO_POC.margem[1]);
+    if (W >= H) {
+      const meio = (topo + pes) / 2, alvo = pes - topo <= Hp - hud - dock ? (hud + Hp - dock) / 2 : hud + (pes - topo) / 2;
+      cy += (meio - alvo) / e;
+    } else if (topo < hud) cy -= (hud - topo) / e;
+    else if (pes > Hp - dock) cy += Math.min((pes - (Hp - dock)) / e, (topo - hud) / e);
+  }
+  return { K, W, H, Wp, Hp, e, es, e0, cx, cy, oy };
 }
+/** a geometria do ultimo quadro desenhado (as capturas medem com ela) */
+export let ultimaGeoPoc: GeoPoc | null = null;
 
 function ajustar(cv: HTMLCanvasElement): { K: number; W: number; H: number } {
   const pai = cv.parentElement, W = pai && pai.clientWidth > 0 ? pai.clientWidth : 390, H = pai && pai.clientHeight > 0 ? pai.clientHeight : 300;
@@ -105,7 +201,7 @@ function ajustar(cv: HTMLCanvasElement): { K: number; W: number; H: number } {
   return { K, W, H };
 }
 
-/** pinta pixels de efeito (os geradores do palcoTR) em volta de (X, Y), px do canvas, com u px do canvas por pixel de efeito; dir -1 espelha */
+/** pinta pixels de efeito (os geradores portados do palco de antes) em volta de (X, Y), px do canvas, com u px do canvas por pixel de efeito; dir -1 espelha */
 function pintar(cx: CanvasRenderingContext2D, px: readonly PixelTR[], X: number, Y: number, u: number, dir: number): void {
   const x0 = Math.round(X), y0 = Math.round(Y);
   for (const luz of [true, false]) {
@@ -246,7 +342,13 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
   const ctx = cv.getContext("2d"); if (!ctx) throw new Error("canvas 2d indisponível");
   const { K, W, H } = ajustar(cv), Wp = cv.width, Hp = cv.height, L = c.L, v = c.v;
   const reduzido = movimentoReduzido(), passoL = passoDe(L), passo = passoL + v.extra;
-  const g = geometriaPoc(Wp, Hp, K, W, H, v, L, passoL, reduzido), e = g.e, es = g.es;
+  const formas = [c.A, c.B], els: ElementoTR[] = formas.map(elementoDoLado);
+  /* o corpo de cada lado (LP3c): o sprite e posto pelo corpo, nao pela caixa */
+  const cps = formas.map(f => (a ? corpoDoSprite(a, f.sprite) : null));
+  const meiaC = (i: number): number => cps[i]?.meia ?? 14, altC = (i: number): number => { const k = cps[i]; return k ? alturaDoCorpo(k) : 40; };
+  const altMax = (i: number): number => { const k = cps[i]; return k ? k.pes - k.topoMax : 40; };
+  const g = geometriaPoc(Wp, Hp, K, W, H, v, L, passoL, reduzido, [altMax(0), altMax(1)]), e = g.e, es = g.es, sc = es / e;
+  ultimaGeoPoc = g;
   const n: ContagemPoc = {};
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, Wp, Hp);
   ctx.fillStyle = COR.fundo; ctx.fillRect(0, 0, Wp, Hp);
@@ -262,12 +364,10 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
   if (escuro > 0) { ctx.fillStyle = `rgba(4,8,20,${escuro.toFixed(3)})`; ctx.fillRect(0, 0, Wp, Hp); }
   n.escuro = escuro.toFixed(2);
   ctx.imageSmoothingEnabled = false;
-  const formas = [c.A, c.B], els: ElementoTR[] = formas.map(elementoDoLado);
-  const dims: [number, number][] = formas.map(f => (a ? dimSprite(a.dados, f.sprite) : [28, 40]));
   /* o pixel de efeito (E2): VOO.pixel pixels do sprite, entre VOO.pixelMinCss e 1,5 vez isso em px de CSS (o sprite grande no zoom deixava o
      efeito em blocos) */
   const ue = (_i: number) => Math.round(Math.max(VOO.pixelMinCss * K, Math.min(VOO.pixelMinCss * 1.5 * K, es * VOO.pixel)));
-  const uChao = es * CHAO.pixel, meiaChao = (i: number) => Math.max(3, Math.round(dims[i][0] * es / 2 / uChao));
+  const uChao = es * CHAO.pixel, meiaChao = (i: number) => Math.max(3, Math.round(meiaC(i) * es / uChao));
   /* as marcas no piso (E3): a cratera da habilidade e o arrasto do empurrao grande, presas ao chao */
   let marcas = 0, ondas = 0;
   for (const m of v.marcas) {
@@ -312,21 +412,25 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
       continue;
     }
     if (i === undefined) continue;
-    const u = lutadorN(L, i), f = formas[i], X = xDe(g, u.x), [w, h] = dims[i];
+    const u = lutadorN(L, i), f = formas[i], X = xDe(g, u.x), cp = cps[i];
     const pulo = reduzido ? 0 : puloDoEmpurrao(v, i, passoL) * e;
-    const Yb = yDe(g, u.y + DESENHO_POC.pes) - pulo, x0 = X - w * es / 2, y0 = Yb - h * es;
-    topo[i] = y0;
+    /* a linha dos pes do corpo em DESENHO_POC.pes abaixo do y do lutador e o meio do corpo no x dele (LP3c) */
+    const Yb = yDe(g, u.y + DESENHO_POC.pes) - pulo;
+    topo[i] = Yb - altC(i) * es;
     /* a aura (E4): com a habilidade pronta, faiscas na cor do elemento; na runa do Castelo, o anel roxo da POC */
     if (u.buffAte > L.relogio && !u.morto) {
       ctx.beginPath(); ctx.ellipse(X, yDe(g, u.y), u.raio * 1.3 * e, u.raio * .5 * e, 0, 0, 7);
       ctx.strokeStyle = `rgba(200,160,255,${reduzido ? .8 : 0.5 + 0.4 * Math.sin(L.relogio / 120)})`; ctx.lineWidth = 2 * es; ctx.stroke(); auras++;
     }
-    if (!a) { ctx.fillStyle = i ? COR.vermelho : COR.azul; ctx.fillRect(X - 12 * e, Yb - 34 * e, 24 * e, 34 * e); continue; }
-    const s = a.dados.sprites[chaveUp(a.dados, f.sprite)], { clipe, t } = clipeDoLutador(u, v.extra * PASSO_POC_MS);
+    if (!a || !cp) { ctx.fillStyle = i ? COR.vermelho : COR.azul; ctx.fillRect(X - 12 * e, Yb - 34 * e, 24 * e, 34 * e); continue; }
+    const s = a.dados.sprites[chaveUp(a.dados, f.sprite)], { clipe, t } = clipeDoLutador(u, v.extra * PASSO_POC_MS, L.fim);
     let iq = 0;
-    if (s?.clipes) { const cl = s.clipes[clipe]; if (!cl) throw new Error(`clipe ${clipe} indisponível para ${f.sprite}`); iq = quadroDoClipe(cl.ms, cl.loop, t); }
+    /* o Die segura o ultimo quadro com corpo (LP3c: o ultimo e vazio em 69 das 70 chaves, e o corpo sumia) */
+    if (s?.clipes) { const cl = s.clipes[clipe]; if (!cl) throw new Error(`clipe ${clipe} indisponível para ${f.sprite}`); iq = quadroComCorpo(cl.quadros, quadroDoClipe(cl.ms, cl.loop, t)); }
     else if (s) iq = u.morto ? 0 : Math.floor(t / a.dados.ms_por_quadro) % s.quadros.length;
     const opc = { espelho: u.viraEsq, ...(s?.clipes ? { clipe } : {}) };
+    const w = cp.caixa, h = s?.caixa[1] ?? cp.pes, o0 = origemDoSprite(cp, X, Yb, es, u.viraEsq), x0 = o0.x, y0 = o0.y;
+    const origem = (p: { x: number; y: number }) => origemDoSprite(cp, xDe(g, p.x), yDe(g, p.y + DESENHO_POC.pes), es, u.viraEsq);
     /* a imagem fantasma do desvio (E4: o dash da POC): copias apagadas nas posicoes de antes, na cor do elemento */
     if (u.dash > 0 && !u.morto) {
       fantasmas++;
@@ -336,7 +440,7 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
       fx.globalCompositeOperation = "source-atop"; fx.globalAlpha = POSTURA.fantasmaTinta; fx.fillStyle = ELEMENTO[els[i]].meio; fx.fillRect(0, 0, fc.width, fc.height);
       POSTURA.fantasmas.forEach((alfa, k) => {
         const p = v.hist[i][(k + 1) * (reduzido ? 2 : 3)]; if (!p) return;
-        ctx.globalAlpha = alfa; ctx.drawImage(fc, Math.round(xDe(g, p.x) - w * es / 2) - m, Math.round(yDe(g, p.y + DESENHO_POC.pes) - h * es) - m); ctx.globalAlpha = 1;
+        const op = origem(p); ctx.globalAlpha = alfa; ctx.drawImage(fc, Math.round(op.x) - m, Math.round(op.y) - m); ctx.globalAlpha = 1;
       });
     }
     /* o rastro da investida (a v18 e a POC: o golpe corpo a corpo avanca na direcao do alvo): copias mais apagadas no caminho ja feito */
@@ -345,7 +449,7 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
       rastros++;
       MOVIMENTO.rastroAlfa.forEach((alfa, k) => {
         const p = v.hist[i][(k + 1) * MOVIMENTO.rastroPassos]; if (!p) return;
-        ctx.globalAlpha = alfa; desenharSprite(ctx, a, f.sprite, xDe(g, p.x) - w * es / 2, yDe(g, p.y + DESENHO_POC.pes) - h * es, es, iq, opc); ctx.globalAlpha = 1;
+        const op = origem(p); ctx.globalAlpha = alfa; desenharSprite(ctx, a, f.sprite, op.x, op.y, es, iq, opc); ctx.globalAlpha = 1;
       });
     }
     const branco = !reduzido && claraoPoc(v, passo, i);
@@ -363,7 +467,7 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
     if (u.recSk <= 0 && !u.morto && u.estado !== "attack") {
       auras++;
       const kp = Math.max(1, Math.ceil(POSTURA.pixelMinCss * K / es)), up = es * kp;
-      pintar(ctx, pixelsDaAura(els[i], Math.round(w * POSTURA.auraMeia / kp), Math.round(h * .8 / kp), passoL, reduzido), X, Yb, up, 1);
+      pintar(ctx, pixelsDaAura(els[i], Math.round(2 * cp.meia * POSTURA.auraMeia / kp), Math.round(altC(i) * .8 / kp), passoL, reduzido), X, Yb, up, 1);
     }
   }
   n.fantasmas = fantasmas; n.rastros = rastros; n.auras = auras; n.claroes = claroes;
@@ -399,35 +503,72 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
   /* os projeteis em voo (E2 e LP-8): o rastro e o brilho do elemento por baixo e o desenho do jogo por cima; sem o desenho, a cabeca do elemento */
   const ef = efeitosAtuais(), prefabs = ef.tipo === "ok" ? ef.prefabs : null;
   let cabecas = 0, nossos = 0, comDesenho = 0, meio = 0;
+  /* LP3c: a cabeca sai da frente do sprite no quadro do disparo e chega a borda do alvo; no meio, o caminho do motor com a diferenca das
+     duas pontas repartida pela fracao do voo (o.f). Os pontos e o passo do acerto sao os do motor */
+  let distBoca = 0, distBorda = 0;
+  const pontoDoVoo = (o: VooPoc, j: number): { x: number; y: number } => {
+    const p = o.pts[j], p0 = o.pts[0], T = o.alvos[j], f = o.f[j], dir = o.esq ? -1 : 1;
+    const ca = cps[o.de], ct = cps[o.de === 0 ? 1 : 0];
+    const fr = a && ca ? frenteDoTiro(a, formas[o.de].sprite, o.tiro.t) : { fx: EQ_POC.raio / sc, fy: EQ_POC.peito / sc };
+    const bx = o.tiro.x + (o.tiro.esq ? -1 : 1) * fr.fx * sc, by = o.tiro.y + DESENHO_POC.pes - fr.fy * sc;
+    const ex = T.x - dir * (ct ? ct.meia * TIRO_POC.borda * sc : EQ_POC.raio), ey = T.y + DESENHO_POC.pes - (ct ? alturaDoCorpo(ct) * TIRO_POC.alturaAlvo * sc : EQ_POC.peito);
+    const hx = T.x - dir * (EQ_POC.raio + ACERTO_MOTOR), hy = T.y - EQ_POC.peito;
+    return { x: p.x + (1 - f) * (bx - p0.x) + f * (ex - hx), y: p.y + (1 - f) * (by - p0.y) + f * (ey - hy) };
+  };
   for (const o of v.voos) {
     const dir = o.esq ? -1 : 1, k = reduzido ? VOO.rastroReduzido : VOO.rastro, u = ue(o.de), ult = o.pts.length - 1;
     if (ult < 0) continue;
-    const cab = o.pts[ult];
+    const cab = pontoDoVoo(o, ult);
     if (o.tFim === null || passo < o.tFim + VOO.rastroFica) for (let j = k; j >= 1; j--) {
-      const pt = o.pts[ult - j]; if (!pt) continue;
+      if (ult - j < 0) continue;
+      const pt = pontoDoVoo(o, ult - j);
       pintar(ctx, pixelsDoRastro(els[o.de], j, k, passo, reduzido), xDe(g, pt.x), yDe(g, pt.y), u, dir);
     }
-    if (o.tFim !== null && passo >= o.tFim) continue;
+    /* a cabeca fica ate o passo do acerto (inclusive: ela chega a borda junto com o estouro) */
+    if (o.tFim !== null && passo > o.tFim) continue;
     cabecas++; if (o.nosso) nossos++;
     if (o.pts.length >= 3) meio++;
+    if (passo === o.t0 + 1) { const b = pontoDoVoo(o, 0), ua = lutadorN(L, o.de); distBoca = Math.round(Math.abs(b.x - ua.x) * e / K); }
+    if (o.tFim !== null && o.acertou) { const T = o.alvos[ult]; distBorda = Math.round(Math.abs(cab.x - T.x) * e / K); }
     const ref = o.prefab && prefabs ? prefabs.get(o.prefab.toLowerCase()) : undefined;
     const X = xDe(g, cab.x), Y = yDe(g, cab.y);
+    if (o.nosso) {
+      /* as 5 formas da LP-8 (o efeito de acerto que voa): o brilho do elemento em volta, a cabeca inteira e o efeito maior e mais claro */
+      const r = TIRO_POC.halo, cor = ELEMENTO[els[o.de]].halo;
+      pintar(ctx, Array.from({ length: (2 * r + 1) ** 2 }, (_, q) => ({ dx: q % (2 * r + 1) - r, dy: Math.floor(q / (2 * r + 1)) - r }))
+        .filter(p => p.dx * p.dx + p.dy * p.dy <= r * r).map(p => ({ ...p, cor, alfa: .22 + .3 * (1 - Math.hypot(p.dx, p.dy) / r), tam: 1, luz: true })), X, Y, u, dir);
+      pintar(ctx, pixelsDaCabeca(els[o.de], passo, reduzido), X, Y, u, dir);
+      if (ref) {
+        let ok = false;
+        for (let q = 0; q < TIRO_POC.brilhoNosso; q++) {
+          ctx.save(); if (q) ctx.globalCompositeOperation = "lighter";
+          ok = desenharEfeito(ctx, ref, (passo - o.t0) * PASSO_POC_MS, X, Y, o.esq, true, DESENHO_POC.efeito * TIRO_POC.escalaNosso * e) || ok; ctx.restore();
+        }
+        if (ok) comDesenho++;
+      }
+      continue;
+    }
     pintar(ctx, pixelsDaCabeca(els[o.de], passo, reduzido).filter(p => p.luz || !ref), X, Y, u, dir);
     if (ref && desenharEfeito(ctx, ref, (passo - o.t0) * PASSO_POC_MS, X, Y, o.esq, true, DESENHO_POC.efeito * e)) comDesenho++;
   }
   n.projeteis = cabecas; n.nossos = nossos; n.projeteisDesenho = comDesenho; n.projeteisMeio = meio;
+  /* as medidas da LP3c (px de CSS): a boca do tiro ao meio do atirador no primeiro quadro, a cabeca ao meio do alvo no acerto */
+  if (distBoca) n.distBoca = distBoca;
+  if (distBorda) n.distBorda = distBorda;
   /* o acerto: o efeito do jogo (o prefab do hits), a faisca da E1 e o estouro na cor do elemento de quem bateu (E2) */
   let efeitosJogo = 0;
   for (const x of v.efeitos) {
     const ref = prefabs?.get(x.prefab.toLowerCase()); if (!ref) continue;
     const tt = (passo - x.t0) * PASSO_POC_MS; if (tt < 0 || tt >= ref.dur) continue;
-    if (desenharEfeito(ctx, ref, tt, xDe(g, x.x), yDe(g, x.y - dims[x.lado][1] * .45), x.espelho, false, DESENHO_POC.efeito * e)) efeitosJogo++;
+    if (desenharEfeito(ctx, ref, tt, xDe(g, x.x), yDe(g, x.y + DESENHO_POC.pes) - altC(x.lado) * TIRO_POC.alturaAlvo * es, x.espelho, false, DESENHO_POC.efeito * e)) efeitosJogo++;
   }
   n.efeitosJogo = efeitosJogo;
   let impactos = 0;
   for (const im of v.impactos) {
     const idade = passo - im.t0; if (idade < 0) continue;
-    const ps = Math.max(1, Math.round(1.5 * K * e / g.e0)), X = Math.round(xDe(g, im.x) - im.dir * 10 * e), Y = Math.round(yDe(g, im.y - dims[im.lado][1] * .45));
+    /* na borda do corpo do alvo, do lado de quem bateu, na meia altura do corpo (LP3c) */
+    const ps = Math.max(1, Math.round(1.5 * K * e / g.e0)), X = Math.round(xDe(g, im.x) - im.dir * meiaC(im.lado) * TIRO_POC.borda * es);
+    const Y = Math.round(yDe(g, im.y + DESENHO_POC.pes) - altC(im.lado) * TIRO_POC.alturaAlvo * es);
     const fa = faiscaDoPasso({ lado: im.lado, t0: im.t0, frac: im.frac, forte: im.forte }, passo);
     if (fa.length) impactos++;
     for (const p of fa) { ctx.fillStyle = p.cor; ctx.fillRect(X + p.dx * ps * 2, Y + p.dy * ps * 2, ps * (im.forte ? 2 : 1), ps * (im.forte ? 2 : 1)); }
@@ -438,7 +579,8 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
   ctx.font = `bold ${Math.round(12 * K)}px system-ui, sans-serif`; ctx.textAlign = "center";
   let numeros = 0;
   for (const nu of v.numeros) {
-    const idade = passo - nu.t0, base = Math.min(topo[nu.lado], yDe(g, nu.y - 30)), y = base - (10 + idade * .6) * K;
+    /* acima da cabeca (o topo do corpo, LP3c; antes, o topo da caixa) */
+    const idade = passo - nu.t0, base = Math.min(topo[nu.lado], yDe(g, nu.y + DESENHO_POC.pes) - altC(nu.lado) * es), y = base - (10 + idade * .6) * K;
     ctx.globalAlpha = Math.max(0, 1 - idade / TELA_POC.vidaNumero); numeros++;
     if (nu.pixel) {
       const { px, w: tw, h: th } = pixelsDoTexto(nu.txt), p = Math.max(1, Math.round(K * (nu.forte ? 6 : 4)));

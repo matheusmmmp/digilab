@@ -1,0 +1,9 @@
+{
+  "descricao": "INDIVIDUALIDADE, I5: a fumaca do orquestrador com as sementes dos testes (vidas feitas aqui, 14 dias)",
+  "fase": "individualidade-i5",
+  "plano": "docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I5.md",
+  "vidas": null,
+  "unidades": {"bases": [101, 202], "k": 2, "prefixo": "digibrain_prototipo"},
+  "dias": 14,
+  "orcamento_por_dia": 16
+}

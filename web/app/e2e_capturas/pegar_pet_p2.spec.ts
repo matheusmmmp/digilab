@@ -11,15 +11,15 @@ const PASTA = process.env.DIGILAB_CAPTURAS_PP2 ?? "";
 const CHAVE = "digilab-web-v21-sprites";
 /* o mesmo pet (semente 4242, v19): bebe as 10h do primeiro dia; Rookie (limo arisco), acordado e com a saude cheia, as 18h */
 const FORMAS = [
-  { nome: "bebe_stun", save: { semente: 4242, versao: 19, log: [[480, "t", 120]] } },
-  { nome: "rookie_medo", save: { semente: 4242, versao: 19, log: [[480, "t", 600]] } },
+  { nome: "bebe_stun", save: { semente: 4242, versao: 21, log: [[480, "t", 120]] } },
+  { nome: "rookie_medo", save: { semente: 4242, versao: 21, log: [[480, "t", 600]] } },
 ] as const;
 
 async function abrir(page: Page, pele: string, save: unknown): Promise<void> {
   await page.goto("/motor/index.ts");
   await page.evaluate(([chave, s]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 1, log: [] }));
-    localStorage.setItem(chave + "-descarte", "6"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
+    localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     localStorage.setItem(chave, s);
   }, [CHAVE, JSON.stringify(save)] as const);
   await page.goto(`/?pele=${pele}&clipes_up=1#/pet/estado`);

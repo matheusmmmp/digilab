@@ -3,9 +3,9 @@
    Fonte: "EQ" = remaster/arena_equilibrio.md (as duas rodadas de 2026-10-29); "PROTOTIPO" = so o arena.html, SEM FONTE de medicao.
    Sairam com o 1 contra 1 (LP1, como no #448): as trocas, a investida do jogador e os status genericos da tela. */
 
-/** A chave da luta da POC no jogo (LP1), DESLIGADA: nada do jogo chama este nucleo; o pet continua no combate_tr. A LP2 liga o pet
-    numa VERSAO_PET nova. */
-export const LUTA_POC_LIGADA = false;
+/** A chave da luta da POC no jogo (LP1), LIGADA na LP4 (Matheus, 2026-11-10: "Sim, abre a LP4"): a luta do pet (a v21, motor/luta_poc.ts)
+    e esta simulacao, e o combate por turnos (combate_tr) saiu. Fica como constante porque o app e os testes a leem (src/lutaPoc.ts) */
+export const LUTA_POC_LIGADA = true;
 
 /** mundo logico em px de sprite (desenhado em 2x). PROPOSTO, PROTOTIPO */
 export const MUNDO = { w: 480, h: 280, esc: 2 } as const;
@@ -45,6 +45,33 @@ export const ERRO_MIRA_POC: Record<Dificuldade, number> = { facil: 40, normal: 1
 /** as opcoes da luta e os padroes do prototipo (os da medicao). PROPOSTO, EQ: vantagem de atributo 1,5x, projeteis 0,15x. O ritmo (a
     vida do jogo / 6) nao e mais da simulacao: a vida chega pronta nos Stats */
 export const OPCOES_PADRAO = { forca: 1.5, pvel: 0.15, dific: "normal" as Dificuldade };
+
+/** a distancia do tiro (LUTA_POC, LP5, D-LP5-12: "Desenho agora, motor na LP5"): como quem atira mantem distancia de quem luta de perto.
+    So vale quando a entrada da luta traz o `tiro` (o candidato da bancada; no jogo, a versao do pet que o ligar, na LP5-5). Sem ele, a luta
+    e a de sempre, byte a byte. Os valores do TIRO_V21 sao os da POC; os do candidato sao PROPOSTOS, SEM FONTE.
+    - distMin: abaixo dela (px) quem atira nao solta o tiro de projetil e recua; 0 = sem distancia minima;
+    - esperaMax: quanto tempo (ms) ele espera abaixo da distMin antes de atirar mesmo assim (encurralado na borda);
+    - recuaAbaixo: recua quando a distancia fica abaixo desta fracao do alcance (a POC: 0,5);
+    - recuo: a velocidade do recuo de quem atira (x o movimento; a POC: o EQ.recuo, 1);
+    - recuaNaPrep: a velocidade (x o movimento) com que ele se afasta na preparacao do tiro, se o alvo esta mais perto que a distMin ou que
+      o recuaAbaixo; 0 = parado, como na POC;
+    - danoProj: o dano do projetil (no lugar do EQ.danoDist, 1 na POC) e velProj: a velocidade dele (x o OPCOES_PADRAO.pvel; 1 na POC).
+      Tiram forca de quem atira quando ele mantem distancia (D-LP5-13, 4: "Aprovo as 4") */
+export interface Tiro { distMin: number; esperaMax: number; recuaAbaixo: number; recuo: number; recuaNaPrep: number; danoProj: number; velProj: number }
+export const TIRO_V21: Readonly<Tiro> = Object.freeze({ distMin: 0, esperaMax: 0, recuaAbaixo: 0.5, recuo: EQ.recuo, recuaNaPrep: 0, danoProj: EQ.danoDist, velProj: 1 });
+
+/** a esquiva pela perspicacia e pela velocidade (LUTA_POC, LP5, D-LP5-14: o Matheus, "Vamos daí fazer com o Mira e o Caráter Atento
+    juntos"). So vale quando a entrada da luta traz a `esquiva`; sem ela, a luta e a de sempre, byte a byte. Cada lutador traz nos Stats a
+    perspicacia (perc: perceber o golpe e reagir antes; a bancada a tira da mira e do carater atento) e a agilidade (agil: o pulo da
+    esquiva; do folego). 1 = o lutador neutro. Os numeros sao PROPOSTOS, SEM FONTE.
+    - kChance: o peso da perc na chance de desviar (a chance da dificuldade x (1 + kChance x (perc - 1))), ate o chanceMax;
+    - kReacao: o peso da perc no tempo de reacao (a reacao da dificuldade / (1 + kReacao x (perc - 1)));
+    - kDash: o peso da agil na velocidade do pulo (ACAO.desvioCpu x (1 + kDash x (agil - 1)));
+      os tres fatores sao lineares (o nucleo nao usa `**`) e ficam em pelo menos 0,1;
+    - pertoChance: a chance base de ler o golpe de perto do outro (na preparacao, ao alcance) e pular para tras; 0 = so o tiro, como na POC;
+    - pertoReacao: o tempo de reacao base (ms) contra o golpe de perto;
+    - contraMs: depois de uma esquiva do golpe de perto, a recarga do ataque fica no maximo nisto (ms; o contra-ataque); 0 = sem */
+export interface Esquiva { kChance: number; kReacao: number; kDash: number; chanceMax: number; pertoChance: number; pertoReacao: number; contraMs: number }
 
 /** movimento e tempos das acoes. PROPOSTO, PROTOTIPO */
 export const ACAO = {

@@ -16,7 +16,7 @@ import { lutaPocLigada } from "./lutaPoc.ts";
 import { carregarEfeitos } from "./telas/lutar/palcoPoc/efeitosJogo.ts";
 import { arquivosPoc, movimentoReduzido, type LadoDesenhoPoc } from "./telas/lutar/palcoPoc/desenhoPoc.ts";
 import {
-  aplicarEventosPoc, consumirPausaPoc, passoDe, passosDaEspera, passosDoQuadro, visualNovoPoc, type VisualPoc,
+  aplicarEventosPoc, consumirPausaPoc, passoDe, passosDaEspera, passosDoQuadro, passosDoTiro, visualNovoPoc, type VisualPoc,
 } from "./telas/lutar/palcoPoc/visualPoc.ts";
 
 /** o que a luta da tela tem de dar no fim: o resultado da mesma luta no motor (null: a luta montada da conferencia, sem motor) */
@@ -34,6 +34,9 @@ export interface PalcoPoc {
 }
 /** pausado e rapido: os botoes do dock (so o ritmo do desenho); replay: a luta vista de novo pelo Ver replay (nada grava) */
 export const LUTA_POC = { palco: null as PalcoPoc | null, lutando: false, pausado: false, rapido: false, replay: false };
+/** o tempo do pet nao anda com o palco na tela (a luta, o resultado e o replay), como no palco de antes: o que passou ali e descartado, como
+    na Pausa (src/tempo.ts) */
+export const lutaSeguraTempo = (): boolean => LUTA_POC.palco !== null;
 /** as lutas da tela de agora, para o Ver replay e o Ver de novo */
 let atual: { lutas: readonly LutaNaTela[]; contexto: string; fim: (L: LutaPoc) => FimPoc } | null = null;
 
@@ -125,7 +128,9 @@ export function assistirPoc(lutas: readonly LutaNaTela[], contexto: string, fim:
     const p = LUTA_POC.palco; if (!p) return;
     if (LUTA_POC.pausado) { timer = setTimeout(quadro, RITMO_POC.quadroMs); return; }
     const L = p.L, e = lutas[j].esperado, base = reduz ? RITMO_POC.passosReduzido : LUTA_POC.rapido ? RITMO_POC.passosRapido : RITMO_POC.passos;
-    const n = e ? passosDoQuadro(passoDe(L), base, { passos: e.passos, fim: e.ko ? "ko" : "limite" }, reduz) : base;
+    const n0 = e ? passosDoQuadro(passoDe(L), base, { passos: e.passos, fim: e.ko ? "ko" : "limite" }, reduz) : base;
+    /* o tiro perto de sair ou de acertar anda devagar na tela (LP3c: o voo curto aparece); os passos e o fim sao os mesmos */
+    const n = reduz ? n0 : passosDoTiro(L, n0);
     for (let q = 0; q < n && !L.fim && L.relogio < LIMITE_POC_MS; q++) aplicarEventosPoc(p.v, L, passoPoc(L), [p.A.forma, p.B.forma]);
     avisar();
     if (L.fim || L.relogio >= LIMITE_POC_MS) { conferir(p); esperar(); return; }

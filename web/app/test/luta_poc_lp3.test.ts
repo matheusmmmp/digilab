@@ -8,8 +8,8 @@ import {
   type EntradaLutaPoc, type LutaPoc,
 } from "../motor/index.ts";
 import { lutar as lutarArena } from "../motor/arena/luta.ts";
-import { IMPACTO } from "../src/telas/lutar/palcoTR/efeitosTR.ts";
-import { CHAO } from "../src/telas/lutar/palcoTR/chaoTR.ts";
+import { IMPACTO } from "../src/telas/lutar/palcoPoc/efeitos.ts";
+import { CHAO } from "../src/telas/lutar/palcoPoc/chao.ts";
 import {
   CAMERA_POC, aplicarEventosPoc, barraDoPasso, claraoPoc, consumirPausaPoc, nivelDaDistanciaPoc, passoDe, preparoDaHabilidade, puloDoEmpurrao,
   tremidaPoc, visualNovoPoc, PREFABS_LP8, type VisualPoc,

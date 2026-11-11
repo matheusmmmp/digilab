@@ -2,7 +2,7 @@
    - o lugar trancado, a 1920 e a 390: o cadeado com o "Nv N", o trilho e a coluna apagados, o minimapa, o "Tamer Nv N", e a tecla, a rota e o toque abrindo o cartao do
      motivo no lugar do painel;
    - o destrave: o cartao (Ir, Depois, Esc), uma vez por nivel, o cadeado aberto e o brilho (sem ele com "reduzir movimento"), e as dicas desligadas sem cartao;
-   - o piso 4 dos saves de antes, as abas Itens e Fronteira e as pecas Regras e Forcar trancadas, o "Ja conheco o jogo" e o "Rever o tutorial".
+   - o piso 4 dos saves de antes, as abas Itens e Fronteira e a peca Forcar trancada (as Regras sairam com o combate por turnos, LP4), o "Ja conheco o jogo" e o "Rever o tutorial".
    Os estados saem de uma chave -nivel semeada ({marcos, cartoes}) e de saves pequenos: um In-Training de 30 min (so o marco 1), um de 70 min (marcos 1 e 2, pela hora de vida),
    um Rookie (1 a 3, o piso leva a 4) e o Champion de e2e/saves.json. Nada aqui muda o motor, o save nem o registro do Tamer. */
 import { expect, test, type Page } from "@playwright/test";
@@ -13,9 +13,9 @@ import { fileURLToPath } from "node:url";
 const PREFIXO = "/" + basename(fileURLToPath(new URL("../../..", import.meta.url)));
 const APP = `${PREFIXO}/web/dist/`, CHAVE = "digilab-web-v21-sprites";
 const CHAMPION = (JSON.parse(readFileSync(new URL("./saves.json", import.meta.url), "utf8")) as Record<string, object>).champion;
-const BEBE_30 = { semente: 101, versao: 13, log: [[480, "t", 30]] };
-const BEBE_70 = { semente: 101, versao: 13, log: [[480, "t", 70]] };
-const ROOKIE = { semente: 101, versao: 13, log: [[480, "u", { n: 1 }], [480, "t", 210]] };
+const BEBE_30 = { semente: 101, versao: 21, log: [[480, "t", 30]] };
+const BEBE_70 = { semente: 101, versao: 21, log: [[480, "t", 70]] };
+const ROOKIE = { semente: 101, versao: 21, log: [[480, "u", { n: 1 }], [480, "t", 210]] };
 const TAMER_VAZIO = { versao: 7, log: [] };
 const TELAS = [["1920", 1920, 950], ["390", 390, 844]] as const;
 
@@ -24,7 +24,7 @@ interface Semente { save?: object | null; tamer?: object; nivel?: { marcos: numb
 async function semear(page: Page, o: Semente = {}): Promise<void> {
   await page.goto("/Assets/digilab_atlas_up.json");
   await page.evaluate(([chave, s, t, n, dicas, bv]) => {
-    localStorage.clear(); localStorage.setItem(chave + "-tamer", t); localStorage.setItem(chave + "-descarte", "6"); localStorage.setItem(chave + "-guardados", "[]");
+    localStorage.clear(); localStorage.setItem(chave + "-tamer", t); localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-guardados", "[]");
     if (bv === "1") localStorage.setItem(chave + "-boas-vindas", "1");
     localStorage.setItem(chave + "-dicas-ligadas", dicas);
     if (s) localStorage.setItem(chave, s);
@@ -202,9 +202,19 @@ test("destrave: com 'Mostrar dicas' desligado nao ha cartao, e o lugar abre do m
   test.setTimeout(120_000);
   await page.setViewportSize({ width: 1920, height: 950 });
   await semear(page, { save: BEBE_70, nivel: { marcos: [1], cartoes: [1] }, dicas: false });
-  await page.goto(APP + "#/pet/estado");
+  await page.goto(APP + "?cameradev=1#/pet/estado");
   await expect(page.locator(".pet-tela")).toBeVisible();
-  await expect(page.locator('.cadeado-ilha.aberto[data-lugar="barraca"]')).toBeVisible();           // o cadeado se abre mesmo assim
+  /* o cadeado se abre mesmo assim. Na planta A (#734) a barraca comeca fora do quadro: o cadeado aberto espera escondido, sem o tempo correr
+     (D-E2E-2, "Sim, esperar"), aparece quando a camera chega nela e some ABRE_MS (2,4 s) depois */
+  const aberto = page.locator('.cadeado-ilha.aberto[data-lugar="barraca"]');
+  await expect(aberto).toBeAttached();
+  await expect(aberto).toBeHidden();
+  await page.waitForTimeout(4000);
+  await expect(aberto).toBeAttached();
+  await page.waitForFunction(() => typeof (window as any).__camera?.ir === "function");
+  await page.evaluate(() => (window as any).__camera.ir("barraca", { zoom: 0.6 }));
+  await expect(aberto).toBeVisible();
+  await expect(aberto).toHaveCount(0, { timeout: 10_000 });
   await expect(page.locator(".cartao-destrave")).toHaveCount(0);
   await trilho(page, "Diário").click();
   await expect(painel(page)).toBeVisible();
@@ -229,10 +239,9 @@ test("o piso 4: um save de hoje sem a chave abre Diario, Crescer e Lutar, sem ca
   await expect(page.locator(".cartao-destrave")).toHaveCount(0);
   await expect(page.locator(".cadeado-ilha")).toHaveCount(0);
   for (const n of ["Crescer", "Lutar", "Diário", "Conversar"]) await expect(trilho(page, n)).not.toHaveAttribute("aria-disabled", "true");
-  /* o Champion tem as Regras e o Forcar; a primeira medalha falta: o Itens fica trancado (Nv 5) com o motivo, e a Fronteira (Nv 8) tambem */
+  /* o Champion tem o Forcar; a primeira medalha falta: o Itens fica trancado (Nv 5) com o motivo, e a Fronteira (Nv 8) tambem */
   await page.goto(APP + "#/lutar/arena");
   await expect(painel(page)).toBeVisible();
-  await expect(page.locator(".ar2-regras > summary")).toBeVisible();
   await page.goto(APP + "#/crescer/itens");
   await expect(page.getByRole("tab", { name: "Itens, Nv 5" })).toBeVisible();
   await expect(page.locator(".lg-trava")).toHaveText("Abre com a primeira medalha");
@@ -243,15 +252,10 @@ test("o piso 4: um save de hoje sem a chave abre Diario, Crescer e Lutar, sem ca
   expect(err).toEqual([]);
 });
 
-test("as pecas Regras e Forcar: trancadas ate o Champion (Nv 6), com o motivo; o motor segue igual", async ({ page }) => {
+test("a peca Forcar: trancada ate o Champion (Nv 6), com o motivo; o motor segue igual", async ({ page }) => {
   test.setTimeout(120_000);
   await page.setViewportSize({ width: 1920, height: 950 });
   await semear(page, { save: ROOKIE, nivel: { marcos: [1, 2, 3, 4], cartoes: [1, 2, 3, 4] } });
-  await page.goto(APP + "#/lutar/arena");
-  await expect(painel(page)).toBeVisible();
-  const regras = page.getByRole("button", { name: "Regras, trancado, Nv 6: Abre quando ele virar Champion" });
-  await expect(regras).toBeVisible();
-  await expect(page.locator(".ar2-regras > summary")).toHaveCount(0);
   await page.goto(APP + "#/crescer/treinar");
   await expect(page.getByRole("button", { name: "Forçar, trancado, Nv 6: Abre quando ele virar Champion" })).toBeVisible();
   await expect(page.locator("button.treino-forcar")).toHaveCount(0);
@@ -266,7 +270,7 @@ test("o Tamer com medalhas: o nivel segue os marcos (Itens no Nv 5, Fronteira so
   await expect(painel(page)).toBeVisible();
   await expect(page.getByRole("tab", { name: "Itens" })).not.toHaveAttribute("aria-label", /Nv 5/);
   await expect(page.locator(".lg-trava")).toHaveCount(0);
-  /* Rookie (1 a 4 pelo piso) + a medalha = Nv 5; as Regras (marco 6) ainda fechadas */
+  /* Rookie (1 a 4 pelo piso) + a medalha = Nv 5; o Forcar (marco 6) ainda fechado */
   expect(await chaveNivel(page)).toEqual({ marcos: [1, 2, 3, 4, 5], cartoes: [1, 2, 3, 4, 5] });
   await expect(page.locator(".tamer-nv--topo")).toHaveText("Tamer Nv 5");
 });
@@ -350,23 +354,8 @@ test("celular: o Esc com o leque do retrato e o cartao abertos fecha so o de cim
   expect(await page.evaluate(() => document.activeElement === document.body)).toBe(false);
 });
 
-test("celular: as Regras trancadas na folha abrem o cartao do motivo dentro dela, e o Esc fecha so o cartao", async ({ page }) => {
-  test.setTimeout(120_000);
-  await page.setViewportSize({ width: 390, height: 844 });
-  await semear(page, { save: ROOKIE, nivel: { marcos: [1, 2, 3, 4], cartoes: [1, 2, 3, 4] } });
-  await page.goto(APP + "#/lutar/arena");
-  const folha = page.locator("dialog.painel-tela--lugar[open]");
-  await expect(folha).toBeVisible();
-  await tocar(folha.getByRole("button", { name: /^Regras, trancado/ }));
-  const cartao = folha.locator(".cartao-motivo");
-  await expect(cartao).toBeVisible();
-  await expect(cartao).toContainText("Abre quando ele virar Champion.");
-  /* o cartao e o de cima: um Esc fecha so ele (nem o balao da peca nem a folha) */
-  await page.keyboard.press("Escape");
-  await expect(cartao).toHaveCount(0);
-  await expect(folha).toBeVisible();
-});
-
+/* o cartao do motivo dentro da folha no celular era o das Regras de luta (a PecaTrancada da Arena), que sairam com o combate por turnos (LP4);
+   o Forcar trancado do Treinar e um botao desabilitado com o motivo no nome */
 for (const [w, h] of [[390, 844], [360, 800]] as const) {
   test(`celular ${w}x${h}: o selo "Nv N" da coluna nao cruza o cartao de chamado nem o relogio e passa no maximo 10 px do botao`, async ({ page }) => {
     test.setTimeout(120_000);

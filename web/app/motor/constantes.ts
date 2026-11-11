@@ -72,27 +72,27 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    registro poe o pet onde o dono o soltou (limitado ao mapa, PP-4), sem mexer no humor, no corpo nem no aprendizado (PP-1); com o pet
    dormindo, falha alto (PP-2). O resto e o v18 (a luta, o cerebro trocavel). Os v13 a v18 seguem vivos, sem o "lp"; so os ovos novos
    nascem v19 */
-export const VERSAO_PET = 19;
-/** as versoes de pet que abrem: a v13 (o tempo real de antes da rodada de equilibrio), a v14 (CV14-1), a v15 (a bola no golpe), a v17
-    (o cerebro trocavel), a v18 (o empurrao) e a v19 (o levar pet). A v16 e so a do laboratorio */
-export const VERSOES_PET: readonly number[] = [13, 14, 15, 17, 18, 19];
+export const VERSAO_PET = 21;
+/** as versoes de pet que abrem: so a v21, a luta da POC (LUTA_POC, LP4: o descarte 7 tirou os v13 a v19, que lutavam pelo combate por
+    turnos; LP-6). A v16 e so a do laboratorio */
+export const VERSOES_PET: readonly number[] = [21];
 /** a versao de pet do cerebro trocavel (o evento "cb") */
 export const VERSAO_V17 = 17;
 /** a versao de pet do empurrao de verdade na luta (a v17 com o RELOGIO_V18) */
 export const VERSAO_V18 = 18;
 /** a versao de pet do levar pet (o evento "lp"; a v18 com o dono que pega o pet e o solta noutro lugar) */
 export const VERSAO_V19 = 19;
-/** a versao tem o cerebro trocavel, a ponte da luta e a bola no golpe da v17: a v17, a v18 (a v17 com o empurrao) e a v19 (a v18 com o
-    levar pet) */
+/** a versao tem o cerebro trocavel, a ponte da luta e a bola no golpe da v17: a v17, a v18 (a v17 com o empurrao), a v19 (a v18 com o
+    levar pet) e a v21 (a v19 com a luta da POC). Desde a LP4 so a v21 abre; as outras ficam no teste porque a v21 e feita delas */
 export const ehCerebroTrocavel = (versao: number): boolean => versao === VERSAO_V17 || versao === VERSAO_V18 || versao === VERSAO_V19 || versao === VERSAO_V21;
 /** 21 = a v19 com a luta da POC (docs/TAREFA_V3_LUTA_POC.md, LP2; as seis decisoes da LP2, Matheus, "Aprovo as 6", 2026-11-08): a luta do pet
     e a simulacao em tempo real de motor/arena/, 1 contra 1, com os numeros saidos dos 6 stats do pet (motor/luta_poc.ts); o evento "l" guarda
     o rival (uma forma do estagio do pet, na Arena, ou o NPC da Campanha), a semente e o mapa; sem gambits ("g"), cartas ("k") nem chips de
-    regra; a Liga, a Torre, a Fabrica e o Salao fechados ate a LP2b. O resto e a v19. A v20 fica para o #694 (a arvore). Atras da chave
-    LUTA_POC_LIGADA (desligada): com ela desligada, os ovos novos seguem v19 e nenhum pet v21 nasce no jogo; VERSOES_PET nao muda */
+    regra; a Liga, a Torre, a Fabrica e o Salao desde a LP2b. O resto e a v19. A v20 fica para o #694 (a arvore). A chave LUTA_POC_LIGADA
+    ligou na LP4 (Matheus, 2026-11-10): os ovos novos nascem v21, e so a v21 abre (VERSOES_PET) */
 export const VERSAO_V21 = 21;
-/** as versoes que abrem com a luta da POC ligada (LP-6: os v13 a v19 saem, com aviso) */
-export const VERSOES_PET_POC: readonly number[] = [VERSAO_V21];
+/** as versoes que abrem com a luta da POC (LP-6: os v13 a v19 saem, com aviso): desde a LP4, as mesmas de VERSOES_PET */
+export const VERSOES_PET_POC: readonly number[] = VERSOES_PET;
 /** os cerebros que o evento "cb" escolhe: o DigiBrain modular e o cerebro A (os lobos, a linha de base) */
 export const CEREBROS = ["modular", "a"] as const;
 /** a versao de pet da bola no golpe (a chave bolaNoGolpe do Mundo) */
@@ -228,18 +228,9 @@ export const FATORES_MEMORIA = ["latencia_fome", "latencia_higiene", "repreensoe
 export const CE = { limiar: .05 };
 export const NF = 11 + 4;   /* 11 do bandit v1 + 4 de memoria */
 
-/* combate V2.1 (ConfigCombateV2C, ConfigCombateV21C) */
-export const CV = {
-  tMax: 40,
-  custo: { golpe_rapido: 10, preparar_pesado: 15, disparo: 20, esquivar: 20 } as Record<string, number>,
-  dano: { golpe_rapido: 8, disparo: 6, pesado: 25 },
-  multDef: .3, multDefPesado: .6, multCarregar: 1.5, gutsDef: 5, gutsCarregar: 25,
-  eps: .05, maxRegras: 8, maxCond: 2, fracoes: [.25, .5, .75], guts: [20, 40, 60], ks: [2, 3], janelaFreq: 5, limiarFreq: .4,
-  pesoGutsOr: .002, pesoPendOr: .5,
-  /* base corrigida (V2C, TAREFA_CORRECAO_COMBATE): parry contra golpe rapido e morte subita */
-  parry: 5, turnoMS: 25, multMS: 1.5,
-};
-/* V21C: vida por vigor 3 -> 2,5 (base 70 -> 75; vida neutra continua 100) contra a dominancia da Ferrugem */
+/* V21C: vida por vigor 3 -> 2,5 (base 70 -> 75; vida neutra continua 100) contra a dominancia da Ferrugem. As regras do combate por turnos
+   (o CV da V2C, as listas da V21E e os gambits) sairam na LUTA_POC, LP4; fica o CV21 porque o perfil das formas (catalogo.perfilDe, a vida
+   e o guts do catalogo e do mapeamento da luta da POC) le os numeros dele */
 export const CV21 = {
   hpBase: 75, hpVigor: 2.5, g0Base: 30, g0Folego: 2, gMaxBase: 80, gMaxFolego: 2, regenBase: 4, regenRec: .4,
   multBase: .7, multPonto: .03, guardaBase: 1.3, guardaPonto: .03,
@@ -248,29 +239,6 @@ export const CV21 = {
   duelista: 4, limFurioso: .5, multFurioso: 1.25, espelho: 1, muralha: 3, recargaSent: 4, multEmb: 2, multTita: 1.3,
   maxRegras: { bebe: 0, crianca: 3, adolescente: 5, adulto: 8 } as Record<EstagioBase, number>, turnos: [5, 10, 20],
 };
-/* V21E: rodada de equilibrio geral, fase 1 (docs/EQUILIBRIO_GERAL.md; chaves da ConfigCombateV21E,
-   experiments/configs/v21e/calibracao.json). So nas lutas de pets v9 (versaoPet em diante): as quatro chaves da V21D e as cinco
-   da V21E, todas listas das formas (bots.gambitsAdulto); a base (custo do golpe rapido, parry, C3) nao muda. As quatro chaves da
-   V21D (reequilibrio dos arquetipos, docs/VALIDACAO_V21D.md, variante a_c_e2v_v) estao aqui: o combate por turnos e a V21D
-   como regras separadas sairam (COMBATE-TR R3), e o v13 usa estas */
-export const CV21E = {
-  versaoPet: 9,
-  preparoSobPeleOculto: true, muralhaListaEspelho: true, vigiaBateEmQuemRecua: true, vigiaRecuaDoPreparoSobPele: true,
-  duelistaDefendeDoGolpe: true, titaDefendeDoGolpe: true, espelhoSemCarregar: true, muralhaSemCarregar: true, muralhaContraGolpeNaPele: true,
-} as const;
-/* a luta em tempo real (pets v13; docs/ESPEC_COMBATE_TR.md): as regras e as listas da V21E, jogadas pelo nucleo motor/combate_tr/ em vez do
-   combate por turnos (combate_tr/adaptador.ts, jogarLuta, escolhe pelo tempoReal) */
-export const CV21E_TR = { ...CV21E, versaoPet: 13, tempoReal: true } as const;
-/** as regras dos pets v14: as da v13 com o candidato da rodada de equilibrio (o relogio RELOGIO_V14, combate_tr/constantes_tr.ts, vem pela
-    versao: combate_tr/luta.ts, relogioDe; os fatores, as listas e o resto, pelo R.versaoPet >= VERSAO_V14 em cada modulo) */
-export const CV21E_TR14 = { ...CV21E_TR, versaoPet: 14 } as const;
-/** as regras dos pets v18: as da v14 com o empurrao (o relogio RELOGIO_V18 vem pela versao: combate_tr/luta.ts, relogioDe; o resto, pelo
-    R.versaoPet >= VERSAO_V14, como na v14) */
-export const CV21E_TR18 = { ...CV21E_TR, versaoPet: 18 } as const;
-/** a versao de pet do candidato da rodada de equilibrio do tempo real (DE-1) */
-export const VERSAO_V14 = 14;
-
-/* catalogo (docs/catalogo_pets.json, docs/arvore_evolucao.json): 4 especies ativas */
 export const STATS: readonly Stat[] = ["vigor", "folego", "recuperacao", "forca", "mira", "guarda"];
 export const ESPECIES: readonly Especie[] = ["brasa", "cirro", "ferrugem", "limo"];
 export const LINHAS: readonly Linha[] = ["brigao", "guardiao", "cacador", "colosso"];
@@ -339,25 +307,22 @@ export const CESC_V9 = {
    EQUILIBRIO (decisao do Matheus, 2026-09-30: o equilibrio dos itens entra na rodada de equilibrio geral do combate, depois das
    proximas mecanicas). vagas: chips equipados por pet pelas medalhas que ele conhece ([minimo de medalhas, chips], do maior para o
    menor; sem medalha, nenhum). tetoChipStat: a soma dos chips de stat vale no maximo esta fracao do treino tipico do estagio (tipico:
-   o das metas da parte 2, test/calibrar_arenas.mjs). espera: minutos do relogio do pet entre duas cartas de revanche do mesmo lider.
-   gutsFolego, curaAbaixo e curaFracao: as cartas de Folego e de Cura */
+   o das metas da parte 2, test/calibrar_arenas.mjs). espera: minutos do relogio do pet entre duas cartas de revanche do mesmo lider (so
+   confere as cartas que o registro do Tamer ja tem: as cartas sairam na LP4 da LUTA_POC, com os numeros delas) */
 export const CIT = {
   versaoPet: 6,
   vagas: [[5, 3], [3, 2], [1, 1]] as readonly (readonly [number, number])[],
   tetoChipStat: .25,
   tipico: { crianca: 8, adolescente: 22, adulto: 36, mega: 40 } as Readonly<Partial<Record<Estagio, number>>>,
   espera: 1440,
-  gutsFolego: 20, curaAbaixo: .3, curaFracao: .2,
 };
 /* itens nos pets v9 (rodada de equilibrio geral, fase 3; docs/EQUILIBRIO_GERAL.md, metas M-D1 a M-D3; itens.ts): restricoes de uso e valores
-   so para os pets v9. treinoMinimo: os itens (chips e carta) so fazem efeito com o treino do pet >= esta fracao do treino tipico do nivel
-   (CIT.tipico); cartaSoContraNpc: a carta so vale contra os NPCs da campanha (nao na arena contra bots); fatorChipStat: o valor do ponto
-   do chip de stat. O chip de regra entra no fim da lista (itens.listaComChips, GambitsPet.listaDeLuta). Calibrados em test/medir_itens.mjs
-   (sementes de calibracao). PROPOSTOS */
+   so para os pets v9. treinoMinimo: os chips so fazem efeito com o treino do pet >= esta fracao do treino tipico do nivel (CIT.tipico);
+   fatorChipStat: o valor do ponto do chip de stat. Calibrados em test/medir_itens.mjs (sementes de calibracao). PROPOSTOS. A regra da carta
+   (cartaSoContraNpc) saiu com as cartas na LP4 da LUTA_POC */
 export const CIT_V9 = {
   versaoPet: 9,
   treinoMinimo: .5,
-  cartaSoContraNpc: true,
   fatorChipStat: .5,
 };
 /* duracao de cada estagio em minutos e chamados do bebe (docs/cronograma_interacoes.json);
@@ -384,10 +349,6 @@ export const FORMAS_AD: readonly FormaAdultaNormal[] = ["duelista", "furioso", "
 export const LINHA_DA_FORMA = Object.fromEntries(LINHAS.flatMap(l => Object.keys(CAT.adulto[l].formas).map(f => [f, l]))) as Record<FormaAdultaNormal, Linha>;
 /* caráter PROVISORIO (so na web): cada eixo junta os tracos de combate que se parecem com ele */
 export const EIXO_TRACO: Record<EixoCarater, readonly TracoCombate[]> = { impetuoso: ["golpe", "carga"], paciente: ["bloqueio"], atento: ["finta"], resistente: ["agarrao"] };
-export const TECNICAS: readonly Tecnica[] = ["investida", "contra_golpe", "marcar", "pele_dura"];
-
-/* gambits hibridos (so na web) */
-export const GA = { base: .05, alfa: .2, bonusResultado: .1, limiarTroca: -.02 };
 
 /* Linha de base do caráter pelos tracos (PROVISORIO, so na web, pets v1/v2): afinidades medias de um pet
    comum no momento de cada transicao (ver o comentario completo no HTML de origem) */

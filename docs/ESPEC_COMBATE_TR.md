@@ -1,5 +1,7 @@
 # ESPEC — COMBATE-TR: a batalha em tempo real como o combate do jogo (R0, 2026-10-29)
 
+> **SUBSTITUÍDO** pela [`docs/TAREFA_V3_LUTA_POC.md`](TAREFA_V3_LUTA_POC.md) (2026-11-08): a luta do jogo é a simulação da POC. O combate por turnos saiu do jogo na LP4 (2026-11-10); este documento fica como registro.
+
 Tarefa: `docs/TAREFA_V2_COMBATE_TR.md` (etapa R0). Worker: Claude Code, Opus 5.5, worktree `v2-combate-tr`. Status: as decisões D-1 a D-9
 (seção 8) foram **DECIDIDAS** pelo Matheus em 2026-10-29, como recomendadas; os números seguem PROPOSTOS, menos os da D-5. Na R0, nenhum código de jogo mudou; a única peça nova foi a
 medida do custo (item 4), com o script e a saída em disco.

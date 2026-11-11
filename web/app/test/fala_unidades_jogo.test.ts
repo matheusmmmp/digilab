@@ -48,7 +48,7 @@ function viver(m: Motor, dias: number, cada: (m: Motor) => void = () => {}): voi
 
 describe("a marca \"fu\": o modular do pet de teste com a fala_unidades", () => {
   test("so no v16, uma vez, no comeco do registro; o replay le a marca e refaz o pet", () => {
-    for (const v of [13, 15, 17, 19]) expect(() => new Motor(101, v).ligarFalaUnidades(), `v${v}`).toThrow(/só o pet de teste/);
+    expect(() => new Motor(101).ligarFalaUnidades(), "v21").toThrow(/só o pet de teste/);
     const m = ovo(101, true);
     expect(m.falaUnidades).toBe(true);
     expect(m.log.filter(e => e[1] === "fu")).toEqual([[m.log[0]![0], "fu", { fala: true }]]);

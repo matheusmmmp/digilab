@@ -4,7 +4,7 @@ import { writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { DIAS_HOJE, SEMENTES_HOJE, VARIANTES_HOJE, todasHoje } from "./dc3d_hoje.ts";
 
-const g = { versao: 1, nota: "DC3d: as vidas de hoje (v13 a v19 e o pet de teste v16), gravadas antes do porte da fala_unidades; sha256",
+const g = { versao: 2, nota: "DC3d: as vidas de hoje (a v21 com o modular e com o A, e o pet de teste v16); regravadas na LP4 da LUTA_POC (a v1 tinha as v13 a v19, gravadas antes do porte da fala_unidades); sha256",
   dias: DIAS_HOJE, sementes: SEMENTES_HOJE, variantes: VARIANTES_HOJE, vidas: todasHoje() };
 const destino = fileURLToPath(new URL("./gabaritos/dc3d_vidas_hoje.json", import.meta.url));
 writeFileSync(destino, JSON.stringify(g, null, 1) + "\n");
