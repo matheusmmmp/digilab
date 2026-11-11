@@ -13,17 +13,19 @@ import {
   sorteiosPoc, statsNpc, statsRivalArena, type EntradaLutaPoc, type IdCena, type LutaPoc, type ResultadoLutaPoc,
 } from "../motor/index.ts";
 import { lutaPocLigada } from "./lutaPoc.ts";
+import { emitirMusica, emitirSom } from "./somEventos.ts";
+import { somDoPassoPoc } from "./somLuta.ts";
 import { carregarEfeitos } from "./telas/lutar/palcoPoc/efeitosJogo.ts";
 import { arquivosPoc, movimentoReduzido, type LadoDesenhoPoc } from "./telas/lutar/palcoPoc/desenhoPoc.ts";
 import {
-  aplicarEventosPoc, consumirPausaPoc, passoDe, passosDaEspera, passosDoQuadro, visualNovoPoc, type VisualPoc,
+  aplicarEventosPoc, consumirPausaPoc, passoDe, passosDaEspera, passosDoQuadro, passosDoTiro, visualNovoPoc, type VisualPoc,
 } from "./telas/lutar/palcoPoc/visualPoc.ts";
 
 /** o que a luta da tela tem de dar no fim: o resultado da mesma luta no motor (null: a luta montada da conferencia, sem motor) */
 /** ko: alguem caiu (os dois, no nocaute duplo); sem ko, a luta chegou ao limite de tempo */
 export interface FimEsperado { vencedor: "a" | "b" | null; relogio: number; passos: number; ko: boolean }
 /** uma luta para o palco: a entrada, o fim esperado, os dois lados como a tela os mostra e o rotulo dela na serie */
-export interface LutaNaTela { entrada: EntradaLutaPoc; esperado: FimEsperado | null; A: LadoDesenhoPoc; B: LadoDesenhoPoc; rotulo: string }
+export interface LutaNaTela { entrada: EntradaLutaPoc; esperado: FimEsperado | null; A: LadoDesenhoPoc; B: LadoDesenhoPoc; rotulo: string; chefe?: boolean }
 export interface FimPoc { titulo: string; texto: string; venceu: boolean | null }
 export interface PalcoPoc {
   L: LutaPoc; v: VisualPoc; A: LadoDesenhoPoc; B: LadoDesenhoPoc; cena: IdCena;
@@ -69,9 +71,13 @@ export function lutasDoResultado(r: ResultadoLutaPoc): LutaNaTela[] {
     esperado: { vencedor: s.vencedor, relogio: s.relogio, passos: s.passos, ko: s.vidaA <= 0 || s.vidaB <= 0 },
     A: ladoDesenho(r.forma), B: ladoDesenho(s.contra),
     /* a Liga tem 6 lutas, a Cidadela 3; a Torre vai ate a primeira que nao for vitoria (o numero de lutas nao aparece) */
+    chefe: r.rival === RIVAL_LIGA,
     rotulo: r.rival === RIVAL_LIGA ? `Luta ${k + 1} de ${LIGA.length}` : ehInstalacao(r.rival) ? `vitória ${k + 1}` : nSerie > 1 ? `Luta ${k + 1} de ${nSerie}` : "",
   }));
 }
+
+/** SOM-UP: a vitoria ou a derrota do pet no fim (o empate fica sem som) */
+const somDoFim = (f: FimPoc): void => { if (f.venceu !== null) emitirSom(f.venceu ? "luta_vitoria" : "luta_derrota"); };
 
 /* ---------------------------------------------------------------- o ritmo */
 /** quadros da tela e a espera do fim. PROPOSTOS, SEM FONTE (os do palco de antes: src/luta.ts) */
@@ -81,6 +87,7 @@ let timer: ReturnType<typeof setTimeout> | undefined;
 /** para o palco (sai da tela: Continuar, ou outra luta comecou) */
 export function fecharPalcoPoc(): void {
   clearTimeout(timer); pular = null; atual = null;
+  emitirMusica("luta", null);
   Object.assign(LUTA_POC, { palco: null, lutando: false, pausado: false, replay: false }); avisar();
 }
 /** o pular da luta em andamento (Desistir e Sair do replay): leva todas as lutas que faltam ao fim, conferindo cada uma, sem desenhar */
@@ -111,9 +118,11 @@ export function assistirPoc(lutas: readonly LutaNaTela[], contexto: string, fim:
   void carregarEfeitos();
   const reduz = movimentoReduzido();
   let j = 0;
-  const abrir = () => {
+  const abrir = (som = true) => {
     const l = lutas[j];
     LUTA_POC.palco = { L: criar(l), v: visualNovoPoc(), A: l.A, B: l.B, cena: l.entrada.cena, k: j, n: lutas.length, rotulo: l.rotulo, contexto: replay ? `Replay · ${contexto}` : contexto, fim: null };
+    /* SOM-UP: a musica do mapa (ou a de chefe, na Liga) e o som de comeco */
+    if (som) { emitirMusica("luta", { luta: l.entrada.cena, chefe: !!l.chefe }); emitirSom(l.chefe ? "luta_chefe" : "luta_pronto"); }
   };
   const conferir = (p: PalcoPoc) => {
     const e = lutas[j].esperado; if (!e) return;
@@ -128,8 +137,10 @@ export function assistirPoc(lutas: readonly LutaNaTela[], contexto: string, fim:
     const p = LUTA_POC.palco; if (!p) return;
     if (LUTA_POC.pausado) { timer = setTimeout(quadro, RITMO_POC.quadroMs); return; }
     const L = p.L, e = lutas[j].esperado, base = reduz ? RITMO_POC.passosReduzido : LUTA_POC.rapido ? RITMO_POC.passosRapido : RITMO_POC.passos;
-    const n = e ? passosDoQuadro(passoDe(L), base, { passos: e.passos, fim: e.ko ? "ko" : "limite" }, reduz) : base;
-    for (let q = 0; q < n && !L.fim && L.relogio < LIMITE_POC_MS; q++) aplicarEventosPoc(p.v, L, passoPoc(L), [p.A.forma, p.B.forma]);
+    const n0 = e ? passosDoQuadro(passoDe(L), base, { passos: e.passos, fim: e.ko ? "ko" : "limite" }, reduz) : base;
+    /* o tiro perto de sair ou de acertar anda devagar na tela (LP3c: o voo curto aparece); os passos e o fim sao os mesmos */
+    const n = reduz ? n0 : passosDoTiro(L, n0);
+    for (let q = 0; q < n && !L.fim && L.relogio < LIMITE_POC_MS; q++) { const ev = passoPoc(L); aplicarEventosPoc(p.v, L, ev, [p.A.forma, p.B.forma]); somDoPassoPoc(L, ev, p.A.sprite, p.B.sprite); }
     avisar();
     if (L.fim || L.relogio >= LIMITE_POC_MS) { conferir(p); esperar(); return; }
     timer = setTimeout(quadro, RITMO_POC.quadroMs + consumirPausaPoc(p.v, reduz));
@@ -143,7 +154,7 @@ export function assistirPoc(lutas: readonly LutaNaTela[], contexto: string, fim:
       p.v.extra += passosDaEspera(k++, RITMO_POC.passos, ko, reduz); avisar();
       if (--falta > 0) { timer = setTimeout(tic, RITMO_POC.quadroMs); return; }
       if (!ultima) { j++; abrir(); avisar(); timer = setTimeout(quadro, RITMO_POC.quadroMs); return; }
-      p.fim = fim(p.L); LUTA_POC.lutando = false; pular = null; avisar();
+      p.fim = fim(p.L); somDoFim(p.fim); LUTA_POC.lutando = false; pular = null; avisar();
     };
     timer = setTimeout(tic, RITMO_POC.quadroMs);
   };
@@ -154,10 +165,10 @@ export function assistirPoc(lutas: readonly LutaNaTela[], contexto: string, fim:
       while (!L.fim && L.relogio < LIMITE_POC_MS) passoPoc(L);
       conferir(p);
       if (j === lutas.length - 1) break;
-      j++; abrir();
+      j++; abrir(false);   /* o pular nao toca o comeco de cada luta */
     }
     const p = LUTA_POC.palco!;
-    p.fim = fim(p.L); LUTA_POC.lutando = false; pular = null; avisar();
+    p.fim = fim(p.L); somDoFim(p.fim); LUTA_POC.lutando = false; pular = null; avisar();
   };
   LUTA_POC.lutando = true;
   abrir(); avisar();

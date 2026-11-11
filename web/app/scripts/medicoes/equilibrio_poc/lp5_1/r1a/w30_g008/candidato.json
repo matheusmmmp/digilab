@@ -1,0 +1,12 @@
+{
+ "nome": "w30_g008",
+ "pesoPonto": 30,
+ "gama": {
+  "vigor": 0.08,
+  "folego": 0.08,
+  "recuperacao": 0.08,
+  "forca": 0.08,
+  "mira": 0.08,
+  "guarda": 0.08
+ }
+}

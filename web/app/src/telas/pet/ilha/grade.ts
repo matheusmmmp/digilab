@@ -268,7 +268,7 @@ export class Ilha {
   }
 
   /* os lugares da planta A (PLANTA_ILHA.lugares): o portao e a barraca no ponto que cabe mais perto do alvo, em grama plana com a folga, longe
-     das arvores do motor (a clareira) e um do outro; o cais na ultima linha de areia antes do mar, na coluna da planta. A frente (+z do glTF):
+     das arvores do motor (a clareira) e um do outro; o cais na beira do mar (a ultima linha de areia), na coluna da planta, `mar` celulas mar adentro e com o pe no fundo do mar (as estacas e o casco do barco entram na agua). A frente (+z do glTF):
      fora da area, para o ponto mais perto dela; dentro (a barraca), para a praca. Cada um abre a clareira dele. Falha alto se faltar lugar */
   private porLugares(): void {
     const P = PLANTA_ILHA, doMotor = this.objetos.filter(o => o.doMotor !== null);
@@ -287,7 +287,7 @@ export class Ilha {
     while (this.cel(i, j + 1)?.tipo === "areia") j++;
     if (this.cel(i, j)?.tipo !== "areia" || this.cel(i, j + 1)?.tipo !== "agua") throw new Error(`sem beira de mar para o cais na coluna ${i} da ilha ${this.cm.layout.nome}`);
     if (doMotor.some(o => Math.hypot(o.x - C.x, o.z - (j + 1)) < C.clareira)) throw new Error(`uma arvore do motor na clareira do cais na ilha ${this.cm.layout.nome}`);
-    this.lugares.push({ nome: "cais", x: C.x, z: j + 1, giro: Math.PI, y: this.altura(C.x, j + 0.5) });
+    this.lugares.push({ nome: "cais", x: C.x, z: j + 1 + C.mar, giro: Math.PI, y: FUNDO_AGUA });
     this.abrir(C.x, j + 1, C.clareira);
   }
 
@@ -357,7 +357,7 @@ export class Ilha {
     /* os marcos espalhados pela moldura (IL-4 revista), cada um com o entorno dele (extras): arbustos e grama alta em grama, pedras em
        qualquer chao plano, ate o raio, longe do marco e uns dos outros; a frente do marco para o ponto mais perto da area */
     const M = P.marcos, r = rng(semente ^ P.sal ^ 0x3a7c05);
-    for (const nome of ["carro", "geladeira", "trilho"] as const) {
+    for (const nome of ["carro", "geladeira", "trilho", "lata"] as const) {
       const G = ENFEITES_GRADE[nome], D = M[nome];
       const [x, z] = this.pertoDe(D.ponto, M.busca, (x, z) => !this.naArea(Math.floor(x), Math.floor(z)) && this.plana(x, z, G.folga, G.chao)
         && !this.caminhos.some(l => pertoDaLinha(x, z, l, P.raioCaminho + G.clareira))

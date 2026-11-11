@@ -572,9 +572,12 @@ def test_estimativa_medida_pela_calibracao_cabe_no_teto():
     assert meta["modelos_devolvidos"] == {"G": ["gemma2:9b"], "H": ["claude-haiku-5-5"], "S": ["claude-sonnet-5-5"]}
 
 
-def test_o_registro_da_rodada_no_plano_confere_com_os_arquivos_de_hoje():
-    """DC4b: a secao 13 do plano (o registro da rodada) existe e casa com os sha256 de hoje; a validacao depende disso"""
-    dc4.exigir_registro(dc4._plano())
+def test_o_registro_da_rodada_no_plano_confere_com_os_arquivos_da_validacao():
+    """DC4b: a secao 13 do plano (o registro da rodada) existe e casa com os sha256 que a validacao da DC4 gravou no meta (a DC4c rodou com
+    esses arquivos). A DC4 esta encerrada (D-DC4D-2): a DC5a mudou `digilab_fala_livre/` e o servidor depois dela (a voz-v4, atras da
+    escolha da voz), entao o registro ja nao casa com os arquivos de hoje, e a validacao da DC4 nao roda de novo (D-DC5A-1)."""
+    meta = json.loads((RAIZ / "artifacts_v3_conversa_dc4/validacao/meta.json").read_text(encoding="utf-8"))
+    assert dc4.registro_do_plano(dc4._plano()) == meta["arquivos"]
 
 
 # ================================================================== 11. DC4b: a voz-v3b (decisao do Matheus em 2026-11-09)

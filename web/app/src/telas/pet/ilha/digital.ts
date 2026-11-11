@@ -7,11 +7,10 @@
        parabola) do alto de um ao do outro. Uma malha de segmentos so.
    Tudo deterministico (a rng da grade com um sal proprio); as contas ficam em digitalConta.ts, sem DOM. Os numeros sao do desenho: PROPOSTO, SEM FONTE. */
 import * as THREE from "three";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import { carregarVariante, curvar } from "./cena.ts";
+import { curvar } from "./cena.ts";
 import { DIGITAL, NUVENS_PINTADAS } from "./constantes.ts";
-import { lugarDaLata, lugaresDasParticulas, segmentosDosFios } from "./digitalConta.ts";
+import { lugaresDasParticulas, segmentosDosFios } from "./digitalConta.ts";
 import { rng, type Ilha } from "./grade.ts";
 
 /** as particulas, e o que a vista chama quando a noite muda */
@@ -277,28 +276,6 @@ export function ceuComGrade(img: HTMLImageElement | ImageBitmap | HTMLCanvasElem
   gl.globalCompositeOperation = "destination-in"; gl.fillStyle = mascara; gl.fillRect(0, 0, w, h);
   g.globalAlpha = G.alfa; g.drawImage(l, 0, 0);
   return c;
-}
-
-/** a lata gigante (D4): o glTF de public/mapa_digital/lata/ (gerado pela Meshy, License.txt ao lado), na altura de DIGITAL.lata, sem sombra
-    no chao; o `quadro` a poe no horizonte a cada quadro, pelo foco da camera (digitalConta.ts, lugarDaLata) */
-export async function lata(ilha: Ilha, base: string):
-    Promise<{ grupo: THREE.Group; quadro: (foco: readonly [number, number], dobra: number, dir: readonly [number, number], meiaLargura: number) => void }> {
-  const L = DIGITAL.lata, { pecas } = await carregarVariante(new GLTFLoader(), new URL(L.arquivo, base).href,
-    { arquivos: [L.arquivo], altura: L.altura, vento: 0, sombra: 0, baixo: false });
-  const grupo = new THREE.Group();
-  for (const p of pecas) {
-    const m = new THREE.Mesh(p.geo, p.mat);
-    (p.mat as THREE.MeshToonMaterial).fog = false;   /* longe, a nevoa do estilo a apagaria; o marco fica com as cores da maquete */
-    m.matrixAutoUpdate = false;
-    m.matrix.copy(p.local);
-    m.frustumCulled = false;   /* o mundo curvo desce o que esta longe no shader: a caixa da malha nao vale */
-    grupo.add(m);
-  }
-  grupo.rotation.y = L.giro;
-  return {
-    grupo,
-    quadro: (foco, dobra, dir, meiaLargura) => { const { x, y, z } = lugarDaLata(ilha, foco, dobra, dir, meiaLargura); grupo.position.set(x, y, z); },
-  };
 }
 
 /** os fios entre os postes: uma malha de segmentos (digitalConta.ts, segmentosDosFios) */
