@@ -45,12 +45,13 @@ const sha = (t: string): string => createHash("sha256").update(t, "utf8").digest
 
 interface Vivida { cerebro: DigiBrain; assinaturas: Record<string, string>[]; m: MotorCorpoMundo; dores: { tick: number; vida_perdida_s: number; dor_antes: number; dor_depois: number }[] }
 /** a vida no laco do TS: o log do Python aplicado a um MotorCorpoMundo com o DigiBrain e a chave do laboratorio ligada */
-function viver(semente: number, log: readonly EventoCorpo[], inatos: typeof INATOS_MODULAR = INATOS_MODULAR, luta = false, antes?: (c: DigiBrain) => void): Vivida {
+function viver(semente: number, log: readonly EventoCorpo[], inatos: typeof INATOS_MODULAR = INATOS_MODULAR, luta = false, antesDe?: (c: DigiBrain, k: number) => void): Vivida {
   const cerebro = new DigiBrain(CONFIG_DIGIBRAIN_LAB, inatos, luta);
-  antes?.(cerebro);                                      // (IG6) o alcance da memoria trocado antes da primeira decisao
+  let decisao = 0;                                       // (IG6) `antesDe`: chamado logo antes de cada decisao, com o numero dela
   const assinaturas: Record<string, string>[] = [];
   const agir = cerebro.agir.bind(cerebro);
   cerebro.agir = (obs, rng) => {                         // a assinatura do estado depois do `agir`, como o Gravador do exportador
+    antesDe?.(cerebro, decisao++);
     const a = agir(obs, rng);
     assinaturas.push(Object.fromEntries(ASSINADOS.map(n => [n, assinar(cerebro[n].estadoInterno())])));
     return a;
@@ -152,11 +153,27 @@ describe("G-PAR-VIDA (PE3 da ponte da luta): o corpo e o M-MEM com o resumo da l
    2 048, D_MAX_ILHA_GRANDE). O arquivo e o digibrain_modular_alcance.json.gz (experiments/exportar_gabarito_digibrain_modular.py --alcance),
    no molde do dos fins: vidas nascidas com o alcance novo. O Python confere que cada uma difere da mesma vida com o alcance de hoje */
 describe("G-PAR-VIDA: as vidas com a memoria de 128 celulas (IG6)", () => {
-  const vidas = lerGz<{ vidas: (VidaFins & { difere_de_hoje: boolean })[] }>("digibrain_modular_alcance.json.gz").vidas;
-  test("o arquivo: tres vidas com o d_max da ilha grande, todas diferentes das de hoje", () => {
+  type VidaAlcance = VidaFins & { difere_de_hoje: boolean; troca_na_decisao?: number; difere_do_ovo?: boolean };
+  const todas = lerGz<{ vidas: VidaAlcance[] }>("digibrain_modular_alcance.json.gz").vidas;
+  const vidas = todas.filter(v => v.troca_na_decisao === undefined), noMeio = todas.filter(v => v.troca_na_decisao !== undefined);
+  test("o arquivo: tres vidas que nascem com o d_max da ilha grande e duas que o recebem no meio, todas diferentes das de hoje", () => {
     expect(D_MAX_ILHA_GRANDE).toBe(2 * INATOS_MODULAR.d_max);
     expect(vidas.map(v => [v.inatos, v.difere_de_hoje])).toEqual([[{ d_max: D_MAX_ILHA_GRANDE }, true], [{ d_max: D_MAX_ILHA_GRANDE }, true], [{ d_max: D_MAX_ILHA_GRANDE }, true]]);
-    expect(vidas.reduce((n, v) => n + v.decisoes.length, 0)).toBe(1152);
+    expect(noMeio.map(v => [v.inatos, v.troca_na_decisao, v.difere_de_hoje])).toEqual([[{}, 150, true], [{}, 1, true]]);
+    expect(noMeio[0].difere_do_ovo).toBe(true);          /* a troca na decisao 150 da outra vida que a de quem nasceu com o alcance */
+    expect(todas.reduce((n, v) => n + v.decisoes.length, 0)).toBe(1920);
+  });
+  /* a troca no meio da vida (o evento "ma" dos pets vivos do jogo; o DigiBrain.alcance_da_memoria do Python): a vida nasce com o alcance
+     de hoje e o recebe logo antes da decisao `troca_na_decisao` */
+  noMeio.forEach(g => {
+    test(`${g.lugar}/${g.dono}/${g.semente}, a troca antes da decisao ${g.troca_na_decisao}: cada decisao e o estado interno no fim`, () => {
+      const v = viver(g.semente, g.log, INATOS_MODULAR, false, (c, k) => { if (k === g.troca_na_decisao) c.alcanceDaMemoria(D_MAX_ILHA_GRANDE); });
+      conferirVida(`${g.lugar}/${g.dono}/${g.semente}`, v, g.decisoes);
+      expect(sha(textoPy(v.cerebro.estadoInterno())), "estado interno no fim").toBe(g.estado);
+      expect([v.cerebro.inatos.d_max, v.cerebro.mem.p.d_max]).toEqual([D_MAX_ILHA_GRANDE, D_MAX_ILHA_GRANDE]);
+      /* sem a troca, a vida e outra */
+      expect(sha(textoPy(viver(g.semente, g.log, INATOS_MODULAR).cerebro.estadoInterno()))).not.toBe(g.estado);
+    });
   });
   vidas.forEach(g => {
     test(`${g.lugar}/${g.dono}/${g.semente} (${JSON.stringify(g.inatos)}): cada decisao e o estado interno no fim`, () => {
@@ -167,7 +184,7 @@ describe("G-PAR-VIDA: as vidas com a memoria de 128 celulas (IG6)", () => {
       /* a mesma vida com o alcance de hoje da outro estado: o arquivo exercita mesmo o d_max */
       expect(sha(textoPy(viver(g.semente, g.log, INATOS_MODULAR).cerebro.estadoInterno()))).not.toBe(g.estado);
       /* e o alcance trocado no meio da vida (o `alcanceDaMemoria` logo no comeco) da a mesma vida de quem nasceu com ele */
-      const meio = viver(g.semente, g.log, INATOS_MODULAR, false, c => c.alcanceDaMemoria(D_MAX_ILHA_GRANDE));
+      const meio = viver(g.semente, g.log, INATOS_MODULAR, false, (c, k) => { if (k === 0) c.alcanceDaMemoria(D_MAX_ILHA_GRANDE); });
       expect(sha(textoPy(meio.cerebro.estadoInterno()))).toBe(g.estado);
     });
   });

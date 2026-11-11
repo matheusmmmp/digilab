@@ -1,8 +1,8 @@
 """O alcance da memoria de lugar na ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secao 12.16, IG6; a IG-6 do Matheus: 128 celulas).
 
 - O numero: `D_MAX_ILHA_GRANDE` e o dobro do `d_max` de sempre, a proporcao do mapa de 128 x 60; o padrao dos inatos nao muda.
-- A troca no meio da vida (`Memoria.alcance`, `DigiBrain.alcance_da_memoria`): so o parametro muda; os episodios ficam como estao; valor
-  invalido falha alto.
+- A troca do parametro (`Memoria.alcance`): so o `d_max` muda; os episodios ficam como estao; valor invalido falha alto.
+- A troca no meio da vida (`DigiBrain.alcance_da_memoria`): duas vidas do gabarito nascem com o alcance de hoje e trocam numa decisao.
 - O gabarito do G-PAR do TS (web/app/test/gabaritos/digibrain_modular_alcance.json.gz) esta em dia byte a byte, e as vidas dele diferem
   das mesmas vidas com o alcance de hoje.
 Sementes: so as dos testes.
@@ -49,6 +49,12 @@ def test_o_gabarito_do_ts_esta_em_dia_e_as_vidas_diferem_das_de_hoje():
     dados = G.alcance()
     assert dados == (G.PASTA / G.ARQUIVO_ALCANCE).read_bytes()
     g = json.loads(gzip.decompress(dados))
-    assert [(v["dono"], v["lugar"], v["semente"]) for v in g["vidas"]] == [v[:3] for v in G.VIDAS_ALCANCE]
-    for v in g["vidas"]:
+    n = len(G.VIDAS_ALCANCE)
+    assert [(v["dono"], v["lugar"], v["semente"]) for v in g["vidas"][:n]] == [v[:3] for v in G.VIDAS_ALCANCE]
+    for v in g["vidas"][:n]:
         assert v["inatos"] == {"d_max": D_MAX_ILHA_GRANDE} and len(v["decisoes"]) == 384 and v["difere_de_hoje"] is True
+    # a troca no meio da vida (o `DigiBrain.alcance_da_memoria`, o evento "ma" do jogo): nasce com o alcance de hoje e troca numa decisao
+    meio = g["vidas"][n:]
+    assert [(v["dono"], v["lugar"], v["semente"], v["troca_na_decisao"]) for v in meio] == [tuple(v) for v in G.VIDAS_ALCANCE_NO_MEIO]
+    assert all(v["inatos"] == {} and len(v["decisoes"]) == 384 for v in meio)
+    assert any(v["troca_na_decisao"] > 1 and v["difere_de_hoje"] and v["difere_do_ovo"] for v in meio)

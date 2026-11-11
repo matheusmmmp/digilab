@@ -357,7 +357,7 @@ describe("a memoria de 128 celulas (IG6): a v25 e o evento ma", () => {
     expect(JSON.stringify(semMarca)).toBe(antes);
     expect(() => m.alongarMemoria()).toThrow(/memória longa/);
     expect(() => m.aplicarEvento([t, "ma", { alcance: 2048 }])).toThrow();
-    viver(m, 1); viver(gemeo, 1);
+    viver(m, 1);
     expect(Motor.reproduzir(5151, copia(m.log), v).assinatura()).toBe(m.assinatura());
     /* o registro cortado antes do "ma" e a vida de antes */
     expect(Motor.reproduzir(5151, copia(m.log.slice(0, n)), v).assinatura()).toBe(antes);
@@ -374,6 +374,14 @@ describe("a memoria de 128 celulas (IG6): a v25 e o evento ma", () => {
     expect(dMax(m)).toBe(2048);
     viver(m, .5);
     expect(Motor.reproduzir(707, copia(m.log), 24).assinatura()).toBe(m.assinatura());
+    /* sem nenhum "cb" antes (o pet que nunca escolheu cerebro): o evento vale, e o modular criado depois nasce com o alcance */
+    const cru = new Motor(808, 24);
+    cru.avancar(90);
+    cru.alongarMemoria();
+    cru.trocarCerebro("modular");
+    expect(dMax(cru)).toBe(2048);
+    viver(cru, .5);
+    expect(Motor.reproduzir(808, copia(cru.log), 24).assinatura()).toBe(cru.assinatura());
     /* a v25 desde o ovo */
     const ovo = ligarProduto(new Motor(707));
     expect([ovo.versao, ovo.cerebroAtual, dMax(ovo), ovo.alcanceMemoria]).toEqual([25, "modular", 2048, 2048]);

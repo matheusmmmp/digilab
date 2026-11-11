@@ -465,7 +465,8 @@ export class Motor {
     if (this.falaUnidades || this.nDecisoes || this.nDono || this.e.tick !== TICK_INICIAL || this.modular === null || this.modular.k !== 0)
       throw new Error("a marca da fala com conteúdo vai uma vez, no começo do registro");
     this.falaUnidades = true;
-    this.modular = new DigiBrain(CONFIG_DIGIBRAIN_LAB_FALA, INATOS_MODULAR, this.ponteLuta);   // o modular de hoje sai sem ter decidido
+    /* o modular de hoje sai sem ter decidido; o novo fica com o alcance da memoria do pet (IG6; no pet de teste, o de sempre) */
+    this.modular = new DigiBrain(CONFIG_DIGIBRAIN_LAB_FALA, { ...INATOS_MODULAR, d_max: this.alcanceMemoria } as typeof INATOS_MODULAR, this.ponteLuta);
   }
   registrarOrigem(o: Origem): void {
     if (this.log.some(ev => ev[1] !== "c" && ev[1] !== "p" && ev[1] !== "pl" && ev[1] !== "fu")) throw new Error("a origem precisa ser o primeiro evento do registro");

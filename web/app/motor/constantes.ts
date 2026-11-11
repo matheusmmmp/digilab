@@ -115,16 +115,16 @@ export const VERSAO_V22 = 22;
 export const VERSAO_V23 = 23;
 /** a versao de pet que nasce na ilha grande (a v23 com o mundo `grande`; docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG4) */
 export const VERSAO_V24 = 24;
-/** a versao luta pela luta da POC: a v21, a v22, a v23, a v24 e a v25 */
 /** a versao de pet que nasce com a memoria de lugar de 128 celulas (a v24 com o `d_max` da ilha grande; IG6) */
 export const VERSAO_V25 = 25;
+/** a versao luta pela luta da POC: a v21, a v22, a v23, a v24 e a v25 */
 export const ehLutaPoc = (versao: number): boolean =>
   versao === VERSAO_V21 || versao === VERSAO_V22 || versao === VERSAO_V23 || versao === VERSAO_V24 || versao === VERSAO_V25;
-/** a versao luta com a tabela da rodada de equilibrio (LUTA_V23): a v23 e a v24, que e a v23 na ilha grande */
+/** a versao luta com a tabela da rodada de equilibrio (LUTA_V23): a v23, a v24 (a v23 na ilha grande) e a v25 (a v24 com a memoria longa) */
 export const ehLutaV23 = (versao: number): boolean => versao === VERSAO_V23 || versao === VERSAO_V24 || versao === VERSAO_V25;
 /** a versao nasce na ilha com agua de 64 x 30: a v22 e a v23 (a v23 e a v22 com a luta nova) */
 export const nasceNaAgua = (versao: number): boolean => versao === VERSAO_V22 || versao === VERSAO_V23;
-/** a versao nasce na ilha grande: a v24 */
+/** a versao nasce na ilha grande: a v24 e a v25 */
 export const nasceNaGrande = (versao: number): boolean => versao === VERSAO_V24 || versao === VERSAO_V25;
 /** a versao nasce com a memoria de lugar de 128 celulas: a v25 */
 export const nasceComMemoriaLonga = (versao: number): boolean => versao === VERSAO_V25;

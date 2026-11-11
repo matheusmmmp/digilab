@@ -551,8 +551,9 @@ diz que mudar não ajuda. Fica a mudança da memória (128 células), que não d
   com ele.
 - **A assinatura** dos pets que não recebem o evento não muda; a de quem recebe ganha uma marca do alcance.
 - **A paridade:** o gabarito novo `digibrain_modular_alcance.json.gz`, três vidas do modular nascidas com 128 células, que a web refaz
-  decisão a decisão; cada uma difere da mesma vida com o alcance de hoje. A troca antes da primeira decisão dá a mesma vida de quem
-  nasceu com o alcance. A troca no meio de uma vida já andada é conferida só no jogo (o replay refaz a vida).
+  decisão a decisão; cada uma difere da mesma vida com o alcance de hoje. O mesmo arquivo tem duas vidas que nascem com o alcance de
+  hoje e o recebem no meio (antes da decisão 1 e antes da 150, pelo `DigiBrain.alcance_da_memoria` do Python); a web as refaz com a
+  troca na mesma decisão. A da decisão 150 difere tanto da vida de hoje quanto da de quem nasceu com o alcance.
 
 **A conferência do efeito** (o retorno da 12.14, na ilha grande, com o modular; `MEDIR_IG6=1`, chave `ig6_retorno` do artefato):
 
@@ -569,5 +570,12 @@ Por semente, a 70 células, a menor distância ao comedouro em um dia foi 1,6, 5
 3 células do comedouro, que é o critério do plano. O efeito existe e é parcial. A 40 células uma vida das cinco deixou de chegar no
 prazo; com cinco sementes não dá para dizer se é efeito ou variação. Nada mais foi ajustado depois de ver este número.
 
-**O que não foi verificado:** a suíte inteira do Python; o custo no celular; a troca do alcance no meio da vida no Python (só há o caso
-do parâmetro trocado antes da primeira decisão e o teste de unidade).
+**A revisão separada** (um agente de leitura, sobre o commit `af254d5b`) não achou defeito de save, de replay nem de assinatura. Apontou
+que a troca no meio da vida não tinha paridade com o Python e que o `DigiBrain.alcance_da_memoria` do Python nunca era executado: as
+duas vidas com a troca no meio entraram no gabarito por isso. Outros ajustes: o pet que nunca escolheu cérebro ganhou um caso no teste
+do jogo, o modular recriado pela fala do pet de teste passa a herdar o alcance do pet, e a docstring do medidor foi corrigida (só a
+v25 é medida no retorno). Fica registrado: a versão não entra na assinatura, então um v25 e um v24 sem o evento, com a mesma vida,
+assinam igual até a memória mudar uma decisão; e um save com o `ma` não abre num cliente antigo, como já acontecia com o `mi`.
+
+**O que não foi verificado:** a suíte inteira do Python; o custo no celular; o retorno medido com a v24 que ganhou o alcance pelo
+evento (só a v25 foi medida).

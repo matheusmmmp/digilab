@@ -132,8 +132,8 @@ function medirAdendo(): Record<string, unknown> {
   return out;
 }
 
-/** a conferencia da IG6 (secao 12.16): o mesmo retorno, na ilha grande, com a v25 (a memoria de 128 celulas) e com a v24 que ganhou o
-    alcance pelo evento "ma" logo no comeco; entra no mesmo artefato, na chave `ig6_retorno` */
+/** a conferencia da IG6 (secao 12.16): o mesmo retorno, na ilha grande, com a v25 (a memoria de 128 celulas desde o ovo); entra no
+    mesmo artefato, na chave `ig6_retorno`. A v24 com o evento "ma" nao e medida aqui */
 function medirRetornoIg6(): Record<string, unknown> {
   const out: Record<string, unknown> = {};
   for (const d of RETORNOS.grande_128x60) {
