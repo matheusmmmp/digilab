@@ -203,5 +203,6 @@ describe("o registro do grupo e o replay", () => {
     const g2 = new Grupo(CMU, 101);
     g2.entrar("A", sem, "x", "y");
     expect(() => g2.avancar(1)).toThrow(/sem perceber/);
+    expect(() => g.mundoDe("A").mudarIlha(15, "mvp_agua")).toThrow(/fora do grupo/);   // a troca de ilha e de um pet so (IA4)
   });
 });
