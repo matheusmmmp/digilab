@@ -15,7 +15,7 @@ import { MAPA_PADRAO, Mundo, celulasSecas, eventoDeixarBola, eventoDeixarComida,
 import { LacoGravado, cerebroDa, json, ler, type Rec, type Vida } from "./laco_gravado.ts";
 
 const { texto, g: G } = ler("./gabaritos/ilha_grande_python.json");
-const SHA = "a1f3ec4588133ae5e74d7c1127bda7368506d64d4850491d57b00336f514fa4f";
+const SHA = "87f279ddd501aa361e93c76af0fef1087f650c7835bdd23ce3c5b377e3e5f620";
 type VidaGrande = Vida & {
   conferido: { cruzou_pela_ponte: number; rolagens: number; posicoes_do_pet: number; tirados_da_agua: { comida: number; levar: number };
                tirados_da_arvore_e_do_marco: Record<"arvore" | "marco", { comida: number; levar: number }> };
@@ -24,7 +24,7 @@ const VIDAS = G.vidas as VidaGrande[];
 const CM = CMU_GRANDE, NX = CM.celulas_x, NY = CM.celulas_y, SUB = CM.sub;
 const mundo = (semente = 101): Mundo => new Mundo({ semente, cfg: CM, contrato: CONFIG_CONTRATO_AGUA });
 const centro = (cx: number, cy: number): [number, number] => [cx * SUB + SUB / 2, cy * SUB + SUB / 2];
-const NA_ARVORE = centro(33, 29), NO_MARCO = centro(31, 21);
+const NA_ARVORE = centro(30, 14), NO_MARCO = centro(31, 21);
 
 describe("o mundo de 128 x 60", () => {
   test("o mapa e o do Python, com a arvore e o marco fechados e o mar em toda a borda", () => {
@@ -35,7 +35,7 @@ describe("o mundo de 128 x 60", () => {
     expect(Object.keys(AGUA_POR_LAYOUT)).toEqual(["mvp_agua", "grande"]);
     expect(new Set(AGUA_ILHA_GRANDE.join(""))).toEqual(new Set([AGUA_MAR, AGUA_DOCE, TERRA, PONTE, ARVORE_FECHADA, MARCO_FECHADO]));
     expect(new Set(AGUA_ILHA_GRANDE[0] + AGUA_ILHA_GRANDE[NY - 1] + AGUA_ILHA_GRANDE.map(l => l[0] + l[NX - 1]).join(""))).toEqual(new Set([AGUA_MAR]));
-    expect(AGUA_ILHA_GRANDE[29][33]).toBe(ARVORE_FECHADA);
+    expect(AGUA_ILHA_GRANDE[14][30]).toBe(ARVORE_FECHADA);
     expect(AGUA_ILHA_GRANDE[21][31]).toBe(MARCO_FECHADO);
     /* mais de tres vezes a terra livre do mundo de hoje */
     const livres = (cm: typeof CM): number => celulasSecas(cm)!.filter(Boolean).length;

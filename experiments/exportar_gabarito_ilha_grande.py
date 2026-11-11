@@ -31,7 +31,7 @@ ARQUIVO = RAIZ / "web" / "app" / "test" / "gabaritos" / "ilha_grande_python.json
 CM = CONFIG_MUNDO_GRANDE
 CC = ag.CC
 DIAS = ag.DIAS
-ARVORE, MARCO = (33, 29), (31, 21)          # uma celula de arvore e uma de marco (o carro) do mapa; o `gerar` confere
+ARVORE, MARCO = (30, 14), (31, 21)          # uma celula de arvore e uma de marco (o carro) do mapa; o `gerar` confere
 # em subunidades (o mapa vai de 0 a 2047 e de 0 a 959); a ponte do meio fica nas colunas 81 e 82 das linhas 33 e 34
 PONTE_MEIO = (81, 83, 33, 35)
 CABECEIRAS = ((79 * CM.sub + CM.sub // 2, 34 * CM.sub), (84 * CM.sub + CM.sub // 2, 34 * CM.sub))

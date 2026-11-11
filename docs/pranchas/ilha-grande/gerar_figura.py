@@ -23,6 +23,11 @@ MAR, DOCE, TERRA, PONTE, ARVORE, MARCO = "~", "r", ".", "=", "T", "#"
 # os lugares e os marcos (x, y em celulas): PROPOSTO
 LUGARES = {"lar": (20, 30), "praça": (64, 30), "saco": (24, 24), "portão": (64, 7), "barraca": (102, 21), "cais": (72, 51)}
 MARCOS = {"carro": (30, 21, 3, 2), "lata": (34, 13, 2, 2), "geladeira": (103, 44, 1, 1), "trilho": (110, 31, 2, 3)}   # x, y, largura, altura
+# os caminhos de terra da planta da vista (web/app/src/telas/pet/ilha/constantes.ts, PLANTA_ILHA_GRANDE), em celulas: nenhuma arvore a
+# menos de FOLGA_CAMINHO deles nem dentro da praca
+CAMINHOS = (((28.5, 30.5), (40, 30.5), (64, 30.5)), ((64, 30.5), (64, 9)), ((64, 30.5), (74, 33), (80, 34), (84, 34), (92, 28), (101, 22)),
+            ((64, 30.5), (68, 42), (72, 50)))
+FOLGA_CAMINHO, RAIO_PRACA = 2.2, 6.5
 PONTES = (17, 33, 47)                 # as linhas de cima de cada ponte (duas linhas cada)
 LAGOS = ((87, 8, 6, 3.2), (27, 41, 7, 3.6), (52, 15, 3.2, 2))      # cx, cy, rx, ry
 BOSQUES = ((24, 17, 6, 3, 12), (36, 46, 8, 3, 12), (76, 13, 6, 3, 9), (104, 16, 6, 3, 12), (108, 40, 5, 4, 9), (58, 45, 6, 3, 8),
@@ -83,6 +88,15 @@ def gerar() -> list[str]:
             return False
         if any(abs(y - p) < 4 and abs(x - rio_x(p)) < 7 for p in PONTES):
             return False
+        cx, cy = x + 0.5, y + 0.5
+        if math.hypot(cx - LUGARES["praça"][0], cy - LUGARES["praça"][1]) < RAIO_PRACA:
+            return False
+        for linha in CAMINHOS:
+            for (ax, ay), (bx, by) in zip(linha, linha[1:]):
+                dx, dy = bx - ax, by - ay
+                u = max(0.0, min(1.0, ((cx - ax) * dx + (cy - ay) * dy) / (dx * dx + dy * dy)))
+                if math.hypot(cx - (ax + u * dx), cy - (ay + u * dy)) < FOLGA_CAMINHO:
+                    return False
         return all(math.hypot(x - ax, y - ay) >= 2.2 for ax, ay in arvores)
 
     def plantar(sorteio, quantas: int) -> None:
