@@ -668,3 +668,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — ARVORE_SACODE, S2: o sacudir no motor em TS, sem versão de pet (worker, Claude Code, Opus 5.5, branch `v3-arvore-sacode-s2`)](registro/2026-11.md)
 - [2026-11-11 — MUNDO_ENFEITES, a prancha da TV de tubo em cartoon (Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-objeto-tv`)](registro/2026-11.md)
 - [2026-11-11 — MMO0: a medida Chrome × Node (Gerente da frente MMO, Claude Code, Opus 5.5, branch `v3-mmo0`)](registro/2026-11.md)
+- [2026-11-11 — COOPERACAO, CO4a: a água dentro do grupo (Claude Code, Opus 5.5, branch `v3-cooperacao-co4a`)](registro/2026-11.md)

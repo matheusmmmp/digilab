@@ -248,3 +248,22 @@ O `web/app/motor/grupo.ts` é o porte do `digilab/grupo.py`, sem tela e sem vers
     projeção. Só o estado das rngs fica fora (D-CO2c-5).
 - **Fora:** o degrau 1b (D-CO2c-3) e a ligação com o `Motor` do jogo, que é a CO4.
 - **Os desvios:** D-CO2c-1 a D-CO2c-5, no registro de 2026-11.
+
+## CO4a, a água dentro do grupo (2026-11-11, Claude Code, Opus 5.5, branch `v3-cooperacao-co4a`)
+
+A CO4 virou quatro PRs (D-CO4-1):
+- **CO4a:** a água no grupo;
+- **CO4b:** o `Motor` do jogo dentro do `Grupo`, um tick por vez, como o `_um_tick` do Python;
+- **CO4c:** o save e os dois ovos, com a `VERSAO_PET` 24;
+- **CO4d:** as telas.
+
+Esta parte deixa os dois pets viverem na ilha com água, onde o jogo nasce:
+
+- **No grupo, o controlador sozinho do contrato vale** (`digilab/mundo.py`, `MotorMundo`; `web/app/motor/mundo.ts`, `Mundo`). O cone e as
+  paredes seguem de um pet só.
+- **O gabarito:** `experiments/exportar_gabarito_grupo_agua.py` grava `web/app/test/gabaritos/grupo_agua_python.json.gz`, três vidas de dois
+  pets no `mvp_agua`.
+- **Os testes:**
+  - `tests/test_cooperacao_agua.py` refaz o gabarito byte a byte, rejoga o registro e confere que nenhum pet fica na água;
+  - `web/app/test/grupo_agua.test.ts` é o G-PAR-GRUPO nesse mundo, decisão a decisão, com o registro do contrato.
+- **Os desvios:** D-CO4-1, D-CO4a-1 e D-CO4a-2, no registro de 2026-11.

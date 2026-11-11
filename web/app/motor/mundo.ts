@@ -1000,7 +1000,9 @@ export class Mundo {
     if (this.comum.secas !== null && !this.cct.controlador)
       throw new Error("o layout com agua exige o controlador do contrato (ConfigContrato.controlador)");
     if (contratoLigado(this.cct)) {
-      if (dado !== undefined) throw new Error("o contrato da P4 roda com um pet, fora do grupo");
+      /* no grupo, so o controlador sozinho (a ilha com agua; CO4a): o cone e as paredes seguem de um pet so, como no Python */
+      if (dado !== undefined && (this.cct.sensores || this.cct.paredes))
+        throw new Error("o contrato da P4 roda com um pet, fora do grupo; no grupo, so o controlador (a agua)");
       this.montarContrato();
     }
   }
