@@ -2,7 +2,7 @@
 "Sim, fica cartoon": formas lisas e cores chapadas, como o carro, a geladeira e o poste).
 
 O gabinete e uma superelipse levada de tras para a frente (o fundo estreita, como o tubo); a moldura e a tela sao pecas separadas na
-frente, para a tela poder mostrar alguma coisa depois (a mascara tv_luz.png acende so o vidro); dois botoes, o alto-falante pintado, quatro
+frente, para a tela poder mostrar alguma coisa depois (a funcao vidro ja marca o que acenderia; a mascara de luz fica para a TV-3); dois botoes, o alto-falante pintado, quatro
 pes, a antena em V e o musgo no pe. A forma segue a televisionVintage do Kenney Furniture Kit (CC0, Assets/kits3d/kenney_furniture) so
 como referencia de desenho: nenhum vertice e nenhum pixel dela esta aqui. Nada vem da Meshy. A mesma entrada da sempre o mesmo arquivo.
 
@@ -13,7 +13,7 @@ from pathlib import Path
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from comum import (BRILHO, CINZA_ESC, CROMO, FERRO, FERRO_CLARO, OURO, OURO_CLARO, OURO_ESC, cor, cupula, exportar, exportar_luz, por,  # noqa: E402
+from comum import (BRILHO, CINZA_ESC, CROMO, FERRO, FERRO_CLARO, OURO, OURO_CLARO, OURO_ESC, cor, cupula, exportar, por,  # noqa: E402
                    revolucao, tons, triangulos, tronco, tubo, tufos)
 
 # ---------------------------------------------------------------- as medidas (unidades do modelo; a vista normaliza a altura). PROPOSTO, SEM FONTE
@@ -102,7 +102,6 @@ def pecas():
 def main(saida: str) -> None:
     ps = pecas()
     print("TV", exportar(ps, saida, "tv", CASCA, "tv.py (DigiLab)"), "triangulos", triangulos(ps))
-    exportar_luz(ps, {"tela": vidro}, saida, "tv")
 
 
 if __name__ == "__main__":
