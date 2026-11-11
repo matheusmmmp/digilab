@@ -1,0 +1,29 @@
+{
+ "descricao": "A calibracao da DC5 (DC5b; docs/PLANO_ANALISE_V3_CONVERSA_DC5.md, secoes 5, 7 e 10): metade do tamanho da validacao, a base 20262900 da subfaixa da calibracao (D-DC5-1), os 2 roteiros da calibracao. A estimativa maxima de US$ 0,50 e o pedido da Gerente da CONVERSA_PET (2026-11-10).",
+ "fase": "calibracao",
+ "unidades": {
+  "bases": [
+   20262900
+  ]
+ },
+ "plano": "docs/PLANO_ANALISE_V3_CONVERSA_DC5.md",
+ "orcamento_por_dia": 16,
+ "bracos": [
+  "G",
+  "H"
+ ],
+ "vozes": [
+  "jogo",
+  "v4"
+ ],
+ "teto_usd": 3.0,
+ "dias": 14,
+ "estimativa_maxima_usd": 0.5,
+ "n_e3_por_pedido": 10,
+ "n_e2": 15,
+ "min_ep_e2": 5,
+ "n_sequencias": 3,
+ "n_es": 3,
+ "roteiros": "experiments/configs/v3_conversa_dc5/roteiros_calibracao.json",
+ "saida": "artifacts_v3_conversa_dc5/calibracao"
+}

@@ -131,6 +131,9 @@ FAIXAS_RESERVADAS = (
                          "calibracao da DC4 e 20262500-20262899 a validacao da DC4, uma vez (docs/PLANO_ANALISE_V3_CONVERSA_DC4.md, secao 7; "
                          "DC4-1, aprovada pelo Matheus em 2026-11-08; as subfaixas do conversa-v1 nunca rodaram, e a avaliacao antiga, "
                          "se voltar, pede faixa nova)"),
+    (20262900, 20263499, "CONVERSA_PET, DC5: 20262900-20263199 a calibracao da DC5 e 20263200-20263499 a validacao da DC5, uma vez "
+                         "(docs/PLANO_ANALISE_V3_CONVERSA_DC5.md, secao 7; D-DC5-1, pedida a Gerente da CONVERSA_PET e aprovada pelo "
+                         "Matheus em 2026-11-10)"),
     (79101, 79505, "CONVERSA_PET, DC3: a rede escolhendo falar, a run unica (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, secao 3; "
                    "conferida livre pelo Gerente da CONVERSA_PET e aprovada pelo Matheus em 2026-11-07, DC3-8)"),
     (85101, 85505, "INDIVIDUALIDADE, I2: a linha de base descritiva, a run unica (docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md, secao 2, IP-9; "
