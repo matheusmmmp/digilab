@@ -68,6 +68,9 @@ export const ENFEITES_MODELOS = {
   /* a lata gigante de refrigerante (as faixas pastel e as cerejas; feita a mao por script em 2026-11-10, secao 17): era o marco do horizonte
      do Digital (D4) e agora fica dentro do mapa, tombada de leve, mais alta que os pinheiros (PROPOSTO, SEM FONTE) */
   lata: { arquivos: ["lata/lata.gltf"], altura: 7, vento: 0, sombra: 2.4, baixo: false },
+  /* a TV de tubo em cartoon, com a antena (feita a mao por script em 2026-11-11, secao 20): na escala de brinquedo da geladeira; a tela
+     ainda nao acende a noite (TV-3). PROPOSTO, SEM FONTE */
+  tv: { arquivos: ["tv/tv.gltf"], altura: 2.6, vento: 0, sombra: 1.0, baixo: false },
 } as const satisfies Record<string, Modelo>;
 export type NomeEnfeite = keyof typeof ENFEITES_MODELOS;
 /** a mascara das partes que acendem a noite (o emissiveMap; fora do glTF, ao lado dele), por enfeite que tem luz */
