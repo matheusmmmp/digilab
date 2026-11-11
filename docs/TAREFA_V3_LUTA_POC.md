@@ -763,6 +763,23 @@ no alugado da Fábrica.
   Ringue em 0,53 das tentativas. Quem decide as séries são as regras dos mapas e a vida sem cura, não os stats do rival.
 - A (b), aceitar o G1 a G3 como reprovados, volta ao Matheus no PR #789 antes de valer.
 
+## Resultado da LP5-4 (a conferência)
+
+A calibração fechou com o `lp5_3` (a D-LP5-21: "Sim, segue"). A conferência rodou uma vez, nas sementes 87xxx, no commit `d4debac3`.
+A tabela inteira está em `web/app/scripts/medicoes/equilibrio_poc/lp5_4/conferencia/comparacao.md`.
+
+| | calibração | conferência |
+|---|---|---|
+| metas que passam | 10 de 21 | 9 de 21 |
+| P1, o Gazimon (sem treino / típico) | 0,380 / 0,627 | 0,391 / 0,611 |
+| P4, os pets do Champion acima de 0,8 | 0,85 (passa) | 0,78 (falha) |
+| P5, as vidas no Mega | 0,19 | 0,22 |
+| G4, o Salão | 0,740/0,852/0,940/0,844 | 0,722/0,865/0,927/0,840 |
+
+**O P4 é a única meta que muda de lado,** por uma diferença que cabe no erro de 100 pets. As outras ficam no mesmo lado. A medida rodou
+duas vezes, com os mesmos dados, por um arquivo escrito no meio da primeira (D-LP5-4-2). Nenhum número muda; o próximo passo é a LP5-5
+(o candidato no jogo, pela D-LP5-7), com a decisão do Matheus.
+
 ## Resultado da LP3c (2026-11-10)
 
 Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp3c`, a pedido do Gerente de sprites e luta. O pedido seguiu a revisão dos
