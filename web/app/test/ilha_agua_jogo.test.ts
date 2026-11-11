@@ -23,6 +23,8 @@ import { versaoDoOvo, versoesQueAbrem } from "../src/lutaPoc.ts";
 import { ligarProduto } from "../src/produto.ts";
 import { ehPetDoJogador } from "../src/nivelTela.ts";
 import { CHAVE, petExemplo, textoSave, type Armazenamento } from "../src/save.ts";
+import { CHAVE_TAMER } from "../src/tamer.ts";
+import { noMapa, regiaoDe } from "../motor/mundo.ts";
 
 const R = CONFIG_CONTRATO_AGUA.r_pet, SUB = CMU_GRANDE.sub;
 const DX = (CMU_GRANDE.layout.ninho[0] - CMU_MVP.layout.ninho[0]) * SUB, DY = (CMU_GRANDE.layout.ninho[1] - CMU_MVP.layout.ninho[1]) * SUB;
@@ -56,9 +58,17 @@ function viver(m: Motor, dias: number): number {
   }
   return fora;
 }
-/** a assinatura sem o mundo: o que nao pode mudar numa troca de ilha */
+/** a assinatura sem o mundo e sem o lugar dos episodios que o DigiBrain modular lembra (o ponto, o lugar e a regiao, que andam com o
+    mundo na ida para a ilha grande): o que nao pode mudar numa troca de ilha */
 function semMundo(x: Motor): string {
-  const a = (JSON.parse(x.assinatura()) as unknown[]).slice(0, -1), v11 = a[a.length - 1] as [string, unknown, Record<string, unknown>, number];
+  const semLugar = (_k: string, v: unknown): unknown => {
+    if (v && typeof v === "object" && !Array.isArray(v) && "ponto" in v && "lugar" in v) {
+      const { ponto: _p, lugar: _l, regiao: _r, ...resto } = v as Record<string, unknown>;
+      return resto;
+    }
+    return v;
+  };
+  const a = (JSON.parse(x.assinatura(), semLugar) as unknown[]).slice(0, -1), v11 = a[a.length - 1] as [string, unknown, Record<string, unknown>, number];
   if (v11[0] !== "v11" || !("mundo" in v11[2])) throw new Error("a assinatura mudou de forma");
   delete v11[2].mundo;
   return JSON.stringify(a);
@@ -253,5 +263,67 @@ describe("no app", () => {
     const ovo = jogoAtual().motor;
     expect([ovo.versao, ovo.naIlhaGrande, ovo.log.some(e => e[1] === "mi")]).toEqual([23, true, false]);
     expect((JSON.parse(a.d[CHAVE]!) as { versao: number }).versao).toBe(23);
+  });
+});
+
+describe("o que o pet lembrava vai junto (o DigiBrain modular, o cerebro padrao dos ovos)", () => {
+  type Ep = { id: number; ponto: [number, number]; lugar: [number, number]; regiao: number; decisao: number };
+  const lembrados = (m: Motor): Ep[] => {
+    /* o modular do Motor, mesmo com o cerebro A decidindo (o `lab` so o mostra quando e ele quem decide) */
+    const mem = (m as unknown as { modular: NonNullable<Motor["lab"]> }).modular.mem;
+    return JSON.parse(JSON.stringify([...mem.episodios, ...mem.guardados()])) as Ep[];
+  };
+  for (const v of [21, 22] as const) test(`a v${v} com o modular: cada lugar lembrado anda o deslocamento do lar e fica em celula livre; o replay refaz`, () => {
+    const m = ligarProduto(new Motor(5151, v));
+    expect(m.cerebroAtual).toBe("modular");
+    viver(m, 3);
+    const antes = lembrados(m);
+    expect(antes.length).toBeGreaterThan(5);
+    m.mudarIlha();
+    const depois = lembrados(m), mu = m.mundo!;
+    expect(mu.trocaMaior!.lugares_lembrados).toBe(antes.length);
+    expect(depois.map(e => [e.id, e.decisao])).toEqual(antes.map(e => [e.id, e.decisao]));
+    let exatos = 0;
+    for (let i = 0; i < antes.length; i++) {
+      const alvo = noMapa(antes[i].ponto[0] + DX, antes[i].ponto[1] + DY, mu.cm), d = depois[i];
+      expect(d.ponto, `episodio ${d.id}`).toEqual(mu.emTerra(...alvo));
+      expect(mu.seca(...d.ponto), `episodio ${d.id}`).toBe(true);
+      expect(d.lugar).toEqual([Math.floor(d.ponto[0] / SUB), Math.floor(d.ponto[1] / SUB)]);
+      expect(d.regiao).toBe(regiaoDe(d.ponto[0], mu.cm));
+      if (d.ponto[0] === alvo[0] && d.ponto[1] === alvo[1]) exatos++;
+    }
+    expect(exatos).toBeGreaterThan(0);
+    /* o que ele lembrava perto do comedouro de la fica perto do comedouro de ca */
+    const perto = (eps: Ep[], c: readonly [number, number]) => eps.filter(e => Math.hypot(e.ponto[0] - c[0], e.ponto[1] - c[1]) <= 3 * SUB).length;
+    const comedouroDeLa: [number, number] = [CMU_MVP.layout.comedouro[0] * SUB + SUB / 2, CMU_MVP.layout.comedouro[1] * SUB + SUB / 2];
+    expect(perto(depois, [comedouroDeLa[0] + DX, comedouroDeLa[1] + DY])).toBe(perto(antes, comedouroDeLa));
+    expect(viver(m, 1)).toBe(0);
+    expect(Motor.reproduzir(5151, copia(m.log), v).assinatura()).toBe(m.assinatura());
+  });
+
+  test("com o cerebro A decidindo, a memoria do modular (se existe) tambem anda; sem o modular, nada a deslocar", () => {
+    const m = ligarProduto(new Motor(5151, 21));
+    viver(m, 2);
+    m.trocarCerebro("a");
+    viver(m, .5);
+    const antes = lembrados(m);
+    m.mudarIlha();
+    expect(m.mundo!.trocaMaior!.lugares_lembrados).toBe(antes.length);
+    expect(Motor.reproduzir(5151, copia(m.log), 21).assinatura()).toBe(m.assinatura());
+  });
+});
+
+describe("no app, depois da ida", () => {
+  const armaz = (d: Record<string, string> = {}): Armazenamento & { d: Record<string, string> } =>
+    ({ d, getItem: k => (k in d ? d[k]! : null), setItem(k, v) { d[k] = v; } });
+
+  for (const v of [21, 22, 23]) test(`o pet de exemplo v${v} que ninguem tocou nao paga Bits ao abrir; depois de um cuidado, e do jogador`, () => {
+    const exemplo = petExemplo(v);
+    exemplo.avancar(240);
+    const a = armaz({ [CHAVE]: textoSave(exemplo) });
+    iniciarJogo(a);
+    const m = jogoAtual().motor;
+    expect([m.versao, m.naIlhaGrande, ehPetDoJogador(m)]).toEqual([v, true, false]);
+    expect(a.d[CHAVE_TAMER] ?? "").not.toContain('"bits"');
   });
 });

@@ -28,7 +28,7 @@ import { CCO_CORPO_V11, CONFIG_LUTA_CORPO_LIGADA } from "./corpo.ts";
 import { desejoLobos, type BracoConsequencia, type CerebroA, type ObservacaoLobos } from "./lobos.ts";
 import { MotorCorpo, estadoNascimentoPy, type PoliticaCorpo } from "./motor_corpo.ts";
 import { MotorCorpoMundo, type PoliticaCorpoMundo } from "./motor_corpo_mundo.ts";
-import { MAPA_PADRAO, eventoDeixarBola, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, lerDeixarBola, lerDeixarComida, lerLevarPet, lerMudarIlha, tamanhoDoMapa, type Mundo } from "./mundo.ts";
+import { MAPA_PADRAO, eventoDeixarBola, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, lerDeixarBola, lerDeixarComida, lerLevarPet, lerMudarIlha, noMapa, regiaoDe, tamanhoDoMapa, type Mundo } from "./mundo.ts";
 import { CONFIG_CONTRATO_AGUA } from "./contrato.ts";
 import { bracoV11 } from "./pet_v11.ts";
 import { leituraLab, type LeituraLab } from "./digibrain/leitura.ts";
@@ -807,6 +807,13 @@ export class Motor {
     if (ilha !== ILHA_DOS_V21 && ilha !== ILHA_DOS_VIVOS) throw new Error(`os pets passam para a ilha ${ILHA_DOS_V21} ou ${ILHA_DOS_VIVOS}, não para ${ilha}`);
     this._conferirMorte(); this._vivo();
     (this.v11!.laco as MotorCorpoMundo).ilhaDoDono(ilha);
+    /* na ida para a ilha grande, os lugares que o DigiBrain modular lembra andam com o mundo (IG-7; o gancho mundo_deslocado do Python).
+       Vale mesmo com o cerebro A decidindo agora: a memoria do modular fica coerente se o dono trocar de cerebro depois */
+    const mu = this.mundo, ida = mu.trocaMaior;
+    if (ilha === ILHA_DOS_VIVOS && ida !== null && this.modular !== null) {
+      const [dx, dy] = ida.deslocamento;
+      ida.lugares_lembrados = this.modular.mem.deslocar(dx, dy, (x, y) => mu.emTerra(...noMapa(x, y, mu.cm)), x => regiaoDe(x, mu.cm));
+    }
   }
   private _validarComida(tipo: unknown, x: unknown, y: unknown): void {
     if (tipo !== "racao") throw new Error(`só a ração vai ao chão nos pets v12 (MV-3): ${String(tipo)}`);

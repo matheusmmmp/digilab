@@ -361,8 +361,10 @@ uma árvore a 2 células. A tela não foi vista de novo depois dessas correçõe
   o que estava na casa ou no jardim de hoje continua na casa ou no jardim; o que estava no campo ou na mata de hoje (da coluna 34 em
   diante) cai no jardim ou no campo da ilha grande.
 - **A orientação do pet volta ao começo e o registro das decisões do controlador começa vazio,** como na troca para a água.
-- **O cérebro A não guarda posição nem tamanho de mapa** (fora do grupo de dois pets, que não troca de ilha): não há memória de lugar
-  para deslocar.
+- **O que o pet lembrava vai junto.** O DigiBrain modular, que é o cérebro padrão dos ovos, guarda o ponto de cada episódio (onde
+  comeu, onde foi e não achou). Na ida, cada ponto lembrado anda o mesmo deslocamento do lar e, se cair em célula fechada, vai para a
+  terra mais perto; o lugar e a região do episódio são refeitos do ponto novo. Vale mesmo com o cérebro A decidindo no momento.
+- **O cérebro A não guarda posição nem tamanho de mapa** (fora do grupo de dois pets, que não troca de ilha).
 
 **Visto no jogo** (medida única desta sessão; capturas fora do git por mostrarem o pet): um pet v21 de verdade, que já tinha o `mi`
 para a água, ganhou o `mi` para a ilha grande ao recarregar e apareceu perto do lar, entre o carro e a lata; o botão Alimentar pôs a
@@ -371,3 +373,19 @@ ração no comedouro novo. Desktop 1440 × 800 e celular 375 × 812, no mapa Dig
 **O que não foi verificado:** a suíte inteira do Python; a ida até um lugar (a barraca, pela ponte) no jogo; o pet de teste e o mapa
 Ilha na tela depois da mudança; o custo no celular de verdade; uma aba antiga do jogo aberta ao mesmo tempo passa a ver "save que não
 abre" (o destino novo do evento), como na IA4.
+
+**A revisão separada da IG4** (um agente de leitura, sobre `8c07aea7..d71c6787`) conferiu que as vidas dos pets que não recebem o evento
+saem byte a byte (cinco vidas, comparando o motor de antes com o de agora) e que a ida tem a mesma ordem no Python e na web. Achou dois
+defeitos e dois riscos, todos corrigidos antes do PR:
+
+- **A memória de lugar do DigiBrain modular ficava nas coordenadas do mapa velho.** A primeira versão desta seção dizia que não havia
+  memória para deslocar, olhando só o cérebro A; o cérebro padrão dos ovos é o modular. Corrigido como descrito acima, no Python
+  (`Memoria.deslocar`, o gancho `mundo_deslocado`) e na web, antes de existir qualquer save com o evento.
+- **O pet de exemplo de uma versão anterior, nunca tocado, passaria a pagar Bits ao abrir** (já acontecia com o v21 desde a IA4). O jogo
+  agora compara com o exemplo da versão do pet.
+- **Importar de novo um arquivo exportado antes da ida** dava conflito falso; a comparação agora ignora o evento da ilha.
+- **A migração feita ao ouvir outra aba** não ficava marcada para gravar; agora fica.
+
+Fica registrado, sem correção: nenhuma vida do gabarito da paridade usa o modular (o caso do deslocamento da memória é conferido por
+um caso fixo igual nos dois lados e por vidas no jogo, só na web); a bola rolando no instante da ida não tem teste; os lugares
+"perto" e "longe" da tela de alimentar não têm teste no mapa grande.

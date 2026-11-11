@@ -330,7 +330,7 @@ export const ILHAS_MAIORES: Readonly<Record<string, { celulas_x: number; celulas
   grande: { celulas_x: CMU_GRANDE.celulas_x, celulas_y: CMU_GRANDE.celulas_y, origens: [LAYOUT_MUNDO_MVP, LAYOUT_MUNDO_MVP_AGUA] },
 });
 /** o registro da ida para a ilha maior (o Mundo.troca_maior do Python, com o `pet` que o motor poe) */
-export interface TrocaMaior extends TrocaIlha { deslocamento: [number, number] }
+export interface TrocaMaior extends TrocaIlha { deslocamento: [number, number]; lugares_lembrados?: number }
 /** o registro da troca de ilha (o Mundo.troca_ilha do Python, com o `pet` que o motor poe) */
 export interface TrocaIlha {
   tick: number; de: string; para: string; comidas: { id: number; de: [number, number]; para: [number, number] }[];

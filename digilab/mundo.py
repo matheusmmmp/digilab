@@ -2209,6 +2209,11 @@ class MotorMundo(MotorFrutas):
             self._montar_contrato()
             dx, dy = reg["deslocamento"]
             self.pet = self._pet_em_terra(*no_mapa(de[0] + dx, de[1] + dy, self.cmf))
+            # o cerebro que lembra lugares (o M-MEM do DigiBrain modular) anda com o mundo; o que nao lembra (o A) nao tem o gancho
+            gancho = getattr(self.politica, "mundo_deslocado", None)
+            if gancho is not None:
+                cm = self.cmf
+                reg["lugares_lembrados"] = gancho(dx, dy, lambda x, y: self.mundo.em_terra(*no_mapa(x, y, cm)), lambda x: regiao_de(x, cm))
         self._pendente = None
         reg["pet"] = {"de": list(de), "para": list(self.pet)}
         self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o levar_pet)

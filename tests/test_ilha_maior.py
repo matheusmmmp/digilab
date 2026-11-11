@@ -166,3 +166,27 @@ def test_o_gabarito_do_ts_esta_em_dia_e_as_vidas_passam_nos_gates():
         assert v["ida"]["exatos"] >= 1 and v["ida"]["tirados"] >= 1 and v["conferido"]["cruzou_pela_ponte"] >= 1
         assert sum(e["tipo"] == "mudar_ilha" for e in v["log"]) == len(v["comeco"]["trocas"])
     assert replace(CONFIG_MUNDO_MVP_AGUA.layout, nome="mvp") == CONFIG_MUNDO_MVP.layout
+
+
+def test_a_memoria_de_lugar_anda_com_o_mundo_o_caso_fixo_do_ts():
+    """o Memoria.deslocar: o mesmo caso do web/app/test/ilha_maior.test.ts (os mesmos episodios, os mesmos pontos de saida)"""
+    from digilab.digibrain.mem import Memoria
+    from digilab.mundo import no_mapa, regiao_de
+    mundo = Mundo(GRANDE, 101)
+    mem = Memoria.__new__(Memoria)
+    mem.sub, mem.autobio = SUB, True
+    mem.episodios = [{"id": 0, "ponto": (300, 240), "lugar": (18, 15), "regiao": 1, "r": 5}]
+    mem.recente = [{"id": 1, "ponto": [248, 104], "lugar": (15, 6), "regiao": 0, "sigma": 7}]
+    mem.duradoura = [{"id": 2, "ponto": (1000, 470), "lugar": (62, 29), "regiao": 3, "sigma": -3}]
+    mem.central = []
+    n = mem.deslocar(DX, DY, lambda x, y: mundo.em_terra(*no_mapa(x, y, GRANDE)), lambda x: regiao_de(x, GRANDE))
+    assert n == 3
+    assert mem.episodios == [{"id": 0, "ponto": (556, 480), "lugar": (34, 30), "regiao": 1, "r": 5}]          # em terra livre: so o deslocamento
+    r = mem.recente[0]                                                                                       # em cima do carro: para a terra
+    assert r["ponto"] != [504, 344] and mundo.seca(*r["ponto"]) and r["lugar"] == (r["ponto"][0] // SUB, r["ponto"][1] // SUB)
+    assert r["ponto"] == [504, 328] and r["lugar"] == (31, 20) and r["regiao"] == 0 and r["sigma"] == 7
+    d = mem.duradoura[0]
+    assert d["ponto"] == (1256, 710) and d["lugar"] == (78, 44) and d["regiao"] == 2 and mundo.seca(1256, 710)   # da mata de la ao campo de ca
+    sem = Memoria.__new__(Memoria)
+    sem.sub, sem.autobio, sem.episodios = SUB, False, []
+    assert sem.deslocar(DX, DY, lambda x, y: (x, y), lambda x: 0) == 0

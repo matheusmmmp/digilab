@@ -11,7 +11,8 @@ import { CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA } from "../motor/constantes.ts";
 import { CONFIG_CONTRATO_AGUA, bloqueioEm } from "../motor/contrato.ts";
 import { CCO_CORPO_V11 } from "../motor/corpo.ts";
 import { estadoNascimentoPy } from "../motor/motor_corpo.ts";
-import { ILHAS_DE_TROCA, ILHAS_MAIORES, Mundo, solidosDaAgua } from "../motor/mundo.ts";
+import { Memoria } from "../motor/digibrain/mem.ts";
+import { ILHAS_DE_TROCA, ILHAS_MAIORES, Mundo, noMapa, regiaoDe, solidosDaAgua } from "../motor/mundo.ts";
 import { LacoGravado, cerebroDa, json, ler, type Rec, type Vida } from "./laco_gravado.ts";
 
 const { texto, g: G } = ler("./gabaritos/ilha_maior_python.json");
@@ -78,6 +79,26 @@ describe("a ida para a ilha grande no Mundo", () => {
     const b = new Mundo({ semente: 101, cfg: CMU_MVP_AGUA, contrato: CONFIG_CONTRATO_AGUA });
     b.mudarIlha(0, "grande");
     expect([b.trocaIlha, b.cm.celulas_x, b.contratoDecisoes.length, b.orientacao]).toEqual([null, 128, 0, 0]);
+  });
+});
+
+describe("a memoria de lugar do DigiBrain modular anda com o mundo", () => {
+  test("o Memoria.deslocar: o mesmo caso fixo do tests/test_ilha_maior.py (os mesmos episodios, os mesmos pontos de saida)", () => {
+    const mundo = new Mundo({ semente: 101, cfg: CMU_GRANDE, contrato: CONFIG_CONTRATO_AGUA });
+    const cd = { memoria_autobio: true, controle_mem: "rel", facetas_mem: false } as unknown as ConstructorParameters<typeof Memoria>[2];
+    const mem = new Memoria({ sub: SUB }, null, cd);
+    type E = Record<string, unknown>;
+    (mem.episodios as unknown as E[]).push({ id: 0, ponto: [300, 240], lugar: [18, 15], regiao: 1, r: 5 });
+    (mem.recente as unknown as E[]).push({ id: 1, ponto: [248, 104], lugar: [15, 6], regiao: 0, sigma: 7 });
+    (mem.duradoura as unknown as E[]).push({ id: 2, ponto: [1000, 470], lugar: [62, 29], regiao: 3, sigma: -3 });
+    const n = mem.deslocar(DX, DY, (x, y) => mundo.emTerra(...noMapa(x, y, CMU_GRANDE)), x => regiaoDe(x, CMU_GRANDE));
+    expect(n).toBe(3);
+    expect(mem.episodios).toEqual([{ id: 0, ponto: [556, 480], lugar: [34, 30], regiao: 1, r: 5 }]);          /* em terra livre: so o deslocamento */
+    expect(mem.recente).toEqual([{ id: 1, ponto: [504, 328], lugar: [31, 20], regiao: 0, sigma: 7 }]);        /* em cima do carro: para a terra */
+    expect(mem.duradoura).toEqual([{ id: 2, ponto: [1256, 710], lugar: [78, 44], regiao: 2, sigma: -3 }]);    /* da mata de la ao campo de ca */
+    expect(mundo.seca(504, 344)).toBe(false);
+    const sem = new Memoria({ sub: SUB }, null, { ...cd, memoria_autobio: false } as typeof cd);
+    expect(sem.deslocar(DX, DY, (x, y) => [x, y], () => 0)).toBe(0);
   });
 });
 

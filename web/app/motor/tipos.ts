@@ -96,7 +96,7 @@ export type EventoMudarIlha = [tick: number, tipo: "mi", troca: { ilha: string }
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
   | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida | EventoBola | EventoLevarPet | EventoMudarIlha | EventoProduto | EventoCerebro | EventoPonteLuta | EventoFalaUnidades;
 
-export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 21 | 22;
+export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 21 | 22 | 23;
 
 /** estado de vida (camada 1) */
 export interface EstadoVida {
