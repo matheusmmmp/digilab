@@ -10,7 +10,7 @@ import {
   CANDIDATO_V21, ESTAGIOS_LUTA, TETO, TIPICO, npc, petDoEstagio, pontosNoTotal, rivalCanonico, rivalDaForma, statsLuta,
 } from "../scripts/equilibrio_poc/comum.ts";
 import { basesDa } from "../scripts/equilibrio_poc/faixas.ts";
-import { candidatoDe } from "../scripts/equilibrio_poc/candidatos.ts";
+import { candidatoDe, LP5_1_ESQ, LP5_1_R2 } from "../scripts/equilibrio_poc/candidatos.ts";
 import { motorDoCandidato } from "../scripts/equilibrio_poc/bancada.ts";
 
 const c = CANDIDATO_V21;
@@ -133,5 +133,9 @@ describe("a esquiva pela perspicacia e pela velocidade (D-LP5-14)", () => {
     const x = candidatoDe({ nome: "teste", esquiva: { ligada: 1, pertoChance: .3 } });
     expect(rivalCanonico(x, "cirro_crianca_sereno").perc).toBeGreaterThan(rivalCanonico(x, "brasa_crianca_arisco").perc!);
     expect(() => candidatoDe({ nome: "teste", esquiva: { ligada: 1, chanceMax: 2 } })).toThrow();
+  });
+  test("o lp5_1_esq (D-LP5-16) e o lp5_1_r2 com a esquiva ligada, e so isso", () => {
+    expect(LP5_1_ESQ.esquiva).toMatchObject({ ligada: 1, gamaMira: .6, gamaFolego: .6, kAtento: .5, pertoChance: 0 });
+    expect({ ...LP5_1_ESQ, nome: "", esquiva: null }).toEqual({ ...LP5_1_R2, nome: "", esquiva: null });
   });
 });

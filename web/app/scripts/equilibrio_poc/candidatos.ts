@@ -52,7 +52,16 @@ export const LP5_1_R2 = candidatoDe({
   mapa: { hp: 1300, vel: 60 }, multVida: E(.6, .9, 1.35, 2.025), multAtk: E(1, 1.5, 2.25, 3.375),
   tiro: { distMin: 110, esperaMax: 1500, recuo: 1.5, recuaNaPrep: 2, recuaAbaixo: .75, danoProj: .7, velProj: 1 },
 });
-export const CANDIDATOS: Readonly<Record<string, Candidato>> = { v21: CANDIDATO_V21, lp5_1_r1: LP5_1_R1, lp5_1_r2: LP5_1_R2 };
+/** o lp5_1_r2 com a esquiva ligada (D-LP5-16: o Matheus, "pode ligar esquiva nova"): o ponto m6_f6_p0 da grade lp5_1/r4e, o unico com 6 metas.
+    A leitura do golpe de perto fica desligada (pertoChance 0): ligada (0,35), o E1 reprova e o A1 pende para quem atira. PROPOSTO, SEM FONTE */
+export const LP5_1_ESQ = candidatoDe({
+  nome: "lp5_1_esq", pesoPonto: 15,
+  gama: { vigor: .02, recuperacao: .02, guarda: .06, forca: .02, mira: .14, folego: .14 },
+  mapa: { hp: 1300, vel: 60 }, multVida: E(.6, .9, 1.35, 2.025), multAtk: E(1, 1.5, 2.25, 3.375),
+  tiro: { distMin: 110, esperaMax: 1500, recuo: 1.5, recuaNaPrep: 2, recuaAbaixo: .75, danoProj: .7, velProj: 1 },
+  esquiva: { ligada: 1, gamaMira: .6, gamaFolego: .6, kAtento: .5, pertoChance: 0, pertoReacao: 200, contraMs: 0 },
+});
+export const CANDIDATOS: Readonly<Record<string, Candidato>> = { v21: CANDIDATO_V21, lp5_1_r1: LP5_1_R1, lp5_1_r2: LP5_1_R2, lp5_1_esq: LP5_1_ESQ };
 /** o candidato da linha de comando: --candidato <nome>, ou --candidato-json <arquivo> (so a grade) */
 export function candidatoDaLinha(nome: string, json: string, grade: boolean): Candidato {
   if (json) {
