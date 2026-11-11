@@ -16,7 +16,7 @@ import { imagemMapa, prontas } from "./imagensMapa.ts";
 import { ELEMENTO, elementoDoSprite, type ElementoTR } from "./elementos.ts";
 import { COR_FORTE, COR_TINTA, MOVIMENTO, faiscaDoPasso, pixelsDoTexto, poeiraDoPasso } from "./efeitos.ts";
 import { VOO, pixelsDaCabeca, pixelsDoEstouro, pixelsDoRastro, type PixelTR } from "./projeteis.ts";
-import { ACERTO_MOTOR, type VooPoc } from "./visualPoc.ts";
+import { ACERTO_MOTOR, golpeEmCurso, tempoDoAtaque, type VooPoc } from "./visualPoc.ts";
 import { CHAO, alfaDaMarca, pixelsDaCratera, pixelsDaOnda, pixelsDaTelegrafia, pixelsDoArrasto, poeiraDaNuvem } from "./chao.ts";
 import { POSTURA, pixelsDaAura } from "./posturas.ts";
 import { efeitosAtuais, folhaEfeito, type EfeitoRef } from "./efeitosJogo.ts";
@@ -28,6 +28,15 @@ import type { LutaPoc, DadosFormaPoc } from "../../../../motor/index.ts";
 
 const { w: MW, h: MH } = MUNDO_POC;
 const { cx: CX, cy: CY, rx: RX, ry: RY } = ELIPSE_POC;
+/** a elipse da luta (LP6-2): a do nucleo (L.el), que cresce com o estagio so com a chave `arenaPorEstagio`; sem ela, a ELIPSE_POC (o mesmo
+    objeto) e o fator 1, e o palco desenha igual ao de antes */
+const elDe = (L: LutaPoc): { cx: number; cy: number; rx: number; ry: number } => L.el ?? ELIPSE_POC;
+const escDe = (L: LutaPoc): number => L.esc ?? 1;
+/** a caixa do mundo da luta (LP6-2): o mundo de 480 x 280 escalado pelo centro da elipse, pelo fator dela */
+export function caixaDoMundo(L: LutaPoc): { x0: number; x1: number; y0: number; y1: number } {
+  const k = escDe(L);
+  return { x0: CX - CX * k, x1: CX + (MW - CX) * k, y0: CY - CY * k, y1: CY + (MH - CY) * k };
+}
 /** cores do chao liso (o Campo de treino, e o recuo quando o mapa nao carrega); as do prototipo */
 const COR = { ceu: "#cfe6f5", chaoA: "#9fcf7a", chaoB: "#8cc068", borda: "#5d8a44", azul: "#2c73e0", vermelho: "#d6336c", fundo: "#141a24" };
 
@@ -68,6 +77,20 @@ export const DESENHO_POC = { efeito: .22, pes: 4, margem: [70, 24], nivelSprite:
     - escalaNosso e brilhoNosso: o efeito do jogo das 5 formas da LP-8 (o efeito de acerto que voa) maior e somado ao fundo mais vezes;
       halo: o raio (em pixels de efeito) do brilho do elemento em volta dele */
 export const TIRO_POC = { borda: .9, alturaAlvo: .5, colunas: 4, escalaNosso: 2.2, brilhoNosso: 2, halo: 7 } as const;
+
+/** O golpe de apoio no desenho (LP6-2; docs/PLANO_LP6_SEGUNDO_GOLPE.md, secao 4). PROPOSTO, SEM FONTE: ajustar nas capturas.
+    - avanco: quanto (mundo) o corpo do atirador vai para a frente no apoio de perto, num arco que sobe ate o instante do golpe e volta no
+      fim do clipe (so o desenho: o motor ja move o corpo pela investida);
+    - pixelTiro: o pixel do tiro fraco, em fracao do pixel de efeito do tiro de verdade (a cabeca e o rastro menores);
+    - rastroTiro: em fracao do rastro do tiro de verdade;
+    - estouro: o pixel do estouro do acerto do apoio, em fracao do de sempre */
+export const APOIO_POC = { avanco: 7, pixelTiro: .5, rastroTiro: .5, estouro: .6 } as const;
+/** o avanco do corpo (mundo, para a frente do lutador) no apoio de perto: 0 fora dele */
+export function avancoDoApoio(u: LutadorPoc): number {
+  if (u.morto || u.estado !== "attack" || !u.usandoApoio || !u.ap || u.ap.proj || u.msAp <= 0) return 0;
+  const tg = Math.max(1, u.ap.t * 1000), f = u.t <= tg ? u.t / tg : 1 - (u.t - tg) / Math.max(1, u.msAp - tg);
+  return APOIO_POC.avanco * Math.sin(Math.PI / 2 * Math.max(0, Math.min(1, f)));
+}
 
 /** o corpo de um sprite no primeiro quadro do Idle, em pixels do sprite dentro da caixa: o meio (cx), a meia-largura, o topo e a linha dos
     pes (o fim do quadro, com a sombra); a caixa comum dos clipes nao e centrada no corpo (LP3c: a mediana passava de 15 px) */
@@ -146,7 +169,8 @@ export function clipeDoLutador(u: LutadorPoc, extraMs: number, fim = false): { c
   /* a luta acabou (LP3c): quem ficou de pe volta ao Idle, em vez de congelar no quadro do ataque */
   if (fim) return { clipe: "Idle", t: extraMs };
   const c: Record<LutadorPoc["estado"], Clipe> = { idle: "Idle", run: "Run", attack: "Attack_1", stun: "Stun", die: "Die" };
-  return { clipe: c[u.estado], t: u.t };
+  /* o golpe de apoio (LP6-2): o mesmo Attack_1, inteiro e mais rapido */
+  return { clipe: c[u.estado], t: u.estado === "attack" ? tempoDoAtaque(u) : u.t };
 }
 
 /** a geometria do quadro: px do canvas por pixel do mundo (e, fracionario), a escala inteira dos sprites (es), o centro da camera (no mundo) e
@@ -161,7 +185,10 @@ export function geometriaPoc(Wp: number, Hp: number, K: number, W: number, H: nu
   alturas: readonly [number, number] = [0, 0]): GeoPoc {
   /* o mundo inteiro cabe em efit; no celular em pe a base aproxima um quarto (a camera acompanha os dois, e o mundo inteiro volta quando
      eles se afastam) */
-  const efit = Math.min(Wp / MW, Hp / MH), e0 = H > W ? efit * 1.25 : efit, vivos = ([0, 1] as const).filter(i => !lutadorN(L, i).foraAte);
+  /* LP6-2: a escala inteira dos sprites e o zoom de perto sao os do mundo de sempre; a elipse maior (o fator k) so abre o nivel 0, que mostra
+     a arena inteira, e o piso da escala (efitK) */
+  const k = escDe(L), cm = caixaDoMundo(L);
+  const efit = Math.min(Wp / MW, Hp / MH), e0 = H > W ? efit * 1.25 : efit, efitK = efit / k, vivos = ([0, 1] as const).filter(i => !lutadorN(L, i).foraAte);
   /* LP3c: a escala inteira dos sprites fica a mesma na luta inteira (a do nivel DESENHO_POC.nivelSprite); antes, round(e) pulava ~25 % no zoom */
   const es = Math.max(1, Math.round(e0 * (1 + DESENHO_POC.nivelSprite / 3)));
   const xs = vivos.map(i => lutadorN(L, i).x), ys = vivos.map(i => lutadorN(L, i).y);
@@ -170,12 +197,13 @@ export function geometriaPoc(Wp: number, Hp: number, K: number, W: number, H: nu
   const hud = DESENHO_POC.hud * K, dock = DESENHO_POC.dock * K, corpo = Math.max(0, ...vivos.map(i => alturas[i])) * es;
   const livreY = Math.max(Hp * .3, Hp - hud - dock - corpo);
   const cabe = Math.min(Wp / (dx + 2 * DESENHO_POC.margem[0]), livreY / (dy + DESENHO_POC.pes + 2 * DESENHO_POC.margem[1]));
-  const e = Math.max(efit, Math.min(cabe, e0 * (1 + nivelDoQuadro(v.cam, passo, reduzido) / 3)));
-  const prender = (c: number, meia: number, max: number) => (meia * 2 >= max ? max / 2 : Math.max(meia, Math.min(max - meia, c)));
-  const cam = v.cam ?? { cx: CX, cy: CY - 30 };
+  const nv = nivelDoQuadro(v.cam, passo, reduzido), base = k === 1 || nv >= 1 ? e0 * (1 + nv / 3) : e0 / k + (e0 * 4 / 3 - e0 / k) * nv;
+  const e = Math.max(efitK, Math.min(cabe, base));
+  const prender = (c: number, meia: number, lo: number, hi: number) => (meia * 2 >= hi - lo ? (lo + hi) / 2 : Math.max(lo + meia, Math.min(hi - meia, c)));
+  const el = elDe(L), cam = v.cam ?? { cx: el.cx, cy: el.cy - 30 };
   const oy = H > W ? .62 : .52;
-  const cx = prender(cam.cx, Wp / 2 / e, MW);
-  let cy = prender(cam.cy, Hp / 2 / e, MH);
+  const cx = prender(cam.cx, Wp / 2 / e, cm.x0, cm.x1);
+  let cy = prender(cam.cy, Hp / 2 / e, cm.y0, cm.y1);
   /* no deitado, os corpos inteiros no meio da faixa livre entre o HUD e o dock (a folga sobra para os golpes, que passam do corpo); em pe
      (o cartao do mapa cobre o alto), so a cabeca mais alta abaixo do HUD e, se couber, os pes acima do dock */
   if (vivos.length) {
@@ -231,7 +259,14 @@ function desenharEfeito(cx: CanvasRenderingContext2D, ref: EfeitoRef, t: number,
 }
 
 /* ---------------------------------------------------------------- o chao e as regras (no mundo; o contexto ja na escala da camera) */
-function chao(cx: CanvasRenderingContext2D, id: IdCena): boolean {
+function chao(cx: CanvasRenderingContext2D, L: LutaPoc): boolean {
+  /* LP6-2: com a elipse maior, a arte do mapa inteira (o ceu, o fundo e o piso) cresce pelo centro da elipse, pelo fator dela */
+  const k = escDe(L);
+  if (k === 1) return chaoBase(cx, L.cena.id);
+  cx.save(); cx.translate(CX, CY); cx.scale(k, k); cx.translate(-CX, -CY);
+  const faltou = chaoBase(cx, L.cena.id); cx.restore(); return faltou;
+}
+function chaoBase(cx: CanvasRenderingContext2D, id: IdCena): boolean {
   const c = VISUAL_POC[id], piso = c.piso ? img(c.piso) : null;
   const faltou = (!!c.piso && prontas.get(c.piso) === null) || (!!c.fundo && prontas.get(c.fundo) === null);
   if (piso) {
@@ -272,15 +307,18 @@ function chao(cx: CanvasRenderingContext2D, id: IdCena): boolean {
 /** o que cada arena desenha embaixo dos lutadores: a regra a vista. O tempo das animacoes do chao e o da luta (relogio), nao o do navegador */
 function baixo(cx: CanvasRenderingContext2D, L: LutaPoc, reduzido: boolean) {
   const c = L.cena, t = reduzido ? 0 : L.relogio;
+  /* a elipse da luta (LP6-2): a do nucleo; as zonas e a mare ja vem escaladas dele */
+  const { cx: CX, cy: CY, rx: RX, ry: RY } = elDe(L), x0 = CX - RX, x1 = CX + RX;
   if (c.id === "coliseu" && c.seguro < 1) {
     cx.save(); cx.beginPath(); cx.ellipse(CX, CY, RX, RY, 0, 0, 7); cx.ellipse(CX, CY, RX * c.seguro, RY * c.seguro, 0, 0, 7, true);
     cx.fillStyle = "rgba(200,40,30,0.32)"; cx.fill("evenodd");
     cx.beginPath(); cx.ellipse(CX, CY, RX * c.seguro, RY * c.seguro, 0, 0, 7); cx.strokeStyle = "rgba(255,120,90,0.95)"; cx.lineWidth = 1.5; cx.stroke(); cx.restore();
   } else if (c.id === "praia" && c.linha < CY + RY) {
     cx.save(); cx.beginPath(); cx.ellipse(CX, CY, RX, RY, 0, 0, 7); cx.clip();
-    cx.fillStyle = "rgba(40,140,200,0.45)"; cx.fillRect(0, c.linha, MW, MH);
+    const xa = Math.min(0, Math.floor(x0 / 6) * 6), xb = Math.max(MW, x1);
+    cx.fillStyle = "rgba(40,140,200,0.45)"; cx.fillRect(xa, c.linha, xb - xa, MH * 2);
     cx.strokeStyle = "rgba(235,250,255,0.85)"; cx.lineWidth = 1.5; cx.beginPath();
-    for (let x = 0; x <= MW; x += 6) cx.lineTo(x, c.linha + Math.sin(x / 14 + t / 300) * 1.6);
+    for (let x = xa; x <= xb; x += 6) cx.lineTo(x, c.linha + Math.sin(x / 14 + t / 300) * 1.6);
     cx.stroke(); cx.restore();
   } else if (c.id === "deserto") {
     const z = c.zonas[0];
@@ -355,7 +393,7 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
   /* o mundo na escala da camera */
   const mundo = () => ctx.setTransform(e, 0, 0, e, Wp / 2 - g.cx * e, Hp * g.oy - g.cy * e);
   mundo();
-  const faltou = chao(ctx, L.cena.id);
+  const faltou = chao(ctx, L);
   /* o nocaute (E5): o cenario escurece; os lutadores e os efeitos vem por cima */
   const koVal = v.koEm.filter((k): k is number => k !== null), koEm = koVal.length ? Math.min(...koVal) : null;
   baixo(ctx, L, reduzido);
@@ -403,7 +441,8 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
   for (const { i, o } of ents) {
     if (o) {
       const im = img(o.img + ".png"); if (!im) continue;
-      const w = im.width / MUNDO_POC.esc, h = im.height / MUNDO_POC.esc;
+      /* o raio do obstaculo cresce com a elipse no nucleo (LP6-1); a imagem, junto (LP6-2) */
+      const w = im.width / MUNDO_POC.esc * escDe(L), h = im.height / MUNDO_POC.esc * escDe(L);
       mundo(); ctx.save(); ctx.imageSmoothingEnabled = true;
       ctx.beginPath(); ctx.ellipse(o.x, o.y, o.r * 1.2, o.r * 0.5, 0, 0, 7); ctx.fillStyle = "rgba(0,0,0,0.3)"; ctx.fill();
       if (o.hp !== undefined && o.max !== undefined && o.hp < o.max) ctx.globalAlpha = 0.55 + 0.45 * o.hp / o.max;
@@ -412,7 +451,8 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
       continue;
     }
     if (i === undefined) continue;
-    const u = lutadorN(L, i), f = formas[i], X = xDe(g, u.x), cp = cps[i];
+    /* o avanco curto do corpo no apoio de perto (LP6-2): so o desenho, para a frente de quem bate */
+    const u = lutadorN(L, i), f = formas[i], X = xDe(g, u.x + (u.viraEsq ? -1 : 1) * (reduzido ? 0 : avancoDoApoio(u))), cp = cps[i];
     const pulo = reduzido ? 0 : puloDoEmpurrao(v, i, passoL) * e;
     /* a linha dos pes do corpo em DESENHO_POC.pes abaixo do y do lutador e o meio do corpo no x dele (LP3c) */
     const Yb = yDe(g, u.y + DESENHO_POC.pes) - pulo;
@@ -444,7 +484,7 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
       });
     }
     /* o rastro da investida (a v18 e a POC: o golpe corpo a corpo avanca na direcao do alvo): copias mais apagadas no caminho ja feito */
-    const g0 = u.usandoHab ? u.sk : u.g, h3 = v.hist[i][MOVIMENTO.rastroPassos];
+    const g0 = golpeEmCurso(u), h3 = v.hist[i][MOVIMENTO.rastroPassos];
     if (!reduzido && u.estado === "attack" && !g0.proj && !u.golpeDado && h3 && Math.abs(h3.x - u.x) >= TELA_POC.dashMin * MOVIMENTO.rastroPassos) {
       rastros++;
       MOVIMENTO.rastroAlfa.forEach((alfa, k) => {
@@ -476,7 +516,7 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
   for (const z of L.cena.zonas) if (z.tipo === "moita") {
     for (let k = 0; k < 9; k++) {
       const an = k / 9 * 6.283, x = z.x + Math.cos(an) * z.rx * 0.7, y = z.y + Math.sin(an) * z.ry * 0.6;
-      ctx.beginPath(); ctx.ellipse(x, y - 3, 9, 7, 0, 0, 7); ctx.fillStyle = k % 2 ? "rgba(46,110,58,0.92)" : "rgba(62,138,70,0.92)"; ctx.fill();
+      ctx.beginPath(); ctx.ellipse(x, y - 3, 9 * escDe(L), 7 * escDe(L), 0, 0, 7); ctx.fillStyle = k % 2 ? "rgba(46,110,58,0.92)" : "rgba(62,138,70,0.92)"; ctx.fill();
     }
     ctx.beginPath(); ctx.ellipse(z.x, z.y - 4, z.rx * 0.75, z.ry * 0.8, 0, 0, 7); ctx.fillStyle = "rgba(54,124,62,0.9)"; ctx.fill();
   }
@@ -502,7 +542,7 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
   n.poeiras = poeiras;
   /* os projeteis em voo (E2 e LP-8): o rastro e o brilho do elemento por baixo e o desenho do jogo por cima; sem o desenho, a cabeca do elemento */
   const ef = efeitosAtuais(), prefabs = ef.tipo === "ok" ? ef.prefabs : null;
-  let cabecas = 0, nossos = 0, comDesenho = 0, meio = 0;
+  let cabecas = 0, nossos = 0, comDesenho = 0, meio = 0, tirosFracos = 0;
   /* LP3c: a cabeca sai da frente do sprite no quadro do disparo e chega a borda do alvo; no meio, o caminho do motor com a diferenca das
      duas pontas repartida pela fracao do voo (o.f). Os pontos e o passo do acerto sao os do motor */
   let distBoca = 0, distBorda = 0;
@@ -516,7 +556,9 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
     return { x: p.x + (1 - f) * (bx - p0.x) + f * (ex - hx), y: p.y + (1 - f) * (by - p0.y) + f * (ey - hy) };
   };
   for (const o of v.voos) {
-    const dir = o.esq ? -1 : 1, k = reduzido ? VOO.rastroReduzido : VOO.rastro, u = ue(o.de), ult = o.pts.length - 1;
+    /* o tiro fraco de quem bate de perto (LP6-2): o projetil generico do palco, com a cabeca e o rastro menores */
+    const k0 = reduzido ? VOO.rastroReduzido : VOO.rastro, k = o.apoio ? Math.max(1, Math.round(k0 * APOIO_POC.rastroTiro)) : k0;
+    const dir = o.esq ? -1 : 1, u = o.apoio ? Math.max(1, Math.round(ue(o.de) * APOIO_POC.pixelTiro)) : ue(o.de), ult = o.pts.length - 1;
     if (ult < 0) continue;
     const cab = pontoDoVoo(o, ult);
     if (o.tFim === null || passo < o.tFim + VOO.rastroFica) for (let j = k; j >= 1; j--) {
@@ -526,7 +568,7 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
     }
     /* a cabeca fica ate o passo do acerto (inclusive: ela chega a borda junto com o estouro) */
     if (o.tFim !== null && passo > o.tFim) continue;
-    cabecas++; if (o.nosso) nossos++;
+    cabecas++; if (o.nosso) nossos++; if (o.apoio) tirosFracos++;
     if (o.pts.length >= 3) meio++;
     if (passo === o.t0 + 1) { const b = pontoDoVoo(o, 0), ua = lutadorN(L, o.de); distBoca = Math.round(Math.abs(b.x - ua.x) * e / K); }
     if (o.tFim !== null && o.acertou) { const T = o.alvos[ult]; distBorda = Math.round(Math.abs(cab.x - T.x) * e / K); }
@@ -551,6 +593,7 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
     pintar(ctx, pixelsDaCabeca(els[o.de], passo, reduzido).filter(p => p.luz || !ref), X, Y, u, dir);
     if (ref && desenharEfeito(ctx, ref, (passo - o.t0) * PASSO_POC_MS, X, Y, o.esq, true, DESENHO_POC.efeito * e)) comDesenho++;
   }
+  n.tirosFracos = tirosFracos;
   n.projeteis = cabecas; n.nossos = nossos; n.projeteisDesenho = comDesenho; n.projeteisMeio = meio;
   /* as medidas da LP3c (px de CSS): a boca do tiro ao meio do atirador no primeiro quadro, a cabeca ao meio do alvo no acerto */
   if (distBoca) n.distBoca = distBoca;
@@ -572,7 +615,7 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
     const fa = faiscaDoPasso({ lado: im.lado, t0: im.t0, frac: im.frac, forte: im.forte }, passo);
     if (fa.length) impactos++;
     for (const p of fa) { ctx.fillStyle = p.cor; ctx.fillRect(X + p.dx * ps * 2, Y + p.dy * ps * 2, ps * (im.forte ? 2 : 1), ps * (im.forte ? 2 : 1)); }
-    pintar(ctx, pixelsDoEstouro(els[im.de], idade, im.forte, reduzido), X, Y, ue(im.de), -im.dir);
+    pintar(ctx, pixelsDoEstouro(els[im.de], idade, im.forte, reduzido), X, Y, im.apoio ? Math.max(1, Math.round(ue(im.de) * APOIO_POC.estouro)) : ue(im.de), -im.dir);
   }
   n.impactos = impactos;
   /* os numeros que sobem: o dano em fonte de pixel com contorno (o critico e a habilidade, maiores e amarelos); o resto em texto */
@@ -616,6 +659,8 @@ export function desenharLutaPoc(cv: HTMLCanvasElement, c: CenaPocDesenho, a: Atl
     ctx.fillStyle = COR_FORTE; for (const [gx, gy] of px) ctx.fillRect(x0 + gx * p, y0 + gy * p, p, p);
     ctx.fillStyle = "#fff6c2"; for (const [gx, gy] of px) if (!px.some(([q, r]) => q === gx && r === gy - 1)) ctx.fillRect(x0 + gx * p, y0 + gy * p, p, o);
   }
+  /* LP6-2: quantos lutadores estao no golpe de apoio e o fator da elipse */
+  n.apoios = [L.a, L.b].filter(u => u.estado === "attack" && u.usandoApoio).length; n.elipse = escDe(L).toFixed(2);
   n.esc = es; n.zoom = (e / g.e0).toFixed(3); n.cena = L.cena.id; n.passo = passoL;
   for (const [k, x] of Object.entries(n)) cv.dataset[k] = String(x);
   return faltou;
