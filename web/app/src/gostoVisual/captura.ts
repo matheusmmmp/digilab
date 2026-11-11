@@ -10,7 +10,9 @@ export const LARGURA_QUADRO = 64, ALTURA_QUADRO = 36;
 /** um vetor por segundo; o RMS do áudio a cada 100 ms, para a variação. PROPOSTOS, SEM FONTE */
 export const PERIODO_MS = 1000, PERIODO_AUDIO_MS = 100;
 
-export interface Captura { parar(): void; temSom: boolean }
+/** `video`: o elemento que toca o fluxo da captura (sem som, fora da página), para o cantinho da TV na ilha mostrar a tela na TV
+    (ilha/cantinhoTv.ts, pela estadoTv.ts); nada dele é gravado. null na TV do jogo */
+export interface Captura { parar(): void; temSom: boolean; video?: HTMLVideoElement | null }
 
 /** começa a captura (precisa vir de um clique); `aoSentir` recebe um Sentido por segundo, `aoAcabar` quando o dono para de compartilhar */
 export async function capturarTela(aoSentir: (s: Sentido) => void, aoAcabar: (motivo: string) => void): Promise<Captura> {
@@ -61,5 +63,5 @@ export async function capturarTela(aoSentir: (s: Sentido) => void, aoAcabar: (mo
     anterior = null;
   };
   fluxo.getVideoTracks()[0]?.addEventListener("ended", () => { parar(); aoAcabar("o compartilhamento da tela acabou"); });
-  return { parar, temSom: analisador !== null };
+  return { parar, temSom: analisador !== null, video };
 }

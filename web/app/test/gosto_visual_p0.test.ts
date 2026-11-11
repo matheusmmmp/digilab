@@ -38,7 +38,7 @@ describe("a chave", () => {
   test("desligada, o componente não renderiza nada (o app de hoje)", () => {
     expect(renderToStaticMarkup(h(GostoVisual))).toBe("");
   });
-  test("o App só ganha a montagem do componente, e nenhum outro arquivo do app importa o protótipo", () => {
+  test("o App só ganha a montagem do componente, e fora dele só o cantinho da TV na ilha (atrás da mesma chave) importa o protótipo", () => {
     const raiz = join(import.meta.dirname, "..", "src"), quem: string[] = [];
     const andar = (d: string): void => { for (const n of readdirSync(d, { withFileTypes: true })) {
       const p = join(d, n.name);
@@ -46,7 +46,8 @@ describe("a chave", () => {
       else if (/\.(ts|tsx)$/.test(n.name) && readFileSync(p, "utf8").includes("gostoVisual/")) quem.push(n.name);
     } };
     andar(raiz);
-    expect(quem).toEqual(["App.tsx"]);
+    /* o cantinho da TV (ilha/cantinhoTv.ts e cantinhoTvConta.ts; test/gosto_visual_tv.test.ts confere a chave dele) lê a chave e o estado da TV */
+    expect(quem.sort()).toEqual(["App.tsx", "cantinhoTv.ts", "cantinhoTvConta.ts"]);
   });
   test("o protótipo fica fora do motor, do log e do save: não importa mudarMotor, aplicarEvento nem o save", () => {
     const dir = join(import.meta.dirname, "..", "src", "gostoVisual");

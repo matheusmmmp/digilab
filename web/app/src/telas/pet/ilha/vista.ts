@@ -55,6 +55,7 @@ import { Apagador, montarMarcadores, type Marcadores } from "./marcadoresLugar.t
 import { TRANCAS } from "../../../trancas.ts";
 import { mitologiaLigada } from "../../../mitologia.ts";
 import { NuvemDoDia } from "./mitologia.ts";
+import { cantinhoNaVista, montarCantinho, type Cantinho } from "./cantinhoTv.ts";
 
 const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -132,6 +133,10 @@ class VistaIlha {
   /** a ida do pet ao lugar aberto (ou a volta), separada da camera: a chave da viagem ("1:<lugar>" ou "0"), de onde partiu, quando e quanto dura;
       null fora da viagem (constantes.ts, PET_VIAGEM_CEL_MS) */
   private andaPet: { chave: string; de: [number, number]; desde: number; dur: number; rota: [number, number][] | null } | null = null;
+  /** o cantinho da TV do prototipo do gosto visual (cantinhoTv.ts): so com a chave `?gosto_visual=1`; null desligada (a ilha de hoje). `tvSentado`:
+      o pet desenhado chegou a almofada com a TV ligada, fora da viagem e do treino */
+  private readonly cantinho: Cantinho | null;
+  private tvSentado = false;
 
   readonly canvas: HTMLCanvasElement;
   private readonly mu: Mundo;
@@ -181,6 +186,15 @@ class VistaIlha {
     this.marcadores = montarMarcadores(base);
     this.nuvem = new NuvemDoDia(this.itens.ninhoEm);
     this.cenaIlha.cena.add(this.itens.raiz, this.papel.raiz, this.marcadores.raiz, this.nuvem.raiz);
+    /* o cantinho da TV (so com a chave do P0; antes dos kits, para a decoracao sob o tapete sair da vista): o pet vai ate ele pela rota em terra */
+    this.cantinho = cantinhoNaVista() ? montarCantinho(this.ilha, (de, para) => (this.ilha.comAgua ? rotaEmTerra(this.ilha.cm, de, para) : null)) : null;
+    if (this.cantinho) {
+      this.cenaIlha.cena.add(this.cantinho.grupo);
+      const caixaCena = canvas.parentElement;
+      this.cantinho.carregarModelo(document.baseURI)
+        .then(q => caixaCena?.setAttribute("data-tv-modelo", q))
+        .catch(err => { caixaCena?.setAttribute("data-tv-modelo", "marcador"); console.error("cantinho da TV: o modelo da TV não carregou; fica o marcador cartoon:", err); });
+    }
     CURVA.uVento.value = 1;
     const il = this.ilha;
     this.mapa = { imagem: new ImageData(pixelsDoMapa(il, this.estilo.paleta), il.larg, il.prof), x0: il.x0, z0: il.z0, larg: il.larg, prof: il.prof, area: il.area };
@@ -340,7 +354,10 @@ class VistaIlha {
     const [sx, sz] = this.itens.sacoEm;
     /* a viagem ao lugar: o pet anda do que o motor diz ate o lado esquerdo do saco na tela (o painel abre a direita) e fica; o treino parte
        dai e volta para ca. `motorCel` e, daqui para baixo, onde o pet estaria sem o treino */
-    const { cel: motorCel, andando: emViagem } = this.petNaViagem(agora, motorCel0, reduzido);
+    /* o cantinho da TV (so vista, com a chave do P0): com a TV ligada o pet vai ate a almofada e fica; a viagem e o treino partem dali e voltam para la */
+    const tv = this.cantinho ? this.cantinho.ida.passo(agora, this.petCel, motorCel0, this.cantinho.ligada(), reduzido) : null;
+    const { cel: motorCel, andando: emViagem } = this.petNaViagem(agora, tv ? tv.cel : motorCel0, reduzido);
+    this.tvSentado = !!tv?.sentado && this.andaPet === null && this.treino === null;
     if (CENA.treino !== null && CENA.treino !== this.treinoVisto) {
       this.treinoVisto = CENA.treino;
       const dir = new THREE.Vector3(1, 0, 0).applyQuaternion(this.camera.quaternion), h = Math.hypot(dir.x, dir.z) || 1;
@@ -349,7 +366,7 @@ class VistaIlha {
       this.treino = { pedido: CENA.treino, desde: agora, ponto, golpe: -1, ida: idaDoTreino(Math.hypot(ponto[0] - motorCel[0], ponto[1] - motorCel[1])) };
     }
     const t = this.treino;
-    const caminhando = this.andaPet === null && this.seguidor.caminhando;
+    const caminhando = this.andaPet === null && (tv?.ativo ? tv.andando : this.seguidor.caminhando);
     if (!t) return { cel: motorCel, golpe: this.bateBola, andando: emViagem || caminhando };
     /* a ida e a volta pela distancia (PA-3; idaDoTreino), os golpes pelo TREINO_MS */
     const dt = agora - t.desde, { golpes } = TREINO_MS, ida = t.ida, volta = t.ida, ponto = t.ponto;
@@ -586,6 +603,7 @@ class VistaIlha {
     if (mao && !this.naMao) {
       this.naMao = true; this.pendulo.zerar(); this.soltouEm = null; this.focoVoltando = false; this.chaoMao = null;
       this.treino = null; this.bateBola = null;
+      this.cantinho?.ida.reiniciar(); this.tvSentado = false;
     }
     if (!mao && this.naMao) { this.naMao = false; this.seguidor.pular(mu.pet); this.soltouEm = agora; this.focoVoltando = true; }
     const pos = this.naMao ? (this.seguidor.pos ?? [mu.pet[0], mu.pet[1]])
@@ -594,7 +612,7 @@ class VistaIlha {
     const viagem = progressoViagem(agora);
     const motorCel: [number, number] = [pos[0] / sub, pos[1] / sub];
     let cor: { cel: [number, number]; golpe: { desde: number; alvo: [number, number] } | null; andando: boolean };
-    let suspenso: Suspenso | null = null;
+    let suspenso: Suspenso | null = null, olharPara: [number, number] | null = null;
     if (mao) {
       /* suspenso sobre o chao sob o pe; fora do chao, o ultimo ponto dele (ou onde estava) */
       this.chaoMao = this.chaoSob(mao.x, mao.y) ?? this.chaoMao ?? [this.petCel[0], this.petCel[1]];
@@ -609,6 +627,8 @@ class VistaIlha {
         if (soltarAcabou(ms, reduzido)) this.soltouEm = null;
         else suspenso = { naMao: false, altura: alturaDepoisDeSoltar(ms, reduzido), angulo: 0, tremor: 0, sombra: null };
       }
+      /* sentado no cantinho da TV: sobe a altura da almofada, olha para a TV (ou vira) e inclina ou pula com a reacao do P0 */
+      if (!suspenso && this.tvSentado && this.cantinho && !cor.golpe) { const pz = this.cantinho.pose(agora, reduzido); suspenso = pz.suspenso; olharPara = pz.olharPara; }
     }
     this.petCel = cor.cel;
     /* o zoom do lugar: abaixo de 900 px a camera se aproxima do saco com a viagem (o saco e o pet ficam grandes no terco de cima) e volta ao sair */
@@ -663,8 +683,16 @@ class VistaIlha {
     const ret = this.papel.atualizar({
       agora, dt: Math.min(0.05, dtMs / 1000), quadro, cel: this.petCel, motor: mu.pet, camera: this.camera,
       ppu, pxPorTexel, yPe, canvas: [this.renderer.domElement.width, this.renderer.domElement.height],
-      razao: this.renderer.getPixelRatio(), reduzido, noite, golpe: cor.golpe, andandoVista: cor.andando, suspenso,
+      razao: this.renderer.getPixelRatio(), reduzido, noite, golpe: cor.golpe, andandoVista: cor.andando, suspenso, olharPara,
     });
+    if (this.cantinho) {
+      /* o alto do papel do pet sobre o chao no pe dele (celulas), medido na tela: o quanto uma celula de altura ali sobe na tela, e onde o retangulo
+         do papel acaba (o mesmo topo de onde o PalcoPet tira o emote; o corte do sprite deixa uma folga acima da cabeca) */
+      const [cx, cz] = this.petCel, v = this.vLugar, dobra = this.dobra;
+      const pe = v.set(cx, dobrarY(0, cz, dobra, cx), cz).project(this.camera).y, um = v.set(cx, dobrarY(1, cz, dobra, cx), cz).project(this.camera).y;
+      const pxCel = ((um - pe) / 2) * this.alturaCss, peCss = ((1 - pe) / 2) * this.alturaCss;
+      this.cantinho.quadro({ agora, reduzido, dobra, sentado: this.tvSentado && !this.naMao, alturaPet: pxCel > 1e-6 ? (peCss - ret.y) / pxCel : 1 });
+    }
     /* o foco do HD-2D: a altura do pet na tela (0 embaixo, 1 em cima) */
     this.renderer.info.reset();
     /* o pet em papel fica sem o traco do estilo (pos.ts, SEM_CONTORNO): os filhos dele mudam, entao a camada e posta a cada quadro */
@@ -735,7 +763,7 @@ class VistaIlha {
     }, true, pode);
   }
 
-  dispose(): void { this.marcadores.dispose(); this.papel.dispose(); this.pos.dispose(); this.renderer.dispose(); }
+  dispose(): void { this.cantinho?.dispose(); this.marcadores.dispose(); this.papel.dispose(); this.pos.dispose(); this.renderer.dispose(); }
 
   /** a queda de qualidade (regra 10, PROPOSTO): sem vento, metade da grama e pixelRatio 1; so uma vez */
   baixarQualidade(): void {
