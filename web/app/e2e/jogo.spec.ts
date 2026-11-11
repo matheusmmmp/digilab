@@ -365,7 +365,9 @@ test("luta da POC: a primeira abertura descarta os pets de antes, avisa, oferece
   expect(r.aviso).toBeNull();
   expect(r.marca).toBe("8");
   expect(r.antigos).toHaveLength(2);
-  expect(r.tamer).toEqual({ versao: 8, log: [] });
+  /* o Tamer novo so tem os Bits dos niveis do Tamer (o piso 4 de quem ja jogava; docs/PLANO_V3_MOEDA.md, MO1), e grava a versao 9 */
+  expect(r.tamer.versao).toBe(9);
+  expect(r.tamer.log.filter((e: [string, { origem?: string }]) => e[0] !== "bits" || e[1].origem !== "nivel")).toEqual([]);
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
   await expect(page.locator("dialog.aviso-poc")).toHaveCount(0);
@@ -394,8 +396,11 @@ test("luta da POC: o pet v19 de antes sai com o aviso, e o Tamer fica com as med
   expect(r.save.versao).toBe(VERSAO_PET);
   expect(r.save.semente).not.toBe(SAVE_ANTIGO_V19.semente);
   expect(r.marca).toBe("8");
-  /* a medalha e o item dela ficam; sem a Fabrica de antes no registro, o Tamer fica como estava */
-  expect(r.tamer).toEqual(tamer);
+  /* a medalha e o item dela ficam; sem a Fabrica de antes no registro, o Tamer fica como estava, mais os Bits (MOEDA, MO1: a 1a medalha e os
+     niveis do Tamer pagam na abertura), na versao 9 */
+  expect(r.tamer.versao).toBe(9);
+  expect(r.tamer.log.filter((e: [string]) => e[0] !== "bits")).toEqual(tamer.log);
+  expect(r.tamer.log.some((e: [string, { id?: string }]) => e[0] === "bits" && e[1].id === "medalha:campina")).toBe(true);
   /* o ovo novo conhece a medalha do Tamer (o "u" no registro dele) */
   expect(r.save.log.filter((e: unknown[]) => e[1] === "u")).toEqual([[expect.any(Number), "u", { n: 1 }]]);
   await page.reload();
