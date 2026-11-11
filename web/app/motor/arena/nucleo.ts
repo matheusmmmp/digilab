@@ -1,6 +1,6 @@
 /* Funcoes de apoio da simulacao (porte de web/app/arena/nucleo.ts do efb2ded): quem esta em campo, geometria da elipse, obstaculos e
-   dano do ambiente. Mudancas da LP1: Math.hypot -> dist (a D-7), x ** 2 -> x * x, 1 contra 1 (sem equipe nem entrada em campo). */
-import { ELIPSE } from "./constantes.ts";
+   dano do ambiente. Mudancas da LP1: Math.hypot -> dist (a D-7), x ** 2 -> x * x, 1 contra 1 (sem equipe nem entrada em campo).
+   LP6-1: a geometria le a elipse da luta (L.el: a ELIPSE, ou ela escalada pelo estagio dos dois, a secao 4a do plano da LP6). */
 import { dist } from "./aritmetica.ts";
 import type { EstadoLutador, Evento, Lado, Luta, Lutador, Obstaculo, Ref, Zona } from "./tipos.ts";
 
@@ -14,12 +14,12 @@ export function mudar(u: Lutador, e: EstadoLutador): void { if (u.estado !== e) 
 export const noElipse = (x: number, y: number, z: Zona): boolean => {
   const a = (x - z.x) / z.rx, b = (y - z.y) / z.ry; return a * a + b * b <= 1;
 };
-export const normArena = (x: number, y: number): number => dist((x - ELIPSE.cx) / ELIPSE.rx, (y - ELIPSE.cy) / ELIPSE.ry);
-export function dentroArena(x: number, y: number): boolean {
-  const a = (x - ELIPSE.cx) / ELIPSE.rx, b = (y - ELIPSE.cy) / ELIPSE.ry; return a * a + b * b <= 1;
+export const normArena = (L: Luta, x: number, y: number): number => dist((x - L.el.cx) / L.el.rx, (y - L.el.cy) / L.el.ry);
+export function dentroArena(L: Luta, x: number, y: number): boolean {
+  const a = (x - L.el.cx) / L.el.rx, b = (y - L.el.cy) / L.el.ry; return a * a + b * b <= 1;
 }
-export function paraCentro(u: Lutador, f: number): [number, number] {
-  const dx = ELIPSE.cx - u.x, dy = ELIPSE.cy - u.y, d = dist(dx, dy) || 1; return [dx / d * f, dy / d * f];
+export function paraCentro(L: Luta, u: Lutador, f: number): [number, number] {
+  const dx = L.el.cx - u.x, dy = L.el.cy - u.y, d = dist(dx, dy) || 1; return [dx / d * f, dy / d * f];
 }
 export function fugirZona(u: Lutador, z: Zona, margem: number, f: number): [number, number] {
   const n = dist((u.x - z.x) / (z.rx * margem), (u.y - z.y) / (z.ry * margem));
@@ -45,8 +45,8 @@ export function ferir(L: Luta, u: Lutador, frac: number, motivo: string, mostrar
 /** a cerca: ninguem sai da elipse (menos no ringue, onde sair e a regra da arena) */
 export function prender(L: Luta, u: Lutador): void {
   if (L.cena.id === "ringue") return;
-  const dx = (u.x - ELIPSE.cx) / (ELIPSE.rx - 20), dy = (u.y - ELIPSE.cy) / (ELIPSE.ry - 10), d = dist(dx, dy);
-  if (d > 1) { u.x = ELIPSE.cx + dx / d * (ELIPSE.rx - 20); u.y = ELIPSE.cy + dy / d * (ELIPSE.ry - 10); }
+  const E = L.el, dx = (u.x - E.cx) / (E.rx - 20), dy = (u.y - E.cy) / (E.ry - 10), d = dist(dx, dy);
+  if (d > 1) { u.x = E.cx + dx / d * (E.rx - 20); u.y = E.cy + dy / d * (E.ry - 10); }
 }
 const inteiro = (o: Obstaculo): boolean => !(o.hp !== undefined && o.hp <= 0);
 /** obstaculos: pegada eliptica (r x 0,6r); empurram corpos */
