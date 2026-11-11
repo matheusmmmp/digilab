@@ -180,12 +180,22 @@ cada grade e antes da conferência.
 **A R0 e a decisão da R1 (2026-11-11).**
 - **A R0** (PR #834): o `lp6_0` passa 6 de 21. Caem o P1, o P4, o G4 e o S1, e o A1 piora no Rookie (0,256) e no Champion (0,298).
   - O apoio de perto prende quem atira junto do inimigo.
-- **A R1:** o Matheus escolheu a (a), "Grade do apoio (a)": uma grade nos números do apoio, registrada aqui antes de rodar.
+- **A R1:** a resposta do Matheus ao #834, repassada pelo Gerente, foi "Regra e grade": a (b) e a (a) juntas, na mesma rodada. Antes dela,
+  nesta sessão, ele tinha escolhido só a (a), "Grade do apoio (a)". A grade não chegou a rodar com a regra antiga.
+- **A regra (D-LP6-3-4):** o atirador bate e recua, como a seção 3 já dizia, e a R0 mostrou que ele ficava colado.
+  - Depois do apoio de perto, quem atira recua sem atacar até o alvo ficar na `distMin` do tiro. O recuo dura no máximo a espera do tiro
+    (`esperaMax`, 1 500 ms no `lp5_3`), na velocidade do recuo do tiro.
+  - Encurralado, o recuo acaba pelo tempo, a espera do tiro já vale como cumprida, e ele atira.
+  - Sem o `tiro` na entrada, o limite é a metade do alcance, e o tempo é o `RECUO_APOIO_SEM_TIRO_MS` (1 500 ms; PROPOSTO, SEM FONTE).
+  - Com as chaves desligadas, a luta é a de sempre: o gabarito da LP6-1 (`arena_lp6_v23.json`, a v21 e a v23) confere igual.
+  - Os testes ficam em `web/app/test/arena_lp6_recuo.test.ts`.
+- **A grade,** registrada aqui antes de rodar e já com a regra nova, mexe nos números do apoio:
   - O dano do apoio em 0,3, 0,45 e 0,6.
   - A recarga em 2, 3 e 4 vezes.
   - A espera do tiro fraco em 1 500 e 3 000 ms.
-  - São 18 pontos, mais o controle `ctrl_arena`: a elipse ligada e o apoio desligado.
+  - São 18 pontos, mais o controle `ctrl_arena`: a elipse ligada e o apoio desligado. O ponto `d60_r2_l15` é o `lp6_0`, agora com a regra
+    nova. A R0 (6 de 21) foi medida com a regra antiga.
   - O ritmo fica em 0,6 e a elipse em 1,15 e 1,3; os dois ficam para a R2.
 - **Como roda:** a grade usa a fase `lp6_3/r1`. Roda em todos os grupos, menos a vida, em 3 bases da calibração e com os tamanhos
   inteiros. A regra de escolha é a da seção 4.2 do plano da LP5, com as 10 metas protegidas do `lp5_3`.
-- **Se nenhum ponto devolve o A1 e as protegidas,** a rodada para e volta ao Matheus com a (b), mudar a regra do apoio de perto no núcleo.
+- **Se nenhum ponto devolve o A1 e as protegidas,** a rodada para e volta ao Matheus com os números, antes de qualquer outra alavanca.

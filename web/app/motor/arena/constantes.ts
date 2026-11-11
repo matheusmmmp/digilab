@@ -97,6 +97,10 @@ export const ACAO = {
     alcance de perto; o tiro fraco de quem bate de perto, com o alvo alem do alcance de perto por longeMs e ao alcance do tiro */
 export interface Apoio { dano: number; recarga: number; longeMs: number }
 export const APOIO_LP6: Readonly<Apoio> = Object.freeze({ dano: 0.6, recarga: 2, longeMs: 1500 });
+/** o recuo depois do apoio de perto de quem atira (LP6-3, D-LP6-3-4; "Regra e grade", Matheus, 2026-11-11): o atirador bate e recua, sem
+    atacar, ate o alvo ficar na distMin do tiro, no maximo pela espera do tiro (o esperaMax). Sem o `tiro` na entrada, ate a metade do
+    alcance, no maximo por este tempo (ms). PROPOSTO, SEM FONTE */
+export const RECUO_APOIO_SEM_TIRO_MS = 1500;
 /** o golpe de apoio na tabela das formas (formas.ts, gerada por tools/gerar_tabela_arena.py; um teste confere que o gerador usa os mesmos):
     o instante do golpe e o clipe a `ritmo` vezes os do golpe principal (o Attack_1 reaproveitado, mais rapido; secao 4 do plano) e o tiro
     fraco na velocidade `vel` (a 20 do "Guide", secao 3). PROPOSTO, SEM FONTE */

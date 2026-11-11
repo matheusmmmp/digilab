@@ -128,18 +128,22 @@ test("o apoio de perto nao troca o recuo: de volta ao idle, com o alvo perto, qu
 test("a esquiva (D-LP5-14) le o apoio de perto como le o golpe de perto", () => {
   const esquiva = { kChance: 0, kReacao: 0, kDash: 0, chanceMax: 1, pertoChance: 1, pertoReacao: 100, contraMs: 0 };
   /* quem le pula para tras (a reacao e o pulo); um lutador ocupado (atacando, atordoado ou ja pulando) nao le, como no golpe de perto */
+  /* nos 8 mapas: com o recuo depois do apoio (D-LP6-3-4), a luta fixa do campo nao tem um apoio que o outro esteja livre para ler */
   const lidosCom = (pertoChance: number) => {
-    const L = criarLuta(configLuta(entrada("campo", AGUMON, VEEMON, { esquiva: { ...esquiva, pertoChance } })), FIXO);
-    let lidos = 0, apoios = 0, nAp = -1;
-    rodar(L, (ev, L2) => {
-      for (const e of ev) if (e.tipo === "apoio" && e.u.lado === "a") { apoios++; nAp = L2.a.nAtaque; }
-      if (nAp >= 0 && L2.b.leuAtaque === nAp) {
-        /* lido na preparacao do apoio, e o pulo vem da leitura */
-        expect(L2.a.usandoApoio && !L2.a.golpeDado).toBe(true);
-        if (pertoChance > 0) expect(L2.b.reacao > 0 || L2.b.dash > 0).toBe(true);
-        lidos++; nAp = -1;
-      }
-    });
+    let lidos = 0, apoios = 0;
+    for (const cena of IDS_CENA) {
+      const L = criarLuta(configLuta(entrada(cena, AGUMON, VEEMON, { esquiva: { ...esquiva, pertoChance } })), FIXO);
+      let nAp = -1;
+      rodar(L, (ev, L2) => {
+        for (const e of ev) if (e.tipo === "apoio" && e.u.lado === "a") { apoios++; nAp = L2.a.nAtaque; }
+        if (nAp >= 0 && L2.b.leuAtaque === nAp) {
+          /* lido na preparacao do apoio, e o pulo vem da leitura */
+          expect(L2.a.usandoApoio && !L2.a.golpeDado).toBe(true);
+          if (pertoChance > 0) expect(L2.b.reacao > 0 || L2.b.dash > 0).toBe(true);
+          lidos++; nAp = -1;
+        }
+      });
+    }
     return { lidos, apoios };
   };
   const com = lidosCom(1);
