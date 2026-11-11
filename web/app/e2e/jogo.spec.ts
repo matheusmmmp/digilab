@@ -915,10 +915,13 @@ for (const largura of [390, 1280]) {
   test(`evolução: o momento em ${largura} px, a aba nova e o "Ver a revelação de novo"`, async ({ page }) => {
     await page.setViewportSize({ width: largura, height: largura >= 1100 ? 800 : 844 });
     await semear(page, SAVE_EVO, undefined, TAMER_1);
+    /* o cartao: com movimento reduzido a cena oficial (CENA_EVOLUCAO_UP) nao abre; ela tem o teste dela logo abaixo */
+    await page.emulateMedia({ reducedMotion: "reduce" });
     const erros = vigiarErros(page);
     await page.goto(APP + "#/crescer/evolucao");
     const rev = page.locator("dialog.revelacao[open]");
     await expect(rev).toBeVisible();
+    await expect(page.getByTestId("cena-evolucao")).toHaveCount(0);
     await expect(rev.locator(".revel-tit")).toHaveText("EVOLUÇÃO!");
     await expect(rev.locator(".revel-de")).toHaveText("Rookie → Champion");
     await expect(rev.locator(".evm-nome")).toHaveText("Growlmon");
@@ -1268,20 +1271,26 @@ test("mundo: o ovo novo choca na cena 3D", async ({ page }) => {
   expect(erros).toEqual([]);
 });
 
-/* UP-SOM: o som e desligado por padrao. Desligado, nenhuma requisicao de audio sai (nem em uma luta inteira); ligar e lembrado ao
-   recarregar e nao entra no save exportado; ligado com os arquivos ausentes, o aviso aparece e o jogo segue. */
-test("som: desligado por padrão não pede áudio nem em uma luta; ligar é lembrado e fica fora do save", async ({ page }) => {
+/* UP-SOM: o som e ligado por padrao (Matheus, 2026-11-10). Desligado pelo jogador, nenhuma requisicao de audio sai (nem em uma luta
+   inteira); ligar e desligar sao lembrados ao recarregar e nao entram no save exportado; ligado com os arquivos ausentes, o aviso aparece
+   e o jogo segue. */
+test("som: ligado por padrão; desligado não pede áudio nem em uma luta; a escolha é lembrada e fica fora do save", async ({ page }) => {
   test.setTimeout(180_000);
   await semear(page, SAVES.champion);
   const erros = vigiarErros(page), pedidos: string[] = [];
-  page.on("request", r => { if (/\/Assets\/sons\/|\.mp3(\?|$)/.test(r.url())) pedidos.push(r.url()); });
   await page.goto(APP + "#/pet/estado");
+  /* padrao ligado; o jogador desliga, e o desligado volta ao recarregar */
+  await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
+  await expect(page.getByRole("switch", { name: /Som do jogo/ })).toBeChecked();
+  await page.getByRole("switch", { name: /Som do jogo/ }).uncheck();
+  await page.reload();
+  page.on("request", r => { if (/\/Assets\/sons\/|\.mp3(\?|$)/.test(r.url())) pedidos.push(r.url()); });
   await irPara(page, "Lutar", "Arena", "lutar/arena");
   await page.getByTestId("poc-lutar").click();
   await expect(page.getByTestId("poc-resultado")).toBeVisible({ timeout: 90_000 });
   expect(pedidos, "pediu áudio com o som desligado").toEqual([]);
   await page.getByTestId("poc-resultado").getByRole("button", { name: "Continuar" }).click();
-  /* Configuração: padrão desligado; ligar e mexer no volume ficam no localStorage do app e voltam ao recarregar */
+  /* Configuração: o desligado foi lembrado; ligar e mexer no volume ficam no localStorage do app e voltam ao recarregar */
   await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
   const chave = page.getByRole("switch", { name: /Som do jogo/ }), vol = page.getByLabel("Volume do som");
   await expect(chave).not.toBeChecked();
@@ -1304,6 +1313,8 @@ test("som: ligado com os arquivos ausentes mostra o aviso e a tela segue", async
   await page.route(/\/Assets\/sons\//, r => r.fulfill({ status: 404, body: "ausente" }));
   await page.goto(APP + "#/pet/estado");
   await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
+  /* ja vem ligado (padrao): desliga e liga de novo, o gesto que pede o mapa */
+  await page.getByRole("switch", { name: /Som do jogo/ }).uncheck();
   await page.getByRole("switch", { name: /Som do jogo/ }).check();
   await expect(page.getByTestId("aviso-som").first()).toBeVisible();
   await expect(page.getByTestId("aviso-som").first()).toContainText("mapa de sons");
@@ -1370,5 +1381,34 @@ test("pele dos menus: Ajustes › Visual troca na hora e a escolha sobrevive ao 
   await page.goto(APP + "#/config");
   await expect(page.locator(".mc-cfg")).toContainText("pele Militar · tema");
   expect(await pele()).toBe("xcom");
+  expect(erros).toEqual([]);
+});
+
+/* a cena oficial da evolucao (CENA_EVOLUCAO_UP, ligada em 2026-11-10; docs/TAREFA_V2_UP_EVOLUCAO.md): o mesmo pet do momento da evolucao
+   (Agumon -> Growlmon, a cena da Tamers). Os pacotes ficam fora do git, em Assets/evolucao_up: sem eles o teste nao se aplica */
+test("evolução: a cena oficial toca antes do cartão e o Pular leva ao cartão", async ({ page }) => {
+  const temCena = (await page.request.get("/Assets/evolucao_up/mapa.json")).ok();
+  test.skip(!temCena, "sem Assets/evolucao_up (fora do git)");
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await semear(page, SAVE_EVO, undefined, TAMER_1);
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/crescer/evolucao");
+  const rev = page.locator("dialog.revelacao[open]"), cena = page.getByTestId("cena-evolucao");
+  await expect(rev).toBeVisible();
+  await expect(cena).toBeVisible();
+  /* baixou e esta tocando: o "carregando" some e o canvas tem pixels pintados */
+  await expect(cena.getByRole("status")).toHaveCount(0);
+  await expect.poll(() => cena.locator("canvas").evaluate((cv: HTMLCanvasElement) => {
+    const g = cv.getContext("2d")!, d = g.getImageData(0, 0, cv.width, cv.height).data;
+    let n = 0; for (let i = 3; i < d.length; i += 4 * 97) if (d[i] > 0) n++;
+    return n;
+  })).toBeGreaterThan(50);
+  await expect(page.getByTestId("aviso-cena-evolucao")).toHaveCount(0);
+  await cena.getByRole("button", { name: "Pular" }).click();
+  await expect(cena).toHaveCount(0);
+  await expect(rev.locator(".evm-nome")).toHaveText("Growlmon");
+  await rev.getByRole("button", { name: "Continuar" }).click();
+  await expect(page.locator("dialog.revelacao[open]")).toHaveCount(0);
   expect(erros).toEqual([]);
 });

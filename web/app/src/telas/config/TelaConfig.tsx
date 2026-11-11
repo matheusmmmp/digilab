@@ -71,7 +71,7 @@ function Principal({ abrir }: { abrir: (p: ParteConfig) => void }) {
         interruptor={{ ligado: detalhesPet, mudar: ligarDetalhesPet }} />
       <Aj ic={Camera} nome="Viagem da câmera" novo resumo="desligada, os lugares abrem num corte seco" interruptor={{ ligado: viagem, mudar: escolherViagem }} />
       <Aj ic={MessageCircle} nome="Fala" rotulo="Fala do pet" resumo={`modo ${NOME_MODO[fl.modo]} · ${rotuloLLM().texto}`} abrir={() => abrir("fala")} />
-      <Aj ic={Volume2} nome="Som" rotulo="Som do jogo" resumo="golpes e impactos na luta e o efeito da evolução; desligado, nada é baixado" interruptor={{ ligado: som.ligado, mudar: v => SOM.ligar(v) }} />
+      <Aj ic={Volume2} nome="Som" rotulo="Som do jogo" resumo="golpes e impactos na luta, a cena e a música da evolução; desligado, nada é baixado" interruptor={{ ligado: som.ligado, mudar: v => SOM.ligar(v) }} />
       {som.ligado && (
         <label className="aj aj--volume"><Volume1 className="aj-ic" aria-hidden="true" /><span className="aj-nome"><b>{Math.round(som.volume * 100)}%</b></span>
           <input type="range" min={0} max={1} step={0.05} value={som.volume} aria-label="Volume do som" aria-valuetext={`${Math.round(som.volume * 100)}%`} onChange={e => SOM.volume(Number((e.target as HTMLInputElement).value))} /></label>

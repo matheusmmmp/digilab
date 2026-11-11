@@ -1,6 +1,7 @@
 /* Som do jogo (TAREFA_V2_UP_SOM): Web Audio do navegador, sem biblioteca. Sons e musicas do Digimon UP (Bandai; com o credito,
    autorizados pelo Matheus: docs/UI_GUIDELINES.md, secao 5.1) ficam FORA do repositorio, em D:\Trab\digilab\Assets\sons, com o
-   mapa.json (chave de sprite -> eventos) gerado por Assets\gerar_sons_up.py. Desligado por padrao: desligado, nada e pedido nem tocado.
+   mapa.json (chave de sprite -> eventos) gerado por Assets\gerar_sons_up.py. Ligado por padrao (Matheus, 2026-11-10, para a musica da cena da
+   evolucao tocar sem passar por Ajustes); desligado pelo jogador, fica lembrado e nada e pedido nem tocado.
    Liga/desliga e volume ficam no localStorage do app (nao no save do pet). So apresentacao: nada daqui entra no motor, no log
    ou no save, e a variacao do som usa o Math.random do app, nunca a RNG do motor. A logica e a do bloco "sons do jogo" da arena do
    prototipo (eventos do script de batalha com atraso e variacao), reescrita. */
@@ -45,6 +46,8 @@ export interface Dependencias {
   buscar: (url: string) => Promise<{ ok: boolean; status: number; json(): Promise<unknown>; arrayBuffer(): Promise<ArrayBuffer> }>;
   aleatorio: () => number;
   armazenamento: { getItem(k: string): string | null; setItem(k: string, v: string): void } | null;
+  /** chama f uma vez no proximo gesto do jogador (o navegador so libera o audio depois de um); opcional: o teste nao precisa */
+  aoGesto?: (f: () => void) => void;
 }
 export interface EstadoSom { ligado: boolean; volume: number; aviso: string | null }
 
@@ -53,6 +56,7 @@ const depsPadrao = (): Dependencias => ({
   buscar: url => fetch(url),
   aleatorio: Math.random,
   armazenamento: (() => { try { return localStorage; } catch { return null; } })(),
+  aoGesto: f => { const g = (): void => { removeEventListener("pointerdown", g); removeEventListener("keydown", g); f(); }; addEventListener("pointerdown", g); addEventListener("keydown", g); },
 });
 
 /** um sistema de som; o jogo usa a instancia SOM, o teste cria a dele com dependencias falsas */
@@ -60,14 +64,14 @@ export function criarSom(dep: Dependencias, base = SONS_URL) {
   const ouvintes = new Set<() => void>();
   let ctx: ContextoAudio | null = null, ganho: GanhoAudio | null = null, mapa: Promise<MapaSom | null> | null = null;
   const buffers = new Map<string, Promise<{ duration: number } | null>>();
-  let musica: FonteAudio | null = null, sfx: FonteAudio | null = null, ordemMus = 0, ordemSfx = 0;
+  let musica: FonteAudio | null = null, sfx: FonteAudio | null = null, ordemMus = 0, ordemSfx = 0, esperandoGesto = false;
 
   const ler = (k: string): string | null => { try { return dep.armazenamento?.getItem(k) ?? null; } catch { return null; } };
   const gravar = (k: string, v: string): void => { try { dep.armazenamento?.setItem(k, v); } catch { /* preferencia de tela */ } };
-  /* o que estava lembrado: ligado so com "1"; volume so se for numero entre 0 e 1 */
+  /* o que estava lembrado: desligado so com "0" (sem nada gravado, ligado); volume so se for numero entre 0 e 1 */
   const salvoVol = ler(CHAVE_SOM_VOLUME), v0 = Number(salvoVol);
   let estado: EstadoSom = {
-    ligado: ler(CHAVE_SOM) === "1", volume: salvoVol !== null && Number.isFinite(v0) && v0 >= 0 && v0 <= 1 ? v0 : VOLUME_PADRAO, aviso: null,
+    ligado: ler(CHAVE_SOM) !== "0", volume: salvoVol !== null && Number.isFinite(v0) && v0 >= 0 && v0 <= 1 ? v0 : VOLUME_PADRAO, aviso: null,
   };
   const mudar = (p: Partial<EstadoSom>): void => { estado = { ...estado, ...p }; for (const o of ouvintes) o(); };
 
@@ -78,7 +82,13 @@ export function criarSom(dep: Dependencias, base = SONS_URL) {
     if (!ctx) {
       ctx = dep.criarContexto(); ganho = ctx.createGain(); ganho.gain.value = estado.volume; ganho.connect(ctx.destination);
     }
-    if (ctx.state === "suspended") void ctx.resume();
+    /* com o som ligado por padrao, a cena da evolucao pode abrir antes de qualquer clique (o pet evolui ao abrir o jogo): o contexto
+       nasce suspenso e o que ja comecou toca quando o jogador fizer o primeiro gesto */
+    if (ctx.state === "suspended") {
+      const c = ctx;
+      void c.resume();
+      if (!esperandoGesto && dep.aoGesto) { esperandoGesto = true; dep.aoGesto(() => { esperandoGesto = false; void c.resume(); }); }
+    }
     return ctx;
   };
   const carregarMapa = (): Promise<MapaSom | null> => {
