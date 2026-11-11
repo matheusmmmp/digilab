@@ -89,7 +89,7 @@ test("o mapa de antes da HR2 (sem os efeitos do cuidado): avisa uma vez e fica e
 });
 
 /* ------------------------------------------------------------------ o que cada momento emite */
-const BASE: EntradaMomentos = { chave: "p", nascendo: 0, dormindo: false, morto: false, acao: "ocioso", abertos: [], urgente: false, atendidos: 0, consumos: 0, ultimo: null };
+const BASE: EntradaMomentos = { chave: "p", nascendo: 0, dormindo: false, morto: false, acao: "ocioso", abertos: [], urgente: false, atendidos: 0, consumos: 0, ultimo: null, vazio: null };
 const em = (o: Partial<EntradaMomentos> = {}): EntradaMomentos => ({ ...BASE, ...o });
 function ouvindo(): { ouvidos: string[]; parar: () => void } {
   const ouvidos: string[] = [];
