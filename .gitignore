@@ -152,3 +152,6 @@ artifacts_conversa_pet/**/vidas/
 artifacts_linhagem/**/vidas/
 !artifacts_v2_descritivo_plato/
 artifacts_v2_descritivo_plato/**/vidas/
+
+# MMO0: o pacote da medida Chrome x Node (web/app/scripts/mmo0/empacotar.ts)
+web/app/scripts/mmo0/dist/
