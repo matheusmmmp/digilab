@@ -53,3 +53,8 @@ export {
   CMIT, LENDA_CONTADA, LENDA_DO_MACACO, NOME_ORACULO, detalheNoTick, falaDoOraculo, hybrisDe, lendas, variadaDe,
   type AtividadeLenda, type EventoLenda, type FontesLenda,
 } from "./lendas.ts";
+/* MITOLOGIA, E1: os sinais dos cinco deuses, o Myotismon, a pedra, as pegadas, o dia raro e o enigma */
+export {
+  CMIT_E1, DEUSES, ENIGMA, FALA_DIA_RARO, FALA_PEDRA, FALA_PEGADAS, FALA_PESSEGO, NOME_DEUS, SINAL_DEUS, diaDeVida, myotismonNoTick,
+  myotismonJaApareceu, pedraAchadaDe, pedraEm, pegadasDe, sinaisDe, sinaisNoTick, tickDoDiaRaro, type Deus, type FontesE1, type SinalDeus,
+} from "./lendas_e1.ts";
