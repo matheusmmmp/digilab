@@ -69,7 +69,7 @@ export function petAqui(o: Onde): Motor | null {
 }
 /* o mesmo pet: o mesmo registro, sem contar a passagem de ilha (o "mi" e do jogo, nao do jogador: o arquivo exportado antes da ilha
    grande e o pet daqui, que ja passou, sao o mesmo pet) */
-const semIlha = (log: readonly EventoRegistro[]): string => JSON.stringify(log.filter(e => e[1] !== "mi"));
+const semIlha = (log: readonly EventoRegistro[]): string => JSON.stringify(log.filter(e => e[1] !== "mi" && e[1] !== "ma"));
 const igual = (a: Guardado, b: Motor): boolean => semIlha(a.log) === semIlha(b.log) && (a.versao ?? 1) === b.versao;
 
 /** sem conflito: vai para a espera. Devolve a mensagem para a tela */
