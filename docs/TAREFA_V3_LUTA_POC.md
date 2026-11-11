@@ -652,6 +652,22 @@ D-LP5-1-11 a 16.
 A LP5-1 fecha pela regra das 3 rodadas. A LP5-2 (os NPCs, o sparring e a vida) parte do `lp5_1_r2`. Nele, o P4 dá de 0,69 a 0,86 de
 média, e só 10 de 100 vidas chegam ao Mega.
 
+### A esquiva ligada (D-LP5-16)
+
+O Matheus: "pode ligar esquiva nova e fazer o merge". O candidato `lp5_1_esq` é o `lp5_1_r2` com a esquiva da D-LP5-14 ligada, no
+ponto `m6_f6_p0` da grade `lp5_1/r4e`, o único da grade com 6 metas. A leitura do golpe de perto fica desligada: ligada (0,35), o E1
+reprova e o A1 pende para quem atira. A medição inteira (`lp5_1_esq/calibracao`, commit `dea4e71c`, 1 412 957 lutas) dá 8 de 21 metas,
+contra 6 do `lp5_1_r2`:
+
+- **passam a mais o P4 e o S1.** O P4: a fração dos pets a 0,8 ou mais vai de 0,45/0,46 a 0,85/0,98 no Champion e no Ultimate. O S1:
+  o Ringue do Rookie vai de 0,449 a 0,451, na beira da faixa;
+- **a mira ganha peso:** no T2, de 0,53 a 0,62 no Rookie e de 0,53 a 0,60 no Ultimate. O fôlego segue morto (0,48 e 0,49);
+- **o P5 sobe, mas reprova:** 19 de 100 vidas chegam ao Mega, contra 10;
+- **nenhuma meta que passava cai:** o T1 dá 0,83/0,90/0,94/0,96, o E1 0,17, a mediana do D1 de 21,6 a 24,7 s;
+- **o que piora um pouco:** o V2 do Rookie (de 0,21 a 0,25, aceito como reprovado na D-LP5-15) e o A1 do Ultimate (de 0,56 a 0,58).
+
+No jogo, a luta segue no v21: a esquiva só entra com o v22, na LP5-5. A LP5-2 parte do `lp5_1_esq`.
+
 ## Resultado da LP3c (2026-11-10)
 
 Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp3c`, a pedido do Gerente de sprites e luta. O pedido seguiu a revisão dos
