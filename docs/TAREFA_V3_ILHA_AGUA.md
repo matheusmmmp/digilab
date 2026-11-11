@@ -538,3 +538,36 @@ diz que mudar não ajuda. Fica a mudança da memória (128 células), que não d
 - **A conferência do efeito:** a medida do retorno da IG5 (12.14), repetida com a v25: a regra é a mesma do plano (o pet volta de 70
   células?). O resultado entra no mesmo artefato, numa chave nova.
 - **O que não muda:** a velocidade, o cheiro, o lugar do comedouro.
+
+### 12.17 IG6: o que foi construído e a conferência do efeito (2026-11-11)
+
+**Esta etapa muda o jogo de hoje:** o ovo novo nasce v25, e os pets v21 a v24 que estão na ilha grande ganham o evento `ma` ao abrir.
+
+- **No Python:** `D_MAX_ILHA_GRANDE` (2 048) no `config.py`; `Memoria.alcance` e `DigiBrain.alcance_da_memoria`, que trocam só o
+  parâmetro. O padrão dos inatos não mudou, e os gabaritos do modular de antes saem iguais.
+- **Na web:** o mesmo número e as mesmas duas funções; a v25 (a v24 com o alcance novo desde o ovo); o evento `ma` do registro, que os
+  pets v21 a v24 na ilha grande ganham ao abrir, logo depois do `mi` quando os dois acontecem na mesma abertura.
+- **O alcance é do pet, não só do cérebro que decide:** com o A decidindo, o evento guarda o alcance, e o modular criado depois nasce
+  com ele.
+- **A assinatura** dos pets que não recebem o evento não muda; a de quem recebe ganha uma marca do alcance.
+- **A paridade:** o gabarito novo `digibrain_modular_alcance.json.gz`, três vidas do modular nascidas com 128 células, que a web refaz
+  decisão a decisão; cada uma difere da mesma vida com o alcance de hoje. A troca antes da primeira decisão dá a mesma vida de quem
+  nasceu com o alcance. A troca no meio de uma vida já andada é conferida só no jogo (o replay refaz a vida).
+
+**A conferência do efeito** (o retorno da 12.14, na ilha grande, com o modular; `MEDIR_IG6=1`, chave `ig6_retorno` do artefato):
+
+| Solto a | v24, memória de 64 células | v25, memória de 128 células |
+|---|---|---|
+| 20 células | 5 de 5 voltam | 5 de 5 voltam |
+| 40 células | 5 de 5 voltam | 4 de 5 voltam (o quinto chegou a 5,8 células) |
+| 70 células | 1 de 5 volta; a menor distância média ao comedouro foi 43,5 células | 1 de 5 volta; a menor distância média foi 12,0 células |
+
+Por semente, a 70 células, a menor distância ao comedouro em um dia foi 1,6, 52,1, 36,8, 70 e 57,2 células na v24, e 0,5, 3,4, 9,2,
+19,7 e 27,1 na v25.
+
+**A leitura:** com 128 células o pet solto a 70 passa a andar na direção de casa em todas as cinco vidas, mas em um dia só uma chega a
+3 células do comedouro, que é o critério do plano. O efeito existe e é parcial. A 40 células uma vida das cinco deixou de chegar no
+prazo; com cinco sementes não dá para dizer se é efeito ou variação. Nada mais foi ajustado depois de ver este número.
+
+**O que não foi verificado:** a suíte inteira do Python; o custo no celular; a troca do alcance no meio da vida no Python (só há o caso
+do parâmetro trocado antes da primeira decisão e o teste de unidade).

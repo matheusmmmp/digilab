@@ -173,6 +173,13 @@ export class Memoria {
     return [Math.floor(x / this.sub), Math.floor(y / this.sub)];
   }
 
+  /** o alcance da memoria de lugar passa a ser `dMax` subunidades (docs/TAREFA_V3_ILHA_AGUA.md, secao 12.16, IG6; a ilha grande; o
+   *  Memoria.alcance do Python). So o parametro muda: os episodios guardados ficam como estao. Inteiro positivo; outro valor falha alto */
+  alcance(dMax: number): void {
+    if (typeof dMax !== "number" || !Number.isInteger(dMax) || dMax <= 0) throw new Error(`M-MEM: o alcance da memoria e um inteiro positivo de subunidades: ${String(dMax)}`);
+    this.p = { ...this.p, d_max: dMax } as typeof this.p;
+  }
+
   /** a ida do mundo para a ilha maior (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG4; a IG-7: "deslocados junto com o lar"; o
    *  Memoria.deslocar do Python): cada lugar lembrado anda (dx, dy), como o pet, a comida e a bola. `ajustar(x, y)` devolve o ponto que
    *  vale no mundo novo (dentro do mapa e, se cair em celula fechada, na terra mais perto) e `regiaoDe(x)` o indice da regiao dele; o

@@ -52,7 +52,7 @@ sys.path.insert(0, str(RAIZ / "experiments"))
 import run_v2_digibrain_prototipo as orq  # noqa: E402
 from bancada.regras_mundo import simular_vida_fisico  # noqa: E402
 
-from digilab.config import CONFIG_DIGIBRAIN_INATOS, CONFIG_DIGIBRAIN_LIGADA, CONFIG_PADRAO  # noqa: E402
+from digilab.config import CONFIG_DIGIBRAIN_INATOS, CONFIG_DIGIBRAIN_LIGADA, CONFIG_PADRAO, D_MAX_ILHA_GRANDE  # noqa: E402
 from digilab.digibrain import adapt as adapt_mod  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.mundo import DonoComLugar  # noqa: E402
@@ -423,6 +423,29 @@ def fins() -> bytes:
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------------
+# IG6 da ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secao 12.16): o G-PAR do M-MEM com o alcance da memoria de 128 celulas (`d_max` = 2 048,
+# config.D_MAX_ILHA_GRANDE). Arquivo novo, no molde do dos fins: vidas do laboratorio nascidas com o alcance novo. O mundo destas vidas e o
+# de sempre (64 x 30): o que se confere e a conta da memoria com o outro `d_max`, decisao a decisao. Sementes dos testes; nao sao vidas de
+# pesquisa.
+ARQUIVO_ALCANCE = f"{PREFIXO}alcance.json.gz"
+INATOS_ALCANCE = {"d_max": D_MAX_ILHA_GRANDE}
+VIDAS_ALCANCE = (("atencioso", "longe_fixo", 101, INATOS_ALCANCE), ("incoerente", "longe", 404, INATOS_ALCANCE),
+                 ("relapso", "comedouro", 202, INATOS_ALCANCE))
+
+
+def alcance() -> bytes:
+    """o gz (mtime 0, nivel 9) das vidas com o alcance da ilha grande; cada uma tem de diferir da mesma vida com o alcance de hoje (senao o
+    arquivo nao confere nada)"""
+    vidas = [_vida_fins(*v) for v in VIDAS_ALCANCE]
+    for v, (dono, lugar, semente, _) in zip(vidas, VIDAS_ALCANCE):
+        hoje = _vida_fins(dono, lugar, semente, {})
+        v["difere_de_hoje"] = v["estado"] != hoje["estado"]
+    if not any(v["difere_de_hoje"] for v in vidas):
+        raise RuntimeError("nenhuma vida do alcance difere da vida de hoje: o arquivo nao exercita o d_max")
+    return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------
 # PE3 da ponte da luta (docs/TAREFA_V3_PONTE_LUTA.md, 3.5): o G-PAR do corpo e do M-MEM com a luta. Arquivo novo e enxuto, como o dos fins: vidas
 # curtas do mundo (as mesmas do laboratorio) em que, entre os avancos do log, entram resumos de luta ESCRITOS A MAO (o Python nao simula a luta:
 # recebe o resumo pronto, evento `lt`), com a `ConfigLutaCorpo` e a `ConfigLutaMemoria` ligadas. Por decisao: a acao, o motivo (com o campo `lutas`
@@ -502,6 +525,11 @@ if __name__ == "__main__":
         b = luta()
         (PASTA / ARQUIVO_LUTA).write_bytes(b)
         print(f"{PASTA / ARQUIVO_LUTA} ({len(b) / 1024 / 1024:.2f} MiB)")
+        sys.exit(0)
+    if "--alcance" in sys.argv:                       # so o arquivo do alcance da memoria (IG6 da ilha grande)
+        b = alcance()
+        (PASTA / ARQUIVO_ALCANCE).write_bytes(b)
+        print(f"{PASTA / ARQUIVO_ALCANCE} ({len(b) / 1024 / 1024:.2f} MiB)")
         sys.exit(0)
     if "--fins" in sys.argv:                          # so o arquivo dos fins da LM4
         b = fins()

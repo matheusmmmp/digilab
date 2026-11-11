@@ -11,7 +11,7 @@ import { gunzipSync } from "node:zlib";
 import { CMU_MVP } from "../motor/constantes.ts";
 import { CCO_CORPO_V11, CONFIG_LUTA_CORPO_LIGADA } from "../motor/corpo.ts";
 import { DigiBrain } from "../motor/digibrain/adapt.ts";
-import { CONFIG_DIGIBRAIN_LAB, INATOS_MODULAR } from "../motor/digibrain/constantes.ts";
+import { CONFIG_DIGIBRAIN_LAB, D_MAX_ILHA_GRANDE, INATOS_MODULAR } from "../motor/digibrain/constantes.ts";
 import { MotorCorpoMundo } from "../motor/motor_corpo_mundo.ts";
 import { estadoNascimentoPy, type EventoCorpo } from "../motor/motor_corpo.ts";
 import { assinar, conferir, vidasModular } from "./digibrain_modular_gabarito.ts";
@@ -45,8 +45,9 @@ const sha = (t: string): string => createHash("sha256").update(t, "utf8").digest
 
 interface Vivida { cerebro: DigiBrain; assinaturas: Record<string, string>[]; m: MotorCorpoMundo; dores: { tick: number; vida_perdida_s: number; dor_antes: number; dor_depois: number }[] }
 /** a vida no laco do TS: o log do Python aplicado a um MotorCorpoMundo com o DigiBrain e a chave do laboratorio ligada */
-function viver(semente: number, log: readonly EventoCorpo[], inatos: typeof INATOS_MODULAR = INATOS_MODULAR, luta = false): Vivida {
+function viver(semente: number, log: readonly EventoCorpo[], inatos: typeof INATOS_MODULAR = INATOS_MODULAR, luta = false, antes?: (c: DigiBrain) => void): Vivida {
   const cerebro = new DigiBrain(CONFIG_DIGIBRAIN_LAB, inatos, luta);
+  antes?.(cerebro);                                      // (IG6) o alcance da memoria trocado antes da primeira decisao
   const assinaturas: Record<string, string>[] = [];
   const agir = cerebro.agir.bind(cerebro);
   cerebro.agir = (obs, rng) => {                         // a assinatura do estado depois do `agir`, como o Gravador do exportador
@@ -144,5 +145,30 @@ describe("G-PAR-VIDA (PE3 da ponte da luta): o corpo e o M-MEM com o resumo da l
     expect(() => viver(g.semente, g.log, INATOS_MODULAR, false)).toThrow(/ConfigLutaCorpo/);
     const c = new DigiBrain();
     expect(() => c.receberLuta("muralha", -1, 400, 30)).toThrow(/luta_memoria/);
+  });
+});
+
+/* IG6 da ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secao 12.16): o G-PAR do M-MEM com o alcance da memoria de 128 celulas (o `d_max` de
+   2 048, D_MAX_ILHA_GRANDE). O arquivo e o digibrain_modular_alcance.json.gz (experiments/exportar_gabarito_digibrain_modular.py --alcance),
+   no molde do dos fins: vidas nascidas com o alcance novo. O Python confere que cada uma difere da mesma vida com o alcance de hoje */
+describe("G-PAR-VIDA: as vidas com a memoria de 128 celulas (IG6)", () => {
+  const vidas = lerGz<{ vidas: (VidaFins & { difere_de_hoje: boolean })[] }>("digibrain_modular_alcance.json.gz").vidas;
+  test("o arquivo: tres vidas com o d_max da ilha grande, todas diferentes das de hoje", () => {
+    expect(D_MAX_ILHA_GRANDE).toBe(2 * INATOS_MODULAR.d_max);
+    expect(vidas.map(v => [v.inatos, v.difere_de_hoje])).toEqual([[{ d_max: D_MAX_ILHA_GRANDE }, true], [{ d_max: D_MAX_ILHA_GRANDE }, true], [{ d_max: D_MAX_ILHA_GRANDE }, true]]);
+    expect(vidas.reduce((n, v) => n + v.decisoes.length, 0)).toBe(1152);
+  });
+  vidas.forEach(g => {
+    test(`${g.lugar}/${g.dono}/${g.semente} (${JSON.stringify(g.inatos)}): cada decisao e o estado interno no fim`, () => {
+      const inatos = { ...INATOS_MODULAR, ...g.inatos } as unknown as typeof INATOS_MODULAR;
+      const v = viver(g.semente, g.log, inatos);
+      conferirVida(`${g.lugar}/${g.dono}/${g.semente}`, v, g.decisoes);
+      expect(sha(textoPy(v.cerebro.estadoInterno())), "estado interno no fim").toBe(g.estado);
+      /* a mesma vida com o alcance de hoje da outro estado: o arquivo exercita mesmo o d_max */
+      expect(sha(textoPy(viver(g.semente, g.log, INATOS_MODULAR).cerebro.estadoInterno()))).not.toBe(g.estado);
+      /* e o alcance trocado no meio da vida (o `alcanceDaMemoria` logo no comeco) da a mesma vida de quem nasceu com ele */
+      const meio = viver(g.semente, g.log, INATOS_MODULAR, false, c => c.alcanceDaMemoria(D_MAX_ILHA_GRANDE));
+      expect(sha(textoPy(meio.cerebro.estadoInterno()))).toBe(g.estado);
+    });
   });
 });
