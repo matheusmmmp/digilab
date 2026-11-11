@@ -9,7 +9,7 @@ import * as M from "../motor/index.ts";
 const { CD, TPD, Motor, pedraAchadaDe, pedraEm, sinaisDe } = M;
 const SEMENTE = 303;
 const m = new Motor(SEMENTE);
-const [px, py] = pedraEm();
+const [px, py] = pedraEm(m.mundo?.cm);
 let levou = false;
 for (let p = 0; p < Math.round(3.3 * TPD / CD.passo); p++) {
   m.avancar(CD.passo);
