@@ -665,4 +665,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — CADEIA, etapa 2: a cena só mastiga com o que comer e o lugar vazio no rosto (Gerente da V3, Claude Code, Opus 5.5, branch `v3-cadeia-f2`)](registro/2026-11.md)
 - [2026-11-11 — CADEIA, etapa 3: o painel mostra o resultado da decisão anterior (Gerente da V3, Claude Code, Opus 5.5, branch `v3-cadeia-f3`)](registro/2026-11.md)
 - [2026-11-11 — HABITAT_REACOES, HR2 e HR3: o som do cuidado, a voz do pet e o bipe do chamado (Gerente da V3, Claude Code, Opus 5.5, branch `v3-habitat-hr2`)](registro/2026-11.md)
+- [2026-11-11 — ARVORE_SACODE, S2: o sacudir no motor em TS, sem versão de pet (worker, Claude Code, Opus 5.5, branch `v3-arvore-sacode-s2`)](registro/2026-11.md)
 - [2026-11-11 — MUNDO_ENFEITES, a prancha da TV de tubo em cartoon (Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-objeto-tv`)](registro/2026-11.md)
