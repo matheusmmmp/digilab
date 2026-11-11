@@ -22,7 +22,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from digilab.config import CONFIG_DECODIFICADOR, CONTEUDOS_FALA
+from digilab.config import CONFIG_DECODIFICADOR, CONFIG_VOZ_V4, CONTEUDOS_FALA
 
 VERSAO_DEC = "dec-v1"
 VERSAO_DEC_V2 = "dec-v2"
@@ -172,3 +172,21 @@ def validar(d, rivais=frozenset()) -> Conceitos:
         vistos.add(chave)
         out.append(Conceito(c["nome"], _inteiro(c["valor"], "valor", 0, S), _inteiro(c["confianca"], "confianca", 0, S), alvo, episodio))
     return Conceitos(k, d["intencao"], tuple(out), versao)
+
+
+def selecionados_v4(conceitos: Conceitos, estagio: str) -> tuple[Conceito, ...]:
+    """A selecao da voz-v4 (DC5, plano 3.5, D-DC5-5): no maximo k conceitos ativos (k pelo estagio, `CONFIG_VOZ_V4`), pela pontuacao
+    valor x confianca, da maior para a menor (empate: a ordem do catalogo e o alvo). No dec-v2 (e no dec-v1), o conceito com o nome da
+    intencao, se ativo, e sempre um dos escolhidos e ocupa uma vaga (a INTENCAO nunca vira "nenhuma"); no dec-v3 o pedido vai sempre, a parte,
+    e nao ocupa vaga. Funcao pura: nada do pet, so os conceitos que a pagina mandou."""
+    k = CONFIG_VOZ_V4.k_do_estagio(estagio)
+    ordem = sorted(conceitos.ativos(), key=lambda c: (-(c.valor * c.confianca), NOMES.index(c.nome), c.alvo or ""))
+    escolhidos: list[Conceito] = []
+    if conceitos.versao != VERSAO_DEC_V3:
+        escolhidos += [c for c in ordem if c.nome == conceitos.intencao][:1]
+    for c in ordem:
+        if len(escolhidos) >= k:
+            break
+        if c not in escolhidos:
+            escolhidos.append(c)
+    return tuple(escolhidos[:k])
