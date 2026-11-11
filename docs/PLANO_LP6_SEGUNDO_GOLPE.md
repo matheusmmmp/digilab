@@ -116,3 +116,63 @@ As decisões 1 a 3 foram DECIDIDAS como recomendadas ("pode seguir para o plano 
    - **Recomendado:** espaço de verdade, com a elipse por estágio, atrás de chave, e calibrada junto com o segundo golpe.
    - **O custo de errar:** com espaço de verdade, a luta do Mega fica mais longa, e os torneios e os NPCs mudam (a LP6-3 mede isso). Só o
      visual mantém os corpos grandes se empurrando e o tiro sem espaço para recuar.
+
+## 8. A LP6-3: o que a rodada mede (registrado antes de qualquer luta, 2026-11-11)
+
+O pedido veio do Gerente, com as palavras do Matheus: "pode seguir para o plano lp6 e a outra pendência do tamanho da arena". A rodada
+usa a bancada da LP5 (`web/app/scripts/equilibrio_poc/`) sem mudar as metas, a régua nem a regra de escolha
+(`docs/PLANO_EQUILIBRIO_LUTA_POC.md`, seções 2, 4.2 e 4.4).
+
+**O ponto de partida.** O candidato `lp6_0` (`candidatos.ts`) é o `lp5_3` com as duas chaves da LP6-1 ligadas e os números dela: o apoio
+com dano de 0,6, recarga de 2 vezes, clipe de 0,6 e espera de 1 500 ms (`APOIO_LP6`), e a elipse de 1,15 e 1,3 (`ARENA_POR_ESTAGIO_LP6`).
+O teste `test/equilibrio_poc_lp6.test.ts` confere três coisas. Primeiro, o `lp6_0` só difere do `lp5_3` nas duas chaves. Segundo,
+desligadas, nada entra na luta. Terceiro, a luta da bancada é a do núcleo com as mesmas entradas.
+
+**A comparação.** O `lp5_3` sem as chaves, das medidas que já estão no git. Na calibração, `lp5_3/calibracao/resumo.json` (commit
+`4a59d680`) dá 10 de 21: P1, P4, T1, T3, E1, D1, D3, A2, G4 e S1. Na conferência, `lp5_4/conferencia/resumo.json` (commit `d4debac3`)
+dá 9 de 21, as mesmas sem o P4.
+
+**As metas.** São as mesmas 21 da LP5, com os mesmos critérios (`criterios.ts` e `resumo_metas.ts`):
+
+| tipo | metas |
+|---|---|
+| **protegidas** | as 10 que o `lp5_3` passa na calibração |
+| **as que a LP6 deve mexer** (SEM FONTE) | A1 (atira × de perto), D1 e D2 (duração e empates), A2 (a distância do tiro), V1 (variedade) e as do Ultimate e do Mega (os grupos de formas, o P3, o G1 a G3) |
+
+**As alavancas.** Só no candidato da bancada, PROPOSTAS, SEM FONTE.
+
+| alavanca | hoje | o que é |
+|---|---|---|
+| `apoio.dano` | 0,6 | fração do dano do golpe principal |
+| `apoio.recarga` | 2 | vezes o ciclo do ataque |
+| `apoio.ritmo` | 0,6 | o tempo do clipe e do instante do golpe, em vezes os do golpe |
+| `apoio.longeMs` | 1 500 | quanto o alvo fica longe antes do tiro fraco |
+| `arena.Ultimate` e `arena.Mega` | 1,15 e 1,3 | a elipse por estágio |
+| `tiro.danoProj` e `tiro.recuo` | 0,7 e 1,5 | as do tiro que o apoio e a elipse mexem |
+
+Sobre o `apoio.ritmo`: a tabela do git tem 0,6. Outro ritmo só existe na bancada, pela mesma regra do `tools/gerar_tabela_arena.py`
+(`tabelaDoRitmo`), e um teste confere que a regra refaz a tabela do git.
+
+Ficam fora:
+- a velocidade do tiro fraco (20) e o resto do `tiro`;
+- o mapeamento, os NPCs, os rivais e a esquiva, já fechados na LP5;
+- o núcleo fora das duas chaves.
+
+**As fases.**
+1. **R0:** a medida inteira do `lp6_0` nas sementes de calibração. É a linha de base com as chaves, para a primeira decisão.
+2. **R1 a R3:** grades curtas (`grade.ts`, fase `lp6_3`) nas alavancas acima. São no máximo 3 rodadas, com a regra de parada e a regra
+   de escolha da LP5 (seção 4.2): um número muda só quando uma meta reprovada passa. Um ajuste que reprova uma meta protegida volta atrás.
+3. **A medida inteira** do candidato escolhido na calibração.
+4. **A conferência, uma vez** nas sementes de conferência, com o candidato fechado num commit antes dela. A bancada recusa rodar de novo um
+   grupo que já tem o JSON dela, e nada se ajusta olhando para a conferência.
+
+**As sementes.**
+- **A calibração:** as bases 86101…86505.
+- **A conferência:** as bases 87101…87505, como na LP5, pelo pedido do Gerente.
+- **O desvio D-LP6-3-1:** as 87xxx já foram vistas na LP5-4 pelo `lp5_3`. Nada da LP6 se ajusta nelas, mas o valor do `lp5_3` nelas é
+  conhecido.
+
+**Os pontos de decisão.** A rodada para em cada um e leva ao Matheus as opções, a recomendação e o custo de errar: depois da R0, depois de
+cada grade e antes da conferência.
+
+**A carga.** No máximo 4 processos e uma medida por vez (V3-D8), pelo gate `tools/pre_run.py --medicao`.
