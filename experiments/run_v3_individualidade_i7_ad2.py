@@ -389,21 +389,31 @@ def tarefa(lote: list[tuple], dias: int, orcamento_por_dia: int) -> list[dict]:
 
 
 # ================================================================== a analise
+def _presente(v: list[int] | None) -> list[int] | None:
+    """D-IND-I7d-2: um perfil com todas as contagens 0 fica fora, como o dia fora do I5 (o SEQ do resto do dia t pode ter decisoes
+    acordadas sem nenhum par seguido de duas)"""
+    return None if v is None or sum(v) == 0 else v
+
+
+def _um_perfil(por_dia: dict, perfil: str) -> dict:
+    return {d: _presente(v) for d, v in r7._um_perfil(por_dia, perfil).items()}
+
+
 def distancias_do_pet(p: dict, perfil: str, idades: tuple, janela: int, dias: int) -> dict:
     """as D de um pet num perfil (as do I7, para os ramos E, R e S)"""
-    orig = r7._um_perfil(p["perfis"][("N", None)], perfil)
-    gem = r7._um_perfil(p["perfis"][("G", None)], perfil)
+    orig = _um_perfil(p["perfis"][("N", None)], perfil)
+    gem = _um_perfil(p["perfis"][("G", None)], perfil)
     out = {"D": {}, "D0": {}, "DG0": {}, "DG": M.distancias_ramo(gem, orig, list(range(1, dias + 1)))}
     for t in idades:
         usados = [d for d in range(t + 1, t + janela + 1) if d <= dias]
         for b in RAMOS:
             if (b, t) not in p["perfis"]:
                 continue
-            out["D"][(b, t)] = M.distancias_ramo(r7._um_perfil(p["perfis"][(b, t)], perfil), orig, usados)
-            ram, ori = p["parciais"][(b, t)].get(perfil), p["parciais"][("N", t)].get(perfil)
+            out["D"][(b, t)] = M.distancias_ramo(_um_perfil(p["perfis"][(b, t)], perfil), orig, usados)
+            ram, ori = _presente(p["parciais"][(b, t)].get(perfil)), _presente(p["parciais"][("N", t)].get(perfil))
             out["D0"][(b, t)] = None if ram is None or ori is None else M.distancia_tv(ram, ori)
         if ("N", t) in p["parciais"]:
-            gp, op = p["parciais"][("G", t)].get(perfil), p["parciais"][("N", t)].get(perfil)
+            gp, op = _presente(p["parciais"][("G", t)].get(perfil)), _presente(p["parciais"][("N", t)].get(perfil))
             out["DG0"][t] = None if gp is None or op is None else M.distancia_tv(gp, op)
     return out
 
@@ -682,12 +692,52 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
     return {"meta": meta, "registros": registros, "resultado": resultado}
 
 
+def analisar_pasta(pasta: Path, boot: int = BOOTSTRAP) -> dict:
+    """D-IND-I7d-3: a analise refeita a partir dos artefatos de uma run cujas vidas terminaram e cuja analise caiu (o `perfis.jsonl.gz`, o
+    `ramos.jsonl` e o `vidas.tar.gz` gravados), sem viver de novo. Confere que cada pet esperado esta la, que o log de base de cada um no
+    `vidas.tar.gz` tem o sha256 do ramo N no `ramos.jsonl` (G-AD2-0 relido) e que a pasta ainda nao tem `analise.json`."""
+    meta = json.loads((pasta / "meta.json").read_text(encoding="utf-8"))
+    if meta.get("fase") != FASE or "fim" in meta:
+        raise RuntimeError(f"{pasta}: nao e uma run do adendo 2 com a analise por fazer")
+    if (pasta / "analise.json").exists():
+        raise FileExistsError(f"{pasta}/analise.json ja existe: a analise se recusa a gravar por cima")
+    cfg = meta["config"]
+    modo_da_config(cfg)
+    esperadas = [(b, d, u["semente"]) for u in meta["unidades"] for b in BRACOS for d in DONOS]
+    textos = i5.ler_vidas(pasta / "vidas.tar.gz", esperadas)
+    lidas = [json.loads(l) for l in (pasta / "ramos.jsonl").read_text(encoding="utf-8").splitlines()]
+    n_sha = {(r["braco"], r["dono"], r["semente"]): r["log_sha256"] for r in lidas if r["ramo"] == "N"}
+    if sorted(n_sha) != sorted(esperadas):
+        raise RuntimeError(f"ramos.jsonl com {len(n_sha)} ramos N, eram {len(esperadas)}")
+    for e in esperadas:
+        if r7._sha(textos[e]) != n_sha[e]:
+            raise bv.ReplayDivergiu(f"G-AD2-0 relido: {e}: o log de base nao tem o sha256 do ramo N")
+    pets = r7.ler_perfis(pasta / "perfis.jsonl.gz")
+    if sorted(pets) != sorted(esperadas):
+        raise RuntimeError(f"perfis.jsonl.gz com {len(pets)} pets, eram {len(esperadas)}")
+    resultado = {"modo": meta["modo"], "fase": FASE, "plano": PLANO, "pets": len(pets), **analisar(pets, lidas, cfg["dias"], boot=boot)}
+    resultado["analise_refeita"] = {"de": "artefatos da run (D-IND-I7d-3)", "orquestrador_sha256": orq.rc._sha_arquivo(Path(__file__)),
+                                    "git_head": orq.rc._git("rev-parse", "HEAD"), "git_limpo": orq.rc._git("status", "--porcelain") == ""}
+    bv._gravar(pasta / "analise.json", bv._dump(resultado))
+    meta["analise_refeita"] = resultado["analise_refeita"]
+    meta["fim_analise"] = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())
+    meta["artefatos_sha256"] = {n: bv._sha(pasta / n) for n in ("vidas.tar.gz", "perfis.jsonl.gz", "ramos.jsonl", "analise.json")}
+    bv._gravar(pasta / "meta.json", bv._dump(meta))
+    return resultado
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--config", required=True)
     ap.add_argument("--saida", default=None)
     ap.add_argument("--processos", type=int, default=1)
+    ap.add_argument("--analisar-pasta", default=None, help="refaz so a analise de uma run cujas vidas terminaram (D-IND-I7d-3)")
     a = ap.parse_args()
+    if a.analisar_pasta:
+        res = analisar_pasta(Path(a.analisar_pasta))
+        print(json.dumps({"pets": res["pets"], "hipotese": {b: {p: x["leitura"]["hipotese"] for p, x in v["por_perfil"].items()}
+                                                             for b, v in res["por_braco"].items()}}, indent=1, ensure_ascii=True))
+        return
     caminho = Path(a.config)
     cfg = json.loads(caminho.read_text(encoding="utf-8"))
     modo = modo_da_config(cfg)

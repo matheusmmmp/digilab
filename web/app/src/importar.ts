@@ -66,7 +66,10 @@ export function localizar(semente: number): Onde {
 export function petAqui(o: Onde): Motor | null {
   return o.tipo === "ativo" ? motorReal() : o.tipo === "guardado" ? abrirGuardado(lerGuardados()[o.i]) : null;
 }
-const igual = (a: Guardado, b: Motor): boolean => JSON.stringify(a.log) === JSON.stringify(b.log) && (a.versao ?? 1) === b.versao;
+/* o mesmo pet: o mesmo registro, sem contar a passagem de ilha (o "mi" e do jogo, nao do jogador: o arquivo exportado antes da ilha
+   grande e o pet daqui, que ja passou, sao o mesmo pet) */
+const semIlha = (log: readonly EventoRegistro[]): string => JSON.stringify(log.filter(e => e[1] !== "mi"));
+const igual = (a: Guardado, b: Motor): boolean => semIlha(a.log) === semIlha(b.log) && (a.versao ?? 1) === b.versao;
 
 /** sem conflito: vai para a espera. Devolve a mensagem para a tela */
 export function importarSemConflito(l: Lido): string {

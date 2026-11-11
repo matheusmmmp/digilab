@@ -33,7 +33,7 @@ describe("o formato do log da troca de ilha (os casos do Python)", () => {
   });
 
   test("o destino e o layout de antes com a agua e o controlador", () => {
-    expect(Object.keys(ILHAS_DE_TROCA)).toEqual(["mvp_agua"]);
+    expect(Object.keys(ILHAS_DE_TROCA)).toEqual(["mvp_agua", "grande"]);
     const { layout, contrato } = ILHAS_DE_TROCA.mvp_agua;
     expect(layout).toBe(CMU_MVP_AGUA.layout);
     expect(json({ ...layout, nome: "mvp" })).toEqual(json(CMU_MVP.layout));
