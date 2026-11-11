@@ -354,6 +354,12 @@ export const CHAMADO_FOME_CORPO = { limiar: .45 };
     CHAMADO_FOME_CORPO. Um por intervalo de CHAMADO_BEBE no maximo, com a janela de CAT.janelaChamado, os dois como hoje. PROPOSTO,
     SEM FONTE */
 export const CHAMADO_BEBE_CORPO: Record<Chamado, number> = { fome: .7, higiene: .9, carinho: .8 };
+/** o cuidado na hora certa do Rookie em diante (os Bits, docs/PLANO_V3_MOEDA.md, secao 2, decisao M-2 do Matheus de 2026-11-10): a acao do
+    dono conta quando o corpo estava abaixo destes limiares antes dela. So o feito do Tamer: o pet nao muda. A fome e a do instinto
+    (CHAMADO_FOME_CORPO: o pet so come abaixo dela), PROPOSTO, SEM FONTE. A higiene e o humor pagam abaixo de 25 %: DECIDIDO pelo Matheus
+    em 2026-11-11 ("abaixo de 25% ganha bits"); os do bebe (CHAMADO_BEBE_CORPO, 0,9 e 0,8) pagariam quase todo banho e carinho do Rookie,
+    cujo corpo cai em linha de 0,83 e 0,95 (medida desta etapa, test/bits.test.ts) */
+export const CUIDADO_NA_HORA: Record<Chamado, number> = { fome: .45, higiene: .25, carinho: .25 };
 export const ACAO_CHAMADO: Record<Chamado, readonly AcaoDono[]> = { fome: ["alimentar"], higiene: ["limpar"], carinho: ["acariciar", "brincar"] };
 export const FORMAS_AD: readonly FormaAdultaNormal[] = ["duelista", "furioso", "espelho", "muralha", "sentinela", "emboscador", "vigia", "tita"];
 export const LINHA_DA_FORMA = Object.fromEntries(LINHAS.flatMap(l => Object.keys(CAT.adulto[l].formas).map(f => [f, l]))) as Record<FormaAdultaNormal, Linha>;

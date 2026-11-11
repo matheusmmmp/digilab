@@ -37,14 +37,15 @@ const FOLGA_MS = 150;
    receptores do corpo no fim, embaixo), as regras no meio (de cima para baixo, na ordem em que o instinto as testa), as acoes na frente (na ordem
    de ACOES_LOBOS). O viewBox e recortado na silhueta (x 90 a 970, y 16 a 568), para o desenho encher o modal. */
 const VB_X = 90, VB_Y = 16, VB_L = 880, VB_A = 552;
-const VB = `${VB_X} ${VB_Y} ${VB_L} ${VB_A}`;
-const SILHUETA = "M120 330C100 210 220 80 420 62C600 45 820 90 890 220C935 300 900 390 820 420C760 440 700 430 650 445C600 470 540 500 470 488C380 475 330 430 250 430C170 430 130 390 120 330Z";
-const CEREBELO = "M650 445C655 505 760 535 825 505C865 485 860 440 820 420C760 440 700 430 650 445Z";
-const DIVISAS = ["M380 66C360 180 372 300 345 410", "M612 54C592 170 602 300 592 420"];
+export const VB = `${VB_X} ${VB_Y} ${VB_L} ${VB_A}`;
+export const SILHUETA = "M120 330C100 210 220 80 420 62C600 45 820 90 890 220C935 300 900 390 820 420C760 440 700 430 650 445C600 470 540 500 470 488C380 475 330 430 250 430C170 430 130 390 120 330Z";
+export const CEREBELO = "M650 445C655 505 760 535 825 505C865 485 860 440 820 420C760 440 700 430 650 445Z";
+export const DIVISAS = ["M380 66C360 180 372 300 345 410", "M612 54C592 170 602 300 592 420"];
 /** as regioes (D1b-6): tres rotulos curtos na mesma linha, com os nomes que o dono entende; o id e o do lobo de cada uma (data-lobo). O "pesou
     mais" e a regiao sem pesos da memoria sairam do modal. Os "receptores do corpo" ficam centrados sob o cerebelo */
 const REGIOES: [string, string, number][] = [["decisao", "ações", 250], ["impulsos", "regras", 490], ["percepcao", "percepção", 760]];
-const Y_REGIOES = 36, SUB_CORPO = { x: 757, y: 556 };
+export const Y_REGIOES = 36;
+const SUB_CORPO = { x: 757, y: 556 };
 const f = (v: number): number => Math.round(v * 10) / 10;
 
 type Ponto = [number, number];
@@ -217,7 +218,7 @@ export function useDecisaoNova(n: number | null, pode: boolean): number | null {
 /** a escala do desenho (a largura renderizada sobre a do viewBox, a menor das duas por causa do "meet") numa variavel CSS: o CSS pede o texto
     do mapa com pelo menos 11 px na tela, max(base, 11px / escala), em unidades do viewBox. So vista */
 const TEXTO_MIN_PX = 11;
-function useEscalaDoMapa(ref: { current: HTMLElement | null }, ativo: boolean): void {
+export function useEscalaDoMapa(ref: { current: HTMLElement | null }, ativo: boolean): void {
   useEffect(() => {
     const el = ref.current; if (!el || !ativo || typeof ResizeObserver !== "function") return;
     const medir = () => { const w = el.clientWidth, h = el.clientHeight; if (w > 0 && h > 0) el.style.setProperty("--scan-esc", String(Math.min(w / VB_L, h / VB_A))); el.style.setProperty("--scan-txt-min", TEXTO_MIN_PX + "px"); };
@@ -230,7 +231,7 @@ function useEscalaDoMapa(ref: { current: HTMLElement | null }, ativo: boolean): 
 /* ---------------------------------------------------------------- o modal */
 /** o selo so como forma (D1b-5): o ponto (ao vivo), as duas barras (pausado) ou o triangulo (replay), com o nome acessivel e a dica */
 const SELO_TXT: Record<EstadoSelo, string> = { vivo: "ao vivo", pausado: "pausado", replay: "replay: uma decisão do passado" };
-function SeloForma({ replay }: { replay: boolean }) {
+export function SeloForma({ replay }: { replay: boolean }) {
   const estado = useEstadoSelo(replay);
   return <span className={"db-selo db-selo--" + estado} role="img" aria-label={SELO_TXT[estado]} title={SELO_TXT[estado]}><i aria-hidden="true" /></span>;
 }

@@ -7,7 +7,7 @@
    mentira e a obediencia, sempre zeradas; a memoria por espacos do Bandit; os gambits e as cartas, sempre vazios): a assinatura das vidas
    v21 nao muda (test/luta_poc_pet.test.ts). */
 import {
-  ACAO_CHAMADO, ACOES_DONO_JOGO_V11, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
+  ACAO_CHAMADO, ACOES_DONO_JOGO_V11, CUIDADO_NA_HORA, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
   TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V22, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehLutaPoc,
   CMU_MVP_AGUA, ILHA_DOS_V21,
 } from "./constantes.ts";
@@ -21,7 +21,7 @@ import {
   type IdInstalacao, type Instalacao,
 } from "./instalacoes.ts";
 import { ESTAGIOS_SALAO, RIVAL_SALAO, caraterDoRivalSalao, formaRivalSalao, sementeSalao } from "./salao.ts";
-import { CMU_MVP } from "./constantes.ts";
+import { CMU_MVP, STATS } from "./constantes.ts";
 import { chipDe, chipServe, itensValem, porqueItensNaoValem, pontosComChips, vagasDeChip } from "./itens.ts";
 import { caraterV11, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
 import { CCO_CORPO_V11, CONFIG_LUTA_CORPO_LIGADA } from "./corpo.ts";
@@ -152,6 +152,10 @@ export class Motor {
   falaFria = false;
   sombria = false;
   chamados: Chamados = { abertos: {}, atendidos: 0, total: 0 };
+  /** os feitos de cuidado que dao Bits ao Tamer (docs/PLANO_V3_MOEDA.md, secao 2; so no jogo, o app le em src/bits.ts): o chamado do bebe
+      atendido, a pausa do treino atendida e o cuidado na hora certa do Rookie em diante (CUIDADO_NA_HORA). Derivado do replay: fora do
+      save, do registro e da assinatura (a vida nao muda) */
+  feitosCuidado: { tick: number; tipo: "chamado" | "pausa" | "cuidado" }[] = [];
   /** as chaves do produto (EventoProduto, no comeco do registro dos ovos novos); sem o evento, as duas desligadas */
   produto: Required<ChavesProduto> = { chamadoPelaFome: false, decisaoNaComida: false, chamadosPeloCorpo: false };
   /** com o chamadoPelaFome ou o chamadosPeloCorpo: o tick em que o ultimo chamado de cada tipo abriu (derivado do registro; fora da
@@ -184,6 +188,9 @@ export class Motor {
      assinatura. episodios = inicio de cada trecho de uma mesma acao do pet (fora ocioso) */
   vida5: { episodios: [number, AcaoPet][]; lutas: { tick: number; rival: string; resultado: "vitoria" | "derrota" | "empate"; lesao: boolean }[];
     sessoes: [number, Exercicio][]; anterior: AcaoPet | null } = { episodios: [], lutas: [], sessoes: [], anterior: null };
+  /** MITOLOGIA, E0 (docs/TAREFA_V3_MITOLOGIA.md): a forca do pet na entrada de cada luta da POC (a soma dos 6 stats de statsDoPet, sem a
+      condicao) e o resultado, para o evento da hybris (motor/lendas.ts). Derivado do replay, como o vida5: fora do save e da assinatura */
+  forcaLutas: { tick: number; rival: string; forcaPet: number; resultado: "vitoria" | "derrota" | "empate" }[] = [];
   lutas: Lutas;
   lesionadoDesde: number | null = null;
   vitoriasVida = 0;                              /* v4: experiencia de combate (nao zera ao evoluir) */
@@ -627,6 +634,7 @@ export class Motor {
     const liga = rival === RIVAL_LIGA, inst = ehInstalacao(rival) ? instalacaoDe(rival) : null, salao = rival === RIVAL_SALAO;
     const npc = !!NPC[rival], torneio = liga || !!inst || salao, forma = this.formaLutaPoc, est = this.estagioAtual;
     const pet = this.statsLutaPoc();
+    const base = statsDoPet(this.forma, this.carater(), this.pontosDeLuta()), forcaBase = STATS.reduce((t, k) => t + base[k], 0);
     const serie: ResultadoLutaPoc["serie"] = [];
     let vida0 = pet.hp, lesao = false, n = 0;
     const ordemL = this.nEventosLuta++;
@@ -671,6 +679,7 @@ export class Motor {
       x.tentativas++; x.ultima = v; x.recorde = Math.max(x.recorde, v);
     }
     this.vida5.lutas.push({ tick: this.e.tick, rival, lesao, resultado: ult.pontosA === 1 ? "vitoria" : ult.pontosA === 0 ? "derrota" : "empate" });
+    this.forcaLutas.push({ tick: this.e.tick, rival, forcaPet: forcaBase, resultado: this.vida5.lutas[this.vida5.lutas.length - 1].resultado });
     return { rival, mapa: torneio ? null : mapa as IdCena, semente, arena: !npc && !torneio, torneio, pet, rivalStats: serie[0].rivalStats, forma, serie, venceu, lesao };
   }
   /* ---------------------------------------------------------------- itens do Tamer (pets v6; motor/itens.ts) */
@@ -797,6 +806,7 @@ export class Motor {
     this._validarComida(tipo, x, y);
     this._conferirMorte(); this._vivo();
     const t = this.e.tick, laco = this.v11!.laco as MotorCorpoMundo;
+    this._cuidadoNaHora("alimentar");
     laco.comidaDoDono(tipo, x, y);
     this.e = laco.estado;
     if (this.estagioAtual === "bebe") this._atender("alimentar");
@@ -818,6 +828,7 @@ export class Motor {
       this._hist({ t, quem: "dono", a });
       return;
     }
+    this._cuidadoNaHora(a);
     this.v11!.laco.acaoDono(a);
     this.e = this.v11!.laco.estado;
     if (this.estagioAtual === "bebe") this._atender(a);
@@ -902,7 +913,7 @@ export class Motor {
   private _pausaTreino(): void {
     if (this.treino.pedePausa && !this.pausaTreino) this.pausaTreino = { treinou: false };
     else if (!this.treino.pedePausa && this.pausaTreino) {
-      if (!this.pausaTreino.treinou) { this.pausas.atendidas++; this.vinc._amostra(1, CTR.pesoPausa, null); }
+      if (!this.pausaTreino.treinou) { this.pausas.atendidas++; this.vinc._amostra(1, CTR.pesoPausa, null); this.feitosCuidado.push({ tick: this.e.tick, tipo: "pausa" }); }
       this.pausaTreino = null;
     }
   }
@@ -972,7 +983,7 @@ export class Motor {
   private _chamadoCorpo(tipo: Chamado, valor: number, lim: number, tk: number, t: number): void {
     const ab = this.chamados.abertos, ultimo = this.ultimoChamado[tipo];
     if (tipo in ab) {
-      if (tipo === "fome" && valor >= lim) { this.chamados.atendidos++; this.chamados.total++; delete ab[tipo]; }
+      if (tipo === "fome" && valor >= lim) { this.chamados.atendidos++; this.chamados.total++; delete ab[tipo]; this.feitosCuidado.push({ tick: tk, tipo: "chamado" }); }
       return;
     }
     if (t > 0 && t < this.dur.bebe && valor < lim && (ultimo === undefined || tk - ultimo >= CHAMADO_BEBE[tipo])) {
@@ -982,7 +993,19 @@ export class Motor {
   }
   private _atender(a: AcaoDono): void {
     const ab = this.chamados.abertos;
-    for (const tipo of Object.keys(ab) as Chamado[]) if (ACAO_CHAMADO[tipo].includes(a)) { this.chamados.atendidos++; this.chamados.total++; delete ab[tipo]; return; }
+    for (const tipo of Object.keys(ab) as Chamado[]) if (ACAO_CHAMADO[tipo].includes(a)) {
+      this.chamados.atendidos++; this.chamados.total++; delete ab[tipo]; this.feitosCuidado.push({ tick: this.e.tick, tipo: "chamado" }); return;
+    }
+  }
+  /** o cuidado na hora certa (Bits, docs/PLANO_V3_MOEDA.md, secao 2): do Rookie em diante nao ha chamado, entao conta a acao do dono que
+      atende o corpo que precisava, lido ANTES da acao (comida com a fome abaixo do limiar, banho com a higiene, carinho ou brincar com o
+      humor). So o feito: nada muda no pet */
+  private _cuidadoNaHora(a: AcaoDono): void {
+    if (this.estagioAtual === "bebe") return;
+    const tipo = (Object.keys(ACAO_CHAMADO) as Chamado[]).find(c => ACAO_CHAMADO[c].includes(a));
+    if (!tipo) return;
+    const e = this.e, valor: Record<Chamado, number> = { fome: e.fome, higiene: e.higiene, carinho: e.humor };
+    if (valor[tipo] < CUIDADO_NA_HORA[tipo]) this.feitosCuidado.push({ tick: e.tick, tipo: "cuidado" });
   }
   chamadosAbertos(): Chamado[] { return this.estagioAtual === "bebe" ? Object.keys(this.chamados.abertos) as Chamado[] : []; }
   fracaoCuidado(): number { return this.chamados.total ? this.chamados.atendidos / this.chamados.total : 1; }

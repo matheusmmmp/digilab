@@ -5,7 +5,7 @@ Coordenador: Matheus (sessão direta). Worker da etapa I0: Claude Code, Opus 5.5
 as IN-1 a IN-8 DECIDIDAS em 2026-11-07, pela recomendação; o I0 (a conferência) na `main` (#684); o I1 (a bateria como ferramenta)
 na `main` (#695); o plano do I2 APROVADO (#700); o I2a na `main` (#707); o I2b (a run da linha de base, faixa 85101…85505)
 na `main` (#718); o adendo 1 na `main` (#746); o plano do I5 APROVADO, na `main` (#747); o I5a na `main` (#751); o I5b na `main` (#768); o plano do I7 e o adendo 1 na `main` (#755, #769); o I7a (as medidas e
-o orquestrador) entregue.**
+o orquestrador) na `main` (#775); o I7b (a run única do I7) entregue; o adendo 2 do plano do I7 DECIDIDO (#788); o I7c (o código do adendo 2) entregue.**
 
 Categoria: documentacao. Origem: Matheus, 2026-11-07: depois da conversa sobre o connectome e a escala, direcionar a pesquisa para o
 temperamento herdado, o sinal do dono, a memória de episódios e o hábito, com uma medida comum de individualidade.
@@ -238,3 +238,52 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
 - **O custo passa do dobro da estimativa do plano** (45 s por pet e 1 h 10 min). A projeção para as 360 pets é de cerca de 6 h com 4
   processos. Pela seção 8 do plano, a IR-6 volta ao Matheus antes da run.
 - **As leituras do plano** estão no registro: D-IND-I7a-1 a 8.
+
+## Resultado da etapa I7b (2026-11-11, Claude Code, Opus 5.5, branch `v3-individualidade-i7b`)
+
+- **O registro:** a seção 13 do plano do I7, commitada e empurrada antes da primeira vida (`3f7b1fa`), com a IR-6 mantida pelo Matheus.
+- **A run única:** 360 pets e 6 120 ramos, em 2 h 48 min com 4 processos. Todas as conferências G-I7-0 a 3 passaram. Os artefatos estão em
+  `artifacts_v3_individualidade_i7/`.
+- **O resultado** está na seção 9 do `docs/RESULTADO_V3_INDIVIDUALIDADE.md`:
+  - nas seis células, nenhuma das quatro hipóteses se declara;
+  - a diferença do tapa cresce com os dias (γ_E > 0, com a régua crua), mas a idade não importa (β_E ≈ 0);
+  - outro acaso faz do ramo um gêmeo em todas as idades (Φ_A ≈ 1);
+  - a E-I7 não se confirma na H-CAN, mas se confirma nas facetas (nenhum REL+F − REL);
+  - a E-I7b se confirma em 4 das 6 células, com efeito pequeno.
+- **O exploratório (9.6, fora do plano):** o tapa é tudo ou nada, pet a pet. Em 2/3 dos ramos ele some do comportamento e fica só na
+  memória autobiográfica; em 1/3 o ramo vira quase um gêmeo. A leitura PROPOSTA é o deslocamento da rng de política por um reflexo.
+- **As leituras** estão no registro: D-IND-I7b-1 a 4.
+
+## O adendo 2 do plano do I7 (2026-11-11, Claude Code, Opus 5.5, branch `v3-individualidade-i7-adendo2`)
+
+- **De onde vem:** a pergunta "história ou sorteio" da 9.8 do resultado. O Matheus pediu que ela virasse um adendo ao plano do I7, e não
+  um I8 ("Escrever como adendo", 2026-11-11).
+- **O adendo** está DECIDIDO pelo Matheus em 2026-11-11 ("Aprova as recomendações e segue"), na seção 14 do `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md`:
+  - 360 pets novos (a faixa 88101…88505, a conferir com o Gerente);
+  - o ramo R(t), com o tapa e o sorteio amarrado pelo tick ao do original (a rng do pet e a do dono);
+  - o R°, a conferência do amarrado sem tapa;
+  - o S(t), um sorteio jogado fora sem tapa;
+  - a fração amarrada ρ = Σ D_R / Σ D_E, com as hipóteses H-SORT (ρ < 0,2) e H-HIST (ρ > 0,8), e a expectativa E-AD2.
+- **As decisões** AD2-1 a AD2-7 estão decididas pela recomendação. Nada roda antes do #786 na `main`, da faixa na tabela, do código do I7c e
+  do registro.
+
+## Resultado da etapa I7c (2026-11-11, Claude Code, Opus 5.5, branch `v3-individualidade-i7c`)
+
+- **O código** segue a seção 14 do plano do I7:
+  - **as medidas:** a `trajetoria_janela` (o tudo ou nada) e a `fracao_amarrada` (o ρ) no `digilab/metrics.py`;
+  - **o orquestrador:** o `experiments/run_v3_individualidade_i7_ad2.py`, irmão do do I7, com:
+    - a vida de base de cada pet;
+    - os ramos N (com os gravadores), G, R°, E(t), R(t) e S(t);
+    - o sorteio amarrado (a rng do pet por chave, as do dono pelo estado do passo);
+    - as conferências G-AD2-0 a 4;
+    - a leitura da 14.4 e os descritivos da 14.5;
+    - a trava (o adendo 2 DECIDIDO, a seção `## 15. O registro do adendo 2`, a faixa do adendo, no máximo 4 processos);
+  - **as configs:** `individualidade_i7_ad2.json` (a faixa 88101…88505) e `individualidade_i7_ad2_fumaca.json`;
+  - **a faixa:** a linha 88101…88505 em `experiments/bancada/faixas.py`, com o ok do Gerente da V3 pedido no PR.
+- **A fumaça** (as sementes 101 e 202, K = 1, 14 dias, 12 pets, 4 processos):
+  - todas as conferências passaram: o R° saiu igual ao N byte a byte, sem chave sem par e sem passo descasado;
+  - levou 7 min 10 s de parede, 35 s por pet com 4 processos e 136 s por pet dentro de cada processo (cada ramo, vivido duas vezes, cerca
+    de 7 s);
+  - a projeção para as 360 pets é de cerca de 3 h 30 min com 4 processos, contra cerca de 3 h da 14.7; não passa do dobro;
+  - os números da fumaça não são resultado: são as sementes dos testes.
+- **As leituras do código** estão no registro: D-IND-I7c-1 a 6.
