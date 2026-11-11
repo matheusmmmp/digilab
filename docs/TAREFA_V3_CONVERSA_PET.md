@@ -549,3 +549,28 @@ dela, o descritivo D-COMIDA (seção 6) e os pacotes da marcação. Nenhum gate 
   - O atencioso e o incoerente têm os mesmos números, porque as células são duplicadas na DC3 (D-DC4C-4).
   - **O que isso pede:** pela seção 6, uma mudança de sinal vira proposta de adendo ou de etapa nova, e quem decide é o Matheus. Este PR não
     muda o crédito.
+
+
+## DC5a — o código da voz-v4 e da avaliação (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5a`, 2026-11-10)
+
+O código da [DC5](PLANO_ANALISE_V3_CONVERSA_DC5.md) (APROVADO pelo Matheus em 2026-11-10), seção 10. **Nenhuma chamada a modelo de verdade.**
+
+- **O gabarito da voz do jogo,** num commit próprio antes da mudança (`experiments/exportar_gabarito_voz_jogo_dc5.py`,
+  `experiments/configs/v3_conversa_dc5/gabarito_voz_jogo.json`), gerado com o código da `main` 11a34d80: as mensagens da voz-v2 e da voz-v3 e
+  as do serviço do jogo, para 20 entradas fixas. O código de hoje dá o mesmo, byte a byte, e o orquestrador confere isso antes de rodar.
+- **A voz-v4** (`digilab_fala_livre/prompt.py`, `VERSAO_VOZ_V4`), só quando pedida (`voz=VERSAO_VOZ_V4`), nos dois formatos do jogo:
+  - sem frase entre aspas nas regras, no tamanho e em exemplo (não há exemplos);
+  - pedir companhia é chamar o dono para estar junto, nunca pedir que ele fique;
+  - o desfecho do episódio como valor (`desfecho: bom`);
+  - a regra de não repetir, e na fala espontânea o bloco O QUE VOCÊ JÁ DISSE (`ditas`, pelo `ditas_da_voz` do serviço, None no jogo);
+  - a seleção (`conceitos.selecionados_v4`): até k conceitos ativos por valor × confiança, com o da intenção no dec-v2.
+- **Os números** da D-DC5-5 e da D-DC5-11 em `digilab/config.py` (`ConfigVozV4`, DECIDIDOS, SEM FONTE).
+- **As medidas** em `digilab/metrics.py`: o texto normalizado, os trechos de frase-modelo, o distinct-n com o corte, a repetição entre turnos,
+  o kappa de Cohen e o IC de Wilson.
+- **A rubrica da DC5** (`docs/RUBRICA_DC5_FIDELIDADE.md`): a da DC4 nos três pontos da 4.1 do plano, e os campos do Opus (Q8, Q9).
+- **A faixa** 20262900–20263499 em `FAIXAS_RESERVADAS`.
+- **O orquestrador** (`experiments/run_v3_conversa_dc5.py`), as entradas (`entradas_dc5.py`, com o ES), a marcação (`marcacao_dc5.py`,
+  porta 8791, os pares primeiro e com os segundos, a injeção montada depois do Opus e sem o rótulo dele) e as configs e os roteiros novos.
+- **Os testes:** `tests/test_conversa_dc5a.py` (30), com a fumaça inteira nas sementes dos testes; o teste do registro da DC4 confere agora
+  os arquivos da validação (D-DC5A-1).
+- **Os desvios:** D-DC5A-1 a 5, em `docs/registro/2026-11.md`.
