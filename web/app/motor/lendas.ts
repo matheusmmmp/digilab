@@ -9,7 +9,7 @@
 import { TPD } from "./constantes.ts";
 import { NPC } from "./bots.ts";
 
-/** os numeros da E0, todos PROPOSTOS e SEM FONTE (a calibracao e o Matheus jogando; D-E0-1 no registro) */
+/** os numeros da E0, DECIDIDOS pelo Matheus em 2026-11-11 ("Aprovo os números"; D-E0-4 no registro), SEM FONTE */
 export const CMIT = {
   /** a hybris: a forca do lider (o `total` do NPC, a soma dos 6 stats) sobre a do pet na entrada (a soma dos 6 de statsDoPet) */
   razaoHybris: 1.3,

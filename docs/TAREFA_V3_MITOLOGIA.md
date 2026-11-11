@@ -1,6 +1,6 @@
 # TAREFA V3 — MITOLOGIA (2026-11-11)
 
-Coordenador: Gerente da V3 (Claude Code). Worker: o mesmo. Worktree e branch: `v3-mitologia`. Status: E0 NO PR.
+Coordenador: Gerente da V3 (Claude Code). Worker: o mesmo. Worktree e branch: `v3-mitologia`. Status: E0 NO PR, D-E0-4 e D-E0-5 DECIDIDAS.
 
 Categoria: implementacao. Origem: Matheus, 2026-11-11: "faz o oráculo com voz, o evento do hybris e a brincadeira variada". É a primeira
 etapa da mitologia (a E0 e a D-MM-16), só no web, atrás da chave `mitologia`.
@@ -33,7 +33,7 @@ Das decisões do Matheus, todas de 2026-11-11:
 
 **O motor (`web/app/motor/`):**
 - **`lendas.ts`, novo.** É uma função pura sobre o pet refeito do log: `lendas(m)`, `hybrisDe`, `variadaDe` e `detalheNoTick`. Traz também
-  os números da E0 (`CMIT`, todos PROPOSTOS) e a voz do oráculo por modelo, sem LLM: os 7 pedaços da lenda do macaco sob a montanha mais o
+  os números da E0 (`CMIT`, DECIDIDOS) e a voz do oráculo por modelo, sem LLM: os 7 pedaços da lenda do macaco sob a montanha mais o
   fecho.
 - **`motor.ts`:** um registro derivado, `forcaLutas`, com a força do pet na entrada de cada luta da POC (a soma dos 6 stats de
   `statsDoPet`) e o resultado. Ele fica fora do save e da assinatura, como o `vida5` (D-E0-2).
@@ -53,7 +53,7 @@ Das decisões do Matheus, todas de 2026-11-11:
 
 **Os eventos:**
 
-| evento | gatilho (PROPOSTO) | o que se vê |
+| evento | gatilho (DECIDIDO) | o que se vê |
 |---|---|---|
 | **a hybris** (do par dono e pet, D-MM-18) | uma derrota para um **líder da Campanha** com `total` ≥ 1,3 × a força do pet na entrada; no máximo uma por dia de jogo | o Jijimon conta o próximo pedaço da lenda (`parte` = as hybris anteriores); contada inteira, ele fecha |
 | **a brincadeira variada** | num dia de jogo, 3 atividades de tédio diferentes (bola, brincar, explorar e o dono brincar), a mesma regra do `atividadeMundo`; no máximo uma por dia | a nuvem dourada para sobre o ninho por um dia de jogo, sem texto e sem som |
@@ -108,7 +108,7 @@ Não há run, e por isso não há plano de análise nem faixa de sementes. O que
 
 ## 8. Precisa do Matheus
 
-Os números da E0 são PROPOSTOS e SEM FONTE. Cada um vem com a recomendação e o custo de errar:
+**DECIDIDAS pelo Matheus em 2026-11-11 ("Aprovo os números"):** as quatro valem como recomendadas. Seguem SEM FONTE.
 
 | decisão | recomendação | custo de errar |
 |---|---|---|
