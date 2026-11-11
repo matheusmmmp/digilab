@@ -734,6 +734,35 @@ O Matheus aprovou as duas recomendações ("Aprovo como recomendadas.").
 - Com 0,67 por luta, a chance de ≥ 8 de 10 é de 0,31, perto das 27 vidas que passam.
 - Os números estão em `web/app/scripts/medicoes/equilibrio_poc/lp5_2/leitura_vida/` e no registro (D-LP5-18-1 a 5).
 
+## Resultado da LP5-3 (os torneios, parada num ponto de decisão)
+
+A LP5-2 fechou com o `lp5_2` (a D-LP5-19: "Sim, segue"). A LP5-3 parte dele, e a alavanca dela é o treino dos rivais dos torneios.
+
+**A grade `lp5_3/r1`** pôs o treino dos rivais do Salão, da Liga, da Torre e da Fábrica em 0, 5, 10 e 20 pontos.
+
+| ponto | G1 títulos | a Liga, o máximo de vitórias | G2 recorde mediano | G3 séries | G4 (Rookie/Champion/Ultimate/Mega) |
+|---|---|---|---|---|---|
+| 0 | 0 | 4 de 6 | 1 | 0,002 | 0,678/0,838/0,927/0,832 |
+| 5 | 0 | 4 | 1 | 0,001 | 0,532/0,760/0,843/0,785 |
+| 10 | 0 | 4 | 2 | 0,003 | 0,414/0,617/0,753/0,735 |
+| 20 | 0 | 4 | 2 | 0,002 | 0,330/0,438/0,629/0,623 |
+
+**A alavanca só deixa os rivais mais fortes,** e o G1, o G3 e o G4 pedem rivais mais fracos.
+- Na Liga, o pet vence a 1.ª luta, mas a vida passa sem cura, e ele não chega à 6.ª.
+- Na Fábrica, o alugado e os rivais são Megas sem treino, e o treino só entra nos rivais.
+- A Torre melhora um pouco com o treino dos rivais, mas não chega ao recorde 3, e a causa não foi medida (D-LP5-3-3).
+
+Nenhum número muda, e a decisão está no PR #784.
+
+### O fator dos rivais dos torneios (D-LP5-20)
+
+O Matheus aprovou a (a): "Sim, roda". A grade `lp5_3/r2` pôs um fator abaixo de 1 nos stats dos rivais dos quatro torneios, sem mexer
+no alugado da Fábrica.
+- **O Salão (G4) fecha em 0,8.** O candidato `lp5_3` é o `lp5_2` com esse fator, e passa em 10 de 21 metas.
+- **A Liga, a Torre e a Fábrica não fecham nem com 0,1.** Em 0,1, a Liga para na Floresta ou na Praia, e a Torre perde a 1.ª luta no
+  Ringue em 0,53 das tentativas. Quem decide as séries são as regras dos mapas e a vida sem cura, não os stats do rival.
+- A (b), aceitar o G1 a G3 como reprovados, volta ao Matheus no PR #789 antes de valer.
+
 ## Resultado da LP3c (2026-11-10)
 
 Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp3c`, a pedido do Gerente de sprites e luta. O pedido seguiu a revisão dos

@@ -11,7 +11,7 @@ import {
 } from "../scripts/equilibrio_poc/comum.ts";
 import { basesDa } from "../scripts/equilibrio_poc/faixas.ts";
 import { limitesNpc, passaNpc } from "../scripts/equilibrio_poc/criterios.ts";
-import { candidatoDe, LP5_1_ESQ, LP5_1_R2, LP5_2 } from "../scripts/equilibrio_poc/candidatos.ts";
+import { candidatoDe, LP5_1_ESQ, LP5_1_R2, LP5_2, LP5_3 } from "../scripts/equilibrio_poc/candidatos.ts";
 import { motorDoCandidato } from "../scripts/equilibrio_poc/bancada.ts";
 
 const c = CANDIDATO_V21;
@@ -135,6 +135,10 @@ describe("a esquiva pela perspicacia e pela velocidade (D-LP5-14)", () => {
     expect(rivalCanonico(x, "cirro_crianca_sereno").perc).toBeGreaterThan(rivalCanonico(x, "brasa_crianca_arisco").perc!);
     expect(() => candidatoDe({ nome: "teste", esquiva: { ligada: 1, chanceMax: 2 } })).toThrow();
   });
+  test("o lp5_3 (D-LP5-20) e o lp5_2 com o fator do Salao em 0,8, e so isso", () => {
+    expect(LP5_3.fatorRival).toEqual({ salao: .8, liga: 1, torre: 1, fabrica: 1 });
+    expect({ ...LP5_3, nome: "", fatorRival: null }).toEqual({ ...LP5_2, nome: "", fatorRival: null });
+  });
   test("o lp5_2 (D-LP5-17) e o lp5_1_esq com o Gazimon em 76,8, e so isso", () => {
     expect(LP5_2.npcTotal.npc_tier1_brutamontes).toBe(76.8);
     expect({ ...LP5_2, nome: "", npcTotal: { ...LP5_2.npcTotal, npc_tier1_brutamontes: 96 } }).toEqual({ ...LP5_1_ESQ, nome: "" });
@@ -161,6 +165,19 @@ describe("a divisao dos stats do NPC (D-LP5-18)", () => {
     expect(() => candidatoDe({ nome: "teste", npcDivisao: { npc_tier2_carcereiro: { ...um, guarda: 0, mira: 2 } } })).toThrow();
     expect(() => candidatoDe({ nome: "teste", npcDivisao: { npc_tier2_carcereiro: { vigor: 6 } as never } })).toThrow();
     expect(() => candidatoDe({ nome: "teste", npcDivisao: { npc_que_nao_ha: um } })).toThrow();
+  });
+});
+
+describe("o fator dos rivais dos torneios (D-LP5-20)", () => {
+  test("hoje o fator e 1 e nao muda o rival; abaixo de 1, os 6 stats vezes o fator; nao positivo falha alto", () => {
+    expect(c.fatorRival).toEqual({ salao: 1, liga: 1, torre: 1, fabrica: 1 });
+    const f = formaLiga(0), car = caraterCanonico(LIGA[0].adulta), x = candidatoDe({ nome: "teste", esquiva: { ligada: 1 } });
+    expect(rivalDaForma(x, f, car, 0, 1)).toEqual(rivalDaForma(x, f, car));
+    const meio = rivalDaForma(x, f, car, 0, .5), um = rivalDaForma(x, f, car);
+    expect(meio.atk).toBeLessThan(um.atk);
+    expect(meio.perc!).toBeLessThan(um.perc!);
+    expect(() => rivalDaForma(x, f, car, 0, 0)).toThrow();
+    expect(() => candidatoDe({ nome: "teste", fatorRival: { liga: 0 } })).toThrow();
   });
 });
 
