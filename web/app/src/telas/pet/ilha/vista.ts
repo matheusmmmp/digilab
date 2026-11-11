@@ -53,6 +53,8 @@ import { SACO_NA_TELA, VIAGEM, ZOOM_LUGAR_MOVEL, lugarAberto, progressoViagem, t
 import { LUGARES, ORDEM_LUGARES, chaoDoLugar, estadoDoLugar, gradeDosLugares, idaDoTreino, pontoDoLugar as pontoLugarDe, pontoDoPet, type BaseDoMundo } from "./lugares.ts";
 import { Apagador, montarMarcadores, type Marcadores } from "./marcadoresLugar.ts";
 import { TRANCAS } from "../../../trancas.ts";
+import { mitologiaLigada } from "../../../mitologia.ts";
+import { NuvemDoDia } from "./mitologia.ts";
 
 const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -68,6 +70,8 @@ class VistaIlha {
   private readonly lida: CameraLida;
   private readonly papel = new Papel();
   private readonly itens: Itens;
+  /** MITOLOGIA, E0: a nuvem do dia da brincadeira variada (so com a chave `mitologia`) */
+  private readonly nuvem: NuvemDoDia;
   /** o ponto de cada lugar da ilha (celulas; lugares.ts) e a altura do chao no pe dele (celulas; o portao e a barraca ficam na moldura) */
   private readonly pontos: Record<Lugar, [number, number]>;
   private readonly chaoLugar: Record<Lugar, number>;
@@ -175,7 +179,8 @@ class VistaIlha {
     this.chaoLugar = Object.fromEntries(ORDEM_LUGARES.map(id => [id, chaoDoLugar(id, base)])) as Record<Lugar, number>;
     /* o portao e a barraca: marcadores provisorios no ponto de cada um, ate o modelo 3D chegar (carregarObjetos); nos estilos sem lugares, ficam */
     this.marcadores = montarMarcadores(base);
-    this.cenaIlha.cena.add(this.itens.raiz, this.papel.raiz, this.marcadores.raiz);
+    this.nuvem = new NuvemDoDia(this.itens.ninhoEm);
+    this.cenaIlha.cena.add(this.itens.raiz, this.papel.raiz, this.marcadores.raiz, this.nuvem.raiz);
     CURVA.uVento.value = 1;
     const il = this.ilha;
     this.mapa = { imagem: new ImageData(pixelsDoMapa(il, this.estilo.paleta), il.larg, il.prof), x0: il.x0, z0: il.z0, larg: il.larg, prof: il.prof, area: il.area };
@@ -641,6 +646,7 @@ class VistaIlha {
     this.objetos?.quadro?.(this.foco, this.estilo.dobra, this.dirDobra, Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * this.camera.aspect);
     this.aplicarTrancas();
     this.itens.sincronizar(mu, m.e.tick, noite, agora, dtMs, m.lesionadoDesde !== null, reduzido, m.e.sujeira, this.naMao ? motorCel : this.petCel);
+    this.nuvem.sincronizar(m, mitologiaLigada(), agora, reduzido);
     /* o pet longe do foco (a camera solta, a viagem, a volta depois de soltar o pet): o chao sob ele desce pela dobra (yPe), e o tamanho do papel vale
        na distancia dele (senao o texel deixa de ser inteiro e o pet cresce ou encolhe com a distancia ao foco). Com o pet na mao o tamanho fica o do
        foco, como na P2 da PEGAR_PET (o chaoSob conta a altura da mao com ele) */

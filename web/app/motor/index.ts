@@ -47,3 +47,8 @@ export {
   type DadosForma as DadosFormaPoc, type EntradaLuta as EntradaLutaPoc, type Evento as EventoPoc, type Luta as LutaPoc,
   type Lutador as LutadorPoc, type ProjetilVoo as ProjetilPoc, type Stats as StatsPoc,
 } from "./arena/index.ts";
+/* MITOLOGIA, E0: as lendas como funcao pura do pet refeito do log (docs/TAREFA_V3_MITOLOGIA.md) */
+export {
+  CMIT, LENDA_CONTADA, LENDA_DO_MACACO, NOME_ORACULO, detalheNoTick, falaDoOraculo, hybrisDe, lendas, variadaDe,
+  type AtividadeLenda, type EventoLenda, type FontesLenda,
+} from "./lendas.ts";
