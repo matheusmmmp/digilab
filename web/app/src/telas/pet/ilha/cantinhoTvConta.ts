@@ -9,18 +9,36 @@ import { comprimento, naRota, type Ponto } from "./rotaConta.ts";
 import { gostoVisualLigado } from "../../../gostoVisual/chave.ts";
 import type { Reacao } from "../../../gostoVisual/gosto.ts";
 
-/** o cantinho no referencial da TV: `frente` ao longo da frente dela (+z do glTF, que a grade gira para a praca) e `lado` a direita de quem
+/** o cantinho no referencial da TV: `frente` ao longo da frente dela (+z do glTF, que a grade poe em tres quartos para a camera: constantes.ts, TV_TRES_QUARTOS) e `lado` a direita de quem
     olha a tela, em celulas. A almofada do pet fica a `assento.frente` da TV ou mais longe, ate `assento.ate`, no primeiro ponto em que o tapete
     inteiro cai em terra plana da area (na planta A a TV fica no plato, e o cantinho desce para o pe do barranco); a do dono (vazia: o lugar de
     quem assiste junto) e o tapete oval vem a partir da almofada do pet. PROPOSTO, SEM FONTE */
 export const CANTINHO_TV = {
-  assento: { frente: 2.4, ate: 5, passo: 0.25, lado: -0.45 },
+  assento: { frente: 2.4, ate: 7, passo: 0.25, lado: -0.45 },
   dono: { frente: 0.35, lado: 1.0 },
   tapete: { frente: 0.3, lado: 0.3, larg: 3.8, prof: 2.6, alto: 0.05, borda: 0.2 },
   almofada: { raio: 0.42, alto: 0.24, raioDono: 0.55 },
   /** a folga em volta do tapete em que a decoracao baixa some da vista */
   folga: 0.3,
 } as const;
+
+/** a caixa do toque na TV: o raio em volta do ponto dela (celulas; a altura e a do modelo, modelos.ts) e o lado minimo da area de toque na
+    tela (px de CSS: o alvo de 44 px). PROPOSTO, SEM FONTE */
+export const CAIXA_TV = { raio: 0.95, minPx: 44 } as const;
+/** a camera com o painel da TV aberto: onde o meio do cantinho fica na tela, em fracao da largura de 900 px em diante (a esquerda do painel)
+    e em fracao da altura abaixo disso (a partir do alto: acima da folha baixa), e quanto dura a ida e a volta (ms; com "reduzir movimento",
+    nenhuma). PROPOSTO, SEM FONTE */
+export const CAMERA_CANTINHO = { largo: 0.32, movel: 0.36, ms: 600 } as const;
+
+/** o avanco da ida da camera ao cantinho: `f` (0 a 1) anda para 1 com o painel aberto e para 0 fechado, em `CAMERA_CANTINHO.ms` */
+export function passoDaCamera(f: number, aberto: boolean, dtMs: number, reduzido: boolean): number {
+  if (!Number.isFinite(f) || !Number.isFinite(dtMs)) throw new Error("passoDaCamera: entrada nao finita");
+  if (reduzido) return aberto ? 1 : 0;
+  const d = Math.max(0, dtMs) / CAMERA_CANTINHO.ms;
+  return Math.min(1, Math.max(0, f + (aberto ? d : -d)));
+}
+/** a suavizacao da ida (entra e sai devagar) */
+export const suave = (f: number): number => f * f * (3 - 2 * f);
 
 /** a tela no modelo da TV (as unidades do glTF, antes da normalizacao do carregarVariante): o centro, os raios e a face da frente da peca
     "tela" de docs/objetos3d/cartoon/tv.py (TX, TY, TRX, TRY x 0,95 e Z1 + 0,034). A textura dinamica vai num plano um fio a frente dela,

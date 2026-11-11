@@ -17,6 +17,8 @@ import {
 } from "../motor/constantes.ts";
 import { CCO_CORPO_V11 } from "../motor/corpo.ts";
 import { Motor } from "../motor/motor.ts";
+import { GrupoDoJogo } from "../motor/grupo_jogo.ts";
+import { ehDoGrupo } from "../motor/constantes.ts";
 import { estadoNascimentoPy, type EventoCorpo } from "../motor/motor_corpo.ts";
 import { MotorCorpoMundo, type OpcoesLacoMundo } from "../motor/motor_corpo_mundo.ts";
 import { MundoPartilhado, eventoSacudirArvore, lerSacudirArvore } from "../motor/mundo.ts";
@@ -229,12 +231,14 @@ describe("o sacudir no Motor do jogo: nenhuma versao o tem (D-AS-S2-1)", () => {
   test("todas as versoes de hoje recusam o sacudirArvore e o \"sa\" no replay, antes do registro", () => {
     expect(VERSOES_COM_SACUDIR).toEqual([]);
     for (const v of VERSOES_PET) {
-      const m = new Motor(101, v);
+      const g = ehDoGrupo(v) ? new GrupoDoJogo(101, v) : null, m = g ? g.motor("A") : new Motor(101, v);   // a v25 so nasce no grupo (CO4c)
       m.avancar(60);
       const n = m.log.length, a = m.assinatura();
       expect(() => m.sacudirArvore("J1"), `v${v}`).toThrow(/nenhum pet sacode/);
       expect([m.log.length, m.assinatura()]).toEqual([n, a]);
-      expect(() => Motor.reproduzir(101, [...m.log, [m.e.tick, "sa", { arvore: "J1" }]], v), `v${v}`).toThrow(/nenhum pet sacode/);
+      const replay = () => g ? GrupoDoJogo.reproduzir(101, v, [...g.log, [m.e.tick, "sa", { arvore: "J1" }, "A"]])
+                             : Motor.reproduzir(101, [...m.log, [m.e.tick, "sa", { arvore: "J1" }]], v);
+      expect(replay, `v${v}`).toThrow(/nenhum pet sacode/);
       expect(() => m.sacudirArvore("J-1")).toThrow(/sacudir_arvore/);
       for (const ruim of [{ arvore: "J1", x: 1 }, { arvore: 1 }, null, ["J1"], {}])
         expect(() => Motor.reproduzir(101, [...m.log, [m.e.tick, "sa", ruim] as unknown as EventoRegistro], v), JSON.stringify(ruim)).toThrow();

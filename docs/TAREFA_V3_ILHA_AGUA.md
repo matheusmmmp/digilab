@@ -519,7 +519,68 @@ come pouco nos dois mundos e varia muito entre as sementes: no comedouro, a fra�
 **A recomendação muda:** não mexer no lugar do comedouro. A decisão do Matheus era mudar "com a medida da hipótese antes"; a medida
 diz que mudar não ajuda. Fica a mudança da memória (128 células), que não depende disto. A confirmar com ele.
 
-### 12.16 O saco de pancada no mar da ilha grande (2026-11-11, Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-saco-ilha`)
+### 12.16 IG6: a memória de 128 células (o plano)
+
+**Decidido pelo Matheus em 2026-11-11:** "Sim, só a memória" (o comedouro fica onde está, depois do adendo da 12.15) e "Todos, por evento
+(Recomendado)" (quem recebe o alcance novo).
+
+- **O que muda:** o alcance da memória de lugar do DigiBrain modular (`d_max`, a distância em que o lugar lembrado deixa de atrair)
+  passa de 1 024 para 2 048 subunidades (de 64 para 128 células) nos pets da ilha grande. É o único número que muda.
+- **A v25:** os ovos novos nascem v25, a v24 com o alcance de 128 células. As outras versões seguem abrindo.
+- **Os pets vivos:** o pet v21 a v24 que está na ilha grande ganha, uma vez, o evento `ma` no registro ao abrir. Só o alcance muda: o
+  que ele lembra, o corpo, o mundo e o vínculo ficam como estão. Vale com o cérebro A decidindo (o alcance fica guardado para quando o
+  modular voltar). O pet de teste (v16), o pet morto e o que não está na ilha grande não recebem.
+- **Atrás de chave:** o parâmetro já existe no Python (`ConfigDigibrainInatos.d_max`) e na web; com o valor de hoje, as vidas de hoje
+  saem byte a byte (os gabaritos do modular não mudam).
+- **A paridade:** um gabarito novo (`digibrain_modular_alcance.json.gz`), no molde do dos fins: vidas do modular nascidas com o alcance
+  de 128 células, que a web refaz decisão a decisão. A troca no meio da vida (o evento) é conferida por um caso fixo igual nos dois
+  lados e por vidas no jogo.
+- **A conferência do efeito:** a medida do retorno da IG5 (12.14), repetida com a v25: a regra é a mesma do plano (o pet volta de 70
+  células?). O resultado entra no mesmo artefato, numa chave nova.
+- **O que não muda:** a velocidade, o cheiro, o lugar do comedouro.
+
+### 12.17 IG6: o que foi construído e a conferência do efeito (2026-11-11)
+
+**Esta etapa muda o jogo de hoje:** o ovo novo nasce v25, e os pets v21 a v24 que estão na ilha grande ganham o evento `ma` ao abrir.
+
+- **No Python:** `D_MAX_ILHA_GRANDE` (2 048) no `config.py`; `Memoria.alcance` e `DigiBrain.alcance_da_memoria`, que trocam só o
+  parâmetro. O padrão dos inatos não mudou, e os gabaritos do modular de antes saem iguais.
+- **Na web:** o mesmo número e as mesmas duas funções; a v25 (a v24 com o alcance novo desde o ovo); o evento `ma` do registro, que os
+  pets v21 a v24 na ilha grande ganham ao abrir, logo depois do `mi` quando os dois acontecem na mesma abertura.
+- **O alcance é do pet, não só do cérebro que decide:** com o A decidindo, o evento guarda o alcance, e o modular criado depois nasce
+  com ele.
+- **A assinatura** dos pets que não recebem o evento não muda; a de quem recebe ganha uma marca do alcance.
+- **A paridade:** o gabarito novo `digibrain_modular_alcance.json.gz`, três vidas do modular nascidas com 128 células, que a web refaz
+  decisão a decisão; cada uma difere da mesma vida com o alcance de hoje. O mesmo arquivo tem duas vidas que nascem com o alcance de
+  hoje e o recebem no meio (antes da decisão 1 e antes da 150, pelo `DigiBrain.alcance_da_memoria` do Python); a web as refaz com a
+  troca na mesma decisão. A da decisão 150 difere tanto da vida de hoje quanto da de quem nasceu com o alcance.
+
+**A conferência do efeito** (o retorno da 12.14, na ilha grande, com o modular; `MEDIR_IG6=1`, chave `ig6_retorno` do artefato):
+
+| Solto a | v24, memória de 64 células | v25, memória de 128 células |
+|---|---|---|
+| 20 células | 5 de 5 voltam | 5 de 5 voltam |
+| 40 células | 5 de 5 voltam | 4 de 5 voltam (o quinto chegou a 5,8 células) |
+| 70 células | 1 de 5 volta; a menor distância média ao comedouro foi 43,5 células | 1 de 5 volta; a menor distância média foi 12,0 células |
+
+Por semente, a 70 células, a menor distância ao comedouro em um dia foi 1,6, 52,1, 36,8, 70 e 57,2 células na v24, e 0,5, 3,4, 9,2,
+19,7 e 27,1 na v25.
+
+**A leitura:** com 128 células o pet solto a 70 passa a andar na direção de casa em todas as cinco vidas, mas em um dia só uma chega a
+3 células do comedouro, que é o critério do plano. O efeito existe e é parcial. A 40 células uma vida das cinco deixou de chegar no
+prazo; com cinco sementes não dá para dizer se é efeito ou variação. Nada mais foi ajustado depois de ver este número.
+
+**A revisão separada** (um agente de leitura, sobre o commit `af254d5b`) não achou defeito de save, de replay nem de assinatura. Apontou
+que a troca no meio da vida não tinha paridade com o Python e que o `DigiBrain.alcance_da_memoria` do Python nunca era executado: as
+duas vidas com a troca no meio entraram no gabarito por isso. Outros ajustes: o pet que nunca escolheu cérebro ganhou um caso no teste
+do jogo, o modular recriado pela fala do pet de teste passa a herdar o alcance do pet, e a docstring do medidor foi corrigida (só a
+v25 é medida no retorno). Fica registrado: a versão não entra na assinatura, então um v25 e um v24 sem o evento, com a mesma vida,
+assinam igual até a memória mudar uma decisão; e um save com o `ma` não abre num cliente antigo, como já acontecia com o `mi`.
+
+**O que não foi verificado:** a suíte inteira do Python; o custo no celular; o retorno medido com a v24 que ganhou o alcance pelo
+evento (só a v25 foi medida).
+
+### 12.18 O saco de pancada no mar da ilha grande (2026-11-11, Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-saco-ilha`)
 
 **O aviso do Matheus (2026-11-11):** "O saco de pancada está fora da ilha", com uma captura do saco dentro da água.
 

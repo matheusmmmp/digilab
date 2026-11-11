@@ -5,7 +5,7 @@
 import { useState } from "react";
 import { Ban, Brain, ChevronRight, Copy, Dumbbell, Hand, HeartCrack, Layers, Medal, Package, PawPrint, RotateCcw, Swords, X, type LucideIcon } from "lucide-react";
 import { Motor, NOME_PET, type ItemHistorico } from "../../../motor/index.ts";
-import { useJogo } from "../../jogo.ts";
+import { replayDaTelaConfere, textoDaTela, useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import { textoSave } from "../../save.ts";
 import { diaDe, hhmm } from "../pet/TelaPet.tsx";
@@ -45,14 +45,14 @@ export function TelaRegistro({ irPet }: { irPet: () => void }) {
   const verificar = () => {
     const t0 = performance.now();
     try {
-      const ok = Motor.reproduzir(m.semente, m.log, m.versao).assinatura() === m.assinatura();
-      setMsg(ok ? { txt: `Replay idêntico: ${m.log.length} eventos reconstruíram o mesmo pet, até o último decimal, em ${(performance.now() - t0).toFixed(0)} ms.` }
+      const { ok, eventos } = replayDaTelaConfere();       // os dois pets (CO4d): o registro do grupo inteiro
+      setMsg(ok ? { txt: `Replay idêntico: ${eventos} eventos reconstruíram o mesmo pet, até o último decimal, em ${(performance.now() - t0).toFixed(0)} ms.` }
         : { txt: "O replay divergiu do pet atual. Isso é um bug do porte; copie o registro e mande para análise.", erro: true });
     } catch (err) { setMsg({ txt: "Replay falhou: " + (err instanceof Error ? err.message : String(err)), erro: true }); }
   };
   const copiar = async () => {
     /* o mesmo conteudo do save: semente, registro e versao do pet */
-    const txt = textoSave(m);
+    const txt = textoDaTela();
     try { await navigator.clipboard.writeText(txt); setMsg({ txt: "Registro copiado." }); }
     catch { console.log(txt); setMsg({ txt: "Não foi possível copiar automaticamente. O registro está no console do navegador." }); }
   };

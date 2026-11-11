@@ -14,8 +14,8 @@ referências): uma quarta hipótese, a régua crua e a forma em U nas frases, e 
 **O adendo 2 (seção 14) está DECIDIDO pelo Matheus em 2026-11-11** ("Aprova as recomendações e segue"): a pergunta "história ou sorteio" da 9.8 do resultado, com um ramo de sorteio
 amarrado, em 360 pets novos. Ele não muda as seções 0 a 13; as AD2-1 a AD2-7 estão decididas pela recomendação.
 
-**O adendo 3 (seção 16) está PROPOSTO** (2026-11-11): o que separa o pet que absorve o tapa do que se afasta, descoberto nas vidas do
-adendo 2 e conferido nas do I7b, sem vidas novas. Ele não muda as seções 0 a 15 e não roda antes das decisões AD3-1 a AD3-6.
+**O adendo 3 (seção 16) está DECIDIDO pelo Matheus em 2026-11-11** ("Aprovo as questões e pode seguir com as recomendações"): o que separa o pet que absorve o tapa do que se afasta, descoberto nas vidas do
+adendo 2 e conferido nas do I7b, sem vidas novas. Ele não muda as seções 0 a 15; as AD3-1 a AD3-6 estão decididas pela recomendação.
 
 **De onde vem:** a conversa de 2026-11-10 sobre como tirar da frente um achado e não só uma implementação organizada. Dela saíram as
 perguntas Q1 a Q4, e o Matheus escolheu começar pela Q3, o desenvolvimento contrafactual ("Segue a recomendação").
@@ -571,11 +571,11 @@ Escrito em 2026-11-11 (Claude Code, Opus 5.5, branch `v3-individualidade-i7d`), 
   - A quarta, `test_credito_canal_etapa0.py::test_o_artefato_se_refaz_igual`, passou rodada sozinha logo depois (1 passed). Ela caiu com a
     máquina carregada por outro trabalho ao lado e não toca o I7.
 
-## 16. Adendo 3: o que separa absorver de se afastar (2026-11-11, PROPOSTO, Claude Code, Opus 5.5)
+## 16. Adendo 3: o que separa absorver de se afastar (2026-11-11, DECIDIDO, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** O Matheus pediu em 2026-11-11 que a frente seguisse as recomendações da 10.6 do resultado ("faça o merge e siga com
+**Status: DECIDIDO pelo Matheus em 2026-11-11** ("Aprovo as questões e pode seguir com as recomendações"), as AD3-1 a AD3-6 pela recomendação. O Matheus pediu em 2026-11-11 que a frente seguisse as recomendações da 10.6 do resultado ("faça o merge e siga com
 as recomendações"). Este adendo é a primeira delas. **Nada dele roda antes de três coisas:**
-1. as decisões AD3-1 a AD3-6 (16.7) decididas pelo Matheus e este cabeçalho marcado DECIDIDO;
+1. as decisões AD3-1 a AD3-6 (16.7) decididas pelo Matheus e este cabeçalho marcado DECIDIDO (feito);
 2. o código do I7e na `main` (16.6), com os testes e a fumaça;
 3. o registro do adendo, numa seção nova no fim deste plano, empurrado antes da primeira leitura.
 
@@ -663,7 +663,7 @@ Todos são lidos no original, no tick do momento, antes do tapa. A divisão em d
   - o `candidatos.jsonl`, uma linha por ramo, com o grupo e os candidatos;
   - o `analise.json`.
 
-### 16.7 As decisões do adendo (PROPOSTAS, para o Matheus; cada uma com a recomendação e o custo de errar)
+### 16.7 As decisões do adendo (DECIDIDAS pelo Matheus em 2026-11-11, todas pela recomendação; cada uma com a recomendação e o custo de errar)
 
 | | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
@@ -673,4 +673,36 @@ Todos são lidos no original, no tick do momento, antes do tapa. A divisão em d
 | **AD3-4** | os candidatos e as divisões | **os sete da 16.3, com as medianas da descoberta** | candidatos demais aumentam os falsos positivos na descoberta, e a confirmação os filtra; um candidato que fica de fora agora só volta num plano novo |
 | **AD3-5** | a regra | **separar nas duas amostras, do mesmo lado**, sem correção de multiplicidade | uma correção (Bonferroni nos sete) deixaria a regra mais dura do que a repetição já deixa; sem a repetição, um achado da descoberta valeria sozinho |
 | **AD3-6** | a causa | **fica para depois:** este adendo só mede associação | um desenho causal agora (o tapa só quando a condição vale) pediria vidas novas e um palpite de candidato sem dados |
+
+## 17. O registro do adendo 3
+
+Escrito em 2026-11-11 (Claude Code, Opus 5.5, branch `v3-individualidade-i7e`), antes da fase 1 do I7e, como a 16.6 manda.
+
+- **O código:** o commit `442b12c2` (o I7e), sobre a `main` com o adendo 3 DECIDIDO.
+- **Os sha256:**
+  - o orquestrador `experiments/run_v3_individualidade_i7_ad3.py`: `7b3aa97767f26e1e0a338cf58f21ea581defeed231ea82e58639077afce9aa75`;
+  - o do adendo 2, que ele importa (os grupos pelo `distancias_do_pet` com o perfil zerado fora):
+    `b1768c4d91346ee739b702c73e4e19195b347e8b9f1ba05143597388d05bfc98`;
+  - o `digilab/metrics.py`: `086ec5f4c2b26e1283926b3806aa4da3ff2918dfe5caeb108e7e4590b06dce57`.
+- **Os artefatos lidos:** os sha256 dos `perfis.jsonl.gz`, dos `ramos.jsonl` e das vidas das duas amostras vão no `meta.json` da fase 1, e são
+  os das runs do adendo 2 e do I7b, que não mudam.
+- **A fumaça** (as vidas da fumaça do adendo 2, as sementes 101 e 202, usadas como as duas amostras): a fase 1 leu 120 momentos de 12 pets em 14
+  s com 4 processos, e a fase 2 levou 2 s. A projeção para as 720 pets é de cerca de 15 min com 4 processos.
+- **Uma leitura da 16.3 (D-IND-I7e-1):** a `acao_atual` no tick do momento é a ação da última decisão antes dele. O momento é a primeira
+  decisão acordada da janela (a regra das sondas), então o C-ACAO quase sempre compara "estava dormindo até agora" com as outras. Na fumaça,
+  a mais comum foi `dormir`.
+- **Os comandos:**
+
+  ```bash
+  python experiments/run_v3_individualidade_i7_ad3.py --fase candidatos --processos 4
+  python experiments/run_v3_individualidade_i7_ad3.py --fase leitura
+  ```
+
+  A saída vai para `artifacts_v3_individualidade_i7_ad3/`, que não existe antes da fase 1. Entre as duas fases, os níveis da descoberta entram
+  nesta seção, num commit empurrado antes da leitura.
+- **A suíte:** esta etapa não rodou a suíte inteira. A do dia é a da seção 15 (5 323 passaram). Os testes da frente estão no corpo do PR.
+- **Os níveis da descoberta** (a fase 1, de 17:20 a 17:28, 3 600 momentos, 7 min com 4 processos; o `niveis.json`, sha256
+  `90bc191429129a78dfac7698a93764439f71e31e4a5a81eeb4df96a84cc6f0c4`), escritos antes da leitura da confirmação:
+  - as medianas: a energia 0,3637, a fome 0,6000 e o humor 0,5800;
+  - a ação mais comum: `dormir` (2543 de 3521 momentos com grupo na descoberta, contando o E e o R).
 
