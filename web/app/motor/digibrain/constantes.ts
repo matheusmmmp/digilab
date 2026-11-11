@@ -90,7 +90,8 @@ export const CONFIG_DIGIBRAIN_LAB = {
 } as const;
 
 /** a ConfigDigibrain que o M-ADAPT recebe: a do laboratorio, com a subchave `fala_unidades` (DC3d) ligada ou nao */
-export type ConfigDigibrainModular = Omit<typeof CONFIG_DIGIBRAIN_LAB, "fala_unidades"> & { readonly fala_unidades: boolean };
+/** `olhar` (GOSTO_VISUAL, P1f): a subchave do gosto visual, opcional para a config de hoje sair byte a byte (sem o campo, desligada) */
+export type ConfigDigibrainModular = Omit<typeof CONFIG_DIGIBRAIN_LAB, "fala_unidades"> & { readonly fala_unidades: boolean; readonly olhar?: boolean };
 /** o laboratorio com a subchave `fala_unidades` ligada (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1 e A1.1; o braco LAB+F da DC3): so o pet de
  *  teste com a marca "fu" no registro (motor.ts) */
 export const CONFIG_DIGIBRAIN_LAB_FALA: ConfigDigibrainModular = { ...CONFIG_DIGIBRAIN_LAB, fala_unidades: true };
@@ -103,6 +104,22 @@ export type ConteudoFala = typeof CONTEUDOS_FALA[number];
 export const TERMO_DO_CONTEUDO = [["fome", "fome_sem_comida"], ["higiene", "u_higiene"], ["solidao", "u_solidao"]] as const;
 /** a ConfigFalaUnidades (digilab/config.py): `ganho_conteudo` = 3S/2, PROPOSTO, SEM FONTE (fixado na DC3a pela condicao da 3.1) */
 export const CONFIG_FALA_UNIDADES = { ganho_conteudo: 1536 } as const;
+
+/** O gosto visual no DigiBrain modular (GOSTO_VISUAL, P1d do Python; o porte da P1f): o comportamento `olhar` no fim da lista, so com a
+ *  subchave `olhar`, e a ConfigOlhar (digilab/config.py; todos PROPOSTOS, SEM FONTE). Conferidos contra test/gabaritos/gosto_visual.json.gz
+ *  por test/gosto_visual_paridade.test.ts. Desligada (todo pet de hoje), nada disto entra. */
+export const COMPORTAMENTO_OLHAR = "olhar";
+export interface ConfigOlhar {
+  readonly escala: number; readonly largura_min: number; readonly largura_max: number;
+  readonly w0_olhar: readonly (readonly [string, number])[]; readonly w0_prox: number; readonly w0_nov: number; readonly w_gosto: number;
+  readonly ganho_gosto_visual: number; readonly tau_exposicao: number; readonly teto_exposicao: number; readonly agrado_no_corpo: boolean;
+}
+export const CONFIG_OLHAR: ConfigOlhar = {
+  escala: 450000, largura_min: 112500, largura_max: 450000, w0_olhar: [["vies", -256], ["u_tedio", 512], ["u_curiosidade", 512]],
+  w0_prox: 256, w0_nov: 256, w_gosto: 1024, ganho_gosto_visual: 1024, tau_exposicao: 960, teto_exposicao: 128, agrado_no_corpo: false,
+};
+/** o laboratorio com a subchave `olhar` (a vida do gabarito do gosto visual) */
+export const CONFIG_DIGIBRAIN_LAB_OLHAR: ConfigDigibrainModular = { ...CONFIG_DIGIBRAIN_LAB, olhar: true };
 
 /** os numeros do Config e da ConfigMundo que o M-SENS le: o passo do cerebro (Config.intervalo_decisao_ticks), a noite (Config.inicio_noite_tick,
  *  fim_noite_tick) e a visao (ConfigMundo.sub, raio_visao_celulas, max_vistos). Conferidos contra o motor e contra constantes_python.json. */
