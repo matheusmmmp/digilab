@@ -434,7 +434,7 @@ export class Ilha {
     /* os marcos espalhados pela moldura (IL-4 revista), cada um com o entorno dele (extras): arbustos e grama alta em grama, pedras em
        qualquer chao plano, ate o raio, longe do marco e uns dos outros; a frente do marco para o ponto mais perto da area */
     const M = P.marcos, r = rng(semente ^ P.sal ^ 0x3a7c05);
-    for (const nome of ["carro", "geladeira", "trilho", "lata"] as const) {
+    for (const nome of ["carro", "geladeira", "trilho", "lata", "tv"] as const) {
       const G = ENFEITES_GRADE[nome], D = M[nome];
       const [x, z] = this.pertoDe(D.ponto, M.busca, (x, z) => noLado(x, z) && this.plana(x, z, G.folga, this.comAgua ? ["grama", "areia"] : G.chao, true)
         && !this.caminhos.some(l => pertoDaLinha(x, z, l, P.raioCaminho + G.clareira))

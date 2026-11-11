@@ -15,7 +15,7 @@ import { MAPA_PADRAO, Mundo, celulasSecas, eventoDeixarBola, eventoDeixarComida,
 import { LacoGravado, cerebroDa, json, ler, type Rec, type Vida } from "./laco_gravado.ts";
 
 const { texto, g: G } = ler("./gabaritos/ilha_grande_python.json");
-const SHA = "87f279ddd501aa361e93c76af0fef1087f650c7835bdd23ce3c5b377e3e5f620";
+const SHA = "1bd222b3c2f762b635e31eaaa1548e48e5a890c5ad40a971639ddc935a3d7ab3";
 type VidaGrande = Vida & {
   conferido: { cruzou_pela_ponte: number; rolagens: number; posicoes_do_pet: number; tirados_da_agua: { comida: number; levar: number };
                tirados_da_arvore_e_do_marco: Record<"arvore" | "marco", { comida: number; levar: number }> };

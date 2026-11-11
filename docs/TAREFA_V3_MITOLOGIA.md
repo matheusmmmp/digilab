@@ -1,6 +1,6 @@
 # TAREFA V3 — MITOLOGIA (2026-11-11)
 
-Coordenador: Gerente da V3 (Claude Code). Worker: o mesmo. Worktree e branch: `v3-mitologia`. Status: E0 NO PR, D-E0-4 e D-E0-5 DECIDIDAS.
+Coordenador: Gerente da V3 (Claude Code). Worker: o mesmo. Worktree e branch: `v3-mitologia`. Status: E0 na `main` (#792); E1 no PR.
 
 Categoria: implementacao. Origem: Matheus, 2026-11-11: "faz o oráculo com voz, o evento do hybris e a brincadeira variada". É a primeira
 etapa da mitologia (a E0 e a D-MM-16), só no web, atrás da chave `mitologia`.
@@ -126,3 +126,81 @@ Não há run, e por isso não há plano de análise nem faixa de sementes. O que
 - **A vida de teste:** é o Rookie de semente 101, com as lutas contra o Gazimon na Campina (`e2e/gerar_save_oraculo.mjs`). Ela dá uma
   brincadeira variada no tick 570 e duas hybris, nos ticks 705 e 1440.
 - **As capturas** a 390 e a 1280 px (o balão e a nuvem) foram mandadas ao Matheus na sessão e ficaram fora do repositório.
+
+## 10. E1: os sinais dos deuses, o Códice e os segredos (2026-11-11)
+
+**A origem:** o Matheus pediu "features, easter eggs, coisas que fomentem essa mitologia" e escolheu, de uma lista, sete itens: o Códice das
+lendas, os sinais dos cinco deuses, o Myotismon como termômetro, a pedra do macaco, os 7 toques no Jijimon, o dia 81 e as pegadas na mata.
+
+**As regras da E0 continuam:**
+- tudo fica atrás da mesma chave `mitologia`;
+- tudo é função pura do pet refeito do log, sem mudar o motor, o cérebro, a luta, o log, o save, a assinatura nem o `VERSAO_PET`;
+- as falas são por modelo, sem LLM e sem nomear a obra.
+
+**O que entrou:**
+
+| peça | gatilho (DECIDIDO pelo Matheus em 2026-11-11, "Aprovo os gatilhos"; SEM FONTE) | o que se vê |
+|---|---|---|
+| **Coragem** (brasa) | vencer um líder da Campanha com `total` ≥ a força do pet | uma chama que não queima, perto do ninho, por um dia |
+| **Amizade** (cirro) | 3 dias seguidos com ≥ 3 carinhos e ≥ 2 brincadeiras do dono | duas flores que se viram uma para a outra, por um dia |
+| **Conhecimento** (ferrugem) | um dia com ≥ 6 explorações do pet | um marco com um risco dourado, por um dia |
+| **Sinceridade** (limo) | um dia com ≥ 3 chamados atendidos | um broto verde, por um dia |
+| **Diversão** (o macaco, Piedmon) | a brincadeira variada da E0 | a nuvenzinha dourada, por um dia |
+| **o Myotismon** (fora do aro) | no último dia, ≥ 12 ações do dono com a mais repetida em ≥ 75 %, ou ≥ 6 lutas contra o mesmo rival | morcegos sobre o ninho e a ilha mais escura; variar devolve a luz |
+| **a pedra do macaco** | sempre na mata, na célula (56, 20), com a chave ligada; é "achada" quando o pet termina uma decisão ou é solto a ≤ 2 células dela, de noite | a pedra com uma racha dourada; o Jijimon conta de onde o macaco nasceu, uma vez |
+| **as pegadas** | a 60ª exploração da vida | uma trilha do ninho até a pedra; o Jijimon dá a pista ("numa noite clara"), uma vez |
+| **o dia 81** | o 81º dia de vida | os cinco sinais juntos o dia inteiro; o Jijimon fala das 81 provações, uma vez |
+| **o enigma** | 7 toques seguidos (em 3 s) no retrato do Jijimon no Códice | uma pergunta com 3 opções; quem acerta ganha um pêssego dourado perto do ninho por um dia |
+| **o Códice das lendas** | no Diário, aba Registro, só com a chave | os pedaços da lenda ouvidos, os sinais vistos (com quantas vezes) e os segredos achados; o resto aparece como "???" com uma pista |
+
+**Os arquivos:**
+- **novos:**
+  - `web/app/motor/lendas_e1.ts`, com os números `CMIT_E1`;
+  - `web/app/src/componentes/Codice.tsx`;
+  - `web/app/test/lendas_e1.test.ts`, com 15 testes;
+  - `web/app/e2e/mitologia_e1.spec.ts`, `web/app/e2e/gerar_save_mitologia_e1.mjs` e `web/app/e2e/save_mitologia_e1.json`;
+- **mudados:**
+  - `web/app/src/telas/pet/ilha/mitologia.ts`, onde a `NuvemDoDia` virou `SinaisDaIlha`;
+  - `web/app/src/mitologia.ts`, com o "já ouvi" por pet virando um registro (o número antigo vira `h`), a fila do oráculo e o enigma;
+  - `web/app/src/componentes/BalaoOraculo.tsx`, que agora fala da fila;
+  - `web/app/src/telas/diario/TelaRegistro.tsx`, que monta o Códice;
+  - `web/app/src/telas/pet/ilha/vista.ts`;
+  - `web/app/motor/index.ts`;
+  - em CSS, `estilo/abertas.css` (o Códice) e `estilo/pet_home.css` (o escurecimento);
+  - `TelaConfig.tsx`, com o resumo da linha "Mitologia".
+
+**Os testes:**
+- o `test/lendas_e1.test.ts` tem 15 testes, todos passando;
+- a suíte inteira do Vitest tem 129 arquivos e 1250 testes, todos passando, sem mudar nenhum gabarito;
+- o `npm run tipos` passa;
+- o e2e da E1 e o da E0 juntos têm 9 testes, todos passando: a pedra contada uma vez, o Códice com o vivido e os "???", o enigma por 7
+  toques (errar, acertar e continuar decifrado depois de recarregar) e a chave desligada sem nada.
+- Uma rodada do e2e da E0 falhou uma vez por um erro de console que não se repetiu em outras cinco.
+
+**A calibração jogando** (D-E1-3, só leitura de vidas de teste, sem run de pesquisa):
+- Na vida comum de 10 dias (sementes 101, 202, 303 e 505, com o dono de roteiro), o pet nunca sai da casa e do jardim. Por isso, o
+  Conhecimento por "as 4 regiões num dia" e as pegadas por "30 explorações na mata" nunca disparariam. A Amizade por "1 dia" saía todo
+  dia.
+- Com os gatilhos da tabela, em 10 dias aparecem: Conhecimento de 1 a 7 vezes, Amizade 3, Diversão de 1 a 6 e Sinceridade 1.
+- As pegadas abrem em uns 3 dias no pet curioso (a semente 101) e em semanas nos outros.
+
+## 11. A chave começa ligada (2026-11-11)
+
+**O pedido do Matheus:** "quero que a mitologia sempre esteja ativa, ela pode ser desligada, mas já começa ligada".
+
+**O que mudou:**
+- **O padrão da chave virou ligada.** Em `web/app/src/mitologia.ts`, o `mitologiaLigada` lê `CHAVE-mitologia !== "0"`: sem nada gravado,
+  a chave fica ligada, e só o "0" desliga. Quem desligou nos Ajustes continua desligado.
+- **Os pets que já existiam:**
+  - as derrotas de antes continuam caladas (D-E0-5);
+  - a pedra, as pegadas e o dia 81 já vividos o oráculo conta uma vez cada.
+- **Os e2e:**
+  - o "desligada" agora grava "0";
+  - o `oraculo_mitologia.spec.ts` ganhou o teste "sem nada gravado, a chave começa ligada".
+- **O que isso muda em relação à E0:** a regra "desligada por padrão, o jogo de hoje" (seção 3) deixou de valer.
+  - O que entra na tela de quem não mexeu nos Ajustes:
+    - o balão do oráculo, quando houver o que contar;
+    - os sinais e a pedra na ilha;
+    - o escurecimento do Myotismon;
+    - o Códice no Diário.
+  - O log, o save, a assinatura e os gabaritos continuam iguais.

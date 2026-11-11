@@ -1,19 +1,20 @@
 /* As ilhas do jogo (docs/TAREFA_V3_ILHA_AGUA.md): a IA4 (a v22 e o "mi" para a ilha com agua; decisoes do Matheus de 2026-11-10) e a IG4
-   (a v23 e o "mi" para a ilha grande; decisoes de 2026-11-11: "Mundo maior no motor", "128 x 60", "tudo na v23", e a IG-7, "deslocados
-   junto com o lar").
-     - o ovo novo e v23: a v22 que nasce na ilha grande (128 x 60), com as arvores e os marcos em que o pet nao pisa; vive, anda so em
-       celula livre, e o replay refaz a vida; a v22 (a ilha com agua de 64 x 30) e a v21 seguem abrindo;
-     - os pets v21 e v22 vivos passam para a ilha grande pelo evento "mi" do registro, uma vez: tudo anda o deslocamento do lar, o que
+   (a v24 e o "mi" para a ilha grande; decisoes de 2026-11-11: "Mundo maior no motor", "128 x 60", as arvores e os marcos na mesma versao,
+   e a IG-7, "deslocados junto com o lar"; no plano a versao era a "v23", que a luta da rodada de equilibrio usou antes).
+     - o ovo novo e v24: a v23 que nasce na ilha grande (128 x 60), com as arvores e os marcos em que o pet nao pisa; vive, anda so em
+       celula livre, e o replay refaz a vida; a v23 e a v22 (a ilha com agua de 64 x 30) e a v21 seguem abrindo;
+     - os pets v21, v22 e v23 vivos passam para a ilha grande pelo evento "mi" do registro, uma vez: tudo anda o deslocamento do lar, o que
        cai em celula fechada vai para a terra, nada do pet muda alem do mundo, e o replay refaz a vida; antes do "mi" a vida e a de antes;
      - o registro gravado entre a IA4 e a IG4 (o v21 com o "mi" para a ilha com agua) continua abrindo, e esse pet tambem passa;
      - o que nao vale falha alto: o pet de teste, o morto, a segunda ida, o registro malformado;
      - no app: o save passa ao abrir e e gravado; o pet guardado e o ovo novo tambem chegam a ilha grande. */
 import { describe, expect, test } from "vitest";
 import {
-  CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, TICK_INICIAL, TPD, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V22, VERSAO_V23, VERSOES_PET,
+  CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, TICK_INICIAL, TPD, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V22, VERSAO_V23, VERSAO_V24, VERSOES_PET,
   ehCerebroTrocavel, ehLutaPoc,
 } from "../motor/constantes.ts";
 import { CONFIG_CONTRATO_AGUA, bloqueioEm } from "../motor/contrato.ts";
+import { tabelaLuta } from "../motor/luta_poc.ts";
 import { Motor } from "../motor/motor.ts";
 import { solidosDaAgua, tamanhoDoMapa } from "../motor/mundo.ts";
 import type { AcaoDono, EventoRegistro } from "../motor/tipos.ts";
@@ -79,14 +80,19 @@ const semTrajetoriaFechada = (m: Motor): void => {
 };
 
 describe("as versoes: o ovo novo nasce na ilha grande", () => {
-  test("a v23 e a v22 com o mundo grande; a v22 e a v21 seguem abrindo", () => {
-    expect([VERSAO_PET, VERSAO_V23, VERSAO_V22, VERSAO_V21]).toEqual([23, 23, 22, 21]);
-    expect(VERSOES_PET).toEqual([21, 22, 23]);
-    expect([versaoDoOvo(), versoesQueAbrem()]).toEqual([23, [21, 22, 23]]);
-    expect([21, 22, 23].map(v => [ehCerebroTrocavel(v), ehLutaPoc(v)])).toEqual([[true, true], [true, true], [true, true]]);
+  test("a v24 e a v23 com o mundo grande; a v23, a v22 e a v21 seguem abrindo", () => {
+    expect([VERSAO_PET, VERSAO_V24, VERSAO_V23, VERSAO_V22, VERSAO_V21]).toEqual([24, 24, 23, 22, 21]);
+    expect(VERSOES_PET).toEqual([21, 22, 23, 24]);
+    expect([versaoDoOvo(), versoesQueAbrem()]).toEqual([24, [21, 22, 23, 24]]);
+    expect([21, 22, 23, 24].map(v => [ehCerebroTrocavel(v), ehLutaPoc(v)])).toEqual([[true, true], [true, true], [true, true], [true, true]]);
+    /* a v24 luta com a tabela da v23 (a rodada de equilibrio); a v22 e a v21, com a delas */
+    expect([21, 22, 23, 24].map(tabelaLuta).map(x => x === tabelaLuta(23))).toEqual([false, false, true, true]);
     expect(ehLutaPoc(VERSAO_PET_LAB)).toBe(false);
     const novo = new Motor(101), meio = new Motor(101, 22), velho = new Motor(101, 21);
-    expect([novo.versao, novo.naIlhaComAgua, novo.naIlhaGrande, novo.podeMudarIlha]).toEqual([23, true, true, false]);
+    expect([novo.versao, novo.naIlhaComAgua, novo.naIlhaGrande, novo.podeMudarIlha]).toEqual([24, true, true, false]);
+    const luta = new Motor(101, 23);
+    expect([luta.versao, luta.naIlhaComAgua, luta.naIlhaGrande, luta.podeMudarIlha]).toEqual([23, true, false, true]);
+    expect(luta.mundo!.cm).toEqual(CMU_MVP_AGUA);
     expect([meio.versao, meio.naIlhaComAgua, meio.naIlhaGrande, meio.podeMudarIlha]).toEqual([22, true, false, true]);
     expect([velho.versao, velho.naIlhaComAgua, velho.naIlhaGrande, velho.podeMudarIlha]).toEqual([21, false, false, true]);
     expect(novo.mundo!.cm).toEqual(CMU_GRANDE);
@@ -95,12 +101,12 @@ describe("as versoes: o ovo novo nasce na ilha grande", () => {
     expect([novo.mundo!.cct, meio.mundo!.cct]).toEqual([CONFIG_CONTRATO_AGUA, CONFIG_CONTRATO_AGUA]);
     expect(novo.mundo!.pet).toEqual([CMU_GRANDE.layout.ninho[0] * SUB + SUB / 2, CMU_GRANDE.layout.ninho[1] * SUB + SUB / 2]);
     expect(novo.mundo!.bolaNoGolpe).toBe(true);
-    /* a v23 luta como a v21: o motivo de nao lutar agora e o do bebe, nao o da versao */
+    /* a v24 luta como a v21: o motivo de nao lutar agora e o do bebe, nao o da versao */
     expect(String(novo.porqueNaoLutaPoc("x", 0))).not.toMatch(/só os pets v/);
     expect([novo.mundo!.trocaIlha, novo.mundo!.trocaMaior]).toEqual([null, null]);
   });
 
-  for (const [v, s] of [[23, 101], [23, 202], [23, 303], [22, 101]] as const)
+  for (const [v, s] of [[24, 101], [24, 202], [24, 303], [23, 101], [22, 101]] as const)
     test(`a v${v} @${s}: 3 dias com a racao e o pet soltos em pontos fechados; nada fica neles, e o replay refaz a vida`, () => {
       const m = ligarProduto(new Motor(s, v));
       expect(viver(m, 3)).toBe(0);
@@ -123,12 +129,12 @@ describe("as versoes: o ovo novo nasce na ilha grande", () => {
     expect(() => velho.deixarComida("racao", 1800, 700)).toThrow(/fora do mapa/);
     expect(() => velho.deixarBola(1800, 700)).toThrow(/fora do mapa/);
     expect([novo.log.length, velho.log.length]).toEqual(n);
-    expect(Motor.reproduzir(101, copia(novo.log), 23).assinatura()).toBe(novo.assinatura());
+    expect(Motor.reproduzir(101, copia(novo.log), 24).assinatura()).toBe(novo.assinatura());
     /* o mesmo registro num pet do mapa de 64 x 30 falha alto no replay */
     expect(() => Motor.reproduzir(101, copia(novo.log), 21)).toThrow(/fora do mapa/);
   });
 
-  test("a v23 e o pet de teste nao passam de ilha; o registro malformado falha alto", () => {
+  test("a v24 e o pet de teste nao passam de ilha; o registro malformado falha alto", () => {
     const novo = new Motor(101), lab = new Motor(101, VERSAO_PET_LAB), meio = new Motor(101, 22);
     expect(() => novo.mudarIlha()).toThrow(/ilha grande/);
     expect(() => lab.mudarIlha()).toThrow(/ilha grande/);
@@ -144,7 +150,7 @@ describe("as versoes: o ovo novo nasce na ilha grande", () => {
 });
 
 describe("os pets vivos passam para a ilha grande (o evento mi)", () => {
-  for (const [v, s] of [[21, 101], [21, 202], [22, 101], [22, 202]] as const)
+  for (const [v, s] of [[21, 101], [21, 202], [22, 101], [22, 202], [23, 101]] as const)
     test(`a v${v} @${s}: so o mundo muda na ida, tudo anda com o lar; depois nada fica em celula fechada; o replay refaz a vida`, () => {
       const m = ligarProduto(new Motor(s, v)), gemeo = ligarProduto(new Motor(s, v));
       viver(m, 1.5); viver(gemeo, 1.5);
@@ -207,7 +213,7 @@ describe("no app", () => {
   const armaz = (d: Record<string, string> = {}): Armazenamento & { d: Record<string, string> } =>
     ({ d, getItem: k => (k in d ? d[k]! : null), setItem(k, v) { d[k] = v; } });
 
-  for (const v of [21, 22]) test(`o save v${v} passa para a ilha grande ao abrir, e o registro com o evento e gravado na hora; abrir de novo nao repete`, () => {
+  for (const v of [21, 22, 23]) test(`o save v${v} passa para a ilha grande ao abrir, e o registro com o evento e gravado na hora; abrir de novo nao repete`, () => {
     const antigo = ligarProduto(new Motor(606, v)); viver(antigo, .5);
     const a = armaz({ [CHAVE]: textoSave(antigo) });
     iniciarJogo(a);
@@ -224,10 +230,10 @@ describe("no app", () => {
     expect(jogoAtual().motor.log.filter(e => e[1] === "mi").length).toBe(1);
   });
 
-  test("o pet de exemplo das versoes de antes (v21 e v22) segue nao sendo do jogador, antes e depois de passar para a ilha grande", () => {
+  test("o pet de exemplo das versoes de antes (v21, v22 e v23) segue nao sendo do jogador, antes e depois de passar para a ilha grande", () => {
     const hoje = petExemplo();
-    expect([hoje.versao, ehPetDoJogador(hoje)]).toEqual([23, false]);
-    for (const v of [21, 22]) {
+    expect([hoje.versao, ehPetDoJogador(hoje)]).toEqual([24, false]);
+    for (const v of [21, 22, 23]) {
       const antigo = petExemplo(v);
       expect([antigo.versao, ehPetDoJogador(antigo)]).toEqual([v, false]);
       antigo.avancar(90);
@@ -251,7 +257,7 @@ describe("no app", () => {
     expect(w.bolaEm(9999)).toEqual(w.emTerra(...meio));
   });
 
-  test("o pet que entra pela troca de pet tambem passa; o ovo novo ja nasce v23 na ilha grande", () => {
+  test("o pet que entra pela troca de pet tambem passa; o ovo novo ja nasce v24 na ilha grande", () => {
     const a = armaz({ [CHAVE]: textoSave(ligarProduto(new Motor(707, 21))) });
     iniciarJogo(a);
     const guardado = ligarProduto(new Motor(808, 22)); viver(guardado, .5);
@@ -261,8 +267,8 @@ describe("no app", () => {
     expect((JSON.parse(a.d[CHAVE]!) as { log: EventoRegistro[] }).log.at(-1)).toEqual([guardado.e.tick, "mi", { ilha: "grande" }]);
     novoPet();
     const ovo = jogoAtual().motor;
-    expect([ovo.versao, ovo.naIlhaGrande, ovo.log.some(e => e[1] === "mi")]).toEqual([23, true, false]);
-    expect((JSON.parse(a.d[CHAVE]!) as { versao: number }).versao).toBe(23);
+    expect([ovo.versao, ovo.naIlhaGrande, ovo.log.some(e => e[1] === "mi")]).toEqual([24, true, false]);
+    expect((JSON.parse(a.d[CHAVE]!) as { versao: number }).versao).toBe(24);
   });
 });
 
@@ -273,7 +279,7 @@ describe("o que o pet lembrava vai junto (o DigiBrain modular, o cerebro padrao 
     const mem = (m as unknown as { modular: NonNullable<Motor["lab"]> }).modular.mem;
     return JSON.parse(JSON.stringify([...mem.episodios, ...mem.guardados()])) as Ep[];
   };
-  for (const v of [21, 22] as const) test(`a v${v} com o modular: cada lugar lembrado anda o deslocamento do lar e fica em celula livre; o replay refaz`, () => {
+  for (const v of [21, 22, 23] as const) test(`a v${v} com o modular: cada lugar lembrado anda o deslocamento do lar e fica em celula livre; o replay refaz`, () => {
     const m = ligarProduto(new Motor(5151, v));
     expect(m.cerebroAtual).toBe("modular");
     viver(m, 3);
@@ -317,7 +323,7 @@ describe("no app, depois da ida", () => {
   const armaz = (d: Record<string, string> = {}): Armazenamento & { d: Record<string, string> } =>
     ({ d, getItem: k => (k in d ? d[k]! : null), setItem(k, v) { d[k] = v; } });
 
-  for (const v of [21, 22, 23]) test(`o pet de exemplo v${v} que ninguem tocou nao paga Bits ao abrir; depois de um cuidado, e do jogador`, () => {
+  for (const v of [21, 22, 23, 24]) test(`o pet de exemplo v${v} que ninguem tocou nao paga Bits ao abrir; depois de um cuidado, e do jogador`, () => {
     const exemplo = petExemplo(v);
     exemplo.avancar(240);
     const a = armaz({ [CHAVE]: textoSave(exemplo) });

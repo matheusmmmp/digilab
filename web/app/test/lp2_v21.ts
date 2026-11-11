@@ -13,8 +13,8 @@ export const DIAS_V21 = 5;
 const PRODUTO = { chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true };
 
 /** o ovo v21 como o app o choca com a chave ligada (src/produto.ts): as chaves do produto, o cerebro e a ponte da luta */
-export function nascerV21(v: VarianteV21, semente: number, ponte = true): Motor {
-  const m = new Motor(semente, VERSAO_V21);
+export function nascerV21(v: VarianteV21, semente: number, ponte = true, versao: number = VERSAO_V21): Motor {
+  const m = new Motor(semente, versao);
   m.ligarProduto(PRODUTO);
   m.trocarCerebro(v === "v21_a" ? "a" : "modular");
   if (ponte) m.ligarPonteLuta(true);
@@ -29,8 +29,8 @@ export interface VidaV21 {
 }
 
 /** a vida de cuidado com lutas da POC; devolve o motor, o registro e o resultado de cada luta */
-export function viverV21(v: VarianteV21, semente: number, dias = DIAS_V21, ponte = true): { m: Motor; log: EventoRegistro[]; res: string[] } {
-  const m = nascerV21(v, semente, ponte), res: string[] = [];
+export function viverV21(v: VarianteV21, semente: number, dias = DIAS_V21, ponte = true, versao: number = VERSAO_V21): { m: Motor; log: EventoRegistro[]; res: string[] } {
+  const m = nascerV21(v, semente, ponte, versao), res: string[] = [];
   for (let p = 0; p < Math.round(dias * TPD / 30) && !m.morte; p++) {
     m.avancar(30);
     const mu = m.mundo!, r = hashSemente("lp2-v21", semente, p) % 100;
@@ -58,9 +58,13 @@ export function gravarV21(v: VarianteV21, semente: number, m: Motor, log: readon
   };
 }
 
+/** o arquivo do gabarito de cada versao: o da v21 (LP2) e o da v22 (o da LP5-5, gravado antes da v23 entrar) */
+export const gabaritoVidas = (versao: number): string => `./gabaritos/lp2_vidas_v${versao}.json`;
 if (process.argv.includes("--gravar")) {
-  const vidas = VARIANTES_V21.flatMap(v => SEMENTES_V21.map(s => { const { m, log, res } = viverV21(v, s); return gravarV21(v, s, m, log, res); }));
-  writeFileSync(new URL("./gabaritos/lp2_vidas_v21.json", import.meta.url),
+  /* --versao 22: o gabarito da v22 (LP5-5); sem ele, o da v21 */
+  const i = process.argv.indexOf("--versao"), versao = i >= 0 ? Number(process.argv[i + 1]) : VERSAO_V21;
+  const vidas = VARIANTES_V21.flatMap(v => SEMENTES_V21.map(s => { const { m, log, res } = viverV21(v, s, DIAS_V21, true, versao); return gravarV21(v, s, m, log, res); }));
+  writeFileSync(new URL(gabaritoVidas(versao), import.meta.url),
     JSON.stringify({ versao: 1, dias: DIAS_V21, sementes: SEMENTES_V21, variantes: VARIANTES_V21, vidas }, null, 1) + "\n");
   console.log(`gravado: ${vidas.length} vidas, ${vidas.reduce((s, x) => s + x.lutas, 0)} lutas`);
 }

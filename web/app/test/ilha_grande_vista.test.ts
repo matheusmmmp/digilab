@@ -63,7 +63,7 @@ describe("a grade da ilha grande", () => {
 
   test("cada marco fica em cima do bloco de celulas fechadas dele", () => {
     const marcos = ilha.enfeites.filter(e => e.nome !== "poste");
-    expect(marcos.map(e => e.nome).sort()).toEqual(["carro", "geladeira", "lata", "trilho"]);
+    expect(marcos.map(e => e.nome).sort()).toEqual(["carro", "geladeira", "lata", "trilho", "tv"]);
     const blocos = new Map<string, [number, number][]>();
     for (const f of ilha.fechadas) if (f.tipo === "marco") {
       const m = marcos.reduce((a, b) => Math.hypot(a.x - f.x - 0.5, a.z - f.z - 0.5) <= Math.hypot(b.x - f.x - 0.5, b.z - f.z - 0.5) ? a : b);
@@ -77,7 +77,7 @@ describe("a grade da ilha grande", () => {
       expect([m.x, m.z], m.nome).toEqual([cx, cz]);
       expect([m.x, m.z], m.nome).toEqual([...PLANTA_ILHA_GRANDE.marcos[m.nome as "carro"].ponto]);
     }
-    expect([...blocos.values()].map(b => b.length).sort()).toEqual([1, 4, 6, 6]);
+    expect([...blocos.values()].map(b => b.length).sort()).toEqual([1, 1, 4, 6, 6]);
   });
 
   test("os lugares, os postes, a praca e os caminhos ficam onde o pet pisa, e todo lugar se alcanca a pe a partir do ninho", () => {

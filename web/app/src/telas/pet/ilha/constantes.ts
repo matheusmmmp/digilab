@@ -108,6 +108,8 @@ export const ENFEITES_GRADE = {
   trilho: { quantos: 1, folga: 1, chao: ["grama"], clareira: 2.2 },
   /* a lata gigante (2026-11-10): saiu do horizonte do Digital e virou um marco da grade, ao norte, atras da area */
   lata: { quantos: 1, folga: 2, chao: ["grama"], clareira: 3.2 },
+  /* a TV de tubo (2026-11-11, secao 20 da tarefa): um marco pequeno, perto da barraca do Tamer */
+  tv: { quantos: 1, folga: 1, chao: ["grama"], clareira: 1.4 },
 } as const;
 /** a planta A da ilha inicial (docs/pranchas/ux-ilha-layout/, IL-1 a IL-4 DECIDIDAS em 2026-11-08; a vista em docs/pranchas/ux-ilha-planta-a/):
     so a parte da vista, em celulas do mundo (x leste, z sul), a mesma em todo mapa de 64 x 30. O ninho, a tigela, a bola e as frutiferas sao
@@ -135,7 +137,7 @@ export interface PlantaIlha {
   caminhos: Readonly<Record<"lar" | "portao" | "barraca" | "cais", readonly (readonly [number, number])[]>>;
   lugares: { portao: LugarDaPlanta; barraca: LugarDaPlanta; cais: { x: number; clareira: number; mar: number }; saco: readonly [number, number] };
   postes: readonly (readonly [number, number])[];
-  marcos: { busca: number; carro: MarcoDaPlanta; geladeira: MarcoDaPlanta; trilho: MarcoDaPlanta; lata: MarcoDaPlanta };
+  marcos: { busca: number; carro: MarcoDaPlanta; geladeira: MarcoDaPlanta; trilho: MarcoDaPlanta; lata: MarcoDaPlanta; tv: MarcoDaPlanta };
   bosques: readonly (readonly [number, number, number, number])[]; vaos: readonly (readonly [number, number, number, number])[];
   sal: number;
   bosque: { porCelula: number; entreArvores: number; escalaArvore: readonly [number, number]; arbustos: number; entreArbustos: number;
@@ -163,6 +165,8 @@ export const PLANTA_ILHA = {
     geladeira: { ponto: [50, 31.2], entorno: { arbusto: 0, grama_alta: 0, pedra: 3, raio: 2 } },
     trilho: { ponto: [69, 21], entorno: { arbusto: 4, grama_alta: 6, pedra: 2, raio: 2.8 } },
     lata: { ponto: [16, -5], entorno: { arbusto: 3, grama_alta: 8, pedra: 2, raio: 3.8 } },
+    /* a TV (2026-11-11): na moldura do norte, atras da barraca. PROPOSTO, SEM FONTE */
+    tv: { ponto: [50, -3], entorno: { arbusto: 1, grama_alta: 4, pedra: 1, raio: 2.2 } },
   },
   bosques: [[8, -6, 8, 4.2], [-6, 4, 3.4, 4.6], [-6, 25.6, 3.2, 2.6], [19, -8, 4, 3.4], [44, -6, 6, 3.6], [-5, -6, 4, 3.4], [56, -6, 6, 3.6]],
   vaos: [[31, -6, 5, 5]],
@@ -192,6 +196,8 @@ export const PLANTA_ILHA_AGUA: PlantaIlha = {
     /* a lata gigante (o marco de 2026-11-10, que na planta A fica na moldura do norte) vem para dentro, no noroeste, entre o carro e o
        saco; o ponto e desta sessao, fora da figura aprovada (IA-2), que e de antes da lata. PROPOSTO, SEM FONTE */
     lata: { ponto: [16, 6], entorno: { arbusto: 3, grama_alta: 8, pedra: 2, raio: 3.8 } },
+    /* a TV (2026-11-11) vem para dentro, a leste da barraca; fora da figura aprovada (IA-2). PROPOSTO, SEM FONTE */
+    tv: { ponto: [54, 11.5], entorno: { arbusto: 1, grama_alta: 4, pedra: 1, raio: 2.2 } },
   },
   bosques: [], vaos: [],
 };
@@ -226,6 +232,8 @@ export const PLANTA_ILHA_GRANDE: PlantaIlha = {
     geladeira: { ponto: [103.5, 44.5], entorno: { arbusto: 0, grama_alta: 0, pedra: 3, raio: 2 } },
     trilho: { ponto: [111, 32.5], entorno: { arbusto: 0, grama_alta: 6, pedra: 2, raio: 3 } },
     lata: { ponto: [35, 14], entorno: { arbusto: 0, grama_alta: 8, pedra: 2, raio: 3.4 } },
+    /* a TV (o marco de 2026-11-11, #814): do lado da barraca, a nordeste; uma celula fechada do mapa */
+    tv: { ponto: [96.5, 17.5], entorno: { arbusto: 0, grama_alta: 4, pedra: 1, raio: 2.2 } },
   },
   bosques: [], vaos: [],
 };

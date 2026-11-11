@@ -389,3 +389,23 @@ defeitos e dois riscos, todos corrigidos antes do PR:
 Fica registrado, sem correção: nenhuma vida do gabarito da paridade usa o modular (o caso do deslocamento da memória é conferido por
 um caso fixo igual nos dois lados e por vidas no jogo, só na web); a bola rolando no instante da ida não tem teste; os lugares
 "perto" e "longe" da tela de alimentar não têm teste no mapa grande.
+
+### 12.12 A junção com a `main` de 2026-11-11: a ilha grande é a v24, e a TV entra no mapa
+
+O Matheus pediu o merge da pilha em 2026-11-11 ("mas ja faca o merge para evitar grandes problemas na frente, afinal foi adicionado uma
+tv que nao estava no seu planejamento"). Entre a base da pilha e o merge entraram 87 commits de outras frentes na `main`. O que mudou
+aqui por causa deles:
+
+- **A versão é a v24, não a v23.** A luta da rodada de equilíbrio (LP5-5) entrou antes e ficou com o número 23 (a v22 com a tabela nova
+  da luta, na ilha com água de 64 × 30). A ilha grande passa a ser a **v24: a v23 que nasce na ilha grande**, com a luta da v23. Onde as
+  seções 12.1 a 12.11 dizem "v23", leia-se v24. Os pets que migram são os v21, os v22 e os v23.
+- **O Mundo da web foi separado em dois** pela frente da cooperação (o mundo partilhado e a parte do pet, como no Python). A ida para a
+  ilha grande foi reaplicada nessa estrutura: `MundoPartilhado.trocarParaMaior` e o ramo dela em `Mundo.mudarIlha`.
+- **A TV** (o marco novo, #814) ganhou uma célula fechada no mapa da ilha grande, em (96, 17), do lado da barraca. O mapa, o
+  `config.py`, o `constantes.ts` e os dois gabaritos da paridade foram regerados. A terra livre passou de 4 087 para 4 086 células.
+- **O teste do lugar lembrado** (`cenario_lugar_lembrado.test.ts`, da auditoria da cadeia) usava o ovo de hoje com a ração num ponto
+  do mapa de 64 × 30, que na ilha grande é mar. Passou a pedir a v23. Na ilha grande, com a ração no comedouro de lá, o modular faz o
+  mesmo (26 e 25 escolhas do lugar lembrado em duas sementes, medida única da junção, sem artefato), mas o ponto lembrado fica a 16,5
+  unidades do comedouro, fora do raio de 16 daquele teste.
+- **O sacudir a árvore** (S2) está no motor da web, mas nenhuma versão de pet o tem ainda; a ida para a ilha grande recusa mundo com
+  árvores do layout, e nenhum pet de hoje as tem.

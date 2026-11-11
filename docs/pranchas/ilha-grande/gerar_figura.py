@@ -22,7 +22,7 @@ MAR, DOCE, TERRA, PONTE, ARVORE, MARCO = "~", "r", ".", "=", "T", "#"
 
 # os lugares e os marcos (x, y em celulas): PROPOSTO
 LUGARES = {"lar": (20, 30), "praça": (64, 30), "saco": (24, 24), "portão": (64, 7), "barraca": (102, 21), "cais": (72, 51)}
-MARCOS = {"carro": (30, 21, 3, 2), "lata": (34, 13, 2, 2), "geladeira": (103, 44, 1, 1), "trilho": (110, 31, 2, 3)}   # x, y, largura, altura
+MARCOS = {"carro": (30, 21, 3, 2), "lata": (34, 13, 2, 2), "geladeira": (103, 44, 1, 1), "trilho": (110, 31, 2, 3), "tv": (96, 17, 1, 1)}   # x, y, largura, altura
 # os caminhos de terra da planta da vista (web/app/src/telas/pet/ilha/constantes.ts, PLANTA_ILHA_GRANDE), em celulas: nenhuma arvore a
 # menos de FOLGA_CAMINHO deles nem dentro da praca
 CAMINHOS = (((28.5, 30.5), (40, 30.5), (64, 30.5)), ((64, 30.5), (64, 9)), ((64, 30.5), (74, 33), (80, 34), (84, 34), (92, 28), (101, 22)),

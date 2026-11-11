@@ -60,7 +60,7 @@ def test_a_ilha_grande_tem_mais_de_tres_vezes_a_terra_de_hoje_com_arvores_e_marc
     livres, hoje = sum(celulas_secas(CM)), sum(celulas_secas(CONFIG_MUNDO_MVP_AGUA))
     assert livres > 3 * hoje
     assert sum(l.count(ARVORE_FECHADA) for l in AGUA_ILHA_GRANDE) >= 60
-    assert sum(l.count(MARCO_FECHADO) for l in AGUA_ILHA_GRANDE) == 3 * 2 + 2 * 2 + 1 + 2 * 3      # o carro, a lata, a geladeira e o trilho
+    assert sum(l.count(MARCO_FECHADO) for l in AGUA_ILHA_GRANDE) == 3 * 2 + 2 * 2 + 1 + 2 * 3 + 1  # o carro, a lata, a geladeira, o trilho e a TV
     assert sum(l.count(PONTE) for l in AGUA_ILHA_GRANDE) == 3 * 4                                # tres pontes de 2 x 2
 
 

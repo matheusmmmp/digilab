@@ -49,11 +49,23 @@ test("o laboratorio: chocar, abrir, ver o motivo, descartar com confirmacao", as
   await expect(page.locator(".topo-lab .lab-selo")).toBeVisible();
   expect(JSON.parse(await page.evaluate(() => (window as any).__digilab.registro() as string)).versao).toBe(16);
 
-  /* o painel do modular mostra o motivo (o tempo anda a 10 min/s: a primeira decisao sai em poucos segundos) */
+  /* o DigiBrain do modular abre no scan (o mesmo modal pequeno do A, pedido do Matheus de 2026-11-11): a rede viva com a decisao (o tempo
+     anda a 10 min/s: a primeira decisao sai em poucos segundos); o motivo inteiro fica no mapa em texto */
   await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
   const painel = page.locator("#pet-painel");
-  await expect(painel.getByText("cérebro modular")).toBeVisible();
-  await expect(painel.getByRole("heading", { name: "O peso de cada módulo nesta escolha" })).toBeVisible({ timeout: 90_000 });
+  await expect(painel).toHaveClass(/scan--lab/);
+  /* o desenho e a rede viva (D1e): uma ilustracao, sem os nos dos modulos; a faixa de baixo diz a escolha de agora e a onda dos modulos */
+  await expect(painel.locator("svg.mp.rv")).toBeVisible({ timeout: 90_000 });
+  await expect(painel.locator("svg.mp.rv [data-termo], svg.mp.rv text")).toHaveCount(0);
+  await expect(painel.locator(".scan-estado")).toContainText("escolha");
+  expect(await painel.locator(".scan-onda").getAttribute("data-n")).toBe(await painel.locator("svg.mp.rv").getAttribute("data-n"));
+  /* a captura da prancha (docs/pranchas/digibrain-lab/), so com DIGILAB_CAPTURA: o mapa e o mapa em texto */
+  const captura = process.env.DIGILAB_CAPTURA;
+  if (captura) await painel.locator(".scan-in").screenshot({ path: `${captura}/scan_lab_mapa_${page.viewportSize()!.width}.png` });
+  await painel.getByRole("button", { name: "O mapa em texto" }).click();
+  await expect(painel.getByRole("heading", { name: "O peso de cada módulo nesta escolha" })).toBeVisible();
+  await expect(painel.getByRole("heading", { name: "O que aconteceu antes" })).toBeVisible();
+  if (captura) await painel.locator(".scan-in").screenshot({ path: `${captura}/scan_lab_texto_${page.viewportSize()!.width}.png` });
   await expect(painel.getByRole("heading", { name: "Lembrança da vez" })).toBeVisible();
   await expect(painel.getByRole("heading", { name: "Intenção em curso" })).toBeVisible();
   await expect(painel.getByRole("heading", { name: "As opções e a chance de cada uma" })).toBeVisible();
