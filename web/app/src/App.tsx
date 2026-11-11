@@ -42,6 +42,7 @@ import { dAbreDiario, ligarAtalhosLugar } from "./atalhosLugar.ts";
 import { entrarLugar, sairLugar, type Lugar } from "./viagem.ts";
 import { soltarTeclas } from "./telas/pet/cameraLivre.ts";
 import { DicaBit } from "./componentes/Bit.tsx";
+import { BalaoOraculo } from "./componentes/BalaoOraculo.tsx";
 import { AcoesMeusPets, MeusPetsDesktop } from "./telas/pet/MeusPetsDesktop.tsx";
 import { useDesktop, usePainelLado } from "./desktop.ts";
 import { ComoJogar, Conclusao, EscolherBrasao } from "./componentes/Jornada.tsx";
@@ -283,6 +284,7 @@ export function App() {
       )}
       </div>
       <DicaBit livre={cartaoLivre} ir={r => { ir(r); scrollTo(0, 0); }} />
+      <BalaoOraculo livre={cartaoLivre} />
       <CartaoMotivo />
       <AnuncioNivel />
       {/* o habitat (a cena do Pet) e a camada de fundo de toda rota: fica montado, nao sobe nem desce ao trocar de destino */}
