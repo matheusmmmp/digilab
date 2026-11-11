@@ -18,6 +18,7 @@ import { lugarAberto } from "../../viagem.ts";
 import { CENA } from "./cenaEstado.ts";
 import { LIMIAR_ARRASTO, avisarNoDock } from "./PorRacao.tsx";
 import { noSprite } from "./ToquePet.tsx";
+import { tentouPegarDormindo } from "./momentos.ts";
 
 /** o pet pode ser pego agora? (o motor e a cena; o ponteiro sobre o sprite e conferido a parte) */
 export function podePegar(m: Motor, nascendo: number, cena: { coberto: boolean; bolaNaMao: boolean; pousoEm: boolean }): boolean {
@@ -47,7 +48,11 @@ export function ligarPegarPet(el: AlvoPonteiro): () => void {
   const baixo = (ev: Event) => {
     const e = ev as Ponteiro, { motor: m, nascendo } = jogoAtual(), v = CENA.mundo;
     if ((e.pointerType === "mouse" && e.button !== 0) || mao || !v) return;
-    if (!podePegar(m, nascendo, { coberto: CENA.coberto || lugarAberto(), bolaNaMao: CENA.bolaNaMao, pousoEm: !!v.pousoEm })) return;
+    if (!podePegar(m, nascendo, { coberto: CENA.coberto || lugarAberto(), bolaNaMao: CENA.bolaNaMao, pousoEm: !!v.pousoEm })) {
+      /* o pet dormindo recusa a mao: vira de lado e segue dormindo (momentos.ts, HR1; so vista) */
+      if (m.e.dormindo && !m.morte && nascendo <= 0 && noSprite(e.clientX, e.clientY, el.getBoundingClientRect(), CENA.ret)) tentouPegarDormindo(performance.now());
+      return;
+    }
     if (!noSprite(e.clientX, e.clientY, el.getBoundingClientRect(), CENA.ret)) return;
     /* a distancia do pe do pet (onde a vista o desenha) ao ponteiro: na mao, o pe fica a essa distancia do dedo */
     const [fx, fy] = v.paraTela(...v.pet);

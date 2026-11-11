@@ -5,7 +5,7 @@ import { LUTA_POC_LIGADA, VERSAO_PET, VERSOES_PET, VERSOES_PET_POC } from "../mo
 
 export const lutaPocLigada = (): boolean =>
   LUTA_POC_LIGADA || (typeof location !== "undefined" && new URLSearchParams(location.search).get("luta_poc") === "1");
-/** a versao dos ovos novos: a de hoje (VERSAO_PET; desde a IA4 da ILHA_AGUA, a v22, a v21 que nasce na ilha com agua) */
+/** a versao dos ovos novos: a de hoje (VERSAO_PET; desde a LP5-5 da LUTA_POC, a v23, a v22 com a luta da rodada de equilibrio) */
 export const versaoDoOvo = (): number => VERSAO_PET;
 /** as versoes que abrem pelo arquivo (Importar) */
 export const versoesQueAbrem = (): readonly number[] => lutaPocLigada() ? VERSOES_PET_POC : VERSOES_PET;

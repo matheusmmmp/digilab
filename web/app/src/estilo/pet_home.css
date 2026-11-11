@@ -69,3 +69,9 @@
 .det-estado{display:flex;flex-direction:column;gap:12px}
 /* a camera livre (ilha/orbita.ts): arrastar e pincar na cena giram e aproximam a camera, em vez de rolar ou ampliar a pagina */
 .habitat-cena > .lcd{touch-action:none}
+
+/* MITOLOGIA, E1 (docs/TAREFA_V3_MITOLOGIA.md): o termometro do Myotismon. Com a repeticao a exaustao, a ilha escurece de leve (so vista;
+   o atributo e posto por ilha/mitologia.ts e some quando o dono varia) */
+.cena3d canvas{transition:filter 2.4s ease}
+html[data-myotismon="1"] .cena3d canvas{filter:brightness(.78) saturate(.72) hue-rotate(-12deg)}
+@media (prefers-reduced-motion:reduce){ .cena3d canvas{transition:none} }
