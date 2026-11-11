@@ -50,7 +50,8 @@ describe("os Cenarios do Lab", () => {
   }, 120_000);
 
   test("o dono simulado trata a lesao: sem isso o pet de varios dias morre da lesao do sparring", () => {
-    const r = { dono: "atencioso" as const, dias: 5, porDia: 16, treinoDia: 0, semente: 4242 };
+    /* a semente 4243: na v23 (a luta da rodada de equilibrio, LP5-5) o pet da 4242 ja nao morre da lesao em 5 dias */
+    const r = { dono: "atencioso" as const, dias: 5, porDia: 16, treinoDia: 0, semente: 4243 };
     expect(() => petDaReceita(r)).toThrow(/lesão/);
     const m = petDaReceita(r, true);
     expect(m.morte).toBeNull();

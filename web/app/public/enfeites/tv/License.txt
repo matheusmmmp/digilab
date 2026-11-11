@@ -1,0 +1,10 @@
+DigiLab: a TV de tubo, um marco da ilha (tv.gltf, tv.bin, tv_cor.png)
+
+Procedencia: feito a mao por script, sem IA, em 2026-11-11 (docs/objetos3d/cartoon/tv.py no repositorio do DigiLab).
+A malha (o gabinete, a moldura, a tela, os botoes, os pes, a antena, o musgo) e a textura (pintada pelo codigo, pela posicao no espaco)
+saem do script; a mesma entrada da sempre o mesmo arquivo. Nada vem de modelo gerado nem de imagem de terceiros.
+
+A forma segue a televisionVintage do Kenney Furniture Kit (CC0) so como referencia de desenho: nenhum vertice e nenhum pixel dela esta nestes arquivos.
+
+Uso: no jogo DigiLab, publicado. Autor: o projeto DigiLab (Matheus).
+Aprovacao: as capturas ficam no PR dos objetos em cartoon.
