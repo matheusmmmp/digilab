@@ -48,6 +48,7 @@ describe("a chave", () => {
     andar(raiz);
     /* o cantinho da TV (ilha/cantinhoTv.ts e cantinhoTvConta.ts; test/gosto_visual_tv.test.ts confere a chave dele) lê a chave e o estado da TV */
     /* desde a etapa 1 do PLANO_UX_GOSTO_VISUAL a tela Pet abre o painel da TV (PainelTv.tsx), também atrás da chave (gosto_visual_painel.test.ts) */
+    /* a etapa 2 nao acrescenta nenhum: o toque na TV e o sinal da reacao chegam ao palco e aos lugares pela cena (cenaEstado.ts) */
     expect(quem.sort()).toEqual(["App.tsx", "TelaPet.tsx", "cantinhoTv.ts", "cantinhoTvConta.ts"]);
   });
   test("o protótipo fica fora do motor, do log e do save: não importa mudarMotor, aplicarEvento nem o save", () => {

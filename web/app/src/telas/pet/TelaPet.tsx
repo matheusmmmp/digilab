@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { gostoVisualLigado } from "../../gostoVisual/chave.ts";
 import { PainelTv } from "../../gostoVisual/PainelTv.tsx";
+import { aoPedirPainelTv, marcarPainelTv } from "../../gostoVisual/painelTvEstado.ts";
+import { ocuparSinalTv } from "../../gostoVisual/sinalTv.ts";
 import {
   ACAO_CHAMADO, ALVOS_DESEJO, CAT, DO_ESP, NOME_ESP, EMOCAO_TXT, FATORES_TXT, NOME_CHAMADO, NOME_EST, NOME_PET, OVO, TICK_INICIAL, TPD,
   chaveSprite, eNoite, expressarConfianca, nomeEstagio, nomeForma, nomeRivalConfianca, observacao, type AcaoDono, type Chamado, type MotivoVida, type Motor,
@@ -147,8 +149,10 @@ const MODO_CURTO: Record<string, string> = { template: "frases prontas", moldura
 function BalaoFala({ v, abrir }: { v: VistaFala; abrir: () => void }) {
   const { motor: m } = useJogo(), mot = m.motivo;
   const chave = mot && mot.origem === "vida" ? `${mot.acao}|${mot.fatores.join(",")}|${mot.recusa?.acaoDono ?? ""}|${v.texto}` : v.texto;
-  const vis = useAviso(chave), arr = useArrastavel<HTMLButtonElement>("fala");
-  if (!vis || (!v.texto && !v.detalhe)) return null;
+  const vis = useAviso(chave), arr = useArrastavel<HTMLButtonElement>("fala"), naTela = vis && !!(v.texto || v.detalhe);
+  /* a fila dos sinais do prototipo do gosto visual: com a fala na tela, o sinal da TV espera (sinalTv.ts; sem a chave, ninguem le) */
+  useEffect(() => { ocuparSinalTv("fala", naTela); return () => ocuparSinalTv("fala", false); }, [naTela]);
+  if (!naTela) return null;
   return (
     <button type="button" className={v.classe + " cena-fala"} title={v.titulo} aria-haspopup="dialog" onClick={abrir} {...arr}>
       <span className="balao-txt">{v.balao}</span>{v.causa}<small>toque para ver o porquê</small></button>
@@ -757,6 +761,12 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
     }, 0);
   };
   useEffect(() => { if (atual) painel.current?.focus(); }, [atual]);
+  /* o prototipo do gosto visual (so com `?gosto_visual=1`): o toque na TV da ilha abre o painel da TV (se ja esta aberto, fica); a camera vai
+     ao cantinho enquanto ele esta aberto; e o chamado do pet passa na frente do sinal da TV */
+  const temTv = tem("tv"), chamando = vivo && petChama(m);
+  useEffect(() => (temTv ? aoPedirPainelTv(() => { gatilho.current = null; setAberto("tv"); }) : undefined), [temTv]);
+  useEffect(() => { marcarPainelTv(atual === "tv"); return () => marcarPainelTv(false); }, [atual]);
+  useEffect(() => { ocuparSinalTv("chamado", chamando); return () => ocuparSinalTv("chamado", false); }, [chamando]);
   /* o resumo do chamado abre o Estado: na pilha (desktop) ou o painel da borda (celular) */
   const abrirEstado = () => {
     if (!largo) { abrir("estado"); return; }
@@ -778,14 +788,15 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
       {topo && largo && createPortal(<LinhaAgora aberto={atual === "digibrain"} sobPainel={atual !== null} aoAbrir={detalhesPet ? () => abrir("digibrain") : undefined} />, topo, "agora")}
       {!largo && <AgoraIcone aberto={atual === "digibrain"} sobPainel={atual !== null} aoAbrir={detalhesPet ? () => abrir("digibrain") : undefined} />}
       <Prioridade abrirDetalhes={largo || detalhesPet ? abrirEstado : undefined} movel={!largo} />
-      {largo ? (!atual && detalhesPet && (
+      {/* com "Exibir detalhes do pet" desligado a pilha some; com o prototipo do gosto visual fica so a linha "TV", o caminho do teclado */}
+      {largo ? (!atual && (detalhesPet || temTv) && (
         <aside className="pet-hud" ref={pilha} aria-label="Painéis do pet" {...arrPilha}>
-          <PainelHud id="estado" aberto={hud.estado} alternar={() => mudarHud("estado")}>{conteudo("estado")}</PainelHud>
-          {temEvo && <PainelHud id="evolucao" aberto={hud.evolucao} alternar={() => mudarHud("evolucao")} resumo={resumoEvo}>{conteudo("evolucao")}</PainelHud>}
-          {vivo && <PainelHud id="acoes" aberto={hud.acoes} alternar={() => mudarHud("acoes")} resumo={ult ? `${hhmm(ult.t)} · ${textoHist(ult)}` : "nada no registro ainda"}>
+          {detalhesPet && <PainelHud id="estado" aberto={hud.estado} alternar={() => mudarHud("estado")}>{conteudo("estado")}</PainelHud>}
+          {detalhesPet && temEvo && <PainelHud id="evolucao" aberto={hud.evolucao} alternar={() => mudarHud("evolucao")} resumo={resumoEvo}>{conteudo("evolucao")}</PainelHud>}
+          {detalhesPet && vivo && <PainelHud id="acoes" aberto={hud.acoes} alternar={() => mudarHud("acoes")} resumo={ult ? `${hhmm(ult.t)} · ${textoHist(ult)}` : "nada no registro ainda"}>
             <UltimasAcoes irRegistro={irRegistro} n={5} /></PainelHud>}
-          {nascendo === 0 && <LinhaDigiBrain abrir={() => abrir("digibrain")} />}
-          {tem("tv") && <LinhaTv abrir={() => abrir("tv")} />}
+          {detalhesPet && nascendo === 0 && <LinhaDigiBrain abrir={() => abrir("digibrain")} />}
+          {temTv && <LinhaTv abrir={() => abrir("tv")} />}
         </aside>
       )) : (
         <LequePet tem={tem} abrirDe={abrirDoLeque} abrirConfig={abrirConfig} abrirMeusPets={abrirMeusPets} />

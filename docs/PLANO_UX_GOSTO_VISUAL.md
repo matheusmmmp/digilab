@@ -500,3 +500,47 @@ verificou nenhuma fonte nova.
 - nenhum revisor (`rev-a11y`, `rev-cena`, `rev-replay`) viu a etapa, e o contraste não foi medido.
 
 Os desvios estão em `docs/registro/2026-11.md`, D-UXGV-14 a 18.
+
+---
+
+## 14. A etapa 2 do código: o cantinho e as reações (2026-11-11, Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-gosto-visual-c2`)
+
+**O pedido do Matheus (2026-11-11):** "Sim, segue a etapa 2".
+
+**O que mudou:**
+- **A TV em três quartos** (UX-GV-3): a frente da TV fica a 40° do sul, virada para o lado do meio da ilha (`TV_TRES_QUARTOS`, em
+  `ilha/constantes.ts`; a conta em `ilha/grade.ts`). Vale sempre, com ou sem a chave. O cantinho gira junto, porque nasce do giro da TV.
+- **O toque na TV abre o painel** (UX-GV-2): `gostoVisual/ToqueTv.tsx`, com o mesmo gesto do toque nos lugares. A área de toque tem pelo
+  menos 44 px. O toque na TV é dela, e a barraca atrás não abre. Com o mouse, o cursor vira a mão.
+- **O ícone no lugar do balão** (UX-GV-10): o balão de texto saiu do 3D. O sinal é um ícone das grades do jogo, sobre a cabeça do pet:
+  o coração (adorando), a interrogação (curioso), as reticências (enjoou) e o "x" (não curtiu). "Assistindo" e "distraído" ficam só
+  na pose.
+- **A fila e o mínimo de 3 s** (`gostoVisual/sinalTv.ts`): o emote do jogo, a fala e o chamado do pet passam na frente. O sinal só troca
+  depois de 3 s na tela.
+- **A câmera vai ao cantinho** com o painel da TV aberto, em 0,6 s, e volta ao fechar. A partir de 900 px o cantinho fica à esquerda do
+  painel; abaixo disso, acima da folha. Com "reduzir movimento" a troca é direta.
+- **Com "Exibir detalhes do pet" desligado,** a pilha fica só com a linha "TV".
+- **O foco ao ligar e ao parar:** o botão que tinha o foco sai da tela, e o foco vai para o botão novo (Parar ou Ligar a TV). Antes ele
+  caía fora do painel, e o Esc não fechava. O defeito era da etapa 1.
+
+**Fora da chave** (`?gosto_visual=1`), o jogo muda em um ponto: o giro da TV. O resto chega ao jogo por dois campos opcionais da cena
+(`CENA.sinalTv` e `CENA.mundo.tvEm`), que ficam vazios sem o protótipo.
+
+**Os testes:** `web/app/test/gosto_visual_cantinho.test.ts` (17 testes) e um terceiro teste em `web/app/e2e/gosto_visual_painel.spec.ts`
+(o toque na TV, a câmera, o sinal e a pilha sem os detalhes).
+
+**As capturas do jogo** estão em `docs/pranchas/ux-gosto-visual/capturas_codigo/`: `etapa2_painel_camera_1440.jpg`,
+`etapa2_sinal_fechado_1440.jpg` e `etapa2_folha_390.jpg`.
+
+**Não feito nesta etapa:**
+- a janela pequena nova, que é da etapa 3;
+- a área de toque da almofada inteira para o pet sentado (seção 5.3): o toque no pet continua o do sprite;
+- a planta sem água foi conferida só pelos testes, não na tela;
+- "Mostrar minha tela" com a captura de verdade continua sem teste;
+- nenhum revisor (`rev-a11y`, `rev-cena`, `rev-replay`) viu a etapa, e o contraste do ícone sobre a cena não foi medido.
+
+**Pontos para o Matheus ver:**
+- **O pet dormindo vai à almofada** e "assiste" de olho fechado. O comportamento é do cantinho do P0 (#820), e esta etapa não o mudou.
+- **O chamado segura o sinal** enquanto durar. Um pet com fome por muito tempo fica sem o ícone da TV, e a reação segue no painel.
+
+Os desvios estão em `docs/registro/2026-11.md`, D-UXGV-19 a 24.

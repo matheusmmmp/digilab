@@ -8,7 +8,7 @@
    - o carinho é o Carinho do jogo (UX-GV-7): aqui não há botão de carinho, e nenhuma contagem de carinhos (a GV-14: o jogo não pontua);
    - no celular (UX-GV-8) o painel é uma folha baixa: recolhida, a reação e o gosto; "Mais" a estica.
    Só existe com `?gosto_visual=1`. Fora do motor, do log e do save. */
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ChevronRight, Lock, MonitorUp, PictureInPicture2, Square, Tv } from "lucide-react";
 import { COMPONENTES, alvos, gostaMaisDe, tempoJunto, valores, type Componente } from "./gosto.ts";
 import { abrirJanelaDaTv, fecharJanelaDaTv, temJanelaPequena, useJanelaDaTv } from "./janelaPequena.ts";
@@ -73,8 +73,16 @@ const Privacidade = () => <p className="tvp-priv"><Lock aria-hidden="true" /><sp
 export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
   const s = useSessaoTv(), janela = useJanelaDaTv();
   const [porque, setPorque] = useState(false), [todos, setTodos] = useState(false), [passando, setPassando] = useState(false), [mais, setMais] = useState(false);
+  /* ligar e parar trocam o botão que tinha o foco por outro: o foco vai para o botão novo, senão cai fora do painel e o Esc não o fecha */
+  const ligada = s.origem !== null, raiz = useRef<HTMLDivElement>(null), ligadaAntes = useRef(ligada);
+  useEffect(() => {
+    if (ligadaAntes.current === ligada) return;
+    ligadaAntes.current = ligada;
+    const a = document.activeElement;
+    if (!a || a === document.body) raiz.current?.querySelector<HTMLElement>(ligada ? "[data-tv-parar]" : "[data-tv-ligar]")?.focus();
+  }, [ligada]);
   if (!s.inato) return <p className="tvp-fraco">O pet ainda não está aqui.</p>;
-  const ligada = s.origem !== null, comTela = podeMostrarTela() && !movel, comJanela = temJanelaPequena() && !movel;
+  const comTela = podeMostrarTela() && !movel, comJanela = temJanelaPequena() && !movel;
   /* sem som na captura, o grupo do som não entra nas contas (o pet não ouve) */
   const quais: readonly Componente[] = ligada && !s.temSom ? IMAGEM : COMPONENTES;
   const linhas = linhasDoGosto(s.inato, s.estado, quais), curtas = linhasMarcadas(linhas), agora = s.sentido ? valores(s.sentido) : {};
@@ -88,7 +96,7 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
       <p className="tvp-forte" data-testid="tv-reacao">{frase}</p>
       {s.origem === "tela" && !s.temSom && <p className="tvp-fraco">Ele não está ouvindo. Para ouvir, compartilhe de novo e marque o áudio.</p>}
       <div className="tvp-bts">
-        <button type="button" className="hx-btn" onClick={pararTv}><Square aria-hidden="true" />Parar</button>
+        <button type="button" className="hx-btn" data-tv-parar="" onClick={pararTv}><Square aria-hidden="true" />Parar</button>
         {comJanela && (janela
           ? <button type="button" className="hx-btn" onClick={fecharJanelaDaTv}><PictureInPicture2 aria-hidden="true" />Trazer de volta</button>
           : <button type="button" className="hx-btn" onClick={() => void abrirJanelaDaTv()}><PictureInPicture2 aria-hidden="true" />Janela pequena</button>)}
@@ -97,7 +105,7 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
     </div>
   ) : (
     <div className="tvp-sec">
-      <button type="button" className="hx-continuar tvp-cheio" onClick={ligarTvJogo}><Tv aria-hidden="true" />Ligar a TV</button>
+      <button type="button" className="hx-continuar tvp-cheio" data-tv-ligar="" onClick={ligarTvJogo}><Tv aria-hidden="true" />Ligar a TV</button>
       {comTela && <button type="button" className="hx-btn tvp-cheio" onClick={() => void ligarTela()}><MonitorUp aria-hidden="true" />Mostrar minha tela</button>}
       {comTela && <Privacidade />}
     </div>
@@ -142,21 +150,21 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
   const erro = s.erro && <p className="tvp-erro" role="alert" data-testid="tv-erro">{s.erro}</p>;
   /* a folha do celular, recolhida: a reação (ou o botão de ligar) e o gosto; "Mais" abre o resto */
   if (movel && !mais) return (
-    <div className="tvp tvp--recolhida" data-testid="painel-tv">
+    <div className="tvp tvp--recolhida" data-testid="painel-tv" ref={raiz}>
       {erro}
       <div className="tvp-sec">
         {ligada ? <p className="tvp-forte" data-testid="tv-reacao">{frase}</p>
-          : <button type="button" className="hx-continuar tvp-cheio" onClick={ligarTvJogo}><Tv aria-hidden="true" />Ligar a TV</button>}
+          : <button type="button" className="hx-continuar tvp-cheio" data-tv-ligar="" onClick={ligarTvJogo}><Tv aria-hidden="true" />Ligar a TV</button>}
         <p data-testid="tv-gosto">{gosto}</p>
         <div className="tvp-bts">
-          {ligada && <button type="button" className="hx-btn" onClick={pararTv}><Square aria-hidden="true" />Parar</button>}
+          {ligada && <button type="button" className="hx-btn" data-tv-parar="" onClick={pararTv}><Square aria-hidden="true" />Parar</button>}
           <Abre aberto={false} alternar={() => setMais(true)}>Mais</Abre>
         </div>
       </div>
     </div>
   );
   return (
-    <div className="tvp" data-testid="painel-tv">
+    <div className="tvp" data-testid="painel-tv" ref={raiz}>
       {erro}
       {controle}
       {leitura}
