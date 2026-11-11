@@ -16,7 +16,7 @@ import { BotaoHx, ChipHx } from "../../componentes/hx/index.ts";
 import { ICONE } from "../../decoracao.ts";
 import { FALA_LLM, ligarFalaLLM, rotuloLLM, useFalaLLM } from "../../fala.ts";
 import { escolherConversaNova, escolherFalaRede, escolherModo, useFalaLivre, type ModoFala } from "../../falaLivre.ts";
-import { useJogo } from "../../jogo.ts";
+import { replayDaTelaConfere, textoDaTela, useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import type { ParteConfig } from "../../rotas.ts";
 import { AvisoSom } from "../../componentes/AvisoSom.tsx";
@@ -126,19 +126,19 @@ function Dados({ irPet }: { irPet: () => void }) {
   const verificar = () => {
     const t0 = performance.now();
     try {
-      const ok = Motor.reproduzir(m.semente, m.log, m.versao).assinatura() === m.assinatura();
-      setMsg(ok ? { txt: `Replay idêntico: ${m.log.length} eventos reconstruíram o mesmo pet em ${(performance.now() - t0).toFixed(0)} ms.` }
+      const { ok, eventos } = replayDaTelaConfere();       // os dois pets (CO4d): o registro do grupo inteiro
+      setMsg(ok ? { txt: `Replay idêntico: ${eventos} eventos reconstruíram o mesmo pet em ${(performance.now() - t0).toFixed(0)} ms.` }
         : { txt: "O replay divergiu do pet atual. Isso é um bug do porte; copie o registro e mande para análise.", erro: true });
     } catch (err) { setMsg({ txt: "Replay falhou: " + (err instanceof Error ? err.message : String(err)), erro: true }); }
   };
   const copiar = async () => {
-    const txt = textoSave(m);
+    const txt = textoDaTela();
     try { await navigator.clipboard.writeText(txt); setMsg({ txt: "Registro copiado." }); }
     catch { console.log(txt); setMsg({ txt: "Não foi possível copiar automaticamente. O registro está no console do navegador." }); }
   };
   const exportar = () => {
     /* o mesmo conteudo do save num arquivo .json baixado pelo navegador */
-    const url = URL.createObjectURL(new Blob([textoSave(m)], { type: "application/json" })), a = document.createElement("a");
+    const url = URL.createObjectURL(new Blob([textoDaTela()], { type: "application/json" })), a = document.createElement("a");
     a.href = url; a.download = `digilab-pet-${m.semente}.json`; a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     setMsg({ txt: "Arquivo do pet exportado." });

@@ -6,7 +6,7 @@
 import { BookOpen, Cloud, CloudOff, Coins, Lock, MessageCircle, Moon, Settings, Sprout, Sun, Swords, type LucideIcon } from "lucide-react";
 import { DO_ESP, NOME_ESP, NOME_EST, TPD, eNoite, nomeEstagio, nomeForma } from "../../motor/index.ts";
 import { BRASAO } from "../decoracao.ts";
-import { sairDoLab, tamerAtual, useJogo } from "../jogo.ts";
+import { focar, irmaoEmFoco, sairDoLab, tamerAtual, useJogo } from "../jogo.ts";
 import { usePainelLado } from "../desktop.ts";
 import { alternarLeque, useLeque } from "../movel.ts";
 import { NOME_DESTINO, type Destino } from "../rotas.ts";
@@ -42,6 +42,21 @@ function SaldoBits({ classe }: { classe: string }) {
   );
 }
 
+/** os dois pets (docs/TAREFA_V3_COOPERACAO.md, CO4d): o retrato do irmao do pet em foco, menor, perto do dele. O toque troca o foco: quem a
+    tela mostra e quem recebe a acao do dono (CO-6). O ponto rosa: o irmao tem um chamado aberto (o tempo ja freou por ele). Com um pet so,
+    ou com o pet de teste na tela, nada aparece */
+function IrmaoNoTopo({ classe }: { classe: string }) {
+  const { nascendo } = useJogo(), ir = irmaoEmFoco();
+  if (!ir) return null;
+  const ovo = nascendo > 0, chamando = !ovo && ir.motor.chamadosAbertos().length > 0, nome = ovo ? "o outro ovo" : nomeForma(ir.motor.forma);
+  const rotulo = `Ver ${nome}${chamando ? ", que está chamando" : ""}`;
+  return (
+    <button type="button" className={classe} aria-label={rotulo} title={rotulo} onClick={() => focar(ir.ident)}>
+      <Retrato m={ir.motor} ovo={ovo} />{chamando && <span className="mm-ponto" aria-hidden="true" />}
+    </button>
+  );
+}
+
 /* O topo do celular (docs/PROPOSTAS_V3_UX_TELA_PET.md, "Mobile mínimo", M1; prancha em docs/pranchas/ux-mobile/): no canto de cima à esquerda o retrato
    (redondo no Vidro, reto no Militar), que abre o leque dos vitais e dos painéis (TelaPet.tsx, LequePet), com o ponto rosa quando há uma necessidade, e a
    hora; no canto de cima à direita a coluna Conversar, Crescer, Lutar e Diário, só ícone. Sem barra de abas: a tela Pet é a casa. O nome e o estágio do
@@ -59,6 +74,7 @@ function TopoMovel({ irConversar, irDestino, lugar }: PropsTopo) {
         onClick={() => alternarLeque("paineis")}>
         <Retrato m={m} ovo={ovo} semArrastar />{nec && <span className="mm-ponto" aria-hidden="true" />}
       </BotaoMovel>
+      <IrmaoNoTopo classe="mm-caixa mm-forma mm-irmao" />
       <span className="mm-caixa mm-pilula mm-relogio" role="group" aria-label={`${hhmm(e.tick)}, dia ${diaDe(e.tick)}${erroSave ? ", não salva" : ""}`}>
         <small aria-hidden="true">D{diaDe(e.tick)}</small><b aria-hidden="true">{hhmm(e.tick)}</b>
         {erroSave && <CloudOff className="mm-salvo-erro" aria-hidden="true" />}
@@ -104,6 +120,7 @@ function TopoLargo({ abrirMeusPets, irConversar, abrirConfig }: PropsTopo) {
             <span className="tamer-nv tamer-nv--topo" role="img" aria-label={`Tamer, nível ${nivelTamer}`}>Tamer Nv {nivelTamer}</span></span>
           {emLab && <span className="topo-lab"><SeloExperimental /><button type="button" className="topo-lab__volta" onClick={sairDoLab}>voltar ao meu pet</button></span>}
         </span>
+        <IrmaoNoTopo classe="topo-irmao" />
       </div>
       {/* o encaixe da linha do agora (TelaPet, por portal): logo depois da plaquinha na ordem do DOM (a tabulacao segue o visual) e sem largura, para o logo e o relogio ficarem onde estao */}
       <span className="topo-agora" />

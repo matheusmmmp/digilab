@@ -6,7 +6,7 @@
    antes desta parte ver a nova). */
 import { useEffect, useState } from "react";
 import { DOIS_OVOS_LIGADO, ESPECIES, GrupoDoJogo, Motor, VERSAO_V26, hashSemente, type Especie, type Ritmo } from "../motor/index.ts";
-import { QUADROS_CHOCANDO, jogoAtual, trocarGrupo, trocarMotor } from "./jogo.ts";
+import { QUADROS_CHOCANDO, jogoAtual, textoDoSaveAtual, trocarGrupo, trocarMotor } from "./jogo.ts";
 import { ligarProduto } from "./produto.ts";
 import { CHAVE, textoSave } from "./save.ts";
 import { CHAVE_GUARDADOS, lerGuardados } from "./pets.ts";
@@ -41,7 +41,7 @@ export function sementeDoBrasao(esp: Especie): number {
 export function chocarDoBrasao(esp: Especie, guardarAtivo = false, ritmo: Ritmo = "rapida"): void {
   if (guardarAtivo) {
     const g = lerGuardados();
-    g.push(JSON.parse(textoSave(jogoAtual().motor)));
+    g.push(JSON.parse(textoDoSaveAtual()));        // o par dos dois pets vai inteiro para a espera (CO4d)
     localStorage.setItem(CHAVE_GUARDADOS, JSON.stringify(g));
   }
   if (DOIS_OVOS_LIGADO) {

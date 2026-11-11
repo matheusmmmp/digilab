@@ -127,9 +127,9 @@ export const VERSAO_V25 = 25;
 export const VERSAO_V26 = 26;
 /** o pet so existe dentro do grupo de dois (a v26) */
 export const ehDoGrupo = (versao: number): boolean => versao === VERSAO_V26;
-/** a chave dos dois ovos (CO4c), desligada: com ela, o ovo do brasao choca o grupo de dois (v26). Desligada ate as telas dos dois pets (a
-    CO4d): ligada sem elas, o segundo pet viveria sem aparecer */
-export const DOIS_OVOS_LIGADO = false;
+/** a chave dos dois ovos (CO4c), ligada na CO4d com as telas dos dois pets: o ovo do brasao choca o grupo de dois (v26). Ficou desligada ate as
+    telas (a CO4d): ligada sem elas, o segundo pet viveria sem aparecer */
+export const DOIS_OVOS_LIGADO = true;
 /** a versao luta pela luta da POC: a v21 a v26 */
 export const ehLutaPoc = (versao: number): boolean =>
   versao === VERSAO_V21 || versao === VERSAO_V22 || versao === VERSAO_V23 || versao === VERSAO_V24 || versao === VERSAO_V25 ||
