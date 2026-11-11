@@ -130,10 +130,13 @@ function andar(L: Luta, u: Lutador, mx: number, my: number, vel: number, dt: num
   u.x += mx * p; u.y += my * p * ACAO.eixoY; prender(L, u); colidir(L, u);
 }
 
+/** a esquiva (D-LP5-14): o fator de um lutador pela perspicacia ou pela agilidade x (1 = o neutro), com o peso k; linear, sem `**` (a
+    aritmetica do nucleo), e pelo menos 0,1 */
+const fatorEsq = (x: number, k: number): number => Math.max(0.1, 1 + k * (x - 1));
 function desviar(L: Luta, u: Lutador, dt: number): void {
   const cfg = dific(L), E = L.cfg.esquiva;
   /* a esquiva (D-LP5-14): a perspicacia sobe a chance e encurta a reacao; sem a `esquiva`, a da POC */
-  const perc = E ? u.st.perc ?? 1 : 1, chance = E ? Math.min(E.chanceMax, cfg.desvio * perc ** E.kChance) : cfg.desvio, reacao = E ? cfg.reacao / perc ** E.kReacao : cfg.reacao;
+  const perc = E ? u.st.perc ?? 1 : 1, chance = E ? Math.min(E.chanceMax, cfg.desvio * fatorEsq(perc, E.kChance)) : cfg.desvio, reacao = E ? cfg.reacao / fatorEsq(perc, E.kReacao) : cfg.reacao;
   for (const p of L.projeteis) {
     if (p.de.lado === u.lado || p.decidido.has(u)) continue;
     const rx = u.x - p.x, ry = (u.y - EQ.peito) - p.y, vindo = rx * p.vx + ry * p.vy > 0;
@@ -150,7 +153,7 @@ function desviar(L: Luta, u: Lutador, dt: number): void {
     const ox = u.x - o.x, oy = u.y - o.y, od = dist(ox, oy) || 1;
     if (od <= EQ.alcanceCorpo + u.raio + EQ.investida) {
       u.leuAtaque = o.nAtaque;
-      if (L.r.ia() < Math.min(E.chanceMax, E.pertoChance * perc ** E.kChance)) { u.reacao = E.pertoReacao / perc ** E.kReacao; u.desvioDir = [ox / od, oy / od]; u.contraPend = E.contraMs > 0; }
+      if (L.r.ia() < Math.min(E.chanceMax, E.pertoChance * fatorEsq(perc, E.kChance))) { u.reacao = E.pertoReacao / fatorEsq(perc, E.kReacao); u.desvioDir = [ox / od, oy / od]; u.contraPend = E.contraMs > 0; }
     }
   }
   if (u.reacao > 0) { u.reacao -= dt; if (u.reacao <= 0) { u.dash = ACAO.desvioCpuMs; u.dashDir = u.desvioDir; } }
@@ -200,7 +203,7 @@ function atualizar(L: Luta, u: Lutador, dt: number): void {
   desviar(L, u, dt);
   if (u.dash > 0) {
     const Es = L.cfg.esquiva;
-    u.dash -= dt; andar(L, u, u.dashDir[0], u.dashDir[1], Es ? ACAO.desvioCpu * (u.st.agil ?? 1) ** Es.kDash : ACAO.desvioCpu, dt); mudar(u, "run");
+    u.dash -= dt; andar(L, u, u.dashDir[0], u.dashDir[1], Es ? ACAO.desvioCpu * fatorEsq(u.st.agil ?? 1, Es.kDash) : ACAO.desvioCpu, dt); mudar(u, "run");
     if (Es && u.dash <= 0 && u.contraPend) { u.contraPend = false; u.recarga = Math.min(u.recarga, Es.contraMs); }
     return;
   }
