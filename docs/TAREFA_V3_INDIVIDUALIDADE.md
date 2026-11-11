@@ -4,7 +4,8 @@ Coordenador: Matheus (sessão direta). Worker da etapa I0: Claude Code, Opus 5.5
 `v3-individualidade` (as etapas seguintes com sufixo, como `v3-individualidade-i0`). Status: **ABERTA; a proposta na `main` (#676);
 as IN-1 a IN-8 DECIDIDAS em 2026-11-07, pela recomendação; o I0 (a conferência) na `main` (#684); o I1 (a bateria como ferramenta)
 na `main` (#695); o plano do I2 APROVADO (#700); o I2a na `main` (#707); o I2b (a run da linha de base, faixa 85101…85505)
-na `main` (#718); o adendo 1 na `main` (#746); o plano do I5 APROVADO, na `main` (#747); o I5a (as medidas e o orquestrador) entregue.**
+na `main` (#718); o adendo 1 na `main` (#746); o plano do I5 APROVADO, na `main` (#747); o I5a na `main` (#751); o I5b na `main` (#768); o plano do I7 e o adendo 1 na `main` (#755, #769); o I7a (as medidas e
+o orquestrador) entregue.**
 
 Categoria: documentacao. Origem: Matheus, 2026-11-07: depois da conversa sobre o connectome e a escala, direcionar a pesquisa para o
 temperamento herdado, o sinal do dono, a memória de episódios e o hábito, com uma medida comum de individualidade.
@@ -197,3 +198,43 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
   - O afastamento do ramo é medido pelos perfis do I5, contra um gêmeo com outro acaso desde o nascimento.
   - Três hipóteses rivais ficam escritas antes: a canalização, o ciclo que se reforça e o caos.
 - **Sem mecanismo novo** (IN-7). O I7a depende do I5a na `main` (#751), e o I7b roda depois do I5b.
+
+## O adendo 1 do plano do I7 (2026-11-10, Claude Code, Opus 5.5, branch `v3-individualidade-i7-adendo1`)
+
+- **O adendo** está DECIDIDO pelo Matheus em 2026-11-10 ("E daí a gente parte para seguir as recomendações"), na seção 12 do
+  `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md`, depois da conferência das 29 referências (vault, seções 9 e 10). Ele traz:
+  - uma quarta hipótese, a H-TRANS (caos cedo, canalização depois);
+  - a régua crua e a forma em U como condições das frases;
+  - a expectativa da malha fechada;
+  - dois descritivos: o estado interno e o efeito comum do tapa.
+
+  As decisões A1-1 a A1-5 estão DECIDIDAS, todas pela recomendação.
+- **A D-IND-I5b-1** (o dono separa os pets) está confirmada pelo Matheus.
+
+## Resultado da etapa I7a (2026-11-10, Claude Code, Opus 5.5, branch `v3-individualidade-i7a`)
+
+- **As medidas** (`digilab/metrics.py`, a seção do I7):
+  - `distancias_ramo` (a D_b(d));
+  - `razao_de_somas` (o Φ) e `soma_presente` (a régua crua);
+  - `inclinacao_ou_none` (o γ e o β);
+  - `folhas_estado` e `distancia_estado` (o estado interno, 12.5, PROPOSTA);
+  - `efeito_comum` (o C_E) e `reencontrou`.
+
+  Os testes, contra casos feitos à mão, estão em `tests/test_individualidade_i7.py`.
+- **O orquestrador:** `experiments/run_v3_individualidade_i7.py`, com as configs `individualidade_i7.json` (a run) e
+  `individualidade_i7_fumaca.json`.
+  - **Os ramos:**
+    - o N, o G, o A(t) e o E(t) vividos pelo laço do dono, com o embrulho do ramo (`DonoRamo`);
+    - o E°(t), o log do I2 com o tapa inserido, rejogado.
+  - **As conferências:** o G-I7-0 a 3 falham alto, e cada ramo é vivido duas vezes (IR-6).
+  - **A análise:** o bootstrap sobre as sementes soma agregados por semente; a leitura segue a 7.2 com o adendo 1 (a H-TRANS, a régua
+    crua e o U).
+  - **A trava:** o cabeçalho APROVADO, a seção `## 13. O registro da análise`, as bases e o K do I2, os 14 dias, no máximo 4 processos
+    e nada por cima de uma pasta.
+- **A fumaça** (as sementes 101 e 202, K = 1, 14 dias, 12 pets, 4 processos, com a suíte inteira de outra sessão rodando ao lado):
+  - todas as conferências passaram;
+  - levou 12 min 20 s de parede, 62 s por pet com 4 processos e 244 s por pet dentro de cada processo;
+  - uma pet sozinha, num processo, levou 93 s (cada ramo, vivido duas vezes, 5 s).
+- **O custo passa do dobro da estimativa do plano** (45 s por pet e 1 h 10 min). A projeção para as 360 pets é de cerca de 6 h com 4
+  processos. Pela seção 8 do plano, a IR-6 volta ao Matheus antes da run.
+- **As leituras do plano** estão no registro: D-IND-I7a-1 a 8.
