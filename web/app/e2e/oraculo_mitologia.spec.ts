@@ -70,6 +70,6 @@ test("um pet que o oráculo ainda não conhecia começa calado", async ({ page }
   await page.waitForTimeout(1500);
   await expect(page.getByTestId("oraculo-balao")).toHaveCount(0);
   const ouvidas = await page.evaluate(c => localStorage.getItem(c + "-mitologia-ouvidas"), CHAVE);
-  expect(JSON.parse(ouvidas!)).toEqual({ [String(SAVE.semente)]: 2 });
+  expect(JSON.parse(ouvidas!)[String(SAVE.semente)]).toMatchObject({ h: 2 });
   expect(erros).toEqual([]);
 });

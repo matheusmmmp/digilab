@@ -322,3 +322,33 @@ O Python, atrás de duas chaves desligadas. Os desvios D-AS-S1-1 a 8 estão em `
   - a v20;
   - o `arvores_na_casa` no `Mundo` do TS;
   - o laço sem o `fruta_comida`, que ele já não tem: conferir que o A do TS com o corpo aceita o estímulo `comida` de uma fruta.
+
+## 10. S2 (2026-11-11, branch `v3-arvore-sacode-s2`)
+
+O porte do sacudir para o motor em TS, sem tela e **sem versão de pet** (D-AS-S2-1). Os desvios D-AS-S2-1 a 5 estão em
+`docs/registro/2026-11.md`, na seção "ARVORE_SACODE, S2".
+
+- **Em `web/app/motor/constantes.ts`:** o `LAYOUT_MUNDO_ILHA` e o `CMU_ILHA` (a planta A, espelho do `CONFIG_MUNDO_ILHA`), a
+  `ConfigSacudir` (`CONFIG_SACUDIR`, `CONFIG_SACUDIR_LIGADA` e o `validarSacudir`), a `ConfigFrutaComoComida` e o
+  `VERSOES_COM_SACUDIR`, vazio. O `VERSAO_PET` segue 23 e o `CMU_MVP` não muda.
+- **Em `web/app/motor/mundo.ts`:**
+  - o `eventoSacudirArvore` e o `lerSacudirArvore`, com o id em letras e dígitos ASCII, de 1 a 16, como no Python;
+  - no `MundoPartilhado`: o `arvoresNaCasa` no construtor, o `ligarSacudir`, o `galhoEm`, o `sacudir`, os registros `galhos` e
+    `sacudidas` e o fluxo `arvore-sacode`, `derivarSemente("arvore-sacode", semente)` no `RandomPy`, que só anda quando cai uma
+    fruta (dois sorteios por fruta);
+  - no `Mundo` do pet: a opção `sacudir` (só fora do grupo), o `sacudirArvore(tick, arvore)`, que atualiza o mundo até o tick antes de
+    sacudir (D-AS-S1-4), e o `noGalho(tick)`;
+  - o `RandomPy.estado()`, só leitura: as 624 palavras e a posição, o `getstate()[1]` do Python.
+- **Em `web/app/motor/motor_corpo_mundo.ts`:** as opções `sacudir` e `frutaComoComida`, o `sacudirArvore` (com o log) e o
+  `sacudirDoDono` (sem ele), o evento `sacudir_arvore` no `aplicarEvento`, o `estadoDict().sacudir` com a chave ligada e o gancho
+  opcional `frutaComida` da AS-11 (D-AS-S2-2).
+- **Em `web/app/motor/motor.ts` e `tipos.ts`:** o `[tick, "sa", { arvore }]` no `EventoRegistro`, o `Motor.sacudirArvore(id)` e o
+  `"sa"` no `aplicarEvento`. Como nenhuma versão tem o sacudir, os dois falham alto em todo pet de hoje, antes do registro.
+- **O G-PAR (`web/app/test/arvore_sacode.test.ts`):** as duas vidas do `arvore_sacode_python.json` (sementes 202 e 505) saem iguais
+  bit a bit no Node: o log, o traço de cada decisão (o estado, a percepção, os candidatos, o ocorrido e o corpo), o resumo do mundo
+  inteiro (`quedas`, `sacudidas`, `galhos`, `consumos`, `comidas`, `sumidas`), o estado do fluxo `arvore-sacode`, o corpo e o estado no
+  fim, os próximos sorteios dos cinco fluxos, o galho no fim e as sacudidas com o pet dormindo. O arquivo tem 14 testes, e a suíte do
+  `web/app` passa com 1 341 testes em 135 arquivos.
+- **Para a S3 e para o Matheus:** em que mundo as árvores vão para os ovos novos (a v23 está na ilha com água, `mvp_agua`, e o
+  `CMU_ILHA` não tem água) e qual versão de pet liga o sacudir. Quando isso for decidido, basta pôr a versão em `VERSOES_COM_SACUDIR` e
+  dar a ela o mundo e as chaves do gabarito; o teste do Motor passa a conferir o replay de um save com `sa`.
