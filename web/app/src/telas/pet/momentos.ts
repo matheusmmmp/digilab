@@ -6,7 +6,9 @@
      - os rostos (CLIPES_REACOES: Triste, Cansado, Recusa), que vao para o evento de reacao.ts (so as formas que os tem).
    Os tempos sao da vista: PROPOSTO, SEM FONTE. */
 import type { ClipeReacao } from "../../atlas.ts";
+import { CAT, type Motor } from "../../../motor/index.ts";
 import { registrarMomentoRosto } from "./reacao.ts";
+import { emitirBipe, emitirSom, emitirVoz } from "../../somEventos.ts";
 
 /** o clipe de acao que um momento toca uma vez */
 export type ClipeMomento = "Feliz" | "Sacudir";
@@ -36,8 +38,10 @@ export interface EntradaMomentos {
   dormindo: boolean;
   morto: boolean;
   acao: string;
-  /** os chamados abertos do bebe e quantos foram atendidos (Motor.chamadosAbertos, Motor.chamados.atendidos) */
+  /** os chamados abertos do bebe e quantos foram atendidos (Motor.chamadosAbertos, Motor.chamados.atendidos); `urgente`: algum esta no ultimo
+      terco da janela (o cartao grande de TelaPet.tsx) */
   abertos: readonly string[];
+  urgente: boolean;
   atendidos: number;
   /** o tamanho de mundo.consumos e o ultimo consumo (null sem mundo ou sem consumo) */
   consumos: number;
@@ -47,7 +51,7 @@ export interface EntradaMomentos {
 }
 
 interface Pendente { clipe: ClipeMomento; em: number; motivo: string }
-interface Visto { chave: string; nascendo: number; dormindo: boolean; abertos: readonly string[]; atendidos: number; consumos: number; vazio: number | null }
+interface Visto { chave: string; nascendo: number; dormindo: boolean; abertos: readonly string[]; urgente: boolean; atendidos: number; consumos: number; acao: string; vazio: number | null }
 
 let visto: Visto | null = null;
 let fila: Pendente[] = [];
@@ -58,13 +62,15 @@ const agendar = (clipe: ClipeMomento, em: number, motivo: string): void => { fil
 
 /** o dono fez uma acao agora (acoes.ts, `agir`): limpar sacode, tratar a lesao deixa Feliz, o carinho deixa Feliz depois do pulinho */
 export function momentoDoDono(acao: string, agora: number): void {
-  if (acao === "limpar") agendar("Sacudir", agora + MOMENTOS.esperaDonoMs, "limpar");
-  else if (acao === "tratar_lesao") agendar("Feliz", agora + MOMENTOS.esperaDonoMs, "tratar");
+  /* o som do gesto do dono toca na hora (HR2); a voz do pet vem com o clipe, quando ele sente (momentoAgora) */
+  if (acao === "limpar") { emitirSom("cuidado_limpar"); agendar("Sacudir", agora + MOMENTOS.esperaDonoMs, "limpar"); }
+  else if (acao === "tratar_lesao") { emitirSom("tratar"); agendar("Feliz", agora + MOMENTOS.esperaDonoMs, "tratar"); }
+  else if (acao === "acariciar") emitirSom("cuidado_toque");
 }
 /** a reacao ao toque relaxou o pet (cenaAcao.ts, reacaoDoCorpo): Feliz quando o pulinho acaba */
 export function momentoDoCarinho(agora: number): void { agendar("Feliz", agora + MOMENTOS.carinhoMs, "carinho"); }
 /** o dono tentou pegar o pet dormindo (PegarPet.tsx): ele vira de lado e segue dormindo */
-export function tentouPegarDormindo(agora: number): void { viraDesde = agora; }
+export function tentouPegarDormindo(agora: number): void { viraDesde = agora; emitirSom("cuidado_recusa"); }
 /** o pet dormindo esta virando de lado agora? */
 export const virandoAgora = (agora: number): boolean => agora >= viraDesde && agora - viraDesde < MOMENTOS.viraMs;
 
@@ -73,24 +79,37 @@ export const virandoAgora = (agora: number): boolean => agora >= viraDesde && ag
 export function vigiarMomentos(e: EntradaMomentos, agora: number): void {
   for (const k of ["nascendo", "atendidos", "consumos"] as const) if (!Number.isFinite(e[k])) throw new Error(`vigiarMomentos: ${k} nao finito`);
   const v = visto;
-  visto = { chave: e.chave, nascendo: e.nascendo, dormindo: e.dormindo, abertos: [...e.abertos], atendidos: e.atendidos, consumos: e.consumos, vazio: e.vazio };
+  visto = { chave: e.chave, nascendo: e.nascendo, dormindo: e.dormindo, abertos: [...e.abertos], urgente: e.urgente, atendidos: e.atendidos, consumos: e.consumos, acao: e.acao, vazio: e.vazio };
   if (!v || v.chave !== e.chave) { fila = []; tocando = null; viraDesde = -1e9; return; }
   if (e.morto) { fila = []; tocando = null; return; }
-  /* a casca quebrou: o pet aparece Feliz */
-  if (v.nascendo > 0 && e.nascendo <= 0) agendar("Feliz", agora, "nasceu");
-  /* acordou: Cansado por um instante */
-  if (v.dormindo && !e.dormindo) registrarMomentoRosto("Cansado", agora, MOMENTOS.acordarMs);
-  /* o chamado: atendido (o contador sobe) ou perdido (um tipo some sem o contador subir) */
-  if (e.atendidos > v.atendidos) agendar("Feliz", agora, "chamado");
-  else if (v.abertos.some(t => !e.abertos.includes(t))) registrarMomentoRosto("Triste", agora, MOMENTOS.perdidoMs);
+  /* a casca quebrou: o pet aparece Feliz, com o som do nascimento */
+  if (v.nascendo > 0 && e.nascendo <= 0) { emitirSom("nascer"); agendar("Feliz", agora, "nasceu"); }
+  /* dormiu e acordou: o bocejo; acordado, Cansado por um instante */
+  if (!v.dormindo && e.dormindo) emitirVoz("bocejo");
+  if (v.dormindo && !e.dormindo) { registrarMomentoRosto("Cansado", agora, MOMENTOS.acordarMs); emitirVoz("bocejo"); }
+  /* o chamado: abre (o bipe e a voz chamando), aperta (o bipe insistente), e atendido (o contador sobe) ou perdido (um tipo some sem o
+     contador subir, com o bipe descendo) */
+  if (e.abertos.some(t => !v.abertos.includes(t))) { emitirBipe("abre"); emitirVoz("chamando"); }
+  else if (e.urgente && !v.urgente) { emitirBipe("urgente"); emitirVoz("chamando"); }
+  if (e.atendidos > v.atendidos) { emitirSom("chamado_atendido"); agendar("Feliz", agora, "chamado"); }
+  else if (v.abertos.some(t => !e.abertos.includes(t))) { emitirBipe("perdido"); registrarMomentoRosto("Triste", agora, MOMENTOS.perdidoMs); }
+  /* a acao do motor que comeca: brincar alegra a voz, emburrar resmunga, chamar atencao chama */
+  if (e.acao !== v.acao && !e.dormindo) {
+    if (e.acao === "brincar") emitirVoz("contente");
+    else if (e.acao === "emburrar") emitirVoz("resmungo");
+    else if (e.acao === "chamar_atencao") emitirVoz("chamando");
+  }
   /* o lugar lembrado estava vazio (CADEIA, etapa 2, D6): Triste por um instante, com o rosto que o atlas ja tem */
   if (e.vazio !== null && (v.vazio === null || e.vazio > v.vazio)) registrarMomentoRosto("Triste", agora, MOMENTOS.vazioMs);
   /* comeu: a fruta podre e Recusa; a comida madura que encheu bem a barriga, Feliz (depois do clipe Comer, pela fila) */
   if (e.consumos > v.consumos && e.ultimo) {
     const u = e.ultimo;
     if (!Number.isFinite(u.fome_antes) || !Number.isFinite(u.fome_depois)) throw new Error("vigiarMomentos: consumo sem fome finita");
-    if (u.situacao !== "madura") registrarMomentoRosto("Recusa", agora, MOMENTOS.podreMs);
-    else if (u.tipo !== "racao" || u.fome_depois - u.fome_antes >= MOMENTOS.fomeFeliz) agendar("Feliz", agora, "comeu");
+    if (u.situacao !== "madura") { emitirSom("fruta_podre"); emitirVoz("resmungo"); registrarMomentoRosto("Recusa", agora, MOMENTOS.podreMs); }
+    else {
+      if (u.tipo !== "racao") emitirSom("fruta_boa");
+      if (u.tipo !== "racao" || u.fome_depois - u.fome_antes >= MOMENTOS.fomeFeliz) agendar("Feliz", agora, "comeu");
+    }
   }
 }
 
@@ -109,9 +128,17 @@ export function momentoAgora(agora: number, livre: boolean, ciclo: (c: ClipeMome
   if (c === null) return null;
   if (!(c > 0) || !Number.isFinite(c)) throw new Error(`ciclo do ${p.clipe} invalido: ${c}`);
   tocando = { clipe: p.clipe, desde: agora, fim: agora + c, motivo: p.motivo };
+  /* o som de quando o clipe comeca (HR2): o fim do comer depois do clipe Comer, e a voz contente do pet que sentiu */
+  if (p.motivo === "comeu") emitirSom("comer_fim");
+  emitirVoz("contente");
   return { clipe: p.clipe, desde: agora };
 }
 
+/** algum chamado do bebe aberto esta no ultimo terco da janela? (a regra do cartao grande de TelaPet.tsx, sem a acao chamar_atencao, que tem a
+    voz dela) */
+export function chamadoUrgente(m: Pick<Motor, "chamadosAbertos" | "chamados" | "e">): boolean {
+  return m.chamadosAbertos().some(c => CAT.janelaChamado - (m.e.tick - m.chamados.abertos[c]!) <= CAT.janelaChamado / 3);
+}
 /** o id do ultimo episodio "nao_havia" da memoria do modular, ou null (o A, ou nenhum ainda) */
 export function ultimoVazio(m: { lab: { mem: { episodios: readonly { id: number; classe: string }[] } } | null }): number | null {
   let r: number | null = null;

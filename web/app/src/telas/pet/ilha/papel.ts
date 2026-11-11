@@ -31,7 +31,7 @@ import { SONO, alturaSono } from "../sono.ts";
 import { SEM_GESTO, comidaPerto, escolherComer, esquecerComer, marcarEmburrar, marcarDormir, gestoAgora, type EscolhaComer } from "../cenaAcao.ts";
 import { CENA } from "../cenaEstado.ts";
 import { bobDaReacao, escolherReacao, marcarReacaoRosto } from "../reacao.ts";
-import { estadoAgora, marcarClipeMomento, momentoAgora, ultimoVazio, vigiarMomentos, virandoAgora, type ClipeMomento } from "../momentos.ts";
+import { chamadoUrgente, estadoAgora, marcarClipeMomento, momentoAgora, ultimoVazio, vigiarMomentos, virandoAgora, type ClipeMomento } from "../momentos.ts";
 import { flashDesde } from "../../../flash.ts";
 import { alargarCorte, unirCaixas, type Corte } from "./corte.ts";
 import { velocidadeAtual } from "../../../tempo.ts";
@@ -352,7 +352,7 @@ export class Papel {
     /* os momentos e os estados do pet (momentos.ts, HR1; so vista): o motor diz o que aconteceu, a vista escolhe o clipe que ja existe */
     const mtM = mo0.motor, ultC = nCons > 0 ? mu!.consumos[nCons - 1] as { tipo: string; situacao: string; fome_antes: number; fome_depois: number } : null;
     const entM = { chave: String(mtM.semente), nascendo: mo0.nascendo, dormindo: mtM.acao === "dormir", morto: !!mtM.morte, acao: mo0.nascendo > 0 ? "" : mtM.acao,
-      abertos: mtM.chamadosAbertos(), atendidos: mtM.chamados.atendidos, consumos: nCons, ultimo: ultC, vazio: ultimoVazio(mtM) };
+      abertos: mtM.chamadosAbertos(), urgente: chamadoUrgente(mtM), atendidos: mtM.chamados.atendidos, consumos: nCons, ultimo: ultC, vazio: ultimoVazio(mtM) };
     vigiarMomentos(entM, p.agora);
     const livreM = !naMao && !golpe && !noClipe && mo0.nascendo <= 0 && mtM.acao !== "dormir" && !mtM.morte;
     const momento = momentoAgora(p.agora, livreM, c => this.cicloDe(c));

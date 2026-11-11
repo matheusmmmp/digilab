@@ -8,7 +8,7 @@ import {
 } from "../src/telas/pet/momentos.ts";
 import { escolherReacao, esquecerReacaoRosto, type EntradaReacao } from "../src/telas/pet/reacao.ts";
 
-const BASE: EntradaMomentos = { chave: "p", nascendo: 0, dormindo: false, morto: false, acao: "ocioso", abertos: [], atendidos: 0, consumos: 0, ultimo: null, vazio: null };
+const BASE: EntradaMomentos = { chave: "p", nascendo: 0, dormindo: false, morto: false, acao: "ocioso", abertos: [], urgente: false, atendidos: 0, consumos: 0, ultimo: null, vazio: null };
 const em = (o: Partial<EntradaMomentos> = {}): EntradaMomentos => ({ ...BASE, ...o });
 const CICLO = 800, ciclo = () => CICLO;
 const CORPO: EntradaReacao = { chave: "p", humor: 0.7, energia: 0.9, saude: 1, lesionado: false, dormindo: false };
@@ -141,4 +141,3 @@ test("o lugar lembrado vazio (CADEIA, D6): um episodio nao_havia novo e Triste p
   vigiarMomentos(em({ vazio: 9 }), 4000);
   expect(rosto(4000)).toBe("Triste");
 });
-
