@@ -4,7 +4,9 @@
    faixas), para nao cansar. A noite e o sono ficam em silencio ate o ambiente da ilha (fora desta etapa). */
 import { useEffect } from "react";
 import { eNoite, TPD } from "../motor/index.ts";
-import { useJogo } from "./jogo.ts";
+import { jogoAtual, useJogo } from "./jogo.ts";
+import { velocidadeAtual } from "./tempo.ts";
+import { podeFalar, taxaDaVoz } from "./somVoz.ts";
 import { SOM } from "./som.ts";
 import { ouvirSom, type InstanteSom } from "./somEventos.ts";
 
@@ -20,9 +22,21 @@ export function ilhaToca(o: { noite: boolean; nascendo: number; morto: boolean; 
 
 const desde = performance.now() / 1000;
 
+/** com o tempo acima disto (minutos de jogo por segundo; a regra do momentoVelMax de cenaAcao.ts), o cuidado e a voz calam: so tocam os instantes
+    raros (o chamado, a casca, o nivel, a medalha, a luta, os menus). PROPOSTO, SEM FONTE (sound design, secao 2.6) */
+export const VEL_MAX_CUIDADO = 60;
+const FREQUENTES: ReadonlySet<string> = new Set(["comer", "comer_fim", "cuidado_toque", "cuidado_limpar", "cuidado_recusa", "fruta_boa", "fruta_podre", "tratar"]);
+
 /** o instante emitido vira som (src/somEventos.ts) */
 export function tocarInstante(i: InstanteSom): void {
-  if (i.tipo === "efeito") void SOM.efeito(i.efeito);
+  const rapido = velocidadeAtual() > VEL_MAX_CUIDADO;
+  if (i.tipo === "efeito") { if (!(rapido && FREQUENTES.has(i.efeito))) void SOM.efeito(i.efeito); }
+  else if (i.tipo === "voz") {
+    if (rapido || !podeFalar(performance.now())) return;
+    const m = jogoAtual().motor;
+    void SOM.voz(taxaDaVoz(i.humor, m.especie, m.estagioAtual));
+  }
+  else if (i.tipo === "bipe") SOM.bipe(i.bipe);
   else if (i.tipo === "golpe") void SOM.tocar(i.evento, i.sprite, i.habilidade);
   else void SOM.pedirMusica(i.fonte, i.alvo);
 }
