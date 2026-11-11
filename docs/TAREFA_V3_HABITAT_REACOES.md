@@ -63,3 +63,24 @@ Branch `v3-habitat-hr1`. Só vista: um módulo novo, `web/app/src/telas/pet/mome
   que se pula sem o atlas de clipes.
 - **Os desvios:** D-HR1-1 a D-HR1-7 (`docs/registro/2026-11.md`).
 
+## 10. HR2 e HR3 (2026-11-11): o som do cuidado, a voz do pet e o bipe do chamado
+
+Branch `v3-habitat-hr2`. Só apresentação.
+
+- **Fora do git:** `Assets/gerar_sons_up.py` ganha 9 efeitos do Digimon UP; o `mapa.json` passa a 26 efeitos.
+- **`web/app/src/somVoz.ts` (novo):** o tom da voz (humor × espécie × estágio) e a pausa de 4 s.
+- **`web/app/src/som.ts`:**
+  - `efeito` com taxa;
+  - `voz(taxa)`;
+  - `bipe(tipo)`, sintetizado;
+  - o mapa sem os efeitos novos avisa e cala.
+- **`web/app/src/somEventos.ts`:** os efeitos novos, `emitirVoz` e `emitirBipe`.
+- **`web/app/src/somJogo.ts`:** a voz com o tom do pet de agora; o cuidado e a voz calam com o tempo rápido.
+- **Os instantes:**
+  - `telas/pet/momentos.ts`: o chamado, a casca, o sono, a fruta, a ação do motor, o começo do clipe e os gestos do dono;
+  - `telas/pet/reacao.ts`: o tapa e a recusa da comida;
+  - `telas/pet/ToquePet.tsx`: o medo da mão;
+  - `telas/pet/ilha/papel.ts`: o chamado urgente.
+- **Testes:** `test/som_hr2.test.ts` (9) e o e2e "som: limpar pede a agua e a voz do pet" (pulado sem os efeitos da HR2 em `Assets/sons`).
+- **Desvios:** D-HR2-1 a 5 e D-HR3-1 (`docs/registro/2026-11.md`).
+
