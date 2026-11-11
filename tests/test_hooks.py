@@ -424,6 +424,7 @@ def test_h10_outra_run_em_andamento(com_pre_run):
     "cd web/app && python scripts/equilibrio_tr/medir_tudo.py --faixa calibracao2 --saida scripts/medicoes/equilibrio_tr/r3",
     "npx tsx scripts/equilibrio_tr/fase1_relogio.ts --faixa calibracao2 --base v14 --saida x.json",
     "node node_modules/tsx/dist/cli.mjs web/app/scripts/equilibrio_tr/fase3_estagio.ts --parte p1",
+    "cd web/app && node scripts/equilibrio_poc/medir_tudo.ts --faixa calibracao --fase lp5_0",   # LUTA_POC LP5-0
 ])
 def test_h10_medicao_do_combate(com_pre_run, comando):
     """E7: a medição do combate passa sozinha e é barrada com outra run em andamento (V3-D8)."""
