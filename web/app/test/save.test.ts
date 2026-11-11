@@ -9,7 +9,7 @@ const armaz = (dados: Record<string, string> = {}): Armazenamento & { dados: Rec
   ({ dados, getItem: k => (k in dados ? dados[k] : null), setItem(k, v) { dados[k] = v; } });
 /** uma vida v21 curta com uma luta na Arena (o gabarito das vidas v13 saiu com elas na LP4) */
 function vidaV21(semente: number): Motor {
-  const m = new Motor(semente);
+  const m = new Motor(semente, 21);
   m.liberar(1);
   for (let p = 0; p < 40 && !m.morte; p++) {
     m.avancar(30);
@@ -29,7 +29,7 @@ describe("save", () => {
     test(`abre um save de hoje igual: a vida v21 ${semente}`, () => {
       const m = vidaV21(semente), log = JSON.parse(JSON.stringify(m.log)) as unknown[];
       expect(log.some(ev => (ev as unknown[])[1] === "l")).toBe(true);
-      const a = armaz({ [CHAVE]: JSON.stringify({ semente, log, versao: VERSAO_PET }) });
+      const a = armaz({ [CHAVE]: JSON.stringify({ semente, log, versao: 21 }) });
       const l = lerSave(a);
       if (l.tipo !== "ok") throw new Error("nao abriu: " + JSON.stringify(l));
       expect(l.motor.assinatura()).toBe(m.assinatura());
@@ -60,9 +60,9 @@ describe("save", () => {
   });
   test("texto do save: {semente, log, versao}", () => {
     /* os v12: o botao Alimentar poe a racao no comedouro (o evento "dc") */
-    const m = new Motor(7); m.avancar(30); m.observar("alimentar");
+    const m = new Motor(7, 21); m.avancar(30); m.observar("alimentar");
     const [x, y] = m.mundo!.comedouro;
-    expect(textoSave(m)).toBe(JSON.stringify({ semente: 7, log: [[480, "t", 30], [510, "dc", { tipo: "racao", x, y }]], versao: VERSAO_PET }));
+    expect(textoSave(m)).toBe(JSON.stringify({ semente: 7, log: [[480, "t", 30], [510, "dc", { tipo: "racao", x, y }]], versao: 21 }));
   });
   test("pet de exemplo e o do HTML (semente 20260924, meio dia)", () => {
     const m = petExemplo();

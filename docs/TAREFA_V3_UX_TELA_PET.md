@@ -844,11 +844,12 @@ tigela, a bola e as frutíferas no `CMU_ILHA`, v20) é do #694.
   - a moldura em bosques e vãos.
   - Tudo o que a planta tira da vista só some (`escondidos`): a lista `objetos` não muda, e o gabarito E-G0 continua passando. O que ela
     acrescenta (as árvores dos bosques, o entorno dos marcos) fica numa lista própria, `extras`, que a `cena.ts` desenha.
-- **O fim da ilha** (`fimDaIlha.ts`, `fimConta.ts`; `grade.ts`, `porBordas`; `FIM_ILHA`):
+- **O fim da ilha** (`fimDaIlha.ts`; `grade.ts`, `porBordas`; `FIM_ILHA`):
   - o mar em volta da grade inteira, até o horizonte;
   - a leste do rio, a mata sobe em dois degraus até o morro;
-  - duas faixas de silhuetas (ilhas perto, morros longe) seguem o ponto olhado. O pé delas vai a cada quadro para o horizonte do mar
-    curvo, e a cor é a da névoa puxada para a sombra do céu, sem cor nova (PA-5).
+  - as duas faixas de silhuetas ao longe (ilhas perto, morros longe) **saíram em 2026-11-10**, a pedido do Matheus: no céu elas liam
+    como manchas verdes soltas, além das nuvens. O `fimConta.ts` e o `FIM_ILHA.silhuetas` saíram junto (D-CEU-1, em
+    `docs/registro/2026-11.md`). O céu fica só com o degradê e as nuvens.
 - **O sinal só** (a regra 3; `itens.ts`, `CHAMADO`): a tigela, a bola e o saco dão um pulinho quando o pet chega perto. Com movimento
   reduzido, nada. O vento na decoração fica (PA-4).
 - **A ida ao saco pela distância** (PA-3; `lugares.ts`, `idaDoTreino`; `TREINO_VEL` = 7 células por segundo, 0,9 s no mínimo): com o
@@ -884,7 +885,7 @@ prioridade, com os destinos quentes, os caminhos claros e a decoração mais apa
 **As decisões** LZ-1 a LZ-5 estão no `LEIA.md` da prancha, como PROPOSTAS: B, sem o cais enquanto estiver trancado, sem efeito à noite, o chão
 com peso 0,3 e todos os mapas do `curvar`. Os números são PROPOSTO, SEM FONTE. A interpretação está em D-LZ-1, em `docs/registro/2026-11.md`.
 
-**Fica para a etapa de código, depois da aprovação:** ligar a proposta escolhida sem o parâmetro, medir o custo no celular e recapturar o e2e
+**Fica para a etapa de código:** ligar a proposta escolhida sem o parâmetro, medir o custo no celular e recapturar o e2e
 (o `--update-snapshots` só com o ok do Matheus).
 
 ## 28. A hierarquia de luz ligada (2026-11-09)
@@ -924,3 +925,32 @@ montagem, e o da barraca nunca era visto no começo do jogo.
   porque o primeiro quadro, antes de a câmera assentar, passa por cima da barraca por uns 20 ms (medido com uma sonda no e2e).
 - O teste do destrave confere o caminho inteiro: com a barraca fora do quadro, o cadeado aberto espera escondido, mesmo depois de 4 s;
   quando a câmera chega nela (`?cameradev=1`), ele aparece e some depois.
+
+## 30. A prancha da câmera do primeiro dia (2026-11-10)
+
+O Matheus disse "Sim, a prancha" (2026-11-10) para a próxima regra de "guiar o olhar sem texto". A próxima que é só vista é a regra 6, a
+câmera do primeiro dia: a 1 (a luz) está na main, a 2 e a 3 já valem, a 4 já acontece e a 5 (os pássaros) precisa do motor. A seção 29
+fica com o PR #760.
+
+**O que foi feito (a prancha e um protótipo desligado):**
+- **A prancha** fica em `docs/pranchas/ux-ilha-abertura/` e na página https://claude.ai/artifact/3B6orUVm6UxnEuB37hRmZw. São três propostas,
+  A (o passeio, 7 s), B (o afastar, 5,2 s) e C (de cima, 4 s), com seis quadros a 1920 × 950 e a 390 × 844 e um vídeo de cada. Os vídeos
+  ficam fora do git, em `D:\Trab\digilab\capturas_ux_ilha_abertura\`.
+- **O protótipo** é uma lista de quadros-chave (o tempo, o ponto olhado, o zoom e a inclinação), em `aberturaConta.ts`, e um gancho em
+  `vista.ts` que troca o ponto olhado, o afastamento e a inclinação da câmera enquanto a abertura anda. Ele só liga com `?abertura=a|b|c`,
+  e `window.__abertura` para o tempo nas capturas. Sem o parâmetro, a vista é a de antes.
+- **O teste** é o `test/ilha_abertura.test.ts`. Ele confere:
+  - o parâmetro, e que um valor desconhecido falha alto;
+  - que toda proposta começa em 0 e acaba no pet, no zoom e na inclinação de sempre;
+  - que o caminho é contínuo e passa nos quadros-chave;
+  - que um tempo inválido falha alto;
+  - que a inclinação mantém a distância.
+
+**As decisões** AB-1 a AB-5 estão no `LEIA.md` da prancha, APROVADAS pelo Matheus em 2026-11-10 ("siga a recomendação."): B; uma vez por save, depois que o ovo choca; qualquer toque
+interrompe; a HUD fica; todas as larguras, sem tocar com "reduzir movimento". Os números são PROPOSTO, SEM FONTE. A interpretação está em
+D-AB-1 e D-AB-2, em `docs/registro/2026-11.md`.
+
+**Fica para a etapa de código:**
+- tocar a proposta escolhida sem o parâmetro, uma vez por save;
+- a interrupção pelo toque;
+- um teste e2e do caminho inteiro.

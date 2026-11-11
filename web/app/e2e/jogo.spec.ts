@@ -135,7 +135,8 @@ for (const [versao, save] of Object.entries(SAVES)) {
     await page.waitForTimeout(300);
     await page.getByRole("button", { name: "Verificar replay" }).click();
     await expect(page.getByText(/^Replay idêntico:/)).toBeVisible();
-    expect(JSON.parse(await page.evaluate(() => (window as any).__digilab.registro())).versao).toBe(VERSAO_PET);
+    /* o save semeado e v21; ao abrir ele passa para a ilha com agua (o "mi"; ILHA_AGUA, IA4) e segue v21 */
+    expect(JSON.parse(await page.evaluate(() => (window as any).__digilab.registro())).versao).toBe(21);
     expect(erros, "erros no console do app").toEqual([]);
   });
 }
@@ -359,12 +360,14 @@ test("luta da POC: a primeira abertura descarta os pets de antes, avisa, oferece
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), g: localStorage.getItem(c + "-guardados"), aviso: localStorage.getItem(c + "-aviso-poc"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!), marca: localStorage.getItem(c + "-descarte"), antigos: JSON.parse(localStorage.getItem(c + "-descartados")!) }), CHAVE);
-  expect(r.save.versao).toBe(VERSAO_PET);            /* o ovo novo nasce na versao atual (a v21, LP4) */
+  expect(r.save.versao).toBe(VERSAO_PET);            /* o ovo novo nasce na versao atual (a v22: a v21 que nasce na ilha com agua) */
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
   expect(r.marca).toBe("8");
   expect(r.antigos).toHaveLength(2);
-  expect(r.tamer).toEqual({ versao: 8, log: [] });
+  /* o Tamer novo so tem os Bits dos niveis do Tamer (o piso 4 de quem ja jogava; docs/PLANO_V3_MOEDA.md, MO1), e grava a versao 9 */
+  expect(r.tamer.versao).toBe(9);
+  expect(r.tamer.log.filter((e: [string, { origem?: string }]) => e[0] !== "bits" || e[1].origem !== "nivel")).toEqual([]);
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
   await expect(page.locator("dialog.aviso-poc")).toHaveCount(0);
@@ -393,8 +396,11 @@ test("luta da POC: o pet v19 de antes sai com o aviso, e o Tamer fica com as med
   expect(r.save.versao).toBe(VERSAO_PET);
   expect(r.save.semente).not.toBe(SAVE_ANTIGO_V19.semente);
   expect(r.marca).toBe("8");
-  /* a medalha e o item dela ficam; sem a Fabrica de antes no registro, o Tamer fica como estava */
-  expect(r.tamer).toEqual(tamer);
+  /* a medalha e o item dela ficam; sem a Fabrica de antes no registro, o Tamer fica como estava, mais os Bits (MOEDA, MO1: a 1a medalha e os
+     niveis do Tamer pagam na abertura), na versao 9 */
+  expect(r.tamer.versao).toBe(9);
+  expect(r.tamer.log.filter((e: [string]) => e[0] !== "bits")).toEqual(tamer.log);
+  expect(r.tamer.log.some((e: [string, { id?: string }]) => e[0] === "bits" && e[1].id === "medalha:campina")).toBe(true);
   /* o ovo novo conhece a medalha do Tamer (o "u" no registro dele) */
   expect(r.save.log.filter((e: unknown[]) => e[1] === "u")).toEqual([[expect.any(Number), "u", { n: 1 }]]);
   await page.reload();
@@ -915,10 +921,13 @@ for (const largura of [390, 1280]) {
   test(`evolução: o momento em ${largura} px, a aba nova e o "Ver a revelação de novo"`, async ({ page }) => {
     await page.setViewportSize({ width: largura, height: largura >= 1100 ? 800 : 844 });
     await semear(page, SAVE_EVO, undefined, TAMER_1);
+    /* o cartao: com movimento reduzido a cena oficial (CENA_EVOLUCAO_UP) nao abre; ela tem o teste dela logo abaixo */
+    await page.emulateMedia({ reducedMotion: "reduce" });
     const erros = vigiarErros(page);
     await page.goto(APP + "#/crescer/evolucao");
     const rev = page.locator("dialog.revelacao[open]");
     await expect(rev).toBeVisible();
+    await expect(page.getByTestId("cena-evolucao")).toHaveCount(0);
     await expect(rev.locator(".revel-tit")).toHaveText("EVOLUÇÃO!");
     await expect(rev.locator(".revel-de")).toHaveText("Rookie → Champion");
     await expect(rev.locator(".evm-nome")).toHaveText("Growlmon");
@@ -1006,6 +1015,9 @@ for (const largura of [390, 1280]) {
 test("treino: com fadiga acima de 60 os exercícios viram Forçar, a folha confirma e o treino entra no registro", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await semear(page, SAVE_TR_FORCAR);
+  /* SOM-UP: o teste mede uma janela de 250 ms do relogio da pagina; baixar e decodificar a musica do treino ao abrir a tela passava dela.
+     O teste nao e de som: o som fica desligado */
+  await page.addInitScript(c => { localStorage.setItem(c + "-som", "0"); }, CHAVE);
   const erros = vigiarErros(page);
   /* o relogio da pagina e falso e, com o app de pe, para: o Forcar so fica habilitado ~3 min de jogo (o intervalo de 10 min passou, a
      fadiga ainda esta acima de 60), uns 300 ms a 10 min/s, e a espera do Playwright (que tenta de novo em intervalos que crescem ate 1 s)
@@ -1268,20 +1280,26 @@ test("mundo: o ovo novo choca na cena 3D", async ({ page }) => {
   expect(erros).toEqual([]);
 });
 
-/* UP-SOM: o som e desligado por padrao. Desligado, nenhuma requisicao de audio sai (nem em uma luta inteira); ligar e lembrado ao
-   recarregar e nao entra no save exportado; ligado com os arquivos ausentes, o aviso aparece e o jogo segue. */
-test("som: desligado por padrão não pede áudio nem em uma luta; ligar é lembrado e fica fora do save", async ({ page }) => {
+/* UP-SOM: o som e ligado por padrao (Matheus, 2026-11-10). Desligado pelo jogador, nenhuma requisicao de audio sai (nem em uma luta
+   inteira); ligar e desligar sao lembrados ao recarregar e nao entram no save exportado; ligado com os arquivos ausentes, o aviso aparece
+   e o jogo segue. */
+test("som: ligado por padrão; desligado não pede áudio nem em uma luta; a escolha é lembrada e fica fora do save", async ({ page }) => {
   test.setTimeout(180_000);
   await semear(page, SAVES.champion);
   const erros = vigiarErros(page), pedidos: string[] = [];
-  page.on("request", r => { if (/\/Assets\/sons\/|\.mp3(\?|$)/.test(r.url())) pedidos.push(r.url()); });
   await page.goto(APP + "#/pet/estado");
+  /* padrao ligado; o jogador desliga, e o desligado volta ao recarregar */
+  await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
+  await expect(page.getByRole("switch", { name: /Som do jogo/ })).toBeChecked();
+  await page.getByRole("switch", { name: /Som do jogo/ }).uncheck();
+  await page.reload();
+  page.on("request", r => { if (/\/Assets\/sons\/|\.mp3(\?|$)/.test(r.url())) pedidos.push(r.url()); });
   await irPara(page, "Lutar", "Arena", "lutar/arena");
   await page.getByTestId("poc-lutar").click();
   await expect(page.getByTestId("poc-resultado")).toBeVisible({ timeout: 90_000 });
   expect(pedidos, "pediu áudio com o som desligado").toEqual([]);
   await page.getByTestId("poc-resultado").getByRole("button", { name: "Continuar" }).click();
-  /* Configuração: padrão desligado; ligar e mexer no volume ficam no localStorage do app e voltam ao recarregar */
+  /* Configuração: o desligado foi lembrado; ligar e mexer no volume ficam no localStorage do app e voltam ao recarregar */
   await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
   const chave = page.getByRole("switch", { name: /Som do jogo/ }), vol = page.getByLabel("Volume do som");
   await expect(chave).not.toBeChecked();
@@ -1304,11 +1322,35 @@ test("som: ligado com os arquivos ausentes mostra o aviso e a tela segue", async
   await page.route(/\/Assets\/sons\//, r => r.fulfill({ status: 404, body: "ausente" }));
   await page.goto(APP + "#/pet/estado");
   await page.locator(".dl-nav .nav-quad", { hasText: "Ajustes" }).click();
+  /* ja vem ligado (padrao): desliga e liga de novo, o gesto que pede o mapa */
+  await page.getByRole("switch", { name: /Som do jogo/ }).uncheck();
   await page.getByRole("switch", { name: /Som do jogo/ }).check();
   await expect(page.getByTestId("aviso-som").first()).toBeVisible();
   await expect(page.getByTestId("aviso-som").first()).toContainText("mapa de sons");
   await page.getByRole("switch", { name: /Som do jogo/ }).uncheck();
   await expect(page.getByRole("switch", { name: /Som do jogo/ })).not.toBeChecked();
+});
+
+/* SOM-UP (docs/TAREFA_V3_SOM_UP.md): com o mapa de sons da versao 2 (Assets/sons, fora do git: sem ele o teste nao se aplica), o painel
+   pede o som de abrir, o treino a musica do treino, e a luta a musica do mapa da arena, os golpes por Digimon e o som do fim */
+test("som: o painel, o treino e a luta pedem os sons do Digimon UP", async ({ page }) => {
+  test.setTimeout(180_000);
+  const r = await page.request.get("/Assets/sons/mapa.json");
+  test.skip(!r.ok() || !(await r.json()).efeitos, "sem Assets/sons da versão 2 (fora do git)");
+  await semear(page, SAVES.champion);
+  const erros = vigiarErros(page), pedidos: string[] = [];
+  page.on("request", q => { const m = /\/Assets\/sons\/([^/?]+)/.exec(q.url()); if (m) pedidos.push(m[1]!); });
+  await page.goto(APP + "#/pet/estado");
+  await irPara(page, "Crescer", "Treinar", "crescer/treinar");
+  await expect.poll(() => pedidos).toContain("sfx_ui_window_open.mp3");
+  await expect.poll(() => pedidos).toContain("SFX_BGM_training_others.mp3");
+  await irPara(page, "Lutar", "Arena", "lutar/arena");
+  await page.getByTestId("poc-lutar").click();
+  await expect(page.getByTestId("poc-resultado")).toBeVisible({ timeout: 90_000 });
+  expect(pedidos.some(p => /^SFX_BGM_(stage|boss_battle)\d+\.mp3$/.test(p)), "a luta não pediu a música do mapa").toBe(true);
+  expect(pedidos.some(p => /^sfx_dm_.+\.mp3$/.test(p)), "a luta não pediu os golpes por Digimon").toBe(true);
+  expect(pedidos.some(p => /^sfx_ui_pvp_(ready|win|lose)\.mp3$/.test(p)), "a luta não pediu o começo nem o fim").toBe(true);
+  expect(erros).toEqual([]);
 });
 
 /* TAREFA_V2_UP_ATLAS: com a chave dos clipes ligada (?clipes_up=1) e o atlas de clipes ausente, o aviso do atlas aparece; nao cai calado no atlas atual */
@@ -1370,5 +1412,34 @@ test("pele dos menus: Ajustes › Visual troca na hora e a escolha sobrevive ao 
   await page.goto(APP + "#/config");
   await expect(page.locator(".mc-cfg")).toContainText("pele Militar · tema");
   expect(await pele()).toBe("xcom");
+  expect(erros).toEqual([]);
+});
+
+/* a cena oficial da evolucao (CENA_EVOLUCAO_UP, ligada em 2026-11-10; docs/TAREFA_V2_UP_EVOLUCAO.md): o mesmo pet do momento da evolucao
+   (Agumon -> Growlmon, a cena da Tamers). Os pacotes ficam fora do git, em Assets/evolucao_up: sem eles o teste nao se aplica */
+test("evolução: a cena oficial toca antes do cartão e o Pular leva ao cartão", async ({ page }) => {
+  const temCena = (await page.request.get("/Assets/evolucao_up/mapa.json")).ok();
+  test.skip(!temCena, "sem Assets/evolucao_up (fora do git)");
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await semear(page, SAVE_EVO, undefined, TAMER_1);
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/crescer/evolucao");
+  const rev = page.locator("dialog.revelacao[open]"), cena = page.getByTestId("cena-evolucao");
+  await expect(rev).toBeVisible();
+  await expect(cena).toBeVisible();
+  /* baixou e esta tocando: o "carregando" some e o canvas tem pixels pintados */
+  await expect(cena.getByRole("status")).toHaveCount(0);
+  await expect.poll(() => cena.locator("canvas").evaluate((cv: HTMLCanvasElement) => {
+    const g = cv.getContext("2d")!, d = g.getImageData(0, 0, cv.width, cv.height).data;
+    let n = 0; for (let i = 3; i < d.length; i += 4 * 97) if (d[i] > 0) n++;
+    return n;
+  })).toBeGreaterThan(50);
+  await expect(page.getByTestId("aviso-cena-evolucao")).toHaveCount(0);
+  await cena.getByRole("button", { name: "Pular" }).click();
+  await expect(cena).toHaveCount(0);
+  await expect(rev.locator(".evm-nome")).toHaveText("Growlmon");
+  await rev.getByRole("button", { name: "Continuar" }).click();
+  await expect(page.locator("dialog.revelacao[open]")).toHaveCount(0);
   expect(erros).toEqual([]);
 });

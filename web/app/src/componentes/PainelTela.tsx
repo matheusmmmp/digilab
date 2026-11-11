@@ -6,6 +6,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { AbasHx, PainelHx, type AbaHx } from "./hx/index.ts";
 import { abrirModal } from "./modal.ts";
+import { emitirSom } from "../somEventos.ts";
 import "../estilo/painel-hx.css";
 
 export interface DadosPainel {
@@ -22,8 +23,15 @@ function Conteudo({ d, fechar, children }: { d: DadosPainel; fechar: () => void;
   );
 }
 
+/** SOM-UP: o som de abrir a cada destino novo (o painel fica montado quando so o destino troca) e o de fechar ao sair */
+export function useSomDoPainel(id: string): void {
+  useEffect(() => { emitirSom("ui_abrir"); }, [id]);
+  useEffect(() => () => emitirSom("ui_fechar"), []);
+}
+
 export function PainelLado({ d, children }: { d: DadosPainel; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
+  useSomDoPainel(d.titulo);
   useEffect(() => { ref.current?.focus(); }, []);
   return (
     <div className="painel-tela painel-tela--lado" ref={ref} tabIndex={-1} onKeyDown={e => { if (e.key === "Escape") d.fechar(); }}>
@@ -34,6 +42,7 @@ export function PainelLado({ d, children }: { d: DadosPainel; children: ReactNod
 
 export function PainelModal({ d, children }: { d: DadosPainel; children: ReactNode }) {
   const ref = useRef<HTMLDialogElement>(null), saindo = useRef(false);
+  useSomDoPainel(d.titulo);
   useEffect(() => {
     const dlg = ref.current; if (!dlg) return;
     saindo.current = false;

@@ -11,6 +11,7 @@
    e do estresse (relaxou) e o fator do medo da mao que o corpo aplicou, (C - medo_da_mao q_susto) / C (corpo.ts, carinho). Os tempos, as alturas
    e as contagens daqui sao da vista: PROPOSTO, SEM FONTE; nao mudam a vida. Sem DOM nas contas (testadas em node); o desenho recebe o contexto. */
 import { S, desenharGrade, type Paleta } from "../../grades.ts";
+import { emitirSom } from "../../somEventos.ts";
 
 /** o gesto do corpo do pet sobre o desenho: `frente` e `alto` em texels do sprite (frente = o lado para onde ele olha; negativo = recua), `estica` a
     fracao da altura (1 = sem mudanca; o pe fica no chao, e a largura cresce o que a altura perde) */
@@ -196,10 +197,10 @@ export function escolherComer(e: EntradaComer, agora: number): EscolhaComer {
   }
   /* o "comeu a racao": espera a reacao acabar ate momentoEsperaMs; depois, uma vez, virado para a comida */
   if (momentoPendente) {
-    if (agora - momentoPendente.em <= CENA_ACAO.momentoEsperaMs) comendo = { desde: agora, laco: false, fim: agora + ciclo, alvo: momentoPendente.alvo };
+    if (agora - momentoPendente.em <= CENA_ACAO.momentoEsperaMs) { comendo = { desde: agora, laco: false, fim: agora + ciclo, alvo: momentoPendente.alvo }; emitirSom("comer"); }
     momentoPendente = null;
   }
-  if (!comendo && e.acao === "comer" && !e.andando) comendo = { desde: agora, laco: true, fim: null, alvo: null };
+  if (!comendo && e.acao === "comer" && !e.andando) { comendo = { desde: agora, laco: true, fim: null, alvo: null }; if (e.velocidade <= CENA_ACAO.momentoVelMax) emitirSom("comer"); }
   if (comendo && comendo.laco) {
     if (e.acao === "comer") comendo.fim = null;
     else if (comendo.fim === null) comendo.fim = comendo.desde + Math.max(1, Math.ceil((agora - comendo.desde) / ciclo)) * ciclo;

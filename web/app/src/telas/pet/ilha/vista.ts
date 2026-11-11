@@ -20,8 +20,11 @@
      mao.ts), e a sombra fica onde ele vai cair, ja no mapa (noMapa, PP-4). Ao soltar, o desenho comeca onde o motor o pos (sem caminhar
      de volta: Seguidor.pular), com a queda e o quique, e o foco volta ao pet em ~MAO.focoTauMs.
    Os kits carregam depois do terreno; se um modelo nao carrega, a cena cai na reserva (MundoReserva), com o erro no console. */
+import { comprimento, naRota, rotaEmTerra } from "./rotaConta.ts";
+import { ILHA_DEV_AGUA } from "./ilhaDev.ts";
+import { ponte } from "./ponte.ts";
 import * as THREE from "three";
-import { TPD, eNoite, noMapa, type Mundo } from "../../../../motor/index.ts";
+import { CMU_MVP_AGUA, TPD, eNoite, noMapa, type Mundo } from "../../../../motor/index.ts";
 import { habitatAtual, voltarParaIlha, type Habitat } from "../../../habitat.ts";
 import { jogoAtual } from "../../../jogo.ts";
 import { CENA, reservaDoPe } from "../cenaEstado.ts";
@@ -41,6 +44,8 @@ import { MAO, Pendulo, alturaDepoisDeSoltar, soltarAcabou, tremorAgora } from ".
 import { ORBITA, aplicarOrbita, ligarControles, recentrar } from "../orbita.ts";
 import { CONSULTA_SOLTA, VISTA, despublicarVista, focoDoQuadro, ligarCameraLivre, publicarVista, type Limites, type MapaDaIlha, type Par } from "../cameraLivre.ts";
 import { CAMERA_DEV, ligarCameraDev } from "../cameraDev.ts";
+import { ABERTURA_PROPOSTA, inclinar, ligarAberturaDev, quadroDaAbertura, tempoDaAbertura } from "./aberturaConta.ts";
+import { PLANTA_ILHA } from "./constantes.ts";
 import { pixelsDoMapa } from "./minimapa.ts";
 import { PRESETS, Pos, SEM_CONTORNO } from "./pos.ts";
 import { SACO_NA_TELA, VIAGEM, ZOOM_LUGAR_MOVEL, lugarAberto, progressoViagem, type Lugar } from "../../../viagem.ts";
@@ -55,9 +60,8 @@ class VistaIlha {
   readonly camera: THREE.PerspectiveCamera;
   private readonly ilha: Ilha;
   private readonly cenaIlha: CenaIlha;
-  /** o fim da ilha (fimDaIlha.ts): o mar em volta e as silhuetas ao longe; a cor de baixo da luz do ceu, lida da cena */
+  /** o fim da ilha (fimDaIlha.ts): o mar em volta, ate o horizonte */
   private readonly fim: FimDaIlha;
-  private readonly sombraCeu = new THREE.Color();
   private readonly seguidor = new Seguidor();
   private readonly raio = new THREE.Raycaster();
   private readonly lida: CameraLida;
@@ -115,7 +119,7 @@ class VistaIlha {
   private bateBola: { desde: number; alvo: [number, number] } | null = null;
   /** a ida do pet ao lugar aberto (ou a volta), separada da camera: a chave da viagem ("1:<lugar>" ou "0"), de onde partiu, quando e quanto dura;
       null fora da viagem (constantes.ts, PET_VIAGEM_CEL_MS) */
-  private andaPet: { chave: string; de: [number, number]; desde: number; dur: number } | null = null;
+  private andaPet: { chave: string; de: [number, number]; desde: number; dur: number; rota: [number, number][] | null } | null = null;
 
   readonly canvas: HTMLCanvasElement;
   private readonly mu: Mundo;
@@ -138,10 +142,13 @@ class VistaIlha {
     /* com o visual, um quadro sao dois desenhos (a cena no alvo e o quadro na tela): a contagem de draw calls da M3 e zerada por quadro */
     this.renderer.info.autoReset = false;
     this.pos = new Pos(this.renderer);
-    this.ilha = ilhaDe(mu.cm);
+    /* ?ilha=agua (ilhaDev.ts): so a vista troca de ilha, para ver o desenho antes de o motor ligar a agua (a IA4) */
+    this.ilha = ilhaDe(ILHA_DEV_AGUA ? CMU_MVP_AGUA : mu.cm);
     this.cenaIlha = this.estilo.montar(this.ilha);
     this.fim = fimDaIlha(this.ilha);
     this.cenaIlha.cena.add(this.fim.grupo);
+    /* a ilha com agua (docs/TAREFA_V3_ILHA_AGUA.md, IA3): as pontes do mapa do motor */
+    if (this.ilha.pontes.length) this.cenaIlha.cena.add(ponte(this.ilha));
     const v = new THREE.Vector3();
     this.lida = {
       projetar: (x, y, z) => { v.set(x, y, z).project(this.camera); return [v.x, v.y]; },
@@ -353,14 +360,21 @@ class VistaIlha {
     const chave = VIAGEM.alvo === 1 ? "1:" + VIAGEM.lugar : "0";
     if (chave !== (this.andaPet?.chave ?? "0")) {
       const de: [number, number] = [this.petCel[0], this.petCel[1]], para = chave === "0" ? motorCel0 : this.pontoDoPetNo(VIAGEM.lugar);
-      const dur = duracaoPetViagem(Math.hypot(para[0] - de[0], para[1] - de[1]), reduzido);
-      this.andaPet = { chave, de, desde: agora, dur };
+      /* na ilha com agua o pet contorna a agua pelo caminho em terra (rotaConta.ts; IA4); sem agua, a reta de sempre */
+      const rota = this.ilha.comAgua ? rotaEmTerra(this.ilha.cm, de, [para[0], para[1]]) : null;
+      const dur = duracaoPetViagem(rota ? comprimento(rota) : Math.hypot(para[0] - de[0], para[1] - de[1]), reduzido);
+      this.andaPet = { chave, de, desde: agora, dur, rota };
     }
     const a = this.andaPet;
     if (!a) return { cel: motorCel0, andando: false };
     const para = a.chave === "0" ? motorCel0 : this.pontoDoPetNo(VIAGEM.lugar);
     const f = a.dur > 0 ? Math.min(1, (agora - a.desde) / a.dur) : 1;
     if (f >= 1 && a.chave === "0") { this.andaPet = null; return { cel: motorCel0, andando: false }; }
+    if (a.rota && f < 1) {
+      /* a volta segue o pet do motor, que pode ter andado desde a partida: o desvio do fim da rota entra aos poucos, sem salto na chegada */
+      const [x, z] = naRota(a.rota, f), u = a.rota[a.rota.length - 1];
+      return { cel: [x + (para[0] - u[0]) * f, z + (para[1] - u[1]) * f], andando: true };
+    }
     return { cel: f >= 1 ? para : this.entre(a.de, para, f), andando: f < 1 };
   }
   private suave(f: number): number { return f * f * (3 - 2 * f); }
@@ -521,7 +535,15 @@ class VistaIlha {
     }
     this.petCel = cor.cel;
     /* o zoom do lugar: abaixo de 900 px a camera se aproxima do saco com a viagem (o saco e o pet ficam grandes no terco de cima) e volta ao sair */
-    const zoom = viagem > 0 ? this.zoomDaViagem(viagem, reduzido) : 1;
+    /* o prototipo da camera do primeiro dia (?abertura=a|b|c; aberturaConta.ts): o ponto olhado, o zoom e a inclinacao saem da abertura ate ela
+       acabar; sem o parametro, com o pet na mao, com um lugar aberto, coberta pelo veu ou com "reduzir movimento", nada muda */
+    const abre = ABERTURA_PROPOSTA && !this.naMao && viagem === 0 && !reduzido && !CENA.coberto
+      ? quadroDaAbertura(ABERTURA_PROPOSTA, tempoDaAbertura(agora), {
+        pet: this.petCel, ninho: this.itens.ninhoEm, praca: [PLANTA_ILHA.praca.x, PLANTA_ILHA.praca.z], portao: this.pontos.portao, barraca: this.pontos.barraca,
+        meio: [(this.petCel[0] + PLANTA_ILHA.praca.x) / 2, (this.petCel[1] + PLANTA_ILHA.praca.z) / 2],
+      }) : null;
+    const aberta = abre && !abre.acabou ? abre : null;
+    const zoom = aberta ? aberta.zoom : viagem > 0 ? this.zoomDaViagem(viagem, reduzido) : 1;
     if (this.afastBase * zoom !== this.afast) { this.afast = this.afastBase * zoom; this.orbitaVersao = -1; }
     this.atualizarOrbita();
     const pode = this.podeSoltar;
@@ -535,9 +557,10 @@ class VistaIlha {
         this.foco = [this.foco[0] + dx * k, this.foco[1] + dz * k];
       } else { this.foco = [alvo[0], alvo[1]]; this.focoVoltando = false; }
       if (viagem > 0) this.foco = this.focoDaViagem(this.foco, viagem, reduzido);
+      if (aberta) this.foco = aberta.foco;
     }
     const [px, pz] = this.foco, a = this.afast;
-    const { desloc, olhar } = this.orbitaVista;
+    const { olhar } = this.orbitaVista, desloc = aberta?.inclina ? inclinar(this.orbitaVista.desloc, aberta.inclina) : this.orbitaVista.desloc;
     this.camera.position.set(px + desloc[0] * a, desloc[1] * a, pz + desloc[2] * a);
     this.camera.lookAt(px + olhar[0] * a, olhar[1] * a, pz + olhar[2] * a);
     this.camera.updateMatrixWorld();
@@ -549,10 +572,6 @@ class VistaIlha {
     cobrirFundo(this.cenaIlha.cena.background, this.camera.aspect);
     this.objetos?.noite?.(noite);
     this.objetos?.quadro?.(this.foco, this.estilo.dobra, this.dirDobra, Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * this.camera.aspect);
-    const hemi = this.cenaIlha.cena.children.find((o): o is THREE.HemisphereLight => o instanceof THREE.HemisphereLight);
-    if (hemi) this.sombraCeu.copy(hemi.groundColor);
-    const nevoa = (this.cenaIlha.cena.fog as THREE.Fog | null)?.color;
-    if (nevoa) this.fim.quadro(this.foco, this.estilo.dobra, this.dirDobra, this.camera, this.ilha.altura(this.foco[0], this.foco[1]), nevoa, this.sombraCeu);
     this.aplicarTrancas();
     this.itens.sincronizar(mu, m.e.tick, noite, agora, dtMs, m.lesionadoDesde !== null, reduzido, m.e.sujeira, this.naMao ? motorCel : this.petCel);
     /* o pet longe do foco (a camera solta, a viagem, a volta depois de soltar o pet): o chao sob ele desce pela dobra (yPe), e o tamanho do papel vale
@@ -674,6 +693,8 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
   const soltarLivre = ligarCameraLivre(() => vista.podeSoltar, () => vista.elevacao0);
   /* a camera de desenvolvimento (?cameradev=1): window.__camera para as ferramentas */
   const soltarDev = ligarCameraDev(() => vista.alvosDev());
+  /* o prototipo da camera do primeiro dia (?abertura=): window.__abertura para as capturas da prancha */
+  const soltarAbertura = ligarAberturaDev();
   let vivo = true, quadro = 0, pedido = 0;
   /* os kits: na hora, ou, se a ilha abriu coberta pelo veu, quando ela ficar a vista (no maximo KITS_COBERTO_MS) */
   let kitsPedidos = false;
@@ -751,7 +772,7 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
   return () => {
     vivo = false;
     cancelAnimationFrame(pedido); obs.disconnect(); if (esperaKits) clearTimeout(esperaKits); canvas.removeEventListener("webglcontextlost", perdeu);
-    soltarControles(); soltarDev(); soltarLivre(); despublicarVista();
+    soltarControles(); soltarDev(); soltarAbertura(); soltarLivre(); despublicarVista();
     CENA.modo3d = false; CENA.cocoNoChao = false; CENA.ret = null; CENA.medir = null; CENA.mundo = null;
     vista.dispose();
   };

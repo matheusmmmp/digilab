@@ -137,3 +137,18 @@ servidor/gasto_fala_livre.json
 # V3, DESEMPENHO: as medidas do docs/DESEMPENHO_PERFIL_2026-11.md; os .prof (binarios do cProfile) sao regeneraveis pelo script
 !artifacts_v3_desempenho/
 artifacts_v3_desempenho/**/*.prof
+
+# ORGANIZACAO 2026-11-10: pastas de artifacts com arquivos rastreados, mas sem a excecao; um arquivo novo nelas era ignorado em
+# silencio pelo artifacts_*/ acima. Mesmo padrao das outras: meta, medidas e resultado no git; as vidas fora (regeneraveis)
+!artifacts_v2_digibrain_prototipo/
+artifacts_v2_digibrain_prototipo/**/vidas/
+!artifacts_v3_conversa_dc3/
+artifacts_v3_conversa_dc3/**/vidas/
+!artifacts_v3_individualidade/
+artifacts_v3_individualidade/**/vidas/
+!artifacts_conversa_pet/
+artifacts_conversa_pet/**/vidas/
+!artifacts_linhagem/
+artifacts_linhagem/**/vidas/
+!artifacts_v2_descritivo_plato/
+artifacts_v2_descritivo_plato/**/vidas/
