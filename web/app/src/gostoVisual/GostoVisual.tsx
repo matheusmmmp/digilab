@@ -16,6 +16,9 @@ import { passandoEmPalavras } from "./PainelTv.tsx";
 import { pararTv, usarPet, useSessaoTv } from "./sessaoTv.ts";
 import { agir } from "../acoes.ts";
 import { BALAO } from "./estadoTv.ts";
+import { CENA } from "../telas/pet/cenaEstado.ts";
+import { sinalDaTvAgora } from "./sinalTv.ts";
+import { ToqueTv } from "./ToqueTv.tsx";
 import {
   COMPONENTES, NOME_COMPONENTE, alvos, gostaMaisDe, tempoJunto, valores, type Componente, type EstadoGosto, type Inato, type Leitura, type Sentido,
 } from "./gosto.ts";
@@ -105,6 +108,8 @@ function GostoVisualLigado() {
   const jogo = useJogo(), semente = jogo.motor.semente, s = useSessaoTv(), janela = useJanelaDaTv();
   const [sprite, setSprite] = useState<string | null>(null), [erroSprite, setErroSprite] = useState<string | null>(null);
   useEffect(() => { usarPet(semente); }, [semente]);
+  /* o sinal da reação sobre o pet, no lugar dos emotes (sinalTv.ts): o palco o lê pela cena enquanto o protótipo está montado */
+  useEffect(() => { CENA.sinalTv = sinalDaTvAgora; return () => { CENA.sinalTv = null; }; }, []);
   /* a TV e a janela não sobrevivem ao protótipo desmontado */
   useEffect(() => () => { pararTv(); fecharJanelaDaTv(); }, []);
   /* parar a TV fecha a janela pequena (o plano, 3.3); fechar a janela não para a TV */
@@ -130,6 +135,7 @@ function GostoVisualLigado() {
   );
   return (
     <>
+      <ToqueTv />
       {s.origem === "tela" && <SeloCaptura parar={pararTv} />}
       <p className="sr-only" role="status" data-testid="tv-anuncio">{tv || fim} {s.origem !== null ? dito : ""}</p>
       {janela && s.inato && createPortal(

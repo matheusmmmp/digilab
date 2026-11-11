@@ -17,20 +17,24 @@
      vai ao console e o cantinho fica sem a tela (a TV em si e a do enfeites.ts, que falha alto do jeito dela);
    - o pet: com a TV ligada ele vai ate a almofada (a rota em terra na ilha com agua, rotaConta.ts), senta (sobe a altura da almofada) e
      olha para a TV; as reacoes do P0 aparecem ali: inclina no "curioso", pula de leve no "adorando", vira para o outro lado no "nao curti"
-     e no "enjoei", e o balao da reacao fica sobre ele. Desligada, ele volta para onde o motor diz.
+     e no "enjoei". O sinal da reacao e um icone no lugar dos emotes do jogo (gostoVisual/sinalTv.ts; o PalcoPet pinta): o balao de texto
+     em 3D saiu na etapa 2 do PLANO_UX_GOSTO_VISUAL (a UX-GV-10). Desligada, ele volta para onde o motor diz;
+   - o toque e a camera (a etapa 2): `caixa` e a caixa da TV no mundo, para a vista dizer se um ponto da tela cai nela (o toque na TV abre o
+     painel, a UX-GV-2); `centro` e o meio do cantinho, para onde a camera olha com o painel da TV aberto (`painelAberto`).
    Os numeros e as contas sem three ficam em cantinhoTvConta.ts. Todos os numeros (os tamanhos, as cores, as poses) sao do desenho:
    PROPOSTO, SEM FONTE. */
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { carregarVariante, curvar, toon } from "./cena.ts";
-import { CANTINHO_TV, IdaAoCantinho, TELA_DO_MODELO, TELA_PASSO_MS, TELA_PX, poseNoCantinho, pontosDoCantinho, prepararChao,
+import { CAIXA_TV, CANTINHO_TV, IdaAoCantinho, TELA_DO_MODELO, TELA_PASSO_MS, TELA_PX, poseNoCantinho, pontosDoCantinho, prepararChao,
   type PontosCantinho } from "./cantinhoTvConta.ts";
-import { dobrarY, type Dobra } from "./curva.ts";
 import type { Ilha } from "./grade.ts";
 import { ENFEITES_MODELOS } from "./modelos.ts";
 import type { Ponto } from "./rotaConta.ts";
 import type { Suspenso } from "./papel.ts";
-import { BALAO, TV } from "../../../gostoVisual/estadoTv.ts";
+import { TV } from "../../../gostoVisual/estadoTv.ts";
+import { painelTvAberto } from "../../../gostoVisual/painelTvEstado.ts";
+import { marcarSentadoNaTv } from "../../../gostoVisual/sinalTv.ts";
 import type { Sentido } from "../../../gostoVisual/gosto.ts";
 
 export { cantinhoNaVista } from "./cantinhoTvConta.ts";
@@ -38,7 +42,7 @@ export { cantinhoNaVista } from "./cantinhoTvConta.ts";
 /* ---------- o desenho (three e canvas) ---------- */
 
 /** as cores chapadas do cantinho (o tapete azul, para nao sumir sob a casca laranja da TV). PROPOSTO, SEM FONTE */
-const COR = { tapete: "#6fb3c4", borda: "#f6e2b3", almofada: "#f6c945", almofadaDono: "#e9846b", balao: "#fffaf0", tinta: "#2f3640" } as const;
+const COR = { tapete: "#6fb3c4", borda: "#f6e2b3", almofada: "#f6c945", almofadaDono: "#e9846b" } as const;
 
 /** um numero de 0 a 359 do nome do programa (o tom de partida do desenho dele) */
 function tomDoTexto(t: string): number {
@@ -83,11 +87,9 @@ function canvas2d(w: number, h: number): { c: HTMLCanvasElement; g: CanvasRender
 
 /** o que a vista passa ao cantinho a cada quadro */
 export interface QuadroCantinho {
-  agora: number; reduzido: boolean; dobra: Dobra;
-  /** o pet chegou e esta sentado na almofada (o balao aparece) */
+  agora: number; reduzido: boolean;
+  /** o pet chegou e esta sentado na almofada (o sinal da reacao aparece; gostoVisual/sinalTv.ts) */
   sentado: boolean;
-  /** a altura do alto do pet desenhado sobre o chao no pe dele (celulas, medida na tela), para o balao ficar sobre a cabeca */
-  alturaPet: number;
 }
 
 export interface Cantinho {
@@ -96,6 +98,12 @@ export interface Cantinho {
   /** a TV do P0 esta ligada (a captura ou a TV do jogo; estadoTv.ts) */
   ligada: () => boolean;
   pontos: PontosCantinho;
+  /** a caixa da TV no mundo (celulas; o chao no pe dela e a altura do modelo), para o toque na TV */
+  caixa: { min: readonly [number, number, number]; max: readonly [number, number, number] };
+  /** o meio do cantinho (celulas): para onde a camera olha com o painel da TV aberto */
+  centro: Ponto;
+  /** o painel da TV esta aberto (gostoVisual/painelTvEstado.ts) */
+  painelAberto: () => boolean;
   /** a pose do pet sentado (o suspenso do papel, papel.ts) e o ponto para onde ele olha */
   pose: (agora: number, reduzido: boolean) => { suspenso: Suspenso; olharPara: Ponto | null };
   quadro: (q: QuadroCantinho) => void;
@@ -147,29 +155,6 @@ export function montarCantinho(ilha: Ilha, rota: (de: Ponto, para: Ponto) => Pon
   const matTela = curvar(new THREE.MeshBasicMaterial({ map: texDesenho, alphaMap: mascara, alphaTest: 0.5, toneMapped: false }));
   mats.push(matTela);
   let tela: THREE.Mesh | null = null;
-  /* o balao da reacao: um sprite sobre o pet sentado (o sprite nao passa pela dobra do shader: a altura dele desconta a dobra, como o papel) */
-  const { c: balaoC, g: balaoG } = canvas2d(256, 96);
-  const texBalao = new THREE.CanvasTexture(balaoC);
-  texBalao.colorSpace = THREE.SRGBColorSpace;
-  texs.push(texBalao);
-  const matBalao = new THREE.SpriteMaterial({ map: texBalao, depthTest: false, depthWrite: false, fog: false, transparent: true });
-  mats.push(matBalao);
-  const balao = new THREE.Sprite(matBalao);
-  balao.scale.set(1.5, 0.56, 1); balao.renderOrder = 10; balao.visible = false; balao.frustumCulled = false;
-  grupo.add(balao);
-  let textoBalao = "";
-  const desenharBalao = (t: string) => {
-    const w = balaoC.width, h = balaoC.height;
-    balaoG.clearRect(0, 0, w, h);
-    balaoG.fillStyle = COR.balao; balaoG.strokeStyle = COR.tinta; balaoG.lineWidth = 5;
-    balaoG.beginPath(); balaoG.roundRect(6, 6, w - 12, h - 30, 22); balaoG.fill(); balaoG.stroke();
-    balaoG.beginPath(); balaoG.moveTo(w / 2 - 14, h - 26); balaoG.lineTo(w / 2, h - 6); balaoG.lineTo(w / 2 + 14, h - 26); balaoG.closePath(); balaoG.fill();
-    balaoG.beginPath(); balaoG.moveTo(w / 2 - 14, h - 25); balaoG.lineTo(w / 2, h - 6); balaoG.lineTo(w / 2 + 14, h - 25); balaoG.stroke();
-    balaoG.fillStyle = COR.tinta; balaoG.font = "bold 34px system-ui, sans-serif"; balaoG.textAlign = "center"; balaoG.textBaseline = "middle";
-    balaoG.fillText(t, w / 2, (h - 24) / 2 + 3);
-    texBalao.needsUpdate = true;
-  };
-
   let video: HTMLVideoElement | null = null, texVideo: THREE.VideoTexture | null = null, pintadoEm = -1e9;
   const quadro = (q: QuadroCantinho) => {
     /* a tela: o video da captura ou o desenho do programa */
@@ -187,14 +172,7 @@ export function montarCantinho(ilha: Ilha, rota: (de: Ponto, para: Ponto) => Pon
     }
     /* desligada, o plano some e fica o vidro pintado do modelo (o #814) */
     if (tela) tela.visible = TV.ligada;
-    /* o balao: so com o pet sentado e uma reacao */
-    const texto = q.sentado && TV.ligada && TV.reacao ? BALAO[TV.reacao] : "";
-    if (texto !== textoBalao) { textoBalao = texto; if (texto) desenharBalao(texto); }
-    balao.visible = texto !== "";
-    if (balao.visible) {
-      const [x, z] = p.assento, y = y0 + q.alturaPet + 0.3;
-      balao.position.set(x, dobrarY(y, z, q.dobra, x), z);
-    }
+    marcarSentadoNaTv(q.sentado && TV.ligada);
   };
 
   const ida = new IdaAoCantinho(p.assento, rota);
@@ -220,11 +198,15 @@ export function montarCantinho(ilha: Ilha, rota: (de: Ponto, para: Ponto) => Pon
   };
 
   const dispose = () => {
+    marcarSentadoNaTv(false);
     for (const g of geos) g.dispose();
     for (const m of mats) m.dispose();
     for (const t of texs) t.dispose();
     texVideo?.dispose();
     grupo.clear();
   };
-  return { grupo, ida, ligada: () => TV.ligada, pontos: p, pose, quadro, carregarTela, dispose };
+  const yTv = ilha.altura(p.tv[0], p.tv[1]), R = CAIXA_TV.raio;
+  const caixa = { min: [p.tv[0] - R, yTv, p.tv[1] - R], max: [p.tv[0] + R, yTv + ENFEITES_MODELOS.tv.altura, p.tv[1] + R] } as const;
+  const centro: Ponto = [(p.tv[0] + p.assento[0]) / 2, (p.tv[1] + p.assento[1]) / 2];
+  return { grupo, ida, ligada: () => TV.ligada, pontos: p, caixa, centro, painelAberto: painelTvAberto, pose, quadro, carregarTela, dispose };
 }

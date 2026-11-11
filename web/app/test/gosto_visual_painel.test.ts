@@ -170,6 +170,6 @@ describe("as fronteiras da etapa 1", () => {
   test("a tela Pet só mostra a TV atrás da chave", () => {
     const t = readFileSync(join(src, "telas", "pet", "TelaPet.tsx"), "utf8");
     expect(t).toContain('id === "tv" ? vivo && gostoVisualLigado()');
-    expect(t).toContain('{tem("tv") && <LinhaTv');
+    expect(t).toContain('{temTv && <LinhaTv');
   });
 });
