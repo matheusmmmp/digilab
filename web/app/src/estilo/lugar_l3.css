@@ -148,6 +148,10 @@
 .aj-seta{ width:18px; height:18px; color:var(--hx-sec) }
 .aj input[type="checkbox"]{ width:44px; height:44px; flex:none; accent-color:var(--hx-btn-borda); cursor:pointer }
 .aj--volume{ cursor:default; margin-left:28px; width:calc(100% - 28px) }
+/* SOM-UP: tres volumes (geral, musica, efeitos): o nome e a porcentagem numa linha, o controle embaixo, na largura toda (no painel estreito ele ficava curto e cobria a porcentagem) */
+.aj--volume{ grid-template-columns:28px minmax(0,1fr); row-gap:0 }
+.aj--volume input[type="range"]{ grid-column:2 }
+.aj--volume .aj-nome{ white-space:nowrap }
 .aj--volume input[type="range"]{ min-height:44px; width:100%; accent-color:var(--hx-btn-borda) }
 .aj-lista .balao{ max-width:min(320px,72vw) }
 
