@@ -84,3 +84,19 @@ As GV-1 a GV-14, todas PROPOSTAS. O texto completo, com o apoio de cada uma, est
 | **GV-12** | As 56 referências da nota no repositório. | **Sim, na GV0**, com o status e os rótulos da nota. | Sem isso, a frente cita fontes só do vault; o custo é um PR a mais. |
 | **GV-13** | O som: um vetor de áudio ao lado do visual. | **Sim, três inteiros (o volume, a variação e o brilho do timbre)**, local, com a regra da GV-10; antes da GV0, a busca dirigida da seção 13 da proposta. | Sem o som, a pergunta do Matheus tem só metade da resposta; com o som sem a busca, o desenho do áudio fica SEM FONTE inteiro. |
 | **GV-14** | O gosto aprendido ser só o gosto do dono, por exposição; como o painel separa as partes. | **O painel mostra o inato (fixo), o da exposição e o da consequência separados**; nada premia o acerto; a medida usa estímulos que o dono nunca mostrou; o genoma × dono mede a parte do dono. | Sem a separação, o dono vê o próprio gosto devolvido como se fosse do pet; separado demais, o painel perde o tom de jogo. |
+
+## Resultado do protótipo P0 (2026-11-11, Claude Code, Opus 5.5, branch `v3-gosto-visual-p0`)
+
+O P0 (`docs/futuro/gosto_visual_pet.md`, seção 14) está no `web/app/src/gostoVisual/`, atrás de `?gosto_visual=1`, fora do motor, do log
+e do save do pet:
+- `chave.ts` (a chave desligada), `sentidos.ts` (o quadro e o áudio viram 4 + 3 números), `gosto.ts` (o pico inato da semente, a
+  exposição, o carinho, a habituação, o "gosta mais de" e o estado guardado), `captura.ts` (o `getDisplayMedia` com vídeo e áudio, um vetor
+  por segundo), `janelaPequena.ts` (a Document Picture-in-Picture, com erro alto sem a API), `tvDoJogo.ts` (quatro programas sintéticos,
+  para ver as reações sem compartilhar a tela) e `GostoVisual.tsx` (o cartão, a janela pequena, as reações, o painel e o tempo junto);
+- `src/App.tsx` só monta o componente, que não renderiza nada com a chave desligada;
+- o teste é o `web/app/test/gosto_visual_p0.test.ts`.
+
+**Visto no navegador do app** (sem artefato, medida única): com a TV do jogo, o pet olha, o balão muda, o tempo junto conta e três carinhos
+deslocam o "hoje" do "de nascença". O navegador do app bloqueia a captura da tela e a janela flutuante: os dois erros aparecem na tela,
+como pedido ("a tela não foi compartilhada: Permission denied"; "a janela pequena não abriu: … no window"). A captura real e a janela
+pequena ficam para o Matheus conferir no Chrome ou no Edge.
