@@ -141,6 +141,12 @@ FAIXAS_RESERVADAS = (
                    "aprovada pelo Matheus em 2026-11-07, \"Aprovo a faixa\"; reusada pelo I7, o desenvolvimento contrafactual, que vive de "
                    "novo as mesmas vidas: docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md, IR-1, aprovada pelo Matheus em 2026-11-10, "
                    "\"Aprovo todas\")"),
+    (86101, 86505, "equilibrio da luta em tempo real (jogo web, LUTA_POC LP5): a calibracao, LP5-0 a LP5-3 "
+                   "(docs/PLANO_EQUILIBRIO_LUTA_POC.md, secao 5; D-LP5-6; bases 86101, 86202, 86303, 86404 e 86505; "
+                   "aprovada pelo Matheus em 2026-11-10, \"Ta, entao faz toda a recomendacao ai que voce deu\", repassado pelo "
+                   "Gerente, que autorizou a reserva)"),
+    (87101, 87505, "equilibrio da luta em tempo real (jogo web, LUTA_POC LP5): a conferencia, uma vez, na LP5-4 "
+                   "(docs/PLANO_EQUILIBRIO_LUTA_POC.md, secao 5; D-LP5-6; mesma derivacao da calibracao; aprovada junto)"),
 )
 
 

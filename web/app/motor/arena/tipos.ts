@@ -1,7 +1,7 @@
 /* Tipos da luta da POC no motor (docs/TAREFA_V3_LUTA_POC.md, LP1): porte de web/app/arena/tipos.ts do commit efb2ded, so 1 contra 1,
    sem jogador e sem equipes. Os dados do Digimon vem da tabela do git (formas.ts, a LP-2); os numeros do lutador vem prontos (Stats, a
    LP-3: na LP2 saem dos 6 stats do pet). */
-import type { Dificuldade } from "./constantes.ts";
+import type { Dificuldade, Esquiva, Tiro } from "./constantes.ts";
 
 export type Lado = "a" | "b";
 export type IdCena = "campo" | "coliseu" | "floresta" | "praia" | "deserto" | "castelo" | "caverna" | "ringue";
@@ -22,7 +22,9 @@ export interface DadosForma {
 /** os numeros do lutador (os Stats da POC): vida, ataque, defesa, movimento (px/s), ciclo do ataque (ms), critico (%), recarga da
     habilidade (s), forca da habilidade (x), esquiva (%), atordoamento (%) e o erro de mira (px; era da dificuldade na POC, e do lutador
     desde a LP2, decisao 2) */
-export interface Stats { hp: number; atk: number; def: number; vel: number; cad: number; crit: number; hcd: number; hpot: number; esquiva: number; atordoa: number; erro: number }
+export interface Stats { hp: number; atk: number; def: number; vel: number; cad: number; crit: number; hcd: number; hpot: number; esquiva: number; atordoa: number; erro: number;
+  /** a perspicacia e a agilidade da esquiva (D-LP5-14; so com a `esquiva` da entrada; sem elas, 1) */
+  perc?: number; agil?: number }
 /** um lado: o Digimon, os numeros e, numa serie sem cura (a Cidadela, LP2), a vida com que ele entra (sem ela, a vida cheia) */
 export interface LadoLuta { forma: DadosForma; stats: Stats; vida0?: number }
 export interface ConfigLuta {
@@ -32,6 +34,10 @@ export interface ConfigLuta {
   pvel: number;       // velocidade dos projeteis em relacao ao jogo
   a: LadoLuta;        // o lado azul (o pet, na LP2)
   b: LadoLuta;
+  /** a distancia do tiro (D-LP5-12); sem ela, a luta da POC */
+  tiro?: Tiro;
+  /** a esquiva pela perspicacia e pela velocidade (D-LP5-14); sem ela, a luta da POC */
+  esquiva?: Esquiva;
 }
 
 // ---------- estado ----------
@@ -50,6 +56,10 @@ export interface Lutador {
   dash: number; dashCd: number; dashDir: [number, number]; reacao: number; desvioDir: [number, number];
   atordoado: number; caiuEm: number; foraAte: number;
   escondido: boolean; naRuna: number; buffAte: number; bloq: number; ladoDesvio: number;
+  /** ms abaixo da distancia minima do tiro (D-LP5-12; so com o `tiro` da entrada) */
+  esperaTiro: number;
+  /** a esquiva (D-LP5-14): os ataques comecados, o ultimo ataque do alvo ja lido e o contra-ataque pendente */
+  nAtaque: number; leuAtaque: number; contraPend: boolean;
   acDano: number; ultAmb: number; ultNum: number;
   /** a ultima situacao em que a IA da POC pensou em trocar (o sorteio dela fica; ver sim.ts, sorteioDaTroca) */
   decisao: string;
