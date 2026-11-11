@@ -132,7 +132,25 @@ function medirAdendo(): Record<string, unknown> {
   return out;
 }
 
+/** a conferencia da IG6 (secao 12.16): o mesmo retorno, na ilha grande, com a v25 (a memoria de 128 celulas desde o ovo); entra no
+    mesmo artefato, na chave `ig6_retorno`. A v24 com o evento "ma" nao e medida aqui */
+function medirRetornoIg6(): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const d of RETORNOS.grande_128x60) {
+    const r = SEMENTES.map(s => retorno(s, 25, "modular", d)), soltos = r.filter(x => x.solto);
+    out[`grande_128x60|modular_v25|${d}`] = { soltos: soltos.length, voltaram: soltos.filter(x => x.voltou).length, menor_media: media(soltos.map(x => x.menor!)),
+                                              mediana_ticks: mediana(soltos.filter(x => x.voltou).map(x => x.ticks!)), vidas: r };
+  }
+  return out;
+}
+
 describe("a medida da IG5", () => {
+  test.skipIf(process.env.MEDIR_IG6 !== "1")("roda o retorno com a memoria de 128 celulas e o acrescenta ao artefato", () => {
+    const g = JSON.parse(readFileSync(ARQUIVO, "utf8")) as Record<string, unknown>;
+    g.ig6_retorno = medirRetornoIg6();
+    writeFileSync(ARQUIVO, JSON.stringify(g, null, 1) + String.fromCharCode(10), "utf8");
+  }, 3_600_000);
+
   test.skipIf(process.env.MEDIR_IG5_ADENDO !== "1")("roda o adendo do comedouro a 6 celulas e o acrescenta ao artefato", () => {
     const g = JSON.parse(readFileSync(ARQUIVO, "utf8")) as Record<string, unknown>;
     g.adendo_comedouro6 = medirAdendo();

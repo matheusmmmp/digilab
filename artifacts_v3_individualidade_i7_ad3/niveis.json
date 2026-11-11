@@ -1,0 +1,16 @@
+{
+  "acao_mais_comum": "dormir",
+  "acoes": {
+    "brincar": 20,
+    "chamar_atencao": 289,
+    "comer": 44,
+    "dormir": 2543,
+    "emburrar": 4,
+    "explorar": 621
+  },
+  "medianas": {
+    "energia": 0.3637222222222222,
+    "fome": 0.6,
+    "humor": 0.58
+  }
+}
