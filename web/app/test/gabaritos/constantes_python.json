@@ -82,6 +82,23 @@
   "recompensa_repreensao": -1.0,
   "variancia_amostra": 0.25
  },
+ "ConfigBanheiro": {
+  "celulas_x": [
+   8,
+   12
+  ],
+  "celulas_y": [
+   18,
+   20
+  ],
+  "ligada": false,
+  "limiar_moderada": 0.5,
+  "limiar_urgente": 0.9,
+  "limpador": false,
+  "w_aqui_0": 1024,
+  "w_banheiro_0": 256,
+  "w_vontade": 4.0
+ },
  "ConfigBateriaCombate": {
   "fracao_max_limite_turnos": 0.2,
   "fracao_min_acao": 0.03,
@@ -125,6 +142,16 @@
   "taxa_max_g6b": 0.65,
   "variacao_guts_g6b": 2,
   "variacao_hp_g6b": 0.05
+ },
+ "ConfigBola": {
+  "bolas_por_dia": 4,
+  "duracao_min": 120,
+  "ganho_humor_bola": 0.15,
+  "ligada": false,
+  "w_bola": 6.0
+ },
+ "ConfigBolaNoGolpe": {
+  "ligada": false
  },
  "ConfigCampanha": {
   "epsilon_npc": 0.05,
@@ -434,6 +461,55 @@
    }
   }
  },
+ "ConfigCerebroB": {
+  "aprendizado_ligado": false,
+  "bits_ponto_fixo": 10,
+  "delta_t": 1.0,
+  "escala_inicial": 1.0,
+  "escala_ticks_desde_cuidado": 480.0,
+  "janela_latencia_ticks": 120,
+  "lambda_elegibilidade": 0.8,
+  "limite_logit": 20.0,
+  "maximo_pesos": 1000,
+  "n_ocultos": 9,
+  "recompensa_elogio": 1.0,
+  "recompensa_pedido_ignorado": -0.5,
+  "recompensa_repreensao": -1.0,
+  "semente_pesos": 1,
+  "taxa_ator": 0.05,
+  "taxa_critico": 0.05,
+  "w0_info": 0.0
+ },
+ "ConfigCerebroC": {
+  "aprendizado_ligado": false,
+  "bits_ponto_fixo": 10,
+  "cortes_binarios": [
+   0.5
+  ],
+  "cortes_hora": [
+   0.25,
+   0.5,
+   0.75
+  ],
+  "cortes_necessidade": [
+   0.25,
+   0.5
+  ],
+  "cortes_sem_cuidado": [
+   0.25,
+   0.5
+  ],
+  "escala_ticks_desde_cuidado": 480.0,
+  "janela_latencia_ticks": 120,
+  "maximo_pesos": 1000,
+  "passo": 64,
+  "piso_peso": 64,
+  "recompensa_elogio": 1.0,
+  "recompensa_pedido_ignorado": -0.5,
+  "recompensa_repreensao": -1.0,
+  "teto": 4096,
+  "w0_info": 0
+ },
  "ConfigCombateV2": {
   "custo_disparo": 20,
   "custo_esquivar": 20,
@@ -716,6 +792,10 @@
   "t_max": 40,
   "turno_morte_subita": 0
  },
+ "ConfigCompeticao": {
+  "kappa_instinto": 16,
+  "ligada": false
+ },
  "ConfigConfianca": {
   "eta_confianca": 0.25,
   "histerese_frase_min": 120,
@@ -729,10 +809,495 @@
   "tau_confianca_min": 1440,
   "tau_habituacao_min": 2880
  },
+ "ConfigConsequencia": {
+  "canais_ligados": false,
+  "drives": [
+   0,
+   1,
+   2
+  ],
+  "ganho": 4,
+  "ganho_gosto": 1024,
+  "humor_na_fruta": true,
+  "janela_pesos": 32,
+  "pesos_drives_corpo": [
+   [
+    "fome",
+    1
+   ],
+   [
+    "higiene",
+    1
+   ],
+   [
+    "energia",
+    1
+   ],
+   [
+    "humor",
+    1
+   ],
+   [
+    "tedio",
+    1
+   ],
+   [
+    "curiosidade",
+    1
+   ],
+   [
+    "solidao",
+    1
+   ],
+   [
+    "estresse",
+    1
+   ],
+   [
+    "dor",
+    1
+   ],
+   [
+    "vontade",
+    1
+   ],
+   [
+    "conforto",
+    1
+   ]
+  ],
+  "pesos_janela": false
+ },
+ "ConfigContrato": {
+  "controlador": false,
+  "cos_meio_cone": 512,
+  "espessura_parede": 8,
+  "lado_tronco": 8,
+  "paredes": false,
+  "r_pet": 6,
+  "raio_bigode": 32,
+  "sensores": false,
+  "ticks_bloqueado": 3
+ },
+ "ConfigCooperacao": {
+  "escala": 1024,
+  "janela_novidade": 1440,
+  "k_meia_vida_pontuacao": 32,
+  "ligada": false,
+  "meia_vida_pontuacao": 1440,
+  "piso_fome": 0.45
+ },
+ "ConfigCorpo": {
+  "armazenar_limiar": 337500,
+  "armazenar_taxa": 375,
+  "banheiro": false,
+  "bits_meia_vida": 16,
+  "carinho_estresse": 90000,
+  "carinho_solidao": 180000,
+  "combustivel_inicial": 225000,
+  "conforto_carinho": 45000,
+  "conversao_den": 1,
+  "conversao_num": 1,
+  "curiosidade_max_novidades": 2,
+  "curiosidade_novidade": 90000,
+  "curiosidade_sobe": 300,
+  "digestao": false,
+  "drives_novos": false,
+  "escala": 450000,
+  "escala_receptor": 1024,
+  "estresse_divisor": 256,
+  "estresse_limiar": 337500,
+  "falta_cansaco": 500,
+  "falta_limiar": 112500,
+  "gasto_atividades_den": 1,
+  "gasto_atividades_num": 1,
+  "gasto_basal_acordado": 375,
+  "gasto_basal_dormindo": 187,
+  "gestos": false,
+  "janela_novidade": 1440,
+  "janela_tedio": 8,
+  "k_meia_vida_conforto": 753,
+  "k_meia_vida_dor": 753,
+  "k_meia_vida_estresse": 32,
+  "k_meia_vida_sabor": 10427,
+  "k_meia_vida_saciedade": 63,
+  "k_meia_vida_susto": 1497,
+  "ligada": false,
+  "medo_da_mao": 1,
+  "meia_vida_sabor": 4,
+  "meia_vida_saciedade": 720,
+  "metabolismo": false,
+  "mobilizar_limiar": 225000,
+  "mobilizar_taxa": 375,
+  "necessidade_desconforto": 22500,
+  "necessidade_max_regiao": 3,
+  "necessidade_regiao": 100,
+  "paladar": false,
+  "paladar_h_max": 1024,
+  "paladar_h_min": -512,
+  "paladar_h_salgado": 256,
+  "pet_brincar_cansaco": 9000,
+  "pet_comer_fome": -22500,
+  "pet_emburrar_tristeza": 4500,
+  "pet_explorar_cansaco": 6750,
+  "pet_explorar_tristeza": -4500,
+  "reserva_inicial": 112500,
+  "saciedade_den": 2,
+  "saciedade_num": 1,
+  "solidao_sobe": 225,
+  "tapa_dor": 90000,
+  "tapa_estresse": 45000,
+  "tapa_susto": 180000,
+  "taxa_digestao": 450000,
+  "tedio_bola": 135000,
+  "tedio_brincar": 45000,
+  "tedio_dono": 90000,
+  "tedio_explorar": 90000,
+  "tedio_sobe": 450,
+  "vida": false,
+  "vida_decaimento": 11,
+  "vontade_desconforto": 150,
+  "vontade_digestao_den": 3,
+  "vontade_digestao_num": 1,
+  "vontade_limiar": 337500,
+  "vontade_sobe": 150
+ },
+ "ConfigDecisaoNaComida": {
+  "ligada": false
+ },
+ "ConfigDecodificador": {
+  "fins_frustrantes": [
+   "desistiu",
+   "sumiu",
+   "trocou"
+  ],
+  "ganho_sigma": 8,
+  "ganho_v": 4,
+  "limiar_confianca": 512,
+  "limiar_desfecho": 128,
+  "limiar_valor": 512,
+  "n_sp_teto": 8,
+  "p_agitacao_e": 3,
+  "p_agitacao_urgencia": 2,
+  "p_curiosidade_fracao": 1,
+  "p_curiosidade_g_exp": 1,
+  "p_curiosidade_tedio": 1,
+  "p_curiosidade_urgencia": 1,
+  "p_determinacao_c": 2,
+  "p_determinacao_persistencia": 1,
+  "p_fome_fracao": 1,
+  "p_fome_intencao": 1,
+  "p_fome_pista": 1,
+  "p_fome_urgencia": 2,
+  "p_frustracao_f": 2,
+  "p_frustracao_fim": 1,
+  "p_frustracao_n_sp": 1,
+  "p_indecisao_margem": 2,
+  "p_indecisao_sondas": 1,
+  "p_solidao_fracao": 1,
+  "p_solidao_urgencia": 2,
+  "p_sono_fracao": 1,
+  "p_sono_noite": 1,
+  "p_sono_reflexo": 1,
+  "p_sono_urgencia": 2,
+  "piso_sonda": 640
+ },
  "ConfigDesejo": {
   "k_cumprimento_ticks": 60,
   "limiar_necessidade": 0.3,
   "limiar_vontade": 0.1
+ },
+ "ConfigDigibrain": {
+  "cheiro_inato": false,
+  "controle_g_apr": "nenhum",
+  "controle_mem": "rel",
+  "credito_corrida": false,
+  "facetas_mem": false,
+  "fala_unidades": false,
+  "g_apr_constante": 0,
+  "intencao_cheiro": false,
+  "intencao_suspensa": false,
+  "ligada": false,
+  "m_mem": true,
+  "memoria_autobio": false,
+  "modula_g_apr": false,
+  "p1": true,
+  "p2": true,
+  "passeio": false,
+  "persistencia": true,
+  "redecidir_evento": false
+ },
+ "ConfigDigibrainInatos": {
+  "a_max": 4096,
+  "beta_e": 1024,
+  "beta_t": 512,
+  "beta_u": 512,
+  "c_g": 1024,
+  "d_max": 1024,
+  "e0": 512,
+  "e_max": 1024,
+  "epsilon": 128,
+  "escala": 1024,
+  "escala_cuidado": 480,
+  "eta_d": 256,
+  "eta_faceta": 16,
+  "eta_h": 4,
+  "fora_do_r": [
+   "susto"
+  ],
+  "g0": 1024,
+  "g_max": 2048,
+  "g_max_incentivo": 1024,
+  "g_min": 512,
+  "ganho_r": 4,
+  "h_max": 512,
+  "janela_rec": 96,
+  "lambda_busca": 256,
+  "lambda_retomar": 256,
+  "lambda_sono": 256,
+  "n_cen": 8,
+  "n_desiste": 3,
+  "n_desiste_cheiro": 6,
+  "n_dur": 32,
+  "n_ep": 16,
+  "n_rec": 16,
+  "n_rep_central": 2,
+  "n_seg_max": 6,
+  "n_suspensa_max": 6,
+  "r_norm": 2,
+  "s_v": 1024,
+  "sim_min": 768,
+  "tau_c": 15,
+  "tau_e": 120,
+  "tau_f_desce": 480,
+  "tau_f_sobe": 60,
+  "tau_hab": 120,
+  "tau_v": 240,
+  "teto_faceta": 256,
+  "theta_dur": 256,
+  "theta_sig": 128,
+  "urgencia_a": 512,
+  "urgencia_b": 1536,
+  "urgencia_lambda": 512,
+  "w0": [
+   [
+    "ocioso",
+    [
+     [
+      "vies",
+      128
+     ],
+     [
+      "u_fome",
+      -256
+     ],
+     [
+      "u_higiene",
+      -256
+     ],
+     [
+      "u_energia",
+      -256
+     ],
+     [
+      "u_tedio",
+      -256
+     ]
+    ]
+   ],
+   [
+    "dormir",
+    [
+     [
+      "vies",
+      -512
+     ],
+     [
+      "u_fome",
+      -1024
+     ],
+     [
+      "u_energia",
+      3072
+     ],
+     [
+      "noite",
+      512
+     ],
+     [
+      "dormindo",
+      512
+     ]
+    ]
+   ],
+   [
+    "comer",
+    [
+     [
+      "vies",
+      -1088
+     ],
+     [
+      "u_fome",
+      3072
+     ]
+    ]
+   ],
+   [
+    "brincar",
+    [
+     [
+      "vies",
+      -256
+     ],
+     [
+      "u_fome",
+      -512
+     ],
+     [
+      "u_energia",
+      -512
+     ],
+     [
+      "u_humor",
+      512
+     ],
+     [
+      "u_tedio",
+      512
+     ],
+     [
+      "bola_vista",
+      1024
+     ]
+    ]
+   ],
+   [
+    "chamar_atencao",
+    [
+     [
+      "vies",
+      -512
+     ],
+     [
+      "u_higiene",
+      1024
+     ],
+     [
+      "u_solidao",
+      512
+     ],
+     [
+      "u_estresse",
+      256
+     ],
+     [
+      "sem_cuidado",
+      256
+     ],
+     [
+      "comida_vista",
+      -1024
+     ],
+     [
+      "fome_sem_comida",
+      2048
+     ]
+    ]
+   ],
+   [
+    "explorar",
+    [
+     [
+      "vies",
+      128
+     ],
+     [
+      "u_energia",
+      -2048
+     ],
+     [
+      "u_tedio",
+      1024
+     ],
+     [
+      "u_curiosidade",
+      1024
+     ],
+     [
+      "fome_sem_comida",
+      512
+     ],
+     [
+      "F",
+      512
+     ]
+    ]
+   ],
+   [
+    "emburrar",
+    [
+     [
+      "vies",
+      -512
+     ],
+     [
+      "cuidado_humor",
+      2048
+     ]
+    ]
+   ]
+  ],
+  "w0_nov": [
+   [
+    "brincar",
+    128
+   ]
+  ],
+  "w0_prox": [
+   [
+    "comer",
+    512
+   ],
+   [
+    "brincar",
+    256
+   ]
+  ],
+  "w0_tipo": [
+   [
+    "comer",
+    [
+     [
+      "racao",
+      256
+     ],
+     [
+      "a",
+      256
+     ],
+     [
+      "b",
+      256
+     ],
+     [
+      "c",
+      256
+     ],
+     [
+      "podre",
+      -2048
+     ]
+    ]
+   ]
+  ],
+  "w0_tipo_cheiro": 256,
+  "w_corpo": 1,
+  "w_lem": 512,
+  "w_lugar": 2,
+  "w_mem": 1024,
+  "w_pers": 4096,
+  "w_vista": 1
  },
  "ConfigDonos": {
   "limiar_alimentar": 0.5,
@@ -876,6 +1441,88 @@
   "limiar_extremo": 0.2,
   "limiar_motivo": 0.05
  },
+ "ConfigFalaUnidades": {
+  "ganho_conteudo": 1536
+ },
+ "ConfigFrutaAoLado": {
+  "coluna": 1,
+  "ligada": false,
+  "linhas": [
+   -1,
+   0,
+   1
+  ],
+  "teto_por_tipo": 1,
+  "tipos": [
+   "a",
+   "b",
+   "c"
+  ]
+ },
+ "ConfigFrutaComoComida": {
+  "ligada": false
+ },
+ "ConfigFrutas": {
+  "duracao_min": 120,
+  "efeito_humor_neutro": 0.0,
+  "efeito_humor_ruim": -0.1,
+  "horarios_oferta": [
+   540,
+   720,
+   900,
+   1080
+  ],
+  "k_saciedade": 1.0,
+  "ligada": false,
+  "meia_vida_recente": 16,
+  "mundo": "descasado",
+  "neofobia_max": 1.0,
+  "nutricao": 0.1,
+  "pref_max": 1.0,
+  "pref_min": 0.2,
+  "rotacao_ofertas": [
+   [
+    "a"
+   ],
+   [
+    "b",
+    "c"
+   ],
+   [
+    "a",
+    "b",
+    "c"
+   ],
+   [
+    "c"
+   ],
+   [
+    "a",
+    "b"
+   ],
+   [
+    "b"
+   ],
+   [
+    "a",
+    "c"
+   ]
+  ],
+  "taxa_incentivo": 0.3,
+  "w_fruta": 6.0
+ },
+ "ConfigGenoma": {
+  "ligado": false
+ },
+ "ConfigGrupo": {
+  "ids": [
+   "A",
+   "B"
+  ],
+  "ligada": false,
+  "orcamento_por_dia": 16,
+  "raio_toque_celulas": 1
+ },
  "ConfigHabituacao": {
   "categorias": [
    "demora",
@@ -912,6 +1559,14 @@
   "min_sessoes_treino": 6,
   "prob_seq_min": 0.6
  },
+ "ConfigInformacao": {
+  "janela_min": 240,
+  "ligada": false
+ },
+ "ConfigJulgamentoFruta": {
+  "ligada": false,
+  "no_orcamento": true
+ },
  "ConfigLesoes": {
   "efeito_qualificacao": "condicao_adulto",
   "experiencia_max": 0.05,
@@ -925,10 +1580,44 @@
   "prob_lesao_derrota": 0.2
  },
  "ConfigLobos": {
+  "alvo_aprendido": false,
+  "alvo_por_arvore": false,
   "aprendizado_ligado": false,
   "bits_ponto_fixo": 10,
+  "entradas_sociais": false,
   "escala_ticks_desde_cuidado": 480.0,
-  "maximo_pesos": 1000
+  "fator_familiaridade": 16,
+  "g_plano": 0,
+  "janela_latencia_ticks": 120,
+  "janela_social_ticks": 240,
+  "maximo_pesos": 1000,
+  "memoria_ganho": 0,
+  "memoria_janela_recencia_ticks": 240,
+  "memoria_ligada": false,
+  "memoria_modo": "relevante",
+  "memoria_permutacao": [],
+  "modelo_outros": false,
+  "paladar": false,
+  "passo": 512,
+  "piso_peso": 64,
+  "presenca_fruta_mundo": false,
+  "recompensa_elogio": 1.0,
+  "recompensa_pedido_ignorado": -0.5,
+  "recompensa_repreensao": -1.0,
+  "recompensa_tapa": -1.0,
+  "teto": 1024,
+  "teto_plano": 2048,
+  "traco_decisoes": 0,
+  "traco_fator": 0,
+  "w0_alvo": 64,
+  "w0_info": 0,
+  "w0_pedido": 0
+ },
+ "ConfigLutaCorpo": {
+  "ligada": false
+ },
+ "ConfigLutaMemoria": {
+  "ligada": false
  },
  "ConfigMemoria": {
   "escala_feedback": 3.0,
@@ -984,6 +1673,149 @@
   "ridge_bradley_terry": 0.01,
   "tolerancia_bradley_terry": 1e-10
  },
+ "ConfigModeloMundo": {
+  "escala": 1024,
+  "ligada": false,
+  "passo_desfecho": 256,
+  "passo_mapa": 128,
+  "raio_ancora_celulas": 2,
+  "teto_modelo": 200
+ },
+ "ConfigMundo": {
+  "atrito": 8,
+  "bola_max_celulas": 10,
+  "bola_min_celulas": 3,
+  "celulas_x": 64,
+  "celulas_y": 30,
+  "cheiro_fruta": 32,
+  "cheiro_racao": 64,
+  "custo_energia_por_subunidade": 0.00016666666666666666,
+  "efeito_podre": -0.1,
+  "fome_max_comer_achado": 0.85,
+  "frutas_por_queda_max": 3,
+  "frutas_por_queda_min": 1,
+  "ganho_humor_bola": 0.15,
+  "layout": {
+   "arvores": [
+    [
+     "J1",
+     22,
+     6,
+     "a"
+    ],
+    [
+     "J2",
+     29,
+     20,
+     "b"
+    ],
+    [
+     "J3",
+     19,
+     14,
+     "c"
+    ],
+    [
+     "M1",
+     53,
+     4,
+     "a"
+    ],
+    [
+     "M2",
+     60,
+     15,
+     "b"
+    ],
+    [
+     "M3",
+     50,
+     23,
+     "c"
+    ],
+    [
+     "M4",
+     62,
+     26,
+     "a"
+    ],
+    [
+     "M5",
+     56,
+     10,
+     "b"
+    ],
+    [
+     "M6",
+     55,
+     19,
+     "c"
+    ]
+   ],
+   "bola_inicio": [
+    40,
+    15
+   ],
+   "comedouro": [
+    10,
+    15
+   ],
+   "ninho": [
+    4,
+    15
+   ],
+   "nome": "padrao",
+   "regioes": [
+    [
+     "casa",
+     0,
+     15
+    ],
+    [
+     "jardim",
+     16,
+     33
+    ],
+    [
+     "campo",
+     34,
+     47
+    ],
+    [
+     "mata",
+     48,
+     63
+    ]
+   ]
+  },
+  "ligada": false,
+  "limiar_cheiro_explorar": 16,
+  "longe_max_celulas": 30,
+  "longe_min_celulas": 20,
+  "maduro_fruta_min": 720,
+  "maduro_racao_min": 1440,
+  "max_frutas_por_arvore": 4,
+  "max_vistos": 8,
+  "mult_bola_campo": 2,
+  "mult_queda": 1.0,
+  "nutricao_fruta": 0.15,
+  "p_queda_jardim": 0.010416666666666666,
+  "p_queda_mata": 0.020833333333333332,
+  "passo_cheiro_celulas": 8,
+  "passo_mundo_ticks": 15,
+  "perto_max_celulas": 2,
+  "prazo_podre_min": 720,
+  "raio_cheiro_celulas": 24,
+  "raio_mancha_celulas": 3,
+  "raio_pegar_celulas": 1,
+  "raio_queda_celulas": 2,
+  "raio_visao_celulas": 6,
+  "recarga_min": 720,
+  "sub": 16,
+  "vagar_max_celulas": 12,
+  "vagar_min_celulas": 4,
+  "velocidade": 4
+ },
  "ConfigObediencia": {
   "acoes_sujeitas": [
    "alimentar",
@@ -998,6 +1830,127 @@
   "limiar_conflito": 0.3,
   "limiar_motivo": 0.05,
   "prob_fazer_outra": 0.5
+ },
+ "ConfigOlfato": {
+  "afastamento_narinas": 8,
+  "cheiro_marca": 16,
+  "cheiro_pet": 32,
+  "comida": false,
+  "idade_marca": 240,
+  "k_adaptacao": 753,
+  "ligada": false,
+  "limiar": 4,
+  "max_marcas": 16,
+  "meia_saturacao": 32,
+  "meia_vida_adaptacao": 60,
+  "narinas": 2,
+  "outro_pet": false,
+  "raio_celulas": 24,
+  "teto_intensidade": 4096
+ },
+ "ConfigOuvido": {
+  "afastamento_ouvidos": 8,
+  "k_adaptacao": 753,
+  "ligada": false,
+  "limiar": 4,
+  "meia_saturacao": 32,
+  "meia_vida_adaptacao": 60,
+  "ouvidos": 2,
+  "raio_som_celulas": 16,
+  "som": 64,
+  "teto_intensidade": 4096
+ },
+ "ConfigPaladar": {
+  "ligada": false,
+  "perfis": {
+   "a": {
+    "amargo": 0,
+    "azedo": 112500,
+    "doce": 337500,
+    "salgado": 0
+   },
+   "b": {
+    "amargo": 112500,
+    "azedo": 337500,
+    "doce": 0,
+    "salgado": 0
+   },
+   "c": {
+    "amargo": 337500,
+    "azedo": 0,
+    "doce": 112500,
+    "salgado": 0
+   },
+   "racao": {
+    "amargo": 0,
+    "azedo": 0,
+    "doce": 0,
+    "salgado": 112500
+   }
+  }
+ },
+ "ConfigPedido": {
+  "dias_pedido": 10,
+  "janela_min": 240,
+  "ligada": false
+ },
+ "ConfigPetQuePensaMundo": {
+  "ligada": false
+ },
+ "ConfigRedeDeSi": {
+  "escala": 1024,
+  "faixas_idade": [
+   96,
+   288,
+   672
+  ],
+  "fator_erro": 64,
+  "horizontes": [
+   1,
+   4,
+   16
+  ],
+  "ligada": false,
+  "maximo_pesos": 1000,
+  "passo": 64,
+  "teto": 4096
+ },
+ "ConfigSacudir": {
+  "galho_max": 3,
+  "ligada": false,
+  "recarga_galho_min": 240
+ },
+ "ConfigSentidos": {
+  "ligada": false,
+  "olfato": {
+   "afastamento_narinas": 8,
+   "cheiro_marca": 16,
+   "cheiro_pet": 32,
+   "comida": false,
+   "idade_marca": 240,
+   "k_adaptacao": 753,
+   "ligada": false,
+   "limiar": 4,
+   "max_marcas": 16,
+   "meia_saturacao": 32,
+   "meia_vida_adaptacao": 60,
+   "narinas": 2,
+   "outro_pet": false,
+   "raio_celulas": 24,
+   "teto_intensidade": 4096
+  },
+  "ouvido": {
+   "afastamento_ouvidos": 8,
+   "k_adaptacao": 753,
+   "ligada": false,
+   "limiar": 4,
+   "meia_saturacao": 32,
+   "meia_vida_adaptacao": 60,
+   "ouvidos": 2,
+   "raio_som_celulas": 16,
+   "som": 64,
+   "teto_intensidade": 4096
+  }
  },
  "ConfigSombrio": {
   "epsilon_minimo": 0.2,
@@ -1183,6 +2136,9 @@
   "teto_vida": 36.0,
   "vinculo_forcar": -0.05
  },
+ "ConfigTrocaDigestao": {
+  "taxa_lenta": 56250
+ },
  "ConfigVinculo": {
   "alfa": 0.1,
   "inicial": 0.5,
@@ -1197,5 +2153,38 @@
   "ligada": false,
   "limiar_energia": 0.25,
   "limiar_necessidade": 0.5
+ },
+ "ConfigVozV4": {
+  "amostra_kappa_por_celula": 8,
+  "conferencia_injecao_por_celula": 2,
+  "distinct_n": [
+   1,
+   2
+  ],
+  "falas_por_sequencia_es": 5,
+  "k_selecao": [
+   [
+    "bebe",
+    1
+   ],
+   [
+    "crianca",
+    1
+   ],
+   [
+    "adolescente",
+    2
+   ],
+   [
+    "adulto",
+    2
+   ]
+  ],
+  "limiar_exemplo_formato": 0.1,
+  "margem_custo": 0.5,
+  "min_palavras_frase_modelo": 3,
+  "n_ditas": 3,
+  "n_sequencias_es": 6,
+  "ngrama_repeticao": 3
  }
 }
