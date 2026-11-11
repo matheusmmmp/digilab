@@ -5,7 +5,7 @@ Coordenador: Matheus (sessão direta). Worker da etapa I0: Claude Code, Opus 5.5
 as IN-1 a IN-8 DECIDIDAS em 2026-11-07, pela recomendação; o I0 (a conferência) na `main` (#684); o I1 (a bateria como ferramenta)
 na `main` (#695); o plano do I2 APROVADO (#700); o I2a na `main` (#707); o I2b (a run da linha de base, faixa 85101…85505)
 na `main` (#718); o adendo 1 na `main` (#746); o plano do I5 APROVADO, na `main` (#747); o I5a na `main` (#751); o I5b na `main` (#768); o plano do I7 e o adendo 1 na `main` (#755, #769); o I7a (as medidas e
-o orquestrador) entregue.**
+o orquestrador) na `main` (#775); o I7b (a run única do I7) entregue.**
 
 Categoria: documentacao. Origem: Matheus, 2026-11-07: depois da conversa sobre o connectome e a escala, direcionar a pesquisa para o
 temperamento herdado, o sinal do dono, a memória de episódios e o hábito, com uma medida comum de individualidade.
@@ -238,3 +238,18 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
 - **O custo passa do dobro da estimativa do plano** (45 s por pet e 1 h 10 min). A projeção para as 360 pets é de cerca de 6 h com 4
   processos. Pela seção 8 do plano, a IR-6 volta ao Matheus antes da run.
 - **As leituras do plano** estão no registro: D-IND-I7a-1 a 8.
+
+## Resultado da etapa I7b (2026-11-11, Claude Code, Opus 5.5, branch `v3-individualidade-i7b`)
+
+- **O registro:** a seção 13 do plano do I7, commitada e empurrada antes da primeira vida (`3f7b1fa`), com a IR-6 mantida pelo Matheus.
+- **A run única:** 360 pets e 6 120 ramos, em 2 h 48 min com 4 processos. Todas as conferências G-I7-0 a 3 passaram. Os artefatos estão em
+  `artifacts_v3_individualidade_i7/`.
+- **O resultado** está na seção 9 do `docs/RESULTADO_V3_INDIVIDUALIDADE.md`:
+  - nas seis células, nenhuma das quatro hipóteses se declara;
+  - a diferença do tapa cresce com os dias (γ_E > 0, com a régua crua), mas a idade não importa (β_E ≈ 0);
+  - outro acaso faz do ramo um gêmeo em todas as idades (Φ_A ≈ 1);
+  - a E-I7 não se confirma na H-CAN, mas se confirma nas facetas (nenhum REL+F − REL);
+  - a E-I7b se confirma em 4 das 6 células, com efeito pequeno.
+- **O exploratório (9.6, fora do plano):** o tapa é tudo ou nada, pet a pet. Em 2/3 dos ramos ele some do comportamento e fica só na
+  memória autobiográfica; em 1/3 o ramo vira quase um gêmeo. A leitura PROPOSTA é o deslocamento da rng de política por um reflexo.
+- **As leituras** estão no registro: D-IND-I7b-1 a 4.

@@ -332,3 +332,37 @@ Os dois ficam só no descritivo, sem frase de leitura.
 | **A1-3** | a forma em U | **entra**, com as duas diferenças | sem ela, um U vira "a idade não importa"; com ela, o Φ(6) pesa mais que as outras idades na leitura do β |
 | **A1-4** | a E-I7b | **entra como expectativa**, sem gate | nenhum, porque é só escrita antes; sem ela, a leitura do E − E° fica sem expectativa |
 | **A1-5** | o estado interno e o efeito comum | **entram só no descritivo**, com a distância do estado escrita pelo I7a | como leitura, pediriam regras sem base; fora do plano, perde-se o caso do evento que some do comportamento e fica no cérebro |
+
+## 13. O registro da análise
+
+Escrito em 2026-11-10 (Claude Code, Opus 5.5, branch `v3-individualidade-i7b`), antes da primeira vida do I7b, como a seção 10 manda.
+
+- **O código:** o commit `3e22ad45` da `main` (o merge do #775, o I7a). O I7b não muda o código; este registro entra num commit próprio,
+  empurrado antes da run.
+- **Os sha256:**
+  - o orquestrador `experiments/run_v3_individualidade_i7.py`: `ddbdab3b293038bda548514570bc266648b2dd478b717acaeb3473069731e7f2`;
+  - o `digilab/metrics.py`: `cf2feb8fdeaa0abebb1dd6b43e449ca892ed5eb146c74db9578624235f49e93e`;
+  - as vidas do I2, `artifacts_v3_individualidade/vidas.tar.gz`: `f07fb6ce2a5db78c494e34b00e364b12e08687b776d4bda5fc3d62e1409dd100`;
+  - a config `experiments/configs/v3_individualidade/individualidade_i7.json`:
+    `988ee4737679958364c954eecfbbe3faea4682f88404ccdad96179dcc306803a`.
+- **O custo da fumaça** (as sementes 101 e 202, K = 1, 14 dias, 12 pets, 4 processos):
+  - uma pet sozinha, num processo, levou 93 s (cada ramo, vivido duas vezes, cerca de 5 s);
+  - a fumaça levou 12 min 20 s de parede, 62 s por pet com 4 processos, com a suíte inteira de outra sessão rodando ao lado;
+  - a projeção para as 360 pets é de cerca de 6 h com 4 processos, contra 1 h 10 min da seção 8. Passou do dobro.
+- **A IR-6 mantida:** levada ao Matheus pela seção 8, ela fica como está, todo ramo vivido duas vezes ("Sim, mantém e mergeia",
+  2026-11-10).
+- **A distância do estado interno (12.5) fixada:** a D-IND-I7a-4 do registro de 2026-11 (a fração das folhas do
+  `estado_interno()["modulos"]` que diferem ou só existem num dos dois, no fim de cada dia; os `motivos` fora). PROPOSTA, SEM FONTE.
+- **O comando:**
+
+  ```bash
+  python experiments/run_v3_individualidade_i7.py --config experiments/configs/v3_individualidade/individualidade_i7.json --processos 4
+  ```
+
+  A saída vai para `artifacts_v3_individualidade_i7/`, que não existe antes da run.
+- **A suíte do dia** (`python -m pytest tests/ -q`, na branch `v3-individualidade-i7b` sobre `3e22ad45`): 5 249 passaram, 9 pulados e 3
+  falharam, em 2 h 35 min (com outra run ao lado). As três falhas são das listas do G2 de outras frentes e não tocam o I7:
+  - `test_digibrain_etapa0.py::test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave` e
+    `test_digibrain_vidas.py::test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain` pedem o `experiments/entradas_dc4.py`;
+  - `test_redecidir_evento.py::test_g2_separado_nada_fora_do_pacote_e_do_orquestrador_le_a_chave` pede o
+    `experiments/auditoria_pet_vivo.py`.
