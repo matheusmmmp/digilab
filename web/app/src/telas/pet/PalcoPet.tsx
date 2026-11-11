@@ -14,7 +14,7 @@ import { CENA } from "./cenaEstado.ts";
 import { alturaSono, desenharZz } from "./sono.ts";
 import { emoteDaReacaoAgora } from "./reacao.ts";
 import { fomeNoEmote } from "../../hudPet.ts";
-import { EMOTE_ATLAS as EMOTE_ICONE, EMOTE_GRADE as GRADE_DO_EMOTE, comerAgora, desenharEfeitos, emoteAgora, type EntradaCena } from "./cenaAcao.ts";
+import { EMOTE_ATLAS as EMOTE_ICONE, EMOTE_GRADE as GRADE_DO_EMOTE, comerAgora, comidaPerto, desenharEfeitos, emoteAgora, type EntradaCena } from "./cenaAcao.ts";
 
 const ICONE_ACAO: Record<string, string> = { dormir: "zz", chamar_atencao: "exclam", emburrar: "raiva", brincar: "nota", explorar: "pergunta", comer: "carne" };
 
@@ -142,7 +142,7 @@ function desenharPetUp(cx: CanvasRenderingContext2D, a: AtlasOk, g: Geo, quadro:
   if (m.e.saude < .3) marcaSaude(cx, K);
 }
 /** a entrada da cena de acao (cenaAcao.ts) com o que o motor registrou agora */
-function entradaCena(): EntradaCena { const m = jogoAtual().motor; return { acao: m.acao, sujeira: m.e.sujeira, chave: String(m.semente) }; }
+function entradaCena(): EntradaCena { const m = jogoAtual().motor; return { acao: m.acao, sujeira: m.e.sujeira, chave: String(m.semente), comidaPerto: comidaPerto(m.mundo) }; }
 /** o clipe Comer no corpo do pet da ilha (cenaAcao.ts, escolherComer): a carne sobre a cabeca e as migalhas saem, o clipe ja traz a comida */
 const comeNoClipe = (): boolean => comerAgora().tocou === "clipe";
 /** o icone de agora: o flash do dono; a cena (o toque, o cocô, a acao do pet); a fome, so se a cena nao tem um (e sem o clipe Comer) */

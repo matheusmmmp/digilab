@@ -69,3 +69,19 @@ O teste `test/cenario_lugar_lembrado.test.ts`:
 Os achados estão no registro (D-CADEIA-2 e D-CADEIA-3):
 - o lugar vazio não perde valor nesta janela;
 - o A nem come a ração do treino em 4 das 5 sementes.
+
+## 10. Etapa 2 (2026-11-11): a cena só mastiga com o que comer e o lugar vazio no rosto
+
+Branch `v3-cadeia-f2`, sobre a etapa 1. Só vista.
+
+- **D3:**
+  - `comidaPerto` (`src/telas/pet/cenaAcao.ts`): a comida a até uma célula do pet;
+  - `escolherComer`, `gestoAgora` e `desenharEfeitos` só desenham o comer com ela;
+  - a ilha (`ilha/papel.ts`), o palco 2D (`PalcoPet.tsx`) e a reserva (`MundoReserva.tsx`) passam a informação.
+- **D6:** `ultimoVazio` e o rosto Triste por 2 s quando a memória grava uma visita vazia nova (`src/telas/pet/momentos.ts`).
+- **Testes:**
+  - `test/ilha_comer_clipe.test.ts`: o comer sem nada perto e `comidaPerto`;
+  - `test/momentos.test.ts`: o lugar vazio;
+  - os e2e do comer e da cena seguem passando.
+- **Desvios:** D-CADEIA-5 e 6.
+
