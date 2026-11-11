@@ -36,6 +36,10 @@ export interface EntradaReacao { chave: string; humor: number; energia: number; 
 
 let evento: { reacao: ReacaoRosto; desde: number; ms: number } | null = null;
 let tapas: number[] = [];
+/** quando foi o ultimo carinho do dono (so vista; o painel da TV do gosto visual le, UX-GV-7 de docs/PLANO_UX_GOSTO_VISUAL.md); null antes
+    do primeiro */
+let carinhoEm: number | null = null;
+export const ultimoCarinhoEm = (): number | null => carinhoEm;
 let atual: { chave: string; reacao: ReacaoRosto; desde: number } | null = null;
 
 /** o dono fez uma acao agora (acoes.ts, `agir`): vira o evento da reacao, se for uma das que tem. `fome` e a do pet antes da acao */
@@ -45,7 +49,7 @@ export function registrarAcaoDono(acao: string, agora: number, fome: number): vo
     tapas = [...tapas.filter(t => agora - t < REACAO.janelaMedoMs), agora];
     evento = { reacao: tapas.length >= REACAO.tapasMedo ? "Medo" : "Triste", desde: agora, ms: REACAO.eventoMs };
     emitirVoz("choro");                                       /* HR2: a voz do pet; o tapa seco (CC0) e da HR4 */
-  } else if (acao === "acariciar") evento = { reacao: "Carinho", desde: agora, ms: REACAO.eventoMs };
+  } else if (acao === "acariciar") { evento = { reacao: "Carinho", desde: agora, ms: REACAO.eventoMs }; carinhoEm = agora; }
   else if (acao === "alimentar" && fome > REACAO.semFome) { evento = { reacao: "Recusa", desde: agora, ms: REACAO.eventoMs }; emitirSom("cuidado_recusa"); emitirVoz("resmungo"); }
 }
 /** um momento do pet que pede um rosto (momentos.ts, HR1: o Cansado ao acordar, o Triste do chamado perdido, a Recusa da fruta podre), por `ms` */

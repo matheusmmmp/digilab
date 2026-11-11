@@ -8,7 +8,7 @@ import { createElement as h } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vitest";
 import { GOSTO_VISUAL_LIGADO, gostoVisualLigado } from "../src/gostoVisual/chave.ts";
-import { GostoVisual, PetAssistindo } from "../src/gostoVisual/GostoVisual.tsx";
+import { GostoVisual } from "../src/gostoVisual/GostoVisual.tsx";
 import { analisarQuadro, vetorDoSom } from "../src/gostoVisual/sentidos.ts";
 import {
   COMPONENTES, alvo, doTexto, valores, estadoInicial, gostaMaisDe, inatoDaSemente, paraTexto, passo, tempoJunto, type EstadoGosto, type Sentido,
@@ -47,13 +47,21 @@ describe("a chave", () => {
     } };
     andar(raiz);
     /* o cantinho da TV (ilha/cantinhoTv.ts e cantinhoTvConta.ts; test/gosto_visual_tv.test.ts confere a chave dele) lê a chave e o estado da TV */
-    expect(quem.sort()).toEqual(["App.tsx", "cantinhoTv.ts", "cantinhoTvConta.ts"]);
+    /* desde a etapa 1 do PLANO_UX_GOSTO_VISUAL a tela Pet abre o painel da TV (PainelTv.tsx), também atrás da chave (gosto_visual_painel.test.ts) */
+    /* a etapa 2 nao acrescenta nenhum: o toque na TV e o sinal da reacao chegam ao palco e aos lugares pela cena (cenaEstado.ts) */
+    expect(quem.sort()).toEqual(["App.tsx", "TelaPet.tsx", "cantinhoTv.ts", "cantinhoTvConta.ts"]);
   });
   test("o protótipo fica fora do motor, do log e do save: não importa mudarMotor, aplicarEvento nem o save", () => {
     const dir = join(import.meta.dirname, "..", "src", "gostoVisual");
     for (const n of readdirSync(dir)) {
       const t = readFileSync(join(dir, n), "utf8");
       expect(t, n).not.toMatch(/mudarMotor|aplicarEvento|trocarMotor|from "\.\.\/save\.ts"/);
+      /* nem pelas beiradas: nada lê o jogo solto, anda o tempo ou chama o motor direto */
+      expect(t, n).not.toMatch(/jogoAtual|\.observar\(|\.avancar\(|tempo\.ts|tocarNoPet/);
+      /* a única porta para o log é o Carinho do jogo, uma vez, no hospedeiro (a janela pequena; UX-GV-7) */
+      const portas = t.match(/\bagir\(/g) ?? [];
+      if (n === "GostoVisual.tsx") { expect(portas, n).toHaveLength(1); expect(t).toContain('if (carinhoVale()) agir("acariciar");'); }
+      else { expect(portas, n).toHaveLength(0); expect(t, n).not.toMatch(/acoes\.ts/); }
     }
   });
 });
@@ -159,22 +167,5 @@ describe("a TV do jogo", () => {
       const r: string[] = [], tv = ligarTvDoJogo(sem, (s, nome) => { r.push(nome + JSON.stringify(s)); if (r.length === 3) { tv.parar(); ok(r); } }, 1);
     });
     expect(await colher(101)).toEqual(await colher(101));
-  });
-});
-
-describe("a vista", () => {
-  test("mostra a reação, o gosto de hoje e o de nascença separados, e o tempo junto", () => {
-    const ina = inatoDaSemente(101), e = rodar(101, visto(0.5, 0.5, 0.5, 0.5), 30);
-    const html = renderToStaticMarkup(h(PetAssistindo, {
-      v: { sprite: null, leitura: { agrado: 0.9, interesse: 0.8, novidade: 0, vontade: 0.8, olhando: true, reacao: "adorando" }, sentido: visto(0.5, 0.5, 0.5, 0.5), inato: ina, estado: e, capturando: true, temSom: false, origem: "a sua tela" },
-      acoes: null,
-    }));
-    expect(html).toContain("adorando");
-    expect(html).toContain("Gosta mais de:");
-    expect(html).toContain("De nascença:");
-    expect(html).toContain("30 s");
-    expect(html).toContain("Sem som");
-    expect(html).toContain("Assistindo: a sua tela");
-    expect(html).not.toContain(">ritmo<"); /* sem som, as barras do som não aparecem */
   });
 });

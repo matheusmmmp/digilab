@@ -111,6 +111,10 @@ export const ENFEITES_GRADE = {
   /* a TV de tubo (2026-11-11, secao 20 da tarefa): um marco pequeno, perto da barraca do Tamer */
   tv: { quantos: 1, folga: 1, chao: ["grama"], clareira: 1.4 },
 } as const;
+/** a TV em tres quartos (docs/PLANO_UX_GOSTO_VISUAL.md, a UX-GV-3, aprovada pelo Matheus em 2026-11-11 e valendo sempre): a frente dela fica a
+    este angulo (graus) do sul, que e de onde a camera olha, virada para o lado do meio da ilha (a praca na ilha com agua, a area na planta A).
+    Assim a tela aparece e quem assiste na frente dela fica de perfil. PROPOSTO, SEM FONTE */
+export const TV_TRES_QUARTOS = 40;
 /** a planta A da ilha inicial (docs/pranchas/ux-ilha-layout/, IL-1 a IL-4 DECIDIDAS em 2026-11-08; a vista em docs/pranchas/ux-ilha-planta-a/):
     so a parte da vista, em celulas do mundo (x leste, z sul), a mesma em todo mapa de 64 x 30. O ninho, a tigela, a bola e as frutiferas sao
     do motor (o LayoutMundo) e nao entram aqui.

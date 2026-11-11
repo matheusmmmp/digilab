@@ -7,7 +7,7 @@ import { DO_ESP, Motor, NOME_EST, OVO, chaveSprite, nomeEstagio, nomeForma } fro
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { abrirModal } from "../../componentes/modal.ts";
 import { BotaoHx, ChipHx, PainelHx } from "../../componentes/hx/index.ts";
-import { trocarMotor, useJogo } from "../../jogo.ts";
+import { trocarGrupoDoSave, trocarMotor, useJogo } from "../../jogo.ts";
 import { CHAVE } from "../../save.ts";
 import { abrirGuardado, ativarGuardado, lerGuardados } from "../../pets.ts";
 import { abrirHeranca, podeSerPai } from "../../heranca.ts";
@@ -24,7 +24,8 @@ export function voltarAoAnterior(): string {
   if (!bruto) return "Não há pet anterior guardado.";
   const d = JSON.parse(bruto);
   if (!Number.isInteger(d?.semente) || !Array.isArray(d?.log)) throw new Error("pet anterior guardado não tem semente e registro");
-  trocarMotor(Motor.reproduzir(d.semente, d.log, d.versao ?? 1), "save");
+  if (d.grupo === true) trocarGrupoDoSave(d);                  // o par dos dois pets (CO4d)
+  else trocarMotor(Motor.reproduzir(d.semente, d.log, d.versao ?? 1), "save");
   try { localStorage.removeItem(CHAVE_ANTERIOR); } catch { /* ja trocou */ }
   return "Pet anterior restaurado pelo replay do registro guardado.";
 }

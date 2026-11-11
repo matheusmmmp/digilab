@@ -2298,6 +2298,80 @@ CONFIG_OUVIDO = ConfigOuvido()
 
 
 # =====================================================================
+# V3, GOSTO_VISUAL, P1b: o orgao da tela no corpo (docs/ESPEC_GOSTO_VISUAL_P1.md, secoes 2 e 4; GV-16, GV-17, GV-18, GV-21 e GV-23 pela
+# recomendacao, D-GV-P1-1). Desligada por padrao: a vida de hoje byte a byte (o gabarito tests/gabaritos/gosto_visual_vidas_de_hoje.json).
+# Ligada (so com o mundo fisico e com `drives_novos` e `gestos` no ConfigCorpo), o corpo tem sete canais da tela (CANAIS_TELA: 4 da visao,
+# 3 do som), cada um com o quimico da adaptacao `adaptacao_tela_<canal>`, no molde do Ouvido (a habituacao e a adaptacao):
+#     a <- a + passo(I - a)                           a cada tick, com a k da meia-vida (o mesmo passo dos orgaos)
+#     tela_<canal>  = div_arred(S x I, teto_intensidade)          o nivel, sem adaptacao (o que o gosto inato compara, P1d)
+#     e_c = max(0, I_c - a_c - limiar);  E = soma dos e_c          a parte adaptada dos sete canais
+#     novidade_tela = div_arred(S x E, E + meia_saturacao)         a novidade, saturada como a leitura dos orgaos
+# e os emissores da secao 4 sobre quimicos que ja existem (o tedio, o estresse, o susto e a tristeza). Fica numa config propria, e nao
+# como campo da ConfigCorpo, para o dump da ConfigCorpo (o gabarito de paridade e o espelho TS) nao mudar, como a ConfigLutaCorpo.
+# Todos os numeros PROPOSTOS, SEM FONTE (nenhuma fonte sustenta o mapa quimico da secao 4: e desenho). Status em corpo.PARAMETROS_TELA.
+# A escala: o estimulo I e um inteiro em [0, teto_intensidade], e teto_intensidade = C = 450000, entao um perfil de programa em [0, C]
+# (secao 1.1) entra sem conversao e os 16 niveis do evento `sentido_tela` (secao 1.2) caem exatos em C/15 = 30000.
+
+
+@dataclass(frozen=True)
+class ConfigTela:
+    """O orgao da tela (GOSTO_VISUAL, P1b). Os numeros e o porque de cada um:
+
+    limiar               15000  = meio nivel do evento (C/30): uma adaptacao que falta menos de meio nivel nao conta como novidade
+    meia_saturacao       450000 = C: a novidade e S/2 quando a soma das partes adaptadas vale um canal inteiro. Um nivel a mais num canal
+                                  so (e = 15000) da ~33 (de S = 1024); tres canais mudando C/3 cada (E = 405000) dao ~485; ligar a TV com
+                                  os sete canais no meio (E ~ 1,47 milhao) da ~784 e, parado, cai abaixo de S/2 em ~2 meias-vidas (o
+                                  enjoo); no teto, ~892 < S. Com C/5 (o primeiro ensaio) a saturacao escondia a queda por ~4,5 h de jogo
+    meia_vida_adaptacao  60     ticks, a do Olfato e do Ouvido de hoje: a novidade de um programa parado cai a metade em uma hora de jogo
+    k_adaptacao          753    = corpo.k_meia_vida(60), na escala 2**bits_meia_vida (conferido por teste)
+    teto_intensidade     450000 = C (acima)
+    tedio_assistir       45000  a base da atividade("assistir") no tedio (DS-4, GV-21): a menor das de hoje (a do brincar); olhar e
+                                  passivo e a TV nao pode virar a melhor atividade (o risco da GV-21)
+    ganho_humor_agrado   4500   a tristeza cai div_arred(ganho x agrado, S) no agrado maximo (GV-16): o humor do explorar de hoje (+0,01,
+                                  o pet_explorar_tristeza), um ganho pequeno, bem abaixo da bola (67500)
+    estresse_corte       337500 = 3C/4, o estresse_limiar dos drives (GV-17): so o volume ou o movimento acima de 0,75 estressa
+    estresse_divisor     256    o estresse_divisor dos drives: por tick, div_arred(max(0, I_vol - corte) + max(0, I_mov - corte), 256);
+                                  um canal no teto estressa como um drive no teto (~439 por tick)
+    salto_volume         225000 = C/2: o susto so quando o volume sobe mais que meia escala entre dois `sentir_tela` (um estouro)
+    susto_salto          90000  o susto de um estouro: a metade do tapa (180000)
+    corte_novidade       512    = S/2: o `novidade_tela` acima disto conta como uma novidade (GV-23; quem chama o estimulo_novidade e o
+                                  motor, na P1c): um nivel a mais num canal nao conta, uma troca de cena conta"""
+
+    ligada: bool = False
+    limiar: int = 15000
+    meia_saturacao: int = 450000
+    meia_vida_adaptacao: int = 60
+    k_adaptacao: int = 753
+    teto_intensidade: int = 450000
+    tedio_assistir: int = 45000
+    ganho_humor_agrado: int = 4500
+    estresse_corte: int = 337500
+    estresse_divisor: int = 256
+    salto_volume: int = 225000
+    susto_salto: int = 90000
+    corte_novidade: int = 512
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigTela.ligada e bool: {self.ligada!r}")
+        _conferir_orgao("ConfigTela", self)
+        for campo in ("tedio_assistir", "ganho_humor_agrado", "estresse_corte", "estresse_divisor", "salto_volume", "susto_salto",
+                      "corte_novidade"):
+            v = getattr(self, campo)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigTela.{campo} tem de ser inteiro positivo: {v!r}")
+        if self.estresse_divisor < 2:
+            raise ValueError(f"ConfigTela.estresse_divisor tem de passar de 1 (o emissor com corte divide): {self.estresse_divisor}")
+        for campo in ("estresse_corte", "salto_volume"):
+            if getattr(self, campo) >= self.teto_intensidade:
+                raise ValueError(f"ConfigTela.{campo} tem de ficar abaixo do teto_intensidade ({self.teto_intensidade}): "
+                                 f"{getattr(self, campo)}")
+
+
+CONFIG_TELA = ConfigTela()
+
+
+# =====================================================================
 # V2, rede de si, etapa 2b (docs/TAREFA_V2_REDE_DE_SI.md; docs/PLANO_ANALISE_V2_REDE_DE_SI.md, secao 3, RS-3): a troca da digestao num
 # tick, gravada no registro como a troca do mutavel. O tick vem de quem monta a vida (a bancada: o fim do dia 7 numa vida de 14); a taxa
 # lenta, daqui. Sem a troca pedida, nada muda (a vida de hoje).
@@ -2807,6 +2881,10 @@ class ConfigDigibrainInatos:
 
 
 CONFIG_DIGIBRAIN_INATOS = ConfigDigibrainInatos()
+# o alcance da memoria de lugar na ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secoes 12.14 a 12.16; a IG-6): o `d_max` na proporcao do mapa
+# de 128 x 60 celulas (2 048 subunidades = 128 celulas; o de sempre, 1 024, e a largura do mapa de 64 x 30). So os pets do jogo na ilha
+# grande o usam (a v25 desde o ovo; os vivos, pelo evento). DECIDIDO (Matheus, 2026-11-11: "Sim, para 128 celulas")
+D_MAX_ILHA_GRANDE = 2048
 # o status de cada campo (conferido por teste contra os campos da dataclass): tudo PROPOSTO, salvo a escala (PE-12) e os dois da parte (b)
 # da L-2 (LS-4: os valores emprestados, sem calibracao) e os tres das M0 e M1 da C4 (a secao 8 da espec, decidida em 2026-11-01)
 PARAMETROS_DIGIBRAIN_INATOS: dict[str, tuple[str, str]] = {

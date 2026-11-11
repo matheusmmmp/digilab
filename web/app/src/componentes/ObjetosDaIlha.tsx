@@ -86,6 +86,7 @@ export function objetoNoPonto(el: { getBoundingClientRect(): { left: number; top
     const p = POS[o];
     if (p?.dentro && Math.hypot(cx - p.cx, cy - p.cy) <= p.raio) return o;
   }
+  if (CENA.mundo.tvEm?.(cx, cy)) return null;   /* a TV do cantinho (so com `?gosto_visual=1`) nao e a barraca */
   const l = CENA.mundo.lugarEm?.(cx, cy) ?? null;
   if (l === "portao" || l === "barraca") return l;
   const s = POS.saco;

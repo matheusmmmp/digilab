@@ -12,7 +12,7 @@ import {
   CD, TPD, nomeForma, observacao, type Motor, type Observacao, type TipoDono,
 } from "../../../motor/index.ts";
 import { comSinal, dec } from "../../componentes/Barras.tsx";
-import { jogoAtual, motorReal, trocarMotor, useJogo } from "../../jogo.ts";
+import { jogoAtual, motorReal, textoDoSaveAtual, trocarMotor, useJogo } from "../../jogo.ts";
 import { CHAVE_ANTERIOR, voltarAoAnterior } from "../pet/MeusPets.tsx";
 import { textoSave } from "../../save.ts";
 import { petDaReceita } from "../../pets.ts";
@@ -72,7 +72,7 @@ function petDoLado(l: Lado, semente: number): Motor {
 export function montarCenario(cen: Cenario, semente: number): { A: Motor; B: Motor } {
   const sa = hashSemente("cenario", cen.id, semente, "a"), sb = hashSemente("cenario", cen.id, semente, "b");
   const A = petDoLado(cen.a, sa), B = petDoLado(cen.b, sb);
-  try { if (!localStorage.getItem(CHAVE_ANTERIOR)) localStorage.setItem(CHAVE_ANTERIOR, textoSave(motorReal())); } catch { /* sem armazenamento */ }
+  try { if (!localStorage.getItem(CHAVE_ANTERIOR)) localStorage.setItem(CHAVE_ANTERIOR, textoDoSaveAtual()); } catch { /* sem armazenamento */ }
   trocarMotor(A, "save");
   rivalFixo = B;
   return { A, B };

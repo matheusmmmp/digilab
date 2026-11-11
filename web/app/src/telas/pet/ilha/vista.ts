@@ -24,7 +24,7 @@ import { comprimento, naRota, rotaEmTerra } from "./rotaConta.ts";
 import { FOCO_DEV, ILHA_DEV_AGUA, ILHA_DEV_GRANDE } from "./ilhaDev.ts";
 import { ponte } from "./ponte.ts";
 import * as THREE from "three";
-import { CMU_GRANDE, CMU_MVP_AGUA, TPD, eNoite, noMapa, type Mundo } from "../../../../motor/index.ts";
+import { CMU_GRANDE, CMU_MVP_AGUA, TPD, eNoite, noMapa, type Motor, type Mundo } from "../../../../motor/index.ts";
 import { habitatAtual, voltarParaIlha, type Habitat } from "../../../habitat.ts";
 import { jogoAtual } from "../../../jogo.ts";
 import { CENA, reservaDoPe } from "../cenaEstado.ts";
@@ -56,6 +56,7 @@ import { TRANCAS } from "../../../trancas.ts";
 import { mitologiaLigada } from "../../../mitologia.ts";
 import { SinaisDaIlha } from "./mitologia.ts";
 import { cantinhoNaVista, montarCantinho, type Cantinho } from "./cantinhoTv.ts";
+import { CAIXA_TV, CAMERA_CANTINHO, passoDaCamera, suave } from "./cantinhoTvConta.ts";
 
 const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -66,10 +67,32 @@ class VistaIlha {
   private readonly cenaIlha: CenaIlha;
   /** o fim da ilha (fimDaIlha.ts): o mar em volta, ate o horizonte */
   private readonly fim: FimDaIlha;
-  private readonly seguidor = new Seguidor();
+  /** os dois pets (docs/TAREFA_V3_COOPERACAO.md, CO4d): um seguidor e um papel por pet, pelo id dele no grupo ("so" com um pet so). O do pet em
+      foco e o de sempre (os getters `seguidor` e `papel`): a camera, o pegar, a coreografia e o resto da vista seguem com ele, como hoje. O
+      do irmao so segue a posicao do motor dele e desenha o papel (desenharIrmaos). Trocar o foco nao teleporta ninguem: cada pet mantem o
+      seu seguidor, e a camera desliza ate o novo foco (focoVoltando) */
+  private readonly porPet = new Map<string, { seguidor: Seguidor; papel: Papel }>();
+  private readonly apagados = new Set<string>();
+  private focoAntes: string | null = null;
+  private chaveFoco(): string {
+    const j = jogoAtual();
+    return j.grupo && !j.emLab ? j.foco : "so";
+  }
+  private par(ident: string): { seguidor: Seguidor; papel: Papel } {
+    let p = this.porPet.get(ident);
+    if (!p) {
+      /* o papel do pet do grupo desenha o motor dele; com o pet de teste na tela (ou um pet so), o pet na tela */
+      const qual = ident === "so" ? null : (): Motor => { const j = jogoAtual(); return j.grupo && !j.emLab ? j.grupo.motor(ident) : j.motor; };
+      p = { seguidor: new Seguidor(), papel: new Papel(qual) };
+      this.porPet.set(ident, p);
+      if (this.cenaIlha) this.cenaIlha.cena.add(p.papel.raiz);
+    }
+    return p;
+  }
+  private get seguidor(): Seguidor { return this.par(this.chaveFoco()).seguidor; }
+  private get papel(): Papel { return this.par(this.chaveFoco()).papel; }
   private readonly raio = new THREE.Raycaster();
   private readonly lida: CameraLida;
-  private readonly papel = new Papel();
   private readonly itens: Itens;
   /** MITOLOGIA, E0 e E1: os sinais dos deuses, a pedra, as pegadas, o pessego e o Myotismon (so com a chave `mitologia`) */
   private readonly mitologia: SinaisDaIlha;
@@ -137,6 +160,8 @@ class VistaIlha {
       o pet desenhado chegou a almofada com a TV ligada, fora da viagem e do treino */
   private readonly cantinho: Cantinho | null;
   private tvSentado = false;
+  /** a ida da camera ao cantinho com o painel da TV aberto (0 a 1; cantinhoTvConta.ts, passoDaCamera) */
+  private tvCamera = 0;
 
   readonly canvas: HTMLCanvasElement;
   private readonly mu: Mundo;
@@ -324,6 +349,21 @@ class VistaIlha {
     const caixas = this.objetos?.lugares, r = this.canvas.getBoundingClientRect();
     if (!caixas || !(r.width > 0 && r.height > 0) || cx < r.left || cx > r.right || cy < r.top || cy > r.bottom) return null;
     return lugarNoPonto(caixas, (x, y, z) => paraTelaNdc(this.lida, this.dobra, x, z, y), ((cx - r.left) / r.width) * 2 - 1, 1 - ((cy - r.top) / r.height) * 2);
+  }
+  /** a vista tem o cantinho da TV (so com a chave do prototipo do gosto visual) */
+  get temCantinho(): boolean { return this.cantinho !== null; }
+  /** a TV da ilha esta sob o ponto do cliente (px)? A caixa dela na tela, pela mesma dobra, com pelo menos CAIXA_TV.minPx de lado (o alvo de
+      toque); falso sem o cantinho ou fora da cena */
+  tvEm(cx: number, cy: number): boolean {
+    const c = this.cantinho?.caixa, r = this.canvas.getBoundingClientRect();
+    if (!c || !(r.width > 0 && r.height > 0) || cx < r.left || cx > r.right || cy < r.top || cy > r.bottom) return false;
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+    for (const x of [c.min[0], c.max[0]]) for (const y of [c.min[1], c.max[1]]) for (const z of [c.min[2], c.max[2]]) {
+      const [a, b] = paraTelaNdc(this.lida, this.dobra, x, z, y), px = r.left + ((a + 1) / 2) * r.width, py = r.top + ((1 - b) / 2) * r.height;
+      x0 = Math.min(x0, px); x1 = Math.max(x1, px); y0 = Math.min(y0, py); y1 = Math.max(y1, py);
+    }
+    const fx = Math.max(0, CAIXA_TV.minPx - (x1 - x0)) / 2, fy = Math.max(0, CAIXA_TV.minPx - (y1 - y0)) / 2;
+    return cx >= x0 - fx && cx <= x1 + fx && cy >= y0 - fy && cy <= y1 + fy;
   }
   /** o modo mundo: o ponto do mapa (subunidades) no cliente (px), pela mesma dobra */
   paraTela(x: number, y: number): [number, number] {
@@ -581,6 +621,19 @@ class VistaIlha {
     } else vertical(t.movel);
     return [ax, az];
   }
+  /** o ponto olhado com o painel da TV aberto: o meio do cantinho, deslocado para ele ficar a esquerda do painel de 900 px em diante (a mesma
+      conta da ancora dos lugares); abaixo disso, o meio do cantinho */
+  private focoNoCantinho(tv: Cantinho, base: [number, number], livre: boolean, dtMs: number, reduzido: boolean): [number, number] {
+    this.tvCamera = passoDaCamera(this.tvCamera, livre && tv.painelAberto(), dtMs, reduzido);
+    if (this.tvCamera <= 0) return base;
+    const c = tv.centro, [rx, rz] = this.direita, [fx, fz] = this.dirDobra, ppc = Math.max(1e-6, this.ppu / this.renderer.getPixelRatio());
+    /* de 900 px em diante o cantinho fica a esquerda do painel (o foco a direita dele); abaixo disso, acima da folha (o foco antes dele, no chao:
+       a distancia na tela encurta pelo seno da elevacao, como na ancora dos lugares) */
+    const seno = Math.max(0.2, Math.abs(this.orbitaVista.desloc[1]) / (Math.hypot(...this.orbitaVista.desloc) || 1));
+    const k = this.largo ? (0.5 - CAMERA_CANTINHO.largo) * this.larguraCss / ppc : 0;
+    const v = this.largo ? 0 : (this.alturaCss * this.fracEnq / 2 - CAMERA_CANTINHO.movel * this.alturaCss) / ppc / seno;
+    return this.entre(base, [c[0] + rx * k - fx * v, c[1] + rz * k - fz * v], suave(this.tvCamera));
+  }
   /** o ponto olhado com a viagem: do que a camera olharia sem ela (ou do lugar de onde veio, numa troca direta) ate o lugar. `p` e o progresso (0 a 1) */
   private focoDaViagem(base: [number, number], p: number, reduzido: boolean): [number, number] {
     const s = reduzido ? 1 : this.suave(p);
@@ -595,6 +648,10 @@ class VistaIlha {
     CURVA.uCurva.value = this.estilo.dobra;
     const { motor: m } = jogoAtual(), mu = m.mundo ?? this.mu, cm = mu.cm, sub = cm.sub;
     const dtMs = agora - this.ultimo, reduzido = movimentoReduzido(), jg = jogoAtual();
+    /* os dois pets (CO4d): o foco trocou, a camera desliza ate o pet novo */
+    const chave = this.chaveFoco();
+    if (this.focoAntes !== null && chave !== this.focoAntes && !this.naMao) this.focoVoltando = true;
+    this.focoAntes = chave;
     /* o pet na mao (CENA.petNaMao): entrou, o pendulo parte do zero; saiu, o desenho comeca onde o motor o pos (o "levar pet" ja foi
        gravado no pointerup, antes da marca cair), sem caminhar de volta */
     const mao = CENA.petNaMao ? CENA.maoPet : null;
@@ -646,6 +703,8 @@ class VistaIlha {
         const k = 1 - Math.exp(-Math.max(0, dtMs) / MAO.focoTauMs);
         this.foco = [this.foco[0] + dx * k, this.foco[1] + dz * k];
       } else { this.foco = [alvo[0], alvo[1]]; this.focoVoltando = false; }
+      /* com o painel da TV aberto (o prototipo do gosto visual), a camera vai ao cantinho e o deixa a esquerda do painel; fechado, volta */
+      if (this.cantinho) this.foco = this.focoNoCantinho(this.cantinho, this.foco, viagem === 0 && !aberta, dtMs, reduzido);
       if (viagem > 0) this.foco = this.focoDaViagem(this.foco, viagem, reduzido);
       if (aberta) this.foco = this.ab?.saida ? quadroDaSaida(this.ab.saida.de, agora - this.ab.saida.desde, this.foco, zoomDeSempre, TRANSICAO_MS).foco : aberta.foco;
     }
@@ -684,14 +743,9 @@ class VistaIlha {
       ppu, pxPorTexel, yPe, canvas: [this.renderer.domElement.width, this.renderer.domElement.height],
       razao: this.renderer.getPixelRatio(), reduzido, noite, golpe: cor.golpe, andandoVista: cor.andando, suspenso, olharPara,
     });
-    if (this.cantinho) {
-      /* o alto do papel do pet sobre o chao no pe dele (celulas), medido na tela: o quanto uma celula de altura ali sobe na tela, e onde o retangulo
-         do papel acaba (o mesmo topo de onde o PalcoPet tira o emote; o corte do sprite deixa uma folga acima da cabeca) */
-      const [cx, cz] = this.petCel, v = this.vLugar, dobra = this.dobra;
-      const pe = v.set(cx, dobrarY(0, cz, dobra, cx), cz).project(this.camera).y, um = v.set(cx, dobrarY(1, cz, dobra, cx), cz).project(this.camera).y;
-      const pxCel = ((um - pe) / 2) * this.alturaCss, peCss = ((1 - pe) / 2) * this.alturaCss;
-      this.cantinho.quadro({ agora, reduzido, dobra, sentado: this.tvSentado && !this.naMao, alturaPet: pxCel > 1e-6 ? (peCss - ret.y) / pxCel : 1 });
-    }
+    this.desenharIrmaos(agora, quadro, dtMs, reduzido, noite);
+    /* o cantinho da TV: a tela, e se o pet esta sentado (o sinal da reacao e do PalcoPet, no lugar dos emotes) */
+    this.cantinho?.quadro({ agora, reduzido, sentado: this.tvSentado && !this.naMao });
     /* o foco do HD-2D: a altura do pet na tela (0 embaixo, 1 em cima) */
     this.renderer.info.reset();
     /* o pet em papel fica sem o traco do estilo (pos.ts, SEM_CONTORNO): os filhos dele mudam, entao a camada e posta a cada quadro */
@@ -700,6 +754,40 @@ class VistaIlha {
     this.publicar(mu, m.e.tick, ret, pode);
     this.publicarLugaresTela();
     return ret;
+  }
+
+  /** os dois pets (CO4d): o irmao do pet em foco anda e aparece no papel dele, seguindo a posicao do motor dele (sem a coreografia, o pegar
+      e o golpe, que sao do pet em foco); os papeis de pets que nao estao mais na tela (o grupo que saiu) se apagam */
+  private desenharIrmaos(agora: number, quadro: number, dtMs: number, reduzido: boolean, noite: boolean): void {
+    const j = jogoAtual(), vivos = j.grupo && !j.emLab ? j.grupo.ids : ["so"];
+    for (const [k, p] of this.porPet) {
+      const vivo = vivos.includes(k);
+      if (!vivo && !this.apagados.has(k)) { p.papel.raiz.visible = false; this.apagados.add(k); }
+      if (vivo && this.apagados.has(k)) { p.papel.raiz.visible = true; this.apagados.delete(k); }
+    }
+    const rets: Record<string, { x: number; y: number; w: number; h: number }> = {};
+    CENA.irmaos = rets;
+    if (!j.grupo || j.emLab) return;
+    const canvas: [number, number] = [this.renderer.domElement.width, this.renderer.domElement.height];
+    for (const ident of j.grupo.ids) {
+      if (ident === j.foco) continue;
+      const o = j.grupo.motor(ident), omu = o.mundo!, cm = omu.cm, sub = cm.sub, p = this.par(ident);
+      if (this.apagados.has(ident)) { p.papel.raiz.visible = true; this.apagados.delete(ident); }
+      const pos = p.seguidor.seguir(omu.pet, dtMs, cm, { velJogo: velocidadeAtual(), acao: o.acao, dorme: j.nascendo > 0 || o.acao === "dormir", reduzido });
+      const cel: [number, number] = [pos[0] / sub, pos[1] / sub], yPe = dobrarY(0, cel[1], this.dobra, cel[0]);
+      let ppu = this.ppu, pxPorTexel = this.pxPorTexel;
+      const dir = this.camera.getWorldDirection(this.dirCam), prof = (cel[0] - this.camera.position.x) * dir.x
+        + (yPe - this.camera.position.y) * dir.y + (cel[1] - this.camera.position.z) * dir.z;
+      if (prof > 1e-3) {
+        ppu = this.renderer.domElement.height / 2 / (prof * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)));
+        pxPorTexel = Math.max(1, Math.round(TEXEL_ALVO * ppu));
+      }
+      rets[ident] = p.papel.atualizar({
+        agora, dt: Math.min(0.05, dtMs / 1000), quadro, cel, motor: omu.pet, camera: this.camera, ppu, pxPorTexel, yPe, canvas,
+        razao: this.renderer.getPixelRatio(), reduzido, noite, golpe: null, andandoVista: p.seguidor.caminhando, suspenso: null,
+      });
+      if (this.estilo.contorno) p.papel.raiz.traverse(x => x.layers.set(SEM_CONTORNO));
+    }
   }
 
   /** o lugar trancado fica apagado e o destrancado volta ao normal; so quando a tabela de trancas mudou (trancas.ts, escrita pelo nivel do Tamer) */
@@ -762,7 +850,11 @@ class VistaIlha {
     }, true, pode);
   }
 
-  dispose(): void { this.cantinho?.dispose(); this.mitologia.descartar(); this.marcadores.dispose(); this.papel.dispose(); this.pos.dispose(); this.renderer.dispose(); }
+  dispose(): void {
+    this.cantinho?.dispose(); this.mitologia.descartar(); this.marcadores.dispose();
+    for (const p of this.porPet.values()) p.papel.dispose();
+    this.pos.dispose(); this.renderer.dispose();
+  }
 
   /** a queda de qualidade (regra 10, PROPOSTO): sem vento, metade da grama e pixelRatio 1; so uma vez */
   baixarQualidade(): void {
@@ -869,6 +961,7 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
     paraTela: (x, y) => vista.paraTela(x, y),
     pousoEm: (x, y) => vista.pousoEm(x, y),
     lugarEm: (x, y) => vista.lugarEm(x, y),
+    ...(vista.temCantinho ? { tvEm: (x: number, y: number) => vista.tvEm(x, y) } : {}),
     get pet() { const p = vista.petDesenhado; if (!p) throw new Error("a cena do mundo ainda nao desenhou o pet"); return p; },
     get bola() { return vista.bolaDesenhada ?? undefined; },
   };

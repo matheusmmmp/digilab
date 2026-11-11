@@ -9,7 +9,10 @@ import type { Motor } from "../motor/index.ts";
    Os ovos novos ja nascem nela (a v23). */
 /** passa o pet para a ilha grande, se ele pode; devolve se passou (quem chama grava o save) */
 export function passarParaIlhaComAgua(m: Motor): boolean {
-  if (!m.podeMudarIlha) return false;
-  m.mudarIlha();
-  return true;
+  let passou = false;
+  if (m.podeMudarIlha) { m.mudarIlha(); passou = true; }
+  /* na ilha grande, a memoria de lugar do pet passa a alcancar 128 celulas (IG6; "Todos, por evento", Matheus, 2026-11-11): o pet que
+     acabou de chegar e o que ja estava la ganham o evento "ma", uma vez */
+  if (m.podeAlongarMemoria) { m.alongarMemoria(); passou = true; }
+  return passou;
 }
