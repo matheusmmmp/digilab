@@ -21,10 +21,10 @@
      de volta: Seguidor.pular), com a queda e o quique, e o foco volta ao pet em ~MAO.focoTauMs.
    Os kits carregam depois do terreno; se um modelo nao carrega, a cena cai na reserva (MundoReserva), com o erro no console. */
 import { comprimento, naRota, rotaEmTerra } from "./rotaConta.ts";
-import { ILHA_DEV_AGUA } from "./ilhaDev.ts";
+import { FOCO_DEV, ILHA_DEV_AGUA, ILHA_DEV_GRANDE } from "./ilhaDev.ts";
 import { ponte } from "./ponte.ts";
 import * as THREE from "three";
-import { CMU_MVP_AGUA, TPD, eNoite, noMapa, type Mundo } from "../../../../motor/index.ts";
+import { CMU_GRANDE, CMU_MVP_AGUA, TPD, eNoite, noMapa, type Motor, type Mundo } from "../../../../motor/index.ts";
 import { habitatAtual, voltarParaIlha, type Habitat } from "../../../habitat.ts";
 import { jogoAtual } from "../../../jogo.ts";
 import { CENA, reservaDoPe } from "../cenaEstado.ts";
@@ -67,10 +67,32 @@ class VistaIlha {
   private readonly cenaIlha: CenaIlha;
   /** o fim da ilha (fimDaIlha.ts): o mar em volta, ate o horizonte */
   private readonly fim: FimDaIlha;
-  private readonly seguidor = new Seguidor();
+  /** os dois pets (docs/TAREFA_V3_COOPERACAO.md, CO4d): um seguidor e um papel por pet, pelo id dele no grupo ("so" com um pet so). O do pet em
+      foco e o de sempre (os getters `seguidor` e `papel`): a camera, o pegar, a coreografia e o resto da vista seguem com ele, como hoje. O
+      do irmao so segue a posicao do motor dele e desenha o papel (desenharIrmaos). Trocar o foco nao teleporta ninguem: cada pet mantem o
+      seu seguidor, e a camera desliza ate o novo foco (focoVoltando) */
+  private readonly porPet = new Map<string, { seguidor: Seguidor; papel: Papel }>();
+  private readonly apagados = new Set<string>();
+  private focoAntes: string | null = null;
+  private chaveFoco(): string {
+    const j = jogoAtual();
+    return j.grupo && !j.emLab ? j.foco : "so";
+  }
+  private par(ident: string): { seguidor: Seguidor; papel: Papel } {
+    let p = this.porPet.get(ident);
+    if (!p) {
+      /* o papel do pet do grupo desenha o motor dele; com o pet de teste na tela (ou um pet so), o pet na tela */
+      const qual = ident === "so" ? null : (): Motor => { const j = jogoAtual(); return j.grupo && !j.emLab ? j.grupo.motor(ident) : j.motor; };
+      p = { seguidor: new Seguidor(), papel: new Papel(qual) };
+      this.porPet.set(ident, p);
+      if (this.cenaIlha) this.cenaIlha.cena.add(p.papel.raiz);
+    }
+    return p;
+  }
+  private get seguidor(): Seguidor { return this.par(this.chaveFoco()).seguidor; }
+  private get papel(): Papel { return this.par(this.chaveFoco()).papel; }
   private readonly raio = new THREE.Raycaster();
   private readonly lida: CameraLida;
-  private readonly papel = new Papel();
   private readonly itens: Itens;
   /** MITOLOGIA, E0 e E1: os sinais dos deuses, a pedra, as pegadas, o pessego e o Myotismon (so com a chave `mitologia`) */
   private readonly mitologia: SinaisDaIlha;
@@ -163,7 +185,7 @@ class VistaIlha {
     this.renderer.info.autoReset = false;
     this.pos = new Pos(this.renderer);
     /* ?ilha=agua (ilhaDev.ts): so a vista troca de ilha, para ver o desenho antes de o motor ligar a agua (a IA4) */
-    this.ilha = ilhaDe(ILHA_DEV_AGUA ? CMU_MVP_AGUA : mu.cm);
+    this.ilha = ilhaDe(ILHA_DEV_GRANDE ? CMU_GRANDE : ILHA_DEV_AGUA ? CMU_MVP_AGUA : mu.cm);
     this.cenaIlha = this.estilo.montar(this.ilha);
     this.fim = fimDaIlha(this.ilha);
     this.cenaIlha.cena.add(this.fim.grupo);
@@ -187,7 +209,7 @@ class VistaIlha {
     this.chaoLugar = Object.fromEntries(ORDEM_LUGARES.map(id => [id, chaoDoLugar(id, base)])) as Record<Lugar, number>;
     /* o portao e a barraca: marcadores provisorios no ponto de cada um, ate o modelo 3D chegar (carregarObjetos); nos estilos sem lugares, ficam */
     this.marcadores = montarMarcadores(base);
-    this.mitologia = new SinaisDaIlha(this.itens.ninhoEm, mu.cm.sub);
+    this.mitologia = new SinaisDaIlha(this.itens.ninhoEm, mu.cm);
     this.cenaIlha.cena.add(this.itens.raiz, this.papel.raiz, this.marcadores.raiz, this.mitologia.raiz);
     /* o cantinho da TV em volta da TV do #814 (so com a chave do P0; antes dos kits, para a decoracao sob o tapete sair da vista): o pet vai ate ele pela rota em terra */
     this.cantinho = cantinhoNaVista() ? montarCantinho(this.ilha, (de, para) => (this.ilha.comAgua ? rotaEmTerra(this.ilha.cm, de, para) : null)) : null;
@@ -626,6 +648,10 @@ class VistaIlha {
     CURVA.uCurva.value = this.estilo.dobra;
     const { motor: m } = jogoAtual(), mu = m.mundo ?? this.mu, cm = mu.cm, sub = cm.sub;
     const dtMs = agora - this.ultimo, reduzido = movimentoReduzido(), jg = jogoAtual();
+    /* os dois pets (CO4d): o foco trocou, a camera desliza ate o pet novo */
+    const chave = this.chaveFoco();
+    if (this.focoAntes !== null && chave !== this.focoAntes && !this.naMao) this.focoVoltando = true;
+    this.focoAntes = chave;
     /* o pet na mao (CENA.petNaMao): entrou, o pendulo parte do zero; saiu, o desenho comeca onde o motor o pos (o "levar pet" ja foi
        gravado no pointerup, antes da marca cair), sem caminhar de volta */
     const mao = CENA.petNaMao ? CENA.maoPet : null;
@@ -682,6 +708,7 @@ class VistaIlha {
       if (viagem > 0) this.foco = this.focoDaViagem(this.foco, viagem, reduzido);
       if (aberta) this.foco = this.ab?.saida ? quadroDaSaida(this.ab.saida.de, agora - this.ab.saida.desde, this.foco, zoomDeSempre, TRANSICAO_MS).foco : aberta.foco;
     }
+    if (FOCO_DEV) this.foco = [FOCO_DEV[0], FOCO_DEV[1]];      /* a previa da ilha grande (ilhaDev.ts) */
     const [px, pz] = this.foco, a = this.afast;
     const { olhar } = this.orbitaVista, desloc = aberta?.inclina ? inclinar(this.orbitaVista.desloc, aberta.inclina) : this.orbitaVista.desloc;
     this.camera.position.set(px + desloc[0] * a, desloc[1] * a, pz + desloc[2] * a);
@@ -716,6 +743,7 @@ class VistaIlha {
       ppu, pxPorTexel, yPe, canvas: [this.renderer.domElement.width, this.renderer.domElement.height],
       razao: this.renderer.getPixelRatio(), reduzido, noite, golpe: cor.golpe, andandoVista: cor.andando, suspenso, olharPara,
     });
+    this.desenharIrmaos(agora, quadro, dtMs, reduzido, noite);
     /* o cantinho da TV: a tela, e se o pet esta sentado (o sinal da reacao e do PalcoPet, no lugar dos emotes) */
     this.cantinho?.quadro({ agora, reduzido, sentado: this.tvSentado && !this.naMao });
     /* o foco do HD-2D: a altura do pet na tela (0 embaixo, 1 em cima) */
@@ -726,6 +754,40 @@ class VistaIlha {
     this.publicar(mu, m.e.tick, ret, pode);
     this.publicarLugaresTela();
     return ret;
+  }
+
+  /** os dois pets (CO4d): o irmao do pet em foco anda e aparece no papel dele, seguindo a posicao do motor dele (sem a coreografia, o pegar
+      e o golpe, que sao do pet em foco); os papeis de pets que nao estao mais na tela (o grupo que saiu) se apagam */
+  private desenharIrmaos(agora: number, quadro: number, dtMs: number, reduzido: boolean, noite: boolean): void {
+    const j = jogoAtual(), vivos = j.grupo && !j.emLab ? j.grupo.ids : ["so"];
+    for (const [k, p] of this.porPet) {
+      const vivo = vivos.includes(k);
+      if (!vivo && !this.apagados.has(k)) { p.papel.raiz.visible = false; this.apagados.add(k); }
+      if (vivo && this.apagados.has(k)) { p.papel.raiz.visible = true; this.apagados.delete(k); }
+    }
+    const rets: Record<string, { x: number; y: number; w: number; h: number }> = {};
+    CENA.irmaos = rets;
+    if (!j.grupo || j.emLab) return;
+    const canvas: [number, number] = [this.renderer.domElement.width, this.renderer.domElement.height];
+    for (const ident of j.grupo.ids) {
+      if (ident === j.foco) continue;
+      const o = j.grupo.motor(ident), omu = o.mundo!, cm = omu.cm, sub = cm.sub, p = this.par(ident);
+      if (this.apagados.has(ident)) { p.papel.raiz.visible = true; this.apagados.delete(ident); }
+      const pos = p.seguidor.seguir(omu.pet, dtMs, cm, { velJogo: velocidadeAtual(), acao: o.acao, dorme: j.nascendo > 0 || o.acao === "dormir", reduzido });
+      const cel: [number, number] = [pos[0] / sub, pos[1] / sub], yPe = dobrarY(0, cel[1], this.dobra, cel[0]);
+      let ppu = this.ppu, pxPorTexel = this.pxPorTexel;
+      const dir = this.camera.getWorldDirection(this.dirCam), prof = (cel[0] - this.camera.position.x) * dir.x
+        + (yPe - this.camera.position.y) * dir.y + (cel[1] - this.camera.position.z) * dir.z;
+      if (prof > 1e-3) {
+        ppu = this.renderer.domElement.height / 2 / (prof * Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)));
+        pxPorTexel = Math.max(1, Math.round(TEXEL_ALVO * ppu));
+      }
+      rets[ident] = p.papel.atualizar({
+        agora, dt: Math.min(0.05, dtMs / 1000), quadro, cel, motor: omu.pet, camera: this.camera, ppu, pxPorTexel, yPe, canvas,
+        razao: this.renderer.getPixelRatio(), reduzido, noite, golpe: null, andandoVista: p.seguidor.caminhando, suspenso: null,
+      });
+      if (this.estilo.contorno) p.papel.raiz.traverse(x => x.layers.set(SEM_CONTORNO));
+    }
   }
 
   /** o lugar trancado fica apagado e o destrancado volta ao normal; so quando a tabela de trancas mudou (trancas.ts, escrita pelo nivel do Tamer) */
@@ -788,7 +850,11 @@ class VistaIlha {
     }, true, pode);
   }
 
-  dispose(): void { this.cantinho?.dispose(); this.mitologia.descartar(); this.marcadores.dispose(); this.papel.dispose(); this.pos.dispose(); this.renderer.dispose(); }
+  dispose(): void {
+    this.cantinho?.dispose(); this.mitologia.descartar(); this.marcadores.dispose();
+    for (const p of this.porPet.values()) p.papel.dispose();
+    this.pos.dispose(); this.renderer.dispose();
+  }
 
   /** a queda de qualidade (regra 10, PROPOSTO): sem vento, metade da grama e pixelRatio 1; so uma vez */
   baixarQualidade(): void {

@@ -9,6 +9,11 @@ O pet, o cenario, o dono e o sorteio sao os da DC4 (`entradas_dc4`, que nao muda
   anteriores da janela (3.4), e a voz do jogo nao.
 
 Se faltar decisao num estrato, o sorteio falha alto e roda mais vidas da mesma base, como na DC4.
+
+**A especie (DC5a2, D-DC5B-5):** com `com_especie`, cada entrada leva a `forma` no `estado.identidade`, como a pagina manda
+(`web/app/src/falaRede.ts`, `estadoDaVoz`), para o estilo da especie vir do corpus. As vidas da bancada nao tem forma: cada vida ganha uma linha
+da arvore do jogo (`digilab_fala_livre.arvore.ARVORE`), sorteada pela rng do fluxo `forma` da vida (a especie, a crianca, a linha e, no
+adulto, o Ultimate ou o Mega), e a forma da entrada e a do estagio dela nessa linha. Sem `com_especie`, as entradas sao as de antes, byte a byte.
 """
 from __future__ import annotations
 
@@ -21,6 +26,8 @@ sys.path.insert(0, str(RAIZ))
 sys.path.insert(0, str(RAIZ / "experiments"))
 
 import entradas_dc4 as en4  # noqa: E402
+
+from digilab_fala_livre.arvore import ARVORE  # noqa: E402
 
 from digilab.config import CONFIG_VOZ_V4, CONTEUDOS_FALA  # noqa: E402
 from digilab.protocol import derivar_semente  # noqa: E402
@@ -37,6 +44,24 @@ def semente_da_vida(base: int, i: int) -> int:
 
 def rng_do_fluxo(base: int, fluxo: str) -> random.Random:
     return random.Random(derivar_semente(PREFIXO, base, fluxo))
+
+
+def linha_da_vida(base: int, i: int) -> dict:
+    """a linha da arvore da vida i (D-DC5B-5): especie, crianca, linha e o adulto (Ultimate ou Mega), pela rng do fluxo `forma` da vida"""
+    rng = random.Random(derivar_semente(PREFIXO, base, "forma", i))
+    especie = rng.choice(sorted(ARVORE))
+    a = ARVORE[especie]
+    crianca, linha, mega = rng.randrange(len(a["criancas"])), rng.randrange(len(a["linhas"])), rng.random() < 0.5
+    champion, ultimate, mega_nome = a["linhas"][linha]
+    return {"vida": i, "especie": especie, "bebe": a["bebe"], "crianca": a["criancas"][crianca], "adolescente": champion,
+            "adulto": mega_nome if mega else ultimate}
+
+
+def com_forma(entrada: dict, linha: dict) -> dict:
+    """a entrada com a forma do estagio dela no estado da voz, pelo mesmo `estado_da_voz` da pagina (o resto nao muda)"""
+    if entrada["estado"] != en4.mv.estado_da_voz(entrada["estagio"]):
+        raise ValueError(f"{entrada['id']}: o estado da voz ja tinha mais que o estagio")
+    return {**entrada, "estado": en4.mv.estado_da_voz(entrada["estagio"], linha[entrada["estagio"]])}
 
 
 def viver(base: int, i: int, dias: int, orcamento_por_dia: int) -> dict:
@@ -65,7 +90,7 @@ def sortear(vidas: list[dict], base: int, n_e3_por_pedido: int, n_e2: int, min_e
 
 
 def exportar(base: int, dias: int, orcamento_por_dia: int, n_e3_por_pedido: int, n_e2: int, min_ep_e2: int, n_sequencias: int, n_es: int,
-             tamanho_es: int = CONFIG_VOZ_V4.falas_por_sequencia_es, viver_vida=viver) -> dict:
+             tamanho_es: int = CONFIG_VOZ_V4.falas_por_sequencia_es, viver_vida=viver, com_especie: bool = False) -> dict:
     """as vidas em ordem ate o sorteio fechar (como a DC4) e as entradas: E3, E2, as sequencias da conversa e as do ES"""
     vidas, faltas = [viver_vida(base, i, dias, orcamento_por_dia) for i in range(en4.N_VIDAS_INICIAL)], []
     while True:
@@ -89,7 +114,14 @@ def exportar(base: int, dias: int, orcamento_por_dia: int, n_e3_por_pedido: int,
           for n, (i, k0) in enumerate(s["ES"])]
     if min_ep_e2 and sum(en4.lembranca_com_episodio(e["conceitos"]) for e in e2) < min_ep_e2:
         raise RuntimeError("o E2 sem as lembrancas com episodio que o plano pede")
-    return {"base": base, "prefixo": PREFIXO, "braco_pet": en4.BRACO_PET, "modo_dono": en4.MODO_DONO, "lugar": en4.dc3.LUGAR, "dias": dias,
+    extra = {}
+    if com_especie:
+        linhas = {v["i"]: linha_da_vida(base, v["i"]) for v in vidas}
+        e3, e2 = [com_forma(e, linhas[e["vida"]]) for e in e3], [com_forma(e, linhas[e["vida"]]) for e in e2]
+        seqs = [{**q, "entradas": [com_forma(e, linhas[e["vida"]]) for e in q["entradas"]]} for q in seqs]
+        es = [{**q, "entradas": [com_forma(e, linhas[e["vida"]]) for e in q["entradas"]]} for q in es]
+        extra = {"linhas_da_arvore": [linhas[i] for i in sorted(linhas)]}
+    return {**extra, "base": base, "prefixo": PREFIXO, "braco_pet": en4.BRACO_PET, "modo_dono": en4.MODO_DONO, "lugar": en4.dc3.LUGAR, "dias": dias,
             "orcamento_por_dia": orcamento_por_dia, "n_vidas": len(vidas), "vidas_a_mais": faltas,
             "vidas": [{k: v[k] for k in ("i", "dono", "semente", "dias", "atendimentos", "log_sha256")}
                       | {"decisoes": len(v["decisoes"]), "falas": {p: sum(d["conteudo"] == p for d in v["decisoes"]) for p in CONTEUDOS_FALA}}

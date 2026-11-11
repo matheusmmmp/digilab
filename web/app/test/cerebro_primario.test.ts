@@ -45,7 +45,7 @@ describe("o cerebro trocavel (a v17, na v21)", () => {
   });
 
   test("o ovo novo nasce com o modular por padrao, e com o A pela preferencia; o replay le o cerebro do registro", () => {
-    expect(VERSAO_PET).toBe(23);
+    expect(VERSAO_PET).toBe(25);
     expect(CHAVE_CEREBRO).toBe(CHAVE + "-cerebro");
     expect(cerebroDosOvos()).toBe("modular");
     const m = ligarProduto(new Motor(303, 21));
@@ -120,8 +120,9 @@ describe("no app", () => {
     trocarCerebroDoPet("modular");
     const s = JSON.parse(a.d[CHAVE]!) as { versao: number; log: EventoRegistro[] };
     expect(s.versao).toBe(21);
-    expect(s.log.slice(0, -2)).toEqual(JSON.parse(JSON.stringify(antigo.log)));
-    expect(s.log.at(-2)).toEqual([antigo.e.tick, "mi", { ilha: "mvp_agua" }]);          // o pet v21 passou para a ilha com agua ao abrir (ILHA_AGUA, IA4)
+    expect(s.log.slice(0, -3)).toEqual(JSON.parse(JSON.stringify(antigo.log)));
+    expect(s.log.at(-3)).toEqual([antigo.e.tick, "mi", { ilha: "grande" }]);          // o pet v21 passou para a ilha grande ao abrir (ILHA_AGUA, IG4)
+    expect(s.log.at(-2)).toEqual([antigo.e.tick, "ma", { alcance: 2048 }]);           // e ganhou a memoria de 128 celulas (ILHA_AGUA, IG6)
     expect(s.log.at(-1)).toEqual([antigo.e.tick, "cb", { cerebro: "modular" }]);
     expect(Motor.reproduzir(606, s.log, 21).assinatura()).toBe(jogoAtual().motor.assinatura());
     expect(dados[CHAVE_CEREBRO]).toBeUndefined();                       // a troca do pet nao mexe na preferencia dos ovos

@@ -194,7 +194,7 @@ def test_estimativa_da_calibracao_cabe_no_limite_da_gerente_e_falha_acima():
 
 def test_piso_do_gasto_vem_da_dc4():
     meta = json.loads((RAIZ / dc5.META_DC4_VALIDACAO).read_text(encoding="utf-8"))
-    assert dc5.piso_do_gasto("calibracao") == meta["gasto"]["fim_usd"]
+    assert dc5.piso_do_gasto({"fase": "calibracao"}) == meta["gasto"]["fim_usd"]
 
 
 def test_registro_da_rodada():

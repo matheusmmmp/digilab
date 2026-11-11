@@ -4,7 +4,7 @@
    Torre e Salao) com a mesma entrada e chega ao mesmo fim; o projetil nosso da LP-8 (desde a LP3b, o tiro de verdade da simulacao). */
 import { describe, expect, test } from "vitest";
 import {
-  ACAO_POC, FORMAS_ARENA, GOLPES_DA_POC, IDS_CENA, LIMITE_POC_MS, Motor, RIVAL_LIGA, RIVAL_SALAO, configLutaPoc, criarLutaPoc, passoPoc, sorteiosPoc, statsRivalArena,
+  ACAO_POC, FORMAS_ARENA, GOLPES_DA_POC, IDS_CENA, LIMITE_POC_MS, Motor, RIVAL_LIGA, RIVAL_SALAO, VERSAO_V21, VERSAO_V23, configLutaPoc, criarLutaPoc, passoPoc, sorteiosPoc, statsRivalArena,
   type EntradaLutaPoc, type LutaPoc,
 } from "../motor/index.ts";
 import { lutar as lutarArena } from "../motor/arena/luta.ts";
@@ -183,5 +183,19 @@ describe("o palco refaz as lutas do motor (a mesma entrada, o mesmo fim)", () =>
     tratar();
     const torre = confere(m.lutarPoc("torre_batalha", m.sementeInstalacao("torre_batalha"), null)); expect(torre[0].rotulo).toBe("vitória 1"); tratar();
     confere(m.lutarPoc(RIVAL_SALAO, m.sementeSalao(), null));
+  });
+  /* o defeito da LP5-5: o palco montava a entrada sem o tiro e a esquiva da LUTA_V23, refazia outra luta e o conferir falhava no fim */
+  test("a Arena de um pet v23 (com o tiro e a esquiva) e a de um v21 (sem eles) acabam no palco como no motor", () => {
+    for (const versao of [VERSAO_V23, VERSAO_V21]) {
+      const m = petDosTorneios(101, versao); treinarMuito(m, 1500);
+      for (const [i, mapa] of (["campo", "praia", "ringue"] as const).entries()) {
+        const r = m.lutarPoc(m.rivaisArenaPoc()[0], 4242 + i, mapa);
+        expect(r.tiro !== undefined && r.esquiva !== undefined).toBe(versao === VERSAO_V23);
+        const [l] = confere(r);
+        expect(l.entrada.tiro).toBe(r.tiro); expect(l.entrada.esquiva).toBe(r.esquiva);
+        if (m.lesionadoDesde !== null) m.observar("tratar_lesao");
+        m.avancar(30);
+      }
+    }
   });
 });

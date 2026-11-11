@@ -105,3 +105,24 @@ Pedido do Matheus, pela sessão do Gerente UX_TELA_PET: "Segue a proxima etapa d
   a assinatura diferente só em número, abaixo de 10⁻¹² (PROPOSTO, SEM FONTE).
 - **Os limites:** o roteiro não é um jogador. Ele não usa o tempo real, o "pular uma hora", a bola, levar o pet nem a troca de ilha. O
   celular não foi medido. Vinte vidas mostram que a divergência das lutas é rara, não que não existe.
+
+## 10. MMO1: a conta dos pontos (2026-11-11)
+
+Pedido do Matheus nesta sessão: "Faca o merge e siga para o proximo passo", depois do merge da MMO0 (#818). Sem tela e sem servidor.
+
+- **O que entrega:**
+  - `web/app/src/ranking/pontos.ts`, uma função pura fora do motor: do registro do pet e da lista das sementes que o servidor entregou,
+    as lutas ranqueadas, os pontos, a semana e o dia de Brasília, e as linhas das tabelas da semana, com o desempate em quatro passos;
+  - `web/app/scripts/conferir_ranking.ts`, o comando que confere um save exportado
+    (`node scripts/conferir_ranking.ts --save F --entregues G`);
+  - `web/app/test/ranking_pontos.test.ts`, 11 testes.
+- **As regras, como o plano diz:**
+  - a vitória pela faixa do rival (Rookie 10, Champion 20, Ultimate 40, Mega 80);
+  - a repetida contra o mesmo rival na semana vale a metade da anterior;
+  - a derrota, a semente não usada e a pendente valem 0 e contam como luta usada;
+  - a 11ª semente do dia não conta;
+  - a semente gasta fora da Arena não vale ponto;
+  - a semana vai de segunda a domingo, no horário de Brasília (UTC−3).
+- **A luta ranqueada é o evento "l" na posição pedida:** o pedido da semente leva o tamanho do registro naquela hora (`indice`), e a luta
+  conta só se o evento nessa posição for a luta com essa semente. O hash do registro até ali fica para o servidor (MMO3 e MMO4).
+- **Fora desta etapa:** o portão ★ (a MO2), o servidor e o registro do Tamer. O Tamer entra com o Respeito, na MMO8.

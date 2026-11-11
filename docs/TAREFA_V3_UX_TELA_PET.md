@@ -982,3 +982,75 @@ O Matheus aprovou AB-1 a AB-5 em 2026-11-10: "siga a recomendação." Esta etapa
 
 A interpretação de "uma vez por save" está em D-AB-3, em `docs/registro/2026-11.md`.
 
+## 32. Etapa D1e: o DigiBrain com o visual de scanner e a rede viva (2026-11-11)
+
+O Matheus pediu em 2026-11-11, com uma imagem de referência: "eu quero que você altere o menu do DigiBrain para ficar mais parecido com
+isso, porém tirando aquela parte de percepção, memória, impulsos, emoção e social". A referência é um cartão com o ícone e o nome, um
+quadro escuro com cantos em colchete, uma rede de pontos e fios claros em anel, uma onda embaixo e um "estado atual". A coluna das cinco
+barras da referência não entra.
+
+A primeira versão desenhava no anel os pesos de verdade do motor, com os nomes. O Matheus viu as capturas e pediu outro desenho, no mesmo
+dia: "quero que faça outro desenho, algo mais lúdico e menos realmente como o cérebro efetivamente está funcionando"; "simule como o
+cérebro funcione mas não exatamente como as conexões estão acontecendo, algo que visualmente seja interessante". Esta seção descreve a
+segunda versão, que é a que ficou.
+
+É só o visual de um painel que já existe (o scan do DigiBrain, D1b e D1c). Por isso não houve prancha de 390 px antes do código: as
+capturas do jogo, em 1280 e em 375 px, foram ao Matheus pela sessão. O motor, o save e o replay não mudam.
+
+**O que mudou no scan do pet do cérebro A (`ScanDigiBrain.tsx`, `scan_digibrain.css`):**
+- **A rede viva** no lugar do mapa dos pesos. É uma ilustração: 150 pontos e entre 500 e 600 fios num anel, com impulsos coloridos correndo
+  por ela e alguns pontos piscando. Os pontos e os fios não são os nós nem os pesos do motor. Isso revoga, para o desenho, o "cada ponto é
+  um nó do motor" da D1. Do motor o desenho usa três coisas:
+  - a semente do pet, para cada pet ter a sua rede;
+  - quantas entradas pesaram na decisão de agora, que dá quantos impulsos correm (4 no mínimo, 2 a mais por entrada, 14 no máximo);
+  - a regra da decisão, que dá a cor dos impulsos.
+- **Os pesos de verdade** continuam no "mapa em texto", como antes.
+- **O quadro** quase preto, com a grade fraca e os quatro cantos em colchete.
+- **O título:** o nome "DigiBrain" ao lado do ícone no desktop. No celular fica só o ícone, como na D1c.
+- **A faixa de baixo**, nova, com dois dados do motor:
+  - **a onda** tem um pico por entrada com termo na decisão de agora (`mapa.acesas.arestas`): para cima a favor, para baixo contra, da
+    altura da força que o motor dá;
+  - **o estado atual** é a regra do instinto que valeu na decisão (`decisao.regra`), com o texto curto "tempo livre", "sono", "fome",
+    "precisando". O motor não tem um estado chamado "calmo". O rosto e a cor ao lado são o tom da regra (D-D1e-2).
+- **O tamanho** é o da D1c: 420 px de largura no desktop e a folha de 210 px no celular. No desktop o painel ficou 62 px mais alto, por
+  causa da faixa.
+- **O movimento:**
+  - os impulsos correm sem parar enquanto o tempo do jogo anda, e congelam com o jogo pausado ou num replay;
+  - numa decisão nova, a varredura passa e a rede inteira acende uma vez;
+  - o giro lento do plano continua no desktop;
+  - com "reduzir movimento", nada se move e os impulsos não aparecem.
+
+**O que saiu do desenho:** os nós com nome (entradas, regras e ações), as chances das candidatas, o destaque do caminho da decisão, os
+rótulos ao passar o mouse e a legenda da dica. A regra da decisão aparece no estado atual; o resto está no mapa em texto, menos as chances
+das candidatas, que hoje não aparecem em lugar nenhum do scan (questão aberta no PR).
+
+**O que não mudou:** o selo, o "i" (com texto novo), o mapa em texto, o fechar, o foco preso e o Esc.
+
+**O scan do cérebro modular** (`ScanDigiBrainLab.tsx`, #799) ganhou o mesmo visual. O Matheus pediu em 2026-11-11: "Sim, leve". É ele que
+os ovos novos abrem, desde a D2 da auditoria da cadeia. O que mudou nele:
+- **A rede viva** no lugar do mapa dos módulos (os 7 módulos, a soma e as opções com a chance). O número de impulsos sai de quantos módulos
+  contribuíram na escolha. A cor dos impulsos é sempre a neutra.
+- **A onda** tem um pico por módulo que contribuiu, na ordem do motor: para cima a favor, para baixo contra, da altura da parte dele sobre
+  a maior parte.
+- **No lugar do "estado atual" fica a "escolha":** a ação da unidade escolhida e a chance dela ("única" sem sorteio). O modular não tem as
+  regras do instinto, então não tem um estado com nome (D-D1e-12).
+- **O que o mapa dos módulos mostrava** continua no mapa em texto, que já tinha "O peso de cada módulo nesta escolha" e "As opções e a
+  chance de cada uma".
+- **A linha do resultado da decisão anterior** fica sob a faixa. No celular ela cabe numa linha só, cortada com reticências; inteira, está
+  no mapa em texto.
+- As capturas em `docs/pranchas/digibrain-lab/` foram refeitas.
+
+Com isso, a silhueta de cérebro e o CSS do mapa com nós e fios saíram dos dois scans.
+
+**O botão de expandir** da referência não entrou: o scan já é o painel aberto, e o botão não teria o que abrir.
+
+**Os testes:**
+- `test/scan_digibrain.test.ts`, 15 testes: a rede (a mesma semente dá a mesma rede, tudo dentro do quadro, sem texto nem nós do motor),
+  os impulsos pela decisão, as marcas de parada e de decisão nova, a onda, o estado atual e o contraste nas duas peles;
+- `test/scan_digibrain_lab.test.ts`, 5 testes: a onda dos módulos, a escolha com a chance, a faixa e a falha alta sem a opção escolhida;
+- `e2e/jogo.spec.ts`: "a rede viva acompanha a decisão" (390 e 1280 px) e "os impulsos correm, e a varredura e o surto passam numa decisão
+  nova e terminam" entram no lugar dos testes do mapa. Saíram os testes dos rótulos (o texto de 11 px e o rótulo ao passar o mouse), porque
+  o desenho não tem mais texto;
+- `e2e/lab_modular.spec.ts`: confere a rede viva e a faixa no pet do laboratório.
+
+Os desvios estão em `docs/registro/2026-11.md`, "UX_TELA_PET, D1e".
