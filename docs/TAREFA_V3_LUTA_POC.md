@@ -668,6 +668,72 @@ contra 6 do `lp5_1_r2`:
 
 No jogo, a luta segue no v21: a esquiva só entra com o v22, na LP5-5. A LP5-2 parte do `lp5_1_esq`.
 
+## Resultado da LP5-2 (as rodadas 1 e 2 do total dos NPCs, paradas num ponto de decisão)
+
+O Matheus: "Sim, segue". A LP5-2 parte do `lp5_1_esq`. Pela D-LP5-9, o total de cada NPC vem primeiro, e a divisão dos stats só entra
+se o total não fechar o P1 a P3 em 2 rodadas. As duas grades (`lp5_2/r1` e `lp5_2/r2`) multiplicam os 10 totais pelo mesmo fator. Cada
+NPC só depende do total dele, então uma grade dá a curva de cada um. As grades rodam só o grupo `lideres`, com 2 bases da calibração
+(86101, 86201), cerca de 18 000 lutas por ponto e 4 processos.
+
+- **A rodada 1** (de 0,5 a 1,3 vez o total de hoje) quase não move nada. O Gazimon sem treino vai de 0,43 a 0,30, e o típico de 0,61 a
+  0,50.
+- **A rodada 2** (de 0,1 a 8 vezes) também não fecha. Nenhuma das metas P1, P2 e P3 passa em nenhum ponto. Dois NPCs passam sozinhos:
+  - **o MarinBullmon** com 1,3 vez o total (143): sem treino 0,18, típico 0,74, pior espécie 0,64;
+  - **o Tortomon** com 3 vezes o total (216): sem treino 0,31, típico 0,77.
+- **Por que o total não fecha:**
+  - **a alavanca ficou fraca.** Com os expoentes da LP5-1 (0,02 no vigor e na força, 0,14 na mira e no fôlego), mesmo 8 vezes o total
+    move pouco cada razão;
+  - **a distância entre o pet sem treino e o típico é curta.** Ela fica em 0,45 ou menos contra qualquer NPC. O T1 (o típico contra o
+    mesmo pet sem treino) é 0,83 no Rookie, e com ele a conta logística dá uns 0,55 para o típico quando o pet sem treino fica em 0,20.
+    O P1 pede 0,70: só fecharia com o T1 perto de 0,93;
+  - **a pior espécie é a forma, não o total.** O cirro do Rookie fica de 0,00 a 0,16 contra o Gazimon em todo o caminho, e a brasa
+    passa de 0,85. É o mesmo achado do V2, aceito como reprovado na D-LP5-15.
+
+A divisão dos stats (a D-LP5-9) mexe no mesmo lado do NPC e não encurta a distância do pet, nem muda a forma. Por isso a fase parou
+aqui, com a decisão levada ao Matheus no PR. Nenhum número do candidato mudou.
+
+### O critério novo e a rodada 3 (D-LP5-17)
+
+O Matheus: "Segue sua recomendação". O critério do P1 a P3 passou a sair do T1 do `lp5_1_esq`: o líder fica no meio do caminho entre o
+pet sem treino e o típico, na escala logística, com 0,10 de folga. Os limites são 0,41/0,59, 0,35/0,65, 0,30/0,70 e 0,27/0,73, do
+Rookie ao Mega, e o desafiante tem +0,15 e +0,05. A pior espécie vai só à leitura. O código está em
+`web/app/scripts/equilibrio_poc/criterios.ts`, com teste.
+
+- **A rodada 3** (`lp5_2/r3`): 7 pontos, cada NPC com a própria faixa de totais, 3 bases (86101, 86201, 86301), cerca de 28 000 lutas
+  por ponto.
+  - **o Gazimon** passa de 0,65 a 0,8 vez o total. Pela regra de escolha (a maior folga), fica em 0,8 vez: 76,8;
+  - **o MarinBullmon e o Tortomon** já passam com o total de hoje, então não mudam;
+  - **os outros 7** (o Guardromon, o Youkomon, o Myotismon, o Piedmon, o Devidramon, o Puppetmon e o Machinedramon) não passam em
+    nenhum total. A distância entre o pet sem treino e o típico contra eles fica de 0,10 a 0,25, e o critério pede de 0,20 a 0,46;
+  - **com 3 bases, o Puppetmon e o Machinedramon dão uns 0,09 a mais no sem treino** que com 2, no mesmo total. A mistura das formas
+    Mega muda de uma base para outra, e o erro passa do binomial.
+- **A medida inteira do `lp5_2`** (`lp5_2/calibracao`, commit `9270f774`, 1 412 957 lutas) dá **9 de 21 metas**: as 8 do `lp5_1_esq` e
+  o P1 (o Gazimon: sem treino 0,380, típico 0,627). O P2 e o P3 reprovam pelos 7 NPCs de cima.
+- **O P5 não lê as alavancas da LP5-2.** O dono simulado só luta na Arena, então o total dos NPCs não entra na vida. O treino dos
+  rivais da Arena está em 0 e só sobe, o que deixaria os rivais mais fortes. O P5 segue em 19 de 100 vidas no Mega: 73 param no
+  Champion. Lá, o pet da vida faz as 10 lutas de sparring e vence 0,67 delas (670 de 1 000), contra 0,85 do pet típico na bancada
+  `sparring`. A causa provável é a vida, não o rival (a condição pela saúde, o caráter, o treino perto de 21 pontos e não 22), mas ela
+  não foi medida.
+
+### A divisão dos stats e a leitura da vida (D-LP5-18)
+
+O Matheus aprovou as duas recomendações ("Aprovo como recomendadas.").
+
+**A divisão dos stats dos 7 NPCs não fecha nenhum deles.**
+- A grade `lp5_2/r4` cruzou 12 divisões com 4 totais.
+- O mais perto foi o Devidramon: 0,513 sem treino e 0,686 com o típico (`fol_t2`), contra ≤ 0,50 e ≥ 0,70; falta 0,014.
+- Depois vêm o Guardromon (falta 0,039), o Youkomon (0,070), o Myotismon (0,109), o Piedmon (0,111), o Machinedramon (0,176) e o
+  Puppetmon (0,186).
+- Os 7 ficam reprovados e vão à investigação do núcleo e à tarefa da tabela das formas. O `lp5_2` não muda.
+
+**A leitura da vida explica o P5.**
+- As 100 vidas chegam ao Champion como colosso. O colosso típico vence 0,712 do sparring, contra 0,885 a 0,899 das outras formas, e o
+  0,85 da bancada é a média das quatro.
+- O dono luta com o treino em ~14 pontos, não em 22; com os 22, a taxa sobe só +0,05.
+- A condição é 1,05, um bônus, e o caráter quase não pesa.
+- Com 0,67 por luta, a chance de ≥ 8 de 10 é de 0,31, perto das 27 vidas que passam.
+- Os números estão em `web/app/scripts/medicoes/equilibrio_poc/lp5_2/leitura_vida/` e no registro (D-LP5-18-1 a 5).
+
 ## Resultado da LP3c (2026-11-10)
 
 Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp3c`, a pedido do Gerente de sprites e luta. O pedido seguiu a revisão dos
