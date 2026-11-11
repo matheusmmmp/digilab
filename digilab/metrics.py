@@ -3014,6 +3014,22 @@ def repeticao_entre_turnos(falas: Sequence[str], n: int) -> dict:
     return {"consideradas": max(len(falas) - 1, 0), "repetem": repetem}
 
 
+def tem_trecho_igual(fala: str, outras: Sequence[str], n: int) -> bool:
+    """a fala tem n ou mais palavras seguidas (normalizadas) iguais a um trecho de um dos outros textos (DC5a2, D-DC5B-5: a repeticao de
+    trecho da voz-v4b e a copia das citacoes do corpus da especie)"""
+    if n < 1:
+        raise ValueError(f"n >= 1: {n}")
+    g = set(_ngramas(palavras_normalizadas(fala), n))
+    return any(g & set(_ngramas(palavras_normalizadas(o), n)) for o in outras)
+
+
+def repeticao_de_trecho(falas: Sequence[str], n: int) -> dict:
+    """numa sequencia (uma conversa ou uma sequencia espontanea), as falas a partir da segunda com n ou mais palavras seguidas iguais a uma fala
+    anterior da mesma sequencia (DC5a2, D-DC5B-5)"""
+    repetem = sum(tem_trecho_igual(f, falas[:i], n) for i, f in enumerate(falas) if i > 0)
+    return {"consideradas": max(len(falas) - 1, 0), "repetem": repetem}
+
+
 def kappa_cohen(pares: Sequence[tuple[str, str]]) -> dict:
     """o kappa de Cohen entre dois marcadores (DC5, 4.1). `pares` = (marcacao A, marcacao B) por item. Com a concordancia esperada igual a 1
     o kappa nao e calculavel: sai None, com a concordancia bruta (o plano: "nao calculavel", e o gate fica nao medido)."""
@@ -3128,3 +3144,22 @@ def reencontrou(ramo: Sequence[Mapping], original: Sequence[Mapping], dia: int) 
     if not b:
         raise ValueError(f"I7: o original nao tem decisoes no dia {dia}")
     return a == b
+
+
+# ---------------------------------------------------------------- o adendo 2 do I7: historia ou sorteio (secao 14 do plano, DECIDIDO)
+def trajetoria_janela(ds: Sequence[float | None]) -> str | None:
+    """o tudo ou nada (14.5): "sempre0" se toda D presente da janela e 0, "nunca0" se toda e > 0, "misto" fora disso; None sem D presente"""
+    vs = [d for d in ds if d is not None]
+    if not vs:
+        return None
+    if any(d < 0 for d in vs):
+        raise ValueError("I7: distancia negativa")
+    if all(d == 0 for d in vs):
+        return "sempre0"
+    return "nunca0" if all(d > 0 for d in vs) else "misto"
+
+
+def fracao_amarrada(pares: Sequence[tuple[float | None, float | None]]) -> float | None:
+    """rho (14.4): soma(D_R) / soma(D_E) sobre os pares (D_R, D_E) com os dois termos; None sem par ou com a soma do E 0. E a razao de
+    somas do Phi com o E no lugar do gemeo."""
+    return razao_de_somas(pares)

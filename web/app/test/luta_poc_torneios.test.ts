@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import {
   LIGA, LUTAS_SERIE_FABRICA, MEDALHAS, MAPA_FABRICA, MAPA_SALAO, MAPA_TORRE, MEDALHAS_LIGA, Motor, PALACIO_NA_TORRE, RIVAL_LIGA, RIVAL_SALAO, TentativaFabrica,
-  VERSAO_FABRICA_ATUAL, VERSAO_FABRICA_POC, VERSAO_V21, VERSOES_FABRICA, chaveSprite, formaLiga, formaRivalInstalacao, formaRivalSalao, regraFabrica,
+  VERSAO_FABRICA_ATUAL, VERSAO_FABRICA_POC, VERSAO_V21, VERSAO_V22, VERSAO_V23, VERSOES_FABRICA, chaveSprite, formaLiga, formaRivalInstalacao, formaRivalSalao, regraFabrica,
   sementeFabrica, type EventoRegistro,
 } from "../motor/index.ts";
 import { SEMENTES_LP2B, gravarTorneios, petDosTorneios, tentativaFabrica, treinarMuito, viverTorneios, type VidaTorneios } from "./lp2b_torneios.ts";
@@ -140,4 +140,32 @@ test("Tamer: a tentativa da Fabrica v21 entra no registro e se refaz igual", asy
   expect(r.fabrica.map(x => x.lutas.map(l => [l.venceu, l.poc!.relogio, l.poc!.vidaA]))).toEqual(t.fabrica.map(x => x.lutas.map(l => [l.venceu, l.poc!.relogio, l.poc!.vidaA])));
   expect(t.fabrica[0].regra.versao).toBe(21);
   expect(() => t.alugarFabrica(0, 1, 99)).toThrow(/versão das regras/);
+});
+
+/* LUTA_POC, LP5-5: o gabarito dos torneios da v22, gravado antes da v23 entrar: a v22 sai byte a byte */
+const gab22 = JSON.parse(readFileSync(new URL("./gabaritos/lp2b_torneios_v22.json", import.meta.url), "utf8")) as typeof gab;
+describe("o gabarito dos torneios v22 (LP5-5) e o replay bit a bit", () => {
+  for (const s of SEMENTES_LP2B) {
+    test(`v22 @${s}: a Liga, a Torre e o Salao saem iguais ao gabarito, e o replay da a mesma assinatura`, () => {
+      const g = gab22.vidas.find(x => x.semente === s)!;
+      const { m, log, res } = viverTorneios(s, VERSAO_V22);
+      expect(gravarTorneios(s, m, log, res)).toEqual(g);
+      const r = Motor.reproduzir(s, log as EventoRegistro[], VERSAO_V22);
+      expect(r.assinatura()).toBe(m.assinatura());
+    });
+  }
+});
+
+/* LUTA_POC, LP5-5: o gabarito dos torneios da v23, gravado depois da v23 entrar */
+const gab23 = JSON.parse(readFileSync(new URL("./gabaritos/lp2b_torneios_v23.json", import.meta.url), "utf8")) as typeof gab;
+describe("o gabarito dos torneios v23 (LP5-5) e o replay bit a bit", () => {
+  for (const s of SEMENTES_LP2B) {
+    test(`v23 @${s}: a Liga, a Torre e o Salao saem iguais ao gabarito, e o replay da a mesma assinatura`, () => {
+      const g = gab23.vidas.find(x => x.semente === s)!;
+      const { m, log, res } = viverTorneios(s, VERSAO_V23);
+      expect(gravarTorneios(s, m, log, res)).toEqual(g);
+      const r = Motor.reproduzir(s, log as EventoRegistro[], VERSAO_V23);
+      expect(r.assinatura()).toBe(m.assinatura());
+    });
+  }
 });

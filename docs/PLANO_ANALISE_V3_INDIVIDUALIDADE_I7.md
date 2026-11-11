@@ -11,6 +11,9 @@ recomendação. **Nenhuma conta do I7 roda antes de cinco coisas:**
 **O adendo 1 (seção 12) está DECIDIDO pelo Matheus em 2026-11-10** ("E daí a gente parte para seguir as recomendações", depois da conferência das
 referências): uma quarta hipótese, a régua crua e a forma em U nas frases, e dois descritivos. Ele vale junto com as seções 0 a 11.
 
+**O adendo 2 (seção 14) está DECIDIDO pelo Matheus em 2026-11-11** ("Aprova as recomendações e segue"): a pergunta "história ou sorteio" da 9.8 do resultado, com um ramo de sorteio
+amarrado, em 360 pets novos. Ele não muda as seções 0 a 13; as AD2-1 a AD2-7 estão decididas pela recomendação.
+
 **De onde vem:** a conversa de 2026-11-10 sobre como tirar da frente um achado e não só uma implementação organizada. Dela saíram as
 perguntas Q1 a Q4, e o Matheus escolheu começar pela Q3, o desenvolvimento contrafactual ("Segue a recomendação").
 - **Por que esta pergunta:** o motor é determinístico e guarda o log. Dá para viver de novo a vida de um pet com uma única coisa diferente
@@ -332,3 +335,236 @@ Os dois ficam só no descritivo, sem frase de leitura.
 | **A1-3** | a forma em U | **entra**, com as duas diferenças | sem ela, um U vira "a idade não importa"; com ela, o Φ(6) pesa mais que as outras idades na leitura do β |
 | **A1-4** | a E-I7b | **entra como expectativa**, sem gate | nenhum, porque é só escrita antes; sem ela, a leitura do E − E° fica sem expectativa |
 | **A1-5** | o estado interno e o efeito comum | **entram só no descritivo**, com a distância do estado escrita pelo I7a | como leitura, pediriam regras sem base; fora do plano, perde-se o caso do evento que some do comportamento e fica no cérebro |
+
+## 13. O registro da análise
+
+Escrito em 2026-11-10 (Claude Code, Opus 5.5, branch `v3-individualidade-i7b`), antes da primeira vida do I7b, como a seção 10 manda.
+
+- **O código:** o commit `3e22ad45` da `main` (o merge do #775, o I7a). O I7b não muda o código; este registro entra num commit próprio,
+  empurrado antes da run.
+- **Os sha256:**
+  - o orquestrador `experiments/run_v3_individualidade_i7.py`: `ddbdab3b293038bda548514570bc266648b2dd478b717acaeb3473069731e7f2`;
+  - o `digilab/metrics.py`: `cf2feb8fdeaa0abebb1dd6b43e449ca892ed5eb146c74db9578624235f49e93e`;
+  - as vidas do I2, `artifacts_v3_individualidade/vidas.tar.gz`: `f07fb6ce2a5db78c494e34b00e364b12e08687b776d4bda5fc3d62e1409dd100`;
+  - a config `experiments/configs/v3_individualidade/individualidade_i7.json`:
+    `988ee4737679958364c954eecfbbe3faea4682f88404ccdad96179dcc306803a`.
+- **O custo da fumaça** (as sementes 101 e 202, K = 1, 14 dias, 12 pets, 4 processos):
+  - uma pet sozinha, num processo, levou 93 s (cada ramo, vivido duas vezes, cerca de 5 s);
+  - a fumaça levou 12 min 20 s de parede, 62 s por pet com 4 processos, com a suíte inteira de outra sessão rodando ao lado;
+  - a projeção para as 360 pets é de cerca de 6 h com 4 processos, contra 1 h 10 min da seção 8. Passou do dobro.
+- **A IR-6 mantida:** levada ao Matheus pela seção 8, ela fica como está, todo ramo vivido duas vezes ("Sim, mantém e mergeia",
+  2026-11-10).
+- **A distância do estado interno (12.5) fixada:** a D-IND-I7a-4 do registro de 2026-11 (a fração das folhas do
+  `estado_interno()["modulos"]` que diferem ou só existem num dos dois, no fim de cada dia; os `motivos` fora). PROPOSTA, SEM FONTE.
+- **O comando:**
+
+  ```bash
+  python experiments/run_v3_individualidade_i7.py --config experiments/configs/v3_individualidade/individualidade_i7.json --processos 4
+  ```
+
+  A saída vai para `artifacts_v3_individualidade_i7/`, que não existe antes da run.
+- **A suíte do dia** (`python -m pytest tests/ -q`, na branch `v3-individualidade-i7b` sobre `3e22ad45`): 5 249 passaram, 9 pulados e 3
+  falharam, em 2 h 35 min (com outra run ao lado). As três falhas são das listas do G2 de outras frentes e não tocam o I7:
+  - `test_digibrain_etapa0.py::test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave` e
+    `test_digibrain_vidas.py::test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain` pedem o `experiments/entradas_dc4.py`;
+  - `test_redecidir_evento.py::test_g2_separado_nada_fora_do_pacote_e_do_orquestrador_le_a_chave` pede o
+    `experiments/auditoria_pet_vivo.py`.
+
+## 14. Adendo 2: história ou sorteio (2026-11-11, DECIDIDO, Claude Code, Opus 5.5)
+
+**Status: DECIDIDO pelo Matheus em 2026-11-11** ("Aprova as recomendações e segue"), as AD2-1 a AD2-7 pela recomendação. O Matheus pediu em 2026-11-11 que a pergunta da 9.8 do `docs/RESULTADO_V3_INDIVIDUALIDADE.md` virasse um adendo a
+este plano ("Escrever como adendo"), e não um I8. **Nada deste adendo roda antes de cinco coisas:**
+1. as decisões AD2-1 a AD2-7 (14.9) decididas pelo Matheus e este cabeçalho marcado DECIDIDO (feito);
+2. o I7b (o #786) na `main`;
+3. a faixa da AD2-1 conferida pelo Gerente da V3 e posta em `experiments/bancada/faixas.py` com a fonte;
+4. o código do I7c na `main` (14.8), com os testes e a fumaça medida;
+5. o registro do adendo (14.7), num commit empurrado antes da primeira vida.
+
+O adendo não muda nada das seções 0 a 13 nem a leitura do I7b, que fica como está.
+
+**De onde vem:** o exploratório da 9.6 do resultado, que ficou fora do plano e foi feito depois da análise.
+- **O tapa é tudo ou nada, pet a pet:**
+  - em cerca de 2/3 dos ramos E, o comportamento volta inteiro ao do original já no dia seguinte, e o tapa fica só na `mem.autobio`;
+  - em cerca de 1/3, o ramo se afasta nos quatro dias e chega perto de um gêmeo.
+- **O que separa os dois grupos:** em 20 ramos relidos, 10 de cada grupo, a contagem `arb.sorteios` do fim do dia t separou os grupos
+  em 18. A leitura proposta foi esta:
+  - quando o tapa muda quantas decisões sorteiam (por exemplo, quando dispara o reflexo do sono, que decide sem rng), o fluxo da rng de
+    política se desloca;
+  - o resto da vida passa a ser outro acaso, e o pet vira quase um gêmeo, como no ramo A.
+- **O porquê da leitura, no código:** o modular nos braços REL e REL+F tem uma única chamada à rng de política, a `rng.random()` do
+  `M-ARB` (`digilab/digibrain/arb.py`). Ela é feita só quando a decisão tem dois candidatos ou mais e nenhum reflexo. A rng do braço EMB
+  (`mem_emb`) não existe nesses dois braços.
+  - Por isso, qualquer decisão que deixa de sortear, ou que passa a sortear, desloca todos os sorteios seguintes.
+  - Isso é o motor funcionando como foi escrito, e não um defeito. A pergunta é o que esse deslocamento responde do I7.
+
+**A pergunta, Q-AD2: a parte do efeito do tapa que dura vem do que o pet viveu (a história) ou do deslocamento do fluxo da rng (o
+sorteio)?**
+
+A resposta muda o que a frente pode dizer:
+- se for a história, o I7 mediu experiência, e um tapa muda um pet em um terço das vezes;
+- se for o sorteio, o I7 mediu sobretudo a sensibilidade do fluxo da rng. A individualidade que um evento deixa é então só a da `mem.autobio`,
+  e a pergunta da Q-I7 fica por responder com o sorteio amarrado.
+
+**O que este adendo não afirma:** que o sorteio é ruído e a história é sinal no sentido de um animal, nem que um pet com o sorteio
+amarrado é mais real que o pet do jogo. O ramo amarrado é um instrumento de medida e não muda o motor. A regra da IN-7 vale: nenhum
+mecanismo novo no pet. Todos os números novos deste adendo são PROPOSTOS e SEM FONTE como escolha, e não há alegação de novidade.
+
+### 14.1 Os pets (AD2-1)
+
+**360 pets novos:** os mesmos 2 braços (REL e REL+F), os 3 donos (atencioso, relapso, aleatório) e 14 dias no `comedouro`, com o
+orçamento de 16 por dia, como no I2. As sementes vêm da faixa **88101…88505** (bases 88101, 88202, 88303, 88404 e 88505, K = 12, o
+prefixo `digibrain_prototipo`).
+- **A faixa** está livre no `FAIXAS_RESERVADAS` hoje. Ela entra na tabela com a fonte só depois do ok do Gerente da V3.
+- **O original de cada pet** é a vida de base vivida pelo laço do dono, sem ramo, como na fumaça do I7a (`viver_fumaca`). Ela vai para
+  `artifacts_v3_individualidade_i7_ad2/vidas.tar.gz`.
+- **Por que pets novos:** a leitura do sorteio nasceu olhando as vidas do I7. Testá-la nas mesmas sementes seria testar a hipótese na
+  amostra que a sugeriu. Os pets novos também repetem o ramo E do I7 numa amostra que ele não viu (14.5).
+
+### 14.2 Os ramos (por pet)
+
+| ramo | o que muda | para quê |
+|---|---|---|
+| **N, o nulo** | nada, vivido de novo com os gravadores ligados (14.3) | a conferência: sai igual à vida de base, byte a byte |
+| **G, o gêmeo** | a rng de política trocada no nascimento, como na seção 2.2 | a régua do Φ |
+| **E(t), o evento** | o tapa no momento do dia t, como na seção 2.2 | o efeito do tapa, repetido nos pets novos |
+| **R(t), o evento com o sorteio amarrado** (AD2-2) | o tapa no momento do dia t, e cada decisão do ramo recebe o mesmo número sorteado que o original recebeu no mesmo tick | o efeito do tapa sem o deslocamento do fluxo |
+| **R°, o amarrado sem evento** | o sorteio amarrado desde o nascimento, sem tapa | a conferência do amarrado: sai igual a N, byte a byte |
+| **S(t), o deslocamento sozinho** (AD2-3) | no momento do dia t, um sorteio da rng de política é jogado fora, sem tapa | se deslocar o fluxo em um número basta para fazer um gêmeo |
+
+As idades são as do I7: t = 2, 4, 6, 8 e 10, com a janela de quatro dias. **O A(t) e o E°(t) não entram (AD2-5):** o I7b já os mediu
+nas 360 vidas do I2, e o Φ_A ficou de 0,96 a 1,00 em todas as células.
+
+### 14.3 O sorteio amarrado
+
+O amarrado fica no orquestrador, como o embrulho do ramo. Nada no `digilab/`, no `engine.py`, no cérebro nem no `simular_vida_fisico`
+muda.
+- **O gravador:** no ramo N, a rng de política do motor é trocada por uma subclasse de `random.Random` com a mesma semente. A subclasse
+  devolve os mesmos números e grava cada `random()` com a chave (tick do motor, ordem da chamada no tick). A rng do dono, a que o laço
+  passa ao `decidir`, ganha um gravador igual.
+- **O amarrado:** no ramo R, a chamada com a chave (tick, ordem) devolve o número que o original gravou com a mesma chave.
+  - **A chave que o original não tem** (o ramo sorteia onde o original não sorteou) recebe um número de uma rng própria, a
+    `derivar_semente("individualidade-i7-amarrado", semente, braço, dono, t)`, na ordem em que essas chaves aparecem.
+  - A fração dessas chaves vai no descritivo (14.5). Se ela for grande, o R não é "o mesmo sorteio", e a leitura diz isso.
+  - Qualquer método da rng que não seja `random()` levanta erro, porque o braço não usa outro (`arb.py`).
+- **A rng do dono também é amarrada (AD2-4):** se só a do pet fosse, um dono que passa a sortear num passo diferente deslocaria o fluxo
+  dele, e a diferença do R ainda poderia vir de um sorteio. O dono continua reagindo ao pet: com o mesmo número e um pet diferente, ele
+  pode decidir outra coisa, e isso conta como história.
+- **O deslocamento do S:** no passo do momento, antes da decisão do pet, o embrulho chama `random()` uma vez na rng de política e joga o
+  número fora. Nada mais muda.
+
+### 14.4 As medidas e as hipóteses, escritas antes
+
+As medidas são as da seção 3, sobre os pets novos: D_b(d), Φ_b(t) contra o gêmeo, a régua crua e o bootstrap da 3.6, com a rng
+`derivar_semente("individualidade-i7-ad2-boot", braço, perfil, medida)`.
+
+**A medida nova é a fração amarrada ρ = Σ D_R / Σ D_E**, a razão de somas sobre os pets do braço, as cinco idades e os quatro dias de cada
+janela, por perfil.
+- ρ = 0: amarrar o sorteio apaga o efeito do tapa, e o que durava era o deslocamento.
+- ρ = 1: amarrar não muda nada, e o que dura é o que o pet viveu.
+- ρ(t), por idade, vai só no descritivo.
+
+| hipótese | o que prevê | a leitura se ela vencer |
+|---|---|---|
+| **H-SORT, o sorteio** | o IC95 de ρ inteiro abaixo de 0,2 | quase todo o efeito do tapa que dura vem do deslocamento do fluxo da rng; com o sorteio amarrado, o tapa fica na memória e quase não no comportamento |
+| **H-HIST, a história** | o IC95 de ρ inteiro acima de 0,8 | o deslocamento quase não pesa; o efeito que dura é o que o pet viveu |
+| **os dois pesam** | o IC95 de ρ inteiro entre 0,2 e 0,8 | uma parte vem de cada um, e a leitura dá ρ com o IC |
+
+**As frases que a leitura pode escrever:**
+- **a hipótese** de cada célula (braço × perfil), pela tabela acima. Um IC que cruza 0,2 ou 0,8 dá "ρ não se separa do limiar nesta
+  análise", com o valor;
+- **"deslocar o fluxo em um sorteio faz do pet um gêmeo"** só se o IC95 de Φ_S(t) ficar inteiro acima de 0,8 (IR-7) em todas as
+  idades; **"não basta para um gêmeo"** só se ficar inteiro abaixo de 0,8 em todas;
+- **"o efeito amarrado cresce com os dias"** pelas regras do γ da 7.2, com a régua crua da 12.2, para o ramo R;
+- **a condição do evento:** a da 3.4, aplicada ao R. Sem Φ_R⁰ acima de 0 em nenhuma idade, a frase é "com o sorteio amarrado, o tapa não
+  mudou o dia", e a H-SORT pode valer junto;
+- fora disso, "não se distingue nesta análise". São seis células sem correção de multiplicidade, e a tabela diz isso, como no I7.
+
+**A expectativa E-AD2, escrita antes e sem gate:** a H-SORT ou "os dois pesam" com ρ abaixo de 0,5, e Φ_S acima de 0,8. É o que o
+exploratório da 9.6 sugere. Ela é relida contra a tabela, sem ajuste.
+
+### 14.5 Os descritivos
+
+- **O tudo ou nada:** a fração dos ramos E(t) e R(t) com D = 0 nos quatro dias da janela, com D > 0 nos quatro, e com os dois, por
+  braço, perfil e dono. É a peça 1 do exploratório da 9.6, agora escrita antes. A leitura proposta lá prevê que a fração "D > 0 nos
+  quatro" cai do E para o R.
+- **A separação pelo sorteio,** nos ramos E(t), em todos e não em 20:
+  - a contagem `arb.sorteios` e `arb.reflexos` do fim do dia t igual ou diferente à do original;
+  - a tabela cruzada com o grupo do tudo ou nada.
+- **A fração de chaves sem par** do R (14.3), por braço e por dono.
+- **O Φ^est do R e do E**, a distância do estado interno da 12.5 (a D-IND-I7a-4), contra o gêmeo.
+- **A réplica do E:** o Φ_E, o γ_E e o reencontro do dia 14 nos pets novos, ao lado dos números do I7b. Aqui não há frase: uma diferença
+  entre as duas amostras se escreve como diferença, sem leitura.
+
+### 14.6 As conferências (falham alto)
+
+- **G-AD2-0, o nulo:** o log do N sai igual à vida de base byte a byte, com os gravadores ligados, e há 96 decisões por dia.
+- **G-AD2-1, o amarrado sem evento:** o log do R° sai igual ao do N byte a byte, e nenhuma chave fica sem par. Um R° diferente do N quer
+  dizer que o amarrado está quebrado, e a run para.
+- **G-AD2-2, o ramo se refaz:** cada ramo vivido duas vezes dá o mesmo log e as mesmas decisões, como na IR-6 (AD2-6).
+- **G-AD2-3, o prefixo:** as decisões de cada E(t), R(t) e S(t) antes do momento são as do original.
+- **G-AD2-4, a perturbação:** o E(t) e o R(t) têm exatamente um tapa a mais que o original, no tick do momento. O S(t) não tem tapa, e o
+  sorteio jogado fora acontece uma vez.
+
+### 14.7 O que a análise grava, o custo e o registro
+
+- **A pasta:** `artifacts_v3_individualidade_i7_ad2/`, com os mesmos arquivos da seção 6. O `analise.json` ganha o ρ, o Φ_S, o Φ_R e
+  os descritivos da 14.5. O `ramos.jsonl` ganha a fração das chaves sem par de cada R.
+- **O custo:** por pet, são 18 ramos (N, G, R°, e o E, o R e o S nas cinco idades), cada um vivido duas vezes, mais a vida de base. O I7b
+  levou 27 s de parede por pet com 4 processos, com 17 ramos, dos quais 5 eram replays mais baratos. A estimativa é de **cerca de 3 h com 4
+  processos** (V3-D8). Ela é SEM FONTE até a fumaça do I7c medir. Se a fumaça der mais que o dobro, o registro diz, e a AD2-6 volta ao
+  Matheus antes da run.
+- **O registro:** antes da primeira vida, numa seção nova no fim deste plano, ficam o commit e os sha256 do orquestrador, do
+  `metrics.py` e da config, o custo da fumaça, o comando e a contagem da suíte do dia.
+
+### 14.8 As missões (cada uma num PR)
+
+| missão | o quê |
+|---|---|
+| **I7-adendo2** | este adendo e as AD2-1 a AD2-7 |
+| **I7c** | o ρ no `digilab/metrics.py`, com teste contra casos feitos à mão; no orquestrador do I7, ou num irmão dele se o diff passar de um terço do arquivo, o gravador, o amarrado, os ramos R, R° e S e as conferências G-AD2-0 a 4; a trava, como a do I7, com a config da faixa 88101…88505; a fumaça com as sementes dos testes |
+| **I7d** | o registro, a run uma vez e a seção do adendo 2 no `docs/RESULTADO_V3_INDIVIDUALIDADE.md` |
+
+**A ordem:** o I7c só começa depois do I7b na `main`, e o I7d é a única run de pesquisa da máquina enquanto roda.
+
+### 14.9 As decisões do adendo (DECIDIDAS pelo Matheus em 2026-11-11, todas pela recomendação; cada uma com a recomendação e o custo de errar)
+
+| | a decisão | a recomendação | o custo de errar |
+|---|---|---|---|
+| **AD2-1** | os pets | **360 novos, da faixa 88101…88505**, com o ok do Gerente | nas vidas do I2, a run reaproveita o original e sai cerca de 3 % mais barata (uma vida de base a menos por pet), mas testa a hipótese na amostra que a sugeriu; com pets novos, o laço com o I2 e o I5 se perde, e o E repetido serve de ponte |
+| **AD2-2** | o controle do sorteio | **o amarrado pelo tick** (14.3) | ressincronizar a rng só no fim do dia t deixaria o resto do dia do tapa com o fluxo deslocado e misturaria as duas coisas; amarrar pela ordem dos sorteios (o n-ésimo do ramo recebe o n-ésimo do original) é o fluxo de hoje, e não separa nada |
+| **AD2-3** | o S(t) | **entra** | sem ele, a H-SORT diz que o deslocamento pesa, mas não se ele sozinho basta; com ele, são cinco ramos a mais por pet, cerca de 30 % do custo |
+| **AD2-4** | a rng do dono | **amarrada junto** | só a do pet deixaria um resto de sorteio do dono dentro do ρ, e a H-HIST poderia ganhar por ele; amarrar o dono tira do ρ a parte do dono que vem do sorteio, mas não a que vem de ele reagir |
+| **AD2-5** | o A e o E° | **saem** | sem eles, a malha aberta não se repete nos pets novos; com eles, são dez ramos a mais por pet para medidas que o I7b já deu |
+| **AD2-6** | a conferência do ramo | **todo ramo vivido duas vezes**, como na IR-6 | só numa amostra, a run fica perto da metade, e um amarrado que não se refaz passaria sem ser visto |
+| **AD2-7** | os limiares do ρ | **0,2 e 0,8**, PROPOSTOS, SEM FONTE; o 0,8 é o da IR-7 e o 0,2 é o espelho dele | mais estreitos, uma das duas hipóteses ganha fácil; mais largos, quase tudo cai em "os dois pesam" |
+
+## 15. O registro do adendo 2
+
+Escrito em 2026-11-11 (Claude Code, Opus 5.5, branch `v3-individualidade-i7d`), antes da primeira vida do I7d, como a 14.7 manda.
+
+- **O código:** o commit `c9c56584` da `main` (o merge do #794, o I7c). O I7d não muda o código: este registro entra num commit próprio,
+  empurrado antes da run, sobre os commits do registro de 2026-11 (a D-IND-I7c-1 confirmada e a D-IND-I7d-1).
+- **Os sha256:**
+  - o orquestrador `experiments/run_v3_individualidade_i7_ad2.py`: `a2b9170c3f6697409fcfef573a9ce74c9b3e2037dff29d41f1d40666ee23a7b4`;
+  - o orquestrador do I7, que ele importa: `ddbdab3b293038bda548514570bc266648b2dd478b717acaeb3473069731e7f2` (o mesmo da seção 13);
+  - o `digilab/metrics.py`: `af0762b501910dfb953e0eecafc5325c7644270aaec1b7fa886f3b31e58913e5`;
+  - a config `experiments/configs/v3_individualidade/individualidade_i7_ad2.json`:
+    `a6719dd18287627c0aaac3a11ac01868a94a0d28a62359cde7c6f90b9f14f2b5`.
+- **O custo da fumaça** (as sementes 101 e 202, K = 1, 14 dias, 12 pets, 4 processos): 7 min 10 s de parede, 35 s por pet com 4 processos,
+  136 s por pet dentro de cada processo. A projeção para as 360 pets é de cerca de 3 h 30 min, contra cerca de 3 h da 14.7: não passa do dobro,
+  e a AD2-6 fica como está.
+- **A faixa:** 88101…88505, na tabela desde o #794, liberada pelo Matheus sem o ok do Gerente (D-IND-I7d-1).
+- **O comando:**
+
+  ```bash
+  python experiments/run_v3_individualidade_i7_ad2.py --config experiments/configs/v3_individualidade/individualidade_i7_ad2.json --processos 4
+  ```
+
+  A saída vai para `artifacts_v3_individualidade_i7_ad2/`, que não existe antes da run.
+- **A suíte do dia** (`python -m pytest tests/ -q`, na branch `v3-individualidade-i7d` sobre `c06d5093`): 5 323 passaram, 9 pulados e 4
+  falharam, em 2 h 11 min.
+  - Três falhas são as listas do G2 de outras frentes, que já falham na `main` e não tocam o I7: duas pedem o
+    `experiments/entradas_dc4.py`, e a do `test_redecidir_evento.py` pede o `experiments/auditoria_pet_vivo.py`.
+  - A quarta, `test_credito_canal_etapa0.py::test_o_artefato_se_refaz_igual`, passou rodada sozinha logo depois (1 passed). Ela caiu com a
+    máquina carregada por outro trabalho ao lado e não toca o I7.
+

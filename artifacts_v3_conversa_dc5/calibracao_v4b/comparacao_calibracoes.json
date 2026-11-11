@@ -1,0 +1,150 @@
+{
+ "G": {
+  "dc5b_jogo": {
+   "acima_do_limite_v4b": 1,
+   "com_citacoes": 0,
+   "copiam_citacao": 0,
+   "e3": 30,
+   "e3_sem_pedido": 14,
+   "e3_solidao": 10,
+   "e3_solidao_fica_comigo": 0,
+   "falas": 96,
+   "fica_comigo": 0,
+   "genericas": 0,
+   "genericas_do_filtro": 0,
+   "palavras_media": 6.427083333333333,
+   "repeticao_trecho": {
+    "consideradas": 42,
+    "repetem": 14
+   }
+  },
+  "dc5b_v4": {
+   "acima_do_limite_v4b": 1,
+   "com_citacoes": 0,
+   "copiam_citacao": 0,
+   "e3": 30,
+   "e3_sem_pedido": 28,
+   "e3_solidao": 10,
+   "e3_solidao_fica_comigo": 0,
+   "falas": 96,
+   "fica_comigo": 0,
+   "genericas": 0,
+   "genericas_do_filtro": 0,
+   "palavras_media": 4.572916666666667,
+   "repeticao_trecho": {
+    "consideradas": 42,
+    "repetem": 7
+   }
+  },
+  "v4b_jogo": {
+   "acima_do_limite_v4b": 3,
+   "com_citacoes": 29,
+   "copiam_citacao": 0,
+   "e3": 30,
+   "e3_sem_pedido": 11,
+   "e3_solidao": 10,
+   "e3_solidao_fica_comigo": 0,
+   "falas": 96,
+   "fica_comigo": 0,
+   "genericas": 2,
+   "genericas_do_filtro": 2,
+   "palavras_media": 6.73404255319149,
+   "repeticao_trecho": {
+    "consideradas": 40,
+    "repetem": 8
+   }
+  },
+  "v4b_v4b": {
+   "acima_do_limite_v4b": 0,
+   "com_citacoes": 25,
+   "copiam_citacao": 0,
+   "e3": 28,
+   "e3_sem_pedido": 20,
+   "e3_solidao": 10,
+   "e3_solidao_fica_comigo": 0,
+   "falas": 96,
+   "fica_comigo": 0,
+   "genericas": 6,
+   "genericas_do_filtro": 6,
+   "palavras_media": 3.5444444444444443,
+   "repeticao_trecho": {
+    "consideradas": 38,
+    "repetem": 4
+   }
+  }
+ },
+ "H": {
+  "dc5b_jogo": {
+   "acima_do_limite_v4b": 50,
+   "com_citacoes": 0,
+   "copiam_citacao": 0,
+   "e3": 30,
+   "e3_sem_pedido": 0,
+   "e3_solidao": 10,
+   "e3_solidao_fica_comigo": 10,
+   "falas": 96,
+   "fica_comigo": 24,
+   "genericas": 0,
+   "genericas_do_filtro": 0,
+   "palavras_media": 19.34375,
+   "repeticao_trecho": {
+    "consideradas": 42,
+    "repetem": 28
+   }
+  },
+  "dc5b_v4": {
+   "acima_do_limite_v4b": 58,
+   "com_citacoes": 0,
+   "copiam_citacao": 0,
+   "e3": 30,
+   "e3_sem_pedido": 1,
+   "e3_solidao": 10,
+   "e3_solidao_fica_comigo": 7,
+   "falas": 96,
+   "fica_comigo": 13,
+   "genericas": 0,
+   "genericas_do_filtro": 0,
+   "palavras_media": 28.177083333333332,
+   "repeticao_trecho": {
+    "consideradas": 42,
+    "repetem": 23
+   }
+  },
+  "v4b_jogo": {
+   "acima_do_limite_v4b": 57,
+   "com_citacoes": 31,
+   "copiam_citacao": 0,
+   "e3": 30,
+   "e3_sem_pedido": 1,
+   "e3_solidao": 10,
+   "e3_solidao_fica_comigo": 9,
+   "falas": 96,
+   "fica_comigo": 18,
+   "genericas": 0,
+   "genericas_do_filtro": 0,
+   "palavras_media": 20.145833333333332,
+   "repeticao_trecho": {
+    "consideradas": 42,
+    "repetem": 23
+   }
+  },
+  "v4b_v4b": {
+   "acima_do_limite_v4b": 48,
+   "com_citacoes": 31,
+   "copiam_citacao": 0,
+   "e3": 30,
+   "e3_sem_pedido": 0,
+   "e3_solidao": 10,
+   "e3_solidao_fica_comigo": 1,
+   "falas": 96,
+   "fica_comigo": 3,
+   "genericas": 0,
+   "genericas_do_filtro": 0,
+   "palavras_media": 25.291666666666668,
+   "repeticao_trecho": {
+    "consideradas": 42,
+    "repetem": 17
+   }
+  }
+ }
+}

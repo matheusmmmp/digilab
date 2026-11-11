@@ -46,6 +46,17 @@ export interface MapaSom {
 /** a musica pedida: uma chave de BGM, ou um lugar que o mapa resolve (a luta pelo mapa da arena, ou a de chefe) */
 export type AlvoMusica = string | { lugar: "ilha" | "treino" | "nascimento" } | { luta: string; chefe: boolean };
 /** quem pede musica, do mais forte ao mais fraco: a evolucao cobre a luta, que cobre o treino e o nascimento, que cobrem a ilha */
+/** os efeitos que a HR2 acrescentou ao mapa (Assets/gerar_sons_up.py): com o mapa de antes, o jogo avisa em vez de falhar */
+const EFEITOS_HR2: readonly string[] = ["cuidado_toque", "cuidado_limpar", "cuidado_recusa", "fruta_boa", "fruta_podre", "chamado_atendido", "tratar", "nascer", "voz"];
+/** o bipe do chamado (HR3): cada toque e [hz, inicio em s, duracao em s]. PROPOSTOS, SEM FONTE (o estilo V-pet da SD-8) */
+export type TipoBipe = "abre" | "urgente" | "perdido";
+export const BIPES: Readonly<Record<TipoBipe, readonly (readonly [number, number, number])[]>> = {
+  abre: [[2000, 0, 0.08], [2000, 0.14, 0.08], [2000, 0.28, 0.08]],
+  urgente: [[2400, 0, 0.06], [2400, 0.1, 0.06], [2400, 0.2, 0.06], [2400, 0.3, 0.06], [2400, 0.4, 0.06]],
+  perdido: [[1200, 0, 0.12], [800, 0.16, 0.12], [500, 0.32, 0.2]],
+};
+/** o volume de cada toque do bipe (a onda quadrada e forte). PROPOSTO, SEM FONTE */
+export const BIPE_GANHO = 0.08;
 export const PRIORIDADE_MUSICA = { evolucao: 3, luta: 2, treino: 1, nascimento: 1, jornada: 1, ilha: 0 } as const;
 export type FonteMusica = keyof typeof PRIORIDADE_MUSICA;
 
@@ -56,9 +67,11 @@ export interface FonteAudio extends NoAudio {
   start(quando?: number, deslocamento?: number): void; stop(): void;
 }
 export interface GanhoAudio extends NoAudio { gain: { value: number } }
+/** o oscilador do bipe do chamado (HR3); opcional no contexto: sem ele (o teste antigo), o bipe nao toca */
+export interface OsciladorAudio extends NoAudio { type: string; frequency: { value: number }; start(quando?: number): void; stop(quando?: number): void }
 export interface ContextoAudio {
   state: string; currentTime: number; destination: unknown;
-  createGain(): GanhoAudio; createBufferSource(): FonteAudio;
+  createGain(): GanhoAudio; createBufferSource(): FonteAudio; createOscillator?(): OsciladorAudio;
   decodeAudioData(dados: ArrayBuffer): Promise<{ duration: number }>; resume(): Promise<void>;
 }
 export interface Dependencias {
@@ -139,15 +152,15 @@ export function criarSom(dep: Dependencias, base = SONS_URL) {
 
   /** toca um arquivo no barramento dos efeitos, com atraso (s) e variacao de tom opcional; com VOZES_POR_ARQUIVO copias dele ainda
       tocando, esta nao toca (a rajada da luta nao satura) */
-  const tocarArquivo = async (arq: string, atraso: number, variacao: number | null): Promise<void> => {
+  const tocarArquivo = async (arq: string, atraso: number, variacao: number | null, taxaFixa = 1): Promise<void> => {
     const b = await buffer(arq);
     if (!b || !estado.ligado || !ctx || !gEfeitos) return;
     const agora = ctx.currentTime, ini = agora + Math.max(0, atraso), vivas = (tocando.get(arq) ?? []).filter(t => t > agora);
     if (vivas.length >= VOZES_POR_ARQUIVO) { tocando.set(arq, vivas); return; }
     const s = ctx.createBufferSource();
     s.buffer = b;
-    const taxa = variacao ? 1 + (dep.aleatorio() * 2 - 1) * variacao / DIVISOR_VARIACAO : 1;
-    if (variacao) s.playbackRate.value = taxa;
+    const taxa = taxaFixa * (variacao ? 1 + (dep.aleatorio() * 2 - 1) * variacao / DIVISOR_VARIACAO : 1);
+    if (taxa !== 1) s.playbackRate.value = taxa;
     s.connect(gEfeitos); s.start(ini);
     vivas.push(ini + b.duration / taxa); tocando.set(arq, vivas);
   };
@@ -198,12 +211,33 @@ export function criarSom(dep: Dependencias, base = SONS_URL) {
     },
     /** um efeito do jogo (src/somEventos.ts) pelo nome; desligado nao faz nada (nem pede arquivo). O mapa antigo (sem "efeitos") avisa
         uma vez; efeito que o mapa nao tem falha alto */
-    async efeito(e: EfeitoSom, atraso = 0): Promise<void> {
+    async efeito(e: EfeitoSom, atraso = 0, taxa = 1): Promise<void> {
       if (!estado.ligado) return;
+      if (!(taxa > 0) || !Number.isFinite(taxa)) throw new Error("taxa do efeito invalida: " + taxa);
       const m = await carregarMapa(); if (!m) return;
       if (!m.efeitos) { avisoMapaAntigo(); return; }
-      const x = m.efeitos[e]; if (!x) throw new Error(`mapa de sons: o efeito ${e} nao esta no mapa`);
-      await tocarArquivo(x.arq, atraso, null);
+      const x = m.efeitos[e];
+      if (!x) {
+        /* o mapa da versao 2 de antes da HR2 nao tem os efeitos do cuidado: avisa uma vez, como o mapa antigo (Assets fica fora do git) */
+        if (EFEITOS_HR2.includes(e)) { avisoMapaAntigo(); return; }
+        throw new Error(`mapa de sons: o efeito ${e} nao esta no mapa`);
+      }
+      await tocarArquivo(x.arq, atraso, null, taxa);
+    },
+    /** a voz do pet (HR2): o arquivo da voz do UP com o tom da especie, do estagio e do humor (src/somVoz.ts, taxaDaVoz) */
+    voz(taxa: number): Promise<void> { return this.efeito("voz", 0, taxa); },
+    /** o bipe do chamado do bebe (HR3, SD-8): sintetizado, sem arquivo. "abre": tres toques; "urgente": cinco, mais agudos e mais rapidos;
+        "perdido": tres toques descendo. Desligado, ou sem oscilador no contexto, nada */
+    bipe(tipo: TipoBipe): void {
+      if (!estado.ligado) return;
+      const c = contexto(); if (!c.createOscillator || !gEfeitos) return;
+      const roteiro = BIPES[tipo]; if (!roteiro) throw new Error("bipe desconhecido: " + tipo);
+      const t0 = c.currentTime;
+      roteiro.forEach(([hz, ini, dur]) => {
+        const o = c.createOscillator!(), g = c.createGain();
+        o.type = "square"; o.frequency.value = hz; g.gain.value = BIPE_GANHO;
+        o.connect(g); g.connect(gEfeitos!); o.start(t0 + ini); o.stop(t0 + ini + dur);
+      });
     },
     /** a fonte pede (ou, com null, larga) a musica; toca a do pedido mais forte (PRIORIDADE_MUSICA) */
     pedirMusica(fonte: FonteMusica, alvo: AlvoMusica | null): Promise<void> {
