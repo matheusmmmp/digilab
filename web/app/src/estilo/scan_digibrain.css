@@ -89,11 +89,11 @@
 .scan .scan-estado-rot{ font:600 11px/1 var(--hx-f); letter-spacing:.12em; text-transform:uppercase; color:var(--hx-rotulo) }
 .scan .scan-estado b{ display:inline-flex; align-items:center; gap:6px; font:700 15px/1 var(--hx-f); letter-spacing:.06em; text-transform:uppercase; color:var(--tom); white-space:nowrap }
 .scan .scan-estado b svg.lucide{ width:18px; height:18px }
-.scan .scan-estado[data-tom="ok"]{ --tom:var(--hx-ok) }
-.scan .scan-estado[data-tom="neutro"]{ --tom:var(--hx-num) }
-.scan .scan-estado[data-tom="alerta"]{ --tom:var(--hx-alerta) }
-.scan .scan-estado[data-tom="perigo"]{ --tom:var(--hx-perigo) }
-.scan .scan-estado[data-tom="sem"]{ --tom:var(--hx-sec) }
+.scan .scan-estado[data-tom="ok"], .scan .rv[data-tom="ok"]{ --tom:var(--hx-ok) }
+.scan .scan-estado[data-tom="neutro"], .scan .rv[data-tom="neutro"]{ --tom:var(--hx-num) }
+.scan .scan-estado[data-tom="alerta"], .scan .rv[data-tom="alerta"]{ --tom:var(--hx-alerta) }
+.scan .scan-estado[data-tom="perigo"], .scan .rv[data-tom="perigo"]{ --tom:var(--hx-perigo) }
+.scan .scan-estado[data-tom="sem"], .scan .rv[data-tom="sem"]{ --tom:var(--hx-sec) }
 .scan-giro{ position:relative; z-index:1; width:100%; height:100% }   /* acima da varredura: os rotulos ficam por cima dela */
 .scan-giro svg{ display:block; width:100%; height:100% }
 
@@ -129,7 +129,25 @@
 .scan .scan-texto th, .scan .scan-texto td{ padding:3px 8px 3px 0; border-bottom:1px solid var(--scan-grade) }
 .scan .scan-texto td:nth-child(4), .scan .scan-texto td:nth-child(5){ font-family:var(--hx-f-num); font-variant-numeric:tabular-nums }
 
-/* ---------- o desenho (SVG). As classes sao as de hoje (MapaPesos.tsx), as que o e2e le */
+/* ---------- a rede viva (D1e): a ilustracao do cerebro em atividade no scan do A v11. Os fios e os pontos sao claros, como a rede da referencia;
+   os impulsos tem a cor do estado atual (--tom) e correm sem parar enquanto o tempo do jogo anda. Sem filtro de brilho: a rede redesenha a cada
+   quadro, e um filtro por cima custaria caro. Com "reduzir movimento" nada anima e os impulsos nao aparecem */
+.scan .rv{ --tom:var(--hx-texto) }
+.scan .rv-fios path{ fill:none; stroke:var(--hx-texto); stroke-opacity:.42; stroke-linecap:round }
+.scan .rv-pontos circle{ fill:var(--hx-texto) }
+.scan .rv-impulsos path{ fill:none; stroke:var(--tom); stroke-linecap:round; stroke-dasharray:.2 .8; stroke-dashoffset:.2; opacity:0 }
+@media (prefers-reduced-motion:no-preference){
+  .scan .rv-impulsos path{ opacity:1; animation:rv-impulso 3s linear infinite }
+  .scan .rv-pisca{ animation:rv-pisca 3.4s ease-in-out infinite }
+  .scan .rv--parada .rv-impulsos path, .scan .rv--parada .rv-pisca{ animation-play-state:paused }
+  /* uma decisao nova: a rede inteira acende uma vez, depois da varredura (o componente tira a marca quando termina) */
+  .scan .rv--surto .rv-fios path{ animation:rv-surto var(--scan-t-pulso) ease-out var(--scan-t-varre) 1 }
+}
+@keyframes rv-impulso{ from{ stroke-dashoffset:.2 } to{ stroke-dashoffset:-.8 } }
+@keyframes rv-pisca{ 0%, 100%{ opacity:1 } 50%{ opacity:.25 } }
+@keyframes rv-surto{ 0%, 100%{ stroke-opacity:.42 } 30%{ stroke-opacity:.95 } }
+
+/* ---------- o desenho (SVG) do scan do cerebro modular (ScanDigiBrainLab), que ainda e o mapa com nos e fios. As classes sao as de hoje (MapaPesos.tsx), as que o e2e le */
 .scan .mp text{ font-family:var(--hx-f) }
 /* a silhueta de cerebro: so o scan do cerebro modular (ScanDigiBrainLab) ainda a desenha */
 .scan .mp-silhueta{ fill:none; stroke:var(--scan-malha); stroke-opacity:.6; stroke-width:1.5 }

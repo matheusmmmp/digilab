@@ -1,87 +1,94 @@
-// O mapa do scan do DigiBrain (D1 da UX_TELA_PET; src/componentes/ScanDigiBrain.tsx). Sem DOM (vitest em node): renderToStaticMarkup.
-// Cobre: cada ponto e um no do motor e cada fio uma aresta de Motor.digibrain().mapa (as contagens que o e2e le), o destaque da decisao, o
-// pulso so quando pedido (e um por aresta acesa), a falha alta (no fora do mapa, mapa e decisao de passos diferentes), a 390 e a 1920, e o
-// tempo de montar o SVG com os ~80 fios (impresso, nao assertado: a maquina muda).
+// O desenho do scan do DigiBrain (D1 e D1e da UX_TELA_PET; src/componentes/ScanDigiBrain.tsx). Sem DOM (vitest em node): renderToStaticMarkup.
+// Cobre: a rede viva (uma ilustracao: deterministica pela semente do pet, dentro do quadro, sem texto nem nos do motor), quantos impulsos
+// correm (o que o desenho le da decisao), as marcas de parada e de decisao nova, a faixa de baixo (a onda e o estado atual, que saem do
+// motor), os numeros do movimento e o contraste nas duas peles.
 import { createElement as h } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import { Motor } from "../motor/index.ts";
 import { REGRAS_LOBOS } from "../motor/index.ts";
-import { FaixaEstado, GIRO_CICLO_S, GIRO_GRAUS, MapaScan, PULSO_MS, TOM_REGRA, VARREDURA_MS, pontosDaOnda } from "../src/componentes/ScanDigiBrain.tsx";
+import {
+  FaixaEstado, GIRO_CICLO_S, GIRO_GRAUS, IMPULSOS_MIN, IMPULSOS_POR_ENTRADA, N_IMPULSOS, PULSO_MS, RedeVivaDesenho, TOM_REGRA, VARREDURA_MS,
+  impulsosDaDecisao, pontosDaOnda, redeViva,
+} from "../src/componentes/ScanDigiBrain.tsx";
 
 /* o pet v11 do e2e do DigiBrain (e2e/jogo.spec.ts) */
 const LOG: [number, string, unknown][] = [[480, "t", 120], [600, "d", "acariciar"], [600, "t", 120], [720, "d", "tapa"], [720, "t", 120],
   [840, "dc", { tipo: "racao", x: 168, y: 248 }], [840, "t", 60]];
 const m = Motor.reproduzir(4242, LOG as never, 21), db = m.digibrain()!;
-const montar = (movel: boolean, movendo: boolean, mapa = db.mapa, decisao = db.decisao): string =>
-  renderToStaticMarkup(h(MapaScan, { mapa, decisao, movel, movendo }));
+const montar = (o: { movel?: boolean; correndo?: boolean; surto?: boolean; acesas?: typeof db.mapa.acesas } = {}): string =>
+  renderToStaticMarkup(h(RedeVivaDesenho, { semente: 4242, acesas: o.acesas === undefined ? db.mapa.acesas : o.acesas, tom: TOM_REGRA[db.decisao!.regra],
+    movel: o.movel ?? false, correndo: o.correndo ?? true, surto: o.surto ?? false }));
 const contar = (s: string, re: RegExp): number => (s.match(re) ?? []).length;
+const grupo = (s: string, classe: string): string => s.match(new RegExp(`<g class="${classe}"[^>]*>(.*?)</g>`))![1]!;
 
-describe("o mapa do scan: cada ponto e cada fio vem do motor", () => {
-  test("o pet do e2e tem decisao, fios e arestas acesas", () => {
+describe("a rede viva (D1e): uma ilustracao, nao o mapa dos pesos", () => {
+  test("o pet do e2e tem decisao e arestas acesas", () => {
     expect(db.decisao).not.toBeNull();
     expect(db.mapa.acesas).not.toBeNull();
-    expect(db.mapa.arestas.length).toBeGreaterThan(40);
+  });
+  test("a mesma semente da a mesma rede; outra semente, outra rede", () => {
+    expect(redeViva(4242)).toEqual(redeViva(4242));
+    expect(redeViva(4243).fios).not.toEqual(redeViva(4242).fios);
+  });
+  test("a rede cabe no quadro: nenhum ponto nem fio fora do viewBox 880 x 552, e o meio do anel fica vazio", () => {
+    for (const semente of [1, 4242, 99999]) {
+      const rede = redeViva(semente);
+      expect(rede.pontos.length).toBe(150);
+      expect(rede.impulsos.length).toBe(N_IMPULSOS);
+      expect(rede.fios.length).toBeGreaterThan(500); expect(rede.fios.length).toBeLessThan(600);
+      for (const p of rede.pontos) {
+        expect(p.x).toBeGreaterThan(0); expect(p.x).toBeLessThan(880); expect(p.y).toBeGreaterThan(0); expect(p.y).toBeLessThan(552);
+        expect(Math.hypot(p.x - 440, p.y - 276)).toBeGreaterThan(80);
+      }
+      const nums = [...rede.fios, ...rede.impulsos].flatMap(d => [...d.matchAll(/(-?[0-9.]+) (-?[0-9.]+)/g)].map(c => [Number(c[1]), Number(c[2])]));
+      expect(nums.length).toBeGreaterThan(1000);
+      for (const [x, y] of nums) { expect(x).toBeGreaterThan(0); expect(x).toBeLessThan(880); expect(y).toBeGreaterThan(0); expect(y).toBeLessThan(552); }
+    }
+  });
+  test("quantos impulsos correm sai da decisao: o minimo, mais dois por entrada que pesou, ate o teto", () => {
+    const ac = db.mapa.acesas!;
+    expect(impulsosDaDecisao(null)).toBe(IMPULSOS_MIN);
+    expect(impulsosDaDecisao(ac)).toBe(Math.min(N_IMPULSOS, IMPULSOS_MIN + IMPULSOS_POR_ENTRADA * ac.arestas.length));
+    expect(impulsosDaDecisao({ ...ac, arestas: Array.from({ length: 40 }, () => ac.arestas[0]!) })).toBe(N_IMPULSOS);
   });
   for (const movel of [false, true]) {
-    test(`as contagens do e2e (${movel ? "390" : "1920"} px)`, () => {
-      const s = montar(movel, false), ac = db.mapa.acesas!, d = db.decisao!;
+    test(`o SVG (${movel ? "390" : "1920"} px): os fios, os pontos e os impulsos da rede, sem texto e sem os nos do motor`, () => {
+      const s = montar({ movel }), ac = db.mapa.acesas!, rede = redeViva(4242);
+      expect(s).toContain('viewBox="0 0 880 552"');
       expect(s).toContain(`data-n="${ac.n}"`);
-      const pesos = s.match(/<g class="mp-pesos[^"]*">(.*?)<\/g>/)![1]!, acesas = s.match(/<g class="mp-acesas">(.*?)<\/g>/)![1]!;
-      expect(contar(pesos, /<path /g)).toBe(db.mapa.arestas.length);
-      expect(contar(acesas, /<path /g)).toBe(ac.arestas.length);
-      expect(contar(s, /class="mp-no[^"]*mp-lit[^"]*" data-regra=/g)).toBe(1);
-      expect(s).toContain(`data-regra="${ac.regra}"`);
-      expect(contar(s, /class="mp-no[^"]*mp-esc[^"]*" data-acao="/g)).toBe(1);
-      expect(contar(s, /class="mp-no[^"]*mp-cand/g)).toBe(d.chances.length);
-      expect(contar(s, /class="mp-pct"/g)).toBe(d.chances.length);
-      expect(contar(s, /class="mp-no[^"]*mp-lit[^"]*" data-entrada=/g)).toBe(d.percepcao.length);
-      /* as tres regioes com os nomes do dono (D1b-6), sem o "pesou mais" nem a regiao sem pesos da memoria */
-      expect([...s.matchAll(/<text class="mp-reg" data-lobo="([^"]+)"[^>]*>([^<]+)<\/text>/g)].map(x => [x[1], x[2]]))
-        .toEqual([["decisao", "ações"], ["impulsos", "regras"], ["percepcao", "percepção"]]);
-      expect(s).not.toMatch(/mp-dest|pesou mais|memória e emoção/);
-      /* um no por entrada, regra e acao */
-      expect(contar(s, /data-entrada=/g)).toBe(10 + db.mapa.receptores.length);
-      expect(contar(s, /data-regra=/g)).toBe(7);
-      expect(contar(s, /data-acao=/g)).toBe(7);
+      expect(s).toContain(`data-impulsos="${impulsosDaDecisao(ac)}"`);
+      expect(s).toContain(`data-tom="${TOM_REGRA[db.decisao!.regra]}"`);
+      expect(contar(grupo(s, "rv-fios"), /<path /g)).toBe(rede.fios.length);
+      expect(contar(grupo(s, "rv-impulsos"), /<path /g)).toBe(impulsosDaDecisao(ac));
+      expect(contar(grupo(s, "rv-pontos"), /<circle /g)).toBe(rede.pontos.length);
       expect(s).toContain('role="img"');
-      expect(s).toContain("Mapa dos pesos do pet");
+      expect(s).toContain("os pesos de verdade estão no mapa em texto");
+      expect(s).not.toMatch(/<text|data-entrada|data-regra|data-acao|mp-pesos|mp-acesas|mp-no|mp-silhueta/);
     });
   }
-  test("o pulso so com `movendo`, um por aresta acesa, e fora de .mp-pesos e .mp-acesas", () => {
-    const sem = montar(false, false), com = montar(false, true), ac = db.mapa.acesas!;
-    expect(sem).not.toContain("mp-pulso");
-    expect(com).toContain("mp-pulso");
-    expect(contar(com.match(/<g class="mp-pulso"[^>]*>(.*?)<\/g>/)![1]!, /<path /g)).toBe(ac.arestas.length);
-    expect(contar(com.match(/<g class="mp-acesas">(.*?)<\/g>/)![1]!, /<path /g)).toBe(ac.arestas.length);
-    expect(contar(com.match(/<g class="mp-pesos[^"]*">(.*?)<\/g>/)![1]!, /<path /g)).toBe(db.mapa.arestas.length);
+  test("as marcas: parada com o tempo parado, surto numa decisao nova; sem decisao, o minimo de impulsos", () => {
+    expect(montar()).not.toMatch(/rv--parada|rv--surto/);
+    expect(montar({ correndo: false })).toContain("rv--parada");
+    expect(montar({ surto: true })).toContain("rv--surto");
+    const sem = montar({ acesas: null });
+    expect(sem).toContain('data-n=""');
+    expect(contar(grupo(sem, "rv-impulsos"), /<path /g)).toBe(IMPULSOS_MIN);
   });
-  test("sem decisao: nada aceso, sem pulso, sem destaque", () => {
-    const s = montar(false, true, { ...db.mapa, acesas: null }, null);
-    expect(s).toContain('data-n=""');
-    expect(s).toContain("Ainda sem decisão");
-    expect(s).not.toContain("mp-acesas");
-    expect(s).not.toContain("mp-pulso");
-    expect(s).not.toContain("mp-lit");
-    expect(s).not.toContain("mp-dest");
+  test("o custo de montar o SVG (mediana de 30 montagens, impressa)", () => {
+    for (let i = 0; i < 5; i++) montar();   // aquece
+    const t: number[] = [];
+    for (let i = 0; i < 30; i++) { const a = performance.now(); montar(); t.push(performance.now() - a); }
+    t.sort((a, b) => a - b);
+    console.log(`RedeVivaDesenho: ${redeViva(4242).fios.length} fios; mediana ${t[15]!.toFixed(2)} ms, max ${t[29]!.toFixed(2)} ms (renderToStaticMarkup, node)`);
+    expect(t[15]!).toBeLessThan(200);   // so um teto frouxo: acima disso algo quebrou
   });
-  test("o anel (D1e): o viewBox 880 x 552, as acoes a esquerda, as entradas a direita e as regras por dentro; sem a silhueta", () => {
-    const s = montar(false, false);
-    expect(s).toContain('viewBox="0 0 880 552"');
-    expect(s).not.toMatch(/mp-silhueta|mp-divisas|db-malha/);
-    /* o centro do ponto de cada no (o segundo circulo do grupo; o primeiro e o alvo do toque) */
-    const centros = (attr: string): [number, number][] => [...s.matchAll(new RegExp(`${attr}="[^"]+"><circle class="mp-alvo" cx="([-0-9.]+)" cy="([-0-9.]+)"`, "g"))].map(m => [Number(m[1]), Number(m[2])]);
-    const raio = ([x, y]: [number, number]): number => Math.hypot(x - 440, y - 276);
-    const ac = centros("data-acao"), en = centros("data-entrada"), re = centros("data-regra");
-    expect([ac.length, re.length, en.length]).toEqual([7, 7, 10 + db.mapa.receptores.length]);
-    for (const p of ac) { expect(p[0]).toBeLessThan(440); expect(raio(p)).toBeCloseTo(212, 0); }
-    for (const p of en) { expect(p[0]).toBeGreaterThan(440); expect(raio(p)).toBeCloseTo(212, 0); }
-    for (const p of re) expect(raio(p)).toBeCloseTo(150, 0);
-    /* todo fio fica dentro do quadro: nenhuma coordenada fora do viewBox */
-    const nums = [...s.matchAll(/ d="([^"]+)"/g)].flatMap(m => [...m[1]!.matchAll(/(-?[\d.]+) (-?[\d.]+)/g)].map(c => [Number(c[1]), Number(c[2])]));
-    expect(nums.length).toBeGreaterThan(200);
-    for (const [x, y] of nums) { expect(x).toBeGreaterThanOrEqual(0); expect(x).toBeLessThanOrEqual(880); expect(y).toBeGreaterThanOrEqual(0); expect(y).toBeLessThanOrEqual(552); }
+  test("com \"reduzir movimento\" nada anima: toda animacao da rede fica dentro do no-preference", () => {
+    const css = readFileSync(new URL("../src/estilo/scan_digibrain.css", import.meta.url), "utf8");
+    const fora = css.replace(/@media \(prefers-reduced-motion:no-preference\)\{[\s\S]*?\n\}/g, "");
+    expect(fora).not.toMatch(/animation:\s*rv-/);
+    expect(css).toMatch(/animation:\s*rv-impulso/);
   });
 });
 
@@ -115,42 +122,9 @@ describe("a faixa de baixo (D1e): a onda e o estado atual saem do motor", () => 
   });
 });
 
-describe("o mapa do scan falha alto", () => {
-  test("uma entrada fora do mapa", () => {
-    const mapa = { ...db.mapa, arestas: [{ ...db.mapa.arestas[0]!, entrada: "inventada" }, ...db.mapa.arestas.slice(1)] };
-    expect(() => montar(false, false, mapa)).toThrow(/entrada fora do mapa: inventada/);
-  });
-  test("o mapa e a leitura de decisoes diferentes", () => {
-    expect(() => montar(false, false, db.mapa, { ...db.decisao!, n: db.decisao!.n + 1 })).toThrow(/decisoes diferentes/);
-  });
-  test("acesas sem decisao", () => {
-    expect(() => montar(false, false, db.mapa, null)).toThrow(/fora de par/);
-  });
-});
-
 describe("os numeros do movimento sao os PROPOSTOS da D1-2", () => {
   test("varredura 1,2 s, pulso 0,8 s, giro de 8 graus num ciclo de 40 s", () => {
     expect([VARREDURA_MS, PULSO_MS, GIRO_GRAUS, GIRO_CICLO_S]).toEqual([1200, 800, 8, 40]);
-  });
-});
-
-describe("o custo de montar o SVG", () => {
-  test("com ~80 fios (mediana de 30 montagens, impressa)", () => {
-    /* uma vida mais longa do mesmo save (como o dados_digibrain.mts da prancha) ate o mapa ter 70 fios ou mais */
-    const log = [...LOG]; let t0 = 900, grande = db;
-    for (let k = 0; k < 400 && grande.mapa.arestas.length < 70; k++) {
-      if (k % 5 === 0) log.push([t0, "d", "acariciar"]);
-      log.push([t0, "t", 60]); t0 += 60;
-      const g = Motor.reproduzir(4242, log as never, 21).digibrain();
-      if (g?.decisao) grande = g;
-    }
-    const mapa = grande.mapa, decisao = grande.decisao;
-    for (let i = 0; i < 5; i++) montar(false, true, mapa, decisao);   // aquece
-    const t: number[] = [];
-    for (let i = 0; i < 30; i++) { const a = performance.now(); montar(false, true, mapa, decisao); t.push(performance.now() - a); }
-    t.sort((a, b) => a - b);
-    console.log(`MapaScan: ${mapa.arestas.length} fios + ${mapa.acesas!.arestas.length} acesas + pulso; mediana ${t[15]!.toFixed(2)} ms, max ${t[29]!.toFixed(2)} ms (renderToStaticMarkup, node)`);
-    expect(t[15]!).toBeLessThan(200);   // so um teto frouxo: acima disso algo quebrou
   });
 });
 

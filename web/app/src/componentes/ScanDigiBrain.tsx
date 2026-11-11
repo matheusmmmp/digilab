@@ -10,14 +10,16 @@
    O campo pequeno (D1c, escolha do Matheus de 2026-11-07, "(a) desk, (b) celular"): no desktop um painel de 420 px sob o relogio, a 390 uma folha
    de 210 px com os botoes numa coluna a esquerda; o titulo e so o icone do cerebro (o nome fica para o leitor de tela); os rotulos so no
    caminho aceso e nas candidatas, e o de qualquer outro ponto aparece ao passar o mouse ou ao tocar nele.
-   O visual do scanner (pedido do Matheus em 2026-11-11, com uma imagem de referencia; docs/TAREFA_V3_UX_TELA_PET.md, "D1e"): a rede em anel no
-   lugar da silhueta de cerebro, o quadro escuro com cantos em colchete, o nome ao lado do icone no desktop e, embaixo, uma faixa com a onda da
-   decisao e o "estado atual". A coluna de cinco barras da referencia (percepcao, memoria, impulsos, emocao, social) nao entra. A onda e o
-   estado saem do motor: a onda e um pico por entrada com termo nesta decisao (mapa.acesas.arestas: o sinal do termo e a forca), e o estado
-   atual e a regra do instinto que valeu (decisao.regra). O motor nao tem um estado chamado "calmo": nada disso e inventado na tela. */
-import { memo, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type MouseEvent, type ReactNode, type SyntheticEvent } from "react";
+   O visual do scanner (pedido do Matheus em 2026-11-11, com uma imagem de referencia; docs/TAREFA_V3_UX_TELA_PET.md, "D1e"): o quadro escuro
+   com cantos em colchete, o nome ao lado do icone no desktop, a rede em anel e, embaixo, uma faixa com a onda da decisao e o "estado atual".
+   A coluna de cinco barras da referencia (percepcao, memoria, impulsos, emocao, social) nao entra. No mesmo dia ele pediu o desenho "mais
+   ludico": a rede e uma ILUSTRACAO que simula o cerebro em atividade (a "rede viva", abaixo), nao o mapa dos pesos; o que a D1 dizia de
+   "cada ponto e um no do motor" deixou de valer para o desenho. Os pesos de verdade ficam no mapa em texto. A onda e o estado atual saem
+   do motor: a onda e um pico por entrada com termo nesta decisao (mapa.acesas.arestas), e o estado atual e a regra do instinto que valeu
+   (decisao.regra). O motor nao tem um estado chamado "calmo". */
+import { memo, useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type MouseEvent, type ReactNode, type SyntheticEvent } from "react";
 import { Annoyed, Brain, Frown, Info, List, Meh, Smile, X, type LucideIcon } from "lucide-react";
-import { ACOES_LOBOS, ENTRADAS_LOBOS, REGRAS_LOBOS, type AcaoPet, type LeituraDecisao, type MapaDecisao, type RegraLobos } from "../../motor/index.ts";
+import { ENTRADAS_LOBOS, type LeituraDecisao, type MapaDecisao, type RegraLobos } from "../../motor/index.ts";
 import { useJogo } from "../jogo.ts";
 import type { EstadoSelo } from "../seloDigiBrain.ts";
 import "../estilo/scan_digibrain.css";
@@ -37,28 +39,24 @@ export const GIRO_CICLO_S = 40;
 /** a folga depois do fim da animacao antes de tirar a varredura e o pulso do DOM, em ms (so para o timer; nao e o tempo da animacao) */
 const FOLGA_MS = 150;
 
-/* ---------------------------------------------------------------- a geometria do desenho (unidades do desenho; so desenho)
-   PROPOSTO, SEM FONTE (o anel, pedido do Matheus em 2026-11-11 com uma imagem de referencia; substitui a silhueta de cerebro da D1-11 e da
-   D1b-2): a rede e um anel. As acoes ficam num arco a esquerda (de cima para baixo, na ordem de ACOES_LOBOS), o que o pet sente num arco a
-   direita (as entradas na ordem do motor e os receptores do corpo no fim, embaixo), e as regras num circulo por dentro (a primeira em cima, no
-   sentido do relogio, na ordem em que o instinto as testa). Cada fio sai da entrada, passa pela regra e chega a acao dando a volta pelo anel,
-   pelo lado mais curto; a "pista" de cada fio (o quanto ele se afasta do meio da faixa) sai so dos indices dos tres nos, para os fios nao
-   ficarem uns em cima dos outros. O viewBox guarda a proporcao 880 x 552 do campo pequeno (D1c). */
+/* ---------------------------------------------------------------- a rede viva (unidades do desenho; so desenho)
+   O Matheus, em 2026-11-11, depois de ver o anel com os pesos de verdade: "quero que faca outro desenho, algo mais ludico e menos realmente
+   como o cerebro efetivamente esta funcionando"; "simule como o cerebro funcione mas nao exatamente como as conexoes estao acontecendo, algo
+   que visualmente seja interessante". O desenho e uma ILUSTRACAO: uma rede de pontos e fios em anel, com impulsos correndo por ela. Os
+   pontos e os fios NAO sao os nos nem os pesos do motor (esses ficam no mapa em texto). Do motor o desenho usa so tres coisas:
+   - a semente do pet, para cada pet ter a sua rede (a forma do anel, os pontos e os fios saem de um gerador proprio da vista, semeado nela);
+   - quantas entradas pesaram na decisao de agora (mapa.acesas.arestas.length), que da quantos impulsos correm;
+   - a regra da decisao, que da a cor dos impulsos (o tom do estado atual).
+   O gerador e so da vista: nao e nenhuma rng do motor, nada dele e gravado e o replay nao o le. Todo numero aqui e de desenho,
+   PROPOSTO, SEM FONTE. O viewBox guarda a proporcao 880 x 552 do campo pequeno (D1c). */
 const VB_L = 880, VB_A = 552, CX = 440, CY = 276;
 const VB_ANEL = `0 0 ${VB_L} ${VB_A}`;
-/** o raio dos arcos de fora (acoes e entradas) e o do circulo das regras */
-const R_FORA = 212, R_REGRA = 150;
-/** a meia abertura, em graus, do arco das acoes (a esquerda) e do das entradas (a direita) */
-const ARCO_ACOES = 60, ARCO_ENTRADAS = 78;
-/** as pistas dos fios: 7 pistas de 14 unidades, de -42 a +42 em volta do caminho direto */
-const N_PISTAS = 7, PISTA = 14;
-/** de quantos em quantos graus o fio ganha um ponto */
-const PASSO_GRAUS = 10;
-/** os rotulos das regioes (D1b-6), com os nomes que o dono entende; o id e o do lobo de cada uma (data-lobo): as acoes no canto de cima a
-    esquerda, as regras no meio do anel e a percepcao no canto de cima a direita. Os "receptores do corpo", no canto de baixo a direita */
-const REGIOES: [string, string, number, number, "start" | "middle" | "end"][] = [
-  ["decisao", "ações", 40, 50, "start"], ["impulsos", "regras", CX, CY + 8, "middle"], ["percepcao", "percepção", VB_L - 40, 50, "end"]];
-const SUB_CORPO = { x: VB_L - 40, y: VB_A - 30 };
+/** quantos pontos a rede tem, o raio medio do anel, a ondulacao dele e a meia largura da faixa em que os pontos se espalham */
+const N_PONTOS = 150, R_ANEL = 178, ONDULACAO = 9, MEIA_FAIXA = 64;
+/** os impulsos: quantos a rede tem prontos, o minimo que corre e quantos entram por entrada que pesou na decisao */
+export const N_IMPULSOS = 14, IMPULSOS_MIN = 4, IMPULSOS_POR_ENTRADA = 2;
+/** a volta de um impulso, em s: a mais curta e o passo entre uma e outra (cinco duracoes, para os impulsos nao andarem juntos) */
+const IMPULSO_S = 2.6, IMPULSO_PASSO_S = 0.7;
 /* a silhueta de cerebro de antes (D1-11, D1b-2): o scan do A v11 nao a desenha mais, mas o do cerebro modular (ScanDigiBrainLab.tsx, o pet
    do laboratorio) ainda desenha, com o viewBox recortado nela (x 90 a 970, y 16 a 568). Ficam aqui so para ele */
 export const VB = `90 16 ${VB_L} ${VB_A}`;
@@ -69,36 +67,58 @@ export const Y_REGIOES = 36;
 const f = (v: number): number => Math.round(v * 10) / 10;
 
 type Ponto = [number, number];
-/** um no no anel: o angulo em graus (0 a direita, 90 embaixo, como na tela) e o raio */
-interface Polar { g: number; r: number }
-const xy = (p: Polar): Ponto => { const a = p.g * Math.PI / 180; return [CX + p.r * Math.cos(a), CY + p.r * Math.sin(a)]; };
-function posicoes(receptores: readonly string[]) {
-  const ent = [...ENTRADAS_LOBOS, ...receptores], n = ent.length;
-  const pe = new Map<string, Polar>(ent.map((e, i) => [e, { g: n === 1 ? 0 : -ARCO_ENTRADAS + 2 * ARCO_ENTRADAS * i / (n - 1), r: R_FORA }]));
-  const pr = new Map<RegraLobos, Polar>(REGRAS_LOBOS.map((r, i) => [r, { g: -90 + 360 * i / REGRAS_LOBOS.length, r: R_REGRA }]));
-  const pa = new Map<AcaoPet, Polar>(ACOES_LOBOS.map((a, i) => [a, { g: 180 + ARCO_ACOES - 2 * ARCO_ACOES * i / (ACOES_LOBOS.length - 1), r: R_FORA }]));
-  return { ent, pe, pr, pa };
+/** o gerador da vista (mulberry32): deterministico pela semente, so para o desenho */
+function geradorDaVista(semente: number): () => number {
+  let a = semente >>> 0;
+  return () => {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
 }
-/** os pontos de um trecho do fio, de `a` a `b` pelo lado mais curto do anel; `lombada` afasta o meio do trecho do caminho direto */
-function trecho(a: Polar, b: Polar, lombada: number): Ponto[] {
-  const dg = ((b.g - a.g) % 360 + 540) % 360 - 180, n = Math.max(2, Math.ceil(Math.abs(dg) / PASSO_GRAUS)), pts: Ponto[] = [];
-  for (let k = 0; k <= n; k++) { const t = k / n; pts.push(xy({ g: a.g + dg * t, r: a.r + (b.r - a.r) * t + lombada * Math.sin(Math.PI * t) })); }
-  return pts;
-}
-/** o trecho como curva suave (quadraticas pelos pontos medios), a partir do primeiro ponto, que ja esta no caminho */
+/** uma curva suave pelos pontos (quadraticas pelos pontos medios) */
 function suave(p: Ponto[]): string {
-  let d = "";
+  let d = `M${f(p[0]![0])} ${f(p[0]![1])}`;
   for (let i = 1; i < p.length - 1; i++) d += `Q${f(p[i]![0])} ${f(p[i]![1])} ${f((p[i]![0] + p[i + 1]![0]) / 2)} ${f((p[i]![1] + p[i + 1]![1]) / 2)}`;
   const u = p[p.length - 1]!;
   return d + `L${f(u[0])} ${f(u[1])}`;
 }
-/** afasta os rotulos que ficariam uns em cima dos outros: recebe os y naturais em ordem crescente e devolve os y com pelo menos `folga` entre
-    vizinhos, sem passar de `teto` */
-function espalhar(ys: number[], folga: number, teto: number): number[] {
-  const o = [...ys];
-  for (let i = 1; i < o.length; i++) o[i] = Math.max(o[i]!, o[i - 1]! + folga);
-  if (o.length && o[o.length - 1]! > teto) { o[o.length - 1] = teto; for (let i = o.length - 2; i >= 0; i--) o[i] = Math.min(o[i]!, o[i + 1]! - folga); }
-  return o;
+export interface RedeViva { pontos: { x: number; y: number; r: number; pisca: boolean }[]; fios: string[]; impulsos: string[] }
+/** a rede de um pet: os pontos em volta do anel (na ordem do angulo), os fios entre vizinhos proximos e alguns mais longos, e os caminhos dos
+    impulsos (cada um passa por uma fila de pontos). A mesma semente da sempre a mesma rede */
+export function redeViva(semente: number): RedeViva {
+  const r = geradorDaVista(semente), fase = r() * Math.PI * 2, pts: Ponto[] = [], pontos: RedeViva["pontos"] = [];
+  for (let i = 0; i < N_PONTOS; i++) {
+    const g = (i + r() * 0.9) / N_PONTOS * Math.PI * 2, raio = R_ANEL + ONDULACAO * (Math.sin(3 * g + fase) + Math.sin(5 * g - fase)) + (r() + r() - 1) * MEIA_FAIXA;
+    const p: Ponto = [CX + raio * Math.cos(g), CY + raio * Math.sin(g)];
+    pts.push(p); pontos.push({ x: f(p[0]), y: f(p[1]), r: f(1.8 + r() * r() * 5), pisca: r() < 0.3 });
+  }
+  const no = (i: number): Ponto => pts[((i % N_PONTOS) + N_PONTOS) % N_PONTOS]!;
+  /* um fio entre dois pontos: uma curva com a barriga para dentro ou para fora do anel */
+  const fio = (a: Ponto, b: Ponto): string => {
+    const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, d = Math.hypot(mx - CX, my - CY) || 1, e = (r() - 0.5) * 0.9 * Math.hypot(b[0] - a[0], b[1] - a[1]);
+    return `M${f(a[0])} ${f(a[1])}Q${f(mx + (mx - CX) / d * e)} ${f(my + (my - CY) / d * e)} ${f(b[0])} ${f(b[1])}`;
+  };
+  const fios: string[] = [];
+  for (let i = 0; i < N_PONTOS; i++) {
+    fios.push(fio(no(i), no(i + 1)), fio(no(i), no(i + 2)));
+    fios.push(fio(no(i), no(i + 3 + Math.floor(r() * 6))));
+    if (r() < 0.6) fios.push(fio(no(i), no(i + 9 + Math.floor(r() * 16))));
+  }
+  const impulsos: string[] = [];
+  for (let k = 0; k < N_IMPULSOS; k++) {
+    let i = Math.floor(r() * N_PONTOS);
+    const sentido = r() < 0.5 ? 1 : -1, n = 9 + Math.floor(r() * 8), caminho: Ponto[] = [no(i)];
+    for (let j = 0; j < n; j++) { i += sentido * (2 + Math.floor(r() * 4)); caminho.push(no(i)); }
+    impulsos.push(suave(caminho));
+  }
+  return { pontos, fios, impulsos };
+}
+/** quantos impulsos correm: o minimo, mais dois por entrada que pesou na decisao de agora, ate o teto da rede */
+export function impulsosDaDecisao(acesas: MapaDecisao | null): number {
+  return Math.min(N_IMPULSOS, IMPULSOS_MIN + IMPULSOS_POR_ENTRADA * (acesas ? acesas.arestas.length : 0));
 }
 
 /** o texto de uma tabela, ou erro: falhar alto em vez de mostrar uma chave crua */
@@ -108,102 +128,30 @@ function txt<T extends string>(tabela: Record<string, string>, k: T, onde: strin
   return v;
 }
 
-/** o mapa dos pesos em SVG (D1-1), em anel. As classes que o e2e le: svg.mp com data-n, .mp-pesos path, .mp-acesas path, .mp-lit, .mp-cand,
-    .mp-esc, .mp-pct, .mp-reg[data-lobo]. `movendo`: o pulso (um ponto que percorre cada aresta acesa) esta no DOM; o pai o tira quando termina */
-function MapaScanBruto({ mapa, decisao, movel, movendo }: { mapa: DadosMapa; decisao: LeituraDecisao | null; movel: boolean; movendo: boolean }) {
-  /* o ponto tocado (D1c): o rotulo dele aparece; tocar de novo, ou em outro, troca. So vista */
-  const [tocado, setTocado] = useState<string | null>(null);
-  const tocar = (id: string) => () => setTocado(t => t === id ? null : id);
-  const cls = (id: string, base: string): string => base + (tocado === id ? " mp-toque" : "");
-  const { ent, pe, pr, pa } = posicoes(mapa.receptores);
-  for (const a of mapa.arestas) {
-    if (!pe.has(a.entrada)) throw new Error(`entrada fora do mapa: ${a.entrada}`);
-    if (!pr.has(a.regra)) throw new Error(`regra fora do mapa: ${a.regra}`);
-    if (!pa.has(a.acao)) throw new Error(`ação fora do mapa: ${a.acao}`);
-  }
-  const ac: MapaDecisao | null = mapa.acesas;
-  if (ac !== null && decisao !== null && (ac.n !== decisao.n || ac.acao !== decisao.acao)) throw new Error("o mapa e a leitura de decisoes diferentes");
-  if ((ac === null) !== (decisao === null)) throw new Error("a decisao e as arestas acesas fora de par");
-  const curva = (e: string, r: RegraLobos, a: AcaoPet): string => {
-    const ie = ent.indexOf(e), ir = REGRAS_LOBOS.indexOf(r), ia = ACOES_LOBOS.indexOf(a);
-    if (ie < 0) throw new Error(`entrada fora do mapa: ${e}`);
-    const p1 = pe.get(e)!, p2 = pr.get(r)!, p3 = pa.get(a)!, meio = (N_PISTAS - 1) / 2;
-    const ida = trecho(p1, p2, PISTA * ((ie * 5 + ia * 3 + ir) % N_PISTAS - meio)), volta = trecho(p2, p3, PISTA * ((ie * 3 + ia * 5 + ir * 2) % N_PISTAS - meio));
-    return `M${f(ida[0]![0])} ${f(ida[0]![1])}` + suave(ida) + suave(volta);
-  };
-  const top = new Set(decisao ? decisao.percepcao.map(p => p.entrada) : []);
-  /* as entradas das arestas acesas: o rotulo delas fica sempre a vista (D1c), mesmo fora das que mais pesaram */
-  const caminho = new Set(ac ? ac.arestas.map(x => x.entrada) : []);
-  const chance = new Map(decisao ? decisao.chances.map(c => [c.acao, c.chance]) : []);
-  /* a espessura de hoje vezes a escala do desenho; os raios idem (a 390 o desenho fica menor, entao os tracos crescem) */
-  const K = movel ? 2.6 : 1.5, R = movel ? 1.8 : 1;
-  const tracejado = (neg: boolean): CSSProperties | undefined => neg ? { strokeDasharray: `${f(6 * K)} ${f(4 * K)}` } : undefined;
-  /* os rotulos das entradas que ficam sempre a vista (as que mais pesaram e as do caminho aceso) se afastam para nao se cobrirem; os outros,
-     que so aparecem ao passar o mouse ou ao tocar, ficam ao lado do ponto. A folga e a altura do texto na tela (11 px) em unidades do desenho */
-  const yNatural = (e: string): number => xy(pe.get(e)!)[1] + 5 * R;
-  const fixos = ent.filter(e => top.has(e) || caminho.has(e));
-  const yFixos = new Map(espalhar(fixos.map(yNatural), movel ? 46 : 28, VB_A - 8).map((y, i) => [fixos[i]!, y]));
-  const rotulo = ac && decisao
-    ? `Mapa dos pesos do pet, ${mapa.arestas.length} pesos. Nesta decisão: regra ${TXT_REGRA[ac.regra]}, escolheu ${TXT_ACAO[ac.acao]} com ${Math.round(chance.get(ac.acao)! * 100)}% de chance.`
-    : `Mapa dos pesos do pet, ${mapa.arestas.length} pesos. Ainda sem decisão.`;
-
+/** a rede viva em SVG. `correndo`: o tempo do jogo anda (parado, os impulsos congelam onde estao); `surto`: uma decisao nova acabou de chegar
+    (a rede acende uma vez; o pai tira a marca quando termina). Com "reduzir movimento" o CSS nao anima nada e os impulsos nao aparecem.
+    As classes que o e2e le: svg.mp.rv com data-n e data-impulsos, .rv-fios path, .rv-impulsos path, .rv-pontos circle */
+function RedeVivaBruta({ semente, acesas, tom, movel, correndo, surto }: { semente: number; acesas: MapaDecisao | null; tom: TomEstado | null; movel: boolean; correndo: boolean; surto: boolean }) {
+  const rede = useMemo(() => redeViva(semente), [semente]), n = impulsosDaDecisao(acesas);
+  /* a 390 o desenho fica menor na tela, entao os tracos e os pontos crescem */
+  const K = movel ? 1.9 : 1;
   return (
-    <svg className="mp" viewBox={VB_ANEL} preserveAspectRatio="xMidYMid meet" role="img" aria-label={rotulo} data-n={ac ? ac.n : ""}>
-      <g aria-hidden="true">
-        {REGIOES.map(([lobo, nome, x, y, ancora]) => <text key={lobo} className="mp-reg" data-lobo={lobo} x={x} y={y} textAnchor={ancora}>{nome}</text>)}
-        {mapa.receptores.length > 0 && <text className="mp-sub" x={SUB_CORPO.x} y={SUB_CORPO.y} textAnchor="end">receptores do corpo</text>}
+    <svg className={"mp rv" + (correndo ? "" : " rv--parada") + (surto ? " rv--surto" : "")} viewBox={VB_ANEL} preserveAspectRatio="xMidYMid meet" role="img"
+      aria-label="Ilustração do cérebro do pet em atividade. É só um desenho: os pesos de verdade estão no mapa em texto."
+      data-n={acesas ? acesas.n : ""} data-impulsos={n} data-tom={tom ?? "sem"}>
+      <g className="rv-fios" strokeWidth={f(1.3 * K)}>{rede.fios.map((d, i) => <path key={i} d={d} />)}</g>
+      <g className="rv-impulsos" strokeWidth={f(5 * K)}>
+        {rede.impulsos.slice(0, n).map((d, i) => <path key={i} pathLength={1} d={d}
+          style={{ animationDuration: f(IMPULSO_S + (i % 5) * IMPULSO_PASSO_S) + "s", animationDelay: f(-i * 0.83) + "s" }} />)}
       </g>
-      <g className={"mp-pesos" + (ac ? " mp-pesos--fundo" : "")}>
-        {mapa.arestas.map(a => {
-          const cls = a.aprendido > 0 ? "mp-mais" : a.aprendido < 0 ? "mp-menos" : "mp-prior";
-          return <path key={a.regra + a.acao + a.entrada} className={cls} d={curva(a.entrada, a.regra, a.acao)} strokeWidth={f(K * (0.4 + a.espessura * 1.4))}
-            strokeOpacity={a.aprendido === 0 ? undefined : f(0.35 + 0.65 * Math.sqrt(Math.abs(a.aprendido)))} style={tracejado(a.w < 0)} />;
-        })}
-      </g>
-      {ac && <g className="mp-acesas">
-        {ac.arestas.map(x => <path key={x.entrada} className={x.termo < 0 ? "mp-neg" : undefined} d={curva(x.entrada, ac.regra, ac.acao)}
-          strokeWidth={f(K * (0.6 + 3 * x.forca))} strokeOpacity={f(0.35 + 0.65 * x.forca)} style={tracejado(x.termo < 0)} />)}
-      </g>}
-      {/* o pulso: um ponto em cada aresta acesa (entrada, regra, acao), que anda uma vez e some; o pai tira o grupo quando termina */}
-      {ac && movendo && <g className="mp-pulso" aria-hidden="true">
-        {ac.arestas.map(x => <path key={x.entrada} pathLength={1} d={curva(x.entrada, ac.regra, ac.acao)} strokeWidth={f(7 * R)} />)}
-      </g>}
-      <g className="mp-nos">
-        {ent.map((e, i) => {
-          const [x, y] = xy(pe.get(e)!), lit = top.has(e);
-          return <g key={e} className={cls("e" + e, "mp-no" + (i >= ENTRADAS_LOBOS.length ? " mp-corpo" : "") + (lit ? " mp-lit" : "") + (caminho.has(e) ? " mp-caminho" : ""))}
-            data-entrada={e} onClick={tocar("e" + e)}>
-            <circle className="mp-alvo" cx={f(x)} cy={f(y)} r={f(R * (movel ? 16 : 12))} />
-            <circle cx={f(x)} cy={f(y)} r={f(R * (lit ? 6 : 4))} /><text x={f(x + 13 * R)} y={f(yFixos.get(e) ?? yNatural(e))}>{txt(TXT_ENTRADA, e, "entrada")}</text></g>;
-        })}
-        {REGRAS_LOBOS.map(r => {
-          const p = pr.get(r)!, [x, y] = xy(p), lit = ac !== null && r === ac.regra;
-          /* o rotulo da regra aponta para o meio do anel, onde nao ha fio */
-          const c = Math.cos(p.g * Math.PI / 180), s = Math.sin(p.g * Math.PI / 180);
-          const [tx, ty] = xy({ g: p.g, r: p.r - 26 * R });
-          return <g key={r} className={cls("r" + r, "mp-no" + (lit ? " mp-lit" : ""))} data-regra={r} onClick={tocar("r" + r)}>
-            <circle className="mp-alvo" cx={f(x)} cy={f(y)} r={f(R * 14)} />
-            <circle cx={f(x)} cy={f(y)} r={f(R * (lit ? 7.5 : 5))} />
-            <text x={f(tx)} y={f(ty + (s < -0.35 ? 14 : s > 0.35 ? -2 : 6) * R)} textAnchor={c > 0.35 ? "end" : c < -0.35 ? "start" : "middle"}>{TXT_REGRA[r]}</text></g>;
-        })}
-        {ACOES_LOBOS.map(a => {
-          const [x, y] = xy(pa.get(a)!), c = chance.get(a), esc = ac !== null && a === ac.acao;
-          const pc = c === undefined ? null : Math.round(c * 100) + "%";
-          return <g key={a} className={cls("a" + a, "mp-no" + (c !== undefined ? " mp-cand" : "") + (esc ? " mp-esc" : ""))} data-acao={a} onClick={tocar("a" + a)}>
-            <circle className="mp-alvo" cx={f(x)} cy={f(y)} r={f(R * 14)} />
-            <circle cx={f(x)} cy={f(y)} r={f(R * (esc ? 8.5 : c !== undefined ? 6.5 : 5))} />
-            <text x={f(x - 14 * R)} y={f(y + 5 * R)} textAnchor="end">{TXT_ACAO[a]}{pc !== null && <tspan className="mp-pct"> {pc}</tspan>}</text></g>;
-        })}
+      <g className="rv-pontos">
+        {rede.pontos.map((p, i) => <circle key={i} className={p.pisca ? "rv-pisca" : undefined} cx={p.x} cy={p.y} r={f(p.r * K)}
+          style={p.pisca ? { animationDelay: f(-(i % 9) * 0.37) + "s" } : undefined} />)}
       </g>
     </svg>
   );
 }
-
-/** a assinatura do que o desenho mostra: Motor.digibrain() devolve objetos novos a cada render, entao o memo compara pelo conteudo que muda
-    (os pesos w de cada aresta, os receptores, a decisao n e as acesas n), nao pela identidade */
-const assinatura = (p: { mapa: DadosMapa; decisao: LeituraDecisao | null }): string =>
-  p.mapa.receptores.join() + "|" + p.mapa.arestas.map(a => a.w).join() + "|" + (p.mapa.acesas ? p.mapa.acesas.n : "") + "|" + (p.decisao ? p.decisao.n : "");
-export const MapaScan = memo(MapaScanBruto, (a, b) => a.movel === b.movel && a.movendo === b.movendo && assinatura(a) === assinatura(b));
+export const RedeVivaDesenho = memo(RedeVivaBruta);
 
 /* ---------------------------------------------------------------- a faixa de baixo: a onda da decisao e o estado atual
    Os dois saem do motor e mudam so com a decisao; nada anima. PROPOSTO, SEM FONTE (o desenho da faixa e o tom de cada regra; nenhum numero de jogo) */
@@ -322,18 +270,13 @@ export function SeloForma({ replay }: { replay: boolean }) {
 }
 
 /** a dica do "i" (D1b-7): a forma e so desenho, e a legenda curta que saiu do rodape */
-function Dica({ receptores, aberta }: { receptores: boolean; aberta: boolean }) {
+function Dica({ aberta }: { aberta: boolean }) {
   return (
     <div className="scan-dica scan-cx" id="db-dica" hidden={!aberta}>
-      <p>A forma de anel é só desenho. Cada ponto é o que o pet sente (à direita), uma regra (por dentro) ou uma ação (à esquerda); cada fio é um peso.</p>
+      <p>A rede é só desenho: ela imita um cérebro em atividade, não mostra as ligações de verdade. Cada pet tem a sua.</p>
+      <p className="scan-dica-selo">Quanto mais coisas pesaram na decisão de agora, mais impulsos correm; a cor deles é a do estado atual.</p>
       <p className="scan-dica-selo">Embaixo: a onda tem um pico por coisa que pesou nesta decisão, para cima a favor e para baixo contra; o estado atual é a regra do instinto que valeu.</p>
-      <p className="scan-dica-selo">Ao lado do título: o ponto é ao vivo, as duas barras são pausado e o triângulo é um replay.</p>
-      <p className="scan-dica-selo">Só o caminho desta decisão tem nome; passe o mouse ou toque num ponto para ver o dele, ou abra o mapa em texto.</p>
-      <ul className="mp-leg">
-        <li><span className="scan-leg scan-leg--aceso" />esta decisão</li><li><span className="scan-leg scan-leg--mais" />aprendeu a mais</li>
-        <li><span className="scan-leg scan-leg--menos" />aprendeu a menos</li><li><span className="scan-leg scan-leg--neg" />peso negativo</li>
-        {receptores && <li><span className="scan-leg scan-leg--corpo" />receptor do corpo</li>}
-      </ul>
+      <p className="scan-dica-selo">Os pesos de verdade estão no mapa em texto. Ao lado do título: o ponto é ao vivo, as duas barras são pausado e o triângulo é um replay.</p>
     </div>
   );
 }
@@ -377,7 +320,7 @@ export function ScanDigiBrain({ fechar, movel, replay = false, chamado }: { fech
           <button type="button" className="scan-ic scan-fechar" aria-label="Fechar DigiBrain" title="Fechar (Esc)" data-autofocus onClick={() => ref.current?.close()}>
             <X aria-hidden="true" /></button>
         </header>
-        {mapa && <Dica receptores={mapa.receptores.length > 0} aberta={verDica} />}
+        {mapa && <Dica aberta={verDica} />}
         {mapa === null ? <p className="scan-vazio">Este pet não tem mapa dos pesos.</p> : (
           <div className="scan-corpo">
             <div className="scan-moldura">
@@ -388,7 +331,7 @@ export function ScanDigiBrain({ fechar, movel, replay = false, chamado }: { fech
                 ? <section className="scan-texto db-texto" id="db-texto" aria-label="O mapa em texto" tabIndex={0}><MapaEmTexto mapa={mapa} d={d} /></section>
                 : <>
                   {mov !== null && <div className="scan-varre-trilho" key={"varre" + mov} aria-hidden="true"><div className="scan-varredura" /></div>}
-                  <div className="scan-giro" ref={giro}><MapaScan mapa={mapa} decisao={d} movel={movel} movendo={mov !== null} /></div>
+                  <div className="scan-giro" ref={giro}><RedeVivaDesenho semente={m.semente} acesas={mapa.acesas} tom={d ? TOM_REGRA[d.regra] : null} movel={movel} correndo={selo === "vivo"} surto={mov !== null} /></div>
                 </>}
             </div>
             <FaixaEstado mapa={mapa} decisao={d} />
