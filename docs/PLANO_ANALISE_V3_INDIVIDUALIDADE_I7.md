@@ -701,4 +701,8 @@ Escrito em 2026-11-11 (Claude Code, Opus 5.5, branch `v3-individualidade-i7e`), 
   A saída vai para `artifacts_v3_individualidade_i7_ad3/`, que não existe antes da fase 1. Entre as duas fases, os níveis da descoberta entram
   nesta seção, num commit empurrado antes da leitura.
 - **A suíte:** esta etapa não rodou a suíte inteira. A do dia é a da seção 15 (5 323 passaram). Os testes da frente estão no corpo do PR.
+- **Os níveis da descoberta** (a fase 1, de 17:20 a 17:28, 3 600 momentos, 7 min com 4 processos; o `niveis.json`, sha256
+  `90bc191429129a78dfac7698a93764439f71e31e4a5a81eeb4df96a84cc6f0c4`), escritos antes da leitura da confirmação:
+  - as medianas: a energia 0,3637, a fome 0,6000 e o humor 0,5800;
+  - a ação mais comum: `dormir` (2543 de 3521 momentos com grupo na descoberta, contando o E e o R).
 
