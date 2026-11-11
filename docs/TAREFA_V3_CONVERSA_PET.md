@@ -681,3 +681,19 @@ gate.
   - **A recomendação:** sim, se a pergunta da DC5c inclui a cópia de citação; não, se ela é a voz como o jogo a produz.
   - **O custo de errar:** com a restrição, a amostra deixa de ter a distribuição de formas do jogo, e a validação não diz nada das formas sem
     citação. Sem ela, a cópia de citação fica com poucas falas, e um 0 diz pouco.
+
+## DC5c, parte 1 — o adendo do plano e a config da validação (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5c`, 2026-11-11)
+
+**Nenhuma chamada a modelo.** A validação roda depois do merge, pelo H10.
+
+- **O adendo** é a seção 15 do [plano da DC5](PLANO_ANALISE_V3_CONVERSA_DC5.md), com uma linha no cabeçalho. A validação passa a comparar
+  a voz do jogo com a voz-v4b, as duas com a espécie e com a `verif-v8b` e a `verif-v9b`. Os gates são os mesmos (G-NATURAL ≥ 10 de 12
+  etc.).
+- **As formas** seguem a distribuição do jogo, a decisão do Matheus "Não, formas do jogo" (D-DC5C-1). A cópia de citação é descritiva, com
+  o n que sair.
+- **As sementes** ficam na base 20263200, na subfaixa da validação que a calibração não usou. O teto continua US$ 3,00. O piso é de
+  US$ 2,202, e a estimativa, de US$ 0,196.
+- **A config:** `experiments/configs/v3_conversa_dc5/validacao.json`, com as vozes `["jogo", "v4b"]`, `especie` e `verificador_dc5`.
+- **O registro da rodada** é a seção 14 do plano, com os sha256 de hoje (D-DC5C-3).
+- **Os testes:** `tests/test_conversa_dc5c.py` (3).
+- **Os desvios:** D-DC5C-1 a 3, em `docs/registro/2026-11.md`.
