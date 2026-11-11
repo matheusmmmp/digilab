@@ -131,7 +131,7 @@ describe("a grade da ilha com agua", () => {
     expect([seca(cais.x, cais.z - 1), seca(cais.x, cais.z)]).toEqual([true, false]);
     expect(ilha.cel(Math.floor(cais.x), Math.floor(cais.z) - 1)!.tipo).toBe("areia");
     expect(ilha.cel(Math.floor(cais.x), Math.floor(cais.z))!.nivel).toBe(-1);                 // o cais da para o mar, nao para o rio
-    expect(ilha.enfeites.map(e => e.nome).sort()).toEqual(["carro", "geladeira", "lata", "poste", "poste", "poste", "poste", "poste", "poste", "trilho"]);
+    expect(ilha.enfeites.map(e => e.nome).sort()).toEqual(["carro", "geladeira", "lata", "poste", "poste", "poste", "poste", "poste", "poste", "trilho", "tv"]);
     for (const e of ilha.enfeites) expect(seca(e.x, e.z), `${e.nome} em ${e.x},${e.z}`).toBe(true);
     expect(seca(...PLANTA_ILHA_AGUA.lugares.saco)).toBe(true);
     expect(seca(PLANTA_ILHA_AGUA.praca.x, PLANTA_ILHA_AGUA.praca.z)).toBe(true);
