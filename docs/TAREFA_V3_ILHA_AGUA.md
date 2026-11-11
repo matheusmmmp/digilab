@@ -513,7 +513,8 @@ hipótese se sustenta se, no A, a fração comida em 240 ticks do `comedouro6` v
 
 **A hipótese não se sustenta.** Com a ração a 6 células do ninho o A comeu menos, não mais (0,234 contra 0,324), longe do 0,437 do
 mundo de hoje. A piora do A no comedouro da ilha grande não vem da distância entre o ninho e o comedouro. A causa não foi achada. O A
-come pouco nos dois mundos e varia muito entre as sementes (são 4 a 8 rações postas por vida).
+come pouco nos dois mundos e varia muito entre as sementes: no comedouro, a fração comida vai de 0,2 a 0,77 no mundo de hoje e de
+0 a 0,85 na ilha grande, com 4 a 13 rações postas por vida. Com cinco sementes, a diferença entre as médias do A pode ser só essa variação.
 
 **A recomendação muda:** não mexer no lugar do comedouro. A decisão do Matheus era mudar "com a medida da hipótese antes"; a medida
 diz que mudar não ajuda. Fica a mudança da memória (128 células), que não depende disto. A confirmar com ele.
