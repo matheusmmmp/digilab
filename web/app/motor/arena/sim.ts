@@ -9,7 +9,7 @@
    4. nada daqui toca no pet, no log nem no save (a LP2 liga).
    LP6-1 (docs/PLANO_LP6_SEGUNDO_GOLPE.md), cada um atras da sua chave da entrada, desligada: o golpe de apoio (`apoio`) e a elipse pelo
    estagio dos dois (`arenaPorEstagio`). Sem as chaves, a luta sai byte a byte igual (test/arena_lp6_gabarito.test.ts). */
-import { ACAO, DIFIC, ELIPSE, EQ, ORDEM_ESTAGIOS, PASSO_MS, PX_POR_UNIDADE, RECUO_APOIO_SEM_TIRO_MS, type ArenaPorEstagio } from "./constantes.ts";
+import { ACAO, DIFIC, ELIPSE, EQ, ORDEM_ESTAGIOS, PASSO_MS, PX_POR_UNIDADE, RECUO_APOIO_SEM_TIRO_MS, type Apoio, type ArenaPorEstagio } from "./constantes.ts";
 import { dist, seno } from "./aritmetica.ts";
 import { CENAS, iniciarCena } from "./cenas.ts";
 import { bloqueio, colidir, dentroArena, evento, lutador, mudar, obstaculoEm, outro, prender, ref } from "./nucleo.ts";
@@ -38,13 +38,16 @@ function conferirStats(l: Lado, cfg: ConfigLuta): void {
 }
 
 /** o fator da elipse pelo maior estagio dos dois (LP6-1, secao 4a): o do Ultimate, o do Mega ou 1 (In-Training, Rookie e Champion) */
+const indiceEstagio = (f: DadosForma): number => {
+  const k = (ORDEM_ESTAGIOS as readonly string[]).indexOf(f.estagio);
+  if (k < 0) throw new Error(`arena: estagio desconhecido ${String(f.estagio)} (${f.digimon})`);
+  return k;
+};
+/** o apoio vale nesta luta? (LP6-3, D-LP6-3-7): sem o `desde`, sempre; com ele, se o maior estagio dos dois e pelo menos o dele */
+export const apoioNaLuta = (a: DadosForma, b: DadosForma, ap: Apoio): boolean =>
+  ap.desde === undefined || Math.max(indiceEstagio(a), indiceEstagio(b)) >= (ORDEM_ESTAGIOS as readonly string[]).indexOf(ap.desde);
 export function fatorElipse(a: DadosForma, b: DadosForma, F: ArenaPorEstagio): number {
-  const i = (f: DadosForma) => {
-    const k = (ORDEM_ESTAGIOS as readonly string[]).indexOf(f.estagio);
-    if (k < 0) throw new Error(`arena: estagio desconhecido ${String(f.estagio)} (${f.digimon})`);
-    return k;
-  };
-  const m = ORDEM_ESTAGIOS[Math.max(i(a), i(b))];
+  const m = ORDEM_ESTAGIOS[Math.max(indiceEstagio(a), indiceEstagio(b))];
   return m === "Mega" ? F.Mega : m === "Ultimate" ? F.Ultimate : 1;
 }
 
@@ -53,7 +56,8 @@ function criarLutador(L: Luta, lado: Lado): Lutador {
   /* o golpe de apoio (LP6-1): so com a chave; a forma tem de trazer o apoio, do tipo que falta ao golpe, e o clipe dele */
   if (L.cfg.apoio && !(forma.apoio && typeof forma.msApoio === "number" && forma.msApoio > 0 && !forma.apoio.proj === !!forma.golpe.proj))
     throw new Error(`arena: a forma ${forma.digimon} nao tem o golpe de apoio do tipo que falta (motor/arena/formas.ts)`);
-  const ap = L.cfg.apoio ? forma.apoio! : null;
+  /* o apoio pelo estagio (LP6-3, D-LP6-3-7): abaixo do `desde`, os dois lutam sem ele, como sem a chave */
+  const ap = L.cfg.apoio && apoioNaLuta(L.cfg.a.forma, L.cfg.b.forma, L.cfg.apoio) ? forma.apoio! : null;
   const g = forma.golpe, sk = forma.habilidade || g, st = { ...stats };
   /* a ordem dos sorteios e a do literal do prototipo: recSk, recarga, fase */
   const recSk = ACAO.recSkIni + L.r.ia() * ACAO.recSkVar, recarga = ACAO.recargaIni + L.r.ia() * ACAO.recargaVar, fase = L.r.ia() * 6.28;
@@ -230,8 +234,9 @@ function atualizar(L: Luta, u: Lutador, dt: number): void {
       /* o fim do apoio (LP6-1): a recarga do golpe segue a dela, com o minimo de sempre */
       if (u.t >= u.msAp) {
         mudar(u, "idle"); u.recarga = Math.max(ACAO.recargaMin, u.recarga); u.usandoApoio = false;
-        /* o atirador bate e recua (LP6-3, D-LP6-3-4): depois do apoio de perto, o recuo ate a distancia do tiro, no maximo a espera dele */
-        if (!u.ap!.proj) u.recuoAp = L.cfg.tiro ? L.cfg.tiro.esperaMax : RECUO_APOIO_SEM_TIRO_MS;
+        /* o atirador bate e recua (LP6-3, D-LP6-3-4), so com o `recua` do apoio (D-LP6-3-7): o recuo ate a distancia do tiro, no maximo a
+           espera dele */
+        if (!u.ap!.proj && L.cfg.apoio!.recua) u.recuoAp = L.cfg.tiro ? L.cfg.tiro.esperaMax : RECUO_APOIO_SEM_TIRO_MS;
       }
     } else if (u.t >= (u.usandoHab ? u.msSk : u.msAtk)) { mudar(u, "idle"); u.recarga = Math.max(ACAO.recargaMin, u.st.cad - u.msAtk); u.usandoHab = false; }
     return;

@@ -199,3 +199,24 @@ cada grade e antes da conferência.
 - **Como roda:** a grade usa a fase `lp6_3/r1`. Roda em todos os grupos, menos a vida, em 3 bases da calibração e com os tamanhos
   inteiros. A regra de escolha é a da seção 4.2 do plano da LP5, com as 10 metas protegidas do `lp5_3`.
 - **Se nenhum ponto devolve o A1 e as protegidas,** a rodada para e volta ao Matheus com os números, antes de qualquer outra alavanca.
+
+**A R1 e a decisão da R2 (2026-11-11).**
+- **A R1** (PR #834, `lp6_3/r1`): nenhum dos 18 pontos do apoio passa nas protegidas. O recuo da regra nova piorou quem atira: no
+  Rookie, o A1 fica de 0,13 a 0,27.
+- **O controle `ctrl_arena`** (só a elipse, sem o apoio) passa 8 de 21. Deixa o Rookie e o Champion como hoje (0,47 e 0,54), mas o
+  Ultimate (0,74) e o Mega (0,65) pendem para quem atira.
+- **A R2:** o Matheus escolheu "Apoio só no Ult/Mega (a)".
+- **As regras (D-LP6-3-7, no núcleo, atrás da chave do apoio):**
+  - **o apoio pelo estágio:** o apoio tem o campo opcional `desde`. Com ele, o apoio só existe quando o maior estágio dos dois lutadores
+    é esse ou maior. Abaixo, a luta é a mesma sem a chave, byte a byte;
+  - **o recuo:** a regra do recuo da R1 (D-LP6-3-4) fica atrás do campo opcional `recua`, desligado. Sem ele, o apoio de perto é o da
+    LP6-1, a regra antiga da R0;
+  - **os testes:** `web/app/test/arena_lp6_recuo.test.ts`.
+- **A grade (`lp6_3/r2`, registrada aqui antes de rodar):**
+  - o apoio desde o Ultimate (`desde: 3`), sem o recuo, com a espera do tiro fraco em 1 500 ms e o clipe em 0,6;
+  - o dano do apoio em 0,45 e 0,6;
+  - a recarga em 2 e 3 vezes;
+  - a elipse (Ultimate e Mega) em 1/1, 1,1/1,2, 1,15/1,3 e 1,2/1,4;
+  - são 16 pontos, em todos os grupos menos a vida, em 3 bases da calibração e com os tamanhos inteiros;
+  - a regra de escolha é a da seção 4.2 do plano da LP5, com as 10 protegidas do `lp5_3`;
+  - todos os números são PROPOSTOS, SEM FONTE.

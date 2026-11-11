@@ -16,7 +16,7 @@ describe("as chaves da LP6 na bancada (LP6-3)", () => {
     expect([nome, n3]).toEqual(["lp6_0", "lp5_3"]);
     expect(resto).toEqual(resto3);
     expect(a3.ligado).toBe(0); expect(r3.ligada).toBe(0);
-    expect(apoio).toEqual({ ligado: 1, ...APOIO_LP6, ritmo: APOIO_TABELA.ritmo });
+    expect(apoio).toEqual({ ligado: 1, ...APOIO_LP6, ritmo: APOIO_TABELA.ritmo, desde: 0, recua: 0 });
     expect(arena).toEqual({ ligada: 1, ...ARENA_POR_ESTAGIO_LP6 });
     expect(extrasLp6(LP6_0)).toEqual({ apoio: { ...APOIO_LP6 }, arenaPorEstagio: { ...ARENA_POR_ESTAGIO_LP6 } });
   });
@@ -66,5 +66,13 @@ describe("as chaves da LP6 na bancada (LP6-3)", () => {
       }
     }
     expect(difere).toBeGreaterThan(0);
+  });
+  test("o apoio pelo estagio e o recuo na bancada (D-LP6-3-7): o desde vira o estagio, o recua vira a chave; so com o apoio ligado", () => {
+    const c = candidatoDe({ nome: "teste", apoio: { ligado: 1, desde: 3, recua: 1 } });
+    expect(extrasLp6(c).apoio).toEqual({ ...APOIO_LP6, desde: "Ultimate", recua: true });
+    expect(extrasLp6(candidatoDe({ nome: "teste", apoio: { ligado: 1, desde: 4 } })).apoio).toEqual({ ...APOIO_LP6, desde: "Mega" });
+    expect(() => extrasLp6(candidatoDe({ nome: "teste", apoio: { ligado: 1, desde: 5 } }))).toThrow();
+    expect(() => candidatoDe({ nome: "teste", apoio: { desde: 3 } })).toThrow();
+    expect(() => candidatoDe({ nome: "teste", apoio: { ligado: 1, recua: 2 } })).toThrow();
   });
 });

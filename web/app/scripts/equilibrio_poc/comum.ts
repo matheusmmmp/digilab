@@ -16,7 +16,7 @@ import {
   caraterCanonico, criarRng, rivaisArena, formaDaChave, hashSemente, lutarNucleoPoc, multEstagio, NPC, sorteiosPoc, statsDe,
   type Carater, type Especie, type Estagio, type Exercicio, type Forma, type FormaAdultaNormal, type IdCena, type Stat, type Stats, type StatsPoc, type TiroPoc, type EsquivaPoc,
 } from "../../motor/index.ts";
-import { APOIO_LP6, APOIO_TABELA, ARENA_POR_ESTAGIO_LP6, type Apoio, type ArenaPorEstagio, type DadosForma, type TabelaFormas } from "../../motor/arena/index.ts";
+import { APOIO_LP6, APOIO_TABELA, ARENA_POR_ESTAGIO_LP6, ORDEM_ESTAGIOS, type Apoio, type ArenaPorEstagio, type DadosForma, type TabelaFormas } from "../../motor/arena/index.ts";
 
 /* ---------------------------------------------------------------- o candidato */
 export type EstagioLuta = "crianca" | "adolescente" | "adulto" | "mega";
@@ -49,7 +49,11 @@ export interface Candidato {
   esquiva: EsquivaPoc & { ligada: number; gamaMira: number; kAtento: number; gamaFolego: number };
   /** o golpe de apoio (LP6-1; docs/PLANO_LP6_SEGUNDO_GOLPE.md, secao 3): ligado 0 = a luta sem apoio, byte a byte. `ritmo` e o tempo do clipe
       do apoio em vezes o do golpe (a tabela do git tem 0,6; outro valor so na bancada, pela tabelaDoRitmo) */
-  apoio: Apoio & { ligado: number; ritmo: number };
+  apoio: Omit<Apoio, "desde" | "recua"> & { ligado: number; ritmo: number;
+    /** o apoio so a partir deste estagio do maior dos dois (o indice no ORDEM_ESTAGIOS: 0 = todos, 3 = Ultimate, 4 = Mega; D-LP6-3-7) */
+    desde: number;
+    /** o recuo depois do apoio de perto (D-LP6-3-4), atras da chave propria: 0 = a regra da LP6-1 */
+    recua: number };
   /** a elipse pelo estagio (LP6-1; secao 4a): ligada 0 = a elipse de sempre, byte a byte */
   arena: ArenaPorEstagio & { ligada: number };
 }
@@ -68,7 +72,7 @@ export const CANDIDATO_V21: Candidato = Object.freeze({
   fatorRival: { salao: 1, liga: 1, torre: 1, fabrica: 1 },
   tiro: { ...TIRO_POC_V21 },
   esquiva: { ligada: 0, kChance: 1, kReacao: 1, kDash: 1, chanceMax: .95, pertoChance: 0, pertoReacao: 200, contraMs: 0, gamaMira: 1, kAtento: .5, gamaFolego: 1 },
-  apoio: { ligado: 0, ...APOIO_LP6, ritmo: APOIO_TABELA.ritmo },
+  apoio: { ligado: 0, ...APOIO_LP6, ritmo: APOIO_TABELA.ritmo, desde: 0, recua: 0 },
   arena: { ligada: 0, ...ARENA_POR_ESTAGIO_LP6 },
 });
 /** a esquiva do candidato na entrada da luta: so ligada (senao a luta da POC, byte a byte) */
@@ -86,8 +90,12 @@ export function extrasLp6(c: Candidato): ExtrasLp6 {
   const ap = zeroOuUm(c.apoio.ligado, "apoio.ligado"), ar = zeroOuUm(c.arena.ligada, "arena.ligada");
   if (!ap && c.apoio.ritmo !== APOIO_TABELA.ritmo) throw new Error("bancada: o ritmo do apoio so muda com o apoio ligado");
   const tabela = ap ? tabelaDoRitmo(c.apoio.ritmo) : undefined;
+  const { desde, recua } = c.apoio;
+  if (!(Number.isInteger(desde) && desde >= 0 && desde < ORDEM_ESTAGIOS.length)) throw new Error(`bancada: apoio.desde e um indice do ORDEM_ESTAGIOS (${desde})`);
+  const rec = zeroOuUm(recua, "apoio.recua");
+  if (!ap && (desde || rec)) throw new Error("bancada: o desde e o recua do apoio so mudam com o apoio ligado");
   return {
-    ...(ap ? { apoio: { dano: c.apoio.dano, recarga: c.apoio.recarga, longeMs: c.apoio.longeMs } } : {}),
+    ...(ap ? { apoio: { dano: c.apoio.dano, recarga: c.apoio.recarga, longeMs: c.apoio.longeMs, ...(desde ? { desde: ORDEM_ESTAGIOS[desde] } : {}), ...(rec ? { recua: true } : {}) } } : {}),
     ...(ar ? { arenaPorEstagio: { Ultimate: c.arena.Ultimate, Mega: c.arena.Mega } } : {}),
     ...(tabela ? { tabela } : {}),
   };

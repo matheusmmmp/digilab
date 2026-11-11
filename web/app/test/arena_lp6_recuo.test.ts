@@ -1,6 +1,7 @@
 // A LP6-3 (docs/PLANO_LP6_SEGUNDO_GOLPE.md, secao 8; o desvio D-LP6-3-4; "Regra e grade", Matheus, 2026-11-11): o atirador bate e recua.
 // Depois do apoio de perto, quem atira recua sem atacar ate o alvo ficar na distMin do tiro, no maximo pela espera do tiro; se o tempo acaba
-// antes (encurralado), a espera ja vale como cumprida e ele atira. Com as chaves desligadas, nada muda (arena_lp6_gabarito.test.ts).
+// antes (encurralado), a espera ja vale como cumprida e ele atira. Desde a R2 (D-LP6-3-7), so com o `recua` do apoio; sem ele, a regra da
+// LP6-1. Com as chaves desligadas, nada muda (arena_lp6_gabarito.test.ts). E o apoio pelo estagio (o `desde`, D-LP6-3-7).
 import { expect, test } from "vitest";
 import { APOIO_LP6, IDS_CENA, PASSO_MS, RECUO_APOIO_SEM_TIRO_MS, configLuta, criarLuta, dist, passo, sorteiosPorFluxo, type EntradaLuta, type Evento, type IdCena, type Luta, type Sorteios, type Stats } from "../motor/arena/index.ts";
 import { LUTA_V23 } from "../motor/luta_poc.ts";
@@ -10,7 +11,7 @@ const TIRO = LUTA_V23.tiro!;
 const FIXO: Sorteios = { ia: () => 0.5, combate: () => 0.5, cena: () => 0.5, visual: () => 0.5 };
 const AGUMON = "brasa_crianca_sereno", VEEMON = "ferrugem_crianca_arisco";
 const entrada = (cena: IdCena, a: string, b: string, extra: Partial<EntradaLuta> = {}, semente = 101): EntradaLuta =>
-  ({ cena, semente, a: { forma: a, stats: ST }, b: { forma: b, stats: ST }, tiro: TIRO, apoio: APOIO_LP6, ...extra });
+  ({ cena, semente, a: { forma: a, stats: ST }, b: { forma: b, stats: ST }, tiro: TIRO, apoio: { ...APOIO_LP6, recua: true }, ...extra });
 const d = (L: Luta) => dist(L.b.x - L.a.x, L.b.y - L.a.y);
 
 /** roda a luta e confere cada recuo de A depois do apoio de perto; devolve quantos recuos houve e quantos passos de recuo */
@@ -83,4 +84,37 @@ test("com as chaves desligadas, o recuo do apoio nunca liga", () => {
   const { apoio: _a, ...sem } = entrada("campo", AGUMON, VEEMON);
   const L = criarLuta(configLuta(sem as EntradaLuta), sorteiosPorFluxo(101));
   while (!L.fim && L.relogio < 120_000) { passo(L); expect(L.a.recuoAp).toBe(0); expect(L.b.recuoAp).toBe(0); }
+});
+
+test("sem o `recua` do apoio (a regra da LP6-1), o recuo nunca liga, e a luta e a de antes da regra", () => {
+  const e = entrada("campo", AGUMON, VEEMON, { apoio: { ...APOIO_LP6 } });
+  const L = criarLuta(configLuta(e), sorteiosPorFluxo(101));
+  let apoios = 0;
+  while (!L.fim && L.relogio < 120_000) { for (const x of passo(L)) if (x.tipo === "apoio") apoios++; expect(L.a.recuoAp).toBe(0); }
+  expect(apoios).toBeGreaterThan(0);
+  expect(() => configLuta(entrada("campo", AGUMON, VEEMON, { apoio: { ...APOIO_LP6, recua: 1 as unknown as boolean } }))).toThrow();
+});
+
+/** o resumo de uma luta inteira: os eventos e o resultado */
+const tudo = (e: EntradaLuta): string => {
+  const L = criarLuta(configLuta(e), sorteiosPorFluxo(e.semente)), ev: Evento[] = [];
+  while (!L.fim && L.relogio < 120_000) ev.push(...passo(L));
+  return JSON.stringify({ ev, v: L.vencedor, r: L.relogio, a: L.a.hp, b: L.b.hp });
+};
+test("o apoio pelo estagio (o `desde`): abaixo dele a luta e a sem o apoio, byte a byte; no estagio, o apoio sai", () => {
+  const ULT = "brasa_adulto_duelista", MEGA = "brasa_adulto_furioso", ULT_PERTO = "cirro_adulto_duelista";
+  const ap = { ...APOIO_LP6, desde: "Ultimate" as const };
+  for (const cena of IDS_CENA) for (const s of [101, 202]) {
+    /* Rookie x Rookie e Champion x Rookie: igual a sem a chave do apoio */
+    const { apoio: _x, ...sem } = entrada(cena, AGUMON, VEEMON, {}, s);
+    expect(tudo({ ...sem, apoio: ap } as EntradaLuta)).toBe(tudo(sem as EntradaLuta));
+    const { apoio: _y, ...sem2 } = entrada(cena, "brasa_adolescente_brigao", VEEMON, {}, s);
+    expect(tudo({ ...sem2, apoio: ap } as EntradaLuta)).toBe(tudo(sem2 as EntradaLuta));
+  }
+  /* Ultimate x Ultimate e o Mega contra o Rookie (o maior dos dois decide): o apoio sai */
+  const comApoio = (a: string, b: string, desde: "Ultimate" | "Mega") => { let n = 0; for (const cena of IDS_CENA) { const L = criarLuta(configLuta(entrada(cena, a, b, { apoio: { ...APOIO_LP6, desde } })), sorteiosPorFluxo(101)); while (!L.fim && L.relogio < 120_000) for (const x of passo(L)) if (x.tipo === "apoio") n++; } return n; };
+  expect(comApoio(ULT, ULT_PERTO, "Ultimate")).toBeGreaterThan(0);
+  expect(comApoio(MEGA, VEEMON, "Ultimate")).toBeGreaterThan(0);
+  expect(comApoio(ULT, ULT_PERTO, "Mega")).toBe(0);
+  expect(() => configLuta(entrada("campo", AGUMON, VEEMON, { apoio: { ...APOIO_LP6, desde: "Rei" as never } }))).toThrow();
 });
