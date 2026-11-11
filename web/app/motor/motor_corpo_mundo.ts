@@ -37,7 +37,7 @@ import { ACOES_DONO_V11, MotorCorpo, estadoNascimentoPy, type EventoCorpo, type 
 import type { ObservacaoLobos } from "./lobos.ts";
 import {
   Mundo, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, eventoSacudirArvore, lerDeixarComida, lerLevarPet, lerMudarIlha, lerSacudirArvore,
-  regiaoDe, type PercepcaoMundo,
+  regiaoDe, type OpcoesMundo, type PercepcaoMundo,
 } from "./mundo.ts";
 import type { AcaoPet, EstadoVida } from "./tipos.ts";
 
@@ -81,6 +81,9 @@ export interface OpcoesLacoMundo {
   sacudir?: ConfigSacudir;
   /** a fruta do mundo como comida (a ConfigFrutaComoComida do Python, AS-11), desligada: com ela, o laco nao entrega o `frutaComida` */
   frutaComoComida?: boolean;
+  /** dois pets (docs/TAREFA_V3_COOPERACAO.md, CO4b): a parte do pet no mundo do grupo, montada pelo Grupo com as opcoes deste laco (o
+   *  `mundo=` do MotorMundo do Python). Sem ela, o laco e dono do proprio mundo, com a semente do pet: a vida de hoje */
+  parteDoMundo?: (op: OpcoesMundo) => Mundo;
 }
 
 const FRUTAS_DO_MUNDO: readonly string[] = ["a", "b", "c"];
@@ -106,8 +109,9 @@ export class MotorCorpoMundo extends MotorCorpo {
               opcoes: OpcoesLacoMundo = {}) {
     super(politica, semente, cc, estado, true);
     if (!cc.drives_novos) throw new Error("o laco com o mundo e o do regime `corpo` com os drives novos (a novidade e a atividade)");
-    this.mundo = new Mundo({ semente, cfg: opcoes.cfgMundo, bolaNoGolpe: opcoes.bolaNoGolpe ?? false, contrato: opcoes.contrato,
-                             ...(opcoes.sacudir !== undefined ? { sacudir: opcoes.sacudir } : {}) });
+    const op: OpcoesMundo = { semente, cfg: opcoes.cfgMundo, bolaNoGolpe: opcoes.bolaNoGolpe ?? false, contrato: opcoes.contrato,
+                              ...(opcoes.sacudir !== undefined ? { sacudir: opcoes.sacudir } : {}) };
+    this.mundo = opcoes.parteDoMundo ? opcoes.parteDoMundo(op) : new Mundo(op);
     if (opcoes.frutaComoComida !== undefined && typeof opcoes.frutaComoComida !== "boolean")
       throw new Error(`frutaComoComida e bool: ${String(opcoes.frutaComoComida)}`);
     this.frutaComoComida = opcoes.frutaComoComida ?? false;

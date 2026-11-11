@@ -267,3 +267,24 @@ Esta parte deixa os dois pets viverem na ilha com água, onde o jogo nasce:
   - `tests/test_cooperacao_agua.py` refaz o gabarito byte a byte, rejoga o registro e confere que nenhum pet fica na água;
   - `web/app/test/grupo_agua.test.ts` é o G-PAR-GRUPO nesse mundo, decisão a decisão, com o registro do contrato.
 - **Os desvios:** D-CO4-1, D-CO4a-1 e D-CO4a-2, no registro de 2026-11.
+
+## CO4b, o Motor do jogo dentro do Grupo (2026-11-11, Claude Code, Opus 5.5, branch `v3-cooperacao-co4b`)
+
+- **O `GrupoDoJogo`** (`web/app/motor/grupo_jogo.ts`): dois `Motor`s inteiros (o corpo, o cérebro, os chamados, a evolução) no mesmo mundo.
+  - **O tempo:** anda pelo `Grupo`, um tick por vez. Os que decidem andam na vez sorteada, depois os outros, e no fim vêm o toque e a
+    disputa.
+  - **O registro:** é um só, `[tick, tipo, valor, pet]`. O `reproduzir` rejoga e falha alto.
+- **O Grupo** (`motor/grupo.ts`) aceita o `Motor` como membro (`entrarMotor`), o relógio que começa no nascimento e a semente do segundo
+  pet nos 32 bits do jogo.
+- **O `Motor`** (`motor/motor.ts`) e o laço (`motor/motor_corpo_mundo.ts`, `motor/motor_corpo.ts`):
+  - recebem a parte do mundo do grupo;
+  - ganham o passo de um tick;
+  - o pet do grupo não anda sozinho.
+  - Sem o grupo, nada muda.
+- **O teste:** `web/app/test/grupo_jogo.test.ts`.
+  - Dois dias de dois pets v23 na ilha com água, com um dono de roteiro.
+  - O mundo é um só: um pet come a ração que o dono deixou pelo outro.
+  - A vez sorteada, a percepção do outro e o toque.
+  - O G-REPLAY-2 no motor: a mesma assinatura, o registro de cada pet como projeção, e o replay recusa o evento desconhecido, o pet de
+    fora e o tick errado.
+- **Os desvios:** D-CO4b-1 a D-CO4b-5, no registro de 2026-11.
