@@ -1,7 +1,7 @@
 # Plano do Digimon no habitat: a reação e o som de cada cuidado (2026-11-11)
 
-**Status:** planejamento, sem código. As decisões HR-1 a HR-8 (seção 6) são PROPOSTAS e esperam o Matheus. Todo número é PROPOSTO, SEM
-FONTE, e se acerta na rodada de equilíbrio do fim.
+**Status:** planejamento, sem código. As decisões HR-1 a HR-8 (seção 6) estão **DECIDIDAS** pelo Matheus em 2026-11-11 ("Aprovo as
+oito"), todas com a opção recomendada. Todo número é PROPOSTO, SEM FONTE, e se acerta na rodada de equilíbrio do fim.
 
 **Origem:** o Matheus, em 2026-11-10: "depois a gente planeja o que a gente faz com o Digimon no habitat, por exemplo. Quando você dá
 comida, a reação dele e tal". Em 2026-11-11: "Pode começar no que ficou pendente ali". O som do que o Digimon UP tem já está na `main`

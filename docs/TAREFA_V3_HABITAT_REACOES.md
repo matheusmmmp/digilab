@@ -1,7 +1,7 @@
 # TAREFA V3 — HABITAT_REACOES (2026-11-11)
 
-Coordenador e worker: sessão do Gerente da V3 (Claude Code, Opus 5.5). Worktree e branch: `v3-habitat-reacoes`. Status: PLANO PROPOSTO
-(etapa 0, sem código).
+Coordenador e worker: sessão do Gerente da V3 (Claude Code, Opus 5.5). Worktree e branch: `v3-habitat-reacoes`. Status: PLANO APROVADO
+(etapa 0, sem código; HR-1 a HR-8 DECIDIDAS em 2026-11-11).
 
 Categoria: documentacao. Origem: Matheus, 2026-11-10: "depois a gente planeja o que a gente faz com o Digimon no habitat, por exemplo.
 Quando você dá comida, a reação dele e tal". Liberado em 2026-11-11: "Pode começar no que ficou pendente ali".
@@ -43,5 +43,4 @@ O plano e o relato no corpo do PR.
 
 ## 8. Precisa do Matheus
 
-As HR-1 a HR-8 (plano, seção 6). A recomendação é aprovar as oito. A HR-5, baixar de 8 a 10 sons CC0, é a única que pede uma ação fora
-do repositório.
+Nada: as HR-1 a HR-8 foram aprovadas em 2026-11-11 ("Aprovo as oito"), com a HR-5, baixar de 8 a 10 sons CC0 na HR4.
