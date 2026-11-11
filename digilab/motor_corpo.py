@@ -131,6 +131,16 @@ class PercepcaoCorpo:
     paladar_azedo: int | None = None
     paladar_amargo: int | None = None
     paladar_salgado: int | None = None
+    # o orgao da tela (GOSTO_VISUAL, P1b): o nivel de cada canal, div_arred(S x I, teto_intensidade), e a novidade, a soma das partes
+    # adaptadas saturada (corpo.todos_receptores_tela, conferido por teste). Desligado (a ConfigTela, o padrao), None
+    tela_cor: int | None = None
+    tela_brilho: int | None = None
+    tela_movimento: int | None = None
+    tela_complexidade: int | None = None
+    tela_volume: int | None = None
+    tela_variacao: int | None = None
+    tela_timbre: int | None = None
+    novidade_tela: int | None = None
 
 
 class MotorCorpo:
@@ -236,7 +246,7 @@ class MotorCorpo:
         antiga = self.cc.taxa_digestao
         cc = replace(self.cc, taxa_digestao=nova)
         corpo = self.corpo
-        grafo = grafo_do_corpo(corpo.cfg, cc, taxas_de(corpo.cfg, cc), corpo.com_mundo, corpo.co, corpo.cv)
+        grafo = grafo_do_corpo(corpo.cfg, cc, taxas_de(corpo.cfg, cc), corpo.com_mundo, corpo.co, corpo.cv, corpo.ct)
         if grafo.nomes != corpo.quimicos:             # pragma: no cover - a taxa nao muda os quimicos
             raise RuntimeError("a troca da digestao mudou os quimicos do corpo")
         corpo.cc, corpo.t, corpo.grafo, corpo.relato_grafo = cc, taxas_de(corpo.cfg, cc), grafo, checar(grafo)
