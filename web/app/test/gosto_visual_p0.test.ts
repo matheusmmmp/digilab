@@ -28,15 +28,19 @@ const rodar = (semente: number, s: Sentido, n: number, carinho = false): EstadoG
 };
 
 describe("a chave", () => {
-  test("desligada por padrão: sem o parâmetro, ou com outro valor, não liga", () => {
-    expect(GOSTO_VISUAL_LIGADO).toBe(false);
-    expect(gostoVisualLigado("")).toBe(false);
-    expect(gostoVisualLigado("?gosto_visual=0")).toBe(false);
-    expect(gostoVisualLigado("?luta_poc=1")).toBe(false);
+  test("ligada por padrão (D-GV-PADRAO-1): sem o parâmetro, ou com outro, liga; só ?gosto_visual=0 desliga", () => {
+    expect(GOSTO_VISUAL_LIGADO).toBe(true);
+    expect(gostoVisualLigado("")).toBe(true);
+    expect(gostoVisualLigado("?luta_poc=1")).toBe(true);
     expect(gostoVisualLigado("?gosto_visual=1")).toBe(true);
+    expect(gostoVisualLigado("?gosto_visual=0")).toBe(false);
+    expect(gostoVisualLigado("?luta_poc=1&gosto_visual=0")).toBe(false);
   });
-  test("desligada, o componente não renderiza nada (o app de hoje)", () => {
-    expect(renderToStaticMarkup(h(GostoVisual))).toBe("");
+  test("com ?gosto_visual=0, o componente não renderiza nada (o app de antes)", () => {
+    const antes = (globalThis as { location?: unknown }).location;
+    (globalThis as { location?: unknown }).location = { search: "?gosto_visual=0" };
+    try { expect(renderToStaticMarkup(h(GostoVisual))).toBe(""); }
+    finally { (globalThis as { location?: unknown }).location = antes; }
   });
   test("o App só ganha a montagem do componente, e fora dele só o cantinho da TV na ilha (atrás da mesma chave) importa o protótipo", () => {
     const raiz = join(import.meta.dirname, "..", "src"), quem: string[] = [];

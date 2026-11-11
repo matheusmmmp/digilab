@@ -140,3 +140,9 @@ volume e movimento, o susto no salto de volume e o `estimulo_agrado_tela` na tri
 saem byte a byte. Testes novos em `tests/test_gosto_visual_corpo.py`. As escolhas estão em `docs/registro/2026-11.md`, D-GV-P1b-1 a 6; a D-GV-P1b-7 é o conserto do exportador do gabarito web do
 modular, que deixa de fora os campos vazios da tela na `PercepcaoCorpo` (os gabaritos da web saem byte a byte, sem regravar).
 Fica para a P1c: a TV, o motor chamando o `sentir_tela` (zeros sem olhar), o assistir e a novidade pelo corte.
+
+## A TV ligada por padrão no jogo (2026-11-11, Claude Code, Opus 5.5, branch `v3-gosto-visual-padrao`)
+
+Decisão do Matheus (D-GV-PADRAO-1, `docs/registro/2026-11.md`): "Quero que a opção da TV esteja padrão no jogo". No web, a chave do
+protótipo (`web/app/src/gostoVisual/chave.ts`) vem ligada; `?gosto_visual=0` desliga naquela aba. A captura continua só no clique do dono,
+fora do motor, do log e do save. As chaves do Python (P1b, P1c) seguem desligadas.
