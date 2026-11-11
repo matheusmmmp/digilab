@@ -10,6 +10,7 @@ import {
   CANDIDATO_V21, ESTAGIOS_LUTA, TETO, TIPICO, npc, petDoEstagio, pontosNoTotal, rivalCanonico, rivalDaForma, statsLuta,
 } from "../scripts/equilibrio_poc/comum.ts";
 import { basesDa } from "../scripts/equilibrio_poc/faixas.ts";
+import { limitesNpc, passaNpc } from "../scripts/equilibrio_poc/criterios.ts";
 import { candidatoDe, LP5_1_ESQ, LP5_1_R2 } from "../scripts/equilibrio_poc/candidatos.ts";
 import { motorDoCandidato } from "../scripts/equilibrio_poc/bancada.ts";
 
@@ -137,5 +138,19 @@ describe("a esquiva pela perspicacia e pela velocidade (D-LP5-14)", () => {
   test("o lp5_1_esq (D-LP5-16) e o lp5_1_r2 com a esquiva ligada, e so isso", () => {
     expect(LP5_1_ESQ.esquiva).toMatchObject({ ligada: 1, gamaMira: .6, gamaFolego: .6, kAtento: .5, pertoChance: 0 });
     expect({ ...LP5_1_ESQ, nome: "", esquiva: null }).toEqual({ ...LP5_1_R2, nome: "", esquiva: null });
+  });
+});
+
+describe("o criterio do P1 a P3 (D-LP5-17)", () => {
+  test("os limites saem do T1 do lp5_1_esq: o meio do caminho na escala logistica, com 0,10 de folga", () => {
+    expect([limitesNpc("crianca", false), limitesNpc("adolescente", false), limitesNpc("adulto", false), limitesNpc("mega", false)])
+      .toEqual([{ sem: .41, tip: .59 }, { sem: .35, tip: .65 }, { sem: .3, tip: .7 }, { sem: .27, tip: .73 }]);
+    expect([limitesNpc("adolescente", true), limitesNpc("mega", true)]).toEqual([{ sem: .5, tip: .7 }, { sem: .42, tip: .78 }]);
+  });
+  test("passa so dentro dos dois limites; estagio sem T1 falha alto", () => {
+    expect(passaNpc("crianca", false, .41, .59)).toBe(true);
+    expect(passaNpc("crianca", false, .42, .9)).toBe(false);
+    expect(passaNpc("crianca", false, .1, .58)).toBe(false);
+    expect(() => limitesNpc("ovo", false)).toThrow();
   });
 });
