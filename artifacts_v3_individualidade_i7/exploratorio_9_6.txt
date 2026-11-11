@@ -1,0 +1,20 @@
+SEQ REL frac D=0 por k: {1: 0.691, 2: 0.684, 3: 0.679, 4: 0.672} D medio nao-zero: {1: 0.229, 2: 0.239, 3: 0.243, 4: 0.256} D_G medio: {1: 0.3, 2: 0.296, 3: 0.304, 4: 0.308} trajetorias: {'sempre0': 603, 'nunca0': 275, 'misto': 22}
+SEQ REL+F frac D=0 por k: {1: 0.668, 2: 0.661, 3: 0.657, 4: 0.649} D medio nao-zero: {1: 0.232, 2: 0.247, 3: 0.256, 4: 0.269} D_G medio: {1: 0.302, 2: 0.305, 3: 0.307, 4: 0.314} trajetorias: {'sempre0': 583, 'nunca0': 297, 'misto': 20}
+LUGAR REL frac D=0 por k: {1: 0.69, 2: 0.684, 3: 0.679, 4: 0.673} D medio nao-zero: {1: 0.361, 2: 0.38, 3: 0.395, 4: 0.397} D_G medio: {1: 0.427, 2: 0.425, 3: 0.431, 4: 0.427} trajetorias: {'sempre0': 605, 'nunca0': 277, 'misto': 18}
+LUGAR REL+F frac D=0 por k: {1: 0.666, 2: 0.661, 3: 0.656, 4: 0.648} D medio nao-zero: {1: 0.37, 2: 0.392, 3: 0.403, 4: 0.405} D_G medio: {1: 0.427, 2: 0.434, 3: 0.431, 4: 0.435} trajetorias: {'sempre0': 582, 'nunca0': 300, 'misto': 18}
+HORA REL frac D=0 por k: {1: 0.691, 2: 0.684, 3: 0.679, 4: 0.672} D medio nao-zero: {1: 0.264, 2: 0.298, 3: 0.316, 4: 0.318} D_G medio: {1: 0.36, 2: 0.364, 3: 0.365, 4: 0.369} trajetorias: {'sempre0': 604, 'nunca0': 277, 'misto': 19}
+HORA REL+F frac D=0 por k: {1: 0.669, 2: 0.661, 3: 0.657, 4: 0.649} D medio nao-zero: {1: 0.272, 2: 0.309, 3: 0.321, 4: 0.334} D_G medio: {1: 0.365, 2: 0.371, 3: 0.371, 4: 0.375} trajetorias: {'sempre0': 584, 'nunca0': 297, 'misto': 19}
+reencontro dia14 = False n 638 estado t+1 medio 0.176 estado t+4 medio 0.364 frac estado=0 em t+1 0.0 em t+4 0.0 gemeo t+4 0.538
+reencontro dia14 = True n 1162 estado t+1 medio 0.005 estado t+4 medio 0.005 frac estado=0 em t+1 0.04 em t+4 0.11 gemeo t+4 0.534
+curado aleatorio 4 folhas 4855 diferem 4 por modulo {'mem.autobio': 4}
+   exemplos: [('mem.autobio.duradoura.3.corpo_antes.dor', '0', '4'), ('mem.autobio.duradoura.3.corpo_depois.dor', '0', '4'), ('mem.autobio.duradoura.4.corpo_antes.dor', '0', '1'), ('mem.autobio.duradoura.4.corpo_depois.dor', '0', '1')]
+curado aleatorio 8 folhas 4855 diferem 5 por modulo {'mem.autobio': 5}
+   exemplos: [('mem.autobio.consolidacoes.8.por_capacidade.duradoura.0', '100', '113'), ('mem.autobio.consolidacoes.8.por_capacidade.duradoura.1', '113', '100'), ('mem.autobio.duradoura.20.corpo_antes.dor', '0', '1'), ('mem.autobio.duradoura.20.corpo_depois.dor', '0', '1'), ('mem.autobio.duradoura.7.rec', '42', '46')]
+afastado aleatorio 2 folhas 4958 diferem 2281 por modulo {'mem.autobio': 2088, 'mem.saidas': 68, 'mem.episodios': 66, 'plast.H': 44, 'estado.fins': 3, 'afeto.V': 1, 'afeto.ultimo': 1, 'arb.reflexos': 1}
+   exemplos: [('afeto.V', '97', '122'), ('afeto.ultimo.V', '97', '122'), ('arb.reflexos', '328', '300'), ('arb.sorteios', '1009', '1037'), ('estado.F', '123', '32'), ('estado.fins.achou', '10', '6')]
+afastado aleatorio 6 folhas 5010 diferem 2225 por modulo {'mem.autobio': 2013, 'mem.saidas': 89, 'mem.episodios': 61, 'plast.H': 45, 'afeto.ultimo': 4, 'estado.fins': 2, 'afeto.V': 1, 'arb.reflexos': 1}
+   exemplos: [('afeto.V', '97', '84'), ('afeto.ultimo.V', '97', '84'), ('afeto.ultimo.canais.fome', '1338', '1428'), ('afeto.ultimo.r', '1338', '1428'), ('afeto.ultimo.r_n', '669', '714'), ('arb.reflexos', '328', '320')]
+exploratorio, fora do plano: o arb.sorteios no fim do dia t (o do tapa) e no dia 14, curados x afastados
+8 ('afastado', 'sorteios diferentes no dia t', 'reflexos diferentes')
+2 ('afastado', 'sorteios iguais no dia t', 'reflexos iguais')
+10 ('curado', 'sorteios iguais no dia t', 'reflexos iguais')
