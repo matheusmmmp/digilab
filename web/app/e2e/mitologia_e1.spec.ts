@@ -17,7 +17,7 @@ async function semear(page: Page, mitologia: boolean): Promise<void> {
   await page.evaluate(([chave, s, mit]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 1, log: [] }));
     localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
-    if (mit) localStorage.setItem(chave + "-mitologia", "1");
+    localStorage.setItem(chave + "-mitologia", mit ? "1" : "0");
     localStorage.setItem(chave, s);
   }, [CHAVE, JSON.stringify(SAVE), mitologia] as const);
 }
@@ -58,6 +58,7 @@ for (const largura of [390, 1280]) {
     await expect(codice.locator("li[data-deus='amizade']")).toContainText("Amizade");
     await expect(codice.locator("li[data-deus='coragem']")).toHaveClass(/codice-oculto/);
     await expect(codice).toContainText("A pedra do macaco");
+    await expect(codice.locator("li[data-segredo='montanha']")).toHaveClass(/codice-oculto/);   // E2: sem Piedmon vencido, a montanha escondida
     const retrato = page.getByTestId("codice-oraculo");
     for (let i = 0; i < 6; i++) await retrato.click();
     await expect(page.getByTestId("codice-enigma")).toHaveCount(0);

@@ -4,7 +4,7 @@
 import { useRef, useState } from "react";
 import {
   CMIT_E1, DEUSES, ENIGMA, FALA_PESSEGO, LENDA_CONTADA, LENDA_DO_MACACO, NOME_DEUS, NOME_ORACULO, SINAL_DEUS, diaDeVida, myotismonJaApareceu,
-  pedraAchadaDe, pegadasDe, sinaisDe, tickDoDiaRaro,
+  montanhaDe, pedraAchadaDe, pegadasDe, sinaisDe, tickDoDiaRaro,
 } from "../../motor/index.ts";
 import { useJogo } from "../jogo.ts";
 import { enigmaResolvidoEm, ouvidasDe, responderEnigma, useMitologia, useVersaoOuvidas } from "../mitologia.ts";
@@ -23,7 +23,7 @@ export function Codice() {
   const sinais = sinaisDe(m), raroVivido = tick >= tickDoDiaRaro();
   const vezes = (d: (typeof DEUSES)[number]) => sinais.filter(s => s.deus === d && s.tick <= tick).length + (raroVivido ? 1 : 0);
   const pedra = pedraAchadaDe(m), pegadas = pegadasDe(m), resolvido = enigmaResolvidoEm(m);
-  const myo = myotismonJaApareceu(m, tick);
+  const myo = myotismonJaApareceu(m, tick), montanha = montanhaDe(m).fechada;
   const tocar = () => {
     const agora = performance.now();
     toques.current = [...toques.current.filter(t => agora - t < JANELA_TOQUES_MS), agora];
@@ -82,6 +82,8 @@ export function Codice() {
             {raroVivido ? <><b>O dia {CMIT_E1.diaRaro}</b>: os cinco olharam ao mesmo tempo</> : <>{OCULTO} <small>um dia que vale por muitos</small></>}</li>
           <li className={myo ? "" : "codice-oculto"}>
             {myo ? <><b>A sombra que gosta de repetição</b>: o Myotismon já escureceu a ilha; variar devolve a luz</> : <>{OCULTO} <small>nem todo deus mora na roda</small></>}</li>
+          <li className={montanha !== null ? "" : "codice-oculto"} data-segredo="montanha">
+            {montanha !== null ? <><b>A montanha</b>: {dia(montanha)}, vocês venceram o Piedmon depois de já terem caído; o macaco saiu da montanha, e o aro ficou na pedra</> : <>{OCULTO} <small>o riso do palhaço guarda a última página</small></>}</li>
         </ul>
       </div>
     </details>

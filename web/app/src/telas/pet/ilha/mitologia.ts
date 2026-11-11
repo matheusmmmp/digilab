@@ -2,12 +2,13 @@
    motor/lendas_e1.ts, funcao pura do pet refeito do log), recalculadas so quando o log cresce. Nenhum texto e nenhum som: sutil de proposito.
      - os sinais dos cinco deuses, cada um por um dia de jogo depois do evento: a nuvenzinha dourada da Diversao (E0) sobre o ninho, a chama
        da Coragem, as duas flores da Amizade, o marco do Conhecimento e o broto da Sinceridade em volta dele; no dia 81, os cinco juntos;
-     - a pedra do macaco na mata (sempre, com a chave) e, depois de muita exploracao la, as pegadas do ninho ate ela;
+     - a pedra do macaco na mata (sempre, com a chave) e, depois de muita exploracao, as pegadas do ninho ate ela; com a lenda fechada
+       (E2: vencer o Piedmon depois de uma hybris), o aro dourado do macaco fica sobre a pedra;
      - o pessego dourado perto do ninho por um dia, para quem decifrou o enigma do Jijimon (src/mitologia.ts);
      - o Myotismon: com a repeticao a exaustao, morcegos sobre o ninho e o canvas mais escuro (o atributo data-myotismon no <html>). */
 import * as THREE from "three";
 import {
-  DEUSES, diaDeVida, CMIT_E1, myotismonNoTick, pedraEm, pegadasDe, sinaisDe, sinaisNoTick, type Deus,
+  DEUSES, diaDeVida, CMIT_E1, montanhaDe, myotismonNoTick, pedraEm, pegadasDe, sinaisDe, sinaisNoTick, type Deus,
 } from "../../../../motor/index.ts";
 import type { Motor } from "../../../../motor/motor.ts";
 import { enigmaResolvidoEm } from "../../../mitologia.ts";
@@ -105,7 +106,9 @@ export class SinaisDaIlha {
   private readonly ninho: readonly [number, number];
   private cacheLog = -1;
   private cacheMotor: Motor | null = null;
-  private derivado: { sinais: ReturnType<typeof sinaisDe>; pegadas: number | null } = { sinais: [], pegadas: null };
+  private derivado: { sinais: ReturnType<typeof sinaisDe>; pegadas: number | null; montanha: number | null } = { sinais: [], pegadas: null, montanha: null };
+  /** E2: o aro do macaco, deixado na pedra quando a lenda se fecha (vencer o Piedmon depois de uma hybris) */
+  private readonly aro: THREE.Mesh;
   private myoAntes: boolean | null = null;
 
   constructor(ninhoEm: readonly [number, number], sub: number) {
@@ -121,6 +124,10 @@ export class SinaisDaIlha {
     const pedraIlha: [number, number] = [px / sub, py / sub];
     this.pedra.position.set(pedraIlha[0], 0, pedraIlha[1]);
     this.pedra.rotation.y = 0.6;
+    this.aro = malha(new THREE.TorusGeometry(0.32, 0.05, 8, 24), toon({ color: 0xffd36b, emissive: 0xb07a12, emissiveIntensity: 0.8 }), 0, 1.45, 0);
+    this.aro.rotation.x = Math.PI / 2.4;
+    this.aro.visible = false;
+    this.pedra.add(this.aro);
     /* as pegadas: do ninho ate a pedra, em pares que se alternam de lado */
     const matPegada = toon({ color: 0x5a3e28 }), [ax, az] = ninhoEm, [bx, bz] = pedraIlha;
     const ang = Math.atan2(bx - ax, bz - az), nx = Math.cos(ang), nz = -Math.sin(ang);
@@ -146,7 +153,7 @@ export class SinaisDaIlha {
     this.raiz.visible = true;
     if (m !== this.cacheMotor || m.log.length !== this.cacheLog) {
       this.cacheMotor = m; this.cacheLog = m.log.length;
-      this.derivado = { sinais: sinaisDe(m), pegadas: pegadasDe(m) };
+      this.derivado = { sinais: sinaisDe(m), pegadas: pegadasDe(m), montanha: montanhaDe(m).fechada };
     }
     const tick = m.e.tick, raro = diaDeVida(tick) === CMIT_E1.diaRaro;
     const ativos = new Set<Deus>(raro ? DEUSES : sinaisNoTick(this.derivado.sinais, tick));
@@ -157,6 +164,7 @@ export class SinaisDaIlha {
       if (g.visible) g.position.y = POS_SINAL[d][1] + (d === "diversao" ? BALANCO * bal : 0);
     }
     this.pedra.visible = true;
+    this.aro.visible = this.derivado.montanha !== null && this.derivado.montanha <= tick;
     this.pegadas.visible = this.derivado.pegadas !== null && this.derivado.pegadas <= tick;
     const enigma = enigmaResolvidoEm(m);
     this.pessego.visible = enigma !== null && enigma <= tick && tick < enigma + TPD_DIA;
