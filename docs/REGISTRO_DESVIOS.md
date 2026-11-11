@@ -624,3 +624,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — LUTA_POC, LP5: a esquiva ligada no candidato (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-calib`)](registro/2026-11.md)
 - [2026-11-11 — LUTA_POC, LP5-2: as rodadas 1 e 2 do total dos NPCs (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-2`)](registro/2026-11.md)
 - [2026-11-11 — LUTA_POC, LP5-2: o critério novo do P1 a P3 e a rodada 3 (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-2`)](registro/2026-11.md)
+- [2026-11-11 — LUTA_POC, LP5-2: a divisão dos stats dos 7 NPCs e a leitura da vida (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-2`)](registro/2026-11.md)

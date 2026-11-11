@@ -715,6 +715,25 @@ Rookie ao Mega, e o desafiante tem +0,15 e +0,05. A pior espécie vai só à lei
   `sparring`. A causa provável é a vida, não o rival (a condição pela saúde, o caráter, o treino perto de 21 pontos e não 22), mas ela
   não foi medida.
 
+### A divisão dos stats e a leitura da vida (D-LP5-18)
+
+O Matheus aprovou as duas recomendações ("Aprovo como recomendadas.").
+
+**A divisão dos stats dos 7 NPCs não fecha nenhum deles.**
+- A grade `lp5_2/r4` cruzou 12 divisões com 4 totais.
+- O mais perto foi o Devidramon: 0,513 sem treino e 0,686 com o típico (`fol_t2`), contra ≤ 0,50 e ≥ 0,70; falta 0,014.
+- Depois vêm o Guardromon (falta 0,039), o Youkomon (0,070), o Myotismon (0,109), o Piedmon (0,111), o Machinedramon (0,176) e o
+  Puppetmon (0,186).
+- Os 7 ficam reprovados e vão à investigação do núcleo e à tarefa da tabela das formas. O `lp5_2` não muda.
+
+**A leitura da vida explica o P5.**
+- As 100 vidas chegam ao Champion como colosso. O colosso típico vence 0,712 do sparring, contra 0,885 a 0,899 das outras formas, e o
+  0,85 da bancada é a média das quatro.
+- O dono luta com o treino em ~14 pontos, não em 22; com os 22, a taxa sobe só +0,05.
+- A condição é 1,05, um bônus, e o caráter quase não pesa.
+- Com 0,67 por luta, a chance de ≥ 8 de 10 é de 0,31, perto das 27 vidas que passam.
+- Os números estão em `web/app/scripts/medicoes/equilibrio_poc/lp5_2/leitura_vida/` e no registro (D-LP5-18-1 a 5).
+
 ## Resultado da LP3c (2026-11-10)
 
 Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp3c`, a pedido do Gerente de sprites e luta. O pedido seguiu a revisão dos
