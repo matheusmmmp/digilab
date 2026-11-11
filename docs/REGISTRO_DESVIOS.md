@@ -698,3 +698,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — COOPERACAO, a proposta de Kant na cooperação (Claude Code, Opus 5.5, sessão da INDIVIDUALIDADE, branch `v3-kant-cooperacao`)](registro/2026-11.md)
 - [2026-11-11 — CONVERSA_PET, DC5c, o adendo do plano e a config da validação (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5c`)](registro/2026-11.md)
 - [2026-11-11 — COOPERACAO, a espec da CO6 (Claude Code, Opus 5.5, sessão da INDIVIDUALIDADE, branch `v3-cooperacao-co6-espec`)](registro/2026-11.md)
+- [2026-11-11 — UX_TELA_PET, o saco de pancada no mar da ilha grande (Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-saco-ilha`)](registro/2026-11.md)
