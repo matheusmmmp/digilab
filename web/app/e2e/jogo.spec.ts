@@ -1009,6 +1009,9 @@ for (const largura of [390, 1280]) {
 test("treino: com fadiga acima de 60 os exercícios viram Forçar, a folha confirma e o treino entra no registro", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await semear(page, SAVE_TR_FORCAR);
+  /* SOM-UP: o teste mede uma janela de 250 ms do relogio da pagina; baixar e decodificar a musica do treino ao abrir a tela passava dela.
+     O teste nao e de som: o som fica desligado */
+  await page.addInitScript(c => { localStorage.setItem(c + "-som", "0"); }, CHAVE);
   const erros = vigiarErros(page);
   /* o relogio da pagina e falso e, com o app de pe, para: o Forcar so fica habilitado ~3 min de jogo (o intervalo de 10 min passou, a
      fadiga ainda esta acima de 60), uns 300 ms a 10 min/s, e a espera do Playwright (que tenta de novo em intervalos que crescem ate 1 s)
@@ -1320,6 +1323,28 @@ test("som: ligado com os arquivos ausentes mostra o aviso e a tela segue", async
   await expect(page.getByTestId("aviso-som").first()).toContainText("mapa de sons");
   await page.getByRole("switch", { name: /Som do jogo/ }).uncheck();
   await expect(page.getByRole("switch", { name: /Som do jogo/ })).not.toBeChecked();
+});
+
+/* SOM-UP (docs/TAREFA_V3_SOM_UP.md): com o mapa de sons da versao 2 (Assets/sons, fora do git: sem ele o teste nao se aplica), o painel
+   pede o som de abrir, o treino a musica do treino, e a luta a musica do mapa da arena, os golpes por Digimon e o som do fim */
+test("som: o painel, o treino e a luta pedem os sons do Digimon UP", async ({ page }) => {
+  test.setTimeout(180_000);
+  const r = await page.request.get("/Assets/sons/mapa.json");
+  test.skip(!r.ok() || !(await r.json()).efeitos, "sem Assets/sons da versão 2 (fora do git)");
+  await semear(page, SAVES.champion);
+  const erros = vigiarErros(page), pedidos: string[] = [];
+  page.on("request", q => { const m = /\/Assets\/sons\/([^/?]+)/.exec(q.url()); if (m) pedidos.push(m[1]!); });
+  await page.goto(APP + "#/pet/estado");
+  await irPara(page, "Crescer", "Treinar", "crescer/treinar");
+  await expect.poll(() => pedidos).toContain("sfx_ui_window_open.mp3");
+  await expect.poll(() => pedidos).toContain("SFX_BGM_training_others.mp3");
+  await irPara(page, "Lutar", "Arena", "lutar/arena");
+  await page.getByTestId("poc-lutar").click();
+  await expect(page.getByTestId("poc-resultado")).toBeVisible({ timeout: 90_000 });
+  expect(pedidos.some(p => /^SFX_BGM_(stage|boss_battle)\d+\.mp3$/.test(p)), "a luta não pediu a música do mapa").toBe(true);
+  expect(pedidos.some(p => /^sfx_dm_.+\.mp3$/.test(p)), "a luta não pediu os golpes por Digimon").toBe(true);
+  expect(pedidos.some(p => /^sfx_ui_pvp_(ready|win|lose)\.mp3$/.test(p)), "a luta não pediu o começo nem o fim").toBe(true);
+  expect(erros).toEqual([]);
 });
 
 /* TAREFA_V2_UP_ATLAS: com a chave dos clipes ligada (?clipes_up=1) e o atlas de clipes ausente, o aviso do atlas aparece; nao cai calado no atlas atual */
