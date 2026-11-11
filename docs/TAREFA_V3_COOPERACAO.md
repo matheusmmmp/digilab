@@ -2,7 +2,7 @@
 
 Coordenador: o Gerente da V3 (Claude Code, Opus 5.5). Worker: um por etapa, a definir. Worktree e branch: `v3-cooperacao` (esta etapa,
 CO0); cada etapa de código terá a sua, `v3-cooperacao-co<n>`. Status: **ABERTA**, só o papel. As decisões CO-1 a CO-9 da seção 8
-esperam o Matheus.
+foram DECIDIDAS em 2026-11-11, pela recomendação.
 
 Categoria: arquitetura. Origem: o Matheus, em 2026-11-11, a partir do levantamento "moral, mitologia e felicidade", feito no vault
 (`20 Temas/Síntese — moral, mitologia e felicidade.md`, fora do repositório).
@@ -162,6 +162,8 @@ Não há run nesta tarefa. Os gates são de engenharia:
 6. Cada número novo está na `ConfigCooperacao` (e no espelho TS, conferido por `constantes.test.mjs`) com PROPOSTO e SEM FONTE.
 
 ## 8. Precisa do Matheus
+
+**As CO-1 a CO-9 foram DECIDIDAS pelo Matheus em 2026-11-11 ("Aprovo as 9"), pela recomendação.** Os números continuam PROPOSTOS.
 
 | n.º | decisão | recomendação | custo de errar |
 |---|---|---|---|
