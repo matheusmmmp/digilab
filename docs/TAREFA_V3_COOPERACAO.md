@@ -215,3 +215,17 @@ A CO2 foi dividida em três PRs, porque o porte é maior do que a seção 3 prev
     a política e o dono do Python.
   - **O teste:** `tests/test_cooperacao_traco.py` refaz o traço byte a byte. Ele também confere que o motor que grava não muda a vida: o
     sha256 do resumo de cada vida é o mesmo da CO1.
+
+## CO2b, o mundo partilhado no TS (2026-11-11, Claude Code, Opus 5.5, branch `v3-cooperacao-co2b`)
+
+O `web/app/motor/mundo.ts` foi separado como o `digilab/mundo.py`, sem mudar o jogo de hoje.
+
+- **O `MundoPartilhado` (novo):** o `Mundo` do Python. Guarda as árvores, as comidas, a bola, os fluxos do mundo e os registros do mundo.
+  - A atualização é idempotente por tick e falha alto num tick para trás.
+  - A percepção (`perceber(x, y, tick, pendente, ve)`), as maduras perto, retirar a comida, rolar a bola e o que o dono deixa.
+- **O `Mundo` (o de hoje):** passa a ser a parte de um pet (o `MotorMundo` do Python), com a mesma interface.
+  - Sem `partilhado`, ele é dono do próprio `MundoPartilhado`, com a semente do pet: a vida de hoje.
+  - Com `partilhado` e `entrada` (um início de dia), ele vive no mundo do grupo, com o relógio dele.
+- **O G2 de um pet só:** `web/app/test/mundo_partilhado.test.ts` rejoga as 4 vidas do `mundo_python.json` com o pet sobre um mundo dado e
+  com o pet dono do próprio, e as duas dão a mesma vida. O G-HOJE (`coop_etapa0.test.ts`) e as paridades do mundo continuam passando.
+- **Os desvios:** D-CO2b-1 a D-CO2b-4, no registro de 2026-11.
