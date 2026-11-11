@@ -248,3 +248,15 @@ cada grade e antes da conferência.
 - **Se o escolhido não tiver a elipse 1,15/1,3,** a decisão 4 do plano muda. Isso é um desvio a registrar e a avisar ao Gerente.
 - **A conferência** roda uma vez nas 87xxx, com o escolhido, na fase `lp6_3`. A comparação usa o `comparar_conferencia.ts
   --conferencia lp6_3`.
+
+**A escolha: o `lp6_3_u120` (2026-11-11, antes da conferência).** As 3 medidas inteiras (commit `c0b99b68`, 5 bases das 86xxx):
+
+| finalista | elipse | metas | protegidas que caem | A1 Ultimate / Mega | o desvio do A1 |
+|---|---|---|---|---|---|
+| `lp6_3_u110` | 1,1 / 1,2 | 10 | nenhuma | 0,488 / 0,416 | 0,084 |
+| `lp6_3_u115` | 1,15 / 1,3 | 9 | **S1** (o Deserto do Ultimate, 0,563) | 0,509 / 0,442 | 0,058 |
+| `lp6_3_u120` | 1,2 / 1,4 | 10 | nenhuma | 0,528 / 0,471 | **0,029** |
+
+- **Pelo critério:** o `lp6_3_u115` sai no passo 1, e o `lp6_3_u120` vence o `lp6_3_u110` no passo 2.
+- **A decisão 4 muda (D-LP6-3-9):** a elipse do Mega passa de 1,3 para 1,4, e a do Ultimate de 1,15 para 1,2. O espaço de verdade fica,
+  com fatores maiores que os do plano. PROPOSTO, SEM FONTE, até o Matheus decidir.
