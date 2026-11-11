@@ -630,6 +630,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-10 — INDIVIDUALIDADE: a D-IND-I5b-1 confirmada e o adendo 1 do I7 DECIDIDO (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i7-adendo1`)](registro/2026-11.md)
 - [2026-11-10 — LUTA_POC, LP5-1: as rodadas 2 e 3 e o fim da LP5-1 (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-calib`)](registro/2026-11.md)
 - [2026-11-10 — CONVERSA_PET, DC5, a aprovação do plano de análise (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5`)](registro/2026-11.md)
+- [2026-11-10 — UX_TELA_PET, a câmera do primeiro dia no jogo (gerente da frente, Claude Code, Opus 5.5, branch `v3-ux-camera-abertura`)](registro/2026-11.md)
 - [2026-11-10 — CONVERSA_PET, DC5a, o código da voz-v4 e da avaliação (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5a`)](registro/2026-11.md)
 - [2026-11-10 — INDIVIDUALIDADE, I7a: as leituras do plano do I7 e o custo da fumaça (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i7a`)](registro/2026-11.md)
 - [2026-11-10 — SOM_UP: os sons do Digimon UP no jogo (Gerente da V3, Claude Code, Opus 5.5, branch `v3-som-up`)](registro/2026-11.md)
