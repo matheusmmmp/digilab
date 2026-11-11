@@ -626,3 +626,28 @@ bancada leva o tiro, e a meta nova é o A2 (PROPOSTA, SEM FONTE). Os desvios sã
   Mas as que atiram passam a vencer as de perto de 0,67 a 0,92 (o A1), e o S1 na Praia não muda.
 - **A ordem das fases não muda:** o tiro é parte do mapeamento (LP5-1), antes dos NPCs. Mas o ponto de partida ganha o A2, e o
   `lp5_1_r1` precisa ser medido de novo com o tiro, nas rodadas 2 e 3 da LP5-1.
+
+### As rodadas 2 e 3 e o fim da LP5-1
+
+O Matheus aprovou as 4 decisões ("Aprovo as 4"; a D-LP5-13). **O candidato da LP5-1 é o `lp5_1_r2`:**
+- o mapeamento da rodada 1;
+- o tiro: distância mínima 110 px, recuo na preparação a 2 vezes o movimento;
+- o dano do projétil a 0,7.
+
+A medida inteira está em `web/app/scripts/medicoes/equilibrio_poc/lp5_1_r2/calibracao/resumo.md` (1 412 931 lutas). Os desvios são o
+D-LP5-1-11 a 16.
+
+- **Passam 6 das 21 metas: T1, T3, E1, D1, D3 e A2.**
+  - **O treino:** o T1 dá 0,81, 0,86, 0,93 e 0,94, do Rookie ao Mega.
+  - **A evolução (E1):** o típico contra o estágio seguinte dá de 0,15 a 0,17.
+  - **A duração (D1):** a mediana fica de 21 a 24 s.
+  - **O tiro (A2):** a mediana fica de 100 a 108 px, com 7 % a 9 % dos tiros a 48 px ou menos.
+- **O que fica para o Matheus** (o D-LP5-1-16):
+  - o V2: a amplitude fica de 0,07 a 0,22, e a rodada 3 não a move;
+  - o A1: a soma fica de 0,45 a 0,56, mas os mapas vão de 0,11 a 0,77, pelas regras dos mapas;
+  - o D2: os empates ficam em 3,6 %;
+  - o S1: o Ringue do Rookie fica em 0,449.
+- **A rodada 3** (16 pontos) não mudou nenhum número.
+
+A LP5-1 fecha pela regra das 3 rodadas. A LP5-2 (os NPCs, o sparring e a vida) parte do `lp5_1_r2`. Nele, o P4 dá de 0,69 a 0,86 de
+média, e só 10 de 100 vidas chegam ao Mega.

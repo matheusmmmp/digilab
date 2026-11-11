@@ -611,3 +611,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-10 — INDIVIDUALIDADE, I5b: a análise única do hábito e a leitura do H_mundo (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i5b`)](registro/2026-11.md)
 - [2026-11-10 — LUTA_POC, LP5-1: a distância do tiro no núcleo (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-calib`)](registro/2026-11.md)
 - [2026-11-10 — INDIVIDUALIDADE: a D-IND-I5b-1 confirmada e o adendo 1 do I7 DECIDIDO (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i7-adendo1`)](registro/2026-11.md)
+- [2026-11-10 — LUTA_POC, LP5-1: as rodadas 2 e 3 e o fim da LP5-1 (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-calib`)](registro/2026-11.md)
