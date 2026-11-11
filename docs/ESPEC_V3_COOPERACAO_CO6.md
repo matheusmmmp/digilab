@@ -1,9 +1,9 @@
-# ESPEC V3 — COOPERACAO, CO6: a reputação e a convivência na percepção (2026-11-11, PROPOSTA, Claude Code, Opus 5.5)
+# ESPEC V3 — COOPERACAO, CO6: a reputação e a convivência na percepção (2026-11-11, CO6-1 a CO6-7 DECIDIDAS, Claude Code, Opus 5.5)
 
-**Status: PROPOSTA, para o Matheus revisar antes de qualquer código.** Esta espec detalha a CO6 da `docs/TAREFA_V3_COOPERACAO.md` (a
+**Status: revisada pelo Matheus; as CO6-1 a CO6-7 (seção 8) DECIDIDAS em 2026-11-11 ("Aprovo todas"), pela recomendação.** Os números continuam PROPOSTOS. Esta espec detalha a CO6 da `docs/TAREFA_V3_COOPERACAO.md` (a
 seção 3: "a reputação entrar na percepção do cérebro"). Ela parte da proposta `docs/futuro/kant_cooperacao.md` (as K-1 a K-6, DECIDIDAS
 pelo Matheus em 2026-11-11), seção 2.1. **O código da CO6 é coordenado pela frente COOPERACAO** (o Gerente da V3, pela K-1). Esta espec é o
-papel dela. As decisões CO6-1 a CO6-7 (seção 8) estão PROPOSTAS. Todos os números são PROPOSTOS, SEM FONTE como escolha, e não há alegação
+papel dela. Todos os números são PROPOSTOS, SEM FONTE como escolha, e não há alegação
 de novidade.
 
 ## 0. O que já existe (os fatos que a espec usa)
@@ -110,7 +110,7 @@ leem vidas de dois pets. A CO7 vem depois da CO6.
 transposta (a assortatividade). Ela só roda com um plano de análise próprio, na bancada, como a run que a tarefa da cooperação já deixa de
 fora.
 
-## 8. As decisões (PROPOSTAS, para o Matheus; cada uma com a recomendação e o custo de errar)
+## 8. As decisões (DECIDIDAS pelo Matheus em 2026-11-11, todas pela recomendação; cada uma com a recomendação e o custo de errar)
 
 | | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
