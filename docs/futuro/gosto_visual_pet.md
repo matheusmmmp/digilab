@@ -333,5 +333,8 @@ com a exposição; o interesse que se gasta e volta; o carinho do dono durante a
 inato e o aprendido separados (GV-14). Todos os números do P0 são PROPOSTOS, SEM FONTE, e ficam no próprio módulo, porque ele não é do
 motor nem do `config.py`.
 
+**A TV do jogo no P0:** um segundo botão liga quatro programas sintéticos (`tvDoJogo.ts`), para ver as reações sem compartilhar a
+tela e onde o navegador não deixa capturar (a GV-1 recomenda começar por ela).
+
 **A privacidade no P0:** a captura começa só por clique; só os sete números existem depois de cada segundo; nada é enviado. Só o estado
 do gosto (os desvios aprendidos e o tempo assistindo junto) fica guardado, no `localStorage` deste navegador, por pet.
