@@ -283,3 +283,16 @@ do mundo grande (não corrigido: a pesquisa não usa o mundo grande, IG-8; fica 
 **O que não foi verificado:** a suíte inteira do Python não rodou; o custo no celular; o DigiBrain modular com as regiões novas (a
 medida usa o A do v11); a fruta posta ao lado da ração no mundo grande (o caminho recebe o tamanho do mapa, mas não tem teste lá). A
 árvore e o marco não tapam a visão do pet, como a água. O grupo de dois pets continua no limite de 64 × 30.
+
+### 12.9 IG2: o que foi construído (2026-11-11)
+
+- **O mundo grande no motor da web:** `CMU_GRANDE`, o layout `grande` e o `AGUA_ILHA_GRANDE` em `web/app/motor/constantes.ts`, com a
+  árvore e o marco fechados. O `celulasSecas` aceita os dois caracteres novos.
+- **As posições dos eventos** (`eventoDeixarComida`, `eventoDeixarBola` e as leituras) recebem o tamanho do mapa; o `Mundo` e o laço
+  (`motor_corpo_mundo.ts`) passam o do mundo deles. Quem não passa fica no limite de 1024 × 480.
+- **A paridade:** o TS refaz as duas vidas do gabarito do Python (`ilha_grande_python.json`) decisão a decisão, com o log, o mundo e o
+  corpo iguais no fim, e os mesmos sólidos na mesma ordem.
+- **O `Motor` do jogo (`motor/motor.ts`) não mudou:** ele ainda valida a ração e a bola do jogador no limite de 1024 × 480. Passar o
+  tamanho do mapa ali é da IG4, que é quem põe um pet no mundo grande.
+- **O tempo na web** (medida única desta sessão, no Node desta máquina, sem artefato): uma vida de 2 dias do gabarito levou 52 e 71 ms
+  na ilha grande, contra 33 e 49 ms no mundo de hoje. No celular não foi medido.

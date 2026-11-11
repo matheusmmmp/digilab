@@ -31,7 +31,7 @@ import type { ConfigContrato } from "./contrato.ts";
 import { efeitoAcaoPet } from "./estado.ts";
 import { ACOES_DONO_V11, MotorCorpo, estadoNascimentoPy, type EventoCorpo, type PoliticaCorpo } from "./motor_corpo.ts";
 import type { ObservacaoLobos } from "./lobos.ts";
-import { Mundo, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, lerDeixarComida, lerLevarPet, lerMudarIlha, regiaoDe, type PercepcaoMundo } from "./mundo.ts";
+import { Mundo, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, lerDeixarComida, lerLevarPet, lerMudarIlha, regiaoDe, tamanhoDoMapa, type PercepcaoMundo } from "./mundo.ts";
 import type { AcaoPet, EstadoVida } from "./tipos.ts";
 
 /** o que a consequencia do mundo devolve (o `ocorrido` do Python, com os nomes dele) */
@@ -104,16 +104,17 @@ export class MotorCorpoMundo extends MotorCorpo {
 
   /** o dono deixa a comida em (x, y): o evento valida o tipo e a posicao antes do log (MotorMundo.deixar_comida) */
   deixarComida(tipo: string, x: number, y: number): void {
-    const ev = eventoDeixarComida(this.estado.tick, tipo, x, y);
+    const mapa = tamanhoDoMapa(this.mundo.cm), ev = eventoDeixarComida(this.estado.tick, tipo, x, y, mapa);
     this.log.push({ tick: ev.tick, tipo: "deixar_comida", valor: ev.valor });
-    this.comidaDoDono(...lerDeixarComida(ev));
+    this.comidaDoDono(...lerDeixarComida(ev, mapa));
   }
 
   /** o deixar_comida sem o log do laco (o Motor do jogo grava o registro dele): a comida no mundo e o contato do alimentar de hoje
    *  (MotorMundo._aplicar_deixar_comida e MotorEducacao._contato) */
   comidaDoDono(tipo: string, x: number, y: number): void {
     const tick = this.estado.tick;
-    lerDeixarComida(eventoDeixarComida(tick, tipo, x, y));
+    const mapa = tamanhoDoMapa(this.mundo.cm);
+    lerDeixarComida(eventoDeixarComida(tick, tipo, x, y, mapa), mapa);
     this.conferirSincronia("antes de deixar_comida");
     this.mundo.deixarComida(tick, tipo, x, y);
     this.estado = { ...this.estado, ultimoCuidado: tick, totalCuidados: this.estado.totalCuidados + 1 };
@@ -176,7 +177,7 @@ export class MotorCorpoMundo extends MotorCorpo {
     if (e.tipo !== "deixar_comida") { super.aplicarEvento(e); return; }
     if (e.tick !== this.estado.tick) throw new Error(`evento no tick ${e.tick}, o motor esta no ${this.estado.tick}`);
     if (typeof e.valor !== "string") throw new Error(`deixar_comida malformado: ${JSON.stringify(e)}`);
-    const [tipo, x, y] = lerDeixarComida({ tick: e.tick, tipo: "deixar_comida", valor: e.valor });
+    const [tipo, x, y] = lerDeixarComida({ tick: e.tick, tipo: "deixar_comida", valor: e.valor }, tamanhoDoMapa(this.mundo.cm));
     this.deixarComida(tipo, x, y);
   }
 

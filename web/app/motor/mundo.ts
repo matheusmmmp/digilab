@@ -8,7 +8,7 @@
    semeadura e os sorteios do CPython (random, getrandbits, randrange, randint). Nada disso usa o mulberry32 do jogo (motor/rng.ts).
 
    Os registros e o `ocorrido` usam os nomes em snake_case do Python de proposito: sao o mesmo dado, conferido campo a campo. */
-import { AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, C, CMU, LAYOUT_MUNDO_MVP_AGUA, PONTE, TERRA, type ConfigMundo, type LayoutMundo } from "./constantes.ts";
+import { AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, ARVORE_FECHADA, C, CMU, LAYOUT_MUNDO_MVP_AGUA, MARCO_FECHADO, PONTE, TERRA, type ConfigMundo, type LayoutMundo } from "./constantes.ts";
 import {
   CONFIG_CONTRATO, CONFIG_CONTRATO_AGUA, bigodes, bloqueioEm, contratoLigado, controlar, livreMaisPerto, relativo, setorDe, solido, validarContrato, visivel, type Andar,
   type CategoriaSolido, type ConfigContrato, type Solido,
@@ -220,7 +220,8 @@ export function celulasSecas(cm: ConfigMundo): readonly boolean[] | null {
     throw new Error(`a agua do layout ${cm.layout.nome} nao tem ${cm.celulas_y} linhas de ${cm.celulas_x} celulas`);
   const out: boolean[] = [];
   for (const l of linhas) for (const c of l) {
-    if (c !== AGUA_MAR && c !== AGUA_DOCE && c !== TERRA && c !== PONTE) throw new Error(`a agua do layout ${cm.layout.nome} tem caractere desconhecido: ${c}`);
+    /* a arvore e o marco fechados (a ilha grande) sao celulas em que o pet nao pisa, como a agua */
+    if (c !== AGUA_MAR && c !== AGUA_DOCE && c !== TERRA && c !== PONTE && c !== ARVORE_FECHADA && c !== MARCO_FECHADO) throw new Error(`a agua do layout ${cm.layout.nome} tem caractere desconhecido: ${c}`);
     out.push(c === TERRA || c === PONTE);
   }
   return Object.freeze(out);
@@ -327,21 +328,27 @@ export interface TrocaIlha {
   bola: { de: [number, number]; para: [number, number] }; pet: { de: [number, number]; para: [number, number] };
 }
 
-function posicaoMundo(x: unknown, y: unknown): [number, number] {
+/** o mapa de 64 x 30 celulas, em subunidades: o limite das posicoes dos eventos de quem nao passa o mapa (events.MAPA_PADRAO do Python) */
+export const MAPA_PADRAO: readonly [number, number] = [1024, 480];
+/** o mapa de um mundo em subunidades (largura, altura): o limite das posicoes dos eventos dele (mundo.tamanho_do_mapa do Python; a ilha
+    grande tem 2048 x 960) */
+export function tamanhoDoMapa(cm: ConfigMundo): readonly [number, number] { return [cm.celulas_x * cm.sub, cm.celulas_y * cm.sub]; }
+
+function posicaoMundo(x: unknown, y: unknown, mapa: readonly [number, number] = MAPA_PADRAO): [number, number] {
   if (typeof x !== "number" || typeof y !== "number" || !Number.isInteger(x) || !Number.isInteger(y))
     throw new Error(`posicao do mundo nao inteira: (${String(x)}, ${String(y)})`);
-  if (!(x >= 0 && x < 1024 && y >= 0 && y < 480)) throw new Error(`posicao fora do mapa: (${x}, ${y})`);
+  if (!(x >= 0 && x < mapa[0] && y >= 0 && y < mapa[1])) throw new Error(`posicao fora do mapa: (${x}, ${y})`);
   return [x, y];
 }
 
-export function eventoDeixarComida(tick: number, tipo: string, x: unknown, y: unknown): EventoMundo {
+export function eventoDeixarComida(tick: number, tipo: string, x: unknown, y: unknown, mapa: readonly [number, number] = MAPA_PADRAO): EventoMundo {
   if (!(TIPOS_COMIDA_MUNDO as readonly string[]).includes(tipo)) throw new Error(`tipo de comida desconhecido: ${tipo}`);
-  const [px, py] = posicaoMundo(x, y);
+  const [px, py] = posicaoMundo(x, y, mapa);
   return { tick, tipo: "deixar_comida", valor: `${tipo}|${px}|${py}` };
 }
 
-export function eventoDeixarBola(tick: number, x: unknown, y: unknown): EventoMundo {
-  const [px, py] = posicaoMundo(x, y);
+export function eventoDeixarBola(tick: number, x: unknown, y: unknown, mapa: readonly [number, number] = MAPA_PADRAO): EventoMundo {
+  const [px, py] = posicaoMundo(x, y, mapa);
   return { tick, tipo: "deixar_bola", valor: `${px}|${py}` };
 }
 
@@ -350,19 +357,19 @@ function inteiroDoLog(texto: string): number {
   return Number(texto);
 }
 
-export function lerDeixarComida(e: EventoMundo): [TipoComidaMundo, number, number] {
+export function lerDeixarComida(e: EventoMundo, mapa: readonly [number, number] = MAPA_PADRAO): [TipoComidaMundo, number, number] {
   if (e.tipo !== "deixar_comida") throw new Error(`evento nao e deixar_comida: ${e.tipo}`);
   const p = e.valor.split("|");
   if (p.length !== 3 || !(TIPOS_COMIDA_MUNDO as readonly string[]).includes(p[0])) throw new Error(`deixar_comida malformado: ${e.valor}`);
-  const [x, y] = posicaoMundo(inteiroDoLog(p[1]), inteiroDoLog(p[2]));
+  const [x, y] = posicaoMundo(inteiroDoLog(p[1]), inteiroDoLog(p[2]), mapa);
   return [p[0] as TipoComidaMundo, x, y];
 }
 
-export function lerDeixarBola(e: EventoMundo): [number, number] {
+export function lerDeixarBola(e: EventoMundo, mapa: readonly [number, number] = MAPA_PADRAO): [number, number] {
   if (e.tipo !== "deixar_bola") throw new Error(`evento nao e deixar_bola: ${e.tipo}`);
   const p = e.valor.split("|");
   if (p.length !== 2) throw new Error(`deixar_bola malformado: ${e.valor}`);
-  return posicaoMundo(inteiroDoLog(p[0]), inteiroDoLog(p[1]));
+  return posicaoMundo(inteiroDoLog(p[0]), inteiroDoLog(p[1]), mapa);
 }
 
 /** o levar pet (v19; events.levar_pet do Python): o ponto onde o dono soltou o pet, inteiro e com sinal (fora do mapa vale: quem o limita
@@ -959,13 +966,15 @@ export class Mundo {
 
   // ------------------------------------------------------------ o dono
   deixarComida(tick: number, tipo: string, x: number, y: number): void {
-    lerDeixarComida(eventoDeixarComida(tick, tipo, x, y));       // valida como o log
+    const mapa = tamanhoDoMapa(this.cm);
+    lerDeixarComida(eventoDeixarComida(tick, tipo, x, y, mapa), mapa);       // valida como o log, no mapa deste mundo
     const c = this.novaComida(tipo, x, y, tick, "dono");
     this.deixadas.push({ tick, id: c.id, tipo, x, y, pet: [this.pet[0], this.pet[1]] });
   }
 
   deixarBola(tick: number, x: number, y: number): void {
-    lerDeixarBola(eventoDeixarBola(tick, x, y));
+    const mapa = tamanhoDoMapa(this.cm);
+    lerDeixarBola(eventoDeixarBola(tick, x, y, mapa), mapa);
     [x, y] = this.emTerra(x, y);
     this.bola = { x0: x, y0: y, x1: x, y1: y, t0: tick, d: 0 };
     this.bolasDeixadas.push({ tick, x, y });

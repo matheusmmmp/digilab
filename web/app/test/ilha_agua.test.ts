@@ -30,7 +30,7 @@ const mundo = (semente = 101): Mundo => new Mundo({ semente, cfg: CM, contrato: 
 describe("a agua do layout", () => {
   test("o mapa e o do Python, pelo nome do layout; o mundo de hoje nao tem agua", () => {
     expect(AGUA_ILHA).toEqual((G.config as unknown as { agua: string[] }).agua);
-    expect(Object.keys(AGUA_POR_LAYOUT)).toEqual(["mvp_agua"]);
+    expect(Object.keys(AGUA_POR_LAYOUT)).toEqual(["mvp_agua", "grande"]);
     expect(celulasSecas(CMU_MVP)).toBeNull();
     expect(solidosDaAgua(CMU_MVP)).toEqual([]);
     expect(json({ ...CM, layout: { ...CM.layout, nome: "mvp" } })).toEqual(json(CMU_MVP));
@@ -66,7 +66,7 @@ describe("a agua do layout", () => {
       expect(com(AGUA_ILHA).secas).toEqual(mundo().secas);
       expect(() => com(AGUA_ILHA.slice(0, -1))).toThrow(/linhas/);
       expect(() => com([AGUA_ILHA[0].slice(0, -1), ...AGUA_ILHA.slice(1)])).toThrow(/linhas/);
-      expect(() => com([troca(AGUA_ILHA[0], 0, "#"), ...AGUA_ILHA.slice(1)])).toThrow(/desconhecido/);
+      expect(() => com([troca(AGUA_ILHA[0], 0, "?"), ...AGUA_ILHA.slice(1)])).toThrow(/desconhecido/);
       for (const [nome, [cx, cy]] of [["ninho", CM.layout.ninho], ["comedouro", CM.layout.comedouro], ["bola_inicio", CM.layout.bola_inicio]] as const)
         expect(() => com(AGUA_ILHA.map((l, y) => y === cy ? troca(l, cx, AGUA_DOCE) : l)), nome).toThrow(new RegExp(`${nome} na agua`));
       /* sem as pontes e sem a volta pelo norte da nascente, a margem leste fica ilhada */
@@ -75,7 +75,7 @@ describe("a agua do layout", () => {
       /* uma celula de terra sozinha no mar tambem */
       expect(() => com(AGUA_ILHA.map((l, y) => y === 0 ? troca(l, 0, TERRA) : l))).toThrow(/1 celulas de terra/);
     } finally { delete tabela.teste_agua; }
-    expect(Object.keys(AGUA_POR_LAYOUT)).toEqual(["mvp_agua"]);
+    expect(Object.keys(AGUA_POR_LAYOUT)).toEqual(["mvp_agua", "grande"]);
   });
 
   test("a agua exige o controlador do contrato", () => {

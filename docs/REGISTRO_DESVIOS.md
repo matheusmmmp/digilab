@@ -650,3 +650,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — ILHA_AGUA, IA4: a ilha com água junto com os objetos em cartoon e a cooperação (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-agua-ia4`)](registro/2026-11.md)
 - [2026-11-11 — ILHA_AGUA: o plano da ilha grande, a v23 (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-grande-plano`)](registro/2026-11.md)
 - [2026-11-11 — ILHA_AGUA, IG1: o mundo grande no Python (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-grande-ig1`)](registro/2026-11.md)
+- [2026-11-11 — ILHA_AGUA, IG2: o mundo grande no motor da web (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-grande-ig2`)](registro/2026-11.md)
