@@ -1,7 +1,8 @@
 # PLANO_UX_GOSTO_VISUAL — o pet assistindo TV: o menu, a vista e a leitura do gosto
 
-**Status: PROPOSTO.** Plano de design em texto, sem prancha e sem código. A prancha só vem depois do ok do Matheus a este plano, e o
-código só depois da prancha aprovada. Data: 2026-11-11. Autor: Gerente da UX_TELA_PET (Claude Code, Fable 5.2), branch
+**Status: APROVADO pelo Matheus em 2026-11-11** ("Sim, segue a prancha", em resposta a "Aprova as dez recomendações do plano para eu
+seguir para a prancha?"): as UX-GV-1 a UX-GV-10 valem pela recomendação. A prancha está em `docs/pranchas/ux-gosto-visual/`; o código só
+vem depois da prancha aprovada. Os números de interface continuam PROPOSTOS, SEM FONTE. Data: 2026-11-11. Autor: Gerente da UX_TELA_PET (Claude Code, Fable 5.2), branch
 `v3-ux-gosto-visual`, criado de `origin/v3-gosto-visual-tv`.
 
 Projeto pessoal do Matheus. Nada aqui alega novidade.
@@ -195,8 +196,9 @@ Um toque em "Por quê" abre a lista por componente. Cada linha tem um trilho só
 | a consequência | **do carinho** | a malha ciano tracejada, a marca do "aprendido com o dono" (§3 do guia) | o desvio do carinho |
 
 - **O ponto de hoje** é o fim das setas: um losango, com o rótulo "hoje".
-- **O P0 soma a exposição e o carinho num desvio só** (`EstadoGosto`). Para mostrar as duas origens, o módulo precisa guardar as duas
-  parcelas. Isso é uma mudança pequena no módulo do protótipo, fora do motor, e fica para a etapa de código (a UX-GV-5).
+- **O P0 já guarda as duas parcelas separadas** (`EstadoGosto.exposicao` e `EstadoGosto.carinho`, em `gosto.ts`); só a tela as soma na
+  marca "hoje". Mostrar as duas origens não muda o módulo nem o gosto já guardado (a UX-GV-5). *Corrigido em 2026-11-11: a primeira
+  versão deste plano dizia que o módulo somava as duas.*
 - **Menos linhas:** por padrão aparecem só os componentes em que o pet tem um gosto marcado ou em que o gosto mudou. "Ver todos" abre os
   sete, em dois grupos: **Imagem** (cor, brilho, movimento, detalhe) e **Som** (volume, ritmo, timbre). Sem som na captura, o grupo Som
   diz "ele não está ouvindo" em vez de barras vazias.
@@ -399,9 +401,9 @@ pequena.
 
 ---
 
-## 9. As decisões em aberto
+## 9. As decisões (APROVADAS pela recomendação em 2026-11-11)
 
-Todas PROPOSTAS. Nenhum número daqui é de jogo; os de interface são PROPOSTOS, SEM FONTE.
+Todas valem pela recomendação. Nenhum número daqui é de jogo; os de interface são PROPOSTOS, SEM FONTE.
 
 | id | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
@@ -409,7 +411,7 @@ Todas PROPOSTAS. Nenhum número daqui é de jogo; os de interface são PROPOSTOS
 | **UX-GV-2** | A entrada: a TV como lugar da ilha. | Sim, pelo toque na TV, mais um botão "TV" na pilha para o teclado; sem item novo na navegação. | Só com o toque, o teclado não chega à TV e o dono novo pode não a achar. Um item na navegação resolveria isso, mas incha o trilho por causa de um protótipo. O botão na pilha é mais um elemento no HUD. |
 | **UX-GV-3** | O giro da TV. | A TV em três quartos, cerca de 40° para o sul, valendo sempre. | Com a TV de frente, o pet fica de costas e a reação some. Com o giro só atrás da chave, a ilha tem duas formas. Valendo sempre, a ilha de hoje muda um enfeite sem a chave. |
 | **UX-GV-4** | A leitura do gosto em dois níveis. | A frase primeiro; o porquê a um toque; o agora numa faixa separada. | Com tudo aberto, volta a densidade do P0. Com o porquê escondido demais, o dono lê só "gosta de X" e conclui que foi ele quem ensinou (o risco da GV-14). |
-| **UX-GV-5** | As origens separadas: "de tanto ver" e "do carinho". | Separar, guardando as duas parcelas no módulo do protótipo. | Sem separar, a tela não cumpre a GV-14. Separando, o estado guardado do P0 muda de formato, e o que os pets já aprenderam no navegador do Matheus precisa de uma regra (zerar ou tratar tudo como "de tanto ver"). |
+| **UX-GV-5** | As origens separadas: "de tanto ver" e "do carinho". | Separar na tela; o módulo do protótipo já guarda as duas parcelas. | Sem separar, a tela não cumpre a GV-14. Separando, são mais marcas por linha, e a leitura fica densa se as duas setas forem pequenas. |
 | **UX-GV-6** | A privacidade: a ordem dos botões, a frase e o selo. | A TV do jogo como botão principal; a frase fixa antes do seletor; o selo com Parar nas três vistas. | Com a tela do dono como botão principal, o primeiro clique de quem chega já pede a captura. Com avisos demais, o dono para de ler. |
 | **UX-GV-7** | O carinho da TV é o Carinho do jogo. | Sim, um carinho só. | Unindo, o carinho dado na frente da TV entra no log e mexe no pet de verdade; o dono pode dar carinho só para puxar o gosto. Mantendo dois, o dono não sabe a diferença, e o P1 vai unir de qualquer jeito. |
 | **UX-GV-8** | No celular, a folha baixa em vez do modal. | A folha, recolhida em duas linhas. | É um desvio da regra do layout de 2026-10-30. Com o modal da regra, o pet fica coberto na única tela em que ele é o assunto. |
