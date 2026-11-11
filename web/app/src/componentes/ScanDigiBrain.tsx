@@ -47,6 +47,7 @@ const FOLGA_MS = 150;
    - a semente do pet, para cada pet ter a sua rede (a forma do anel, os pontos e os fios saem de um gerador proprio da vista, semeado nela);
    - quantas entradas pesaram na decisao de agora (mapa.acesas.arestas.length), que da quantos impulsos correm;
    - a regra da decisao, que da a cor dos impulsos (o tom do estado atual).
+   A mesma rede serve ao scan do cerebro modular (ScanDigiBrainLab.tsx), com os modulos que contribuiram no lugar das entradas.
    O gerador e so da vista: nao e nenhuma rng do motor, nada dele e gravado e o replay nao o le. Todo numero aqui e de desenho,
    PROPOSTO, SEM FONTE. O viewBox guarda a proporcao 880 x 552 do campo pequeno (D1c). */
 const VB_L = 880, VB_A = 552, CX = 440, CY = 276;
@@ -57,13 +58,6 @@ const N_PONTOS = 150, R_ANEL = 178, ONDULACAO = 9, MEIA_FAIXA = 64;
 export const N_IMPULSOS = 14, IMPULSOS_MIN = 4, IMPULSOS_POR_ENTRADA = 2;
 /** a volta de um impulso, em s: a mais curta e o passo entre uma e outra (cinco duracoes, para os impulsos nao andarem juntos) */
 const IMPULSO_S = 2.6, IMPULSO_PASSO_S = 0.7;
-/* a silhueta de cerebro de antes (D1-11, D1b-2): o scan do A v11 nao a desenha mais, mas o do cerebro modular (ScanDigiBrainLab.tsx, o pet
-   do laboratorio) ainda desenha, com o viewBox recortado nela (x 90 a 970, y 16 a 568). Ficam aqui so para ele */
-export const VB = `90 16 ${VB_L} ${VB_A}`;
-export const SILHUETA = "M120 330C100 210 220 80 420 62C600 45 820 90 890 220C935 300 900 390 820 420C760 440 700 430 650 445C600 470 540 500 470 488C380 475 330 430 250 430C170 430 130 390 120 330Z";
-export const CEREBELO = "M650 445C655 505 760 535 825 505C865 485 860 440 820 420C760 440 700 430 650 445Z";
-export const DIVISAS = ["M380 66C360 180 372 300 345 410", "M612 54C592 170 602 300 592 420"];
-export const Y_REGIOES = 36;
 const f = (v: number): number => Math.round(v * 10) / 10;
 
 type Ponto = [number, number];
@@ -116,9 +110,11 @@ export function redeViva(semente: number): RedeViva {
   }
   return { pontos, fios, impulsos };
 }
-/** quantos impulsos correm: o minimo, mais dois por entrada que pesou na decisao de agora, ate o teto da rede */
-export function impulsosDaDecisao(acesas: MapaDecisao | null): number {
-  return Math.min(N_IMPULSOS, IMPULSOS_MIN + IMPULSOS_POR_ENTRADA * (acesas ? acesas.arestas.length : 0));
+/** quantos impulsos correm: o minimo, mais dois por coisa que pesou na decisao de agora (as entradas com termo, no A; os modulos que
+    contribuiram, no modular), ate o teto da rede */
+export function impulsosDaDecisao(pesaram: number): number {
+  if (!Number.isInteger(pesaram) || pesaram < 0) throw new Error(`quantas coisas pesaram: ${pesaram}`);
+  return Math.min(N_IMPULSOS, IMPULSOS_MIN + IMPULSOS_POR_ENTRADA * pesaram);
 }
 
 /** o texto de uma tabela, ou erro: falhar alto em vez de mostrar uma chave crua */
@@ -128,17 +124,18 @@ function txt<T extends string>(tabela: Record<string, string>, k: T, onde: strin
   return v;
 }
 
-/** a rede viva em SVG. `correndo`: o tempo do jogo anda (parado, os impulsos congelam onde estao); `surto`: uma decisao nova acabou de chegar
+/** a rede viva em SVG, a mesma nos dois scans (o do A e o do modular). `n`: o numero da decisao de agora (null sem decisao); `pesaram`: quantas
+    coisas pesaram nela. `correndo`: o tempo do jogo anda (parado, os impulsos congelam onde estao); `surto`: uma decisao nova acabou de chegar
     (a rede acende uma vez; o pai tira a marca quando termina). Com "reduzir movimento" o CSS nao anima nada e os impulsos nao aparecem.
     As classes que o e2e le: svg.mp.rv com data-n e data-impulsos, .rv-fios path, .rv-impulsos path, .rv-pontos circle */
-function RedeVivaBruta({ semente, acesas, tom, movel, correndo, surto }: { semente: number; acesas: MapaDecisao | null; tom: TomEstado | null; movel: boolean; correndo: boolean; surto: boolean }) {
-  const rede = useMemo(() => redeViva(semente), [semente]), n = impulsosDaDecisao(acesas);
+function RedeVivaBruta({ semente, n: decisao, pesaram, tom, movel, correndo, surto }: { semente: number; n: number | null; pesaram: number; tom: TomEstado | null; movel: boolean; correndo: boolean; surto: boolean }) {
+  const rede = useMemo(() => redeViva(semente), [semente]), n = impulsosDaDecisao(pesaram);
   /* a 390 o desenho fica menor na tela, entao os tracos e os pontos crescem */
   const K = movel ? 1.9 : 1;
   return (
     <svg className={"mp rv" + (correndo ? "" : " rv--parada") + (surto ? " rv--surto" : "")} viewBox={VB_ANEL} preserveAspectRatio="xMidYMid meet" role="img"
       aria-label="Ilustração do cérebro do pet em atividade. É só um desenho: os pesos de verdade estão no mapa em texto."
-      data-n={acesas ? acesas.n : ""} data-impulsos={n} data-tom={tom ?? "sem"}>
+      data-n={decisao ?? ""} data-impulsos={n} data-tom={tom ?? "sem"}>
       <g className="rv-fios" strokeWidth={f(1.3 * K)}>{rede.fios.map((d, i) => <path key={i} d={d} />)}</g>
       <g className="rv-impulsos" strokeWidth={f(5 * K)}>
         {rede.impulsos.slice(0, n).map((d, i) => <path key={i} pathLength={1} d={d}
@@ -164,34 +161,50 @@ export const TOM_REGRA: Record<RegraLobos, TomEstado> = {
 const ROSTO: Record<TomEstado, LucideIcon> = { ok: Smile, neutro: Meh, alerta: Annoyed, perigo: Frown };
 /** a largura de cada entrada na onda, a meia largura do pico e a altura da onda, em unidades do desenho da onda (so desenho) */
 const ONDA_PASSO = 12, ONDA_MEIO = 4, ONDA_A = 40;
-/** os pontos da onda: uma linha de base e, em cada entrada com termo nesta decisao, um pico para cima (a favor) ou para baixo (contra), da
-    altura da forca que o motor da (mapa.acesas.arestas). As entradas vem na ordem do mapa (as do motor e os receptores do corpo) */
-export function pontosDaOnda(entradas: readonly string[], acesas: MapaDecisao | null): string {
-  const termo = new Map(acesas ? acesas.arestas.map(x => [x.entrada, x] as const) : []), base = ONDA_A / 2, pts: string[] = [`0,${base}`];
-  for (const e of termo.keys()) if (!entradas.includes(e)) throw new Error(`entrada fora do mapa: ${e}`);
+/** um pico da onda: de quem e (a entrada, no A; o modulo, no modular) e a altura com sinal, de -1 (contra) a 1 (a favor) */
+export interface PicoOnda { entrada: string; altura: number }
+/** os picos do A: um por entrada com termo nesta decisao, com o sinal do termo e a forca que o motor da (mapa.acesas.arestas) */
+export const picosDaDecisao = (acesas: MapaDecisao | null): PicoOnda[] =>
+  acesas ? acesas.arestas.map(x => ({ entrada: x.entrada, altura: Math.sign(x.termo) * x.forca })) : [];
+/** os pontos da onda: uma linha de base e, em cada entrada com pico, um pico para cima (a favor) ou para baixo (contra). As entradas vem na
+    ordem do motor */
+export function pontosDaOnda(entradas: readonly string[], picos: readonly PicoOnda[]): string {
+  const pico = new Map(picos.map(x => [x.entrada, x.altura] as const)), base = ONDA_A / 2, pts: string[] = [`0,${base}`];
+  for (const [e, a] of pico) {
+    if (!entradas.includes(e)) throw new Error(`entrada fora do mapa: ${e}`);
+    if (!(Math.abs(a) <= 1)) throw new Error(`pico de ${e} fora de -1 a 1: ${a}`);
+  }
   entradas.forEach((e, i) => {
-    const t = termo.get(e), x = ONDA_PASSO * i + ONDA_PASSO / 2;
-    if (t === undefined) return;
-    pts.push(`${x - ONDA_MEIO},${base}`, `${x},${f(base - Math.sign(t.termo) * t.forca * (base - 3))}`, `${x + ONDA_MEIO},${base}`);
+    const a = pico.get(e), x = ONDA_PASSO * i + ONDA_PASSO / 2;
+    if (a === undefined) return;
+    pts.push(`${x - ONDA_MEIO},${base}`, `${x},${f(base - a * (base - 3))}`, `${x + ONDA_MEIO},${base}`);
   });
   pts.push(`${ONDA_PASSO * entradas.length},${base}`);
   return pts.join(" ");
 }
-export function FaixaEstado({ mapa, decisao }: { mapa: DadosMapa; decisao: LeituraDecisao | null }) {
-  const ent = [...ENTRADAS_LOBOS, ...mapa.receptores], ac = mapa.acesas;
-  const tom: TomEstado | null = decisao ? TOM_REGRA[decisao.regra] : null, Rosto = tom ? ROSTO[tom] : null;
+/** a faixa, a mesma nos dois scans: a onda a esquerda e, a direita, um rotulo com o que os filhos disserem */
+export function Faixa({ n, entradas, picos, rotulo, tom, regra = "", titulo, children }: {
+  n: number | null; entradas: readonly string[]; picos: readonly PicoOnda[]; rotulo: string; tom: TomEstado | null; regra?: string; titulo?: string; children: ReactNode }) {
   return (
     <div className="scan-faixa">
-      <svg className="scan-onda" viewBox={`0 0 ${ONDA_PASSO * ent.length} ${ONDA_A}`} preserveAspectRatio="none" role="img" data-n={ac ? ac.n : ""}
-        aria-label={ac ? `A onda desta decisão: ${ac.arestas.length} picos, um por coisa que pesou.` : "A onda: ainda sem decisão."}>
-        <line className="scan-onda-base" x1="0" y1={ONDA_A / 2} x2={ONDA_PASSO * ent.length} y2={ONDA_A / 2} />
-        <polyline points={pontosDaOnda(ent, ac)} />
+      <svg className="scan-onda" viewBox={`0 0 ${ONDA_PASSO * entradas.length} ${ONDA_A}`} preserveAspectRatio="none" role="img" data-n={n ?? ""}
+        aria-label={n !== null ? `A onda desta decisão: ${picos.length} picos, um por coisa que pesou.` : "A onda: ainda sem decisão."}>
+        <line className="scan-onda-base" x1="0" y1={ONDA_A / 2} x2={ONDA_PASSO * entradas.length} y2={ONDA_A / 2} />
+        <polyline points={pontosDaOnda(entradas, picos)} />
       </svg>
-      <p className="scan-estado" data-tom={tom ?? "sem"} data-regra={decisao ? decisao.regra : ""}>
-        <span className="scan-estado-rot">estado atual</span>
-        <b>{Rosto && <Rosto aria-hidden="true" />}{decisao ? TXT_REGRA[decisao.regra] : "sem decisão"}</b>
+      <p className="scan-estado" data-tom={tom ?? "sem"} data-regra={regra} title={titulo}>
+        <span className="scan-estado-rot">{rotulo}</span>
+        <b>{children}</b>
       </p>
     </div>
+  );
+}
+export function FaixaEstado({ mapa, decisao }: { mapa: DadosMapa; decisao: LeituraDecisao | null }) {
+  const ac = mapa.acesas, tom: TomEstado | null = decisao ? TOM_REGRA[decisao.regra] : null, Rosto = tom ? ROSTO[tom] : null;
+  return (
+    <Faixa n={ac ? ac.n : null} entradas={[...ENTRADAS_LOBOS, ...mapa.receptores]} picos={picosDaDecisao(ac)} rotulo="estado atual" tom={tom} regra={decisao ? decisao.regra : ""}>
+      {Rosto && <Rosto aria-hidden="true" />}{decisao ? TXT_REGRA[decisao.regra] : "sem decisão"}
+    </Faixa>
   );
 }
 
@@ -324,14 +337,13 @@ export function ScanDigiBrain({ fechar, movel, replay = false, chamado }: { fech
         {mapa === null ? <p className="scan-vazio">Este pet não tem mapa dos pesos.</p> : (
           <div className="scan-corpo">
             <div className="scan-moldura">
-              {/* os cantos em colchete do scanner: so desenho */}
-              <i className="scan-canto scan-canto--ce" aria-hidden="true" /><i className="scan-canto scan-canto--cd" aria-hidden="true" />
-              <i className="scan-canto scan-canto--be" aria-hidden="true" /><i className="scan-canto scan-canto--bd" aria-hidden="true" />
+              {/* os cantos em colchete do scanner: so desenho; saem no mapa em texto, para nao ficarem por cima das letras */}
+              {!verTexto && <><i className="scan-canto scan-canto--ce" aria-hidden="true" /><i className="scan-canto scan-canto--cd" aria-hidden="true" /><i className="scan-canto scan-canto--be" aria-hidden="true" /><i className="scan-canto scan-canto--bd" aria-hidden="true" /></>}
               {verTexto
                 ? <section className="scan-texto db-texto" id="db-texto" aria-label="O mapa em texto" tabIndex={0}><MapaEmTexto mapa={mapa} d={d} /></section>
                 : <>
                   {mov !== null && <div className="scan-varre-trilho" key={"varre" + mov} aria-hidden="true"><div className="scan-varredura" /></div>}
-                  <div className="scan-giro" ref={giro}><RedeVivaDesenho semente={m.semente} acesas={mapa.acesas} tom={d ? TOM_REGRA[d.regra] : null} movel={movel} correndo={selo === "vivo"} surto={mov !== null} /></div>
+                  <div className="scan-giro" ref={giro}><RedeVivaDesenho semente={m.semente} n={mapa.acesas ? mapa.acesas.n : null} pesaram={mapa.acesas ? mapa.acesas.arestas.length : 0} tom={d ? TOM_REGRA[d.regra] : null} movel={movel} correndo={selo === "vivo"} surto={mov !== null} /></div>
                 </>}
             </div>
             <FaixaEstado mapa={mapa} decisao={d} />

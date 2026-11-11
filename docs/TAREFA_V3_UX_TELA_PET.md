@@ -1026,16 +1026,31 @@ das candidatas, que hoje não aparecem em lugar nenhum do scan (questão aberta 
 
 **O que não mudou:** o selo, o "i" (com texto novo), o mapa em texto, o fechar, o foco preso e o Esc.
 
-**O scan do pet do laboratório** (`ScanDigiBrainLab.tsx`, #799) continua com a silhueta de cérebro e o mapa dos módulos, sem a faixa. Ele
-ganha só o quadro mais escuro e os pontos claros, que vêm do mesmo CSS. Levar a rede viva para ele é outra etapa.
+**O scan do cérebro modular** (`ScanDigiBrainLab.tsx`, #799) ganhou o mesmo visual. O Matheus pediu em 2026-11-11: "Sim, leve". É ele que
+os ovos novos abrem, desde a D2 da auditoria da cadeia. O que mudou nele:
+- **A rede viva** no lugar do mapa dos módulos (os 7 módulos, a soma e as opções com a chance). O número de impulsos sai de quantos módulos
+  contribuíram na escolha. A cor dos impulsos é sempre a neutra.
+- **A onda** tem um pico por módulo que contribuiu, na ordem do motor: para cima a favor, para baixo contra, da altura da parte dele sobre
+  a maior parte.
+- **No lugar do "estado atual" fica a "escolha":** a ação da unidade escolhida e a chance dela ("única" sem sorteio). O modular não tem as
+  regras do instinto, então não tem um estado com nome (D-D1e-12).
+- **O que o mapa dos módulos mostrava** continua no mapa em texto, que já tinha "O peso de cada módulo nesta escolha" e "As opções e a
+  chance de cada uma".
+- **A linha do resultado da decisão anterior** fica sob a faixa. No celular ela cabe numa linha só, cortada com reticências; inteira, está
+  no mapa em texto.
+- As capturas em `docs/pranchas/digibrain-lab/` foram refeitas.
+
+Com isso, a silhueta de cérebro e o CSS do mapa com nós e fios saíram dos dois scans.
 
 **O botão de expandir** da referência não entrou: o scan já é o painel aberto, e o botão não teria o que abrir.
 
 **Os testes:**
 - `test/scan_digibrain.test.ts`, 15 testes: a rede (a mesma semente dá a mesma rede, tudo dentro do quadro, sem texto nem nós do motor),
   os impulsos pela decisão, as marcas de parada e de decisão nova, a onda, o estado atual e o contraste nas duas peles;
+- `test/scan_digibrain_lab.test.ts`, 5 testes: a onda dos módulos, a escolha com a chance, a faixa e a falha alta sem a opção escolhida;
 - `e2e/jogo.spec.ts`: "a rede viva acompanha a decisão" (390 e 1280 px) e "os impulsos correm, e a varredura e o surto passam numa decisão
   nova e terminam" entram no lugar dos testes do mapa. Saíram os testes dos rótulos (o texto de 11 px e o rótulo ao passar o mouse), porque
-  o desenho não tem mais texto.
+  o desenho não tem mais texto;
+- `e2e/lab_modular.spec.ts`: confere a rede viva e a faixa no pet do laboratório.
 
 Os desvios estão em `docs/registro/2026-11.md`, "UX_TELA_PET, D1e".

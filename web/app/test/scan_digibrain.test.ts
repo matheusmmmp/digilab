@@ -10,7 +10,7 @@ import { Motor } from "../motor/index.ts";
 import { REGRAS_LOBOS } from "../motor/index.ts";
 import {
   FaixaEstado, GIRO_CICLO_S, GIRO_GRAUS, IMPULSOS_MIN, IMPULSOS_POR_ENTRADA, N_IMPULSOS, PULSO_MS, RedeVivaDesenho, TOM_REGRA, VARREDURA_MS,
-  impulsosDaDecisao, pontosDaOnda, redeViva,
+  impulsosDaDecisao, picosDaDecisao, pontosDaOnda, redeViva,
 } from "../src/componentes/ScanDigiBrain.tsx";
 
 /* o pet v11 do e2e do DigiBrain (e2e/jogo.spec.ts) */
@@ -18,7 +18,8 @@ const LOG: [number, string, unknown][] = [[480, "t", 120], [600, "d", "acariciar
   [840, "dc", { tipo: "racao", x: 168, y: 248 }], [840, "t", 60]];
 const m = Motor.reproduzir(4242, LOG as never, 21), db = m.digibrain()!;
 const montar = (o: { movel?: boolean; correndo?: boolean; surto?: boolean; acesas?: typeof db.mapa.acesas } = {}): string =>
-  renderToStaticMarkup(h(RedeVivaDesenho, { semente: 4242, acesas: o.acesas === undefined ? db.mapa.acesas : o.acesas, tom: TOM_REGRA[db.decisao!.regra],
+  renderToStaticMarkup(h(RedeVivaDesenho, { semente: 4242, n: (o.acesas === undefined ? db.mapa.acesas : o.acesas)?.n ?? null,
+    pesaram: (o.acesas === undefined ? db.mapa.acesas : o.acesas)?.arestas.length ?? 0, tom: TOM_REGRA[db.decisao!.regra],
     movel: o.movel ?? false, correndo: o.correndo ?? true, surto: o.surto ?? false }));
 const contar = (s: string, re: RegExp): number => (s.match(re) ?? []).length;
 const grupo = (s: string, classe: string): string => s.match(new RegExp(`<g class="${classe}"[^>]*>(.*?)</g>`))![1]!;
@@ -49,19 +50,20 @@ describe("a rede viva (D1e): uma ilustracao, nao o mapa dos pesos", () => {
   });
   test("quantos impulsos correm sai da decisao: o minimo, mais dois por entrada que pesou, ate o teto", () => {
     const ac = db.mapa.acesas!;
-    expect(impulsosDaDecisao(null)).toBe(IMPULSOS_MIN);
-    expect(impulsosDaDecisao(ac)).toBe(Math.min(N_IMPULSOS, IMPULSOS_MIN + IMPULSOS_POR_ENTRADA * ac.arestas.length));
-    expect(impulsosDaDecisao({ ...ac, arestas: Array.from({ length: 40 }, () => ac.arestas[0]!) })).toBe(N_IMPULSOS);
+    expect(impulsosDaDecisao(0)).toBe(IMPULSOS_MIN);
+    expect(impulsosDaDecisao(ac.arestas.length)).toBe(Math.min(N_IMPULSOS, IMPULSOS_MIN + IMPULSOS_POR_ENTRADA * ac.arestas.length));
+    expect(impulsosDaDecisao(40)).toBe(N_IMPULSOS);
+    expect(() => impulsosDaDecisao(-1)).toThrow(/pesaram/);
   });
   for (const movel of [false, true]) {
     test(`o SVG (${movel ? "390" : "1920"} px): os fios, os pontos e os impulsos da rede, sem texto e sem os nos do motor`, () => {
       const s = montar({ movel }), ac = db.mapa.acesas!, rede = redeViva(4242);
       expect(s).toContain('viewBox="0 0 880 552"');
       expect(s).toContain(`data-n="${ac.n}"`);
-      expect(s).toContain(`data-impulsos="${impulsosDaDecisao(ac)}"`);
+      expect(s).toContain(`data-impulsos="${impulsosDaDecisao(ac.arestas.length)}"`);
       expect(s).toContain(`data-tom="${TOM_REGRA[db.decisao!.regra]}"`);
       expect(contar(grupo(s, "rv-fios"), /<path /g)).toBe(rede.fios.length);
-      expect(contar(grupo(s, "rv-impulsos"), /<path /g)).toBe(impulsosDaDecisao(ac));
+      expect(contar(grupo(s, "rv-impulsos"), /<path /g)).toBe(impulsosDaDecisao(ac.arestas.length));
       expect(contar(grupo(s, "rv-pontos"), /<circle /g)).toBe(rede.pontos.length);
       expect(s).toContain('role="img"');
       expect(s).toContain("os pesos de verdade estão no mapa em texto");
@@ -95,17 +97,18 @@ describe("a rede viva (D1e): uma ilustracao, nao o mapa dos pesos", () => {
 describe("a faixa de baixo (D1e): a onda e o estado atual saem do motor", () => {
   const ent = ["vies", "fome", "higiene", "energia", "humor", "saude", "sujeira", "dormindo", "hora", "ticks_sem_cuidado", ...db.mapa.receptores];
   test("a onda: um pico por aresta acesa, para cima a favor e para baixo contra, da altura da forca", () => {
-    const ac = db.mapa.acesas!, pts = pontosDaOnda(ent, ac).split(" ").map(p => p.split(",").map(Number));
+    const ac = db.mapa.acesas!, pts = pontosDaOnda(ent, picosDaDecisao(ac)).split(" ").map(p => p.split(",").map(Number));
     expect(pts.length).toBe(2 + 3 * ac.arestas.length);
     for (const x of ac.arestas) {
       const pico = pts.find(p => p[0] === 12 * ent.indexOf(x.entrada) + 6)!;
       expect(pico[1]).toBeCloseTo(20 - Math.sign(x.termo) * x.forca * 17, 1);
     }
     /* uma decisao montada: um termo a favor e um contra */
-    const dois = pontosDaOnda(ent, { ...ac, arestas: [{ entrada: "fome", termo: 0.5, forca: 1 }, { entrada: "humor", termo: -0.2, forca: 0.5 }] });
+    const dois = pontosDaOnda(ent, picosDaDecisao({ ...ac, arestas: [{ entrada: "fome", termo: 0.5, forca: 1 }, { entrada: "humor", termo: -0.2, forca: 0.5 }] }));
     expect(dois).toBe("0,20 14,20 18,3 22,20 50,20 54,28.5 58,20 " + 12 * ent.length + ",20");
-    expect(pontosDaOnda(ent, null)).toBe(`0,20 ${12 * ent.length},20`);
-    expect(() => pontosDaOnda(ent, { ...ac, arestas: [{ entrada: "inventada", termo: 1, forca: 1 }] })).toThrow(/entrada fora do mapa: inventada/);
+    expect(pontosDaOnda(ent, picosDaDecisao(null))).toBe(`0,20 ${12 * ent.length},20`);
+    expect(() => pontosDaOnda(ent, [{ entrada: "inventada", altura: 1 }])).toThrow(/entrada fora do mapa: inventada/);
+    expect(() => pontosDaOnda(ent, [{ entrada: "fome", altura: 1.5 }])).toThrow(/fora de -1 a 1/);
   });
   test("o estado atual e a regra da decisao, com o tom dela; sem decisao, diz isso", () => {
     const s = renderToStaticMarkup(h(FaixaEstado, { mapa: db.mapa, decisao: db.decisao })), d = db.decisao!;
