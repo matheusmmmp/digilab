@@ -62,6 +62,7 @@ test("o laboratorio: chocar, abrir, ver o motivo, descartar com confirmacao", as
   if (captura) await painel.locator(".scan-in").screenshot({ path: `${captura}/scan_lab_mapa_${page.viewportSize()!.width}.png` });
   await painel.getByRole("button", { name: "O mapa em texto" }).click();
   await expect(painel.getByRole("heading", { name: "O peso de cada módulo nesta escolha" })).toBeVisible();
+  await expect(painel.getByRole("heading", { name: "O que aconteceu antes" })).toBeVisible();
   if (captura) await painel.locator(".scan-in").screenshot({ path: `${captura}/scan_lab_texto_${page.viewportSize()!.width}.png` });
   await expect(painel.getByRole("heading", { name: "Lembrança da vez" })).toBeVisible();
   await expect(painel.getByRole("heading", { name: "Intenção em curso" })).toBeVisible();
