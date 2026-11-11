@@ -2932,3 +2932,95 @@ def media_habito(valores: Sequence[float | None]) -> dict:
     """a media dos valores que nao sao None (4.3) e quantos ficaram fora; a media e None se todos ficaram fora"""
     vs = [v for v in valores if v is not None]
     return {"media": sum(vs) / len(vs) if vs else None, "n": len(vs), "fora": len(valores) - len(vs)}
+
+
+# ================================================================== INDIVIDUALIDADE, I7: o desenvolvimento contrafactual
+# docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md (APROVADO pelo Matheus em 2026-11-10; adendo 1 DECIDIDO), secoes 3 e 12. As contas de um ramo
+# contra o original, a razao contra o gemeo e as inclinacoes. O replay, os ramos, o bootstrap e a leitura ficam no orquestrador
+# (experiments/run_v3_individualidade_i7.py). A distancia do estado interno (12.5) e PROPOSTA, SEM FONTE (o I7a a escreve; o registro a fixa).
+
+def distancias_ramo(ramo: Mapping[int, Sequence[int] | None], original: Mapping[int, Sequence[int] | None],
+                    dias: Sequence[int]) -> dict:
+    """D_b(d) (3.1): a `distancia_tv` entre o perfil do ramo e o do original em cada dia de `dias`; None no dia em que um dos dois esta fora
+    (ou nao existe)."""
+    return {d: (None if ramo.get(d) is None or original.get(d) is None else distancia_tv(ramo[d], original[d])) for d in sorted(set(dias))}
+
+
+def razao_de_somas(pares: Sequence[tuple[float | None, float | None]]) -> float | None:
+    """Phi (3.2): soma(D_b) / soma(D_G) sobre os pares com os dois termos; None sem par ou com a soma do gemeo 0 (a razao e de somas, nao a
+    media de razoes, porque um D_G de um dia pode ser 0)."""
+    dentro = [(a, b) for a, b in pares if a is not None and b is not None]
+    den = sum(b for _, b in dentro)
+    return None if not dentro or den == 0 else sum(a for a, _ in dentro) / den
+
+
+def soma_presente(pares: Sequence[tuple[float | None, float | None]]) -> float | None:
+    """a soma crua do D_b (12.2) sobre os mesmos pares da razao (os dois termos presentes); None sem par"""
+    dentro = [a for a, b in pares if a is not None and b is not None]
+    return sum(dentro) if dentro else None
+
+
+def inclinacao_ou_none(xs: Sequence[float], ys: Sequence[float | None]) -> float | None:
+    """a `inclinacao_mmq` sobre os pontos com y; None com menos de dois x distintos (as inclinacoes do I7, 3.3 e 12.2)"""
+    pts = [(x, y) for x, y in zip(xs, ys) if y is not None]
+    if len({x for x, _ in pts}) < 2:
+        return None
+    return inclinacao_mmq([x for x, _ in pts], [y for _, y in pts])
+
+
+def folhas_estado(estado, prefixo: str = "") -> dict:
+    """as folhas de um estado interno (dicionarios e listas aninhados), pelo caminho: {"a.b.0": valor}. Um dicionario ou uma lista vazios
+    viram uma folha propria (o caminho com o tipo), para que sumir ou aparecer conte."""
+    if isinstance(estado, Mapping):
+        if not estado:
+            return {prefixo + "{}": None}
+        out: dict = {}
+        for k in sorted(estado, key=str):
+            out.update(folhas_estado(estado[k], f"{prefixo}{k}."))
+        return out
+    if isinstance(estado, (list, tuple)):
+        if not estado:
+            return {prefixo + "[]": None}
+        out = {}
+        for i, v in enumerate(estado):
+            out.update(folhas_estado(v, f"{prefixo}{i}."))
+        return out
+    return {prefixo[:-1] if prefixo.endswith(".") else prefixo: estado}
+
+
+def distancia_estado(a: Mapping, b: Mapping) -> float:
+    """a distancia do estado interno (12.5, PROPOSTA, SEM FONTE): a fracao dos caminhos de folha (a uniao dos dois estados) em que o valor
+    difere ou o caminho so existe num deles. 0: os mesmos estados; 1: nenhuma folha em comum com o mesmo valor. Recebe as folhas
+    (`folhas_estado`)."""
+    caminhos = set(a) | set(b)
+    if not caminhos:
+        raise ValueError("I7: dois estados vazios")
+    falta = object()
+    return sum(1 for c in caminhos if a.get(c, falta) != b.get(c, falta) or (c in a) != (c in b)) / len(caminhos)
+
+
+def efeito_comum(ramos: Sequence[Sequence[int] | None], originais: Sequence[Sequence[int] | None]) -> float | None:
+    """C_E (12.5): a `distancia_tv` entre o perfil somado de todos os ramos e o perfil somado de todos os originais (os pares com os dois
+    perfis), dividida pela media das distancias de cada par. Perto de 1, o ramo empurra todos os pets para o mesmo lado; perto de 0, cada
+    pet muda para um lado. None sem par ou com a media 0."""
+    pares = [(r, o) for r, o in zip(ramos, originais) if r is not None and o is not None]
+    if not pares:
+        return None
+    media = sum(distancia_tv(r, o) for r, o in pares) / len(pares)
+    if media == 0:
+        return None
+    soma_r = [sum(c) for c in zip(*(r for r, _ in pares))]
+    soma_o = [sum(c) for c in zip(*(o for _, o in pares))]
+    return distancia_tv(soma_r, soma_o) / media
+
+
+def reencontrou(ramo: Sequence[Mapping], original: Sequence[Mapping], dia: int) -> bool:
+    """o reencontro (3.5): as decisoes do dia `dia` (a acao e a posicao) do ramo sao todas iguais as do original"""
+    ini, fim = janela_dias(dia, dia)
+
+    def chave(ds):
+        return [(d["tick"], d["acao"], d["x"], d["y"]) for d in ds if ini <= d["tick"] < fim]
+    a, b = chave(ramo), chave(original)
+    if not b:
+        raise ValueError(f"I7: o original nao tem decisoes no dia {dia}")
+    return a == b
