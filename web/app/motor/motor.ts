@@ -21,7 +21,7 @@ import {
   type IdInstalacao, type Instalacao,
 } from "./instalacoes.ts";
 import { ESTAGIOS_SALAO, RIVAL_SALAO, caraterDoRivalSalao, formaRivalSalao, sementeSalao } from "./salao.ts";
-import { CMU_MVP } from "./constantes.ts";
+import { CMU_MVP, STATS } from "./constantes.ts";
 import { chipDe, chipServe, itensValem, porqueItensNaoValem, pontosComChips, vagasDeChip } from "./itens.ts";
 import { caraterV11, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
 import { CCO_CORPO_V11, CONFIG_LUTA_CORPO_LIGADA } from "./corpo.ts";
@@ -188,6 +188,9 @@ export class Motor {
      assinatura. episodios = inicio de cada trecho de uma mesma acao do pet (fora ocioso) */
   vida5: { episodios: [number, AcaoPet][]; lutas: { tick: number; rival: string; resultado: "vitoria" | "derrota" | "empate"; lesao: boolean }[];
     sessoes: [number, Exercicio][]; anterior: AcaoPet | null } = { episodios: [], lutas: [], sessoes: [], anterior: null };
+  /** MITOLOGIA, E0 (docs/TAREFA_V3_MITOLOGIA.md): a forca do pet na entrada de cada luta da POC (a soma dos 6 stats de statsDoPet, sem a
+      condicao) e o resultado, para o evento da hybris (motor/lendas.ts). Derivado do replay, como o vida5: fora do save e da assinatura */
+  forcaLutas: { tick: number; rival: string; forcaPet: number; resultado: "vitoria" | "derrota" | "empate" }[] = [];
   lutas: Lutas;
   lesionadoDesde: number | null = null;
   vitoriasVida = 0;                              /* v4: experiencia de combate (nao zera ao evoluir) */
@@ -631,6 +634,7 @@ export class Motor {
     const liga = rival === RIVAL_LIGA, inst = ehInstalacao(rival) ? instalacaoDe(rival) : null, salao = rival === RIVAL_SALAO;
     const npc = !!NPC[rival], torneio = liga || !!inst || salao, forma = this.formaLutaPoc, est = this.estagioAtual;
     const pet = this.statsLutaPoc();
+    const base = statsDoPet(this.forma, this.carater(), this.pontosDeLuta()), forcaBase = STATS.reduce((t, k) => t + base[k], 0);
     const serie: ResultadoLutaPoc["serie"] = [];
     let vida0 = pet.hp, lesao = false, n = 0;
     const ordemL = this.nEventosLuta++;
@@ -675,6 +679,7 @@ export class Motor {
       x.tentativas++; x.ultima = v; x.recorde = Math.max(x.recorde, v);
     }
     this.vida5.lutas.push({ tick: this.e.tick, rival, lesao, resultado: ult.pontosA === 1 ? "vitoria" : ult.pontosA === 0 ? "derrota" : "empate" });
+    this.forcaLutas.push({ tick: this.e.tick, rival, forcaPet: forcaBase, resultado: this.vida5.lutas[this.vida5.lutas.length - 1].resultado });
     return { rival, mapa: torneio ? null : mapa as IdCena, semente, arena: !npc && !torneio, torneio, pet, rivalStats: serie[0].rivalStats, forma, serie, venceu, lesao };
   }
   /* ---------------------------------------------------------------- itens do Tamer (pets v6; motor/itens.ts) */

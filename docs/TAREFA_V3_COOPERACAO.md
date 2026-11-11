@@ -215,3 +215,36 @@ A CO2 foi dividida em três PRs, porque o porte é maior do que a seção 3 prev
     a política e o dono do Python.
   - **O teste:** `tests/test_cooperacao_traco.py` refaz o traço byte a byte. Ele também confere que o motor que grava não muda a vida: o
     sha256 do resumo de cada vida é o mesmo da CO1.
+
+## CO2b, o mundo partilhado no TS (2026-11-11, Claude Code, Opus 5.5, branch `v3-cooperacao-co2b`)
+
+O `web/app/motor/mundo.ts` foi separado como o `digilab/mundo.py`, sem mudar o jogo de hoje.
+
+- **O `MundoPartilhado` (novo):** o `Mundo` do Python. Guarda as árvores, as comidas, a bola, os fluxos do mundo e os registros do mundo.
+  - A atualização é idempotente por tick e falha alto num tick para trás.
+  - A percepção (`perceber(x, y, tick, pendente, ve)`), as maduras perto, retirar a comida, rolar a bola e o que o dono deixa.
+- **O `Mundo` (o de hoje):** passa a ser a parte de um pet (o `MotorMundo` do Python), com a mesma interface.
+  - Sem `partilhado`, ele é dono do próprio `MundoPartilhado`, com a semente do pet: a vida de hoje.
+  - Com `partilhado` e `entrada` (um início de dia), ele vive no mundo do grupo, com o relógio dele.
+- **O G2 de um pet só:** `web/app/test/mundo_partilhado.test.ts` rejoga as 4 vidas do `mundo_python.json` com o pet sobre um mundo dado e
+  com o pet dono do próprio, e as duas dão a mesma vida. O G-HOJE (`coop_etapa0.test.ts`) e as paridades do mundo continuam passando.
+- **Os desvios:** D-CO2b-1 a D-CO2b-4, no registro de 2026-11.
+
+## CO2c, o grupo em TS (2026-11-11, Claude Code, Opus 5.5, branch `v3-cooperacao-co2c`)
+
+O `web/app/motor/grupo.ts` é o porte do `digilab/grupo.py`, sem tela e sem versão de pet nova.
+
+- **O `Grupo`:** dois pets no mesmo `MundoPartilhado`, no mesmo relógio.
+  - **A vez no tick:** o fluxo `mundo-ordem`, com o Fisher-Yates do `random.shuffle` por `randrange`.
+  - **As sementes:** o primeiro pet usa a do grupo; o segundo, `derivarSemente("segundo-pet", s)`.
+  - **A percepção social:** só a visão e o toque, do que é físico.
+  - **O toque e a disputa,** no fim de cada tick com decisão.
+  - **O registro do grupo:** o JSONL do Python, byte a byte, e a projeção de cada pet. O `reproduzirGrupo` rejoga e falha alto.
+- **O pet do grupo** (`PetDoGrupo`) é o engine, o corpo e o cérebro, de fora: o grupo não decide nada.
+- **O G-PAR-GRUPO passa** (`web/app/test/grupo.test.ts`, bit a bit no Node):
+  - os 8 casos da vez sorteada da CO1;
+  - as 5 vidas de dois pets da CO1, rejogadas do registro com o traço da CO2a. Em cada decisão: a percepção, a social, os candidatos, o
+    ocorrido, o estado e o `_tick_social`. No fim: as vezes, os contatos, as disputas, o mundo, o físico e o social de cada pet e a
+    projeção. Só o estado das rngs fica fora (D-CO2c-5).
+- **Fora:** o degrau 1b (D-CO2c-3) e a ligação com o `Motor` do jogo, que é a CO4.
+- **Os desvios:** D-CO2c-1 a D-CO2c-5, no registro de 2026-11.

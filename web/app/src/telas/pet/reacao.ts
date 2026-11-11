@@ -33,7 +33,7 @@ export const EMOTE_DA_REACAO: Readonly<Record<ReacaoRosto, string | null>> = {
 /** o que a vista le do pet para decidir a reacao de estado */
 export interface EntradaReacao { chave: string; humor: number; energia: number; saude: number; lesionado: boolean; dormindo: boolean }
 
-let evento: { reacao: ReacaoRosto; desde: number } | null = null;
+let evento: { reacao: ReacaoRosto; desde: number; ms: number } | null = null;
 let tapas: number[] = [];
 let atual: { chave: string; reacao: ReacaoRosto; desde: number } | null = null;
 
@@ -42,9 +42,14 @@ export function registrarAcaoDono(acao: string, agora: number, fome: number): vo
   if (!Number.isFinite(fome)) throw new Error("registrarAcaoDono: fome nao finita");
   if (acao === "tapa") {
     tapas = [...tapas.filter(t => agora - t < REACAO.janelaMedoMs), agora];
-    evento = { reacao: tapas.length >= REACAO.tapasMedo ? "Medo" : "Triste", desde: agora };
-  } else if (acao === "acariciar") evento = { reacao: "Carinho", desde: agora };
-  else if (acao === "alimentar" && fome > REACAO.semFome) evento = { reacao: "Recusa", desde: agora };
+    evento = { reacao: tapas.length >= REACAO.tapasMedo ? "Medo" : "Triste", desde: agora, ms: REACAO.eventoMs };
+  } else if (acao === "acariciar") evento = { reacao: "Carinho", desde: agora, ms: REACAO.eventoMs };
+  else if (acao === "alimentar" && fome > REACAO.semFome) evento = { reacao: "Recusa", desde: agora, ms: REACAO.eventoMs };
+}
+/** um momento do pet que pede um rosto (momentos.ts, HR1: o Cansado ao acordar, o Triste do chamado perdido, a Recusa da fruta podre), por `ms` */
+export function registrarMomentoRosto(r: ReacaoRosto, agora: number, ms: number): void {
+  if (!(ms > 0) || !Number.isFinite(ms)) throw new Error("registrarMomentoRosto: ms invalido");
+  evento = { reacao: r, desde: agora, ms };
 }
 
 /** a reacao de agora, ou null: o evento do dono (por eventoMs), senao o estado do corpo (Doente, Triste, Cansado, nesta ordem). `mostrar` so fica
@@ -53,7 +58,7 @@ export function escolherReacao(e: EntradaReacao, agora: number): { reacao: Reaca
   for (const k of ["humor", "energia", "saude"] as const) if (!Number.isFinite(e[k])) throw new Error(`escolherReacao: ${k} nao finito`);
   let r: ReacaoRosto | null = null, desde = agora;
   if (e.dormindo) { atual = null; return null; }
-  if (evento && agora >= evento.desde && agora - evento.desde < REACAO.eventoMs) { r = evento.reacao; desde = evento.desde; }
+  if (evento && agora >= evento.desde && agora - evento.desde < evento.ms) { r = evento.reacao; desde = evento.desde; }
   else if (e.lesionado || e.saude < REACAO.saudeBaixa) r = "Doente";
   else if (e.humor < REACAO.humorBaixo) r = "Triste";
   else if (e.energia < REACAO.energiaBaixa) r = "Cansado";

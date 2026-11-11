@@ -214,3 +214,147 @@ O D_braço é o mesmo nos dois braços porque é o mesmo par visto de cada lado.
 
 O I7 mede o afastamento contra o gêmeo (D_G). Esta tabela dá a escala: o pet já varia 0,34 a 0,50 de um dia para o outro, e o par mais
 próximo que existe hoje (D_braço) fica em 0,28 a 0,41. O D_G do I7 vai se medir contra esse ruído. É só contexto, não muda o plano do I7.
+
+## 9. O I7: o desenvolvimento contrafactual (2026-11-11, a run única, Claude Code, Opus 5.5, branch `v3-individualidade-i7b`)
+
+O plano é o `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md` (APROVADO, com o adendo 1 DECIDIDO). O registro está na seção 13, commitado e
+empurrado antes da primeira vida (`3f7b1fa`). A run rodou uma vez.
+
+- **Os dados:** as 360 pets do I2 (2 braços × 3 donos × 60 sementes). Cada pet tem 17 ramos: o N, o G, cinco A(t), cinco E(t) e cinco
+  E°(t), com t = 2, 4, 6, 8 e 10. Nenhum (pet, t) ficou sem ramo.
+- **As conferências G-I7-0 a 3** passaram em todos os 6 120 ramos. Cada uma falha alto, e a run terminou sem erro. No `ramos.jsonl`,
+  `false` numa conferência quer dizer que ela não se aplica àquele ramo; por exemplo, a G-I7-0 só vale para o N.
+  - o N saiu igual ao log do I2, byte a byte;
+  - cada ramo, vivido duas vezes, deu o mesmo log (a IR-6);
+  - as decisões antes do momento são as do original;
+  - o E e o E° têm um tapa a mais, só no momento.
+- **O artefato:** `artifacts_v3_individualidade_i7/`.
+  - versionados: o `meta.json`, o `analise.json` e o `custo.json`; o `meta.json` grava o `git_head` `3f7b1fa`, a árvore limpa e os sha256;
+  - só locais, como o `perfis.jsonl` do I5: o `perfis.jsonl.gz` (2 MB) e o `ramos.jsonl` (10 MB). Os sha256 de ambos estão no
+    `meta.json`.
+- **O custo:** 2 h 48 min de parede com 4 processos, contra a projeção de 6 h da fumaça. São 27 s por pet (110 s dentro de cada processo),
+  e cada ramo, vivido duas vezes, leva cerca de 6 s.
+
+### 9.1 A tabela (os dias t+1 a t+4; as razões contra o gêmeo; o IC95 pelo bootstrap sobre as sementes, 2 000 reamostras)
+
+| braço | perfil | Φ_E (as 5 idades) | γ_E | γ_E cru | β_E | Φ_A(2) | Φ_A(10) | β_A | ΔΦ E − E° |
+|---|---|---|---|---|---|---|---|---|---|
+| REL | SEQ | 0,255 [0,226; 0,284] | 0,0113 [0,0056; 0,0177] | 3,84 [2,44; 5,32] | −0,0008 [−0,0088; 0,0072] | 1,002 [0,972; 1,032] | 0,995 [0,967; 1,025] | −0,0020 [−0,0071; 0,0031] | 0,0018 [−0,0024; 0,0061] |
+| REL | LUGAR | 0,286 [0,257; 0,319] | 0,0136 [0,0083; 0,0187] | 5,38 [3,53; 7,20] | 0,0005 [−0,0079; 0,0091] | 0,981 [0,954; 1,008] | 0,959 [0,936; 0,982] | −0,0027 [−0,0070; 0,0010] | 0,0008 [−0,0026; 0,0038] |
+| REL | HORA | 0,262 [0,231; 0,295] | 0,0191 [0,0144; 0,0244] | 6,85 [5,30; 8,54] | −0,0001 [−0,0079; 0,0077] | 1,000 [0,986; 1,014] | 0,995 [0,974; 1,016] | 0,0002 [−0,0027; 0,0028] | 0,0132 [0,0083; 0,0180] |
+| REL+F | SEQ | 0,279 [0,258; 0,300] | 0,0152 [0,0089; 0,0218] | 5,11 [3,30; 7,06] | 0,0038 [−0,0040; 0,0115] | 1,001 [0,967; 1,032] | 0,998 [0,972; 1,024] | −0,0010 [−0,0066; 0,0046] | 0,0043 [0,0000; 0,0087] |
+| REL+F | LUGAR | 0,312 [0,286; 0,336] | 0,0130 [0,0082; 0,0179] | 5,62 [3,86; 7,37] | 0,0055 [−0,0033; 0,0144] | 0,967 [0,947; 0,990] | 0,970 [0,947; 0,994] | −0,0003 [−0,0042; 0,0034] | 0,0053 [0,0023; 0,0085] |
+| REL+F | HORA | 0,285 [0,263; 0,307] | 0,0210 [0,0164; 0,0255] | 7,81 [6,36; 9,31] | 0,0063 [−0,0014; 0,0138] | 0,996 [0,977; 1,014] | 1,001 [0,986; 1,017] | 0,0015 [−0,0012; 0,0041] | 0,0185 [0,0140; 0,0232] |
+
+O γ_E cru é a inclinação de Σ D_E contra k, sem dividir pelo gêmeo (12.2). Em todas as células o IC95 dele fica inteiro acima de 0.
+
+**Por idade (o ponto), o resto do dia t (Φ⁰) e a forma em U (12.3):**
+
+| braço | perfil | Φ_E(2) | Φ_E(4) | Φ_E(6) | Φ_E(8) | Φ_E(10) | Φ⁰_E(2) | Φ⁰_E(10) | U1_E | U2_E |
+|---|---|---|---|---|---|---|---|---|---|---|
+| REL | SEQ | 0,266 | 0,265 | 0,227 | 0,256 | 0,262 | 0,192 | 0,200 | 0,038 [−0,048; 0,117] | 0,035 [−0,043; 0,109] |
+| REL | LUGAR | 0,289 | 0,295 | 0,262 | 0,283 | 0,300 | 0,176 | 0,194 | 0,027 [−0,069; 0,122] | 0,038 [−0,053; 0,129] |
+| REL | HORA | 0,261 | 0,281 | 0,236 | 0,261 | 0,270 | 0,151 | 0,168 | 0,025 [−0,063; 0,113] | 0,034 [−0,049; 0,117] |
+| REL+F | SEQ | 0,282 | 0,272 | 0,260 | 0,253 | 0,330 | 0,185 | 0,268 | 0,022 [−0,059; 0,101] | 0,070 [−0,000; 0,141] |
+| REL+F | LUGAR | 0,303 | 0,311 | 0,284 | 0,294 | 0,367 | 0,172 | 0,238 | 0,019 [−0,073; 0,111] | 0,083 [0,010; 0,159] |
+| REL+F | HORA | 0,272 | 0,287 | 0,256 | 0,262 | 0,348 | 0,155 | 0,238 | 0,017 [−0,065; 0,102] | 0,092 [0,027; 0,156] |
+
+### 9.2 As frases (7.2 e adendo 1)
+
+- **A condição do evento:** em todas as células, "o tapa mudou o dia em ao menos uma idade" (o Φ⁰_E fica de 0,15 a 0,27, com o IC95
+  acima de 0).
+- **γ_E:** nas seis células, "a diferença do evento cresce com os dias". A régua crua passa junto.
+- **β_E:** nas seis células, "não se distingue de zero nesta análise".
+- **A forma em U:** nenhuma célula tem as duas diferenças do mesmo lado, então não há frase de U nem de ∩.
+- **Φ_A(t):** em todas as idades e células, "o ramo vira um gêmeo" (o IC95 inteiro acima de 0,8). No LUGAR também se escreve "a
+  história até o dia t sobrevive a outro acaso", em parte das idades: no REL nos dias 6, 8 e 10, e no REL+F nos dias 2, 6, 8 e 10. O
+  Φ_A fica de 0,96 a 0,98 nesses casos, logo abaixo de 1.
+- **Φ_E(t):** em todas as idades e células, "o ramo fica mais perto do original que um gêmeo".
+- **γ_A:** só no REL × LUGAR, "a diferença cresce com os dias" (0,012 [0,004; 0,020]); nas outras células, não se distingue de 0.
+  **β_A:** em nenhuma célula se distingue de 0.
+- **A hipótese:** nas seis células, **"nenhuma das hipóteses descreve o perfil do braço sozinha"**:
+  - a H-AMP pede o γ_E > 0, que passa, e o β_E < 0, que não passa;
+  - a H-CAN pede o γ_E < 0;
+  - a H-TRANS pede o Φ_A(10) abaixo de 0,8;
+  - a H-CAOS pede o Φ_E acima de 0,8.
+
+### 9.3 Os contrastes (seção 4)
+
+- **REL+F − REL** (as mesmas sementes reamostradas juntas): nenhum se distingue de 0.
+
+| perfil | Φ_E (5 idades) | γ_E | β_E |
+|---|---|---|---|
+| SEQ | 0,0244 [−0,0065; 0,0564] | 0,0039 [−0,0034; 0,0109] | 0,0046 [−0,0041; 0,0131] |
+| LUGAR | 0,0258 [−0,0051; 0,0551] | −0,0006 [−0,0072; 0,0062] | 0,0051 [−0,0048; 0,0146] |
+| HORA | 0,0233 [−0,0106; 0,0562] | 0,0019 [−0,0035; 0,0072] | 0,0064 [−0,0026; 0,0150] |
+
+- **E − E°** (o dono que reage contra o dono que repete o log; a coluna ΔΦ da 9.1):
+  - acima de 0 em quatro células: REL × HORA, 0,013; REL+F × HORA, 0,019; REL+F × LUGAR, 0,005; REL+F × SEQ, 0,004, com o IC95 começando
+    em 0,00004;
+  - não se distingue de 0 no REL × SEQ e no REL × LUGAR.
+
+  Onde passa, o efeito é pequeno: o E° sozinho dá de 90 % a 99 % do Φ_E.
+
+### 9.4 As expectativas, relidas sem ajuste
+
+- **E-I7** (a H-CAN no LUGAR e na HORA, e nenhuma diferença entre o REL e o REL+F):
+  - **a H-CAN não se confirma:** a diferença do tapa cresce com os dias, e outro acaso torna o ramo um gêmeo;
+  - **a parte das facetas se confirma:** nenhum contraste REL+F − REL se distingue de 0.
+- **E-I7b** (Φ_E > Φ_E°):
+  - **confirma-se em quatro das seis células,** com efeito pequeno;
+  - não se distingue de 0 no REL × SEQ e no REL × LUGAR.
+
+### 9.5 O que a tabela mostra, além das frases (descritivo do plano, 12.5 e 3.5)
+
+- **Outro acaso apaga a história em poucos dias.** O Φ_A fica de 0,96 a 1,02 nos dias t+1 a t+4. No resto do dia t, ele já está em 0,81
+  a 0,93. Trocar a rng de política no dia t faz do pet, em um dia, outro pet tão distante quanto um gêmeo, em qualquer idade.
+- **O estado interno guarda mais que o comportamento.** O Φ^est do A fica de 0,56 a 0,77: o cérebro do ramo continua mais perto do
+  original que o de um gêmeo, mesmo com o comportamento já do gêmeo. O do E fica de 0,16 a 0,24.
+- **O reencontro:** no dia 14, 66 % dos ramos E do REL e 63 % dos do REL+F decidem exatamente como o original.
+  - Por idade, a fração não muda: fica entre 59 % e 68 %.
+  - Por dono, muda: o relapso reencontra menos (54 % e 51 %) que o atencioso (73 % e 65 %) e o aleatório (72 % nos dois braços).
+- **O efeito comum do tapa (C_E)** fica de 0,11 a 0,31. O tapa não empurra todos os pets para o mesmo lado; cada um muda para o seu.
+- **Por dono:** o Φ_E do relapso é o maior nos três perfis e nos dois braços (0,34 a 0,39, contra 0,21 a 0,29 dos outros dois).
+
+### 9.6 Exploratório, fora do plano (2026-11-11, depois da análise; nenhuma frase de leitura sai daqui)
+
+Sai das mesmas vidas, lidas de novo do `perfis.jsonl.gz` e do `ramos.jsonl`, mais a releitura de 24 ramos para ver as folhas do estado.
+A saída das três peças está em `artifacts_v3_individualidade_i7/exploratorio_9_6.txt` (versionado), com os trechos de código no
+`exploratorio_9_6_codigo.txt` ao lado.
+
+- **O tapa é tudo ou nada, pet a pet.** Contando, para cada ramo E(t), os dias t+1 a t+4 com D_E = 0:
+  - cerca de 2/3 dos ramos (583 a 605 de 900, por braço e perfil) têm D_E = 0 nos quatro dias: o comportamento volta ao do original
+    inteiro, já no dia seguinte;
+  - cerca de 1/3 (275 a 300 de 900) tem D_E > 0 nos quatro dias;
+  - só 18 a 22 de 900 misturam os dois.
+- **Os ramos que se afastam chegam perto de um gêmeo:** o D_E médio deles cresce de 0,23 para 0,26 na SEQ, enquanto o D_G médio é 0,30; de
+  0,36 para 0,40 no LUGAR (D_G 0,43); e de 0,26 para 0,32 na HORA (D_G 0,37).
+  - O Φ_E médio de 0,26 a 0,31 é a mistura das duas populações, 1/3 com Φ de 0,8 a 0,9 e 2/3 com 0.
+  - O γ_E > 0 vem do grupo que se afasta.
+- **Nos ramos que voltam, o tapa fica só na memória:**
+  - a distância do estado interno no dia t+4 é de 0,005 em média (contra 0,36 nos que se afastam), mas não é zero em 89 % deles;
+  - nos dois casos relidos, as folhas que diferem (4 e 5 de 4 855) são todas da memória autobiográfica (`mem.autobio`: a dor guardada
+    do episódio do tapa);
+  - nos que se afastam, diferem cerca de 2 200 folhas, da memória, do afeto, da plasticidade e do árbitro.
+- **O que separa os dois grupos parece ser o fluxo da rng de política.** Em 20 ramos relidos (10 de cada grupo):
+  - nos 10 que voltaram, o `arb.sorteios` (a contagem de sorteios do árbitro) e o `arb.reflexos` no fim do dia t são os do original;
+  - em 8 dos 10 que se afastaram, os dois já diferem no fim do próprio dia t.
+
+  A leitura PROPOSTA: quando o tapa dispara (ou deixa de disparar) um reflexo, o árbitro sorteia um número diferente de vezes. A rng de
+  política fica deslocada, e o resto da vida é outro acaso, o mesmo que o ramo A faz de propósito. Quando não dispara, o modular absorve
+  o tapa. São 20 ramos, e os outros 2 afastados não se explicam assim.
+
+### 9.7 O que a análise não demonstra
+
+- que o pet não tem história: o estado interno do A fica mais perto do original que um gêmeo, e o comportamento é que não mostra isso;
+- que a idade não importa em outra janela, em outro evento ou num pet que vive mais de 14 dias;
+- que o mecanismo da 9.6 vale para todos os ramos: são 20 ramos relidos, fora do plano;
+- qualquer efeito do genoma (vazio no I2);
+- que a medida é nova.
+
+### 9.8 O que isso muda para a frente
+
+- **PROPOSTO, do exploratório da 9.6: o comportamento do modular, nesta janela, parece dominado pelo fluxo da rng de política.** Trocar a rng apaga a história em um dia, e um
+  tapa só muda o pet de modo duradouro quando desloca esse fluxo.
+- **A pergunta que fica, PROPOSTA:** o desenvolvimento do pet vem da história ou do sorteio? Um ramo E com a rng ressincronizada depois
+  do tapa (o mesmo número de sorteios) separaria as duas coisas. Isso pede um plano novo (um adendo ao I7, ou um I8) e não roda sem ele.
