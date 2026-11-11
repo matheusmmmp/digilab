@@ -3,10 +3,10 @@
    relogio e o visual deles seguiam nos tokens --dl-*; desde o HUD (docs/TAREFA_V3_LAYOUT_HUD.md) a plaquinha e o relogio sao caixas
    escuras chanfradas (estilo/pet_hud.css), no mesmo sistema dos menus. Com a camera solta da ilha (telas/pet/cameraLivre.ts), o retrato
    volta a camera ao pet. */
-import { BookOpen, Cloud, CloudOff, Lock, MessageCircle, Moon, Settings, Sprout, Sun, Swords, type LucideIcon } from "lucide-react";
+import { BookOpen, Cloud, CloudOff, Coins, Lock, MessageCircle, Moon, Settings, Sprout, Sun, Swords, type LucideIcon } from "lucide-react";
 import { DO_ESP, NOME_ESP, NOME_EST, TPD, eNoite, nomeEstagio, nomeForma } from "../../motor/index.ts";
 import { BRASAO } from "../decoracao.ts";
-import { sairDoLab, useJogo } from "../jogo.ts";
+import { sairDoLab, tamerAtual, useJogo } from "../jogo.ts";
 import { usePainelLado } from "../desktop.ts";
 import { alternarLeque, useLeque } from "../movel.ts";
 import { NOME_DESTINO, type Destino } from "../rotas.ts";
@@ -30,6 +30,18 @@ const ICONE_DESTINO: Partial<Record<Destino, LucideIcon>> = { crescer: Sprout, l
 const atalhoLugar = (d: Destino): string | undefined => d === "crescer" ? "C" : d === "lutar" ? "L" : d === "diario" && dAbreDiario() ? "D" : undefined;
 const DESTINOS_COLUNA: Destino[] = ["crescer", "lutar", "diario"];
 
+/** o saldo de Bits do Tamer (docs/PLANO_V3_MOEDA.md, MO1), ao lado do relogio. Some com o registro do Tamer que nao abriu (o erro dele
+    aparece em outro lugar) e antes do primeiro Bit, para o primeiro dia nao ganhar mais um numero na tela */
+function SaldoBits({ classe }: { classe: string }) {
+  const { erroTamer } = useJogo(), b = tamerAtual().bits;
+  if (erroTamer || b < 1) return null;
+  return (
+    <span className={classe} role="img" aria-label={`${b} Bits`} title="Bits: a moeda do Tamer">
+      <Coins aria-hidden="true" /><b aria-hidden="true">{b.toLocaleString("pt-BR")}</b>
+    </span>
+  );
+}
+
 /* O topo do celular (docs/PROPOSTAS_V3_UX_TELA_PET.md, "Mobile mínimo", M1; prancha em docs/pranchas/ux-mobile/): no canto de cima à esquerda o retrato
    (redondo no Vidro, reto no Militar), que abre o leque dos vitais e dos painéis (TelaPet.tsx, LequePet), com o ponto rosa quando há uma necessidade, e a
    hora; no canto de cima à direita a coluna Conversar, Crescer, Lutar e Diário, só ícone. Sem barra de abas: a tela Pet é a casa. O nome e o estágio do
@@ -50,6 +62,7 @@ function TopoMovel({ irConversar, irDestino, lugar }: PropsTopo) {
       <span className="mm-caixa mm-pilula mm-relogio" role="group" aria-label={`${hhmm(e.tick)}, dia ${diaDe(e.tick)}${erroSave ? ", não salva" : ""}`}>
         <small aria-hidden="true">D{diaDe(e.tick)}</small><b aria-hidden="true">{hhmm(e.tick)}</b>
         {erroSave && <CloudOff className="mm-salvo-erro" aria-hidden="true" />}
+        <SaldoBits classe="mm-bits" />
       </span>
       <div className="mm-coluna">
         <span className="mm-item">
@@ -100,6 +113,7 @@ function TopoLargo({ abrirMeusPets, irConversar, abrirConfig }: PropsTopo) {
         <span className="topo-hora-txt"><span className="topo-dia">dia {diaDe(e.tick)}</span><span className="topo-hora">{hhmm(e.tick)}</span></span>
         <span className={`pet-salvo${erroSave ? " erro" : ""}`}>{erroSave ? <CloudOff aria-hidden="true" /> : <Cloud aria-hidden="true" />}{erroSave ? "não salva" : "salvo"}</span>
       </span>
+      <SaldoBits classe="topo-bits" />
       <span className="topo-bts">
         <button type="button" className="topo-bt" aria-label="Conversar" onClick={irConversar}><MessageCircle aria-hidden="true" /></button>
         <button type="button" className="topo-bt" aria-label="Configurações" onClick={abrirConfig}><Settings aria-hidden="true" /></button>

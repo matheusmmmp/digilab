@@ -9,7 +9,7 @@
 import { describe, expect, test } from "vitest";
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
-import { CMU_MVP, TPD, VERSAO_PET } from "../motor/constantes.ts";
+import { CMU_MVP, TPD } from "../motor/constantes.ts";
 import { Motor } from "../motor/motor.ts";
 
 const ARQUIVO = new URL("./gabaritos/coop_etapa0_ts.json", import.meta.url);
@@ -61,13 +61,14 @@ const impressao = (m: Motor): string => sha(JSON.stringify(m.mundo!.resumo()));
 
 function gerar(): Gabarito {
   const vidas = VIDAS.map(([semente, dias]): VidaGravada => {
-    const m = new Motor(semente);
+    /* as vidas gravadas sao v21, a versao do dia da CO1; desde a v22 (ILHA_AGUA, IA4) a versao e pedida de forma explicita */
+    const m = new Motor(semente, 21);
     viverDias(m, dias);
     const log = JSON.parse(JSON.stringify(m.log)) as Evento[];
     const { pts } = refazer(semente, m.versao, log);
     return { semente, versao: m.versao, dias, log, pontos: pts, assinatura: sha(m.assinatura()), impressao: impressao(m) };
   });
-  return { versao_pet: VERSAO_PET, arquivos: Object.fromEntries(PINADOS.map(p => [p, shaArquivo(p)])), vidas };
+  return { versao_pet: 21, arquivos: Object.fromEntries(PINADOS.map(p => [p, shaArquivo(p)])), vidas };
 }
 
 if (process.env.GRAVAR_COOP === "1") writeFileSync(ARQUIVO, JSON.stringify(gerar(), null, 1) + "\n", "utf8");
@@ -92,7 +93,7 @@ describe("COOPERACAO, CO1: o G-HOJE do lado TS", () => {
       expect(impressao(m)).toBe(v.impressao);
     });
     test(`a vida ${v.semente}: o mesmo dono de roteiro refaz o mesmo log`, () => {
-      const m = new Motor(v.semente);
+      const m = new Motor(v.semente, v.versao);
       viverDias(m, v.dias);
       expect(JSON.parse(JSON.stringify(m.log))).toEqual(v.log);
     });

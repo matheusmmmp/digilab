@@ -27,10 +27,11 @@
 import { C } from "./constantes.ts";
 import type { ConfigCorpo, ConfigMundo } from "./constantes.ts";
 import { CCO_CORPO_V11 } from "./corpo.ts";
+import type { ConfigContrato } from "./contrato.ts";
 import { efeitoAcaoPet } from "./estado.ts";
 import { ACOES_DONO_V11, MotorCorpo, estadoNascimentoPy, type EventoCorpo, type PoliticaCorpo } from "./motor_corpo.ts";
 import type { ObservacaoLobos } from "./lobos.ts";
-import { Mundo, eventoDeixarComida, eventoLevarPet, lerDeixarComida, lerLevarPet, regiaoDe, type PercepcaoMundo } from "./mundo.ts";
+import { Mundo, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, lerDeixarComida, lerLevarPet, lerMudarIlha, regiaoDe, type PercepcaoMundo } from "./mundo.ts";
 import type { AcaoPet, EstadoVida } from "./tipos.ts";
 
 /** o que a consequencia do mundo devolve (o `ocorrido` do Python, com os nomes dele) */
@@ -63,6 +64,8 @@ export interface OpcoesLacoMundo {
   decidirNaComida?: boolean;
   /** a chave dos pets v15 (a ConfigBolaNoGolpe do Python), desligada: com ela, a bola sai na direcao em que o pet vinha (Mundo, OpcoesMundo) */
   bolaNoGolpe?: boolean;
+  /** o contrato da P4 (o `cfg_contrato` do Python), desligado: o layout com agua exige o controlador (docs/TAREFA_V3_ILHA_AGUA.md) */
+  contrato?: ConfigContrato;
 }
 
 /** as acoes do dono no laco com o mundo: as do v11 sem o alimentar (ele vira o deixar_comida) */
@@ -84,7 +87,7 @@ export class MotorCorpoMundo extends MotorCorpo {
               opcoes: OpcoesLacoMundo = {}) {
     super(politica, semente, cc, estado, true);
     if (!cc.drives_novos) throw new Error("o laco com o mundo e o do regime `corpo` com os drives novos (a novidade e a atividade)");
-    this.mundo = new Mundo({ semente, cfg: opcoes.cfgMundo, bolaNoGolpe: opcoes.bolaNoGolpe ?? false });
+    this.mundo = new Mundo({ semente, cfg: opcoes.cfgMundo, bolaNoGolpe: opcoes.bolaNoGolpe ?? false, contrato: opcoes.contrato });
     this.regra = opcoes.regra ?? (() => null);
     this.paridade = opcoes.paridade ?? false;
     this.digibrain = opcoes.digibrain ?? false;
@@ -142,7 +145,28 @@ export class MotorCorpoMundo extends MotorCorpo {
     this.mundo.levarPet(this.estado.tick, x, y);
   }
 
+  /** a troca de ilha (docs/TAREFA_V3_ILHA_AGUA.md, IA4; MotorMundo.mudar_ilha do Python): o mundo do pet passa para a ilha com agua
+   *  `nome`; o evento valida o nome e o Mundo a troca, antes do log */
+  mudarIlha(nome: string): void {
+    const ev = eventoMudarIlha(this.estado.tick, nome);
+    this.ilhaDoDono(lerMudarIlha(ev));
+    this.log.push({ tick: ev.tick, tipo: "mudar_ilha", valor: ev.valor });
+  }
+
+  /** o mudar_ilha sem o log do laco (o Motor do jogo grava o registro dele). Como o levar_pet, nao e contato nem cuidado: nao passa pelo
+   *  estado, pelo corpo nem pelo cerebro. Vale com o pet acordado ou dormindo */
+  ilhaDoDono(nome: string): void {
+    lerMudarIlha(eventoMudarIlha(this.estado.tick, nome));
+    this.conferirSincronia("antes de mudar_ilha");
+    this.mundo.mudarIlha(this.estado.tick, nome);
+  }
+
   override aplicarEvento(e: EventoCorpo): void {
+    if (e.tipo === "mudar_ilha") {
+      if (e.tick !== this.estado.tick) throw new Error(`evento no tick ${e.tick}, o motor esta no ${this.estado.tick}`);
+      this.mudarIlha(lerMudarIlha(e));
+      return;
+    }
     if (e.tipo === "levar_pet") {
       if (e.tick !== this.estado.tick) throw new Error(`evento no tick ${e.tick}, o motor esta no ${this.estado.tick}`);
       if (typeof e.valor !== "string") throw new Error(`levar_pet malformado: ${JSON.stringify(e)}`);

@@ -135,7 +135,8 @@ for (const [versao, save] of Object.entries(SAVES)) {
     await page.waitForTimeout(300);
     await page.getByRole("button", { name: "Verificar replay" }).click();
     await expect(page.getByText(/^Replay idêntico:/)).toBeVisible();
-    expect(JSON.parse(await page.evaluate(() => (window as any).__digilab.registro())).versao).toBe(VERSAO_PET);
+    /* o save semeado e v21; ao abrir ele passa para a ilha com agua (o "mi"; ILHA_AGUA, IA4) e segue v21 */
+    expect(JSON.parse(await page.evaluate(() => (window as any).__digilab.registro())).versao).toBe(21);
     expect(erros, "erros no console do app").toEqual([]);
   });
 }
@@ -359,12 +360,14 @@ test("luta da POC: a primeira abertura descarta os pets de antes, avisa, oferece
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), g: localStorage.getItem(c + "-guardados"), aviso: localStorage.getItem(c + "-aviso-poc"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!), marca: localStorage.getItem(c + "-descarte"), antigos: JSON.parse(localStorage.getItem(c + "-descartados")!) }), CHAVE);
-  expect(r.save.versao).toBe(VERSAO_PET);            /* o ovo novo nasce na versao atual (a v21, LP4) */
+  expect(r.save.versao).toBe(VERSAO_PET);            /* o ovo novo nasce na versao atual (a v22: a v21 que nasce na ilha com agua) */
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
   expect(r.marca).toBe("8");
   expect(r.antigos).toHaveLength(2);
-  expect(r.tamer).toEqual({ versao: 8, log: [] });
+  /* o Tamer novo so tem os Bits dos niveis do Tamer (o piso 4 de quem ja jogava; docs/PLANO_V3_MOEDA.md, MO1), e grava a versao 9 */
+  expect(r.tamer.versao).toBe(9);
+  expect(r.tamer.log.filter((e: [string, { origem?: string }]) => e[0] !== "bits" || e[1].origem !== "nivel")).toEqual([]);
   await page.reload();
   await expect(page.locator(".pet-tela")).toBeVisible();
   await expect(page.locator("dialog.aviso-poc")).toHaveCount(0);
@@ -393,8 +396,11 @@ test("luta da POC: o pet v19 de antes sai com o aviso, e o Tamer fica com as med
   expect(r.save.versao).toBe(VERSAO_PET);
   expect(r.save.semente).not.toBe(SAVE_ANTIGO_V19.semente);
   expect(r.marca).toBe("8");
-  /* a medalha e o item dela ficam; sem a Fabrica de antes no registro, o Tamer fica como estava */
-  expect(r.tamer).toEqual(tamer);
+  /* a medalha e o item dela ficam; sem a Fabrica de antes no registro, o Tamer fica como estava, mais os Bits (MOEDA, MO1: a 1a medalha e os
+     niveis do Tamer pagam na abertura), na versao 9 */
+  expect(r.tamer.versao).toBe(9);
+  expect(r.tamer.log.filter((e: [string]) => e[0] !== "bits")).toEqual(tamer.log);
+  expect(r.tamer.log.some((e: [string, { id?: string }]) => e[0] === "bits" && e[1].id === "medalha:campina")).toBe(true);
   /* o ovo novo conhece a medalha do Tamer (o "u" no registro dele) */
   expect(r.save.log.filter((e: unknown[]) => e[1] === "u")).toEqual([[expect.any(Number), "u", { n: 1 }]]);
   await page.reload();
@@ -1270,6 +1276,9 @@ test("mundo: o ovo novo choca na cena 3D", async ({ page }) => {
   const lcd = page.locator(".pet-cena canvas.lcd");
   await expect(lcd).toHaveAttribute("aria-label", "Tela do pet: ovo");
   await expect(lcd).not.toHaveAttribute("aria-label", "Tela do pet: ovo", { timeout: 20_000 });
+  /* o ovo que chocou pede a camera do primeiro dia (AB-2), que toca logo (e2e/abertura.spec.ts) */
+  await expect.poll(() => page.evaluate(c => JSON.parse(localStorage.getItem(c + "-abertura") ?? "null")?.semente ?? null, CHAVE)).not.toBeNull();
+  await expect(page.locator("[data-abertura]")).toHaveCount(1);
   await infoMundoNoEstado(page, null);
   expect(erros).toEqual([]);
 });
@@ -1323,6 +1332,54 @@ test("som: ligado com os arquivos ausentes mostra o aviso e a tela segue", async
   await expect(page.getByTestId("aviso-som").first()).toContainText("mapa de sons");
   await page.getByRole("switch", { name: /Som do jogo/ }).uncheck();
   await expect(page.getByRole("switch", { name: /Som do jogo/ })).not.toBeChecked();
+});
+
+/* HABITAT_REACOES, HR1 (docs/PLANO_V3_HABITAT_REACOES.md): com o atlas de clipes do UP (fora do git: sem ele o teste nao se aplica), limpar faz
+   o pet sacudir (o clipe Sacudir, uma vez) e o clipe sai sozinho depois do ciclo. So vista: o registro ganha so o "limpar" */
+test("momentos: limpar faz o pet sacudir com o clipe do atlas", async ({ page }) => {
+  const r = await page.request.get("/Assets/digilab_atlas_up_clipes.json");
+  test.skip(!r.ok(), "sem Assets/digilab_atlas_up_clipes.json (fora do git)");
+  await semear(page, SAVES.champion);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  await expect(page.locator(".pet-cena .cena3d")).toBeVisible();
+  const clipe = () => page.evaluate(() => (window as any).__digilab.clipeMomento() as string | null);
+  const largura = page.viewportSize()!.width;
+  /* o pet escolhe o que faz: com o corpo ocupado (o golpe na bola, o Comer) por mais de MOMENTOS.esperaMaxMs, o momento sai sem tocar, como o
+     plano manda. Por isso o clique se repete ate tres vezes */
+  let sacudiu = false;
+  for (let i = 0; i < 3 && !sacudiu; i++) {
+    if (largura < 900) await page.locator(".acoes-pet .acao-mais").click();      /* no celular o Limpar mora no Mais, que fecha a cada acao */
+    await page.getByRole("button", { name: "Limpar", exact: true }).first().click();
+    sacudiu = await expect.poll(clipe, { timeout: 4_000 }).toBe("Sacudir").then(() => true, () => false);
+  }
+  expect(sacudiu, "limpar nao fez o pet sacudir em tres tentativas").toBe(true);
+  expect(await page.evaluate(() => (window as any).__digilab.momento())).toBe("limpar");
+  await expect.poll(clipe, { timeout: 8_000 }).not.toBe("Sacudir");
+  expect(erros).toEqual([]);
+});
+
+/* HABITAT_REACOES, HR2 (docs/PLANO_V3_HABITAT_REACOES.md): com o mapa de sons que ja tem os efeitos do cuidado (Assets/sons, fora do git: sem
+   ele o teste nao se aplica), limpar pede a agua na hora e, quando o pet sacode, a voz dele. O pet escolhe o que faz: com o corpo ocupado o
+   momento sai sem tocar (D-HR1-4), entao o clique se repete ate tres vezes */
+test("som: limpar pede a agua e a voz do pet", async ({ page }) => {
+  const r = await page.request.get("/Assets/sons/mapa.json");
+  test.skip(!r.ok() || !(await r.json()).efeitos?.cuidado_limpar, "sem os efeitos da HR2 em Assets/sons (fora do git)");
+  await semear(page, SAVES.champion);
+  const erros = vigiarErros(page), pedidos: string[] = [];
+  page.on("request", q => { const m = /\/Assets\/sons\/([^/?]+)/.exec(q.url()); if (m) pedidos.push(m[1]!); });
+  await page.goto(APP + "#/pet/estado");
+  await expect(page.locator(".pet-cena .cena3d")).toBeVisible();
+  const largura = page.viewportSize()!.width;
+  let falou = false;
+  for (let i = 0; i < 3 && !falou; i++) {
+    if (largura < 900) await page.locator(".acoes-pet .acao-mais").click();
+    await page.getByRole("button", { name: "Limpar", exact: true }).first().click();
+    await expect.poll(() => pedidos).toContain("sfx_ui_farm_water.mp3");
+    falou = await expect.poll(() => pedidos, { timeout: 5_000 }).toContain("sfx_digimon_voice.mp3").then(() => true, () => false);
+  }
+  expect(falou, "a voz do pet nao foi pedida em tres tentativas").toBe(true);
+  expect(erros).toEqual([]);
 });
 
 /* SOM-UP (docs/TAREFA_V3_SOM_UP.md): com o mapa de sons da versao 2 (Assets/sons, fora do git: sem ele o teste nao se aplica), o painel

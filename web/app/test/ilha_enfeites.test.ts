@@ -34,7 +34,9 @@ describe("onde ficam os enfeites (E-G10, desde a planta A)", () => {
     expect(marco("trilho").x).toBeGreaterThanOrEqual(ilha.rioX + RIO.largura);
     /* a lata gigante (2026-11-10): ao norte, atras da area, entre o lar e o portao */
     expect(marco("lata").z).toBeLessThan(0);
-    for (const n of ["carro", "geladeira", "trilho", "lata"] as const) {
+    /* a TV (2026-11-11): na moldura do norte, atras da barraca */
+    expect(marco("tv").z).toBeLessThan(0);
+    for (const n of ["carro", "geladeira", "trilho", "lata", "tv"] as const) {
       const e = marco(n), G = ENFEITES_GRADE[n], c = ilha.cel(Math.floor(e.x), Math.floor(e.z))!;
       expect(ilha.naArea(Math.floor(e.x), Math.floor(e.z)), n).toBe(false);
       expect(G.chao as readonly string[], n).toContain(c.tipo);
@@ -53,7 +55,7 @@ describe("onde ficam os enfeites (E-G10, desde a planta A)", () => {
 
 const APP = join(__dirname, ".."), ENF = join(APP, "public", "enfeites"), DOCS = join(APP, "..", "..", "docs", "enfeites");
 /* o teto da categoria (D-I3): 554 para os repetidos, 2 414 para os marcos */
-const TETO: Record<string, number> = { poste: 554, carro: 2414, geladeira: 2414, trilho: 2414, lata: 2414 }, LADO_MAX = 1024, BYTES = 300 * 1024;
+const TETO: Record<string, number> = { poste: 554, carro: 2414, geladeira: 2414, trilho: 2414, lata: 2414, tv: 2414 }, LADO_MAX = 1024, BYTES = 300 * 1024;
 type Gltf = {
   asset: { extras?: { gerado_por_ia?: boolean; gerador?: string } }; nodes: { name?: string }[]; buffers: { uri: string }[];
   images?: { uri: string }[]; accessors: { count: number }[];
@@ -128,6 +130,17 @@ describe("a lata gigante feita a mao por script", () => {
     expect(g.asset.extras?.gerador).toMatch(/docs\/objetos3d\/lata\/mao\/lata_mao\.py/);
     expect(g.meshes.length).toBe(1); expect(g.meshes[0].primitives.length).toBe(1); expect(g.images?.length).toBe(1);
     expect(ENFEITES_LUZ.lata).toBeUndefined();
+  });
+});
+
+/* a TV de tubo em cartoon (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 20): sai do script, sem IA; a mascara da tela ainda nao acende (TV-3) */
+describe("a TV de tubo em cartoon, feita a mao por script", () => {
+  test("a procedencia aponta o tv.py e a malha e uma so, com uma textura", () => {
+    const g = JSON.parse(readFileSync(join(ENF, ENFEITES_MODELOS.tv.arquivos[0]), "utf8")) as Gltf;
+    expect(g.asset.extras?.gerado_por_ia).toBe(false);
+    expect(g.asset.extras?.gerador).toMatch(/docs\/objetos3d\/cartoon\/tv\.py/);
+    expect(g.meshes.length).toBe(1); expect(g.meshes[0].primitives.length).toBe(1); expect(g.images?.length).toBe(1);
+    expect(ENFEITES_LUZ.tv).toBeUndefined();
   });
 });
 
