@@ -659,3 +659,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — HABITAT_REACOES, HR1: as reações que faltavam na vista (Gerente da V3, Claude Code, Opus 5.5, branch `v3-habitat-hr1`)](registro/2026-11.md)
 - [2026-11-11 — CADEIA, etapa 1: o cenário do lugar lembrado e as decisões D2, D4 e D5 (Gerente da V3, Claude Code, Opus 5.5, branch `v3-cadeia-f1`)](registro/2026-11.md)
 - [2026-11-11 — CADEIA, etapa 2: a cena só mastiga com o que comer e o lugar vazio no rosto (Gerente da V3, Claude Code, Opus 5.5, branch `v3-cadeia-f2`)](registro/2026-11.md)
+- [2026-11-11 — CADEIA, etapa 3: o painel mostra o resultado da decisão anterior (Gerente da V3, Claude Code, Opus 5.5, branch `v3-cadeia-f3`)](registro/2026-11.md)

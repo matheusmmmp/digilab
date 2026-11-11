@@ -85,3 +85,16 @@ Branch `v3-cadeia-f2`, sobre a etapa 1. Só vista.
   - os e2e do comer e da cena seguem passando.
 - **Desvios:** D-CADEIA-5 e 6.
 
+## 11. Etapa 3 (2026-11-11): o painel mostra o resultado da decisão anterior
+
+Branch `v3-cadeia-f3`, sobre a etapa 2. Só leitura.
+
+- **`resultadoAnterior`** (`motor/digibrain/leitura.ts`): o `consequencia` do motivo anterior.
+- **`textoResultado`** (`src/componentes/DigiBrainLab.tsx`): uma linha, por exemplo "Explorar o lugar lembrado (183, 249); chegou e não havia
+  comida; a visita vazia ficou na memória".
+- **Onde aparece:** sob o mapa do scan do modular e na seção "O que aconteceu antes" do mapa em texto.
+- **Testes:**
+  - `test/resultado_lab.test.ts` (3): o consumo e a visita vazia no cenário do lugar lembrado, o texto de cada caso e "só leitura";
+  - o e2e do laboratório confere a seção.
+- **Desvios:** D-CADEIA-7 a 9.
+

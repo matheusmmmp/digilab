@@ -35,7 +35,7 @@ export * from "./digibrain.ts";
 export * from "./pet_lab.ts";
 export { decodificar, decodificarV2, episodioDec, desfechoDoEpisodio, CATALOGO_CONCEITOS, CLASSES_EPISODIO_DEC, DESFECHOS, VERSAO_DECODIFICADOR, VERSAO_DECODIFICADOR_V2, type Conceito, type ConceitosDec, type EpisodioDec, type NomeConceito } from "./digibrain/decodificador.ts";
 export { CONTEUDOS_FALA, type ConteudoFala } from "./digibrain/constantes.ts";
-export { ORDEM_TERMOS, type BarraLab, type ChanceLab, type LeituraLab, type SondaLab, type TermoLab } from "./digibrain/leitura.ts";
+export { ORDEM_TERMOS, resultadoAnterior, type BarraLab, type ChanceLab, type LeituraLab, type ResultadoLab, type SondaLab, type TermoLab } from "./digibrain/leitura.ts";
 /* a luta da POC (LUTA_POC, LP2): o mapeamento dos stats e os rivais; do nucleo, so a chave, os mapas e a tabela (os outros nomes dele, como
    Stats e ResultadoLuta, sao de motor/arena/ e colidiriam com os do motor) */
 export * from "./luta_poc.ts";
