@@ -18,6 +18,7 @@
    (percebendo o mundo pela porta que o grupo da) e recebe o que aconteceu. Os registros usam os nomes em snake_case do Python de
    proposito: sao o mesmo dado, conferido campo a campo (o G-PAR-GRUPO, test/grupo.test.ts). */
 import { ACOES_DONO, TPD, type ConfigMundo } from "./constantes.ts";
+import type { ConfigContrato } from "./contrato.ts";
 import {
   DIR16, Mundo, MundoPartilhado, RandomPy, derivarSemente, distancia, eventoDeixarBola, eventoDeixarComida, lerDeixarBola,
   lerDeixarComida, type EscolherAlvo, type EstadoNoMundo, type GanchoGrupo, type PercepcaoMundo, type PercepcaoSocial, type TickSocial,
@@ -199,6 +200,8 @@ export interface PetDoGrupo {
 }
 export interface OpcoesPetNoGrupo {
   efeitoFrutas?: Record<string, number>;
+  /** o contrato do pet: no grupo, so o controlador sozinho (a ilha com agua, CONFIG_CONTRATO_AGUA; CO4a) */
+  contrato?: ConfigContrato;
   estado?: { ganhoAlimentar: number; probSujeiraPosRefeicao: number; sujeiraMaxima: number; intervalo: number };
   bolaNoGolpe?: boolean;
 }

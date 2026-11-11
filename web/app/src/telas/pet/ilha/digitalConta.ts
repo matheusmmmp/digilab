@@ -49,3 +49,22 @@ export function segmentosDosFios(ilha: Ilha): number[] {
   }
   return pos;
 }
+
+/** os desenhos de um anel do portal do ceu (DIGITAL.portal): a linha cheia, os tracos, as marcas (riscos para fora), os blocos (quadradinhos
+    de dados) e a linha dupla */
+export const DESENHOS_DE_ANEL = ["linha", "tracos", "marcas", "blocos", "dupla"] as const;
+export type DesenhoDeAnel = (typeof DESENHOS_DE_ANEL)[number];
+export interface AnelDoPortal { raio: number; desenho: DesenhoDeAnel; partes: number; volta: number; fase: number }
+
+/** os aneis concentricos do portal, de dentro para fora: o raio cresce por igual, o desenho alterna (o de fora e sempre a linha cheia, o
+    arco grande das referencias), `partes` e quantos tracos, marcas ou blocos cabem na volta (mais nos de fora), `volta` sao os segundos por
+    volta com o sinal do lado (um para cada lado, o de dentro mais depressa) e `fase` o giro de partida, da rng com o sal do portal */
+export function aneisDoPortal(): AnelDoPortal[] {
+  const P = DIGITAL.portal, r = rng(P.sal), aneis: AnelDoPortal[] = [];
+  for (let k = 0; k < P.aneis; k++) {
+    const u = k / Math.max(1, P.aneis - 1), raio = P.raio[0] + (P.raio[1] - P.raio[0]) * u;
+    const desenho = k === P.aneis - 1 ? "linha" : DESENHOS_DE_ANEL[1 + (k % (DESENHOS_DE_ANEL.length - 1))];
+    aneis.push({ raio, desenho, partes: 8 * Math.max(1, Math.round(raio / 3)), volta: (k % 2 ? -1 : 1) * (P.volta[0] + (P.volta[1] - P.volta[0]) * u), fase: r() * Math.PI * 2 });
+  }
+  return aneis;
+}

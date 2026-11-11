@@ -273,3 +273,22 @@ desligada (o espelho é o `CCOOP` do `motor/constantes.ts`). Ela só mede: nenhu
   - há de 1 a 6 contenções por vida de 3 dias, 2 disputas neutras e 1 encostar;
   - nenhuma disputa é "anti", então o sinal −1 só é conferido nas chamadas sintéticas.
 - **Os desvios:** D-CO3-1 a D-CO3-8, no registro de 2026-11.
+
+## CO4a, a água dentro do grupo (2026-11-11, Claude Code, Opus 5.5, branch `v3-cooperacao-co4a`)
+
+A CO4 virou quatro PRs (D-CO4-1):
+- **CO4a:** a água no grupo;
+- **CO4b:** o `Motor` do jogo dentro do `Grupo`, um tick por vez, como o `_um_tick` do Python;
+- **CO4c:** o save e os dois ovos, com a `VERSAO_PET` 24;
+- **CO4d:** as telas.
+
+Esta parte deixa os dois pets viverem na ilha com água, onde o jogo nasce:
+
+- **No grupo, o controlador sozinho do contrato vale** (`digilab/mundo.py`, `MotorMundo`; `web/app/motor/mundo.ts`, `Mundo`). O cone e as
+  paredes seguem de um pet só.
+- **O gabarito:** `experiments/exportar_gabarito_grupo_agua.py` grava `web/app/test/gabaritos/grupo_agua_python.json.gz`, três vidas de dois
+  pets no `mvp_agua`.
+- **Os testes:**
+  - `tests/test_cooperacao_agua.py` refaz o gabarito byte a byte, rejoga o registro e confere que nenhum pet fica na água;
+  - `web/app/test/grupo_agua.test.ts` é o G-PAR-GRUPO nesse mundo, decisão a decisão, com o registro do contrato.
+- **Os desvios:** D-CO4-1, D-CO4a-1 e D-CO4a-2, no registro de 2026-11.
