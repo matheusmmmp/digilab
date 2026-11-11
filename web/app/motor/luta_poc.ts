@@ -4,7 +4,7 @@
 import { ERRO_MIRA_POC, FORMAS_ARENA, IDS_CENA, type Esquiva, type IdCena, type Stats as StatsArena, type Tiro } from "./arena/index.ts";
 import { NPC, type Lugar } from "./bots.ts";
 import { caraterCanonico, multEstagio, statsDe } from "./catalogo.ts";
-import { CTR, LINHA_DA_FORMA, STATS, VERSAO_V23 } from "./constantes.ts";
+import { CTR, LINHA_DA_FORMA, STATS, VERSAO_V23, VERSAO_V24 } from "./constantes.ts";
 import { DIGIMON_DA_FORMA } from "./nomes.ts";
 import type { Carater, Especie, Estagio, Forma, FormaAdultaNormal, Linha, Ramo, Stat, Stats } from "./tipos.ts";
 
@@ -71,7 +71,7 @@ export const LUTA_V23: TabelaLuta = Object.freeze({
   esquiva: { kChance: 1, kReacao: 1, kDash: 1, chanceMax: .95, pertoChance: 0, pertoReacao: 200, contraMs: 0, gamaMira: .6, gamaFolego: .6, kAtento: .5 },
 });
 /** a tabela da luta de uma versao de pet: a v23 tem a dela; as outras (a v21 e a v22), a de sempre */
-export const tabelaLuta = (versao: number): TabelaLuta => versao === VERSAO_V23 ? LUTA_V23 : LUTA_V21;
+export const tabelaLuta = (versao: number): TabelaLuta => versao === VERSAO_V23 || versao === VERSAO_V24 ? LUTA_V23 : LUTA_V21;   // a v24 e a v23 no grupo
 /** a esquiva da tabela na entrada do nucleo (so os numeros do nucleo); null sem esquiva */
 export const esquivaDaTabela = (T: TabelaLuta): Esquiva | null => {
   if (!T.esquiva) return null;

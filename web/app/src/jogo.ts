@@ -4,12 +4,12 @@
    muda em outra aba, esta relê o save em vez de gravar por cima. */
 import { passarParaIlhaComAgua } from "./ilhaAgua.ts";
 import { useEffect, useState } from "react";
-import { Motor, PetMorto, ehCerebroTrocavel } from "../motor/index.ts";
+import { GrupoDoJogo, Motor, PetMorto, ehCerebroTrocavel } from "../motor/index.ts";
 import { pedirAbertura } from "./abertura.ts";
 import { ligarProduto } from "./produto.ts";
 import { podeTrocarCerebro, type Cerebro } from "./cerebro.ts";
 import { CHAVE_LAB } from "./lab.ts";
-import { CHAVE, gravarSave, lerSave, petExemplo, textoSave, type Armazenamento } from "./save.ts";
+import { CHAVE, gravarSave, lerSave, petExemplo, textoSave, textoSaveGrupo, type Armazenamento } from "./save.ts";
 import { CHAVE_TAMER, Tamer, conferirBits, conferirBitsDoNivel, conferirCampeao, conferirItensDasMedalhas, conferirMedalhas, conferirRecordes, gravarTamer, lerTamer, sincronizarPet, type MedalhaGanha } from "./tamer.ts";
 import { versaoDoOvo } from "./lutaPoc.ts";
 import { assinaturaIntocada } from "./nivel.ts";
@@ -17,7 +17,12 @@ import { emitirSom } from "./somEventos.ts";
 
 export type Origem = "save" | "exemplo" | "novo";
 export interface Jogo {
+  /** o pet na tela: o de um pet so, ou, com os dois pets (v24, CO4c), o pet em foco do grupo */
   motor: Motor;
+  /** os dois pets (v24; motor/grupo_jogo.ts), ou null com um pet so. O tempo e as acoes do dono vao ao grupo pelo pet em foco */
+  grupo: GrupoDoJogo | null;
+  /** o pet do grupo em foco na tela (quem recebe a acao do dono; CO-6); "A" sem grupo */
+  foco: string;
   origem: Origem;
   /** save que existe e nao abriu: o app mostra o erro e nao grava por cima */
   erroSave: { erro: string; bruto: string } | null;
@@ -46,11 +51,12 @@ export function iniciarJogo(armaz: Armazenamento): Jogo {
   armazenamento = armaz;
   let erroTamer: string | null = null;
   try { tamer = lerTamer(armaz); } catch (err) { tamer = new Tamer(); erroTamer = err instanceof Error ? err.message : String(err); }
-  const l = lerSave(armaz), extra = { erroTamer, evolucoesAoTrocar: null, emLab: null };
+  const l = lerSave(armaz), extra = { erroTamer, evolucoesAoTrocar: null, emLab: null, foco: "A" };
   /* o pet v21 salvo passa para a ilha com agua na abertura (IA4), e o registro com o evento e gravado na hora */
   const passou = l.tipo === "ok" && passarParaIlhaComAgua(l.motor);
-  if (l.tipo === "ok") jogo = { motor: l.motor, origem: "save", erroSave: null, revisao: 0, nascendo: 0, ...extra };
-  else jogo = { motor: petExemplo(), origem: "exemplo", erroSave: l.tipo === "erro" ? { erro: l.erro, bruto: l.bruto } : null, revisao: 0, nascendo: 0, ...extra };
+  if (l.tipo === "ok") jogo = { motor: l.motor, grupo: l.grupo, origem: "save", erroSave: null, revisao: 0, nascendo: 0, ...extra,
+                                foco: l.grupo ? focoDoMotor(l.grupo, l.motor) : "A" };
+  else jogo = { motor: petExemplo(), grupo: null, origem: "exemplo", erroSave: l.tipo === "erro" ? { erro: l.erro, bruto: l.bruto } : null, revisao: 0, nascendo: 0, ...extra };
   /* o pet salvo pode estar atras do Tamer (medalha ganha com outro pet): recebe o "u" ja na abertura */
   if (l.tipo === "ok" && (medalhas(jogo).mudou || passou)) gravar();
   return jogo;
@@ -102,10 +108,20 @@ export function jogoAtual(): Jogo {
 }
 const avisar = (): void => { for (const o of ouvintes) o(); };
 
+/** o id do pet do grupo (o save guarda o foco pelo id) */
+function focoDoMotor(g: GrupoDoJogo, m: Motor): string {
+  const i = g.ids.find(k => g.motor(k) === m);
+  if (i === undefined) throw new Error("o pet na tela nao e do grupo");
+  return i;
+}
+/** o texto do save de hoje: o do grupo (com o foco) ou o de um pet so */
+const textoDoSave = (j: Jogo): string => (j.grupo ? textoSaveGrupo(j.grupo, j.foco) : textoSave(j.motor));
+
 function gravar(): void {
   const j = jogoAtual();
   if (j.erroSave || !armazenamento) return;
   if (j.emLab) armazenamento.setItem(CHAVE_LAB, textoSave(j.motor));   // o pet de teste vai para o espaco dele, nunca para o save de hoje
+  else if (j.grupo) armazenamento.setItem(CHAVE, textoDoSave(j));      // os dois pets: o registro do grupo
   else gravarSave(armazenamento, j.motor);
   ultimoGravado = performance.now(); pendente = false;
 }
@@ -116,7 +132,9 @@ export function gravarPendente(): void { if (pendente) gravar(); }
     passando grava no maximo a cada 2 s (como o HTML), e o resto sai ao esconder ou fechar a aba. */
 export function mudarMotor(f: (m: Motor) => void, quando: "agora" | "adiado" = "agora"): void {
   const j = jogoAtual();
-  try { f(j.motor); } catch (err) {
+  /* os dois pets (CO4c): a mudanca vai ao grupo pelo pet em foco, e o que ele grava entra no registro do grupo; o avancar dele anda os dois.
+     Com o pet de teste na tela, o grupo fica parado, como o pet de hoje */
+  try { if (j.grupo && !j.emLab) j.grupo.agir(j.foco, f); else f(j.motor); } catch (err) {
     /* pet v4 morto: a acao nao entra no registro; a tela passa a mostrar a morte e quem chamou recebe o erro */
     if (err instanceof PetMorto) avisar();
     throw err;
@@ -133,12 +151,32 @@ export function trocarMotor(m: Motor, origem: Origem, nascendo = 0): void {
   sairDoLab();            // trocar o pet e sempre sobre o pet de hoje: o pet de teste sai da tela, com o save dele intacto
   const j = jogoAtual();
   passarParaIlhaComAgua(m);        // o pet v21 guardado ou importado chega a ilha com agua ao abrir (IA4); o gravar abaixo o salva
-  j.motor = m; j.origem = origem; j.erroSave = null; j.nascendo = nascendo; j.revisao++;
+  j.motor = m; j.grupo = null; j.foco = "A"; j.origem = origem; j.erroSave = null; j.nascendo = nascendo; j.revisao++;
   /* pet guardado que estava pronto: recebe as medalhas agora e evolui (a revelacao conta a partir de antes) */
   const antes = m.evolucoes.length;
   medalhas(j);
   j.evolucoesAoTrocar = m.evolucoes.length > antes ? antes : null;
   gravar();
+  avisar();
+}
+/** os dois ovos chocando (CO4c): o grupo inteiro passa a ser o de hoje, com o primeiro pet em foco */
+export function trocarGrupo(g: GrupoDoJogo, origem: Origem, nascendo = 0): void {
+  sairDoLab();
+  const j = jogoAtual();
+  j.grupo = g; j.foco = g.ids[0]; j.motor = g.motor(j.foco);
+  j.origem = origem; j.erroSave = null; j.nascendo = nascendo; j.revisao++;
+  medalhas(j);
+  j.evolucoesAoTrocar = null;
+  gravar();
+  avisar();
+}
+/** muda o pet em foco do grupo (quem a tela mostra e quem recebe a acao do dono; CO-6). Sem grupo, falha */
+export function focar(ident: string): void {
+  const j = jogoAtual();
+  if (!j.grupo) throw new Error("so os dois pets tem foco");
+  if (j.emLab) throw new Error("volte ao seu pet antes de trocar o foco");
+  j.motor = j.grupo.motor(ident); j.foco = ident; j.revisao++;
+  pendente = true;
   avisar();
 }
 /** o pet de hoje: o ativo, mesmo com o pet de teste na tela */
@@ -200,11 +238,14 @@ export function ouvirOutrasAbas(): () => void {
       jogo.revisao++; avisar(); return;
     }
     if (ev.key !== CHAVE || !armazenamento || !jogo) return;
-    if (ev.newValue === null || ev.newValue === textoSave(motorReal())) return;
+    if (ev.newValue === null || (!jogo.emLab && ev.newValue === textoDoSave(jogo)) || (jogo.emLab && !jogo.grupo && ev.newValue === textoSave(motorReal()))) return;
     const l = lerSave(armazenamento);
     if (l.tipo === "ok") passarParaIlhaComAgua(l.motor);          // a outra aba pode ser de antes da IA4: o pet chega a ilha com agua aqui tambem
-    if (jogo.emLab) { if (l.tipo === "ok") jogo.emLab = l.motor; return; }    // o pet de hoje, guardado: relê ele, o de teste segue na tela
-    if (l.tipo === "ok") { jogo.motor = l.motor; jogo.origem = "save"; jogo.erroSave = null; jogo.revisao++; pendente = false; avisar(); }
+    if (jogo.emLab) { if (l.tipo === "ok") { jogo.emLab = l.motor; jogo.grupo = l.grupo; if (l.grupo) jogo.foco = focoDoMotor(l.grupo, l.motor); } return; }    // o pet de hoje, guardado: relê ele, o de teste segue na tela
+    if (l.tipo === "ok") {
+      jogo.motor = l.motor; jogo.grupo = l.grupo; jogo.foco = l.grupo ? focoDoMotor(l.grupo, l.motor) : "A";
+      jogo.origem = "save"; jogo.erroSave = null; jogo.revisao++; pendente = false; avisar();
+    }
     else if (l.tipo === "erro") { jogo.erroSave = { erro: "outra aba gravou um save que não abre: " + l.erro, bruto: l.bruto }; avisar(); }
   };
   addEventListener("storage", aoMudar);

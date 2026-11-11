@@ -12,8 +12,9 @@
    As sementes: o primeiro pet usa a do grupo; o segundo, `derivarSemente("segundo-pet", s)` cortada aos 32 bits das sementes do jogo (D-CO4b-2).
    Os dois nascem juntos, no tick de nascimento do jogo (TICK_INICIAL), que e o comeco do relogio do mundo (D-CO4b-3).
 
-   Nenhuma versao de pet nova aqui: o save e os dois ovos sao a CO4c. */
-import { CMU_MVP, CMU_MVP_AGUA, TICK_INICIAL, nasceNaAgua, type ConfigMundo } from "./constantes.ts";
+   Os pets sao da v24 (CO4c; motor/constantes.ts): o pet v24 so existe no grupo. O `avancar` de qualquer um dos dois anda o grupo inteiro,
+   para o relogio do jogo e as telas, que leem o pet em foco, seguirem como hoje (src/jogo.ts). */
+import { CMU_MVP, CMU_MVP_AGUA, TICK_INICIAL, VERSAO_V24, ehDoGrupo, nasceNaAgua, type ConfigMundo } from "./constantes.ts";
 import { CONFIG_GRUPO_LIGADA, Grupo, ROTULO_SEGUNDO_PET } from "./grupo.ts";
 import { Motor } from "./motor.ts";
 import type { EventoRegistro } from "./tipos.ts";
@@ -41,6 +42,7 @@ export class GrupoDoJogo {
 
   constructor(semente: number, versao: number) {
     if (!Number.isInteger(semente) || semente < 0 || semente > 0xffffffff) throw new Error(`semente do grupo fora dos 32 bits: ${semente}`);
+    if (!ehDoGrupo(versao)) throw new Error(`o grupo do jogo e de pets v${VERSAO_V24}, nao v${versao}`);
     this.semente = semente;
     this.versao = versao;
     this.grupo = new Grupo(mundoDaVersao(versao), semente, CONFIG_GRUPO_LIGADA,
@@ -51,6 +53,8 @@ export class GrupoDoJogo {
       motores[ident] = this.grupo.entrarMotor(ident, TICK_INICIAL, parte => new Motor(s, versao, { parteDoMundo: parte }), "jogo", "jogador") as Motor;
     }
     this.motores = Object.freeze(motores);
+    /* CO4c: o avancar de qualquer um dos dois anda o grupo (o relogio do jogo chama o do pet em foco) */
+    for (const m of Object.values(motores)) m.ligarAvancoDoGrupo(n => this.avancar(n));
   }
 
   get ids(): readonly string[] { return CONFIG_GRUPO_LIGADA.ids; }
@@ -66,10 +70,12 @@ export class GrupoDoJogo {
   /** um avanco do grupo: o "t" no registro do grupo e no de cada pet, os ticks intercalados no Grupo e, no fim, a conferencia da morte */
   avancar(n: number): void {
     if (!Number.isInteger(n) || n <= 0) throw new Error(`avanco precisa de ticks inteiros positivos: ${n}`);
+    this.descarregar();                          // dentro de uma acao do dono: o que o pet gravou antes do tempo vem antes dele
     const u = this.log[this.log.length - 1];
     if (u && u[1] === "t" && u[3] === null && u[0] + (u[2] as number) === this.tick) u[2] = (u[2] as number) + n;
     else this.log.push([this.tick, "t", n, null]);
     this._avancar(n);
+    if (this.acao !== null) this.acao.cursor = this.motor(this.acao.ident).log.length;   // o "t" do pet ja esta no registro do grupo
   }
 
   private _avancar(n: number): void {
@@ -85,15 +91,29 @@ export class GrupoDoJogo {
   /** o dono faz algo com o pet `ident` pelo Motor dele (observar, deixarBola, lutarPoc...): o que o Motor grava no registro dele vai ao
       registro do grupo, com o id. Um avanco dentro da acao falha alto (o tempo e do grupo) */
   agir<T>(ident: string, f: (m: Motor) => T): T {
-    const m = this.motor(ident), antes = m.log.length, ultimo = antes > 0 ? JSON.stringify(m.log[antes - 1]) : null;
-    const r = f(m);
-    if (m.log.length < antes || (antes > 0 && JSON.stringify(m.log[antes - 1]) !== ultimo))
-      throw new Error(`a acao do dono reescreveu o registro do pet ${ident}`);
-    for (const ev of m.log.slice(antes)) {
-      if (ev[1] === "t") throw new Error(`a acao do dono andou o tempo do pet ${ident}: o tempo e do grupo`);
-      this.log.push([ev[0], ev[1], ev[2], ident]);
+    if (this.acao !== null) throw new Error(`acao do dono dentro de outra (do pet ${this.acao.ident})`);
+    const m = this.motor(ident);
+    this.acao = { ident, cursor: m.log.length };
+    try {
+      const r = f(m);
+      this.descarregar();
+      return r;
+    } finally {
+      this.acao = null;
     }
-    return r;
+  }
+  /** a acao do dono em andamento: o pet e ate onde o registro dele ja foi para o do grupo. Um avanco dentro dela (o relogio do jogo pelo
+      `mudarMotor`, CO4c) entra no registro do grupo na ordem certa: o que veio antes, o "t", e o que veio depois */
+  private acao: { ident: string; cursor: number } | null = null;
+  private descarregar(): void {
+    if (this.acao === null) return;
+    const m = this.motor(this.acao.ident);
+    if (m.log.length < this.acao.cursor) throw new Error(`a acao do dono reescreveu o registro do pet ${this.acao.ident}`);
+    for (const ev of m.log.slice(this.acao.cursor)) {
+      if (ev[1] === "t") throw new Error(`o pet ${this.acao.ident} andou o tempo por fora do grupo`);
+      this.log.push([ev[0], ev[1], ev[2], this.acao.ident]);
+    }
+    this.acao.cursor = m.log.length;
   }
 
   // ------------------------------------------------------------ o replay

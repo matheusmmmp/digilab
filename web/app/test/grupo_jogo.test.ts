@@ -1,15 +1,16 @@
 /* O Motor do jogo dentro do Grupo (docs/TAREFA_V3_COOPERACAO.md, etapa CO4b; motor/grupo_jogo.ts):
-   - dois Motors inteiros (v23) na ilha com agua, o tempo andando pelo grupo, um tick por vez na vez sorteada;
+   - dois Motors inteiros (v24, CO4c) na ilha com agua, o tempo andando pelo grupo, um tick por vez na vez sorteada;
    - o mundo e um so: a racao que o dono deixa por um pet pode ser comida pelo outro, e as comidas, a bola e as quedas sao as mesmas;
    - cada pet tem a percepcao do outro, os contatos e os chamados dele;
    - o G-REPLAY-2 no motor: o registro do grupo refeito da a mesma assinatura, e um evento desconhecido, fora do tick ou de um pet de fora falha
      alto;
-   - o pet do grupo nao anda sozinho (o avancar dele falha alto), e o pet sozinho de hoje nao muda (o G-HOJE segue nos testes de cada versao). */
+   - o avancar de um pet do grupo anda o grupo inteiro (CO4c), e a acao do dono com o tempo dentro entra no registro na ordem certa;
+   - a v24 so existe no grupo, e o grupo so tem a v24; o pet sozinho de hoje nao muda (o G-HOJE segue nos testes de cada versao). */
 import { describe, expect, test } from "vitest";
 import { TICK_INICIAL, TPD } from "../motor/constantes.ts";
 import { GrupoDoJogo, Motor, derivarSemente, sementeDoSegundoJogo, type EventoGrupoJogo } from "../motor/index.ts";
 
-const VERSAO = 23;
+const VERSAO = 24;
 
 /** o dono de roteiro: a cada passo de 15 ticks, a racao a um pet (alternando), o carinho no outro de vez em quando e a limpeza */
 function viver(semente: number, passos: number): GrupoDoJogo {
@@ -93,11 +94,22 @@ describe("o Motor do jogo dentro do Grupo", () => {
     expect(() => GrupoDoJogo.reproduzir(101, VERSAO, com(l => { l.splice(i, 0, [l[i][0], "t", 5, "A"]); }))).toThrow(/avanco com pet/);
   });
 
-  test("o pet do grupo nao anda sozinho, e o dono nao age por fora do Motor", () => {
-    expect(() => g.motor("A").avancar(1)).toThrow(/GrupoDoJogo/);
-    expect(() => g.agir("A", m => m.avancar(1))).toThrow(/GrupoDoJogo/);
+  test("o avancar de um pet anda o grupo, e a acao com o tempo dentro entra na ordem (o relogio do jogo pelo mudarMotor, CO4c)", () => {
+    const h = new GrupoDoJogo(303, VERSAO), t0 = h.tick;
+    h.motor("B").avancar(15);
+    expect([h.tick, h.motor("A").e.tick, h.motor("B").e.tick]).toEqual([t0 + 15, t0 + 15, t0 + 15]);
+    expect(h.log).toEqual([[t0, "t", 15, null]]);
+    h.agir("A", m => { m.observar("acariciar"); m.avancar(15); m.observar("limpar"); });
+    expect(h.log.map(e => [e[0] - t0, e[1], e[3]])).toEqual([[0, "t", null], [15, "d", "A"], [15, "t", null], [30, "d", "A"]]);
+    expect(GrupoDoJogo.reproduzir(303, VERSAO, h.log).assinatura()).toBe(h.assinatura());
+    expect(() => h.agir("A", () => h.agir("B", () => 0))).toThrow(/dentro de outra/);
     expect(() => g.grupo.acaoDono("A", "acariciar")).toThrow(/pelo Motor/);
-    const so = new Motor(101, VERSAO);
+  });
+
+  test("a v24 so existe no grupo, e o grupo so tem a v24; o pet sozinho de hoje anda como sempre", () => {
+    expect(() => new Motor(101, VERSAO)).toThrow(/so nasce no grupo/);
+    expect(() => new GrupoDoJogo(101, 23)).toThrow(/v24/);
+    const so = new Motor(101, 23);
     expect(so.noGrupo).toBe(false);
     so.avancar(30);
     expect(so.e.tick).toBe(TICK_INICIAL + 30);

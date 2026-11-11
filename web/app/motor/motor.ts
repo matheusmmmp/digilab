@@ -8,7 +8,7 @@
    v21 nao muda (test/luta_poc_pet.test.ts). */
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, CUIDADO_NA_HORA, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
-  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehLutaPoc, nasceNaAgua,
+  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehDoGrupo, ehLutaPoc, nasceNaAgua, VERSAO_V24,
   CMU_MVP_AGUA, ILHA_DOS_V21, VERSOES_COM_SACUDIR,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
@@ -248,6 +248,9 @@ export class Motor {
     if (!VERSOES_PET.includes(versao) && versao !== VERSAO_PET_LAB) throw new Error(`versão de pet desconhecida: ${versao} (só a ${VERSOES_PET.join(" e a ")} e o pet de teste v${VERSAO_PET_LAB} abrem; os pets de antes, com o combate por turnos, foram descartados)`);
     this.semente = semente; this.versao = versao as VersaoPet;
     this.noGrupo = opcoes.parteDoMundo !== undefined;
+    /* a v24 so existe no grupo, e o grupo so tem a v24 (CO4c) */
+    if (this.noGrupo !== ehDoGrupo(versao))
+      throw new Error(this.noGrupo ? `o pet do grupo e da v${VERSAO_V24}, nao da v${versao}` : `o pet v${VERSAO_V24} so nasce no grupo, com o irmao`);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
     this.temp = temperamentoDe(semente);
     /* o Bandit nao decide nem aprende para o pet; fica so a memoria por espacos dele, como o lobo de memoria e emocao (D-W7 do #201): a
@@ -909,9 +912,20 @@ export class Motor {
 
   /* ---------------------------------------------------------------- tempo */
   avancar(n: number): void {
-    if (this.noGrupo) throw new Error("o pet do grupo anda pelo GrupoDoJogo, um tick por vez na vez sorteada (CO4b)");
+    if (this.noGrupo) {
+      /* CO4c: o tempo do pet do grupo e o do grupo; o relogio do jogo (src/tempo.ts) anda os dois pets por aqui */
+      if (this.avancarDoGrupo === null) throw new Error("o pet do grupo anda pelo GrupoDoJogo, um tick por vez na vez sorteada (CO4b)");
+      this.avancarDoGrupo(n);
+      return;
+    }
     this._registrarAvanco(n);
     this._avancar(n);
+  }
+  /** o avanco do grupo do pet (o GrupoDoJogo o liga na montagem; CO4c) */
+  private avancarDoGrupo: ((n: number) => void) | null = null;
+  ligarAvancoDoGrupo(f: (n: number) => void): void {
+    if (!this.noGrupo || this.avancarDoGrupo !== null) throw new Error("ligarAvancoDoGrupo so uma vez, no pet do grupo");
+    this.avancarDoGrupo = f;
   }
   private _registrarAvanco(n: number): void {
     if (!(n > 0)) throw new Error("avanco precisa ser positivo");

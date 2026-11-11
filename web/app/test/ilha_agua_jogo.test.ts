@@ -48,8 +48,8 @@ function viver(m: Motor, dias: number): number {
 describe("a versao 22: o ovo novo nasce na ilha com agua", () => {
   test("a v22 e a v21 com o mundo da agua e o controlador; a v21 segue abrindo", () => {
     expect([VERSAO_PET, VERSAO_V22, VERSAO_V21]).toEqual([23, 22, 21]);
-    expect(VERSOES_PET).toEqual([21, 22, 23]);
-    expect([versaoDoOvo(), versoesQueAbrem()]).toEqual([23, [21, 22, 23]]);
+    expect(VERSOES_PET).toEqual([21, 22, 23, 24]);   // a v24: os dois pets (CO4c)
+    expect([versaoDoOvo(), versoesQueAbrem()]).toEqual([23, [21, 22, 23, 24]]);   // a v24: os dois pets (CO4c)
     expect([21, 22, 23].map(v => [ehCerebroTrocavel(v), ehLutaPoc(v)])).toEqual([[true, true], [true, true], [true, true]]);
     expect(ehLutaPoc(VERSAO_PET_LAB)).toBe(false);
     const novo = new Motor(101), velho = new Motor(101, 21);

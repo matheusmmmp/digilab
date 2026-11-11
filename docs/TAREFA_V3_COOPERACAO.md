@@ -288,3 +288,21 @@ Esta parte deixa os dois pets viverem na ilha com água, onde o jogo nasce:
   - O G-REPLAY-2 no motor: a mesma assinatura, o registro de cada pet como projeção, e o replay recusa o evento desconhecido, o pet de
     fora e o tick errado.
 - **Os desvios:** D-CO4b-1 a D-CO4b-5, no registro de 2026-11.
+
+## CO4c, o save e os dois ovos (2026-11-11, Claude Code, Opus 5.5, branch `v3-cooperacao-co4c`)
+
+- **A v24** (`motor/constantes.ts`): a v23 que nasce no grupo. O pet v24 só existe no grupo. O `VERSAO_PET` (o ovo de um pet só) segue 23.
+- **Os dois ovos** (`src/jornada.ts`, `chocarDoisOvos`): o primeiro é do brasão escolhido, e o segundo é surpresa ("Um brasão, o outro
+  surpresa"). Ficam atrás da chave `DOIS_OVOS_LIGADO`, desligada até a CO4d.
+- **O save do grupo** (`src/save.ts`): `{semente, log, versao, grupo: true, foco}`, na mesma chave. Abrir é refazer o registro do grupo.
+- **O jogo** (`src/jogo.ts`):
+  - o `Jogo` ganha o grupo e o pet em foco (`trocarGrupo`, `focar`);
+  - o `mudarMotor` passa pelo grupo;
+  - o `avancar` do pet em foco anda os dois.
+- **O teste** (`web/app/test/dois_ovos.test.ts`):
+  - os dois ovos;
+  - o G-REPLAY-2 no save (a mesma assinatura e o mesmo foco ao abrir);
+  - o save malformado como erro;
+  - o jogo com os dois pets: o relógio, a ação no pet em foco, a troca do foco e o grupo gravado;
+  - o pet de um pet só igual.
+- **Os desvios:** D-CO4c-1 a D-CO4c-5, no registro de 2026-11.
