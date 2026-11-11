@@ -409,3 +409,112 @@ aqui por causa deles:
   unidades do comedouro, fora do raio de 16 daquele teste.
 - **O sacudir a árvore** (S2) está no motor da web, mas nenhuma versão de pet o tem ainda; a ida para a ilha grande recusa mundo com
   árvores do layout, e nenhum pet de hoje as tem.
+
+### 12.13 IG5: o plano da medida (escrito antes de rodar, 2026-11-11)
+
+**Para que serve:** decidir a IG-6 (a velocidade, o cheiro e o alcance da memória do pet na ilha grande) com números. A v24 já está no
+jogo: qualquer mudança que sair daqui é outra versão de pet, e a decisão é do Matheus.
+
+**O que roda:** o `Motor` do jogo (`web/app/motor/motor.ts`), que é o que o jogador joga, com as chaves do produto. Não é run de pesquisa
+do Python: é uma medida descritiva do produto, sem hipótese científica, só com as sementes dos testes (101, 202, 303, 404, 505).
+
+- **Os dois mundos:** a v23 (a ilha com água de 64 × 30) e a v24 (a ilha grande). As duas têm a mesma luta e o mesmo cérebro; só o
+  mundo muda.
+- **Os dois cérebros:** o DigiBrain modular (o padrão dos ovos) e o A (a escolha em Ajustes).
+- **O dono:** a cada 30 ticks, com o pet acordado, com fome abaixo de 0,6 e sem comida no chão, põe uma ração no lugar do cenário;
+  limpa quando o pet está sujo e faz carinho a cada 5 passos. Cinco dias por vida.
+- **Os cenários** são os três lugares que a tela de alimentar oferece (`lugaresNomeados`): o **comedouro**, **perto** (2 células do
+  pet) e **longe** (20 células do pet).
+- **O retorno** (só descritivo): depois de 2 dias comendo no comedouro, o dono solta o pet a 20, 40 e 70 células a leste do comedouro
+  (70 só cabe na ilha grande), com fome e sem comida no chão, e mede se em um dia ele chega a 3 células do comedouro.
+
+**O que se mede, por vida:** as rações postas e comidas; a fração comida em até 240 ticks; a mediana de ticks até comer; a fração dos
+passos com fome abaixo de 0,2; a fome média; a distância andada por dia; as células distintas visitadas sobre as livres; o tempo de
+máquina por dia de jogo (no Node desta máquina).
+
+**A regra da leitura (fixada antes de ver os números):** para cada cérebro e cenário, compara-se a média das cinco sementes da v24 com a
+da v23.
+
+- O pet está **pior na ilha grande** se a fração comida em 240 ticks cai mais de 0,10 ou a fração de passos com fome abaixo de 0,2 sobe
+  mais de 0,10.
+- **Nenhum cenário pior:** a recomendação é não mexer na velocidade nem no cheiro.
+- **Pior só no "longe":** a recomendação é rever o cheiro (o alcance de 24 células), não a velocidade.
+- **Pior no comedouro ou no "perto":** a recomendação é rever a velocidade, e o número sai de uma segunda medida.
+- **O retorno** decide só a memória: se o pet volta de 40 e não de 70 células, a recomendação é levar o alcance da memória (64 células)
+  para a proporção do mapa novo.
+
+São cinco sementes: a leitura é descritiva, sem intervalo de confiança, e a diferença de 0,10 é um corte prático. PROPOSTO, SEM FONTE.
+O artefato é o `docs/pranchas/ilha-grande/medida_ig5.json`, gravado pelo `web/app/test/medir_ilha_grande.test.ts` com `MEDIR_IG5=1`.
+
+### 12.14 IG5: o resultado da medida (2026-11-11)
+
+Artefato: `docs/pranchas/ilha-grande/medida_ig5.json` (`MEDIR_IG5=1 npx vitest run test/medir_ilha_grande.test.ts`, no commit `a59685d2`,
+sobre a `main` `ec6aa985`). Médias de cinco sementes, cinco dias por vida.
+
+| Cérebro | Lugar da ração | Comida em 240 ticks: hoje → grande | Passos com fome baixa: hoje → grande | Pior pela regra? |
+|---|---|---|---|---|
+| modular | comedouro | 0,800 → 0,815 | 0,008 → 0,005 | não |
+| modular | perto | 0,899 → 0,896 | 0,013 → 0,002 | não |
+| modular | longe | 0,183 → 0,139 | 0,375 → 0,462 | não (a fome baixa sobe 0,087, perto do corte de 0,10) |
+| A | comedouro | 0,437 → 0,324 | 0,450 → 0,555 | **sim** (cai 0,113 e sobe 0,105) |
+| A | perto | 0,443 → 0,452 | 0,465 → 0,465 | não |
+| A | longe | 0,067 → 0,000 | 0,825 → 0,855 | não (é ruim nos dois mundos) |
+
+**O retorno** (o pet solto com fome a uma distância do comedouro, sem comida no chão; quantos de 5 chegam a 3 células dele em um dia):
+
+| Cérebro | 20 células | 40 células | 70 células (só na ilha grande) |
+|---|---|---|---|
+| modular, hoje | 5 de 5 | 5 de 5 | não cabe |
+| modular, grande | 5 de 5 | 5 de 5 | **1 de 5** (a menor distância média foi 43,5 células) |
+| A, nos dois mundos | 0 de 5 | 0 de 5 | 0 de 5 |
+
+**Outros números:** o modular anda o mesmo por dia nos dois mundos (107 a 123 células no de hoje, 113 a 128 na ilha grande) e visita
+22 a 30 % das células livres do mundo de hoje contra 7 a 10 % da ilha grande: ele usa a mesma área em volta do lar, e o resto da ilha
+fica sem visita. O tempo de máquina por dia de jogo, no Node desta máquina, foi de 29 a 50 ms no mundo de hoje e de 50 a 62 ms na ilha
+grande com o modular.
+
+**A leitura pela regra fixada no plano (12.13):**
+
+- **A velocidade:** a regra dispara no cérebro A com a ração no comedouro. Com o modular, que é o cérebro dos ovos, nenhum cenário
+  piora no comedouro nem no "perto".
+- **O cheiro:** a regra não dispara ("pior só no longe" não aconteceu), mas o modular no "longe" ficou a 0,013 do corte na fome baixa.
+- **A memória:** a regra dispara. O modular volta de 40 células e não de 70.
+
+**Interpretação desta sessão sobre o cérebro A no comedouro (NÃO CONFIRMADA):** no layout da ilha grande o comedouro fica a 8 células
+do ninho; no mundo de hoje, a 6, que é o raio da visão. A piora do A pode vir dessa distância, que é escolha do layout da IG1, e não
+da velocidade: no "perto" (2 células do pet) o A fica igual nos dois mundos. Não foi medido com o comedouro a 6 células.
+
+**Limites:** cinco sementes, sem intervalo de confiança; o corte de 0,10 é prático. O dono da medida não é um jogador de verdade. O
+custo no celular de verdade continua sem medida.
+
+### 12.15 IG-6: as decisões do Matheus e o adendo da medida (2026-11-11)
+
+**Decidido pelo Matheus em 2026-11-11** (pergunta desta sessão, com a recomendação e o custo de errar):
+
+- **A memória do modular:** "Sim, para 128 células (Recomendado)".
+- **O comedouro a 6 células do ninho:** "Sim, junto com a memória (Recomendado)", com a medida da hipótese antes de mudar.
+- **A velocidade e o cheiro:** não mexer (a recomendação; a regra do plano não disparou para o modular).
+
+As duas mudanças são uma versão nova de pet, a fazer numa etapa própria (a IG6), com plano, paridade e a decisão sobre os pets v24 que
+já existem.
+
+**Adendo da medida, escrito antes de rodar** (exploratório, fora do plano da 12.13): a hipótese de que o cérebro A piora no comedouro
+da ilha grande por causa da distância ao ninho. Um cenário a mais, `comedouro6`, só na ilha grande: a ração num ponto a 6 células a
+leste do ninho, no lugar do comedouro (que fica a 8). Com os dois cérebros, as mesmas sementes e o mesmo dono. **A leitura:** a
+hipótese se sustenta se, no A, a fração comida em 240 ticks do `comedouro6` voltar para perto da do mundo de hoje (0,437; a menos de
+0,10) e a do modular não piorar mais de 0,10 contra o comedouro de hoje da ilha grande (0,815).
+
+**O resultado do adendo** (no mesmo artefato, chave `adendo_comedouro6`; médias de cinco sementes, na ilha grande):
+
+| Cérebro | Ração no comedouro (8 células do ninho) | Ração a 6 células do ninho |
+|---|---|---|
+| A | 0,324 comida em 240 ticks; fome baixa em 0,555 dos passos | 0,234; fome baixa em 0,645 |
+| modular | 0,815; 0,005 | 0,804; 0,017 |
+
+**A hipótese não se sustenta.** Com a ração a 6 células do ninho o A comeu menos, não mais (0,234 contra 0,324), longe do 0,437 do
+mundo de hoje. A piora do A no comedouro da ilha grande não vem da distância entre o ninho e o comedouro. A causa não foi achada. O A
+come pouco nos dois mundos e varia muito entre as sementes: no comedouro, a fração comida vai de 0,2 a 0,77 no mundo de hoje e de
+0 a 0,85 na ilha grande, com 4 a 13 rações postas por vida. Com cinco sementes, a diferença entre as médias do A pode ser só essa variação.
+
+**A recomendação muda:** não mexer no lugar do comedouro. A decisão do Matheus era mudar "com a medida da hipótese antes"; a medida
+diz que mudar não ajuda. Fica a mudança da memória (128 células), que não depende disto. A confirmar com ele.
