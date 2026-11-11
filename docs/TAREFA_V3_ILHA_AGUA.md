@@ -518,3 +518,23 @@ come pouco nos dois mundos e varia muito entre as sementes: no comedouro, a fra�
 
 **A recomendação muda:** não mexer no lugar do comedouro. A decisão do Matheus era mudar "com a medida da hipótese antes"; a medida
 diz que mudar não ajuda. Fica a mudança da memória (128 células), que não depende disto. A confirmar com ele.
+
+### 12.16 IG6: a memória de 128 células (o plano)
+
+**Decidido pelo Matheus em 2026-11-11:** "Sim, só a memória" (o comedouro fica onde está, depois do adendo da 12.15) e "Todos, por evento
+(Recomendado)" (quem recebe o alcance novo).
+
+- **O que muda:** o alcance da memória de lugar do DigiBrain modular (`d_max`, a distância em que o lugar lembrado deixa de atrair)
+  passa de 1 024 para 2 048 subunidades (de 64 para 128 células) nos pets da ilha grande. É o único número que muda.
+- **A v25:** os ovos novos nascem v25, a v24 com o alcance de 128 células. As outras versões seguem abrindo.
+- **Os pets vivos:** o pet v21 a v24 que está na ilha grande ganha, uma vez, o evento `ma` no registro ao abrir. Só o alcance muda: o
+  que ele lembra, o corpo, o mundo e o vínculo ficam como estão. Vale com o cérebro A decidindo (o alcance fica guardado para quando o
+  modular voltar). O pet de teste (v16), o pet morto e o que não está na ilha grande não recebem.
+- **Atrás de chave:** o parâmetro já existe no Python (`ConfigDigibrainInatos.d_max`) e na web; com o valor de hoje, as vidas de hoje
+  saem byte a byte (os gabaritos do modular não mudam).
+- **A paridade:** um gabarito novo (`digibrain_modular_alcance.json.gz`), no molde do dos fins: vidas do modular nascidas com o alcance
+  de 128 células, que a web refaz decisão a decisão. A troca no meio da vida (o evento) é conferida por um caso fixo igual nos dois
+  lados e por vidas no jogo.
+- **A conferência do efeito:** a medida do retorno da IG5 (12.14), repetida com a v25: a regra é a mesma do plano (o pet volta de 70
+  células?). O resultado entra no mesmo artefato, numa chave nova.
+- **O que não muda:** a velocidade, o cheiro, o lugar do comedouro.
