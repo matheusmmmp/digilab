@@ -3,6 +3,8 @@
 
 /* ---- A janela pequena (gostoVisual/JanelaTv.tsx; a prancha janela_360, 2026-11-11): sempre escura, na pele dos menus (tokens --hx-*);
    nenhuma cor nova. Sem rolagem: o palco encolhe e os botões ficam no pé. Os tamanhos são PROPOSTOS, SEM FONTE. */
+/* o fundo do documento da janela é escuro (color-scheme): na pele Vidro o miolo é translúcido, e sem isto ele ficaria sobre o branco */
+html:has(> body > .jtv){ color-scheme:dark }
 body:has(> .jtv){ margin:0; background:var(--hx-miolo) }
 .jtv{ box-sizing:border-box; height:100vh; display:flex; flex-direction:column; gap:12px; padding:14px; overflow:hidden;
   background:var(--hx-miolo); color:var(--hx-texto); font:500 16px/1.35 var(--hx-f) }
@@ -11,7 +13,7 @@ body:has(> .jtv){ margin:0; background:var(--hx-miolo) }
 .jtv-selo > i{ width:9px; height:9px; border-radius:50%; background:var(--hx-alerta); flex:none }
 .jtv-fraco{ color:var(--hx-sec); font-size:14px }
 .jtv-erro{ padding:6px 10px; border:1px solid var(--hx-perigo); color:var(--hx-perigo); font-size:14px }
-.jtv-palco{ flex:1; min-height:120px; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:0; padding:12px 12px 16px;
+.jtv-palco{ flex:1; min-height:0; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:0; padding:12px 12px 16px;
   border:1px solid var(--hx-borda); background:var(--hx-miolo-2); overflow:hidden }
 .jtv-balao{ position:relative; padding:8px 14px; border:1px solid var(--hx-borda); background:var(--hx-miolo); font-weight:600; text-align:center }
 .jtv-balao::after{ content:""; position:absolute; left:50%; bottom:-7px; width:12px; height:12px; rotate:45deg; translate:-50% 0;
@@ -46,7 +48,7 @@ body:has(> .jtv){ margin:0; background:var(--hx-miolo) }
 .tvp-bts{ display:flex; flex-wrap:wrap; gap:8px; align-items:center }
 .tvp-bts > .hx-btn{ flex:1 1 0; min-height:44px; white-space:nowrap; display:inline-flex; align-items:center; justify-content:center; gap:8px }
 .tvp-cheio{ width:100%; min-height:44px; display:inline-flex; align-items:center; justify-content:center; gap:8px }
-.tvp-p{ align-self:flex-start; min-height:36px }
+.tvp-p{ align-self:flex-start; min-height:44px }
 .tvp svg{ width:18px; height:18px; flex:none }
 .tvp-abre{ display:flex; align-items:center; gap:6px; min-height:44px; padding:0; border:0; background:none; color:var(--hx-texto); font:700 15px var(--hx-f); cursor:pointer; text-align:left }
 .tvp-abre:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }

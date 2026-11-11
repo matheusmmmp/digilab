@@ -15,7 +15,7 @@ import { PALAVRA_REACAO } from "../src/gostoVisual/leituraGosto.ts";
 const fonte = (rel: string): string => readFileSync(join(import.meta.dirname, "..", rel), "utf8");
 const vista = (m: Partial<VistaJanela> = {}): VistaJanela => ({
   sprite: null, reacao: "adorando", inato: inatoDaSemente(101), estado: estadoInicial(), origem: "jogo", programa: "desenho colorido", temSom: true,
-  nome: "Agumon", dito: "Está adorando.", erro: null, ...m,
+  nome: "Agumon", dito: "Está adorando.", erro: null, podeCarinho: true, ...m,
 });
 const html = (m: Partial<VistaJanela> = {}): string => renderToStaticMarkup(h(JanelaDaTv, { v: vista(m), carinho: () => {}, parar: () => {} }));
 
@@ -61,6 +61,12 @@ describe("a janela pequena: só o pet, a reação, uma linha e dois botões (se�
     expect(t).toMatch(/Parar<\/button>/);
     expect(t).not.toMatch(/Por quê|De nascença|tvp-|gv-|carinhos|Assistiram/);
   });
+  test("onde o jogo não aceita o carinho, o botão fica desligado e uma linha diz por quê", () => {
+    const t = html({ podeCarinho: false });
+    expect(t).toMatch(/data-janela-tv-carinho="" disabled="" aria-describedby="jtv-sem-carinho"/);
+    expect(t).toContain('id="jtv-sem-carinho" data-testid="janela-tv-sem-carinho">O carinho volta quando o jogo estiver na tela do pet.</p>');
+    expect(html()).not.toMatch(/disabled|janela-tv-sem-carinho/);
+  });
   test("o pet tem o nome da forma como texto alternativo, com e sem o quadro", () => {
     expect(html({ sprite: "data:image/png;base64,AA" })).toContain('<img class="dl-pix jtv-sprite" src="data:image/png;base64,AA" alt="Agumon"/>');
     expect(html()).toContain('role="img" aria-label="Agumon"');
@@ -88,7 +94,9 @@ describe("a janela flutuante", () => {
   });
   test("o hospedeiro: o Carinho é o do jogo, o Esc fecha a janela sem parar a TV, e o balão segue o mínimo do sinal", () => {
     const g = fonte("src/gostoVisual/GostoVisual.tsx");
-    expect(g).toContain('carinho={() => { agir("acariciar"); }} parar={pararTv}');
+    expect(g).toContain('carinho={() => { if (carinhoVale()) agir("acariciar"); }} parar={pararTv}');
+    /* a janela fica à mão em qualquer rota: o carinho só vale onde o toque no pet vale, e sem luta na tela */
+    expect(g).toContain("const carinhoVale = (): boolean => !toqueIgnorado() && !lutaSeguraTempo(), podeCarinho = carinhoVale();");
     expect(g).toContain('if (e.key === "Escape") { e.preventDefault(); fecharJanelaDaTv(); }');
     expect(g).toContain("useRef(new FilaSinal()).current.passo(");
     expect(g).toContain('querySelector<HTMLElement>("[data-janela-tv-carinho]")?.focus()');

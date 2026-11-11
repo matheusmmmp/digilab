@@ -5,7 +5,8 @@
    - o selo "Vendo a sua tela" aparece enquanto a tela do dono é lida (UX-GV-6); na TV do jogo, uma linha diz o programa;
    - a janela é sempre escura (a pele dos menus, tokens --hx-*), para não disputar com o que o dono assiste.
    A vista não tem estado próprio (o teste a renderiza no node); o hospedeiro (GostoVisual.tsx) a põe na janela flutuante
-   (janelaPequena.ts). Só existe com `?gosto_visual=1`. Fora do motor, do log e do save. */
+   (janelaPequena.ts). Só existe com `?gosto_visual=1`. Fora do motor, do log e do save, exceto o Carinho, que é o do jogo: o hospedeiro
+   o grava pela porta de sempre das ações do dono e só onde o jogo aceita o toque no pet (`podeCarinho`). */
 import { Hand, Square } from "lucide-react";
 import { COMPONENTES, alvos, gostaMaisDe, type EstadoGosto, type Inato, type Reacao } from "./gosto.ts";
 import { IMAGEM, PALAVRA_REACAO } from "./leituraGosto.ts";
@@ -28,6 +29,8 @@ export interface VistaJanela {
   /** o que o leitor de tela ouve (a reação, no ritmo do hospedeiro) */
   dito: string;
   erro: string | null;
+  /** o jogo aceita o carinho agora (o mesmo critério do toque no pet: sem luta na tela, sem menu nem lugar aberto por cima da cena) */
+  podeCarinho: boolean;
 }
 
 /** a janela pequena: o selo ou o programa, o palco com o balão e o pet, a linha do gosto e os dois botões */
@@ -47,8 +50,10 @@ export function JanelaDaTv({ v, carinho, parar }: { v: VistaJanela; carinho: () 
       </div>
       <p className="sr-only" role="status" data-testid="janela-tv-status">{v.dito}</p>
       <p className="jtv-gosto" data-testid="janela-tv-gosto">Gosta mais de: {gostaMaisDe(alvos(v.inato, v.estado), quais)}.</p>
+      {!v.podeCarinho && <p className="jtv-fraco" id="jtv-sem-carinho" data-testid="janela-tv-sem-carinho">O carinho volta quando o jogo estiver na tela do pet.</p>}
       <div className="jtv-bts">
-        <button type="button" className="hx-continuar" data-janela-tv-carinho="" onClick={carinho}><Hand aria-hidden="true" />Carinho</button>
+        <button type="button" className="hx-continuar" data-janela-tv-carinho="" disabled={!v.podeCarinho} aria-describedby={v.podeCarinho ? undefined : "jtv-sem-carinho"}
+          onClick={carinho}><Hand aria-hidden="true" />Carinho</button>
         <button type="button" className="hx-btn" onClick={parar}><Square aria-hidden="true" />Parar</button>
       </div>
     </div>

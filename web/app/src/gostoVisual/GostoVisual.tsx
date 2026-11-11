@@ -1,5 +1,6 @@
 /* O protótipo P0 do gosto visual na tela (docs/futuro/gosto_visual_pet.md, seção 14). Atrás da chave `?gosto_visual=1`; desligado, não
-   monta. Fora do motor, do log e do save do pet.
+   monta. Fora do motor, do log e do save do pet, exceto o Carinho da janela pequena, que é o do jogo (a ação "acariciar", a porta de
+   sempre) e só vale onde o jogo aceita o toque no pet.
    Desde a etapa 1 do docs/PLANO_UX_GOSTO_VISUAL.md (2026-11-11) o cartão do canto saiu (UX-GV-1): o controle e a leitura estão no painel
    da TV (PainelTv.tsx), e o carinho é o Carinho do jogo (UX-GV-7). Aqui fica o hospedeiro: o selo da captura, os avisos ao leitor de
    tela e a janela pequena, cujo miolo é a JanelaTv.tsx desde a etapa 3 (a vista `PetAssistindo` do P0 saiu). */
@@ -17,18 +18,23 @@ import { pararTv, usarPet, useSessaoTv } from "./sessaoTv.ts";
 import { agir } from "../acoes.ts";
 import { nomeForma } from "../../motor/index.ts";
 import { CENA } from "../telas/pet/cenaEstado.ts";
+import { painelTvAberto } from "./painelTvEstado.ts";
 import { FilaSinal, sinalDaTvAgora } from "./sinalTv.ts";
 import { ToqueTv } from "./ToqueTv.tsx";
+import { toqueIgnorado } from "../telas/pet/ToquePet.tsx";
+import { lutaSeguraTempo } from "../lutaPocTela.ts";
 
-/** o que o leitor de tela ouve: a reação quando ela muda (no máximo uma a cada ANUNCIO_MS) e a TV ligando e desligando */
+/** o que o leitor de tela ouve da reação: a frase só é dita quando a reação (`chave`) muda, não quando só o motivo muda, e no máximo
+    uma vez a cada ANUNCIO_MS; a frase dita é a do instante em que ela sai */
 export const ANUNCIO_MS = 5000;
-function useAnuncio(texto: string): string {
-  const [dito, setDito] = useState(""), ultimo = useRef(-Infinity);
+function useAnuncio(chave: string, texto: string): string {
+  const [dito, setDito] = useState(""), ultimo = useRef(-Infinity), agora = useRef(texto);
+  agora.current = texto;
   useEffect(() => {
     const espera = Math.max(0, ultimo.current + ANUNCIO_MS - performance.now());
-    const t = setTimeout(() => { ultimo.current = performance.now(); setDito(texto); }, texto === "" ? 0 : espera);
+    const t = setTimeout(() => { ultimo.current = performance.now(); setDito(agora.current); }, chave === "" ? 0 : espera);
     return () => clearTimeout(t);
-  }, [texto]);
+  }, [chave]);
   return dito;
 }
 
@@ -70,9 +76,24 @@ function GostoVisualLigado() {
   }, [janela]);
   const reacao = s.inato && s.leitura ? fraseDaReacao(s.inato, s.estado, s.sentido, s.leitura.reacao) : "";
   const tv = s.origem === "tela" ? "O pet está vendo a sua tela." : s.origem === "jogo" ? "A TV do jogo está ligada." : "";
-  const dito = useAnuncio(reacao), ligou = useRef(false);
-  const fim = !tv && ligou.current ? "A TV foi desligada." : "";
-  useEffect(() => { ligou.current = s.origem !== null; }, [s.origem]);
+  const dito = useAnuncio(s.origem !== null ? s.leitura?.reacao ?? "" : "", reacao), ligou = useRef(false);
+  /* a TV ligando e desligando é dita uma vez, numa região só dela (a reação tem a sua): "A TV foi desligada." fica ANUNCIO_MS e sai */
+  const [ditoTv, setDitoTv] = useState("");
+  useEffect(() => {
+    if (tv) { ligou.current = true; setDitoTv(tv); return; }
+    if (!ligou.current) return;
+    ligou.current = false; setDitoTv("A TV foi desligada.");
+    const t = setTimeout(() => setDitoTv(""), ANUNCIO_MS);
+    return () => clearTimeout(t);
+  }, [tv]);
+  /* o Parar do selo some junto com o selo: com o painel fechado, o foco vai à linha "TV" da pilha (ou ao retrato, no celular) */
+  const pararPeloSelo = () => {
+    pararTv();
+    if (!painelTvAberto()) setTimeout(() => (document.querySelector<HTMLElement>(".pet-hud [data-painel-pet='tv'] .hud-painel__bt") ?? document.querySelector<HTMLElement>(".mm-retrato"))?.focus(), 0);
+  };
+  /* o Carinho da janela é o do jogo, e a janela fica à mão em qualquer rota: ele só vale onde o toque no pet vale (ToquePet.tsx: sem menu
+     nem lugar aberto por cima da cena, sem a bola ou o pet na mão) e sem luta na tela. A sessão redesenha a cada segundo sentido */
+  const carinhoVale = (): boolean => !toqueIgnorado() && !lutaSeguraTempo(), podeCarinho = carinhoVale();
   /* na janela pequena: o balão troca no ritmo do sinal (no mínimo 3 s, sinalTv.ts); ao abrir, o foco vai ao Carinho; o Esc a fecha (o
      "Trazer de volta" do painel) e a TV continua */
   const balao = useRef(new FilaSinal()).current.passo(s.origem !== null ? s.leitura?.reacao ?? null : null, performance.now());
@@ -86,11 +107,12 @@ function GostoVisualLigado() {
   return (
     <>
       <ToqueTv />
-      {s.origem === "tela" && <SeloCaptura parar={pararTv} />}
-      <p className="sr-only" role="status" data-testid="tv-anuncio">{tv || fim} {s.origem !== null ? dito : ""}</p>
+      {s.origem === "tela" && <SeloCaptura parar={pararPeloSelo} />}
+      <p className="sr-only" role="status" data-testid="tv-anuncio">{ditoTv}</p>
+      <p className="sr-only" role="status" data-testid="tv-anuncio-reacao">{s.origem !== null ? dito : ""}</p>
       {janela && s.inato && s.origem !== null && createPortal(
         <JanelaDaTv v={{ sprite, reacao: balao, inato: s.inato, estado: s.estado, origem: s.origem, programa: s.programa, temSom: s.temSom,
-          nome: nomeForma(jogo.motor.forma), dito, erro: erroSprite ?? s.erro }} carinho={() => { agir("acariciar"); }} parar={pararTv} />, janela.document.body)}
+          nome: nomeForma(jogo.motor.forma), dito, erro: erroSprite ?? s.erro, podeCarinho }} carinho={() => { if (carinhoVale()) agir("acariciar"); }} parar={pararTv} />, janela.document.body)}
     </>
   );
 }

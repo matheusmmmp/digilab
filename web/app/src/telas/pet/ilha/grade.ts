@@ -419,8 +419,10 @@ export class Ilha {
         && !this.lugares.some(l => Math.hypot(l.x - x, l.z - z) < P.lugares[l.nome].clareira + G.clareira), "o enfeite " + nome);
       /* a frente para o ponto mais perto da area; dentro dela (a ilha com agua), para a praca */
       const ax = this.comAgua ? P.praca.x : Math.min(Math.max(x, 0), this.area.w), az = this.comAgua ? P.praca.z : Math.min(Math.max(z, 0), this.area.h);
-      /* a TV fica em tres quartos para a camera (a UX-GV-3): a TV_TRES_QUARTOS graus do sul, para o lado desse mesmo ponto */
-      const giro = nome === "tv" ? (ax < x ? -1 : 1) * TV_TRES_QUARTOS * Math.PI / 180 : Math.atan2(ax - x, az - z);
+      /* a TV fica em tres quartos para a camera (a UX-GV-3): a TV_TRES_QUARTOS graus do sul, para o lado do meio da ilha (a praca na ilha com
+         agua; o meio da area sem agua, onde a TV fica sobre a faixa da area e o ponto mais perto dela nao diz o lado) */
+      const meioX = this.comAgua ? P.praca.x : this.area.w / 2;
+      const giro = nome === "tv" ? (meioX < x ? -1 : 1) * TV_TRES_QUARTOS * Math.PI / 180 : Math.atan2(ax - x, az - z);
       this.enfeites.push({ nome, x, z, giro });
       this.abrir(x, z, G.clareira);
       const E = D.entorno;

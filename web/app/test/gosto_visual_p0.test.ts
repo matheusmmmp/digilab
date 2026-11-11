@@ -56,6 +56,12 @@ describe("a chave", () => {
     for (const n of readdirSync(dir)) {
       const t = readFileSync(join(dir, n), "utf8");
       expect(t, n).not.toMatch(/mudarMotor|aplicarEvento|trocarMotor|from "\.\.\/save\.ts"/);
+      /* nem pelas beiradas: nada lê o jogo solto, anda o tempo ou chama o motor direto */
+      expect(t, n).not.toMatch(/jogoAtual|\.observar\(|\.avancar\(|tempo\.ts|tocarNoPet/);
+      /* a única porta para o log é o Carinho do jogo, uma vez, no hospedeiro (a janela pequena; UX-GV-7) */
+      const portas = t.match(/\bagir\(/g) ?? [];
+      if (n === "GostoVisual.tsx") { expect(portas, n).toHaveLength(1); expect(t).toContain('if (carinhoVale()) agir("acariciar");'); }
+      else { expect(portas, n).toHaveLength(0); expect(t, n).not.toMatch(/acoes\.ts/); }
     }
   });
 });
