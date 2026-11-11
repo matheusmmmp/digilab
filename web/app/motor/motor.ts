@@ -98,6 +98,9 @@ export interface ResultadoLutaPoc {
   /** cada luta jogada: com a vida com que o pet entrou, o rival (a forma na tabela), o mapa e os numeros dele */
   serie: (ResultadoArena & { vida0: number; pontosA: number; contra: string; mapa: IdCena; rivalStats: StatsArena })[];
   venceu: boolean; lesao: boolean;
+  /** o tiro e a esquiva que a luta usou (a v23 em diante, ou a bancada); ausentes na luta da POC de sempre (v21 e v22). O palco refaz a luta
+      com eles (src/lutaPocTela.ts, lutasDoResultado) */
+  tiro?: TiroLutaPoc; esquiva?: EsquivaLutaPoc;
 }
 /** pets v21 (LP2b; LP-5 revista): o Palacio juntou-se a Torre de Batalha, porque na luta nova todo pet decide sozinho */
 export const PALACIO_NA_TORRE = "o Palácio juntou-se à Torre de Batalha na luta nova: lute na Torre";
@@ -690,7 +693,8 @@ export class Motor {
     }
     this.vida5.lutas.push({ tick: this.e.tick, rival, lesao, resultado: ult.pontosA === 1 ? "vitoria" : ult.pontosA === 0 ? "derrota" : "empate" });
     this.forcaLutas.push({ tick: this.e.tick, rival, forcaPet: forcaBase, resultado: this.vida5.lutas[this.vida5.lutas.length - 1].resultado });
-    return { rival, mapa: torneio ? null : mapa as IdCena, semente, arena: !npc && !torneio, torneio, pet, rivalStats: serie[0].rivalStats, forma, serie, venceu, lesao };
+    return { rival, mapa: torneio ? null : mapa as IdCena, semente, arena: !npc && !torneio, torneio, pet, rivalStats: serie[0].rivalStats, forma, serie, venceu, lesao,
+      ...(tiro ? { tiro } : {}), ...(esquiva ? { esquiva } : {}) };
   }
   /* ---------------------------------------------------------------- itens do Tamer (pets v6; motor/itens.ts) */
   /** chips que este pet pode ter equipados, pelas medalhas que ele conhece (0 nos v1-v5) */
