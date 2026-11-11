@@ -9,7 +9,7 @@
 import { ESTAGIOS_SALAO, LUTAS_SERIE_FABRICA, Motor, NOME_EST, RIVAL_SALAO, chaveSprite, formaRivalSalao, nomeForma, type Estagio, type Forma, type LutaFabrica,
   VERSAO_FABRICA_ATUAL } from "../motor/index.ts";
 import { jogoAtual, mudarMotor, mudarTamer, tamerAtual } from "./jogo.ts";
-import { abrirGuardado, atualizarGuardado, lerGuardados } from "./pets.ts";
+import { abrirGuardado, atualizarGuardado, ehGrupoGuardado, lerGuardados } from "./pets.ts";
 import { sincronizarPet, type LutaSalao, type Tamer, type TentativaSalao } from "./tamer.ts";
 import { assistirPoc, fimDoPet, ladoDesenho, lutasDoResultado, type LutaNaTela } from "./lutaPocTela.ts";
 import { MAPA_FABRICA, type ResultadoLutaPoc } from "../motor/index.ts";
@@ -59,7 +59,7 @@ export function candidatosSalao(t: Tamer = tamerAtual()): CandidatoSalao[] {
   const out: CandidatoSalao[] = [], a = jogoAtual().motor;
   const junta = (origem: OrigemPet, m: Motor) => out.push({ origem, semente: m.semente, m, nome: nomeForma(m.forma), est: m.estagioAtual, erro: m.porqueNaoSalao() });
   junta("ativo", a);
-  lerGuardados().forEach((g, i) => junta(i, copiaSincronizada(t, g.semente, g.log, g.versao)));
+  lerGuardados().forEach((g, i) => { if (!ehGrupoGuardado(g)) junta(i, copiaSincronizada(t, g.semente, g.log, g.versao)); });   // o par dos dois pets fica fora (CO4d)
   return out;
 }
 /** os estagios do Salao sem nenhum pet que possa lutar */

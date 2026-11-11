@@ -21,7 +21,7 @@ import { ACOES_DONO, TPD, type ConfigMundo } from "./constantes.ts";
 import type { ConfigContrato } from "./contrato.ts";
 import {
   DIR16, Mundo, MundoPartilhado, RandomPy, derivarSemente, distancia, eventoDeixarBola, eventoDeixarComida, lerDeixarBola,
-  lerDeixarComida, type EscolherAlvo, type EstadoNoMundo, type GanchoGrupo, type PercepcaoMundo, type PercepcaoSocial, type TickSocial,
+  lerDeixarComida, type EscolherAlvo, type OpcoesMundo, type EstadoNoMundo, type GanchoGrupo, type PercepcaoMundo, type PercepcaoSocial, type TickSocial,
 } from "./mundo.ts";
 import { CONFIG_COOPERACAO, Cooperacao, TIPOS_MADUROS, type ConfigCooperacao, type ConsumoCoop, type Posicoes } from "./cooperacao.ts";
 
@@ -206,7 +206,25 @@ export interface OpcoesPetNoGrupo {
   bolaNoGolpe?: boolean;
 }
 
-interface Membro { pet: PetDoGrupo; mundo: Mundo; acaoAtual: string }
+/** O pet do jogo inteiro no grupo (CO4b; o MotorMundo do Python): o Motor anda o proprio tick, usando a parte dele do mundo do grupo, e o
+    Grupo so sorteia a vez, como o `_um_tick()` do Python. A acao visivel e a do Motor */
+export interface MotorNoGrupo {
+  decideNoProximoTick(): boolean;
+  umTickNoGrupo(): void;
+  readonly acao: string;
+}
+
+/** as opcoes do grupo: o tick do mundo em que ele comeca (o do nascimento dos pets do jogo; 0 na pesquisa) e a semente do segundo pet (o
+    jogo a quer nos 32 bits das sementes dele; a pesquisa, o derivarSemente inteiro) */
+export interface OpcoesGrupo {
+  tickInicial?: number;
+  /** a medida da cooperacao (CO3); desligada por padrao */
+  cooperacao?: Readonly<ConfigCooperacao>;
+  sementeDoSegundo?: (semente: number | bigint) => number | bigint;
+}
+
+/** um membro: o pet do traco (o engine e o cerebro de fora, `pet`) ou o pet do jogo inteiro (`motor`) */
+interface Membro { pet: PetDoGrupo | null; motor: MotorNoGrupo | null; mundo: Mundo; acaoAtual: string }
 
 export interface Disputa {
   tick: number; comida: number; tipo: string; situacao: string | null; vencedor: string; perdedor: string;
@@ -229,16 +247,22 @@ export class Grupo implements GanchoGrupo {
   readonly coop: Cooperacao | null;
   readonly cm: ConfigMundo;
   readonly semente: number | bigint;
+  readonly tickInicial: number;
 
-  constructor(cm: ConfigMundo, semente: number | bigint, cg: Readonly<ConfigGrupo> = CONFIG_GRUPO_LIGADA,
-              cco: Readonly<ConfigCooperacao> = CONFIG_COOPERACAO) {
+  constructor(cm: ConfigMundo, semente: number | bigint, cg: Readonly<ConfigGrupo> = CONFIG_GRUPO_LIGADA, op: OpcoesGrupo = {}) {
     validarConfigGrupo(cg);
+    const cco = op.cooperacao ?? CONFIG_COOPERACAO;
     this.coop = cco.ligada ? new Cooperacao(cco) : null;
     this.cm = cm;
     this.semente = semente;
     this.cg = cg;
+    const t0 = op.tickInicial ?? 0;
+    if (!Number.isInteger(t0) || t0 < 0) throw new Error(`tickInicial inteiro >= 0: ${t0}`);
+    this.tickInicial = t0;
+    this.tick = t0;
     this.comum = new MundoPartilhado(cm, semente);
     this.sementes = sementesDoGrupo(semente, cg.ids);
+    if (op.sementeDoSegundo && cg.ids.length === 2) this.sementes[cg.ids[1]] = op.sementeDoSegundo(semente);
     this.registro = new RegistroGrupo({ versao: VERSAO_REGISTRO_GRUPO, semente, ids: [...cg.ids], layout: cm.layout.nome, pets: {} });
   }
 
@@ -247,16 +271,47 @@ export class Grupo implements GanchoGrupo {
   entrar(ident: string, pet: PetDoGrupo, cerebro: string, dono: string, op: OpcoesPetNoGrupo = {}): Mundo {
     if (!this.cg.ids.includes(ident)) throw new Error(`pet fora do grupo: ${ident} (ids ${this.cg.ids})`);
     if (this.membros.has(ident)) throw new Error(`o pet ${ident} ja entrou`);
-    if (this.tick % TPD) throw new Error(`o pet entra num inicio de dia do mundo: tick ${this.tick}`);
-    const mundo = new Mundo({ semente: this.sementes[ident], cfg: this.cm, partilhado: this.comum, entrada: this.tick, ...op });
-    for (const outro of this.membros.values())                  // o efeito de cada fruta e do mundo: o mesmo para todos
-      if (JSON.stringify(outro.mundo.efeitoFrutas) !== JSON.stringify(mundo.efeitoFrutas))
-        throw new Error(`efeitoFrutas diferente entre os pets: ${JSON.stringify(outro.mundo.efeitoFrutas)} x ${JSON.stringify(mundo.efeitoFrutas)}`);
-    mundo.ligarGrupo(this, ident);
-    this.membros.set(ident, { pet, mundo, acaoAtual: "ocioso" });
-    this.registro.cabecalho.pets[ident] = { semente: this.sementes[ident], entrada: this.tick, cerebro, dono };
-    this.registro.anexar({ tick: this.tick, tipo: "entrada", valor: ident, destino: DESTINO_GRUPO, pet: ident, origem: null });
+    this.conferirEntrada(ident);
+    const mundo = new Mundo({ semente: this.sementes[ident], cfg: this.cm, partilhado: this.comum, entrada: this.tick - this.tickInicial, ...op });
+    this.registrarEntrada(ident, { pet, motor: null, mundo, acaoAtual: "ocioso" }, cerebro, dono);
     return mundo;
+  }
+
+  /** O pet do jogo inteiro entra agora (CO4b): `criar` monta o Motor e lhe da a funcao `parte`, que o laco dele chama uma vez para montar a
+      parte dele no mundo do grupo, com a semente dele. `tickDoPet` e o relogio do pet na entrada (o do nascimento): o do mundo menos ele e a
+      entrada (um multiplo do dia; com os dois nascendo juntos, 0) */
+  entrarMotor(ident: string, tickDoPet: number, criar: (parte: (op: OpcoesMundo) => Mundo) => MotorNoGrupo, cerebro: string,
+              dono: string): MotorNoGrupo {
+    this.conferirEntrada(ident);
+    let mundo: Mundo | null = null;
+    const parte = (op: OpcoesMundo): Mundo => {
+      if (mundo !== null) throw new Error(`a parte do pet ${ident} no mundo do grupo ja foi montada`);
+      if (op.semente !== this.sementes[ident]) throw new Error(`o pet ${ident} tem de nascer com a semente do grupo: ${op.semente} x ${this.sementes[ident]}`);
+      if (op.cfg !== undefined && JSON.stringify(op.cfg) !== JSON.stringify(this.cm)) throw new Error(`o pet ${ident} quer outro mundo que o do grupo`);
+      mundo = new Mundo({ ...op, cfg: this.cm, partilhado: this.comum, entrada: this.tick - tickDoPet });
+      return mundo;
+    };
+    const motor = criar(parte);
+    const feito = mundo as Mundo | null;
+    if (feito === null) throw new Error(`o pet ${ident} nasceu sem a parte dele no mundo do grupo`);
+    this.registrarEntrada(ident, { pet: null, motor, mundo: feito, acaoAtual: motor.acao }, cerebro, dono);
+    return motor;
+  }
+
+  private conferirEntrada(ident: string): void {
+    if (!this.cg.ids.includes(ident)) throw new Error(`pet fora do grupo: ${ident} (ids ${this.cg.ids})`);
+    if (this.membros.has(ident)) throw new Error(`o pet ${ident} ja entrou`);
+    if ((this.tick - this.tickInicial) % TPD) throw new Error(`o pet entra num inicio de dia do mundo: tick ${this.tick}`);
+  }
+
+  private registrarEntrada(ident: string, mb: Membro, cerebro: string, dono: string): void {
+    for (const outro of this.membros.values())                  // o efeito de cada fruta e do mundo: o mesmo para todos
+      if (JSON.stringify(outro.mundo.efeitoFrutas) !== JSON.stringify(mb.mundo.efeitoFrutas))
+        throw new Error(`efeitoFrutas diferente entre os pets: ${JSON.stringify(outro.mundo.efeitoFrutas)} x ${JSON.stringify(mb.mundo.efeitoFrutas)}`);
+    mb.mundo.ligarGrupo(this, ident);
+    this.membros.set(ident, mb);
+    this.registro.cabecalho.pets[ident] = { semente: this.sementes[ident], entrada: mb.mundo.entrada, cerebro, dono };
+    this.registro.anexar({ tick: this.tick, tipo: "entrada", valor: ident, destino: DESTINO_GRUPO, pet: ident, origem: null });
   }
 
   idsPresentes(): string[] {
@@ -282,21 +337,37 @@ export class Grupo implements GanchoGrupo {
     this.registro.anexar({ tick: this.tick, tipo: "avanco", valor: ticks, destino: DESTINO_GRUPO, pet: null, origem: null });
     const presentes = this.idsPresentes();
     for (let k = 0; k < ticks; k++) {
-      const decidem = presentes.filter(i => this.membro(i).pet.decideEm(this.tick - this.membro(i).mundo.entrada));
+      const decidem = presentes.filter(i => {
+        const mb = this.membro(i);
+        return mb.motor !== null ? mb.motor.decideNoProximoTick() : mb.pet!.decideEm(this.tick - mb.mundo.entrada);
+      });
       const ordem = decidem.length >= 2 ? this.sortear(decidem) : decidem;
       const nContatos = this.contatos.length, nDisputas = this.disputas.length;
+      /* a vez sorteada primeiro, depois os que nao decidem (o `ordem + os outros` do Python); o pet do traco que nao decide nao tem tick. A
+         medida (CO3) le cada um logo depois da decisao dele, o pet do traco ou o pet do jogo (CO5) */
       for (const i of ordem) {
-        this.decidirUm(i);
+        const mb = this.membro(i);
+        if (mb.motor !== null) mb.motor.umTickNoGrupo(); else this.decidirUm(i);
         if (this.coop !== null) this.coopDecisao(i, presentes);
+      }
+      for (const i of presentes) {
+        const mb = this.membro(i);
+        if (mb.motor !== null && !decidem.includes(i)) mb.motor.umTickNoGrupo();
       }
       if (decidem.length && presentes.length >= 2) this.toqueEDisputa(presentes, ordem);
       if (this.coop !== null && decidem.length) {
         const [pos, raios] = this.posicoesERaios(presentes);
         this.coop.fimDoTick(this.tick, this.disputas.slice(nDisputas), this.contatos.slice(nContatos) as { pets: unknown; tipos: Record<string, string> }[],
-                            Object.fromEntries(presentes.map(i => [i, this.membro(i).acaoAtual])), pos, raios);
+                            Object.fromEntries(presentes.map(i => [i, this.acaoVisivel(i)])), pos, raios);
       }
       this.tick++;
     }
+  }
+
+  /** a acao que se ve de fora: a do Motor (o pet do jogo) ou a ultima decidida (o pet do traco) */
+  private acaoVisivel(ident: string): string {
+    const o = this.membro(ident);
+    return o.motor !== null ? o.motor.acao : o.acaoAtual;
   }
 
   // ------------------------------------------------------------ a cooperacao (CO3): o que a medida le, sem mudar nada
@@ -343,11 +414,11 @@ export class Grupo implements GanchoGrupo {
         return { mundo, social: m.social };
       },
     };
-    const d = mb.pet.decidir(t, porta);
+    const d = mb.pet!.decidir(t, porta);
     if (!percebeu) throw new Error(`o pet ${ident} decidiu sem perceber (porta.antes)`);
     mb.acaoAtual = d.acao;                                       // a acao que se ve de fora
     const r = m.consequencia(t, d.acao, d.estado, d.escolher ?? null, d.regra);
-    mb.pet.depois?.(t, { ...r, candidatos: m.ultimosCandidatos, tickSocial: m.tickSocial, percepcaoDepois: m.perceber(t), tickMundo: this.tick });
+    mb.pet!.depois?.(t, { ...r, candidatos: m.ultimosCandidatos, tickSocial: m.tickSocial, percepcaoDepois: m.perceber(t), tickMundo: this.tick });
   }
 
   // ------------------------------------------------------------ os sentidos sobre o outro (GanchoGrupo)
@@ -358,7 +429,7 @@ export class Grupo implements GanchoGrupo {
     const m = this.membro(ident).mundo;
     const fisico = outros.map((i): [string, number, number, string] => {
       const o = this.membro(i);
-      return [i, o.mundo.pet[0], o.mundo.pet[1], o.acaoAtual];
+      return [i, o.mundo.pet[0], o.mundo.pet[1], this.acaoVisivel(i)];
     });
     return perceberSocial(m.pet[0], m.pet[1], this.tick, fisico, m.viuComerDe, m.toques, m.raioDaVisao);
   }
@@ -441,15 +512,22 @@ export class Grupo implements GanchoGrupo {
     };
   }
 
+  /** o dono do pet do jogo age pelo Motor dele (o GrupoDoJogo grava o registro); o registro do Grupo so tem a entrada e o avanco */
+  private semMotor(mb: Membro, ident: string): void {
+    if (mb.motor !== null) throw new Error(`o dono do pet ${ident} do jogo age pelo Motor dele (o GrupoDoJogo), nao pelo Grupo`);
+  }
+
   // ------------------------------------------------------------ o dono (DP-7: o orcamento e o contato sao de um pet)
   acaoDono(ident: string, acao: string): void {
     const mb = this.membro(ident);
+    this.semMotor(mb, ident);
     if (!(ACOES_DONO as readonly string[]).includes(acao)) throw new Error(`acao do dono desconhecida no grupo: ${acao}`);
     this.registro.anexar({ tick: this.tick, tipo: "acao_usuario", valor: acao, destino: destinoDoPet(ident), pet: ident, origem: ORIGEM_DONO });
-    mb.pet.observar?.(acao);
+    mb.pet!.observar?.(acao);
   }
 
   deixarComida(ident: string, tipo: string, x: number, y: number): void {
+    this.semMotor(this.membro(ident), ident);
     const m = this.membro(ident).mundo;
     const ev = eventoDeixarComida(this.tick, tipo, x, y);       // valida antes do registro
     this.registro.anexar({ tick: this.tick, tipo: "deixar_comida", valor: ev.valor, destino: DESTINO_MUNDO, pet: ident, origem: ORIGEM_DONO });
@@ -457,6 +535,7 @@ export class Grupo implements GanchoGrupo {
   }
 
   deixarBola(ident: string, x: number, y: number): void {
+    this.semMotor(this.membro(ident), ident);
     const m = this.membro(ident).mundo;
     const ev = eventoDeixarBola(this.tick, x, y);
     this.registro.anexar({ tick: this.tick, tipo: "deixar_bola", valor: ev.valor, destino: DESTINO_MUNDO, pet: ident, origem: ORIGEM_DONO });
@@ -487,7 +566,7 @@ export function reproduzirGrupo(registro: RegistroGrupo, pets: Record<string, ()
   if (cab.sentidos !== undefined && cab.sentidos !== null) throw new Error("o registro tem os sentidos do degrau 1b, fora do grupo em TS");
   if (Object.keys(pets).sort().join() !== Object.keys(cab.pets).sort().join())
     throw new Error(`pets ${Object.keys(pets).sort()} para o cabecalho ${Object.keys(cab.pets).sort()}`);
-  const g = new Grupo(cm, cab.semente, cg, cco);
+  const g = new Grupo(cm, cab.semente, cg, { cooperacao: cco });
   for (const e of registro.eventos) {
     if (e.tick !== g.tick) throw new Error(`evento no tick ${e.tick} com o grupo no tick ${g.tick}: ${jsonPython(e)}`);
     if (e.tipo === "entrada") {

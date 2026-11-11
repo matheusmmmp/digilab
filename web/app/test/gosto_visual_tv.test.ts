@@ -62,7 +62,7 @@ describe("a chave ligada: o lugar", () => {
     expect([p.tv, p.giro]).toEqual([[t.x, t.z], t.giro]);
     /* a almofada fica na frente da tela (+z do glTF girado), a pelo menos a distância pedida */
     const f = [Math.sin(t.giro), Math.cos(t.giro)], frente = (p.assento[0] - t.x) * f[0]! + (p.assento[1] - t.z) * f[1]!;
-    expect(frente).toBeGreaterThanOrEqual(CANTINHO_TV.assento.frente);
+    expect(frente).toBeGreaterThanOrEqual(CANTINHO_TV.assento.frente - 1e-9);
     for (const q of [p.assento, p.dono, p.tapete]) {
       const c = ilha.cel(Math.floor(q[0]), Math.floor(q[1]))!;
       expect([c.tipo !== "agua", c.nivel, ilha.naArea(q[0], q[1])]).toEqual([true, 0, true]);

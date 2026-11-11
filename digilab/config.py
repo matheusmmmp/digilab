@@ -2881,6 +2881,10 @@ class ConfigDigibrainInatos:
 
 
 CONFIG_DIGIBRAIN_INATOS = ConfigDigibrainInatos()
+# o alcance da memoria de lugar na ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secoes 12.14 a 12.16; a IG-6): o `d_max` na proporcao do mapa
+# de 128 x 60 celulas (2 048 subunidades = 128 celulas; o de sempre, 1 024, e a largura do mapa de 64 x 30). So os pets do jogo na ilha
+# grande o usam (a v25 desde o ovo; os vivos, pelo evento). DECIDIDO (Matheus, 2026-11-11: "Sim, para 128 celulas")
+D_MAX_ILHA_GRANDE = 2048
 # o status de cada campo (conferido por teste contra os campos da dataclass): tudo PROPOSTO, salvo a escala (PE-12) e os dois da parte (b)
 # da L-2 (LS-4: os valores emprestados, sem calibracao) e os tres das M0 e M1 da C4 (a secao 8 da espec, decidida em 2026-11-01)
 PARAMETROS_DIGIBRAIN_INATOS: dict[str, tuple[str, str]] = {

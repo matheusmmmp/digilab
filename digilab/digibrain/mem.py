@@ -59,6 +59,8 @@ lugar e o do consumo bom mais recente; "emb" lembra um episodio sorteado entre o
 como 0 (MA-3; a categoria, a repeticao e a capacidade seguem o sigma verdadeiro). A rng so existe no "emb"."""
 from __future__ import annotations
 
+from dataclasses import replace
+
 from ..config import CONFIG_DIGIBRAIN_INATOS, TICKS_POR_DIA, TIPOS_ALVO_DIGIBRAIN, ConfigDigibrainInatos, ConfigMundo
 from ..modelo_mundo import raiz_inteira
 from ..policies.lobos import div_arred
@@ -180,6 +182,13 @@ class Memoria:
 
     def lugar_de(self, x: int, y: int) -> tuple[int, int]:
         return x // self.sub, y // self.sub
+
+    def alcance(self, d_max: int) -> None:
+        """O alcance da memoria de lugar passa a ser `d_max` subunidades (docs/TAREFA_V3_ILHA_AGUA.md, secao 12.16, IG6; a ilha grande).
+        So o parametro muda: os episodios guardados ficam como estao. Inteiro positivo; outro valor falha alto."""
+        if type(d_max) is not int or d_max <= 0:
+            raise ValueError(f"M-MEM: o alcance da memoria e um inteiro positivo de subunidades: {d_max!r}")
+        self.p = replace(self.p, d_max=d_max)
 
     def deslocar(self, dx: int, dy: int, ajustar, regiao_de) -> int:
         """A ida do mundo para a ilha maior (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG4; a IG-7: "deslocados junto com o lar"): cada
