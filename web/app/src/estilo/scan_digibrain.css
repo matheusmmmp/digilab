@@ -131,6 +131,9 @@
 
 /* ---------- o desenho (SVG). As classes sao as de hoje (MapaPesos.tsx), as que o e2e le */
 .scan .mp text{ font-family:var(--hx-f) }
+/* a silhueta de cerebro: so o scan do cerebro modular (ScanDigiBrainLab) ainda a desenha */
+.scan .mp-silhueta{ fill:none; stroke:var(--scan-malha); stroke-opacity:.6; stroke-width:1.5 }
+.scan .mp-divisas path{ fill:none; stroke:var(--hx-borda); stroke-dasharray:4 7; stroke-width:1.2 }
 .scan .mp-reg, .scan .mp-sub{ font-size:max(15px, calc(var(--scan-txt-min, 11px) / var(--scan-esc, 1))); font-weight:600; letter-spacing:.16em; text-transform:uppercase; fill:var(--hx-rotulo) }
 .scan .mp-sub{ fill:var(--hx-ok); letter-spacing:.1em }
 .scan .mp-pesos path, .scan .mp-acesas path, .scan .mp-pulso path{ fill:none; stroke-linecap:round }
@@ -193,6 +196,12 @@
   .scan .mp-no text{ font-size:max(32px, calc(var(--scan-txt-min, 11px) / var(--scan-esc, 1))); stroke-width:8px }
   .scan .mp-reg, .scan .mp-sub{ display:none }
   .scan .mp-no circle{ stroke-width:2 }
+  .scan .mp-divisas path{ stroke-width:2.5; stroke-dasharray:8 14 }
+  .scan .mp-silhueta{ stroke-width:3 }
   .scan .mp-cand circle{ stroke-width:5 }
   .scan .mp-esc circle{ stroke-width:5 }
 }
+
+/* o mapa em texto do modular (ScanDigiBrainLab): os tokens escuros dos paineis (painel-hx.css) sem o fundo, a margem e a letra deles, que sao da
+   folha do painel; aqui fica o vidro do scan e a letra do mapa em texto do A */
+.scan.scan--lab .scan-texto{ background:none; padding:10px 12px; font-size:14px }

@@ -45,7 +45,7 @@ const FOLGA_MS = 150;
    pelo lado mais curto; a "pista" de cada fio (o quanto ele se afasta do meio da faixa) sai so dos indices dos tres nos, para os fios nao
    ficarem uns em cima dos outros. O viewBox guarda a proporcao 880 x 552 do campo pequeno (D1c). */
 const VB_L = 880, VB_A = 552, CX = 440, CY = 276;
-const VB = `0 0 ${VB_L} ${VB_A}`;
+const VB_ANEL = `0 0 ${VB_L} ${VB_A}`;
 /** o raio dos arcos de fora (acoes e entradas) e o do circulo das regras */
 const R_FORA = 212, R_REGRA = 150;
 /** a meia abertura, em graus, do arco das acoes (a esquerda) e do das entradas (a direita) */
@@ -59,6 +59,13 @@ const PASSO_GRAUS = 10;
 const REGIOES: [string, string, number, number, "start" | "middle" | "end"][] = [
   ["decisao", "ações", 40, 50, "start"], ["impulsos", "regras", CX, CY + 8, "middle"], ["percepcao", "percepção", VB_L - 40, 50, "end"]];
 const SUB_CORPO = { x: VB_L - 40, y: VB_A - 30 };
+/* a silhueta de cerebro de antes (D1-11, D1b-2): o scan do A v11 nao a desenha mais, mas o do cerebro modular (ScanDigiBrainLab.tsx, o pet
+   do laboratorio) ainda desenha, com o viewBox recortado nela (x 90 a 970, y 16 a 568). Ficam aqui so para ele */
+export const VB = `90 16 ${VB_L} ${VB_A}`;
+export const SILHUETA = "M120 330C100 210 220 80 420 62C600 45 820 90 890 220C935 300 900 390 820 420C760 440 700 430 650 445C600 470 540 500 470 488C380 475 330 430 250 430C170 430 130 390 120 330Z";
+export const CEREBELO = "M650 445C655 505 760 535 825 505C865 485 860 440 820 420C760 440 700 430 650 445Z";
+export const DIVISAS = ["M380 66C360 180 372 300 345 410", "M612 54C592 170 602 300 592 420"];
+export const Y_REGIOES = 36;
 const f = (v: number): number => Math.round(v * 10) / 10;
 
 type Ponto = [number, number];
@@ -141,7 +148,7 @@ function MapaScanBruto({ mapa, decisao, movel, movendo }: { mapa: DadosMapa; dec
     : `Mapa dos pesos do pet, ${mapa.arestas.length} pesos. Ainda sem decisão.`;
 
   return (
-    <svg className="mp" viewBox={VB} preserveAspectRatio="xMidYMid meet" role="img" aria-label={rotulo} data-n={ac ? ac.n : ""}>
+    <svg className="mp" viewBox={VB_ANEL} preserveAspectRatio="xMidYMid meet" role="img" aria-label={rotulo} data-n={ac ? ac.n : ""}>
       <g aria-hidden="true">
         {REGIOES.map(([lobo, nome, x, y, ancora]) => <text key={lobo} className="mp-reg" data-lobo={lobo} x={x} y={y} textAnchor={ancora}>{nome}</text>)}
         {mapa.receptores.length > 0 && <text className="mp-sub" x={SUB_CORPO.x} y={SUB_CORPO.y} textAnchor="end">receptores do corpo</text>}
@@ -296,7 +303,7 @@ export function useDecisaoNova(n: number | null, pode: boolean): number | null {
 /** a escala do desenho (a largura renderizada sobre a do viewBox, a menor das duas por causa do "meet") numa variavel CSS: o CSS pede o texto
     do mapa com pelo menos 11 px na tela, max(base, 11px / escala), em unidades do viewBox. So vista */
 const TEXTO_MIN_PX = 11;
-function useEscalaDoMapa(ref: { current: HTMLElement | null }, ativo: boolean): void {
+export function useEscalaDoMapa(ref: { current: HTMLElement | null }, ativo: boolean): void {
   useEffect(() => {
     const el = ref.current; if (!el || !ativo || typeof ResizeObserver !== "function") return;
     const medir = () => { const w = el.clientWidth, h = el.clientHeight; if (w > 0 && h > 0) el.style.setProperty("--scan-esc", String(Math.min(w / VB_L, h / VB_A))); el.style.setProperty("--scan-txt-min", TEXTO_MIN_PX + "px"); };
@@ -309,7 +316,7 @@ function useEscalaDoMapa(ref: { current: HTMLElement | null }, ativo: boolean): 
 /* ---------------------------------------------------------------- o modal */
 /** o selo so como forma (D1b-5): o ponto (ao vivo), as duas barras (pausado) ou o triangulo (replay), com o nome acessivel e a dica */
 const SELO_TXT: Record<EstadoSelo, string> = { vivo: "ao vivo", pausado: "pausado", replay: "replay: uma decisão do passado" };
-function SeloForma({ replay }: { replay: boolean }) {
+export function SeloForma({ replay }: { replay: boolean }) {
   const estado = useEstadoSelo(replay);
   return <span className={"db-selo db-selo--" + estado} role="img" aria-label={SELO_TXT[estado]} title={SELO_TXT[estado]}><i aria-hidden="true" /></span>;
 }
