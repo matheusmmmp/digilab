@@ -14,6 +14,9 @@ referências): uma quarta hipótese, a régua crua e a forma em U nas frases, e 
 **O adendo 2 (seção 14) está DECIDIDO pelo Matheus em 2026-11-11** ("Aprova as recomendações e segue"): a pergunta "história ou sorteio" da 9.8 do resultado, com um ramo de sorteio
 amarrado, em 360 pets novos. Ele não muda as seções 0 a 13; as AD2-1 a AD2-7 estão decididas pela recomendação.
 
+**O adendo 3 (seção 16) está PROPOSTO** (2026-11-11): o que separa o pet que absorve o tapa do que se afasta, descoberto nas vidas do
+adendo 2 e conferido nas do I7b, sem vidas novas. Ele não muda as seções 0 a 15 e não roda antes das decisões AD3-1 a AD3-6.
+
 **De onde vem:** a conversa de 2026-11-10 sobre como tirar da frente um achado e não só uma implementação organizada. Dela saíram as
 perguntas Q1 a Q4, e o Matheus escolheu começar pela Q3, o desenvolvimento contrafactual ("Segue a recomendação").
 - **Por que esta pergunta:** o motor é determinístico e guarda o log. Dá para viver de novo a vida de um pet com uma única coisa diferente
@@ -567,4 +570,107 @@ Escrito em 2026-11-11 (Claude Code, Opus 5.5, branch `v3-individualidade-i7d`), 
     `experiments/entradas_dc4.py`, e a do `test_redecidir_evento.py` pede o `experiments/auditoria_pet_vivo.py`.
   - A quarta, `test_credito_canal_etapa0.py::test_o_artefato_se_refaz_igual`, passou rodada sozinha logo depois (1 passed). Ela caiu com a
     máquina carregada por outro trabalho ao lado e não toca o I7.
+
+## 16. Adendo 3: o que separa absorver de se afastar (2026-11-11, PROPOSTO, Claude Code, Opus 5.5)
+
+**Status: PROPOSTO.** O Matheus pediu em 2026-11-11 que a frente seguisse as recomendações da 10.6 do resultado ("faça o merge e siga com
+as recomendações"). Este adendo é a primeira delas. **Nada dele roda antes de três coisas:**
+1. as decisões AD3-1 a AD3-6 (16.7) decididas pelo Matheus e este cabeçalho marcado DECIDIDO;
+2. o código do I7e na `main` (16.6), com os testes e a fumaça;
+3. o registro do adendo, numa seção nova no fim deste plano, empurrado antes da primeira leitura.
+
+**De onde vem:** o adendo 2 (a seção 10 do resultado) mostrou que o tapa é tudo ou nada pela história, e não pelo sorteio:
+- em cerca de 69 % dos ramos o pet volta ao original no dia seguinte;
+- em cerca de 29 % ele se afasta nos quatro dias;
+- a fração quase não muda com o sorteio amarrado.
+
+O que decide o lado de cada pet não foi medido. O único sinal visto é descritivo: com o dono relapso, 43 % a 47 % dos ramos se afastam, contra
+18 % a 27 % com os outros donos.
+
+**A pergunta, Q-AD3: o que, no momento do tapa, separa o ramo que absorve o tapa do ramo que se afasta?**
+
+**O que este adendo não afirma:** causa. Os candidatos são lidos no original, no momento do tapa, e a medida é de associação. Um candidato
+que separa nas duas amostras é um bom suspeito para um desenho causal depois (por exemplo, o tapa dado só quando a condição vale). Não há
+mecanismo novo no pet (IN-7). Todos os números novos são PROPOSTOS e SEM FONTE como escolha, e não há alegação de novidade.
+
+### 16.1 As duas amostras (AD3-2)
+
+- **A descoberta: as vidas do adendo 2** (os 360 pets da faixa 88101…88505), com os ramos E e os ramos R. O R mostra o efeito do tapa sem
+  o deslocamento do sorteio, e o E é o tapa de sempre. Os dois entram como dois conjuntos, cada um com a sua tabela.
+- **A confirmação: as vidas do I7b** (os 360 pets do I2, faixa 85101…85505), com os ramos E. São pets diferentes, com outras sementes. Até
+  aqui, nenhum candidato foi lido nelas: o exploratório da 9.6 contou o tudo ou nada e o `arb.sorteios`, que não está entre os candidatos
+  (16.3).
+- **Nenhuma vida nova:** os candidatos saem do replay do log do original até o momento (o `copia_em` da bateria do I1). Os grupos saem dos
+  `perfis.jsonl.gz` já gravados, que são artefatos locais com os sha256 nos `meta.json` das duas runs.
+
+### 16.2 Os grupos (AD3-3)
+
+Por ramo (o pet, o ramo e a idade t), a trajetória da janela de quatro dias no SEQ (a `trajetoria_janela`):
+- **absorve:** D = 0 nos quatro dias;
+- **se afasta:** D > 0 nos quatro;
+- **misto:** fica fora, porque são 2 % a 3 % dos ramos.
+
+O SEQ basta: um ramo com D = 0 num perfil tem as decisões do dia iguais às do original, e por isso D = 0 nos outros.
+
+### 16.3 Os candidatos, escritos antes (AD3-4)
+
+Todos são lidos no original, no tick do momento, antes do tapa. A divisão em dois níveis está escrita aqui e vale igual nas duas amostras.
+
+| candidato | o que é | os dois níveis |
+|---|---|---|
+| **C-DONO** | o dono | relapso × os outros dois |
+| **C-ENERGIA** | a energia do pet no momento | abaixo × acima da mediana da amostra de descoberta |
+| **C-FOME** | a fome no momento | acima × abaixo da mediana da descoberta |
+| **C-HUMOR** | o humor no momento | abaixo × acima da mediana da descoberta |
+| **C-ACAO** | a ação do pet no passo do momento (`acao_atual`) | a mais comum na descoberta × as outras (a escolhida vai no registro antes da leitura da confirmação) |
+| **C-IDADE** | a idade do tapa | t ≤ 4 × t ≥ 6 |
+| **C-BRACO** | o braço | REL+F × REL |
+
+- **A mediana** de cada drive é calculada uma vez na descoberta (o E e o R juntos, todos os ramos com grupo). Ela entra no registro antes
+  da leitura da confirmação.
+- **A medida:** para cada candidato, Δ = a fração "se afasta" no primeiro nível menos a fração no segundo. O IC95 vem do bootstrap sobre as
+  sementes, com 2 000 reamostras e a rng `derivar_semente("individualidade-i7-ad3-boot", amostra, conjunto, candidato)`.
+
+### 16.4 A leitura
+
+- **"O candidato separa"** só se o IC95 do Δ ficar inteiro do mesmo lado de 0 na descoberta (nos dois conjuntos, o E e o R) e na
+  confirmação (o E do I7b).
+- **"Só na descoberta"** quando ele separa na descoberta e não na confirmação. A frase é "não se confirma nos pets do I7b".
+- **Fora disso,** "não separa nesta análise".
+- **O C-DONO** foi visto na descoberta antes deste plano. Para ele, a frase depende só da confirmação.
+- **A multiplicidade:** são sete candidatos sem correção, e a exigência de repetir numa amostra independente faz esse papel. A tabela diz
+  isso ao lado.
+
+### 16.5 Os descritivos
+
+- **A tabela cruzada** dos candidatos que separam, dois a dois, com a fração "se afasta" em cada célula, para ver se um explica o outro (por
+  exemplo, se o relapso deixa o pet com fome no momento).
+- **O efeito imediato:** a fração "se afasta" entre os ramos cujo D do resto do dia t foi 0 (o tapa não mudou o resto do dia) e entre os
+  que não. Fica só no descritivo, porque é parte do efeito e não uma condição anterior a ele.
+- **Os drives em nível:** a média e os quartis de cada drive nos dois grupos, por amostra.
+
+### 16.6 A missão, o custo e o que se grava
+
+- **O I7e:**
+  - o leitor dos candidatos: o replay até cada momento, só de leitura, num orquestrador irmão do do adendo 2, sem tocar no `digilab/`;
+  - o Δ e o bootstrap, e a regra da 16.4;
+  - os testes contra casos feitos à mão e a fumaça com as sementes dos testes.
+- **A leitura:** depois do registro, no mesmo PR do resultado.
+- **O custo:** um replay até cada momento custa de 1 a 3 s. São cerca de 720 pets × 5 idades, perto de 30 min com 4 processos. É uma
+  estimativa SEM FONTE até a fumaça.
+- **A pasta:** `artifacts_v3_individualidade_i7_ad3/`, com:
+  - o `meta.json`, com os sha256 dos artefatos lidos das duas runs;
+  - o `candidatos.jsonl`, uma linha por ramo, com o grupo e os candidatos;
+  - o `analise.json`.
+
+### 16.7 As decisões do adendo (PROPOSTAS, para o Matheus; cada uma com a recomendação e o custo de errar)
+
+| | a decisão | a recomendação | o custo de errar |
+|---|---|---|---|
+| **AD3-1** | a forma | **um adendo ao I7** (a seção 16), como o adendo 2 | um I8 separado deixaria o plano do I7 mais curto, mas repetiria as medidas, as amostras e as regras que já estão aqui |
+| **AD3-2** | as amostras | **a descoberta nas vidas do adendo 2 e a confirmação nas do I7b**, sem vidas novas | uma run nova com outra faixa daria uma confirmação limpa, a cerca de 2 h de vidas e com uma faixa a pedir; as vidas do I7b já foram olhadas no tudo ou nada (9.6), mas não nos candidatos |
+| **AD3-3** | os grupos | **pelo SEQ, com o misto fora** | outro perfil daria quase os mesmos grupos; incluir o misto pediria uma terceira categoria para 2 % a 3 % dos ramos |
+| **AD3-4** | os candidatos e as divisões | **os sete da 16.3, com as medianas da descoberta** | candidatos demais aumentam os falsos positivos na descoberta, e a confirmação os filtra; um candidato que fica de fora agora só volta num plano novo |
+| **AD3-5** | a regra | **separar nas duas amostras, do mesmo lado**, sem correção de multiplicidade | uma correção (Bonferroni nos sete) deixaria a regra mais dura do que a repetição já deixa; sem a repetição, um achado da descoberta valeria sozinho |
+| **AD3-6** | a causa | **fica para depois:** este adendo só mede associação | um desenho causal agora (o tapa só quando a condição vale) pediria vidas novas e um palpite de candidato sem dados |
 
