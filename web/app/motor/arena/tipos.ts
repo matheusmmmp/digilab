@@ -1,7 +1,7 @@
 /* Tipos da luta da POC no motor (docs/TAREFA_V3_LUTA_POC.md, LP1): porte de web/app/arena/tipos.ts do commit efb2ded, so 1 contra 1,
    sem jogador e sem equipes. Os dados do Digimon vem da tabela do git (formas.ts, a LP-2); os numeros do lutador vem prontos (Stats, a
    LP-3: na LP2 saem dos 6 stats do pet). */
-import type { Dificuldade, Esquiva, Tiro } from "./constantes.ts";
+import type { Apoio, ArenaPorEstagio, Dificuldade, Esquiva, Tiro } from "./constantes.ts";
 
 export type Lado = "a" | "b";
 export type IdCena = "campo" | "coliseu" | "floresta" | "praia" | "deserto" | "castelo" | "caverna" | "ringue";
@@ -16,6 +16,9 @@ export interface GolpeBase { anim: string; t: number; proj: Projetil | null; hit
 export interface DadosForma {
   digimon: string; nome: string; estagio: string; atributo: Atributo; generico: boolean;
   golpe: GolpeBase; habilidade: GolpeBase | null; msGolpe: number; msHabilidade: number;
+  /** o golpe de apoio, do tipo que falta ao golpe, e a duracao (ms) do clipe dele (LP6-1; so com o `apoio` da luta). A tabela do git tem
+      os dois em toda forma; uma forma sem eles com a chave ligada falha alto */
+  apoio?: GolpeBase; msApoio?: number;
 }
 
 // ---------- configuracao de uma luta ----------
@@ -38,6 +41,10 @@ export interface ConfigLuta {
   tiro?: Tiro;
   /** a esquiva pela perspicacia e pela velocidade (D-LP5-14); sem ela, a luta da POC */
   esquiva?: Esquiva;
+  /** o golpe de apoio (LP6-1); sem ele, a luta sem apoio */
+  apoio?: Apoio;
+  /** a elipse pelo estagio dos dois (LP6-1, secao 4a do plano); sem ela, a elipse de sempre */
+  arenaPorEstagio?: ArenaPorEstagio;
 }
 
 // ---------- estado ----------
@@ -60,12 +67,17 @@ export interface Lutador {
   esperaTiro: number;
   /** a esquiva (D-LP5-14): os ataques comecados, o ultimo ataque do alvo ja lido e o contra-ataque pendente */
   nAtaque: number; leuAtaque: number; contraPend: boolean;
+  /** o golpe de apoio (LP6-1; null sem o `apoio` da entrada): os dados, o clipe (ms), a recarga (ms), se o ataque em curso e o apoio e ha
+      quanto tempo (ms) o alvo esta alem do alcance de perto (o tiro fraco de quem bate de perto) */
+  ap: GolpeBase | null; msAp: number; recAp: number; usandoApoio: boolean; longeMs: number;
   acDano: number; ultAmb: number; ultNum: number;
   /** a ultima situacao em que a IA da POC pensou em trocar (o sorteio dela fica; ver sim.ts, sorteioDaTroca) */
   decisao: string;
 }
 export interface Obstaculo { x: number; y: number; r: number; img: string; hp: number | undefined; max: number | undefined }
 export interface Zona { tipo: string; x: number; y: number; rx: number; ry: number }
+/** a elipse da arena de uma luta (a ELIPSE de constantes.ts, ou ela escalada pelo estagio, LP6-1) */
+export interface Elipse { cx: number; cy: number; rx: number; ry: number }
 export interface Erupcao { x: number; y: number; t: number; explodiu: boolean }
 export interface EstadoCena {
   id: IdCena; obst: Obstaculo[]; zonas: Zona[]; seguro: number;
@@ -80,11 +92,15 @@ export interface ProjetilVoo {
 export interface Ref { lado: Lado; n: string }
 export type Evento =
   | { tipo: "inicio"; a: string; b: string }
-  | { tipo: "dano"; at: Ref; alvo: Ref; valor: number; perda: number; crit: boolean; mult: number; hab: boolean; resta: number; x: number; y: number; dx: number; hits: Impacto[]; espelho: boolean }
+  | { tipo: "dano"; at: Ref; alvo: Ref; valor: number; perda: number; crit: boolean; mult: number; hab: boolean; resta: number; x: number; y: number; dx: number; hits: Impacto[]; espelho: boolean;
+      /** o golpe de apoio (LP6-1): so aparece quando e ele */
+      apoio?: true }
   | { tipo: "esquiva"; at: Ref; alvo: Ref; x: number; y: number }
   | { tipo: "atordoado"; at: Ref; alvo: Ref }
   | { tipo: "queda"; u: Ref; motivo: string | null }
   | { tipo: "habilidade"; u: Ref; propria: boolean; anim: string; x: number; y: number }
+  /** o golpe de apoio comeca (LP6-1): `perto`, o golpe de perto de quem atira; senao, o tiro fraco de quem bate de perto */
+  | { tipo: "apoio"; u: Ref; perto: boolean; anim: string; x: number; y: number }
   | { tipo: "golpe_ar"; u: Ref }
   | { tipo: "tiro_bloqueado"; u: Ref; obst: string }
   | { tipo: "pilar"; u: Ref; quebrou: boolean }
@@ -102,6 +118,8 @@ export interface Sorteios { ia(): number; combate(): number; cena(): number; vis
 export interface Luta {
   cfg: ConfigLuta; r: Sorteios;
   cena: EstadoCena; a: Lutador; b: Lutador;
+  /** a elipse desta luta e o fator dela sobre a ELIPSE (1 sem a `arenaPorEstagio`; LP6-1) */
+  el: Elipse; esc: number;
   projeteis: ProjetilVoo[]; relogio: number; fim: boolean; vencedor: Lado | null;
   /** eventos do passo em andamento (passo() devolve e limpa) */
   eventos: Evento[];

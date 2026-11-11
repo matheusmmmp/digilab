@@ -22,7 +22,10 @@ const SEMENTES = [101, 102, 103, 104, 105];
 const PASSOS_FOME = 200;           // passos de 15 min: 50 h de jogo sem comida
 
 function treinar(s: number, cerebro: "modular" | "a"): Motor {
-  const m = new Motor(s);
+  /* a v23 de forma explicita: o cenario foi medido no mundo de 64 x 30, com a racao em P = (168, 248), que na ilha grande (a v24, ILHA_AGUA,
+     IG4) e mar. Na ilha grande, com a racao no comedouro de la, o modular faz o mesmo (medido na juncao: 26 e 25 escolhas do lugar
+     lembrado nas sementes 101 e 105), mas o ponto lembrado cai a 16,5 unidades do comedouro, fora do raio PERTO de 16 deste teste */
+  const m = new Motor(s, 23);
   m.trocarCerebro(cerebro);
   for (let p = 0; p < Math.round(2 * TPD / 30); p++) {
     m.avancar(30);

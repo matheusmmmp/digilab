@@ -1,7 +1,7 @@
 /* Save do jogo: so o registro {semente, log, versao}, na MESMA chave do digilab_sprites.html. O estado nunca
    e salvo: abrir e reprocessar o registro (Motor.reproduzir). Um save de hoje abre igual no app novo.
    Chaves: CHAVE (o save), CHAVE-aba ("destino/aba"), CHAVE-fala-llm, CHAVE-anterior, CHAVE-boas-vindas.
-   Os dois pets (v24; docs/TAREFA_V3_COOPERACAO.md, CO4c): o save do grupo e {semente, log, versao, grupo: true, foco}, com o registro do grupo
+   Os dois pets (v25; docs/TAREFA_V3_COOPERACAO.md, CO4c): o save do grupo e {semente, log, versao, grupo: true, foco}, com o registro do grupo
    ([tick, tipo, valor, pet]; motor/grupo_jogo.ts) e o pet em foco na tela. Abrir e reprocessar o registro do grupo (GrupoDoJogo.reproduzir). */
 import { GrupoDoJogo, Motor, type EventoGrupoJogo, type EventoRegistro } from "../motor/index.ts";
 import { ligarProduto } from "./produto.ts";

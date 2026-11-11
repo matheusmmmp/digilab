@@ -6,12 +6,14 @@
       vem pronto na tabela, `fr`) e sem Math.random;
    2. os dados do Digimon vem da tabela do git (formas.ts) e os numeros do lutador chegam prontos (Stats);
    3. so 1 contra 1, os dois lados pela IA: sairam o modo jogador, a entrada, as equipes e as trocas;
-   4. nada daqui toca no pet, no log nem no save (a LP2 liga). */
-import { ACAO, DIFIC, ELIPSE, EQ, PASSO_MS, PX_POR_UNIDADE } from "./constantes.ts";
+   4. nada daqui toca no pet, no log nem no save (a LP2 liga).
+   LP6-1 (docs/PLANO_LP6_SEGUNDO_GOLPE.md), cada um atras da sua chave da entrada, desligada: o golpe de apoio (`apoio`) e a elipse pelo
+   estagio dos dois (`arenaPorEstagio`). Sem as chaves, a luta sai byte a byte igual (test/arena_lp6_gabarito.test.ts). */
+import { ACAO, DIFIC, ELIPSE, EQ, ORDEM_ESTAGIOS, PASSO_MS, PX_POR_UNIDADE, type ArenaPorEstagio } from "./constantes.ts";
 import { dist, seno } from "./aritmetica.ts";
 import { CENAS, iniciarCena } from "./cenas.ts";
 import { bloqueio, colidir, dentroArena, evento, lutador, mudar, obstaculoEm, outro, prender, ref } from "./nucleo.ts";
-import type { Atributo, ConfigLuta, Evento, GolpeBase, Lado, Luta, Lutador, Sorteios } from "./tipos.ts";
+import type { Atributo, ConfigLuta, DadosForma, Elipse, Evento, GolpeBase, Lado, Luta, Lutador, Sorteios } from "./tipos.ts";
 
 const def = (L: Luta) => CENAS[L.cena.id];
 const dific = (L: Luta) => DIFIC[L.cfg.dific];
@@ -35,8 +37,23 @@ function conferirStats(l: Lado, cfg: ConfigLuta): void {
   if (v0 !== undefined && !(Number.isInteger(v0) && v0 >= 1 && v0 <= s.hp)) throw new Error(`arena: vida inicial do lado ${l} fora de [1, ${s.hp}] (${v0})`);
 }
 
+/** o fator da elipse pelo maior estagio dos dois (LP6-1, secao 4a): o do Ultimate, o do Mega ou 1 (In-Training, Rookie e Champion) */
+export function fatorElipse(a: DadosForma, b: DadosForma, F: ArenaPorEstagio): number {
+  const i = (f: DadosForma) => {
+    const k = (ORDEM_ESTAGIOS as readonly string[]).indexOf(f.estagio);
+    if (k < 0) throw new Error(`arena: estagio desconhecido ${String(f.estagio)} (${f.digimon})`);
+    return k;
+  };
+  const m = ORDEM_ESTAGIOS[Math.max(i(a), i(b))];
+  return m === "Mega" ? F.Mega : m === "Ultimate" ? F.Ultimate : 1;
+}
+
 function criarLutador(L: Luta, lado: Lado): Lutador {
   const { forma, stats, vida0 } = L.cfg[lado];
+  /* o golpe de apoio (LP6-1): so com a chave; a forma tem de trazer o apoio, do tipo que falta ao golpe, e o clipe dele */
+  if (L.cfg.apoio && !(forma.apoio && typeof forma.msApoio === "number" && forma.msApoio > 0 && !forma.apoio.proj === !!forma.golpe.proj))
+    throw new Error(`arena: a forma ${forma.digimon} nao tem o golpe de apoio do tipo que falta (motor/arena/formas.ts)`);
+  const ap = L.cfg.apoio ? forma.apoio! : null;
   const g = forma.golpe, sk = forma.habilidade || g, st = { ...stats };
   /* a ordem dos sorteios e a do literal do prototipo: recSk, recarga, fase */
   const recSk = ACAO.recSkIni + L.r.ia() * ACAO.recSkVar, recarga = ACAO.recargaIni + L.r.ia() * ACAO.recargaVar, fase = L.r.ia() * 6.28;
@@ -48,6 +65,7 @@ function criarLutador(L: Luta, lado: Lado): Lutador {
     alcance: g.proj ? ACAO.alcanceDist : EQ.alcanceCorpo, raio: EQ.raio, alvo: null, fase,
     morto: false, dano: 0, golpes: 0, mira: null, dash: 0, dashCd: 0, dashDir: [0, 0], reacao: 0, desvioDir: [0, 0],
     atordoado: 0, caiuEm: 0, foraAte: 0, escondido: false, naRuna: 0, buffAte: 0, bloq: 0, ladoDesvio: 0, esperaTiro: 0, nAtaque: 0, leuAtaque: -1, contraPend: false,
+    ap, msAp: ap ? forma.msApoio! : 0, recAp: 0, usandoApoio: false, longeMs: 0,
     acDano: 0, ultAmb: 0, ultNum: 0, decisao: "",
   };
 }
@@ -57,11 +75,15 @@ export function criarLuta(cfg: ConfigLuta, r: Sorteios): Luta {
   conferirStats("a", cfg); conferirStats("b", cfg);
   if (!CENAS[cfg.cena]) throw new Error(`arena: mapa desconhecido ${String(cfg.cena)}`);
   if (!DIFIC[cfg.dific]) throw new Error(`arena: dificuldade desconhecida ${String(cfg.dific)}`);
-  const L = { cfg, r, cena: iniciarCena(cfg.cena), projeteis: [], relogio: 0, fim: false, vencedor: null, eventos: [] } as unknown as Luta;
+  /* a elipse pelo estagio dos dois (LP6-1): sem a chave, a ELIPSE de sempre (o mesmo objeto) e o fator 1 */
+  const esc = cfg.arenaPorEstagio ? fatorElipse(cfg.a.forma, cfg.b.forma, cfg.arenaPorEstagio) : 1;
+  const el: Elipse = esc === 1 ? ELIPSE : { cx: ELIPSE.cx, cy: ELIPSE.cy, rx: ELIPSE.rx * esc, ry: ELIPSE.ry * esc };
+  const L = { cfg, r, cena: iniciarCena(cfg.cena, esc), el, esc, projeteis: [], relogio: 0, fim: false, vencedor: null, eventos: [] } as unknown as Luta;
   L.a = criarLutador(L, "a");
   L.b = criarLutador(L, "b");
-  L.a.x = ELIPSE.cx - ACAO.entradaX; L.a.y = ELIPSE.cy + ACAO.entradaY;
-  L.b.x = ELIPSE.cx + ACAO.entradaX; L.b.y = ELIPSE.cy + ACAO.entradaY;
+  /* os pontos de inicio escalam com a elipse (x 1 e exato: sem a chave, os de sempre) */
+  L.a.x = el.cx - ACAO.entradaX * esc; L.a.y = el.cy + ACAO.entradaY * esc;
+  L.b.x = el.cx + ACAO.entradaX * esc; L.b.y = el.cy + ACAO.entradaY * esc;
   L.a.alvo = L.b; L.b.alvo = L.a; colidir(L, L.a); colidir(L, L.b);
   evento(L, { tipo: "inicio", a: L.a.n, b: L.b.n });
   return L;
@@ -70,18 +92,21 @@ export function criarLuta(cfg: ConfigLuta, r: Sorteios): Luta {
 function aplicarDano(L: Luta, at: Lutador, alvo: Lutador, dados: GolpeBase | null, hab: boolean): void {
   if (alvo.morto) return;
   dados = dados || at.g;
+  /* o golpe de apoio (LP6-1): o tipo de dano e o `fr` do golpe principal, vezes a fracao do apoio */
+  const apoio = at.ap !== null && dados === at.ap, base = apoio ? at.g : dados;
   if (L.r.combate() * 100 < (alvo.st.esquiva || 0)) { evento(L, { tipo: "esquiva", at: ref(at), alvo: ref(alvo), x: alvo.x, y: alvo.y }); return; }
   const crit = L.r.combate() * 100 < at.st.crit, m = mult(L, at, alvo);
   const runa = at.buffAte > L.relogio ? 1.3 : 1;
   let d = at.st.atk * (100 / (100 + alvo.st.def)) * (1 - EQ.variacao + L.r.combate() * 2 * EQ.variacao) * (crit ? 1.5 : 1) * m * (hab ? at.st.hpot : 1) * runa
-    * (dados.proj ? (L.cfg.tiro ? L.cfg.tiro.danoProj : EQ.danoDist) : EQ.danoCorpo) * dados.fr;
+    * (base.proj ? (L.cfg.tiro ? L.cfg.tiro.danoProj : EQ.danoDist) : EQ.danoCorpo) * base.fr;
+  if (apoio) d *= L.cfg.apoio!.dano;
   d = Math.max(1, Math.round(d));
   const antes = alvo.hp;
   alvo.hp = Math.max(0, alvo.hp - d); at.dano += d; at.golpes++;
   /* o deslocamento do numero de dano: so visual, mas no prototipo sai do mesmo sorteio (fica no fluxo "visual") */
   const dx = (L.r.visual() - 0.5) * 16;
   const hits = dados.hits.length ? dados.hits : [{ prefab: "Fx_Battle_Hit_A_Normal", atraso: 0 }];
-  evento(L, { tipo: "dano", at: ref(at), alvo: ref(alvo), valor: d, perda: antes - alvo.hp, crit, mult: m, hab, resta: alvo.hp, x: alvo.x, y: alvo.y, dx, hits, espelho: at.x > alvo.x });
+  evento(L, { tipo: "dano", at: ref(at), alvo: ref(alvo), valor: d, perda: antes - alvo.hp, crit, mult: m, hab, resta: alvo.hp, x: alvo.x, y: alvo.y, dx, hits, espelho: at.x > alvo.x, ...(apoio ? { apoio: true as const } : {}) });
   if (alvo.hp <= 0) {
     alvo.morto = true; mudar(alvo, "die"); alvo.caiuEm = L.relogio;
     evento(L, { tipo: "queda", u: ref(alvo), motivo: null });
@@ -99,14 +124,20 @@ function aplicarDano(L: Luta, at: Lutador, alvo: Lutador, dados: GolpeBase | nul
   }
 }
 
-function iniciarAtaque(L: Luta, u: Lutador, mira: [number, number], hab: boolean): void {
+function iniciarAtaque(L: Luta, u: Lutador, mira: [number, number], hab: boolean, apoio = false): void {
   u.estado = "attack"; u.t = 0; u.golpeDado = false; u.mira = mira; u.viraEsq = mira[0] < u.x; u.usandoHab = !!hab; u.nAtaque++;
+  if (apoio) {
+    /* o golpe de apoio (LP6-1): a recarga propria, contada do comeco, em vezes o ciclo do ataque */
+    u.usandoApoio = true; u.recAp = L.cfg.apoio!.recarga * u.st.cad;
+    evento(L, { tipo: "apoio", u: ref(u), perto: !u.ap!.proj, anim: u.ap!.anim, x: u.x, y: u.y });
+  }
   if (hab) {
     u.recSk = u.st.hcd * 1000;
     evento(L, { tipo: "habilidade", u: ref(u), propria: u.propria, anim: u.sk.anim, x: u.x, y: u.y });
   }
 }
-const dadosDe = (u: Lutador): GolpeBase => u.usandoHab ? u.sk : u.g;
+/* o golpe em curso: o apoio (LP6-1), a habilidade ou o golpe. A esquiva (D-LP5-14) le por aqui: o apoio de perto e lido como o golpe de perto */
+const dadosDe = (u: Lutador): GolpeBase => u.usandoApoio ? u.ap! : u.usandoHab ? u.sk : u.g;
 const peito = (u: Lutador): [number, number] => [u.x, u.y - EQ.peito];
 
 function soltarGolpe(L: Luta, u: Lutador): void {
@@ -178,6 +209,7 @@ function atualizar(L: Luta, u: Lutador, dt: number): void {
   if (u.morto) return;
   const o = u.alvo!, dx = o.x - u.x, dy = o.y - u.y, d = dist(dx, dy);
   u.recarga -= dt; u.dashCd -= dt; u.recSk -= dt;
+  if (u.ap) u.recAp -= dt;
   if (u.foraAte) return;   // caiu do ringue: espera voltar ao centro
   if (u.estado === "stun") { u.atordoado -= dt; if (u.atordoado <= 0) mudar(u, "idle"); return; }
   if (u.estado === "attack") {
@@ -194,7 +226,10 @@ function atualizar(L: Luta, u: Lutador, dt: number): void {
       if (id < Math.max(T.distMin, u.alcance * T.recuaAbaixo)) andar(L, u, -ix / id, -iy / id, u.st.vel * T.recuaNaPrep, dt);
     }
     if (!u.golpeDado && u.t >= dg.t * 1000) { u.golpeDado = true; if (!o.morto) soltarGolpe(L, u); }
-    if (u.t >= (u.usandoHab ? u.msSk : u.msAtk)) { mudar(u, "idle"); u.recarga = Math.max(ACAO.recargaMin, u.st.cad - u.msAtk); u.usandoHab = false; }
+    if (u.usandoApoio) {
+      /* o fim do apoio (LP6-1): a recarga do golpe segue a dela, com o minimo de sempre */
+      if (u.t >= u.msAp) { mudar(u, "idle"); u.recarga = Math.max(ACAO.recargaMin, u.recarga); u.usandoApoio = false; }
+    } else if (u.t >= (u.usandoHab ? u.msSk : u.msAtk)) { mudar(u, "idle"); u.recarga = Math.max(ACAO.recargaMin, u.st.cad - u.msAtk); u.usandoHab = false; }
     return;
   }
   if (o.morto) { mudar(u, "idle"); return; }
@@ -221,6 +256,19 @@ function atualizar(L: Luta, u: Lutador, dt: number): void {
   let perto = false;
   if (T && T.distMin > 0 && (u.g.proj || u.sk.proj) && d < T.distMin) { u.esperaTiro += dt; perto = u.esperaTiro < T.esperaMax; } else u.esperaTiro = 0;
   if (u.recSk <= 0 && d <= alcHab + folga(u.sk.proj) && (livre || !u.sk.proj) && !(perto && u.sk.proj)) { iniciarAtaque(L, u, mira(), true); return; }
+  /* o golpe de apoio (LP6-1), pela distancia e com a recarga propria */
+  const ap = u.ap;
+  if (ap && !ap.proj) {
+    /* quem atira: o golpe de perto com o alvo abaixo da distMin do tiro (sem o `tiro`, a do recuo da POC) e ao alcance de perto. Sai
+       durante a espera do tiro (D-LP5-12) e nao troca o recuo: o atirador bate e, de volta ao idle, recua como antes */
+    const limite = T && T.distMin > 0 ? T.distMin : u.alcance * (T ? T.recuaAbaixo : 0.5);
+    if (u.recAp <= 0 && d < limite && d <= EQ.alcanceCorpo + folga(null)) { iniciarAtaque(L, u, mira(), false, true); return; }
+  } else if (ap) {
+    /* quem bate de perto: o tiro fraco quando o alvo fica alem do alcance de perto por um tempo (ele foge ou se esconde), ao alcance do
+       tiro e sem arvore ou rocha no caminho */
+    if (d > u.alcance + folga(u.g.proj)) u.longeMs += dt; else u.longeMs = 0;
+    if (u.recAp <= 0 && u.longeMs >= L.cfg.apoio!.longeMs && d <= ACAO.alcanceDist && livre) { u.longeMs = 0; iniciarAtaque(L, u, mira(), false, true); return; }
+  }
   if (d <= u.alcance + folga(u.g.proj) && u.recarga <= 0 && (livre || !u.g.proj) && !(perto && u.g.proj)) { iniciarAtaque(L, u, mira(), false); return; }
   let mx = 0, my = 0;
   if (!livre) {
@@ -274,7 +322,7 @@ export function passo(L: Luta): Evento[] {
         else evento(L, { tipo: "tiro_bloqueado", u: ref(pr.de), obst: ob.img });
       }
       else if (!o.morto && !o.foraAte && dist(o.x - pr.x, (o.y - EQ.peito) - pr.y) <= o.raio + 6) { pr.fim = true; aplicarDano(L, pr.de, o, pr.dados, pr.hab); }
-      else if (pr.resta <= 0 || !dentroArena(pr.x, pr.y + 30)) { pr.fim = true; evento(L, { tipo: "tiro_errou", u: ref(pr.de) }); }
+      else if (pr.resta <= 0 || !dentroArena(L, pr.x, pr.y + 30)) { pr.fim = true; evento(L, { tipo: "tiro_errou", u: ref(pr.de) }); }
     }
   }
   L.projeteis = L.projeteis.filter(pr => !pr.fim);
