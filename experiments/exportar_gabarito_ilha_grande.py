@@ -25,7 +25,7 @@ import exportar_gabarito_ilha_agua as ag  # noqa: E402
 import exportar_gabarito_mvp_mundo as e0  # noqa: E402
 
 from digilab.config import AGUA_POR_LAYOUT, ARVORE_FECHADA, CONFIG_MUNDO_GRANDE, MARCO_FECHADO  # noqa: E402
-from digilab.mundo import solidos_da_agua  # noqa: E402
+from digilab.mundo import centro_da_celula, solidos_da_agua  # noqa: E402
 
 ARQUIVO = RAIZ / "web" / "app" / "test" / "gabaritos" / "ilha_grande_python.json"
 CM = CONFIG_MUNDO_GRANDE
@@ -34,8 +34,8 @@ DIAS = ag.DIAS
 ARVORE, MARCO = (33, 29), (31, 21)          # uma celula de arvore e uma de marco (o carro) do mapa; o `gerar` confere
 # em subunidades (o mapa vai de 0 a 2047 e de 0 a 959); a ponte do meio fica nas colunas 81 e 82 das linhas 33 e 34
 PONTE_MEIO = (81, 83, 33, 35)
-CABECEIRAS = ((79 * 16 + 8, 34 * 16), (84 * 16 + 8, 34 * 16))
-NA_ARVORE, NO_MARCO = (ARVORE[0] * 16 + 8, ARVORE[1] * 16 + 8), (MARCO[0] * 16 + 8, MARCO[1] * 16 + 8)
+CABECEIRAS = ((79 * CM.sub + CM.sub // 2, 34 * CM.sub), (84 * CM.sub + CM.sub // 2, 34 * CM.sub))
+NA_ARVORE, NO_MARCO = centro_da_celula(ARVORE, CM), centro_da_celula(MARCO, CM)
 PONTOS_COMIDA = ((600, 480), (1352, 408), (1700, 500), (432, 656), (5, 5), NA_ARVORE, (1100, 300), NO_MARCO, (1800, 560), (2040, 950))
 PONTOS_LEVAR = ((1280, 480), (1352, 410), (1700, 480), (-40, 120), (440, 660), (1000, -7), NA_ARVORE, (3000, 50), NO_MARCO, (0, 0))
 ROTEIRO = ag.Roteiro(PONTOS_COMIDA, PONTOS_LEVAR, (), CABECEIRAS, PONTE_MEIO)

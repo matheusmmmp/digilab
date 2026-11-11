@@ -241,7 +241,9 @@ partida: PROPOSTO, SEM FONTE.
 - **O mundo grande no Python:** `CONFIG_MUNDO_GRANDE` (128 × 60 células), o layout `grande` e o mapa `AGUA_ILHA_GRANDE`, com dois
   caracteres novos, a árvore fechada (`T`) e o marco fechado (`#`). O motor os trata como a água: viram sólidos e o pet contorna.
   Nenhuma regra de desvio nova.
-- **O `ConfigMundo` aceita dois tamanhos,** 64 × 30 e 128 × 60, e nenhum outro.
+- **O `ConfigMundo` aceita dois tamanhos,** 64 × 30 e 128 × 60, com 16 subunidades por célula, e nenhum outro.
+- **O banheiro no layout com água** tem de ficar inteiro em células em que o pet pisa; senão o motor falha alto. O retângulo de
+  sempre do banheiro cai no mar da ilha grande, então a ilha grande ainda não combina com o banheiro (o jogo não o usa).
 - **As posições dos eventos** (a ração, a fruta e a bola que o dono põe) valem até o tamanho do mapa de cada mundo. Antes o limite era
   fixo em 1024 × 480 subunidades. Quem não passa o tamanho (o grupo, os replays de antes) continua no limite de antes.
 - **As regiões** são as quatro de sempre com as faixas dobradas (IG-5).
@@ -269,5 +271,15 @@ dos testes, 4 dias, uma ração a cada terço de dia a uma distância fixa a les
 nenhum dos dois. O que muda na ilha grande é que essas distâncias passam a existir entre o lar e a maior parte da ilha. É o dado para a
 IG-6; nada foi ajustado.
 
+**Os limites da medida:** a ração nova é posta sem tirar a anterior, e conta ração com o pet sem fome (6 de 23 a 4 células). Serve
+para "além de 24 células, nada"; não serve como taxa de alcance. A 24 células as rações postas são 11, contra 21 a 26 nas outras
+distâncias; não investiguei o motivo.
+
+**A revisão separada** (um agente de leitura, antes do PR) não achou defeito que mude a vida de hoje nem o replay. Apontou três riscos:
+a validação do tamanho aceitava outras combinações de células e subunidades (corrigido), o banheiro de sempre cairia no mar da ilha
+grande em silêncio (corrigido: falha alto), e a métrica do hábito (`digilab/metrics.py`, I5) é fixa em 64 × 30 e erraria numa vida
+do mundo grande (não corrigido: a pesquisa não usa o mundo grande, IG-8; fica registrado como armadilha).
+
 **O que não foi verificado:** a suíte inteira do Python não rodou; o custo no celular; o DigiBrain modular com as regiões novas (a
-medida usa o A do v11); a árvore e o marco não tapam a visão do pet, como a água.
+medida usa o A do v11); a fruta posta ao lado da ração no mundo grande (o caminho recebe o tamanho do mapa, mas não tem teste lá). A
+árvore e o marco não tapam a visão do pet, como a água. O grupo de dois pets continua no limite de 64 × 30.

@@ -1842,7 +1842,7 @@ class ConfigMundo:
 
     def __post_init__(self) -> None:
         # o mapa da tarefa (secao 3) e o da ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG-2: 128 x 60); nenhum outro tamanho
-        if (self.celulas_x * self.sub, self.celulas_y * self.sub) not in ((1024, 480), (2048, 960)):
+        if (self.celulas_x, self.celulas_y, self.sub) not in ((64, 30, 16), (128, 60, 16)):
             raise ValueError("o mapa e 64 x 30 celulas de 16 subunidades (secao 3) ou 128 x 60 (a ilha grande)")
         if self.velocidade <= 0 or self.atrito <= 0:
             raise ValueError("velocidade e atrito precisam ser positivos")

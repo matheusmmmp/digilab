@@ -283,7 +283,7 @@ def fala(tick: int, gatilho: str) -> Evento:
 
 # V2, mundo fisico (docs/TAREFA_V2_MUNDO_FISICO.md, secao 4): o dono deixa a comida ou a bola num ponto do mapa. Tipos novos do log,
 # como a `luta`: so o `reproduzir_mundo` (digilab/mundo.py) os entende; os replays de antes levantam erro. A posicao ja vem na grade
-# (inteiros em subunidades, dentro do mapa: 0 <= x < 1024, 0 <= y < 480); fora disso, nao inteira ou tipo desconhecido levanta erro.
+# (inteiros em subunidades, dentro do mapa: 0 <= x < 1024, 0 <= y < 480 no de 64 x 30; o `mapa` de quem chama, abaixo); fora disso, nao inteira ou tipo desconhecido levanta erro.
 TIPOS_COMIDA_MUNDO = ("racao", "a", "b", "c")
 LARGURA_MUNDO = 1024
 ALTURA_MUNDO = 480

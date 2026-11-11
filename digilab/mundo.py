@@ -308,6 +308,10 @@ def faixa_do_banheiro(cbh: ConfigBanheiro, cm: ConfigMundo) -> tuple[int, int, i
     casa = cm.layout.regioes[0]
     if casa[0] != "casa" or not casa[1] <= cx0 <= cx1 <= casa[2]:
         raise ValueError(f"o banheiro tem de ficar dentro da casa {casa}: x {cbh.celulas_x}")
+    # no layout com agua, o banheiro inteiro fica em celulas em que o pet pisa (na ilha grande, o retangulo de sempre cai no mar)
+    secas = celulas_secas(cm)
+    if secas is not None and not all(secas[cy * cm.celulas_x + cx] for cy in range(cy0, cy1 + 1) for cx in range(cx0, cx1 + 1)):
+        raise ValueError(f"o banheiro tem celula fechada no layout {cm.layout.nome!r}: x {cbh.celulas_x}, y {cbh.celulas_y}")
     sub = cm.sub
     return cx0 * sub, (cx1 + 1) * sub - 1, cy0 * sub, (cy1 + 1) * sub - 1
 

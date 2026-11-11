@@ -51,8 +51,9 @@ def test_o_mapa_e_o_da_figura_tem_o_tamanho_do_mundo_e_o_mar_em_toda_a_borda():
     assert set(AGUA_ILHA_GRANDE[0]) == set(AGUA_ILHA_GRANDE[-1]) == {AGUA_MAR}
     assert all(l[0] == l[-1] == AGUA_MAR for l in AGUA_ILHA_GRANDE)
     # so os dois tamanhos decididos existem
-    with pytest.raises(ValueError, match="64 x 30"):
-        ConfigMundo(ligada=True, celulas_x=96, celulas_y=48)
+    for outro in ({"celulas_x": 96, "celulas_y": 48}, {"sub": 32}, {"celulas_x": 128, "celulas_y": 60, "sub": 8}):
+        with pytest.raises(ValueError, match="64 x 30"):
+            ConfigMundo(ligada=True, **outro)
 
 
 def test_a_ilha_grande_tem_mais_de_tres_vezes_a_terra_de_hoje_com_arvores_e_marcos():
@@ -102,6 +103,14 @@ def test_toda_a_terra_livre_se_alcanca_a_pe_e_o_ninho_fechado_falha_alto():
             Mundo(ruim, 101)
     finally:
         del AGUA_POR_LAYOUT["grande_teste"]
+
+
+def test_o_banheiro_de_sempre_cai_no_mar_da_ilha_grande_e_falha_alto():
+    from digilab.config import CONFIG_BANHEIRO_LIGADA
+    from digilab.mundo import faixa_do_banheiro
+    faixa_do_banheiro(CONFIG_BANHEIRO_LIGADA, CONFIG_MUNDO_MVP_AGUA)             # no mundo de hoje com agua, o banheiro fica em terra
+    with pytest.raises(ValueError, match="celula fechada"):
+        faixa_do_banheiro(CONFIG_BANHEIRO_LIGADA, CM)
 
 
 def test_o_que_o_dono_poe_em_cima_da_arvore_ou_do_marco_vai_para_a_terra():
