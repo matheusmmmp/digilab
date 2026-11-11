@@ -1,0 +1,695 @@
+{
+ "fase": "lp5_1",
+ "bases": 1,
+ "grupos": [
+  "treino",
+  "estagio",
+  "sparring",
+  "formas_crianca",
+  "formas_adolescente",
+  "formas_adulto",
+  "formas_mega"
+ ],
+ "tam": {
+  "pets": 8,
+  "lutas": 4,
+  "lutasT2": 3,
+  "lutasGrade": 2,
+  "lutasE1": 4,
+  "lutasFormas": 5
+ },
+ "candidatos": [
+  {
+   "nome": "g04_f1_m3_v03_70",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.04,
+    "recuperacao": 0.04,
+    "guarda": 0.12,
+    "forca": 0.04,
+    "mira": 0.3,
+    "folego": 0.3
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 70
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g04_f1_m3_v10_45",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.04,
+    "recuperacao": 0.04,
+    "guarda": 0.12,
+    "forca": 0.04,
+    "mira": 0.3,
+    "folego": 1.0
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 45
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g04_f1_m3_v06_45",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.04,
+    "recuperacao": 0.04,
+    "guarda": 0.12,
+    "forca": 0.04,
+    "mira": 0.3,
+    "folego": 0.6
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 45
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g04_f1_m8_v03_70",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.04,
+    "recuperacao": 0.04,
+    "guarda": 0.12,
+    "forca": 0.04,
+    "mira": 0.8,
+    "folego": 0.3
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 70
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g04_f1_m8_v10_45",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.04,
+    "recuperacao": 0.04,
+    "guarda": 0.12,
+    "forca": 0.04,
+    "mira": 0.8,
+    "folego": 1.0
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 45
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g04_f1_m8_v06_45",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.04,
+    "recuperacao": 0.04,
+    "guarda": 0.12,
+    "forca": 0.04,
+    "mira": 0.8,
+    "folego": 0.6
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 45
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g04_f15_m3_v03_70",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.04,
+    "recuperacao": 0.04,
+    "guarda": 0.12,
+    "forca": 0.06,
+    "mira": 0.3,
+    "folego": 0.3
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 70
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g04_f15_m3_v10_45",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.04,
+    "recuperacao": 0.04,
+    "guarda": 0.12,
+    "forca": 0.06,
+    "mira": 0.3,
+    "folego": 1.0
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 45
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g04_f15_m3_v06_45",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.04,
+    "recuperacao": 0.04,
+    "guarda": 0.12,
+    "forca": 0.06,
+    "mira": 0.3,
+    "folego": 0.6
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 45
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g04_f15_m8_v03_70",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.04,
+    "recuperacao": 0.04,
+    "guarda": 0.12,
+    "forca": 0.06,
+    "mira": 0.8,
+    "folego": 0.3
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 70
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g04_f15_m8_v10_45",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.04,
+    "recuperacao": 0.04,
+    "guarda": 0.12,
+    "forca": 0.06,
+    "mira": 0.8,
+    "folego": 1.0
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 45
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g04_f15_m8_v06_45",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.04,
+    "recuperacao": 0.04,
+    "guarda": 0.12,
+    "forca": 0.06,
+    "mira": 0.8,
+    "folego": 0.6
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 45
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g05_f1_m3_v03_70",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.05,
+    "recuperacao": 0.05,
+    "guarda": 0.15,
+    "forca": 0.05,
+    "mira": 0.3,
+    "folego": 0.3
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 70
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g05_f1_m3_v10_45",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.05,
+    "recuperacao": 0.05,
+    "guarda": 0.15,
+    "forca": 0.05,
+    "mira": 0.3,
+    "folego": 1.0
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 45
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g05_f1_m3_v06_45",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.05,
+    "recuperacao": 0.05,
+    "guarda": 0.15,
+    "forca": 0.05,
+    "mira": 0.3,
+    "folego": 0.6
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 45
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g05_f1_m8_v03_70",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.05,
+    "recuperacao": 0.05,
+    "guarda": 0.15,
+    "forca": 0.05,
+    "mira": 0.8,
+    "folego": 0.3
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 70
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g05_f1_m8_v10_45",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.05,
+    "recuperacao": 0.05,
+    "guarda": 0.15,
+    "forca": 0.05,
+    "mira": 0.8,
+    "folego": 1.0
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 45
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g05_f1_m8_v06_45",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.05,
+    "recuperacao": 0.05,
+    "guarda": 0.15,
+    "forca": 0.05,
+    "mira": 0.8,
+    "folego": 0.6
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 45
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g05_f15_m3_v03_70",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.05,
+    "recuperacao": 0.05,
+    "guarda": 0.15,
+    "forca": 0.075,
+    "mira": 0.3,
+    "folego": 0.3
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 70
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g05_f15_m3_v10_45",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.05,
+    "recuperacao": 0.05,
+    "guarda": 0.15,
+    "forca": 0.075,
+    "mira": 0.3,
+    "folego": 1.0
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 45
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g05_f15_m3_v06_45",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.05,
+    "recuperacao": 0.05,
+    "guarda": 0.15,
+    "forca": 0.075,
+    "mira": 0.3,
+    "folego": 0.6
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 45
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g05_f15_m8_v03_70",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.05,
+    "recuperacao": 0.05,
+    "guarda": 0.15,
+    "forca": 0.075,
+    "mira": 0.8,
+    "folego": 0.3
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 70
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g05_f15_m8_v10_45",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.05,
+    "recuperacao": 0.05,
+    "guarda": 0.15,
+    "forca": 0.075,
+    "mira": 0.8,
+    "folego": 1.0
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 45
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  },
+  {
+   "nome": "g05_f15_m8_v06_45",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.05,
+    "recuperacao": 0.05,
+    "guarda": 0.15,
+    "forca": 0.075,
+    "mira": 0.8,
+    "folego": 0.6
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 45
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1.0,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   }
+  }
+ ]
+}
