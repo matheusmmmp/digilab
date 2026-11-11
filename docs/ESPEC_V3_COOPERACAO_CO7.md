@@ -1,9 +1,9 @@
-# ESPEC V3 — COOPERACAO, CO7: os deveres como escudo, o teste da universalização e a culpa e a inveja (2026-11-11, PROPOSTA, Claude Code, Opus 5.5)
+# ESPEC V3 — COOPERACAO, CO7: os deveres como escudo, o teste da universalização e a culpa e a inveja (2026-11-11, CO7-1 a CO7-8 DECIDIDAS, Claude Code, Opus 5.5)
 
-**Status: PROPOSTA, para o Matheus revisar antes de qualquer código.** Esta espec detalha a CO7 da `docs/TAREFA_V3_COOPERACAO.md`: os
+**Status: revisada pelo Matheus; as CO7-1 a CO7-8 (seção 8) DECIDIDAS em 2026-11-11 ("Aprovo todas"), pela recomendação.** Os números continuam PROPOSTOS. Esta espec detalha a CO7 da `docs/TAREFA_V3_COOPERACAO.md`: os
 deveres como escudo, por estágio. Ela parte da proposta `docs/futuro/kant_cooperacao.md` (as K-2, K-3 e K-4, DECIDIDAS em 2026-11-11) e da
 espec da CO6 (`docs/ESPEC_V3_COOPERACAO_CO6.md`, as CO6-1 a CO6-7 DECIDIDAS). **O código é coordenado pela frente COOPERACAO** (o Gerente da
-V3, pela K-1). As decisões CO7-1 a CO7-8 (seção 8) estão PROPOSTAS. Todos os números são PROPOSTOS, SEM FONTE como escolha, e não há
+V3, pela K-1). Todos os números são PROPOSTOS, SEM FONTE como escolha, e não há
 alegação de novidade.
 
 ## 0. O que já existe e o que vale
@@ -104,7 +104,7 @@ CO7.
 
 **A ordem:** depois da CO6 na `main`.
 
-## 8. As decisões (PROPOSTAS, para o Matheus; cada uma com a recomendação e o custo de errar)
+## 8. As decisões (DECIDIDAS pelo Matheus em 2026-11-11, todas pela recomendação; cada uma com a recomendação e o custo de errar)
 
 | | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
