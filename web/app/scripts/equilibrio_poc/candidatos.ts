@@ -107,7 +107,21 @@ export const LP6_0 = candidatoDe({
   fatorRival: { salao: .8 },
   apoio: { ligado: 1 }, arena: { ligada: 1 },
 });
-export const CANDIDATOS: Readonly<Record<string, Candidato>> = { v21: CANDIDATO_V21, lp5_1_r1: LP5_1_R1, lp5_1_r2: LP5_1_R2, lp5_1_esq: LP5_1_ESQ, lp5_2: LP5_2, lp5_3: LP5_3, lp6_0: LP6_0 };
+/** LP6-3, os 3 finalistas da R2 (lp6_3/r2; D-LP6-3-7 e D-LP6-3-8): o lp6_0 com o apoio so desde o Ultimate (sem o recuo), dano 0,6, recarga
+    3 vezes, e a elipse do Ultimate e do Mega em 1,1/1,2, 1,15/1,3 ou 1,2/1,4. PROPOSTOS, SEM FONTE */
+const finalista = (nome: string, Ultimate: number, Mega: number) => candidatoDe({
+  nome, pesoPonto: 15,
+  gama: { vigor: .02, recuperacao: .02, guarda: .06, forca: .02, mira: .14, folego: .14 },
+  mapa: { hp: 1300, vel: 60 }, multVida: E(.6, .9, 1.35, 2.025), multAtk: E(1, 1.5, 2.25, 3.375),
+  tiro: { distMin: 110, esperaMax: 1500, recuo: 1.5, recuaNaPrep: 2, recuaAbaixo: .75, danoProj: .7, velProj: 1 },
+  esquiva: { ligada: 1, gamaMira: .6, gamaFolego: .6, kAtento: .5, pertoChance: 0, pertoReacao: 200, contraMs: 0 },
+  npcTotal: { npc_tier1_brutamontes: 76.8 },
+  fatorRival: { salao: .8 },
+  apoio: { ligado: 1, dano: .6, recarga: 3, desde: 3 }, arena: { ligada: 1, Ultimate, Mega },
+});
+export const LP6_3_U110 = finalista("lp6_3_u110", 1.1, 1.2), LP6_3_U115 = finalista("lp6_3_u115", 1.15, 1.3), LP6_3_U120 = finalista("lp6_3_u120", 1.2, 1.4);
+export const CANDIDATOS: Readonly<Record<string, Candidato>> = { v21: CANDIDATO_V21, lp5_1_r1: LP5_1_R1, lp5_1_r2: LP5_1_R2, lp5_1_esq: LP5_1_ESQ, lp5_2: LP5_2, lp5_3: LP5_3, lp6_0: LP6_0,
+  lp6_3_u110: LP6_3_U110, lp6_3_u115: LP6_3_U115, lp6_3_u120: LP6_3_U120 };
 /** o candidato da linha de comando: --candidato <nome>, ou --candidato-json <arquivo> (so a grade) */
 export function candidatoDaLinha(nome: string, json: string, grade: boolean): Candidato {
   if (json) {

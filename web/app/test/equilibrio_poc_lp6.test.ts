@@ -5,7 +5,8 @@ import { describe, expect, test } from "vitest";
 import { CMD, DUR_EVO, FORMAS_ARENA, Motor, VERSAO_V22, VERSAO_V23, lutarNucleoPoc, sorteiosPoc } from "../motor/index.ts";
 import { APOIO_LP6, APOIO_TABELA, ARENA_POR_ESTAGIO_LP6 } from "../motor/arena/index.ts";
 import { CANDIDATO_V21, extrasLp6, lutar, refazerApoio, rivalCanonico, tabelaDoRitmo } from "../scripts/equilibrio_poc/comum.ts";
-import { candidatoDe, LP5_3, LP6_0 } from "../scripts/equilibrio_poc/candidatos.ts";
+import { readFileSync } from "node:fs";
+import { candidatoDe, LP5_3, LP6_0, LP6_3_U110, LP6_3_U115, LP6_3_U120, type Troca } from "../scripts/equilibrio_poc/candidatos.ts";
 import { motorDoCandidato } from "../scripts/equilibrio_poc/bancada.ts";
 
 describe("as chaves da LP6 na bancada (LP6-3)", () => {
@@ -74,5 +75,12 @@ describe("as chaves da LP6 na bancada (LP6-3)", () => {
     expect(() => extrasLp6(candidatoDe({ nome: "teste", apoio: { ligado: 1, desde: 5 } }))).toThrow();
     expect(() => candidatoDe({ nome: "teste", apoio: { desde: 3 } })).toThrow();
     expect(() => candidatoDe({ nome: "teste", apoio: { ligado: 1, recua: 2 } })).toThrow();
+  });
+  test("os 3 finalistas (D-LP6-3-8) sao os pontos u110, u115 e u120 com dano 0,6 e recarga 3 da grade R2", () => {
+    const g = JSON.parse(readFileSync(new URL("../scripts/medicoes/equilibrio_poc/lp6_3/r2/grade.json", import.meta.url), "utf-8")) as { candidatos: Troca[] };
+    for (const [c, ponto] of [[LP6_3_U110, "u110_d60_r3"], [LP6_3_U115, "u115_d60_r3"], [LP6_3_U120, "u120_d60_r3"]] as const) {
+      const { nome: _a, ...x } = c, { nome: _b, ...y } = candidatoDe(g.candidatos.find(t => t.nome === ponto)!);
+      expect(x).toEqual(y);
+    }
   });
 });

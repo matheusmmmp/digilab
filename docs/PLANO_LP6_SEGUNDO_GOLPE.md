@@ -228,3 +228,23 @@ cada grade e antes da conferência.
   - são 16 pontos, em todos os grupos menos a vida, em 3 bases da calibração e com os tamanhos inteiros;
   - a regra de escolha é a da seção 4.2 do plano da LP5, com as 10 protegidas do `lp5_3`;
   - todos os números são PROPOSTOS, SEM FONTE.
+
+**A R2 e a escolha do candidato (2026-11-11, registrada antes das medidas inteiras).**
+- **A R2** (PR #834, `lp6_3/r2`): 10 dos 16 pontos passam 9 de 21, e voltam o P1, o P4 e o G4.
+  - **O S1** cai em todos os pontos. No Rookie, é ruído das 3 bases. No Ultimate e no Mega, depende da elipse.
+- **A decisão:** o Matheus escolheu "(a) Medir os 3 (Recommended)", repassado pelo Gerente.
+- **Os finalistas** (`candidatos.ts`) têm o apoio desde o Ultimate, sem o recuo, dano 0,6 e recarga 3 vezes:
+  - `lp6_3_u110`, a elipse em 1,1/1,2;
+  - `lp6_3_u115`, em 1,15/1,3;
+  - `lp6_3_u120`, em 1,2/1,4.
+- **As medidas:** cada finalista roda inteiro nas 5 bases da calibração, um por vez, com o `medir_tudo.ts`, nas fases `lp6_3_u110`,
+  `lp6_3_u115` e `lp6_3_u120`.
+- **O critério, nesta ordem:**
+  1. **As 10 protegidas do `lp5_3` passam,** o S1 inclusive. Quem reprova uma delas sai.
+  2. **Entre os que ficam, o de menor desvio do A1** no Ultimate e no Mega, o maior entre `|A1 Ultimate − 0,5|` e `|A1 Mega − 0,5|`
+     (o A1 na soma dos 8 mapas).
+  3. **Se dois ficam a menos de 0,01 um do outro,** vence o mais perto dos números da LP6-1, o `lp6_3_u115`, e depois o de menor fator.
+- **Se nenhum passa as 10 protegidas,** a escolha volta ao Matheus antes da conferência, com os números.
+- **Se o escolhido não tiver a elipse 1,15/1,3,** a decisão 4 do plano muda. Isso é um desvio a registrar e a avisar ao Gerente.
+- **A conferência** roda uma vez nas 87xxx, com o escolhido, na fase `lp6_3`. A comparação usa o `comparar_conferencia.ts
+  --conferencia lp6_3`.
