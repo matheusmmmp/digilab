@@ -104,8 +104,9 @@
 .mc-conv__linha{ display:flex; align-items:flex-end; gap:8px }
 .mc-av{ width:44px; height:44px; flex:none; display:grid; place-items:center; background:var(--hx-miolo-2); border:1px solid var(--hx-borda-topo); overflow:hidden }
 .mc-av img{ max-width:none }
-.mc-pilha{ display:grid; gap:4px; min-width:0 }
-.mc-balao{ max-width:min(86%,560px); padding:8px 12px; border:1px solid var(--hx-borda-topo); background:var(--hx-miolo-2); color:var(--hx-texto); overflow-wrap:anywhere }
+/* a pilha ocupa a linha e o balao encolhe ao texto: com a pilha encolhida, os 86 % do balao eram menos que o texto e "Comi?" partia */
+.mc-pilha{ display:grid; gap:4px; min-width:0; flex:1; justify-items:start }
+.mc-balao{ max-width:min(86%,560px); padding:8px 12px; border:1px solid var(--hx-borda-topo); background:var(--hx-miolo-2); color:var(--hx-texto); overflow-wrap:break-word }
 .mc-balao--eu{ align-self:flex-end; background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda) }
 .mc-balao--sembase{ text-decoration:line-through; text-decoration-color:var(--hx-alerta); border-style:dashed }
 .mc-nota{ display:flex; gap:6px; align-items:baseline; font-size:14px; color:var(--hx-sec) }
