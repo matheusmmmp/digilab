@@ -668,6 +668,30 @@ contra 6 do `lp5_1_r2`:
 
 No jogo, a luta segue no v21: a esquiva só entra com o v22, na LP5-5. A LP5-2 parte do `lp5_1_esq`.
 
+## Resultado da LP5-2 (as rodadas 1 e 2 do total dos NPCs, paradas num ponto de decisão)
+
+O Matheus: "Sim, segue". A LP5-2 parte do `lp5_1_esq`. Pela D-LP5-9, o total de cada NPC vem primeiro, e a divisão dos stats só entra
+se o total não fechar o P1 a P3 em 2 rodadas. As duas grades (`lp5_2/r1` e `lp5_2/r2`) multiplicam os 10 totais pelo mesmo fator. Cada
+NPC só depende do total dele, então uma grade dá a curva de cada um. As grades rodam só o grupo `lideres`, com 2 bases da calibração
+(86101, 86201), cerca de 18 000 lutas por ponto e 4 processos.
+
+- **A rodada 1** (de 0,5 a 1,3 vez o total de hoje) quase não move nada. O Gazimon sem treino vai de 0,43 a 0,30, e o típico de 0,61 a
+  0,50.
+- **A rodada 2** (de 0,1 a 8 vezes) também não fecha. Nenhuma das metas P1, P2 e P3 passa em nenhum ponto. Dois NPCs passam sozinhos:
+  - **o MarinBullmon** com 1,3 vez o total (143): sem treino 0,18, típico 0,74, pior espécie 0,64;
+  - **o Tortomon** com 3 vezes o total (216): sem treino 0,31, típico 0,77.
+- **Por que o total não fecha:**
+  - **a alavanca ficou fraca.** Com os expoentes da LP5-1 (0,02 no vigor e na força, 0,14 na mira e no fôlego), mesmo 8 vezes o total
+    move pouco cada razão;
+  - **a distância entre o pet sem treino e o típico é curta.** Ela fica em 0,45 ou menos contra qualquer NPC. O T1 (o típico contra o
+    mesmo pet sem treino) é 0,83 no Rookie, e com ele a conta logística dá uns 0,55 para o típico quando o pet sem treino fica em 0,20.
+    O P1 pede 0,70: só fecharia com o T1 perto de 0,93;
+  - **a pior espécie é a forma, não o total.** O cirro do Rookie fica de 0,00 a 0,16 contra o Gazimon em todo o caminho, e a brasa
+    passa de 0,85. É o mesmo achado do V2, aceito como reprovado na D-LP5-15.
+
+A divisão dos stats (a D-LP5-9) mexe no mesmo lado do NPC e não encurta a distância do pet, nem muda a forma. Por isso a fase parou
+aqui, com a decisão levada ao Matheus no PR. Nenhum número do candidato mudou.
+
 ## Resultado da LP3c (2026-11-10)
 
 Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp3c`, a pedido do Gerente de sprites e luta. O pedido seguiu a revisão dos

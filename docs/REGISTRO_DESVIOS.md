@@ -621,3 +621,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-10 — LUTA_POC, LP3c: o desenho do tiro, da câmera e do fim (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp3c`)](registro/2026-11.md)
 - [2026-11-11 — COOPERACAO, CO0: a tarefa no papel (coordenador, Gerente da V3, Claude Code, Opus 5.5, branch `v3-cooperacao`)](registro/2026-11.md)
 - [2026-11-11 — LUTA_POC, LP5: a esquiva ligada no candidato (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-calib`)](registro/2026-11.md)
+- [2026-11-11 — LUTA_POC, LP5-2: as rodadas 1 e 2 do total dos NPCs (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-2`)](registro/2026-11.md)
