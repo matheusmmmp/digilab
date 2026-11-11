@@ -9,7 +9,7 @@
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, CUIDADO_NA_HORA, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
   TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehLutaPoc, nasceNaAgua,
-  CMU_MVP_AGUA, ILHA_DOS_V21,
+  CMU_MVP_AGUA, ILHA_DOS_V21, VERSOES_COM_SACUDIR,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { LUGARES_V6, NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
@@ -28,7 +28,10 @@ import { CCO_CORPO_V11, CONFIG_LUTA_CORPO_LIGADA } from "./corpo.ts";
 import { desejoLobos, type BracoConsequencia, type CerebroA, type ObservacaoLobos } from "./lobos.ts";
 import { MotorCorpo, estadoNascimentoPy, type PoliticaCorpo } from "./motor_corpo.ts";
 import { MotorCorpoMundo, type PoliticaCorpoMundo } from "./motor_corpo_mundo.ts";
-import { eventoDeixarBola, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, lerDeixarBola, lerDeixarComida, lerLevarPet, lerMudarIlha, type Mundo } from "./mundo.ts";
+import {
+  eventoDeixarBola, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, eventoSacudirArvore, lerDeixarBola, lerDeixarComida, lerLevarPet, lerMudarIlha,
+  lerSacudirArvore, type Mundo,
+} from "./mundo.ts";
 import { CONFIG_CONTRATO_AGUA } from "./contrato.ts";
 import { bracoV11 } from "./pet_v11.ts";
 import { leituraLab, type LeituraLab } from "./digibrain/leitura.ts";
@@ -780,6 +783,28 @@ export class Motor {
     this._conferirMorte(); this._vivo();
     (this.v11!.laco as MotorCorpoMundo).petDoDono(x, y);
   }
+  /** o sacudir a arvore (docs/TAREFA_V3_ARVORE_SACODE.md, S2): o dono sacode a arvore `arvore` do layout; cai uma fruta se houver no
+      galho e lugar no chao. So o mundo muda (AS-1): nao e contato nem cuidado, nao passa pelo cerebro, pelo corpo, pelo vinculo nem pelo
+      historico, e nao atende o chamado do bebe. Vale com o pet acordado ou dormindo; o pet morto, uma versao sem o sacudir (hoje, todas:
+      VERSOES_COM_SACUDIR vazia, D-AS-S2-1) e o id que nao e de arvore do layout falham alto antes do registro */
+  sacudirArvore(arvore: string): void {
+    lerSacudirArvore(eventoSacudirArvore(this.e.tick, arvore));
+    this._conferirSacudir();
+    this._conferirMorte(); this._vivo();
+    const t = this.e.tick;
+    this._sacudirArvore(arvore);
+    this.log.push([t, "sa", { arvore }]);
+  }
+  private _conferirSacudir(): void {
+    if (!VERSOES_COM_SACUDIR.includes(this.versao) || this.mundo === null || this.mundo.sacudidas === null)
+      throw new Error(`nenhum pet sacode árvore ainda: o sacudir não está em nenhuma versão de pet (este é v${this.versao})`);
+  }
+  private _sacudirArvore(arvore: string): void {
+    lerSacudirArvore(eventoSacudirArvore(this.e.tick, arvore));
+    this._conferirSacudir();
+    this._conferirMorte(); this._vivo();
+    (this.v11!.laco as MotorCorpoMundo).sacudirDoDono(arvore);
+  }
   /** o pet pode passar para a ilha com agua agora: e v21, esta vivo e o mundo dele ainda nao tem agua (IA4) */
   get podeMudarIlha(): boolean { return this.versao === VERSAO_V21 && this.mundo !== null && this.mundo.secas === null && this.morte === null; }
   /** a ilha do pet tem agua (a v22 desde o ovo; a v21 depois do "mi") */
@@ -1229,6 +1254,13 @@ export class Motor {
         const { x, y } = l as Record<string, unknown>;
         lerLevarPet(eventoLevarPet(t, x, y));
         this._levarPet(x as number, y as number); break;
+      }
+      case "sa": {
+        const a = ev[2] as unknown;
+        if (!a || typeof a !== "object" || Object.keys(a).join() !== "arvore")
+          throw new Error(`evento de sacudir a árvore inválido no registro (tick ${t}): ${JSON.stringify(a)}`);
+        const arvore = lerSacudirArvore({ tipo: "sacudir_arvore", valor: (a as Record<string, unknown>).arvore });
+        this._sacudirArvore(arvore); break;
       }
       case "mi": {
         const i = ev[2] as unknown;
