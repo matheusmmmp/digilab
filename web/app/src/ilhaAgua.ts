@@ -4,7 +4,10 @@
    nascem na ilha com agua (a v22). O pet de teste (v16), o pet morto e o que ja passou ficam como estao. */
 import type { Motor } from "../motor/index.ts";
 
-/** passa o pet para a ilha com agua, se ele pode; devolve se passou (quem chama grava o save) */
+/* Desde a IG4 (docs/TAREFA_V3_ILHA_AGUA.md, secao 12; 2026-11-11) o destino e a ilha grande (128 x 60): passam os pets v21 (os que
+   nunca passaram para a agua e os que ja tinham passado) e os v22, com o lar de la virando o lar de ca e tudo deslocado junto (IG-7).
+   Os ovos novos ja nascem nela (a v23). */
+/** passa o pet para a ilha grande, se ele pode; devolve se passou (quem chama grava o save) */
 export function passarParaIlhaComAgua(m: Motor): boolean {
   if (!m.podeMudarIlha) return false;
   m.mudarIlha();

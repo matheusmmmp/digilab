@@ -52,7 +52,8 @@ def test_o_evento_guarda_o_nome_do_layout_e_so_aceita_a_forma_canonica():
 
 
 def test_os_destinos_sao_o_layout_de_antes_com_a_agua_e_o_controlador():
-    assert set(ILHAS_DE_TROCA) == {"mvp_agua", "ilha_agua"}
+    # o "grande" e a ilha de outro tamanho (a secao 12 da tarefa, IG4; tests/test_ilha_maior.py)
+    assert set(ILHAS_DE_TROCA) == {"mvp_agua", "ilha_agua", "grande"}
     for antes, depois in ((CONFIG_MUNDO_MVP, CONFIG_MUNDO_MVP_AGUA), (CONFIG_MUNDO_ILHA, CONFIG_MUNDO_ILHA_AGUA)):
         layout, contrato = ILHAS_DE_TROCA[depois.layout.nome]
         assert layout == depois.layout and replace(layout, nome=antes.layout.nome) == antes.layout

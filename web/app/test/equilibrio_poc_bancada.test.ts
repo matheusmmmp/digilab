@@ -5,13 +5,14 @@ import { describe, expect, test } from "vitest";
 import {
   CAMPANHA_V6, CMD, CTR, DUR_EVO, LIGA, Motor, STATS, TICK_INICIAL, TentativaFabrica, caraterCanonico, condicaoDe, formaLiga, rivaisArena,
   statsDoPet, statsNpc, statsRivalArena, statsRivalForma, TIRO_POC_V21, lutarNucleoPoc, sorteiosPoc, type Stats,
+  LUTA_V23, RIVAL_SALAO, VERSAO_V22, VERSAO_V23, caraterDoRivalSalao, formaRivalSalao, tabelaLuta,
 } from "../motor/index.ts";
 import {
-  CANDIDATO_V21, ESTAGIOS_LUTA, TETO, TIPICO, npc, petDoEstagio, pontosNoTotal, rivalCanonico, rivalDaForma, statsLuta,
+  CANDIDATO_V21, ESTAGIOS_LUTA, TETO, TIPICO, esquivaDe, lutador, npc, petDoEstagio, pontosNoTotal, rivalCanonico, rivalDaForma, statsLuta,
 } from "../scripts/equilibrio_poc/comum.ts";
 import { basesDa } from "../scripts/equilibrio_poc/faixas.ts";
 import { limitesNpc, passaNpc } from "../scripts/equilibrio_poc/criterios.ts";
-import { candidatoDe, LP5_1_ESQ, LP5_1_R2, LP5_2 } from "../scripts/equilibrio_poc/candidatos.ts";
+import { candidatoDe, LP5_1_ESQ, LP5_1_R2, LP5_2, LP5_3 } from "../scripts/equilibrio_poc/candidatos.ts";
 import { motorDoCandidato } from "../scripts/equilibrio_poc/bancada.ts";
 
 const c = CANDIDATO_V21;
@@ -19,7 +20,7 @@ const c = CANDIDATO_V21;
 describe("o candidato v21 refaz os numeros do jogo", () => {
   test("o pet: o statsLutaPoc do Motor, sem e com treino", () => {
     for (const s of [11, 21, 23, 101, 202]) {
-      const m = new Motor(s);
+      const m = new Motor(s, VERSAO_V22);
       m.liberar(CMD.mega);
       m.avancar(DUR_EVO.bebe + 30);
       const conf = () => expect(statsLuta(c, statsDoPet(m.forma, m.carater(), m.pontosDeLuta()), m.forma.est, condicaoDe(m.e.saude))).toEqual(m.statsLutaPoc());
@@ -42,6 +43,62 @@ describe("o candidato v21 refaz os numeros do jogo", () => {
     LIGA.forEach((x, k) => expect(rivalDaForma(c, formaLiga(k), caraterCanonico(x.adulta))).toEqual(statsRivalForma(formaLiga(k), caraterCanonico(x.adulta))));
     const t = new TentativaFabrica(1, 0);
     for (const f of t.alugueis) expect(rivalDaForma(c, f, caraterCanonico(f.adulta!))).toEqual(t.statsPoc(f));
+  });
+});
+
+describe("a v23 do jogo e o lp5_3 da bancada (LP5-5)", () => {
+  const L = LP5_3;
+  test("a tabela da v23 e o lp5_3: o mapeamento, o tiro, a esquiva, o Gazimon e o Salao", () => {
+    expect(tabelaLuta(VERSAO_V23)).toBe(LUTA_V23);
+    expect(tabelaLuta(VERSAO_V22).versao).toBe(21);
+    expect(LUTA_V23.mapa).toEqual(L.mapa);
+    expect(LUTA_V23.gama).toEqual(L.gama);
+    const sem = (x: Readonly<Partial<Record<string, number>>> | null) => { const { bebe, ...r } = x!; expect(bebe).toBeDefined(); return r; };
+    expect([LUTA_V23.pesoPonto, sem(LUTA_V23.multVida), sem(LUTA_V23.multAtk)]).toEqual([L.pesoPonto, L.multVida, L.multAtk]);
+    expect(LUTA_V23.tiro).toEqual(L.tiro);
+    const { ligada, ...esq } = L.esquiva;
+    expect(ligada).toBe(1);
+    expect(LUTA_V23.esquiva).toEqual(esq);
+    expect(LUTA_V23.fatorRival).toEqual({ liga: L.fatorRival.liga, torre: L.fatorRival.torre, salao: L.fatorRival.salao });
+    for (const x of CAMPANHA_V6) expect(LUTA_V23.npcTotal[x.k] ?? x.total).toBe(L.npcTotal[x.k]);
+  });
+  test("o pet v23: o statsLutaPoc do Motor e o lutador do lp5_3, sem e com treino", () => {
+    for (const s of [11, 21, 23, 101, 202]) {
+      const m = new Motor(s, VERSAO_V23);
+      m.liberar(CMD.mega);
+      m.avancar(DUR_EVO.bebe + 30);
+      const conf = () => expect(m.statsLutaPoc()).toEqual(lutador(L, m.forma, m.carater(), m.pontosDeLuta(), condicaoDe(m.e.saude)));
+      conf();
+      m.treino.pontos = { vigor: 2, folego: 1, recuperacao: 1, forca: 2, mira: 1, guarda: 1.5 } as Stats;
+      conf();
+      expect(m.statsLutaPoc().perc).toBeGreaterThan(0);
+    }
+  });
+  test("os NPCs, os rivais da Arena, os Megas da Liga e o rival do Salao da v23", () => {
+    const T = LUTA_V23;
+    for (const x of CAMPANHA_V6) expect(statsNpc(x.k, T)).toEqual(npc(L, x.k));
+    for (const e of ESTAGIOS_LUTA) for (const k of rivaisArena(e)) expect(statsRivalArena(k, T)).toEqual(rivalCanonico(L, k));
+    LIGA.forEach((x, k) => expect(statsRivalForma(formaLiga(k), caraterCanonico(x.adulta), T, T.fatorRival.liga)).toEqual(rivalDaForma(L, formaLiga(k), caraterCanonico(x.adulta), 0, L.fatorRival.liga)));
+    for (const e of ESTAGIOS_LUTA) for (const s of [1, 2, 3]) {
+      const f = formaRivalSalao(s, e);
+      expect(statsRivalForma(f, caraterDoRivalSalao(f), T, T.fatorRival.salao)).toEqual(rivalDaForma(L, f, caraterDoRivalSalao(f), 0, L.fatorRival.salao));
+    }
+  });
+  test("a mesma luta: o Motor v23 e a bancada com o lp5_3 (o remendo sobre a v22) dao o mesmo resultado", () => {
+    for (const s of [101, 202, 303]) {
+      const a = new Motor(s, VERSAO_V23), b = motorDoCandidato(L, s);
+      for (const m of [a, b]) { m.liberar(CMD.mega); m.avancar(DUR_EVO.bebe + 30); }
+      expect(b.versao).toBe(VERSAO_V22);
+      const rv = a.rivaisArenaPoc()[s % a.rivaisArenaPoc().length];
+      const ra = a.lutarPoc(rv, s * 7, "campo"), rb = b.lutarPoc(rv, s * 7, "campo");
+      expect(ra.serie.map(x => [x.vencedor, x.relogio, x.vidaA, x.vidaB])).toEqual(rb.serie.map(x => [x.vencedor, x.relogio, x.vidaA, x.vidaB]));
+    }
+    expect(esquivaDe(L)).toEqual({ kChance: 1, kReacao: 1, kDash: 1, chanceMax: .95, pertoChance: 0, pertoReacao: 200, contraMs: 0 });
+  });
+  test("o Salao da v23 e mais facil que o da v22: o rival com os stats vezes 0,8", () => {
+    const f = formaRivalSalao(1, "crianca"), car = caraterDoRivalSalao(f);
+    expect(statsRivalForma(f, car, LUTA_V23, .8).atk).toBeLessThan(statsRivalForma(f, car, LUTA_V23).atk);
+    expect(RIVAL_SALAO).toBeTruthy();
   });
 });
 
@@ -89,7 +146,7 @@ describe("os candidatos da rodada (LP5-1 a LP5-3)", () => {
   test("o Motor remendado com os numeros do v21 luta igual ao Motor do jogo (a vida do P5)", () => {
     const copia = candidatoDe({ nome: "copia_v21" });
     for (const s of [11, 21, 23]) {
-      const a = new Motor(s), b = motorDoCandidato(copia, s, true);
+      const a = new Motor(s, VERSAO_V22), b = motorDoCandidato(copia, s, true);
       for (const m of [a, b]) { m.liberar(CMD.mega); m.avancar(TICK_INICIAL + DUR_EVO.bebe + DUR_EVO.crianca + 15 - m.e.tick); m.treino.pontos = { vigor: 2, folego: 1, recuperacao: 1, forca: 2, mira: 1, guarda: 1.5 } as Stats; }
       expect(b.estagioAtual).toBe("adolescente");
       for (let k = 0; k < 3; k++) {
@@ -135,6 +192,10 @@ describe("a esquiva pela perspicacia e pela velocidade (D-LP5-14)", () => {
     expect(rivalCanonico(x, "cirro_crianca_sereno").perc).toBeGreaterThan(rivalCanonico(x, "brasa_crianca_arisco").perc!);
     expect(() => candidatoDe({ nome: "teste", esquiva: { ligada: 1, chanceMax: 2 } })).toThrow();
   });
+  test("o lp5_3 (D-LP5-20) e o lp5_2 com o fator do Salao em 0,8, e so isso", () => {
+    expect(LP5_3.fatorRival).toEqual({ salao: .8, liga: 1, torre: 1, fabrica: 1 });
+    expect({ ...LP5_3, nome: "", fatorRival: null }).toEqual({ ...LP5_2, nome: "", fatorRival: null });
+  });
   test("o lp5_2 (D-LP5-17) e o lp5_1_esq com o Gazimon em 76,8, e so isso", () => {
     expect(LP5_2.npcTotal.npc_tier1_brutamontes).toBe(76.8);
     expect({ ...LP5_2, nome: "", npcTotal: { ...LP5_2.npcTotal, npc_tier1_brutamontes: 96 } }).toEqual({ ...LP5_1_ESQ, nome: "" });
@@ -161,6 +222,19 @@ describe("a divisao dos stats do NPC (D-LP5-18)", () => {
     expect(() => candidatoDe({ nome: "teste", npcDivisao: { npc_tier2_carcereiro: { ...um, guarda: 0, mira: 2 } } })).toThrow();
     expect(() => candidatoDe({ nome: "teste", npcDivisao: { npc_tier2_carcereiro: { vigor: 6 } as never } })).toThrow();
     expect(() => candidatoDe({ nome: "teste", npcDivisao: { npc_que_nao_ha: um } })).toThrow();
+  });
+});
+
+describe("o fator dos rivais dos torneios (D-LP5-20)", () => {
+  test("hoje o fator e 1 e nao muda o rival; abaixo de 1, os 6 stats vezes o fator; nao positivo falha alto", () => {
+    expect(c.fatorRival).toEqual({ salao: 1, liga: 1, torre: 1, fabrica: 1 });
+    const f = formaLiga(0), car = caraterCanonico(LIGA[0].adulta), x = candidatoDe({ nome: "teste", esquiva: { ligada: 1 } });
+    expect(rivalDaForma(x, f, car, 0, 1)).toEqual(rivalDaForma(x, f, car));
+    const meio = rivalDaForma(x, f, car, 0, .5), um = rivalDaForma(x, f, car);
+    expect(meio.atk).toBeLessThan(um.atk);
+    expect(meio.perc!).toBeLessThan(um.perc!);
+    expect(() => rivalDaForma(x, f, car, 0, 0)).toThrow();
+    expect(() => candidatoDe({ nome: "teste", fatorRival: { liga: 0 } })).toThrow();
   });
 });
 

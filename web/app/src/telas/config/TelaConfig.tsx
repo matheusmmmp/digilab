@@ -70,7 +70,7 @@ function Principal({ abrir }: { abrir: (p: ParteConfig) => void }) {
       <span className="sr-only" role="status" aria-live="polite">{revisto ? "Tutorial reiniciado" : ""}</span>
       <Aj ic={Activity} nome="Detalhes do pet" rotulo="Exibir detalhes do pet" resumo="os painéis Estado atual, Evolução, Últimas ações e DigiBrain na tela do pet"
         interruptor={{ ligado: detalhesPet, mudar: ligarDetalhesPet }} />
-      <Aj ic={Mountain} nome="Mitologia" novo resumo="o oráculo Jijimon conta uma lenda depois de certas derrotas, e a ilha guarda sinais de um dia bem brincado; desligada, nada aparece"
+      <Aj ic={Mountain} nome="Mitologia" novo resumo="o oráculo Jijimon conta lendas, os cinco deuses deixam sinais na ilha e o Diário ganha o Códice das lendas; desligada, nada aparece"
         interruptor={{ ligado: mitologia, mudar: ligarMitologia }} />
       <Aj ic={Camera} nome="Viagem da câmera" novo resumo="desligada, os lugares abrem num corte seco" interruptor={{ ligado: viagem, mudar: escolherViagem }} />
       <Aj ic={MessageCircle} nome="Fala" rotulo="Fala do pet" resumo={`modo ${NOME_MODO[fl.modo]} · ${rotuloLLM().texto}`} abrir={() => abrir("fala")} />

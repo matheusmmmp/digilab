@@ -65,13 +65,33 @@ PREFIXO = en.PREFIXO
 FASES = ("fumaca", "calibracao", "validacao")
 BRACOS = {"G": dc4.BRACOS["G"], "H": dc4.BRACOS["H"]}                            # D-DC5-2: o S sai
 VOZES = ("jogo", "v4")                                                            # secao 2
+# DC5a2 (D-DC5B-5, a decisao do Matheus em 2026-11-11): a voz-v4b no lugar da voz-v4, com a especie e o verificador da DC5 (verif-v8b e
+# verif-v9b) em todas as celulas. A config diz qual desenho roda; o da calibracao da DC5b (jogo e v4, sem especie) continua valendo.
+DESENHOS = {("jogo", "v4"): {"especie": False, "verificador_dc5": False}, ("jogo", "v4b"): {"especie": True, "verificador_dc5": True}}
+VOZES_VALIDAS = ("jogo", "v4", "v4b")
+VOZ_NOVA = {"v4": pr.VERSAO_VOZ_V4, "v4b": pr.VERSAO_VOZ_V4B}
+VERIFICADOR_DC5 = {"verif-v8": "verif-v8b", "verif-v9": "verif-v9b"}
 CELULAS = tuple((b, v) for b in BRACOS for v in VOZES)
+
+
+def vozes_da_config(cfg: dict) -> tuple:
+    v = tuple(cfg["vozes"])
+    if v not in DESENHOS:
+        raise ValueError(f"as vozes {list(v)}: so {[list(x) for x in DESENHOS]} (secao 2, D-DC5B-5)")
+    if cfg.get("especie", False) != DESENHOS[v]["especie"] or cfg.get("verificador_dc5", False) != DESENHOS[v]["verificador_dc5"]:
+        raise ValueError(f"as vozes {list(v)} pedem especie={DESENHOS[v]['especie']} e verificador_dc5={DESENHOS[v]['verificador_dc5']}")
+    return v
+
+
+def celulas_da_config(cfg: dict) -> tuple:
+    return tuple((b, v) for b in BRACOS for v in vozes_da_config(cfg))
 MODELO_VERIF = dc4.MODELO_VERIF
 FAIXAS = {"calibracao": (20262900, 20263199), "validacao": (20263200, 20263499)}  # secao 7, D-DC5-1
 SEMENTES_DOS_TESTES = dc4.SEMENTES_DOS_TESTES
 DIR_CONFIGS = "experiments/configs/v3_conversa_dc5"
 ROTEIROS = {"calibracao": f"{DIR_CONFIGS}/roteiros_calibracao.json", "validacao": f"{DIR_CONFIGS}/roteiros_validacao.json"}
-CONFIGS = {"calibracao": f"{DIR_CONFIGS}/calibracao.json", "validacao": f"{DIR_CONFIGS}/validacao.json"}
+CONFIGS = {"calibracao": f"{DIR_CONFIGS}/calibracao.json", "calibracao_v4b": f"{DIR_CONFIGS}/calibracao_v4b.json",
+           "validacao": f"{DIR_CONFIGS}/validacao.json"}
 FRASES_MODELO = f"{DIR_CONFIGS}/frases_modelo.json"
 GABARITO_VOZ_JOGO = f"{DIR_CONFIGS}/gabarito_voz_jogo.json"
 # o tamanho da fase (secao 5): a calibracao e a metade da validacao
@@ -134,8 +154,7 @@ def conferir_config(cfg: dict) -> None:
         raise ValueError("a DC5 tem uma base por fase")
     if list(cfg["bracos"]) != list(BRACOS):
         raise ValueError(f"os bracos sao {list(BRACOS)} (D-DC5-2)")
-    if list(cfg["vozes"]) != list(VOZES):
-        raise ValueError(f"as vozes sao {list(VOZES)} (secao 2)")
+    vozes_da_config(cfg)
     if cfg["teto_usd"] != TETO_USD:
         raise ValueError(f"o teto e US$ {TETO_USD} (D-DC5-9)")
     lim = cfg.get("estimativa_maxima_usd")
@@ -203,7 +222,7 @@ def carregar_frases_modelo() -> dict:
 def arquivos_do_registro() -> list[str]:
     fixos = [ORQUESTRADOR, "experiments/entradas_dc5.py", "experiments/entradas_dc4.py", "experiments/montador_voz_rede.py",
              "experiments/marcacao_dc5.py", "experiments/run_v3_conversa_dc4.py", "experiments/run_v3_conversa_dc3.py",
-             "experiments/exportar_gabarito_voz_jogo_dc5.py", CONFIGS["calibracao"], CONFIGS["validacao"], ROTEIROS["calibracao"],
+             "experiments/exportar_gabarito_voz_jogo_dc5.py", CONFIGS["calibracao"], CONFIGS["calibracao_v4b"], CONFIGS["validacao"], ROTEIROS["calibracao"],
              ROTEIROS["validacao"], FRASES_MODELO, GABARITO_VOZ_JOGO, RUBRICA, "digilab/config.py", "digilab/metrics.py",
              "servidor/fala_livre_claude.py", "servidor/fala_livre.py", "servidor/fala_llm.py"]
     return fixos + [p.relative_to(RAIZ).as_posix() for p in sorted((RAIZ / "digilab_fala_livre").glob("*.py"))]
@@ -260,7 +279,7 @@ def falas_por_celula(cfg: dict) -> int:
 
 def estimativa_usd(cfg: dict) -> float:
     """secao 8: as falas do H (as duas vozes) x o custo real por fala do H na DC4 x (1 + a margem)"""
-    n_h = sum(1 for b, _ in CELULAS if BRACOS[b][0] == "claude") * falas_por_celula(cfg)
+    n_h = sum(1 for b, _ in celulas_da_config(cfg) if BRACOS[b][0] == "claude") * falas_por_celula(cfg)
     return n_h * custo_por_fala_h_dc4() * (1 + CONFIG_VOZ_V4.margem_custo)
 
 
@@ -275,11 +294,24 @@ def exigir_estimativa(cfg: dict, gasto_atual: float) -> float:
     return est
 
 
-def piso_do_gasto(fase: str) -> float:
-    """o gasto que ja aconteceu antes da fase: o fim da validacao da DC4 e, na validacao da DC5, tambem o da calibracao dela"""
-    if fase == "fumaca":
+def metas_do_piso(cfg: dict) -> list[str]:
+    """as metas das rodadas de antes cujo fim e o piso do gasto: o fim da validacao da DC4 e, na validacao da DC5, tambem o da calibracao
+    dela; a config pode somar outras (`metas_anteriores`, DC5a2: a recalibracao da voz-v4b soma a calibracao da DC5b)"""
+    if cfg["fase"] == "fumaca":
+        return []
+    extra = cfg.get("metas_anteriores", [])
+    if not isinstance(extra, list) or not all(isinstance(m, str) for m in extra):
+        raise ValueError(f"metas_anteriores invalidas: {extra!r}")
+    base = [META_DC4_VALIDACAO] + ([META_CALIBRACAO] if cfg["fase"] == "validacao" else [])
+    return base + [m for m in extra if m not in base]
+
+
+def piso_do_gasto(cfg: dict) -> float:
+    """o gasto que ja aconteceu antes da fase: o maior fim entre as metas do piso (`metas_do_piso`)"""
+    fase = cfg["fase"]
+    metas = metas_do_piso(cfg)
+    if not metas:
         return 0.0
-    metas = [META_DC4_VALIDACAO] + ([META_CALIBRACAO] if fase == "validacao" else [])
     fins = []
     for m in metas:
         arq = RAIZ / m
@@ -291,7 +323,7 @@ def piso_do_gasto(fase: str) -> float:
 
 def clientes_reais(cfg: dict) -> dict:
     """os clientes de verdade: construir nao chama nada. O gasto e o da fala livre, com o piso (`piso_do_gasto`)."""
-    gasto = dc4.gasto_com_piso(ControleGasto(cfg["teto_usd"], ARQUIVO_GASTO_LIVRE), piso_do_gasto(cfg["fase"]))
+    gasto = dc4.gasto_com_piso(ControleGasto(cfg["teto_usd"], ARQUIVO_GASTO_LIVRE), piso_do_gasto(cfg))
     voz = {b: ClienteOllama(m) if p == "ollama" else ClienteClaude(m, gasto) for b, (p, m) in BRACOS.items()}
     return {"voz": voz, "verif": ClienteOllama(MODELO_VERIF), "gasto": gasto, "falso": False}
 
@@ -307,23 +339,28 @@ class ServicoDC5(ServicoFalaLivre):
     """O servico do jogo, com o cliente da voz do braco, o verificador proprio e a voz da celula: na `jogo`, nada muda (a voz do formato e
     nenhuma fala ja dita); na `v4`, a voz-v4 e, na fala espontanea do ES, as falas ja ditas da sequencia (`self.ditas`)."""
 
-    def __init__(self, voz_cliente, verif, voz: str) -> None:
-        if voz not in VOZES:
+    def __init__(self, voz_cliente, verif, voz: str, verificador_dc5: bool = False) -> None:
+        if voz not in VOZES_VALIDAS:
             raise ValueError(f"voz {voz!r}")
         super().__init__(cliente=voz_cliente, ambiente={})
-        self._verif_dc5, self.voz, self.ditas = verif, voz, None
+        self._verif_dc5, self.voz, self.ditas, self.verificador_dc5 = verif, voz, None, verificador_dc5
 
     @property
     def cliente_verif(self):
         return self._verif_dc5
 
     def voz_dos_conceitos(self, conceitos):
-        return pr.VERSAO_VOZ_V4 if self.voz == "v4" else None
+        return VOZ_NOVA.get(self.voz)
 
     def ditas_da_voz(self, situacao: str):
-        if self.ditas is not None and (self.voz != "v4" or situacao != "espontanea"):
-            raise RuntimeError("as falas ja ditas so na voz-v4 e na fala espontanea (plano, 3.4)")
+        if self.ditas is not None and (self.voz not in VOZ_NOVA or situacao != "espontanea"):
+            raise RuntimeError("as falas ja ditas so na voz-v4 (e na v4b) e na fala espontanea (plano, 3.4)")
         return self.ditas
+
+    def verificador_dos_conceitos(self, conceitos):
+        """o do jogo, ou (DC5a2, `verificador_dc5`) a verif-v8b e a verif-v9b, nas duas vozes da celula"""
+        v = super().verificador_dos_conceitos(conceitos)
+        return VERIFICADOR_DC5[v] if self.verificador_dc5 else v
 
 
 def semente_do_turno(base: int, item: str) -> int:
@@ -332,19 +369,19 @@ def semente_do_turno(base: int, item: str) -> int:
 
 
 def voz_esperada(voz: str, versao_dec: str) -> str:
-    if voz == "v4":
-        return pr.VERSAO_VOZ_V4
+    if voz in VOZ_NOVA:
+        return VOZ_NOVA[voz]
     return pr.VERSAO_VOZ_V3 if versao_dec == VERSAO_DEC_V3 else pr.VERSAO_VOZ_V2
 
 
 def conferir_registro(reg: dict) -> None:
     """secao 9: o da DC4 (a entrada, o braco, a semente, o usage, o modelo) e a voz da celula"""
     dc4.conferir_registro(reg)
-    if reg.get("voz") not in VOZES or reg["celula"] != f"{reg['braco']}-{reg['voz']}":
+    if reg.get("voz") not in VOZES_VALIDAS or reg["celula"] != f"{reg['braco']}-{reg['voz']}":
         raise RuntimeError(f"a fala {reg['id']} sem a celula")
     if reg["versao_prompt"] != voz_esperada(reg["voz"], reg["versao_dec"]):
         raise RuntimeError(f"a fala {reg['id']}: a voz {reg['versao_prompt']!r}, a celula pede {voz_esperada(reg['voz'], reg['versao_dec'])!r}")
-    if (reg.get("ditas") is not None) != (reg["voz"] == "v4" and reg["conjunto"] == "ES" and bool(reg["ditas"])):
+    if (reg.get("ditas") is not None) != (reg["voz"] in VOZ_NOVA and reg["conjunto"] == "ES" and bool(reg["ditas"])):
         raise RuntimeError(f"a fala {reg['id']}: as falas ja ditas fora da voz-v4 no ES")
 
 
@@ -355,7 +392,9 @@ def falar(servico: ServicoDC5, chamadas: dict, braco: str, voz: str, item: str, 
         reg = dc4.falar(servico, chamadas, braco, f"{braco}-{voz}/{item}", entrada, situacao, semente, fala_jogador, historico)
     finally:
         servico.ditas = None
-    reg.update(celula=f"{braco}-{voz}", voz=voz, item=item, ditas=ditas or None)
+    forma = entrada["estado"]["identidade"].get("forma")
+    especie = forma.removesuffix(" sombrio") if forma is not None and forma.removesuffix(" sombrio") in servico.especies else None
+    reg.update(celula=f"{braco}-{voz}", voz=voz, item=item, ditas=ditas or None, forma=forma, especie_corpus=especie)
     conferir_registro(reg)
     return reg
 
@@ -372,7 +411,7 @@ def rodar_celula(braco: str, voz: str, servico: ServicoDC5, chamadas: dict, entr
     for seq in entradas["sequencias_es"]:
         ja = []
         for t, e in enumerate(seq["entradas"]):
-            ditas = [f for f, est in ja if est == e["estagio"]][-CONFIG_VOZ_V4.n_ditas:] if voz == "v4" else []
+            ditas = [f for f, est in ja if est == e["estagio"]][-CONFIG_VOZ_V4.n_ditas:] if voz in VOZ_NOVA else []
             reg = falar(servico, chamadas, braco, voz, e["id"], e, "espontanea", semente_do_turno(base, e["id"]), ditas=ditas)
             reg.update(sequencia_es=seq["id"], turno=t)
             if reg["erro"] is None:                    # a fala generica nao e fala do pet: nao vai como ja dita
@@ -414,20 +453,23 @@ def conferir_registros(regs: list[dict], entradas: dict, roteiros: list[dict], c
 
 
 # ================================================================== os pares da naturalidade (4.5)
-def sortear_pares(base: int, conversas: list[str]) -> list[dict]:
-    """voz-v4 x voz do jogo, em cada braco e cada conversa: o lado de cada voz e a ordem dos pares, pela rng do fluxo `pares`"""
+def sortear_pares(base: int, conversas: list[str], nova: str = "v4") -> list[dict]:
+    """voz nova (a v4 ou a v4b) x voz do jogo, em cada braco e cada conversa: o lado de cada voz e a ordem dos pares, pela rng do fluxo
+    `pares`"""
+    if nova not in VOZ_NOVA:
+        raise ValueError(f"voz nova {nova!r}")
     rng = en.rng_do_fluxo(base, "pares")
     pares = []
     for b in BRACOS:
         for c in conversas:
-            lados = ["v4", "jogo"] if rng.random() < 0.5 else ["jogo", "v4"]
+            lados = [nova, "jogo"] if rng.random() < 0.5 else ["jogo", nova]
             pares.append({"conversa": c, "braco": b, "esquerda": lados[0], "direita": lados[1]})
     rng.shuffle(pares)
     return [{"id": f"P{n:02d}", **p} for n, p in enumerate(pares)]
 
 
-def conferir_pares(pares: list[dict], base: int, conversas: list[str]) -> None:
-    if pares != sortear_pares(base, conversas):
+def conferir_pares(pares: list[dict], base: int, conversas: list[str], nova: str = "v4") -> None:
+    if pares != sortear_pares(base, conversas, nova):
         raise RuntimeError("a ordem dos pares nao e a sorteada (secao 9)")
 
 
@@ -436,12 +478,12 @@ def _json(caminho: Path, obj) -> None:
     caminho.write_text(json.dumps(obj, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
 
 
-def _meta_do_gasto(gasto: ControleGasto, inicio: float, gravadas: list[dict]) -> dict:
+def _meta_do_gasto(gasto: ControleGasto, inicio: float, gravadas: list[dict], celulas=CELULAS) -> dict:
     return {"limite_usd": gasto.limite, "inicio_usd": round(inicio, 6), "fim_usd": round(gasto.gasto, 6),
             "da_rodada_usd": round(gasto.gasto - inicio, 6),
             "pelo_usage_usd": {f"{b}-{v}": round(sum(custo_usd(BRACOS[b][1], r["usage"]["entrada"], r["usage"]["saida"]) for r in gravadas
                                                      if r["celula"] == f"{b}-{v}" and r["usage"]["entrada"] is not None), 6)
-                               for b, v in CELULAS if BRACOS[b][0] == "claude"}}
+                               for b, v in celulas if BRACOS[b][0] == "claude"}}
 
 
 def rodar(cfg: dict, roteiros: list[dict], pasta: Path, clientes: dict, exportar=en.exportar) -> dict:
@@ -456,15 +498,20 @@ def rodar(cfg: dict, roteiros: list[dict], pasta: Path, clientes: dict, exportar
     pasta.mkdir(parents=True)
     base = cfg["unidades"]["bases"][0]
     tags = {"falso": True} if clientes["falso"] else dc4.tag_ollama(clientes["verif"])
+    celulas = celulas_da_config(cfg)
+    desenho = DESENHOS[vozes_da_config(cfg)]
+    nova = next(v for v in vozes_da_config(cfg) if v in VOZ_NOVA)
+    especie = {"com_especie": True} if desenho["especie"] else {}
     entradas = exportar(base, cfg["dias"], cfg["orcamento_por_dia"], cfg["n_e3_por_pedido"], cfg["n_e2"], cfg["min_ep_e2"],
-                        cfg["n_sequencias"], cfg["n_es"])
+                        cfg["n_sequencias"], cfg["n_es"], **especie)
     _json(pasta / "entradas.json", entradas)
     arq = (pasta / "falas.jsonl").open("w", encoding="utf-8", newline="\n")
     chamadas = {"voz": [], "verif": []}
     verif = dc4.ClienteRegistrado(clientes["verif"], "verif", chamadas["verif"])
     regs, parada, gravadas = [], None, []
     meta = {"fase": cfg["fase"], "base": base, "plano": PLANO, "plano_sha256": dc4.sha_arquivo(RAIZ / PLANO), "arquivos": sha_dos_arquivos(),
-            "celulas": [f"{b}-{v}" for b, v in CELULAS], "estimativa_usd": round(estimativa, 6),
+            "celulas": [f"{b}-{v}" for b, v in celulas], "vozes": list(vozes_da_config(cfg)), "especie": desenho["especie"],
+            "verificador_dc5": desenho["verificador_dc5"], "metas_do_piso": metas_do_piso(cfg), "estimativa_usd": round(estimativa, 6),
             "frases_modelo_sha256": dc4.sha_arquivo(RAIZ / FRASES_MODELO), "n_frases_modelo": {k: len(frases[k]) for k in ("jogo", "v3b")},
             "clientes_falsos": clientes["falso"], "ollama": tags, "python": platform.python_version(), "inicio": time.strftime("%Y-%m-%dT%H:%M:%S")}
 
@@ -474,19 +521,21 @@ def rodar(cfg: dict, roteiros: list[dict], pasta: Path, clientes: dict, exportar
         gravadas.append(reg)
 
     try:
-        for b, v in CELULAS:
+        for b, v in celulas:
             voz = dc4.ClienteRegistrado(clientes["voz"][b], f"voz/{b}-{v}", chamadas["voz"])
             if voz.modelo != BRACOS[b][1]:
                 raise ModeloTrocado(f"o braco {b} com o cliente de {voz.modelo!r}")
-            regs += rodar_celula(b, v, ServicoDC5(voz, verif, v), chamadas, entradas, roteiros, gravar)
+            servico = ServicoDC5(voz, verif, v, desenho["verificador_dc5"])
+            meta.setdefault("corpus_sha256", servico.corpus_sha)
+            regs += rodar_celula(b, v, servico, chamadas, entradas, roteiros, gravar)
     except ParadaNoTeto as err:
         parada = str(err)
     finally:
         arq.close()
-        meta["gasto"] = _meta_do_gasto(gasto, gasto_inicio, gravadas)
+        meta["gasto"] = _meta_do_gasto(gasto, gasto_inicio, gravadas, celulas)
         meta["parada_no_teto"] = parada
         meta["modelos_devolvidos"] = {f"{b}-{v}": sorted({c["modelo_devolvido"] for c in chamadas["voz"]
-                                                          if c["papel"] == f"voz/{b}-{v}" and c["modelo_devolvido"]}) for b, v in CELULAS}
+                                                          if c["papel"] == f"voz/{b}-{v}" and c["modelo_devolvido"]}) for b, v in celulas}
         meta["verificador_devolvido"] = sorted({c["modelo_devolvido"] for c in chamadas["verif"] if c["modelo_devolvido"]})
         meta["falas"] = len(gravadas)
         meta["fim"] = time.strftime("%Y-%m-%dT%H:%M:%S")
@@ -495,10 +544,10 @@ def rodar(cfg: dict, roteiros: list[dict], pasta: Path, clientes: dict, exportar
         raise ParadaNoTeto(parada + f" (a rodada parou com {len(regs)} falas no disco)")
     if gasto.gasto > gasto.limite:
         raise RuntimeError(f"o gasto passou do teto: US$ {gasto.gasto} > {gasto.limite}")
-    conferir_registros(regs, entradas, roteiros, CELULAS)
+    conferir_registros(regs, entradas, roteiros, celulas)
     conversas = [f"{r['id']}-{s['id']}" for r in roteiros for s in entradas["sequencias"]]
-    pares = sortear_pares(base, conversas)
-    conferir_pares(pares, base, conversas)
+    pares = sortear_pares(base, conversas, nova)
+    conferir_pares(pares, base, conversas, nova)
     _json(pasta / "pares.json", pares)
     mc.montar(pasta / "marcacao", base, entradas, regs, pares)
     return meta
