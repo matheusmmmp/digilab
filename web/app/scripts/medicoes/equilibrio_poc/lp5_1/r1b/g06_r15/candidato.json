@@ -1,0 +1,27 @@
+{
+ "nome": "g06_r15",
+ "pesoPonto": 30,
+ "gama": {
+  "vigor": 0.06,
+  "folego": 0.06,
+  "recuperacao": 0.06,
+  "forca": 0.06,
+  "mira": 0.06,
+  "guarda": 0.06
+ },
+ "mapa": {
+  "hp": 1300
+ },
+ "multVida": {
+  "crianca": 0.6,
+  "adolescente": 0.9,
+  "adulto": 1.35,
+  "mega": 2.025
+ },
+ "multAtk": {
+  "crianca": 1,
+  "adolescente": 1.5,
+  "adulto": 2.25,
+  "mega": 3.375
+ }
+}

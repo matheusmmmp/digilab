@@ -844,11 +844,12 @@ tigela, a bola e as frutíferas no `CMU_ILHA`, v20) é do #694.
   - a moldura em bosques e vãos.
   - Tudo o que a planta tira da vista só some (`escondidos`): a lista `objetos` não muda, e o gabarito E-G0 continua passando. O que ela
     acrescenta (as árvores dos bosques, o entorno dos marcos) fica numa lista própria, `extras`, que a `cena.ts` desenha.
-- **O fim da ilha** (`fimDaIlha.ts`, `fimConta.ts`; `grade.ts`, `porBordas`; `FIM_ILHA`):
+- **O fim da ilha** (`fimDaIlha.ts`; `grade.ts`, `porBordas`; `FIM_ILHA`):
   - o mar em volta da grade inteira, até o horizonte;
   - a leste do rio, a mata sobe em dois degraus até o morro;
-  - duas faixas de silhuetas (ilhas perto, morros longe) seguem o ponto olhado. O pé delas vai a cada quadro para o horizonte do mar
-    curvo, e a cor é a da névoa puxada para a sombra do céu, sem cor nova (PA-5).
+  - as duas faixas de silhuetas ao longe (ilhas perto, morros longe) **saíram em 2026-11-10**, a pedido do Matheus: no céu elas liam
+    como manchas verdes soltas, além das nuvens. O `fimConta.ts` e o `FIM_ILHA.silhuetas` saíram junto (D-CEU-1, em
+    `docs/registro/2026-11.md`). O céu fica só com o degradê e as nuvens.
 - **O sinal só** (a regra 3; `itens.ts`, `CHAMADO`): a tigela, a bola e o saco dão um pulinho quando o pet chega perto. Com movimento
   reduzido, nada. O vento na decoração fica (PA-4).
 - **A ida ao saco pela distância** (PA-3; `lugares.ts`, `idaDoTreino`; `TREINO_VEL` = 7 células por segundo, 0,9 s no mínimo): com o
@@ -906,3 +907,21 @@ O Matheus respondeu "B com tudo" (2026-11-09) à prancha da seção 27: LZ-1 a L
 - As capturas (o script da prancha, Ilha e Digital, desktop e celular, Vidro e Militar) saem iguais às da B da prancha, sem erro de shader.
 
 **Não medido:** o custo no celular. São até 48 focos num laço do fragmento, e falta medir num aparelho de verdade.
+
+## 29. As 4 falhas antigas do e2e (2026-11-10)
+
+As 4 falhas que vinham de antes (seção 28) eram testes atrasados em relação à tela, não defeitos do jogo:
+- **`conversa_nova.spec.ts` e `fala_rede.spec.ts` (a chave "Fala do pet"):** os testes procuravam a linha antiga dos Ajustes (`.hx-linha`).
+  Os Ajustes viraram ícones, e agora os testes acham o botão pelo nome acessível ("Fala do pet").
+- **`fala_rede.spec.ts`, o pet de teste do modular:** o pet sai do ovo bebê, e o nível do Tamer tranca o Conversar até o Rookie (marco 3,
+  `nivel.ts`). O teste agora semeia a chave do nível com o Conversar aberto.
+- **`niveis.spec.ts`, o destrave com as dicas desligadas:** na planta A (#734), a barraca fica fora do primeiro quadro. O cadeado aberto só
+  aparece com o lugar na tela e some em 2,4 s (`ABRE_MS`), e por isso nunca ficava visível. O teste agora confere que o cadeado aberto
+  existe (D-E2E-1).
+
+**O brilho espera o lugar aparecer** (o Matheus, 2026-11-10: "Sim, esperar"). Antes, o brilho do "acabou de abrir" corria 2,4 s desde a
+montagem, e o da barraca nunca era visto no começo do jogo.
+- Agora os `ABRE_MS` contam desde que o lugar fica no quadro por `VISTO_MS` (0,5 s) seguidos (`CadeadosDaIlha.tsx`). O meio segundo existe
+  porque o primeiro quadro, antes de a câmera assentar, passa por cima da barraca por uns 20 ms (medido com uma sonda no e2e).
+- O teste do destrave confere o caminho inteiro: com a barraca fora do quadro, o cadeado aberto espera escondido, mesmo depois de 4 s;
+  quando a câmera chega nela (`?cameradev=1`), ele aparece e some depois.

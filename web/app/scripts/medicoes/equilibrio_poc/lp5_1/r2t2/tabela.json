@@ -1,0 +1,386 @@
+{
+ "tarefa": "LUTA_POC, LP5, a grade",
+ "fase": "lp5_1",
+ "bases": 1,
+ "tam": {
+  "lutasFormas": 5,
+  "lutasTiro": 1
+ },
+ "grupos": [
+  "tiro",
+  "formas_crianca",
+  "formas_adolescente",
+  "formas_adulto",
+  "formas_mega"
+ ],
+ "segundos": 303.139,
+ "tabela": [
+  {
+   "nome": "r1_prep12",
+   "troca": {
+    "nome": "r1_prep12",
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 1.2,
+     "recuaAbaixo": 0.75
+    }
+   },
+   "passam": [
+    "D1"
+   ],
+   "falham": [
+    "D2",
+    "A1",
+    "A2",
+    "V1",
+    "S1"
+   ],
+   "metas": {
+    "D1": {
+     "passa": true,
+     "curto": "18.45|22.05 18.35|22.05 19.05|22.55 18.25|21.95; min forma 13.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.167; sem fim 0"
+    },
+    "A1": {
+     "passa": false,
+     "curto": "0.69/0.79/0.81/0.61"
+    },
+    "A2": {
+     "passa": false,
+     "curto": "88|0.1 88|0.11 84|0.11 80|0.13"
+    },
+    "V1": {
+     "passa": false,
+     "curto": "0.2-0.7 0.15-0.82 0.21-0.88 0.19-0.82"
+    },
+    "S1": {
+     "passa": false,
+     "curto": "0.33-0.6 0.2-0.63 0.3-0.61 0.24-0.54"
+    }
+   }
+  },
+  {
+   "nome": "r1_prep20",
+   "troca": {
+    "nome": "r1_prep20",
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75
+    }
+   },
+   "passam": [
+    "D1",
+    "A2"
+   ],
+   "falham": [
+    "D2",
+    "A1",
+    "V1",
+    "S1"
+   ],
+   "metas": {
+    "D1": {
+     "passa": true,
+     "curto": "19.05|23.35 18.65|22.55 19.15|23.35 18.95|23.45; min forma 13.55"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.166; sem fim 0"
+    },
+    "A1": {
+     "passa": false,
+     "curto": "0.79/0.88/0.88/0.69"
+    },
+    "A2": {
+     "passa": true,
+     "curto": "108|0.07 108|0.06 108|0.06 100|0.08"
+    },
+    "V1": {
+     "passa": false,
+     "curto": "0.16-0.75 0.12-0.83 0.16-0.9 0.14-0.84"
+    },
+    "S1": {
+     "passa": false,
+     "curto": "0.33-0.64 0.2-0.63 0.3-0.61 0.24-0.54"
+    }
+   }
+  },
+  {
+   "nome": "r1_prep20_rc2",
+   "troca": {
+    "nome": "r1_prep20_rc2",
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 120,
+     "esperaMax": 2000,
+     "recuo": 2,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.8
+    }
+   },
+   "passam": [
+    "D1",
+    "A2"
+   ],
+   "falham": [
+    "D2",
+    "A1",
+    "V1",
+    "S1"
+   ],
+   "metas": {
+    "D1": {
+     "passa": true,
+     "curto": "19.25|24.25 18.95|23.15 19.55|24.55 19.05|23.95; min forma 13.45"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.16; sem fim 0"
+    },
+    "A1": {
+     "passa": false,
+     "curto": "0.78/0.86/0.88/0.67"
+    },
+    "A2": {
+     "passa": true,
+     "curto": "116|0.05 116|0.05 116|0.06 116|0.06"
+    },
+    "V1": {
+     "passa": false,
+     "curto": "0.16-0.74 0.14-0.83 0.16-0.88 0.16-0.83"
+    },
+    "S1": {
+     "passa": false,
+     "curto": "0.28-0.63 0.2-0.66 0.3-0.58 0.23-0.56"
+    }
+   }
+  },
+  {
+   "nome": "r1_prep30_rc2",
+   "troca": {
+    "nome": "r1_prep30_rc2",
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 130,
+     "esperaMax": 3000,
+     "recuo": 2,
+     "recuaNaPrep": 3,
+     "recuaAbaixo": 0.9
+    }
+   },
+   "passam": [
+    "D1",
+    "A2"
+   ],
+   "falham": [
+    "D2",
+    "A1",
+    "V1",
+    "S1"
+   ],
+   "metas": {
+    "D1": {
+     "passa": true,
+     "curto": "19.45|28.25 18.85|26.55 19.55|28.05 19.15|27.75; min forma 13.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.177; sem fim 0"
+    },
+    "A1": {
+     "passa": false,
+     "curto": "0.71/0.8/0.82/0.62"
+    },
+    "A2": {
+     "passa": true,
+     "curto": "132|0.02 132|0.02 132|0.02 132|0.02"
+    },
+    "V1": {
+     "passa": false,
+     "curto": "0.2-0.7 0.19-0.8 0.21-0.87 0.2-0.83"
+    },
+    "S1": {
+     "passa": false,
+     "curto": "0.38-0.68 0.34-0.66 0.27-0.65 0.32-0.61"
+    }
+   }
+  },
+  {
+   "nome": "r1_prep20_sod",
+   "troca": {
+    "nome": "r1_prep20_sod",
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75
+    }
+   },
+   "passam": [
+    "D1",
+    "A2"
+   ],
+   "falham": [
+    "D2",
+    "A1",
+    "V1",
+    "S1"
+   ],
+   "metas": {
+    "D1": {
+     "passa": true,
+     "curto": "17.75|21.85 17.75|21.75 18.85|22.35 17.95|21.85; min forma 13.45"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.169; sem fim 0"
+    },
+    "A1": {
+     "passa": false,
+     "curto": "0.79/0.89/0.92/0.69"
+    },
+    "A2": {
+     "passa": true,
+     "curto": "100|0.06 100|0.05 96|0.06 92|0.07"
+    },
+    "V1": {
+     "passa": false,
+     "curto": "0.13-0.75 0.09-0.83 0.13-0.89 0.13-0.84"
+    },
+    "S1": {
+     "passa": false,
+     "curto": "0.28-0.59 0.17-0.67 0.22-0.62 0.19-0.57"
+    }
+   }
+  }
+ ]
+}

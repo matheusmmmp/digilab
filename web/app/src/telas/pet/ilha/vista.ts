@@ -58,9 +58,8 @@ class VistaIlha {
   readonly camera: THREE.PerspectiveCamera;
   private readonly ilha: Ilha;
   private readonly cenaIlha: CenaIlha;
-  /** o fim da ilha (fimDaIlha.ts): o mar em volta e as silhuetas ao longe; a cor de baixo da luz do ceu, lida da cena */
+  /** o fim da ilha (fimDaIlha.ts): o mar em volta, ate o horizonte */
   private readonly fim: FimDaIlha;
-  private readonly sombraCeu = new THREE.Color();
   private readonly seguidor = new Seguidor();
   private readonly raio = new THREE.Raycaster();
   private readonly lida: CameraLida;
@@ -562,10 +561,6 @@ class VistaIlha {
     cobrirFundo(this.cenaIlha.cena.background, this.camera.aspect);
     this.objetos?.noite?.(noite);
     this.objetos?.quadro?.(this.foco, this.estilo.dobra, this.dirDobra, Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * this.camera.aspect);
-    const hemi = this.cenaIlha.cena.children.find((o): o is THREE.HemisphereLight => o instanceof THREE.HemisphereLight);
-    if (hemi) this.sombraCeu.copy(hemi.groundColor);
-    const nevoa = (this.cenaIlha.cena.fog as THREE.Fog | null)?.color;
-    if (nevoa) this.fim.quadro(this.foco, this.estilo.dobra, this.dirDobra, this.camera, this.ilha.altura(this.foco[0], this.foco[1]), nevoa, this.sombraCeu);
     this.aplicarTrancas();
     this.itens.sincronizar(mu, m.e.tick, noite, agora, dtMs, m.lesionadoDesde !== null, reduzido, m.e.sujeira, this.naMao ? motorCel : this.petCel);
     /* o pet longe do foco (a camera solta, a viagem, a volta depois de soltar o pet): o chao sob ele desce pela dobra (yPe), e o tamanho do papel vale

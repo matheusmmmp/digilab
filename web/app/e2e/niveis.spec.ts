@@ -202,9 +202,19 @@ test("destrave: com 'Mostrar dicas' desligado nao ha cartao, e o lugar abre do m
   test.setTimeout(120_000);
   await page.setViewportSize({ width: 1920, height: 950 });
   await semear(page, { save: BEBE_70, nivel: { marcos: [1], cartoes: [1] }, dicas: false });
-  await page.goto(APP + "#/pet/estado");
+  await page.goto(APP + "?cameradev=1#/pet/estado");
   await expect(page.locator(".pet-tela")).toBeVisible();
-  await expect(page.locator('.cadeado-ilha.aberto[data-lugar="barraca"]')).toBeVisible();           // o cadeado se abre mesmo assim
+  /* o cadeado se abre mesmo assim. Na planta A (#734) a barraca comeca fora do quadro: o cadeado aberto espera escondido, sem o tempo correr
+     (D-E2E-2, "Sim, esperar"), aparece quando a camera chega nela e some ABRE_MS (2,4 s) depois */
+  const aberto = page.locator('.cadeado-ilha.aberto[data-lugar="barraca"]');
+  await expect(aberto).toBeAttached();
+  await expect(aberto).toBeHidden();
+  await page.waitForTimeout(4000);
+  await expect(aberto).toBeAttached();
+  await page.waitForFunction(() => typeof (window as any).__camera?.ir === "function");
+  await page.evaluate(() => (window as any).__camera.ir("barraca", { zoom: 0.6 }));
+  await expect(aberto).toBeVisible();
+  await expect(aberto).toHaveCount(0, { timeout: 10_000 });
   await expect(page.locator(".cartao-destrave")).toHaveCount(0);
   await trilho(page, "Diário").click();
   await expect(painel(page)).toBeVisible();
