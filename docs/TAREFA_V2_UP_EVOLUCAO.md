@@ -3,7 +3,7 @@
 > **V2, congelado em 2026-10-30** (tag `v2-final`). O estado em que este documento fica na V3 está em `docs/FECHAMENTO_V2.md`; o
 > plano da V3, em `docs/PLANO_V3.md`.
 
-Coordenador: sessão de coordenação da integração UP (Claude Code). Worker: Claude Code (Opus 5.5). Worktree e branch: `v2-up-evolucao`. Status: A TELA ENTREGUE, à espera do Matheus (a etapa 0 na seção 10, decidida na seção 9; a tela na seção 11; liberada em 2026-10-29)
+Coordenador: sessão de coordenação da integração UP (Claude Code). Worker: Claude Code (Opus 5.5). Worktree e branch: `v2-up-evolucao`. Status: CHAVE LIGADA no jogo (Matheus, 2026-11-10; seção 12). A etapa 0 na seção 10, decidida na seção 9; a tela na seção 11
 (D3 e D4 decididas; a UP-ATLAS na `main`, #441).
 
 Categoria: implementacao. Origem: Matheus, 2026-10-29: `D:\Trab\digilab\remaster\LEVANTAMENTO_INTEGRACAO.md`, seção 5, e o protótipo em
@@ -248,3 +248,25 @@ Matheus: trocar a chave para `true` em `web/app/src/evolucaoUp.ts`, rodar `npm r
   - no branch, outras 3 deram diferença na primeira tentativa e passaram na segunda;
   - **o momento da evolução (`evolucao-momento`), a tela que este PR toca, sai igual em 390 e 1280 px.**
 
+
+## 12. A chave ligada (2026-11-10, Gerente da V3, Claude Code, Opus 5.5, worktree `v3-evolucao-cena`)
+
+O Matheus, em 2026-11-10: "Eu projetei toda uma animação de evolução e eu não vi isso em jogo. Tem até música. Procura essa POC aí e
+aplica no jogo." A cena estava na `main` desde a seção 11, atrás de `CENA_EVOLUCAO_UP = false`. Esta etapa liga a chave e não muda o
+código da cena:
+- `web/app/src/evolucaoUp.ts`: `CENA_EVOLUCAO_UP = true`. O teste de unidade passa a esperar a chave ligada.
+- `web/app/e2e/jogo.spec.ts`: o teste do momento da evolução (o cartão) roda com movimento reduzido, que pula a cena como antes. Um
+  teste novo toca a cena da Tamers (Agumon → Growlmon), confere que o canvas pinta, que não aparece o aviso e que o "Pular" leva ao
+  cartão. Ele se pula quando `Assets/evolucao_up` não existe, porque os pacotes ficam fora do git.
+- **Sem os assets** (outra máquina, o modo remoto sem a pasta), a Revelação mostra o aviso "A cena da evolução não tocou" e segue no
+  cartão, como a seção 11 já fazia.
+- **O som passa a vir ligado por padrão** (Matheus, 2026-11-10, "Ligar por padrão", para a música da cena tocar sem passar por
+  Ajustes): em `src/som.ts`, só fica desligado se o jogador desligou (a chave do som gravada com `"0"`), e isso continua lembrado. Os
+  testes do som (`test/som.test.ts` e os dois e2e do som) passam a partir do padrão ligado. Sem a pasta `Assets/sons`, o aviso do mapa
+  de sons aparece na primeira vez que o jogo pede um som. O navegador só libera o áudio depois do primeiro gesto na página: se a cena
+  abre antes de qualquer clique (o pet evolui ao abrir o jogo), o som retoma no primeiro clique ou tecla (`aoGesto` em `src/som.ts`).
+- **O celular de referência continua sem medida** (a decisão 4 da seção 10).
+- **Na prévia** (`npm run dev`, o save do e2e `save_evolucao.json` com o som ligado): o mapa, os pacotes `tamers.bin` e
+  `revelacao.bin`, a música `EVO.mp3` e o `sfx_evolution_sfx.mp3` vieram com 200. A cena tocou do Agumon no casulo ao Growlmon revelado,
+  e no fim veio o cartão. Os únicos erros do console são os 502 de `/api/fala` (o servidor local desligado). Capturas em
+  `docs/pranchas/evolucao-cena/`.

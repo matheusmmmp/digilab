@@ -10,6 +10,7 @@ import { QUADROS_CHOCANDO, jogoAtual, trocarMotor } from "./jogo.ts";
 import { ligarProduto } from "./produto.ts";
 import { CHAVE, textoSave } from "./save.ts";
 import { CHAVE_GUARDADOS, lerGuardados } from "./pets.ts";
+import { versaoDoOvo } from "./lutaPoc.ts";
 
 /** a conclusao vista vem da Liga dos Lideres (chave propria; a "-conclusao" dos pets v1-v5, o chefe da campanha, saiu com eles) */
 export const CHAVE_CONCLUSAO_LIGA = CHAVE + "-conclusao-liga";
@@ -43,7 +44,7 @@ export function chocarDoBrasao(esp: Especie, guardarAtivo = false, ritmo: Ritmo 
     g.push(JSON.parse(textoSave(jogoAtual().motor)));
     localStorage.setItem(CHAVE_GUARDADOS, JSON.stringify(g));
   }
-  const m = new Motor(sementeDoBrasao(esp));
+  const m = new Motor(sementeDoBrasao(esp), versaoDoOvo());
   if (m.especie !== esp) throw new Error("ovo de outro brasão");
   if (ritmo !== "rapida") m.configurar(ritmo);
   trocarMotor(ligarProduto(m), "novo", QUADROS_CHOCANDO);

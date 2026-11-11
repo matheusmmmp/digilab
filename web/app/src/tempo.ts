@@ -2,10 +2,10 @@
    segundo). No 1x, 1 min de jogo = 1 min de relogio, mesmo com a aba em segundo plano. Salto maximo de 1 h real
    por passo, para nao travar depois de um sono do PC. O bebe anda minuto a minuto para parar no instante em que
    um chamado abre; com chamado aberto o tempo cai para 1x ate atender (e volta depois). Durante a luta no palco e com o Resultado
-   dela aberto o tempo nao anda (luta.lutaSeguraTempo): o que passou ali e descartado, como na Pausa. */
+   dela aberto o tempo nao anda (lutaPocTela.lutaSeguraTempo): o que passou ali e descartado, como na Pausa. */
 import { useEffect, useState } from "react";
 import { jogoAtual, mudarMotor } from "./jogo.ts";
-import { lutaSeguraTempo } from "./luta.ts";
+import { lutaSeguraTempo } from "./lutaPocTela.ts";
 
 export const VEL_1X = 1 / 60;
 export const VELOCIDADES: readonly [string, number, string?][] = [

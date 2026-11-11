@@ -65,7 +65,8 @@ function viverDias(m: Motor, dias: number, dono: Dono): void {
     if (m.lesionadoDesde !== null) m.observar("tratar_lesao");
     if (m.estagioAtual === "crianca" && m.medalhas === 0) m.liberar(1);
     if ((m.estagioAtual === "crianca" || m.estagioAtual === "adolescente") && m.treino.podeTocar(m.e.tick) && p % 3 === 0) m.treinar("levantar_pedra");
-    if (m.estagioAtual === "adolescente" && p % 6 === 0) m.lutar("aleatorio", 1000 + p);
+    /* a luta da POC (LUTA_POC, LP4): uma forma do estagio, no Campo de treino */
+    if (m.estagioAtual === "adolescente" && p % 6 === 0) { const rv = m.rivaisArenaPoc(); m.lutarPoc(rv[p % rv.length], 1000 + p, "campo"); }
   }
 }
 
@@ -110,14 +111,14 @@ const cerebro = (m: Motor): string => sha(JSON.stringify(m.cerebro!.estadoIntern
 
 function gerar(): Gabarito {
   const vidas = VIDAS.map(([semente, dias, dono]): VidaGravada => {
-    const m = new Motor(semente), escolhas = escutarEscolhas(m);
+    const m = new Motor(semente, 21), escolhas = escutarEscolhas(m);
     viverDias(m, dias, dono);
     const log = JSON.parse(JSON.stringify(m.log)) as Evento[];
     const { pts } = refazer(semente, m.versao, log);
     return { semente, versao: m.versao, dias, dono, log, pontos: pts, assinatura: sha(m.assinatura()), ...resumoEscolhas(escolhas),
              consumos: m.mundo!.consumos.length, impressao: impressao(m), cerebro: cerebro(m) };
   });
-  return { versao_pet: VERSAO_PET, arquivos: Object.fromEntries(PINADOS.map(p => [p, shaArquivo(p)])), vidas };
+  return { versao_pet: 21, arquivos: Object.fromEntries(PINADOS.map(p => [p, shaArquivo(p)])), vidas };
 }
 
 if (process.env.GRAVAR_V12 === "1") writeFileSync(ARQUIVO, JSON.stringify(gerar(), null, 1) + "\n", "utf8");
@@ -145,28 +146,31 @@ describe("o gabarito das vidas v12 do jogo em TS (T-PONTO-4, parte 1)", () => {
     for (const p of PINADOS) expect(shaArquivo(p), p).toBe(G.arquivos[p]);
   });
 
-  /* os pets v12 nao abrem mais (o descarte 6, COMBATE-TR, etapa R2b): as vidas do gabarito se refazem no v13, que e o v12 com a luta em
-     tempo real, e saem iguais, bit a bit. A vida do roteiro, que luta, muda com a luta nova e sai daqui (o gabarito das vidas v13,
-     test/vidas_v13.test.ts, confere as vidas com luta) */
+  /* os pets v12 nao abrem mais (o descarte 6, COMBATE-TR, etapa R2b): as vidas do gabarito se refazem na versao de hoje e saem iguais, bit a
+     bit. A vida do roteiro, que luta, muda com a luta nova e sai daqui. Desde a LP4 da LUTA_POC a versao de hoje e a v21, e a assinatura do
+     pet depois da primeira evolucao muda: os pets v12 a v19 tinham as regras de combate (o GambitsPet) nela, e a v21 nao tem (o lugar delas
+     fica null). Por isso, depois da primeira evolucao o ponto confere o tick, as decisoes e o estagio, e o fim confere o mundo, os
+     candidatos e o cerebro, sem a assinatura (desvio no registro de 2026-11, LUTA_POC, LP4) */
   for (const v of G.vidas.filter(x => !x.log.some(e => e[1] === "l"))) {
-    test(`v12 @${v.semente} (${v.dono}, ${v.dias} dias), refeita no v13: o replay do log, ponto a ponto, os candidatos, o mundo e o cerebro no fim`, () => {
-      const { m, pts, escolhas } = refazer(v.semente, VERSAO_PET, v.log);
+    test(`v12 @${v.semente} (${v.dono}, ${v.dias} dias), refeita na v21: o replay do log, ponto a ponto, os candidatos, o mundo e o cerebro no fim`, () => {
+      const { m, pts, escolhas } = refazer(v.semente, 21, v.log);
       expect(pts.length).toBe(v.pontos.length);
-      pts.forEach((p, i) => expect(p, `ponto no evento ${v.pontos[i].evento}`).toEqual(v.pontos[i]));
+      const semSha = (p: Ponto) => ({ ...p, sha: undefined });
+      pts.forEach((p, i) => expect(p.estagio === "bebe" ? p : semSha(p), `ponto no evento ${v.pontos[i].evento}`)
+        .toEqual(p.estagio === "bebe" ? v.pontos[i] : semSha(v.pontos[i])));
       expect(resumoEscolhas(escolhas)).toEqual({ candidatos: v.candidatos, n: v.n, tipos_explorar: v.tipos_explorar });
       expect(m.mundo!.consumos.length).toBe(v.consumos);
       expect(impressao(m)).toBe(v.impressao);
-      expect(sha(m.assinatura())).toBe(v.assinatura);
       expect(cerebro(m)).toBe(v.cerebro);
       /* e pelo caminho publico */
-      expect(sha(Motor.reproduzir(v.semente, v.log, VERSAO_PET).assinatura())).toBe(v.assinatura);
+      expect(Motor.reproduzir(v.semente, v.log, 21).assinatura()).toBe(m.assinatura());
     });
   }
 
   test("o mesmo dono, jogado de novo hoje, da o mesmo log (o dono e o motor deterministas)", () => {
     for (const k of [0, 2]) {
       const [semente, dias, dono] = VIDAS[k];
-      const m = new Motor(semente);
+      const m = new Motor(semente, 21);
       viverDias(m, dias, dono);
       expect(JSON.parse(JSON.stringify(m.log))).toEqual(G.vidas[k].log);
     }

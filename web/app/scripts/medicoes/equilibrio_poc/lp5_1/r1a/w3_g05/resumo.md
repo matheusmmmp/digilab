@@ -1,0 +1,19 @@
+# Resumo das metas, lp5_1, calibracao
+
+commit `339623b3c9fcdc2365b363c367c061f51f7d7542+sujo`, candidato `w3_g05`, 28528 lutas, 29.143 s somados nos processos.
+
+**Passam (2):** P4, V2. **Falham (9):** T1, T2, T3, E1, D1, D2, A1, V1, S1.
+
+| # | a meta | o criterio | passa | os valores (resumo; o inteiro no resumo.json) |
+|---|---|---|---|---|
+| P4 | o sparring nao trava | >= 80 % dos pets tipicos a >= 0,8 contra as formas do estagio, no Champion e no Ultimate | sim | {fracao_pets_acima_de_0_8:{adolescente:1,adulto:1,crianca:0.4,mega:1},taxa_media:{crianca:0.806,adolescente:1,adulto:1,mega:1}} |
+| T1 | o treino pesa | o tipico contra o mesmo pet sem treino de 0,80 a 0,97, em cada estagio (8 mapas) | **nao** | {taxa:{crianca:0.994,adolescente:1,adulto:1,mega:1}} |
+| T2 | nenhum stat morto, nenhum dominante | 8 pontos num stat so contra o mesmo pet sem treino: cada stat >= 0,60; amplitude <= 0,25 (Rookie e Ultimate) | **nao** | {taxa:{crianca:{vigor:1,folego:0.55,recuperacao:0.963,forca:1,mira:0.538,guarda:0.8},adulto:{vigor:1,folego:0.463,recuperacao:0.963,forca:1,mira:0.5,guarda:0.975}}} |
+| T3 | o teto do treino | no teto contra os rivais do estagio <= 0,95; degrau <= 0,25 a cada 4 pontos; no Rookie, o teto (10) contra o tipico (8) <= 0,70 | **nao** | {no_teto:{crianca:0.875,adolescente:1,adulto:1,mega:1},maior_degrau_4_pontos:{crianca:0.375,adolescente:0.262,adulto:0.3,mega:0.338},rookie_teto_contra_tipico:0.819,curva:{crianca:{0:0.425,2:0.725,4:0.8,6:0.825,8:0.825,1 |
+| E1 | a evolucao pesa mais que o treino | tipico contra o estagio seguinte de 0,10 a 0,35; dois acima <= 0,05; o teto contra o seguinte <= 0,50 | **nao** | {taxa:{crianca_tipico_contra_adolescente:0.663,crianca_teto_contra_adolescente:0.738,crianca_tipico_contra_adulto:0.55,adolescente_tipico_contra_adulto:1,adolescente_teto_contra_adulto:0.994,adolescente_tipico_contra_meg |
+| D1 | a duracao | mediana de cada estagio de 15 a 40 s; p90 <= 60 s; nenhuma forma com mediana < 8 s | **nao** | {por_estagio:{crianca:{mediana_s:11.65,p90_s:15.75,lutas:3216},adolescente:{mediana_s:14.65,p90_s:22.25,lutas:8064},adulto:{mediana_s:18.85,p90_s:28.85,lutas:8944},mega:{mediana_s:19.05,p90_s:33.95,lutas:8304}},formas_cu |
+| D2 | sem fim e empate | lutas no limite <= 0,5 %; empates <= 2 % em cada forma | **nao** | {sem_fim:0,lutas:28528,empate_total:0.016,empate_max_forma:0.059,formas_acima_de_2pc:[brasa_crianca_sereno (0.024),cirro_crianca_sereno (0.037),cirro_crianca_arisco (0.049),limo_crianca_arisco (0.059),brasa_adolescente_b |
+| A1 | de longe x de perto | as que atiram contra as de perto: de 0,45 a 0,55 na soma dos 8 mapas; de 0,30 a 0,70 em cada mapa | **nao** | {crianca:{longe:5,perto:3,soma_8_mapas:0.311,por_mapa:{campo:0.322,coliseu:0.311,floresta:0.233,praia:0.356,deserto:0.333,castelo:0.222,caverna:0.311,ringue:0.4}},adolescente:{longe:13,perto:3,soma_8_mapas:0.425,por_mapa |
+| V1 | a variedade no estagio | cada forma contra as outras de 0,35 a 0,65; amplitude <= 0,30; toda forma vence >= 2 outras | **nao** | {crianca:{amplitude:0.39,taxa:{brasa_crianca_sereno:0.408,brasa_crianca_arisco:0.485,cirro_crianca_sereno:0.345,cirro_crianca_arisco:0.464,ferrugem_crianca_sereno:0.646,ferrugem_crianca_arisco:0.735,limo_crianca_sereno:0 |
+| V2 | a especie nao decide sozinha | da melhor a pior especie <= 0,15, em cada estagio (o pet tipico contra as formas do estagio) | sim | {amplitude:{crianca:0.115,adolescente:0,adulto:0,mega:0},por_especie:{crianca:{brasa:0.76,cirro:0.875,limo:0.875},adolescente:{brasa:1,limo:1,ferrugem:1},adulto:{brasa:1,limo:1},mega:{limo:1,brasa:1,cirro:1}}} |
+| S1 | o espelho | o mesmo lutador dos dois lados: o lado A de 0,45 a 0,55 em cada mapa, so nas lutas com vencedor (D-LP5-11) | **nao** | {crianca:{lado_a_com_vencedor:{campo:0.368,coliseu:0.421,floresta:0.421,praia:0.261,deserto:0.579,castelo:0.524,caverna:0.286,ringue:0.389},leitura:{a:0.333,b:0.495,empate:0.172,a_sem_empates:0.403}},adolescente:{lado_a_ |

@@ -1,0 +1,92 @@
+Exploratorio da secao 9.6 do RESULTADO_V3_INDIVIDUALIDADE (2026-11-11), fora do plano. Rodado da raiz da worktree, sobre o commit
+3f7b1fa e os artefatos desta pasta. A saida esta em exploratorio_9_6.txt.
+
+=== peca 1: os dias com D_E = 0 por ramo E(t) ===
+import sys, json
+from pathlib import Path
+sys.path.insert(0,"."); sys.path.insert(0,"experiments")
+import run_v3_individualidade_i7 as r
+pets = r.ler_perfis(Path("artifacts_v3_individualidade_i7/perfis.jsonl.gz"))
+for perfil in ("SEQ","LUGAR","HORA"):
+  for braco in ("REL","REL+F"):
+    zero={k:[0,0] for k in range(1,5)}; nz={k:[] for k in range(1,5)}; dg={k:[] for k in range(1,5)}
+    traj={"sempre0":0,"nunca0":0,"misto":0}
+    for (b,dono,s),p in pets.items():
+      if b!=braco: continue
+      x=r.distancias_do_pet(p,perfil,r.IDADES,r.JANELA,14)
+      for t in r.IDADES:
+        if ("E",t) not in x["D"]: continue
+        ds=[]
+        for k in range(1,5):
+          v=x["D"][("E",t)].get(t+k)
+          if v is None: continue
+          ds.append(v)
+          zero[k][1]+=1; zero[k][0]+= v==0
+          if v>0: nz[k].append(v)
+          g=x["DG"].get(t+k)
+          if g is not None: dg[k].append(g)
+        if ds:
+          traj["sempre0" if all(v==0 for v in ds) else "nunca0" if all(v>0 for v in ds) else "misto"]+=1
+    print(perfil,braco,"frac D=0 por k:",{k:round(a/b,3) for k,(a,b) in zero.items()},
+          "D medio nao-zero:",{k:round(sum(v)/len(v),3) for k,v in nz.items()},
+          "D_G medio:",{k:round(sum(v)/len(v),3) for k,v in dg.items()}, "trajetorias:",traj)
+
+=== peca 1b: o estado interno dos ramos E, pelo reencontro do dia 14 (do ramos.jsonl) ===
+import json,collections
+g=collections.defaultdict(list)
+for l in open('artifacts_v3_individualidade_i7/ramos.jsonl',encoding='utf-8'):
+  r=json.loads(l)
+  if r['ramo']!='E': continue
+  ds=sorted(r['estado'],key=int)
+  last=r['estado'][ds[-1]]; first=r['estado'][ds[0]]
+  gl=r['estado_gemeo'][ds[-1]]
+  g[r['reencontro_ultimo_dia']].append((first,last,gl, r['estado_sha256'].get('14')))
+for k,v in g.items():
+  n=len(v); z1=sum(a==0 for a,_,_,_ in v)/n; zl=sum(b==0 for _,b,_,_ in v)/n
+  print("reencontro dia14 =",k,"n",n,"estado t+1 medio",round(sum(a for a,_,_,_ in v)/n,3),"estado t+4 medio",round(sum(b for _,b,_,_ in v)/n,3),
+        "frac estado=0 em t+1",round(z1,3),"em t+4",round(zl,3),"gemeo t+4",round(sum(c for *_,c,_ in v)/n,3))
+
+=== peca 2: as folhas do estado que diferem no dia 14 (2 ramos E curados e 2 afastados, os primeiros do REL no ramos.jsonl) ===
+import sys, json, collections
+sys.path.insert(0,"."); sys.path.insert(0,"experiments")
+import run_v3_individualidade_i7 as r
+from digilab.events import AcaoUsuario
+alvos={True:[],False:[]}
+for l in open('artifacts_v3_individualidade_i7/ramos.jsonl',encoding='utf-8'):
+  x=json.loads(l)
+  if x['ramo']=='E' and x['braco']=='REL' and len(alvos[x['reencontro_ultimo_dia']])<2:
+    alvos[x['reencontro_ultimo_dia']].append(x)
+  if all(len(v)==2 for v in alvos.values()): break
+origs={}
+for cur,lst in alvos.items():
+  for x in lst:
+    k=(x['braco'],x['dono'],x['semente'])
+    if k not in origs: origs[k]=r.viver_ramo(x['braco'],x['dono'],x['semente'],14,16)
+    E=r.viver_ramo(x['braco'],x['dono'],x['semente'],14,16,x['momento'],lambda m: m.observar(AcaoUsuario.TAPA))
+    a,b=E['estados'][14],origs[k]['estados'][14]
+    dif=sorted(c for c in set(a)|set(b) if a.get(c)!=b.get(c))
+    tops=collections.Counter(".".join(c.split(".")[:2]) for c in dif)
+    print("curado" if cur else "afastado", x['dono'], x['idade'], "folhas", len(set(a)|set(b)), "diferem", len(dif), "por modulo", dict(tops.most_common(8)))
+    print("   exemplos:", [(c, str(b.get(c))[:30], str(a.get(c))[:30]) for c in dif[:6]])
+
+=== peca 3: o arb.sorteios e o arb.reflexos no fim do dia t (10 ramos E de cada grupo, semente multipla de 7) ===
+import sys, json, collections
+sys.path.insert(0,"."); sys.path.insert(0,"experiments")
+import run_v3_individualidade_i7 as r
+from digilab.events import AcaoUsuario
+alvos={True:[],False:[]}
+for l in open('artifacts_v3_individualidade_i7/ramos.jsonl',encoding='utf-8'):
+  x=json.loads(l)
+  if x['ramo']=='E' and x['semente']%7==0 and len(alvos[x['reencontro_ultimo_dia']])<10:
+    alvos[x['reencontro_ultimo_dia']].append(x)
+origs={}; res=collections.Counter()
+for cur,lst in alvos.items():
+  for x in lst:
+    k=(x['braco'],x['dono'],x['semente'])
+    if k not in origs: origs[k]=r.viver_ramo(*k,14,16)
+    E=r.viver_ramo(*k,14,16,x['momento'],lambda m: m.observar(AcaoUsuario.TAPA))
+    t=x['idade']; o=origs[k]['estados']
+    s_t=E['estados'][t].get('arb.sorteios')==o[t].get('arb.sorteios')
+    rf=E['estados'][t].get('arb.reflexos')==o[t].get('arb.reflexos')
+    res[("curado" if cur else "afastado", "sorteios iguais no dia t" if s_t else "sorteios diferentes no dia t", "reflexos iguais" if rf else "reflexos diferentes")]+=1
+for k,v in sorted(res.items()): print(v,k)

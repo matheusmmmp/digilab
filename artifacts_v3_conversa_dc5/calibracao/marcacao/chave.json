@@ -1,0 +1,2174 @@
+{
+ "F0000": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-011"
+ },
+ "F0001": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E2-010"
+ },
+ "F0002": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q2-t1"
+ },
+ "F0003": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-026"
+ },
+ "F0004": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q2-t0"
+ },
+ "F0005": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/S1-f3"
+ },
+ "F0006": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q2-t2"
+ },
+ "F0007": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/S1-f2"
+ },
+ "F0008": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-028"
+ },
+ "F0009": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-016"
+ },
+ "F0010": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-024"
+ },
+ "F0011": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-028"
+ },
+ "F0012": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-026"
+ },
+ "F0013": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-001"
+ },
+ "F0014": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-004"
+ },
+ "F0015": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q1-t4"
+ },
+ "F0016": {
+  "celula": "H-v4",
+  "fala": "H-v4/S2-f0"
+ },
+ "F0017": {
+  "celula": "H-v4",
+  "fala": "H-v4/S1-f2"
+ },
+ "F0018": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E2-014"
+ },
+ "F0019": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-018"
+ },
+ "F0020": {
+  "celula": "H-v4",
+  "fala": "H-v4/S1-f4"
+ },
+ "F0021": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/S0-f4"
+ },
+ "F0022": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-002"
+ },
+ "F0023": {
+  "celula": "G-v4",
+  "fala": "G-v4/S0-f3"
+ },
+ "F0024": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-018"
+ },
+ "F0025": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-024"
+ },
+ "F0026": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-017"
+ },
+ "F0027": {
+  "celula": "G-v4",
+  "fala": "G-v4/E2-005"
+ },
+ "F0028": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q1-t4"
+ },
+ "F0029": {
+  "celula": "H-v4",
+  "fala": "H-v4/S0-f0"
+ },
+ "F0030": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-024"
+ },
+ "F0031": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-012"
+ },
+ "F0032": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q0-t1"
+ },
+ "F0033": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q2-t4"
+ },
+ "F0034": {
+  "celula": "H-v4",
+  "fala": "H-v4/S0-f4"
+ },
+ "F0035": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q1-t3"
+ },
+ "F0036": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q1-t0"
+ },
+ "F0037": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-001"
+ },
+ "F0038": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q2-t2"
+ },
+ "F0039": {
+  "celula": "G-v4",
+  "fala": "G-v4/S2-f1"
+ },
+ "F0040": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-018"
+ },
+ "F0041": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q0-t1"
+ },
+ "F0042": {
+  "celula": "G-v4",
+  "fala": "G-v4/S1-f2"
+ },
+ "F0043": {
+  "celula": "G-v4",
+  "fala": "G-v4/E2-014"
+ },
+ "F0044": {
+  "celula": "G-v4",
+  "fala": "G-v4/S1-f4"
+ },
+ "F0045": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-025"
+ },
+ "F0046": {
+  "celula": "G-v4",
+  "fala": "G-v4/S2-f0"
+ },
+ "F0047": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q0-t5"
+ },
+ "F0048": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q2-t4"
+ },
+ "F0049": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q1-t2"
+ },
+ "F0050": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q2-t0"
+ },
+ "F0051": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q1-t3"
+ },
+ "F0052": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q0-t2"
+ },
+ "F0053": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q1-t4"
+ },
+ "F0054": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-016"
+ },
+ "F0055": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q0-t0"
+ },
+ "F0056": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-020"
+ },
+ "F0057": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-014"
+ },
+ "F0058": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q1-t2"
+ },
+ "F0059": {
+  "celula": "H-v4",
+  "fala": "H-v4/E2-004"
+ },
+ "F0060": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q1-t2"
+ },
+ "F0061": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-021"
+ },
+ "F0062": {
+  "celula": "G-v4",
+  "fala": "G-v4/E2-004"
+ },
+ "F0063": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q2-t2"
+ },
+ "F0064": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E2-013"
+ },
+ "F0065": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q2-t0"
+ },
+ "F0066": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q2-t5"
+ },
+ "F0067": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q1-t5"
+ },
+ "F0068": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-005"
+ },
+ "F0069": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q0-t1"
+ },
+ "F0070": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-007"
+ },
+ "F0071": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q1-t0"
+ },
+ "F0072": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-001"
+ },
+ "F0073": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q1-t0"
+ },
+ "F0074": {
+  "celula": "G-v4",
+  "fala": "G-v4/E2-000"
+ },
+ "F0075": {
+  "celula": "G-v4",
+  "fala": "G-v4/E2-012"
+ },
+ "F0076": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q0-t1"
+ },
+ "F0077": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q0-t3"
+ },
+ "F0078": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q2-t2"
+ },
+ "F0079": {
+  "celula": "H-v4",
+  "fala": "H-v4/E2-007"
+ },
+ "F0080": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q0-t4"
+ },
+ "F0081": {
+  "celula": "H-v4",
+  "fala": "H-v4/E2-002"
+ },
+ "F0082": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/S1-f1"
+ },
+ "F0083": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-025"
+ },
+ "F0084": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q2-t5"
+ },
+ "F0085": {
+  "celula": "G-v4",
+  "fala": "G-v4/E2-011"
+ },
+ "F0086": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/S0-f1"
+ },
+ "F0087": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q1-t1"
+ },
+ "F0088": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-013"
+ },
+ "F0089": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-006"
+ },
+ "F0090": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-027"
+ },
+ "F0091": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q1-t5"
+ },
+ "F0092": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q2-t2"
+ },
+ "F0093": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-017"
+ },
+ "F0094": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q1-t1"
+ },
+ "F0095": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-020"
+ },
+ "F0096": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-020"
+ },
+ "F0097": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q0-t1"
+ },
+ "F0098": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q0-t4"
+ },
+ "F0099": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-004"
+ },
+ "F0100": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q1-t0"
+ },
+ "F0101": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-021"
+ },
+ "F0102": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q0-t0"
+ },
+ "F0103": {
+  "celula": "H-v4",
+  "fala": "H-v4/S1-f0"
+ },
+ "F0104": {
+  "celula": "G-v4",
+  "fala": "G-v4/E2-002"
+ },
+ "F0105": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-003"
+ },
+ "F0106": {
+  "celula": "G-v4",
+  "fala": "G-v4/E2-007"
+ },
+ "F0107": {
+  "celula": "H-v4",
+  "fala": "H-v4/S0-f1"
+ },
+ "F0108": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-022"
+ },
+ "F0109": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-023"
+ },
+ "F0110": {
+  "celula": "H-v4",
+  "fala": "H-v4/E2-008"
+ },
+ "F0111": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q1-t3"
+ },
+ "F0112": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-019"
+ },
+ "F0113": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-000"
+ },
+ "F0114": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-009"
+ },
+ "F0115": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E2-009"
+ },
+ "F0116": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-001"
+ },
+ "F0117": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q1-t3"
+ },
+ "F0118": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q1-t5"
+ },
+ "F0119": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E2-004"
+ },
+ "F0120": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q0-t4"
+ },
+ "F0121": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q0-t4"
+ },
+ "F0122": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/S0-f2"
+ },
+ "F0123": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-028"
+ },
+ "F0124": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-020"
+ },
+ "F0125": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/S0-f3"
+ },
+ "F0126": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/S2-f3"
+ },
+ "F0127": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-025"
+ },
+ "F0128": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-009"
+ },
+ "F0129": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E2-008"
+ },
+ "F0130": {
+  "celula": "H-v4",
+  "fala": "H-v4/E2-011"
+ },
+ "F0131": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q2-t5"
+ },
+ "F0132": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-003"
+ },
+ "F0133": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-021"
+ },
+ "F0134": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q1-t0"
+ },
+ "F0135": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E2-002"
+ },
+ "F0136": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/S2-f2"
+ },
+ "F0137": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-003"
+ },
+ "F0138": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-018"
+ },
+ "F0139": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q0-t5"
+ },
+ "F0140": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q0-t5"
+ },
+ "F0141": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q1-t0"
+ },
+ "F0142": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E2-001"
+ },
+ "F0143": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-019"
+ },
+ "F0144": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E2-011"
+ },
+ "F0145": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q0-t0"
+ },
+ "F0146": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q2-t2"
+ },
+ "F0147": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E2-014"
+ },
+ "F0148": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-028"
+ },
+ "F0149": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q0-t3"
+ },
+ "F0150": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q0-t2"
+ },
+ "F0151": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q2-t1"
+ },
+ "F0152": {
+  "celula": "G-v4",
+  "fala": "G-v4/S1-f0"
+ },
+ "F0153": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-026"
+ },
+ "F0154": {
+  "celula": "G-v4",
+  "fala": "G-v4/S0-f4"
+ },
+ "F0155": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q2-t3"
+ },
+ "F0156": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-016"
+ },
+ "F0157": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-019"
+ },
+ "F0158": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q1-t5"
+ },
+ "F0159": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q0-t3"
+ },
+ "F0160": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q0-t2"
+ },
+ "F0161": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q1-t0"
+ },
+ "F0162": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-017"
+ },
+ "F0163": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-002"
+ },
+ "F0164": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/S1-f2"
+ },
+ "F0165": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q1-t4"
+ },
+ "F0166": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q0-t5"
+ },
+ "F0167": {
+  "celula": "G-v4",
+  "fala": "G-v4/S2-f4"
+ },
+ "F0168": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-009"
+ },
+ "F0169": {
+  "celula": "H-v4",
+  "fala": "H-v4/S1-f1"
+ },
+ "F0170": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q0-t1"
+ },
+ "F0171": {
+  "celula": "H-v4",
+  "fala": "H-v4/S0-f3"
+ },
+ "F0172": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-011"
+ },
+ "F0173": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q1-t1"
+ },
+ "F0174": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q1-t1"
+ },
+ "F0175": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-023"
+ },
+ "F0176": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q0-t5"
+ },
+ "F0177": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q2-t4"
+ },
+ "F0178": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-014"
+ },
+ "F0179": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-010"
+ },
+ "F0180": {
+  "celula": "H-v4",
+  "fala": "H-v4/S2-f1"
+ },
+ "F0181": {
+  "celula": "G-v4",
+  "fala": "G-v4/S1-f3"
+ },
+ "F0182": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E2-000"
+ },
+ "F0183": {
+  "celula": "G-v4",
+  "fala": "G-v4/S2-f2"
+ },
+ "F0184": {
+  "celula": "G-v4",
+  "fala": "G-v4/E2-009"
+ },
+ "F0185": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q2-t3"
+ },
+ "F0186": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q0-t5"
+ },
+ "F0187": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/S2-f0"
+ },
+ "F0188": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-005"
+ },
+ "F0189": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q2-t0"
+ },
+ "F0190": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-010"
+ },
+ "F0191": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q0-t4"
+ },
+ "F0192": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q2-t3"
+ },
+ "F0193": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q0-t2"
+ },
+ "F0194": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E2-007"
+ },
+ "F0195": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-008"
+ },
+ "F0196": {
+  "celula": "H-v4",
+  "fala": "H-v4/E2-001"
+ },
+ "F0197": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q0-t4"
+ },
+ "F0198": {
+  "celula": "H-v4",
+  "fala": "H-v4/S1-f3"
+ },
+ "F0199": {
+  "celula": "G-v4",
+  "fala": "G-v4/S0-f0"
+ },
+ "F0200": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q2-t1"
+ },
+ "F0201": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q1-t1"
+ },
+ "F0202": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-012"
+ },
+ "F0203": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/S2-f0"
+ },
+ "F0204": {
+  "celula": "H-v4",
+  "fala": "H-v4/E2-010"
+ },
+ "F0205": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-029"
+ },
+ "F0206": {
+  "celula": "H-v4",
+  "fala": "H-v4/E2-014"
+ },
+ "F0207": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E2-010"
+ },
+ "F0208": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/S0-f0"
+ },
+ "F0209": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q1-t3"
+ },
+ "F0210": {
+  "celula": "H-v4",
+  "fala": "H-v4/S2-f4"
+ },
+ "F0211": {
+  "celula": "G-v4",
+  "fala": "G-v4/S0-f1"
+ },
+ "F0212": {
+  "celula": "H-v4",
+  "fala": "H-v4/E2-005"
+ },
+ "F0213": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E2-001"
+ },
+ "F0214": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q1-t2"
+ },
+ "F0215": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q1-t1"
+ },
+ "F0216": {
+  "celula": "H-v4",
+  "fala": "H-v4/S0-f2"
+ },
+ "F0217": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-013"
+ },
+ "F0218": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q1-t2"
+ },
+ "F0219": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q1-t2"
+ },
+ "F0220": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q0-t1"
+ },
+ "F0221": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q1-t5"
+ },
+ "F0222": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E2-002"
+ },
+ "F0223": {
+  "celula": "G-v4",
+  "fala": "G-v4/E2-001"
+ },
+ "F0224": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q1-t4"
+ },
+ "F0225": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q0-t0"
+ },
+ "F0226": {
+  "celula": "G-v4",
+  "fala": "G-v4/S0-f2"
+ },
+ "F0227": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q0-t3"
+ },
+ "F0228": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-008"
+ },
+ "F0229": {
+  "celula": "G-v4",
+  "fala": "G-v4/E2-010"
+ },
+ "F0230": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/S0-f4"
+ },
+ "F0231": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q2-t5"
+ },
+ "F0232": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-026"
+ },
+ "F0233": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-000"
+ },
+ "F0234": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E2-013"
+ },
+ "F0235": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-007"
+ },
+ "F0236": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E2-006"
+ },
+ "F0237": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-014"
+ },
+ "F0238": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/S0-f0"
+ },
+ "F0239": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q1-t4"
+ },
+ "F0240": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-013"
+ },
+ "F0241": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-004"
+ },
+ "F0242": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-008"
+ },
+ "F0243": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q0-t2"
+ },
+ "F0244": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q2-t4"
+ },
+ "F0245": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q2-t0"
+ },
+ "F0246": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q2-t0"
+ },
+ "F0247": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q2-t1"
+ },
+ "F0248": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-006"
+ },
+ "F0249": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q2-t3"
+ },
+ "F0250": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q0-t3"
+ },
+ "F0251": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-010"
+ },
+ "F0252": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-027"
+ },
+ "F0253": {
+  "celula": "G-v4",
+  "fala": "G-v4/E2-006"
+ },
+ "F0254": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q2-t5"
+ },
+ "F0255": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q2-t1"
+ },
+ "F0256": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q2-t1"
+ },
+ "F0257": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E2-005"
+ },
+ "F0258": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-029"
+ },
+ "F0259": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E2-006"
+ },
+ "F0260": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-011"
+ },
+ "F0261": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-005"
+ },
+ "F0262": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q0-t0"
+ },
+ "F0263": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q2-t0"
+ },
+ "F0264": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q2-t4"
+ },
+ "F0265": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E2-000"
+ },
+ "F0266": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/S2-f2"
+ },
+ "F0267": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-000"
+ },
+ "F0268": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/S2-f1"
+ },
+ "F0269": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-022"
+ },
+ "F0270": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-016"
+ },
+ "F0271": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q1-t1"
+ },
+ "F0272": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-004"
+ },
+ "F0273": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q1-t4"
+ },
+ "F0274": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-006"
+ },
+ "F0275": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/S0-f2"
+ },
+ "F0276": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q1-t3"
+ },
+ "F0277": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-015"
+ },
+ "F0278": {
+  "celula": "G-v4",
+  "fala": "G-v4/E2-003"
+ },
+ "F0279": {
+  "celula": "G-v4",
+  "fala": "G-v4/E2-008"
+ },
+ "F0280": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/S1-f4"
+ },
+ "F0281": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-012"
+ },
+ "F0282": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-029"
+ },
+ "F0283": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-027"
+ },
+ "F0284": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q2-t2"
+ },
+ "F0285": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-015"
+ },
+ "F0286": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q1-t0"
+ },
+ "F0287": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-007"
+ },
+ "F0288": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q0-t4"
+ },
+ "F0289": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q1-t4"
+ },
+ "F0290": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/S0-f3"
+ },
+ "F0291": {
+  "celula": "H-v4",
+  "fala": "H-v4/E2-006"
+ },
+ "F0292": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q1-t3"
+ },
+ "F0293": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q1-t5"
+ },
+ "F0294": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q0-t4"
+ },
+ "F0295": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q0-t5"
+ },
+ "F0296": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q2-t5"
+ },
+ "F0297": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q1-t5"
+ },
+ "F0298": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/S0-f1"
+ },
+ "F0299": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q0-t0"
+ },
+ "F0300": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q1-t3"
+ },
+ "F0301": {
+  "celula": "H-v4",
+  "fala": "H-v4/S2-f2"
+ },
+ "F0302": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q0-t3"
+ },
+ "F0303": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-009"
+ },
+ "F0304": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q2-t5"
+ },
+ "F0305": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-021"
+ },
+ "F0306": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-017"
+ },
+ "F0307": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E2-003"
+ },
+ "F0308": {
+  "celula": "H-v4",
+  "fala": "H-v4/E2-003"
+ },
+ "F0309": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-005"
+ },
+ "F0310": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/S1-f0"
+ },
+ "F0311": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/S2-f4"
+ },
+ "F0312": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-007"
+ },
+ "F0313": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-022"
+ },
+ "F0314": {
+  "celula": "G-v4",
+  "fala": "G-v4/E2-013"
+ },
+ "F0315": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q0-t0"
+ },
+ "F0316": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q0-t1"
+ },
+ "F0317": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q0-t0"
+ },
+ "F0318": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q2-t3"
+ },
+ "F0319": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q0-t3"
+ },
+ "F0320": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q2-t1"
+ },
+ "F0321": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-000"
+ },
+ "F0322": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q2-t3"
+ },
+ "F0323": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-012"
+ },
+ "F0324": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q2-t3"
+ },
+ "F0325": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-022"
+ },
+ "F0326": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q2-t5"
+ },
+ "F0327": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-002"
+ },
+ "F0328": {
+  "celula": "H-v4",
+  "fala": "H-v4/S2-f3"
+ },
+ "F0329": {
+  "celula": "H-v4",
+  "fala": "H-v4/E2-000"
+ },
+ "F0330": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-015"
+ },
+ "F0331": {
+  "celula": "H-v4",
+  "fala": "H-v4/E2-013"
+ },
+ "F0332": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/S1-f0"
+ },
+ "F0333": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-024"
+ },
+ "F0334": {
+  "celula": "H-v4",
+  "fala": "H-v4/E2-009"
+ },
+ "F0335": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-003"
+ },
+ "F0336": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/S1-f1"
+ },
+ "F0337": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q2-t4"
+ },
+ "F0338": {
+  "celula": "H-v4",
+  "fala": "H-v4/E2-012"
+ },
+ "F0339": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-025"
+ },
+ "F0340": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q1-t2"
+ },
+ "F0341": {
+  "celula": "G-v4",
+  "fala": "G-v4/S1-f1"
+ },
+ "F0342": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-023"
+ },
+ "F0343": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E2-005"
+ },
+ "F0344": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E2-009"
+ },
+ "F0345": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q2-t4"
+ },
+ "F0346": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/S2-f1"
+ },
+ "F0347": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q0-t2"
+ },
+ "F0348": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q1-t1"
+ },
+ "F0349": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E2-011"
+ },
+ "F0350": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-019"
+ },
+ "F0351": {
+  "celula": "G-v4",
+  "fala": "G-v4/S2-f3"
+ },
+ "F0352": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q0-t2"
+ },
+ "F0353": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-013"
+ },
+ "F0354": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E2-012"
+ },
+ "F0355": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E2-008"
+ },
+ "F0356": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K1-Q2-t3"
+ },
+ "F0357": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-011"
+ },
+ "F0358": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E2-003"
+ },
+ "F0359": {
+  "celula": "H-v4",
+  "fala": "H-v4/K2-Q0-t2"
+ },
+ "F0360": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q1-t5"
+ },
+ "F0361": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-015"
+ },
+ "F0362": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-027"
+ },
+ "F0363": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-014"
+ },
+ "F0364": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E2-007"
+ },
+ "F0365": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/S1-f3"
+ },
+ "F0366": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q1-t2"
+ },
+ "F0367": {
+  "celula": "G-v4",
+  "fala": "G-v4/K1-Q2-t4"
+ },
+ "F0368": {
+  "celula": "H-v4",
+  "fala": "H-v4/K1-Q2-t0"
+ },
+ "F0369": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-006"
+ },
+ "F0370": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-023"
+ },
+ "F0371": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-002"
+ },
+ "F0372": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K1-Q0-t5"
+ },
+ "F0373": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-029"
+ },
+ "F0374": {
+  "celula": "G-v4",
+  "fala": "G-v4/K2-Q0-t3"
+ },
+ "F0375": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E2-012"
+ },
+ "F0376": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-008"
+ },
+ "F0377": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-010"
+ },
+ "F0378": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/S2-f3"
+ },
+ "F0379": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E2-004"
+ },
+ "F0380": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/S2-f4"
+ },
+ "F0381": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/S1-f4"
+ },
+ "F0382": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/K2-Q2-t1"
+ },
+ "F0383": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/K2-Q2-t2"
+ },
+ "S000": {
+  "celula": "H-jogo",
+  "sequencia": "K2-Q0"
+ },
+ "S001": {
+  "celula": "H-v4",
+  "sequencia": "S0"
+ },
+ "S002": {
+  "celula": "G-v4",
+  "sequencia": "S1"
+ },
+ "S003": {
+  "celula": "H-v4",
+  "sequencia": "K1-Q2"
+ },
+ "S004": {
+  "celula": "G-v4",
+  "sequencia": "K2-Q0"
+ },
+ "S005": {
+  "celula": "H-jogo",
+  "sequencia": "K2-Q1"
+ },
+ "S006": {
+  "celula": "G-jogo",
+  "sequencia": "S0"
+ },
+ "S007": {
+  "celula": "H-jogo",
+  "sequencia": "S2"
+ },
+ "S008": {
+  "celula": "H-v4",
+  "sequencia": "K1-Q1"
+ },
+ "S009": {
+  "celula": "G-v4",
+  "sequencia": "S2"
+ },
+ "S010": {
+  "celula": "H-v4",
+  "sequencia": "K2-Q1"
+ },
+ "S011": {
+  "celula": "H-v4",
+  "sequencia": "K1-Q0"
+ },
+ "S012": {
+  "celula": "G-jogo",
+  "sequencia": "K2-Q0"
+ },
+ "S013": {
+  "celula": "H-jogo",
+  "sequencia": "K1-Q0"
+ },
+ "S014": {
+  "celula": "H-v4",
+  "sequencia": "S1"
+ },
+ "S015": {
+  "celula": "H-v4",
+  "sequencia": "K2-Q0"
+ },
+ "S016": {
+  "celula": "G-jogo",
+  "sequencia": "K1-Q0"
+ },
+ "S017": {
+  "celula": "H-jogo",
+  "sequencia": "K1-Q1"
+ },
+ "S018": {
+  "celula": "H-jogo",
+  "sequencia": "K2-Q2"
+ },
+ "S019": {
+  "celula": "G-v4",
+  "sequencia": "K1-Q2"
+ },
+ "S020": {
+  "celula": "G-v4",
+  "sequencia": "K1-Q1"
+ },
+ "S021": {
+  "celula": "H-v4",
+  "sequencia": "K2-Q2"
+ },
+ "S022": {
+  "celula": "G-jogo",
+  "sequencia": "K1-Q1"
+ },
+ "S023": {
+  "celula": "G-jogo",
+  "sequencia": "K2-Q1"
+ },
+ "S024": {
+  "celula": "H-jogo",
+  "sequencia": "K1-Q2"
+ },
+ "S025": {
+  "celula": "G-v4",
+  "sequencia": "K1-Q0"
+ },
+ "S026": {
+  "celula": "G-jogo",
+  "sequencia": "K2-Q2"
+ },
+ "S027": {
+  "celula": "G-jogo",
+  "sequencia": "S2"
+ },
+ "S028": {
+  "celula": "H-v4",
+  "sequencia": "S2"
+ },
+ "S029": {
+  "celula": "G-v4",
+  "sequencia": "K2-Q1"
+ },
+ "S030": {
+  "celula": "H-jogo",
+  "sequencia": "S1"
+ },
+ "S031": {
+  "celula": "G-v4",
+  "sequencia": "S0"
+ },
+ "S032": {
+  "celula": "G-v4",
+  "sequencia": "K2-Q2"
+ },
+ "S033": {
+  "celula": "G-jogo",
+  "sequencia": "S1"
+ },
+ "S034": {
+  "celula": "H-jogo",
+  "sequencia": "S0"
+ },
+ "S035": {
+  "celula": "G-jogo",
+  "sequencia": "K1-Q2"
+ },
+ "L000": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-004",
+  "certa": "fome"
+ },
+ "L001": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-026",
+  "certa": "solidao"
+ },
+ "L002": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-004",
+  "certa": "fome"
+ },
+ "L003": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-007",
+  "certa": "fome"
+ },
+ "L004": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-013",
+  "certa": "higiene"
+ },
+ "L005": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-019",
+  "certa": "higiene"
+ },
+ "L006": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-005",
+  "certa": "fome"
+ },
+ "L007": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-006",
+  "certa": "fome"
+ },
+ "L008": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-013",
+  "certa": "higiene"
+ },
+ "L009": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-027",
+  "certa": "solidao"
+ },
+ "L010": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-006",
+  "certa": "fome"
+ },
+ "L011": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-000",
+  "certa": "fome"
+ },
+ "L012": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-014",
+  "certa": "higiene"
+ },
+ "L013": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-022",
+  "certa": "solidao"
+ },
+ "L014": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-018",
+  "certa": "higiene"
+ },
+ "L015": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-022",
+  "certa": "solidao"
+ },
+ "L016": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-006",
+  "certa": "fome"
+ },
+ "L017": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-015",
+  "certa": "higiene"
+ },
+ "L018": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-025",
+  "certa": "solidao"
+ },
+ "L019": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-019",
+  "certa": "higiene"
+ },
+ "L020": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-016",
+  "certa": "higiene"
+ },
+ "L021": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-009",
+  "certa": "fome"
+ },
+ "L022": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-001",
+  "certa": "fome"
+ },
+ "L023": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-028",
+  "certa": "solidao"
+ },
+ "L024": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-013",
+  "certa": "higiene"
+ },
+ "L025": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-001",
+  "certa": "fome"
+ },
+ "L026": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-029",
+  "certa": "solidao"
+ },
+ "L027": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-016",
+  "certa": "higiene"
+ },
+ "L028": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-009",
+  "certa": "fome"
+ },
+ "L029": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-005",
+  "certa": "fome"
+ },
+ "L030": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-016",
+  "certa": "higiene"
+ },
+ "L031": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-029",
+  "certa": "solidao"
+ },
+ "L032": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-025",
+  "certa": "solidao"
+ },
+ "L033": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-002",
+  "certa": "fome"
+ },
+ "L034": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-009",
+  "certa": "fome"
+ },
+ "L035": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-010",
+  "certa": "higiene"
+ },
+ "L036": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-004",
+  "certa": "fome"
+ },
+ "L037": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-025",
+  "certa": "solidao"
+ },
+ "L038": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-021",
+  "certa": "solidao"
+ },
+ "L039": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-016",
+  "certa": "higiene"
+ },
+ "L040": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-008",
+  "certa": "fome"
+ },
+ "L041": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-001",
+  "certa": "fome"
+ },
+ "L042": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-018",
+  "certa": "higiene"
+ },
+ "L043": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-028",
+  "certa": "solidao"
+ },
+ "L044": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-017",
+  "certa": "higiene"
+ },
+ "L045": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-024",
+  "certa": "solidao"
+ },
+ "L046": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-004",
+  "certa": "fome"
+ },
+ "L047": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-018",
+  "certa": "higiene"
+ },
+ "L048": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-023",
+  "certa": "solidao"
+ },
+ "L049": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-007",
+  "certa": "fome"
+ },
+ "L050": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-013",
+  "certa": "higiene"
+ },
+ "L051": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-003",
+  "certa": "fome"
+ },
+ "L052": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-007",
+  "certa": "fome"
+ },
+ "L053": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-017",
+  "certa": "higiene"
+ },
+ "L054": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-022",
+  "certa": "solidao"
+ },
+ "L055": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-012",
+  "certa": "higiene"
+ },
+ "L056": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-012",
+  "certa": "higiene"
+ },
+ "L057": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-001",
+  "certa": "fome"
+ },
+ "L058": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-014",
+  "certa": "higiene"
+ },
+ "L059": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-028",
+  "certa": "solidao"
+ },
+ "L060": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-015",
+  "certa": "higiene"
+ },
+ "L061": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-018",
+  "certa": "higiene"
+ },
+ "L062": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-024",
+  "certa": "solidao"
+ },
+ "L063": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-002",
+  "certa": "fome"
+ },
+ "L064": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-029",
+  "certa": "solidao"
+ },
+ "L065": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-020",
+  "certa": "solidao"
+ },
+ "L066": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-017",
+  "certa": "higiene"
+ },
+ "L067": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-021",
+  "certa": "solidao"
+ },
+ "L068": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-021",
+  "certa": "solidao"
+ },
+ "L069": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-008",
+  "certa": "fome"
+ },
+ "L070": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-010",
+  "certa": "higiene"
+ },
+ "L071": {
+  "celula": "H-jogo",
+  "fala": "H-jogo/E3-020",
+  "certa": "solidao"
+ },
+ "L072": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-024",
+  "certa": "solidao"
+ },
+ "L073": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-026",
+  "certa": "solidao"
+ },
+ "L074": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-027",
+  "certa": "solidao"
+ },
+ "L075": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-021",
+  "certa": "solidao"
+ },
+ "L076": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-015",
+  "certa": "higiene"
+ },
+ "L077": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-005",
+  "certa": "fome"
+ },
+ "L078": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-012",
+  "certa": "higiene"
+ },
+ "L079": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-002",
+  "certa": "fome"
+ },
+ "L080": {
+  "celula": "G-jogo",
+  "fala": "G-jogo/E3-026",
+  "certa": "solidao"
+ },
+ "L081": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-008",
+  "certa": "fome"
+ },
+ "L082": {
+  "celula": "G-v4",
+  "fala": "G-v4/E3-011",
+  "certa": "higiene"
+ },
+ "L083": {
+  "celula": "H-v4",
+  "fala": "H-v4/E3-020",
+  "certa": "solidao"
+ },
+ "P00": {
+  "conversa": "K1-Q2",
+  "braco": "G",
+  "esquerda": "v4",
+  "direita": "jogo"
+ },
+ "P01": {
+  "conversa": "K1-Q2",
+  "braco": "H",
+  "esquerda": "v4",
+  "direita": "jogo"
+ },
+ "P02": {
+  "conversa": "K2-Q1",
+  "braco": "G",
+  "esquerda": "jogo",
+  "direita": "v4"
+ },
+ "P03": {
+  "conversa": "K1-Q0",
+  "braco": "G",
+  "esquerda": "v4",
+  "direita": "jogo"
+ },
+ "P04": {
+  "conversa": "K2-Q0",
+  "braco": "G",
+  "esquerda": "jogo",
+  "direita": "v4"
+ },
+ "P05": {
+  "conversa": "K2-Q2",
+  "braco": "G",
+  "esquerda": "jogo",
+  "direita": "v4"
+ },
+ "P06": {
+  "conversa": "K2-Q1",
+  "braco": "H",
+  "esquerda": "jogo",
+  "direita": "v4"
+ },
+ "P07": {
+  "conversa": "K1-Q1",
+  "braco": "G",
+  "esquerda": "jogo",
+  "direita": "v4"
+ },
+ "P08": {
+  "conversa": "K1-Q1",
+  "braco": "H",
+  "esquerda": "jogo",
+  "direita": "v4"
+ },
+ "P09": {
+  "conversa": "K1-Q0",
+  "braco": "H",
+  "esquerda": "jogo",
+  "direita": "v4"
+ },
+ "P10": {
+  "conversa": "K2-Q2",
+  "braco": "H",
+  "esquerda": "v4",
+  "direita": "jogo"
+ },
+ "P11": {
+  "conversa": "K2-Q0",
+  "braco": "H",
+  "esquerda": "jogo",
+  "direita": "v4"
+ }
+}

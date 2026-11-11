@@ -115,7 +115,8 @@ describe("efeitos curtos dos itens", () => {
   it("os chips de stat saem dos pontos do motor", () => {
     const forca = ITENS.find(i => i.id === "chip_forca")!;
     expect(efeitoCurto(forca)).toBe("+1 força +1 vigor");
-    expect(efeitoCurto(ITENS.find(i => i.id === "carta_folego")!)).toBe("+20 guts");
+    /* as cartas sairam com o combate por turnos (LP4): ficam so como itens de antes, sem efeito */
+    expect(efeitoCurto(ITENS.find(i => i.id === "carta_folego")!)).toBe("sem efeito");
   });
 });
 

@@ -1,0 +1,14 @@
+{
+ "id": "01a1bb76-64e7-71e1-ad16-d21eda8e3a87",
+ "type": "image-to-image",
+ "ai_model": "nano-banana-2",
+ "prompt": "Multiple views of the same old green cast-iron street lamp: front, side and back, same style, same colors, same hand-painted detail. Chipped green paint on the post with darker worn patches, a square glass lantern with a green iron frame and a pointed finial on top, warm yellow glowing glass panes, a small brass collar under the lantern and two short side arms, ivy with small green leaves climbing flat against the post, and a square stone block base covered in green moss. Plain light grey background.",
+ "status": "SUCCEEDED",
+ "consumed_credits": 6,
+ "created_at": 1794146461102,
+ "finished_at": 1794146483650,
+ "saldo": {
+  "antes": 50,
+  "depois": 44
+ }
+}

@@ -259,16 +259,32 @@ class ServicoFalaLivre:
         hist = self._historico(hist, com_estagio=True)
         especie = self.especies.get(forma.removesuffix(" sombrio")) if forma is not None else None
         with self.trava:
-            r = gerar_voz(self.cliente, conceitos, estagio, situacao, jog, hist, semente, especie=especie, comando=comando)
+            r = gerar_voz(self.cliente, conceitos, estagio, situacao, jog, hist, semente, especie=especie, comando=comando,
+                          voz=self.voz_dos_conceitos(conceitos), ditas=self.ditas_da_voz(situacao))
             verif = None
             if r.erro is None:                         # fala generica (erro) nao e fala da LLM: nao ha o que conferir
                 dono = [f for f in r.fatos if f["tipo"] == TIPO_DONO_DISSE]
                 verif = verificar_conceitos(self.cliente_verif, r.fala, r.fatos_citados, conceitos, dono, semente + 7919,
-                                            versao=_verificador_dos_conceitos(conceitos)).para_dict()
+                                            versao=self.verificador_dos_conceitos(conceitos)).para_dict()
         return {"versao_app": VERSAO_APP, "fala": r.fala, "fatos_citados": list(r.fatos_citados), "fatos": list(r.fatos),
                 "estagio": r.estagio, "modelo": r.modelo, "versao_prompt": r.versao_prompt, "latencia_s": r.latencia_s,
                 "erro": r.erro, "comando": r.comando if comando else None, "verificacao": verif, "conceitos_k": conceitos.k,
                 "especie_corpus": r.especie, "corpus_sha256": self.corpus_sha}
+
+    def voz_dos_conceitos(self, conceitos: dec.Conceitos) -> str | None:
+        """a voz da rede pedida ao `gerar_voz`: None, a do formato (o jogo: voz-v1/v2/v3). A DC4 (o `ServicoDC4` do orquestrador) pede a
+        voz-v3b no dec-v3 (decisao do Matheus em 2026-11-09); o verificador nao muda (`_verificador_dos_conceitos`)."""
+        return None
+
+    def verificador_dos_conceitos(self, conceitos: dec.Conceitos) -> str:
+        """a versao do verificador dos conceitos: a do formato (`_verificador_dos_conceitos`) no jogo. So a DC5 (o `ServicoDC5` do
+        orquestrador, com a voz-v4b) pede a verif-v8b e a verif-v9b (DC5a2, D-DC5B-5)."""
+        return _verificador_dos_conceitos(conceitos)
+
+    def ditas_da_voz(self, situacao: str):
+        """as ultimas falas espontaneas do pet que vao a voz: None no jogo (a voz do jogo nao as recebe). So a DC5 (o `ServicoDC5` do
+        orquestrador, com a voz-v4) as pede, na fala espontanea (plano da DC5, 3.4)."""
+        return None
 
     @staticmethod
     def _identidade_da_voz(estado) -> tuple[str, str | None]:
@@ -299,7 +315,7 @@ class ServicoFalaLivre:
         conceitos = self._conceitos(d["conceitos"])
         with self.trava:
             return verificar_conceitos(self.cliente_verif, fala, cit, conceitos, fatos, _semente(d.get("semente", 0)),
-                                       versao=_verificador_dos_conceitos(conceitos)).para_dict()
+                                       versao=self.verificador_dos_conceitos(conceitos)).para_dict()
 
     def verificar(self, d: dict) -> dict:
         fala = _texto(d.get("fala"), "fala", 400)

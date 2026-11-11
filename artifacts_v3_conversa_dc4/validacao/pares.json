@@ -1,0 +1,170 @@
+[
+ {
+  "id": "P00",
+  "conversa": "V1-Q2",
+  "comparacao": "HxG",
+  "esquerda": "H",
+  "direita": "G"
+ },
+ {
+  "id": "P01",
+  "conversa": "V4-Q1",
+  "comparacao": "HxG",
+  "esquerda": "H",
+  "direita": "G"
+ },
+ {
+  "id": "P02",
+  "conversa": "V3-Q1",
+  "comparacao": "HxG",
+  "esquerda": "H",
+  "direita": "G"
+ },
+ {
+  "id": "P03",
+  "conversa": "V2-Q0",
+  "comparacao": "SxG",
+  "esquerda": "G",
+  "direita": "S"
+ },
+ {
+  "id": "P04",
+  "conversa": "V1-Q0",
+  "comparacao": "HxG",
+  "esquerda": "H",
+  "direita": "G"
+ },
+ {
+  "id": "P05",
+  "conversa": "V1-Q1",
+  "comparacao": "HxG",
+  "esquerda": "H",
+  "direita": "G"
+ },
+ {
+  "id": "P06",
+  "conversa": "V2-Q2",
+  "comparacao": "SxG",
+  "esquerda": "S",
+  "direita": "G"
+ },
+ {
+  "id": "P07",
+  "conversa": "V2-Q1",
+  "comparacao": "HxG",
+  "esquerda": "G",
+  "direita": "H"
+ },
+ {
+  "id": "P08",
+  "conversa": "V4-Q0",
+  "comparacao": "SxG",
+  "esquerda": "S",
+  "direita": "G"
+ },
+ {
+  "id": "P09",
+  "conversa": "V3-Q1",
+  "comparacao": "SxG",
+  "esquerda": "G",
+  "direita": "S"
+ },
+ {
+  "id": "P10",
+  "conversa": "V3-Q0",
+  "comparacao": "HxG",
+  "esquerda": "G",
+  "direita": "H"
+ },
+ {
+  "id": "P11",
+  "conversa": "V2-Q0",
+  "comparacao": "HxG",
+  "esquerda": "H",
+  "direita": "G"
+ },
+ {
+  "id": "P12",
+  "conversa": "V4-Q2",
+  "comparacao": "HxG",
+  "esquerda": "G",
+  "direita": "H"
+ },
+ {
+  "id": "P13",
+  "conversa": "V3-Q2",
+  "comparacao": "SxG",
+  "esquerda": "G",
+  "direita": "S"
+ },
+ {
+  "id": "P14",
+  "conversa": "V1-Q1",
+  "comparacao": "SxG",
+  "esquerda": "S",
+  "direita": "G"
+ },
+ {
+  "id": "P15",
+  "conversa": "V4-Q2",
+  "comparacao": "SxG",
+  "esquerda": "G",
+  "direita": "S"
+ },
+ {
+  "id": "P16",
+  "conversa": "V3-Q2",
+  "comparacao": "HxG",
+  "esquerda": "H",
+  "direita": "G"
+ },
+ {
+  "id": "P17",
+  "conversa": "V4-Q0",
+  "comparacao": "HxG",
+  "esquerda": "G",
+  "direita": "H"
+ },
+ {
+  "id": "P18",
+  "conversa": "V2-Q2",
+  "comparacao": "HxG",
+  "esquerda": "H",
+  "direita": "G"
+ },
+ {
+  "id": "P19",
+  "conversa": "V2-Q1",
+  "comparacao": "SxG",
+  "esquerda": "S",
+  "direita": "G"
+ },
+ {
+  "id": "P20",
+  "conversa": "V4-Q1",
+  "comparacao": "SxG",
+  "esquerda": "G",
+  "direita": "S"
+ },
+ {
+  "id": "P21",
+  "conversa": "V1-Q2",
+  "comparacao": "SxG",
+  "esquerda": "G",
+  "direita": "S"
+ },
+ {
+  "id": "P22",
+  "conversa": "V1-Q0",
+  "comparacao": "SxG",
+  "esquerda": "G",
+  "direita": "S"
+ },
+ {
+  "id": "P23",
+  "conversa": "V3-Q0",
+  "comparacao": "SxG",
+  "esquerda": "G",
+  "direita": "S"
+ }
+]

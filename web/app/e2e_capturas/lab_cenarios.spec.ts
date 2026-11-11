@@ -18,7 +18,7 @@ test.describe("capturas dos Cenarios", () => {
     /* o save e semeado por uma pagina da mesma origem que nao e o app (o app gravaria o pet dele por cima ao fechar) */
     await page.goto("/motor/index.ts");
     await page.evaluate(([chave, v]) => {
-      localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-descarte", "6");
+      localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-descarte", "8");
       localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
       localStorage.setItem(chave, JSON.stringify({ semente: 101, versao: v, log: [[480, "u", { n: 1 }], [480, "t", 210]] }));
     }, [CHAVE, VERSAO_PET] as const);

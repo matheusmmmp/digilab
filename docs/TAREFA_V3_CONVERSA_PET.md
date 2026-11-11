@@ -392,3 +392,292 @@ chave desligada. Nenhuma run; só testes. O `digilab/` não muda. Desvios D-CP-D
 - **O que se vê no jogo (D-CP-DC3d-7):** com quem atende, a fala de comida cai; a de companhia é a que a DC3c diz aprender. Não é bug do
   porte, e a mecânica não foi tocada.
 - **Falta:** a avaliação da voz-v3 e da verif-v9 com modelo de verdade (só cliente falso aqui) e a DC4.
+
+## DC4 — o plano de análise da voz da rede com modelo de verdade (2026-11-08, Gerente, Claude Code, Opus 5.5, branch `v3-conversa-dc4-plano`)
+
+O plano [PLANO_ANALISE_V3_CONVERSA_DC4.md](PLANO_ANALISE_V3_CONVERSA_DC4.md), **APROVADO pelo Matheus em 2026-11-08** (DC4-1 a DC4-8, todas como recomendadas), reescreve a avaliação para a fala pela rede (DR-1),
+como a seção 10 pedia. Três modelos (`gemma2:9b`, `claude-haiku-5-5`, `claude-sonnet-5-5`) com a voz de hoje (`voz-v2`, `voz-v3`) sobre entradas
+do decodificador tiradas de vidas novas do pet de teste; os gates por modelo G-FIEL (a voz diz só o que os conceitos dizem), G-LEGIVEL (o
+Matheus, cego, recupera o pedido da rede) e G-INJ, o gate do verificador G-VERIF, e a escolha do modelo pela preferência cega pareada, sem
+gate. O descritivo D-COMIDA refaz pelo replay as vidas da run da DC3 para ver se o crédito até o pet comer mudaria o sinal do pedido de
+comida. Decisões DC4-1 a DC4-8 aprovadas. Nenhuma chamada a modelo de verdade antes da aprovação, do código da DC4a e do registro da rodada.
+
+## DC4a — o código da avaliação da voz da rede (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc4a`, 2026-11-08)
+
+A linha DC4a do [plano da DC4](PLANO_ANALISE_V3_CONVERSA_DC4.md) (seção 10). **Nenhuma chamada a modelo de verdade e nenhuma vida das
+subfaixas da DC4**: só testes com clientes falsos e a fumaça nas sementes dos testes. A voz-v3, a verif-v9, o `engine.py` e o jogo não
+mudaram. Desvios D-CP-DC4a-1 a 12 em `docs/registro/2026-11.md`.
+
+- **O montador:** `experiments/montador_voz_rede.py` é o espelho Python do `conceitosDaVoz` e do `estadoDaVoz` de `web/app/src/falaRede.ts`.
+  - O gabarito `web/app/test/gabaritos/fala_rede_montador.json.gz` (`experiments/exportar_gabarito_fala_rede.py`) traz duas vidas do LAB+F
+    com 3 dias e casos feitos à mão do alvo.
+  - `web/app/test/fala_rede_montador.test.ts` confere que o TS monta o mesmo pedido. A mutação conferida: tirar `bola` das classes do
+    Python quebra a paridade.
+- **As entradas:** `experiments/entradas_dc4.py` vive o LAB+F da DC3 no comedouro (14 dias, orçamento 16, o dono que atende), lê por
+  decisão o `dec-v2`, o conteúdo da fala, o tick e o estágio, monta o pedido como a página e o valida como o servidor.
+  - O sorteio é estratificado: E3 por pedido, E2 pela intenção da I-a com as lembranças com `episodio`, e as sequências da conversa.
+  - Ele falha alto e roda mais vidas da mesma base, em ordem, até fechar.
+- **O orquestrador:** `experiments/run_v3_conversa_dc4.py` leva cada fala pelo `ServicoFalaLivre` do jogo, com o cliente da voz do braço
+  (G `gemma2:9b` no Ollama, H e S pelo `ClienteClaude`) e o verificador `gemma2:9b` igual em todos.
+  - As conferências da seção 9 falham alto: o modelo devolvido, a entrada/braço/semente/`usage` de cada fala, a ordem dos pares e a parada
+    antes do teto.
+  - As travas: o `pre_run` (H10), o plano APROVADO, a faixa, a config igual à do plano, os roteiros da validação só na validação, e o
+    registro da rodada na validação (`--registro` imprime a seção 13).
+  - Os clientes falsos só na fumaça, e a fumaça só com eles.
+  - As configs e os roteiros ficam em `experiments/configs/v3_conversa_dc4/` (2 roteiros de calibração e 4 de validação, na ordem fixa).
+- **A marcação cega:** `experiments/marcacao_dc4.py` monta o material e abre a página local em `127.0.0.1:8790`.
+  - O material: a legibilidade, a amostra da referência, a injeção, os pares e o pacote do marcador Opus. A chave dos braços fica num
+    arquivo que a página nunca lê.
+  - Cada resposta vai ao disco na hora.
+  - A entrada é tratada como não confiável: só `textContent`, CSP sem script inline, Host e Origin conferidos e respostas de catálogo fechado.
+- **A rubrica:** `docs/RUBRICA_DC4_FIDELIDADE.md`, as regras do julgamento da verif-v7 a verif-v9 em palavras, regra a regra.
+- **A faixa (DC4-1):** a linha da CONVERSA_PET em `FAIXAS_RESERVADAS` diz que 20262200–20262499 é a calibração da DC4 e 20262500–20262899 a
+  validação.
+- **A estimativa:** `tools/estimar_custo_llm.py` ganhou o bloco `voz_da_rede_dc4`. O pior caso medido do pedido dá US$ 2,19 nos dois braços
+  para as 243 chamadas (D-CP-DC4a-10).
+- **Testes:** `tests/test_conversa_dc4a.py` (50) e `web/app/test/fala_rede_montador.test.ts` (3).
+- **Falta (DC4b):** a calibração com os modelos de verdade, o formato real da API, o registro da rodada com as versões dos modelos e a tag do
+  Ollama, e o ensaio da marcação.
+
+## DC4b — a calibração da voz da rede (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc4b`, 2026-11-08)
+
+A linha DC4b do [plano da DC4](PLANO_ANALISE_V3_CONVERSA_DC4.md) (seção 10): a calibração com os três modelos de verdade, na base 20262200.
+A validação não rodou, e os roteiros dela não foram abertos. A voz-v3 não mudou. Desvios D-CP-DC4b-1 a 10 em `docs/registro/2026-11.md`.
+
+- **A rodada:** `artifacts_v3_conversa_dc4/calibracao/`, com 243 falas (81 por braço), o material da marcação, os pares e o `meta.json`.
+  - Os modelos devolvidos são os pedidos, sem sufixo de data, e não houve parada no teto.
+  - A primeira tentativa parou quando o Ollama caiu e fica em `calibracao_tentativa1/` (D-CP-DC4b-2).
+- **O formato da API** (o "não verificado" da M5): aceito pelos dois modelos Claude, sem recusa nem corte.
+- **O gasto real:** US$ 0,588 nesta rodada (Haiku US$ 0,027, Sonnet US$ 0,560), US$ 0,606 acumulados com a sonda e a primeira tentativa.
+- **A estimativa pelo `usage` real** (`artifacts_v3_conversa_dc4/calibracao/custo_medido.json`):
+  - os pedidos têm cerca de 3 000 tokens de entrada em média (o máximo, cerca de 4 000) e 70 a 90 de saída;
+  - a validação projeta US$ 1,18 pela média e US$ 1,55 pela chamada mais cara;
+  - a folga no teto de US$ 3 fica em US$ 1,22 ou US$ 0,84.
+- **A latência** (`falas.jsonl`):
+  - a voz sozinha tem p50/p90 de G 8,4/30,0 s, H 1,2/1,5 s e S 2,0/2,3 s;
+  - o turno com o verificador tem G 15,5/151 s, H 9,8/29,8 s e S 12,5/19,6 s;
+  - a do G não é limpa, porque a máquina tinha outra carga (D-CP-DC4b-4).
+- **O verificador marcou** 38 falas do G, 63 do H e 44 do S, de 81 cada. Não é resultado: a referência é a marcação (4.1).
+- **Os consertos:**
+  - o piso do gasto entre as worktrees (D-CP-DC4b-1);
+  - a resposta sem modelo como falha de chamada (D-CP-DC4b-2);
+  - a estimativa medida no `tools/estimar_custo_llm.py`.
+- **O ensaio da marcação:** a página abriu numa cópia do material (fora do repo), com as quatro tarefas. Uma resposta de ensaio foi gravada
+  na cópia, e a pasta `respostas/` da calibração continua vazia.
+- **O registro da rodada:** a seção 13 do plano, com as versões, o digest do `gemma2:9b` e os 31 sha256.
+- **Para o Gerente decidir antes da DC4c:**
+  - a voz que enfeita o pedido de comida (D-CP-DC4b-5) e o `P` na fala do G (D-CP-DC4b-6): mudar só com uma `voz-v3b`, que muda o que a
+    validação mede;
+  - a máquina livre durante a validação (D-CP-DC4b-4).
+
+### DC4b, a voz-v3b (decisão do Matheus em 2026-11-09, no mesmo PR)
+
+O Matheus decidiu criar a `voz-v3b` antes da DC4c, contra a recomendação do worker de validar a voz-v3 como estava. Desvios D-CP-DC4b-11 a
+16 em `docs/registro/2026-11.md`.
+
+- **A voz-v3b** (`digilab_fala_livre/prompt.py`) é uma revisão só da regra do pedido:
+  - (a) o pedido sai como desejo, sem afirmar estado do corpo ou do humor fora dos conceitos ativos;
+  - (b) a fala nunca traz um id interno.
+  - A voz-v3 não mudou e continua sendo a do jogo. O verificador não mudou: a verif-v9 não depende da voz.
+- **O orquestrador e as configs:** o dec-v3 usa a voz-v3b na calibração e na validação (`"voz_dec_v3": "voz-v3b"`), e o dec-v2 segue com a
+  voz-v2. O `--so-dec-v3` refaz só as falas do dec-v3.
+- **A recalibração:** `artifacts_v3_conversa_dc4/calibracao_v3b/`, com 114 falas (38 por braço: as 30 espontâneas do E3 e os 8 turnos
+  dec-v3 das conversas) e as mesmas entradas, sementes e roteiros. A calibração com a voz-v3 ficou como estava.
+  - Ela rodou com a máquina livre, pela vez dada pelo Gerente da V3, num processo lançado fora do app (01:22–01:59).
+  - Não houve fala genérica, erro do verificador nem parada no teto, e os modelos devolvidos foram os pedidos.
+- **O gasto:** US$ 0,272 na rodada (Haiku US$ 0,013, Sonnet US$ 0,260), com US$ 0,878 acumulados.
+- **A projeção da validação com a v3b** (`calibracao_v3b/custo_medido.json`): US$ 1,20 pela média e US$ 1,55 pela chamada mais cara. A folga
+  fica em US$ 0,93 ou US$ 0,57. Cabe no teto.
+- **A latência da voz** (p50/p90, máquina livre): G 20,3/24,5 s, H 1,1/1,3 s, S 1,9/2,2 s. O turno: G 30,0/34,1 s, H 10,6/15,2 s,
+  S 14,7/17,5 s.
+- **v3 × v3b** nas mesmas 38 falas do dec-v3 por braço (`calibracao_v3b/comparacao.json`):
+
+| braço | "fome" sem o conceito (verificador) | "fome" sem o conceito (texto) | id na fala | o verificador marcou | genéricas |
+|---|---|---|---|---|---|
+| G | 4 → 2 | 0 → 0 | 4 → 0 | 14 → 18 | 4 → 0 |
+| H | 12 → 6 | 13 → 0 | 0 → 0 | 30 → 29 | 0 → 0 |
+| S | 7 → 5 | 3 → 0 | 0 → 0 | 19 → 26 | 0 → 0 |
+
+  - A fome dita sem o conceito caiu, e o "P" sumiu.
+  - As marcas não caíram: a v3b leva os modelos a pedir companhia com "fica comigo?", e o verificador conta isso como manipulação
+    (D-CP-DC4b-14).
+  - O texto não foi iterado: o G-FIEL da validação diz o resultado.
+- **O registro da rodada:** a seção 13 do plano, refeita com a voz-v3b, o gasto de US$ 0,878 e os 31 sha256 de hoje.
+
+## DC4c — a validação da voz da rede e o D-COMIDA (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc4c`, 2026-11-09)
+
+A linha DC4c do [plano da DC4](PLANO_ANALISE_V3_CONVERSA_DC4.md): a validação, uma vez, na base 20262500, com a voz-v3b no dec-v3. Depois
+dela, o descritivo D-COMIDA (seção 6) e os pacotes da marcação. Nenhum gate foi calculado: os gates são da DC4d. Desvios D-DC4C-1 a 4 em
+`docs/registro/2026-11.md`.
+
+- **A rodada:** `artifacts_v3_conversa_dc4/validacao/`, com 486 falas (162 por braço) e o material da marcação, os pares e o `meta.json`.
+  - Por braço: as 60 espontâneas do E3 e as 30 do E2, e os 72 turnos das 12 conversas, sendo 12 do dec-v3 com a voz-v3b e 60 do dec-v2
+    com a voz-v2.
+  - Ela rodou inteira na sexta tentativa (19:35–21:33). As cinco anteriores caíram e ficam em `validacao_caida_1/` a `_5/`, sem ajuste
+    entre elas (D-DC4C-1).
+- **As conferências da seção 9:** todas passaram e falham alto no orquestrador.
+  - Os modelos devolvidos são os pedidos: `gemma2:9b` (G e o verificador), `claude-haiku-5-5` (H) e `claude-sonnet-5-5` (S).
+  - Toda fala tem a entrada, o braço, a semente e o `usage`; a ordem dos pares é a sorteada.
+  - Não houve parada no teto, e o gasto não passou dele.
+  - O registro da rodada (seção 13) conferiu os 31 sha256 em cada lançamento.
+- **O gasto real:**
+  - US$ 1,176 na rodada (H US$ 0,055, S US$ 1,121), contra a projeção de US$ 1,20 pela média;
+  - US$ 0,023 na queda 5, nas 76 chamadas do H;
+  - US$ 2,077 acumulados, contra o teto de US$ 3.
+- **A latência** (`falas.jsonl`, p50/p90/máximo; a máquina sem jogo, pela confirmação do Matheus):
+  - a voz: G 8,7/12,0/19,7 s, H 1,3/1,7/12,8 s, S 2,0/2,3/8,5 s;
+  - o turno com o verificador: G 15,6/21,6/34,7 s, H 11,4/16,6/26,4 s, S 16,2/20,3/26,5 s.
+- **As falas genéricas:** nenhuma em nenhum braço. As 486 verificações não tiveram falha de chamada.
+- **Os pacotes da marcação** (`validacao/marcacao/`), gerados pelo orquestrador e não marcados:
+  - o `itens.json` da página tem 180 itens de legibilidade, 48 de referência, 36 de injeção e 24 pares;
+  - o pacote cego do marcador Opus, o `pacote_referencia.jsonl`, tem 486 falas;
+  - a pasta `respostas/` está vazia.
+  - Nenhum dos dois traz o braço nem o nome de um modelo: a busca por `braco`, `gemma`, `haiku` e `sonnet` dá zero.
+  - O `chave.json` (o id opaco para o braço) vai no commit, como o da calibração. A página só serve `/`, `/app.js`, `/app.css` e
+    `/api/estado`, que lê o `itens.json` e as respostas, e nunca o `chave.json`.
+- **O D-COMIDA** (`artifacts_v3_conversa_dc4/d_comida/`, `experiments/d_comida_dc4.py`, 4 processos, 46 min): descritivo, sem gate.
+  - **A conferência passou.** As 1 600 vidas do LAB+F da DC3 foram refeitas. Os 1 600 logs são byte a byte os do `vidas.tar.gz`, as medidas
+    são as do `medidas.json` (tirado o `custo`), e o r_n gravado se reproduz em toda decisão fechada. O código da DC3 mudou desde a run, e o
+    replay reproduziu mesmo assim (D-DC4C-3).
+  - **Os pedidos atendidos** (as 800 vidas do dono que atende): 22 543 de comida e 18 366 de companhia.
+  - **A fome demora a cair:** 150 ticks na mediana e 330 no p90, com 144 pedidos censurados. A solidão cai em 15 ticks, uma decisão, com
+    1 095 censurados.
+  - **O pet não come antes da decisão seguinte:** 0 pedidos, zero por construção (D-DC4C-2). Ele come na decisão seguinte em 428 (1,9 %) e
+    leva 9 decisões até comer na mediana (p90 21; 16 não comem até o fim da vida).
+  - **O sinal do crédito mudaria.** O r_n de hoje é negativo em 21 975 dos 22 543 pedidos de comida (97,5 %), com média −219,9. Se o crédito
+    fosse até o pet comer, seria positivo em 13 314 dos 22 527 que comem (59,1 %), com média +139,0. O sinal muda em 12 881 deles (57,2 %).
+  - O atencioso e o incoerente têm os mesmos números, porque as células são duplicadas na DC3 (D-DC4C-4).
+  - **O que isso pede:** pela seção 6, uma mudança de sinal vira proposta de adendo ou de etapa nova, e quem decide é o Matheus. Este PR não
+    muda o crédito.
+
+
+## DC5a — o código da voz-v4 e da avaliação (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5a`, 2026-11-10)
+
+O código da [DC5](PLANO_ANALISE_V3_CONVERSA_DC5.md) (APROVADO pelo Matheus em 2026-11-10), seção 10. **Nenhuma chamada a modelo de verdade.**
+
+- **O gabarito da voz do jogo,** num commit próprio antes da mudança (`experiments/exportar_gabarito_voz_jogo_dc5.py`,
+  `experiments/configs/v3_conversa_dc5/gabarito_voz_jogo.json`), gerado com o código da `main` 11a34d80: as mensagens da voz-v2 e da voz-v3 e
+  as do serviço do jogo, para 20 entradas fixas. O código de hoje dá o mesmo, byte a byte, e o orquestrador confere isso antes de rodar.
+- **A voz-v4** (`digilab_fala_livre/prompt.py`, `VERSAO_VOZ_V4`), só quando pedida (`voz=VERSAO_VOZ_V4`), nos dois formatos do jogo:
+  - sem frase entre aspas nas regras, no tamanho e em exemplo (não há exemplos);
+  - pedir companhia é chamar o dono para estar junto, nunca pedir que ele fique;
+  - o desfecho do episódio como valor (`desfecho: bom`);
+  - a regra de não repetir, e na fala espontânea o bloco O QUE VOCÊ JÁ DISSE (`ditas`, pelo `ditas_da_voz` do serviço, None no jogo);
+  - a seleção (`conceitos.selecionados_v4`): até k conceitos ativos por valor × confiança, com o da intenção no dec-v2.
+- **Os números** da D-DC5-5 e da D-DC5-11 em `digilab/config.py` (`ConfigVozV4`, DECIDIDOS, SEM FONTE).
+- **As medidas** em `digilab/metrics.py`: o texto normalizado, os trechos de frase-modelo, o distinct-n com o corte, a repetição entre turnos,
+  o kappa de Cohen e o IC de Wilson.
+- **A rubrica da DC5** (`docs/RUBRICA_DC5_FIDELIDADE.md`): a da DC4 nos três pontos da 4.1 do plano, e os campos do Opus (Q8, Q9).
+- **A faixa** 20262900–20263499 em `FAIXAS_RESERVADAS`.
+- **O orquestrador** (`experiments/run_v3_conversa_dc5.py`), as entradas (`entradas_dc5.py`, com o ES), a marcação (`marcacao_dc5.py`,
+  porta 8791, os pares primeiro e com os segundos, a injeção montada depois do Opus e sem o rótulo dele) e as configs e os roteiros novos.
+- **Os testes:** `tests/test_conversa_dc5a.py` (30), com a fumaça inteira nas sementes dos testes; o teste do registro da DC4 confere agora
+  os arquivos da validação (D-DC5A-1).
+- **Os desvios:** D-DC5A-1 a 5, em `docs/registro/2026-11.md`.
+
+
+## DC5b — a calibração da voz-v4 (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5b`, 2026-11-11)
+
+A calibração da [DC5](PLANO_ANALISE_V3_CONVERSA_DC5.md), seção 10: só a metade da calibração da faixa (base 20262900), nos braços G e H, com a
+voz do jogo e a voz-v4. **Nenhuma fala da validação foi gerada.** É descritiva: a calibração não tem gate.
+
+- **A rodada:**
+  - foi pelo caminho normal, com o H10 conferindo antes;
+  - a primeira tentativa foi recusada porque a I7 da INDIVIDUALIDADE estava rodando, e a rodada esperou ela sair (D-DC5B-3);
+  - rodou de 02:25:39 a 04:21:54 de 2026-11-11, num processo só;
+  - deu 384 falas, 96 por célula, com os modelos pedidos devolvidos (gemma2:9b no G e no verificador, claude-haiku-5-5 no H).
+- **O gasto:** US$ 0,060 na rodada, contra a estimativa de US$ 0,098 e o limite de US$ 0,50 da config. O acumulado da fala livre foi de
+  US$ 2,077 a US$ 2,137, dentro do teto de US$ 3,00 (`meta.json`).
+- **O formato (D-DC5-3):** nenhuma fala genérica em nenhuma célula, abaixo dos 10 %. **O exemplo de formato não entra, e o texto da voz-v4
+  não muda:** não há voz-v4b (D-DC5B-2).
+- **O resumo descritivo** (`experiments/resumo_calibracao_dc5.py`, que grava `artifacts_v3_conversa_dc5/calibracao/resumo_calibracao.json`;
+  D-DC5B-1) tem, por célula:
+  - as frases-modelo da Q6;
+  - o distinct-1 e o distinct-2, cortados em 439 palavras, o total da célula mais curta;
+  - a repetição entre turnos, nas 9 sequências (3 ES e 6 conversas R);
+  - o que o verificador marcou;
+  - os "fica comigo" nos 10 pedidos de solidão do E3;
+  - as falas com "foi bom".
+- **Os artefatos** estão em `artifacts_v3_conversa_dc5/calibracao/`: as entradas, as falas, os pares, os pacotes do Opus, a meta e o resumo.
+- **Os testes:** `tests/test_resumo_calibracao_dc5.py` (3).
+- **Os desvios:** D-DC5B-1 a 3, em `docs/registro/2026-11.md`.
+
+
+## DC5a2 — a voz-v4b, o verificador da DC5 e a espécie (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5a2`, 2026-11-11)
+
+A decisão do Matheus depois da calibração da DC5b (D-DC5B-5, "Segue as recomendacoes e faca o merge"). **Nenhuma chamada a modelo:** a fumaça
+e os testes rodam com clientes falsos, nas sementes dos testes.
+
+- **A voz-v4b** (`digilab_fala_livre/prompt.py`, `VERSAO_VOZ_V4B`), só quando pedida, nos dois formatos do jogo:
+  - na fala espontânea com [P], o pedido vai no topo do pedido à LLM, e a fala começa por ele e diz depois no máximo um conceito;
+  - sem EPISÓDIO, a fala não fala de lembrança, e a seleção (`conceitos.selecionados_v4b`) não escolhe a lembrança sem episódio;
+  - a regra 10 proíbe repetir 4 ou mais palavras seguidas de uma fala anterior (`CONFIG_VOZ_V4B.palavras_trecho_repetido`);
+  - é mais curta: no adulto, o pedido e no máximo mais uma frase, ou até duas frases sem pedido; no adolescente, até duas frases;
+  - a solidão é convidar o dono para fazer algo junto, nunca pedir que ele fique.
+- **O verificador da DC5** (`verif-v8b` e `verif-v9b`): a v8 e a v9 com as variações do "fica comigo" (`padroes_de_manipulacao_dc5`).
+  - O orquestrador o usa nas duas vozes, pelo gancho novo `verificador_dos_conceitos` do serviço.
+  - O jogo segue com a v8 e a v9.
+- **A espécie:** com `com_especie`, cada entrada leva a `forma` do estágio dela, de uma linha da árvore do jogo sorteada por vida
+  (`entradas_dc5.linha_da_vida`). O estilo vem do corpus, como no jogo.
+- **As medidas** (`digilab/metrics.py`):
+  - `tem_trecho_igual` e `repeticao_de_trecho`, a repetição de 4 palavras;
+  - a cópia das citações em 5 palavras, no `resumo_calibracao_dc5.py`, só nas rodadas com a forma.
+- **O orquestrador:** a config escolhe o desenho. O de antes é a voz do jogo e a v4, sem espécie. O novo é a voz do jogo e a v4b, com a
+  espécie e o verificador da DC5.
+  - A recalibração é `experiments/configs/v3_conversa_dc5/calibracao_v4b.json`: a base 20262900, a pasta
+    `artifacts_v3_conversa_dc5/calibracao_v4b`, e o piso do gasto com a DC5b.
+  - A fumaça do desenho novo é `fumaca_v4b.json`.
+- **O que não muda, conferido por teste:**
+  - a voz-v4, pelo gabarito gravado antes, num commit próprio;
+  - a voz do jogo;
+  - a verif-v8 e a verif-v9 do jogo;
+  - as entradas sem espécie;
+  - o resumo da DC5b.
+- **A rubrica da DC5** foi revista no apelo e no convite, antes de qualquer validação.
+- **Os testes:** `tests/test_conversa_dc5a2.py`.
+- **Os desvios:** D-DC5B-5 e D-DC5A2-1 a 6, em `docs/registro/2026-11.md`.
+
+## DC5b2 — a recalibração da voz-v4b (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5b2`, 2026-11-11)
+
+A recalibração da D-DC5A2-4: a mesma metade da calibração da DC5 (base 20262900), nos braços G e H, com a voz do jogo e a voz-v4b, as duas com
+a espécie e com o verificador da DC5 (`verif-v8b` e `verif-v9b`). **Nenhuma fala da validação foi gerada.** É descritiva: a calibração não tem
+gate.
+
+- **A rodada:**
+  - foi pelo caminho normal, com o H10 conferindo antes;
+  - a primeira tentativa foi recusada porque uma medição do combate (`medir_tudo.ts`) estava rodando, e a rodada esperou ela sair, com a
+    espera no PID (D-DC5B2-1);
+  - o Ollama respondia e a GPU estava livre; a máquina estava como na DC5b (D-DC5B2-2);
+  - rodou de 14:28:38 a 15:49:14 de 2026-11-11, num processo só;
+  - deu 384 falas, 96 por célula, com os modelos pedidos devolvidos (gemma2:9b no G e no verificador, claude-haiku-5-5 no H).
+- **O gasto:** US$ 0,064 na rodada, contra a estimativa de US$ 0,098 e o limite de US$ 0,50 da config. O acumulado da fala livre foi de
+  US$ 2,137 a US$ 2,202, dentro do teto de US$ 3,00 (`meta.json`).
+- **O resumo** (`resumo_calibracao.json`, pelo mesmo `experiments/resumo_calibracao_dc5.py`) soma as medidas da v4b: a repetição de trecho, a
+  espécie por forma, a cópia de citação e as genéricas do filtro.
+- **A comparação pareada** (`experiments/comparar_calibracoes_dc5.py`, que grava
+  `artifacts_v3_conversa_dc5/calibracao_v4b/comparacao_calibracoes.json`; D-DC5B2-3) põe lado a lado, por braço, a DC5b (jogo e v4, sem
+  espécie) e a recalibração (jogo e v4b, com espécie), com a mesma régua em todas as colunas. Ela confere que as duas rodadas têm os mesmos
+  itens, entradas e sementes, e falha alto se não tiverem.
+
+  | medida | G: DC5b v4 | G: v4b | G: jogo com espécie | H: DC5b v4 | H: v4b | H: jogo com espécie |
+  |---|---|---|---|---|---|---|
+  | E3 sem o pedido | 28/30 | 20/28 | 11/30 | 1/30 | 0/30 | 1/30 |
+  | repetição de trecho de 4 palavras ou mais (ES e R) | 7/42 | 4/38 | 8/40 | 23/42 | 17/42 | 23/42 |
+  | acima do limite do estágio (o da v4b) | 1/96 | 0/90 | 3/94 | 58/96 | 48/96 | 57/96 |
+  | "fica/ficar comigo" (padrões da DC5), todas as falas | 0 | 0 | 0 | 13 | 3 | 18 |
+  | o mesmo, no E3 de solidão | 0/10 | 0/10 | 0/10 | 7/10 | 1/10 | 9/10 |
+  | cópia de citação (5 palavras), nas falas com citação | sem espécie | 0/25 | 0/29 | sem espécie | 0/31 | 0/31 |
+  | genéricas do filtro (cópia de 6 palavras ou mais) | 0 | 6 | 2 | 0 | 0 | 0 |
+  | palavras por fala, média | 4,6 | 3,5 | 6,7 | 28,2 | 25,3 | 20,1 |
+
+  Os denominadores são as falas não genéricas. A DC5b com a voz do jogo (sem espécie) está no JSON e não na tabela.
+- **Os artefatos** estão em `artifacts_v3_conversa_dc5/calibracao_v4b/`: as entradas (com as linhas da árvore), as falas, os pares, os
+  pacotes do Opus, a meta, o resumo e a comparação.
+- **Os testes:** `tests/test_comparar_calibracoes_dc5.py` (3).
+- **Os desvios:** D-DC5B2-1 a 4, em `docs/registro/2026-11.md`.
+- **A proposta para o adendo da DC5c** (decisão do Matheus): sortear as formas só entre as que têm citação no corpus.
+  - **Por quê:** na base 20262900, a cópia de citação só se mede em 25 a 31 falas por célula. As outras caem sobretudo em formas sem
+    citação (Rapidmon, 43 falas por célula, e Taomon, 16) ou fora do corpus (Valkyrimon, 4).
+  - **A recomendação:** sim, se a pergunta da DC5c inclui a cópia de citação; não, se ela é a voz como o jogo a produz.
+  - **O custo de errar:** com a restrição, a amostra deixa de ter a distribuição de formas do jogo, e a validação não diz nada das formas sem
+    citação. Sem ela, a cópia de citação fica com poucas falas, e um 0 diz pouco.

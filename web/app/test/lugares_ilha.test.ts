@@ -4,8 +4,8 @@
 import { describe, expect, it } from "vitest";
 import { CMU, LAYOUT_MUNDO_AFASTADO } from "../motor/index.ts";
 import { centroDaCelula } from "../motor/mundo.ts";
-import { LUGARES, ORDEM_LUGARES, chaoDoLugar, gradeDosLugares, lugarDoDestino, pontoDoLugar, type BaseDoMundo } from "../src/telas/pet/ilha/lugares.ts";
-import { SACO_DESDE_NINHO } from "../src/telas/pet/ilha/constantes.ts";
+import { LUGARES, ORDEM_LUGARES, chaoDoLugar, gradeDosLugares, idaDoTreino, lugarDoDestino, pontoDoLugar, type BaseDoMundo } from "../src/telas/pet/ilha/lugares.ts";
+import { PLANTA_ILHA, TREINO_MS, TREINO_VEL } from "../src/telas/pet/ilha/constantes.ts";
 import { ilhaDe } from "../src/telas/pet/ilha/grade.ts";
 import { LUGARES_LUZ, LUGARES_MODELOS } from "../src/telas/pet/ilha/modelos.ts";
 
@@ -32,19 +32,26 @@ describe("lugares da ilha", () => {
     expect(LUGARES.portao.luz).toBe("lugares/" + LUGARES_LUZ.portao);
     expect(LUGARES.barraca.luz).toBeNull();
   });
-  it("o saco fica onde ficava desde a L2: a [3, -4] do ninho", () => {
-    const [nx, nz] = base.ninho;
-    expect(pontoDoLugar("saco", base)).toEqual([nx + SACO_DESDE_NINHO[0], nz + SACO_DESDE_NINHO[1]]);
-    expect(pontoDoLugar("saco", base)).toEqual([7.5, 11.5]);
+  it("o saco fica perto da praca, no ponto da planta A", () => {
+    expect(pontoDoLugar("saco", base)).toEqual([PLANTA_ILHA.lugares.saco[0], PLANTA_ILHA.lugares.saco[1]]);
+    expect(pontoDoLugar("saco", base)).toEqual([22, 9]);
+    expect(Math.hypot(22 - PLANTA_ILHA.praca.x, 9 - PLANTA_ILHA.praca.z)).toBeLessThan(12);
   });
-  it("o portao e a barraca ficam onde a grade da ilha os poe (ao norte da area andavel), com a altura do chao de la", () => {
+  it("a ida ao saco no treino dura a distancia sobre TREINO_VEL, com TREINO_MS.ida no minimo (PA-3)", () => {
+    expect(idaDoTreino(0)).toBe(TREINO_MS.ida);
+    expect(idaDoTreino(2)).toBe(TREINO_MS.ida);
+    expect(idaDoTreino(19)).toBeCloseTo((19 / TREINO_VEL) * 1000, 9);
+    expect(idaDoTreino(19)).toBeGreaterThan(2500);
+  });
+  it("o portao e a barraca ficam onde a grade da ilha os poe (o portao ao norte, a barraca a leste da praca), com a altura do chao de la", () => {
     const ilha = ilhaDe(CMU);
     for (const id of ["portao", "barraca"] as const) {
       const g = ilha.lugares.find(l => l.nome === id)!;
       expect(pontoDoLugar(id, base), id).toEqual([g.x, g.z]);
       expect(chaoDoLugar(id, base), id).toBe(g.y);
-      expect(g.z, id).toBeLessThan(0);
     }
+    expect(ilha.lugares.find(l => l.nome === "portao")!.z).toBeLessThan(0);
+    expect(ilha.lugares.find(l => l.nome === "barraca")!.x).toBeGreaterThan(PLANTA_ILHA.praca.x);
     expect(chaoDoLugar("saco", base)).toBe(0);
   });
   it("sem a grade, o ponto do portao e da barraca falha alto (o saco nao precisa dela)", () => {
@@ -53,9 +60,9 @@ describe("lugares da ilha", () => {
     expect(() => pontoDoLugar("barraca", sem)).toThrow(/grade/);
     expect(pontoDoLugar("saco", sem)).toEqual(pontoDoLugar("saco", base));
   });
-  it("as alturas alvo sao as do ITENS_3D: 5 para o portao e 4 para a barraca", () => {
+  it("as alturas alvo: 5 para o portao (ITENS_3D) e 3,6 para a barraca refeita (D-LG-OB-4, o barranco atras dela)", () => {
     expect(LUGARES.portao.altura).toBe(5);
-    expect(LUGARES.barraca.altura).toBe(4);
+    expect(LUGARES.barraca.altura).toBe(3.6);
   });
   it("em outro layout (o afastado) o saco fica na area andavel, e os tres ficam distantes entre si", () => {
     const cm = { ...CMU, layout: LAYOUT_MUNDO_AFASTADO }, b = baseDe(cm);

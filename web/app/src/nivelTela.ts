@@ -9,11 +9,12 @@
    - o cartao de destrave: pede a fila das dicas (dicas.ts) e sai dela quando visto.
    NADA acontece durante o render: `calcularNivel` so le (a chave, o jogo) e guarda o resultado; gravar a chave, as travas, os brilhos e o aviso saem no efeito
    (`confirmarNivel`, chamado pelo useNivelRaiz). So vista: nada aqui muda o motor, o save, o registro do Tamer nem o replay; "a vista nunca abre antes do motor". */
+import { VERSOES_PET } from "../motor/index.ts";
 import { useEffect, useSyncExternalStore } from "react";
 import { type Motor } from "../motor/index.ts";
-import { motorReal, tamerAtual, useJogo } from "./jogo.ts";
-import { CHAVE_GUARDADOS, ESCADA, abrirGuardado, lerGuardados, petDaReceita } from "./pets.ts";
-import { CHAVE, petExemplo } from "./save.ts";
+import { motorReal, pagarNivel, tamerAtual, useJogo } from "./jogo.ts";
+import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados } from "./pets.ts";
+import { CHAVE, SEMENTE_EXEMPLO, petExemplo } from "./save.ts";
 import { dicasLigadas, pedirCartao, retirarCartao, esquecerDicasVistas } from "./dicas.ts";
 import { definirTrancas } from "./trancas.ts";
 import {
@@ -21,6 +22,7 @@ import {
   nivelDe, pecaAberta, reverTutorial, sincronizar, textoEstado, vidaDoPet, type EstadoNivel, type Peca,
 } from "./nivel.ts";
 import type { Lugar } from "./viagem.ts";
+import { emitirSom } from "./somEventos.ts";
 
 export const CHAVE_NIVEL = CHAVE + "-nivel";
 
@@ -28,23 +30,22 @@ export const CHAVE_NIVEL = CHAVE + "-nivel";
 const GUARDADOS_MS = 1500;
 
 /* ---------------------------------------------------------------------------------------------------- quem nao e do jogador */
-let semeadas: { sementes: ReadonlySet<number>; assinaturas: ReadonlySet<string> } | null = null;
-function pecasSemeadas() {
-  if (!semeadas) {
-    const exemplo = petExemplo();
-    /* so as sementes sao baratas; as assinaturas da escada (a simulacao dos pets) saem na primeira vez que uma semente bate */
-    semeadas = { sementes: new Set([exemplo.semente, ...ESCADA.map(r => r.semente)]), assinaturas: new Set() };
-    (semeadas.assinaturas as Set<string>).add(assinaturaIntocada(exemplo));
+/* desde a LP2 da LUTA_POC (e para todos desde a LP4) a escada de exemplo nao e semeada: so o pet de exemplo. A assinatura dele sai da
+   simulacao da vida de exemplo, feita so quando o pet tem a semente do exemplo e uma vez por versao: o pet de exemplo de quem abriu o jogo
+   antes da v22 (ILHA_AGUA, IA4) e v21 e continua valendo como "nao e do jogador" */
+const assinaturasDoExemplo = new Map<number, ReadonlySet<string>>();
+function assinaturaDoExemplo(versao: number): ReadonlySet<string> {
+  let s = assinaturasDoExemplo.get(versao);
+  if (!s) {
+    s = new Set(VERSOES_PET.includes(versao) ? [assinaturaIntocada(petExemplo(versao))] : []);
+    assinaturasDoExemplo.set(versao, s);
   }
-  return semeadas;
+  return s;
 }
-let escadaFeita = false;
-/** o pet e do jogador: nao e o de exemplo nem um da escada semeada ainda intocado (o criterio do ativo e dos guardados) */
+/** o pet e do jogador: nao e o de exemplo ainda intocado (o criterio do ativo e dos guardados) */
 export function ehPetDoJogador(m: Motor): boolean {
-  const s = pecasSemeadas();
-  if (!s.sementes.has(m.semente)) return true;
-  if (!escadaFeita) { for (const r of ESCADA) (s.assinaturas as Set<string>).add(assinaturaIntocada(petDaReceita(r))); escadaFeita = true; }
-  return !ehPetIntocado(m, s.assinaturas);
+  if (m.semente !== SEMENTE_EXEMPLO) return true;
+  return !ehPetIntocado(m, assinaturaDoExemplo(m.versao));
 }
 
 /* ---------------------------------------------------------------------------------------------------- o estado do modulo */
@@ -116,6 +117,8 @@ const lerAgora = (): EstadoNivel => calcularNivel().estado;
 /** o efeito da casca: confirma o resultado (grava a chave, poe as travas, guarda os brilhos e o aviso dos lugares que abriram) */
 function confirmarNivel(): void {
   const r = calcularNivel(), antes = confirmado;
+  /* os Bits de cada nivel do Tamer (docs/PLANO_V3_MOEDA.md, MO1): pagos uma vez, a partir do nivel confirmado (com o piso dos saves antigos) */
+  pagarNivel(nivelDe(r.estado));
   definirTrancas({ saco: !pecaAberta(r.estado, "crescer"), portao: !pecaAberta(r.estado, "lutar"), barraca: !pecaAberta(r.estado, "diario") });
   if (antes !== null && r.estado === antes) return;
   confirmado = r.estado; versaoConfirmado++;
@@ -123,6 +126,7 @@ function confirmarNivel(): void {
   /* o lugar que acabou de abrir brilha uma vez (quando a ilha aparecer) e o leitor de tela ouve o que abriu */
   for (const n of r.novos) for (const p of Object.keys(LUGAR_DA_PECA) as Peca[]) if (PECAS[p].marco === n) brilhos.add(LUGAR_DA_PECA[p]!);
   if (brilhos.size) { versaoBrilhos++; for (const o of ouvBrilhos) o(); }
+  if (antes !== null && r.novos.length) emitirSom("nivel");   /* SOM-UP: o nivel novo (nao na primeira leitura) */
   const fala = anuncioDeAbertura(r.novos);
   if (fala) falar(fala);
   avisar();

@@ -94,6 +94,14 @@ o registro do consumo (`consumos_mundo`, e com ele o `ocorrido["comeu"]` do `com
 madura e None na podre; a fruta na mao (sempre madura) tambem. O mundo nao usa o perfil para nada: nao muda a nutricao, o humor, o cheiro,
 a percepcao, os candidatos nem nenhuma rng. O corpo (o orgao do Paladar, do B) o le daqui.
 
+O sacudir a arvore (docs/TAREFA_V3_ARVORE_SACODE.md, S1; AS-1 a AS-11 aprovadas em 2026-11-08): `cfg_sacudir` (ConfigSacudir) liga, so com
+o mundo e um pet. Desligado, nada muda. Ligado, cada arvore tem um galho (ate `galho_max`, nasce cheio, repoe uma fruta a cada
+`recarga_galho_min` ticks), e o evento `sacudir_arvore(tick, arvore)` (events.sacudir_arvore; o replay o refaz) derruba uma fruta do galho
+num ponto a ate `raio_queda_celulas` do tronco, pelo fluxo proprio `arvore-sacode`, se houver lugar no chao (o teto de hoje). Nao e
+contato nem cuidado e vale com o pet dormindo. O registro e do `Mundo` (`galhos`, `sacudidas`). A queda natural nao muda.
+`cfg_fruta_comida` (ConfigFrutaComoComida, AS-11): ligada, o laco nao entrega o `fruta_comida` ao cerebro, e a fruta do mundo chega como a
+racao (o A do v11 com o corpo quebra com o aviso, o MV-10).
+
 A fruta ao lado da racao (o RP-2 de docs/futuro/paladar.md; `cfg_fruta_ao_lado`, ConfigFrutaAoLado): so com o mundo e um pet. Desligada,
 nada muda. Ligada, o motor aceita o evento `deixar_fruta(tipo, x, y)` (events.deixar_fruta; o replay o refaz), so logo depois de uma racao
 deixada pelo dono no mesmo tick (a racao de referencia); a fruta nasce madura com a origem `dono_ao_lado` (ORIGEM_AO_LADO), entra em
@@ -110,14 +118,16 @@ from dataclasses import dataclass, replace
 from typing import Callable
 
 from .ambiente import PoliticaInstintoBola
-from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, N_PONTOS_LONGE_FIXO, TICKS_POR_DIA, Config, ConfigMundo
+from .config import CONFIG_BOLA, CONFIG_DONOS, CONFIG_MUNDO, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, N_PONTOS_LONGE_FIXO, TICKS_POR_DIA, Config, ConfigMundo, LayoutMundo
 from .config import CONFIG_BANHEIRO, CONFIG_PQP_MUNDO, ConfigBanheiro, ConfigDonos, ConfigPetQuePensaMundo
 from .config import CONFIG_PALADAR, ConfigPaladar
 from .config import CONFIG_GENOMA, ConfigGenoma
 from .genoma import TIPO_EVENTO as TIPO_GENOMA, Genoma
 from .config import CONFIG_FRUTA_AO_LADO, ConfigFrutaAoLado
 from .config import CONFIG_CONTRATO, ConfigContrato
+from .config import AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, ARVORE_FECHADA, MARCO_FECHADO, PONTE, TERRA
 from .config import CONFIG_BOLA_NO_GOLPE, CONFIG_DECISAO_NA_COMIDA, ConfigBolaNoGolpe, ConfigDecisaoNaComida
+from .config import CONFIG_FRUTA_COMO_COMIDA, CONFIG_SACUDIR, ConfigFrutaComoComida, ConfigSacudir
 from . import contrato as ct
 from .config import ConfigOlfato, ConfigOuvido, ConfigSentidos
 from .corpo import leitura_orgao
@@ -129,10 +139,15 @@ from .events import (ACOES_BOLA, ACOES_FRUTAS, ACOES_MAO, ACOES_TROCA_ARVORES, F
 from .events import deixar_bola as evento_deixar_bola
 from .events import levar_pet as evento_levar_pet
 from .events import ler_levar_pet
+from .events import mudar_ilha as evento_mudar_ilha
+from .events import ler_mudar_ilha
+from .config import ILHAS_DE_TROCA, ILHAS_MAIORES
 from .events import deixar_fruta as evento_deixar_fruta
 from .events import LutaSemChave, ler_deixar_fruta, ler_resumo_luta
 from .events import resumo_luta as evento_resumo_luta
 from .events import deixar_comida as evento_deixar_comida
+from .events import ler_sacudir_arvore
+from .events import sacudir_arvore as evento_sacudir_arvore
 from .frutas import MotorFrutas
 from .policy import Observacao, Transicao
 from .protocol import derivar_semente
@@ -160,6 +175,10 @@ class BanheiroSemMundo(ValueError):
 
 class PetQuePensaSemChave(ValueError):
     """a fruta na mao, a troca de tipo ou a ConfigPetQuePensaMundo sem o mundo, sem a chave ou no grupo"""
+
+
+class SacudirSemChave(ValueError):
+    """o sacudir a arvore (docs/TAREFA_V3_ARVORE_SACODE.md) sem o mundo, sem a ConfigSacudir ou no grupo"""
 
 
 class GestoForaDoMundo(ValueError):
@@ -219,6 +238,56 @@ def centro_da_celula(celula: tuple, cm: ConfigMundo) -> tuple[int, int]:
     return celula[0] * cm.sub + cm.sub // 2, celula[1] * cm.sub + cm.sub // 2
 
 
+def celulas_secas(cm: ConfigMundo) -> tuple[bool, ...] | None:
+    """A agua do layout (docs/TAREFA_V3_ILHA_AGUA.md, IA1; config.AGUA_POR_LAYOUT, pelo nome): None no mapa sem agua (os layouts de antes); com agua, uma celula por
+    posicao (linha a linha, de cima para baixo), True onde o pet pisa (a terra e a ponte). O mapa do tamanho errado ou com um caractere
+    desconhecido falha alto."""
+    linhas = AGUA_POR_LAYOUT.get(cm.layout.nome)
+    if linhas is None:
+        return None
+    if len(linhas) != cm.celulas_y or any(type(l) is not str or len(l) != cm.celulas_x for l in linhas):
+        raise ValueError(f"a agua do layout {cm.layout.nome!r} nao tem {cm.celulas_y} linhas de {cm.celulas_x} celulas")
+    # a arvore e o marco fechados (a ilha grande, secao 12 da tarefa) sao celulas em que o pet nao pisa, como a agua
+    ruins = sorted({c for l in linhas for c in l} - {AGUA_MAR, AGUA_DOCE, TERRA, PONTE, ARVORE_FECHADA, MARCO_FECHADO})
+    if ruins:
+        raise ValueError(f"a agua do layout {cm.layout.nome!r} tem caractere desconhecido: {ruins}")
+    return tuple(c in (TERRA, PONTE) for l in linhas for c in l)
+
+
+def solidos_da_agua(cm: ConfigMundo) -> tuple:
+    """Os solidos da agua, em subunidades: em cada linha, cada trecho seguido de celulas de agua; o mesmo trecho em linhas seguidas vira
+    um retangulo so. Na ordem de (y0, x0). A agua colide e nao tapa a visao; a categoria e `obstaculo` (a lista de categorias do contrato
+    nao muda: o gabarito dele a sorteia)."""
+    secas = celulas_secas(cm)
+    if secas is None:
+        return ()
+    nx, ny = cm.celulas_x, cm.celulas_y
+    abertos: dict[tuple[int, int], int] = {}
+    rets: list[tuple[int, int, int, int]] = []
+    for y in range(ny + 1):
+        trechos, x = set(), 0
+        while y < ny and x < nx:
+            if secas[y * nx + x]:
+                x += 1
+                continue
+            x0 = x
+            while x < nx and not secas[y * nx + x]:
+                x += 1
+            trechos.add((x0, x))
+        for k in sorted(abertos):
+            if k not in trechos:
+                rets.append((k[0], abertos.pop(k), k[1], y))
+        for k in trechos:
+            abertos.setdefault(k, y)
+    return tuple(ct.Solido(x0 * cm.sub, y0 * cm.sub, x1 * cm.sub, y1 * cm.sub, "obstaculo", True, False)
+                 for x0, y0, x1, y1 in sorted(rets, key=lambda r: (r[1], r[0])))
+
+
+def tamanho_do_mapa(cm: ConfigMundo) -> tuple[int, int]:
+    """o mapa em subunidades (largura, altura): o limite das posicoes dos eventos deste mundo (events._posicao_mundo)"""
+    return cm.celulas_x * cm.sub, cm.celulas_y * cm.sub
+
+
 def regiao_de(x: int, cm: ConfigMundo) -> int:
     """0 casa, 1 jardim, 2 campo, 3 mata (a ordem de layout.regioes)"""
     celula = x // cm.sub
@@ -239,6 +308,10 @@ def faixa_do_banheiro(cbh: ConfigBanheiro, cm: ConfigMundo) -> tuple[int, int, i
     casa = cm.layout.regioes[0]
     if casa[0] != "casa" or not casa[1] <= cx0 <= cx1 <= casa[2]:
         raise ValueError(f"o banheiro tem de ficar dentro da casa {casa}: x {cbh.celulas_x}")
+    # no layout com agua, o banheiro inteiro fica em celulas em que o pet pisa (na ilha grande, o retangulo de sempre cai no mar)
+    secas = celulas_secas(cm)
+    if secas is not None and not all(secas[cy * cm.celulas_x + cx] for cy in range(cy0, cy1 + 1) for cx in range(cx0, cx1 + 1)):
+        raise ValueError(f"o banheiro tem celula fechada no layout {cm.layout.nome!r}: x {cbh.celulas_x}, y {cbh.celulas_y}")
     sub = cm.sub
     return cx0 * sub, (cx1 + 1) * sub - 1, cy0 * sub, (cy1 + 1) * sub - 1
 
@@ -655,8 +728,9 @@ class _PoliticaComMundo:
         self._pm.observar(Transicao(observacao=m._obs_decisao, acao=transicao.acao, observacao_seguinte=obs_depois,
                                     recompensa=transicao.recompensa))
         comeu = ocorrido["comeu"] if ocorrido is not None else None
-        if comeu is not None and comeu["tipo"] in FRUTAS:
-            aviso = getattr(self._pm, "fruta_comida", None)     # E2: os cerebros que ja o usam
+        if comeu is not None and comeu["tipo"] in FRUTAS and not m.cfc.ligada:
+            # E2: os cerebros que ja o usam. Com a fruta do mundo como comida (AS-11), o aviso nao vai: a fruta chega como a racao
+            aviso = getattr(self._pm, "fruta_comida", None)
             if aviso is not None:
                 aviso(comeu["tipo"], obs_depois)
         if ocorrido is not None:
@@ -687,7 +761,11 @@ class Mundo:
     A atualizacao (quedas, apodrecer, sumir) e idempotente por tick (`atualizar`): a segunda chamada no mesmo tick nao faz nada, e um tick
     para tras falha alto. Com dois pets, quem decide primeiro no tick a dispara, e o resultado so le o tick e o fluxo `mundo-arvores`."""
 
-    def __init__(self, cfg_mundo: ConfigMundo, semente: int) -> None:
+    def __init__(self, cfg_mundo: ConfigMundo, semente: int, arvores_na_casa: bool = False) -> None:
+        # `arvores_na_casa` (TAREFA_V3_ARVORE_SACODE, D-AS-S1-7): so o motor com a ConfigSacudir ligada; a arvore na casa (o bosque do lar
+        # da planta A da ilha) cai como a do jardim. Sem ele, a arvore na casa falha alto, como hoje
+        if type(arvores_na_casa) is not bool:
+            raise TypeError(f"arvores_na_casa e bool: {arvores_na_casa!r}")
         if not cfg_mundo.ligada:
             raise MundoSemChave("o Mundo so existe com a ConfigMundo ligada")
         cm = self.cmf = cfg_mundo
@@ -706,13 +784,18 @@ class Mundo:
                 raise ValueError(f"arvore {ident} com fruta desconhecida: {fruta!r}")
             ax, ay = centro_da_celula((x, y), cm)
             nome = nomes[regiao_de(ax, cm)]
-            if nome == "jardim":
+            if nome == "jardim" or (nome == "casa" and arvores_na_casa):
                 p = cm.p_queda_jardim * cm.mult_queda
             elif nome == "mata":
                 p = cm.p_queda_mata * cm.mult_queda
             else:
                 raise ValueError(f"arvore {ident} fora do jardim e da mata: {nome}")
             self.arvores.append({"id": ident, "x": ax, "y": ay, "fruta": fruta, "regiao": nome, "p": p, "recarga_ate": 0})
+        # a agua (docs/TAREFA_V3_ILHA_AGUA.md, IA1): None no mapa sem agua, e nada muda. Com agua, o ninho, o comedouro, a bola e as
+        # arvores ficam em terra, e toda a terra se alcanca a pe a partir do ninho (o layout que nao cumpre falha alto)
+        self.secas = celulas_secas(cm)
+        if self.secas is not None:
+            self._conferir_agua()
         self.comidas: dict[int, dict] = {}
         self.prox_id = ID_BOLA + 1
         self.passo_mundo = 0
@@ -721,6 +804,8 @@ class Mundo:
         self.quedas: list[dict] = []
         self.sumidas: list[dict] = []
         self.bolas_deixadas: list[dict] = []
+        self.troca_ilha: dict | None = None        # a troca de ilha (IA4): None ate o evento `mudar_ilha`
+        self.troca_maior: dict | None = None       # a ida para a ilha maior (IG4): None ate o `mudar_ilha` para um destino de ILHAS_MAIORES
         self.rolagens: list[dict] = []
         # o banheiro (TAREFA_V2_BANHEIRO, secao 3): as necessidades no chao, so depois de `ligar_necessidades` (um motor com o banheiro);
         # sem ele, None e nada muda (nem o resumo). Um contador proprio: os ids das comidas nao mudam com o banheiro
@@ -736,6 +821,147 @@ class Mundo:
         # dois pets, etapa 8 (o degrau 1b): o rastro de cada pet, {id: [(x, y, tick), ...]} em ordem de tick, so depois de `ligar_marcas`
         # (o grupo com a ConfigSentidos ligada); sem ele, None e nada muda (nem o resumo)
         self.marcas: dict[str, list[tuple[int, int, int]]] | None = None
+        # o sacudir a arvore (TAREFA_V3_ARVORE_SACODE, secao 3.2): o galho de cada arvore, as sacudidas e o fluxo `arvore-sacode`, so depois
+        # de `ligar_sacudir` (o motor com a ConfigSacudir); sem ele, None e nada muda (nem o resumo)
+        self.galhos: dict[str, dict] | None = None
+        self.sacudidas: list[dict] | None = None
+        self.rng_sacode: random.Random | None = None
+        self.csa: ConfigSacudir | None = None
+
+    # ------------------------------------------------------------ a agua (docs/TAREFA_V3_ILHA_AGUA.md, IA1)
+    def _conferir_agua(self) -> None:
+        cm, secas, nx = self.cmf, self.secas, self.cmf.celulas_x
+        lay = cm.layout
+        pontos = [("ninho", lay.ninho), ("comedouro", lay.comedouro), ("bola_inicio", lay.bola_inicio)]
+        pontos += [(f"arvore {a[0]}", (a[1], a[2])) for a in lay.arvores]
+        for nome, (cx, cy) in pontos:
+            if not secas[cy * nx + cx]:
+                raise ValueError(f"layout {lay.nome!r}: {nome} na agua ({cx}, {cy})")
+        ini = lay.ninho[1] * nx + lay.ninho[0]
+        vistas, fila = {ini}, [ini]
+        while fila:
+            i = fila.pop()
+            x, y = i % nx, i // nx
+            for vx, vy in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                j = vy * nx + vx
+                if 0 <= vx < nx and 0 <= vy < cm.celulas_y and secas[j] and j not in vistas:
+                    vistas.add(j)
+                    fila.append(j)
+        ilhadas = sum(secas) - len(vistas)
+        if ilhadas:
+            raise ValueError(f"layout {lay.nome!r}: {ilhadas} celulas de terra que o pet nao alcanca a pe a partir do ninho")
+
+    def seca(self, x: int, y: int) -> bool:
+        """o ponto (dentro do mapa) esta em terra? Sem agua no mapa, sempre"""
+        return self.secas is None or self.secas[(y // self.cmf.sub) * self.cmf.celulas_x + x // self.cmf.sub]
+
+    def em_terra(self, x: int, y: int) -> tuple[int, int]:
+        """o ponto, se esta em terra; senao o centro da celula de terra mais perto (a conta do contrato: octil, o empate pelo indice)"""
+        if self.seca(x, y):
+            return x, y
+        cm = self.cmf
+        return centro_da_celula(ct.livre_mais_perto(self.secas, cm.celulas_x, (x // cm.sub, y // cm.sub)), cm)
+
+    def ate_a_margem(self, x0: int, y0: int, x1: int, y1: int) -> tuple[int, int]:
+        """o ultimo ponto em terra da linha de (x0, y0) a (x1, y1), antes da primeira agua: a bola para na margem. Os pontos da linha
+        sao os do `tapado` do contrato: p0 + (p1 - p0) k / n, com n = max(|dx|, |dy|)"""
+        if self.secas is None:
+            return x1, y1
+        dx, dy = x1 - x0, y1 - y0
+        n = max(abs(dx), abs(dy))
+        x, y = x0, y0
+        for k in range(1, n + 1):
+            px, py = x0 + div_arred(dx * k, n), y0 + div_arred(dy * k, n)
+            if not self.seca(px, py):
+                break
+            x, y = px, py
+        return x, y
+
+    def trocar_layout(self, layout: LayoutMundo, tick: int) -> dict:
+        """A troca de ilha (docs/TAREFA_V3_ILHA_AGUA.md, IA4): o mundo passa do layout de hoje, sem agua, para `layout`, que e o mesmo
+        (so o nome muda) com agua. O mundo ja vem atualizado ate o tick. A comida que fica na agua vai para a terra mais perto; a bola
+        para onde esta, ou na terra mais perto. Nenhum fluxo de acaso anda. Uma vez so por mundo. Devolve o registro (`troca_ilha`)."""
+        if self.tick_atualizado is None or tick != self.tick_atualizado:
+            raise RuntimeError(f"trocar_layout no tick {tick} com o mundo atualizado ate {self.tick_atualizado}")
+        if self.secas is not None or self.troca_ilha is not None:
+            raise ValueError(f"o mundo {self.cmf.layout.nome!r} ja tem agua: a troca de ilha vale uma vez, de um layout sem agua")
+        if replace(layout, nome=self.cmf.layout.nome) != self.cmf.layout:
+            raise ValueError(f"a troca de ilha so muda a agua: {layout.nome!r} nao e o layout {self.cmf.layout.nome!r} com outro nome")
+        de = self.cmf.layout.nome
+        cm = replace(self.cmf, layout=layout)
+        secas = celulas_secas(cm)
+        if secas is None:
+            raise ValueError(f"o layout {layout.nome!r} nao tem agua: a troca de ilha e para a ilha com agua")
+        self.cmf, self.secas = cm, secas
+        self._conferir_agua()
+        comidas = []
+        for c in self.comidas.values():
+            x, y = self.em_terra(c["x"], c["y"])
+            if (x, y) != (c["x"], c["y"]):
+                comidas.append({"id": c["id"], "de": [c["x"], c["y"]], "para": [x, y]})
+                c["x"], c["y"] = x, y
+        bx, by = self.bola_em(tick)
+        x, y = self.em_terra(bx, by)
+        self.bola = {"x0": x, "y0": y, "x1": x, "y1": y, "t0": tick, "d": 0}
+        self.troca_ilha = {"tick": tick, "de": de, "para": layout.nome, "comidas": comidas, "bola": {"de": [bx, by], "para": [x, y]}}
+        return self.troca_ilha
+
+    def trocar_para_maior(self, layout: LayoutMundo, celulas_x: int, celulas_y: int, origens: tuple, tick: int) -> dict:
+        """A ida para a ilha maior (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG4): o mundo passa do layout de hoje (um dos `origens`) para
+        `layout`, que tem outro tamanho. O mundo ja vem atualizado ate o tick. Tudo o que tem posicao anda o deslocamento do ninho de la
+        para o ninho de ca (IG-7): o ninho e o comedouro passam a ser os do layout novo, e a comida e a bola vao junto, para a terra mais
+        perto se cairem em celula fechada ou fora do mapa. A bola para onde esta. Nenhum fluxo de acaso anda. Uma vez so por mundo; o
+        mundo com arvores ou com o banheiro nao troca (as posicoes deles nao tem destino). Devolve o registro (`troca_maior`)."""
+        if self.tick_atualizado is None or tick != self.tick_atualizado:
+            raise RuntimeError(f"trocar_para_maior no tick {tick} com o mundo atualizado ate {self.tick_atualizado}")
+        if self.troca_maior is not None:
+            raise ValueError(f"o mundo {self.cmf.layout.nome!r} ja passou para a ilha maior: a troca vale uma vez")
+        if self.cmf.layout not in origens:
+            raise ValueError(f"a ilha maior {layout.nome!r} nao recebe o mundo {self.cmf.layout.nome!r}")
+        if self.arvores or self.necessidades is not None:
+            raise ValueError("a ida para a ilha maior nao leva arvores nem o banheiro")
+        de, sub = self.cmf.layout, self.cmf.sub
+        dx, dy = (layout.ninho[0] - de.ninho[0]) * sub, (layout.ninho[1] - de.ninho[1]) * sub
+        bola_de = self.bola_em(tick)                              # no mundo de la, antes de trocar
+        cm = replace(self.cmf, layout=layout, celulas_x=celulas_x, celulas_y=celulas_y)
+        secas = celulas_secas(cm)
+        if secas is None:
+            raise ValueError(f"o layout {layout.nome!r} nao tem agua: a ilha maior e uma ilha com agua")
+        self.cmf, self.secas = cm, secas
+        self.ninho, self.comedouro = centro_da_celula(layout.ninho, cm), centro_da_celula(layout.comedouro, cm)
+        self._conferir_agua()
+        comidas = []
+        for c in self.comidas.values():
+            x, y = self.em_terra(*no_mapa(c["x"] + dx, c["y"] + dy, cm))
+            comidas.append({"id": c["id"], "de": [c["x"], c["y"]], "para": [x, y]})
+            c["x"], c["y"] = x, y
+        x, y = self.em_terra(*no_mapa(bola_de[0] + dx, bola_de[1] + dy, cm))
+        self.bola = {"x0": x, "y0": y, "x1": x, "y1": y, "t0": tick, "d": 0}
+        self.troca_maior = {"tick": tick, "de": de.nome, "para": layout.nome, "deslocamento": [dx, dy], "comidas": comidas,
+                            "bola": {"de": list(bola_de), "para": [x, y]}}
+        return self.troca_maior
+
+    def rolagem_seca(self, x0: int, y0: int, x1: int, y1: int) -> tuple[int, int]:
+        """onde a bola que rola de (x0, y0) para (x1, y1) para: na margem (`ate_a_margem`) e, depois, encurtada ate que todo ponto por
+        onde ela passa tick a tick (a conta do `bola_em`, que arredonda pela distancia e pode sair 1 subunidade da linha) esteja em
+        terra. Sem agua, (x1, y1)."""
+        if self.secas is None:
+            return x1, y1
+        x1, y1 = self.ate_a_margem(x0, y0, x1, y1)
+        atrito = self.cmf.atrito
+        while True:
+            d = distancia(x1 - x0, y1 - y0)
+            px, py = x0, y0
+            for j in range(1, -(-d // atrito)):
+                qx, qy = x0 + div_arred((x1 - x0) * atrito * j, d), y0 + div_arred((y1 - y0) * atrito * j, d)
+                if not self.seca(qx, qy):
+                    break
+                px, py = qx, qy
+            else:
+                return x1, y1
+            if distancia(px - x0, py - y0) >= d:
+                raise RuntimeError(f"a rolagem da bola nao encurtou: ({x0}, {y0}) -> ({x1}, {y1})")
+            x1, y1 = px, py
 
     # ------------------------------------------------------------ dois pets, etapa 8: o rastro (secao 5.3)
     def ligar_marcas(self) -> None:
@@ -816,6 +1042,67 @@ class Mundo:
         perto.sort(key=lambda t: (t[3], t[0]))
         return perto
 
+    # ------------------------------------------------------------ o sacudir a arvore (TAREFA_V3_ARVORE_SACODE, secoes 3.2 e 3.3)
+    def ligar_sacudir(self, cs: ConfigSacudir) -> None:
+        """liga o galho (cheio, com o relogio parado), o registro das sacudidas e o fluxo proprio `arvore-sacode`, que so anda quando cai
+        uma fruta; nenhum outro fluxo muda"""
+        if not isinstance(cs, ConfigSacudir) or not cs.ligada:
+            raise SacudirSemChave(f"ligar_sacudir precisa da ConfigSacudir ligada: {cs!r}")
+        if self.galhos is not None:
+            raise RuntimeError("o sacudir ja esta ligado neste Mundo")
+        self.csa = cs
+        self.galhos = {a["id"]: {"no_galho": cs.galho_max, "repoe_em": None} for a in self.arvores}
+        self.sacudidas = []
+        self.rng_sacode = random.Random(derivar_semente("arvore-sacode", self.semente))
+
+    def galho_em(self, ident: str, tick: int) -> tuple[int, int | None]:
+        """Pura: (frutas no galho, o tick da proxima reposicao ou None) da arvore no tick. O galho abaixo do maximo repoe uma fruta a cada
+        `recarga_galho_min` ticks, contados da primeira fruta que saiu com ele cheio; cheio, o relogio para."""
+        if self.galhos is None:
+            raise SacudirSemChave("o galho so existe com a ConfigSacudir ligada")
+        g = self.galhos[ident]
+        n, prox = g["no_galho"], g["repoe_em"]
+        cs = self.csa
+        while prox is not None and tick >= prox:
+            n += 1
+            prox = prox + cs.recarga_galho_min if n < cs.galho_max else None
+        return n, prox
+
+    def sacudir(self, ident: str, tick: int) -> dict:
+        """O dono sacode a arvore `ident` no tick (o mundo ja atualizado ate ele). Com fruta no galho e lugar no chao (o teto de hoje,
+        `max_frutas_por_arvore` frutas da arvore no chao, maduras ou podres), cai uma fruta do tipo da arvore, madura, com a origem = o id
+        da arvore, num ponto sorteado como o da queda natural (direcao em 16 e distancia ate `raio_queda_celulas`, no fluxo
+        `arvore-sacode`). Sem fruta no galho, com o chao cheio ou com a arvore parada (o J5), nada cai e nada se sorteia. Devolve o registro
+        da sacudida (tambem em `sacudidas`)."""
+        if self.galhos is None:
+            raise SacudirSemChave("sacudir a arvore sem a ConfigSacudir ligada")
+        if self.tick_atualizado is None or tick != self.tick_atualizado:
+            raise RuntimeError(f"sacudir no tick {tick} com o mundo atualizado ate {self.tick_atualizado}")
+        arv = next((a for a in self.arvores if a["id"] == ident), None)
+        if arv is None:
+            raise ValueError(f"sacudir uma arvore que nao existe no layout {self.cmf.layout.nome!r}: {ident!r}")
+        cm = self.cmf
+        n, prox = self.galho_em(ident, tick)
+        no_chao = sum(1 for c in self.comidas.values() if c["origem"] == ident and self.situacao(c, tick) is not None)
+        reg = {"tick": tick, "arvore": ident, "no_galho_antes": n, "no_chao_antes": no_chao, "caiu": None}
+        if n == 0:
+            reg["motivo"] = "galho_vazio"
+        elif arv.get("parada"):
+            reg["motivo"] = "parada"
+        elif no_chao >= cm.max_frutas_por_arvore:
+            reg["motivo"] = "chao_cheio"
+        else:
+            rng = self.rng_sacode
+            x, y = deslocar(arv["x"], arv["y"], rng.randrange(16), rng.randrange(cm.raio_queda_celulas * cm.sub + 1), cm)
+            c = self.nova_comida(arv["fruta"], x, y, tick, ident)
+            if prox is None:                       # o galho estava cheio: o relogio comeca agora
+                prox = tick + self.csa.recarga_galho_min
+            n -= 1
+            reg.update(motivo="caiu", caiu=c["id"], x=c["x"], y=c["y"], tipo=arv["fruta"])     # onde a fruta ficou (a agua, IA1)
+        self.galhos[ident] = {"no_galho": n, "repoe_em": prox}
+        self.sacudidas.append(reg)
+        return reg
+
     # ------------------------------------------------------------ o banheiro
     def ligar_necessidades(self) -> None:
         """Chamado pelo motor com o banheiro (todos os pets do mundo com ele chamam; a segunda vez nao faz nada)."""
@@ -828,6 +1115,7 @@ class Mundo:
             raise BanheiroSemMundo("necessidade num Mundo sem o banheiro ligado")
         if no_mapa(x, y, self.cmf) != (x, y):
             raise ValueError(f"necessidade fora do mapa: ({x}, {y})")
+        x, y = self.em_terra(x, y)
         n = {"id": self.prox_necessidade, "x": x, "y": y, "tick": tick}
         self.prox_necessidade += 1
         self.necessidades[n["id"]] = n
@@ -862,6 +1150,7 @@ class Mundo:
         return b["x0"] + div_arred((b["x1"] - b["x0"]) * andou, b["d"]), b["y0"] + div_arred((b["y1"] - b["y0"]) * andou, b["d"])
 
     def nova_comida(self, tipo: str, x: int, y: int, tick: int, origem: str) -> dict:
+        x, y = self.em_terra(x, y)                 # a agua (IA1): a comida que cairia na agua fica na terra mais perto
         c = {"id": self.prox_id, "tipo": tipo, "x": x, "y": y, "tick_posta": tick, "origem": origem}
         self.prox_id += 1
         self.comidas[c["id"]] = c
@@ -969,7 +1258,7 @@ class Mundo:
         celulas = self.rng_bola.randint(cm.bola_min_celulas, cm.bola_max_celulas)
         if cm.layout.regioes[regiao_de(bx, cm)][0] == "campo":
             celulas *= cm.mult_bola_campo
-        x1, y1 = deslocar(bx, by, direcao, celulas * cm.sub, cm)
+        x1, y1 = self.rolagem_seca(bx, by, *deslocar(bx, by, direcao, celulas * cm.sub, cm))    # a agua (IA1): a bola para na margem
         self.bola = {"x0": bx, "y0": by, "x1": x1, "y1": y1, "t0": tick, "d": distancia(x1 - bx, y1 - by)}
         rolagem = {"tick": tick, "de": (bx, by), "para": (x1, y1), "direcao": direcao, "celulas": celulas}
         self.rolagens.append(rolagem)
@@ -991,6 +1280,7 @@ class Mundo:
         """o dono poe a bola parada em (x, y); fora do mapa falha alto"""
         if no_mapa(x, y, self.cmf) != (x, y):
             raise ValueError(f"deixar_bola fora do mapa: ({x}, {y})")
+        x, y = self.em_terra(x, y)
         self.bola = {"x0": x, "y0": y, "x1": x, "y1": y, "t0": tick, "d": 0}
         self.bolas_deixadas.append({"tick": tick, "x": x, "y": y})
 
@@ -1001,12 +1291,16 @@ class Mundo:
                 "passo_mundo": self.passo_mundo, "tick_atualizado": self.tick_atualizado, "arvores": [dict(a) for a in self.arvores],
                 "rngs": [r.getstate() for r in (self.rng_arvores, self.rng_bola)], "quedas": self.quedas, "sumidas": self.sumidas,
                 "bolas_deixadas": self.bolas_deixadas, "rolagens": self.rolagens,
+                **({} if self.troca_ilha is None else {"troca_ilha": self.troca_ilha}),
+                **({} if self.troca_maior is None else {"troca_maior": self.troca_maior}),
                 **({} if self.necessidades is None else {
                     "necessidades": [dict(n) for n in self.necessidades.values()], "prox_necessidade": self.prox_necessidade,
                     "recolhidas": self.recolhidas}),
                 **({} if self.trocas_tipo is None else {"trocas_tipo": self.trocas_tipo}),
                 **({} if self.paradas_arvores is None else {"paradas_arvores": self.paradas_arvores}),
-                **({} if self.marcas is None else {"marcas": {i: [list(m) for m in l] for i, l in sorted(self.marcas.items())}})}
+                **({} if self.marcas is None else {"marcas": {i: [list(m) for m in l] for i, l in sorted(self.marcas.items())}}),
+                **({} if self.galhos is None else {"galhos": {i: dict(g) for i, g in self.galhos.items()}, "sacudidas": self.sacudidas,
+                                                   "rng_sacode": self.rng_sacode.getstate()})}
 
 
 # ================================================================== o motor
@@ -1021,8 +1315,15 @@ class MotorMundo(MotorFrutas):
                  entrada_mundo: int = 0, cfg_banheiro: ConfigBanheiro | None = None, cfg_pqp: ConfigPetQuePensaMundo | None = None,
                  cfg_paladar: ConfigPaladar | None = None, cfg_fruta_ao_lado: ConfigFrutaAoLado | None = None,
                  cfg_contrato: ConfigContrato | None = None, cfg_decisao_comida: ConfigDecisaoNaComida | None = None,
-                 cfg_bola_golpe: ConfigBolaNoGolpe | None = None, **kw) -> None:
+                 cfg_bola_golpe: ConfigBolaNoGolpe | None = None, cfg_sacudir: ConfigSacudir | None = None,
+                 cfg_fruta_comida: ConfigFrutaComoComida | None = None, **kw) -> None:
         super().__init__(*a, **kw)
+        self.csa = cfg_sacudir or CONFIG_SACUDIR
+        if not isinstance(self.csa, ConfigSacudir):
+            raise TypeError(f"cfg_sacudir e uma ConfigSacudir: {self.csa!r}")
+        self.cfc = cfg_fruta_comida or CONFIG_FRUTA_COMO_COMIDA
+        if not isinstance(self.cfc, ConfigFrutaComoComida):
+            raise TypeError(f"cfg_fruta_comida e uma ConfigFrutaComoComida: {self.cfc!r}")
         self.cct = cfg_contrato or CONFIG_CONTRATO
         if not isinstance(self.cct, ConfigContrato):
             raise TypeError(f"cfg_contrato e uma ConfigContrato: {self.cct!r}")
@@ -1058,6 +1359,10 @@ class MotorMundo(MotorFrutas):
                 raise ValueError("a decisao na comida (ConfigDecisaoNaComida) exige o mundo fisico (ConfigMundo.ligada)")
             if self.cbg.ligada:
                 raise ValueError("a bola no golpe (ConfigBolaNoGolpe) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.csa.ligada:
+                raise SacudirSemChave("o sacudir a arvore (ConfigSacudir) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.cfc.ligada:
+                raise ValueError("a fruta do mundo como comida (ConfigFrutaComoComida) exige o mundo fisico (ConfigMundo.ligada)")
             return                                     # desligado: o MotorFrutas byte a byte (nem embrulho, nem Mundo)
         if self.cf.ligada or self.cb.ligada:
             raise ValueError("o mundo substitui o cenario do N4 e da A1: ConfigFrutas e ConfigBola desligadas com ConfigMundo.ligada")
@@ -1076,7 +1381,7 @@ class MotorMundo(MotorFrutas):
         if mundo is None:
             if entrada_mundo:
                 raise ValueError("entrada_mundo so com um Mundo dado (o do grupo)")
-            self.mundo = Mundo(cm, semente)           # com um pet, o motor e dono do proprio mundo (a semente do mundo e a do pet)
+            self.mundo = Mundo(cm, semente, arvores_na_casa=True) if self.csa.ligada else Mundo(cm, semente)   # com um pet, o motor e dono do proprio mundo (a semente do mundo e a do pet)
         else:                                         # no grupo (digilab/grupo.py): o mundo e de todos, e o pet entra num tick dele
             if not isinstance(mundo, Mundo) or mundo.cmf != cm:
                 raise ValueError("o Mundo dado tem de ser um Mundo com a mesma ConfigMundo do motor")
@@ -1127,11 +1432,24 @@ class MotorMundo(MotorFrutas):
             self.troncos_vistos: dict[str, int] = {}     # id -> o primeiro tick do mundo em que o pet viu o tronco
             self.mundo.ligar_trocas()
 
+        if self.csa.ligada:
+            # o sacudir a arvore (TAREFA_V3_ARVORE_SACODE, S1): so com um pet, fora do grupo (o registro do grupo nao tem o evento)
+            if mundo is not None:
+                raise SacudirSemChave("o sacudir a arvore (ConfigSacudir) roda com um pet, fora do grupo")
+            self.mundo.ligar_sacudir(self.csa)
+
         if self.cct.ligada:
             # a P4 (docs/TAREFA_V2_P4_CEREBRO_MUNDO.md, secao 3.1): o contrato, so com um pet (o grupo nao tem o controlador nem o cone)
             if mundo is not None:
                 raise ValueError("o contrato da P4 (ConfigContrato) roda com um pet, fora do grupo")
             self._montar_contrato()
+
+        if self.mundo.secas is not None:
+            # a agua (docs/TAREFA_V3_ILHA_AGUA.md, IA1): quem desvia dela e o controlador do contrato; o banheiro anda em linha reta
+            if not self.cct.controlador:
+                raise ValueError("o layout com agua exige o controlador do contrato (ConfigContrato.controlador)")
+            if self.cbh.ligada:
+                raise ValueError("o layout com agua nao roda com o banheiro (o aliviar anda em linha reta)")
 
         self._grupo = None
         self.ident: str | None = None
@@ -1169,7 +1487,7 @@ class MotorMundo(MotorFrutas):
         self._quadrados_troncos = {a["id"]: ct.Solido(a["x"] - meio, a["y"] - meio, a["x"] - meio + cc.lado_tronco,
                                                       a["y"] - meio + cc.lado_tronco, "tronco", False, True)
                                    for a in self.mundo.arvores} if cc.sensores else {}
-        self._solidos = paredes                                   # os que colidem (o controlador e os bigodes)
+        self._solidos = paredes + solidos_da_agua(cm)             # os que colidem (o controlador e os bigodes); a agua, IA1
         self._opacos = paredes + tuple(self._quadrados_troncos.values())
         self.orientacao = 0
         self.contrato_decisoes: list[dict] = []                   # por decisao com alvo: o que o controlador e os sensores registraram
@@ -1513,6 +1831,11 @@ class MotorMundo(MotorFrutas):
                 alvo = self.alvo_padrao(acao, cands)
             else:
                 self._validar_alvo(acao, alvo, cands)
+            if alvo is not None and alvo.id is None and self.mundo.secas is not None:
+                # a agua (IA1): o ponto escolhido na agua (o vagar, o cheiro, o lugar lembrado) vale a terra mais perto; o pendente o guarda
+                tx, ty = self.mundo.em_terra(alvo.x, alvo.y)
+                if (tx, ty) != (alvo.x, alvo.y):
+                    alvo = replace(alvo, x=tx, y=ty)
             andar = None
             if alvo is not None and self.cct.controlador:      # a P4: o controlador do contrato, nos ticks da decisao
                 cm = self.cmf
@@ -1794,17 +2117,17 @@ class MotorMundo(MotorFrutas):
     def deixar_comida(self, tipo: str, x: int, y: int) -> None:
         if not self.cmf.ligada:
             raise MundoSemChave("deixar_comida com ConfigMundo.ligada = False")
-        evento = evento_deixar_comida(self._estado.tick, tipo, x, y)     # valida tipo e posicao antes do log
+        evento = evento_deixar_comida(self._estado.tick, tipo, x, y, tamanho_do_mapa(self.cmf))     # valida tipo e posicao antes do log
         self._log.anexar(evento)
-        self._aplicar_deixar_comida(*ler_deixar_comida(evento))
+        self._aplicar_deixar_comida(*ler_deixar_comida(evento, tamanho_do_mapa(self.cmf)))
 
     def deixar_fruta(self, tipo: str, x: int, y: int) -> None:
         """a fruta ao lado da racao (ConfigFrutaAoLado): fora do orcamento (o canal nao a ve) e sem contato"""
         if not (self.cmf.ligada and self.cfal.ligada):
             raise MundoSemChave("deixar_fruta sem o mundo e a ConfigFrutaAoLado ligados")
-        evento = evento_deixar_fruta(self._estado.tick, tipo, x, y)      # valida tipo e posicao antes do log
+        evento = evento_deixar_fruta(self._estado.tick, tipo, x, y, tamanho_do_mapa(self.cmf))      # valida tipo e posicao antes do log
         self._log.anexar(evento)
-        self._aplicar_deixar_fruta(*ler_deixar_fruta(evento))
+        self._aplicar_deixar_fruta(*ler_deixar_fruta(evento, tamanho_do_mapa(self.cmf)))
 
     def resumo_luta(self, rival: str, resultado: int, vida_perdida_s: int) -> None:
         """O resumo pronto de uma luta (ponte da luta, PE1): vai ao log e ao corpo. So com o corpo e a ConfigLutaCorpo ligada."""
@@ -1819,9 +2142,9 @@ class MotorMundo(MotorFrutas):
     def deixar_bola(self, x: int, y: int) -> None:
         if not self.cmf.ligada:
             raise MundoSemChave("deixar_bola com ConfigMundo.ligada = False")
-        evento = evento_deixar_bola(self._estado.tick, x, y)
+        evento = evento_deixar_bola(self._estado.tick, x, y, tamanho_do_mapa(self.cmf))
         self._log.anexar(evento)
-        self._aplicar_deixar_bola(*ler_deixar_bola(evento))
+        self._aplicar_deixar_bola(*ler_deixar_bola(evento, tamanho_do_mapa(self.cmf)))
 
     def levar_pet(self, x: int, y: int) -> None:
         """O dono pega o pet e o solta em (x, y) (docs/TAREFA_V3_PEGAR_PET.md; os pets v19 do jogo web). Valida o evento e o estado antes
@@ -1843,10 +2166,92 @@ class MotorMundo(MotorFrutas):
         if self._estado.dormindo:
             raise RuntimeError(f"levar_pet com o pet dormindo (tick {tick}): o dono pega o pet acordado")
         de = self.pet
-        self.pet = no_mapa(x, y, self.cmf)
+        self.pet = self._pet_em_terra(*no_mapa(x, y, self.cmf))
         self._pendente = None
         self.levadas.append({"tick": self._tm(tick), "de": list(de), "pedido": [x, y], "para": list(self.pet)})
         self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o deixar_bola)
+
+    def mudar_ilha(self, nome: str) -> None:
+        """O mundo do pet passa para a ilha com agua `nome` (docs/TAREFA_V3_ILHA_AGUA.md, IA4; os pets v21 do jogo web que ja estavam
+        vivos). Valida o evento e a troca antes do log."""
+        evento = evento_mudar_ilha(self._estado.tick, nome)
+        self._aplicar_mudar_ilha(ler_mudar_ilha(evento))
+        self._log.anexar(evento)
+
+    def _aplicar_mudar_ilha(self, nome: str) -> None:
+        """So o mundo muda: o layout ganha a agua, o contrato passa a ser o do destino (o controlador, que desvia dela), o que esta na
+        agua vai para a terra mais perto (a comida, a bola e o pet) e o destino que o pet tinha se perde. Nao e contato nem cuidado: nao
+        passa pelo estado, pelo corpo nem pelo cerebro, como o levar_pet. Vale com o pet acordado ou dormindo. Com um pet (fora do
+        grupo), sem o banheiro e sem o contrato ligado antes; o destino desconhecido e a segunda troca falham alto."""
+        if not self.cmf.ligada:
+            raise MundoSemChave("mudar_ilha com ConfigMundo.ligada = False")
+        if nome not in ILHAS_DE_TROCA:
+            raise ValueError(f"mudar_ilha para uma ilha desconhecida: {nome!r}")
+        maior = ILHAS_MAIORES.get(nome)      # a ilha de outro tamanho (IG4): pode vir depois da agua, com o contrato ja ligado
+        if self._grupo is not None or self.cbh.ligada or (self.cct.ligada and maior is None):
+            raise ValueError("mudar_ilha roda com um pet (fora do grupo), sem o banheiro e sem o contrato ligado antes")
+        layout, contrato = ILHAS_DE_TROCA[nome]
+        if not contrato.controlador:
+            raise ValueError(f"a ilha {nome!r} tem agua e pede o controlador do contrato")
+        tm = self._tm(self._estado.tick)
+        self.mundo.atualizar(tm)
+        de = self.pet
+        if maior is None:
+            reg = self.mundo.trocar_layout(layout, tm)
+            self.cmf, self.cct = self.mundo.cmf, contrato
+            self._montar_contrato()
+            self.pet = self._pet_em_terra(*self.pet)
+        else:
+            # como na troca para a agua, a orientacao volta ao setor 0 e o registro das decisoes do controlador comeca vazio (as de antes
+            # estao nas coordenadas do mapa de la), mesmo que o controlador ja viesse ligado
+            reg = self.mundo.trocar_para_maior(layout, *maior, tm)
+            self.cmf, self.cct = self.mundo.cmf, contrato
+            self._montar_contrato()
+            dx, dy = reg["deslocamento"]
+            self.pet = self._pet_em_terra(*no_mapa(de[0] + dx, de[1] + dy, self.cmf))
+            # o cerebro que lembra lugares (o M-MEM do DigiBrain modular) anda com o mundo; o que nao lembra (o A) nao tem o gancho
+            gancho = getattr(self.politica, "mundo_deslocado", None)
+            if gancho is not None:
+                cm = self.cmf
+                reg["lugares_lembrados"] = gancho(dx, dy, lambda x, y: self.mundo.em_terra(*no_mapa(x, y, cm)), lambda x: regiao_de(x, cm))
+        self._pendente = None
+        reg["pet"] = {"de": list(de), "para": list(self.pet)}
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o levar_pet)
+
+    def _pet_em_terra(self, x: int, y: int) -> tuple[int, int]:
+        """a agua (IA1): o pet solto na agua, ou tao rente a ela que o corpo a invade, cai no centro da celula de terra mais perto"""
+        if self.mundo.secas is None or ct.bloqueio_em(x, y, self.cct.r_pet, self._solidos) is None:
+            return x, y
+        cm = self.cmf
+        return centro_da_celula(ct.livre_mais_perto(self.mundo.secas, cm.celulas_x, (x // cm.sub, y // cm.sub)), cm)
+
+    def sacudir_arvore(self, arvore: str) -> None:
+        """O dono sacode a arvore (docs/TAREFA_V3_ARVORE_SACODE.md; os pets v20 do jogo web). Valida o evento e a arvore antes do log."""
+        if not (self.cmf.ligada and self.csa.ligada):
+            raise SacudirSemChave("sacudir_arvore sem o mundo e a ConfigSacudir ligados")
+        evento = evento_sacudir_arvore(self._estado.tick, arvore)
+        self._aplicar_sacudir_arvore(ler_sacudir_arvore(evento))
+        self._log.anexar(evento)
+
+    def _aplicar_sacudir_arvore(self, arvore: str) -> None:
+        """So o mundo muda (AS-1): o galho, e a fruta que cai. Nao e contato nem cuidado: nao passa pelo estado, pelo corpo nem pelo
+        cerebro (nenhum gancho), como o deixar_bola. Vale com o pet acordado ou dormindo. O mundo e atualizado ate o tick antes (as quedas
+        naturais ate ele, as que sumiram), como na troca de tipo do J5."""
+        if not (self.cmf.ligada and self.csa.ligada):
+            raise SacudirSemChave("sacudir_arvore sem o mundo e a ConfigSacudir ligados")
+        tm = self._tm(self._estado.tick)
+        if not any(a["id"] == arvore for a in self.mundo.arvores):
+            raise ValueError(f"sacudir uma arvore que nao existe no layout {self.cmf.layout.nome!r}: {arvore!r}")
+        self.mundo.atualizar(tm)
+        self.mundo.sacudir(arvore, tm)
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o deixar_bola)
+
+    def no_galho(self) -> dict[str, int]:
+        """as frutas no galho de cada arvore agora (o que o cartao da arvore mostra); so le"""
+        if not (self.cmf.ligada and self.csa.ligada):
+            raise SacudirSemChave("o galho so existe com o mundo e a ConfigSacudir ligados")
+        t = self._tm(self._estado.tick)
+        return {a["id"]: self.mundo.galho_em(a["id"], t)[0] for a in self.mundo.arvores}
 
     def _aplicar_deixar_comida(self, tipo: str, x: int, y: int) -> None:
         if not self.cmf.ligada:
@@ -1869,7 +2274,7 @@ class MotorMundo(MotorFrutas):
         if racao is None:
             raise ValueError(f"fruta ao lado sem racao deixada no tick {tm}: a fruta vai logo depois da racao, no mesmo passo")
         c = self.mundo.deixar_fruta_ao_lado(tipo, x, y, tm)
-        self.frutas_ao_lado.append({"tick": tm, "id": c["id"], "tipo": tipo, "x": x, "y": y, "racao": racao["id"]})
+        self.frutas_ao_lado.append({"tick": tm, "id": c["id"], "tipo": tipo, "x": c["x"], "y": c["y"], "racao": racao["id"]})
         self._n_eventos += 1                     # e um evento do log, mas NAO e contato
 
     def ao_lado_no_chao(self) -> dict[str, int]:
@@ -1901,6 +2306,8 @@ class MotorMundo(MotorFrutas):
                              "necessidades": len(self.mundo.necessidades), "na_zona": self.necessidades_na_zona()}
         if self.cfal.ligada:
             d["fruta_ao_lado"] = {"no_chao": self.ao_lado_no_chao(), "postas": len(self.frutas_ao_lado)}
+        if self.csa.ligada:
+            d["sacudir"] = {"no_galho": self.no_galho(), "sacudidas": len(self.mundo.sacudidas)}
         return d
 
     def resumo_mundo_fisico(self) -> dict:
@@ -1916,6 +2323,8 @@ class MotorMundo(MotorFrutas):
                 "bolas_deixadas": m.bolas_deixadas, "rolagens": m.rolagens, "decisoes": self.decisoes_mundo,
                 "regioes": self.regioes, "visitas": self.visitas,
                 "manchas_abertas": [dict(v) for v in self._manchas_abertas.values()],
+                **({} if m.troca_ilha is None else {"troca_ilha": m.troca_ilha}),
+                **({} if m.troca_maior is None else {"troca_maior": m.troca_maior}),
                 **({} if not self.cbh.ligada else {
                     "necessidades": [dict(n) for n in m.necessidades.values()], "prox_necessidade": m.prox_necessidade,
                     "recolhidas": m.recolhidas, "alivios": self.alivios, "recolhas": self.recolhas,
@@ -1924,7 +2333,9 @@ class MotorMundo(MotorFrutas):
                 **({} if m.paradas_arvores is None else {"paradas_arvores": m.paradas_arvores}),
                 **({} if not self.cfal.ligada else {"frutas_ao_lado": self.frutas_ao_lado}),
                 **({} if not self.cct.ligada else {"orientacao": self.orientacao, "contrato_decisoes": self.contrato_decisoes}),
-                **({} if not self.levadas else {"levadas": self.levadas})}     # so com alguma levada: a vida de antes sai byte a byte
+                **({} if not self.levadas else {"levadas": self.levadas}),
+                **({} if m.galhos is None else {"galhos": {i: dict(g) for i, g in m.galhos.items()}, "sacudidas": m.sacudidas,
+                                                "rng_sacode": m.rng_sacode.getstate()})}     # so com alguma levada: a vida de antes sai byte a byte
 
     # ------------------------------------------------------------ o avanco em ticks (o grupo, dois pets, etapa 2)
     # O `_avancar(n)` de hoje e: o que cada classe faz uma vez por avanco (o MotorPersonalidade conta o evento de avanco no indice dos
@@ -1950,7 +2361,7 @@ class MotorMundo(MotorFrutas):
 def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config | None = None, semente: int = 42,
                      fabrica_motor: Callable | None = None, ate_tick: int | None = None,
                      cfg_genoma: ConfigGenoma | None = None) -> MotorMundo:
-    """O replay que entende os eventos do mundo (`deixar_comida`, `deixar_bola`, `levar_pet`). `ate_tick`: para antes do primeiro evento nesse
+    """O replay que entende os eventos do mundo (`deixar_comida`, `deixar_bola`, `levar_pet`, `sacudir_arvore`). `ate_tick`: para antes do primeiro evento nesse
     tick (corta o avanco que o atravessa), como o reproduzir_educacao. Evento desconhecido levanta erro; luta, origem, fala e
     decisao externa tambem: o mundo minimo roda sem educacao e sem lesoes.
 
@@ -1976,13 +2387,17 @@ def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config 
         elif evento.tipo == "acao_usuario":
             motor._aplicar_acao_usuario(AcaoUsuario(evento.valor))
         elif evento.tipo == "deixar_comida":
-            motor._aplicar_deixar_comida(*ler_deixar_comida(evento))
+            motor._aplicar_deixar_comida(*ler_deixar_comida(evento, tamanho_do_mapa(motor.cmf)))
         elif evento.tipo == "deixar_bola":
-            motor._aplicar_deixar_bola(*ler_deixar_bola(evento))
+            motor._aplicar_deixar_bola(*ler_deixar_bola(evento, tamanho_do_mapa(motor.cmf)))
         elif evento.tipo == "levar_pet":
             motor._aplicar_levar_pet(*ler_levar_pet(evento))
+        elif evento.tipo == "mudar_ilha":
+            motor._aplicar_mudar_ilha(ler_mudar_ilha(evento))
         elif evento.tipo == "deixar_fruta":
-            motor._aplicar_deixar_fruta(*ler_deixar_fruta(evento))
+            motor._aplicar_deixar_fruta(*ler_deixar_fruta(evento, tamanho_do_mapa(motor.cmf)))
+        elif evento.tipo == "sacudir_arvore":
+            motor._aplicar_sacudir_arvore(ler_sacudir_arvore(evento))
         elif evento.tipo == "lt":
             motor._aplicar_resumo_luta(*ler_resumo_luta(evento))
         else:

@@ -2,13 +2,18 @@
    item 1): as telas leem o motor pelo useJogo() e so mudam o motor por aqui, que avisa todo mundo e grava o
    save. Duas abas no mesmo navegador (o HTML antigo e o app, ou dois apps) nao se sobrescrevem: quando o save
    muda em outra aba, esta relê o save em vez de gravar por cima. */
+import { passarParaIlhaComAgua } from "./ilhaAgua.ts";
 import { useEffect, useState } from "react";
-import { Motor, PetMorto, ehCerebroTrocavel } from "../motor/index.ts";
+import { Motor, PetMorto, VERSOES_PET, ehCerebroTrocavel } from "../motor/index.ts";
+import { pedirAbertura } from "./abertura.ts";
 import { ligarProduto } from "./produto.ts";
 import { podeTrocarCerebro, type Cerebro } from "./cerebro.ts";
 import { CHAVE_LAB } from "./lab.ts";
 import { CHAVE, gravarSave, lerSave, petExemplo, textoSave, type Armazenamento } from "./save.ts";
-import { CHAVE_TAMER, Tamer, conferirCampeao, conferirItensDasMedalhas, conferirMedalhas, conferirRecordes, gravarTamer, lerTamer, sincronizarPet, type MedalhaGanha } from "./tamer.ts";
+import { CHAVE_TAMER, Tamer, conferirBits, conferirBitsDoNivel, conferirCampeao, conferirItensDasMedalhas, conferirMedalhas, conferirRecordes, gravarTamer, lerTamer, sincronizarPet, type MedalhaGanha } from "./tamer.ts";
+import { versaoDoOvo } from "./lutaPoc.ts";
+import { assinaturaIntocada } from "./nivel.ts";
+import { emitirSom } from "./somEventos.ts";
 
 export type Origem = "save" | "exemplo" | "novo";
 export interface Jogo {
@@ -42,10 +47,12 @@ export function iniciarJogo(armaz: Armazenamento): Jogo {
   let erroTamer: string | null = null;
   try { tamer = lerTamer(armaz); } catch (err) { tamer = new Tamer(); erroTamer = err instanceof Error ? err.message : String(err); }
   const l = lerSave(armaz), extra = { erroTamer, evolucoesAoTrocar: null, emLab: null };
+  /* o pet v21 salvo passa para a ilha com agua na abertura (IA4), e o registro com o evento e gravado na hora */
+  const passou = l.tipo === "ok" && passarParaIlhaComAgua(l.motor);
   if (l.tipo === "ok") jogo = { motor: l.motor, origem: "save", erroSave: null, revisao: 0, nascendo: 0, ...extra };
   else jogo = { motor: petExemplo(), origem: "exemplo", erroSave: l.tipo === "erro" ? { erro: l.erro, bruto: l.bruto } : null, revisao: 0, nascendo: 0, ...extra };
   /* o pet salvo pode estar atras do Tamer (medalha ganha com outro pet): recebe o "u" ja na abertura */
-  if (l.tipo === "ok" && medalhas(jogo).mudou) gravar();
+  if (l.tipo === "ok" && (medalhas(jogo).mudou || passou)) gravar();
   return jogo;
 }
 export const tamerAtual = (): Tamer => tamer;
@@ -58,8 +65,21 @@ function medalhas(j: Jogo): { novas: MedalhaGanha[]; mudou: boolean } {
   if (!armazenamento || j.erroSave || j.erroTamer) return { novas: [], mudou: false };
   const novas = conferirMedalhas(tamer, j.motor), itens = conferirItensDasMedalhas(tamer, j.motor), titulo = conferirCampeao(tamer, j.motor);
   const recordes = conferirRecordes(tamer, j.motor);
-  if (novas.length || itens.length || titulo || recordes.length) gravarTamer(armazenamento, tamer);
+  /* os Bits (docs/PLANO_V3_MOEDA.md, MO1): os feitos novos do pet e a 1a medalha de cada lider. O pet de exemplo das boas-vindas, ainda nao
+     do jogador, nao paga: nem com a origem "exemplo", nem intocado depois de um descarte (o criterio do nivel do Tamer, nivel.ts) */
+  const bits = j.origem === "exemplo" || exemploIntocado(j.motor) ? [] : conferirBits(tamer, j.motor);
+  if (novas.length || itens.length || titulo || recordes.length || bits.length) gravarTamer(armazenamento, tamer);
   return { novas, mudou: sincronizarPet(tamer, j.motor) };
+}
+const exemplos = new Map<number, { semente: number; assinatura: string }>();
+/** o pet e o de exemplo das boas-vindas, ainda intocado (so o tempo passou): a mesma conta do nivel do Tamer (nivelTela.ts, ehPetDoJogador).
+    O exemplo e o da versao do pet: quem abriu o jogo antes da v23 (ou da v22) e nunca tocou no pet tem o exemplo daquela versao, que
+    passa para a ilha grande ao abrir e continua nao sendo do jogador (a assinatura intocada ignora o "mi") */
+function exemploIntocado(m: Motor): boolean {
+  if (!VERSOES_PET.includes(m.versao)) return false;
+  let ex = exemplos.get(m.versao);
+  if (!ex) { const e = petExemplo(m.versao); ex = { semente: e.semente, assinatura: assinaturaIntocada(e) }; exemplos.set(m.versao, ex); }
+  return m.semente === ex.semente && assinaturaIntocada(m) === ex.assinatura;
 }
 /** a unica porta de mudanca do Tamer fora das medalhas (itens: a carta usada, a carta da revanche): aplica, grava e avisa. Com o
     registro do Tamer que nao abriu, falha (o app nao grava por cima dele) */
@@ -70,6 +90,15 @@ export function mudarTamer<T>(f: (t: Tamer) => T): T {
   gravarTamer(armazenamento, tamer);
   j.revisao++; avisar();
   return r;
+}
+/** os Bits dos niveis do Tamer (nivelTela.ts, quando o nivel confirmado sobe): paga os que faltam ate `nivel`, grava e avisa. Sem nada a
+    pagar, ou com o registro do Tamer que nao abriu, nao faz nada (a vista chama a cada confirmacao) */
+export function pagarNivel(nivel: number): void {
+  const j = jogoAtual();
+  if (!armazenamento || j.erroTamer || j.emLab) return;
+  if (!conferirBitsDoNivel(tamer, nivel).length) return;
+  gravarTamer(armazenamento, tamer);
+  j.revisao++; avisar();
 }
 export function jogoAtual(): Jogo {
   if (!jogo) throw new Error("jogo nao iniciado");
@@ -96,7 +125,7 @@ export function mudarMotor(f: (m: Motor) => void, quando: "agora" | "adiado" = "
     if (err instanceof PetMorto) avisar();
     throw err;
   }
-  medalhas(j);
+  if (medalhas(j).novas.length) emitirSom("medalha");   /* SOM-UP: a medalha nova do Tamer */
   j.revisao++;
   if (j.origem === "exemplo" && !j.erroSave) j.origem = "save";
   pendente = true;
@@ -107,6 +136,7 @@ export function mudarMotor(f: (m: Motor) => void, quando: "agora" | "adiado" = "
 export function trocarMotor(m: Motor, origem: Origem, nascendo = 0): void {
   sairDoLab();            // trocar o pet e sempre sobre o pet de hoje: o pet de teste sai da tela, com o save dele intacto
   const j = jogoAtual();
+  passarParaIlhaComAgua(m);        // o pet v21 guardado ou importado chega a ilha com agua ao abrir (IA4); o gravar abaixo o salva
   j.motor = m; j.origem = origem; j.erroSave = null; j.nascendo = nascendo; j.revisao++;
   /* pet guardado que estava pronto: recebe as medalhas agora e evolui (a revelacao conta a partir de antes) */
   const antes = m.evolucoes.length;
@@ -141,7 +171,6 @@ export function trocarCerebroDoPet(c: Cerebro): void {
   if (j.erroSave) throw new Error("o save não abriu: o cérebro não troca");
   if (!podeTrocarCerebro(j.motor)) throw new Error(`este pet é da versão ${j.motor.versao} e não troca de cérebro`);
   if (j.motor.cerebroAtual === c) throw new Error(`o pet já decide com o cérebro ${c}`);
-  if (!ehCerebroTrocavel(j.motor.versao)) { j.motor = Motor.promoverV17(j.motor); j.revisao++; }
   mudarMotor(m => m.trocarCerebro(c));
 }
 /** quadros do palco (120 ms cada) com o ovo chocando: ~5 s, para o nascimento ser um momento e nao um corte. PROPOSTO, SEM FONTE */
@@ -149,7 +178,7 @@ export const QUADROS_CHOCANDO = 40;
 /** um ovo novo: semente do relogio (como o HTML) e o ovo chocando */
 export function novoPet(): void {
   const s = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
-  trocarMotor(ligarProduto(new Motor(s)), "novo", QUADROS_CHOCANDO);
+  trocarMotor(ligarProduto(new Motor(s, versaoDoOvo())), "novo", QUADROS_CHOCANDO);
 }
 /** o balanco do ovo de lado, em unidades (texel ou px), pelos quadros que faltam: parado no comeco, tremidas curtas no meio, e cada
     vez mais forte no fim (o ovo nao "anda": so treme no lugar). PROPOSTO, SEM FONTE */
@@ -162,7 +191,8 @@ export function balancoOvo(nascendo: number): number {
 /** um quadro a menos do ovo chocando (chamado pelo palco a cada desenho) */
 export function passarQuadroOvo(): void {
   const j = jogoAtual();
-  if (j.nascendo > 0) { j.nascendo--; if (j.nascendo === 0) avisar(); }
+  /* o ovo chocou: a camera do primeiro dia fica pedida (abertura.ts; AB-2, uma vez por pet) */
+  if (j.nascendo > 0) { j.nascendo--; if (j.nascendo === 0) { pedirAbertura(j.motor.semente); avisar(); } }
 }
 
 /** outra aba mudou o save: relê em vez de gravar por cima depois */
@@ -176,8 +206,10 @@ export function ouvirOutrasAbas(): () => void {
     if (ev.key !== CHAVE || !armazenamento || !jogo) return;
     if (ev.newValue === null || ev.newValue === textoSave(motorReal())) return;
     const l = lerSave(armazenamento);
+    /* a outra aba pode ser de antes da IG4: o pet chega a ilha grande aqui tambem, e o registro com o evento fica para gravar */
+    const passou = l.tipo === "ok" && passarParaIlhaComAgua(l.motor);
     if (jogo.emLab) { if (l.tipo === "ok") jogo.emLab = l.motor; return; }    // o pet de hoje, guardado: relê ele, o de teste segue na tela
-    if (l.tipo === "ok") { jogo.motor = l.motor; jogo.origem = "save"; jogo.erroSave = null; jogo.revisao++; pendente = false; avisar(); }
+    if (l.tipo === "ok") { jogo.motor = l.motor; jogo.origem = "save"; jogo.erroSave = null; jogo.revisao++; pendente = passou; avisar(); }
     else if (l.tipo === "erro") { jogo.erroSave = { erro: "outra aba gravou um save que não abre: " + l.erro, bruto: l.bruto }; avisar(); }
   };
   addEventListener("storage", aoMudar);
