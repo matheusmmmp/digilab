@@ -362,5 +362,6 @@ A cooperação aparece sem número (D-MM-8), em `web/app/src/telas/pet/AtosDoIrm
 - **A medida da CO3 ligou no jogo,** e só mede (o G-SEM-DECISAO no jogo, `web/app/test/coop_tela.test.ts`).
 - **As capturas,** a 390 e 1280 px, no Militar e no Sci-fi, ficam em `D:\Trab\digilab\capturas_coop_co5\`, fora do git: o ato na ilha e,
   no celular, a linha.
+  - **Aprovadas pelo Matheus** em 2026-11-11 (D-CO5-7).
   - **A captura do gesto da luta espera um conserto da `main`:** a luta de todo pet v23 e v24 não termina no palco (D-CO5-5).
 - **Os desvios:** D-CO5-1 a D-CO5-6, no registro de 2026-11.
