@@ -16,6 +16,16 @@ export interface BarraLab { termo: TermoLab; valor: number; permil: number }
 export interface ChanceLab { chave: ChaveUnidade; acao: string; permil: number | null; escolhida: boolean }
 /** uma sonda de "o que mudaria a escolha": a unidade que o motivo daria sem aquele termo e se a escolha mudaria */
 export interface SondaLab { nome: string; chave: ChaveUnidade | null; mudaria: boolean }
+/** o resultado da decisao anterior (CADEIA, etapa 3, PR-C da auditoria; o `consequencia` que o M-ADAPT grava no motivo dela ao fechar):
+    o que ele escolheu, se comeu (o tipo e a situacao), se chegou ao alvo, o efeito no corpo (o sinal do r normalizado), o que ficou na memoria
+    (o episodio de consumo ou o da visita vazia) e se o habito recebeu credito. So le o motivo */
+export interface ResultadoLab {
+  k: number; escolha: ChaveUnidade;
+  comeu: { tipo: string; situacao: string } | null; chegou: boolean | null;
+  efeito: "melhorou" | "piorou" | "igual";
+  memoria: "consumo" | "visita" | null;
+  aprendeu: boolean;
+}
 export interface LeituraLab {
   /** o numero da decisao (`motivo.k`) */
   k: number;
@@ -51,6 +61,24 @@ function valorTermo(termos: Dict, t: TermoLab): number {
 const mesmaChave = (a: ChaveUnidade | null, b: ChaveUnidade | null): boolean => JSON.stringify(a) === JSON.stringify(b);
 
 /** a leitura do ultimo motivo do DigiBrain modular; null antes da primeira decisao */
+/** o resultado da decisao anterior a ultima (a ultima ainda nao fechou); null sem ela ou antes de ela fechar */
+export function resultadoAnterior(lab: DigiBrain): ResultadoLab | null {
+  const n = lab.motivos.length;
+  if (n < 2) return null;
+  const m: Dict = lab.motivos[n - 2]!, c: Dict | null = m["consequencia"] ?? null;
+  if (c === null) return null;
+  for (const k of ["r_n", "chegou", "comeu", "episodio", "creditos", "p1"]) if (!(k in c)) throw new Error(`o consequencia do motivo ${m["k"]} sem ${k}`);
+  const comeu: Dict | null = c["comeu"];
+  return {
+    k: m["k"], escolha: m["escolha"] as ChaveUnidade,
+    comeu: comeu === null ? null : { tipo: comeu["tipo"], situacao: comeu["situacao"] },
+    chegou: c["chegou"],
+    efeito: c["r_n"] > 0 ? "melhorou" : c["r_n"] < 0 ? "piorou" : "igual",
+    memoria: c["episodio"] === null ? null : comeu !== null ? "consumo" : "visita",
+    aprendeu: (c["creditos"] as unknown[]).length > 0 || c["p1"] !== null,
+  };
+}
+
 export function leituraLab(lab: DigiBrain): LeituraLab | null {
   const m: Dict | null = lab.ultimoMotivo;
   if (m === null) return null;

@@ -3,6 +3,8 @@
    punicao). A reacao mostrada sai do corpo: le a solidao, o estresse e o susto antes e depois (cenaAcao.ts, reacaoDoCorpo). O tapa nao vem
    pelo toque (fica so no botao). Um arrasto (a camera livre, a bola, pegar o pet) ou um toque longo nao conta. */
 import { useEffect, type RefObject } from "react";
+import { momentoDoCarinho } from "./momentos.ts";
+import { emitirVoz } from "../../somEventos.ts";
 import type { Motor } from "../../../motor/index.ts";
 import { agir } from "../../acoes.ts";
 import { jogoAtual } from "../../jogo.ts";
@@ -38,7 +40,10 @@ export function noSprite(cx: number, cy: number, cena: { left: number; top: numb
 export function tocarNoPet(agora: number): boolean {
   const antes = lerCorpo(jogoAtual().motor);
   if (!agir("acariciar")) return false;
-  mostrarReacao(reacaoDoCorpo(antes, lerCorpo(jogoAtual().motor), agora));
+  const r = reacaoDoCorpo(antes, lerCorpo(jogoAtual().motor), agora);
+  mostrarReacao(r);
+  if (r.tipo === "relaxou") momentoDoCarinho(agora);   /* o Feliz quando o pulinho acaba (momentos.ts, HR1) */
+  if (r.medo > 0) emitirVoz("susto");                   /* HR2: o medo da mao assusta a voz */
   return true;
 }
 

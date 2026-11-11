@@ -8,8 +8,8 @@
    v21 nao muda (test/luta_poc_pet.test.ts). */
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, CUIDADO_NA_HORA, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
-  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V22, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehLutaPoc,
-  CMU_MVP_AGUA, ILHA_DOS_V21,
+  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehLutaPoc, nasceNaAgua,
+  CMU_MVP_AGUA, ILHA_DOS_V21, VERSOES_COM_SACUDIR,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { LUGARES_V6, NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
@@ -21,14 +21,17 @@ import {
   type IdInstalacao, type Instalacao,
 } from "./instalacoes.ts";
 import { ESTAGIOS_SALAO, RIVAL_SALAO, caraterDoRivalSalao, formaRivalSalao, sementeSalao } from "./salao.ts";
-import { CMU_MVP } from "./constantes.ts";
+import { CMU_MVP, STATS } from "./constantes.ts";
 import { chipDe, chipServe, itensValem, porqueItensNaoValem, pontosComChips, vagasDeChip } from "./itens.ts";
 import { caraterV11, formaAdultaDe, linhaDoCarater, type QuandoCarater } from "./carater.ts";
 import { CCO_CORPO_V11, CONFIG_LUTA_CORPO_LIGADA } from "./corpo.ts";
 import { desejoLobos, type BracoConsequencia, type CerebroA, type ObservacaoLobos } from "./lobos.ts";
 import { MotorCorpo, estadoNascimentoPy, type PoliticaCorpo } from "./motor_corpo.ts";
 import { MotorCorpoMundo, type PoliticaCorpoMundo } from "./motor_corpo_mundo.ts";
-import { eventoDeixarBola, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, lerDeixarBola, lerDeixarComida, lerLevarPet, lerMudarIlha, type Mundo } from "./mundo.ts";
+import {
+  eventoDeixarBola, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, eventoSacudirArvore, lerDeixarBola, lerDeixarComida, lerLevarPet, lerMudarIlha,
+  lerSacudirArvore, type Mundo,
+} from "./mundo.ts";
 import { CONFIG_CONTRATO_AGUA } from "./contrato.ts";
 import { bracoV11 } from "./pet_v11.ts";
 import { leituraLab, type LeituraLab } from "./digibrain/leitura.ts";
@@ -38,7 +41,7 @@ import { CONFIG_DIGIBRAIN_LAB_FALA, CONTEUDOS_FALA, INATOS_MODULAR, type Conteud
 import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
 import { ConfiancaCombate } from "./confianca.ts";
 import { lutar as lutarArena, sorteiosPorFluxo, type IdCena, type ResultadoLuta as ResultadoArena, type Stats as StatsArena, type Tiro as TiroLutaPoc, type Esquiva as EsquivaLutaPoc } from "./arena/index.ts";
-import { MAPA_SALAO, MAPA_TORRE, statsRivalForma, ehMapa, formaDaChave as formaDaChaveMotor, mapaDoLugar, naTabela, rivaisArena, statsDaLuta, statsDoPet, statsNpc, statsRivalArena } from "./luta_poc.ts";
+import { MAPA_SALAO, MAPA_TORRE, statsRivalForma, ehMapa, esquivaDaTabela, formaDaChave as formaDaChaveMotor, mapaDoLugar, naTabela, rivaisArena, statsDaLuta, statsDoPet, statsNpc, statsRivalArena, tabelaLuta } from "./luta_poc.ts";
 import { condicaoDe } from "./treino.ts";
 import { caraterCanonico } from "./catalogo.ts";
 import { estadoInicial, observacao, temperamentoDe } from "./estado.ts";
@@ -188,6 +191,9 @@ export class Motor {
      assinatura. episodios = inicio de cada trecho de uma mesma acao do pet (fora ocioso) */
   vida5: { episodios: [number, AcaoPet][]; lutas: { tick: number; rival: string; resultado: "vitoria" | "derrota" | "empate"; lesao: boolean }[];
     sessoes: [number, Exercicio][]; anterior: AcaoPet | null } = { episodios: [], lutas: [], sessoes: [], anterior: null };
+  /** MITOLOGIA, E0 (docs/TAREFA_V3_MITOLOGIA.md): a forca do pet na entrada de cada luta da POC (a soma dos 6 stats de statsDoPet, sem a
+      condicao) e o resultado, para o evento da hybris (motor/lendas.ts). Derivado do replay, como o vida5: fora do save e da assinatura */
+  forcaLutas: { tick: number; rival: string; forcaPet: number; resultado: "vitoria" | "derrota" | "empate" }[] = [];
   lutas: Lutas;
   lesionadoDesde: number | null = null;
   vitoriasVida = 0;                              /* v4: experiencia de combate (nao zera ao evoluir) */
@@ -303,8 +309,8 @@ export class Motor {
        a regra de cada decisao vai ao registro do mundo, como o ultima_regra do Python */
     const laco = new MotorCorpoMundo(politica, semente, CCO_CORPO_V11, estadoNascimentoPy(TICK_INICIAL),
                                      { regra: () => braco.cerebro.ultimaRegra, digibrain: lab !== null,
-                                       /* a v22 nasce na ilha com agua, com o controlador do contrato (IA4); as outras, no mundo sem agua */
-                                       cfgMundo: versao === VERSAO_V22 ? CMU_MVP_AGUA : CMU_MVP, ...(versao === VERSAO_V22 ? { contrato: CONFIG_CONTRATO_AGUA } : {}),
+                                       /* a v22 e a v23 nascem na ilha com agua, com o controlador do contrato (IA4); as outras, no mundo sem agua */
+                                       cfgMundo: nasceNaAgua(versao) ? CMU_MVP_AGUA : CMU_MVP, ...(nasceNaAgua(versao) ? { contrato: CONFIG_CONTRATO_AGUA } : {}),
                                        bolaNoGolpe: ehCerebroTrocavel(versao) });     // o pet de teste (v16): a bola de antes; a v21, a bola no golpe
     this.v11 = { braco, laco };
     this.e = laco.estado;
@@ -553,7 +559,9 @@ export class Motor {
   get formaLutaPoc(): string { return chaveSprite(this.forma); }
   /** os numeros do pet na luta da POC agora: os 6 stats (especie, carater, forma, treino e chips de stat) e a condicao do cuidado */
   statsLutaPoc(): StatsArena {
-    return statsDaLuta(statsDoPet(this.forma, this.carater(), this.pontosDeLuta()), this.forma.est, condicaoDe(this.e.saude));
+    /* a tabela da luta da versao do pet (a v23 tem a dela; LP5-5); o eixo atento do carater so entra na esquiva */
+    const T = tabelaLuta(this.versao), car = this.carater();
+    return statsDaLuta(statsDoPet(this.forma, car, this.pontosDeLuta(), T), this.forma.est, condicaoDe(this.e.saude), T, car?.atento ?? 0);
   }
   /** os rivais da Arena para este pet: as formas do estagio dele */
   rivaisArenaPoc(): string[] { return rivaisArena(this.estagioAtual); }
@@ -603,24 +611,24 @@ export class Motor {
     if (rival === RIVAL_LIGA) {
       if (k >= LIGA.length) return null;
       const f = formaLiga(k), x = LIGA[k];
-      return { forma: chaveSprite(f), stats: statsRivalForma(f, caraterCanonico(x.adulta)), mapa: mapaDoLugar(LUGARES_V6[ARENA_POR_ID[x.arena].lugar]),
+      return { forma: chaveSprite(f), stats: statsRivalForma(f, caraterCanonico(x.adulta), tabelaLuta(this.versao), tabelaLuta(this.versao).fatorRival.liga), mapa: mapaDoLugar(LUGARES_V6[ARENA_POR_ID[x.arena].lugar]),
         nome: `na Liga dos Líderes, contra ${nomeMegaLiga(k)} de ${NOME_BOT[x.lider]}` };
     }
     if (ehInstalacao(rival)) {
       if (k >= LUTAS_MAX_INSTALACAO) return null;
       const f = formaRivalInstalacao(semente, k);
-      return { forma: chaveSprite(f), stats: statsRivalForma(f, caraterCanonico(f.adulta as FormaAdultaNormal)), mapa: MAPA_TORRE,
+      return { forma: chaveSprite(f), stats: statsRivalForma(f, caraterCanonico(f.adulta as FormaAdultaNormal), tabelaLuta(this.versao), tabelaLuta(this.versao).fatorRival.torre), mapa: MAPA_TORRE,
         nome: `na ${instalacaoDe(rival).nome}, contra ${nomeForma(f)}` };
     }
     if (rival === RIVAL_SALAO) {
       if (k >= 1) return null;
       const f = formaRivalSalao(semente, est);
-      return { forma: chaveSprite(f), stats: statsRivalForma(f, caraterDoRivalSalao(f)), mapa: MAPA_SALAO, nome: `no Salão, contra ${nomeForma(f)}` };
+      return { forma: chaveSprite(f), stats: statsRivalForma(f, caraterDoRivalSalao(f), tabelaLuta(this.versao), tabelaLuta(this.versao).fatorRival.salao), mapa: MAPA_SALAO, nome: `no Salão, contra ${nomeForma(f)}` };
     }
     /* das regras das arenas dos lideres fica so a serie da Cidadela (LP2, decisao 5): 3 lutas sem cura para o pet; o lider volta inteiro */
     const npc = !!NPC[rival], n = npc ? arenaDaLuta(rival, this.versao)?.lutas ?? 1 : 1;
     if (k >= n) return null;
-    return { forma: rival, stats: npc ? statsNpc(rival) : statsRivalArena(rival), mapa: mapa!,
+    return { forma: rival, stats: npc ? statsNpc(rival, tabelaLuta(this.versao)) : statsRivalArena(rival, tabelaLuta(this.versao)), mapa: mapa!,
       nome: `contra ${npc ? NOME_BOT[rival] : nomeForma(formaDaChaveMotor(rival))}${n > 1 ? ` (luta ${k + 1} de ${n})` : ""}` };
   }
   private _lutarPoc(rival: string, semente: number, mapa: unknown): ResultadoLutaPoc {
@@ -631,6 +639,10 @@ export class Motor {
     const liga = rival === RIVAL_LIGA, inst = ehInstalacao(rival) ? instalacaoDe(rival) : null, salao = rival === RIVAL_SALAO;
     const npc = !!NPC[rival], torneio = liga || !!inst || salao, forma = this.formaLutaPoc, est = this.estagioAtual;
     const pet = this.statsLutaPoc();
+    /* o tiro e a esquiva: os da bancada, se ela os pos; senao, os da tabela da versao (a v21 e a v22, nenhum: a luta da POC) */
+    const T = tabelaLuta(this.versao), tiro = this.tiroLutaPoc ?? T.tiro, esquiva = this.esquivaLutaPoc ?? esquivaDaTabela(T);
+    /* a forca do pet para o oraculo (MITOLOGIA E0): a soma dos 6 stats pelo peso de sempre, a mesma em todas as versoes */
+    const base = statsDoPet(this.forma, this.carater(), this.pontosDeLuta()), forcaBase = STATS.reduce((t, k) => t + base[k], 0);
     const serie: ResultadoLutaPoc["serie"] = [];
     let vida0 = pet.hp, lesao = false, n = 0;
     const ordemL = this.nEventosLuta++;
@@ -640,7 +652,7 @@ export class Motor {
       if (!rv) break;
       n = k + 1;
       const s = sementeDaSerie(semente, k);
-      const r = lutarArena({ cena: rv.mapa, semente: s, a: { forma, stats: pet, ...(k ? { vida0 } : {}) }, b: { forma: rv.forma, stats: rv.stats }, ...(this.tiroLutaPoc ? { tiro: this.tiroLutaPoc } : {}), ...(this.esquivaLutaPoc ? { esquiva: this.esquivaLutaPoc } : {}) }, sorteiosPorFluxo(s));
+      const r = lutarArena({ cena: rv.mapa, semente: s, a: { forma, stats: pet, ...(k ? { vida0 } : {}) }, b: { forma: rv.forma, stats: rv.stats }, ...(tiro ? { tiro } : {}), ...(esquiva ? { esquiva } : {}) }, sorteiosPorFluxo(s));
       const pontosA = r.vencedor === "a" ? 1 : r.vencedor === "b" ? 0 : 0.5, res = pontosA === 1 ? 1 : pontosA === 0 ? -1 : 0;
       serie.push({ ...r, vida0, pontosA, contra: rv.forma, mapa: rv.mapa, rivalStats: rv.stats });
       const chave = rivalDaConfianca(rival, semente, k, est);
@@ -675,6 +687,7 @@ export class Motor {
       x.tentativas++; x.ultima = v; x.recorde = Math.max(x.recorde, v);
     }
     this.vida5.lutas.push({ tick: this.e.tick, rival, lesao, resultado: ult.pontosA === 1 ? "vitoria" : ult.pontosA === 0 ? "derrota" : "empate" });
+    this.forcaLutas.push({ tick: this.e.tick, rival, forcaPet: forcaBase, resultado: this.vida5.lutas[this.vida5.lutas.length - 1].resultado });
     return { rival, mapa: torneio ? null : mapa as IdCena, semente, arena: !npc && !torneio, torneio, pet, rivalStats: serie[0].rivalStats, forma, serie, venceu, lesao };
   }
   /* ---------------------------------------------------------------- itens do Tamer (pets v6; motor/itens.ts) */
@@ -769,6 +782,28 @@ export class Motor {
     this._conferirLevarPet();
     this._conferirMorte(); this._vivo();
     (this.v11!.laco as MotorCorpoMundo).petDoDono(x, y);
+  }
+  /** o sacudir a arvore (docs/TAREFA_V3_ARVORE_SACODE.md, S2): o dono sacode a arvore `arvore` do layout; cai uma fruta se houver no
+      galho e lugar no chao. So o mundo muda (AS-1): nao e contato nem cuidado, nao passa pelo cerebro, pelo corpo, pelo vinculo nem pelo
+      historico, e nao atende o chamado do bebe. Vale com o pet acordado ou dormindo; o pet morto, uma versao sem o sacudir (hoje, todas:
+      VERSOES_COM_SACUDIR vazia, D-AS-S2-1) e o id que nao e de arvore do layout falham alto antes do registro */
+  sacudirArvore(arvore: string): void {
+    lerSacudirArvore(eventoSacudirArvore(this.e.tick, arvore));
+    this._conferirSacudir();
+    this._conferirMorte(); this._vivo();
+    const t = this.e.tick;
+    this._sacudirArvore(arvore);
+    this.log.push([t, "sa", { arvore }]);
+  }
+  private _conferirSacudir(): void {
+    if (!VERSOES_COM_SACUDIR.includes(this.versao) || this.mundo === null || this.mundo.sacudidas === null)
+      throw new Error(`nenhum pet sacode árvore ainda: o sacudir não está em nenhuma versão de pet (este é v${this.versao})`);
+  }
+  private _sacudirArvore(arvore: string): void {
+    lerSacudirArvore(eventoSacudirArvore(this.e.tick, arvore));
+    this._conferirSacudir();
+    this._conferirMorte(); this._vivo();
+    (this.v11!.laco as MotorCorpoMundo).sacudirDoDono(arvore);
   }
   /** o pet pode passar para a ilha com agua agora: e v21, esta vivo e o mundo dele ainda nao tem agua (IA4) */
   get podeMudarIlha(): boolean { return this.versao === VERSAO_V21 && this.mundo !== null && this.mundo.secas === null && this.morte === null; }
@@ -1219,6 +1254,13 @@ export class Motor {
         const { x, y } = l as Record<string, unknown>;
         lerLevarPet(eventoLevarPet(t, x, y));
         this._levarPet(x as number, y as number); break;
+      }
+      case "sa": {
+        const a = ev[2] as unknown;
+        if (!a || typeof a !== "object" || Object.keys(a).join() !== "arvore")
+          throw new Error(`evento de sacudir a árvore inválido no registro (tick ${t}): ${JSON.stringify(a)}`);
+        const arvore = lerSacudirArvore({ tipo: "sacudir_arvore", valor: (a as Record<string, unknown>).arvore });
+        this._sacudirArvore(arvore); break;
       }
       case "mi": {
         const i = ev[2] as unknown;
