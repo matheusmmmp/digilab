@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import {
   DIGIMON_DA_FORMA, PALACIO_NA_TORRE, FORMAS_ARENA, IDS_CENA, LUGARES_V6, LUTA_POC_LIGADA, MAPA_DO_LUGAR, MAPA_STATS, Motor, NPC, STATS,
-  VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSOES_PET, VERSOES_PET_POC, chaveSprite, formaDaChave, hashSemente, rivaisArena, statsDaLuta, statsDoPet, statsNpc,
+  VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V22, VERSOES_PET, VERSOES_PET_POC, chaveSprite, formaDaChave, hashSemente, rivaisArena, statsDaLuta, statsDoPet, statsNpc,
   statsRivalArena, type EventoRegistro, type Stats,
 } from "../motor/index.ts";
 import { DIAS_V21, SEMENTES_V21, VARIANTES_V21, gravarV21, nascerV21, viverV21, type VidaV21 } from "./lp2_v21.ts";
@@ -156,4 +156,19 @@ describe("a vida nova: o gabarito e o replay bit a bit", () => {
     const ra = a.lutarPoc(rv, hashSemente("x", 1), "campo"), rb = b.lutarPoc(rv, hashSemente("x", 2), "campo");
     expect(ra.serie[0].relogio === rb.serie[0].relogio && ra.serie[0].vidaA === rb.serie[0].vidaA).toBe(false);
   });
+});
+
+/* LUTA_POC, LP5-5: o gabarito da v22, gravado antes da v23 entrar (a regra da mecanica nova): a v22 sai byte a byte */
+const gab22 = JSON.parse(readFileSync(new URL("./gabaritos/lp2_vidas_v22.json", import.meta.url), "utf8")) as typeof gab;
+describe("a vida da v22 (LP5-5): o gabarito e o replay bit a bit", () => {
+  for (const v of VARIANTES_V21) for (const s of SEMENTES_V21) {
+    test(`v22 ${v} @${s}: a vida sai igual ao gabarito, e o replay do registro da a mesma assinatura`, () => {
+      const g = gab22.vidas.find(x => x.variante === v && x.semente === s)!;
+      const { m, log, res } = viverV21(v, s, DIAS_V21, true, VERSAO_V22);
+      expect(m.versao).toBe(VERSAO_V22);
+      expect(gravarV21(v, s, m, log, res)).toEqual(g);
+      const r = Motor.reproduzir(s, log, VERSAO_V22);
+      expect(r.assinatura()).toBe(m.assinatura());
+    });
+  }
 });
