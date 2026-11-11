@@ -3128,3 +3128,22 @@ def reencontrou(ramo: Sequence[Mapping], original: Sequence[Mapping], dia: int) 
     if not b:
         raise ValueError(f"I7: o original nao tem decisoes no dia {dia}")
     return a == b
+
+
+# ---------------------------------------------------------------- o adendo 2 do I7: historia ou sorteio (secao 14 do plano, DECIDIDO)
+def trajetoria_janela(ds: Sequence[float | None]) -> str | None:
+    """o tudo ou nada (14.5): "sempre0" se toda D presente da janela e 0, "nunca0" se toda e > 0, "misto" fora disso; None sem D presente"""
+    vs = [d for d in ds if d is not None]
+    if not vs:
+        return None
+    if any(d < 0 for d in vs):
+        raise ValueError("I7: distancia negativa")
+    if all(d == 0 for d in vs):
+        return "sempre0"
+    return "nunca0" if all(d > 0 for d in vs) else "misto"
+
+
+def fracao_amarrada(pares: Sequence[tuple[float | None, float | None]]) -> float | None:
+    """rho (14.4): soma(D_R) / soma(D_E) sobre os pares (D_R, D_E) com os dois termos; None sem par ou com a soma do E 0. E a razao de
+    somas do Phi com o E no lugar do gemeo."""
+    return razao_de_somas(pares)

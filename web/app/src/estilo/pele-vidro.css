@@ -130,7 +130,7 @@
 :root[data-pele="vidro"] :is(.mc-sec, .mc-fatos__corpo h3, .mc-lado h3, .hx-chip){ font-size:var(--hx-rotulo-tam) }
 
 /* ---------- conteudo das telas no painel (painel-hx.css, M4): os --dl-* e --ui-* remapeados do Militar, em tons do vidro */
-:root[data-pele="vidro"] :is(.painel-tela .painel-tela__folha, .pet-painel .pet-painel__folha){
+:root[data-pele="vidro"] :is(.painel-tela .painel-tela__folha, .pet-painel .pet-painel__folha, .scan--lab .scan-texto){
   --dl-hex:rgba(95,190,255,.10); --dl-surface:rgba(95,190,255,.06); --dl-surface-2:rgba(95,190,255,.10);
   --dl-border:#3F7DAE; --dl-border-shadow:#14304E; --dl-navy:#24507A; --dl-navy-deep:#0C2240;
   --dl-action:#3AA8FF; --dl-action-press:#2A8AD6; --dl-action-ink:#06101A; --dl-action-lite:#7CC4FF;

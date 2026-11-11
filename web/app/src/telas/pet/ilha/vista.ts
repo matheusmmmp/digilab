@@ -42,9 +42,10 @@ import type { NomeLugar } from "./modelos.ts";
 import { Papel, type Ret, type Suspenso } from "./papel.ts";
 import { MAO, Pendulo, alturaDepoisDeSoltar, soltarAcabou, tremorAgora } from "./mao.ts";
 import { ORBITA, aplicarOrbita, ligarControles, recentrar } from "../orbita.ts";
-import { CONSULTA_SOLTA, VISTA, despublicarVista, focoDoQuadro, ligarCameraLivre, publicarVista, type Limites, type MapaDaIlha, type Par } from "../cameraLivre.ts";
+import { CONSULTA_SOLTA, TRANSICAO_MS, VISTA, despublicarVista, focoDoQuadro, ligarCameraLivre, publicarVista, type Limites, type MapaDaIlha, type Par } from "../cameraLivre.ts";
 import { CAMERA_DEV, ligarCameraDev } from "../cameraDev.ts";
-import { ABERTURA_PROPOSTA, inclinar, ligarAberturaDev, quadroDaAbertura, tempoDaAbertura } from "./aberturaConta.ts";
+import { ABERTURA_PROPOSTA, inclinar, ligarAberturaDev, quadroDaAbertura, quadroDaSaida, tempoDaAbertura, zerarRelogioAbertura, type Ponto, type Proposta, type QuadroAbertura } from "./aberturaConta.ts";
+import { PROPOSTA_ESCOLHIDA, aberturaPendente, marcarAberturaTocada } from "../../../abertura.ts";
 import { PLANTA_ILHA } from "./constantes.ts";
 import { pixelsDoMapa } from "./minimapa.ts";
 import { PRESETS, Pos, SEM_CONTORNO } from "./pos.ts";
@@ -52,6 +53,8 @@ import { SACO_NA_TELA, VIAGEM, ZOOM_LUGAR_MOVEL, lugarAberto, progressoViagem, t
 import { LUGARES, ORDEM_LUGARES, chaoDoLugar, estadoDoLugar, gradeDosLugares, idaDoTreino, pontoDoLugar as pontoLugarDe, pontoDoPet, type BaseDoMundo } from "./lugares.ts";
 import { Apagador, montarMarcadores, type Marcadores } from "./marcadoresLugar.ts";
 import { TRANCAS } from "../../../trancas.ts";
+import { mitologiaLigada } from "../../../mitologia.ts";
+import { NuvemDoDia } from "./mitologia.ts";
 
 const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -67,6 +70,8 @@ class VistaIlha {
   private readonly lida: CameraLida;
   private readonly papel = new Papel();
   private readonly itens: Itens;
+  /** MITOLOGIA, E0: a nuvem do dia da brincadeira variada (so com a chave `mitologia`) */
+  private readonly nuvem: NuvemDoDia;
   /** o ponto de cada lugar da ilha (celulas; lugares.ts) e a altura do chao no pe dele (celulas; o portao e a barraca ficam na moldura) */
   private readonly pontos: Record<Lugar, [number, number]>;
   private readonly chaoLugar: Record<Lugar, number>;
@@ -117,6 +122,13 @@ class VistaIlha {
   /** a batida na bola: quantas rolagens o motor ja tinha (null antes do primeiro quadro: as de antes de abrir a ilha nao contam) */
   private rolagens: number | null = null;
   private bateBola: { desde: number; alvo: [number, number] } | null = null;
+  /* a camera do primeiro dia (aberturaConta.ts e src/abertura.ts): `semente` null e a do ?abertura= (as capturas da prancha: nao grava, nao
+     acaba nem se interrompe); `saida` e a volta pelo toque (AB-3). `visto` guarda o pet e o ovo da ultima consulta ao pedido */
+  private ab: { p: Proposta; semente: number | null; saida: { desde: number; de: QuadroAbertura } | null; ultimo: QuadroAbertura | null } | null =
+    ABERTURA_PROPOSTA ? { p: ABERTURA_PROPOSTA, semente: null, saida: null, ultimo: null } : null;
+  private abVisto = "";
+  private abInterromper = false;
+  private abMarca: string | null = null;
   /** a ida do pet ao lugar aberto (ou a volta), separada da camera: a chave da viagem ("1:<lugar>" ou "0"), de onde partiu, quando e quanto dura;
       null fora da viagem (constantes.ts, PET_VIAGEM_CEL_MS) */
   private andaPet: { chave: string; de: [number, number]; desde: number; dur: number; rota: [number, number][] | null } | null = null;
@@ -167,7 +179,8 @@ class VistaIlha {
     this.chaoLugar = Object.fromEntries(ORDEM_LUGARES.map(id => [id, chaoDoLugar(id, base)])) as Record<Lugar, number>;
     /* o portao e a barraca: marcadores provisorios no ponto de cada um, ate o modelo 3D chegar (carregarObjetos); nos estilos sem lugares, ficam */
     this.marcadores = montarMarcadores(base);
-    this.cenaIlha.cena.add(this.itens.raiz, this.papel.raiz, this.marcadores.raiz);
+    this.nuvem = new NuvemDoDia(this.itens.ninhoEm);
+    this.cenaIlha.cena.add(this.itens.raiz, this.papel.raiz, this.marcadores.raiz, this.nuvem.raiz);
     CURVA.uVento.value = 1;
     const il = this.ilha;
     this.mapa = { imagem: new ImageData(pixelsDoMapa(il, this.estilo.paleta), il.larg, il.prof), x0: il.x0, z0: il.z0, larg: il.larg, prof: il.prof, area: il.area };
@@ -377,6 +390,70 @@ class VistaIlha {
     }
     return { cel: f >= 1 ? para : this.entre(a.de, para, f), andando: f < 1 };
   }
+  /** a abertura deste quadro, ou null (a camera de sempre). Comeca quando o ovo do pet de agora chocou e ela ainda nao tocou (AB-2), com o ovo
+      fora da tela, sem o pet na mao, sem lugar aberto e sem o veu; com "reduzir movimento" ela e pulada (AB-5). Um toque, uma tecla ou a roda
+      (AB-3), o pet na mao ou um lugar aberto encerram: a camera volta a de sempre em TRANSICAO_MS. Acabou, interrompida ou pulada, ela fica
+      marcada (src/abertura.ts) e nao volta */
+  private quadroDaAbertura(agora: number, reduzido: boolean, viagem: number, zoomDeSempre: number): QuadroAbertura | null {
+    const jg = jogoAtual(), m = jg.motor, livre = !this.naMao && viagem === 0 && !CENA.coberto;
+    if (!this.ab && !ABERTURA_PROPOSTA && jg.nascendo === 0 && !m.morte) {
+      const visto = `${m.semente}/${jg.nascendo}`;
+      if (visto !== this.abVisto) {
+        if (!aberturaPendente(m.semente)) this.abVisto = visto;
+        else if (reduzido) { marcarAberturaTocada(m.semente); this.abVisto = visto; }
+        else if (livre) {
+          this.abVisto = visto; this.abInterromper = false; zerarRelogioAbertura();
+          this.ab = { p: PROPOSTA_ESCOLHIDA, semente: m.semente, saida: null, ultimo: null };
+        }
+      }
+    }
+    const ab = this.ab;
+    let q: QuadroAbertura | null = null;
+    if (ab && ab.semente === null) {
+      /* ?abertura=: como na prancha, so com a ilha livre; depois do fim, a camera de sempre */
+      const r = livre && !reduzido ? quadroDaAbertura(ab.p, tempoDaAbertura(agora), this.pontosDaAbertura()) : null;
+      q = r && !r.acabou ? r : null;
+    } else if (ab && ab.semente !== null) {
+      if (reduzido) { this.encerrarAbertura(); }
+      else if (ab.saida) {
+        const r = quadroDaSaida(ab.saida.de, agora - ab.saida.desde, this.petCel, zoomDeSempre, TRANSICAO_MS);
+        if (r.acabou) this.ab = null; else q = r;
+      } else {
+        const r = quadroDaAbertura(ab.p, tempoDaAbertura(agora), this.pontosDaAbertura());
+        if (r.acabou) { marcarAberturaTocada(ab.semente); this.ab = null; }
+        else if (this.abInterromper || !livre) {
+          marcarAberturaTocada(ab.semente);
+          const de = ab.ultimo ?? r;
+          ab.saida = { desde: agora, de };
+          q = quadroDaSaida(de, 0, this.petCel, zoomDeSempre, TRANSICAO_MS);
+        } else { ab.ultimo = r; q = r; }
+      }
+      this.abInterromper = false;
+    }
+    /* data-abertura: "tocando" ou "saindo" enquanto a camera do primeiro dia manda (os testes e2e esperam por ele) */
+    const marca = q === null ? null : this.ab?.saida ? "saindo" : "tocando";
+    if (marca !== this.abMarca) {
+      this.abMarca = marca;
+      const el = this.renderer.domElement.parentElement;
+      if (marca) el?.setAttribute("data-abertura", marca); else el?.removeAttribute("data-abertura");
+    }
+    return q;
+  }
+  /** onde fica cada ponto olhado pela abertura agora (celulas) */
+  private pontosDaAbertura(): Record<Ponto, [number, number]> {
+    return {
+      pet: this.petCel, ninho: this.itens.ninhoEm, praca: [PLANTA_ILHA.praca.x, PLANTA_ILHA.praca.z], portao: this.pontos.portao, barraca: this.pontos.barraca,
+      meio: [(this.petCel[0] + PLANTA_ILHA.praca.x) / 2, (this.petCel[1] + PLANTA_ILHA.praca.z) / 2],
+    };
+  }
+  /** um toque, uma tecla ou a roda: a abertura que toca volta ao pet (AB-3); a do ?abertura= nao se interrompe */
+  interromperAbertura(): void { if (this.ab && this.ab.semente !== null && !this.ab.saida) this.abInterromper = true; }
+  /** a abertura de verdade sai agora (a tela fechou no meio, ou o "reduzir movimento" ligou): fica marcada e nao volta */
+  encerrarAbertura(): void {
+    if (this.ab && this.ab.semente !== null) marcarAberturaTocada(this.ab.semente);
+    if (this.ab?.semente !== null) this.ab = null;
+  }
+
   private suave(f: number): number { return f * f * (3 - 2 * f); }
   private entre(a: [number, number], b: [number, number], f: number): [number, number] { return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f]; }
   /** a direita da camera no chao (unitaria): a direita da direcao em que ela olha */
@@ -535,15 +612,10 @@ class VistaIlha {
     }
     this.petCel = cor.cel;
     /* o zoom do lugar: abaixo de 900 px a camera se aproxima do saco com a viagem (o saco e o pet ficam grandes no terco de cima) e volta ao sair */
-    /* o prototipo da camera do primeiro dia (?abertura=a|b|c; aberturaConta.ts): o ponto olhado, o zoom e a inclinacao saem da abertura ate ela
-       acabar; sem o parametro, com o pet na mao, com um lugar aberto, coberta pelo veu ou com "reduzir movimento", nada muda */
-    const abre = ABERTURA_PROPOSTA && !this.naMao && viagem === 0 && !reduzido && !CENA.coberto
-      ? quadroDaAbertura(ABERTURA_PROPOSTA, tempoDaAbertura(agora), {
-        pet: this.petCel, ninho: this.itens.ninhoEm, praca: [PLANTA_ILHA.praca.x, PLANTA_ILHA.praca.z], portao: this.pontos.portao, barraca: this.pontos.barraca,
-        meio: [(this.petCel[0] + PLANTA_ILHA.praca.x) / 2, (this.petCel[1] + PLANTA_ILHA.praca.z) / 2],
-      }) : null;
-    const aberta = abre && !abre.acabou ? abre : null;
-    const zoom = aberta ? aberta.zoom : viagem > 0 ? this.zoomDaViagem(viagem, reduzido) : 1;
+    /* a camera do primeiro dia: o ponto olhado, o zoom e a inclinacao saem da abertura enquanto ela toca, e da volta ao pet depois de um toque */
+    const zoomDeSempre = viagem > 0 ? this.zoomDaViagem(viagem, reduzido) : 1;
+    const aberta = this.quadroDaAbertura(agora, reduzido, viagem, zoomDeSempre);
+    const zoom = aberta ? aberta.zoom : zoomDeSempre;
     if (this.afastBase * zoom !== this.afast) { this.afast = this.afastBase * zoom; this.orbitaVersao = -1; }
     this.atualizarOrbita();
     const pode = this.podeSoltar;
@@ -557,7 +629,7 @@ class VistaIlha {
         this.foco = [this.foco[0] + dx * k, this.foco[1] + dz * k];
       } else { this.foco = [alvo[0], alvo[1]]; this.focoVoltando = false; }
       if (viagem > 0) this.foco = this.focoDaViagem(this.foco, viagem, reduzido);
-      if (aberta) this.foco = aberta.foco;
+      if (aberta) this.foco = this.ab?.saida ? quadroDaSaida(this.ab.saida.de, agora - this.ab.saida.desde, this.foco, zoomDeSempre, TRANSICAO_MS).foco : aberta.foco;
     }
     const [px, pz] = this.foco, a = this.afast;
     const { olhar } = this.orbitaVista, desloc = aberta?.inclina ? inclinar(this.orbitaVista.desloc, aberta.inclina) : this.orbitaVista.desloc;
@@ -574,6 +646,7 @@ class VistaIlha {
     this.objetos?.quadro?.(this.foco, this.estilo.dobra, this.dirDobra, Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * this.camera.aspect);
     this.aplicarTrancas();
     this.itens.sincronizar(mu, m.e.tick, noite, agora, dtMs, m.lesionadoDesde !== null, reduzido, m.e.sujeira, this.naMao ? motorCel : this.petCel);
+    this.nuvem.sincronizar(m, mitologiaLigada(), agora, reduzido);
     /* o pet longe do foco (a camera solta, a viagem, a volta depois de soltar o pet): o chao sob ele desce pela dobra (yPe), e o tamanho do papel vale
        na distancia dele (senao o texel deixa de ser inteiro e o pet cresce ou encolhe com a distancia ao foco). Com o pet na mao o tamanho fica o do
        foco, como na P2 da PEGAR_PET (o chaoSob conta a altura da mao com ele) */
@@ -695,6 +768,9 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
   const soltarDev = ligarCameraDev(() => vista.alvosDev());
   /* o prototipo da camera do primeiro dia (?abertura=): window.__abertura para as capturas da prancha */
   const soltarAbertura = ligarAberturaDev();
+  /* a camera do primeiro dia: um toque, uma tecla ou a roda em qualquer lugar da pagina a encerra (AB-3) */
+  const interromper = () => vista.interromperAbertura(), EV_ABERTURA = ["pointerdown", "keydown", "wheel"] as const;
+  for (const ev of EV_ABERTURA) window.addEventListener(ev, interromper, { capture: true, passive: true });
   let vivo = true, quadro = 0, pedido = 0;
   /* os kits: na hora, ou, se a ilha abriu coberta pelo veu, quando ela ficar a vista (no maximo KITS_COBERTO_MS) */
   let kitsPedidos = false;
@@ -773,6 +849,8 @@ export function iniciarIlha(canvas: HTMLCanvasElement, mundo: Mundo, aoPerder: (
     vivo = false;
     cancelAnimationFrame(pedido); obs.disconnect(); if (esperaKits) clearTimeout(esperaKits); canvas.removeEventListener("webglcontextlost", perdeu);
     soltarControles(); soltarDev(); soltarAbertura(); soltarLivre(); despublicarVista();
+    for (const ev of EV_ABERTURA) window.removeEventListener(ev, interromper, { capture: true });
+    vista.encerrarAbertura();
     CENA.modo3d = false; CENA.cocoNoChao = false; CENA.ret = null; CENA.medir = null; CENA.mundo = null;
     vista.dispose();
   };
