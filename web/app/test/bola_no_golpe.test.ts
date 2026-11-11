@@ -88,7 +88,7 @@ describe("a bola do dono (o evento db)", () => {
   });
 
   test("a bola fica onde o dono a pos, parada", () => {
-    const m = new Motor(7);
+    const m = new Motor(7, 21);
     m.avancar(5);
     m.deixarBola(300, 200);
     expect(m.mundo!.bolaEm(m.e.tick)).toEqual([300, 200]);
@@ -96,11 +96,11 @@ describe("a bola do dono (o evento db)", () => {
   });
 
   test("o db invalido falha alto, antes do registro e no replay", () => {
-    const m = new Motor(7), n = m.log.length;
+    const m = new Motor(7, 21), n = m.log.length;
     expect(() => m.deixarBola(1024, 10)).toThrow(/fora do mapa/);
     expect(() => m.deixarBola(10.5, 10)).toThrow();
     expect(m.log.length).toBe(n);
     for (const ruim of [{ x: 1, y: 2, z: 3 }, { x: 1 }, null, { x: 2000, y: 1 }] as unknown[])
-      expect(() => Motor.reproduzir(7, [[480, "db", ruim] as unknown as EventoRegistro])).toThrow();
+      expect(() => Motor.reproduzir(7, [[480, "db", ruim] as unknown as EventoRegistro], 21)).toThrow();
   });
 });
