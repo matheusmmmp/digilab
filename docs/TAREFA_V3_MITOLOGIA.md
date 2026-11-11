@@ -183,3 +183,24 @@ lendas, os sinais dos cinco deuses, o Myotismon como termômetro, a pedra do mac
   dia.
 - Com os gatilhos da tabela, em 10 dias aparecem: Conhecimento de 1 a 7 vezes, Amizade 3, Diversão de 1 a 6 e Sinceridade 1.
 - As pegadas abrem em uns 3 dias no pet curioso (a semente 101) e em semanas nos outros.
+
+## 11. A chave começa ligada (2026-11-11)
+
+**O pedido do Matheus:** "quero que a mitologia sempre esteja ativa, ela pode ser desligada, mas já começa ligada".
+
+**O que mudou:**
+- **O padrão da chave virou ligada.** Em `web/app/src/mitologia.ts`, o `mitologiaLigada` lê `CHAVE-mitologia !== "0"`: sem nada gravado,
+  a chave fica ligada, e só o "0" desliga. Quem desligou nos Ajustes continua desligado.
+- **Os pets que já existiam:**
+  - as derrotas de antes continuam caladas (D-E0-5);
+  - a pedra, as pegadas e o dia 81 já vividos o oráculo conta uma vez cada.
+- **Os e2e:**
+  - o "desligada" agora grava "0";
+  - o `oraculo_mitologia.spec.ts` ganhou o teste "sem nada gravado, a chave começa ligada".
+- **O que isso muda em relação à E0:** a regra "desligada por padrão, o jogo de hoje" (seção 3) deixou de valer.
+  - O que entra na tela de quem não mexeu nos Ajustes:
+    - o balão do oráculo, quando houver o que contar;
+    - os sinais e a pedra na ilha;
+    - o escurecimento do Myotismon;
+    - o Códice no Diário.
+  - O log, o save, a assinatura e os gabaritos continuam iguais.
