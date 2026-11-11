@@ -11,6 +11,7 @@ import { CHAVE, gravarSave, lerSave, petExemplo, textoSave, type Armazenamento }
 import { CHAVE_TAMER, Tamer, conferirBits, conferirBitsDoNivel, conferirCampeao, conferirItensDasMedalhas, conferirMedalhas, conferirRecordes, gravarTamer, lerTamer, sincronizarPet, type MedalhaGanha } from "./tamer.ts";
 import { versaoDoOvo } from "./lutaPoc.ts";
 import { assinaturaIntocada } from "./nivel.ts";
+import { emitirSom } from "./somEventos.ts";
 
 export type Origem = "save" | "exemplo" | "novo";
 export interface Jogo {
@@ -116,7 +117,7 @@ export function mudarMotor(f: (m: Motor) => void, quando: "agora" | "adiado" = "
     if (err instanceof PetMorto) avisar();
     throw err;
   }
-  medalhas(j);
+  if (medalhas(j).novas.length) emitirSom("medalha");   /* SOM-UP: a medalha nova do Tamer */
   j.revisao++;
   if (j.origem === "exemplo" && !j.erroSave) j.origem = "save";
   pendente = true;

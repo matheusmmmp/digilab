@@ -21,6 +21,7 @@ import {
   nivelDe, pecaAberta, reverTutorial, sincronizar, textoEstado, vidaDoPet, type EstadoNivel, type Peca,
 } from "./nivel.ts";
 import type { Lugar } from "./viagem.ts";
+import { emitirSom } from "./somEventos.ts";
 
 export const CHAVE_NIVEL = CHAVE + "-nivel";
 
@@ -123,6 +124,7 @@ function confirmarNivel(): void {
   /* o lugar que acabou de abrir brilha uma vez (quando a ilha aparecer) e o leitor de tela ouve o que abriu */
   for (const n of r.novos) for (const p of Object.keys(LUGAR_DA_PECA) as Peca[]) if (PECAS[p].marco === n) brilhos.add(LUGAR_DA_PECA[p]!);
   if (brilhos.size) { versaoBrilhos++; for (const o of ouvBrilhos) o(); }
+  if (antes !== null && r.novos.length) emitirSom("nivel");   /* SOM-UP: o nivel novo (nao na primeira leitura) */
   const fala = anuncioDeAbertura(r.novos);
   if (fala) falar(fala);
   avisar();

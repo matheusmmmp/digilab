@@ -10,6 +10,7 @@ import { chocarDoBrasao, fecharEscolhaBrasao, guardarAtivoNoProximoOvo, marcarCo
 import { tamerAtual } from "../jogo.ts";
 import { SeloMedalha } from "./Medalha.tsx";
 import { abrirModal } from "./modal.ts";
+import { emitirMusica } from "../somEventos.ts";
 import { Deco } from "./Deco.tsx";
 import { Peca } from "./Imagens.tsx";
 import { BotaoContinuar, BotaoHx } from "./hx/index.ts";
@@ -24,6 +25,8 @@ export function EscolherBrasao({ podeVoltar }: { podeVoltar: boolean }) {
   const ref = useRef<HTMLDialogElement>(null), a = useAtlas(), [msg, setMsg] = useState(""), desk = useDesktop();
   const [ritmo, setRitmo] = useState<Ritmo>("rapida");
   useEffect(() => { abrirModal(ref.current); }, []);
+  /* SOM-UP: a musica do nascimento do Digimon UP enquanto o jogador escolhe o brasao */
+  useEffect(() => { emitirMusica("jornada", { lugar: "nascimento" }); return () => emitirMusica("jornada", null); }, []);
   const escolher = (esp: Especie) => {
     try { chocarDoBrasao(esp, guardarAtivoNoProximoOvo(), ritmo); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
   };
