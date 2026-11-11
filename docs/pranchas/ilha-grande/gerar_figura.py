@@ -21,8 +21,8 @@ W, H = 128, 60
 MAR, DOCE, TERRA, PONTE, ARVORE, MARCO = "~", "r", ".", "=", "T", "#"
 
 # os lugares e os marcos (x, y em celulas): PROPOSTO
-LUGARES = {"lar": (44, 30), "praça": (64, 30), "saco": (46, 22), "portão": (64, 7), "barraca": (102, 21), "cais": (72, 51)}
-MARCOS = {"carro": (22, 24, 3, 2), "lata": (34, 13, 2, 2), "geladeira": (103, 44, 1, 1), "trilho": (110, 31, 2, 3)}   # x, y, largura, altura
+LUGARES = {"lar": (20, 30), "praça": (64, 30), "saco": (24, 24), "portão": (64, 7), "barraca": (102, 21), "cais": (72, 51)}
+MARCOS = {"carro": (30, 21, 3, 2), "lata": (34, 13, 2, 2), "geladeira": (103, 44, 1, 1), "trilho": (110, 31, 2, 3)}   # x, y, largura, altura
 PONTES = (17, 33, 47)                 # as linhas de cima de cada ponte (duas linhas cada)
 LAGOS = ((87, 8, 6, 3.2), (27, 41, 7, 3.6), (52, 15, 3.2, 2))      # cx, cy, rx, ry
 BOSQUES = ((24, 17, 6, 3, 12), (36, 46, 8, 3, 12), (76, 13, 6, 3, 9), (104, 16, 6, 3, 12), (108, 40, 5, 4, 9), (58, 45, 6, 3, 8),

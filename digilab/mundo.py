@@ -125,7 +125,7 @@ from .config import CONFIG_GENOMA, ConfigGenoma
 from .genoma import TIPO_EVENTO as TIPO_GENOMA, Genoma
 from .config import CONFIG_FRUTA_AO_LADO, ConfigFrutaAoLado
 from .config import CONFIG_CONTRATO, ConfigContrato
-from .config import AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, PONTE, TERRA
+from .config import AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, ARVORE_FECHADA, MARCO_FECHADO, PONTE, TERRA
 from .config import CONFIG_BOLA_NO_GOLPE, CONFIG_DECISAO_NA_COMIDA, ConfigBolaNoGolpe, ConfigDecisaoNaComida
 from .config import CONFIG_FRUTA_COMO_COMIDA, CONFIG_SACUDIR, ConfigFrutaComoComida, ConfigSacudir
 from . import contrato as ct
@@ -247,7 +247,8 @@ def celulas_secas(cm: ConfigMundo) -> tuple[bool, ...] | None:
         return None
     if len(linhas) != cm.celulas_y or any(type(l) is not str or len(l) != cm.celulas_x for l in linhas):
         raise ValueError(f"a agua do layout {cm.layout.nome!r} nao tem {cm.celulas_y} linhas de {cm.celulas_x} celulas")
-    ruins = sorted({c for l in linhas for c in l} - {AGUA_MAR, AGUA_DOCE, TERRA, PONTE})
+    # a arvore e o marco fechados (a ilha grande, secao 12 da tarefa) sao celulas em que o pet nao pisa, como a agua
+    ruins = sorted({c for l in linhas for c in l} - {AGUA_MAR, AGUA_DOCE, TERRA, PONTE, ARVORE_FECHADA, MARCO_FECHADO})
     if ruins:
         raise ValueError(f"a agua do layout {cm.layout.nome!r} tem caractere desconhecido: {ruins}")
     return tuple(c in (TERRA, PONTE) for l in linhas for c in l)
@@ -280,6 +281,11 @@ def solidos_da_agua(cm: ConfigMundo) -> tuple:
             abertos.setdefault(k, y)
     return tuple(ct.Solido(x0 * cm.sub, y0 * cm.sub, x1 * cm.sub, y1 * cm.sub, "obstaculo", True, False)
                  for x0, y0, x1, y1 in sorted(rets, key=lambda r: (r[1], r[0])))
+
+
+def tamanho_do_mapa(cm: ConfigMundo) -> tuple[int, int]:
+    """o mapa em subunidades (largura, altura): o limite das posicoes dos eventos deste mundo (events._posicao_mundo)"""
+    return cm.celulas_x * cm.sub, cm.celulas_y * cm.sub
 
 
 def regiao_de(x: int, cm: ConfigMundo) -> int:
@@ -2070,17 +2076,17 @@ class MotorMundo(MotorFrutas):
     def deixar_comida(self, tipo: str, x: int, y: int) -> None:
         if not self.cmf.ligada:
             raise MundoSemChave("deixar_comida com ConfigMundo.ligada = False")
-        evento = evento_deixar_comida(self._estado.tick, tipo, x, y)     # valida tipo e posicao antes do log
+        evento = evento_deixar_comida(self._estado.tick, tipo, x, y, tamanho_do_mapa(self.cmf))     # valida tipo e posicao antes do log
         self._log.anexar(evento)
-        self._aplicar_deixar_comida(*ler_deixar_comida(evento))
+        self._aplicar_deixar_comida(*ler_deixar_comida(evento, tamanho_do_mapa(self.cmf)))
 
     def deixar_fruta(self, tipo: str, x: int, y: int) -> None:
         """a fruta ao lado da racao (ConfigFrutaAoLado): fora do orcamento (o canal nao a ve) e sem contato"""
         if not (self.cmf.ligada and self.cfal.ligada):
             raise MundoSemChave("deixar_fruta sem o mundo e a ConfigFrutaAoLado ligados")
-        evento = evento_deixar_fruta(self._estado.tick, tipo, x, y)      # valida tipo e posicao antes do log
+        evento = evento_deixar_fruta(self._estado.tick, tipo, x, y, tamanho_do_mapa(self.cmf))      # valida tipo e posicao antes do log
         self._log.anexar(evento)
-        self._aplicar_deixar_fruta(*ler_deixar_fruta(evento))
+        self._aplicar_deixar_fruta(*ler_deixar_fruta(evento, tamanho_do_mapa(self.cmf)))
 
     def resumo_luta(self, rival: str, resultado: int, vida_perdida_s: int) -> None:
         """O resumo pronto de uma luta (ponte da luta, PE1): vai ao log e ao corpo. So com o corpo e a ConfigLutaCorpo ligada."""
@@ -2095,9 +2101,9 @@ class MotorMundo(MotorFrutas):
     def deixar_bola(self, x: int, y: int) -> None:
         if not self.cmf.ligada:
             raise MundoSemChave("deixar_bola com ConfigMundo.ligada = False")
-        evento = evento_deixar_bola(self._estado.tick, x, y)
+        evento = evento_deixar_bola(self._estado.tick, x, y, tamanho_do_mapa(self.cmf))
         self._log.anexar(evento)
-        self._aplicar_deixar_bola(*ler_deixar_bola(evento))
+        self._aplicar_deixar_bola(*ler_deixar_bola(evento, tamanho_do_mapa(self.cmf)))
 
     def levar_pet(self, x: int, y: int) -> None:
         """O dono pega o pet e o solta em (x, y) (docs/TAREFA_V3_PEGAR_PET.md; os pets v19 do jogo web). Valida o evento e o estado antes
@@ -2324,15 +2330,15 @@ def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config 
         elif evento.tipo == "acao_usuario":
             motor._aplicar_acao_usuario(AcaoUsuario(evento.valor))
         elif evento.tipo == "deixar_comida":
-            motor._aplicar_deixar_comida(*ler_deixar_comida(evento))
+            motor._aplicar_deixar_comida(*ler_deixar_comida(evento, tamanho_do_mapa(motor.cmf)))
         elif evento.tipo == "deixar_bola":
-            motor._aplicar_deixar_bola(*ler_deixar_bola(evento))
+            motor._aplicar_deixar_bola(*ler_deixar_bola(evento, tamanho_do_mapa(motor.cmf)))
         elif evento.tipo == "levar_pet":
             motor._aplicar_levar_pet(*ler_levar_pet(evento))
         elif evento.tipo == "mudar_ilha":
             motor._aplicar_mudar_ilha(ler_mudar_ilha(evento))
         elif evento.tipo == "deixar_fruta":
-            motor._aplicar_deixar_fruta(*ler_deixar_fruta(evento))
+            motor._aplicar_deixar_fruta(*ler_deixar_fruta(evento, tamanho_do_mapa(motor.cmf)))
         elif evento.tipo == "sacudir_arvore":
             motor._aplicar_sacudir_arvore(ler_sacudir_arvore(evento))
         elif evento.tipo == "lt":

@@ -167,8 +167,8 @@ O que **não** entra aqui: nado, barco, pesca e mata fechada onde o pet não ent
 
 ## 12. A ilha grande (a v23): o plano
 
-**Estado: PROPOSTO.** Três decisões do Matheus já valem (IG-1 a IG-3); as outras (IG-4 a IG-9) e a figura esperam a resposta dele.
-Nenhum código desta seção existe.
+**Estado: APROVADO** pelo Matheus em 2026-11-11 ("Aprovo, começa a IG1"): as IG-4 a IG-9 da seção 12.6 ficam decididas pela
+recomendação. A IG1 está construída (seção 12.8); as outras etapas, não.
 
 O pedido, em 2026-11-11: "A ilha, ela é muito pequena. Eu quero que aumente ela pra parecer uma ilha de verdade."
 
@@ -196,7 +196,7 @@ relevo baixo) continua para depois.
 ### 12.3 A figura do mapa proposto
 
 `docs/pranchas/ilha-grande/mapa_proposto.png` (gerada por `gerar_figura.py`, na mesma pasta; o texto do mapa em `mapa_proposto.txt`).
-128 × 60 células, 4 082 de terra livre (3,1 vezes a de hoje), um rio com três pontes, dois lagos e um laguinho, 84 árvores em oito
+128 × 60 células, 4 087 de terra livre (3,1 vezes a de hoje), um rio com três pontes, dois lagos e um laguinho, 79 árvores em oito
 bosques e soltas, e os quatro marcos ocupando as células deles. A ilha de hoje aparece embaixo, na mesma escala. É um ponto de
 partida: PROPOSTO, SEM FONTE.
 
@@ -218,7 +218,7 @@ partida: PROPOSTO, SEM FONTE.
 | IG4 | **Ligar:** a v23, e a migração dos pets v21 e v22 por evento | **Sim** |
 | IG5 | **Medir e ajustar:** o custo do desvio num celular de verdade e o tempo que o pet leva para chegar na comida; os ajustes que a medida pedir | Depende |
 
-### 12.6 O que falta o Matheus decidir
+### 12.6 As decisões IG-4 a IG-9 (DECIDIDAS pela recomendação em 2026-11-11)
 
 | # | A pergunta | A recomendação | O custo de errar |
 |---|---|---|---|
@@ -235,3 +235,39 @@ partida: PROPOSTO, SEM FONTE.
 - **O efeito no pet:** nenhuma vida rodou no mundo grande. Não sei se o pet acha a comida, nem quanto tempo leva.
 - **A vista:** a grade, a câmera, o minimapa e a luz foram feitos para 64 × 30; o que quebra com 128 × 60 só aparece na IG3.
 - **O DigiBrain modular** (`sens`, `mem`, `adapt`) com as regiões novas: lido por alto, não testado.
+
+### 12.8 IG1: o que foi construído (2026-11-11)
+
+- **O mundo grande no Python:** `CONFIG_MUNDO_GRANDE` (128 × 60 células), o layout `grande` e o mapa `AGUA_ILHA_GRANDE`, com dois
+  caracteres novos, a árvore fechada (`T`) e o marco fechado (`#`). O motor os trata como a água: viram sólidos e o pet contorna.
+  Nenhuma regra de desvio nova.
+- **O `ConfigMundo` aceita dois tamanhos,** 64 × 30 e 128 × 60, e nenhum outro.
+- **As posições dos eventos** (a ração, a fruta e a bola que o dono põe) valem até o tamanho do mapa de cada mundo. Antes o limite era
+  fixo em 1024 × 480 subunidades. Quem não passa o tamanho (o grupo, os replays de antes) continua no limite de antes.
+- **As regiões** são as quatro de sempre com as faixas dobradas (IG-5).
+- **O gabarito da paridade** (`web/app/test/gabaritos/ilha_grande_python.json`): duas vidas de 2 dias com o roteiro da água nos pontos
+  deste mapa, mais a ração e o pet soltos em cima de uma árvore e de um marco. O TS confere contra ele na IG2.
+- **As vidas de hoje não mudaram:** os gabaritos da água e da troca de ilha, regerados, saem iguais.
+
+**Desvio da figura aprovada (IG-4):** na primeira figura o lar ficava em (44, 30), que nas faixas aprovadas (IG-5) é o jardim. No MVP o
+ninho fica na casa, e o cérebro lê o nome da região. O lar foi para (20, 30), na casa; o carro e o saco mudaram de lugar para dar
+espaço, e as árvores foram sorteadas de novo (79 em vez de 84). A figura e o texto do mapa em `docs/pranchas/ilha-grande/` são os
+novos. PROPOSTO, SEM FONTE.
+
+**A primeira medida** (`experiments/medir_ilha_grande.py`, artefato em `docs/pranchas/ilha-grande/medida_ig1.json`; cinco sementes
+dos testes, 4 dias, uma ração a cada terço de dia a uma distância fixa a leste do ninho; descritiva, sem gate):
+
+| Distância (células) | Hoje, 64 × 30: comidas no prazo | Ilha grande: comidas no prazo | Mediana até comer |
+|---|---|---|---|
+| 4 | 6 de 23 | 6 de 21 | 15 ticks nos dois |
+| 12 | 6 de 24 | 5 de 22 | 60 ticks nos dois |
+| 24 | 3 de 11 | 3 de 11 | 120 ticks nos dois |
+| 36 | 0 de 26 | 0 de 26 | — |
+| 48 e 56 | não cabe | 0 de 26 | — |
+
+À mesma distância o pet se sai igual nos dois mundos. Além de 24 células (o alcance do cheiro) ele não comeu nenhuma ração no prazo, em
+nenhum dos dois. O que muda na ilha grande é que essas distâncias passam a existir entre o lar e a maior parte da ilha. É o dado para a
+IG-6; nada foi ajustado.
+
+**O que não foi verificado:** a suíte inteira do Python não rodou; o custo no celular; o DigiBrain modular com as regiões novas (a
+medida usa o A do v11); a árvore e o marco não tapam a visão do pet, como a água.

@@ -1,0 +1,77 @@
+{
+ "dias": 4,
+ "mundos": {
+  "grande_128x60": {
+   "12": {
+    "comidas_no_prazo": 5,
+    "fracao": 0.227,
+    "mediana_ticks": 60,
+    "postas": 22
+   },
+   "24": {
+    "comidas_no_prazo": 3,
+    "fracao": 0.273,
+    "mediana_ticks": 120,
+    "postas": 11
+   },
+   "36": {
+    "comidas_no_prazo": 0,
+    "fracao": 0.0,
+    "mediana_ticks": null,
+    "postas": 26
+   },
+   "4": {
+    "comidas_no_prazo": 6,
+    "fracao": 0.286,
+    "mediana_ticks": 15,
+    "postas": 21
+   },
+   "48": {
+    "comidas_no_prazo": 0,
+    "fracao": 0.0,
+    "mediana_ticks": null,
+    "postas": 26
+   },
+   "56": {
+    "comidas_no_prazo": 0,
+    "fracao": 0.0,
+    "mediana_ticks": null,
+    "postas": 26
+   }
+  },
+  "hoje_64x30": {
+   "12": {
+    "comidas_no_prazo": 6,
+    "fracao": 0.25,
+    "mediana_ticks": 60,
+    "postas": 24
+   },
+   "24": {
+    "comidas_no_prazo": 3,
+    "fracao": 0.273,
+    "mediana_ticks": 120,
+    "postas": 11
+   },
+   "36": {
+    "comidas_no_prazo": 0,
+    "fracao": 0.0,
+    "mediana_ticks": null,
+    "postas": 26
+   },
+   "4": {
+    "comidas_no_prazo": 6,
+    "fracao": 0.261,
+    "mediana_ticks": 15,
+    "postas": 23
+   }
+  }
+ },
+ "passo": 480,
+ "sementes": [
+  101,
+  202,
+  303,
+  404,
+  505
+ ]
+}
