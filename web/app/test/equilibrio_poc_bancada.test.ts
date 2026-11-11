@@ -164,6 +164,19 @@ describe("a divisao dos stats do NPC (D-LP5-18)", () => {
   });
 });
 
+describe("o fator dos rivais dos torneios (D-LP5-20)", () => {
+  test("hoje o fator e 1 e nao muda o rival; abaixo de 1, os 6 stats vezes o fator; nao positivo falha alto", () => {
+    expect(c.fatorRival).toEqual({ salao: 1, liga: 1, torre: 1, fabrica: 1 });
+    const f = formaLiga(0), car = caraterCanonico(LIGA[0].adulta), x = candidatoDe({ nome: "teste", esquiva: { ligada: 1 } });
+    expect(rivalDaForma(x, f, car, 0, 1)).toEqual(rivalDaForma(x, f, car));
+    const meio = rivalDaForma(x, f, car, 0, .5), um = rivalDaForma(x, f, car);
+    expect(meio.atk).toBeLessThan(um.atk);
+    expect(meio.perc!).toBeLessThan(um.perc!);
+    expect(() => rivalDaForma(x, f, car, 0, 0)).toThrow();
+    expect(() => candidatoDe({ nome: "teste", fatorRival: { liga: 0 } })).toThrow();
+  });
+});
+
 describe("o criterio do P1 a P3 (D-LP5-17)", () => {
   test("os limites saem do T1 do lp5_1_esq: o meio do caminho na escala logistica, com 0,10 de folga", () => {
     expect([limitesNpc("crianca", false), limitesNpc("adolescente", false), limitesNpc("adulto", false), limitesNpc("mega", false)])
