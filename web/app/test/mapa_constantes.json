@@ -1761,6 +1761,31 @@
    "web": "CMEN.honestidadeEnganador",
    "fonte": "python",
    "py": "ConfigMentira.honestidade_enganador"
+  },
+  {
+   "web": "CCOOP.escala",
+   "fonte": "python",
+   "py": "ConfigCooperacao.escala"
+  },
+  {
+   "web": "CCOOP.pisoFome",
+   "fonte": "python",
+   "py": "ConfigCooperacao.piso_fome"
+  },
+  {
+   "web": "CCOOP.meiaVida",
+   "fonte": "python",
+   "py": "ConfigCooperacao.meia_vida_pontuacao"
+  },
+  {
+   "web": "CCOOP.kMeiaVida",
+   "fonte": "python",
+   "py": "ConfigCooperacao.k_meia_vida_pontuacao"
+  },
+  {
+   "web": "CCOOP.janelaNovidade",
+   "fonte": "python",
+   "py": "ConfigCooperacao.janela_novidade"
   }
  ],
  "convertidos": [

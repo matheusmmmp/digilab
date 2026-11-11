@@ -23,6 +23,7 @@ import {
   DIR16, Mundo, MundoPartilhado, RandomPy, derivarSemente, distancia, eventoDeixarBola, eventoDeixarComida, lerDeixarBola,
   lerDeixarComida, type EscolherAlvo, type EstadoNoMundo, type GanchoGrupo, type PercepcaoMundo, type PercepcaoSocial, type TickSocial,
 } from "./mundo.ts";
+import { CONFIG_COOPERACAO, Cooperacao, TIPOS_MADUROS, type ConfigCooperacao, type ConsumoCoop, type Posicoes } from "./cooperacao.ts";
 
 export const ROTULO_ORDEM = "mundo-ordem";              // o fluxo da vez no tick (DP-2)
 export const ROTULO_SEGUNDO_PET = "segundo-pet";        // a semente do segundo pet
@@ -224,12 +225,15 @@ export class Grupo implements GanchoGrupo {
   readonly contatos: Record<string, unknown>[] = [];
   readonly disputas: Disputa[] = [];
   readonly registro: RegistroGrupo;
-
+  /** a cooperacao (CO3): so mede; null com a ConfigCooperacao desligada (o grupo de hoje) */
+  readonly coop: Cooperacao | null;
   readonly cm: ConfigMundo;
   readonly semente: number | bigint;
 
-  constructor(cm: ConfigMundo, semente: number | bigint, cg: Readonly<ConfigGrupo> = CONFIG_GRUPO_LIGADA) {
+  constructor(cm: ConfigMundo, semente: number | bigint, cg: Readonly<ConfigGrupo> = CONFIG_GRUPO_LIGADA,
+              cco: Readonly<ConfigCooperacao> = CONFIG_COOPERACAO) {
     validarConfigGrupo(cg);
+    this.coop = cco.ligada ? new Cooperacao(cco) : null;
     this.cm = cm;
     this.semente = semente;
     this.cg = cg;
@@ -280,10 +284,40 @@ export class Grupo implements GanchoGrupo {
     for (let k = 0; k < ticks; k++) {
       const decidem = presentes.filter(i => this.membro(i).pet.decideEm(this.tick - this.membro(i).mundo.entrada));
       const ordem = decidem.length >= 2 ? this.sortear(decidem) : decidem;
-      for (const i of ordem) this.decidirUm(i);
+      const nContatos = this.contatos.length, nDisputas = this.disputas.length;
+      for (const i of ordem) {
+        this.decidirUm(i);
+        if (this.coop !== null) this.coopDecisao(i, presentes);
+      }
       if (decidem.length && presentes.length >= 2) this.toqueEDisputa(presentes, ordem);
+      if (this.coop !== null && decidem.length) {
+        const [pos, raios] = this.posicoesERaios(presentes);
+        this.coop.fimDoTick(this.tick, this.disputas.slice(nDisputas), this.contatos.slice(nContatos) as { pets: unknown; tipos: Record<string, string> }[],
+                            Object.fromEntries(presentes.map(i => [i, this.membro(i).acaoAtual])), pos, raios);
+      }
       this.tick++;
     }
+  }
+
+  // ------------------------------------------------------------ a cooperacao (CO3): o que a medida le, sem mudar nada
+  private posicoesERaios(presentes: readonly string[]): [Posicoes, Record<string, number>] {
+    const pos: Posicoes = {}, raios: Record<string, number> = {};
+    for (const i of presentes) { const m = this.membro(i).mundo; pos[i] = [m.pet[0], m.pet[1]]; raios[i] = m.raioDaVisao; }
+    return [pos, raios];
+  }
+
+  /** o pet `ident` acabou de decidir: o que ele via (as comidas maduras e os outros), a fome com que decidiu e o que comeu */
+  private coopDecisao(ident: string, presentes: readonly string[]): void {
+    const m = this.membro(ident).mundo, ts = this.noTick(m), p = m.percepcaoDaDecisao;
+    if (ts === null || p === null) throw new Error(`o pet ${ident} decidiu no tick ${this.tick} sem o registro social da decisao`);
+    const maduras = p.vistos.filter(v => TIPOS_MADUROS.includes(v[1])).map(v => v[0]);
+    const outros = m.social === null ? [] : m.social.outros.map(o => o[0]);
+    let consumo: ConsumoCoop | null = null;
+    if (ts.comeu !== null) {
+      consumo = m.consumos.at(-1) as unknown as ConsumoCoop;
+      if (consumo.id !== ts.comeu.id) throw new Error(`o consumo do pet ${ident} nao e o da decisao`);
+    }
+    this.coop!.decisao(this.tick, ident, maduras, outros, m.fomeDaDecisao, consumo, ...this.posicoesERaios(presentes));
   }
 
   /** DP-2: um sorteio por tick com dois ou mais pets decidindo, no fluxo `mundo-ordem`, sobre a lista ordenada pelo id */
@@ -435,6 +469,7 @@ export class Grupo implements GanchoGrupo {
     return {
       tick: this.tick, mundo: this.comum.resumo(), ordens: this.ordens, contatos: this.contatos, disputas: this.disputas,
       pets: Object.fromEntries([...this.membros].map(([i, mb]) => [i, { fisico: mb.mundo.resumo(), social: mb.mundo.resumoSocial(), entrada: mb.mundo.entrada }])),
+      ...(this.coop !== null ? { cooperacao: this.coop.resumo(this.idsPresentes(), this.tick) } : {}),
     };
   }
 }
@@ -443,7 +478,8 @@ export class Grupo implements GanchoGrupo {
 /** Refaz o grupo do cabecalho e rejoga os eventos no mesmo relogio. `pets[id]` monta o pet (o engine e o cerebro) e as opcoes da parte dele
     do mundo. O registro refeito tem de ser o lido (falha alto); evento desconhecido, fora do tick ou de pet que nao entrou tambem. */
 export function reproduzirGrupo(registro: RegistroGrupo, pets: Record<string, () => { pet: PetDoGrupo; opcoes?: OpcoesPetNoGrupo }>,
-                                cm: ConfigMundo, cg: Readonly<ConfigGrupo> = CONFIG_GRUPO_LIGADA): Grupo {
+                                cm: ConfigMundo, cg: Readonly<ConfigGrupo> = CONFIG_GRUPO_LIGADA,
+                                cco: Readonly<ConfigCooperacao> = CONFIG_COOPERACAO): Grupo {
   const cab = registro.cabecalho as CabecalhoGrupo & { sentidos?: unknown };
   if (cab.versao !== VERSAO_REGISTRO_GRUPO) throw new Error(`versao do registro do grupo desconhecida: ${String(cab.versao)}`);
   if (cab.ids.join("\u0000") !== cg.ids.join("\u0000") || cab.layout !== cm.layout.nome)
@@ -451,7 +487,7 @@ export function reproduzirGrupo(registro: RegistroGrupo, pets: Record<string, ()
   if (cab.sentidos !== undefined && cab.sentidos !== null) throw new Error("o registro tem os sentidos do degrau 1b, fora do grupo em TS");
   if (Object.keys(pets).sort().join() !== Object.keys(cab.pets).sort().join())
     throw new Error(`pets ${Object.keys(pets).sort()} para o cabecalho ${Object.keys(cab.pets).sort()}`);
-  const g = new Grupo(cm, cab.semente, cg);
+  const g = new Grupo(cm, cab.semente, cg, cco);
   for (const e of registro.eventos) {
     if (e.tick !== g.tick) throw new Error(`evento no tick ${e.tick} com o grupo no tick ${g.tick}: ${jsonPython(e)}`);
     if (e.tipo === "entrada") {
