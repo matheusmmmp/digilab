@@ -5,7 +5,7 @@ Coordenador: Matheus (sessão direta). Worker da etapa I0: Claude Code, Opus 5.5
 as IN-1 a IN-8 DECIDIDAS em 2026-11-07, pela recomendação; o I0 (a conferência) na `main` (#684); o I1 (a bateria como ferramenta)
 na `main` (#695); o plano do I2 APROVADO (#700); o I2a na `main` (#707); o I2b (a run da linha de base, faixa 85101…85505)
 na `main` (#718); o adendo 1 na `main` (#746); o plano do I5 APROVADO, na `main` (#747); o I5a na `main` (#751); o I5b na `main` (#768); o plano do I7 e o adendo 1 na `main` (#755, #769); o I7a (as medidas e
-o orquestrador) na `main` (#775); o I7b (a run única do I7) entregue; o adendo 2 do plano do I7 DECIDIDO (#788).**
+o orquestrador) na `main` (#775); o I7b (a run única do I7) entregue; o adendo 2 do plano do I7 DECIDIDO (#788); o I7c (o código do adendo 2) entregue.**
 
 Categoria: documentacao. Origem: Matheus, 2026-11-07: depois da conversa sobre o connectome e a escala, direcionar a pesquisa para o
 temperamento herdado, o sinal do dono, a memória de episódios e o hábito, com uma medida comum de individualidade.
@@ -266,3 +266,24 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
   - a fração amarrada ρ = Σ D_R / Σ D_E, com as hipóteses H-SORT (ρ < 0,2) e H-HIST (ρ > 0,8), e a expectativa E-AD2.
 - **As decisões** AD2-1 a AD2-7 estão decididas pela recomendação. Nada roda antes do #786 na `main`, da faixa na tabela, do código do I7c e
   do registro.
+
+## Resultado da etapa I7c (2026-11-11, Claude Code, Opus 5.5, branch `v3-individualidade-i7c`)
+
+- **O código** segue a seção 14 do plano do I7:
+  - **as medidas:** a `trajetoria_janela` (o tudo ou nada) e a `fracao_amarrada` (o ρ) no `digilab/metrics.py`;
+  - **o orquestrador:** o `experiments/run_v3_individualidade_i7_ad2.py`, irmão do do I7, com:
+    - a vida de base de cada pet;
+    - os ramos N (com os gravadores), G, R°, E(t), R(t) e S(t);
+    - o sorteio amarrado (a rng do pet por chave, as do dono pelo estado do passo);
+    - as conferências G-AD2-0 a 4;
+    - a leitura da 14.4 e os descritivos da 14.5;
+    - a trava (o adendo 2 DECIDIDO, a seção `## 15. O registro do adendo 2`, a faixa do adendo, no máximo 4 processos);
+  - **as configs:** `individualidade_i7_ad2.json` (a faixa 88101…88505) e `individualidade_i7_ad2_fumaca.json`;
+  - **a faixa:** a linha 88101…88505 em `experiments/bancada/faixas.py`, com o ok do Gerente da V3 pedido no PR.
+- **A fumaça** (as sementes 101 e 202, K = 1, 14 dias, 12 pets, 4 processos):
+  - todas as conferências passaram: o R° saiu igual ao N byte a byte, sem chave sem par e sem passo descasado;
+  - levou 7 min 10 s de parede, 35 s por pet com 4 processos e 136 s por pet dentro de cada processo (cada ramo, vivido duas vezes, cerca
+    de 7 s);
+  - a projeção para as 360 pets é de cerca de 3 h 30 min com 4 processos, contra cerca de 3 h da 14.7; não passa do dobro;
+  - os números da fumaça não são resultado: são as sementes dos testes.
+- **As leituras do código** estão no registro: D-IND-I7c-1 a 6.
