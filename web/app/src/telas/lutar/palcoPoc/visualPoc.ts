@@ -30,8 +30,15 @@ export interface NumeroPoc { txt: string; cor: string; t0: number; lado: LadoN; 
 /** um efeito de acerto do jogo (o prefab do `hits`, dos dados do Digimon UP), no ponto do alvo; t0 ja com o atraso dele */
 export interface EfeitoJogoPoc { prefab: string; t0: number; lado: LadoN; x: number; y: number; espelho: boolean }
 /** um voo: o projetil da simulacao (nosso: o tiro da LP-8), com a cabeca a cada passo desde t0 (no mundo, ja na altura
-    do peito), o prefab que voa e o fim (o passo em que acertou, foi bloqueado ou saiu do alcance) */
-export interface VooPoc { de: LadoN; t0: number; pts: { x: number; y: number }[]; prefab: string | null; esq: boolean; tFim: number | null; nosso: boolean; acertou: boolean }
+    do peito), o prefab que voa e o fim (o passo em que acertou, foi bloqueado ou saiu do alcance).
+    LP3c, so desenho: a cada ponto tambem os pes do alvo naquele passo (alvos) e a fracao do caminho ate o acerto (f: 0 na boca do motor,
+    1 no acerto; nunca desce), e o atirador no disparo (tiro: os pes, o lado e o tempo do ataque, para achar a frente do sprite no quadro
+    do disparo). O desenho leva a cabeca da frente do sprite (f 0) a borda do alvo (f 1); os pontos do motor nao mudam. No voo que nasce e
+    acerta no mesmo passo (a simulacao nunca o pos em L.projeteis), o voo e montado do dano (sintetico) */
+export interface VooPoc {
+  de: LadoN; t0: number; pts: { x: number; y: number }[]; prefab: string | null; esq: boolean; tFim: number | null; nosso: boolean; acertou: boolean;
+  alvos: { x: number; y: number }[]; f: number[]; tiro: { x: number; y: number; esq: boolean; t: number }; sintetico: boolean;
+}
 /** uma marca no piso (E3): a cratera da habilidade e o arrasto do empurrao grande, no mundo; o MarcaTR (lado, t0, ate) da a opacidade */
 export interface MarcaPoc { m: MarcaTR; x: number; y: number; x1: number; y1: number }
 /** a camera (E5): o centro (no mundo) e o nivel de zoom, com a passagem de um nivel para o outro */
@@ -138,29 +145,72 @@ export function aplicarEventosPoc(v: VisualPoc, L: LutaPoc, ev: readonly EventoP
 
 /** os projeteis da simulacao: abre o voo de quem apareceu, anota a cabeca de quem segue e fecha o de quem saiu (acertou, bateu num obstaculo
     ou passou do alcance). Os objetos de projetil da simulacao so servem de chave, num mapa fora do estado visual */
-const seguidos = new WeakMap<VisualPoc, Map<object, VooPoc>>();
+const seguidos = new WeakMap<VisualPoc, Map<{ x: number; y: number }, VooPoc>>();
+/** a distancia (mundo) do centro do peito do alvo em que o motor acerta o projetil (motor/arena/sim.ts: o.raio + 6) */
+export const ACERTO_MOTOR = 6;
+/** a fracao do caminho ate o acerto num ponto: o que ja voou sobre o que voou mais o que falta ate o raio de acerto do alvo; nunca desce */
+function fracaoDoVoo(o: VooPoc, p: { x: number; y: number }, alvo: LutadorPoc): number {
+  const p0 = o.pts[0], voou = Math.hypot(p.x - p0.x, p.y - p0.y);
+  const falta = Math.max(0, Math.hypot(alvo.x - p.x, alvo.y - EQ_POC.peito - p.y) - alvo.raio - ACERTO_MOTOR);
+  const f = voou + falta > 0 ? voou / (voou + falta) : 1;
+  return Math.max(o.f.length ? o.f[o.f.length - 1] : 0, Math.min(1, f));
+}
 /** o projetil nosso (LP-8, a LP3b no nucleo): o tiro das formas que atiram o proprio efeito de acerto. Voa como os outros, pela simulacao;
     so fica marcado (o data-nossos do canvas) */
 export const PREFABS_LP8: ReadonlySet<string> = new Set(Object.values(GOLPES_DA_POC).flatMap(g => g.hits.map(h => h.prefab)));
 function seguirProjeteis(v: VisualPoc, L: LutaPoc, t: number): void {
   let m = seguidos.get(v); if (!m) { m = new Map(); seguidos.set(v, m); }
-  const vivos = new Set<object>(L.projeteis);
+  const vivos = new Set<{ x: number; y: number }>(L.projeteis);
   for (const pr of L.projeteis) {
     let o = m.get(pr);
     if (!o) {
       /* a simulacao ja moveu o projetil no passo em que nasceu: o voo comeca na boca de quem atirou */
-      const de = ladoN(pr.de.lado), b = bocaDe(pr.de);
+      const de = ladoN(pr.de.lado), b = bocaDe(pr.de), alvo = lutadorN(L, de === 0 ? 1 : 0);
       const prefab = pr.dados.proj?.prefab ?? null;
-      o = { de, t0: t - 1, pts: [b], prefab, esq: pr.esq, tFim: null, nosso: prefab !== null && PREFABS_LP8.has(prefab), acertou: false };
+      o = { de, t0: t - 1, pts: [b], prefab, esq: pr.esq, tFim: null, nosso: prefab !== null && PREFABS_LP8.has(prefab), acertou: false,
+        alvos: [{ x: alvo.x, y: alvo.y }], f: [0], tiro: { x: pr.de.x, y: pr.de.y, esq: pr.de.viraEsq, t: pr.de.t }, sintetico: false };
       m.set(pr, o); v.voos.push(o);
     }
-    o.pts.push({ x: pr.x, y: pr.y });
+    const alvo = lutadorN(L, o.de === 0 ? 1 : 0), p = { x: pr.x, y: pr.y };
+    o.f.push(fracaoDoVoo(o, p, alvo)); o.alvos.push({ x: alvo.x, y: alvo.y }); o.pts.push(p);
   }
   for (const [pr, o] of m) if (!vivos.has(pr)) {
     /* saiu no passo de agora: acertou se o alvo levou dano neste passo (o impacto acabou de entrar) */
-    o.tFim = t; o.acertou = v.impactos.some(i => i.t0 === t && i.de === o.de);
+    o.tFim = t;
+    const im = v.impactos.find(i => i.t0 === t && i.de === o.de);
+    o.acertou = !!im;
+    /* o acerto e o ultimo ponto do voo (o desenho o leva a borda do alvo, onde ele estava antes do empurrao) */
+    if (im) { o.pts.push({ x: pr.x, y: pr.y }); o.alvos.push({ x: im.x, y: im.y }); o.f.push(1); }
     m.delete(pr);
   }
+  /* o tiro que nasce e acerta no mesmo passo: a simulacao nunca o pos em L.projeteis; o voo sai do dano (da boca ao acerto) */
+  for (const im of v.impactos) if (im.t0 === t && !v.voos.some(o => o.de === im.de && o.tFim === t)) {
+    const at = lutadorN(L, im.de), dados = im.hab ? at.sk : at.g; if (!dados.proj) continue;
+    const prefab = dados.proj.prefab ?? null, b = bocaDe(at);
+    v.voos.push({ de: im.de, t0: t - 1, pts: [b, { x: im.x - im.dir * (EQ_POC.raio + ACERTO_MOTOR), y: im.y - EQ_POC.peito }], prefab, esq: im.dir < 0, tFim: t,
+      nosso: prefab !== null && PREFABS_LP8.has(prefab), acertou: true, alvos: [{ x: im.x, y: im.y }, { x: im.x, y: im.y }], f: [0, 1],
+      tiro: { x: at.x, y: at.y, esq: at.viraEsq, t: at.t }, sintetico: true });
+  }
+}
+
+/** O ritmo dos tiros (LP3c, so desenho). PROPOSTO, SEM FONTE: ajustar nas capturas.
+    - janela: os passos antes do disparo e antes do acerto em que a tela anda devagar (lentos passos por quadro), para o voo curto (1 a 3
+      passos) aparecer em quadros desenhados; a luta, os passos e o fim sao os mesmos. */
+export const RITMO_TIRO = { janela: 3, lentos: 1 } as const;
+/** os passos deste quadro da tela com um tiro perto de sair ou de acertar: no maximo RITMO_TIRO.lentos; senao, base. Le so o estado da luta */
+export function passosDoTiro(L: LutaPoc, base: number): number {
+  const lim = RITMO_TIRO.janela * PASSO_POC_MS;
+  for (const u of [L.a, L.b]) {
+    if (u.morto || u.estado !== "attack" || u.golpeDado) continue;
+    const g = u.usandoHab ? u.sk : u.g;
+    if (g.proj && g.t * 1000 - u.t <= lim) return Math.min(base, RITMO_TIRO.lentos);
+  }
+  for (const pr of L.projeteis) {
+    const o = pr.de.lado === "a" ? L.b : L.a, vel = Math.hypot(pr.vx, pr.vy) * PASSO_POC_MS / 1000;
+    const falta = Math.max(0, Math.hypot(o.x - pr.x, o.y - EQ_POC.peito - pr.y) - o.raio - ACERTO_MOTOR);
+    if (vel > 0 && falta / vel <= RITMO_TIRO.janela) return Math.min(base, RITMO_TIRO.lentos);
+  }
+  return base;
 }
 
 function seguirCamera(v: VisualPoc, L: LutaPoc): void {

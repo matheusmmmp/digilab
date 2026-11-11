@@ -536,3 +536,56 @@ A `PLANO_V3` (a trilha B), a `TAREFA_V3_PONTE_LUTA`, o `DESIGN_MEDALHAS_ARENAS` 
 - os itens;
 - a Fábrica só v21.
 Também `test/tamer.test.ts`, com o descarte 8 e a Fábrica de antes, e `e2e_capturas/luta_poc_lp4.spec.ts`, com as capturas.
+
+## Resultado da LP3c (2026-11-10)
+
+Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp3c`, a pedido do Gerente de sprites e luta. O pedido seguiu a revisão dos
+sprites da luta (Fable 5.2) e a decisão do Matheus "Desenho agora, motor na LP5". O Matheus aprovou as capturas em 2026-11-10 ("Aprovo,
+abre o PR"; o recado chegou pelo Gerente). Os desvios estão em `docs/registro/2026-11.md`, seção "LUTA_POC, LP3c".
+
+**Só o desenho.** Mudaram só `src/telas/lutar/palcoPoc/desenhoPoc.ts`, `visualPoc.ts`, `src/lutaPocTela.ts` e `src/estilo/luta_poc.css`.
+O motor (`motor/arena/`), o replay e os gabaritos ficaram byte a byte. A distância do tiro, que deixa o atirador encostar no alvo, é da
+LP5.
+
+**O que mudou:**
+1. **A origem do tiro:** o tiro nasce na frente do sprite, no quadro do disparo. A frente é lida nos pixels do `Attack_1`: de 20 a 108 px
+   do sprite a partir do meio do corpo, com mediana 50, em 53 formas e habilidades que atiram. Antes, o tiro nascia a 18 px do mundo do
+   centro. O acerto cai na borda do corpo do alvo. No meio do voo, o desenho segue o caminho do motor, com a diferença das duas pontas
+   repartida pela fração do voo (`VooPoc.f`). O tiro que nasce e acerta no mesmo passo, que a simulação nunca põe em `L.projeteis`,
+   ganha um voo montado do dano.
+2. **O voo visível:** a até 3 passos do disparo ou do acerto, a tela anda 1 passo por quadro (`RITMO_TIRO`, `passosDoTiro`). Os passos e
+   o fim são os mesmos, e o movimento reduzido fica como antes.
+3. **O projétil das 5 formas da LP-8:**
+   - o efeito que voa fica 2,2× maior e é somado ao fundo duas vezes;
+   - ganha o brilho e a cabeça do elemento.
+4. **A câmera e a escala:**
+   - a escala inteira dos sprites é fixa na luta;
+   - a câmera conta a altura do corpo (Idle, Run, Stun e `Attack_1`);
+   - no deitado, os corpos ficam centrados entre o HUD e o dock.
+   WarGreymon × SlashAngemon cabe inteiro em 1920×950.
+5. **O sprite pelo corpo:** a caixa é posta pelo meio do primeiro quadro do Idle, não pelo meio da caixa. Os pés ficam na linha do corpo.
+6. **O fim:** o `Die` segura o último quadro com corpo, e o vencedor vai ao `Idle`.
+7. **Os menores:**
+   - o número do dano e o estouro ancoram no corpo;
+   - no celular, o nome do HUD vai em até duas linhas, a 10 px, sem reticências.
+
+**Os números novos** são PROPOSTOS, SEM FONTE: `DESENHO_POC` (pes 4, margem [70, 24], nivelSprite 0,5, hud 84, dock 96), `TIRO_POC` e
+`RITMO_TIRO`.
+
+**As capturas:** 5 pares, em 1920×950 e em 390 px, com o antes e o depois e as tiras de tiro. Ficam fora do git, na pasta de notas do
+Gerente (`lp3c_capturas/`), com os scripts que as refazem.
+
+**O teste novo:** `web/app/test/luta_poc_lp3c.test.ts`. Ele confere:
+- que o ritmo dos tiros não muda o fim dos 5 pares;
+- a fração do voo;
+- que todo dano de tiro tem um voo;
+- a posição pelo corpo;
+- o `Die` segurado e o `Idle` do vencedor.
+
+**O que fica de fora:**
+- **A distância do tiro:** é do motor, na LP5.
+- **A sobreposição no golpe de perto:** o que resta vem do avanço desenhado no próprio `Attack_1` (o Veemon), e não sai sem mexer na
+  pose.
+- **O HerculesKabuterimon:** com 19 letras, o nome ainda quebra no meio da palavra no celular.
+- **O atlas novo `digilab_atlas_up_luta`:** ligá-lo é decisão do Matheus. Ele daria `Hurt_1` e `Hurt_2`, `Knockback`, `Win` e `Lose`
+  nos 262 sprites.
