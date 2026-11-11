@@ -358,3 +358,135 @@ A saída das três peças está em `artifacts_v3_individualidade_i7/exploratorio
   tapa só muda o pet de modo duradouro quando desloca esse fluxo.
 - **A pergunta que fica, PROPOSTA:** o desenvolvimento do pet vem da história ou do sorteio? Um ramo E com a rng ressincronizada depois
   do tapa (o mesmo número de sorteios) separaria as duas coisas. Isso pede um plano novo (um adendo ao I7, ou um I8) e não roda sem ele.
+
+## 10. O adendo 2 do I7: história ou sorteio (2026-11-11, a run única, Claude Code, Opus 5.5, branch `v3-individualidade-i7d`)
+
+**O desenho:** a seção 14 do `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md`, DECIDIDA (AD2-1 a AD2-7), com o registro da seção 15.
+- **Os pets:** 360 novos, da faixa 88101…88505: 2 braços × 3 donos × 60 sementes, 14 dias no `comedouro`.
+- **Os ramos por pet:** o N, o G, o R° e, nas idades 2, 4, 6, 8 e 10, o E (o tapa), o R (o tapa com o sorteio amarrado) e o S (um sorteio
+  jogado fora, sem tapa). São 6 480 ramos, cada um vivido duas vezes, com as conferências G-AD2-0 a 4 passando em todos. Nenhum pet ficou
+  sem ramo.
+- **O amarrado funcionou:** o R° saiu igual ao N byte a byte em todos os pets. Nos ramos R, 2,2 % (REL) e 2,3 % (REL+F) dos sorteios do
+  pet caíram numa chave sem par, e nenhum passo do dono ficou descasado.
+- **A run:** de 12:19 a 14:03, 1 h 44 min com 4 processos. A análise caiu no fim (D-IND-I7d-2) e foi refeita a partir dos artefatos, sem
+  viver de novo (D-IND-I7d-3).
+- **Os artefatos:** `artifacts_v3_individualidade_i7_ad2/`, com o `meta.json` e o `analise.json` versionados. O `vidas.tar.gz`, o
+  `perfis.jsonl.gz` e o `ramos.jsonl` ficam locais, com os sha256 no `meta.json`. Não há `custo.json`, porque o custo por ramo se perdeu
+  com a queda.
+
+### 10.1 A tabela (os dias t+1 a t+4, as cinco idades juntas; o IC95 pelo bootstrap sobre as sementes, 2 000 reamostras)
+
+ρ = Σ D_R / Σ D_E (14.4). Os Φ são razões contra o gêmeo, e os γ são as inclinações em k (3.3).
+
+| braço | perfil | ρ | Φ_E | Φ_R | Φ_S | γ_R | γ_E |
+|---|---|---|---|---|---|---|---|
+| REL | SEQ | 0,881 [0,846; 0,913] | 0,260 [0,235; 0,285] | 0,229 [0,205; 0,251] | 0,848 [0,832; 0,865] | 0,0065 [0,0009; 0,0122] | 0,0110 [0,0054; 0,0169] |
+| REL | LUGAR | 0,948 [0,918; 0,978] | 0,298 [0,270; 0,327] | 0,282 [0,254; 0,309] | 0,907 [0,890; 0,925] | 0,0067 [0,0020; 0,0117] | 0,0062 [0,0016; 0,0107] |
+| REL | HORA | 0,754 [0,728; 0,779] | 0,265 [0,239; 0,291] | 0,200 [0,178; 0,222] | 0,867 [0,851; 0,881] | 0,0085 [0,0037; 0,0137] | 0,0155 [0,0112; 0,0198] |
+| REL+F | SEQ | 0,889 [0,857; 0,923] | 0,265 [0,240; 0,290] | 0,235 [0,214; 0,257] | 0,847 [0,830; 0,865] | 0,0043 [−0,0015; 0,0107] | 0,0135 [0,0077; 0,0194] |
+| REL+F | LUGAR | 0,959 [0,930; 0,988] | 0,304 [0,275; 0,333] | 0,291 [0,266; 0,317] | 0,916 [0,902; 0,932] | 0,0113 [0,0056; 0,0178] | 0,0171 [0,0120; 0,0228] |
+| REL+F | HORA | 0,770 [0,742; 0,799] | 0,269 [0,244; 0,294] | 0,207 [0,187; 0,226] | 0,873 [0,862; 0,885] | 0,0066 [0,0022; 0,0112] | 0,0183 [0,0129; 0,0234] |
+
+Φ_S por idade:
+
+| braço | perfil | t = 2 | t = 4 | t = 6 | t = 8 | t = 10 |
+|---|---|---|---|---|---|---|
+| REL | SEQ | 0,861 [0,830; 0,894] | 0,851 [0,817; 0,886] | 0,855 [0,822; 0,890] | 0,839 [0,807; 0,869] | 0,838 [0,805; 0,867] |
+| REL | LUGAR | 0,922 [0,890; 0,953] | 0,888 [0,853; 0,919] | 0,906 [0,875; 0,936] | 0,918 [0,888; 0,949] | 0,904 [0,876; 0,931] |
+| REL | HORA | 0,855 [0,825; 0,886] | 0,853 [0,823; 0,880] | 0,872 [0,842; 0,899] | 0,870 [0,845; 0,894] | 0,882 [0,854; 0,907] |
+| REL+F | SEQ | 0,850 [0,814; 0,888] | 0,826 [0,792; 0,856] | 0,836 [0,798; 0,869] | 0,865 [0,833; 0,894] | 0,857 [0,823; 0,890] |
+| REL+F | LUGAR | 0,902 [0,872; 0,931] | 0,927 [0,899; 0,956] | 0,924 [0,892; 0,954] | 0,918 [0,884; 0,949] | 0,911 [0,891; 0,930] |
+| REL+F | HORA | 0,866 [0,838; 0,893] | 0,868 [0,845; 0,890] | 0,884 [0,860; 0,908] | 0,876 [0,849; 0,902] | 0,874 [0,850; 0,896] |
+
+São seis células sem correção de multiplicidade (14.4).
+
+### 10.2 As frases (14.4)
+
+| braço | perfil | a hipótese | o deslocamento sozinho | o efeito amarrado |
+|---|---|---|---|---|
+| REL | SEQ | H-HIST | deslocar o fluxo em um sorteio faz do pet um gemeo | o efeito amarrado cresce com os dias |
+| REL | LUGAR | H-HIST | deslocar o fluxo em um sorteio faz do pet um gemeo | o efeito amarrado cresce com os dias |
+| REL | HORA | os dois pesam | deslocar o fluxo em um sorteio faz do pet um gemeo | o efeito amarrado cresce com os dias |
+| REL+F | SEQ | H-HIST | nao se distingue do limiar nesta analise | nao se distingue de zero nesta analise |
+| REL+F | LUGAR | H-HIST | deslocar o fluxo em um sorteio faz do pet um gemeo | o efeito amarrado cresce com os dias |
+| REL+F | HORA | os dois pesam | deslocar o fluxo em um sorteio faz do pet um gemeo | o efeito amarrado cresce com os dias |
+
+- **A condição do evento** vale nas seis células, para o E e para o R: o Φ⁰ fica acima de 0 em ao menos uma idade.
+- **No REL+F SEQ, a régua crua do γ_R não se distingue de zero,** e por isso a frase do γ_R não se escreve ali. Nas outras cinco células,
+  a crua passa junto.
+
+**Em palavras:**
+- **Amarrar o sorteio quase não muda o efeito do tapa** no SEQ e no LUGAR, nos dois braços (a H-HIST, com ρ de 0,88 a 0,96).
+- **No HORA, os dois pesam:** cerca de 3/4 do efeito fica com o sorteio amarrado (ρ de 0,75 e 0,77).
+- **O deslocamento sozinho faz um gêmeo:** jogar fora um único sorteio, sem tapa, deixa o pet tão longe do original quanto um gêmeo, em
+  todas as idades, em 5 das 6 células. No REL+F SEQ, o IC de t = 4 encosta no limiar (0,792).
+
+### 10.3 A expectativa E-AD2, relida sem ajuste
+
+A E-AD2 previa a H-SORT, ou "os dois pesam" com ρ abaixo de 0,5, e Φ_S acima de 0,8.
+- **A parte do ρ não se confirma:** o ρ fica de 0,75 a 0,96, nenhuma célula fica abaixo de 0,5, e quatro dão a H-HIST.
+- **A parte do Φ_S se confirma** em 5 das 6 células.
+
+**A leitura proposta no exploratório da 9.6** ("um reflexo desloca a rng de política, e o resto da vida vira outro acaso") **não se sustenta
+como explicação do tapa.** O deslocamento sozinho faria um gêmeo, como o S mostra, mas o tapa que dura não depende dele: com o sorteio
+amarrado, a mesma fração de pets se afasta.
+
+### 10.4 O que a tabela mostra, além das frases (descritivo, 14.5)
+
+- **O tudo ou nada continua com o sorteio amarrado** (a fração dos ramos por janela de quatro dias, no SEQ; o "D > 0 nos quatro" por dono à
+  direita):
+
+| braço | ramo | D = 0 nos quatro | D > 0 nos quatro | os dois | D > 0 nos quatro, por dono |
+|---|---|---|---|---|---|
+| REL | E | 68 % | 31 % | 2 % | aleatorio 21 %, atencioso 25 %, relapso 46 % |
+| REL | R | 69 % | 29 % | 2 % | aleatorio 19 %, atencioso 24 %, relapso 43 % |
+| REL+F | E | 67 % | 31 % | 2 % | aleatorio 21 %, atencioso 27 %, relapso 47 % |
+| REL+F | R | 68 % | 29 % | 3 % | aleatorio 18 %, atencioso 26 %, relapso 44 % |
+
+  A previsão da 9.6 era que a fração "D > 0 nos quatro" caísse do E para o R. Ela cai pouco, de 31 % para 29 %. Ela é maior com o dono
+  relapso (43 % a 47 %) que com o atencioso e o aleatório.
+- **A separação pelo M-ARB:**
+  - nos ramos E que se afastam (SEQ, REL), 187 de 278 têm a contagem de sorteios do fim do dia t diferente da do original, e nos que voltam,
+    0 de 608;
+  - nos ramos R que se afastam, 200 de 257 também a têm, com o sorteio amarrado.
+
+  A diferença na contagem acompanha o afastamento, mas não é a causa dele. Os números do REL+F são parecidos (`descritivo.separacao_pelo_arb`
+  no `analise.json`).
+- **O estado interno contra o gêmeo** (Φ^est, SEQ; o estado não depende do perfil):
+  - o E fica de 0,14 a 0,31 e o R de 0,13 a 0,28, os dois maiores na idade 2;
+  - o S fica de 0,52 a 0,72, abaixo do gêmeo mesmo com o comportamento igual ao de um gêmeo.
+- **A réplica do E**, nos pets novos, ao lado do I7b:
+  - o Φ_E fica de 0,26 a 0,30 (no I7b, de 0,26 a 0,31);
+  - o γ_E fica de 0,006 a 0,018, com o IC95 acima de 0 nas seis células (no I7b, de 0,011 a 0,021);
+  - o reencontro do dia 14 é de 67 % (REL) e 65 % (REL+F) dos ramos E (no I7b, 66 % e 63 %), e de 68 % e 66 % dos ramos R.
+
+  São diferenças pequenas, entre duas amostras, e não têm leitura.
+- **O ρ por idade** fica só no descritivo, sem frase:
+
+| braço | perfil | t = 2 | t = 4 | t = 6 | t = 8 | t = 10 |
+|---|---|---|---|---|---|---|
+| REL | SEQ | 0,854 | 0,945 | 0,873 | 0,798 | 0,911 |
+| REL | LUGAR | 0,924 | 1,005 | 0,926 | 0,902 | 0,970 |
+| REL | HORA | 0,738 | 0,827 | 0,725 | 0,691 | 0,765 |
+| REL+F | SEQ | 0,842 | 0,925 | 0,894 | 0,850 | 0,934 |
+| REL+F | LUGAR | 0,938 | 0,999 | 0,979 | 0,858 | 1,007 |
+| REL+F | HORA | 0,741 | 0,832 | 0,750 | 0,689 | 0,826 |
+
+### 10.5 O que a análise não demonstra
+
+- **Que o sorteio não pesa no pet:** ele pesa muito, porque um único número a mais faz um gêmeo (o S). O que a análise mostra é que o efeito
+  duradouro do tapa não vem do deslocamento do fluxo.
+- **Que a história é uma experiência no sentido de um animal.** "História" aqui é o que o motor e o cérebro carregam do tapa (o estado, as
+  decisões do dia, o dono reagindo), separado do fluxo da rng.
+- **Que o amarrado é perfeito:** 2 % dos sorteios do R caíram numa chave sem par e receberam um número de outra rng. Eles entram no ρ como
+  sorteio, então o ρ subestima um pouco a parte da história.
+- **O que acontece em outras idades, outros mundos, outros donos ou no cérebro A.** São seis células sem correção de multiplicidade.
+
+### 10.6 O que isso muda para a frente (PROPOSTO)
+
+- **O tapa muda o pet pela história em cerca de 30 % das vezes,** e em 70 % ele volta ao original. A sensibilidade extrema ao sorteio é uma
+  propriedade separada: qualquer deslocamento do fluxo (um sorteio a mais) produz um gêmeo.
+- **Para as perguntas seguintes (Q1, Q2):** comparar ramos com o sorteio amarrado separa o efeito de uma experiência do acaso. Sem ele, um
+  efeito pode vir só de mexer no fluxo. Isso vale como recomendação de método, PROPOSTA.
+- **Uma pergunta nova, PROPOSTA:** o que decide se um pet absorve o tapa ou se afasta? O dono relapso pesa (46 % contra 21 % a 25 %), e a
+  fração não muda com o sorteio amarrado.

@@ -145,6 +145,10 @@ class DigiBrain:
     nome = "digibrain"
     versao_pet = VERSAO_PET_DIGIBRAIN
 
+    def mundo_deslocado(self, dx: int, dy: int, ajustar, regiao_de) -> int:
+        """o gancho da ida para a ilha maior (MotorMundo._aplicar_mudar_ilha, IG4): os lugares que o M-MEM lembra andam com o mundo"""
+        return self.m.mem.deslocar(dx, dy, ajustar, regiao_de)
+
     def __init__(self, cfg: Config | None = None, cfg_digibrain: ConfigDigibrain | None = None, cfg_mundo: ConfigMundo | None = None,
                  inatos: ConfigDigibrainInatos | None = None, serie_e_doadora: tuple | None = None,
                  semente: int | None = None, cfg_luta_memoria: ConfigLutaMemoria | None = None,

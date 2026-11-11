@@ -20,6 +20,7 @@ from __future__ import annotations
 import json
 import sys
 from dataclasses import asdict
+from typing import NamedTuple
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[1]
@@ -54,6 +55,19 @@ PONTOS_BOLA = ((500, 240), (700, 150), (8, 470), (880, 260), (205, 368))
 VIDAS = (("a_v11_agua_202", 202), ("a_v11_agua_505", 505))
 
 
+class Roteiro(NamedTuple):
+    """os pontos do roteiro num mapa: onde o dono poe a racao, leva o pet e poe a bola, as duas cabeceiras de uma ponte e as celulas
+    dela (x0, x1, y0, y1). O deste arquivo e o do mapa de 64 x 30; a ilha grande tem o dela (exportar_gabarito_ilha_grande.py)"""
+    comida: tuple
+    levar: tuple
+    bola: tuple
+    cabeceiras: tuple
+    ponte: tuple
+
+
+ROTEIRO = Roteiro(PONTOS_COMIDA, PONTOS_LEVAR, PONTOS_BOLA, CABECEIRAS, PONTE_NORTE)
+
+
 def motor(semente: int, cm=CM, com_arvores: bool = False, contrato=CC):
     b = e0._bancada()
     espec = bv.EspecVida("atencioso", gl.BRACO_V11, semente)
@@ -63,7 +77,7 @@ def motor(semente: int, cm=CM, com_arvores: bool = False, contrato=CC):
                                      cfg_bola_golpe=CONFIG_BOLA_NO_GOLPE_LIGADA, cfg_contrato=contrato, **extras)
 
 
-def viver(semente: int, cm=CM, com_arvores: bool = False, troca: tuple | None = None):
+def viver(semente: int, cm=CM, com_arvores: bool = False, troca: tuple | None = None, rot: Roteiro = ROTEIRO):
     """a vida do roteiro; devolve o motor e o que o roteiro pediu (o ponto pedido e onde a coisa foi parar). Com `com_arvores` (so no
     teste do Python, na ilha com arvores), o dono tambem poe a bola e sacode as arvores. Com `troca` = (o tick, o mundo de antes), a vida
     comeca no mundo de antes, sem agua e sem o contrato, e passa para `cm` no tick, pelo evento `mudar_ilha` (a IA4: o gabarito da troca
@@ -93,10 +107,10 @@ def viver(semente: int, cm=CM, com_arvores: bool = False, troca: tuple | None = 
             m.mudar_ilha(cm.layout.nome)
             pedidos["troca"] = {"tick": t, "dormindo": dormindo, "pet_antes": pet, **m.mundo.troca_ilha}
         if t % ROTEIRO_COMIDA == 0:
-            comida(t, *PONTOS_COMIDA[k["c"] % len(PONTOS_COMIDA)])
+            comida(t, *rot.comida[k["c"] % len(rot.comida)])
             k["c"] += 1
         if t % ROTEIRO_LEVAR == 0:
-            x, y = PONTOS_LEVAR[k["l"] % len(PONTOS_LEVAR)]
+            x, y = rot.levar[k["l"] % len(rot.levar)]
             if m._estado.dormindo:
                 pedidos["dormindo_em"].append(t)
             else:
@@ -107,13 +121,13 @@ def viver(semente: int, cm=CM, com_arvores: bool = False, troca: tuple | None = 
             m.sacudir_arvore(arvores[k["s"] % len(arvores)])
             k["s"] += 1
         if com_arvores and t % ROTEIRO_BOLA == 0:
-            x, y = PONTOS_BOLA[k["b"] % len(PONTOS_BOLA)]
+            x, y = rot.bola[k["b"] % len(rot.bola)]
             k["b"] += 1
             m.deixar_bola(x, y)
             bola = m.mundo.bola
             pedidos["bola"].append({"tick": t, "pedido": [x, y], "ficou": [bola["x1"], bola["y1"]]})
         if t % ROTEIRO_PONTE == 0 and not m._estado.dormindo:
-            de, para = CABECEIRAS[k["p"] % 2], CABECEIRAS[(k["p"] + 1) % 2]
+            de, para = rot.cabeceiras[k["p"] % 2], rot.cabeceiras[(k["p"] + 1) % 2]
             k["p"] += 1
             m.levar_pet(*de)
             comida(t, *para)
@@ -129,11 +143,11 @@ def pontos_da_rolagem(rol: dict, atrito: int) -> list[tuple[int, int]]:
     return [(x0, y0)] + meio + [(x1, y1)]
 
 
-def travessias(m, pedidos: dict, agua) -> int:
+def travessias(m, pedidos: dict, agua, rot: Roteiro = ROTEIRO) -> int:
     """quantas vezes o pet cruzou o rio pela ponte do norte: depois de solto numa cabeceira (e antes de o dono leva-lo de novo), a
     trajetoria sai do lado em que ele foi solto, pisa em celulas da ponte e chega ao outro lado sem sair dela"""
     sub = m.cmf.sub
-    cx0, cx1, cy0, cy1 = PONTE_NORTE
+    cx0, cx1, cy0, cy1 = rot.ponte
     if any(agua[y][x] != PONTE for y in range(cy0, cy1) for x in range(cx0, cx1)):
         raise RuntimeError("a ponte do norte nao esta onde o roteiro espera")
     levadas = sorted(m._tm(p["tick"]) for p in pedidos["levar"] + pedidos["ponte"])       # no tempo do mundo, como o das decisoes
@@ -160,7 +174,7 @@ def travessias(m, pedidos: dict, agua) -> int:
     return n
 
 
-def conferir(m, pedidos: dict) -> dict:
+def conferir(m, pedidos: dict, rot: Roteiro = ROTEIRO) -> dict:
     """os gates da agua nesta vida (G-AG-2 e G-AG-5); falha alto se algum nao vale. Na vida com a troca de ilha (`pedidos["troca"]`), o
     que o roteiro fez antes dela nao conta (nao havia agua): confere-se o que ficou no mundo e tudo o que veio depois"""
     desde = pedidos["troca"]["tick"] if "troca" in pedidos else 0
@@ -198,7 +212,7 @@ def conferir(m, pedidos: dict) -> dict:
     for x, y in pontos:
         if ct.bloqueio_em(x, y, r, solidos) is not None:
             raise RuntimeError(f"o pet na agua: ({x}, {y})")
-    cruzou = travessias(m, pedidos, agua)
+    cruzou = travessias(m, pedidos, agua, rot)
     movidos = {k: sum(p["pedido"] != p["ficou"] for p in pedidos[k]) for k in ("comida", "levar")}
     if not cruzou or not all(movidos.values()):
         raise RuntimeError(f"o roteiro precisa de uma travessia pela ponte ({cruzou}) e de uma comida e um pet tirados da agua ({movidos})")

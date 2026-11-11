@@ -5,7 +5,7 @@ Coordenador: Matheus (sessão direta). Worker da etapa I0: Claude Code, Opus 5.5
 as IN-1 a IN-8 DECIDIDAS em 2026-11-07, pela recomendação; o I0 (a conferência) na `main` (#684); o I1 (a bateria como ferramenta)
 na `main` (#695); o plano do I2 APROVADO (#700); o I2a na `main` (#707); o I2b (a run da linha de base, faixa 85101…85505)
 na `main` (#718); o adendo 1 na `main` (#746); o plano do I5 APROVADO, na `main` (#747); o I5a na `main` (#751); o I5b na `main` (#768); o plano do I7 e o adendo 1 na `main` (#755, #769); o I7a (as medidas e
-o orquestrador) na `main` (#775); o I7b (a run única do I7) entregue; o adendo 2 do plano do I7 DECIDIDO (#788); o I7c (o código do adendo 2) entregue.**
+o orquestrador) na `main` (#775); o I7b (a run única do I7) entregue; o adendo 2 do plano do I7 DECIDIDO (#788); o I7c (o código do adendo 2) na `main` (#794); o I7d (a run do adendo 2) na `main` (#829); o adendo 3 do plano do I7 PROPOSTO.**
 
 Categoria: documentacao. Origem: Matheus, 2026-11-07: depois da conversa sobre o connectome e a escala, direcionar a pesquisa para o
 temperamento herdado, o sinal do dono, a memória de episódios e o hábito, com uma medida comum de individualidade.
@@ -287,3 +287,27 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
   - a projeção para as 360 pets é de cerca de 3 h 30 min com 4 processos, contra cerca de 3 h da 14.7; não passa do dobro;
   - os números da fumaça não são resultado: são as sementes dos testes.
 - **As leituras do código** estão no registro: D-IND-I7c-1 a 6.
+
+## Resultado da etapa I7d (2026-11-11, Claude Code, Opus 5.5, branch `v3-individualidade-i7d`)
+
+- **O registro:** a seção 15 do plano do I7, commitada e empurrada antes da primeira vida (`73d98c0e`). A faixa foi liberada pelo Matheus
+  sem o ok do Gerente (D-IND-I7d-1).
+- **A run única:** 360 pets novos e 6 480 ramos, em 1 h 44 min com 4 processos, com todas as conferências passando. A análise caiu num
+  perfil zerado (D-IND-I7d-2) e foi refeita a partir dos artefatos, sem viver de novo (D-IND-I7d-3).
+- **O resultado** está na seção 10 do `docs/RESULTADO_V3_INDIVIDUALIDADE.md`:
+  - amarrar o sorteio quase não muda o efeito do tapa: a H-HIST no SEQ e no LUGAR, e "os dois pesam" no HORA (ρ de 0,75 a 0,96);
+  - jogar fora um único sorteio faz um gêmeo (Φ_S acima de 0,8 em 5 das 6 células);
+  - a E-AD2 não se confirma no ρ e se confirma no Φ_S;
+  - a leitura do exploratório da 9.6 não se sustenta: o tudo ou nada continua com o sorteio amarrado (29 % dos ramos R se afastam, contra
+    31 % dos E).
+- **As leituras** estão no registro: D-IND-I7d-1 a 4.
+
+## O adendo 3 do plano do I7 (2026-11-11, Claude Code, Opus 5.5, branch `v3-individualidade-i7-adendo3`)
+
+- **De onde vem:** a primeira recomendação da 10.6 do resultado. O Matheus pediu para seguir com as recomendações (2026-11-11).
+- **O adendo** está PROPOSTO, na seção 16 do `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md`:
+  - a pergunta: o que, no momento do tapa, separa o ramo que absorve o tapa do que se afasta;
+  - sete candidatos lidos no original antes do tapa (o dono, a energia, a fome, o humor, a ação, a idade e o braço);
+  - a descoberta nas vidas do adendo 2 e a confirmação nas do I7b, sem vidas novas.
+- **As decisões** AD3-1 a AD3-6 estão com o Matheus.
+
