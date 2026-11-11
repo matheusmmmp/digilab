@@ -627,3 +627,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — LUTA_POC, LP5-2: a divisão dos stats dos 7 NPCs e a leitura da vida (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-2`)](registro/2026-11.md)
 - [2026-11-11 — COOPERACAO, CO2a: o traço do grupo (Gerente da V3, Claude Code, Opus 5.5, branch `v3-cooperacao-co2`)](registro/2026-11.md)
 - [2026-11-11 — LUTA_POC, LP5-3: o treino dos rivais dos torneios (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-2`)](registro/2026-11.md)
+- [2026-11-11 — LUTA_POC, LP5-3: o fator dos rivais dos torneios (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-3`)](registro/2026-11.md)

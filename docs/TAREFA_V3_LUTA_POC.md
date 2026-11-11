@@ -754,6 +754,15 @@ A LP5-2 fechou com o `lp5_2` (a D-LP5-19: "Sim, segue"). A LP5-3 parte dele, e a
 
 Nenhum número muda, e a decisão está no PR #784.
 
+### O fator dos rivais dos torneios (D-LP5-20)
+
+O Matheus aprovou a (a): "Sim, roda". A grade `lp5_3/r2` pôs um fator abaixo de 1 nos stats dos rivais dos quatro torneios, sem mexer
+no alugado da Fábrica.
+- **O Salão (G4) fecha em 0,8.** O candidato `lp5_3` é o `lp5_2` com esse fator, e passa em 10 de 21 metas.
+- **A Liga, a Torre e a Fábrica não fecham nem com 0,1.** Em 0,1, a Liga para na Floresta ou na Praia, e a Torre perde a 1.ª luta no
+  Ringue em 0,53 das tentativas. Quem decide as séries são as regras dos mapas e a vida sem cura, não os stats do rival.
+- A (b), aceitar o G1 a G3 como reprovados, volta ao Matheus no PR #789 antes de valer.
+
 ## Resultado da LP3c (2026-11-10)
 
 Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp3c`, a pedido do Gerente de sprites e luta. O pedido seguiu a revisão dos
