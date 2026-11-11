@@ -266,16 +266,25 @@ export const CONTORNO_DIGITAL = { tinta: 0x15222a, forca: 1, largura: 3, limiar:
 
 /** o toque digital do estilo Digital (digital.ts; docs/TAREFA_V3_MAPA_DIGITAL.md, D3): as particulas (quantas, o sal da rng, a margem
     alem da area, a altura acima do chao, o tamanho, a cor, a opacidade de dia e de noite, o sobe e desce, a velocidade e o giro), a
-    grade no ceu (a cor, a opacidade, a espessura, os meridianos de cada lado, os paralelos e o ponto de fuga acima da imagem, em alturas
-    dela) e os fios (o alto do poste onde prendem, a fracao da altura; o alcance; quantos por poste; a queda por celula de vao; os
+    portal no ceu (abaixo; a grade pintada de 2026-11-08, com os meridianos e os paralelos, saiu em 2026-11-11) e os fios (o alto do poste onde prendem, a fracao da altura; o alcance; quantos por poste; a queda por celula de vao; os
     segmentos; a cor). PROPOSTO, SEM FONTE */
 export const DIGITAL = {
   particulas: { quantas: 140, sal: 0xd161a1, margem: 3, altura: [0.6, 3.2], tamanho: 0.06, cor: 0x7ff3ff, opacidade: [0.55, 0.95],
     sobe: 0.25, vel: 0.8, giro: 0.9 },
-  /* a grade mais discreta (2026-11-08: "tá muito saturada [...] Deixa ela um pouco mais opaca"): o ciano dessaturado, fraca e so na faixa de baixo do
-     ceu, sumindo para cima a partir de `desde` (a fracao da altura da imagem) */
-  /* e de novo no mesmo dia: "cadê aquelas linhas no céu? Eu quero aquelas linhas no céu, só que não tão forte": no ceu todo outra vez, mais fracas
-     no alto (`topo`, a fracao da forca la em cima) */
-  grade: { cor: "#b0e8f0", alfa: 0.3, espessura: 2.5, meridianos: 9, paralelos: 8, fuga: 0.25, topo: 0.55 },
+  /* o portal no ceu (2026-11-11, o Matheus: as linhas do ceu "estao bem feias, elas estao estaticas", com duas imagens de referencia: arcos
+     grandes cruzando o ceu, aneis concentricos e uma coluna de luz). Entra no lugar da grade pintada, que deixa de ser desenhada. E do mundo
+     (digital.ts, portalDoCeu), ao norte da ilha, e anda pelo uTempo (parado com "reduzir movimento"):
+       - `longe` e `altura`: a que distancia do centro da ilha e a que altura fica o centro do portal (celulas);
+       - `aneis`: quantos aneis concentricos, do raio `raio[0]` ao `raio[1]`; cada um gira para um lado, o de dentro mais depressa
+         (`volta`, segundos por volta do de dentro e do de fora); os desenhos se alternam (digitalConta.ts, aneisDoPortal);
+       - `coluna`: a largura e a altura da coluna de luz, e os aneis deitados em volta dela (quantos, o raio do de baixo e do de cima);
+       - `arcos`: os arcos grandes em volta da ilha inteira (o raio, a espessura, a inclinacao de cada um em graus e os segundos por volta);
+       - `cor`, e a opacidade de dia e de noite; `pulso`: quanto a opacidade oscila e em quantos segundos. PROPOSTO, SEM FONTE */
+  /* 2026-11-11, no mesmo dia: "as linhas no ceu estao muito claras, deixa um pouco mais transparente, simulando que e longe e cobre o mundo
+     todo": o portal mais longe e maior, mais arcos em volta do mundo, e tudo com a metade da forca */
+  portal: { longe: 102, altura: 20, aneis: 7, raio: [8, 56], volta: [70, 340], sal: 0x9a7e11,
+    coluna: { largura: 9, altura: 90, aneis: 4, raio: [7.5, 3] },
+    arcos: { raio: 98, espessura: 0.1, inclina: [58, -44, 71, 24, -66], volta: 520 },
+    cor: "#bff6ff", opacidade: [0.28, 0.42], pulso: [0.12, 9] },
   fios: { alto: 0.93, alcance: 10, porPoste: 2, queda: 0.06, segmentos: 12, cor: 0x2b2a33 },
 } as const;
