@@ -35,7 +35,7 @@ import { DigiBrain } from "./digibrain/adapt.ts";
 import { CONFIG_DIGIBRAIN_LAB_FALA, CONTEUDOS_FALA, INATOS_MODULAR, type ConteudoFala } from "./digibrain/constantes.ts";
 import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
 import { ConfiancaCombate } from "./confianca.ts";
-import { lutar as lutarArena, sorteiosPorFluxo, type IdCena, type ResultadoLuta as ResultadoArena, type Stats as StatsArena } from "./arena/index.ts";
+import { lutar as lutarArena, sorteiosPorFluxo, type IdCena, type ResultadoLuta as ResultadoArena, type Stats as StatsArena, type Tiro as TiroLutaPoc, type Esquiva as EsquivaLutaPoc } from "./arena/index.ts";
 import { MAPA_SALAO, MAPA_TORRE, statsRivalForma, ehMapa, formaDaChave as formaDaChaveMotor, mapaDoLugar, naTabela, rivaisArena, statsDaLuta, statsDoPet, statsNpc, statsRivalArena } from "./luta_poc.ts";
 import { condicaoDe } from "./treino.ts";
 import { caraterCanonico } from "./catalogo.ts";
@@ -162,6 +162,11 @@ export class Motor {
   private produtoLido = false;
   /** a ponte da luta (PE3): o registro tem a marca "pl" (ovo novo v16/v17); sem ela, a luta passa ao lado do corpo e do cerebro, como hoje */
   ponteLuta = false;
+  /** a distancia do tiro (LUTA_POC, D-LP5-12): so a bancada do equilibrio a poe (o candidato); o jogo nao a usa ate a versao do pet da LP5-5.
+      Sem ela (o padrao), a luta e a de sempre. Nao vai ao registro nem ao save */
+  tiroLutaPoc: TiroLutaPoc | null = null;
+  /** a esquiva pela perspicacia e pela velocidade (D-LP5-14): como o tiroLutaPoc, so a bancada a poe; null = a luta de sempre */
+  esquivaLutaPoc: EsquivaLutaPoc | null = null;
   /** DC3d da CONVERSA_PET: o registro tem a marca "fu" (so o pet de teste v16): o modular decide com a subchave `fala_unidades` (o
       `chamar_atencao` em tres unidades de fala com conteudo, docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1 e A1.1); sem ela, o modular de hoje */
   falaUnidades = false;
@@ -631,7 +636,7 @@ export class Motor {
       if (!rv) break;
       n = k + 1;
       const s = sementeDaSerie(semente, k);
-      const r = lutarArena({ cena: rv.mapa, semente: s, a: { forma, stats: pet, ...(k ? { vida0 } : {}) }, b: { forma: rv.forma, stats: rv.stats } }, sorteiosPorFluxo(s));
+      const r = lutarArena({ cena: rv.mapa, semente: s, a: { forma, stats: pet, ...(k ? { vida0 } : {}) }, b: { forma: rv.forma, stats: rv.stats }, ...(this.tiroLutaPoc ? { tiro: this.tiroLutaPoc } : {}), ...(this.esquivaLutaPoc ? { esquiva: this.esquivaLutaPoc } : {}) }, sorteiosPorFluxo(s));
       const pontosA = r.vencedor === "a" ? 1 : r.vencedor === "b" ? 0 : 0.5, res = pontosA === 1 ? 1 : pontosA === 0 ? -1 : 0;
       serie.push({ ...r, vida0, pontosA, contra: rv.forma, mapa: rv.mapa, rivalStats: rv.stats });
       const chave = rivalDaConfianca(rival, semente, k, est);

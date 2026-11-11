@@ -46,7 +46,7 @@ test("Conversa nova: desligada por padrao; ligada manda prompt conversa-v1 e o h
 
   /* liga a chave nos Ajustes (preferencia de tela, fora do registro do pet) */
   await page.goto(APP + "#/config");
-  await page.locator(".mc-cfg .hx-linha", { hasText: "Fala do pet" }).click();
+  await page.locator(".mc-cfg").getByRole("button", { name: "Fala do pet" }).click();   /* os Ajustes em icones: o nome acessivel */
   const chave = page.getByRole("switch", { name: /Conversa nova/ });
   await expect(chave).not.toBeChecked();
   await chave.check();
