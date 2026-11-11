@@ -7,7 +7,8 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 import { Motor } from "../motor/index.ts";
-import { GIRO_CICLO_S, GIRO_GRAUS, MapaScan, PULSO_MS, VARREDURA_MS } from "../src/componentes/ScanDigiBrain.tsx";
+import { REGRAS_LOBOS } from "../motor/index.ts";
+import { FaixaEstado, GIRO_CICLO_S, GIRO_GRAUS, MapaScan, PULSO_MS, TOM_REGRA, VARREDURA_MS, pontosDaOnda } from "../src/componentes/ScanDigiBrain.tsx";
 
 /* o pet v11 do e2e do DigiBrain (e2e/jogo.spec.ts) */
 const LOG: [number, string, unknown][] = [[480, "t", 120], [600, "d", "acariciar"], [600, "t", 120], [720, "d", "tapa"], [720, "t", 120],
@@ -65,17 +66,52 @@ describe("o mapa do scan: cada ponto e cada fio vem do motor", () => {
     expect(s).not.toContain("mp-lit");
     expect(s).not.toContain("mp-dest");
   });
-  test("o viewBox e o recorte da silhueta; no desktop o rotulo da regra fica em cima do ponto, e a 390 a direita dele", () => {
-    expect(montar(false, false)).toContain('viewBox="90 16 880 552"');
-    /* o y do rotulo menos o y do ponto, na regra sono_exaustao */
-    const y = (s: string): number => {
-      const g = s.slice(s.indexOf('data-regra="sono_exaustao"'));
-      return Number(g.match(/<text[^>]* y="([-\d.]+)"/)![1]) - Number(g.match(/ cy="([-\d.]+)"/)![1]);
-    };
-    expect(y(montar(false, false))).toBeLessThan(0);
-    const g = montar(true, false), r = g.slice(g.indexOf('data-regra="sono_exaustao"'));
-    expect(Number(r.match(/<text x="([-\d.]+)"/)![1]) - Number(r.match(/ cx="([-\d.]+)"/)![1])).toBeGreaterThan(0);
-    expect(r).toMatch(/<text[^>]*text-anchor="start"/);
+  test("o anel (D1d): o viewBox 880 x 552, as acoes a esquerda, as entradas a direita e as regras por dentro; sem a silhueta", () => {
+    const s = montar(false, false);
+    expect(s).toContain('viewBox="0 0 880 552"');
+    expect(s).not.toMatch(/mp-silhueta|mp-divisas|db-malha/);
+    /* o centro do ponto de cada no (o segundo circulo do grupo; o primeiro e o alvo do toque) */
+    const centros = (attr: string): [number, number][] => [...s.matchAll(new RegExp(`${attr}="[^"]+"><circle class="mp-alvo" cx="([-0-9.]+)" cy="([-0-9.]+)"`, "g"))].map(m => [Number(m[1]), Number(m[2])]);
+    const raio = ([x, y]: [number, number]): number => Math.hypot(x - 440, y - 276);
+    const ac = centros("data-acao"), en = centros("data-entrada"), re = centros("data-regra");
+    expect([ac.length, re.length, en.length]).toEqual([7, 7, 10 + db.mapa.receptores.length]);
+    for (const p of ac) { expect(p[0]).toBeLessThan(440); expect(raio(p)).toBeCloseTo(212, 0); }
+    for (const p of en) { expect(p[0]).toBeGreaterThan(440); expect(raio(p)).toBeCloseTo(212, 0); }
+    for (const p of re) expect(raio(p)).toBeCloseTo(150, 0);
+    /* todo fio fica dentro do quadro: nenhuma coordenada fora do viewBox */
+    const nums = [...s.matchAll(/ d="([^"]+)"/g)].flatMap(m => [...m[1]!.matchAll(/(-?[\d.]+) (-?[\d.]+)/g)].map(c => [Number(c[1]), Number(c[2])]));
+    expect(nums.length).toBeGreaterThan(200);
+    for (const [x, y] of nums) { expect(x).toBeGreaterThanOrEqual(0); expect(x).toBeLessThanOrEqual(880); expect(y).toBeGreaterThanOrEqual(0); expect(y).toBeLessThanOrEqual(552); }
+  });
+});
+
+describe("a faixa de baixo (D1d): a onda e o estado atual saem do motor", () => {
+  const ent = ["vies", "fome", "higiene", "energia", "humor", "saude", "sujeira", "dormindo", "hora", "ticks_sem_cuidado", ...db.mapa.receptores];
+  test("a onda: um pico por aresta acesa, para cima a favor e para baixo contra, da altura da forca", () => {
+    const ac = db.mapa.acesas!, pts = pontosDaOnda(ent, ac).split(" ").map(p => p.split(",").map(Number));
+    expect(pts.length).toBe(2 + 3 * ac.arestas.length);
+    for (const x of ac.arestas) {
+      const pico = pts.find(p => p[0] === 12 * ent.indexOf(x.entrada) + 6)!;
+      expect(pico[1]).toBeCloseTo(20 - Math.sign(x.termo) * x.forca * 17, 1);
+    }
+    /* uma decisao montada: um termo a favor e um contra */
+    const dois = pontosDaOnda(ent, { ...ac, arestas: [{ entrada: "fome", termo: 0.5, forca: 1 }, { entrada: "humor", termo: -0.2, forca: 0.5 }] });
+    expect(dois).toBe("0,20 14,20 18,3 22,20 50,20 54,28.5 58,20 " + 12 * ent.length + ",20");
+    expect(pontosDaOnda(ent, null)).toBe(`0,20 ${12 * ent.length},20`);
+    expect(() => pontosDaOnda(ent, { ...ac, arestas: [{ entrada: "inventada", termo: 1, forca: 1 }] })).toThrow(/entrada fora do mapa: inventada/);
+  });
+  test("o estado atual e a regra da decisao, com o tom dela; sem decisao, diz isso", () => {
+    const s = renderToStaticMarkup(h(FaixaEstado, { mapa: db.mapa, decisao: db.decisao })), d = db.decisao!;
+    expect(s).toContain(`data-regra="${d.regra}"`);
+    expect(s).toContain(`data-tom="${TOM_REGRA[d.regra]}"`);
+    expect(s).toContain("estado atual");
+    expect(s).toContain(`data-n="${d.n}"`);
+    const sem = renderToStaticMarkup(h(FaixaEstado, { mapa: { ...db.mapa, acesas: null }, decisao: null }));
+    expect(sem).toContain('data-tom="sem"');
+    expect(sem).toContain("sem decisão");
+    expect(Object.keys(TOM_REGRA).sort()).toEqual([...REGRAS_LOBOS].sort());
+    /* a coluna das cinco barras da referencia nao entra, e nada promete mais do que o motor tem */
+    expect(s).not.toMatch(/memória|impulsos|emoção|social|calmo/i);
   });
 });
 
@@ -133,7 +169,7 @@ describe("o modal pequeno nao cobre a ilha (D1b-3)", () => {
 
 /* o contraste do desenho (rev-a11y da D1b): o modal fica sobre a ilha, entao o pior fundo e o do habitat mais claro, como em hx_pele.test.ts
    (a grama de dia; no Militar, o branco puro). A pilha, de baixo para cima: o fundo, o veu do ::backdrop (o --hx-miolo a 28 %), a caixa
-   (o --hud-fundo-1, o lado mais claro do gradiente) e a moldura do desenho (o --hx-miolo a 55 %). O contorno escuro dos rotulos (paint-order)
+   (o --hud-fundo-1, o lado mais claro do gradiente) e a moldura do desenho (o --hx-miolo a 92 %, D1d). O contorno escuro dos rotulos (paint-order)
    so ajuda e nao entra na conta. Com "reduzir transparencia" os tokens ficam opacos e mais escuros, entao o caso translucido e o pior */
 describe("o contraste do desenho sobre a ilha, nas duas peles", () => {
   const tokensCss = readFileSync(new URL("../src/estilo/tokens.css", import.meta.url), "utf8");
@@ -158,9 +194,11 @@ describe("o contraste do desenho sobre a ilha, nas duas peles", () => {
   for (const [pele, sel, ilha] of casos) {
     test(`${pele}: os rotulos 4,5:1 e as formas do selo 3:1`, () => {
       const b = pele === "vidro" ? bloco(sel) : raiz, t = (n: string) => rgba(ler(b, n))[0];
-      const veu = sobre(ler(b, "hx-miolo"), ilha, 0.28), caixa = sobre(ler(b, "hud-fundo-1"), veu), desenho = sobre(ler(b, "hx-miolo"), caixa, 0.55);
+      const veu = sobre(ler(b, "hx-miolo"), ilha, 0.28), caixa = sobre(ler(b, "hud-fundo-1"), veu), desenho = sobre(ler(b, "hx-miolo"), caixa, 0.92);
       /* os nos (--hx-sec), as regioes (--hx-rotulo), os receptores do corpo (--hx-ok), os acesos (--hx-texto) e a chance (--hx-num), no desenho */
       for (const n of ["hx-sec", "hx-rotulo", "hx-ok", "hx-texto", "hx-num"]) expect(contraste(t(n), desenho), `${pele} ${n} no desenho`).toBeGreaterThanOrEqual(4.5);
+      /* o tom do estado atual (--hx-alerta, --hx-perigo; o ok, o neutro e o sem ja estao acima), no fundo da faixa, o mesmo do desenho */
+      for (const n of ["hx-alerta", "hx-perigo"]) expect(contraste(t(n), desenho), `${pele} ${n} na faixa`).toBeGreaterThanOrEqual(4.5);
       /* o titulo e os icones do topo, na caixa */
       for (const n of ["hx-texto", "hx-texto-2"]) expect(contraste(t(n), caixa), `${pele} ${n} na caixa`).toBeGreaterThanOrEqual(4.5);
       /* o selo: o ponto (--hx-ok), as barras (--hx-sec) e o triangulo (--hx-rotulo), na caixa */
