@@ -252,3 +252,9 @@ Ficam: à noite ela fica escura e quase ilegível (o revisor sugere um leve bril
 - uma granulação fina no capim à noite, no celular;
 - o barranco, que ainda lê um pouco como muro de tijolo;
 - o fps de verdade (D-G5) e o Digital como padrão (D-MD1), com o Matheus.
+
+## 12.1. D4 revista: a lata sai do horizonte (2026-11-10, Gerente, Claude Code, Fable 5.2, branch `v3-objeto-lata-mao`)
+
+O Matheus pediu em 2026-11-10 a lata dentro do mapa e refeita ("tá fora do mapa e ainda tá toda errada"). A lata presa ao horizonte da
+seção 12 sai do estilo Digital, com o `DIGITAL.lata`, a função `lata` e o `lugarDaLata`. A lata nova é um marco da grade, feita à mão
+por script: `docs/TAREFA_V3_MUNDO_ENFEITES.md`, seção 17.

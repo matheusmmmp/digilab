@@ -99,13 +99,15 @@ export const SACO_FOLGA_POSTE = 0.14;
 export const COCO = { raio: 0.85, passo: 0.25, surgirMs: 380 } as const;
 
 /** os enfeites do mundo humano (docs/TAREFA_V3_MUNDO_ENFEITES.md; grade.ts, porEnfeites), desde a planta A (PLANTA_ILHA) em pontos fixos:
-    por enfeite, quantos por mapa e a folga de chao plano em volta (celulas); dos marcos (o carro, a geladeira e o trilho), o chao em que
+    por enfeite, quantos por mapa e a folga de chao plano em volta (celulas); dos marcos (o carro, a geladeira, o trilho e a lata gigante), o chao em que
     cada um pode ficar e a clareira que ele abre na decoracao. PROPOSTO, SEM FONTE */
 export const ENFEITES_GRADE = {
   poste: { quantos: 6, folga: 0 },
   carro: { quantos: 1, folga: 1, chao: ["grama"], clareira: 2.2 },
   geladeira: { quantos: 1, folga: 1, chao: ["areia"], clareira: 1.4 },
   trilho: { quantos: 1, folga: 1, chao: ["grama"], clareira: 2.2 },
+  /* a lata gigante (2026-11-10): saiu do horizonte do Digital e virou um marco da grade, ao norte, atras da area */
+  lata: { quantos: 1, folga: 2, chao: ["grama"], clareira: 3.2 },
 } as const;
 /** a planta A da ilha inicial (docs/pranchas/ux-ilha-layout/, IL-1 a IL-4 DECIDIDAS em 2026-11-08; a vista em docs/pranchas/ux-ilha-planta-a/):
     so a parte da vista, em celulas do mundo (x leste, z sul), a mesma em todo mapa de 64 x 30. O ninho, a tigela, a bola e as frutiferas sao
@@ -114,7 +116,7 @@ export const ENFEITES_GRADE = {
     - os caminhos de terra (`raioCaminho`) da praca ao lar (ate o comedouro do layout), ao portao, a barraca e ao cais, pelos pontos de
       `caminhos`; cada um para antes da base do lugar (`folgaLugar` alem do raio dele) e so pinta grama da area andavel;
     - os lugares: o `alvo` de cada um (a grade poe no ponto que cabe mais perto dele, em `busca` celulas, com a `folga` de chao plano), a
-      `clareira` que ele abre na decoracao e o raio da `base` onde o caminho para; o cais na coluna `x`; o saco perto da praca;
+      `clareira` que ele abre na decoracao e o raio da `base` onde o caminho para; o cais na coluna `x`, com o meio do modelo `mar` celulas mar adentro da beira (o pier feito a mao sai da areia para o mar); o saco perto da praca;
     - os postes (IL-3), cerca de 6, so na praca e no caminho do cais, em grama ou areia; a lampada para o ponto mais perto do caminho;
     - os marcos (a IL-4 de 2026-11-08, revista: "espalha eles tambem pelo mapa"), cada um num canto da moldura, no ponto que cabe mais perto
       do da planta (`busca` celulas), com o entorno dele (extras, a rng propria): o carro meio coberto pelo mato no oeste, a geladeira na
@@ -125,6 +127,20 @@ export const ENFEITES_GRADE = {
       altas, a escala e os arbustos (fracao das arvores) na base, na elipse 1,3 vez maior. Os bosques que a planta
       punha dentro da area do pet ficaram na moldura, encostados nela: o LayoutMundo so aceita arvore com fruta (o desvio da prancha).
     PROPOSTO, SEM FONTE */
+export interface LugarDaPlanta { alvo: readonly [number, number]; busca: number; folga: number; clareira: number; base: number }
+export interface MarcoDaPlanta { ponto: readonly [number, number]; entorno: { arbusto: number; grama_alta: number; pedra: number; raio: number } }
+/** a forma de uma planta da ilha (a PLANTA_ILHA e a PLANTA_ILHA_AGUA) */
+export interface PlantaIlha {
+  praca: { x: number; z: number; raio: number }; raioCaminho: number; folgaLugar: number;
+  caminhos: Readonly<Record<"lar" | "portao" | "barraca" | "cais", readonly (readonly [number, number])[]>>;
+  lugares: { portao: LugarDaPlanta; barraca: LugarDaPlanta; cais: { x: number; clareira: number; mar: number }; saco: readonly [number, number] };
+  postes: readonly (readonly [number, number])[];
+  marcos: { busca: number; carro: MarcoDaPlanta; geladeira: MarcoDaPlanta; trilho: MarcoDaPlanta; lata: MarcoDaPlanta };
+  bosques: readonly (readonly [number, number, number, number])[]; vaos: readonly (readonly [number, number, number, number])[];
+  sal: number;
+  bosque: { porCelula: number; entreArvores: number; escalaArvore: readonly [number, number]; arbustos: number; entreArbustos: number;
+            escalaArbusto: readonly [number, number] };
+}
 export const PLANTA_ILHA = {
   praca: { x: 31, z: 16, raio: 4.2 },
   raioCaminho: 0.8, folgaLugar: 0.6,
@@ -137,7 +153,7 @@ export const PLANTA_ILHA = {
   lugares: {
     portao: { alvo: [31, -2.5], busca: 3, folga: 1, clareira: 3, base: 1.6 },
     barraca: { alvo: [48.5, 8.5], busca: 3, folga: 1, clareira: 3.4, base: 2.4 },
-    cais: { x: 38, clareira: 4.5 },
+    cais: { x: 38, clareira: 4.5, mar: 0.9 },
     saco: [22, 9],
   },
   postes: [[27.5, 13], [34.5, 13], [27.5, 19.5], [34.5, 19.5], [33.5, 26], [37, 30]],
@@ -146,11 +162,50 @@ export const PLANTA_ILHA = {
     carro: { ponto: [-6.5, 19.5], entorno: { arbusto: 6, grama_alta: 8, pedra: 1, raio: 2.8 } },
     geladeira: { ponto: [50, 31.2], entorno: { arbusto: 0, grama_alta: 0, pedra: 3, raio: 2 } },
     trilho: { ponto: [69, 21], entorno: { arbusto: 4, grama_alta: 6, pedra: 2, raio: 2.8 } },
+    lata: { ponto: [16, -5], entorno: { arbusto: 3, grama_alta: 8, pedra: 2, raio: 3.8 } },
   },
   bosques: [[8, -6, 8, 4.2], [-6, 4, 3.4, 4.6], [-6, 25.6, 3.2, 2.6], [19, -8, 4, 3.4], [44, -6, 6, 3.6], [-5, -6, 4, 3.4], [56, -6, 6, 3.6]],
   vaos: [[31, -6, 5, 5]],
   sal: 0xb05c0e5, bosque: { porCelula: 0.16, entreArvores: 2.2, escalaArvore: [0.9, 1.2], arbustos: 0.5, entreArbustos: 1.2, escalaArbusto: [0.85, 1.15] },
 } as const;
+/** a planta da ilha onde so a agua barra o pet (docs/TAREFA_V3_ILHA_AGUA.md, IA3; o layout com agua, AGUA_POR_LAYOUT do motor): a ilha
+    inteira fica dentro do mapa do motor, e a moldura e so mar. A praca, o saco, a barraca, o cais e os caminhos sao os da planta A (o
+    mapa da agua foi desenhado em volta deles: o caminho da barraca passa pela ponte do norte). O que muda:
+    - o portao vem para dentro, na ponta norte da ilha, e o caminho dele para la; o caminho do cais para na praia, dentro do mapa;
+    - o ultimo poste do cais sai do mar;
+    - os marcos vem para dentro (o carro no oeste, a geladeira na areia do sudeste, o trilho no leste), nos pontos da figura aprovada
+      (IA-2), ja que nao ha mais moldura de terra; a lata, que e de depois da figura, fica no noroeste;
+    - nao ha bosque nem vao: nada alto que nao seja do motor, um lugar ou um enfeite entra na area (a regra 5 da ilha; do entorno dos
+      marcos so entra o que e baixo), e a moldura e mar.
+    `moldura`: as celulas de mar em volta do mapa do motor; `praia`: a terra a ate tantas celulas do mar vira areia (`praiaSul` da linha
+    `sulDesde` para baixo, onde fica o cais). PROPOSTO, SEM FONTE */
+export const PLANTA_ILHA_AGUA: PlantaIlha = {
+  ...PLANTA_ILHA,
+  caminhos: { ...PLANTA_ILHA.caminhos, portao: [[31, 16], [31, 5]], cais: [[31, 16], [36, 24], [37.6, 27.4]] },
+  lugares: { ...PLANTA_ILHA.lugares, portao: { alvo: [31, 3.5], busca: 3, folga: 1, clareira: 3, base: 1.6 } },
+  postes: [[27.5, 13], [34.5, 13], [27.5, 19.5], [34.5, 19.5], [33.5, 24], [36.2, 26.6]],
+  marcos: {
+    busca: 2.5,
+    carro: { ponto: [6.5, 9], entorno: { arbusto: 6, grama_alta: 8, pedra: 1, raio: 2.8 } },
+    geladeira: { ponto: [50.5, 25.5], entorno: { arbusto: 0, grama_alta: 0, pedra: 3, raio: 2 } },
+    trilho: { ponto: [57, 17], entorno: { arbusto: 4, grama_alta: 6, pedra: 2, raio: 2.8 } },
+    /* a lata gigante (o marco de 2026-11-10, que na planta A fica na moldura do norte) vem para dentro, no noroeste, entre o carro e o
+       saco; o ponto e desta sessao, fora da figura aprovada (IA-2), que e de antes da lata. PROPOSTO, SEM FONTE */
+    lata: { ponto: [16, 6], entorno: { arbusto: 3, grama_alta: 8, pedra: 2, raio: 3.8 } },
+  },
+  bosques: [], vaos: [],
+};
+export const ILHA_AGUA = { moldura: 8, praia: 1, praiaSul: 2, sulDesde: 22 } as const;
+/** a ponte da ilha com agua (ponte.ts), em formas lisas e cores chapadas (o padrao cartoon de 2026-11-10), feita por codigo: o tabuado
+    (a altura sobre o chao e a espessura, baixas porque o pet, a bola e as sombras sao desenhados no chao; quantas tabuas por celula e
+    a fresta entre elas), o corrimao nas beiras que dao para a agua (a
+    altura, a espessura do pau, o poste) e as cores. Em celulas. PROPOSTO, SEM FONTE */
+export const PONTE_ILHA = {
+  tabuado: { altura: 0.01, espessura: 0.04, porCelula: 4, fresta: 0.035, sobra: 0.12 },
+  corrimao: { altura: 0.62, pau: 0.07, poste: 0.11, recuo: 0.08 },
+  cor: { tabua: [0xc98a4b, 0xb97c42, 0xd2955a], corrimao: 0x8a5a2e, poste: 0x6f4623 },
+} as const;
+
 /** o fim da ilha (o Matheus, 2026-11-08: "adicionar um final [...] para ela nao acabar no meio do nada"; fimDaIlha.ts e grade.ts, porBordas):
     - a leste do rio, a mata sobe em `degraus` ate o morro: a coluna (a partir da margem leste do rio) onde comeca cada nivel, com a borda
       ondulando ate `ondula` celulas; a decoracao rente a um degrau novo some (a lista `objetos` nao muda, E-G0);
@@ -223,12 +278,4 @@ export const DIGITAL = {
      no alto (`topo`, a fracao da forca la em cima) */
   grade: { cor: "#b0e8f0", alfa: 0.3, espessura: 2.5, meridianos: 9, paralelos: 8, fuga: 0.25, topo: 0.55 },
   fios: { alto: 0.93, alcance: 10, porPoste: 2, queda: 0.06, segmentos: 12, cor: 0x2b2a33 },
-  /* a lata gigante (D4, o marco), no horizonte como na maquete B: a grade tem 64 celulas de largura e a camera segue o pet, entao um
-     marco parado num ponto so apareceria perto dele, e o mundo curvo o afundaria. Ela fica a `longe` celulas ao norte do pet e anda com
-     ele so com a fracao 1 - `paralaxe` (o que esta longe quase nao corre na tela); `lado` e a fracao da meia largura visivel a direita
-     do meio da tela (a mesma no celular e no desktop, longe do aviso do meio e do painel da direita); o pe fica a `base` do chao do pet,
-     com a dobra do mundo descontada (ela nao afunda), e a parte de baixo some atras do penhasco e da mata. A altura passa o dobro de
-     um pinheiro; o giro vira a frente (as cerejas, +z do glTF) um pouco para o lado, em tres quartos. Ajustados nas capturas da D4
-     (1280 e 390 px): PROPOSTO, SEM FONTE */
-  lata: { arquivo: "mapa_digital/lata/lata.gltf", longe: 46, lado: 0.22, paralaxe: 0.12, base: -12, altura: 9, giro: -0.35 },
 } as const;

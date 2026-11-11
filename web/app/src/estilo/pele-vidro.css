@@ -163,7 +163,7 @@
 
 /* ---------- HUD da tela Pet, do topo e do trilho (pet_hud.css, casca.css): o mesmo vidro dos paineis, com o reflexo, o contorno interno e o
    brilho por dentro; o trecho de luz e o marcador acesos */
-:root[data-pele="vidro"] :is(.hud-caixa, .pet-hud .hud-painel, .topo-pet, .topo-relogio),
+:root[data-pele="vidro"] :is(.hud-caixa, .pet-hud .hud-painel, .topo-pet, .topo-relogio, .topo-bits),
 :root[data-pele="vidro"] body .pet-tela .pet-alerta :is(.pet-prioridade, .chamado.dl-card),
 :root[data-pele="vidro"] body .hx-nav::before{
   background:

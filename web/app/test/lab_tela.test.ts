@@ -21,9 +21,9 @@ afterEach(() => { vi.unstubAllGlobals(); });
 
 /** o jogo com um pet de hoje que ja viveu um pouco, e os guardados de sempre */
 function jogoDeHoje(): { texto: string; guardados: string } {
-  const hoje = new Motor(555); hoje.avancar(300); hoje.observar("alimentar");
+  const hoje = new Motor(555, 21); hoje.avancar(300); hoje.observar("alimentar");
   dados[CHAVE] = textoSave(hoje);
-  dados[CHAVE_GUARDADOS] = JSON.stringify([JSON.parse(textoSave(new Motor(777)))]);
+  dados[CHAVE_GUARDADOS] = JSON.stringify([JSON.parse(textoSave(new Motor(777, 21)))]);
   iniciarJogo(armaz());
   return { texto: dados[CHAVE]!, guardados: dados[CHAVE_GUARDADOS]! };
 }
@@ -95,7 +95,7 @@ describe("Abrir (LM5-7): o pet de teste na tela sem trocar o pet ativo", () => {
     const lab = chocarOvoLab();
     abrirLab(lab);
     const salvo = dados[CHAVE_LAB];
-    trocarMotor(new Motor(888), "novo");
+    trocarMotor(new Motor(888, 21), "novo");
     expect(jogoAtual().emLab).toBeNull();
     expect(jogoAtual().motor.semente).toBe(888);
     expect(dados[CHAVE_LAB]).toBe(salvo);
@@ -122,7 +122,7 @@ describe("importar e exportar o save v16", () => {
     expect(JSON.parse(textoSave(m)).versao).toBe(VERSAO_PET_LAB);
   });
   test("um arquivo de hoje (a v21) nao e de laboratorio; uma versao que ainda nao existe segue sem abrir", () => {
-    const m = new Motor(31); m.avancar(200);
+    const m = new Motor(31, 21); m.avancar(200);
     expect(m.versao).toBe(21);
     expect(lerArquivo(textoSave(m), "a").lab).toBe(false);
     expect(() => lerArquivo(JSON.stringify({ semente: 31, log: [], versao: 20 }), "a")).toThrow(/versão 20/);
@@ -140,7 +140,7 @@ describe("importar e exportar o save v16", () => {
     const outro = petDeTeste(32);
     expect(() => importarSemConflito(lerArquivo(textoSave(outro), "o.digilab"))).toThrow(/já existe um pet de teste/);
     expect(() => ficarComArquivo(l)).toThrow(/não toma o lugar/);
-    expect(motorReal().versao).toBe(VERSAO_PET);
+    expect(motorReal().versao).toBe(21);
     expect(motorReal().semente).toBe(555);
   });
 });

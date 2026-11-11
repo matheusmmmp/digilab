@@ -147,6 +147,10 @@ FAIXAS_RESERVADAS = (
                    "Gerente, que autorizou a reserva)"),
     (87101, 87505, "equilibrio da luta em tempo real (jogo web, LUTA_POC LP5): a conferencia, uma vez, na LP5-4 "
                    "(docs/PLANO_EQUILIBRIO_LUTA_POC.md, secao 5; D-LP5-6; mesma derivacao da calibracao; aprovada junto)"),
+    (88101, 88505, "INDIVIDUALIDADE, I7, adendo 2: historia ou sorteio, a run unica dos 360 pets novos "
+                   "(docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md, secao 14, AD2-1; bases 88101, 88202, 88303, 88404 e 88505, K = 12; "
+                   "aprovada pelo Matheus em 2026-11-11, \"Aprova as recomendacoes e segue\"; conferida livre nesta tabela em 2026-11-11, "
+                   "o ok do Gerente da V3 pedido no PR do I7c)"),
 )
 
 

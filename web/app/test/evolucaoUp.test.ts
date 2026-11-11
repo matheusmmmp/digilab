@@ -21,8 +21,8 @@ const mapa = (): MapaEvolucao => ({
   sem_cena: [{ forma: "forma_s", digimon: "Seadramon", evol: false }],
 });
 
-test("a chave nasce desligada", () => {
-  expect(CENA_EVOLUCAO_UP).toBe(false);
+test("a chave esta ligada (Matheus, 2026-11-10)", () => {
+  expect(CENA_EVOLUCAO_UP).toBe(true);
 });
 
 test("escolherCena: a cena e a musica da linha; sem linha, o Evol do atlas; sem Evol, a Revelacao de hoje", () => {

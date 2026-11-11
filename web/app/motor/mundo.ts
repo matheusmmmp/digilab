@@ -8,9 +8,9 @@
    semeadura e os sorteios do CPython (random, getrandbits, randrange, randint). Nada disso usa o mulberry32 do jogo (motor/rng.ts).
 
    Os registros e o `ocorrido` usam os nomes em snake_case do Python de proposito: sao o mesmo dado, conferido campo a campo. */
-import { C, CMU, TPD, type ConfigMundo } from "./constantes.ts";
+import { AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, C, CMU, LAYOUT_MUNDO_MVP_AGUA, PONTE, TERRA, TPD, type ConfigMundo, type LayoutMundo } from "./constantes.ts";
 import {
-  CONFIG_CONTRATO, bigodes, contratoLigado, controlar, relativo, setorDe, solido, validarContrato, visivel, type Andar,
+  CONFIG_CONTRATO, CONFIG_CONTRATO_AGUA, bigodes, bloqueioEm, contratoLigado, controlar, livreMaisPerto, relativo, setorDe, solido, validarContrato, visivel, type Andar,
   type CategoriaSolido, type ConfigContrato, type Solido,
 } from "./contrato.ts";
 
@@ -210,6 +210,45 @@ export function noMapa(x: number, y: number, cm: ConfigMundo = CMU): [number, nu
   return [Math.min(cm.celulas_x * cm.sub - 1, Math.max(0, x)), Math.min(cm.celulas_y * cm.sub - 1, Math.max(0, y))];
 }
 
+// ================================================================== a agua (docs/TAREFA_V3_ILHA_AGUA.md; o espelho de digilab/mundo.py)
+/** a agua do layout (a tabela AGUA_POR_LAYOUT, pelo nome): null no mapa sem agua; com agua, uma celula por posicao (linha a linha, de cima
+    para baixo), true onde o pet pisa (a terra e a ponte). O mapa do tamanho errado ou com um caractere desconhecido falha alto */
+export function celulasSecas(cm: ConfigMundo): readonly boolean[] | null {
+  const linhas = Object.prototype.hasOwnProperty.call(AGUA_POR_LAYOUT, cm.layout.nome) ? AGUA_POR_LAYOUT[cm.layout.nome] : null;
+  if (linhas === null) return null;
+  if (linhas.length !== cm.celulas_y || linhas.some(l => typeof l !== "string" || l.length !== cm.celulas_x))
+    throw new Error(`a agua do layout ${cm.layout.nome} nao tem ${cm.celulas_y} linhas de ${cm.celulas_x} celulas`);
+  const out: boolean[] = [];
+  for (const l of linhas) for (const c of l) {
+    if (c !== AGUA_MAR && c !== AGUA_DOCE && c !== TERRA && c !== PONTE) throw new Error(`a agua do layout ${cm.layout.nome} tem caractere desconhecido: ${c}`);
+    out.push(c === TERRA || c === PONTE);
+  }
+  return Object.freeze(out);
+}
+
+/** os solidos da agua, em subunidades: em cada linha, cada trecho seguido de celulas de agua; o mesmo trecho em linhas seguidas vira um
+    retangulo so. Na ordem de (y0, x0). A agua colide e nao tapa a visao; a categoria e `obstaculo` */
+export function solidosDaAgua(cm: ConfigMundo): readonly Solido[] {
+  const secas = celulasSecas(cm);
+  if (secas === null) return [];
+  const nx = cm.celulas_x, ny = cm.celulas_y;
+  const abertos = new Map<string, [number, number, number]>();           // "x0,x1" -> [x0, x1, y0]
+  const rets: [number, number, number, number][] = [];
+  for (let y = 0; y <= ny; y++) {
+    const trechos = new Map<string, [number, number]>();
+    for (let x = 0; y < ny && x < nx;) {
+      if (secas[y * nx + x]) { x++; continue; }
+      const x0 = x;
+      while (x < nx && !secas[y * nx + x]) x++;
+      trechos.set(`${x0},${x}`, [x0, x]);
+    }
+    for (const [k, [x0, x1, y0]] of [...abertos]) if (!trechos.has(k)) { rets.push([x0, y0, x1, y]); abertos.delete(k); }
+    for (const [k, [x0, x1]] of trechos) if (!abertos.has(k)) abertos.set(k, [x0, x1, y]);
+  }
+  rets.sort((a, b) => a[1] - b[1] || a[0] - b[0]);
+  return Object.freeze(rets.map(([x0, y0, x1, y1]) => solido(x0 * cm.sub, y0 * cm.sub, x1 * cm.sub, y1 * cm.sub, "obstaculo", true, false)));
+}
+
 export function deslocar(x: number, y: number, direcao: number, comprimento: number, cm: ConfigMundo = CMU): [number, number] {
   const [cx, cy] = DIR16[direcao];
   return noMapa(x + divArred(cx * comprimento, ESCALA_DIR), y + divArred(cy * comprimento, ESCALA_DIR), cm);
@@ -261,7 +300,32 @@ export function direcaoDoCheiro(x: number, y: number, fontes: readonly FonteChei
 // ================================================================== os eventos do log (events.deixar_comida, deixar_bola)
 export const TIPOS_COMIDA_MUNDO = ["racao", "a", "b", "c"] as const;
 export type TipoComidaMundo = typeof TIPOS_COMIDA_MUNDO[number];
-export interface EventoMundo { tick: number; tipo: "deixar_comida" | "deixar_bola" | "levar_pet"; valor: string }
+export interface EventoMundo { tick: number; tipo: "deixar_comida" | "deixar_bola" | "levar_pet" | "mudar_ilha"; valor: string }
+
+/** a troca de ilha (docs/TAREFA_V3_ILHA_AGUA.md, IA4; events.mudar_ilha do Python): o nome do layout de destino, em minusculas, digitos e
+    sublinhado ASCII, de 1 a 32. Se a troca vale, quem confere e o Mundo.mudarIlha */
+const NOME_ILHA = /^[a-z0-9_]{1,32}$/;
+function nomeIlha(nome: unknown): string {
+  if (typeof nome !== "string" || !NOME_ILHA.test(nome)) throw new Error(`mudar_ilha com nome de layout invalido: ${String(nome)}`);
+  return nome;
+}
+export function eventoMudarIlha(tick: number, nome: unknown): EventoMundo {
+  return { tick, tipo: "mudar_ilha", valor: nomeIlha(nome) };
+}
+export function lerMudarIlha(e: { tipo: string; valor: unknown }): string {
+  if (e.tipo !== "mudar_ilha") throw new Error(`evento nao e mudar_ilha: ${e.tipo}`);
+  return nomeIlha(e.valor);
+}
+/** os destinos da troca de ilha (o ILHAS_DE_TROCA do Python), pelo nome: o layout (o mesmo de antes, so com outro nome e com a agua) e o
+    contrato que passa a valer (o controlador, que desvia da agua). DECIDIDO (2026-11-10: "Migram por evento") */
+export const ILHAS_DE_TROCA: Readonly<Record<string, { layout: LayoutMundo; contrato: ConfigContrato }>> = Object.freeze({
+  mvp_agua: { layout: LAYOUT_MUNDO_MVP_AGUA, contrato: CONFIG_CONTRATO_AGUA },
+});
+/** o registro da troca de ilha (o Mundo.troca_ilha do Python, com o `pet` que o motor poe) */
+export interface TrocaIlha {
+  tick: number; de: string; para: string; comidas: { id: number; de: [number, number]; para: [number, number] }[];
+  bola: { de: [number, number]; para: [number, number] }; pet: { de: [number, number]; para: [number, number] };
+}
 
 function posicaoMundo(x: unknown, y: unknown): [number, number] {
   if (typeof x !== "number" || typeof y !== "number" || !Number.isInteger(x) || !Number.isInteger(y))
@@ -423,7 +487,8 @@ export interface RegistroContrato {
     A atualizacao (quedas, apodrecer, sumir) e idempotente por tick: a segunda chamada no mesmo tick nao faz nada, e um tick para tras
     falha alto. Com dois pets, quem decide primeiro no tick a dispara. */
 export class MundoPartilhado {
-  readonly cm: ConfigMundo;
+  /** o mundo de agora: muda uma vez na vida, na troca de ilha (trocarLayout) */
+  cm: ConfigMundo;
   readonly semente: number | bigint;
   readonly rngArvores: RandomPy;
   readonly rngBola: RandomPy;
@@ -441,6 +506,10 @@ export class MundoPartilhado {
   readonly sumidas: Record<string, unknown>[] = [];
   readonly bolasDeixadas: { tick: number; x: number; y: number }[] = [];
   readonly rolagens: Record<string, unknown>[] = [];
+  /** a agua (docs/TAREFA_V3_ILHA_AGUA.md): null no mapa sem agua, e nada muda */
+  secas: readonly boolean[] | null;
+  /** a troca de ilha (IA4): null ate o evento `mudar_ilha`; o `pet` e posto pela parte do pet */
+  trocaIlha: TrocaIlha | null = null;
 
   constructor(cfg: ConfigMundo, semente: number | bigint) {
     const cm = this.cm = cfg;
@@ -463,6 +532,102 @@ export class MundoPartilhado {
       else throw new Error(`arvore ${id} fora do jardim e da mata: ${nome}`);
       this.arvores.push({ id, x: ax, y: ay, fruta, regiao: nome, p, recarga_ate: 0 });
     }
+    // a agua (IA1): com agua, o ninho, o comedouro, a bola e as arvores ficam em terra, e toda a terra se alcanca a pe a partir do ninho
+    this.secas = celulasSecas(cm);
+    if (this.secas !== null) this.conferirAgua();
+  }
+
+  // ------------------------------------------------------------ a agua (o Mundo._conferir_agua, o seca, o em_terra e o ate_a_margem do Python)
+  private conferirAgua(): void {
+    const cm = this.cm, secas = this.secas!, nx = cm.celulas_x, lay = cm.layout;
+    const pontos: [string, readonly [number, number]][] = [["ninho", lay.ninho], ["comedouro", lay.comedouro], ["bola_inicio", lay.bola_inicio],
+      ...lay.arvores.map((a): [string, readonly [number, number]] => [`arvore ${a[0]}`, [a[1], a[2]]])];
+    for (const [nome, [cx, cy]] of pontos) if (!secas[cy * nx + cx]) throw new Error(`layout ${lay.nome}: ${nome} na agua (${cx}, ${cy})`);
+    const ini = lay.ninho[1] * nx + lay.ninho[0];
+    const vistas = new Set<number>([ini]), fila = [ini];
+    while (fila.length) {
+      const i = fila.pop()!, x = i % nx, y = Math.floor(i / nx);
+      for (const [vx, vy] of [[x + 1, y], [x - 1, y], [x, y + 1], [x, y - 1]]) {
+        const j = vy * nx + vx;
+        if (vx >= 0 && vx < nx && vy >= 0 && vy < cm.celulas_y && secas[j] && !vistas.has(j)) { vistas.add(j); fila.push(j); }
+      }
+    }
+    const ilhadas = secas.filter(Boolean).length - vistas.size;
+    if (ilhadas) throw new Error(`layout ${lay.nome}: ${ilhadas} celulas de terra que o pet nao alcanca a pe a partir do ninho`);
+  }
+
+  /** o ponto (dentro do mapa) esta em terra? Sem agua no mapa, sempre */
+  seca(x: number, y: number): boolean {
+    return this.secas === null || this.secas[Math.floor(y / this.cm.sub) * this.cm.celulas_x + Math.floor(x / this.cm.sub)];
+  }
+
+  /** o ponto, se esta em terra; senao o centro da celula de terra mais perto (a conta do contrato: octil, o empate pelo indice) */
+  emTerra(x: number, y: number): [number, number] {
+    if (this.seca(x, y)) return [x, y];
+    const cm = this.cm, m = Math.floor(cm.sub / 2);
+    const [cx, cy] = livreMaisPerto(this.secas!, cm.celulas_x, [Math.floor(x / cm.sub), Math.floor(y / cm.sub)]);
+    return [cx * cm.sub + m, cy * cm.sub + m];
+  }
+
+  /** o ultimo ponto em terra da linha de (x0, y0) a (x1, y1), antes da primeira agua: a bola para na margem */
+  ateAMargem(x0: number, y0: number, x1: number, y1: number): [number, number] {
+    if (this.secas === null) return [x1, y1];
+    const dx = x1 - x0, dy = y1 - y0, n = Math.max(Math.abs(dx), Math.abs(dy));
+    let x = x0, y = y0;
+    for (let k = 1; k <= n; k++) {
+      const px = x0 + divArred(dx * k, n), py = y0 + divArred(dy * k, n);
+      if (!this.seca(px, py)) break;
+      x = px; y = py;
+    }
+    return [x, y];
+  }
+
+  /** onde a bola que rola de (x0, y0) para (x1, y1) para (o Mundo.rolagem_seca do Python): na margem (ateAMargem) e, depois, encurtada
+      ate que todo ponto por onde ela passa tick a tick (a conta do bolaEm, que arredonda pela distancia e pode sair 1 subunidade da
+      linha) esteja em terra. Sem agua, (x1, y1) */
+  rolagemSeca(x0: number, y0: number, x1: number, y1: number): [number, number] {
+    if (this.secas === null) return [x1, y1];
+    [x1, y1] = this.ateAMargem(x0, y0, x1, y1);
+    const atrito = this.cm.atrito;
+    for (;;) {
+      const d = distancia(x1 - x0, y1 - y0), n = Math.ceil(d / atrito);
+      let px = x0, py = y0, molhou = false;
+      for (let j = 1; j < n; j++) {
+        const qx = x0 + divArred((x1 - x0) * atrito * j, d), qy = y0 + divArred((y1 - y0) * atrito * j, d);
+        if (!this.seca(qx, qy)) { molhou = true; break; }
+        px = qx; py = qy;
+      }
+      if (!molhou) return [x1, y1];
+      if (distancia(px - x0, py - y0) >= d) throw new Error(`a rolagem da bola nao encurtou: (${x0}, ${y0}) -> (${x1}, ${y1})`);
+      x1 = px; y1 = py;
+    }
+  }
+
+  /** A troca de ilha (IA4; o Mundo.trocar_layout do Python): o mundo passa do layout de hoje, sem agua, para `layout`, que e o mesmo (so o
+      nome muda) com agua. O mundo ja vem atualizado ate o tick. A comida que fica na agua vai para a terra mais perto; a bola para onde
+      esta, ou na terra mais perto. Nenhum fluxo de acaso anda. Uma vez so por mundo. Devolve o registro (`trocaIlha`); o `pet` e posto
+      pela parte do pet, no mesmo objeto, como no Python */
+  trocarLayout(layout: LayoutMundo, tick: number): TrocaIlha {
+    if (this.tickAtualizado_ === null || tick !== this.tickAtualizado_)
+      throw new Error(`trocarLayout no tick ${tick} com o mundo atualizado ate ${this.tickAtualizado_}`);
+    if (this.secas !== null || this.trocaIlha !== null)
+      throw new Error(`o mundo ${this.cm.layout.nome} ja tem agua: a troca de ilha vale uma vez, de um layout sem agua`);
+    const de = this.cm.layout.nome;
+    if (JSON.stringify({ ...layout, nome: de }) !== JSON.stringify(this.cm.layout))
+      throw new Error(`a troca de ilha so muda a agua: ${layout.nome} nao e o layout ${de} com outro nome`);
+    const cm: ConfigMundo = { ...this.cm, layout }, secas = celulasSecas(cm);
+    if (secas === null) throw new Error(`o layout ${layout.nome} nao tem agua: a troca de ilha e para a ilha com agua`);
+    this.cm = cm; this.secas = secas;
+    this.conferirAgua();
+    const comidas: TrocaIlha["comidas"] = [];
+    for (const c of this.comidas.values()) {
+      const [x, y] = this.emTerra(c.x, c.y);
+      if (x !== c.x || y !== c.y) { comidas.push({ id: c.id, de: [c.x, c.y], para: [x, y] }); c.x = x; c.y = y; }
+    }
+    const [bx, by] = this.bolaEm(tick), [x, y] = this.emTerra(bx, by);
+    this.bola = { x0: x, y0: y, x1: x, y1: y, t0: tick, d: 0 };
+    this.trocaIlha = { tick, de, para: layout.nome, comidas, bola: { de: [bx, by], para: [x, y] } } as TrocaIlha;
+    return this.trocaIlha;
   }
 
   get proxId(): number { return this.proxId_; }
@@ -490,6 +655,7 @@ export class MundoPartilhado {
   }
 
   novaComida(tipo: string, x: number, y: number, tick: number, origem: string): Comida {
+    [x, y] = this.emTerra(x, y);                                 // a agua: a comida que cairia na agua fica na terra mais perto
     const c: Comida = { id: this.proxId_++, tipo, x, y, tick_posta: tick, origem };
     this.comidas.set(c.id, c);
     return c;
@@ -591,7 +757,7 @@ export class MundoPartilhado {
     const direcao = golpe ?? sorteada;
     let celulas = this.rngBola.randint(cm.bola_min_celulas, cm.bola_max_celulas);
     if (cm.layout.regioes[regiaoDe(bx, cm)][0] === "campo") celulas *= cm.mult_bola_campo;
-    const [x1, y1] = deslocar(bx, by, direcao, celulas * cm.sub, cm);
+    const [x1, y1] = this.rolagemSeca(bx, by, ...deslocar(bx, by, direcao, celulas * cm.sub, cm));  // a agua: a bola para na margem
     this.bola = { x0: bx, y0: by, x1, y1, t0: tick, d: distancia(x1 - bx, y1 - by) };
     this.rolagens.push({ tick, de: [bx, by], para: [x1, y1], direcao, celulas });
   }
@@ -605,6 +771,7 @@ export class MundoPartilhado {
   /** o dono poe a bola parada em (x, y); fora do mapa falha alto */
   deixarBola(x: number, y: number, tick: number): void {
     lerDeixarBola(eventoDeixarBola(tick, x, y));
+    [x, y] = this.emTerra(x, y);
     this.bola = { x0: x, y0: y, x1: x, y1: y, t0: tick, d: 0 };
     this.bolasDeixadas.push({ tick, x, y });
   }
@@ -615,6 +782,7 @@ export class MundoPartilhado {
       bola: { ...this.bola }, comidas: [...this.comidas.values()].map(c => ({ ...c })), prox_id: this.proxId_,
       passo_mundo: this.passoMundo_, tick_atualizado: this.tickAtualizado_, arvores: this.arvores.map(a => ({ ...a })),
       quedas: this.quedas, sumidas: this.sumidas, bolas_deixadas: this.bolasDeixadas, rolagens: this.rolagens,
+      ...(this.trocaIlha !== null ? { troca_ilha: JSON.parse(JSON.stringify(this.trocaIlha)) as TrocaIlha } : {}),
     };
   }
 }
@@ -627,7 +795,8 @@ export class MundoPartilhado {
     Os metodos recebem o tick do pet; o mundo e os registros do mundo fisico usam o do mundo (o do pet mais a `entrada`). Com um pet so,
     a entrada e 0 e os dois relogios sao o mesmo. */
 export class Mundo {
-  readonly cm: ConfigMundo;
+  /** o mundo de agora: muda uma vez na vida, na troca de ilha (mudarIlha) */
+  cm: ConfigMundo;
   readonly comum: MundoPartilhado;
   readonly entrada: number;
   readonly efeitoFrutas: Record<string, number>;
@@ -657,7 +826,7 @@ export class Mundo {
   readonly regioes: { tick: number; de: number; para: number }[] = [];
   readonly visitas: { arvore: string; chegada: number; saida: number | null; decisoes: number }[] = [];
   // o contrato da P4 (desligado: nada disto muda o mundo de hoje)
-  readonly cct: ConfigContrato;
+  cct: ConfigContrato;                                         // muda uma vez na vida, na troca de ilha (mudarIlha)
   private solidos: readonly Solido[] = [];                     // os que colidem (as paredes, com a chave delas)
   private opacos: readonly Solido[] = [];                      // os que tapam (as paredes e os troncos)
   orientacao = 0;
@@ -714,6 +883,8 @@ export class Mundo {
     this.bolaNoGolpe = op.bolaNoGolpe ?? false;
     this.pet = [this.comum.ninho[0], this.comum.ninho[1]];
     this.cct = validarContrato({ ...(op.contrato ?? CONFIG_CONTRATO) });
+    if (this.comum.secas !== null && !this.cct.controlador)
+      throw new Error("o layout com agua exige o controlador do contrato (ConfigContrato.controlador)");
     if (contratoLigado(this.cct)) {
       if (dado !== undefined) throw new Error("o contrato da P4 roda com um pet, fora do grupo");
       this.montarContrato();
@@ -750,6 +921,24 @@ export class Mundo {
   get sumidas(): Record<string, unknown>[] { return this.comum.sumidas; }
   get bolasDeixadas(): { tick: number; x: number; y: number }[] { return this.comum.bolasDeixadas; }
   get rolagens(): Record<string, unknown>[] { return this.comum.rolagens; }
+  /** a agua (docs/TAREFA_V3_ILHA_AGUA.md): null no mapa sem agua, e nada muda */
+  get secas(): readonly boolean[] | null { return this.comum.secas; }
+  /** a troca de ilha (IA4): null ate o evento `mudar_ilha` */
+  get trocaIlha(): TrocaIlha | null { return this.comum.trocaIlha; }
+  seca(x: number, y: number): boolean { return this.comum.seca(x, y); }
+  emTerra(x: number, y: number): [number, number] { return this.comum.emTerra(x, y); }
+  ateAMargem(x0: number, y0: number, x1: number, y1: number): [number, number] { return this.comum.ateAMargem(x0, y0, x1, y1); }
+  rolagemSeca(x0: number, y0: number, x1: number, y1: number): [number, number] { return this.comum.rolagemSeca(x0, y0, x1, y1); }
+
+  /** o pet solto na agua, ou tao rente a ela que o corpo a invade, cai no centro da celula de terra mais perto (o _pet_em_terra do
+      Python, da parte do pet: le os solidos do contrato) */
+  private petEmTerra(x: number, y: number): [number, number] {
+    const secas = this.comum.secas;
+    if (secas === null || bloqueioEm(x, y, this.cct.r_pet, this.solidos) === null) return [x, y];
+    const cm = this.cm, m = Math.floor(cm.sub / 2);
+    const [cx, cy] = livreMaisPerto(secas, cm.celulas_x, [Math.floor(x / cm.sub), Math.floor(y / cm.sub)]);
+    return [cx * cm.sub + m, cy * cm.sub + m];
+  }
 
   /** as paredes na borda (so com a chave `paredes`; solidas e opacas) e os quadrados dos troncos (com a chave `sensores`; opacos, sem
       colisao, P4-4), na ordem do Python (o _montar_contrato) */
@@ -764,7 +953,7 @@ export class Mundo {
     const troncos = cc.sensores
       ? this.arvores.map(a => solido(a.x - meio, a.y - meio, a.x - meio + cc.lado_tronco, a.y - meio + cc.lado_tronco, "tronco", false, true))
       : [];
-    this.solidos = Object.freeze(paredes);
+    this.solidos = Object.freeze([...paredes, ...solidosDaAgua(cm)]);   // a agua: docs/TAREFA_V3_ILHA_AGUA.md
     this.opacos = Object.freeze([...paredes, ...troncos]);
   }
 
@@ -953,6 +1142,12 @@ export class Mundo {
     return [reg, { ...e, fome, humor, sujeira }];
   }
 
+  /** alguem brincou com a bola (o _rolar_bola do Python): ela rola no mundo partilhado; `de` e onde o pet estava antes do passo que o
+      levou a bola (com a bolaNoGolpe, o golpe sai na direcao em que ele vinha) */
+  private rolarBola(tick: number, de?: readonly [number, number]): void {
+    this.comum.rolarBola(this.tm(tick), this.bolaNoGolpe && de !== undefined ? de : null);
+  }
+
   /** A consequencia de uma decisao (MotorMundo._consequencia): o estado vem depois do efeito de sempre da acao (o engine); sai o
       estado depois de andar, comer e brincar, com o +0,05 do comer desfeito (MF-2). `escolher` e o gancho do cerebro (null: o
       padrao); `regra` vai para o registro. Toda decisao passa aqui (as acoes sem alvo so registram e limpam o pendente). */
@@ -972,6 +1167,11 @@ export class Mundo {
       a = escolher ? escolher(ac, cands.slice(), this.percepcao!, u) : null;
       if (a === null) a = this.alvoPadrao(ac, cands);
       else this.validarAlvo(ac, a, cands);
+      if (a !== null && a.id === null && this.comum.secas !== null) {
+        /* a agua: o ponto escolhido na agua (o vagar, o cheiro, o lugar lembrado) vale a terra mais perto; o pendente o guarda */
+        const [tx, ty] = this.comum.emTerra(a.x, a.y);
+        if (tx !== a.x || ty !== a.y) a = { ...a, x: tx, y: ty };
+      }
       let andar: Andar | null = null;
       let x1: number, y1: number;
       if (a !== null && this.cct.controlador) {             // a P4: o controlador do contrato, nos ticks da decisao
@@ -999,7 +1199,7 @@ export class Mundo {
         if (alcancaveis.length) [comeu, e] = this.comer(alcancaveis[0][2], "achou", tick, e);
       } else if (chegou && ac === "brincar" && objetoDo(a!) === "bola") {
         e.humor = Math.min(1, e.humor + this.cm.ganho_humor_bola);
-        this.comum.rolarBola(this.tm(tick), this.bolaNoGolpe ? [x0, y0] : null);
+        this.rolarBola(tick, [x0, y0]);
         bola = true;
       }
       const social = this.grupo !== null ? this.idSocial(a) : null;
@@ -1089,9 +1289,35 @@ export class Mundo {
   levarPet(tick: number, x: number, y: number): void {
     const [px, py] = lerLevarPet(eventoLevarPet(tick, x, y));
     const de: [number, number] = [this.pet[0], this.pet[1]];
-    this.pet = noMapa(px, py, this.cm);
+    this.pet = this.petEmTerra(...noMapa(px, py, this.cm));
     this.pendente = null;
     this.levadas.push({ tick: this.tm(tick), de, pedido: [px, py], para: [this.pet[0], this.pet[1]] });
+  }
+
+  /** a troca de ilha (docs/TAREFA_V3_ILHA_AGUA.md, IA4; o MotorMundo._aplicar_mudar_ilha do Python): o mundo passa do layout de hoje, sem
+   *  agua, para `nome`, que e o mesmo (so o nome muda) com agua (MundoPartilhado.trocarLayout); o contrato passa a ser o do destino (o
+   *  controlador, que desvia dela); o pet que fica na agua vai para a terra mais perto, e o destino que ele tinha se perde. Nenhum fluxo
+   *  de acaso anda. Nao e contato nem cuidado. Vale com o pet acordado ou dormindo, uma vez so, com um pet (fora do grupo) e sem o
+   *  contrato ligado antes */
+  mudarIlha(tick: number, nome: string): TrocaIlha {
+    nome = lerMudarIlha(eventoMudarIlha(tick, nome));
+    if (!Object.prototype.hasOwnProperty.call(ILHAS_DE_TROCA, nome)) throw new Error(`mudar_ilha para uma ilha desconhecida: ${nome}`);
+    if (contratoLigado(this.cct))
+      throw new Error("mudar_ilha roda com um pet (fora do grupo), sem o banheiro e sem o contrato ligado antes");
+    const { layout, contrato } = ILHAS_DE_TROCA[nome];
+    if (!contrato.controlador) throw new Error(`a ilha ${nome} tem agua e pede o controlador do contrato`);
+    this.atualizar(tick);
+    const reg = this.comum.trocarLayout(layout, this.tm(tick));
+    this.cm = this.comum.cm;
+    this.cct = validarContrato({ ...contrato });
+    this.montarContrato();
+    this.orientacao = 0;
+    this.contratoDecisoes.length = 0;
+    const petDe: [number, number] = [this.pet[0], this.pet[1]];
+    this.pet = this.petEmTerra(this.pet[0], this.pet[1]);
+    this.pendente = null;
+    reg.pet = { de: petDe, para: [this.pet[0], this.pet[1]] };
+    return reg;
   }
 
   // ------------------------------------------------------------ leitura
@@ -1116,6 +1342,7 @@ export class Mundo {
       rolagens: m.rolagens, decisoes: this.decisoes, regioes: this.regioes, visitas: this.visitas,
       manchas_abertas: [...this.manchasAbertas.values()].map(v => ({ ...v })),
       ...(contratoLigado(this.cct) ? { orientacao: this.orientacao, contrato_decisoes: this.contratoDecisoes } : {}),
+      ...(m.trocaIlha !== null ? { troca_ilha: JSON.parse(JSON.stringify(m.trocaIlha)) as TrocaIlha } : {}),
       ...(this.levadas.length > 0 ? { levadas: this.levadas.map(l => ({ ...l, de: [...l.de], pedido: [...l.pedido], para: [...l.para] })) } : {}),   // so com alguma levada: a vida de antes sai byte a byte
     };
   }
