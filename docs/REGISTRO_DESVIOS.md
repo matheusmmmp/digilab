@@ -611,3 +611,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-10 — INDIVIDUALIDADE, I5b: a análise única do hábito e a leitura do H_mundo (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i5b`)](registro/2026-11.md)
 - [2026-11-10 — INDIVIDUALIDADE: a D-IND-I5b-1 confirmada e o adendo 1 do I7 DECIDIDO (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i7-adendo1`)](registro/2026-11.md)
 - [2026-11-10 — CONVERSA_PET, DC5, a aprovação do plano de análise (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5`)](registro/2026-11.md)
+- [2026-11-10 — UX_TELA_PET, a câmera do primeiro dia no jogo (gerente da frente, Claude Code, Opus 5.5, branch `v3-ux-camera-abertura`)](registro/2026-11.md)

@@ -4,6 +4,7 @@
    muda em outra aba, esta relê o save em vez de gravar por cima. */
 import { useEffect, useState } from "react";
 import { Motor, PetMorto, ehCerebroTrocavel } from "../motor/index.ts";
+import { pedirAbertura } from "./abertura.ts";
 import { ligarProduto } from "./produto.ts";
 import { podeTrocarCerebro, type Cerebro } from "./cerebro.ts";
 import { CHAVE_LAB } from "./lab.ts";
@@ -162,7 +163,8 @@ export function balancoOvo(nascendo: number): number {
 /** um quadro a menos do ovo chocando (chamado pelo palco a cada desenho) */
 export function passarQuadroOvo(): void {
   const j = jogoAtual();
-  if (j.nascendo > 0) { j.nascendo--; if (j.nascendo === 0) avisar(); }
+  /* o ovo chocou: a camera do primeiro dia fica pedida (abertura.ts; AB-2, uma vez por pet) */
+  if (j.nascendo > 0) { j.nascendo--; if (j.nascendo === 0) { pedirAbertura(j.motor.semente); avisar(); } }
 }
 
 /** outra aba mudou o save: relê em vez de gravar por cima depois */

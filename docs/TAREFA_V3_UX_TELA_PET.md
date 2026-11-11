@@ -953,3 +953,31 @@ D-AB-1 e D-AB-2, em `docs/registro/2026-11.md`.
 - tocar a proposta escolhida sem o parâmetro, uma vez por save;
 - a interrupção pelo toque;
 - um teste e2e do caminho inteiro.
+
+## 31. A câmera do primeiro dia no jogo (2026-11-10)
+
+O Matheus aprovou AB-1 a AB-5 em 2026-11-10: "siga a recomendação." Esta etapa liga a proposta B no jogo, sem o parâmetro.
+
+**Como funciona:**
+- **O pedido (AB-2):** quando o ovo choca (`passarQuadroOvo`, em `src/jogo.ts`), o jogo grava `{semente, tocada: false}` na chave da página
+  `<chave>-abertura` (`src/abertura.ts`). A chave fica fora do save, do log e do replay. Recarregar antes de a abertura tocar não perde o
+  pedido.
+- **O toque:** a vista (`vista.ts`) toca a B quando o pet de agora tem o pedido. Ela só começa sem o pet na mão, sem lugar aberto e sem o véu.
+  No fim, a câmera chega ao pet no zoom de sempre, e o pedido fica marcado como tocado.
+- **A interrupção (AB-3):** um toque, uma tecla ou a roda em qualquer lugar da página encerram a abertura. Pegar o pet ou abrir um lugar
+  também. A câmera volta à de sempre em 0,4 s (`TRANSICAO_MS`, `quadroDaSaida` em `aberturaConta.ts`), e o pedido fica marcado.
+- **A HUD (AB-4)** fica como está.
+- **Onde vale (AB-5):** em todas as larguras. Com "reduzir movimento", a abertura é pulada, e o pedido fica marcado.
+- **O `?abertura=a|b|c`** continua tocando a proposta pedida a cada abertura da página, para refazer as capturas da prancha. Nesse modo, a
+  abertura não grava nada e não se interrompe.
+- **`data-abertura`:** a cena ganha `"tocando"` ou `"saindo"` enquanto a abertura manda na câmera. Os testes esperam por esse atributo.
+
+**Os testes:**
+- `test/ilha_abertura.test.ts`, com 10 testes, 5 deles novos: a saída pelo toque e o pedido (uma vez por pet, outro pet não herda, a chave
+  estragada não toca);
+- `e2e/abertura.spec.ts`, com 3 testes: toca uma vez e não volta ao recarregar; uma tecla interrompe; "reduzir movimento" pula, e sem pedido
+  nada acontece;
+- no `e2e/jogo.spec.ts`, o "mundo: o ovo novo choca na cena 3D" confere que o ovo que choca grava o pedido e que a abertura toca.
+
+A interpretação de "uma vez por save" está em D-AB-3, em `docs/registro/2026-11.md`.
+

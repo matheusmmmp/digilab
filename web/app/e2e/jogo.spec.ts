@@ -1264,6 +1264,9 @@ test("mundo: o ovo novo choca na cena 3D", async ({ page }) => {
   const lcd = page.locator(".pet-cena canvas.lcd");
   await expect(lcd).toHaveAttribute("aria-label", "Tela do pet: ovo");
   await expect(lcd).not.toHaveAttribute("aria-label", "Tela do pet: ovo", { timeout: 20_000 });
+  /* o ovo que chocou pede a camera do primeiro dia (AB-2), que toca logo (e2e/abertura.spec.ts) */
+  await expect.poll(() => page.evaluate(c => JSON.parse(localStorage.getItem(c + "-abertura") ?? "null")?.semente ?? null, CHAVE)).not.toBeNull();
+  await expect(page.locator("[data-abertura]")).toHaveCount(1);
   await infoMundoNoEstado(page, null);
   expect(erros).toEqual([]);
 });
