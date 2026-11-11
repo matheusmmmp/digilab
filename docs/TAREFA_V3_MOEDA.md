@@ -80,7 +80,7 @@ As M-1 a M-10 do `docs/PLANO_V3_MOEDA.md`, seção 9, cada uma com a recomendaç
   - 396 depois de um carinho com o humor em 9 %, o cuidado na hora.
 
 **Os desvios e as interpretações** estão no registro (`docs/registro/2026-11.md`, "MOEDA, MO1"):
-- os limiares do cuidado na hora da higiene e do humor: 0,5, e não os do bebê;
+- os limiares do cuidado na hora da higiene e do humor: 25 %, DECIDIDO pelo Matheus em 2026-11-11 (a etapa propunha 0,5);
 - a faixa do rival da Arena;
 - o teto do cuidado contado em Bits;
 - o Salão fora;
