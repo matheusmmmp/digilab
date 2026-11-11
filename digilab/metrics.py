@@ -13,6 +13,7 @@
 from __future__ import annotations
 
 import math
+import re
 import random
 from bisect import bisect_left
 from dataclasses import dataclass
@@ -2932,3 +2933,106 @@ def media_habito(valores: Sequence[float | None]) -> dict:
     """a media dos valores que nao sao None (4.3) e quantos ficaram fora; a media e None se todos ficaram fora"""
     vs = [v for v in valores if v is not None]
     return {"media": sum(vs) / len(vs) if vs else None, "n": len(vs), "fora": len(valores) - len(vs)}
+
+
+# --- a variedade e a copia da fala, a DC5 da CONVERSA_PET (docs/PLANO_ANALISE_V3_CONVERSA_DC5.md, 4.6; APROVADO em 2026-11-10; medidas
+# nossas, SEM FONTE; o distinct-n e uma definicao da literatura de dialogo cuja fonte fica NAO CONFIRMADA no resumo, plano 4.6 e 12)
+def palavras_normalizadas(texto: str) -> list[str]:
+    """o texto normalizado da 4.6: minusculas, sem acentos, sem pontuacao, as palavras separadas por espaco"""
+    import unicodedata
+    if not isinstance(texto, str):
+        raise TypeError(f"texto precisa ser str: {type(texto).__name__}")
+    sem_acento = "".join(ch for ch in unicodedata.normalize("NFD", texto.lower()) if unicodedata.category(ch) != "Mn")
+    return "".join(ch if ch.isalnum() else " " for ch in sem_acento).split()
+
+
+def trechos_de_frases_modelo(frases: Sequence[str], min_palavras: int) -> list[tuple[str, ...]]:
+    """a lista da Q6: cada frase cortada em sentencas no ponto final, na interrogacao, na exclamacao e nas reticencias (tambem o caractere unico); cada sentenca
+    normalizada vira um trecho, e so ficam os de pelo menos `min_palavras` palavras (sem repetir, na ordem)"""
+    if min_palavras < 1:
+        raise ValueError(f"min_palavras >= 1: {min_palavras}")
+    out: list[tuple[str, ...]] = []
+    for f in frases:
+        for sentenca in re.split(r"[.!?…]+", f):
+            t = tuple(palavras_normalizadas(sentenca))
+            if len(t) >= min_palavras and t not in out:
+                out.append(t)
+    return out
+
+
+def _contem(palavras: Sequence[str], trecho: Sequence[str]) -> bool:
+    m = len(trecho)
+    return any(tuple(palavras[i:i + m]) == tuple(trecho) for i in range(len(palavras) - m + 1))
+
+
+def tem_frase_modelo(fala: str, trechos: Sequence[Sequence[str]]) -> bool:
+    """a fala contem um trecho da lista, normalizado, como sequencia de palavras (4.6, Q6)"""
+    p = palavras_normalizadas(fala)
+    return any(_contem(p, t) for t in trechos)
+
+
+def _ngramas(palavras: Sequence[str], n: int) -> list[tuple[str, ...]]:
+    return [tuple(palavras[i:i + n]) for i in range(len(palavras) - n + 1)]
+
+
+def distinct_n(falas: Sequence[str], n: int, total_palavras: int | None = None) -> dict:
+    """a fracao de n-gramas distintos sobre o total (4.6, Q7), nas falas em ordem, cortadas no mesmo total de palavras (`total_palavras`, o
+    menor entre as celulas; None = todas). Os n-gramas nao cruzam de uma fala para a outra. Falha alto sem n-grama."""
+    if n < 1:
+        raise ValueError(f"n >= 1: {n}")
+    resto = total_palavras
+    todos: list[tuple[str, ...]] = []
+    usadas = 0
+    for f in falas:
+        p = palavras_normalizadas(f)
+        if resto is not None:
+            p = p[:max(resto, 0)]
+            resto -= len(p)
+        usadas += len(p)
+        todos += _ngramas(p, n)
+        if resto is not None and resto <= 0:
+            break
+    if total_palavras is not None and usadas < total_palavras:
+        raise ValueError(f"distinct-{n}: so {usadas} palavras, o corte pede {total_palavras}")
+    if not todos:
+        raise ValueError(f"distinct-{n} sem n-grama")
+    return {"n": n, "distintos": len(set(todos)), "total": len(todos), "valor": len(set(todos)) / len(todos), "palavras": usadas}
+
+
+def repeticao_entre_turnos(falas: Sequence[str], n: int) -> dict:
+    """numa sequencia (uma conversa ou uma sequencia espontanea), as falas a partir da segunda que repetem um n-grama de palavras de uma fala
+    anterior da mesma sequencia (4.6, Q7)"""
+    if n < 1:
+        raise ValueError(f"n >= 1: {n}")
+    vistos: set = set()
+    repetem = 0
+    for i, f in enumerate(falas):
+        g = set(_ngramas(palavras_normalizadas(f), n))
+        if i > 0 and g & vistos:
+            repetem += 1
+        vistos |= g
+    return {"consideradas": max(len(falas) - 1, 0), "repetem": repetem}
+
+
+def kappa_cohen(pares: Sequence[tuple[str, str]]) -> dict:
+    """o kappa de Cohen entre dois marcadores (DC5, 4.1). `pares` = (marcacao A, marcacao B) por item. Com a concordancia esperada igual a 1
+    o kappa nao e calculavel: sai None, com a concordancia bruta (o plano: "nao calculavel", e o gate fica nao medido)."""
+    if not pares:
+        raise ValueError("kappa sem itens")
+    n = len(pares)
+    cats = sorted({x for p in pares for x in p})
+    po = sum(a == b for a, b in pares) / n
+    pe = sum((sum(a == c for a, _ in pares) / n) * (sum(b == c for _, b in pares) / n) for c in cats)
+    kappa = None if pe >= 1 else (po - pe) / (1 - pe)
+    return {"n": n, "concordancia": po, "esperada": pe, "kappa": kappa, "calculavel": kappa is not None,
+            "por_categoria": {c: [sum(a == c for a, _ in pares), sum(b == c for _, b in pares)] for c in cats}}
+
+
+def ic_wilson(k: int, n: int, z: float = 1.959963984540054) -> list[float]:
+    """o IC de Wilson de uma fracao k/n (o IC95 por padrao; DC5, 4.1 e 4.2, como na DC4)"""
+    if n <= 0 or not 0 <= k <= n:
+        raise ValueError(f"Wilson com k={k}, n={n}")
+    p = k / n
+    centro = (p + z * z / (2 * n)) / (1 + z * z / n)
+    meia = z * math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / (1 + z * z / n)
+    return [max(0.0, centro - meia), min(1.0, centro + meia)]

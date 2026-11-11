@@ -67,12 +67,22 @@ def mensagens_do_prompt() -> dict:
 
 def mensagens_do_servico() -> dict:
     from servidor.fala_livre import ServicoFalaLivre
+
+    class Servico(ServicoFalaLivre):
+        """o servico do jogo, sem mudar nada, com o verificador falso"""
+
+        def __init__(self, voz, verif) -> None:
+            super().__init__(cliente=voz, ambiente={})
+            self._verif_gabarito = verif
+
+        @property
+        def cliente_verif(self):
+            return self._verif_gabarito
+
     out = {}
     for e, est, sit in CASOS:
         voz, verif = ClienteGuarda("voz"), ClienteGuarda("verif")
-        s = ServicoFalaLivre(cliente=voz, ambiente={})
-        s.__dict__["_verif_gabarito"] = verif
-        type(s).cliente_verif = property(lambda self: self.__dict__.get("_verif_gabarito"))   # o verificador falso, so neste processo
+        s = Servico(voz, verif)
         pedido = {"situacao": sit, "estado": {"identidade": {"estagio": est}}, "conceitos": ENTRADAS[e], "semente": 7,
                   "historico": HISTORICO if sit == "conversa" else []}
         if sit == "conversa":
