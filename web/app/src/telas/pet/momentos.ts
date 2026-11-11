@@ -26,7 +26,7 @@ export const MOMENTOS = {
   /** o Feliz do carinho sai quando o pulinho da reacao ao toque acaba (cenaAcao.ts, CENA_ACAO.reacaoMs) */
   carinhoMs: 1600,
   /** os rostos dos momentos: quanto duram */
-  acordarMs: 1500, perdidoMs: 2000, podreMs: 2000,
+  acordarMs: 1500, perdidoMs: 2000, podreMs: 2000, vazioMs: 2000,
   /** o pet dormindo vira de lado quando o dono tenta pegar: quanto dura */
   viraMs: 600,
 } as const;
@@ -45,11 +45,13 @@ export interface EntradaMomentos {
   atendidos: number;
   /** o tamanho de mundo.consumos e o ultimo consumo (null sem mundo ou sem consumo) */
   consumos: number;
+  /** o id do ultimo episodio "nao_havia" da memoria do modular (a ida ao lugar lembrado que estava vazio); null sem modular ou sem episodio */
+  vazio: number | null;
   ultimo: { tipo: string; situacao: string; fome_antes: number; fome_depois: number } | null;
 }
 
 interface Pendente { clipe: ClipeMomento; em: number; motivo: string }
-interface Visto { chave: string; nascendo: number; dormindo: boolean; abertos: readonly string[]; urgente: boolean; atendidos: number; consumos: number; acao: string }
+interface Visto { chave: string; nascendo: number; dormindo: boolean; abertos: readonly string[]; urgente: boolean; atendidos: number; consumos: number; acao: string; vazio: number | null }
 
 let visto: Visto | null = null;
 let fila: Pendente[] = [];
@@ -77,7 +79,7 @@ export const virandoAgora = (agora: number): boolean => agora >= viraDesde && ag
 export function vigiarMomentos(e: EntradaMomentos, agora: number): void {
   for (const k of ["nascendo", "atendidos", "consumos"] as const) if (!Number.isFinite(e[k])) throw new Error(`vigiarMomentos: ${k} nao finito`);
   const v = visto;
-  visto = { chave: e.chave, nascendo: e.nascendo, dormindo: e.dormindo, abertos: [...e.abertos], urgente: e.urgente, atendidos: e.atendidos, consumos: e.consumos, acao: e.acao };
+  visto = { chave: e.chave, nascendo: e.nascendo, dormindo: e.dormindo, abertos: [...e.abertos], urgente: e.urgente, atendidos: e.atendidos, consumos: e.consumos, acao: e.acao, vazio: e.vazio };
   if (!v || v.chave !== e.chave) { fila = []; tocando = null; viraDesde = -1e9; return; }
   if (e.morto) { fila = []; tocando = null; return; }
   /* a casca quebrou: o pet aparece Feliz, com o som do nascimento */
@@ -97,6 +99,8 @@ export function vigiarMomentos(e: EntradaMomentos, agora: number): void {
     else if (e.acao === "emburrar") emitirVoz("resmungo");
     else if (e.acao === "chamar_atencao") emitirVoz("chamando");
   }
+  /* o lugar lembrado estava vazio (CADEIA, etapa 2, D6): Triste por um instante, com o rosto que o atlas ja tem */
+  if (e.vazio !== null && (v.vazio === null || e.vazio > v.vazio)) registrarMomentoRosto("Triste", agora, MOMENTOS.vazioMs);
   /* comeu: a fruta podre e Recusa; a comida madura que encheu bem a barriga, Feliz (depois do clipe Comer, pela fila) */
   if (e.consumos > v.consumos && e.ultimo) {
     const u = e.ultimo;
@@ -134,6 +138,12 @@ export function momentoAgora(agora: number, livre: boolean, ciclo: (c: ClipeMome
     voz dela) */
 export function chamadoUrgente(m: Pick<Motor, "chamadosAbertos" | "chamados" | "e">): boolean {
   return m.chamadosAbertos().some(c => CAT.janelaChamado - (m.e.tick - m.chamados.abertos[c]!) <= CAT.janelaChamado / 3);
+}
+/** o id do ultimo episodio "nao_havia" da memoria do modular, ou null (o A, ou nenhum ainda) */
+export function ultimoVazio(m: { lab: { mem: { episodios: readonly { id: number; classe: string }[] } } | null }): number | null {
+  let r: number | null = null;
+  for (const ep of m.lab?.mem.episodios ?? []) if (ep.classe === "nao_havia" && (r === null || ep.id > r)) r = ep.id;
+  return r;
 }
 /** o clipe em laco do estado do pet: Die morto; Chamar com um chamado aberto ou chamando atencao; Feliz brincando. Null nos outros */
 export function estadoAgora(e: Pick<EntradaMomentos, "morto" | "dormindo" | "abertos" | "acao" | "nascendo">): ClipeEstado | null {
