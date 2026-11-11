@@ -4,7 +4,7 @@
 import type { Par } from "./cameraLivre.ts";
 
 /** o diametro do circulo (px de CSS); PROPOSTO, SEM FONTE (L1-7) */
-export const MINIMAPA_PX = 232;
+export const MINIMAPA_PX = 176;
 /** px por celula na escala "B" (a janela em volta do ponto olhado; L1-1) */
 export const ESCALA_B = 9;
 /** o quanto de zoom cada toque da roda anda (0 = escala A, 1 = escala B); PROPOSTO, SEM FONTE */

@@ -1,18 +1,11 @@
 DigiLab: a barraca do Tamer, o lugar do Diario (barraca.gltf, barraca.bin, barraca_cor.png)
 
-Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus, em 2026-11-07.
-Pelos termos de uso da Meshy (atualizados em 2026-09-19, secao 3.2), a saida de um plano pago e do cliente.
-Os termos proibem tirar a marca de IA (secao 2.4): a marca fica no asset.extras do barraca.gltf e neste arquivo.
+Procedencia: feito a mao por script, sem IA, em 2026-11-10 (docs/objetos3d/cartoon/barraca.py no repositorio do DigiLab).
+A malha (o domo, o rolo da porta, a antena, os estais, as estacas, o banquinho, os livros) e a textura (pintada pelo codigo, pela posicao no espaco)
+saem do script; a mesma entrada da sempre o mesmo arquivo. Nada vem de modelo gerado nem de imagem de terceiros.
 
-Como foi feito (docs/TAREFA_V3_LUGARES_3D.md e docs/lugares3d/barraca/ no repositorio):
-- concept: Meshy Image to Image (nano-banana-2), com duas referencias de estilo geradas pela propria Meshy para o DigiLab (a maquete B do
-  mapa digital e o concept da geladeira), sem o pet e sem imagem de terceiros; sem texto, sem marca, sem simbolo; o concept 2 (o domo
-  digital) escolhido pelo Matheus;
-- vistas: Meshy Image to Image com multivista, a partir do concept;
-- malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
-- conserto no Blender 4.5 LTS e em Python, por script: a malha da Meshy fica como veio; a cor e chapada nas cores do concept, pelo matiz, com uma
-  cor por face.
-As tarefas da Meshy (concept, vistas, malha) estao no asset.extras do barraca.gltf.
+O desenho segue o esboco do objeto (docs/objetos3d/barraca/esbocos/esboco_1_domo_costuras.png), gerado pela Meshy para o DigiLab e usado so como referencia de desenho:
+nenhum pixel e nenhum vertice dele esta nestes arquivos. A barraca de antes (a malha e a textura da Meshy) saiu do jogo; o historico esta em docs/TAREFA_V3_LUGARES_3D.md e em docs/objetos3d/barraca/.
 
-Uso: no jogo DigiLab, publicado. Credito: "Barraca do Tamer gerada com a Meshy (meshy.ai)".
-Aprovacao: o Matheus escolheu o concept em 2026-11-07; a aprovacao da previa fica no PR da barraca.
+Uso: no jogo DigiLab, publicado. Autor: o projeto DigiLab (Matheus).
+Aprovacao: as capturas ficam no PR dos objetos em cartoon.

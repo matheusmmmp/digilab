@@ -13,7 +13,7 @@ from .fatos import ESTAGIOS
 from .gerar import Resultado
 from .ollama import ClienteOllama
 from .prompt import (ID_PEDIDO, MAX_CHARS, MAX_TOKENS, TIPO_PEDIDO, esquema, fatos_do_dono_voz, ids_conceitos, linha_conceito,
-                     linha_pedido, mensagens_voz, versao_voz)
+                     linha_pedido, mensagens_voz, voz_pedida)
 from .saida import FALA_GENERICA, SaidaInvalida, aparar, ler
 
 TIPO_CONCEITO = "conceito"
@@ -32,15 +32,17 @@ def fatos_da_voz(conceitos: Conceitos, historico, estagio: str, situacao: str = 
 
 
 def gerar_voz(cliente: ClienteOllama, conceitos: Conceitos, estagio: str, situacao: str, fala_jogador: str | None = None,
-              historico=None, semente: int = 0, especie: Especie | None = None, comando: bool = False) -> Resultado:
+              historico=None, semente: int = 0, especie: Especie | None = None, comando: bool = False, voz: str | None = None,
+              ditas=None) -> Resultado:
     """Saida invalida, falha de rede ou citacao repetida do corpus viram a fala generica (a fala sempre acontece; a LLM nunca faz
-    o pet agir por engano de formato)."""
+    o pet agir por engano de formato). `voz`: None (a do formato), a voz-v3b no dec-v3 (DC4b) ou a voz-v4 (DC5; `prompt.voz_pedida`).
+    `ditas`: so na voz-v4 e na fala espontanea, as ultimas falas espontaneas do pet (DC5, plano 3.4)."""
     if estagio not in ESTAGIOS:
         raise ValueError(f"voz-v1: estagio desconhecido: {estagio!r}")
     estilo = bloco_estilo(especie) if especie is not None else None
-    msgs = mensagens_voz(conceitos, estagio, situacao, fala_jogador, historico, estilo=estilo, comando=comando)
+    msgs = mensagens_voz(conceitos, estagio, situacao, fala_jogador, historico, estilo=estilo, comando=comando, voz=voz, ditas=ditas)
     fatos = tuple(fatos_da_voz(conceitos, historico, estagio, situacao))
-    base = dict(fatos=fatos, estagio=estagio, modelo=cliente.modelo, versao_prompt=versao_voz(conceitos),
+    base = dict(fatos=fatos, estagio=estagio, modelo=cliente.modelo, versao_prompt=voz_pedida(conceitos, voz),
                 especie=especie.especie if especie is not None else None)
     try:
         r = cliente.conversar(msgs, esquema(estagio, comando), MAX_TOKENS[estagio], semente)

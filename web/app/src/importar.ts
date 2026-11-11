@@ -9,6 +9,7 @@ import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados, type Guardado } from "./p
 import { textoSave } from "./save.ts";
 import { diaDe } from "./telas/pet/TelaPet.tsx";
 import { nomeForma } from "../motor/index.ts";
+import { versoesQueAbrem } from "./lutaPoc.ts";
 
 /* tela de importar (tela cheia, aberta de Meus pets no celular e no desktop) */
 let aberta = false;
@@ -46,7 +47,9 @@ export function lerArquivo(texto: string, arquivo: string): Lido {
   const g: Guardado = { semente: s.semente as number, log: s.log as EventoRegistro[], versao: (s.versao ?? 1) as number };
   /* o descarte 6 (COMBATE-TR, E2): os pets de antes da luta em tempo real nao abrem mais, nem pelo arquivo */
   const lab = g.versao === VERSAO_PET_LAB;
-  if (!lab && !VERSOES_PET.includes(g.versao)) throw new Error(`este pet é da versão ${g.versao} do jogo${g.versao < Math.min(...VERSOES_PET) ? ", com o combate por turnos," : ""} e não abre nesta versão (só a ${VERSOES_PET.join(" e a ")}, com a luta em tempo real, e a ${VERSAO_PET_LAB} do laboratório)`);
+  /* com a luta da POC ligada (LP2, LP-6), so a v21 abre */
+  const abrem = versoesQueAbrem();
+  if (!lab && !abrem.includes(g.versao)) throw new Error(`este pet é da versão ${g.versao} do jogo${g.versao < Math.min(...VERSOES_PET) ? ", com o combate por turnos," : abrem !== VERSOES_PET ? ", com a luta de antes," : ""} e não abre nesta versão (só a ${abrem.join(" e a ")}, com a luta em tempo real, e a ${VERSAO_PET_LAB} do laboratório)`);
   let m: Motor;
   try { m = Motor.reproduzir(g.semente, g.log, g.versao); } catch (err) { throw new Error("o replay do registro não confere: " + (err instanceof Error ? err.message : String(err))); }
   return { g, m, arquivo, lab };
@@ -63,7 +66,10 @@ export function localizar(semente: number): Onde {
 export function petAqui(o: Onde): Motor | null {
   return o.tipo === "ativo" ? motorReal() : o.tipo === "guardado" ? abrirGuardado(lerGuardados()[o.i]) : null;
 }
-const igual = (a: Guardado, b: Motor): boolean => JSON.stringify(a.log) === JSON.stringify(b.log) && (a.versao ?? 1) === b.versao;
+/* o mesmo pet: o mesmo registro, sem contar a passagem de ilha (o "mi" e do jogo, nao do jogador: o arquivo exportado antes da ilha
+   grande e o pet daqui, que ja passou, sao o mesmo pet) */
+const semIlha = (log: readonly EventoRegistro[]): string => JSON.stringify(log.filter(e => e[1] !== "mi"));
+const igual = (a: Guardado, b: Motor): boolean => semIlha(a.log) === semIlha(b.log) && (a.versao ?? 1) === b.versao;
 
 /** sem conflito: vai para a espera. Devolve a mensagem para a tela */
 export function importarSemConflito(l: Lido): string {

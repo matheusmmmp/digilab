@@ -1,0 +1,90 @@
+{
+  "adendo": "docs/PLANO_ANALISE_V3_INDIVIDUALIDADE.md, secao 13",
+  "bootstrap": 2000,
+  "donos": [
+    "atencioso",
+    "relapso",
+    "aleatorio"
+  ],
+  "medidas_sha256": "28c70b1c4961cd42154c805cc77133383a8f843a724baa52568da768dc402a60",
+  "por_dono": {
+    "aleatorio": {
+      "apego": {
+        "faceta": "apego_dono",
+        "ic95": [
+          -0.2688358814671347,
+          0.24825480602991873
+        ],
+        "pets": 60,
+        "spearman": -0.0031749589785190152
+      },
+      "neofilia": {
+        "faceta": "cautela_comida",
+        "ic95": [
+          -0.09187302952677144,
+          0.24486778158710298
+        ],
+        "pets": 60,
+        "spearman": 0.07667182817864789
+      },
+      "ousadia": {
+        "faceta": "ousadia_longe",
+        "ic95": [
+          -0.2561159528694529,
+          0.24011622666773988
+        ],
+        "pets": 60,
+        "spearman": -0.004684966305897649
+      }
+    },
+    "atencioso": {
+      "apego": {
+        "faceta": "apego_dono",
+        "ic95": null,
+        "pets": 60,
+        "spearman": null
+      },
+      "neofilia": {
+        "faceta": "cautela_comida",
+        "ic95": null,
+        "pets": 60,
+        "spearman": null
+      },
+      "ousadia": {
+        "faceta": "ousadia_longe",
+        "ic95": [
+          -0.158161614051507,
+          0.4282470202262543
+        ],
+        "pets": 60,
+        "spearman": 0.1542725538990526
+      }
+    },
+    "relapso": {
+      "apego": {
+        "faceta": "apego_dono",
+        "ic95": [
+          -0.08384554053758238,
+          0.42099460615108714
+        ],
+        "pets": 60,
+        "spearman": 0.18206192824147463
+      },
+      "neofilia": {
+        "faceta": "cautela_comida",
+        "ic95": null,
+        "pets": 60,
+        "spearman": null
+      },
+      "ousadia": {
+        "faceta": "ousadia_longe",
+        "ic95": [
+          -0.40747002077275774,
+          0.13304395358321536
+        ],
+        "pets": 60,
+        "spearman": -0.13403940310097182
+      }
+    }
+  }
+}

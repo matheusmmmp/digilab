@@ -2,13 +2,14 @@
    useJogo(): todo numero sai de `Motor.leituraLab()` (motor/digibrain/leitura.ts, o ultimo motivo do M-ADAPT em inteiros) e do historico; a
    tela so escolhe o texto e formata. Nenhum rotulo diz "pensando", "sentindo" ou "querendo": dizem o modulo ou o que o motivo guarda. O painel
    do A v11 (DigiBrain.tsx) segue igual para os pets v11. */
-import { NOME_PET, ORDEM_TERMOS, type AcaoPet, type ConceitosDec, type LeituraLab, type NomeConceito, type TermoLab } from "../../motor/index.ts";
+import { NOME_PET, ORDEM_TERMOS, type AcaoPet, type ConceitosDec, type LeituraLab, type NomeConceito, type ResultadoLab, type TermoLab } from "../../motor/index.ts";
 import { CONFIG_DECODIFICADOR } from "../../motor/digibrain/constantes.ts";
+import { resultadoAnterior } from "../../motor/index.ts";
 import { useJogo } from "../jogo.ts";
 import { hhmm } from "../telas/pet/TelaPet.tsx";
 import "../estilo/lab.css";
 
-const NOME_TERMO: Record<TermoLab, string> = {
+export const NOME_TERMO: Record<TermoLab, string> = {
   memoria: "Lugar lembrado", inato: "Inato", lembranca: "Lembrança", objeto: "Objeto à vista", incentivo: "Incentivo (P1)", persistencia: "Persistência", habito: "Hábito (P2)",
 };
 const NOME_SONDA: Record<string, string> = {
@@ -19,6 +20,18 @@ const ACAO_INF: Record<string, string> = {
   ocioso: "ficar à toa", dormir: "dormir", comer: "comer", brincar: "brincar", chamar_atencao: "chamar você", explorar: "explorar", emburrar: "emburrar",
 };
 const maiuscula = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+
+/** o resultado da decisao anterior numa linha (CADEIA, etapa 3): o que ele fez, o que aconteceu, o corpo e o que ficou nele. Nenhum "pensou" */
+export function textoResultado(r: ResultadoLab): string {
+  const partes: string[] = [maiuscula(rotuloUnidade(r.escolha))];
+  if (r.comeu) partes.push(`comeu ${r.comeu.tipo === "racao" ? "ração" : "uma fruta"}${r.comeu.situacao === "podre" ? " podre" : ""}`);
+  else if (r.chegou === true) partes.push(r.escolha[1] === "ponto" ? "chegou e não havia comida" : "chegou");
+  else if (r.chegou === false) partes.push("não chegou");
+  if (r.efeito !== "igual") partes.push(r.efeito === "melhorou" ? "o corpo melhorou" : "o corpo piorou");
+  if (r.memoria) partes.push(r.memoria === "consumo" ? "o lugar ficou na memória" : "a visita vazia ficou na memória");
+  if (r.aprendeu) partes.push("o hábito aprendeu");
+  return partes.join("; ") + ".";
+}
 
 /** o rotulo de uma unidade, da chave [acao, tipo, id]: o que o motivo guarda, sem inventar nome de lugar (LM5-4) */
 export function rotuloUnidade(chave: readonly [string, string | null, unknown]): string {
@@ -73,7 +86,7 @@ function Barras({ l }: { l: LeituraLab }) {
 
 /** o conteudo do painel do modular, o mesmo no desktop (coluna) e no celular (folha) */
 export function ConteudoDigiBrainLab() {
-  const { motor: m } = useJogo(), l = m.leituraLab(), conc = m.conceitosDec();
+  const { motor: m } = useJogo(), l = m.leituraLab(), conc = m.conceitosDec(), res = m.lab ? resultadoAnterior(m.lab) : null;
   const ultimas = m.historico.filter(h => h.quem === "pet").slice(-5).reverse();
   if (l === null) return <div className="db-conteudo"><p className="db-vazio">Ainda não decidiu nada.</p></div>;
   const peso = l.barras.find(b => b.termo === "lembranca");
@@ -86,6 +99,11 @@ export function ConteudoDigiBrainLab() {
           {l.sem_lugar && <small>Sem o lugar lembrado, teria escolhido: {rotuloUnidade(l.sem_lugar).toLowerCase()}.</small>}
           {l.reflexo && <small>Reflexo do sono: sem sorteio.</small>}
           {l.nada_a_fazer && <small>Nenhuma opção com peso: nada a fazer.</small>}</div>
+      </section>
+      <section aria-labelledby="dl-res">
+        <h3 className="db-sec" id="dl-res">O que aconteceu antes</h3>
+        {res ? <p className="db-resultado" data-testid="resultado-anterior" data-k={res.k}>{textoResultado(res)}</p>
+          : <p className="db-vazio">A decisão anterior ainda não fechou.</p>}
       </section>
       <section aria-labelledby="dl-lemb">
         <h3 className="db-sec" id="dl-lemb">Lembrança da vez</h3>

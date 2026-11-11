@@ -1,3 +1,7 @@
+> **Este README é o da v0** (o motor sem aprendizado) e fica como histórico. Para o projeto de hoje, comece pelo
+> [`CLAUDE.md`](CLAUDE.md) (ou o [`AGENTS.md`](AGENTS.md), para agentes de fora), pelo [`docs/PAINEL_V3.md`](docs/PAINEL_V3.md) e pelo
+> [`docs/INDICE.md`](docs/INDICE.md).
+
 # Digilab v0 — motor de pet, sem aprendizado
 
 Camada 1 (estado) + camada 2 (política) do desenho de três camadas. Sem

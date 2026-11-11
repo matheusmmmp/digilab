@@ -14,9 +14,8 @@ import { S, gradeDe, imagemGrade, paleta } from "../grades.ts";
 import { Deco } from "./Deco.tsx";
 import { SeloMedalha } from "./Medalha.tsx";
 import { abrirModal, rotaDaTelaCheia } from "./modal.ts";
-import { ehLuta } from "../rotas.ts";
 import { SOM } from "../som.ts";
-import { useLuta } from "../luta.ts";
+import { useLutaPoc } from "../lutaPocTela.ts";
 import { CENA_EVOLUCAO_UP } from "../evolucaoUp.ts";
 import { CenaEvolucao } from "./CenaEvolucao.tsx";
 import { tamerAtual, useJogo } from "../jogo.ts";
@@ -107,17 +106,17 @@ const DECIDIDO: Record<string, string> = { crianca: "o cuidado", adolescente: "o
 function Revelacao({ i, m, fechar }: { i: number; m: Motor; fechar: () => void }) {
   const ref = useRef<HTMLDialogElement>(null), x = m.evolucoes[i], f = x.forma, antes = formaAntes(m, i), cor = corDominante(m.tracos);
   const med = medalhasDaEvolucao(m, x), arq = nomeArquetipo(f), br = BRASAO[m.especie], largo = matchMedia("(min-width: 900px)").matches;
-  /* a cena oficial antes do cartao (CENA_EVOLUCAO_UP, desligada: o cartao de hoje); com movimento reduzido, direto ao cartao */
+  /* a cena oficial antes do cartao (CENA_EVOLUCAO_UP, ligada; desligada, o cartao de hoje); com movimento reduzido, direto ao cartao */
   const [cena, setCena] = useState(() => CENA_EVOLUCAO_UP && !matchMedia("(prefers-reduced-motion: reduce)").matches);
   const [aviso, setAviso] = useState<string | null>(null), tocouCena = useRef(false);
   /* abre no topo (o foco inicial iria para o Continuar, embaixo, e rolaria a tela) */
   useEffect(() => { const d = ref.current; if (!d) return; abrirModal(d); d.scrollTop = 0; if (!cena) d.querySelector<HTMLElement>(".revel-tit")?.focus(); }, [cena]);
   useEffect(() => rotaDaTelaCheia("#/evolucao"), []);
-  /* so apresentacao: o efeito da evolucao (src/som.ts; desligado por padrao); a revelacao daqui e imediata, entao a queda cai no começo.
+  /* so apresentacao: o efeito da evolucao (src/som.ts; ligado por padrao); a revelacao daqui e imediata, entao a queda cai no começo.
      Com a cena, o efeito e a musica sao dela; a musica para quando a revelacao fecha */
   useEffect(() => {
     if (!cena) void SOM.tocarEvolucao(0);
-    return () => { SOM.pararEvolucao(); if (tocouCena.current) SOM.pararMusica(); };
+    return () => { SOM.pararEvolucao(); if (tocouCena.current) void SOM.pedirMusica("evolucao", null); };
   }, []);
   return (
     <dialog className="revelacao evm ab-hx dl" ref={ref} aria-labelledby="revel-tit" onClose={fechar}>
@@ -178,7 +177,7 @@ export function reverEvolucao(i: number): void {
 }
 /** acompanha as evolucoes: abre a revelacao quando o motor registra uma nova nesta sessao; Continuar leva a Crescer · Evolucao */
 export function RevelacaoEvolucao({ continuar }: { continuar?: () => void }) {
-  const jogo = useJogo(), { motor: m } = jogo, luta = useLuta(), [, redesenhar] = useState(0);
+  const jogo = useJogo(), { motor: m } = jogo, luta = useLutaPoc(), [, redesenhar] = useState(0);
   useEffect(() => { const o = () => redesenhar(x => x + 1); ouvintes.add(o); return () => { ouvintes.delete(o); }; }, []);
   useEffect(() => {
     const n = m.evolucoes.length;
@@ -191,6 +190,6 @@ export function RevelacaoEvolucao({ continuar }: { continuar?: () => void }) {
     if (n > VISTAS.n) { VISTAS.n = n; VISTAS.pendente = n - 1; redesenhar(x => x + 1); }
   });
   const i = VISTAS.pendente;
-  if (i === null || !m.evolucoes[i] || luta.lutando || ehLuta(location.hash)) return null;
+  if (i === null || !m.evolucoes[i] || luta.palco !== null) return null;
   return <Revelacao key={i} i={i} m={m} fechar={() => { VISTAS.pendente = null; redesenhar(x => x + 1); continuar?.(); }} />;
 }

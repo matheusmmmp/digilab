@@ -1,0 +1,28 @@
+{
+ "descricao": "A fumaca do orquestrador da DC5 (DC5a): a semente dos testes 101, 3 dias, poucas entradas, os roteiros da calibracao e os clientes falsos (--falso). Nenhuma chamada a modelo de verdade; nao e dado da DC5.",
+ "fase": "fumaca",
+ "unidades": {
+  "bases": [
+   101
+  ]
+ },
+ "plano": "docs/PLANO_ANALISE_V3_CONVERSA_DC5.md",
+ "orcamento_por_dia": 16,
+ "bracos": [
+  "G",
+  "H"
+ ],
+ "vozes": [
+  "jogo",
+  "v4"
+ ],
+ "teto_usd": 3.0,
+ "dias": 3,
+ "n_e3_por_pedido": 2,
+ "n_e2": 3,
+ "min_ep_e2": 1,
+ "n_sequencias": 1,
+ "n_es": 1,
+ "roteiros": "experiments/configs/v3_conversa_dc5/roteiros_calibracao.json",
+ "saida": "artifacts_v3_conversa_dc5/fumaca"
+}

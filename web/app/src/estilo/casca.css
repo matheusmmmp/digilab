@@ -69,6 +69,11 @@ body:has(.app--habitat){ overflow:hidden }
 .topo-relogio .pet-salvo{ display:flex; align-items:center; gap:4px; padding-left:10px; border-left:1px solid var(--hx-borda); color:var(--hx-sec); font:500 12px/1 var(--hx-f) }
 .topo-relogio .pet-salvo svg{ width:20px; height:20px; color:var(--hx-texto-2) }
 .topo-relogio .pet-salvo.erro, .topo-relogio .pet-salvo.erro svg{ color:var(--hx-perigo) }
+/* o saldo de Bits do Tamer (docs/PLANO_V3_MOEDA.md, MO1): a caixa do relogio, logo depois dele; o numero no estilo dos numeros do HUD */
+.topo-bits{ display:flex; align-items:center; gap:6px; padding:4px 12px; min-height:48px }
+.topo-bits svg{ width:20px; height:20px; color:var(--hx-alerta) }
+.topo-bits b{ font:700 18px/1 var(--hx-f-num); font-variant-numeric:tabular-nums; color:var(--hx-num) }
+@media (max-width:479px){ .topo-bits{ padding:3px 10px; min-height:44px } }
 .topo-bts{ display:flex; gap:6px }
 .topo-bt{ width:44px; height:44px; display:flex; align-items:center; justify-content:center; padding:0; border:1px solid var(--hx-borda-topo); background:var(--hx-miolo); color:var(--hx-texto); cursor:pointer }
 .topo-bt svg{ width:22px; height:22px }

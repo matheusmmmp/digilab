@@ -11,6 +11,19 @@
    e do estresse (relaxou) e o fator do medo da mao que o corpo aplicou, (C - medo_da_mao q_susto) / C (corpo.ts, carinho). Os tempos, as alturas
    e as contagens daqui sao da vista: PROPOSTO, SEM FONTE; nao mudam a vida. Sem DOM nas contas (testadas em node); o desenho recebe o contexto. */
 import { S, desenharGrade, type Paleta } from "../../grades.ts";
+import { emitirSom } from "../../somEventos.ts";
+
+/** o que a vista le do mundo para saber se ha o que comer perto do pet (Motor.mundo) */
+export interface MundoComida { pet: readonly [number, number]; comidas: ReadonlyMap<number, { x: number; y: number }>; cm: { sub: number } }
+/** ha comida a ate uma celula do pet? (CADEIA, etapa 2, D3 do Matheus de 2026-11-11: a cena so mastiga com o que comer). Sem mundo (os pets sem o
+    mapa fisico), true: a cena de antes */
+export function comidaPerto(mu: MundoComida | null | undefined): boolean {
+  if (!mu) return true;
+  const sub = mu.cm.sub;
+  if (!(sub > 0)) throw new Error("comidaPerto: a celula do mundo invalida");
+  for (const c of mu.comidas.values()) if (Math.hypot(c.x - mu.pet[0], c.y - mu.pet[1]) <= sub) return true;
+  return false;
+}
 
 /** o gesto do corpo do pet sobre o desenho: `frente` e `alto` em texels do sprite (frente = o lado para onde ele olha; negativo = recua), `estica` a
     fracao da altura (1 = sem mudanca; o pe fica no chao, e a largura cresce o que a altura perde) */
@@ -98,7 +111,7 @@ export function gestoDaReacao(r: Reacao, agora: number): Gesto {
 
 /* ------------------------------------------------------------------ o gesto e o emote de agora */
 /** o que a vista le do pet para a cena */
-export interface EntradaCena { acao: string; sujeira: number; chave: string }
+export interface EntradaCena { acao: string; sujeira: number; chave: string; /** ha comida a ate uma celula (comidaPerto); sem o campo, sim */ comidaPerto?: boolean }
 
 /** o gesto do corpo para a acao do motor (so quando o pet esta parado no lugar: andando, quem se mexe e o passo) */
 export function gestoDaAcao(acao: string, agora: number): Gesto {
@@ -129,6 +142,8 @@ export function gestoAgora(e: EntradaCena, agora: number, reduzido: boolean, par
   if (r) return gestoDaReacao(r, agora);
   if (pausa) return SEM_GESTO;
   if (noCoco(agora)) return gestoDoCoco(agora);
+  /* comer sem nada perto (D3): sem a mastigacao; o motor decidiu comer, mas a cena desenha so o que acontece */
+  if (e.acao === "comer" && e.comidaPerto === false) return SEM_GESTO;
   return parado && !(emburra && e.acao === "emburrar") ? gestoDaAcao(e.acao, agora) : SEM_GESTO;
 }
 
@@ -150,6 +165,8 @@ export function emoteAgora(e: EntradaCena, agora: number, clipe = false): string
 export interface EntradaComer {
   chave: string; acao: string; consumos: number; alvo: readonly [number, number] | null; ciclo: number | null;
   velocidade: number; andando: boolean; pausa: boolean; donoDesde: number | null;
+  /** ha comida a ate uma celula do pet (comidaPerto): sem ela, o laco do comer nao toca (D3); o "comeu a racao" vem do consumo e toca */
+  comidaPerto: boolean;
 }
 /** o corpo do comer agora. `tocou` e o campo que o teste le: "clipe" (o Comer do atlas no corpo), "gesto" (o achatar de hoje: sem o
     clipe, a queda explicita) ou null (nenhum dos dois: nao come, anda, esta na Pausa ou a reacao do dono ocupa o corpo). `desde` e o inicio
@@ -178,7 +195,7 @@ export function escolherComer(e: EntradaComer, agora: number): EscolhaComer {
   const ciclo = e.ciclo;
   if (ciclo === null) {
     comendo = null; momentoPendente = null;
-    return (ultimaComer = e.acao === "comer" && !e.andando && !e.pausa ? { ...NADA_COMER, tocou: "gesto" } : NADA_COMER);
+    return (ultimaComer = e.acao === "comer" && e.comidaPerto && !e.andando && !e.pausa ? { ...NADA_COMER, tocou: "gesto" } : NADA_COMER);
   }
   if (!(ciclo > 0) || !Number.isFinite(ciclo)) throw new Error("ciclo do Comer invalido: " + ciclo);
   if (novo && e.velocidade <= CENA_ACAO.momentoVelMax) momentoPendente = { em: agora, alvo: e.alvo };
@@ -196,12 +213,12 @@ export function escolherComer(e: EntradaComer, agora: number): EscolhaComer {
   }
   /* o "comeu a racao": espera a reacao acabar ate momentoEsperaMs; depois, uma vez, virado para a comida */
   if (momentoPendente) {
-    if (agora - momentoPendente.em <= CENA_ACAO.momentoEsperaMs) comendo = { desde: agora, laco: false, fim: agora + ciclo, alvo: momentoPendente.alvo };
+    if (agora - momentoPendente.em <= CENA_ACAO.momentoEsperaMs) { comendo = { desde: agora, laco: false, fim: agora + ciclo, alvo: momentoPendente.alvo }; emitirSom("comer"); }
     momentoPendente = null;
   }
-  if (!comendo && e.acao === "comer" && !e.andando) comendo = { desde: agora, laco: true, fim: null, alvo: null };
+  if (!comendo && e.acao === "comer" && e.comidaPerto && !e.andando) { comendo = { desde: agora, laco: true, fim: null, alvo: null }; if (e.velocidade <= CENA_ACAO.momentoVelMax) emitirSom("comer"); }
   if (comendo && comendo.laco) {
-    if (e.acao === "comer") comendo.fim = null;
+    if (e.acao === "comer" && e.comidaPerto) comendo.fim = null;
     else if (comendo.fim === null) comendo.fim = comendo.desde + Math.max(1, Math.ceil((agora - comendo.desde) / ciclo)) * ciclo;
   }
   if (comendo && comendo.fim !== null && agora >= comendo.fim) {
@@ -242,7 +259,7 @@ export function desenharEfeitos(cx: CanvasRenderingContext2D, K: number, x: numb
       cx.restore();
     }
   }
-  if (reduzido || pausa || e.acao !== "comer" || r || clipe) return;
+  if (reduzido || pausa || e.acao !== "comer" || e.comidaPerto === false || r || clipe) return;
   /* as migalhas: pedacinhos que caem da boca, defasados (o gesto de hoje: com o clipe Comer no corpo, saem) */
   cx.save(); cx.fillStyle = pal.d ?? "#C9533A"; cx.strokeStyle = "#1D2233"; cx.lineWidth = Math.max(1, K * 0.5);
   for (let i = 0; i < C.migalhas; i++) {

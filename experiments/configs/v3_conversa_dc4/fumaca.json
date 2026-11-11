@@ -1,0 +1,25 @@
+{
+  "descricao": "A fumaca do orquestrador da DC4 (DC4a): a semente dos testes 101, 3 dias, poucas entradas, os roteiros da calibracao e os clientes falsos (--falso). Nenhuma chamada a modelo de verdade; nao e dado da DC4.",
+  "fase": "fumaca",
+  "unidades": {
+    "bases": [
+      101
+    ]
+  },
+  "plano": "docs/PLANO_ANALISE_V3_CONVERSA_DC4.md",
+  "dias": 3,
+  "orcamento_por_dia": 16,
+  "bracos": [
+    "G",
+    "H",
+    "S"
+  ],
+  "teto_usd": 3.0,
+  "voz_dec_v3": "voz-v3b",
+  "n_e3_por_pedido": 2,
+  "n_e2": 3,
+  "min_ep_e2": 1,
+  "n_sequencias": 1,
+  "roteiros": "experiments/configs/v3_conversa_dc4/roteiros_calibracao.json",
+  "saida": "artifacts_v3_conversa_dc4/fumaca"
+}

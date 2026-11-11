@@ -85,3 +85,10 @@ def test_linha_de_comando_fase_v3(raiz, capsys):
                          "--data", "2026-10-30", "--raiz", str(raiz)]) == 0
     assert (raiz / "docs" / "TAREFA_V3_INFRA_POC.md").exists()
     assert "worktree add D:/Trab/digilab/v3-infra-poc -b v3-infra-poc" in capsys.readouterr().out
+
+
+def test_linha_de_comando_sem_fase_e_v3(raiz, capsys):
+    assert nt.principal(["INFRA_POC", "--categoria", "documentacao", "--origem", "Matheus", "--resumo", "a",
+                         "--data", "2026-11-10", "--raiz", str(raiz)]) == 0
+    saida = capsys.readouterr().out
+    assert "docs/TAREFA_V3_INFRA_POC.md" in saida and "D:/Trab/digilab/v3 worktree add" in saida

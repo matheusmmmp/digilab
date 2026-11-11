@@ -71,20 +71,61 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    19 = o v18 com o "levar pet" (docs/TAREFA_V3_PEGAR_PET.md; PP-1 a PP-5, decididas pelo Matheus em 2026-11-07): o evento "lp" do
    registro poe o pet onde o dono o soltou (limitado ao mapa, PP-4), sem mexer no humor, no corpo nem no aprendizado (PP-1); com o pet
    dormindo, falha alto (PP-2). O resto e o v18 (a luta, o cerebro trocavel). Os v13 a v18 seguem vivos, sem o "lp"; so os ovos novos
-   nascem v19 */
-export const VERSAO_PET = 19;
-/** as versoes de pet que abrem: a v13 (o tempo real de antes da rodada de equilibrio), a v14 (CV14-1), a v15 (a bola no golpe), a v17
-    (o cerebro trocavel), a v18 (o empurrao) e a v19 (o levar pet). A v16 e so a do laboratorio */
-export const VERSOES_PET: readonly number[] = [13, 14, 15, 17, 18, 19];
+   nascem v19;
+   22 = a v21 que nasce na ilha onde so a agua barra o pet (docs/TAREFA_V3_ILHA_AGUA.md, IA4; "v22", Matheus, 2026-11-10): o mundo dela e
+   o `mvp_agua` (CMU_MVP_AGUA), com o controlador do contrato, que desvia da agua. O resto e a v21. Os v21 seguem vivos e passam para a
+   mesma ilha pelo evento "mi" do registro ("Migram por evento", Matheus, 2026-11-10); so os ovos novos nascem v22;
+   23 = a v22 com a luta da rodada de equilibrio (docs/PLANO_EQUILIBRIO_LUTA_POC.md, LP5-5; o candidato lp5_3; "Sim, liga", Matheus,
+   2026-11-11; D-LP5-7): o mesmo nucleo, a mesma ilha com agua, e a tabela da luta da v23 (motor/luta_poc.ts, LUTA_V23): o mapeamento dos
+   stats com os expoentes, a esquiva, a distancia do tiro, o Gazimon em 76,8 e o rival do Salao com o fator 0,8. Os v21 e os v22 seguem
+   vivos, com os numeros deles; so os ovos novos nascem v23;
+   24 = a v23 que nasce na ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG4; o Matheus, 2026-11-11: "Mundo maior no motor",
+   "128 x 60", as arvores e os marcos na mesma versao): o mundo dela e o `grande` (CMU_GRANDE), com as arvores e os marcos em que o pet
+   nao pisa. O resto e a v23, com a luta dela. No plano a versao era a "v23"; a luta da rodada de equilibrio entrou na main antes e
+   ficou com o numero. Os v21, os v22 e os v23 seguem vivos e passam para a ilha grande pelo evento "mi" do registro, com tudo
+   deslocado junto com o lar (IG-7); so os ovos novos nascem v24 */
+export const VERSAO_PET = 24;
+/** as versoes de pet que abrem: a v21, a luta da POC (LUTA_POC, LP4: o descarte 7 tirou os v13 a v19, que lutavam pelo combate por
+    turnos; LP-6), a v22, a v21 que nasce na ilha com agua, a v23, a v22 com a luta da rodada de equilibrio, e a v24, a v23 que nasce na
+    ilha grande. A v16 e so a do laboratorio */
+export const VERSOES_PET: readonly number[] = [21, 22, 23, 24];
 /** a versao de pet do cerebro trocavel (o evento "cb") */
 export const VERSAO_V17 = 17;
 /** a versao de pet do empurrao de verdade na luta (a v17 com o RELOGIO_V18) */
 export const VERSAO_V18 = 18;
 /** a versao de pet do levar pet (o evento "lp"; a v18 com o dono que pega o pet e o solta noutro lugar) */
 export const VERSAO_V19 = 19;
-/** a versao tem o cerebro trocavel, a ponte da luta e a bola no golpe da v17: a v17, a v18 (a v17 com o empurrao) e a v19 (a v18 com o
-    levar pet) */
-export const ehCerebroTrocavel = (versao: number): boolean => versao === VERSAO_V17 || versao === VERSAO_V18 || versao === VERSAO_V19;
+/** a versao tem o cerebro trocavel, a ponte da luta e a bola no golpe da v17: a v17, a v18 (a v17 com o empurrao), a v19 (a v18 com o
+    levar pet) e a v21 (a v19 com a luta da POC). Desde a LP4 so a v21 abre; as outras ficam no teste porque a v21 e feita delas */
+export const ehCerebroTrocavel = (versao: number): boolean =>
+  versao === VERSAO_V17 || versao === VERSAO_V18 || versao === VERSAO_V19 || versao === VERSAO_V21 || versao === VERSAO_V22 || versao === VERSAO_V23 || versao === VERSAO_V24;
+/** 21 = a v19 com a luta da POC (docs/TAREFA_V3_LUTA_POC.md, LP2; as seis decisoes da LP2, Matheus, "Aprovo as 6", 2026-11-08): a luta do pet
+    e a simulacao em tempo real de motor/arena/, 1 contra 1, com os numeros saidos dos 6 stats do pet (motor/luta_poc.ts); o evento "l" guarda
+    o rival (uma forma do estagio do pet, na Arena, ou o NPC da Campanha), a semente e o mapa; sem gambits ("g"), cartas ("k") nem chips de
+    regra; a Liga, a Torre, a Fabrica e o Salao desde a LP2b. O resto e a v19. A v20 fica para o #694 (a arvore). A chave LUTA_POC_LIGADA
+    ligou na LP4 (Matheus, 2026-11-10): os ovos novos nascem v21, e so a v21 abre (VERSOES_PET) */
+export const VERSAO_V21 = 21;
+/** a versao de pet que nasce na ilha com agua (a v21 com o mundo `mvp_agua`; docs/TAREFA_V3_ILHA_AGUA.md, IA4) */
+export const VERSAO_V22 = 22;
+/** a versao de pet com a luta da rodada de equilibrio (a v22 com a tabela LUTA_V23; LP5-5) */
+export const VERSAO_V23 = 23;
+/** a versao de pet que nasce na ilha grande (a v23 com o mundo `grande`; docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG4) */
+export const VERSAO_V24 = 24;
+/** a versao luta pela luta da POC: a v21, a v22, a v23 e a v24 */
+export const ehLutaPoc = (versao: number): boolean => versao === VERSAO_V21 || versao === VERSAO_V22 || versao === VERSAO_V23 || versao === VERSAO_V24;
+/** a versao luta com a tabela da rodada de equilibrio (LUTA_V23): a v23 e a v24, que e a v23 na ilha grande */
+export const ehLutaV23 = (versao: number): boolean => versao === VERSAO_V23 || versao === VERSAO_V24;
+/** a versao nasce na ilha com agua de 64 x 30: a v22 e a v23 (a v23 e a v22 com a luta nova) */
+export const nasceNaAgua = (versao: number): boolean => versao === VERSAO_V22 || versao === VERSAO_V23;
+/** a versao nasce na ilha grande: a v24 */
+export const nasceNaGrande = (versao: number): boolean => versao === VERSAO_V24;
+/** a ilha com agua para onde os pets v21 passaram entre a IA4 e a IG4 (o evento "mi" dos registros dessa epoca; o destino do
+    ILHAS_DE_TROCA). Desde a IG4 ninguem mais passa para ela: o registro que ja tem o evento continua abrindo */
+export const ILHA_DOS_V21 = "mvp_agua";
+/** a ilha grande, para onde os pets v21 e v22 vivos passam (o evento "mi"; o destino do ILHAS_MAIORES) */
+export const ILHA_DOS_VIVOS = "grande";
+/** as versoes que abrem com a luta da POC (LP-6: os v13 a v19 saem, com aviso): desde a LP4, as mesmas de VERSOES_PET */
+export const VERSOES_PET_POC: readonly number[] = VERSOES_PET;
 /** os cerebros que o evento "cb" escolhe: o DigiBrain modular e o cerebro A (os lobos, a linha de base) */
 export const CEREBROS = ["modular", "a"] as const;
 /** a versao de pet da bola no golpe (a chave bolaNoGolpe do Mundo) */
@@ -220,18 +261,9 @@ export const FATORES_MEMORIA = ["latencia_fome", "latencia_higiene", "repreensoe
 export const CE = { limiar: .05 };
 export const NF = 11 + 4;   /* 11 do bandit v1 + 4 de memoria */
 
-/* combate V2.1 (ConfigCombateV2C, ConfigCombateV21C) */
-export const CV = {
-  tMax: 40,
-  custo: { golpe_rapido: 10, preparar_pesado: 15, disparo: 20, esquivar: 20 } as Record<string, number>,
-  dano: { golpe_rapido: 8, disparo: 6, pesado: 25 },
-  multDef: .3, multDefPesado: .6, multCarregar: 1.5, gutsDef: 5, gutsCarregar: 25,
-  eps: .05, maxRegras: 8, maxCond: 2, fracoes: [.25, .5, .75], guts: [20, 40, 60], ks: [2, 3], janelaFreq: 5, limiarFreq: .4,
-  pesoGutsOr: .002, pesoPendOr: .5,
-  /* base corrigida (V2C, TAREFA_CORRECAO_COMBATE): parry contra golpe rapido e morte subita */
-  parry: 5, turnoMS: 25, multMS: 1.5,
-};
-/* V21C: vida por vigor 3 -> 2,5 (base 70 -> 75; vida neutra continua 100) contra a dominancia da Ferrugem */
+/* V21C: vida por vigor 3 -> 2,5 (base 70 -> 75; vida neutra continua 100) contra a dominancia da Ferrugem. As regras do combate por turnos
+   (o CV da V2C, as listas da V21E e os gambits) sairam na LUTA_POC, LP4; fica o CV21 porque o perfil das formas (catalogo.perfilDe, a vida
+   e o guts do catalogo e do mapeamento da luta da POC) le os numeros dele */
 export const CV21 = {
   hpBase: 75, hpVigor: 2.5, g0Base: 30, g0Folego: 2, gMaxBase: 80, gMaxFolego: 2, regenBase: 4, regenRec: .4,
   multBase: .7, multPonto: .03, guardaBase: 1.3, guardaPonto: .03,
@@ -240,29 +272,6 @@ export const CV21 = {
   duelista: 4, limFurioso: .5, multFurioso: 1.25, espelho: 1, muralha: 3, recargaSent: 4, multEmb: 2, multTita: 1.3,
   maxRegras: { bebe: 0, crianca: 3, adolescente: 5, adulto: 8 } as Record<EstagioBase, number>, turnos: [5, 10, 20],
 };
-/* V21E: rodada de equilibrio geral, fase 1 (docs/EQUILIBRIO_GERAL.md; chaves da ConfigCombateV21E,
-   experiments/configs/v21e/calibracao.json). So nas lutas de pets v9 (versaoPet em diante): as quatro chaves da V21D e as cinco
-   da V21E, todas listas das formas (bots.gambitsAdulto); a base (custo do golpe rapido, parry, C3) nao muda. As quatro chaves da
-   V21D (reequilibrio dos arquetipos, docs/VALIDACAO_V21D.md, variante a_c_e2v_v) estao aqui: o combate por turnos e a V21D
-   como regras separadas sairam (COMBATE-TR R3), e o v13 usa estas */
-export const CV21E = {
-  versaoPet: 9,
-  preparoSobPeleOculto: true, muralhaListaEspelho: true, vigiaBateEmQuemRecua: true, vigiaRecuaDoPreparoSobPele: true,
-  duelistaDefendeDoGolpe: true, titaDefendeDoGolpe: true, espelhoSemCarregar: true, muralhaSemCarregar: true, muralhaContraGolpeNaPele: true,
-} as const;
-/* a luta em tempo real (pets v13; docs/ESPEC_COMBATE_TR.md): as regras e as listas da V21E, jogadas pelo nucleo motor/combate_tr/ em vez do
-   combate por turnos (combate_tr/adaptador.ts, jogarLuta, escolhe pelo tempoReal) */
-export const CV21E_TR = { ...CV21E, versaoPet: 13, tempoReal: true } as const;
-/** as regras dos pets v14: as da v13 com o candidato da rodada de equilibrio (o relogio RELOGIO_V14, combate_tr/constantes_tr.ts, vem pela
-    versao: combate_tr/luta.ts, relogioDe; os fatores, as listas e o resto, pelo R.versaoPet >= VERSAO_V14 em cada modulo) */
-export const CV21E_TR14 = { ...CV21E_TR, versaoPet: 14 } as const;
-/** as regras dos pets v18: as da v14 com o empurrao (o relogio RELOGIO_V18 vem pela versao: combate_tr/luta.ts, relogioDe; o resto, pelo
-    R.versaoPet >= VERSAO_V14, como na v14) */
-export const CV21E_TR18 = { ...CV21E_TR, versaoPet: 18 } as const;
-/** a versao de pet do candidato da rodada de equilibrio do tempo real (DE-1) */
-export const VERSAO_V14 = 14;
-
-/* catalogo (docs/catalogo_pets.json, docs/arvore_evolucao.json): 4 especies ativas */
 export const STATS: readonly Stat[] = ["vigor", "folego", "recuperacao", "forca", "mira", "guarda"];
 export const ESPECIES: readonly Especie[] = ["brasa", "cirro", "ferrugem", "limo"];
 export const LINHAS: readonly Linha[] = ["brigao", "guardiao", "cacador", "colosso"];
@@ -331,25 +340,22 @@ export const CESC_V9 = {
    EQUILIBRIO (decisao do Matheus, 2026-09-30: o equilibrio dos itens entra na rodada de equilibrio geral do combate, depois das
    proximas mecanicas). vagas: chips equipados por pet pelas medalhas que ele conhece ([minimo de medalhas, chips], do maior para o
    menor; sem medalha, nenhum). tetoChipStat: a soma dos chips de stat vale no maximo esta fracao do treino tipico do estagio (tipico:
-   o das metas da parte 2, test/calibrar_arenas.mjs). espera: minutos do relogio do pet entre duas cartas de revanche do mesmo lider.
-   gutsFolego, curaAbaixo e curaFracao: as cartas de Folego e de Cura */
+   o das metas da parte 2, test/calibrar_arenas.mjs). espera: minutos do relogio do pet entre duas cartas de revanche do mesmo lider (so
+   confere as cartas que o registro do Tamer ja tem: as cartas sairam na LP4 da LUTA_POC, com os numeros delas) */
 export const CIT = {
   versaoPet: 6,
   vagas: [[5, 3], [3, 2], [1, 1]] as readonly (readonly [number, number])[],
   tetoChipStat: .25,
   tipico: { crianca: 8, adolescente: 22, adulto: 36, mega: 40 } as Readonly<Partial<Record<Estagio, number>>>,
   espera: 1440,
-  gutsFolego: 20, curaAbaixo: .3, curaFracao: .2,
 };
 /* itens nos pets v9 (rodada de equilibrio geral, fase 3; docs/EQUILIBRIO_GERAL.md, metas M-D1 a M-D3; itens.ts): restricoes de uso e valores
-   so para os pets v9. treinoMinimo: os itens (chips e carta) so fazem efeito com o treino do pet >= esta fracao do treino tipico do nivel
-   (CIT.tipico); cartaSoContraNpc: a carta so vale contra os NPCs da campanha (nao na arena contra bots); fatorChipStat: o valor do ponto
-   do chip de stat. O chip de regra entra no fim da lista (itens.listaComChips, GambitsPet.listaDeLuta). Calibrados em test/medir_itens.mjs
-   (sementes de calibracao). PROPOSTOS */
+   so para os pets v9. treinoMinimo: os chips so fazem efeito com o treino do pet >= esta fracao do treino tipico do nivel (CIT.tipico);
+   fatorChipStat: o valor do ponto do chip de stat. Calibrados em test/medir_itens.mjs (sementes de calibracao). PROPOSTOS. A regra da carta
+   (cartaSoContraNpc) saiu com as cartas na LP4 da LUTA_POC */
 export const CIT_V9 = {
   versaoPet: 9,
   treinoMinimo: .5,
-  cartaSoContraNpc: true,
   fatorChipStat: .5,
 };
 /* duracao de cada estagio em minutos e chamados do bebe (docs/cronograma_interacoes.json);
@@ -371,15 +377,17 @@ export const CHAMADO_FOME_CORPO = { limiar: .45 };
     CHAMADO_FOME_CORPO. Um por intervalo de CHAMADO_BEBE no maximo, com a janela de CAT.janelaChamado, os dois como hoje. PROPOSTO,
     SEM FONTE */
 export const CHAMADO_BEBE_CORPO: Record<Chamado, number> = { fome: .7, higiene: .9, carinho: .8 };
+/** o cuidado na hora certa do Rookie em diante (os Bits, docs/PLANO_V3_MOEDA.md, secao 2, decisao M-2 do Matheus de 2026-11-10): a acao do
+    dono conta quando o corpo estava abaixo destes limiares antes dela. So o feito do Tamer: o pet nao muda. A fome e a do instinto
+    (CHAMADO_FOME_CORPO: o pet so come abaixo dela), PROPOSTO, SEM FONTE. A higiene e o humor pagam abaixo de 25 %: DECIDIDO pelo Matheus
+    em 2026-11-11 ("abaixo de 25% ganha bits"); os do bebe (CHAMADO_BEBE_CORPO, 0,9 e 0,8) pagariam quase todo banho e carinho do Rookie,
+    cujo corpo cai em linha de 0,83 e 0,95 (medida desta etapa, test/bits.test.ts) */
+export const CUIDADO_NA_HORA: Record<Chamado, number> = { fome: .45, higiene: .25, carinho: .25 };
 export const ACAO_CHAMADO: Record<Chamado, readonly AcaoDono[]> = { fome: ["alimentar"], higiene: ["limpar"], carinho: ["acariciar", "brincar"] };
 export const FORMAS_AD: readonly FormaAdultaNormal[] = ["duelista", "furioso", "espelho", "muralha", "sentinela", "emboscador", "vigia", "tita"];
 export const LINHA_DA_FORMA = Object.fromEntries(LINHAS.flatMap(l => Object.keys(CAT.adulto[l].formas).map(f => [f, l]))) as Record<FormaAdultaNormal, Linha>;
 /* caráter PROVISORIO (so na web): cada eixo junta os tracos de combate que se parecem com ele */
 export const EIXO_TRACO: Record<EixoCarater, readonly TracoCombate[]> = { impetuoso: ["golpe", "carga"], paciente: ["bloqueio"], atento: ["finta"], resistente: ["agarrao"] };
-export const TECNICAS: readonly Tecnica[] = ["investida", "contra_golpe", "marcar", "pele_dura"];
-
-/* gambits hibridos (so na web) */
-export const GA = { base: .05, alfa: .2, bonusResultado: .1, limiarTroca: -.02 };
 
 /* Linha de base do caráter pelos tracos (PROVISORIO, so na web, pets v1/v2): afinidades medias de um pet
    comum no momento de cada transicao (ver o comentario completo no HTML de origem) */
@@ -467,6 +475,152 @@ export const CMU: ConfigMundo = {
    arvores, so com a racao do jogador. So o pet v12 o usa; a pesquisa e os outros gabaritos seguem com o CMU. PROPOSTO, SEM FONTE. */
 export const LAYOUT_MUNDO_MVP: LayoutMundo = { ...LAYOUT_MUNDO_PADRAO, nome: "mvp", arvores: [] };
 export const CMU_MVP: ConfigMundo = { ...CMU, layout: LAYOUT_MUNDO_MVP };
+/* O mundo da ilha (docs/TAREFA_V3_ARVORE_SACODE.md, AS-7; o espelho de config.LAYOUT_MUNDO_ILHA e CONFIG_MUNDO_ILHA): o layout do MVP
+   com tres frutiferas no bosque do lar (a planta A da ilha, PR #724), na casa: o Mundo so as aceita com o sacudir ligado (D-AS-S1-7).
+   O CMU_MVP nao muda. Nenhuma versao de pet o roda ainda (D-AS-S2-1): so o teste de paridade. Os pontos sao PROPOSTO, SEM FONTE. */
+export const LAYOUT_MUNDO_ILHA: LayoutMundo = {
+  ...LAYOUT_MUNDO_MVP, nome: "ilha", ninho: [11, 13], comedouro: [16, 15], bola_inicio: [21, 19],
+  arvores: [["J1", 9, 9, "a"], ["J2", 14, 7, "b"], ["J3", 6, 14, "c"]],
+};
+export const CMU_ILHA: ConfigMundo = { ...CMU_MVP, layout: LAYOUT_MUNDO_ILHA };
+/** o sacudir a arvore (docs/TAREFA_V3_ARVORE_SACODE.md, secao 3.2; o espelho da ConfigSacudir de digilab/config.py): o galho de cada
+    arvore nasce cheio com `galho_max` frutas e repoe uma a cada `recarga_galho_min` ticks. O modelo e DECIDIDO (AS-3); os numeros sao
+    PROPOSTOS, SEM FONTE (o equilibrio do fim). Desligada, nada muda */
+export interface ConfigSacudir { ligada: boolean; galho_max: number; recarga_galho_min: number }
+export const CONFIG_SACUDIR: ConfigSacudir = Object.freeze({ ligada: false, galho_max: 3, recarga_galho_min: 240 });
+export const CONFIG_SACUDIR_LIGADA: ConfigSacudir = Object.freeze({ ...CONFIG_SACUDIR, ligada: true });
+/** confere a ConfigSacudir como o __post_init__ do Python */
+export function validarSacudir(cs: ConfigSacudir): ConfigSacudir {
+  if (typeof cs.ligada !== "boolean") throw new Error(`ConfigSacudir.ligada e bool: ${String(cs.ligada)}`);
+  if (!Number.isInteger(cs.galho_max) || typeof cs.galho_max !== "number" || cs.galho_max < 1)
+    throw new Error(`ConfigSacudir.galho_max e inteiro >= 1: ${String(cs.galho_max)}`);
+  if (!Number.isInteger(cs.recarga_galho_min) || typeof cs.recarga_galho_min !== "number" || cs.recarga_galho_min < 1)
+    throw new Error(`ConfigSacudir.recarga_galho_min e inteiro >= 1: ${String(cs.recarga_galho_min)}`);
+  return cs;
+}
+/** a fruta do mundo como comida (AS-11; o espelho da ConfigFrutaComoComida): ligada, o laco do mundo nao entrega o aviso `frutaComida`
+    ao cerebro, e a fruta chega como a racao. Desligada (o padrao), a vida de hoje byte a byte */
+export interface ConfigFrutaComoComida { ligada: boolean }
+export const CONFIG_FRUTA_COMO_COMIDA: ConfigFrutaComoComida = Object.freeze({ ligada: false });
+export const CONFIG_FRUTA_COMO_COMIDA_LIGADA: ConfigFrutaComoComida = Object.freeze({ ligada: true });
+/** as versoes de pet que tem o sacudir a arvore (o evento "sa"): nenhuma ainda (D-AS-S2-1; o mundo das arvores e decisao do Matheus) */
+export const VERSOES_COM_SACUDIR: readonly number[] = Object.freeze([]);
+
+/* A ilha onde so a agua barra o pet (docs/TAREFA_V3_ILHA_AGUA.md; o espelho de digilab/config.py: AGUA_ILHA, AGUA_POR_LAYOUT e
+   CONFIG_MUNDO_MVP_AGUA). A agua e uma linha de texto por linha de celulas, de cima para baixo, com um caractere por celula; ela barra o
+   corpo e nao tapa a visao, e a ponte e terra. O mapa fica na tabela, pelo nome do layout (o LayoutMundo nao ganha campo: os gabaritos de
+   antes o gravam campo a campo); o layout fora da tabela nao tem agua. O desenho e PROPOSTO, SEM FONTE. Quem roda um layout com agua precisa
+   do controlador do contrato (o Mundo confere e falha alto). */
+export const AGUA_MAR = "~", AGUA_DOCE = "r", TERRA = ".", PONTE = "=";
+export const AGUA_ILHA: readonly string[] = [
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~.......................~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~.................................~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~..............................rrrr......~~~~~~~~~~~~~",
+  "~~~~~~~~~...............................rrrrrr........~~~~~~~~~~",
+  "~~~~~~~..................................rrrr............~~~~~~~",
+  "~~~~~~.....................................rr.............~~~~~~",
+  "~~~~~......................................rr...............~~~~",
+  "~~~~.......................................rr................~~~",
+  "~~~~.......................................rr................~~~",
+  "~~~.......................................rr..................~~",
+  "~~~.......................................==..................~~",
+  "~~~.......................................==..................~~",
+  "~~~......................................rrr...................~",
+  "~~~......................................rr....................~",
+  "~~~......................................rr....................~",
+  "~~~......................................rr....................~",
+  "~~~.....................................rr....................~~",
+  "~~~.....................................rr....................~~",
+  "~~~......................................rr...................~~",
+  "~~~~......................................rrr................~~~",
+  "~~~~.......................................==...............~~~~",
+  "~~~~~.....rrrrr............................==..............~~~~~",
+  "~~~~~~...rrrrrrr...........................rr.............~~~~~~",
+  "~~~~~~~...rrrrr.............................rr..........~~~~~~~~",
+  "~~~~~~~~~....................................rr.......~~~~~~~~~~",
+  "~~~~~~~~~~~~..................................rr...~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~..............................rr~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+];
+export const LAYOUT_MUNDO_MVP_AGUA: LayoutMundo = { ...LAYOUT_MUNDO_MVP, nome: "mvp_agua" };
+export const CMU_MVP_AGUA: ConfigMundo = { ...CMU_MVP, layout: LAYOUT_MUNDO_MVP_AGUA };
+/* A ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG2; o espelho de digilab/config.py: AGUA_ILHA_GRANDE, LAYOUT_MUNDO_GRANDE e
+   CONFIG_MUNDO_GRANDE): o mundo do produto com 128 x 60 celulas. O mapa tem dois caracteres a mais, a arvore fechada e o marco fechado:
+   celulas de terra em que o pet nao pisa, como a agua (o mesmo solido, o mesmo desvio; nao tapam a visao). A arvore daqui e so obstaculo.
+   As regioes sao as quatro de sempre com as faixas dobradas (IG-5). Nenhum pet do jogo roda este mundo ainda (a IG4 liga). PROPOSTO, SEM FONTE. */
+export const ARVORE_FECHADA = "T", MARCO_FECHADO = "#";
+export const AGUA_ILHA_GRANDE: readonly string[] = [
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.............~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.........T.................~~~~~~..~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...........................................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~............................................rrrr~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~..............................................rrrrrrrr~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~..................................................rrrrrrrrrr....~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~............................................T.........rrrrrrrrrr.......~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~.....................................................T..........rr........~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~..............T..............................T.....T.......T.....rr.........~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~.........##..............rrrr...................T.....T...........rr.....T....~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~......T...##.............rrrrrr....................................rr........T.~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~.....T....................rrrrrr.................T..T..T...........rrr......T...~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~....T.......................rrrr...................................rrr............~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~...........T...................................................T......==.....#.......~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~.....T..T................................................................==...............~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~......T........T............................................................rr...................~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~............................................................................rrrr.......................~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~...................###......................................................rr...........................~~~~~~~~~~~~",
+  "~~~~~~~~~~.......T............###.....................................................rrr.............................~~~~~~~~~~",
+  "~~~~~~~~~~~.......................................................................T..rrr......T........................~~~~~~~~~",
+  "~~~~~~~~~~~~.........................................................................rr.................................~~~~~~~~",
+  "~~~~~~~~~~~~...............................................................T........rrr.............................T...~~~~~~~~",
+  "~~~~~~~~~~~~~............................................................T.........rrr...................................~~~~~~~",
+  "~~~~~~~~~~~~~~.....................................................................rr.............................T.......~~~~~~",
+  "~~~~~~~~~~~~~.....................................................................rrr......................................~~~~~",
+  "~~~~~~~~~~~~~.....................................................................rr........................................~~~~",
+  "~~~~~~~~~~~~.....................................................................rrr.........................................~~~",
+  "~~~~~~~~~~~...T..................................................................rr...........................##.............~~~",
+  "~~~~~~~~~~.......................................................................rr...........................##.............~~~",
+  "~~~~~~~~~~.......................................................................==...........................##............~~~~",
+  "~~~~~~~~~~.......................................................................==.......T..T.............................~~~~~",
+  "~~~~~~~~~~...T...................................................................rr.......................................~~~~~~",
+  "~~~~~~~~~~~....T...T.............................................................rr...........................T........~~~~~~~~~",
+  "~~~~~~~~~~~......T.......rrrr....................................................rrr.......................T.........~~~~~~~~~~~",
+  "~~~~~~~~~~~...........rrrrrrrrrr..................................................rr....................T...........~~~~~~~~~~~~",
+  "~~~~~~~~~~~..........rrrrrrrrrrrr.............................................T...rrr..T........T...........T...T..~~~~~~~~~~~~~",
+  "~~~~~~~~~~~.........rrrrrrrrrrrrrr...................T.............................rr.........................T....~~~~~~~~~~~~~",
+  "~~~~~~~~~~..........rrrrrrrrrrrrrr.................................................rrr...........T................~~~~~~~~~~~~~~",
+  "~~~~~~~~~~...........rrrrrrrrrrrr.............................................T.....rrr................T..T.......~~~~~~~~~~~~~~",
+  "~~~~~~~~~~............rrrrrrrrrr..T........T................T...T....................rr...........................~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~..............rrrr........................T........T......................rrr...............#......T...~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~........................T..T..T............T..............................rrr......T.................~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~..............T...T.................T....................................rrr........T............~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~............T....T....................T..T...T........................==..................~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~.................T............................................==.......T.....~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...T.....T...............T................................rr.........~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~........................................................rrrr....~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~........................................~~~~~~~~~~~~....~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~....................T...............~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~............................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~..............~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+  "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+];
+export const LAYOUT_MUNDO_GRANDE: LayoutMundo = {
+  ...LAYOUT_MUNDO_MVP, nome: "grande", regioes: [["casa", 0, 31], ["jardim", 32, 67], ["campo", 68, 95], ["mata", 96, 127]],
+  ninho: [20, 30], comedouro: [28, 30], bola_inicio: [72, 32],
+};
+export const CMU_GRANDE: ConfigMundo = { ...CMU_MVP, layout: LAYOUT_MUNDO_GRANDE, celulas_x: 128, celulas_y: 60 };
+export const AGUA_POR_LAYOUT: Readonly<Record<string, readonly string[]>> = {
+  [LAYOUT_MUNDO_MVP_AGUA.nome]: AGUA_ILHA, [LAYOUT_MUNDO_GRANDE.nome]: AGUA_ILHA_GRANDE,
+};
 
 /* V2, o corpo do Creatures 3 por baixo dos drives (docs/TAREFA_V2_CORPO_DRIVES.md, etapa 7): espelho da ConfigCorpo de
    digilab/config.py, campo a campo (snake_case de proposito, conferido pelo nome contra o gabarito do Python). O motor do corpo e

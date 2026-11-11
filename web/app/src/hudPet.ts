@@ -3,13 +3,16 @@
    diz que está com fome abaixo de FOME_FALA; abaixo de FOME_EMOTE ele só mostra o emoji da carne sobre a cabeça; acima, nada (o dono
    percebe pelo pet). E a opção "Exibir detalhes do pet" (Ajustes): liga ou desliga os painéis Estado, Evolução, Últimas ações e
    DigiBrain. Tudo só apresentação: o motor, o log, o chamado e o replay não mudam. PROPOSTO, SEM FONTE. */
-import type { PointerEvent as PE, MouseEvent as ME, CSSProperties } from "react";
+import type { PointerEvent as PE, MouseEvent as ME, CSSProperties, RefObject } from "react";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import type { Chamado, Motor } from "../motor/index.ts";
 import { CHAVE } from "./save.ts";
 
 /** quanto tempo o aviso fica na tela depois de mudar (o Matheus, 2026-11-04: 15 s) */
 export const AVISO_MS = 15_000;
+/** quanto tempo a faixa do resumo (a fome, o Estado) e a linha do agora ficam na tela depois de mudar; depois saem, mesmo com a fome critica
+    (o Matheus, 2026-11-08: "quando notifica, deixa eles durante 5 segundos e daí eles saem"). PROPOSTO, SEM FONTE (numero de interface) */
+export const NOTIFICA_MS = 5_000;
 /** abaixo disso o pet diz que está com fome (texto); abaixo de FOME_EMOTE, só o emoji sobre a cabeça (o Matheus, 2026-11-04) */
 export const FOME_FALA = 0.15;
 export const FOME_EMOTE = 0.5;
@@ -21,14 +24,14 @@ export function chamadosVisiveis(m: Motor): Chamado[] {
 /** o emoji da fome sobre a cabeça do pet: comida abaixo de FOME_EMOTE */
 export const fomeNoEmote = (m: Motor): boolean => m.e.fome < FOME_EMOTE;
 
-/** visível por AVISO_MS a cada mudança de `chave` (e ao montar); `fixo` deixa visível enquanto valer */
-export function useAviso(chave: string, fixo = false): boolean {
+/** visível por `ms` (AVISO_MS) a cada mudança de `chave` (e ao montar); `fixo` deixa visível enquanto valer */
+export function useAviso(chave: string, fixo = false, ms = AVISO_MS): boolean {
   const [vis, setVis] = useState(true);
   useEffect(() => {
     setVis(true);
-    const t = setTimeout(() => setVis(false), AVISO_MS);
+    const t = setTimeout(() => setVis(false), ms);
     return () => clearTimeout(t);
-  }, [chave]);
+  }, [chave, ms]);
   return vis || fixo;
 }
 
@@ -44,14 +47,26 @@ function gravarDesvio(id: string, d: Desvio): void {
 /** quantos px o ponteiro anda antes de virar arraste (abaixo disso é um toque e o clique passa) */
 const LIMIAR_ARRASTE = 6;
 
-/** arrastar o elemento pela tela: devolve o ref, o estilo (translate) e os eventos; um arraste não vira clique */
-export function useArrastavel<T extends HTMLElement>(id: string) {
-  const ref = useRef<T>(null);
+/** quem esta montado e arrastavel: "voltar os paineis ao lugar" (Ajustes) zera todos de uma vez */
+const ouvintesArraste = new Set<() => void>();
+/** os paineis e avisos voltam ao lugar de sempre (apaga as posicoes gravadas no navegador; nada do save) */
+export function voltarPaineis(): void {
+  try { localStorage.removeItem(CHAVE_ARRASTE); } catch { /* preferência de tela */ }
+  for (const o of ouvintesArraste) o();
+}
+/** ha algum painel ou aviso fora do lugar de sempre */
+export function temPainelMovido(): boolean { return Object.values(lerDesvios()).some(d => d.dx || d.dy); }
+
+/** o arraste de `id` sobre o elemento de `ref`; com `alca` (um seletor), so comeca num ponteiro sobre ela (o cabecalho do painel), e o resto do
+    painel continua a clicar e a rolar. Um arraste nao vira clique */
+function useArraste<T extends HTMLElement>(id: string, ref: RefObject<T | null>, alca?: string, porTranslate = false) {
   const [d, setD] = useState<Desvio>(() => lerDesvios()[id] ?? { dx: 0, dy: 0 });
+  useEffect(() => { const o = () => setD({ dx: 0, dy: 0 }); ouvintesArraste.add(o); return () => { ouvintesArraste.delete(o); }; }, []);
   const arr = useRef<{ x: number; y: number; base: Desvio; ret: DOMRect; moveu: boolean; id: number } | null>(null);
   const moveuAgora = useRef(false);
   const onPointerDown = (e: PE<T>) => {
     if (e.button !== 0 || !ref.current) return;
+    if (alca && !(e.target instanceof Element && e.target.closest(alca))) return;
     arr.current = { x: e.clientX, y: e.clientY, base: d, ret: ref.current.getBoundingClientRect(), moveu: false, id: e.pointerId };
   };
   const onPointerMove = (e: PE<T>) => {
@@ -72,8 +87,21 @@ export function useArrastavel<T extends HTMLElement>(id: string) {
     if (a.moveu) { moveuAgora.current = true; setD(x => { gravarDesvio(id, x); return x; }); }
   };
   const onClickCapture = (e: ME<T>) => { if (moveuAgora.current) { moveuAgora.current = false; e.preventDefault(); e.stopPropagation(); } };
-  const style: CSSProperties = d.dx || d.dy ? { transform: `translate(${Math.round(d.dx)}px, ${Math.round(d.dy)}px)` } : {};
-  return { ref, style, onPointerDown, onPointerMove, onPointerUp: soltar, onPointerCancel: soltar, onClickCapture, "data-arrastavel": "" };
+  /* os paineis usam a propriedade `translate`, que soma com a animacao de entrada (transform) em vez de brigar com ela */
+  const style: CSSProperties = !(d.dx || d.dy) ? {} : porTranslate ? { translate: `${Math.round(d.dx)}px ${Math.round(d.dy)}px` }
+    : { transform: `translate(${Math.round(d.dx)}px, ${Math.round(d.dy)}px)` };
+  return { style, onPointerDown, onPointerMove, onPointerUp: soltar, onPointerCancel: soltar, onClickCapture, "data-arrastavel": "" };
+}
+
+/** arrastar o elemento pela tela (o balao da fala, o alerta): devolve o ref, o estilo (translate) e os eventos; um arraste nao vira clique */
+export function useArrastavel<T extends HTMLElement>(id: string) {
+  const ref = useRef<T>(null);
+  return { ref, ...useArraste(id, ref) };
+}
+/** arrastar um painel pelo cabecalho (`alca`, um seletor dentro dele), com o ref que o painel ja tem (o Matheus, 2026-11-08: "desde que o usuário consiga
+    arrastar ou arrumar o layout desses menus"). Devolve o estilo e os eventos para o elemento do painel */
+export function useArrastavelPorAlca<T extends HTMLElement>(id: string, ref: RefObject<T | null>, alca: string) {
+  return useArraste(id, ref, alca, true);
 }
 
 /* ---------- a opção "Exibir detalhes do pet" (Ajustes): os painéis Estado, Evolução, Últimas ações e DigiBrain */

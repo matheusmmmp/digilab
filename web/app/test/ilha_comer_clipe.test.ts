@@ -7,7 +7,7 @@
 //   - o corte do Comer (com o Comer_objeto) e o do Attack_1 tem o mesmo centro e o mesmo pe do corte do sprite.
 import { beforeEach, describe, expect, test } from "vitest";
 import { readFileSync } from "node:fs";
-import { CENA_ACAO, SEM_GESTO, comerAgora, emoteAgora, escolherComer, esquecerCoco, esquecerComer, esquecerReacao, gestoAgora, gestoDaReacao,
+import { CENA_ACAO, SEM_GESTO, comerAgora, comidaPerto, emoteAgora, escolherComer, esquecerCoco, esquecerComer, esquecerReacao, gestoAgora, gestoDaReacao,
   mostrarReacao, type EntradaComer, type Reacao } from "../src/telas/pet/cenaAcao.ts";
 import { alargarCorte, unirCaixas, type Corte } from "../src/telas/pet/ilha/corte.ts";
 import { juntarClipes, type AtlasClipes, type AtlasUp, type Quadro } from "../src/atlas.ts";
@@ -18,7 +18,7 @@ const soma = (ms: number[]) => ms.reduce((a, b) => a + b, 0);
 /** o ciclo do Comer do sprite sintetico forma_a: 133 + 100 + 67 = 300 ms */
 const CICLO = soma(atlas.sprites.forma_a.clipes!.Comer!.ms);
 
-const base: EntradaComer = { chave: "1", acao: "ocioso", consumos: 0, alvo: null, ciclo: CICLO, velocidade: 10, andando: false, pausa: false, donoDesde: null };
+const base: EntradaComer = { chave: "1", acao: "ocioso", consumos: 0, alvo: null, ciclo: CICLO, velocidade: 10, andando: false, pausa: false, donoDesde: null, comidaPerto: true };
 const em = (t: number, e: Partial<EntradaComer> = {}) => escolherComer({ ...base, ...e }, t);
 const cena = (acao: string) => ({ acao, sujeira: 0, chave: "1" });
 const relaxou = (desde: number): Reacao => ({ desde, tipo: "relaxou", carinho: 1, medo: 0 });
@@ -190,3 +190,39 @@ describe("o corte alargado: o mesmo centro e o mesmo pe", () => {
     expect(alargarCorte(b, [{ x0: 4, x1: 10, pe: 25 }, null])).toEqual(b);
   });
 });
+
+/* CADEIA, etapa 2 (D3 do Matheus de 2026-11-11): a cena so mastiga com o que comer. O motor pode decidir "comer" sem comida a ate uma celula
+   (o A, cujo alvo e o padrao do motor; o modular a caminho): o laco do Comer, o gesto e as migalhas nao tocam. O "comeu a racao" vem do consumo
+   e toca igual */
+describe("comer sem nada perto (D3)", () => {
+  test("com o clipe: a acao comer sem comida perto nao toca o laco; o consumo toca o momento", () => {
+    esquecerComer();
+    em(0, { comidaPerto: false });
+    expect(em(10, { acao: "comer", comidaPerto: false }).tocou).toBeNull();
+    expect(em(500, { acao: "comer", comidaPerto: false }).tocou).toBeNull();
+    const m = em(600, { acao: "comer", comidaPerto: false, consumos: 1 });
+    expect(m.tocou).toBe("clipe");
+    expect(m.momento).toBe(true);
+  });
+  test("sem o clipe: nem o gesto; com comida perto, o gesto de hoje", () => {
+    esquecerComer();
+    expect(em(0, { acao: "comer", ciclo: null, comidaPerto: false }).tocou).toBeNull();
+    expect(em(10, { acao: "comer", ciclo: null, comidaPerto: true }).tocou).toBe("gesto");
+  });
+  test("o gesto da cena: sem comida perto, nenhuma mastigacao; sem o campo, a de hoje", () => {
+    esquecerReacao(); esquecerCoco();
+    expect(gestoAgora({ ...cena("comer"), comidaPerto: false }, 210, false, true)).toEqual(SEM_GESTO);
+    expect(gestoAgora(cena("comer"), 210, false, true).estica).toBeLessThan(1);
+  });
+});
+
+describe("comidaPerto: a comida a ate uma celula do pet", () => {
+  const mundo = (comidas: [number, number][]) => ({ pet: [100, 100] as const, cm: { sub: 8 }, comidas: new Map(comidas.map(([x, y], i) => [i, { x, y }])) });
+  test("ate uma celula sim; mais longe nao; sem mundo, sim", () => {
+    expect(comidaPerto(mundo([[106, 104]]))).toBe(true);
+    expect(comidaPerto(mundo([[120, 100]]))).toBe(false);
+    expect(comidaPerto(mundo([]))).toBe(false);
+    expect(comidaPerto(undefined)).toBe(true);
+  });
+});
+

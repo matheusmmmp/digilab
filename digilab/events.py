@@ -18,6 +18,7 @@ dado de pesquisa e nao so um save file.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from enum import Enum
 from typing import Iterator, Sequence
@@ -282,42 +283,45 @@ def fala(tick: int, gatilho: str) -> Evento:
 
 # V2, mundo fisico (docs/TAREFA_V2_MUNDO_FISICO.md, secao 4): o dono deixa a comida ou a bola num ponto do mapa. Tipos novos do log,
 # como a `luta`: so o `reproduzir_mundo` (digilab/mundo.py) os entende; os replays de antes levantam erro. A posicao ja vem na grade
-# (inteiros em subunidades, dentro do mapa: 0 <= x < 1024, 0 <= y < 480); fora disso, nao inteira ou tipo desconhecido levanta erro.
+# (inteiros em subunidades, dentro do mapa: 0 <= x < 1024, 0 <= y < 480 no de 64 x 30; o `mapa` de quem chama, abaixo); fora disso, nao inteira ou tipo desconhecido levanta erro.
 TIPOS_COMIDA_MUNDO = ("racao", "a", "b", "c")
 LARGURA_MUNDO = 1024
 ALTURA_MUNDO = 480
+# o mapa de 64 x 30 celulas; o motor do mundo passa o tamanho do mapa dele em `mapa` (a ilha grande tem 2048 x 960: docs/TAREFA_V3_ILHA_AGUA.md,
+# secao 12). Quem nao passa (o grupo, os replays de antes) continua no de 64 x 30
+MAPA_PADRAO = (LARGURA_MUNDO, ALTURA_MUNDO)
 
 
-def _posicao_mundo(x, y) -> tuple[int, int]:
+def _posicao_mundo(x, y, mapa: tuple[int, int] = MAPA_PADRAO) -> tuple[int, int]:
     if type(x) is not int or type(y) is not int:
         raise ValueError(f"posicao do mundo nao inteira: ({x!r}, {y!r})")
-    if not (0 <= x < LARGURA_MUNDO and 0 <= y < ALTURA_MUNDO):
+    if not (0 <= x < mapa[0] and 0 <= y < mapa[1]):
         raise ValueError(f"posicao fora do mapa: ({x}, {y})")
     return x, y
 
 
-def deixar_comida(tick: int, tipo: str, x: int, y: int) -> Evento:
+def deixar_comida(tick: int, tipo: str, x: int, y: int, mapa: tuple[int, int] = MAPA_PADRAO) -> Evento:
     if tipo not in TIPOS_COMIDA_MUNDO:
         raise ValueError(f"tipo de comida desconhecido: {tipo!r}")
-    x, y = _posicao_mundo(x, y)
+    x, y = _posicao_mundo(x, y, mapa)
     return Evento(tick=tick, tipo="deixar_comida", valor=f"{tipo}|{x}|{y}")
 
 
-def deixar_fruta(tick: int, tipo: str, x: int, y: int) -> Evento:
+def deixar_fruta(tick: int, tipo: str, x: int, y: int, mapa: tuple[int, int] = MAPA_PADRAO) -> Evento:
     """a fruta que o dono poe ao lado da racao (ConfigFrutaAoLado): fora do orcamento e sem contato; so frutas"""
     if tipo not in FRUTAS:
         raise ValueError(f"fruta ao lado desconhecida: {tipo!r}")
-    x, y = _posicao_mundo(x, y)
+    x, y = _posicao_mundo(x, y, mapa)
     return Evento(tick=tick, tipo="deixar_fruta", valor=f"{tipo}|{x}|{y}")
 
 
-def ler_deixar_fruta(evento: Evento) -> tuple[str, int, int]:
+def ler_deixar_fruta(evento: Evento, mapa: tuple[int, int] = MAPA_PADRAO) -> tuple[str, int, int]:
     if evento.tipo != "deixar_fruta":
         raise ValueError(f"evento nao e deixar_fruta: {evento.tipo!r}")
     partes = str(evento.valor).split("|")
     if len(partes) != 3 or partes[0] not in FRUTAS:
         raise ValueError(f"deixar_fruta malformado: {evento.valor!r}")
-    return (partes[0],) + _posicao_mundo(_inteiro_do_log(partes[1]), _inteiro_do_log(partes[2]))
+    return (partes[0],) + _posicao_mundo(_inteiro_do_log(partes[1]), _inteiro_do_log(partes[2]), mapa)
 
 
 class LutaSemChave(ValueError):
@@ -348,8 +352,8 @@ def ler_resumo_luta(evento: Evento) -> tuple[str, int, int]:
     return partes[0], int(partes[1]), int(partes[2])
 
 
-def deixar_bola(tick: int, x: int, y: int) -> Evento:
-    x, y = _posicao_mundo(x, y)
+def deixar_bola(tick: int, x: int, y: int, mapa: tuple[int, int] = MAPA_PADRAO) -> Evento:
+    x, y = _posicao_mundo(x, y, mapa)
     return Evento(tick=tick, tipo="deixar_bola", valor=f"{x}|{y}")
 
 
@@ -389,28 +393,72 @@ def ler_levar_pet(evento: Evento) -> tuple[int, int]:
     return _ponto_solto(_inteiro_com_sinal_do_log(partes[0]), _inteiro_com_sinal_do_log(partes[1]))
 
 
+TIPO_MUDAR_ILHA = "mudar_ilha"       # o pet passa para a ilha com agua no meio da vida (docs/TAREFA_V3_ILHA_AGUA.md, IA4)
+_NOME_ILHA = re.compile(r"[a-z0-9_]{1,32}")
+
+
+def _nome_ilha(nome) -> str:
+    """o nome do layout de destino no log: minusculas, digitos e sublinhado ASCII, de 1 a 32; se a troca vale, quem confere e o motor"""
+    if type(nome) is not str or _NOME_ILHA.fullmatch(nome) is None:
+        raise ValueError(f"mudar_ilha com nome de layout invalido: {nome!r}")
+    return nome
+
+
+def mudar_ilha(tick: int, nome: str) -> Evento:
+    """o mundo do pet passa a ser o layout `nome` (o mesmo de antes, com a agua); o jogo web, os pets v21 que ja estavam vivos"""
+    return Evento(tick=tick, tipo=TIPO_MUDAR_ILHA, valor=_nome_ilha(nome))
+
+
+def ler_mudar_ilha(evento: Evento) -> str:
+    if evento.tipo != TIPO_MUDAR_ILHA:
+        raise ValueError(f"evento nao e {TIPO_MUDAR_ILHA}: {evento.tipo!r}")
+    return _nome_ilha(evento.valor)
+
+
+TIPO_SACUDIR = "sacudir_arvore"      # o dono sacode a arvore (docs/TAREFA_V3_ARVORE_SACODE.md, S1): so com a ConfigSacudir ligada
+_ID_ARVORE = re.compile(r"[A-Za-z0-9]{1,16}")
+
+
+def _id_arvore(arvore) -> str:
+    """o id da arvore no log: letras e digitos ASCII, de 1 a 16; se e uma arvore do layout, quem confere e o Mundo"""
+    if type(arvore) is not str or _ID_ARVORE.fullmatch(arvore) is None:
+        raise ValueError(f"sacudir_arvore com id de arvore invalido: {arvore!r}")
+    return arvore
+
+
+def sacudir_arvore(tick: int, arvore: str) -> Evento:
+    """o dono sacode a arvore `arvore` (o id do layout, por exemplo "J1"); o jogo web, pets v20"""
+    return Evento(tick=tick, tipo=TIPO_SACUDIR, valor=_id_arvore(arvore))
+
+
+def ler_sacudir_arvore(evento: Evento) -> str:
+    if evento.tipo != TIPO_SACUDIR:
+        raise ValueError(f"evento nao e {TIPO_SACUDIR}: {evento.tipo!r}")
+    return _id_arvore(evento.valor)
+
+
 def _inteiro_do_log(texto: str) -> int:
     if not texto.isdigit():
         raise ValueError(f"inteiro malformado no log: {texto!r}")
     return int(texto)
 
 
-def ler_deixar_comida(evento: Evento) -> tuple[str, int, int]:
+def ler_deixar_comida(evento: Evento, mapa: tuple[int, int] = MAPA_PADRAO) -> tuple[str, int, int]:
     if evento.tipo != "deixar_comida":
         raise ValueError(f"evento nao e deixar_comida: {evento.tipo!r}")
     partes = str(evento.valor).split("|")
     if len(partes) != 3 or partes[0] not in TIPOS_COMIDA_MUNDO:
         raise ValueError(f"deixar_comida malformado: {evento.valor!r}")
-    return (partes[0],) + _posicao_mundo(_inteiro_do_log(partes[1]), _inteiro_do_log(partes[2]))
+    return (partes[0],) + _posicao_mundo(_inteiro_do_log(partes[1]), _inteiro_do_log(partes[2]), mapa)
 
 
-def ler_deixar_bola(evento: Evento) -> tuple[int, int]:
+def ler_deixar_bola(evento: Evento, mapa: tuple[int, int] = MAPA_PADRAO) -> tuple[int, int]:
     if evento.tipo != "deixar_bola":
         raise ValueError(f"evento nao e deixar_bola: {evento.tipo!r}")
     partes = str(evento.valor).split("|")
     if len(partes) != 2:
         raise ValueError(f"deixar_bola malformado: {evento.valor!r}")
-    return _posicao_mundo(_inteiro_do_log(partes[0]), _inteiro_do_log(partes[1]))
+    return _posicao_mundo(_inteiro_do_log(partes[0]), _inteiro_do_log(partes[1]), mapa)
 
 
 def ler_luta(evento: Evento) -> tuple[str, int]:

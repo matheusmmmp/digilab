@@ -32,7 +32,7 @@ import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import { useTempo } from "../../tempo.ts";
 import { CHAVE } from "../../save.ts";
-import { FOME_FALA, chamadosVisiveis, useArrastavel, useAviso, useDetalhesPet } from "../../hudPet.ts";
+import { FOME_FALA, NOTIFICA_MS, chamadosVisiveis, useArrastavel, useArrastavelPorAlca, useAviso, useDetalhesPet } from "../../hudPet.ts";
 import { BotaoMovel, Segura } from "../../componentes/BotaoMovel.tsx";
 import { alternarLeque, fecharLeque, mudarLeque, useLeque } from "../../movel.ts";
 import { AgoraIcone, ChipCausa, LinhaAgora } from "./LinhaAgora.tsx";
@@ -46,9 +46,8 @@ import "../../estilo/pet_movel.css";
 import "../../estilo/nivel.css";
 import { useNivel } from "../../nivelTela.ts";
 import { nivelDe } from "../../nivel.ts";
-import { ConteudoDigiBrainLab } from "../../componentes/DigiBrainLab.tsx";
 import { ScanDigiBrain } from "../../componentes/ScanDigiBrain.tsx";
-import { SeloExperimental } from "../config/Laboratorio.tsx";
+import { ScanDigiBrainLab } from "../../componentes/ScanDigiBrainLab.tsx";
 import { duracao, previsaoEvo } from "../crescer/TelaEvolucao.tsx";
 
 export const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
@@ -335,8 +334,9 @@ function temPedido(m: Motor): boolean {
     Sem o nome do pet (ele esta na plaquinha do topo) */
 function Prioridade({ abrirDetalhes, movel = false }: { abrirDetalhes?: () => void; movel?: boolean }) {
   const { motor: m, nascendo } = useJogo(), r = resumoAgora(m, nascendo), pedido = !m.morte && nascendo === 0 && temPedido(m), nec = movel ? necessidadeMovel(m, nascendo) : null;
-  /* o resumo so aparece por AVISO_MS quando muda (hudPet.ts); a fome critica, o pedido e a morte ficam. No celular o aviso da necessidade segue o mesmo tempo */
-  const vis = useAviso(movel ? nec?.texto ?? "" : r.texto, nascendo === 0 && m.e.fome < FOME_FALA), arr = useArrastavel<HTMLDivElement>("alerta");
+  /* o resumo so aparece por NOTIFICA_MS quando muda (hudPet.ts), inclusive a fome critica (2026-11-08; antes ela ficava); o pedido e a morte ficam. No celular
+     o aviso da necessidade segue o mesmo tempo */
+  const vis = useAviso(movel ? nec?.texto ?? "" : r.texto, false, NOTIFICA_MS), arr = useArrastavel<HTMLDivElement>("alerta");
   /* o celular anuncia a necessidade uma vez a cada mudanca do texto (nao a cada tick que muda o %): a regiao fica sempre montada e o % entra no texto
      no momento da mudanca */
   const falado = movel && nec?.aviso ? nec.texto : "", [anuncio, setAnuncio] = useState("");
@@ -620,12 +620,6 @@ function LinhaDigiBrain({ abrir }: { abrir: () => void }) {
   );
 }
 
-/** o painel DigiBrain do modular, no pet de teste (v16); o do A v11 abre no ScanDigiBrain (D1c), e chegar aqui com ele e erro */
-function PainelDigiBrain() {
-  const { motor: m } = useJogo();
-  if (!m.lab) throw new Error("o DigiBrain do A v11 abre no ScanDigiBrain, nao no painel");
-  return <div className="pet-painel__folha dl digibrain"><div className="db-folha-selo"><SeloExperimental /><span className="db-selo">cérebro modular</span></div><ConteudoDigiBrainLab /></div>;
-}
 function ConteudoPainel({ id, v, irRegistro, irEvolucao, detalhes, alternarDetalhes }: {
   id: Painel; v: VistaFala; irRegistro: () => void; irEvolucao: () => void; detalhes: boolean; alternarDetalhes: () => void;
 }) {
@@ -634,7 +628,7 @@ function ConteudoPainel({ id, v, irRegistro, irEvolucao, detalhes, alternarDetal
     case "evolucao": return <ProximaEvolucao irEvolucao={irEvolucao} />;
     case "acoes": return <UltimasAcoes irRegistro={irRegistro} />;
     /* o DigiBrain e o porque da fala, com a pele escura (D8) */
-    case "digibrain": return <PainelDigiBrain />;
+    case "digibrain": throw new Error("o DigiBrain abre no scan (ScanDigiBrain ou ScanDigiBrainLab), nao no painel");
     case "fala": return <div className="pet-painel__folha dl"><DetalheFala v={v} semTitulo /></div>;
   }
 }
@@ -747,6 +741,8 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
     setTimeout(() => pilha.current?.querySelector<HTMLElement>("[data-painel-pet='estado'] .hud-painel__bt")?.focus(), 0);
   };
   const ult = ultimasDoRegistro(m, 1)[0], topo = useTopo();
+  /* a pilha da direita se arrasta pelos cabecalhos (2026-11-08); a posicao fica no navegador, e Ajustes > Visual a volta ao lugar */
+  const arrPilha = useArrastavelPorAlca("pilha", pilha, ".hud-painel__cab");
   const resumoEvo = p ? (p.falta > 0 ? `próxima forma em ${duracao(p.falta)}` : "tempo do estágio cumprido") : undefined;
   const conteudo = (id: Painel) => <ConteudoPainel id={id} v={fala} irRegistro={irRegistro} irEvolucao={irEvolucao} detalhes={hud.detalhes} alternarDetalhes={() => mudarHud("detalhes")} />;
   return (
@@ -759,7 +755,7 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
       {!largo && <AgoraIcone aberto={atual === "digibrain"} sobPainel={atual !== null} aoAbrir={detalhesPet ? () => abrir("digibrain") : undefined} />}
       <Prioridade abrirDetalhes={largo || detalhesPet ? abrirEstado : undefined} movel={!largo} />
       {largo ? (!atual && detalhesPet && (
-        <aside className="pet-hud" ref={pilha} aria-label="Painéis do pet">
+        <aside className="pet-hud" ref={pilha} aria-label="Painéis do pet" {...arrPilha}>
           <PainelHud id="estado" aberto={hud.estado} alternar={() => mudarHud("estado")}>{conteudo("estado")}</PainelHud>
           {temEvo && <PainelHud id="evolucao" aberto={hud.evolucao} alternar={() => mudarHud("evolucao")} resumo={resumoEvo}>{conteudo("evolucao")}</PainelHud>}
           {vivo && <PainelHud id="acoes" aberto={hud.acoes} alternar={() => mudarHud("acoes")} resumo={ult ? `${hhmm(ult.t)} · ${textoHist(ult)}` : "nada no registro ainda"}>
@@ -775,7 +771,9 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
       {largo && <CameraHud />}
       {/* o DigiBrain do A v11 e o scan (o campo pequeno, um dialogo modal); o do modular (pet v16) continua no painel de hoje (D1-9) */}
       {atual === "digibrain" && !m.lab && <ScanDigiBrain fechar={fechar} movel={!largo} chamado={<ChamadoSobScan />} />}
-      {atual && !(atual === "digibrain" && !m.lab) && (
+      {/* o pet do laboratorio (v16) abre o mesmo scan, com o mapa do modular (pedido do Matheus de 2026-11-11) */}
+      {atual === "digibrain" && m.lab && <ScanDigiBrainLab fechar={fechar} movel={!largo} chamado={<ChamadoSobScan />} />}
+      {atual && atual !== "digibrain" && (
         <div className="pet-painel" id="pet-painel" data-painel-pet={atual} ref={painel} tabIndex={-1} onKeyDown={e => { if (e.key === "Escape") { e.stopPropagation(); fechar(); } }}>
           <PainelHx titulo={TITULO_PAINEL[atual]} onFechar={fechar} rotuloFechar={`Fechar ${TITULO_PAINEL[atual]}`} className="pet-painel__hx">
             {conteudo(atual)}

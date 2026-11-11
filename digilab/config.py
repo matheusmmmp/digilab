@@ -1841,8 +1841,9 @@ class ConfigMundo:
     raio_mancha_celulas: int = 3
 
     def __post_init__(self) -> None:
-        if self.celulas_x * self.sub != 1024 or self.celulas_y * self.sub != 480:
-            raise ValueError("o mapa da tarefa e 64 x 30 celulas de 16 subunidades (secao 3)")
+        # o mapa da tarefa (secao 3) e o da ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG-2: 128 x 60); nenhum outro tamanho
+        if (self.celulas_x, self.celulas_y, self.sub) not in ((64, 30, 16), (128, 60, 16)):
+            raise ValueError("o mapa e 64 x 30 celulas de 16 subunidades (secao 3) ou 128 x 60 (a ilha grande)")
         if self.velocidade <= 0 or self.atrito <= 0:
             raise ValueError("velocidade e atrito precisam ser positivos")
         if self.mult_queda <= 0.0:
@@ -1864,6 +1865,140 @@ CONFIG_MUNDO_LIGADA = ConfigMundo(ligada=True)
 # ele nao vaza). PROPOSTO, SEM FONTE: o motivo e o A v11 sem as chaves do mundo, que nao come a fruta do mundo (registro 2026-10-24).
 LAYOUT_MUNDO_MVP = replace(LAYOUT_MUNDO_PADRAO, nome="mvp", arvores=())                  # PROPOSTO, SEM FONTE
 CONFIG_MUNDO_MVP = replace(CONFIG_MUNDO_LIGADA, layout=LAYOUT_MUNDO_MVP)                  # PROPOSTO, SEM FONTE
+
+# O mundo da ilha (docs/TAREFA_V3_ARVORE_SACODE.md, AS-7 APROVADA em 2026-11-08): o layout do MVP com tres frutiferas, so para os pets v20
+# do jogo. O CONFIG_MUNDO_MVP nao muda (a vida gravada dos pets v12 a v19). O mundo novo e DECIDIDO. Os pontos sao os da planta A da ilha
+# inicial (docs/pranchas/ux-ilha-layout/, PR #724; o Matheus em 2026-11-08: "A, com IL-2 a IL-4"), em celulas inteiras: o ninho, a tigela
+# (o comedouro; os 15,5 da planta em 15), a bola e as frutiferas no bosque atras do ninho (IL-2). As regioes sao as de hoje, e as tres
+# arvores caem na casa: o Mundo so as aceita com o sacudir ligado (D-AS-S1-7). Os pontos sao PROPOSTO, SEM FONTE, e ficam so aqui.
+LAYOUT_MUNDO_ILHA = replace(LAYOUT_MUNDO_MVP, nome="ilha", ninho=(11, 13), comedouro=(16, 15), bola_inicio=(21, 19),  # PROPOSTO, SEM FONTE
+                            arvores=(("J1", 9, 9, "a"), ("J2", 14, 7, "b"), ("J3", 6, 14, "c")))                   # PROPOSTO, SEM FONTE
+CONFIG_MUNDO_ILHA = replace(CONFIG_MUNDO_MVP, layout=LAYOUT_MUNDO_ILHA)
+
+# A ilha onde so a agua barra o pet (docs/TAREFA_V3_ILHA_AGUA.md, APROVADA em 2026-11-10; o Matheus: "Eu quero que o pet consiga andar pela
+# ilha inteira, so nao atravesse a agua"): o layout da ilha (a planta A) com o mar em volta, um rio com duas pontes e uma lagoa, dentro do
+# mesmo mundo de 64 x 30 (IA-1). O desenho e PROPOSTO, SEM FONTE, e muda aqui sem mexer no codigo (IA-2); o espelho e o
+# web/app/motor/constantes.ts. Quem roda este layout precisa do controlador do contrato (o MotorMundo confere e falha alto).
+# A agua e uma linha de texto por linha de celulas, de cima para baixo, com um caractere por celula: AGUA_MAR, AGUA_DOCE, TERRA ou PONTE.
+# Ela barra o corpo e nao tapa a visao; a ponte e terra (a vista e que a desenha). O mapa fica em AGUA_POR_LAYOUT, pelo nome do layout, e
+# nao num campo do LayoutMundo: os gabaritos de antes gravam o layout campo a campo, e um campo novo os mudaria. O layout que nao esta na
+# tabela nao tem agua. Quem monta os solidos e o digilab/mundo.py (solidos_da_agua).
+AGUA_MAR, AGUA_DOCE, TERRA, PONTE = "~", "r", ".", "="
+AGUA_ILHA = (
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~.......................~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~.................................~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~..............................rrrr......~~~~~~~~~~~~~",
+    "~~~~~~~~~...............................rrrrrr........~~~~~~~~~~",
+    "~~~~~~~..................................rrrr............~~~~~~~",
+    "~~~~~~.....................................rr.............~~~~~~",
+    "~~~~~......................................rr...............~~~~",
+    "~~~~.......................................rr................~~~",
+    "~~~~.......................................rr................~~~",
+    "~~~.......................................rr..................~~",
+    "~~~.......................................==..................~~",
+    "~~~.......................................==..................~~",
+    "~~~......................................rrr...................~",
+    "~~~......................................rr....................~",
+    "~~~......................................rr....................~",
+    "~~~......................................rr....................~",
+    "~~~.....................................rr....................~~",
+    "~~~.....................................rr....................~~",
+    "~~~......................................rr...................~~",
+    "~~~~......................................rrr................~~~",
+    "~~~~.......................................==...............~~~~",
+    "~~~~~.....rrrrr............................==..............~~~~~",
+    "~~~~~~...rrrrrrr...........................rr.............~~~~~~",
+    "~~~~~~~...rrrrr.............................rr..........~~~~~~~~",
+    "~~~~~~~~~....................................rr.......~~~~~~~~~~",
+    "~~~~~~~~~~~~..................................rr...~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~..............................rr~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+)                                                                                        # PROPOSTO, SEM FONTE
+LAYOUT_MUNDO_ILHA_AGUA = replace(LAYOUT_MUNDO_ILHA, nome="ilha_agua")
+# o mundo do produto de hoje no jogo web (o MVP, sem arvores) com a mesma agua: e o que o TS roda, e o do gabarito da paridade (IA1/IA2).
+# O ninho (4, 15), o comedouro (10, 15) e a bola (40, 15) do MVP ficam em terra neste mapa (o Mundo confere e falha alto).
+LAYOUT_MUNDO_MVP_AGUA = replace(LAYOUT_MUNDO_MVP, nome="mvp_agua")
+AGUA_POR_LAYOUT = {LAYOUT_MUNDO_ILHA_AGUA.nome: AGUA_ILHA, LAYOUT_MUNDO_MVP_AGUA.nome: AGUA_ILHA}
+CONFIG_MUNDO_ILHA_AGUA = replace(CONFIG_MUNDO_ILHA, layout=LAYOUT_MUNDO_ILHA_AGUA)
+CONFIG_MUNDO_MVP_AGUA = replace(CONFIG_MUNDO_MVP, layout=LAYOUT_MUNDO_MVP_AGUA)
+
+# A ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secao 12; IG-1 a IG-9 DECIDIDAS pelo Matheus em 2026-11-11: "Mundo maior no motor", "128 x 60",
+# as arvores e os marcos como obstaculos na mesma versao): o mundo do produto com 128 x 60 celulas. O mapa tem dois caracteres a mais, a
+# ARVORE_FECHADA e o MARCO_FECHADO: celulas de terra em que o pet nao pisa, como a agua (o mesmo solido, o mesmo desvio; nao tapam a
+# visao). A arvore daqui e so obstaculo: nao da fruta e nao esta em `layout.arvores` (a que sacode e da docs/TAREFA_V3_ARVORE_SACODE.md).
+# O mapa e o de docs/pranchas/ilha-grande/mapa_proposto.txt (gerar_figura.py; um teste confere que sao iguais): PROPOSTO, SEM FONTE.
+# As regioes sao as quatro de sempre com as faixas dobradas (IG-5). O ninho, o comedouro e a bola ficam na casa, na casa e no campo, como
+# no MVP (la: 4, 10 e 40 de 64): os pontos sao desta sessao, PROPOSTO, SEM FONTE. So o jogo usa este mundo (IG-8): a bancada e as runs de
+# pesquisa ficam nos de antes.
+ARVORE_FECHADA, MARCO_FECHADO = "T", "#"
+AGUA_ILHA_GRANDE = (
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.............~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.........T.................~~~~~~..~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...........................................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~............................................rrrr~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~..............................................rrrrrrrr~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~..................................................rrrrrrrrrr....~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~............................................T.........rrrrrrrrrr.......~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~.....................................................T..........rr........~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~..............T..............................T.....T.......T.....rr.........~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~.........##..............rrrr...................T.....T...........rr.....T....~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~......T...##.............rrrrrr....................................rr........T.~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~.....T....................rrrrrr.................T..T..T...........rrr......T...~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~....T.......................rrrr...................................rrr............~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~...........T...................................................T......==.....#.......~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~.....T..T................................................................==...............~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~......T........T............................................................rr...................~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~............................................................................rrrr.......................~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~...................###......................................................rr...........................~~~~~~~~~~~~",
+    "~~~~~~~~~~.......T............###.....................................................rrr.............................~~~~~~~~~~",
+    "~~~~~~~~~~~.......................................................................T..rrr......T........................~~~~~~~~~",
+    "~~~~~~~~~~~~.........................................................................rr.................................~~~~~~~~",
+    "~~~~~~~~~~~~...............................................................T........rrr.............................T...~~~~~~~~",
+    "~~~~~~~~~~~~~............................................................T.........rrr...................................~~~~~~~",
+    "~~~~~~~~~~~~~~.....................................................................rr.............................T.......~~~~~~",
+    "~~~~~~~~~~~~~.....................................................................rrr......................................~~~~~",
+    "~~~~~~~~~~~~~.....................................................................rr........................................~~~~",
+    "~~~~~~~~~~~~.....................................................................rrr.........................................~~~",
+    "~~~~~~~~~~~...T..................................................................rr...........................##.............~~~",
+    "~~~~~~~~~~.......................................................................rr...........................##.............~~~",
+    "~~~~~~~~~~.......................................................................==...........................##............~~~~",
+    "~~~~~~~~~~.......................................................................==.......T..T.............................~~~~~",
+    "~~~~~~~~~~...T...................................................................rr.......................................~~~~~~",
+    "~~~~~~~~~~~....T...T.............................................................rr...........................T........~~~~~~~~~",
+    "~~~~~~~~~~~......T.......rrrr....................................................rrr.......................T.........~~~~~~~~~~~",
+    "~~~~~~~~~~~...........rrrrrrrrrr..................................................rr....................T...........~~~~~~~~~~~~",
+    "~~~~~~~~~~~..........rrrrrrrrrrrr.............................................T...rrr..T........T...........T...T..~~~~~~~~~~~~~",
+    "~~~~~~~~~~~.........rrrrrrrrrrrrrr...................T.............................rr.........................T....~~~~~~~~~~~~~",
+    "~~~~~~~~~~..........rrrrrrrrrrrrrr.................................................rrr...........T................~~~~~~~~~~~~~~",
+    "~~~~~~~~~~...........rrrrrrrrrrrr.............................................T.....rrr................T..T.......~~~~~~~~~~~~~~",
+    "~~~~~~~~~~............rrrrrrrrrr..T........T................T...T....................rr...........................~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~..............rrrr........................T........T......................rrr...............#......T...~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~........................T..T..T............T..............................rrr......T.................~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~..............T...T.................T....................................rrr........T............~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~............T....T....................T..T...T........................==..................~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~.................T............................................==.......T.....~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~...T.....T...............T................................rr.........~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~........................................................rrrr....~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~........................................~~~~~~~~~~~~....~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~....................T...............~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~............................~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~..............~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+    "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+)                                                                                        # PROPOSTO, SEM FONTE
+LAYOUT_MUNDO_GRANDE = replace(LAYOUT_MUNDO_MVP, nome="grande", regioes=(("casa", 0, 31), ("jardim", 32, 67), ("campo", 68, 95), ("mata", 96, 127)),
+                              ninho=(20, 30), comedouro=(28, 30), bola_inicio=(72, 32))                              # PROPOSTO, SEM FONTE
+AGUA_POR_LAYOUT[LAYOUT_MUNDO_GRANDE.nome] = AGUA_ILHA_GRANDE
+CONFIG_MUNDO_GRANDE = replace(CONFIG_MUNDO_MVP, layout=LAYOUT_MUNDO_GRANDE, celulas_x=128, celulas_y=60)             # PROPOSTO, SEM FONTE
 
 
 # =====================================================================
@@ -2357,6 +2492,21 @@ class ConfigContrato:
 
 CONFIG_CONTRATO = ConfigContrato()
 CONFIG_CONTRATO_LIGADO = ConfigContrato(sensores=True, controlador=True)
+# a ilha com agua (docs/TAREFA_V3_ILHA_AGUA.md, IA1): so o controlador, que e quem desvia da agua; o cone e as paredes ficam desligados
+CONFIG_CONTRATO_AGUA = ConfigContrato(controlador=True)
+# a troca de ilha no meio da vida (docs/TAREFA_V3_ILHA_AGUA.md, IA4; a IA-4 do Matheus: os pets vivos passam para a ilha nova): o evento
+# `mudar_ilha` leva o mundo do pet para um destino desta tabela, pelo nome: o layout (o mesmo de antes, so com outro nome e com a agua) e
+# o contrato que passa a valer (o controlador, que desvia da agua). DECIDIDO (2026-11-10: "Migram por evento")
+ILHAS_DE_TROCA = {LAYOUT_MUNDO_MVP_AGUA.nome: (LAYOUT_MUNDO_MVP_AGUA, CONFIG_CONTRATO_AGUA),
+                  LAYOUT_MUNDO_ILHA_AGUA.nome: (LAYOUT_MUNDO_ILHA_AGUA, CONFIG_CONTRATO_AGUA),
+                  LAYOUT_MUNDO_GRANDE.nome: (LAYOUT_MUNDO_GRANDE, CONFIG_CONTRATO_AGUA)}
+# a ida para a ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG4; a IG-7 do Matheus: o pet, a comida e a bola dos pets vivos vao
+# "deslocados junto com o lar"): os destinos do `mudar_ilha` que tem OUTRO tamanho e OUTRO layout. Por nome: o tamanho do mundo (celulas)
+# e os layouts de onde se pode vir (o mundo do produto de hoje, sem agua ou com ela). Nessa troca tudo o que tem posicao anda o
+# deslocamento do ninho de la para o ninho de ca, e o que cair em celula fechada vai para a terra mais perto. Vale uma vez por mundo, e
+# pode vir depois da troca para a agua (os pets v21 que ja passaram, e os v22, que nasceram nela). DECIDIDO (2026-11-11)
+ILHAS_MAIORES = {LAYOUT_MUNDO_GRANDE.nome: (CONFIG_MUNDO_GRANDE.celulas_x, CONFIG_MUNDO_GRANDE.celulas_y,
+                                            (LAYOUT_MUNDO_MVP, LAYOUT_MUNDO_MVP_AGUA))}
 
 
 # =====================================================================
@@ -2710,6 +2860,47 @@ CONFIG_BOLA_NO_GOLPE = ConfigBolaNoGolpe()
 CONFIG_BOLA_NO_GOLPE_LIGADA = ConfigBolaNoGolpe(ligada=True)
 
 
+# O sacudir a arvore (docs/TAREFA_V3_ARVORE_SACODE.md, S1; AS-1 a AS-10 APROVADAS pelo Matheus em 2026-11-08): o dono sacode a arvore X e,
+# com fruta no galho e lugar no chao, cai uma fruta a ate `raio_queda_celulas` do tronco. O galho guarda ate `galho_max` frutas, nasce
+# cheio e repoe uma a cada `recarga_galho_min` ticks, num relogio por arvore que so anda com o galho abaixo do maximo (AS-3). A queda
+# natural nao muda (AS-4). Desligada, a vida de hoje sai byte a byte (tests/gabaritos/arvore_sacode_de_hoje.json). So os pets v20 do jogo
+# web a ligam. O modelo do galho e DECIDIDO (AS-3); os dois numeros sao PROPOSTOS, SEM FONTE, para a rodada de equilibrio do fim.
+@dataclass(frozen=True)
+class ConfigSacudir:
+    ligada: bool = False                     # DECIDIDO (AS-1 a AS-10): a chave
+    galho_max: int = 3                       # PROPOSTO, SEM FONTE: as frutas no galho, no maximo (o galho nasce cheio)
+    recarga_galho_min: int = 240             # PROPOSTO, SEM FONTE: os ticks para o galho repor uma fruta (4 h de jogo)
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigSacudir.ligada e bool: {self.ligada!r}")
+        if type(self.galho_max) is not int or self.galho_max < 1:
+            raise ValueError(f"ConfigSacudir.galho_max e inteiro >= 1: {self.galho_max!r}")
+        if type(self.recarga_galho_min) is not int or self.recarga_galho_min < 1:
+            raise ValueError(f"ConfigSacudir.recarga_galho_min e inteiro >= 1: {self.recarga_galho_min!r}")
+
+
+CONFIG_SACUDIR = ConfigSacudir()
+CONFIG_SACUDIR_LIGADA = ConfigSacudir(ligada=True)
+
+
+# A fruta do mundo como comida (docs/TAREFA_V3_ARVORE_SACODE.md, AS-11 APROVADA pelo Matheus em 2026-11-08, "Fruta como racao"): o A do
+# v11 com o corpo quebra ao receber o aviso `fruta_comida` de uma fruta do mundo (o MV-10). Ligada, o laco do mundo nao entrega o aviso:
+# a fruta chega ao cerebro como a racao chega, pelo `ocorrido` do mundo e pelo estimulo `comida` do corpo, sem a E2 do humor e sem a
+# sub-decisao de fruta. E o que o laco do TS ja faz (motor_corpo_mundo.ts nao tem o fruta_comida). Desligada, a vida de hoje byte a byte.
+@dataclass(frozen=True)
+class ConfigFrutaComoComida:
+    ligada: bool = False                     # DECIDIDO (AS-11): a chave
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigFrutaComoComida.ligada e bool: {self.ligada!r}")
+
+
+CONFIG_FRUTA_COMO_COMIDA = ConfigFrutaComoComida()
+CONFIG_FRUTA_COMO_COMIDA_LIGADA = ConfigFrutaComoComida(ligada=True)
+
+
 # O genoma no log (docs/TAREFA_V3_GENOMA_G0.md, G0-1 a G0-7 DECIDIDAS em 2026-11-04; digilab/genoma.py): o evento `genoma` no tick 0 do log
 # do mundo. Desligada, a vida de hoje sai byte a byte (tests/gabaritos/genoma_g0_vidas_de_hoje.json). A E1 so cria o registro; o replay
 # (E2) e a bancada (E3) leem a chave.
@@ -2810,3 +3001,55 @@ class ConfigFalaUnidades:
 
 CONFIG_FALA_UNIDADES = ConfigFalaUnidades()
 PARAMETROS_FALA_UNIDADES = {"ganho_conteudo": ("PROPOSTO", "SEM FONTE; a condicao da secao 3.1 do plano DC3, nas sementes dos testes")}
+
+
+# A voz-v4 e a avaliacao da DC5 (CONVERSA_PET; docs/PLANO_ANALISE_V3_CONVERSA_DC5.md, APROVADO pelo Matheus em 2026-11-10, "Aprovar tudo";
+# D-DC5-5 e D-DC5-11). Todos DECIDIDOS como recomendados, todos SEM FONTE. So a voz-v4 e a DC5 os leem: a voz do jogo nao muda.
+@dataclass(frozen=True)
+class ConfigVozV4:
+    # 3.5, D-DC5-5: quantos conceitos a rede escolhe dizer, por estagio (a pontuacao e valor x confianca)
+    k_selecao: tuple = (("bebe", 1), ("crianca", 1), ("adolescente", 2), ("adulto", 2))
+    # 3.4, D-DC5-11: as ultimas falas espontaneas do pet, do mesmo estagio, que vao no bloco "O QUE VOCE JA DISSE"
+    n_ditas: int = 3
+    # 4.6 Q7, D-DC5-11: o n-grama de palavras da repeticao entre turnos, e os n do distinct-n
+    ngrama_repeticao: int = 3
+    distinct_n: tuple = (1, 2)
+    # 4.6 Q6, D-DC5-11: o tamanho minimo, em palavras normalizadas, de um trecho da lista de frases-modelo
+    min_palavras_frase_modelo: int = 3
+    # 5, D-DC5-11: a ES (sequencias de falas espontaneas seguidas da mesma vida), na validacao; a calibracao usa a metade das falas
+    n_sequencias_es: int = 6
+    falas_por_sequencia_es: int = 5
+    # 4.1 e 4.4, D-DC5-11: a amostra do kappa e a conferencia cega da injecao, por celula
+    amostra_kappa_por_celula: int = 8
+    conferencia_injecao_por_celula: int = 2
+    # 8, D-DC5-11: a margem da estimativa do custo
+    margem_custo: float = 0.5
+    # 3.1, D-DC5-3 e D-DC5-11: a fracao de falas genericas por formato numa celula da calibracao que liga o exemplo so de formato
+    limiar_exemplo_formato: float = 0.10
+
+    def k_do_estagio(self, estagio: str) -> int:
+        d = dict(self.k_selecao)
+        if estagio not in d:
+            raise ValueError(f"ConfigVozV4: estagio sem k: {estagio!r}")
+        return d[estagio]
+
+
+CONFIG_VOZ_V4 = ConfigVozV4()
+PARAMETROS_VOZ_V4 = {f.name: ("DECIDIDO", "SEM FONTE; plano da DC5, D-DC5-5/D-DC5-11, aprovado pelo Matheus em 2026-11-10")
+                     for f in fields(ConfigVozV4)}
+
+
+@dataclass(frozen=True)
+class ConfigVozV4B:
+    """A voz-v4b da DC5 (CONVERSA_PET, DC5a2; D-DC5B-5, a decisao do Matheus em 2026-11-11, "Segue as recomendacoes e faca o merge").
+    Os numeros da voz-v4 que nao mudam ficam em `ConfigVozV4`."""
+    # a regra 10 da voz-v4b e a medida da repeticao de trecho: quantas palavras seguidas iguais a uma fala anterior da mesma conversa ou
+    # sequencia contam como repetir a frase
+    palavras_trecho_repetido: int = 4
+    # a copia do corpus da especie: quantas palavras seguidas iguais a uma citacao contam como copia (o filtro do jogo reprova a partir de 6,
+    # `corpus.PALAVRAS_REPETIDAS`)
+    palavras_copia_citacao: int = 5
+
+
+CONFIG_VOZ_V4B = ConfigVozV4B()
+PARAMETROS_VOZ_V4B = {f.name: ("PROPOSTO", "SEM FONTE; a Gerente da CONVERSA_PET, 2026-11-11 (D-DC5B-5)") for f in fields(ConfigVozV4B)}

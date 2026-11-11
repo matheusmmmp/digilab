@@ -82,6 +82,9 @@ python run_demo.py                                                            # 
 Ambiente do usuário: Windows, pasta `D:\Trab\digilab\v2` (referência da `main`; o trabalho é nas worktrees `D:\Trab\digilab\v2-<frente>`,
 `docs/V2_TRABALHO_PARALELO.md`; a `v1` é só leitura). Python 3.10+.
 
+**Desde 2026-11-09, vale o CPython 3.12 ou mais novo, e não o "3.10+" acima.** Os gabaritos dependem da soma compensada de floats do
+`sum()`, que só existe a partir do 3.12 (decisão D-DES-4; `DESEMPENHO_PERFIL_2026-11.md`, seção 8).
+
 ## A bancada em módulos (2026-10-14, rodada de saúde, etapa 3)
 
 A tabela acima é a de antes da rodada e fica como está. Desde a etapa 3, o código da bancada está no pacote `experiments/bancada/`, um
@@ -104,3 +107,9 @@ As seções acima são cópias inteiras do CLAUDE.md antigo (o G-NADA-PERDIDO co
 - **2026-10-25, TAREFA_V2_DIGIBRAIN_MODULAR_PROTOTIPO, etapa 1b:** o gabarito das vidas v12 do jogo em TS (`web/app/test/gabaritos/v12_jogo_ts.json`, de `test/v12_jogo_ts.test.ts`, com `GRAVAR_V12=1`); o `ponto` no laço atrás da chave da v13 (`OpcoesLacoMundo.digibrain` e o gancho `escolherAlvo` da política; `test/ponto_v13.test.ts`); a medição pontual do A v11 no navegador: `cd web/app && node --experimental-strip-types test/medir_custo_a.mjs` grava `test/custo_a_v11_navegador.json`.
 - **2026-10-29, TAREFA_V2_PRODUTO_FOME:** as chaves do produto dos pets v12 no evento `"p"` do registro (`motor/tipos.ts`, `Motor.ligarProduto`; o jogo as liga nos ovos novos por `src/produto.ts`): o chamado de fome do bebê pela fome do corpo (`CHAMADO_FOME_CORPO`) e a decisão na comida (`OpcoesLacoMundo.decidirNaComida`; no Python, `ConfigDecisaoNaComida`). Os testes `test/produto_fome.test.ts` e `test/decisao_na_comida.test.ts` (o G-PAR, com o laço gravado em `test/laco_gravado.ts`); o gabarito `python experiments/exportar_gabarito_decisao_na_comida.py` grava `web/app/test/gabaritos/decisao_na_comida_python.json` (`tests/test_decisao_na_comida.py`); o efeito no bebê: `cd web/app && node --experimental-strip-types test/medir_chamado_fome.ts` grava `test/efeito_chamado_fome.json`.
 - **2026-10-30, TAREFA_V2_PRODUTO_CUIDADO:** a terceira chave do produto, `chamadosPeloCorpo` (o evento `"p"` dos ovos novos; `src/produto.ts`): os três chamados do bebê pelo corpo, com os limiares do bebê (`CHAMADO_BEBE_CORPO`, `Motor._chamadoCorpo`). O teste `test/produto_cuidado.test.ts`; o efeito no bebê: `cd web/app && node --experimental-strip-types test/medir_chamados_bebe.ts` grava `test/efeito_chamados_bebe.json`.
+- **2026-11-10, TAREFA_V3_LUTA_POC, LP4:** a luta do jogo é a da POC para todos (`LUTA_POC_LIGADA`, `web/app/motor/arena/constantes.ts`; os ovos
+  novos nascem v21, a `VERSAO_PET`). Saíram o combate por turnos (`motor/combate_tr/`, `motor/combate.ts`, `motor/gambits_pet.ts`, as listas de
+  `motor/bots.ts`), o palco 1D (`src/telas/lutar/palcoTR/`: os geradores de desenho que o palco 2D usa foram para `src/telas/lutar/palcoPoc/`), o
+  `src/luta.ts` e as telas do combate de antes (`TelaLuta`, `TelaArena`, `TelaCampanha`, `ModalResultado`, `EditorRegras`, `PainelAprendizado`,
+  `EscolhaCarta`, o mapa da Exploração), os scripts `scripts/equilibrio_tr/` e os testes deles. A Arena e a Campanha são as do palco novo
+  (`src/telas/lutar/palcoPoc/TelaLugaresPoc.tsx`), e o descarte 8 (`src/tamer.ts`) tira os pets v13 a v19 e a Fábrica de antes.

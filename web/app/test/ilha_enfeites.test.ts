@@ -5,9 +5,9 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, test } from "vitest";
 import { CMU, CMU_MVP } from "../motor/index.ts";
-import { ilhaDe } from "../src/telas/pet/ilha/grade.ts";
-import { ENFEITES_GRADE } from "../src/telas/pet/ilha/constantes.ts";
-import { ENFEITES_LUZ, ENFEITES_MODELOS, MODELOS } from "../src/telas/pet/ilha/modelos.ts";
+import { RIO, ilhaDe } from "../src/telas/pet/ilha/grade.ts";
+import { ENFEITES_GRADE, PLANTA_ILHA } from "../src/telas/pet/ilha/constantes.ts";
+import { ENFEITES_LUZ, ENFEITES_MODELOS } from "../src/telas/pet/ilha/modelos.ts";
 
 const GABARITO: Record<string, unknown[]> = JSON.parse(readFileSync(join(__dirname, "gabaritos", "ilha_objetos.json"), "utf8"));
 
@@ -17,33 +17,45 @@ describe("os enfeites da ilha", () => {
   });
 });
 
-describe("onde ficam os enfeites (E-G10)", () => {
-  for (const cm of [CMU_MVP, CMU]) test(`na moldura, em grama plana, longe da area, das coisas altas e uns dos outros (layout ${cm.layout.nome})`, () => {
-    const ilha = ilhaDe(cm);
+describe("onde ficam os enfeites (E-G10, desde a planta A)", () => {
+  for (const cm of [CMU_MVP, CMU]) test(`os postes nos pontos da planta e os marcos espalhados pela moldura (layout ${cm.layout.nome})`, () => {
+    const ilha = ilhaDe(cm), P = PLANTA_ILHA;
     for (const nome of Object.keys(ENFEITES_MODELOS) as (keyof typeof ENFEITES_MODELOS)[])
       expect(ilha.enfeites.filter(e => e.nome === nome).length, nome).toBe(ENFEITES_GRADE[nome].quantos);
-    const altos = ilha.objetos.filter(o => !MODELOS[o.modelo].baixo);
-    for (const e of ilha.enfeites) {
-      const G = ENFEITES_GRADE[e.nome], c = ilha.cel(Math.floor(e.x), Math.floor(e.z))!, d = ilha.distanciaDaArea(e.x, e.z);
-      expect(ilha.naArea(Math.floor(e.x), Math.floor(e.z))).toBe(false);
-      expect(c.tipo).toBe("grama");
-      expect(d).toBeGreaterThanOrEqual(G.perto); expect(d).toBeLessThanOrEqual(G.longe);
-      if (G.norte) {
-        const dx = e.x - (cm.layout.ninho[0] + 0.5);
-        expect(e.z).toBeLessThan(0);
-        if ("faixa" in G) { expect(dx).toBeGreaterThanOrEqual(G.faixa[0]); expect(dx).toBeLessThanOrEqual(G.faixa[1]); }
-        else expect(Math.abs(dx)).toBeLessThanOrEqual(G.casa);
+    /* IL-3: os postes so na praca e no caminho do cais, em chao plano */
+    const postes = ilha.enfeites.filter(e => e.nome === "poste");
+    expect(postes.map(e => [e.x, e.z])).toEqual(P.postes.map(p => [p[0], p[1]]));
+    for (const e of postes) expect(["grama", "caminho", "areia"]).toContain(ilha.cel(Math.floor(e.x), Math.floor(e.z))!.tipo);
+    /* IL-4 revista: cada marco num canto da moldura (o carro a oeste, a geladeira na areia do sul, o trilho a leste do rio), no chao dele,
+       perto do ponto da planta, fora dos caminhos e das clareiras dos lugares, e longe uns dos outros */
+    const marcos = ilha.enfeites.filter(e => e.nome !== "poste"), marco = (n: string) => marcos.find(e => e.nome === n)!;
+    expect(marco("carro").x).toBeLessThan(0);
+    expect(marco("geladeira").z).toBeGreaterThanOrEqual(ilha.area.h);
+    expect(marco("trilho").x).toBeGreaterThanOrEqual(ilha.rioX + RIO.largura);
+    /* a lata gigante (2026-11-10): ao norte, atras da area, entre o lar e o portao */
+    expect(marco("lata").z).toBeLessThan(0);
+    /* a TV (2026-11-11): na moldura do norte, atras da barraca */
+    expect(marco("tv").z).toBeLessThan(0);
+    for (const n of ["carro", "geladeira", "trilho", "lata", "tv"] as const) {
+      const e = marco(n), G = ENFEITES_GRADE[n], c = ilha.cel(Math.floor(e.x), Math.floor(e.z))!;
+      expect(ilha.naArea(Math.floor(e.x), Math.floor(e.z)), n).toBe(false);
+      expect(G.chao as readonly string[], n).toContain(c.tipo);
+      expect(Math.hypot(e.x - P.marcos[n].ponto[0], e.z - P.marcos[n].ponto[1]), n).toBeLessThanOrEqual(P.marcos.busca);
+      for (const l of ilha.lugares) expect(Math.hypot(l.x - e.x, l.z - e.z), `${n} e ${l.nome}`).toBeGreaterThanOrEqual(P.lugares[l.nome].clareira + G.clareira);
+      for (const l of ilha.caminhos) for (let k = 1; k < l.length; k++) {
+        const [ax, az] = l[k - 1], [bx, bz] = l[k], dx = bx - ax, dz = bz - az, q = dx * dx + dz * dz;
+        const t = Math.max(0, Math.min(1, ((e.x - ax) * dx + (e.z - az) * dz) / q));
+        expect(Math.hypot(ax + t * dx - e.x, az + t * dz - e.z), n).toBeGreaterThan(P.raioCaminho + G.clareira);
       }
-      for (const o of altos) expect(Math.hypot(o.x - e.x, o.z - e.z)).toBeGreaterThanOrEqual(G.deAlto);
-      /* a distancia de quem chega depois (a ordem da lista) */
-      for (const f of ilha.enfeites.slice(0, ilha.enfeites.indexOf(e))) expect(Math.hypot(f.x - e.x, f.z - e.z)).toBeGreaterThanOrEqual(G.entreSi);
     }
+    for (let i = 0; i < marcos.length; i++) for (let j = i + 1; j < marcos.length; j++)
+      expect(Math.hypot(marcos[i].x - marcos[j].x, marcos[i].z - marcos[j].z), `${marcos[i].nome} e ${marcos[j].nome}`).toBeGreaterThan(20);
   });
 });
 
 const APP = join(__dirname, ".."), ENF = join(APP, "public", "enfeites"), DOCS = join(APP, "..", "..", "docs", "enfeites");
 /* o teto da categoria (D-I3): 554 para os repetidos, 2 414 para os marcos */
-const TETO: Record<string, number> = { poste: 554, carro: 2414, geladeira: 2414, trilho: 2414 }, LADO_MAX = 1024, BYTES = 300 * 1024;
+const TETO: Record<string, number> = { poste: 554, carro: 2414, geladeira: 2414, trilho: 2414, lata: 2414, tv: 2414 }, LADO_MAX = 1024, BYTES = 300 * 1024;
 type Gltf = {
   asset: { extras?: { gerado_por_ia?: boolean; gerador?: string } }; nodes: { name?: string }[]; buffers: { uri: string }[];
   images?: { uri: string }[]; accessors: { count: number }[];
@@ -74,8 +86,74 @@ describe("os arquivos dos enfeites (E-G1 a E-G8)", () => {
     for (const u of usados) expect(existsSync(u), u).toBe(true);
     expect(usados.reduce((s, u) => s + statSync(u).size, 0)).toBeLessThanOrEqual(BYTES);
     expect(readdirSync(dir).map(a => join(dir, a)).filter(a => !usados.includes(a) && !/License\.txt$/.test(a))).toEqual([]);
-    const lic = readFileSync(join(dir, "License.txt"), "utf8");
-    expect(lic).toMatch(/Meshy/); expect(lic).toMatch(/gerado por IA/);
-    expect(g.asset.extras?.gerado_por_ia).toBe(true); expect(g.asset.extras?.gerador).toMatch(/Meshy/);
+    /* a procedencia: o gerado pela Meshy leva a marca de IA (os termos dela, secao 2.4); o feito a mao por script (o poste em blocos,
+       docs/TAREFA_V3_MUNDO_ENFEITES.md secao 14) diz que nao e IA e aponta o script que o gera, no License e no asset.extras */
+    const lic = readFileSync(join(dir, "License.txt"), "utf8"), ex = g.asset.extras;
+    expect(typeof ex?.gerado_por_ia).toBe("boolean");
+    if (ex?.gerado_por_ia) { expect(lic).toMatch(/Meshy/); expect(lic).toMatch(/gerado por IA/); expect(ex.gerador).toMatch(/Meshy/); }
+    else {
+      expect(lic).toMatch(/feito a mao por script/);
+      const script = ex?.gerador?.match(/docs\/[\w/]+\.py/)?.[0];
+      expect(script, "o gerador aponta o script").toBeDefined();
+      expect(existsSync(join(APP, "..", "..", script!)), script).toBe(true);
+    }
+  });
+});
+
+/* o carro feito a mao (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 15): sai do script, sem IA, e continua um marco de um draw call so */
+describe("o carro feito a mao por script", () => {
+  test("a procedencia aponta o carro_mao.py e a malha e uma so, com uma textura", () => {
+    const g = JSON.parse(readFileSync(join(ENF, ENFEITES_MODELOS.carro.arquivos[0]), "utf8")) as Gltf;
+    expect(g.asset.extras?.gerado_por_ia).toBe(false);
+    expect(g.asset.extras?.gerador).toMatch(/docs\/objetos3d\/carro\/mao\/carro_mao\.py/);
+    expect(g.meshes.length).toBe(1); expect(g.meshes[0].primitives.length).toBe(1); expect(g.images?.length).toBe(1);
+    expect(ENFEITES_LUZ.carro).toBeUndefined();
+  });
+});
+
+/* a geladeira feita a mao (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 16): sai do script, sem IA, com os solidos e o atlas do carro */
+describe("a geladeira feita a mao por script", () => {
+  test("a procedencia aponta o geladeira_mao.py e a malha e uma so, com uma textura", () => {
+    const g = JSON.parse(readFileSync(join(ENF, ENFEITES_MODELOS.geladeira.arquivos[0]), "utf8")) as Gltf;
+    expect(g.asset.extras?.gerado_por_ia).toBe(false);
+    expect(g.asset.extras?.gerador).toMatch(/docs\/objetos3d\/geladeira\/mao\/geladeira_mao\.py/);
+    expect(g.meshes.length).toBe(1); expect(g.meshes[0].primitives.length).toBe(1); expect(g.images?.length).toBe(1);
+    expect(ENFEITES_LUZ.geladeira).toBeUndefined();
+  });
+});
+
+/* a lata gigante feita a mao (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 17): sai do script, sem IA; era o marco do horizonte do Digital */
+describe("a lata gigante feita a mao por script", () => {
+  test("a procedencia aponta o lata_mao.py e a malha e uma so, com uma textura", () => {
+    const g = JSON.parse(readFileSync(join(ENF, ENFEITES_MODELOS.lata.arquivos[0]), "utf8")) as Gltf;
+    expect(g.asset.extras?.gerado_por_ia).toBe(false);
+    expect(g.asset.extras?.gerador).toMatch(/docs\/objetos3d\/lata\/mao\/lata_mao\.py/);
+    expect(g.meshes.length).toBe(1); expect(g.meshes[0].primitives.length).toBe(1); expect(g.images?.length).toBe(1);
+    expect(ENFEITES_LUZ.lata).toBeUndefined();
+  });
+});
+
+/* a TV de tubo em cartoon (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 20): sai do script, sem IA; a mascara da tela ainda nao acende (TV-3) */
+describe("a TV de tubo em cartoon, feita a mao por script", () => {
+  test("a procedencia aponta o tv.py e a malha e uma so, com uma textura", () => {
+    const g = JSON.parse(readFileSync(join(ENF, ENFEITES_MODELOS.tv.arquivos[0]), "utf8")) as Gltf;
+    expect(g.asset.extras?.gerado_por_ia).toBe(false);
+    expect(g.asset.extras?.gerador).toMatch(/docs\/objetos3d\/cartoon\/tv\.py/);
+    expect(g.meshes.length).toBe(1); expect(g.meshes[0].primitives.length).toBe(1); expect(g.images?.length).toBe(1);
+    expect(ENFEITES_LUZ.tv).toBeUndefined();
+  });
+});
+
+/* o poste e o trilho em cartoon (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 18): saem dos scripts de docs/objetos3d/cartoon/, sem IA */
+describe("o poste e o trilho em cartoon, feitos a mao por script", () => {
+  for (const n of ["poste", "trilho"] as const) test(n, () => {
+    const g = JSON.parse(readFileSync(join(ENF, ENFEITES_MODELOS[n].arquivos[0]), "utf8")) as Gltf;
+    expect(g.asset.extras?.gerado_por_ia).toBe(false);
+    expect(g.asset.extras?.gerador).toContain(`docs/objetos3d/cartoon/${n}.py`);
+    expect(g.meshes.length).toBe(1); expect(g.meshes[0].primitives.length).toBe(1); expect(g.images?.length).toBe(1);
+  });
+  test("o poste continua com a mascara dos vidros, e o trilho sem luz", () => {
+    expect(ENFEITES_LUZ.poste).toBe("poste/poste_luz.png"); expect(ENFEITES_LUZ.trilho).toBeUndefined();
+    expect(existsSync(join(ENF, ENFEITES_LUZ.poste!))).toBe(true);
   });
 });

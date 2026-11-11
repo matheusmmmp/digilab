@@ -1699,3 +1699,9 @@ Os tamanhos são PROPOSTO, SEM FONTE.
 
 **Decidida também (Matheus, 2026-11-07, "siga com as recomendações"):** o movimento continua como na D1. A varredura e o pulso só passam
 a 1x ou mais devagar; em avanço rápido, só o destaque troca.
+
+## Ilha A, "Objetos que falam" (I1) (2026-11-07)
+
+A prancha, a fonte de cada elemento no motor e a lista do que a direção C vai precisar estão em
+[docs/pranchas/ux-ilha-a/LEIA.md](pranchas/ux-ilha-a/LEIA.md). As perguntas I1-1 a I1-10, cada uma com a recomendação, estão em
+[docs/pranchas/ux-ilha-a/PERGUNTAS.md](pranchas/ux-ilha-a/PERGUNTAS.md). As medidas novas são PROPOSTO, SEM FONTE.

@@ -28,6 +28,8 @@ export const CONFIG_CONTRATO: Readonly<ConfigContrato> = Object.freeze({
   lado_tronco: 8, espessura_parede: 8,
 });
 export const CONFIG_CONTRATO_LIGADO: Readonly<ConfigContrato> = Object.freeze({ ...CONFIG_CONTRATO, sensores: true, controlador: true });
+/** a ilha com agua (docs/TAREFA_V3_ILHA_AGUA.md): so o controlador, que e quem desvia da agua */
+export const CONFIG_CONTRATO_AGUA: Readonly<ConfigContrato> = Object.freeze({ ...CONFIG_CONTRATO, controlador: true });
 
 export const contratoLigado = (c: ConfigContrato): boolean => c.sensores || c.controlador || c.paredes;
 
