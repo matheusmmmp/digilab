@@ -5,7 +5,7 @@ Coordenador: Matheus (sessão direta). Worker da etapa I0: Claude Code, Opus 5.5
 as IN-1 a IN-8 DECIDIDAS em 2026-11-07, pela recomendação; o I0 (a conferência) na `main` (#684); o I1 (a bateria como ferramenta)
 na `main` (#695); o plano do I2 APROVADO (#700); o I2a na `main` (#707); o I2b (a run da linha de base, faixa 85101…85505)
 na `main` (#718); o adendo 1 na `main` (#746); o plano do I5 APROVADO, na `main` (#747); o I5a na `main` (#751); o I5b na `main` (#768); o plano do I7 e o adendo 1 na `main` (#755, #769); o I7a (as medidas e
-o orquestrador) na `main` (#775); o I7b (a run única do I7) entregue; o adendo 2 do plano do I7 PROPOSTO.**
+o orquestrador) na `main` (#775); o I7b (a run única do I7) entregue; o adendo 2 do plano do I7 DECIDIDO (#788).**
 
 Categoria: documentacao. Origem: Matheus, 2026-11-07: depois da conversa sobre o connectome e a escala, direcionar a pesquisa para o
 temperamento herdado, o sinal do dono, a memória de episódios e o hábito, com uma medida comum de individualidade.
@@ -258,11 +258,11 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
 
 - **De onde vem:** a pergunta "história ou sorteio" da 9.8 do resultado. O Matheus pediu que ela virasse um adendo ao plano do I7, e não
   um I8 ("Escrever como adendo", 2026-11-11).
-- **O adendo** está PROPOSTO, na seção 14 do `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md`:
+- **O adendo** está DECIDIDO pelo Matheus em 2026-11-11 ("Aprova as recomendações e segue"), na seção 14 do `docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md`:
   - 360 pets novos (a faixa 88101…88505, a conferir com o Gerente);
   - o ramo R(t), com o tapa e o sorteio amarrado pelo tick ao do original (a rng do pet e a do dono);
   - o R°, a conferência do amarrado sem tapa;
   - o S(t), um sorteio jogado fora sem tapa;
   - a fração amarrada ρ = Σ D_R / Σ D_E, com as hipóteses H-SORT (ρ < 0,2) e H-HIST (ρ > 0,8), e a expectativa E-AD2.
-- **As decisões** AD2-1 a AD2-7 estão com o Matheus. Nada roda antes delas, do #786 na `main`, da faixa na tabela, do código do I7c e
+- **As decisões** AD2-1 a AD2-7 estão decididas pela recomendação. Nada roda antes do #786 na `main`, da faixa na tabela, do código do I7c e
   do registro.

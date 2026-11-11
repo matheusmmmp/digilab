@@ -11,8 +11,8 @@ recomendação. **Nenhuma conta do I7 roda antes de cinco coisas:**
 **O adendo 1 (seção 12) está DECIDIDO pelo Matheus em 2026-11-10** ("E daí a gente parte para seguir as recomendações", depois da conferência das
 referências): uma quarta hipótese, a régua crua e a forma em U nas frases, e dois descritivos. Ele vale junto com as seções 0 a 11.
 
-**O adendo 2 (seção 14) está PROPOSTO** (2026-11-11): a pergunta "história ou sorteio" da 9.8 do resultado, com um ramo de sorteio
-amarrado, em 360 pets novos. Ele não muda as seções 0 a 13 e não roda antes das decisões AD2-1 a AD2-7.
+**O adendo 2 (seção 14) está DECIDIDO pelo Matheus em 2026-11-11** ("Aprova as recomendações e segue"): a pergunta "história ou sorteio" da 9.8 do resultado, com um ramo de sorteio
+amarrado, em 360 pets novos. Ele não muda as seções 0 a 13; as AD2-1 a AD2-7 estão decididas pela recomendação.
 
 **De onde vem:** a conversa de 2026-11-10 sobre como tirar da frente um achado e não só uma implementação organizada. Dela saíram as
 perguntas Q1 a Q4, e o Matheus escolheu começar pela Q3, o desenvolvimento contrafactual ("Segue a recomendação").
@@ -370,11 +370,11 @@ Escrito em 2026-11-10 (Claude Code, Opus 5.5, branch `v3-individualidade-i7b`), 
   - `test_redecidir_evento.py::test_g2_separado_nada_fora_do_pacote_e_do_orquestrador_le_a_chave` pede o
     `experiments/auditoria_pet_vivo.py`.
 
-## 14. Adendo 2: história ou sorteio (2026-11-11, PROPOSTO, Claude Code, Opus 5.5)
+## 14. Adendo 2: história ou sorteio (2026-11-11, DECIDIDO, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** O Matheus pediu em 2026-11-11 que a pergunta da 9.8 do `docs/RESULTADO_V3_INDIVIDUALIDADE.md` virasse um adendo a
+**Status: DECIDIDO pelo Matheus em 2026-11-11** ("Aprova as recomendações e segue"), as AD2-1 a AD2-7 pela recomendação. O Matheus pediu em 2026-11-11 que a pergunta da 9.8 do `docs/RESULTADO_V3_INDIVIDUALIDADE.md` virasse um adendo a
 este plano ("Escrever como adendo"), e não um I8. **Nada deste adendo roda antes de cinco coisas:**
-1. as decisões AD2-1 a AD2-7 (14.9) decididas pelo Matheus e este cabeçalho marcado DECIDIDO;
+1. as decisões AD2-1 a AD2-7 (14.9) decididas pelo Matheus e este cabeçalho marcado DECIDIDO (feito);
 2. o I7b (o #786) na `main`;
 3. a faixa da AD2-1 conferida pelo Gerente da V3 e posta em `experiments/bancada/faixas.py` com a fonte;
 4. o código do I7c na `main` (14.8), com os testes e a fumaça medida;
@@ -526,7 +526,7 @@ exploratório da 9.6 sugere. Ela é relida contra a tabela, sem ajuste.
 
 **A ordem:** o I7c só começa depois do I7b na `main`, e o I7d é a única run de pesquisa da máquina enquanto roda.
 
-### 14.9 As decisões do adendo (PROPOSTAS, para o Matheus; cada uma com a recomendação e o custo de errar)
+### 14.9 As decisões do adendo (DECIDIDAS pelo Matheus em 2026-11-11, todas pela recomendação; cada uma com a recomendação e o custo de errar)
 
 | | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
