@@ -1,7 +1,7 @@
 # TAREFA V3 — MMO (2026-11-10)
 
 Coordenador: o Gerente da V3. Worker: o Gerente da frente MMO (Claude Code, Opus 5.5). Worktree e branch: `v3-mmo`. Status: ABERTA
-(o plano entregue; as etapas esperam as decisões MMO-1 a MMO-14).
+(o plano entregue; as etapas esperam as decisões MMO-1 a MMO-19).
 
 Categoria: implementacao. Origem: Matheus, 2026-11-10: planejar um sistema multijogador com pontuação, ranking semanal, top tier diário e a ligação com os Bits.
 
@@ -20,7 +20,7 @@ do `docs/PLANO_V3_PROGRESSAO_TUTORIAL.md` (o multiplayer do nível 10 em diante)
 
 - **Para o plano (esta entrega):** nada.
 - **Para as etapas de código:**
-  - as decisões MMO-1 a MMO-14 do Matheus (seção 12 do `docs/PLANO_V3_MMO.md`);
+  - as decisões MMO-1 a MMO-19 do Matheus (seção 14 do `docs/PLANO_V3_MMO.md`);
   - a moeda na `main`: o plano (#762) e a MO1 (#765), porque o registro do Tamer 9 é a base do registro que o servidor recebe;
   - a LP5 da luta (o equilíbrio, #759 e #763), porque a pontuação de luta não deve abrir sobre um equilíbrio que ainda vai mudar
     (o Gazimon trava o Rookie).
@@ -69,6 +69,8 @@ de sementes reservada.
   - o ranking semanal;
   - o top tier diário;
   - os Bits;
+  - as duas pontuações, a do Digimon e o Respeito do Tamer, e o reset com bônus (pedido do Matheus de 2026-11-10, depois da primeira
+    versão);
   - as etapas;
   - os riscos;
   - as decisões MMO-n, cada uma com a recomendação e o custo de errar.
@@ -78,4 +80,4 @@ de sementes reservada.
 
 ## 8. Precisa do Matheus
 
-As decisões MMO-1 a MMO-14, na seção 12 do `docs/PLANO_V3_MMO.md`, cada uma com a recomendação e o custo de errar.
+As decisões MMO-1 a MMO-19, na seção 14 do `docs/PLANO_V3_MMO.md`, cada uma com a recomendação e o custo de errar.

@@ -1,6 +1,6 @@
 # Plano do multijogador: vários jogadores, ranking semanal e top tier diário (2026-11-10)
 
-**Status:** PROPOSTO, sem código. As decisões MMO-1 a MMO-14 (seção 12) são do Matheus. Todo número novo é **PROPOSTO, SEM FONTE**, e se
+**Status:** PROPOSTO, sem código. As decisões MMO-1 a MMO-19 (seção 14) são do Matheus. Todo número novo é **PROPOSTO, SEM FONTE**, e se
 acerta na rodada de equilíbrio do fim (a regra "equilíbrio só no fim").
 
 **Origem:** o Matheus, em 2026-11-10: "planejamento de um sistema de MMO, no caso, aceitar múltiplos jogadores com pontuações de rankings,
@@ -37,7 +37,7 @@ O que **não** existe: conta, login, servidor com dados, envio de log, tabela de
 2. **O servidor.** Ele guarda a conta, os envios e as tabelas, entrega as sementes das lutas ranqueadas e confere cada envio (MMO-2).
 3. **A conferência pelo replay** (seção 3). O cliente manda o log, nunca a pontuação. O servidor refaz o log no Node e calcula os pontos. O
    número que o cliente mostra é só uma prévia, até o servidor confirmar.
-4. **A privacidade** (seção 9). Entrar no ranking é escolha do jogador, o apelido não é o nome, e o log é apagado depois da conferência.
+4. **A privacidade** (seção 11). Entrar no ranking é escolha do jogador, o apelido não é o nome, e o log é apagado depois da conferência.
 5. **O nível do Tamer no registro** (P-5, opção T): o servidor precisa conferir que o jogador chegou ao nível 10.
 
 ## 3. A conferência contra trapaça
@@ -59,7 +59,7 @@ parâmetro. O que muda é quem a escolhe.
 
 **A divergência Chrome × Node:** o pet de um jogador honesto é jogado no Chrome, e o servidor confere no Node. Os dois diferem no último bit de
 `exp` e `log`, e uma diferença no corpo ou no cérebro pode, um dia, mudar uma decisão do pet e o resultado de uma luta. Antes de qualquer
-servidor, a **MMO0** mede quantos logs gravados no Chrome o Node refaz igual (seção 10). Se algum divergir, a conta do servidor vale e o
+servidor, a **MMO0** mede quantos logs gravados no Chrome o Node refaz igual (seção 12). Se algum divergir, a conta do servidor vale e o
 jogador vê o resultado do servidor, com o aviso; a regra está na MMO-5.
 
 **A versão do motor:** a conferência roda com o motor de uma versão fixa, e o motor só muda na virada da semana (MMO-14). Um cliente de
@@ -136,7 +136,111 @@ A outra opção da MMO-12: uma quantia fixa e pequena de Bits por participar da 
 PROPOSTO), igual para todos, sem depender da colocação. É uma fonte nova, e por isso vai ao Matheus: não desfaz a M-2, mas acrescenta uma
 linha à tabela dela.
 
-## 8. Onde o multijogador entra no jogo
+## 8. As duas pontuações: a do Digimon e a do Tamer
+
+O Matheus pediu em 2026-11-10, depois da primeira versão deste plano: "A ideia é que o jogador ele tenha um Digimon com uma pontuação
+grande, mas o Tamer em si ele também tem uma pontuação de respeito, uma pontuação máxima também. Então tem tanto o Digimon quanto o Tamer."
+
+| | **os pontos do Digimon** | **o Respeito do Tamer** |
+|---|---|---|
+| **de quem é** | de um pet, a vida dele | do jogador, todos os pets dele |
+| **de onde vem** | os pontos das lutas ranqueadas da seção 4, somados em todas as semanas da vida do pet | os feitos únicos do Tamer e os resets com bônus (tabela abaixo) |
+| **zera?** | não: é o total da vida. O pet novo começa em 0 | nunca: só sobe |
+| **o ranking** | **o máximo histórico dos Digimon:** uma linha por pet, pelo total dele. O pet aposentado continua na tabela, com o total que tinha | **o ranking dos Tamers:** uma linha por conta, pelo Respeito |
+| **a semana e o dia** | a tabela da semana (seção 5) é a fatia da semana destes pontos | não entra na semana nem no dia |
+
+**De onde vem o Respeito (PROPOSTO, SEM FONTE):**
+
+| feito | Respeito | quantas vezes |
+|---|---|---|
+| a 1ª medalha de cada líder | 100 | uma por líder (6) |
+| o título da Liga (o evento `campeao`) | 500 | uma |
+| o reset com bônus (seção 9) | pelo nível do reset: 300, 600 ou 1 000 | um por pet |
+| o título da semana (o 1º de uma tabela de estágio) | 100 | um por semana e tabela |
+| o selo "Top do dia" | 20 | um por dia |
+
+**O que o servidor confere:** o Respeito do ranking conta só o que o servidor viu. São as medalhas e o título refeitos dos logs que o
+jogador mandou, os resets dos pets cujo log ele mandou e os selos e títulos que ele mesmo deu. A tela pode mostrar um Respeito local maior,
+com pets que nunca foram enviados, mas só o conferido vai para a tabela.
+
+**O Respeito e o nível do Tamer:** hoje o nível é a contagem dos marcos 1 a 9 (`src/nivel.ts`). Ele não tem XP, e a P-2 recusou o XP
+por ação. A proposta (MMO-15) mantém os marcos 1 a 9 como estão: são o tutorial e abrem os lugares. **O nível 10 é o marco da MMO-13, e do 11 em
+diante o nível passa a ser lido no Respeito:** um nível a cada 1 000 de Respeito (PROPOSTO). O Respeito não vem de clique, vem de feito, então a P-2 fica
+de pé.
+
+**"Uma pontuação máxima" tem duas leituras (MMO-16):**
+- **(a) recomendada:** o recorde, a maior pontuação já feita. O Respeito só sobe, e a tabela dos Tamers é ordenada por ele;
+- **(b):** um teto. O Respeito para num máximo (por exemplo, 10 000), e quem chega lá vira "Tamer Lendário".
+
+Com o teto, o topo da tabela empata, e o desempate vira só a data. Por isso a recomendação é a (a), com os títulos de faixa (Lendário a
+partir de 10 000; PROPOSTO) como marcos, sem parar a conta.
+
+## 9. O reset: recomeçar com bônus
+
+O pedido: "E daí tem a questão do reset, né? Se quando ele reseta, ele chega a certo nível, quando ele reseta, ele vai ter algum tipo de
+bonificação."
+
+**A leitura (MMO-17): o reset é do pet, não do Tamer.** O jogador aposenta o Digimon e recomeça de um ovo. Se o pet chegou a um nível,
+ganha o bônus. É como o Digimon World: o pet acaba, e um ovo novo começa. A outra leitura é o Tamer recomeçar do zero, como o "prestígio"
+dos jogos incrementais. Ela apagaria as medalhas, que o Tamer guarda para sempre (`tamer.ts`, "sobrevivem ao pet"), e o portão e as
+melhorias comprados com Bits (M-4, M-8). Por isso não é a recomendada.
+
+**O que já existe, e o reset reaproveita:**
+- **o ovo novo da conclusão** (`src/jornada.ts`, `novoOvoGuardandoAtivo` e `chocarDoBrasao(esp, guardarAtivo)`): depois da Liga, o jogo
+  oferece um ovo novo e guarda o campeão;
+- **a aposentadoria do cruzamento** (`src/heranca.ts`, `cruzar`): o pai ativo sai do jogo e vai para Diário › Gerações (`CHAVE_GERACOES`),
+  só para ver, com a geração contada (`geracao`).
+
+O reset é a soma dos dois: aposentar o pet ativo em Gerações, sem cruzar, e chocar um ovo do brasão escolhido. Nenhum dos dois toca o
+motor nem o formato do save: o ovo novo é um `Motor` novo. **O cruzamento também conta como reset:** o pai que se aposenta ganha o bônus
+pelo nível dele.
+
+**O que zera e o que fica:**
+
+| zera (é do pet) | fica (é do Tamer) |
+|---|---|
+| o pet ativo, que vai para Gerações com o log inteiro | as medalhas, os itens, o título, os recordes da Fronteira |
+| os pontos do Digimon (o pet novo começa em 0; o aposentado fica no máximo histórico) | os Bits, o portão ★ e as melhorias (MO2 a MO4) |
+| a trava da campanha (já é por pet: cada ovo sobe de novo) | o nível do Tamer, o Respeito, os selos e os títulos |
+| os chips equipados no pet (o chip é do Tamer e se equipa de novo) | os pets guardados |
+
+**Em que nível o reset dá bônus (PROPOSTO, SEM FONTE):**
+
+| nível do reset | o pet chegou a | Respeito | Bits |
+|---|---|---|---|
+| **sem bônus** | antes do Ultimate | 0 | 0 (o recomeço de hoje, sem mudança) |
+| **1** | Ultimate | 300 | 150 |
+| **2** | Mega | 600 | 400 |
+| **3** | Mega e o título da Liga com este pet | 1 000 | 800 |
+
+**A trava contra o reset de farm:** o pet novo recebe as medalhas que o Tamer já tem (o evento `"u"`), então chega ao Ultimate mais
+depressa do que o primeiro. Sem trava, recomeçar viraria a fonte mais rápida de Respeito e de Bits. Duas travas (MMO-18):
+- **para o Respeito (o ranking):** o reset só dá Respeito se o pet tiver um mínimo de pontos do Digimon conferidos (por exemplo, 200;
+  PROPOSTO). Esses pontos saem das lutas ranqueadas, que o relógio do servidor limita (MMO-8);
+- **para os Bits (a economia local):** um reset pago por semana de relógio (PROPOSTO). Os Bits não são conferidos pelo servidor (seção 7),
+  então a trava só segura o equilíbrio, não a trapaça.
+
+**Qual é o bônus (MMO-18):** a recomendação é **Respeito e Bits, sem herança de stats no motor.** Os Bits compram chips na loja, dentro do
+teto de hoje (M-9). Assim, o bônus ajuda o pet novo sem passar do teto do estágio. A outra opção é a herança do Digimon World: o ovo novo
+nasce com uma parte dos stats do anterior. Ela pede uma versão de pet nova e um evento de origem no motor, e dá ao veterano uma vantagem que
+o teto não segura.
+
+**Como o reset entra nos rankings:**
+- **a semana:** as lutas do pet aposentado já contadas ficam na tabela da semana. O pet novo entra na tabela do estágio dele (o Rookie),
+  e os pontos dos dois somam, porque a tabela é por estágio e o jogador aparece em cada uma em que lutou;
+- **o desafio do dia:** não muda. A Fábrica não usa o pet do jogador;
+- **o máximo histórico dos Digimon:** o aposentado fica com o total que tinha, e o pet novo entra como uma linha nova;
+- **o ranking dos Tamers:** sobe pelo Respeito do reset.
+
+**Como conversa com os Bits (M-1 a M-10):** os Bits do reset são uma linha nova na tabela da M-2, como os marcos de evolução. Não
+desfazem nenhuma decisão: a derrota e a Fronteira continuam sem pagar; o kit continua de graça (M-7); o chip continua no teto (M-9); e o
+dinheiro real segue fora. Como é uma fonte nova, vai ao Matheus (MMO-19), com a outra opção: o reset só dá Respeito, e os Bits ficam como
+a M-2 deixou.
+
+**O que o registro precisa:** um evento novo no registro do Tamer, `"reset"`: o pet (semente), o hash do log dele, o estágio, o nível do
+reset e a hora. É a mesma versão nova do Tamer da MMO2. O servidor confere o nível do reset refazendo o log do pet aposentado.
+
+## 10. Onde o multijogador entra no jogo
 
 - **O nível:** do nível 10 do Tamer em diante (a P-10). Hoje os marcos vão até o 9 (`ULTIMO_MARCO`). O marco do 10 fica com o Matheus
   (MMO-13; a P-10 sugeria o primeiro Mega ou o segundo pet guardado).
@@ -144,7 +248,7 @@ linha à tabela dela.
   O cais abre o ranking da semana, o desafio do dia, o perfil e o mural.
 - **Sem conta, nada muda:** o jogo de um jogador só segue igual, com o save no navegador. A conta é só para quem entra no ranking.
 
-## 9. A privacidade
+## 11. A privacidade
 
 - **Entrar é escolha:** o jogador entra pelo cais, lê o que vai para o servidor e aceita. Sair apaga a conta e os envios.
 - **O que vai para o servidor:** o identificador da conta, o apelido, os logs do pet e do Tamer de quem envia, e as horas dos envios. Não
@@ -157,7 +261,7 @@ linha à tabela dela.
   e proíbe pedir a ela dado que não seja estritamente necessário para o jogo (§ 4º). O desenho acima já pede o mínimo. Antes de abrir para
   fora do grupo de convidados, isso passa por quem entende da lei (MMO-4). **Este plano não é parecer jurídico.**
 
-## 10. As etapas (um PR por etapa)
+## 12. As etapas (um PR por etapa)
 
 Cada etapa com tela começa pela prancha, que o Matheus aprova antes do código (desktop e celular juntos, a regra dos lugares da ilha).
 
@@ -171,12 +275,13 @@ Cada etapa com tela começa pela prancha, que o Matheus aprova antes do código 
 | **MMO5: o ranking da semana** | a prancha; as tabelas por estágio, o desempate, o congelamento e o segredo publicado | MMO4, MMO-9, MMO-14 |
 | **MMO6: o desafio do dia** | a Fábrica com as sementes de fora, atrás de chave desligada e com o gabarito antes; a tentativa única; o selo | MMO3, MMO-10, MMO-11 |
 | **MMO7: as recompensas e o mural** | os títulos, os selos, o enfeite da temporada e o mural | MMO5, MMO6, MMO-12 |
+| **MMO8: as duas pontuações e o reset** | a prancha do reset (aposentar, o bônus, o ovo novo) e do perfil com as duas pontuações; o evento `"reset"` no registro do Tamer; os pontos do Digimon e o Respeito na conta pura da MMO1; o máximo histórico dos Digimon e o ranking dos Tamers no servidor; os Bits do reset, se a MMO-19 os aprovar | MMO2, MMO5, MMO-15 a MMO-19 |
 
 **Depois do plano, só se o Matheus quiser:** a luta assíncrona contra o pet de outro jogador. O servidor já tem o log dele, e a luta é IA
 contra IA, então daria para lutar contra uma cópia do pet de outro jogador, sem os dois estarem jogando ao mesmo tempo. Fica fora das
 etapas porque muda o catálogo de rivais e pede a sua própria decisão.
 
-## 11. Os riscos
+## 13. Os riscos
 
 | risco | o que se vê | o que segura |
 |---|---|---|
@@ -187,9 +292,10 @@ etapas porque muda o catálogo de rivais e pede a sua própria decisão.
 | **o custo de manter** | conta, servidor, backup e contestação pedem tempo que é da pesquisa | etapas pequenas; cada uma para no PR; o jogo de um jogador só não depende de nada disso |
 | **a privacidade e os menores** | dado de comportamento e de criança num servidor | entrada por escolha, apelido gerado, sem texto livre, log apagado; a revisão antes de abrir (MMO-4) |
 | **o ranking tomar o lugar do pet** | o jogo de cuidar vira um jogo de farmar luta | o cuidado fora do ranking, o limite diário, o prestígio no lugar dos Bits |
+| **o reset de farm** | o pet novo herda as medalhas do Tamer e chega ao Ultimate depressa; recomeçar vira a fonte mais rápida de Respeito e de Bits | o Respeito do reset pede pontos do Digimon conferidos; os Bits do reset, um por semana de relógio (MMO-18) |
 | **o segredo vazar** | quem tem o segredo da semana sabe as sementes antes | o segredo fica só no servidor, fora do git, como a chave da API (`servidor/CLAUDE.md`) |
 
-## 12. Decisões para o Matheus
+## 14. Decisões para o Matheus
 
 Cada uma com a recomendação e o custo de errar. Nenhuma está decidida.
 
@@ -202,7 +308,7 @@ Cada uma com a recomendação e o custo de errar. Nenhuma está decidida.
   começar em casa deixa o ranking cair junto com a máquina.
 - **MMO-3. O login:** **por um provedor** (entrar com Google ou com GitHub), sem senha guardada pelo jogo. A outra opção é o link por
   e-mail. Custo de errar: baixo a médio. Guardar senha é o pior caso; o provedor também segura um pouco as contas a mais.
-- **MMO-4. A privacidade da seção 9,** com a entrada por escolha, o apelido gerado, sem texto livre, o log apagado em 30 dias
+- **MMO-4. A privacidade da seção 11,** com a entrada por escolha, o apelido gerado, sem texto livre, o log apagado em 30 dias
   (PROPOSTO) e **a revisão da LGPD antes de abrir para fora dos convidados.** Custo de errar: alto, se abrir sem a revisão.
 - **MMO-5. Quem manda na pontuação:** **o servidor**, pelo replay no Node. O cliente mostra a prévia e, quando divergir, a conta do
   servidor com o aviso. Depende da MMO0. Custo de errar: confiar no cliente é deixar a tabela para quem edita o save.
@@ -230,7 +336,27 @@ Cada uma com a recomendação e o custo de errar. Nenhuma está decidida.
 - **MMO-14. A versão da conferência:** o motor do servidor só muda na virada da semana, e um cliente de outra versão não envia. Custo de
   errar: médio. Mudar o motor no meio da semana muda a régua da tabela com a semana aberta.
 
-## 13. Fora deste plano
+**As duas pontuações e o reset** (seções 8 e 9, pedido do Matheus de 2026-11-10):
+
+- **MMO-15. Duas pontuações, cada uma com o seu ranking:**
+  - os pontos do Digimon, o total da vida do pet, com o máximo histórico dos Digimon;
+  - o Respeito do Tamer, pelos feitos únicos e pelos resets, com o ranking dos Tamers.
+  O nível do Tamer fica nos marcos 1 a 9, e do 11 em diante sobe a cada 1 000 de Respeito (PROPOSTO). Custo de errar: médio. Uma pontuação
+  só mistura o pet e o jogador, e o veterano com um pet novo some da tabela.
+- **MMO-16. O que é a "pontuação máxima":** **o recorde, sem teto**, com o título "Tamer Lendário" a partir de 10 000 (PROPOSTO). A outra
+  leitura é um teto que para a conta. Custo de errar: baixo a médio. Com o teto, o topo da tabela empata, e só a data desempata.
+- **MMO-17. O reset é do pet:** aposenta o Digimon em Gerações e choca um ovo, reaproveitando o `jornada.ts` e o `heranca.ts`. O Tamer
+  fica com tudo (a tabela da seção 9), e o cruzamento também conta como reset. A outra leitura é o Tamer recomeçar do zero. Custo de errar:
+  alto, se for o do Tamer. Ele apaga as medalhas e as compras com Bits e vai contra a M-8.
+- **MMO-18. O bônus do reset:** **Respeito e Bits, sem herança de stats no motor.** Os níveis são o Ultimate, o Mega e o Mega com a Liga
+  (300, 600 e 1 000 de Respeito; 150, 400 e 800 Bits; PROPOSTO). As travas são o mínimo de 200 pontos do Digimon conferidos para o Respeito
+  e um reset pago em Bits por semana de relógio (PROPOSTO). A outra opção é a herança de stats do Digimon World. Custo de errar: médio. Sem
+  as travas, recomeçar vira farm; com a herança de stats, o motor muda de versão, e o teto do estágio deixa de segurar o veterano.
+- **MMO-19. Os Bits do reset entram como uma linha nova da M-2?** Recomendo **sim**, como os marcos de evolução, sem mexer nas outras
+  linhas. A outra opção é o reset dar só Respeito. Custo de errar: baixo a médio. É uma fonte nova de moeda, e a rodada de equilíbrio a
+  acerta junto com as outras (M-10).
+
+## 15. Fora deste plano
 
 - A troca entre jogadores (Bits, itens, pets).
 - O chat livre e a luta ao vivo entre dois jogadores ao mesmo tempo.
