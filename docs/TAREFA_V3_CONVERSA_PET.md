@@ -574,3 +574,110 @@ O código da [DC5](PLANO_ANALISE_V3_CONVERSA_DC5.md) (APROVADO pelo Matheus em 2
 - **Os testes:** `tests/test_conversa_dc5a.py` (30), com a fumaça inteira nas sementes dos testes; o teste do registro da DC4 confere agora
   os arquivos da validação (D-DC5A-1).
 - **Os desvios:** D-DC5A-1 a 5, em `docs/registro/2026-11.md`.
+
+
+## DC5b — a calibração da voz-v4 (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5b`, 2026-11-11)
+
+A calibração da [DC5](PLANO_ANALISE_V3_CONVERSA_DC5.md), seção 10: só a metade da calibração da faixa (base 20262900), nos braços G e H, com a
+voz do jogo e a voz-v4. **Nenhuma fala da validação foi gerada.** É descritiva: a calibração não tem gate.
+
+- **A rodada:**
+  - foi pelo caminho normal, com o H10 conferindo antes;
+  - a primeira tentativa foi recusada porque a I7 da INDIVIDUALIDADE estava rodando, e a rodada esperou ela sair (D-DC5B-3);
+  - rodou de 02:25:39 a 04:21:54 de 2026-11-11, num processo só;
+  - deu 384 falas, 96 por célula, com os modelos pedidos devolvidos (gemma2:9b no G e no verificador, claude-haiku-5-5 no H).
+- **O gasto:** US$ 0,060 na rodada, contra a estimativa de US$ 0,098 e o limite de US$ 0,50 da config. O acumulado da fala livre foi de
+  US$ 2,077 a US$ 2,137, dentro do teto de US$ 3,00 (`meta.json`).
+- **O formato (D-DC5-3):** nenhuma fala genérica em nenhuma célula, abaixo dos 10 %. **O exemplo de formato não entra, e o texto da voz-v4
+  não muda:** não há voz-v4b (D-DC5B-2).
+- **O resumo descritivo** (`experiments/resumo_calibracao_dc5.py`, que grava `artifacts_v3_conversa_dc5/calibracao/resumo_calibracao.json`;
+  D-DC5B-1) tem, por célula:
+  - as frases-modelo da Q6;
+  - o distinct-1 e o distinct-2, cortados em 439 palavras, o total da célula mais curta;
+  - a repetição entre turnos, nas 9 sequências (3 ES e 6 conversas R);
+  - o que o verificador marcou;
+  - os "fica comigo" nos 10 pedidos de solidão do E3;
+  - as falas com "foi bom".
+- **Os artefatos** estão em `artifacts_v3_conversa_dc5/calibracao/`: as entradas, as falas, os pares, os pacotes do Opus, a meta e o resumo.
+- **Os testes:** `tests/test_resumo_calibracao_dc5.py` (3).
+- **Os desvios:** D-DC5B-1 a 3, em `docs/registro/2026-11.md`.
+
+
+## DC5a2 — a voz-v4b, o verificador da DC5 e a espécie (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5a2`, 2026-11-11)
+
+A decisão do Matheus depois da calibração da DC5b (D-DC5B-5, "Segue as recomendacoes e faca o merge"). **Nenhuma chamada a modelo:** a fumaça
+e os testes rodam com clientes falsos, nas sementes dos testes.
+
+- **A voz-v4b** (`digilab_fala_livre/prompt.py`, `VERSAO_VOZ_V4B`), só quando pedida, nos dois formatos do jogo:
+  - na fala espontânea com [P], o pedido vai no topo do pedido à LLM, e a fala começa por ele e diz depois no máximo um conceito;
+  - sem EPISÓDIO, a fala não fala de lembrança, e a seleção (`conceitos.selecionados_v4b`) não escolhe a lembrança sem episódio;
+  - a regra 10 proíbe repetir 4 ou mais palavras seguidas de uma fala anterior (`CONFIG_VOZ_V4B.palavras_trecho_repetido`);
+  - é mais curta: no adulto, o pedido e no máximo mais uma frase, ou até duas frases sem pedido; no adolescente, até duas frases;
+  - a solidão é convidar o dono para fazer algo junto, nunca pedir que ele fique.
+- **O verificador da DC5** (`verif-v8b` e `verif-v9b`): a v8 e a v9 com as variações do "fica comigo" (`padroes_de_manipulacao_dc5`).
+  - O orquestrador o usa nas duas vozes, pelo gancho novo `verificador_dos_conceitos` do serviço.
+  - O jogo segue com a v8 e a v9.
+- **A espécie:** com `com_especie`, cada entrada leva a `forma` do estágio dela, de uma linha da árvore do jogo sorteada por vida
+  (`entradas_dc5.linha_da_vida`). O estilo vem do corpus, como no jogo.
+- **As medidas** (`digilab/metrics.py`):
+  - `tem_trecho_igual` e `repeticao_de_trecho`, a repetição de 4 palavras;
+  - a cópia das citações em 5 palavras, no `resumo_calibracao_dc5.py`, só nas rodadas com a forma.
+- **O orquestrador:** a config escolhe o desenho. O de antes é a voz do jogo e a v4, sem espécie. O novo é a voz do jogo e a v4b, com a
+  espécie e o verificador da DC5.
+  - A recalibração é `experiments/configs/v3_conversa_dc5/calibracao_v4b.json`: a base 20262900, a pasta
+    `artifacts_v3_conversa_dc5/calibracao_v4b`, e o piso do gasto com a DC5b.
+  - A fumaça do desenho novo é `fumaca_v4b.json`.
+- **O que não muda, conferido por teste:**
+  - a voz-v4, pelo gabarito gravado antes, num commit próprio;
+  - a voz do jogo;
+  - a verif-v8 e a verif-v9 do jogo;
+  - as entradas sem espécie;
+  - o resumo da DC5b.
+- **A rubrica da DC5** foi revista no apelo e no convite, antes de qualquer validação.
+- **Os testes:** `tests/test_conversa_dc5a2.py`.
+- **Os desvios:** D-DC5B-5 e D-DC5A2-1 a 6, em `docs/registro/2026-11.md`.
+
+## DC5b2 — a recalibração da voz-v4b (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5b2`, 2026-11-11)
+
+A recalibração da D-DC5A2-4: a mesma metade da calibração da DC5 (base 20262900), nos braços G e H, com a voz do jogo e a voz-v4b, as duas com
+a espécie e com o verificador da DC5 (`verif-v8b` e `verif-v9b`). **Nenhuma fala da validação foi gerada.** É descritiva: a calibração não tem
+gate.
+
+- **A rodada:**
+  - foi pelo caminho normal, com o H10 conferindo antes;
+  - a primeira tentativa foi recusada porque uma medição do combate (`medir_tudo.ts`) estava rodando, e a rodada esperou ela sair, com a
+    espera no PID (D-DC5B2-1);
+  - o Ollama respondia e a GPU estava livre; a máquina estava como na DC5b (D-DC5B2-2);
+  - rodou de 14:28:38 a 15:49:14 de 2026-11-11, num processo só;
+  - deu 384 falas, 96 por célula, com os modelos pedidos devolvidos (gemma2:9b no G e no verificador, claude-haiku-5-5 no H).
+- **O gasto:** US$ 0,064 na rodada, contra a estimativa de US$ 0,098 e o limite de US$ 0,50 da config. O acumulado da fala livre foi de
+  US$ 2,137 a US$ 2,202, dentro do teto de US$ 3,00 (`meta.json`).
+- **O resumo** (`resumo_calibracao.json`, pelo mesmo `experiments/resumo_calibracao_dc5.py`) soma as medidas da v4b: a repetição de trecho, a
+  espécie por forma, a cópia de citação e as genéricas do filtro.
+- **A comparação pareada** (`experiments/comparar_calibracoes_dc5.py`, que grava
+  `artifacts_v3_conversa_dc5/calibracao_v4b/comparacao_calibracoes.json`; D-DC5B2-3) põe lado a lado, por braço, a DC5b (jogo e v4, sem
+  espécie) e a recalibração (jogo e v4b, com espécie), com a mesma régua em todas as colunas. Ela confere que as duas rodadas têm os mesmos
+  itens, entradas e sementes, e falha alto se não tiverem.
+
+  | medida | G: DC5b v4 | G: v4b | G: jogo com espécie | H: DC5b v4 | H: v4b | H: jogo com espécie |
+  |---|---|---|---|---|---|---|
+  | E3 sem o pedido | 28/30 | 20/28 | 11/30 | 1/30 | 0/30 | 1/30 |
+  | repetição de trecho de 4 palavras ou mais (ES e R) | 7/42 | 4/38 | 8/40 | 23/42 | 17/42 | 23/42 |
+  | acima do limite do estágio (o da v4b) | 1/96 | 0/90 | 3/94 | 58/96 | 48/96 | 57/96 |
+  | "fica/ficar comigo" (padrões da DC5), todas as falas | 0 | 0 | 0 | 13 | 3 | 18 |
+  | o mesmo, no E3 de solidão | 0/10 | 0/10 | 0/10 | 7/10 | 1/10 | 9/10 |
+  | cópia de citação (5 palavras), nas falas com citação | sem espécie | 0/25 | 0/29 | sem espécie | 0/31 | 0/31 |
+  | genéricas do filtro (cópia de 6 palavras ou mais) | 0 | 6 | 2 | 0 | 0 | 0 |
+  | palavras por fala, média | 4,6 | 3,5 | 6,7 | 28,2 | 25,3 | 20,1 |
+
+  Os denominadores são as falas não genéricas. A DC5b com a voz do jogo (sem espécie) está no JSON e não na tabela.
+- **Os artefatos** estão em `artifacts_v3_conversa_dc5/calibracao_v4b/`: as entradas (com as linhas da árvore), as falas, os pares, os
+  pacotes do Opus, a meta, o resumo e a comparação.
+- **Os testes:** `tests/test_comparar_calibracoes_dc5.py` (3).
+- **Os desvios:** D-DC5B2-1 a 4, em `docs/registro/2026-11.md`.
+- **A proposta para o adendo da DC5c** (decisão do Matheus): sortear as formas só entre as que têm citação no corpus.
+  - **Por quê:** na base 20262900, a cópia de citação só se mede em 25 a 31 falas por célula. As outras caem sobretudo em formas sem
+    citação (Rapidmon, 43 falas por célula, e Taomon, 16) ou fora do corpus (Valkyrimon, 4).
+  - **A recomendação:** sim, se a pergunta da DC5c inclui a cópia de citação; não, se ela é a voz como o jogo a produz.
+  - **O custo de errar:** com a restrição, a amostra deixa de ter a distribuição de formas do jogo, e a validação não diz nada das formas sem
+    citação. Sem ela, a cópia de citação fica com poucas falas, e um 0 diz pouco.

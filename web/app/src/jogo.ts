@@ -4,7 +4,7 @@
    muda em outra aba, esta relê o save em vez de gravar por cima. */
 import { passarParaIlhaComAgua } from "./ilhaAgua.ts";
 import { useEffect, useState } from "react";
-import { Motor, PetMorto, ehCerebroTrocavel } from "../motor/index.ts";
+import { Motor, PetMorto, VERSOES_PET, ehCerebroTrocavel } from "../motor/index.ts";
 import { pedirAbertura } from "./abertura.ts";
 import { ligarProduto } from "./produto.ts";
 import { podeTrocarCerebro, type Cerebro } from "./cerebro.ts";
@@ -71,11 +71,15 @@ function medalhas(j: Jogo): { novas: MedalhaGanha[]; mudou: boolean } {
   if (novas.length || itens.length || titulo || recordes.length || bits.length) gravarTamer(armazenamento, tamer);
   return { novas, mudou: sincronizarPet(tamer, j.motor) };
 }
-let exemplo: { semente: number; assinatura: string } | null = null;
-/** o pet e o de exemplo das boas-vindas, ainda intocado (so o tempo passou): a mesma conta do nivel do Tamer (nivelTela.ts, ehPetDoJogador) */
+const exemplos = new Map<number, { semente: number; assinatura: string }>();
+/** o pet e o de exemplo das boas-vindas, ainda intocado (so o tempo passou): a mesma conta do nivel do Tamer (nivelTela.ts, ehPetDoJogador).
+    O exemplo e o da versao do pet: quem abriu o jogo antes da v23 (ou da v22) e nunca tocou no pet tem o exemplo daquela versao, que
+    passa para a ilha grande ao abrir e continua nao sendo do jogador (a assinatura intocada ignora o "mi") */
 function exemploIntocado(m: Motor): boolean {
-  if (!exemplo) { const e = petExemplo(); exemplo = { semente: e.semente, assinatura: assinaturaIntocada(e) }; }
-  return m.semente === exemplo.semente && assinaturaIntocada(m) === exemplo.assinatura;
+  if (!VERSOES_PET.includes(m.versao)) return false;
+  let ex = exemplos.get(m.versao);
+  if (!ex) { const e = petExemplo(m.versao); ex = { semente: e.semente, assinatura: assinaturaIntocada(e) }; exemplos.set(m.versao, ex); }
+  return m.semente === ex.semente && assinaturaIntocada(m) === ex.assinatura;
 }
 /** a unica porta de mudanca do Tamer fora das medalhas (itens: a carta usada, a carta da revanche): aplica, grava e avisa. Com o
     registro do Tamer que nao abriu, falha (o app nao grava por cima dele) */
@@ -202,9 +206,10 @@ export function ouvirOutrasAbas(): () => void {
     if (ev.key !== CHAVE || !armazenamento || !jogo) return;
     if (ev.newValue === null || ev.newValue === textoSave(motorReal())) return;
     const l = lerSave(armazenamento);
-    if (l.tipo === "ok") passarParaIlhaComAgua(l.motor);          // a outra aba pode ser de antes da IA4: o pet chega a ilha com agua aqui tambem
+    /* a outra aba pode ser de antes da IG4: o pet chega a ilha grande aqui tambem, e o registro com o evento fica para gravar */
+    const passou = l.tipo === "ok" && passarParaIlhaComAgua(l.motor);
     if (jogo.emLab) { if (l.tipo === "ok") jogo.emLab = l.motor; return; }    // o pet de hoje, guardado: relê ele, o de teste segue na tela
-    if (l.tipo === "ok") { jogo.motor = l.motor; jogo.origem = "save"; jogo.erroSave = null; jogo.revisao++; pendente = false; avisar(); }
+    if (l.tipo === "ok") { jogo.motor = l.motor; jogo.origem = "save"; jogo.erroSave = null; jogo.revisao++; pendente = passou; avisar(); }
     else if (l.tipo === "erro") { jogo.erroSave = { erro: "outra aba gravou um save que não abre: " + l.erro, bruto: l.bruto }; avisar(); }
   };
   addEventListener("storage", aoMudar);

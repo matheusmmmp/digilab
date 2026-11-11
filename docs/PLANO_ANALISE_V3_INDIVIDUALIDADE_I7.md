@@ -537,3 +537,34 @@ exploratório da 9.6 sugere. Ela é relida contra a tabela, sem ajuste.
 | **AD2-5** | o A e o E° | **saem** | sem eles, a malha aberta não se repete nos pets novos; com eles, são dez ramos a mais por pet para medidas que o I7b já deu |
 | **AD2-6** | a conferência do ramo | **todo ramo vivido duas vezes**, como na IR-6 | só numa amostra, a run fica perto da metade, e um amarrado que não se refaz passaria sem ser visto |
 | **AD2-7** | os limiares do ρ | **0,2 e 0,8**, PROPOSTOS, SEM FONTE; o 0,8 é o da IR-7 e o 0,2 é o espelho dele | mais estreitos, uma das duas hipóteses ganha fácil; mais largos, quase tudo cai em "os dois pesam" |
+
+## 15. O registro do adendo 2
+
+Escrito em 2026-11-11 (Claude Code, Opus 5.5, branch `v3-individualidade-i7d`), antes da primeira vida do I7d, como a 14.7 manda.
+
+- **O código:** o commit `c9c56584` da `main` (o merge do #794, o I7c). O I7d não muda o código: este registro entra num commit próprio,
+  empurrado antes da run, sobre os commits do registro de 2026-11 (a D-IND-I7c-1 confirmada e a D-IND-I7d-1).
+- **Os sha256:**
+  - o orquestrador `experiments/run_v3_individualidade_i7_ad2.py`: `a2b9170c3f6697409fcfef573a9ce74c9b3e2037dff29d41f1d40666ee23a7b4`;
+  - o orquestrador do I7, que ele importa: `ddbdab3b293038bda548514570bc266648b2dd478b717acaeb3473069731e7f2` (o mesmo da seção 13);
+  - o `digilab/metrics.py`: `af0762b501910dfb953e0eecafc5325c7644270aaec1b7fa886f3b31e58913e5`;
+  - a config `experiments/configs/v3_individualidade/individualidade_i7_ad2.json`:
+    `a6719dd18287627c0aaac3a11ac01868a94a0d28a62359cde7c6f90b9f14f2b5`.
+- **O custo da fumaça** (as sementes 101 e 202, K = 1, 14 dias, 12 pets, 4 processos): 7 min 10 s de parede, 35 s por pet com 4 processos,
+  136 s por pet dentro de cada processo. A projeção para as 360 pets é de cerca de 3 h 30 min, contra cerca de 3 h da 14.7: não passa do dobro,
+  e a AD2-6 fica como está.
+- **A faixa:** 88101…88505, na tabela desde o #794, liberada pelo Matheus sem o ok do Gerente (D-IND-I7d-1).
+- **O comando:**
+
+  ```bash
+  python experiments/run_v3_individualidade_i7_ad2.py --config experiments/configs/v3_individualidade/individualidade_i7_ad2.json --processos 4
+  ```
+
+  A saída vai para `artifacts_v3_individualidade_i7_ad2/`, que não existe antes da run.
+- **A suíte do dia** (`python -m pytest tests/ -q`, na branch `v3-individualidade-i7d` sobre `c06d5093`): 5 323 passaram, 9 pulados e 4
+  falharam, em 2 h 11 min.
+  - Três falhas são as listas do G2 de outras frentes, que já falham na `main` e não tocam o I7: duas pedem o
+    `experiments/entradas_dc4.py`, e a do `test_redecidir_evento.py` pede o `experiments/auditoria_pet_vivo.py`.
+  - A quarta, `test_credito_canal_etapa0.py::test_o_artefato_se_refaz_igual`, passou rodada sozinha logo depois (1 passed). Ela caiu com a
+    máquina carregada por outro trabalho ao lado e não toca o I7.
+
