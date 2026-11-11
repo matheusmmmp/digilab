@@ -127,6 +127,20 @@ export const ENFEITES_GRADE = {
       altas, a escala e os arbustos (fracao das arvores) na base, na elipse 1,3 vez maior. Os bosques que a planta
       punha dentro da area do pet ficaram na moldura, encostados nela: o LayoutMundo so aceita arvore com fruta (o desvio da prancha).
     PROPOSTO, SEM FONTE */
+export interface LugarDaPlanta { alvo: readonly [number, number]; busca: number; folga: number; clareira: number; base: number }
+export interface MarcoDaPlanta { ponto: readonly [number, number]; entorno: { arbusto: number; grama_alta: number; pedra: number; raio: number } }
+/** a forma de uma planta da ilha (a PLANTA_ILHA e a PLANTA_ILHA_AGUA) */
+export interface PlantaIlha {
+  praca: { x: number; z: number; raio: number }; raioCaminho: number; folgaLugar: number;
+  caminhos: Readonly<Record<"lar" | "portao" | "barraca" | "cais", readonly (readonly [number, number])[]>>;
+  lugares: { portao: LugarDaPlanta; barraca: LugarDaPlanta; cais: { x: number; clareira: number; mar: number }; saco: readonly [number, number] };
+  postes: readonly (readonly [number, number])[];
+  marcos: { busca: number; carro: MarcoDaPlanta; geladeira: MarcoDaPlanta; trilho: MarcoDaPlanta; lata: MarcoDaPlanta };
+  bosques: readonly (readonly [number, number, number, number])[]; vaos: readonly (readonly [number, number, number, number])[];
+  sal: number;
+  bosque: { porCelula: number; entreArvores: number; escalaArvore: readonly [number, number]; arbustos: number; entreArbustos: number;
+            escalaArbusto: readonly [number, number] };
+}
 export const PLANTA_ILHA = {
   praca: { x: 31, z: 16, raio: 4.2 },
   raioCaminho: 0.8, folgaLugar: 0.6,
@@ -154,6 +168,44 @@ export const PLANTA_ILHA = {
   vaos: [[31, -6, 5, 5]],
   sal: 0xb05c0e5, bosque: { porCelula: 0.16, entreArvores: 2.2, escalaArvore: [0.9, 1.2], arbustos: 0.5, entreArbustos: 1.2, escalaArbusto: [0.85, 1.15] },
 } as const;
+/** a planta da ilha onde so a agua barra o pet (docs/TAREFA_V3_ILHA_AGUA.md, IA3; o layout com agua, AGUA_POR_LAYOUT do motor): a ilha
+    inteira fica dentro do mapa do motor, e a moldura e so mar. A praca, o saco, a barraca, o cais e os caminhos sao os da planta A (o
+    mapa da agua foi desenhado em volta deles: o caminho da barraca passa pela ponte do norte). O que muda:
+    - o portao vem para dentro, na ponta norte da ilha, e o caminho dele para la; o caminho do cais para na praia, dentro do mapa;
+    - o ultimo poste do cais sai do mar;
+    - os marcos vem para dentro (o carro no oeste, a geladeira na areia do sudeste, o trilho no leste), nos pontos da figura aprovada
+      (IA-2), ja que nao ha mais moldura de terra; a lata, que e de depois da figura, fica no noroeste;
+    - nao ha bosque nem vao: nada alto que nao seja do motor, um lugar ou um enfeite entra na area (a regra 5 da ilha; do entorno dos
+      marcos so entra o que e baixo), e a moldura e mar.
+    `moldura`: as celulas de mar em volta do mapa do motor; `praia`: a terra a ate tantas celulas do mar vira areia (`praiaSul` da linha
+    `sulDesde` para baixo, onde fica o cais). PROPOSTO, SEM FONTE */
+export const PLANTA_ILHA_AGUA: PlantaIlha = {
+  ...PLANTA_ILHA,
+  caminhos: { ...PLANTA_ILHA.caminhos, portao: [[31, 16], [31, 5]], cais: [[31, 16], [36, 24], [37.6, 27.4]] },
+  lugares: { ...PLANTA_ILHA.lugares, portao: { alvo: [31, 3.5], busca: 3, folga: 1, clareira: 3, base: 1.6 } },
+  postes: [[27.5, 13], [34.5, 13], [27.5, 19.5], [34.5, 19.5], [33.5, 24], [36.2, 26.6]],
+  marcos: {
+    busca: 2.5,
+    carro: { ponto: [6.5, 9], entorno: { arbusto: 6, grama_alta: 8, pedra: 1, raio: 2.8 } },
+    geladeira: { ponto: [50.5, 25.5], entorno: { arbusto: 0, grama_alta: 0, pedra: 3, raio: 2 } },
+    trilho: { ponto: [57, 17], entorno: { arbusto: 4, grama_alta: 6, pedra: 2, raio: 2.8 } },
+    /* a lata gigante (o marco de 2026-11-10, que na planta A fica na moldura do norte) vem para dentro, no noroeste, entre o carro e o
+       saco; o ponto e desta sessao, fora da figura aprovada (IA-2), que e de antes da lata. PROPOSTO, SEM FONTE */
+    lata: { ponto: [16, 6], entorno: { arbusto: 3, grama_alta: 8, pedra: 2, raio: 3.8 } },
+  },
+  bosques: [], vaos: [],
+};
+export const ILHA_AGUA = { moldura: 8, praia: 1, praiaSul: 2, sulDesde: 22 } as const;
+/** a ponte da ilha com agua (ponte.ts), em formas lisas e cores chapadas (o padrao cartoon de 2026-11-10), feita por codigo: o tabuado
+    (a altura sobre o chao e a espessura, baixas porque o pet, a bola e as sombras sao desenhados no chao; quantas tabuas por celula e
+    a fresta entre elas), o corrimao nas beiras que dao para a agua (a
+    altura, a espessura do pau, o poste) e as cores. Em celulas. PROPOSTO, SEM FONTE */
+export const PONTE_ILHA = {
+  tabuado: { altura: 0.01, espessura: 0.04, porCelula: 4, fresta: 0.035, sobra: 0.12 },
+  corrimao: { altura: 0.62, pau: 0.07, poste: 0.11, recuo: 0.08 },
+  cor: { tabua: [0xc98a4b, 0xb97c42, 0xd2955a], corrimao: 0x8a5a2e, poste: 0x6f4623 },
+} as const;
+
 /** o fim da ilha (o Matheus, 2026-11-08: "adicionar um final [...] para ela nao acabar no meio do nada"; fimDaIlha.ts e grade.ts, porBordas):
     - a leste do rio, a mata sobe em `degraus` ate o morro: a coluna (a partir da margem leste do rio) onde comeca cada nivel, com a borda
       ondulando ate `ondula` celulas; a decoracao rente a um degrau novo some (a lista `objetos` nao muda, E-G0);

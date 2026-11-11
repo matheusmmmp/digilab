@@ -2,6 +2,7 @@
    item 1): as telas leem o motor pelo useJogo() e so mudam o motor por aqui, que avisa todo mundo e grava o
    save. Duas abas no mesmo navegador (o HTML antigo e o app, ou dois apps) nao se sobrescrevem: quando o save
    muda em outra aba, esta relê o save em vez de gravar por cima. */
+import { passarParaIlhaComAgua } from "./ilhaAgua.ts";
 import { useEffect, useState } from "react";
 import { Motor, PetMorto, ehCerebroTrocavel } from "../motor/index.ts";
 import { pedirAbertura } from "./abertura.ts";
@@ -45,10 +46,12 @@ export function iniciarJogo(armaz: Armazenamento): Jogo {
   let erroTamer: string | null = null;
   try { tamer = lerTamer(armaz); } catch (err) { tamer = new Tamer(); erroTamer = err instanceof Error ? err.message : String(err); }
   const l = lerSave(armaz), extra = { erroTamer, evolucoesAoTrocar: null, emLab: null };
+  /* o pet v21 salvo passa para a ilha com agua na abertura (IA4), e o registro com o evento e gravado na hora */
+  const passou = l.tipo === "ok" && passarParaIlhaComAgua(l.motor);
   if (l.tipo === "ok") jogo = { motor: l.motor, origem: "save", erroSave: null, revisao: 0, nascendo: 0, ...extra };
   else jogo = { motor: petExemplo(), origem: "exemplo", erroSave: l.tipo === "erro" ? { erro: l.erro, bruto: l.bruto } : null, revisao: 0, nascendo: 0, ...extra };
   /* o pet salvo pode estar atras do Tamer (medalha ganha com outro pet): recebe o "u" ja na abertura */
-  if (l.tipo === "ok" && medalhas(jogo).mudou) gravar();
+  if (l.tipo === "ok" && (medalhas(jogo).mudou || passou)) gravar();
   return jogo;
 }
 export const tamerAtual = (): Tamer => tamer;
@@ -110,6 +113,7 @@ export function mudarMotor(f: (m: Motor) => void, quando: "agora" | "adiado" = "
 export function trocarMotor(m: Motor, origem: Origem, nascendo = 0): void {
   sairDoLab();            // trocar o pet e sempre sobre o pet de hoje: o pet de teste sai da tela, com o save dele intacto
   const j = jogoAtual();
+  passarParaIlhaComAgua(m);        // o pet v21 guardado ou importado chega a ilha com agua ao abrir (IA4); o gravar abaixo o salva
   j.motor = m; j.origem = origem; j.erroSave = null; j.nascendo = nascendo; j.revisao++;
   /* pet guardado que estava pronto: recebe as medalhas agora e evolui (a revelacao conta a partir de antes) */
   const antes = m.evolucoes.length;
@@ -179,6 +183,7 @@ export function ouvirOutrasAbas(): () => void {
     if (ev.key !== CHAVE || !armazenamento || !jogo) return;
     if (ev.newValue === null || ev.newValue === textoSave(motorReal())) return;
     const l = lerSave(armazenamento);
+    if (l.tipo === "ok") passarParaIlhaComAgua(l.motor);          // a outra aba pode ser de antes da IA4: o pet chega a ilha com agua aqui tambem
     if (jogo.emLab) { if (l.tipo === "ok") jogo.emLab = l.motor; return; }    // o pet de hoje, guardado: relê ele, o de teste segue na tela
     if (l.tipo === "ok") { jogo.motor = l.motor; jogo.origem = "save"; jogo.erroSave = null; jogo.revisao++; pendente = false; avisar(); }
     else if (l.tipo === "erro") { jogo.erroSave = { erro: "outra aba gravou um save que não abre: " + l.erro, bruto: l.bruto }; avisar(); }

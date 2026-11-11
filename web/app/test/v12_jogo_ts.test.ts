@@ -111,14 +111,14 @@ const cerebro = (m: Motor): string => sha(JSON.stringify(m.cerebro!.estadoIntern
 
 function gerar(): Gabarito {
   const vidas = VIDAS.map(([semente, dias, dono]): VidaGravada => {
-    const m = new Motor(semente), escolhas = escutarEscolhas(m);
+    const m = new Motor(semente, 21), escolhas = escutarEscolhas(m);
     viverDias(m, dias, dono);
     const log = JSON.parse(JSON.stringify(m.log)) as Evento[];
     const { pts } = refazer(semente, m.versao, log);
     return { semente, versao: m.versao, dias, dono, log, pontos: pts, assinatura: sha(m.assinatura()), ...resumoEscolhas(escolhas),
              consumos: m.mundo!.consumos.length, impressao: impressao(m), cerebro: cerebro(m) };
   });
-  return { versao_pet: VERSAO_PET, arquivos: Object.fromEntries(PINADOS.map(p => [p, shaArquivo(p)])), vidas };
+  return { versao_pet: 21, arquivos: Object.fromEntries(PINADOS.map(p => [p, shaArquivo(p)])), vidas };
 }
 
 if (process.env.GRAVAR_V12 === "1") writeFileSync(ARQUIVO, JSON.stringify(gerar(), null, 1) + "\n", "utf8");
@@ -153,7 +153,7 @@ describe("o gabarito das vidas v12 do jogo em TS (T-PONTO-4, parte 1)", () => {
      candidatos e o cerebro, sem a assinatura (desvio no registro de 2026-11, LUTA_POC, LP4) */
   for (const v of G.vidas.filter(x => !x.log.some(e => e[1] === "l"))) {
     test(`v12 @${v.semente} (${v.dono}, ${v.dias} dias), refeita na v21: o replay do log, ponto a ponto, os candidatos, o mundo e o cerebro no fim`, () => {
-      const { m, pts, escolhas } = refazer(v.semente, VERSAO_PET, v.log);
+      const { m, pts, escolhas } = refazer(v.semente, 21, v.log);
       expect(pts.length).toBe(v.pontos.length);
       const semSha = (p: Ponto) => ({ ...p, sha: undefined });
       pts.forEach((p, i) => expect(p.estagio === "bebe" ? p : semSha(p), `ponto no evento ${v.pontos[i].evento}`)
@@ -163,14 +163,14 @@ describe("o gabarito das vidas v12 do jogo em TS (T-PONTO-4, parte 1)", () => {
       expect(impressao(m)).toBe(v.impressao);
       expect(cerebro(m)).toBe(v.cerebro);
       /* e pelo caminho publico */
-      expect(Motor.reproduzir(v.semente, v.log, VERSAO_PET).assinatura()).toBe(m.assinatura());
+      expect(Motor.reproduzir(v.semente, v.log, 21).assinatura()).toBe(m.assinatura());
     });
   }
 
   test("o mesmo dono, jogado de novo hoje, da o mesmo log (o dono e o motor deterministas)", () => {
     for (const k of [0, 2]) {
       const [semente, dias, dono] = VIDAS[k];
-      const m = new Motor(semente);
+      const m = new Motor(semente, 21);
       viverDias(m, dias, dono);
       expect(JSON.parse(JSON.stringify(m.log))).toEqual(G.vidas[k].log);
     }

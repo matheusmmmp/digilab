@@ -9,11 +9,12 @@
    - o cartao de destrave: pede a fila das dicas (dicas.ts) e sai dela quando visto.
    NADA acontece durante o render: `calcularNivel` so le (a chave, o jogo) e guarda o resultado; gravar a chave, as travas, os brilhos e o aviso saem no efeito
    (`confirmarNivel`, chamado pelo useNivelRaiz). So vista: nada aqui muda o motor, o save, o registro do Tamer nem o replay; "a vista nunca abre antes do motor". */
+import { VERSOES_PET } from "../motor/index.ts";
 import { useEffect, useSyncExternalStore } from "react";
 import { type Motor } from "../motor/index.ts";
 import { motorReal, tamerAtual, useJogo } from "./jogo.ts";
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados } from "./pets.ts";
-import { CHAVE, petExemplo } from "./save.ts";
+import { CHAVE, SEMENTE_EXEMPLO, petExemplo } from "./save.ts";
 import { dicasLigadas, pedirCartao, retirarCartao, esquecerDicasVistas } from "./dicas.ts";
 import { definirTrancas } from "./trancas.ts";
 import {
@@ -29,21 +30,22 @@ export const CHAVE_NIVEL = CHAVE + "-nivel";
 const GUARDADOS_MS = 1500;
 
 /* ---------------------------------------------------------------------------------------------------- quem nao e do jogador */
-let semeadas: { sementes: ReadonlySet<number>; assinaturas: ReadonlySet<string> } | null = null;
-function pecasSemeadas() {
-  if (!semeadas) {
-    const exemplo = petExemplo();
-    /* desde a LP2 da LUTA_POC (e para todos desde a LP4) a escada de exemplo nao e semeada: so o pet de exemplo */
-    semeadas = { sementes: new Set([exemplo.semente]), assinaturas: new Set() };
-    (semeadas.assinaturas as Set<string>).add(assinaturaIntocada(exemplo));
+/* desde a LP2 da LUTA_POC (e para todos desde a LP4) a escada de exemplo nao e semeada: so o pet de exemplo. A assinatura dele sai da
+   simulacao da vida de exemplo, feita so quando o pet tem a semente do exemplo e uma vez por versao: o pet de exemplo de quem abriu o jogo
+   antes da v22 (ILHA_AGUA, IA4) e v21 e continua valendo como "nao e do jogador" */
+const assinaturasDoExemplo = new Map<number, ReadonlySet<string>>();
+function assinaturaDoExemplo(versao: number): ReadonlySet<string> {
+  let s = assinaturasDoExemplo.get(versao);
+  if (!s) {
+    s = new Set(VERSOES_PET.includes(versao) ? [assinaturaIntocada(petExemplo(versao))] : []);
+    assinaturasDoExemplo.set(versao, s);
   }
-  return semeadas;
+  return s;
 }
 /** o pet e do jogador: nao e o de exemplo ainda intocado (o criterio do ativo e dos guardados) */
 export function ehPetDoJogador(m: Motor): boolean {
-  const s = pecasSemeadas();
-  if (!s.sementes.has(m.semente)) return true;
-  return !ehPetIntocado(m, s.assinaturas);
+  if (m.semente !== SEMENTE_EXEMPLO) return true;
+  return !ehPetIntocado(m, assinaturaDoExemplo(m.versao));
 }
 
 /* ---------------------------------------------------------------------------------------------------- o estado do modulo */
