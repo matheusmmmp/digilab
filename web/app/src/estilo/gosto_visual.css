@@ -5,6 +5,9 @@
 .gv-cabeca .gv-mini{margin-left:auto}
 .gv-selo{font-size:.6875rem;padding:1px 6px;border-radius:6px;background:rgba(255,200,80,.2);color:#ffc850}
 .gv-na-janela{background:var(--dl-surface,#1d2230);color:var(--dl-text,#eef);min-height:100vh;padding:10px 12px;box-sizing:border-box;font-size:.8125rem}
+/* na janela pequena, os botões ficam presos no pé: numa janela mais baixa que o painel, ele rola e os botões continuam à mão */
+.gv-na-janela .gv-acoes{position:sticky;bottom:0;margin:6px -12px -10px;padding:8px 12px;background:var(--dl-surface,#1d2230);box-shadow:0 -4px 10px rgba(0,0,0,.3)}
+body:has(> .gv-na-janela){margin:0}
 .gv-cartao{display:flex;flex-direction:column;gap:4px}
 .gv-palco{position:relative;display:flex;align-items:flex-end;justify-content:space-between;height:150px;padding:0 6px;
   background:linear-gradient(#2a3346,#202636);border-radius:10px;overflow:hidden}

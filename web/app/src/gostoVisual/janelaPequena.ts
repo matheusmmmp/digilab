@@ -3,8 +3,9 @@
 
 interface DocumentPiP { requestWindow(op?: { width?: number; height?: number }): Promise<Window>; window: Window | null }
 
-/** a janela: 340 x 460 cabe o pet, o balão e o painel. PROPOSTO, SEM FONTE */
-export const LARGURA_JANELA = 340, ALTURA_JANELA = 460;
+/** a janela: 360 x 620 cabe o pet, o balão, o painel e os botões (os 340 x 460 de antes abriam com 404 de altura útil e cortavam os
+    botões). O navegador pode abrir menor: os botões ficam presos no pé da janela. PROPOSTO, SEM FONTE */
+export const LARGURA_JANELA = 360, ALTURA_JANELA = 620;
 
 export const temJanelaPequena = (): boolean => typeof window !== "undefined" && "documentPictureInPicture" in window;
 
