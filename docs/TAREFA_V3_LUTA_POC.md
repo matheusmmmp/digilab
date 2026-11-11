@@ -864,3 +864,19 @@ o jogo segue na v23.
     gravado antes da mudança;
   - `test/arena_lp6.test.ts`: a tabela, o replay bit a bit com as chaves ligadas, cada regra do apoio e a escala da elipse.
 - **O que fica para depois:** o palco (LP6-2), a calibração (LP6-3) e a versão nova do pet (LP6-4).
+
+## Resultado da LP6-2 (2026-11-11: o golpe de apoio e a elipse maior no palco)
+
+Só desenho, em `web/app/src/telas/lutar/palcoPoc/` (`desenhoPoc.ts` e `visualPoc.ts`) e `web/app/src/lutaPocTela.ts`; o núcleo não
+muda. As interpretações estão no `docs/registro/2026-11.md` (D-LP6-2-1 a 8). O Matheus aprovou as capturas ("Aprovo, conserta"), com o
+conserto da borda cortada antes do PR.
+
+- **O apoio de perto do atirador:** o `Attack_1` inteiro, mais rápido, com um avanço curto do corpo; o acerto é o do núcleo.
+- **O tiro fraco de quem bate de perto:** o projétil genérico, com metade do pixel e do rastro do tiro de verdade, saindo da frente do
+  sprite.
+- **A elipse maior:** o palco desenha a elipse do núcleo, e o mapa cresce junto. O nível 0 da câmera mostra a arena inteira; de perto, o
+  zoom e os sprites são os de sempre.
+- **A borda cortada do export:** a explosão do golpe do Gallantmon terminava numa linha reta já na v23. O palco esfuma a borda onde o
+  quadro encosta na caixa (`BORDA_CORTADA`), sem inventar a arte.
+- **As capturas:** `&palco_lp6=ligadas|desligadas` na luta montada; os vídeos ficam fora do repositório.
+- **Os testes:** `test/luta_poc_lp6_palco.test.ts`.
