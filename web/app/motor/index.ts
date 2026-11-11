@@ -40,7 +40,7 @@ export { ORDEM_TERMOS, resultadoAnterior, type BarraLab, type ChanceLab, type Le
 /* a luta da POC (LUTA_POC, LP2): o mapeamento dos stats e os rivais; do nucleo, so a chave, os mapas e a tabela (os outros nomes dele, como
    Stats e ResultadoLuta, sao de motor/arena/ e colidiriam com os do motor) */
 export * from "./luta_poc.ts";
-export { APOIO_LP6, ARENA_POR_ESTAGIO_LP6, CENAS, ERRO_MIRA_POC, FORMAS_ARENA, GOLPES_DA_POC, IDS_CENA, LUTA_POC_LIGADA, TIRO_V21 as TIRO_POC_V21, type Esquiva as EsquivaPoc, type IdCena, type Tiro as TiroPoc } from "./arena/index.ts";
+export { APOIO_LP6, APOIO_LP6_3, ARENA_POR_ESTAGIO_LP6, ARENA_POR_ESTAGIO_LP6_3, CENAS, ERRO_MIRA_POC, FORMAS_ARENA, GOLPES_DA_POC, IDS_CENA, LUTA_POC_LIGADA, TIRO_V21 as TIRO_POC_V21, type Esquiva as EsquivaPoc, type IdCena, type Tiro as TiroPoc } from "./arena/index.ts";
 /* a tela da luta da POC (LUTA_POC, LP3): o palco refaz a luta passo a passo com a mesma entrada e so le o estado; com nomes proprios, para
    nao colidir com os do motor */
 export {
