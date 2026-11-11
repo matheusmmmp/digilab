@@ -46,9 +46,8 @@ import "../../estilo/pet_movel.css";
 import "../../estilo/nivel.css";
 import { useNivel } from "../../nivelTela.ts";
 import { nivelDe } from "../../nivel.ts";
-import { ConteudoDigiBrainLab } from "../../componentes/DigiBrainLab.tsx";
 import { ScanDigiBrain } from "../../componentes/ScanDigiBrain.tsx";
-import { SeloExperimental } from "../config/Laboratorio.tsx";
+import { ScanDigiBrainLab } from "../../componentes/ScanDigiBrainLab.tsx";
 import { duracao, previsaoEvo } from "../crescer/TelaEvolucao.tsx";
 
 export const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
@@ -621,12 +620,6 @@ function LinhaDigiBrain({ abrir }: { abrir: () => void }) {
   );
 }
 
-/** o painel DigiBrain do modular, no pet de teste (v16); o do A v11 abre no ScanDigiBrain (D1c), e chegar aqui com ele e erro */
-function PainelDigiBrain() {
-  const { motor: m } = useJogo();
-  if (!m.lab) throw new Error("o DigiBrain do A v11 abre no ScanDigiBrain, nao no painel");
-  return <div className="pet-painel__folha dl digibrain"><div className="db-folha-selo"><SeloExperimental /><span className="db-selo">cérebro modular</span></div><ConteudoDigiBrainLab /></div>;
-}
 function ConteudoPainel({ id, v, irRegistro, irEvolucao, detalhes, alternarDetalhes }: {
   id: Painel; v: VistaFala; irRegistro: () => void; irEvolucao: () => void; detalhes: boolean; alternarDetalhes: () => void;
 }) {
@@ -635,7 +628,7 @@ function ConteudoPainel({ id, v, irRegistro, irEvolucao, detalhes, alternarDetal
     case "evolucao": return <ProximaEvolucao irEvolucao={irEvolucao} />;
     case "acoes": return <UltimasAcoes irRegistro={irRegistro} />;
     /* o DigiBrain e o porque da fala, com a pele escura (D8) */
-    case "digibrain": return <PainelDigiBrain />;
+    case "digibrain": throw new Error("o DigiBrain abre no scan (ScanDigiBrain ou ScanDigiBrainLab), nao no painel");
     case "fala": return <div className="pet-painel__folha dl"><DetalheFala v={v} semTitulo /></div>;
   }
 }
@@ -778,7 +771,9 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
       {largo && <CameraHud />}
       {/* o DigiBrain do A v11 e o scan (o campo pequeno, um dialogo modal); o do modular (pet v16) continua no painel de hoje (D1-9) */}
       {atual === "digibrain" && !m.lab && <ScanDigiBrain fechar={fechar} movel={!largo} chamado={<ChamadoSobScan />} />}
-      {atual && !(atual === "digibrain" && !m.lab) && (
+      {/* o pet do laboratorio (v16) abre o mesmo scan, com o mapa do modular (pedido do Matheus de 2026-11-11) */}
+      {atual === "digibrain" && m.lab && <ScanDigiBrainLab fechar={fechar} movel={!largo} chamado={<ChamadoSobScan />} />}
+      {atual && atual !== "digibrain" && (
         <div className="pet-painel" id="pet-painel" data-painel-pet={atual} ref={painel} tabIndex={-1} onKeyDown={e => { if (e.key === "Escape") { e.stopPropagation(); fechar(); } }}>
           <PainelHx titulo={TITULO_PAINEL[atual]} onFechar={fechar} rotuloFechar={`Fechar ${TITULO_PAINEL[atual]}`} className="pet-painel__hx">
             {conteudo(atual)}

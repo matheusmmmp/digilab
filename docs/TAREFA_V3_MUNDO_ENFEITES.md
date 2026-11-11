@@ -419,3 +419,43 @@ faz tudo em estilo cartoon pra ver como fica". É um teste para ele olhar: a dec
 capturas no git; a conferência foi na vitrine e no jogo, no estilo da Ilha, de dia. A noite (o poste aceso), o estilo Digital, o celular
 e o e2e não foram conferidos. Os arquivos do poste em blocos e do vagão da Meshy ficam em `docs/objetos3d/poste/` e
 `docs/objetos3d/trem/` como histórico. Os desvios estão em `docs/registro/2026-11.md`, D-CARTOON-1 a 5.
+
+
+## 19. A prancha da TV de tubo em cartoon (2026-11-11, Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-objeto-tv`)
+
+**O pedido do Matheus (2026-11-11):** "Procure modelos de tv 3d para botarmos na ilha", depois "TV por script cartoon" e "Gere a tv pelo
+fable". A busca achou a `televisionVintage` do Kenney Furniture Kit (CC0, já em `Assets/kits3d/kenney_furniture`); ela serviu só de
+referência de forma.
+
+**O que há:** o script `docs/objetos3d/cartoon/tv.py`, no padrão do poste (seção 18), e a prancha
+`docs/objetos3d/tv/prancha_tv.jpg` (quatro vistas). A TV tem o gabinete laranja com a cara creme, a moldura e a tela em peças separadas, dois
+botões, o alto-falante pintado, quatro pés, a antena em V e o musgo no pé. São 766 triângulos.
+
+**Não feito (espera a aprovação da prancha):** a TV não está no jogo. Faltam a entrada no `publicar.py`, os arquivos em
+`web/app/public/enfeites/tv/`, o lugar na ilha e os testes. A prancha saiu de uma prévia por pontos (fora do git), não da vitrine: os
+pontinhos na tela e nas costas são da prévia, não da textura.
+
+**As decisões que a prancha pede (PROPOSTO):** TV-1, a forma e as cores; TV-2, onde ela fica na ilha; TV-3, se a tela mostra alguma coisa
+depois. As medidas e a paleta são PROPOSTO, SEM FONTE. Os desvios estão em `docs/registro/2026-11.md`, D-TV-1 a 3.
+
+
+## 20. A TV de tubo na ilha (2026-11-11, Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-objeto-tv`)
+
+**O pedido do Matheus (2026-11-11):** "Gere então", depois da prancha da seção 19.
+
+**O que mudou:**
+- **Os arquivos** estão em `web/app/public/enfeites/tv/` (o glTF, o `.bin`, a textura e o `License.txt`), publicados pelo
+  `docs/objetos3d/cartoon/publicar.py tv`. A validação está em `docs/enfeites/tv/validacao.json`: 0 erros e 0 avisos.
+- **O modelo** entrou no `ENFEITES_MODELOS` (`modelos.ts`), com 2,6 células de altura.
+- **O lugar:** a TV é um marco novo da grade (`ENFEITES_GRADE.tv`, clareira de 1,4). Na planta A ela fica na moldura do norte, atrás da
+  barraca (o ponto 50, −3). Na ilha com água ela fica dentro do mapa, a leste da barraca (54, 11,5). O sorteio dela vem depois dos outros
+  marcos, então o entorno deles não muda.
+- **A máscara de luz saiu do script por enquanto:** o teste dos enfeites não aceita arquivo sem uso na pasta pública, e a tela ainda não
+  acende (TV-3). A função `vidro` do `tv.py` continua marcando o que acenderia.
+
+**Os testes:** o `ilha_enfeites.test.ts` confere os arquivos, o teto de triângulos, a procedência e o lugar da TV na planta A; o
+`ilha_agua_vista.test.ts` confere a TV na lista da ilha com água.
+
+**Conferido na tela:** só na vitrine (`poc/vitrine.html`), no estilo Digital: `docs/objetos3d/tv/vitrine_tv.png`. **Não conferido:** a TV
+dentro do jogo (o lugar, o tamanho ao lado do pet, a noite, o celular) e o e2e. Os números (a altura, a sombra, a clareira, os pontos e o
+entorno) são PROPOSTO, SEM FONTE. Os desvios estão em `docs/registro/2026-11.md`, D-TV-4 a 6.
