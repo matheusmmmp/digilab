@@ -3039,6 +3039,52 @@ PARAMETROS_VOZ_V4 = {f.name: ("DECIDIDO", "SEM FONTE; plano da DC5, D-DC5-5/D-DC
                      for f in fields(ConfigVozV4)}
 
 
+# =====================================================================
+# V3, a cooperacao entre dois pets do mesmo dono (docs/TAREFA_V3_COOPERACAO.md, etapa CO3; secao 3.1; D-MM-8). Os atos sociais derivados
+# (a disputa, a contencao, o encostar) e a pontuacao pro-social de cada pet e a reputacao dele vista pelo outro, medidos pelo motor como
+# funcao do log (digilab/cooperacao.py). Desligada por padrao: o grupo de hoje, byte a byte. Ligada, so mede: nenhuma acao e nenhum corpo
+# muda (CO-3; o G-SEM-DECISAO). O espelho em TS e o CCOOP de web/app/motor/constantes.ts.
+
+
+@dataclass(frozen=True)
+class ConfigCooperacao:
+    """ligada                a medida do grupo (o Grupo a chama no fim de cada decisao e de cada tick); desligada, nada e medido
+    escala                 S, a escala dos efeitos, dos valores e da pontuacao (a do cerebro A)
+    piso_fome              a fome do perdedor abaixo da qual a disputa e "anti" (CO-9: o fome_moderada do instinto, policy.py)
+    meia_vida_pontuacao    a meia-vida da pontuacao e da reputacao, em ticks do mundo (um dia)
+    k_meia_vida_pontuacao  = corpo.k_meia_vida(meia_vida_pontuacao), na escala 2**16 (a regra da secao 3 do corpo; o tick nao a recalcula)
+    janela_novidade        a janela em que a repeticao do mesmo ato com o mesmo alvo cai pela metade, em ticks do mundo (o dia do mundo)"""
+
+    ligada: bool = False
+    escala: int = _S
+    piso_fome: float = 0.45
+    meia_vida_pontuacao: int = 1440
+    k_meia_vida_pontuacao: int = 32
+    janela_novidade: int = 1440
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigCooperacao.ligada e bool: {self.ligada!r}")
+        for nome in ("escala", "meia_vida_pontuacao", "k_meia_vida_pontuacao", "janela_novidade"):
+            v = getattr(self, nome)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigCooperacao.{nome} tem de ser inteiro positivo: {v!r}")
+        if not 0.0 < self.piso_fome < 1.0:
+            raise ValueError(f"ConfigCooperacao.piso_fome em (0, 1): {self.piso_fome!r}")
+
+
+CONFIG_COOPERACAO = ConfigCooperacao()
+CONFIG_COOPERACAO_LIGADA = ConfigCooperacao(ligada=True)
+PARAMETROS_COOPERACAO = {
+    "ligada": ("DECIDIDO", "CO-3 (Matheus, 2026-11-11): a CO3 so mede e mostra; desligada, o grupo de hoje"),
+    "escala": ("DECIDIDO", "PE-12: S = 1024, a do cerebro A (ConfigLobos.bits_ponto_fixo = 10)"),
+    "piso_fome": ("PROPOSTO", "CO-9 (2026-11-11): o fome_moderada do instinto (digilab/policy.py, `fome < 0.45`), SEM FONTE"),
+    "meia_vida_pontuacao": ("PROPOSTO", "SEM FONTE: um dia do mundo (secao 3.1; Moral do pet, A3: 'decai por meia-vida no tempo do jogo')"),
+    "k_meia_vida_pontuacao": ("PROPOSTO", "= corpo.k_meia_vida(meia_vida_pontuacao)"),
+    "janela_novidade": ("PROPOSTO", "SEM FONTE: o dia do mundo (secao 3.1: 'cai pela metade a cada repeticao ... no dia')"),
+}
+
+
 @dataclass(frozen=True)
 class ConfigVozV4B:
     """A voz-v4b da DC5 (CONVERSA_PET, DC5a2; D-DC5B-5, a decisao do Matheus em 2026-11-11, "Segue as recomendacoes e faca o merge").
