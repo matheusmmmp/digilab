@@ -248,3 +248,28 @@ O `web/app/motor/grupo.ts` é o porte do `digilab/grupo.py`, sem tela e sem vers
     projeção. Só o estado das rngs fica fora (D-CO2c-5).
 - **Fora:** o degrau 1b (D-CO2c-3) e a ligação com o `Motor` do jogo, que é a CO4.
 - **Os desvios:** D-CO2c-1 a D-CO2c-5, no registro de 2026-11.
+
+## CO3, os atos e a pontuação (2026-11-11, Claude Code, Opus 5.5, branch `v3-cooperacao-co3`)
+
+A medida da cooperação, no Python (`digilab/cooperacao.py`) e no TS (`web/app/motor/cooperacao.ts`), atrás da `ConfigCooperacao`
+desligada (o espelho é o `CCOOP` do `motor/constantes.ts`). Ela só mede: nenhuma ação e nenhum corpo muda.
+
+- **Os atos:**
+  - **a disputa:** do registro do Grupo. É "anti" se a fome do perdedor estava abaixo do piso, e neutra se não;
+  - **a contenção:** a única comida madura à vista, deixada para o outro, que a come antes da próxima decisão de quem deixou;
+  - **o encostar:** o contato de quem seguiu o outro, com o outro emburrado. Vale 0 (D-CO3-3).
+- **A pontuação** de cada pet e a **reputação** dele vista pelo outro:
+  - em inteiros na escala S;
+  - a novidade cai pela metade no dia;
+  - a meia-vida é de um dia;
+  - a intenção pesa zero.
+- **Os gates:**
+  - **G-SEM-DECISAO:** no Python, as 7 vidas do gabarito com a medida ligada têm o mesmo sha256 do resumo que com ela desligada (as 5 da
+    CO1 contra o gabarito da CO1). No TS, o traço inteiro de cada vida sai igual com a medida ligada, e o resumo sem a chave é o da
+    medida desligada.
+  - **G-PAR-COOP:** os atos, a pontuação e a reputação do TS são iguais aos do Python nas 7 vidas e nas chamadas sintéticas
+    (`web/app/test/cooperacao.test.ts`, contra `cooperacao_python.json.gz` de `experiments/exportar_gabarito_cooperacao.py`).
+- **O que as vidas mostram** (o gabarito; nenhuma run):
+  - há de 1 a 6 contenções por vida de 3 dias, 2 disputas neutras e 1 encostar;
+  - nenhuma disputa é "anti", então o sinal −1 só é conferido nas chamadas sintéticas.
+- **Os desvios:** D-CO3-1 a D-CO3-8, no registro de 2026-11.

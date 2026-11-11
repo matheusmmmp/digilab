@@ -650,3 +650,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — COOPERACAO, CO2b: o mundo partilhado no TS (Claude Code, Opus 5.5, branch `v3-cooperacao-co2b`)](registro/2026-11.md)
 - [2026-11-11 — COOPERACAO, CO2c: o grupo em TS (Claude Code, Opus 5.5, branch `v3-cooperacao-co2c`)](registro/2026-11.md)
 - [2026-11-11 — ILHA_AGUA, IA4: a ilha com água junto com os objetos em cartoon e a cooperação (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-agua-ia4`)](registro/2026-11.md)
+- [2026-11-11 — COOPERACAO, CO3: os atos e a pontuação no motor (Claude Code, Opus 5.5, branch `v3-cooperacao-co3`)](registro/2026-11.md)
