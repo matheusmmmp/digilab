@@ -1,0 +1,30 @@
+{
+ "descricao": "A fumaca do desenho da voz-v4b (DC5a2): a da DC5a com a voz-v4b, a especie e o verificador da DC5. Clientes falsos; nao e dado da DC5.",
+ "fase": "fumaca",
+ "unidades": {
+  "bases": [
+   101
+  ]
+ },
+ "plano": "docs/PLANO_ANALISE_V3_CONVERSA_DC5.md",
+ "orcamento_por_dia": 16,
+ "bracos": [
+  "G",
+  "H"
+ ],
+ "vozes": [
+  "jogo",
+  "v4b"
+ ],
+ "teto_usd": 3.0,
+ "dias": 3,
+ "n_e3_por_pedido": 2,
+ "n_e2": 3,
+ "min_ep_e2": 1,
+ "n_sequencias": 1,
+ "n_es": 1,
+ "roteiros": "experiments/configs/v3_conversa_dc5/roteiros_calibracao.json",
+ "saida": "artifacts_v3_conversa_dc5/fumaca_v4b",
+ "especie": true,
+ "verificador_dc5": true
+}

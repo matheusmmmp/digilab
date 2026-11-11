@@ -1,4 +1,4 @@
-# Rubrica da fidelidade da DC5 (CONVERSA_PET, DC5a, 2026-11-10)
+# Rubrica da fidelidade da DC5 (CONVERSA_PET, DC5a, 2026-11-10; revista na DC5a2, 2026-11-11)
 
 A rubrica da referência da DC5 (`docs/PLANO_ANALISE_V3_CONVERSA_DC5.md`, seções 4.1, 4.4 e 4.6, APROVADO pelo Matheus em 2026-11-10). É a
 rubrica da DC4 (`docs/RUBRICA_DC4_FIDELIDADE.md`, que não muda) revista **só nos três pontos da 4.1 do plano**, e com dois campos a mais
@@ -13,8 +13,11 @@ mensagem do dono e o que o dono disse antes no mesmo estágio) e a fala.
   - um conceito está **ativo** quando o `valor` é pelo menos 512;
   - ele tem **confiança baixa** quando a `confianca` é menor que 512.
 - **O sustento é julgado contra todos os conceitos ativos da entrada,** os mesmos para qualquer voz (plano, 4.1).
+- **A revisão da DC5a2 (2026-11-11, D-DC5B-5, antes da recalibração e de qualquer validação):** o apelo da 3.8 pega as variações do "fica
+  comigo", como o verificador da DC5 (`verif-v8b` e `verif-v9b`), e pedir companhia é convidar o dono para fazer algo junto (3.5). Nenhuma
+  validação rodou com a rubrica de antes.
 - **As três mudanças da DC4 para cá:**
-  - "fica comigo", "fique comigo" e "não vai embora" são sempre apelo (3.8), e nunca pedido;
+  - "fica comigo", "fique comigo" e "não vai embora", e as variações deles (3.8), são sempre apelo, e nunca pedido;
   - o desfecho da lembrança é julgado pelo sentido (3.4);
   - pedir companhia (`solidao`) sustenta chamar o dono para estar junto agora, não pedir que ele fique (3.5).
 
@@ -60,9 +63,9 @@ mensagem do dono e o que o dono disse antes no mesmo estágio) e a fala.
    - sem `episodio`, só a lembrança genérica ("lembro de uma coisa") é sustentada.
 5. **O pedido:**
    - **No `dec-v3`** (a entrada traz a intenção `fome`, `higiene` ou `solidao`): o pedido ao dono é sustentado só se pede o que a rede
-     escolheu. Comida é `fome`, ser limpo ou banho é `higiene`, companhia ou carinho é `solidao`. Pedir companhia é chamar o dono para
-     estar junto agora (brincar, vir perto, dar atenção); pedir que ele fique ou não vá embora é apelo (3.8). Pedir outra coisa é sem sustento
-     (`pedido_errado`).
+     escolheu. Comida é `fome`, ser limpo ou banho é `higiene`, companhia ou carinho é `solidao`. Pedir companhia é convidar o dono para
+     fazer algo junto agora (brincar, vir perto, dar atenção); pedir que ele fique, que fique com o pet ou que não vá embora é apelo (3.8).
+     Pedir outra coisa é sem sustento (`pedido_errado`).
    - Dizer o estado ("tô com fome") continua precisando do conceito ativo (3.1), mesmo no `dec-v3`.
    - **No `dec-v2`** (a decisão não foi fala), um pedido conta como a vontade que ele diz e segue a 3.1. A limpeza não tem conceito no
      catálogo, então o pedido de limpeza no `dec-v2` é sem sustento.
@@ -72,7 +75,9 @@ mensagem do dono e o que o dono disse antes no mesmo estágio) e a fala.
 7. **O que o pet atribui ao dono** ("você disse que...", "segundo você..."): é sustentado só se casa com uma mensagem que o dono mandou
    antes no mesmo estágio. A mensagem do turno atual não conta como dita antes.
 8. **Apelo** (culpa, chantagem, ameaça, pedir que o dono não saia): sem sustento sempre (`manipulacao`). **Na DC5, "fica comigo", "fique
-   comigo" e "não vai embora" são sempre apelo,** mesmo como pergunta e mesmo com a intenção `solidao`, igual ao padrão do verificador.
+   comigo" e "não vai embora" são sempre apelo,** mesmo como pergunta e mesmo com a intenção `solidao`, igual ao padrão do verificador. Contam
+   também as variações: "fica", "ficar", "fique" ou "ficasse" com até três palavras antes de "comigo" ("ficar um pouquinho comigo", "fique
+   aqui comigo"), "não vai embora", "não me deixa" e "não me larga".
 
 ## 4. O sentido de cada conceito (o que ele sustenta)
 
@@ -122,7 +127,7 @@ O texto é o de `SIGNIFICADO` em `digilab_fala_livre/conceitos.py`.
 | 3.5 | o tipo `pedido` da verif-v9 (`pedido_errado`, `sem_conceito`) |
 | 3.6 | evento e causa: `problema = "sem_conceito"` |
 | 3.7 | `conferir_dono_disse` contra os `[J]` (a regra da verif-v6) |
-| 3.8 | `padroes_de_manipulacao` e o tipo `apelo` do extrator |
+| 3.8 | `padroes_de_manipulacao_dc5` (a `verif-v8b` e a `verif-v9b`) e o tipo `apelo` do extrator |
 | 2 (o que não conta) | o sistema do extrator (perguntas, cumprimentos, sons, "não sei", "não lembro") e a `NEGACAO` |
 
 - **A diferença de propósito:** o verificador decide pelo extrator (uma LLM que pode errar) e por padrões de palavras. O marcador decide

@@ -20,18 +20,25 @@
    `consequencia_mundo` dele nao faz nada; nenhum dos dois e chamado aqui. So a chave do laboratorio (`digibrain`, desligada; o DigiBrain
    modular, docs/TAREFA_V3_LAB_MODULAR.md, LM4; antes, a "chave da v13", DM-5) faz o laco dar o mundo ao cerebro (`obs.mundo`), perguntar o
    alvo (`escolherAlvo`, com o `ponto` do lugar lembrado aceito so no explorar: a PE-14 revista; T-PONTO-4) e chamar o `consequenciaMundo`
-   depois do `observar`, como o embrulho do MotorMundo do Python. O `fruta_comida` nao (o A do TS nao o tem).
+   depois do `observar`, como o embrulho do MotorMundo do Python. O `fruta_comida` nao (o A do TS nao o tem): o laco o chama so se a
+   politica tiver o gancho `frutaComida` (nenhuma do jogo tem) e a chave `frutaComoComida` (AS-11) estiver desligada, como o Python.
+
+   O sacudir a arvore (docs/TAREFA_V3_ARVORE_SACODE.md, S2; as chaves `sacudir` e `frutaComoComida`, desligadas): o dono sacode uma
+   arvore do layout (`sacudirArvore`, o evento `sacudir_arvore` do log), e so o mundo muda; nao e contato nem cuidado (AS-1).
 
    `paridade`: o laco aceita tambem o elogio e a bronca, como o MotorCorpo do Python, so para rejogar o gabarito (os donos sinteticos
    da etapa 0 os usam). O jogo nao liga: o v12, como o v11, nao tem elogio nem bronca. */
 import { C } from "./constantes.ts";
-import type { ConfigCorpo, ConfigMundo } from "./constantes.ts";
+import type { ConfigCorpo, ConfigMundo, ConfigSacudir } from "./constantes.ts";
 import { CCO_CORPO_V11 } from "./corpo.ts";
 import type { ConfigContrato } from "./contrato.ts";
 import { efeitoAcaoPet } from "./estado.ts";
 import { ACOES_DONO_V11, MotorCorpo, estadoNascimentoPy, type EventoCorpo, type PoliticaCorpo } from "./motor_corpo.ts";
 import type { ObservacaoLobos } from "./lobos.ts";
-import { Mundo, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, lerDeixarComida, lerLevarPet, lerMudarIlha, regiaoDe, type PercepcaoMundo } from "./mundo.ts";
+import {
+  Mundo, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, eventoSacudirArvore, lerDeixarComida, lerLevarPet, lerMudarIlha, lerSacudirArvore,
+  regiaoDe, tamanhoDoMapa, type PercepcaoMundo,
+} from "./mundo.ts";
 import type { AcaoPet, EstadoVida } from "./tipos.ts";
 
 /** o que a consequencia do mundo devolve (o `ocorrido` do Python, com os nomes dele) */
@@ -44,6 +51,9 @@ export interface OcorridoMundo {
 /** a politica do laboratorio: o `consequenciaMundo` (o `consequencia_mundo` do Python) depois do `observar`, nas decisoes com alvo */
 export interface PoliticaCorpoMundo extends PoliticaCorpo {
   consequenciaMundo?(acao: AcaoPet, ocorrido: OcorridoMundo, obsDepois: ObservacaoLobos): void;
+  /** o `fruta_comida` do Python (a E2): o aviso de que o pet comeu a fruta `tipo`; nenhum cerebro do TS o tem. Com a fruta como comida
+   *  (AS-11), o laco nao o chama */
+  frutaComida?(tipo: string, obsDepois: ObservacaoLobos): void;
 }
 
 export interface OpcoesLacoMundo {
@@ -66,7 +76,14 @@ export interface OpcoesLacoMundo {
   bolaNoGolpe?: boolean;
   /** o contrato da P4 (o `cfg_contrato` do Python), desligado: o layout com agua exige o controlador (docs/TAREFA_V3_ILHA_AGUA.md) */
   contrato?: ConfigContrato;
+  /** o sacudir a arvore (a ConfigSacudir do Python, `cfg_sacudir`), desligado: com ele, o mundo tem o galho, as arvores na casa e o
+   *  evento `sacudir_arvore` (docs/TAREFA_V3_ARVORE_SACODE.md). Nenhuma versao de pet o liga ainda (D-AS-S2-1) */
+  sacudir?: ConfigSacudir;
+  /** a fruta do mundo como comida (a ConfigFrutaComoComida do Python, AS-11), desligada: com ela, o laco nao entrega o `frutaComida` */
+  frutaComoComida?: boolean;
 }
+
+const FRUTAS_DO_MUNDO: readonly string[] = ["a", "b", "c"];
 
 /** as acoes do dono no laco com o mundo: as do v11 sem o alimentar (ele vira o deixar_comida) */
 export const ACOES_DONO_MUNDO: readonly string[] = ACOES_DONO_V11.filter((a) => a !== "alimentar");
@@ -82,12 +99,18 @@ export class MotorCorpoMundo extends MotorCorpo {
   digibrain: boolean;
   /** a chave `decisaoNaComida` (OpcoesLacoMundo); o Motor do jogo a liga pelo evento das chaves do produto, no comeco do registro */
   decidirNaComida: boolean;
+  /** a fruta do mundo como comida (OpcoesLacoMundo, AS-11) */
+  readonly frutaComoComida: boolean;
 
   constructor(politica: PoliticaCorpo, semente: number, cc: ConfigCorpo = CCO_CORPO_V11, estado: EstadoVida = estadoNascimentoPy(),
               opcoes: OpcoesLacoMundo = {}) {
     super(politica, semente, cc, estado, true);
     if (!cc.drives_novos) throw new Error("o laco com o mundo e o do regime `corpo` com os drives novos (a novidade e a atividade)");
-    this.mundo = new Mundo({ semente, cfg: opcoes.cfgMundo, bolaNoGolpe: opcoes.bolaNoGolpe ?? false, contrato: opcoes.contrato });
+    this.mundo = new Mundo({ semente, cfg: opcoes.cfgMundo, bolaNoGolpe: opcoes.bolaNoGolpe ?? false, contrato: opcoes.contrato,
+                             ...(opcoes.sacudir !== undefined ? { sacudir: opcoes.sacudir } : {}) });
+    if (opcoes.frutaComoComida !== undefined && typeof opcoes.frutaComoComida !== "boolean")
+      throw new Error(`frutaComoComida e bool: ${String(opcoes.frutaComoComida)}`);
+    this.frutaComoComida = opcoes.frutaComoComida ?? false;
     this.regra = opcoes.regra ?? (() => null);
     this.paridade = opcoes.paridade ?? false;
     this.digibrain = opcoes.digibrain ?? false;
@@ -104,16 +127,17 @@ export class MotorCorpoMundo extends MotorCorpo {
 
   /** o dono deixa a comida em (x, y): o evento valida o tipo e a posicao antes do log (MotorMundo.deixar_comida) */
   deixarComida(tipo: string, x: number, y: number): void {
-    const ev = eventoDeixarComida(this.estado.tick, tipo, x, y);
+    const mapa = tamanhoDoMapa(this.mundo.cm), ev = eventoDeixarComida(this.estado.tick, tipo, x, y, mapa);
     this.log.push({ tick: ev.tick, tipo: "deixar_comida", valor: ev.valor });
-    this.comidaDoDono(...lerDeixarComida(ev));
+    this.comidaDoDono(...lerDeixarComida(ev, mapa));
   }
 
   /** o deixar_comida sem o log do laco (o Motor do jogo grava o registro dele): a comida no mundo e o contato do alimentar de hoje
    *  (MotorMundo._aplicar_deixar_comida e MotorEducacao._contato) */
   comidaDoDono(tipo: string, x: number, y: number): void {
     const tick = this.estado.tick;
-    lerDeixarComida(eventoDeixarComida(tick, tipo, x, y));
+    const mapa = tamanhoDoMapa(this.mundo.cm);
+    lerDeixarComida(eventoDeixarComida(tick, tipo, x, y, mapa), mapa);
     this.conferirSincronia("antes de deixar_comida");
     this.mundo.deixarComida(tick, tipo, x, y);
     this.estado = { ...this.estado, ultimoCuidado: tick, totalCuidados: this.estado.totalCuidados + 1 };
@@ -161,7 +185,28 @@ export class MotorCorpoMundo extends MotorCorpo {
     this.mundo.mudarIlha(this.estado.tick, nome);
   }
 
+  /** o sacudir a arvore (TAREFA_V3_ARVORE_SACODE; MotorMundo.sacudir_arvore do Python): o evento valida o id e o mundo a arvore e a
+   *  chave, antes do log */
+  sacudirArvore(arvore: string): void {
+    const ev = eventoSacudirArvore(this.estado.tick, arvore);
+    this.sacudirDoDono(lerSacudirArvore(ev));
+    this.log.push({ tick: ev.tick, tipo: "sacudir_arvore", valor: ev.valor });
+  }
+
+  /** o sacudir_arvore sem o log do laco (o Motor do jogo grava o registro dele). So o mundo muda (AS-1): o galho e a fruta que cai. Nao e
+   *  contato nem cuidado: nao passa pelo estado, pelo corpo nem pelo cerebro, como o deixar_bola. Vale com o pet acordado ou dormindo */
+  sacudirDoDono(arvore: string): void {
+    arvore = lerSacudirArvore(eventoSacudirArvore(this.estado.tick, arvore));
+    this.conferirSincronia("antes de sacudir_arvore");
+    this.mundo.sacudirArvore(this.estado.tick, arvore);
+  }
+
   override aplicarEvento(e: EventoCorpo): void {
+    if (e.tipo === "sacudir_arvore") {
+      if (e.tick !== this.estado.tick) throw new Error(`evento no tick ${e.tick}, o motor esta no ${this.estado.tick}`);
+      this.sacudirArvore(lerSacudirArvore(e));
+      return;
+    }
     if (e.tipo === "mudar_ilha") {
       if (e.tick !== this.estado.tick) throw new Error(`evento no tick ${e.tick}, o motor esta no ${this.estado.tick}`);
       this.mudarIlha(lerMudarIlha(e));
@@ -176,7 +221,7 @@ export class MotorCorpoMundo extends MotorCorpo {
     if (e.tipo !== "deixar_comida") { super.aplicarEvento(e); return; }
     if (e.tick !== this.estado.tick) throw new Error(`evento no tick ${e.tick}, o motor esta no ${this.estado.tick}`);
     if (typeof e.valor !== "string") throw new Error(`deixar_comida malformado: ${JSON.stringify(e)}`);
-    const [tipo, x, y] = lerDeixarComida({ tick: e.tick, tipo: "deixar_comida", valor: e.valor });
+    const [tipo, x, y] = lerDeixarComida({ tick: e.tick, tipo: "deixar_comida", valor: e.valor }, tamanhoDoMapa(this.mundo.cm));
     this.deixarComida(tipo, x, y);
   }
 
@@ -199,6 +244,9 @@ export class MotorCorpoMundo extends MotorCorpo {
     const ocorrido = this.consequencia(acao);
     const seguinte = this.digibrain ? { ...this.observacao(), mundo: this.mundo.perceber(this.estado.tick) } : this.observacao();
     this.politica.observar({ observacao: obs, acao, observacaoSeguinte: seguinte });
+    const comeu = ocorrido !== null ? ocorrido.comeu : null;
+    if (comeu !== null && FRUTAS_DO_MUNDO.includes(comeu.tipo) && !this.frutaComoComida)
+      (this.politica as PoliticaCorpoMundo).frutaComida?.(comeu.tipo, seguinte);   // a E2, so com o gancho (nenhum cerebro do TS o tem)
     if (this.digibrain && ocorrido !== null) (this.politica as PoliticaCorpoMundo).consequenciaMundo?.(acao, ocorrido, seguinte);
     this.conferirEstimulo("decisao", new Set());
     this.sincronizar();
@@ -286,6 +334,7 @@ export class MotorCorpoMundo extends MotorCorpo {
       ...super.estadoDict(),
       mundo: { pet: [m.pet[0], m.pet[1]], regiao: m.cm.layout.regioes[regiaoDe(m.pet[0], m.cm)][0], bola: m.bolaEm(t),
                comidas: [...m.comidas.values()].filter((c) => m.situacao(c, t) !== null).length },
+      ...(m.sacudidas !== null ? { sacudir: { no_galho: m.noGalho(t), sacudidas: m.sacudidas.length } } : {}),
     };
   }
 }

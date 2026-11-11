@@ -1,7 +1,8 @@
 /* O ceu do estilo Digital sem a pintura de anime (docs/TAREFA_V3_UX_TELA_PET.md, secao 25; 2026-11-08): so vista. Confere os numeros que o
    Matheus pediu ("muito saturada [...] mais opaca"; "mais pixelada"), sem DOM */
 import { describe, expect, test } from "vitest";
-import { CEU_SEM_PINTURA, DIGITAL, NUVENS_PINTADAS } from "../src/telas/pet/ilha/constantes.ts";
+import { CEU_SEM_PINTURA, DIGITAL, LONGE, NUVENS_PINTADAS } from "../src/telas/pet/ilha/constantes.ts";
+import { DESENHOS_DE_ANEL, aneisDoPortal } from "../src/telas/pet/ilha/digitalConta.ts";
 
 const rgb = (h: string) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
 const saturacao = (h: string) => { const c = rgb(h), mx = Math.max(...c), mn = Math.min(...c); return mx === 0 ? 0 : (mx - mn) / mx; };
@@ -23,13 +24,36 @@ describe("o ceu sem pintura", () => {
   });
 });
 
-describe("a grade digital mais discreta", () => {
-  test("visivel no ceu todo, mais fraca que a de antes (0,5) e mais fraca no alto", () => {
-    expect(DIGITAL.grade.alfa).toBeGreaterThan(0.2);
-    expect(DIGITAL.grade.alfa).toBeLessThan(0.5);
-    expect(saturacao(DIGITAL.grade.cor)).toBeLessThan(saturacao("#b8faff"));
-    expect(DIGITAL.grade.topo).toBeGreaterThan(0);
-    expect(DIGITAL.grade.topo).toBeLessThan(1);
+describe("o portal no ceu, no lugar da grade pintada", () => {
+  const P = DIGITAL.portal, aneis = aneisDoPortal();
+  test("os aneis crescem de dentro para fora, cada um gira para um lado e o de dentro e o mais rapido", () => {
+    expect(aneis.length).toBe(P.aneis);
+    expect(aneis[0].raio).toBe(P.raio[0]);
+    expect(aneis[aneis.length - 1].raio).toBe(P.raio[1]);
+    for (let k = 1; k < aneis.length; k++) {
+      expect(aneis[k].raio).toBeGreaterThan(aneis[k - 1].raio);
+      expect(Math.sign(aneis[k].volta)).toBe(-Math.sign(aneis[k - 1].volta));
+      expect(Math.abs(aneis[k].volta)).toBeGreaterThan(Math.abs(aneis[k - 1].volta));
+    }
+  });
+  test("o de fora e a linha cheia (o arco grande), os outros alternam o desenho, e a conta e deterministica", () => {
+    expect(aneis[aneis.length - 1].desenho).toBe("linha");
+    for (const a of aneis) { expect(DESENHOS_DE_ANEL).toContain(a.desenho); expect(a.partes % 8).toBe(0); expect(a.fase >= 0 && a.fase < Math.PI * 2).toBe(true); }
+    expect(new Set(aneis.slice(0, -1).map(a => a.desenho)).size).toBeGreaterThanOrEqual(3);
+    expect(aneisDoPortal()).toEqual(aneis);
+  });
+  test("cabe na camera: o portal e os arcos ficam aquem do plano de longe, e o portal fica alem das nuvens", () => {
+    expect(P.longe).toBeGreaterThan(NUVENS_PINTADAS.raio[1]);
+    expect(P.longe + P.raio[1]).toBeLessThan(LONGE - 40);
+    expect(P.arcos.raio + 3 * P.arcos.inclina.length).toBeLessThan(LONGE - 40);
+    expect(P.altura + P.raio[1]).toBeGreaterThan(P.raio[1]);
+  });
+  test("mais forte de noite que de dia, sem estourar com o pulso", () => {
+    expect(P.opacidade[1]).toBeGreaterThan(P.opacidade[0]);
+    expect(P.opacidade[1] * (1 + P.pulso[0])).toBeLessThanOrEqual(1);
+    /* fraco, como coisa longe (o primeiro desenho, com 0,62 de dia, ficou claro demais), mas sem sumir */
+    expect(P.opacidade[0]).toBeLessThan(0.4);
+    expect(P.opacidade[0] * (1 - P.pulso[0])).toBeGreaterThan(0.15);
   });
 });
 

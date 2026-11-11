@@ -1,6 +1,6 @@
 /* MITOLOGIA, E0 (docs/TAREFA_V3_MITOLOGIA.md): o balao do oraculo Jijimon. O save (e2e/save_oraculo.json, gerado por
    e2e/gerar_save_oraculo.mjs) e um Rookie com duas hybris (derrotas para o Gazimon muito acima dele, em dois dias). Com a chave `mitologia`
-   ligada e o oraculo sem ter contado nada a este pet, ele conta o primeiro pedaco da lenda, depois o segundo, e some. Desligada, nada
+   ligada e o oraculo sem ter contado nada a este pet, ele conta o primeiro pedaco da lenda, depois o segundo, e some. Sem nada gravado, a chave comeca ligada (2026-11-11). Desligada, nada
    aparece; um pet que o oraculo ainda nao conhecia comeca calado (as lutas de antes de ligar a chave nao falam). So le a tela. */
 import { expect, test, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
@@ -52,8 +52,16 @@ for (const largura of [390, 1280]) {
   });
 }
 
-test("com a chave desligada o oráculo não fala", async ({ page }) => {
+test("sem nada gravado, a chave começa ligada e o oráculo fala", async ({ page }) => {
   await semear(page, null, { [String(SAVE.semente)]: 0 });
+  const erros = errosDa(page);
+  await page.goto(APP + "#/pet");
+  await expect(page.getByTestId("oraculo-balao")).toContainText(LENDA_DO_MACACO[0]);
+  expect(erros).toEqual([]);
+});
+
+test("com a chave desligada o oráculo não fala", async ({ page }) => {
+  await semear(page, "0", { [String(SAVE.semente)]: 0 });
   const erros = errosDa(page);
   await page.goto(APP + "#/pet");
   await expect(page.locator(".app")).toBeVisible();
