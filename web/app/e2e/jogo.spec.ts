@@ -135,7 +135,8 @@ for (const [versao, save] of Object.entries(SAVES)) {
     await page.waitForTimeout(300);
     await page.getByRole("button", { name: "Verificar replay" }).click();
     await expect(page.getByText(/^Replay idêntico:/)).toBeVisible();
-    expect(JSON.parse(await page.evaluate(() => (window as any).__digilab.registro())).versao).toBe(VERSAO_PET);
+    /* o save semeado e v21; ao abrir ele passa para a ilha com agua (o "mi"; ILHA_AGUA, IA4) e segue v21 */
+    expect(JSON.parse(await page.evaluate(() => (window as any).__digilab.registro())).versao).toBe(21);
     expect(erros, "erros no console do app").toEqual([]);
   });
 }
@@ -359,7 +360,7 @@ test("luta da POC: a primeira abertura descarta os pets de antes, avisa, oferece
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), g: localStorage.getItem(c + "-guardados"), aviso: localStorage.getItem(c + "-aviso-poc"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!), marca: localStorage.getItem(c + "-descarte"), antigos: JSON.parse(localStorage.getItem(c + "-descartados")!) }), CHAVE);
-  expect(r.save.versao).toBe(VERSAO_PET);            /* o ovo novo nasce na versao atual (a v21, LP4) */
+  expect(r.save.versao).toBe(VERSAO_PET);            /* o ovo novo nasce na versao atual (a v22: a v21 que nasce na ilha com agua) */
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();
   expect(r.marca).toBe("8");

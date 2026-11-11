@@ -23,7 +23,7 @@ export function Habitat({ escurecer, irLugar }: { escurecer: boolean; irLugar: (
   return (
     <div className="habitat">
       <section ref={cena} className={"pet-cena habitat-cena" + (m.morte ? " pet-cena--morto" : "")} aria-label="O pet no quarto">
-        <CenaPet noite={eNoite(m.e.tick % TPD)} mundo={!!m.mundo} />
+        <CenaPet noite={eNoite(m.e.tick % TPD)} mundo={!!m.mundo} ilha={m.mundo?.cm.layout.nome ?? ""} />
         {nascendo > 0 && <Deco nome="Digivice_Circle_01" className="ovo-anel gira" />}
         <PalcoPet />
         {/* a bola do mundo se pega na cena e se solta no chao (o evento "db") */}

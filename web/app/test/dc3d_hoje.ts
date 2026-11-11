@@ -24,7 +24,7 @@ export function nascerHoje(v: VarianteHoje, semente: number): Motor {
     m.ligarPonteLuta(true);
     return m;
   }
-  const m = new Motor(semente);
+  const m = new Motor(semente, 21);
   m.ligarProduto(PRODUTO);
   m.trocarCerebro(v === "v21_a" ? "a" : "modular");
   m.ligarPonteLuta(true);
