@@ -47,7 +47,8 @@ def test_a_troca_do_alcance_so_muda_o_parametro():
 
 def test_o_gabarito_do_ts_esta_em_dia_e_as_vidas_diferem_das_de_hoje():
     dados = G.alcance()
-    assert dados == (G.PASTA / G.ARQUIVO_ALCANCE).read_bytes()
+    # o conteudo, nao os bytes do .gz: outro zlib (o Python 3.12 do CI) comprime o mesmo texto em bytes diferentes
+    assert gzip.decompress(dados) == gzip.decompress((G.PASTA / G.ARQUIVO_ALCANCE).read_bytes())
     g = json.loads(gzip.decompress(dados))
     n = len(G.VIDAS_ALCANCE)
     assert [(v["dono"], v["lugar"], v["semente"]) for v in g["vidas"][:n]] == [v[:3] for v in G.VIDAS_ALCANCE]
