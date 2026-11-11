@@ -667,3 +667,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — HABITAT_REACOES, HR2 e HR3: o som do cuidado, a voz do pet e o bipe do chamado (Gerente da V3, Claude Code, Opus 5.5, branch `v3-habitat-hr2`)](registro/2026-11.md)
 - [2026-11-11 — MUNDO_ENFEITES, a prancha da TV de tubo em cartoon (Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-objeto-tv`)](registro/2026-11.md)
 - [2026-11-11 — MMO0: a medida Chrome × Node (Gerente da frente MMO, Claude Code, Opus 5.5, branch `v3-mmo0`)](registro/2026-11.md)
+- [2026-11-11 — MMO1: a conta dos pontos (Gerente da frente MMO, Claude Code, Opus 5.5, branch `v3-mmo1`)](registro/2026-11.md)
