@@ -1,20 +1,12 @@
 DigiLab: o carro abandonado da ilha (carro.gltf, carro.bin, carro_cor.png)
 
-Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus, em 2026-11-07 (o retrabalho dos
-objetos; o carro de 2026-11-06, a caminhonete, saiu).
-Pelos termos de uso da Meshy (atualizados em 2026-09-19, secao 3.2), a saida de um plano pago e do cliente.
-Os termos proibem tirar a marca de IA (secao 2.4): a marca fica no asset.extras do carro.gltf e neste arquivo.
+Procedencia: feito a mao por script, sem IA, em 2026-11-09, no repositorio do DigiLab (licenca do projeto).
+O modelo e a textura saem de docs/objetos3d/carro/mao/carro_mao.py: a carroceria por secoes, as pecas (rodas, para-choques, farois,
+molduras, retrovisores, musgo, capim e flores) e a pintura de cada uma estao no codigo; o mesmo script gera sempre os mesmos arquivos.
+Nada vem de modelo, textura ou imagem de terceiros. O carro anterior, gerado pela Meshy, saiu.
 
-Como foi feito (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 12, e docs/objetos3d/carro/ no repositorio):
-- esboco: Meshy Image to Image (nano-banana-2), so com prompt de estilo em palavras; o esboco 1 (hatch retro azul) escolhido para o
-  retrabalho (docs/objetos3d/REFERENCIAS.md);
-- vistas: Meshy Image to Image com multivista, a partir do esboco;
-- malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
-- acabamento no Blender 4.5 LTS e em Python, por script: a malha girada com a frente em +z, os vertices repetidos soldados, as normais
-  suavizadas; a textura pintada da Meshy redesenhada em cartoon limpo por regiao (2026-11-08, rodada 3: a tinta, a ferrugem, o musgo,
-  o vidro e os farois em cores chapadas de uma paleta fixa, a oclusao assada da propria malha e flores rosa no teto), reduzida a 512 px
-  em paleta de 256 cores.
-As tarefas da Meshy (esboco, vistas, malha) estao no asset.extras do carro.gltf.
+Referencia de desenho: o esboco 1 do retrabalho dos objetos (docs/objetos3d/carro/esbocos/esboco_1_hatch_retro.png), gerado pela Meshy
+(meshy.ai, plano Pro, conta do Matheus) como imagem de conceito; ele so guiou a forma e as cores, e nao entra nos arquivos.
+O carro refeito a mao foi pedido pelo Matheus em 2026-11-09 (docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 15).
 
-Uso: no jogo DigiLab, publicado. Credito: "Carro abandonado gerado com a Meshy (meshy.ai)".
-Aprovacao: o retrabalho foi pedido pelo Matheus em 2026-11-07; a aprovacao da captura na ilha fica no PR do retrabalho do carro.
+Uso: no jogo DigiLab, publicado.
