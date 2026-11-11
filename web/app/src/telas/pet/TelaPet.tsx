@@ -31,6 +31,7 @@ import {
   detalheFalaLivre, gatilhoFalaLivre, iconeVerif, tituloFalaLivre, useFalaLivre,
 } from "../../falaLivre.ts";
 import { AMPULHETA } from "../../grades.ts";
+import { ICONE_FATOR, partesFala, rotuloAcaoFala } from "../../falaMarcas.ts";
 import { ROTULO_DONO, agir } from "../../acoes.ts";
 import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
@@ -53,6 +54,7 @@ import { nivelDe } from "../../nivel.ts";
 import { ScanDigiBrain } from "../../componentes/ScanDigiBrain.tsx";
 import { ScanDigiBrainLab } from "../../componentes/ScanDigiBrainLab.tsx";
 import { duracao, previsaoEvo } from "../crescer/TelaEvolucao.tsx";
+import { AtosNaIlha, linhasDosAtos } from "./AtosDoIrmao.tsx";
 
 export const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
 export const diaDe = (t: number): number => Math.floor((t - TICK_INICIAL) / TPD) + 1;
@@ -67,29 +69,23 @@ export function Retrato({ m, ovo, semArrastar = false }: { m: Motor; ovo: boolea
 }
 /* ------------------------------------------------ fala: balao por estagio (guia, secao 9), causa e detalhe */
 const EMOTE_KAOMOJI: Record<string, string> = { "(^_^)": "emoji_feliz", "(*^_^*)": "emoji_coracao", "(o.o)?": "emoji_surpreso" };
-const EMOTE_FATOR: Record<string, string> = { fome: "emoji_carne", necessidade_fome: "emoji_carne", elogio: "emoji_joinha", elogios: "emoji_joinha", carinho: "emoji_coracao" };
-const FATOR_DEMORA = new Set(["demora", "latencia_fome", "latencia_higiene", "tempo_sem_cuidado"]);
 const CAUSA_MEMORIA: Record<string, string> = { demora: "demora", latencia_fome: "demora", latencia_higiene: "demora", bronca: "bronca", repreensoes: "bronca", elogio: "elogio", elogios: "elogio", carinho: "carinho" };
 const EMOTE_CAUSA: Record<string, string> = { elogio: "emoji_joinha", carinho: "emoji_coracao" };
 const CORES_AMPULHETA = { k: "#173A8A", w: "#FFFFFF", y: "#F0B429" };
 
-/** o texto vem da tabela de expressao do motor; a tela so troca marcas por emotes (In-Training: emote; Rookie:
-    icones da causa; Champion em diante: frase) */
+/** o texto vem da tabela de expressao do motor; a tela so troca marcas por emotes (In-Training: emote; Rookie: a acao numa
+    etiqueta e a causa no icone do fator, ou numa etiqueta sem o atlas; Champion em diante: frase). Nunca as marcas cruas */
+function IconeFator({ nome, alt }: { nome: string; alt: string }) {
+  return nome === "tempo" ? <Grade grade={AMPULHETA} escala={3} cores={CORES_AMPULHETA} alt={alt} />
+    : <span className="fala-ic"><Peca nome={nome} escala={2} alt={alt} /></span>;
+}
 function TextoFala({ txt, est, atlasOk }: { txt: string; est: string; atlasOk: boolean }) {
   if (est === "bebe" && atlasOk && EMOTE_KAOMOJI[txt]) return <Peca nome={EMOTE_KAOMOJI[txt]} escala={2} alt={txt} />;
-  if (est !== "crianca" || !atlasOk) return <>{txt}</>;
-  const partes: ReactNode[] = [];
-  let ult = 0, i = 0;
-  for (const m of txt.matchAll(/\[:(.+?):\]/g)) {
-    partes.push(txt.slice(ult, m.index));
-    const marc = m[1], f = Object.keys(FATORES_TXT).find(k => FATORES_TXT[k].marcador === marc);
-    partes.push(f && EMOTE_FATOR[f] ? <Peca key={i++} nome={EMOTE_FATOR[f]} escala={2} alt={marc} />
-      : f && FATOR_DEMORA.has(f) ? <Grade key={i++} grade={AMPULHETA} escala={3} cores={CORES_AMPULHETA} alt={marc} />
-      : <span key={i++} className="fala-marca">{marc}</span>);
-    ult = (m.index ?? 0) + m[0].length;
-  }
-  partes.push(txt.slice(ult));
-  return <>{partes}</>;
+  if (est !== "crianca") return <>{txt}</>;
+  return <>{partesFala(txt).map((p, i) => p.tipo === "texto" ? p.txt
+    : p.tipo === "acao" ? <span key={i} className="fala-acao">{p.txt}</span>
+    : atlasOk && p.fator && ICONE_FATOR[p.fator] ? <IconeFator key={i} nome={ICONE_FATOR[p.fator]} alt={p.txt} />
+    : <span key={i} className="fala-marca">{p.txt}</span>)}</>;
 }
 /** o chip de causa do balao e do "Por que ele disse isso" (so com MotivoVida): fator de memoria, malha ciano com o evento; o treino
     com pausa, "vem do corpo"; outro fator, o marcador neutro; sem fator ou exploracao, "? sem motivo registrado" (LinhaAgora.tsx) */
@@ -127,18 +123,14 @@ function useFala(): VistaFala {
   return v;
 }
 /** a causa da ultima decisao em icones, no "Por que ele disse isso" (fora da cena: sobre ela so o chamado, o balao e o DigiBrain); sem causa, "?" */
-const ICONE_CAUSA: Record<string, "carne" | "tempo" | "joinha" | "coracao" | "exclam"> = {
-  fome: "carne", necessidade_fome: "carne", latencia_fome: "tempo", latencia_higiene: "tempo", tempo_sem_cuidado: "tempo", demora: "tempo",
-  elogio: "joinha", elogios: "joinha", carinho: "coracao", bronca: "exclam", repreensoes: "exclam",
-};
 function CausaIcones() {
   const { motor: m } = useJogo(), mot = m.motivo;
   if (!mot || mot.origem !== "vida") return null;
-  const ic = mot.exploracao ? [] : [...new Set(mot.fatores.map(f => ICONE_CAUSA[f]).filter(Boolean))].slice(0, 3);
+  const ic = mot.exploracao ? [] : [...new Set(mot.fatores.map(f => ICONE_FATOR[f]).filter(Boolean))].slice(0, 3);
   const txt = mot.exploracao || !mot.fatores.length ? "sem causa registrada" : mot.fatores.map(f => FATORES_TXT[f]?.marcador ?? f).join(" + ");
   return (
     <span className="causa-icones" role="img" aria-label={`causa: ${txt}`} title={txt}>
-      {ic.length ? ic.flatMap((x, i) => [i > 0 ? <b key={"m" + i}>+</b> : null, <span key={"p" + i} className="causa-ic">{x === "tempo" ? <Peca nome="icone_tempo" /> : <Peca nome={"emoji_" + x} escala={2} />}</span>])
+      {ic.length ? ic.flatMap((x, i) => [i > 0 ? <b key={"m" + i}>+</b> : null, <span key={"p" + i} className="causa-ic">{x === "tempo" ? <Peca nome="icone_tempo" /> : <Peca nome={x} escala={2} />}</span>])
         : <b className="balao-q">?</b>}
     </span>
   );
@@ -165,7 +157,7 @@ function DetalheFala({ v, semTitulo = false }: { v: VistaFala; semTitulo?: boole
     <section className="det-sec det-fala" aria-labelledby="det-fala-tit">
       {!semTitulo && <h3 id="det-fala-tit">Por que ele disse isso</h3>}
       <div className="fala-det">
-        <span className="pet-status dl-lcd">{NOME_PET[m.acao]}{freado ? " · tempo em 1x até atender" : ""}</span><CausaIcones />{v.causa}
+        <span className="pet-status dl-lcd">{rotuloAcaoFala(m)}{freado ? " · tempo em 1x até atender" : ""}</span><CausaIcones />{v.causa}
         <span className="dl-apoio">{v.texto && <>“{v.texto}” · </>}{v.detalhe}</span></div>
       <span className="fala-status" title={`${r.texto} · ${r.titulo}`}><span className="fala-ponto" data-estado={fl.modo === "template" ? "off" : r.estado} aria-hidden="true" />{MODO_CURTO[fl.modo]}</span>
     </section>
@@ -535,11 +527,19 @@ type LinhaHist = Motor["historico"][number];
 const ultimasDoRegistro = (m: Motor, n: number): LinhaHist[] => m.historico.filter(h => h.quem === "dono" || h.quem === "pet" || h.quem === "recusa").slice(-n).reverse();
 const textoHist = (h: LinhaHist): string => h.quem === "pet" ? NOME_PET[h.a as keyof typeof NOME_PET] ?? h.a : h.a;
 function UltimasAcoes({ irRegistro, n = 8 }: { irRegistro: () => void; n?: number }) {
-  const { motor: m } = useJogo(), itens = ultimasDoRegistro(m, n);
+  const { motor: m } = useJogo();
+  /* os dois pets (CO5): os atos com o irmao entram na mesma lista, pela hora, sem numero (AtosDoIrmao.tsx) */
+  const itens: ({ tipo: "hist"; t: number; h: LinhaHist } | { tipo: "ato"; t: number; texto: string; pro: boolean })[] = [
+    ...ultimasDoRegistro(m, n).map(h => ({ tipo: "hist" as const, t: h.t, h })), ...linhasDosAtos(n).map(a => ({ tipo: "ato" as const, ...a }))]
+    .sort((a, b) => b.t - a.t).slice(0, n);
   return (
     <>
-      {itens.length ? <ol className="mod-registro">{itens.map((h, i) => {
-        const I = ICONE_QUEM[h.quem as keyof typeof ICONE_QUEM];
+      {itens.length ? <ol className="mod-registro">{itens.map((x, i) => {
+        if (x.tipo === "ato") {
+          const I = x.pro ? Heart : Users;
+          return <li key={i} data-quem="irmao"><time>{hhmm(x.t)}</time><span className="mod-registro-ic"><I size={18} aria-hidden="true" /></span><span>{x.texto}</span></li>;
+        }
+        const h = x.h, I = ICONE_QUEM[h.quem as keyof typeof ICONE_QUEM];
         return <li key={i} data-quem={h.quem}><time>{hhmm(h.t)}</time><span className="mod-registro-ic"><I size={18} aria-hidden="true" /></span>
           <span>{h.quem === "dono" ? "você: " : h.quem === "recusa" ? "recusou: " : ""}{textoHist(h)}</span></li>;
       })}</ol> : <p className="mod-vazio">nada no registro ainda</p>}
@@ -787,6 +787,7 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
       </div>
       {topo && largo && createPortal(<LinhaAgora aberto={atual === "digibrain"} sobPainel={atual !== null} aoAbrir={detalhesPet ? () => abrir("digibrain") : undefined} />, topo, "agora")}
       {!largo && <AgoraIcone aberto={atual === "digibrain"} sobPainel={atual !== null} aoAbrir={detalhesPet ? () => abrir("digibrain") : undefined} />}
+      <AtosNaIlha />
       <Prioridade abrirDetalhes={largo || detalhesPet ? abrirEstado : undefined} movel={!largo} />
       {/* com "Exibir detalhes do pet" desligado a pilha some; com o prototipo do gosto visual fica so a linha "TV", o caminho do teclado */}
       {largo ? (!atual && (detalhesPet || temTv) && (

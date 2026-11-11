@@ -25,7 +25,8 @@ export function useHeranca(): { pai2: number | null } | null {
 
 /** geracao de um pet: 1 sem origem; filho = 1 + a maior geracao dos pais */
 export const geracao = (m: Motor): number => m.origem ? 1 + Math.max(...m.origem.pais.map(p => p.ger ?? 1)) : 1;
-export const podeSerPai = (m: Motor): boolean => (m.estagioAtual === "adulto" || m.estagioAtual === "mega") && !m.morte;
+/** os dois pets (CO4d): o pet do grupo ainda nao e pai (a heranca do par fica para uma etapa propria; D-CO4d-5) */
+export const podeSerPai = (m: Motor): boolean => (m.estagioAtual === "adulto" || m.estagioAtual === "mega") && !m.morte && !m.noGrupo;
 
 /** os pets em espera, com o motivo quando nao podem ser pai */
 export function candidatos(): { i: number; m: Motor; ok: boolean }[] {

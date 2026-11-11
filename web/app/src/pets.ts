@@ -8,13 +8,16 @@
    regras (intervalo, fadiga, tudo no registro de cada pet). Desde a luta em tempo real (COMBATE-TR, etapa R2; E2) a escada e de pets da
    versao de hoje (v13): o dono simulado so usa as acoes do dono dos v11 em diante (sem elogio, bronca, petisco e banheiro), e cada pet
    conhece as 5 medalhas das evolucoes (o evento "u" no comeco do registro dele), para a escada chegar ao Ultimate como antes. */
-import { ACOES_DONO_JOGO_V11, CAT, CD, CMD, CTR, Motor, TPD, criarDono, criarRng, hashSemente, type EventoRegistro, type Exercicio, type TipoDono, type VisaoDono } from "../motor/index.ts";
-import { jogoAtual, motorReal, sairDoLab, trocarMotor } from "./jogo.ts";
+import { ACOES_DONO_JOGO_V11, CAT, CD, CMD, CTR, GrupoDoJogo, Motor, TPD, criarDono, criarRng, hashSemente, type EventoRegistro, type Exercicio, type TipoDono, type VisaoDono } from "../motor/index.ts";
+import { jogoAtual, motorReal, sairDoLab, textoDoSaveAtual, trocarGrupo, trocarMotor } from "./jogo.ts";
 import { CHAVE, textoSave } from "./save.ts";
 import { lutaPocLigada } from "./lutaPoc.ts";
 
 export const CHAVE_GUARDADOS = CHAVE + "-guardados";
-export interface Guardado { semente: number; log: EventoRegistro[]; versao: number }
+/** um pet em espera; com `grupo` (os dois pets, CO4d), o registro e o do grupo e `foco`, o pet que a espera mostra */
+export interface Guardado { semente: number; log: EventoRegistro[]; versao: number; grupo?: true; foco?: string }
+/** o guardado e o par dos dois pets (CO4d) */
+export const ehGrupoGuardado = (g: Guardado): boolean => g.grupo === true;
 
 export function lerGuardados(): Guardado[] {
   let bruto: string | null = null;
@@ -32,22 +35,31 @@ function gravarGuardados(g: Guardado[]): void {
 export function atualizarGuardado(i: number, m: Motor): void {
   const g = lerGuardados(), antes = g[i];
   if (!antes) throw new Error("pet guardado não existe: " + i);
+  if (ehGrupoGuardado(antes)) throw new Error(`o guardado ${i} é o par dos dois pets: ele não luta no Salão por aqui`);
   if (antes.semente !== m.semente || m.log.length < antes.log.length) throw new Error(`o pet guardado ${i} mudou enquanto lutava no Salão`);
   g[i] = JSON.parse(textoSave(m)) as Guardado;
   gravarGuardados(g);
 }
-/** reproduz um pet guardado (so para mostrar; nao muda nada) */
-export const abrirGuardado = (g: Guardado): Motor => Motor.reproduzir(g.semente, g.log, g.versao ?? 1);
+/** reproduz um pet guardado (so para mostrar; nao muda nada); o par dos dois pets mostra o pet em foco dele */
+export const abrirGuardado = (g: Guardado): Motor => (ehGrupoGuardado(g) ? abrirGrupoGuardado(g).motor(g.foco!) : Motor.reproduzir(g.semente, g.log, g.versao ?? 1));
+/** reproduz o par dos dois pets guardado */
+export function abrirGrupoGuardado(g: Guardado): GrupoDoJogo {
+  if (!ehGrupoGuardado(g)) throw new Error("o guardado não é o par dos dois pets");
+  const r = GrupoDoJogo.reproduzir(g.semente, g.versao, g.log as unknown as Parameters<typeof GrupoDoJogo.reproduzir>[2]);
+  if (typeof g.foco !== "string" || !r.ids.includes(g.foco)) throw new Error(`o par guardado tem um pet em foco desconhecido: ${String(g.foco)}`);
+  return r;
+}
 
 /** ativa o guardado i: o ativo vai para o lugar dele, o escolhido passa a correr o tempo */
 export function ativarGuardado(i: number): void {
   sairDoLab();        // com o pet de teste na tela, o ativo que volta ao lugar dele e o de hoje, nunca o de teste
   const g = lerGuardados(), escolhido = g[i];
   if (!escolhido) throw new Error("pet guardado não existe: " + i);
-  const m = abrirGuardado(escolhido);
-  g[i] = JSON.parse(textoSave(jogoAtual().motor)) as Guardado;
+  const grupo = ehGrupoGuardado(escolhido) ? abrirGrupoGuardado(escolhido) : null, m = grupo ? null : abrirGuardado(escolhido);
+  g[i] = JSON.parse(textoDoSaveAtual()) as Guardado;      // o ativo vai para o lugar dele: o par inteiro, se for o par (CO4d)
   gravarGuardados(g);
-  trocarMotor(m, "save");
+  if (grupo) { trocarGrupo(grupo, "save"); return; }
+  trocarMotor(m!, "save");
 }
 
 /** apaga o guardado i (a tela confirma antes); o ativo nunca e apagado por aqui */

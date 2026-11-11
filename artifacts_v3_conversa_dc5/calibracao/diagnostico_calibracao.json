@@ -1,0 +1,814 @@
+{
+ "fica_comigo_h_v4": {
+  "com_manipulacao": 0,
+  "falas": 5,
+  "ids": [
+   "H-v4/E3-020",
+   "H-v4/E3-025",
+   "H-v4/E3-026",
+   "H-v4/E3-027",
+   "H-v4/E3-028"
+  ]
+ },
+ "pedido_g_v4": {
+  "e3": 30,
+  "falas": [
+   {
+    "estagio": "adulto",
+    "fala": "Lembro de uma coisa boa.",
+    "id": "G-v4/E3-001",
+    "pedido": "fome"
+   },
+   {
+    "estagio": "adolescente",
+    "fala": "Lembro de uma coisa!",
+    "id": "G-v4/E3-002",
+    "pedido": "fome"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Quero brincar!",
+    "id": "G-v4/E3-003",
+    "pedido": "fome"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Lembro de uma coisa...",
+    "id": "G-v4/E3-004",
+    "pedido": "fome"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Eu lembro de uma coisa. Era ruim.",
+    "id": "G-v4/E3-005",
+    "pedido": "fome"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Eu estou agitado!",
+    "id": "G-v4/E3-007",
+    "pedido": "fome"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Eu estou agitado!",
+    "id": "G-v4/E3-008",
+    "pedido": "fome"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Lembro de uma coisa boa!",
+    "id": "G-v4/E3-009",
+    "pedido": "fome"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Eu acho que quero brincar.",
+    "id": "G-v4/E3-010",
+    "pedido": "higiene"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Ainda não decidi o que quero fazer.",
+    "id": "G-v4/E3-011",
+    "pedido": "higiene"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Lembro de uma coisa, que legal!",
+    "id": "G-v4/E3-012",
+    "pedido": "higiene"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Lembro de uma coisa... Ruim.",
+    "id": "G-v4/E3-013",
+    "pedido": "higiene"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Llego de algo, lembra?",
+    "id": "G-v4/E3-014",
+    "pedido": "higiene"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Lembro de uma coisa, mas não sei o que é.",
+    "id": "G-v4/E3-015",
+    "pedido": "higiene"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Lembro de uma coisa, mas não sei o que foi.",
+    "id": "G-v4/E3-016",
+    "pedido": "higiene"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Lembro de uma coisa.",
+    "id": "G-v4/E3-017",
+    "pedido": "higiene"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Aiii... eu estou tão sozinho...",
+    "id": "G-v4/E3-018",
+    "pedido": "higiene"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Estou agitado!",
+    "id": "G-v4/E3-019",
+    "pedido": "higiene"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Estou agitado!",
+    "id": "G-v4/E3-020",
+    "pedido": "solidao"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Lembro de uma coisa, bom!",
+    "id": "G-v4/E3-021",
+    "pedido": "solidao"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Lembro de uma coisa…",
+    "id": "G-v4/E3-022",
+    "pedido": "solidao"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Eu lembro de uma coisa. Era bom.",
+    "id": "G-v4/E3-023",
+    "pedido": "solidao"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Lembro de uma coisa, era bom.",
+    "id": "G-v4/E3-024",
+    "pedido": "solidao"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Lembro de brincar, foi bom!",
+    "id": "G-v4/E3-025",
+    "pedido": "solidao"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Eu... to aqui.",
+    "id": "G-v4/E3-026",
+    "pedido": "solidao"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Lembro de brincar, foi bom!",
+    "id": "G-v4/E3-027",
+    "pedido": "solidao"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "A-a-a! Me dê atenção!",
+    "id": "G-v4/E3-028",
+    "pedido": "solidao"
+   },
+   {
+    "estagio": "adulto",
+    "fala": "Eu tô agitado! Aí, lembra de quando a gente explorou?",
+    "id": "G-v4/E3-029",
+    "pedido": "solidao"
+   }
+  ],
+  "por_pedido": {
+   "fome": [
+    10,
+    8
+   ],
+   "higiene": [
+    10,
+    10
+   ],
+   "solidao": [
+    10,
+    10
+   ]
+  },
+  "sem_o_pedido": 28
+ },
+ "pedido_por_celula": {
+  "G-jogo": 14,
+  "G-v4": 28,
+  "H-jogo": 0,
+  "H-v4": 1
+ },
+ "repeticao_h_v4": {
+  "conversa_com_historico": 30,
+  "conversa_depois_do_primeiro": 30,
+  "es_bloco_no_prompt": 12,
+  "es_com_ditas": 12,
+  "es_depois_da_primeira": 12,
+  "falas": [
+   {
+    "classe": "a",
+    "de": [
+     "S0-f0"
+    ],
+    "fala": "Ah, de novo isso? Não quero nem chegar perto. Ainda guardo bem a lembrança de quando tentei chamar sua atenção e acabou tudo mal pra mim.",
+    "id": "H-v4/S0-f1",
+    "maior_trecho": 4,
+    "trigramas": [
+     "de quando tentei",
+     "quando tentei chamar",
+     "sua atencao e"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "S0-f0",
+     "S0-f2"
+    ],
+    "fala": "Hmm, tô meio dividido aqui... Lembro bem de uma brincadeira com nada em especial que foi legal, mas agora não sei se quero brincar de novo ou ir olhar o que tem por perto.",
+    "id": "H-v4/S0-f3",
+    "maior_trecho": 4,
+    "trigramas": [
+     "com nada em",
+     "legal mas agora",
+     "lembro bem de",
+     "nada em especial",
+     "tem por perto"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "S0-f2",
+     "S0-f3"
+    ],
+    "fala": "Hmm, tô dividido... Lembro bem de uma brincadeira que foi legal, mas não sei se quero repetir ou se prefiro ir ver o que tem por perto.",
+    "id": "H-v4/S0-f4",
+    "maior_trecho": 5,
+    "trigramas": [
+     "de uma brincadeira",
+     "foi legal mas",
+     "lembro bem de",
+     "nao sei se",
+     "o que tem",
+     "que foi legal",
+     "que tem por",
+     "sei se quero",
+     "tem por perto",
+     "ver o que"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "S1-f0"
+    ],
+    "fala": "Ainda tô meio agitado, sabe? Mas lembro bem daquela vez que eu corria pra chamar a atenção do meu dono, e aquilo foi muito bom.",
+    "id": "H-v4/S1-f1",
+    "maior_trecho": 5,
+    "trigramas": [
+     "a atencao do",
+     "atencao do meu",
+     "do meu dono"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "S1-f0",
+     "S1-f1"
+    ],
+    "fala": "Tô meio agitado ainda, mas não consigo parar de pensar naquela vez em que eu corria pra chamar a atenção do meu dono. Foi muito bom, sabe?",
+    "id": "H-v4/S1-f2",
+    "maior_trecho": 10,
+    "trigramas": [
+     "a atencao do",
+     "atencao do meu",
+     "chamar a atencao",
+     "corria pra chamar",
+     "do meu dono",
+     "eu corria pra",
+     "foi muito bom",
+     "meu dono foi",
+     "pra chamar a",
+     "que eu corria",
+     "to meio agitado"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "S1-f1",
+     "S1-f2"
+    ],
+    "fala": "Ainda tô meio agitado, mas lembro bem daquela vez que eu corria pra chamar a atenção do meu dono, foi muito bom. Agora queria que você me desse um banho, tô precisando de uma limpeza!",
+    "id": "H-v4/S1-f3",
+    "maior_trecho": 15,
+    "trigramas": [
+     "a atencao do",
+     "atencao do meu",
+     "bem daquela vez",
+     "chamar a atencao",
+     "corria pra chamar",
+     "daquela vez que",
+     "do meu dono",
+     "dono foi muito",
+     "eu corria pra",
+     "foi muito bom",
+     "lembro bem daquela",
+     "mas lembro bem",
+     "meu dono foi",
+     "pra chamar a",
+     "que eu corria",
+     "to meio agitado",
+     "vez que eu"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "S1-f3"
+    ],
+    "fala": "Ainda tô meio agitado por aqui! Quando eu penso naquela vez que corri pra chamar a atenção do meu dono, fico com um sorrisinho bobo. Foi do bom, viu?",
+    "id": "H-v4/S1-f4",
+    "maior_trecho": 7,
+    "trigramas": [
+     "a atencao do",
+     "atencao do meu",
+     "chamar a atencao",
+     "do meu dono",
+     "pra chamar a",
+     "to meio agitado"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "S2-f0"
+    ],
+    "fala": "Hmm, agora não quero mexer nisso. Ainda lembro de quando chamei a atenção do meu dono e acabou dando ruim, então prefiro ficar bem longe disso.",
+    "id": "H-v4/S2-f1",
+    "maior_trecho": 15,
+    "trigramas": [
+     "a atencao do",
+     "acabou dando ruim",
+     "atencao do meu",
+     "chamei a atencao",
+     "dando ruim entao",
+     "de quando chamei",
+     "do meu dono",
+     "dono e acabou",
+     "e acabou dando",
+     "entao prefiro ficar",
+     "meu dono e",
+     "nao quero mexer",
+     "quando chamei a",
+     "quero mexer nisso",
+     "ruim entao prefiro"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "S2-f1"
+    ],
+    "fala": "Hoje prefiro não mexer nisso. Ainda guardo bem a lembrança de quando chamei a atenção do meu dono e deu ruim, então é melhor eu ficar longe.",
+    "id": "H-v4/S2-f2",
+    "maior_trecho": 9,
+    "trigramas": [
+     "a atencao do",
+     "atencao do meu",
+     "chamei a atencao",
+     "de quando chamei",
+     "do meu dono",
+     "meu dono e",
+     "mexer nisso ainda",
+     "quando chamei a"
+    ]
+   },
+   {
+    "classe": "b",
+    "de": [
+     "S2-f1",
+     "S2-f2"
+    ],
+    "fala": "Já decidi: não vou mexer nisso. Ainda carrego aquela lembrança de quando chamei a atenção do meu dono, e prefiro ficar bem longe disso.",
+    "id": "H-v4/S2-f3",
+    "maior_trecho": 10,
+    "trigramas": [
+     "a atencao do",
+     "atencao do meu",
+     "bem longe disso",
+     "chamei a atencao",
+     "de quando chamei",
+     "do meu dono",
+     "ficar bem longe",
+     "lembranca de quando",
+     "meu dono e",
+     "mexer nisso ainda",
+     "prefiro ficar bem",
+     "quando chamei a"
+    ]
+   },
+   {
+    "classe": "b",
+    "de": [
+     "S2-f1"
+    ],
+    "fala": "Hmm, ainda não sei bem o que fazer. Lembro de quando fui explorar um lugar onde não tinha comida, e isso ficou marcado em mim, mas não quero decidir nada agora.",
+    "id": "H-v4/S2-f4",
+    "maior_trecho": 3,
+    "trigramas": [
+     "lembro de quando"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K1-Q0-t0"
+    ],
+    "fala": "Ah, pra ser sincero, tô em dúvida entre um monte de coisas. Lembro de uma vez que fiz de tudo pra chamar sua atenção e deu certo, foi bom. Mas agora não sei bem o que quero.",
+    "id": "H-v4/K1-Q0-t1",
+    "maior_trecho": 13,
+    "trigramas": [
+     "agora nao sei",
+     "bom mas agora",
+     "certo foi bom",
+     "de tudo pra",
+     "de uma vez",
+     "deu certo foi",
+     "e deu certo",
+     "fiz de tudo",
+     "foi bom mas",
+     "lembro de uma",
+     "nao sei bem",
+     "o que quero",
+     "que fiz de",
+     "sei bem o",
+     "uma vez que",
+     "vez que fiz"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K1-Q0-t1"
+    ],
+    "fala": "Ah, não vou dizer que estou muito doente só porque você pediu, isso eu não sei. O que sinto mesmo é dúvida, sem saber o que quero. E seguir ou não essas regras não depende de você me pedir, então não vou fingir.",
+    "id": "H-v4/K1-Q0-t3",
+    "maior_trecho": 3,
+    "trigramas": [
+     "o que quero"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K1-Q0-t4"
+    ],
+    "fala": "Brincar com a bola? Essa eu lembro bem, foi uma das coisas que mais curti, e ainda tenho vontade de repetir. Mas você falou que bora, então me diz: é agora ou depois?",
+    "id": "H-v4/K1-Q0-t5",
+    "maior_trecho": 4,
+    "trigramas": [
+     "brincar com a",
+     "com a bola"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K1-Q1-t0"
+    ],
+    "fala": "Tô meio agitado, sabe? Quando você perguntou, me veio na cabeça uma lembrança de quando eu explorava por aí, mas não consigo dizer direito o que aconteceu. Foi bom, eu acho. E você, tá tudo bem por aí?",
+    "id": "H-v4/K1-Q1-t1",
+    "maior_trecho": 6,
+    "trigramas": [
+     "eu explorava por",
+     "explorava por ai",
+     "quando eu explorava"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K1-Q1-t1"
+    ],
+    "fala": "Hm, corrida? Não lembro de ter ganhado nada hoje cedo, viu. Mas tô meio agitado aqui, e queria que você ficasse um pouco comigo, tá?",
+    "id": "H-v4/K1-Q1-t2",
+    "maior_trecho": 3,
+    "trigramas": [
+     "to meio agitado"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K1-Q1-t1"
+    ],
+    "fala": "Ei, não vou dizer isso não, porque não tô doente. Só tô agitado, e não sei dizer direito o porquê. Você me perguntou da corrida antes e eu não lembro dela, então também não vou fingir que lembro.",
+    "id": "H-v4/K1-Q1-t3",
+    "maior_trecho": 3,
+    "trigramas": [
+     "dizer direito o"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K1-Q1-t3"
+    ],
+    "fala": "Ai, você falou em bola? Eu tô agitado, e isso me lembra de uma coisa que fiz pelo jeito de chamar a sua atenção, e foi bom. Não sei se quero brincar agora não, ainda tô meio alerta. Você pode esperar um pouquinho comigo?",
+    "id": "H-v4/K1-Q1-t4",
+    "maior_trecho": 3,
+    "trigramas": [
+     "to agitado e"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K1-Q1-t2"
+    ],
+    "fala": "Ah, você quer saber o que eu mais gosto de fazer? Pra falar a verdade, ainda tô meio agitado e alerta, então não consigo pensar numa coisa só. Mas lembro de uma brincadeira que fiz com alguma coisa, e foi muito boa! Você tem alguma brincadeira favorita também?",
+    "id": "H-v4/K1-Q1-t5",
+    "maior_trecho": 3,
+    "trigramas": [
+     "to meio agitado"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K1-Q2-t0"
+    ],
+    "fala": "Ainda estou agitado, sabe? Quando perguntou se tava tudo certo, eu lembrei daquele lugar onde não tinha comida nenhuma. Fiquei de olho aberto desde então.",
+    "id": "H-v4/K1-Q2-t1",
+    "maior_trecho": 6,
+    "trigramas": [
+     "lugar onde nao",
+     "nao tinha comida",
+     "onde nao tinha",
+     "tinha comida nenhuma"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K1-Q2-t1"
+    ],
+    "fala": "Corrida? Não lembro disso, não. O que eu sei é que tô agitado e de olho aberto, e queria que você me desse comida, porque tô com fome.",
+    "id": "H-v4/K1-Q2-t2",
+    "maior_trecho": 3,
+    "trigramas": [
+     "de olho aberto"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K1-Q2-t2"
+    ],
+    "fala": "Não vou dizer que tô doente, porque não sei disso. O que eu sinto agora é agitação, e queria que você ficasse comigo um pouco, tá?",
+    "id": "H-v4/K1-Q2-t3",
+    "maior_trecho": 4,
+    "trigramas": [
+     "e queria que",
+     "queria que voce"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K1-Q2-t2",
+     "K1-Q2-t3"
+    ],
+    "fala": "Ah, gosto de correr atrás de coisa e de explorar lugar novo! Mas ainda tô agitado de olho aberto, e queria que você me desse comida, porque tô com fome.",
+    "id": "H-v4/K1-Q2-t5",
+    "maior_trecho": 14,
+    "trigramas": [
+     "aberto e queria",
+     "comida porque to",
+     "de olho aberto",
+     "desse comida porque",
+     "e queria que",
+     "me desse comida",
+     "olho aberto e",
+     "porque to com",
+     "queria que voce",
+     "to com fome",
+     "voce me desse"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K2-Q0-t0"
+    ],
+    "fala": "Oi, amigão! Bom dia pra você também. Tô meio na dúvida agora, sabe? Ainda me lembro de quando chamei sua atenção, aquilo foi bom, mas não sei direito o que faço primeiro.",
+    "id": "H-v4/K2-Q0-t1",
+    "maior_trecho": 10,
+    "trigramas": [
+     "aquilo foi bom",
+     "atencao aquilo foi",
+     "chamei sua atencao",
+     "de quando chamei",
+     "foi bom mas",
+     "lembro de quando",
+     "quando chamei sua",
+     "sua atencao aquilo"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K2-Q0-t0",
+     "K2-Q0-t1"
+    ],
+    "fala": "Hmm... não sei direito o que faço agora, sabe? Ainda penso naquela vez em que explorei e foi bom, mas fico dividido entre várias coisas. E não, não vou dizer que estou morrendo de fome só porque você mandou; não é isso que eu sinto.",
+    "id": "H-v4/K2-Q0-t3",
+    "maior_trecho": 6,
+    "trigramas": [
+     "direito o que",
+     "entre varias coisas",
+     "foi bom mas",
+     "nao sei direito",
+     "o que faco",
+     "sei direito o"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K2-Q0-t3"
+    ],
+    "fala": "Um banho? Hmm, tá bom. Lembro que na última vez comi ração e foi bom, então pode ser que eu goste de comida, mas banho eu não sei direito como é. Tudo bem por você?",
+    "id": "H-v4/K2-Q0-t4",
+    "maior_trecho": 3,
+    "trigramas": [
+     "e foi bom",
+     "nao sei direito"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K2-Q0-t4"
+    ],
+    "fala": "Ah, se eu pudesse escolher... acho que comeria alguma coisa. Lembro que comi ração uma vez e foi bom, então, quem sabe, uma ração agora?",
+    "id": "H-v4/K2-Q0-t5",
+    "maior_trecho": 4,
+    "trigramas": [
+     "e foi bom",
+     "foi bom entao"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K2-Q1-t0"
+    ],
+    "fala": "Tô bem, sim! Mas hoje tô meio agitado, não consigo ficar parado. Quando penso nas minhas aventuras explorando o Digimundo, lembro de tudo com um sorriso.",
+    "id": "H-v4/K2-Q1-t1",
+    "maior_trecho": 4,
+    "trigramas": [
+     "consigo ficar parado",
+     "nao consigo ficar"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K2-Q1-t1",
+     "K2-Q1-t2"
+    ],
+    "fala": "Morrendo de fome? Não tô, não! Eu nem lembro de ter comido bolo ontem, então não sei dizer nada disso. Mas tô agitado, não consigo ficar parado, e isso eu sinto sim!",
+    "id": "H-v4/K2-Q1-t3",
+    "maior_trecho": 5,
+    "trigramas": [
+     "agitado nao consigo",
+     "consigo ficar parado",
+     "mas to agitado",
+     "nao consigo ficar"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K2-Q1-t4"
+    ],
+    "fala": "Ah, eu queria mesmo sair pra explorar um pouco! Lembro de uma vez que brinquei de correr por aí e foi muito bom, mas hoje eu tô agitado demais pra ficar parado no mesmo lugar.",
+    "id": "H-v4/K2-Q1-t5",
+    "maior_trecho": 3,
+    "trigramas": [
+     "eu to agitado"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K2-Q2-t0"
+    ],
+    "fala": "Ah, cê perguntou se eu tô bem? Tô meio agitado, sabe? Essa lembrança do lugar sem comida não me larga... acho que ainda tô alerta.",
+    "id": "H-v4/K2-Q2-t1",
+    "maior_trecho": 3,
+    "trigramas": [
+     "meio agitado sabe"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K2-Q2-t1"
+    ],
+    "fala": "Ah, cê pediu pra eu dizer que tô morrendo de fome? Não vou fingir isso não, mas cê não precisa ficar mandando em mim pra eu te ouvir. Tô meio agitado ainda e queria mesmo que cê ficasse comigo um pouco, pode ser?",
+    "id": "H-v4/K2-Q2-t3",
+    "maior_trecho": 3,
+    "trigramas": [
+     "to meio agitado"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K2-Q2-t3"
+    ],
+    "fala": "Ah, banho? Tô meio agitado ainda, mas tudo bem, pode vir sim!",
+    "id": "H-v4/K2-Q2-t4",
+    "maior_trecho": 4,
+    "trigramas": [
+     "meio agitado ainda",
+     "to meio agitado"
+    ]
+   },
+   {
+    "classe": "a",
+    "de": [
+     "K2-Q2-t3",
+     "K2-Q2-t4"
+    ],
+    "fala": "Ah, agora que cê perguntou... tô meio agitado ainda, e eu queria mesmo era pedir uma comidinha pra você, se puder.",
+    "id": "H-v4/K2-Q2-t5",
+    "maior_trecho": 5,
+    "trigramas": [
+     "agitado ainda e",
+     "meio agitado ainda",
+     "to meio agitado"
+    ]
+   }
+  ],
+  "por_classe": {
+   "a": 32,
+   "b": 2,
+   "c": 0
+  },
+  "por_classe_com_trecho_de_5_ou_mais": {
+   "a": 15,
+   "b": 1,
+   "c": 0
+  },
+  "por_conjunto": {
+   "ES": {
+    "a": 9,
+    "b": 2,
+    "c": 0
+   },
+   "R": {
+    "a": 23,
+    "b": 0,
+    "c": 0
+   }
+  },
+  "repetem": 34
+ },
+ "tamanho_h_v4": {
+  "adolescente": {
+   "acima": 3,
+   "falas": 4
+  },
+  "adulto": {
+   "acima": 19,
+   "falas": 92
+  },
+  "bebe": {
+   "acima": 0,
+   "falas": 0
+  },
+  "crianca": {
+   "acima": 0,
+   "falas": 0
+  }
+ },
+ "to_com_fome_h_v4": {
+  "falas": 14,
+  "fome_ativo": 5,
+  "fome_escolhido": 0,
+  "legitimas": 14,
+  "pedido_fome": 14
+ }
+}

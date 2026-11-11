@@ -3,7 +3,8 @@
    mostra. A Liga, a Torre, o Salao e a Fabrica continuam na Fronteira com o aviso de antes (a tela deles na luta nova fica para depois). */
 import { useState } from "react";
 import { Swords } from "lucide-react";
-import { CENAS, IDS_CENA, NPC, hashSemente, mapaDoLugar, type IdCena } from "../../../../motor/index.ts";
+import { CENAS, FALA_PIEDMON_ANTES, IDS_CENA, NOME_ORACULO, NPC, ehPiedmon, hashSemente, mapaDoLugar, type IdCena } from "../../../../motor/index.ts";
+import { useMitologia } from "../../../mitologia.ts";
 import { imagemAtlas, useAtlas } from "../../../atlas.ts";
 import { mudarMotor, useJogo } from "../../../jogo.ts";
 import { assistirPoc, fimDoPet, ladoDesenho, lutasDoResultado, nomeDaChave, spriteDaChave, useLutaPoc } from "../../../lutaPocTela.ts";
@@ -20,7 +21,7 @@ export function lutarNoPalco(rival: string, mapa: IdCena | null, contexto: strin
   const res = r as unknown as ResultadoLutaPoc, lutas = lutasDoResultado(res);
   assistirPoc(lutas, contexto, L => {
     const ult = lutas[lutas.length - 1], serie = lutas.length > 1;
-    return fimDoPet(L, ult.A, ult.B, serie ? (res.venceu ? `Venceu as ${lutas.length} lutas seguidas.` : `A série parou na luta ${lutas.length}.`) : "");
+    return { ...fimDoPet(L, ult.A, ult.B, serie ? (res.venceu ? `Venceu as ${lutas.length} lutas seguidas.` : `A série parou na luta ${lutas.length}.`) : ""), doPet: true };
   });
 }
 
@@ -65,7 +66,7 @@ export function TelaArenaPoc() {
 }
 
 export function TelaCampanhaPoc() {
-  const { motor: m } = useJogo(), luta = useLutaPoc(), [erro, setErro] = useState<string | null>(null);
+  const { motor: m } = useJogo(), luta = useLutaPoc(), [erro, setErro] = useState<string | null>(null), mitologia = useMitologia();
   const desafios = Object.keys(m.campanha).filter(k => NPC[k]);
   return (
     <section className="hx-painel poc-lugar" aria-labelledby="poc-camp-tit" data-testid="poc-campanha">
@@ -77,7 +78,9 @@ export function TelaCampanhaPoc() {
           return (
             <li key={k} className="poc-desafio">
               <Retrato k={k} />
-              <span><b>{nomeDaChave(k)}</b><small>{L.nome} · {CENAS[mapa].nome}{m.campanha[k] ? ` · vencido ${m.campanha[k]}×` : ""}</small></span>
+              <span><b>{nomeDaChave(k)}</b><small>{L.nome} · {CENAS[mapa].nome}{m.campanha[k] ? ` · vencido ${m.campanha[k]}×` : ""}</small>
+                {/* MITOLOGIA, E2: o Jijimon comenta o Piedmon antes da luta (so com a chave) */}
+                {mitologia && ehPiedmon(k) && <small className="poc-oraculo" data-testid="poc-oraculo-piedmon"><b>{NOME_ORACULO}:</b> {FALA_PIEDMON_ANTES}</small>}</span>
               <button type="button" className="hx-btn" disabled={luta.lutando || !aberto} onClick={() => lutarNoPalco(k, mapa, `Campanha · ${L.nome}`, setErro)}
                 data-testid={`poc-desafio-${k}`}>{aberto ? "Lutar" : "Trancado"}</button>
             </li>

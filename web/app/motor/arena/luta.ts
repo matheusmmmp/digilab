@@ -1,7 +1,7 @@
 /* A luta inteira, sem tela (LP1): a entrada (o mapa, as duas formas, os stats de cada lado e a semente) da sempre o mesmo resultado, que
    e o que o replay da LP2 vai refazer. Os dois lados sao a IA da arena na dificuldade "normal" (a LP-3); a tela da LP3 assiste passo a
    passo com a mesma configuracao. */
-import { ACAO, LIMITE_MS, OPCOES_PADRAO, type Esquiva, type Tiro } from "./constantes.ts";
+import { ACAO, LIMITE_MS, OPCOES_PADRAO, type Apoio, type ArenaPorEstagio, type Esquiva, type Tiro } from "./constantes.ts";
 import { FORMAS_ARENA } from "./formas.ts";
 import type { DadosForma } from "./tipos.ts";
 import { sorteiosPorFluxo } from "./rng.ts";
@@ -19,14 +19,28 @@ export function formaArena(chave: string, tabela: TabelaFormas = FORMAS_ARENA) {
 }
 
 /** a entrada de uma luta; `vida0`: a vida com que o lado entra numa serie sem cura (sem ela, cheia) */
-export interface EntradaLuta { cena: IdCena; a: { forma: string; stats: Stats; vida0?: number }; b: { forma: string; stats: Stats; vida0?: number }; semente: number; tiro?: Tiro; esquiva?: Esquiva }
+export interface EntradaLuta { cena: IdCena; a: { forma: string; stats: Stats; vida0?: number }; b: { forma: string; stats: Stats; vida0?: number }; semente: number; tiro?: Tiro; esquiva?: Esquiva;
+  /** as chaves da LP6-1 (desligadas sem elas): o golpe de apoio e a elipse pelo estagio */
+  apoio?: Apoio; arenaPorEstagio?: ArenaPorEstagio }
 
 /** a configuracao da luta 1 contra 1: os dois pela IA, com a dificuldade, o atributo e os projeteis do padrao da POC */
 export function configLuta(e: EntradaLuta, tabela: TabelaFormas = FORMAS_ARENA): ConfigLuta {
   return { cena: e.cena, dific: OPCOES_PADRAO.dific, forca: OPCOES_PADRAO.forca, pvel: OPCOES_PADRAO.pvel,
     a: { forma: formaArena(e.a.forma, tabela), stats: e.a.stats, ...(e.a.vida0 !== undefined ? { vida0: e.a.vida0 } : {}) },
     b: { forma: formaArena(e.b.forma, tabela), stats: e.b.stats, ...(e.b.vida0 !== undefined ? { vida0: e.b.vida0 } : {}) },
-    ...(e.tiro ? { tiro: conferirTiro(e.tiro) } : {}), ...(e.esquiva ? { esquiva: conferirEsquiva(e.esquiva) } : {}) };
+    ...(e.tiro ? { tiro: conferirTiro(e.tiro) } : {}), ...(e.esquiva ? { esquiva: conferirEsquiva(e.esquiva) } : {}),
+    ...(e.apoio ? { apoio: conferirApoio(e.apoio) } : {}), ...(e.arenaPorEstagio ? { arenaPorEstagio: conferirArenaPorEstagio(e.arenaPorEstagio) } : {}) };
+}
+const numOk = (v: unknown, min: number, max: number) => typeof v === "number" && Number.isFinite(v) && v >= min && v <= max;
+/** o golpe de apoio da entrada (LP6-1): cada numero finito e na faixa, senao falha alto */
+export function conferirApoio(x: Apoio): Apoio {
+  if (!numOk(x.dano, 0.05, 2) || !numOk(x.recarga, 0.25, 10) || !numOk(x.longeMs, 0, 10_000)) throw new Error(`arena: golpe de apoio invalido ${JSON.stringify(x)}`);
+  return { dano: x.dano, recarga: x.recarga, longeMs: x.longeMs };
+}
+/** a elipse pelo estagio da entrada (LP6-1): fatores finitos, de 1 a 2, e o do Mega pelo menos o do Ultimate, senao falha alto */
+export function conferirArenaPorEstagio(x: ArenaPorEstagio): ArenaPorEstagio {
+  if (!numOk(x.Ultimate, 1, 2) || !numOk(x.Mega, 1, 2) || x.Mega < x.Ultimate) throw new Error(`arena: elipse por estagio invalida ${JSON.stringify(x)}`);
+  return { Ultimate: x.Ultimate, Mega: x.Mega };
 }
 /** a esquiva da entrada (D-LP5-14): cada numero finito e na faixa, senao falha alto */
 export function conferirEsquiva(x: Esquiva): Esquiva {

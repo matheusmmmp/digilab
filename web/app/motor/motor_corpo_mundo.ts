@@ -37,7 +37,7 @@ import { ACOES_DONO_V11, MotorCorpo, estadoNascimentoPy, type EventoCorpo, type 
 import type { ObservacaoLobos } from "./lobos.ts";
 import {
   Mundo, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, eventoSacudirArvore, lerDeixarComida, lerLevarPet, lerMudarIlha, lerSacudirArvore,
-  regiaoDe, type PercepcaoMundo,
+  regiaoDe, tamanhoDoMapa, type OpcoesMundo, type PercepcaoMundo,
 } from "./mundo.ts";
 import type { AcaoPet, EstadoVida } from "./tipos.ts";
 
@@ -81,6 +81,9 @@ export interface OpcoesLacoMundo {
   sacudir?: ConfigSacudir;
   /** a fruta do mundo como comida (a ConfigFrutaComoComida do Python, AS-11), desligada: com ela, o laco nao entrega o `frutaComida` */
   frutaComoComida?: boolean;
+  /** dois pets (docs/TAREFA_V3_COOPERACAO.md, CO4b): a parte do pet no mundo do grupo, montada pelo Grupo com as opcoes deste laco (o
+   *  `mundo=` do MotorMundo do Python). Sem ela, o laco e dono do proprio mundo, com a semente do pet: a vida de hoje */
+  parteDoMundo?: (op: OpcoesMundo) => Mundo;
 }
 
 const FRUTAS_DO_MUNDO: readonly string[] = ["a", "b", "c"];
@@ -106,8 +109,9 @@ export class MotorCorpoMundo extends MotorCorpo {
               opcoes: OpcoesLacoMundo = {}) {
     super(politica, semente, cc, estado, true);
     if (!cc.drives_novos) throw new Error("o laco com o mundo e o do regime `corpo` com os drives novos (a novidade e a atividade)");
-    this.mundo = new Mundo({ semente, cfg: opcoes.cfgMundo, bolaNoGolpe: opcoes.bolaNoGolpe ?? false, contrato: opcoes.contrato,
-                             ...(opcoes.sacudir !== undefined ? { sacudir: opcoes.sacudir } : {}) });
+    const op: OpcoesMundo = { semente, cfg: opcoes.cfgMundo, bolaNoGolpe: opcoes.bolaNoGolpe ?? false, contrato: opcoes.contrato,
+                              ...(opcoes.sacudir !== undefined ? { sacudir: opcoes.sacudir } : {}) };
+    this.mundo = opcoes.parteDoMundo ? opcoes.parteDoMundo(op) : new Mundo(op);
     if (opcoes.frutaComoComida !== undefined && typeof opcoes.frutaComoComida !== "boolean")
       throw new Error(`frutaComoComida e bool: ${String(opcoes.frutaComoComida)}`);
     this.frutaComoComida = opcoes.frutaComoComida ?? false;
@@ -127,16 +131,17 @@ export class MotorCorpoMundo extends MotorCorpo {
 
   /** o dono deixa a comida em (x, y): o evento valida o tipo e a posicao antes do log (MotorMundo.deixar_comida) */
   deixarComida(tipo: string, x: number, y: number): void {
-    const ev = eventoDeixarComida(this.estado.tick, tipo, x, y);
+    const mapa = tamanhoDoMapa(this.mundo.cm), ev = eventoDeixarComida(this.estado.tick, tipo, x, y, mapa);
     this.log.push({ tick: ev.tick, tipo: "deixar_comida", valor: ev.valor });
-    this.comidaDoDono(...lerDeixarComida(ev));
+    this.comidaDoDono(...lerDeixarComida(ev, mapa));
   }
 
   /** o deixar_comida sem o log do laco (o Motor do jogo grava o registro dele): a comida no mundo e o contato do alimentar de hoje
    *  (MotorMundo._aplicar_deixar_comida e MotorEducacao._contato) */
   comidaDoDono(tipo: string, x: number, y: number): void {
     const tick = this.estado.tick;
-    lerDeixarComida(eventoDeixarComida(tick, tipo, x, y));
+    const mapa = tamanhoDoMapa(this.mundo.cm);
+    lerDeixarComida(eventoDeixarComida(tick, tipo, x, y, mapa), mapa);
     this.conferirSincronia("antes de deixar_comida");
     this.mundo.deixarComida(tick, tipo, x, y);
     this.estado = { ...this.estado, ultimoCuidado: tick, totalCuidados: this.estado.totalCuidados + 1 };
@@ -220,7 +225,7 @@ export class MotorCorpoMundo extends MotorCorpo {
     if (e.tipo !== "deixar_comida") { super.aplicarEvento(e); return; }
     if (e.tick !== this.estado.tick) throw new Error(`evento no tick ${e.tick}, o motor esta no ${this.estado.tick}`);
     if (typeof e.valor !== "string") throw new Error(`deixar_comida malformado: ${JSON.stringify(e)}`);
-    const [tipo, x, y] = lerDeixarComida({ tick: e.tick, tipo: "deixar_comida", valor: e.valor });
+    const [tipo, x, y] = lerDeixarComida({ tick: e.tick, tipo: "deixar_comida", valor: e.valor }, tamanhoDoMapa(this.mundo.cm));
     this.deixarComida(tipo, x, y);
   }
 

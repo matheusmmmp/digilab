@@ -43,7 +43,7 @@ function vida(tipo: "atencioso" | "aleatorio", semente: number, dias: number, me
 }
 
 describe("a versao dos ovos novos", () => {
-  test("ovos novos sao v23 (a v22 com a luta da rodada de equilibrio); a v21 (v6 + confianca + vinculo B + o cerebro A e o corpo + o mundo fisico + o cerebro trocavel + a luta da POC)", () => { expect(VERSAO_PET).toBe(23); expect(new Motor(1, 21).versao).toBe(21); });
+  test("ovos novos sao v25 (a v24 com a memoria de 128 celulas); a v21 (v6 + confianca + vinculo B + o cerebro A e o corpo + o mundo fisico + o cerebro trocavel + a luta da POC)", () => { expect(VERSAO_PET).toBe(25); expect(new Motor(1, 21).versao).toBe(21); });
 });
 
 describe("a trava (pet v21)", () => {

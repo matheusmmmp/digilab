@@ -59,6 +59,8 @@ lugar e o do consumo bom mais recente; "emb" lembra um episodio sorteado entre o
 como 0 (MA-3; a categoria, a repeticao e a capacidade seguem o sigma verdadeiro). A rng so existe no "emb"."""
 from __future__ import annotations
 
+from dataclasses import replace
+
 from ..config import CONFIG_DIGIBRAIN_INATOS, TICKS_POR_DIA, TIPOS_ALVO_DIGIBRAIN, ConfigDigibrainInatos, ConfigMundo
 from ..modelo_mundo import raiz_inteira
 from ..policies.lobos import div_arred
@@ -180,6 +182,30 @@ class Memoria:
 
     def lugar_de(self, x: int, y: int) -> tuple[int, int]:
         return x // self.sub, y // self.sub
+
+    def alcance(self, d_max: int) -> None:
+        """O alcance da memoria de lugar passa a ser `d_max` subunidades (docs/TAREFA_V3_ILHA_AGUA.md, secao 12.16, IG6; a ilha grande).
+        So o parametro muda: os episodios guardados ficam como estao. Inteiro positivo; outro valor falha alto."""
+        if type(d_max) is not int or d_max <= 0:
+            raise ValueError(f"M-MEM: o alcance da memoria e um inteiro positivo de subunidades: {d_max!r}")
+        self.p = replace(self.p, d_max=d_max)
+
+    def deslocar(self, dx: int, dy: int, ajustar, regiao_de) -> int:
+        """A ida do mundo para a ilha maior (docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG4; a IG-7: "deslocados junto com o lar"): cada
+        lugar lembrado anda (dx, dy), como o pet, a comida e a bola. `ajustar(x, y)` devolve o ponto que vale no mundo novo (dentro do
+        mapa e, se cair em celula fechada, na terra mais perto) e `regiao_de(x)` o indice da regiao dele; o lugar e refeito do ponto.
+        Vale para o lugar lembrado e para a memoria autobiografica (as tres camadas). Nada mais do episodio muda (o valor, a decisao, o
+        id). Devolve quantos episodios andaram."""
+        listas = [self.episodios] + ([self.recente, self.duradoura, self.central] if self.autobio else [])
+        n = 0
+        for lista in listas:
+            for e in lista:
+                x, y = ajustar(e["ponto"][0] + dx, e["ponto"][1] + dy)
+                e["ponto"] = (x, y) if isinstance(e["ponto"], tuple) else [x, y]
+                e["lugar"] = self.lugar_de(x, y)
+                e["regiao"] = regiao_de(x)
+                n += 1
+        return n
 
     def codificar(self, ep: dict) -> int:
         """guarda o episodio (os campos da docstring, sem o id) e devolve o id"""
