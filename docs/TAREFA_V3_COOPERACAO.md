@@ -176,3 +176,21 @@ Não há run nesta tarefa. Os gates são de engenharia:
 | **CO-7** | o cérebro do segundo pet | **o mesmo do primeiro** (o modular), cada um com o seu estado; nenhum parâmetro passa de um ao outro | baixo |
 | **CO-8** | a herança entre os dois | **sem regra nova:** o jogo já cruza dois adultos do dono (`src/heranca.ts`); os irmãos podem ser pais, como hoje | baixo; se o Matheus quiser proibir, é uma linha na tela da herança |
 | **CO-9** | o piso de fome que separa a disputa "anti" da "neutra" | o `fome_moderada` do instinto (o mesmo limiar do chamado de fome, `motor/constantes.ts`, `chamadoPelaFome`), para não criar número novo | baixo: é PROPOSTO e se ajusta na rodada de equilíbrio |
+
+## CO1, os gabaritos (2026-11-11, Gerente da V3, Claude Code, Opus 5.5, branch `v3-cooperacao-co1`)
+
+Gravados com o código da `main` (`9f72f060`) antes de qualquer mudança da frente, num commit só deles.
+
+- **O Python:**
+  - `experiments/exportar_gabarito_grupo.py` grava `web/app/test/gabaritos/grupo_python.json.gz` (613 724 bytes).
+  - **A vez sorteada (DP-2):** 8 casos (4 sementes, listas de 2 e de 3 ids, 40 sorteios cada).
+  - **As vidas:** 5 vidas de 3 dias de dois pets do mesmo dono sintético, com os sentidos do degrau 1b desligados (sementes 101 a 505).
+    Cada vida guarda o registro do grupo, as vezes sorteadas, os contatos, as disputas e o resumo inteiro do grupo, com o sha256.
+  - **O teste:** `tests/test_cooperacao_gabarito.py` refaz o gabarito e o compara byte a byte.
+  - **O lado de um pet** continua sendo o `tests/gabaritos/dois_pets_vidas_de_hoje.json`, conferido pelo `tests/test_grupo.py`.
+- **O TS:**
+  - `web/app/test/coop_etapa0.test.ts` grava, com `GRAVAR_COOP=1`, o `web/app/test/gabaritos/coop_etapa0_ts.json`.
+  - **As vidas:** três vidas do pet v21 com um dono de roteiro fixo (sementes 101, 202 e 303; 126, 177 e 83 eventos). Cada uma guarda o
+    log, a assinatura a cada 25 eventos de um replay incremental e no fim, e a impressão do mundo.
+  - **Os arquivos pinados:** o sha256 de `grupo_python.json.gz`, `mundo_python.json` e `mvp_mundo_python.json`.
+- **O achado (D-CO1-1):** as disputas são raras. Há 2 em 5 vidas, mesmo com o comedouro comum em três delas (`n_disputas` no gabarito).
