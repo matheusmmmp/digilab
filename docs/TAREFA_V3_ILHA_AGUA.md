@@ -296,3 +296,14 @@ medida usa o A do v11); a fruta posta ao lado da ração no mundo grande (o cami
   tamanho do mapa ali é da IG4, que é quem põe um pet no mundo grande.
 - **O tempo na web** (medida única desta sessão, no Node desta máquina, sem artefato): uma vida de 2 dias do gabarito levou 52 e 71 ms
   na ilha grande, contra 33 e 49 ms no mundo de hoje. No celular não foi medido.
+
+**A revisão separada da IG2** (um agente de leitura, sobre o commit `c81aa747`) não achou defeito nem divergência entre o TS e o Python
+no mundo grande, nem mudança para os pets de hoje. Dois riscos baixos, corrigidos: o TS não conferia o tamanho do mundo (o `Mundo`
+agora só aceita os dois tamanhos, como o Python), e o teste de paridade não conferia os próximos sorteios de cada fluxo de acaso nem
+o número de decisões (agora confere). Ficam registrados, sem correção:
+
+- **A bola no mundo grande não tem paridade:** o roteiro do gabarito não põe bola, e as vidas têm uma rolagem e nenhuma.
+- **A memória do cérebro modular** (`d_max = 1024`, em `motor/digibrain/mem.ts` e no `config.py`) vale a largura do mapa antigo: na
+  ilha grande, um lugar lembrado a mais de 64 células não atrai. É assunto da IG-6, junto com o cheiro de 24 células.
+- **A vista** (`src/telas/pet/ilha/grade.ts`) desenharia a árvore e o marco fechados como chão livre: é a IG3.
+- **O `Motor` do jogo** recusaria a ração além de x = 1023 ou y = 479 num pet do mundo grande, falhando alto: é a IG4.

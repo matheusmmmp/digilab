@@ -98,6 +98,9 @@ describe("o mundo de 128 x 60", () => {
     expect(() => eventoDeixarComida(0, "racao", ...longe)).toThrow(/fora do mapa/);
     expect(() => eventoDeixarBola(0, ...longe)).toThrow(/fora do mapa/);
     expect(eventoDeixarComida(0, "racao", ...longe, tamanhoDoMapa(CM)).valor).toBe("racao|1800|700");
+    /* so os dois tamanhos existem, como no Python */
+    for (const outro of [{ celulas_x: 96, celulas_y: 48 }, { sub: 32 }, { celulas_x: 128 }])
+      expect(() => new Mundo({ semente: 101, cfg: { ...CMU_MVP, ...outro } }), JSON.stringify(outro)).toThrow(/64 x 30/);
   });
 });
 
@@ -134,6 +137,12 @@ describe("G-PAR da ilha grande: o laco do TS = o Python, decisao a decisao", () 
       expect({ q: { ...m.corpo.q }, receptores: m.corpo.receptores() }).toEqual(vida.corpo_fim);
       const e = m.estado;
       expect({ fome: e.fome, energia: e.energia, humor: e.humor, sujeira: e.sujeira, tick: e.tick }).toEqual(vida.estado_fim);
+      /* as decisoes e os proximos sorteios de cada fluxo de acaso (como no test/mvp_mundo.test.ts): nenhum fluxo andou a mais */
+      expect(m.mundo.decisoes.length).toBe(vida.decisoes);
+      for (const [fluxo, rg] of [["arvores", m.mundo.rngArvores], ["bola", m.mundo.rngBola], ["sujeira", m.mundo.rngSujeira], ["alvo", m.mundo.rngAlvo]] as const) {
+        const prox = { random: [rg.random(), rg.random(), rg.random()], randrange16: [rg.randrange(1 << 16), rg.randrange(1 << 16), rg.randrange(1 << 16)] };
+        expect(prox, `proximos de ${fluxo}`).toEqual(vida.proximos[fluxo]);
+      }
 
       /* os gates do lado do TS: nenhuma comida e nenhum ponto do pet em celula fechada, e o pet pisou na ponte */
       const w = m.mundo, r = CONFIG_CONTRATO_AGUA.r_pet, solidos = solidosDaAgua(CM);

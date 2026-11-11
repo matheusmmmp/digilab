@@ -504,6 +504,9 @@ export class Mundo {
   constructor(op: OpcoesMundo) {
     const cm = this.cm = op.cfg ?? CMU;
     if (!cm.ligada) throw new Error("o Mundo so existe com a ConfigMundo ligada");
+    /* so os dois tamanhos do Python (ConfigMundo.__post_init__): o limite das posicoes dos eventos vem do tamanho (tamanhoDoMapa) */
+    if (!(cm.sub === 16 && ((cm.celulas_x === 64 && cm.celulas_y === 30) || (cm.celulas_x === 128 && cm.celulas_y === 60))))
+      throw new Error("o mapa e 64 x 30 celulas de 16 subunidades (secao 3) ou 128 x 60 (a ilha grande)");
     const ef = op.efeitoFrutas ?? { a: 0, b: 0, c: 0 };
     if (Object.keys(ef).sort().join() !== FRUTAS.join()) throw new Error(`efeitoFrutas precisa de a, b e c: ${Object.keys(ef)}`);
     this.efeitoFrutas = { ...ef };
