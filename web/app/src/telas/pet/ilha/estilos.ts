@@ -13,7 +13,7 @@ import { PALETA_DIGITAL, PALETA_ILHA, carregarVariante, doisTons, flores, montar
   type PaletaTerreno } from "./cena.ts";
 import { arquivosCassette, carregadorCassette, terrenoCassette } from "./cassette.ts";
 import { CEU_DIGITAL, CEU_SEM_PINTURA, CONTORNO_DIGITAL, DOBRA_K, NUVENS_PINTADAS } from "./constantes.ts";
-import { ceuComGrade, ceuEmFaixas, fios, lata, nuvensDaPintura, nuvensDesenhadas, particulas, separarNuvens, suavizarPintura } from "./digital.ts";
+import { ceuComGrade, ceuEmFaixas, fios, nuvensDaPintura, nuvensDesenhadas, particulas, separarNuvens, suavizarPintura } from "./digital.ts";
 import { enfeites } from "./enfeites.ts";
 import { lugares } from "./lugaresCena.ts";
 import { PALETA_FLORESTA, arquivosFloresta, carregadorFloresta } from "./floresta.ts";
@@ -115,13 +115,13 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
           const gltf = new GLTFLoader();
           const kits = (arq: string, _id: string, modelo: Parameters<typeof carregarVariante>[2]) =>
             carregarVariante(gltf, new URL("kits3d_digital/" + arq, base).href, modelo);
-          const [o, e, l, g] = await Promise.all([objetos(i, base, kits), enfeites(i, base), lata(i, base), lugares(i, base)]);
-          /* o toque digital (D3): as particulas e os fios dos postes; e a lata gigante no fundo (D4); os lugares (lugaresCena.ts) */
+          const [o, e, g] = await Promise.all([objetos(i, base, kits), enfeites(i, base), lugares(i, base)]);
+          /* o toque digital (D3): as particulas e os fios dos postes; os lugares (lugaresCena.ts). A lata gigante (D4) deixou o horizonte: e um marco da grade (enfeites.ts) */
           const p = particulas(i);
-          o.grupo.add(e.grupo, fios(i), l.grupo, g.grupo);
+          o.grupo.add(e.grupo, fios(i), g.grupo);
           doisTons(o.grupo);
           o.grupo.add(p.malha);
-          return { ...o, noite: n => { e.noite(n); p.noite(n); }, quadro: l.quadro, lugares: g.caixas, lugaresRaiz: g.raizes, abrirLugar: g.abrir };
+          return { ...o, noite: n => { e.noite(n); p.noite(n); }, lugares: g.caixas, lugaresRaiz: g.raizes, abrirLugar: g.abrir };
         },
       };
     }
