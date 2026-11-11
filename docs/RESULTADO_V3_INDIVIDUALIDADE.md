@@ -490,3 +490,86 @@ amarrado, a mesma fração de pets se afasta.
   efeito pode vir só de mexer no fluxo. Isso vale como recomendação de método, PROPOSTA.
 - **Uma pergunta nova, PROPOSTA:** o que decide se um pet absorve o tapa ou se afasta? O dono relapso pesa (46 % contra 21 % a 25 %), e a
   fração não muda com o sorteio amarrado.
+
+## 11. O adendo 3 do I7: o que separa absorver de se afastar (2026-11-11, Claude Code, Opus 5.5, branch `v3-individualidade-i7e`)
+
+**O desenho:** a seção 16 do plano do I7, DECIDIDA (AD3-1 a AD3-6), com o registro da seção 17.
+- **As amostras:** a descoberta são as vidas do adendo 2, nos ramos E e R. A confirmação são as vidas do I7b, nos ramos E.
+- **Nenhuma vida nova:** os candidatos saem do replay do original até o momento do tapa.
+- **As duas fases:** a fase 1 leu 3 600 momentos em 7 min. Os níveis da descoberta entraram no registro antes da fase 2 (a energia, a fome e o
+  humor pela mediana; a ação mais comum, `dormir`).
+- **Os artefatos:** `artifacts_v3_individualidade_i7_ad3/`, com o `meta.json`, o `niveis.json` e o `analise.json` versionados. O
+  `candidatos.jsonl` fica local, com o sha256 no `meta.json`.
+- **Os ramos com grupo:** 1768 na descoberta E (560 se afastam),
+  1753 na descoberta R (521) e 1758 na confirmação
+  (572).
+
+### 11.1 A tabela (Δ = a fração "se afasta" no primeiro nível menos no segundo; o IC95 pelo bootstrap sobre as sementes, 2 000 reamostras)
+
+| candidato (o primeiro nível) | descoberta, E | descoberta, R | confirmação, E | a frase (16.4) |
+|---|---|---|---|---|
+| C-ACAO (a ação `dormir`) | −0,005 [−0,064; +0,051] | +0,003 [−0,053; +0,058] | −0,016 [−0,070; +0,037] | nao separa nesta analise |
+| C-BRACO (o braço REL+F) | +0,006 [−0,024; +0,034] | +0,009 [−0,022; +0,038] | +0,024 [−0,009; +0,055] | nao separa nesta analise |
+| C-DONO (o dono relapso) | +0,232 [+0,184; +0,282] | +0,219 [+0,167; +0,270] | +0,174 [+0,122; +0,223] | separa |
+| C-ENERGIA (a energia abaixo da mediana) | −0,068 [−0,111; −0,023] | −0,072 [−0,110; −0,033] | −0,039 [−0,089; +0,015] | so na descoberta: nao se confirma nos pets do I7b |
+| C-FOME (a fome acima da mediana) | +0,062 [+0,007; +0,113] | +0,068 [+0,017; +0,117] | +0,034 [−0,013; +0,082] | so na descoberta: nao se confirma nos pets do I7b |
+| C-HUMOR (o humor abaixo da mediana) | +0,095 [+0,047; +0,143] | +0,096 [+0,049; +0,143] | +0,066 [+0,019; +0,113] | separa |
+| C-IDADE (a idade t ≤ 4) | +0,091 [+0,043; +0,138] | +0,091 [+0,044; +0,136] | +0,004 [−0,051; +0,058] | so na descoberta: nao se confirma nos pets do I7b |
+
+São sete candidatos sem correção de multiplicidade, e a repetição na confirmação faz esse papel (16.4).
+
+### 11.2 As frases
+
+- **Separam nas duas amostras:**
+  - **o dono relapso:** de 17 a 23 pontos a mais de pets que se afastam. Ele foi visto na descoberta antes do plano, então vale a
+    confirmação, +0,174 [+0,122; +0,223];
+  - **o humor baixo no momento do tapa:** de 7 a 10 pontos a mais.
+- **Só na descoberta,** sem se confirmar nos pets do I7b: a energia baixa (menos pets se afastam), a fome alta e a idade cedo (t ≤ 4).
+- **Não separam nesta análise:** a ação em curso e o braço.
+
+### 11.3 O que a tabela mostra, além das frases (descritivo, 16.5)
+
+- **O dono e o humor juntos** (a fração que se afasta em cada célula):
+
+| conjunto | outros donos, humor alto | outros donos, humor baixo | relapso, humor alto | relapso, humor baixo |
+|---|---|---|---|---|
+| descoberta|E | 17 % (n = 476) | 29 % (n = 700) | 39 % (n = 418) | 68 % (n = 174) |
+| descoberta|R | 15 % (n = 474) | 28 % (n = 692) | 37 % (n = 414) | 62 % (n = 173) |
+| confirmacao|E | 21 % (n = 440) | 30 % (n = 728) | 38 % (n = 439) | 63 % (n = 151) |
+
+  Os dois se somam. Com o dono relapso e o humor baixo, perto de 2/3 dos pets se afastam, contra 15 % a 21 % com os outros donos e o humor
+  alto.
+- **O efeito imediato decide quase tudo:**
+
+| conjunto | o resto do dia t igual ao original: se afastam | o resto do dia t diferente: se afastam |
+|---|---|---|
+| confirmacao|E | 3 % (n = 1194) | 96 % (n = 564) |
+| descoberta|E | 2 % (n = 1212) | 96 % (n = 554) |
+| descoberta|R | 2 % (n = 1217) | 92 % (n = 534) |
+
+  Se o tapa não muda o resto do dia em que acontece, o pet quase nunca se afasta depois. Se muda, ele quase sempre se afasta. Isso é parte do
+  efeito, e não uma condição anterior a ele, então fica só no descritivo.
+- **Os drives em média, por grupo** (a energia, a fome e o humor, na escala de 0 a 1):
+
+| conjunto | grupo | energia | fome | humor |
+|---|---|---|---|---|
+| confirmacao|E | absorve | 0,390 | 0,554 | 0,612 |
+| confirmacao|E | afasta | 0,407 | 0,569 | 0,560 |
+| descoberta|E | absorve | 0,380 | 0,540 | 0,617 |
+| descoberta|E | afasta | 0,403 | 0,567 | 0,561 |
+| descoberta|R | absorve | 0,381 | 0,539 | 0,617 |
+| descoberta|R | afasta | 0,403 | 0,572 | 0,559 |
+
+### 11.4 O que a análise não demonstra
+
+- **Causa.** O dono relapso e o humor baixo estão associados ao afastamento nas duas amostras, mas a análise não diz se eles o causam. O humor
+  baixo pode ser efeito do dono relapso, e a tabela cruzada mostra que os dois se somam, sem separar um do outro como causa.
+- **Que os outros candidatos não importam.** "Só na descoberta" quer dizer que não se repetiram nos pets do I7b, e não que o efeito é zero.
+- **O mecanismo:** por que o humor baixo deixa o tapa pegar. A análise não lê o cérebro.
+
+### 11.5 O que isso muda para a frente (PROPOSTO)
+
+- **Uma resposta à pergunta do adendo 3:** um pet com o dono relapso e o humor baixo no momento do tapa se afasta muito mais do original.
+  Quando o tapa muda o próprio dia, o efeito dura.
+- **Um desenho causal possível depois, PROPOSTO (a AD3-6 deixou para depois):** dar o tapa só nos momentos de humor baixo e só nos de humor
+  alto, no mesmo pet e com o sorteio amarrado (o método do adendo 2). Isso testaria se o humor decide, separado do dono. Pede um plano novo.

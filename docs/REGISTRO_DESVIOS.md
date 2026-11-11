@@ -706,4 +706,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — MITOLOGIA: a pedra na ilha grande (Gerente da V3, Claude Code, Opus 5.5, branch `v3-mitologia-ilha-grande`)](registro/2026-11.md)
 - [2026-11-11 — COOPERACAO, a espec da CO6 (Claude Code, Opus 5.5, sessão da INDIVIDUALIDADE, branch `v3-cooperacao-co6-espec`)](registro/2026-11.md)
 - [2026-11-11 — COOPERACAO, a espec da CO7 (Claude Code, Opus 5.5, sessão da INDIVIDUALIDADE, branch `v3-cooperacao-co7-espec`)](registro/2026-11.md)
+- [2026-11-11 — INDIVIDUALIDADE, I7e: a leitura do adendo 3 (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i7e`)](registro/2026-11.md)
 - [2026-11-11 — LUTA_POC, o palco da v23 sem o tiro e a esquiva (Claude Code, Opus 5.5, sessão lateral, branch `v3-palco-v23`)](registro/2026-11.md)
