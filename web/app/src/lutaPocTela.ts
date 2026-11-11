@@ -26,7 +26,8 @@ import {
 export interface FimEsperado { vencedor: "a" | "b" | null; relogio: number; passos: number; ko: boolean }
 /** uma luta para o palco: a entrada, o fim esperado, os dois lados como a tela os mostra e o rotulo dela na serie */
 export interface LutaNaTela { entrada: EntradaLutaPoc; esperado: FimEsperado | null; A: LadoDesenhoPoc; B: LadoDesenhoPoc; rotulo: string; chefe?: boolean }
-export interface FimPoc { titulo: string; texto: string; venceu: boolean | null }
+/** `doPet`: a luta e do pet em foco (os lugares de luta; nao a Fabrica, o Salao nem a luta montada): so nela o irmao assiste e faz o gesto (CO5) */
+export interface FimPoc { titulo: string; texto: string; venceu: boolean | null; doPet?: boolean }
 export interface PalcoPoc {
   L: LutaPoc; v: VisualPoc; A: LadoDesenhoPoc; B: LadoDesenhoPoc; cena: IdCena;
   /** a luta k (0, 1, ...) de n e o rotulo dela; o contexto (Arena, Campanha, a serie) */

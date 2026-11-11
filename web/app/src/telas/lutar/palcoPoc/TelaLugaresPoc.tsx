@@ -20,7 +20,7 @@ export function lutarNoPalco(rival: string, mapa: IdCena | null, contexto: strin
   const res = r as unknown as ResultadoLutaPoc, lutas = lutasDoResultado(res);
   assistirPoc(lutas, contexto, L => {
     const ult = lutas[lutas.length - 1], serie = lutas.length > 1;
-    return fimDoPet(L, ult.A, ult.B, serie ? (res.venceu ? `Venceu as ${lutas.length} lutas seguidas.` : `A série parou na luta ${lutas.length}.`) : "");
+    return { ...fimDoPet(L, ult.A, ult.B, serie ? (res.venceu ? `Venceu as ${lutas.length} lutas seguidas.` : `A série parou na luta ${lutas.length}.`) : ""), doPet: true };
   });
 }
 

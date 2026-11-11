@@ -17,6 +17,7 @@ import { barraDoPasso, passoDe, type LadoN } from "./visualPoc.ts";
 import "../../../estilo/abertas.css";
 import "../../../estilo/luta_hud.css";
 import "../../../estilo/luta_poc.css";
+import { GestoDoIrmaoNaLuta } from "../../pet/AtosDoIrmao.tsx";
 
 /** o relogio da luta na tela (m:ss), o mesmo do palco de antes */
 const relogio = (s: number): string => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
@@ -67,6 +68,7 @@ function Resultado({ p, replay, continuar }: { p: PalcoPoc; replay: boolean; con
     <dialog className="modal-conf ab-hx dl poc-resultado" ref={ref} aria-labelledby="poc-res-tit" onClose={fechar} data-testid="poc-resultado">
       <h2 id="poc-res-tit">{replay ? "Fim do replay" : p.fim.titulo}</h2>
       <p>{replay ? `${p.fim.texto} ${/nada foi gravado/.test(p.fim.texto) ? "A luta foi refeita da mesma entrada." : "A luta foi refeita do registro; nada foi gravado."}` : p.fim.texto}</p>
+      {!replay && p.fim.doPet && <GestoDoIrmaoNaLuta venceu={p.fim.venceu} />}
       <div className="modal-bts">
         <BotaoHx className="res-replay" data-testid="poc-ver-replay" onClick={() => { rever.current = true; ref.current?.close(); }}>{replay ? "Ver de novo" : "Ver replay"}</BotaoHx>
         <BotaoContinuar data-autofocus onClick={() => { ref.current?.close(); continuar(); }}>Continuar</BotaoContinuar>
