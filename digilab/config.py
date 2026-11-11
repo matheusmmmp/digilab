@@ -2860,3 +2860,39 @@ class ConfigFalaUnidades:
 
 CONFIG_FALA_UNIDADES = ConfigFalaUnidades()
 PARAMETROS_FALA_UNIDADES = {"ganho_conteudo": ("PROPOSTO", "SEM FONTE; a condicao da secao 3.1 do plano DC3, nas sementes dos testes")}
+
+
+# A voz-v4 e a avaliacao da DC5 (CONVERSA_PET; docs/PLANO_ANALISE_V3_CONVERSA_DC5.md, APROVADO pelo Matheus em 2026-11-10, "Aprovar tudo";
+# D-DC5-5 e D-DC5-11). Todos DECIDIDOS como recomendados, todos SEM FONTE. So a voz-v4 e a DC5 os leem: a voz do jogo nao muda.
+@dataclass(frozen=True)
+class ConfigVozV4:
+    # 3.5, D-DC5-5: quantos conceitos a rede escolhe dizer, por estagio (a pontuacao e valor x confianca)
+    k_selecao: tuple = (("bebe", 1), ("crianca", 1), ("adolescente", 2), ("adulto", 2))
+    # 3.4, D-DC5-11: as ultimas falas espontaneas do pet, do mesmo estagio, que vao no bloco "O QUE VOCE JA DISSE"
+    n_ditas: int = 3
+    # 4.6 Q7, D-DC5-11: o n-grama de palavras da repeticao entre turnos, e os n do distinct-n
+    ngrama_repeticao: int = 3
+    distinct_n: tuple = (1, 2)
+    # 4.6 Q6, D-DC5-11: o tamanho minimo, em palavras normalizadas, de um trecho da lista de frases-modelo
+    min_palavras_frase_modelo: int = 3
+    # 5, D-DC5-11: a ES (sequencias de falas espontaneas seguidas da mesma vida), na validacao; a calibracao usa a metade das falas
+    n_sequencias_es: int = 6
+    falas_por_sequencia_es: int = 5
+    # 4.1 e 4.4, D-DC5-11: a amostra do kappa e a conferencia cega da injecao, por celula
+    amostra_kappa_por_celula: int = 8
+    conferencia_injecao_por_celula: int = 2
+    # 8, D-DC5-11: a margem da estimativa do custo
+    margem_custo: float = 0.5
+    # 3.1, D-DC5-3 e D-DC5-11: a fracao de falas genericas por formato numa celula da calibracao que liga o exemplo so de formato
+    limiar_exemplo_formato: float = 0.10
+
+    def k_do_estagio(self, estagio: str) -> int:
+        d = dict(self.k_selecao)
+        if estagio not in d:
+            raise ValueError(f"ConfigVozV4: estagio sem k: {estagio!r}")
+        return d[estagio]
+
+
+CONFIG_VOZ_V4 = ConfigVozV4()
+PARAMETROS_VOZ_V4 = {f.name: ("DECIDIDO", "SEM FONTE; plano da DC5, D-DC5-5/D-DC5-11, aprovado pelo Matheus em 2026-11-10")
+                     for f in fields(ConfigVozV4)}
