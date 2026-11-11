@@ -1326,6 +1326,31 @@ test("som: ligado com os arquivos ausentes mostra o aviso e a tela segue", async
   await expect(page.getByRole("switch", { name: /Som do jogo/ })).not.toBeChecked();
 });
 
+/* HABITAT_REACOES, HR1 (docs/PLANO_V3_HABITAT_REACOES.md): com o atlas de clipes do UP (fora do git: sem ele o teste nao se aplica), limpar faz
+   o pet sacudir (o clipe Sacudir, uma vez) e o clipe sai sozinho depois do ciclo. So vista: o registro ganha so o "limpar" */
+test("momentos: limpar faz o pet sacudir com o clipe do atlas", async ({ page }) => {
+  const r = await page.request.get("/Assets/digilab_atlas_up_clipes.json");
+  test.skip(!r.ok(), "sem Assets/digilab_atlas_up_clipes.json (fora do git)");
+  await semear(page, SAVES.champion);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  await expect(page.locator(".pet-cena .cena3d")).toBeVisible();
+  const clipe = () => page.evaluate(() => (window as any).__digilab.clipeMomento() as string | null);
+  const largura = page.viewportSize()!.width;
+  /* o pet escolhe o que faz: com o corpo ocupado (o golpe na bola, o Comer) por mais de MOMENTOS.esperaMaxMs, o momento sai sem tocar, como o
+     plano manda. Por isso o clique se repete ate tres vezes */
+  let sacudiu = false;
+  for (let i = 0; i < 3 && !sacudiu; i++) {
+    if (largura < 900) await page.locator(".acoes-pet .acao-mais").click();      /* no celular o Limpar mora no Mais, que fecha a cada acao */
+    await page.getByRole("button", { name: "Limpar", exact: true }).first().click();
+    sacudiu = await expect.poll(clipe, { timeout: 4_000 }).toBe("Sacudir").then(() => true, () => false);
+  }
+  expect(sacudiu, "limpar nao fez o pet sacudir em tres tentativas").toBe(true);
+  expect(await page.evaluate(() => (window as any).__digilab.momento())).toBe("limpar");
+  await expect.poll(clipe, { timeout: 8_000 }).not.toBe("Sacudir");
+  expect(erros).toEqual([]);
+});
+
 /* SOM-UP (docs/TAREFA_V3_SOM_UP.md): com o mapa de sons da versao 2 (Assets/sons, fora do git: sem ele o teste nao se aplica), o painel
    pede o som de abrir, o treino a musica do treino, e a luta a musica do mapa da arena, os golpes por Digimon e o som do fim */
 test("som: o painel, o treino e a luta pedem os sons do Digimon UP", async ({ page }) => {
