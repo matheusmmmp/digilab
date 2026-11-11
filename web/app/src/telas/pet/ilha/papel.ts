@@ -28,10 +28,10 @@ import { OVO, chaveSprite } from "../../../../motor/index.ts";
 import { CLIPES_REACOES, atlasAtual, chaveUp, desenharSprite, dimSprite, quadroAgora, type AtlasOk, type Clipe, type ClipeReacao } from "../../../atlas.ts";
 import { balancoOvo, jogoAtual } from "../../../jogo.ts";
 import { SONO, alturaSono } from "../sono.ts";
-import { SEM_GESTO, escolherComer, esquecerComer, marcarEmburrar, marcarDormir, gestoAgora, type EscolhaComer } from "../cenaAcao.ts";
+import { SEM_GESTO, comidaPerto, escolherComer, esquecerComer, marcarEmburrar, marcarDormir, gestoAgora, type EscolhaComer } from "../cenaAcao.ts";
 import { CENA } from "../cenaEstado.ts";
 import { bobDaReacao, escolherReacao, marcarReacaoRosto } from "../reacao.ts";
-import { chamadoUrgente, estadoAgora, marcarClipeMomento, momentoAgora, vigiarMomentos, virandoAgora, type ClipeMomento } from "../momentos.ts";
+import { chamadoUrgente, estadoAgora, marcarClipeMomento, momentoAgora, ultimoVazio, vigiarMomentos, virandoAgora, type ClipeMomento } from "../momentos.ts";
 import { flashDesde } from "../../../flash.ts";
 import { alargarCorte, unirCaixas, type Corte } from "./corte.ts";
 import { velocidadeAtual } from "../../../tempo.ts";
@@ -343,7 +343,7 @@ export class Papel {
     const comer = escolherComer({
       chave: String(mo0.motor.semente), acao: mo0.nascendo > 0 ? "" : mo0.motor.acao, consumos: nCons,
       alvo: ultimo !== undefined ? this.comidasAntes.get(ultimo) ?? null : null, ciclo: this.cicloComer(),
-      velocidade: velocidadeAtual(), andando: andaBase || !!golpe, pausa: velocidadeAtual() <= 0, donoDesde: flashDesde(),
+      velocidade: velocidadeAtual(), andando: andaBase || !!golpe, pausa: velocidadeAtual() <= 0, donoDesde: flashDesde(), comidaPerto: comidaPerto(mu),
     }, p.agora);
     this.comidasAntes = new Map([...(mu?.comidas.values() ?? [])].map(c => [c.id, [c.x / sub, c.y / sub] as const]));
     const noClipe = comer.tocou === "clipe" && !golpe && !naMao;
@@ -352,7 +352,7 @@ export class Papel {
     /* os momentos e os estados do pet (momentos.ts, HR1; so vista): o motor diz o que aconteceu, a vista escolhe o clipe que ja existe */
     const mtM = mo0.motor, ultC = nCons > 0 ? mu!.consumos[nCons - 1] as { tipo: string; situacao: string; fome_antes: number; fome_depois: number } : null;
     const entM = { chave: String(mtM.semente), nascendo: mo0.nascendo, dormindo: mtM.acao === "dormir", morto: !!mtM.morte, acao: mo0.nascendo > 0 ? "" : mtM.acao,
-      abertos: mtM.chamadosAbertos(), urgente: chamadoUrgente(mtM), atendidos: mtM.chamados.atendidos, consumos: nCons, ultimo: ultC };
+      abertos: mtM.chamadosAbertos(), urgente: chamadoUrgente(mtM), atendidos: mtM.chamados.atendidos, consumos: nCons, ultimo: ultC, vazio: ultimoVazio(mtM) };
     vigiarMomentos(entM, p.agora);
     const livreM = !naMao && !golpe && !noClipe && mo0.nascendo <= 0 && mtM.acao !== "dormir" && !mtM.morte;
     const momento = momentoAgora(p.agora, livreM, c => this.cicloDe(c));
@@ -386,7 +386,7 @@ export class Papel {
     /* dormindo (sono.ts): o quadro parado achatado, respirando, num tom apagado */
     const mo = jogoAtual().motor, dorme = !ovo && mo.acao === "dormir";
     /* a cena da acao do motor, o cocô e a reacao ao toque (cenaAcao.ts; so vista): o gesto do corpo sobre o desenho. Parado e acordado ele faz o da acao */
-    const gesto0 = ovo || naMao ? SEM_GESTO : gestoAgora({ acao: mo.acao, sujeira: mo.e.sujeira, chave: String(mo.semente) }, p.agora, p.reduzido, !andando && !dorme, velocidadeAtual() <= 0, noClipe || noMomento, emburra);
+    const gesto0 = ovo || naMao ? SEM_GESTO : gestoAgora({ acao: mo.acao, sujeira: mo.e.sujeira, chave: String(mo.semente), comidaPerto: comidaPerto(mo.mundo) }, p.agora, p.reduzido, !andando && !dorme, velocidadeAtual() <= 0, noClipe || noMomento, emburra);
     /* a expressao se mexe 1 texel inteiro (reacao.ts, bobDaReacao); sem reacao, o gesto de sempre */
     const gesto = rosto && !ovo && !naMao ? { ...gesto0, alto: gesto0.alto + bobDaReacao(p.agora, p.reduzido) } : gesto0;
     const achata = dorme && !dormeQ, alt = (achata ? alturaSono(p.agora, p.reduzido) : 1) * gesto.estica;

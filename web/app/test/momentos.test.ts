@@ -8,7 +8,7 @@ import {
 } from "../src/telas/pet/momentos.ts";
 import { escolherReacao, esquecerReacaoRosto, type EntradaReacao } from "../src/telas/pet/reacao.ts";
 
-const BASE: EntradaMomentos = { chave: "p", nascendo: 0, dormindo: false, morto: false, acao: "ocioso", abertos: [], urgente: false, atendidos: 0, consumos: 0, ultimo: null };
+const BASE: EntradaMomentos = { chave: "p", nascendo: 0, dormindo: false, morto: false, acao: "ocioso", abertos: [], urgente: false, atendidos: 0, consumos: 0, ultimo: null, vazio: null };
 const em = (o: Partial<EntradaMomentos> = {}): EntradaMomentos => ({ ...BASE, ...o });
 const CICLO = 800, ciclo = () => CICLO;
 const CORPO: EntradaReacao = { chave: "p", humor: 0.7, energia: 0.9, saude: 1, lesionado: false, dormindo: false };
@@ -129,4 +129,15 @@ test("falha alto com numero nao finito", () => {
   expect(() => vigiarMomentos(em({ atendidos: Number.NaN }), 0)).toThrow(/nao finito/);
   vigiarMomentos(em(), 0);
   expect(() => vigiarMomentos(em({ consumos: 1, ultimo: { tipo: "racao", situacao: "madura", fome_antes: Number.NaN, fome_depois: 1 } }), 0)).toThrow(/fome/);
+});
+
+test("o lugar lembrado vazio (CADEIA, D6): um episodio nao_havia novo e Triste por vazioMs; o mesmo episodio nao repete", () => {
+  vigiarMomentos(em(), 0);
+  vigiarMomentos(em({ vazio: 7 }), 100);
+  expect(rosto(100)).toBe("Triste");
+  expect(rosto(100 + MOMENTOS.vazioMs)).toBeNull();
+  vigiarMomentos(em({ vazio: 7 }), 3000);
+  expect(rosto(3000)).toBeNull();
+  vigiarMomentos(em({ vazio: 9 }), 4000);
+  expect(rosto(4000)).toBe("Triste");
 });
