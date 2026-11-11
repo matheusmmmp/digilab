@@ -579,3 +579,15 @@ assinam igual até a memória mudar uma decisão; e um save com o `ma` não abre
 
 **O que não foi verificado:** a suíte inteira do Python; o custo no celular; o retorno medido com a v24 que ganhou o alcance pelo
 evento (só a v25 foi medida).
+
+### 12.18 A ilha grande fechada (2026-11-11)
+
+**Decisão do Matheus (2026-11-11, nesta sessão):** "Basta, fecha". O efeito parcial da memória de 128 células fica como está, e não
+se abre outra etapa para o retorno de longe.
+
+- **Na `main`:** a ilha de 128 × 60 (IG1 a IG4, a v24), a medida (IG5, #831), a memória de 128 células (IG6, #843, a v25 e o evento
+  `ma`) e o portal do céu (#795).
+- **Fica como achado, sem etapa:** de 70 células o pet anda para casa, mas só uma vida de cinco chega a 3 células do comedouro em um
+  dia; a causa não foi investigada (seção 12.17).
+- **Segue sem verificação:** a suíte inteira do Python, o custo num celular de verdade e o retorno medido com a v24 que ganhou o
+  alcance pelo evento.

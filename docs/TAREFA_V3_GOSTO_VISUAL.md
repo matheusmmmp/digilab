@@ -128,15 +128,3 @@ afetar de forma biológica e química". A espec é a `docs/ESPEC_GOSTO_VISUAL_P1
 | GV-23 | a novidade da tela tira curiosidade | sim, pelo `estimulo_novidade` de hoje |
 
 Nenhum código do P1 antes da revisão do Matheus.
-
-## Resultado da etapa P1b (2026-11-11, Claude Code, Opus 5.5, branch `v3-gosto-visual-p1b`)
-
-O corpo ganhou o órgão da tela, atrás da `ConfigTela` (desligada; `digilab/config.py`, status em `corpo.PARAMETROS_TELA`, todos PROPOSTOS,
-SEM FONTE). Ligada (só com o mundo físico, `drives_novos` e `gestos`; falha alto sem eles): sete canais (`CANAIS_TELA`) com os químicos
-`adaptacao_tela_<canal>`, os receptores `tela_<canal>` (o nível) e `novidade_tela` (a soma das partes adaptadas, saturada), o
-`sentir_tela` exigido a cada tick, e os emissores da seção 4 da espec: o `atividade("assistir")` no tédio, o estresse acima do corte de
-volume e movimento, o susto no salto de volume e o `estimulo_agrado_tela` na tristeza. O grafo os declara (o sentido "tela", o
-`ReceptorSoma` e o gatilho `tela_acima`), e a `PercepcaoCorpo` tem os oito campos novos no fim. Desligada, as vidas do gabarito do P1a
-saem byte a byte. Testes novos em `tests/test_gosto_visual_corpo.py`. As escolhas estão em `docs/registro/2026-11.md`, D-GV-P1b-1 a 6; a D-GV-P1b-7 é o conserto do exportador do gabarito web do
-modular, que deixa de fora os campos vazios da tela na `PercepcaoCorpo` (os gabaritos da web saem byte a byte, sem regravar).
-Fica para a P1c: a TV, o motor chamando o `sentir_tela` (zeros sem olhar), o assistir e a novidade pelo corte.
