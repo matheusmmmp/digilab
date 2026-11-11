@@ -135,3 +135,9 @@ export const CONFIG_DECODIFICADOR = {
   p_curiosidade_urgencia: 1, p_curiosidade_tedio: 1, p_curiosidade_g_exp: 1, p_curiosidade_fracao: 1,
 } as const;
 export type ConfigDecodificador = typeof CONFIG_DECODIFICADOR;
+
+/** o alcance da memoria de lugar na ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secoes 12.14 a 12.16; a IG-6; o D_MAX_ILHA_GRANDE do
+    Python): o `d_max` na proporcao do mapa de 128 x 60 celulas (2 048 subunidades = 128 celulas; o de sempre, 1 024, e a largura do mapa de
+    64 x 30). So os pets do jogo na ilha grande o usam (a v25 desde o ovo; os vivos, pelo evento "ma"). DECIDIDO (Matheus, 2026-11-11:
+    "Sim, para 128 celulas") */
+export const D_MAX_ILHA_GRANDE = 2048;

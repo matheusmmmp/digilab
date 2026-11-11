@@ -26,8 +26,8 @@ function viver(m: Motor, dias: number, longe: boolean): void {
 
 describe("o pet de teste do laboratorio (v16)", () => {
   test("a fabrica e a unica porta: o ovo padrao segue o padrao (a v15 do PR #525) e as versoes que abrem nao incluem o pet de teste", () => {
-    expect(VERSAO_PET).toBe(24);
-    expect(VERSOES_PET).toEqual([21, 22, 23, 24]);
+    expect(VERSAO_PET).toBe(25);
+    expect(VERSOES_PET).toEqual([21, 22, 23, 24, 25, 26]);   // a v26: os dois pets (CO4c)
     expect(VERSAO_PET_LAB).toBe(16);
     expect(new Motor(101, 21).versao).toBe(21);
     expect(new Motor(101, 21).lab).toBeNull();

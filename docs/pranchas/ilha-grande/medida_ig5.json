@@ -1381,5 +1381,121 @@
     }
    ]
   }
+ },
+ "ig6_retorno": {
+  "grande_128x60|modular_v25|20": {
+   "soltos": 5,
+   "voltaram": 5,
+   "menor_media": 0.32,
+   "mediana_ticks": 300,
+   "vidas": [
+    {
+     "solto": true,
+     "menor": 0.5,
+     "voltou": true,
+     "ticks": 270
+    },
+    {
+     "solto": true,
+     "menor": 0.1,
+     "voltou": true,
+     "ticks": 255
+    },
+    {
+     "solto": true,
+     "menor": 0.1,
+     "voltou": true,
+     "ticks": 300
+    },
+    {
+     "solto": true,
+     "menor": 0.1,
+     "voltou": true,
+     "ticks": 615
+    },
+    {
+     "solto": true,
+     "menor": 0.8,
+     "voltou": true,
+     "ticks": 360
+    }
+   ]
+  },
+  "grande_128x60|modular_v25|40": {
+   "soltos": 5,
+   "voltaram": 4,
+   "menor_media": 1.48,
+   "mediana_ticks": 990,
+   "vidas": [
+    {
+     "solto": true,
+     "menor": 0.2,
+     "voltou": true,
+     "ticks": 675
+    },
+    {
+     "solto": true,
+     "menor": 0.2,
+     "voltou": true,
+     "ticks": 675
+    },
+    {
+     "solto": true,
+     "menor": 0.1,
+     "voltou": true,
+     "ticks": 990
+    },
+    {
+     "solto": true,
+     "menor": 5.8,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 1.1,
+     "voltou": true,
+     "ticks": 1155
+    }
+   ]
+  },
+  "grande_128x60|modular_v25|70": {
+   "soltos": 5,
+   "voltaram": 1,
+   "menor_media": 11.98,
+   "mediana_ticks": 1215,
+   "vidas": [
+    {
+     "solto": true,
+     "menor": 0.5,
+     "voltou": true,
+     "ticks": 1215
+    },
+    {
+     "solto": true,
+     "menor": 3.4,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 9.2,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 19.7,
+     "voltou": false,
+     "ticks": null
+    },
+    {
+     "solto": true,
+     "menor": 27.1,
+     "voltou": false,
+     "ticks": null
+    }
+   ]
+  }
  }
 }

@@ -8,7 +8,7 @@
      (norte e oeste), o rio (leste) ou a areia (sul): o pet para ali porque o motor o prende, e a vista mostra um limite.
    A vista (cena.ts) so desenha o que esta aqui. Todos os numeros sao do desenho: PROPOSTO, SEM FONTE. */
 import { AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, ARVORE_FECHADA, LAYOUT_MUNDO_GRANDE, MARCO_FECHADO, PONTE, celulasSecas, type ConfigMundo } from "../../../../motor/index.ts";
-import { ENFEITES_GRADE, FIM_ILHA, ILHA_AGUA, ILHA_GRANDE, PLANTA_ILHA, PLANTA_ILHA_AGUA, PLANTA_ILHA_GRANDE, type PlantaIlha } from "./constantes.ts";
+import { ENFEITES_GRADE, TV_TRES_QUARTOS, FIM_ILHA, ILHA_AGUA, ILHA_GRANDE, PLANTA_ILHA, PLANTA_ILHA_AGUA, PLANTA_ILHA_GRANDE, type PlantaIlha } from "./constantes.ts";
 import { ENFEITES_MODELOS, MODELOS, MODELO_ARVORE_DO_MOTOR, type NomeEnfeite, type NomeLugar, type NomeModelo } from "./modelos.ts";
 
 /** a moldura em volta da area andavel, em celulas (pelo menos 8 de cada lado, secao 5) */
@@ -441,7 +441,9 @@ export class Ilha {
         && !this.lugares.some(l => Math.hypot(l.x - x, l.z - z) < P.lugares[l.nome].clareira + G.clareira), "o enfeite " + nome);
       /* a frente para o ponto mais perto da area; dentro dela (a ilha com agua), para a praca */
       const ax = this.comAgua ? P.praca.x : Math.min(Math.max(x, 0), this.area.w), az = this.comAgua ? P.praca.z : Math.min(Math.max(z, 0), this.area.h);
-      this.enfeites.push({ nome, x, z, giro: Math.atan2(ax - x, az - z) });
+      /* a TV fica em tres quartos para a camera (a UX-GV-3): a TV_TRES_QUARTOS graus do sul, para o lado desse mesmo ponto */
+      const giro = nome === "tv" ? (ax < x ? -1 : 1) * TV_TRES_QUARTOS * Math.PI / 180 : Math.atan2(ax - x, az - z);
+      this.enfeites.push({ nome, x, z, giro });
       this.abrir(x, z, G.clareira);
       const E = D.entorno;
       for (const [modelo, quantos, escala] of [["arbusto", E.arbusto, [0.8, 1.15]], ["grama_alta", E.grama_alta, [0.9, 1.3]], ["pedra", E.pedra, [0.6, 0.95]]] as const) {

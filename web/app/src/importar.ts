@@ -3,7 +3,7 @@
    outro registro = conflito: o dono escolhe qual fica, e o outro vai para a espera (ninguem e apagado). */
 import { useEffect, useState } from "react";
 import { Motor, VERSAO_PET_LAB, VERSOES_PET, type EventoRegistro } from "../motor/index.ts";
-import { motorReal, sairDoLab, trocarMotor } from "./jogo.ts";
+import { motorReal, sairDoLab, textoDoSaveAtual, trocarMotor } from "./jogo.ts";
 import { guardarImportadoLab, lerPetLab } from "./lab.ts";
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados, type Guardado } from "./pets.ts";
 import { textoSave } from "./save.ts";
@@ -42,8 +42,9 @@ export interface Lido { g: Guardado; m: Motor; arquivo: string; lab: boolean }
 export function lerArquivo(texto: string, arquivo: string): Lido {
   let d: unknown;
   try { d = JSON.parse(texto); } catch { throw new Error("o arquivo não é um registro do Digilab (JSON inválido)"); }
-  const s = d as { semente?: unknown; log?: unknown; versao?: unknown };
+  const s = d as { semente?: unknown; log?: unknown; versao?: unknown; grupo?: unknown };
   if (!Number.isInteger(s.semente) || !Array.isArray(s.log)) throw new Error("o arquivo não tem semente e registro");
+  if (s.grupo !== undefined) throw new Error("o arquivo é dos dois pets: ele ainda não se importa (só se abre como o save de hoje)");
   const g: Guardado = { semente: s.semente as number, log: s.log as EventoRegistro[], versao: (s.versao ?? 1) as number };
   /* o descarte 6 (COMBATE-TR, E2): os pets de antes da luta em tempo real nao abrem mais, nem pelo arquivo */
   const lab = g.versao === VERSAO_PET_LAB;
@@ -68,7 +69,7 @@ export function petAqui(o: Onde): Motor | null {
 }
 /* o mesmo pet: o mesmo registro, sem contar a passagem de ilha (o "mi" e do jogo, nao do jogador: o arquivo exportado antes da ilha
    grande e o pet daqui, que ja passou, sao o mesmo pet) */
-const semIlha = (log: readonly EventoRegistro[]): string => JSON.stringify(log.filter(e => e[1] !== "mi"));
+const semIlha = (log: readonly EventoRegistro[]): string => JSON.stringify(log.filter(e => e[1] !== "mi" && e[1] !== "ma"));
 const igual = (a: Guardado, b: Motor): boolean => semIlha(a.log) === semIlha(b.log) && (a.versao ?? 1) === b.versao;
 
 /** sem conflito: vai para a espera. Devolve a mensagem para a tela */
@@ -94,7 +95,7 @@ export function ficarComArquivo(l: Lido): void {
   sairDoLab();
   const o = localizar(l.g.semente), g = lerGuardados();
   if (o.tipo === "ativo") {
-    g.push(JSON.parse(textoSave(motorReal())) as Guardado);
+    g.push(JSON.parse(textoDoSaveAtual()) as Guardado);     // o par dos dois pets vai inteiro para a espera (CO4d)
     localStorage.setItem(CHAVE_GUARDADOS, JSON.stringify(g));
     trocarMotor(l.m, "save");
   } else if (o.tipo === "guardado") {

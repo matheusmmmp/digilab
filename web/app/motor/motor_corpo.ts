@@ -119,6 +119,8 @@ export class MotorCorpo {
   /** o laco de um tick e a acao do dono sem o log do MotorCorpo: os pets v11 do jogo (motor.ts) gravam o registro do Motor, e o
    *  MotorCorpo so roda a vida por baixo. A mesma conta do avancar e do observar */
   passo(): [number, AcaoPet][] { return this.laco(1); }
+  /** o pet decide no proximo passo (dois pets, CO4b: o Grupo sorteia a vez entre os que decidem no tick) */
+  decideNoProximoPasso(): boolean { return this.estado.tick >= this.proximaDecisao; }
   acaoDono(acao: string): void { this.aplicarAcaoUsuario(acao); }
 
   /** o passo do replay: o evento tem de cair no tick de agora (o log e a vida andam juntos) */

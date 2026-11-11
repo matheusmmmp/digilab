@@ -1,0 +1,447 @@
+{
+  "bootstrap": 2000,
+  "contagens": {
+    "confirmacao|E": {
+      "afasta": 572,
+      "n": 1758
+    },
+    "descoberta|E": {
+      "afasta": 560,
+      "n": 1768
+    },
+    "descoberta|R": {
+      "afasta": 521,
+      "n": 1753
+    }
+  },
+  "delta": {
+    "C-ACAO": {
+      "confirmacao|E": -0.015697524120850237,
+      "descoberta|E": -0.005071700041518967,
+      "descoberta|R": 0.0029417482019050145
+    },
+    "C-BRACO": {
+      "confirmacao|E": 0.024288154897494307,
+      "descoberta|E": 0.005958139463460355,
+      "descoberta|R": 0.009003579563944042
+    },
+    "C-DONO": {
+      "confirmacao|E": 0.17355467843046202,
+      "descoberta|E": 0.23233820555249127,
+      "descoberta|R": 0.21908795778166743
+    },
+    "C-ENERGIA": {
+      "confirmacao|E": -0.038856832813364106,
+      "descoberta|E": -0.0678733031674208,
+      "descoberta|R": -0.071537724600782
+    },
+    "C-FOME": {
+      "confirmacao|E": 0.03410210664979407,
+      "descoberta|E": 0.06169123669123666,
+      "descoberta|R": 0.06808490143602453
+    },
+    "C-HUMOR": {
+      "confirmacao|E": 0.0659840728100114,
+      "descoberta|E": 0.09541361428081435,
+      "descoberta|R": 0.09566473988439306
+    },
+    "C-IDADE": {
+      "confirmacao|E": 0.0037204099745893338,
+      "descoberta|E": 0.09052969502407704,
+      "descoberta|R": 0.09077159737537094
+    }
+  },
+  "descritivos": {
+    "cruzada": {
+      "confirmacao|E": {
+        "C-DONO x C-HUMOR": {
+          "C-DONO=False|C-HUMOR=False": {
+            "fracao_afasta": 0.20909090909090908,
+            "n": 440
+          },
+          "C-DONO=False|C-HUMOR=True": {
+            "fracao_afasta": 0.3021978021978022,
+            "n": 728
+          },
+          "C-DONO=True|C-HUMOR=False": {
+            "fracao_afasta": 0.37585421412300685,
+            "n": 439
+          },
+          "C-DONO=True|C-HUMOR=True": {
+            "fracao_afasta": 0.6291390728476821,
+            "n": 151
+          }
+        }
+      },
+      "descoberta|E": {
+        "C-DONO x C-HUMOR": {
+          "C-DONO=False|C-HUMOR=False": {
+            "fracao_afasta": 0.16806722689075632,
+            "n": 476
+          },
+          "C-DONO=False|C-HUMOR=True": {
+            "fracao_afasta": 0.28714285714285714,
+            "n": 700
+          },
+          "C-DONO=True|C-HUMOR=False": {
+            "fracao_afasta": 0.38516746411483255,
+            "n": 418
+          },
+          "C-DONO=True|C-HUMOR=True": {
+            "fracao_afasta": 0.6781609195402298,
+            "n": 174
+          }
+        }
+      },
+      "descoberta|R": {
+        "C-DONO x C-HUMOR": {
+          "C-DONO=False|C-HUMOR=False": {
+            "fracao_afasta": 0.14767932489451477,
+            "n": 474
+          },
+          "C-DONO=False|C-HUMOR=True": {
+            "fracao_afasta": 0.27601156069364163,
+            "n": 692
+          },
+          "C-DONO=True|C-HUMOR=False": {
+            "fracao_afasta": 0.3671497584541063,
+            "n": 414
+          },
+          "C-DONO=True|C-HUMOR=True": {
+            "fracao_afasta": 0.6242774566473989,
+            "n": 173
+          }
+        }
+      }
+    },
+    "drives": {
+      "confirmacao|E": {
+        "absorve": {
+          "energia": {
+            "media": 0.3895462806820311,
+            "quartis": [
+              0.2936388888888889,
+              0.3731111111111111,
+              0.46695833333333336
+            ]
+          },
+          "fome": {
+            "media": 0.5543317875210793,
+            "quartis": [
+              0.35,
+              0.6125,
+              0.8375
+            ]
+          },
+          "humor": {
+            "media": 0.6120678752107926,
+            "quartis": [
+              0.469375,
+              0.5875,
+              0.768125
+            ]
+          }
+        },
+        "afasta": {
+          "energia": {
+            "media": 0.40704632867132867,
+            "quartis": [
+              0.2989583333333333,
+              0.39222222222222225,
+              0.4845555555555555
+            ]
+          },
+          "fome": {
+            "media": 0.5687718531468531,
+            "quartis": [
+              0.34062500000000007,
+              0.65625,
+              0.825
+            ]
+          },
+          "humor": {
+            "media": 0.5602753496503496,
+            "quartis": [
+              0.433125,
+              0.55375,
+              0.734375
+            ]
+          }
+        }
+      },
+      "descoberta|E": {
+        "absorve": {
+          "energia": {
+            "media": 0.37985352281089035,
+            "quartis": [
+              0.2920555555555555,
+              0.35755555555555557,
+              0.4470694444444444
+            ]
+          },
+          "fome": {
+            "media": 0.540469784768212,
+            "quartis": [
+              0.3,
+              0.575,
+              0.8125
+            ]
+          },
+          "humor": {
+            "media": 0.617369619205298,
+            "quartis": [
+              0.48,
+              0.595,
+              0.776875
+            ]
+          }
+        },
+        "afasta": {
+          "energia": {
+            "media": 0.40298859126984127,
+            "quartis": [
+              0.3011111111111111,
+              0.38430555555555557,
+              0.47575
+            ]
+          },
+          "fome": {
+            "media": 0.5665625,
+            "quartis": [
+              0.3,
+              0.6625,
+              0.825
+            ]
+          },
+          "humor": {
+            "media": 0.5609464285714285,
+            "quartis": [
+              0.43,
+              0.55,
+              0.73
+            ]
+          }
+        }
+      },
+      "descoberta|R": {
+        "absorve": {
+          "energia": {
+            "media": 0.38054076479076476,
+            "quartis": [
+              0.29259722222222223,
+              0.35755555555555557,
+              0.44722222222222224
+            ]
+          },
+          "fome": {
+            "media": 0.5390422077922078,
+            "quartis": [
+              0.3,
+              0.575,
+              0.8125
+            ]
+          },
+          "humor": {
+            "media": 0.6172524350649351,
+            "quartis": [
+              0.48,
+              0.595,
+              0.775
+            ]
+          }
+        },
+        "afasta": {
+          "energia": {
+            "media": 0.40335892514395394,
+            "quartis": [
+              0.3,
+              0.388,
+              0.47538888888888886
+            ]
+          },
+          "fome": {
+            "media": 0.5717850287907869,
+            "quartis": [
+              0.3,
+              0.675,
+              0.8375
+            ]
+          },
+          "humor": {
+            "media": 0.5592658349328214,
+            "quartis": [
+              0.43,
+              0.54,
+              0.7362500000000001
+            ]
+          }
+        }
+      }
+    },
+    "imediato": {
+      "confirmacao|E": {
+        "resto do dia t diferente": {
+          "fracao_afasta": 0.9574468085106383,
+          "n": 564
+        },
+        "resto do dia t igual": {
+          "fracao_afasta": 0.02680067001675042,
+          "n": 1194
+        }
+      },
+      "descoberta|E": {
+        "resto do dia t diferente": {
+          "fracao_afasta": 0.9638989169675091,
+          "n": 554
+        },
+        "resto do dia t igual": {
+          "fracao_afasta": 0.019801980198019802,
+          "n": 1212
+        }
+      },
+      "descoberta|R": {
+        "resto do dia t diferente": {
+          "fracao_afasta": 0.9232209737827716,
+          "n": 534
+        },
+        "resto do dia t igual": {
+          "fracao_afasta": 0.021364009860312245,
+          "n": 1217
+        }
+      }
+    }
+  },
+  "fase": "individualidade-i7-ad3",
+  "ic95": {
+    "C-ACAO": {
+      "confirmacao|E": [
+        -0.06956955703882484,
+        0.037217692117617995
+      ],
+      "descoberta|E": [
+        -0.06404828637850568,
+        0.05107210031347964
+      ],
+      "descoberta|R": [
+        -0.052512077984058825,
+        0.05818851538796982
+      ]
+    },
+    "C-BRACO": {
+      "confirmacao|E": [
+        -0.008774243258686976,
+        0.05506672194837303
+      ],
+      "descoberta|E": [
+        -0.024031802892876097,
+        0.03378909459647106
+      ],
+      "descoberta|R": [
+        -0.022066743383199083,
+        0.03804568236599454
+      ]
+    },
+    "C-DONO": {
+      "confirmacao|E": [
+        0.12239230795931827,
+        0.22318550207200621
+      ],
+      "descoberta|E": [
+        0.18412301090649025,
+        0.2816761028965537
+      ],
+      "descoberta|R": [
+        0.16688284244429225,
+        0.27024026489789893
+      ]
+    },
+    "C-ENERGIA": {
+      "confirmacao|E": [
+        -0.08888499573787123,
+        0.015215481382999385
+      ],
+      "descoberta|E": [
+        -0.11104169105558642,
+        -0.02252826559196236
+      ],
+      "descoberta|R": [
+        -0.11048455446883076,
+        -0.03325109663420667
+      ]
+    },
+    "C-FOME": {
+      "confirmacao|E": [
+        -0.013153520073144354,
+        0.08165412735864319
+      ],
+      "descoberta|E": [
+        0.007275823367777379,
+        0.1128317449244437
+      ],
+      "descoberta|R": [
+        0.017218980941267947,
+        0.11730387706378828
+      ]
+    },
+    "C-HUMOR": {
+      "confirmacao|E": [
+        0.019088213491475214,
+        0.11328595913493944
+      ],
+      "descoberta|E": [
+        0.0465323761783939,
+        0.14285714285714285
+      ],
+      "descoberta|R": [
+        0.04929988561511456,
+        0.1427969627626378
+      ]
+    },
+    "C-IDADE": {
+      "confirmacao|E": [
+        -0.05054719751752418,
+        0.058261379383861
+      ],
+      "descoberta|E": [
+        0.043082498171964356,
+        0.13835137398732195
+      ],
+      "descoberta|R": [
+        0.04448392278580959,
+        0.13582857766977036
+      ]
+    }
+  },
+  "leitura": {
+    "C-ACAO": "nao separa nesta analise",
+    "C-BRACO": "nao separa nesta analise",
+    "C-DONO": "separa",
+    "C-ENERGIA": "so na descoberta: nao se confirma nos pets do I7b",
+    "C-FOME": "so na descoberta: nao se confirma nos pets do I7b",
+    "C-HUMOR": "separa",
+    "C-IDADE": "so na descoberta: nao se confirma nos pets do I7b"
+  },
+  "leitura_feita": {
+    "git_head": "defdc9000da69ee11fd4814cb90bc7df04c47b61",
+    "git_limpo": true,
+    "orquestrador_sha256": "7b3aa97767f26e1e0a338cf58f21ea581defeed231ea82e58639077afce9aa75"
+  },
+  "multiplicidade": "7 candidatos sem correcao; a repeticao na confirmacao faz o papel (16.4)",
+  "niveis": {
+    "acao_mais_comum": "dormir",
+    "acoes": {
+      "brincar": 20,
+      "chamar_atencao": 289,
+      "comer": 44,
+      "dormir": 2543,
+      "emburrar": 4,
+      "explorar": 621
+    },
+    "medianas": {
+      "energia": 0.3637222222222222,
+      "fome": 0.6,
+      "humor": 0.58
+    }
+  },
+  "plano": "docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md"
+}

@@ -10,7 +10,7 @@
      - no app: o save passa ao abrir e e gravado; o pet guardado e o ovo novo tambem chegam a ilha grande. */
 import { describe, expect, test } from "vitest";
 import {
-  CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, TICK_INICIAL, TPD, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V22, VERSAO_V23, VERSAO_V24, VERSOES_PET,
+  CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, TICK_INICIAL, TPD, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V22, VERSAO_V23, VERSAO_V24, VERSAO_V25, VERSOES_PET,
   ehCerebroTrocavel, ehLutaPoc,
 } from "../motor/constantes.ts";
 import { CONFIG_CONTRATO_AGUA, bloqueioEm } from "../motor/contrato.ts";
@@ -81,15 +81,18 @@ const semTrajetoriaFechada = (m: Motor): void => {
 
 describe("as versoes: o ovo novo nasce na ilha grande", () => {
   test("a v24 e a v23 com o mundo grande; a v23, a v22 e a v21 seguem abrindo", () => {
-    expect([VERSAO_PET, VERSAO_V24, VERSAO_V23, VERSAO_V22, VERSAO_V21]).toEqual([24, 24, 23, 22, 21]);
-    expect(VERSOES_PET).toEqual([21, 22, 23, 24]);
-    expect([versaoDoOvo(), versoesQueAbrem()]).toEqual([24, [21, 22, 23, 24]]);
-    expect([21, 22, 23, 24].map(v => [ehCerebroTrocavel(v), ehLutaPoc(v)])).toEqual([[true, true], [true, true], [true, true], [true, true]]);
+    expect([VERSAO_PET, VERSAO_V25, VERSAO_V24, VERSAO_V23, VERSAO_V22, VERSAO_V21]).toEqual([25, 25, 24, 23, 22, 21]);
+    expect(VERSOES_PET).toEqual([21, 22, 23, 24, 25, 26]);   // a v26: os dois pets (CO4c)
+    expect([versaoDoOvo(), versoesQueAbrem()]).toEqual([25, [21, 22, 23, 24, 25, 26]]);   // a v26: os dois pets (CO4c)
+    expect([21, 22, 23, 24, 25].map(v => [ehCerebroTrocavel(v), ehLutaPoc(v)])).toEqual([[true, true], [true, true], [true, true], [true, true], [true, true]]);
     /* a v24 luta com a tabela da v23 (a rodada de equilibrio); a v22 e a v21, com a delas */
-    expect([21, 22, 23, 24].map(tabelaLuta).map(x => x === tabelaLuta(23))).toEqual([false, false, true, true]);
+    expect([21, 22, 23, 24, 25].map(tabelaLuta).map(x => x === tabelaLuta(23))).toEqual([false, false, true, true, true]);
     expect(ehLutaPoc(VERSAO_PET_LAB)).toBe(false);
     const novo = new Motor(101), meio = new Motor(101, 22), velho = new Motor(101, 21);
-    expect([novo.versao, novo.naIlhaComAgua, novo.naIlhaGrande, novo.podeMudarIlha]).toEqual([24, true, true, false]);
+    expect([novo.versao, novo.naIlhaComAgua, novo.naIlhaGrande, novo.podeMudarIlha]).toEqual([25, true, true, false]);
+    /* a v25 nasce com a memoria de 128 celulas; a v24, com a de sempre (e pode ganha-la pelo evento) */
+    const v24 = new Motor(101, 24);
+    expect([novo.alcanceMemoria, novo.podeAlongarMemoria, v24.alcanceMemoria, v24.podeAlongarMemoria, v24.naIlhaGrande]).toEqual([2048, false, 1024, true, true]);
     const luta = new Motor(101, 23);
     expect([luta.versao, luta.naIlhaComAgua, luta.naIlhaGrande, luta.podeMudarIlha]).toEqual([23, true, false, true]);
     expect(luta.mundo!.cm).toEqual(CMU_MVP_AGUA);
@@ -106,7 +109,7 @@ describe("as versoes: o ovo novo nasce na ilha grande", () => {
     expect([novo.mundo!.trocaIlha, novo.mundo!.trocaMaior]).toEqual([null, null]);
   });
 
-  for (const [v, s] of [[24, 101], [24, 202], [24, 303], [23, 101], [22, 101]] as const)
+  for (const [v, s] of [[25, 101], [24, 101], [24, 202], [24, 303], [23, 101], [22, 101]] as const)
     test(`a v${v} @${s}: 3 dias com a racao e o pet soltos em pontos fechados; nada fica neles, e o replay refaz a vida`, () => {
       const m = ligarProduto(new Motor(s, v));
       expect(viver(m, 3)).toBe(0);
@@ -129,7 +132,7 @@ describe("as versoes: o ovo novo nasce na ilha grande", () => {
     expect(() => velho.deixarComida("racao", 1800, 700)).toThrow(/fora do mapa/);
     expect(() => velho.deixarBola(1800, 700)).toThrow(/fora do mapa/);
     expect([novo.log.length, velho.log.length]).toEqual(n);
-    expect(Motor.reproduzir(101, copia(novo.log), 24).assinatura()).toBe(novo.assinatura());
+    expect(Motor.reproduzir(101, copia(novo.log), 25).assinatura()).toBe(novo.assinatura());
     /* o mesmo registro num pet do mapa de 64 x 30 falha alto no replay */
     expect(() => Motor.reproduzir(101, copia(novo.log), 21)).toThrow(/fora do mapa/);
   });
@@ -221,19 +224,22 @@ describe("no app", () => {
     expect([m.versao, m.naIlhaGrande, emTerra(m)]).toEqual([v, true, true]);
     const s = JSON.parse(a.d[CHAVE]!) as { versao: number; log: EventoRegistro[] };
     expect(s.versao).toBe(v);
-    expect(s.log.slice(0, -1)).toEqual(copia(antigo.log));
-    expect(s.log.at(-1)).toEqual([antigo.e.tick, "mi", { ilha: "grande" }]);
+    expect(s.log.slice(0, -2)).toEqual(copia(antigo.log));
+    expect(s.log.at(-2)).toEqual([antigo.e.tick, "mi", { ilha: "grande" }]);
+    expect(s.log.at(-1)).toEqual([antigo.e.tick, "ma", { alcance: 2048 }]);          // na ilha grande, a memoria de 128 celulas (IG6)
+    expect(m.alcanceMemoria).toBe(2048);
     expect(Motor.reproduzir(606, s.log, v).assinatura()).toBe(m.assinatura());
     const texto = a.d[CHAVE]!;
     iniciarJogo(a);
     expect(a.d[CHAVE]).toBe(texto);
     expect(jogoAtual().motor.log.filter(e => e[1] === "mi").length).toBe(1);
+    expect(jogoAtual().motor.log.filter(e => e[1] === "ma").length).toBe(1);
   });
 
-  test("o pet de exemplo das versoes de antes (v21, v22 e v23) segue nao sendo do jogador, antes e depois de passar para a ilha grande", () => {
+  test("o pet de exemplo das versoes de antes (v21 a v24) segue nao sendo do jogador, antes e depois de passar para a ilha grande", () => {
     const hoje = petExemplo();
-    expect([hoje.versao, ehPetDoJogador(hoje)]).toEqual([24, false]);
-    for (const v of [21, 22, 23]) {
+    expect([hoje.versao, ehPetDoJogador(hoje)]).toEqual([25, false]);
+    for (const v of [21, 22, 23, 24]) {
       const antigo = petExemplo(v);
       expect([antigo.versao, ehPetDoJogador(antigo)]).toEqual([v, false]);
       antigo.avancar(90);
@@ -257,18 +263,18 @@ describe("no app", () => {
     expect(w.bolaEm(9999)).toEqual(w.emTerra(...meio));
   });
 
-  test("o pet que entra pela troca de pet tambem passa; o ovo novo ja nasce v24 na ilha grande", () => {
+  test("o pet que entra pela troca de pet tambem passa; o ovo novo ja nasce v25 na ilha grande", () => {
     const a = armaz({ [CHAVE]: textoSave(ligarProduto(new Motor(707, 21))) });
     iniciarJogo(a);
     const guardado = ligarProduto(new Motor(808, 22)); viver(guardado, .5);
     expect(guardado.naIlhaGrande).toBe(false);
     trocarMotor(guardado, "save");
     expect([jogoAtual().motor.semente, jogoAtual().motor.naIlhaGrande]).toEqual([808, true]);
-    expect((JSON.parse(a.d[CHAVE]!) as { log: EventoRegistro[] }).log.at(-1)).toEqual([guardado.e.tick, "mi", { ilha: "grande" }]);
+    expect((JSON.parse(a.d[CHAVE]!) as { log: EventoRegistro[] }).log.slice(-2)).toEqual([[guardado.e.tick, "mi", { ilha: "grande" }], [guardado.e.tick, "ma", { alcance: 2048 }]]);
     novoPet();
     const ovo = jogoAtual().motor;
-    expect([ovo.versao, ovo.naIlhaGrande, ovo.log.some(e => e[1] === "mi")]).toEqual([24, true, false]);
-    expect((JSON.parse(a.d[CHAVE]!) as { versao: number }).versao).toBe(24);
+    expect([ovo.versao, ovo.naIlhaGrande, ovo.log.some(e => e[1] === "mi" || e[1] === "ma"), ovo.alcanceMemoria]).toEqual([25, true, false, 2048]);
+    expect((JSON.parse(a.d[CHAVE]!) as { versao: number }).versao).toBe(25);
   });
 });
 
@@ -323,7 +329,7 @@ describe("no app, depois da ida", () => {
   const armaz = (d: Record<string, string> = {}): Armazenamento & { d: Record<string, string> } =>
     ({ d, getItem: k => (k in d ? d[k]! : null), setItem(k, v) { d[k] = v; } });
 
-  for (const v of [21, 22, 23, 24]) test(`o pet de exemplo v${v} que ninguem tocou nao paga Bits ao abrir; depois de um cuidado, e do jogador`, () => {
+  for (const v of [21, 22, 23, 24, 25]) test(`o pet de exemplo v${v} que ninguem tocou nao paga Bits ao abrir; depois de um cuidado, e do jogador`, () => {
     const exemplo = petExemplo(v);
     exemplo.avancar(240);
     const a = armaz({ [CHAVE]: textoSave(exemplo) });
@@ -331,5 +337,67 @@ describe("no app, depois da ida", () => {
     const m = jogoAtual().motor;
     expect([m.versao, m.naIlhaGrande, ehPetDoJogador(m)]).toEqual([v, true, false]);
     expect(a.d[CHAVE_TAMER] ?? "").not.toContain('"bits"');
+  });
+});
+
+describe("a memoria de 128 celulas (IG6): a v25 e o evento ma", () => {
+  const dMax = (m: Motor): number => (m as unknown as { modular: NonNullable<Motor["lab"]> }).modular.mem.p.d_max;
+  for (const v of [21, 22, 23, 24] as const) test(`a v${v} na ilha grande ganha a memoria longa pelo evento, uma vez; so o alcance muda; o replay refaz`, () => {
+    const m = ligarProduto(new Motor(5151, v)), gemeo = ligarProduto(new Motor(5151, v));
+    for (const x of [m, gemeo]) { viver(x, 1.5); if (x.podeMudarIlha) x.mudarIlha(); viver(x, .5); }
+    expect(m.assinatura()).toBe(gemeo.assinatura());
+    expect([m.naIlhaGrande, m.alcanceMemoria, dMax(m), m.podeAlongarMemoria]).toEqual([true, 1024, 1024, true]);
+    const t = m.e.tick, n = m.log.length, antes = m.assinatura(), eps = JSON.stringify(m.lab!.mem.episodios);
+    m.alongarMemoria();
+    expect(m.log.slice(n)).toEqual([[t, "ma", { alcance: 2048 }]]);
+    expect([m.alcanceMemoria, dMax(m), m.podeAlongarMemoria, m.e.tick]).toEqual([2048, 2048, false, t]);
+    expect(JSON.stringify(m.lab!.mem.episodios)).toBe(eps);
+    /* a assinatura so ganha a marca do alcance: tirando ela, e a de antes */
+    const semMarca = (JSON.parse(m.assinatura()) as unknown[]).filter(x => !(Array.isArray(x) && x[0] === "ma"));
+    expect(JSON.stringify(semMarca)).toBe(antes);
+    expect(() => m.alongarMemoria()).toThrow(/memória longa/);
+    expect(() => m.aplicarEvento([t, "ma", { alcance: 2048 }])).toThrow();
+    viver(m, 1);
+    expect(Motor.reproduzir(5151, copia(m.log), v).assinatura()).toBe(m.assinatura());
+    /* o registro cortado antes do "ma" e a vida de antes */
+    expect(Motor.reproduzir(5151, copia(m.log.slice(0, n)), v).assinatura()).toBe(antes);
+  });
+
+  test("com o cerebro A decidindo o alcance fica guardado, e o modular criado depois nasce com ele", () => {
+    const m = new Motor(707, 24);
+    m.trocarCerebro("a");
+    viver(m, .5);
+    expect((m as unknown as { modular: unknown }).modular).toBeNull();
+    m.alongarMemoria();
+    expect(m.alcanceMemoria).toBe(2048);
+    m.trocarCerebro("modular");
+    expect(dMax(m)).toBe(2048);
+    viver(m, .5);
+    expect(Motor.reproduzir(707, copia(m.log), 24).assinatura()).toBe(m.assinatura());
+    /* sem nenhum "cb" antes (o pet que nunca escolheu cerebro): o evento vale, e o modular criado depois nasce com o alcance */
+    const cru = new Motor(808, 24);
+    cru.avancar(90);
+    cru.alongarMemoria();
+    cru.trocarCerebro("modular");
+    expect(dMax(cru)).toBe(2048);
+    viver(cru, .5);
+    expect(Motor.reproduzir(808, copia(cru.log), 24).assinatura()).toBe(cru.assinatura());
+    /* a v25 desde o ovo */
+    const ovo = ligarProduto(new Motor(707));
+    expect([ovo.versao, ovo.cerebroAtual, dMax(ovo), ovo.alcanceMemoria]).toEqual([25, "modular", 2048, 2048]);
+  });
+
+  test("quem nao recebe: fora da ilha grande, a v25, o pet de teste, o morto; o registro malformado falha alto", () => {
+    const fora = new Motor(101, 22), novo = new Motor(101), lab = new Motor(101, VERSAO_PET_LAB);
+    for (const x of [fora, novo, lab]) {
+      expect(x.podeAlongarMemoria).toBe(false);
+      expect(() => x.alongarMemoria()).toThrow(/memória longa/);
+      expect(() => x.aplicarEvento([TICK_INICIAL, "ma", { alcance: 2048 }])).toThrow();
+    }
+    const morto = new Motor(404, 24);
+    morto.morte = { tick: morto.e.tick, causa: "lesoes" };
+    expect([morto.podeAlongarMemoria, passarParaIlhaComAgua(morto)]).toEqual([false, false]);
+    for (const ruim of [{ alcance: 1024 }, { alcance: 4096 }, { alcance: "2048" }, { alcance: 2048, x: 1 }, {}, null, 2048])
+      expect(() => new Motor(101, 24).aplicarEvento([TICK_INICIAL, "ma", ruim] as unknown as EventoRegistro), JSON.stringify(ruim)).toThrow();
   });
 });
