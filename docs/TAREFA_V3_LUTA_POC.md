@@ -692,6 +692,29 @@ NPC só depende do total dele, então uma grade dá a curva de cada um. As grade
 A divisão dos stats (a D-LP5-9) mexe no mesmo lado do NPC e não encurta a distância do pet, nem muda a forma. Por isso a fase parou
 aqui, com a decisão levada ao Matheus no PR. Nenhum número do candidato mudou.
 
+### O critério novo e a rodada 3 (D-LP5-17)
+
+O Matheus: "Segue sua recomendação". O critério do P1 a P3 passou a sair do T1 do `lp5_1_esq`: o líder fica no meio do caminho entre o
+pet sem treino e o típico, na escala logística, com 0,10 de folga. Os limites são 0,41/0,59, 0,35/0,65, 0,30/0,70 e 0,27/0,73, do
+Rookie ao Mega, e o desafiante tem +0,15 e +0,05. A pior espécie vai só à leitura. O código está em
+`web/app/scripts/equilibrio_poc/criterios.ts`, com teste.
+
+- **A rodada 3** (`lp5_2/r3`): 7 pontos, cada NPC com a própria faixa de totais, 3 bases (86101, 86201, 86301), cerca de 28 000 lutas
+  por ponto.
+  - **o Gazimon** passa de 0,65 a 0,8 vez o total. Pela regra de escolha (a maior folga), fica em 0,8 vez: 76,8;
+  - **o MarinBullmon e o Tortomon** já passam com o total de hoje, então não mudam;
+  - **os outros 7** (o Guardromon, o Youkomon, o Myotismon, o Piedmon, o Devidramon, o Puppetmon e o Machinedramon) não passam em
+    nenhum total. A distância entre o pet sem treino e o típico contra eles fica de 0,10 a 0,25, e o critério pede de 0,18 a 0,46;
+  - **com 3 bases, o Puppetmon e o Machinedramon dão uns 0,09 a mais no sem treino** que com 2, no mesmo total. A mistura das formas
+    Mega muda de uma base para outra, e o erro passa do binomial.
+- **A medida inteira do `lp5_2`** (`lp5_2/calibracao`, commit `9270f774`, 1 412 957 lutas) dá **9 de 21 metas**: as 8 do `lp5_1_esq` e
+  o P1 (o Gazimon: sem treino 0,380, típico 0,627). O P2 e o P3 reprovam pelos 7 NPCs de cima.
+- **O P5 não lê as alavancas da LP5-2.** O dono simulado só luta na Arena, então o total dos NPCs não entra na vida. O treino dos
+  rivais da Arena está em 0 e só sobe, o que deixaria os rivais mais fortes. O P5 segue em 19 de 100 vidas no Mega: 73 param no
+  Champion. Lá, o pet da vida faz as 10 lutas de sparring e vence 0,67 delas (670 de 1 000), contra 0,85 do pet típico na bancada
+  `sparring`. A causa provável é a vida, não o rival (a condição pela saúde, o caráter, o treino perto de 21 pontos e não 22), mas ela
+  não foi medida.
+
 ## Resultado da LP3c (2026-11-10)
 
 Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp3c`, a pedido do Gerente de sprites e luta. O pedido seguiu a revisão dos

@@ -623,3 +623,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — COOPERACAO, CO1: os gabaritos (Gerente da V3, Claude Code, Opus 5.5, branch `v3-cooperacao-co1`)](registro/2026-11.md)
 - [2026-11-11 — LUTA_POC, LP5: a esquiva ligada no candidato (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-calib`)](registro/2026-11.md)
 - [2026-11-11 — LUTA_POC, LP5-2: as rodadas 1 e 2 do total dos NPCs (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-2`)](registro/2026-11.md)
+- [2026-11-11 — LUTA_POC, LP5-2: o critério novo do P1 a P3 e a rodada 3 (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-2`)](registro/2026-11.md)
