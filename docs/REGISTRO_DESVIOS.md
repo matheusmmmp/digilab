@@ -705,3 +705,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — CONVERSA_PET, DC5c, o adendo do plano e a config da validação (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5c`)](registro/2026-11.md)
 - [2026-11-11 — MITOLOGIA: a pedra na ilha grande (Gerente da V3, Claude Code, Opus 5.5, branch `v3-mitologia-ilha-grande`)](registro/2026-11.md)
 - [2026-11-11 — COOPERACAO, a espec da CO6 (Claude Code, Opus 5.5, sessão da INDIVIDUALIDADE, branch `v3-cooperacao-co6-espec`)](registro/2026-11.md)
+- [2026-11-11 — LUTA_POC, o palco da v23 sem o tiro e a esquiva (Claude Code, Opus 5.5, sessão lateral, branch `v3-palco-v23`)](registro/2026-11.md)
+- [2026-11-11 — SONO_SEGURA: o sono do modular segura até a energia passar de 90 % (worker, Claude Code, branch `v3-sono-segura`)](registro/2026-11.md)
