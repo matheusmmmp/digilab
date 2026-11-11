@@ -569,6 +569,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-07 — LUTA_EQUILIBRIO_R3, o plano da terceira rodada de equilíbrio do combate (worker, Claude Code, Opus 5.5, branch `v3-luta-equilibrio-r3`)](registro/2026-11.md)
 - [2026-11-07 — LUTA_E2E_ARENA, os e2e da E2 à E4 na Arena da L3 (worker, Claude Code, Opus 5.5, branch `v3-luta-e2e-arena`)](registro/2026-11.md)
 - [2026-11-07 — LUTA_CARTAO_390, a faixa "O que [pet] faz" no celular (worker, Claude Code, Opus 5.5, branch `v3-luta-cartao-390`)](registro/2026-11.md)
+- [2026-11-07 — PET_VIVO, etapa 0a: a verificação das referências da revisão I (worker, Claude Code, Opus 5.5, branch `v3-pet-vivo-referencias`)](registro/2026-11.md)
 - [2026-11-08 — ARTIGO_A1_FIGURAS, as figuras e as tabelas do artigo A1 pelos artefatos (etapa A1-4; worker, Claude Code, Sonnet 5.5, branch `v3-artigo-a1-figuras`)](registro/2026-11.md)
 - [2026-11-07 — PET_VIVO, etapa 0: os planos da auditoria da escolha (0b) e da medida de "age pelo estado" (0c) (worker, Claude Code, Opus 5.5, branch `v3-pet-vivo`)](registro/2026-11.md)
 - [2026-11-08 — PET_VIVO, etapa 0b/0c: o código da auditoria (worker, Claude Code, Opus 5.5, branch `v3-pet-vivo-codigo`)](registro/2026-11.md)
