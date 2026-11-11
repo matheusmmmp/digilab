@@ -8,7 +8,7 @@ import { useJogo } from "../jogo.ts";
 import { hhmm } from "../telas/pet/TelaPet.tsx";
 import "../estilo/lab.css";
 
-const NOME_TERMO: Record<TermoLab, string> = {
+export const NOME_TERMO: Record<TermoLab, string> = {
   memoria: "Lugar lembrado", inato: "Inato", lembranca: "Lembrança", objeto: "Objeto à vista", incentivo: "Incentivo (P1)", persistencia: "Persistência", habito: "Hábito (P2)",
 };
 const NOME_SONDA: Record<string, string> = {
