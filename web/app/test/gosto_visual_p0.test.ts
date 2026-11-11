@@ -8,7 +8,7 @@ import { createElement as h } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vitest";
 import { GOSTO_VISUAL_LIGADO, gostoVisualLigado } from "../src/gostoVisual/chave.ts";
-import { GostoVisual, PetAssistindo } from "../src/gostoVisual/GostoVisual.tsx";
+import { GostoVisual } from "../src/gostoVisual/GostoVisual.tsx";
 import { analisarQuadro, vetorDoSom } from "../src/gostoVisual/sentidos.ts";
 import {
   COMPONENTES, alvo, doTexto, valores, estadoInicial, gostaMaisDe, inatoDaSemente, paraTexto, passo, tempoJunto, type EstadoGosto, type Sentido,
@@ -161,22 +161,5 @@ describe("a TV do jogo", () => {
       const r: string[] = [], tv = ligarTvDoJogo(sem, (s, nome) => { r.push(nome + JSON.stringify(s)); if (r.length === 3) { tv.parar(); ok(r); } }, 1);
     });
     expect(await colher(101)).toEqual(await colher(101));
-  });
-});
-
-describe("a vista", () => {
-  test("mostra a reação, o gosto de hoje e o de nascença separados, e o tempo junto", () => {
-    const ina = inatoDaSemente(101), e = rodar(101, visto(0.5, 0.5, 0.5, 0.5), 30);
-    const html = renderToStaticMarkup(h(PetAssistindo, {
-      v: { sprite: null, leitura: { agrado: 0.9, interesse: 0.8, novidade: 0, vontade: 0.8, olhando: true, reacao: "adorando" }, sentido: visto(0.5, 0.5, 0.5, 0.5), inato: ina, estado: e, capturando: true, temSom: false, origem: "a sua tela" },
-      acoes: null,
-    }));
-    expect(html).toContain("adorando");
-    expect(html).toContain("Gosta mais de:");
-    expect(html).toContain("De nascença:");
-    expect(html).toContain("30 s");
-    expect(html).toContain("Sem som");
-    expect(html).toContain("Assistindo: a sua tela");
-    expect(html).not.toContain(">ritmo<"); /* sem som, as barras do som não aparecem */
   });
 });

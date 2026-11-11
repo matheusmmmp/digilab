@@ -544,3 +544,36 @@ Os desvios estão em `docs/registro/2026-11.md`, D-UXGV-14 a 18.
 - **O chamado segura o sinal** enquanto durar. Um pet com fome por muito tempo fica sem o ícone da TV, e a reação segue no painel.
 
 Os desvios estão em `docs/registro/2026-11.md`, D-UXGV-19 a 24.
+
+---
+
+## 15. A etapa 3 do código: a janela pequena (2026-11-11, Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-gosto-visual-c3`)
+
+**O pedido do Matheus (2026-11-11):** "Sim, etapa 3".
+
+**O que mudou** (tudo atrás de `?gosto_visual=1`):
+- **O miolo novo** (`web/app/src/gostoVisual/JanelaTv.tsx`), como a prancha `janela_360`: o pet, a reação num balão, a linha "Gosta mais
+  de" e dois botões, Carinho e Parar. Saíram as barras, o "de nascença", o tempo junto e a rolagem.
+- **O balão fica fora do elemento que espelha o pet** (o problema 4): o "Não curtiu" não aparece mais invertido. Ele diz a reação em
+  palavras e troca no ritmo do sinal, no mínimo a cada 3 s.
+- **No alto,** o selo "Vendo a sua tela" enquanto a tela do dono é lida; na TV do jogo, a linha "Passando: a TV do jogo" com o programa.
+- **A janela é sempre escura,** na pele dos menus (tokens `--hx-*`), e acompanha a pele escolhida: Vidro ou Militar.
+- **O Carinho é o do jogo** (UX-GV-7), e entra no registro como o do botão.
+- **O teclado:** ao abrir, o foco vai ao Carinho. O Esc fecha a janela, e a TV continua.
+- **O leitor de tela** ouve a reação por uma região de status, no mesmo ritmo do painel (uma vez a cada 5 s, no máximo).
+- **A vista `PetAssistindo` e as classes `gv-*`** do cartão do P0 saíram do código e do CSS.
+
+**Os testes:** `web/app/test/gosto_visual_janela.test.ts` (11 testes) e um quarto teste em `web/app/e2e/gosto_visual_painel.spec.ts`, que
+abre a janela flutuante de verdade no Chrome.
+
+**As capturas do jogo** estão em `docs/pranchas/ux-gosto-visual/capturas_codigo/`: `etapa3_janela_360_vidro.jpg` e
+`etapa3_janela_360_militar.jpg`.
+
+**Não feito nem conferido:**
+- a janela com a tela do dono de verdade ("Mostrar minha tela") não foi testada, porque o seletor é do navegador; o selo dela está
+  coberto só pelo teste da vista;
+- a janela não foi aberta num Chrome com tela (só no Chrome sem tela do e2e), então ficar por cima das outras janelas não foi visto;
+- o pet aparece um pouco à direita do meio, porque o quadro que a cena entrega não é centrado;
+- nenhum revisor (`rev-a11y`, `rev-cena`, `rev-replay`) viu a etapa, e o contraste não foi medido.
+
+Com esta etapa, as três vistas do plano estão no código. Os desvios estão em `docs/registro/2026-11.md`, D-UXGV-25 a 28.

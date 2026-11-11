@@ -1,48 +1,33 @@
-/* O protótipo P0 do gosto visual (src/gostoVisual/GostoVisual.tsx): o cartão no canto e a janela pequena. Só existe com ?gosto_visual=1. */
-.gv-canto{position:fixed;left:12px;bottom:12px;z-index:60;width:min(320px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto;
-  background:var(--dl-surface,#1d2230);color:var(--dl-text,#eef);border-radius:14px;padding:10px 12px;box-shadow:0 6px 24px rgba(0,0,0,.35);font-size:.8125rem}
-.gv-cabeca{display:flex;align-items:center;gap:6px;margin-bottom:6px}
-.gv-cabeca .gv-mini{margin-left:auto}
-.gv-selo{font-size:.6875rem;padding:1px 6px;border-radius:6px;background:rgba(255,200,80,.2);color:#ffc850}
-.gv-na-janela{background:var(--dl-surface,#1d2230);color:var(--dl-text,#eef);min-height:100vh;padding:10px 12px;box-sizing:border-box;font-size:.8125rem}
-/* na janela pequena, os botões ficam presos no pé: numa janela mais baixa que o painel, ele rola e os botões continuam à mão */
-.gv-na-janela .gv-acoes{position:sticky;bottom:0;margin:6px -12px -10px;padding:8px 12px;background:var(--dl-surface,#1d2230);box-shadow:0 -4px 10px rgba(0,0,0,.3)}
-body:has(> .gv-na-janela){margin:0}
-.gv-cartao{display:flex;flex-direction:column;gap:4px}
-.gv-palco{position:relative;display:flex;align-items:flex-end;justify-content:space-between;height:150px;padding:0 6px;
-  background:linear-gradient(#2a3346,#202636);border-radius:10px;overflow:hidden}
-.gv-tela{width:70px;height:48px;margin-bottom:44px;border-radius:6px;border:4px solid #555;background:linear-gradient(135deg,#f66,#6cf,#fd5);transition:filter .6s}
-.gv-pet{position:relative;display:flex;flex-direction:column;align-items:center;margin-right:18px;transition:transform .6s}
-.gv-sprite{width:96px;height:96px;object-fit:contain;image-rendering:pixelated}
-.gv-sprite--vazio{display:grid;place-items:center;background:#334;border-radius:50%}
-/* olhando: o pet se inclina para a TV (à esquerda); enjoou: vira de costas */
-.gv-pet--olhando{transform:translateX(-14px) rotate(-6deg)}
-.gv-pet--adorando{transform:translateX(-20px) rotate(-8deg) scale(1.08)}
-.gv-pet--adorando .gv-sprite{animation:gv-pula .7s ease-in-out infinite alternate}
-.gv-pet--enjoou,.gv-pet--nao_gosta{transform:scaleX(-1)}
-.gv-pet--enjoou .gv-balao,.gv-pet--nao_gosta .gv-balao{transform:scaleX(-1)}
-.gv-pet--curioso{transform:translateX(-6px)}
-@keyframes gv-pula{from{transform:translateY(0)}to{transform:translateY(-6px)}}
-@media (prefers-reduced-motion:reduce){.gv-pet,.gv-tela{transition:none}.gv-pet--adorando .gv-sprite{animation:none}}
-.gv-balao{position:absolute;bottom:100px;white-space:nowrap;background:#fff;color:#222;font-weight:800;border-radius:10px;padding:2px 8px;font-size:.75rem}
-.gv-linha{margin:0}
-.gv-fraca{opacity:.75}
-.gv-barras{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-direction:column;gap:3px}
-.gv-barras li{display:flex;align-items:center;gap:6px}
-.gv-nome{width:64px;flex:none}
-.gv-trilho{position:relative;flex:1;height:8px;border-radius:4px;background:rgba(255,255,255,.12)}
-.gv-marca{position:absolute;top:-2px;width:12px;height:12px;margin-left:-6px;border-radius:50%}
-.gv-marca--inato{background:#8fd18f}
-.gv-marca--hoje{background:#ffb347;width:8px;height:8px;top:0;margin-left:-4px;border-radius:2px}
-.gv-marca--agora{background:#7ec8ff;width:3px;height:14px;top:-3px;margin-left:-1px;border-radius:1px}
-.gv-ponto{display:inline-block;position:static;width:8px;height:8px;margin:0 2px 0 6px;border-radius:50%}
-.gv-legenda{margin:2px 0 0;font-size:.6875rem;opacity:.75}
-.gv-acoes{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
-.gv-botao{font:inherit;font-weight:800;border:0;border-radius:8px;padding:5px 10px;background:rgba(255,255,255,.12);color:inherit;cursor:pointer}
-.gv-botao:disabled{opacity:.4;cursor:default}
-.gv-botao--forte{background:#ffb347;color:#222}
-.gv-botao:focus-visible{outline:2px solid #7ec8ff;outline-offset:2px}
-.gv-aviso{margin:4px 0;font-size:.75rem}
+/* O protótipo do gosto visual (src/gostoVisual/): a janela pequena, o painel da TV e o selo da captura. Só existe com ?gosto_visual=1.
+   As classes gv-* do cartão do P0 saíram com a etapa 3 do docs/PLANO_UX_GOSTO_VISUAL.md. */
+
+/* ---- A janela pequena (gostoVisual/JanelaTv.tsx; a prancha janela_360, 2026-11-11): sempre escura, na pele dos menus (tokens --hx-*);
+   nenhuma cor nova. Sem rolagem: o palco encolhe e os botões ficam no pé. Os tamanhos são PROPOSTOS, SEM FONTE. */
+body:has(> .jtv){ margin:0; background:var(--hx-miolo) }
+.jtv{ box-sizing:border-box; height:100vh; display:flex; flex-direction:column; gap:12px; padding:14px; overflow:hidden;
+  background:var(--hx-miolo); color:var(--hx-texto); font:500 16px/1.35 var(--hx-f) }
+.jtv p{ margin:0 }
+.jtv-selo{ align-self:flex-start; display:flex; align-items:center; gap:10px; padding:8px 12px; border:1px solid var(--hx-alerta); background:var(--hx-miolo-2); font-weight:600 }
+.jtv-selo > i{ width:9px; height:9px; border-radius:50%; background:var(--hx-alerta); flex:none }
+.jtv-fraco{ color:var(--hx-sec); font-size:14px }
+.jtv-erro{ padding:6px 10px; border:1px solid var(--hx-perigo); color:var(--hx-perigo); font-size:14px }
+.jtv-palco{ flex:1; min-height:120px; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:0; padding:12px 12px 16px;
+  border:1px solid var(--hx-borda); background:var(--hx-miolo-2); overflow:hidden }
+.jtv-balao{ position:relative; padding:8px 14px; border:1px solid var(--hx-borda); background:var(--hx-miolo); font-weight:600; text-align:center }
+.jtv-balao::after{ content:""; position:absolute; left:50%; bottom:-7px; width:12px; height:12px; rotate:45deg; translate:-50% 0;
+  background:var(--hx-miolo); border-right:1px solid var(--hx-borda); border-bottom:1px solid var(--hx-borda) }
+.jtv-pet{ display:block; transition:transform .5s }
+.jtv-sprite{ display:block; width:200px; height:200px; max-height:100%; object-fit:contain; image-rendering:pixelated }
+.jtv-sprite--vazio{ border:1px dashed var(--hx-borda) }
+/* a pose de cada reação: só o pet vira ou inclina; o balão fica fora dele */
+.jtv-pet--enjoou, .jtv-pet--nao_gosta{ transform:scaleX(-1) }
+.jtv-pet--curioso{ transform:rotate(-8deg) }
+.jtv-pet--adorando .jtv-sprite{ animation:jtv-pula .7s ease-in-out infinite alternate }
+@keyframes jtv-pula{ from{ transform:translateY(0) } to{ transform:translateY(-8px) } }
+@media (prefers-reduced-motion:reduce){ .jtv-pet{ transition:none } .jtv-pet--adorando .jtv-sprite{ animation:none } }
+.jtv-bts{ display:grid; grid-template-columns:1fr 1fr; gap:8px }
+.jtv-bts button{ min-height:48px; display:inline-flex; align-items:center; justify-content:center; gap:8px }
+.jtv-bts svg{ width:18px; height:18px }
 
 /* ---- O painel da TV (gostoVisual/PainelTv.tsx; docs/PLANO_UX_GOSTO_VISUAL.md e a prancha docs/pranchas/ux-gosto-visual/, 2026-11-11).
    Pele dos menus (tokens --hx-*); nenhuma cor nova. Os tamanhos são PROPOSTOS, SEM FONTE. */
