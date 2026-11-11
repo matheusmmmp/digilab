@@ -17,9 +17,9 @@ import { emitirSom } from "./somEventos.ts";
 
 export type Origem = "save" | "exemplo" | "novo";
 export interface Jogo {
-  /** o pet na tela: o de um pet so, ou, com os dois pets (v25, CO4c), o pet em foco do grupo */
+  /** o pet na tela: o de um pet so, ou, com os dois pets (v26, CO4c), o pet em foco do grupo */
   motor: Motor;
-  /** os dois pets (v25; motor/grupo_jogo.ts), ou null com um pet so. O tempo e as acoes do dono vao ao grupo pelo pet em foco */
+  /** os dois pets (v26; motor/grupo_jogo.ts), ou null com um pet so. O tempo e as acoes do dono vao ao grupo pelo pet em foco */
   grupo: GrupoDoJogo | null;
   /** o pet do grupo em foco na tela (quem recebe a acao do dono; CO-6); "A" sem grupo */
   foco: string;
@@ -82,7 +82,7 @@ const exemplos = new Map<number, { semente: number; assinatura: string }>();
     O exemplo e o da versao do pet: quem abriu o jogo antes da v23 (ou da v22) e nunca tocou no pet tem o exemplo daquela versao, que
     passa para a ilha grande ao abrir e continua nao sendo do jogador (a assinatura intocada ignora o "mi") */
 function exemploIntocado(m: Motor): boolean {
-  if (!VERSOES_PET.includes(m.versao) || ehDoGrupo(m.versao)) return false;      // o pet do grupo (v25) nunca e o de exemplo
+  if (!VERSOES_PET.includes(m.versao) || ehDoGrupo(m.versao)) return false;      // o pet do grupo (v26) nunca e o de exemplo
   let ex = exemplos.get(m.versao);
   if (!ex) { const e = petExemplo(m.versao); ex = { semente: e.semente, assinatura: assinaturaIntocada(e) }; exemplos.set(m.versao, ex); }
   return m.semente === ex.semente && assinaturaIntocada(m) === ex.assinatura;

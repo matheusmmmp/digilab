@@ -1,12 +1,12 @@
-/* Os dois ovos e o save do grupo (docs/TAREFA_V3_COOPERACAO.md, etapa CO4c; a v25):
+/* Os dois ovos e o save do grupo (docs/TAREFA_V3_COOPERACAO.md, etapa CO4c; a v26):
    - os dois ovos: o primeiro do brasao escolhido, o segundo surpresa (D-CO4b-6), os dois com o produto ligado, cada um no registro dele;
    - o save do grupo: {semente, log, versao, grupo, foco}; abrir e reprocessar o registro do grupo da a mesma assinatura (o G-REPLAY-2 no save),
      e o save malformado abre como erro visivel, sem gravar por cima;
    - o jogo com os dois pets: o relogio (o avancar do pet em foco) anda os dois, a acao do dono vai ao pet em foco, o foco troca e fica no
      save, e a mudanca grava o grupo;
-   - a chave DOIS_OVOS_LIGADO e desligada: o ovo do brasao de hoje segue de um pet so (v24), e o pet v24 salvo abre igual (o G-HOJE). */
+   - a chave DOIS_OVOS_LIGADO e desligada: o ovo do brasao de hoje segue de um pet so (v25), e o pet v25 salvo abre igual (o G-HOJE). */
 import { describe, expect, test } from "vitest";
-import { DOIS_OVOS_LIGADO, ESPECIES, GrupoDoJogo, TPD, VERSAO_PET, VERSAO_V25, sementeDoSegundoJogo } from "../motor/index.ts";
+import { DOIS_OVOS_LIGADO, ESPECIES, GrupoDoJogo, TPD, VERSAO_PET, VERSAO_V26, sementeDoSegundoJogo } from "../motor/index.ts";
 import { CHAVE, lerSave, textoSave, textoSaveGrupo, type Armazenamento } from "../src/save.ts";
 import { focar, iniciarJogo, jogoAtual, mudarMotor, trocarGrupo } from "../src/jogo.ts";
 import { chocarDoisOvos, especieDaSemente, sementeDoBrasao } from "../src/jornada.ts";
@@ -21,7 +21,7 @@ const SEMENTE = (() => { for (let s = 1; ; s++) if (especieDaSemente(s) === ESP)
 describe("os dois ovos", () => {
   test("o primeiro e do brasao, o segundo e surpresa, e os dois nascem com o produto", () => {
     const g = chocarDoisOvos(ESP, "rapida", SEMENTE);
-    expect(g.versao).toBe(VERSAO_V25);
+    expect(g.versao).toBe(VERSAO_V26);
     expect(g.motor("A").especie).toBe(ESP);
     expect(g.motor("B").semente).toBe(sementeDoSegundoJogo(SEMENTE));
     expect(g.motor("B").especie).toBe(especieDaSemente(g.motor("B").semente));
@@ -30,9 +30,9 @@ describe("os dois ovos", () => {
     expect(especieDaSemente(sementeDoBrasao(ESP))).toBe(ESP);
   });
 
-  test("a chave e desligada: o ovo de um pet so segue v24", () => {
+  test("a chave e desligada: o ovo de um pet so segue v25", () => {
     expect(DOIS_OVOS_LIGADO).toBe(false);
-    expect(VERSAO_PET).toBe(24);
+    expect(VERSAO_PET).toBe(25);
   });
 });
 
@@ -46,7 +46,7 @@ describe("o save do grupo", () => {
     if (l.tipo !== "ok") throw new Error(JSON.stringify(l));
     expect(l.grupo!.assinatura()).toBe(g.assinatura());
     expect(l.motor).toBe(l.grupo!.motor("B"));
-    expect(JSON.parse(a.dados[CHAVE])).toMatchObject({ semente: SEMENTE, versao: VERSAO_V25, grupo: true, foco: "B" });
+    expect(JSON.parse(a.dados[CHAVE])).toMatchObject({ semente: SEMENTE, versao: VERSAO_V26, grupo: true, foco: "B" });
   });
 
   test("o save malformado abre como erro visivel", () => {
@@ -96,6 +96,6 @@ describe("o jogo com os dois pets", () => {
     expect(j.grupo).toBeNull();
     expect(j.motor.noGrupo).toBe(false);
     expect(() => focar("B")).toThrow(/so os dois pets/);
-    expect(GrupoDoJogo.reproduzir(SEMENTE, VERSAO_V25, []).tick).toBe(chocarDoisOvos(ESP, "rapida", SEMENTE).tick);
+    expect(GrupoDoJogo.reproduzir(SEMENTE, VERSAO_V26, []).tick).toBe(chocarDoisOvos(ESP, "rapida", SEMENTE).tick);
   });
 });

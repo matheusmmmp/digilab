@@ -8,8 +8,8 @@
    v21 nao muda (test/luta_poc_pet.test.ts). */
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, CUIDADO_NA_HORA, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
-  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehDoGrupo, ehLutaPoc, nasceNaAgua, VERSAO_V25,
-  nasceNaGrande, CMU_GRANDE, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, VERSOES_COM_SACUDIR,
+  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehDoGrupo, ehLutaPoc, nasceNaAgua, VERSAO_V26,
+  nasceNaGrande, nasceComMemoriaLonga, CMU_GRANDE, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, VERSOES_COM_SACUDIR,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { LUGARES_V6, NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
@@ -37,7 +37,7 @@ import { bracoV11 } from "./pet_v11.ts";
 import { leituraLab, type LeituraLab } from "./digibrain/leitura.ts";
 import { decodificar, decodificarV2, type ConceitosDec } from "./digibrain/decodificador.ts";
 import { DigiBrain } from "./digibrain/adapt.ts";
-import { CONFIG_DIGIBRAIN_LAB_FALA, CONTEUDOS_FALA, INATOS_MODULAR, type ConteudoFala } from "./digibrain/constantes.ts";
+import { CONFIG_DIGIBRAIN_LAB, CONFIG_DIGIBRAIN_LAB_FALA, CONTEUDOS_FALA, D_MAX_ILHA_GRANDE, INATOS_MODULAR, type ConteudoFala } from "./digibrain/constantes.ts";
 import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
 import { ConfiancaCombate } from "./confianca.ts";
 import { lutar as lutarArena, sorteiosPorFluxo, type IdCena, type ResultadoLuta as ResultadoArena, type Stats as StatsArena, type Tiro as TiroLutaPoc, type Esquiva as EsquivaLutaPoc } from "./arena/index.ts";
@@ -248,9 +248,9 @@ export class Motor {
     if (!VERSOES_PET.includes(versao) && versao !== VERSAO_PET_LAB) throw new Error(`versão de pet desconhecida: ${versao} (só a ${VERSOES_PET.join(" e a ")} e o pet de teste v${VERSAO_PET_LAB} abrem; os pets de antes, com o combate por turnos, foram descartados)`);
     this.semente = semente; this.versao = versao as VersaoPet;
     this.noGrupo = opcoes.parteDoMundo !== undefined;
-    /* a v24 so existe no grupo, e o grupo so tem a v24 (CO4c) */
+    /* a v26 so existe no grupo, e o grupo so tem a v26 (CO4c) */
     if (this.noGrupo !== ehDoGrupo(versao))
-      throw new Error(this.noGrupo ? `o pet do grupo e da v${VERSAO_V25}, nao da v${versao}` : `o pet v${VERSAO_V25} so nasce no grupo, com o irmao`);
+      throw new Error(this.noGrupo ? `o pet do grupo e da v${VERSAO_V26}, nao da v${versao}` : `o pet v${VERSAO_V26} so nasce no grupo, com o irmao`);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
     this.temp = temperamentoDe(semente);
     /* o Bandit nao decide nem aprende para o pet; fica so a memoria por espacos dele, como o lobo de memoria e emocao (D-W7 do #201): a
@@ -259,6 +259,8 @@ export class Motor {
     const braco = bracoV11(), m = this;
     /* o laco chama o cerebro por aqui: o desejo antes de decidir (como o gabarito da vontade) e, depois da decisao, o que o Motor
        registra dela (nada que mexa no estado do pet: o efeito da acao e do laco) */
+    /* a v25 nasce com a memoria de lugar de 128 celulas (IG6): o modular dela e criado com esse alcance (no "cb") */
+    if (nasceComMemoriaLonga(versao)) this.alcanceMemoria = D_MAX_ILHA_GRANDE;
     const lab = versao === VERSAO_PET_LAB ? new DigiBrain() : null;
     this.modular = lab; this.modularAtivo = lab !== null;
     const politicaA: PoliticaCorpoMundo = {
@@ -472,7 +474,8 @@ export class Motor {
     if (this.falaUnidades || this.nDecisoes || this.nDono || this.e.tick !== TICK_INICIAL || this.modular === null || this.modular.k !== 0)
       throw new Error("a marca da fala com conteúdo vai uma vez, no começo do registro");
     this.falaUnidades = true;
-    this.modular = new DigiBrain(CONFIG_DIGIBRAIN_LAB_FALA, INATOS_MODULAR, this.ponteLuta);   // o modular de hoje sai sem ter decidido
+    /* o modular de hoje sai sem ter decidido; o novo fica com o alcance da memoria do pet (IG6; no pet de teste, o de sempre) */
+    this.modular = new DigiBrain(CONFIG_DIGIBRAIN_LAB_FALA, { ...INATOS_MODULAR, d_max: this.alcanceMemoria } as typeof INATOS_MODULAR, this.ponteLuta);
   }
   registrarOrigem(o: Origem): void {
     if (this.log.some(ev => ev[1] !== "c" && ev[1] !== "p" && ev[1] !== "pl" && ev[1] !== "fu")) throw new Error("a origem precisa ser o primeiro evento do registro");
@@ -820,6 +823,31 @@ export class Motor {
       com ela: o v21 que ja tinha passado para a agua, o v22 e o v23) */
   get podeMudarIlha(): boolean {
     return (this.versao === VERSAO_V21 || nasceNaAgua(this.versao)) && this.mundo !== null && this.mundo.cm.layout.nome !== ILHA_DOS_VIVOS && this.morte === null;
+  }
+  /** o alcance da memoria de lugar do DigiBrain modular deste pet, em subunidades (IG6): o de sempre (1 024), ou o da ilha grande
+      (2 048) na v25 desde o ovo e nos v21 a v24 depois do evento "ma". Vale para o modular que existe e para o que for criado depois */
+  alcanceMemoria: number = INATOS_MODULAR.d_max;
+  /** o pet pode ganhar a memoria de 128 celulas agora: e v21 a v24, esta vivo, esta na ilha grande e ainda tem o alcance de sempre */
+  get podeAlongarMemoria(): boolean {
+    return (this.versao === VERSAO_V21 || nasceNaAgua(this.versao) || (nasceNaGrande(this.versao) && !nasceComMemoriaLonga(this.versao)))
+      && this.naIlhaGrande && this.alcanceMemoria !== D_MAX_ILHA_GRANDE && this.morte === null;
+  }
+  /** IG6 (docs/TAREFA_V3_ILHA_AGUA.md, secao 12.16; "Todos, por evento", Matheus, 2026-11-11): a memoria de lugar do pet passa a alcancar
+      128 celulas. So o alcance muda: o que ele lembra, o corpo, o mundo e o vinculo ficam como estao. Nao e contato nem cuidado. Vale com
+      o cerebro A decidindo (o alcance fica para o modular), com o pet acordado ou dormindo, uma vez; fora da ilha grande, na v25, no pet
+      de teste ou no morto, falha alto */
+  alongarMemoria(): void {
+    if (!this.podeAlongarMemoria) throw new Error(`só o pet v21 a v24 vivo, na ilha grande e com a memória de sempre ganha a memória longa (este é v${this.versao})`);
+    const t = this.e.tick;
+    this._alongarMemoria(D_MAX_ILHA_GRANDE);
+    this.log.push([t, "ma", { alcance: D_MAX_ILHA_GRANDE }]);
+  }
+  private _alongarMemoria(alcance: unknown): void {
+    if (alcance !== D_MAX_ILHA_GRANDE) throw new Error(`o alcance da memória do registro é ${D_MAX_ILHA_GRANDE}, não ${String(alcance)}`);
+    if (!this.podeAlongarMemoria) throw new Error(`só o pet v21 a v24 vivo, na ilha grande e com a memória de sempre ganha a memória longa (este é v${this.versao})`);
+    this._conferirMorte(); this._vivo();
+    this.alcanceMemoria = D_MAX_ILHA_GRANDE;
+    this.modular?.alcanceDaMemoria(D_MAX_ILHA_GRANDE);
   }
   /** o pet vive na ilha grande (a v24 desde o ovo; a v21, a v22 e a v23 depois do "mi" para ela) */
   get naIlhaGrande(): boolean { return this.mundo !== null && this.mundo.cm.layout.nome === ILHA_DOS_VIVOS; }
@@ -1217,7 +1245,11 @@ export class Motor {
   private _trocarCerebro(v: unknown): void {
     this._validarCerebro(v);
     this._conferirMorte(); this._vivo();
-    if (v.cerebro === "modular") { this.modular ??= new DigiBrain(); if (this.ponteLuta) this.modular.ligarLutaMemoria(); }
+    /* o modular nasce com o alcance da memoria deste pet (o de sempre, ou o da ilha grande: a v25 e o evento "ma"; IG6) */
+    if (v.cerebro === "modular") {
+      this.modular ??= new DigiBrain(CONFIG_DIGIBRAIN_LAB, { ...INATOS_MODULAR, d_max: this.alcanceMemoria } as typeof INATOS_MODULAR);
+      if (this.ponteLuta) this.modular.ligarLutaMemoria();
+    }
     this.modularAtivo = v.cerebro === "modular";
     this.cerebroEscolhido = true;
     (this.v11!.laco as MotorCorpoMundo).digibrain = this.modularAtivo;   // o modular ve o mundo, escolhe o alvo e recebe a consequencia dele
@@ -1268,6 +1300,8 @@ export class Motor {
       ...(this.versao === VERSAO_PET_LAB ? [["lab", { ...this.modular!.estadoInterno(), motivos: undefined }]] : []),
       /* a v17 depois do primeiro "cb": o cerebro que decide e o modular (a v17 sem "cb" assina como a v15) */
       ...(this.cerebroEscolhido ? [["cb", this.modularAtivo ? "modular" : "a", this.modular ? { ...this.modular.estadoInterno(), motivos: undefined } : null]] : []),
+      /* a memoria longa pelo evento "ma" (IG6): so com o evento (a assinatura dos pets sem ele nao muda; a v25 ja nasce com ela) */
+      ...(this.alcanceMemoria !== INATOS_MODULAR.d_max && !nasceComMemoriaLonga(this.versao) ? [["ma", this.alcanceMemoria]] : []),
       ...(this.ponteLuta ? [this.epsLuta ? ["pl", "eps"] : ["pl", true]] : []),   /* a ponte da luta: so com a marca (a assinatura dos pets sem ela nao muda) */
       ...(this.falaUnidades ? [["fu", true]] : []),   /* DC3d: a fala com conteudo, so com a marca (a assinatura dos pets sem ela nao muda) */
       ["v11", this.v11!.braco.cerebro.estadoInterno(), this.v11!.laco.estadoDict(), this.v11!.laco.proximaDecisao],
@@ -1324,6 +1358,12 @@ export class Motor {
           throw new Error(`evento de sacudir a árvore inválido no registro (tick ${t}): ${JSON.stringify(a)}`);
         const arvore = lerSacudirArvore({ tipo: "sacudir_arvore", valor: (a as Record<string, unknown>).arvore });
         this._sacudirArvore(arvore); break;
+      }
+      case "ma": {
+        const a = ev[2] as unknown;
+        if (!a || typeof a !== "object" || Object.keys(a).join() !== "alcance")
+          throw new Error(`evento do alcance da memória inválido no registro (tick ${t}): ${JSON.stringify(a)}`);
+        this._alongarMemoria((a as Record<string, unknown>).alcance); break;
       }
       case "mi": {
         const i = ev[2] as unknown;

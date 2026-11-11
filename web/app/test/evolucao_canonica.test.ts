@@ -71,7 +71,7 @@ describe("nomes e sprites no canone", () => {
 });
 
 describe("Ultimate -> Mega (pet v21)", () => {
-  test("ovos novos sao v24 (a v23 na ilha grande); a v21 (v5 + medalhas + confianca + vinculo B + o cerebro A e o corpo + o mundo fisico + o cerebro trocavel + a luta da POC)", () => { expect(VERSAO_PET).toBe(24); expect(new Motor(1, 21).versao).toBe(21); });
+  test("ovos novos sao v25 (a v24 com a memoria de 128 celulas); a v21 (v5 + medalhas + confianca + vinculo B + o cerebro A e o corpo + o mundo fisico + o cerebro trocavel + a luta da POC)", () => { expect(VERSAO_PET).toBe(25); expect(new Motor(1, 21).versao).toBe(21); });
 
   test("com tempo, lutas, vitorias e vinculo vira Mega: estagio novo, com a forma adulta do Ultimate", () => {
     const m = ultimate(3101), adulta = m.forma.adulta;

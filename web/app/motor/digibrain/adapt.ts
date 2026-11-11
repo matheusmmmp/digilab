@@ -68,7 +68,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
   readonly nome = "digibrain";
   readonly versao_pet = VERSAO_PET_DIGIBRAIN;
   readonly cd: ConfigLab;
-  readonly inatos: typeof INATOS_MODULAR;
+  inatos: typeof INATOS_MODULAR;                              // muda so no alcance da memoria (alcanceDaMemoria)
   readonly S: number;
   readonly sens: Sens;
   readonly afeto: Afeto;
@@ -220,6 +220,13 @@ export class DigiBrain implements PoliticaCorpoMundo {
     const p = this.pendente(acao, "consequencia_mundo");
     if (p.mundo !== null) throw new Error("consequencia_mundo duas vezes na mesma decisao");
     p.mundo = [ocorrido, obsDepois];
+  }
+
+  /** o alcance da memoria de lugar do M-MEM passa a ser `dMax` (a ilha grande, IG6; o DigiBrain.alcance_da_memoria do Python); os
+   *  `inatos` do cerebro acompanham */
+  alcanceDaMemoria(dMax: number): void {
+    this.mem.alcance(dMax);
+    this.inatos = { ...this.inatos, d_max: dMax } as typeof INATOS_MODULAR;
   }
 
   /** liga a `luta_memoria` num DigiBrain que ainda nao decidiu (a marca `pl` do registro chega depois de o pet nascer): idempotente */
