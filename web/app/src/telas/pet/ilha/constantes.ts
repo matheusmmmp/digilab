@@ -133,9 +133,9 @@ export interface MarcoDaPlanta { ponto: readonly [number, number]; entorno: { ar
 export interface PlantaIlha {
   praca: { x: number; z: number; raio: number }; raioCaminho: number; folgaLugar: number;
   caminhos: Readonly<Record<"lar" | "portao" | "barraca" | "cais", readonly (readonly [number, number])[]>>;
-  lugares: { portao: LugarDaPlanta; barraca: LugarDaPlanta; cais: { x: number; clareira: number }; saco: readonly [number, number] };
+  lugares: { portao: LugarDaPlanta; barraca: LugarDaPlanta; cais: { x: number; clareira: number; mar: number }; saco: readonly [number, number] };
   postes: readonly (readonly [number, number])[];
-  marcos: { busca: number; carro: MarcoDaPlanta; geladeira: MarcoDaPlanta; trilho: MarcoDaPlanta };
+  marcos: { busca: number; carro: MarcoDaPlanta; geladeira: MarcoDaPlanta; trilho: MarcoDaPlanta; lata: MarcoDaPlanta };
   bosques: readonly (readonly [number, number, number, number])[]; vaos: readonly (readonly [number, number, number, number])[];
   sal: number;
   bosque: { porCelula: number; entreArvores: number; escalaArvore: readonly [number, number]; arbustos: number; entreArbustos: number;
@@ -174,7 +174,7 @@ export const PLANTA_ILHA = {
     - o portao vem para dentro, na ponta norte da ilha, e o caminho dele para la; o caminho do cais para na praia, dentro do mapa;
     - o ultimo poste do cais sai do mar;
     - os marcos vem para dentro (o carro no oeste, a geladeira na areia do sudeste, o trilho no leste), nos pontos da figura aprovada
-      (IA-2), ja que nao ha mais moldura de terra;
+      (IA-2), ja que nao ha mais moldura de terra; a lata, que e de depois da figura, fica no noroeste;
     - nao ha bosque nem vao: nada alto que nao seja do motor, um lugar ou um enfeite entra na area (a regra 5 da ilha; do entorno dos
       marcos so entra o que e baixo), e a moldura e mar.
     `moldura`: as celulas de mar em volta do mapa do motor; `praia`: a terra a ate tantas celulas do mar vira areia (`praiaSul` da linha
@@ -189,6 +189,9 @@ export const PLANTA_ILHA_AGUA: PlantaIlha = {
     carro: { ponto: [6.5, 9], entorno: { arbusto: 6, grama_alta: 8, pedra: 1, raio: 2.8 } },
     geladeira: { ponto: [50.5, 25.5], entorno: { arbusto: 0, grama_alta: 0, pedra: 3, raio: 2 } },
     trilho: { ponto: [57, 17], entorno: { arbusto: 4, grama_alta: 6, pedra: 2, raio: 2.8 } },
+    /* a lata gigante (o marco de 2026-11-10, que na planta A fica na moldura do norte) vem para dentro, no noroeste, entre o carro e o
+       saco; o ponto e desta sessao, fora da figura aprovada (IA-2), que e de antes da lata. PROPOSTO, SEM FONTE */
+    lata: { ponto: [16, 6], entorno: { arbusto: 3, grama_alta: 8, pedra: 2, raio: 3.8 } },
   },
   bosques: [], vaos: [],
 };
