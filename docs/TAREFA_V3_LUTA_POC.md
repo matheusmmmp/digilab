@@ -704,7 +704,7 @@ Rookie ao Mega, e o desafiante tem +0,15 e +0,05. A pior espécie vai só à lei
   - **o Gazimon** passa de 0,65 a 0,8 vez o total. Pela regra de escolha (a maior folga), fica em 0,8 vez: 76,8;
   - **o MarinBullmon e o Tortomon** já passam com o total de hoje, então não mudam;
   - **os outros 7** (o Guardromon, o Youkomon, o Myotismon, o Piedmon, o Devidramon, o Puppetmon e o Machinedramon) não passam em
-    nenhum total. A distância entre o pet sem treino e o típico contra eles fica de 0,10 a 0,25, e o critério pede de 0,18 a 0,46;
+    nenhum total. A distância entre o pet sem treino e o típico contra eles fica de 0,10 a 0,25, e o critério pede de 0,20 a 0,46;
   - **com 3 bases, o Puppetmon e o Machinedramon dão uns 0,09 a mais no sem treino** que com 2, no mesmo total. A mistura das formas
     Mega muda de uma base para outra, e o erro passa do binomial.
 - **A medida inteira do `lp5_2`** (`lp5_2/calibracao`, commit `9270f774`, 1 412 957 lutas) dá **9 de 21 metas**: as 8 do `lp5_1_esq` e
