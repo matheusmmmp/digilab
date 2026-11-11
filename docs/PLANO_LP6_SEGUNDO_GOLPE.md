@@ -100,7 +100,8 @@ desligada):
 
 ## 7. Decisões do Matheus
 
-As decisões 1 a 3 foram DECIDIDAS como recomendadas ("pode seguir para o plano lp6", 2026-11-11). A 4 está PROPOSTA.
+As decisões 1 a 3 foram DECIDIDAS como recomendadas ("pode seguir para o plano lp6", 2026-11-11). A 4 está PROPOSTA. A 2 foi atualizada na LP6-3,
+pela R2 (abaixo).
 
 1. **O apoio sai pela distância, com recarga própria (seção 3), ou ele ocupa o lugar da habilidade das 68 formas que a repetem?**
    - **Recomendado:** pela distância, com recarga própria. A habilidade sai pela recarga longa e na hora errada para o atirador.
@@ -109,6 +110,13 @@ As decisões 1 a 3 foram DECIDIDAS como recomendadas ("pode seguir para o plano 
 2. **As 7 formas com habilidade própria também ganham o apoio?**
    - **Recomendado:** sim, para todo Digimon ter as duas distâncias. Quatro delas estão entre os NPCs que nenhum total fecha.
    - **O custo de errar:** os líderes ficam com três ataques, e a identidade deles muda um pouco.
+   - **Atualizada na LP6-3 (2026-11-11), pela R2:** o Matheus escolheu "(a) Apoio só no Ult/Mega (Recommended)", e o Gerente repassou.
+     - **O que vale agora:** o apoio só existe na luta em que o maior estágio dos dois lutadores é Ultimate ou Mega.
+     - **O que muda da decisão original:** ela queria todo Digimon com as duas distâncias. Agora, no In-Training, no Rookie e no Champion,
+       ninguém tem o apoio. As 7 formas com habilidade própria seguem com ele quando a luta é de Ultimate ou de Mega.
+     - **Por quê:** a R0 e a R1 mostraram que o apoio derruba quem atira no Rookie e no Champion, nas duas regras do apoio de perto. Só com a
+       elipse, esses dois estágios ficam como no `lp5_3`.
+     - **A regra antiga:** o apoio de perto sem o recuo. A regra do recuo da R1 fica atrás de uma chave própria, desligada (D-LP6-3-7).
 3. **O clipe do apoio:** reaproveitar o `Attack_1` (seção 4) ou gerar uma pose-chave por Digimon já na LP6-2?
    - **Recomendado:** reaproveitar o `Attack_1` na LP6-2. A pose-chave fica como passo opcional, depois das capturas.
    - **O custo de errar:** com o clipe reaproveitado, o apoio pode parecer igual ao golpe; as capturas mostram isso antes do PR.
