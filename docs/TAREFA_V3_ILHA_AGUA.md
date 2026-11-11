@@ -445,3 +445,44 @@ da v23.
 
 São cinco sementes: a leitura é descritiva, sem intervalo de confiança, e a diferença de 0,10 é um corte prático. PROPOSTO, SEM FONTE.
 O artefato é o `docs/pranchas/ilha-grande/medida_ig5.json`, gravado pelo `web/app/test/medir_ilha_grande.test.ts` com `MEDIR_IG5=1`.
+
+### 12.14 IG5: o resultado da medida (2026-11-11)
+
+Artefato: `docs/pranchas/ilha-grande/medida_ig5.json` (`MEDIR_IG5=1 npx vitest run test/medir_ilha_grande.test.ts`, no commit `a59685d2`,
+sobre a `main` `ec6aa985`). Médias de cinco sementes, cinco dias por vida.
+
+| Cérebro | Lugar da ração | Comida em 240 ticks: hoje → grande | Passos com fome baixa: hoje → grande | Pior pela regra? |
+|---|---|---|---|---|
+| modular | comedouro | 0,800 → 0,815 | 0,008 → 0,005 | não |
+| modular | perto | 0,899 → 0,896 | 0,013 → 0,002 | não |
+| modular | longe | 0,183 → 0,139 | 0,375 → 0,462 | não (a fome baixa sobe 0,087, perto do corte de 0,10) |
+| A | comedouro | 0,437 → 0,324 | 0,450 → 0,555 | **sim** (cai 0,113 e sobe 0,105) |
+| A | perto | 0,443 → 0,452 | 0,465 → 0,465 | não |
+| A | longe | 0,067 → 0,000 | 0,825 → 0,855 | não (é ruim nos dois mundos) |
+
+**O retorno** (o pet solto com fome a uma distância do comedouro, sem comida no chão; quantos de 5 chegam a 3 células dele em um dia):
+
+| Cérebro | 20 células | 40 células | 70 células (só na ilha grande) |
+|---|---|---|---|
+| modular, hoje | 5 de 5 | 5 de 5 | não cabe |
+| modular, grande | 5 de 5 | 5 de 5 | **1 de 5** (a menor distância média foi 43,5 células) |
+| A, nos dois mundos | 0 de 5 | 0 de 5 | 0 de 5 |
+
+**Outros números:** o modular anda o mesmo por dia nos dois mundos (107 a 123 células no de hoje, 113 a 128 na ilha grande) e visita
+22 a 30 % das células livres do mundo de hoje contra 7 a 10 % da ilha grande: ele usa a mesma área em volta do lar, e o resto da ilha
+fica sem visita. O tempo de máquina por dia de jogo, no Node desta máquina, foi de 29 a 50 ms no mundo de hoje e de 50 a 62 ms na ilha
+grande com o modular.
+
+**A leitura pela regra fixada no plano (12.13):**
+
+- **A velocidade:** a regra dispara no cérebro A com a ração no comedouro. Com o modular, que é o cérebro dos ovos, nenhum cenário
+  piora no comedouro nem no "perto".
+- **O cheiro:** a regra não dispara ("pior só no longe" não aconteceu), mas o modular no "longe" ficou a 0,013 do corte na fome baixa.
+- **A memória:** a regra dispara. O modular volta de 40 células e não de 70.
+
+**Interpretação desta sessão sobre o cérebro A no comedouro (NÃO CONFIRMADA):** no layout da ilha grande o comedouro fica a 8 células
+do ninho; no mundo de hoje, a 6, que é o raio da visão. A piora do A pode vir dessa distância, que é escolha do layout da IG1, e não
+da velocidade: no "perto" (2 células do pet) o A fica igual nos dois mundos. Não foi medido com o comedouro a 6 células.
+
+**Limites:** cinco sementes, sem intervalo de confiança; o corte de 0,10 é prático. O dono da medida não é um jogador de verdade. O
+custo no celular de verdade continua sem medida.
