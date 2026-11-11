@@ -668,6 +668,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — LUTA_POC, LP5-4: a conferência do `lp5_3` (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-4`)](registro/2026-11.md)
 - [2026-11-11 — LUTA_POC, LP5-5: o `lp5_3` no jogo, como a v23 (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-5`)](registro/2026-11.md)
 - [2026-11-11 — DIGIBRAIN_SCAN_LAB: o scan no pet do laboratório (Gerente da V3, Claude Code, Opus 5.5, branch `v3-digibrain-scan-lab`)](registro/2026-11.md)
+- [2026-11-11 — GOSTO_VISUAL: o protótipo P0 antes da espec (Claude Code, Opus 5.5, branch `v3-gosto-visual`)](registro/2026-11.md)
 - [2026-11-11 — UX_TELA_PET, D1e: o DigiBrain com o visual de scanner e a rede viva (sessão própria aberta pelo Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-digibrain-menu`)](registro/2026-11.md)
 - [2026-11-11 — HABITAT_REACOES, HR1: as reações que faltavam na vista (Gerente da V3, Claude Code, Opus 5.5, branch `v3-habitat-hr1`)](registro/2026-11.md)
 - [2026-11-11 — CADEIA, etapa 1: o cenário do lugar lembrado e as decisões D2, D4 e D5 (Gerente da V3, Claude Code, Opus 5.5, branch `v3-cadeia-f1`)](registro/2026-11.md)
@@ -687,3 +688,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — INDIVIDUALIDADE, o adendo 3 do plano do I7 (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i7-adendo3`)](registro/2026-11.md)
 - [2026-11-11 — CONVERSA_PET, DC5b2, a recalibração da voz-v4b (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5b2`)](registro/2026-11.md)
 - [2026-11-11 — CONVERSA_PET, DC5c, o adendo do plano e a config da validação (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5c`)](registro/2026-11.md)
+- [2026-11-11 — MITOLOGIA: a pedra na ilha grande (Gerente da V3, Claude Code, Opus 5.5, branch `v3-mitologia-ilha-grande`)](registro/2026-11.md)

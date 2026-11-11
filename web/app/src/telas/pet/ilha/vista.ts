@@ -179,7 +179,7 @@ class VistaIlha {
     this.chaoLugar = Object.fromEntries(ORDEM_LUGARES.map(id => [id, chaoDoLugar(id, base)])) as Record<Lugar, number>;
     /* o portao e a barraca: marcadores provisorios no ponto de cada um, ate o modelo 3D chegar (carregarObjetos); nos estilos sem lugares, ficam */
     this.marcadores = montarMarcadores(base);
-    this.mitologia = new SinaisDaIlha(this.itens.ninhoEm, mu.cm.sub);
+    this.mitologia = new SinaisDaIlha(this.itens.ninhoEm, mu.cm);
     this.cenaIlha.cena.add(this.itens.raiz, this.papel.raiz, this.marcadores.raiz, this.mitologia.raiz);
     CURVA.uVento.value = 1;
     const il = this.ilha;
