@@ -66,7 +66,10 @@ ConfigTV do MotorMundo vao juntas (falha alto com uma so; a escala da TV e o tet
   - a novidade pelo corte (GV-23): a cada tick, depois do `sentir_tela`, quando o `novidade_tela` passa de `corte_novidade` (estava no
     corte ou abaixo no tick anterior), `Corpo.estimulo_novidade(1)`; o tick vai para `novidades_tela`;
   - o assistir (GV-21): em cada decisao em que o pet olha a TV depois da propria acao, `Corpo.atividade("assistir")`, depois dos estimulos
-    da acao e antes do gancho `consequencia_corpo` (no `ocorrido`, ("atividade", "assistir")).
+    da acao e antes do gancho `consequencia_corpo` (no `ocorrido`, ("atividade", "assistir"));
+  - o agrado no corpo (GV-16, P1d): logo depois do assistir, se o cerebro tem o gancho `agrado_tela` e ele da um agrado (o DigiBrain
+    modular com a subchave `olhar` e a `ConfigOlhar.agrado_no_corpo`), `Corpo.estimulo_agrado_tela(agrado)` (no `ocorrido`,
+    ("agrado_tela", agrado)). Sem o gancho, ou com None, nada.
 """
 
 from __future__ import annotations
@@ -423,6 +426,12 @@ class MotorCorpo:
         if self._tela_ligada() and self.olhando_tv():             # a TV (P1c, GV-21): o assistir, depois dos estimulos da acao
             self.corpo.atividade(ATIVIDADE_TELA)
             self._estimulos.append(("atividade", ATIVIDADE_TELA))
+            agrado = getattr(self._pm_cerebro(), "agrado_tela", None)     # GV-16 (P1d): o agrado no corpo, se o cerebro o da
+            a = None if agrado is None else agrado(self.corpo.leituras_tela())
+            if a is not None:
+                self.corpo.estimulo_agrado_tela(a)
+                self._estimulos.append(("agrado_tela", a))
+                self._sincronizar()                   # a tristeza e o humor de hoje: o Estado volta a ser a leitura do corpo
         gancho = getattr(self.politica, "consequencia_corpo", None)
         if gancho is not None:
             ocorrido = {"acao": acao.value, "estimulos": list(self._estimulos)}

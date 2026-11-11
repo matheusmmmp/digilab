@@ -157,3 +157,24 @@ P1f: a média de 10 amostras em 16 níveis, o evento só na mudança. Desligada,
 provisório: acordado, no ocioso e com a TV no raio da visão) é a que a P1d troca.
 Fica para a P1d: o comportamento `olhar` no lugar do ocioso na regra de quem olha, a TV nos `vistos` (a classe `tela` do M-SENS), o
 `GenomaVisao`, o canal `gosto_visual` e quem chama o `estimulo_agrado_tela`.
+
+## Resultado da etapa P1d (2026-11-11, Claude Code, Opus 5.5, branch `v3-gosto-visual-p1d`)
+
+O DigiBrain modular ganhou o gosto visual, atrás da subchave `olhar` da `ConfigDigibrain` (desligada), com os números numa `ConfigOlhar`
+própria (`digilab/config.py`, `PARAMETROS_OLHAR`, todos PROPOSTOS, SEM FONTE):
+- **o genoma** (`digilab/genoma_visao.py`): o ótimo e a largura do pico por canal, pela rng própria `visao-ovo`; o genoma vazio é o
+  controle; nenhuma outra rng muda;
+- **o M-SENS**: a classe `tela` (as TVs à vista, do gancho novo `ver_tela`, fora dos `objetos`), os receptores da tela lidos à parte, o
+  agrado (o pico em inteiros contra o alvo) e o alvo aprendido pela exposição, com teto;
+- **o comportamento `olhar`** no fim da lista: o inato (o tédio e a curiosidade), a proximidade e a novidade da linha, o incentivo da
+  classe `tela` (P1), a linha H[olhar] (P2) e o termo `gosto` (o agrado do que ele já olhava); o motor o executa como o ocioso, parado;
+- **o canal `gosto_visual`** no r da consequência de olhar; a exposição e o P1 da classe `tela` na mesma consequência;
+- **o motor**: só olha (o `sentir_tela`, o assistir, a novidade) quem o cérebro mandou olhar, pelo gancho `olhando_tela`; sem o gancho (o
+  A, os instintos), a regra provisória da P1c; o agrado no corpo (GV-16) pelo gancho `agrado_tela`, só com a sub-chave `agrado_no_corpo`.
+Desligada, as vidas do gabarito do P1a e os gabaritos do modular para a web saem byte a byte (nada regravado); o A não muda. Testes novos
+em `tests/test_gosto_visual_cerebro.py` (o genoma, o olhar escolhido e reforçado, o genoma × programa, o replay e a chave desligada). As
+escolhas estão em `docs/registro/2026-11.md`, D-GV-P1d-1 a 11; a D-GV-P1d-1 (o `olhar` sem `AcaoPet` novo: o pet só olha a TV que já vê)
+e a D-GV-P1d-4 (o termo `gosto` na ativação, que a espec não tem) são as que pedem o olho do Matheus.
+Fica para a P1e: a sonda das duas TVs (o gancho já aceita várias linhas; o motor só tem uma TV, `ID_TV`) e o plano de análise. Fica para a
+P1f: o porte do olhar ao motor TS (a classe `tela`, a unidade, o termo `gosto`, o canal `gosto_visual`, a exposição, o genoma `visao-ovo` e
+os três ganchos), o exportador `experiments/exportar_gosto_visual.py` e a chave `olhar` nas constantes do modular (D-GV-P1d-7).

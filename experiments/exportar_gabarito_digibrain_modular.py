@@ -279,12 +279,18 @@ def cobertura_da_vida(c) -> dict:
     }
 
 
+def config_digibrain_json(cd) -> dict:
+    """a ConfigDigibrain nas constantes: sem a subchave `olhar` desligada (GOSTO_VISUAL, P1d, D-GV-P1d-7: as constantes gravadas saem
+    byte a byte; na P1f, com o olhar na web, ela entra)"""
+    return {k: v for k, v in asdict(cd).items() if not (k == "olhar" and v is False)}
+
+
 def constantes() -> dict:
-    cd = config_laboratorio()
+    cd = config_digibrain_json(config_laboratorio())
     return {"versao": 1, "braco": BRACO,
-            "config_digibrain": asdict(cd), "config_digibrain_inatos": paraj(asdict(CONFIG_DIGIBRAIN_INATOS)),
-            "ligadas": sorted(k for k, v in asdict(cd).items() if v is True), "desligadas": sorted(
-                k for k, v in asdict(cd).items() if v is False),
+            "config_digibrain": cd, "config_digibrain_inatos": paraj(asdict(CONFIG_DIGIBRAIN_INATOS)),
+            "ligadas": sorted(k for k, v in cd.items() if v is True), "desligadas": sorted(
+                k for k, v in cd.items() if v is False),
             "metodos_gravados": {k: list(v) for k, v in METODOS.items()}, "ganchos": list(GANCHOS),
             "vidas": [{"dono": d, "lugar": lg, "semente": s, "dias": DIAS} for lg in LUGARES for d in DONOS for s in SEMENTES]}
 
