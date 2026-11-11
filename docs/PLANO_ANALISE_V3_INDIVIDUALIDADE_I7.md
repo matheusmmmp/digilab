@@ -14,8 +14,8 @@ referências): uma quarta hipótese, a régua crua e a forma em U nas frases, e 
 **O adendo 2 (seção 14) está DECIDIDO pelo Matheus em 2026-11-11** ("Aprova as recomendações e segue"): a pergunta "história ou sorteio" da 9.8 do resultado, com um ramo de sorteio
 amarrado, em 360 pets novos. Ele não muda as seções 0 a 13; as AD2-1 a AD2-7 estão decididas pela recomendação.
 
-**O adendo 3 (seção 16) está PROPOSTO** (2026-11-11): o que separa o pet que absorve o tapa do que se afasta, descoberto nas vidas do
-adendo 2 e conferido nas do I7b, sem vidas novas. Ele não muda as seções 0 a 15 e não roda antes das decisões AD3-1 a AD3-6.
+**O adendo 3 (seção 16) está DECIDIDO pelo Matheus em 2026-11-11** ("Aprovo as questões e pode seguir com as recomendações"): o que separa o pet que absorve o tapa do que se afasta, descoberto nas vidas do
+adendo 2 e conferido nas do I7b, sem vidas novas. Ele não muda as seções 0 a 15; as AD3-1 a AD3-6 estão decididas pela recomendação.
 
 **De onde vem:** a conversa de 2026-11-10 sobre como tirar da frente um achado e não só uma implementação organizada. Dela saíram as
 perguntas Q1 a Q4, e o Matheus escolheu começar pela Q3, o desenvolvimento contrafactual ("Segue a recomendação").
@@ -571,11 +571,11 @@ Escrito em 2026-11-11 (Claude Code, Opus 5.5, branch `v3-individualidade-i7d`), 
   - A quarta, `test_credito_canal_etapa0.py::test_o_artefato_se_refaz_igual`, passou rodada sozinha logo depois (1 passed). Ela caiu com a
     máquina carregada por outro trabalho ao lado e não toca o I7.
 
-## 16. Adendo 3: o que separa absorver de se afastar (2026-11-11, PROPOSTO, Claude Code, Opus 5.5)
+## 16. Adendo 3: o que separa absorver de se afastar (2026-11-11, DECIDIDO, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** O Matheus pediu em 2026-11-11 que a frente seguisse as recomendações da 10.6 do resultado ("faça o merge e siga com
+**Status: DECIDIDO pelo Matheus em 2026-11-11** ("Aprovo as questões e pode seguir com as recomendações"), as AD3-1 a AD3-6 pela recomendação. O Matheus pediu em 2026-11-11 que a frente seguisse as recomendações da 10.6 do resultado ("faça o merge e siga com
 as recomendações"). Este adendo é a primeira delas. **Nada dele roda antes de três coisas:**
-1. as decisões AD3-1 a AD3-6 (16.7) decididas pelo Matheus e este cabeçalho marcado DECIDIDO;
+1. as decisões AD3-1 a AD3-6 (16.7) decididas pelo Matheus e este cabeçalho marcado DECIDIDO (feito);
 2. o código do I7e na `main` (16.6), com os testes e a fumaça;
 3. o registro do adendo, numa seção nova no fim deste plano, empurrado antes da primeira leitura.
 
@@ -663,7 +663,7 @@ Todos são lidos no original, no tick do momento, antes do tapa. A divisão em d
   - o `candidatos.jsonl`, uma linha por ramo, com o grupo e os candidatos;
   - o `analise.json`.
 
-### 16.7 As decisões do adendo (PROPOSTAS, para o Matheus; cada uma com a recomendação e o custo de errar)
+### 16.7 As decisões do adendo (DECIDIDAS pelo Matheus em 2026-11-11, todas pela recomendação; cada uma com a recomendação e o custo de errar)
 
 | | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
