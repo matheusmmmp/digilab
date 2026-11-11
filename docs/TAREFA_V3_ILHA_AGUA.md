@@ -409,3 +409,39 @@ aqui por causa deles:
   unidades do comedouro, fora do raio de 16 daquele teste.
 - **O sacudir a árvore** (S2) está no motor da web, mas nenhuma versão de pet o tem ainda; a ida para a ilha grande recusa mundo com
   árvores do layout, e nenhum pet de hoje as tem.
+
+### 12.13 IG5: o plano da medida (escrito antes de rodar, 2026-11-11)
+
+**Para que serve:** decidir a IG-6 (a velocidade, o cheiro e o alcance da memória do pet na ilha grande) com números. A v24 já está no
+jogo: qualquer mudança que sair daqui é outra versão de pet, e a decisão é do Matheus.
+
+**O que roda:** o `Motor` do jogo (`web/app/motor/motor.ts`), que é o que o jogador joga, com as chaves do produto. Não é run de pesquisa
+do Python: é uma medida descritiva do produto, sem hipótese científica, só com as sementes dos testes (101, 202, 303, 404, 505).
+
+- **Os dois mundos:** a v23 (a ilha com água de 64 × 30) e a v24 (a ilha grande). As duas têm a mesma luta e o mesmo cérebro; só o
+  mundo muda.
+- **Os dois cérebros:** o DigiBrain modular (o padrão dos ovos) e o A (a escolha em Ajustes).
+- **O dono:** a cada 30 ticks, com o pet acordado, com fome abaixo de 0,6 e sem comida no chão, põe uma ração no lugar do cenário;
+  limpa quando o pet está sujo e faz carinho a cada 5 passos. Cinco dias por vida.
+- **Os cenários** são os três lugares que a tela de alimentar oferece (`lugaresNomeados`): o **comedouro**, **perto** (2 células do
+  pet) e **longe** (20 células do pet).
+- **O retorno** (só descritivo): depois de 2 dias comendo no comedouro, o dono solta o pet a 20, 40 e 70 células a leste do comedouro
+  (70 só cabe na ilha grande), com fome e sem comida no chão, e mede se em um dia ele chega a 3 células do comedouro.
+
+**O que se mede, por vida:** as rações postas e comidas; a fração comida em até 240 ticks; a mediana de ticks até comer; a fração dos
+passos com fome abaixo de 0,2; a fome média; a distância andada por dia; as células distintas visitadas sobre as livres; o tempo de
+máquina por dia de jogo (no Node desta máquina).
+
+**A regra da leitura (fixada antes de ver os números):** para cada cérebro e cenário, compara-se a média das cinco sementes da v24 com a
+da v23.
+
+- O pet está **pior na ilha grande** se a fração comida em 240 ticks cai mais de 0,10 ou a fração de passos com fome abaixo de 0,2 sobe
+  mais de 0,10.
+- **Nenhum cenário pior:** a recomendação é não mexer na velocidade nem no cheiro.
+- **Pior só no "longe":** a recomendação é rever o cheiro (o alcance de 24 células), não a velocidade.
+- **Pior no comedouro ou no "perto":** a recomendação é rever a velocidade, e o número sai de uma segunda medida.
+- **O retorno** decide só a memória: se o pet volta de 40 e não de 70 células, a recomendação é levar o alcance da memória (64 células)
+  para a proporção do mapa novo.
+
+São cinco sementes: a leitura é descritiva, sem intervalo de confiança, e a diferença de 0,10 é um corte prático. PROPOSTO, SEM FONTE.
+O artefato é o `docs/pranchas/ilha-grande/medida_ig5.json`, gravado pelo `web/app/test/medir_ilha_grande.test.ts` com `MEDIR_IG5=1`.
