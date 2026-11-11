@@ -1056,7 +1056,9 @@ export class Mundo {
     if (this.comum.secas !== null && !this.cct.controlador)
       throw new Error("o layout com agua exige o controlador do contrato (ConfigContrato.controlador)");
     if (contratoLigado(this.cct)) {
-      if (dado !== undefined) throw new Error("o contrato da P4 roda com um pet, fora do grupo");
+      /* no grupo, so o controlador sozinho (a ilha com agua; CO4a): o cone e as paredes seguem de um pet so, como no Python */
+      if (dado !== undefined && (this.cct.sensores || this.cct.paredes))
+        throw new Error("o contrato da P4 roda com um pet, fora do grupo; no grupo, so o controlador (a agua)");
       this.montarContrato();
     }
   }
@@ -1076,6 +1078,12 @@ export class Mundo {
 
   /** o raio da visao do pet (o grupo: quem ve o outro comer, quem esta a vista) */
   get raioDaVisao(): number { return this.raioVisao; }
+
+  /** a percepcao com que o pet decidiu (a cooperacao: as comidas maduras que ele via) */
+  get percepcaoDaDecisao(): PercepcaoMundo | null { return this.percepcao; }
+
+  /** a fome com que o pet decidiu (a cooperacao: a disputa "anti") */
+  get fomeDaDecisao(): number { return this.fomeAntes; }
 
   /** o alvo que ficou sem chegar (o grupo: a disputa de quem nao decidiu no tick) */
   get pendenteAtual(): Pendente | null { return this.pendente; }

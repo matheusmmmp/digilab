@@ -1439,9 +1439,11 @@ class MotorMundo(MotorFrutas):
             self.mundo.ligar_sacudir(self.csa)
 
         if self.cct.ligada:
-            # a P4 (docs/TAREFA_V2_P4_CEREBRO_MUNDO.md, secao 3.1): o contrato, so com um pet (o grupo nao tem o controlador nem o cone)
-            if mundo is not None:
-                raise ValueError("o contrato da P4 (ConfigContrato) roda com um pet, fora do grupo")
+            # a P4 (docs/TAREFA_V2_P4_CEREBRO_MUNDO.md, secao 3.1): o contrato, so com um pet (o grupo nao tem o cone nem as paredes). A
+            # excecao (TAREFA_V3_COOPERACAO, CO4a): o controlador sozinho, o da ilha com agua (CONFIG_CONTRATO_AGUA), vale no grupo; cada
+            # pet anda pelo dele, contra a agua do mundo partilhado
+            if mundo is not None and (self.cct.sensores or self.cct.paredes):
+                raise ValueError("o contrato da P4 (ConfigContrato) roda com um pet, fora do grupo; no grupo, so o controlador (a agua)")
             self._montar_contrato()
 
         if self.mundo.secas is not None:
