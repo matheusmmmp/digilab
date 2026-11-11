@@ -58,7 +58,8 @@ from dataclasses import asdict, dataclass
 from typing import Callable
 
 from .config import CONFIG_DONOS, CONFIG_GRUPO_LIGADA, CONFIG_PADRAO, CONFIG_SENTIDOS, TICKS_POR_DIA, Config, ConfigDonos, ConfigGrupo
-from .config import ConfigMundo, ConfigSentidos
+from .config import CONFIG_COOPERACAO, ConfigCooperacao, ConfigMundo, ConfigSentidos
+from .cooperacao import TIPOS_MADUROS, Cooperacao
 from .donos import Visao
 from .events import AcaoUsuario, Evento, LogDeEventos, avanco, ler_deixar_bola, ler_deixar_comida
 from .events import deixar_bola as evento_deixar_bola
@@ -172,12 +173,17 @@ class Grupo:
     """N motores sobre um `Mundo`, no mesmo relogio. Nao decide nada: so chama cada motor na vez sorteada e grava o registro."""
 
     def __init__(self, cfg_mundo: ConfigMundo, semente: int, cfg_grupo: ConfigGrupo | None = None, cfg: Config | None = None,
-                 cfg_sentidos: ConfigSentidos | None = None) -> None:
+                 cfg_sentidos: ConfigSentidos | None = None, cfg_cooperacao: ConfigCooperacao | None = None) -> None:
         self.cg = cfg_grupo or CONFIG_GRUPO_LIGADA
         if not self.cg.ligada:
             raise GrupoSemChave("o grupo so existe com ConfigGrupo.ligada (sem ela, o MotorMundo de um pet e dono do proprio Mundo)")
         self.cfg = cfg or CONFIG_PADRAO
         self.cs = cfg_sentidos or CONFIG_SENTIDOS        # o degrau 1b (etapa 8): desligada, o grupo de hoje
+        # a cooperacao (TAREFA_V3_COOPERACAO, CO3): so mede; desligada, o grupo de hoje (nem a medida, nem a chave no resumo)
+        self.cco = cfg_cooperacao or CONFIG_COOPERACAO
+        if not isinstance(self.cco, ConfigCooperacao):
+            raise TypeError(f"cfg_cooperacao e uma ConfigCooperacao: {self.cco!r}")
+        self.coop = Cooperacao(self.cco) if self.cco.ligada else None
         self.semente = semente
         self.mundo = Mundo(cfg_mundo, semente)
         self.sementes = sementes_do_grupo(semente, self.cg.ids)
@@ -251,16 +257,41 @@ class Grupo:
         for _ in range(ticks):
             decidem = [i for i in presentes if self.motores[i]._estado.tick >= self.motores[i]._proxima_decisao]
             ordem = self._sortear(decidem) if len(decidem) >= 2 else decidem
+            n_contatos, n_disputas = len(self.contatos), len(self.disputas)
             for i in ordem + [i for i in presentes if i not in decidem]:
                 self.motores[i]._um_tick()
+                if self.coop is not None and i in decidem:
+                    self._coop_decisao(i, presentes)
             if decidem and len(presentes) >= 2:
                 self._toque_e_disputa(presentes, ordem)
+            if self.coop is not None and decidem:
+                self.coop.fim_do_tick(self.tick, self.disputas[n_disputas:], self.contatos[n_contatos:],
+                                      {i: self.motores[i]._acao_atual.value for i in presentes}, *self._posicoes_e_raios(presentes))
             self.tick += 1
         for i in presentes:
             m = self.motores[i]
             m._fechar_avanco()
             if m._estado.tick + m.entrada_mundo != self.tick:     # o relogio do pet anda com o do mundo
                 raise RuntimeError(f"o relogio do pet {i} saiu do relogio do mundo")
+
+    # ------------------------------------------------------------ a cooperacao (CO3): o que a medida le, sem mudar nada
+    def _posicoes_e_raios(self, presentes: list[str]) -> tuple[dict, dict]:
+        return ({i: tuple(self.motores[i].pet) for i in presentes}, {i: self.motores[i]._raio_visao for i in presentes})
+
+    def _coop_decisao(self, ident: str, presentes: list[str]) -> None:
+        """o pet `ident` acabou de decidir: o que ele via (as comidas maduras e os outros), a fome com que decidiu e o que comeu"""
+        m = self.motores[ident]
+        ts = self._no_tick(m)
+        if ts is None:
+            raise RuntimeError(f"o pet {ident} decidiu no tick {self.tick} sem o registro social da decisao")
+        maduras = [v[0] for v in m._percepcao.vistos if v[1] in TIPOS_MADUROS]
+        outros = [] if m._social is None else [o[0] for o in m._social.outros]
+        consumo = None
+        if ts["comeu"] is not None:
+            consumo = m.consumos_mundo[-1]
+            if consumo["id"] != ts["comeu"]["id"]:
+                raise RuntimeError(f"o consumo do pet {ident} nao e o da decisao: {consumo} x {ts['comeu']}")
+        self.coop.decisao(self.tick, ident, maduras, outros, m._fome_antes, consumo, *self._posicoes_e_raios(presentes))
 
     def _sortear(self, decidem: list[str]) -> list[str]:
         """DP-2: um sorteio por tick com dois ou mais pets decidindo, no fluxo `mundo-ordem`, sobre a lista ordenada pelo id (o
@@ -450,6 +481,8 @@ class Grupo:
              "rng_ordem": None if self._rng_ordem is None else self._rng_ordem.getstate(),
              "contatos": self.contatos, "disputas": self.disputas,
              "pets": {i: _resumo_do_pet(m) for i, m in self.motores.items()}}
+        if self.coop is not None:
+            r["cooperacao"] = self.coop.resumo(self.ids_presentes(), self.tick)
         if self.cs.ligada:
             r["sentidos"] = {"sons": self.sons, "pets": {i: {"passo": m._passo, "sons_ouvidos": [list(s) for s in m._sons_ouvidos],
                                                              "sons_orgao": [list(s) for s in m._sons_orgao]}
@@ -492,7 +525,8 @@ class PetNoGrupo:
 
 # ================================================================== o replay
 def reproduzir_grupo(registro: RegistroGrupo, fabricas: dict[str, tuple[Callable, Callable]], cfg_mundo: ConfigMundo,
-                     cfg_grupo: ConfigGrupo | None = None, cfg: Config | None = None, cfg_sentidos: ConfigSentidos | None = None) -> Grupo:
+                     cfg_grupo: ConfigGrupo | None = None, cfg: Config | None = None, cfg_sentidos: ConfigSentidos | None = None,
+                     cfg_cooperacao: ConfigCooperacao | None = None) -> Grupo:
     """Refaz o grupo do cabecalho e rejoga os eventos no mesmo relogio. `fabricas[id] = (fabrica da politica, fabrica do motor)`. O
     registro refeito tem de ser o lido (falha alto); evento desconhecido, fora do tick ou de pet que nao entrou tambem."""
     cab = registro.cabecalho
@@ -507,7 +541,7 @@ def reproduzir_grupo(registro: RegistroGrupo, fabricas: dict[str, tuple[Callable
     if set(fabricas) != set(cab["pets"]):
         raise ValueError(f"fabricas {sorted(fabricas)} para os pets {sorted(cab['pets'])}")
     cfg = cfg or CONFIG_PADRAO
-    g = Grupo(cfg_mundo, cab["semente"], cg, cfg, cs)
+    g = Grupo(cfg_mundo, cab["semente"], cg, cfg, cs, cfg_cooperacao)
     for e in registro.eventos:
         if e.tick != g.tick:
             raise ValueError(f"evento no tick {e.tick} com o grupo no tick {g.tick}: {e}")
@@ -546,7 +580,7 @@ class PetDoGrupo:
 
 def simular_grupo(cfg_mundo: ConfigMundo, semente: int, pets: list[PetDoGrupo], dias: int, cfg_grupo: ConfigGrupo | None = None,
                   cfg: Config | None = None, cfg_donos: ConfigDonos | None = None, canal_classe: type | None = None,
-                  cfg_sentidos: ConfigSentidos | None = None) -> Grupo:
+                  cfg_sentidos: ConfigSentidos | None = None, cfg_cooperacao: ConfigCooperacao | None = None) -> Grupo:
     """O `simular_vida_mundo` do grupo (DP-7, a validacao inicial): a cada passo do dono o grupo anda o passo e, para cada pet presente
     (na ordem dos ids), o dono decide o cuidado dele pelo que ve dele, com o orcamento dele (`orcamento_por_dia` por dia vivido) e a rng
     `dono` dele (`derivar_semente("dono", semente do pet, rotulo do dono)`). Um pet so, entrando no tick 0, e o `simular_vida_mundo` de
@@ -566,7 +600,7 @@ def simular_grupo(cfg_mundo: ConfigMundo, semente: int, pets: list[PetDoGrupo], 
         if type(p.entrada) is not int or p.entrada % TICKS_POR_DIA:
             # sem isto o pet nunca entrava, em silencio (o laco so o poe num passo do dono): a entrada e um tick do mundo, num inicio de dia
             raise ValueError(f"o pet {p.ident} entra num inicio de dia do mundo (multiplo de {TICKS_POR_DIA}): {p.entrada!r}")
-    g = Grupo(cfg_mundo, semente, cg, cfg, cfg_sentidos)
+    g = Grupo(cfg_mundo, semente, cg, cfg, cfg_sentidos, cfg_cooperacao)
     por_id = sorted(pets, key=lambda p: p.ident)           # G-ORDEM: a ordem da lista nao importa
     canais: dict[str, CanalMundo] = {}
     rngs: dict[str, random.Random] = {}

@@ -39,3 +39,6 @@
   .luta-tela.luta-tela--poc .hud-nome{ font-size:10px; letter-spacing:0; white-space:normal; overflow-wrap:anywhere; text-overflow:clip;
     display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; line-clamp:2 }
 }
+
+/* MITOLOGIA, E2: a fala do Jijimon no cartao do Piedmon (TelaLugaresPoc.tsx) */
+.poc-desafio .poc-oraculo{ display:block; margin-top:4px; font-style:italic; opacity:.9; line-height:1.35 }

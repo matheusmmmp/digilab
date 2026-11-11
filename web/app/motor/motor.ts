@@ -8,8 +8,8 @@
    v21 nao muda (test/luta_poc_pet.test.ts). */
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, CUIDADO_NA_HORA, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
-  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehDoGrupo, ehLutaPoc, nasceNaAgua, VERSAO_V24,
-  CMU_MVP_AGUA, ILHA_DOS_V21, VERSOES_COM_SACUDIR,
+  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehDoGrupo, ehLutaPoc, nasceNaAgua, VERSAO_V25,
+  nasceNaGrande, CMU_GRANDE, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, VERSOES_COM_SACUDIR,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { LUGARES_V6, NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
@@ -29,8 +29,8 @@ import { desejoLobos, type BracoConsequencia, type CerebroA, type ObservacaoLobo
 import { MotorCorpo, estadoNascimentoPy, type PoliticaCorpo } from "./motor_corpo.ts";
 import { MotorCorpoMundo, type PoliticaCorpoMundo } from "./motor_corpo_mundo.ts";
 import {
-  eventoDeixarBola, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, eventoSacudirArvore, lerDeixarBola, lerDeixarComida, lerLevarPet, lerMudarIlha,
-  lerSacudirArvore, type Mundo, type OpcoesMundo,
+  MAPA_PADRAO, eventoDeixarBola, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, eventoSacudirArvore, lerDeixarBola, lerDeixarComida, lerLevarPet,
+  lerMudarIlha, lerSacudirArvore, noMapa, regiaoDe, tamanhoDoMapa, type Mundo, type OpcoesMundo,
 } from "./mundo.ts";
 import { CONFIG_CONTRATO_AGUA } from "./contrato.ts";
 import { bracoV11 } from "./pet_v11.ts";
@@ -248,9 +248,9 @@ export class Motor {
     if (!VERSOES_PET.includes(versao) && versao !== VERSAO_PET_LAB) throw new Error(`versão de pet desconhecida: ${versao} (só a ${VERSOES_PET.join(" e a ")} e o pet de teste v${VERSAO_PET_LAB} abrem; os pets de antes, com o combate por turnos, foram descartados)`);
     this.semente = semente; this.versao = versao as VersaoPet;
     this.noGrupo = opcoes.parteDoMundo !== undefined;
-    /* a v24 so existe no grupo, e o grupo so tem a v24 (CO4c) */
+    /* a v25 so existe no grupo, e o grupo so tem a v25 (CO4c) */
     if (this.noGrupo !== ehDoGrupo(versao))
-      throw new Error(this.noGrupo ? `o pet do grupo e da v${VERSAO_V24}, nao da v${versao}` : `o pet v${VERSAO_V24} so nasce no grupo, com o irmao`);
+      throw new Error(this.noGrupo ? `o pet do grupo e da v${VERSAO_V25}, nao da v${versao}` : `o pet v${VERSAO_V25} so nasce no grupo, com o irmao`);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
     this.temp = temperamentoDe(semente);
     /* o Bandit nao decide nem aprende para o pet; fica so a memoria por espacos dele, como o lobo de memoria e emocao (D-W7 do #201): a
@@ -317,8 +317,10 @@ export class Motor {
        a regra de cada decisao vai ao registro do mundo, como o ultima_regra do Python */
     const laco = new MotorCorpoMundo(politica, semente, CCO_CORPO_V11, estadoNascimentoPy(TICK_INICIAL),
                                      { regra: () => braco.cerebro.ultimaRegra, digibrain: lab !== null,
-                                       /* a v22 e a v23 nascem na ilha com agua, com o controlador do contrato (IA4); as outras, no mundo sem agua */
-                                       cfgMundo: nasceNaAgua(versao) ? CMU_MVP_AGUA : CMU_MVP, ...(nasceNaAgua(versao) ? { contrato: CONFIG_CONTRATO_AGUA } : {}),
+                                       /* a v24 nasce na ilha grande (IG4); a v22 e a v23, na ilha com agua de 64 x 30 (IA4); as tres com o
+                                          controlador do contrato. As outras, no mundo sem agua */
+                                       cfgMundo: nasceNaGrande(versao) ? CMU_GRANDE : nasceNaAgua(versao) ? CMU_MVP_AGUA : CMU_MVP,
+                                       ...(nasceNaGrande(versao) || nasceNaAgua(versao) ? { contrato: CONFIG_CONTRATO_AGUA } : {}),
                                        bolaNoGolpe: ehCerebroTrocavel(versao),
                                        ...(opcoes.parteDoMundo ? { parteDoMundo: opcoes.parteDoMundo } : {}) });     // o pet de teste (v16): a bola de antes; a v21, a bola no golpe
     this.v11 = { braco, laco };
@@ -761,13 +763,13 @@ export class Motor {
       de antes nao tem. Posicao fora do mapa ou nao inteira falha alto antes do registro. Nao e cuidado nem contato (o deixar_bola do
       Python): so a bola muda de lugar */
   deixarBola(x: number, y: number): void {
-    lerDeixarBola(eventoDeixarBola(this.e.tick, x, y));
+    lerDeixarBola(eventoDeixarBola(this.e.tick, x, y, this._mapa()), this._mapa());
     this._conferirMorte(); this._vivo();
     this.log.push([this.e.tick, "db", { x, y }]);
     this._deixarBola(x, y);
   }
   private _deixarBola(x: number, y: number): void {
-    lerDeixarBola(eventoDeixarBola(this.e.tick, x, y));
+    lerDeixarBola(eventoDeixarBola(this.e.tick, x, y, this._mapa()), this._mapa());
     this._conferirMorte(); this._vivo();
     (this.v11!.laco as MotorCorpoMundo).bolaDoDono(x, y);
   }
@@ -814,30 +816,47 @@ export class Motor {
     this._conferirMorte(); this._vivo();
     (this.v11!.laco as MotorCorpoMundo).sacudirDoDono(arvore);
   }
-  /** o pet pode passar para a ilha com agua agora: e v21, esta vivo e o mundo dele ainda nao tem agua (IA4) */
-  get podeMudarIlha(): boolean { return this.versao === VERSAO_V21 && this.mundo !== null && this.mundo.secas === null && this.morte === null; }
+  /** o pet pode passar para a ilha grande agora (IG4): e v21, v22 ou v23, esta vivo e o mundo dele ainda e o de 64 x 30 (sem agua, ou
+      com ela: o v21 que ja tinha passado para a agua, o v22 e o v23) */
+  get podeMudarIlha(): boolean {
+    return (this.versao === VERSAO_V21 || nasceNaAgua(this.versao)) && this.mundo !== null && this.mundo.cm.layout.nome !== ILHA_DOS_VIVOS && this.morte === null;
+  }
+  /** o pet vive na ilha grande (a v24 desde o ovo; a v21, a v22 e a v23 depois do "mi" para ela) */
+  get naIlhaGrande(): boolean { return this.mundo !== null && this.mundo.cm.layout.nome === ILHA_DOS_VIVOS; }
+  /** o mapa do mundo do pet, em subunidades: o limite das posicoes da racao e da bola (o de 64 x 30 sem o mundo) */
+  private _mapa(): readonly [number, number] { return this.mundo === null ? MAPA_PADRAO : tamanhoDoMapa(this.mundo.cm); }
   /** a ilha do pet tem agua (a v22 desde o ovo; a v21 depois do "mi") */
   get naIlhaComAgua(): boolean { return this.mundo !== null && this.mundo.secas !== null; }
-  /** IA4 (docs/TAREFA_V3_ILHA_AGUA.md; "Migram por evento", Matheus, 2026-11-10): o pet v21 passa para a ilha com agua. So o mundo muda:
-      a comida, a bola e o pet que ficam na agua vao para a terra mais perto, e dali em diante o pet a contorna. Nao e contato nem cuidado,
-      e nada vai ao cerebro, ao corpo, ao vinculo ou ao historico. Vale com o pet acordado ou dormindo, uma vez; fora da v21, com o pet
-      morto ou ja na agua, falha alto */
+  /** IG4 (docs/TAREFA_V3_ILHA_AGUA.md, secao 12; "Migram por evento", Matheus, 2026-11-10, e a IG-7, 2026-11-11): o pet v21 ou v22
+      passa para a ilha grande. So o mundo muda: o lar de la vira o lar de ca, e a comida, a bola e o pet vao deslocados junto com ele; o
+      que cai em agua, arvore ou marco vai para a terra mais perto. Nao e contato nem cuidado, e nada vai ao cerebro, ao corpo, ao
+      vinculo ou ao historico. Vale com o pet acordado ou dormindo, uma vez; com o pet morto, de teste ou ja na ilha grande, falha alto */
   mudarIlha(): void {
-    if (!this.podeMudarIlha) throw new Error(`só o pet v${VERSAO_V21} vivo, na ilha sem água, passa para a ilha com água (este é v${this.versao})`);
+    if (!this.podeMudarIlha) throw new Error(`só o pet v${VERSAO_V21}, v22 ou v23 vivo, fora da ilha grande, passa para ela (este é v${this.versao})`);
     const t = this.e.tick;
-    this._mudarIlha(ILHA_DOS_V21);
-    this.log.push([t, "mi", { ilha: ILHA_DOS_V21 }]);
+    this._mudarIlha(ILHA_DOS_VIVOS);
+    this.log.push([t, "mi", { ilha: ILHA_DOS_VIVOS }]);
   }
+  /* o "mi" do registro: para a ilha grande (os v21, os v22 e os v23, desde a IG4) ou para a ilha com agua de 64 x 30 (so os v21, nos
+     registros gravados entre a IA4 e a IG4) */
   private _mudarIlha(ilha: string): void {
     lerMudarIlha(eventoMudarIlha(this.e.tick, ilha));
-    if (this.versao !== VERSAO_V21 || this.mundo === null) throw new Error(`só os pets v${VERSAO_V21} passam para a ilha com água pelo registro (este é v${this.versao})`);
-    if (ilha !== ILHA_DOS_V21) throw new Error(`os pets v${VERSAO_V21} passam para a ilha ${ILHA_DOS_V21}, não para ${ilha}`);
+    if (this.mundo === null || !(this.versao === VERSAO_V21 || (nasceNaAgua(this.versao) && ilha === ILHA_DOS_VIVOS)))
+      throw new Error(`só os pets v${VERSAO_V21}, v22 e v23 passam de ilha pelo registro (este é v${this.versao}, para ${ilha})`);
+    if (ilha !== ILHA_DOS_V21 && ilha !== ILHA_DOS_VIVOS) throw new Error(`os pets passam para a ilha ${ILHA_DOS_V21} ou ${ILHA_DOS_VIVOS}, não para ${ilha}`);
     this._conferirMorte(); this._vivo();
     (this.v11!.laco as MotorCorpoMundo).ilhaDoDono(ilha);
+    /* na ida para a ilha grande, os lugares que o DigiBrain modular lembra andam com o mundo (IG-7; o gancho mundo_deslocado do Python).
+       Vale mesmo com o cerebro A decidindo agora: a memoria do modular fica coerente se o dono trocar de cerebro depois */
+    const mu = this.mundo, ida = mu.trocaMaior;
+    if (ilha === ILHA_DOS_VIVOS && ida !== null && this.modular !== null) {
+      const [dx, dy] = ida.deslocamento;
+      ida.lugares_lembrados = this.modular.mem.deslocar(dx, dy, (x, y) => mu.emTerra(...noMapa(x, y, mu.cm)), x => regiaoDe(x, mu.cm));
+    }
   }
   private _validarComida(tipo: unknown, x: unknown, y: unknown): void {
     if (tipo !== "racao") throw new Error(`só a ração vai ao chão nos pets v12 (MV-3): ${String(tipo)}`);
-    lerDeixarComida(eventoDeixarComida(this.e.tick, tipo, x, y));
+    lerDeixarComida(eventoDeixarComida(this.e.tick, tipo, x, y, this._mapa()), this._mapa());
   }
   /** v12: a racao no mundo e o contato do alimentar de hoje (MotorMundo._aplicar_deixar_comida): no laco, o mundo e o cerebro; aqui, o
       chamado do bebe, a memoria por espacos, o vinculo e o historico, como o alimentar dos v11 */
@@ -1288,7 +1307,7 @@ export class Motor {
         if (!b || typeof b !== "object" || Object.keys(b).sort().join() !== "x,y")
           throw new Error(`evento de bola inválido no registro (tick ${t}): ${JSON.stringify(b)}`);
         const { x, y } = b as Record<string, unknown>;
-        lerDeixarBola(eventoDeixarBola(t, x, y));
+        lerDeixarBola(eventoDeixarBola(t, x, y, this._mapa()), this._mapa());
         this._deixarBola(x as number, y as number); break;
       }
       case "lp": {

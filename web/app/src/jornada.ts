@@ -5,7 +5,7 @@
    vista fica numa chave propria (sementes dos pets que ja viram a mensagem; a da Liga, noutra, para o pet v6 que viu a do Piedmon
    antes desta parte ver a nova). */
 import { useEffect, useState } from "react";
-import { DOIS_OVOS_LIGADO, ESPECIES, GrupoDoJogo, Motor, VERSAO_V24, hashSemente, type Especie, type Ritmo } from "../motor/index.ts";
+import { DOIS_OVOS_LIGADO, ESPECIES, GrupoDoJogo, Motor, VERSAO_V25, hashSemente, type Especie, type Ritmo } from "../motor/index.ts";
 import { QUADROS_CHOCANDO, jogoAtual, textoDoSaveAtual, trocarGrupo, trocarMotor } from "./jogo.ts";
 import { ligarProduto } from "./produto.ts";
 import { CHAVE, textoSave } from "./save.ts";
@@ -55,11 +55,11 @@ export function chocarDoBrasao(esp: Especie, guardarAtivo = false, ritmo: Ritmo 
   guardarNoProximoOvo = false;
   fecharEscolhaBrasao();
 }
-/** os dois ovos (v24; docs/TAREFA_V3_COOPERACAO.md, CO4c), com a chave DOIS_OVOS_LIGADO: o primeiro e do brasao escolhido, e o segundo e
+/** os dois ovos (v25; docs/TAREFA_V3_COOPERACAO.md, CO4c), com a chave DOIS_OVOS_LIGADO: o primeiro e do brasao escolhido, e o segundo e
     surpresa ("Um brasao, o outro surpresa", Matheus, 2026-11-11; D-CO4b-6): a semente dele sai da do primeiro (sementeDoSegundoJogo), e a
     especie, dela. Os dois nascem com o mesmo ritmo e o mesmo produto, cada um no registro dele */
 export function chocarDoisOvos(esp: Especie, ritmo: Ritmo = "rapida", semente: number = sementeDoBrasao(esp)): GrupoDoJogo {
-  const g = new GrupoDoJogo(semente, VERSAO_V24);
+  const g = new GrupoDoJogo(semente, VERSAO_V25);
   if (g.motor(g.ids[0]).especie !== esp) throw new Error("ovo de outro brasão");
   for (const i of g.ids) g.agir(i, m => { if (ritmo !== "rapida") m.configurar(ritmo); ligarProduto(m); });
   return g;

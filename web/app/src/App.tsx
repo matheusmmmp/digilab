@@ -61,6 +61,7 @@ import { ObjetosDaIlha } from "./componentes/ObjetosDaIlha.tsx";
 import { marcarDiarioVisto } from "./telas/pet/objetosIlha.ts";
 import { abrirMotivo, jaConhecoOJogo, useNivelRaiz } from "./nivelTela.ts";
 import { PECAS, nivelDaPeca, pecaAberta, pecaDaAba, pecaDoDestino, type EstadoNivel, type Peca } from "./nivel.ts";
+import { GostoVisual } from "./gostoVisual/GostoVisual.tsx";
 
 const armaz = (): Storage => localStorage;
 
@@ -315,6 +316,8 @@ export function App() {
       {her && !desk && <Heranca pai2={her.pai2} fim={irPet} />}
       {importando && !desk && <ImportarPet fechar={fecharImportar} />}
       {conclusao && <Conclusao m={jogo.motor} fechar={() => setConclusao(false)} />}
+      {/* o prototipo P0 do gosto visual (docs/futuro/gosto_visual_pet.md, secao 14): so com ?gosto_visual=1; desligado, nao monta */}
+      <GostoVisual />
     </div>
   );
 }

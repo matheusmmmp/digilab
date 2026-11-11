@@ -5,7 +5,7 @@
    - o par vai inteiro para a espera e volta inteiro (Meus pets); o Salao nao o ve;
    - a heranca nao aceita um pet do par nesta etapa, e o arquivo do par ainda nao se importa (D-CO4d-5). */
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import { ESPECIES, GrupoDoJogo, TPD, VERSAO_V24 } from "../motor/index.ts";
+import { ESPECIES, GrupoDoJogo, TPD, VERSAO_V25 } from "../motor/index.ts";
 import { CHAVE, type Armazenamento } from "../src/save.ts";
 import { focar, iniciarJogo, irmaoEmFoco, jogoAtual, mudarMotor, petsVivos, replayDaTelaConfere, textoDaTela, textoDoSaveAtual, trocarGrupo } from "../src/jogo.ts";
 import { chocarDoisOvos, especieDaSemente } from "../src/jornada.ts";
@@ -87,6 +87,6 @@ describe("o save nas telas", () => {
     const g = jogoAtual().grupo!;
     expect(podeSerPai(g.motor("A"))).toBe(false);
     expect(() => lerArquivo(textoDaTela(), "par.digilab")).toThrow(/dois pets/);
-    expect(GrupoDoJogo.reproduzir(g.semente, VERSAO_V24, g.log).assinatura()).toBe(g.assinatura());
+    expect(GrupoDoJogo.reproduzir(g.semente, VERSAO_V25, g.log).assinatura()).toBe(g.assinatura());
   });
 });
