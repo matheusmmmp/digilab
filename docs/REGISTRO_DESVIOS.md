@@ -613,6 +613,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-10 — LUTA_POC, LP5: o plano do equilíbrio da luta em tempo real (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5`)](registro/2026-11.md)
 - [2026-11-10 — UX_TELA_PET, as 4 falhas antigas do e2e (Gerente da UX_TELA_PET, Claude Code, Opus 5.5, branch `v3-ux-e2e-ajustes`)](registro/2026-11.md)
 - [2026-11-10 — INDIVIDUALIDADE, I7: o plano APROVADO (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i7-plano`)](registro/2026-11.md)
+- [2026-11-10 — ORGANIZACAO, o mapa de destino dos documentos e os ponteiros da V3 (Gerente da V3, Claude Code, Opus 5.5, branch `v3-organizacao`)](registro/2026-11.md)
 - [2026-11-10 — UX_TELA_PET, a prancha da câmera do primeiro dia (gerente da frente, Claude Code, Opus 5.5, branch `v3-ux-camera-primeiro-dia`)](registro/2026-11.md)
 - [2026-11-10 — ILHA_AGUA: o plano PROPOSTO (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-agua-plano`)](registro/2026-11.md)
 - [2026-11-10 — ILHA_AGUA: o plano APROVADO (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-agua-plano`)](registro/2026-11.md)
