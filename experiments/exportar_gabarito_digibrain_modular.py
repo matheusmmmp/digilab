@@ -55,6 +55,8 @@ from bancada.regras_mundo import simular_vida_fisico  # noqa: E402
 from digilab.config import CONFIG_DIGIBRAIN_INATOS, CONFIG_DIGIBRAIN_LIGADA, CONFIG_PADRAO, D_MAX_ILHA_GRANDE  # noqa: E402
 from digilab.digibrain import adapt as adapt_mod  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
+from digilab.corpo import todos_receptores_tela  # noqa: E402
+from digilab.motor_corpo import PercepcaoCorpo  # noqa: E402
 from digilab.mundo import DonoComLugar  # noqa: E402
 
 PASTA = RAIZ / "web" / "app" / "test" / "gabaritos"
@@ -94,6 +96,10 @@ def _texto(obj) -> str:
     return json.dumps(obj, sort_keys=True, separators=(",", ":"))
 
 
+# GOSTO_VISUAL P1b: os campos da tela na PercepcaoCorpo, vazios com a ConfigTela desligada, ficam fora (o gabarito de hoje sai byte a byte)
+_TELA = frozenset(todos_receptores_tela())
+
+
 def paraj(v):
     """o valor nos tipos do JSON: dataclass em dict, tupla em lista, enum no valor, modulo e funcao em texto"""
     if v is None or isinstance(v, (bool, int, float, str)):
@@ -101,7 +107,8 @@ def paraj(v):
     if isinstance(v, Enum):
         return v.value
     if is_dataclass(v) and not isinstance(v, type):
-        return {f.name: paraj(getattr(v, f.name)) for f in fields(v)}
+        return {f.name: paraj(getattr(v, f.name)) for f in fields(v)
+                if not (isinstance(v, PercepcaoCorpo) and f.name in _TELA and getattr(v, f.name) is None)}
     if isinstance(v, dict):
         return {str(k): paraj(x) for k, x in v.items()}
     if isinstance(v, (list, tuple, set, frozenset)):

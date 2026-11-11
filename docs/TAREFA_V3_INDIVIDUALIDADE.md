@@ -5,7 +5,7 @@ Coordenador: Matheus (sessão direta). Worker da etapa I0: Claude Code, Opus 5.5
 as IN-1 a IN-8 DECIDIDAS em 2026-11-07, pela recomendação; o I0 (a conferência) na `main` (#684); o I1 (a bateria como ferramenta)
 na `main` (#695); o plano do I2 APROVADO (#700); o I2a na `main` (#707); o I2b (a run da linha de base, faixa 85101…85505)
 na `main` (#718); o adendo 1 na `main` (#746); o plano do I5 APROVADO, na `main` (#747); o I5a na `main` (#751); o I5b na `main` (#768); o plano do I7 e o adendo 1 na `main` (#755, #769); o I7a (as medidas e
-o orquestrador) na `main` (#775); o I7b (a run única do I7) entregue; o adendo 2 do plano do I7 DECIDIDO (#788); o I7c (o código do adendo 2) na `main` (#794); o I7d (a run do adendo 2) na `main` (#829); o adendo 3 do plano do I7 PROPOSTO.**
+o orquestrador) na `main` (#775); o I7b (a run única do I7) entregue; o adendo 2 do plano do I7 DECIDIDO (#788); o I7c (o código do adendo 2) na `main` (#794); o I7d (a run do adendo 2) na `main` (#829); o adendo 3 do plano do I7 na `main` (#835), DECIDIDO; o I7e (o código e a leitura do adendo 3) entregue.**
 
 Categoria: documentacao. Origem: Matheus, 2026-11-07: depois da conversa sobre o connectome e a escala, direcionar a pesquisa para o
 temperamento herdado, o sinal do dono, a memória de episódios e o hábito, com uma medida comum de individualidade.
@@ -310,4 +310,16 @@ O plano (#700) e a faixa 85101…85505 estão APROVADOS. O I2a é o código ante
   - sete candidatos lidos no original antes do tapa (o dono, a energia, a fome, o humor, a ação, a idade e o braço);
   - a descoberta nas vidas do adendo 2 e a confirmação nas do I7b, sem vidas novas.
 - **As decisões** AD3-1 a AD3-6 estão com o Matheus.
+
+## Resultado da etapa I7e (2026-11-11, Claude Code, Opus 5.5, branch `v3-individualidade-i7e`)
+
+- **O código:** `experiments/run_v3_individualidade_i7_ad3.py`, em duas fases (os candidatos e a leitura), com os testes em
+  `tests/test_individualidade_i7_ad3.py`.
+- **O registro:** a seção 17 do plano, antes da fase 1. Os níveis da descoberta entraram nela antes da leitura.
+- **O resultado** (seção 11 do `docs/RESULTADO_V3_INDIVIDUALIDADE.md`):
+  - o dono relapso e o humor baixo no momento do tapa separam nas duas amostras;
+  - a energia, a fome e a idade, só na descoberta;
+  - a ação e o braço não separam;
+  - se o tapa muda o resto do dia, o pet quase sempre se afasta depois (descritivo).
+- **As leituras** estão no registro: D-IND-I7e-1 e 2.
 

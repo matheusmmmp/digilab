@@ -80,7 +80,9 @@ Object.assign(window, { __digilab: { assinatura: () => jogoAtual().motor.assinat
   /* o que tocou no comer no ultimo quadro da ilha: "clipe", "gesto" ou null (cenaAcao.ts, escolherComer; docs/TAREFA_V3_SPRITES_ACOES.md, M4) */
   comer: () => comerAgora().tocou, emburrar: () => emburrarAgora(), dormir: () => dormirAgora(), reacaoRosto: () => reacaoRostoAgora(), clipeMomento: () => clipeMomentoAgora(), momento: () => motivoAgora(), cenaPara: (x: number, y: number) => CENA.mundo?.paraTela(x, y) ?? null,
   /* o pet na mao (PegarPet.tsx; docs/TAREFA_V3_PEGAR_PET.md, P2) */
-  petNaMao: () => CENA.petNaMao } });
+  petNaMao: () => CENA.petNaMao,
+  /* o prototipo do gosto visual (so com `?gosto_visual=1`; sem ela, falso e null): a TV da ilha sob o ponto, e o sinal da reacao sobre o pet */
+  tvEm: (x: number, y: number) => CENA.mundo?.tvEm?.(x, y) ?? false, sinalTv: () => CENA.sinalTv?.(performance.now()) ?? null } });
 /* varios pets: no primeiro acesso a esta versao, a escada de pets guardados de exemplo (fraco -> forte), depois da
    primeira pintura para nao atrasar a abertura */
 setTimeout(() => { try { semearGuardados(); } catch (err) { console.error("pets guardados de exemplo:", err); } }, 400);

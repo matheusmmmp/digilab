@@ -1,6 +1,6 @@
 # Prancha: o pet assistindo TV
 
-**Status: PROPOSTA, à espera da aprovação do Matheus.** O plano é o `docs/PLANO_UX_GOSTO_VISUAL.md` (UX-GV-1 a 10 aprovadas em 2026-11-11:
+**Status: APROVADA pelo Matheus em 2026-11-11** ("Sim, começa o código", em resposta a "Aprova a prancha para eu começar o código, uma etapa por vista?"): a PR-1, a PR-2 e a PR-3 valem pela recomendação. O plano é o `docs/PLANO_UX_GOSTO_VISUAL.md` (UX-GV-1 a 10 aprovadas em 2026-11-11:
 "Sim, segue a prancha"). O código só vem depois desta prancha aprovada. Tudo fica atrás de `?gosto_visual=1`, menos o giro da TV
 (UX-GV-3).
 
