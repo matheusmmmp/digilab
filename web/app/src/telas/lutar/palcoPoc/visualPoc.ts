@@ -24,7 +24,9 @@ export const lutadorN = (L: LutaPoc, i: LadoN): LutadorPoc => (i === 0 ? L.a : L
 
 /** um acerto: quem levou, quando, quanto (fracao da vida maxima), se foi forte (o critico, a habilidade ou um golpe grande), onde (o mundo da
     luta, os pes do alvo) e de que lado veio (dir 1: o golpe veio da esquerda e empurra para a direita) */
-export interface ImpactoPoc { lado: LadoN; t0: number; frac: number; forte: boolean; crit: boolean; hab: boolean; x: number; y: number; dir: 1 | -1; de: LadoN }
+export interface ImpactoPoc { lado: LadoN; t0: number; frac: number; forte: boolean; crit: boolean; hab: boolean; x: number; y: number; dir: 1 | -1; de: LadoN;
+  /** o golpe de apoio (LP6-2): o dano veio dele (o `apoio` do evento, so com a chave do nucleo) */
+  apoio: boolean }
 /** um numero que sobe: no mundo da luta (os pes de quem levou), em fonte de pixel (dano) ou em texto (esquiva, runa, fora do ringue) */
 export interface NumeroPoc { txt: string; cor: string; t0: number; lado: LadoN; x: number; y: number; forte: boolean; pixel: boolean }
 /** um efeito de acerto do jogo (o prefab do `hits`, dos dados do Digimon UP), no ponto do alvo; t0 ja com o atraso dele */
@@ -38,6 +40,8 @@ export interface EfeitoJogoPoc { prefab: string; t0: number; lado: LadoN; x: num
 export interface VooPoc {
   de: LadoN; t0: number; pts: { x: number; y: number }[]; prefab: string | null; esq: boolean; tFim: number | null; nosso: boolean; acertou: boolean;
   alvos: { x: number; y: number }[]; f: number[]; tiro: { x: number; y: number; esq: boolean; t: number }; sintetico: boolean;
+  /** LP6-2: o tiro fraco de quem bate de perto (o golpe de apoio): o desenho o faz pequeno e sem o efeito do jogo */
+  apoio: boolean;
 }
 /** uma marca no piso (E3): a cratera da habilidade e o arrasto do empurrao grande, no mundo; o MarcaTR (lado, t0, ate) da a opacidade */
 export interface MarcaPoc { m: MarcaTR; x: number; y: number; x1: number; y1: number }
@@ -77,6 +81,12 @@ export const CAMERA_POC = { limiares: [210, 120], histerese: 18, suave: .08, tro
 /** a boca (o peito, na frente do corpo) de um lutador, no mundo */
 export const bocaDe = (u: LutadorPoc): { x: number; y: number } => ({ x: u.x + (u.viraEsq ? -1 : 1) * EQ_POC.raio, y: u.y - EQ_POC.peito });
 
+/** o golpe em curso de um lutador no ataque: o apoio (LP6-1, so com a chave), a habilidade ou o golpe (o mesmo do `dadosDe` do nucleo) */
+export const golpeEmCurso = (u: LutadorPoc): LutadorPoc["g"] => (u.usandoApoio && u.ap ? u.ap : u.usandoHab ? u.sk : u.g);
+/** o tempo (ms) do Attack_1 no ataque em curso (LP6-2): o apoio reaproveita o clipe inteiro, mais rapido (o clipe dele, msAp, e 0,6 do
+    golpe no nucleo); o golpe e a habilidade, o tempo da luta */
+export const tempoDoAtaque = (u: LutadorPoc): number => (u.usandoApoio && u.msAp > 0 ? u.t * u.msAtk / u.msAp : u.t);
+
 /** o nivel de zoom para a distancia d (no mundo) entre os dois, com histerese em volta do nivel atual */
 export function nivelDaDistanciaPoc(d: number, atual: number): number {
   const [l1, l2] = CAMERA_POC.limiares, h = CAMERA_POC.histerese;
@@ -94,7 +104,7 @@ export function aplicarEventosPoc(v: VisualPoc, L: LutaPoc, ev: readonly EventoP
     if (e.tipo === "dano") {
       const i = ladoN(e.alvo.lado), alvo = lutadorN(L, i), frac = e.valor / alvo.st.hp, forte = e.crit || e.hab || frac >= IMPACTO.fracaoPesado;
       const dir: 1 | -1 = e.espelho ? -1 : 1;
-      v.impactos.push({ lado: i, t0: t, frac, forte, crit: e.crit, hab: e.hab, x: e.x, y: e.y, dir, de: ladoN(e.at.lado) });
+      v.impactos.push({ lado: i, t0: t, frac, forte, crit: e.crit, hab: e.hab, x: e.x, y: e.y, dir, de: ladoN(e.at.lado), apoio: !!e.apoio });
       v.pausaMs = Math.max(v.pausaMs, forte ? IMPACTO.pausaMs : Math.round(IMPACTO.pausaMs / 2));
       v.numeros.push({ txt: "-" + e.valor, cor: i === 0 ? COR_VERMELHO : COR_AZUL, t0: t, lado: i, x: e.x + e.dx / 4, y: e.y, forte, pixel: true });
       if (e.mult > 1) v.numeros.push({ txt: "eficaz!", cor: COR_CURA, t0: t, lado: i, x: e.x, y: e.y - 12, forte: false, pixel: false });
@@ -168,7 +178,8 @@ function seguirProjeteis(v: VisualPoc, L: LutaPoc, t: number): void {
       const de = ladoN(pr.de.lado), b = bocaDe(pr.de), alvo = lutadorN(L, de === 0 ? 1 : 0);
       const prefab = pr.dados.proj?.prefab ?? null;
       o = { de, t0: t - 1, pts: [b], prefab, esq: pr.esq, tFim: null, nosso: prefab !== null && PREFABS_LP8.has(prefab), acertou: false,
-        alvos: [{ x: alvo.x, y: alvo.y }], f: [0], tiro: { x: pr.de.x, y: pr.de.y, esq: pr.de.viraEsq, t: pr.de.t }, sintetico: false };
+        alvos: [{ x: alvo.x, y: alvo.y }], f: [0], tiro: { x: pr.de.x, y: pr.de.y, esq: pr.de.viraEsq, t: tempoDoAtaque(pr.de) }, sintetico: false,
+        apoio: pr.de.ap !== null && pr.dados === pr.de.ap };
       m.set(pr, o); v.voos.push(o);
     }
     const alvo = lutadorN(L, o.de === 0 ? 1 : 0), p = { x: pr.x, y: pr.y };
@@ -185,11 +196,11 @@ function seguirProjeteis(v: VisualPoc, L: LutaPoc, t: number): void {
   }
   /* o tiro que nasce e acerta no mesmo passo: a simulacao nunca o pos em L.projeteis; o voo sai do dano (da boca ao acerto) */
   for (const im of v.impactos) if (im.t0 === t && !v.voos.some(o => o.de === im.de && o.tFim === t)) {
-    const at = lutadorN(L, im.de), dados = im.hab ? at.sk : at.g; if (!dados.proj) continue;
+    const at = lutadorN(L, im.de), dados = im.apoio && at.ap ? at.ap : im.hab ? at.sk : at.g; if (!dados.proj) continue;
     const prefab = dados.proj.prefab ?? null, b = bocaDe(at);
     v.voos.push({ de: im.de, t0: t - 1, pts: [b, { x: im.x - im.dir * (EQ_POC.raio + ACERTO_MOTOR), y: im.y - EQ_POC.peito }], prefab, esq: im.dir < 0, tFim: t,
       nosso: prefab !== null && PREFABS_LP8.has(prefab), acertou: true, alvos: [{ x: im.x, y: im.y }, { x: im.x, y: im.y }], f: [0, 1],
-      tiro: { x: at.x, y: at.y, esq: at.viraEsq, t: at.t }, sintetico: true });
+      tiro: { x: at.x, y: at.y, esq: at.viraEsq, t: tempoDoAtaque(at) }, sintetico: true, apoio: im.apoio });
   }
 }
 
@@ -202,7 +213,7 @@ export function passosDoTiro(L: LutaPoc, base: number): number {
   const lim = RITMO_TIRO.janela * PASSO_POC_MS;
   for (const u of [L.a, L.b]) {
     if (u.morto || u.estado !== "attack" || u.golpeDado) continue;
-    const g = u.usandoHab ? u.sk : u.g;
+    const g = golpeEmCurso(u);
     if (g.proj && g.t * 1000 - u.t <= lim) return Math.min(base, RITMO_TIRO.lentos);
   }
   for (const pr of L.projeteis) {

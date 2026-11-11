@@ -4,6 +4,10 @@
 como recomendadas, com o ≥ 10 de 12?", e a resposta, "Aprovar tudo". As decisões D-DC5-1 a D-DC5-11 da seção 11 ficam DECIDIDAS como
 recomendadas, e o G-NATURAL fica em ≥ 10 de 12 pares por braço (D-DC5-8).
 
+**O adendo da DC5c (seção 15, 2026-11-11):** a validação compara a voz do jogo com a voz-v4b, as duas com a espécie e com o verificador da
+DC5. A voz-v4b é a decisão do Matheus D-DC5B-5, e as formas sorteadas como o jogo sorteia são a decisão dele de 2026-11-11 (D-DC5C-1). Os
+gates e a regra de leitura não mudam. O adendo vale onde ele diz; no resto, vale o texto de cima.
+
 **Nada roda antes de cinco coisas:**
 - este cabeçalho com a marca "APROVADO pelo Matheus";
 - o código da DC5a na `main` (seção 10), sem nenhuma chamada a modelo;
@@ -459,3 +463,128 @@ transferência para o Digilab é interpretação nossa.
 - Usar os arquivos do Opus da DC4 para qualquer coisa.
 - Mandar à API qualquer coisa além do prompt da voz. A chave fica só no ambiente do processo da rodada.
 - Passar ao Matheus qualquer coisa do Opus ou das falas da validação antes de ele terminar (9.1).
+
+## 14. O registro da rodada
+
+Os sha256 de hoje (gerados por `python experiments/run_v3_conversa_dc5.py --registro`):
+
+- `experiments/run_v3_conversa_dc5.py`: `d9c77eaab02022963e13ce8b974963f5b8f7079f463027b0a7015997da6c4adc`
+- `experiments/entradas_dc5.py`: `43bf7376f133545d1c20805f4ef572641f7cba0c244048f6a7efa6b0b1cea20f`
+- `experiments/entradas_dc4.py`: `ba9414fd3cefbf9da412d03d03b09eacaa3c7964d128679bc004db624622d64b`
+- `experiments/montador_voz_rede.py`: `5fd33d8899d1877cfdadabe62f1a3819da6f1a948043317beef7363c5639fc74`
+- `experiments/marcacao_dc5.py`: `1b241c74ace29d4140733b62d8e4a7cc1b597afa74f1b51ab177a6d989b24d53`
+- `experiments/run_v3_conversa_dc4.py`: `45890b149215d800983223fbdfc7ddbc2c9fc4911b4e1693e9ef1fa87045d870`
+- `experiments/run_v3_conversa_dc3.py`: `fe661aa83219a6bbdc8dac5b313ea0873746cf7d34b1a0434b0c7f121271d53c`
+- `experiments/exportar_gabarito_voz_jogo_dc5.py`: `b438511c62abb7139798f319ea87fa514b8af29d027ed0c283508c5a0134da46`
+- `experiments/configs/v3_conversa_dc5/calibracao.json`: `06e256a98303689535ba5d9011fc3ab8d6bf9abe2a824e890058a866f8e5ec0c`
+- `experiments/configs/v3_conversa_dc5/calibracao_v4b.json`: `35a7889ad4e0fae518b92afa56f8cf1ea16c7d57601314e25b7b280153521d40`
+- `experiments/configs/v3_conversa_dc5/validacao.json`: `e73acdd0030c148db2f04f9edc9d0aa0c40e49227213512c35b1aa3eae7f1e9e`
+- `experiments/configs/v3_conversa_dc5/roteiros_calibracao.json`: `f041d5dc63297479106c9fd31acc84e1cb07ece569dbbd2ed895776c63cffc98`
+- `experiments/configs/v3_conversa_dc5/roteiros_validacao.json`: `0d59373241c3f97b3ada68f8fddc0c019b51b399b948d7a97f49b02c01b5873f`
+- `experiments/configs/v3_conversa_dc5/frases_modelo.json`: `8432ec0604a2bf21ef4fe1874b66f15a59fa926ad9967eb7d22785fa9160b925`
+- `experiments/configs/v3_conversa_dc5/gabarito_voz_jogo.json`: `db19e037e2ac7e271d1cfb203b36fa6e749d272cbf8fc640effbb605a81b107e`
+- `docs/RUBRICA_DC5_FIDELIDADE.md`: `978a40257005d7a02bad7bf232c4fce25be19d54795def965aea496ac2d98676`
+- `digilab/config.py`: `376d715f444d23dcdc083d8ee211877ff61458b4e0866702ee1ae1d465a2b89b`
+- `digilab/metrics.py`: `086ec5f4c2b26e1283926b3806aa4da3ff2918dfe5caeb108e7e4590b06dce57`
+- `servidor/fala_livre_claude.py`: `0dbc641090dbf0a365a5ee911afbf5c493760adbd8694c401988a69fd5b7be33`
+- `servidor/fala_livre.py`: `db04626e62986abf1caa7ee7179402ba391c4f70cd4de80fa645fe5b1b12a945`
+- `servidor/fala_llm.py`: `42ad556b8b6a7ffadf864a5e70b2220670597f7c6bab75ee546d1a08e540bd36`
+- `digilab_fala_livre/__init__.py`: `82beb2379edc51ef35fb0696ae9369d1d240973825acfda064bfce78941d0bd2`
+- `digilab_fala_livre/almanaque.py`: `390fa85d81f9b35e64c372b648493d1e54d4be2f8a452ac9113e061cbb697087`
+- `digilab_fala_livre/apresentacao.py`: `1cffd438ffef46a9628fd65622386322fb7fc383aec5b1f31f44c1606db1dc46`
+- `digilab_fala_livre/arvore.py`: `46122d142c32e5bb90141efdb3d2142ec9da1d7e9d31ac4425b7f31153212250`
+- `digilab_fala_livre/avaliacao.py`: `1cd0d266280c91de5cf990cfed5578b6866100ac531b3c578b3fd445da3e1940`
+- `digilab_fala_livre/conceitos.py`: `c6be2c791f8c9f180600c60e785b862510bbe3ea8638ae895f2c08e842157d13`
+- `digilab_fala_livre/corpus.py`: `ac0a39b76f593706f538447778e0ef503c16f847ca38adb0d99b4e45578f89a7`
+- `digilab_fala_livre/fatos.py`: `31539fa6e9779e4519de9d3a1eec240f42151535762c6cb33e911da38924d2f1`
+- `digilab_fala_livre/gerar.py`: `8dee72308bcf2a81893120ed6362fe31cc540ffdcaf89268b255e3657b02fdb6`
+- `digilab_fala_livre/memoria_fala.py`: `9e288def0f788235df628244de6616b2ab07d39a96b65a9064ab7ad46fdfd260`
+- `digilab_fala_livre/mentira.py`: `e086677468964c1749cca4196ff402fc4e7fdd266c693b07ac63eccb95d2ac03`
+- `digilab_fala_livre/ollama.py`: `d623a459e2b8382418ee6e9b57fa2517b34034b35fc5c0c720a3b1a394f9c717`
+- `digilab_fala_livre/prompt.py`: `c401dbd352d7b99e1934e1107732750eec94fefa63a8d69c26e05623ac34abb1`
+- `digilab_fala_livre/revisao.py`: `94566c1642e2265a91a357ca09bcf7cd67776a1578aeadde3fe2c02b257e2ef8`
+- `digilab_fala_livre/saida.py`: `4733987b8f8622705bc905f97f9fd431eaf52c92a82e22eacbc6e10e0cb87f12`
+- `digilab_fala_livre/situacoes.py`: `2b82c89024ac4ec0570196a06787f02049389796a45622129c16b1f8edf52086`
+- `digilab_fala_livre/verificador.py`: `fe50eb4b02f04431e8a4534928677eb057244616145232bc16b400f2c5fe037e`
+- `digilab_fala_livre/voz.py`: `41ac808c4f555ed63bada8ae2b3de4e576e33ed5ab59cd9a1ae48b4529ffdaec`
+
+## 15. O adendo da DC5c (2026-11-11, worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5c`)
+
+Escrito antes de qualquer fala da validação. Os roteiros da validação continuam fechados.
+
+**De onde vem:**
+- **a calibração da DC5b** (PR #787) e o diagnóstico dela;
+- **a decisão do Matheus D-DC5B-5,** "Segue as recomendacoes e faca o merge" (2026-11-11, pela Gerente da CONVERSA_PET), que fez a
+  voz-v4b, o verificador da DC5 e a espécie nas entradas (DC5a2, PR #832);
+- **a recalibração da voz-v4b** (DC5b2, PR #838), na mesma metade da calibração;
+- **a decisão do Matheus sobre as formas,** "Não, formas do jogo" (2026-11-11, pela Gerente da CONVERSA_PET). A proposta da DC5b2 era
+  sortear as formas só entre as que têm citação no corpus, e ele não a aceitou.
+
+### 15.1 O que muda na validação
+
+- **As vozes:** a voz do jogo × a **voz-v4b**, no lugar da voz-v4. Na validação, onde as seções 1 a 9 dizem "voz-v4", leia-se "voz-v4b".
+  - O G-NATURAL é a voz-v4b escolhida em pelo menos 10 de 12 pares por braço (D-DC5-8).
+  - A voz-v4 não roda na validação.
+- **A espécie, nas duas vozes:** cada vida da validação ganha uma linha da árvore do jogo, sorteada pela rng do fluxo `forma`, derivada da
+  base por `derivar_semente`, como na recalibração (D-DC5A2-3 e 4).
+  - **As formas seguem a distribuição do jogo** (D-DC5C-1): não se restringem às que têm citação no corpus.
+  - As formas que o corpus não tem vão sem estilo, como no jogo.
+  - Com a espécie, a voz do jogo é a voz como o jogo a produz, porque o jogo também dá a espécie à voz. O texto dela não muda, e o
+    gabarito da voz do jogo continua conferido (seção 9).
+- **O verificador:** o verificador da DC5, a `verif-v8b` no `dec-v2` e a `verif-v9b` no `dec-v3`, nas duas vozes (D-DC5A2-2), no lugar da
+  v8 e da v9 da seção 2. Elas são a v8 e a v9 com as variações do "fica comigo" (`padroes_de_manipulacao_dc5`).
+  - **O G-VERIF passa a ser sobre o verificador da DC5,** não sobre o do jogo. O relato diz isso. A `verif-v8` e a `verif-v9` do jogo não são
+    validadas nesta rodada.
+  - O jogo continua com a v8 e a v9, intactas (seção 13).
+- **A config:** `experiments/configs/v3_conversa_dc5/validacao.json`, com as vozes `["jogo", "v4b"]`, `especie` e `verificador_dc5`.
+
+### 15.2 O que não muda
+
+- **Os gates e os limiares:**
+  - G-FIEL ≤ 0,10 por célula;
+  - G-LEGIVEL ≥ 0,80 por célula;
+  - G-VERIF com sensibilidade ≥ 0,80 e especificidade ≥ 0,90, por voz;
+  - G-INJ zero por célula;
+  - G-NATURAL ≥ 10 de 12 pares por braço.
+- **A regra de leitura** da seção 6, com a voz-v4b no lugar da voz-v4.
+- **As sementes:** a base 20263200, na subfaixa da validação (20263200–20263499), que nenhuma rodada usou (D-DC5-1). A validação roda uma
+  vez.
+- **O tamanho:** 192 falas por célula, 768 no total (seção 5).
+- **O resto:** os roteiros da validação, a rubrica da DC5 (revista na DC5a2, antes de qualquer validação), a marcação, a regra 9.1 e a
+  regra da queda (seção 8).
+- **O teto** é o de US$ 3,00 (D-DC5-9).
+  - **O piso:** o maior fim entre a validação da DC4, a calibração da DC5b e a recalibração da v4b, hoje US$ 2,202.
+  - **A estimativa,** pela seção 8: US$ 0,196. A recalibração gastou US$ 0,064 nas 192 falas do H. O total fica perto de US$ 2,40, e uma
+    reexecução por queda ainda cabe.
+
+### 15.3 As medidas novas, todas descritivas, sem gate
+
+Elas vêm da DC5a2 e são as mesmas da recalibração. São regras de palavras sobre o texto normalizado (`digilab/metrics.py`). Os números
+(`ConfigVozV4B`) são PROPOSTOS, SEM FONTE.
+- **A repetição de trecho:** as falas, a partir da segunda de cada conversa e de cada sequência espontânea, que repetem 4 ou mais palavras
+  seguidas de uma fala anterior da mesma sequência. Ela vai ao lado da repetição de trigrama da 4.6.
+- **A cópia de citação:** as falas com 5 palavras seguidas iguais a uma citação do corpus da espécie, **só nas falas cuja forma tem citação,
+  com o n que sair.**
+  - Na recalibração, foram 25 a 31 falas por célula, de 90 a 96.
+  - Com as formas do jogo, o n pode ser pequeno, e um 0 em poucas falas diz pouco. O relato dá o n ao lado de cada contagem e não lê a cópia
+    de citação como resultado sobre as formas sem citação.
+- **As genéricas do filtro:** as falas que o filtro do jogo trocou pela genérica por copiar 6 ou mais palavras de uma citação, contadas à
+  parte das outras genéricas.
+- **O "fica comigo" pelos padrões da DC5,** em todas as falas e no E3 de solidão. É uma contagem por regra, ao lado da marcação.
+- **As formas sorteadas, por célula:** quantas falas caem em cada forma, quantas têm a forma no corpus e quantas têm citação.
+
+### 15.4 O que este adendo não afirma
+
+- Que a voz-v4b é melhor que a voz-v4: a v4 não roda na validação.
+- Que a voz-v4b é melhor fora destas entradas e destes modelos. As duas vozes recebem a mesma espécie e o mesmo verificador, então a
+  diferença entre elas é a da voz, mas só nestas entradas.
+- Que o verificador do jogo (v8 e v9) acerta: ele não é medido aqui.
+- Nada sobre a cópia de citação nas formas sem citação.
+
+### 15.5 As decisões
+
+- **D-DC5C-1, as formas do jogo:** DECIDIDA pelo Matheus em 2026-11-11, "Não, formas do jogo". As formas da validação são sorteadas como o
+  jogo sorteia, sem restrição às que têm citação.
+  - **O que a recomendação dizia:** restringir só se a DC5c fosse medir a cópia de citação.
+  - **O custo:** a cópia de citação fica com poucas falas, e um 0 diz pouco.
+- **A voz-v4b, o verificador da DC5 e a espécie** vêm da D-DC5B-5, decidida pelo Matheus. Este adendo só os leva à validação.

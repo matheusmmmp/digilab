@@ -36,7 +36,7 @@ describe("a vista do mundo", () => {
     for (const p of Object.values(borda)) expect(dentroDoMapa(cm, p[0], p[1])).toBe(true);
   });
   test("num pet de verdade (v13) os tres lugares sao aceitos pelo motor e entram no registro como o evento dc", () => {
-    const m = new Motor(6503);
+    const m = new Motor(6503, 21);
     m.avancar(120);
     const lugares = lugaresNomeados(m.mundo!);
     for (const [x, y] of Object.values(lugares)) m.deixarComida("racao", x, y);

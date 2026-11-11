@@ -85,3 +85,29 @@ export const ACAO = {
   recSkIni: 2500, recSkVar: 1500, recargaIni: 300, recargaVar: 300,
   recargaMin: 150,
 } as const;
+
+/** o golpe de apoio (LUTA_POC, LP6-1; docs/PLANO_LP6_SEGUNDO_GOLPE.md, secao 3; as decisoes 1 a 3 do Matheus, 2026-11-11: "pode seguir para
+    o plano lp6"): um segundo golpe, do tipo que falta ao golpe principal, que sai pela distancia e tem recarga propria. So vale quando a
+    entrada da luta traz o `apoio` (a chave; nenhuma versao de pet o liga ate a LP6-4); sem ele, a luta e a de sempre, byte a byte. Os
+    numeros sao PROPOSTOS, SEM FONTE, e entram na calibracao da LP6-3.
+    - dano: o dano do apoio, em fracao do dano do golpe principal (o mesmo tipo de dano e o mesmo `fr` do principal, vezes isto);
+    - recarga: a recarga do apoio, em vezes o ciclo do ataque do lutador (Stats.cad), contada do comeco do apoio;
+    - longeMs: quanto tempo (ms) o alvo de quem bate de perto fica alem do alcance de perto antes do tiro fraco sair.
+    Quando sai: o de perto de quem atira, com o alvo abaixo da distMin do tiro (sem o `tiro`, da metade do alcance, o recuo da POC) e ao
+    alcance de perto; o tiro fraco de quem bate de perto, com o alvo alem do alcance de perto por longeMs e ao alcance do tiro */
+export interface Apoio { dano: number; recarga: number; longeMs: number }
+export const APOIO_LP6: Readonly<Apoio> = Object.freeze({ dano: 0.6, recarga: 2, longeMs: 1500 });
+/** o golpe de apoio na tabela das formas (formas.ts, gerada por tools/gerar_tabela_arena.py; um teste confere que o gerador usa os mesmos):
+    o instante do golpe e o clipe a `ritmo` vezes os do golpe principal (o Attack_1 reaproveitado, mais rapido; secao 4 do plano) e o tiro
+    fraco na velocidade `vel` (a 20 do "Guide", secao 3). PROPOSTO, SEM FONTE */
+export const APOIO_TABELA = { ritmo: 0.6, vel: 20 } as const;
+
+/** a arena do Ultimate e do Mega (LUTA_POC, LP6-1; docs/PLANO_LP6_SEGUNDO_GOLPE.md, secao 4a; a decisao 4 PROPOSTA, com a recomendacao
+    aplicada): a elipse cresce pelo maior estagio dos dois lutadores, e tudo que e da cena cresce junto (as zonas, os obstaculos, a area
+    segura, a linha da mare e os pontos de inicio); os corpos, o alcance e a velocidade nao mudam. So vale quando a entrada da luta traz a
+    `arenaPorEstagio` (a chave); sem ela, a elipse de sempre, byte a byte. O fator de cada estagio (In-Training, Rookie e Champion: 1).
+    PROPOSTO, SEM FONTE */
+export interface ArenaPorEstagio { Ultimate: number; Mega: number }
+export const ARENA_POR_ESTAGIO_LP6: Readonly<ArenaPorEstagio> = Object.freeze({ Ultimate: 1.15, Mega: 1.3 });
+/** a ordem dos estagios da tabela das formas, do menor ao maior (o maior dos dois lutadores escolhe o fator) */
+export const ORDEM_ESTAGIOS = ["In-Training", "Rookie", "Champion", "Ultimate", "Mega"] as const;
