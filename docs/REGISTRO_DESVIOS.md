@@ -693,6 +693,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — MMO1: a conta dos pontos (Gerente da frente MMO, Claude Code, Opus 5.5, branch `v3-mmo1`)](registro/2026-11.md)
 - [2026-11-11 — ILHA_AGUA, IG5: a medida do pet na ilha grande (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-grande-ig5`)](registro/2026-11.md)
 - [2026-11-11 — ILHA_AGUA, IG5: as decisões da IG-6 e o adendo do comedouro (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-grande-ig5`)](registro/2026-11.md)
+- [2026-11-11 — ILHA_AGUA, IG6: a memória de 128 células (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-grande-ig6`)](registro/2026-11.md)
 - [2026-11-11 — CONVERSA_PET, DC5a2, a voz-v4b, o verificador da DC5 e a espécie (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5a2`)](registro/2026-11.md)
 - [2026-11-11 — INDIVIDUALIDADE, o adendo 3 do plano do I7 (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i7-adendo3`)](registro/2026-11.md)
 - [2026-11-11 — CONVERSA_PET, DC5b2, a recalibração da voz-v4b (worker, Claude Code, Opus 5.5, branch `v3-conversa-dc5b2`)](registro/2026-11.md)
