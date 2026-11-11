@@ -4,10 +4,10 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, test } from "vitest";
-import { MODELOS } from "../src/telas/pet/ilha/modelos.ts";
+import { ENFEITES_MODELOS, MODELOS } from "../src/telas/pet/ilha/modelos.ts";
 import { CMU, CMU_MVP } from "../motor/index.ts";
 import { DIGITAL } from "../src/telas/pet/ilha/constantes.ts";
-import { lugarDaLata, lugaresDasParticulas, paresDosFios, segmentosDosFios } from "../src/telas/pet/ilha/digitalConta.ts";
+import { lugaresDasParticulas, paresDosFios, segmentosDosFios } from "../src/telas/pet/ilha/digitalConta.ts";
 import { DOBRA_K } from "../src/telas/pet/ilha/constantes.ts";
 import { ilhaDe } from "../src/telas/pet/ilha/grade.ts";
 
@@ -59,56 +59,11 @@ describe("o estilo Digital", () => {
     for (const v of seg) expect(Number.isFinite(v)).toBe(true);
   });
 
-  /* D4 (docs/TAREFA_V3_MAPA_DIGITAL.md, secao 12): a lata gigante, o arquivo com os gates dos marcos (G1 a G8 da ITENS_3D, teto 2 414)
-     e o lugar no horizonte */
-  test("D4: o arquivo da lata (G1 a G8, teto dos marcos)", () => {
-    const f = join(__dirname, "..", "public", DIGITAL.lata.arquivo), dir = join(f, "..");
-    const g = JSON.parse(readFileSync(f, "utf8")) as {
-      asset: { extras?: { gerado_por_ia?: boolean; gerador?: string } }; nodes: unknown[]; buffers: { uri: string }[]; images?: { uri: string }[];
-      accessors: { count: number }[]; meshes: { primitives: { indices?: number; mode?: number; material?: number }[] }[];
-      materials?: { pbrMetallicRoughness?: { baseColorTexture?: unknown; metallicRoughnessTexture?: unknown }; normalTexture?: unknown;
-        occlusionTexture?: unknown; emissiveTexture?: unknown }[];
-    };
-    let tri = 0;
-    for (const me of g.meshes) for (const p of me.primitives) { expect(p.mode ?? 4).toBe(4); tri += g.accessors[p.indices!].count / 3; }
-    expect(tri).toBeLessThanOrEqual(2414);
-    expect(g.nodes.length).toBe(1);
-    for (const im of g.images ?? []) {
-      const b = readFileSync(join(dir, im.uri)), w = b.readUInt32BE(16), h = b.readUInt32BE(20);
-      expect(w).toBeLessThanOrEqual(1024); expect(Math.log2(w) % 1).toBe(0); expect(Math.log2(h) % 1).toBe(0);
-    }
-    for (const ma of g.materials ?? []) {
-      expect(ma.pbrMetallicRoughness?.baseColorTexture).toBeDefined();
-      expect(ma.normalTexture ?? ma.occlusionTexture ?? ma.emissiveTexture ?? ma.pbrMetallicRoughness?.metallicRoughnessTexture).toBeUndefined();
-    }
-    const usados = [f, ...g.buffers.map(b => join(dir, b.uri)), ...(g.images ?? []).map(i => join(dir, i.uri))];
-    expect(usados.reduce((s, u) => s + statSync(u).size, 0)).toBeLessThanOrEqual(300 * 1024);
-    expect(readdirSync(dir).map(a => join(dir, a)).filter(a => !usados.includes(a) && !/License\.txt$/.test(a))).toEqual([]);
-    const lic = readFileSync(join(dir, "License.txt"), "utf8");
-    expect(lic).toMatch(/Meshy/); expect(lic).toMatch(/gerado por IA/);
-    expect(g.asset.extras?.gerado_por_ia).toBe(true); expect(g.asset.extras?.gerador).toMatch(/Meshy/);
-    const r = JSON.parse(readFileSync(join(__dirname, "..", "..", "..", "docs", "mapa_digital", "lata", "validacao.json"), "utf8")) as
-      { issues: { numErrors: number; numWarnings: number } };
-    expect(r.issues.numErrors).toBe(0); expect(r.issues.numWarnings).toBe(0);
-  });
-
-  for (const cm of [CMU_MVP, CMU]) test(`D4: a lata no horizonte (layout ${cm.layout.nome})`, () => {
-    const ilha = ilhaDe(cm), L = DIGITAL.lata, dir: [number, number] = [0, -1], meia = 0.5;
-    const ninho: [number, number] = [cm.layout.ninho[0] + 0.5, cm.layout.ninho[1] + 0.5];
-    const a = lugarDaLata(ilha, ninho, DOBRA_K, dir, meia);
-    expect(lugarDaLata(ilha, ninho, DOBRA_K, dir, meia)).toEqual(a);
-    /* sempre `longe` ao norte do pet, e com a dobra descontada: o pe fica a `base` do chao do pet, onde quer que ele esteja */
-    for (const foco of [ninho, [1.5, 1.5], [ilha.area.w - 1.5, ilha.area.h - 1.5]] as [number, number][]) {
-      const l = lugarDaLata(ilha, foco, DOBRA_K, dir, meia), dz = (l.x - foco[0]) * dir[0] + (l.z - foco[1]) * dir[1];
-      expect(l.z).toBeCloseTo(foco[1] - L.longe, 9);
-      expect(l.y - DOBRA_K * dz * dz).toBeCloseTo(ilha.altura(foco[0], foco[1]) + L.base, 9);
-      expect(l.giro).toBe(L.giro);
-    }
-    /* a paralaxe: o pet anda 10 celulas para o leste e a lata so 10 * (1 - paralaxe) */
-    const b = lugarDaLata(ilha, [ninho[0] + 10, ninho[1]], DOBRA_K, dir, meia);
-    expect(b.x - a.x).toBeCloseTo(10 * (1 - L.paralaxe), 9);
-    /* o lado acompanha a largura da tela (a mesma fracao no celular e no desktop) */
-    const c = lugarDaLata(ilha, ninho, DOBRA_K, dir, 2 * meia);
-    expect(c.x - a.x).toBeCloseTo(L.lado * (L.longe + 14.5) * meia, 9);
+  /* D4 revista (2026-11-10, docs/TAREFA_V3_MUNDO_ENFEITES.md, secao 17): a lata gigante saiu do horizonte do Digital e virou um marco da
+     grade (ENFEITES_MODELOS.lata; os gates do arquivo e do lugar em test/ilha_enfeites.test.ts). Aqui: o estilo nao tem mais a lata propria */
+  test("D4 revista: o Digital nao tem mais a lata do horizonte", () => {
+    expect("lata" in DIGITAL).toBe(false);
+    expect(existsSync(join(PASTA, "lata"))).toBe(false);
+    expect(ENFEITES_MODELOS.lata.arquivos[0]).toBe("lata/lata.gltf");
   });
 });

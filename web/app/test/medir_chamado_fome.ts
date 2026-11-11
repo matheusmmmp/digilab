@@ -24,7 +24,7 @@ const SAIDA = new URL("./efeito_chamado_fome.json", import.meta.url);
 
 /** a vida do bebe com as chaves (null: sem o evento "p"); tambem a do test/medir_chamados_bebe.ts */
 export function vida(semente: number, ritmo: "rapida" | "classica", chaves: ChavesProduto | null, dono: NomeDono) {
-  const m = new Motor(semente);
+  const m = new Motor(semente, 21);
   if (ritmo === "classica") m.configurar("classica");
   if (chaves) m.ligarProduto(chaves);
   const abriu: Record<Chamado, number> = { fome: 0, higiene: 0, carinho: 0 };

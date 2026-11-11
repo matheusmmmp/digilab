@@ -15,9 +15,9 @@ const neutro = Object.fromEntries(STATS.map(k => [k, 10])) as Stats;
 describe("a chave e a versao", () => {
   test("a chave ligou na LP4: os ovos de hoje nascem v21, e so a v21 abre", () => {
     expect(LUTA_POC_LIGADA).toBe(true);
-    expect(VERSAO_PET).toBe(21);
-    expect(VERSOES_PET).toEqual([VERSAO_V21]);
-    expect(VERSOES_PET_POC).toEqual([21]);
+    expect(VERSAO_PET).toBe(22);
+    expect(VERSOES_PET).toEqual([VERSAO_V21, 22]);
+    expect(VERSOES_PET_POC).toEqual([21, 22]);
     for (const v of [13, 14, 15, 17, 18, 19]) expect(() => new Motor(101, v), `v${v}`).toThrow(/versão de pet desconhecida/);
     expect(new Motor(101, VERSAO_V21).versao).toBe(21);
     expect(() => new Motor(101, 20)).toThrow(/versão de pet desconhecida/);

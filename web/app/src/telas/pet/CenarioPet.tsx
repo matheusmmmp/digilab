@@ -86,7 +86,9 @@ function MedirCena() {
   );
 }
 /** o cenario: a cena 3D (import dinamico) ou a reserva; `mundo`: o pet tem o mundo fisico (v12), e as duas desenham o mapa */
-export function CenaPet({ noite, mundo = false }: { noite: boolean; mundo?: boolean }) {
+/* `ilha`: o nome do layout do mundo do pet na tela. A grade da ilha e montada com a cena; quando o layout muda (o pet de hoje, na ilha com
+   agua, da lugar ao pet de teste, na ilha sem agua, ou o contrario; docs/TAREFA_V3_ILHA_AGUA.md, IA4), a cena religa */
+export function CenaPet({ noite, mundo = false, ilha = "" }: { noite: boolean; mundo?: boolean; ilha?: string }) {
   const ref = useRef<HTMLCanvasElement>(null), [reserva, setReserva] = useState(() => !temWebGL());
   const medir = new URLSearchParams(location.search).get("medir3d") === "1";
   /* o mapa e a camera do habitat (Ajustes > Aparencia): trocar religa a cena com o jogo rodando (so vista; o motor segue) */
@@ -103,7 +105,7 @@ export function CenaPet({ noite, mundo = false }: { noite: boolean; mundo?: bool
       })
       .catch(err => { console.warn("cena 3D do Pet não carregou; fica o cenário de reserva:", err); if (vivo) setReserva(true); });
     return () => { vivo = false; parar?.(); };
-  }, [reserva, mundo, mapa, camera]);
+  }, [reserva, mundo, mapa, camera, ilha]);
   if (reserva) return mundo ? <MundoReserva /> : <CenarioPet noite={noite} />;
   return <>
     <div className={"cena3d" + (noite ? " cena3d--noite" : "")} aria-hidden="true"><canvas ref={ref} /></div>
