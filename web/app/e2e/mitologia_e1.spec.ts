@@ -17,7 +17,7 @@ async function semear(page: Page, mitologia: boolean): Promise<void> {
   await page.evaluate(([chave, s, mit]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 1, log: [] }));
     localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
-    if (mit) localStorage.setItem(chave + "-mitologia", "1");
+    localStorage.setItem(chave + "-mitologia", mit ? "1" : "0");
     localStorage.setItem(chave, s);
   }, [CHAVE, JSON.stringify(SAVE), mitologia] as const);
 }

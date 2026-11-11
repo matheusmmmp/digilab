@@ -1,4 +1,4 @@
-/* MITOLOGIA (docs/TAREFA_V3_MITOLOGIA.md, E0, E1 e E2): a chave `mitologia` (Ajustes; desligada por padrao) e o que o oraculo ja contou a cada
+/* MITOLOGIA (docs/TAREFA_V3_MITOLOGIA.md, E0, E1 e E2): a chave `mitologia` (Ajustes; ligada por padrao desde 2026-11-11) e o que o oraculo ja contou a cada
    pet. As lendas sao funcao pura do pet refeito do log (motor/lendas.ts, motor/lendas_e1.ts); aqui so fica a preferencia de tela, o "ja ouvi"
    e o enigma decifrado, fora do save (o enigma nao e evento do log: e conversa com o oraculo, como o "ja ouvi"; D-E1-4). */
 import { useSyncExternalStore } from "react";
@@ -16,10 +16,11 @@ let versao = 0;
 const avisar = () => { versao++; for (const o of ouvintes) o(); };
 const assinar = (o: () => void) => { ouvintes.add(o); return () => { ouvintes.delete(o); }; };
 
-/** padrao: desligada (o jogo de hoje); so "1" liga. Lida uma vez e guardada (a cena le a cada quadro) */
+/** padrao: LIGADA (o Matheus, 2026-11-11: "quero que a mitologia sempre esteja ativa, ela pode ser desligada, mas ja comeca ligada"); so
+    "0" desliga. Lida uma vez e guardada (a cena le a cada quadro) */
 let ligada: boolean | null = null;
 export function mitologiaLigada(): boolean {
-  if (ligada === null) { try { ligada = localStorage.getItem(CHAVE_MITOLOGIA) === "1"; } catch { ligada = false; } }
+  if (ligada === null) { try { ligada = localStorage.getItem(CHAVE_MITOLOGIA) !== "0"; } catch { ligada = true; } }
   return ligada;
 }
 export function ligarMitologia(v: boolean): void {
@@ -28,7 +29,7 @@ export function ligarMitologia(v: boolean): void {
   avisar();
 }
 export function useMitologia(): boolean {
-  return useSyncExternalStore(assinar, mitologiaLigada, () => false);
+  return useSyncExternalStore(assinar, mitologiaLigada, () => true);
 }
 
 /* ---------- o que o oraculo ja contou a cada pet (pela semente). Na E0 era so o numero de hybris ouvidas; na E1 vira o registro abaixo (o
