@@ -90,10 +90,13 @@ export type EventoCerebro = [tick: number, tipo: "cb", troca: { cerebro: "modula
 export type EventoPonteLuta = [tick: number, tipo: "pl", marca: { luta: true; eps?: true }];
 /** DC3d da CONVERSA_PET: a fala com conteudo (a subchave `fala_unidades` do modular), uma vez, no comeco do registro de um pet de teste v16 */
 export type EventoFalaUnidades = [tick: number, tipo: "fu", marca: { fala: true }];
+/** a troca de ilha (docs/TAREFA_V3_ILHA_AGUA.md, IA4): o mundo do pet v21 passa para a ilha com agua `ilha` (o destino do ILHAS_DE_TROCA);
+    o que estiver na agua vai para a terra mais perto. Uma vez por pet; nao e contato nem cuidado */
+export type EventoMudarIlha = [tick: number, tipo: "mi", troca: { ilha: string }];
 export type EventoRegistro = EventoTempo | EventoDono | EventoLuta | EventoGambit | EventoTreino | EventoOrigem | EventoConfig | EventoLiberacao
-  | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida | EventoBola | EventoLevarPet | EventoProduto | EventoCerebro | EventoPonteLuta | EventoFalaUnidades;
+  | EventoItem | EventoCarta | EventoFronteira | EventoFala | EventoComida | EventoBola | EventoLevarPet | EventoMudarIlha | EventoProduto | EventoCerebro | EventoPonteLuta | EventoFalaUnidades;
 
-export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 21;
+export type VersaoPet = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 21 | 22;
 
 /** estado de vida (camada 1) */
 export interface EstadoVida {

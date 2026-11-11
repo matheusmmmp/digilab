@@ -87,7 +87,7 @@ describe("G-PAR do levar pet: o laco do TS = o Python, decisao a decisao", () =>
 
 /** o pet v19 do jogo, acordado, num tick com o destino pendente (o pet anda para algum lugar) */
 function acordado(semente: number): Motor {
-  const m = new Motor(semente);
+  const m = new Motor(semente, 21);
   m.ligarProduto({ chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true });
   m.avancar(300);
   for (let i = 0; i < 200 && m.e.dormindo; i++) m.avancar(7);
@@ -106,10 +106,10 @@ const semMundo = (m: Motor): unknown => {
 
 describe("o levar pet no Motor (o evento lp, pets v19)", () => {
   test("o ovo novo (a v21) tem o levar pet da v19 e o cerebro trocavel", () => {
-    expect(VERSAO_PET).toBe(21);
+    expect(VERSAO_PET).toBe(22);
     expect(VERSAO_V19).toBe(19);
-    expect(VERSOES_PET).toEqual([21]);
-    const m = new Motor(101);
+    expect(VERSOES_PET).toEqual([21, 22]);
+    const m = new Motor(101, 21);
     expect(m.versao).toBe(21);
     expect(ehCerebroTrocavel(21)).toBe(true);
     expect(m.mundo!.bolaNoGolpe).toBe(true);
@@ -149,14 +149,14 @@ describe("o levar pet no Motor (o evento lp, pets v19)", () => {
         m.avancar(45);
       }
       expect(m.log.filter(e => e[1] === "lp").length).toBeGreaterThan(0);
-      const r = Motor.reproduzir(s, m.log);
+      const r = Motor.reproduzir(s, m.log, 21);
       expect(r.assinatura()).toBe(m.assinatura());
       expect(r.mundo!.levadas).toEqual(m.mundo!.levadas);
     }
   });
 
   test("o pet dormindo nao e pego (PP-2): falha alto e nada vai ao registro", () => {
-    const m = new Motor(101);
+    const m = new Motor(101, 21);
     m.ligarProduto({ chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true });
     for (let i = 0; i < 2000 && !m.e.dormindo; i++) m.avancar(7);
     expect(m.e.dormindo).toBe(true);
@@ -165,7 +165,7 @@ describe("o levar pet no Motor (o evento lp, pets v19)", () => {
     expect(m.log.length).toBe(n);
     expect(m.assinatura()).toBe(a);
     /* no replay, um "lp" com o pet dormindo tambem falha */
-    expect(() => Motor.reproduzir(101, [...m.log, [m.e.tick, "lp", { x: 10, y: 10 }]])).toThrow(/dormindo/);
+    expect(() => Motor.reproduzir(101, [...m.log, [m.e.tick, "lp", { x: 10, y: 10 }]], 21)).toThrow(/dormindo/);
   });
 
   test("antes da v19 o evento nao existe (so o pet de teste v16 abre, das de antes), e o registro invalido falha alto", () => {
@@ -177,7 +177,7 @@ describe("o levar pet no Motor (o evento lp, pets v19)", () => {
     }
     const m = acordado(101), t = m.e.tick;
     for (const ruim of [{ x: 1 }, { x: 1, y: 2, z: 3 }, { x: 1.5, y: 2 }, { x: "1", y: 2 }, null, [1, 2]])
-      expect(() => Motor.reproduzir(101, [...m.log, [t, "lp", ruim] as unknown as EventoRegistro]), JSON.stringify(ruim)).toThrow();
+      expect(() => Motor.reproduzir(101, [...m.log, [t, "lp", ruim] as unknown as EventoRegistro], 21), JSON.stringify(ruim)).toThrow();
     expect(() => m.levarPet(1.5, 2)).toThrow(/levar_pet/);
   });
 });
