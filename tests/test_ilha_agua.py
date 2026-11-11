@@ -56,7 +56,8 @@ def _tabela_limpa():
 
 # ------------------------------------------------------------------ G-AG-1: sem agua, nada muda
 def test_o_layout_sem_agua_nao_tem_solido_nem_celulas():
-    assert set(AGUA_POR_LAYOUT) == {"ilha_agua", "mvp_agua"} and CONFIG_MUNDO_ILHA.layout.nome == "ilha"
+    # o "grande" e a ilha de 128 x 60 (a secao 12 da tarefa; tests/test_ilha_grande.py)
+    assert set(AGUA_POR_LAYOUT) == {"ilha_agua", "mvp_agua", "grande"} and CONFIG_MUNDO_ILHA.layout.nome == "ilha"
     # a agua vai pelo nome do layout: os dois mundos com agua a tem, e os de antes (o mesmo layout com o nome de antes) nao
     for com, sem in ((CONFIG_MUNDO_ILHA_AGUA, CONFIG_MUNDO_ILHA), (CONFIG_MUNDO_MVP_AGUA, CONFIG_MUNDO_MVP)):
         assert celulas_secas(com) is not None and celulas_secas(sem) is None
@@ -82,7 +83,7 @@ def test_o_mapa_errado_falha_alto():
     with pytest.raises(ValueError, match="linhas"):
         celulas_secas(_com_agua((AGUA_ILHA[0][:-1],) + AGUA_ILHA[1:]))
     with pytest.raises(ValueError, match="desconhecido"):
-        celulas_secas(_com_agua(("#" + AGUA_ILHA[0][1:],) + AGUA_ILHA[1:]))
+        celulas_secas(_com_agua(("?" + AGUA_ILHA[0][1:],) + AGUA_ILHA[1:]))      # o "#" passou a valer: e o marco fechado da ilha grande
 
 
 def test_os_solidos_cobrem_a_agua_e_so_a_agua():
