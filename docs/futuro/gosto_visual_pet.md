@@ -1,7 +1,8 @@
 # O gosto visual do pet: ver uma tela, gostar de umas imagens mais que de outras, e uma medida para isso
 
 Status (2026-11-11): **PROPOSTO**. Pedido do Matheus depois da busca bibliográfica de 2026-11-10. Não autoriza implementação: as
-decisões GV-1 a GV-12 (seção 10) são dele. A frente é a `docs/TAREFA_V3_GOSTO_VISUAL.md`. Nenhum código, nenhuma faixa, nenhuma vida,
+decisões GV-1 a GV-14 (seção 10) são dele. A exceção é o protótipo P0 no jogo web (seção 14), que o Matheus pediu antes da revisão da
+espec. A frente é a `docs/TAREFA_V3_GOSTO_VISUAL.md`. Nenhum código, nenhuma faixa, nenhuma vida,
 nenhum plano de análise.
 
 **O pedido:** o pet observa a tela compartilhada (ou uma TV dentro do jogo) e forma um gosto visual próprio, em parte de nascença e em
@@ -36,7 +37,9 @@ parte aprendido.
 - **A ligação com a INDIVIDUALIDADE:** o gosto visual vira mais um traço lido por sondas em cópias do pet, no desenho genoma × dono
   (seção 8).
 - **A ordem** (seção 9): a espec revisada pelo Matheus, depois o Python com a TV do jogo, depois a sonda, depois o plano e a run, e só no
-  fim a web e a tela real.
+  fim a web e a tela real. A exceção é o protótipo P0 (seção 14), pedido pelo Matheus antes da espec.
+- **A pergunta do Matheus** ("ele pode começar a gostar de algo que eu assista ou ouça?") tem a resposta na seção 12, e **o som** na
+  seção 13.
 
 ## 1. De onde vem e o que já existe no projeto
 
@@ -261,6 +264,9 @@ gosto do pet sobre o que é novo para ele, e o efeito da exposição do dono se 
 | **GV-11** | A sonda das duas TVs entra na bateria da INDIVIDUALIDADE. | **Não: sonda própria desta frente, com a mesma maquinaria**, sem mexer na IN-2 nem nas etapas em andamento. | Entrar na bateria muda uma decisão tomada e o custo das runs de lá; as vidas de hoje nem têm o traço. Separada, a comparação com os outros traços pede um passo a mais no plano. |
 | **GV-12** | As 56 referências da nota no repositório. | **Sim, na GV0**, num `docs/referencias/*_verificadas.csv` com o status e os rótulos [sem resumo] e [resumo parcial] da nota. | Sem isso, a frente cita fontes que só existem no vault, e o CI da categoria literatura não as confere. O custo é um PR a mais. |
 
+| **GV-13** | O som: um vetor de áudio ao lado do visual. | **Sim, um vetor de três inteiros em [0, C]: o volume, a variação (o ritmo) e o brilho do timbre (o centróide espectral)**, calculado no computador do usuário, com a mesma regra de privacidade da GV-10, e com o seu próprio pico inato e a sua habituação. Antes da GV0, uma busca dirigida (seção 13). | Sem o som, o pet "assiste" um vídeo mudo, e a pergunta do Matheus (seção 12) só tem metade da resposta. Com o som sem a busca, o desenho do áudio fica SEM FONTE inteiro; e um áudio mais rico (palavras, melodia) aumenta o risco de privacidade sem ganho para o gosto. |
+| **GV-14** | O risco de o gosto aprendido ser só o gosto do dono, por exposição, e como o painel separa as partes. | **O painel mostra três barras por componente: o inato (do genoma, fixo), o da exposição e o da consequência**, e um "gosta mais de…" calculado só do total; o jogo não premia o acerto; a medida usa estímulos que o dono nunca mostrou (5.3); o desenho genoma × dono (seção 8) mede a parte do dono. | Sem a separação, o dono vê o próprio gosto devolvido como se fosse do pet, e qualquer leitura de "o pet aprendeu a gostar" fica confundida com "o pet viu muito". Separado demais na tela, o painel vira um gráfico de pesquisa e perde o tom de jogo. |
+
 ## 11. Riscos
 
 - **Ler ruído como gosto.** Mitigação: o genoma vazio como controle, réplicas de sonda e de semente, e a familiarização.
@@ -270,3 +276,62 @@ gosto do pet sobre o que é novo para ele, e o efeito da exposição do dono se 
   olhando como efeito colateral.
 - **A privacidade.** Mitigação: a seção 7 e a ordem da seção 9.
 - **A alegação de novidade.** Mitigação: as regras do topo; o que a busca não achou não vira "inédito".
+
+## 12. A pergunta do Matheus: o pet pode começar a gostar do que eu assisto ou ouço?
+
+A pergunta (Matheus, 2026-11-11): "se eu streamar minha tela para o pet, ele pode começar a gostar de algo que eu assista ou ouça".
+
+**A resposta pelo desenho: sim, pelas características, não pelo sentido.**
+- **O pet gosta do vetor, não do conteúdo.** Ele recebe a cor, o brilho, o movimento e a complexidade (e, com a GV-13, o volume, o ritmo
+  e o timbre). Ele não sabe que é um filme, um jogo ou uma planilha. Se o dono assiste muito anime colorido e rápido, o que o pet pode
+  passar a preferir é "colorido e rápido", e isso vale para qualquer outra coisa colorida e rápida.
+- **O primeiro caminho é a mera exposição** (3.5; Zajonc 1968, `10.1037/h0025848`): o que o pet vê muito desloca a expectativa dele,
+  e o ponto em que um quadro "está certo" anda na direção do que o dono assiste.
+- **O segundo caminho é a consequência** (3.5; o análogo do paladar, Provenza 1995, `10.2307/4002498`): se o dono faz carinho enquanto
+  passa um tipo de coisa, aquele tipo ganha agrado. **SEM FONTE** para isso com imagens ou sons num agente.
+- **O excesso gasta o interesse.** A habituação (3.3) faz o pet desviar do que viu demais agora, e o pico (3.2) faz o igual demais deixar
+  de "estar certo". Por isso a resposta não é "o pet passa a gostar de tudo o que o dono assiste": um pouco de exposição aproxima o gosto,
+  exposição demais cansa, e o pet volta a procurar o que difere (Gustafsson et al. 2021, `10.3758/s13420-021-00484-3`: o novo atrai o
+  olhar, o semifamiliar fica com o agrado).
+- **A parte inata não se move.** Dois pets com o mesmo dono e a mesma tela terminam com gostos diferentes, porque partem de picos
+  diferentes. Isso é o que torna o gosto do pet, e não só o do dono (GV-3, GV-14).
+
+## 13. O som
+
+- **A ideia:** um vetor de áudio de três inteiros em [0, C], calculado no computador do usuário a partir do áudio da captura e descartado
+  na hora, como o quadro: o **volume** (a energia média), a **variação** (o quanto o volume muda entre janelas, um substituto barato do
+  ritmo) e o **brilho do timbre** (o centróide espectral). As contas exatas são PROPOSTAS, SEM FONTE (GV-13).
+- **O gosto do som** segue a mesma forma do visual: um pico inato por componente, a expectativa que se desloca e o interesse que se gasta.
+- **A privacidade:** a mesma regra da GV-10. Só os três números saem; nenhum trecho de áudio, nenhuma transcrição, nada à LLM.
+- **A fonte: SEM FONTE no levantamento.** A nota do vault cobre só a visão (o único resultado sonoro dela é Gold et al. 2019,
+  `10.1523/jneurosci.0428-19.2019`, sobre o prazer da música e a predição, [resumo parcial]).
+- **A busca dirigida proposta (não feita):** pelas mesmas bases e regras da nota (OpenAlex, Crossref, DOI e resumo conferidos), em três
+  trilhas:
+  - a preferência auditiva em animais e a escolha entre sons (o enriquecimento sonoro em cães, gatos e primatas; os sistemas de escolha
+    sonora de Hirskyj-Douglas e Kankaanpää 2022 como ponto de partida);
+  - a habituação e a mera exposição a sons e música (a curva de exposição na música, o U invertido da complexidade musical);
+  - os descritores de baixo nível (volume, ritmo, centróide espectral) como preditores de preferência, em humanos ou em agentes.
+
+## 14. O protótipo P0 no jogo web (pedido do Matheus antes da espec)
+
+**O pedido (Matheus, 2026-11-11):** "então implemente uma proposta que faça o pet rodar no navegador naquele modo que a janela fica
+pequena e ele possa ver e ouvir uma tela do meu computador, posso ver as reações dele e ele recebendo essas informações do meu
+comportamento, passando tempo com o usuário e demonstrando preferência por certas coisas". Ele pula a revisão da espec antes do protótipo
+(a regra é dele; o registro está em `docs/registro/2026-11.md`, D-GV-P0-1). A GV0 continua valendo para tudo o que vier depois.
+
+**O que o P0 é, e o que não é:**
+- **é** um protótipo de produto no `web/app/`, para o Matheus ver e sentir a ideia: o pet numa janela pequena flutuante (a Document
+  Picture-in-Picture API), vendo e ouvindo a tela pela captura (`getDisplayMedia`), com as reações e o painel do gosto;
+- **não é** uma mecânica do motor: o gosto fica num módulo TS separado (`web/app/src/gostoVisual/`), fora do motor, fora do log e fora do
+  save do pet. Ele não tem par no Python, não tem paridade, não entra em nenhuma medida e não vale para resultado. As GV-1 a GV-14 seguem
+  em aberto, e o P0 não decide nenhuma delas;
+- **entra atrás de uma chave desligada** (o parâmetro `?gosto_visual=1`). Desligado, o jogo é o de hoje, e um teste confere.
+
+**Como ele segue a proposta:** o vetor de quatro números da visão (seção 2) e o de três do som (seção 13), uma vez por segundo, com o quadro
+e o áudio descartados na hora; o agrado em pico com o ponto ótimo e a largura inatos derivados da semente do pet; a expectativa que anda
+com a exposição; o interesse que se gasta e volta; o carinho do dono durante a exibição puxando o gosto (a associação); o painel com o
+inato e o aprendido separados (GV-14). Todos os números do P0 são PROPOSTOS, SEM FONTE, e ficam no próprio módulo, porque ele não é do
+motor nem do `config.py`.
+
+**A privacidade no P0:** a captura começa só por clique; só os sete números existem depois de cada segundo; nada é enviado. Só o estado
+do gosto (os desvios aprendidos e o tempo assistindo junto) fica guardado, no `localStorage` deste navegador, por pet.

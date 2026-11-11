@@ -2,7 +2,7 @@
 
 Coordenador: Matheus (pela sessão que pediu a frente). Worker da proposta: Claude Code, Opus 5.5, worktree `v3-gosto-visual`. Worktree e
 branch: `v3-gosto-visual` (as etapas seguintes com sufixo, como `v3-gosto-visual-gv1`). Status: **ABERTA; a proposta em revisão; as
-GV-1 a GV-12 PROPOSTAS.**
+GV-1 a GV-14 PROPOSTAS; o protótipo P0 no jogo web pedido pelo Matheus antes da espec (D-GV-P0-1).**
 
 Categoria: documentacao. Origem: Matheus, 2026-11-11: depois da busca bibliográfica de 2026-11-10 sobre o pet observar a tela
 compartilhada e ter um gosto visual, transformar o levantamento numa proposta de frente para revisão.
@@ -17,7 +17,7 @@ proposta inteira está em `docs/futuro/gosto_visual_pet.md`.
 ## 2. Depende de
 
 - Na `main`: nada além do que já está.
-- Do Matheus: as GV-1 a GV-12 (`docs/futuro/gosto_visual_pet.md`, seção 10), antes da GV0.
+- Do Matheus: as GV-1 a GV-14 (`docs/futuro/gosto_visual_pet.md`, seção 10), antes da GV0.
 - Nenhuma etapa depende do I7 da INDIVIDUALIDADE, nem toca a worktree `v3-individualidade`.
 
 ## 3. Mudança mínima
@@ -41,6 +41,7 @@ ao coordenador. Nenhum número é decidido aqui. GPU: não.
 
 | etapa | o quê | entrega |
 |---|---|---|
+| **P0** | o protótipo no jogo web (a janela flutuante, a captura da tela e do som, o gosto num módulo TS fora do motor e do log), atrás de `?gosto_visual=1`; pedido pelo Matheus antes da espec (`docs/futuro/gosto_visual_pet.md`, seção 14) | código e testes do web, PR próprio |
 | **GV0** | a espec (as contas do vetor, o pico, as meias-vidas, a ação "olhar", a TV do jogo, a sonda, a privacidade) e as 56 referências da nota do vault em `docs/referencias/`; **revisada pelo Matheus antes de qualquer protótipo** | documentos, PR próprio |
 | **GV1** | o Python atrás de chave desligada: a TV do jogo, o vetor, o gosto (genoma e estado), a ação "olhar" num módulo do modular; o gabarito das vidas de hoje num commit próprio, antes | código e testes, PR próprio |
 | **GV2** | a sonda das duas TVs como ferramenta, só leitura, com o G2 (a vida com e sem a sonda sai byte a byte) | código e testes, PR próprio |
@@ -56,16 +57,16 @@ gosto ao longo da vida (GV-9); o teste de força pelo custo de olhar (GV-5); a s
 
 ## 7. Critérios de aceitação
 
-- `docs/futuro/gosto_visual_pet.md` existe, com a ideia do vetor, o gosto inato e aprendido em pico com a habituação, a ação "olhar", a
+- `docs/futuro/gosto_visual_pet.md` existe, com a resposta à pergunta do Matheus (seção 12), o som (seção 13), o P0 (seção 14), a ideia do vetor, o gosto inato e aprendido em pico com a habituação, a ação "olhar", a
   medida em duas partes depois da familiarização, o risco do dono, a privacidade, a ligação com a INDIVIDUALIDADE, os passos GV0 a GV5 e
-  as GV-1 a GV-12, cada uma com a recomendação e o custo de errar.
+  as GV-1 a GV-14, cada uma com a recomendação e o custo de errar.
 - Toda referência citada está na nota do vault `BUSCA_GOSTO_VISUAL_2026-11-10.md` ou em `docs/referencias/referencias_verificadas.csv`;
   o resto está escrito SEM FONTE. Nenhuma alegação de novidade.
 - Os links relativos dos documentos mudados resolvem (o CI da categoria documentacao).
 
 ## 8. Precisa do Matheus
 
-As GV-1 a GV-12, todas PROPOSTAS. O texto completo, com o apoio de cada uma, está em `docs/futuro/gosto_visual_pet.md`, seção 10.
+As GV-1 a GV-14, todas PROPOSTAS. O texto completo, com o apoio de cada uma, está em `docs/futuro/gosto_visual_pet.md`, seção 10.
 
 | id | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
@@ -81,3 +82,5 @@ As GV-1 a GV-12, todas PROPOSTAS. O texto completo, com o apoio de cada uma, est
 | **GV-10** | O que da tela real fica guardado. | **Só os quatro inteiros, numa taxa baixa, no log local; nada à rede, ao servidor ou à LLM; captura ligada a cada sessão e anunciada.** | Guardar mais faz do log um registro do uso do computador; guardar menos pode cegar o pet ao movimento. |
 | **GV-11** | A sonda das duas TVs na bateria da INDIVIDUALIDADE. | **Não: sonda própria, com a mesma maquinaria.** | Entrar muda a IN-2 e o custo das runs de lá; separada, a comparação entre traços pede um passo a mais. |
 | **GV-12** | As 56 referências da nota no repositório. | **Sim, na GV0**, com o status e os rótulos da nota. | Sem isso, a frente cita fontes só do vault; o custo é um PR a mais. |
+| **GV-13** | O som: um vetor de áudio ao lado do visual. | **Sim, três inteiros (o volume, a variação e o brilho do timbre)**, local, com a regra da GV-10; antes da GV0, a busca dirigida da seção 13 da proposta. | Sem o som, a pergunta do Matheus tem só metade da resposta; com o som sem a busca, o desenho do áudio fica SEM FONTE inteiro. |
+| **GV-14** | O gosto aprendido ser só o gosto do dono, por exposição; como o painel separa as partes. | **O painel mostra o inato (fixo), o da exposição e o da consequência separados**; nada premia o acerto; a medida usa estímulos que o dono nunca mostrou; o genoma × dono mede a parte do dono. | Sem a separação, o dono vê o próprio gosto devolvido como se fosse do pet; separado demais, o painel perde o tom de jogo. |
