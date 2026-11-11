@@ -13,7 +13,7 @@
    Os dois nascem juntos, no tick de nascimento do jogo (TICK_INICIAL), que e o comeco do relogio do mundo (D-CO4b-3).
 
    Nenhuma versao de pet nova aqui: o save e os dois ovos sao a CO4c. */
-import { CMU_MVP, CMU_MVP_AGUA, TICK_INICIAL, nasceNaAgua, type ConfigMundo } from "./constantes.ts";
+import { CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA, TICK_INICIAL, nasceNaAgua, nasceNaGrande, type ConfigMundo } from "./constantes.ts";
 import { CONFIG_GRUPO_LIGADA, Grupo, ROTULO_SEGUNDO_PET } from "./grupo.ts";
 import { Motor } from "./motor.ts";
 import type { EventoRegistro } from "./tipos.ts";
@@ -29,7 +29,7 @@ export function sementeDoSegundoJogo(semente: number | bigint): number {
 
 /** o mundo de uma versao de pet (o mesmo do construtor do Motor) */
 export function mundoDaVersao(versao: number): ConfigMundo {
-  return nasceNaAgua(versao) ? CMU_MVP_AGUA : CMU_MVP;
+  return nasceNaGrande(versao) ? CMU_GRANDE : nasceNaAgua(versao) ? CMU_MVP_AGUA : CMU_MVP;
 }
 
 export class GrupoDoJogo {

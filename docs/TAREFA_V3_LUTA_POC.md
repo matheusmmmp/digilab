@@ -844,3 +844,23 @@ Gerente (`lp3c_capturas/`), com os scripts que as refazem.
 - **O HerculesKabuterimon:** com 19 letras, o nome ainda quebra no meio da palavra no celular.
 - **O atlas novo `digilab_atlas_up_luta`:** ligá-lo é decisão do Matheus. Ele daria `Hurt_1` e `Hurt_2`, `Knockback`, `Win` e `Lose`
   nos 262 sprites.
+
+## Resultado da LP6-1 (2026-11-11: o núcleo do golpe de apoio e da elipse por estágio)
+
+O plano é o `docs/PLANO_LP6_SEGUNDO_GOLPE.md`; as interpretações estão no `docs/registro/2026-11.md` (D-LP6-1-1 a 9). Nada liga no jogo:
+o jogo segue na v23.
+
+- **O golpe de apoio** (a chave `apoio` da entrada da luta, desligada):
+  - a tabela `web/app/motor/arena/formas.ts` ganha o `apoio` e o `msApoio` de cada forma, gerados pelo `tools/gerar_tabela_arena.py`;
+  - em `sim.ts`, o apoio de perto de quem atira sai abaixo da `distMin` do tiro, e o tiro fraco de quem bate de perto sai com o alvo
+    além do alcance por 1,5 s;
+  - o dano é 0,6 do golpe principal, e a recarga é 2 vezes o ciclo do ataque;
+  - a esquiva lê o apoio de perto como o golpe de perto.
+- **A elipse por estágio** (a chave `arenaPorEstagio`, desligada): o fator é 1,15 no Ultimate e 1,3 no Mega, pelo maior estágio dos dois.
+  A cena escala junto, e os corpos não.
+- **Os números** são PROPOSTOS, SEM FONTE: `APOIO_LP6`, `APOIO_TABELA` e `ARENA_POR_ESTAGIO_LP6`, em `constantes.ts`.
+- **Os testes:**
+  - `test/arena_lp6_gabarito.test.ts`: com as chaves desligadas, 384 lutas da v21 e da v23 saem byte a byte iguais ao gabarito,
+    gravado antes da mudança;
+  - `test/arena_lp6.test.ts`: a tabela, o replay bit a bit com as chaves ligadas, cada regra do apoio e a escala da elipse.
+- **O que fica para depois:** o palco (LP6-2), a calibração (LP6-3) e a versão nova do pet (LP6-4).
