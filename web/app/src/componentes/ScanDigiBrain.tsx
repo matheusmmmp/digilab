@@ -10,7 +10,7 @@
    O campo pequeno (D1c, escolha do Matheus de 2026-11-07, "(a) desk, (b) celular"): no desktop um painel de 420 px sob o relogio, a 390 uma folha
    de 210 px com os botoes numa coluna a esquerda; o titulo e so o icone do cerebro (o nome fica para o leitor de tela); os rotulos so no
    caminho aceso e nas candidatas, e o de qualquer outro ponto aparece ao passar o mouse ou ao tocar nele.
-   O visual do scanner (pedido do Matheus em 2026-11-11, com uma imagem de referencia; docs/TAREFA_V3_UX_TELA_PET.md, "D1d"): a rede em anel no
+   O visual do scanner (pedido do Matheus em 2026-11-11, com uma imagem de referencia; docs/TAREFA_V3_UX_TELA_PET.md, "D1e"): a rede em anel no
    lugar da silhueta de cerebro, o quadro escuro com cantos em colchete, o nome ao lado do icone no desktop e, embaixo, uma faixa com a onda da
    decisao e o "estado atual". A coluna de cinco barras da referencia (percepcao, memoria, impulsos, emocao, social) nao entra. A onda e o
    estado saem do motor: a onda e um pico por entrada com termo nesta decisao (mapa.acesas.arestas: o sinal do termo e a forca), e o estado

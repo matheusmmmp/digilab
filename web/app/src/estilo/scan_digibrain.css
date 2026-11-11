@@ -5,7 +5,7 @@
    e 12 px da direita, sob o relogio, no lugar da pilha de paineis; abaixo de 900 px, uma folha de 210 px presa embaixo, com os botoes numa
    coluna a esquerda do desenho. O veu e leve e sem desfoque (D1b-3); o vidro da pele fica so na caixa, como num painel da HUD.
    O movimento (varredura, pulso, giro) so existe sem "reduzir movimento"; o giro so no desktop.
-   O visual do scanner (D1d, pedido do Matheus em 2026-11-11): o quadro quase preto com a grade fraca e os cantos em colchete, a rede em anel de
+   O visual do scanner (D1e, pedido do Matheus em 2026-11-11): o quadro quase preto com a grade fraca e os cantos em colchete, a rede em anel de
    fios claros, o nome ao lado do icone no desktop e a faixa de baixo (a onda e o estado atual), de 56 px no desktop e 40 px no celular.
    PROPOSTO, SEM FONTE (medidas de layout). */
 
@@ -13,7 +13,7 @@
 .scan{ --scan-malha:var(--hx-medidor); --scan-grade:var(--hx-medidor-trilho); --scan-prior:var(--hx-sec); --scan-raio:0px;
   /* a largura: 420 px, ou menos se a janela for baixa (o desenho guarda a proporcao 880 x 552 do viewBox; 204 px sao o alto, o topo, a faixa
      de baixo, as bordas e a folga de baixo). PROPOSTO, SEM FONTE (D1c) */
-  --scan-larg:min(420px, calc(100vw - 24px), calc((100dvh - 204px) * 880 / 552 + 16px)) }
+  --scan-larg:min(420px, calc(100vw - 24px), calc((100dvh - var(--scan-fora)) * 880 / 552 + 16px)); --scan-fora:204px }
 :root[data-pele="vidro"] .scan{ --scan-raio:8px }
 
 /* ---------- o dialogo: so a caixa; o <dialog> nao tem fundo, borda nem filtro (o cartao do chamado, dentro dele, se posiciona pela tela) */
@@ -33,7 +33,7 @@
 .scan-in{ position:relative; display:flex; flex-direction:column; padding:0 8px 8px }
 
 .scan-topo{ position:relative; flex:none; height:52px; display:flex; align-items:center; gap:4px; padding-left:4px }
-/* o titulo: o icone do cerebro e o nome ao lado (D1d); no celular so o icone (D1c), e o nome fica para o leitor de tela */
+/* o titulo: o icone do cerebro e o nome ao lado (D1e); no celular so o icone (D1c), e o nome fica para o leitor de tela */
 .scan-tit{ display:inline-flex; align-items:center; gap:8px; margin:0; color:var(--hx-texto) }
 .scan .scan-tit-nome{ font:700 17px/1 var(--hx-f); letter-spacing:.02em }
 .scan .scan-tit svg.lucide{ width:24px; height:24px }
@@ -78,7 +78,7 @@
 .scan-canto--be{ bottom:8px; left:8px; border-bottom-width:2px; border-left-width:2px }
 .scan-canto--bd{ bottom:8px; right:8px; border-bottom-width:2px; border-right-width:2px }
 
-/* ---------- a faixa de baixo (D1d): a onda da decisao a esquerda e o estado atual a direita. Nada anima */
+/* ---------- a faixa de baixo (D1e): a onda da decisao a esquerda e o estado atual a direita. Nada anima */
 .scan-faixa{ flex:none; display:flex; align-items:stretch; gap:10px; height:56px; padding:6px 10px; border:1px solid var(--hx-borda); border-radius:var(--scan-raio);
   background-color:color-mix(in srgb, var(--hx-miolo) 92%, transparent) }
 .scan-onda{ flex:1 1 0; min-width:0; height:100%; overflow:visible }
@@ -169,6 +169,16 @@
 .scan .mp .mp-no .mp-pct{ font-family:var(--hx-f-num); font-weight:700; font-size:inherit; fill:var(--hx-num) }
 .scan .mp .mp-no text.mp-pct{ font-size:max(16px, calc(var(--scan-txt-min, 11px) / var(--scan-esc, 1))) }   /* a chance no desktop e um text a parte, nao herda do rotulo */
 
+
+/* a janela baixa no desktop (o zoom de 200%, rev-a11y da D1b): a faixa de baixo encolhe para 40 px e o nome sai do titulo (fica para o leitor
+   de tela), para o topo com os tres botoes caber na largura que sobra. PROPOSTO, SEM FONTE (D1e) */
+@media (min-width:900px) and (max-height:460px){
+  .scan{ --scan-fora:188px }
+  .scan .scan-tit-nome{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap }
+  .scan-faixa{ height:40px; padding:3px 8px }
+  .scan .scan-estado{ gap:3px }
+  .scan .scan-estado b{ font-size:14px }
+}
 
 /* ---------- o celular (< 900 px): uma folha de 210 px presa embaixo (D1c), com o topo numa coluna de botoes a esquerda do desenho. Os nomes das
    regioes saem: com o texto minimo de 11 px eles nao cabem (a dica do "i" diz o que e cada ponto) */

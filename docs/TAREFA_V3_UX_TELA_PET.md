@@ -982,3 +982,44 @@ O Matheus aprovou AB-1 a AB-5 em 2026-11-10: "siga a recomendação." Esta etapa
 
 A interpretação de "uma vez por save" está em D-AB-3, em `docs/registro/2026-11.md`.
 
+## 32. Etapa D1e: o DigiBrain com o visual de scanner em anel (2026-11-11)
+
+O Matheus pediu em 2026-11-11, com uma imagem de referência: "eu quero que você altere o menu do DigiBrain para ficar mais parecido com
+isso, porém tirando aquela parte de percepção, memória, impulsos, emoção e social". A referência é um cartão com o ícone e o nome, um
+quadro escuro com cantos em colchete, uma rede de pontos e fios claros em anel, uma onda embaixo e um "estado atual". A coluna das cinco
+barras da referência não entra.
+
+É só o visual de um painel que já existe (o scan do DigiBrain, D1b e D1c). Por isso não houve prancha de 390 px antes do código: as
+capturas do jogo, em 1280 e em 375 px, foram ao Matheus com o PR. O motor, o save e o replay não mudam.
+
+**O que mudou no scan do pet do cérebro A (`ScanDigiBrain.tsx`, `scan_digibrain.css`):**
+- **A rede em anel** no lugar da silhueta de cérebro. Os nós e os fios são os mesmos de antes, todos do `Motor.digibrain().mapa`:
+  - as ações num arco à esquerda;
+  - o que o pet sente num arco à direita, com os receptores do corpo embaixo;
+  - as regras num círculo por dentro;
+  - cada fio vai da entrada à regra e da regra à ação, dando a volta pelo anel.
+- **O quadro** quase preto, com a grade fraca e os quatro cantos em colchete.
+- **O título:** o nome "DigiBrain" ao lado do ícone no desktop. No celular fica só o ícone, como na D1c.
+- **A faixa de baixo**, nova:
+  - **a onda** tem um pico por entrada com termo na decisão de agora (`mapa.acesas.arestas`): para cima a favor, para baixo contra, da
+    altura da força que o motor dá;
+  - **o estado atual** é a regra do instinto que valeu na decisão (`decisao.regra`), com o texto curto que o mapa já usava ("tempo livre",
+    "sono", "fome", "precisando"). O motor não tem um estado chamado "calmo". O rosto e a cor ao lado são o tom da regra (D-D1e-2).
+- **O tamanho** é o da D1c: 420 px de largura no desktop e a folha de 210 px no celular. No desktop o painel ficou 62 px mais alto, por
+  causa da faixa.
+- **O movimento** é o de antes: a varredura e o pulso numa decisão nova, e o giro lento no desktop. A onda e o estado não animam. Com
+  "reduzir movimento", nada se move.
+
+**O que não mudou:** o selo, a dica do "i", o mapa em texto, o fechar, o foco preso, o Esc, os rótulos só no caminho aceso e nas
+candidatas, e as classes que o e2e lê.
+
+**O scan do pet do laboratório** (`ScanDigiBrainLab.tsx`, #799) continua com a silhueta de cérebro e sem a faixa. Ele ganha só o quadro
+mais escuro e os pontos claros, que vêm do mesmo CSS. Levar o anel para ele é outra etapa.
+
+**O botão de expandir** da referência não entrou: o scan já é o painel aberto, e o botão não teria o que abrir.
+
+**Os testes:** `test/scan_digibrain.test.ts` tem 16 testes. Os novos conferem o anel (as ações à esquerda, as entradas à direita, as
+regras por dentro, nenhum fio fora do quadro), a onda (um pico por aresta acesa, com o sinal e a força) e o estado atual (a regra da
+decisão, o tom, o caso sem decisão). O contraste dos tons do estado entra no teste das duas peles.
+
+Os desvios estão em `docs/registro/2026-11.md`, "UX_TELA_PET, D1e".

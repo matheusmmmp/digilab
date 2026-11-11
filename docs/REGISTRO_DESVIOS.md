@@ -651,3 +651,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — COOPERACAO, CO2c: o grupo em TS (Claude Code, Opus 5.5, branch `v3-cooperacao-co2c`)](registro/2026-11.md)
 - [2026-11-11 — ILHA_AGUA, IA4: a ilha com água junto com os objetos em cartoon e a cooperação (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-agua-ia4`)](registro/2026-11.md)
 - [2026-11-11 — DIGIBRAIN_SCAN_LAB: o scan no pet do laboratório (Gerente da V3, Claude Code, Opus 5.5, branch `v3-digibrain-scan-lab`)](registro/2026-11.md)
+- [2026-11-11 — UX_TELA_PET, D1e: o DigiBrain com o visual de scanner em anel (sessão própria aberta pelo Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-digibrain-menu`)](registro/2026-11.md)

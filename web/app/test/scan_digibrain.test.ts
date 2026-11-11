@@ -66,7 +66,7 @@ describe("o mapa do scan: cada ponto e cada fio vem do motor", () => {
     expect(s).not.toContain("mp-lit");
     expect(s).not.toContain("mp-dest");
   });
-  test("o anel (D1d): o viewBox 880 x 552, as acoes a esquerda, as entradas a direita e as regras por dentro; sem a silhueta", () => {
+  test("o anel (D1e): o viewBox 880 x 552, as acoes a esquerda, as entradas a direita e as regras por dentro; sem a silhueta", () => {
     const s = montar(false, false);
     expect(s).toContain('viewBox="0 0 880 552"');
     expect(s).not.toMatch(/mp-silhueta|mp-divisas|db-malha/);
@@ -85,7 +85,7 @@ describe("o mapa do scan: cada ponto e cada fio vem do motor", () => {
   });
 });
 
-describe("a faixa de baixo (D1d): a onda e o estado atual saem do motor", () => {
+describe("a faixa de baixo (D1e): a onda e o estado atual saem do motor", () => {
   const ent = ["vies", "fome", "higiene", "energia", "humor", "saude", "sujeira", "dormindo", "hora", "ticks_sem_cuidado", ...db.mapa.receptores];
   test("a onda: um pico por aresta acesa, para cima a favor e para baixo contra, da altura da forca", () => {
     const ac = db.mapa.acesas!, pts = pontosDaOnda(ent, ac).split(" ").map(p => p.split(",").map(Number));
@@ -169,7 +169,7 @@ describe("o modal pequeno nao cobre a ilha (D1b-3)", () => {
 
 /* o contraste do desenho (rev-a11y da D1b): o modal fica sobre a ilha, entao o pior fundo e o do habitat mais claro, como em hx_pele.test.ts
    (a grama de dia; no Militar, o branco puro). A pilha, de baixo para cima: o fundo, o veu do ::backdrop (o --hx-miolo a 28 %), a caixa
-   (o --hud-fundo-1, o lado mais claro do gradiente) e a moldura do desenho (o --hx-miolo a 92 %, D1d). O contorno escuro dos rotulos (paint-order)
+   (o --hud-fundo-1, o lado mais claro do gradiente) e a moldura do desenho (o --hx-miolo a 92 %, D1e). O contorno escuro dos rotulos (paint-order)
    so ajuda e nao entra na conta. Com "reduzir transparencia" os tokens ficam opacos e mais escuros, entao o caso translucido e o pior */
 describe("o contraste do desenho sobre a ilha, nas duas peles", () => {
   const tokensCss = readFileSync(new URL("../src/estilo/tokens.css", import.meta.url), "utf8");
