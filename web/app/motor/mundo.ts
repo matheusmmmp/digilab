@@ -441,6 +441,38 @@ export interface OpcoesMundo {
   entrada?: number;
 }
 
+// ================================================================== os sentidos sobre o outro (dois pets, etapa 3; degrau 1; CO2c)
+// docs/futuro/dois_pets.md, secao 5 (DP-4, DP-11): a visao e o toque, so do que e fisico. O grupo (motor/grupo.ts) monta a percepcao.
+/** os candidatos do explorar que so existem com o outro (secao 6) */
+export const CANDIDATOS_SOCIAIS: readonly string[] = ["seguir", "onde_comeu"];
+export const TIPOS_TOQUE = ["disputa_ganhou", "disputa_perdeu", "encostou", "encostaram", "esbarrou"] as const;
+export type TipoToque = typeof TIPOS_TOQUE[number];
+
+/** A PercepcaoSocial do Python (secao 5), sem campo de estado interno do outro: `outros` = (id, dx, dy, d, acao visivel) a ate o raio da
+    visao, em ordem de d e de id; `onde_comeu` = (id, x, y, idade) do ultimo consumo visto de cada outro; `toque` = (id, tipo, direcao,
+    idade) do ultimo contato; `sentidos` (o degrau 1b) fica null: a cooperacao usa so a visao e o toque */
+export interface PercepcaoSocial {
+  outros: [string, number, number, number, string][]; onde_comeu: [string, number, number, number][];
+  toque: [string, string, number, number][]; sentidos: null;
+}
+
+/** o que o grupo da a parte de um pet (o `_grupo` do MotorMundo) */
+export interface GanchoGrupo {
+  perceberSocial(ident: string): PercepcaoSocial | null;
+  viuComer(quem: string, x: number, y: number): void;
+}
+
+/** o pendente de um pet; `social`: o id do outro, quando o alvo que ficou e social */
+export interface Pendente { acao: AcaoComAlvo; alvo: AlvoMundo; social?: string }
+
+/** o que o grupo le no fim do tick (o `_tick_social` do Python): a partida, o alvo, quem o pet seguiu e o que comeu */
+export interface TickSocial {
+  tick: number; de: [number, number]; alvo: AlvoMundo | null; pendente_antes: Pendente | null; social: string | null;
+  comeu: { id: number; tipo: string; x: number; y: number; situacao: string | null } | null;
+}
+
+const chaveAlvo = (a: AlvoMundo): string => `${a.tipo}|${a.x}|${a.y}|${a.id}|${a.de}`;
+
 /** o registro do contrato numa decisao com alvo (o _registro_contrato do Python) */
 export interface RegistroContrato {
   tick: number; orientacao: number; parou_por: string; contato: [CategoriaSolido, number][]; obstaculos: number[];
@@ -780,7 +812,7 @@ export class Mundo {
   readonly rngAlvo: RandomPy;
   readonly bolaNoGolpe: boolean;
   pet: [number, number];
-  private pendente: { acao: AcaoComAlvo; alvo: AlvoMundo } | null = null;
+  private pendente: Pendente | null = null;
   private fomeAntes = 0;
   private percepcao: PercepcaoMundo | null = null;
   private readonly manchasAbertas = new Map<string, { arvore: string; chegada: number; saida: number | null; decisoes: number }>();
@@ -799,6 +831,24 @@ export class Mundo {
   private opacos: readonly Solido[] = [];                      // os que tapam (as paredes e os troncos)
   orientacao = 0;
   readonly contratoDecisoes: RegistroContrato[] = [];
+  // dois pets (CO2c): o grupo e o id do pet nele (o Grupo poe na entrada); fora do grupo, nada disto e usado e a vida e a de hoje
+  private grupo: GanchoGrupo | null = null;
+  ident: string | null = null;
+  /** a percepcao social da decisao (null sozinho ou fora do grupo) */
+  social: PercepcaoSocial | null = null;
+  private readonly candsSociais = new Map<string, string>();   // o candidato social da decisao -> o id do outro
+  private pendenteAntes: Pendente | null = null;                // o alvo pendente com que a decisao comecou (a disputa)
+  /** o que o grupo le no fim do tick */
+  tickSocial: TickSocial | null = null;
+  /** a memoria da visao: id -> (x, y, tick do mundo) do ultimo consumo visto de cada outro */
+  readonly viuComerDe = new Map<string, [number, number, number]>();
+  /** a memoria do toque: id -> (tipo, direcao, tick do mundo) do ultimo contato com cada outro */
+  readonly toques = new Map<string, [string, number, number]>();
+  // os registros sociais do pet (as medidas; derivados, o replay refaz)
+  readonly vistosComer: { tick: number; outro: string; x: number; y: number; d: number }[] = [];
+  readonly idasOndeComeu: Record<string, unknown>[] = [];
+  readonly aVista: Record<string, number> = {};                 // decisoes com cada outro a vista
+  decisoesNoGrupo = 0;                                          // decisoes com outro pet presente
 
   constructor(op: OpcoesMundo) {
     const dado = op.partilhado;
@@ -845,6 +895,20 @@ export class Mundo {
   tm(tick: number): number {
     return tick + this.entrada;
   }
+
+  /** o Grupo poe o pet nele (so com o mundo partilhado dado); uma vez so */
+  ligarGrupo(grupo: GanchoGrupo, ident: string): void {
+    if (this.grupo !== null) throw new Error(`o pet ${this.ident} ja esta num grupo`);
+    if (!ident) throw new Error("o pet do grupo precisa de um id");
+    this.grupo = grupo;
+    this.ident = ident;
+  }
+
+  /** o raio da visao do pet (o grupo: quem ve o outro comer, quem esta a vista) */
+  get raioDaVisao(): number { return this.raioVisao; }
+
+  /** o alvo que ficou sem chegar (o grupo: a disputa de quem nao decidiu no tick) */
+  get pendenteAtual(): Pendente | null { return this.pendente; }
 
   // ------------------------------------------------------------ o que e do mundo, lido de la (os atributos de antes)
   get rngArvores(): RandomPy { return this.comum.rngArvores; }
@@ -925,6 +989,15 @@ export class Mundo {
     this.atualizar(tick);
     this.percepcao = this.perceber(tick);
     this.fomeAntes = fome;
+    if (this.grupo !== null) {
+      this.social = this.grupo.perceberSocial(this.ident!);
+      this.pendenteAntes = this.pendente;
+      this.candsSociais.clear();
+      if (this.social !== null) {
+        this.decisoesNoGrupo++;
+        for (const [ident] of this.social.outros) this.aVista[ident] = (this.aVista[ident] ?? 0) + 1;
+      }
+    }
     return this.percepcao;
   }
 
@@ -966,7 +1039,53 @@ export class Mundo {
     }
     const cont = this.continuar(acao, tick);
     if (cont) cands.push(cont);
+    if (acao === "explorar" && this.social !== null) cands.push(...this.candidatosSociais(p));
     return cands;
+  }
+
+  /** dois pets, secao 6: `seguir` cada outro visto (onde ele esta) e `onde_comeu` de cada outro que este pet viu comer, depois dos de
+      hoje. O padrao do motor nunca os escolhe; so o cerebro */
+  private candidatosSociais(p: PercepcaoMundo): AlvoMundo[] {
+    const cands: AlvoMundo[] = [];
+    for (const [ident, dx, dy] of this.social!.outros) {
+      const a = alvo("seguir", p.x + dx, p.y + dy);
+      this.candsSociais.set(chaveAlvo(a), ident);
+      cands.push(a);
+    }
+    for (const [ident, x, y] of this.social!.onde_comeu) {
+      const a = alvo("onde_comeu", x, y);
+      this.candsSociais.set(chaveAlvo(a), ident);
+      cands.push(a);
+    }
+    return cands;
+  }
+
+  /** o id do outro de um alvo social (seguir, onde_comeu, ou o continuar deles), ou null */
+  private idSocial(a: AlvoMundo | null): string | null {
+    if (a === null) return null;
+    if (CANDIDATOS_SOCIAIS.includes(a.tipo)) {
+      const id = this.candsSociais.get(chaveAlvo(a));
+      if (id === undefined) throw new Error(`alvo social fora dos candidatos: ${JSON.stringify(a)}`);
+      return id;
+    }
+    if (a.tipo === "continuar" && a.de !== null && CANDIDATOS_SOCIAIS.includes(a.de)) {
+      const id = this.pendenteAntes?.social;
+      if (id === undefined) throw new Error(`continuar social sem o outro no pendente: ${JSON.stringify(a)}`);
+      return id;
+    }
+    return null;
+  }
+
+  /** a ida a `onde_comeu` (a confianca da secao 8 sai daqui): chegou, comeu, e quantas comidas boas estavam a vista na chegada */
+  private registrarSocial(a: AlvoMundo, chegou: boolean, comeu: Record<string, unknown> | null, x1: number, y1: number, tick: number): void {
+    const classe = a.tipo === "continuar" ? a.de : a.tipo;
+    if (classe !== "onde_comeu") return;
+    const tm = this.tm(tick);
+    this.idasOndeComeu.push({
+      tick: tm, outro: this.idSocial(a), x: a.x, y: a.y, continuacao: a.tipo === "continuar", chegou,
+      comeu: comeu === null ? null : { id: comeu.id, tipo: comeu.tipo, situacao: comeu.situacao, como: comeu.como },
+      boas_a_vista: chegou ? this.comum.madurasPerto(x1, y1, tm, this.raioVisao).length : null,
+    });
   }
 
   /** o que o instinto usa; nunca escolhe comida podre */
@@ -1016,6 +1135,10 @@ export class Mundo {
     const reg = { tick: tm, id: c.id, tipo: c.tipo, origem: c.origem, tick_posta: c.tick_posta, situacao: sit, como,
                   fome_antes: e.fome, humor_antes: e.humor, fome_depois: fome, humor_depois: humor };
     this.consumos.push(reg);
+    if (this.grupo !== null) {                                  // dois pets: o consumo e visto pelos outros e lido pela disputa
+      this.tickSocial!.comeu = { id: c.id, tipo: c.tipo, x: c.x, y: c.y, situacao: sit };
+      this.grupo.viuComer(this.ident!, c.x, c.y);
+    }
     return [reg, { ...e, fome, humor, sujeira }];
   }
 
@@ -1059,6 +1182,8 @@ export class Mundo {
       } else {
         [x1, y1] = a === null ? [x0, y0] : passoAte(x0, y0, a.x, a.y, this.alcance, this.cm);
       }
+      if (this.grupo !== null)
+        this.tickSocial = { tick: this.tm(tick), de: [x0, y0], alvo: a, pendente_antes: this.pendenteAntes, social: this.idSocial(a), comeu: null };
       const desloc = andar === null ? distancia(x1 - x0, y1 - y0) : andar.andado;
       this.pet = [x1, y1];
       if (ac === "comer") e.fome = this.fomeAntes;
@@ -1077,9 +1202,11 @@ export class Mundo {
         this.rolarBola(tick, [x0, y0]);
         bola = true;
       }
+      const social = this.grupo !== null ? this.idSocial(a) : null;
+      if (social !== null) this.registrarSocial(a!, chegou, comeu, x1, y1, tick);
       if (a !== null && !chegou) {
         const base = a.tipo !== "continuar" ? a : alvo(a.de!, a.x, a.y, a.id);
-        this.pendente = { acao: ac, alvo: base };
+        this.pendente = social === null ? { acao: ac, alvo: base } : { acao: ac, alvo: base, social };
       } else {
         this.pendente = null;
       }
@@ -1088,6 +1215,8 @@ export class Mundo {
       if (contratoLigado(this.cct) && a !== null) ocorrido.contrato = this.registroContrato(tick, x0, y0, x1, y1, andar, chegou, comeu);
     } else {
       this.pendente = null;
+      if (this.grupo !== null)
+        this.tickSocial = { tick: this.tm(tick), de: [x0, y0], alvo: null, pendente_antes: this.pendenteAntes, social: null, comeu: null };
     }
     this.registrarDecisao(this.tm(tick), acao, [x0, y0], regiaoAntes, a, ocorrido, regra);
     return { estado: e, ocorrido };
@@ -1173,7 +1302,7 @@ export class Mundo {
   mudarIlha(tick: number, nome: string): TrocaIlha {
     nome = lerMudarIlha(eventoMudarIlha(tick, nome));
     if (!Object.prototype.hasOwnProperty.call(ILHAS_DE_TROCA, nome)) throw new Error(`mudar_ilha para uma ilha desconhecida: ${nome}`);
-    if (contratoLigado(this.cct))
+    if (this.grupo !== null || contratoLigado(this.cct))
       throw new Error("mudar_ilha roda com um pet (fora do grupo), sem o banheiro e sem o contrato ligado antes");
     const { layout, contrato } = ILHAS_DE_TROCA[nome];
     if (!contrato.controlador) throw new Error(`a ilha ${nome} tem agua e pede o controlador do contrato`);
@@ -1192,6 +1321,16 @@ export class Mundo {
   }
 
   // ------------------------------------------------------------ leitura
+  /** os registros sociais do pet (o resumo_social do Python; so no grupo) */
+  resumoSocial(): Record<string, unknown> {
+    return {
+      viu_comer: Object.fromEntries([...this.viuComerDe].map(([i, v]) => [i, [...v]])),
+      toques: Object.fromEntries([...this.toques].map(([i, v]) => [i, [...v]])),
+      vistos_comer: this.vistosComer, idas_onde_comeu: this.idasOndeComeu, a_vista: { ...this.aVista },
+      decisoes_no_grupo: this.decisoesNoGrupo,
+    };
+  }
+
   /** o MotorMundo.resumo_mundo_fisico, sem as rngs (as mesmas chaves de antes da separacao do MundoPartilhado) */
   resumo(): Record<string, unknown> {
     const m = this.comum;
