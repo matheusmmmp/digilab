@@ -1,7 +1,8 @@
 # TAREFA V3 — MMO (2026-11-10)
 
 Coordenador: o Gerente da V3. Worker: o Gerente da frente MMO (Claude Code, Opus 5.5). Worktree e branch: `v3-mmo`. Status: ABERTA
-(o plano entregue; as etapas esperam as decisões MMO-1 a MMO-19).
+(o plano entregue; as decisões MMO-1 a MMO-19 APROVADAS pela recomendação em 2026-11-11; as etapas de código seguem a
+seção 12 do plano, cada uma com a sua prancha quando tiver tela).
 
 Categoria: implementacao. Origem: Matheus, 2026-11-10: planejar um sistema multijogador com pontuação, ranking semanal, top tier diário e a ligação com os Bits.
 

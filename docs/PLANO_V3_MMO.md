@@ -1,6 +1,7 @@
 # Plano do multijogador: vários jogadores, ranking semanal e top tier diário (2026-11-10)
 
-**Status:** PROPOSTO, sem código. As decisões MMO-1 a MMO-19 (seção 14) são do Matheus. Todo número novo é **PROPOSTO, SEM FONTE**, e se
+**Status:** APROVADO, sem código. O Matheus aprovou as decisões MMO-1 a MMO-19 (seção 14) pela recomendação em 2026-11-11, inclusive o
+marco do nível 10 no primeiro Mega (MMO-13). Os números continuam **PROPOSTOS, SEM FONTE**, e se
 acerta na rodada de equilíbrio do fim (a regra "equilíbrio só no fim").
 
 **Origem:** o Matheus, em 2026-11-10: "planejamento de um sistema de MMO, no caso, aceitar múltiplos jogadores com pontuações de rankings,
@@ -297,7 +298,8 @@ etapas porque muda o catálogo de rivais e pede a sua própria decisão.
 
 ## 14. Decisões para o Matheus
 
-Cada uma com a recomendação e o custo de errar. Nenhuma está decidida.
+Cada uma com a recomendação e o custo de errar. **APROVADAS pelo Matheus em 2026-11-11, todas pela recomendação** ("Eu autorizo" e
+"continue com as recomendacoes", nesta sessão). Aprovar a regra não fixa os números: eles seguem PROPOSTOS até a rodada de equilíbrio.
 
 - **MMO-1. O que é o "MMO":** cada um na sua ilha, e os jogadores se encontram nas tabelas (assíncrono). A outra opção é um mundo dividido
   ao vivo. **Recomendo o assíncrono.** Custo de errar: alto. O mundo ao vivo pede um servidor que roda o motor o tempo todo e a
