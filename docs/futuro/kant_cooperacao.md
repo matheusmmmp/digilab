@@ -1,6 +1,6 @@
-# Kant na cooperação dos pets: a proposta (2026-11-11, PROPOSTA, Claude Code, Opus 5.5)
+# Kant na cooperação dos pets: a proposta (2026-11-11, K-1 a K-6 DECIDIDAS, Claude Code, Opus 5.5)
 
-**Status: PROPOSTA.** Nada aqui é decidido nem tem código. Esta proposta liga a busca bibliográfica de 2026-11-11 às etapas que a
+**Status: as K-1 a K-6 (seção 7) DECIDIDAS pelo Matheus em 2026-11-11 ("Aprovo todas"), pela recomendação.** Os números continuam PROPOSTOS, e não há código. Esta proposta liga a busca bibliográfica de 2026-11-11 às etapas que a
 `docs/TAREFA_V3_COOPERACAO.md` já deixa para depois: a CO6 (a reputação na percepção do cérebro) e a CO7 (os deveres como escudo, por
 estágio). Ela também deixa desenhada uma etapa futura, a dos pets de computadores diferentes. **A coordenação do código continua com a
 frente COOPERACAO** (o Gerente da V3). Este documento é o insumo dela, não uma frente paralela.
@@ -106,7 +106,7 @@ A hybris (D-MM-18), a aura, a luta (LP-3), a fala moral pela LLM (a fala nasce d
 | **CO-bancada** | o plano de análise da pergunta "a cooperação emerge e responde à reputação e ao peso kantiano?", antes de qualquer run | a frente COOPERACAO |
 | **K-rede** | a etapa em rede (5) | depois de a D-MM-12 ser reaberta |
 
-## 7. As decisões (PROPOSTAS, para o Matheus; cada uma com a recomendação e o custo de errar)
+## 7. As decisões (DECIDIDAS pelo Matheus em 2026-11-11, todas pela recomendação; cada uma com a recomendação e o custo de errar)
 
 | | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
