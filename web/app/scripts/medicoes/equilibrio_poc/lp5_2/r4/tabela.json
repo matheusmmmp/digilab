@@ -1,0 +1,7356 @@
+{
+ "tarefa": "LUTA_POC, LP5, a grade",
+ "fase": "lp5_2",
+ "bases": 3,
+ "tam": {},
+ "grupos": [
+  "lideres"
+ ],
+ "segundos": 269.687,
+ "tabela": [
+  {
+   "nome": "vig_t1",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "vig_t1",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 90,
+     "npc_v6_youkomon": 27,
+     "npc_v5_myotismon": 1.1,
+     "npc_v5_piedmon": 110,
+     "npc_tier2_porteiro": 18,
+     "npc_v5_puppetmon": 4.5,
+     "npc_v5_machinedramon": 3.6
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.75|29.35 16.35|27.95 17.05|26.45; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":52.85,\"mediana_s\":43.85}"
+    }
+   }
+  },
+  {
+   "nome": "vig_t2",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "vig_t2",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 180,
+     "npc_v6_youkomon": 36,
+     "npc_v5_myotismon": 3.3,
+     "npc_v5_piedmon": 220,
+     "npc_tier2_porteiro": 36,
+     "npc_v5_puppetmon": 18,
+     "npc_v5_machinedramon": 14.4
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.45|29.15 16.75|28.05 18.05|27.65; min forma 12.45"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":52.35,\"mediana_s\":43.75}"
+    }
+   }
+  },
+  {
+   "nome": "vig_t3",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "vig_t3",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 270,
+     "npc_v6_youkomon": 45,
+     "npc_v5_myotismon": 7.7,
+     "npc_v5_piedmon": 440,
+     "npc_tier2_porteiro": 54,
+     "npc_v5_puppetmon": 45,
+     "npc_v5_machinedramon": 36
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.45|29.45 17.25|28.05 18.85|29.05; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":51.55,\"mediana_s\":44.05}"
+    }
+   }
+  },
+  {
+   "nome": "vig_t4",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "vig_t4",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 450,
+     "npc_v6_youkomon": 54,
+     "npc_v5_myotismon": 16.5,
+     "npc_v5_piedmon": 880,
+     "npc_tier2_porteiro": 72,
+     "npc_v5_puppetmon": 90,
+     "npc_v5_machinedramon": 72
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 3,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.35|29.35 17.45|28.05 19.45|30.25; min forma 14.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":52.65,\"mediana_s\":44.25}"
+    }
+   }
+  },
+  {
+   "nome": "for_t1",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "for_t1",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 90,
+     "npc_v6_youkomon": 27,
+     "npc_v5_myotismon": 1.1,
+     "npc_v5_piedmon": 110,
+     "npc_tier2_porteiro": 18,
+     "npc_v5_puppetmon": 4.5,
+     "npc_v5_machinedramon": 3.6
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.05|28.65 15.85|27.95 16.25|25.25; min forma 12.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":51.15,\"mediana_s\":42.15}"
+    }
+   }
+  },
+  {
+   "nome": "for_t2",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "for_t2",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 180,
+     "npc_v6_youkomon": 36,
+     "npc_v5_myotismon": 3.3,
+     "npc_v5_piedmon": 220,
+     "npc_tier2_porteiro": 36,
+     "npc_v5_puppetmon": 18,
+     "npc_v5_machinedramon": 14.4
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.05|28.55 16.25|28.05 17.35|27.05; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":50.85,\"mediana_s\":42.15}"
+    }
+   }
+  },
+  {
+   "nome": "for_t3",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "for_t3",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 270,
+     "npc_v6_youkomon": 45,
+     "npc_v5_myotismon": 7.7,
+     "npc_v5_piedmon": 440,
+     "npc_tier2_porteiro": 54,
+     "npc_v5_puppetmon": 45,
+     "npc_v5_machinedramon": 36
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.05|28.75 16.55|27.95 18.15|28.25; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":49.85,\"mediana_s\":42.65}"
+    }
+   }
+  },
+  {
+   "nome": "for_t4",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "for_t4",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 450,
+     "npc_v6_youkomon": 54,
+     "npc_v5_myotismon": 16.5,
+     "npc_v5_piedmon": 880,
+     "npc_tier2_porteiro": 72,
+     "npc_v5_puppetmon": 90,
+     "npc_v5_machinedramon": 72
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 3,
+      "mira": 0.6,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.05|28.65 17.15|27.85 18.75|29.45; min forma 14.05"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":50.95,\"mediana_s\":42.75}"
+    }
+   }
+  },
+  {
+   "nome": "rec_t1",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "rec_t1",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 90,
+     "npc_v6_youkomon": 27,
+     "npc_v5_myotismon": 1.1,
+     "npc_v5_piedmon": 110,
+     "npc_tier2_porteiro": 18,
+     "npc_v5_puppetmon": 4.5,
+     "npc_v5_machinedramon": 3.6
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 21.45|27.95 15.85|27.85 16.25|24.85; min forma 12.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":51.75,\"mediana_s\":42.25}"
+    }
+   }
+  },
+  {
+   "nome": "rec_t2",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "rec_t2",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 180,
+     "npc_v6_youkomon": 36,
+     "npc_v5_myotismon": 3.3,
+     "npc_v5_piedmon": 220,
+     "npc_tier2_porteiro": 36,
+     "npc_v5_puppetmon": 18,
+     "npc_v5_machinedramon": 14.4
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 21.25|27.85 16.15|27.85 17.45|27.25; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":50.85,\"mediana_s\":41.85}"
+    }
+   }
+  },
+  {
+   "nome": "rec_t3",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "rec_t3",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 270,
+     "npc_v6_youkomon": 45,
+     "npc_v5_myotismon": 7.7,
+     "npc_v5_piedmon": 440,
+     "npc_tier2_porteiro": 54,
+     "npc_v5_puppetmon": 45,
+     "npc_v5_machinedramon": 36
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 21.55|27.95 16.65|27.85 18.15|28.75; min forma 12.45"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":49.65,\"mediana_s\":41.65}"
+    }
+   }
+  },
+  {
+   "nome": "rec_t4",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "rec_t4",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 450,
+     "npc_v6_youkomon": 54,
+     "npc_v5_myotismon": 16.5,
+     "npc_v5_piedmon": 880,
+     "npc_tier2_porteiro": 72,
+     "npc_v5_puppetmon": 90,
+     "npc_v5_machinedramon": 72
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 3,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 21.85|28.05 17.05|27.55 18.65|29.05; min forma 14.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":48.95,\"mediana_s\":41.25}"
+    }
+   }
+  },
+  {
+   "nome": "gua_t1",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "gua_t1",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 90,
+     "npc_v6_youkomon": 27,
+     "npc_v5_myotismon": 1.1,
+     "npc_v5_piedmon": 110,
+     "npc_tier2_porteiro": 18,
+     "npc_v5_puppetmon": 4.5,
+     "npc_v5_machinedramon": 3.6
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.75|29.45 16.25|27.95 16.95|26.45; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":52.65,\"mediana_s\":43.55}"
+    }
+   }
+  },
+  {
+   "nome": "gua_t2",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "gua_t2",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 180,
+     "npc_v6_youkomon": 36,
+     "npc_v5_myotismon": 3.3,
+     "npc_v5_piedmon": 220,
+     "npc_tier2_porteiro": 36,
+     "npc_v5_puppetmon": 18,
+     "npc_v5_machinedramon": 14.4
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.45|29.15 16.65|28.05 18.05|27.65; min forma 12.45"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":52.25,\"mediana_s\":43.65}"
+    }
+   }
+  },
+  {
+   "nome": "gua_t3",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "gua_t3",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 270,
+     "npc_v6_youkomon": 45,
+     "npc_v5_myotismon": 7.7,
+     "npc_v5_piedmon": 440,
+     "npc_tier2_porteiro": 54,
+     "npc_v5_puppetmon": 45,
+     "npc_v5_machinedramon": 36
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.45|29.45 17.15|28.05 18.85|29.05; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":51.35,\"mediana_s\":44.05}"
+    }
+   }
+  },
+  {
+   "nome": "gua_t4",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "gua_t4",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 450,
+     "npc_v6_youkomon": 54,
+     "npc_v5_myotismon": 16.5,
+     "npc_v5_piedmon": 880,
+     "npc_tier2_porteiro": 72,
+     "npc_v5_puppetmon": 90,
+     "npc_v5_machinedramon": 72
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 3
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.35|29.35 17.45|28.05 19.45|30.35; min forma 14.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":52.65,\"mediana_s\":44.25}"
+    }
+   }
+  },
+  {
+   "nome": "mir_t1",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "mir_t1",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 90,
+     "npc_v6_youkomon": 27,
+     "npc_v5_myotismon": 1.1,
+     "npc_v5_piedmon": 110,
+     "npc_tier2_porteiro": 18,
+     "npc_v5_puppetmon": 4.5,
+     "npc_v5_machinedramon": 3.6
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.45|29.75 15.85|27.95 16.55|27.45; min forma 12.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":50.15,\"mediana_s\":41.85}"
+    }
+   }
+  },
+  {
+   "nome": "mir_t2",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "mir_t2",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 180,
+     "npc_v6_youkomon": 36,
+     "npc_v5_myotismon": 3.3,
+     "npc_v5_piedmon": 220,
+     "npc_tier2_porteiro": 36,
+     "npc_v5_puppetmon": 18,
+     "npc_v5_machinedramon": 14.4
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.25|29.35 16.15|28.05 17.55|28.45; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":50.05,\"mediana_s\":41.95}"
+    }
+   }
+  },
+  {
+   "nome": "mir_t3",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "mir_t3",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 270,
+     "npc_v6_youkomon": 45,
+     "npc_v5_myotismon": 7.7,
+     "npc_v5_piedmon": 440,
+     "npc_tier2_porteiro": 54,
+     "npc_v5_puppetmon": 45,
+     "npc_v5_machinedramon": 36
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.15|29.95 16.65|27.95 18.15|29.55; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":50.15,\"mediana_s\":42.85}"
+    }
+   }
+  },
+  {
+   "nome": "mir_t4",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "mir_t4",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 450,
+     "npc_v6_youkomon": 54,
+     "npc_v5_myotismon": 16.5,
+     "npc_v5_piedmon": 880,
+     "npc_tier2_porteiro": 72,
+     "npc_v5_puppetmon": 90,
+     "npc_v5_machinedramon": 72
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 0.6,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 3,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.25|30.05 17.15|27.95 20.35|32.15; min forma 14.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":51.05,\"mediana_s\":42.95}"
+    }
+   }
+  },
+  {
+   "nome": "fol_t1",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "fol_t1",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 90,
+     "npc_v6_youkomon": 27,
+     "npc_v5_myotismon": 1.1,
+     "npc_v5_piedmon": 110,
+     "npc_tier2_porteiro": 18,
+     "npc_v5_puppetmon": 4.5,
+     "npc_v5_machinedramon": 3.6
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.15|29.55 16.05|28.05 16.85|27.75; min forma 12.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":52.05,\"mediana_s\":41.75}"
+    }
+   }
+  },
+  {
+   "nome": "fol_t2",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "fol_t2",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 180,
+     "npc_v6_youkomon": 36,
+     "npc_v5_myotismon": 3.3,
+     "npc_v5_piedmon": 220,
+     "npc_tier2_porteiro": 36,
+     "npc_v5_puppetmon": 18,
+     "npc_v5_machinedramon": 14.4
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 21.95|29.05 16.55|28.05 17.95|28.55; min forma 12.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":51.55,\"mediana_s\":42.85}"
+    }
+   }
+  },
+  {
+   "nome": "fol_t3",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "fol_t3",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 270,
+     "npc_v6_youkomon": 45,
+     "npc_v5_myotismon": 7.7,
+     "npc_v5_piedmon": 440,
+     "npc_tier2_porteiro": 54,
+     "npc_v5_puppetmon": 45,
+     "npc_v5_machinedramon": 36
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 21.75|29.15 17.15|28.15 18.85|29.65; min forma 14.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":51.25,\"mediana_s\":43.35}"
+    }
+   }
+  },
+  {
+   "nome": "fol_t4",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "fol_t4",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 450,
+     "npc_v6_youkomon": 54,
+     "npc_v5_myotismon": 16.5,
+     "npc_v5_piedmon": 880,
+     "npc_tier2_porteiro": 72,
+     "npc_v5_puppetmon": 90,
+     "npc_v5_machinedramon": 72
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.6,
+      "folego": 3,
+      "recuperacao": 0.6,
+      "forca": 0.6,
+      "mira": 0.6,
+      "guarda": 0.6
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 21.65|29.15 17.35|28.05 19.35|31.75; min forma 14.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":52.85,\"mediana_s\":44.05}"
+    }
+   }
+  },
+  {
+   "nome": "mf_t1",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "mf_t1",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 90,
+     "npc_v6_youkomon": 27,
+     "npc_v5_myotismon": 1.1,
+     "npc_v5_piedmon": 110,
+     "npc_tier2_porteiro": 18,
+     "npc_v5_puppetmon": 4.5,
+     "npc_v5_machinedramon": 3.6
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.45|30.05 15.75|27.85 16.75|28.15; min forma 12.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":50.45,\"mediana_s\":40.85}"
+    }
+   }
+  },
+  {
+   "nome": "mf_t2",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "mf_t2",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 180,
+     "npc_v6_youkomon": 36,
+     "npc_v5_myotismon": 3.3,
+     "npc_v5_piedmon": 220,
+     "npc_tier2_porteiro": 36,
+     "npc_v5_puppetmon": 18,
+     "npc_v5_machinedramon": 14.4
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.15|29.65 16.25|27.95 18.05|29.15; min forma 12.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":50.85,\"mediana_s\":41.95}"
+    }
+   }
+  },
+  {
+   "nome": "mf_t3",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "mf_t3",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 270,
+     "npc_v6_youkomon": 45,
+     "npc_v5_myotismon": 7.7,
+     "npc_v5_piedmon": 440,
+     "npc_tier2_porteiro": 54,
+     "npc_v5_puppetmon": 45,
+     "npc_v5_machinedramon": 36
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.05|29.65 17.05|28.05 18.45|29.65; min forma 13.65"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":51.35,\"mediana_s\":42.85}"
+    }
+   }
+  },
+  {
+   "nome": "mf_t4",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "mf_t4",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 450,
+     "npc_v6_youkomon": 54,
+     "npc_v5_myotismon": 16.5,
+     "npc_v5_piedmon": 880,
+     "npc_tier2_porteiro": 72,
+     "npc_v5_puppetmon": 90,
+     "npc_v5_machinedramon": 72
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 0.45
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 21.75|29.55 17.45|28.05 20.25|32.25; min forma 14.15"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":52.05,\"mediana_s\":43.45}"
+    }
+   }
+  },
+  {
+   "nome": "mg_t1",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "mg_t1",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 90,
+     "npc_v6_youkomon": 27,
+     "npc_v5_myotismon": 1.1,
+     "npc_v5_piedmon": 110,
+     "npc_tier2_porteiro": 18,
+     "npc_v5_puppetmon": 4.5,
+     "npc_v5_machinedramon": 3.6
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.65|29.95 16.15|27.95 16.95|27.05; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":51.85,\"mediana_s\":43.25}"
+    }
+   }
+  },
+  {
+   "nome": "mg_t2",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "mg_t2",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 180,
+     "npc_v6_youkomon": 36,
+     "npc_v5_myotismon": 3.3,
+     "npc_v5_piedmon": 220,
+     "npc_tier2_porteiro": 36,
+     "npc_v5_puppetmon": 18,
+     "npc_v5_machinedramon": 14.4
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.75|29.95 16.45|28.05 17.85|28.75; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":51.55,\"mediana_s\":43.35}"
+    }
+   }
+  },
+  {
+   "nome": "mg_t3",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "mg_t3",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 270,
+     "npc_v6_youkomon": 45,
+     "npc_v5_myotismon": 7.7,
+     "npc_v5_piedmon": 440,
+     "npc_tier2_porteiro": 54,
+     "npc_v5_puppetmon": 45,
+     "npc_v5_machinedramon": 36
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.45|29.55 17.05|28.05 18.45|28.65; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":51.55,\"mediana_s\":43.85}"
+    }
+   }
+  },
+  {
+   "nome": "mg_t4",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "mg_t4",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 450,
+     "npc_v6_youkomon": 54,
+     "npc_v5_myotismon": 16.5,
+     "npc_v5_piedmon": 880,
+     "npc_tier2_porteiro": 72,
+     "npc_v5_puppetmon": 90,
+     "npc_v5_machinedramon": 72
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.45,
+      "folego": 0.45,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 2.1,
+      "guarda": 2.1
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.25|29.65 17.25|28.05 19.25|31.65; min forma 12.45"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":51.55,\"mediana_s\":43.45}"
+    }
+   }
+  },
+  {
+   "nome": "fg_t1",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "fg_t1",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 90,
+     "npc_v6_youkomon": 27,
+     "npc_v5_myotismon": 1.1,
+     "npc_v5_piedmon": 110,
+     "npc_tier2_porteiro": 18,
+     "npc_v5_puppetmon": 4.5,
+     "npc_v5_machinedramon": 3.6
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.45|29.85 16.15|28.05 17.15|27.55; min forma 12.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":52.85,\"mediana_s\":42.35}"
+    }
+   }
+  },
+  {
+   "nome": "fg_t2",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "fg_t2",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 180,
+     "npc_v6_youkomon": 36,
+     "npc_v5_myotismon": 3.3,
+     "npc_v5_piedmon": 220,
+     "npc_tier2_porteiro": 36,
+     "npc_v5_puppetmon": 18,
+     "npc_v5_machinedramon": 14.4
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.25|29.65 16.75|28.05 18.15|28.55; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":52.15,\"mediana_s\":43.35}"
+    }
+   }
+  },
+  {
+   "nome": "fg_t3",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "fg_t3",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 270,
+     "npc_v6_youkomon": 45,
+     "npc_v5_myotismon": 7.7,
+     "npc_v5_piedmon": 440,
+     "npc_tier2_porteiro": 54,
+     "npc_v5_puppetmon": 45,
+     "npc_v5_machinedramon": 36
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.15|29.45 17.25|28.15 18.95|29.45; min forma 14.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":51.95,\"mediana_s\":44.05}"
+    }
+   }
+  },
+  {
+   "nome": "fg_t4",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "fg_t4",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 450,
+     "npc_v6_youkomon": 54,
+     "npc_v5_myotismon": 16.5,
+     "npc_v5_piedmon": 880,
+     "npc_tier2_porteiro": 72,
+     "npc_v5_puppetmon": 90,
+     "npc_v5_machinedramon": 72
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.45,
+      "folego": 2.1,
+      "recuperacao": 0.45,
+      "forca": 0.45,
+      "mira": 0.45,
+      "guarda": 2.1
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.05|29.45 17.55|28.05 19.75|31.25; min forma 14.95"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":52.95,\"mediana_s\":43.95}"
+    }
+   }
+  },
+  {
+   "nome": "mfg_t1",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "mfg_t1",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 90,
+     "npc_v6_youkomon": 27,
+     "npc_v5_myotismon": 1.1,
+     "npc_v5_piedmon": 110,
+     "npc_tier2_porteiro": 18,
+     "npc_v5_puppetmon": 4.5,
+     "npc_v5_machinedramon": 3.6
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.75|30.55 15.85|27.85 17.25|28.35; min forma 12.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":49.95,\"mediana_s\":40.85}"
+    }
+   }
+  },
+  {
+   "nome": "mfg_t2",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "mfg_t2",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 180,
+     "npc_v6_youkomon": 36,
+     "npc_v5_myotismon": 3.3,
+     "npc_v5_piedmon": 220,
+     "npc_tier2_porteiro": 36,
+     "npc_v5_puppetmon": 18,
+     "npc_v5_machinedramon": 14.4
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.65|30.35 16.45|28.05 18.55|29.25; min forma 12.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":51.35,\"mediana_s\":43.05}"
+    }
+   }
+  },
+  {
+   "nome": "mfg_t3",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "mfg_t3",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 270,
+     "npc_v6_youkomon": 45,
+     "npc_v5_myotismon": 7.7,
+     "npc_v5_piedmon": 440,
+     "npc_tier2_porteiro": 54,
+     "npc_v5_puppetmon": 45,
+     "npc_v5_machinedramon": 36
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.55|30.15 17.25|28.15 18.75|29.85; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":52.25,\"mediana_s\":43.55}"
+    }
+   }
+  },
+  {
+   "nome": "mfg_t4",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "mfg_t4",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 450,
+     "npc_v6_youkomon": 54,
+     "npc_v5_myotismon": 16.5,
+     "npc_v5_piedmon": 880,
+     "npc_tier2_porteiro": 72,
+     "npc_v5_puppetmon": 90,
+     "npc_v5_machinedramon": 72
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v6_youkomon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v5_myotismon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v5_piedmon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 0.25,
+      "folego": 1.75,
+      "recuperacao": 0.25,
+      "forca": 0.25,
+      "mira": 1.75,
+      "guarda": 1.75
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.35|30.25 17.65|28.15 19.85|31.65; min forma 14.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":52.65,\"mediana_s\":44.05}"
+    }
+   }
+  },
+  {
+   "nome": "sem_mir_t1",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "sem_mir_t1",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 90,
+     "npc_v6_youkomon": 27,
+     "npc_v5_myotismon": 1.1,
+     "npc_v5_piedmon": 110,
+     "npc_tier2_porteiro": 18,
+     "npc_v5_puppetmon": 4.5,
+     "npc_v5_machinedramon": 3.6
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v6_youkomon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v5_myotismon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v5_piedmon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.15|28.55 16.25|28.05 16.95|26.55; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":53.25,\"mediana_s\":43.25}"
+    }
+   }
+  },
+  {
+   "nome": "sem_mir_t2",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "sem_mir_t2",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 180,
+     "npc_v6_youkomon": 36,
+     "npc_v5_myotismon": 3.3,
+     "npc_v5_piedmon": 220,
+     "npc_tier2_porteiro": 36,
+     "npc_v5_puppetmon": 18,
+     "npc_v5_machinedramon": 14.4
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v6_youkomon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v5_myotismon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v5_piedmon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 21.75|28.55 16.75|28.05 17.85|27.35; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":52.45,\"mediana_s\":43.55}"
+    }
+   }
+  },
+  {
+   "nome": "sem_mir_t3",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "sem_mir_t3",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 270,
+     "npc_v6_youkomon": 45,
+     "npc_v5_myotismon": 7.7,
+     "npc_v5_piedmon": 440,
+     "npc_tier2_porteiro": 54,
+     "npc_v5_puppetmon": 45,
+     "npc_v5_machinedramon": 36
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v6_youkomon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v5_myotismon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v5_piedmon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 21.85|28.55 17.15|28.05 18.45|28.15; min forma 13.25"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.09; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":51.85,\"mediana_s\":43.25}"
+    }
+   }
+  },
+  {
+   "nome": "sem_mir_t4",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "sem_mir_t4",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 450,
+     "npc_v6_youkomon": 54,
+     "npc_v5_myotismon": 16.5,
+     "npc_v5_piedmon": 880,
+     "npc_tier2_porteiro": 72,
+     "npc_v5_puppetmon": 90,
+     "npc_v5_machinedramon": 72
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v6_youkomon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v5_myotismon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v5_piedmon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 1.16,
+      "folego": 1.16,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 0.2,
+      "guarda": 1.16
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 21.75|28.35 17.25|27.85 19.25|29.35; min forma 14.65"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.084; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":51.75,\"mediana_s\":43.15}"
+    }
+   }
+  },
+  {
+   "nome": "sem_fol_t1",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "sem_fol_t1",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 90,
+     "npc_v6_youkomon": 27,
+     "npc_v5_myotismon": 1.1,
+     "npc_v5_piedmon": 110,
+     "npc_tier2_porteiro": 18,
+     "npc_v5_puppetmon": 4.5,
+     "npc_v5_machinedramon": 3.6
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v6_youkomon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v5_myotismon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v5_piedmon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 21.65|28.45 16.45|27.95 16.45|24.45; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":52.95,\"mediana_s\":43.85}"
+    }
+   }
+  },
+  {
+   "nome": "sem_fol_t2",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "sem_fol_t2",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 180,
+     "npc_v6_youkomon": 36,
+     "npc_v5_myotismon": 3.3,
+     "npc_v5_piedmon": 220,
+     "npc_tier2_porteiro": 36,
+     "npc_v5_puppetmon": 18,
+     "npc_v5_machinedramon": 14.4
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v6_youkomon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v5_myotismon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v5_piedmon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.15|28.55 16.55|28.05 17.65|26.65; min forma 12.45"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.08; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":52.15,\"mediana_s\":43.85}"
+    }
+   }
+  },
+  {
+   "nome": "sem_fol_t3",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "sem_fol_t3",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 270,
+     "npc_v6_youkomon": 45,
+     "npc_v5_myotismon": 7.7,
+     "npc_v5_piedmon": 440,
+     "npc_tier2_porteiro": 54,
+     "npc_v5_puppetmon": 45,
+     "npc_v5_machinedramon": 36
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v6_youkomon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v5_myotismon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v5_piedmon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.15|28.65 17.15|27.95 18.25|29.15; min forma 12.45"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.081; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":51.55,\"mediana_s\":43.25}"
+    }
+   }
+  },
+  {
+   "nome": "sem_fol_t4",
+   "troca": {
+    "pesoPonto": 15,
+    "gama": {
+     "vigor": 0.02,
+     "recuperacao": 0.02,
+     "guarda": 0.06,
+     "forca": 0.02,
+     "mira": 0.14,
+     "folego": 0.14
+    },
+    "mapa": {
+     "hp": 1300,
+     "vel": 60
+    },
+    "multVida": {
+     "crianca": 0.6,
+     "adolescente": 0.9,
+     "adulto": 1.35,
+     "mega": 2.025
+    },
+    "multAtk": {
+     "crianca": 1,
+     "adolescente": 1.5,
+     "adulto": 2.25,
+     "mega": 3.375
+    },
+    "tiro": {
+     "distMin": 110,
+     "esperaMax": 1500,
+     "recuo": 1.5,
+     "recuaNaPrep": 2,
+     "recuaAbaixo": 0.75,
+     "danoProj": 0.7,
+     "velProj": 1
+    },
+    "nome": "sem_fol_t4",
+    "esquiva": {
+     "ligada": 1,
+     "gamaMira": 0.6,
+     "gamaFolego": 0.6,
+     "kAtento": 0.5,
+     "pertoChance": 0,
+     "pertoReacao": 200,
+     "contraMs": 0
+    },
+    "npcTotal": {
+     "npc_tier1_brutamontes": 76.8,
+     "npc_tier2_carcereiro": 450,
+     "npc_v6_youkomon": 54,
+     "npc_v5_myotismon": 16.5,
+     "npc_v5_piedmon": 880,
+     "npc_tier2_porteiro": 72,
+     "npc_v5_puppetmon": 90,
+     "npc_v5_machinedramon": 72
+    },
+    "npcDivisao": {
+     "npc_tier2_carcereiro": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v6_youkomon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v5_myotismon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v5_piedmon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_tier2_porteiro": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v5_puppetmon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     },
+     "npc_v5_machinedramon": {
+      "vigor": 1.16,
+      "folego": 0.2,
+      "recuperacao": 1.16,
+      "forca": 1.16,
+      "mira": 1.16,
+      "guarda": 1.16
+     }
+    }
+   },
+   "passam": [
+    "P1",
+    "D1",
+    "D3"
+   ],
+   "falham": [
+    "P2",
+    "P3",
+    "D2"
+   ],
+   "metas": {
+    "P1": {
+     "passa": true,
+     "curto": "{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.41,\"limite_t"
+    },
+    "P2": {
+     "passa": false,
+     "curto": "{\"Gazimon\":{\"nome\":\"Gazimon\",\"estagio\":\"crianca\",\"mapa\":\"campo\",\"limite_sem\":0.4"
+    },
+    "P3": {
+     "passa": false,
+     "curto": "{\"Tortomon\":{\"nome\":\"Tortomon\",\"estagio\":\"adolescente\",\"mapa\":\"coliseu\",\"limite_"
+    },
+    "D1": {
+     "passa": true,
+     "curto": "19.65|27.95 22.45|28.95 17.35|27.95 18.65|29.85; min forma 12.35"
+    },
+    "D2": {
+     "passa": false,
+     "curto": "max 0.087; sem fim 0"
+    },
+    "D3": {
+     "passa": true,
+     "curto": "{\"p90_s\":50.75,\"mediana_s\":42.95}"
+    }
+   }
+  }
+ ]
+}

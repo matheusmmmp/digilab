@@ -126,16 +126,16 @@ describe("a textura pintada (LG-G5b)", () => {
     expect(branco / (luz.w * luz.h)).toBeGreaterThan(0.01); expect(branco / (luz.w * luz.h)).toBeLessThan(0.5);
     expect(certo / branco, "o branco da mascara cai no ciano da textura").toBeGreaterThan(0.8);
   });
-  /* a barraca: o chao de dentro, visto pela porta, e escuro. A Meshy nao fez chao e deixou o fundo claro (D-LG-9): o pixel publicado no
-     centro das UVs dele (docs/objetos3d/barraca/retrabalho/chao_uv.json; u, v do Blender, a linha da imagem e 1 - v) fica abaixo de 45 %
-     de luminancia */
-  test("barraca: o chao de dentro escuro", () => {
-    const chao = JSON.parse(readFileSync(join(__dirname, "..", "..", "..", "docs", "objetos3d", "barraca", "retrabalho", "chao_uv.json"), "utf8")) as { cantos: number[][] };
-    expect(chao.cantos.length).toBe(4);
+  /* a barraca em cartoon (docs/objetos3d/cartoon/barraca.py, 2026-11-10): a porta e pintada no domo, sem vao, com o escuro de dentro. A
+     textura tem esse escuro (abaixo de 25 % de luminancia) numa parte pequena, e o resto e o pano claro */
+  test("barraca: o escuro de dentro da porta esta pintado", () => {
     const cor = png(join(__dirname, "..", "public", "lugares", "barraca", "barraca_cor.png"));
-    const u = chao.cantos.reduce((s, c) => s + c[0], 0) / 4, v = chao.cantos.reduce((s, c) => s + c[1], 0) / 4;
-    const [r, g, b] = cor.px(Math.floor(u * cor.w), Math.floor((1 - v) * cor.h));
-    expect((0.2126 * r + 0.7152 * g + 0.0722 * b) / 255).toBeLessThan(0.45);
+    let escuro = 0, total = 0;
+    for (let y = 0; y < cor.h; y += 2) for (let x = 0; x < cor.w; x += 2) {
+      const [r, g, b] = cor.px(x, y);
+      total++; if ((0.2126 * r + 0.7152 * g + 0.0722 * b) / 255 < 0.25) escuro++;
+    }
+    expect(escuro / total).toBeGreaterThan(0.005); expect(escuro / total).toBeLessThan(0.2);
   });
 });
 

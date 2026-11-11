@@ -10,6 +10,7 @@ import { useEffect, useRef, type ReactNode } from "react";
 import { AbasHx, PainelHx, type AbaHx } from "./hx/index.ts";
 import { abrirModal } from "./modal.ts";
 import { useArrastavelPorAlca } from "../hudPet.ts";
+import { useSomDoPainel } from "./PainelTela.tsx";
 import "../estilo/lugar.css";
 import "../estilo/lugar_l3.css";
 
@@ -37,6 +38,7 @@ function Conteudo({ d, fechar, folha, children }: { d: DadosLugar; fechar: () =>
 /** de 900 px em diante: o painel ao lado do saco */
 export function LugarLado({ d, children }: { d: DadosLugar; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
+  useSomDoPainel(d.destino ?? "ajustes");   /* SOM-UP: abrir a cada lugar novo, fechar ao sair */
   /* o painel se arrasta pelo cabecalho (2026-11-08); cada lugar guarda a sua posicao no navegador, e Ajustes > Visual as volta ao lugar */
   const arr = useArrastavelPorAlca(`painel-${d.destino ?? "ajustes"}`, ref, ".hx-painel__cab");
   /* ao fechar, o foco volta a quem abriu o lugar (se ainda estiver na pagina; depois do foco que o App poe no trilho) */
@@ -55,6 +57,7 @@ export function LugarLado({ d, children }: { d: DadosLugar; children: ReactNode 
 /** abaixo de 900 px: a folha que sobe da base */
 export function LugarFolha({ d, children }: { d: DadosLugar; children: ReactNode }) {
   const ref = useRef<HTMLDialogElement>(null), saindo = useRef(false);
+  useSomDoPainel(d.destino ?? "ajustes");
   useEffect(() => {
     const dlg = ref.current; if (!dlg) return;
     saindo.current = false;

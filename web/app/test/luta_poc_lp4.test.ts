@@ -21,12 +21,12 @@ const arquivos = (d: string): string[] => readdirSync(d).flatMap(n => statSync(j
 describe("a chave ligada (LP4)", () => {
   test("LUTA_POC_LIGADA, a v21 nos ovos novos e so a v21 (e o pet de teste) abrindo", () => {
     expect(LUTA_POC_LIGADA).toBe(true);
-    expect(VERSAO_PET).toBe(21);
-    expect(VERSOES_PET).toEqual([21]);
+    expect(VERSAO_PET).toBe(22);
+    expect(VERSOES_PET).toEqual([21, 22]);
     expect(lutaPocLigada()).toBe(true);
-    expect(versaoDoOvo()).toBe(21);
-    expect(versoesQueAbrem()).toEqual([21]);
-    expect(new Motor(1).versao).toBe(21);
+    expect(versaoDoOvo()).toBe(22);
+    expect(versoesQueAbrem()).toEqual([21, 22]);
+    expect(new Motor(1, 21).versao).toBe(21);
     expect(new Motor(1, VERSAO_PET_LAB).versao).toBe(16);
     for (const v of [1, 6, 12, 13, 14, 15, 17, 18, 19, 20]) expect(() => new Motor(1, v), `v${v}`).toThrow(/versão de pet desconhecida/);
   });
@@ -60,7 +60,7 @@ describe("os itens (LP-5)", () => {
       expect(it.efeito, it.id).toMatch(/sem efeito/);
       if (it.tipo === "chip_regra") for (const e of ["crianca", "adolescente", "adulto", "mega"] as const) expect(chipServe(it, e)).toBe(false);
     }
-    const m = new Motor(5);
+    const m = new Motor(5, 21);
     m.liberar(1);
     while (m.estagioAtual === "bebe") m.avancar(60);
     expect(m.porqueNaoEquipa("chip_recuo")).toMatch(/chip de regra/);
@@ -68,7 +68,7 @@ describe("os itens (LP-5)", () => {
     expect(m.porqueNaoEquipa("chip_forca")).toBeNull();
   });
   test("as medalhas so dao os chips de stat ao Tamer; os chips de regra que ele ja tem ficam no registro", () => {
-    const t = new Tamer(), m = new Motor(5);
+    const t = new Tamer(), m = new Motor(5, 21);
     for (const md of MEDALHAS) t.ganhar(md.id, m, 1);
     const novos = conferirItensDasMedalhas(t, m, 2).map(x => x.id);
     expect(novos).toEqual(MEDALHAS.map(md => ITEM_DA_MEDALHA[md.id]).filter(id => temEfeito(itemDe(id))));

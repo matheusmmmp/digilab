@@ -10,7 +10,8 @@ import {
   CANDIDATO_V21, ESTAGIOS_LUTA, TETO, TIPICO, npc, petDoEstagio, pontosNoTotal, rivalCanonico, rivalDaForma, statsLuta,
 } from "../scripts/equilibrio_poc/comum.ts";
 import { basesDa } from "../scripts/equilibrio_poc/faixas.ts";
-import { candidatoDe, LP5_1_ESQ, LP5_1_R2 } from "../scripts/equilibrio_poc/candidatos.ts";
+import { limitesNpc, passaNpc } from "../scripts/equilibrio_poc/criterios.ts";
+import { candidatoDe, LP5_1_ESQ, LP5_1_R2, LP5_2 } from "../scripts/equilibrio_poc/candidatos.ts";
 import { motorDoCandidato } from "../scripts/equilibrio_poc/bancada.ts";
 
 const c = CANDIDATO_V21;
@@ -134,8 +135,45 @@ describe("a esquiva pela perspicacia e pela velocidade (D-LP5-14)", () => {
     expect(rivalCanonico(x, "cirro_crianca_sereno").perc).toBeGreaterThan(rivalCanonico(x, "brasa_crianca_arisco").perc!);
     expect(() => candidatoDe({ nome: "teste", esquiva: { ligada: 1, chanceMax: 2 } })).toThrow();
   });
+  test("o lp5_2 (D-LP5-17) e o lp5_1_esq com o Gazimon em 76,8, e so isso", () => {
+    expect(LP5_2.npcTotal.npc_tier1_brutamontes).toBe(76.8);
+    expect({ ...LP5_2, nome: "", npcTotal: { ...LP5_2.npcTotal, npc_tier1_brutamontes: 96 } }).toEqual({ ...LP5_1_ESQ, nome: "" });
+  });
   test("o lp5_1_esq (D-LP5-16) e o lp5_1_r2 com a esquiva ligada, e so isso", () => {
     expect(LP5_1_ESQ.esquiva).toMatchObject({ ligada: 1, gamaMira: .6, gamaFolego: .6, kAtento: .5, pertoChance: 0 });
     expect({ ...LP5_1_ESQ, nome: "", esquiva: null }).toEqual({ ...LP5_1_R2, nome: "", esquiva: null });
+  });
+});
+
+describe("a divisao dos stats do NPC (D-LP5-18)", () => {
+  test("sem divisao, o NPC divide igual; com divisao, o total fica e os pesos mudam os stats", () => {
+    expect(c.npcDivisao).toEqual({});
+    const k = "npc_tier2_carcereiro", w = { vigor: .6, folego: .6, recuperacao: .6, forca: .6, mira: 3, guarda: .6 };
+    const x = candidatoDe({ nome: "teste", esquiva: { ligada: 1 }, npcDivisao: { [k]: w } }), igual = candidatoDe({ nome: "teste", esquiva: { ligada: 1 } });
+    expect(npc(igual, k)).toEqual(npc(candidatoDe({ nome: "teste", esquiva: { ligada: 1 }, npcDivisao: { [k]: { vigor: 1, folego: 1, recuperacao: 1, forca: 1, mira: 1, guarda: 1 } } }), k));
+    expect(npc(x, k).perc!).toBeGreaterThan(npc(igual, k).perc!);
+    expect(npc(x, k).agil!).toBeLessThan(npc(igual, k).agil!);
+    expect(npc(x, "npc_v5_piedmon")).toEqual(npc(igual, "npc_v5_piedmon"));
+  });
+  test("divisao sem os 6 stats, com peso nao positivo, que nao soma 6 ou de um NPC que nao existe falha alto", () => {
+    const um = { vigor: 1, folego: 1, recuperacao: 1, forca: 1, mira: 1, guarda: 1 };
+    expect(() => candidatoDe({ nome: "teste", npcDivisao: { npc_tier2_carcereiro: { ...um, guarda: 2 } } })).toThrow();
+    expect(() => candidatoDe({ nome: "teste", npcDivisao: { npc_tier2_carcereiro: { ...um, guarda: 0, mira: 2 } } })).toThrow();
+    expect(() => candidatoDe({ nome: "teste", npcDivisao: { npc_tier2_carcereiro: { vigor: 6 } as never } })).toThrow();
+    expect(() => candidatoDe({ nome: "teste", npcDivisao: { npc_que_nao_ha: um } })).toThrow();
+  });
+});
+
+describe("o criterio do P1 a P3 (D-LP5-17)", () => {
+  test("os limites saem do T1 do lp5_1_esq: o meio do caminho na escala logistica, com 0,10 de folga", () => {
+    expect([limitesNpc("crianca", false), limitesNpc("adolescente", false), limitesNpc("adulto", false), limitesNpc("mega", false)])
+      .toEqual([{ sem: .41, tip: .59 }, { sem: .35, tip: .65 }, { sem: .3, tip: .7 }, { sem: .27, tip: .73 }]);
+    expect([limitesNpc("adolescente", true), limitesNpc("mega", true)]).toEqual([{ sem: .5, tip: .7 }, { sem: .42, tip: .78 }]);
+  });
+  test("passa so dentro dos dois limites; estagio sem T1 falha alto", () => {
+    expect(passaNpc("crianca", false, .41, .59)).toBe(true);
+    expect(passaNpc("crianca", false, .42, .9)).toBe(false);
+    expect(passaNpc("crianca", false, .1, .58)).toBe(false);
+    expect(() => limitesNpc("ovo", false)).toThrow();
   });
 });

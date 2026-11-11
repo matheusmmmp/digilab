@@ -1,20 +1,11 @@
 DigiLab: a barraca do Tamer, o lugar do Diario (barraca.gltf, barraca.bin, barraca_cor.png)
 
-Procedencia: item gerado por IA, com o gerador Meshy (meshy.ai), no plano Pro pago, na conta do Matheus. Primeira versao em 2026-11-07;
-refeita em 2026-11-07/08 (o retrabalho dos objetos, docs/objetos3d/REFERENCIAS.md).
-Pelos termos de uso da Meshy (atualizados em 2026-09-19, secao 3.2), a saida de um plano pago e do cliente.
-Os termos proibem tirar a marca de IA (secao 2.4): a marca fica no asset.extras do barraca.gltf e neste arquivo.
+Procedencia: feito a mao por script, sem IA, em 2026-11-10 (docs/objetos3d/cartoon/barraca.py no repositorio do DigiLab).
+A malha (o domo, o rolo da porta, a antena, os estais, as estacas, o banquinho, os livros) e a textura (pintada pelo codigo, pela posicao no espaco)
+saem do script; a mesma entrada da sempre o mesmo arquivo. Nada vem de modelo gerado nem de imagem de terceiros.
 
-Como foi feito (docs/TAREFA_V3_LUGARES_3D.md, secao 14, e docs/objetos3d/barraca/ no repositorio):
-- esboco: Meshy Image to Image (nano-banana-2), so com o prompt e a referencia de estilo gerada pela propria Meshy para o DigiLab (a
-  maquete B do mapa digital), sem o pet e sem imagem de terceiros; sem texto, sem marca, sem simbolo; o esboco 1 (o domo com costuras)
-  escolhido pelo Matheus;
-- vistas: Meshy Image to Image com multivista, a partir do esboco;
-- malha: Meshy Multi-Image to 3D (remesh em triangulos, so a cor);
-- acabamento no Blender 4.5 LTS e em Python, por script: a malha e a textura pintada da Meshy como vieram, sem achatar as cores; o escuro
-  de dentro pintado nas faces vistas pela porta, as cordas tingidas de laranja, um chao e um forro escuros por dentro (18 triangulos),
-  as normais suavizadas e a textura reduzida a 512 px com 256 cores para caber no orcamento de 300 KB.
-As tarefas da Meshy (esboco, vistas, malha) estao no asset.extras do barraca.gltf.
+O desenho segue o esboco do objeto (docs/objetos3d/barraca/esbocos/esboco_1_domo_costuras.png), gerado pela Meshy para o DigiLab e usado so como referencia de desenho:
+nenhum pixel e nenhum vertice dele esta nestes arquivos. A barraca de antes (a malha e a textura da Meshy) saiu do jogo; o historico esta em docs/TAREFA_V3_LUGARES_3D.md e em docs/objetos3d/barraca/.
 
-Uso: no jogo DigiLab, publicado. Credito: "Barraca do Tamer gerada com a Meshy (meshy.ai)".
-Aprovacao: o Matheus escolheu o esboco em 2026-11-07; a aprovacao do modelo fica no PR do retrabalho da barraca.
+Uso: no jogo DigiLab, publicado. Autor: o projeto DigiLab (Matheus).
+Aprovacao: as capturas ficam no PR dos objetos em cartoon.
