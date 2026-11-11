@@ -884,7 +884,7 @@ prioridade, com os destinos quentes, os caminhos claros e a decoração mais apa
 **As decisões** LZ-1 a LZ-5 estão no `LEIA.md` da prancha, como PROPOSTAS: B, sem o cais enquanto estiver trancado, sem efeito à noite, o chão
 com peso 0,3 e todos os mapas do `curvar`. Os números são PROPOSTO, SEM FONTE. A interpretação está em D-LZ-1, em `docs/registro/2026-11.md`.
 
-**Fica para a etapa de código, depois da aprovação:** ligar a proposta escolhida sem o parâmetro, medir o custo no celular e recapturar o e2e
+**Fica para a etapa de código:** ligar a proposta escolhida sem o parâmetro, medir o custo no celular e recapturar o e2e
 (o `--update-snapshots` só com o ok do Matheus).
 
 ## 28. A hierarquia de luz ligada (2026-11-09)
@@ -945,11 +945,11 @@ fica com o PR #760.
   - que um tempo inválido falha alto;
   - que a inclinação mantém a distância.
 
-**As decisões** AB-1 a AB-5 estão no `LEIA.md` da prancha, como PROPOSTAS: B; uma vez por save, depois que o ovo choca; qualquer toque
+**As decisões** AB-1 a AB-5 estão no `LEIA.md` da prancha, APROVADAS pelo Matheus em 2026-11-10 ("siga a recomendação."): B; uma vez por save, depois que o ovo choca; qualquer toque
 interrompe; a HUD fica; todas as larguras, sem tocar com "reduzir movimento". Os números são PROPOSTO, SEM FONTE. A interpretação está em
 D-AB-1 e D-AB-2, em `docs/registro/2026-11.md`.
 
-**Fica para a etapa de código, depois da aprovação:**
+**Fica para a etapa de código:**
 - tocar a proposta escolhida sem o parâmetro, uma vez por save;
 - a interrupção pelo toque;
 - um teste e2e do caminho inteiro.

@@ -55,17 +55,20 @@ de captura, o pet está perto do comedouro e não no ninho, como estaria logo de
 No zoom de perto (0,55 a 0,6), o fundo fica enevoado, porque a névoa acompanha o afastamento da câmera. A câmera livre de hoje faz o
 mesmo quando aproxima. A prancha não mexe nisso.
 
-## As decisões (PROPOSTAS)
+## As decisões (APROVADAS)
 
-- **AB-1, a proposta.** Recomendação: **B, o afastar**. O pet fica no quadro o tempo todo, e em 5 s a praça e o portão aparecem em volta
+O Matheus aprovou as cinco em 2026-11-10: "siga a recomendação." Os números (tempos, zooms e inclinações) continuam PROPOSTO, SEM FONTE.
+
+
+- **AB-1, a proposta.** APROVADA: **B, o afastar**. O pet fica no quadro o tempo todo, e em 5 s a praça e o portão aparecem em volta
   dele. A A começa longe do pet e dura mais. A C começa com o pet pequeno. Custo de errar: baixo, porque é trocar uma tabela em
   `aberturaConta.ts`.
-- **AB-2, quando toca.** Recomendação: **uma vez por save**, na primeira vez que a ilha fica à vista depois que o ovo choca. O registro fica
+- **AB-2, quando toca.** APROVADA: **uma vez por save**, na primeira vez que a ilha fica à vista depois que o ovo choca. O registro fica
   numa chave da página (`<chave>-abertura`), fora do save, do log e do replay, como o nível do Tamer. A alternativa é tocar no começo de
   cada dia do jogo, que cansa. Custo de errar: baixo.
-- **AB-3, interromper.** Recomendação: **sim**. Qualquer toque, tecla ou roda encerra a abertura, e a câmera volta ao pet na transição
+- **AB-3, interromper.** APROVADA: **sim**. Qualquer toque, tecla ou roda encerra a abertura, e a câmera volta ao pet na transição
   curta da câmera solta (`TRANSICAO_MS`, 0,4 s). Custo de errar: baixo.
-- **AB-4, a HUD durante a abertura.** Recomendação: **fica como está**. Nos quadros, a câmera guia o olhar mesmo com os painéis, e
+- **AB-4, a HUD durante a abertura.** APROVADA: **fica como está**. Nos quadros, a câmera guia o olhar mesmo com os painéis, e
   esconder a HUD pede mexer no layout. A alternativa é esmaecer os painéis enquanto a câmera anda. Custo de errar: baixo.
-- **AB-5, onde vale.** Recomendação: **em todas as larguras**. No celular, os quadros leem bem (`celular_*.jpg`). Com "reduzir movimento",
+- **AB-5, onde vale.** APROVADA: **em todas as larguras**. No celular, os quadros leem bem (`celular_*.jpg`). Com "reduzir movimento",
   a abertura não toca. Custo de errar: baixo.
