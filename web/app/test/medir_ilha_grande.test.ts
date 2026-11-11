@@ -21,7 +21,8 @@ const CENARIOS = ["comedouro", "perto", "longe"] as const;
 const RETORNOS: Record<string, number[]> = { hoje_64x30: [20, 40], grande_128x60: [20, 40, 70] };
 const PERTO_DO_COMEDOURO = 3;         // celulas
 
-type Cenario = (typeof CENARIOS)[number];
+/* o adendo da 12.15 (exploratorio): a racao a 6 celulas a leste do ninho, so na ilha grande, onde o comedouro fica a 8 */
+type Cenario = (typeof CENARIOS)[number] | "comedouro6";
 const media = (v: number[]): number | null => v.length ? Math.round((v.reduce((a, b) => a + b, 0) / v.length) * 1000) / 1000 : null;
 const mediana = (v: number[]): number | null => { const o = [...v].sort((a, b) => a - b); return o.length ? o[Math.floor(o.length / 2)] : null; };
 
@@ -35,7 +36,8 @@ function cuidar(m: Motor, p: number, cenario: Cenario | null): boolean {
   const e = m.e, mu = m.mundo!;
   let pos = false;
   if (cenario !== null && !e.dormindo && e.fome < FOME_DO_DONO && mu.comidas.size === 0) {
-    const [x, y] = lugaresNomeados(mu)[cenario];
+    const [x, y] = cenario === "comedouro6" ? [(mu.cm.layout.ninho[0] + 6) * mu.cm.sub + mu.cm.sub / 2, mu.cm.layout.ninho[1] * mu.cm.sub + mu.cm.sub / 2]
+      : lugaresNomeados(mu)[cenario];
     m.deixarComida("racao", x, y);
     pos = true;
   }
@@ -120,7 +122,24 @@ function medir(): Record<string, unknown> {
            perto_do_comedouro: PERTO_DO_COMEDOURO, mundos: Object.fromEntries(MUNDOS), cenarios, retornos };
 }
 
+/** o adendo: so o cenario `comedouro6`, na ilha grande, com os dois cerebros; entra no mesmo artefato, na chave `adendo_comedouro6` */
+function medirAdendo(): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const cerebro of CEREBROS) {
+    const vidas = SEMENTES.map(s => vida(s, 24, cerebro, "comedouro6")), chaves = Object.keys(vidas[0]);
+    out[`grande_128x60|${cerebro}|comedouro6`] = { media: Object.fromEntries(chaves.map(k => [k, media(vidas.map(v => v[k]).filter((x): x is number => x !== null))])), vidas };
+  }
+  return out;
+}
+
 describe("a medida da IG5", () => {
+  test.skipIf(process.env.MEDIR_IG5_ADENDO !== "1")("roda o adendo do comedouro a 6 celulas e o acrescenta ao artefato", () => {
+    const g = JSON.parse(readFileSync(ARQUIVO, "utf8")) as Record<string, unknown>;
+    g.adendo_comedouro6 = medirAdendo();
+    writeFileSync(ARQUIVO, JSON.stringify(g, null, 1) + "
+", "utf8");
+  }, 3_600_000);
+
   test.skipIf(process.env.MEDIR_IG5 !== "1")("roda a medida e grava o artefato", () => {
     const g = medir();
     writeFileSync(ARQUIVO, JSON.stringify(g, null, 1) + "\n", "utf8");

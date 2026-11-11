@@ -486,3 +486,20 @@ da velocidade: no "perto" (2 células do pet) o A fica igual nos dois mundos. N�
 
 **Limites:** cinco sementes, sem intervalo de confiança; o corte de 0,10 é prático. O dono da medida não é um jogador de verdade. O
 custo no celular de verdade continua sem medida.
+
+### 12.15 IG-6: as decisões do Matheus e o adendo da medida (2026-11-11)
+
+**Decidido pelo Matheus em 2026-11-11** (pergunta desta sessão, com a recomendação e o custo de errar):
+
+- **A memória do modular:** "Sim, para 128 células (Recomendado)".
+- **O comedouro a 6 células do ninho:** "Sim, junto com a memória (Recomendado)", com a medida da hipótese antes de mudar.
+- **A velocidade e o cheiro:** não mexer (a recomendação; a regra do plano não disparou para o modular).
+
+As duas mudanças são uma versão nova de pet, a fazer numa etapa própria (a IG6), com plano, paridade e a decisão sobre os pets v24 que
+já existem.
+
+**Adendo da medida, escrito antes de rodar** (exploratório, fora do plano da 12.13): a hipótese de que o cérebro A piora no comedouro
+da ilha grande por causa da distância ao ninho. Um cenário a mais, `comedouro6`, só na ilha grande: a ração num ponto a 6 células a
+leste do ninho, no lugar do comedouro (que fica a 8). Com os dois cérebros, as mesmas sementes e o mesmo dono. **A leitura:** a
+hipótese se sustenta se, no A, a fração comida em 240 ticks do `comedouro6` voltar para perto da do mundo de hoje (0,437; a menos de
+0,10) e a do modular não piorar mais de 0,10 contra o comedouro de hoje da ilha grande (0,815).
