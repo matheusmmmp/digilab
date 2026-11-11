@@ -1,0 +1,12 @@
+{
+ "nome": "w30_g005",
+ "pesoPonto": 30,
+ "gama": {
+  "vigor": 0.05,
+  "folego": 0.05,
+  "recuperacao": 0.05,
+  "forca": 0.05,
+  "mira": 0.05,
+  "guarda": 0.05
+ }
+}

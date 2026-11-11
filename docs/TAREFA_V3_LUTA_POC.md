@@ -537,6 +537,137 @@ A `PLANO_V3` (a trilha B), a `TAREFA_V3_PONTE_LUTA`, o `DESIGN_MEDALHAS_ARENAS` 
 - a Fábrica só v21.
 Também `test/tamer.test.ts`, com o descarte 8 e a Fábrica de antes, e `e2e_capturas/luta_poc_lp4.spec.ts`, com as capturas.
 
+## Resultado da LP5-0 (2026-11-10)
+
+Worker: Claude Code (Opus 5.5), worktree `D:\Trab\digilab\v3-luta-poc-lp5`, branch `v3-luta-poc-lp5-0`, a pedido do Gerente de sprites e
+luta. O plano é o `docs/PLANO_EQUILIBRIO_LUTA_POC.md`, APROVADO: as D-LP5-1 a D-LP5-10 foram decididas como recomendadas ("Tá, então faz toda a
+recomendação aí que você deu", o Matheus, 2026-11-10, repassado). Os desvios estão em `docs/registro/2026-11.md`, seção "LUTA_POC, LP5-0".
+Nenhum número do jogo mudou.
+
+**O que entrou:**
+- as faixas `86101…86505` (calibração) e `87101…87505` (conferência) na `FAIXAS_RESERVADAS`, num commit próprio;
+- o H10 e o `pre_run --medicao` reconhecem `scripts/equilibrio_poc/`;
+- a bancada nova `web/app/scripts/equilibrio_poc/`:
+  - o candidato e o `CANDIDATO_V21`, que refaz os números do jogo (`web/app/test/equilibrio_poc_bancada.test.ts`);
+  - o treino típico pelo `TreinoPet.sessao`;
+  - os 10 grupos das metas;
+  - o `medir_tudo`, em até 4 processos;
+  - o `resumo_metas`;
+  - a prova de reprodução, que refaz o `lp4_gazimon.json` campo a campo;
+  - a sonda das formas do Motor.
+
+**O ponto de partida** (a calibração, o candidato v21: 1 427 674 lutas;
+`web/app/scripts/medicoes/equilibrio_poc/lp5_0/calibracao/resumo.json` e `resumo.md`). Passam 5 das 20 metas: P3, P4, P5, D3 e V2.
+
+- **O treino decide tudo.** O pet típico vence o mesmo pet sem treino em 1,00 de cada estágio (T1). Contra as formas do estágio, 2 pontos
+  levam o Rookie de 0,51 a 0,91, e do Champion em diante a curva chega a 1,00 aos 12 pontos (T3). O típico de um estágio vence as formas do
+  estágio seguinte de 0,94 a 1,00, e o Rookie típico vence 0,92 contra os Ultimates (E1). A evolução não pesa contra o treino.
+- **Os stats não pesam igual (T2).** Com 8 pontos num stat só, o fôlego dá 0,50 no Rookie e 0,60 no Ultimate, e a mira dá 0,74 e 0,81. O
+  vigor, a força, a guarda e a recuperação dão de 0,96 a 1,00.
+- **Os líderes (P1, P2).** O Gazimon trava: o Rookie típico vence 0,30. Por espécie, a brasa vence 0,55, o limo 0,47, a ferrugem 0,01 e o
+  cirro 0,00. A Cidadela (o Myotismon, a série de 3) dá 0,72, com a pior espécie a 0,48. Os outros quatro líderes vencem de 0,97 a 1,00
+  com o típico e perdem sem treino.
+- **Os desafiantes, o sparring e a vida passam (P3, P4, P5).** O dono simulado que treina chega ao Mega nas 100 vidas.
+- **As formas (V1, A1).** Sem treino, uma forma contra as outras do estágio vai de 0,10 a 0,77 no Rookie e de 0,001 a 0,97 nos outros
+  estágios. As que atiram vencem as de perto de 0,26 a 0,44.
+- **A duração (D1).** A mediana vai de 11,1 s a 16,2 s, abaixo dos 15 s em três estágios. O p90 fica entre 19,8 e 47,8 s, e 7 formas têm
+  mediana abaixo de 8 s.
+- **Os empates (D2).** Passam de 2 % em 4 Rookies, também fora do espelho (até 5,9 %).
+- **Os torneios.**
+  - A Liga sai em todas as tentativas (G1). A Torre tem o recorde mediano de 35 (G2).
+  - A Fábrica, de Mega canônico contra Mega canônico, vence uma série em 0,018 (G3).
+  - O Salão vence de 0,97 a 1,00 (G4).
+- **O espelho (S1) reprova pelos empates, não pelo lado** (D-LP5-0-6). Sem os empates, o lado A fica em 0,48 a 0,51. Pela regra do plano,
+  a rodada para aqui, e o achado vai ao Gerente antes de qualquer ajuste.
+
+**As hipóteses da seção 1 do plano:**
+- o treino que compõe: confirmada, a curva satura em poucos pontos;
+- a mira que pesa pouco: confirmada em parte, porque o fôlego pesa menos ainda;
+- o Gazimon que ficou forte sem o `eps`: o único líder que trava.
+
+A calibração (LP5-1) espera a leitura do S1 pelo Matheus.
+
+## Resultado da LP5-1 (a rodada 1 do mapeamento, parada pelo S1)
+
+**A régua do S1** passou a contar só as lutas com vencedor (a D-LP5-11, decidida pelo Matheus em 2026-11-10). **A rodada 1** foi uma
+grade em quatro partes (r1a a r1d, 49 pontos, `web/app/scripts/medicoes/equilibrio_poc/lp5_1/r1*/tabela.md`) e a medida inteira do
+candidato escolhido, o `lp5_1_r1` (1 364 118 lutas em 252 s, 4 processos; `lp5_1/calibracao/resumo.md`). Os desvios são o D-LP5-1-1 a 6
+(`docs/registro/2026-11.md`).
+
+**Passam 4 das 20 metas: T3, E1, D1 e D3** (na LP5-0 passavam P3, P4, P5, D3 e V2).
+
+- **O treino ganhou teto (T1, T3).** O expoente baixo com o ponto mais pesado satura a curva. O típico contra o mesmo pet sem treino fica
+  em 0,77 no Rookie, 0,89 no Champion, 0,93 no Ultimate e 0,94 no Mega (o T1 pede de 0,80 a 0,97). No teto, contra as formas do estágio,
+  fica de 0,72 a 0,86, e o maior degrau de 4 pontos é 0,17.
+- **A evolução pesa mais que o treino (E1).** O típico contra o estágio seguinte fica de 0,13 a 0,16 (o teto, de 0,12 a 0,17), e dois
+  estágios acima fica em 0.
+- **A duração (D1):** a mediana fica de 16,4 a 17,3 s em todos os estágios, com o p90 abaixo de 20 s.
+- **O que não fecha com o mapeamento** (o D-LP5-1-5):
+  - o fôlego não pesa (T2): de 0,47 a 0,49;
+  - a variedade vem da tabela das formas (V1): a amplitude fica de 0,41 a 0,43 do Champion ao Mega;
+  - a espécie pesa (V2): a amplitude entre as espécies fica de 0,09 a 0,25, e a brasa é a pior no Rookie, no Champion e no Mega;
+  - o sparring trava (P4): de 0,69 a 0,87 de média. Por isso só 15 de 100 vidas chegam ao Mega (P5), e 72 ficam no Champion;
+  - os dois últimos passaram na LP5-0 só porque o pet típico vencia tudo.
+- **De longe x de perto (A1):** o movimento base de 60 aproxima a soma de 0,50 (0,48 a 0,58; o A1 pede de 0,45 a 0,55).
+- **Os líderes e os torneios** ficam para a LP5-2 e a LP5-3: os NPCs e os rivais dos torneios ainda têm os números da v21.
+
+**A rodada para pelo S1** (D-LP5-1-4). Na Praia, o lado A fica de 0,42 a 0,46. Com o v21 (a LP5-0 relida pela régua nova) isso vale em
+todos os estágios, e com o `lp5_1_r1` do Champion ao Mega. É o núcleo, não o candidato. A LP5-2 espera a decisão do Matheus sobre o S1 e sobre as metas que o
+mapeamento não fecha.
+
+### A distância do tiro (D-LP5-12)
+
+O núcleo ganhou o `Tiro` desligado. A luta de hoje sai igual: o teste confere, e a fidelidade da LP1 dá 3276 de 3276. O candidato da
+bancada leva o tiro, e a meta nova é o A2 (PROPOSTA, SEM FONTE). Os desvios são o D-LP5-1-7 a 10.
+
+- **O ponto de partida do A2** (o v21, as 5 bases): contra quem luta de perto, a mediana da distância no tiro é 48 a 52 px, e de 26 % a
+  46 % dos tiros saem a 48 px ou menos. Contra quem atira, a mediana é 132 px. O A2 pede pelo menos 90 px e no máximo 15 %.
+- **As grades:** o recuo na preparação do tiro é a alavanca que move. A 2 vezes o movimento, o A2 passa (100 a 108 px, 6 % a 8 %).
+  Mas as que atiram passam a vencer as de perto de 0,67 a 0,92 (o A1), e o S1 na Praia não muda.
+- **A ordem das fases não muda:** o tiro é parte do mapeamento (LP5-1), antes dos NPCs. Mas o ponto de partida ganha o A2, e o
+  `lp5_1_r1` precisa ser medido de novo com o tiro, nas rodadas 2 e 3 da LP5-1.
+
+### As rodadas 2 e 3 e o fim da LP5-1
+
+O Matheus aprovou as 4 decisões ("Aprovo as 4"; a D-LP5-13). **O candidato da LP5-1 é o `lp5_1_r2`:**
+- o mapeamento da rodada 1;
+- o tiro: distância mínima 110 px, recuo na preparação a 2 vezes o movimento;
+- o dano do projétil a 0,7.
+
+A medida inteira está em `web/app/scripts/medicoes/equilibrio_poc/lp5_1_r2/calibracao/resumo.md` (1 412 931 lutas). Os desvios são o
+D-LP5-1-11 a 16.
+
+- **Passam 6 das 21 metas: T1, T3, E1, D1, D3 e A2.**
+  - **O treino:** o T1 dá 0,81, 0,86, 0,93 e 0,94, do Rookie ao Mega.
+  - **A evolução (E1):** o típico contra o estágio seguinte dá de 0,15 a 0,17.
+  - **A duração (D1):** a mediana fica de 21 a 24 s.
+  - **O tiro (A2):** a mediana fica de 100 a 108 px, com 7 % a 9 % dos tiros a 48 px ou menos.
+- **O que fica para o Matheus** (o D-LP5-1-16):
+  - o V2: a amplitude fica de 0,07 a 0,22, e a rodada 3 não a move;
+  - o A1: a soma fica de 0,45 a 0,56, mas os mapas vão de 0,11 a 0,77, pelas regras dos mapas;
+  - o D2: os empates ficam em 3,6 %;
+  - o S1: o Ringue do Rookie fica em 0,449.
+- **A rodada 3** (16 pontos) não mudou nenhum número.
+
+A LP5-1 fecha pela regra das 3 rodadas. A LP5-2 (os NPCs, o sparring e a vida) parte do `lp5_1_r2`. Nele, o P4 dá de 0,69 a 0,86 de
+média, e só 10 de 100 vidas chegam ao Mega.
+
+### A esquiva ligada (D-LP5-16)
+
+O Matheus: "pode ligar esquiva nova e fazer o merge". O candidato `lp5_1_esq` é o `lp5_1_r2` com a esquiva da D-LP5-14 ligada, no
+ponto `m6_f6_p0` da grade `lp5_1/r4e`, o único da grade com 6 metas. A leitura do golpe de perto fica desligada: ligada (0,35), o E1
+reprova e o A1 pende para quem atira. A medição inteira (`lp5_1_esq/calibracao`, commit `dea4e71c`, 1 412 957 lutas) dá 8 de 21 metas,
+contra 6 do `lp5_1_r2`:
+
+- **passam a mais o P4 e o S1.** O P4: a fração dos pets a 0,8 ou mais vai de 0,45/0,46 a 0,85/0,98 no Champion e no Ultimate. O S1:
+  o Ringue do Rookie vai de 0,449 a 0,451, na beira da faixa;
+- **a mira ganha peso:** no T2, de 0,53 a 0,62 no Rookie e de 0,53 a 0,60 no Ultimate. O fôlego segue morto (0,48 e 0,49);
+- **o P5 sobe, mas reprova:** 19 de 100 vidas chegam ao Mega, contra 10;
+- **nenhuma meta que passava cai:** o T1 dá 0,83/0,90/0,94/0,96, o E1 0,17, a mediana do D1 de 21,6 a 24,7 s;
+- **o que piora um pouco:** o V2 do Rookie (de 0,21 a 0,25, aceito como reprovado na D-LP5-15) e o A1 do Ultimate (de 0,56 a 0,58).
+
+No jogo, a luta segue no v21: a esquiva só entra com o v22, na LP5-5. A LP5-2 parte do `lp5_1_esq`.
+
 ## Resultado da LP3c (2026-11-10)
 
 Worker: Claude Code (Opus 5.5), worktree e branch `v3-luta-poc-lp3c`, a pedido do Gerente de sprites e luta. O pedido seguiu a revisão dos

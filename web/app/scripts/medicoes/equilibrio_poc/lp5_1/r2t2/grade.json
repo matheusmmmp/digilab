@@ -1,0 +1,189 @@
+{
+ "fase": "lp5_1",
+ "bases": 1,
+ "grupos": [
+  "tiro",
+  "formas_crianca",
+  "formas_adolescente",
+  "formas_adulto",
+  "formas_mega"
+ ],
+ "tam": {
+  "lutasFormas": 5,
+  "lutasTiro": 1
+ },
+ "candidatos": [
+  {
+   "nome": "r1_prep12",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.02,
+    "recuperacao": 0.02,
+    "guarda": 0.06,
+    "forca": 0.02,
+    "mira": 0.14,
+    "folego": 0.14
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   },
+   "tiro": {
+    "distMin": 110,
+    "esperaMax": 1500,
+    "recuo": 1.5,
+    "recuaNaPrep": 1.2,
+    "recuaAbaixo": 0.75
+   }
+  },
+  {
+   "nome": "r1_prep20",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.02,
+    "recuperacao": 0.02,
+    "guarda": 0.06,
+    "forca": 0.02,
+    "mira": 0.14,
+    "folego": 0.14
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   },
+   "tiro": {
+    "distMin": 110,
+    "esperaMax": 1500,
+    "recuo": 1.5,
+    "recuaNaPrep": 2.0,
+    "recuaAbaixo": 0.75
+   }
+  },
+  {
+   "nome": "r1_prep20_rc2",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.02,
+    "recuperacao": 0.02,
+    "guarda": 0.06,
+    "forca": 0.02,
+    "mira": 0.14,
+    "folego": 0.14
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   },
+   "tiro": {
+    "distMin": 120,
+    "esperaMax": 2000,
+    "recuo": 2.0,
+    "recuaNaPrep": 2.0,
+    "recuaAbaixo": 0.8
+   }
+  },
+  {
+   "nome": "r1_prep30_rc2",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.02,
+    "recuperacao": 0.02,
+    "guarda": 0.06,
+    "forca": 0.02,
+    "mira": 0.14,
+    "folego": 0.14
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   },
+   "tiro": {
+    "distMin": 130,
+    "esperaMax": 3000,
+    "recuo": 2.0,
+    "recuaNaPrep": 3.0,
+    "recuaAbaixo": 0.9
+   }
+  },
+  {
+   "nome": "r1_prep20_sod",
+   "pesoPonto": 15,
+   "gama": {
+    "vigor": 0.02,
+    "recuperacao": 0.02,
+    "guarda": 0.06,
+    "forca": 0.02,
+    "mira": 0.14,
+    "folego": 0.14
+   },
+   "mapa": {
+    "hp": 1300,
+    "vel": 60
+   },
+   "multVida": {
+    "crianca": 0.6,
+    "adolescente": 0.9,
+    "adulto": 1.35,
+    "mega": 2.025
+   },
+   "multAtk": {
+    "crianca": 1,
+    "adolescente": 1.5,
+    "adulto": 2.25,
+    "mega": 3.375
+   },
+   "tiro": {
+    "recuaNaPrep": 2.0,
+    "recuaAbaixo": 0.75
+   }
+  }
+ ]
+}
