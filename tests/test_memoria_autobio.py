@@ -702,6 +702,8 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave():
                       "experiments/run_v3_individualidade_i5.py",
                       # o orquestrador do I7 da INDIVIDUALIDADE: importa o da C4 so pelas fabricas e pelo DonoComLugar, para viver os ramos; nao le a chave
                       "experiments/run_v3_individualidade_i7.py",
+                      # o orquestrador do adendo 2 do I7: importa o da C4 pela vida de base (`viver`), como o do I7; nao le a chave
+                      "experiments/run_v3_individualidade_i7_ad2.py",
                       # a medicao de desempenho (docs/DESEMPENHO_PERFIL_2026-11.md): importa o orquestrador da C4 pela vida e pela analise; nao le a chave
                       "experiments/medir_desempenho_perfil.py",
                       # a auditoria do PET_VIVO: so cita a pasta da run da C4 (memoria_autobio/run) para reler os logs; nao le a chave
