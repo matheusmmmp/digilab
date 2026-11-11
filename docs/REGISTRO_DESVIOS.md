@@ -656,6 +656,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — LUTA_POC, LP5-3: o treino dos rivais dos torneios (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-2`)](registro/2026-11.md)
 - [2026-11-11 — LUTA_POC, LP5-3: o fator dos rivais dos torneios (worker, Claude Code, Opus 5.5, branch `v3-luta-poc-lp5-3`)](registro/2026-11.md)
 - [2026-11-11 — ILHA_AGUA, IA4: a ilha com água junto com os objetos em cartoon e a cooperação (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-agua-ia4`)](registro/2026-11.md)
+- [2026-11-11 — MAPA_DIGITAL: o portal no céu, no lugar da grade pintada (Gerente de MAPA_DIGITAL, Claude Code, Fable 5.2, branch `v3-ceu-linhas-vivas`)](registro/2026-11.md)
 - [2026-11-11 — COOPERACAO, CO3: os atos e a pontuação no motor (Claude Code, Opus 5.5, branch `v3-cooperacao-co3`)](registro/2026-11.md)
 - [2026-11-11 — INDIVIDUALIDADE, I7d: a run do adendo 2 do I7 (worker, Claude Code, Opus 5.5, branch `v3-individualidade-i7d`)](registro/2026-11.md)
 - [2026-11-11 — ILHA_AGUA: o plano da ilha grande, a v23 (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-grande-plano`)](registro/2026-11.md)

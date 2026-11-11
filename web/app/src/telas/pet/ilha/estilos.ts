@@ -13,7 +13,7 @@ import { PALETA_DIGITAL, PALETA_ILHA, carregarVariante, doisTons, flores, montar
   type PaletaTerreno } from "./cena.ts";
 import { arquivosCassette, carregadorCassette, terrenoCassette } from "./cassette.ts";
 import { CEU_DIGITAL, CEU_SEM_PINTURA, CONTORNO_DIGITAL, DOBRA_K, NUVENS_PINTADAS } from "./constantes.ts";
-import { ceuComGrade, ceuEmFaixas, fios, nuvensDaPintura, nuvensDesenhadas, particulas, separarNuvens, suavizarPintura } from "./digital.ts";
+import { ceuEmFaixas, fios, nuvensDaPintura, nuvensDesenhadas, particulas, portalDoCeu, separarNuvens, suavizarPintura } from "./digital.ts";
 import { enfeites } from "./enfeites.ts";
 import { lugares } from "./lugaresCena.ts";
 import { PALETA_FLORESTA, arquivosFloresta, carregadorFloresta } from "./floresta.ts";
@@ -75,20 +75,20 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
       /* o estilo digital (docs/TAREFA_V3_MAPA_DIGITAL.md, D1 e D2): a mesma ilha e os mesmos objetos, no fundo de anime: o ceu pintado
          (public/mapa_digital/ceu.jpg), a paleta chapada com as flores, o barranco de pedra, os kits recoloridos e o toon de dois tons
          em tudo, os itens inclusive (usarDoisTons) */
-      /* o ceu (CEU_SEM_PINTURA, 2026-11-08): em pixel (o padrao), suave ou o pintado de antes, com a grade digital por cima (D3, digital.ts) */
+      /* o ceu (CEU_SEM_PINTURA, 2026-11-08): em pixel, suave ou o pintado (o padrao); o toque digital do ceu e o portal, do mundo (digital.ts, portalDoCeu) */
       const modo = modoDoCeu(), S = CEU_SEM_PINTURA, ceuDia = new THREE.Texture();
       /* no pintado, as nuvens saem da imagem e vao para o mundo (NUVENS_PINTADAS): o fundo fica so o degrade, e uma camada de nuvens so */
       const pintura = modo !== "pintado" ? null : new Promise<{ ceu: HTMLCanvasElement; nuvens: HTMLCanvasElement }>((ok, falha) => {
         new THREE.TextureLoader().load(new URL("mapa_digital/ceu.jpg", base).href, t => {
           const partes = separarNuvens(suavizarPintura(t.image, S.pintura.saturacao, S.pintura.clarear));
-          ceuDia.image = ceuComGrade(partes.ceu); ceuDia.needsUpdate = true;
+          ceuDia.image = partes.ceu; ceuDia.needsUpdate = true;
           ok(partes);
         }, undefined, falha);
       });
       if (pintura) {
       } else {
         const [w, h] = S.tela;
-        ceuDia.image = ceuComGrade(ceuEmFaixas(S.cores, modo === "pixel" ? S.faixas : h, w, h));
+        ceuDia.image = ceuEmFaixas(S.cores, modo === "pixel" ? S.faixas : h, w, h);
         if (modo === "pixel") { ceuDia.magFilter = THREE.NearestFilter; ceuDia.minFilter = THREE.NearestFilter; ceuDia.generateMipmaps = false; }
         ceuDia.needsUpdate = true;
       }
@@ -117,11 +117,11 @@ function estiloSemTons(mapa: Mapa, base: string): Estilo {
             carregarVariante(gltf, new URL("kits3d_digital/" + arq, base).href, modelo);
           const [o, e, g] = await Promise.all([objetos(i, base, kits), enfeites(i, base), lugares(i, base)]);
           /* o toque digital (D3): as particulas e os fios dos postes; os lugares (lugaresCena.ts). A lata gigante (D4) deixou o horizonte: e um marco da grade (enfeites.ts) */
-          const p = particulas(i);
+          const p = particulas(i), ceu = portalDoCeu(i);
           o.grupo.add(e.grupo, fios(i), g.grupo);
           doisTons(o.grupo);
-          o.grupo.add(p.malha);
-          return { ...o, noite: n => { e.noite(n); p.noite(n); }, lugares: g.caixas, lugaresRaiz: g.raizes, abrirLugar: g.abrir };
+          o.grupo.add(p.malha, ceu.grupo);
+          return { ...o, noite: n => { e.noite(n); p.noite(n); ceu.noite(n); }, lugares: g.caixas, lugaresRaiz: g.raizes, abrirLugar: g.abrir };
         },
       };
     }
