@@ -1,0 +1,18 @@
+{
+ "nome": "B4_bola2048",
+ "bloco": "B4",
+ "tenta": "w_bola_do_dono = 2 048",
+ "opcoes": {
+  "ajuste": {
+   "cerebro": {
+    "guarda_fome_brincar": false,
+    "comer_bebe": false,
+    "w_comer_bebe": 512
+   },
+   "lambda_acordar": null,
+   "urgencia_lambda": null,
+   "vies_brincar": null,
+   "w_bola_do_dono": 2048
+  }
+ }
+}

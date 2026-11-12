@@ -1,0 +1,18 @@
+{
+ "nome": "A_bebe_w1024",
+ "bloco": "A",
+ "tenta": "comer_bebe, w_comer_bebe = 1024",
+ "opcoes": {
+  "ajuste": {
+   "cerebro": {
+    "guarda_fome_brincar": false,
+    "comer_bebe": true,
+    "w_comer_bebe": 1024
+   },
+   "lambda_acordar": null,
+   "urgencia_lambda": null,
+   "vies_brincar": null,
+   "w_bola_do_dono": null
+  }
+ }
+}
