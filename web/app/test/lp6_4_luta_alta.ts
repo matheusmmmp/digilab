@@ -14,9 +14,9 @@ const PRODUTO = { chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorp
 const sha = (x: string): string => createHash("sha256").update(x).digest("hex");
 
 /** o pet que luta e o jeito de agir nele e de andar o tempo: o Motor sozinho ou o primeiro do grupo */
-interface Vida { m: Motor; agir<T>(f: (m: Motor) => T): T; avancar(n: number): void; log(): unknown; assinatura(): string; reproduzir(): string }
+export interface Vida { m: Motor; agir<T>(f: (m: Motor) => T): T; avancar(n: number): void; log(): unknown; assinatura(): string; reproduzir(): string }
 
-function nascer(semente: number, versao: number): Vida {
+export function nascerAlta(semente: number, versao: number): Vida {
   if (ehDoGrupo(versao)) {
     const g = new GrupoDoJogo(semente, versao), a = g.ids[0]!;
     for (const i of g.ids) g.agir(i, m => { m.ligarProduto(PRODUTO); m.trocarCerebro("modular"); m.ligarPonteLuta(true); });
@@ -32,7 +32,7 @@ function nascer(semente: number, versao: number): Vida {
 export interface VidaAlta { semente: number; estagio: string; eventos: number; lutas: number; ult: number; mega: number; log_sha: string; assinatura: string; resultados: string }
 
 export function viverAlta(semente: number, versao: number, dias = DIAS_ALTA): { v: Vida; res: string[]; ult: number; mega: number } {
-  const v = nascer(semente, versao), m = v.m, res: string[] = [];
+  const v = nascerAlta(semente, versao), m = v.m, res: string[] = [];
   let ult = 0, mega = 0;
   v.agir(x => x.liberar(CMD.mega));
   for (let p = 0; p < Math.round(dias * TPD / 30) && !m.morte; p++) {

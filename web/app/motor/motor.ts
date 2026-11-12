@@ -8,7 +8,7 @@
    v21 nao muda (test/luta_poc_pet.test.ts). */
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, CUIDADO_NA_HORA, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
-  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehDoGrupo, ehLutaPoc, nasceNaAgua, VERSAO_V26,
+  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehDoGrupo, ehLutaPoc, nasceNaAgua, VERSAO_V26, VERSAO_V28,
   nasceNaGrande, nasceComMemoriaLonga, nasceComSonoSegura, CMU_GRANDE, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, VERSOES_COM_SACUDIR,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
@@ -102,6 +102,8 @@ export interface ResultadoLutaPoc {
   /** o tiro e a esquiva que a luta usou (a v23 em diante, ou a bancada); ausentes na luta da POC de sempre (v21 e v22). O palco refaz a luta
       com eles (src/lutaPocTela.ts, lutasDoResultado) */
   tiro?: TiroLutaPoc; esquiva?: EsquivaLutaPoc;
+  /** o golpe de apoio e a arena por estagio que a luta usou (a v28, ou a bancada; LP6-4); ausentes sem eles. O palco os repassa tambem */
+  apoio?: ApoioLutaPoc; arenaPorEstagio?: ArenaLutaPoc;
 }
 /** pets v21 (LP2b; LP-5 revista): o Palacio juntou-se a Torre de Batalha, porque na luta nova todo pet decide sozinho */
 export const PALACIO_NA_TORRE = "o Palácio juntou-se à Torre de Batalha na luta nova: lute na Torre";
@@ -177,7 +179,7 @@ export class Motor {
   /** a esquiva pela perspicacia e pela velocidade (D-LP5-14): como o tiroLutaPoc, so a bancada a poe; null = a luta de sempre */
   esquivaLutaPoc: EsquivaLutaPoc | null = null;
   /** as chaves da LP6-1 (o golpe de apoio, a elipse pelo estagio e a tabela das formas com outro ritmo do apoio): como o tiroLutaPoc, so a
-      bancada as poe (LP6-3); null = a luta de sempre. Nenhuma versao de pet as liga ate a LP6-4 */
+      bancada as poe (LP6-3); null = a da tabela da versao (a v28 tem o apoio e a arena, LUTA_V28; LP6-4) */
   apoioLutaPoc: ApoioLutaPoc | null = null;
   arenaLutaPoc: ArenaLutaPoc | null = null;
   formasLutaPoc: TabelaFormasPoc | null = null;
@@ -259,7 +261,7 @@ export class Motor {
     this.noGrupo = opcoes.parteDoMundo !== undefined;
     /* a v26 so existe no grupo, e o grupo so tem a v26 (CO4c) */
     if (this.noGrupo !== ehDoGrupo(versao))
-      throw new Error(this.noGrupo ? `o pet do grupo e da v${VERSAO_V26}, nao da v${versao}` : `o pet v${VERSAO_V26} so nasce no grupo, com o irmao`);
+      throw new Error(this.noGrupo ? `o pet do grupo e da v${VERSAO_V26} ou da v${VERSAO_V28}, nao da v${versao}` : `o pet v${versao} so nasce no grupo, com o irmao`);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
     this.temp = temperamentoDe(semente);
     /* o Bandit nao decide nem aprende para o pet; fica so a memoria por espacos dele, como o lobo de memoria e emocao (D-W7 do #201): a
@@ -664,6 +666,8 @@ export class Motor {
     const pet = this.statsLutaPoc();
     /* o tiro e a esquiva: os da bancada, se ela os pos; senao, os da tabela da versao (a v21 e a v22, nenhum: a luta da POC) */
     const T = tabelaLuta(this.versao), tiro = this.tiroLutaPoc ?? T.tiro, esquiva = this.esquivaLutaPoc ?? esquivaDaTabela(T);
+    /* o golpe de apoio e a arena por estagio: os da bancada, se ela os pos; senao, os da tabela da versao (so a v28; LP6-4) */
+    const apoio = this.apoioLutaPoc ?? T.apoio ?? null, arenaPorEstagio = this.arenaLutaPoc ?? T.arenaPorEstagio ?? null;
     /* a forca do pet para o oraculo (MITOLOGIA E0): a soma dos 6 stats pelo peso de sempre, a mesma em todas as versoes */
     const base = statsDoPet(this.forma, this.carater(), this.pontosDeLuta()), forcaBase = STATS.reduce((t, k) => t + base[k], 0);
     const serie: ResultadoLutaPoc["serie"] = [];
@@ -676,7 +680,7 @@ export class Motor {
       n = k + 1;
       const s = sementeDaSerie(semente, k);
       const r = lutarArena({ cena: rv.mapa, semente: s, a: { forma, stats: pet, ...(k ? { vida0 } : {}) }, b: { forma: rv.forma, stats: rv.stats }, ...(tiro ? { tiro } : {}), ...(esquiva ? { esquiva } : {}),
-        ...(this.apoioLutaPoc ? { apoio: this.apoioLutaPoc } : {}), ...(this.arenaLutaPoc ? { arenaPorEstagio: this.arenaLutaPoc } : {}) }, sorteiosPorFluxo(s), this.formasLutaPoc ?? undefined);
+        ...(apoio ? { apoio } : {}), ...(arenaPorEstagio ? { arenaPorEstagio } : {}) }, sorteiosPorFluxo(s), this.formasLutaPoc ?? undefined);
       const pontosA = r.vencedor === "a" ? 1 : r.vencedor === "b" ? 0 : 0.5, res = pontosA === 1 ? 1 : pontosA === 0 ? -1 : 0;
       serie.push({ ...r, vida0, pontosA, contra: rv.forma, mapa: rv.mapa, rivalStats: rv.stats });
       const chave = rivalDaConfianca(rival, semente, k, est);
@@ -713,7 +717,7 @@ export class Motor {
     this.vida5.lutas.push({ tick: this.e.tick, rival, lesao, resultado: ult.pontosA === 1 ? "vitoria" : ult.pontosA === 0 ? "derrota" : "empate" });
     this.forcaLutas.push({ tick: this.e.tick, rival, forcaPet: forcaBase, resultado: this.vida5.lutas[this.vida5.lutas.length - 1].resultado });
     return { rival, mapa: torneio ? null : mapa as IdCena, semente, arena: !npc && !torneio, torneio, pet, rivalStats: serie[0].rivalStats, forma, serie, venceu, lesao,
-      ...(tiro ? { tiro } : {}), ...(esquiva ? { esquiva } : {}) };
+      ...(tiro ? { tiro } : {}), ...(esquiva ? { esquiva } : {}), ...(apoio ? { apoio } : {}), ...(arenaPorEstagio ? { arenaPorEstagio } : {}) };
   }
   /* ---------------------------------------------------------------- itens do Tamer (pets v6; motor/itens.ts) */
   /** chips que este pet pode ter equipados, pelas medalhas que ele conhece (0 nos v1-v5) */

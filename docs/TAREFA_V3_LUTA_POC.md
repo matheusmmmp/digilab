@@ -916,3 +916,20 @@ PR #834, em rascunho. O plano e a régua estão na seção 8 do `docs/PLANO_LP6_
   - o A1 do Rookie e do Champion por mapa (o Castelo e o Ringue) e o Ringue de todos os estágios, com a investigação do núcleo;
   - o V1, o V2, o T2, o D2, o G1 a G3, o P2, o P3 e o P5, como na LP5;
   - as capturas do palco com a elipse 1,2/1,4, antes da LP6-4.
+
+## Resultado da LP6-4 (2026-11-11: a luta da LP6 no jogo, a v28)
+
+- **As capturas** do palco com a elipse 1,2/1,4 (32 lutas, desktop 1920×950 e celular 390×844, em `D:\Trab\digilab\capturas_lp6_4`, fora
+  do git) foram aprovadas pelo Matheus: "Aprovo, segue" (2026-11-11, repassado pelo Gerente).
+- **A versão é a v28: a v26 (o grupo de dois) com a luta da LP6.**
+  - A tabela `LUTA_V28` (`web/app/motor/luta_poc.ts`) é a `LUTA_V23` com o apoio só no Ultimate e no Mega, sem o recuo (`APOIO_LP6_3`),
+    e a elipse 1,2 no Ultimate e 1,4 no Mega (`ARENA_POR_ESTAGIO_LP6_3`). São os números do `lp6_3_u120`, PROPOSTOS, SEM FONTE.
+  - O ovo do brasão choca o grupo v28 (`VERSAO_GRUPO`, `src/jornada.ts`). O ovo de um pet só segue na v27 (o sono que segura, #855).
+  - O Gerente pediu "a v27"; a v27 entrou na `main` antes, com o sono que segura, e a v28 era o número livre (D-LP6-4-1).
+- **Os pets vivos não mudam:** os v21 a v27 seguem com a luta deles. Os gabaritos foram gravados num commit próprio antes da mudança
+  (`test/lp6_4_gabaritos.test.ts`): as vidas e os torneios da LP2 na v24, v25 e v27, e a vida que chega ao Ultimate e ao Mega e luta neles
+  (`test/lp6_4_luta_alta.ts`) na v24 a v27, a v26 pelo primeiro pet do grupo.
+- **Os testes da v28** (`test/lp6_4_v28.test.ts`): a tabela; a vida do grupo v28 igual à do v26 até a primeira luta no Ultimate e
+  diferente depois; o palco refaz as lutas do Mega com o apoio e a arena da tabela (o `ResultadoLutaPoc` os guarda); o gabarito da vida
+  alta e o replay.
+- **Fica de fora:** o sono que segura no grupo (era a v28 do D-SONO-4) passa a pedir uma versão depois desta, a v29, que junta as duas.

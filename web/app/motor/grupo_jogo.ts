@@ -14,7 +14,7 @@
 
    Os pets sao da v26 (a v25 no grupo; CO4c; motor/constantes.ts): o pet v26 so existe no grupo. O `avancar` de qualquer um dos dois anda o grupo inteiro,
    para o relogio do jogo e as telas, que leem o pet em foco, seguirem como hoje (src/jogo.ts). */
-import { CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA, TICK_INICIAL, VERSAO_V26, ehDoGrupo, nasceNaAgua, nasceNaGrande, type ConfigMundo } from "./constantes.ts";
+import { CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA, TICK_INICIAL, VERSAO_V26, VERSAO_V28, ehDoGrupo, nasceNaAgua, nasceNaGrande, type ConfigMundo } from "./constantes.ts";
 import { CONFIG_GRUPO_LIGADA, Grupo, ROTULO_SEGUNDO_PET } from "./grupo.ts";
 import { CONFIG_COOPERACAO_LIGADA } from "./cooperacao.ts";
 import { Motor } from "./motor.ts";
@@ -53,7 +53,7 @@ export class GrupoDoJogo {
   /** `medir`: a medida da cooperacao (CO3), ligada no jogo; desligada so no teste do G-SEM-DECISAO (ela nao muda nada) */
   constructor(semente: number, versao: number, medir = true) {
     if (!Number.isInteger(semente) || semente < 0 || semente > 0xffffffff) throw new Error(`semente do grupo fora dos 32 bits: ${semente}`);
-    if (!ehDoGrupo(versao)) throw new Error(`o grupo do jogo e de pets v${VERSAO_V26}, nao v${versao}`);
+    if (!ehDoGrupo(versao)) throw new Error(`o grupo do jogo e de pets v${VERSAO_V26} ou v${VERSAO_V28}, nao v${versao}`);
     this.semente = semente;
     this.versao = versao;
     this.grupo = new Grupo(mundoDaVersao(versao), semente, CONFIG_GRUPO_LIGADA,

@@ -6,7 +6,7 @@
      save, e a mudanca grava o grupo;
    - a chave DOIS_OVOS_LIGADO ligou na CO4d; o ovo de um pet so segue v25, e o pet v25 salvo abre igual (o G-HOJE). */
 import { describe, expect, test } from "vitest";
-import { DOIS_OVOS_LIGADO, ESPECIES, GrupoDoJogo, TPD, VERSAO_PET, VERSAO_V26, sementeDoSegundoJogo } from "../motor/index.ts";
+import { DOIS_OVOS_LIGADO, ESPECIES, GrupoDoJogo, TPD, VERSAO_GRUPO, VERSAO_PET, VERSAO_V26, VERSAO_V28, sementeDoSegundoJogo } from "../motor/index.ts";
 import { CHAVE, lerSave, textoSave, textoSaveGrupo, type Armazenamento } from "../src/save.ts";
 import { focar, iniciarJogo, jogoAtual, mudarMotor, trocarGrupo } from "../src/jogo.ts";
 import { chocarDoisOvos, especieDaSemente, sementeDoBrasao } from "../src/jornada.ts";
@@ -21,7 +21,8 @@ const SEMENTE = (() => { for (let s = 1; ; s++) if (especieDaSemente(s) === ESP)
 describe("os dois ovos", () => {
   test("o primeiro e do brasao, o segundo e surpresa, e os dois nascem com o produto", () => {
     const g = chocarDoisOvos(ESP, "rapida", SEMENTE);
-    expect(g.versao).toBe(VERSAO_V26);
+    expect(g.versao).toBe(VERSAO_V28);   // desde a LP6-4, a v26 com a luta da LP6
+    expect(VERSAO_GRUPO).toBe(VERSAO_V28);
     expect(g.motor("A").especie).toBe(ESP);
     expect(g.motor("B").semente).toBe(sementeDoSegundoJogo(SEMENTE));
     expect(g.motor("B").especie).toBe(especieDaSemente(g.motor("B").semente));
@@ -46,7 +47,17 @@ describe("o save do grupo", () => {
     if (l.tipo !== "ok") throw new Error(JSON.stringify(l));
     expect(l.grupo!.assinatura()).toBe(g.assinatura());
     expect(l.motor).toBe(l.grupo!.motor("B"));
-    expect(JSON.parse(a.dados[CHAVE])).toMatchObject({ semente: SEMENTE, versao: VERSAO_V26, grupo: true, foco: "B" });
+    expect(JSON.parse(a.dados[CHAVE])).toMatchObject({ semente: SEMENTE, versao: VERSAO_V28, grupo: true, foco: "B" });
+  });
+
+  test("o grupo v26 de antes da LP6-4 segue abrindo, como v26 (os pets vivos ficam com os numeros deles)", () => {
+    const v = new GrupoDoJogo(SEMENTE, VERSAO_V26);
+    for (const i of v.ids) v.agir(i, m => m.ligarProduto({ chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true }));
+    for (let k = 0; k < 8; k++) v.avancar(15);
+    const l = lerSave(armaz({ [CHAVE]: textoSaveGrupo(v, "A") }));
+    if (l.tipo !== "ok") throw new Error(JSON.stringify(l));
+    expect(l.grupo!.versao).toBe(VERSAO_V26);
+    expect(l.grupo!.assinatura()).toBe(v.assinatura());
   });
 
   test("o save malformado abre como erro visivel", () => {

@@ -64,13 +64,14 @@ export const ladoDesenho = (k: string): LadoDesenhoPoc => {
 };
 
 /** as lutas de um resultado do motor (uma, ou a serie: a Cidadela, a Liga, a Torre), com a mesma entrada que o motor usou (Motor._lutarPoc),
-    o tiro e a esquiva inclusive (os da v23; sem eles o palco refazia outra luta e o fim nao batia) */
+    o tiro e a esquiva inclusive (os da v23; sem eles o palco refazia outra luta e o fim nao batia), e o apoio e a arena por estagio (os da v28) */
 export function lutasDoResultado(r: ResultadoLutaPoc): LutaNaTela[] {
   /* a serie da Cidadela: as lutas que ela tem (as jogadas param na primeira que nao for vitoria) */
   const nSerie = NPC[r.rival] ? arenaDaLuta(r.rival, VERSAO_V21)?.lutas ?? 1 : 1;
   return r.serie.map((s, k) => ({
     entrada: { cena: s.mapa, semente: sementeDaSerie(r.semente, k), a: { forma: r.forma, stats: r.pet, ...(k ? { vida0: s.vida0 } : {}) }, b: { forma: s.contra, stats: s.rivalStats },
-      ...(r.tiro ? { tiro: r.tiro } : {}), ...(r.esquiva ? { esquiva: r.esquiva } : {}) },
+      ...(r.tiro ? { tiro: r.tiro } : {}), ...(r.esquiva ? { esquiva: r.esquiva } : {}),
+      ...(r.apoio ? { apoio: r.apoio } : {}), ...(r.arenaPorEstagio ? { arenaPorEstagio: r.arenaPorEstagio } : {}) },
     esperado: { vencedor: s.vencedor, relogio: s.relogio, passos: s.passos, ko: s.vidaA <= 0 || s.vidaB <= 0 },
     A: ladoDesenho(r.forma), B: ladoDesenho(s.contra),
     /* a Liga tem 6 lutas, a Cidadela 3; a Torre vai ate a primeira que nao for vitoria (o numero de lutas nao aparece) */
