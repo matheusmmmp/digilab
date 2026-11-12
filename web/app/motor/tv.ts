@@ -16,6 +16,8 @@ export const N_CANAIS_TELA = 7;
 export const NIVEL_MAX_TELA = 15;
 export const FONTES_SENTIDO_TELA = ["tela", "tv"] as const;
 export const FONTES_TV = ["grade", "evento"] as const;
+/** a TV desligada (a decisao A da captura ligada ao cerebro, D-GV-TVJOGO-1): o valor `fonte|desligada` do sentido_tela */
+export const TELA_DESLIGADA = "desligada";
 export const TIPO_TROCAR_CANAL = "trocar_canal";
 export const TIPO_SENTIDO_TELA = "sentido_tela";
 /** o id da TV nas linhas da classe `tela` (`verTela`) e no `olhandoTela` */
@@ -77,6 +79,12 @@ export const CONFIG_TV: ConfigTV = {
     busca 0) fica na celula (96, 17), que o mapa fecha (nao e seca), e a TV do motor pede uma celula seca (falha alto, como o Python).
     Nada daqui e do Python: a pesquisa usa a CONFIG_TV. PROPOSTO, SEM FONTE */
 export const CONFIG_TV_JOGO: ConfigTV = { ...CONFIG_TV, ligada: true, fonte: "evento", celula: [96, 18] };
+/** a TV no jogo (a ConfigTVJogo do Python; as decisoes A e D da captura ligada ao cerebro, "Sim a tudo", Matheus, 2026-11-12; D-GV-TVJOGO):
+    `desligar`, o sentido_tela da TV desligada (A); `ir_ate_tv`, a linha da TV tambem fora do raio e a acao "ir_tv" (D). PROPOSTAS, SEM FONTE */
+export interface ConfigTVJogo { readonly desligar: boolean; readonly ir_ate_tv: boolean }
+export const CONFIG_TVJOGO: ConfigTVJogo = { desligar: false, ir_ate_tv: false };
+export const CONFIG_TVJOGO_LIGADA: ConfigTVJogo = { desligar: true, ir_ate_tv: true };
+
 /** a celula para onde o dono leva o pet para assistir (o gesto "levar o pet", v19; o painel da TV): duas celulas ao sul da TV do motor, perto
     da almofada do cantinho e dentro do raio da visao (6 celulas). PROPOSTO, SEM FONTE */
 export const CELULA_PERTO_DA_TV_JOGO: readonly [number, number] = [96, 20];
@@ -123,9 +131,16 @@ export function valorSentidoTela(fonte: string, niveis: readonly number[]): stri
   if (!(FONTES_SENTIDO_TELA as readonly string[]).includes(fonte)) throw new Error(`fonte do sentido_tela em ${FONTES_SENTIDO_TELA}: ${fonte}`);
   return [fonte, ...niveisTela(niveis).map(String)].join("|");
 }
-export function lerSentidoTela(valor: unknown): [string, number[]] {
+/** a TV desligada (D-GV-TVJOGO-1): `fonte|desligada` */
+export function valorSentidoTelaDesligada(fonte: string): string {
+  if (!(FONTES_SENTIDO_TELA as readonly string[]).includes(fonte)) throw new Error(`fonte do sentido_tela em ${FONTES_SENTIDO_TELA}: ${fonte}`);
+  return `${fonte}|${TELA_DESLIGADA}`;
+}
+/** [fonte, niveis]; os niveis sao null na TV desligada (`fonte|desligada`, D-GV-TVJOGO-1) */
+export function lerSentidoTela(valor: unknown): [string, number[] | null] {
   if (typeof valor !== "string") throw new Error(`sentido_tela malformado: ${JSON.stringify(valor)}`);
   const partes = valor.split("|");
+  if (partes.length === 2 && (FONTES_SENTIDO_TELA as readonly string[]).includes(partes[0]!) && partes[1] === TELA_DESLIGADA) return [partes[0]!, null];
   if (partes.length !== 1 + N_CANAIS_TELA || !(FONTES_SENTIDO_TELA as readonly string[]).includes(partes[0]!)) {
     throw new Error(`sentido_tela malformado: ${JSON.stringify(valor)}`);
   }
@@ -145,7 +160,7 @@ export class TV {
   readonly x: number;
   readonly y: number;
   readonly trocasCanal: { tick: number; programa: number; antes: number | null; ate: number }[] = [];
-  readonly sentidos: { tick: number; fonte: string; niveis: number[] }[] = [];
+  readonly sentidos: { tick: number; fonte: string; niveis: number[] | null }[] = [];
   private sentido: [string, number[]] | null = null;
   private readonly rng: RandomPy | null = null;
   readonly programas: number[][] = [];
@@ -217,16 +232,17 @@ export class TV {
     return reg;
   }
 
-  sentir(fonte: string, niveis: readonly number[], tick: number): void {
+  /** os niveis null: a TV desligada (D-GV-TVJOGO-1; quem confere a chave e o laco) */
+  sentir(fonte: string, niveis: readonly number[] | null, tick: number): void {
     if (this.cfg.fonte !== "evento") throw new TVSemChave(`sentido_tela com a fonte ${this.cfg.fonte}: o modo livre gravado e a fonte "evento"`);
     if (!(FONTES_SENTIDO_TELA as readonly string[]).includes(fonte)) throw new Error(`fonte do sentido_tela em ${FONTES_SENTIDO_TELA}: ${fonte}`);
-    this.sentido = [fonte, [...niveis]];
-    this.sentidos.push({ tick, fonte, niveis: [...niveis] });
+    this.sentido = niveis === null ? null : [fonte, [...niveis]];
+    this.sentidos.push({ tick, fonte, niveis: niveis === null ? null : [...niveis] });
   }
 
   resumo(): Record<string, unknown> {
     return { x: this.x, y: this.y, fonte: this.cfg.fonte, trocas_canal: this.trocasCanal.map(t => ({ ...t })),
-             sentidos: this.sentidos.map(s => ({ ...s, niveis: [...s.niveis] })) };
+             sentidos: this.sentidos.map(s => ({ ...s, niveis: s.niveis === null ? null : [...s.niveis] })) };
   }
 }
 

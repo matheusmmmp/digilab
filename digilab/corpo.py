@@ -842,6 +842,9 @@ class Corpo:
         mapa, pelo `estimulo_consumo_mundo`."""
         if com_mundo and acao is AcaoPet.COMER:
             return
+        if acao is AcaoPet.IR_TV:                   # o ir ate a TV (D-GV-TVJOGO-3): o metabolismo do ocioso; o andar vem do mundo
+            self._efeito(self.t.pet[AcaoPet.OCIOSO], False)
+            return
         self._efeito(self.t.pet[acao], acao is AcaoPet.COMER)
 
     def estimulo_bola(self, ganho_humor: float) -> None:

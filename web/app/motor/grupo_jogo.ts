@@ -14,7 +14,8 @@
 
    Os pets sao da v26 (a v25 no grupo; CO4c; motor/constantes.ts): o pet v26 so existe no grupo. O `avancar` de qualquer um dos dois anda o grupo inteiro,
    para o relogio do jogo e as telas, que leem o pet em foco, seguirem como hoje (src/jogo.ts). */
-import { CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA, TICK_INICIAL, ehDoGrupo, nasceNaAgua, nasceNaGrande, type ConfigMundo } from "./constantes.ts";
+import { CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA, TICK_INICIAL, ehDoGrupo, nasceComTv, nasceComTvJogo, nasceNaAgua, nasceNaGrande, type ConfigMundo } from "./constantes.ts";
+import { CONFIG_TV_JOGO, CONFIG_TVJOGO_LIGADA, lerSentidoTela, valorSentidoTela, valorSentidoTelaDesligada } from "./tv.ts";
 import { CONFIG_GRUPO_LIGADA, Grupo, ROTULO_SEGUNDO_PET } from "./grupo.ts";
 import { CONFIG_COOPERACAO_LIGADA } from "./cooperacao.ts";
 import { Motor } from "./motor.ts";
@@ -53,11 +54,13 @@ export class GrupoDoJogo {
   /** `medir`: a medida da cooperacao (CO3), ligada no jogo; desligada so no teste do G-SEM-DECISAO (ela nao muda nada) */
   constructor(semente: number, versao: number, medir = true) {
     if (!Number.isInteger(semente) || semente < 0 || semente > 0xffffffff) throw new Error(`semente do grupo fora dos 32 bits: ${semente}`);
-    if (!ehDoGrupo(versao)) throw new Error(`o grupo do jogo e de pets v26, v28 ou v29, nao v${versao}`);
+    if (!ehDoGrupo(versao)) throw new Error(`o grupo do jogo e de pets v26, v28, v29 ou v34, nao v${versao}`);
     this.semente = semente;
     this.versao = versao;
     this.grupo = new Grupo(mundoDaVersao(versao), semente, CONFIG_GRUPO_LIGADA,
-                           { tickInicial: TICK_INICIAL, sementeDoSegundo: sementeDoSegundoJogo, ...(medir ? { cooperacao: CONFIG_COOPERACAO_LIGADA } : {}) });   // a medida (CO3), ligada no jogo (CO5): so mede
+                           { tickInicial: TICK_INICIAL, sementeDoSegundo: sementeDoSegundoJogo, ...(medir ? { cooperacao: CONFIG_COOPERACAO_LIGADA } : {}),   // a medida (CO3), ligada no jogo (CO5): so mede
+                             /* a v34 (D-GV-TVJOGO-4): a TV do mundo comum, na celula da TV do jogo, com a TV desligada */
+                             ...(nasceComTv(versao) ? { tv: CONFIG_TV_JOGO, ...(nasceComTvJogo(versao) ? { tvJogo: CONFIG_TVJOGO_LIGADA } : {}) } : {}) });
     const motores: Record<string, Motor> = {};
     for (const ident of CONFIG_GRUPO_LIGADA.ids) {
       const s = Number(this.grupo.sementes[ident]);
@@ -127,6 +130,28 @@ export class GrupoDoJogo {
     this.acao.cursor = m.log.length;
   }
 
+  // ------------------------------------------------------------ a TV do mundo comum (a v34; D-GV-TVJOGO-4)
+  /** o grupo tem a TV no cerebro (a v34): o que a TV passa entra pelo "st" do grupo */
+  get temTv(): boolean { return nasceComTv(this.versao); }
+  /** o modo livre gravado no grupo: o que a TV do mundo comum passa a partir de agora (o valor do `sentido_tela`; na v34, tambem a TV
+      desligada). E um evento do grupo, sem pet ([tick, "st", valor, null]): os dois pets veem a mesma TV. Fora da v34, dentro de uma acao do
+      dono, com algum pet morto ou com o valor fora da forma canonica, falha alto antes do registro */
+  sentidoTela(valor: string): void {
+    if (!this.temTv) throw new Error(`só o grupo v34 tem a TV no cérebro (este é v${this.versao})`);
+    if (this.acao !== null) throw new Error("o sentido_tela do grupo fora de uma acao do dono");
+    const [fonte, niveis] = lerSentidoTela(valor);
+    if ((niveis === null ? valorSentidoTelaDesligada(fonte) : valorSentidoTela(fonte, niveis)) !== valor)
+      throw new Error(`sentido_tela fora da forma canônica: ${JSON.stringify(valor)}`);
+    for (const [i, m] of Object.entries(this.motores)) if (m.morte !== null) throw new Error(`o pet ${i} do grupo morreu`);
+    this.grupo.sentidoTela(valor);
+    this.log.push([this.tick, "st", valor, null]);
+  }
+  /** o ultimo `sentido_tela` do grupo (o valor), ou null. So le */
+  get ultimoSentidoTela(): string | null {
+    const tv = this.grupo.comum.tv, u = tv === null ? undefined : tv.sentidos[tv.sentidos.length - 1];
+    return u === undefined ? null : u.niveis === null ? valorSentidoTelaDesligada(u.fonte) : valorSentidoTela(u.fonte, u.niveis);
+  }
+
   // ------------------------------------------------------------ o replay
   /** Refaz o grupo e rejoga o registro no mesmo relogio. Evento fora do tick, de pet de fora, desconhecido ou o registro refeito diferente
       do lido falham alto */
@@ -137,6 +162,7 @@ export class GrupoDoJogo {
       const [t, tipo, valor, pet] = ev;
       if (t !== g.tick) throw new Error(`evento no tick ${t} com o grupo no tick ${g.tick}: ${JSON.stringify(ev)}`);
       if (pet === null) {
+        if (tipo === "st") { g.sentidoTela(valor as string); continue; }      // a TV do mundo comum (a v34)
         if (tipo !== "t") throw new Error(`evento sem pet que nao e o avanco: ${JSON.stringify(ev)}`);
         g.avancar(valor as number);
       } else {

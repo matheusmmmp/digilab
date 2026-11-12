@@ -2452,6 +2452,40 @@ PARAMETROS_TV: dict[str, tuple[str, str]] = {
 
 
 @dataclass(frozen=True)
+class ConfigTVJogo:
+    """A TV no jogo (GOSTO_VISUAL, as decisoes A e D da captura ligada ao cerebro; "Sim a tudo", Matheus, 2026-11-12; docs/registro/2026-11.md,
+    D-GV-TVJOGO). So com a ConfigTV ligada; desligada (o padrao), nada muda. Duas sub-chaves, cada uma atras da sua (PROPOSTAS, SEM FONTE):
+
+    desligar   False  A: o `sentido_tela` da TV desligada (`fonte|desligada`, events.sentido_tela_desligada; so na fonte "evento"): a TV volta
+                      a passar nada (`TV.em` da None), sai das TVs a vista do cerebro e o pet nao a olha; o proximo `sentido_tela` a religa
+    ir_ate_tv  False  D: o pet sabe onde a TV fica (como o ninho): a linha dela vai ao cerebro (`ver_tela`) tambem fora do raio da visao,
+                      com a TV ligada, e o motor executa a acao IR_TV (AcaoPet.IR_TV): o pet anda ate a TV pelo andar das acoes com alvo
+                      (o controlador do contrato ou o passo_ate), ate o raio de pegar, sem sorteio nem candidato; o metabolismo e o do
+                      ocioso mais o custo do andar. Quem escolhe e o cerebro (o DigiBrain modular com o olhar e a mesma sub-chave)"""
+
+    desligar: bool = False
+    ir_ate_tv: bool = False
+
+    def __post_init__(self) -> None:
+        for campo in ("desligar", "ir_ate_tv"):
+            if type(getattr(self, campo)) is not bool:
+                raise TypeError(f"ConfigTVJogo.{campo} e bool: {getattr(self, campo)!r}")
+
+    @property
+    def ligada(self) -> bool:
+        return self.desligar or self.ir_ate_tv
+
+
+CONFIG_TVJOGO = ConfigTVJogo()
+CONFIG_TVJOGO_LIGADA = ConfigTVJogo(desligar=True, ir_ate_tv=True)
+# o status de cada campo da ConfigTVJogo (conferido por teste): os dois PROPOSTOS, SEM FONTE; o porque esta na docstring
+PARAMETROS_TVJOGO: dict[str, tuple[str, str]] = {
+    "desligar": ("PROPOSTO", "a decisao A da captura ligada ao cerebro (Matheus, 2026-11-12, \"Sim a tudo\"); o formato, SEM FONTE"),
+    "ir_ate_tv": ("PROPOSTO", "a decisao D da captura ligada ao cerebro (Matheus, 2026-11-12, \"Sim a tudo\"); a regra, SEM FONTE"),
+}
+
+
+@dataclass(frozen=True)
 class ConfigDuasTVs:
     """As duas TVs da sonda (GOSTO_VISUAL, P1e; docs/ESPEC_GOSTO_VISUAL_P1.md, secao 7; GV-11). So existem numa copia do pet, pelo
     `MotorMundo.ligar_duas_tvs`; a vida nunca as liga, e com a ConfigDuasTVs desligada o metodo falha alto. Os numeros (todos PROPOSTOS,

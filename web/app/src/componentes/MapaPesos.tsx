@@ -13,6 +13,7 @@ export const TXT_REGRA: Record<RegraLobos, string> = {
 };
 export const TXT_ACAO: Record<AcaoPet, string> = {
   ocioso: "à toa", dormir: "dormir", comer: "comer", brincar: "brincar", chamar_atencao: "chamar você", explorar: "explorar", emburrar: "emburrar",
+  ir_tv: "ir até a TV",
 };
 
 export interface DadosMapa { receptores: readonly string[]; arestas: ArestaMapa[]; acesas: MapaDecisao | null }

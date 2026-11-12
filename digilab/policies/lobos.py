@@ -102,7 +102,7 @@ from ..config import (CONFIG_BOLA, CONFIG_CONSEQUENCIA, CONFIG_FRUTAS, CONFIG_LO
                       ConfigMundo)
 from ..config import CONFIG_MODELO_MUNDO_LIGADA, ConfigModeloMundo
 from ..config import ConfigCompeticao
-from ..events import ACOES_PET_HOJE, FRUTAS, AcaoPet, AcaoUsuario
+from ..events import ACOES_PET_BANHEIRO, ACOES_PET_HOJE, FRUTAS, AcaoPet, AcaoUsuario
 from ..modelo_mundo import TIPOS as TIPOS_COMIDA_MODELO, ModeloMundo, raiz_inteira
 from ..policy import Observacao, PoliticaInstinto, Transicao
 
@@ -264,7 +264,9 @@ CLASSES_COMER_PALADAR = tuple(f"comida:{t}" for t in TIPOS_COMIDA_CLASSE) + ("co
 #   acao_<a>        a acao visivel do outro mais perto (uma por acao do AcaoPet; com um outro a vista, exatamente uma vale 1)
 #   toque_<tipo>    o tipo do ultimo contato, se ha no maximo `janela_social_ticks` (o mais recente; empate pelo id)
 TIPOS_TOQUE_SOCIAL = ("disputa_ganhou", "disputa_perdeu", "encostou", "encostaram", "esbarrou")
-ACOES_VISIVEIS = tuple(a.value for a in AcaoPet)
+# as acoes que o A ve no outro pet: as oito de antes da TV no jogo (o IR_TV, D-GV-TVJOGO-3, chega como o explorar: perceber_social), para a
+# entrada social de hoje nao mudar com o membro novo do enum
+ACOES_VISIVEIS = tuple(a.value for a in ACOES_PET_HOJE + ACOES_PET_BANHEIRO)
 ENTRADAS_SOCIAIS = (("outro_a_vista", "viu_comer") + tuple(f"acao_{a}" for a in ACOES_VISIVEIS)
                     + tuple(f"toque_{t}" for t in TIPOS_TOQUE_SOCIAL))
 TIPOS_COMIDA_BOA = ("racao",) + FRUTAS   # os tipos da percepcao do mundo que sao comida boa (sem `_podre`, sem a bola)

@@ -139,7 +139,7 @@ from .config import CONFIG_CONTRATO, ConfigContrato
 from .config import AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, ARVORE_FECHADA, MARCO_FECHADO, PONTE, TERRA
 from .config import CONFIG_BOLA_NO_GOLPE, CONFIG_DECISAO_NA_COMIDA, ConfigBolaNoGolpe, ConfigDecisaoNaComida
 from .config import CONFIG_FRUTA_COMO_COMIDA, CONFIG_SACUDIR, ConfigFrutaComoComida, ConfigSacudir
-from .config import CONFIG_TV, ConfigTV
+from .config import CONFIG_TV, CONFIG_TVJOGO, ConfigTV, ConfigTVJogo
 from . import contrato as ct
 from .config import ConfigOlfato, ConfigOuvido, ConfigSentidos
 from .corpo import CANAIS_TELA, leitura_orgao
@@ -162,6 +162,7 @@ from .events import ler_sacudir_arvore
 from .events import sacudir_arvore as evento_sacudir_arvore
 from .events import TIPO_SENTIDO_TELA, TIPO_TROCAR_CANAL, ler_sentido_tela, ler_trocar_canal
 from .events import sentido_tela as evento_sentido_tela
+from .events import sentido_tela_desligada as evento_sentido_tela_desligada
 from .events import trocar_canal as evento_trocar_canal
 from .tv import ID_TV, IDS_DUAS_TVS, TV, TVFixa, TVSemChave
 from .config import ConfigDuasTVs
@@ -568,6 +569,12 @@ class PercepcaoSocial:
 # (o som em linha reta). Tudo aqui so le o que e fisico: a posicao do outro, o rastro que ele deixou no mundo e o som da acao dele.
 SONS = ("comendo", "bola", "chamado", "emburrado")
 SOM_DA_ACAO = {AcaoPet.CHAMAR_ATENCAO: "chamado", AcaoPet.EMBURRAR: "emburrado"}     # os sons das acoes sem alvo
+
+
+def acao_visivel(acao: AcaoPet) -> str:
+    """a acao do pet vista de fora (a percepcao social do outro pet): o ir ate a TV (D-GV-TVJOGO-3) e andar, e chega como o explorar (o A
+    ve as oito acoes de antes, lobos.ACOES_VISIVEIS); as outras, como sao"""
+    return AcaoPet.EXPLORAR.value if acao is AcaoPet.IR_TV else acao.value
 
 # os numeros do mundo sao os da ConfigOlfato e da ConfigOuvido (status em corpo.PARAMETROS_OLFATO e corpo.PARAMETROS_OUVIDO)
 PARAMETROS_SENTIDOS: dict[str, tuple[str, str]] = {
@@ -1355,11 +1362,20 @@ class MotorMundo(MotorFrutas):
                  cfg_paladar: ConfigPaladar | None = None, cfg_fruta_ao_lado: ConfigFrutaAoLado | None = None,
                  cfg_contrato: ConfigContrato | None = None, cfg_decisao_comida: ConfigDecisaoNaComida | None = None,
                  cfg_bola_golpe: ConfigBolaNoGolpe | None = None, cfg_sacudir: ConfigSacudir | None = None,
-                 cfg_fruta_comida: ConfigFrutaComoComida | None = None, cfg_tv: ConfigTV | None = None, **kw) -> None:
+                 cfg_fruta_comida: ConfigFrutaComoComida | None = None, cfg_tv: ConfigTV | None = None,
+                 cfg_tv_jogo: ConfigTVJogo | None = None, **kw) -> None:
         super().__init__(*a, **kw)
         self.ctv = cfg_tv or CONFIG_TV
         if not isinstance(self.ctv, ConfigTV):
             raise TypeError(f"cfg_tv e uma ConfigTV: {self.ctv!r}")
+        # a TV no jogo (as decisoes A e D, D-GV-TVJOGO): so com a TV ligada; desligada, nada muda
+        self.ctj = cfg_tv_jogo or CONFIG_TVJOGO
+        if not isinstance(self.ctj, ConfigTVJogo):
+            raise TypeError(f"cfg_tv_jogo e uma ConfigTVJogo: {self.ctj!r}")
+        if self.ctj.ligada and not self.ctv.ligada:
+            raise TVSemChave("a ConfigTVJogo (a TV desligada e o ir ate a TV) exige a ConfigTV ligada")
+        if self.ctj.desligar and self.ctv.fonte != "evento":
+            raise TVSemChave("a TV desligada (ConfigTVJogo.desligar) e do modo livre gravado (a fonte \"evento\")")
         self.csa = cfg_sacudir or CONFIG_SACUDIR
         if not isinstance(self.csa, ConfigSacudir):
             raise TypeError(f"cfg_sacudir e uma ConfigSacudir: {self.csa!r}")
@@ -1483,13 +1499,15 @@ class MotorMundo(MotorFrutas):
             self.mundo.ligar_sacudir(self.csa)
 
         if self.ctv.ligada:
-            # a TV (GOSTO_VISUAL, P1c): so com um pet, fora do grupo, e com o corpo na frente (o MotorCorpo confere a ConfigTela)
-            if mundo is not None:
-                raise TVSemChave("a TV (ConfigTV) roda com um pet, fora do grupo")
+            # a TV (GOSTO_VISUAL, P1c): com o corpo na frente (o MotorCorpo confere a ConfigTela); com um pet, o motor a liga. No grupo (a
+            # decisao B, D-GV-TVJOGO), a TV e do mundo comum: o Grupo a liga (Grupo(cfg_tv=)), e o motor so confere que e a mesma config
             from .motor_corpo import MotorCorpo
             if not isinstance(self, MotorCorpo):
                 raise TVSemChave("a TV exige o corpo na frente do motor (com_corpo(MotorMundo)) com a ConfigTela ligada")
-            self.mundo.ligar_tv(self.ctv)
+            if mundo is None:
+                self.mundo.ligar_tv(self.ctv)
+            elif self.mundo.tv is None or self.mundo.tv.cfg != self.ctv:
+                raise TVSemChave("a TV (ConfigTV) no grupo e do mundo comum: o Grupo a liga com a mesma ConfigTV (Grupo(cfg_tv=))")
 
         if self.cct.ligada:
             # a P4 (docs/TAREFA_V2_P4_CEREBRO_MUNDO.md, secao 3.1): o contrato, so com um pet (o grupo nao tem o cone nem as paredes). A
@@ -1945,6 +1963,11 @@ class MotorMundo(MotorFrutas):
                         "chegou": chegou, "comeu": comeu, "brincou_com_bola": bola}
             if self.cct.ligada and alvo is not None:
                 ocorrido["contrato"] = self._registro_contrato(tick, x0, y0, x1, y1, andar, chegou, comeu)
+        elif acao is AcaoPet.IR_TV:
+            alvo, ocorrido = self._ir_ate_tv(tick, x0, y0)
+            if self._grupo is not None:                      # como os outros ramos: o alvo e a TV, nunca comida (sem disputa)
+                self._tick_social = {"tick": self._tm(tick), "de": (x0, y0), "alvo": alvo, "pendente_antes": self._pendente_antes,
+                                     "social": None, "comeu": None}
         elif acao is AcaoPet.ALIVIAR:
             alvo, ocorrido = self._aliviar(tick, x0, y0)
             if self._grupo is not None:                      # como os outros ramos: o alvo do aliviar nunca e comida (sem disputa)
@@ -1963,6 +1986,38 @@ class MotorMundo(MotorFrutas):
             self._olfato_anterior = self._leitura_olfato_decisao()   # a leitura desta decisao, para a seguinte (uma narina: subiu ou caiu)
         self._registrar_decisao(tick, acao, (x0, y0), regiao_antes, alvo, ocorrido)
         return ocorrido
+
+    def _ir_ate_tv(self, tick: int, x0: int, y0: int) -> tuple[Alvo, dict]:
+        """O ir ate a TV (a decisao D da captura ligada ao cerebro, D-GV-TVJOGO-3; so com a ConfigTVJogo.ir_ate_tv): o pet anda para a TV
+        (o centro da celula dela, que e terra) pelo andar das acoes com alvo (o controlador do contrato, ou o passo_ate), ate o raio de
+        pegar, nos ticks da decisao. Sem sorteio (nem o u da rng `alvo`), sem candidato e sem pendente: a decisao seguinte escolhe de novo.
+        O custo e o do andar (custo_energia_por_subunidade x deslocamento); o metabolismo da acao e o do ocioso."""
+        if not self.ctj.ir_ate_tv:
+            raise TVSemChave("a acao IR_TV exige a ConfigTVJogo.ir_ate_tv")
+        tv = self._exigir_tv("ir_tv")
+        alvo = Alvo("tv", tv.x, tv.y, ID_TV)
+        andar = None
+        if self.cct.controlador:
+            cm = self.cmf
+            andar = ct.controlar(x0, y0, alvo.x, alvo.y, self._raio_pegar, self.cfg.intervalo_decisao_ticks, cm.velocidade,
+                                 self.cct.r_pet, self._solidos, cm.celulas_x, cm.celulas_y, cm.sub, self.cct.ticks_bloqueado,
+                                 self.orientacao)
+            x1, y1 = andar.x, andar.y
+        else:
+            x1, y1 = passo_ate(x0, y0, alvo.x, alvo.y, self._alcance, self.cmf)
+        desloc = distancia(x1 - x0, y1 - y0) if andar is None else andar.andado
+        self.pet = (x1, y1)
+        energia_antes = self._estado.energia
+        if desloc:
+            self._estado = replace(self._estado, energia=max(0.0, energia_antes - self.cmf.custo_energia_por_subunidade * desloc))
+        chegou = distancia(alvo.x - x1, alvo.y - y1) <= self._raio_pegar
+        self._pendente = None
+        ocorrido = {"acao": AcaoPet.IR_TV.value, "u": None, "alvo": alvo.para_dict(), "de": (x0, y0), "para": (x1, y1),
+                    "deslocamento": desloc, "energia_gasta": energia_antes - self._estado.energia, "chegou": chegou, "comeu": None,
+                    "brincou_com_bola": False}
+        if self.cct.ligada:
+            ocorrido["contrato"] = self._registro_contrato(tick, x0, y0, x1, y1, andar, chegou, None)
+        return alvo, ocorrido
 
     def _registro_contrato(self, tick: int, x0: int, y0: int, x1: int, y1: int, andar, chegou: bool, comeu: dict | None) -> dict:
         """A P4: o que o contrato registra numa decisao com alvo (o registro da secao 5.1 do mundo_3d.md e o `ocorrido`). A orientacao anda
@@ -2352,7 +2407,8 @@ class MotorMundo(MotorFrutas):
         tv = self.mundo.tv
         dx, dy = tv.x - self.pet[0], tv.y - self.pet[1]
         d = distancia(dx, dy)
-        if tv.em(self._tm(self._estado.tick)) is None or d > self._raio_visao:
+        # o ir ate a TV (a decisao D, D-GV-TVJOGO-3): o pet sabe onde a TV fica, e a linha dela vai tambem fora do raio (com ela ligada)
+        if tv.em(self._tm(self._estado.tick)) is None or (d > self._raio_visao and not self.ctj.ir_ate_tv):
             return []
         return [(ID_TV, dx, dy, d)]
 
@@ -2444,9 +2500,22 @@ class MotorMundo(MotorFrutas):
         self._aplicar_sentido_tela(*ler_sentido_tela(evento))
         self._log.anexar(evento)
 
-    def _aplicar_sentido_tela(self, fonte: str, niveis: tuple[int, ...]) -> None:
-        """So a TV muda (o replay le o evento e nao chama ninguem). Nao e contato nem cuidado."""
+    def desligar_tela(self, fonte: str) -> None:
+        """A TV desligada (a decisao A, D-GV-TVJOGO-1; so com a ConfigTVJogo.desligar): a TV nao passa nada ate o proximo sentido_tela.
+        Valida o evento antes do log."""
+        self._exigir_tv("sentido_tela")
+        evento = evento_sentido_tela_desligada(self._estado.tick, fonte)
+        self._aplicar_sentido_tela(*ler_sentido_tela(evento))
+        self._log.anexar(evento)
+
+    def _aplicar_sentido_tela(self, fonte: str, niveis: tuple[int, ...] | None) -> None:
+        """So a TV muda (o replay le o evento e nao chama ninguem). Nao e contato nem cuidado. Os niveis None: a TV desligada (so com a
+        ConfigTVJogo.desligar; sem ela, falha alto). No grupo, a TV e do mundo comum: o Grupo aplica o evento (Grupo.sentido_tela)"""
         tv = self._exigir_tv("sentido_tela")
+        if self._grupo is not None:
+            raise TVSemChave("o sentido_tela no grupo e do mundo comum: Grupo.sentido_tela")
+        if niveis is None and not self.ctj.desligar:
+            raise TVSemChave("a TV desligada (sentido_tela `fonte|desligada`) exige a ConfigTVJogo.desligar")
         tv.sentir(fonte, niveis, self._tm(self._estado.tick))
         self._n_eventos += 1                     # e um evento do log, mas NAO e contato
 

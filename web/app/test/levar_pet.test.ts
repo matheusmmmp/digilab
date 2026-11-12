@@ -106,9 +106,9 @@ const semMundo = (m: Motor): unknown => {
 
 describe("o levar pet no Motor (o evento lp, pets v19)", () => {
   test("o ovo novo (a v21) tem o levar pet da v19 e o cerebro trocavel", () => {
-    expect(VERSAO_PET).toBe(32);
+    expect(VERSAO_PET).toBe(33);
     expect(VERSAO_V19).toBe(19);
-    expect(VERSOES_PET).toEqual([21, 22, 23, 24, 25, 26, 27, 28, 29, 32]);   // a v26: os dois pets (CO4c)
+    expect(VERSOES_PET).toEqual([21, 22, 23, 24, 25, 26, 27, 28, 29, 32, 33, 34]);   // a v26: os dois pets (CO4c)
     const m = new Motor(101, 21);
     expect(m.versao).toBe(21);
     expect(ehCerebroTrocavel(21)).toBe(true);

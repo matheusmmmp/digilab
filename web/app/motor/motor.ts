@@ -9,7 +9,7 @@
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, CUIDADO_NA_HORA, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
   TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehDoGrupo, ehLutaPoc, nasceNaAgua,
-  nasceNaGrande, nasceComMemoriaLonga, nasceComSonoSegura, nasceComTv, CMU_GRANDE, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, VERSOES_COM_SACUDIR,
+  nasceNaGrande, nasceComMemoriaLonga, nasceComSonoSegura, nasceComTv, nasceComTvJogo, CMU_GRANDE, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, VERSOES_COM_SACUDIR,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { LUGARES_V6, NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
@@ -41,7 +41,7 @@ import { CONFIG_DIGIBRAIN_LAB, CONFIG_DIGIBRAIN_LAB_FALA, CONFIG_DIGIBRAIN_LAB_O
   type ConteudoFala } from "./digibrain/constantes.ts";
 import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
 import { ConfiancaCombate } from "./confianca.ts";
-import { CONFIG_TELA_LIGADA, CONFIG_TV_JOGO, ID_TV, lerSentidoTela, valorSentidoTela } from "./tv.ts";
+import { CONFIG_TELA_LIGADA, CONFIG_TV_JOGO, CONFIG_TVJOGO_LIGADA, ID_TV, lerSentidoTela, valorSentidoTela, valorSentidoTelaDesligada } from "./tv.ts";
 import { lutar as lutarArena, sorteiosPorFluxo, type IdCena, type ResultadoLuta as ResultadoArena, type Stats as StatsArena, type Tiro as TiroLutaPoc, type Esquiva as EsquivaLutaPoc, type Apoio as ApoioLutaPoc, type ArenaPorEstagio as ArenaLutaPoc, type TabelaFormas as TabelaFormasPoc } from "./arena/index.ts";
 import { MAPA_SALAO, MAPA_TORRE, statsRivalForma, ehMapa, esquivaDaTabela, formaDaChave as formaDaChaveMotor, mapaDoLugar, naTabela, rivaisArena, statsDaLuta, statsDoPet, statsNpc, statsRivalArena, tabelaLuta } from "./luta_poc.ts";
 import { condicaoDe } from "./treino.ts";
@@ -345,7 +345,9 @@ export class Motor {
                                        ...(nasceNaGrande(versao) || nasceNaAgua(versao) ? { contrato: CONFIG_CONTRATO_AGUA } : {}),
                                        bolaNoGolpe: ehCerebroTrocavel(versao),
                                        /* a v32: o orgao da tela no corpo e a TV do jogo no mundo, pela fonte "evento" (o evento "st") */
-                                       ...(nasceComTv(versao) ? { tela: { tela: CONFIG_TELA_LIGADA, tv: CONFIG_TV_JOGO } } : {}),
+                                       /* a v33 e a v34: a TV no jogo (a TV desligada e o ir ate a TV; D-GV-TVJOGO) */
+                                       ...(nasceComTv(versao) ? { tela: { tela: CONFIG_TELA_LIGADA, tv: CONFIG_TV_JOGO,
+                                                                          ...(nasceComTvJogo(versao) ? { tvJogo: CONFIG_TVJOGO_LIGADA } : {}) } } : {}),
                                        ...(opcoes.parteDoMundo ? { parteDoMundo: opcoes.parteDoMundo } : {}) });     // o pet de teste (v16): a bola de antes; a v21, a bola no golpe
     this.v11 = { braco, laco };
     this.e = laco.estado;
@@ -889,10 +891,13 @@ export class Motor {
     this._sentidoTela(valor);
     this.log.push([t, "st", valor]);
   }
-  private _validarSentidoTela(valor: unknown): [string, number[]] {
+  private _validarSentidoTela(valor: unknown): [string, number[] | null] {
     if (!nasceComTv(this.versao)) throw new Error(`só o pet v32 tem a TV no cérebro (este é v${this.versao})`);
     const [fonte, niveis] = lerSentidoTela(valor);
-    if (valorSentidoTela(fonte, niveis) !== valor) throw new Error(`sentido_tela fora da forma canônica: ${JSON.stringify(valor)}`);
+    /* a TV desligada (a decisao A, D-GV-TVJOGO-1): so nos pets da TV no jogo (a v33 e a v34); a v32 a recusa */
+    if (niveis === null && !nasceComTvJogo(this.versao)) throw new Error(`a TV desligada só no pet v33 (este é v${this.versao})`);
+    if ((niveis === null ? valorSentidoTelaDesligada(fonte) : valorSentidoTela(fonte, niveis)) !== valor)
+      throw new Error(`sentido_tela fora da forma canônica: ${JSON.stringify(valor)}`);
     return [fonte, niveis];
   }
   private _sentidoTela(valor: unknown): void {
@@ -904,7 +909,7 @@ export class Motor {
   get ultimoSentidoTela(): string | null {
     const tv = this.v11 && this.v11.laco instanceof MotorCorpoMundo ? this.v11.laco.tv : null;
     const u = tv === null ? undefined : tv.sentidos[tv.sentidos.length - 1];
-    return u === undefined ? null : valorSentidoTela(u.fonte, u.niveis);
+    return u === undefined ? null : u.niveis === null ? valorSentidoTelaDesligada(u.fonte) : valorSentidoTela(u.fonte, u.niveis);
   }
   /** a TV no cerebro agora, para as telas (so le): se o pet olha a TV (o OCIOSO do olhar, acordado e com ela no raio), se ela esta no raio da
       visao, e o `olhar` do ultimo motivo do modular (o agrado, o termo gosto e a TV escolhida); null fora da v32 */
@@ -1090,7 +1095,9 @@ export class Motor {
     this.pol.observar(obs, a, t);
     this._desejo(obs, a, t, d);
     this._conferirMorte();
-    for (const k of ACOES_PET) this.tracos[k] = (1 - CT.alfa) * this.tracos[k] + (k === a ? CT.alfa : 0);
+    /* o ir ate a TV (v33 e v34; D-GV-TVJOGO-3) conta como o explorar nos tracos (e andar); as outras, como sao */
+    const at = a === "ir_tv" ? "explorar" : a;
+    for (const k of ACOES_PET) this.tracos[k] = (1 - CT.alfa) * this.tracos[k] + (k === at ? CT.alfa : 0);
     this.nDecisoes++;
     const ult = this.historico[this.historico.length - 1];
     if (!ult || ult.quem !== "pet" || ult.a !== a) this._hist({ t, quem: "pet", a });
@@ -1316,7 +1323,8 @@ export class Motor {
       /* a v32: o modular com a subchave `olhar`, o genoma da visao da semente do ovo (rng propria `visao-ovo`) e o agrado no corpo */
       const tv = nasceComTv(this.versao);
       this.modular ??= new DigiBrain(tv ? CONFIG_DIGIBRAIN_LAB_OLHAR : CONFIG_DIGIBRAIN_LAB, { ...INATOS_MODULAR, d_max: this.alcanceMemoria } as typeof INATOS_MODULAR, false,
-        nasceComSonoSegura(this.versao) ? CONFIG_SONO_SEGURA_LIGADA : CONFIG_SONO_SEGURA, tv ? { semente: this.semente, cfgOlhar: CONFIG_OLHAR_JOGO } : undefined);
+        nasceComSonoSegura(this.versao) ? CONFIG_SONO_SEGURA_LIGADA : CONFIG_SONO_SEGURA,
+        tv ? { semente: this.semente, cfgOlhar: CONFIG_OLHAR_JOGO, ...(nasceComTvJogo(this.versao) ? { irAteTv: true } : {}) } : undefined);
       if (this.ponteLuta) this.modular.ligarLutaMemoria();
     }
     this.modularAtivo = v.cerebro === "modular";

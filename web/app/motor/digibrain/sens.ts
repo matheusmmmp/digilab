@@ -113,6 +113,14 @@ export class Sens {
     }
   }
 
+  /** a TV no jogo (D-GV-TVJOGO-3): as linhas da TV fora do raio, so com `ligarIrAteTv` */
+  irAteTv = false;
+  /** a decisao D (so com a subchave `olhar`): o motor manda a linha da TV tambem fora do raio da visao. A linha longe tem a proximidade 0 e
+   *  nao conta como vista na habituacao da classe `tela` */
+  ligarIrAteTv(): void { this.exigirOlhar("ligar_ir_ate_tv"); this.irAteTv = true; }
+  /** a linha da TV esta fora do raio da visao (so com o ir ate a TV) */
+  longe(linha: { d: number }): boolean { return linha.d > this.raio; }
+
   // ------------------------------------------------------------ a tela (P1f, so com a subchave `olhar`)
   private exigirOlhar(onde: string): ConfigOlhar {
     if (this.olhar === null) throw new Error(`M-SENS: ${onde} sem a subchave olhar`);
@@ -159,6 +167,7 @@ export class Sens {
     const out = telas.map(l => {
       if (l.length !== 4 || l.some(v => !Number.isInteger(v)) || l[3]! < 0) throw new Error(`M-SENS: linha da tela malformada: ${JSON.stringify(l)}`);
       const [id, dx, dy, d] = l as [number, number, number, number];
+      if (d > this.raio && !this.irAteTv) throw new Error(`M-SENS: linha da tela fora do raio da visao (${d} > ${this.raio}) sem o ir ate a TV`);
       return { id, tipo: CLASSE_TELA, classe: CLASSE_TELA, dx, dy, d, prox: this.proximidade(d), nov } as LinhaTela;
     });
     if (new Set(out.map(o => o.id)).size !== out.length) throw new Error("M-SENS: duas linhas da tela com o mesmo id");
@@ -226,7 +235,8 @@ export class Sens {
     for (const c of CLASSES_OBJETO) this.hab[c] = integrar(this.hab[c], vistas.has(c) ? S : 0, this.kHab, S);   // a habituacao anda depois da novidade
     if (linhasTela !== null) {                         // a classe `tela` (P1f), no fim, com a mesma regra
       const h = this.hab as Record<string, number>;
-      h[CLASSE_TELA] = integrar(h[CLASSE_TELA]!, linhasTela.length ? S : 0, this.kHab, S);
+      /* o ir ate a TV (D-GV-TVJOGO-3): a linha longe nao conta como vista (sem ele, toda linha esta no raio: a conta de hoje) */
+      h[CLASSE_TELA] = integrar(h[CLASSE_TELA]!, linhasTela.some(o => !this.longe(o)) ? S : 0, this.kHab, S);
     }
     let comida = 0, bola = 0;
     for (const o of objetos) {

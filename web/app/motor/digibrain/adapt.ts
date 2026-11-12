@@ -61,7 +61,7 @@ export function intencaoDaUnidade(unidade: UnidadeImpulso): Intencao {
 
 export class DigibrainDesligado extends Error {}
 /** o olhar no DigiBrain (P1f): o genoma dado (o vazio do controle) ou a semente do ovo, e a ConfigOlhar; so com a subchave `olhar` */
-export interface OpcoesOlhar { semente?: number; genoma?: GenomaVisao; cfgOlhar?: ConfigOlhar }
+export interface OpcoesOlhar { semente?: number; genoma?: GenomaVisao; cfgOlhar?: ConfigOlhar; irAteTv?: boolean }
 /** a ponte da luta sem a chave ligada (o `LutaSemChave` do Python) */
 export class LutaSemChave extends Error {}
 
@@ -100,6 +100,8 @@ export class DigiBrain implements PoliticaCorpoMundo {
   private pcAntesLuta: Dict | null = null;               // o corpo da ultima consequencia fechada (so com a luta_memoria)
   /** o olhar (P1f): a ConfigOlhar e o genoma da visao (null sem a subchave), as TVs a vista para a decisao seguinte e a TV que o pet olha */
   readonly co: ConfigOlhar | null = null;
+  /** o ir ate a TV (D-GV-TVJOGO-3): a unidade de olhar de uma TV fora do raio vira o "ir_tv" (so com a subchave `olhar`) */
+  readonly irAteTv: boolean = false;
   readonly genomaVisao: GenomaVisao | null = null;
   private telas: [number, number, number, number][] | null = null;
   private olhando: number | null = null;
@@ -122,6 +124,10 @@ export class DigiBrain implements PoliticaCorpoMundo {
       throw new Error("a ConfigOlhar e o genoma da visao so com a subchave olhar");
     }
     this.sens = new Sens(CONFIG_MODULAR_MUNDO, CONFIG_MODULAR_MUNDO, inatos, this.co, this.genomaVisao);
+    /* o ir ate a TV (a decisao D, D-GV-TVJOGO-3; so com a subchave `olhar`): a unidade de olhar de uma TV fora do raio vai ao motor como o
+       "ir_tv"; desligado, uma linha longe falha alto no M-SENS */
+    this.irAteTv = olhar?.irAteTv === true;
+    if (this.irAteTv) this.sens.ligarIrAteTv();
     this.afeto = new Afeto(cfg, cd, inatos, null);
     this.estado = new EstadoDinamico(cfg, cd, inatos);
     this.impulso = new Impulso(inatos, cd, undefined, this.co);
@@ -178,7 +184,9 @@ export class DigiBrain implements PoliticaCorpoMundo {
     const unidade = esc.unidade;
     const fins = this.estado.escolhida(unidade, z, afeto.g_apr, k, reflexo);
     const creditos = creditar(this.plast, fins);
-    const intencao = intencaoDaUnidade(unidade);
+    let intencao = intencaoDaUnidade(unidade);
+    if (this.irAteTv && unidade.chave[0] === COMPORTAMENTO_OLHAR && this.sens.longe(unidade.objeto as { d: number }))
+      intencao = { acao: "ir_tv", tipo_alvo: null, id_alvo: null, ponto: null };   // a TV fora do raio (D-GV-TVJOGO-3): o pet anda ate ela
     const urg = afeto.urgencias;
     let drive: string | null = null;
     for (const r of Object.keys(urg).sort()) if (drive === null || urg[r]! > urg[drive]!) drive = r;
@@ -203,7 +211,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
     motivo["consolidacao"] = consolidacao;
     if (this.lutaMemoria) motivo["lutas"] = episodiosLuta;      // a ponte da luta (PE3): desligada, nenhum campo novo
     if (cd.olhar) {                                       // o olhar (P1f): desligada, nenhum campo novo
-      this.olhando = unidade.chave[0] === COMPORTAMENTO_OLHAR ? unidade.chave[2] as number : null;
+      this.olhando = unidade.chave[0] === COMPORTAMENTO_OLHAR && intencao.acao === "ocioso" ? unidade.chave[2] as number : null;
       motivo["olhar"] = { ...resumoOlhar, olha: this.olhando };
     }
     this.pendencia = {
@@ -221,7 +229,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
     const S = this.S, niveis = sens["tela_niveis"] as Record<string, number> | null, telas = sens["telas"] as { id: number }[];
     let a: number | null = null, aInato: number | null = null;
     const gosto: Record<number, number> = {};
-    const visivel = telas.some(o => o.id === this.olhando);
+    const visivel = telas.some(o => o.id === this.olhando && !this.sens.longe(o as unknown as { d: number }));
     if (this.olhando !== null && visivel && niveis !== null) {
       a = this.sens.agrado(niveis);
       aInato = this.sens.agradoInato(niveis);
@@ -404,7 +412,8 @@ export class DigiBrain implements PoliticaCorpoMundo {
     if (pc1 === undefined || pm1 === undefined) throw new Error("a consequencia sem o corpo ou sem o mundo de depois");
     const ocorrido: OcorridoMundo | null = p.mundo === null ? null : p.mundo[0];
     const recs = this.sens.receptores!;
-    const olhou = this.cd.olhar === true && p.unidade.chave[0] === COMPORTAMENTO_OLHAR;
+    /* o ir ate a TV (D-GV-TVJOGO-3): a opcao de olhar executada como o "ir_tv" nao olhou (sem agrado, sem exposicao e sem o P1 da tela) */
+    const olhou = this.cd.olhar === true && p.unidade.chave[0] === COMPORTAMENTO_OLHAR && acao === "ocioso";
     let gv: number | null = null, olhar: Dict | null = null, niveis: Record<string, number> | null = null;
     if (olhou) {                                          // o olhar (P1f): o agrado do nivel de depois, contra o alvo de antes da exposicao
       niveis = this.sens.niveisTela(pc1 as Dict);

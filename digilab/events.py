@@ -212,6 +212,10 @@ class AcaoPet(str, Enum):
     # V2, banheiro (docs/TAREFA_V2_BANHEIRO.md, secao 4; BN-1): fazer as necessidades, no fim do enum e so com a chave do banheiro. As
     # iteracoes de hoje (bandit, metricas, tracos, arena, desejo, lobos sem banheiro) usam ACOES_PET_HOJE, as sete de sempre
     ALIVIAR = "aliviar"
+    # V3, GOSTO_VISUAL, a TV no jogo (a decisao D da captura ligada ao cerebro; D-GV-TVJOGO-3): ir ate a TV, no fim do enum e so com a
+    # ConfigTVJogo.ir_ate_tv (o motor confere). Quem itera as acoes de hoje (o A, a rede de si, as metricas) usa ACOES_PET_HOJE e
+    # ACOES_PET_BANHEIRO, e a vida de hoje nao muda com o membro novo
+    IR_TV = "ir_tv"
 
 
 # as sete acoes do pet de sempre, na ordem do enum: quem itera sobre as acoes do pet (bandit, metricas, tracos, arena, desejo, o cerebro A
@@ -219,8 +223,9 @@ class AcaoPet(str, Enum):
 ACOES_PET_HOJE = (AcaoPet.OCIOSO, AcaoPet.DORMIR, AcaoPet.COMER, AcaoPet.BRINCAR, AcaoPet.CHAMAR_ATENCAO, AcaoPet.EXPLORAR,
                   AcaoPet.EMBURRAR)
 ACOES_PET_BANHEIRO = (AcaoPet.ALIVIAR,)
-if ACOES_PET_HOJE + ACOES_PET_BANHEIRO != tuple(AcaoPet):      # pragma: no cover - conferido na carga
-    raise RuntimeError("AcaoPet mudou: ACOES_PET_HOJE e ACOES_PET_BANHEIRO tem de cobrir o enum, na ordem")
+ACOES_PET_TV = (AcaoPet.IR_TV,)                 # a TV no jogo (D-GV-TVJOGO-3): so com a ConfigTVJogo.ir_ate_tv
+if ACOES_PET_HOJE + ACOES_PET_BANHEIRO + ACOES_PET_TV != tuple(AcaoPet):      # pragma: no cover - conferido na carga
+    raise RuntimeError("AcaoPet mudou: ACOES_PET_HOJE, ACOES_PET_BANHEIRO e ACOES_PET_TV tem de cobrir o enum, na ordem")
 
 
 @dataclass(frozen=True)
@@ -447,6 +452,7 @@ TIPO_SENTIDO_TELA = "sentido_tela"
 FONTES_SENTIDO_TELA = ("tela", "tv")             # a tela real do computador ou a TV do jogo, as duas pelo modo livre gravado
 NIVEL_MAX_TELA = 15                              # o formato do evento: 16 niveis por canal (GV-15); o corpo multiplica por C/15
 N_CANAIS_TELA = 7                                # os sete canais (4 da visao, 3 do som; corpo.CANAIS_TELA, conferido por teste)
+TELA_DESLIGADA = "desligada"                      # a TV desligada (a decisao A, D-GV-TVJOGO-1): o valor `fonte|desligada`
 
 
 def _natural_canonico(texto: str) -> int:
@@ -488,12 +494,24 @@ def sentido_tela(tick: int, fonte: str, niveis) -> Evento:
     return Evento(tick=tick, tipo=TIPO_SENTIDO_TELA, valor="|".join((fonte,) + tuple(str(v) for v in n)))
 
 
-def ler_sentido_tela(evento: Evento) -> tuple[str, tuple[int, ...]]:
+def sentido_tela_desligada(tick: int, fonte: str) -> Evento:
+    """a TV desligada (GOSTO_VISUAL, a decisao A da captura ligada ao cerebro; D-GV-TVJOGO-1; so com a ConfigTVJogo.desligar, quem confere e
+    o motor): `fonte|desligada`. A partir deste tick a TV nao passa nada (sai das TVs a vista e o pet nao a olha); o proximo sentido_tela
+    a religa"""
+    if fonte not in FONTES_SENTIDO_TELA:
+        raise ValueError(f"fonte do sentido_tela em {FONTES_SENTIDO_TELA}: {fonte!r}")
+    return Evento(tick=tick, tipo=TIPO_SENTIDO_TELA, valor=f"{fonte}|{TELA_DESLIGADA}")
+
+
+def ler_sentido_tela(evento: Evento) -> tuple[str, tuple[int, ...] | None]:
+    """(fonte, niveis); os niveis sao None na TV desligada (`fonte|desligada`, D-GV-TVJOGO-1)"""
     if evento.tipo != TIPO_SENTIDO_TELA:
         raise ValueError(f"evento nao e {TIPO_SENTIDO_TELA}: {evento.tipo!r}")
     if type(evento.valor) is not str:
         raise ValueError(f"sentido_tela malformado: {evento.valor!r}")
     partes = evento.valor.split("|")
+    if len(partes) == 2 and partes[0] in FONTES_SENTIDO_TELA and partes[1] == TELA_DESLIGADA:
+        return partes[0], None
     if len(partes) != 1 + N_CANAIS_TELA or partes[0] not in FONTES_SENTIDO_TELA:
         raise ValueError(f"sentido_tela malformado: {evento.valor!r}")
     return partes[0], _niveis_tela([_natural_canonico(p) for p in partes[1:]])
