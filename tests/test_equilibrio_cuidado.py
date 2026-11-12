@@ -33,7 +33,7 @@ def test_a_config_desligada_por_padrao_e_os_status():
     assert not CONFIG_EQUILIBRIO_CUIDADO.ligada
     assert not CONFIG_EQUILIBRIO_CUIDADO.guarda_fome_brincar and not CONFIG_EQUILIBRIO_CUIDADO.comer_bebe
     assert {f.name for f in fields(ConfigEquilibrioCuidado)} == set(PARAMETROS_EQUILIBRIO_CUIDADO)
-    assert all(st == "PROPOSTO" and "SEM FONTE" in fonte for st, fonte in PARAMETROS_EQUILIBRIO_CUIDADO.values())
+    assert all(st == "DECIDIDO" and "SEM FONTE" in fonte for st, fonte in PARAMETROS_EQUILIBRIO_CUIDADO.values())   # APROVADOS em 2026-11-12 (E2/E3)
     with pytest.raises(TypeError):
         ConfigEquilibrioCuidado(guarda_fome_brincar=1)
     with pytest.raises(ValueError):
@@ -42,7 +42,7 @@ def test_a_config_desligada_por_padrao_e_os_status():
 
 def test_os_inatos_do_e1_so_trocam_os_dois_numeros():
     assert set(INATOS_E1_PROPOSTOS) == set(PARAMETROS_E1)
-    assert all(st == "PROPOSTO" and "SEM FONTE" in fonte for st, fonte in PARAMETROS_E1.values())
+    assert all(st == "DECIDIDO" and "SEM FONTE" in fonte for st, fonte in PARAMETROS_E1.values())   # APROVADOS em 2026-11-12 (E2/E3)
     e1 = inatos_e1()
     assert CONFIG_DIGIBRAIN_INATOS.urgencia_lambda == 512 and dict(dict(CONFIG_DIGIBRAIN_INATOS.w0)["brincar"])["vies"] == -256
     assert e1.urgencia_lambda == INATOS_E1_PROPOSTOS["urgencia_lambda"]

@@ -11,7 +11,7 @@
    - os marcos: cada evolucao e cada nivel do Tamer.
    Cada feito tem um id estavel (a ordem dele no que o motor deriva do registro, que so cresce), entao conferir de novo nao paga duas vezes.
    Todos os numeros sao PROPOSTOS, SEM FONTE (M-10: a rodada de equilibrio os acerta numa vida gravada). */
-import { LUGARES_V6, MEDALHA_POR_ID, RIVAL_LIGA, RIVAL_SALAO, TPD, ehInstalacao, type Estagio, type Motor } from "../motor/index.ts";
+import { LUGARES_V6, MEDALHA_POR_ID, RIVAL_LIGA, RIVAL_SALAO, TPD, ehInstalacao, nasceComEquilibrioCuidado, type Estagio, type Motor } from "../motor/index.ts";
 
 /** de onde vieram os Bits de um evento do Tamer */
 export type OrigemBits = "luta" | "lider" | "chamado" | "pausa" | "cuidado" | "evolucao" | "nivel";
@@ -42,10 +42,12 @@ export interface TabelaBits {
   readonly tetoCuidadoDia: number; readonly evolucao: Record<Estagio, number>; readonly nivel: number;
 }
 
-/** EQUILIBRIO_CUIDADO, E1 (docs/RESULTADO_V3_EQUILIBRIO_CUIDADO_E1.md): a tabela da calibracao, atras da chave. So a bancada do E1 a usa
-    (scripts/equilibrio_cuidado/); o jogo segue com a BITS ate o E3 (EQ-6), que a liga junto com a versao nova do pet. Os valores que mudam
-    (o cuidado na hora certa e o teto do dia) sao PROPOSTOS, SEM FONTE, pela grade do E1; o resto e o da BITS */
+/** EQUILIBRIO_CUIDADO, E1 (docs/RESULTADO_V3_EQUILIBRIO_CUIDADO_E1.md): a tabela da calibracao. Desde o E3 (EQ-6), a dos pets v38 e v39
+    (tabelaBitsDe); os pets das versoes de antes seguem com a BITS. Os valores que mudam (o cuidado na hora certa, o teto do dia e a evolucao
+    para o Rookie) foram APROVADOS pelo Matheus em 2026-11-12 ("Aprovo, siga"), SEM FONTE, pela grade do E1; o resto e o da BITS */
 export const BITS_V2: TabelaBits = { ...BITS, cuidado: 5, tetoCuidadoDia: 40, evolucao: { ...BITS.evolucao, crianca: 60 } };
+/** a tabela dos Bits de um pet, pela versao dele: a BITS_V2 na v38 e na v39 (o E3), a BITS nas de antes */
+export const tabelaBitsDe = (versao: number): TabelaBits => nasceComEquilibrioCuidado(versao) ? BITS_V2 : BITS;
 
 /** um feito que vale Bits */
 export interface Feito { id: string; valor: number; origem: OrigemBits; tick: number }
@@ -63,9 +65,9 @@ function faixaDoRival(m: Motor, rival: string, tick: number): Estagio {
 }
 const ehTorneio = (rival: string): boolean => rival === RIVAL_LIGA || rival === RIVAL_SALAO || ehInstalacao(rival);
 
-/** os feitos do pet que valem Bits, na ordem do registro dele. Puro: le so o que o motor deriva do replay. `tabela`: a BITS (o jogo) ou a
-    BITS_V2 (so a bancada do E1) */
-export function feitosDoPet(m: Motor, tabela: TabelaBits = BITS): Feito[] {
+/** os feitos do pet que valem Bits, na ordem do registro dele. Puro: le so o que o motor deriva do replay. `tabela`: a da versao do pet
+    (tabelaBitsDe: a BITS_V2 na v38 e na v39, a BITS nas de antes); a bancada do E1 passa a dela */
+export function feitosDoPet(m: Motor, tabela: TabelaBits = tabelaBitsDe(m.versao)): Feito[] {
   const BITS = tabela;
   const feitos: Feito[] = [];
   /* as vitorias, com a novidade por rival e por dia do pet */

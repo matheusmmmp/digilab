@@ -46,6 +46,17 @@ class TVSemChave(ValueError):
     """A TV (trocar_canal, sentido_tela) sem a ConfigTV ligada, com a fonte errada, sem o mundo ou no grupo."""
 
 
+class DuasTVsSemLugar(RuntimeError):
+    """As duas TVs da sonda (`MotorMundo.ligar_duas_tvs`) nao cabem em nenhuma das direcoes tentadas a partir do pet (a D-GV-P1e-3). E um
+    RuntimeError, como antes do adendo 2 da GV3b (D-GV-GV3B2): quem nao trata o caso falha alto como falhava; a sonda com a regra
+    "sem_sonda" (docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO2.md) trata so esta classe. Leva o pet e a direcao sorteada."""
+
+    def __init__(self, mensagem: str, pet: tuple, direcao_sorteada: int) -> None:
+        super().__init__(mensagem)
+        self.pet = tuple(pet)
+        self.direcao_sorteada = direcao_sorteada
+
+
 def intensidades_dos_niveis(niveis: tuple[int, ...], escala: int) -> dict[str, int]:
     """os sete niveis do evento (0 a 15) na escala do corpo: div_arred(n x escala, 15)"""
     return {c: div_arred(n * escala, NIVEL_MAX_TELA) for c, n in zip(CANAIS_TELA, niveis)}

@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import { AVISO_AUTORIA } from "./scripts/autoria.ts";
 
 const ASSETS = fileURLToPath(new URL("../../../Assets/", import.meta.url));
 /* decoracao do Digimon UP (Assets/gerar_decoracao_up.py): o JSON e so os PNGs da lista do repositorio */
@@ -55,9 +56,23 @@ function atlasDev(): Plugin {
   };
 }
 
+/** PI2 (docs/PLANO_V3_CONTA_PROTECAO.md, PI-4): o aviso de autoria no topo de cada JS do build, posto depois da minificacao (o
+    scripts/conferir_build.ts confere, no "npm run build"); o build continua sem source map */
+function avisoAutoria(): Plugin {
+  return {
+    name: "digilab-aviso-autoria",
+    apply: "build",
+    generateBundle(_opcoes, pacote) {
+      for (const peca of Object.values(pacote)) {
+        if (peca.type === "chunk" && !peca.code.startsWith(AVISO_AUTORIA)) peca.code = AVISO_AUTORIA + "\n" + peca.code;
+      }
+    },
+  };
+}
+
 export default defineConfig({
   base: "./",
-  plugins: [react(), tailwindcss(), atlasDev()],
+  plugins: [react(), tailwindcss(), atlasDev(), avisoAutoria()],
   /* "@/" = src/, o alias dos componentes no estilo shadcn (components.json) */
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
   build: { outDir: "../dist", emptyOutDir: true, sourcemap: false, target: "es2022" },

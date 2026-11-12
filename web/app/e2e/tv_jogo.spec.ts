@@ -84,7 +84,7 @@ for (const [onde, largura, altura] of TAMANHOS) {
   test(`a v35 no ${onde}: o pet vai ate a TV sozinho, o gosto vem do cerebro e parar desliga a TV`, async ({ browser }) => {
     test.setTimeout(240_000);
     const { ctx, page, erros } = await abrir(browser, largura, altura);
-    expect((await registro(page)).versao).toBe(35);
+    expect((await registro(page)).versao).toBe(38);
     let painel = await abrirPainelTv(page, movel);
     await painel.getByRole("button", { name: "Ligar a TV" }).click();
     await expect(painel.getByTestId("tv-reacao")).toContainText("No cérebro:", { timeout: 15_000 });
@@ -115,7 +115,7 @@ for (const [onde, largura, altura] of TAMANHOS) {
   test(`a v35 no ${onde}: uma imagem parada cansa o pet (enjoado dela)`, async ({ browser }) => {
     test.setTimeout(240_000);
     const { ctx, page, erros } = await abrir(browser, largura, altura, petComImagemParada());
-    expect((await registro(page)).versao).toBe(35);
+    expect((await registro(page)).versao).toBe(35);   // o pet semeado e um v35 (petComImagemParada)
     await abrirPainelTv(page, movel);
     const frase = await esperarFrase(page, "enjoado dela", true);
     expect(frase).not.toBeNull();

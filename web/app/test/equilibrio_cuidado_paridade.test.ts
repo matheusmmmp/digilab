@@ -9,7 +9,7 @@ import { describe, expect, test } from "vitest";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { gunzipSync } from "node:zlib";
-import { CMU_MVP, VERSAO_PET } from "../motor/constantes.ts";
+import { CMU_MVP, VERSAO_V35 as VERSAO_PET } from "../motor/constantes.ts";   // a bancada do E1 liga o ajuste so nas versoes de antes do E3
 import { CCO_CORPO_V11 } from "../motor/corpo.ts";
 import { DigiBrain } from "../motor/digibrain/adapt.ts";
 import {
@@ -55,7 +55,7 @@ const sha = (t: string): string => createHash("sha256").update(t, "utf8").digest
 
 /** a vida do laboratorio pelo laco do TS, com o gancho do bebe antes de cada decisao (o pet e bebe nas primeiras `kBebe`) */
 function viver(semente: number, log: readonly EventoCorpo[], ceq: ConfigEquilibrioCuidado, kBebe: number | null) {
-  const cerebro = new DigiBrain(CONFIG_DIGIBRAIN_LAB, INATOS_E1, false, CONFIG_SONO_SEGURA_LIGADA, undefined, CONFIG_LANCE_DONO_LIGADA, ceq);
+  const cerebro = new DigiBrain(CONFIG_DIGIBRAIN_LAB, INATOS_E1, false, CONFIG_SONO_SEGURA_LIGADA, undefined, CONFIG_LANCE_DONO_LIGADA, null, ceq);
   const assinaturas: Record<string, string>[] = [];
   const agir = cerebro.agir.bind(cerebro);
   cerebro.agir = (obs, rng) => {
@@ -107,7 +107,7 @@ describe("a falha alta", () => {
   test("o gancho sem a regra, ou duas vezes", () => {
     const c = new DigiBrain(CONFIG_DIGIBRAIN_LAB, INATOS_MODULAR, false, CONFIG_SONO_SEGURA_LIGADA, undefined, CONFIG_LANCE_DONO_LIGADA);
     expect(() => c.estagioBebe(true)).toThrow(/comer_bebe ligada/);
-    const d = new DigiBrain(CONFIG_DIGIBRAIN_LAB, INATOS_MODULAR, false, CONFIG_SONO_SEGURA_LIGADA, undefined, CONFIG_LANCE_DONO_LIGADA,
+    const d = new DigiBrain(CONFIG_DIGIBRAIN_LAB, INATOS_MODULAR, false, CONFIG_SONO_SEGURA_LIGADA, undefined, CONFIG_LANCE_DONO_LIGADA, null,
       { ...CONFIG_EQUILIBRIO_CUIDADO, comer_bebe: true });
     d.estagioBebe(true);
     expect(() => d.estagioBebe(false)).toThrow(/duas vezes/);

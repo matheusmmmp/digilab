@@ -11,24 +11,40 @@
      mesma fonte do painel do DigiBrain), o botão "Levar até a TV" aparece quando a TV está fora da vista dele, e o rodapé diz que o que passa
      entra no cérebro. O gosto ("Gosta mais de", o porquê) é o do cérebro (a decisão C, D-GV-TVJOGO-5): o genoma da visão e a exposição do
      DigiBrain; o carinho ainda não entra nele.
+   - os canais (D-GV-CANAL): com a tela do dono ligada, "Canal ▸" troca entre as fontes já escolhidas (só com mais de uma), "+ Canal"
+     escolhe outra tela no seletor do navegador e "+ Vídeo" abre um vídeo deste computador; desligada, "Abrir um vídeo" liga com um.
    Só existe com `?gosto_visual=1`. Fora do motor, do log e do save, salvo o "st" e o levar o pet da v32 (cerebroTv.ts). */
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { ChevronRight, Lock, MonitorUp, PictureInPicture2, Square, Tv } from "lucide-react";
+import { ChevronRight, Film, Lock, MonitorUp, PictureInPicture2, Plus, SkipForward, Square, Tv } from "lucide-react";
 import { COMPONENTES, alvos, gostaMaisDe, tempoJunto, valores, type Componente } from "./gosto.ts";
 import { abrirJanelaDaTv, fecharJanelaDaTv, temJanelaPequena, useJanelaDaTv } from "./janelaPequena.ts";
 import {
   IMAGEM, SOM, descricaoDaLinha, fraseDaReacao, linhasDoCerebro, linhasDoGosto, linhasMarcadas, nascencaDifere, ondeFica, pontosDasLinhas, type LinhaGosto,
 } from "./leituraGosto.ts";
-import { ligarTela, ligarTvJogo, pararTv, podeMostrarTela, useSessaoTv, type SessaoTv } from "./sessaoTv.ts";
+import { ligarTela, ligarTvJogo, ligarVideo, pararTv, podeAbrirVideo, podeMostrarTela, proximoCanal, useSessaoTv, type SessaoTv } from "./sessaoTv.ts";
 import { leituraDoCerebro, levarPetATv } from "./cerebroTv.ts";
 import { useJogoSeHouver } from "../jogo.ts";
+import { MAX_CANAIS } from "./canais.ts";
 
 export const FRASE_PRIVACIDADE = "Ele só sente cores, brilho, movimento e som: sete números por segundo. Nenhuma imagem é guardada e nada sai deste computador.";
 const pct = (x: number): string => `${Math.round(Math.min(1, Math.max(0, x)) * 1000) / 10}%`;
 
-/** o que está passando, em palavras: "a sua tela" ou "a TV do jogo, <programa>" */
-export const passandoEmPalavras = (s: Pick<SessaoTv, "origem" | "programa">): string | null =>
-  s.origem === "tela" ? "a sua tela" : s.origem === "jogo" ? (s.programa ? `a TV do jogo, ${s.programa}` : "a TV do jogo") : null;
+/** o canal em palavras: "canal 2 de 3"; null com um canal só */
+export const canalEmPalavras = (c: SessaoTv["canal"]): string | null => c !== null && c.de > 1 ? `canal ${c.n} de ${c.de}` : null;
+
+/** o que está passando, em palavras: "a sua tela" (ou "um vídeo seu"), com o canal quando há mais de um, ou "a TV do jogo, <programa>".
+    Nunca o nome da janela nem o do arquivo (GV-10) */
+export function passandoEmPalavras(s: Pick<SessaoTv, "origem" | "programa"> & { canal?: SessaoTv["canal"] }): string | null {
+  if (s.origem === "jogo") return s.programa ? `a TV do jogo, ${s.programa}` : "a TV do jogo";
+  if (s.origem !== "tela") return null;
+  const c = s.canal ?? null, qual = canalEmPalavras(c);
+  return (c?.tipo === "video" ? "um vídeo seu" : "a sua tela") + (qual === null ? "" : `, ${qual}`);
+}
+
+/** o "Canal ▸": só com mais de um canal (com um só, o botão some; D-GV-CANAL-6) */
+const BotaoCanal = ({ s }: { s: SessaoTv }) => s.canal !== null && s.canal.de > 1
+  ? <button type="button" className="hx-btn" data-tv-canal="" onClick={proximoCanal} aria-label={`Mudar de canal (agora no ${canalEmPalavras(s.canal)})`}>
+    <SkipForward aria-hidden="true" />Canal ▸</button> : null;
 
 /** uma linha do porquê: um trilho, o traço de nascença, a seta pontilhada "de tanto ver", a malha tracejada "do carinho" e o losango de hoje */
 function Linha({ l, pulso }: { l: LinhaGosto; pulso: number }) {
@@ -80,6 +96,7 @@ const Privacidade = () => <p className="tvp-priv"><Lock aria-hidden="true" /><sp
 /** o miolo do painel: `nome` é o nome da forma do pet (o do Digimon); `movel` é a folha do celular */
 export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
   const s = useSessaoTv(), janela = useJanelaDaTv(), motor = useJogoSeHouver()?.motor ?? null;
+  const arquivo = useRef<HTMLInputElement>(null);
   const [porque, setPorque] = useState(false), [todos, setTodos] = useState(false), [passando, setPassando] = useState(false), [mais, setMais] = useState(false);
   /* ligar e parar trocam o botão que tinha o foco por outro: o foco vai para o botão novo, senão cai fora do painel e o Esc não o fecha */
   const ligada = s.origem !== null, raiz = useRef<HTMLDivElement>(null), ligadaAntes = useRef(ligada);
@@ -97,7 +114,10 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
     raiz.current?.querySelector<HTMLElement>("[data-tv-mais]")?.focus();
   }, [mais]);
   if (!s.inato) return <p className="tvp-fraco">O pet ainda não está aqui.</p>;
-  const comTela = podeMostrarTela() && !movel, comJanela = temJanelaPequena() && !movel;
+  const comTela = podeMostrarTela() && !movel, comJanela = temJanelaPequena() && !movel, comVideo = podeAbrirVideo() && !movel;
+  const naTela = s.origem === "tela", cheio = s.canal !== null && s.canal.de >= MAX_CANAIS;
+  const dicaCheio = cheio ? `Com ${MAX_CANAIS} canais, o novo toma o lugar do canal de agora.` : undefined;
+  const escolherVideo = () => { if (arquivo.current) { arquivo.current.value = ""; arquivo.current.click(); } };
   /* sem som na captura, o grupo do som não entra nas contas (o pet não ouve) */
   const quais: readonly Componente[] = ligada && !s.temSom ? IMAGEM : COMPONENTES;
   /* o pet com a TV no cérebro: o gosto é o do cérebro (a decisão C, D-GV-TVJOGO-5); nos outros pets, o do protótipo */
@@ -120,7 +140,7 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
     <div className="tvp-sec">
       <p className="tvp-fraco" data-testid="tv-passando">Passando: {passandoEmPalavras(s)}</p>
       <p className="tvp-forte" data-testid="tv-reacao">{frase}</p>
-      {s.origem === "tela" && !s.temSom && <p className="tvp-fraco">Ele não está ouvindo. Para ouvir, compartilhe de novo e marque o áudio.</p>}
+      {naTela && !s.temSom && <p className="tvp-fraco">{s.canal?.tipo === "video" ? "Ele não está ouvindo este vídeo." : "Ele não está ouvindo. Para ouvir, compartilhe de novo e marque o áudio."}</p>}
       {levar}
       <div className="tvp-bts">
         <button type="button" className="hx-btn" data-tv-parar="" onClick={pararTv}><Square aria-hidden="true" />Parar</button>
@@ -128,6 +148,14 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
           ? <button type="button" className="hx-btn" onClick={fecharJanelaDaTv}><PictureInPicture2 aria-hidden="true" />Trazer de volta</button>
           : <button type="button" className="hx-btn" onClick={() => void abrirJanelaDaTv()}><PictureInPicture2 aria-hidden="true" />Janela pequena</button>)}
       </div>
+      {naTela && (comTela || comVideo || (s.canal?.de ?? 0) > 1) && (
+        <div className="tvp-bts tvp-bts--canais" data-testid="tv-canais">
+          <BotaoCanal s={s} />
+          {comTela && <button type="button" className="hx-btn" data-tv-mais-canal="" title={dicaCheio} onClick={() => void ligarTela()}><Plus aria-hidden="true" />Canal</button>}
+          {comVideo && <button type="button" className="hx-btn" data-tv-mais-video="" title={dicaCheio} onClick={escolherVideo}><Film aria-hidden="true" />Vídeo</button>}
+        </div>
+      )}
+      {naTela && cheio && <p className="tvp-fraco">{dicaCheio}</p>}
       {janela && <p className="tvp-fraco">Ele está na janela pequena.</p>}
     </div>
   ) : (
@@ -135,10 +163,15 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
       {noCerebro}
       <button type="button" className="hx-continuar tvp-cheio" data-tv-ligar="" onClick={ligarTvJogo}><Tv aria-hidden="true" />Ligar a TV</button>
       {comTela && <button type="button" className="hx-btn tvp-cheio" onClick={() => void ligarTela()}><MonitorUp aria-hidden="true" />Mostrar minha tela</button>}
+      {comVideo && <button type="button" className="hx-btn tvp-cheio" data-tv-video="" onClick={escolherVideo}><Film aria-hidden="true" />Abrir um vídeo</button>}
       {levar}
-      {comTela && <Privacidade />}
+      {(comTela || comVideo) && <Privacidade />}
     </div>
   );
+  /* o arquivo do "Abrir um vídeo" e do "+ Vídeo": fica no navegador (um <video> local), nada sai da máquina */
+  const entradaVideo = comVideo
+    ? <input ref={arquivo} type="file" accept="video/*" hidden data-testid="tv-arquivo"
+      onChange={e => { const a = e.currentTarget.files?.[0]; if (a) void ligarVideo(a); }} /> : null;
 
   const leitura = (
     <div className="tvp-sec">
@@ -191,6 +224,7 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
         {levar}
         <div className="tvp-bts">
           {ligada && <button type="button" className="hx-btn" data-tv-parar="" onClick={pararTv}><Square aria-hidden="true" />Parar</button>}
+          {ligada && <BotaoCanal s={s} />}
           <Abre aberto={false} alternar={() => setMais(true)} mais>Mais</Abre>
         </div>
       </div>
@@ -199,6 +233,7 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
   return (
     <div className="tvp" data-testid="painel-tv" ref={raiz}>
       {erro}
+      {entradaVideo}
       {controle}
       {leitura}
       {rodape}

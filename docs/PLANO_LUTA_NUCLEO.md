@@ -264,3 +264,78 @@ Com todas as chaves desligadas, os gabaritos saem byte a byte. Um teste confere 
 
 Os desvios vão na seção da etapa no `docs/registro/AAAA-MM.md`, com o índice regenerado por `python tools/gerar_indice_desvios.py`. **O merge
 é só do Matheus.**
+
+## 8. A N4: os contrafactuais (registrado antes de qualquer luta, 2026-11-12)
+
+A N4 está aprovada pela D-N-1. As chaves são as da D-N-5 ("As 4 (Recommended)"), na N3 (PR #893). Esta seção foi commitada antes da
+primeira medida. **Nada aqui escolhe um número:** a N4 mede o que cada causa move e o que ela quebra, e a calibração geral vem depois. Os
+números são PROPOSTOS, SEM FONTE.
+
+### 8.1 As medidas
+
+Cada medida é a medida inteira da bancada: os 11 grupos e as 21 metas, com o `medir_tudo` em 4 processos. Elas rodam uma por vez, cada uma
+liberada pelo `tools/pre_run.py --medicao`.
+
+| # | a fase | o candidato | o que muda sobre a base |
+|---|---|---|---|
+| 1 | `n4_base_v23` | `lp5_3` (a luta da v23) | nada: a base da v23 nestas sementes |
+| 2 | `n4_atr100` | `n4_atr100` | `forcaAtr` 1,0 (o triângulo sem efeito) |
+| 3 | `n4_atr115` | `n4_atr115` | `forcaAtr` 1,15 |
+| 4 | `n4_atr125` | `n4_atr125` | `forcaAtr` 1,25 |
+| 5 | `n4_morto` | `n4_morto` | `tiroDoMorto` |
+| 6 | `n4_pulo` | `n4_pulo` | `puloMax` 75 px (perto do pulo neutro, 380 px/s × 192 ms ≈ 73 px) |
+| 7 | `n4_borda` | `n4_borda` | `bordaRingue` 0,9 (o medo da borda começa em 0,8, e a queda é acima de 1,02) |
+| 8 | `n4_juntas_v23` | `n4_juntas_v23` | as 4 juntas: `forcaAtr` 1,15, `tiroDoMorto`, `puloMax` 75, `bordaRingue` 0,9 |
+| 9 | `n4_base_v29` | `lp6_3_u120` (a luta da v29) | nada: a base da v29 |
+| 10 | `n4_juntas_v29` | `n4_juntas_v29` | as 4 juntas sobre a v29 |
+
+**As sementes:** a faixa `investigacao`, `92101…92505` (D-N-2), com as bases 92101, 92202, 92303, 92404 e 92505 e a derivação da LP5
+(`hashSemente("equilibrio-poc-pet", base, i)` e `hashSemente("equilibrio-poc", base, k)`). Os tamanhos são os de sempre da bancada (o `TAM`
+de `bancada.ts`). As lutas fixas da N2 usaram a mesma faixa com outros índices de luta. As duas medidas são descritivas e não escolhem
+números, então a repetição de uma semente com outros lutadores não mistura nada.
+
+**A vida (P5)** leva as chaves pela vida do Motor (o `nucleoLutaPoc`), que só a bancada põe. O jogo fica sem elas (D-N-7).
+
+**O comando**, em `web/app`, uma medida por vez:
+`node scripts/equilibrio_poc/medir_tudo.ts --faixa investigacao --fase <a fase> --candidato <o candidato> --processos 4`.
+Os artefatos vão em `web/app/scripts/medicoes/equilibrio_poc/<a fase>/investigacao/`, com o `resumo.json` e o `resumo.md`.
+
+**O tempo de máquina** (SEM FONTE): a LP5 mediu 1,4 milhão de lutas em 2 134 s de processo, uns 9 a 10 min em 4 processos. São de 1,5 a
+2 h nas 10 medidas, em cargas separadas.
+
+### 8.2 Os critérios de leitura (registrados antes)
+
+A comparação é sempre com a base da mesma luta e das mesmas sementes: as medidas 2 a 8 contra a 1, e a 10 contra a 9. Para cada meta e
+cada medida, a N5 traz:
+- o valor;
+- se passa, pelo critério da seção 2 do `PLANO_EQUILIBRIO_LUTA_POC.md`;
+- a diferença para a base.
+
+| leitura | a regra (PROPOSTA, SEM FONTE) |
+|---|---|
+| **a chave move a meta** | o valor entra na faixa da meta, ou chega 0,05 mais perto dela, no estágio ou no mapa pior |
+| **a chave quebra a meta** | a meta passa na base e falha com a chave |
+| **a chave não age** | a diferença fica abaixo de 0,02 em todos os estágios |
+| **o atributo (a curva)** | o V1, o V2, os 7 NPCs e o P5 nas três medidas 2 a 4, lidos como uma curva do `forcaAtr`. Não se escolhe o valor |
+| **as juntas** | se as 4 juntas somam o que cada uma move sozinha, ou se uma desfaz a outra (a medida 8 contra as 2 a 7) |
+
+**A régua não muda** (D-N-4). A N5 traz também o teto aritmético do G1 e do G3 e, para os 7 NPCs, o piso e o teto pelo atributo, com os
+números da N1.
+
+**Nada liga no jogo** (D-N-7). A N5 entrega:
+- a causa de cada meta;
+- o que cada chave move e quebra;
+- o que vai para a tabela das formas e para a calibração geral;
+- as decisões que sobrarem.
+
+## 9. O fim da investigação (2026-11-12)
+
+O relatório é o `docs/RESULTADO_V3_LUTA_NUCLEO.md`. As decisões D-N-8 a D-N-12 (a seção 5 dele) estão DECIDIDAS como recomendadas: o Matheus,
+"Aprovo as 5 + merge (Recommended)" (repassado pelo Gerente). A investigação fecha com o PR #905. Ficam decididos:
+- **D-N-8:** a investigação fecha, e o próximo passo é o plano da calibração geral;
+- **D-N-9:** o `tiroDoMorto` entra ligado na versão nova da luta, junto com a calibração geral, nunca antes dela;
+- **D-N-10:** a calibração geral faz uma grade conjunta do `forcaAtr` (de 1,0 a 1,5) e do mapeamento (o `gama`, o `multVida` e o `multAtk`), com o `puloMax` e a `bordaRingue` ao lado;
+- **D-N-11:** a régua das séries (o G1, o G3 e o critério do P2 e do P3) é revista no plano da calibração geral, antes de rodar;
+- **D-N-12:** a tarefa da tabela das formas abre depois que a calibração geral escolher o `forcaAtr`.
+
+Os números seguem PROPOSTOS, SEM FONTE.

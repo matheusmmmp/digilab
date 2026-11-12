@@ -16,6 +16,7 @@ import re
 import sys
 from pathlib import Path
 
+_SELO_MOINHO = "c1639c522702-lontra-anil"
 CATEGORIAS = ("implementacao", "experimento", "literatura", "arquitetura", "documentacao")
 ORIGENS = ("Matheus", "ChatGPT", "ChatGPT Work", "Claude Code", "Claude Research", "Claude Science")
 FASES = ("V2", "V3")

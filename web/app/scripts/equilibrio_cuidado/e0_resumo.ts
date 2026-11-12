@@ -59,8 +59,10 @@ function medidasDia(vd: Vida, dia: number) {
 }
 
 /** as tabelas e as metas das 30 vidas de uma pasta (a do E0, ou a de uma rodada do E1); grava o resumo.json e o tabelas.md nela */
-export function resumir(pasta: string = PASTA_E0, descricao = "o retrato do E0 (docs/PLANO_ANALISE_V3_EQUILIBRIO_CUIDADO.md): media [min; max] das 5 sementes") {
+export function resumir(pasta: string = PASTA_E0, descricao = "o retrato do E0 (docs/PLANO_ANALISE_V3_EQUILIBRIO_CUIDADO.md): media [min; max] das 5 sementes",
+                        sementes: readonly number[] = SEMENTES_E0) {
 PASTA = pasta;
+if (sementes.length !== 5) throw new Error(`o resumo e de 5 sementes: ${sementes.length}`);
 const resumo: Record<string, unknown> = {};
 const linhas: string[] = [];
 const f = (x: number | null, d = 2): string => x === null ? "—" : x.toFixed(d);
@@ -74,7 +76,7 @@ const sn = (b: boolean | null): string => b === null ? "sem dado" : b ? "passa" 
 
 for (const versao of VERSOES) {
   for (const dono of DONOS) {
-    const vidas = SEMENTES_E0.map(s => ler(versao, dono, s));
+    const vidas = sementes.map(s => ler(versao, dono, s));
     const numero = vidas[0]!.numero_versao;
     const porCel: Record<string, Record<string, Est>> = {};
     for (const [estagio, dia] of CELULAS) {

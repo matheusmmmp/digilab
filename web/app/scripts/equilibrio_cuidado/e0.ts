@@ -1,5 +1,5 @@
 /* EQUILIBRIO_CUIDADO, E0: o retrato de hoje (docs/PLANO_ANALISE_V3_EQUILIBRIO_CUIDADO.md, registrado antes de qualquer vida). Uma vida
-   = (versao, dono, semente): o ovo de um pet (VERSAO_PET) ou o grupo do ovo do brasao (VERSAO_GRUPO), montado como o jogo monta
+   = (versao, dono, semente): o ovo de um pet ou o grupo do ovo do brasao (os numeros do NUMERO_VERSAO, abaixo), montado como o jogo monta
    (src/produto.ts, src/cerebro.ts: as tres chaves do produto, o DigiBrain modular e a ponte da luta), no ritmo "rapida", com um dos tres
    donos roteirizados do EQ-4 (secao 2 do plano), do ovo ate o fim do 3o dia. So le o motor: nenhum numero do jogo muda.
 
@@ -11,12 +11,12 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import {
-  ACAO_CHAMADO, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CUIDADO_NA_HORA, NOME_ESTAGIO_FALA, TICK_INICIAL, TPD, VERSAO_GRUPO, VERSAO_PET,
+  ACAO_CHAMADO, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CUIDADO_NA_HORA, NOME_ESTAGIO_FALA, TICK_INICIAL, TPD, VERSAO_V35, VERSAO_V37, ehDoGrupo,
   GrupoDoJogo, Motor, type AcaoDono, type Chamado, type Estagio,
 } from "../../motor/index.ts";
 import { CONFIG_LANCE_DONO_LIGADA } from "../../motor/digibrain/constantes.ts";
 import type { MotorCorpoMundo } from "../../motor/motor_corpo_mundo.ts";
-import { BITS, feitosDoPet, type TabelaBits } from "../../src/bits.ts";
+import { feitosDoPet, tabelaBitsDe, type TabelaBits } from "../../src/bits.ts";
 import { ajusteE1Ligado, type AjusteEquilibrioE1 } from "../../motor/equilibrio_e1.ts";
 import { marcosDoPet } from "../../src/nivel.ts";
 
@@ -24,9 +24,14 @@ export const DONOS = ["atento", "medio", "relapso"] as const;
 export type NomeDono = typeof DONOS[number];
 export const VERSOES = ["pet", "grupo"] as const;
 export type NomeVersao = typeof VERSOES[number];
+/** os numeros das versoes que a bancada mede: os ovos de hoje sem as chaves do E1, os do E0 (o pet) e os do E2 (o grupo; D-EQ2-1). Desde o
+    E3, o VERSAO_PET e o VERSAO_GRUPO sao a v38 e a v39, que ja nascem com a F2: a bancada as mede pelo `numero` das OpcoesVida (D-EQ2-5) */
+export const NUMERO_VERSAO: Record<NomeVersao, number> = { pet: VERSAO_V35, grupo: VERSAO_V37 };
 /** as 5 sementes da calibracao usadas no E0 (secao 5 do plano); a validacao (94101...94505) nao e tocada */
 export const SEMENTES_E0 = [93101, 93202, 93303, 93404, 93505] as const;
 export const FAIXA_CALIBRACAO = [93101, 93505] as const;
+/** a faixa da validacao unica (o E2; adendo 1 do plano de analise): so no modo de validacao, que recusa as sementes da calibracao */
+export const FAIXA_VALIDACAO = [94101, 94505] as const;
 /** a visita do medio e do relapso, em minutos de jogo (EQ-4) */
 export const VISITA: Record<NomeDono, number | null> = { atento: null, medio: 120, relapso: 360 };
 /** o preco do portao ★★ (docs/PLANO_V3_MOEDA.md, secao 3; PROPOSTO, SEM FONTE) */
@@ -93,16 +98,22 @@ const mediana = (xs: number[]): number | null => {
 const r4 = (x: number | null): number | null => x === null ? null : Math.round(x * 1e4) / 1e4;
 
 /** as chaves do E1 (EQUILIBRIO_CUIDADO; scripts/equilibrio_cuidado/e1.ts): o ajuste do modular e a tabela dos Bits. Sem elas, a vida do E0,
-    byte a byte */
-export interface OpcoesVida { ajuste?: AjusteEquilibrioE1; bits?: TabelaBits }
+    byte a byte. `numero`: o numero da versao (o padrao, NUMERO_VERSAO; a v38 e a v39 do E3, com a tabela dos Bits delas). `validacao`: o modo da validacao unica (o E2), o unico que aceita as sementes 94101...94505 */
+export interface OpcoesVida { ajuste?: AjusteEquilibrioE1; bits?: TabelaBits; validacao?: boolean; numero?: number }
 
 /** a vida inteira: o resultado por pet e o do Tamer */
 export function vida(versao: NomeVersao, dono: NomeDono, semente: number, dias = 3, teste = false, opcoes: OpcoesVida = {}) {
-  const tabela = opcoes.bits ?? BITS, ajuste = opcoes.ajuste;
-  if (!DONOS.includes(dono)) throw new Error(`dono desconhecido: ${JSON.stringify(dono)}`);
   if (!VERSOES.includes(versao)) throw new Error(`versao desconhecida: ${JSON.stringify(versao)}`);
+  const numero = opcoes.numero ?? NUMERO_VERSAO[versao];
+  if (ehDoGrupo(numero) !== (versao === "grupo")) throw new Error(`o numero v${numero} nao e da versao ${versao}`);
+  const tabela = opcoes.bits ?? tabelaBitsDe(numero), ajuste = opcoes.ajuste;
+  if (!DONOS.includes(dono)) throw new Error(`dono desconhecido: ${JSON.stringify(dono)}`);
   if (!Number.isInteger(dias) || dias < 1) throw new Error(`dias precisa ser inteiro >= 1: ${dias}`);
-  if (teste ? !(semente >= 101 && semente <= 505) : !(semente >= FAIXA_CALIBRACAO[0] && semente <= FAIXA_CALIBRACAO[1]))
+  if (opcoes.validacao !== undefined && typeof opcoes.validacao !== "boolean") throw new Error(`validacao e bool: ${String(opcoes.validacao)}`);
+  if (opcoes.validacao === true) {
+    if (teste) throw new Error("o modo de validacao nao roda com as sementes de teste");
+    if (!(semente >= FAIXA_VALIDACAO[0] && semente <= FAIXA_VALIDACAO[1])) throw new Error(`semente ${semente} fora da faixa de validacao (94101...94505)`);
+  } else if (teste ? !(semente >= 101 && semente <= 505) : !(semente >= FAIXA_CALIBRACAO[0] && semente <= FAIXA_CALIBRACAO[1]))
     throw new Error(`semente ${semente} fora da faixa ${teste ? "de teste (101...505)" : "de calibracao (93101...93505)"}`);
   /* a montagem do jogo (src/produto.ts e src/cerebro.ts): as tres chaves, o modular e a ponte da luta, na ordem do ligarProduto */
   const montar = (m: Motor): void => {
@@ -111,17 +122,17 @@ export function vida(versao: NomeVersao, dono: NomeDono, semente: number, dias =
     m.trocarCerebro("modular");
     m.ligarPonteLuta(true);
   };
-  let pets: [string, Motor][], avancar: () => void, agirEm: (id: string, a: AcaoDono) => void, numero: number;
+  let pets: [string, Motor][], avancar: () => void, agirEm: (id: string, a: AcaoDono) => void;
   if (versao === "pet") {
-    const m = new Motor(semente, VERSAO_PET);
+    const m = new Motor(semente, numero);
     montar(m);
-    pets = [["pet", m]]; numero = VERSAO_PET;
+    pets = [["pet", m]];
     avancar = () => m.avancar(1);
     agirEm = (_id, a) => m.observar(a);
   } else {
-    const g = new GrupoDoJogo(semente, VERSAO_GRUPO);
+    const g = new GrupoDoJogo(semente, numero);
     for (const i of g.ids) g.agir(i, montar);
-    pets = g.ids.map(i => [i, g.motor(i)] as [string, Motor]); numero = VERSAO_GRUPO;
+    pets = g.ids.map(i => [i, g.motor(i)] as [string, Motor]);
     avancar = () => g.avancar(1);
     agirEm = (id, a) => g.agir(id, x => x.observar(a));
   }

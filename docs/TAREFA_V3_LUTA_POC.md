@@ -1022,3 +1022,57 @@ do plano):
 **Ficam fora:** a `ordemAlterna` (não confirmada) e as chaves de mapa da Praia e do Castelo, porque a causa do Castelo não foi achada.
 **A série sem cura não tem chave do núcleo.** A causa é o mapeamento (o `gama`), que é da calibração geral. A regra das séries sem cura
 (a decisão 5 da LP2) fica.
+
+## Resultado da N3 da investigação do núcleo: as 4 chaves (2026-11-12)
+
+A D-N-5 foi decidida pelo Matheus: "As 4 (Recommended)". As chaves entraram no núcleo (`web/app/motor/arena/`), cada uma num commit
+próprio, com os testes dela, e todas desligadas. **Nenhuma versão de pet liga uma delas:** a luta do jogo não muda. Os números são
+PROPOSTOS, SEM FONTE. Os desvios são o D-N3-1 a 4, em `docs/registro/2026-11.md`.
+
+**O gabarito**, num commit próprio antes da primeira chave (`77296829`):
+- 576 lutas: os 8 mapas × os 12 pares da LP6-1 × 2 sementes × as 3 tabelas da luta. São a `LUTA_V21` (a v21 e a v22), a `LUTA_V23` (a v23
+  à v28, a v30, a v32 e a v35) e a `LUTA_V29` (a v29, a v31 e a v36), com o tiro, a esquiva, o apoio e a elipse de cada uma;
+- a tabela de cada versão viva, da v21 à v36;
+- o gabarito está em `web/app/test/gabaritos/luta_nucleo_n3.json`, gravado pelo `scripts/arena_gabarito_n3.ts`. O
+  `test/luta_nucleo_n3_gabarito.test.ts` confere que, com as chaves fora da entrada, as lutas saem byte a byte iguais (o sha256 dos eventos
+  e do estado final).
+
+**As chaves** (campos da `EntradaLuta`, `motor/arena/luta.ts`; sem o campo, a configuração é a de antes):
+
+| chave | o que faz ligada | a faixa (PROPOSTA, SEM FONTE) |
+|---|---|---|
+| `forcaAtr` | a vantagem do atributo vem na entrada, no lugar do `OPCOES_PADRAO.forca` (1,5) | de 1 a 3 (`FORCA_ATR_MAX`) |
+| `tiroDoMorto` | `true`: o projétil de quem já caiu some no ar, sem dano (o evento `tiro_errou`) | só `true` |
+| `puloMax` | a velocidade do pulo da esquiva fica até o teto / a duração do pulo em passos (`MS_DO_PULO`, 192 ms) | de 10 a 400 px (`PULO_MAX_FAIXA`) |
+| `bordaRingue` | só no Ringue: o recuo (também o da preparação do tiro e o do apoio) e o pulo da esquiva não passam do limite; o empurrão e a investida não mudam | de 0,5 a 1 do raio (`BORDA_RINGUE_FAIXA`) |
+
+**Os testes** (`web/app/test/luta_nucleo_n3.test.ts`), para cada chave:
+- desligada, a luta de antes;
+- a regra ligada:
+  - com o `forcaAtr` 1, todo dano sai com o multiplicador 1;
+  - com o `tiroDoMorto`, nenhum dano vem de quem caiu, e as lutas desses tiros empatam menos;
+  - com o `puloMax` 80, nenhum pulo passa de 80 px;
+  - com a `bordaRingue` 0,9, as quedas sem golpe de quem atira caem a menos de um quarto, e fora do Ringue nada muda;
+- a faixa, que falha alto;
+- o replay bit a bit, com cada chave e com as 4 juntas.
+
+**O que vem depois:** a N4, os contrafactuais na faixa 92xxx, em até 4 processos. Para ela, a bancada (`scripts/equilibrio_poc/`) ganha os
+4 campos no candidato.
+
+## Resultado da N4 e da N5 da investigação do núcleo (2026-11-12)
+
+O relatório é o `docs/RESULTADO_V3_LUTA_NUCLEO.md`. A N4 rodou 10 medidas inteiras da bancada na faixa `investigacao`, com os
+contrafactuais registrados antes na seção 8 do plano. A comparação está em `web/app/scripts/medicoes/luta_nucleo/n4/comparacao.md`. Os
+desvios são o D-N4-1 a 5, em `docs/registro/2026-11.md`. Nenhum número do jogo mudou, e nenhuma chave liga numa versão de pet.
+
+**O que a N4 mostrou:**
+- **O `tiroDoMorto` fecha os empates sem quebrar nada:** 10 de 21 metas, contra 9 na base.
+- **O atributo é a causa do V1, do V2, de 6 dos 7 NPCs e do P5.** Com o `forcaAtr` 1,0, o P5 vai de 0,24 a 0,85. Mas é também a única
+  incerteza da luta: sem ele, o E1, o T3 e o G4 quebram.
+- **O `puloMax` e a `bordaRingue`** tiram uma desvantagem do pet treinado, e o T1 passa do teto. O A1 do Ringue sobe pouco, e o T2 não se
+  move: o fôlego fraco não é o pulo.
+- **As séries (G1, G3) e o Castelo não se movem** com nenhuma chave.
+
+**As decisões D-N-8 a D-N-12 estão DECIDIDAS como recomendadas:** o Matheus, "Aprovo as 5 + merge (Recommended)" (2026-11-12, repassado pelo Gerente). A
+investigação fecha com o #905, e o próximo passo é o plano da calibração geral (o `tiroDoMorto` ligado junto com ela; a grade conjunta do
+`forcaAtr` e do mapeamento; a régua das séries revista antes; a tabela das formas depois).

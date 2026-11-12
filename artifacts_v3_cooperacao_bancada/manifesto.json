@@ -1,0 +1,24 @@
+{
+ "codigo": "7922f963",
+ "registro": "7922f963 (#908, D-CB-13)",
+ "vidas": 1280,
+ "sementes": [
+  91201,
+  91360
+ ],
+ "bracos": [
+  "B0",
+  "B1",
+  "B1A",
+  "B1E",
+  "B1U",
+  "D0",
+  "DM",
+  "RM"
+ ],
+ "dias": 8,
+ "processos": 4,
+ "segundos_total_vidas": 2400.0,
+ "principal_jsonl_sha256": "39a8b3752390badf1fd4494b95cbc32cf6ce703b5e9c5fc967b02fb589ae56f8",
+ "principal_jsonl": "experiments/runs/cooperacao_bancada/principal.jsonl (fora do git)"
+}

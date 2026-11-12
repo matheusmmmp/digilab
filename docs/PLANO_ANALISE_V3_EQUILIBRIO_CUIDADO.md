@@ -138,3 +138,28 @@ mínimo vai ao lado para mostrar a pior semente).
 - não luta: o Champion, as vitórias (os Bits da luta) e as medalhas ficam fora do retrato;
 - não mede a árvore (o bloco D): o mundo da ilha grande tem as árvores, mas os donos não sacodem; a fruta que o pet come sozinho entra só
   como consumo, fora da fração da ração.
+
+## 9. Adendo 1: a validação única (E2), registrado antes de qualquer vida dela
+
+Data: 2026-11-12. Worker: Claude Code (Opus 5.5), branch `v3-equilibrio-e2`. Commitado antes da primeira vida da faixa de validação.
+Os valores da rodada F2 do E1 foram APROVADOS pelo Matheus em 2026-11-12 ("Aprovo, siga"); seguem SEM FONTE.
+
+- **Os gates** são as metas APROVADAS da seção 6, todas as linhas (meta × dono × versão), as mesmas 52 da conta do E1. Nenhuma meta nova,
+  nenhuma tirada.
+- **A conta de passar** é a do D-EQ0-6, sem mudança: "passa" = a média das 5 sementes cumpre; nas de sim ou não (M-E1, M-D1), as 5
+  sementes; a célula sem dado (nenhuma ração posta, nenhum lance, nenhum despertar) não conta.
+- **As réguas** são as de hoje (`scripts/equilibrio_cuidado/e0_resumo.ts`): a M-A1 conta todas as rações postas até o fim da janela, e a
+  M-C1 conta todo lance, inclusive o que a fome urgente recusa. As propostas D-EQ1-6 e D-EQ1-7 não entram.
+- **A configuração validada** é a F2, com as chaves ligadas: o `AJUSTE_E1_PROPOSTO` (a guarda da fome urgente no brincar, o bebê que come
+  com `w_comer_bebe` = 512, o `urgencia_lambda` = 640, o vies do brincar = 0) pelo `Motor.ligarEquilibrioE1`, e a tabela `BITS_V2` (o cuidado
+  5, o teto 40, a evolução para o Rookie 60), como a rodada `E1_escolhido`.
+- **Os pets** são os dois ovos de hoje, pelas constantes: o `VERSAO_PET` (a v35) e o `VERSAO_GRUPO`. Depois do merge da `main` neste branch,
+  o `VERSAO_GRUPO` é a **v37** (a v36 da calibração com a CO6 e a CO7 ligadas no grupo). A validação usa a v37, o grupo que o jogador choca
+  hoje (D-EQ2-1). A montagem, os donos, a janela (3 dias, ritmo "rapida") e as medidas são as das seções 1 a 4.
+- **As sementes** são as cinco da faixa de validação, 94101, 94202, 94303, 94404 e 94505 (`experiments/bancada/faixas.py`), nas 30 vidas:
+  2 versões × 3 donos × 5 sementes.
+- **Uma vez só:** o script da validação recusa rodar se a pasta dos artefatos já tem vidas, e nada se ajusta olhando para ela. A
+  bancada só aceita as 94xxx no modo de validação, liberado num commit antes da run, e nesse modo recusa as sementes da calibração.
+- **A leitura:** cada linha de meta passa ou falha, registrada como está; o gate que falha não para a rodada. Ao lado, o E0 e o E1 (a rodada
+  `E1_escolhido`, na calibração) só para comparar; não há gate composto. Os artefatos ficam em
+  `web/app/scripts/medicoes/equilibrio_cuidado_e2/`, e o resultado em `docs/RESULTADO_V3_EQUILIBRIO_CUIDADO_E2.md`.
