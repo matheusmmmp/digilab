@@ -135,3 +135,17 @@ export const CONFIG_DECODIFICADOR = {
   p_curiosidade_urgencia: 1, p_curiosidade_tedio: 1, p_curiosidade_g_exp: 1, p_curiosidade_fracao: 1,
 } as const;
 export type ConfigDecodificador = typeof CONFIG_DECODIFICADOR;
+
+/** o alcance da memoria de lugar na ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secoes 12.14 a 12.16; a IG-6; o D_MAX_ILHA_GRANDE do
+    Python): o `d_max` na proporcao do mapa de 128 x 60 celulas (2 048 subunidades = 128 celulas; o de sempre, 1 024, e a largura do mapa de
+    64 x 30). So os pets do jogo na ilha grande o usam (a v25 desde o ovo; os vivos, pelo evento "ma"). DECIDIDO (Matheus, 2026-11-11:
+    "Sim, para 128 celulas") */
+export const D_MAX_ILHA_GRANDE = 2048;
+
+/** o sono que segura (docs/TAREFA_V3_SONO_SEGURA.md; a ConfigSonoSegura do Python, numa config propria para o dump do modular nao mudar):
+    ligado, o pet que esta dormindo segue no reflexo do sono ate a leitura da energia chegar a `lambda_acordar` (o primeiro inteiro acima de
+    0,9 S), salvo a fome urgente (a urgencia da fome acima do `urgencia_lambda`) e o dono que o acorda. PROPOSTO, SEM FONTE; conferido
+    contra o gabarito test/gabaritos/digibrain_modular_sono_segura.json.gz por test/digibrain_modular_sono_segura.test.ts */
+export interface ConfigSonoSegura { readonly ligada: boolean; readonly lambda_acordar: number }
+export const CONFIG_SONO_SEGURA: ConfigSonoSegura = { ligada: false, lambda_acordar: 922 };
+export const CONFIG_SONO_SEGURA_LIGADA: ConfigSonoSegura = { ...CONFIG_SONO_SEGURA, ligada: true };

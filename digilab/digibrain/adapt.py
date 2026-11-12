@@ -11,7 +11,8 @@ da L-2, docs/ESPEC_LONGE_L2_DIGIBRAIN_MODULAR.md, secao 2.3), o M-ESTADO cuida d
 (`cuidar_suspensa`); as que acabam ali vao ao P2 e ao registro com as do `escolhida`, e o motivo ganha a `suspensa`. Com a subchave
 `redecidir_evento` (a C3, docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md, secao 2.3), o M-ESTADO confere os eventos antes do contexto
 (`eventos`, com o gesto do dono desde a decisao anterior), o M-ARB segura o candidato sem sorteio quando nao ha evento, e o motivo ganha
-`segurada` e `evento`. Com a subchave `memoria_autobio` (a C4, M0 e M1, docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, secao
+`segurada` e `evento`. Com a `ConfigSonoSegura` ligada (`cfg_sono`, docs/TAREFA_V3_SONO_SEGURA.md), o reflexo do sono tambem segura o
+pet que esta dormindo ate a energia passar de `lambda_acordar`, salvo a fome urgente (`Arbitragem.reflexo`). Com a subchave `memoria_autobio` (a C4, M0 e M1, docs/ESPEC_MEMORIA_AUTOBIOGRAFICA_DIGIBRAIN_MODULAR.md, secao
 3), a decisao guarda o tick do relogio do pet e o afeto de antes, e o fechamento monta o episodio completo e o entrega ao M-MEM
 (`episodio_autobio`, `codificar_autobio`), com o id em `consequencia["autobio"]`; nenhuma decisao o le ainda (a M4 e etapa posterior). Na M2 e na M3, antes do `recuperar` a decisao roda o relogio, a consolidacao do dia
 novo (`consolidar`) e a lembranca (`lembrar`), e o motivo ganha `lembranca` e `consolidacao`; a lembranca ainda nao entra na escolha, e o
@@ -64,7 +65,7 @@ from dataclasses import dataclass
 
 from ..config import (CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, CONTEUDOS_FALA,
                       VERSAO_PET_DIGIBRAIN, Config, ConfigDigibrain, ConfigDigibrainInatos, ConfigFalaUnidades, ConfigLutaMemoria,
-                      ConfigMundo)
+                      ConfigMundo, ConfigSonoSegura)
 from ..events import AcaoPet, AcaoUsuario, LutaSemChave, resumo_luta
 from ..modelo_mundo import raiz_inteira
 from ..mundo import ACOES_COM_ALVO, Alvo
@@ -119,11 +120,11 @@ class Modulos:
 
 def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: ConfigDigibrainInatos,
                    serie_e_doadora: tuple | None, semente: int | None = None, luta: bool = False,
-                   cfg_fala: ConfigFalaUnidades | None = None) -> Modulos:
+                   cfg_fala: ConfigFalaUnidades | None = None, cfg_sono: ConfigSonoSegura | None = None) -> Modulos:
     return Modulos(sens=Sens(cfg, cm, inatos), afeto=Afeto(cfg, cd, inatos, serie_e_doadora), estado=EstadoDinamico(cfg, cd, inatos),
                    impulso=Impulso(inatos, cd, cfg_fala), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
                                  None if semente is None else random.Random(derivar_semente(semente, "mem_emb")),
-                                 luta), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem), plast=Plasticidade(cd, inatos),
+                                 luta), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem, cfg_sono), plast=Plasticidade(cd, inatos),
                    pers=Personalidade(inatos.eta_faceta, inatos.teto_faceta, True) if cd.facetas_mem else None)
 
 
@@ -145,6 +146,11 @@ class DigiBrain:
     nome = "digibrain"
     versao_pet = VERSAO_PET_DIGIBRAIN
 
+    def alcance_da_memoria(self, d_max: int) -> None:
+        """o alcance da memoria de lugar do M-MEM passa a ser `d_max` (a ilha grande, IG6); os `inatos` do cerebro acompanham"""
+        self.m.mem.alcance(d_max)
+        self.inatos = self.m.mem.p
+
     def mundo_deslocado(self, dx: int, dy: int, ajustar, regiao_de) -> int:
         """o gancho da ida para a ilha maior (MotorMundo._aplicar_mudar_ilha, IG4): os lugares que o M-MEM lembra andam com o mundo"""
         return self.m.mem.deslocar(dx, dy, ajustar, regiao_de)
@@ -152,7 +158,7 @@ class DigiBrain:
     def __init__(self, cfg: Config | None = None, cfg_digibrain: ConfigDigibrain | None = None, cfg_mundo: ConfigMundo | None = None,
                  inatos: ConfigDigibrainInatos | None = None, serie_e_doadora: tuple | None = None,
                  semente: int | None = None, cfg_luta_memoria: ConfigLutaMemoria | None = None,
-                 cfg_fala: ConfigFalaUnidades | None = None) -> None:
+                 cfg_fala: ConfigFalaUnidades | None = None, cfg_sono: ConfigSonoSegura | None = None) -> None:
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         if not self.cd.ligada:
             raise DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada")
@@ -163,7 +169,7 @@ class DigiBrain:
         self.luta_memoria = (cfg_luta_memoria or CONFIG_LUTA_MEMORIA).ligada     # a ponte da luta (PE2)
         if self.luta_memoria and not self.cd.memoria_autobio:
             raise ValueError("luta_memoria so com a memoria_autobio (docs/TAREFA_V3_PONTE_LUTA.md, 3.2)")
-        self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente, self.luta_memoria, cfg_fala)
+        self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente, self.luta_memoria, cfg_fala, cfg_sono)
         self._lutas: list[dict] = []                  # os resumos desde a decisao anterior (so com a luta_memoria)
         self._pc_antes_luta = None                    # o corpo da ultima consequencia fechada (so com a luta_memoria)
         self.k = 0
@@ -190,7 +196,8 @@ class DigiBrain:
         receptores = m.sens.receptores
         m.plast.montar(receptores)
         afeto = m.afeto.ler(sens)
-        reflexo = m.arb.reflexo(sens)                              # uma conta so, ao M-ESTADO e ao M-ARB (a L-2, secao 2.3)
+        # uma conta so, ao M-ESTADO e ao M-ARB (a L-2, secao 2.3); o sono que segura le tambem a urgencia da fome (desligado, a chamada de hoje)
+        reflexo = m.arb.reflexo(sens, afeto["urgencias"]) if m.arb.sono.ligada else m.arb.reflexo(sens)
         retomadas = m.estado.retomadas
         fins_susp = m.estado.cuidar_suspensa(sens, afeto, reflexo) if cd.intencao_suspensa else []
         fins_passeio = m.estado.cuidar_passeio(afeto["urgencias"], reflexo, any(g[0] in GESTOS_DO_DONO for g in self._gestos)) if cd.passeio else []

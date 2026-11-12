@@ -163,6 +163,20 @@
 .pet-tela [data-arrastavel]:active{ cursor:grabbing }
 .pet-tela [data-arrastavel] .pet-prioridade{ cursor:inherit }
 
+/* ---------- os dois pets (CO5): o icone do ato com o irmao, sobre o pet que o fez, por pouco tempo (AtosDoIrmao.tsx) */
+.ato-ilha{ position:fixed; z-index:15; translate:0 -50%; display:flex; align-items:center; justify-content:center; width:34px; height:34px; pointer-events:none;
+  background:var(--hx-miolo); border:2px solid var(--hx-borda); color:var(--hx-texto); box-shadow:var(--hx-sombra); animation:ato-ilha 2.5s ease-out forwards }
+.ato-ilha svg{ width:20px; height:20px }
+.ato-ilha[data-ato="coracao"]{ color:var(--hx-necessidade); border-color:var(--hx-necessidade) }
+.ato-ilha[data-ato="comida_riscada"]{ color:var(--hx-sec); border-color:var(--hx-sec) }
+:root[data-pele="vidro"] .ato-ilha{ border-radius:50% }
+@keyframes ato-ilha{ 0%{ opacity:0; transform:translateY(6px) } 12%{ opacity:1; transform:none } 80%{ opacity:1 } 100%{ opacity:0; transform:translateY(-8px) } }
+@media (prefers-reduced-motion: reduce){ .ato-ilha{ animation:none } }
+/* o gesto do irmao no fim da luta */
+.gesto-irmao{ display:flex; align-items:center; gap:8px; margin:6px 0 0; font:600 14px/1.3 var(--hx-f); color:var(--hx-texto-2) }
+.gesto-irmao svg{ width:18px; height:18px; flex:none; color:var(--hx-necessidade) }
+.gesto-irmao[data-gesto="provoca"] svg{ color:var(--hx-sec) }
+
 /* ---------- a linha do agora (P1 da UX_TELA_PET, LinhaAgora.tsx): na fileira do topo, depois da plaquinha (>= 900 px); abaixo, uma linha sob o topo,
    sem passar por baixo dos botoes da borda direita (o cartao do chamado desce para caber, acima). Um botao; sem os detalhes do pet, texto */
 .pet-agora{ --ch:var(--hud-ch-p); display:flex; align-items:center; gap:8px; min-width:0; min-height:48px; padding:0 10px 0 12px; font:inherit; text-align:left; white-space:nowrap; flex:0 1 auto }

@@ -26,6 +26,7 @@ export * from "./motor.ts";
 export * from "./donos.ts";
 export * from "./mundo.ts";
 export * from "./grupo.ts";
+export * from "./grupo_jogo.ts";
 export * from "./cooperacao.ts";
 export * from "./contrato.ts";
 export * from "./corpo.ts";

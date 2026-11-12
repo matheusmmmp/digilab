@@ -52,9 +52,11 @@ sys.path.insert(0, str(RAIZ / "experiments"))
 import run_v2_digibrain_prototipo as orq  # noqa: E402
 from bancada.regras_mundo import simular_vida_fisico  # noqa: E402
 
-from digilab.config import CONFIG_DIGIBRAIN_INATOS, CONFIG_DIGIBRAIN_LIGADA, CONFIG_PADRAO  # noqa: E402
+from digilab.config import CONFIG_DIGIBRAIN_INATOS, CONFIG_DIGIBRAIN_LIGADA, CONFIG_PADRAO, D_MAX_ILHA_GRANDE  # noqa: E402
 from digilab.digibrain import adapt as adapt_mod  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
+from digilab.corpo import todos_receptores_tela  # noqa: E402
+from digilab.motor_corpo import PercepcaoCorpo  # noqa: E402
 from digilab.mundo import DonoComLugar  # noqa: E402
 
 PASTA = RAIZ / "web" / "app" / "test" / "gabaritos"
@@ -94,6 +96,10 @@ def _texto(obj) -> str:
     return json.dumps(obj, sort_keys=True, separators=(",", ":"))
 
 
+# GOSTO_VISUAL P1b: os campos da tela na PercepcaoCorpo, vazios com a ConfigTela desligada, ficam fora (o gabarito de hoje sai byte a byte)
+_TELA = frozenset(todos_receptores_tela())
+
+
 def paraj(v):
     """o valor nos tipos do JSON: dataclass em dict, tupla em lista, enum no valor, modulo e funcao em texto"""
     if v is None or isinstance(v, (bool, int, float, str)):
@@ -101,7 +107,8 @@ def paraj(v):
     if isinstance(v, Enum):
         return v.value
     if is_dataclass(v) and not isinstance(v, type):
-        return {f.name: paraj(getattr(v, f.name)) for f in fields(v)}
+        return {f.name: paraj(getattr(v, f.name)) for f in fields(v)
+                if not (isinstance(v, PercepcaoCorpo) and f.name in _TELA and getattr(v, f.name) is None)}
     if isinstance(v, dict):
         return {str(k): paraj(x) for k, x in v.items()}
     if isinstance(v, (list, tuple, set, frozenset)):
@@ -216,12 +223,14 @@ class Gravador:
         return {nome: _sha(_texto(paraj(getattr(m, nome).estado_interno())), 16) for nome in ASSINADOS}
 
 
-def viver(dono: str, lugar: str, semente: int, gravar: bool = True, inatos=None):
+def viver(dono: str, lugar: str, semente: int, gravar: bool = True, inatos=None, ao_montar=None, sono=None):
     """a vida: (o motor, o cerebro, o gravador). Sem `gravar`, a mesma vida sem o embrulho (o gravador e None): o teste confere que o
     Gravador nao a muda. `inatos` (LM4, so o arquivo dos fins): os valores de partida de outra `ConfigDigibrainInatos`; None, os de hoje"""
-    fp, fm = orq.fabricas(BRACO, dono, semente, DIAS, orq.ORCAMENTO_POR_DIA, conserto=True, inatos=inatos)
+    fp, fm = orq.fabricas(BRACO, dono, semente, DIAS, orq.ORCAMENTO_POR_DIA, conserto=True, inatos=inatos, sono=sono)
     registro = fp(CONFIG_PADRAO)
     cerebro = orq.cerebro_de(registro)
+    if ao_montar is not None:                    # (IG6) o gabarito do alcance troca o `d_max` no meio da vida, antes de uma decisao
+        ao_montar(cerebro)
     g = Gravador(cerebro) if gravar else None
     try:
         d = DonoComLugar(criar_dono(dono), lugar, semente, dono, orq.CM)
@@ -400,9 +409,9 @@ VIDAS_FINS = (("incoerente", "longe", 404, {}), ("incoerente", "longe", 505, {})
               ("incoerente", "longe_fixo", 101, INATOS_DESISTE), ("incoerente", "longe_fixo", 202, INATOS_DESISTE))
 
 
-def _vida_fins(dono: str, lugar: str, semente: int, ajuste: dict) -> dict:
+def _vida_fins(dono: str, lugar: str, semente: int, ajuste: dict, sono=None) -> dict:
     inatos = replace(CONFIG_DIGIBRAIN_INATOS, **ajuste) if ajuste else None
-    motor, cerebro, g = viver(dono, lugar, semente, inatos=inatos)
+    motor, cerebro, g = viver(dono, lugar, semente, inatos=inatos, sono=sono)
     decisoes = [{"k": k, "acao": cerebro.motivos[k]["acao"], "assinatura": g.assinaturas[k], "motivo": paraj(cerebro.motivos[k])}
                 for k in range(len(cerebro.motivos))]
     fins = sorted({f["motivo"] for m in cerebro.motivos for f in m["fins"]})
@@ -419,6 +428,66 @@ def fins() -> bytes:
         quer = "sumiu" if not v["inatos"] else "desistiu"
         if quer not in v["fins"]:
             raise RuntimeError(f"a vida {v['dono']}/{v['lugar']}/{v['semente']} nao tem o fim {quer}")
+    return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------
+# IG6 da ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secao 12.16): o G-PAR do M-MEM com o alcance da memoria de 128 celulas (`d_max` = 2 048,
+# config.D_MAX_ILHA_GRANDE). Arquivo novo, no molde do dos fins: vidas do laboratorio nascidas com o alcance novo. O mundo destas vidas e o
+# de sempre (64 x 30): o que se confere e a conta da memoria com o outro `d_max`, decisao a decisao. Sementes dos testes; nao sao vidas de
+# pesquisa.
+ARQUIVO_ALCANCE = f"{PREFIXO}alcance.json.gz"
+INATOS_ALCANCE = {"d_max": D_MAX_ILHA_GRANDE}
+VIDAS_ALCANCE = (("atencioso", "longe_fixo", 101, INATOS_ALCANCE), ("incoerente", "longe", 404, INATOS_ALCANCE),
+                 ("relapso", "comedouro", 202, INATOS_ALCANCE))
+
+
+# a troca no meio da vida (o evento "ma" dos pets vivos do jogo): a vida nasce com o alcance de hoje e, logo antes da decisao
+# `troca_na_decisao`, o cerebro recebe o `alcance_da_memoria` da ilha grande. (o dono, o lugar, a semente, a decisao)
+VIDAS_ALCANCE_NO_MEIO = (("atencioso", "longe_fixo", 101, 150), ("incoerente", "longe", 404, 1))
+
+
+def _vida_alcance_no_meio(dono: str, lugar: str, semente: int, k_troca: int) -> dict:
+    def ao_montar(cerebro) -> None:
+        agir, n = cerebro.agir, [0]
+
+        def com_troca(obs, rng):
+            if n[0] == k_troca:
+                cerebro.alcance_da_memoria(D_MAX_ILHA_GRANDE)
+            n[0] += 1
+            return agir(obs, rng)
+        cerebro.agir = com_troca
+
+    motor, cerebro, g = viver(dono, lugar, semente, ao_montar=ao_montar)
+    if cerebro.inatos.d_max != D_MAX_ILHA_GRANDE or cerebro.m.mem.p.d_max != D_MAX_ILHA_GRANDE:
+        raise RuntimeError("a troca do alcance nao aconteceu")
+    decisoes = [{"k": k, "acao": cerebro.motivos[k]["acao"], "assinatura": g.assinaturas[k], "motivo": paraj(cerebro.motivos[k])}
+                for k in range(len(cerebro.motivos))]
+    return {"dono": dono, "lugar": lugar, "semente": semente, "dias": DIAS, "inatos": {}, "troca_na_decisao": k_troca, "decisoes": decisoes,
+            "fins": sorted({f["motivo"] for m in cerebro.motivos for f in m["fins"]}),
+            "log": [ev.para_dict() for ev in motor.log], "log_sha256": hashlib.sha256(motor.log.para_jsonl().encode("utf-8")).hexdigest(),
+            "estado": hashlib.sha256(_texto(paraj(cerebro.estado_interno())).encode("utf-8")).hexdigest(),
+            "assinatura_final": g.assinar()}
+
+
+def alcance() -> bytes:
+    """o gz (mtime 0, nivel 9) das vidas com o alcance da ilha grande: as que nascem com ele e as que o recebem no meio da vida. Cada uma
+    tem de diferir da mesma vida com o alcance de hoje, e a do meio tambem da que nasce com ele (senao o arquivo nao confere nada)"""
+    vidas = [_vida_fins(*v) for v in VIDAS_ALCANCE]
+    hoje = {}
+    for v, (dono, lugar, semente, _) in zip(vidas, VIDAS_ALCANCE):
+        hoje[(dono, lugar, semente)] = _vida_fins(dono, lugar, semente, {})["estado"]
+        v["difere_de_hoje"] = v["estado"] != hoje[(dono, lugar, semente)]
+    if not any(v["difere_de_hoje"] for v in vidas):
+        raise RuntimeError("nenhuma vida do alcance difere da vida de hoje: o arquivo nao exercita o d_max")
+    desde_o_ovo = {(v["dono"], v["lugar"], v["semente"]): v["estado"] for v in vidas}
+    for dono, lugar, semente, k in VIDAS_ALCANCE_NO_MEIO:
+        v = _vida_alcance_no_meio(dono, lugar, semente, k)
+        v["difere_de_hoje"] = v["estado"] != hoje[(dono, lugar, semente)]
+        v["difere_do_ovo"] = v["estado"] != desde_o_ovo[(dono, lugar, semente)]
+        vidas.append(v)
+    if not any(v.get("troca_na_decisao", 0) > 1 and v["difere_de_hoje"] and v["difere_do_ovo"] for v in vidas):
+        raise RuntimeError("nenhuma vida com a troca no meio difere das outras duas: o arquivo nao exercita a troca")
     return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
 
 
@@ -497,11 +566,48 @@ def luta() -> bytes:
     return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
 
 
+# ---------------------------------------------------------------------------------------------------------------------------------------
+# O sono que segura (docs/TAREFA_V3_SONO_SEGURA.md): o G-PAR do reflexo do sono com a histerese (a ConfigSonoSegura ligada). Arquivo novo, no
+# molde do dos fins: vidas do laboratorio nascidas com a chave ligada, com a ConfigSonoSegura do Python (o TS confere a CONFIG_SONO_SEGURA
+# contra ela). Cada vida tem de diferir da mesma vida com a chave desligada, ter o reflexo segurando o sono acima de `lambda_sono` e ao
+# menos uma acordada pela energia acima de `lambda_acordar`; o atencioso brinca com o pet dormindo (o dono que o acorda). Sementes dos
+# testes; nao sao vidas de pesquisa.
+ARQUIVO_SONO = f"{PREFIXO}sono_segura.json.gz"
+VIDAS_SONO = (("atencioso", "comedouro", 101), ("relapso", "longe_fixo", 202), ("incoerente", "comedouro", 303))
+
+
+def sono_segura() -> bytes:
+    """o gz (mtime 0, nivel 9) das vidas com o sono que segura; cada uma difere da de hoje"""
+    from digilab.config import CONFIG_SONO_SEGURA_LIGADA
+    vidas = []
+    for dono, lugar, semente in VIDAS_SONO:
+        v = _vida_fins(dono, lugar, semente, {}, sono=CONFIG_SONO_SEGURA_LIGADA)
+        v["difere_de_hoje"] = v["estado"] != _vida_fins(dono, lugar, semente, {})["estado"]
+        ms = [d["motivo"] for d in v["decisoes"]]
+        v["cochilos"] = sum(1 for i, m in enumerate(ms) if m["acao"] == "dormir" and (i == 0 or ms[i - 1]["acao"] != "dormir"))
+        v["reflexos"] = sum(1 for m in ms if m["reflexo"])
+        if not v["difere_de_hoje"]:
+            raise RuntimeError(f"a vida {dono}/{lugar}/{semente} com o sono que segura e a de hoje: o arquivo nao exercita a chave")
+        vidas.append(v)
+    return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "config_sono_segura": paraj(CONFIG_SONO_SEGURA_LIGADA),
+                                           "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
+
+
 if __name__ == "__main__":
+    if "--sono" in sys.argv:                          # so o arquivo do sono que segura (SONO_SEGURA)
+        b = sono_segura()
+        (PASTA / ARQUIVO_SONO).write_bytes(b)
+        print(f"{PASTA / ARQUIVO_SONO} ({len(b) / 1024 / 1024:.2f} MiB)")
+        sys.exit(0)
     if "--luta" in sys.argv:                          # so o arquivo da PE3 da ponte da luta
         b = luta()
         (PASTA / ARQUIVO_LUTA).write_bytes(b)
         print(f"{PASTA / ARQUIVO_LUTA} ({len(b) / 1024 / 1024:.2f} MiB)")
+        sys.exit(0)
+    if "--alcance" in sys.argv:                       # so o arquivo do alcance da memoria (IG6 da ilha grande)
+        b = alcance()
+        (PASTA / ARQUIVO_ALCANCE).write_bytes(b)
+        print(f"{PASTA / ARQUIVO_ALCANCE} ({len(b) / 1024 / 1024:.2f} MiB)")
         sys.exit(0)
     if "--fins" in sys.argv:                          # so o arquivo dos fins da LM4
         b = fins()

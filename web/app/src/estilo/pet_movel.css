@@ -53,6 +53,9 @@
   /* o ponto rosa: ha uma necessidade (a mesma regra do aviso e da acao rosa) */
   .mm-ponto{ position:absolute; top:-4px; right:-4px; width:16px; height:16px; background:var(--hx-necessidade); border:2px solid var(--hx-miolo) }
   :root[data-pele="vidro"] .mm-ponto{ border-radius:50% }
+  /* os dois pets (CO4d): o retrato do irmao, abaixo do do pet; o toque troca o foco */
+  .mm-irmao{ position:absolute; top:78px; left:22px; width:40px; height:40px; padding:2px; border-width:2px; cursor:pointer }
+  .mm-irmao img{ display:block; width:100%; height:100%; object-fit:contain; border-radius:inherit; pointer-events:none; -webkit-user-drag:none }
   .mm-relogio{ position:absolute; top:26px; left:80px; height:32px; max-width:calc(100vw - 80px - 76px); overflow:hidden; display:flex; align-items:baseline; gap:6px; padding:6px 12px 0; white-space:nowrap }
   /* larguras estreitas e zoom: o dia sai e a hora fica, e a pilula nunca passa por baixo da coluna da direita */
   @media (max-width:300px){ .mm-relogio small{ display:none } }
