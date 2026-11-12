@@ -36,7 +36,7 @@ import {
 import { CONFIG_CONTRATO_AGUA } from "./contrato.ts";
 import { bracoV11 } from "./pet_v11.ts";
 import { leituraLab, type LeituraLab } from "./digibrain/leitura.ts";
-import { decodificar, decodificarV2, type ConceitosDec } from "./digibrain/decodificador.ts";
+import { decodificar, decodificarV2, decodificarV4, type ConceitosDec, type ConceitosDecV4 } from "./digibrain/decodificador.ts";
 import { DigiBrain } from "./digibrain/adapt.ts";
 import { CONFIG_DIGIBRAIN_LAB, CONFIG_DIGIBRAIN_LAB_FALA, CONFIG_DIGIBRAIN_LAB_OLHAR, CONFIG_LANCE_DONO, CONFIG_LANCE_DONO_LIGADA, CONFIG_OLHAR_JOGO, CONFIG_SONO_SEGURA,
   CONFIG_SONO_SEGURA_LIGADA, CONTEUDOS_FALA, D_MAX_ILHA_GRANDE, INATOS_MODULAR,
@@ -420,6 +420,14 @@ export class Motor {
     const rec = (mo["lembranca"] as Record<string, any> | undefined)?.["recuperado"] ?? null;
     const ep = rec === null ? undefined : l.mem.guardados().find(e => e.id === rec);
     return decodificarV2(mo, l.S, ep === undefined ? null : (ep as unknown as Record<string, any>));
+  }
+  /** a fala do assistir (docs/futuro/fala_do_assistir.md, FA-2): o `dec-v4` sobre o ultimo motivo do modular, com o motivo anterior; null
+      nos pets sem o olhar com o enjoo (antes da v35), sem modular ou antes da primeira decisao. So le, nao muda a vida */
+  conceitosAssistir(): ConceitosDecV4 | null {
+    const l = this.lab;
+    if (l === null || !nasceComTvJogo(this.versao) || l.motivos.length === 0) return null;
+    const n = l.motivos.length;
+    return decodificarV4(l.motivos[n - 1]!, n > 1 ? l.motivos[n - 2]! : null, l.S);
   }
   /** DC3d da CONVERSA_PET: o conteudo da unidade de fala que o modular escolheu na ultima decisao (fome, higiene ou solidao), so com a
       marca "fu"; null sem ela, sem decisao ainda ou quando a ultima decisao nao foi uma fala. So le */

@@ -87,3 +87,12 @@ em inglês, e deixa os sprites e os nomes do Digimon UP fora da licença, com o 
 (D-CONTA-39). Cada JS do build começa pelo aviso de autoria, posto por um plugin do `web/app/vite.config.ts` depois da minificação
 (D-CONTA-40), e o `npm run build` reprova um build com `.map` ou sem o aviso (`web/app/scripts/conferir_build.ts`, D-CONTA-41). Os seis
 canários ficam fora do motor, e a lista só no vault (D-CONTA-42).
+
+## A CN1 local: o esqueleto do servidor (2026-11-12)
+
+O item 2 da seção 9.2 do `docs/ROADMAP_V3_CONTA.md`, sem conta, sem nuvem. A pasta `servidor_web/` tem o servidor Node 24 + Hono em
+TypeScript, com a `/saude` e a fala por LLM portada do `servidor/` no mesmo contrato que o jogo usa (`GET /api/fala/status`,
+`POST /api/fala`) e com as mesmas regras: o catálogo fechado, o teto TOTAL em arquivo (o mesmo do Python), o modelo sem preço que não sobe,
+a chave só no ambiente e o template quando não dá (D-CONTA-47, 50, 51). O catálogo e o gabarito dos testes são gerados do Python, e o
+Vitest confere a paridade (D-CONTA-49). Ficaram de fora o Ollama, o alerta por e-mail, a fala livre e o `--remoto`; o `servidor/` não muda.
+Dois achados: o id datado do modelo cai no preço mais caro da tabela (D-CONTA-52), e o Mega nunca usa a LLM (D-CONTA-53).
