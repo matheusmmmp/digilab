@@ -142,16 +142,18 @@ Escrito em 2026-11-12, antes de qualquer vida da faixa, no branch `v3-gosto-visu
 o PR #875, porque o #875 ainda não estava na `main`).
 - **O ok do Matheus:** 2026-11-12, repassado pela sessão coordenadora: "Sim a tudo", à pergunta "Libera os três merges e aprova o resto pela
   recomendação? (sim a tudo, inclusive repetir a GV3 / ...)" (D-GV-GV3B-1).
-- **O commit do código:** COMMIT_CODIGO (o orquestrador, as configs, a faixa e o teste; este adendo entra junto). Este registro foi
-  completado num commit próprio por cima dele, que só muda documentos.
+- **O commit do código:** `0db18119` (o orquestrador, as configs, a faixa e o teste; este adendo entrou junto, com os campos deste
+  registro ainda vazios). Este registro foi completado num commit próprio por cima dele, que só muda documentos. Antes do piloto, quem roda
+  confere que os sha256 abaixo são os da `main`; se o merge do #875 ou desta etapa mudar algum desses arquivos, a diferença é registrada
+  antes da primeira vida, e o `meta.json` de cada pasta grava o `git_head` e os sha256 de novo.
 - **Os sha256** (o conteúdo no commit do código):
-  - o orquestrador `experiments/run_v3_gosto_visual.py`: SHA_ORQ;
-  - a sonda `experiments/sonda_duas_tvs.py` (sem mudança desde a GV3): SHA_SONDA;
-  - o `digilab/metrics.py`: SHA_METRICS;
-  - o `digilab/config.py` (a `ConfigEnjooTela`): SHA_CONFIG;
-  - o `digilab/corpo.py`: SHA_CORPO;
-  - a config do piloto `experiments/configs/v3_gosto_visual/piloto_enjoo.json`: SHA_PILOTO;
-  - a config da run `experiments/configs/v3_gosto_visual/gosto_visual_enjoo.json`: SHA_RUN;
+  - o orquestrador `experiments/run_v3_gosto_visual.py`: `0b8e150f079b5125cbc76c9a319e9dbef6ef21328919d130b6e799373a6364ec`;
+  - a sonda `experiments/sonda_duas_tvs.py` (sem mudança desde a GV3): `d3eee15766dc1cbfa616854997dd55ae4571c1ec94a6a327464c8dad7067b5d3`;
+  - o `digilab/metrics.py`: `7d6eed8b6f4134bde4b37f367fef1d256fdc9b73b8cfcd9c834c544d2b0d94fd`;
+  - o `digilab/config.py` (a `ConfigEnjooTela`): `a5371d3e68b255c331debbad6b85836681b4495cfb7df8ee9da88a90379c094d`;
+  - o `digilab/corpo.py`: `ed198a4a664f4d451b88d63ef625fe63006a9996869bbd4b33ddf1ef4c5e256f`;
+  - a config do piloto `experiments/configs/v3_gosto_visual/piloto_enjoo.json`: `8cd1ab9e3d63533d279384f51facefa76bab0dd7c43db7372905fba52e6c1037`;
+  - a config da run `experiments/configs/v3_gosto_visual/gosto_visual_enjoo.json`: `694ac4c6412a288c0a384da31d16a9b770dea8e7fbdd7fb590f57d12deb20edb`;
   - o sha256 deste adendo não cabe nele mesmo e fica no `meta.json` de cada pasta (`plano_sha256`), com o do plano da GV3
     (`plano_base_sha256`) e a config do enjoo inteira (`enjoo_tela`).
 - **As configs:** `piloto_enjoo.json` (bases 90101 e 90202, K = 2, 14 dias: 4 unidades, 24 vidas) e `gosto_visual_enjoo.json` (bases 90303,
