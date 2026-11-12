@@ -2,10 +2,12 @@
 // D-GV-ENJOO-1 a 6 em docs/registro/2026-11.md). Sem DOM (vitest em node). Cobre: a imagem parada por 30 min termina em "enjoou", sem voltar
 // a olhar; a cena nova devolve o interesse; voltar à primeira logo depois não devolve; o desenjoo lento (horas); a exposição em U invertido;
 // o "adorando" com o interesse alto; a memória de tamanho fixo e a troca determinística; o estado guardado, a migração da versão 1 e o erro
-// alto numa memória estragada. Todos os números são PROPOSTOS, SEM FONTE.
+// alto numa memória estragada. E sem o enjoo migrante (D-GV-MIGRANTE-1 a 3, 2026-11-12): quadros distintos mas próximos nascem com o
+// interesse alto, a volta ao primeiro não o acha desenjoado por arrasto, e o corte de cena não gasta protótipo. Todos os números são
+// PROPOSTOS, SEM FONTE.
 import { describe, expect, test } from "vitest";
 import {
-  INTERESSE_ADORANDO, PROTOTIPOS, RAIO_GENERALIZACAO, distancia, doTexto, estadoInicial, inatoDaSemente, paraTexto, passo,
+  INTERESSE_ADORANDO, PROTOTIPOS, RAIO_GENERALIZACAO, SALTO_CORTE, distancia, doTexto, estadoInicial, inatoDaSemente, paraTexto, passo,
   type EstadoGosto, type Inato, type Leitura, type Sentido,
 } from "../src/gostoVisual/gosto.ts";
 
@@ -125,5 +127,60 @@ describe("a memória do enjoo", () => {
     expect(() => doTexto(v2([{ vetor: { sabor: 0.5 }, enjoo: 0 }]))).toThrow(/memoria\[0\]\.sabor/);
     expect(() => doTexto(v2([{ vetor: { cor: 0.5 }, enjoo: 1.5 }]))).toThrow(/enjoo/);
     expect(() => doTexto(v2([{ vetor: {}, enjoo: 0 }]))).toThrow(/vazio/);
+  });
+});
+
+describe("sem o enjoo migrante (D-GV-MIGRANTE-1 a 3)", () => {
+  const ina = inatoDaSemente(SEMENTE);
+  /* sete quadros parados: o meio e seis com um componente 0,25 para um lado; ficam a 0,0625 do meio e a 0,125 uns dos outros, todos
+     dentro do raio de antes (0,15), como os quadros reais */
+  const base = visto(0.5, 0.5, 0, 0.5).visao;
+  const quadros: Sentido[] = [{ visao: base, som: null }];
+  for (const k of ["cor", "brilho", "complexidade"] as const) for (const d of [-0.25, 0.25]) quadros.push({ visao: { ...base, [k]: base[k] + d }, som: null });
+  /* o segundo do corte: o quadro novo com o pico de movimento, como o vetor da visão mede a troca de quadro */
+  const pico = (s: Sentido): Sentido => ({ visao: { ...s.visao, movimento: 0.9 }, som: null });
+  /* o primeiro por 10 min e os outros por 30 s cada, cada troca com o segundo do corte; devolve a leitura do 1º segundo depois do corte */
+  const sequencia = (): { estado: EstadoGosto; primeiros: Leitura[]; nosCortes: Leitura[] } => {
+    let e = assistir(ina, estadoInicial(), quadros[0]!, 600).estado;
+    const primeiros: Leitura[] = [], nosCortes: Leitura[] = [];
+    for (const q of quadros.slice(1)) {
+      const c = passo(ina, e, pico(q), false); nosCortes.push(c.leitura);
+      const r = assistir(ina, c.estado, q, 29); primeiros.push(r.leituras[0]!); e = r.estado;
+    }
+    return { estado: e, primeiros, nosCortes };
+  };
+  test("os sete quadros são distintos, mas ficam a menos de 0,15 uns dos outros e além do raio da generalização", () => {
+    for (let i = 0; i < quadros.length; i++) for (let j = i + 1; j < quadros.length; j++) {
+      const d = distancia(quadros[i]!.visao, { vetor: quadros[j]!.visao, enjoo: 0 });
+      expect(d).toBeLessThan(0.15);
+      expect(d).toBeGreaterThanOrEqual(RAIO_GENERALIZACAO);
+    }
+  });
+  test("cada quadro novo começa com o interesse alto: não nasce enjoado do quadro de antes", () => {
+    const { primeiros, nosCortes } = sequencia();
+    expect(assistir(ina, estadoInicial(), quadros[0]!, 600).leituras.at(-1)!.interesse).toBeLessThan(0.3);
+    for (const l of [...primeiros, ...nosCortes]) expect(l.interesse).toBeGreaterThan(0.9);
+  });
+  test("a volta ao primeiro quadro depois dos outros não o acha desenjoado por arrasto", () => {
+    const { estado } = sequencia();
+    expect(estado.memoria.some(p => JSON.stringify(p.vetor) === JSON.stringify(quadros[0]!.visao))).toBe(true);
+    const c = passo(ina, estado, pico(quadros[0]!), false), volta = assistir(ina, c.estado, quadros[0]!, 30).leituras;
+    expect(volta[0]!.interesse).toBeLessThan(0.3);
+    expect(volta.every(l => l.interesse < 0.3)).toBe(true);
+  });
+  test("o protótipo fica parado no vetor em que nasceu", () => {
+    const e = assistir(ina, assistir(ina, estadoInicial(), quadros[0]!, 60).estado, { visao: { ...base, cor: 0.51 }, som: null }, 60).estado;
+    expect(e.memoria.map(p => p.vetor)).toEqual([quadros[0]!.visao]);
+  });
+  test("o corte de cena não gasta um protótipo com o vetor de passagem, nem com a memória cheia", () => {
+    const A = quadros[0]!, B = quadros[1]!;
+    expect(0.9 - 0).toBeGreaterThan(SALTO_CORTE);
+    const e = assistir(ina, passo(ina, assistir(ina, estadoInicial(), A, 60).estado, pico(B), false).estado, B, 60).estado;
+    expect(e.memoria.map(p => p.vetor)).toEqual([A.visao, B.visao]);
+    let cheia = assistir(ina, estadoInicial(), quadros[0]!, 30).estado;
+    for (const q of quadros.slice(1, PROTOTIPOS)) cheia = assistir(ina, cheia, q, 30).estado;
+    expect(cheia.memoria).toHaveLength(PROTOTIPOS);
+    const depois = passo(ina, cheia, pico(quadros[6]!), false).estado;
+    expect(depois.memoria).toEqual(cheia.memoria.map(p => ({ vetor: p.vetor, enjoo: p.enjoo * Math.exp(-1 / 7200) })));
   });
 });

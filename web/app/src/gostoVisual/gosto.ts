@@ -7,6 +7,8 @@
    - a habituação presa ao estímulo (seção 3.3; o enjoo, D-GV-ENJOO-1 a 3): uma memória curta de protótipos do vetor, cada um com o seu
      enjoo, que sobe enquanto o pet vê aquilo e decai devagar (horas de TV ligada); o interesse de agora é 1 menos o enjoo do protótipo
      parecido. Só a novidade (a cena longe dos protótipos) ou a constante lenta devolvem o interesse; voltar à mesma imagem não desenjoa;
+   - sem o enjoo migrante (D-GV-MIGRANTE-1 a 3): o protótipo fica parado no vetor em que nasceu, os raios do "mesmo" estímulo e da
+     generalização ficam abaixo da distância entre quadros reais diferentes, e o segundo de um corte de cena não entra na memória;
    - a exposição com saturação (o U invertido, D-GV-ENJOO-4): até o enjoo do estímulo chegar a SATURACAO_EXPOSICAO, ela puxa o alvo para
      o que passa; daí em diante para de puxar, e o enjoo acima da saturação vira tédio, que desconta do agrado daquele estímulo;
    - o pet olha quando o agrado vezes o interesse passa de um corte, e desvia quando caem (com folga entre os dois cortes).
@@ -32,10 +34,12 @@ export const LIMITE_EXPOSICAO = 0.25, LIMITE_CARINHO = 0.3;
 /** a memória do enjoo (D-GV-ENJOO-2): quantos protótipos do vetor ela guarda */
 export const PROTOTIPOS = 6;
 /** até que distância (a média por componente) um vetor é "o mesmo" estímulo de um protótipo, e até onde o enjoo dele ainda pesa (a
-    generalização cai em linha, de 1 na distância 0 a 0 em RAIO_GENERALIZACAO) */
-export const RAIO_MESMO = 0.15, RAIO_GENERALIZACAO = 0.3;
-/** quanto o protótipo anda por segundo na direção do vetor que ele reconheceu */
-export const TAXA_PROTOTIPO = 0.1;
+    generalização cai em linha, de 1 na distância 0 a 0 em RAIO_GENERALIZACAO). D-GV-MIGRANTE-2: eram 0,15 e 0,3, e quadros reais
+    diferentes ficam a menos disso uns dos outros no vetor da visão; o protótipo não anda (D-GV-MIGRANTE-1) */
+export const RAIO_MESMO = 0.025, RAIO_GENERALIZACAO = 0.05;
+/** o corte de cena (D-GV-MIGRANTE-3): o movimento que sobe mais que isto de um segundo para o outro marca um vetor de passagem, que não
+    cria nem gasta protótipo */
+export const SALTO_CORTE = 0.5;
 /** o enjoo que sobe por segundo, olhando e de lado (a fração do que falta até 1) */
 export const GASTO_ENJOO_OLHANDO = 0.012, GASTO_ENJOO_DE_LADO = 0.003;
 /** a constante lenta do desenjoo, em segundos de TV ligada (2 h): o enjoo de todos os protótipos cai por exp(-dt/TAU) a cada passo */
@@ -81,9 +85,11 @@ export interface EstadoGosto {
   olhando: boolean;
   segundosJuntos: number;
   carinhos: number;
+  /** o movimento do segundo anterior, para achar o corte de cena (null antes do primeiro segundo; não vai ao estado guardado) */
+  movimentoAntes: number | null;
 }
 export const estadoInicial = (): EstadoGosto =>
-  ({ exposicao: zeros(), carinho: zeros(), memoria: [], interesse: 1, olhando: false, segundosJuntos: 0, carinhos: 0 });
+  ({ exposicao: zeros(), carinho: zeros(), memoria: [], interesse: 1, olhando: false, segundosJuntos: 0, carinhos: 0, movimentoAntes: null });
 
 export type Reacao = "adorando" | "olhando" | "enjoou" | "nao_gosta" | "curioso" | "distraido";
 /** o agrado já com o tédio descontado, e o tédio à parte; a novidade é a distância ao protótipo mais perto (1 com a memória vazia) */
@@ -132,12 +138,16 @@ export function passo(ina: Inato, e0: EstadoGosto, s: Sentido, carinho: boolean,
   /* a novidade: a distância ao protótipo mais perto (no empate, o primeiro na ordem da memória); com a memória vazia, tudo é novo */
   let perto = -1, novidade = 1;
   e.memoria.forEach((p, j) => { const d = distancia(v, p); if (d < novidade) { novidade = d; perto = j; } });
-  /* o estímulo de agora: o protótipo que o reconhece, ou um novo, sem enjoo; com a memória cheia, o novo toma o lugar do de menor enjoo
-     (no empate, o mais antigo) */
+  /* o estímulo de agora: o protótipo que o reconhece (parado no vetor em que nasceu), ou um novo, sem enjoo; com a memória cheia, o novo
+     toma o lugar do de menor enjoo (no empate, o mais antigo). No segundo de um corte de cena, o estímulo é uma cópia solta: a memória
+     não muda, e o enjoo dele não fica guardado */
+  const corte = e0.movimentoAntes !== null && s.visao.movimento - e0.movimentoAntes > SALTO_CORTE;
+  e.movimentoAntes = s.visao.movimento;
   let p: Prototipo;
   if (perto >= 0 && novidade <= RAIO_MESMO) {
-    p = e.memoria[perto]!;
-    for (const k of ks) p.vetor[k] = p.vetor[k] === undefined ? v[k]! : p.vetor[k]! + limitar(TAXA_PROTOTIPO * dt) * (v[k]! - p.vetor[k]!);
+    p = corte ? { vetor: { ...e.memoria[perto]!.vetor }, enjoo: e.memoria[perto]!.enjoo } : e.memoria[perto]!;
+  } else if (corte) {
+    p = { vetor: { ...v }, enjoo: 0 };
   } else {
     p = { vetor: { ...v }, enjoo: 0 };
     if (e.memoria.length >= PROTOTIPOS) {
