@@ -1,0 +1,45 @@
+{
+ "versao": 1,
+ "pet": 28,
+ "dias": 4,
+ "sementes": [
+  101,
+  202,
+  303
+ ],
+ "vidas": [
+  {
+   "semente": 101,
+   "estagio": "mega",
+   "eventos": 182,
+   "lutas": 41,
+   "ult": 12,
+   "mega": 19,
+   "log_sha": "0c87172d756c2e368c1f5544679db7f6b92880d028d3af38d3fecc370aa9467c",
+   "assinatura": "4fb8a72d1dc2da0e340fab1923347a31dc86f3551fed6d21d605ce640359db02",
+   "resultados": "9faca4f77b8e940bbae74410e2a91830c165eac8a86a54b741e0466386616bfc"
+  },
+  {
+   "semente": 202,
+   "estagio": "mega",
+   "eventos": 190,
+   "lutas": 41,
+   "ult": 12,
+   "mega": 19,
+   "log_sha": "04ef141557b2e2162ac74155e130a415c53852e4383833f44ddf0499a82063f3",
+   "assinatura": "26122a908b0fe0785e459b573d90f228b2c860b73f44f7c210a4dc00e8ba8814",
+   "resultados": "1aec0c9edaf604c0eb9f737b14b6e5e2385e1c00ddd3ef399f0ad7d686cccf96"
+  },
+  {
+   "semente": 303,
+   "estagio": "mega",
+   "eventos": 204,
+   "lutas": 41,
+   "ult": 12,
+   "mega": 19,
+   "log_sha": "0ef43c8297b1f501c1213f8644236ba44be1a2c664b7ad53281e6d024f8adf72",
+   "assinatura": "1ab687719cc30e310682a9827b7e26ba09c54c118a82f264ccbda67285c41dc0",
+   "resultados": "b89123ef34b209d72739619ab08ea5885082686d505a5717e14490cb88ab3502"
+  }
+ ]
+}
