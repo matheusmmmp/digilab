@@ -1,11 +1,15 @@
 # PLANO DE ANÁLISE V3 — GOSTO_VISUAL, GV3: a run descritiva genoma × dono com a sonda das duas TVs (2026-11-11, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO, à espera do Matheus.** Todos os números deste plano são PROPOSTOS; as decisões GVP-1 a GVP-8 (seção 10) são dele.
-**Nenhuma vida da faixa roda antes de quatro coisas:**
-1. este cabeçalho com a marca "APROVADO pelo Matheus" (o orquestrador confere);
+**Status: APROVADO pelo Matheus em 2026-11-11, repassado pela sessão coordenadora.** À pergunta "Aprova as GVP-1 a GVP-8 pela
+recomendação?", a resposta foi "e segue o experimento com as suas recomendações." As GVP-1 a GVP-8 (seção 10) estão DECIDIDAS, todas
+pela recomendação; os números do plano seguem PROPOSTOS e SEM FONTE como estão escritos. **Nenhuma vida da faixa roda antes de quatro
+coisas:**
+1. este cabeçalho com a marca "APROVADO pelo Matheus" (o orquestrador confere; feito);
 2. a faixa 89101…89505 em `experiments/bancada/faixas.py` (já está, confirmada pelo coordenador, 2026-11-11);
 3. o código da P1e na `main`: a segunda TV no motor, a sonda, as medidas em `digilab/metrics.py` e o orquestrador
-   `experiments/run_v3_gosto_visual.py`, com a fumaça nas sementes dos testes (101…505);
+   `experiments/run_v3_gosto_visual.py`, com a fumaça nas sementes dos testes (101…505) (**não feito como escrito:** o código está no
+   branch `v3-gosto-visual-p1e`, PR #863, commit `a124353c`, ainda sem merge; a sessão coordenadora mandou rodar nesse branch. O desvio
+   é o D-GV-P1e-12, no `docs/registro/2026-11.md`);
 4. o registro da run (seção 11) preenchido num commit empurrado antes da primeira vida.
 
 **De onde vem:** a seção 7 e a linha P1e da `docs/ESPEC_GOSTO_VISUAL_P1.md`; a seção 5 da `docs/futuro/gosto_visual_pet.md` (a medida
@@ -192,7 +196,7 @@ seção 6 também é registrado.
 O orquestrador só roda o piloto e a run com a marca "APROVADO pelo Matheus", a faixa em `FAIXAS_RESERVADAS`, a seção 11 presente, as bases,
 o K e os 14 dias do plano, no máximo 4 processos e uma pasta nova. A fumaça (101…505) roda sem isso.
 
-## 10. As decisões do Matheus (todas PROPOSTAS)
+## 10. As decisões do Matheus (DECIDIDAS em 2026-11-11, todas pela recomendação)
 
 | id | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
@@ -207,5 +211,30 @@ o K e os 14 dias do plano, no máximo 4 processos e uma pasta nova. A fumaça (1
 
 ## 11. O registro da run
 
-Nenhuma vida ainda. Antes da primeira vida do piloto, esta seção recebe, num commit empurrado: a data, o commit, a config, os 4 processos, o
-sha256 deste plano e o ok do Matheus (com a frase dele).
+Escrito em 2026-11-11, antes da primeira vida da faixa, no branch `v3-gosto-visual-p1e` (PR #863).
+- **O ok do Matheus:** 2026-11-11, repassado pela sessão coordenadora. À pergunta "Aprova as GVP-1 a GVP-8 pela recomendação?", a
+  resposta foi "e segue o experimento com as suas recomendações." (D-GV-P1e-11.)
+- **O commit do código:** `a124353c` (o P1e, `827b9672`, com a `origin/main` `680a0408` por cima). O registro entra num commit próprio
+  por cima dele, que não muda o código da run (o orquestrador, a sonda, as medidas e as configs ficam como estão); só o teste da
+  trava (`tests/test_gosto_visual_sonda.py`), que conferia o status PROPOSTO no texto do plano, passa a conferir a trava numa cópia do
+  texto. O código não está na `main` (D-GV-P1e-12).
+- **Os sha256** (o conteúdo no commit `a124353c`):
+  - este plano, no texto que o Matheus aprovou (antes deste registro e da marca):
+    `eddb2019422ca990db1472828f7c08f05f186579305bc457cb2cfb4fab544a70`;
+    o sha256 do plano com o registro não cabe nele mesmo e fica no `meta.json` de cada pasta (`plano_sha256`);
+  - o orquestrador `experiments/run_v3_gosto_visual.py`: `479baf22d36dd08ee570e4bcbd304942d12c1d38b9ad9582b5674c9915aa8031`;
+  - a sonda `experiments/sonda_duas_tvs.py`: `d3eee15766dc1cbfa616854997dd55ae4571c1ec94a6a327464c8dad7067b5d3`;
+  - o `digilab/metrics.py`: `7d6eed8b6f4134bde4b37f367fef1d256fdc9b73b8cfcd9c834c544d2b0d94fd`;
+  - a config do piloto: `55c801e0f390a5e4a760423177f77afcddd5b363993c45d669d424e42ad35ce4`;
+  - a config da run: `3b5dc49ca1ca1d86fbbc6aeaec96a74df6a232e1ab0c2a1dddfb4abb41d646f6`.
+- **As configs:** `experiments/configs/v3_gosto_visual/piloto.json` (bases 89101 e 89202, K = 2, 14 dias: 4 unidades, 24 vidas) e
+  `experiments/configs/v3_gosto_visual/gosto_visual.json` (bases 89303, 89404 e 89505, K = 12, 14 dias: 36 unidades, 216 vidas).
+- **Os comandos**, 4 processos (V3-D8), cada um numa pasta nova (o orquestrador recusa gravar por cima):
+  - o piloto: `python experiments/run_v3_gosto_visual.py --config experiments/configs/v3_gosto_visual/piloto.json --processos 4`,
+    em `artifacts_v3_gosto_visual/piloto/`;
+  - a run, só se o piloto passar na conferência da seção 6 (a fração das réplicas com uma olhada ≥ 0,25), uma vez:
+    `python experiments/run_v3_gosto_visual.py --config experiments/configs/v3_gosto_visual/gosto_visual.json --processos 4`, em
+    `artifacts_v3_gosto_visual/gosto_visual/`.
+- **A faixa:** 89101…89505, em `FAIXAS_RESERVADAS`; conferido em 2026-11-11, depois de um `git fetch`, que a `origin/main` (`680a0408`)
+  não tem nenhuma faixa nova que a cruze.
+- **A máquina:** nenhuma outra run de pesquisa rodando (conferido na lista dos processos antes do piloto).

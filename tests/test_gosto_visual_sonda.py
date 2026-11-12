@@ -7,7 +7,7 @@
 - a sonda em pets com genomas diferentes: o agrado lido segue o genoma, o controle tem o agrado inato igual nas duas, e o genoma muda o
   que a copia faz; a janela tick a tick e igual a janela inteira;
 - as medidas (`metrics.medidas_duas_tvs`, `metrics.familiarizacao_tv`) e a falha alto delas;
-- o orquestrador: a trava (o plano ainda PROPOSTO recusa o piloto e a run), a fumaca com as sementes dos testes e a faixa reservada.
+- o orquestrador: a trava (o plano PROPOSTO ou sem o registro recusa o piloto e a run), a fumaca com as sementes dos testes e a faixa reservada.
 Sementes: as dos testes (101, 202, 303) e as derivadas delas. Nenhuma vida da faixa roda aqui.
 """
 from __future__ import annotations
@@ -304,13 +304,19 @@ def test_a_faixa_esta_reservada_confirmada_e_nao_cruza_outra_nem_uma_queimada():
 
 
 def test_a_trava_recusa_o_piloto_e_a_run_sem_o_plano_aprovado():
-    texto = R._plano()
-    assert not texto.splitlines()[2].startswith(R.MARCA_APROVADO)                            # o plano ainda e PROPOSTO
+    """o plano esta APROVADO desde 2026-11-11 (a GV3); a trava se confere numa copia do texto com o status PROPOSTO e sem o registro"""
+    aprovado = R._plano()
+    linhas = aprovado.splitlines()
+    i = next(n for n, x in enumerate(linhas) if x.startswith("**Status:"))
+    assert linhas[i].startswith(R.MARCA_APROVADO)                                             # aprovado pelo Matheus, 2026-11-11
+    proposto = "\n".join(linhas[:i] + ["**Status: PROPOSTO, a espera do Matheus.**"] + linhas[i + 1:])
+    sem_registro = aprovado.replace(R.TITULO_REGISTRO, "## 11. (sem o registro)")
     for nome in ("piloto.json", "gosto_visual.json"):
         cfg = json.loads((RAIZ / "experiments" / "configs" / "v3_gosto_visual" / nome).read_text(encoding="utf-8"))
         with pytest.raises(RuntimeError, match="APROVADO"):
-            R.modo_da_config(cfg)
-    aprovado = texto.replace("**Status: PROPOSTO", "**Status: APROVADO pelo Matheus", 1)
+            R.modo_da_config(cfg, proposto)
+        with pytest.raises(RuntimeError, match="registro"):
+            R.modo_da_config(cfg, sem_registro)
     cfg = json.loads((RAIZ / "experiments" / "configs" / "v3_gosto_visual" / "piloto.json").read_text(encoding="utf-8"))
     assert R.modo_da_config(cfg, aprovado) == "piloto"
     with pytest.raises(ValueError):
