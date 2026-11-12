@@ -2384,6 +2384,9 @@ CONFIG_TELA = ConfigTela()
 # Fica numa config propria, e nao como campo da ConfigMundo (a espec fala em `ConfigMundo.tv`), para o dump da ConfigMundo nao mudar, como
 # a ConfigTela do P1b (D-GV-P1c-1). Todos os numeros PROPOSTOS, SEM FONTE.
 FONTES_TV = ("grade", "evento")
+# os sete canais da tela (secao 1.1 da espec: 4 da visao, 3 do som), na ordem do evento `sentido_tela`; o corpo e o cerebro os
+# importam daqui (o cerebro nao importa o corpo, a G-RECEPTOR)
+CANAIS_TELA = ("cor", "brilho", "movimento", "complexidade", "volume", "variacao", "timbre")
 
 
 @dataclass(frozen=True)
@@ -2445,6 +2448,42 @@ PARAMETROS_TV: dict[str, tuple[str, str]] = {
     "cena_ticks": ("PROPOSTO", "uma cena a cada 5 ticks; SEM FONTE"),
     "variacao": ("PROPOSTO", "0,06 C, o VARIACAO_DENTRO do P0; SEM FONTE"),
     "janela_resumo_s": ("PROPOSTO", "GV-15: a media de 10 s reais (a recomendacao da espec); SEM FONTE"),
+}
+
+
+@dataclass(frozen=True)
+class ConfigDuasTVs:
+    """As duas TVs da sonda (GOSTO_VISUAL, P1e; docs/ESPEC_GOSTO_VISUAL_P1.md, secao 7; GV-11). So existem numa copia do pet, pelo
+    `MotorMundo.ligar_duas_tvs`; a vida nunca as liga, e com a ConfigDuasTVs desligada o metodo falha alto. Os numeros (todos PROPOSTOS,
+    SEM FONTE):
+
+    distancia_celulas   3     cada TV a 3 celulas do pet, em direcoes opostas (6 entre elas): as duas no raio da visao (6 celulas) de
+                              quem esta parado e a mesma distancia dele (a proximidade da linha de objeto e a mesma nas duas)
+    tentativas          16    as direcoes tentadas a partir da sorteada (as 16 do DIR16), ate as duas caberem em terra, dentro do mapa e
+                              a mesma distancia; sem nenhuma, falha alto"""
+
+    ligada: bool = False
+    distancia_celulas: int = 3
+    tentativas: int = 16
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigDuasTVs.ligada e bool: {self.ligada!r}")
+        for campo in ("distancia_celulas", "tentativas"):
+            v = getattr(self, campo)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigDuasTVs.{campo} tem de ser inteiro positivo: {v!r}")
+        if self.tentativas > 16:
+            raise ValueError(f"ConfigDuasTVs.tentativas ate 16 (as direcoes do DIR16): {self.tentativas}")
+
+
+CONFIG_DUAS_TVS = ConfigDuasTVs()
+CONFIG_DUAS_TVS_LIGADA = ConfigDuasTVs(ligada=True)
+# o status de cada campo da ConfigDuasTVs (conferido por teste): todos PROPOSTOS, SEM FONTE; o porque esta na docstring
+PARAMETROS_DUAS_TVS: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "a sonda das duas TVs atras de chave desligada (espec do P1, secao 8); SEM FONTE"),
+    "distancia_celulas": ("PROPOSTO", "metade do raio da visao: as duas a vista e a mesma distancia do pet; SEM FONTE"),
+    "tentativas": ("PROPOSTO", "as 16 direcoes do DIR16; SEM FONTE"),
 }
 
 
@@ -2734,13 +2773,17 @@ class ConfigDigibrain:
     controle_mem: str = "rel"                # PROPOSTO, SEM FONTE como valor (C4, espec 7.2): o braco da memoria (CONTROLES_MEM); "rel" e o de hoje
     passeio: bool = False                    # PROPOSTO, SEM FONTE como valor (AN-2, docs/TAREFA_V3_ACOES_NOVAS.md, 3.1): o vagar que segura o destino
     fala_unidades: bool = False              # PROPOSTO, SEM FONTE como valor (DC3, docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1): o chamar com conteudo
+    olhar: bool = False                      # PROPOSTO, SEM FONTE como valor (GOSTO_VISUAL, P1d; docs/ESPEC_GOSTO_VISUAL_P1.md, secoes 5 e 6,
+                                             # GV-19): o comportamento `olhar`, a classe `tela` do M-SENS e o canal `gosto_visual` (ConfigOlhar)
 
     def __post_init__(self) -> None:
         for nome in ("ligada", "modula_g_apr", "p2", "m_mem", "persistencia", "p1", "cheiro_inato", "intencao_cheiro",
                      "intencao_suspensa", "credito_corrida", "redecidir_evento", "memoria_autobio", "facetas_mem", "passeio",
-                     "fala_unidades"):
+                     "fala_unidades", "olhar"):
             if type(getattr(self, nome)) is not bool:
                 raise TypeError(f"ConfigDigibrain.{nome} e bool: {getattr(self, nome)!r}")
+        if self.olhar and self.fala_unidades:
+            raise ValueError("olhar nao se combina com a fala_unidades (GOSTO_VISUAL, P1d: PROPOSTO, sem teste da combinacao)")
         if self.fala_unidades and (self.passeio or self.credito_corrida or self.intencao_suspensa or self.redecidir_evento
                                    or self.facetas_mem):
             raise ValueError("fala_unidades nao se combina com a passeio, a credito_corrida, a intencao_suspensa, a redecidir_evento nem "
@@ -2805,6 +2848,9 @@ CARACTERISTICAS_DIGIBRAIN = (("vies",) + tuple(f"u_{r}" for r in RECEPTORES_DIGI
 # os tipos de alvo das unidades (secao 4.5): as classes do objeto visto e os alvos sem objeto (o cheiro, o vagar, o lugar lembrado)
 TIPOS_ALVO_DIGIBRAIN = ("racao", "a", "b", "c", "podre", "bola", "cheiro", "vagar", "ponto")
 COMPORTAMENTOS_DIGIBRAIN = ("ocioso", "dormir", "comer", "brincar", "chamar_atencao", "explorar", "emburrar")   # a ordem de ACOES_PET_HOJE
+# o comportamento `olhar` (GOSTO_VISUAL, P1d; GV-19): so com a subchave `olhar`, no fim da lista (a ordem das unidades de hoje nao muda)
+COMPORTAMENTO_OLHAR = "olhar"
+COMPORTAMENTOS_DIGIBRAIN_OLHAR = COMPORTAMENTOS_DIGIBRAIN + (COMPORTAMENTO_OLHAR,)
 _S = 1024
 
 
@@ -3190,6 +3236,82 @@ class ConfigFalaUnidades:
 
 CONFIG_FALA_UNIDADES = ConfigFalaUnidades()
 PARAMETROS_FALA_UNIDADES = {"ganho_conteudo": ("PROPOSTO", "SEM FONTE; a condicao da secao 3.1 do plano DC3, nas sementes dos testes")}
+
+
+# =====================================================================
+# V3, GOSTO_VISUAL, P1d: o gosto no cerebro (docs/ESPEC_GOSTO_VISUAL_P1.md, secoes 5 e 6; GV-16 e GV-19 pela recomendacao, D-GV-P1-1).
+# So com a subchave `olhar` da ConfigDigibrain (desligada por padrao: a vida de hoje byte a byte). Fica numa config propria, e nao na
+# ConfigDigibrainInatos, para as constantes do gabarito do modular para a web (digibrain_modular_constantes.json) nao mudarem, como a
+# ConfigFalaUnidades. O genoma da visao (digilab/genoma_visao.py, rng propria `visao-ovo`) usa a `escala` e as larguras daqui; o resto e do
+# cerebro (digilab/digibrain: o M-SENS, o M-IMPULSO, o M-AFETO). Todos os numeros PROPOSTOS, SEM FONTE.
+
+
+@dataclass(frozen=True)
+class ConfigOlhar:
+    """O olhar e o gosto visual no DigiBrain modular (GOSTO_VISUAL, P1d). Os numeros e o porque de cada um (todos PROPOSTOS, SEM FONTE):
+
+    escala             450000  = C, a escala do genoma da visao e dos perfis da TV (o teto_intensidade da ConfigTela, conferido por teste)
+    largura_min        112500  = C/4: a largura do pico mais estreita do genoma (um canal a C/4 do otimo ja nao agrada)
+    largura_max        450000  = C: a mais larga (o agrado cai devagar por toda a escala)
+    w0_olhar           o inato do `olhar` (espec, secao 6: a urgencia do tedio e da curiosidade): vies -S/4, u_tedio S/2, u_curiosidade
+                       S/2, metade do explorar (que le os dois com S): olhar e passivo e nao pode ganhar sempre (o risco da GV-21)
+    w0_prox            256 = S/4, o do brincar: a TV mais perto atrai mais
+    w0_nov             256 = S/4: a novidade da linha (S - a habituacao da classe `tela`, PE-11)
+    w_gosto            1024 = S: o termo `gosto` da unidade, mul(w_gosto, agrado - S/2), com o agrado do que o pet ja olhava (0 se nao
+                       olhava); o programa no otimo soma S/2 e o mais longe tira S/2 (D-GV-P1d-4)
+    ganho_gosto_visual 1024 = S, o ganho_gosto do canal `gosto` do paladar no A: o canal `gosto_visual` no r, mul(ganho, agrado - S/2),
+                       +-S/2 no r, +-S/4 no r_n (com S/4, o primeiro ensaio, o r_n de +-S/16 nao movia o H: o passo do P2 arredonda a 0)
+    tau_exposicao      960 ticks (dois dias de jogo): o alvo aprendido anda devagar para o nivel visto (a exposicao)
+    teto_exposicao     128 = S/8: o deslocamento maximo do alvo aprendido a partir do otimo inato, por canal (o teto do P0)
+    agrado_no_corpo    False: a sub-chave do agrado no corpo (GV-16), o `estimulo_agrado_tela` chamado pelo motor quando o pet olha"""
+
+    escala: int = 450000
+    largura_min: int = 112500
+    largura_max: int = 450000
+    w0_olhar: tuple = (("vies", -_S // 4), ("u_tedio", _S // 2), ("u_curiosidade", _S // 2))
+    w0_prox: int = _S // 4
+    w0_nov: int = _S // 4
+    w_gosto: int = _S
+    ganho_gosto_visual: int = _S
+    tau_exposicao: int = 960
+    teto_exposicao: int = _S // 8
+    agrado_no_corpo: bool = False
+
+    def __post_init__(self) -> None:
+        if type(self.agrado_no_corpo) is not bool:
+            raise TypeError(f"ConfigOlhar.agrado_no_corpo e bool: {self.agrado_no_corpo!r}")
+        for campo in ("escala", "largura_min", "largura_max", "w0_prox", "w0_nov", "w_gosto", "ganho_gosto_visual", "tau_exposicao",
+                      "teto_exposicao"):
+            v = getattr(self, campo)
+            if type(v) is not int or v < 0:
+                raise ValueError(f"ConfigOlhar.{campo} e um inteiro >= 0: {v!r}")
+        if not 0 < self.largura_min <= self.largura_max <= self.escala:
+            raise ValueError(f"ConfigOlhar: 0 < largura_min <= largura_max <= escala ({self.largura_min}, {self.largura_max}, "
+                             f"{self.escala})")
+        if self.tau_exposicao < 15:
+            raise ValueError(f"ConfigOlhar.tau_exposicao abaixo do passo do cerebro (15 ticks): {self.tau_exposicao}")
+        if self.teto_exposicao > _S:
+            raise ValueError(f"ConfigOlhar.teto_exposicao em [0, S]: {self.teto_exposicao}")
+        if type(self.w0_olhar) is not tuple or any(type(p) is not tuple or len(p) != 2 or p[0] not in CARACTERISTICAS_DIGIBRAIN
+                                                   or type(p[1]) is not int for p in self.w0_olhar):
+            raise ValueError(f"ConfigOlhar.w0_olhar: pares (caracteristica, inteiro) de CARACTERISTICAS_DIGIBRAIN: {self.w0_olhar!r}")
+
+
+CONFIG_OLHAR = ConfigOlhar()
+# o status de cada campo da ConfigOlhar (conferido por teste): todos PROPOSTOS, SEM FONTE; o porque esta na docstring
+PARAMETROS_OLHAR: dict[str, tuple[str, str]] = {
+    "escala": ("PROPOSTO", "= C, a escala dos perfis da TV e do teto_intensidade da tela; SEM FONTE"),
+    "largura_min": ("PROPOSTO", "C/4, a largura do pico mais estreita do genoma da visao; SEM FONTE"),
+    "largura_max": ("PROPOSTO", "C, a largura mais larga; SEM FONTE"),
+    "w0_olhar": ("PROPOSTO", "espec do P1, secao 6: o tedio e a curiosidade, metade do explorar; SEM FONTE"),
+    "w0_prox": ("PROPOSTO", "S/4, o do brincar; SEM FONTE"),
+    "w0_nov": ("PROPOSTO", "S/4, a novidade da linha (PE-11); SEM FONTE"),
+    "w_gosto": ("PROPOSTO", "S: o agrado do que o pet ja olhava na ativacao do olhar (D-GV-P1d-4); SEM FONTE"),
+    "ganho_gosto_visual": ("PROPOSTO", "S, o ganho_gosto do paladar: o canal gosto_visual no r (espec, secao 5.2); SEM FONTE"),
+    "tau_exposicao": ("PROPOSTO", "dois dias de jogo: a exposicao anda devagar (a direcao: Zajonc 1968); SEM FONTE como valor"),
+    "teto_exposicao": ("PROPOSTO", "S/8: o teto do deslocamento do alvo aprendido, como no P0; SEM FONTE"),
+    "agrado_no_corpo": ("PROPOSTO", "GV-16: a sub-chave do agrado no corpo, desligada; SEM FONTE"),
+}
 
 
 # A voz-v4 e a avaliacao da DC5 (CONVERSA_PET; docs/PLANO_ANALISE_V3_CONVERSA_DC5.md, APROVADO pelo Matheus em 2026-11-10, "Aprovar tudo";

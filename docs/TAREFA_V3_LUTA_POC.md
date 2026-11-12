@@ -880,3 +880,39 @@ conserto da borda cortada antes do PR.
   quadro encosta na caixa (`BORDA_CORTADA`), sem inventar a arte.
 - **As capturas:** `&palco_lp6=ligadas|desligadas` na luta montada; os vídeos ficam fora do repositório.
 - **Os testes:** `test/luta_poc_lp6_palco.test.ts`.
+
+## Resultado da LP6-3 (2026-11-11: a calibração do golpe de apoio e da elipse por estágio)
+
+PR #834, em rascunho. O plano e a régua estão na seção 8 do `docs/PLANO_LP6_SEGUNDO_GOLPE.md`, e os desvios são os D-LP6-3-1 a 9 em
+`docs/registro/2026-11.md`. Nenhuma versão de pet liga as chaves: isso é a LP6-4.
+
+- **O candidato:** o `lp6_3_u120`, que é o `lp5_3` com duas mudanças.
+  - **O apoio** só existe na luta em que o maior estágio dos dois é Ultimate ou Mega. Ele tem dano 0,6, recarga de 3 vezes, espera do
+    tiro fraco de 1 500 ms, clipe de 0,6 e não tem o recuo.
+  - **A elipse** é 1,2 no Ultimate e 1,4 no Mega.
+  - Os números são PROPOSTOS, SEM FONTE.
+- **Na calibração:** 10 de 21, as mesmas 10 do `lp5_3` (commit `c0b99b68`).
+- **Na conferência, uma vez, nas 87xxx:** 9 de 21, as mesmas 9 do `lp5_3` na LP5-4 (commit `a52fa0cf`).
+  - Só o P4 muda de lado: os pets do Champion acima de 0,8 vão de 0,85 a 0,78, como na LP5-4.
+- **O que a LP6 move:**
+  - **O A1 do Ultimate e do Mega** fica em 0,526 e 0,465 na conferência, contra 0,577 e 0,477 do `lp5_3`.
+  - **Os mapas fora da faixa do A1:** no Ultimate, caem de 5 para 2, o Deserto e o Ringue. No Mega, fica só o Ringue.
+  - **O S1** passa em todos os estágios.
+  - **No Rookie e no Champion,** a luta é a mesma do `lp5_3`.
+- **O caminho até ele:**
+  - **R0:** o apoio em todos os estágios dá 6 de 21. O apoio de perto prende quem atira junto do inimigo.
+  - **R1:** a regra do recuo (D-LP6-3-4) e a grade do apoio também dão 6 de 21. 83 % dos recuos acabam pelo tempo.
+  - **R2:** o apoio só no Ultimate e no Mega (D-LP6-3-7) dá 9 de 21 nas grades de 3 bases.
+  - **A escolha:** três finalistas medidos inteiros, pelo critério registrado antes (D-LP6-3-8). O `lp6_3_u115`, com a elipse do plano,
+    reprova o S1 no Deserto do Ultimate.
+- **Decisões que mudaram:**
+  - **a decisão 2 (seção 7):** nenhum Digimon tem o apoio no In-Training, no Rookie e no Champion;
+  - **a decisão 4, nos números:** a elipse de 1,15 e 1,3 passa a 1,2 e 1,4 (D-LP6-3-9), PROPOSTO até o Matheus decidir.
+- **No núcleo, atrás da chave do apoio:**
+  - o `desde`, o apoio pelo estágio;
+  - o `recua`, a regra do recuo, desligada;
+  - testes em `web/app/test/arena_lp6_recuo.test.ts`.
+- **Ficam para depois:**
+  - o A1 do Rookie e do Champion por mapa (o Castelo e o Ringue) e o Ringue de todos os estágios, com a investigação do núcleo;
+  - o V1, o V2, o T2, o D2, o G1 a G3, o P2, o P3 e o P5, como na LP5;
+  - as capturas do palco com a elipse 1,2/1,4, antes da LP6-4.

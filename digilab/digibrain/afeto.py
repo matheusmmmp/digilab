@@ -13,7 +13,10 @@ Na consequencia (`consequencia`), dos receptores de antes e de depois:
     `fora_do_r` (o susto, como no A), com os canais por drive (`canais_do_sinal`: a soma telescopica e o escalar, K-6);
   - `r_n = clamp(div_arred(r, R_n), -S, S)`;
   - a valencia `V <- V + mul(k_V, r_n - V)` e a excitacao `E <- E + mul(k_E, max(|r_n|, dor, susto, estresse) - E)` (forma I).
-A serie da excitacao lida em cada decisao fica em `serie_e` (a doadora do M4-emb e a serie de uma vida M4). Sem rng."""
+A serie da excitacao lida em cada decisao fica em `serie_e` (a doadora do M4-emb e a serie de uma vida M4).
+**O canal `gosto_visual`** (GOSTO_VISUAL, P1d; docs/ESPEC_GOSTO_VISUAL_P1.md, secao 5.2; so com a subchave `olhar`): na consequencia de
+uma opcao de olhar, o M-ADAPT passa o termo pronto (`gosto_visual`, o agrado do que o pet olhou, centrado); ele soma ao r antes do r_n,
+como o canal `gosto` do paladar no A, e entra em `canais` (a soma dos canais segue sendo o r). Sem ele, a conta de hoje. Sem rng."""
 from __future__ import annotations
 
 from ..config import CONFIG_DIGIBRAIN_INATOS, Config, ConfigDigibrain, ConfigDigibrainInatos
@@ -94,11 +97,16 @@ class Afeto:
     def drives(self, receptores: tuple) -> tuple:
         return tuple(r for r in receptores if r not in self.p.fora_do_r)
 
-    def consequencia(self, pc_antes, pc_depois, receptores: tuple) -> dict:
+    def consequencia(self, pc_antes, pc_depois, receptores: tuple, gosto_visual: int | None = None) -> dict:
         p, S = self.p, self.S
         drives = self.drives(receptores)
         r = sinal_corpo(pc_antes, pc_depois, drives, p.ganho_r, S)
         canais = canais_do_sinal(pc_antes, pc_depois, drives, p.ganho_r, S)
+        if gosto_visual is not None:                  # o canal `gosto_visual` (P1d): so na opcao de olhar, com a subchave
+            if type(gosto_visual) is not int:
+                raise TypeError(f"M-AFETO: gosto_visual e inteiro: {gosto_visual!r}")
+            r += gosto_visual
+            canais["gosto_visual"] = gosto_visual
         r_n = clamp(div_arred(r, p.r_norm), -S, S)
         self.V = integrar(self.V, r_n, self.k_v, S)
         exc = max([abs(r_n)] + [falta_receptor(pc_depois, x, S) for x in EXCITANTES if x in receptores])
