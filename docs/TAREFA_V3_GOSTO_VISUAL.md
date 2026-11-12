@@ -347,3 +347,11 @@ na `main`.
 - **A leitura** cita o estresse de B e o salto de volume de A para B.
 
 O resultado está em `docs/RESULTADO_V3_GOSTO_VISUAL_ENJOO.md`.
+
+## Mudar de canal na TV do dono (2026-11-12, Claude Code, Opus 5.5, branch `v3-gosto-visual-canal`)
+
+O pedido do Matheus: um botão para trocar a tela que o pet está vendo, "como mudar de canal". No painel da TV, com a tela do dono ligada,
+"+ Canal" escolhe outra tela no seletor do navegador, "+ Vídeo" abre um vídeo deste computador e "Canal ▸" alterna entre os até 3
+canais já escolhidos (PROPOSTO), sem parar a sessão nem o cérebro; o "st" só leva os números do canal atual, no formato de sempre. Uma
+fonte encerrada sai da lista. No celular nada muda. As escolhas D-GV-CANAL-1 a 8 estão em `docs/registro/2026-11.md`; o código em
+`web/app/src/gostoVisual/canais.ts`, `captura.ts`, `sessaoTv.ts` e `PainelTv.tsx`.
