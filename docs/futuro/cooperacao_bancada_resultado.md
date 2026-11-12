@@ -73,7 +73,7 @@ pet de verdade.
 
 **As frases que a leitura sustenta:**
 - "Mesmo quando a situação acontece muitas vezes, os deveres da CO7, com os pesos de hoje, quase não mudam o que o pet de verdade faz: o
-  irmão aflito come a comida disputada +0,0008 vezes a mais (IC [−0,0014; 0,0039])."
+  irmão aflito come a comida disputada numa parte das vezes só 0,0008 maior (IC [−0,0014; 0,0039])."
 - "O motivo é que o pet quase não disputava essa comida: o escudo só tem 8 % de escolhas para tirar, e a culpa e a inveja disparam sem mudar a
   escolha."
 - **Não entra:** nada sobre os gêmeos do jogo (o B não é um pet de verdade), nem "a CO7 não funciona": o escudo faz o que diz (o G-ESCUDO
