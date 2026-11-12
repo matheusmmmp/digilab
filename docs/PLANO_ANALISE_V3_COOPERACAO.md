@@ -1,7 +1,9 @@
 # PLANO DE ANÁLISE V3 — COOPERACAO, a bancada: a cooperação emerge e cresce com o peso dos deveres? (2026-11-12, CB-1 a CB-9 DECIDIDAS, Claude Code, Opus 5.5)
 
 **Status: APROVADO pelo Matheus em 2026-11-12 ("Aprovo todas").** As decisões CB-1 a CB-9 (seção 11) estão DECIDIDAS, todas pela
-recomendação. Os números continuam PROPOSTOS. **Nenhuma vida deste plano roda antes de cinco coisas:**
+recomendação. Os números continuam PROPOSTOS.
+**Rodado em 2026-11-12 (CB4):** H-EMERGE e H-DOSE NÃO CONFIRMAM, H-REP INCONCLUSIVO POR PREMISSA, H-CUSTO CONFIRMA; o
+descritivo está em `docs/futuro/cooperacao_bancada_resultado.md` (D-CB-15). **Nenhuma vida deste plano roda antes de cinco coisas:**
 1. este cabeçalho com a marca "APROVADO pelo Matheus" (feito);
 2. a CO6 e a CO7 na `main` (`docs/ESPEC_V3_COOPERACAO_CO6.md` e `docs/ESPEC_V3_COOPERACAO_CO7.md`), com os testes G-ESCUDO,
    G-RECEPTOR-SOCIAL e G-PAR-CO7 verdes;
