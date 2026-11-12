@@ -27,7 +27,7 @@ test("o laboratorio: chocar, abrir, ver o motivo, descartar com confirmacao", as
   await page.goto(APP + "#/pet/estado");
   await expect(page.locator(".pet-tela")).toBeVisible();
   await expect(page.locator(".lab-selo")).toHaveCount(0);       // a chave desligada: nada do laboratorio na tela Pet
-  await page.locator(".acoes-pet button", { hasText: "Carinho" }).click();      // uma acao do dono grava o save do pet de hoje
+  await page.locator(".acoes-pet button", { hasText: "Elogiar" }).click();      // uma acao do dono grava o save do pet de hoje
   const petDeHoje = await hoje(page);
   expect(petDeHoje.versao).toBe(VERSAO_PET); // o ovo padrao de hoje (a versao atual; era a v17 ate a v18 do empurrao, #661)
 

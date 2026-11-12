@@ -249,7 +249,7 @@ function Chamados({ agir }: { agir: (a: AcaoDono) => void }) {
   if (!ab.length && m.acao === "chamar_atencao") return (
     <div className="dl-card chamado">
       <span className="chamado-ic"><Peca nome="emoji_exclam" escala={2} reserva="!" /></span>
-      <span className="chamado-txt"><b>Chamando você</b><span className="dl-apoio">um carinho atende</span></span>
+      <span className="chamado-txt"><b>Chamando você</b><span className="dl-apoio">um elogio atende</span></span>
       <button type="button" className="hx-continuar" onClick={() => agir("acariciar")}>Atender</button>
     </div>
   );
@@ -298,7 +298,7 @@ function necessidadeBaixa(m: Motor): Necessidade | undefined {
 
 interface Resumo { texto: string; emote: string | null; acao: AcaoDono | null }
 /** o resumo de agora, so do motor: o ovo; a necessidade mais baixa (se alguma esta abaixo da metade); o desejo; ou o que ele faz */
-const TEXTO_CHAMADO: Record<Chamado, string> = { fome: "está com fome", higiene: "quer um banho", carinho: "quer carinho" };
+const TEXTO_CHAMADO: Record<Chamado, string> = { fome: "está com fome", higiene: "quer um banho", carinho: "quer atenção" };
 function resumoAgora(m: Motor, nascendo: number): Resumo {
   if (nascendo > 0) return { texto: "o ovo está chocando", emote: null, acao: null };
   /* chamado aberto que ainda nao aperta: so o resumo (e a acao certa destacada no dock); o cartao com o Atender e o temPedido */
