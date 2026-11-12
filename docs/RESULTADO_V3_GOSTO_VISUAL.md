@@ -58,7 +58,7 @@ O Δ_I dos 108 pets de genoma próprio vai de −514 a 459, com 48 positivos; no
 
 | dono | escolha | tempo relativo |
 |---|---|---|
-| nenhum | 0,175 [−0,168; 0,523] | 0,244 [−0,085; 0,555] |
+| nenhum | 0,175 [−0,168; 0,522] | 0,244 [−0,085; 0,555] |
 | calmo | 0,103 [−0,262; 0,428] | 0,137 [−0,195; 0,436] |
 | agitado | 0,117 [−0,228; 0,448] | 0,231 [−0,098; 0,530] |
 
@@ -71,12 +71,12 @@ O Δ_I dos 108 pets de genoma próprio vai de −514 a 459, com 48 positivos; no
 | próprio | calmo − agitado | −0,007 [−0,044; 0,027] | −0,002 [−0,026; 0,023] |
 | próprio | calmo − nenhum | 0,015 [−0,033; 0,067] | 0,005 [−0,028; 0,039] |
 | próprio | agitado − nenhum | 0,022 [−0,027; 0,066] | 0,008 [−0,031; 0,044] |
-| vazio | calmo − agitado | −0,048 [−0,097; 0,005] | −0,032 [−0,066; 0,006] |
+| vazio | calmo − agitado | −0,048 [−0,097; 0,004] | −0,032 [−0,066; 0,006] |
 | vazio | calmo − nenhum | −0,029 [−0,080; 0,019] | −0,026 [−0,062; 0,008] |
-| vazio | agitado − nenhum | 0,018 [−0,018; 0,059] | 0,006 [−0,021; 0,034] |
+| vazio | agitado − nenhum | 0,018 [−0,018; 0,058] | 0,006 [−0,021; 0,034] |
 
 **A parte do dono não aparece com 36 unidades** em nenhum genoma: todo IC95 contém 0. No vazio, os pontos de `calmo − agitado` são
-negativos e os IC95 passam de 0 por pouco (0,005 e 0,006); pela regra da 7.2, isso é "não aparece", e não um efeito do contrário.
+negativos e os IC95 passam de 0 por pouco (0,004 e 0,006); pela regra da 7.2, isso é "não aparece", e não um efeito do contrário.
 
 ### 2.3 A interação (5.4)
 
