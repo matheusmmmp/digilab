@@ -70,6 +70,8 @@ export interface Lutador {
   /** o golpe de apoio (LP6-1; null sem o `apoio` da entrada): os dados, o clipe (ms), a recarga (ms), se o ataque em curso e o apoio e ha
       quanto tempo (ms) o alvo esta alem do alcance de perto (o tiro fraco de quem bate de perto) */
   ap: GolpeBase | null; msAp: number; recAp: number; usandoApoio: boolean; longeMs: number;
+  /** o recuo depois do apoio de perto de quem atira (LP6-3, D-LP6-3-4): quanto tempo (ms) ainda resta dele; 0 = sem recuo */
+  recuoAp: number;
   acDano: number; ultAmb: number; ultNum: number;
   /** a ultima situacao em que a IA da POC pensou em trocar (o sorteio dela fica; ver sim.ts, sorteioDaTroca) */
   decisao: string;

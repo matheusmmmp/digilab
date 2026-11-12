@@ -3,7 +3,7 @@
    Os tamanhos das amostras sao PROPOSTOS, SEM FONTE (secao 4.1; os cortes estao no desvio D-LP5-0-3).
    uso (em web/app): node scripts/equilibrio_poc/bancada.ts --grupo <grupo> --faixa calibracao --fase lp5_0 [--candidato v21]
    grupos: lideres, sparring, vida, treino, estagio, formas_crianca, formas_adolescente, formas_adulto, formas_mega, torneios */
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import {
   ACOES_DONO_JOGO_V11, ARENA_POR_ID, CAMPANHA_V6, CAT, CD, CMD, CTR, IDS_CENA, LIGA, LUGARES_V6, LUTAS_MAX_INSTALACAO, MAPA_FABRICA, MAPA_SALAO,
@@ -12,9 +12,9 @@ import {
   type Exercicio, type Forma, type FormaAdultaNormal, type IdCena, type Stat, type StatsPoc, type TiroPoc, type EsquivaPoc, type VisaoDono,
 } from "../../motor/index.ts";
 import {
-  CANDIDATO_V21, ESTAGIOS_LUTA, atira, esquivaDe, tiroDaPoc, TETO, TIPICO, argumento, commitAtual, contar, juntar, lutador, lutadorDoPet, lutar, novaConta, npc,
+  CANDIDATO_V21, ESTAGIOS_LUTA, atira, esquivaDe, extrasLp6, tiroDaPoc, TETO, TIPICO, argumento, commitAtual, contar, juntar, lutador, lutadorDoPet, lutar, novaConta, npc,
   petDoEstagio, pontosNumStat, rivalCanonico, rivalDaForma, sementeLuta, taxa,
-  type Candidato, type Conta, type EstagioLuta, type Lado, type Luta1, type PetBancada,
+  type Candidato, type Conta, type EstagioLuta, type ExtrasLp6, type Lado, type Luta1, type PetBancada,
 } from "./comum.ts";
 import { basesDa } from "./faixas.ts";
 import { candidatoDaLinha } from "./candidatos.ts";
@@ -54,8 +54,10 @@ let LUTAS = 0;
 let TIRO: TiroPoc | undefined;
 /** a esquiva do candidato que roda (so ligada; D-LP5-14) */
 let ESQ: EsquivaPoc | undefined;
+/** as chaves da LP6 do candidato que roda (LP6-3; desligadas, vazio) */
+let LP6: ExtrasLp6 = {};
 function luta(est: string, cena: IdCena, s: number, a: Lado, b: Lado): Luta1 {
-  const r = lutar(cena, s, a, b, TIRO, ESQ); LUTAS++; D.add(est, [a.forma, b.forma], r); return r;
+  const r = lutar(cena, s, a, b, TIRO, ESQ, LP6); LUTAS++; D.add(est, [a.forma, b.forma], r); return r;
 }
 /** uma serie sem cura para o pet (a Cidadela, a Liga, a Torre): vai ate a primeira que nao for vitoria ou ate n. Cada rival entra inteiro */
 function serie(est: string, s: number, pet: Lado, rivais: (j: number) => { lado: Lado; mapa: IdCena } | null, n: number): { vitorias: number; relogio: number } {
@@ -128,6 +130,11 @@ export function motorDoCandidato(c: Candidato, semente: number, remendar = c.nom
   /* o tiro do candidato pela entrada opcional do Motor (desvio D-LP5-1-11); o da POC fica fora, e a luta sai a de sempre */
   if (!tiroDaPoc(c.tiro)) m.tiroLutaPoc = { ...c.tiro };
   const esq = esquivaDe(c); if (esq) m.esquivaLutaPoc = esq;
+  /* as chaves da LP6 pelas entradas opcionais do Motor, como o tiro (LP6-3); desligadas, nada muda */
+  const lp6 = extrasLp6(c);
+  if (lp6.apoio) m.apoioLutaPoc = lp6.apoio;
+  if (lp6.arenaPorEstagio) m.arenaLutaPoc = lp6.arenaPorEstagio;
+  if (lp6.tabela) m.formasLutaPoc = lp6.tabela;
   x._rivalPoc = (rival: string, ...resto: unknown[]) => {
     if (!rivaisArena(m.estagioAtual).includes(rival)) throw new Error(`bancada: a vida do candidato so luta na Arena, nao com ${rival}`);
     const rv = rivalDoMotor(rival, ...resto);
@@ -234,7 +241,8 @@ function tiro(c: Candidato, bases: number[]) {
     for (const [tipo, alvos] of [["perto", perto], ["longe", longe]] as const) for (const x of longe) for (const y of alvos) for (const m of IDS_CENA) for (const base of bases)
       for (let q = 0; q < TAM.lutasTiro; q++) for (const ladoX of ["a", "b"] as const) {
         const s = sementeLuta(base, 12_000_000 + q), A = ladoX === "a" ? lados[x] : lados[y], B = ladoX === "a" ? lados[y] : lados[x];
-        const L = criarLutaPoc(configLutaPoc({ cena: m, semente: s, a: A, b: B, ...(TIRO && !tiroDaPoc(TIRO) ? { tiro: TIRO } : {}), ...(ESQ ? { esquiva: ESQ } : {}) }), sorteiosPoc(s));
+        const L = criarLutaPoc(configLutaPoc({ cena: m, semente: s, a: A, b: B, ...(TIRO && !tiroDaPoc(TIRO) ? { tiro: TIRO } : {}), ...(ESQ ? { esquiva: ESQ } : {}),
+          ...(LP6.apoio ? { apoio: LP6.apoio } : {}), ...(LP6.arenaPorEstagio ? { arenaPorEstagio: LP6.arenaPorEstagio } : {}) }, LP6.tabela), sorteiosPoc(s));
         const quem = ladoX === "a" ? L.a : L.b, vistos = new Map<unknown, number>();
         while (!L.fim && L.relogio < LIMITE_POC_MS) {
           passoPoc(L);
@@ -303,7 +311,7 @@ function torneios(c: Candidato, bases: number[]) {
 /* ---------------------------------------------------------------- a linha de comando */
 export const GRUPOS = ["lideres", "sparring", "vida", "treino", "estagio", "formas_crianca", "formas_adolescente", "formas_adulto", "formas_mega", "torneios", "tiro"] as const;
 function rodar(grupo: string, c: Candidato, bases: number[]): unknown {
-  TIRO = c.tiro; ESQ = esquivaDe(c);
+  TIRO = c.tiro; ESQ = esquivaDe(c); LP6 = extrasLp6(c);
   switch (grupo) {
     case "tiro": return tiro(c, bases);
     case "lideres": return lideres(c, bases);
@@ -319,8 +327,11 @@ function rodar(grupo: string, c: Candidato, bases: number[]): unknown {
 }
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const grupo = argumento("grupo"), faixa = argumento("faixa"), fase = argumento("fase"), nomeC = argumento("candidato", "v21");
-  if (!/^lp5_[0-9a-z_]+$/.test(fase)) throw new Error(`bancada: fase invalida ${fase}`);
-  if (faixa === "conferencia" && fase !== "lp5_4") throw new Error("bancada: a conferencia so roda na LP5-4 (secao 4.4)");
+  if (!/^lp[56]_[0-9a-z_]+$/.test(fase)) throw new Error(`bancada: fase invalida ${fase}`);
+  /* a conferencia: uma vez na LP5-4 e uma vez na LP6-3 (o adendo da LP6-3); um grupo que ja tem o JSON dela nao roda de novo */
+  if (faixa === "conferencia" && fase !== "lp5_4" && fase !== "lp6_3") throw new Error("bancada: a conferencia so roda na LP5-4 e na LP6-3");
+  if (faixa === "conferencia" && existsSync(fileURLToPath(new URL(`../medicoes/equilibrio_poc/${fase}/conferencia/${grupo}.json`, import.meta.url))))
+    throw new Error(`bancada: a conferencia do grupo ${grupo} na ${fase} ja rodou (uma vez so)`);
   const rapido = process.argv.includes("--rapido"), grade = process.argv.includes("--grade");
   if (rapido && grade) throw new Error("bancada: --rapido ou --grade, nao os dois");
   if (grade && faixa !== "calibracao") throw new Error("bancada: a grade so roda na calibracao");

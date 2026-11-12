@@ -1,6 +1,7 @@
-/* O painel da TV do gosto visual (docs/PLANO_UX_GOSTO_VISUAL.md, etapa 1; a prancha docs/pranchas/ux-gosto-visual/): com ?gosto_visual=1 a
+/* O painel da TV do gosto visual (docs/PLANO_UX_GOSTO_VISUAL.md, etapa 1; a prancha docs/pranchas/ux-gosto-visual/): com a chave (ligada
+   por padrão desde a D-GV-PADRAO-1; por isso os testes abrem sem parâmetro, e o "sem a chave" usa ?gosto_visual=0) a
    linha "TV" da pilha abre o painel, "Ligar a TV" liga a TV do jogo, a reação e o que passa aparecem, o Esc fecha o painel sem desligar
-   a TV e o foco volta à linha; "Parar" desliga. No celular o painel é a folha recolhida. Sem a chave, nada disso existe. Nada entra no
+   a TV e o foco volta à linha; "Parar" desliga. No celular o painel é a folha recolhida. Com ?gosto_visual=0, nada disso existe. Nada entra no
    registro: o protótipo fica fora do motor, do log e do save. O save é o do abertura.spec. */
 import { expect, test, type Browser, type Page } from "@playwright/test";
 import { basename } from "node:path";
@@ -33,7 +34,7 @@ const registro = (page: Page) => page.evaluate(() => JSON.stringify(JSON.parse((
 
 test("gosto visual: a TV da pilha abre o painel, liga, o Esc fecha sem desligar e o Parar desliga; nada entra no registro", async ({ browser }) => {
   test.setTimeout(120_000);
-  const { ctx, page, erros } = await abrir(browser, "?gosto_visual=1", 1440, 900);
+  const { ctx, page, erros } = await abrir(browser, "", 1440, 900);
   const antes = await registro(page);
   await expect(page.locator(".gv-canto")).toHaveCount(0);   /* o cartão do canto saiu (UX-GV-1) */
   const linha = page.locator(".pet-hud [data-painel-pet='tv'] button");
@@ -67,9 +68,9 @@ test("gosto visual: a TV da pilha abre o painel, liga, o Esc fecha sem desligar 
   await ctx.close();
 });
 
-test("gosto visual: no celular o painel é a folha recolhida, e sem a chave não há TV", async ({ browser }) => {
+test("gosto visual: no celular o painel é a folha recolhida, e com ?gosto_visual=0 não há TV", async ({ browser }) => {
   test.setTimeout(120_000);
-  const c = await abrir(browser, "?gosto_visual=1", 390, 844);
+  const c = await abrir(browser, "", 390, 844);
   await c.page.locator(".mm-retrato").click();
   await c.page.locator("#leque-pet").getByRole("button", { name: "TV", exact: true }).click();
   const painel = c.page.getByTestId("painel-tv");
@@ -81,7 +82,7 @@ test("gosto visual: no celular o painel é a folha recolhida, e sem a chave não
   await expect(painel.getByRole("button", { name: "Mostrar minha tela" })).toHaveCount(0);
   expect(c.erros).toEqual([]);
   await c.ctx.close();
-  const s = await abrir(browser, "", 1440, 900);
+  const s = await abrir(browser, "?gosto_visual=0", 1440, 900);
   await expect(s.page.locator(".pet-hud [data-painel-pet='digibrain']")).toHaveCount(1);
   await expect(s.page.locator("[data-painel-pet='tv']")).toHaveCount(0);
   await expect(s.page.getByTestId("tv-anuncio")).toHaveCount(0);
@@ -101,7 +102,7 @@ const pontoDaTv = (page: Page) => page.evaluate(() => {
 test("gosto visual: o toque na TV da ilha abre o painel, a câmera vai ao cantinho e o sinal da reação é um ícone do jogo", async ({ browser }) => {
   test.setTimeout(180_000);
   /* com "Exibir detalhes do pet" desligado a pilha fica só com a linha "TV" (o caminho do teclado) */
-  const { ctx, page, erros } = await abrir(browser, "?gosto_visual=1", 1440, 900, { "-detalhes-pet": "0" });
+  const { ctx, page, erros } = await abrir(browser, "", 1440, 900, { "-detalhes-pet": "0" });
   const antes = await registro(page);
   await expect(page.locator(".pet-hud [data-painel-pet]")).toHaveCount(1);
   const linha = page.locator(".pet-hud [data-painel-pet='tv'] button");
@@ -134,8 +135,8 @@ test("gosto visual: o toque na TV da ilha abre o painel, a câmera vai ao cantin
   expect(await registro(page)).toBe(antes);
   expect(erros).toEqual([]);
   await ctx.close();
-  /* sem a chave: nenhuma TV tocável e nenhum sinal */
-  const s = await abrir(browser, "", 1440, 900);
+  /* com ?gosto_visual=0: nenhuma TV tocável e nenhum sinal */
+  const s = await abrir(browser, "?gosto_visual=0", 1440, 900);
   expect(await s.page.evaluate(() => { const d = (window as any).__digilab; return [d.tvEm(700, 400), d.sinalTv()]; })).toEqual([false, null]);
   await s.ctx.close();
 });
@@ -145,7 +146,7 @@ const naJanela = <T>(page: Page, f: string): Promise<T | null> => page.evaluate(
 
 test("gosto visual: a janela pequena mostra o pet, a reação e a linha do gosto; o Carinho é o do jogo, o Esc a fecha sem parar a TV e o Parar fecha tudo", async ({ browser }) => {
   test.setTimeout(180_000);
-  const { ctx, page, erros } = await abrir(browser, "?gosto_visual=1", 1440, 900);
+  const { ctx, page, erros } = await abrir(browser, "", 1440, 900);
   const linha = page.locator(".pet-hud [data-painel-pet='tv'] button");
   await linha.click();
   const painel = page.getByTestId("painel-tv");
