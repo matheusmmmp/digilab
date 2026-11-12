@@ -27,6 +27,8 @@ export type NomeVersao = typeof VERSOES[number];
 /** as 5 sementes da calibracao usadas no E0 (secao 5 do plano); a validacao (94101...94505) nao e tocada */
 export const SEMENTES_E0 = [93101, 93202, 93303, 93404, 93505] as const;
 export const FAIXA_CALIBRACAO = [93101, 93505] as const;
+/** a faixa da validacao unica (o E2; adendo 1 do plano de analise): so no modo de validacao, que recusa as sementes da calibracao */
+export const FAIXA_VALIDACAO = [94101, 94505] as const;
 /** a visita do medio e do relapso, em minutos de jogo (EQ-4) */
 export const VISITA: Record<NomeDono, number | null> = { atento: null, medio: 120, relapso: 360 };
 /** o preco do portao ★★ (docs/PLANO_V3_MOEDA.md, secao 3; PROPOSTO, SEM FONTE) */
@@ -93,8 +95,8 @@ const mediana = (xs: number[]): number | null => {
 const r4 = (x: number | null): number | null => x === null ? null : Math.round(x * 1e4) / 1e4;
 
 /** as chaves do E1 (EQUILIBRIO_CUIDADO; scripts/equilibrio_cuidado/e1.ts): o ajuste do modular e a tabela dos Bits. Sem elas, a vida do E0,
-    byte a byte */
-export interface OpcoesVida { ajuste?: AjusteEquilibrioE1; bits?: TabelaBits }
+    byte a byte. `validacao`: o modo da validacao unica (o E2), o unico que aceita as sementes 94101...94505 */
+export interface OpcoesVida { ajuste?: AjusteEquilibrioE1; bits?: TabelaBits; validacao?: boolean }
 
 /** a vida inteira: o resultado por pet e o do Tamer */
 export function vida(versao: NomeVersao, dono: NomeDono, semente: number, dias = 3, teste = false, opcoes: OpcoesVida = {}) {
@@ -102,7 +104,11 @@ export function vida(versao: NomeVersao, dono: NomeDono, semente: number, dias =
   if (!DONOS.includes(dono)) throw new Error(`dono desconhecido: ${JSON.stringify(dono)}`);
   if (!VERSOES.includes(versao)) throw new Error(`versao desconhecida: ${JSON.stringify(versao)}`);
   if (!Number.isInteger(dias) || dias < 1) throw new Error(`dias precisa ser inteiro >= 1: ${dias}`);
-  if (teste ? !(semente >= 101 && semente <= 505) : !(semente >= FAIXA_CALIBRACAO[0] && semente <= FAIXA_CALIBRACAO[1]))
+  if (opcoes.validacao !== undefined && typeof opcoes.validacao !== "boolean") throw new Error(`validacao e bool: ${String(opcoes.validacao)}`);
+  if (opcoes.validacao === true) {
+    if (teste) throw new Error("o modo de validacao nao roda com as sementes de teste");
+    if (!(semente >= FAIXA_VALIDACAO[0] && semente <= FAIXA_VALIDACAO[1])) throw new Error(`semente ${semente} fora da faixa de validacao (94101...94505)`);
+  } else if (teste ? !(semente >= 101 && semente <= 505) : !(semente >= FAIXA_CALIBRACAO[0] && semente <= FAIXA_CALIBRACAO[1]))
     throw new Error(`semente ${semente} fora da faixa ${teste ? "de teste (101...505)" : "de calibracao (93101...93505)"}`);
   /* a montagem do jogo (src/produto.ts e src/cerebro.ts): as tres chaves, o modular e a ponte da luta, na ordem do ligarProduto */
   const montar = (m: Motor): void => {
