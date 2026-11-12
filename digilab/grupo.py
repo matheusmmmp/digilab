@@ -54,7 +54,7 @@ from __future__ import annotations
 
 import json
 import random
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from typing import Callable
 
 from .config import CONFIG_DONOS, CONFIG_GRUPO_LIGADA, CONFIG_PADRAO, CONFIG_SENTIDOS, TICKS_POR_DIA, Config, ConfigDonos, ConfigGrupo
@@ -267,6 +267,9 @@ class Grupo:
             if self.coop is not None and decidem:
                 self.coop.fim_do_tick(self.tick, self.disputas[n_disputas:], self.contatos[n_contatos:],
                                       {i: self.motores[i]._acao_atual.value for i in presentes}, *self._posicoes_e_raios(presentes))
+            if self.cco.co6:                         # a CO6: o peso dos deveres, no fim de todo tick (desligada, nada)
+                self.coop.fim_do_tick_k(self.tick, *self._posicoes_e_raios(presentes),
+                                        {i: self.motores[i]._estado.tick for i in presentes})
             self.tick += 1
         for i in presentes:
             m = self.motores[i]
@@ -315,7 +318,11 @@ class Grupo:
         m = self.motores[ident]
         fisico = [(i, *self.motores[i].pet, self.motores[i]._acao_atual.value) for i in outros]
         sentidos = self.perceber_sentidos(ident, outros) if self.cs.ligada else None
-        return perceber_social(*m.pet, self.tick, fisico, m._viu_comer, m._toques, m._raio_visao, sentidos)
+        p = perceber_social(*m.pet, self.tick, fisico, m._viu_comer, m._toques, m._raio_visao, sentidos)
+        if self.cco.co6:                         # a CO6: a reputacao de cada outro presente e o proprio `k` (desligada, os campos ficam None)
+            p = replace(p, reputacao=tuple((i, self.coop.reputacao(i, ident, self.tick)) for i in sorted(outros)),
+                        peso_dever=self.coop.peso_dever(ident))
+        return p
 
     # ------------------------------------------------------------ o cheiro proprio, o rastro e o som (etapa 8; degrau 1b)
     MUNDO_OLFATO = ("afastamento_narinas", "cheiro_pet", "cheiro_marca", "raio_celulas", "idade_marca", "max_marcas")

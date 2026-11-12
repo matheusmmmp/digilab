@@ -48,13 +48,23 @@ def _jsonavel(obj):
     return json.loads(json.dumps(obj, sort_keys=True, default=lambda o: o.para_dict() if hasattr(o, "para_dict") else repr(o)))
 
 
+def _social_jsonavel(social) -> dict:
+    """a percepcao social em JSON; os campos da CO6 (a reputacao e o peso dos deveres) so entram quando a CO6 os da (desligada, o traco de
+    hoje, byte a byte)"""
+    d = asdict(social)
+    for campo in ("reputacao", "peso_dever"):
+        if d[campo] is None:
+            del d[campo]
+    return _jsonavel(d)
+
+
 class MotorGrupoGravado(MotorMundoGravado):
     """O MotorMundoGravado com o que o grupo pede a mais: o tick do mundo, a percepcao social e o `_tick_social`; nao muda nada da vida."""
 
     def _antes_da_decisao(self):
         p = super()._antes_da_decisao()
         social = getattr(self, "_social", None)
-        self._op.update(tick_mundo=self._tm(self._estado.tick), social=None if social is None else _jsonavel(asdict(social)))
+        self._op.update(tick_mundo=self._tm(self._estado.tick), social=None if social is None else _social_jsonavel(social))
         return p
 
     def _consequencia(self, acao):

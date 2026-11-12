@@ -177,7 +177,13 @@ def test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain():
                                                                              # o gabarito do decodificador de conceitos (DC1) so le o motivo; nenhuma vida
                                                                              "experiments/exportar_decodificador.py",
                                                                              # a DC3 (#672, #686): o orquestrador da run unica e o exportador do gabarito da fala_unidades
-                                                                             "experiments/run_v3_conversa_dc3.py", "experiments/exportar_gabarito_fala_unidades.py"}
+                                                                             "experiments/run_v3_conversa_dc3.py", "experiments/exportar_gabarito_fala_unidades.py",
+                                                                             # os que ja citavam o pacote e faltavam aqui (o teste falhava na main, D-CO6b-4): o GOSTO_VISUAL
+                                                                             # (P1e, P1f) e a DC4a
+                                                                             "experiments/run_v3_gosto_visual.py", "experiments/exportar_gosto_visual.py",
+                                                                             "experiments/entradas_dc4.py",
+                                                                             # COOPERACAO, CO6a: o gabarito das vidas do grupo com o modular
+                                                                             "experiments/exportar_gabarito_co6.py"}
     assert "lembranca" not in (RAIZ / "digilab" / "mundo.py").read_text(encoding="utf-8")
 
 

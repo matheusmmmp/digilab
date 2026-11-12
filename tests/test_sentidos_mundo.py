@@ -484,7 +484,8 @@ def test_o_passo_e_a_direcao_do_ultimo_deslocamento():
 
 # ================================================================== G-RECEPTOR-SOCIAL
 def test_a_percepcao_dos_sentidos_so_tem_o_fisico():
-    assert [f.name for f in fields(PercepcaoSocial)] == ["outros", "onde_comeu", "toque", "sentidos"]
+    # a `reputacao` e o `peso_dever` sao da CO6 (tests/test_cooperacao_co6.py), None sem ela
+    assert [f.name for f in fields(PercepcaoSocial)] == ["outros", "onde_comeu", "toque", "sentidos", "reputacao", "peso_dever"]
     assert [f.name for f in fields(PercepcaoSentidos)] == ["passo", "cheiro", "sons"]
     g = _grupo(101, "espiao", barulho=True)
     vistos = 0

@@ -23,6 +23,14 @@ um valor de centenas em centenas de ticks, e nao em dias (D-CO3-4). A intencao p
 (`peso_int` = 0, D-CO0-3). A reputacao de i vista por k e a mesma conta, so com os atos de i que k testemunhou: k ve i no momento do ato
 (a distancia ate o raio da visao de k, com as posicoes daquele momento), e a repeticao conta so entre os testemunhados.
 
+A CO6 (docs/ESPEC_V3_COOPERACAO_CO6.md; so com a subchave `co6`): o peso dos deveres `k` de cada pet, pela convivencia (Alger e Weibull
+2013, 10.3982/ecta10637, a forma; os numeros sao PROPOSTOS, SEM FONTE). O Grupo chama `fim_do_tick_k` no fim de TODO tick (com ou sem
+decisao), depois da medida do tick, com as posicoes, os raios e a idade (o tick do proprio pet) de cada presente. Para cada pet i, em ordem
+de id: ha encontro se algum outro j esta a ate o raio da visao de i e a ate o de j (um ve o outro) e a reputacao de j vista por i e positiva
+naquele tick; com encontro, `k_i` ganha `k_passo`; sem, decai um tick pela meia-vida da pontuacao (CO6-3); e fica no teto do estagio da
+idade (CO6-4). Guardado como a pontuacao, em ponto fixo de BITS_FRACAO bits abaixo de S, e lido arredondado na escala S. O `k` so le a
+reputacao (feita so dos atos testemunhados) e a posicao: nada do estado interno do outro (o G-RECEPTOR-SOCIAL). Nada aqui muda a decisao.
+
 So biblioteca padrao.
 """
 
@@ -30,8 +38,9 @@ from __future__ import annotations
 
 import math
 
-from .config import ConfigCooperacao
+from .config import TICKS_POR_DIA, ConfigCooperacao
 from .corpo import passo_meia_vida
+from .expressao import estagio_por_idade
 from .mundo import distancia, div_arred
 
 ATOS = ("disputa", "contencao", "encostar")
@@ -65,9 +74,15 @@ class Conta:
         self.bruto = 0                                  # o valor x 2**BITS_FRACAO no ultimo tick
         self.tick = 0
         self.repeticoes: dict[tuple, int] = {}
+        self._lido: tuple[int, int] | None = None      # (tick, bruto decaido ate ele): o decaimento e passo a passo, e partir dele e exato
 
     def _bruto_em(self, tick: int) -> int:
-        return decair(self.bruto, tick - self.tick, self.cfg.k_meia_vida_pontuacao)
+        base_tick, base = self.tick, self.bruto
+        if self._lido is not None and base_tick <= self._lido[0] <= tick:
+            base_tick, base = self._lido
+        v = decair(base, tick - base_tick, self.cfg.k_meia_vida_pontuacao)
+        self._lido = (tick, v)
+        return v
 
     def em(self, tick: int) -> int:
         """o valor no tick, na escala S"""
@@ -77,6 +92,7 @@ class Conta:
         """(a repeticao, a contribuicao, o valor depois, na escala S)"""
         self.bruto = self._bruto_em(tick)
         self.tick = tick
+        self._lido = None
         chave = (tick // self.cfg.janela_novidade, ato, alvo)
         n = self.repeticoes.get(chave, 0)
         self.repeticoes[chave] = n + 1
@@ -98,6 +114,7 @@ class Cooperacao:
         self._fome: dict[str, float] = {}                         # o fome_antes da ultima decisao de cada pet
         self._oportunidades: dict[str, list[tuple]] = {}          # autor -> [(tick, alvo, comida)] da ultima decisao dele
         self._ganhos: dict[tuple, int] = {}                       # (tick, quem, comida) -> o ganho, so no tick
+        self._k: dict[str, int] = {}                              # a CO6: o `k` de cada pet x 2**BITS_FRACAO, no fim do ultimo tick
 
     # ------------------------------------------------------------ o que o Grupo chama
     def decisao(self, tick: int, ident: str, maduras: list[int], outros_vistos: list[str], fome_antes: float, consumo: dict | None,
@@ -141,6 +158,40 @@ class Cooperacao:
                     self._ato(tick, "encostar", eu, outro, None, 1, 0, posicoes, raios)
         self._ganhos = {k: v for k, v in self._ganhos.items() if k[0] != tick}
 
+    def fim_do_tick_k(self, tick: int, posicoes: dict[str, tuple[int, int]], raios: dict[str, int], idades: dict[str, int]) -> None:
+        """a CO6: o fim de TODO tick, depois da medida do tick; `idades` e o tick do proprio pet (a idade, que da o estagio e o teto)"""
+        if not self.cfg.co6:
+            raise RuntimeError("o peso dos deveres (fim_do_tick_k) exige a subchave co6 da ConfigCooperacao")
+        if set(idades) != set(posicoes) or set(raios) != set(posicoes):
+            raise ValueError(f"posicoes, raios e idades de presentes diferentes: {sorted(posicoes)} {sorted(raios)} {sorted(idades)}")
+        um = 2 ** BITS_FRACAO
+        for i in sorted(posicoes):
+            xi, yi = posicoes[i]
+            encontro = False
+            for j in sorted(posicoes):
+                if j == i:
+                    continue
+                d = distancia(posicoes[j][0] - xi, posicoes[j][1] - yi)
+                if d <= raios[i] and d <= raios[j] and self.reputacao(j, i, tick) > 0:
+                    encontro = True
+                    break
+            k = self._k.get(i, 0)
+            k = k + self.cfg.k_passo * um if encontro else decair(k, 1, self.cfg.k_meia_vida_pontuacao)
+            self._k[i] = min(k, self.teto_k(idades[i]) * um)
+
+    def teto_k(self, idade: int) -> int:
+        """o teto do `k` no estagio da idade em ticks do proprio pet (CO6-4; o estagio provisorio da ConfigExpressao)"""
+        if type(idade) is not int or idade < 0:
+            raise ValueError(f"idade em ticks, inteira e nao negativa: {idade!r}")
+        estagio = estagio_por_idade(idade / TICKS_POR_DIA)
+        return getattr(self.cfg, f"k_teto_{estagio}")
+
+    def peso_dever(self, ident: str) -> int:
+        """o `k` do pet no fim do ultimo tick, na escala S (0 antes do primeiro tick dele)"""
+        if not self.cfg.co6:
+            raise RuntimeError("o peso dos deveres exige a subchave co6 da ConfigCooperacao")
+        return div_arred(self._k.get(ident, 0), 2 ** BITS_FRACAO)
+
     # ------------------------------------------------------------ a conta
     def _conta(self, tabela: dict, chave) -> Conta:
         if chave not in tabela:
@@ -175,5 +226,8 @@ class Cooperacao:
 
     def resumo(self, ids: list[str], tick: int) -> dict:
         """os atos, a pontuacao de cada pet e a reputacao de cada um vista por cada outro, no tick"""
-        return {"atos": self.atos, "pontuacao": {i: self.pontuacao(i, tick) for i in ids},
-                "reputacao": {i: {k: self.reputacao(i, k, tick) for k in ids if k != i} for i in ids}}
+        r = {"atos": self.atos, "pontuacao": {i: self.pontuacao(i, tick) for i in ids},
+             "reputacao": {i: {k: self.reputacao(i, k, tick) for k in ids if k != i} for i in ids}}
+        if self.cfg.co6:                                          # a CO6: desligada, o resumo de hoje
+            r["peso_dever"] = {i: self.peso_dever(i) for i in ids}
+        return r

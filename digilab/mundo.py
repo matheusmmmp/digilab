@@ -555,12 +555,17 @@ class PercepcaoSocial:
     - `toque`: (id, tipo, direcao, idade) do ultimo contato com cada outro (tipo em TIPOS_TOQUE; direcao 1 a 8 na tabela do cheiro, 0 na
       mesma celula); em ordem de id;
     - `sentidos` (o degrau 1b, so com a ConfigSentidos ligada; senao None): o cheiro de cada outro, o rastro dele e os sons ouvidos
-      (`PercepcaoSentidos`)."""
+      (`PercepcaoSentidos`);
+    - `reputacao` (a CO6, so com a subchave `co6` da ConfigCooperacao; senao None): (id, r) de cada outro presente no grupo, a vista ou
+      nao (CO6-2), em ordem de id, com r a reputacao dele vista por este pet (a memoria dos atos que este pet testemunhou), na escala S;
+    - `peso_dever` (a CO6; senao None): o peso dos deveres `k` deste pet, na escala S (o estado moral do proprio pet)."""
 
     outros: tuple
     onde_comeu: tuple
     toque: tuple
     sentidos: "PercepcaoSentidos | None" = None
+    reputacao: tuple | None = None
+    peso_dever: int | None = None
 
 
 # ------------------------------------------------------------------ o degrau 1b: o cheiro proprio, o rastro e o som (dois pets, etapa 8)
