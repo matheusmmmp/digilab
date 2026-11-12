@@ -1,13 +1,15 @@
 /* Os lugares da ilha (L3 de "Lugares da ilha"): os pontos, a altura, o estado e o caminho do modelo de cada um. Pura: sem three e sem DOM.
    Desde a mescla com a LUGARES_3D (2026-11-07) o portao e a barraca ficam onde a grade da ilha os poe (grade.ts, porLugares; o LG-G2 de
    test/ilha_lugares.test.ts confere o lugar em si), com o modelo de LUGARES_MODELOS; aqui so se confere que a tabela le a grade. */
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { CMU, LAYOUT_MUNDO_AFASTADO } from "../motor/index.ts";
+import { CMU, CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA, LAYOUT_MUNDO_AFASTADO } from "../motor/index.ts";
 import { centroDaCelula } from "../motor/mundo.ts";
 import { LUGARES, ORDEM_LUGARES, chaoDoLugar, gradeDosLugares, idaDoTreino, lugarDoDestino, pontoDoLugar, type BaseDoMundo } from "../src/telas/pet/ilha/lugares.ts";
-import { PLANTA_ILHA, TREINO_MS, TREINO_VEL } from "../src/telas/pet/ilha/constantes.ts";
+import { PLANTA_ILHA, PLANTA_ILHA_GRANDE, TREINO_MS, TREINO_VEL } from "../src/telas/pet/ilha/constantes.ts";
 import { ilhaDe } from "../src/telas/pet/ilha/grade.ts";
-import { LUGARES_LUZ, LUGARES_MODELOS } from "../src/telas/pet/ilha/modelos.ts";
+import { LUGARES_LUZ, LUGARES_MODELOS, MODELOS } from "../src/telas/pet/ilha/modelos.ts";
 
 const baseDe = (cm: typeof CMU): BaseDoMundo => {
   const [nx, ny] = centroDaCelula(cm.layout.ninho, cm), [cx, cy] = centroDaCelula(cm.layout.comedouro, cm);
@@ -36,6 +38,28 @@ describe("lugares da ilha", () => {
     expect(pontoDoLugar("saco", base)).toEqual([PLANTA_ILHA.lugares.saco[0], PLANTA_ILHA.lugares.saco[1]]);
     expect(pontoDoLugar("saco", base)).toEqual([22, 9]);
     expect(Math.hypot(22 - PLANTA_ILHA.praca.x, 9 - PLANTA_ILHA.praca.z)).toBeLessThan(12);
+  });
+  it("em cada ilha o saco fica no ponto da planta dela, em terra plana da area (na ilha grande o da planta A e agua)", () => {
+    for (const cm of [CMU_MVP, CMU_MVP_AGUA, CMU_GRANDE]) {
+      const ilha = ilhaDe(cm), p = pontoDoLugar("saco", { ...base, area: ilha.area, saco: ilha.planta.lugares.saco });
+      expect([...p], cm.layout.nome).toEqual([...ilha.planta.lugares.saco]);
+      const c = ilha.cel(Math.floor(p[0]), Math.floor(p[1]))!;
+      expect([c.tipo !== "agua", c.nivel, ilha.naArea(p[0], p[1])], cm.layout.nome).toEqual([true, 0, true]);
+      /* perto do saco so ha decoracao baixa: nada alto no lugar dele */
+      const perto = ilha.objetos.filter((o, i) => !ilha.escondidos.has(i) && Math.hypot(o.x - p[0], o.z - p[1]) < LUGARES.saco.raio);
+      for (const o of perto) expect(MODELOS[o.modelo].baixo, `${cm.layout.nome}: ${o.modelo}`).toBe(true);
+    }
+    /* o defeito de 2026-11-11: o ponto da planta A, na ilha grande, e mar */
+    const grande = ilhaDe(CMU_GRANDE), [ax, az] = PLANTA_ILHA.lugares.saco;
+    expect(grande.cel(ax, az)!.tipo).toBe("agua");
+    expect([...PLANTA_ILHA_GRANDE.lugares.saco]).not.toEqual([ax, az]);
+  });
+  it("a vista e os itens pedem o ponto do saco a planta da ilha, e a abertura olha a praca dela", () => {
+    const v = readFileSync(join(import.meta.dirname, "..", "src", "telas", "pet", "ilha", "vista.ts"), "utf8");
+    expect(v).toContain("new Itens(mu, this.ilha.planta.lugares.saco)");
+    expect(v).toContain("grade: gradeDosLugares(this.ilha), saco: this.ilha.planta.lugares.saco }");
+    expect(v).toContain("praca: [this.ilha.planta.praca.x, this.ilha.planta.praca.z]");
+    expect(v).not.toMatch(/PLANTA_ILHA/);
   });
   it("a ida ao saco no treino dura a distancia sobre TREINO_VEL, com TREINO_MS.ida no minimo (PA-3)", () => {
     expect(idaDoTreino(0)).toBe(TREINO_MS.ida);

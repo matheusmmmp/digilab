@@ -2372,6 +2372,83 @@ CONFIG_TELA = ConfigTela()
 
 
 # =====================================================================
+# V3, GOSTO_VISUAL, P1c: a TV no mundo (docs/ESPEC_GOSTO_VISUAL_P1.md, secoes 1 e 8; GV-15 e GV-20 pela recomendacao, D-GV-P1-1).
+# Desligada por padrao: a vida de hoje byte a byte. Ligada (so com o mundo fisico, um pet fora do grupo e o corpo com a ConfigTela ligada;
+# falha alto sem eles), a TV e um objeto do Mundo numa celula do mapa, e o motor entrega ao corpo, a cada tick, o que ela passa (zeros
+# quando o pet nao olha). Duas fontes, uma por vida (D-GV-P1c-2):
+#   "grade"   a TV do jogo (a pesquisa, GV-20): `n_programas` perfis de sete inteiros em [0, escala] e a grade (a sequencia dos programas,
+#             a duracao de cada um e a variacao pequena por cena), tudo sorteado pela rng propria `tv-programas` (derivar_semente com a
+#             semente do mundo); o dono troca o canal pelo evento `trocar_canal` (o programa vale ate o fim do programa da grade);
+#   "evento"  o modo livre gravado (secao 1.2): o que a TV passa e o ultimo evento `sentido_tela` ate o tick (fonte e sete niveis de 0 a
+#             15); sem nenhum, a TV esta desligada. So no jogo, nunca em resultado (GV-20).
+# Fica numa config propria, e nao como campo da ConfigMundo (a espec fala em `ConfigMundo.tv`), para o dump da ConfigMundo nao mudar, como
+# a ConfigTela do P1b (D-GV-P1c-1). Todos os numeros PROPOSTOS, SEM FONTE.
+FONTES_TV = ("grade", "evento")
+
+
+@dataclass(frozen=True)
+class ConfigTV:
+    """A TV no mundo (GOSTO_VISUAL, P1c). Os numeros e o porque de cada um (todos PROPOSTOS, SEM FONTE):
+
+    fonte                "grade"   a TV do jogo, a unica da pesquisa (GV-20); "evento", o modo livre gravado (so no jogo)
+    celula               (4, 10)   na casa, a 5 celulas do ninho (4, 15): dentro do raio da visao (6 celulas) de quem esta no ninho, que
+                                   e o raio em que o pet olha a TV (D-GV-P1c-4)
+    escala               450000    = C, a escala dos perfis; o motor do corpo confere que e o teto_intensidade da ConfigTela
+    n_programas          4         os quatro programas da TV do jogo do P0 (web/app/src/gostoVisual/tvDoJogo.ts)
+    programa_min_ticks   30        cada programa da grade dura de meia hora...
+    programa_max_ticks   90        ... a uma hora e meia de jogo (sorteado; o P0 troca a cada 25 s reais)
+    cena_ticks           5         a cada 5 ticks, uma cena: um deslocamento novo por canal dentro do programa
+    variacao             27000     = 0,06 C, o VARIACAO_DENTRO do P0: o deslocamento de cada cena, uniforme em [-variacao, variacao]
+    janela_resumo_s      10        GV-15: quem grava o `sentido_tela` (tv.ResumoTela) faz a media de 10 amostras (uma por segundo real)"""
+
+    ligada: bool = False
+    fonte: str = "grade"
+    celula: tuple = (4, 10)
+    escala: int = 450000
+    n_programas: int = 4
+    programa_min_ticks: int = 30
+    programa_max_ticks: int = 90
+    cena_ticks: int = 5
+    variacao: int = 27000
+    janela_resumo_s: int = 10
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigTV.ligada e bool: {self.ligada!r}")
+        if self.fonte not in FONTES_TV:
+            raise ValueError(f"ConfigTV.fonte em {FONTES_TV}: {self.fonte!r}")
+        if type(self.celula) is not tuple or len(self.celula) != 2 or any(type(v) is not int or v < 0 for v in self.celula):
+            raise ValueError(f"ConfigTV.celula e (x, y) inteiros >= 0: {self.celula!r}")
+        for campo in ("escala", "n_programas", "programa_min_ticks", "programa_max_ticks", "cena_ticks", "janela_resumo_s"):
+            v = getattr(self, campo)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigTV.{campo} tem de ser inteiro positivo: {v!r}")
+        if self.n_programas < 2:
+            raise ValueError(f"ConfigTV.n_programas >= 2 (a grade troca sempre para outro programa): {self.n_programas}")
+        if self.programa_min_ticks > self.programa_max_ticks:
+            raise ValueError(f"ConfigTV.programa_min_ticks > programa_max_ticks: {self.programa_min_ticks} > {self.programa_max_ticks}")
+        if type(self.variacao) is not int or not 0 <= self.variacao < self.escala:
+            raise ValueError(f"ConfigTV.variacao e inteiro em [0, escala): {self.variacao!r}")
+
+
+CONFIG_TV = ConfigTV()
+CONFIG_TV_LIGADA = ConfigTV(ligada=True)
+# o status de cada campo da ConfigTV (conferido por teste): todos PROPOSTOS, SEM FONTE; o porque esta na docstring
+PARAMETROS_TV: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "a TV no mundo atras de chave desligada (espec do P1, secao 8); SEM FONTE"),
+    "fonte": ("PROPOSTO", "GV-20: a grade na pesquisa, o evento so no jogo; SEM FONTE"),
+    "celula": ("PROPOSTO", "na casa, no raio da visao de quem esta no ninho; SEM FONTE"),
+    "escala": ("PROPOSTO", "= C, o teto_intensidade da ConfigTela; SEM FONTE"),
+    "n_programas": ("PROPOSTO", "os quatro programas da TV do jogo do P0; SEM FONTE"),
+    "programa_min_ticks": ("PROPOSTO", "meia hora de jogo; SEM FONTE"),
+    "programa_max_ticks": ("PROPOSTO", "uma hora e meia de jogo; SEM FONTE"),
+    "cena_ticks": ("PROPOSTO", "uma cena a cada 5 ticks; SEM FONTE"),
+    "variacao": ("PROPOSTO", "0,06 C, o VARIACAO_DENTRO do P0; SEM FONTE"),
+    "janela_resumo_s": ("PROPOSTO", "GV-15: a media de 10 s reais (a recomendacao da espec); SEM FONTE"),
+}
+
+
+# =====================================================================
 # V2, rede de si, etapa 2b (docs/TAREFA_V2_REDE_DE_SI.md; docs/PLANO_ANALISE_V2_REDE_DE_SI.md, secao 3, RS-3): a troca da digestao num
 # tick, gravada no registro como a troca do mutavel. O tick vem de quem monta a vida (a bancada: o fim do dia 7 numa vida de 14); a taxa
 # lenta, daqui. Sem a troca pedida, nada muda (a vida de hoje).
@@ -2898,6 +2975,40 @@ PARAMETROS_DIGIBRAIN_INATOS: dict[str, tuple[str, str]] = {
              ("PROPOSTO", "docs/ESPEC_DIGIBRAIN_MODULAR.md, secoes 2 a 7; valor de partida a mao (etapa 1a), SEM FONTE salvo o que o "
                           "comentario do campo cita"))
     for f in fields(ConfigDigibrainInatos)}
+
+
+@dataclass(frozen=True)
+class ConfigSonoSegura:
+    """O sono que segura do DigiBrain modular (docs/TAREFA_V3_SONO_SEGURA.md; a histerese do sono, Matheus, 2026-11-11). Hoje o reflexo do
+    sono do M-ARB so forca o dormir com a leitura da energia abaixo de `lambda_sono` (S/4); acima dele o dormir disputa com as outras
+    opcoes e perde assim que a energia sobe um pouco (o sono picado em cochilos de 15 a 45 min). Ligada, o pet que esta dormindo (o
+    `dormindo` do vetor de estado, que o M-SENS ja le em `contexto["dormindo"]`) segue no reflexo ate a leitura da energia chegar a
+    `lambda_acordar`. So acorda antes pela fome urgente (a urgencia da fome acima do `urgencia_lambda` dos inatos, a mesma guarda do
+    passeio, AN-4; nenhum limiar novo) ou pelo dono que o acorda (o brincar do dono tira o `dormindo`, como hoje). Abaixo de `lambda_sono`
+    o reflexo de sempre vale, com fome ou sem. Fica numa config propria, e nao em `ConfigDigibrain` nem nos inatos, para o dump deles (o
+    gabarito de paridade do modular, digibrain_modular_constantes.json) nao mudar, como a `ConfigLutaMemoria`. Desligada (o padrao), a
+    vida de hoje sai byte a byte (tests/gabaritos/sono_segura_de_hoje.json). Status em PARAMETROS_SONO_SEGURA."""
+
+    ligada: bool = False                      # PROPOSTO: a chave (so os pets do jogo da versao do sono que segura a ligam)
+    lambda_acordar: int = -(-9 * _S // 10)    # PROPOSTO, SEM FONTE: a leitura da energia em que o sono acaba; o primeiro inteiro acima
+                                              # de 0,9 S (922 de 1 024: "ate a energia passar de 90 %")
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigSonoSegura.ligada e bool: {self.ligada!r}")
+        if type(self.lambda_acordar) is not int or not CONFIG_DIGIBRAIN_INATOS.lambda_sono < self.lambda_acordar <= _S:
+            raise ValueError(f"ConfigSonoSegura.lambda_acordar e inteiro em (lambda_sono, S]: {self.lambda_acordar!r}")
+
+
+# Status dos campos da ConfigSonoSegura (conferido por teste). A fome urgente nao tem numero proprio: e o `urgencia_lambda` dos inatos.
+PARAMETROS_SONO_SEGURA: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "TAREFA_V3_SONO_SEGURA (a histerese do sono APROVADA pelo Matheus em 2026-11-11); a chave, SEM FONTE"),
+    "lambda_acordar": ("PROPOSTO", "TAREFA_V3_SONO_SEGURA (Matheus, 2026-11-11: dormir ate a energia passar de 90 %); 0,9 S arredondado "
+                                   "para cima, SEM FONTE"),
+}
+
+CONFIG_SONO_SEGURA = ConfigSonoSegura()
+CONFIG_SONO_SEGURA_LIGADA = ConfigSonoSegura(ligada=True)
 # a versao do pet do cerebro modular (DM-5, DECIDIDA em 2026-10-25): a v13, so com a ConfigDigibrain ligada. Os saves v1 a v12, as
 # assinaturas e os gabaritos nao mudam; no jogo (web/app/), a v13 entra na etapa 1b
 VERSAO_PET_DIGIBRAIN = 13

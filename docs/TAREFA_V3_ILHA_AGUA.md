@@ -580,7 +580,23 @@ assinam igual até a memória mudar uma decisão; e um save com o `ma` não abre
 **O que não foi verificado:** a suíte inteira do Python; o custo no celular; o retorno medido com a v24 que ganhou o alcance pelo
 evento (só a v25 foi medida).
 
-### 12.18 A ilha grande fechada (2026-11-11)
+### 12.18 O saco de pancada no mar da ilha grande (2026-11-11, Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-saco-ilha`)
+
+**O aviso do Matheus (2026-11-11):** "O saco de pancada está fora da ilha", com uma captura do saco dentro da água.
+
+- **A causa:** o ponto do saco vinha sempre da planta A (`PLANTA_ILHA.lugares.saco`, 22; 9), em qualquer ilha. Na ilha grande essa
+  célula é mar. A planta da ilha grande já tinha o ponto certo (24; 24, em grama, perto do lar), mas ninguém o lia.
+- **O conserto:** a vista e os itens passam a pedir o ponto do saco à planta que vale na ilha (`Ilha.planta.lugares.saco`), pela
+  `BaseDoMundo.saco` de `lugares.ts`. O minimapa, o treino e a viagem do Crescer usam o mesmo ponto e acompanham.
+- **O mesmo defeito na abertura do primeiro dia:** a câmera olhava a praça da planta A (31; 16). Agora olha a praça da planta da ilha
+  (na grande, 64; 30,5).
+- **Só vista:** nada no motor, no log nem no save. As ilhas pequenas não mudam, porque nelas o ponto é o mesmo.
+- **Os testes:** `web/app/test/lugares_ilha.test.ts` confere, nas três ilhas, que o saco cai em terra plana da área e só perto de
+  decoração baixa, e que o ponto da planta A na ilha grande é água.
+- **Conferido na tela:** o Crescer aberto num pet v24, a 1440 e a 390 px: o saco está na grama
+  (`docs/pranchas/ilha-grande/saco_em_terra_1440.jpg`). **Não conferido:** a abertura do primeiro dia na ilha grande, e o e2e inteiro.
+
+### 12.19 A ilha grande fechada (2026-11-11)
 
 **Decisão do Matheus (2026-11-11, nesta sessão):** "Basta, fecha". O efeito parcial da memória de 128 células fica como está, e não
 se abre outra etapa para o retorno de longe.
