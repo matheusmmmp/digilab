@@ -86,6 +86,8 @@ Object.assign(window, { __digilab: { assinatura: () => jogoAtual().motor.assinat
   comer: () => comerAgora().tocou, emburrar: () => emburrarAgora(), dormir: () => dormirAgora(), reacaoRosto: () => reacaoRostoAgora(), clipeMomento: () => clipeMomentoAgora(), momento: () => motivoAgora(), bolaVista: () => bolaVista(), cenaPara: (x: number, y: number) => CENA.mundo?.paraTela(x, y) ?? null,
   /* o pet na mao (PegarPet.tsx; docs/TAREFA_V3_PEGAR_PET.md, P2) */
   petNaMao: () => CENA.petNaMao,
+  /* quantos objetos da ilha estao transparentes por taparem o pet (ilha/transparente.ts; docs/TAREFA_V3_MOITA_NINHO.md) */
+  tapando: () => CENA.tapando,
   /* o prototipo do gosto visual (so com `?gosto_visual=1`; sem ela, falso e null): a TV da ilha sob o ponto, e o sinal da reacao sobre o pet.
      `sinalTv` anda a fila do sinal como o palco faz (o minimo de 3 s conta desde a primeira leitura): e estado de vista, nada do motor */
   tvEm: (x: number, y: number) => CENA.mundo?.tvEm?.(x, y) ?? false, sinalTv: () => CENA.sinalTv?.(performance.now()) ?? null } });
