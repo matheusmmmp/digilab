@@ -28,7 +28,7 @@ que recebeu pedidos não se refaz no Python. Os gestos e o anel são vista e Tam
 | peça | onde | o que pesa |
 |---|---|---|
 | a sujeira é uma contagem; o cocô 3D é só vista; o Limpar tira todos os cocôs | `web/app/motor/mundo.ts` (`EstadoNoMundo.sujeira`); `web/app/src/telas/pet/ilha/cocos.ts` | o limpar no mapa não precisa de motor novo |
-| o banheiro existe só no Python | `web/app/motor/constantes.ts` ("a quimica em TS e a etapa 4 do banheiro"); `docs/TAREFA_V2_BANHEIRO.md` | o xixi pede o porte do banheiro |
+| o banheiro existe só no Python | `web/app/motor/constantes.ts` ("a quimica em TS e a etapa 4 do banheiro"); `docs/TAREFA_V2_BANHEIRO.md` | fica de fora: não há xixi (IN-5) |
 | os Bits no registro do Tamer; "a moeda paga o feito, não o clique"; o chamado paga 2, com teto de 20 por dia de pet | `docs/PLANO_V3_MOEDA.md`, seções 2 e 6 | o "perfeito" só multiplica um feito que já paga |
 | o toque curto no pet é o Elogiar; "um toque longo não conta" | `web/app/src/telas/pet/ToquePet.tsx` | o segurar parado está livre para o arco |
 | segurar e arrastar o pet é pegar (o "lp") | `web/app/src/telas/pet/PegarPet.tsx` | o arco abre antes do limiar do arrasto |
@@ -58,10 +58,22 @@ que recebeu pedidos não se refaz no Python. Os gestos e o anel são vista e Tam
 | IN-2 | o "perfeito" paga só como multiplicador de um feito que já paga, dentro do teto do dia |
 | IN-3 | a opção "sem tempo" (acessibilidade) dá o bônus "bom" (PROPOSTO: a metade do perfeito) |
 | IN-4 | limpar um cocô por vez (a sujeira com lugar no motor) só depois do limpar no mapa, se ele agradar |
-| IN-5 | o xixi entra só com o porte do banheiro para o TS; nunca uma poça só desenhada |
+| IN-5 | **não há xixi** (revista pelo Matheus em 2026-11-12: "Não precisa ter xixi"); a sujeira do jogo é o cocô e a terra cavada |
 | IN-6 | a automação **não** conta como cuidado do dono: não paga Bits, não conta chamado, não soma vínculo |
 | IN-7 | os tempos do anel (PROPOSTO: de 1,5 a 3 s) e a faixa perfeita se acertam na rodada de equilíbrio |
 | IN-8 | o bônus em Bits espera a rodada de equilíbrio do cuidado em curso (a E1); o gesto pode entrar antes, com o bônus desligado |
+
+### 3.1b As mecânicas novas pedidas em 2026-11-12 (MN)
+
+Decididas pelo Matheus na direção; o como e os números são **PROPOSTOS**. Cada uma é mecânica nova no motor do jogo: chave desligada,
+versão de pet nova e gabarito antes.
+
+| # | decisão | o que existe hoje | o que falta (PROPOSTO) |
+|---|---|---|---|
+| MN-1 | **o pet pode gostar ou não de ser arrastado.** Ele solta um emoji, e isso afeta o estado dele | pegar o pet muda só a posição (PP-1, "nesta versão"); a careta é só vista (PP-3) | um traço do pet (de nascença, pelo genoma) que diz se o colo acalma ou assusta; o efeito entra pelo corpo (alívio da solidão ou susto e estresse), como o carinho e o tapa; o emoji lê o corpo. **Revê a PP-1** |
+| MN-2 | **a digidoença: a fratura.** Depois de uma derrota muito séria, o pet fica fraturado, e a vida e o esforço dele caem por um tempo | a lesão: 20 % de chance ao perder sem pontuar (`CLE.probLesao`), tratar em até 6 h ou o pet morre (`web/app/motor/constantes.ts`); o rosto Doente | uma **condição com nome e prazo**: a fratura reduz o vigor (a vida) e o fôlego (o esforço) enquanto dura e some com o tempo e o tratamento; a lista de condições pode crescer (outras digidoenças) |
+| MN-3 | **cavar deixa terra por cima do chão**, um modelo 3D, que o dono limpa ou não, do mesmo jeito do cocô | cavar não existe; a sujeira é uma contagem e o cocô 3D é só vista | a ação de cavar; a terra cavada como uma sujeira com lugar no mapa; o limpar por toque ou anel (TU-4); o modelo 3D em cartoon |
+| MN-4 | **a comida jogada no chão:** o dono a deixa perto do pet e ele come, ou o dono pede "Come" e o pet aceita ou recusa | o "Por ração" põe a comida no chão e o pet decide ir comer | o arrasto da comida (IT4) e o comando Come (EN-9) |
 
 ### 3.2 A entrada e o arco (EN)
 
@@ -114,7 +126,10 @@ que recebeu pedidos não se refaz no Python. Os gestos e o anel são vista e Tam
 | **IT5, a entrada sem pausa** | a mão fantasma e o contorno no objeto; o tempo a 1x no passo guiado (TU-1); nada trava (TU-2); os passos no pet de exemplo (TU-9); a frase da morte nas boas-vindas (TU-5); o "?" (TU-3); a dica da câmera (TU-6); o presente do Rookie (TU-8); as linhas novas na tabela de níveis do plano de progressão | IT2, IT3, IT4 | não |
 | **IT6, os pedidos** | o evento do pedido (nome a fechar, por exemplo `"pd"`), a percepção no cérebro com a janela (EN-5), a recusa visível, a frase neutra (EN-8); uma `VERSAO_PET` nova e a chave desligada, com o gabarito byte a byte antes (EN-4) | IT3 | **sim** (só TS) |
 | **IT7, o coletor de cocô** | o primeiro mecanismo na loja do carro, que não conta como cuidado (IN-6) | a loja (MO3 do plano da moeda); a IT2 | **sim** |
-| **depois** | o cocô um a um (IN-4); o xixi com o porte do banheiro (IN-5); a horta; os pedidos da jornada (a J4 do roadmap do parceiro) | cada um com a sua espec | sim |
+| **IT8, cavar e a terra** | a ação de cavar, a terra cavada no mapa e o limpar (MN-3) | IT2, IT6 | **sim** |
+| **IT9, o colo** | o pet gosta ou não de ser arrastado, com o emoji e o efeito no corpo (MN-1) | — | **sim** |
+| **IT10, a fratura** | a condição depois da derrota séria, com a queda temporária da vida e do esforço (MN-2) | o núcleo da luta fechado | **sim** |
+| **depois** | o cocô um a um (IN-4); a horta; os pedidos da jornada (a J4 do roadmap do parceiro) | cada um com a sua espec | sim |
 
 **A ordem do arco, passo a passo (IT6):**
 1. O dono escolhe um pedido. O registro do pet ganha o evento, com o tick.
