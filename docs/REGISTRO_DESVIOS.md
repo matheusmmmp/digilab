@@ -766,6 +766,8 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-12 — CONTA: o roadmap da conta, da nuvem e do multijogador (Claude Code, Opus 5.5, branch `v3-conta-roadmap`)](registro/2026-11.md)
 - [2026-11-12 — CONTA: as RC-1 a RC-4 do roadmap decididas pela recomendação (Claude Code, Opus 5.5, branch `v3-conta-roadmap`)](registro/2026-11.md)
 - [2026-11-12 — COOPERACAO, CB1: o orquestrador e as medidas da bancada (Claude Code, Opus 5.5, branch `v3-cooperacao-cb1`)](registro/2026-11.md)
+- [2026-11-12 — CONTA: a PI2, a licença, o aviso no build e os canários (Claude Code, Opus 5.5, branch `v3-pi2-licenca`)](registro/2026-11.md)
 - [2026-11-12 — CONTA: a CN0, a medida do save, as chaves do navegador e o tempo fechado (Claude Code, Opus 5.5, branch `v3-conta-cn0`)](registro/2026-11.md)
 - [2026-11-12 — COOPERACAO, CB2: a fumaça e o piloto da bancada (Claude Code, Opus 5.5, branch `v3-cooperacao-cb2`)](registro/2026-11.md)
 - [2026-11-12 — COOPERACAO, CB3: o registro da análise da bancada (Claude Code, Opus 5.5, branch `v3-cooperacao-cb3`)](registro/2026-11.md)
+- [2026-11-12 — COOPERACAO, CB4: as vidas e o resultado da bancada (Claude Code, Opus 5.5, branch `v3-cooperacao-cb4`)](registro/2026-11.md)
