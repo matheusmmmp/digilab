@@ -29,7 +29,7 @@ def test_a_faixa_de_validacao_e_a_nova():
     assert unidades == bv.unidades_derivadas(NOVA, 6)                     # a regra das unidades e a mesma (adendo 4.1)
     faixas = {(a, b): f for a, b, f in bv.FAIXAS_RESERVADAS}
     assert "QUEIMADA" in faixas[(15101, 15505)] and (30101, 30505) in faixas
-    assert [(a, b) for a, b, _ in bv.FAIXAS_QUEIMADAS] == [(15101, 15505)]
+    assert [(a, b) for a, b, _ in bv.FAIXAS_QUEIMADAS][0] == (15101, 15505)   # a primeira; a 90101...90505 entrou depois (D-GV-GV3B2-5)
 
 
 @pytest.mark.parametrize("bases", [[15101, 15202, 15303, 15404, 15505], [15303]])
