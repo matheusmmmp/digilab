@@ -13,7 +13,9 @@ mesmo programa nao importa quem pergunta nem quando. No tick t, cada canal e o p
 da grade (as cenas sao as da grade; a grade nao muda nem consome sorteio).
 
 A fonte "evento" (o modo livre gravado, secao 1.2): o que a TV passa e o ultimo `sentido_tela` ate o tick, cada nivel n em [0, 15] vira
-div_arred(n x escala, 15); sem nenhum, a TV esta desligada (`em` da None). A grade nao existe e nada se sorteia.
+div_arred(n x escala, 15); sem nenhum, a TV esta desligada (`em` da None). A grade nao existe e nada se sorteia. A TV desligada de novo (a
+decisao A da captura ligada ao cerebro, D-GV-TVJOGO-1; o motor confere a ConfigTVJogo.desligar): o `sentido_tela` `fonte|desligada` (os
+niveis None) a desliga ate o proximo.
 
 `ResumoTela` e o resumo do GV-15, do lado de quem grava o evento (o P0 no jogo, na P1f): a media de cada janela de `janela` amostras (uma
 por segundo real; o padrao e ConfigTV.janela_resumo_s, 10) em 16 niveis por canal, e o evento so quando algum nivel muda.
@@ -135,14 +137,15 @@ class TV:
         self.trocas_canal.append(reg)
         return reg
 
-    def sentir(self, fonte: str, niveis: tuple[int, ...], tick: int) -> None:
-        """o modo livre gravado (so na fonte "evento"): a partir do tick, a TV passa estes niveis"""
+    def sentir(self, fonte: str, niveis: tuple[int, ...] | None, tick: int) -> None:
+        """o modo livre gravado (so na fonte "evento"): a partir do tick, a TV passa estes niveis; None, a TV desligada (a decisao A,
+        D-GV-TVJOGO-1: `em` volta a dar None; quem confere a chave e o motor)"""
         if self.cfg.fonte != "evento":
             raise TVSemChave(f"sentido_tela com a fonte {self.cfg.fonte!r}: o modo livre gravado e a fonte \"evento\"")
         if fonte not in FONTES_SENTIDO_TELA:
             raise ValueError(f"fonte do sentido_tela em {FONTES_SENTIDO_TELA}: {fonte!r}")
-        self._sentido = (fonte, tuple(niveis))
-        self.sentidos.append({"tick": tick, "fonte": fonte, "niveis": list(niveis)})
+        self._sentido = None if niveis is None else (fonte, tuple(niveis))
+        self.sentidos.append({"tick": tick, "fonte": fonte, "niveis": None if niveis is None else list(niveis)})
 
     def resumo(self) -> dict:
         return {"x": self.x, "y": self.y, "fonte": self.cfg.fonte, "trocas_canal": [dict(t) for t in self.trocas_canal],

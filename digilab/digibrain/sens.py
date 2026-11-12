@@ -104,6 +104,17 @@ class Sens:
             self.k_expo = ganho_de_tau(olhar.tau_exposicao, cfg.intervalo_decisao_ticks, self.S)
             self.exposicoes = 0
             self.tela_presente: bool | None = None    # se os receptores da tela estao no corpo, fixado na primeira decisao
+        self.ir_ate_tv = False                        # a TV no jogo (D-GV-TVJOGO-3): as linhas da TV fora do raio, so com `ligar_ir_ate_tv`
+
+    def ligar_ir_ate_tv(self) -> None:
+        """a decisao D (D-GV-TVJOGO-3; so com a subchave `olhar`): o motor manda a linha da TV tambem fora do raio da visao (o pet sabe onde
+        ela fica). A linha longe tem a proximidade 0 (a conta de sempre) e nao conta como vista na habituacao da classe `tela`"""
+        self._exigir_olhar("ligar_ir_ate_tv")
+        self.ir_ate_tv = True
+
+    def longe(self, linha: dict) -> bool:
+        """a linha da TV esta fora do raio da visao (so com o ir ate a TV)"""
+        return linha["d"] > self.raio
 
     def _receptores(self, pc) -> tuple:
         presentes = tuple(f.name for f in fields(pc) if getattr(pc, f.name) is not None)
@@ -206,6 +217,8 @@ class Sens:
             if type(linha) not in (tuple, list) or len(linha) != 4 or any(type(v) is not int for v in linha) or linha[3] < 0:
                 raise ValueError(f"M-SENS: linha da tela malformada (id, dx, dy, d inteiros): {linha!r}")
             ident, dx, dy, d = linha
+            if d > self.raio and not self.ir_ate_tv:
+                raise ValueError(f"M-SENS: linha da tela fora do raio da visao ({d} > {self.raio}) sem o ir ate a TV: {linha!r}")
             out.append({"id": ident, "tipo": CLASSE_TELA, "classe": CLASSE_TELA, "dx": dx, "dy": dy, "d": d, "prox": self.proximidade(d),
                         "nov": S - self.hab[CLASSE_TELA]})
         if len({o["id"] for o in out}) != len(out):
@@ -255,7 +268,9 @@ class Sens:
         for c in CLASSES_OBJETO:                       # a habituacao anda depois da novidade da decisao
             self.hab[c] = integrar(self.hab[c], S if c in vistas else 0, self.k_hab, S)
         if linhas_tela is not None:                    # a classe `tela` (P1d), no fim, com a mesma regra
-            self.hab[CLASSE_TELA] = integrar(self.hab[CLASSE_TELA], S if linhas_tela else 0, self.k_hab, S)
+            # o ir ate a TV (D-GV-TVJOGO-3): a linha longe nao conta como vista (sem ele, toda linha esta no raio: a conta de hoje)
+            vista = any(not self.longe(o) for o in linhas_tela)
+            self.hab[CLASSE_TELA] = integrar(self.hab[CLASSE_TELA], S if vista else 0, self.k_hab, S)
         comida = max((o["prox"] for o in objetos if o["classe"] in COMIDAS_BOAS), default=0)
         bola = max((o["prox"] for o in objetos if o["classe"] == "bola"), default=0)
         out = {"falta": falta, "leitura": leitura, "contexto": contexto, "objetos": objetos,

@@ -17,6 +17,9 @@ import {
   type CategoriaSolido, type ConfigContrato, type Solido,
 } from "./contrato.ts";
 import { mesmoLanceDono, validarLanceDono, type ConfigLanceDono } from "./digibrain/constantes.ts";
+import type { TV } from "./tv.ts";
+/** o id da TV da vida (tv.ID_TV; aqui sem importar o tv.ts, que importa este arquivo) */
+const ID_TV_MUNDO = 1;
 
 // ================================================================== sha256 e derivar_semente
 const K256 = new Uint32Array([
@@ -571,6 +574,8 @@ export class MundoPartilhado {
   sacudidas: Sacudida[] | null = null;
   rngSacode: RandomPy | null = null;
   private csa: ConfigSacudir | null = null;
+  /** a TV do mundo comum (GOSTO_VISUAL, a decisao B; D-GV-TVJOGO-4): so no grupo com a TV (o Grupo a liga); null e nada muda */
+  tv: TV | null = null;
   /** o lance do dono (TAREFA_V3_BOLA_BRINCAR, BB-1): os lances e o fluxo `dono-bola`, so depois de `ligarLance`; sem ele, null e nada muda
       (nem o resumo) */
   lances: Lance[] | null = null;
@@ -1376,6 +1381,9 @@ export class Mundo {
   /** A consequencia de uma decisao (MotorMundo._consequencia): o estado vem depois do efeito de sempre da acao (o engine); sai o
       estado depois de andar, comer e brincar, com o +0,05 do comer desfeito (MF-2). `escolher` e o gancho do cerebro (null: o
       padrao); `regra` vai para o registro. Toda decisao passa aqui (as acoes sem alvo so registram e limpam o pendente). */
+  /** o ir ate a TV (D-GV-TVJOGO-3): o centro da TV, posto pelo laco com a sub-chave `ir_ate_tv`; null, e a acao "ir_tv" falha alto */
+  alvoTv: readonly [number, number] | null = null;
+
   consequencia(tick: number, acao: string, estado: EstadoNoMundo, escolher: EscolherAlvo | null = null, regra: string | null = null)
       : { estado: EstadoNoMundo; ocorrido: Record<string, unknown> | null } {
     const [x0, y0] = this.pet;
@@ -1438,6 +1446,32 @@ export class Mundo {
       ocorrido = { acao, u, alvo: a, de: [x0, y0], para: [x1, y1], deslocamento: desloc, energia_gasta: energiaAntes - e.energia,
                    chegou, comeu, brincou_com_bola: bola };
       if (contratoLigado(this.cct) && a !== null) ocorrido.contrato = this.registroContrato(tick, x0, y0, x1, y1, andar, chegou, comeu);
+    } else if (acao === "ir_tv") {
+      /* o ir ate a TV (a decisao D, D-GV-TVJOGO-3; o _ir_ate_tv do Python): o pet anda para o centro da TV pelo andar das acoes com alvo, ate o
+         raio de pegar, sem sorteio, sem candidato e sem pendente; o custo e o do andar */
+      if (this.alvoTv === null) throw new Error("a acao ir_tv exige a sub-chave ir_ate_tv (o laco poe o centro da TV)");
+      a = alvo("tv", this.alvoTv[0], this.alvoTv[1], ID_TV_MUNDO);
+      let andar: Andar | null = null;
+      let x1: number, y1: number;
+      if (this.cct.controlador) {
+        const cm = this.cm;
+        andar = controlar(x0, y0, a.x, a.y, this.raioPegar, this.intervalo, cm.velocidade, this.cct.r_pet, this.solidos, cm.celulas_x,
+                          cm.celulas_y, cm.sub, this.cct.ticks_bloqueado, this.orientacao);
+        [x1, y1] = [andar.x, andar.y];
+      } else {
+        [x1, y1] = passoAte(x0, y0, a.x, a.y, this.alcance, this.cm);
+      }
+      const desloc = andar === null ? distancia(x1 - x0, y1 - y0) : andar.andado;
+      this.pet = [x1, y1];
+      const energiaAntes = e.energia;
+      if (desloc) e.energia = Math.max(0, e.energia - this.cm.custo_energia_por_subunidade * desloc);
+      const chegou = distancia(a.x - x1, a.y - y1) <= this.raioPegar;
+      this.pendente = null;
+      if (this.grupo !== null)
+        this.tickSocial = { tick: this.tm(tick), de: [x0, y0], alvo: a, pendente_antes: this.pendenteAntes, social: null, comeu: null };
+      ocorrido = { acao, u: null, alvo: a, de: [x0, y0], para: [x1, y1], deslocamento: desloc, energia_gasta: energiaAntes - e.energia,
+                   chegou, comeu: null, brincou_com_bola: false };
+      if (contratoLigado(this.cct)) ocorrido.contrato = this.registroContrato(tick, x0, y0, x1, y1, andar, chegou, null);
     } else {
       this.pendente = null;
       if (this.grupo !== null)
