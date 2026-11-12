@@ -202,9 +202,9 @@ def test_a_sonda_falha_alto_se_o_log_da_vida_mudar(monkeypatch):
     vida, fab, _ = R.viver("proprio", "nenhum", u, 2)
     original = sd.ler_replica
 
-    def mexe(c, r):
+    def mexe(c, r, *regra):                                  # a regra para as duas TVs sem lugar (o adendo 2) passa adiante
         vida.log.anexar(vida.log[-1])                                                         # a regra quebrada: a sonda tocou a vida
-        return original(c, r)
+        return original(c, r, *regra)
     monkeypatch.setattr(sd, "ler_replica", mexe)
     with pytest.raises(RuntimeError, match="G2"):
         sd.sonda(vida, fab, u["semente"], (1,), 1)
