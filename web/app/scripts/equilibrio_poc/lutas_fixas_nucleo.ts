@@ -44,7 +44,7 @@ type L = any;
 function montar(cena: IdCena, s: number, a: Lado, b: Lado): L {
   LUTAS++;
   return criarLutaPoc(configLutaPoc({ cena, semente: s, a, b, ...(TIRO ? { tiro: TIRO } : {}), ...(ESQ ? { esquiva: ESQ } : {}),
-    ...(LP6.apoio ? { apoio: LP6.apoio } : {}), ...(LP6.arenaPorEstagio ? { arenaPorEstagio: LP6.arenaPorEstagio } : {}) }, LP6.tabela), sorteiosPoc(s));
+    ...(LP6.apoio ? { apoio: LP6.apoio } : {}), ...(LP6.arenaPorEstagio ? { arenaPorEstagio: LP6.arenaPorEstagio } : {}), ...(LP6.nucleo ?? {}) }, LP6.tabela), sorteiosPoc(s));
 }
 /** anda ate o fim, chamando f(eventos, luta) a cada passo */
 function andar(Lt: L, f: (ev: L[], Lt: L) => void): void {
