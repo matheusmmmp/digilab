@@ -57,15 +57,30 @@ def impressao(m) -> dict:
             "decisoes": len(c.motivos), "olhares": sum(1 for x in c.motivos if x["olhar"]["olha"] is not None)}
 
 
-def viver_parada(semente: int, dias: int = DIAS_PARADA, niveis=IMAGEM, **kw_cerebro):
+def fabricas_parada(semente: int, cfg_enjoo_tela=None) -> tuple:
+    """(fabrica da politica, fabrica do motor) da imagem parada; `cfg_enjoo_tela` (o conserto do enjoo) vai ao cerebro e ao corpo"""
+    kw = {} if cfg_enjoo_tela is None else {"cfg_enjoo_tela": cfg_enjoo_tela}
+
+    def fp(cfg=None):
+        return DigiBrain(cfg or CONFIG_PADRAO, X.config_vida(), orq.CM, semente=semente, cfg_olhar=X.config_olhar("evento"), **kw)
+
+    def fm(politica, cfg, s):
+        return com_corpo(MotorMundo)(politica, cfg, s, NEUTRO, "brasa", obediencia_desligada=True, cfg_mundo=orq.CM, cfg_corpo=X._cc(),
+                                     cfg_tela=X.TELA, cfg_tv=X.config_tv("evento"), **kw)
+    return fp, fm
+
+
+def viver_parada(semente: int, dias: int = DIAS_PARADA, niveis=IMAGEM, cfg_enjoo_tela=None, a_cada_hora=None):
     """a imagem parada: o modular da vida do exportador (o laboratorio com o olhar e o agrado no corpo), a TV do modo livre com um
-    `sentido_tela` so no tick 0, o dono que poe comida a cada 3 horas e acaricia a cada 5. `kw_cerebro` vai ao DigiBrain"""
-    cerebro = DigiBrain(CONFIG_PADRAO, X.config_vida(), orq.CM, semente=semente, cfg_olhar=X.config_olhar("evento"), **kw_cerebro)
-    m = com_corpo(MotorMundo)(cerebro, CONFIG_PADRAO, semente, NEUTRO, "brasa", obediencia_desligada=True, cfg_mundo=orq.CM,
-                              cfg_corpo=X._cc(), cfg_tela=X.TELA, cfg_tv=X.config_tv("evento"))
+    `sentido_tela` so no tick 0, o dono que poe comida a cada 3 horas e acaricia a cada 5. `cfg_enjoo_tela`: o conserto do enjoo (so os
+    testes dele); `a_cada_hora(h, motor)`, se dado, roda antes de cada hora (so os testes do conserto)"""
+    fp, fm = fabricas_parada(semente, cfg_enjoo_tela)
+    m = fm(fp(), CONFIG_PADRAO, semente)
     m.sentido_tela("tv", niveis)
     x, y = centro_da_celula(orq.CM.layout.comedouro, orq.CM)
     for h in range(dias * 24):
+        if a_cada_hora is not None:
+            a_cada_hora(h, m)
         m.avancar(HORA)
         if h % 3 == 0:
             m.deixar_comida("racao", x, y)

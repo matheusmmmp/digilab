@@ -245,3 +245,21 @@ cena nova ou essa constante lenta devolvem o interesse, e voltar à mesma imagem
 depois o enjoo vira tédio. O "adorando" pede o interesse alto. O estado guardado vai à versão 2, e a versão 1 migra com a memória vazia.
 Uma imagem parada por 30 min termina em "enjoou", sem voltar a olhar. Testes em `web/app/test/gosto_visual_enjoo.test.ts`. As escolhas
 (D-GV-ENJOO-1 a 7) e o que diverge do Python estão em `docs/registro/2026-11.md`. A P1f e o Python não mudam.
+
+## O enjoo no cérebro do Python (2026-11-12, Claude Code, Opus 5.5, branch `v3-gosto-visual-enjoo-cerebro`)
+
+O conserto D-GV-ENJOO-PY-3, autorizado pelo Matheus ("Pode fazer o conserto do cérebro e fazer o merge"), ficou atrás da `ConfigEnjooTela`,
+desligada. O gabarito de antes foi gravado num commit próprio. Com a chave ligada:
+
+- **No corpo:** a adaptação fica presa ao estímulo. Ela sobe rápido olhando e volta devagar sem olhar. Uma memória de 6 protótipos parados
+  guarda o enjoo de cada um, e o receptor `enjoo_tela` mostra o enjoo do que o pet vê agora. A novidade conta a mudança nos dois sentidos,
+  e o susto é medido contra o último estímulo visto.
+- **No cérebro:** cada TV tem um enjoo lembrado, e a unidade de olhar ganha o termo `enjoo`. O agrado efetivo cai com o tédio, e a
+  exposição satura (o U invertido).
+- **O estresse do B** fica justificado pela GV-17. A docstring do `corte_novidade` foi corrigida.
+
+Os testes estão em `tests/test_gosto_visual_enjoo_cerebro.py`, e o gabarito em `tests/test_gabarito_gosto_visual_enjoo.py`. As escolhas,
+D-GV-ENJOO-CER-1 a 11, estão em `docs/registro/2026-11.md`. O conserto foi ajustado ao diagnóstico com as mídias reais (D-GV-VIDEO-9 a 13).
+
+**O próximo passo:** repetir a GV3 com a chave ligada pede um adendo ao plano e uma faixa nova, só com a aprovação do Matheus. A paridade
+TS vem noutra rodada.
