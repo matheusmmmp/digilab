@@ -757,7 +757,8 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
     setAberto(null); gatilho.current = null;
     setTimeout(() => {
       if (g?.isConnected) g.focus();
-      else if (antes || qual) document.querySelector<HTMLElement>(`.pet-hud [data-painel-pet='${antes ?? qual}'] .hud-painel__bt`)?.focus();
+      /* sem a pilha (abaixo de 900 px; o painel aberto pelo toque na TV da ilha nao tem gatilho), o foco vai ao retrato, como no leque */
+      else if (antes || qual) (document.querySelector<HTMLElement>(`.pet-hud [data-painel-pet='${antes ?? qual}'] .hud-painel__bt`) ?? document.querySelector<HTMLElement>(".mm-retrato"))?.focus();
     }, 0);
   };
   useEffect(() => { if (atual) painel.current?.focus(); }, [atual]);

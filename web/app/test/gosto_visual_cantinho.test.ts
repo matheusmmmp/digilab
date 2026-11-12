@@ -78,7 +78,8 @@ describe("o sinal da TV: um ícone no lugar do balão de texto (UX-GV-10)", () =
     expect(c).not.toMatch(/BALAO|SpriteMaterial|fillText/);
     expect(c).toContain("marcarSentadoNaTv(q.sentado && TV.ligada)");
     const p = fonte("src/telas/pet/PalcoPet.tsx");
-    expect(p).toContain("const daTv = doJogo === null ? CENA.sinalTv?.(performance.now()) ?? null : null;");
+    /* dormindo, o "zz" é do pet: o sinal da TV não entra */
+    expect(p).toContain('const daTv = doJogo === null && m.acao !== "dormir" ? CENA.sinalTv?.(performance.now()) ?? null : null;');
     expect(p).toContain("return doJogo ?? daTv;");
     expect(p).not.toContain("gostoVisual/");
     /* sem o protótipo montado a cena não tem sinal: o palco é o de hoje */
@@ -99,9 +100,11 @@ describe("a TV em três quartos (UX-GV-3, valendo sempre)", () => {
     expect(p.assento[1]).toBeGreaterThan(p.tv[1]);
     expect(Math.abs(p.assento[0] - p.tv[0])).toBeGreaterThan(1);
   });
-  test("na ilha com água a TV vira para o lado da praça", () => {
+  test("a TV vira para o lado do meio da ilha: a praça na ilha com água, o meio da área na planta sem água", () => {
     const t = tvDaIlha(ilhaDe(CMU_MVP_AGUA));
     expect(Math.sign(Math.sin(t.giro))).toBe(Math.sign(PLANTA_ILHA_AGUA.praca.x - t.x));
+    const seca = ilhaDe(CMU_MVP), s = tvDaIlha(seca);
+    expect(Math.sign(Math.sin(s.giro))).toBe(Math.sign(seca.area.w / 2 - s.x));
   });
   test("o giro não depende da chave: a grade não lê o protótipo", () => {
     expect(fonte("src/telas/pet/ilha/grade.ts")).not.toMatch(/gostoVisual|gosto_visual/);
@@ -139,6 +142,13 @@ describe("o toque na TV abre o painel (UX-GV-2)", () => {
     desligar();
     el.dispatchEvent(ev("pointerdown", { clientX: 120, clientY: 120 })); el.dispatchEvent(ev("pointerup", { clientX: 120, clientY: 120 }));
     expect(pedidos).toBe(1);
+  });
+  test("a bola ou a tigela na frente da TV fica com o toque (ObjetosDaIlha.tsx)", () => {
+    const f = fonte("src/gostoVisual/ToqueTv.tsx");
+    expect(f).toContain("if (!(CENA.mundo?.tvEm?.(cx, cy) ?? false)) return false;");
+    expect(f).toContain("return objetoNoPonto(el, cx, cy) === null;");
+    /* e a TV não vira um objeto: com a TV no ponto, o lugar atrás dela não conta */
+    expect(fonte("src/componentes/ObjetosDaIlha.tsx")).toContain("if (CENA.mundo.tvEm?.(cx, cy)) return null;");
   });
   test("o toque na TV é da TV: a barraca atrás dela não abre; sem a TV na cena, a barraca abre como hoje", () => {
     const el = alvo();

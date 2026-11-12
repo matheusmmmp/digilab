@@ -139,3 +139,54 @@ test("gosto visual: o toque na TV da ilha abre o painel, a câmera vai ao cantin
   expect(await s.page.evaluate(() => { const d = (window as any).__digilab; return [d.tvEm(700, 400), d.sinalTv()]; })).toEqual([false, null]);
   await s.ctx.close();
 });
+
+/** avalia na janela pequena (a Document Picture-in-Picture da página); null se ela não está aberta */
+const naJanela = <T>(page: Page, f: string): Promise<T | null> => page.evaluate(`(() => { const w = window.documentPictureInPicture && window.documentPictureInPicture.window; if (!w) return null; const d = w.document; return (${f})(d, w); })()`) as Promise<T | null>;
+
+test("gosto visual: a janela pequena mostra o pet, a reação e a linha do gosto; o Carinho é o do jogo, o Esc a fecha sem parar a TV e o Parar fecha tudo", async ({ browser }) => {
+  test.setTimeout(180_000);
+  const { ctx, page, erros } = await abrir(browser, "?gosto_visual=1", 1440, 900);
+  const linha = page.locator(".pet-hud [data-painel-pet='tv'] button");
+  await linha.click();
+  const painel = page.getByTestId("painel-tv");
+  /* com a TV desligada não há o botão da janela: sem TV, ela não tem o que mostrar */
+  await expect(painel.getByRole("button", { name: "Janela pequena" })).toHaveCount(0);
+  await painel.getByRole("button", { name: "Ligar a TV" }).click();
+  await painel.getByRole("button", { name: "Janela pequena" }).click();
+  await expect(painel).toContainText("Ele está na janela pequena.");
+  await expect(painel.getByRole("button", { name: "Trazer de volta" })).toBeVisible();
+  /* o miolo novo: o programa, o balão em palavras, o pet, a linha do gosto e dois botões; nada do cartão do P0 nem do porquê */
+  await expect.poll(() => naJanela<string>(page, "d => d.querySelector('[data-testid=janela-tv-balao]')?.textContent ?? ''"), { timeout: 20_000 })
+    .toMatch(/^(Está adorando|Está assistindo|Ficou curioso|Enjoou disso|Não curtiu|Não está prestando atenção)$/);
+  await expect.poll(() => naJanela<boolean>(page, "d => !!d.querySelector('img.jtv-sprite')"), { timeout: 20_000 }).toBe(true);
+  const j = (await naJanela<{ pele: string; passando: string; gosto: string; botoes: string[]; velho: number; rola: boolean; foco: string; fundo: string }>(page, `(d, w) => ({
+    pele: d.documentElement.dataset.pele, passando: d.querySelector('[data-testid=janela-tv-passando]')?.textContent ?? '',
+    gosto: d.querySelector('[data-testid=janela-tv-gosto]')?.textContent ?? '', botoes: [...d.querySelectorAll('button')].map(b => b.textContent),
+    velho: d.querySelectorAll('.gv-cartao, .gv-barras, .tvp-linha').length, rola: d.documentElement.scrollHeight > w.innerHeight + 1,
+    foco: d.activeElement?.textContent ?? '', fundo: w.getComputedStyle(d.querySelector('.jtv')).backgroundColor })`))!;
+  expect(j.pele).toBe(await page.evaluate(() => document.documentElement.dataset.pele));
+  expect(j.passando).toContain("Passando: a TV do jogo");
+  expect(j.gosto).toMatch(/^Gosta mais de: .+\.$/);
+  expect(j.botoes).toEqual(["Carinho", "Parar"]);
+  expect([j.velho, j.rola, j.foco]).toEqual([0, false, "Carinho"]);
+  expect(j.fundo).not.toBe("rgba(0, 0, 0, 0)");
+  /* o Carinho da janela é o Carinho do jogo: entra no registro como o do botão */
+  const antes = await registro(page);
+  await naJanela(page, "d => { d.querySelector('[data-janela-tv-carinho]').click(); return true; }");
+  await expect.poll(() => registro(page)).not.toBe(antes);
+  const novo = JSON.parse(await registro(page)).slice(JSON.parse(antes).length);
+  expect(novo.map((e: unknown[]) => [e[1], e[2]])).toEqual([["d", "acariciar"]]);
+  /* o Esc na janela a fecha, e a TV continua */
+  await naJanela(page, "d => { d.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true })); return true; }");
+  await expect.poll(() => naJanela<boolean>(page, "() => true")).toBeNull();
+  await expect(painel.getByRole("button", { name: "Janela pequena" })).toBeVisible();
+  await expect(painel.getByTestId("tv-passando")).toContainText("a TV do jogo");
+  /* de novo aberta, o Parar da janela desliga a TV e fecha a janela */
+  await painel.getByRole("button", { name: "Janela pequena" }).click();
+  await expect.poll(() => naJanela<number>(page, "d => d.querySelectorAll('button').length"), { timeout: 20_000 }).toBe(2);
+  await naJanela(page, "d => { [...d.querySelectorAll('button')].find(b => b.textContent === 'Parar').click(); return true; }");
+  await expect.poll(() => naJanela<boolean>(page, "() => true")).toBeNull();
+  await expect(painel.getByRole("button", { name: "Ligar a TV" })).toBeVisible();
+  expect(erros).toEqual([]);
+  await ctx.close();
+});

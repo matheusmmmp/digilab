@@ -31,7 +31,12 @@ export type Ponto = readonly [number, number];
 export interface PosicaoNaGrade { x: number; z: number; giro: number; y: number }
 /** o que o ponto de cada lugar pede do layout do motor (celulas continuas, o centro da celula) e, para o portao e a barraca, da grade da ilha
     (Ilha.lugares; o saco nao precisa dela) */
-export interface BaseDoMundo { ninho: Ponto; comedouro: Ponto; area: { w: number; h: number }; grade?: Partial<Record<"portao" | "barraca", PosicaoNaGrade>> }
+export interface BaseDoMundo {
+  ninho: Ponto; comedouro: Ponto; area: { w: number; h: number }; grade?: Partial<Record<"portao" | "barraca", PosicaoNaGrade>>;
+  /** o ponto do saco na planta que vale nesta ilha (Ilha.planta.lugares.saco: a A, a da ilha com agua ou a da ilha grande). Sem ele, o da
+      planta A. Quem monta a base de uma ilha de verdade o passa sempre: o ponto da planta A cai na agua da ilha grande (2026-11-11) */
+  saco?: Ponto;
+}
 /** a posicao do portao e da barraca na grade da ilha (Ilha.lugares), para a BaseDoMundo; falha alto se faltar um */
 export function gradeDosLugares(ilha: { readonly lugares: readonly { nome: NomeLugar; x: number; z: number; giro: number; y: number }[] }): Record<"portao" | "barraca", PosicaoNaGrade> {
   const achar = (n: "portao" | "barraca"): PosicaoNaGrade => {
@@ -75,7 +80,7 @@ const luzDe = (n: NomeLugar): string | null => (LUGARES_LUZ[n] ? "lugares/" + LU
 export const LUGARES: Readonly<Record<IdLugar, LugarIlha>> = {
   saco: {
     id: "saco", nome: "Saco de pancada", destino: "crescer", altura: 2.5, raio: 0.5, estado: "aberto", modelo: null, luz: null, cadeado: null,
-    ponto: () => [PLANTA_ILHA.lugares.saco[0], PLANTA_ILHA.lugares.saco[1]],
+    ponto: b => { const p = b.saco ?? PLANTA_ILHA.lugares.saco; return [p[0], p[1]]; },
   },
   portao: {
     id: "portao", nome: "Portão da arena", destino: "lutar", altura: LUGARES_MODELOS.portao.altura, raio: 0.5, estado: "aberto",
