@@ -56,6 +56,21 @@ M-SENS o entrega na Observacao (`sens["lutas"]`) e, depois da consolidacao e da 
 (rival em `outro`), se a regra de hoje o aceita. Nenhum modulo o recebe como recompensa: o V, o E, o g_apr e o M-PLAST nao andam; a
 variacao do corpo (o corpo da consequencia anterior contra o da Observacao) e quem da o sigma. Desligada, nenhum campo, estado nem gancho.
 
+**O olhar** (GOSTO_VISUAL, P1d; docs/ESPEC_GOSTO_VISUAL_P1.md, secoes 5 e 6; a subchave `olhar`, com a `ConfigOlhar` e o `GenomaVisao` do
+ovo, `genoma_visao(semente)`, rng propria `visao-ovo`, ou o dado, como o genoma vazio do controle). Tres ganchos novos, que o motor com a TV
+procura no cerebro (nenhum le a chave fora do pacote):
+  - `ver_tela(linhas)`: o motor, antes de cada decisao, entrega as TVs a vista (id, dx, dy, d); o M-SENS faz delas as linhas da classe
+    `tela` (sem o gancho na decisao, nenhuma);
+  - `olhando_tela()`: o id da TV da unidade de olhar escolhida na ultima decisao, ou None. O motor so entrega o que a TV passa ao corpo
+    quando o pet olha a TV desse id (e esta acordado, parado e com ela no raio da visao);
+  - `agrado_tela(leituras)`: com a `agrado_no_corpo` (GV-16), o agrado do nivel lido agora (o motor chama o `estimulo_agrado_tela` do
+    corpo, depois do assistir); sem ela, None.
+A unidade de olhar e entregue ao motor como o OCIOSO (o pet fica parado; o metabolismo e o do ocioso, secao 4 da espec), sem alvo. Na
+decisao, o termo `gosto` da unidade da TV que o pet ja olhava e mul(w_gosto, agrado - S/2), com o agrado do nivel da percepcao de agora
+(0 nas outras e se ele nao olhava). Na consequencia da opcao de olhar: o canal `gosto_visual` = mul(ganho_gosto_visual, agrado - S/2) no
+r (M-AFETO), com o agrado do nivel de depois contra o alvo de antes; depois a exposicao (`Sens.expor`) e o P1 da classe `tela`. O motivo
+ganha `olhar` (o agrado, o inato, o gosto e as TVs a vista). Desligada, nenhum campo, estado nem gancho que funcione (os tres falham alto).
+
 **O registro** (secao 7): cada decisao guarda o seu motivo em `motivos` (derivado, nunca no log): as unidades com os termos, os pesos, o
 u, a escolha, o afeto, o estado, a memoria, as sondas e, no fechamento, a consequencia."""
 from __future__ import annotations
@@ -63,16 +78,17 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from ..config import (CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_PADRAO, CONTEUDOS_FALA,
-                      VERSAO_PET_DIGIBRAIN, Config, ConfigDigibrain, ConfigDigibrainInatos, ConfigFalaUnidades, ConfigLutaMemoria,
-                      ConfigMundo, ConfigSonoSegura)
+from ..config import (COMPORTAMENTO_OLHAR, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_OLHAR,
+                      CONFIG_PADRAO, CONTEUDOS_FALA, VERSAO_PET_DIGIBRAIN, Config, ConfigDigibrain, ConfigDigibrainInatos,
+                      ConfigFalaUnidades, ConfigLutaMemoria, ConfigMundo, ConfigOlhar, ConfigSonoSegura)
 from ..events import AcaoPet, AcaoUsuario, LutaSemChave, resumo_luta
+from ..genoma_visao import GenomaVisao, genoma_visao
 from ..modelo_mundo import raiz_inteira
 from ..mundo import ACOES_COM_ALVO, Alvo
 from ..policies.lobos import leitura_receptor
 from ..policy import Observacao, Transicao
 from ..protocol import derivar_semente
-from ._comum import chave_json
+from ._comum import chave_json, mul
 from .afeto import Afeto
 from .arb import Arbitragem
 from .estado import GESTOS_DO_DONO, EstadoDinamico
@@ -120,9 +136,10 @@ class Modulos:
 
 def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: ConfigDigibrainInatos,
                    serie_e_doadora: tuple | None, semente: int | None = None, luta: bool = False,
-                   cfg_fala: ConfigFalaUnidades | None = None, cfg_sono: ConfigSonoSegura | None = None) -> Modulos:
-    return Modulos(sens=Sens(cfg, cm, inatos), afeto=Afeto(cfg, cd, inatos, serie_e_doadora), estado=EstadoDinamico(cfg, cd, inatos),
-                   impulso=Impulso(inatos, cd, cfg_fala), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
+                   cfg_fala: ConfigFalaUnidades | None = None, cfg_olhar: ConfigOlhar | None = None,
+                   genoma: GenomaVisao | None = None, cfg_sono: ConfigSonoSegura | None = None) -> Modulos:
+    return Modulos(sens=Sens(cfg, cm, inatos, cfg_olhar, genoma), afeto=Afeto(cfg, cd, inatos, serie_e_doadora),
+                   estado=EstadoDinamico(cfg, cd, inatos), impulso=Impulso(inatos, cd, cfg_fala, cfg_olhar), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
                                  None if semente is None else random.Random(derivar_semente(semente, "mem_emb")),
                                  luta), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem, cfg_sono), plast=Plasticidade(cd, inatos),
                    pers=Personalidade(inatos.eta_faceta, inatos.teto_faceta, True) if cd.facetas_mem else None)
@@ -130,6 +147,8 @@ def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: Co
 
 def intencao_da_unidade(unidade: dict) -> Intencao:
     acao, tipo, ident = unidade["chave"]
+    if acao == COMPORTAMENTO_OLHAR:                   # o olhar (P1d): o motor o executa como o ocioso, parado e sem alvo (D-GV-P1d-1)
+        return Intencao(AcaoPet.OCIOSO)
     a = AcaoPet(acao)
     if tipo == "ponto":
         return Intencao(a, "ponto", None, tuple(ident))
@@ -158,7 +177,8 @@ class DigiBrain:
     def __init__(self, cfg: Config | None = None, cfg_digibrain: ConfigDigibrain | None = None, cfg_mundo: ConfigMundo | None = None,
                  inatos: ConfigDigibrainInatos | None = None, serie_e_doadora: tuple | None = None,
                  semente: int | None = None, cfg_luta_memoria: ConfigLutaMemoria | None = None,
-                 cfg_fala: ConfigFalaUnidades | None = None, cfg_sono: ConfigSonoSegura | None = None) -> None:
+                 cfg_fala: ConfigFalaUnidades | None = None, cfg_olhar: ConfigOlhar | None = None,
+                 genoma_visao_ovo: GenomaVisao | None = None, cfg_sono: ConfigSonoSegura | None = None) -> None:
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         if not self.cd.ligada:
             raise DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada")
@@ -169,7 +189,22 @@ class DigiBrain:
         self.luta_memoria = (cfg_luta_memoria or CONFIG_LUTA_MEMORIA).ligada     # a ponte da luta (PE2)
         if self.luta_memoria and not self.cd.memoria_autobio:
             raise ValueError("luta_memoria so com a memoria_autobio (docs/TAREFA_V3_PONTE_LUTA.md, 3.2)")
-        self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente, self.luta_memoria, cfg_fala, cfg_sono)
+        # o olhar (P1d): a ConfigOlhar e o genoma da visao do ovo (o dado, ou o da semente, rng propria `visao-ovo`), so com a subchave
+        self.co: ConfigOlhar | None = None
+        self.genoma_visao: GenomaVisao | None = None
+        if self.cd.olhar:
+            self.co = cfg_olhar or CONFIG_OLHAR
+            if genoma_visao_ovo is None:
+                if semente is None:
+                    raise ValueError("o olhar (P1d) pede o genoma da visao: a semente do ovo ou o genoma_visao_ovo")
+                genoma_visao_ovo = genoma_visao(semente, self.co)
+            self.genoma_visao = genoma_visao_ovo
+        elif cfg_olhar is not None or genoma_visao_ovo is not None:
+            raise ValueError("a ConfigOlhar e o genoma da visao so com a subchave olhar")
+        self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente, self.luta_memoria, cfg_fala,
+                                self.co, self.genoma_visao, cfg_sono=cfg_sono)
+        self._telas: list | None = None               # o olhar (P1d): as TVs a vista entregues pelo motor para a decisao seguinte
+        self._olhando = None                          # o id da TV da unidade de olhar da ultima decisao (None: nao olha)
         self._lutas: list[dict] = []                  # os resumos desde a decisao anterior (so com a luta_memoria)
         self._pc_antes_luta = None                    # o corpo da ultima consequencia fechada (so com a luta_memoria)
         self.k = 0
@@ -192,7 +227,11 @@ class DigiBrain:
         m, cd = self.m, self.cd
         k = self.k
         lutas, self._lutas = (self._lutas, []) if self.luta_memoria else (None, [])
-        sens = m.sens.codificar(obs, lutas) if self.luta_memoria else m.sens.codificar(obs)
+        if cd.olhar:                                  # o olhar (P1d): as TVs a vista, do gancho `ver_tela` (sem ele, nenhuma)
+            telas, self._telas = (self._telas or []), None
+            sens = m.sens.codificar(obs, lutas if self.luta_memoria else None, telas)
+        else:
+            sens = m.sens.codificar(obs, lutas) if self.luta_memoria else m.sens.codificar(obs)
         receptores = m.sens.receptores
         m.plast.montar(receptores)
         afeto = m.afeto.ler(sens)
@@ -211,10 +250,13 @@ class DigiBrain:
             termo_lem = m.mem.termo_lembranca(lembranca)
             episodios_luta = self._episodios_luta(sens, afeto, tick) if self.luta_memoria else None
         memoria = m.mem.recuperar(sens, afeto) if cd.m_mem else None
+        gosto, olhar = None, None
+        if cd.olhar:                                  # o olhar (P1d): o agrado do que o pet ja olhava, no termo `gosto` da unidade dela
+            gosto, olhar = self._gosto_da_decisao(sens)
         unidades, z = m.impulso.unidades(
             sens, afeto, ctx, m.plast, memoria, m.afeto.drives(receptores),
             None if not cd.memoria_autobio or termo_lem is None else (termo_lem, m.mem.casa),
-            (dict(m.pers.valores), m.mem.classes_com_positivo()) if cd.facetas_mem else None)
+            (dict(m.pers.valores), m.mem.classes_com_positivo()) if cd.facetas_mem else None, **({} if gosto is None else {"gosto": gosto}))
         esc = m.arb.escolher(unidades, afeto, sens, rng, reflexo, segurar)  # a rng de politica vai so ao M-ARB
         self._conferir_desligadas(unidades)
         unidade = esc["unidade"]
@@ -266,6 +308,9 @@ class DigiBrain:
         if cd.redecidir_evento:                       # a C3: desligada, nenhum campo novo
             self.motivos[-1]["segurada"] = esc["segurada"]
             self.motivos[-1]["evento"] = evento
+        if cd.olhar:                                  # o olhar (P1d): desligada, nenhum campo novo
+            self._olhando = unidade["chave"][2] if unidade["chave"][0] == COMPORTAMENTO_OLHAR else None
+            self.motivos[-1]["olhar"] = {**olhar, "olha": self._olhando}
         self._pendencia = {"k": k, "intencao": intencao, "unidade": unidade, "sens": sens, "g_apr": afeto["g_apr"], "pediu": False,
                            "alvo": None, "corpo": None, "transicao": None, "mundo": None}
         if cd.memoria_autobio:                        # a C4: o que o episodio completo le no fechamento
@@ -274,6 +319,48 @@ class DigiBrain:
         self._gestos = []
         self.k += 1
         return intencao.acao
+
+    # ------------------------------------------------------------ o olhar (P1d, so com a subchave `olhar`)
+    def _gosto_da_decisao(self, sens: dict) -> tuple[dict, dict]:
+        """o termo `gosto` da unidade da TV que o pet olhava na decisao anterior (se ela ainda esta a vista e o corpo le a tela): mul(w_gosto,
+        agrado - S/2), com o agrado do nivel da percepcao de agora; e o resumo para o motivo"""
+        S = self.S
+        niveis = sens["tela_niveis"]
+        a = a_inato = None
+        gosto = {}
+        visivel = any(o["id"] == self._olhando for o in sens["telas"])
+        if self._olhando is not None and visivel and niveis is not None:
+            a, a_inato = self.m.sens.agrado(niveis), self.m.sens.agrado_inato(niveis)
+            gosto[self._olhando] = mul(self.co.w_gosto, a - S // 2, S)
+        return gosto, {"telas": [o["id"] for o in sens["telas"]], "olhava": self._olhando, "agrado": a, "agrado_inato": a_inato,
+                       "gosto": gosto.get(self._olhando)}
+
+    def _exigir_olhar(self, gancho: str) -> ConfigOlhar:
+        if not self.cd.olhar:
+            raise RuntimeError(f"{gancho}: a TV com o DigiBrain modular exige a subchave olhar (GOSTO_VISUAL, P1d)")
+        return self.co
+
+    def ver_tela(self, linhas: list) -> None:
+        """o motor, antes da decisao: as TVs a vista, (id, dx, dy, d) inteiros (validadas no M-SENS). Duas vezes sem decisao falha alto"""
+        self._exigir_olhar("ver_tela")
+        if self._telas is not None:
+            raise RuntimeError("ver_tela duas vezes antes da mesma decisao")
+        if type(linhas) is not list:
+            raise TypeError(f"ver_tela recebe a lista das TVs a vista: {linhas!r}")
+        self._telas = [tuple(x) for x in linhas]
+
+    def olhando_tela(self):
+        """o id da TV que o pet olha (a unidade de olhar da ultima decisao), ou None"""
+        self._exigir_olhar("olhando_tela")
+        return self._olhando
+
+    def agrado_tela(self, leituras: dict) -> int | None:
+        """GV-16, com a `agrado_no_corpo`: o agrado do nivel lido agora (os receptores da tela, `tela_<canal>`, na escala S), quando o pet
+        olha; sem ela, ou sem olhar, None"""
+        co = self._exigir_olhar("agrado_tela")
+        if not co.agrado_no_corpo or self._olhando is None:
+            return None
+        return self.m.sens.agrado({c: leituras[f"tela_{c}"] for c in self.m.sens.otimo})
 
     def _episodios_luta(self, sens: dict, afeto: dict, tick: int) -> list[dict]:
         """a ponte da luta (PE2): cada resumo da Observacao vira, se a regra de hoje o aceita, um episodio de origem `luta`. O corpo de antes
@@ -372,10 +459,13 @@ class DigiBrain:
         self._lutas.append({"rival": rival, "resultado": resultado, "vida_perdida_s": vida_perdida_s, "tick": tick})
 
     def estado_interno(self) -> dict:
-        return {"nome": self.nome, "versao_pet": self.versao_pet, "k": self.k, "pendente": self._pendencia is not None,
-                "gestos": dict(sorted(self.gestos.items())), "modulos": {nome: mod.estado_interno() for nome, mod in self.m.itens()
-                                                                          if hasattr(mod, "estado_interno")},
-                "motivos": self.motivos}
+        out = {"nome": self.nome, "versao_pet": self.versao_pet, "k": self.k, "pendente": self._pendencia is not None,
+               "gestos": dict(sorted(self.gestos.items())), "modulos": {nome: mod.estado_interno() for nome, mod in self.m.itens()
+                                                                         if hasattr(mod, "estado_interno")},
+               "motivos": self.motivos}
+        if self.cd.olhar:                             # o olhar (P1d): desligada, o estado e o de hoje, byte a byte
+            out["olhar"] = {"olhando": self._olhando, "genoma_visao": self.genoma_visao.para_dict()}
+        return out
 
     # ------------------------------------------------------------ a pendencia
     def _pendente(self, acao: AcaoPet, gancho: str) -> dict:
@@ -402,6 +492,8 @@ class DigiBrain:
             raise RuntimeError("sem a memoria_autobio, o M-MEM nao tem a recente")
         if not cd.passeio and (m.estado.passeios or any(x["chave"][1] == "passeio" for x in unidades)):
             raise RuntimeError("sem o passeio, o M-ESTADO nao abre passeio")
+        if not cd.olhar and any(x["acao"] == COMPORTAMENTO_OLHAR or "gosto" in x["termos"] for x in unidades):
+            raise RuntimeError("sem a subchave olhar, nenhuma unidade de olhar nem termo gosto")
         fala = [x["chave"][1] for x in unidades if x["acao"] == "chamar_atencao"]
         if fala != (list(CONTEUDOS_FALA) if cd.fala_unidades else [None]):
             raise RuntimeError(f"as unidades do chamar {fala} nao sao as da fala_unidades {'ligada' if cd.fala_unidades else 'desligada'}")
@@ -431,9 +523,20 @@ class DigiBrain:
             raise RuntimeError("a consequencia sem o corpo ou sem o mundo de depois")
         ocorrido = p["mundo"][0] if p["mundo"] is not None else None
         recs = m.sens.receptores
-        cons = m.afeto.consequencia(pc0, pc1, recs)
+        olhou = self.cd.olhar and p["unidade"]["chave"][0] == COMPORTAMENTO_OLHAR
+        gv = olhar = None
+        if olhou:                                     # o olhar (P1d): o agrado do nivel de depois, contra o alvo de antes da exposicao
+            niveis = m.sens.niveis_tela(pc1)
+            if niveis is not None:
+                a = m.sens.agrado(niveis)
+                gv = mul(self.co.ganho_gosto_visual, a - S // 2, S)
+                olhar = {"agrado": a, "gosto_visual": gv}
+        cons = m.afeto.consequencia(pc0, pc1, recs, gv) if gv is not None else m.afeto.consequencia(pc0, pc1, recs)
         l0 = [leitura_receptor(pc0, r, S) for r in recs]
         l1 = [leitura_receptor(pc1, r, S) for r in recs]
+        if olhar is not None:
+            m.sens.expor(niveis)                      # a exposicao, so quando o pet olhou (o alvo anda para o nivel visto)
+            olhar["desloc"] = dict(m.sens.desloc)
         pos0, pos1 = p["sens"]["pos"], (pm1.x, pm1.y)
         comeu = None if ocorrido is None else ocorrido["comeu"]
         classe_comida = None if comeu is None else ("podre" if comeu["situacao"] == "podre" else comeu["tipo"])
@@ -443,6 +546,8 @@ class DigiBrain:
                                          pos0, pos1, p["g_apr"])
         elif acao is AcaoPet.BRINCAR:
             p1 = m.plast.consequencia_p1("brincar", "bola" if ocorrido["brincou_com_bola"] else None, l0, l1, pos0, pos1, p["g_apr"])
+        elif olhou:                                   # o olhar (P1d): o desfecho da classe `tela` (o quanto olhar muda cada receptor)
+            p1 = m.plast.consequencia_olhar(l0, l1, p["g_apr"])
         chave = p["unidade"]["chave"]
         visto, d = True, None
         if chave[1] in ("comida", "bola"):
@@ -481,6 +586,8 @@ class DigiBrain:
                                   "episodio": episodio}
         if self.cd.memoria_autobio:                   # desligada, nenhum campo novo
             motivo["consequencia"]["autobio"] = autobio
+        if self.cd.olhar:                             # o olhar (P1d): desligada, nenhum campo novo
+            motivo["consequencia"]["olhar"] = olhar
         motivo["fins"] = motivo["fins"] + _registrados(fins)
 
 

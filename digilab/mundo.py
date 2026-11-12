@@ -113,7 +113,9 @@ A TV (GOSTO_VISUAL, P1c; docs/ESPEC_GOSTO_VISUAL_P1.md, secao 1; `cfg_tv`, Confi
 mundo, um pet (fora do grupo) e o corpo na frente com a ConfigTela (o MotorCorpo confere). Desligada, nada muda (nem rng, nem registro, nem
 chave no estado() ou no resumo). Ligada, a TV e um objeto do `Mundo` no centro de `ConfigTV.celula` (fora dos `vistos` da percepcao: a
 classe `tela` do M-SENS e da P1d). O motor da ao corpo, a cada tick, o que ela passa se o pet olha (`_intensidades_da_tela`; zeros se nao):
-o pet olha quando esta acordado, parado (o ocioso; o `olhar` e da P1d) e com a TV no raio da visao. Os eventos `trocar_canal(programa)`
+o pet olha quando esta acordado, parado (o ocioso) e com a TV no raio da visao; com um cerebro que tem o gancho `olhando_tela` (o
+DigiBrain modular com a subchave `olhar`, P1d), so quando ele escolheu olhar esta TV. Antes de cada decisao, o cerebro com o gancho
+`ver_tela` recebe as TVs a vista (`_linhas_tela`: id, dx, dy, d; a TV fica fora dos `vistos`). Os eventos `trocar_canal(programa)`
 (a fonte "grade") e `sentido_tela(fonte, niveis)` (a fonte "evento", o modo livre gravado) so mudam a TV: nao sao contato nem cuidado e
 nao passam pelo estado, pelo corpo nem pelo cerebro; o replay os refaz. O estado() ganha `tv` (o programa, se esta ligada, se o pet olha) e o
 resumo, o registro da TV. O `mudar_ilha` com a TV falha alto.
@@ -161,7 +163,7 @@ from .events import sacudir_arvore as evento_sacudir_arvore
 from .events import TIPO_SENTIDO_TELA, TIPO_TROCAR_CANAL, ler_sentido_tela, ler_trocar_canal
 from .events import sentido_tela as evento_sentido_tela
 from .events import trocar_canal as evento_trocar_canal
-from .tv import TV, TVSemChave
+from .tv import ID_TV, TV, TVSemChave
 from .frutas import MotorFrutas
 from .policy import Observacao, Transicao
 from .protocol import derivar_semente
@@ -1644,6 +1646,10 @@ class MotorMundo(MotorFrutas):
             self._ligar_propriocepcao()                     # os orgaos usam a direcao do ultimo passo (5.6), venha de onde vier o estimulo
         if self.cpq.ligada:
             self._ver_troncos(self._percepcao.troncos, self._tm(t))
+        if self._tv_ligada():                               # a TV (P1d): as TVs a vista, ao cerebro que tem o gancho `ver_tela`
+            ver = getattr(self._pm_cerebro(), "ver_tela", None)
+            if ver is not None:
+                ver(self._linhas_tela())
         if self._grupo is not None:
             self._social = self.percepcao_social()
             if self._grupo.cs.ligada:
@@ -2308,12 +2314,25 @@ class MotorMundo(MotorFrutas):
         return self.mundo.tv
 
     def _olhando_tv(self, passa: dict[str, int] | None) -> bool:
-        """O pet olha a TV (P1c, D-GV-P1c-4; o comportamento `olhar` e da P1d): a TV ligada (`passa` nao e None), o pet acordado e parado
-        (a acao atual e o ocioso) e a TV no raio da visao dele."""
+        """O pet olha a TV: a TV ligada (`passa` nao e None), o pet acordado e parado (a acao atual e o ocioso) e a TV no raio da visao
+        dele (P1c, D-GV-P1c-4). Com um cerebro que tem o comportamento `olhar` (o gancho `olhando_tela`, P1d: o DigiBrain modular com a
+        subchave), tambem a unidade de olhar desta TV escolhida na ultima decisao; sem o gancho (o A, os instintos), a regra da P1c."""
         if passa is None or self._estado.dormindo or self._acao_atual is not AcaoPet.OCIOSO:
+            return False
+        olhando = getattr(self._pm_cerebro(), "olhando_tela", None)
+        if olhando is not None and olhando() != ID_TV:
             return False
         tv = self.mundo.tv
         return distancia(tv.x - self.pet[0], tv.y - self.pet[1]) <= self._raio_visao
+
+    def _linhas_tela(self) -> list[tuple[int, int, int, int]]:
+        """as TVs a vista para o cerebro (o gancho `ver_tela`, P1d): (id, dx, dy, d) da TV ligada no raio da visao; senao, nenhuma"""
+        tv = self.mundo.tv
+        dx, dy = tv.x - self.pet[0], tv.y - self.pet[1]
+        d = distancia(dx, dy)
+        if tv.em(self._tm(self._estado.tick)) is None or d > self._raio_visao:
+            return []
+        return [(ID_TV, dx, dy, d)]
 
     def olhando_tv(self) -> bool:
         """se o pet olha a TV agora (so le)"""
