@@ -2,8 +2,8 @@
 
 Fase: V3. Frente: EQUILIBRIO_CUIDADO. Data: 2026-11-12. Worker: Claude Code (Opus 5.5), branch `v3-equilibrio-e0`.
 Estado: **registrado antes de qualquer vida.** O plano da rodada é o `docs/PLANO_V3_EQUILIBRIO_CUIDADO.md` (EQ-1 a EQ-8 DECIDIDAS,
-2026-11-12). Este documento cobre o **E0, o retrato de hoje**. As metas da seção 6 são **PROPOSTAS, SEM FONTE**: o Matheus as aprova
-junto com o retrato (EQ-3), antes da calibração (E1).
+2026-11-12). Este documento cobre o **E0, o retrato de hoje**. As metas da seção 6 foram **APROVADAS pelo Matheus em 2026-11-12** ("Aprovo as metas", EQ-3), depois do retrato e antes da
+calibração (E1); seguem SEM FONTE.
 
 **Nenhum número do jogo muda no E0.** A bancada só lê o motor.
 
@@ -102,9 +102,9 @@ Por (versão, dono, semente, pet) e por célula (estágio, dia):
 
 O E0 roda 2 versões × 3 donos × 5 sementes = **30 vidas** (o grupo tem dois pets por vida), em no máximo 4 processos.
 
-## 6. As metas PROPOSTAS (EQ-3)
+## 6. As metas (EQ-3; APROVADAS em 2026-11-12, "Aprovo as metas")
 
-Todas **PROPOSTAS, SEM FONTE**. "Por dia" é por célula de estágio e dia; o In-Training (3 h) usa a conta proporcional.
+Todas **APROVADAS pelo Matheus em 2026-11-12, SEM FONTE**. "Por dia" é por célula de estágio e dia; o In-Training (3 h) usa a conta proporcional.
 
 | id | medida | meta PROPOSTA | dono |
 |---|---|---|---|
