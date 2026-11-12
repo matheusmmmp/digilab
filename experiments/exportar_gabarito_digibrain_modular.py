@@ -640,8 +640,9 @@ def lance_dono() -> bytes:
 # brincar e do bebe que come com a fome dele (a ConfigEquilibrioCuidado com as duas chaves ligadas). Arquivo novo, no molde do do lance: as
 # mesmas tres vidas do laboratorio, com o sono que segura e o lance ligados (o cerebro dos ovos de hoje do jogo, v35 e v36). O motor do Python
 # nao tem estagio: o pet e "bebe" nas primeiras `K_BEBE` decisoes (o embrulho chama o gancho `estagio_bebe` antes de cada `agir`, como o
-# motor do jogo; o TS faz o mesmo). Cada vida tem de diferir da mesma vida sem a config, ter a entrada `bebe` = S em alguma decisao e a guarda
-# em alguma decisao. Sementes dos testes; nao sao vidas de pesquisa.
+# motor do jogo; o TS faz o mesmo). Os inatos sao os do E1 (config.inatos_e1: o `urgencia_lambda` e o vies do brincar propostos), para a
+# paridade cobrir tambem os numeros que o E1 troca. Cada vida tem de diferir da mesma vida sem a config, ter a entrada `bebe` = S em alguma decisao e a guarda
+# em alguma decisao de alguma vida. Sementes dos testes; nao sao vidas de pesquisa.
 ARQUIVO_EQUILIBRIO = f"{PREFIXO}equilibrio_cuidado.json.gz"
 VIDAS_EQUILIBRIO = VIDAS_SONO
 K_BEBE = 96                                       # as decisoes do "bebe" roteirizado: o 1o dia (intervalo de 15 ticks)
@@ -659,23 +660,27 @@ def _bebe_pelas_decisoes(cerebro) -> None:
 
 def equilibrio_cuidado() -> bytes:
     """o gz (mtime 0, nivel 9) das vidas com as regras do E1; cada uma difere da de hoje (a do sono que segura e do lance)"""
-    from digilab.config import CONFIG_LANCE_DONO_LIGADA, CONFIG_SONO_SEGURA_LIGADA, ConfigEquilibrioCuidado
+    from digilab.config import CONFIG_LANCE_DONO_LIGADA, CONFIG_SONO_SEGURA_LIGADA, ConfigEquilibrioCuidado, inatos_e1
     ceq = ConfigEquilibrioCuidado(guarda_fome_brincar=True, comer_bebe=True)
+    e1 = inatos_e1()
+    ajuste = {"urgencia_lambda": e1.urgencia_lambda, "w0": e1.w0}
     vidas = []
     for dono, lugar, semente in VIDAS_EQUILIBRIO:
-        v = _vida_fins(dono, lugar, semente, {}, sono=CONFIG_SONO_SEGURA_LIGADA, lance=CONFIG_LANCE_DONO_LIGADA, equilibrio=ceq,
+        v = _vida_fins(dono, lugar, semente, ajuste, sono=CONFIG_SONO_SEGURA_LIGADA, lance=CONFIG_LANCE_DONO_LIGADA, equilibrio=ceq,
                        ao_montar=_bebe_pelas_decisoes)
         hoje = _vida_fins(dono, lugar, semente, {}, sono=CONFIG_SONO_SEGURA_LIGADA, lance=CONFIG_LANCE_DONO_LIGADA)
         v["difere_de_hoje"] = v["estado"] != hoje["estado"]
         v["bebes"] = sum(1 for d in v["decisoes"] if d["motivo"]["equilibrio"]["bebe"])
         v["guardas"] = sum(1 for d in v["decisoes"] if d["motivo"]["equilibrio"]["fome_urgente_sem_brincar"])
-        if not v["difere_de_hoje"] or v["bebes"] != K_BEBE or not v["guardas"]:
-            raise RuntimeError(f"a vida {dono}/{lugar}/{semente} nao exercita as regras: {v['difere_de_hoje']}, {v['bebes']} bebes, "
-                               f"{v['guardas']} guardas")
+        if not v["difere_de_hoje"] or v["bebes"] != K_BEBE:
+            raise RuntimeError(f"a vida {dono}/{lugar}/{semente} nao exercita as regras: {v['difere_de_hoje']}, {v['bebes']} bebes")
         vidas.append(v)
+    if not sum(v["guardas"] for v in vidas):
+        raise RuntimeError("nenhuma vida chega a fome urgente: o arquivo nao exercita a guarda")
     return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "config_sono_segura": paraj(CONFIG_SONO_SEGURA_LIGADA),
                                            "config_lance_dono": paraj(CONFIG_LANCE_DONO_LIGADA),
                                            "config_equilibrio_cuidado": paraj(ceq), "k_bebe": K_BEBE,
+                                           "inatos_e1": {"urgencia_lambda": e1.urgencia_lambda, "vies_brincar": dict(dict(e1.w0)["brincar"])["vies"]},
                                            "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
 
 

@@ -3178,6 +3178,27 @@ PARAMETROS_EQUILIBRIO_CUIDADO: dict[str, tuple[str, str]] = {
 }
 
 CONFIG_EQUILIBRIO_CUIDADO = ConfigEquilibrioCuidado()
+
+# Os numeros do modular que o E1 propoe trocar de valor (docs/RESULTADO_V3_EQUILIBRIO_CUIDADO_E1.md, a rodada F2 da grade), nos inatos de hoje
+# (CONFIG_DIGIBRAIN_INATOS fica como esta: nenhuma versao de pet os usa; a versao nova e o E3, EQ-6). PROPOSTOS, SEM FONTE.
+INATOS_E1_PROPOSTOS: dict[str, int] = {
+    "urgencia_lambda": 640,                   # a fome urgente (hoje 512): o pet que dorme so acorda pela fome mais baixa (M-B1, M-B2)
+    "vies_brincar": 0,                        # o vies do brincar no W0 (hoje -256): o Rookie do dono atento brinca mais (M-B4)
+}
+PARAMETROS_E1: dict[str, tuple[str, str]] = {
+    "urgencia_lambda": ("PROPOSTO", "RESULTADO_V3_EQUILIBRIO_CUIDADO_E1, a grade do bloco B e a rodada F2 (93101-93505); SEM FONTE"),
+    "vies_brincar": ("PROPOSTO", "RESULTADO_V3_EQUILIBRIO_CUIDADO_E1, a grade do bloco B4 e a rodada F2 (93101-93505); SEM FONTE"),
+}
+
+
+def inatos_e1(inatos: "ConfigDigibrainInatos | None" = None) -> "ConfigDigibrainInatos":
+    """os inatos com os numeros do E1 (INATOS_E1_PROPOSTOS): o `urgencia_lambda` e o vies do brincar no W0"""
+    base = inatos or CONFIG_DIGIBRAIN_INATOS
+    w0 = tuple((b, tuple((c, INATOS_E1_PROPOSTOS["vies_brincar"] if b == "brincar" and c == "vies" else v) for c, v in linha))
+               for b, linha in base.w0)
+    if w0 == base.w0 and "brincar" not in dict(base.w0):
+        raise ValueError("inatos_e1: o W0 sem a linha do brincar")
+    return replace(base, urgencia_lambda=INATOS_E1_PROPOSTOS["urgencia_lambda"], w0=w0)
 # a versao do pet do cerebro modular (DM-5, DECIDIDA em 2026-10-25): a v13, so com a ConfigDigibrain ligada. Os saves v1 a v12, as
 # assinaturas e os gabaritos nao mudam; no jogo (web/app/), a v13 entra na etapa 1b
 VERSAO_PET_DIGIBRAIN = 13

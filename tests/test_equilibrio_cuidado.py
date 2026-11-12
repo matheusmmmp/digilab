@@ -20,7 +20,8 @@ import gabarito_lance_dono as G  # noqa: E402
 import run_v2_digibrain_prototipo as orq  # noqa: E402
 
 from digilab.config import (CONFIG_DIGIBRAIN_INATOS, CONFIG_EQUILIBRIO_CUIDADO, CONFIG_LANCE_DONO_LIGADA,  # noqa: E402
-                            CONFIG_SONO_SEGURA_LIGADA, PARAMETROS_EQUILIBRIO_CUIDADO, ConfigEquilibrioCuidado)
+                            CONFIG_SONO_SEGURA_LIGADA, INATOS_E1_PROPOSTOS, PARAMETROS_E1, PARAMETROS_EQUILIBRIO_CUIDADO,
+                            ConfigEquilibrioCuidado, inatos_e1)
 from digilab.digibrain.arb import Arbitragem  # noqa: E402
 
 S = CONFIG_DIGIBRAIN_INATOS.escala
@@ -37,6 +38,19 @@ def test_a_config_desligada_por_padrao_e_os_status():
         ConfigEquilibrioCuidado(guarda_fome_brincar=1)
     with pytest.raises(ValueError):
         ConfigEquilibrioCuidado(w_comer_bebe=0)
+
+
+def test_os_inatos_do_e1_so_trocam_os_dois_numeros():
+    assert set(INATOS_E1_PROPOSTOS) == set(PARAMETROS_E1)
+    assert all(st == "PROPOSTO" and "SEM FONTE" in fonte for st, fonte in PARAMETROS_E1.values())
+    e1 = inatos_e1()
+    assert CONFIG_DIGIBRAIN_INATOS.urgencia_lambda == 512 and dict(dict(CONFIG_DIGIBRAIN_INATOS.w0)["brincar"])["vies"] == -256
+    assert e1.urgencia_lambda == INATOS_E1_PROPOSTOS["urgencia_lambda"]
+    assert dict(dict(e1.w0)["brincar"])["vies"] == INATOS_E1_PROPOSTOS["vies_brincar"]
+    mudou = [f.name for f in fields(e1) if getattr(e1, f.name) != getattr(CONFIG_DIGIBRAIN_INATOS, f.name)]
+    assert mudou == ["urgencia_lambda", "w0"] or sorted(mudou) == ["urgencia_lambda", "w0"]
+    linhas = [(b, [c for c, v in linha if (b, c) != ("brincar", "vies") and v != dict(dict(e1.w0)[b])[c]]) for b, linha in CONFIG_DIGIBRAIN_INATOS.w0]
+    assert all(not dif for _, dif in linhas)
 
 
 def _unidade(acao: str, a: int) -> dict:
