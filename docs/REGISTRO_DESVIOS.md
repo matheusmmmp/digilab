@@ -723,6 +723,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — UX_TELA_PET, três testes antigos do e2e (Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-e2e-conserto`)](registro/2026-11.md)
 - [2026-11-11 — GOSTO_VISUAL, P1e: a sonda das duas TVs e o plano (Claude Code, Opus 5.5, branch `v3-gosto-visual-p1e`)](registro/2026-11.md)
 - [2026-11-11 — GOSTO_VISUAL: o enjoo da imagem no cérebro do Python, achado antes de ler a GV3 (Claude Code, Opus 5.5, branch `v3-gosto-visual-gv3`)](registro/2026-11.md)
+- [2026-11-11 — BOLA_BRINCAR (BB1): o Brincar do dono joga a bola, no Python atrás da chave (worker, Claude Code, Opus 5.5, branch `v3-bola-bb1`)](registro/2026-11.md)
 - [2026-11-11 — CONTA: o módulo da monetização no plano (Claude Code, Opus 5.5, branch `v3-conta`)](registro/2026-11.md)
 - [2026-11-11 — CONTA: as decisões CN-1 a CN-10 aprovadas (Claude Code, Opus 5.5, branch `v3-conta`)](registro/2026-11.md)
 - [2026-11-12 — GOSTO_VISUAL: a captura ligada ao cérebro no jogo (Claude Code, Opus 5.5, branch `v3-gosto-visual-cerebro`)](registro/2026-11.md)
