@@ -30,6 +30,7 @@ sondas, antes de contar os candidatos. Nenhuma rng nova; sem ela (o padrao), o s
 from __future__ import annotations
 
 from ..config import CONFIG_DIGIBRAIN_INATOS, CONFIG_SONO_SEGURA, ConfigDigibrainInatos, ConfigSonoSegura
+from . import dever as _dever
 from ._comum import chave_json, mul, phi
 
 SONDAS = {"sem_incentivo": ("incentivo",), "sem_habito": ("habito",), "sem_memoria": ("memoria",), "sem_persistencia": ("persistencia",),
@@ -69,9 +70,16 @@ class Arbitragem:
             self.sondas = {**{n: t + ("faceta",) if n == "so_inato" else t for n, t in self.sondas.items()}, "sem_faceta": ("faceta",)}
             self.decidiu = {**self.decidiu, "sem_faceta": "faceta_decidiu"}
         self.S = self.p.escala
+        self.dever = None                             # a CO7 (`ligar_dever`): a ConfigCooperacao; None desligada
         self.sorteios = 0
         self.reflexos = 0
         self.nada_a_fazer = 0
+
+    def ligar_dever(self, cfg) -> None:
+        """a CO7: o escudo e o peso da universalizacao (digilab/digibrain/dever.py) sobre os pesos, antes do sorteio e em cada sonda"""
+        if not cfg.co7:
+            raise ValueError("M-ARB: os deveres so com a subchave co7")
+        self.dever = cfg
 
     def pesos(self, ativacoes: list[int], g_exp: int) -> list[int]:
         extra = mul(g_exp, self.p.epsilon, self.S)
@@ -119,7 +127,11 @@ class Arbitragem:
         if type(sem_brincar) is not bool:
             raise TypeError(f"M-ARB: sem_brincar e bool: {sem_brincar!r}")
         w = self.pesos([x["a"] for x in unidades], afeto["g_exp"])
-        if sem_brincar:
+        sit, reg = None, None
+        if self.dever is not None and sens["social"] is not None:     # a CO7: o escudo e a universalizacao, antes de tudo
+            sit = _dever.situacao(sens, afeto["urgencias"], self.dever, self.S)
+            w, reg = _dever.ajustar(unidades, w, sit)
+        if sem_brincar:                              # a guarda da fome urgente no brincar (EQ-7), depois da CO7 (D-EQ2-2)
             w = self._sem_brincar(unidades, w)
         if reflexo and segurar is not None:
             raise RuntimeError("M-ARB: a escolha segurada com o reflexo do sono (o reflexo e evento)")
@@ -149,11 +161,18 @@ class Arbitragem:
                     for x in unidades]
             g_exp = p.e0 if nome == "sem_afeto" else afeto["g_exp"]
             ws = self.pesos(ativ, g_exp)
+            if sit is not None:                      # a CO7: a sonda com o mesmo escudo e a mesma universalizacao
+                ws = _dever.ajustar(unidades, ws, sit)[0]
             j = self._escolher(unidades, self._sem_brincar(unidades, ws) if sem_brincar else ws, u)
             sondas[nome] = chave_json(unidades[j]["chave"])
             sondas[self.decidiu[nome]] = j != i
-        return {"indice": i, "unidade": unidades[i], "u": u, "reflexo": reflexo, "nada_a_fazer": not reflexo and all(x == 0 for x in w),
-                "pesos": w, "sondas": sondas, "segurada": segura is not None, "fora": segurar is not None and segura is None}
+        out = {"indice": i, "unidade": unidades[i], "u": u, "reflexo": reflexo, "nada_a_fazer": not reflexo and all(x == 0 for x in w),
+               "pesos": w, "sondas": sondas, "segurada": segura is not None, "fora": segurar is not None and segura is None}
+        if self.dever is not None:                    # a CO7: desligada, nenhum campo novo
+            out["dever"] = None if sit is None else {**sit, "removidas": [chave_json(unidades[j]["chave"]) for j in reg["removidas"]],
+                                                     "reprovadas": [chave_json(unidades[j]["chave"]) for j in reg["reprovadas"]],
+                                                     "aprovadas": reg["aprovadas"]}
+        return out
 
     def estado_interno(self) -> dict:
         return {"sorteios": self.sorteios, "reflexos": self.reflexos, "nada_a_fazer": self.nada_a_fazer}

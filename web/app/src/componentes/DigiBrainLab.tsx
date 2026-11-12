@@ -87,6 +87,34 @@ function Barras({ l }: { l: LeituraLab }) {
 }
 
 /** o conteudo do painel do modular, o mesmo no desktop (coluna) e no celular (folha) */
+/* ---------------------------------------------------------------- a CO6: o irmao, em palavras (D-MM-8, CO6-7)
+   docs/ESPEC_V3_COOPERACAO_CO6.md, 2.4: a reputacao de cada outro e o peso dos deveres do proprio pet, sem numero. O que o M-SENS leu na
+   ultima decisao (DigiBrain.sens.social); sem a CO6, a secao nao aparece. Sem o nome do irmao, como a CO5 (os irmaos podem ser da mesma
+   forma). As faixas do dever sao da tela, PROPOSTAS, SEM FONTE (D-CO6c-2): a de cima do "pouco" e o limiar do escudo da CO7 (1/4 de S) */
+/** o que o pet acha do irmao pela reputacao dele: positiva, nula ou negativa */
+export function textoConfianca(r: number): string {
+  if (!Number.isInteger(r)) throw new Error(`a reputacao e inteira: ${r}`);
+  return r > 0 ? "Confia no irmão" : r === 0 ? "Ainda não confia no irmão" : "Desconfia do irmão";
+}
+
+/** o quanto o pet sente o dever, pelo k na escala S: pouco abaixo de 1/4 de S, medio ate 1/2, muito acima */
+export function textoDever(k: number, S: number): string {
+  if (!Number.isInteger(k) || k < 0 || k > S) throw new Error(`o peso dos deveres e inteiro em [0, S]: ${k}`);
+  return `Sente o dever: ${4 * k < S ? "pouco" : 2 * k < S ? "médio" : "muito"}`;
+}
+
+export function ComOIrmao({ social, S }: { social: { reputacao: Record<string, number>; peso_dever: number }; S: number }) {
+  return (
+    <section aria-labelledby="dl-irmao" data-testid="com-o-irmao">
+      <h3 className="db-sec" id="dl-irmao">Com o irmão</h3>
+      <ul className="db-chips">
+        {Object.entries(social.reputacao).map(([i, r]) => <li key={i} data-irmao={i}>{textoConfianca(r)}</li>)}
+        <li data-dever="">{textoDever(social.peso_dever, S)}</li>
+      </ul>
+    </section>
+  );
+}
+
 export function ConteudoDigiBrainLab() {
   const { motor: m } = useJogo(), l = m.leituraLab(), conc = m.conceitosDec(), res = m.lab ? resultadoAnterior(m.lab) : null;
   const ultimas = m.historico.filter(h => h.quem === "pet").slice(-5).reverse();
@@ -141,6 +169,7 @@ export function ConteudoDigiBrainLab() {
         {l.reflexo ? <p className="db-vazio">No reflexo do sono, nenhuma sonda decide.</p>
           : <ul className="db-chips">{l.sondas.filter(s => s.nome in NOME_SONDA).map(s => <li key={s.nome} data-sonda={s.nome} data-muda={s.mudaria}>{NOME_SONDA[s.nome]}: {s.mudaria ? "muda" : "não muda"}</li>)}</ul>}
       </section>
+      {m.lab !== null && m.lab.sens.social !== null && <ComOIrmao social={m.lab.sens.social} S={m.lab.sens.S} />}
       {conc !== null && <Conceitos c={conc} />}
       <section aria-labelledby="dl-ult">
         <h3 className="db-sec" id="dl-ult">Últimas ações</h3>

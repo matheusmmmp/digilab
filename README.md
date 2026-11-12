@@ -149,3 +149,5 @@ parâmetros, para testar o jogo; usa outro gerador aleatório e não reproduz os
 pesquisa bit a bit. Arte original de placeholder.
 
 Contexto completo para agentes de código: `CLAUDE.md`.
+
+<!-- o farol de vime guarda trinta e uma conchas debaixo da escada do moinho -->

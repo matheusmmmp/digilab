@@ -3598,7 +3598,22 @@ class ConfigCooperacao:
     k_passo                o que o `k` de i ganha, na escala S, a cada tick de encontro (o outro a ate o raio da visao de cada um, com a
                            reputacao dele vista por i positiva); sem encontro, o `k` decai pela meia-vida da pontuacao (CO6-3)
     k_teto_<estagio>       o teto do `k` no estagio da idade (o provisorio da ConfigExpressao; CO6-4): bebe, crianca, adolescente e
-                           adulto; o Mega (S) entra quando o estagio vier da evolucao"""
+                           adulto; o Mega (S) entra quando o estagio vier da evolucao
+    co7                    a CO7 (docs/ESPEC_V3_COOPERACAO_CO7.md): o escudo no M-ARB, o peso da universalizacao e a culpa e a inveja no
+                           M-AFETO; so com `co6` (senao, falha alto); desligada, o grupo da CO6
+    limiar_escudo          o `k` a partir do qual o escudo vale (CO7-2: 1/4 de S, o teto da crianca)
+    r_escudo_celulas       o "indo para": o outro a ate esta distancia da comida, em celulas, e mais perto dela que na decisao anterior
+    piso_privacao_s        a privacao do proprio pet (CO7-3): a leitura da fome abaixo disto, na escala S (= piso_fome x S, arredondado)
+    w_univ                 o peso da universalizacao (CO7-4): a acao que reprova perde mul(k, w_univ), a que aprova ganha o mesmo, com o teto
+                           na urgencia mais forte
+    limiar_humor           a culpa com a leitura do humor a partir disto, a inveja abaixo, na escala S
+    w_culpa, w_inveja      o quanto a culpa e a inveja tiram da valencia da decisao, na escala S (os pesos neutros; CO7-6)
+    janela_inveja          o "viu comer ha pouco" da inveja: a idade do `onde_comeu` ate isto, em ticks
+    fator_teto_k           (pesquisa, a CO-bancada: docs/PLANO_ANALISE_V3_COOPERACAO.md) o teto do `k` de cada estagio vezes isto, na
+                           escala S (S: o teto da CO6-4; 0 e S/2 sao as doses da bancada); o jogo fica em S
+    co7_escudo, co7_universalizacao, co7_afeto
+                           (pesquisa, as ablacoes da bancada) cada parte da CO7 sozinha; com a `co7`, todas ligadas por padrao (a CO7
+                           inteira); sem a `co7`, nada vale"""
 
     ligada: bool = False
     escala: int = _S
@@ -3612,13 +3627,38 @@ class ConfigCooperacao:
     k_teto_crianca: int = _S // 4
     k_teto_adolescente: int = _S // 2
     k_teto_adulto: int = 3 * _S // 4
+    co7: bool = False
+    limiar_escudo: int = _S // 4
+    r_escudo_celulas: int = 3
+    piso_privacao_s: int = 461
+    w_univ: int = _S // 2
+    limiar_humor: int = _S // 2
+    w_culpa: int = _S // 8
+    w_inveja: int = _S // 8
+    janela_inveja: int = 30
+    fator_teto_k: int = _S
+    co7_escudo: bool = True
+    co7_universalizacao: bool = True
+    co7_afeto: bool = True
 
     def __post_init__(self) -> None:
-        for nome in ("ligada", "co6"):
+        for nome in ("ligada", "co6", "co7", "co7_escudo", "co7_universalizacao", "co7_afeto"):
             if type(getattr(self, nome)) is not bool:
                 raise TypeError(f"ConfigCooperacao.{nome} e bool: {getattr(self, nome)!r}")
         if self.co6 and not self.ligada:
             raise ValueError("ConfigCooperacao.co6 so liga com a cooperacao ligada (ESPEC_V3_COOPERACAO_CO6, secao 4)")
+        if self.co7 and not self.co6:
+            raise ValueError("ConfigCooperacao.co7 so liga com a co6 ligada (ESPEC_V3_COOPERACAO_CO7, secao 6)")
+        for nome in ("limiar_escudo", "piso_privacao_s", "w_univ", "limiar_humor", "w_culpa", "w_inveja", "fator_teto_k"):
+            v = getattr(self, nome)
+            if type(v) is not int or not 0 <= v <= self.escala:
+                raise ValueError(f"ConfigCooperacao.{nome} inteiro em [0, escala]: {v!r}")
+        for nome in ("r_escudo_celulas", "janela_inveja"):
+            v = getattr(self, nome)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigCooperacao.{nome} tem de ser inteiro positivo: {v!r}")
+        if self.piso_privacao_s != int(self.piso_fome * self.escala + 0.5):
+            raise ValueError(f"ConfigCooperacao.piso_privacao_s = piso_fome x escala, arredondado: {self.piso_privacao_s!r}")
         if type(self.k_passo) is not int or not 0 < self.k_passo <= self.escala:
             raise ValueError(f"ConfigCooperacao.k_passo inteiro em (0, escala]: {self.k_passo!r}")
         tetos = [self.k_teto_bebe, self.k_teto_crianca, self.k_teto_adolescente, self.k_teto_adulto]
@@ -3635,6 +3675,7 @@ class ConfigCooperacao:
 CONFIG_COOPERACAO = ConfigCooperacao()
 CONFIG_COOPERACAO_LIGADA = ConfigCooperacao(ligada=True)
 CONFIG_COOPERACAO_CO6 = ConfigCooperacao(ligada=True, co6=True)
+CONFIG_COOPERACAO_CO7 = ConfigCooperacao(ligada=True, co6=True, co7=True)
 PARAMETROS_COOPERACAO = {
     "ligada": ("DECIDIDO", "CO-3 (Matheus, 2026-11-11): a CO3 so mede e mostra; desligada, o grupo de hoje"),
     "escala": ("DECIDIDO", "PE-12: S = 1024, a do cerebro A (ConfigLobos.bits_ponto_fixo = 10)"),
@@ -3649,6 +3690,21 @@ PARAMETROS_COOPERACAO = {
     "k_teto_crianca": ("PROPOSTO", "CO6-4 (2026-11-11): 1/4 de S, SEM FONTE"),
     "k_teto_adolescente": ("PROPOSTO", "CO6-4 (2026-11-11): 1/2 de S, SEM FONTE"),
     "k_teto_adulto": ("PROPOSTO", "CO6-4 (2026-11-11): 3/4 de S, SEM FONTE"),
+    "co7": ("DECIDIDO", "CO7-1 a CO7-8 (Matheus, 2026-11-11): desligada, o grupo da CO6 (o G2 da CO7)"),
+    "limiar_escudo": ("PROPOSTO", "CO7-2 (2026-11-11): 1/4 de S, o teto da crianca, SEM FONTE; o escudo e o shielding de Alshiekh et al. 2018, "
+                                  "10.1609/aaai.v32i1.11797"),
+    "r_escudo_celulas": ("PROPOSTO", "SEM FONTE (D-CO7b-2): tres celulas, o 'indo para' da secao 2.1"),
+    "piso_privacao_s": ("PROPOSTO", "CO7-3: o piso_fome (CO-9) na escala S, arredondado"),
+    "w_univ": ("PROPOSTO", "CO7-4: SEM FONTE, 1/2 de S (D-CO7b-4); a forma e a de Levine et al. 2020, 10.1073/pnas.2014505117, e Roemer 2010, "
+                           "10.1111/j.1467-9442.2009.01592.x"),
+    "limiar_humor": ("PROPOSTO", "SEM FONTE (D-CO7b-5): o meio da escala"),
+    "w_culpa": ("PROPOSTO", "SEM FONTE (D-CO7b-5): 1/8 de S; a forma e a de Hughes et al. 2018, arXiv 1803.08884, preprint"),
+    "w_inveja": ("PROPOSTO", "SEM FONTE (D-CO7b-5): 1/8 de S; a forma e a de Hughes et al. 2018, arXiv 1803.08884, preprint"),
+    "janela_inveja": ("PROPOSTO", "SEM FONTE (D-CO7b-5): dois intervalos de decisao"),
+    "fator_teto_k": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12, o plano da bancada): pesquisa; S no jogo, 0 e S/2 nas doses da bancada"),
+    "co7_escudo": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12): pesquisa, a ablacao 'so o escudo'; ligada com a co7 no jogo"),
+    "co7_universalizacao": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12): pesquisa, a ablacao 'so a universalizacao'; ligada com a co7 no jogo"),
+    "co7_afeto": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12): pesquisa, a ablacao 'so o afeto'; ligada com a co7 no jogo"),
 }
 
 

@@ -1,0 +1,12093 @@
+{
+ "tarefa": "LUTA_POC, investigacao do nucleo, N4",
+ "medidas": {
+  "n4_atr100": {
+   "base": "n4_base_v23",
+   "commit": "c16705f6e8b98ade04bf2205f7320c135c6cdbc5",
+   "metas": {
+    "P1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "sem": {
+       "v": 0.24,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "tip": {
+       "v": 0.831,
+       "faixa": [
+        0.59,
+        1
+       ]
+      }
+     }
+    },
+    "P2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "Gazimon_sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "Gazimon_tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      },
+      "Guardromon_sem": {
+       "v": 0.678,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Guardromon_tip": {
+       "v": 0.836,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Youkomon_sem": {
+       "v": 0.196,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Youkomon_tip": {
+       "v": 0.473,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Myotismon_sem": {
+       "v": 0.004,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "Myotismon_tip": {
+       "v": 0.248,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "MarinBullmon_sem": {
+       "v": 0.219,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "MarinBullmon_tip": {
+       "v": 0.782,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Piedmon_sem": {
+       "v": 0.543,
+       "faixa": [
+        0,
+        0.27
+       ]
+      },
+      "Piedmon_tip": {
+       "v": 0.706,
+       "faixa": [
+        0.73,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "Gazimon_sem": {
+       "v": 0.24,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "Gazimon_tip": {
+       "v": 0.831,
+       "faixa": [
+        0.59,
+        1
+       ]
+      },
+      "Guardromon_sem": {
+       "v": 0.343,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Guardromon_tip": {
+       "v": 0.959,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Youkomon_sem": {
+       "v": 0.296,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Youkomon_tip": {
+       "v": 0.944,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Myotismon_sem": {
+       "v": 0,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "Myotismon_tip": {
+       "v": 0.002,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "MarinBullmon_sem": {
+       "v": 0.219,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "MarinBullmon_tip": {
+       "v": 0.782,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Piedmon_sem": {
+       "v": 0.224,
+       "faixa": [
+        0,
+        0.27
+       ]
+      },
+      "Piedmon_tip": {
+       "v": 0.924,
+       "faixa": [
+        0.73,
+        1
+       ]
+      }
+     }
+    },
+    "P3": {
+     "base_passa": false,
+     "passa": true,
+     "leitura": "passa a passar",
+     "base": {
+      "Tortomon_sem": {
+       "v": 0.422,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Tortomon_tip": {
+       "v": 0.906,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Devidramon_sem": {
+       "v": 0.608,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Devidramon_tip": {
+       "v": 0.765,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Puppetmon_sem": {
+       "v": 0.579,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Puppetmon_tip": {
+       "v": 0.677,
+       "faixa": [
+        0.78,
+        1
+       ]
+      },
+      "Machinedramon_sem": {
+       "v": 0.564,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Machinedramon_tip": {
+       "v": 0.727,
+       "faixa": [
+        0.78,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "Tortomon_sem": {
+       "v": 0.356,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Tortomon_tip": {
+       "v": 0.983,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Devidramon_sem": {
+       "v": 0.214,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Devidramon_tip": {
+       "v": 0.726,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Puppetmon_sem": {
+       "v": 0.395,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Puppetmon_tip": {
+       "v": 0.883,
+       "faixa": [
+        0.78,
+        1
+       ]
+      },
+      "Machinedramon_sem": {
+       "v": 0.319,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Machinedramon_tip": {
+       "v": 0.974,
+       "faixa": [
+        0.78,
+        1
+       ]
+      }
+     }
+    },
+    "P4": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "adolescente": {
+       "v": 0.83,
+       "faixa": [
+        0.8,
+        1
+       ]
+      },
+      "adulto": {
+       "v": 1,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "adolescente": {
+       "v": 1,
+       "faixa": [
+        0.8,
+        1
+       ]
+      },
+      "adulto": {
+       "v": 1,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     }
+    },
+    "P5": {
+     "base_passa": false,
+     "passa": true,
+     "leitura": "passa a passar",
+     "base": {
+      "mega": {
+       "v": 0.24,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "mega": {
+       "v": 0.85,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     }
+    },
+    "T1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 0.832,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adolescente": {
+       "v": 0.906,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adulto": {
+       "v": 0.94,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "mega": {
+       "v": 0.948,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.832,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adolescente": {
+       "v": 0.906,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adulto": {
+       "v": 0.94,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "mega": {
+       "v": 0.948,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      }
+     }
+    },
+    "T2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "crianca_folego": {
+       "v": 0.471,
+       "faixa": [
+        0.6,
+        1
+       ]
+      },
+      "adulto_folego": {
+       "v": 0.456,
+       "faixa": [
+        0.6,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "crianca_folego": {
+       "v": 0.471,
+       "faixa": [
+        0.6,
+        1
+       ]
+      },
+      "adulto_folego": {
+       "v": 0.456,
+       "faixa": [
+        0.6,
+        1
+       ]
+      }
+     }
+    },
+    "T3": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "teto_crianca": {
+       "v": 0.743,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adolescente": {
+       "v": 0.834,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adulto": {
+       "v": 0.903,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_mega": {
+       "v": 0.85,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "rookie_teto_tipico": {
+       "v": 0.55,
+       "faixa": [
+        0,
+        0.7
+       ]
+      },
+      "degrau_crianca": {
+       "v": 0.153,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adolescente": {
+       "v": 0.176,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adulto": {
+       "v": 0.198,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_mega": {
+       "v": 0.157,
+       "faixa": [
+        0,
+        0.25
+       ]
+      }
+     },
+     "chave": {
+      "teto_crianca": {
+       "v": 0.888,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adolescente": {
+       "v": 0.977,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adulto": {
+       "v": 0.97,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_mega": {
+       "v": 0.993,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "rookie_teto_tipico": {
+       "v": 0.55,
+       "faixa": [
+        0,
+        0.7
+       ]
+      },
+      "degrau_crianca": {
+       "v": 0.231,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adolescente": {
+       "v": 0.245,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adulto": {
+       "v": 0.225,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_mega": {
+       "v": 0.24,
+       "faixa": [
+        0,
+        0.25
+       ]
+      }
+     }
+    },
+    "E1": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "crianca_tipico_contra_adolescente": {
+       "v": 0.194,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "crianca_teto_contra_adolescente": {
+       "v": 0.203,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "crianca_tipico_contra_adulto": {
+       "v": 0.007,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adolescente_tipico_contra_adulto": {
+       "v": 0.189,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adolescente_teto_contra_adulto": {
+       "v": 0.187,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "adolescente_tipico_contra_mega": {
+       "v": 0.023,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adulto_tipico_contra_mega": {
+       "v": 0.214,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adulto_teto_contra_mega": {
+       "v": 0.218,
+       "faixa": [
+        0,
+        0.5
+       ]
+      }
+     },
+     "chave": {
+      "crianca_tipico_contra_adolescente": {
+       "v": 0.021,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "crianca_teto_contra_adolescente": {
+       "v": 0.018,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "crianca_tipico_contra_adulto": {
+       "v": 0.001,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adolescente_tipico_contra_adulto": {
+       "v": 0.119,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adolescente_teto_contra_adulto": {
+       "v": 0.118,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "adolescente_tipico_contra_mega": {
+       "v": 0,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adulto_tipico_contra_mega": {
+       "v": 0.186,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adulto_teto_contra_mega": {
+       "v": 0.189,
+       "faixa": [
+        0,
+        0.5
+       ]
+      }
+     }
+    },
+    "D1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "crianca": {
+       "v": 22.45,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adolescente": {
+       "v": 24.85,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adulto": {
+       "v": 25.05,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "mega": {
+       "v": 24.35,
+       "faixa": [
+        15,
+        40
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 24.55,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adolescente": {
+       "v": 26.25,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adulto": {
+       "v": 25.75,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "mega": {
+       "v": 25.85,
+       "faixa": [
+        15,
+        40
+       ]
+      }
+     }
+    },
+    "D2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "empate_total": {
+       "v": 0.04,
+       "faixa": [
+        0,
+        0.02
+       ]
+      },
+      "empate_max_forma": {
+       "v": 0.113,
+       "faixa": [
+        0,
+        0.02
+       ]
+      }
+     },
+     "chave": {
+      "empate_total": {
+       "v": 0.053,
+       "faixa": [
+        0,
+        0.02
+       ]
+      },
+      "empate_max_forma": {
+       "v": 0.113,
+       "faixa": [
+        0,
+        0.02
+       ]
+      }
+     }
+    },
+    "D3": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "p90_s": {
+       "v": 55.15,
+       "faixa": [
+        0,
+        180
+       ]
+      }
+     },
+     "chave": {
+      "p90_s": {
+       "v": 52.05,
+       "faixa": [
+        0,
+        180
+       ]
+      }
+     }
+    },
+    "A1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca_soma": {
+       "v": 0.471,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_ringue": {
+       "v": 0.086,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "crianca_castelo": {
+       "v": 0.17,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_soma": {
+       "v": 0.544,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_ringue": {
+       "v": 0.127,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_castelo": {
+       "v": 0.244,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_soma": {
+       "v": 0.581,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_ringue": {
+       "v": 0.144,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_castelo": {
+       "v": 0.388,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_soma": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_ringue": {
+       "v": 0.207,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_castelo": {
+       "v": 0.299,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      }
+     },
+     "chave": {
+      "crianca_soma": {
+       "v": 0.514,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_ringue": {
+       "v": 0.05,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "crianca_castelo": {
+       "v": 0.137,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_soma": {
+       "v": 0.534,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_ringue": {
+       "v": 0.083,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_castelo": {
+       "v": 0.208,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_soma": {
+       "v": 0.533,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_ringue": {
+       "v": 0.073,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_castelo": {
+       "v": 0.325,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_soma": {
+       "v": 0.583,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_ringue": {
+       "v": 0.123,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_castelo": {
+       "v": 0.305,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      }
+     }
+    },
+    "A2": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adolescente": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adulto": {
+       "v": 104,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "mega": {
+       "v": 100,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adolescente": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adulto": {
+       "v": 104,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "mega": {
+       "v": 100,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      }
+     }
+    },
+    "V1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca": {
+       "v": 0.305,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adolescente": {
+       "v": 0.398,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adulto": {
+       "v": 0.438,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "mega": {
+       "v": 0.39,
+       "faixa": [
+        0,
+        0.3
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.181,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adolescente": {
+       "v": 0.205,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adulto": {
+       "v": 0.192,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "mega": {
+       "v": 0.118,
+       "faixa": [
+        0,
+        0.3
+       ]
+      }
+     }
+    },
+    "V2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca": {
+       "v": 0.257,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adolescente": {
+       "v": 0.159,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adulto": {
+       "v": 0.031,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "mega": {
+       "v": 0.093,
+       "faixa": [
+        0,
+        0.15
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.164,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adolescente": {
+       "v": 0.033,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adulto": {
+       "v": 0.039,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "mega": {
+       "v": 0.007,
+       "faixa": [
+        0,
+        0.15
+       ]
+      }
+     }
+    },
+    "G1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "titulos": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "titulos": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     }
+    },
+    "G2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "recorde_mediano": {
+       "v": 1,
+       "faixa": [
+        3,
+        30
+       ]
+      }
+     },
+     "chave": {
+      "recorde_mediano": {
+       "v": 1,
+       "faixa": [
+        3,
+        30
+       ]
+      }
+     }
+    },
+    "G3": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "series": {
+       "v": 0.001,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "series": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     }
+    },
+    "G4": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "crianca": {
+       "v": 0.727,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adolescente": {
+       "v": 0.848,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adulto": {
+       "v": 0.927,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "mega": {
+       "v": 0.859,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.874,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adolescente": {
+       "v": 0.983,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adulto": {
+       "v": 0.985,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "mega": {
+       "v": 0.996,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      }
+     }
+    },
+    "S1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "crianca_min": {
+       "v": 0.459,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_max": {
+       "v": 0.555,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_min": {
+       "v": 0.473,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_max": {
+       "v": 0.554,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_min": {
+       "v": 0.481,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_max": {
+       "v": 0.528,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_min": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_max": {
+       "v": 0.508,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      }
+     },
+     "chave": {
+      "crianca_min": {
+       "v": 0.459,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_max": {
+       "v": 0.555,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_min": {
+       "v": 0.473,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_max": {
+       "v": 0.554,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_min": {
+       "v": 0.481,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_max": {
+       "v": 0.528,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_min": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_max": {
+       "v": 0.508,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      }
+     }
+    }
+   }
+  },
+  "n4_atr115": {
+   "base": "n4_base_v23",
+   "commit": "c16705f6e8b98ade04bf2205f7320c135c6cdbc5",
+   "metas": {
+    "P1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "sem": {
+       "v": 0.333,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "tip": {
+       "v": 0.662,
+       "faixa": [
+        0.59,
+        1
+       ]
+      }
+     }
+    },
+    "P2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "Gazimon_sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "Gazimon_tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      },
+      "Guardromon_sem": {
+       "v": 0.678,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Guardromon_tip": {
+       "v": 0.836,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Youkomon_sem": {
+       "v": 0.196,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Youkomon_tip": {
+       "v": 0.473,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Myotismon_sem": {
+       "v": 0.004,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "Myotismon_tip": {
+       "v": 0.248,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "MarinBullmon_sem": {
+       "v": 0.219,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "MarinBullmon_tip": {
+       "v": 0.782,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Piedmon_sem": {
+       "v": 0.543,
+       "faixa": [
+        0,
+        0.27
+       ]
+      },
+      "Piedmon_tip": {
+       "v": 0.706,
+       "faixa": [
+        0.73,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "Gazimon_sem": {
+       "v": 0.333,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "Gazimon_tip": {
+       "v": 0.662,
+       "faixa": [
+        0.59,
+        1
+       ]
+      },
+      "Guardromon_sem": {
+       "v": 0.642,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Guardromon_tip": {
+       "v": 0.891,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Youkomon_sem": {
+       "v": 0.204,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Youkomon_tip": {
+       "v": 0.771,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Myotismon_sem": {
+       "v": 0,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "Myotismon_tip": {
+       "v": 0.03,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "MarinBullmon_sem": {
+       "v": 0.219,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "MarinBullmon_tip": {
+       "v": 0.782,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Piedmon_sem": {
+       "v": 0.448,
+       "faixa": [
+        0,
+        0.27
+       ]
+      },
+      "Piedmon_tip": {
+       "v": 0.859,
+       "faixa": [
+        0.73,
+        1
+       ]
+      }
+     }
+    },
+    "P3": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "Tortomon_sem": {
+       "v": 0.422,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Tortomon_tip": {
+       "v": 0.906,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Devidramon_sem": {
+       "v": 0.608,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Devidramon_tip": {
+       "v": 0.765,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Puppetmon_sem": {
+       "v": 0.579,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Puppetmon_tip": {
+       "v": 0.677,
+       "faixa": [
+        0.78,
+        1
+       ]
+      },
+      "Machinedramon_sem": {
+       "v": 0.564,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Machinedramon_tip": {
+       "v": 0.727,
+       "faixa": [
+        0.78,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "Tortomon_sem": {
+       "v": 0.421,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Tortomon_tip": {
+       "v": 0.951,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Devidramon_sem": {
+       "v": 0.522,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Devidramon_tip": {
+       "v": 0.782,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Puppetmon_sem": {
+       "v": 0.542,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Puppetmon_tip": {
+       "v": 0.792,
+       "faixa": [
+        0.78,
+        1
+       ]
+      },
+      "Machinedramon_sem": {
+       "v": 0.505,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Machinedramon_tip": {
+       "v": 0.939,
+       "faixa": [
+        0.78,
+        1
+       ]
+      }
+     }
+    },
+    "P4": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "adolescente": {
+       "v": 0.83,
+       "faixa": [
+        0.8,
+        1
+       ]
+      },
+      "adulto": {
+       "v": 1,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "adolescente": {
+       "v": 0.99,
+       "faixa": [
+        0.8,
+        1
+       ]
+      },
+      "adulto": {
+       "v": 1,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     }
+    },
+    "P5": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "mega": {
+       "v": 0.24,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "mega": {
+       "v": 0.56,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     }
+    },
+    "T1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 0.832,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adolescente": {
+       "v": 0.906,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adulto": {
+       "v": 0.94,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "mega": {
+       "v": 0.948,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.832,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adolescente": {
+       "v": 0.906,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adulto": {
+       "v": 0.94,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "mega": {
+       "v": 0.948,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      }
+     }
+    },
+    "T2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "crianca_folego": {
+       "v": 0.471,
+       "faixa": [
+        0.6,
+        1
+       ]
+      },
+      "adulto_folego": {
+       "v": 0.456,
+       "faixa": [
+        0.6,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "crianca_folego": {
+       "v": 0.471,
+       "faixa": [
+        0.6,
+        1
+       ]
+      },
+      "adulto_folego": {
+       "v": 0.456,
+       "faixa": [
+        0.6,
+        1
+       ]
+      }
+     }
+    },
+    "T3": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "teto_crianca": {
+       "v": 0.743,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adolescente": {
+       "v": 0.834,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adulto": {
+       "v": 0.903,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_mega": {
+       "v": 0.85,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "rookie_teto_tipico": {
+       "v": 0.55,
+       "faixa": [
+        0,
+        0.7
+       ]
+      },
+      "degrau_crianca": {
+       "v": 0.153,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adolescente": {
+       "v": 0.176,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adulto": {
+       "v": 0.198,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_mega": {
+       "v": 0.157,
+       "faixa": [
+        0,
+        0.25
+       ]
+      }
+     },
+     "chave": {
+      "teto_crianca": {
+       "v": 0.795,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adolescente": {
+       "v": 0.917,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adulto": {
+       "v": 0.963,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_mega": {
+       "v": 0.96,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "rookie_teto_tipico": {
+       "v": 0.55,
+       "faixa": [
+        0,
+        0.7
+       ]
+      },
+      "degrau_crianca": {
+       "v": 0.171,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adolescente": {
+       "v": 0.182,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adulto": {
+       "v": 0.202,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_mega": {
+       "v": 0.19,
+       "faixa": [
+        0,
+        0.25
+       ]
+      }
+     }
+    },
+    "E1": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "crianca_tipico_contra_adolescente": {
+       "v": 0.194,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "crianca_teto_contra_adolescente": {
+       "v": 0.203,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "crianca_tipico_contra_adulto": {
+       "v": 0.007,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adolescente_tipico_contra_adulto": {
+       "v": 0.189,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adolescente_teto_contra_adulto": {
+       "v": 0.187,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "adolescente_tipico_contra_mega": {
+       "v": 0.023,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adulto_tipico_contra_mega": {
+       "v": 0.214,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adulto_teto_contra_mega": {
+       "v": 0.218,
+       "faixa": [
+        0,
+        0.5
+       ]
+      }
+     },
+     "chave": {
+      "crianca_tipico_contra_adolescente": {
+       "v": 0.032,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "crianca_teto_contra_adolescente": {
+       "v": 0.039,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "crianca_tipico_contra_adulto": {
+       "v": 0.001,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adolescente_tipico_contra_adulto": {
+       "v": 0.134,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adolescente_teto_contra_adulto": {
+       "v": 0.132,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "adolescente_tipico_contra_mega": {
+       "v": 0.001,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adulto_tipico_contra_mega": {
+       "v": 0.191,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adulto_teto_contra_mega": {
+       "v": 0.197,
+       "faixa": [
+        0,
+        0.5
+       ]
+      }
+     }
+    },
+    "D1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "crianca": {
+       "v": 22.45,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adolescente": {
+       "v": 24.85,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adulto": {
+       "v": 25.05,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "mega": {
+       "v": 24.35,
+       "faixa": [
+        15,
+        40
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 23.45,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adolescente": {
+       "v": 25.45,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adulto": {
+       "v": 25.45,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "mega": {
+       "v": 25.25,
+       "faixa": [
+        15,
+        40
+       ]
+      }
+     }
+    },
+    "D2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "empate_total": {
+       "v": 0.04,
+       "faixa": [
+        0,
+        0.02
+       ]
+      },
+      "empate_max_forma": {
+       "v": 0.113,
+       "faixa": [
+        0,
+        0.02
+       ]
+      }
+     },
+     "chave": {
+      "empate_total": {
+       "v": 0.041,
+       "faixa": [
+        0,
+        0.02
+       ]
+      },
+      "empate_max_forma": {
+       "v": 0.113,
+       "faixa": [
+        0,
+        0.02
+       ]
+      }
+     }
+    },
+    "D3": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "p90_s": {
+       "v": 55.15,
+       "faixa": [
+        0,
+        180
+       ]
+      }
+     },
+     "chave": {
+      "p90_s": {
+       "v": 56.05,
+       "faixa": [
+        0,
+        180
+       ]
+      }
+     }
+    },
+    "A1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "muda sem chegar",
+     "base": {
+      "crianca_soma": {
+       "v": 0.471,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_ringue": {
+       "v": 0.086,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "crianca_castelo": {
+       "v": 0.17,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_soma": {
+       "v": 0.544,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_ringue": {
+       "v": 0.127,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_castelo": {
+       "v": 0.244,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_soma": {
+       "v": 0.581,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_ringue": {
+       "v": 0.144,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_castelo": {
+       "v": 0.388,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_soma": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_ringue": {
+       "v": 0.207,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_castelo": {
+       "v": 0.299,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      }
+     },
+     "chave": {
+      "crianca_soma": {
+       "v": 0.493,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_ringue": {
+       "v": 0.048,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "crianca_castelo": {
+       "v": 0.15,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_soma": {
+       "v": 0.544,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_ringue": {
+       "v": 0.09,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_castelo": {
+       "v": 0.236,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_soma": {
+       "v": 0.568,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_ringue": {
+       "v": 0.09,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_castelo": {
+       "v": 0.375,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_soma": {
+       "v": 0.522,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_ringue": {
+       "v": 0.13,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_castelo": {
+       "v": 0.283,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      }
+     }
+    },
+    "A2": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adolescente": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adulto": {
+       "v": 104,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "mega": {
+       "v": 100,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adolescente": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adulto": {
+       "v": 104,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "mega": {
+       "v": 100,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      }
+     }
+    },
+    "V1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca": {
+       "v": 0.305,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adolescente": {
+       "v": 0.398,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adulto": {
+       "v": 0.438,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "mega": {
+       "v": 0.39,
+       "faixa": [
+        0,
+        0.3
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.259,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adolescente": {
+       "v": 0.367,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adulto": {
+       "v": 0.406,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "mega": {
+       "v": 0.375,
+       "faixa": [
+        0,
+        0.3
+       ]
+      }
+     }
+    },
+    "V2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca": {
+       "v": 0.257,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adolescente": {
+       "v": 0.159,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adulto": {
+       "v": 0.031,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "mega": {
+       "v": 0.093,
+       "faixa": [
+        0,
+        0.15
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.277,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adolescente": {
+       "v": 0.066,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adulto": {
+       "v": 0.033,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "mega": {
+       "v": 0.03,
+       "faixa": [
+        0,
+        0.15
+       ]
+      }
+     }
+    },
+    "G1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "titulos": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "titulos": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     }
+    },
+    "G2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "recorde_mediano": {
+       "v": 1,
+       "faixa": [
+        3,
+        30
+       ]
+      }
+     },
+     "chave": {
+      "recorde_mediano": {
+       "v": 1,
+       "faixa": [
+        3,
+        30
+       ]
+      }
+     }
+    },
+    "G3": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "series": {
+       "v": 0.001,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "series": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     }
+    },
+    "G4": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "crianca": {
+       "v": 0.727,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adolescente": {
+       "v": 0.848,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adulto": {
+       "v": 0.927,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "mega": {
+       "v": 0.859,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.796,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adolescente": {
+       "v": 0.936,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adulto": {
+       "v": 0.978,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "mega": {
+       "v": 0.97,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      }
+     }
+    },
+    "S1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "crianca_min": {
+       "v": 0.459,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_max": {
+       "v": 0.555,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_min": {
+       "v": 0.473,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_max": {
+       "v": 0.554,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_min": {
+       "v": 0.481,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_max": {
+       "v": 0.528,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_min": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_max": {
+       "v": 0.508,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      }
+     },
+     "chave": {
+      "crianca_min": {
+       "v": 0.459,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_max": {
+       "v": 0.555,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_min": {
+       "v": 0.473,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_max": {
+       "v": 0.554,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_min": {
+       "v": 0.481,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_max": {
+       "v": 0.528,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_min": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_max": {
+       "v": 0.508,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      }
+     }
+    }
+   }
+  },
+  "n4_atr125": {
+   "base": "n4_base_v23",
+   "commit": "c16705f6e8b98ade04bf2205f7320c135c6cdbc5",
+   "metas": {
+    "P1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "sem": {
+       "v": 0.343,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "tip": {
+       "v": 0.629,
+       "faixa": [
+        0.59,
+        1
+       ]
+      }
+     }
+    },
+    "P2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "Gazimon_sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "Gazimon_tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      },
+      "Guardromon_sem": {
+       "v": 0.678,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Guardromon_tip": {
+       "v": 0.836,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Youkomon_sem": {
+       "v": 0.196,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Youkomon_tip": {
+       "v": 0.473,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Myotismon_sem": {
+       "v": 0.004,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "Myotismon_tip": {
+       "v": 0.248,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "MarinBullmon_sem": {
+       "v": 0.219,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "MarinBullmon_tip": {
+       "v": 0.782,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Piedmon_sem": {
+       "v": 0.543,
+       "faixa": [
+        0,
+        0.27
+       ]
+      },
+      "Piedmon_tip": {
+       "v": 0.706,
+       "faixa": [
+        0.73,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "Gazimon_sem": {
+       "v": 0.343,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "Gazimon_tip": {
+       "v": 0.629,
+       "faixa": [
+        0.59,
+        1
+       ]
+      },
+      "Guardromon_sem": {
+       "v": 0.671,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Guardromon_tip": {
+       "v": 0.858,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Youkomon_sem": {
+       "v": 0.2,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Youkomon_tip": {
+       "v": 0.627,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Myotismon_sem": {
+       "v": 0,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "Myotismon_tip": {
+       "v": 0.079,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "MarinBullmon_sem": {
+       "v": 0.219,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "MarinBullmon_tip": {
+       "v": 0.782,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Piedmon_sem": {
+       "v": 0.502,
+       "faixa": [
+        0,
+        0.27
+       ]
+      },
+      "Piedmon_tip": {
+       "v": 0.795,
+       "faixa": [
+        0.73,
+        1
+       ]
+      }
+     }
+    },
+    "P3": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "Tortomon_sem": {
+       "v": 0.422,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Tortomon_tip": {
+       "v": 0.906,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Devidramon_sem": {
+       "v": 0.608,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Devidramon_tip": {
+       "v": 0.765,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Puppetmon_sem": {
+       "v": 0.579,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Puppetmon_tip": {
+       "v": 0.677,
+       "faixa": [
+        0.78,
+        1
+       ]
+      },
+      "Machinedramon_sem": {
+       "v": 0.564,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Machinedramon_tip": {
+       "v": 0.727,
+       "faixa": [
+        0.78,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "Tortomon_sem": {
+       "v": 0.423,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Tortomon_tip": {
+       "v": 0.93,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Devidramon_sem": {
+       "v": 0.596,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Devidramon_tip": {
+       "v": 0.769,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Puppetmon_sem": {
+       "v": 0.57,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Puppetmon_tip": {
+       "v": 0.722,
+       "faixa": [
+        0.78,
+        1
+       ]
+      },
+      "Machinedramon_sem": {
+       "v": 0.531,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Machinedramon_tip": {
+       "v": 0.856,
+       "faixa": [
+        0.78,
+        1
+       ]
+      }
+     }
+    },
+    "P4": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "adolescente": {
+       "v": 0.83,
+       "faixa": [
+        0.8,
+        1
+       ]
+      },
+      "adulto": {
+       "v": 1,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "adolescente": {
+       "v": 0.92,
+       "faixa": [
+        0.8,
+        1
+       ]
+      },
+      "adulto": {
+       "v": 1,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     }
+    },
+    "P5": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "mega": {
+       "v": 0.24,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "mega": {
+       "v": 0.42,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     }
+    },
+    "T1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 0.832,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adolescente": {
+       "v": 0.906,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adulto": {
+       "v": 0.94,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "mega": {
+       "v": 0.948,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.832,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adolescente": {
+       "v": 0.906,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adulto": {
+       "v": 0.94,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "mega": {
+       "v": 0.948,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      }
+     }
+    },
+    "T2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "crianca_folego": {
+       "v": 0.471,
+       "faixa": [
+        0.6,
+        1
+       ]
+      },
+      "adulto_folego": {
+       "v": 0.456,
+       "faixa": [
+        0.6,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "crianca_folego": {
+       "v": 0.471,
+       "faixa": [
+        0.6,
+        1
+       ]
+      },
+      "adulto_folego": {
+       "v": 0.456,
+       "faixa": [
+        0.6,
+        1
+       ]
+      }
+     }
+    },
+    "T3": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "teto_crianca": {
+       "v": 0.743,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adolescente": {
+       "v": 0.834,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adulto": {
+       "v": 0.903,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_mega": {
+       "v": 0.85,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "rookie_teto_tipico": {
+       "v": 0.55,
+       "faixa": [
+        0,
+        0.7
+       ]
+      },
+      "degrau_crianca": {
+       "v": 0.153,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adolescente": {
+       "v": 0.176,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adulto": {
+       "v": 0.198,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_mega": {
+       "v": 0.157,
+       "faixa": [
+        0,
+        0.25
+       ]
+      }
+     },
+     "chave": {
+      "teto_crianca": {
+       "v": 0.768,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adolescente": {
+       "v": 0.882,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adulto": {
+       "v": 0.944,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_mega": {
+       "v": 0.93,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "rookie_teto_tipico": {
+       "v": 0.55,
+       "faixa": [
+        0,
+        0.7
+       ]
+      },
+      "degrau_crianca": {
+       "v": 0.165,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adolescente": {
+       "v": 0.179,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adulto": {
+       "v": 0.199,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_mega": {
+       "v": 0.179,
+       "faixa": [
+        0,
+        0.25
+       ]
+      }
+     }
+    },
+    "E1": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "crianca_tipico_contra_adolescente": {
+       "v": 0.194,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "crianca_teto_contra_adolescente": {
+       "v": 0.203,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "crianca_tipico_contra_adulto": {
+       "v": 0.007,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adolescente_tipico_contra_adulto": {
+       "v": 0.189,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adolescente_teto_contra_adulto": {
+       "v": 0.187,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "adolescente_tipico_contra_mega": {
+       "v": 0.023,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adulto_tipico_contra_mega": {
+       "v": 0.214,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adulto_teto_contra_mega": {
+       "v": 0.218,
+       "faixa": [
+        0,
+        0.5
+       ]
+      }
+     },
+     "chave": {
+      "crianca_tipico_contra_adolescente": {
+       "v": 0.052,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "crianca_teto_contra_adolescente": {
+       "v": 0.073,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "crianca_tipico_contra_adulto": {
+       "v": 0.002,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adolescente_tipico_contra_adulto": {
+       "v": 0.156,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adolescente_teto_contra_adulto": {
+       "v": 0.152,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "adolescente_tipico_contra_mega": {
+       "v": 0.003,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adulto_tipico_contra_mega": {
+       "v": 0.2,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adulto_teto_contra_mega": {
+       "v": 0.204,
+       "faixa": [
+        0,
+        0.5
+       ]
+      }
+     }
+    },
+    "D1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "crianca": {
+       "v": 22.45,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adolescente": {
+       "v": 24.85,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adulto": {
+       "v": 25.05,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "mega": {
+       "v": 24.35,
+       "faixa": [
+        15,
+        40
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 22.95,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adolescente": {
+       "v": 25.15,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adulto": {
+       "v": 25.25,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "mega": {
+       "v": 25.05,
+       "faixa": [
+        15,
+        40
+       ]
+      }
+     }
+    },
+    "D2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "empate_total": {
+       "v": 0.04,
+       "faixa": [
+        0,
+        0.02
+       ]
+      },
+      "empate_max_forma": {
+       "v": 0.113,
+       "faixa": [
+        0,
+        0.02
+       ]
+      }
+     },
+     "chave": {
+      "empate_total": {
+       "v": 0.04,
+       "faixa": [
+        0,
+        0.02
+       ]
+      },
+      "empate_max_forma": {
+       "v": 0.113,
+       "faixa": [
+        0,
+        0.02
+       ]
+      }
+     }
+    },
+    "D3": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "p90_s": {
+       "v": 55.15,
+       "faixa": [
+        0,
+        180
+       ]
+      }
+     },
+     "chave": {
+      "p90_s": {
+       "v": 56.25,
+       "faixa": [
+        0,
+        180
+       ]
+      }
+     }
+    },
+    "A1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "muda sem chegar",
+     "base": {
+      "crianca_soma": {
+       "v": 0.471,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_ringue": {
+       "v": 0.086,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "crianca_castelo": {
+       "v": 0.17,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_soma": {
+       "v": 0.544,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_ringue": {
+       "v": 0.127,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_castelo": {
+       "v": 0.244,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_soma": {
+       "v": 0.581,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_ringue": {
+       "v": 0.144,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_castelo": {
+       "v": 0.388,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_soma": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_ringue": {
+       "v": 0.207,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_castelo": {
+       "v": 0.299,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      }
+     },
+     "chave": {
+      "crianca_soma": {
+       "v": 0.481,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_ringue": {
+       "v": 0.058,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "crianca_castelo": {
+       "v": 0.163,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_soma": {
+       "v": 0.544,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_ringue": {
+       "v": 0.101,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_castelo": {
+       "v": 0.243,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_soma": {
+       "v": 0.574,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_ringue": {
+       "v": 0.106,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_castelo": {
+       "v": 0.385,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_soma": {
+       "v": 0.497,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_ringue": {
+       "v": 0.154,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_castelo": {
+       "v": 0.293,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      }
+     }
+    },
+    "A2": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adolescente": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adulto": {
+       "v": 104,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "mega": {
+       "v": 100,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adolescente": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adulto": {
+       "v": 104,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "mega": {
+       "v": 100,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      }
+     }
+    },
+    "V1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca": {
+       "v": 0.305,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adolescente": {
+       "v": 0.398,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adulto": {
+       "v": 0.438,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "mega": {
+       "v": 0.39,
+       "faixa": [
+        0,
+        0.3
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.287,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adolescente": {
+       "v": 0.385,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adulto": {
+       "v": 0.427,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "mega": {
+       "v": 0.39,
+       "faixa": [
+        0,
+        0.3
+       ]
+      }
+     }
+    },
+    "V2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca": {
+       "v": 0.257,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adolescente": {
+       "v": 0.159,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adulto": {
+       "v": 0.031,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "mega": {
+       "v": 0.093,
+       "faixa": [
+        0,
+        0.15
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.285,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adolescente": {
+       "v": 0.112,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adulto": {
+       "v": 0.017,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "mega": {
+       "v": 0.052,
+       "faixa": [
+        0,
+        0.15
+       ]
+      }
+     }
+    },
+    "G1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "titulos": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "titulos": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     }
+    },
+    "G2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "recorde_mediano": {
+       "v": 1,
+       "faixa": [
+        3,
+        30
+       ]
+      }
+     },
+     "chave": {
+      "recorde_mediano": {
+       "v": 1,
+       "faixa": [
+        3,
+        30
+       ]
+      }
+     }
+    },
+    "G3": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "series": {
+       "v": 0.001,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "series": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     }
+    },
+    "G4": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "crianca": {
+       "v": 0.727,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adolescente": {
+       "v": 0.848,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adulto": {
+       "v": 0.927,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "mega": {
+       "v": 0.859,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.756,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adolescente": {
+       "v": 0.901,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adulto": {
+       "v": 0.971,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "mega": {
+       "v": 0.939,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      }
+     }
+    },
+    "S1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "crianca_min": {
+       "v": 0.459,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_max": {
+       "v": 0.555,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_min": {
+       "v": 0.473,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_max": {
+       "v": 0.554,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_min": {
+       "v": 0.481,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_max": {
+       "v": 0.528,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_min": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_max": {
+       "v": 0.508,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      }
+     },
+     "chave": {
+      "crianca_min": {
+       "v": 0.459,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_max": {
+       "v": 0.555,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_min": {
+       "v": 0.473,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_max": {
+       "v": 0.554,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_min": {
+       "v": 0.481,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_max": {
+       "v": 0.528,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_min": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_max": {
+       "v": 0.508,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      }
+     }
+    }
+   }
+  },
+  "n4_morto": {
+   "base": "n4_base_v23",
+   "commit": "c16705f6e8b98ade04bf2205f7320c135c6cdbc5",
+   "metas": {
+    "P1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "sem": {
+       "v": 0.357,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "tip": {
+       "v": 0.62,
+       "faixa": [
+        0.59,
+        1
+       ]
+      }
+     }
+    },
+    "P2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "muda sem chegar",
+     "base": {
+      "Gazimon_sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "Gazimon_tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      },
+      "Guardromon_sem": {
+       "v": 0.678,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Guardromon_tip": {
+       "v": 0.836,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Youkomon_sem": {
+       "v": 0.196,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Youkomon_tip": {
+       "v": 0.473,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Myotismon_sem": {
+       "v": 0.004,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "Myotismon_tip": {
+       "v": 0.248,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "MarinBullmon_sem": {
+       "v": 0.219,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "MarinBullmon_tip": {
+       "v": 0.782,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Piedmon_sem": {
+       "v": 0.543,
+       "faixa": [
+        0,
+        0.27
+       ]
+      },
+      "Piedmon_tip": {
+       "v": 0.706,
+       "faixa": [
+        0.73,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "Gazimon_sem": {
+       "v": 0.357,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "Gazimon_tip": {
+       "v": 0.62,
+       "faixa": [
+        0.59,
+        1
+       ]
+      },
+      "Guardromon_sem": {
+       "v": 0.683,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Guardromon_tip": {
+       "v": 0.838,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Youkomon_sem": {
+       "v": 0.213,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Youkomon_tip": {
+       "v": 0.478,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Myotismon_sem": {
+       "v": 0.004,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "Myotismon_tip": {
+       "v": 0.277,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "MarinBullmon_sem": {
+       "v": 0.219,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "MarinBullmon_tip": {
+       "v": 0.782,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Piedmon_sem": {
+       "v": 0.545,
+       "faixa": [
+        0,
+        0.27
+       ]
+      },
+      "Piedmon_tip": {
+       "v": 0.708,
+       "faixa": [
+        0.73,
+        1
+       ]
+      }
+     }
+    },
+    "P3": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "muda sem chegar",
+     "base": {
+      "Tortomon_sem": {
+       "v": 0.422,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Tortomon_tip": {
+       "v": 0.906,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Devidramon_sem": {
+       "v": 0.608,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Devidramon_tip": {
+       "v": 0.765,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Puppetmon_sem": {
+       "v": 0.579,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Puppetmon_tip": {
+       "v": 0.677,
+       "faixa": [
+        0.78,
+        1
+       ]
+      },
+      "Machinedramon_sem": {
+       "v": 0.564,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Machinedramon_tip": {
+       "v": 0.727,
+       "faixa": [
+        0.78,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "Tortomon_sem": {
+       "v": 0.46,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Tortomon_tip": {
+       "v": 0.911,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Devidramon_sem": {
+       "v": 0.608,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Devidramon_tip": {
+       "v": 0.765,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Puppetmon_sem": {
+       "v": 0.579,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Puppetmon_tip": {
+       "v": 0.677,
+       "faixa": [
+        0.78,
+        1
+       ]
+      },
+      "Machinedramon_sem": {
+       "v": 0.566,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Machinedramon_tip": {
+       "v": 0.728,
+       "faixa": [
+        0.78,
+        1
+       ]
+      }
+     }
+    },
+    "P4": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "adolescente": {
+       "v": 0.83,
+       "faixa": [
+        0.8,
+        1
+       ]
+      },
+      "adulto": {
+       "v": 1,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "adolescente": {
+       "v": 0.83,
+       "faixa": [
+        0.8,
+        1
+       ]
+      },
+      "adulto": {
+       "v": 1,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     }
+    },
+    "P5": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "mega": {
+       "v": 0.24,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "mega": {
+       "v": 0.25,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     }
+    },
+    "T1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 0.832,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adolescente": {
+       "v": 0.906,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adulto": {
+       "v": 0.94,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "mega": {
+       "v": 0.948,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.845,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adolescente": {
+       "v": 0.92,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adulto": {
+       "v": 0.949,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "mega": {
+       "v": 0.955,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      }
+     }
+    },
+    "T2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca_folego": {
+       "v": 0.471,
+       "faixa": [
+        0.6,
+        1
+       ]
+      },
+      "adulto_folego": {
+       "v": 0.456,
+       "faixa": [
+        0.6,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "crianca_folego": {
+       "v": 0.519,
+       "faixa": [
+        0.6,
+        1
+       ]
+      },
+      "adulto_folego": {
+       "v": 0.526,
+       "faixa": [
+        0.6,
+        1
+       ]
+      }
+     }
+    },
+    "T3": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "teto_crianca": {
+       "v": 0.743,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adolescente": {
+       "v": 0.834,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adulto": {
+       "v": 0.903,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_mega": {
+       "v": 0.85,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "rookie_teto_tipico": {
+       "v": 0.55,
+       "faixa": [
+        0,
+        0.7
+       ]
+      },
+      "degrau_crianca": {
+       "v": 0.153,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adolescente": {
+       "v": 0.176,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adulto": {
+       "v": 0.198,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_mega": {
+       "v": 0.157,
+       "faixa": [
+        0,
+        0.25
+       ]
+      }
+     },
+     "chave": {
+      "teto_crianca": {
+       "v": 0.744,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adolescente": {
+       "v": 0.835,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adulto": {
+       "v": 0.905,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_mega": {
+       "v": 0.85,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "rookie_teto_tipico": {
+       "v": 0.613,
+       "faixa": [
+        0,
+        0.7
+       ]
+      },
+      "degrau_crianca": {
+       "v": 0.153,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adolescente": {
+       "v": 0.175,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adulto": {
+       "v": 0.194,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_mega": {
+       "v": 0.16,
+       "faixa": [
+        0,
+        0.25
+       ]
+      }
+     }
+    },
+    "E1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "crianca_tipico_contra_adolescente": {
+       "v": 0.194,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "crianca_teto_contra_adolescente": {
+       "v": 0.203,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "crianca_tipico_contra_adulto": {
+       "v": 0.007,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adolescente_tipico_contra_adulto": {
+       "v": 0.189,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adolescente_teto_contra_adulto": {
+       "v": 0.187,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "adolescente_tipico_contra_mega": {
+       "v": 0.023,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adulto_tipico_contra_mega": {
+       "v": 0.214,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adulto_teto_contra_mega": {
+       "v": 0.218,
+       "faixa": [
+        0,
+        0.5
+       ]
+      }
+     },
+     "chave": {
+      "crianca_tipico_contra_adolescente": {
+       "v": 0.196,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "crianca_teto_contra_adolescente": {
+       "v": 0.205,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "crianca_tipico_contra_adulto": {
+       "v": 0.008,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adolescente_tipico_contra_adulto": {
+       "v": 0.192,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adolescente_teto_contra_adulto": {
+       "v": 0.19,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "adolescente_tipico_contra_mega": {
+       "v": 0.024,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adulto_tipico_contra_mega": {
+       "v": 0.218,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adulto_teto_contra_mega": {
+       "v": 0.222,
+       "faixa": [
+        0,
+        0.5
+       ]
+      }
+     }
+    },
+    "D1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 22.45,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adolescente": {
+       "v": 24.85,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adulto": {
+       "v": 25.05,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "mega": {
+       "v": 24.35,
+       "faixa": [
+        15,
+        40
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 22.45,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adolescente": {
+       "v": 24.85,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adulto": {
+       "v": 25.05,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "mega": {
+       "v": 24.35,
+       "faixa": [
+        15,
+        40
+       ]
+      }
+     }
+    },
+    "D2": {
+     "base_passa": false,
+     "passa": true,
+     "leitura": "passa a passar",
+     "base": {
+      "empate_total": {
+       "v": 0.04,
+       "faixa": [
+        0,
+        0.02
+       ]
+      },
+      "empate_max_forma": {
+       "v": 0.113,
+       "faixa": [
+        0,
+        0.02
+       ]
+      }
+     },
+     "chave": {
+      "empate_total": {
+       "v": 0,
+       "faixa": [
+        0,
+        0.02
+       ]
+      },
+      "empate_max_forma": {
+       "v": 0,
+       "faixa": [
+        0,
+        0.02
+       ]
+      }
+     }
+    },
+    "D3": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "p90_s": {
+       "v": 55.15,
+       "faixa": [
+        0,
+        180
+       ]
+      }
+     },
+     "chave": {
+      "p90_s": {
+       "v": 55.35,
+       "faixa": [
+        0,
+        180
+       ]
+      }
+     }
+    },
+    "A1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "crianca_soma": {
+       "v": 0.471,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_ringue": {
+       "v": 0.086,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "crianca_castelo": {
+       "v": 0.17,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_soma": {
+       "v": 0.544,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_ringue": {
+       "v": 0.127,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_castelo": {
+       "v": 0.244,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_soma": {
+       "v": 0.581,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_ringue": {
+       "v": 0.144,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_castelo": {
+       "v": 0.388,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_soma": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_ringue": {
+       "v": 0.207,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_castelo": {
+       "v": 0.299,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      }
+     },
+     "chave": {
+      "crianca_soma": {
+       "v": 0.471,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_ringue": {
+       "v": 0.086,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "crianca_castelo": {
+       "v": 0.17,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_soma": {
+       "v": 0.544,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_ringue": {
+       "v": 0.127,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_castelo": {
+       "v": 0.244,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_soma": {
+       "v": 0.581,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_ringue": {
+       "v": 0.144,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_castelo": {
+       "v": 0.388,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_soma": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_ringue": {
+       "v": 0.207,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_castelo": {
+       "v": 0.299,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      }
+     }
+    },
+    "A2": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adolescente": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adulto": {
+       "v": 104,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "mega": {
+       "v": 100,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adolescente": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adulto": {
+       "v": 104,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "mega": {
+       "v": 100,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      }
+     }
+    },
+    "V1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca": {
+       "v": 0.305,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adolescente": {
+       "v": 0.398,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adulto": {
+       "v": 0.438,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "mega": {
+       "v": 0.39,
+       "faixa": [
+        0,
+        0.3
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.284,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adolescente": {
+       "v": 0.413,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adulto": {
+       "v": 0.447,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "mega": {
+       "v": 0.409,
+       "faixa": [
+        0,
+        0.3
+       ]
+      }
+     }
+    },
+    "V2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 0.257,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adolescente": {
+       "v": 0.159,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adulto": {
+       "v": 0.031,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "mega": {
+       "v": 0.093,
+       "faixa": [
+        0,
+        0.15
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.254,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adolescente": {
+       "v": 0.158,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adulto": {
+       "v": 0.031,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "mega": {
+       "v": 0.094,
+       "faixa": [
+        0,
+        0.15
+       ]
+      }
+     }
+    },
+    "G1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "titulos": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "titulos": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     }
+    },
+    "G2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "recorde_mediano": {
+       "v": 1,
+       "faixa": [
+        3,
+        30
+       ]
+      }
+     },
+     "chave": {
+      "recorde_mediano": {
+       "v": 1,
+       "faixa": [
+        3,
+        30
+       ]
+      }
+     }
+    },
+    "G3": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "series": {
+       "v": 0.001,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "series": {
+       "v": 0.001,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     }
+    },
+    "G4": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 0.727,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adolescente": {
+       "v": 0.848,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adulto": {
+       "v": 0.927,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "mega": {
+       "v": 0.859,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.73,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adolescente": {
+       "v": 0.848,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adulto": {
+       "v": 0.928,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "mega": {
+       "v": 0.86,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      }
+     }
+    },
+    "S1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca_min": {
+       "v": 0.459,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_max": {
+       "v": 0.555,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_min": {
+       "v": 0.473,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_max": {
+       "v": 0.554,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_min": {
+       "v": 0.481,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_max": {
+       "v": 0.528,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_min": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_max": {
+       "v": 0.508,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      }
+     },
+     "chave": {
+      "crianca_min": {
+       "v": 0.483,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_max": {
+       "v": 0.554,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_min": {
+       "v": 0.49,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_max": {
+       "v": 0.546,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_min": {
+       "v": 0.472,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_max": {
+       "v": 0.509,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_min": {
+       "v": 0.48,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_max": {
+       "v": 0.517,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      }
+     }
+    }
+   }
+  },
+  "n4_pulo": {
+   "base": "n4_base_v23",
+   "commit": "c16705f6e8b98ade04bf2205f7320c135c6cdbc5",
+   "metas": {
+    "P1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "sem": {
+       "v": 0.356,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "tip": {
+       "v": 0.597,
+       "faixa": [
+        0.59,
+        1
+       ]
+      }
+     }
+    },
+    "P2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "Gazimon_sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "Gazimon_tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      },
+      "Guardromon_sem": {
+       "v": 0.678,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Guardromon_tip": {
+       "v": 0.836,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Youkomon_sem": {
+       "v": 0.196,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Youkomon_tip": {
+       "v": 0.473,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Myotismon_sem": {
+       "v": 0.004,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "Myotismon_tip": {
+       "v": 0.248,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "MarinBullmon_sem": {
+       "v": 0.219,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "MarinBullmon_tip": {
+       "v": 0.782,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Piedmon_sem": {
+       "v": 0.543,
+       "faixa": [
+        0,
+        0.27
+       ]
+      },
+      "Piedmon_tip": {
+       "v": 0.706,
+       "faixa": [
+        0.73,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "Gazimon_sem": {
+       "v": 0.356,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "Gazimon_tip": {
+       "v": 0.597,
+       "faixa": [
+        0.59,
+        1
+       ]
+      },
+      "Guardromon_sem": {
+       "v": 0.68,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Guardromon_tip": {
+       "v": 0.839,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Youkomon_sem": {
+       "v": 0.195,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Youkomon_tip": {
+       "v": 0.46,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Myotismon_sem": {
+       "v": 0.005,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "Myotismon_tip": {
+       "v": 0.3,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "MarinBullmon_sem": {
+       "v": 0.222,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "MarinBullmon_tip": {
+       "v": 0.807,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Piedmon_sem": {
+       "v": 0.55,
+       "faixa": [
+        0,
+        0.27
+       ]
+      },
+      "Piedmon_tip": {
+       "v": 0.694,
+       "faixa": [
+        0.73,
+        1
+       ]
+      }
+     }
+    },
+    "P3": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "Tortomon_sem": {
+       "v": 0.422,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Tortomon_tip": {
+       "v": 0.906,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Devidramon_sem": {
+       "v": 0.608,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Devidramon_tip": {
+       "v": 0.765,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Puppetmon_sem": {
+       "v": 0.579,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Puppetmon_tip": {
+       "v": 0.677,
+       "faixa": [
+        0.78,
+        1
+       ]
+      },
+      "Machinedramon_sem": {
+       "v": 0.564,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Machinedramon_tip": {
+       "v": 0.727,
+       "faixa": [
+        0.78,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "Tortomon_sem": {
+       "v": 0.418,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Tortomon_tip": {
+       "v": 0.894,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Devidramon_sem": {
+       "v": 0.611,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Devidramon_tip": {
+       "v": 0.775,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Puppetmon_sem": {
+       "v": 0.58,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Puppetmon_tip": {
+       "v": 0.683,
+       "faixa": [
+        0.78,
+        1
+       ]
+      },
+      "Machinedramon_sem": {
+       "v": 0.563,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Machinedramon_tip": {
+       "v": 0.723,
+       "faixa": [
+        0.78,
+        1
+       ]
+      }
+     }
+    },
+    "P4": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "adolescente": {
+       "v": 0.83,
+       "faixa": [
+        0.8,
+        1
+       ]
+      },
+      "adulto": {
+       "v": 1,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "adolescente": {
+       "v": 0.77,
+       "faixa": [
+        0.8,
+        1
+       ]
+      },
+      "adulto": {
+       "v": 0.97,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     }
+    },
+    "P5": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "muda sem chegar",
+     "base": {
+      "mega": {
+       "v": 0.24,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "mega": {
+       "v": 0.14,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     }
+    },
+    "T1": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "crianca": {
+       "v": 0.832,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adolescente": {
+       "v": 0.906,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adulto": {
+       "v": 0.94,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "mega": {
+       "v": 0.948,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.856,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adolescente": {
+       "v": 0.957,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adulto": {
+       "v": 0.979,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "mega": {
+       "v": 0.985,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      }
+     }
+    },
+    "T2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "crianca_folego": {
+       "v": 0.471,
+       "faixa": [
+        0.6,
+        1
+       ]
+      },
+      "adulto_folego": {
+       "v": 0.456,
+       "faixa": [
+        0.6,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "crianca_folego": {
+       "v": 0.469,
+       "faixa": [
+        0.6,
+        1
+       ]
+      },
+      "adulto_folego": {
+       "v": 0.463,
+       "faixa": [
+        0.6,
+        1
+       ]
+      }
+     }
+    },
+    "T3": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "teto_crianca": {
+       "v": 0.743,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adolescente": {
+       "v": 0.834,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adulto": {
+       "v": 0.903,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_mega": {
+       "v": 0.85,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "rookie_teto_tipico": {
+       "v": 0.55,
+       "faixa": [
+        0,
+        0.7
+       ]
+      },
+      "degrau_crianca": {
+       "v": 0.153,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adolescente": {
+       "v": 0.176,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adulto": {
+       "v": 0.198,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_mega": {
+       "v": 0.157,
+       "faixa": [
+        0,
+        0.25
+       ]
+      }
+     },
+     "chave": {
+      "teto_crianca": {
+       "v": 0.736,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adolescente": {
+       "v": 0.82,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adulto": {
+       "v": 0.888,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_mega": {
+       "v": 0.843,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "rookie_teto_tipico": {
+       "v": 0.545,
+       "faixa": [
+        0,
+        0.7
+       ]
+      },
+      "degrau_crianca": {
+       "v": 0.142,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adolescente": {
+       "v": 0.172,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adulto": {
+       "v": 0.192,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_mega": {
+       "v": 0.152,
+       "faixa": [
+        0,
+        0.25
+       ]
+      }
+     }
+    },
+    "E1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "crianca_tipico_contra_adolescente": {
+       "v": 0.194,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "crianca_teto_contra_adolescente": {
+       "v": 0.203,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "crianca_tipico_contra_adulto": {
+       "v": 0.007,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adolescente_tipico_contra_adulto": {
+       "v": 0.189,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adolescente_teto_contra_adulto": {
+       "v": 0.187,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "adolescente_tipico_contra_mega": {
+       "v": 0.023,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adulto_tipico_contra_mega": {
+       "v": 0.214,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adulto_teto_contra_mega": {
+       "v": 0.218,
+       "faixa": [
+        0,
+        0.5
+       ]
+      }
+     },
+     "chave": {
+      "crianca_tipico_contra_adolescente": {
+       "v": 0.19,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "crianca_teto_contra_adolescente": {
+       "v": 0.194,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "crianca_tipico_contra_adulto": {
+       "v": 0.003,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adolescente_tipico_contra_adulto": {
+       "v": 0.15,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adolescente_teto_contra_adulto": {
+       "v": 0.15,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "adolescente_tipico_contra_mega": {
+       "v": 0.017,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adulto_tipico_contra_mega": {
+       "v": 0.153,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adulto_teto_contra_mega": {
+       "v": 0.155,
+       "faixa": [
+        0,
+        0.5
+       ]
+      }
+     }
+    },
+    "D1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 22.45,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adolescente": {
+       "v": 24.85,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adulto": {
+       "v": 25.05,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "mega": {
+       "v": 24.35,
+       "faixa": [
+        15,
+        40
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 22.45,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adolescente": {
+       "v": 24.95,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adulto": {
+       "v": 25.15,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "mega": {
+       "v": 24.45,
+       "faixa": [
+        15,
+        40
+       ]
+      }
+     }
+    },
+    "D2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "empate_total": {
+       "v": 0.04,
+       "faixa": [
+        0,
+        0.02
+       ]
+      },
+      "empate_max_forma": {
+       "v": 0.113,
+       "faixa": [
+        0,
+        0.02
+       ]
+      }
+     },
+     "chave": {
+      "empate_total": {
+       "v": 0.039,
+       "faixa": [
+        0,
+        0.02
+       ]
+      },
+      "empate_max_forma": {
+       "v": 0.112,
+       "faixa": [
+        0,
+        0.02
+       ]
+      }
+     }
+    },
+    "D3": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "p90_s": {
+       "v": 55.15,
+       "faixa": [
+        0,
+        180
+       ]
+      }
+     },
+     "chave": {
+      "p90_s": {
+       "v": 51.45,
+       "faixa": [
+        0,
+        180
+       ]
+      }
+     }
+    },
+    "A1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "crianca_soma": {
+       "v": 0.471,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_ringue": {
+       "v": 0.086,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "crianca_castelo": {
+       "v": 0.17,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_soma": {
+       "v": 0.544,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_ringue": {
+       "v": 0.127,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_castelo": {
+       "v": 0.244,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_soma": {
+       "v": 0.581,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_ringue": {
+       "v": 0.144,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_castelo": {
+       "v": 0.388,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_soma": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_ringue": {
+       "v": 0.207,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_castelo": {
+       "v": 0.299,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      }
+     },
+     "chave": {
+      "crianca_soma": {
+       "v": 0.472,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_ringue": {
+       "v": 0.085,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "crianca_castelo": {
+       "v": 0.167,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_soma": {
+       "v": 0.545,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_ringue": {
+       "v": 0.124,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_castelo": {
+       "v": 0.239,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_soma": {
+       "v": 0.582,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_ringue": {
+       "v": 0.136,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_castelo": {
+       "v": 0.388,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_soma": {
+       "v": 0.481,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_ringue": {
+       "v": 0.191,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_castelo": {
+       "v": 0.299,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      }
+     }
+    },
+    "A2": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adolescente": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adulto": {
+       "v": 104,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "mega": {
+       "v": 100,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adolescente": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adulto": {
+       "v": 104,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "mega": {
+       "v": 100,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      }
+     }
+    },
+    "V1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 0.305,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adolescente": {
+       "v": 0.398,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adulto": {
+       "v": 0.438,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "mega": {
+       "v": 0.39,
+       "faixa": [
+        0,
+        0.3
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.304,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adolescente": {
+       "v": 0.402,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adulto": {
+       "v": 0.441,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "mega": {
+       "v": 0.393,
+       "faixa": [
+        0,
+        0.3
+       ]
+      }
+     }
+    },
+    "V2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 0.257,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adolescente": {
+       "v": 0.159,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adulto": {
+       "v": 0.031,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "mega": {
+       "v": 0.093,
+       "faixa": [
+        0,
+        0.15
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.242,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adolescente": {
+       "v": 0.154,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adulto": {
+       "v": 0.04,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "mega": {
+       "v": 0.095,
+       "faixa": [
+        0,
+        0.15
+       ]
+      }
+     }
+    },
+    "G1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "titulos": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "titulos": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     }
+    },
+    "G2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "muda sem chegar",
+     "base": {
+      "recorde_mediano": {
+       "v": 1,
+       "faixa": [
+        3,
+        30
+       ]
+      }
+     },
+     "chave": {
+      "recorde_mediano": {
+       "v": 2,
+       "faixa": [
+        3,
+        30
+       ]
+      }
+     }
+    },
+    "G3": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "series": {
+       "v": 0.001,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "series": {
+       "v": 0.001,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     }
+    },
+    "G4": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "crianca": {
+       "v": 0.727,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adolescente": {
+       "v": 0.848,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adulto": {
+       "v": 0.927,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "mega": {
+       "v": 0.859,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.721,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adolescente": {
+       "v": 0.828,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adulto": {
+       "v": 0.907,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "mega": {
+       "v": 0.855,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      }
+     }
+    },
+    "S1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca_min": {
+       "v": 0.459,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_max": {
+       "v": 0.555,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_min": {
+       "v": 0.473,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_max": {
+       "v": 0.554,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_min": {
+       "v": 0.481,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_max": {
+       "v": 0.528,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_min": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_max": {
+       "v": 0.508,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      }
+     },
+     "chave": {
+      "crianca_min": {
+       "v": 0.453,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_max": {
+       "v": 0.55,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_min": {
+       "v": 0.469,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_max": {
+       "v": 0.552,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_min": {
+       "v": 0.477,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_max": {
+       "v": 0.527,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_min": {
+       "v": 0.476,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_max": {
+       "v": 0.513,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      }
+     }
+    }
+   }
+  },
+  "n4_borda": {
+   "base": "n4_base_v23",
+   "commit": "c16705f6e8b98ade04bf2205f7320c135c6cdbc5",
+   "metas": {
+    "P1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      }
+     }
+    },
+    "P2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "Gazimon_sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "Gazimon_tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      },
+      "Guardromon_sem": {
+       "v": 0.678,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Guardromon_tip": {
+       "v": 0.836,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Youkomon_sem": {
+       "v": 0.196,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Youkomon_tip": {
+       "v": 0.473,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Myotismon_sem": {
+       "v": 0.004,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "Myotismon_tip": {
+       "v": 0.248,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "MarinBullmon_sem": {
+       "v": 0.219,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "MarinBullmon_tip": {
+       "v": 0.782,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Piedmon_sem": {
+       "v": 0.543,
+       "faixa": [
+        0,
+        0.27
+       ]
+      },
+      "Piedmon_tip": {
+       "v": 0.706,
+       "faixa": [
+        0.73,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "Gazimon_sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "Gazimon_tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      },
+      "Guardromon_sem": {
+       "v": 0.678,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Guardromon_tip": {
+       "v": 0.836,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Youkomon_sem": {
+       "v": 0.196,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Youkomon_tip": {
+       "v": 0.473,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Myotismon_sem": {
+       "v": 0.004,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "Myotismon_tip": {
+       "v": 0.248,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "MarinBullmon_sem": {
+       "v": 0.219,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "MarinBullmon_tip": {
+       "v": 0.782,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Piedmon_sem": {
+       "v": 0.543,
+       "faixa": [
+        0,
+        0.27
+       ]
+      },
+      "Piedmon_tip": {
+       "v": 0.706,
+       "faixa": [
+        0.73,
+        1
+       ]
+      }
+     }
+    },
+    "P3": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "Tortomon_sem": {
+       "v": 0.422,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Tortomon_tip": {
+       "v": 0.906,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Devidramon_sem": {
+       "v": 0.608,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Devidramon_tip": {
+       "v": 0.765,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Puppetmon_sem": {
+       "v": 0.579,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Puppetmon_tip": {
+       "v": 0.677,
+       "faixa": [
+        0.78,
+        1
+       ]
+      },
+      "Machinedramon_sem": {
+       "v": 0.564,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Machinedramon_tip": {
+       "v": 0.727,
+       "faixa": [
+        0.78,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "Tortomon_sem": {
+       "v": 0.422,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Tortomon_tip": {
+       "v": 0.906,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Devidramon_sem": {
+       "v": 0.608,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Devidramon_tip": {
+       "v": 0.765,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Puppetmon_sem": {
+       "v": 0.579,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Puppetmon_tip": {
+       "v": 0.677,
+       "faixa": [
+        0.78,
+        1
+       ]
+      },
+      "Machinedramon_sem": {
+       "v": 0.564,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Machinedramon_tip": {
+       "v": 0.727,
+       "faixa": [
+        0.78,
+        1
+       ]
+      }
+     }
+    },
+    "P4": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "adolescente": {
+       "v": 0.83,
+       "faixa": [
+        0.8,
+        1
+       ]
+      },
+      "adulto": {
+       "v": 1,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "adolescente": {
+       "v": 0.83,
+       "faixa": [
+        0.8,
+        1
+       ]
+      },
+      "adulto": {
+       "v": 1,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     }
+    },
+    "P5": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "mega": {
+       "v": 0.24,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "mega": {
+       "v": 0.24,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     }
+    },
+    "T1": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "crianca": {
+       "v": 0.832,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adolescente": {
+       "v": 0.906,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adulto": {
+       "v": 0.94,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "mega": {
+       "v": 0.948,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.864,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adolescente": {
+       "v": 0.976,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adulto": {
+       "v": 0.983,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "mega": {
+       "v": 0.991,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      }
+     }
+    },
+    "T2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "crianca_folego": {
+       "v": 0.471,
+       "faixa": [
+        0.6,
+        1
+       ]
+      },
+      "adulto_folego": {
+       "v": 0.456,
+       "faixa": [
+        0.6,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "crianca_folego": {
+       "v": 0.478,
+       "faixa": [
+        0.6,
+        1
+       ]
+      },
+      "adulto_folego": {
+       "v": 0.463,
+       "faixa": [
+        0.6,
+        1
+       ]
+      }
+     }
+    },
+    "T3": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "teto_crianca": {
+       "v": 0.743,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adolescente": {
+       "v": 0.834,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adulto": {
+       "v": 0.903,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_mega": {
+       "v": 0.85,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "rookie_teto_tipico": {
+       "v": 0.55,
+       "faixa": [
+        0,
+        0.7
+       ]
+      },
+      "degrau_crianca": {
+       "v": 0.153,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adolescente": {
+       "v": 0.176,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adulto": {
+       "v": 0.198,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_mega": {
+       "v": 0.157,
+       "faixa": [
+        0,
+        0.25
+       ]
+      }
+     },
+     "chave": {
+      "teto_crianca": {
+       "v": 0.743,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adolescente": {
+       "v": 0.834,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adulto": {
+       "v": 0.903,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_mega": {
+       "v": 0.85,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "rookie_teto_tipico": {
+       "v": 0.552,
+       "faixa": [
+        0,
+        0.7
+       ]
+      },
+      "degrau_crianca": {
+       "v": 0.153,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adolescente": {
+       "v": 0.176,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adulto": {
+       "v": 0.198,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_mega": {
+       "v": 0.157,
+       "faixa": [
+        0,
+        0.25
+       ]
+      }
+     }
+    },
+    "E1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "crianca_tipico_contra_adolescente": {
+       "v": 0.194,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "crianca_teto_contra_adolescente": {
+       "v": 0.203,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "crianca_tipico_contra_adulto": {
+       "v": 0.007,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adolescente_tipico_contra_adulto": {
+       "v": 0.189,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adolescente_teto_contra_adulto": {
+       "v": 0.187,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "adolescente_tipico_contra_mega": {
+       "v": 0.023,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adulto_tipico_contra_mega": {
+       "v": 0.214,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adulto_teto_contra_mega": {
+       "v": 0.218,
+       "faixa": [
+        0,
+        0.5
+       ]
+      }
+     },
+     "chave": {
+      "crianca_tipico_contra_adolescente": {
+       "v": 0.194,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "crianca_teto_contra_adolescente": {
+       "v": 0.203,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "crianca_tipico_contra_adulto": {
+       "v": 0.007,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adolescente_tipico_contra_adulto": {
+       "v": 0.189,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adolescente_teto_contra_adulto": {
+       "v": 0.187,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "adolescente_tipico_contra_mega": {
+       "v": 0.023,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adulto_tipico_contra_mega": {
+       "v": 0.214,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adulto_teto_contra_mega": {
+       "v": 0.218,
+       "faixa": [
+        0,
+        0.5
+       ]
+      }
+     }
+    },
+    "D1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 22.45,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adolescente": {
+       "v": 24.85,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adulto": {
+       "v": 25.05,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "mega": {
+       "v": 24.35,
+       "faixa": [
+        15,
+        40
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 22.45,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adolescente": {
+       "v": 24.85,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adulto": {
+       "v": 24.95,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "mega": {
+       "v": 24.15,
+       "faixa": [
+        15,
+        40
+       ]
+      }
+     }
+    },
+    "D2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "empate_total": {
+       "v": 0.04,
+       "faixa": [
+        0,
+        0.02
+       ]
+      },
+      "empate_max_forma": {
+       "v": 0.113,
+       "faixa": [
+        0,
+        0.02
+       ]
+      }
+     },
+     "chave": {
+      "empate_total": {
+       "v": 0.04,
+       "faixa": [
+        0,
+        0.02
+       ]
+      },
+      "empate_max_forma": {
+       "v": 0.113,
+       "faixa": [
+        0,
+        0.02
+       ]
+      }
+     }
+    },
+    "D3": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "p90_s": {
+       "v": 55.15,
+       "faixa": [
+        0,
+        180
+       ]
+      }
+     },
+     "chave": {
+      "p90_s": {
+       "v": 55.15,
+       "faixa": [
+        0,
+        180
+       ]
+      }
+     }
+    },
+    "A1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca_soma": {
+       "v": 0.471,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_ringue": {
+       "v": 0.086,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "crianca_castelo": {
+       "v": 0.17,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_soma": {
+       "v": 0.544,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_ringue": {
+       "v": 0.127,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_castelo": {
+       "v": 0.244,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_soma": {
+       "v": 0.581,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_ringue": {
+       "v": 0.144,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_castelo": {
+       "v": 0.388,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_soma": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_ringue": {
+       "v": 0.207,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_castelo": {
+       "v": 0.299,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      }
+     },
+     "chave": {
+      "crianca_soma": {
+       "v": 0.478,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_ringue": {
+       "v": 0.143,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "crianca_castelo": {
+       "v": 0.17,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_soma": {
+       "v": 0.548,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_ringue": {
+       "v": 0.155,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_castelo": {
+       "v": 0.244,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_soma": {
+       "v": 0.59,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_ringue": {
+       "v": 0.217,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_castelo": {
+       "v": 0.388,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_soma": {
+       "v": 0.48,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_ringue": {
+       "v": 0.213,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_castelo": {
+       "v": 0.299,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      }
+     }
+    },
+    "A2": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "crianca": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adolescente": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adulto": {
+       "v": 104,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "mega": {
+       "v": 100,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 100,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adolescente": {
+       "v": 104,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adulto": {
+       "v": 100,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "mega": {
+       "v": 96,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      }
+     }
+    },
+    "V1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 0.305,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adolescente": {
+       "v": 0.398,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adulto": {
+       "v": 0.438,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "mega": {
+       "v": 0.39,
+       "faixa": [
+        0,
+        0.3
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.303,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adolescente": {
+       "v": 0.399,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adulto": {
+       "v": 0.453,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "mega": {
+       "v": 0.403,
+       "faixa": [
+        0,
+        0.3
+       ]
+      }
+     }
+    },
+    "V2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 0.257,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adolescente": {
+       "v": 0.159,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adulto": {
+       "v": 0.031,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "mega": {
+       "v": 0.093,
+       "faixa": [
+        0,
+        0.15
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.257,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adolescente": {
+       "v": 0.159,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adulto": {
+       "v": 0.031,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "mega": {
+       "v": 0.093,
+       "faixa": [
+        0,
+        0.15
+       ]
+      }
+     }
+    },
+    "G1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "titulos": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "titulos": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     }
+    },
+    "G2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "muda sem chegar",
+     "base": {
+      "recorde_mediano": {
+       "v": 1,
+       "faixa": [
+        3,
+        30
+       ]
+      }
+     },
+     "chave": {
+      "recorde_mediano": {
+       "v": 2,
+       "faixa": [
+        3,
+        30
+       ]
+      }
+     }
+    },
+    "G3": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "series": {
+       "v": 0.001,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "series": {
+       "v": 0.001,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     }
+    },
+    "G4": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "nao age",
+     "base": {
+      "crianca": {
+       "v": 0.727,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adolescente": {
+       "v": 0.848,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adulto": {
+       "v": 0.927,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "mega": {
+       "v": 0.859,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.727,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adolescente": {
+       "v": 0.848,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adulto": {
+       "v": 0.927,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "mega": {
+       "v": 0.859,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      }
+     }
+    },
+    "S1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "crianca_min": {
+       "v": 0.459,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_max": {
+       "v": 0.555,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_min": {
+       "v": 0.473,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_max": {
+       "v": 0.554,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_min": {
+       "v": 0.481,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_max": {
+       "v": 0.528,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_min": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_max": {
+       "v": 0.508,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      }
+     },
+     "chave": {
+      "crianca_min": {
+       "v": 0.459,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_max": {
+       "v": 0.555,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_min": {
+       "v": 0.473,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_max": {
+       "v": 0.552,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_min": {
+       "v": 0.481,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_max": {
+       "v": 0.528,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_min": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_max": {
+       "v": 0.508,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      }
+     }
+    }
+   }
+  },
+  "n4_juntas_v23": {
+   "base": "n4_base_v23",
+   "commit": "c16705f6e8b98ade04bf2205f7320c135c6cdbc5",
+   "metas": {
+    "P1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "sem": {
+       "v": 0.338,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "tip": {
+       "v": 0.655,
+       "faixa": [
+        0.59,
+        1
+       ]
+      }
+     }
+    },
+    "P2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "Gazimon_sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "Gazimon_tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      },
+      "Guardromon_sem": {
+       "v": 0.678,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Guardromon_tip": {
+       "v": 0.836,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Youkomon_sem": {
+       "v": 0.196,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Youkomon_tip": {
+       "v": 0.473,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Myotismon_sem": {
+       "v": 0.004,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "Myotismon_tip": {
+       "v": 0.248,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "MarinBullmon_sem": {
+       "v": 0.219,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "MarinBullmon_tip": {
+       "v": 0.782,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Piedmon_sem": {
+       "v": 0.543,
+       "faixa": [
+        0,
+        0.27
+       ]
+      },
+      "Piedmon_tip": {
+       "v": 0.706,
+       "faixa": [
+        0.73,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "Gazimon_sem": {
+       "v": 0.338,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "Gazimon_tip": {
+       "v": 0.655,
+       "faixa": [
+        0.59,
+        1
+       ]
+      },
+      "Guardromon_sem": {
+       "v": 0.658,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Guardromon_tip": {
+       "v": 0.905,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Youkomon_sem": {
+       "v": 0.226,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Youkomon_tip": {
+       "v": 0.781,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Myotismon_sem": {
+       "v": 0,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "Myotismon_tip": {
+       "v": 0.028,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "MarinBullmon_sem": {
+       "v": 0.222,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "MarinBullmon_tip": {
+       "v": 0.807,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Piedmon_sem": {
+       "v": 0.48,
+       "faixa": [
+        0,
+        0.27
+       ]
+      },
+      "Piedmon_tip": {
+       "v": 0.834,
+       "faixa": [
+        0.73,
+        1
+       ]
+      }
+     }
+    },
+    "P3": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "Tortomon_sem": {
+       "v": 0.422,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Tortomon_tip": {
+       "v": 0.906,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Devidramon_sem": {
+       "v": 0.608,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Devidramon_tip": {
+       "v": 0.765,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Puppetmon_sem": {
+       "v": 0.579,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Puppetmon_tip": {
+       "v": 0.677,
+       "faixa": [
+        0.78,
+        1
+       ]
+      },
+      "Machinedramon_sem": {
+       "v": 0.564,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Machinedramon_tip": {
+       "v": 0.727,
+       "faixa": [
+        0.78,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "Tortomon_sem": {
+       "v": 0.457,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Tortomon_tip": {
+       "v": 0.951,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Devidramon_sem": {
+       "v": 0.534,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Devidramon_tip": {
+       "v": 0.798,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Puppetmon_sem": {
+       "v": 0.554,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Puppetmon_tip": {
+       "v": 0.801,
+       "faixa": [
+        0.78,
+        1
+       ]
+      },
+      "Machinedramon_sem": {
+       "v": 0.507,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Machinedramon_tip": {
+       "v": 0.913,
+       "faixa": [
+        0.78,
+        1
+       ]
+      }
+     }
+    },
+    "P4": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "adolescente": {
+       "v": 0.83,
+       "faixa": [
+        0.8,
+        1
+       ]
+      },
+      "adulto": {
+       "v": 1,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "adolescente": {
+       "v": 0.91,
+       "faixa": [
+        0.8,
+        1
+       ]
+      },
+      "adulto": {
+       "v": 1,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     }
+    },
+    "P5": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "mega": {
+       "v": 0.24,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "mega": {
+       "v": 0.46,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     }
+    },
+    "T1": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "crianca": {
+       "v": 0.832,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adolescente": {
+       "v": 0.906,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adulto": {
+       "v": 0.94,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "mega": {
+       "v": 0.948,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.865,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adolescente": {
+       "v": 0.972,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adulto": {
+       "v": 0.984,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "mega": {
+       "v": 0.992,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      }
+     }
+    },
+    "T2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca_folego": {
+       "v": 0.471,
+       "faixa": [
+        0.6,
+        1
+       ]
+      },
+      "adulto_folego": {
+       "v": 0.456,
+       "faixa": [
+        0.6,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "crianca_folego": {
+       "v": 0.517,
+       "faixa": [
+        0.6,
+        1
+       ]
+      },
+      "adulto_folego": {
+       "v": 0.532,
+       "faixa": [
+        0.6,
+        1
+       ]
+      }
+     }
+    },
+    "T3": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "teto_crianca": {
+       "v": 0.743,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adolescente": {
+       "v": 0.834,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adulto": {
+       "v": 0.903,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_mega": {
+       "v": 0.85,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "rookie_teto_tipico": {
+       "v": 0.55,
+       "faixa": [
+        0,
+        0.7
+       ]
+      },
+      "degrau_crianca": {
+       "v": 0.153,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adolescente": {
+       "v": 0.176,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adulto": {
+       "v": 0.198,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_mega": {
+       "v": 0.157,
+       "faixa": [
+        0,
+        0.25
+       ]
+      }
+     },
+     "chave": {
+      "teto_crianca": {
+       "v": 0.779,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adolescente": {
+       "v": 0.904,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adulto": {
+       "v": 0.962,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_mega": {
+       "v": 0.956,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "rookie_teto_tipico": {
+       "v": 0.603,
+       "faixa": [
+        0,
+        0.7
+       ]
+      },
+      "degrau_crianca": {
+       "v": 0.164,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adolescente": {
+       "v": 0.176,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adulto": {
+       "v": 0.191,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_mega": {
+       "v": 0.172,
+       "faixa": [
+        0,
+        0.25
+       ]
+      }
+     }
+    },
+    "E1": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "crianca_tipico_contra_adolescente": {
+       "v": 0.194,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "crianca_teto_contra_adolescente": {
+       "v": 0.203,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "crianca_tipico_contra_adulto": {
+       "v": 0.007,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adolescente_tipico_contra_adulto": {
+       "v": 0.189,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adolescente_teto_contra_adulto": {
+       "v": 0.187,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "adolescente_tipico_contra_mega": {
+       "v": 0.023,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adulto_tipico_contra_mega": {
+       "v": 0.214,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adulto_teto_contra_mega": {
+       "v": 0.218,
+       "faixa": [
+        0,
+        0.5
+       ]
+      }
+     },
+     "chave": {
+      "crianca_tipico_contra_adolescente": {
+       "v": 0.022,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "crianca_teto_contra_adolescente": {
+       "v": 0.022,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "crianca_tipico_contra_adulto": {
+       "v": 0,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adolescente_tipico_contra_adulto": {
+       "v": 0.082,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adolescente_teto_contra_adulto": {
+       "v": 0.085,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "adolescente_tipico_contra_mega": {
+       "v": 0.001,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adulto_tipico_contra_mega": {
+       "v": 0.126,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adulto_teto_contra_mega": {
+       "v": 0.129,
+       "faixa": [
+        0,
+        0.5
+       ]
+      }
+     }
+    },
+    "D1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "crianca": {
+       "v": 22.45,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adolescente": {
+       "v": 24.85,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adulto": {
+       "v": 25.05,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "mega": {
+       "v": 24.35,
+       "faixa": [
+        15,
+        40
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 23.35,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adolescente": {
+       "v": 25.55,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adulto": {
+       "v": 25.45,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "mega": {
+       "v": 25.25,
+       "faixa": [
+        15,
+        40
+       ]
+      }
+     }
+    },
+    "D2": {
+     "base_passa": false,
+     "passa": true,
+     "leitura": "passa a passar",
+     "base": {
+      "empate_total": {
+       "v": 0.04,
+       "faixa": [
+        0,
+        0.02
+       ]
+      },
+      "empate_max_forma": {
+       "v": 0.113,
+       "faixa": [
+        0,
+        0.02
+       ]
+      }
+     },
+     "chave": {
+      "empate_total": {
+       "v": 0,
+       "faixa": [
+        0,
+        0.02
+       ]
+      },
+      "empate_max_forma": {
+       "v": 0,
+       "faixa": [
+        0,
+        0.02
+       ]
+      }
+     }
+    },
+    "D3": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "p90_s": {
+       "v": 55.15,
+       "faixa": [
+        0,
+        180
+       ]
+      }
+     },
+     "chave": {
+      "p90_s": {
+       "v": 50.55,
+       "faixa": [
+        0,
+        180
+       ]
+      }
+     }
+    },
+    "A1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "muda sem chegar",
+     "base": {
+      "crianca_soma": {
+       "v": 0.471,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_ringue": {
+       "v": 0.086,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "crianca_castelo": {
+       "v": 0.17,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_soma": {
+       "v": 0.544,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_ringue": {
+       "v": 0.127,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_castelo": {
+       "v": 0.244,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_soma": {
+       "v": 0.581,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_ringue": {
+       "v": 0.144,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_castelo": {
+       "v": 0.388,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_soma": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_ringue": {
+       "v": 0.207,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_castelo": {
+       "v": 0.299,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      }
+     },
+     "chave": {
+      "crianca_soma": {
+       "v": 0.503,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_ringue": {
+       "v": 0.122,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "crianca_castelo": {
+       "v": 0.15,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_soma": {
+       "v": 0.549,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_ringue": {
+       "v": 0.122,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_castelo": {
+       "v": 0.231,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_soma": {
+       "v": 0.579,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_ringue": {
+       "v": 0.163,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_castelo": {
+       "v": 0.374,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_soma": {
+       "v": 0.526,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_ringue": {
+       "v": 0.119,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_castelo": {
+       "v": 0.285,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      }
+     }
+    },
+    "A2": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "crianca": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adolescente": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adulto": {
+       "v": 104,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "mega": {
+       "v": 100,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 100,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adolescente": {
+       "v": 104,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adulto": {
+       "v": 100,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "mega": {
+       "v": 96,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      }
+     }
+    },
+    "V1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca": {
+       "v": 0.305,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adolescente": {
+       "v": 0.398,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adulto": {
+       "v": 0.438,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "mega": {
+       "v": 0.39,
+       "faixa": [
+        0,
+        0.3
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.239,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adolescente": {
+       "v": 0.395,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adulto": {
+       "v": 0.435,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "mega": {
+       "v": 0.387,
+       "faixa": [
+        0,
+        0.3
+       ]
+      }
+     }
+    },
+    "V2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca": {
+       "v": 0.257,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adolescente": {
+       "v": 0.159,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adulto": {
+       "v": 0.031,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "mega": {
+       "v": 0.093,
+       "faixa": [
+        0,
+        0.15
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.263,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adolescente": {
+       "v": 0.089,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adulto": {
+       "v": 0.036,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "mega": {
+       "v": 0.048,
+       "faixa": [
+        0,
+        0.15
+       ]
+      }
+     }
+    },
+    "G1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "titulos": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "titulos": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     }
+    },
+    "G2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "muda sem chegar",
+     "base": {
+      "recorde_mediano": {
+       "v": 1,
+       "faixa": [
+        3,
+        30
+       ]
+      }
+     },
+     "chave": {
+      "recorde_mediano": {
+       "v": 2,
+       "faixa": [
+        3,
+        30
+       ]
+      }
+     }
+    },
+    "G3": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "series": {
+       "v": 0.001,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "series": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     }
+    },
+    "G4": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "crianca": {
+       "v": 0.727,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adolescente": {
+       "v": 0.848,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adulto": {
+       "v": 0.927,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "mega": {
+       "v": 0.859,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.786,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adolescente": {
+       "v": 0.927,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adulto": {
+       "v": 0.979,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "mega": {
+       "v": 0.968,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      }
+     }
+    },
+    "S1": {
+     "base_passa": false,
+     "passa": true,
+     "leitura": "passa a passar",
+     "base": {
+      "crianca_min": {
+       "v": 0.459,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_max": {
+       "v": 0.555,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_min": {
+       "v": 0.473,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_max": {
+       "v": 0.554,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_min": {
+       "v": 0.481,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_max": {
+       "v": 0.528,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_min": {
+       "v": 0.479,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_max": {
+       "v": 0.508,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      }
+     },
+     "chave": {
+      "crianca_min": {
+       "v": 0.485,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_max": {
+       "v": 0.55,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_min": {
+       "v": 0.49,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_max": {
+       "v": 0.544,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_min": {
+       "v": 0.467,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_max": {
+       "v": 0.509,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_min": {
+       "v": 0.477,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_max": {
+       "v": 0.521,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      }
+     }
+    }
+   }
+  },
+  "n4_juntas_v29": {
+   "base": "n4_base_v29",
+   "commit": "c16705f6e8b98ade04bf2205f7320c135c6cdbc5",
+   "metas": {
+    "P1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "sem": {
+       "v": 0.338,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "tip": {
+       "v": 0.655,
+       "faixa": [
+        0.59,
+        1
+       ]
+      }
+     }
+    },
+    "P2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "Gazimon_sem": {
+       "v": 0.355,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "Gazimon_tip": {
+       "v": 0.605,
+       "faixa": [
+        0.59,
+        1
+       ]
+      },
+      "Guardromon_sem": {
+       "v": 0.678,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Guardromon_tip": {
+       "v": 0.836,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Youkomon_sem": {
+       "v": 0.196,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Youkomon_tip": {
+       "v": 0.473,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Myotismon_sem": {
+       "v": 0.003,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "Myotismon_tip": {
+       "v": 0.199,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "MarinBullmon_sem": {
+       "v": 0.192,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "MarinBullmon_tip": {
+       "v": 0.717,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Piedmon_sem": {
+       "v": 0.556,
+       "faixa": [
+        0,
+        0.27
+       ]
+      },
+      "Piedmon_tip": {
+       "v": 0.736,
+       "faixa": [
+        0.73,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "Gazimon_sem": {
+       "v": 0.338,
+       "faixa": [
+        0,
+        0.41
+       ]
+      },
+      "Gazimon_tip": {
+       "v": 0.655,
+       "faixa": [
+        0.59,
+        1
+       ]
+      },
+      "Guardromon_sem": {
+       "v": 0.658,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Guardromon_tip": {
+       "v": 0.905,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Youkomon_sem": {
+       "v": 0.226,
+       "faixa": [
+        0,
+        0.35
+       ]
+      },
+      "Youkomon_tip": {
+       "v": 0.781,
+       "faixa": [
+        0.65,
+        1
+       ]
+      },
+      "Myotismon_sem": {
+       "v": 0,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "Myotismon_tip": {
+       "v": 0.001,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "MarinBullmon_sem": {
+       "v": 0.183,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "MarinBullmon_tip": {
+       "v": 0.77,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Piedmon_sem": {
+       "v": 0.508,
+       "faixa": [
+        0,
+        0.27
+       ]
+      },
+      "Piedmon_tip": {
+       "v": 0.89,
+       "faixa": [
+        0.73,
+        1
+       ]
+      }
+     }
+    },
+    "P3": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "Tortomon_sem": {
+       "v": 0.422,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Tortomon_tip": {
+       "v": 0.906,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Devidramon_sem": {
+       "v": 0.608,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Devidramon_tip": {
+       "v": 0.765,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Puppetmon_sem": {
+       "v": 0.583,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Puppetmon_tip": {
+       "v": 0.692,
+       "faixa": [
+        0.78,
+        1
+       ]
+      },
+      "Machinedramon_sem": {
+       "v": 0.574,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Machinedramon_tip": {
+       "v": 0.735,
+       "faixa": [
+        0.78,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "Tortomon_sem": {
+       "v": 0.457,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Tortomon_tip": {
+       "v": 0.951,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Devidramon_sem": {
+       "v": 0.534,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "Devidramon_tip": {
+       "v": 0.798,
+       "faixa": [
+        0.7,
+        1
+       ]
+      },
+      "Puppetmon_sem": {
+       "v": 0.578,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Puppetmon_tip": {
+       "v": 0.814,
+       "faixa": [
+        0.78,
+        1
+       ]
+      },
+      "Machinedramon_sem": {
+       "v": 0.554,
+       "faixa": [
+        0,
+        0.42
+       ]
+      },
+      "Machinedramon_tip": {
+       "v": 0.918,
+       "faixa": [
+        0.78,
+        1
+       ]
+      }
+     }
+    },
+    "P4": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "adolescente": {
+       "v": 0.83,
+       "faixa": [
+        0.8,
+        1
+       ]
+      },
+      "adulto": {
+       "v": 0.95,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "adolescente": {
+       "v": 0.91,
+       "faixa": [
+        0.8,
+        1
+       ]
+      },
+      "adulto": {
+       "v": 1,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     }
+    },
+    "P5": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "mega": {
+       "v": 0.21,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "mega": {
+       "v": 0.46,
+       "faixa": [
+        0.8,
+        1
+       ]
+      }
+     }
+    },
+    "T1": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "crianca": {
+       "v": 0.832,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adolescente": {
+       "v": 0.906,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adulto": {
+       "v": 0.931,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "mega": {
+       "v": 0.911,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.865,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adolescente": {
+       "v": 0.972,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "adulto": {
+       "v": 0.982,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      },
+      "mega": {
+       "v": 0.99,
+       "faixa": [
+        0.8,
+        0.97
+       ]
+      }
+     }
+    },
+    "T2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca_folego": {
+       "v": 0.471,
+       "faixa": [
+        0.6,
+        1
+       ]
+      },
+      "adulto_folego": {
+       "v": 0.477,
+       "faixa": [
+        0.6,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "crianca_folego": {
+       "v": 0.517,
+       "faixa": [
+        0.6,
+        1
+       ]
+      },
+      "adulto_folego": {
+       "v": 0.538,
+       "faixa": [
+        0.6,
+        1
+       ]
+      }
+     }
+    },
+    "T3": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "teto_crianca": {
+       "v": 0.743,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adolescente": {
+       "v": 0.834,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adulto": {
+       "v": 0.883,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_mega": {
+       "v": 0.834,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "rookie_teto_tipico": {
+       "v": 0.55,
+       "faixa": [
+        0,
+        0.7
+       ]
+      },
+      "degrau_crianca": {
+       "v": 0.153,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adolescente": {
+       "v": 0.176,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adulto": {
+       "v": 0.182,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_mega": {
+       "v": 0.152,
+       "faixa": [
+        0,
+        0.25
+       ]
+      }
+     },
+     "chave": {
+      "teto_crianca": {
+       "v": 0.779,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adolescente": {
+       "v": 0.904,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_adulto": {
+       "v": 0.959,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "teto_mega": {
+       "v": 0.954,
+       "faixa": [
+        0,
+        0.95
+       ]
+      },
+      "rookie_teto_tipico": {
+       "v": 0.603,
+       "faixa": [
+        0,
+        0.7
+       ]
+      },
+      "degrau_crianca": {
+       "v": 0.164,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adolescente": {
+       "v": 0.176,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_adulto": {
+       "v": 0.174,
+       "faixa": [
+        0,
+        0.25
+       ]
+      },
+      "degrau_mega": {
+       "v": 0.149,
+       "faixa": [
+        0,
+        0.25
+       ]
+      }
+     }
+    },
+    "E1": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "crianca_tipico_contra_adolescente": {
+       "v": 0.194,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "crianca_teto_contra_adolescente": {
+       "v": 0.203,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "crianca_tipico_contra_adulto": {
+       "v": 0.003,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adolescente_tipico_contra_adulto": {
+       "v": 0.111,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adolescente_teto_contra_adulto": {
+       "v": 0.111,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "adolescente_tipico_contra_mega": {
+       "v": 0.005,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adulto_tipico_contra_mega": {
+       "v": 0.136,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adulto_teto_contra_mega": {
+       "v": 0.133,
+       "faixa": [
+        0,
+        0.5
+       ]
+      }
+     },
+     "chave": {
+      "crianca_tipico_contra_adolescente": {
+       "v": 0.022,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "crianca_teto_contra_adolescente": {
+       "v": 0.022,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "crianca_tipico_contra_adulto": {
+       "v": 0,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adolescente_tipico_contra_adulto": {
+       "v": 0.056,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adolescente_teto_contra_adulto": {
+       "v": 0.058,
+       "faixa": [
+        0,
+        0.5
+       ]
+      },
+      "adolescente_tipico_contra_mega": {
+       "v": 0,
+       "faixa": [
+        0,
+        0.05
+       ]
+      },
+      "adulto_tipico_contra_mega": {
+       "v": 0.104,
+       "faixa": [
+        0.1,
+        0.35
+       ]
+      },
+      "adulto_teto_contra_mega": {
+       "v": 0.1,
+       "faixa": [
+        0,
+        0.5
+       ]
+      }
+     }
+    },
+    "D1": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "crianca": {
+       "v": 22.45,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adolescente": {
+       "v": 24.85,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adulto": {
+       "v": 23.95,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "mega": {
+       "v": 23.95,
+       "faixa": [
+        15,
+        40
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 23.35,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adolescente": {
+       "v": 25.45,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "adulto": {
+       "v": 24.55,
+       "faixa": [
+        15,
+        40
+       ]
+      },
+      "mega": {
+       "v": 24.85,
+       "faixa": [
+        15,
+        40
+       ]
+      }
+     }
+    },
+    "D2": {
+     "base_passa": false,
+     "passa": true,
+     "leitura": "passa a passar",
+     "base": {
+      "empate_total": {
+       "v": 0.047,
+       "faixa": [
+        0,
+        0.02
+       ]
+      },
+      "empate_max_forma": {
+       "v": 0.115,
+       "faixa": [
+        0,
+        0.02
+       ]
+      }
+     },
+     "chave": {
+      "empate_total": {
+       "v": 0,
+       "faixa": [
+        0,
+        0.02
+       ]
+      },
+      "empate_max_forma": {
+       "v": 0,
+       "faixa": [
+        0,
+        0.02
+       ]
+      }
+     }
+    },
+    "D3": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "p90_s": {
+       "v": 56.35,
+       "faixa": [
+        0,
+        180
+       ]
+      }
+     },
+     "chave": {
+      "p90_s": {
+       "v": 49.55,
+       "faixa": [
+        0,
+        180
+       ]
+      }
+     }
+    },
+    "A1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca_soma": {
+       "v": 0.471,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_ringue": {
+       "v": 0.086,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "crianca_castelo": {
+       "v": 0.17,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_soma": {
+       "v": 0.544,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_ringue": {
+       "v": 0.127,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_castelo": {
+       "v": 0.244,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_soma": {
+       "v": 0.526,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_ringue": {
+       "v": 0.194,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_castelo": {
+       "v": 0.413,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_soma": {
+       "v": 0.468,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_ringue": {
+       "v": 0.243,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_castelo": {
+       "v": 0.412,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      }
+     },
+     "chave": {
+      "crianca_soma": {
+       "v": 0.503,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_ringue": {
+       "v": 0.122,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "crianca_castelo": {
+       "v": 0.15,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_soma": {
+       "v": 0.549,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_ringue": {
+       "v": 0.122,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adolescente_castelo": {
+       "v": 0.231,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_soma": {
+       "v": 0.543,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_ringue": {
+       "v": 0.352,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "adulto_castelo": {
+       "v": 0.406,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_soma": {
+       "v": 0.524,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_ringue": {
+       "v": 0.407,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      },
+      "mega_castelo": {
+       "v": 0.421,
+       "faixa": [
+        0.3,
+        0.7
+       ]
+      }
+     }
+    },
+    "A2": {
+     "base_passa": true,
+     "passa": true,
+     "leitura": "muda sem chegar",
+     "base": {
+      "crianca": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adolescente": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adulto": {
+       "v": 112,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "mega": {
+       "v": 112,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 100,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adolescente": {
+       "v": 104,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "adulto": {
+       "v": 108,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      },
+      "mega": {
+       "v": 112,
+       "faixa": [
+        90,
+        1000000000
+       ]
+      }
+     }
+    },
+    "V1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca": {
+       "v": 0.305,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adolescente": {
+       "v": 0.398,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adulto": {
+       "v": 0.463,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "mega": {
+       "v": 0.405,
+       "faixa": [
+        0,
+        0.3
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.239,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adolescente": {
+       "v": 0.395,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "adulto": {
+       "v": 0.429,
+       "faixa": [
+        0,
+        0.3
+       ]
+      },
+      "mega": {
+       "v": 0.423,
+       "faixa": [
+        0,
+        0.3
+       ]
+      }
+     }
+    },
+    "V2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "move",
+     "base": {
+      "crianca": {
+       "v": 0.257,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adolescente": {
+       "v": 0.159,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adulto": {
+       "v": 0.071,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "mega": {
+       "v": 0.109,
+       "faixa": [
+        0,
+        0.15
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.263,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adolescente": {
+       "v": 0.089,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "adulto": {
+       "v": 0.036,
+       "faixa": [
+        0,
+        0.15
+       ]
+      },
+      "mega": {
+       "v": 0.059,
+       "faixa": [
+        0,
+        0.15
+       ]
+      }
+     }
+    },
+    "G1": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "titulos": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "titulos": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     }
+    },
+    "G2": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "muda sem chegar",
+     "base": {
+      "recorde_mediano": {
+       "v": 1,
+       "faixa": [
+        3,
+        30
+       ]
+      }
+     },
+     "chave": {
+      "recorde_mediano": {
+       "v": 2,
+       "faixa": [
+        3,
+        30
+       ]
+      }
+     }
+    },
+    "G3": {
+     "base_passa": false,
+     "passa": false,
+     "leitura": "nao age",
+     "base": {
+      "series": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     },
+     "chave": {
+      "series": {
+       "v": 0,
+       "faixa": [
+        0.25,
+        1
+       ]
+      }
+     }
+    },
+    "G4": {
+     "base_passa": true,
+     "passa": false,
+     "leitura": "quebra",
+     "base": {
+      "crianca": {
+       "v": 0.727,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adolescente": {
+       "v": 0.848,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adulto": {
+       "v": 0.895,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "mega": {
+       "v": 0.845,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      }
+     },
+     "chave": {
+      "crianca": {
+       "v": 0.786,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adolescente": {
+       "v": 0.927,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "adulto": {
+       "v": 0.977,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      },
+      "mega": {
+       "v": 0.958,
+       "faixa": [
+        0.7,
+        0.95
+       ]
+      }
+     }
+    },
+    "S1": {
+     "base_passa": false,
+     "passa": true,
+     "leitura": "passa a passar",
+     "base": {
+      "crianca_min": {
+       "v": 0.459,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_max": {
+       "v": 0.555,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_min": {
+       "v": 0.473,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_max": {
+       "v": 0.554,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_min": {
+       "v": 0.465,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_max": {
+       "v": 0.526,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_min": {
+       "v": 0.449,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_max": {
+       "v": 0.531,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      }
+     },
+     "chave": {
+      "crianca_min": {
+       "v": 0.485,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "crianca_max": {
+       "v": 0.55,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_min": {
+       "v": 0.49,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adolescente_max": {
+       "v": 0.544,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_min": {
+       "v": 0.474,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "adulto_max": {
+       "v": 0.521,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_min": {
+       "v": 0.461,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      },
+      "mega_max": {
+       "v": 0.524,
+       "faixa": [
+        0.45,
+        0.55
+       ]
+      }
+     }
+    }
+   }
+  }
+ }
+}

@@ -184,7 +184,9 @@ class Cooperacao:
         if type(idade) is not int or idade < 0:
             raise ValueError(f"idade em ticks, inteira e nao negativa: {idade!r}")
         estagio = estagio_por_idade(idade / TICKS_POR_DIA)
-        return getattr(self.cfg, f"k_teto_{estagio}")
+        teto = getattr(self.cfg, f"k_teto_{estagio}")
+        # a dose da bancada (fator_teto_k; S no jogo): com S, o teto da CO6-4, exato
+        return teto if self.cfg.fator_teto_k == self.cfg.escala else div_arred(teto * self.cfg.fator_teto_k, self.cfg.escala)
 
     def peso_dever(self, ident: str) -> int:
         """o `k` do pet no fim do ultimo tick, na escala S (0 antes do primeiro tick dele)"""

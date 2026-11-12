@@ -7,6 +7,9 @@
      nome (os irmaos podem ser da mesma forma);
    - depois da luta do pet em foco, o gesto do irmao que assistiu: consola, comemora ou provoca, pelo resultado e pela reputacao do lutador
      vista pelo irmao ("Resultado e reputacao", Matheus, 2026-11-11; D-CO5-2; motor/grupo_jogo.ts, gestoDepoisDaLuta).
+   - a CO7 (docs/ESPEC_V3_COOPERACAO_CO7.md, CO7-7; so com a `co7` ligada no grupo, desligada no jogo de hoje, D-CO6c-1): o gesto do dever, sem
+     numero: o pet que hesita e deixa a comida para o irmao aflito (o escudo tirou a comida, ou a universalizacao aprovou deixa-la e ele a
+     deixou) e o que quer consolar o irmao aflito (a culpa), na linha de Ultimas acoes e com o coracao na ilha.
    Nada aqui muda o pet: so le o grupo. */
 import { useEffect, useRef, useState } from "react";
 import { Frown, Heart, PartyPopper, UtensilsCrossed, type LucideIcon } from "lucide-react";
@@ -34,6 +37,29 @@ export function textoDoAto(a: Pick<AtoRegistrado, "ato" | "sinal" | "autor" | "a
   throw new Error(`ato desconhecido: ${a.ato}`);
 }
 
+/** o gesto do dever de uma decisao (o `dever` do motivo do modular e a escolha dela), ou null: hesitar e deixar a comida para o irmao aflito,
+    quando o escudo a tirou ou a universalizacao aprovou deixa-la e a escolha nao foi pega-la; senao, consolar, com a culpa */
+export function gestoDoDever(escolha: unknown, d: { removidas: unknown[]; aprovadas: number; proibidas: unknown[]; culpa?: number }): string | null {
+  const e = escolha as unknown[] | null, pegou = e !== null && e[0] === "comer" && e[1] === "comida" && d.proibidas.includes(e[2]);
+  if (!pegou && (d.removidas.length > 0 || d.aprovadas > 0)) return "hesitou e deixou a comida para o irmão, que estava aflito";
+  if ((d.culpa ?? 0) > 0) return "quis consolar o irmão, que estava aflito";
+  return null;
+}
+
+/** as linhas do gesto do dever do pet em foco (a CO7; nada sem ela) */
+export function linhasDosDeveres(n: number): { t: number; texto: string; pro: boolean }[] {
+  const j = jogoAtual(), g = j.grupo && !j.emLab ? j.grupo.grupo : null;
+  if (g === null || g.coop === null || !g.coop.cfg.co7) return [];
+  const out: { t: number; texto: string; pro: boolean }[] = [];
+  for (let i = g.deveres.length - 1; i >= 0 && out.length < n; i--) {
+    const x = g.deveres[i]!;
+    if (x.pet !== j.foco) continue;
+    const texto = gestoDoDever(x.escolha, x.dever as Parameters<typeof gestoDoDever>[1]);
+    if (texto !== null) out.push({ t: x.tick, texto, pro: true });
+  }
+  return out;
+}
+
 /** as linhas dos atos do pet em foco para Ultimas acoes: o tick, o texto e se e pro-social (o icone) */
 export function linhasDosAtos(n: number): { t: number; texto: string; pro: boolean }[] {
   const j = jogoAtual(), c = j.grupo && !j.emLab ? j.grupo.grupo.coop : null;
@@ -54,15 +80,23 @@ export const ATO_NA_ILHA_MS = 2500;
 export function AtosNaIlha() {
   const { revisao, grupo, foco, emLab } = useJogo();
   const [vivos, setVivos] = useState<{ id: number; autor: string; icone: "coracao" | "comida_riscada"; ate: number }[]>([]);
-  const vistos = useRef<number | null>(null), proximo = useRef(0), refs = useRef(new Map<number, HTMLSpanElement>());
+  const vistos = useRef<number | null>(null), vistosDever = useRef<number | null>(null), proximo = useRef(0), refs = useRef(new Map<number, HTMLSpanElement>());
   const coop = grupo && !emLab ? grupo.grupo.coop : null;
   /* os atos novos desde a ultima olhada (os de antes de abrir a tela nao aparecem) */
   useEffect(() => {
     if (coop === null) { vistos.current = null; return; }
     const n = coop.atos.length;
     if (vistos.current === null || vistos.current > n) { vistos.current = n; return; }
-    const novos = coop.atos.slice(vistos.current).map(a => ({ a, icone: iconeDoAto(a) })).filter(x => x.icone !== null);
+    const novos: { a: { autor: string }; icone: "coracao" | "comida_riscada" | null }[] =
+      coop.atos.slice(vistos.current).map(a => ({ a, icone: iconeDoAto(a) })).filter(x => x.icone !== null);
     vistos.current = n;
+    if (coop.cfg.co7 && grupo) {                      // a CO7: o coracao do gesto do dever (hesitar e deixar, consolar), sobre o pet que o fez
+      const ds = grupo.grupo.deveres, nd = ds.length;
+      if (vistosDever.current !== null && vistosDever.current <= nd)
+        for (const x of ds.slice(vistosDever.current))
+          if (gestoDoDever(x.escolha, x.dever as Parameters<typeof gestoDoDever>[1]) !== null) novos.push({ a: { autor: x.pet }, icone: "coracao" });
+      vistosDever.current = nd;
+    }
     if (!novos.length) return;
     const agora = performance.now();
     setVivos(v => [...v.filter(x => x.ate > agora), ...novos.map(x => ({ id: proximo.current++, autor: x.a.autor, icone: x.icone!, ate: agora + ATO_NA_ILHA_MS }))]);

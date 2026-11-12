@@ -29,7 +29,7 @@ apaga o log em 30 dias.
 | **o cérebro, o corpo, o mundo e a luta** | o motor TS (`web/app/motor/`), **no navegador do jogador** | o servidor não precisa simular nada. Ele só guarda e, para o ranking, confere pelo replay |
 | **o save** | `web/app/src/save.ts`: `{semente, log, versao}` (e `grupo`, `foco` com os dois pets, v26) na chave `digilab-web-v21-sprites` do `localStorage` | o estado nunca é salvo, só o log. O log só cresce: sincronizar é mandar os eventos novos |
 | **as outras chaves do navegador** | 37 chaves `CHAVE + "-..."` em `web/app/src/` (Tamer, guardados, Gerações, nível, tema, som, HUD, fala, lab…) | cada uma precisa de um destino: vai para a nuvem, fica no aparelho ou não sai (seção 5.4) |
-| **o tempo** | `web/app/src/tempo.ts`: anda pelo relógio real com a aba aberta, na velocidade escolhida, com salto máximo de 1 h real por passo | **a conferir na CN0:** o que acontece com o pet entre fechar num aparelho e abrir no outro |
+| **o tempo** | `web/app/src/tempo.ts`: anda pelo relógio real com a aba aberta, na velocidade escolhida, com salto máximo de 1 h real por passo | **conferido na CN0** ([RESULTADO_V3_CONTA_CN0.md](RESULTADO_V3_CONTA_CN0.md), seção 3): o pet **não** envelhece pelo tempo fechado; abre no outro aparelho no tick em que fechou |
 | **o replay** | `Motor.reproduzir`, sem DOM; uma vida de 166 a 234 lutas refaz em 67 a 76 ms no Node 24 (`web/app/scripts/medicoes/replay_lp2.json`, citado no plano MMO) | conferir no servidor é barato |
 | **o MMO** | MMO0 (paridade Chrome × Node, #818) e MMO1 (a conta dos pontos, #824) na `main` | a conta e o servidor ainda não existem |
 | **o servidor** | `servidor/servidor_local.py` (Python, biblioteca padrão e o SDK `anthropic`), na máquina do Matheus, só em `127.0.0.1`; `--remoto` para o túnel da Cloudflare com a senha HTTP Basic | entrega o jogo e a `/api/fala`; não guarda nada de jogador |
@@ -111,7 +111,7 @@ o jogador ver. A outra opção, "o último a enviar ganha", apaga a história de
 |---|---|---|
 | o save (`CHAVE`), os guardados (`-guardados`), Gerações (`-geracoes`), o registro do Tamer (`-tamer`: medalhas, Bits, itens), o nível (`-nivel`), a conclusão da Liga (`-conclusao-liga`), a mitologia (`-mitologia`, `-mitologia-ouvidas`), os descartados (`-descartados`, `-descarte`) | os ajustes de tela e som (`-tema`, `-pele`, `-som*`, `-hud*`), a aba, as dicas e os avisos já vistos | a fala e a conversa (`-fala-llm`, `-fala-rede`, `-modo-fala`, `-conversa-nova`), o pet do laboratório (`-lab*`) |
 
-A lista é PROPOSTA e precisa de uma passada chave a chave na CN0 (por exemplo, `-habitat`, `-viagem` e `-anterior`). **A fala não sobe**
+A lista é PROPOSTA; a passada chave a chave da CN0 está no [RESULTADO_V3_CONTA_CN0.md](RESULTADO_V3_CONTA_CN0.md), seção 2: fecha o `-habitat` e o `-viagem` (ficam no aparelho) e o `-anterior` (sobe como o pet do jogador; o pet dos Cenários não sobe), muda o `-mitologia` para o aparelho (é só a chave liga/desliga) e acrescenta três chaves fora do padrão, entre elas o gosto da TV por pet (`digilab-gosto-visual-p0:<semente>`), que vai para a nuvem (D-CONTA-34 a 36). **A fala não sobe**
 pela regra do `servidor/CLAUDE.md` (a fala nunca entra no registro do pet) e porque é o dado mais pessoal do jogo. **Os ajustes ficam no
 aparelho** porque o celular e o PC pedem ajustes diferentes; a outra opção é subir também, com a troca por aparelho.
 
@@ -127,6 +127,8 @@ Uma cópia diária de cada save, guardada por 30 dias (PROPOSTO), para restaurar
 um bug apagou o pet). Restaurar não apaga a versão de agora: ela vira uma cópia também.
 
 ## 6. A proteção contra raspagem e abuso
+
+**O projeto inteiro** (o repositório, a licença, o INPI, o rastreio) está no `docs/PLANO_V3_CONTA_PROTECAO.md` (PI-1 a PI-9).
 
 **O limite, dito antes:** o que chega ao navegador pode ser copiado. O código JS é sempre legível, e um agente que controla um navegador de
 verdade tira uma captura de tela. A proteção encarece a cópia em lote; não a impede. O que é protegido de verdade fica no servidor.

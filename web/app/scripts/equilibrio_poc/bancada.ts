@@ -135,6 +135,8 @@ export function motorDoCandidato(c: Candidato, semente: number, remendar = c.nom
   if (lp6.apoio) m.apoioLutaPoc = lp6.apoio;
   if (lp6.arenaPorEstagio) m.arenaLutaPoc = lp6.arenaPorEstagio;
   if (lp6.tabela) m.formasLutaPoc = lp6.tabela;
+  /* as chaves da N3 pela entrada opcional do Motor, como o tiro; desligadas, nada muda */
+  if (lp6.nucleo) m.nucleoLutaPoc = lp6.nucleo;
   x._rivalPoc = (rival: string, ...resto: unknown[]) => {
     if (!rivaisArena(m.estagioAtual).includes(rival)) throw new Error(`bancada: a vida do candidato so luta na Arena, nao com ${rival}`);
     const rv = rivalDoMotor(rival, ...resto);
@@ -242,7 +244,7 @@ function tiro(c: Candidato, bases: number[]) {
       for (let q = 0; q < TAM.lutasTiro; q++) for (const ladoX of ["a", "b"] as const) {
         const s = sementeLuta(base, 12_000_000 + q), A = ladoX === "a" ? lados[x] : lados[y], B = ladoX === "a" ? lados[y] : lados[x];
         const L = criarLutaPoc(configLutaPoc({ cena: m, semente: s, a: A, b: B, ...(TIRO && !tiroDaPoc(TIRO) ? { tiro: TIRO } : {}), ...(ESQ ? { esquiva: ESQ } : {}),
-          ...(LP6.apoio ? { apoio: LP6.apoio } : {}), ...(LP6.arenaPorEstagio ? { arenaPorEstagio: LP6.arenaPorEstagio } : {}) }, LP6.tabela), sorteiosPoc(s));
+          ...(LP6.apoio ? { apoio: LP6.apoio } : {}), ...(LP6.arenaPorEstagio ? { arenaPorEstagio: LP6.arenaPorEstagio } : {}), ...(LP6.nucleo ?? {}) }, LP6.tabela), sorteiosPoc(s));
         const quem = ladoX === "a" ? L.a : L.b, vistos = new Map<unknown, number>();
         while (!L.fim && L.relogio < LIMITE_POC_MS) {
           passoPoc(L);
@@ -327,7 +329,9 @@ function rodar(grupo: string, c: Candidato, bases: number[]): unknown {
 }
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
   const grupo = argumento("grupo"), faixa = argumento("faixa"), fase = argumento("fase"), nomeC = argumento("candidato", "v21");
-  if (!/^lp[56]_[0-9a-z_]+$/.test(fase)) throw new Error(`bancada: fase invalida ${fase}`);
+  /* as fases da LP5 e da LP6, e os contrafactuais da N4 da investigacao do nucleo (n4_<candidato>, na faixa investigacao) */
+  if (!/^(lp[56]|n4)_[0-9a-z_]+$/.test(fase)) throw new Error(`bancada: fase invalida ${fase}`);
+  if (fase.startsWith("n4_") !== (faixa === "investigacao")) throw new Error("bancada: a fase n4_ roda so na faixa investigacao, e a investigacao so nela");
   /* a conferencia: uma vez na LP5-4 e uma vez na LP6-3 (o adendo da LP6-3); um grupo que ja tem o JSON dela nao roda de novo */
   if (faixa === "conferencia" && fase !== "lp5_4" && fase !== "lp6_3") throw new Error("bancada: a conferencia so roda na LP5-4 e na LP6-3");
   if (faixa === "conferencia" && existsSync(fileURLToPath(new URL(`../medicoes/equilibrio_poc/${fase}/conferencia/${grupo}.json`, import.meta.url))))

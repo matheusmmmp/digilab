@@ -44,14 +44,15 @@ import { EstadoDinamico, type OpcaoFim } from "./estado.ts";
 import { Impulso, type UnidadeImpulso } from "./impulso.ts";
 import { Memoria, episodioAutobio, episodioLuta } from "./mem.ts";
 import { Plasticidade, type OpcaoCredito } from "./plast.ts";
-import { COMIDAS_BOAS, Sens, classeDoTipo, type ObservacaoModular, type ResumoLutaSens } from "./sens.ts";
+import { COMIDAS_BOAS, Sens, classeDoTipo, type ObservacaoModular, type ResumoLutaSens, type SocialSens } from "./sens.ts";
+import type { ConfigCooperacao } from "../cooperacao.ts";
 
 /** o `VERSAO_PET_DIGIBRAIN` do Python (a DM-5); o pet de teste do jogo tem a versao propria (VERSAO_PET_LAB, motor/constantes.ts) */
 export const VERSAO_PET_DIGIBRAIN = 13;
 
 type Dict = Record<string, any>;
 /** a Observacao do laco com o mundo: o corpo (os receptores) e o mundo (a percepcao) */
-export type ObservacaoMundoLobos = ObservacaoLobos & { mundo?: PercepcaoMundo };
+export type ObservacaoMundoLobos = ObservacaoLobos & { mundo?: PercepcaoMundo; social?: SocialSens | null };
 
 /** a escolha do M-ARB vista pelo motor: a acao e, nas acoes com alvo, o tipo do candidato do motor, o id dele e, no lugar lembrado, o ponto */
 export interface Intencao { acao: AcaoPet; tipo_alvo: string | null; id_alvo: number | null; ponto: readonly [number, number] | null }
@@ -129,7 +130,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
    *  ConfigLanceDono (BB-4) */
   constructor(cd: ConfigLab = CONFIG_DIGIBRAIN_LAB, inatos: typeof INATOS_MODULAR = INATOS_MODULAR, lutaMemoria = false,
     sono: ConfigSonoSegura = CONFIG_SONO_SEGURA, olhar?: OpcoesOlhar, lance: ConfigLanceDono = CONFIG_LANCE_DONO,
-    equilibrio: ConfigEquilibrioCuidado = CONFIG_EQUILIBRIO_CUIDADO) {
+    cooperacao: Readonly<ConfigCooperacao> | null = null, equilibrio: ConfigEquilibrioCuidado = CONFIG_EQUILIBRIO_CUIDADO) {
     if (!cd.ligada) throw new DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada");
     this.cl = validarLanceDono(lance);
     this.ceq = validarEquilibrioCuidado(equilibrio);
@@ -162,7 +163,16 @@ export class DigiBrain implements PoliticaCorpoMundo {
     this.mem = new Memoria({ sub: CONFIG_MODULAR_MUNDO.sub }, inatos, cd, lutaMemoria);
     this.arb = new Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem, sono);   // `sono`: o sono que segura (SONO_SEGURA)
     this.plast = new Plasticidade(cd, inatos);
+    /* a CO7 (docs/ESPEC_V3_COOPERACAO_CO7.md): os deveres no M-SENS, no M-ARB e no M-AFETO, so com a subchave `co7`; sem ela, nada muda */
+    if (cooperacao !== null && cooperacao.co7) {
+      this.dever = cooperacao;
+      this.sens.ligarDever(cooperacao, CONFIG_MODULAR_MUNDO.sub);
+      this.arb.ligarDever(cooperacao);
+      this.afeto.ligarDever(cooperacao);
+    }
   }
+  /** a CO7: a ConfigCooperacao com a `co7`; null desligada */
+  dever: Readonly<ConfigCooperacao> | null = null;
 
   get ultimoMotivo(): Dict | null { return this.motivos.length ? this.motivos[this.motivos.length - 1]! : null; }
 
@@ -180,6 +190,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
     const oMod: ObservacaoModular = {
       corpo: obs.corpo, vetor_estado: obs.v, ticks_desde_cuidado: obs.tdc,
       mundo: { x: m.x, y: m.y, regiao: m.regiao, direcao_cheiro: m.direcao_cheiro, vistos: m.vistos },
+      ...(obs.social !== undefined ? { social: obs.social } : {}),      // a CO6: so o M-SENS a le
     };
     const lutas = this.lutaMemoria ? this.lutas : null;
     if (this.lutaMemoria) this.lutas = [];
@@ -251,6 +262,8 @@ export class DigiBrain implements PoliticaCorpoMundo {
     if (this.lutaMemoria) motivo["lutas"] = episodiosLuta;      // a ponte da luta (PE3): desligada, nenhum campo novo
     if (lance !== null) motivo["lance"] = lance;               // o lance do dono (BB-4): desligada, nenhum campo novo
     if (equilibrioLigado(this.ceq)) motivo["equilibrio"] = { bebe, fome_urgente_sem_brincar: guarda };   // as regras do E1: desligadas, nada
+    if (this.dever !== null)                              // a CO7: desligada, nenhum campo novo
+      motivo["dever"] = esc.dever === null || esc.dever === undefined ? null : { ...esc.dever, culpa: afeto.culpa, inveja: afeto.inveja };
     if (cd.olhar) {                                       // o olhar (P1f): desligada, nenhum campo novo
       this.olhando = unidade.chave[0] === COMPORTAMENTO_OLHAR && intencao.acao === "ocioso" ? unidade.chave[2] as number : null;
       motivo["olhar"] = { ...resumoOlhar, olha: this.olhando };
@@ -463,6 +476,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
       nome: this.nome, versao_pet: this.versao_pet, k: this.k, pendente: this.pendencia !== null,
       gestos: Object.fromEntries(Object.entries(this.gestos).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))), modulos, motivos: this.motivos,
     };
+    if (this.sens.social !== null) out["social"] = { reputacao: { ...this.sens.social.reputacao }, peso_dever: this.sens.social.peso_dever };   // a CO6
     if (this.cd.olhar) out["olhar"] = { olhando: this.olhando, genoma_visao: { otimo: { ...this.genomaVisao!.otimo }, largura: { ...this.genomaVisao!.largura } } };
     if (this.ce !== null) (out["olhar"] as Dict)["enjoo_tv"] = { ...this.enjooTv };   // o enjoo (D-GV-ENJOO-CER): desligado, nenhum campo novo
     return out;
