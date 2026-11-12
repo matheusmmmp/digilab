@@ -347,3 +347,15 @@ na `main`.
 - **A leitura** cita o estresse de B e o salto de volume de A para B.
 
 O resultado está em `docs/RESULTADO_V3_GOSTO_VISUAL_ENJOO.md`.
+
+## A busca OV0 e a espec OV1 do órgão da visão (2026-11-12, Claude Code, Opus 5.5, branch `v3-orgao-visao-ov1`)
+
+O pedido do Matheus (2026-11-11): um órgão de visão computacional dedicado e local, que passa conceitos à rede do pet, com os conceitos do
+corpus do Digimundo e uma mitologia em volta (a `docs/futuro/fala_do_assistir.md`, seções 10 e 10.10).
+- **A OV0** está no vault (`DigiLab — Revisão de escopo\BUSCA_ORGAO_VISAO_2026-11-12.md`): os modelos, as licenças, os modos de falha e a
+  habituação por conceito, com os status da `literatura-digilab`.
+- **A OV1** é a `docs/ESPEC_V3_ORGAO_VISAO.md`, só papel e PROPOSTA. Ela traz a lista (24 genéricos e as 56 espécies do corpus), o SigLIP
+  base no navegador, a regra da confiança, o evento `percepcao_tela`, os receptores sem química, o M-SENS e o gosto por conceito, e o patrono
+  pelo brasão do jogo como estado no afeto, só na valência. Separa a percepção da crença e traz o painel em palavras.
+- As decisões são as OV1-1 a OV1-14, e as leituras estão em `docs/registro/2026-11.md` (D-OV1-1 a 5). Nada de código antes da revisão do
+  Matheus.
