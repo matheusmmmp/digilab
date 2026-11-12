@@ -109,10 +109,10 @@ Cada uma tem o mecanismo no código, o que mudaria se ela fosse a causa e uma me
 
 ## 3. O que os artefatos já mostram (exploração descritiva, não confirmatória)
 
-**O script:** `C:\Users\mathe\AppData\Local\Temp\claude\d053fb42b5422907\463abcf9-80a9-469d-9e0d-1b497f57b6d5\scratchpad\porque\descritivo.py`,
-fora do repositório, só sobre `artifacts_v3_gosto_visual/gosto_visual/medidas.json` (GV3) e
+**O script:** `artifacts_v3_gosto_visual/porque/descritivo.py` (rode `python artifacts_v3_gosto_visual/porque/descritivo.py .` na raiz),
+só sobre `artifacts_v3_gosto_visual/gosto_visual/medidas.json` (GV3) e
 `artifacts_v3_gosto_visual/gosto_visual_enjoo2/medidas.json` (GV3b), e o `analise.json` de cada uma só para conferir. Ele não importa
-nenhum código do repositório. A saída é o `descritivo.json` na mesma pasta do scratchpad; cada número abaixo cita a chave dela. Os IC95
+nenhum código do repositório. A saída é o `artifacts_v3_gosto_visual/porque/descritivo.json`, na mesma pasta, e sai igual byte a byte a cada execução; cada número abaixo cita a chave dela. Os IC95
 são percentis de 2000 reamostras de **unidades inteiras** (a regra do plano), com a semente 20261112 do script; nenhuma reamostra ficou
 indefinida. Os três donos entram juntos nos Spearman (108 pets do próprio, cada genoma três vezes): isso é escolha desta exploração, não do
 plano, que lê dono por dono.
