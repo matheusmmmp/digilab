@@ -36,6 +36,17 @@ export const BITS = {
   nivel: 30,
 } as const;
 
+/** a forma da tabela dos Bits (a de hoje, BITS, e a do E1, BITS_V2) */
+export interface TabelaBits {
+  readonly faixa: Record<Estagio, number>; readonly lider: number; readonly chamado: number; readonly pausa: number; readonly cuidado: number;
+  readonly tetoCuidadoDia: number; readonly evolucao: Record<Estagio, number>; readonly nivel: number;
+}
+
+/** EQUILIBRIO_CUIDADO, E1 (docs/RESULTADO_V3_EQUILIBRIO_CUIDADO_E1.md): a tabela da calibracao, atras da chave. So a bancada do E1 a usa
+    (scripts/equilibrio_cuidado/); o jogo segue com a BITS ate o E3 (EQ-6), que a liga junto com a versao nova do pet. Os valores que mudam
+    (o cuidado na hora certa e o teto do dia) sao PROPOSTOS, SEM FONTE, pela grade do E1; o resto e o da BITS */
+export const BITS_V2: TabelaBits = { ...BITS, cuidado: 5, tetoCuidadoDia: 40, evolucao: { ...BITS.evolucao, crianca: 60 } };
+
 /** um feito que vale Bits */
 export interface Feito { id: string; valor: number; origem: OrigemBits; tick: number }
 
@@ -52,8 +63,10 @@ function faixaDoRival(m: Motor, rival: string, tick: number): Estagio {
 }
 const ehTorneio = (rival: string): boolean => rival === RIVAL_LIGA || rival === RIVAL_SALAO || ehInstalacao(rival);
 
-/** os feitos do pet que valem Bits, na ordem do registro dele. Puro: le so o que o motor deriva do replay */
-export function feitosDoPet(m: Motor): Feito[] {
+/** os feitos do pet que valem Bits, na ordem do registro dele. Puro: le so o que o motor deriva do replay. `tabela`: a BITS (o jogo) ou a
+    BITS_V2 (so a bancada do E1) */
+export function feitosDoPet(m: Motor, tabela: TabelaBits = BITS): Feito[] {
+  const BITS = tabela;
   const feitos: Feito[] = [];
   /* as vitorias, com a novidade por rival e por dia do pet */
   const repeticoes = new Map<string, number>();

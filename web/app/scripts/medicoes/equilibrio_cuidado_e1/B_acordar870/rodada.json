@@ -1,0 +1,18 @@
+{
+ "nome": "B_acordar870",
+ "bloco": "B",
+ "tenta": "lambda_acordar = 870",
+ "opcoes": {
+  "ajuste": {
+   "cerebro": {
+    "guarda_fome_brincar": false,
+    "comer_bebe": false,
+    "w_comer_bebe": 512
+   },
+   "lambda_acordar": 870,
+   "urgencia_lambda": null,
+   "vies_brincar": null,
+   "w_bola_do_dono": null
+  }
+ }
+}

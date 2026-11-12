@@ -1,0 +1,18 @@
+{
+ "nome": "B4_vies-128",
+ "bloco": "B4",
+ "tenta": "vies do brincar = -128",
+ "opcoes": {
+  "ajuste": {
+   "cerebro": {
+    "guarda_fome_brincar": false,
+    "comer_bebe": false,
+    "w_comer_bebe": 512
+   },
+   "lambda_acordar": null,
+   "urgencia_lambda": null,
+   "vies_brincar": -128,
+   "w_bola_do_dono": null
+  }
+ }
+}

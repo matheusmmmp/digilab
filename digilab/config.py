@@ -3136,6 +3136,69 @@ PARAMETROS_LANCE_DONO: dict[str, tuple[str, str]] = {
 
 CONFIG_LANCE_DONO = ConfigLanceDono()
 CONFIG_LANCE_DONO_LIGADA = ConfigLanceDono(ligada=True)
+
+
+@dataclass(frozen=True)
+class ConfigEquilibrioCuidado:
+    """As duas regras novas da rodada de equilibrio do cuidado (docs/PLANO_V3_EQUILIBRIO_CUIDADO.md, EQ-7 DECIDIDA pelo Matheus em
+    2026-11-12; o E1, docs/RESULTADO_V3_EQUILIBRIO_CUIDADO_E1.md), so no DigiBrain modular, cada uma com a sua chave:
+    - `guarda_fome_brincar` (o bloco C, D-BB2-3): com a fome urgente (a urgencia da fome acima do `urgencia_lambda` dos inatos, a mesma guarda
+      do sono que segura, do passeio e do convite do lance), o M-ARB poe o peso 0 em todas as unidades do brincar, no sorteio e nas sondas.
+      O pet faminto nao vai jogar bola; o resto do sorteio nao muda;
+    - `comer_bebe` (o bloco A): o motor do jogo diz ao cerebro, antes de cada decisao, se o pet e um bebe (o In-Training da tela; o gancho
+      `estagio_bebe(bool)`, como o `bola_do_dono` do lance), e o M-IMPULSO soma mul(w_comer_bebe, bebe) ao inato do comer (todas as unidades
+      do comer), com a entrada `bebe` = S no bebe e 0 depois. O bebe, cuja fome fica acima do limiar do Rookie, come com a fome dele. O motor
+      do Python nao tem estagio: so o motor do jogo (e o exportador do gabarito, com o estagio roteirizado) chama o gancho.
+    Fica numa config propria, como a `ConfigSonoSegura` e a `ConfigLanceDono`, para o dump dos inatos e da `ConfigDigibrain` nao mudar.
+    Desligada (o padrao), a vida de hoje sai byte a byte (tests/gabaritos/equilibrio_cuidado_de_hoje.json). Nenhuma versao de pet a liga:
+    a versao nova e o E3 (EQ-6). Status em PARAMETROS_EQUILIBRIO_CUIDADO."""
+
+    guarda_fome_brincar: bool = False         # PROPOSTO: a chave da guarda da fome urgente no brincar (EQ-7, bloco C)
+    comer_bebe: bool = False                  # PROPOSTO: a chave do bebe que come com a fome dele (EQ-7, bloco A)
+    w_comer_bebe: int = _S // 2               # PROPOSTO, SEM FONTE: o peso da entrada `bebe` no inato do comer (a grade do E1)
+
+    def __post_init__(self) -> None:
+        for campo in ("guarda_fome_brincar", "comer_bebe"):
+            if type(getattr(self, campo)) is not bool:
+                raise TypeError(f"ConfigEquilibrioCuidado.{campo} e bool: {getattr(self, campo)!r}")
+        if type(self.w_comer_bebe) is not int or self.w_comer_bebe <= 0:
+            raise ValueError(f"ConfigEquilibrioCuidado.w_comer_bebe e inteiro positivo: {self.w_comer_bebe!r}")
+
+    @property
+    def ligada(self) -> bool:
+        """alguma das duas regras ligada"""
+        return self.guarda_fome_brincar or self.comer_bebe
+
+
+# Status dos campos da ConfigEquilibrioCuidado (conferido por teste). A fome urgente nao tem numero proprio: e o `urgencia_lambda` dos inatos.
+PARAMETROS_EQUILIBRIO_CUIDADO: dict[str, tuple[str, str]] = {
+    "guarda_fome_brincar": ("PROPOSTO", "PLANO_V3_EQUILIBRIO_CUIDADO, EQ-7 (a regra DECIDIDA em 2026-11-12; D-BB2-3); a chave, SEM FONTE"),
+    "comer_bebe": ("PROPOSTO", "PLANO_V3_EQUILIBRIO_CUIDADO, EQ-7 (a regra DECIDIDA em 2026-11-12); a chave, SEM FONTE"),
+    "w_comer_bebe": ("PROPOSTO", "RESULTADO_V3_EQUILIBRIO_CUIDADO_E1 (a grade do E1 nas sementes de calibracao 93101-93505); SEM FONTE"),
+}
+
+CONFIG_EQUILIBRIO_CUIDADO = ConfigEquilibrioCuidado()
+
+# Os numeros do modular que o E1 propoe trocar de valor (docs/RESULTADO_V3_EQUILIBRIO_CUIDADO_E1.md, a rodada F2 da grade), nos inatos de hoje
+# (CONFIG_DIGIBRAIN_INATOS fica como esta: nenhuma versao de pet os usa; a versao nova e o E3, EQ-6). PROPOSTOS, SEM FONTE.
+INATOS_E1_PROPOSTOS: dict[str, int] = {
+    "urgencia_lambda": 640,                   # a fome urgente (hoje 512): o pet que dorme so acorda pela fome mais baixa (M-B1, M-B2)
+    "vies_brincar": 0,                        # o vies do brincar no W0 (hoje -256): o Rookie do dono atento brinca mais (M-B4)
+}
+PARAMETROS_E1: dict[str, tuple[str, str]] = {
+    "urgencia_lambda": ("PROPOSTO", "RESULTADO_V3_EQUILIBRIO_CUIDADO_E1, a grade do bloco B e a rodada F2 (93101-93505); SEM FONTE"),
+    "vies_brincar": ("PROPOSTO", "RESULTADO_V3_EQUILIBRIO_CUIDADO_E1, a grade do bloco B4 e a rodada F2 (93101-93505); SEM FONTE"),
+}
+
+
+def inatos_e1(inatos: "ConfigDigibrainInatos | None" = None) -> "ConfigDigibrainInatos":
+    """os inatos com os numeros do E1 (INATOS_E1_PROPOSTOS): o `urgencia_lambda` e o vies do brincar no W0"""
+    base = inatos or CONFIG_DIGIBRAIN_INATOS
+    w0 = tuple((b, tuple((c, INATOS_E1_PROPOSTOS["vies_brincar"] if b == "brincar" and c == "vies" else v) for c, v in linha))
+               for b, linha in base.w0)
+    if w0 == base.w0 and "brincar" not in dict(base.w0):
+        raise ValueError("inatos_e1: o W0 sem a linha do brincar")
+    return replace(base, urgencia_lambda=INATOS_E1_PROPOSTOS["urgencia_lambda"], w0=w0)
 # a versao do pet do cerebro modular (DM-5, DECIDIDA em 2026-10-25): a v13, so com a ConfigDigibrain ligada. Os saves v1 a v12, as
 # assinaturas e os gabaritos nao mudam; no jogo (web/app/), a v13 entra na etapa 1b
 VERSAO_PET_DIGIBRAIN = 13

@@ -7,6 +7,7 @@
    os dois pets, e as contagens (minutos de fome alta, cochilos, saude, energia ao acordar) sao a media dos dois. Depois, a media das 5
    sementes, o minimo e o maximo. "Passa" = a media cumpre a meta; nas metas de sim ou nao (M-E1, M-D1), as 5 sementes. */
 import { readFileSync, writeFileSync } from "node:fs";
+import { pathToFileURL } from "node:url";
 import { DONOS, PASTA_E0, SEMENTES_E0, VERSOES, type NomeDono, type NomeVersao } from "./e0.ts";
 
 interface Cel {
@@ -18,7 +19,8 @@ interface Vida { versao: NomeVersao; numero_versao: number; dono: NomeDono; seme
   tamer: { bits_total: number; bits_por_dia: Record<string, number>; bits_por_origem: Record<string, number>; tick_150: number | null; dia_150: number | null;
     tick_pronto_champion: number | null; ha_150_antes_do_champion: boolean | null } }
 
-const ler = (v: NomeVersao, d: NomeDono, s: number): Vida => JSON.parse(readFileSync(`${PASTA_E0}${v}_${d}_${s}.json`, "utf8"));
+let PASTA = PASTA_E0;
+const ler = (v: NomeVersao, d: NomeDono, s: number): Vida => JSON.parse(readFileSync(`${PASTA}${v}_${d}_${s}.json`, "utf8"));
 const media = (xs: number[]): number => xs.reduce((a, b) => a + b, 0) / xs.length;
 const razao = (a: number, b: number): number | null => b > 0 ? a / b : null;
 /** media, minimo e maximo das sementes que tem o valor (n = quantas) */
@@ -56,6 +58,9 @@ function medidasDia(vd: Vida, dia: number) {
   };
 }
 
+/** as tabelas e as metas das 30 vidas de uma pasta (a do E0, ou a de uma rodada do E1); grava o resumo.json e o tabelas.md nela */
+export function resumir(pasta: string = PASTA_E0, descricao = "o retrato do E0 (docs/PLANO_ANALISE_V3_EQUILIBRIO_CUIDADO.md): media [min; max] das 5 sementes") {
+PASTA = pasta;
 const resumo: Record<string, unknown> = {};
 const linhas: string[] = [];
 const f = (x: number | null, d = 2): string => x === null ? "—" : x.toFixed(d);
@@ -142,6 +147,9 @@ linhas.push("### As metas PROPOSTAS (seção 6 do plano)", "", "| id | medida | 
 for (const x of [...metas].sort((a, b) => a.id.localeCompare(b.id) || DONOS.indexOf(a.dono) - DONOS.indexOf(b.dono) || a.hoje.localeCompare(b.hoje)))
   linhas.push(`| ${x.id} | ${x.medida} | ${x.meta} | ${x.dono} | ${x.hoje} | ${sn(x.passa)} |`);
 
-writeFileSync(`${PASTA_E0}resumo.json`, JSON.stringify({ descricao: "o retrato do E0 (docs/PLANO_ANALISE_V3_EQUILIBRIO_CUIDADO.md): media [min; max] das 5 sementes", resumo, metas }, null, 1) + "\n");
-writeFileSync(`${PASTA_E0}tabelas.md`, linhas.join("\n") + "\n");
-console.log(linhas.join("\n"));
+writeFileSync(`${PASTA}resumo.json`, JSON.stringify({ descricao, resumo, metas }, null, 1) + "\n");
+writeFileSync(`${PASTA}tabelas.md`, linhas.join("\n") + "\n");
+return { resumo, metas, linhas };
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) console.log(resumir().linhas.join("\n"));

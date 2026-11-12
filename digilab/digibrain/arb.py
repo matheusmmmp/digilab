@@ -23,7 +23,10 @@ chamar a rng, e, como no reflexo, nenhuma sonda decide. Fora da lista ou com pes
 **O sono que segura** (docs/TAREFA_V3_SONO_SEGURA.md; `Arbitragem(sono=ConfigSonoSegura(ligada=True))`): o reflexo tambem vale com o pet
 dormindo (o `contexto["dormindo"]` do M-SENS, o `dormindo` do vetor de estado) e a energia abaixo de `lambda_acordar`, salvo com a fome
 urgente (a urgencia da fome acima do `urgencia_lambda`, a guarda do passeio). O dono que acorda o pet tira o `dormindo`, e a decisao
-seguinte ja nao segura. Nenhuma rng nova; desligada, o reflexo de hoje."""
+seguinte ja nao segura. Nenhuma rng nova; desligada, o reflexo de hoje.
+**A guarda da fome urgente no brincar** (docs/PLANO_V3_EQUILIBRIO_CUIDADO.md, EQ-7; `escolher(..., sem_brincar=True)`, que o M-ADAPT passa so
+com a `ConfigEquilibrioCuidado.guarda_fome_brincar` ligada e a fome urgente): o peso de todas as unidades do brincar vira 0, no sorteio e nas
+sondas, antes de contar os candidatos. Nenhuma rng nova; sem ela (o padrao), o sorteio de hoje."""
 from __future__ import annotations
 
 from ..config import CONFIG_DIGIBRAIN_INATOS, CONFIG_SONO_SEGURA, ConfigDigibrainInatos, ConfigSonoSegura
@@ -103,12 +106,21 @@ class Arbitragem:
             raise RuntimeError("M-ARB: o sono que segura le a urgencia da fome, e ela nao veio do M-AFETO")
         return sens["contexto"]["dormindo"] > 0 and energia < self.sono.lambda_acordar and urgencias["fome"] <= self.p.urgencia_lambda
 
+    @staticmethod
+    def _sem_brincar(unidades: list[dict], w: list[int]) -> list[int]:
+        """a guarda da fome urgente no brincar (EQ-7): o peso 0 nas unidades do brincar"""
+        return [0 if x["acao"] == "brincar" else wi for x, wi in zip(unidades, w)]
+
     def escolher(self, unidades: list[dict], afeto: dict, sens: dict, rng, reflexo: bool | None = None,
-                 segurar: tuple | None = None) -> dict:
+                 segurar: tuple | None = None, sem_brincar: bool = False) -> dict:
         p = self.p
         if reflexo is None:
             reflexo = self.reflexo(sens)
+        if type(sem_brincar) is not bool:
+            raise TypeError(f"M-ARB: sem_brincar e bool: {sem_brincar!r}")
         w = self.pesos([x["a"] for x in unidades], afeto["g_exp"])
+        if sem_brincar:
+            w = self._sem_brincar(unidades, w)
         if reflexo and segurar is not None:
             raise RuntimeError("M-ARB: a escolha segurada com o reflexo do sono (o reflexo e evento)")
         segura = None if segurar is None else next((j for j, x in enumerate(unidades) if x["chave"] == segurar and w[j] > 0), None)
@@ -136,7 +148,8 @@ class Arbitragem:
             ativ = [0 if ("memoria" in tirar and x.get("tipo") == "ponto") else phi(x["soma"] - sum(x["termos"][t] for t in tirar), p.a_max)
                     for x in unidades]
             g_exp = p.e0 if nome == "sem_afeto" else afeto["g_exp"]
-            j = self._escolher(unidades, self.pesos(ativ, g_exp), u)
+            ws = self.pesos(ativ, g_exp)
+            j = self._escolher(unidades, self._sem_brincar(unidades, ws) if sem_brincar else ws, u)
             sondas[nome] = chave_json(unidades[j]["chave"])
             sondas[self.decidiu[nome]] = j != i
         return {"indice": i, "unidade": unidades[i], "u": u, "reflexo": reflexo, "nada_a_fazer": not reflexo and all(x == 0 for x in w),

@@ -85,9 +85,9 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from ..config import (COMPORTAMENTO_OLHAR, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_LANCE_DONO, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_OLHAR,
+from ..config import (COMPORTAMENTO_OLHAR, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_EQUILIBRIO_CUIDADO, CONFIG_LANCE_DONO, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_OLHAR,
                       CONFIG_PADRAO, CONTEUDOS_FALA, VERSAO_PET_DIGIBRAIN, Config, ConfigDigibrain, ConfigDigibrainInatos,
-                      ConfigEnjooTela, ConfigFalaUnidades, ConfigLanceDono, ConfigLutaMemoria, ConfigMundo, ConfigOlhar, ConfigSonoSegura)
+                      ConfigEnjooTela, ConfigEquilibrioCuidado, ConfigFalaUnidades, ConfigLanceDono, ConfigLutaMemoria, ConfigMundo, ConfigOlhar, ConfigSonoSegura)
 from ..events import AcaoPet, AcaoUsuario, LutaSemChave, resumo_luta
 from ..genoma_visao import GenomaVisao, genoma_visao
 from ..modelo_mundo import raiz_inteira
@@ -145,9 +145,10 @@ def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: Co
                    serie_e_doadora: tuple | None, semente: int | None = None, luta: bool = False,
                    cfg_fala: ConfigFalaUnidades | None = None, cfg_olhar: ConfigOlhar | None = None,
                    genoma: GenomaVisao | None = None, cfg_sono: ConfigSonoSegura | None = None,
-                   cfg_lance: ConfigLanceDono | None = None, cfg_enjoo: ConfigEnjooTela | None = None) -> Modulos:
+                   cfg_lance: ConfigLanceDono | None = None, cfg_enjoo: ConfigEnjooTela | None = None,
+                   cfg_equilibrio: ConfigEquilibrioCuidado | None = None) -> Modulos:
     return Modulos(sens=Sens(cfg, cm, inatos, cfg_olhar, genoma, cfg_enjoo), afeto=Afeto(cfg, cd, inatos, serie_e_doadora),
-                   estado=EstadoDinamico(cfg, cd, inatos), impulso=Impulso(inatos, cd, cfg_fala, cfg_olhar, cfg_lance), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
+                   estado=EstadoDinamico(cfg, cd, inatos), impulso=Impulso(inatos, cd, cfg_fala, cfg_olhar, cfg_lance, cfg_equilibrio), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
                                  None if semente is None else random.Random(derivar_semente(semente, "mem_emb")),
                                  luta, cd.olhar), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem, cfg_sono), plast=Plasticidade(cd, inatos),
                    pers=Personalidade(inatos.eta_faceta, inatos.teto_faceta, True) if cd.facetas_mem else None)
@@ -188,7 +189,7 @@ class DigiBrain:
                  cfg_fala: ConfigFalaUnidades | None = None, cfg_olhar: ConfigOlhar | None = None,
                  genoma_visao_ovo: GenomaVisao | None = None, cfg_sono: ConfigSonoSegura | None = None,
                  cfg_lance: ConfigLanceDono | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None,
-                 ir_ate_tv: bool = False) -> None:
+                 ir_ate_tv: bool = False, cfg_equilibrio: ConfigEquilibrioCuidado | None = None) -> None:
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         if not self.cd.ligada:
             raise DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada")
@@ -216,6 +217,11 @@ class DigiBrain:
         if not isinstance(self.cl, ConfigLanceDono):
             raise TypeError(f"cfg_lance e uma ConfigLanceDono: {self.cl!r}")
         self._convite: bool | None = None             # o convite entregue pelo motor para a decisao seguinte (None: nao entregue)
+        # as regras do E1 (EQ-7): a guarda da fome urgente no brincar e o bebe que come com a fome dele (o gancho `estagio_bebe`)
+        self.ceq = cfg_equilibrio or CONFIG_EQUILIBRIO_CUIDADO
+        if not isinstance(self.ceq, ConfigEquilibrioCuidado):
+            raise TypeError(f"cfg_equilibrio e uma ConfigEquilibrioCuidado: {self.ceq!r}")
+        self._bebe: bool | None = None                # o estagio entregue pelo motor do jogo para a decisao seguinte (None: nao entregue)
         # o enjoo (D-GV-ENJOO-CER): so com a subchave olhar e a ConfigEnjooTela ligada; desligada, nada muda
         self.ce: ConfigEnjooTela | None = None
         if cfg_enjoo_tela is not None:
@@ -226,7 +232,8 @@ class DigiBrain:
                     raise ValueError("a ConfigEnjooTela ligada so com a subchave olhar (D-GV-ENJOO-CER)")
                 self.ce = cfg_enjoo_tela
         self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente, self.luta_memoria, cfg_fala,
-                                self.co, self.genoma_visao, cfg_sono=cfg_sono, cfg_lance=self.cl, cfg_enjoo=self.ce)
+                                self.co, self.genoma_visao, cfg_sono=cfg_sono, cfg_lance=self.cl, cfg_enjoo=self.ce,
+                                cfg_equilibrio=self.ceq)
         if self.ce is not None:
             self.enjoo_tv: dict = {}                  # o enjoo lembrado de cada TV, id -> [0, S]
             self.k_enjoo_lembrado = ganho_de_tau(self.ce.tau_enjoo_lembrado, self.cfg.intervalo_decisao_ticks, self.S)
@@ -293,12 +300,24 @@ class DigiBrain:
         if self.cl.ligada:                            # o lance do dono (BB-4): o convite, salvo com a fome urgente (que segue ganhando)
             lance = self._entrada_bola_do_dono(afeto["urgencias"])
             extra["bola_do_dono"] = lance["bola_do_dono"]
+        if self.ceq.comer_bebe:                       # o bebe que come com a fome dele (EQ-7): a entrada `bebe` do gancho do motor
+            if self._bebe is None:
+                raise RuntimeError("o DigiBrain com a ConfigEquilibrioCuidado.comer_bebe decide sem o gancho estagio_bebe do motor")
+            bebe, self._bebe = self._bebe, None
+            extra["bebe"] = self.S if bebe else 0
+        # a guarda da fome urgente no brincar (EQ-7): a mesma fome urgente do sono que segura e do convite
+        guarda = None
+        if self.ceq.guarda_fome_brincar:
+            if "fome" not in afeto["urgencias"]:
+                raise RuntimeError("a guarda do brincar le a urgencia da fome, e ela nao veio do M-AFETO")
+            guarda = afeto["urgencias"]["fome"] > self.inatos.urgencia_lambda
         unidades, z = m.impulso.unidades(
             sens, afeto, ctx, m.plast, memoria, m.afeto.drives(receptores),
             None if not cd.memoria_autobio or termo_lem is None else (termo_lem, m.mem.casa),
             (dict(m.pers.valores), m.mem.classes_com_positivo()) if cd.facetas_mem else None, **extra,
             **({} if self.ce is None else {"enjoo": olhar.pop("_termo_enjoo")}))
-        esc = m.arb.escolher(unidades, afeto, sens, rng, reflexo, segurar)  # a rng de politica vai so ao M-ARB
+        esc = (m.arb.escolher(unidades, afeto, sens, rng, reflexo, segurar) if guarda is None   # a rng de politica vai so ao M-ARB
+               else m.arb.escolher(unidades, afeto, sens, rng, reflexo, segurar, sem_brincar=guarda))
         self._conferir_desligadas(unidades)
         unidade = esc["unidade"]
         fins = fins_susp + fins_passeio + m.estado.escolhida(unidade, z, afeto["g_apr"], k, reflexo)
@@ -353,6 +372,8 @@ class DigiBrain:
             self.motivos[-1]["evento"] = evento
         if self.cl.ligada:                            # o lance do dono (BB-4): desligada, nenhum campo novo
             self.motivos[-1]["lance"] = lance
+        if self.ceq.ligada:                           # as regras do E1 (EQ-7): desligadas, nenhum campo novo
+            self.motivos[-1]["equilibrio"] = {"bebe": extra.get("bebe"), "fome_urgente_sem_brincar": guarda}
         if cd.olhar:                                  # o olhar (P1d): desligada, nenhum campo novo
             self._olhando = unidade["chave"][2] if unidade["chave"][0] == COMPORTAMENTO_OLHAR and intencao.acao is AcaoPet.OCIOSO else None
             self.motivos[-1]["olhar"] = {**olhar, "olha": self._olhando}
@@ -376,6 +397,18 @@ class DigiBrain:
         if self._convite is not None:
             raise RuntimeError("bola_do_dono duas vezes antes da mesma decisao")
         self._convite = convite
+
+    # ------------------------------------------------------------ o bebe que come com a fome dele (EQ-7, so com a chave `comer_bebe`)
+    def estagio_bebe(self, bebe: bool) -> None:
+        """o motor do jogo, antes de cada decisao: o pet e um bebe (o In-Training da tela)? Sem a chave, ou duas vezes sem decisao, falha
+        alto"""
+        if not self.ceq.comer_bebe:
+            raise RuntimeError("estagio_bebe: o gancho do bebe exige a ConfigEquilibrioCuidado.comer_bebe ligada no cerebro (EQ-7)")
+        if type(bebe) is not bool:
+            raise TypeError(f"estagio_bebe recebe um bool: {bebe!r}")
+        if self._bebe is not None:
+            raise RuntimeError("estagio_bebe duas vezes antes da mesma decisao")
+        self._bebe = bebe
 
     def _entrada_bola_do_dono(self, urgencias: dict) -> dict:
         """a entrada `bola_do_dono` da decisao: S na janela do convite, 0 fora dela e 0 com a fome urgente (a urgencia da fome acima do
