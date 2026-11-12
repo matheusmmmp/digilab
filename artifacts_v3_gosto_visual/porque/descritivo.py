@@ -141,5 +141,5 @@ def resumo_run(pasta):
 
 
 res = {k: resumo_run(p) for k, p in RUNS.items()}
-(Path(__file__).resolve().parent / "descritivo.json").write_text(json.dumps(res, indent=1, ensure_ascii=True) + "\n", encoding="utf-8")
+(Path(__file__).resolve().parent / "descritivo.json").write_bytes((json.dumps(res, indent=1, ensure_ascii=True) + "\n").encode("utf-8"))
 print(json.dumps(res, indent=1))
