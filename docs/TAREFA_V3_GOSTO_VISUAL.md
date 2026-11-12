@@ -383,3 +383,7 @@ gabarito das vidas de hoje foi gravado antes, num commit próprio, e sai igual b
 - **Os testes:** `tests/test_orgao_visao.py` e `tests/test_gabarito_orgao_visao.py`.
 
 As leituras estão em `docs/registro/2026-11.md`, D-OV2-1 a 8. O web, a paridade e o órgão no navegador são a OV3.
+
+- **GVN-2, a leitura das vidas gravadas (2026-11-12, Claude Code, Opus 5.5, branch `v3-gosto-visual-gvn2`):** descritiva, sem vida nova,
+  pelo plano curto `docs/PLANO_ANALISE_V3_GOSTO_VISUAL_GVN2.md`; o resultado na seção 6 de `docs/futuro/gosto_visual_porque_negativo.md`
+  (`artifacts_v3_gosto_visual/gvn2/leitura.json`). A parte do peso da H5 não se lê nos `vidas.tar.gz` (GVN-2b aberta).
