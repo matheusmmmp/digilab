@@ -102,6 +102,9 @@ def julgar_acao(estado: dict, cfg: ConfigDonos) -> int:
         # o banheiro (TAREFA_V2_BANHEIRO, secao 5): o dono de cuidado nao julga onde o pet alivia (nem bronca nem elogio); o carinho
         # depois do banheiro e do DonoCarinhoBanheiro, fora do orcamento. Nas vidas de hoje o aliviar nao existe: nada muda
         return 0
+    if acao is AcaoPet.IR_TV:
+        # a TV no jogo (D-GV-TVJOGO-3): o dono de cuidado nao julga o ir ate a TV, como o aliviar. Nas vidas de hoje ele nao existe
+        return 0
     raise ValueError(f"acao do pet sem regra de julgamento: {acao}")  # pragma: no cover
 
 

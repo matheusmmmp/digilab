@@ -20,7 +20,7 @@
 import { C, CCO, CCO_V11, DUR_EVO, LIMIAR_PRIVACAO, TPD, type ConfigCorpo, type ConfigMundo } from "./constantes.ts";
 import { eNoite } from "./estado.ts";
 import { divArred, TIPOS_COMIDA_MUNDO } from "./mundo.ts";
-import type { AcaoPet } from "./tipos.ts";
+import type { AcaoPet, AcaoPetHoje } from "./tipos.ts";
 import { ATIVIDADE_TELA, CANAIS_ESTRESSE_TELA, CANAIS_TELA, CANAL_SUSTO_TELA, CONFIG_TELA, RECEPTOR_NOVIDADE_TELA, conferirConfigTela,
   type CanalTela, type ConfigTela } from "./tv.ts";
 import { CONFIG_ENJOO_TELA, RECEPTOR_ENJOO_TELA, conferirConfigEnjooTela, type ConfigEnjooTela } from "./enjoo_tela.ts";
@@ -51,7 +51,7 @@ export const ACOES_DONO_CORPO = ["alimentar", "limpar", "brincar", "acariciar", 
 export type AcaoDonoCorpo = typeof ACOES_DONO_CORPO[number];
 type AcaoDonoHoje = Exclude<AcaoDonoCorpo, "tapa">;
 /** a ordem das acoes do pet em corpo.taxas_de (a do dicionario do Python, que da a ordem dos emissores "pet:*") */
-const ORDEM_PET: readonly AcaoPet[] = ["ocioso", "dormir", "chamar_atencao", "brincar", "explorar", "comer", "emburrar"];
+const ORDEM_PET: readonly AcaoPetHoje[] = ["ocioso", "dormir", "chamar_atencao", "brincar", "explorar", "comer", "emburrar"];
 const FRUTAS_MUNDO = ["a", "b", "c"] as const;
 export const TOLERANCIA_GRADE = 1e-6;   // quanto um numero de hoje x C pode fugir de um inteiro (so erro de float)
 
@@ -156,7 +156,7 @@ export interface TaxasCorpo {
   cansaco_acordado: number; cansaco_noite: number; cansaco_dormindo: number; dano_privacao: number; dano_cura: number;
   limiar_privacao: number;
   dono: Record<AcaoDonoHoje, Record<string, number>>;
-  pet: Record<AcaoPet, Record<string, number>>;
+  pet: Record<AcaoPetHoje, Record<string, number>>;
 }
 
 /** corpo.gasto_da_atividade: o que uma atividade tira do combustivel, div_arred(o cansaco dela x gasto_atividades_num,
@@ -181,14 +181,14 @@ export function taxasDe(cc: ConfigCorpo): TaxasCorpo {
     elogiar: { tristeza: menos(g(C.ganhoElogiar, "ganho_elogiar")) },
     repreender: { tristeza: g(C.custoRepr, "custo_repreender") },
   };
-  const efeitos: Record<AcaoPet, Record<string, number>> = {
+  const efeitos: Record<AcaoPetHoje, Record<string, number>> = {
     ocioso: {}, dormir: {}, chamar_atencao: {},
     brincar: { tristeza: menos(g(C.humBrinc * C.intervalo, "humor do brincar")), cansaco: cc.pet_brincar_cansaco },
     explorar: { cansaco: cc.pet_explorar_cansaco, tristeza: cc.pet_explorar_tristeza },
     comer: { fome: cc.pet_comer_fome },
     emburrar: { tristeza: cc.pet_emburrar_tristeza },
   };
-  const pet = Object.fromEntries(ORDEM_PET.map((a) => [a, efeitos[a]])) as Record<AcaoPet, Record<string, number>>;
+  const pet = Object.fromEntries(ORDEM_PET.map((a) => [a, efeitos[a]])) as Record<AcaoPetHoje, Record<string, number>>;
   if (cc.metabolismo) {
     // ME-3: as atividades tiram do combustivel o que somam ao cansaco vezes o fator do gasto; o cansaco de hoje nao muda
     for (const ef of [pet.brincar, pet.explorar, dono.brincar]) ef.combustivel = menos(gastoDaAtividade(cc, ef.cansaco));
@@ -863,6 +863,7 @@ export class Corpo {
    *  nao da fome por si: a comida vem do mapa */
   acaoPet(acao: AcaoPet, comMundo = false): void {
     if (comMundo && acao === "comer") return;
+    if (acao === "ir_tv") { this.efeito(this.t.pet.ocioso, false); return; }   // o ir ate a TV (D-GV-TVJOGO-3): o ocioso; o andar vem do mundo
     if (!Object.hasOwn(this.t.pet, acao)) throw new Error(`acao do pet desconhecida: ${acao}`);
     this.efeito(this.t.pet[acao], acao === "comer");
   }

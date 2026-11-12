@@ -214,7 +214,7 @@ medido na VPS.
 | **CN2: a conta** | as pranchas das telas 1, 2 e 4; o OAuth, a sessão, o banco, o apelido, o aceite, apagar e baixar os dados | CN1, CN-1, CN-2, CN-10 |
 | **CN3: o save na nuvem** | as pranchas das telas 3 e 5; a sincronização por eventos, a vez, a divergência, as cópias; atrás de uma chave desligada no app (desligada, o save de hoje não muda) | CN2, CN0, CN-3, CN-4, CN-5 |
 | **CN4: a proteção** | o `robots.txt`, a borda na Cloudflare, os assets por URL assinada, a cota da fala, o Turnstile | CN1 (a cota da fala, CN2) |
-| **CN5: a hospedagem de teste** | o domínio, a VPS, o R2, o deploy pelo CI, o backup, o painel; os custos da seção 7 conferidos com os preços do dia | CN1 a CN4; o Matheus contrata |
+| **CN5: a hospedagem de teste** | o domínio, a VPS, o R2, o deploy pelo CI, o backup, o painel; os custos da seção 7 conferidos com os preços do dia (a comparação dos provedores e as CH-1 a CH-7: `docs/PLANO_V3_CONTA_HOSPEDAGEM.md`) | CN1 a CN4; o Matheus contrata |
 | **CN6: abrir** | as páginas públicas (tela 6), os termos e a privacidade; a revisão da LGPD; só depois, fora dos convidados | CN5, a revisão |
 | **CN7: o apoio** (CN-11 e CN-12 DECIDIDAS) | a seção 13.4: o processador, a tabela `apoios`, as telas da assinatura e do apoio e as páginas de venda; o anúncio da voz (seção 13.7.5) e a medida do eCPM real; a doação pode vir antes, sem código, por um link | CN6, CN-11 a CN-14 |
 
