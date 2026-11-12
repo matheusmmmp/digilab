@@ -200,3 +200,9 @@ passa sem regravar nada; D-GV-P1f-2).
 O achado: o `olhar` da P1d não rodava com a `memoria_autobio`; o conserto mínimo, no Python e no TS, está na D-GV-P1f-1.
 Fica de fora: a chave do web `?gosto_cerebro=1` (proposta) e a ligação do P0 ao cérebro (o `sentido_tela` gravado no registro do jogo e o
 painel lendo o cérebro), que pedem uma versão de pet nova e a decisão do Matheus (D-GV-P1f-6).
+
+## A TV ligada por padrão no jogo (2026-11-11, Claude Code, Opus 5.5, branch `v3-gosto-visual-padrao`)
+
+Decisão do Matheus (D-GV-PADRAO-1, `docs/registro/2026-11.md`): "Quero que a opção da TV esteja padrão no jogo". No web, a chave do
+protótipo (`web/app/src/gostoVisual/chave.ts`) vem ligada; `?gosto_visual=0` desliga naquela aba. A captura continua só no clique do dono,
+fora do motor, do log e do save. As chaves do Python (P1b, P1c) seguem desligadas.
