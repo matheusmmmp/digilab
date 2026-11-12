@@ -55,7 +55,7 @@ export function chocarDoBrasao(esp: Especie, guardarAtivo = false, ritmo: Ritmo 
   guardarNoProximoOvo = false;
   fecharEscolhaBrasao();
 }
-/** os dois ovos (a VERSAO_GRUPO, a v28 desde a LP6-4; antes a v26; docs/TAREFA_V3_COOPERACAO.md, CO4c), com a chave DOIS_OVOS_LIGADO: o primeiro e do brasao escolhido, e o segundo e
+/** os dois ovos (v28, VERSAO_GRUPO; antes v26; docs/TAREFA_V3_COOPERACAO.md, CO4c), com a chave DOIS_OVOS_LIGADO: o primeiro e do brasao escolhido, e o segundo e
     surpresa ("Um brasao, o outro surpresa", Matheus, 2026-11-11; D-CO4b-6): a semente dele sai da do primeiro (sementeDoSegundoJogo), e a
     especie, dela. Os dois nascem com o mesmo ritmo e o mesmo produto, cada um no registro dele */
 export function chocarDoisOvos(esp: Especie, ritmo: Ritmo = "rapida", semente: number = sementeDoBrasao(esp)): GrupoDoJogo {

@@ -360,7 +360,7 @@ test("luta da POC: a primeira abertura descarta os pets de antes, avisa, oferece
   await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
   const r = await page.evaluate(c => ({ save: JSON.parse(localStorage.getItem(c)!), g: localStorage.getItem(c + "-guardados"), aviso: localStorage.getItem(c + "-aviso-poc"),
     tamer: JSON.parse(localStorage.getItem(c + "-tamer")!), marca: localStorage.getItem(c + "-descarte"), antigos: JSON.parse(localStorage.getItem(c + "-descartados")!) }), CHAVE);
-  /* o ovo do brasao choca os dois pets (CO4d): o save e o do grupo, na VERSAO_GRUPO (a v28 desde a LP6-4) */
+  /* o ovo do brasao choca os dois pets (CO4d): o save e o do grupo, na v26 */
   expect([r.save.versao, r.save.grupo]).toEqual([VERSAO_GRUPO, true]);
   expect(r.g).toBe("[]");
   expect(r.aviso).toBeNull();

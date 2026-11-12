@@ -15,31 +15,31 @@
    "lutas": 41,
    "ult": 12,
    "mega": 19,
-   "log_sha": "ea12c0691287da21f9f1937b229cd7b6a8dce5474361a8a609f34cd3dd1ea034",
-   "assinatura": "9ad16b11d9405bcce3888508eef93199e180de4c85f36858892e0e374fd8f3e7",
-   "resultados": "f13ddb2850bacf6bf6c5cd133e38721ece6a099d09685dcda47736e49ceb6a6f"
+   "log_sha": "0c87172d756c2e368c1f5544679db7f6b92880d028d3af38d3fecc370aa9467c",
+   "assinatura": "4fb8a72d1dc2da0e340fab1923347a31dc86f3551fed6d21d605ce640359db02",
+   "resultados": "9faca4f77b8e940bbae74410e2a91830c165eac8a86a54b741e0466386616bfc"
   },
   {
    "semente": 202,
    "estagio": "mega",
-   "eventos": 177,
+   "eventos": 190,
    "lutas": 41,
    "ult": 12,
    "mega": 19,
-   "log_sha": "203f21381f5de36be0d66548ce3aa8198cd8fed8bc7e56e5eee355b64003b17f",
-   "assinatura": "37e55e0500cdf35d4b219987d98c22b1d49148a530f3259c91fa63dbdfaf26ee",
-   "resultados": "c5f8a2d2e037089b92aef3ff661c7508d45dca8c155f15cf3506ffd7021744dc"
+   "log_sha": "04ef141557b2e2162ac74155e130a415c53852e4383833f44ddf0499a82063f3",
+   "assinatura": "26122a908b0fe0785e459b573d90f228b2c860b73f44f7c210a4dc00e8ba8814",
+   "resultados": "1aec0c9edaf604c0eb9f737b14b6e5e2385e1c00ddd3ef399f0ad7d686cccf96"
   },
   {
    "semente": 303,
    "estagio": "mega",
-   "eventos": 194,
+   "eventos": 204,
    "lutas": 41,
    "ult": 12,
    "mega": 19,
-   "log_sha": "b3c9006014944b4a2c2c6692e140a6119232b71ca0d1b17f869d79dab63172e7",
-   "assinatura": "12db1b69b9f0711fb9780a36b60349eea459b395b8a74a3994e3454cf969e306",
-   "resultados": "49c6fec31e66cfa16c92fac4ff094f2ea8687a98cb8941cfe9199306a91c997f"
+   "log_sha": "0ef43c8297b1f501c1213f8644236ba44be1a2c664b7ad53281e6d024f8adf72",
+   "assinatura": "1ab687719cc30e310682a9827b7e26ba09c54c118a82f264ccbda67285c41dc0",
+   "resultados": "b89123ef34b209d72739619ab08ea5885082686d505a5717e14490cb88ab3502"
   }
  ]
 }

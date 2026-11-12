@@ -100,7 +100,7 @@ describe("o pet gemeo em Ajustes", () => {
     chocarDoBrasao(um.especie, true, um.ritmo);
     const g = jogoAtual().grupo!;
     expect(g).not.toBeNull();
-    expect(g.versao).toBe(VERSAO_GRUPO);   // a v28 desde a LP6-4
+    expect(g.versao).toBe(VERSAO_GRUPO);
     expect(g.motor("A").especie).toBe(ESP);
     const guardados = lerGuardados();
     expect(guardados).toHaveLength(1);
