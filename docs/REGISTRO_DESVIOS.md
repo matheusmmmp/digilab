@@ -779,3 +779,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-12 — INDIVIDUALIDADE, o adendo 4 do I7 (Claude Code, Opus 5.5, branch `v3-individualidade-ad4`)](registro/2026-11.md)
 - [2026-11-12 — CONTA: as RC-5 a RC-8 do roadmap decididas pela recomendação (Claude Code, Opus 5.5, branch `v3-conta-roadmap-dev`)](registro/2026-11.md)
 - [2026-11-12 — UX_TELA_PET, o plano e a prancha das janelas do pet (Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-janelas`)](registro/2026-11.md)
+- [2026-11-12 — UX_TELA_PET, JN1: uma chave "exibir" por janela do pet (Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-janelas-jn1`)](registro/2026-11.md)

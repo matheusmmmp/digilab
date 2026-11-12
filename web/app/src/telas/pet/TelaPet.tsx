@@ -37,7 +37,8 @@ import { useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao } from "../../jornada.ts";
 import { useTempo } from "../../tempo.ts";
 import { CHAVE } from "../../save.ts";
-import { FOME_FALA, NOTIFICA_MS, chamadosVisiveis, useArrastavel, useArrastavelPorAlca, useAviso, useDetalhesPet } from "../../hudPet.ts";
+import { FOME_FALA, NOTIFICA_MS, chamadosVisiveis, useArrastavel, useArrastavelPorAlca, useAviso } from "../../hudPet.ts";
+import { useJanelas } from "../../janelasPet.ts";
 import { BotaoMovel, Segura } from "../../componentes/BotaoMovel.tsx";
 import { alternarLeque, fecharLeque, mudarLeque, useLeque } from "../../movel.ts";
 import { AgoraIcone, ChipCausa, LinhaAgora, nomeAcaoAgora } from "./LinhaAgora.tsx";
@@ -735,12 +736,15 @@ function useTopo(): HTMLElement | null {
 }
 export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: { irRegistro: () => void; irEvolucao: () => void; abrirConfig: () => void; abrirMeusPets: () => void }) {
   const { motor: m, nascendo } = useJogo(), fala = useFala(), largo = useLargo(), [aberto, setAberto] = useState<Painel | null>(null);
-  const [hud, mudarHud] = useAbertosHud(), detalhesPet = useDetalhesPet();
+  const [hud, mudarHud] = useAbertosHud(), jn = useJanelas();
   const painel = useRef<HTMLDivElement>(null), gatilho = useRef<HTMLElement | null>(null), dock = useRef<HTMLDivElement>(null), pilha = useRef<HTMLElement>(null);
   useReservaDoHabitat(dock, largo);
   const vivo = nascendo === 0 && !m.morte, p = vivo ? previsaoEvo(m) : null, temEvo = !!p;
-  /* "Exibir detalhes do pet" desligado (Ajustes): sem Estado, Evolucao, Ultimas acoes e DigiBrain; o porque da fala fica */
-  const tem = (id: Painel): boolean => id === "tv" ? vivo && gostoVisualLigado() : id === "fala" ? nascendo === 0 : !detalhesPet ? false : id === "estado" || (nascendo === 0 && (id === "evolucao" ? temEvo : id === "digibrain" ? true : vivo));
+  /* cada janela tem o seu "exibir" (Ajustes > Exibir, janelasPet.ts): escondida, o painel dela nao abre; o porque da fala fica */
+  const tem = (id: Painel): boolean => id === "tv" ? vivo && gostoVisualLigado() : id === "fala" ? nascendo === 0 : id === "estado" ? jn.estado
+    : nascendo === 0 && (id === "evolucao" ? jn.evolucao && temEvo : id === "digibrain" ? jn.digibrain : jn.acoes && vivo);
+  /* ha alguma janela para a pilha da direita */
+  const naPilha = jn.estado || jn.evolucao || jn.acoes || jn.digibrain;
   /* o painel que deixou de fazer sentido (o ovo chocando, o pet que morreu) fecha sozinho; no desktop Estado, Evolucao e Ultimas acoes
      ficam na pilha, e o painel flutuante e so o do DigiBrain e o do porque */
   const valido = (q: Painel | null): q is Painel => q !== null && tem(q) && (!largo || q === "digibrain" || q === "fala" || q === "tv");
@@ -787,18 +791,18 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
         {vivo && <BalaoFala v={fala} abrir={() => abrir("fala")} />}
         {m.mundo && vivo && <FaixaRacao />}
       </div>
-      {topo && largo && createPortal(<LinhaAgora aberto={atual === "digibrain"} sobPainel={atual !== null} aoAbrir={detalhesPet ? () => abrir("digibrain") : undefined} />, topo, "agora")}
-      {!largo && <AgoraIcone aberto={atual === "digibrain"} sobPainel={atual !== null} aoAbrir={detalhesPet ? () => abrir("digibrain") : undefined} />}
+      {topo && largo && jn.agora && createPortal(<LinhaAgora aberto={atual === "digibrain"} sobPainel={atual !== null} aoAbrir={jn.digibrain ? () => abrir("digibrain") : undefined} />, topo, "agora")}
+      {!largo && jn.agora && <AgoraIcone aberto={atual === "digibrain"} sobPainel={atual !== null} aoAbrir={jn.digibrain ? () => abrir("digibrain") : undefined} />}
       <AtosNaIlha />
-      <Prioridade abrirDetalhes={largo || detalhesPet ? abrirEstado : undefined} movel={!largo} />
-      {/* com "Exibir detalhes do pet" desligado a pilha some; com o prototipo do gosto visual fica so a linha "TV", o caminho do teclado */}
-      {largo ? (!atual && (detalhesPet || temTv) && (
+      <Prioridade abrirDetalhes={jn.estado ? abrirEstado : undefined} movel={!largo} />
+      {/* com as quatro janelas da pilha escondidas a pilha some; com o prototipo do gosto visual fica so a linha "TV", o caminho do teclado */}
+      {largo ? (!atual && (naPilha || temTv) && (
         <aside className="pet-hud" ref={pilha} aria-label="Painéis do pet" {...arrPilha}>
-          {detalhesPet && <PainelHud id="estado" aberto={hud.estado} alternar={() => mudarHud("estado")}>{conteudo("estado")}</PainelHud>}
-          {detalhesPet && temEvo && <PainelHud id="evolucao" aberto={hud.evolucao} alternar={() => mudarHud("evolucao")} resumo={resumoEvo}>{conteudo("evolucao")}</PainelHud>}
-          {detalhesPet && vivo && <PainelHud id="acoes" aberto={hud.acoes} alternar={() => mudarHud("acoes")} resumo={ult ? `${hhmm(ult.t)} · ${textoHist(ult)}` : "nada no registro ainda"}>
+          {jn.estado && <PainelHud id="estado" aberto={hud.estado} alternar={() => mudarHud("estado")}>{conteudo("estado")}</PainelHud>}
+          {jn.evolucao && temEvo && <PainelHud id="evolucao" aberto={hud.evolucao} alternar={() => mudarHud("evolucao")} resumo={resumoEvo}>{conteudo("evolucao")}</PainelHud>}
+          {jn.acoes && vivo && <PainelHud id="acoes" aberto={hud.acoes} alternar={() => mudarHud("acoes")} resumo={ult ? `${hhmm(ult.t)} · ${textoHist(ult)}` : "nada no registro ainda"}>
             <UltimasAcoes irRegistro={irRegistro} n={5} /></PainelHud>}
-          {detalhesPet && nascendo === 0 && <LinhaDigiBrain abrir={() => abrir("digibrain")} />}
+          {jn.digibrain && nascendo === 0 && <LinhaDigiBrain abrir={() => abrir("digibrain")} />}
           {temTv && <LinhaTv abrir={() => abrir("tv")} />}
         </aside>
       )) : (
@@ -806,7 +810,7 @@ export function TelaPet({ irRegistro, irEvolucao, abrirConfig, abrirMeusPets }: 
       )}
       {/* a camera solta (L1 de "Lugares da ilha"): o minimapa no canto de baixo a direita, onde ficava a etiqueta do DigiBrain, e o "seguir o
           pet" e o aviso de borda; so a partir de 900 px, e o minimapa sai enquanto um painel flutuante ocupa a direita */}
-      {largo && !atual && <Minimapa chama={vivo && petChama(m)} />}
+      {largo && !atual && jn.minimapa && <Minimapa chama={vivo && petChama(m)} />}
       {largo && <CameraHud />}
       {/* o DigiBrain do A v11 e o scan (o campo pequeno, um dialogo modal); o do modular (pet v16) continua no painel de hoje (D1-9) */}
       {atual === "digibrain" && !m.lab && <ScanDigiBrain fechar={fechar} movel={!largo} chamado={<ChamadoSobScan />} />}

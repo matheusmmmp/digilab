@@ -114,3 +114,26 @@ chaves de Ajustes › Exibir: cada uma põe ou tira o botão daquele painel no l
 - O custo do DigiBrain sempre aberto não foi medido.
 - O redimensionar aparece só no quadro do modo arrumar; o conteúdo de cada janela em outra largura não foi desenhado.
 - A pele Militar foi capturada e não foi olhada.
+
+---
+
+## 10. A etapa JN1: uma chave "exibir" por janela (2026-11-12, Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-janelas-jn1`)
+
+**O que entrou:**
+- **O cadastro das janelas** (`web/app/src/janelasPet.ts`): Estado atual, Evolução, Últimas ações, DigiBrain, Agora e Minimapa, com o
+  nome e o resumo de cada uma. A tela do pet e os Ajustes leem o mesmo cadastro.
+- **Ajustes › Exibir** (`#/config/exibir`): uma chave por janela. A linha "Exibir" do menu dos Ajustes diz quantas estão à mostra.
+- **A tela do pet** (`TelaPet.tsx`): cada painel da pilha, a linha do agora e o minimapa obedecem à chave deles. Uma janela escondida
+  não abre por outro caminho (o resumo do chamado não abre o Estado escondido; a linha do agora não abre o DigiBrain escondido).
+- **A chave única "Exibir detalhes do pet" saiu** (UX-JN-7). Quem a tinha desligada começa com as quatro janelas dela escondidas; o
+  Agora e o Minimapa ficam à mostra.
+- **Onde fica guardado:** a chave `-janelas` do navegador (`{v: 1, exibir: {...}}`), fora do save. Um texto ilegível vale como nada
+  gravado.
+
+**O que não entrou (é das etapas seguintes):** nada se arrasta sozinho ainda; a pilha continua se movendo como um bloco. Os três
+arranjos, "Arrumar as janelas" e o "Voltar ao lugar" dentro de Exibir são da JN2 e da JN4. A linha "TV" do gosto visual continua na
+pilha por conta própria, fora do cadastro.
+
+**O celular:** as mesmas chaves valem. Escondida, a janela não abre pelo leque do retrato. Não conferi o celular na tela.
+
+**As capturas do jogo** estão em `docs/pranchas/ux-janelas/capturas_codigo/`: `jn1_exibir_1920.jpg` e `jn1_pet_sem_acoes_1920.jpg`.
