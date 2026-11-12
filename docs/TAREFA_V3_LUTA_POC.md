@@ -1073,4 +1073,6 @@ desvios são o D-N4-1 a 5, em `docs/registro/2026-11.md`. Nenhum número do jogo
   move: o fôlego fraco não é o pulo.
 - **As séries (G1, G3) e o Castelo não se movem** com nenhuma chave.
 
-**As decisões que sobram:** a D-N-8 a D-N-12, na seção 5 do relatório.
+**As decisões D-N-8 a D-N-12 estão DECIDIDAS como recomendadas:** o Matheus, "Aprovo as 5 + merge (Recommended)" (2026-11-12, repassado pelo Gerente). A
+investigação fecha com o #905, e o próximo passo é o plano da calibração geral (o `tiroDoMorto` ligado junto com ela; a grade conjunta do
+`forcaAtr` e do mapeamento; a régua das séries revista antes; a tabela das formas depois).

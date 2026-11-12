@@ -85,7 +85,9 @@ atributos pesa.
 - **o Castelo:** nenhuma regra explica o A1 dele;
 - **o T2:** o fôlego não pesa, e não é pelo pulo.
 
-## 5. As decisões que sobram para o Matheus
+## 5. As decisões que sobravam (todas DECIDIDAS como recomendadas, 2026-11-12: "Aprovo as 5 + merge (Recommended)", o Matheus, repassado pelo Gerente)
+
+Com elas, a investigação fecha neste PR (#905). O próximo passo é o plano da calibração geral, que ainda não foi aberto.
 
 | # | a pergunta | a recomendação | o custo de errar |
 |---|---|---|---|

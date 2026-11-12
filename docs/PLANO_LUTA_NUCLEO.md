@@ -327,3 +327,15 @@ números da N1.
 - o que cada chave move e quebra;
 - o que vai para a tabela das formas e para a calibração geral;
 - as decisões que sobrarem.
+
+## 9. O fim da investigação (2026-11-12)
+
+O relatório é o `docs/RESULTADO_V3_LUTA_NUCLEO.md`. As decisões D-N-8 a D-N-12 (a seção 5 dele) estão DECIDIDAS como recomendadas: o Matheus,
+"Aprovo as 5 + merge (Recommended)" (repassado pelo Gerente). A investigação fecha com o PR #905. Ficam decididos:
+- **D-N-8:** a investigação fecha, e o próximo passo é o plano da calibração geral;
+- **D-N-9:** o `tiroDoMorto` entra ligado na versão nova da luta, junto com a calibração geral, nunca antes dela;
+- **D-N-10:** a calibração geral faz uma grade conjunta do `forcaAtr` (de 1,0 a 1,5) e do mapeamento (o `gama`, o `multVida` e o `multAtk`), com o `puloMax` e a `bordaRingue` ao lado;
+- **D-N-11:** a régua das séries (o G1, o G3 e o critério do P2 e do P3) é revista no plano da calibração geral, antes de rodar;
+- **D-N-12:** a tarefa da tabela das formas abre depois que a calibração geral escolher o `forcaAtr`.
+
+Os números seguem PROPOSTOS, SEM FONTE.
