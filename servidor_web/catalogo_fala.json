@@ -1,0 +1,710 @@
+{
+ "acoes_combate": {
+  "avancar": [
+   "[avançar]",
+   "avançar",
+   "Avancei"
+  ],
+  "carregar": [
+   "[carregar]",
+   "carregar",
+   "Carreguei guts"
+  ],
+  "contra_golpe": [
+   "[contra]",
+   "contra-golpe",
+   "Fiz o contra-golpe"
+  ],
+  "defender": [
+   "[defender]",
+   "defender",
+   "Defendi"
+  ],
+  "disparo": [
+   "[disparo]",
+   "disparo",
+   "Disparei"
+  ],
+  "esquivar": [
+   "[esquivar]",
+   "esquivar",
+   "Esquivei"
+  ],
+  "fintar": [
+   "[finta]",
+   "finta",
+   "Fintei em vez de soltar o pesado"
+  ],
+  "golpe_rapido": [
+   "[golpe]",
+   "golpe",
+   "Dei um golpe rápido"
+  ],
+  "investida": [
+   "[investida]",
+   "investida",
+   "Investi"
+  ],
+  "marcar": [
+   "[marcar]",
+   "marcar",
+   "Marquei você"
+  ],
+  "pele_dura": [
+   "[pele dura]",
+   "pele dura",
+   "Endureci a pele"
+  ],
+  "pesado": [
+   "[pesado!]",
+   "pesado!",
+   "Soltei o pesado que eu tinha preparado"
+  ],
+  "preparar_pesado": [
+   "[preparar]",
+   "preparar",
+   "Preparei o pesado"
+  ],
+  "recuar": [
+   "[recuar]",
+   "recuar",
+   "Recuei"
+  ]
+ },
+ "acoes_vida": {
+  "brincar": [
+   "[brincar]",
+   "brincar",
+   "Brinquei"
+  ],
+  "chamar_atencao": [
+   "[chamar]",
+   "chamar",
+   "Chamei você"
+  ],
+  "comer": [
+   "[comer]",
+   "comer",
+   "Comi"
+  ],
+  "dormir": [
+   "[dormir]",
+   "dormir",
+   "Dormi"
+  ],
+  "emburrar": [
+   "[emburrar]",
+   "emburrar",
+   "Emburrei"
+  ],
+  "enrolar": [
+   "[enrolei]",
+   "enrolei",
+   "Enrolei no treino"
+  ],
+  "explorar": [
+   "[explorar]",
+   "explorar",
+   "Explorei"
+  ],
+  "fazer_outra": [
+   "[outra coisa]",
+   "outra coisa",
+   "Fiz outra coisa em vez do que você pediu"
+  ],
+  "forcar_treino": [
+   "[forçado]",
+   "forçado",
+   "Treinei além do meu limite"
+  ],
+  "ocioso": [
+   "[à toa]",
+   "à toa",
+   "Fiquei à toa"
+  ],
+  "recusar": [
+   "[não!]",
+   "não quero",
+   "Não quis fazer o que você pediu"
+  ],
+  "treinar_cansado": [
+   "[sem pausa]",
+   "sem pausa",
+   "Treinei mesmo pedindo para parar"
+  ]
+ },
+ "dominios": {
+  "distancia_eh": [
+   [
+    "longe",
+    "medio",
+    "perto"
+   ]
+  ],
+  "executando_pesado": [],
+  "guts_proprio_abaixo": [
+   [
+    "20",
+    "40",
+    "60"
+   ]
+  ],
+  "guts_proprio_acima": [
+   [
+    "20",
+    "40",
+    "60"
+   ]
+  ],
+  "hp_proprio_abaixo": [
+   [
+    "0.25",
+    "0.5",
+    "0.75"
+   ]
+  ],
+  "oponente_frequente": [
+   [
+    "avancar",
+    "carregar",
+    "contra_golpe",
+    "defender",
+    "disparo",
+    "esquivar",
+    "fintar",
+    "golpe_rapido",
+    "investida",
+    "marcar",
+    "pele_dura",
+    "pesado",
+    "preparar_pesado",
+    "recuar"
+   ]
+  ],
+  "oponente_guts_abaixo": [
+   [
+    "20",
+    "40",
+    "60"
+   ]
+  ],
+  "oponente_hp_abaixo": [
+   [
+    "0.25",
+    "0.5",
+    "0.75"
+   ]
+  ],
+  "oponente_preparando": [],
+  "oponente_repete": [
+   [
+    "avancar",
+    "carregar",
+    "contra_golpe",
+    "defender",
+    "disparo",
+    "esquivar",
+    "fintar",
+    "golpe_rapido",
+    "investida",
+    "marcar",
+    "pele_dura",
+    "pesado",
+    "preparar_pesado",
+    "recuar"
+   ],
+   [
+    "2",
+    "3"
+   ]
+  ],
+  "oponente_vai_preparar": [],
+  "sempre": [],
+  "turno_execucao": [
+   [
+    "10",
+    "20",
+    "5"
+   ]
+  ]
+ },
+ "emote_humor": [
+  "(T_T)",
+  "(-_-)",
+  "(^_^)"
+ ],
+ "esquema": {
+  "additionalProperties": false,
+  "properties": {
+   "abertura": {
+    "type": "string"
+   },
+   "fecho": {
+    "type": "string"
+   }
+  },
+  "required": [
+   "abertura",
+   "fecho"
+  ],
+  "type": "object"
+ },
+ "estagios": [
+  "bebe",
+  "crianca",
+  "adolescente",
+  "adulto"
+ ],
+ "estagios_llm": [
+  "adolescente",
+  "adulto"
+ ],
+ "fatores": {
+  "bola": {
+   "adolescente": "bola...",
+   "adulto": "porque a bola estava ali",
+   "bebe": "",
+   "crianca": "[:bola:]",
+   "marcador": "bola"
+  },
+  "bronca": {
+   "adolescente": "repreensão...",
+   "adulto": "porque lembro da sua repreensão",
+   "bebe": "",
+   "crianca": "[:repreensão:]",
+   "marcador": "repreensão"
+  },
+  "carinho": {
+   "adolescente": "carinho...",
+   "adulto": "porque lembro do seu carinho",
+   "bebe": "",
+   "crianca": "[:carinho:]",
+   "marcador": "carinho"
+  },
+  "demora": {
+   "adolescente": "me deixou esperando...",
+   "adulto": "porque lembro que você me deixou esperando",
+   "bebe": "",
+   "crianca": "[:me deixou esperando:]",
+   "marcador": "me deixou esperando"
+  },
+  "distancia_eh": {
+   "adolescente": "distância...",
+   "adulto": "porque a distância era {p0}",
+   "bebe": "",
+   "crianca": "[:distância:]",
+   "marcador": "distância"
+  },
+  "dormindo": {
+   "adolescente": "sono...",
+   "adulto": "porque eu estava com sono",
+   "bebe": "",
+   "crianca": "[:sono:]",
+   "marcador": "sono"
+  },
+  "elogio": {
+   "adolescente": "parabéns...",
+   "adulto": "porque lembro dos seus parabéns",
+   "bebe": "",
+   "crianca": "[:parabéns:]",
+   "marcador": "parabéns"
+  },
+  "elogios": {
+   "adolescente": "elogio...",
+   "adulto": "por causa dos elogios recentes",
+   "bebe": "",
+   "crianca": "[:elogio:]",
+   "marcador": "elogio"
+  },
+  "energia": {
+   "adolescente": "cansaço...",
+   "adulto": "por causa do cansaço",
+   "bebe": "",
+   "crianca": "[:cansaço:]",
+   "marcador": "cansaço"
+  },
+  "escolha_aprendida_fruta": {
+   "adolescente": "aprendi a escolher...",
+   "adulto": "porque aprendi a escolher essa",
+   "bebe": "",
+   "crianca": "[:aprendi a escolher:]",
+   "marcador": "aprendi a escolher"
+  },
+  "executando_pesado": {
+   "adolescente": "hora do pesado...",
+   "adulto": "porque era a hora do pesado",
+   "bebe": "",
+   "crianca": "[:hora do pesado:]",
+   "marcador": "hora do pesado"
+  },
+  "fadiga_treino": {
+   "adolescente": "treino puxado...",
+   "adulto": "por causa do treino puxado",
+   "bebe": "",
+   "crianca": "[:treino puxado:]",
+   "marcador": "treino puxado"
+  },
+  "fome": {
+   "adolescente": "fome...",
+   "adulto": "por causa da fome",
+   "bebe": "",
+   "crianca": "[:fome:]",
+   "marcador": "fome"
+  },
+  "fruta": {
+   "adolescente": "fruta à vista...",
+   "adulto": "porque havia fruta à vista",
+   "bebe": "",
+   "crianca": "[:fruta à vista:]",
+   "marcador": "fruta à vista"
+  },
+  "guts_proprio_abaixo": {
+   "adolescente": "exausto...",
+   "adulto": "porque eu estava exausto (guts abaixo de {p0})",
+   "bebe": "",
+   "crianca": "[:exausto:]",
+   "marcador": "exausto"
+  },
+  "guts_proprio_acima": {
+   "adolescente": "folga de guts...",
+   "adulto": "porque eu tinha folga de guts ({p0} ou mais)",
+   "bebe": "",
+   "crianca": "[:folga de guts:]",
+   "marcador": "folga de guts"
+  },
+  "habito": {
+   "adolescente": "costume...",
+   "adulto": "por costume",
+   "bebe": "",
+   "crianca": "[:costume:]",
+   "marcador": "costume"
+  },
+  "higiene": {
+   "adolescente": "higiene...",
+   "adulto": "por causa da higiene",
+   "bebe": "",
+   "crianca": "[:higiene:]",
+   "marcador": "higiene"
+  },
+  "hora": {
+   "adolescente": "hora do dia...",
+   "adulto": "por causa da hora do dia",
+   "bebe": "",
+   "crianca": "[:hora do dia:]",
+   "marcador": "hora do dia"
+  },
+  "hp_proprio_abaixo": {
+   "adolescente": "machucado...",
+   "adulto": "porque eu estava machucado (menos de {p0} da vida)",
+   "bebe": "",
+   "crianca": "[:machucado:]",
+   "marcador": "machucado"
+  },
+  "humor": {
+   "adolescente": "humor...",
+   "adulto": "por causa do meu humor",
+   "bebe": "",
+   "crianca": "[:humor:]",
+   "marcador": "humor"
+  },
+  "incentivo_fruta": {
+   "adolescente": "a que eu mais procuro...",
+   "adulto": "porque é a que eu mais procuro",
+   "bebe": "",
+   "crianca": "[:a que eu mais procuro:]",
+   "marcador": "a que eu mais procuro"
+  },
+  "latencia_fome": {
+   "adolescente": "demorou com a comida...",
+   "adulto": "porque você demorou com a comida da última vez",
+   "bebe": "",
+   "crianca": "[:demorou com a comida:]",
+   "marcador": "demorou com a comida"
+  },
+  "latencia_higiene": {
+   "adolescente": "demorou para me limpar...",
+   "adulto": "porque você demorou para me limpar da última vez",
+   "bebe": "",
+   "crianca": "[:demorou para me limpar:]",
+   "marcador": "demorou para me limpar"
+  },
+  "memoria_fruta": {
+   "adolescente": "lembrei dessa fruta...",
+   "adulto": "porque lembrei dessa fruta",
+   "bebe": "",
+   "crianca": "[:lembrei dessa fruta:]",
+   "marcador": "lembrei dessa fruta"
+  },
+  "necessidade_energia": {
+   "adolescente": "sem forças...",
+   "adulto": "porque eu estava sem forças",
+   "bebe": "",
+   "crianca": "[:sem forças:]",
+   "marcador": "sem forças"
+  },
+  "necessidade_fome": {
+   "adolescente": "barriga vazia...",
+   "adulto": "porque eu estava de barriga vazia",
+   "bebe": "",
+   "crianca": "[:barriga vazia:]",
+   "marcador": "barriga vazia"
+  },
+  "necessidade_higiene": {
+   "adolescente": "todo sujo...",
+   "adulto": "porque eu estava todo sujo",
+   "bebe": "",
+   "crianca": "[:todo sujo:]",
+   "marcador": "todo sujo"
+  },
+  "necessidade_humor": {
+   "adolescente": "chateado...",
+   "adulto": "porque eu estava chateado",
+   "bebe": "",
+   "crianca": "[:chateado:]",
+   "marcador": "chateado"
+  },
+  "oponente_frequente": {
+   "adolescente": "você insiste...",
+   "adulto": "porque você insiste em '{p0}'",
+   "bebe": "",
+   "crianca": "[:você insiste:]",
+   "marcador": "você insiste"
+  },
+  "oponente_guts_abaixo": {
+   "adolescente": "você estava sem guts...",
+   "adulto": "porque você estava sem guts (abaixo de {p0})",
+   "bebe": "",
+   "crianca": "[:você estava sem guts:]",
+   "marcador": "você estava sem guts"
+  },
+  "oponente_hp_abaixo": {
+   "adolescente": "você estava fraco...",
+   "adulto": "porque você estava fraco (menos de {p0} da vida)",
+   "bebe": "",
+   "crianca": "[:você estava fraco:]",
+   "marcador": "você estava fraco"
+  },
+  "oponente_preparando": {
+   "adolescente": "você ia usar o golpe pesado...",
+   "adulto": "porque você ia usar o golpe pesado",
+   "bebe": "",
+   "crianca": "[:você ia usar o golpe pesado:]",
+   "marcador": "você ia usar o golpe pesado"
+  },
+  "oponente_repete": {
+   "adolescente": "você repetiu...",
+   "adulto": "porque você repetiu '{p0}' {p1} vezes",
+   "bebe": "",
+   "crianca": "[:você repetiu:]",
+   "marcador": "você repetiu"
+  },
+  "oponente_vai_preparar": {
+   "adolescente": "vi o pesado vindo...",
+   "adulto": "porque vi o pesado vindo antes de você preparar",
+   "bebe": "",
+   "crianca": "[:vi o pesado vindo:]",
+   "marcador": "vi o pesado vindo"
+  },
+  "plano_arvore": {
+   "adolescente": "lá cai...",
+   "adulto": "porque no {p0} lá cai {p1}, que me faz bem",
+   "bebe": "",
+   "crianca": "[:lá cai:]",
+   "marcador": "lá cai"
+  },
+  "plano_comida": {
+   "adolescente": "vi ali...",
+   "adulto": "porque vi ali {p0}, que me faz bem",
+   "bebe": "",
+   "crianca": "[:vi ali:]",
+   "marcador": "vi ali"
+  },
+  "plano_evita": {
+   "adolescente": "me faz mal...",
+   "adulto": "porque {p0} me faz mal",
+   "bebe": "",
+   "crianca": "[:me faz mal:]",
+   "marcador": "me faz mal"
+  },
+  "repreensoes": {
+   "adolescente": "bronca...",
+   "adulto": "por causa das broncas recentes",
+   "bebe": "",
+   "crianca": "[:bronca:]",
+   "marcador": "bronca"
+  },
+  "saude": {
+   "adolescente": "saúde...",
+   "adulto": "por causa da saúde",
+   "bebe": "",
+   "crianca": "[:saúde:]",
+   "marcador": "saúde"
+  },
+  "sempre": {
+   "adolescente": "sempre faço...",
+   "adulto": "porque sempre faço isso",
+   "bebe": "",
+   "crianca": "[:sempre faço:]",
+   "marcador": "sempre faço"
+  },
+  "sujeira": {
+   "adolescente": "sujeira...",
+   "adulto": "por causa da sujeira",
+   "bebe": "",
+   "crianca": "[:sujeira:]",
+   "marcador": "sujeira"
+  },
+  "teimosia": {
+   "adolescente": "teimoso...",
+   "adulto": "porque eu sou teimoso",
+   "bebe": "",
+   "crianca": "[:teimoso:]",
+   "marcador": "teimoso"
+  },
+  "tempo_sem_cuidado": {
+   "adolescente": "sem cuidado...",
+   "adulto": "porque fiquei muito tempo sem cuidado",
+   "bebe": "",
+   "crianca": "[:sem cuidado:]",
+   "marcador": "sem cuidado"
+  },
+  "turno_execucao": {
+   "adolescente": "luta longa...",
+   "adulto": "porque já era uma luta longa (turno {p0} ou mais)",
+   "bebe": "",
+   "crianca": "[:luta longa:]",
+   "marcador": "luta longa"
+  },
+  "vinculo_baixo": {
+   "adolescente": "não confio...",
+   "adulto": "porque ainda não confio em você",
+   "bebe": "",
+   "crianca": "[:não confio:]",
+   "marcador": "não confio"
+  }
+ },
+ "fonte": "gerado por tools/gerar_catalogo_fala_web.py de digilab/expressao.py e servidor/fala_llm.py; nao editar a mao",
+ "generico_adulto": "Não sei, só quis.",
+ "generico_instinto": "Foi instinto: é o meu jeito.",
+ "humor_alegre": 0.66,
+ "humor_neutro": 0.33,
+ "limite_por_minuto": 30,
+ "limite_usd_padrao": 2.0,
+ "max_inteiro": 10000000,
+ "max_refs": 10,
+ "max_tokens_saida": 300,
+ "modelo_padrao": "claude-haiku-4-5",
+ "modelos_com_fallback": [
+  "claude-fable-5-1",
+  "claude-opus-5"
+ ],
+ "moldura": {
+  "causais": [
+   "porque",
+   "por que",
+   "por causa",
+   "pois",
+   "já que",
+   "ja que",
+   "então",
+   "entao",
+   "por isso",
+   "devido",
+   "motivo",
+   "razão",
+   "razao",
+   "culpa",
+   "graças",
+   "gracas",
+   "senão",
+   "senao",
+   "pra ",
+   "para "
+  ],
+  "extra": "¡°·¿–—‘’“”…★☆☺☻♡♥♪♫",
+  "max_chars": 40,
+  "max_palavras": 4,
+  "temas": [
+   "fome",
+   "comi",
+   "comer",
+   "sono",
+   "dormi",
+   "cansa",
+   "energia",
+   "higien",
+   "suj",
+   "saúde",
+   "saude",
+   "doente",
+   "hora",
+   "dia",
+   "noite",
+   "distân",
+   "distan",
+   "perto",
+   "longe",
+   "guts",
+   "vida",
+   "machuc",
+   "ferid",
+   "fraco",
+   "oponente",
+   "você",
+   "voce",
+   "turno",
+   "evento",
+   "lembr",
+   "humor",
+   "triste",
+   "feliz",
+   "bravo",
+   "raiva"
+  ]
+ },
+ "precos_usd_por_mtok": {
+  "claude-fable-5-1": [
+   10.0,
+   50.0
+  ],
+  "claude-haiku-4-5": [
+   1.0,
+   5.0
+  ],
+  "claude-haiku-5-5": [
+   0.1,
+   0.5
+  ],
+  "claude-opus-5": [
+   5.0,
+   25.0
+  ],
+  "claude-sonnet-5": [
+   2.0,
+   10.0
+  ],
+  "claude-sonnet-5-5": [
+   2.0,
+   10.0
+  ]
+ },
+ "reacao_bebe": {
+  "avancar": "(o_o)>",
+  "carregar": "(ò_ó)*",
+  "contra_golpe": "(ò_ó)|",
+  "defender": "(-_-)#",
+  "disparo": "(>_<)~",
+  "esquivar": "(^o^)~",
+  "fintar": "(¬‿¬)!",
+  "golpe_rapido": "(>_<)!",
+  "investida": "(ò_ó)>>",
+  "marcar": "(o_o)+",
+  "pele_dura": "(-_-)[]",
+  "pesado": "(ò_ó)!!",
+  "preparar_pesado": "(ò_ó)...",
+  "recuar": "<(o_o)"
+ },
+ "sistema": "Você dá personalidade à fala de um pet virtual (um pequeno monstro digital) que fala com o dono, em português do Brasil.\n\nA frase do meio (\"frase\") já está pronta e é a verdade: diz o que o pet fez e, se houver, por quê. Você NÃO reescreve a frase. Você só cria a moldura em volta dela:\n- \"abertura\" (OBRIGATÓRIA, 1 a 3 palavras): o que o pet diz ANTES da frase: interjeição, onomatopeia ou chamamento.\n- \"fecho\" (opcional, no máximo UMA carinha ou reação curta): o que ele diz DEPOIS.\n\nO campo \"tom\" manda no jeito. Exemplos (varie, não repita sempre o mesmo):\n- \"rabugento\": abertura \"Hmpf...\", \"Tsc!\", \"Aff...\", \"Grr!\", \"Ai ai...\"; fecho \">_<\", \"-_-\", \"T_T\", \"hmpf\".\n- \"neutro\": abertura \"Hm.\", \"Ei!\", \"Olha só:\", \"Então tá:\", \"Nhac!\"; fecho \"^^\", \"o_o\", \"hm\".\n- \"animado\": abertura \"Eba!\", \"Uhuu!\", \"Yay!\", \"Oba, oba!\", \"Pow!\"; fecho \"^_^\", \"\\o/\", \":D\", \"hehe!\".\n\nRegras que não podem ser quebradas:\n1. A moldura nunca explica nada: sem \"porque\", \"por causa\", \"pois\", \"já que\", \"então\", \"por isso\", sem motivo, lembrança ou sentimento-causa.\n2. Sem números.\n3. Não repita palavras da frase do meio e não fale de fome, sono, cansaço, higiene, saúde, sujeira, hora, distância, guts, vida ou do oponente.\n4. Pode deixar abertura ou fecho vazios (\"\").",
+ "timeout_s": 8.0,
+ "versao_prompt": "fala-v6"
+}
