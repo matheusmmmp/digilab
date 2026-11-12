@@ -77,7 +77,7 @@ const lerMundo = () => {
     lances: mu.lances && mu.lances.map(l => ({ tick: l.tick, para: [...l.para] })), rolagensTicks: mu.rolagens.map(r => (r as { tick: number }).tick), tickMundo: mu.tm(m.e.tick),
     versao: m.versao, cerebro: m.cerebroAtual };
 };
-Object.assign(window, { __digilab: { assinatura: () => jogoAtual().motor.assinatura(), registro: () => textoDaTela(), grupo: () => { const j = jogoAtual(); return j.grupo ? { foco: j.foco, ids: [...j.grupo.ids], ticks: j.grupo.ids.map(i => j.grupo!.motor(i).e.tick), especies: j.grupo.ids.map(i => j.grupo!.motor(i).especie) } : null; }, focar: (i: string) => focar(i), tick: () => jogoAtual().motor.e.tick, digibrain: () => jogoAtual().motor.digibrain(),
+Object.assign(window, { __digilab: { assinatura: () => jogoAtual().motor.assinatura(), registro: () => textoDaTela(), grupo: () => { const j = jogoAtual(); return j.grupo ? { foco: j.foco, ids: [...j.grupo.ids], ticks: j.grupo.ids.map(i => j.grupo!.motor(i).e.tick), especies: j.grupo.ids.map(i => j.grupo!.motor(i).especie), chamados: j.grupo.ids.map(i => j.grupo!.motor(i).chamadosAbertos()) } : null; }, focar: (i: string) => focar(i), tick: () => jogoAtual().motor.e.tick, digibrain: () => jogoAtual().motor.digibrain(),
   mundo: lerMundo, cena: () => CENA.mundo && { pet: [...CENA.mundo.pet], bola: CENA.mundo.bola ?? null, modo3d: CENA.modo3d, ret: CENA.ret },
   reacao: () => reacaoAtual(performance.now()),
   /* o que tocou no comer no ultimo quadro da ilha: "clipe", "gesto" ou null (cenaAcao.ts, escolherComer; docs/TAREFA_V3_SPRITES_ACOES.md, M4) */

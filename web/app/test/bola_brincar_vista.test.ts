@@ -1,7 +1,7 @@
 // A vista da bola do dono (docs/TAREFA_V3_BOLA_BRINCAR.md, BB-9; a etapa BB3): o arco do lance (src/telas/pet/ilha/arcoBola.ts) e a vigia do
 // lance, do chute e da recusa (src/telas/pet/momentos.ts, vigiarBola). So vista, sem DOM: o motor ja decidiu, e nada daqui volta a ele.
 import { afterEach, beforeEach, expect, test } from "vitest";
-import { ARCO_BOLA, novoArco, origemDoArco, pontoDoArco } from "../src/telas/pet/ilha/arcoBola.ts";
+import { ARCO_BOLA, CHUTE_BOLA, bateEm, novoArco, origemDoArco, passoDoChute, pontoDoArco, pontoDoChute, type ChuteBola } from "../src/telas/pet/ilha/arcoBola.ts";
 import { MOMENTOS, chuteNaJanela, bolaVista, esquecerMomentos, vigiarBola, type EntradaBola } from "../src/telas/pet/momentos.ts";
 import { escolherReacao, esquecerReacaoRosto } from "../src/telas/pet/reacao.ts";
 import { ouvirSom, type InstanteSom } from "../src/somEventos.ts";
@@ -109,4 +109,25 @@ test("o pet de antes da v30 (sem o lance) so tem o chute; a entrada invalida fal
   expect(vigiarBola(em({ lances: null, rolagens: [101] }), 10)).toEqual({ lance: null, chutou: true, recusa: null });
   expect(() => vigiarBola(em({ janela: 0 }), 0)).toThrow();
   expect(() => vigiarBola(em({ energia: NaN }), 0)).toThrow();
+});
+
+test("o chute: o pet para encostado na bola, do lado de onde vem; ja perto, fica", () => {
+  expect(pontoDoChute([0, 0], [3, 4])).toEqual([0.6 * CHUTE_BOLA.encosto, 0.8 * CHUTE_BOLA.encosto].map(v => v) as [number, number]);
+  expect(pontoDoChute([0, 0], [0.3, 0])).toEqual([0.3, 0]);
+});
+
+test("o chute: corre ate a bola, da o golpe nela, volta ao motor; a bola so rola quando o braco chega", () => {
+  const c: ChuteBola = { desde: 1000, bola: [10, 10], partida: [10, 13], alvo: [10, 6], golpeMs: 450 };
+  const motor: [number, number] = [10, 11], ponto = pontoDoChute(c.bola, c.partida);
+  const { corridaMs, voltaMs } = CHUTE_BOLA;
+  expect(passoDoChute(c, 1000, motor, false)).toEqual({ cel: [10, 13], golpe: null, andando: true, acabou: false });
+  expect(passoDoChute(c, 1000 + corridaMs, motor, false)).toEqual({ cel: ponto, golpe: { desde: 1000 + corridaMs, alvo: [10, 6] }, andando: false, acabou: false });
+  const volta = passoDoChute(c, 1000 + corridaMs + 450 + voltaMs / 2, motor, false);
+  expect([volta.golpe, volta.andando, volta.acabou]).toEqual([null, true, false]);
+  expect(passoDoChute(c, 1000 + corridaMs + 450 + voltaMs, motor, false)).toEqual({ cel: motor, golpe: null, andando: false, acabou: true });
+  expect(bateEm(c, false)).toBe(1000 + corridaMs + 450 * CHUTE_BOLA.bateFracao);
+  /* movimento reduzido: so o golpe, no lugar do motor, e a bola sai logo */
+  expect(passoDoChute(c, 1100, motor, true)).toEqual({ cel: motor, golpe: { desde: 1000, alvo: [10, 6] }, andando: false, acabou: false });
+  expect(passoDoChute(c, 1450, motor, true).acabou).toBe(true);
+  expect(bateEm(c, true)).toBe(1000 + 450 * CHUTE_BOLA.bateFracao);
 });

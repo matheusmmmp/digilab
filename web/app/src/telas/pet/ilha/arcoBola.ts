@@ -35,3 +35,43 @@ export function pontoDoArco(a: ArcoBola, agora: number): { x: number; z: number;
   const y = ARCO_BOLA.alturaMao * (1 - f) + 4 * ARCO_BOLA.altura * f * (1 - f);
   return { x, z, y, acabou: f >= 1 };
 }
+
+/* ------------------------------------------------------------------ o chute (BB-9: "o pet corre e chuta", com o golpe que ja existe)
+   O motor diz que o pet chutou (uma rolagem nova), mas o pet desenhado pode estar a uma ou duas celulas da bola desenhada (o Seguidor anda
+   atras do motor). Para o chute aparecer na bola: o pet desenhado corre ate encostar nela (`corridaMs`), da o golpe (`golpeMs`, o
+   BATER_BOLA_MS da vista), e volta suave para onde o motor o pos (`voltaMs`). A bola desenhada fica parada onde estava ate o braco chegar
+   (`bateEm`), e so entao rola. So o desenho. PROPOSTO, SEM FONTE */
+export const CHUTE_BOLA = { corridaMs: 260, encosto: 0.7, voltaMs: 300, bateFracao: 0.3 } as const;
+
+/** um chute em curso: quando o motor rolou a bola (ms da vista), onde a bola estava (celulas), onde o pet desenhado estava, para onde ele olha
+    no golpe, e quanto dura o golpe */
+export interface ChuteBola { desde: number; bola: Par; partida: Par; alvo: Par; golpeMs: number }
+
+/** onde o pet para para chutar: `encosto` celulas antes da bola, do lado de onde ele vem (ja perto, fica onde esta) */
+export function pontoDoChute(bola: Par, partida: Par, encosto: number = CHUTE_BOLA.encosto): [number, number] {
+  const dx = partida[0] - bola[0], dz = partida[1] - bola[1], d = Math.hypot(dx, dz);
+  if (d <= encosto) return [partida[0], partida[1]];
+  return [bola[0] + (dx / d) * encosto, bola[1] + (dz / d) * encosto];
+}
+
+/** quando o braco chega a bola (ms da vista): ate la a bola desenhada fica parada */
+export const bateEm = (c: ChuteBola, reduzido: boolean): number =>
+  (reduzido ? c.desde : c.desde + CHUTE_BOLA.corridaMs) + c.golpeMs * CHUTE_BOLA.bateFracao;
+
+const suave = (f: number): number => f * f * (3 - 2 * f);
+const entre = (a: Par, b: Par, f: number): [number, number] => [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f];
+
+/** o passo do chute em `agora`: onde desenhar o pet (`motorCel`: onde ele estaria sem o chute), o golpe (desde quando, olhando para onde) e se
+    ele anda; `acabou` depois da volta. Com movimento reduzido, so o golpe, no lugar */
+export function passoDoChute(c: ChuteBola, agora: number, motorCel: Par, reduzido: boolean)
+    : { cel: [number, number]; golpe: { desde: number; alvo: [number, number] } | null; andando: boolean; acabou: boolean } {
+  const alvo: [number, number] = [c.alvo[0], c.alvo[1]], dt = agora - c.desde;
+  if (reduzido) return dt < c.golpeMs ? { cel: [motorCel[0], motorCel[1]], golpe: { desde: c.desde, alvo }, andando: false, acabou: false }
+    : { cel: [motorCel[0], motorCel[1]], golpe: null, andando: false, acabou: true };
+  const { corridaMs, voltaMs } = CHUTE_BOLA, ponto = pontoDoChute(c.bola, c.partida);
+  if (dt < corridaMs) return { cel: entre(c.partida, ponto, suave(Math.max(0, dt) / corridaMs)), golpe: null, andando: true, acabou: false };
+  if (dt < corridaMs + c.golpeMs) return { cel: ponto, golpe: { desde: c.desde + corridaMs, alvo }, andando: false, acabou: false };
+  if (dt < corridaMs + c.golpeMs + voltaMs)
+    return { cel: entre(ponto, motorCel, suave((dt - corridaMs - c.golpeMs) / voltaMs)), golpe: null, andando: true, acabou: false };
+  return { cel: [motorCel[0], motorCel[1]], golpe: null, andando: false, acabou: true };
+}

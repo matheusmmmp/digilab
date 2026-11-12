@@ -57,6 +57,7 @@ import { SinaisDaIlha } from "./mitologia.ts";
 import { cantinhoNaVista, montarCantinho, type Cantinho } from "./cantinhoTv.ts";
 import { CAIXA_TV, CAMERA_CANTINHO, passoDaCamera, suave } from "./cantinhoTvConta.ts";
 import { vigiarBola } from "../momentos.ts";
+import { bateEm, passoDoChute, type ChuteBola } from "./arcoBola.ts";
 import { CONFIG_LANCE_DONO_LIGADA } from "../../../../motor/digibrain/constantes.ts";
 
 const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -146,9 +147,10 @@ class VistaIlha {
   private treinoVisto: number | null = CENA.treino;
   /** a batida na bola: quantas rolagens o motor ja tinha (null antes do primeiro quadro: as de antes de abrir a ilha nao contam) */
   private rolagens: number | null = null;
-  private bateBola: { desde: number; alvo: [number, number] } | null = null;
-  /** a batida que chegou com a bola ainda no arco do lance (BB-9): espera ela cair para comecar */
-  private bateBolaPendente: [number, number] | null = null;
+  /** a batida na bola (BB-9, arcoBola.ts): o pet desenhado corre ate a bola, da o golpe e volta */
+  private bateBola: ChuteBola | null = null;
+  /** a batida que chegou com a bola ainda no arco do lance (BB-9): espera ela cair para comecar (onde a bola estava e para onde ela vai) */
+  private bateBolaPendente: { bola: [number, number]; alvo: [number, number] } | null = null;
   /* a camera do primeiro dia (aberturaConta.ts e src/abertura.ts): `semente` null e a do ?abertura= (as capturas da prancha: nao grava, nao
      acaba nem se interrompe); `saida` e a volta pelo toque (AB-3). `visto` guarda o pet e o ovo da ultima consulta ao pedido */
   private ab: { p: Proposta; semente: number | null; saida: { desde: number; de: QuadroAbertura } | null; ultimo: QuadroAbertura | null } | null =
@@ -387,14 +389,13 @@ class VistaIlha {
     const n = mu.rolagens.length, sub = mu.cm.sub;
     if (this.rolagens !== null && n > this.rolagens) {
       const r = mu.rolagens[n - 1] as { de: [number, number]; para: [number, number] }, parou = r.para[0] === r.de[0] && r.para[1] === r.de[1];
-      const alvo: [number, number] = parou ? [r.de[0] / sub, r.de[1] / sub] : [r.para[0] / sub, r.para[1] / sub];
+      const alvo: [number, number] = parou ? [r.de[0] / sub, r.de[1] / sub] : [r.para[0] / sub, r.para[1] / sub], bola: [number, number] = [r.de[0] / sub, r.de[1] / sub];
       /* a bola ainda no ar (o arco do lance): o golpe espera ela cair, senao o pet chuta o vazio */
-      if (this.itens.noArco) this.bateBolaPendente = alvo;
-      else this.bateBola = { desde: agora, alvo };
+      if (this.itens.noArco) this.bateBolaPendente = { bola, alvo };
+      else this.comecarChute(agora, bola, alvo, reduzido);
     }
-    if (this.bateBolaPendente && !this.itens.noArco) { this.bateBola = { desde: agora, alvo: this.bateBolaPendente }; this.bateBolaPendente = null; }
+    if (this.bateBolaPendente && !this.itens.noArco) { this.comecarChute(agora, this.bateBolaPendente.bola, this.bateBolaPendente.alvo, reduzido); this.bateBolaPendente = null; }
     this.rolagens = n;
-    if (this.bateBola && agora - this.bateBola.desde >= BATER_BOLA_MS) this.bateBola = null;
     /* o treino: um pedido novo comeca do lugar em que o pet esta; ele para a GOLPE_DIST do saco, ao lado dele na tela (ao longo da
        direita da camera no chao, que gira com a camera livre), do lado em que o pet ja esta: nem na frente do saco, nem atras */
     const [sx, sz] = this.itens.sacoEm;
@@ -413,7 +414,7 @@ class VistaIlha {
     }
     const t = this.treino;
     const caminhando = this.andaPet === null && (tv?.ativo ? tv.andando : this.seguidor.caminhando);
-    if (!t) return { cel: motorCel, golpe: this.bateBola, andando: emViagem || caminhando };
+    if (!t) return this.comChute(agora, motorCel, reduzido, emViagem || caminhando);
     /* a ida e a volta pela distancia (PA-3; idaDoTreino), os golpes pelo TREINO_MS */
     const dt = agora - t.desde, { golpes } = TREINO_MS, ida = t.ida, volta = t.ida, ponto = t.ponto;
     const suave = (f: number) => (reduzido ? 1 : this.suave(f)), entre = (a: [number, number], b: [number, number], f: number) => this.entre(a, b, f);
@@ -426,7 +427,21 @@ class VistaIlha {
     }
     if (dt < ida + golpes + volta) return { cel: entre(ponto, motorCel, suave((dt - ida - golpes) / volta)), golpe: null, andando: !reduzido };
     this.treino = null;
-    return { cel: motorCel, golpe: this.bateBola, andando: emViagem || caminhando };
+    return this.comChute(agora, motorCel, reduzido, emViagem || caminhando);
+  }
+
+  /** o chute novo (BB-9): parte de onde o pet esta desenhado; a bola desenhada espera o braco chegar */
+  private comecarChute(agora: number, bola: [number, number], alvo: [number, number], reduzido: boolean): void {
+    this.bateBola = { desde: agora, bola, partida: [this.petCel[0], this.petCel[1]], alvo, golpeMs: BATER_BOLA_MS };
+    this.itens.segurarBola(bola, bateEm(this.bateBola, reduzido));
+  }
+  /** o pet fora do treino: o chute em curso (a corrida, o golpe, a volta) sobre a posicao do motor, ou a posicao do motor */
+  private comChute(agora: number, motorCel: [number, number], reduzido: boolean, andando: boolean)
+      : { cel: [number, number]; golpe: { desde: number; alvo: [number, number] } | null; andando: boolean } {
+    if (!this.bateBola) return { cel: motorCel, golpe: null, andando };
+    const p = passoDoChute(this.bateBola, agora, motorCel, reduzido);
+    if (p.acabou) { this.bateBola = null; return { cel: motorCel, golpe: null, andando }; }
+    return { cel: p.cel, golpe: p.golpe, andando: p.andando };
   }
 
   /** onde o pet esta na ida ao lugar aberto (ou na volta): ele anda do ponto em que estava desenhado ate o lugar (ou de volta ate o motor) em

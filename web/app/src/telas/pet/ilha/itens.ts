@@ -288,6 +288,9 @@ export class Itens {
     if (reduzido) { this.arco = null; return; }
     this.arco = novoArco(agora, [para[0] / this.sub, para[1] / this.sub], camChao);
   }
+  /** a bola parada em `em` (celulas) ate `ate` (ms da vista): o chute (BB-9) a solta quando o braco do pet chega */
+  segurarBola(em: readonly [number, number], ate: number): void { this.segura = { em: [em[0], em[1]], ate }; }
+  private segura: { em: [number, number]; ate: number } | null = null;
   /** a bola esta no arco do lance agora? (a vista segura a batida ate ela cair) */
   get noArco(): boolean { return this.arco !== null; }
 
@@ -326,7 +329,9 @@ export class Itens {
       item.podre = podre;
     }
     for (const [id, item] of this.comidas) if (!vistas.has(id)) { this.raiz.remove(item.g); this.comidas.delete(id); }
+    if (this.segura && (agora >= this.segura.ate || CENA.bolaNaMao)) this.segura = null;
     if (this.arco && !CENA.bolaNaMao) this.voarBola(agora);
+    else if (this.segura) { this.bolaCel = [this.segura.em[0], this.segura.em[1]]; this.bola.g.position.set(this.bolaCel[0], 0, this.bolaCel[1]); }
     else { this.arco = null; this.moverBola(mu.bolaEm(tick), dtMs, reduzido || this.naMaoAntes); }
     this.naMaoAntes = CENA.bolaNaMao;
     this.bola.g.visible = !CENA.bolaNaMao;

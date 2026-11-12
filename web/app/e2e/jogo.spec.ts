@@ -1380,6 +1380,64 @@ test("som: limpar pede a agua e a voz do pet", async ({ page }) => {
   expect(erros).toEqual([]);
 });
 
+/* BOLA_BRINCAR, BB3 (docs/TAREFA_V3_BOLA_BRINCAR.md, BB-9): o ovo novo do brasao choca o grupo v31 (com o lance do dono, BB-7); o Brincar joga a
+   bola perto do pet (um lance novo no mundo), a vista a faz voar e conta o lance, e o modular decide na hora e tende a correr e chutar: uma rolagem
+   da bola dentro da janela do convite. O chute e um sorteio do cerebro (o convite, nao a ordem: BB-4), entao o clique se repete ate tres vezes,
+   como nos momentos. So o Brincar entra no registro: a bola e o chute saem do motor no replay */
+test("Brincar joga a bola e o pet chuta", async ({ page }) => {
+  test.setTimeout(180_000);
+  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.evaluate(([c, s]) => {
+    localStorage.clear(); localStorage.setItem(c + "-boas-vindas", "1"); localStorage.setItem(c + "-dicas-ligadas", "0");
+    localStorage.setItem(c, s); localStorage.setItem(c + "-guardados", "[]");
+  }, [CHAVE, JSON.stringify(SAVE_ANTIGO_V3)] as const);
+  const erros = vigiarErros(page);
+  await page.goto(APP + "#/pet/estado");
+  await page.locator("dialog.aviso-tr[open]").getByRole("button", { name: "Escolher o brasão do ovo novo" }).click();
+  await page.locator("dialog.brasao-tela[open] .br-card").first().click();
+  await expect(page.locator(".pet-cena .cena3d")).toBeVisible();
+  const lcd = page.locator(".pet-cena canvas.lcd");
+  await expect(lcd).not.toHaveAttribute("aria-label", "Tela do pet: ovo", { timeout: 20_000 });
+  type MundoBola = { lances: { tick: number }[] | null; rolagensTicks: number[]; tickMundo: number; versao: number; cerebro: string };
+  const mundo = () => page.evaluate(() => (window as any).__digilab.mundo() as MundoBola);
+  const m0 = await mundo();
+  expect([m0.versao, m0.cerebro, m0.lances]).toEqual([VERSAO_GRUPO, "modular", []]);
+  const JANELA = 30;                                    /* CONFIG_LANCE_DONO_LIGADA.janela_convite_ticks */
+  /* o chamado aberto de qualquer um dos bebes poe o tempo em 1x (tempo.ts): os dois chocam pedindo carinho. Antes de cada lance, o dono atende o
+     chamado do irmao (B) pelo Carinho, no foco dele, e volta ao A; o do A, o proprio Brincar atende (ACAO_CHAMADO.carinho) */
+  type Grupo = { foco: string; ids: string[]; chamados: string[][] };
+  const ROTULO: Record<string, string> = { carinho: "Carinho", higiene: "Limpar", fome: "Alimentar" };
+  async function atenderIrmao(): Promise<void> {
+    const g = await page.evaluate(() => (window as any).__digilab.grupo() as Grupo);
+    for (const [k, id] of g.ids.entries()) {
+      if (id === "A" || !g.chamados[k]!.length) continue;
+      await page.evaluate(i => (window as any).__digilab.focar(i), id);
+      await expect.poll(() => page.evaluate(() => (window as any).__digilab.grupo().foco)).toBe(id);
+      for (const c of g.chamados[k]!) await page.locator(".acoes-pet button", { hasText: ROTULO[c]! }).first().click();
+      await expect.poll(async () => (await page.evaluate(() => (window as any).__digilab.grupo() as Grupo)).chamados[k]!.length).toBe(0);
+      await page.evaluate(() => (window as any).__digilab.focar("A"));
+      await expect.poll(() => page.evaluate(() => (window as any).__digilab.grupo().foco)).toBe("A");
+    }
+  }
+  let chutou = false;
+  for (let i = 0; i < 3 && !chutou; i++) {
+    await atenderIrmao();
+    const antes = (await mundo()).lances!.length;
+    await page.locator(".acoes-pet button", { hasText: "Brincar" }).first().click();
+    await expect.poll(async () => (await mundo()).lances!.length, { timeout: 5_000 }).toBe(antes + 1);
+    const lance = (await mundo()).lances!.at(-1)!.tick;
+    /* a janela passa (10 min/s: 30 ticks em ~3 s); o chute e uma rolagem dentro dela */
+    await expect.poll(async () => (await mundo()).tickMundo, { timeout: 30_000 }).toBeGreaterThanOrEqual(lance + JANELA);
+    chutou = (await mundo()).rolagensTicks.some(r => r >= lance && r < lance + JANELA);
+  }
+  expect(chutou, "o pet nao chutou a bola em tres lances").toBe(true);
+  /* a vista viu os lances e o chute (momentos.ts, vigiarBola) */
+  const vista = await page.evaluate(() => (window as any).__digilab.bolaVista() as { lances: number; chutes: number; recusas: number });
+  expect(vista.lances).toBeGreaterThanOrEqual(1);
+  expect(vista.chutes).toBeGreaterThanOrEqual(1);
+  expect(erros).toEqual([]);
+});
+
 /* SOM-UP (docs/TAREFA_V3_SOM_UP.md): com o mapa de sons da versao 2 (Assets/sons, fora do git: sem ele o teste nao se aplica), o painel
    pede o som de abrir, o treino a musica do treino, e a luta a musica do mapa da arena, os golpes por Digimon e o som do fim */
 test("som: o painel, o treino e a luta pedem os sons do Digimon UP", async ({ page }) => {
