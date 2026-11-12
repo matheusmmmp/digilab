@@ -550,6 +550,8 @@ class DigiBrain:
                "gestos": dict(sorted(self.gestos.items())), "modulos": {nome: mod.estado_interno() for nome, mod in self.m.itens()
                                                                          if hasattr(mod, "estado_interno")},
                "motivos": self.motivos}
+        if self.m.sens.social is not None:            # a CO6 (o M-SENS leu a reputacao e o peso dos deveres): desligada, o estado de hoje
+            out["social"] = {"reputacao": dict(self.m.sens.social["reputacao"]), "peso_dever": self.m.sens.social["peso_dever"]}
         if self.cd.olhar:                             # o olhar (P1d): desligada, o estado e o de hoje, byte a byte
             out["olhar"] = {"olhando": self._olhando, "genoma_visao": self.genoma_visao.para_dict()}
             if self.ce is not None:                   # o enjoo (D-GV-ENJOO-CER): desligado, nenhum campo novo

@@ -79,7 +79,9 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              # GOSTO_VISUAL, P1e: o orquestrador da GV3 (o laboratorio com o olhar)
                                                                              "experiments/run_v3_gosto_visual.py",
                                                                              # a DC4a (e6da35cc): as entradas da avaliacao da voz so importam o decodificador; nenhuma vida
-                                                                             "experiments/entradas_dc4.py"}
+                                                                             "experiments/entradas_dc4.py",
+                                                                             # COOPERACAO, CO6a: o gabarito das vidas do grupo com o modular (o braco REL pelo orquestrador)
+                                                                             "experiments/exportar_gabarito_co6.py"}
 
 
 def test_o_digibrain_so_existe_com_a_chave_ligada_e_e_a_v13():

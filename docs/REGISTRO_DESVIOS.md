@@ -744,5 +744,6 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-12 — COOPERACAO, CO6a: o gabarito das vidas de hoje (Claude Code, Opus 5.5, branch `v3-cooperacao-co6`)](registro/2026-11.md)
 - [2026-11-12 — LUTA_POC, N0: o plano da investigação do núcleo (Claude Code, Opus 5.5, branch `v3-luta-nucleo-plano`)](registro/2026-11.md)
 - [2026-11-12 — LUTA_POC, N0: as D-N-1 a D-N-7 decididas (Claude Code, Opus 5.5, branch `v3-luta-nucleo-plano`)](registro/2026-11.md)
+- [2026-11-12 — COOPERACAO, CO6b: a reputação e o peso dos deveres na percepção, no Python (Claude Code, Opus 5.5, branch `v3-cooperacao-co6b`)](registro/2026-11.md)
 - [2026-11-12 — CONTA: as CH-1 a CH-7 decididas pela recomendação (Claude Code, Opus 5.5, branch `v3-conta-hospedagem`)](registro/2026-11.md)
 - [2026-11-12 — COOPERACAO: o plano da bancada aprovado (Claude Code, Opus 5.5, branch `v3-cooperacao-bancada-aprovado`)](registro/2026-11.md)

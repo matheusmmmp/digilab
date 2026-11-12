@@ -379,3 +379,17 @@ Gravado com o código da `main` (`bf381ef9`) antes de qualquer mudança da CO6, 
   sha256 do `estado_interno()` de cada cérebro, o dos logs e o do resumo do grupo.
 - **O teste:** `tests/test_cooperacao_co6.py` refaz as vidas e as compara com o gabarito (o G2 da CO6).
 - **Os desvios:** D-CO6a-1 e D-CO6a-2, no registro de 2026-11.
+
+## CO6b, a reputação e o peso dos deveres na percepção, no Python (2026-11-12, Claude Code, Opus 5.5, branch `v3-cooperacao-co6b`)
+
+Atrás da subchave `co6` da `ConfigCooperacao`, desligada por padrão e só com a `ligada` (sem ela, falha alto).
+
+- **O `k`** (`digilab/cooperacao.py`, `fim_do_tick_k` e `peso_dever`): ganha `k_passo` por tick de encontro com um outro de reputação
+  positiva, um vendo o outro; decai pela meia-vida da pontuação sem encontro; fica no teto do estágio da idade (0, 1/4, 1/2 e 3/4 de S).
+- **A percepção** (`digilab/mundo.py`, `digilab/grupo.py`): a `PercepcaoSocial` ganha a `reputacao` de cada outro presente e o
+  `peso_dever` do próprio pet. Desligada, os dois ficam None.
+- **O cérebro:** o M-SENS lê os dois campos, e o `estado_interno()` do modular os mostra na chave `social`. Nenhum módulo os usa.
+- **Os testes** (`tests/test_cooperacao_co6.py`): o G2; o G-SEM-DECISAO-CO6 nas vidas do modular; o G-RECEPTOR-SOCIAL; o passo, o
+  decaimento e o teto à mão; o M-SENS; e o gabarito do G-PAR-CO6 para o TS (`experiments/exportar_gabarito_co6_par.py`,
+  `web/app/test/gabaritos/co6_python.json.gz`), que confere o G-SEM-DECISAO-CO6 nas 7 vidas da CO3.
+- **Os desvios:** D-CO6b-1 a D-CO6b-7, no registro de 2026-11.

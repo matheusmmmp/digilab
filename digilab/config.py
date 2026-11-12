@@ -3529,7 +3529,13 @@ class ConfigCooperacao:
     piso_fome              a fome do perdedor abaixo da qual a disputa e "anti" (CO-9: o fome_moderada do instinto, policy.py)
     meia_vida_pontuacao    a meia-vida da pontuacao e da reputacao, em ticks do mundo (um dia)
     k_meia_vida_pontuacao  = corpo.k_meia_vida(meia_vida_pontuacao), na escala 2**16 (a regra da secao 3 do corpo; o tick nao a recalcula)
-    janela_novidade        a janela em que a repeticao do mesmo ato com o mesmo alvo cai pela metade, em ticks do mundo (o dia do mundo)"""
+    janela_novidade        a janela em que a repeticao do mesmo ato com o mesmo alvo cai pela metade, em ticks do mundo (o dia do mundo)
+    co6                    a CO6 (docs/ESPEC_V3_COOPERACAO_CO6.md): a reputacao de cada outro presente e o peso dos deveres `k` na percepcao
+                           social, lidos pelo M-SENS, sem mudar a decisao (CO6-1); so com `ligada` (senao, falha alto); desligada, o grupo de hoje
+    k_passo                o que o `k` de i ganha, na escala S, a cada tick de encontro (o outro a ate o raio da visao de cada um, com a
+                           reputacao dele vista por i positiva); sem encontro, o `k` decai pela meia-vida da pontuacao (CO6-3)
+    k_teto_<estagio>       o teto do `k` no estagio da idade (o provisorio da ConfigExpressao; CO6-4): bebe, crianca, adolescente e
+                           adulto; o Mega (S) entra quando o estagio vier da evolucao"""
 
     ligada: bool = False
     escala: int = _S
@@ -3537,10 +3543,24 @@ class ConfigCooperacao:
     meia_vida_pontuacao: int = 1440
     k_meia_vida_pontuacao: int = 32
     janela_novidade: int = 1440
+    co6: bool = False
+    k_passo: int = 1
+    k_teto_bebe: int = 0
+    k_teto_crianca: int = _S // 4
+    k_teto_adolescente: int = _S // 2
+    k_teto_adulto: int = 3 * _S // 4
 
     def __post_init__(self) -> None:
-        if type(self.ligada) is not bool:
-            raise TypeError(f"ConfigCooperacao.ligada e bool: {self.ligada!r}")
+        for nome in ("ligada", "co6"):
+            if type(getattr(self, nome)) is not bool:
+                raise TypeError(f"ConfigCooperacao.{nome} e bool: {getattr(self, nome)!r}")
+        if self.co6 and not self.ligada:
+            raise ValueError("ConfigCooperacao.co6 so liga com a cooperacao ligada (ESPEC_V3_COOPERACAO_CO6, secao 4)")
+        if type(self.k_passo) is not int or not 0 < self.k_passo <= self.escala:
+            raise ValueError(f"ConfigCooperacao.k_passo inteiro em (0, escala]: {self.k_passo!r}")
+        tetos = [self.k_teto_bebe, self.k_teto_crianca, self.k_teto_adolescente, self.k_teto_adulto]
+        if any(type(t) is not int or not 0 <= t <= self.escala for t in tetos) or tetos != sorted(tetos):
+            raise ValueError(f"ConfigCooperacao.k_teto_*: inteiros em [0, escala], sem descer com o estagio: {tetos!r}")
         for nome in ("escala", "meia_vida_pontuacao", "k_meia_vida_pontuacao", "janela_novidade"):
             v = getattr(self, nome)
             if type(v) is not int or v <= 0:
@@ -3551,6 +3571,7 @@ class ConfigCooperacao:
 
 CONFIG_COOPERACAO = ConfigCooperacao()
 CONFIG_COOPERACAO_LIGADA = ConfigCooperacao(ligada=True)
+CONFIG_COOPERACAO_CO6 = ConfigCooperacao(ligada=True, co6=True)
 PARAMETROS_COOPERACAO = {
     "ligada": ("DECIDIDO", "CO-3 (Matheus, 2026-11-11): a CO3 so mede e mostra; desligada, o grupo de hoje"),
     "escala": ("DECIDIDO", "PE-12: S = 1024, a do cerebro A (ConfigLobos.bits_ponto_fixo = 10)"),
@@ -3558,6 +3579,13 @@ PARAMETROS_COOPERACAO = {
     "meia_vida_pontuacao": ("PROPOSTO", "SEM FONTE: um dia do mundo (secao 3.1; Moral do pet, A3: 'decai por meia-vida no tempo do jogo')"),
     "k_meia_vida_pontuacao": ("PROPOSTO", "= corpo.k_meia_vida(meia_vida_pontuacao)"),
     "janela_novidade": ("PROPOSTO", "SEM FONTE: o dia do mundo (secao 3.1: 'cai pela metade a cada repeticao ... no dia')"),
+    "co6": ("DECIDIDO", "CO6-1 (Matheus, 2026-11-11): a CO6 so recebe e mostra; desligada, o grupo de hoje (CO6-6, o G2)"),
+    "k_passo": ("PROPOSTO", "SEM FONTE: um ponto da escala S por tick de encontro (D-CO6b-1); a forma e a de Alger e Weibull 2013, "
+                            "10.3982/ecta10637 (o peso sobe com os encontros repetidos com quem retribui)"),
+    "k_teto_bebe": ("PROPOSTO", "CO6-4 (2026-11-11): 0, SEM FONTE"),
+    "k_teto_crianca": ("PROPOSTO", "CO6-4 (2026-11-11): 1/4 de S, SEM FONTE"),
+    "k_teto_adolescente": ("PROPOSTO", "CO6-4 (2026-11-11): 1/2 de S, SEM FONTE"),
+    "k_teto_adulto": ("PROPOSTO", "CO6-4 (2026-11-11): 3/4 de S, SEM FONTE"),
 }
 
 

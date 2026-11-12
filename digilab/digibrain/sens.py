@@ -83,6 +83,7 @@ class Sens:
         self.max_vistos = cfg_mundo.max_vistos
         self.k_hab = ganho_de_tau(self.p.tau_hab, cfg.intervalo_decisao_ticks, self.S)
         self.hab = {c: 0 for c in CLASSES_OBJETO}
+        self.social: dict | None = None               # a CO6: a reputacao e o peso dos deveres da ultima decisao que os trouxe (senao None)
         self.receptores: tuple | None = None          # os receptores presentes, fixados na primeira decisao
         self.olhar = olhar                            # a tela (P1d): so com a subchave `olhar`; None desligada
         self.enjoo: ConfigEnjooTela | None = None     # o enjoo (D-GV-ENJOO-CER): so com o olhar e a ConfigEnjooTela ligada
@@ -240,11 +241,30 @@ class Sens:
             out.append({"rival": r["rival"], "resultado": r["resultado"], "vida_perdida_s": r["vida_perdida_s"], "tick": r["tick"]})
         return out
 
+    def _ler_social(self, ps) -> None:
+        """a CO6 (docs/ESPEC_V3_COOPERACAO_CO6.md, 2.3): a reputacao de cada outro e o peso dos deveres, se a percepcao social os traz, vao
+        ao estado (o painel e as medidas); nenhum modulo os usa na decisao (o G-SEM-DECISAO-CO6). Sem eles (a CO6 desligada, o pet sozinho),
+        o estado fica como estava. Um campo sem o outro ou fora da escala falha alto"""
+        if ps is None or (ps.reputacao is None and ps.peso_dever is None):
+            return
+        S = self.S
+        if ps.reputacao is None or ps.peso_dever is None:
+            raise ValueError(f"M-SENS: a reputacao e o peso dos deveres vem juntos (a CO6): {ps.reputacao!r} {ps.peso_dever!r}")
+        if type(ps.peso_dever) is not int or not 0 <= ps.peso_dever <= S:
+            raise ValueError(f"M-SENS: o peso dos deveres e inteiro em [0, S]: {ps.peso_dever!r}")
+        rep = {}
+        for item in ps.reputacao:
+            if type(item) not in (tuple, list) or len(item) != 2 or type(item[0]) is not str or type(item[1]) is not int or item[0] in rep:
+                raise ValueError(f"M-SENS: a reputacao e (id, r inteiro), um por outro: {ps.reputacao!r}")
+            rep[item[0]] = item[1]
+        self.social = {"reputacao": rep, "peso_dever": ps.peso_dever}
+
     def codificar(self, obs, lutas: list[dict] | None = None, telas: list | None = None) -> dict:
         S = self.S
         if telas is not None and self.olhar is None:
             raise RuntimeError("M-SENS: as linhas da tela sem a subchave olhar")
         pc, pm = obs.corpo, obs.mundo
+        self._ler_social(getattr(obs, "social", None))
         recs = self._receptores(pc)
         falta = {r: falta_receptor(pc, r, S) for r in recs}
         leitura = {r: leitura_receptor(pc, r, S) for r in recs}
