@@ -45,7 +45,7 @@ describe("o cerebro trocavel (a v17, na v21)", () => {
   });
 
   test("o ovo novo nasce com o modular por padrao, e com o A pela preferencia; o replay le o cerebro do registro", () => {
-    expect(VERSAO_PET).toBe(27);
+    expect(VERSAO_PET).toBe(32);
     expect(CHAVE_CEREBRO).toBe(CHAVE + "-cerebro");
     expect(cerebroDosOvos()).toBe("modular");
     const m = ligarProduto(new Motor(303, 21));

@@ -7,13 +7,18 @@
      de tanto ver, do carinho, cada uma com a forma dela); o que está passando numa faixa à parte;
    - o carinho é o Carinho do jogo (UX-GV-7): aqui não há botão de carinho, e nenhuma contagem de carinhos (a GV-14: o jogo não pontua);
    - no celular (UX-GV-8) o painel é uma folha baixa: recolhida, a reação e o gosto; "Mais" a estica.
-   Só existe com `?gosto_visual=1`. Fora do motor, do log e do save. */
+   - no pet com a TV no cérebro (a v32; D-GV-CEREBRO-8): a reação é a do cérebro (o que o motor diz que ele faz, a mesma fonte do painel do
+     DigiBrain), o botão "Levar até a TV" aparece quando a TV está fora da vista dele, e o rodapé diz que o que passa entra no cérebro. O gosto
+     ("Gosta mais de", o porquê) segue o do protótipo, fora do cérebro, e o rodapé diz isso.
+   Só existe com `?gosto_visual=1`. Fora do motor, do log e do save, salvo o "st" e o levar o pet da v32 (cerebroTv.ts). */
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ChevronRight, Lock, MonitorUp, PictureInPicture2, Square, Tv } from "lucide-react";
 import { COMPONENTES, alvos, gostaMaisDe, tempoJunto, valores, type Componente } from "./gosto.ts";
 import { abrirJanelaDaTv, fecharJanelaDaTv, temJanelaPequena, useJanelaDaTv } from "./janelaPequena.ts";
 import { IMAGEM, SOM, descricaoDaLinha, fraseDaReacao, linhasDoGosto, linhasMarcadas, nascencaDifere, ondeFica, type LinhaGosto } from "./leituraGosto.ts";
 import { ligarTela, ligarTvJogo, pararTv, podeMostrarTela, useSessaoTv, type SessaoTv } from "./sessaoTv.ts";
+import { leituraDoCerebro, levarPetATv } from "./cerebroTv.ts";
+import { useJogoSeHouver } from "../jogo.ts";
 
 export const FRASE_PRIVACIDADE = "Ele só sente cores, brilho, movimento e som: sete números por segundo. Nenhuma imagem é guardada e nada sai deste computador.";
 const pct = (x: number): string => `${Math.round(Math.min(1, Math.max(0, x)) * 1000) / 10}%`;
@@ -71,7 +76,7 @@ const Privacidade = () => <p className="tvp-priv"><Lock aria-hidden="true" /><sp
 
 /** o miolo do painel: `nome` é o nome da forma do pet (o do Digimon); `movel` é a folha do celular */
 export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
-  const s = useSessaoTv(), janela = useJanelaDaTv();
+  const s = useSessaoTv(), janela = useJanelaDaTv(), motor = useJogoSeHouver()?.motor ?? null;
   const [porque, setPorque] = useState(false), [todos, setTodos] = useState(false), [passando, setPassando] = useState(false), [mais, setMais] = useState(false);
   /* ligar e parar trocam o botão que tinha o foco por outro: o foco vai para o botão novo, senão cai fora do painel e o Esc não o fecha */
   const ligada = s.origem !== null, raiz = useRef<HTMLDivElement>(null), ligadaAntes = useRef(ligada);
@@ -94,7 +99,12 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
   const quais: readonly Componente[] = ligada && !s.temSom ? IMAGEM : COMPONENTES;
   const linhas = linhasDoGosto(s.inato, s.estado, quais), curtas = linhasMarcadas(linhas), agora = s.sentido ? valores(s.sentido) : {};
   const img = linhas.filter(l => IMAGEM.includes(l.k)), som = linhas.filter(l => SOM.includes(l.k));
-  const frase = s.leitura ? fraseDaReacao(s.inato, s.estado, s.sentido, s.leitura.reacao) : ligada ? "Ligando…" : null;
+  /* a v32: a reação é a do cérebro (D-GV-CEREBRO-8); nos outros pets, a do protótipo */
+  const cer = motor === null ? null : leituraDoCerebro(motor);
+  const frase = cer !== null && ligada ? cer.frase : s.leitura ? fraseDaReacao(s.inato, s.estado, s.sentido, s.leitura.reacao) : ligada ? "Ligando…" : null;
+  const levar = cer !== null && motor !== null && !cer.noRaio && !motor.e.dormindo && motor.morte === null
+    ? <button type="button" className="hx-btn tvp-cheio" data-tv-levar="" onClick={levarPetATv}>Levar até a TV</button> : null;
+  const noCerebro = cer !== null && !ligada ? <p className="tvp-fraco" data-testid="tv-cerebro">{cer.frase}</p> : null;
   const gosto = `Gosta mais de: ${gostaMaisDe(alvos(s.inato, s.estado), quais)}.`;
 
   const controle = ligada ? (
@@ -102,6 +112,7 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
       <p className="tvp-fraco" data-testid="tv-passando">Passando: {passandoEmPalavras(s)}</p>
       <p className="tvp-forte" data-testid="tv-reacao">{frase}</p>
       {s.origem === "tela" && !s.temSom && <p className="tvp-fraco">Ele não está ouvindo. Para ouvir, compartilhe de novo e marque o áudio.</p>}
+      {levar}
       <div className="tvp-bts">
         <button type="button" className="hx-btn" data-tv-parar="" onClick={pararTv}><Square aria-hidden="true" />Parar</button>
         {comJanela && (janela
@@ -112,8 +123,10 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
     </div>
   ) : (
     <div className="tvp-sec">
+      {noCerebro}
       <button type="button" className="hx-continuar tvp-cheio" data-tv-ligar="" onClick={ligarTvJogo}><Tv aria-hidden="true" />Ligar a TV</button>
       {comTela && <button type="button" className="hx-btn tvp-cheio" onClick={() => void ligarTela()}><MonitorUp aria-hidden="true" />Mostrar minha tela</button>}
+      {levar}
       {comTela && <Privacidade />}
     </div>
   );
@@ -150,7 +163,9 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
     <div className="tvp-sec">
       <p className="tvp-fraco" data-testid="tv-tempo">Assistiram juntos: {tempoJunto(s.estado.segundosJuntos)}</p>
       {ligada && s.origem === "tela" && <Privacidade />}
-      <p className="tvp-fraco tvp-prot">Protótipo: o gosto ainda não entra no cérebro do pet.</p>
+      {cer !== null
+        ? <p className="tvp-fraco tvp-prot" data-testid="tv-prot">O que a TV passa entra no cérebro dele: sete números a cada 10 segundos, no registro. O gosto acima ainda é o do protótipo, fora do cérebro.</p>
+        : <p className="tvp-fraco tvp-prot" data-testid="tv-prot">Protótipo: o gosto ainda não entra no cérebro do pet.</p>}
     </div>
   );
 
@@ -162,7 +177,9 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
       <div className="tvp-sec">
         {ligada ? <p className="tvp-forte" data-testid="tv-reacao">{frase}</p>
           : <button type="button" className="hx-continuar tvp-cheio" data-tv-ligar="" onClick={ligarTvJogo}><Tv aria-hidden="true" />Ligar a TV</button>}
+        {noCerebro}
         <p data-testid="tv-gosto">{gosto}</p>
+        {levar}
         <div className="tvp-bts">
           {ligada && <button type="button" className="hx-btn" data-tv-parar="" onClick={pararTv}><Square aria-hidden="true" />Parar</button>}
           <Abre aberto={false} alternar={() => setMais(true)} mais>Mais</Abre>

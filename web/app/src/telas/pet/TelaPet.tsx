@@ -40,7 +40,7 @@ import { CHAVE } from "../../save.ts";
 import { FOME_FALA, NOTIFICA_MS, chamadosVisiveis, useArrastavel, useArrastavelPorAlca, useAviso, useDetalhesPet } from "../../hudPet.ts";
 import { BotaoMovel, Segura } from "../../componentes/BotaoMovel.tsx";
 import { alternarLeque, fecharLeque, mudarLeque, useLeque } from "../../movel.ts";
-import { AgoraIcone, ChipCausa, LinhaAgora } from "./LinhaAgora.tsx";
+import { AgoraIcone, ChipCausa, LinhaAgora, nomeAcaoAgora } from "./LinhaAgora.tsx";
 import { CameraHud, petChama } from "./CameraHud.tsx";
 import { Minimapa } from "./Minimapa.tsx";
 import { BarraBola } from "./PorBola.tsx";
@@ -302,7 +302,7 @@ function resumoAgora(m: Motor, nascendo: number): Resumo {
   if (baixa) return { texto: ROTULO_BAIXO[baixa], emote: EMOTE_NEC[baixa], acao: ACAO_NEC[baixa] };
   const d = m.desejoAtual(m.observacaoAgora(), m.e.tick);
   if (d) return { texto: (d.tipo === "necessidade" ? "precisa " : "quer ") + ALVOS_DESEJO[d.alvo][1], emote: EMOTE_DESEJO[d.alvo] ?? null, acao: ACAO_DESEJO[d.alvo] ?? null };
-  return { texto: "agora: " + NOME_PET[m.acao], emote: null, acao: null };
+  return { texto: "agora: " + nomeAcaoAgora(m), emote: null, acao: null };
 }
 /** o que o celular mostra de uma necessidade (docs/PROPOSTAS_V3_UX_TELA_PET.md, "Mobile minimo", M1-6 a M1-8, M1-13): o aviso (icone e %), o ponto
     rosa no retrato e a acao rosa e maior saem da MESMA regra do resumo (resumoAgora: o chamado aberto, a necessidade mais baixa, o desejo que e
