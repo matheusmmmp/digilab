@@ -15,6 +15,7 @@ import * as THREE from "three";
 import type { Mundo } from "../../../../motor/index.ts";
 import { ninhoDe } from "../vistaMundo.ts";
 import { CENA } from "../cenaEstado.ts";
+import { novoArco, pontoDoArco, type ArcoBola } from "./arcoBola.ts";
 import { BOLA_SALTO, BOLA_TAU_MS, CHAMADO, COCO, KIT_DESDE_NINHO, LUZ_NINHO, SACO_AMASSO, SACO_BALANCO, SACO_FOLGA_POSTE, SACO_GIRO } from "./constantes.ts";
 import { pontoDoLugar } from "./lugares.ts";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
@@ -215,6 +216,8 @@ export class Itens {
   private readonly sub: number;
   /** onde a bola esta desenhada (celulas), indo ate a do motor sem pular; null antes do primeiro quadro */
   private bolaCel: [number, number] | null = null;
+  /** o arco do lance do dono (arcoBola.ts, BB-9): enquanto dura, a bola voa do lado da camera ate o ponto do lance; null fora dele */
+  private arco: ArcoBola | null = null;
   /** a bola estava na mao do dono no quadro anterior: ao cair, ela aparece onde caiu (sem rolar do lugar antigo) */
   private naMaoAntes = false;
   /** o sinal so (CHAMADO): a tigela, a bola e o saco dao um pulinho quando o pet chega perto; `em`, quando comecou, e `perto`, se o pet
@@ -279,6 +282,15 @@ export class Itens {
   /** onde a bola esta desenhada (subunidades do mapa), para pegar a bola na cena (PorBola.tsx); null antes do primeiro quadro */
   get bolaDesenhada(): [number, number] | null { return this.bolaCel && [this.bolaCel[0] * this.sub, this.bolaCel[1] * this.sub]; }
 
+  /** o lance do dono (BB-9): a bola voa do lado da camera (`camChao`, o chao sob ela, celulas) ate `para` (subunidades, onde o motor a pos);
+      com movimento reduzido, nada: ela aparece la, como antes */
+  lancar(agora: number, para: readonly [number, number], camChao: readonly [number, number], reduzido: boolean): void {
+    if (reduzido) { this.arco = null; return; }
+    this.arco = novoArco(agora, [para[0] / this.sub, para[1] / this.sub], camChao);
+  }
+  /** a bola esta no arco do lance agora? (a vista segura a batida ate ela cair) */
+  get noArco(): boolean { return this.arco !== null; }
+
   /** um golpe no saco de quem esta em `de` (celulas): o saco balanca para longe dele, no plano vertical que passa pelos dois. O eixo e
       d x cima (d, a direcao de quem bateu ate o saco): o angulo positivo leva a ponta do saco no sentido de d. O saco tambem amassa na
       direcao d e gira na corrente: o braco vai do poste (-x) ao saco (+x), e quem bate de um lado do braco (z < saco) o gira num
@@ -314,7 +326,8 @@ export class Itens {
       item.podre = podre;
     }
     for (const [id, item] of this.comidas) if (!vistas.has(id)) { this.raiz.remove(item.g); this.comidas.delete(id); }
-    this.moverBola(mu.bolaEm(tick), dtMs, reduzido || this.naMaoAntes);
+    if (this.arco && !CENA.bolaNaMao) this.voarBola(agora);
+    else { this.arco = null; this.moverBola(mu.bolaEm(tick), dtMs, reduzido || this.naMaoAntes); }
     this.naMaoAntes = CENA.bolaNaMao;
     this.bola.g.visible = !CENA.bolaNaMao;
     this.balancarSaco(agora, reduzido);
@@ -334,6 +347,20 @@ export class Itens {
       const k = reduzido || t > 6 * CHAMADO.tau ? 0 : CHAMADO.amplitude * Math.exp(-t / CHAMADO.tau) * Math.sin((2 * Math.PI * t) / CHAMADO.periodo);
       c.g.scale.set(1 - k / 2, 1 + k, 1 - k / 2);
     }
+  }
+
+  /** a bola no arco do lance: no ar sobre o chao (a sombra fica no chao, sob ela), girando; ao cair, a bola fica no ponto do lance, e o
+      quadro seguinte volta a seguir o motor (se o pet ja chutou, ela rola dali) */
+  private voarBola(agora: number): void {
+    const p = pontoDoArco(this.arco!, agora), antes = this.bolaCel;
+    this.bolaCel = [p.x, p.z];
+    if (antes) {
+      const dx = p.x - antes[0], dz = p.z - antes[1], d = Math.hypot(dx, dz);
+      if (d > 1e-5) this.bola.esfera.quaternion.premultiply(this.giro.setFromAxisAngle(new THREE.Vector3(dz / d, 0, -dx / d), d / R_BOLA));
+    }
+    this.bola.g.position.set(p.x, 0, p.z);
+    this.bola.esfera.position.y = R_BOLA + p.y;
+    if (p.acabou) { this.arco = null; this.bola.esfera.position.y = R_BOLA; }
   }
 
   /** a bola desenhada vai ate a do motor (constante BOLA_TAU_MS; salta longe ou com movimento reduzido) e gira em volta do eixo do chao

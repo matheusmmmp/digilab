@@ -56,6 +56,8 @@ import { mitologiaLigada } from "../../../mitologia.ts";
 import { SinaisDaIlha } from "./mitologia.ts";
 import { cantinhoNaVista, montarCantinho, type Cantinho } from "./cantinhoTv.ts";
 import { CAIXA_TV, CAMERA_CANTINHO, passoDaCamera, suave } from "./cantinhoTvConta.ts";
+import { vigiarBola } from "../momentos.ts";
+import { CONFIG_LANCE_DONO_LIGADA } from "../../../../motor/digibrain/constantes.ts";
 
 const movimentoReduzido = (): boolean => matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -145,6 +147,8 @@ class VistaIlha {
   /** a batida na bola: quantas rolagens o motor ja tinha (null antes do primeiro quadro: as de antes de abrir a ilha nao contam) */
   private rolagens: number | null = null;
   private bateBola: { desde: number; alvo: [number, number] } | null = null;
+  /** a batida que chegou com a bola ainda no arco do lance (BB-9): espera ela cair para comecar */
+  private bateBolaPendente: [number, number] | null = null;
   /* a camera do primeiro dia (aberturaConta.ts e src/abertura.ts): `semente` null e a do ?abertura= (as capturas da prancha: nao grava, nao
      acaba nem se interrompe); `saida` e a volta pelo toque (AB-3). `visto` guarda o pet e o ovo da ultima consulta ao pedido */
   private ab: { p: Proposta; semente: number | null; saida: { desde: number; de: QuadroAbertura } | null; ultimo: QuadroAbertura | null } | null =
@@ -383,8 +387,12 @@ class VistaIlha {
     const n = mu.rolagens.length, sub = mu.cm.sub;
     if (this.rolagens !== null && n > this.rolagens) {
       const r = mu.rolagens[n - 1] as { de: [number, number]; para: [number, number] }, parou = r.para[0] === r.de[0] && r.para[1] === r.de[1];
-      this.bateBola = { desde: agora, alvo: parou ? [r.de[0] / sub, r.de[1] / sub] : [r.para[0] / sub, r.para[1] / sub] };
+      const alvo: [number, number] = parou ? [r.de[0] / sub, r.de[1] / sub] : [r.para[0] / sub, r.para[1] / sub];
+      /* a bola ainda no ar (o arco do lance): o golpe espera ela cair, senao o pet chuta o vazio */
+      if (this.itens.noArco) this.bateBolaPendente = alvo;
+      else this.bateBola = { desde: agora, alvo };
     }
+    if (this.bateBolaPendente && !this.itens.noArco) { this.bateBola = { desde: agora, alvo: this.bateBolaPendente }; this.bateBolaPendente = null; }
     this.rolagens = n;
     if (this.bateBola && agora - this.bateBola.desde >= BATER_BOLA_MS) this.bateBola = null;
     /* o treino: um pedido novo comeca do lugar em que o pet esta; ele para a GOLPE_DIST do saco, ao lado dele na tela (ao longo da
@@ -723,6 +731,11 @@ class VistaIlha {
     this.objetos?.noite?.(noite);
     this.objetos?.quadro?.(this.foco, this.estilo.dobra, this.dirDobra, Math.tan(THREE.MathUtils.degToRad(this.camera.fov / 2)) * this.camera.aspect);
     this.aplicarTrancas();
+    /* a bola do dono (BB-9; momentos.ts, vigiarBola): o lance novo voa do lado da camera; o som do lance e do chute; a recusa no rosto */
+    const lb = vigiarBola({ chave: String(m.semente), lances: mu.lances, rolagens: mu.rolagens.map(r => (r as { tick: number }).tick),
+      tickMundo: mu.tm(m.e.tick), janela: CONFIG_LANCE_DONO_LIGADA.janela_convite_ticks, energia: m.e.energia, dormindo: m.acao === "dormir",
+      convidado: m.cerebroAtual === "modular" }, agora);
+    if (lb.lance) this.itens.lancar(agora, lb.lance.para, [this.camera.position.x, this.camera.position.z], reduzido);
     this.itens.sincronizar(mu, m.e.tick, noite, agora, dtMs, m.lesionadoDesde !== null, reduzido, m.e.sujeira, this.naMao ? motorCel : this.petCel);
     this.mitologia.sincronizar(m, mitologiaLigada(), agora, reduzido);
     /* o pet longe do foco (a camera solta, a viagem, a volta depois de soltar o pet): o chao sob ele desce pela dobra (yPe), e o tamanho do papel vale
