@@ -213,6 +213,8 @@ export interface MotorNoGrupo {
   decideNoProximoTick(): boolean;
   umTickNoGrupo(): void;
   readonly acao: string;
+  /** o modular do pet, se decide com ele (a CO7 le o `dever` do ultimo motivo) */
+  readonly lab?: { motivos: readonly Record<string, unknown>[] } | null;
 }
 
 /** as opcoes do grupo: o tick do mundo em que ele comeca (o do nascimento dos pets do jogo; 0 na pesquisa) e a semente do segundo pet (o
@@ -248,6 +250,10 @@ export class Grupo implements GanchoGrupo {
   readonly ordens: { tick: number; decidem: string[]; ordem: string[] }[] = [];
   readonly contatos: Record<string, unknown>[] = [];
   readonly disputas: Disputa[] = [];
+  /** a CO7 (so com a `co7`): o que os deveres fizeram em cada decisao de um pet do jogo com o modular (o `dever` do motivo), para o gesto na tela;
+      derivado, fora do resumo e da assinatura */
+  readonly deveres: { tick: number; pet: string; escolha: unknown; dever: Record<string, unknown> }[] = [];
+  private readonly motivosVistos = new Map<string, number>();
   readonly registro: RegistroGrupo;
   /** a cooperacao (CO3): so mede; null com a ConfigCooperacao desligada (o grupo de hoje) */
   readonly coop: Cooperacao | null;
@@ -259,6 +265,7 @@ export class Grupo implements GanchoGrupo {
     validarConfigGrupo(cg);
     const cco = op.cooperacao ?? CONFIG_COOPERACAO;
     if (cco.co6 && !cco.ligada) throw new Error("ConfigCooperacao.co6 so liga com a cooperacao ligada (ESPEC_V3_COOPERACAO_CO6, secao 4)");
+    if (cco.co7 && !cco.co6) throw new Error("ConfigCooperacao.co7 so liga com a co6 ligada (ESPEC_V3_COOPERACAO_CO7, secao 6)");
     this.coop = cco.ligada ? new Cooperacao(cco) : null;
     this.cm = cm;
     this.semente = semente;
@@ -382,6 +389,7 @@ export class Grupo implements GanchoGrupo {
       for (const i of ordem) {
         const mb = this.membro(i);
         if (mb.motor !== null) mb.motor.umTickNoGrupo(); else this.decidirUm(i);
+        if (this.coop !== null && this.coop.cfg.co7 && mb.motor !== null) this.lerDever(i, mb.motor.lab ?? null);
         if (this.coop !== null) this.coopDecisao(i, presentes);
       }
       for (const i of presentes) {
@@ -400,6 +408,16 @@ export class Grupo implements GanchoGrupo {
       }
       this.tick++;
     }
+  }
+
+  /** a CO7: o `dever` da decisao que o pet do jogo acabou de tomar com o modular (nada sem ele) */
+  private lerDever(ident: string, lab: { motivos: readonly Record<string, unknown>[] } | null): void {
+    if (lab === null) return;
+    const n = lab.motivos.length, visto = this.motivosVistos.get(ident) ?? 0;
+    this.motivosVistos.set(ident, n);
+    if (n === visto) return;
+    const m = lab.motivos[n - 1]!, d = m["dever"] as Record<string, unknown> | null | undefined;
+    if (d !== null && d !== undefined) this.deveres.push({ tick: this.tick, pet: ident, escolha: m["escolha"], dever: d });
   }
 
   /** a acao que se ve de fora: a do Motor (o pet do jogo) ou a ultima decidida (o pet do traco) */

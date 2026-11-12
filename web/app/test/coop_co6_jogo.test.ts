@@ -1,17 +1,18 @@
 /* A CO6 no grupo do jogo (docs/ESPEC_V3_COOPERACAO_CO6.md, 2.3 e 2.4): o M-SENS do modular le a reputacao e o peso dos deveres da percepcao
    social, e o painel do DigiBrain os mostra em palavras, sem numero (D-MM-8, CO6-7).
-   - a chave fica DESLIGADA no jogo (D-CO6c-1): o GrupoDoJogo de hoje nao a liga, e o estado do cerebro nao tem a chave `social`;
-   - ligada (so nos testes), o G-SEM-DECISAO-CO6 no jogo: os dois pets vivem igual a CO6 desligada (o mesmo registro e os mesmos motivos de
+   - a chave fica DESLIGADA nos grupos de antes da v37 (D-CO6c-1): o estado do cerebro nao tem a chave `social`; a v37 a liga ("Sim, juntas",
+     Matheus, 2026-11-12, com a CO7);
+   - ligada na v36 pelo parametro (so nos testes), o G-SEM-DECISAO-CO6 no jogo: os dois pets vivem igual a CO6 desligada (o mesmo registro e os mesmos motivos de
      cada decisao); o M-SENS guarda o que a percepcao trouxe, que e a reputacao e o k da Cooperacao do grupo;
    - o texto do painel: confia, ainda nao confia, desconfia; sente o dever pouco, medio ou muito; nenhum algarismo. */
 import { createElement as h } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, test } from "vitest";
-import { GrupoDoJogo, TPD, VERSAO_GRUPO } from "../motor/index.ts";
+import { GrupoDoJogo, TPD, VERSAO_GRUPO, VERSAO_V36 } from "../motor/index.ts";
 import { ComOIrmao, textoConfianca, textoDever } from "../src/componentes/DigiBrainLab.tsx";
 
 function viver(co6: boolean): GrupoDoJogo {
-  const g = new GrupoDoJogo(202, VERSAO_GRUPO, true, co6);
+  const g = new GrupoDoJogo(202, VERSAO_V36, true, co6);
   for (const i of g.ids) g.agir(i, m => m.trocarCerebro("modular"));     // o ovo escolhe o modular (src/cerebro.ts, o padrao dos ovos novos)
   for (let k = 0; k < (3 * TPD) / 15; k++) {
     g.avancar(15);
@@ -22,15 +23,16 @@ function viver(co6: boolean): GrupoDoJogo {
 const LIGADA = viver(true), DESLIGADA = viver(false);
 
 describe("a CO6 no grupo do jogo", () => {
-  test("desligada no jogo: o grupo de hoje nao a liga, e o cerebro nao ganha a chave social", () => {
-    const g = new GrupoDoJogo(101, VERSAO_GRUPO);
-    expect(g.grupo.coop!.cfg.co6).toBe(false);
+  test("desligada nos grupos de antes (v36), ligada no de hoje (v37), e o cerebro so ganha a chave social com ela", () => {
+    expect(new GrupoDoJogo(101, VERSAO_V36).grupo.coop!.cfg.co6).toBe(false);
+    expect(VERSAO_GRUPO).toBe(37);
+    expect(new GrupoDoJogo(101, VERSAO_GRUPO).grupo.coop!.cfg.co6).toBe(true);
     for (const m of Object.values(DESLIGADA.motores)) {
       expect(m.lab).not.toBeNull();
       expect(m.lab!.sens.social).toBeNull();
       expect("social" in m.lab!.estadoInterno()).toBe(false);
     }
-    expect(() => new GrupoDoJogo(101, VERSAO_GRUPO, false, true)).toThrow(/medida/);
+    expect(() => new GrupoDoJogo(101, VERSAO_V36, false, true)).toThrow(/medida/);
   });
 
   test("o G-SEM-DECISAO-CO6 no jogo: o mesmo registro e os mesmos motivos, decisao a decisao", () => {

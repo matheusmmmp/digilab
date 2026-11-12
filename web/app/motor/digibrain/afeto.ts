@@ -1,6 +1,7 @@
 /* M-AFETO, os afetos e os moduladores: o espelho de digilab/digibrain/afeto.py (docs/ESPEC_DIGIBRAIN_MODULAR.md, secao 4.3; LM1).
    Na decisao (`ler`): a urgencia de cada receptor, o g_apr e o g_exp. Na consequencia: o sinal homeostatico do A, a valencia V e a excitacao
    E (forma I). Aritmetica inteira, sem rng. */
+import { culpaInveja, type ConfigDever } from "./dever.ts";
 import { contribuicoesCorpo, faltaReceptor, sinalCorpo, type PercepcaoCorpoLobos } from "../lobos.ts";
 import { clamp, divArred, ganhoDeTau, integrar, mul } from "./_comum.ts";
 import { INATOS_MODULAR } from "./constantes.ts";
@@ -15,6 +16,8 @@ export interface ConfigAfeto { intervalo_decisao_ticks: number }
 
 export interface LeituraAfeto {
   urgencias: Record<string, number>; V: number; E: number; e_usada: number | null; g_apr: number; g_exp: number;
+  /** a CO7 (so com `ligarDever`): o que a decisao tirou da valencia */
+  culpa?: number; inveja?: number;
 }
 export interface UltimoAfeto { r: number; r_n: number; canais: Record<string, number>; V: number; E: number }
 
@@ -74,7 +77,11 @@ export class Afeto {
     return clamp(p.g0 + mul(p.beta_e, e, this.S), p.g_min, p.g_max);
   }
 
-  ler(sens: Pick<SaidaSens, "falta">): LeituraAfeto {
+  /** a CO7 (4; CO7-6): a culpa e a inveja tiram da valencia da decisao (o V que o M-IMPULSO le), sem mexer no V guardado nem no corpo */
+  ligarDever(cfg: ConfigDever): void { this.dever = cfg; }
+  dever: ConfigDever | null = null;
+
+  ler(sens: Pick<SaidaSens, "falta"> & Partial<SaidaSens>): LeituraAfeto {
     const p = this.p, S = this.S, cd = this.cd;
     const falta = sens.falta;
     const urg: Record<string, number> = {};
@@ -98,7 +105,14 @@ export class Afeto {
     const gExp = clamp(p.e0 + mul(p.beta_t, falta["tedio"] ?? 0, S) - mul(p.beta_u, maxUrg, S), 0, p.e_max);
     this.serie_e.push(this.E);
     this.decisoes += 1;
-    return { urgencias: urg, V: this.V, E: this.E, e_usada: eUsada, g_apr: gApr, g_exp: gExp };
+    const out: LeituraAfeto = { urgencias: urg, V: this.V, E: this.E, e_usada: eUsada, g_apr: gApr, g_exp: gExp };
+    if (this.dever !== null) {                         // a CO7: a culpa e a inveja so na valencia desta decisao (desligada, a de hoje)
+      const [culpa, inveja] = culpaInveja({ social: sens.social ?? null, leitura: sens.leitura! }, this.dever);
+      out.V = clamp(this.V - culpa - inveja, -S, S);
+      out.culpa = culpa;
+      out.inveja = inveja;
+    }
+    return out;
   }
 
   drives(receptores: readonly string[]): string[] {

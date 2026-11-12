@@ -1,0 +1,5206 @@
+{
+ "origem": "scripts/arena_gabarito_n3.ts, antes das chaves da N3 (as tabelas v21, v23 e v29)",
+ "versoes": {
+  "21": 21,
+  "22": 21,
+  "23": 23,
+  "24": 23,
+  "25": 23,
+  "26": 23,
+  "27": 23,
+  "28": 23,
+  "29": 29,
+  "30": 23,
+  "31": 29,
+  "32": 23,
+  "35": 23,
+  "36": 29,
+  "37": 29
+ },
+ "lutas": [
+  {
+   "id": "v21|campo|brasa_bebe|ferrugem_bebe|101",
+   "sha": "bc31c60b92d447f5feecc96ab78da888e9e9a71c6231808124bc1eebe7240da1",
+   "vencedor": "a",
+   "relogio": 12560,
+   "vidaA": 11,
+   "vidaB": 0,
+   "eventos": 15
+  },
+  {
+   "id": "v21|campo|brasa_bebe|ferrugem_bebe|202",
+   "sha": "a4da06f0bcdefd3ce0332c4d24a48a489347368f7f5940b030957b51efa5b392",
+   "vencedor": "a",
+   "relogio": 11776,
+   "vidaA": 57,
+   "vidaB": 0,
+   "eventos": 14
+  },
+  {
+   "id": "v21|campo|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "19251c15f67e6144139b9e42482a3c104e3be4b51ab612963acc0549fe940eb1",
+   "vencedor": "b",
+   "relogio": 13504,
+   "vidaA": 0,
+   "vidaB": 389,
+   "eventos": 17
+  },
+  {
+   "id": "v21|campo|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "603882f0c411b66c4fd69ed8f44cc3ee92b453f8c062a6f14509f220a20f4cc2",
+   "vencedor": "b",
+   "relogio": 14496,
+   "vidaA": 0,
+   "vidaB": 216,
+   "eventos": 18
+  },
+  {
+   "id": "v21|campo|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "2e8f1fc7ffd7b8eb5f5ffcef4de6640df701d231170bb72bb32c7e1e63166479",
+   "vencedor": "a",
+   "relogio": 11520,
+   "vidaA": 102,
+   "vidaB": 0,
+   "eventos": 19
+  },
+  {
+   "id": "v21|campo|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "ebe45becefd8d57323b9f814cbf8244d5dab25e3352361014757415209d63981",
+   "vencedor": null,
+   "relogio": 12368,
+   "vidaA": 0,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v21|campo|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "75a2358a5bcfc4e5ed85524021688a4a6751f67f524d160e1d81b4b3986a8cca",
+   "vencedor": "b",
+   "relogio": 14976,
+   "vidaA": 0,
+   "vidaB": 360,
+   "eventos": 32
+  },
+  {
+   "id": "v21|campo|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "1a73b4418958af8556c8af0db3db0fb9268105c8addadb14fd1ae8539667632a",
+   "vencedor": "b",
+   "relogio": 15216,
+   "vidaA": 0,
+   "vidaB": 363,
+   "eventos": 31
+  },
+  {
+   "id": "v21|campo|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "ce2fbca7a7abf725c1b66bafbacfba5627a2969afc71878e5501be67b9f57822",
+   "vencedor": "b",
+   "relogio": 18000,
+   "vidaA": 0,
+   "vidaB": 79,
+   "eventos": 28
+  },
+  {
+   "id": "v21|campo|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "e1f75d3c66a216703fc6d583e03f3fee350a52cc4700be23dbff77a4cfed2193",
+   "vencedor": "a",
+   "relogio": 14672,
+   "vidaA": 110,
+   "vidaB": 0,
+   "eventos": 24
+  },
+  {
+   "id": "v21|campo|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "a6e9525c7fa8a1e4fe9596f21f302dfe551edf5e6d955c56dd29da1b66c8226e",
+   "vencedor": "a",
+   "relogio": 13072,
+   "vidaA": 502,
+   "vidaB": 0,
+   "eventos": 24
+  },
+  {
+   "id": "v21|campo|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "1501524dac8bcb6a5147c6e5d8f1d70445f46ffee5b8e2e4d1fc916d886a60ab",
+   "vencedor": "a",
+   "relogio": 14464,
+   "vidaA": 403,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v21|campo|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "45ef6630040ee2e976492cb01c3caaff021e0b4ca43bf544f3be26a321b5d512",
+   "vencedor": "a",
+   "relogio": 16912,
+   "vidaA": 671,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v21|campo|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "0cad862e8c25126fd734e1b882ced0ef31d72fc132e96b88d664ad09d512dc63",
+   "vencedor": "a",
+   "relogio": 16048,
+   "vidaA": 690,
+   "vidaB": 0,
+   "eventos": 21
+  },
+  {
+   "id": "v21|campo|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "5131df45e8b1af75bafd7f70d392391f8fdda25b9a18ba9157a336df20dc5fc6",
+   "vencedor": "b",
+   "relogio": 9312,
+   "vidaA": 0,
+   "vidaB": 523,
+   "eventos": 16
+  },
+  {
+   "id": "v21|campo|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "44e313638cbdc94e3a002fa79ac6b59b676c301bae53b122b288d64dc268b432",
+   "vencedor": "a",
+   "relogio": 15792,
+   "vidaA": 4,
+   "vidaB": 0,
+   "eventos": 25
+  },
+  {
+   "id": "v21|campo|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "077267e447f2659e1ce081876969e4d7bfd3792e1b6ecd254c3e108057d42dd7",
+   "vencedor": "a",
+   "relogio": 24224,
+   "vidaA": 406,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v21|campo|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "de745ceed7b094bdc59ad4d881760d2f99a79252f08e8c72027e5b4277ef2f16",
+   "vencedor": "a",
+   "relogio": 23040,
+   "vidaA": 409,
+   "vidaB": 0,
+   "eventos": 34
+  },
+  {
+   "id": "v21|campo|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "1dc872a9e2aa73ea80844af2b056b254fc8982633859f7ed5568dc711393b3bf",
+   "vencedor": "b",
+   "relogio": 13664,
+   "vidaA": 0,
+   "vidaB": 871,
+   "eventos": 29
+  },
+  {
+   "id": "v21|campo|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "fc9b1bf6d993438cf315d974cd5b09c475272ac3aef72c5714536918660a8cfe",
+   "vencedor": "b",
+   "relogio": 14784,
+   "vidaA": 0,
+   "vidaB": 702,
+   "eventos": 32
+  },
+  {
+   "id": "v21|campo|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "2d2f4c18a57b0fab266fd0de90b31b9672ba825fcaad082ad99232dd1853a1e1",
+   "vencedor": "a",
+   "relogio": 11856,
+   "vidaA": 1081,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v21|campo|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "f8f44908ed176cd728606d2a51ba0acaa3bb6c75f8b0a9ff178feb80efdceab6",
+   "vencedor": "a",
+   "relogio": 11904,
+   "vidaA": 1032,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v21|campo|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "1f51c9435bfa1adfa0a2a6df0424e31123b692c4c8021b740170e91ad9d8fcef",
+   "vencedor": "b",
+   "relogio": 9216,
+   "vidaA": 0,
+   "vidaB": 1436,
+   "eventos": 19
+  },
+  {
+   "id": "v21|campo|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "d8988c8b37f5384de6c71abfb01ea6806d5b0eecef8eb1b57dade899361fba7a",
+   "vencedor": "b",
+   "relogio": 10768,
+   "vidaA": 0,
+   "vidaB": 1436,
+   "eventos": 20
+  },
+  {
+   "id": "v21|coliseu|brasa_bebe|ferrugem_bebe|101",
+   "sha": "b283fa13983f87802633b8f2c467f562e450c414169b932d863cf5074e6ca36e",
+   "vencedor": "a",
+   "relogio": 12560,
+   "vidaA": 11,
+   "vidaB": 0,
+   "eventos": 15
+  },
+  {
+   "id": "v21|coliseu|brasa_bebe|ferrugem_bebe|202",
+   "sha": "8382ed5f3ffef9cc9cc01d96cd8c63f49fa73a253597f86837f173d16a1ae4c6",
+   "vencedor": "a",
+   "relogio": 11776,
+   "vidaA": 57,
+   "vidaB": 0,
+   "eventos": 14
+  },
+  {
+   "id": "v21|coliseu|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "4b06653cc0ae30637ea08e2b137611ec3df2c127542184f2618c26a677e430e3",
+   "vencedor": "b",
+   "relogio": 13504,
+   "vidaA": 0,
+   "vidaB": 389,
+   "eventos": 17
+  },
+  {
+   "id": "v21|coliseu|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "23fe2fdc4dd8fca38a16ade51aa2af6978150186995061f2af477b35e4ef448c",
+   "vencedor": "b",
+   "relogio": 14496,
+   "vidaA": 0,
+   "vidaB": 216,
+   "eventos": 18
+  },
+  {
+   "id": "v21|coliseu|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "2e8f1fc7ffd7b8eb5f5ffcef4de6640df701d231170bb72bb32c7e1e63166479",
+   "vencedor": "a",
+   "relogio": 11520,
+   "vidaA": 102,
+   "vidaB": 0,
+   "eventos": 19
+  },
+  {
+   "id": "v21|coliseu|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "a78b14652e1d6f32bff10ee18abb5415f3a9de3a36e649fee96127ac76f16822",
+   "vencedor": null,
+   "relogio": 12368,
+   "vidaA": 0,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v21|coliseu|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "9a39f9a1ec28f2fe3d82950a87fbe6f0c6a08b6ec6746eed8af011e9f299e1cb",
+   "vencedor": "b",
+   "relogio": 14976,
+   "vidaA": 0,
+   "vidaB": 360,
+   "eventos": 32
+  },
+  {
+   "id": "v21|coliseu|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "998d46eb706314125a414dfc43b1e5732a52addb8d3b9d204248875d907158b5",
+   "vencedor": "b",
+   "relogio": 15216,
+   "vidaA": 0,
+   "vidaB": 363,
+   "eventos": 31
+  },
+  {
+   "id": "v21|coliseu|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "c8d1644b3f02dd3ff54d3393fab3099408fcb4fc98bcb8ff8477e4b79f6b6c5e",
+   "vencedor": "b",
+   "relogio": 18000,
+   "vidaA": 0,
+   "vidaB": 79,
+   "eventos": 28
+  },
+  {
+   "id": "v21|coliseu|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "7847009db74b12fdf4113285e077bb92bd1e463ab420ddf1715869962d8158a8",
+   "vencedor": "a",
+   "relogio": 14672,
+   "vidaA": 110,
+   "vidaB": 0,
+   "eventos": 24
+  },
+  {
+   "id": "v21|coliseu|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "51b04925be0c6a8d7041077e221a83b7c7378e26c03a33461387ce7e5e12993f",
+   "vencedor": "a",
+   "relogio": 13072,
+   "vidaA": 502,
+   "vidaB": 0,
+   "eventos": 24
+  },
+  {
+   "id": "v21|coliseu|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "f9575da99abe83644ccf53e24d9290d92a336576b8e420ebb673fb70a9f116c7",
+   "vencedor": "a",
+   "relogio": 14464,
+   "vidaA": 403,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v21|coliseu|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "45ef6630040ee2e976492cb01c3caaff021e0b4ca43bf544f3be26a321b5d512",
+   "vencedor": "a",
+   "relogio": 16912,
+   "vidaA": 671,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v21|coliseu|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "0cad862e8c25126fd734e1b882ced0ef31d72fc132e96b88d664ad09d512dc63",
+   "vencedor": "a",
+   "relogio": 16048,
+   "vidaA": 690,
+   "vidaB": 0,
+   "eventos": 21
+  },
+  {
+   "id": "v21|coliseu|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "7e21f8b41ef72a4cfab8a1cd71f3c9eb4c17ad0f0173a0928f81776e1dd0d9d5",
+   "vencedor": "b",
+   "relogio": 9328,
+   "vidaA": 0,
+   "vidaB": 321,
+   "eventos": 17
+  },
+  {
+   "id": "v21|coliseu|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "7ceee7001271332148cd65398b7f1e83ba8d6911cbf33a61808c5c4e238df92a",
+   "vencedor": "a",
+   "relogio": 15792,
+   "vidaA": 4,
+   "vidaB": 0,
+   "eventos": 25
+  },
+  {
+   "id": "v21|coliseu|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "c51e539ab3c1574d12c618431b16e4d3ece756301bbf4891c44e2b4321b2508d",
+   "vencedor": "a",
+   "relogio": 24224,
+   "vidaA": 406,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v21|coliseu|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "f6fcb54ff0372dab63ec94edd98f955fc3fae0cc409e83dcef46a18215a0fc7f",
+   "vencedor": "a",
+   "relogio": 23040,
+   "vidaA": 409,
+   "vidaB": 0,
+   "eventos": 34
+  },
+  {
+   "id": "v21|coliseu|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "a05573f42423da0bd41fbfa351880161d8532815847a14c70f81b0b8ebffe953",
+   "vencedor": "b",
+   "relogio": 13664,
+   "vidaA": 0,
+   "vidaB": 871,
+   "eventos": 29
+  },
+  {
+   "id": "v21|coliseu|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "f8859411e5d5340e768fd9467080c9e0950098f327d5c8e4dd13fe1727491d6b",
+   "vencedor": "b",
+   "relogio": 14784,
+   "vidaA": 0,
+   "vidaB": 702,
+   "eventos": 32
+  },
+  {
+   "id": "v21|coliseu|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "b7d29450ff860075e3730fe18eb62fa0b97cbb967351ddfefa8e3999b5399992",
+   "vencedor": "a",
+   "relogio": 11856,
+   "vidaA": 1081,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v21|coliseu|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "f8f44908ed176cd728606d2a51ba0acaa3bb6c75f8b0a9ff178feb80efdceab6",
+   "vencedor": "a",
+   "relogio": 11904,
+   "vidaA": 1032,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v21|coliseu|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "1f51c9435bfa1adfa0a2a6df0424e31123b692c4c8021b740170e91ad9d8fcef",
+   "vencedor": "b",
+   "relogio": 9216,
+   "vidaA": 0,
+   "vidaB": 1436,
+   "eventos": 19
+  },
+  {
+   "id": "v21|coliseu|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "d8988c8b37f5384de6c71abfb01ea6806d5b0eecef8eb1b57dade899361fba7a",
+   "vencedor": "b",
+   "relogio": 10768,
+   "vidaA": 0,
+   "vidaB": 1436,
+   "eventos": 20
+  },
+  {
+   "id": "v21|floresta|brasa_bebe|ferrugem_bebe|101",
+   "sha": "30fd62c498da612f0cea41bb7732a21939743c271b0b2fcdcef1de7243184df2",
+   "vencedor": "a",
+   "relogio": 12576,
+   "vidaA": 11,
+   "vidaB": 0,
+   "eventos": 15
+  },
+  {
+   "id": "v21|floresta|brasa_bebe|ferrugem_bebe|202",
+   "sha": "e7b66d04d39a577bda92069badf2e167aeb0a0afa4543893ca942e4314a4bec8",
+   "vencedor": "b",
+   "relogio": 14256,
+   "vidaA": 0,
+   "vidaB": 56,
+   "eventos": 18
+  },
+  {
+   "id": "v21|floresta|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "53452b564ee4d05007d0722ab20e47dda07901da213a765c2c4a80834abdac41",
+   "vencedor": "b",
+   "relogio": 13504,
+   "vidaA": 0,
+   "vidaB": 305,
+   "eventos": 17
+  },
+  {
+   "id": "v21|floresta|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "58c2ce495a0c12d5a2fd42876aa1ff9c5c3dd0b51898aa3f52844dbac812d79c",
+   "vencedor": "b",
+   "relogio": 14496,
+   "vidaA": 0,
+   "vidaB": 216,
+   "eventos": 18
+  },
+  {
+   "id": "v21|floresta|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "d1f1d6e093c43f2423e99b817783a4998967306f2121864a9d21fcdc7e1e2d30",
+   "vencedor": "a",
+   "relogio": 11520,
+   "vidaA": 102,
+   "vidaB": 0,
+   "eventos": 19
+  },
+  {
+   "id": "v21|floresta|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "1074f697ef732444bce68b71fc332c0ecf23a98967922426915a1cc05574e432",
+   "vencedor": "b",
+   "relogio": 12352,
+   "vidaA": 0,
+   "vidaB": 184,
+   "eventos": 21
+  },
+  {
+   "id": "v21|floresta|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "ce13d39dabbba7ef87447fd64a00a8ce5a7ed75e82900a6394f8ef6d1a876581",
+   "vencedor": "b",
+   "relogio": 14976,
+   "vidaA": 0,
+   "vidaB": 360,
+   "eventos": 32
+  },
+  {
+   "id": "v21|floresta|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "60ca0f6c29eb39e42b6937781e65fd96e29b96fa1ae5ada85cf3cfe173137c4e",
+   "vencedor": "b",
+   "relogio": 15216,
+   "vidaA": 0,
+   "vidaB": 363,
+   "eventos": 31
+  },
+  {
+   "id": "v21|floresta|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "2b8d1546cd798ff1faca38571b40c559beffe2315642d0dec62eb8184d9a4839",
+   "vencedor": "b",
+   "relogio": 18000,
+   "vidaA": 0,
+   "vidaB": 223,
+   "eventos": 28
+  },
+  {
+   "id": "v21|floresta|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "80cf40695ee5f7c61329a6d5eea7b540057c4362cc435417e67d11d4f7f84d08",
+   "vencedor": "b",
+   "relogio": 16864,
+   "vidaA": 0,
+   "vidaB": 67,
+   "eventos": 27
+  },
+  {
+   "id": "v21|floresta|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "bd016ffc0be9593536ce4fce14032f59aee0ced61c835e0b9ee5e1ef1ac49c9a",
+   "vencedor": "a",
+   "relogio": 13072,
+   "vidaA": 502,
+   "vidaB": 0,
+   "eventos": 24
+  },
+  {
+   "id": "v21|floresta|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "ab00a8826086cf863d12e75aaf48af09ede760da665496fc6c24c14af8f1a273",
+   "vencedor": "a",
+   "relogio": 14416,
+   "vidaA": 447,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v21|floresta|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "18090d9dfbf6f7a1a63538d0e729ca646bc454f43efeb54c48c68552aa47cda9",
+   "vencedor": "a",
+   "relogio": 16912,
+   "vidaA": 671,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v21|floresta|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "350facded7b40a37d5aceb0402ecc10a1f61e5c297c41b2a93d1c580f0500cc7",
+   "vencedor": "a",
+   "relogio": 16048,
+   "vidaA": 690,
+   "vidaB": 0,
+   "eventos": 21
+  },
+  {
+   "id": "v21|floresta|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "0002d815399c6cabc75c1a71da01b21626178be90293f556608d3c906ec1cd58",
+   "vencedor": "b",
+   "relogio": 15392,
+   "vidaA": 0,
+   "vidaB": 6,
+   "eventos": 25
+  },
+  {
+   "id": "v21|floresta|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "53339f9f0aad3ac2c01bedb3e41a6348996789821f636c747fee352990f8d54f",
+   "vencedor": "a",
+   "relogio": 15792,
+   "vidaA": 4,
+   "vidaB": 0,
+   "eventos": 25
+  },
+  {
+   "id": "v21|floresta|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "aadb23a27bbcbee177f8126584fbd3e53bd03bc3c3275eedc254740ab77bd4f3",
+   "vencedor": "a",
+   "relogio": 24224,
+   "vidaA": 406,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v21|floresta|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "480bf07a374c28adc5eba8d4dc175dfdecc52258fb0dd4f460d1c08f33d479f9",
+   "vencedor": "a",
+   "relogio": 23040,
+   "vidaA": 582,
+   "vidaB": 0,
+   "eventos": 34
+  },
+  {
+   "id": "v21|floresta|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "1dc872a9e2aa73ea80844af2b056b254fc8982633859f7ed5568dc711393b3bf",
+   "vencedor": "b",
+   "relogio": 13664,
+   "vidaA": 0,
+   "vidaB": 871,
+   "eventos": 29
+  },
+  {
+   "id": "v21|floresta|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "fc9b1bf6d993438cf315d974cd5b09c475272ac3aef72c5714536918660a8cfe",
+   "vencedor": "b",
+   "relogio": 14784,
+   "vidaA": 0,
+   "vidaB": 702,
+   "eventos": 32
+  },
+  {
+   "id": "v21|floresta|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "4bf89dfe2874c5508277ab1686e6bdc0a8a6edfc1473870c68c460a5e508d524",
+   "vencedor": "a",
+   "relogio": 14560,
+   "vidaA": 1143,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v21|floresta|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "70cacb99e3dcf5e915e2ee23e49bf4096b9c8b7a24a2bc7b8b84cb7edc5f07cd",
+   "vencedor": "a",
+   "relogio": 11904,
+   "vidaA": 1032,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v21|floresta|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "1f51c9435bfa1adfa0a2a6df0424e31123b692c4c8021b740170e91ad9d8fcef",
+   "vencedor": "b",
+   "relogio": 9216,
+   "vidaA": 0,
+   "vidaB": 1436,
+   "eventos": 19
+  },
+  {
+   "id": "v21|floresta|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "3a10e0610a116b25ac7fcf5e906c1b3031b800a2c7791e81a969b345c7554e46",
+   "vencedor": "b",
+   "relogio": 10768,
+   "vidaA": 0,
+   "vidaB": 1436,
+   "eventos": 20
+  },
+  {
+   "id": "v21|praia|brasa_bebe|ferrugem_bebe|101",
+   "sha": "e47a669e8f67a741cd784ea6f860a25c0266848d9c7bcd4ea1e63f2c938df8a6",
+   "vencedor": "b",
+   "relogio": 13264,
+   "vidaA": 0,
+   "vidaB": 15,
+   "eventos": 16
+  },
+  {
+   "id": "v21|praia|brasa_bebe|ferrugem_bebe|202",
+   "sha": "7d4d47132ba8b9278217b1da8d18b0dc8083ea85907d2a05cab2f86cfb86d202",
+   "vencedor": "a",
+   "relogio": 11760,
+   "vidaA": 51,
+   "vidaB": 0,
+   "eventos": 14
+  },
+  {
+   "id": "v21|praia|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "ee3b08e818239c638297e48a07f09c851c6e6bfd40c95154a586963fba50c43e",
+   "vencedor": "b",
+   "relogio": 16672,
+   "vidaA": 0,
+   "vidaB": 226,
+   "eventos": 19
+  },
+  {
+   "id": "v21|praia|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "0a28f5f0817077cbaec52b935a4d524916ad1614b2c18db5db5a0611e4b8277b",
+   "vencedor": "b",
+   "relogio": 14384,
+   "vidaA": 0,
+   "vidaB": 227,
+   "eventos": 18
+  },
+  {
+   "id": "v21|praia|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "0a5c7e5badfcec2a952b01a5d691a8d1acab39787cfc801a36f72d176dccfba7",
+   "vencedor": "b",
+   "relogio": 21856,
+   "vidaA": 0,
+   "vidaB": 74,
+   "eventos": 33
+  },
+  {
+   "id": "v21|praia|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "39c5aa31efdf788b7b21f2c61b1b0424a8b9918e1bf9a919e0f02b71a424f7a4",
+   "vencedor": "a",
+   "relogio": 12400,
+   "vidaA": 41,
+   "vidaB": 0,
+   "eventos": 21
+  },
+  {
+   "id": "v21|praia|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "5a05320f3399dee59d87f3902bda995df89d986d829a140416a7d321962d0d71",
+   "vencedor": "b",
+   "relogio": 15520,
+   "vidaA": 0,
+   "vidaB": 361,
+   "eventos": 32
+  },
+  {
+   "id": "v21|praia|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "62c789522b775397c8faf3a29ea7a5c4c13d585b4b4a9764b58d4482bdc2f839",
+   "vencedor": "b",
+   "relogio": 15536,
+   "vidaA": 0,
+   "vidaB": 426,
+   "eventos": 31
+  },
+  {
+   "id": "v21|praia|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "b8de216de1456fc593f6b79e78e97a1a8515d84af73335da21f436eb2713ae69",
+   "vencedor": "a",
+   "relogio": 15440,
+   "vidaA": 89,
+   "vidaB": 0,
+   "eventos": 25
+  },
+  {
+   "id": "v21|praia|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "b69f72ee10e45c92e383e522b398a1ba8a27163f5d2053644fd59358f96779e3",
+   "vencedor": "a",
+   "relogio": 14672,
+   "vidaA": 145,
+   "vidaB": 0,
+   "eventos": 24
+  },
+  {
+   "id": "v21|praia|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "ee1f36bb5572fa59ae8c75f7bfeaf3573cbff0e57c87ee7ca2048d97477adf44",
+   "vencedor": "a",
+   "relogio": 13632,
+   "vidaA": 498,
+   "vidaB": 0,
+   "eventos": 24
+  },
+  {
+   "id": "v21|praia|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "0daae10c9a257569183fc88ff8e9485f832415e1121bd43c88b7d6ca6b9b8162",
+   "vencedor": "a",
+   "relogio": 17856,
+   "vidaA": 417,
+   "vidaB": 0,
+   "eventos": 30
+  },
+  {
+   "id": "v21|praia|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "3085ec8720b41727b052c8369aabafef9f57d0753f5a71ef53d05bf47def7e70",
+   "vencedor": "a",
+   "relogio": 16720,
+   "vidaA": 703,
+   "vidaB": 0,
+   "eventos": 21
+  },
+  {
+   "id": "v21|praia|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "d7183876e728131975ef486d4a2c8c883808018b1e2ce902c170113d14ef4fb4",
+   "vencedor": "a",
+   "relogio": 16304,
+   "vidaA": 706,
+   "vidaB": 0,
+   "eventos": 21
+  },
+  {
+   "id": "v21|praia|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "7928b9560be2a0c81f8deac28773e12a9947ba3006cf9cb75255e88948137aa5",
+   "vencedor": "a",
+   "relogio": 14864,
+   "vidaA": 10,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v21|praia|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "ecfbcaa9f97e0eb9e8cfe8b3086ac7df61e3313e538eb29599ad62481731da73",
+   "vencedor": "b",
+   "relogio": 10496,
+   "vidaA": 0,
+   "vidaB": 515,
+   "eventos": 17
+  },
+  {
+   "id": "v21|praia|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "584ac5a007b3895813c05eeca54ce05443b906373df4d95d227a2a017b1044a2",
+   "vencedor": "a",
+   "relogio": 24592,
+   "vidaA": 405,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v21|praia|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "ef51f1904c0dd34bf35a368ec1fb246d6c7c5e666a4deee0207d6f5a479f4bc8",
+   "vencedor": "a",
+   "relogio": 23168,
+   "vidaA": 440,
+   "vidaB": 0,
+   "eventos": 33
+  },
+  {
+   "id": "v21|praia|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "32c0bb27956607e58be666405d3d86e4e85d2400d39f8bea791b74f21f8e7d46",
+   "vencedor": "b",
+   "relogio": 13648,
+   "vidaA": 0,
+   "vidaB": 871,
+   "eventos": 29
+  },
+  {
+   "id": "v21|praia|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "4316289945231e7fb1b928cdb8132cc6fd7004dc4701c91c59208bc9e209128c",
+   "vencedor": "b",
+   "relogio": 14912,
+   "vidaA": 0,
+   "vidaB": 702,
+   "eventos": 32
+  },
+  {
+   "id": "v21|praia|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "fa0ad46dc0570a800e743dcbcd3b958fad99aa603a2439151e9b9acf39347140",
+   "vencedor": "a",
+   "relogio": 12128,
+   "vidaA": 1081,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v21|praia|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "dfc4ba836f8f9211efb58473e53f0b32d9b678a64431404be212673bd8703a2a",
+   "vencedor": "a",
+   "relogio": 12016,
+   "vidaA": 1032,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v21|praia|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "40fd91dab89302393f8fb375972e9b9882a606f327cc062d05b1680dc767df43",
+   "vencedor": "b",
+   "relogio": 11024,
+   "vidaA": 0,
+   "vidaB": 1430,
+   "eventos": 20
+  },
+  {
+   "id": "v21|praia|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "b906c77cad58b7e945692f48944877b61824983156631719a7d036521aaa89c4",
+   "vencedor": "b",
+   "relogio": 10816,
+   "vidaA": 0,
+   "vidaB": 1436,
+   "eventos": 20
+  },
+  {
+   "id": "v21|deserto|brasa_bebe|ferrugem_bebe|101",
+   "sha": "99f4316000f52db881e78f249c74580f0685057874358cf3b1af82c7e9450019",
+   "vencedor": "a",
+   "relogio": 12400,
+   "vidaA": 115,
+   "vidaB": 0,
+   "eventos": 15
+  },
+  {
+   "id": "v21|deserto|brasa_bebe|ferrugem_bebe|202",
+   "sha": "30ebbe3d57963309e827317333e641f0dbedcd96377c7b28fe3ef7a02812238f",
+   "vencedor": "a",
+   "relogio": 11728,
+   "vidaA": 51,
+   "vidaB": 0,
+   "eventos": 14
+  },
+  {
+   "id": "v21|deserto|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "4a14124067e4e556c17c18daad93776f42c24f2500afd43498e353bd69a10ec7",
+   "vencedor": "b",
+   "relogio": 13536,
+   "vidaA": 0,
+   "vidaB": 333,
+   "eventos": 17
+  },
+  {
+   "id": "v21|deserto|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "501daf7ada6264d4d6f564430736d9b617580d3f4453284ae9bbc51155096906",
+   "vencedor": "b",
+   "relogio": 17808,
+   "vidaA": 0,
+   "vidaB": 183,
+   "eventos": 22
+  },
+  {
+   "id": "v21|deserto|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "ef30fd41a5e7d3d9fdcec3b7668c2eb79b0c86d49412b66ed176acc2016d9896",
+   "vencedor": "a",
+   "relogio": 11536,
+   "vidaA": 102,
+   "vidaB": 0,
+   "eventos": 19
+  },
+  {
+   "id": "v21|deserto|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "4985399fd4c3ed99f7c9d097fa71682114f02f102ac2a7ca1e867a2c94dbe96c",
+   "vencedor": null,
+   "relogio": 12576,
+   "vidaA": 0,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v21|deserto|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "8e173f7a9c383c8867e5e977578505886bee64e443948fd56a61774550f7b777",
+   "vencedor": "b",
+   "relogio": 17536,
+   "vidaA": 0,
+   "vidaB": 372,
+   "eventos": 36
+  },
+  {
+   "id": "v21|deserto|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "c2bf66ea0363e3e728256b454d2cf63e44f59b265416d682c8cf5d991cc83564",
+   "vencedor": "b",
+   "relogio": 15056,
+   "vidaA": 0,
+   "vidaB": 428,
+   "eventos": 32
+  },
+  {
+   "id": "v21|deserto|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "7ae5b99b19675393d46554e41605410873340feb043a97787447510bd36da35b",
+   "vencedor": "a",
+   "relogio": 18192,
+   "vidaA": 45,
+   "vidaB": 0,
+   "eventos": 29
+  },
+  {
+   "id": "v21|deserto|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "fcd8533b46438433f6607de30ab542a06815a224305a5bd05aeda378f2cd441b",
+   "vencedor": "b",
+   "relogio": 20080,
+   "vidaA": 0,
+   "vidaB": 143,
+   "eventos": 32
+  },
+  {
+   "id": "v21|deserto|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "b19a2c842a4db326cb4a291958cf6a58e8ba5e3c55e70561a1700e519032f7e6",
+   "vencedor": "a",
+   "relogio": 13024,
+   "vidaA": 497,
+   "vidaB": 0,
+   "eventos": 24
+  },
+  {
+   "id": "v21|deserto|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "68f13d87a50dec0c6bbb5acf64a3fd95ba325795bbde4a8fc920cf5440c76d67",
+   "vencedor": "a",
+   "relogio": 12960,
+   "vidaA": 554,
+   "vidaB": 0,
+   "eventos": 24
+  },
+  {
+   "id": "v21|deserto|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "3111469a8460d5516b1967c88b5caa8a71972fb1c8942d1b4b6ba842cd3770f3",
+   "vencedor": "a",
+   "relogio": 16720,
+   "vidaA": 713,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v21|deserto|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "4ba09376cc15f323b3f2aaa3bc4bd581426d637f7f4211edf2fa0a7a14df65e2",
+   "vencedor": "a",
+   "relogio": 16304,
+   "vidaA": 706,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v21|deserto|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "ec526c8a839d4b4a69247fa7251fc0b7187ec35006c330e14b821724a1b72fc1",
+   "vencedor": "a",
+   "relogio": 16912,
+   "vidaA": 13,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v21|deserto|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "bf17a59578b97451d516bd331cfdc744adaea55f30286459847b484f1827b135",
+   "vencedor": "b",
+   "relogio": 8560,
+   "vidaA": 0,
+   "vidaB": 652,
+   "eventos": 15
+  },
+  {
+   "id": "v21|deserto|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "2f5771ef56bc9910c959d1d2dd26aa53b847d285ae95f587bdc2baf6d4493986",
+   "vencedor": "a",
+   "relogio": 25280,
+   "vidaA": 527,
+   "vidaB": 0,
+   "eventos": 38
+  },
+  {
+   "id": "v21|deserto|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "40d736d9e7a7e9ce90d1950a6450e0225c64e301ed314c646aaa07617d929e77",
+   "vencedor": "a",
+   "relogio": 25296,
+   "vidaA": 468,
+   "vidaB": 0,
+   "eventos": 37
+  },
+  {
+   "id": "v21|deserto|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "a00828ec4f6d84d4277e91513deb7c6ff7ac73abe9869e67068348f5d4849765",
+   "vencedor": "b",
+   "relogio": 13664,
+   "vidaA": 0,
+   "vidaB": 938,
+   "eventos": 29
+  },
+  {
+   "id": "v21|deserto|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "f7f5a4fb5e79d5f1041fe5e05fb7a872fc5b06955adb1ea0b6e01f3c52747082",
+   "vencedor": "b",
+   "relogio": 14624,
+   "vidaA": 0,
+   "vidaB": 846,
+   "eventos": 32
+  },
+  {
+   "id": "v21|deserto|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "cea0ae1c230fe953142a58a60da727e515ac5051073d38bdd9c3af82230ca198",
+   "vencedor": "a",
+   "relogio": 11856,
+   "vidaA": 1081,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v21|deserto|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "7fa1384c27e2ef011cc2ee91904bcc30d3bdd85c1cf8877f803c1dd8a6c375d3",
+   "vencedor": "a",
+   "relogio": 11904,
+   "vidaA": 1032,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v21|deserto|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "01bbcb2b52e4dc41c1344fafd440db45dd7842a677968dc1e2a398f6447c0748",
+   "vencedor": "b",
+   "relogio": 11024,
+   "vidaA": 0,
+   "vidaB": 1430,
+   "eventos": 20
+  },
+  {
+   "id": "v21|deserto|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "d2538de0cc72234851bcb603201d09db1682f6bb7fbe061f131bc75a94b04b22",
+   "vencedor": "b",
+   "relogio": 10800,
+   "vidaA": 0,
+   "vidaB": 1436,
+   "eventos": 20
+  },
+  {
+   "id": "v21|castelo|brasa_bebe|ferrugem_bebe|101",
+   "sha": "71a1db3c11525a75aaf4f0fdf6de83361ec336d02ddd3f609c63365f71b219fb",
+   "vencedor": "b",
+   "relogio": 11152,
+   "vidaA": 0,
+   "vidaB": 60,
+   "eventos": 15
+  },
+  {
+   "id": "v21|castelo|brasa_bebe|ferrugem_bebe|202",
+   "sha": "f12aa2c352adbd849e40e42d1dd796bddc782e82214f2f3e549c415eb53f5227",
+   "vencedor": "b",
+   "relogio": 9344,
+   "vidaA": 0,
+   "vidaB": 58,
+   "eventos": 14
+  },
+  {
+   "id": "v21|castelo|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "6e4896fc9686bc2cbbd5a81e88965eb9923e5059ba43b060a780257b5aa2f222",
+   "vencedor": "b",
+   "relogio": 13568,
+   "vidaA": 0,
+   "vidaB": 305,
+   "eventos": 17
+  },
+  {
+   "id": "v21|castelo|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "5413bf3ca89fa308767528ba72a55766d65b3d71aa83248d117bbff065c2e948",
+   "vencedor": "b",
+   "relogio": 10960,
+   "vidaA": 0,
+   "vidaB": 373,
+   "eventos": 15
+  },
+  {
+   "id": "v21|castelo|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "f5b477a7fbf9d4ac95ae1c9a6fa59458418e1080eeaaa23af48f5f04a4b8434e",
+   "vencedor": "b",
+   "relogio": 13520,
+   "vidaA": 0,
+   "vidaB": 78,
+   "eventos": 22
+  },
+  {
+   "id": "v21|castelo|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "dd883e3d37ed93cf0d0b35f07b9fbb95196d7322edc0fe0c8dd731ebdb18ccf2",
+   "vencedor": "a",
+   "relogio": 12176,
+   "vidaA": 130,
+   "vidaB": 0,
+   "eventos": 21
+  },
+  {
+   "id": "v21|castelo|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "f778cc95dc5a3352af370bf924204ed4b73fbb45e4397a864fcbbad54a844d31",
+   "vencedor": "b",
+   "relogio": 15248,
+   "vidaA": 0,
+   "vidaB": 361,
+   "eventos": 32
+  },
+  {
+   "id": "v21|castelo|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "7fb752dc9f353762c418397d3dc5f4ab961af76a84c3b9ecd51a97c1f21e58c3",
+   "vencedor": "b",
+   "relogio": 15216,
+   "vidaA": 0,
+   "vidaB": 363,
+   "eventos": 31
+  },
+  {
+   "id": "v21|castelo|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "6b8ba0562fb48090137e2447747e10317b4821d15381e1490e500341c90beefe",
+   "vencedor": "a",
+   "relogio": 15456,
+   "vidaA": 89,
+   "vidaB": 0,
+   "eventos": 25
+  },
+  {
+   "id": "v21|castelo|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "553a2575f54b2c13f6ed20788d61370170de2f86c6c588058b01deb0d90a24f3",
+   "vencedor": "a",
+   "relogio": 14656,
+   "vidaA": 82,
+   "vidaB": 0,
+   "eventos": 25
+  },
+  {
+   "id": "v21|castelo|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "7c309c04bff367567bfd0b22e53086860e5669288ae10888f6a88e4f17cfce74",
+   "vencedor": "a",
+   "relogio": 13120,
+   "vidaA": 498,
+   "vidaB": 0,
+   "eventos": 24
+  },
+  {
+   "id": "v21|castelo|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "a6d7c0d69f7928a8ee9dd4869caeaf130641cd0dfe5e8e8d4c2543b7f06b8457",
+   "vencedor": "a",
+   "relogio": 14512,
+   "vidaA": 403,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v21|castelo|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "14e6c6e60c915fe08931769a381e0c2ef128b649b150bb57c9d8b692524a83c1",
+   "vencedor": "a",
+   "relogio": 16720,
+   "vidaA": 652,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v21|castelo|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "41a72990bf1c59abebf24818ef6c429e3799b75bf971b4b75b69ee20d7618e2d",
+   "vencedor": "a",
+   "relogio": 16048,
+   "vidaA": 626,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v21|castelo|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "b7646b87e5ae422e800628757c1c00db8a2a755a2b70e9fdff060303957d6b28",
+   "vencedor": "b",
+   "relogio": 12416,
+   "vidaA": 0,
+   "vidaB": 223,
+   "eventos": 20
+  },
+  {
+   "id": "v21|castelo|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "8764b1b6385e1fe83afbb1d6c9c73b67699722bd217bfcaad73d1427ed0df2b7",
+   "vencedor": "a",
+   "relogio": 14544,
+   "vidaA": 99,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v21|castelo|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "1ccedb8c743ab7a403230034867a3f85ceceea54fcd826d33962fd4998dfef08",
+   "vencedor": "a",
+   "relogio": 24256,
+   "vidaA": 410,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v21|castelo|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "94e2e9fb834938e71c34ea879afed70b823592748bb9fd761f9b765e0ccfc3ad",
+   "vencedor": "a",
+   "relogio": 23104,
+   "vidaA": 489,
+   "vidaB": 0,
+   "eventos": 34
+  },
+  {
+   "id": "v21|castelo|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "325dbd334b8ed85e82d12a7b6bfb39c9aef22659f96471486ade06183e008616",
+   "vencedor": "b",
+   "relogio": 13392,
+   "vidaA": 0,
+   "vidaB": 871,
+   "eventos": 29
+  },
+  {
+   "id": "v21|castelo|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "ee64ab32a3b7baa5e4d623c7445902f150bd6386237ad07b562bd6ed440d379b",
+   "vencedor": "b",
+   "relogio": 14656,
+   "vidaA": 0,
+   "vidaB": 702,
+   "eventos": 32
+  },
+  {
+   "id": "v21|castelo|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "019a2e42ee130b917372ea22b029b7e3ea7feff0b0570181520178718c953691",
+   "vencedor": "a",
+   "relogio": 11968,
+   "vidaA": 1051,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v21|castelo|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "d3dae7b7f6846536ffc4d89e8cf3c21e251dc5ebf28865fa9a13c80698ee05d4",
+   "vencedor": "a",
+   "relogio": 11728,
+   "vidaA": 1032,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v21|castelo|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "d193da2fcb9e3778185d6c9ba667ff178c5a43eedb23930f0608dc01f88256ac",
+   "vencedor": "b",
+   "relogio": 9248,
+   "vidaA": 0,
+   "vidaB": 1443,
+   "eventos": 19
+  },
+  {
+   "id": "v21|castelo|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "1e62981dafcedacdfe83344fe28808c87c5639c97762a27888a55bc8e157aa65",
+   "vencedor": "b",
+   "relogio": 9552,
+   "vidaA": 0,
+   "vidaB": 1475,
+   "eventos": 19
+  },
+  {
+   "id": "v21|caverna|brasa_bebe|ferrugem_bebe|101",
+   "sha": "603438dc360decd0401eedaa262f4d44924528e342f3782c3209e8fec2a178c1",
+   "vencedor": "b",
+   "relogio": 11376,
+   "vidaA": 0,
+   "vidaB": 25,
+   "eventos": 21
+  },
+  {
+   "id": "v21|caverna|brasa_bebe|ferrugem_bebe|202",
+   "sha": "cab6f869523baacb6586a8090b4896e3ee2db22faf96eeee653a88732ae7a376",
+   "vencedor": "a",
+   "relogio": 11728,
+   "vidaA": 57,
+   "vidaB": 0,
+   "eventos": 14
+  },
+  {
+   "id": "v21|caverna|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "4183b7f315fad4d0837f3c6d8185be72dee5ce004ba612f610c7d4378f24a95d",
+   "vencedor": "b",
+   "relogio": 10448,
+   "vidaA": 0,
+   "vidaB": 440,
+   "eventos": 13
+  },
+  {
+   "id": "v21|caverna|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "a1a61fea35afece17af76d1f03a0ca6806862a54fa8e478b93811df8ab6a7153",
+   "vencedor": "b",
+   "relogio": 10960,
+   "vidaA": 0,
+   "vidaB": 303,
+   "eventos": 16
+  },
+  {
+   "id": "v21|caverna|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "498acef3b0b3a6f8a78f91e0753d41fcfd5b3466e884afe5f538bb7c92017bd2",
+   "vencedor": "a",
+   "relogio": 11792,
+   "vidaA": 55,
+   "vidaB": 0,
+   "eventos": 19
+  },
+  {
+   "id": "v21|caverna|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "ebd61392b2de94dccfdc4ca9e350e36d5b206507bcdb44ffe07ce65c6cebe5cc",
+   "vencedor": "b",
+   "relogio": 10752,
+   "vidaA": 0,
+   "vidaB": 96,
+   "eventos": 19
+  },
+  {
+   "id": "v21|caverna|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "d557a56e96d31056995086298e137fc34ee940535a39bdae21eddeec09f7d208",
+   "vencedor": "b",
+   "relogio": 15296,
+   "vidaA": 0,
+   "vidaB": 203,
+   "eventos": 34
+  },
+  {
+   "id": "v21|caverna|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "07036c7346f0c1e89f979ff9bbdd7b8985214cdc850b3f24fac924d0b44d1c81",
+   "vencedor": "b",
+   "relogio": 13808,
+   "vidaA": 0,
+   "vidaB": 268,
+   "eventos": 31
+  },
+  {
+   "id": "v21|caverna|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "7917fe20f0a14cba926359b210c9f0876115c30682424b26987fac5d392de211",
+   "vencedor": "b",
+   "relogio": 17952,
+   "vidaA": 0,
+   "vidaB": 20,
+   "eventos": 31
+  },
+  {
+   "id": "v21|caverna|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "3bda1465a2b78f999bd2dbc2945384a80864bf904a5a67a0cb554b4fcec7d5db",
+   "vencedor": "a",
+   "relogio": 14656,
+   "vidaA": 21,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v21|caverna|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "3b107480697415f0ac6b574823505c64e51e0af188946354126dd670c6ab078a",
+   "vencedor": "a",
+   "relogio": 13200,
+   "vidaA": 498,
+   "vidaB": 0,
+   "eventos": 51
+  },
+  {
+   "id": "v21|caverna|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "7c34f204f26f08379572e78e2bac69c2d83c0ae7c98b37e2bb0e97cd186d7ce0",
+   "vencedor": "a",
+   "relogio": 13344,
+   "vidaA": 354,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v21|caverna|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "33fa97145913e493bce56407be47c930f1aa3dfe90dc339e27d4e93440f03808",
+   "vencedor": "a",
+   "relogio": 14128,
+   "vidaA": 757,
+   "vidaB": 0,
+   "eventos": 20
+  },
+  {
+   "id": "v21|caverna|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "eac2896538c9c27272cbfea45ec82360350c43f5aca04231c6dfc8aff9402f2a",
+   "vencedor": "a",
+   "relogio": 13456,
+   "vidaA": 690,
+   "vidaB": 0,
+   "eventos": 21
+  },
+  {
+   "id": "v21|caverna|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "ca71f3fdb8f8c49678daa90e52ef0d97921edfbeb16fdafe72a1cc8db421da1e",
+   "vencedor": "b",
+   "relogio": 12352,
+   "vidaA": 0,
+   "vidaB": 189,
+   "eventos": 21
+  },
+  {
+   "id": "v21|caverna|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "28db3f78d254b1bde493812bdeab04f5cd07d16faf2cf997f673f2f597034729",
+   "vencedor": "b",
+   "relogio": 10496,
+   "vidaA": 0,
+   "vidaB": 515,
+   "eventos": 18
+  },
+  {
+   "id": "v21|caverna|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "3cb33715ad674587271f2090f2bb1542a95840b200133c94739bbfd883aaf60d",
+   "vencedor": "a",
+   "relogio": 24496,
+   "vidaA": 179,
+   "vidaB": 0,
+   "eventos": 37
+  },
+  {
+   "id": "v21|caverna|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "469157472f230d09ff863331feee49347e0c96e5536e58fdead3a35e08ed63ac",
+   "vencedor": "a",
+   "relogio": 20224,
+   "vidaA": 514,
+   "vidaB": 0,
+   "eventos": 31
+  },
+  {
+   "id": "v21|caverna|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "4c168f46fca32fe5d83c6ae9de53ac3444dc7f3e1a75794a43bb0dee4d521839",
+   "vencedor": "b",
+   "relogio": 12736,
+   "vidaA": 0,
+   "vidaB": 941,
+   "eventos": 27
+  },
+  {
+   "id": "v21|caverna|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "98e3dbfcc01937227613c6c8d5b69c0ff472321ee55c78869392dadc78b7ee89",
+   "vencedor": "b",
+   "relogio": 12592,
+   "vidaA": 0,
+   "vidaB": 979,
+   "eventos": 27
+  },
+  {
+   "id": "v21|caverna|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "1f81ce4e14657336b86c0901dd91367cc648443cc4b69c7f044c15c370dcc47d",
+   "vencedor": "a",
+   "relogio": 12080,
+   "vidaA": 916,
+   "vidaB": 0,
+   "eventos": 29
+  },
+  {
+   "id": "v21|caverna|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "3c8b989f981cfd0788b68171198e412533c643b3dd5cc0fe85df0c1bff403329",
+   "vencedor": "a",
+   "relogio": 12304,
+   "vidaA": 1028,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v21|caverna|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "ec6028701af9186d8c4dbe3e2bb3a03a054ec150f2cb7f4e6c07f130ddc64e1b",
+   "vencedor": "b",
+   "relogio": 9408,
+   "vidaA": 0,
+   "vidaB": 1469,
+   "eventos": 19
+  },
+  {
+   "id": "v21|caverna|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "0107a332eaee10c6c83b3bf433fb23510c4f9e8c832552778155f5083ab2d2ba",
+   "vencedor": "b",
+   "relogio": 9408,
+   "vidaA": 0,
+   "vidaB": 1475,
+   "eventos": 19
+  },
+  {
+   "id": "v21|ringue|brasa_bebe|ferrugem_bebe|101",
+   "sha": "10c9e6f7a113418b9c56b01ffc8a80ab62cc9a8d89b6efdc35ee934f34dd5834",
+   "vencedor": "a",
+   "relogio": 12384,
+   "vidaA": 11,
+   "vidaB": 0,
+   "eventos": 15
+  },
+  {
+   "id": "v21|ringue|brasa_bebe|ferrugem_bebe|202",
+   "sha": "12a7792d9fb671bf3bb02f80a67189faaa5fb4a12c095e0c496688889b01aa9f",
+   "vencedor": "a",
+   "relogio": 11872,
+   "vidaA": 57,
+   "vidaB": 0,
+   "eventos": 14
+  },
+  {
+   "id": "v21|ringue|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "b1d459e64251c707d8769fa3f0e2f838d2a3c6f479dc470d792a2d2f2a12fa97",
+   "vencedor": "b",
+   "relogio": 13776,
+   "vidaA": 0,
+   "vidaB": 199,
+   "eventos": 18
+  },
+  {
+   "id": "v21|ringue|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "882ed074517453c06394b77abf21dc777586a47e694cd3675bc91521c913f56e",
+   "vencedor": "b",
+   "relogio": 14304,
+   "vidaA": 0,
+   "vidaB": 268,
+   "eventos": 19
+  },
+  {
+   "id": "v21|ringue|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "d86103d9033239072c6abfe360fee232abd41f8fa0acace5b3c0c97ac23ecb80",
+   "vencedor": "a",
+   "relogio": 11680,
+   "vidaA": 103,
+   "vidaB": 0,
+   "eventos": 20
+  },
+  {
+   "id": "v21|ringue|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "13c55ad96ce5322ffff2c472bb87b330ae5f612563a5cd81788562633b111f9a",
+   "vencedor": "b",
+   "relogio": 12336,
+   "vidaA": 0,
+   "vidaB": 26,
+   "eventos": 21
+  },
+  {
+   "id": "v21|ringue|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "8117fc7dcfa18f9fc7cb1bc6ce5ef5f6d9fc058f8e500c9f6da0f06828a52661",
+   "vencedor": "b",
+   "relogio": 13648,
+   "vidaA": 0,
+   "vidaB": 498,
+   "eventos": 28
+  },
+  {
+   "id": "v21|ringue|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "137ac819286831e084536f3d21246c30b94d4b6e62a70c8fd5299dbc8a8413de",
+   "vencedor": "b",
+   "relogio": 14112,
+   "vidaA": 0,
+   "vidaB": 458,
+   "eventos": 28
+  },
+  {
+   "id": "v21|ringue|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "c645fb2c9bf24d79d08a4133bba7909c2641b3ca52cb6b2ae8a84251d219f6d3",
+   "vencedor": "a",
+   "relogio": 15408,
+   "vidaA": 40,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v21|ringue|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "008648fc5cb09f649b2a4032b28926b39de9a63a0bdf465a71be84c9cfc31a68",
+   "vencedor": "a",
+   "relogio": 14672,
+   "vidaA": 79,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v21|ringue|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "e331422137033fecc27d64f2cd62a323ab631990dd5ea6cac824309744f97ed3",
+   "vencedor": "a",
+   "relogio": 13600,
+   "vidaA": 457,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v21|ringue|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "d00ab5a16274a2692de008171ee51fba083c76c5aa126d5b02bf5c5fb207fe17",
+   "vencedor": "a",
+   "relogio": 13376,
+   "vidaA": 414,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v21|ringue|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "07f515f735275c9b4245a022b6a896dc55bbdb4a3f674f471e665a5f8deb2520",
+   "vencedor": "a",
+   "relogio": 16912,
+   "vidaA": 713,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v21|ringue|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "ec5a04c7495184c3493c9203c2cf509d6bf0b72047df4d8e8f1faaa64ea32a0b",
+   "vencedor": "a",
+   "relogio": 16048,
+   "vidaA": 690,
+   "vidaB": 0,
+   "eventos": 21
+  },
+  {
+   "id": "v21|ringue|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "caae0bbf8dff5e234766661d12f175a2242d57ae7ef160aadf60c883b4da8e64",
+   "vencedor": "b",
+   "relogio": 9280,
+   "vidaA": 0,
+   "vidaB": 650,
+   "eventos": 16
+  },
+  {
+   "id": "v21|ringue|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "d1d7ce5b84ff7ab941eb41c106643b8bbfcbb50a7e339d8707accc5ee5330d3f",
+   "vencedor": "b",
+   "relogio": 12000,
+   "vidaA": 0,
+   "vidaB": 244,
+   "eventos": 21
+  },
+  {
+   "id": "v21|ringue|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "c24fcfa7bec30f567c4c0e3bb92ffdb47dc9c0b885cd58c6e623becf40e3fb9f",
+   "vencedor": "a",
+   "relogio": 21392,
+   "vidaA": 459,
+   "vidaB": 0,
+   "eventos": 36
+  },
+  {
+   "id": "v21|ringue|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "434d6083f5b41fbf315c08ee9a7a2cee53c050c2688a142162e2bfbd32d9a80d",
+   "vencedor": "a",
+   "relogio": 20192,
+   "vidaA": 480,
+   "vidaB": 0,
+   "eventos": 33
+  },
+  {
+   "id": "v21|ringue|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "4f9858efc15d8bd84fa0c52081225e71b9c516f82bf7f2db699f000f939c5247",
+   "vencedor": "b",
+   "relogio": 14704,
+   "vidaA": 0,
+   "vidaB": 442,
+   "eventos": 33
+  },
+  {
+   "id": "v21|ringue|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "746ccdb8df2f5564e643442e0cb545a812fb244d9ad61561ea26be30a2d5420b",
+   "vencedor": "b",
+   "relogio": 15904,
+   "vidaA": 0,
+   "vidaB": 334,
+   "eventos": 35
+  },
+  {
+   "id": "v21|ringue|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "646f16797acea4d70427cd0a8dc510fdf091c29c0015906d4abe9b75650ed37f",
+   "vencedor": "a",
+   "relogio": 10880,
+   "vidaA": 1044,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v21|ringue|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "c28fc741350bd03d4452b207bcf66b61a14b2a6ec35bee18eb3c44ddc3264f66",
+   "vencedor": "a",
+   "relogio": 14528,
+   "vidaA": 987,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v21|ringue|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "fca83bb321c313aa687a4c9941636c9862e82caa92b8ee626f72c9b431d7e3dd",
+   "vencedor": "b",
+   "relogio": 10384,
+   "vidaA": 0,
+   "vidaB": 1477,
+   "eventos": 20
+  },
+  {
+   "id": "v21|ringue|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "9a306994c96ba987b8ba39505c551ab4a8a0c4ea902d0857d37b4a968c935918",
+   "vencedor": "b",
+   "relogio": 10768,
+   "vidaA": 0,
+   "vidaB": 1436,
+   "eventos": 20
+  },
+  {
+   "id": "v23|campo|brasa_bebe|ferrugem_bebe|101",
+   "sha": "e2cf416f4b55208db0b9489466b1a57e5a5a6fcc8e436689a23609c3b5362607",
+   "vencedor": "b",
+   "relogio": 21984,
+   "vidaA": 0,
+   "vidaB": 21,
+   "eventos": 28
+  },
+  {
+   "id": "v23|campo|brasa_bebe|ferrugem_bebe|202",
+   "sha": "9324c29c3701194ba3a4aefd2af078b2a6b5a30de5763a9e166a904d91ec42aa",
+   "vencedor": "a",
+   "relogio": 19616,
+   "vidaA": 64,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v23|campo|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "0035255e4d0cd91756e75b8c447d56cb9bcb484e6fe34afdf27b94dd7ffcdd50",
+   "vencedor": "a",
+   "relogio": 31168,
+   "vidaA": 259,
+   "vidaB": 0,
+   "eventos": 40
+  },
+  {
+   "id": "v23|campo|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "c7b970bd91af303ffe34346c0266686d580d85a856288f2d0e413b5f6b0ce5e1",
+   "vencedor": "b",
+   "relogio": 24720,
+   "vidaA": 0,
+   "vidaB": 80,
+   "eventos": 33
+  },
+  {
+   "id": "v23|campo|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "495c4a0e71b38b0694d162215fbb06544f4d5a52eb8d9760153ffd1d2624a8b7",
+   "vencedor": "b",
+   "relogio": 27312,
+   "vidaA": 0,
+   "vidaB": 13,
+   "eventos": 38
+  },
+  {
+   "id": "v23|campo|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "3478aed232f3a324d621a7b58735e74dc4a9531cc1ed4f3fab2cd1d56884648d",
+   "vencedor": "a",
+   "relogio": 25456,
+   "vidaA": 206,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v23|campo|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "9bc78efe06803b66b320c5db4e2f43ea07a86e486393d411688918d3379fa14b",
+   "vencedor": "b",
+   "relogio": 33632,
+   "vidaA": 0,
+   "vidaB": 64,
+   "eventos": 43
+  },
+  {
+   "id": "v23|campo|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "0ba760438151e66da4df7de10507e48fa429400b886ab96f5e0b26edceb20f18",
+   "vencedor": "a",
+   "relogio": 29072,
+   "vidaA": 563,
+   "vidaB": 0,
+   "eventos": 37
+  },
+  {
+   "id": "v23|campo|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "ec7570aa4cb83ca76721f3255de8b1ce461975455a1dc1ceeb941bb8059a6181",
+   "vencedor": "a",
+   "relogio": 28720,
+   "vidaA": 113,
+   "vidaB": 0,
+   "eventos": 38
+  },
+  {
+   "id": "v23|campo|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "9ebfb370f3009b5448ece9a3e99b56fb2a927fc1d736ece397f0113eaca490fa",
+   "vencedor": "a",
+   "relogio": 32928,
+   "vidaA": 409,
+   "vidaB": 0,
+   "eventos": 42
+  },
+  {
+   "id": "v23|campo|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "68b156ce870544b127b5e9034540b3df6078b48712d8d99ef4e2e983c872e4ea",
+   "vencedor": "a",
+   "relogio": 19520,
+   "vidaA": 1297,
+   "vidaB": 0,
+   "eventos": 25
+  },
+  {
+   "id": "v23|campo|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "ab5202ad6d3e5ac805ef25ab4a8b98d91d953bd6327a92ddccc7a4e9d732f1bb",
+   "vencedor": "a",
+   "relogio": 18096,
+   "vidaA": 1052,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v23|campo|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "60f826cb968425bd597ca03e2361ab0ce6d53b9bf5fbea7d347cfc0825b64523",
+   "vencedor": "a",
+   "relogio": 11840,
+   "vidaA": 1002,
+   "vidaB": 0,
+   "eventos": 19
+  },
+  {
+   "id": "v23|campo|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "79cd811e99a8ef636e5905cb42b25ee43d637e14c36b538a9b3242b5430549d4",
+   "vencedor": "a",
+   "relogio": 11168,
+   "vidaA": 1187,
+   "vidaB": 0,
+   "eventos": 17
+  },
+  {
+   "id": "v23|campo|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "d3deccdb643bf3827658f98f5a39d73195ec2a50a92898fd92c5ffd3924ab16d",
+   "vencedor": "a",
+   "relogio": 25312,
+   "vidaA": 990,
+   "vidaB": 0,
+   "eventos": 32
+  },
+  {
+   "id": "v23|campo|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "304250730acc9819bf4366abca598bc31bf23389c4bb9a98e3da9bdcb2a161ff",
+   "vencedor": "a",
+   "relogio": 21088,
+   "vidaA": 1022,
+   "vidaB": 0,
+   "eventos": 29
+  },
+  {
+   "id": "v23|campo|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "567511dc3ccf36c63c0b93b71cbec76c457314cd2240d60fcb32ae6b29c8a59b",
+   "vencedor": "a",
+   "relogio": 23936,
+   "vidaA": 1144,
+   "vidaB": 0,
+   "eventos": 31
+  },
+  {
+   "id": "v23|campo|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "993321b4a6ef5b1b81091835a37a90bea056c6dbdf07fb8155ce7b30e7859d36",
+   "vencedor": "a",
+   "relogio": 20576,
+   "vidaA": 1583,
+   "vidaB": 0,
+   "eventos": 28
+  },
+  {
+   "id": "v23|campo|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "c5da3bf88af1dc1f5e377dead13ef6f950bcfe3ddd18529ff6756776fd2eac15",
+   "vencedor": "a",
+   "relogio": 21888,
+   "vidaA": 592,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v23|campo|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "63dc810f364f30e0555fa78586f4d3c01e2753407a1e4ea2f6630614707fe282",
+   "vencedor": "b",
+   "relogio": 27360,
+   "vidaA": 0,
+   "vidaB": 524,
+   "eventos": 33
+  },
+  {
+   "id": "v23|campo|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "3376ed65c4cbc2fd1e3b17430b8c3f3df9009c60508804db940f19211dff84e6",
+   "vencedor": "b",
+   "relogio": 19232,
+   "vidaA": 0,
+   "vidaB": 1407,
+   "eventos": 28
+  },
+  {
+   "id": "v23|campo|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "3f181067a328910ff86bab2e9a91c0d9ef71a7c3b7e1ded6e37370856f9b8d67",
+   "vencedor": "b",
+   "relogio": 18688,
+   "vidaA": 0,
+   "vidaB": 1451,
+   "eventos": 27
+  },
+  {
+   "id": "v23|campo|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "ed2136dd05da87f1aaff04c0d36cb36c886e512e36daf1ae0675305e45ee3c27",
+   "vencedor": "b",
+   "relogio": 12848,
+   "vidaA": 0,
+   "vidaB": 985,
+   "eventos": 20
+  },
+  {
+   "id": "v23|campo|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "bf9f79a12d41a2e2bb236e80a50d14de819fe8f42ae6eb5e5d69e36e7e730824",
+   "vencedor": "b",
+   "relogio": 12608,
+   "vidaA": 0,
+   "vidaB": 1012,
+   "eventos": 20
+  },
+  {
+   "id": "v23|coliseu|brasa_bebe|ferrugem_bebe|101",
+   "sha": "57c4938af629cd64315b2ce180e2dde29bd6d3b7f8b6637d1edde8185bd7e167",
+   "vencedor": "a",
+   "relogio": 20320,
+   "vidaA": 48,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v23|coliseu|brasa_bebe|ferrugem_bebe|202",
+   "sha": "764b0401baf0a7a2ebb9076c30cd275b4ee0c58b6dee17a8c1204728459a3664",
+   "vencedor": "a",
+   "relogio": 17552,
+   "vidaA": 142,
+   "vidaB": 0,
+   "eventos": 24
+  },
+  {
+   "id": "v23|coliseu|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "617ebc92eb0830d9e394f03b25155d5d01c2469a0a134a4a52ea653fc6e4e5d4",
+   "vencedor": "b",
+   "relogio": 29440,
+   "vidaA": 0,
+   "vidaB": 27,
+   "eventos": 38
+  },
+  {
+   "id": "v23|coliseu|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "9ad8e331414862e1dbdf328f45f74288a04acbf8b08a912b1b32b219147afd0f",
+   "vencedor": "b",
+   "relogio": 22656,
+   "vidaA": 0,
+   "vidaB": 125,
+   "eventos": 31
+  },
+  {
+   "id": "v23|coliseu|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "495c4a0e71b38b0694d162215fbb06544f4d5a52eb8d9760153ffd1d2624a8b7",
+   "vencedor": "b",
+   "relogio": 27312,
+   "vidaA": 0,
+   "vidaB": 13,
+   "eventos": 38
+  },
+  {
+   "id": "v23|coliseu|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "298f52f0e174c70810f9d95675dc80b9b3e02d701c8dce15f6a7bfc0a453bedd",
+   "vencedor": "a",
+   "relogio": 25456,
+   "vidaA": 206,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v23|coliseu|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "8ef83a5e0605759c84ce62a96505679856ff4e52e918233ffb9947ed435fe3ed",
+   "vencedor": "b",
+   "relogio": 28320,
+   "vidaA": 0,
+   "vidaB": 133,
+   "eventos": 38
+  },
+  {
+   "id": "v23|coliseu|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "6699262787899b2993ebf77100d82927472eba7f3894235dc63146a881d86c4c",
+   "vencedor": "b",
+   "relogio": 21200,
+   "vidaA": 0,
+   "vidaB": 369,
+   "eventos": 30
+  },
+  {
+   "id": "v23|coliseu|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "78f66ff0279ad79c42147704bd4117390c6c1696ccd2b613c0de6c1345323f6f",
+   "vencedor": "a",
+   "relogio": 28672,
+   "vidaA": 116,
+   "vidaB": 0,
+   "eventos": 38
+  },
+  {
+   "id": "v23|coliseu|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "eee5345505bb99457b01008cce3372424e849c76e9b97f73dfcfc37d1e65a6f0",
+   "vencedor": "a",
+   "relogio": 34992,
+   "vidaA": 282,
+   "vidaB": 0,
+   "eventos": 45
+  },
+  {
+   "id": "v23|coliseu|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "f9bbd0b625e80f9cbaeb7c930a25faf0a22b3344fd303414f4805f1223c94d96",
+   "vencedor": "a",
+   "relogio": 20048,
+   "vidaA": 1143,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v23|coliseu|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "37f6311d512f0f42e11a2473d88f8464155aadf134e87feae34e74d4585be1be",
+   "vencedor": "a",
+   "relogio": 18032,
+   "vidaA": 1052,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v23|coliseu|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "60f826cb968425bd597ca03e2361ab0ce6d53b9bf5fbea7d347cfc0825b64523",
+   "vencedor": "a",
+   "relogio": 11840,
+   "vidaA": 1002,
+   "vidaB": 0,
+   "eventos": 19
+  },
+  {
+   "id": "v23|coliseu|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "79cd811e99a8ef636e5905cb42b25ee43d637e14c36b538a9b3242b5430549d4",
+   "vencedor": "a",
+   "relogio": 11168,
+   "vidaA": 1187,
+   "vidaB": 0,
+   "eventos": 17
+  },
+  {
+   "id": "v23|coliseu|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "bca63dcd87f64a46bd5f2c5c9b764fe45bf246cd9de6331b87ad6cbfdd35e0bf",
+   "vencedor": "a",
+   "relogio": 19264,
+   "vidaA": 1408,
+   "vidaB": 0,
+   "eventos": 24
+  },
+  {
+   "id": "v23|coliseu|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "92b5ba49f27f1b66a6f94582b212b6245a7d4bd8042271c6f83d42d56e43e53d",
+   "vencedor": "a",
+   "relogio": 15184,
+   "vidaA": 1535,
+   "vidaB": 0,
+   "eventos": 21
+  },
+  {
+   "id": "v23|coliseu|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "f52144f2f8b45b9d7ae02678f0a3afbb98f369e56b31e01c1501a0d713f49023",
+   "vencedor": "a",
+   "relogio": 17136,
+   "vidaA": 1670,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v23|coliseu|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "792a7f5647b86e32ef75055fc7f29f150038232b91689b32ee933e5374e55ace",
+   "vencedor": "a",
+   "relogio": 20576,
+   "vidaA": 1488,
+   "vidaB": 0,
+   "eventos": 28
+  },
+  {
+   "id": "v23|coliseu|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "d7466bc7768740438471a161a333689fc0e0cdfee60d9d1969830d1ef9ee42af",
+   "vencedor": "b",
+   "relogio": 28640,
+   "vidaA": 0,
+   "vidaB": 20,
+   "eventos": 34
+  },
+  {
+   "id": "v23|coliseu|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "06ab01a0a7a37b90126ab6c3fdd81536a925dfb72af9870a44a09e398395f2cf",
+   "vencedor": "a",
+   "relogio": 23360,
+   "vidaA": 146,
+   "vidaB": 0,
+   "eventos": 31
+  },
+  {
+   "id": "v23|coliseu|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "3966d6d2c10331e509387bff2298003cd9746c0933dffbe72418c3090af48d53",
+   "vencedor": "b",
+   "relogio": 19232,
+   "vidaA": 0,
+   "vidaB": 1407,
+   "eventos": 28
+  },
+  {
+   "id": "v23|coliseu|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "db1aa94e6e0e57ec7d4f20bfff05b0ab104fb59e569334c7e3747d05c3d4d582",
+   "vencedor": "b",
+   "relogio": 18688,
+   "vidaA": 0,
+   "vidaB": 1451,
+   "eventos": 27
+  },
+  {
+   "id": "v23|coliseu|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "ed2136dd05da87f1aaff04c0d36cb36c886e512e36daf1ae0675305e45ee3c27",
+   "vencedor": "b",
+   "relogio": 12848,
+   "vidaA": 0,
+   "vidaB": 985,
+   "eventos": 20
+  },
+  {
+   "id": "v23|coliseu|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "bf9f79a12d41a2e2bb236e80a50d14de819fe8f42ae6eb5e5d69e36e7e730824",
+   "vencedor": "b",
+   "relogio": 12608,
+   "vidaA": 0,
+   "vidaB": 1012,
+   "eventos": 20
+  },
+  {
+   "id": "v23|floresta|brasa_bebe|ferrugem_bebe|101",
+   "sha": "91d62fea1d237a0babdc276f1e3d5dd56a1712d62a6433fe557a5261991275f3",
+   "vencedor": "a",
+   "relogio": 23696,
+   "vidaA": 59,
+   "vidaB": 0,
+   "eventos": 30
+  },
+  {
+   "id": "v23|floresta|brasa_bebe|ferrugem_bebe|202",
+   "sha": "682d8848c62530979fb8e993ee73222d31f9c75e1d9a6161ea2fd2309add3105",
+   "vencedor": "a",
+   "relogio": 20944,
+   "vidaA": 213,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v23|floresta|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "05042c97f03b84ee81c0b6e5638287abcb809bc97ccba813a43c9b8c1f869c59",
+   "vencedor": "a",
+   "relogio": 38720,
+   "vidaA": 180,
+   "vidaB": 0,
+   "eventos": 44
+  },
+  {
+   "id": "v23|floresta|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "ca49b682652357b9be3ba4f05323e18ad458e39f4839db257f8907449865671b",
+   "vencedor": "b",
+   "relogio": 30368,
+   "vidaA": 0,
+   "vidaB": 45,
+   "eventos": 38
+  },
+  {
+   "id": "v23|floresta|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "f16eec9a67722b84884b0d6a0f0d7d7b85f9bb06ad68c9fea1101c9f06d38329",
+   "vencedor": "a",
+   "relogio": 26848,
+   "vidaA": 4,
+   "vidaB": 0,
+   "eventos": 37
+  },
+  {
+   "id": "v23|floresta|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "33d0ec2a6e95913641579fd3387e1b47f47619c01f35a388578866d8b573af87",
+   "vencedor": "a",
+   "relogio": 25440,
+   "vidaA": 160,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v23|floresta|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "f0b77c3694b14f1111415ff4e2097231ca3a9e4bd3f5c3d46c1f7e6bf85df4ef",
+   "vencedor": "b",
+   "relogio": 28736,
+   "vidaA": 0,
+   "vidaB": 178,
+   "eventos": 37
+  },
+  {
+   "id": "v23|floresta|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "b65101830350582d648c57cf370694b3d8fb5bd516483ba8ab18ed371cf3fc90",
+   "vencedor": "b",
+   "relogio": 29264,
+   "vidaA": 0,
+   "vidaB": 221,
+   "eventos": 39
+  },
+  {
+   "id": "v23|floresta|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "bb0a64c6e2fe961cfd3f8715cf8e97e186b643a6431e77078e6bc20e4a6979ba",
+   "vencedor": "a",
+   "relogio": 31328,
+   "vidaA": 489,
+   "vidaB": 0,
+   "eventos": 40
+  },
+  {
+   "id": "v23|floresta|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "edaec63274e6aee8e58cb4eb279aeb198ffec17ff391899a75a871ceb47ca599",
+   "vencedor": "a",
+   "relogio": 37712,
+   "vidaA": 400,
+   "vidaB": 0,
+   "eventos": 45
+  },
+  {
+   "id": "v23|floresta|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "b7b9891447ad36410657db3626573d007ef8de1f0b6fdc8e6d9086316d90076e",
+   "vencedor": "a",
+   "relogio": 28720,
+   "vidaA": 564,
+   "vidaB": 0,
+   "eventos": 37
+  },
+  {
+   "id": "v23|floresta|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "2536b4d3e1bd12fb7ac14385758c13977b65048c902cb9b64deed5652d24077e",
+   "vencedor": "a",
+   "relogio": 23392,
+   "vidaA": 836,
+   "vidaB": 0,
+   "eventos": 30
+  },
+  {
+   "id": "v23|floresta|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "5933295f1daf1543bb2b7fb615df58bd6b9d837b6e8bf18c60096df995b7e577",
+   "vencedor": "a",
+   "relogio": 11840,
+   "vidaA": 1002,
+   "vidaB": 0,
+   "eventos": 19
+  },
+  {
+   "id": "v23|floresta|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "5de04a560a5a70180ec110db7adf77d0ba1d850f9b5ecd4e4f6fcb24dc4306d6",
+   "vencedor": "a",
+   "relogio": 11168,
+   "vidaA": 1187,
+   "vidaB": 0,
+   "eventos": 17
+  },
+  {
+   "id": "v23|floresta|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "c07d6db5346ae13787f079ddb670c6f578343c5cae036280b9699b0b1fcfc2b8",
+   "vencedor": "a",
+   "relogio": 27456,
+   "vidaA": 1073,
+   "vidaB": 0,
+   "eventos": 33
+  },
+  {
+   "id": "v23|floresta|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "6d02d01deec257705a0b4a79371af5ac0d425e0e6928dfa73715bf54813920e6",
+   "vencedor": "a",
+   "relogio": 22288,
+   "vidaA": 1449,
+   "vidaB": 0,
+   "eventos": 25
+  },
+  {
+   "id": "v23|floresta|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "539651d543042a5bac12a37df295b64934e0d638a9d50bdc09672378a37b3e58",
+   "vencedor": "a",
+   "relogio": 27184,
+   "vidaA": 1357,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v23|floresta|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "80ab99b03b2b92d85138456d957d35418ce5dd53e6a67cbead39d1e10bd69d1b",
+   "vencedor": "a",
+   "relogio": 24464,
+   "vidaA": 1439,
+   "vidaB": 0,
+   "eventos": 31
+  },
+  {
+   "id": "v23|floresta|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "c9368b03b598d08d734544d485da35b9c75472e9f63ce2cab61b76326846c7c0",
+   "vencedor": "a",
+   "relogio": 30080,
+   "vidaA": 330,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v23|floresta|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "74f092daf9bf026721e9e36de29b6de3e52d6370bf39d02befa866c2e8f00a24",
+   "vencedor": "a",
+   "relogio": 27264,
+   "vidaA": 680,
+   "vidaB": 0,
+   "eventos": 30
+  },
+  {
+   "id": "v23|floresta|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "68b0fb99cb06db165f36bd709bb7fcc38784ac753007d5ba1d325adc0ea55be2",
+   "vencedor": "b",
+   "relogio": 24032,
+   "vidaA": 0,
+   "vidaB": 1094,
+   "eventos": 33
+  },
+  {
+   "id": "v23|floresta|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "10867a9b9b183e02a161c3027384f17e838e7f96d716759b25e2ed3bbbe9c21c",
+   "vencedor": "b",
+   "relogio": 18704,
+   "vidaA": 0,
+   "vidaB": 1459,
+   "eventos": 27
+  },
+  {
+   "id": "v23|floresta|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "ed2136dd05da87f1aaff04c0d36cb36c886e512e36daf1ae0675305e45ee3c27",
+   "vencedor": "b",
+   "relogio": 12848,
+   "vidaA": 0,
+   "vidaB": 985,
+   "eventos": 20
+  },
+  {
+   "id": "v23|floresta|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "5fc7c0d65d3cffd8f703f0aa90b7e8a6b8b4574734162df1e1aa1f1d6c60e058",
+   "vencedor": "b",
+   "relogio": 12608,
+   "vidaA": 0,
+   "vidaB": 1012,
+   "eventos": 20
+  },
+  {
+   "id": "v23|praia|brasa_bebe|ferrugem_bebe|101",
+   "sha": "093fe5b0e20aa24601f2da052fe818b3db598dd6b0f0fa69a858473d0354496d",
+   "vencedor": "a",
+   "relogio": 19952,
+   "vidaA": 57,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v23|praia|brasa_bebe|ferrugem_bebe|202",
+   "sha": "12194a1e94b7fa859c324abaa00f6de865b76047a3f987ea2bb7aefab23a3245",
+   "vencedor": "a",
+   "relogio": 19424,
+   "vidaA": 86,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v23|praia|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "5c25aaf623893aaf54f01f4ab14f2f27636deeb10e2d2d47099471253f3fac3c",
+   "vencedor": "a",
+   "relogio": 30944,
+   "vidaA": 160,
+   "vidaB": 0,
+   "eventos": 37
+  },
+  {
+   "id": "v23|praia|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "01c9cfdf4430d1ac6d1d8974a82ae6f566b445f84229079786b80366b86b7b07",
+   "vencedor": "b",
+   "relogio": 27440,
+   "vidaA": 0,
+   "vidaB": 48,
+   "eventos": 36
+  },
+  {
+   "id": "v23|praia|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "57d8e52c01238d6fabcd1e83597ebff09c361eac4e0527c675c58266f0c48858",
+   "vencedor": "a",
+   "relogio": 28896,
+   "vidaA": 78,
+   "vidaB": 0,
+   "eventos": 39
+  },
+  {
+   "id": "v23|praia|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "772c3a48803d059734c61ffc235f3123b9f884ae9ee8170d4cd6f30225e1b9e1",
+   "vencedor": "b",
+   "relogio": 25584,
+   "vidaA": 0,
+   "vidaB": 19,
+   "eventos": 35
+  },
+  {
+   "id": "v23|praia|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "ab8565ec66e1a9473a0d7c6839054614544d2886ee9b7270f9ba255ceafe3003",
+   "vencedor": "b",
+   "relogio": 30576,
+   "vidaA": 0,
+   "vidaB": 15,
+   "eventos": 40
+  },
+  {
+   "id": "v23|praia|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "2b98d15eff326083f14141007fb1bedea259fa57752b6371de095addb54ac0cc",
+   "vencedor": "a",
+   "relogio": 27072,
+   "vidaA": 149,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v23|praia|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "c39eb3ba69ac1eb6fce73d14daec371fb44603755e2d289fc31ce05cb613707b",
+   "vencedor": "a",
+   "relogio": 30432,
+   "vidaA": 199,
+   "vidaB": 0,
+   "eventos": 39
+  },
+  {
+   "id": "v23|praia|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "a772b80c86d39c52f2ad3b9c76c2f1a00ef782392edad8d842df7bb1b0bdeb6c",
+   "vencedor": "a",
+   "relogio": 33856,
+   "vidaA": 82,
+   "vidaB": 0,
+   "eventos": 41
+  },
+  {
+   "id": "v23|praia|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "3c498f7cf470fa8ffe298977ce3dc0bb51fe7d634c6fe7697c8eb56109d5867c",
+   "vencedor": "a",
+   "relogio": 19904,
+   "vidaA": 1136,
+   "vidaB": 0,
+   "eventos": 25
+  },
+  {
+   "id": "v23|praia|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "e9d45fd468c905790ab29a186ead27be4cb8e3573d850e5c1bebca2587d1e562",
+   "vencedor": "a",
+   "relogio": 20176,
+   "vidaA": 1549,
+   "vidaB": 0,
+   "eventos": 25
+  },
+  {
+   "id": "v23|praia|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "291fc35c2336c6c569982984d43ce4a028d30a337ec8619dea10866c3706a04a",
+   "vencedor": "a",
+   "relogio": 13856,
+   "vidaA": 945,
+   "vidaB": 0,
+   "eventos": 20
+  },
+  {
+   "id": "v23|praia|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "98bf866d70012ab2776aeee92ff0b615b8abe339cd9e449a1b6abd6afb7e7fc5",
+   "vencedor": "a",
+   "relogio": 11664,
+   "vidaA": 1183,
+   "vidaB": 0,
+   "eventos": 17
+  },
+  {
+   "id": "v23|praia|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "6b72fe34dd503ef57ce685e0be3434057e7b5a0cc0ccbfa8217725d55cf9e511",
+   "vencedor": "a",
+   "relogio": 21328,
+   "vidaA": 1246,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v23|praia|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "6919fbf8a247a71db5ba43a221f15c851ca278fb21e1b2db144c1f828c36ac50",
+   "vencedor": "a",
+   "relogio": 25056,
+   "vidaA": 1133,
+   "vidaB": 0,
+   "eventos": 31
+  },
+  {
+   "id": "v23|praia|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "a8ad82fe68add3f4fa1b9034138befd504241edda8ed632afc55dc9d3c6a0b96",
+   "vencedor": "a",
+   "relogio": 17840,
+   "vidaA": 1545,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v23|praia|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "a05b2af765a918f01c9863d0997fc2c0449f0647cd7f21ac5889611b487419fc",
+   "vencedor": "a",
+   "relogio": 23120,
+   "vidaA": 1164,
+   "vidaB": 0,
+   "eventos": 31
+  },
+  {
+   "id": "v23|praia|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "1aafe119e72180df64a79a247eedbf447edfd537bc8db248d67ba850374033e3",
+   "vencedor": "b",
+   "relogio": 28480,
+   "vidaA": 0,
+   "vidaB": 487,
+   "eventos": 33
+  },
+  {
+   "id": "v23|praia|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "235330e4074bd1af39f88fb9d89e665c3d0d8c6a7720ac8559c3f766621f9ecd",
+   "vencedor": "b",
+   "relogio": 29568,
+   "vidaA": 0,
+   "vidaB": 453,
+   "eventos": 34
+  },
+  {
+   "id": "v23|praia|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "6c318e0216eac6a0e5950663171072b0babd7d69b1cc1f307050e3e7c9b592dc",
+   "vencedor": "b",
+   "relogio": 19408,
+   "vidaA": 0,
+   "vidaB": 1504,
+   "eventos": 28
+  },
+  {
+   "id": "v23|praia|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "e977538a00b140ae0d0b9b79f929a44fc190130a0ce17e319e402fe6eeb7e400",
+   "vencedor": "b",
+   "relogio": 19600,
+   "vidaA": 0,
+   "vidaB": 1350,
+   "eventos": 28
+  },
+  {
+   "id": "v23|praia|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "460f6dafa1fbfd7e279a7199b363954d101410dcdc788f1eee34831587eff342",
+   "vencedor": "b",
+   "relogio": 13264,
+   "vidaA": 0,
+   "vidaB": 985,
+   "eventos": 20
+  },
+  {
+   "id": "v23|praia|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "c2867d3814ad939a62d5aab7b15eaf19c5515eb8aeef0aba28fc115907c321da",
+   "vencedor": "b",
+   "relogio": 14160,
+   "vidaA": 0,
+   "vidaB": 903,
+   "eventos": 21
+  },
+  {
+   "id": "v23|deserto|brasa_bebe|ferrugem_bebe|101",
+   "sha": "65cf99b6df6acddba541be24523027e44aca7a84e2009d8719d0744ef669a37c",
+   "vencedor": "b",
+   "relogio": 18640,
+   "vidaA": 0,
+   "vidaB": 27,
+   "eventos": 25
+  },
+  {
+   "id": "v23|deserto|brasa_bebe|ferrugem_bebe|202",
+   "sha": "68c0ddad34a4b8bf210b3615ad4516f714ea26b7e1cbf93298f351d5a73dd22a",
+   "vencedor": "a",
+   "relogio": 19264,
+   "vidaA": 255,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v23|deserto|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "dff5a2da14e96d36d057b4bfcf7e74a2493ee623f44ec7f2bc66fda680591736",
+   "vencedor": "a",
+   "relogio": 29808,
+   "vidaA": 120,
+   "vidaB": 0,
+   "eventos": 38
+  },
+  {
+   "id": "v23|deserto|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "5cb578be1b1189f884c9810fab4a9df82cd5f08e346e176fab8e55b9cbd6a722",
+   "vencedor": "b",
+   "relogio": 24912,
+   "vidaA": 0,
+   "vidaB": 43,
+   "eventos": 32
+  },
+  {
+   "id": "v23|deserto|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "953d1055d2023d3a14bdee3ec698434205ead5af20b0aceee66dc82b3e941773",
+   "vencedor": "b",
+   "relogio": 27296,
+   "vidaA": 0,
+   "vidaB": 81,
+   "eventos": 39
+  },
+  {
+   "id": "v23|deserto|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "b2889424d22a3ba828724b292c9bd74211a3db41aa837f3b2b6ef1a799fbcf81",
+   "vencedor": "a",
+   "relogio": 25456,
+   "vidaA": 206,
+   "vidaB": 0,
+   "eventos": 36
+  },
+  {
+   "id": "v23|deserto|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "c9c5de7e90bb42349592f5b9b94a3cf2e7417e88b2469b36be770529a16d4a4d",
+   "vencedor": "a",
+   "relogio": 32288,
+   "vidaA": 77,
+   "vidaB": 0,
+   "eventos": 42
+  },
+  {
+   "id": "v23|deserto|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "088e21ba6fa051039b4654860b791d1aba8601a9453824e27e550f6243274a87",
+   "vencedor": "b",
+   "relogio": 24064,
+   "vidaA": 0,
+   "vidaB": 333,
+   "eventos": 33
+  },
+  {
+   "id": "v23|deserto|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "7afe84a2a63247d877b0c8581dc60627029e1efe24dba43c49036c5e100cc2e1",
+   "vencedor": "a",
+   "relogio": 29744,
+   "vidaA": 298,
+   "vidaB": 0,
+   "eventos": 38
+  },
+  {
+   "id": "v23|deserto|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "836e2b783316f8d598dcee3f350353b6586a29df089898643bfeb8f1cf32ef6c",
+   "vencedor": "a",
+   "relogio": 28048,
+   "vidaA": 303,
+   "vidaB": 0,
+   "eventos": 36
+  },
+  {
+   "id": "v23|deserto|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "ae7ae21567bba3decbd8bb27049a11ae1982fa7541dd3c47bd901bd266db860b",
+   "vencedor": "a",
+   "relogio": 20672,
+   "vidaA": 1046,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v23|deserto|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "96d6334b8e3144e39cac7361339b0463190df635ddf19c5e768cb9741eaf021e",
+   "vencedor": "a",
+   "relogio": 17264,
+   "vidaA": 1056,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v23|deserto|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "bc3a4b86bf97113f8691bc75847cc6dd7c51cc3e0d95fcd42edae9dd8bce381a",
+   "vencedor": "a",
+   "relogio": 13856,
+   "vidaA": 945,
+   "vidaB": 0,
+   "eventos": 21
+  },
+  {
+   "id": "v23|deserto|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "3146f21a0f3ed944a6cdcf77fd6026087b8d25a7595ab3bceda9cefaf0607cd5",
+   "vencedor": "a",
+   "relogio": 11488,
+   "vidaA": 1183,
+   "vidaB": 0,
+   "eventos": 17
+  },
+  {
+   "id": "v23|deserto|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "7ff0e87db2aa5e7f120418dfba47acc5ad47dda28d24bb7ac2e274d4fc3e864e",
+   "vencedor": "a",
+   "relogio": 24320,
+   "vidaA": 1195,
+   "vidaB": 0,
+   "eventos": 32
+  },
+  {
+   "id": "v23|deserto|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "2adb809e096180351a827c831bcfb5cb23a9105b23f934093f4c54a41ca9e864",
+   "vencedor": "a",
+   "relogio": 16064,
+   "vidaA": 1526,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v23|deserto|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "aa6a7ffdcb66f428d3f2bd5307d747d7df65d5983b4dffb5abb7d27c785534ee",
+   "vencedor": "b",
+   "relogio": 41536,
+   "vidaA": 0,
+   "vidaB": 150,
+   "eventos": 55
+  },
+  {
+   "id": "v23|deserto|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "91b2ae214fec351f630c693d412a7a85a58e257b5574655f96aafc36dd659ff2",
+   "vencedor": "a",
+   "relogio": 30448,
+   "vidaA": 844,
+   "vidaB": 0,
+   "eventos": 40
+  },
+  {
+   "id": "v23|deserto|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "c4344a9e184ac14360b08a4628330651d19e4b197befd1fde555ad16e4f1cd71",
+   "vencedor": "b",
+   "relogio": 27936,
+   "vidaA": 0,
+   "vidaB": 837,
+   "eventos": 36
+  },
+  {
+   "id": "v23|deserto|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "644f46463a974193114ce518ad5945f8bffd93c1c33147bb28ecedcc2c91ba14",
+   "vencedor": "b",
+   "relogio": 28816,
+   "vidaA": 0,
+   "vidaB": 225,
+   "eventos": 37
+  },
+  {
+   "id": "v23|deserto|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "1ce565879ebb609d9c6afb7003f79e3e443edf53d90048083e74089576c51f12",
+   "vencedor": "b",
+   "relogio": 21440,
+   "vidaA": 0,
+   "vidaB": 1201,
+   "eventos": 32
+  },
+  {
+   "id": "v23|deserto|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "94357873988faa13028a623a2b80aaa1914b43f97a7ee47091885b5c33a37d21",
+   "vencedor": "b",
+   "relogio": 26688,
+   "vidaA": 0,
+   "vidaB": 867,
+   "eventos": 38
+  },
+  {
+   "id": "v23|deserto|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "80de2877910b2f6a16c4612b47eb63b035879a9a22dc0408ab40d9ed3a6abf1f",
+   "vencedor": "b",
+   "relogio": 13104,
+   "vidaA": 0,
+   "vidaB": 985,
+   "eventos": 21
+  },
+  {
+   "id": "v23|deserto|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "d61b9588ff1bb008c1e8d3fda140903c5b7c771212bb784443a9fba525bfe097",
+   "vencedor": "b",
+   "relogio": 13104,
+   "vidaA": 0,
+   "vidaB": 1012,
+   "eventos": 21
+  },
+  {
+   "id": "v23|castelo|brasa_bebe|ferrugem_bebe|101",
+   "sha": "4514c5d0b9d700c16d2611c1c04b72771c5ab9e9845c10508cf433c1ec4e89ee",
+   "vencedor": "a",
+   "relogio": 20704,
+   "vidaA": 122,
+   "vidaB": 0,
+   "eventos": 28
+  },
+  {
+   "id": "v23|castelo|brasa_bebe|ferrugem_bebe|202",
+   "sha": "0c85918d85bf082bcd1ace141f26b1c531a27da8780b0ccf833465b67c7434aa",
+   "vencedor": "a",
+   "relogio": 20176,
+   "vidaA": 6,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v23|castelo|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "14c609c6d8bbf79ce75af0b922b0f9cd653a0a8f75718fad1d61b96896f8ce3e",
+   "vencedor": "b",
+   "relogio": 28400,
+   "vidaA": 0,
+   "vidaB": 230,
+   "eventos": 37
+  },
+  {
+   "id": "v23|castelo|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "cc9ea3c0a8f3607e35c8bd3cb1e6f9a55ffaa938b1d4740efd3e443c0be68a3a",
+   "vencedor": "b",
+   "relogio": 27824,
+   "vidaA": 0,
+   "vidaB": 1,
+   "eventos": 36
+  },
+  {
+   "id": "v23|castelo|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "a2296104bd033d1dd95cb83fee3f9d8ac4215be343ebebb9b23e8f1caca82d9f",
+   "vencedor": "b",
+   "relogio": 27248,
+   "vidaA": 0,
+   "vidaB": 46,
+   "eventos": 38
+  },
+  {
+   "id": "v23|castelo|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "8359e2d59ac42672e55174423fe885dbbb6233843a3f09c5731bcfca23bffe89",
+   "vencedor": "a",
+   "relogio": 23376,
+   "vidaA": 124,
+   "vidaB": 0,
+   "eventos": 34
+  },
+  {
+   "id": "v23|castelo|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "41a9e209ea1b864333db2317f8d921c32ebc8b2c2a331170017d02988b927807",
+   "vencedor": "a",
+   "relogio": 28368,
+   "vidaA": 203,
+   "vidaB": 0,
+   "eventos": 38
+  },
+  {
+   "id": "v23|castelo|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "4c5ccdf7aed89dd4da39942ecc0a458fba87d1ec96e978a228f265818fcdbaaf",
+   "vencedor": "b",
+   "relogio": 23280,
+   "vidaA": 0,
+   "vidaB": 272,
+   "eventos": 31
+  },
+  {
+   "id": "v23|castelo|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "e9a6bf124c220d6618ccde420c7448134bfa575a20d06d7c7a610b4e02ddaa99",
+   "vencedor": "b",
+   "relogio": 30320,
+   "vidaA": 0,
+   "vidaB": 26,
+   "eventos": 39
+  },
+  {
+   "id": "v23|castelo|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "6590da133ff236bae8ef19c26cdf89da82db7e1286e23859b0a755c31642ed81",
+   "vencedor": "b",
+   "relogio": 25360,
+   "vidaA": 0,
+   "vidaB": 56,
+   "eventos": 32
+  },
+  {
+   "id": "v23|castelo|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "4251fab4e0f30e9a2562a09d7a8c143e0a83a05ffc3f95b24093e3cfb3a72f88",
+   "vencedor": "a",
+   "relogio": 20640,
+   "vidaA": 1050,
+   "vidaB": 0,
+   "eventos": 29
+  },
+  {
+   "id": "v23|castelo|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "01d7277ce5eaf8b85d757f4ae3f296cf06981ae98c02ff471851afb6ff6a8d72",
+   "vencedor": "a",
+   "relogio": 22064,
+   "vidaA": 683,
+   "vidaB": 0,
+   "eventos": 28
+  },
+  {
+   "id": "v23|castelo|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "3f9c8dca73f311f6f57a2a622672cbab0b37b5c4ae9ecc7f5ee9d0bac1e47e18",
+   "vencedor": "a",
+   "relogio": 11840,
+   "vidaA": 1002,
+   "vidaB": 0,
+   "eventos": 20
+  },
+  {
+   "id": "v23|castelo|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "26c0e41a3975e61d8b4cb297b0eb3399fa5505848e537459ad2cb21629bcf518",
+   "vencedor": "a",
+   "relogio": 11168,
+   "vidaA": 1071,
+   "vidaB": 0,
+   "eventos": 18
+  },
+  {
+   "id": "v23|castelo|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "1f32d8fe744f9d6f2262b2781197a20c5e7300ad22bc27fbf95bb8eed1744d79",
+   "vencedor": "a",
+   "relogio": 14016,
+   "vidaA": 1775,
+   "vidaB": 0,
+   "eventos": 20
+  },
+  {
+   "id": "v23|castelo|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "bf46e15faa2ead6a8d49c599bb3022d5592fe0a7613464543535566f62ca522d",
+   "vencedor": "a",
+   "relogio": 20064,
+   "vidaA": 1350,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v23|castelo|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "55df8b7a4008da0b6ae5ab6425b13848a53e13e4ba1c4c35d9e05db74258b12b",
+   "vencedor": "a",
+   "relogio": 15840,
+   "vidaA": 1700,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v23|castelo|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "5a67293e3523802b6ac667e3da4543e7a904e65304ca0d2a56dc670a92c76d87",
+   "vencedor": "a",
+   "relogio": 17792,
+   "vidaA": 1780,
+   "vidaB": 0,
+   "eventos": 24
+  },
+  {
+   "id": "v23|castelo|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "e2c0012277121ce7d28628202e4e4396d35a0d2a2ffac711660c998f428019ac",
+   "vencedor": "b",
+   "relogio": 28656,
+   "vidaA": 0,
+   "vidaB": 83,
+   "eventos": 36
+  },
+  {
+   "id": "v23|castelo|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "78d0bcea612e7c090bf1fe69a4d240f311dd952bc131e797c0e6218df6e91e0f",
+   "vencedor": "b",
+   "relogio": 32304,
+   "vidaA": 0,
+   "vidaB": 597,
+   "eventos": 39
+  },
+  {
+   "id": "v23|castelo|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "4087457a0f960ca709c452d0edcfa41e10faf7f3f6ad67405820f389f2794952",
+   "vencedor": "b",
+   "relogio": 27392,
+   "vidaA": 0,
+   "vidaB": 765,
+   "eventos": 39
+  },
+  {
+   "id": "v23|castelo|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "7cb665bbb2d0dd4aa80da2ea7bd1334859089cbedd4350337664ab63fdfd7c9e",
+   "vencedor": "b",
+   "relogio": 20768,
+   "vidaA": 0,
+   "vidaB": 1296,
+   "eventos": 31
+  },
+  {
+   "id": "v23|castelo|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "e36c1c91ec94ab52384bffeb4e5caaf12cd1afbc08eeb93ceffd580ce69893d6",
+   "vencedor": "b",
+   "relogio": 10864,
+   "vidaA": 0,
+   "vidaB": 1181,
+   "eventos": 18
+  },
+  {
+   "id": "v23|castelo|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "e6ed09d5dc5500a916f306707db0e74434923e933412258afc41b7db53b4ab9c",
+   "vencedor": "b",
+   "relogio": 10736,
+   "vidaA": 0,
+   "vidaB": 1197,
+   "eventos": 18
+  },
+  {
+   "id": "v23|caverna|brasa_bebe|ferrugem_bebe|101",
+   "sha": "b6ef1c232b3362890633ac659c1be1e0c88996c7b4e21955fde82147a46abe7d",
+   "vencedor": "b",
+   "relogio": 20432,
+   "vidaA": 0,
+   "vidaB": 52,
+   "eventos": 26
+  },
+  {
+   "id": "v23|caverna|brasa_bebe|ferrugem_bebe|202",
+   "sha": "6b6a6c8609dea64d80169b6ec5c50f57e64c74caf29b6762065d0c4e430298cc",
+   "vencedor": "a",
+   "relogio": 17888,
+   "vidaA": 32,
+   "vidaB": 0,
+   "eventos": 25
+  },
+  {
+   "id": "v23|caverna|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "b595ac740a6d0acd7bddcdeb1eea2a962a781e43e888a1f2b358fc8152dbe4ad",
+   "vencedor": "a",
+   "relogio": 33760,
+   "vidaA": 32,
+   "vidaB": 0,
+   "eventos": 42
+  },
+  {
+   "id": "v23|caverna|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "726a5625201fd15cc57bfa473a3b8e5b7ce29acbf320de7e18c6716d883b73f8",
+   "vencedor": "b",
+   "relogio": 24192,
+   "vidaA": 0,
+   "vidaB": 156,
+   "eventos": 40
+  },
+  {
+   "id": "v23|caverna|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "8e52537b9ea8c3a0d18c52b443dae424fa4186a951aa04b53d869f8ac6ac3e66",
+   "vencedor": null,
+   "relogio": 27216,
+   "vidaA": 0,
+   "vidaB": 0,
+   "eventos": 42
+  },
+  {
+   "id": "v23|caverna|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "92c09f30acc468facbd552fa35351a02b16e55bfa410c0b81933de96e45efeeb",
+   "vencedor": "a",
+   "relogio": 21408,
+   "vidaA": 105,
+   "vidaB": 0,
+   "eventos": 32
+  },
+  {
+   "id": "v23|caverna|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "fe3aee10c508d03cd714d41cf7f80f49c30122c9bd886c87d275e3be64489350",
+   "vencedor": "b",
+   "relogio": 26800,
+   "vidaA": 0,
+   "vidaB": 262,
+   "eventos": 32
+  },
+  {
+   "id": "v23|caverna|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "a3c2977821978d212bc80be9d713eef7fa3627853e7e527a69d12426f35d7c20",
+   "vencedor": "a",
+   "relogio": 23808,
+   "vidaA": 470,
+   "vidaB": 0,
+   "eventos": 75
+  },
+  {
+   "id": "v23|caverna|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "deeb9bf77f17bb6c81c15f6f5585c16041a0d6e8462a42e41f5a246fd21b20f5",
+   "vencedor": "a",
+   "relogio": 30864,
+   "vidaA": 172,
+   "vidaB": 0,
+   "eventos": 40
+  },
+  {
+   "id": "v23|caverna|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "89cf4a5acac649821f8517f0371fcc9f4dea686d8b12eb0e7409619ac4818572",
+   "vencedor": "a",
+   "relogio": 33744,
+   "vidaA": 119,
+   "vidaB": 0,
+   "eventos": 53
+  },
+  {
+   "id": "v23|caverna|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "f8d6a793aaf6ef7de0e3ee60da1cb313a1ab19c1f1108abcc281e9e5a0afecb7",
+   "vencedor": "a",
+   "relogio": 19712,
+   "vidaA": 1034,
+   "vidaB": 0,
+   "eventos": 29
+  },
+  {
+   "id": "v23|caverna|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "cbaf58c145b9995c74680a3cb5f01f2cfd201253c13e32c0282012dcee64b27d",
+   "vencedor": "a",
+   "relogio": 23584,
+   "vidaA": 1058,
+   "vidaB": 0,
+   "eventos": 78
+  },
+  {
+   "id": "v23|caverna|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "9e0beb96bb449d2b466d7265724e119ad908c107a9618f7dd716c86566ac0f07",
+   "vencedor": "a",
+   "relogio": 11840,
+   "vidaA": 1002,
+   "vidaB": 0,
+   "eventos": 19
+  },
+  {
+   "id": "v23|caverna|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "0c318720afbc19efe7e96e103ec9262fbeb5ea8c9d319f3964c67cecc32f3311",
+   "vencedor": "a",
+   "relogio": 11328,
+   "vidaA": 1011,
+   "vidaB": 0,
+   "eventos": 18
+  },
+  {
+   "id": "v23|caverna|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "8057efa694387d73d61e9325951f2601473fcb42ee6b2c7bdc68a825b1fba2ac",
+   "vencedor": "a",
+   "relogio": 28912,
+   "vidaA": 507,
+   "vidaB": 0,
+   "eventos": 102
+  },
+  {
+   "id": "v23|caverna|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "e4a319e0e0c81080ce59576a3756167481ea5d73749303c54ad9b8932c9f0107",
+   "vencedor": "a",
+   "relogio": 20608,
+   "vidaA": 1382,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v23|caverna|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "2d4d6f60912e1ea162e5c4dcd3ea09f84e07d7beeb63e8c7848958c38577adcd",
+   "vencedor": "a",
+   "relogio": 20752,
+   "vidaA": 959,
+   "vidaB": 0,
+   "eventos": 31
+  },
+  {
+   "id": "v23|caverna|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "dd13c904458e4b24bc75b5af0e406a5b0eca745f63a680a90227589a77cf4a6a",
+   "vencedor": "a",
+   "relogio": 33664,
+   "vidaA": 6,
+   "vidaB": 0,
+   "eventos": 43
+  },
+  {
+   "id": "v23|caverna|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "f54a2b46c774f45c4ebe64af3517f19b997431a8d565fab822313247975d8dbc",
+   "vencedor": "b",
+   "relogio": 26848,
+   "vidaA": 0,
+   "vidaB": 645,
+   "eventos": 29
+  },
+  {
+   "id": "v23|caverna|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "cfc0f1b28f1d503083683687d1bbca67f2a03ae689d26fd0fd13dce83eb80bce",
+   "vencedor": "a",
+   "relogio": 32480,
+   "vidaA": 33,
+   "vidaB": 0,
+   "eventos": 120
+  },
+  {
+   "id": "v23|caverna|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "6b2478f24f8cf80740c95dfa23612cb734717539665dc3f349366c0121037e0d",
+   "vencedor": "b",
+   "relogio": 19248,
+   "vidaA": 0,
+   "vidaB": 1407,
+   "eventos": 31
+  },
+  {
+   "id": "v23|caverna|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "a2a004d61708823e8d1169eeeb7db4d4879570bbf5a767e04556008410ad185d",
+   "vencedor": "b",
+   "relogio": 19008,
+   "vidaA": 0,
+   "vidaB": 997,
+   "eventos": 29
+  },
+  {
+   "id": "v23|caverna|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "680f21b1da75619764f48c46fe52b0b8a13b803c57a845e0b6cb811522cafb2a",
+   "vencedor": "b",
+   "relogio": 10944,
+   "vidaA": 0,
+   "vidaB": 1181,
+   "eventos": 18
+  },
+  {
+   "id": "v23|caverna|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "db380089167111b163eca8b86eae4538fc4b72b49f6ca8b7878e1990d0f75892",
+   "vencedor": "b",
+   "relogio": 12928,
+   "vidaA": 0,
+   "vidaB": 1012,
+   "eventos": 21
+  },
+  {
+   "id": "v23|ringue|brasa_bebe|ferrugem_bebe|101",
+   "sha": "0b6bfcd06d40e4ce49d785f51e01d998acddf111f91a6cfe5495cd7a688a12c9",
+   "vencedor": "b",
+   "relogio": 23600,
+   "vidaA": 0,
+   "vidaB": 115,
+   "eventos": 31
+  },
+  {
+   "id": "v23|ringue|brasa_bebe|ferrugem_bebe|202",
+   "sha": "f504e4c4066c6feda1ab3eea53735123b7c71ad5364f984aab5066082d06cafb",
+   "vencedor": "a",
+   "relogio": 27328,
+   "vidaA": 160,
+   "vidaB": 0,
+   "eventos": 32
+  },
+  {
+   "id": "v23|ringue|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "de79719531d343d1e662b36b6e79df6e17587e2a8350f204896e43502c510263",
+   "vencedor": "b",
+   "relogio": 20992,
+   "vidaA": 0,
+   "vidaB": 339,
+   "eventos": 27
+  },
+  {
+   "id": "v23|ringue|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "fc38c8e7cda4b56cb260947097e222830a83487ed1b3398ba5e3f7a4dcb79b3d",
+   "vencedor": "b",
+   "relogio": 23040,
+   "vidaA": 0,
+   "vidaB": 234,
+   "eventos": 28
+  },
+  {
+   "id": "v23|ringue|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "34ae4b0d27f682c5a5b6808c08ba96d553872acea7fa688d1f957eb5186083f3",
+   "vencedor": null,
+   "relogio": 27344,
+   "vidaA": 0,
+   "vidaB": 0,
+   "eventos": 39
+  },
+  {
+   "id": "v23|ringue|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "e3c7cec4f324cb45b1028ff30645dd6c0215a44fb251b282760185d96603937b",
+   "vencedor": "a",
+   "relogio": 25440,
+   "vidaA": 12,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v23|ringue|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "ecc2f86cf2713388e7e4dafe4b3808c732a45ee7fbd3b2316c72ea240719859d",
+   "vencedor": "b",
+   "relogio": 22832,
+   "vidaA": 0,
+   "vidaB": 302,
+   "eventos": 31
+  },
+  {
+   "id": "v23|ringue|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "ab1ae931b0230a86aeff174eb7edaa6a6392d583d1e423a29774f8c01c4907ab",
+   "vencedor": "b",
+   "relogio": 26848,
+   "vidaA": 0,
+   "vidaB": 173,
+   "eventos": 37
+  },
+  {
+   "id": "v23|ringue|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "e3233d48a9eec3201abc6af2024c807dd33b6110b75129989e70b2b195871de7",
+   "vencedor": "b",
+   "relogio": 26864,
+   "vidaA": 0,
+   "vidaB": 270,
+   "eventos": 32
+  },
+  {
+   "id": "v23|ringue|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "9e2f92a1f1bbe2f96054dbf8ecc9e83d66d87992e20408407b351e41d7a2fcee",
+   "vencedor": "b",
+   "relogio": 25936,
+   "vidaA": 0,
+   "vidaB": 203,
+   "eventos": 34
+  },
+  {
+   "id": "v23|ringue|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "c3159e995804dcac212c88f49eadb29ffd74b8a5b4b5a1cfa769e829abac270e",
+   "vencedor": "a",
+   "relogio": 28288,
+   "vidaA": 565,
+   "vidaB": 0,
+   "eventos": 32
+  },
+  {
+   "id": "v23|ringue|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "677fd81b603bdcb7bdf9ae1dbdff6b9d3de2dc1638b5441bd765d8233c39ff58",
+   "vencedor": "a",
+   "relogio": 21616,
+   "vidaA": 1229,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v23|ringue|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "562fd9a3c8260a66e56d52e060f4dd1de9c076416e735f6f7a0732c91b75ecd8",
+   "vencedor": "a",
+   "relogio": 11840,
+   "vidaA": 1002,
+   "vidaB": 0,
+   "eventos": 19
+  },
+  {
+   "id": "v23|ringue|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "0d47800031a55a2ce3b54304c9197f14ab58d38d09cbd7333de128ca9b4416ef",
+   "vencedor": "a",
+   "relogio": 11168,
+   "vidaA": 1187,
+   "vidaB": 0,
+   "eventos": 17
+  },
+  {
+   "id": "v23|ringue|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "bbefc6c43eaa25ef2ed210fd7567bb4207013f6e75a500eb4a61271f862ad332",
+   "vencedor": "a",
+   "relogio": 20880,
+   "vidaA": 1758,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v23|ringue|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "df51a8171a7a84a4b1763c823f3bd04bea5ad7ef9fa3498f652815bbc1f1d2b1",
+   "vencedor": "a",
+   "relogio": 16480,
+   "vidaA": 1296,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v23|ringue|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "bcefde50346e1385987de4e3cc09330c06405b74e256c56959c6bd6cd5698e32",
+   "vencedor": "a",
+   "relogio": 19344,
+   "vidaA": 1498,
+   "vidaB": 0,
+   "eventos": 25
+  },
+  {
+   "id": "v23|ringue|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "68cf9b54c7004084e39a46464e1bcd5e66f26ab658492dca626412e86d82b835",
+   "vencedor": "a",
+   "relogio": 18768,
+   "vidaA": 1895,
+   "vidaB": 0,
+   "eventos": 24
+  },
+  {
+   "id": "v23|ringue|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "673cec7fdc503510f9d1574bb5b0e323fa0b164568dce3aec90b858a9fcffcf6",
+   "vencedor": "a",
+   "relogio": 21392,
+   "vidaA": 745,
+   "vidaB": 0,
+   "eventos": 31
+  },
+  {
+   "id": "v23|ringue|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "6af6878af1732d25a043edb67cb37e072f286a37f64deda5b6786a7c02454cb6",
+   "vencedor": "a",
+   "relogio": 26368,
+   "vidaA": 297,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v23|ringue|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "a767033bfe1a0cf78735292a02c3e1805505f0fa853e3f9e89389aec545f007a",
+   "vencedor": "b",
+   "relogio": 19264,
+   "vidaA": 0,
+   "vidaB": 1407,
+   "eventos": 28
+  },
+  {
+   "id": "v23|ringue|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "b6d50ba1baa9e0961b9ed686c2e437ac46cb1e8e3705f79ac200cb04ef9384a7",
+   "vencedor": "b",
+   "relogio": 19008,
+   "vidaA": 0,
+   "vidaB": 1261,
+   "eventos": 28
+  },
+  {
+   "id": "v23|ringue|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "c6b544e7d1cede912643709ef3879c81f9bc147a2e0da9edec4d6e772c6aa476",
+   "vencedor": "b",
+   "relogio": 12848,
+   "vidaA": 0,
+   "vidaB": 985,
+   "eventos": 20
+  },
+  {
+   "id": "v23|ringue|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "6b4113126269e04a2025fcb7500d54fca2d5961be9b8be7a925d5bafbf805770",
+   "vencedor": "b",
+   "relogio": 12608,
+   "vidaA": 0,
+   "vidaB": 1012,
+   "eventos": 20
+  },
+  {
+   "id": "v29|campo|brasa_bebe|ferrugem_bebe|101",
+   "sha": "e2cf416f4b55208db0b9489466b1a57e5a5a6fcc8e436689a23609c3b5362607",
+   "vencedor": "b",
+   "relogio": 21984,
+   "vidaA": 0,
+   "vidaB": 21,
+   "eventos": 28
+  },
+  {
+   "id": "v29|campo|brasa_bebe|ferrugem_bebe|202",
+   "sha": "9324c29c3701194ba3a4aefd2af078b2a6b5a30de5763a9e166a904d91ec42aa",
+   "vencedor": "a",
+   "relogio": 19616,
+   "vidaA": 64,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v29|campo|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "0035255e4d0cd91756e75b8c447d56cb9bcb484e6fe34afdf27b94dd7ffcdd50",
+   "vencedor": "a",
+   "relogio": 31168,
+   "vidaA": 259,
+   "vidaB": 0,
+   "eventos": 40
+  },
+  {
+   "id": "v29|campo|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "c7b970bd91af303ffe34346c0266686d580d85a856288f2d0e413b5f6b0ce5e1",
+   "vencedor": "b",
+   "relogio": 24720,
+   "vidaA": 0,
+   "vidaB": 80,
+   "eventos": 33
+  },
+  {
+   "id": "v29|campo|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "495c4a0e71b38b0694d162215fbb06544f4d5a52eb8d9760153ffd1d2624a8b7",
+   "vencedor": "b",
+   "relogio": 27312,
+   "vidaA": 0,
+   "vidaB": 13,
+   "eventos": 38
+  },
+  {
+   "id": "v29|campo|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "3478aed232f3a324d621a7b58735e74dc4a9531cc1ed4f3fab2cd1d56884648d",
+   "vencedor": "a",
+   "relogio": 25456,
+   "vidaA": 206,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v29|campo|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "9bc78efe06803b66b320c5db4e2f43ea07a86e486393d411688918d3379fa14b",
+   "vencedor": "b",
+   "relogio": 33632,
+   "vidaA": 0,
+   "vidaB": 64,
+   "eventos": 43
+  },
+  {
+   "id": "v29|campo|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "0ba760438151e66da4df7de10507e48fa429400b886ab96f5e0b26edceb20f18",
+   "vencedor": "a",
+   "relogio": 29072,
+   "vidaA": 563,
+   "vidaB": 0,
+   "eventos": 37
+  },
+  {
+   "id": "v29|campo|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "ec7570aa4cb83ca76721f3255de8b1ce461975455a1dc1ceeb941bb8059a6181",
+   "vencedor": "a",
+   "relogio": 28720,
+   "vidaA": 113,
+   "vidaB": 0,
+   "eventos": 38
+  },
+  {
+   "id": "v29|campo|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "9ebfb370f3009b5448ece9a3e99b56fb2a927fc1d736ece397f0113eaca490fa",
+   "vencedor": "a",
+   "relogio": 32928,
+   "vidaA": 409,
+   "vidaB": 0,
+   "eventos": 42
+  },
+  {
+   "id": "v29|campo|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "4705f00353eb7db5999d951db19c87c38da2116dbbce2edf60b036556e0231a8",
+   "vencedor": "a",
+   "relogio": 16336,
+   "vidaA": 1096,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v29|campo|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "da25e7759c433a56b3c6c285381b440afe4d3056f5e7cafd5cb75ffc46a6ee91",
+   "vencedor": "a",
+   "relogio": 16272,
+   "vidaA": 1314,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v29|campo|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "6f39a88b135d36a40efd571e72df84564d07930d58875e6848d53d474232f64d",
+   "vencedor": "a",
+   "relogio": 12432,
+   "vidaA": 983,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v29|campo|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "25bb2e1dc5caca4b1f323b5f3f0842255006ed83bb0cea9684c6b3c730436bb3",
+   "vencedor": "a",
+   "relogio": 13328,
+   "vidaA": 887,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v29|campo|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "bd95c7136d58d7e04b4df1f3c6f3f1eb7febbd8ac0701d9d88632f11b9ba42ad",
+   "vencedor": "a",
+   "relogio": 24400,
+   "vidaA": 1085,
+   "vidaB": 0,
+   "eventos": 34
+  },
+  {
+   "id": "v29|campo|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "d145280c634668cc18ab6c95a6cc4df3c08113d7f1aada84706eb3c8d7fc177a",
+   "vencedor": "a",
+   "relogio": 16720,
+   "vidaA": 1387,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v29|campo|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "75e02a43ed628fd0659f8399e7e7817ffb12c1b0149fc24b12842f4894983f0a",
+   "vencedor": "a",
+   "relogio": 21232,
+   "vidaA": 1248,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v29|campo|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "97f333148a0afe3f4b6eea69656b507754fb564e784038b3a2881f6a3ecb921c",
+   "vencedor": "a",
+   "relogio": 21760,
+   "vidaA": 1258,
+   "vidaB": 0,
+   "eventos": 36
+  },
+  {
+   "id": "v29|campo|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "4c7caefb056c87020e2cde5e788b34ae02711e41c8e18b0dff0ff97c54e2c81c",
+   "vencedor": "b",
+   "relogio": 29088,
+   "vidaA": 0,
+   "vidaB": 491,
+   "eventos": 41
+  },
+  {
+   "id": "v29|campo|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "227c3791088e4bdeb76e8fb708c5d873d56cf71b723416b9889b75bc9c9d140f",
+   "vencedor": "a",
+   "relogio": 25104,
+   "vidaA": 91,
+   "vidaB": 0,
+   "eventos": 44
+  },
+  {
+   "id": "v29|campo|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "9a51fd25ee73aaec95e03be33cec9a0180be3a30a9322812bc454cd227ea592d",
+   "vencedor": "b",
+   "relogio": 19680,
+   "vidaA": 0,
+   "vidaB": 1208,
+   "eventos": 29
+  },
+  {
+   "id": "v29|campo|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "b5c1175662312a55085af77532a940b4881ddae8310afba9cd46877720ee3f43",
+   "vencedor": "b",
+   "relogio": 20512,
+   "vidaA": 0,
+   "vidaB": 1486,
+   "eventos": 29
+  },
+  {
+   "id": "v29|campo|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "9608111935a678628a2203a6e0a5446df4ca9eca4890de14d50ab96ad25d2795",
+   "vencedor": "b",
+   "relogio": 11808,
+   "vidaA": 0,
+   "vidaB": 1131,
+   "eventos": 22
+  },
+  {
+   "id": "v29|campo|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "1e0510d8beec36d13e776dbedf9d7947d307ef2202f61ed5a9d597b637822150",
+   "vencedor": "b",
+   "relogio": 12112,
+   "vidaA": 0,
+   "vidaB": 919,
+   "eventos": 23
+  },
+  {
+   "id": "v29|coliseu|brasa_bebe|ferrugem_bebe|101",
+   "sha": "57c4938af629cd64315b2ce180e2dde29bd6d3b7f8b6637d1edde8185bd7e167",
+   "vencedor": "a",
+   "relogio": 20320,
+   "vidaA": 48,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v29|coliseu|brasa_bebe|ferrugem_bebe|202",
+   "sha": "764b0401baf0a7a2ebb9076c30cd275b4ee0c58b6dee17a8c1204728459a3664",
+   "vencedor": "a",
+   "relogio": 17552,
+   "vidaA": 142,
+   "vidaB": 0,
+   "eventos": 24
+  },
+  {
+   "id": "v29|coliseu|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "617ebc92eb0830d9e394f03b25155d5d01c2469a0a134a4a52ea653fc6e4e5d4",
+   "vencedor": "b",
+   "relogio": 29440,
+   "vidaA": 0,
+   "vidaB": 27,
+   "eventos": 38
+  },
+  {
+   "id": "v29|coliseu|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "9ad8e331414862e1dbdf328f45f74288a04acbf8b08a912b1b32b219147afd0f",
+   "vencedor": "b",
+   "relogio": 22656,
+   "vidaA": 0,
+   "vidaB": 125,
+   "eventos": 31
+  },
+  {
+   "id": "v29|coliseu|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "495c4a0e71b38b0694d162215fbb06544f4d5a52eb8d9760153ffd1d2624a8b7",
+   "vencedor": "b",
+   "relogio": 27312,
+   "vidaA": 0,
+   "vidaB": 13,
+   "eventos": 38
+  },
+  {
+   "id": "v29|coliseu|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "298f52f0e174c70810f9d95675dc80b9b3e02d701c8dce15f6a7bfc0a453bedd",
+   "vencedor": "a",
+   "relogio": 25456,
+   "vidaA": 206,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v29|coliseu|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "8ef83a5e0605759c84ce62a96505679856ff4e52e918233ffb9947ed435fe3ed",
+   "vencedor": "b",
+   "relogio": 28320,
+   "vidaA": 0,
+   "vidaB": 133,
+   "eventos": 38
+  },
+  {
+   "id": "v29|coliseu|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "6699262787899b2993ebf77100d82927472eba7f3894235dc63146a881d86c4c",
+   "vencedor": "b",
+   "relogio": 21200,
+   "vidaA": 0,
+   "vidaB": 369,
+   "eventos": 30
+  },
+  {
+   "id": "v29|coliseu|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "78f66ff0279ad79c42147704bd4117390c6c1696ccd2b613c0de6c1345323f6f",
+   "vencedor": "a",
+   "relogio": 28672,
+   "vidaA": 116,
+   "vidaB": 0,
+   "eventos": 38
+  },
+  {
+   "id": "v29|coliseu|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "eee5345505bb99457b01008cce3372424e849c76e9b97f73dfcfc37d1e65a6f0",
+   "vencedor": "a",
+   "relogio": 34992,
+   "vidaA": 282,
+   "vidaB": 0,
+   "eventos": 45
+  },
+  {
+   "id": "v29|coliseu|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "2862ba519abe07cfac07d3dd94fa2ba390a9c389153a808d2295802b45e41ec9",
+   "vencedor": "a",
+   "relogio": 16256,
+   "vidaA": 1007,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v29|coliseu|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "3482b72abb9732327b640d2e17bc0a39cfceb7413bc7853c7fc4ab604a0e8622",
+   "vencedor": "a",
+   "relogio": 16048,
+   "vidaA": 998,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v29|coliseu|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "6f39a88b135d36a40efd571e72df84564d07930d58875e6848d53d474232f64d",
+   "vencedor": "a",
+   "relogio": 12432,
+   "vidaA": 983,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v29|coliseu|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "25bb2e1dc5caca4b1f323b5f3f0842255006ed83bb0cea9684c6b3c730436bb3",
+   "vencedor": "a",
+   "relogio": 13328,
+   "vidaA": 887,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v29|coliseu|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "5c365ddb7a849aa36d40d61041eaa25684f7066cd16935734f35faf17b5b0a58",
+   "vencedor": "a",
+   "relogio": 19136,
+   "vidaA": 1427,
+   "vidaB": 0,
+   "eventos": 28
+  },
+  {
+   "id": "v29|coliseu|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "1534a20f809948107226a008c1661ac2b7651ba5cc8ba8431d34dc2a7b9d71d0",
+   "vencedor": "a",
+   "relogio": 16672,
+   "vidaA": 1387,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v29|coliseu|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "25bb099640160e651894193e1140ef6d170fb9e76ce2aed76c747360036aa2a3",
+   "vencedor": "a",
+   "relogio": 19312,
+   "vidaA": 1457,
+   "vidaB": 0,
+   "eventos": 31
+  },
+  {
+   "id": "v29|coliseu|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "cc4e8f8f595864a4cf1f62c5072c7f0ffc88caba0d5c1bc48a4f98e2fef1b8e6",
+   "vencedor": "a",
+   "relogio": 21424,
+   "vidaA": 1240,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v29|coliseu|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "5268835a232a6c835e86472cd58e77f82a5f7e55ef19b2f956590ed7db35f73c",
+   "vencedor": "b",
+   "relogio": 28128,
+   "vidaA": 0,
+   "vidaB": 331,
+   "eventos": 42
+  },
+  {
+   "id": "v29|coliseu|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "7b49f4d59d7c72f93e47990aa0061ac4a036c00e15679c980f8e1ac2c0ca3a31",
+   "vencedor": "a",
+   "relogio": 25120,
+   "vidaA": 214,
+   "vidaB": 0,
+   "eventos": 41
+  },
+  {
+   "id": "v29|coliseu|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "9a51fd25ee73aaec95e03be33cec9a0180be3a30a9322812bc454cd227ea592d",
+   "vencedor": "b",
+   "relogio": 19680,
+   "vidaA": 0,
+   "vidaB": 1208,
+   "eventos": 29
+  },
+  {
+   "id": "v29|coliseu|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "aa3e48d2e8c3274ab6623a35dc1b1b7bedf80f14bdc81905693eff76a14d1855",
+   "vencedor": "b",
+   "relogio": 24832,
+   "vidaA": 0,
+   "vidaB": 1328,
+   "eventos": 33
+  },
+  {
+   "id": "v29|coliseu|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "9608111935a678628a2203a6e0a5446df4ca9eca4890de14d50ab96ad25d2795",
+   "vencedor": "b",
+   "relogio": 11808,
+   "vidaA": 0,
+   "vidaB": 1131,
+   "eventos": 22
+  },
+  {
+   "id": "v29|coliseu|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "1e0510d8beec36d13e776dbedf9d7947d307ef2202f61ed5a9d597b637822150",
+   "vencedor": "b",
+   "relogio": 12112,
+   "vidaA": 0,
+   "vidaB": 919,
+   "eventos": 23
+  },
+  {
+   "id": "v29|floresta|brasa_bebe|ferrugem_bebe|101",
+   "sha": "91d62fea1d237a0babdc276f1e3d5dd56a1712d62a6433fe557a5261991275f3",
+   "vencedor": "a",
+   "relogio": 23696,
+   "vidaA": 59,
+   "vidaB": 0,
+   "eventos": 30
+  },
+  {
+   "id": "v29|floresta|brasa_bebe|ferrugem_bebe|202",
+   "sha": "682d8848c62530979fb8e993ee73222d31f9c75e1d9a6161ea2fd2309add3105",
+   "vencedor": "a",
+   "relogio": 20944,
+   "vidaA": 213,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v29|floresta|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "05042c97f03b84ee81c0b6e5638287abcb809bc97ccba813a43c9b8c1f869c59",
+   "vencedor": "a",
+   "relogio": 38720,
+   "vidaA": 180,
+   "vidaB": 0,
+   "eventos": 44
+  },
+  {
+   "id": "v29|floresta|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "ca49b682652357b9be3ba4f05323e18ad458e39f4839db257f8907449865671b",
+   "vencedor": "b",
+   "relogio": 30368,
+   "vidaA": 0,
+   "vidaB": 45,
+   "eventos": 38
+  },
+  {
+   "id": "v29|floresta|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "f16eec9a67722b84884b0d6a0f0d7d7b85f9bb06ad68c9fea1101c9f06d38329",
+   "vencedor": "a",
+   "relogio": 26848,
+   "vidaA": 4,
+   "vidaB": 0,
+   "eventos": 37
+  },
+  {
+   "id": "v29|floresta|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "33d0ec2a6e95913641579fd3387e1b47f47619c01f35a388578866d8b573af87",
+   "vencedor": "a",
+   "relogio": 25440,
+   "vidaA": 160,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v29|floresta|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "f0b77c3694b14f1111415ff4e2097231ca3a9e4bd3f5c3d46c1f7e6bf85df4ef",
+   "vencedor": "b",
+   "relogio": 28736,
+   "vidaA": 0,
+   "vidaB": 178,
+   "eventos": 37
+  },
+  {
+   "id": "v29|floresta|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "b65101830350582d648c57cf370694b3d8fb5bd516483ba8ab18ed371cf3fc90",
+   "vencedor": "b",
+   "relogio": 29264,
+   "vidaA": 0,
+   "vidaB": 221,
+   "eventos": 39
+  },
+  {
+   "id": "v29|floresta|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "bb0a64c6e2fe961cfd3f8715cf8e97e186b643a6431e77078e6bc20e4a6979ba",
+   "vencedor": "a",
+   "relogio": 31328,
+   "vidaA": 489,
+   "vidaB": 0,
+   "eventos": 40
+  },
+  {
+   "id": "v29|floresta|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "edaec63274e6aee8e58cb4eb279aeb198ffec17ff391899a75a871ceb47ca599",
+   "vencedor": "a",
+   "relogio": 37712,
+   "vidaA": 400,
+   "vidaB": 0,
+   "eventos": 45
+  },
+  {
+   "id": "v29|floresta|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "fd25bd3c8da6c7ed00a5a8fa13b2c507d3c4f9e665476ca3d8fb5b6f59857a03",
+   "vencedor": "a",
+   "relogio": 16352,
+   "vidaA": 1096,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v29|floresta|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "146fdc524d546f5f2009f4d25d5f1c7a21b3676d0cf62ee6a7a4227cd3eeabed",
+   "vencedor": "a",
+   "relogio": 17456,
+   "vidaA": 1353,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v29|floresta|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "6f39a88b135d36a40efd571e72df84564d07930d58875e6848d53d474232f64d",
+   "vencedor": "a",
+   "relogio": 12432,
+   "vidaA": 983,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v29|floresta|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "25bb2e1dc5caca4b1f323b5f3f0842255006ed83bb0cea9684c6b3c730436bb3",
+   "vencedor": "a",
+   "relogio": 13328,
+   "vidaA": 887,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v29|floresta|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "45a5423de4121a9b33cdc00cf6387765c0ca67eadb0f90037e2034bdbee8c564",
+   "vencedor": "a",
+   "relogio": 33440,
+   "vidaA": 627,
+   "vidaB": 0,
+   "eventos": 48
+  },
+  {
+   "id": "v29|floresta|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "913722d90fedcbd3c462591a4f69d99fef6e0340207ce2a0b12b3b42bf54e585",
+   "vencedor": "a",
+   "relogio": 19696,
+   "vidaA": 1218,
+   "vidaB": 0,
+   "eventos": 31
+  },
+  {
+   "id": "v29|floresta|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "85495c0967e7c34b245674f741d355379dd51004c02f995abcdb78f11152d83f",
+   "vencedor": "a",
+   "relogio": 22800,
+   "vidaA": 1256,
+   "vidaB": 0,
+   "eventos": 38
+  },
+  {
+   "id": "v29|floresta|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "a8f9d4447e62542d08383bcafb9c3094a88bb3a61227c87de21771c1b3f7e9ac",
+   "vencedor": "a",
+   "relogio": 17760,
+   "vidaA": 1752,
+   "vidaB": 0,
+   "eventos": 28
+  },
+  {
+   "id": "v29|floresta|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "afd0b04afb63c7399df7fcdfd7c123974ca1935d2f8e72569c4c0b6f90193398",
+   "vencedor": "b",
+   "relogio": 33728,
+   "vidaA": 0,
+   "vidaB": 272,
+   "eventos": 47
+  },
+  {
+   "id": "v29|floresta|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "1d05a39d639b5928665d29f079b4e1091a843e0f64373d8233a2890b4bf078ad",
+   "vencedor": "a",
+   "relogio": 25104,
+   "vidaA": 210,
+   "vidaB": 0,
+   "eventos": 44
+  },
+  {
+   "id": "v29|floresta|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "9a51fd25ee73aaec95e03be33cec9a0180be3a30a9322812bc454cd227ea592d",
+   "vencedor": "b",
+   "relogio": 19680,
+   "vidaA": 0,
+   "vidaB": 1208,
+   "eventos": 29
+  },
+  {
+   "id": "v29|floresta|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "7efb515fd1cee8c40d4db752bf9dbaad2032bcc827d6e4f65835111e02278424",
+   "vencedor": "b",
+   "relogio": 23136,
+   "vidaA": 0,
+   "vidaB": 1255,
+   "eventos": 31
+  },
+  {
+   "id": "v29|floresta|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "9608111935a678628a2203a6e0a5446df4ca9eca4890de14d50ab96ad25d2795",
+   "vencedor": "b",
+   "relogio": 11808,
+   "vidaA": 0,
+   "vidaB": 1131,
+   "eventos": 22
+  },
+  {
+   "id": "v29|floresta|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "1e0510d8beec36d13e776dbedf9d7947d307ef2202f61ed5a9d597b637822150",
+   "vencedor": "b",
+   "relogio": 12112,
+   "vidaA": 0,
+   "vidaB": 919,
+   "eventos": 23
+  },
+  {
+   "id": "v29|praia|brasa_bebe|ferrugem_bebe|101",
+   "sha": "093fe5b0e20aa24601f2da052fe818b3db598dd6b0f0fa69a858473d0354496d",
+   "vencedor": "a",
+   "relogio": 19952,
+   "vidaA": 57,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v29|praia|brasa_bebe|ferrugem_bebe|202",
+   "sha": "12194a1e94b7fa859c324abaa00f6de865b76047a3f987ea2bb7aefab23a3245",
+   "vencedor": "a",
+   "relogio": 19424,
+   "vidaA": 86,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v29|praia|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "5c25aaf623893aaf54f01f4ab14f2f27636deeb10e2d2d47099471253f3fac3c",
+   "vencedor": "a",
+   "relogio": 30944,
+   "vidaA": 160,
+   "vidaB": 0,
+   "eventos": 37
+  },
+  {
+   "id": "v29|praia|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "01c9cfdf4430d1ac6d1d8974a82ae6f566b445f84229079786b80366b86b7b07",
+   "vencedor": "b",
+   "relogio": 27440,
+   "vidaA": 0,
+   "vidaB": 48,
+   "eventos": 36
+  },
+  {
+   "id": "v29|praia|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "57d8e52c01238d6fabcd1e83597ebff09c361eac4e0527c675c58266f0c48858",
+   "vencedor": "a",
+   "relogio": 28896,
+   "vidaA": 78,
+   "vidaB": 0,
+   "eventos": 39
+  },
+  {
+   "id": "v29|praia|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "772c3a48803d059734c61ffc235f3123b9f884ae9ee8170d4cd6f30225e1b9e1",
+   "vencedor": "b",
+   "relogio": 25584,
+   "vidaA": 0,
+   "vidaB": 19,
+   "eventos": 35
+  },
+  {
+   "id": "v29|praia|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "ab8565ec66e1a9473a0d7c6839054614544d2886ee9b7270f9ba255ceafe3003",
+   "vencedor": "b",
+   "relogio": 30576,
+   "vidaA": 0,
+   "vidaB": 15,
+   "eventos": 40
+  },
+  {
+   "id": "v29|praia|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "2b98d15eff326083f14141007fb1bedea259fa57752b6371de095addb54ac0cc",
+   "vencedor": "a",
+   "relogio": 27072,
+   "vidaA": 149,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v29|praia|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "c39eb3ba69ac1eb6fce73d14daec371fb44603755e2d289fc31ce05cb613707b",
+   "vencedor": "a",
+   "relogio": 30432,
+   "vidaA": 199,
+   "vidaB": 0,
+   "eventos": 39
+  },
+  {
+   "id": "v29|praia|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "a772b80c86d39c52f2ad3b9c76c2f1a00ef782392edad8d842df7bb1b0bdeb6c",
+   "vencedor": "a",
+   "relogio": 33856,
+   "vidaA": 82,
+   "vidaB": 0,
+   "eventos": 41
+  },
+  {
+   "id": "v29|praia|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "9b876ea3d4f46dd413727ce58fd750c3997844aa068363ebc3eb70fd0c841ba3",
+   "vencedor": "a",
+   "relogio": 19472,
+   "vidaA": 1175,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v29|praia|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "0f527eda019618b5d9459ea47f1ae5a31221d45637d11b5da0dd4b54a30fa7e2",
+   "vencedor": "a",
+   "relogio": 18576,
+   "vidaA": 1089,
+   "vidaB": 0,
+   "eventos": 26
+  },
+  {
+   "id": "v29|praia|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "ae5abd27c4f403455675a867a4f30e6f318db7b05c006de15ecd79dafd8e5ecc",
+   "vencedor": "a",
+   "relogio": 14000,
+   "vidaA": 983,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v29|praia|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "eecb14a8ecc19c36be5036d77761192b5bdf3830b8952aaf937dcbf8182f1da5",
+   "vencedor": "a",
+   "relogio": 14192,
+   "vidaA": 887,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v29|praia|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "2515d34b3d83d683e4ea49ca931ca66adaf0a0e2573a7500883d46dd703c0535",
+   "vencedor": "a",
+   "relogio": 20096,
+   "vidaA": 1319,
+   "vidaB": 0,
+   "eventos": 30
+  },
+  {
+   "id": "v29|praia|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "8c9eafda197aa03ae7c6a5b45b2b7caf791ed2fbf151d9dc0011cb97938c5336",
+   "vencedor": "a",
+   "relogio": 15376,
+   "vidaA": 1444,
+   "vidaB": 0,
+   "eventos": 25
+  },
+  {
+   "id": "v29|praia|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "c1f1ba465f9dd5e88779d017bf11dcf68e39fae9f0db688049d9f8f4f9901214",
+   "vencedor": "a",
+   "relogio": 17360,
+   "vidaA": 1646,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v29|praia|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "13601047f44c4d27545393b560807a961827aa7255df084c59ed9f935ab47431",
+   "vencedor": "a",
+   "relogio": 21792,
+   "vidaA": 1403,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v29|praia|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "6e4cd4eeca73cf0aac863e3419a36c5605e350fdbd1863b8e64d47a5a937a800",
+   "vencedor": "a",
+   "relogio": 24128,
+   "vidaA": 386,
+   "vidaB": 0,
+   "eventos": 41
+  },
+  {
+   "id": "v29|praia|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "878450477cee2491376b55ad26c0e83e7b11ff0fd3ff748e7b4d67d426698764",
+   "vencedor": "b",
+   "relogio": 26960,
+   "vidaA": 0,
+   "vidaB": 679,
+   "eventos": 36
+  },
+  {
+   "id": "v29|praia|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "eeeb4b69b5e8c7a61a953de80ab4dfcc89ac8af016f1269047325d9e02610f46",
+   "vencedor": "b",
+   "relogio": 20288,
+   "vidaA": 0,
+   "vidaB": 1322,
+   "eventos": 29
+  },
+  {
+   "id": "v29|praia|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "ef61c13a047a076c09d8eaa4d95d4924b6710d693423ca0009a25c24250be3e0",
+   "vencedor": "b",
+   "relogio": 20496,
+   "vidaA": 0,
+   "vidaB": 1215,
+   "eventos": 29
+  },
+  {
+   "id": "v29|praia|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "aca533fb9f8aa98c56456a209db3442e4620df61fd1a09dbcc11ae0eb610ff37",
+   "vencedor": "b",
+   "relogio": 11520,
+   "vidaA": 0,
+   "vidaB": 1162,
+   "eventos": 20
+  },
+  {
+   "id": "v29|praia|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "b0815c3a1083607e449d58ed5d817d019e68be9ab5e417866751bf1ccdcec985",
+   "vencedor": "b",
+   "relogio": 12544,
+   "vidaA": 0,
+   "vidaB": 1065,
+   "eventos": 22
+  },
+  {
+   "id": "v29|deserto|brasa_bebe|ferrugem_bebe|101",
+   "sha": "65cf99b6df6acddba541be24523027e44aca7a84e2009d8719d0744ef669a37c",
+   "vencedor": "b",
+   "relogio": 18640,
+   "vidaA": 0,
+   "vidaB": 27,
+   "eventos": 25
+  },
+  {
+   "id": "v29|deserto|brasa_bebe|ferrugem_bebe|202",
+   "sha": "68c0ddad34a4b8bf210b3615ad4516f714ea26b7e1cbf93298f351d5a73dd22a",
+   "vencedor": "a",
+   "relogio": 19264,
+   "vidaA": 255,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v29|deserto|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "dff5a2da14e96d36d057b4bfcf7e74a2493ee623f44ec7f2bc66fda680591736",
+   "vencedor": "a",
+   "relogio": 29808,
+   "vidaA": 120,
+   "vidaB": 0,
+   "eventos": 38
+  },
+  {
+   "id": "v29|deserto|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "5cb578be1b1189f884c9810fab4a9df82cd5f08e346e176fab8e55b9cbd6a722",
+   "vencedor": "b",
+   "relogio": 24912,
+   "vidaA": 0,
+   "vidaB": 43,
+   "eventos": 32
+  },
+  {
+   "id": "v29|deserto|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "953d1055d2023d3a14bdee3ec698434205ead5af20b0aceee66dc82b3e941773",
+   "vencedor": "b",
+   "relogio": 27296,
+   "vidaA": 0,
+   "vidaB": 81,
+   "eventos": 39
+  },
+  {
+   "id": "v29|deserto|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "b2889424d22a3ba828724b292c9bd74211a3db41aa837f3b2b6ef1a799fbcf81",
+   "vencedor": "a",
+   "relogio": 25456,
+   "vidaA": 206,
+   "vidaB": 0,
+   "eventos": 36
+  },
+  {
+   "id": "v29|deserto|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "c9c5de7e90bb42349592f5b9b94a3cf2e7417e88b2469b36be770529a16d4a4d",
+   "vencedor": "a",
+   "relogio": 32288,
+   "vidaA": 77,
+   "vidaB": 0,
+   "eventos": 42
+  },
+  {
+   "id": "v29|deserto|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "088e21ba6fa051039b4654860b791d1aba8601a9453824e27e550f6243274a87",
+   "vencedor": "b",
+   "relogio": 24064,
+   "vidaA": 0,
+   "vidaB": 333,
+   "eventos": 33
+  },
+  {
+   "id": "v29|deserto|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "7afe84a2a63247d877b0c8581dc60627029e1efe24dba43c49036c5e100cc2e1",
+   "vencedor": "a",
+   "relogio": 29744,
+   "vidaA": 298,
+   "vidaB": 0,
+   "eventos": 38
+  },
+  {
+   "id": "v29|deserto|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "836e2b783316f8d598dcee3f350353b6586a29df089898643bfeb8f1cf32ef6c",
+   "vencedor": "a",
+   "relogio": 28048,
+   "vidaA": 303,
+   "vidaB": 0,
+   "eventos": 36
+  },
+  {
+   "id": "v29|deserto|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "6710653229ae8e0a6a1e863d44b4b38708dad1c4a7070f938c6329a63890eec8",
+   "vencedor": "a",
+   "relogio": 21136,
+   "vidaA": 757,
+   "vidaB": 0,
+   "eventos": 33
+  },
+  {
+   "id": "v29|deserto|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "6c9dd67420e5ac73ec204c38f2c89a10975a32d252c2b8f5e78f2bbde39472cd",
+   "vencedor": "a",
+   "relogio": 19136,
+   "vidaA": 1251,
+   "vidaB": 0,
+   "eventos": 30
+  },
+  {
+   "id": "v29|deserto|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "e1b55b03f34eeb631a8a3360100a1e0418acdfb1d84aafe7026ff563bd006ad3",
+   "vencedor": "a",
+   "relogio": 14272,
+   "vidaA": 983,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v29|deserto|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "2d722e6157cdda073b17c367945c522c3f373f6d4015af24700336172d15a72f",
+   "vencedor": "a",
+   "relogio": 14944,
+   "vidaA": 1029,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v29|deserto|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "ab5b57d93e27fde29c841a3b6b33417c948b56d6ee6e7b548d1420da6a9c36c1",
+   "vencedor": "a",
+   "relogio": 20512,
+   "vidaA": 1284,
+   "vidaB": 0,
+   "eventos": 31
+  },
+  {
+   "id": "v29|deserto|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "660d15f67962c23b9822b3ae885daff39fcc0a3b24506e01a350fbfd33711a74",
+   "vencedor": "a",
+   "relogio": 28608,
+   "vidaA": 970,
+   "vidaB": 0,
+   "eventos": 37
+  },
+  {
+   "id": "v29|deserto|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "165503ea5fe60a1e641dc239a6ae990fe8b0dbe20481c236e98a1fa3ccb3d427",
+   "vencedor": "a",
+   "relogio": 21504,
+   "vidaA": 1154,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v29|deserto|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "15eba1e1d6957101e529d0090853b1813c3382dacf6392ec0a90655915be6f8d",
+   "vencedor": "a",
+   "relogio": 18592,
+   "vidaA": 1369,
+   "vidaB": 0,
+   "eventos": 29
+  },
+  {
+   "id": "v29|deserto|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "584132e513c10454fa2655b9b40f223bf89149abb639d120e0fd8cbcb28c9d4a",
+   "vencedor": "b",
+   "relogio": 27312,
+   "vidaA": 0,
+   "vidaB": 498,
+   "eventos": 39
+  },
+  {
+   "id": "v29|deserto|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "f3513df533a1a8f2247e52e1c9f31c50a6abc8896b08327023958c29650c6742",
+   "vencedor": "b",
+   "relogio": 29408,
+   "vidaA": 0,
+   "vidaB": 80,
+   "eventos": 45
+  },
+  {
+   "id": "v29|deserto|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "cbe220b96a324501d6307dec3d93d6a4937c1389ae31803e014c8f7f43f00d65",
+   "vencedor": "b",
+   "relogio": 20160,
+   "vidaA": 0,
+   "vidaB": 1322,
+   "eventos": 30
+  },
+  {
+   "id": "v29|deserto|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "2b4e601a236e46486761fb18b77366f6508e95ec9cc2475758f9544dc826bca9",
+   "vencedor": "b",
+   "relogio": 22496,
+   "vidaA": 0,
+   "vidaB": 1066,
+   "eventos": 32
+  },
+  {
+   "id": "v29|deserto|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "068f71d2896e5cbb86fab0402c29c898cacded546c7eddfcfb2ced1b2603e67c",
+   "vencedor": "b",
+   "relogio": 13696,
+   "vidaA": 0,
+   "vidaB": 1044,
+   "eventos": 23
+  },
+  {
+   "id": "v29|deserto|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "c8bb941aa5fffda7e864536564d8342c195c626e006c2d2bd4ed0ff9545ca2fb",
+   "vencedor": "b",
+   "relogio": 12736,
+   "vidaA": 0,
+   "vidaB": 1048,
+   "eventos": 23
+  },
+  {
+   "id": "v29|castelo|brasa_bebe|ferrugem_bebe|101",
+   "sha": "4514c5d0b9d700c16d2611c1c04b72771c5ab9e9845c10508cf433c1ec4e89ee",
+   "vencedor": "a",
+   "relogio": 20704,
+   "vidaA": 122,
+   "vidaB": 0,
+   "eventos": 28
+  },
+  {
+   "id": "v29|castelo|brasa_bebe|ferrugem_bebe|202",
+   "sha": "0c85918d85bf082bcd1ace141f26b1c531a27da8780b0ccf833465b67c7434aa",
+   "vencedor": "a",
+   "relogio": 20176,
+   "vidaA": 6,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v29|castelo|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "14c609c6d8bbf79ce75af0b922b0f9cd653a0a8f75718fad1d61b96896f8ce3e",
+   "vencedor": "b",
+   "relogio": 28400,
+   "vidaA": 0,
+   "vidaB": 230,
+   "eventos": 37
+  },
+  {
+   "id": "v29|castelo|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "cc9ea3c0a8f3607e35c8bd3cb1e6f9a55ffaa938b1d4740efd3e443c0be68a3a",
+   "vencedor": "b",
+   "relogio": 27824,
+   "vidaA": 0,
+   "vidaB": 1,
+   "eventos": 36
+  },
+  {
+   "id": "v29|castelo|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "a2296104bd033d1dd95cb83fee3f9d8ac4215be343ebebb9b23e8f1caca82d9f",
+   "vencedor": "b",
+   "relogio": 27248,
+   "vidaA": 0,
+   "vidaB": 46,
+   "eventos": 38
+  },
+  {
+   "id": "v29|castelo|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "8359e2d59ac42672e55174423fe885dbbb6233843a3f09c5731bcfca23bffe89",
+   "vencedor": "a",
+   "relogio": 23376,
+   "vidaA": 124,
+   "vidaB": 0,
+   "eventos": 34
+  },
+  {
+   "id": "v29|castelo|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "41a9e209ea1b864333db2317f8d921c32ebc8b2c2a331170017d02988b927807",
+   "vencedor": "a",
+   "relogio": 28368,
+   "vidaA": 203,
+   "vidaB": 0,
+   "eventos": 38
+  },
+  {
+   "id": "v29|castelo|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "4c5ccdf7aed89dd4da39942ecc0a458fba87d1ec96e978a228f265818fcdbaaf",
+   "vencedor": "b",
+   "relogio": 23280,
+   "vidaA": 0,
+   "vidaB": 272,
+   "eventos": 31
+  },
+  {
+   "id": "v29|castelo|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "e9a6bf124c220d6618ccde420c7448134bfa575a20d06d7c7a610b4e02ddaa99",
+   "vencedor": "b",
+   "relogio": 30320,
+   "vidaA": 0,
+   "vidaB": 26,
+   "eventos": 39
+  },
+  {
+   "id": "v29|castelo|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "6590da133ff236bae8ef19c26cdf89da82db7e1286e23859b0a755c31642ed81",
+   "vencedor": "b",
+   "relogio": 25360,
+   "vidaA": 0,
+   "vidaB": 56,
+   "eventos": 32
+  },
+  {
+   "id": "v29|castelo|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "33957520029d170d37d1ebebf967df9359266a9b25c317fe23595ec16a594064",
+   "vencedor": "a",
+   "relogio": 19808,
+   "vidaA": 869,
+   "vidaB": 0,
+   "eventos": 32
+  },
+  {
+   "id": "v29|castelo|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "e98ea6701a4bc799b53ce9488dcb92f5b8f24586502ce8f1e1940b25f6e9c959",
+   "vencedor": "a",
+   "relogio": 16672,
+   "vidaA": 1175,
+   "vidaB": 0,
+   "eventos": 27
+  },
+  {
+   "id": "v29|castelo|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "0b677b87554dbff0bb05f8d534713ca4ff017854ea3ed547060545b9460180c2",
+   "vencedor": "a",
+   "relogio": 12464,
+   "vidaA": 983,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v29|castelo|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "b32b6a9d4804128af969a8acd95625e84514d15f4f7371bcb8264477321fe017",
+   "vencedor": "a",
+   "relogio": 11344,
+   "vidaA": 1105,
+   "vidaB": 0,
+   "eventos": 21
+  },
+  {
+   "id": "v29|castelo|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "0733ed437613c402528526268d5e18020931f1211af7b2cbd04a1095709b09fc",
+   "vencedor": "a",
+   "relogio": 26768,
+   "vidaA": 1010,
+   "vidaB": 0,
+   "eventos": 39
+  },
+  {
+   "id": "v29|castelo|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "944cccc662eb95d79018617f7470ae108f979f4075961252dd2936c7c6ee23a2",
+   "vencedor": "a",
+   "relogio": 18640,
+   "vidaA": 1394,
+   "vidaB": 0,
+   "eventos": 29
+  },
+  {
+   "id": "v29|castelo|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "f91f11420401a0c5e85dc909de5b616c7546eb7495f00063c026084703866e3b",
+   "vencedor": "a",
+   "relogio": 20944,
+   "vidaA": 1322,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v29|castelo|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "c39861a64716ee4a990d641348f83bf5cb953576087850bf2339e7e242fd45c6",
+   "vencedor": "a",
+   "relogio": 19680,
+   "vidaA": 1544,
+   "vidaB": 0,
+   "eventos": 31
+  },
+  {
+   "id": "v29|castelo|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "e0e8ef145ca9bb46ed86a13511c7539a1dd5436798a903fc4279a3812930053d",
+   "vencedor": "b",
+   "relogio": 28480,
+   "vidaA": 0,
+   "vidaB": 525,
+   "eventos": 42
+  },
+  {
+   "id": "v29|castelo|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "7c871c3006ba73cfc982bdb0439b636078a1474e99eee9895e076db51d5d0c4c",
+   "vencedor": "b",
+   "relogio": 26032,
+   "vidaA": 0,
+   "vidaB": 399,
+   "eventos": 39
+  },
+  {
+   "id": "v29|castelo|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "340a5e33a18f36743f5f729d30577394c537964a39a51cbc7d354cb093824938",
+   "vencedor": "b",
+   "relogio": 19680,
+   "vidaA": 0,
+   "vidaB": 1082,
+   "eventos": 30
+  },
+  {
+   "id": "v29|castelo|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "d947dd3f2baa8eecede77d97a7e7d68667f9b0b3be765e9d6502ca64051a9d64",
+   "vencedor": "b",
+   "relogio": 17568,
+   "vidaA": 0,
+   "vidaB": 1441,
+   "eventos": 25
+  },
+  {
+   "id": "v29|castelo|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "d5b13ae69516761118963198e7c8c6a5d8f170e9fafac57abbd006844b80bc8c",
+   "vencedor": "b",
+   "relogio": 11824,
+   "vidaA": 0,
+   "vidaB": 1120,
+   "eventos": 23
+  },
+  {
+   "id": "v29|castelo|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "9090f74157cfb18319454f08fd2163ee14bf6a39d917663139d225907db10799",
+   "vencedor": "b",
+   "relogio": 12112,
+   "vidaA": 0,
+   "vidaB": 927,
+   "eventos": 24
+  },
+  {
+   "id": "v29|caverna|brasa_bebe|ferrugem_bebe|101",
+   "sha": "b6ef1c232b3362890633ac659c1be1e0c88996c7b4e21955fde82147a46abe7d",
+   "vencedor": "b",
+   "relogio": 20432,
+   "vidaA": 0,
+   "vidaB": 52,
+   "eventos": 26
+  },
+  {
+   "id": "v29|caverna|brasa_bebe|ferrugem_bebe|202",
+   "sha": "6b6a6c8609dea64d80169b6ec5c50f57e64c74caf29b6762065d0c4e430298cc",
+   "vencedor": "a",
+   "relogio": 17888,
+   "vidaA": 32,
+   "vidaB": 0,
+   "eventos": 25
+  },
+  {
+   "id": "v29|caverna|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "b595ac740a6d0acd7bddcdeb1eea2a962a781e43e888a1f2b358fc8152dbe4ad",
+   "vencedor": "a",
+   "relogio": 33760,
+   "vidaA": 32,
+   "vidaB": 0,
+   "eventos": 42
+  },
+  {
+   "id": "v29|caverna|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "726a5625201fd15cc57bfa473a3b8e5b7ce29acbf320de7e18c6716d883b73f8",
+   "vencedor": "b",
+   "relogio": 24192,
+   "vidaA": 0,
+   "vidaB": 156,
+   "eventos": 40
+  },
+  {
+   "id": "v29|caverna|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "8e52537b9ea8c3a0d18c52b443dae424fa4186a951aa04b53d869f8ac6ac3e66",
+   "vencedor": null,
+   "relogio": 27216,
+   "vidaA": 0,
+   "vidaB": 0,
+   "eventos": 42
+  },
+  {
+   "id": "v29|caverna|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "92c09f30acc468facbd552fa35351a02b16e55bfa410c0b81933de96e45efeeb",
+   "vencedor": "a",
+   "relogio": 21408,
+   "vidaA": 105,
+   "vidaB": 0,
+   "eventos": 32
+  },
+  {
+   "id": "v29|caverna|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "fe3aee10c508d03cd714d41cf7f80f49c30122c9bd886c87d275e3be64489350",
+   "vencedor": "b",
+   "relogio": 26800,
+   "vidaA": 0,
+   "vidaB": 262,
+   "eventos": 32
+  },
+  {
+   "id": "v29|caverna|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "a3c2977821978d212bc80be9d713eef7fa3627853e7e527a69d12426f35d7c20",
+   "vencedor": "a",
+   "relogio": 23808,
+   "vidaA": 470,
+   "vidaB": 0,
+   "eventos": 75
+  },
+  {
+   "id": "v29|caverna|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "deeb9bf77f17bb6c81c15f6f5585c16041a0d6e8462a42e41f5a246fd21b20f5",
+   "vencedor": "a",
+   "relogio": 30864,
+   "vidaA": 172,
+   "vidaB": 0,
+   "eventos": 40
+  },
+  {
+   "id": "v29|caverna|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "89cf4a5acac649821f8517f0371fcc9f4dea686d8b12eb0e7409619ac4818572",
+   "vencedor": "a",
+   "relogio": 33744,
+   "vidaA": 119,
+   "vidaB": 0,
+   "eventos": 53
+  },
+  {
+   "id": "v29|caverna|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "521ff65ec9fbfd27a8f3f4f348e6b78e03aea96dcf1252e8a992c04d67dc09d6",
+   "vencedor": "a",
+   "relogio": 20944,
+   "vidaA": 846,
+   "vidaB": 0,
+   "eventos": 32
+  },
+  {
+   "id": "v29|caverna|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "645651635ff2bf8572efd0f2dd7667d1da8077858737724042260a343d180bc3",
+   "vencedor": "a",
+   "relogio": 15728,
+   "vidaA": 699,
+   "vidaB": 0,
+   "eventos": 31
+  },
+  {
+   "id": "v29|caverna|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "69e148ba3220205cd95540c85c56b46aaf1a7c04297e30afc9a84610cde4c9a9",
+   "vencedor": "a",
+   "relogio": 12832,
+   "vidaA": 983,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v29|caverna|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "b6ef40c16dbbc884039632c6b6355891ad69884bc1615b9cf9dbe4d60f3ba926",
+   "vencedor": "a",
+   "relogio": 13904,
+   "vidaA": 887,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v29|caverna|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "e95ac10870f5cd9c38621753232545ba256978da715487aaadbdf20dd4d492f0",
+   "vencedor": "a",
+   "relogio": 24592,
+   "vidaA": 1163,
+   "vidaB": 0,
+   "eventos": 48
+  },
+  {
+   "id": "v29|caverna|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "6c6fee97a4c0172c535f092fb816b9f2aa793254c736b35f668492b126fb1f36",
+   "vencedor": "a",
+   "relogio": 31888,
+   "vidaA": 253,
+   "vidaB": 0,
+   "eventos": 99
+  },
+  {
+   "id": "v29|caverna|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "ee382f26acf131c1f450e9b50d2de58c6a3b073ca321b5ba31a9814c2f6b2bd5",
+   "vencedor": "a",
+   "relogio": 29776,
+   "vidaA": 664,
+   "vidaB": 0,
+   "eventos": 47
+  },
+  {
+   "id": "v29|caverna|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "592fc7c936cf48c672d7403b82d5b4cb4c1d30c7213abf788ff769c7f986801e",
+   "vencedor": "a",
+   "relogio": 20992,
+   "vidaA": 1289,
+   "vidaB": 0,
+   "eventos": 31
+  },
+  {
+   "id": "v29|caverna|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "91180507aca5c664f979227e88613bb78462b57faa59802412ce3fa8f36c5f1a",
+   "vencedor": "b",
+   "relogio": 28400,
+   "vidaA": 0,
+   "vidaB": 343,
+   "eventos": 43
+  },
+  {
+   "id": "v29|caverna|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "a021b25e6575fe3528378467d4b00045cb295491434b80de6c9a4af2fb1bfbcb",
+   "vencedor": "a",
+   "relogio": 26912,
+   "vidaA": 37,
+   "vidaB": 0,
+   "eventos": 53
+  },
+  {
+   "id": "v29|caverna|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "5bcfb2233f9669d843a254d81b20085d341f238a3c1f52370753fff563083778",
+   "vencedor": "b",
+   "relogio": 19968,
+   "vidaA": 0,
+   "vidaB": 1322,
+   "eventos": 29
+  },
+  {
+   "id": "v29|caverna|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "db100657c05c1b1b318b12e6a045a7dbc21b91b00d4386ad726d74aae52ffdb6",
+   "vencedor": "b",
+   "relogio": 16512,
+   "vidaA": 0,
+   "vidaB": 1538,
+   "eventos": 24
+  },
+  {
+   "id": "v29|caverna|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "1b8434718093ae92c8abbc51a247b49f55ca04e9c61ff5dd6865e65627756c8b",
+   "vencedor": "b",
+   "relogio": 11168,
+   "vidaA": 0,
+   "vidaB": 1172,
+   "eventos": 21
+  },
+  {
+   "id": "v29|caverna|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "a86bc603726b2904025d0a93abed0294772dfabe2b43498bbedff5cf6fb50902",
+   "vencedor": "b",
+   "relogio": 12192,
+   "vidaA": 0,
+   "vidaB": 1048,
+   "eventos": 23
+  },
+  {
+   "id": "v29|ringue|brasa_bebe|ferrugem_bebe|101",
+   "sha": "0b6bfcd06d40e4ce49d785f51e01d998acddf111f91a6cfe5495cd7a688a12c9",
+   "vencedor": "b",
+   "relogio": 23600,
+   "vidaA": 0,
+   "vidaB": 115,
+   "eventos": 31
+  },
+  {
+   "id": "v29|ringue|brasa_bebe|ferrugem_bebe|202",
+   "sha": "f504e4c4066c6feda1ab3eea53735123b7c71ad5364f984aab5066082d06cafb",
+   "vencedor": "a",
+   "relogio": 27328,
+   "vidaA": 160,
+   "vidaB": 0,
+   "eventos": 32
+  },
+  {
+   "id": "v29|ringue|cirro_crianca_arisco|ferrugem_crianca_arisco|101",
+   "sha": "de79719531d343d1e662b36b6e79df6e17587e2a8350f204896e43502c510263",
+   "vencedor": "b",
+   "relogio": 20992,
+   "vidaA": 0,
+   "vidaB": 339,
+   "eventos": 27
+  },
+  {
+   "id": "v29|ringue|cirro_crianca_arisco|ferrugem_crianca_arisco|202",
+   "sha": "fc38c8e7cda4b56cb260947097e222830a83487ed1b3398ba5e3f7a4dcb79b3d",
+   "vencedor": "b",
+   "relogio": 23040,
+   "vidaA": 0,
+   "vidaB": 234,
+   "eventos": 28
+  },
+  {
+   "id": "v29|ringue|brasa_crianca_sereno|limo_crianca_arisco|101",
+   "sha": "34ae4b0d27f682c5a5b6808c08ba96d553872acea7fa688d1f957eb5186083f3",
+   "vencedor": null,
+   "relogio": 27344,
+   "vidaA": 0,
+   "vidaB": 0,
+   "eventos": 39
+  },
+  {
+   "id": "v29|ringue|brasa_crianca_sereno|limo_crianca_arisco|202",
+   "sha": "e3c7cec4f324cb45b1028ff30645dd6c0215a44fb251b282760185d96603937b",
+   "vencedor": "a",
+   "relogio": 25440,
+   "vidaA": 12,
+   "vidaB": 0,
+   "eventos": 35
+  },
+  {
+   "id": "v29|ringue|limo_adolescente_guardiao|limo_adolescente_brigao|101",
+   "sha": "ecc2f86cf2713388e7e4dafe4b3808c732a45ee7fbd3b2316c72ea240719859d",
+   "vencedor": "b",
+   "relogio": 22832,
+   "vidaA": 0,
+   "vidaB": 302,
+   "eventos": 31
+  },
+  {
+   "id": "v29|ringue|limo_adolescente_guardiao|limo_adolescente_brigao|202",
+   "sha": "ab1ae931b0230a86aeff174eb7edaa6a6392d583d1e423a29774f8c01c4907ab",
+   "vencedor": "b",
+   "relogio": 26848,
+   "vidaA": 0,
+   "vidaB": 173,
+   "eventos": 37
+  },
+  {
+   "id": "v29|ringue|brasa_adolescente_brigao|limo_crianca_sereno|101",
+   "sha": "e3233d48a9eec3201abc6af2024c807dd33b6110b75129989e70b2b195871de7",
+   "vencedor": "b",
+   "relogio": 26864,
+   "vidaA": 0,
+   "vidaB": 270,
+   "eventos": 32
+  },
+  {
+   "id": "v29|ringue|brasa_adolescente_brigao|limo_crianca_sereno|202",
+   "sha": "9e2f92a1f1bbe2f96054dbf8ecc9e83d66d87992e20408407b351e41d7a2fcee",
+   "vencedor": "b",
+   "relogio": 25936,
+   "vidaA": 0,
+   "vidaB": 203,
+   "eventos": 34
+  },
+  {
+   "id": "v29|ringue|limo_adulto_espelho|cirro_adulto_duelista|101",
+   "sha": "01405029e54b2d0f15f0194a85441efd742f38306537fc2e7f6d1a4365a7ea41",
+   "vencedor": "a",
+   "relogio": 17984,
+   "vidaA": 885,
+   "vidaB": 0,
+   "eventos": 29
+  },
+  {
+   "id": "v29|ringue|limo_adulto_espelho|cirro_adulto_duelista|202",
+   "sha": "84f9610f6b1970942430e78e77fd4ebb910834429d2a8c200a2cfe4b6a64ee2c",
+   "vencedor": "a",
+   "relogio": 21136,
+   "vidaA": 587,
+   "vidaB": 0,
+   "eventos": 34
+  },
+  {
+   "id": "v29|ringue|ferrugem_adulto_duelista|cirro_adolescente_colosso|101",
+   "sha": "c9a3069efe3f52f20f3d74bbdaf7a9d5b31828f91c2227070fc44b621220a8ac",
+   "vencedor": "a",
+   "relogio": 12544,
+   "vidaA": 983,
+   "vidaB": 0,
+   "eventos": 22
+  },
+  {
+   "id": "v29|ringue|ferrugem_adulto_duelista|cirro_adolescente_colosso|202",
+   "sha": "c783830ff8c56ae698b97238a3022d105b1cdb5dd73f9d0d79f419b01db976a8",
+   "vencedor": "a",
+   "relogio": 13440,
+   "vidaA": 1029,
+   "vidaB": 0,
+   "eventos": 23
+  },
+  {
+   "id": "v29|ringue|limo_adulto_emboscador|brasa_adulto_furioso|101",
+   "sha": "e59d77b0ff7cfebed1f7c67e12c2ecff02b822236a5924e9f29e9093190d8866",
+   "vencedor": "a",
+   "relogio": 35792,
+   "vidaA": 63,
+   "vidaB": 0,
+   "eventos": 49
+  },
+  {
+   "id": "v29|ringue|limo_adulto_emboscador|brasa_adulto_furioso|202",
+   "sha": "c48c4e9c242828499b4c64ec503a9ab684e25877209e5f269f74f339097b0f75",
+   "vencedor": "a",
+   "relogio": 21440,
+   "vidaA": 1434,
+   "vidaB": 0,
+   "eventos": 30
+  },
+  {
+   "id": "v29|ringue|limo_adulto_furioso|ferrugem_adulto_vigia|101",
+   "sha": "4a886dce7500ab1f07536753b3f4dc204b95cd180c9b9b1a5fd827094b23f097",
+   "vencedor": "a",
+   "relogio": 23744,
+   "vidaA": 920,
+   "vidaB": 0,
+   "eventos": 38
+  },
+  {
+   "id": "v29|ringue|limo_adulto_furioso|ferrugem_adulto_vigia|202",
+   "sha": "33fc0d4327e92e6f87ffc7ccab18b92e29ae15e8ebbbdb8e125de481ab374783",
+   "vencedor": "a",
+   "relogio": 19664,
+   "vidaA": 1503,
+   "vidaB": 0,
+   "eventos": 29
+  },
+  {
+   "id": "v29|ringue|npc_v5_puppetmon|npc_v5_piedmon|101",
+   "sha": "da4f7104f76728cf13419688bb9672cc61bb50192a87635b260c3c3c782ddf2a",
+   "vencedor": "a",
+   "relogio": 25104,
+   "vidaA": 285,
+   "vidaB": 0,
+   "eventos": 41
+  },
+  {
+   "id": "v29|ringue|npc_v5_puppetmon|npc_v5_piedmon|202",
+   "sha": "43ba7a37bf44a6a0a5afb27b25f2cc9b0514c46248f50f4a72241ab1a9daef61",
+   "vencedor": "a",
+   "relogio": 28208,
+   "vidaA": 179,
+   "vidaB": 0,
+   "eventos": 43
+  },
+  {
+   "id": "v29|ringue|npc_v5_myotismon|npc_v5_machinedramon|101",
+   "sha": "e9d3d75ebc89e95bdfaf2ce2d13a4ab5b72aba4ad028673e2df3e1a1fa1d2a27",
+   "vencedor": "b",
+   "relogio": 19728,
+   "vidaA": 0,
+   "vidaB": 1214,
+   "eventos": 29
+  },
+  {
+   "id": "v29|ringue|npc_v5_myotismon|npc_v5_machinedramon|202",
+   "sha": "33128c8430961c19bb8bea82beaea5c42aa255c073ce56728cc85711e149c7a0",
+   "vencedor": "b",
+   "relogio": 21200,
+   "vidaA": 0,
+   "vidaB": 1201,
+   "eventos": 29
+  },
+  {
+   "id": "v29|ringue|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|101",
+   "sha": "4446feae635ddb9bed20fdd883b6fcf45576baed2cb8f513114535b191b06d5e",
+   "vencedor": "b",
+   "relogio": 12864,
+   "vidaA": 0,
+   "vidaB": 1021,
+   "eventos": 23
+  },
+  {
+   "id": "v29|ringue|ferrugem_adolescente_guardiao|npc_v6_marinbullmon|202",
+   "sha": "a9608aebfab09bf7bf1ca89ba82a21b21c1115c9a9b6ff089d2eafa2ff7278c1",
+   "vencedor": "b",
+   "relogio": 14096,
+   "vidaA": 0,
+   "vidaB": 921,
+   "eventos": 24
+  }
+ ]
+}

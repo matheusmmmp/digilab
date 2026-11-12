@@ -1,0 +1,148 @@
+/* Prancha "a pagina de entrada", ESBOCO B (2026-11-12): escura, com o pet grande no meio do titulo, pela referencia que o Matheus
+   mandou (uma pagina de jogo escura, com o personagem sobre o nome, os ladrilhos coloridos e o celular com fichas). So desenho.
+   AS CORES sao as da pele Vidro (--hx-*) e as do tema do jogo (--dl-*), copias de web/app/src/estilo/tokens.css: nenhuma cor nova.
+   OS LADRILHOS usam cores emprestadas dos tokens (a acao, a sombria, o destaque, a necessidade, o ok): hoje nao existe cor de brasao,
+   e essas cores tem sentido fixo no jogo (guia, secao 3). E a PI-5 do LEIA.md. AS FONTES sao as do guia. Os tamanhos sao PROPOSTOS. */
+:root{
+  --hx-miolo:rgba(5,14,30,.86); --hx-miolo-2:rgba(10,26,52,.78); --hx-borda:rgba(110,200,255,.72); --hx-texto:#EAF5FF; --hx-texto-2:#D2E6F7;
+  --hx-sec:#C2D7EA; --hx-rotulo:#8ED8FF; --hx-luz:#5FD4FF; --hx-tecla:rgba(95,190,255,.08);
+  --dl-action:#2C73E0; --dl-dark:#7B3FB8; --dl-highlight:#FFD23F; --dl-need:#E5489F; --dl-ok:#3FCF6A; --dl-navy:#173A8A; --dl-navy-deep:#0F2A66;
+  --dl-highlight-ink:#3B2A00; --dl-surface:#FFFFFF; --dl-text:#13244D;
+  --f-tit:"Rajdhani","Saira Condensed",system-ui,sans-serif; --f-txt:"Barlow",system-ui,sans-serif; --f-lcd:"DotGothic16",ui-monospace,monospace;
+  --linha:color-mix(in srgb,var(--hx-borda) 30%,transparent);
+  --col:1180px; --lado:max(16px,calc((100% - var(--col))/2));
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:dark;background:black;scroll-behavior:smooth}
+body{position:relative;color:var(--hx-texto);font:500 17px/1.5 var(--f-txt);overflow-x:hidden;background:linear-gradient(var(--hx-miolo),var(--hx-miolo)),black}
+a{color:inherit}
+ul,ol{list-style:none}
+:focus-visible{outline:3px solid var(--hx-luz);outline-offset:3px}
+svg.ic{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lcd{font:400 12px/1.2 var(--f-lcd);letter-spacing:.14em;text-transform:uppercase}
+.pet{display:inline-block;image-rendering:pixelated;background-repeat:no-repeat;flex:none}
+.pet.vira{transform:scaleX(-1)}
+.rabisco{display:inline-block;font:400 22px/1 var(--f-lcd);color:var(--hx-luz);transform:rotate(-8deg);text-shadow:0 0 14px color-mix(in srgb,var(--hx-luz) 60%,transparent)}
+.riscas{height:14px;background:repeating-linear-gradient(-45deg,var(--hx-texto) 0 6px,transparent 6px 12px)}
+h2{font:700 54px/.95 var(--f-tit);letter-spacing:.02em;text-transform:uppercase;text-wrap:balance}
+p{color:var(--hx-sec)}
+p b{color:var(--hx-luz);font-weight:600}
+
+.bt{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:0 22px;border:0;border-radius:999px;background:var(--hx-luz);color:var(--dl-text);
+  font:700 15px/1 var(--f-tit);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;white-space:nowrap;box-shadow:0 0 22px color-mix(in srgb,var(--hx-luz) 50%,transparent)}
+.bt.grande{min-height:64px;padding:0 40px;font-size:20px}
+.bt.fantasma{background:var(--hx-tecla);color:var(--hx-texto);border:1px solid var(--linha);box-shadow:none}
+.redondo{width:64px;height:64px;display:grid;place-items:center;border-radius:50%;background:var(--hx-luz);color:var(--dl-text);box-shadow:0 0 22px color-mix(in srgb,var(--hx-luz) 50%,transparent)}
+.redondo .ic{width:26px;height:26px;stroke-width:2.6}
+
+/* ---- a moldura da pagina: a linha fina em volta e a aba de cima (a referencia) */
+.moldura{position:relative;margin:56px var(--lado) 0;border:1px solid var(--linha);border-bottom:0;border-radius:22px 22px 0 0;padding:14px 14px 0}
+.aba{position:absolute;left:50%;top:-15px;transform:translateX(-50%);padding:6px 22px;background:black;border:1px solid var(--linha);border-radius:10px;color:var(--hx-sec)}
+
+/* ---- o palco: a ilha a noite, o nome gigante e o pet no meio, por cima das letras */
+.palco{position:relative;z-index:0;height:680px;border-radius:14px;overflow:hidden;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--dl-dark) 62%,transparent),color-mix(in srgb,var(--dl-navy-deep) 78%,transparent) 55%,black 100%),
+    url("../ux-lugares-menus/img/cena_sem_pet.jpg") 50% 20%/cover no-repeat}
+.palco nav.menu{position:absolute;left:50%;top:22px;transform:translateX(-50%);display:flex;gap:6px}
+.palco nav.menu a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1px solid var(--linha);border-radius:999px;background:var(--hx-tecla);font:400 11px/1 var(--f-lcd);letter-spacing:.12em;text-transform:uppercase;text-decoration:none}
+.palco .logo{position:absolute;left:28px;top:22px;display:flex;align-items:center;gap:10px;min-height:44px;font:700 20px/1 var(--f-tit);letter-spacing:.22em;text-decoration:none}
+.palco .logo i{width:22px;height:22px;background:repeating-linear-gradient(-45deg,currentColor 0 3px,transparent 3px 6px)}
+.palco .topo-dir{position:absolute;right:24px;top:22px;display:flex;gap:8px}
+.nome{position:absolute;left:0;right:0;top:118px;text-align:center;font:700 300px/.74 var(--f-tit);letter-spacing:.04em;text-transform:uppercase;color:var(--hx-texto)}
+.nome span{display:block}
+.palco .rabisco{position:absolute;z-index:2;left:60px;top:130px;font-size:30px}
+.palco .heroi-pet{position:absolute;left:50%;bottom:92px;transform:translateX(-50%);filter:drop-shadow(0 18px 0 color-mix(in srgb,black 40%,transparent))}
+.palco .riscas{position:absolute;left:150px;right:360px;bottom:118px}
+.palco .frase{position:absolute;left:150px;bottom:20px;font:700 26px/1 var(--f-tit);letter-spacing:.06em;text-transform:uppercase}
+.palco .frase em{font-style:normal;color:var(--hx-luz)}
+.palco .selo{position:absolute;right:24px;bottom:20px;display:flex;align-items:center;gap:14px;padding:12px;border-radius:18px;background:var(--hx-miolo-2);border:1px solid var(--linha)}
+.selo .n{font:700 34px/1 var(--f-tit)} .selo .lcd{color:var(--hx-sec)}
+.ladrilho{display:grid;place-items:end center;border-radius:14px;overflow:hidden;padding-bottom:8px}
+.selo .ladrilho{width:96px;height:96px}
+.palco .redondo{position:absolute;right:372px;bottom:36px}
+.palco .lado{position:absolute;left:28px;bottom:24px;display:flex;flex-direction:column;gap:8px}
+.palco .lado span{width:44px;height:44px;display:grid;place-items:center;border-radius:50%;background:var(--hx-tecla);border:1px solid var(--linha)}
+
+/* ---- o primeiro dia: o texto a direita e os bebes soltos pelos lados (no lugar das pedras da referencia) */
+.sec{position:relative;padding:90px 42px}
+.dia{display:grid;grid-template-columns:1fr 470px;gap:40px;align-items:center;min-height:250px}
+.dia .txt{position:relative}
+.dia .rabisco{position:absolute;right:20px;top:-26px}
+.dia p{margin-top:18px;max-width:40ch}
+.solto{position:absolute}
+.s1{left:20px;top:70px;transform:rotate(-12deg)} .s2{left:300px;top:230px;transform:rotate(9deg)} .s3{right:-70px;top:40px;transform:rotate(14deg)}
+
+/* ---- a fileira: os Digimon em ladrilhos de cor, de tamanhos diferentes */
+.fileira{display:grid;grid-template-columns:150px 150px 150px 290px 150px 150px;grid-auto-rows:150px;gap:10px;justify-content:center;margin:0 -14px}
+.fileira .ladrilho{position:relative}
+.fileira .g{grid-row:span 2;grid-column:span 1}
+.fileira .gg{grid-row:span 2}
+.fileira .rotulo{align-self:end;padding:0 2px 4px;color:var(--hx-sec)}
+.fileira .rotulo b{display:block;font:700 17px/1.1 var(--f-tit);letter-spacing:.06em;color:var(--hx-texto)}
+.fileira .cod{position:absolute;left:14px;top:12px;font:700 34px/1 var(--f-tit);letter-spacing:.04em;color:var(--dl-surface)}
+.c-acao{background:var(--dl-action)} .c-sombria{background:var(--dl-dark)} .c-destaque{background:var(--dl-highlight)} .c-nec{background:var(--dl-need)} .c-ok{background:var(--dl-ok)} .c-navy{background:var(--dl-navy)}
+.horizonte{height:190px;margin:0 -14px;background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--dl-dark) 55%,transparent) 55%,black 100%),
+  linear-gradient(180deg,black,transparent 40%),url("../ilha-grande/saco_em_terra_1440.jpg") 50% 78%/cover no-repeat}
+
+/* ---- o DigiBrain: o texto e a ficha a esquerda, o celular com as fichas flutuando a direita */
+.cerebro{display:grid;grid-template-columns:1fr 520px;gap:60px;align-items:center}
+.cerebro .txt{position:relative}
+.cerebro .rabisco{position:absolute;left:-14px;top:-30px}
+.cerebro p{margin-top:18px;max-width:42ch}
+.recurso{margin-top:34px;max-width:440px;padding:18px 20px 16px;border:1px solid var(--linha);border-radius:18px;background:var(--hx-tecla)}
+.recurso header{display:flex;justify-content:space-between;color:var(--hx-sec);margin-bottom:14px}
+.recurso b{display:block;font:700 18px/1.1 var(--f-tit);letter-spacing:.1em;text-transform:uppercase}
+.recurso small{display:block;margin-top:6px;font:500 14px/1.4 var(--f-txt);color:var(--hx-sec)}
+.recurso .setas{display:flex;justify-content:flex-end;gap:6px;margin-top:10px}
+.recurso .setas span{width:44px;height:44px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--linha)}
+.recurso .setas span:first-child .ic{transform:rotate(180deg)}
+.aparelho{position:relative;height:560px}
+.fone{position:absolute;left:50%;top:0;width:270px;height:560px;transform:translateX(-50%);border-radius:34px;border:1px solid var(--hx-borda);background:var(--hx-miolo-2);padding:14px;display:flex;flex-direction:column;gap:12px;
+  box-shadow:0 0 60px color-mix(in srgb,var(--dl-dark) 60%,transparent)}
+.fone .cab{display:flex;align-items:center;gap:8px;color:var(--hx-sec)}
+.fone .cena{flex:1;border-radius:20px;display:grid;place-items:center;background:radial-gradient(circle at 50% 55%,color-mix(in srgb,var(--dl-dark) 80%,transparent),transparent 70%)}
+.fone img{display:block;width:100%;border-radius:14px}
+.flut{position:absolute;display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:14px;border:1px solid var(--linha);background:var(--hx-miolo-2);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.flut .lcd{color:var(--hx-sec)} .flut b{font:700 24px/1 var(--f-tit);letter-spacing:.04em}
+.fl1{left:-10px;top:60px} .fl2{right:0;top:210px} .fl3{left:10px;bottom:40px}
+.op{display:grid;grid-template-columns:70px 90px 40px;align-items:center;gap:8px;font:400 12px/1 var(--f-lcd);text-transform:uppercase}
+.op i{height:6px;border-radius:3px;background:var(--hx-tecla)} .op i b{display:block;height:100%;border-radius:3px;background:var(--hx-luz)}
+.etq-apr{align-self:flex-start;padding:3px 8px;border:1px dashed var(--hx-luz);color:var(--hx-luz);font:400 12px/1.2 var(--f-lcd);letter-spacing:.1em;text-transform:uppercase}
+
+/* ---- o fim */
+.fim{display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;padding:90px 20px 70px;border-top:1px solid var(--linha)}
+.fim .garantias{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;color:var(--hx-sec)}
+.rodape{display:flex;flex-direction:column;align-items:center;gap:6px;padding:0 20px 40px;color:var(--hx-sec);font:500 14px/1.4 var(--f-txt);text-align:center}
+.rodape nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;font:400 12px/1 var(--f-lcd);letter-spacing:.14em;text-transform:uppercase;text-decoration:none;color:var(--hx-texto-2)}
+.fixo{display:none}
+.nota{position:absolute;z-index:60;font:600 11px/1.3 system-ui,sans-serif;color:#0b1320;background:#FFE08A;padding:2px 6px;border-radius:3px;max-width:300px;text-align:left;letter-spacing:0;text-transform:none}
+body.sem-notas .nota{display:none}
+
+@media (max-width:899px){
+  .moldura{margin-top:34px;padding:8px 8px 0}
+  .palco{height:740px}
+  .palco nav.menu,.palco .lado,.palco .topo-dir .bt:not(.fantasma),.palco .riscas{display:none}
+  .palco .logo{left:16px;top:12px} .palco .topo-dir{right:12px;top:12px}
+  .nome{top:96px;font-size:118px}
+  .palco .rabisco{left:20px;top:78px;font-size:20px}
+  .palco .heroi-pet{bottom:330px;zoom:.6}
+  .palco .frase{left:16px;right:16px;bottom:150px;font-size:22px;text-align:center}
+  .palco .selo{left:12px;right:12px;bottom:16px;justify-content:space-between}
+  .selo .ladrilho{width:72px;height:72px}
+  .palco .redondo{display:none}
+  .sec{padding:72px 12px}
+  h2{font-size:38px}
+  .dia{grid-template-columns:1fr;min-height:0;padding-top:150px}
+  .s1{left:0;top:0} .s2{left:150px;top:40px} .s3{right:0;top:0}
+  .fileira{grid-template-columns:1fr 1fr;grid-auto-rows:150px;margin:0}
+  .fileira .gg{grid-column:span 2}
+  .fileira .rotulo{display:none}
+  .cerebro{grid-template-columns:1fr;gap:40px}
+  .aparelho{height:auto;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .fone{position:relative;left:auto;transform:none}
+  .flut{position:relative;left:auto !important;right:auto !important;top:auto !important;bottom:auto !important;width:100%}
+  .rodape{padding-bottom:104px}
+  .fixo{display:flex;position:fixed;z-index:50;left:0;right:0;bottom:0;padding:10px 16px 14px;background:black;border-top:1px solid var(--linha)}
+  .fixo .bt{flex:1;min-height:52px;font-size:17px}
+  .nota{display:none}
+}

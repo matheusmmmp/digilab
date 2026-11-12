@@ -187,7 +187,9 @@ def test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain():
                                                                              # COOPERACAO, CO7b: o gabarito do G-PAR-CO7 (o modular com a CO7 no grupo)
                                                                              "experiments/exportar_gabarito_co7_par.py",
                                                                              # GOSTO_VISUAL, a TV no jogo (#883): o exportador do gabarito, que faltava aqui (D-CO7b-9)
-                                                                             "experiments/exportar_tv_jogo.py"}
+                                                                             "experiments/exportar_tv_jogo.py",
+                                                                             # COOPERACAO, CB1: a bancada da cooperacao (o modular nos dois pets do grupo)
+                                                                             "experiments/run_v3_cooperacao_bancada.py"}
     assert "lembranca" not in (RAIZ / "digilab" / "mundo.py").read_text(encoding="utf-8")
 
 

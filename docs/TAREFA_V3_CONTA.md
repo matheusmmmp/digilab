@@ -64,3 +64,18 @@ Não há run. A etapa CN0 é uma medida de engenharia (o tamanho dos saves), nã
 ## 8. Precisa do Matheus
 
 As decisões CN-1 a CN-14, na seção 12 do plano, cada uma com a recomendação e o custo de errar.
+
+## A PI0: o CI enxuto (2026-11-12)
+
+A primeira etapa do `docs/PLANO_V3_CONTA_PROTECAO.md`, antes de o repositório ficar privado (PI-1, PI-2). O relato saiu para o
+`.github/workflows/verificar-relato.yml`, que roda em todo evento do PR; o `.github/workflows/verificar-pr.yml` roda o `testes` e o `web` só
+quando chega um commit, e o `web` só liga a máquina quando o PR muda `web/app/`. Nenhuma conferência saiu: o filtro "só quando o Python
+muda" foi descartado porque o `testes` confere os documentos (D-CONTA-27). A medida: 20 % das execuções repetiam o mesmo commit
+(D-CONTA-28). A economia é estimada e ainda não cabe na cota grátis (D-CONTA-30).
+
+## A CN0: a medida do save (2026-11-12)
+
+A primeira etapa da F0 do `docs/ROADMAP_V3_CONTA.md`. O script `web/app/scripts/medir_cn0_save.ts` grava 18 vidas típicas no Node e mede o
+save por dia de jogo (`web/app/scripts/medicoes/cn0_save.json`). Um dia manda de 0,6 a 23 kB cru (de 0,2 a 1,6 kB em brotli), e a TV é o
+que mais pesa. As 37 chaves e três fora do padrão têm destino; o `-habitat` e o `-viagem` ficam no aparelho, e o `-anterior` sobe como o
+pet do jogador (D-CONTA-34 a 36). O pet não envelhece com o jogo fechado (D-CONTA-38). O resultado está em `docs/RESULTADO_V3_CONTA_CN0.md`.
