@@ -739,3 +739,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-12 — CONTA: as CN-15 a CN-18 decididas pela recomendação (Claude Code, Opus 5.5, branch `v3-conta-anuncios`)](registro/2026-11.md)
 - [2026-11-12 — BOLA_BRINCAR (BB2), a junção com a v32 (Claude Code, Opus 5.5, branch `v3-bola-bb2`)](registro/2026-11.md)
 - [2026-11-12 — COOPERACAO: o plano de análise da bancada (Claude Code, Opus 5.5, branch `v3-cooperacao-bancada`)](registro/2026-11.md)
+- [2026-11-12 — COOPERACAO, CO6a: o gabarito das vidas de hoje (Claude Code, Opus 5.5, branch `v3-cooperacao-co6`)](registro/2026-11.md)
