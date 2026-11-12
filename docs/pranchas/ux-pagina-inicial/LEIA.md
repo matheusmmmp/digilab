@@ -1,6 +1,7 @@
 # Prancha: a página de entrada
 
-**Status: PROPOSTA, rodada 3, com um esboço B ao lado** (2026-11-12). É a tela 6 do `docs/PLANO_V3_CONTA.md` (seção 3: "uma página inicial curta"), da etapa
+**Status: a página A foi a ESCOLHIDA pelo Matheus em 2026-11-12** ("A, a clara", em resposta a "Qual das duas páginas de entrada segue
+adiante?"). O esboço B fica na pasta só como registro. As PI-2 a PI-4 continuam abertas. É a tela 6 do `docs/PLANO_V3_CONTA.md` (seção 3: "uma página inicial curta"), da etapa
 CN6. O código só vem depois desta prancha aprovada.
 
 **Os pedidos do Matheus (2026-11-12):**
@@ -13,7 +14,7 @@ CN6. O código só vem depois desta prancha aprovada.
 - o quarto, sobre a captura da rodada 2 e uma captura da página do Valorant: "Baseado nessa prancha, corrija tentando deixar um
   pouco com as formas retas da página do Valorant".
 
-**Há duas páginas na pasta, para escolher uma:** a **A** (`inicial.html`, clara, de laboratório, já com as formas retas) e a **B**
+**Há duas páginas na pasta; a A é a que segue:** a **A** (`inicial.html`, clara, de laboratório, já com as formas retas) e a **B**
 (`inicial_b.html`, o esboço escuro). As duas dizem as mesmas coisas. A rodada 1 (escura, na pele dos menus) saiu. É só desenho: uma página HTML estática (`inicial.html`), que rola, com a
 quebra a 900 px.
 
@@ -78,7 +79,7 @@ Da A: `inicial_1440` (a página inteira, com as notas), `inicial_1440_limpa` (se
 
 ## O que a prancha pede ao Matheus
 
-- **PI-1, qual das duas:** a **A** (clara, de laboratório, com as formas retas) ou a **B** (o esboço escuro). **Recomendo a A:** ela é a
+- **PI-1, qual das duas: DECIDIDA, a A** (Matheus, 2026-11-12: "A, a clara"). A pergunta era: a **A** (clara, de laboratório, com as formas retas) ou a **B** (o esboço escuro). **Recomendo a A:** ela é a
   que responde aos seus quatro pedidos juntos, usa só cores que não têm outro sentido no jogo e já está acertada no celular. A B tem
   mais impacto na primeira dobra, e o palco dela (o nome gigante com o pet por cima) pode entrar na A. Custo de errar: baixo, é desenho.
 - **PI-2, a frase principal:** "Crie um Digimon que decide sozinho". A outra opção põe o aprendizado na frente ("que aprende com
@@ -89,7 +90,7 @@ Da A: `inicial_1440` (a página inteira, com as notas), `inicial_1440_limpa` (se
   passagem de uma para o outro, ao clicar em "Começar agora", não foi desenhada. Recomendo aceitar a diferença: a página é a vitrine e o
   jogo é o jogo. Custo de errar: baixo a médio; se a troca parecer brusca, cabe uma tela de carregamento clara.
 
-- **PI-5, as cores dos ladrilhos (só se a B for a escolhida):** os ladrilhos usam o verde do "ok", o rosa da "necessidade", o amarelo do
+- **PI-5, as cores dos ladrilhos: não se aplica mais** (a B não foi a escolhida). A pergunta era: os ladrilhos usam o verde do "ok", o rosa da "necessidade", o amarelo do
   "destaque" e o roxo da "sombria", que têm sentido fixo no jogo (guia, seção 3). Para usá-los como enfeite seria preciso criar quatro
   cores de brasão, que hoje não existem. Custo de errar: médio, se o jogador ler o rosa como um chamado.
 
