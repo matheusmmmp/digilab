@@ -9,10 +9,15 @@ nomeados da fala, cada um com valor e confianca em [0, S], mais a intencao (regr
 - **Pesos e limiares:** `ConfigDecodificador` (`digilab/config.py`), PROPOSTOS, SEM FONTE.
 - **Intencao (I-a):** `lembranca` quando a sonda `lembranca_decidiu` e verdadeira; senao o conceito de maior valor (empate: a ordem do catalogo),
   sem contar a `lembranca`.
+- **O `dec-v4`** (a fala do assistir, docs/futuro/fala_do_assistir.md, FA-2 a FA-4, DECIDIDAS pelo Matheus em 2026-11-12): o `olhar` no
+  catalogo de comportamentos e o bloco `assistir` (`gostei`, `susto`, `chato`, `o_que_e`), lido do campo `olhar` do motivo (com o enjoo) e da
+  decisao anterior; os limiares na `ConfigFalaAssistir`, calibrados nas vidas gravadas da GV3 e da GV3b
+  (`artifacts_v3_gosto_visual/fala_limiares/`). O espelho e o `decodificarV4` do TS, conferido contra
+  `web/app/test/gabaritos/decodificador_v4_python.json.gz`. O dec-v1 e o dec-v2 nao mudam.
 """
 from __future__ import annotations
 
-from ..config import CONFIG_DECODIFICADOR, CONFIG_DIGIBRAIN_INATOS, ConfigDecodificador
+from ..config import CONFIG_DECODIFICADOR, CONFIG_DIGIBRAIN_INATOS, CONFIG_FALA_ASSISTIR, ConfigDecodificador, ConfigFalaAssistir
 from ..policies.lobos import div_arred
 from ._comum import clamp, mul
 
@@ -59,13 +64,13 @@ def _confianca_escolhida(m: dict, S: int) -> int:
     return 0 if total <= 0 else div_arred(esc["w"] * S, total)
 
 
-def _validar(m: dict) -> None:
-    """falha alto em receptor, comportamento ou sonda desconhecidos"""
+def _validar(m: dict, comportamentos: tuple[str, ...] = COMPORTAMENTOS) -> None:
+    """falha alto em receptor, comportamento ou sonda desconhecidos (`comportamentos`: o catalogo da versao; o dec-v4 soma o `olhar`)"""
     for r in m["afeto"]["urgencias"]:
         if r not in RECEPTORES:
             raise ValueError(f"receptor desconhecido no motivo: {r!r}")
     for u in m["unidades"]:
-        if u["chave"][0] not in COMPORTAMENTOS:
+        if u["chave"][0] not in comportamentos:
             raise ValueError(f"comportamento desconhecido no motivo: {u['chave'][0]!r}")
     for s in m["sondas"]:
         if s.endswith("_decidiu") and s not in SONDAS_DECIDIU:
@@ -77,8 +82,13 @@ def _validar(m: dict) -> None:
 
 def decodificar(motivo: dict, cfg: ConfigDecodificador = CONFIG_DECODIFICADOR, S: int = CONFIG_DIGIBRAIN_INATOS.escala) -> dict:
     """{versao, k, intencao, conceitos: [{nome, valor, confianca, alvo?}]} (a espec, secao 2), os 12 conceitos na ordem do catalogo"""
+    return _decodificar(motivo, cfg, S, COMPORTAMENTOS)
+
+
+def _decodificar(motivo: dict, cfg: ConfigDecodificador, S: int, comportamentos: tuple[str, ...]) -> dict:
+    """o dec-v1 sobre o catalogo de comportamentos dado (o do dec-v1, ou o do dec-v4 com o `olhar`); as contas nao mudam"""
     m = motivo
-    _validar(m)
+    _validar(m, comportamentos)
     urg = m["afeto"]["urgencias"]
     est = m["estado"]
     escolha = m["escolha"]
@@ -193,4 +203,91 @@ def decodificar_v2(motivo: dict, episodio: dict | None, cfg: ConfigDecodificador
         for c in r["conceitos"]:
             if c["nome"] == "lembranca":
                 c["episodio"] = dec
+    return r
+
+
+# ====================================================================== o dec-v4: a fala do assistir (FA-2 a FA-4)
+VERSAO_V4 = "dec-v4"                                   # nome PROPOSTO (FA-2)
+COMPORTAMENTOS_V4 = COMPORTAMENTOS + ("olhar",)        # = config.COMPORTAMENTO_OLHAR: o olhar entra no catalogo (FA-2)
+# os conceitos do assistir da primeira versao (FA-3: sem o `de_novo`), na ordem do catalogo (o desempate da intencao)
+CATALOGO_ASSISTIR = ("gostei", "susto", "chato", "o_que_e")
+CAMPOS_OLHAR_V4 = ("telas", "olhava", "agrado", "agrado_inato", "gosto", "enjoo", "agrado_efetivo", "olha")
+
+
+def _escala(x: int, limiar: int, h: int, S: int) -> int:
+    """o sinal x em [0, S] levado a [0, S] por duas retas: 0 -> 0, `limiar` -> h, S -> S (o sinal no limiar vale o limiar de ativo)"""
+    x = clamp(x, 0, S)
+    return div_arred(x * h, limiar) if x < limiar else h + div_arred((x - limiar) * (S - h), S - limiar)
+
+
+def _confianca_assistir(valor: int, h: int, S: int) -> int:
+    """a distancia do valor ao limiar de ativo h, em [0, S]: 0 no limiar e S nas pontas (o ativo de pouco e o conceito em duvida)"""
+    return div_arred((valor - h) * S, S - h) if valor >= h else div_arred((h - valor) * S, h)
+
+
+def _validar_olhar(o: dict) -> None:
+    """o campo `olhar` do motivo com o enjoo (o cerebro do jogo v35+ e da GV3b, D-GV-ENJOO-CER); falha alto sem ele ou com campo a menos"""
+    falta = [c for c in CAMPOS_OLHAR_V4 if c not in o]
+    if falta:
+        raise ValueError(f"o dec-v4 pede o olhar com o enjoo no motivo; faltam {falta}")
+    if o["olhava"] is not None and any(o[c] is None for c in ("agrado", "agrado_efetivo", "enjoo")):
+        raise ValueError("o dec-v4: o pet olhava e o motivo nao tem o agrado, o agrado efetivo ou o enjoo")
+
+
+def conceitos_assistir(motivo: dict, anterior: dict | None, cfg: ConfigFalaAssistir = CONFIG_FALA_ASSISTIR,
+                       S: int = CONFIG_DIGIBRAIN_INATOS.escala) -> dict | None:
+    """os conceitos do assistir da decisao (FA-2 a FA-4), ou None se o pet nao olhava uma TV no intervalo que acabou (`olhar.olhava`; "so
+    enquanto o pet olha", FA-5). PROPOSTO, SEM FONTE nos limiares (ConfigFalaAssistir, calibrados nas vidas gravadas da GV3 e da GV3b):
+    - `gostei`: o agrado efetivo do que o pet olhava (o agrado com o enjoo, o que o cerebro usa no termo `gosto`), alto;
+    - `susto`: a subida da urgencia do susto desde a decisao anterior (o salto de volume do corpo, GV-17; FA-4: so o volume), zerada quando
+      houve tapa nos gestos do intervalo (o tapa e o outro emissor do susto no corpo; o susto do assistir e so o da tela);
+    - `chato`: o enjoo da TV (a habituacao do cerebro, D-GV-ENJOO-CER) e o tedio, os dois altos (o menor dos dois valores);
+    - `o_que_e`: o agrado sem o enjoo baixo (o nivel longe do alvo aprendido: longe do esperado) e o enjoo baixo (o pet ainda nao cansou
+      daquela TV: a novidade que o motivo mostra; o `novidade_tela` do corpo nao esta no motivo); o menor dos dois.
+    A intencao do assistir: o `susto`, quando ativo (FA-2); senao o ativo de maior valor (empate: a ordem do catalogo); nenhum ativo: None.
+    `anterior` e o motivo da decisao k - 1 (None so na primeira decisao)."""
+    o = motivo["olhar"]
+    _validar_olhar(o)
+    if anterior is None:
+        if motivo["k"] != 0:
+            raise ValueError(f"o dec-v4 pede o motivo anterior a decisao {motivo['k']}")
+        susto_antes = 0
+    else:
+        if anterior["k"] != motivo["k"] - 1:
+            raise ValueError(f"o motivo anterior e o da decisao {anterior['k']}, nao o da {motivo['k'] - 1}")
+        susto_antes = anterior["afeto"]["urgencias"]["susto"]
+    if o["olhava"] is None:
+        return None
+    h = cfg.limiar_ativo
+    urg = motivo["afeto"]["urgencias"]
+    tapa = any(g[0] == "tapa" for g in motivo["gestos"])
+    subida = 0 if tapa else max(0, urg["susto"] - susto_antes)
+    ae, enjoo = o["agrado_efetivo"], o["enjoo"]
+    valores = {
+        "gostei": _escala(ae, cfg.gostei_agrado, h, S),
+        "susto": _escala(subida, cfg.susto_subida, h, S),
+        "chato": min(_escala(enjoo, cfg.chato_enjoo, h, S), _escala(urg["tedio"], cfg.chato_tedio, h, S)),
+        "o_que_e": min(_escala(S - o["agrado"], S - cfg.o_que_e_agrado, h, S), _escala(S - enjoo, S - cfg.o_que_e_enjoo, h, S)),
+    }
+    cs = [{"nome": n, "valor": valores[n], "confianca": _confianca_assistir(valores[n], h, S)} for n in CATALOGO_ASSISTIR]
+    ativos = [c for c in cs if c["valor"] >= h]
+    if any(c["nome"] == "susto" for c in ativos):
+        intencao = "susto"
+    elif ativos:
+        intencao = max(ativos, key=lambda c: (c["valor"], -CATALOGO_ASSISTIR.index(c["nome"])))["nome"]
+    else:
+        intencao = None
+    return {"olhava": o["olhava"], "intencao": intencao, "conceitos": cs}
+
+
+def decodificar_v4(motivo: dict, anterior: dict | None, cfg: ConfigDecodificador = CONFIG_DECODIFICADOR,
+                   cfg_assistir: ConfigFalaAssistir = CONFIG_FALA_ASSISTIR, S: int = CONFIG_DIGIBRAIN_INATOS.escala) -> dict:
+    """O `dec-v4` (FA-2): os 12 conceitos do dec-v1 com o `olhar` no catalogo de comportamentos (as contas sao as do dec-v1) e o bloco
+    `assistir` (`conceitos_assistir`, ou None quando o pet nao olhava). Falha alto num motivo sem o olhar com o enjoo. O dec-v1 e o dec-v2
+    nao mudam. So le: nada muda o cerebro nem a vida"""
+    if "olhar" not in motivo:
+        raise ValueError("o dec-v4 pede o motivo com o olhar (a subchave `olhar` do modular)")
+    r = _decodificar(motivo, cfg, S, COMPORTAMENTOS_V4)
+    r["versao"] = VERSAO_V4
+    r["assistir"] = conceitos_assistir(motivo, anterior, cfg_assistir, S)
     return r
