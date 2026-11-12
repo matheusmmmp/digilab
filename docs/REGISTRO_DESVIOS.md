@@ -773,3 +773,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-12 — COOPERACAO, CB2: a fumaça e o piloto da bancada (Claude Code, Opus 5.5, branch `v3-cooperacao-cb2`)](registro/2026-11.md)
 - [2026-11-12 — COOPERACAO, CB3: o registro da análise da bancada (Claude Code, Opus 5.5, branch `v3-cooperacao-cb3`)](registro/2026-11.md)
 - [2026-11-12 — COOPERACAO, CB4: as vidas e o resultado da bancada (Claude Code, Opus 5.5, branch `v3-cooperacao-cb4`)](registro/2026-11.md)
+- [2026-11-12 — INDIVIDUALIDADE, o adendo 4 do I7 (Claude Code, Opus 5.5, branch `v3-individualidade-ad4`)](registro/2026-11.md)
+- [2026-11-12 — UX_TELA_PET, a prancha do save na nuvem: levar o pet e os estados (Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-conta-nuvem`)](registro/2026-11.md)

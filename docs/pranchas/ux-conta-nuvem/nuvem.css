@@ -1,0 +1,53 @@
+/* Prancha "o save na nuvem: levar o pet e os estados" (as telas 3 e 5 do docs/PLANO_V3_CONTA.md, etapa CN3). So desenho.
+   Por cima do ../ux-lugares-menus/lugares.css, do movel.css e do ../ux-conta/conta.css (o molde da prancha da conta). Nenhuma cor
+   nova: tudo aqui usa token --hx-*. Os tamanhos sao PROPOSTO, SEM FONTE. */
+
+/* a lista do que ha neste aparelho (o molde do .ct-ap da conta) */
+.nv-lista .med-li{grid-template-columns:24px 1fr auto}
+.nv-lista .etq.ok{border-color:var(--hx-ok);color:var(--hx-ok)}
+
+/* os dois lados de uma escolha: este aparelho e a nuvem (ou o outro aparelho) */
+.nv-lados{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.nv-lado{display:flex;flex-direction:column;gap:4px;padding:10px 12px;border:1px solid var(--hx-borda);background:var(--hx-tecla);text-align:left;min-height:44px}
+.nv-lado b{font:700 18px/1.1 var(--hx-f)}
+.nv-lado small{display:block;font:500 13px/1.3 var(--hx-f);color:var(--hx-sec)}
+.nv-lado .linha{gap:6px;color:var(--hx-rotulo)}
+.nv-lado .linha .ic{width:16px;height:16px}
+button.nv-lado[aria-checked="true"]{background:var(--hx-escolhido);color:var(--hx-escolhido-ink);border-color:var(--hx-escolhido-borda);box-shadow:var(--hx-escolhido-brilho)}
+button.nv-lado[aria-checked="true"] small,button.nv-lado[aria-checked="true"] .linha{color:inherit;opacity:.85}
+button.nv-lado .radio{width:14px;height:14px;border-radius:50%;border:2px solid currentColor;flex:none}
+button.nv-lado[aria-checked="true"] .radio{background:currentColor}
+
+/* as tres respostas, uma embaixo da outra, cada uma com a consequencia escrita */
+.nv-opcoes{display:flex;flex-direction:column;gap:6px}
+.nv-opcoes .rival{width:100%;min-height:52px;align-items:flex-start;padding:8px 10px}
+.nv-opcoes .rival .radio{margin-top:3px}
+.nv-opcoes .rival small{font-size:13px}
+
+/* o estado da nuvem no HUD: o lugar do "salvo" do relogio. A prancha mostra os cinco estados ampliados, lado a lado */
+.nv-fileira{position:absolute;z-index:30;left:150px;top:250px;display:flex;gap:22px;align-items:flex-start}
+.nv-col{display:flex;flex-direction:column;align-items:flex-start;gap:10px;width:300px}
+.nv-chip{--ch:var(--hud-ch-p);display:inline-flex;align-items:center;gap:10px;min-height:56px;padding:0 18px;font:600 19px/1 var(--hx-f);white-space:nowrap}
+.nv-chip .ic{width:24px;height:24px}
+.nv-chip small{font:600 16px/1 var(--hx-f-num);color:var(--hx-num)}
+.nv-chip.ok .ic{color:var(--hx-ok)}
+.nv-chip.alerta{border-color:var(--hx-alerta)} .nv-chip.alerta .ic{color:var(--hx-alerta)}
+.nv-col .balao{position:static;max-width:none}
+.nv-col .balao::after{display:none}
+.nota.fixa{position:static;display:block}
+body.sem-notas .nota.fixa{display:none}
+
+/* as copias: uma linha por dia */
+.nv-copias{display:flex;flex-direction:column}
+.nv-copias li{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;min-height:48px;padding:2px 0 2px 2px;border-bottom:1px solid var(--hx-borda)}
+.nv-copias li:last-child{border-bottom:0}
+.nv-copias b{display:block;font:600 15px/1.15 var(--hx-f)}
+.nv-copias small{display:block;font:500 13px/1.25 var(--hx-f);color:var(--hx-sec)}
+.nv-copias .bt{min-height:44px;padding:0 12px;font-size:13px}
+
+/* os avisos sobre a tela do pet: a mesma caixa, no meio (nao sao parte dos Ajustes) */
+.nv-aviso .lp-corpo{gap:12px}
+.nv-so-ver{opacity:.4}
+
+/* a linha que so informa (nem some, nem fica): o icone na cor do rotulo */
+.ct-some li.neutro .ic{color:var(--hx-rotulo)}
