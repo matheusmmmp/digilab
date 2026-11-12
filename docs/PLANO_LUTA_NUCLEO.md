@@ -4,7 +4,9 @@ Worker: Claude Code, Opus 5.5, worktree `D:\Trab\digilab\v3-luta-nucleo`, branch
 de sprites e luta (a sessão `local_a6f79153`). A tarefa é a `docs/TAREFA_V3_LUTA_POC.md`. Este plano é a investigação que a D-LP5-13, a
 D-LP5-15, a D-LP5-18, a D-LP5-19 e a D-LP5-21 mandaram para depois, e a lista "ficam para depois" da LP6-3.
 
-**Status: PROPOSTO.** Nada aqui roda antes da aprovação do Matheus (seção 6). Os números novos são PROPOSTOS, SEM FONTE.
+**Status: APROVADO.** As decisões D-N-1 a D-N-7 (seção 6) estão DECIDIDAS como recomendadas: o Matheus, em 2026-11-12, "Aprovo as 7
+(Recommended)" (repassado pelo Gerente). A régua e a ordem foram aprovadas; os números novos (a faixa, os valores do `forca`, os tempos de
+máquina) seguem PROPOSTOS, SEM FONTE.
 
 **O que este PR é:** só documento. Nenhum código, nenhuma luta e nenhuma rodada da bancada. As leituras da seção 1.2 usam JSON que já estão
 no repositório.
@@ -237,7 +239,7 @@ Com todas as chaves desligadas, os gabaritos saem byte a byte. Um teste confere 
 6. **O A1 com poucas formas de perto.** No Rookie são 3 de perto contra 5 de longe, e o atributo das 3 pesa no A1 do estágio. A N1 lê o A1
    só nos pares neutros, ao lado do A1 de hoje.
 
-## 6. As decisões do Matheus
+## 6. As decisões do Matheus (todas DECIDIDAS como recomendadas, 2026-11-12: "Aprovo as 7 (Recommended)", o Matheus, repassado pelo Gerente)
 
 | # | a pergunta | a recomendação | o custo de errar |
 |---|---|---|---|
