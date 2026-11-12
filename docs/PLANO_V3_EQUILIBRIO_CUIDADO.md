@@ -1,7 +1,7 @@
 # PLANO_V3_EQUILIBRIO_CUIDADO: a rodada de equilíbrio do cuidado
 
-Fase: V3. Coordenador: o Gerente da V3. Data: 2026-11-12. Estado: **plano, com as decisões EQ-1 a EQ-8 PROPOSTAS**. Nenhuma vida nem número
-muda antes da aprovação do Matheus.
+Fase: V3. Coordenador: o Gerente da V3. Data: 2026-11-12. Estado: **plano aprovado: as decisões EQ-1 a EQ-8 DECIDIDAS** (Matheus, 2026-11-12, "Sim, os dois"). Os números
+novos seguem PROPOSTOS até a aprovação das metas (EQ-3).
 
 ## 1. O pedido e o que entra
 
@@ -66,7 +66,7 @@ O método é o do `CLAUDE.md`: plano registrado antes, calibração com as semen
 4. **E2, a validação única.** Uma vez, numa faixa de sementes nova, com os gates escritos no plano de análise.
 5. **E3, a versão.** Os números novos entram juntos numa versão nova de pet (EQ-6). Os pets de hoje não mudam.
 
-## 4. As decisões
+## 4. As decisões (DECIDIDAS em 2026-11-12)
 
 - **EQ-1, o escopo:** os blocos A a E da seção 2. A luta fica com a investigação do núcleo, e o corpo químico do Python, a cooperação, o MMO e
   os números visuais ficam fora. **Recomendo.** O custo de errar é baixo: o que ficar de fora entra numa rodada própria.
@@ -105,7 +105,7 @@ O método é o do `CLAUDE.md`: plano registrado antes, calibração com as semen
 
 ## 6. Precisa do Matheus
 
-**Recomendo aprovar as EQ-1 a EQ-8 como estão.** A pergunta que mais muda o trabalho é a EQ-1: deixar a luta fora. Ela é o que mais reprova
+**Feito:** o Matheus aprovou as EQ-1 a EQ-8 em 2026-11-12 ("Sim, os dois"). A próxima decisão dele são as metas do E0 (EQ-3). A pergunta que mais muda o trabalho é a EQ-1: deixar a luta fora. Ela é o que mais reprova
 hoje:
 - a Liga, a Torre e a Fábrica com 0 títulos;
 - 81 % das vidas paradas no Champion;
