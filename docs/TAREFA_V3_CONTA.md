@@ -1,7 +1,8 @@
 # TAREFA V3 — CONTA (2026-11-11)
 
 Coordenador: o Matheus, nesta sessão. Worker: Claude Code (Opus 5.5). Worktree e branch: `v3-conta`. Status: ABERTA (o plano entregue;
-as CN-1 a CN-10 DECIDIDAS em 2026-11-11; as CN-11 a CN-14 com o Matheus).
+as CN-1 a CN-12 DECIDIDAS em 2026-11-11, a CN-12 revista e a CN-13 e a CN-14 DECIDIDAS em 2026-11-12; e as CN-15 a
+CN-18 DECIDIDAS em 2026-11-12: todas as CN-n decididas).
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-11: planejar a conta (login, primeiro acesso, perfil), o save na nuvem entre aparelhos, a proteção contra raspagem e a infraestrutura de servidor.
 

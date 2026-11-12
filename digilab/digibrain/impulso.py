@@ -36,6 +36,8 @@ nenhuma unidade nem termo novo.
 **O convite do lance do dono** (TAREFA_V3_BOLA_BRINCAR, BB-4; a `ConfigLanceDono` ligada): a entrada `bola_do_dono` (0 ou S, o M-ADAPT a
 monta) soma mul(w_bola_do_dono, bola_do_dono) ao inato do brincar (todas as unidades do brincar: a da bola a vista ou, sem ela, a sem alvo).
 Fica fora do z (CARACTERISTICAS_DIGIBRAIN e o W0 nao mudam). Desligada, nenhum termo.
+**O enjoo** (D-GV-ENJOO-CER; so com o olhar e a `ConfigEnjooTela` ligada): todas as unidades ganham o termo `enjoo` (0 fora das unidades
+de olhar), que o M-ADAPT entrega pronto por TV: -mul(w_enjoo, o enjoo lembrado da TV). Desligado, nenhum termo novo.
 Sem estado e sem rng."""
 from __future__ import annotations
 
@@ -147,7 +149,7 @@ class Impulso:
 
     def unidades(self, sens: dict, afeto: dict, contexto: dict, plast, memoria: dict | None, drives: tuple,
                  lembranca: tuple | None = None, facetas: tuple | None = None, gosto: dict | None = None,
-                 bola_do_dono: int | None = None) -> tuple[list[dict], list]:
+                 bola_do_dono: int | None = None, enjoo: dict | None = None) -> tuple[list[dict], list]:
         """as unidades da decisao com os termos e a ativacao, e o z. `lembranca` = (o termo da M4, o `casa` do M-MEM) ou None; so com a
         `memoria_autobio` as unidades ganham o termo `lembranca` (L nas que casam com o episodio lembrado, 0 nas outras). `facetas` = (os
         valores das tres facetas, as classes de comida que ja tem episodio positivo); so com a `facetas_mem` as unidades ganham o termo
@@ -158,6 +160,8 @@ class Impulso:
         S, a_max = self.S, self.p.a_max
         if (gosto is not None) != (self.co is not None):
             raise RuntimeError("M-IMPULSO: o termo gosto vem so com a subchave olhar, e com ela sempre")
+        if enjoo is not None and gosto is None:
+            raise RuntimeError("M-IMPULSO: o termo enjoo (D-GV-ENJOO-CER) so com a subchave olhar")
         z = self.contexto_z(sens, afeto, contexto)
         inato_b = {b: sum(mul(w, zj, S) for w, zj in zip(self.w0[b], z) if w) for b in COMPORTAMENTOS_DIGIBRAIN}
         if (bola_do_dono is not None) != self.cl.ligada:
@@ -186,10 +190,12 @@ class Impulso:
                               "tipo": o["classe"], "objeto": o, "d": o["d"]} for o in sens["telas"]]
             if set(gosto) - {o["id"] for o in sens["telas"]}:
                 raise RuntimeError(f"M-IMPULSO: o gosto de uma TV fora da vista: {gosto!r}")
+            if enjoo is not None and set(enjoo) - {o["id"] for o in sens["telas"]}:
+                raise RuntimeError(f"M-IMPULSO: o enjoo de uma TV fora da vista: {enjoo!r}")
         for u in lista:
             b, o = u["acao"], u["objeto"]
             termos = dict.fromkeys(TERMOS + (("lembranca",) if self.cd.memoria_autobio else ()) + (("faceta",) if self.cd.facetas_mem else ())
-                                   + (("gosto",) if olhar else ()), 0)
+                                   + (("gosto",) if olhar else ()) + (("enjoo",) if enjoo is not None else ()), 0)
             inato = inato_fala[u["chave"][1]] if fala and b == FALA else inato_b[b]
             termos["inato"] = inato + (self.w0_tipo.get(b, {}).get(u["tipo"], 0) if u["tipo"] is not None else 0)
             if b == COMPORTAMENTO_OLHAR:              # o olhar (P1d): a linha da TV, o incentivo da classe `tela` e o gosto
@@ -199,6 +205,8 @@ class Impulso:
                     incentivos[o["classe"]] = plast.incentivo(sens["pc"], o["classe"], drives)
                 termos["incentivo"] = mul(incentivos[o["classe"]], o["prox"], S)
                 termos["gosto"] = gosto.get(o["id"], 0)
+                if enjoo is not None:
+                    termos["enjoo"] = enjoo.get(o["id"], 0)
             elif o is not None:
                 termos["prox"] = mul(self.w0_prox.get(b, 0), o["prox"], S)
                 termos["nov"] = mul(self.w0_nov.get(b, 0), o["nov"], S)

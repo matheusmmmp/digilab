@@ -72,6 +72,15 @@ export const CONFIG_TV: ConfigTV = {
   cena_ticks: 5, variacao: 27000, janela_resumo_s: 10,
 };
 
+/** a TV do jogo no cerebro (a v32; D-GV-CEREBRO-2 e 3): a fonte "evento" (o modo livre gravado: o que a captura da tela ou a TV do P0
+    passa entra no registro pelo evento "st") e a celula logo ao sul da TV da ilha grande: o marco do #814 (PLANTA_ILHA_GRANDE.marcos.tv,
+    busca 0) fica na celula (96, 17), que o mapa fecha (nao e seca), e a TV do motor pede uma celula seca (falha alto, como o Python).
+    Nada daqui e do Python: a pesquisa usa a CONFIG_TV. PROPOSTO, SEM FONTE */
+export const CONFIG_TV_JOGO: ConfigTV = { ...CONFIG_TV, ligada: true, fonte: "evento", celula: [96, 18] };
+/** a celula para onde o dono leva o pet para assistir (o gesto "levar o pet", v19; o painel da TV): duas celulas ao sul da TV do motor, perto
+    da almofada do cantinho e dentro do raio da visao (6 celulas). PROPOSTO, SEM FONTE */
+export const CELULA_PERTO_DA_TV_JOGO: readonly [number, number] = [96, 20];
+
 /** o __post_init__ da ConfigTV: falha alto */
 export function conferirConfigTV(c: ConfigTV): ConfigTV {
   if (typeof c.ligada !== "boolean") throw new Error(`ConfigTV.ligada e bool: ${String(c.ligada)}`);

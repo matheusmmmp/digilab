@@ -29,9 +29,13 @@ export function decisaoAgora(m: Motor): LeituraDecisao | null {
   return c === null || mo === null ? null : leituraDecisao(mo, c.prior[mo.regra][mo.acao], c.escala, c.receptoresNovos);
 }
 
+/** o nome do que o pet faz agora: o da acao do motor; no pet com a TV no cerebro (a v32), "vendo TV" quando o cerebro escolheu olhar (o motor
+    executa o olhar como o ocioso; D-GV-CEREBRO-8: a linha nao diz "a toa" enquanto o DigiBrain diz "olhar") */
+export const nomeAcaoAgora = (m: Motor): string => (m.temTv && m.tvNoCerebro()?.olhando ? "vendo TV" : NOME_PET[m.acao]);
+
 /** o caso da linha, pela ordem em que a tela testa: o modular decide; sem decisao; o aprendido mudou a escolha; o instinto bastava; uma opcao so */
 export function vistaAgora(m: Motor, decisao?: LeituraDecisao | null): VistaAgora {
-  const acao = NOME_PET[m.acao];
+  const acao = nomeAcaoAgora(m);
   if (m.lab !== null) return { caso: "modular", acao, regra: null, semEle: null };   /* o modular decide: o A parou, nao se le */
   const d = decisao === undefined ? decisaoAgora(m) : decisao;
   if (d === null) return { caso: "sem", acao, regra: null, semEle: null };
