@@ -1,7 +1,7 @@
 # Plano da interação direta: o gesto no mundo, o arco de comandos e a entrada sem pausa (2026-11-12)
 
 **Status:** APROVADO, sem código. O Matheus decidiu as IN-1 a IN-8, as EN-1 a EN-8 e as TU-1 a TU-9 (seção 3) **pela recomendação** em
-2026-11-12 ("Sim, pela recomendação"). Os números (tempos do anel, janelas, quantidades) continuam **PROPOSTOS, SEM FONTE**, e se acertam
+2026-11-12 ("Sim, pela recomendação"), e a EN-9 no mesmo dia. Os números (tempos do anel, janelas, quantidades) continuam **PROPOSTOS, SEM FONTE**, e se acertam
 na rodada de equilíbrio do fim ("equilíbrio só no fim").
 
 **Origem:** três pedidos do Matheus em 2026-11-12:
@@ -75,6 +75,7 @@ que recebeu pedidos não se refaz no Python. Os gestos e o anel são vista e Tam
 | EN-6 | no celular, o arco junta as ações do dono e os pedidos; no desktop, o dock fica e o arco tem os pedidos e o Elogiar e Repreender |
 | EN-7 | o primeiro passo é o arco só com as ações de hoje (só vista); os pedidos vêm depois (motor) |
 | EN-8 | a frase da primeira recusa é neutra ("Ele disse não. A escolha é sua.") |
+| EN-9 | os quatro primeiros comandos são **cavar, dormir, comer e brincar** (Matheus, 2026-11-12); o pet escolhe fazer ou não, e o dono elogia ou repreende |
 
 ### 3.3 O tutorial (TU)
 
@@ -121,9 +122,14 @@ que recebeu pedidos não se refaz no Python. Os gestos e o anel são vista e Tam
 3. O pet decide e a vista mostra: faz, faz outra coisa ou diz não (o rosto Recusa e, quando houver, a fala do gatilho "recusar").
 4. O dono pode responder com o Elogiar ou o Repreender, ou deixar. O tapa credita a última decisão pelo traço, e o carinho chega pelo corpo.
 
+**O comando Cavar (EN-9):** cavar é uma **ação nova**: o motor de hoje não tem (conferido na `main`, 2026-11-12). Pede uma ação do pet
+no motor, o que fica enterrado no mapa e uma pose de cavar por forma, sem acréscimo ao desenho. O que o pet acha ao cavar (uma fruta, uma
+peça da mitologia, só o buraco) fica PROPOSTO. Como é mecânica nova, entra atrás de chave e numa versão de pet nova, na IT6 ou numa etapa
+própria logo depois dela.
+
 **Os pedidos por estágio (PROPOSTO):**
 - **no bebê, nenhum:** só as ações do dono;
-- **no Rookie:** Vem cá, Come, Dorme, Brinca;
+- **no Rookie:** Come, Dorme, Brinca, Cava e Vem cá;
 - **no Champion:** Fica e Explora;
 - **na jornada:** Segue, Espera, Ajuda.
 
