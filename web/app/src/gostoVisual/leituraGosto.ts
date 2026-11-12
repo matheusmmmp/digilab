@@ -64,7 +64,7 @@ export function ondeFica(l: LinhaGosto, x: number): string {
 /** a linha como uma frase, para o leitor de tela (nada só por cor nem só por posição) */
 export function descricaoDaLinha(l: LinhaGosto): string {
   const ver = Math.abs(l.deVer) >= MUDOU, car = Math.abs(l.doCarinho) >= MUDOU;
-  const hoje = ver || car ? `hoje, ${ondeFica(l, l.hoje)}; mudou ${[ver ? "de tanto ver" : "", car ? "com o carinho" : ""].filter(Boolean).join(" e ")}` : "hoje, quase igual";
+  const hoje = ver || car ? `hoje, ${ondeFica(l, l.hoje)}; mudou ${[ver ? "de tanto ver" : "", car ? "com o elogio" : ""].filter(Boolean).join(" e ")}` : "hoje, quase igual";
   return `${l.nome}: de nascença, ${ondeFica(l, l.nascenca)}. ${hoje}.`;
 }
 

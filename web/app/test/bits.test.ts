@@ -104,7 +104,7 @@ describe("o evento \"bits\" no registro do Tamer (versao 9)", () => {
     expect(novos.some(g => g.origem === "evolucao" && g.id === "evolucao:crianca")).toBe(true);
     expect(conferirBits(t, m, 2000)).toEqual([]);
     gravarTamer(a, t);
-    expect(JSON.parse(a.dados[CHAVE_TAMER]).versao).toBe(9);
+    expect(JSON.parse(a.dados[CHAVE_TAMER]).versao).toBe(10);
     const r = lerTamer(a);
     expect(r.bits).toBe(t.bits);
     expect(r.bits).toBe(novos.reduce((s, g) => s + g.valor, 0));
