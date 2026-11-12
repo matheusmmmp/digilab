@@ -142,7 +142,7 @@ Não há run nesta tarefa. Os gates são de engenharia:
   - o corpo segue `.github/pull_request_template.md`, e o CI (`tools/verificar_relato.py`) confere os campos.
 
 **A CO-bancada (2026-11-12):** o plano de análise de "a cooperação emerge e cresce com o `k`?" está em
-`docs/PLANO_ANALISE_V3_COOPERACAO.md`, PROPOSTO (as CB-1 a CB-9 vão ao Matheus). Nenhuma vida roda antes da CO7 na `main` e da aprovação.
+`docs/PLANO_ANALISE_V3_COOPERACAO.md`, APROVADO (as CB-1 a CB-9 DECIDIDAS pelo Matheus em 2026-11-12). Nenhuma vida roda antes da CO7 na `main` e da aprovação.
 
 ## 6. Fora desta tarefa
 
