@@ -83,12 +83,23 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    "128 x 60", as arvores e os marcos na mesma versao): o mundo dela e o `grande` (CMU_GRANDE), com as arvores e os marcos em que o pet
    nao pisa. O resto e a v23, com a luta dela. No plano a versao era a "v23"; a luta da rodada de equilibrio entrou na main antes e
    ficou com o numero. Os v21, os v22 e os v23 seguem vivos e passam para a ilha grande pelo evento "mi" do registro, com tudo
-   deslocado junto com o lar (IG-7); so os ovos novos nascem v24 */
-export const VERSAO_PET = 24;
+   deslocado junto com o lar (IG-7); so os ovos novos nascem v24;
+   25 = a v24 com a memoria de lugar do DigiBrain modular alcancando 128 celulas (docs/TAREFA_V3_ILHA_AGUA.md, secoes 12.14 a 12.16, IG6; o
+   Matheus, 2026-11-11: "Sim, para 128 celulas" e "Todos, por evento"): o `d_max` do M-MEM vale 2 048 subunidades, a proporcao da ilha
+   grande, em vez de 1 024. O resto e a v24. Os v21 a v24 que estao na ilha grande ganham o mesmo alcance pelo evento "ma" do registro,
+   uma vez; so os ovos novos nascem v25;
+   26 = a v25 no grupo de dois pets (CO4c; VERSAO_V26, abaixo): nao e o ovo de um pet so;
+   27 = a v25 com o sono que segura do DigiBrain modular (docs/TAREFA_V3_SONO_SEGURA.md; a histerese do sono, Matheus, 2026-11-11): o pet
+   que esta dormindo segue dormindo ate a energia passar de 90 % (o `lambda_acordar`), salvo a fome urgente e o dono que o acorda
+   (CONFIG_SONO_SEGURA_LIGADA, motor/digibrain/constantes.ts). O resto e a v25 (a ilha grande, a memoria de 128 celulas, a luta da v23). A
+   v26 (o grupo) era o numero livre seguinte da main quando a frente comecou, por isso a v27 (D-SONO-4). Os v21 a v26 seguem como estao,
+   com o sono de antes; so os ovos novos de um pet so nascem v27 */
+export const VERSAO_PET = 27;
 /** as versoes de pet que abrem: a v21, a luta da POC (LUTA_POC, LP4: o descarte 7 tirou os v13 a v19, que lutavam pelo combate por
-    turnos; LP-6), a v22, a v21 que nasce na ilha com agua, a v23, a v22 com a luta da rodada de equilibrio, e a v24, a v23 que nasce na
-    ilha grande. A v16 e so a do laboratorio */
-export const VERSOES_PET: readonly number[] = [21, 22, 23, 24];
+    turnos; LP-6), a v22, a v21 que nasce na ilha com agua, a v23, a v22 com a luta da rodada de equilibrio, a v24, a v23 que nasce na
+    ilha grande, a v25, a v24 com a memoria de 128 celulas (IG6), a v26, a v25 no grupo de dois pets (CO4c), e a v27, a v25 com o sono que
+    segura (SONO_SEGURA). A v16 e so a do laboratorio */
+export const VERSOES_PET: readonly number[] = [21, 22, 23, 24, 25, 26, 27];
 /** a versao de pet do cerebro trocavel (o evento "cb") */
 export const VERSAO_V17 = 17;
 /** a versao de pet do empurrao de verdade na luta (a v17 com o RELOGIO_V18) */
@@ -98,7 +109,8 @@ export const VERSAO_V19 = 19;
 /** a versao tem o cerebro trocavel, a ponte da luta e a bola no golpe da v17: a v17, a v18 (a v17 com o empurrao), a v19 (a v18 com o
     levar pet) e a v21 (a v19 com a luta da POC). Desde a LP4 so a v21 abre; as outras ficam no teste porque a v21 e feita delas */
 export const ehCerebroTrocavel = (versao: number): boolean =>
-  versao === VERSAO_V17 || versao === VERSAO_V18 || versao === VERSAO_V19 || versao === VERSAO_V21 || versao === VERSAO_V22 || versao === VERSAO_V23 || versao === VERSAO_V24;
+  versao === VERSAO_V17 || versao === VERSAO_V18 || versao === VERSAO_V19 || versao === VERSAO_V21 || versao === VERSAO_V22 || versao === VERSAO_V23 || versao === VERSAO_V24 || versao === VERSAO_V25 ||
+  versao === VERSAO_V26 || versao === VERSAO_V27;
 /** 21 = a v19 com a luta da POC (docs/TAREFA_V3_LUTA_POC.md, LP2; as seis decisoes da LP2, Matheus, "Aprovo as 6", 2026-11-08): a luta do pet
     e a simulacao em tempo real de motor/arena/, 1 contra 1, com os numeros saidos dos 6 stats do pet (motor/luta_poc.ts); o evento "l" guarda
     o rival (uma forma do estagio do pet, na Arena, ou o NPC da Campanha), a semente e o mapa; sem gambits ("g"), cartas ("k") nem chips de
@@ -111,14 +123,37 @@ export const VERSAO_V22 = 22;
 export const VERSAO_V23 = 23;
 /** a versao de pet que nasce na ilha grande (a v23 com o mundo `grande`; docs/TAREFA_V3_ILHA_AGUA.md, secao 12, IG4) */
 export const VERSAO_V24 = 24;
-/** a versao luta pela luta da POC: a v21, a v22, a v23 e a v24 */
-export const ehLutaPoc = (versao: number): boolean => versao === VERSAO_V21 || versao === VERSAO_V22 || versao === VERSAO_V23 || versao === VERSAO_V24;
-/** a versao luta com a tabela da rodada de equilibrio (LUTA_V23): a v23 e a v24, que e a v23 na ilha grande */
-export const ehLutaV23 = (versao: number): boolean => versao === VERSAO_V23 || versao === VERSAO_V24;
+/** a versao de pet que nasce com a memoria de lugar de 128 celulas (a v24 com o `d_max` da ilha grande; IG6) */
+export const VERSAO_V25 = 25;
+/** 26 = a v25 que nasce no grupo, com o irmao (docs/TAREFA_V3_COOPERACAO.md, CO4c; "Dois ovos no inicio" e "Um segundo pet meu", Matheus,
+    2026-11-11): dois ovos do mesmo dono, chocados juntos, vivendo no mesmo mundo (motor/grupo_jogo.ts, o GrupoDoJogo), com o registro do
+    grupo no save. O pet v26 so existe no grupo, e o grupo so tem pets v26. O resto e a v25 (a ilha grande, a memoria de 128 celulas, a luta
+    da v23, o cerebro). Os pets de um so (v21 a v25) seguem como estao, sem irmao (CO-4); o VERSAO_PET (o ovo de um pet so, a heranca) segue a
+    v25. No PR da CO4c a versao era a "v24"; a ilha grande e a memoria longa entraram na main antes e ficaram com a v24 e a v25 (D-CO4c-8;
+    "IG6 v25, grupo v26", Matheus, 2026-11-11) */
+export const VERSAO_V26 = 26;
+/** o pet so existe dentro do grupo de dois (a v26) */
+export const ehDoGrupo = (versao: number): boolean => versao === VERSAO_V26;
+/** a chave dos dois ovos (CO4c), ligada na CO4d com as telas dos dois pets: o ovo do brasao choca o grupo de dois (v26). Ficou desligada ate as
+    telas (a CO4d): ligada sem elas, o segundo pet viveria sem aparecer */
+export const DOIS_OVOS_LIGADO = true;
+/** a versao de pet que nasce com o sono que segura do DigiBrain modular (a v25 com a CONFIG_SONO_SEGURA_LIGADA; SONO_SEGURA) */
+export const VERSAO_V27 = 27;
+/** a versao nasce com o sono que segura (o modular dela dorme ate a energia passar de 90 %): a v27 */
+export const nasceComSonoSegura = (versao: number): boolean => versao === VERSAO_V27;
+/** a versao luta pela luta da POC: a v21 a v27 */
+export const ehLutaPoc = (versao: number): boolean =>
+  versao === VERSAO_V21 || versao === VERSAO_V22 || versao === VERSAO_V23 || versao === VERSAO_V24 || versao === VERSAO_V25 ||
+  versao === VERSAO_V26 || versao === VERSAO_V27;
+/** a versao luta com a tabela da rodada de equilibrio (LUTA_V23): a v23, a v24 (a v23 na ilha grande) a v25 (a v24 com a memoria longa) a v26 (a v25 no grupo) e a v27 (a v25 com o sono que segura) */
+export const ehLutaV23 = (versao: number): boolean =>
+  versao === VERSAO_V23 || versao === VERSAO_V24 || versao === VERSAO_V25 || versao === VERSAO_V26 || versao === VERSAO_V27;
 /** a versao nasce na ilha com agua de 64 x 30: a v22 e a v23 (a v23 e a v22 com a luta nova) */
 export const nasceNaAgua = (versao: number): boolean => versao === VERSAO_V22 || versao === VERSAO_V23;
-/** a versao nasce na ilha grande: a v24 */
-export const nasceNaGrande = (versao: number): boolean => versao === VERSAO_V24;
+/** a versao nasce na ilha grande: a v24, a v25, a v26 e a v27 */
+export const nasceNaGrande = (versao: number): boolean => versao === VERSAO_V24 || versao === VERSAO_V25 || versao === VERSAO_V26 || versao === VERSAO_V27;
+/** a versao nasce com a memoria de lugar de 128 celulas: a v25, a v26 (a v25 no grupo) e a v27 (a v25 com o sono que segura) */
+export const nasceComMemoriaLonga = (versao: number): boolean => versao === VERSAO_V25 || versao === VERSAO_V26 || versao === VERSAO_V27;
 /** a ilha com agua para onde os pets v21 passaram entre a IA4 e a IG4 (o evento "mi" dos registros dessa epoca; o destino do
     ILHAS_DE_TROCA). Desde a IG4 ninguem mais passa para ela: o registro que ja tem o evento continua abrindo */
 export const ILHA_DOS_V21 = "mvp_agua";

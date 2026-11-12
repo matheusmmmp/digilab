@@ -1,0 +1,26 @@
+{
+  "analise_sha256": "f07823949099a67e143addb9587961d92543dc9a55d2f1548e44d204fcb1938d",
+  "artefatos_sha256": {
+    "candidatos.jsonl": "319f806c140129e479a52c1d86ce18d4fbd0719691d79ac46c9645482f3165a4",
+    "niveis.json": "90bc191429129a78dfac7698a93764439f71e31e4a5a81eeb4df96a84cc6f0c4"
+  },
+  "fase": "individualidade-i7-ad3",
+  "fim": "2026-11-11T17:28:03",
+  "git_head": "ea77436f41d3aa7c930c6dba5b9aa44ac0410a85",
+  "git_limpo": true,
+  "inicio": "2026-11-11T17:20:51",
+  "lidos_sha256": {
+    "confirmacao/perfis.jsonl.gz": "d0acc8382079064c83e2f0e18db0574b2fdd96eac12e32cb04c1e30ef57eee6e",
+    "confirmacao/ramos.jsonl": "c5cb4355d966f3ae68fee813ed8bb26386708657ad1980a32a2b78aec701472a",
+    "confirmacao/vidas": "f07fb6ce2a5db78c494e34b00e364b12e08687b776d4bda5fc3d62e1409dd100",
+    "descoberta/perfis.jsonl.gz": "49c4db6271ad0b1f2f3a9176ca436ca55bf596a2333b9ba43db1756e7a8a7ffc",
+    "descoberta/ramos.jsonl": "f2119978f9c36af0a438385616560327c96ccf4f8589d60f71e1d9c9a46cf1ef",
+    "descoberta/vidas": "a3955de3f50eb87066e2f82813eb8b91761d0589bddfd8355afd35b8828c431a"
+  },
+  "orquestrador_sha256": "7b3aa97767f26e1e0a338cf58f21ea581defeed231ea82e58639077afce9aa75",
+  "parede_s": 428.1563274000073,
+  "plano": "docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md",
+  "plano_sha256": "9c6756b72a98e19ecdeb224ec40b2eb32b23cd50713d8c54d71d7878c4b3eaba",
+  "processos": 4,
+  "python": "3.13.0"
+}

@@ -3,15 +3,15 @@
    estagio, e embaixo o "de -> para", o que decidiu e as medalhas que a evolucao pediu. So evolucoes novas nesta sessao abrem sozinhas (o
    save antigo nao reabre as dele); o historico de Crescer · Evolucao reabre qualquer uma (reverEvolucao). Tudo vem do que o motor
    registrou na evolucao e no registro do pet. */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   CAT, CLE, CMD, CMG, CSO, MEDALHA_POR_ID, NOME_EST, SOMBRIA, chaveSprite, corDominante, nomeArquetipo, nomeEstagio, nomeForma,
   type Evolucao, type Forma, type Motor, type TracoCombate,
 } from "../../motor/index.ts";
-import { desenharSprite, quadroAgora, useAtlas } from "../atlas.ts";
-import { BRASAO } from "../decoracao.ts";
+import { desenharSprite, enquadrarIdle, quadroAgora, useAtlas } from "../atlas.ts";
+import { BRASAO, useDecoracao } from "../decoracao.ts";
 import { S, gradeDe, imagemGrade, paleta } from "../grades.ts";
-import { Deco } from "./Deco.tsx";
+import { Deco, fundoDeco } from "./Deco.tsx";
 import { SeloMedalha } from "./Medalha.tsx";
 import { abrirModal, rotaDaTelaCheia } from "./modal.ts";
 import { SOM } from "../som.ts";
@@ -81,16 +81,17 @@ export function medalhasDaEvolucao(m: Motor, x: Evolucao): { pediu: number; libe
 export function PetGrande({ f, alvo, cor, sombria = false, maxEscala = 6 }: { f: Forma; alvo: [number, number]; cor: TracoCombate; sombria?: boolean; maxEscala?: number }) {
   const a = useAtlas(), ref = useRef<HTMLCanvasElement>(null), k = chaveSprite(f);
   const sp = a.tipo === "ok" ? a.dados.sprites[k] ?? null : null;
-  const esc = sp ? Math.max(1, Math.min(maxEscala, Math.floor(alvo[0] / (sp.caixa[0] + 2)), Math.floor(alvo[1] / (sp.caixa[1] + 2)))) : 1;
+  /* o canvas e a caixa do Idle, nao a do sprite (a comum a todos os clipes, onde o corpo parado fica fora do meio): atlas.ts, enquadrarIdle */
+  const { esc, w, h, x, y } = sp ? enquadrarIdle(sp, alvo, maxEscala) : { esc: 1, w: 0, h: 0, x: 0, y: 0 };
   useEffect(() => {
     const cv = ref.current; if (!cv || a.tipo !== "ok" || !sp) return;
     const g = cv.getContext("2d"); if (!g) throw new Error("canvas 2d indisponível");
-    const desenha = () => { g.clearRect(0, 0, cv.width, cv.height); desenharSprite(g, a, k, esc, esc, esc, quadroAgora(a, k), { sombria }); };
+    const desenha = () => { g.clearRect(0, 0, cv.width, cv.height); desenharSprite(g, a, k, x, y, esc, quadroAgora(a, k), { sombria }); };
     desenha();
     const t = setInterval(desenha, a.dados.ms_por_quadro);
     return () => clearInterval(t);
-  }, [a, k, esc, sombria]);
-  if (sp) return <canvas className="dl-pix evm-spr" ref={ref} width={(sp.caixa[0] + 2) * esc} height={(sp.caixa[1] + 2) * esc} aria-hidden="true" />;
+  }, [a, k, esc, x, y, sombria]);
+  if (sp) return <canvas className="dl-pix evm-spr" ref={ref} width={w} height={h} aria-hidden="true" />;
   const grade = S[gradeDe(f.est)];
   const e = Math.max(1, Math.min(maxEscala * 2, Math.floor(alvo[0] / grade[0].length), Math.floor(alvo[1] / grade.length)));
   const img = imagemGrade(grade, e, paleta(cor));
@@ -99,6 +100,14 @@ export function PetGrande({ f, alvo, cor, sombria = false, maxEscala = 6 }: { f:
 /** o pet pequeno do "de -> para" */
 function Mini({ f, cor }: { f: Forma; cor: TracoCombate }) {
   return <span className="evm-mini"><PetGrande f={f} alvo={[56, 56]} cor={cor} maxEscala={2} /></span>;
+}
+
+/** o brilho atras do anel. A peca do UP e uma textura de somar (anel branco em fundo PRETO opaco, sem alfa): como <img> ela pintava um
+    quadrado escuro por cima da grade. Aqui o brilho da peca vira a mascara (mask-mode: luminance) de um branco, sem mistura de cores */
+function Brilho() {
+  useDecoracao();
+  const url = fundoDeco("UI_Fx_Glow_Circle_01");
+  return url ? <span className="evm-glow" aria-hidden="true" style={{ "--evm-glow": url } as CSSProperties} /> : null;
 }
 
 const DECIDIDO: Record<string, string> = { crianca: "o cuidado", adolescente: "o caráter", adulto: "o caráter e o treino", mega: "o vínculo e as vitórias" };
@@ -132,7 +141,7 @@ function Revelacao({ i, m, fechar }: { i: number; m: Motor; fechar: () => void }
           </div>
           <div className="evm-cena">
             <span className="evm-raio" aria-hidden="true" />
-            <Deco nome="UI_Fx_Glow_Circle_01" largura={320} altura={320} className="evm-glow" />
+            <Brilho />
             <Deco nome="Digivice_Circle_01" largura={300} altura={300} className="evm-digivice dl-gira" />
             <span className="evm-plataforma" aria-hidden="true"><i /><i /><i /></span>
             <span className="evm-pet"><PetGrande f={f} alvo={largo ? [340, 300] : [250, 220]} cor={cor} sombria={!!SOMBRIA[f.adulta!]} /></span>

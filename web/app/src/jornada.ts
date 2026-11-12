@@ -5,8 +5,8 @@
    vista fica numa chave propria (sementes dos pets que ja viram a mensagem; a da Liga, noutra, para o pet v6 que viu a do Piedmon
    antes desta parte ver a nova). */
 import { useEffect, useState } from "react";
-import { ESPECIES, Motor, hashSemente, type Especie, type Ritmo } from "../motor/index.ts";
-import { QUADROS_CHOCANDO, jogoAtual, trocarMotor } from "./jogo.ts";
+import { DOIS_OVOS_LIGADO, ESPECIES, GrupoDoJogo, Motor, VERSAO_V26, hashSemente, type Especie, type Ritmo } from "../motor/index.ts";
+import { QUADROS_CHOCANDO, jogoAtual, textoDoSaveAtual, trocarGrupo, trocarMotor } from "./jogo.ts";
 import { ligarProduto } from "./produto.ts";
 import { CHAVE, textoSave } from "./save.ts";
 import { CHAVE_GUARDADOS, lerGuardados } from "./pets.ts";
@@ -41,15 +41,28 @@ export function sementeDoBrasao(esp: Especie): number {
 export function chocarDoBrasao(esp: Especie, guardarAtivo = false, ritmo: Ritmo = "rapida"): void {
   if (guardarAtivo) {
     const g = lerGuardados();
-    g.push(JSON.parse(textoSave(jogoAtual().motor)));
+    g.push(JSON.parse(textoDoSaveAtual()));        // o par dos dois pets vai inteiro para a espera (CO4d)
     localStorage.setItem(CHAVE_GUARDADOS, JSON.stringify(g));
   }
-  const m = new Motor(sementeDoBrasao(esp), versaoDoOvo());
-  if (m.especie !== esp) throw new Error("ovo de outro brasão");
-  if (ritmo !== "rapida") m.configurar(ritmo);
-  trocarMotor(ligarProduto(m), "novo", QUADROS_CHOCANDO);
+  if (DOIS_OVOS_LIGADO) {
+    trocarGrupo(chocarDoisOvos(esp, ritmo), "novo", QUADROS_CHOCANDO);
+  } else {
+    const m = new Motor(sementeDoBrasao(esp), versaoDoOvo());
+    if (m.especie !== esp) throw new Error("ovo de outro brasão");
+    if (ritmo !== "rapida") m.configurar(ritmo);
+    trocarMotor(ligarProduto(m), "novo", QUADROS_CHOCANDO);
+  }
   guardarNoProximoOvo = false;
   fecharEscolhaBrasao();
+}
+/** os dois ovos (v26; docs/TAREFA_V3_COOPERACAO.md, CO4c), com a chave DOIS_OVOS_LIGADO: o primeiro e do brasao escolhido, e o segundo e
+    surpresa ("Um brasao, o outro surpresa", Matheus, 2026-11-11; D-CO4b-6): a semente dele sai da do primeiro (sementeDoSegundoJogo), e a
+    especie, dela. Os dois nascem com o mesmo ritmo e o mesmo produto, cada um no registro dele */
+export function chocarDoisOvos(esp: Especie, ritmo: Ritmo = "rapida", semente: number = sementeDoBrasao(esp)): GrupoDoJogo {
+  const g = new GrupoDoJogo(semente, VERSAO_V26);
+  if (g.motor(g.ids[0]).especie !== esp) throw new Error("ovo de outro brasão");
+  for (const i of g.ids) g.agir(i, m => { if (ritmo !== "rapida") m.configurar(ritmo); ligarProduto(m); });
+  return g;
 }
 /** a conclusao pede para guardar o campeao quando o dono escolher um ovo novo por ela */
 let guardarNoProximoOvo = false;

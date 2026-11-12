@@ -8,8 +8,8 @@
    v21 nao muda (test/luta_poc_pet.test.ts). */
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, CUIDADO_NA_HORA, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
-  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehLutaPoc, nasceNaAgua,
-  nasceNaGrande, CMU_GRANDE, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, VERSOES_COM_SACUDIR,
+  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehDoGrupo, ehLutaPoc, nasceNaAgua, VERSAO_V26,
+  nasceNaGrande, nasceComMemoriaLonga, nasceComSonoSegura, CMU_GRANDE, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, VERSOES_COM_SACUDIR,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { LUGARES_V6, NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
@@ -30,14 +30,15 @@ import { MotorCorpo, estadoNascimentoPy, type PoliticaCorpo } from "./motor_corp
 import { MotorCorpoMundo, type PoliticaCorpoMundo } from "./motor_corpo_mundo.ts";
 import {
   MAPA_PADRAO, eventoDeixarBola, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, eventoSacudirArvore, lerDeixarBola, lerDeixarComida, lerLevarPet,
-  lerMudarIlha, lerSacudirArvore, noMapa, regiaoDe, tamanhoDoMapa, type Mundo,
+  lerMudarIlha, lerSacudirArvore, noMapa, regiaoDe, tamanhoDoMapa, type Mundo, type OpcoesMundo,
 } from "./mundo.ts";
 import { CONFIG_CONTRATO_AGUA } from "./contrato.ts";
 import { bracoV11 } from "./pet_v11.ts";
 import { leituraLab, type LeituraLab } from "./digibrain/leitura.ts";
 import { decodificar, decodificarV2, type ConceitosDec } from "./digibrain/decodificador.ts";
 import { DigiBrain } from "./digibrain/adapt.ts";
-import { CONFIG_DIGIBRAIN_LAB_FALA, CONTEUDOS_FALA, INATOS_MODULAR, type ConteudoFala } from "./digibrain/constantes.ts";
+import { CONFIG_DIGIBRAIN_LAB, CONFIG_DIGIBRAIN_LAB_FALA, CONFIG_SONO_SEGURA, CONFIG_SONO_SEGURA_LIGADA, CONTEUDOS_FALA, D_MAX_ILHA_GRANDE, INATOS_MODULAR,
+  type ConteudoFala } from "./digibrain/constantes.ts";
 import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
 import { ConfiancaCombate } from "./confianca.ts";
 import { lutar as lutarArena, sorteiosPorFluxo, type IdCena, type ResultadoLuta as ResultadoArena, type Stats as StatsArena, type Tiro as TiroLutaPoc, type Esquiva as EsquivaLutaPoc, type Apoio as ApoioLutaPoc, type ArenaPorEstagio as ArenaLutaPoc, type TabelaFormas as TabelaFormasPoc } from "./arena/index.ts";
@@ -98,6 +99,9 @@ export interface ResultadoLutaPoc {
   /** cada luta jogada: com a vida com que o pet entrou, o rival (a forma na tabela), o mapa e os numeros dele */
   serie: (ResultadoArena & { vida0: number; pontosA: number; contra: string; mapa: IdCena; rivalStats: StatsArena })[];
   venceu: boolean; lesao: boolean;
+  /** o tiro e a esquiva que a luta usou (a v23 em diante, ou a bancada); ausentes na luta da POC de sempre (v21 e v22). O palco refaz a luta
+      com eles (src/lutaPocTela.ts, lutasDoResultado) */
+  tiro?: TiroLutaPoc; esquiva?: EsquivaLutaPoc;
 }
 /** pets v21 (LP2b; LP-5 revista): o Palacio juntou-se a Torre de Batalha, porque na luta nova todo pet decide sozinho */
 export const PALACIO_NA_TORRE = "o Palácio juntou-se à Torre de Batalha na luta nova: lute na Torre";
@@ -244,10 +248,18 @@ export class Motor {
   /** o modular decide agora (a v16 sempre; a v17 depois de um "cb" do modular) */
   private modularAtivo = false;
 
-  constructor(semente: number, versao: number = VERSAO_PET) {
+  /** dois pets (docs/TAREFA_V3_COOPERACAO.md, CO4b): o pet vive no mundo de um grupo, e o tempo dele anda pelo GrupoDoJogo (motor/grupo_jogo.ts)
+      um tick por vez, na vez sorteada; o `avancar` dele falha alto. Fora do grupo, false: a vida de hoje */
+  readonly noGrupo: boolean;
+
+  constructor(semente: number, versao: number = VERSAO_PET, opcoes: { parteDoMundo?: (op: OpcoesMundo) => Mundo } = {}) {
     /* so a v21 e o pet de teste (v16): os pets de antes (v1-v19, com o combate por turnos) foram descartados (os descartes 6 e 7, src/tamer.ts) */
     if (!VERSOES_PET.includes(versao) && versao !== VERSAO_PET_LAB) throw new Error(`versão de pet desconhecida: ${versao} (só a ${VERSOES_PET.join(" e a ")} e o pet de teste v${VERSAO_PET_LAB} abrem; os pets de antes, com o combate por turnos, foram descartados)`);
     this.semente = semente; this.versao = versao as VersaoPet;
+    this.noGrupo = opcoes.parteDoMundo !== undefined;
+    /* a v26 so existe no grupo, e o grupo so tem a v26 (CO4c) */
+    if (this.noGrupo !== ehDoGrupo(versao))
+      throw new Error(this.noGrupo ? `o pet do grupo e da v${VERSAO_V26}, nao da v${versao}` : `o pet v${VERSAO_V26} so nasce no grupo, com o irmao`);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
     this.temp = temperamentoDe(semente);
     /* o Bandit nao decide nem aprende para o pet; fica so a memoria por espacos dele, como o lobo de memoria e emocao (D-W7 do #201): a
@@ -256,6 +268,8 @@ export class Motor {
     const braco = bracoV11(), m = this;
     /* o laco chama o cerebro por aqui: o desejo antes de decidir (como o gabarito da vontade) e, depois da decisao, o que o Motor
        registra dela (nada que mexa no estado do pet: o efeito da acao e do laco) */
+    /* a v25 nasce com a memoria de lugar de 128 celulas (IG6): o modular dela e criado com esse alcance (no "cb") */
+    if (nasceComMemoriaLonga(versao)) this.alcanceMemoria = D_MAX_ILHA_GRANDE;
     const lab = versao === VERSAO_PET_LAB ? new DigiBrain() : null;
     this.modular = lab; this.modularAtivo = lab !== null;
     const politicaA: PoliticaCorpoMundo = {
@@ -318,7 +332,8 @@ export class Motor {
                                           controlador do contrato. As outras, no mundo sem agua */
                                        cfgMundo: nasceNaGrande(versao) ? CMU_GRANDE : nasceNaAgua(versao) ? CMU_MVP_AGUA : CMU_MVP,
                                        ...(nasceNaGrande(versao) || nasceNaAgua(versao) ? { contrato: CONFIG_CONTRATO_AGUA } : {}),
-                                       bolaNoGolpe: ehCerebroTrocavel(versao) });     // o pet de teste (v16): a bola de antes; a v21, a bola no golpe
+                                       bolaNoGolpe: ehCerebroTrocavel(versao),
+                                       ...(opcoes.parteDoMundo ? { parteDoMundo: opcoes.parteDoMundo } : {}) });     // o pet de teste (v16): a bola de antes; a v21, a bola no golpe
     this.v11 = { braco, laco };
     this.e = laco.estado;
     /* o vinculo B (coerencia por situacao, sem pedido), sem obediencia */
@@ -468,7 +483,8 @@ export class Motor {
     if (this.falaUnidades || this.nDecisoes || this.nDono || this.e.tick !== TICK_INICIAL || this.modular === null || this.modular.k !== 0)
       throw new Error("a marca da fala com conteúdo vai uma vez, no começo do registro");
     this.falaUnidades = true;
-    this.modular = new DigiBrain(CONFIG_DIGIBRAIN_LAB_FALA, INATOS_MODULAR, this.ponteLuta);   // o modular de hoje sai sem ter decidido
+    /* o modular de hoje sai sem ter decidido; o novo fica com o alcance da memoria do pet (IG6; no pet de teste, o de sempre) */
+    this.modular = new DigiBrain(CONFIG_DIGIBRAIN_LAB_FALA, { ...INATOS_MODULAR, d_max: this.alcanceMemoria } as typeof INATOS_MODULAR, this.ponteLuta);
   }
   registrarOrigem(o: Origem): void {
     if (this.log.some(ev => ev[1] !== "c" && ev[1] !== "p" && ev[1] !== "pl" && ev[1] !== "fu")) throw new Error("a origem precisa ser o primeiro evento do registro");
@@ -696,7 +712,8 @@ export class Motor {
     }
     this.vida5.lutas.push({ tick: this.e.tick, rival, lesao, resultado: ult.pontosA === 1 ? "vitoria" : ult.pontosA === 0 ? "derrota" : "empate" });
     this.forcaLutas.push({ tick: this.e.tick, rival, forcaPet: forcaBase, resultado: this.vida5.lutas[this.vida5.lutas.length - 1].resultado });
-    return { rival, mapa: torneio ? null : mapa as IdCena, semente, arena: !npc && !torneio, torneio, pet, rivalStats: serie[0].rivalStats, forma, serie, venceu, lesao };
+    return { rival, mapa: torneio ? null : mapa as IdCena, semente, arena: !npc && !torneio, torneio, pet, rivalStats: serie[0].rivalStats, forma, serie, venceu, lesao,
+      ...(tiro ? { tiro } : {}), ...(esquiva ? { esquiva } : {}) };
   }
   /* ---------------------------------------------------------------- itens do Tamer (pets v6; motor/itens.ts) */
   /** chips que este pet pode ter equipados, pelas medalhas que ele conhece (0 nos v1-v5) */
@@ -818,6 +835,31 @@ export class Motor {
   get podeMudarIlha(): boolean {
     return (this.versao === VERSAO_V21 || nasceNaAgua(this.versao)) && this.mundo !== null && this.mundo.cm.layout.nome !== ILHA_DOS_VIVOS && this.morte === null;
   }
+  /** o alcance da memoria de lugar do DigiBrain modular deste pet, em subunidades (IG6): o de sempre (1 024), ou o da ilha grande
+      (2 048) na v25 desde o ovo e nos v21 a v24 depois do evento "ma". Vale para o modular que existe e para o que for criado depois */
+  alcanceMemoria: number = INATOS_MODULAR.d_max;
+  /** o pet pode ganhar a memoria de 128 celulas agora: e v21 a v24, esta vivo, esta na ilha grande e ainda tem o alcance de sempre */
+  get podeAlongarMemoria(): boolean {
+    return (this.versao === VERSAO_V21 || nasceNaAgua(this.versao) || (nasceNaGrande(this.versao) && !nasceComMemoriaLonga(this.versao)))
+      && this.naIlhaGrande && this.alcanceMemoria !== D_MAX_ILHA_GRANDE && this.morte === null;
+  }
+  /** IG6 (docs/TAREFA_V3_ILHA_AGUA.md, secao 12.16; "Todos, por evento", Matheus, 2026-11-11): a memoria de lugar do pet passa a alcancar
+      128 celulas. So o alcance muda: o que ele lembra, o corpo, o mundo e o vinculo ficam como estao. Nao e contato nem cuidado. Vale com
+      o cerebro A decidindo (o alcance fica para o modular), com o pet acordado ou dormindo, uma vez; fora da ilha grande, na v25, no pet
+      de teste ou no morto, falha alto */
+  alongarMemoria(): void {
+    if (!this.podeAlongarMemoria) throw new Error(`só o pet v21 a v24 vivo, na ilha grande e com a memória de sempre ganha a memória longa (este é v${this.versao})`);
+    const t = this.e.tick;
+    this._alongarMemoria(D_MAX_ILHA_GRANDE);
+    this.log.push([t, "ma", { alcance: D_MAX_ILHA_GRANDE }]);
+  }
+  private _alongarMemoria(alcance: unknown): void {
+    if (alcance !== D_MAX_ILHA_GRANDE) throw new Error(`o alcance da memória do registro é ${D_MAX_ILHA_GRANDE}, não ${String(alcance)}`);
+    if (!this.podeAlongarMemoria) throw new Error(`só o pet v21 a v24 vivo, na ilha grande e com a memória de sempre ganha a memória longa (este é v${this.versao})`);
+    this._conferirMorte(); this._vivo();
+    this.alcanceMemoria = D_MAX_ILHA_GRANDE;
+    this.modular?.alcanceDaMemoria(D_MAX_ILHA_GRANDE);
+  }
   /** o pet vive na ilha grande (a v24 desde o ovo; a v21, a v22 e a v23 depois do "mi" para ela) */
   get naIlhaGrande(): boolean { return this.mundo !== null && this.mundo.cm.layout.nome === ILHA_DOS_VIVOS; }
   /** o mapa do mundo do pet, em subunidades: o limite das posicoes da racao e da bola (o de 64 x 30 sem o mundo) */
@@ -928,25 +970,60 @@ export class Motor {
 
   /* ---------------------------------------------------------------- tempo */
   avancar(n: number): void {
+    if (this.noGrupo) {
+      /* CO4c: o tempo do pet do grupo e o do grupo; o relogio do jogo (src/tempo.ts) anda os dois pets por aqui */
+      if (this.avancarDoGrupo === null) throw new Error("o pet do grupo anda pelo GrupoDoJogo, um tick por vez na vez sorteada (CO4b)");
+      this.avancarDoGrupo(n);
+      return;
+    }
+    this._registrarAvanco(n);
+    this._avancar(n);
+  }
+  /** o avanco do grupo do pet (o GrupoDoJogo o liga na montagem; CO4c) */
+  private avancarDoGrupo: ((n: number) => void) | null = null;
+  ligarAvancoDoGrupo(f: (n: number) => void): void {
+    if (!this.noGrupo || this.avancarDoGrupo !== null) throw new Error("ligarAvancoDoGrupo so uma vez, no pet do grupo");
+    this.avancarDoGrupo = f;
+  }
+  private _registrarAvanco(n: number): void {
     if (!(n > 0)) throw new Error("avanco precisa ser positivo");
     const u = this.log[this.log.length - 1];
     if (u && u[1] === "t" && u[0] + u[2] === this.e.tick) u[2] += n; else this.log.push([this.e.tick, "t", n]);
-    this._avancar(n);
+  }
+  /* ---- dois pets (CO4b): o avanco em tres partes, como o _abrir_avanco, o _um_tick e o _fechar_avanco do Python. O GrupoDoJogo as chama */
+  /** o avanco do grupo chega ao registro do pet (o mesmo "t" de hoje) */
+  abrirAvancoNoGrupo(n: number): void {
+    if (!this.noGrupo) throw new Error("abrirAvancoNoGrupo so no pet do grupo");
+    this._registrarAvanco(n);
+  }
+  /** o pet decide no proximo tick (o Grupo sorteia a vez entre os que decidem) */
+  decideNoProximoTick(): boolean { return this.v11!.laco.decideNoProximoPasso(); }
+  /** um tick do pet: o do laco e o que vem depois (os chamados, a evolucao, o treino e a pausa), o mesmo do _avancar */
+  umTickNoGrupo(): void {
+    if (!this.noGrupo) throw new Error("umTickNoGrupo so no pet do grupo");
+    this._umTick();
+  }
+  /** o fim do avanco do grupo (a conferencia da morte, como no fim do _avancar) */
+  fecharAvancoNoGrupo(): void {
+    if (!this.noGrupo) throw new Error("fecharAvancoNoGrupo so no pet do grupo");
+    this._conferirMorte();
   }
   /** v11: o laco do corpo anda um tick por vez (a decisao, se for a hora, chama o cerebro e o _decisaoV11); o que vem depois do tick e o
       dos v10 (os chamados do bebe, a evolucao, o treino e a pausa), sem mexer no estado do pet */
   private _avancar(n: number): void {
-    const laco = this.v11!.laco;
-    for (let i = 0; i < n; i++) {
-      laco.passo();
-      this.e = laco.estado;
-      if (this.estagioAtual === "bebe") this._chamados();
-      this._evoluir();
-      const e = this.e;
-      this.treino.avancar(e.tick, e.dormindo, Math.min(e.fome, e.higiene, e.energia) >= CTR.bemCuidado, this.estagioAtual);
-      this._pausaTreino();
-    }
+    if (this.noGrupo) throw new Error("o pet do grupo anda pelo GrupoDoJogo, um tick por vez na vez sorteada (CO4b)");
+    for (let i = 0; i < n; i++) this._umTick();
     this._conferirMorte();
+  }
+  private _umTick(): void {
+    const laco = this.v11!.laco;
+    laco.passo();
+    this.e = laco.estado;
+    if (this.estagioAtual === "bebe") this._chamados();
+    this._evoluir();
+    const e = this.e;
+    this.treino.avancar(e.tick, e.dormindo, Math.min(e.fome, e.higiene, e.energia) >= CTR.bemCuidado, this.estagioAtual);
+    this._pausaTreino();
   }
   /** v11: o que o Motor registra de uma decisao do cerebro (chamado pelo laco, logo depois do agir). Como nos v10, sem o motivo do
       Bandit (o motivo do cerebro A fica no cerebro: o painel DigiBrain e a etapa 5), sem o efeito (o do laco) e sem travessuras */
@@ -1179,7 +1256,13 @@ export class Motor {
   private _trocarCerebro(v: unknown): void {
     this._validarCerebro(v);
     this._conferirMorte(); this._vivo();
-    if (v.cerebro === "modular") { this.modular ??= new DigiBrain(); if (this.ponteLuta) this.modular.ligarLutaMemoria(); }
+    /* o modular nasce com o alcance da memoria deste pet (o de sempre, ou o da ilha grande: a v25 e o evento "ma"; IG6) e, na v27, com o sono
+       que segura (SONO_SEGURA) */
+    if (v.cerebro === "modular") {
+      this.modular ??= new DigiBrain(CONFIG_DIGIBRAIN_LAB, { ...INATOS_MODULAR, d_max: this.alcanceMemoria } as typeof INATOS_MODULAR, false,
+        nasceComSonoSegura(this.versao) ? CONFIG_SONO_SEGURA_LIGADA : CONFIG_SONO_SEGURA);
+      if (this.ponteLuta) this.modular.ligarLutaMemoria();
+    }
     this.modularAtivo = v.cerebro === "modular";
     this.cerebroEscolhido = true;
     (this.v11!.laco as MotorCorpoMundo).digibrain = this.modularAtivo;   // o modular ve o mundo, escolhe o alvo e recebe a consequencia dele
@@ -1230,6 +1313,8 @@ export class Motor {
       ...(this.versao === VERSAO_PET_LAB ? [["lab", { ...this.modular!.estadoInterno(), motivos: undefined }]] : []),
       /* a v17 depois do primeiro "cb": o cerebro que decide e o modular (a v17 sem "cb" assina como a v15) */
       ...(this.cerebroEscolhido ? [["cb", this.modularAtivo ? "modular" : "a", this.modular ? { ...this.modular.estadoInterno(), motivos: undefined } : null]] : []),
+      /* a memoria longa pelo evento "ma" (IG6): so com o evento (a assinatura dos pets sem ele nao muda; a v25 ja nasce com ela) */
+      ...(this.alcanceMemoria !== INATOS_MODULAR.d_max && !nasceComMemoriaLonga(this.versao) ? [["ma", this.alcanceMemoria]] : []),
       ...(this.ponteLuta ? [this.epsLuta ? ["pl", "eps"] : ["pl", true]] : []),   /* a ponte da luta: so com a marca (a assinatura dos pets sem ela nao muda) */
       ...(this.falaUnidades ? [["fu", true]] : []),   /* DC3d: a fala com conteudo, so com a marca (a assinatura dos pets sem ela nao muda) */
       ["v11", this.v11!.braco.cerebro.estadoInterno(), this.v11!.laco.estadoDict(), this.v11!.laco.proximaDecisao],
@@ -1286,6 +1371,12 @@ export class Motor {
           throw new Error(`evento de sacudir a árvore inválido no registro (tick ${t}): ${JSON.stringify(a)}`);
         const arvore = lerSacudirArvore({ tipo: "sacudir_arvore", valor: (a as Record<string, unknown>).arvore });
         this._sacudirArvore(arvore); break;
+      }
+      case "ma": {
+        const a = ev[2] as unknown;
+        if (!a || typeof a !== "object" || Object.keys(a).join() !== "alcance")
+          throw new Error(`evento do alcance da memória inválido no registro (tick ${t}): ${JSON.stringify(a)}`);
+        this._alongarMemoria((a as Record<string, unknown>).alcance); break;
       }
       case "mi": {
         const i = ev[2] as unknown;
