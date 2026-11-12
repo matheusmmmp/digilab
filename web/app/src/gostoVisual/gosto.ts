@@ -4,7 +4,11 @@
      carinho deslocaram (seção 3.2);
    - a exposição: o alvo anda devagar na direção do que o pet vê (a mera exposição, seção 3.5);
    - o carinho do dono durante a exibição puxa o alvo para o que está passando (a associação com a consequência, seção 3.5);
-   - o interesse se gasta enquanto o pet olha e volta quando ele não olha ou quando o quadro muda (a habituação, seção 3.3);
+   - a habituação presa ao estímulo (seção 3.3; o enjoo, D-GV-ENJOO-1 a 3): uma memória curta de protótipos do vetor, cada um com o seu
+     enjoo, que sobe enquanto o pet vê aquilo e decai devagar (horas de TV ligada); o interesse de agora é 1 menos o enjoo do protótipo
+     parecido. Só a novidade (a cena longe dos protótipos) ou a constante lenta devolvem o interesse; voltar à mesma imagem não desenjoa;
+   - a exposição com saturação (o U invertido, D-GV-ENJOO-4): até o enjoo do estímulo chegar a SATURACAO_EXPOSICAO, ela puxa o alvo para
+     o que passa; daí em diante para de puxar, e o enjoo acima da saturação vira tédio, que desconta do agrado daquele estímulo;
    - o pet olha quando o agrado vezes o interesse passa de um corte, e desvia quando caem (com folga entre os dois cortes).
    Determinístico: o mesmo pet e a mesma sequência de vetores dão o mesmo estado. Todos os números são PROPOSTOS, SEM FONTE. */
 import { criarRng, hashSemente } from "../../motor/rng.ts";
@@ -25,12 +29,25 @@ export const TAXA_EXPOSICAO_OLHANDO = 0.004, TAXA_EXPOSICAO_DE_LADO = 0.001;
 export const TAXA_CARINHO = 0.12;
 /** o máximo que a exposição e o carinho deslocam o alvo, cada um */
 export const LIMITE_EXPOSICAO = 0.25, LIMITE_CARINHO = 0.3;
-/** o traço do que o pet espera ver (a novidade é a distância a ele), por segundo */
-export const TAXA_ESPERADO = 0.25;
-/** o gasto do interesse por segundo olhando e a volta por segundo sem olhar */
-export const GASTO_INTERESSE = 0.012, VOLTA_INTERESSE = 0.02;
-/** quanto a novidade devolve de interesse (a deshabituação) */
-export const GANHO_NOVIDADE = 1.5;
+/** a memória do enjoo (D-GV-ENJOO-2): quantos protótipos do vetor ela guarda */
+export const PROTOTIPOS = 6;
+/** até que distância (a média por componente) um vetor é "o mesmo" estímulo de um protótipo, e até onde o enjoo dele ainda pesa (a
+    generalização cai em linha, de 1 na distância 0 a 0 em RAIO_GENERALIZACAO) */
+export const RAIO_MESMO = 0.15, RAIO_GENERALIZACAO = 0.3;
+/** quanto o protótipo anda por segundo na direção do vetor que ele reconheceu */
+export const TAXA_PROTOTIPO = 0.1;
+/** o enjoo que sobe por segundo, olhando e de lado (a fração do que falta até 1) */
+export const GASTO_ENJOO_OLHANDO = 0.012, GASTO_ENJOO_DE_LADO = 0.003;
+/** a constante lenta do desenjoo, em segundos de TV ligada (2 h): o enjoo de todos os protótipos cai por exp(-dt/TAU) a cada passo */
+export const TAU_DESENJOO = 7200;
+/** a exposição com saturação (D-GV-ENJOO-4): a exposição puxa o alvo só até este enjoo; acima dele, o enjoo vira tédio */
+export const SATURACAO_EXPOSICAO = 0.5;
+/** o tédio máximo (no enjoo 1), descontado do agrado do estímulo */
+export const PESO_TEDIO = 0.5;
+/** o "adorando" pede o agrado e também o interesse acima destes cortes (D-GV-ENJOO-5) */
+export const AGRADO_ADORANDO = 0.7, INTERESSE_ADORANDO = 0.6;
+/** abaixo deste interesse, o pet que não olha uma coisa de que gosta está enjoado */
+export const INTERESSE_ENJOOU = 0.4;
 /** os cortes da vontade de olhar: começa acima de COMECA, para abaixo de PARA */
 export const COMECA_OLHAR = 0.42, PARA_OLHAR = 0.24;
 
@@ -51,21 +68,26 @@ export function inatoDaSemente(semente: number): Inato {
   return { otimo, largura };
 }
 
-/** o estado aprendido: o deslocamento da exposição e o do carinho, o que o pet espera ver, o interesse e o tempo junto */
+/** um protótipo da memória do enjoo: o vetor (só os componentes que ele viu) e o enjoo dele, em [0, 1] */
+export interface Prototipo { vetor: Partial<PorComponente>; enjoo: number }
+
+/** o estado aprendido: o deslocamento da exposição e o do carinho, a memória do enjoo, o interesse de agora e o tempo junto */
 export interface EstadoGosto {
   exposicao: PorComponente;
   carinho: PorComponente;
-  esperado: PorComponente | null;
+  /** no máximo PROTOTIPOS, na ordem da criação; a troca é determinística (`passo`) */
+  memoria: Prototipo[];
   interesse: number;
   olhando: boolean;
   segundosJuntos: number;
   carinhos: number;
 }
 export const estadoInicial = (): EstadoGosto =>
-  ({ exposicao: zeros(), carinho: zeros(), esperado: null, interesse: 1, olhando: false, segundosJuntos: 0, carinhos: 0 });
+  ({ exposicao: zeros(), carinho: zeros(), memoria: [], interesse: 1, olhando: false, segundosJuntos: 0, carinhos: 0 });
 
 export type Reacao = "adorando" | "olhando" | "enjoou" | "nao_gosta" | "curioso" | "distraido";
-export interface Leitura { agrado: number; interesse: number; novidade: number; vontade: number; olhando: boolean; reacao: Reacao }
+/** o agrado já com o tédio descontado, e o tédio à parte; a novidade é a distância ao protótipo mais perto (1 com a memória vazia) */
+export interface Leitura { agrado: number; tedio: number; interesse: number; novidade: number; vontade: number; olhando: boolean; reacao: Reacao }
 
 /** os componentes presentes neste segundo e o valor de cada um */
 export function valores(s: Sentido): Partial<PorComponente> {
@@ -84,35 +106,70 @@ export function agrado(ina: Inato, e: EstadoGosto, s: Sentido): number {
   return ks.reduce((t, k) => t + Math.exp(-(((v[k]! - alvo(ina, e, k)) / ina.largura[k]) ** 2)), 0) / ks.length;
 }
 
+/** a distância de um vetor a um protótipo: a média por componente presente agora; um componente que o protótipo não viu conta 1 */
+export function distancia(v: Partial<PorComponente>, p: Prototipo): number {
+  const ks = Object.keys(v) as Componente[];
+  if (ks.length === 0) throw new Error("distância de um sentido sem componente");
+  return ks.reduce((t, k) => t + (p.vetor[k] === undefined ? 1 : Math.abs(v[k]! - p.vetor[k]!)), 0) / ks.length;
+}
+
+/** o enjoo de um vetor: o maior enjoo da memória, pesado pela generalização (1 na distância 0, 0 a partir de RAIO_GENERALIZACAO) */
+export const enjooDe = (v: Partial<PorComponente>, memoria: readonly Prototipo[]): number =>
+  memoria.reduce((m, p) => Math.max(m, p.enjoo * Math.max(0, 1 - distancia(v, p) / RAIO_GENERALIZACAO)), 0);
+
+/** o tédio de um enjoo: zero até a saturação da exposição; acima dela, cresce em linha até PESO_TEDIO no enjoo 1 */
+export const tedioDe = (enjoo: number): number => PESO_TEDIO * Math.max(0, enjoo - SATURACAO_EXPOSICAO) / (1 - SATURACAO_EXPOSICAO);
+
 /** um segundo assistindo junto: devolve o estado novo (o antigo não muda) e a leitura do segundo */
 export function passo(ina: Inato, e0: EstadoGosto, s: Sentido, carinho: boolean, dt = 1): { estado: EstadoGosto; leitura: Leitura } {
   if (!(dt > 0)) throw new Error(`passo do gosto com dt ${dt}`);
   const v = valores(s), ks = Object.keys(v) as Componente[];
-  const e: EstadoGosto = { ...e0, exposicao: { ...e0.exposicao }, carinho: { ...e0.carinho }, esperado: e0.esperado ? { ...e0.esperado } : null };
-  /* a novidade: a distância média ao que o pet espera; no primeiro segundo, tudo é novo */
-  const novidade = e.esperado ? ks.reduce((t, k) => t + Math.abs(v[k]! - e.esperado![k]), 0) / ks.length : 1;
-  const esp = e.esperado ?? { ...zeros(), ...v };
-  for (const k of ks) esp[k] += limitar(TAXA_ESPERADO * dt) * (v[k]! - esp[k]);
-  e.esperado = esp;
-  const a = agrado(ina, e0, s);
-  /* a exposição e o carinho deslocam o alvo na direção do que está passando */
-  const taxa = (e.olhando ? TAXA_EXPOSICAO_OLHANDO : TAXA_EXPOSICAO_DE_LADO) * dt;
+  const e: EstadoGosto = { ...e0, exposicao: { ...e0.exposicao }, carinho: { ...e0.carinho },
+    memoria: e0.memoria.map(p => ({ vetor: { ...p.vetor }, enjoo: p.enjoo })) };
+  /* a constante lenta: todo enjoo cai devagar, olhando ou não */
+  const desenjoo = Math.exp(-dt / TAU_DESENJOO);
+  for (const p of e.memoria) p.enjoo *= desenjoo;
+  /* a novidade: a distância ao protótipo mais perto (no empate, o primeiro na ordem da memória); com a memória vazia, tudo é novo */
+  let perto = -1, novidade = 1;
+  e.memoria.forEach((p, j) => { const d = distancia(v, p); if (d < novidade) { novidade = d; perto = j; } });
+  /* o estímulo de agora: o protótipo que o reconhece, ou um novo, sem enjoo; com a memória cheia, o novo toma o lugar do de menor enjoo
+     (no empate, o mais antigo) */
+  let p: Prototipo;
+  if (perto >= 0 && novidade <= RAIO_MESMO) {
+    p = e.memoria[perto]!;
+    for (const k of ks) p.vetor[k] = p.vetor[k] === undefined ? v[k]! : p.vetor[k]! + limitar(TAXA_PROTOTIPO * dt) * (v[k]! - p.vetor[k]!);
+  } else {
+    p = { vetor: { ...v }, enjoo: 0 };
+    if (e.memoria.length >= PROTOTIPOS) {
+      let troca = 0;
+      e.memoria.forEach((q, j) => { if (q.enjoo < e.memoria[troca]!.enjoo) troca = j; });
+      e.memoria.splice(troca, 1);
+    }
+    e.memoria.push(p);
+  }
+  const enjooAntes = p.enjoo, base = agrado(ina, e0, s);
+  /* o agrado do gosto (o alvo de antes deste segundo) menos o tédio deste estímulo */
+  const tedio = tedioDe(enjooAntes), a = Math.max(0, base - tedio);
+  /* a exposição (com saturação) e o carinho deslocam o alvo na direção do que está passando */
+  const satura = Math.max(0, 1 - enjooAntes / SATURACAO_EXPOSICAO);
+  const taxa = (e.olhando ? TAXA_EXPOSICAO_OLHANDO : TAXA_EXPOSICAO_DE_LADO) * dt * satura;
   for (const k of ks) {
     e.exposicao[k] = limitar(e.exposicao[k] + taxa * (v[k]! - alvo(ina, e0, k)), -LIMITE_EXPOSICAO, LIMITE_EXPOSICAO);
     if (carinho) e.carinho[k] = limitar(e.carinho[k] + TAXA_CARINHO * (v[k]! - alvo(ina, e0, k)), -LIMITE_CARINHO, LIMITE_CARINHO);
   }
   if (carinho) e.carinhos += 1;
-  /* o interesse se gasta olhando, volta sem olhar, e a novidade devolve uma parte */
-  const gasto = e.olhando ? -GASTO_INTERESSE * dt : VOLTA_INTERESSE * dt * (1 - e.interesse);
-  e.interesse = limitar(e.interesse + gasto + GANHO_NOVIDADE * novidade * novidade);
+  /* o enjoo do estímulo sobe (olhando mais que de lado), e o interesse é o que sobra do enjoo do vetor de agora */
+  p.enjoo = limitar(p.enjoo + limitar((e.olhando ? GASTO_ENJOO_OLHANDO : GASTO_ENJOO_DE_LADO) * dt) * (1 - p.enjoo));
+  e.interesse = 1 - enjooDe(v, e.memoria);
   const vontade = a * e.interesse, estava = e.olhando;
   e.olhando = estava ? vontade >= PARA_OLHAR : vontade > COMECA_OLHAR;
   e.segundosJuntos += dt;
+  /* sem olhar: o que não agrada nem de cara é "não curtiu"; o que agrada, com o interesse gasto, é "enjoou" (D-GV-ENJOO-5) */
   const reacao: Reacao = e.olhando
-    ? a > 0.7 ? "adorando" : "olhando"
-    : estava ? (e.interesse < 0.4 ? "enjoou" : "nao_gosta")
-    : novidade > 0.15 ? "curioso" : a < 0.3 ? "nao_gosta" : "distraido";
-  return { estado: e, leitura: { agrado: a, interesse: e.interesse, novidade, vontade, olhando: e.olhando, reacao } };
+    ? a > AGRADO_ADORANDO && e.interesse > INTERESSE_ADORANDO ? "adorando" : "olhando"
+    : estava ? (e.interesse < INTERESSE_ENJOOU ? "enjoou" : "nao_gosta")
+    : novidade > 0.15 ? "curioso" : base < 0.3 ? "nao_gosta" : e.interesse < INTERESSE_ENJOOU ? "enjoou" : "distraido";
+  return { estado: e, leitura: { agrado: a, tedio, interesse: e.interesse, novidade, vontade, olhando: e.olhando, reacao } };
 }
 
 /* --- o "gosta mais de…" em palavras (GV-14: a parte de nascença e a de hoje, separadas) --- */
@@ -144,14 +201,34 @@ export function alvos(ina: Inato, e: EstadoGosto): PorComponente {
 /* --- o estado guardado (só o aprendido e o tempo junto; nenhum quadro, nenhum áudio) --- */
 export const chaveGuardada = (semente: number): string => `digilab-gosto-visual-p0:${semente}`;
 
-/** o estado guardado em texto: só os deslocamentos aprendidos, o tempo junto e os carinhos */
-export const paraTexto = (e: EstadoGosto): string =>
-  JSON.stringify({ v: 1, exposicao: e.exposicao, carinho: e.carinho, segundosJuntos: e.segundosJuntos, carinhos: e.carinhos });
+/** a versão do texto guardado: a 2 traz a memória do enjoo (D-GV-ENJOO-3); a 1, de antes, não tinha */
+export const VERSAO_GUARDADA = 2;
 
-/** o estado de volta do texto; um texto que não é o do P0 levanta erro (não volta ao zero em silêncio) */
+/** o estado guardado em texto: os deslocamentos aprendidos, a memória do enjoo, o tempo junto e os carinhos */
+export const paraTexto = (e: EstadoGosto): string =>
+  JSON.stringify({ v: VERSAO_GUARDADA, exposicao: e.exposicao, carinho: e.carinho, memoria: e.memoria, segundosJuntos: e.segundosJuntos, carinhos: e.carinhos });
+
+/** a memória do enjoo de volta do texto: no máximo PROTOTIPOS, cada vetor com componentes conhecidos em [0, 1] e o enjoo em [0, 1] */
+function lerMemoria(x: unknown): Prototipo[] {
+  if (!Array.isArray(x) || x.length > PROTOTIPOS) throw new Error("gosto guardado com a memória do enjoo estragada");
+  return x.map((q, j) => {
+    const p = q as { vetor?: unknown; enjoo?: unknown } | null, vetor: Partial<PorComponente> = {};
+    if (typeof p?.vetor !== "object" || p.vetor === null) throw new Error(`gosto guardado sem o vetor do protótipo ${j}`);
+    for (const [k, n] of Object.entries(p.vetor)) {
+      if (!(COMPONENTES as readonly string[]).includes(k) || typeof n !== "number" || !(n >= 0 && n <= 1)) throw new Error(`gosto guardado com memoria[${j}].${k} inválido`);
+      vetor[k as Componente] = n;
+    }
+    if (Object.keys(vetor).length === 0) throw new Error(`gosto guardado com o protótipo ${j} vazio`);
+    if (typeof p.enjoo !== "number" || !(p.enjoo >= 0 && p.enjoo <= 1)) throw new Error(`gosto guardado com memoria[${j}].enjoo inválido`);
+    return { vetor, enjoo: p.enjoo };
+  });
+}
+
+/** o estado de volta do texto; um texto que não é o do P0 levanta erro (não volta ao zero em silêncio). A versão 1 (de antes do enjoo)
+    migra de propósito com a memória vazia: ela nunca guardou a habituação, e o interesse dela já voltava ao abrir (D-GV-ENJOO-3) */
 export function doTexto(t: string): EstadoGosto {
   const o = JSON.parse(t) as Record<string, unknown>;
-  if (o.v !== 1) throw new Error(`gosto guardado numa versão desconhecida: ${String(o.v)}`);
+  if (o.v !== 1 && o.v !== VERSAO_GUARDADA) throw new Error(`gosto guardado numa versão desconhecida: ${String(o.v)}`);
   const ler = (x: unknown, nome: string): PorComponente => {
     const r = zeros();
     for (const k of COMPONENTES) {
@@ -162,7 +239,8 @@ export function doTexto(t: string): EstadoGosto {
     return r;
   };
   if (typeof o.segundosJuntos !== "number" || typeof o.carinhos !== "number") throw new Error("gosto guardado sem o tempo junto");
-  return { ...estadoInicial(), exposicao: ler(o.exposicao, "exposicao"), carinho: ler(o.carinho, "carinho"), segundosJuntos: o.segundosJuntos, carinhos: o.carinhos };
+  const memoria = o.v === 1 ? [] : lerMemoria(o.memoria);
+  return { ...estadoInicial(), exposicao: ler(o.exposicao, "exposicao"), carinho: ler(o.carinho, "carinho"), memoria, segundosJuntos: o.segundosJuntos, carinhos: o.carinhos };
 }
 
 /** "1 h 05 min", "12 min 30 s", "40 s" */
