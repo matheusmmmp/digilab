@@ -121,7 +121,7 @@ async function post(rota: string, corpo: unknown): Promise<Record<string, unknow
 /* uma chamada por vez (uma GPU): a conversa espera na fila; fala espontanea com chamada em curso e descartada */
 async function falar(situacao: "espontanea" | "conversa", gatilho: string | null, falaJogador?: string): Promise<void> {
   if (FL.pendente) { if (situacao === "conversa") FL.fila.push([situacao, gatilho, falaJogador]); return; }
-  FL.pendente = true; avisar();
+  FL.pendente = true; FL.erro = null; avisar();
   const motor = jogoAtual().motor;
   const semente = hashSemente("fala-livre", motor.semente, motor.log.length, FL.sessao.length) >>> 1;
   const t = motor.e.tick;
