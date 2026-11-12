@@ -45,6 +45,12 @@ export interface ConfigLuta {
   apoio?: Apoio;
   /** a elipse pelo estagio dos dois (LP6-1, secao 4a do plano); sem ela, a elipse de sempre */
   arenaPorEstagio?: ArenaPorEstagio;
+  /** a N3 da investigacao do nucleo (docs/PLANO_LUTA_NUCLEO.md, secao 4): o projetil de quem ja caiu some no ar; sem ela, ele ainda acerta */
+  tiroDoMorto?: true;
+  /** a N3: o teto (px) do pulo da esquiva; sem ele, o pulo sem teto */
+  puloMax?: number;
+  /** a N3: no Ringue, o limite (fracao do raio) do recuo e do pulo; sem ele, eles nao olham a borda */
+  bordaRingue?: number;
 }
 
 // ---------- estado ----------
