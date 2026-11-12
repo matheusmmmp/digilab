@@ -1,8 +1,7 @@
 # Plano da proteção da propriedade intelectual contra cópia e raspagem (2026-11-12)
 
-**Status:** PROPOSTO, sem código. Aprofunda a seção 6 do `docs/PLANO_V3_CONTA.md` (a proteção do site, decidida na CN-9) para o
-**projeto inteiro**: o repositório, o jogo publicado, a borda, a lei e o rastreio. As decisões PI-1 a PI-9 (seção 7) vão ao Matheus, cada
-uma com a recomendação e o custo de errar.
+**Status:** sem código. **As PI-1 a PI-9 estão DECIDIDAS** pelo Matheus em 2026-11-12, pela recomendação e sem mudança ("Sim, segue e mergeia"); os números (o teto de US$ 20, a busca mensal) seguem PROPOSTOS. Aprofunda a seção 6 do `docs/PLANO_V3_CONTA.md` (a proteção do site, decidida na CN-9) para o
+**projeto inteiro**: o repositório, o jogo publicado, a borda, a lei e o rastreio. As decisões estão na seção 7.
 
 **Origem:** o Matheus, em 2026-11-12: "Sobre a questão de proteger a propriedade intelectual de agentes externos e LLMs que podem fazer a
 extração dos dados e copiar o projeto, tem algum tipo de proteção que a gente consegue instaurar para evitar esse tipo de coisa?"
@@ -88,26 +87,26 @@ quiser). O que muda:
 
 ## 7. Decisões para o Matheus
 
-Cada uma com a recomendação e o custo de errar. **Todas PROPOSTAS.**
+Cada uma com a recomendação e o custo de errar. **Todas DECIDIDAS** pelo Matheus em 2026-11-12, pela recomendação: "Sim, segue e mergeia".
 
-- **PI-1. O repositório privado: sim, depois da PI-2.** É a medida que mais protege, e volta atrás quando quiser. Custo de errar: alto se
+- **PI-1 (DECIDIDA). O repositório privado: sim, depois da PI-2.** É a medida que mais protege, e volta atrás quando quiser. Custo de errar: alto se
   ficar público (o código, a pesquisa e os planos seguem abertos a qualquer coleta); médio se fechar sem a PI-2 (o CI para no meio do mês e
   trava os merges).
-- **PI-2. O CI no privado: cortar os minutos primeiro** (o `testes` só quando o Python muda; o PR de documento só com o `relato`) **e pôr um
+- **PI-2 (DECIDIDA). O CI no privado: cortar os minutos primeiro** (o `testes` só quando o Python muda; o PR de documento só com o `relato`) **e pôr um
   teto de gasto de US$ 20 por mês** (PROPOSTO). O runner na máquina do Matheus fica de fora. Custo de errar: médio. Sem o corte, a conta
   passa de US$ 31 por mês; com o teto em zero, o CI trava.
-- **PI-3. O histórico público: não reescrever.** O que já foi público não volta com um `git filter-repo`, e reescrever o histórico quebra
+- **PI-3 (DECIDIDA). O histórico público: não reescrever.** O que já foi público não volta com um `git filter-repo`, e reescrever o histórico quebra
   todas as worktrees e os PRs. Custo de errar: alto, se reescrever.
-- **PI-4. O LICENSE "todos os direitos reservados" e o aviso de autoria no bundle: sim.** Custo de errar: baixo.
-- **PI-5. Os termos de uso contra a raspagem e o treino: sim**, na CN6. Custo de errar: baixo.
-- **PI-6. Os robôs: o `robots.txt`, as políticas de IA da Cloudflare (bloquear o treino, bloquear o agente na API, permitir a busca) e o
+- **PI-4 (DECIDIDA). O LICENSE "todos os direitos reservados" e o aviso de autoria no bundle: sim.** Custo de errar: baixo.
+- **PI-5 (DECIDIDA). Os termos de uso contra a raspagem e o treino: sim**, na CN6. Custo de errar: baixo.
+- **PI-6 (DECIDIDA). Os robôs: o `robots.txt`, as políticas de IA da Cloudflare (bloquear o treino, bloquear o agente na API, permitir a busca) e o
   aviso de mineração reservada: sim**, na CN4. Custo de errar: baixo. Bloquear a busca esconde o jogo; não bloquear o agente deixa um robô
   gastar a fala.
-- **PI-7. A ofuscação do motor: não agora**, só se uma cópia aparecer. Custo de errar: médio. Ofuscar cedo deixa o jogo mais lento e põe
+- **PI-7 (DECIDIDA). A ofuscação do motor: não agora**, só se uma cópia aparecer. Custo de errar: médio. Ofuscar cedo deixa o jogo mais lento e põe
   em risco a paridade do replay, contra quem ainda não apareceu.
-- **PI-8. O registro no INPI: sim**, antes de abrir para fora dos convidados (R$ 210, mais o certificado digital). Custo de errar: médio.
+- **PI-8 (DECIDIDA). O registro no INPI: sim**, antes de abrir para fora dos convidados (R$ 210, mais o certificado digital). Custo de errar: médio.
   Sem o registro, a autoria depende do histórico do git, que é mais fácil de contestar.
-- **PI-9. Os canários e a busca mensal: sim**, fora do motor. Custo de errar: baixo.
+- **PI-9 (DECIDIDA). Os canários e a busca mensal: sim**, fora do motor. Custo de errar: baixo.
 
 ## 8. As etapas
 
