@@ -78,10 +78,10 @@ versão de pet nova e gabarito antes.
 
 ### 3.1c Os apontamentos da análise do Wobbledogs (WD)
 
-**PROPOSTAS** (2026-11-12): o Matheus pediu para incorporá-las ao GDD, e ainda não as decidiu uma a uma. A análise, com a fonte, está no
+**WD-1 a WD-8 DECIDIDAS** pelo Matheus em 2026-11-12, pela recomendação ("Sim, as duas"); as WD-9 e WD-10 seguem a decidir. Os números e os exemplos são PROPOSTOS. A análise, com a fonte, está no
 vault (`DigiLab Research/20 Temas/Wobbledogs — mecânicas para adaptar.md`). Referência de design, NÃO VERIFICADA em fonte primária.
 
-| # | proposta | recomendação |
+| # | decisão | como |
 |---|---|---|
 | WD-1 | o painel de hábitos, só de leitura, lido do cérebro: mostra o quanto o pet passou a fazer cada ação | sim; nunca uma barra que o jogador enche |
 | WD-2 | os feitos do Tamer no Diário, que liberam enfeites, comidas e brinquedos; sem feito de tempo puro (revê a TU-7) | sim, no Diário, sem tela nova |
