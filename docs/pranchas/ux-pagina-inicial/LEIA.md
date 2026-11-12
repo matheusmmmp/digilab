@@ -33,7 +33,7 @@ quebra a 900 px.
 
 | o bloco | o que tem |
 |---|---|
-| **o herói** | a ilha de verdade (uma captura do jogo); "Crie um Digimon que decide sozinho"; **"Começar agora"**; "No navegador · Sem conta · Sem instalar"; "Já tenho conta: entrar". Embaixo a imagem acaba num corte reto, em degrau, e seis pets ficam sobre uma régua de laboratório |
+| **o herói** | a ilha de verdade (uma captura do jogo); "Crie um Digimon que decide sozinho"; **"Começar agora"**; "No navegador · Sem conta · Sem instalar"; "Já tenho conta: entrar". Embaixo a imagem acaba num corte reto, em degrau, e a linha do Agumon fica sobre uma régua de laboratório: Koromon, Agumon, Greymon, MetalGreymon e WarGreymon, do In-Training ao Mega (pedido do Matheus; a linha é a do jogo, `motor/nomes.ts` e `motor/arena/formas.ts`) |
 | **01 · Laboratório aberto** | "Um cérebro que você pode ver": o Agumon na moldura de oito lados, a captura real do DigiBrain e a ficha "escolha de agora" |
 | **a faixa larga** | uma captura do jogo de ponta a ponta: a ilha e o treino |
 | **02 · Primeiro dia** | "Do ovo ao primeiro cuidado", os quatro brasões e a ficha dos três passos |

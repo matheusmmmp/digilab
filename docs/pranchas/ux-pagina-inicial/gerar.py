@@ -17,6 +17,8 @@
 #
 # DE ONDE VEM CADA AFIRMACAO DA PAGINA (nada do que ela diz e novo):
 #   "abre no navegador, sem conta e sem instalar" ..... docs/PLANO_V3_CONTA.md, CN-1
+#   a linha do Agumon na regua do heroi ............... web/app/motor/nomes.ts (DIGIMON_DA_FORMA: Koromon, Agumon, Greymon) e
+#                                                       motor/arena/formas.ts (MetalGreymon, Ultimate; WarGreymon, Mega)
 #   o brasao, o ovo, o primeiro cuidado ............... a jornada do jogo; os brasoes e os niveis: UI_GUIDELINES, secao 12
 #   as acoes Alimentar, Brincar, Limpar, Carinho ...... o dock da tela Pet
 #   o pet decide sozinho; o DigiBrain mostra a escolha  docs/PRODUTO_VISAO.md, secao 1; o scan do DigiBrain (ScanDigiBrain.tsx)
@@ -45,14 +47,20 @@ def ic(n: str, cls: str = "ic") -> str:
 
 
 def _primeira_faixa(ocupado: list) -> tuple[int, int]:
-    a = next(i for i, v in enumerate(ocupado) if v)
-    b = next((i for i in range(a, len(ocupado)) if not ocupado[i]), len(ocupado))
-    return a, b
+    """a primeira faixa ocupada com 8 px ou mais (algumas folhas tem um pixel solto antes do primeiro quadro)"""
+    i = 0
+    while True:
+        a = next(j for j in range(i, len(ocupado)) if ocupado[j])
+        b = next((j for j in range(a, len(ocupado)) if not ocupado[j]), len(ocupado))
+        if b - a >= 8:
+            return a, b
+        i = b
 
 
-def pet(nome: str, k: float, vira: bool = False) -> str:
+def pet(nome: str, k: float, vira: bool = False, arq: str = "") -> str:
     """o primeiro quadro da folha do Digimon (parado), achado pelo alfa: a primeira coluna de quadros e, nela, a primeira linha"""
-    im = Image.open(ASSETS / f"{nome}.png").convert("RGBA")
+    arq = arq or nome   # a folha, quando o primeiro quadro da folha do nome nao e o parado (o WarGreymon)
+    im = Image.open(ASSETS / f"{arq}.png").convert("RGBA")
     al = im.getchannel("A")
     W, H = im.size
     x0, x1 = _primeira_faixa([al.crop((x, 0, x + 1, H)).getbbox() is not None for x in range(W)])
@@ -60,7 +68,7 @@ def pet(nome: str, k: float, vira: bool = False) -> str:
     bx = al.crop((x0, y0, x1, y1)).getbbox()
     x0, x1 = x0 + bx[0], x0 + bx[2]
     return (f'<span class="pet{" vira" if vira else ""}" role="img" aria-label="{nome}" style="width:{(x1 - x0) * k:.0f}px;height:{(y1 - y0) * k:.0f}px;'
-            f"background-image:url('{G.A}/sprites/{nome}.png');background-size:{W * k:.0f}px {H * k:.0f}px;"
+            f"background-image:url('{G.A}/sprites/{arq}.png');background-size:{W * k:.0f}px {H * k:.0f}px;"
             f'background-position:{-x0 * k:.0f}px {-y0 * k:.0f}px"></span>')
 
 
@@ -90,11 +98,14 @@ TRILHAS = '''<svg class="trilhas" viewBox="0 0 1080 560" aria-hidden="true">
 </svg>'''
 
 
+ARQ = {"WarGreymon": "WarGreymon_Adventure"}   # a folha em que o primeiro quadro e o WarGreymon parado, sem a poeira do golpe
+
+
 def pagina() -> str:
     jogar = f'<a class="bt acao jogar" href="#/pet">{ic("play")}Começar agora</a>'
-    fila = "".join(f'<figure>{pet(n, k, v)}<figcaption class="lcd"><b>{n}</b><span class="nv"> · {nv}</span></figcaption></figure>'
-                   for n, k, v, nv in [("Botamon", 1.2, False, "Fresh"), ("Koromon", 1.2, True, "In-Training"), ("Agumon", 1.6, True, "Rookie"),
-                                       ("Tsunomon", 1.2, False, "In-Training"), ("Gomamon", 1.4, False, "Rookie"), ("Patamon", 1.3, False, "Rookie")])
+    fila = "".join(f'<figure>{pet(n, k, v, ARQ.get(n, ""))}<figcaption class="lcd"><b>{n}</b><span class="nv"> · {nv}</span></figcaption></figure>'
+                   for n, k, v, nv in [("Koromon", 1.2, True, "In-Training"), ("Agumon", 1.5, True, "Rookie"), ("Greymon", 2.0, True, "Champion"),
+                                       ("MetalGreymon", 1.4, True, "Ultimate"), ("WarGreymon", 2.2, True, "Mega")])
     brasoes = "".join(f'<span class="chip">{b}</span>' for b in ["Coragem", "Amizade", "Conhecimento", "Sinceridade"])
     ops = "".join(f'<span class="barra-op"><span>{o}</span><i><b style="width:{p}%"></b></i><span>{p} %</span></span>'
                   for o, p in [("explorar", 48), ("comer", 31), ("dormir", 21)])
@@ -123,10 +134,10 @@ def pagina() -> str:
     <a class="ja" href="#/config/conta">Já tenho conta: entrar</a>
   </div>
   <span class="corte" aria-hidden="true"></span>
-  <div class="fila" aria-label="Alguns dos Digimon do jogo">{fila}</div>
+  <div class="fila" aria-label="A linha do Agumon, do In-Training ao Mega">{fila}</div>
   <span class="regua" aria-hidden="true"></span>
   {nota("1 · a ideia do 'Explore 14K': a imagem grande (a ilha de verdade, de uma captura do jogo), o título em caixa alta e UM botão. Ele leva direto ao jogo (CN-1: sem conta)", "right:20px;top:90px", 320)}
-  {nota("embaixo a imagem acaba num corte reto, em degrau (as formas do Valorant), e os pets ficam na borda, sobre uma régua de laboratório. Os nomes e os níveis são os do jogo", "right:20px;bottom:150px", 300)}
+  {nota("embaixo a imagem acaba num corte reto, em degrau (as formas do Valorant), e os pets ficam na borda, sobre uma régua de laboratório. É a linha do Agumon no jogo (nomes.ts e formas.ts), do In-Training ao Mega; é uma das linhas possíveis, não a única", "right:20px;bottom:150px", 300)}
 </section>
 
 <section class="sec" id="lab" aria-labelledby="t1">
