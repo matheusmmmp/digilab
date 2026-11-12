@@ -9,6 +9,7 @@
 import { createReadStream, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { defineConfig, type Plugin } from "vite";
+import react from "@vitejs/plugin-react";
 
 const AQUI = fileURLToPath(new URL(".", import.meta.url));
 const ASSETS = fileURLToPath(new URL("../../../../Assets/", import.meta.url));
@@ -38,14 +39,17 @@ function atlasDev(): Plugin {
 export default defineConfig({
   root: AQUI,
   base: "./",
-  plugins: [atlasDev()],
+  /* o React só para a página de entrada (home/); o WORLD-POC-01a não usa JSX */
+  plugins: [react(), atlasDev()],
   build: {
     outDir: fileURLToPath(new URL("../../dist_poc/", import.meta.url)),
     emptyOutDir: true,
     sourcemap: false,
     target: "es2022",
-    /* a página e a raiz que leva a ela (o endereço "Network" do Vite é a raiz; o celular da M3 entra por ele) */
-    rollupOptions: { input: [fileURLToPath(new URL("./mundo3d.html", import.meta.url)), fileURLToPath(new URL("./index.html", import.meta.url))] },
+    /* a página e a raiz que leva a ela (o endereço "Network" do Vite é a raiz; o celular da M3 entra por ele); a página de entrada (home/,
+       docs/pranchas/ux-pagina-inicial/POC.md) */
+    rollupOptions: { input: [fileURLToPath(new URL("./mundo3d.html", import.meta.url)), fileURLToPath(new URL("./index.html", import.meta.url)),
+      fileURLToPath(new URL("./home/index.html", import.meta.url))] },
   },
   preview: { port: 8800, strictPort: true },
 });

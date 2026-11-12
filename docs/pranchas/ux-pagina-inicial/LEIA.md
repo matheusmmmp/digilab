@@ -4,6 +4,10 @@
 adiante?"). O esboço B fica na pasta só como registro. As PI-2 a PI-4 continuam abertas. É a tela 6 do `docs/PLANO_V3_CONTA.md` (seção 3: "uma página inicial curta"), da etapa
 CN6. O código só vem depois desta prancha aprovada.
 
+**A POC em código (2026-11-12):** `web/app/poc/home/`, descrita em [`POC.md`](POC.md), com as capturas `capturas/poc_390.jpg` e
+`capturas/poc_1440.jpg`. Ela resolve o que a seção "O que não foi feito" abaixo deixou: as larguras intermediárias, o movimento, o
+contraste medido e a passagem para o jogo (PI-4, PROPOSTO).
+
 **Os pedidos do Matheus (2026-11-12):**
 - o primeiro: "monte um layout de página web de entrada, falando sobre o jogo e indicando a começar imediatamente";
 - o segundo, com quatro imagens de referência: "Quero que monte a página com esse design mais clean, cyber futurismo, um laboratório

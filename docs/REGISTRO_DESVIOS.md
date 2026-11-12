@@ -760,3 +760,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-12 — LUTA_POC, N2: a D-N-5 decidida (Claude Code, Opus 5.5, branch `v3-luta-nucleo-n1`)](registro/2026-11.md)
 - [2026-11-12 — CONTA: o plano da proteção da propriedade intelectual (Claude Code, Opus 5.5, branch `v3-conta-protecao`)](registro/2026-11.md)
 - [2026-11-12 — CONTA: as PI-1 a PI-9 decididas pela recomendação (Claude Code, Opus 5.5, branch `v3-conta-protecao`)](registro/2026-11.md)
+- [2026-11-12 — CONTA: a PI0, o CI enxuto (Claude Code, Opus 5.5, branch `v3-conta-pi0-ci`)](registro/2026-11.md)
+- [2026-11-12 — UX_TELA_PET: a POC da página de entrada (Claude Code, Opus 5.5, branch `v3-ux-home-poc`)](registro/2026-11.md)
