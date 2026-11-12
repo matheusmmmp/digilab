@@ -10,7 +10,7 @@ Como dar ao jogo um parceiro só, que vive entre o habitat e uma área viva com 
 
 ## 2. Depende de
 
-As decisões PAR-1 a PAR-3 (Matheus, 2026-11-12). Para a J1: as PAR-6, PAR-7 e PAR-14.
+As decisões PAR-1 a PAR-3, PAR-6 e PAR-14 (Matheus, 2026-11-12). Para a J1 falta a PAR-7.
 
 ## 3. Mudança mínima
 
@@ -18,7 +18,7 @@ J0: só documentos: [`GDD_V3_PARCEIRO.md`](GDD_V3_PARCEIRO.md), [`ENGENHARIA_V3_
 
 ## 4. Experimento e gate (se houver run)
 
-Sem run na J0. A J1 terá o plano de análise `docs/PLANO_ANALISE_V3_PARCEIRO.md`, commitado antes da primeira vida, e uma faixa de sementes pedida ao coordenador (o roadmap, seção 2).
+Sem run. A jornada fica só no jogo web (PAR-14): sem plano de análise nem faixa de sementes; os critérios da J1 são de produto, conferidos por testes (o roadmap, seção 2).
 
 ## 5. Entrega
 

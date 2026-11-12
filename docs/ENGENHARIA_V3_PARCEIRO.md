@@ -19,7 +19,7 @@ serem correlacionadas". Num projeto com event sourcing, isso quer dizer três co
 | RNG de ambiente e de política separadas | `CLAUDE.md` | uma rng por fluxo novo (região, habitantes, eventos), por `derivar_semente` |
 | mecânica nova atrás de chave desligada, com gabarito antes | `CLAUDE.md` | desligada, a vida de hoje sai byte a byte; o gabarito vai num commit próprio |
 | uma versão de pet por mecânica | `web/app/CLAUDE.md` | os pets antigos não ganham a jornada sem uma decisão |
-| paridade Python × TS, bit a bit no Node | `web/app/CLAUDE.md` | a regra da região entra nos dois, com gabaritos do Python |
+| paridade Python × TS, bit a bit no Node | `web/app/CLAUDE.md` | **não vale para a jornada** (PAR-14, exceção decidida pelo Matheus): a região existe só no TS. A paridade do cérebro nas vidas do habitat continua (seção 4.8) |
 | evento desconhecido no log levanta erro | `CLAUDE.md` | cada evento novo tem leitor estrito, como o `mi` de hoje |
 | `engine.py` não muda | `CLAUDE.md` | a região fica em subclasse ou módulo novo |
 
@@ -62,8 +62,9 @@ serem correlacionadas". Num projeto com event sourcing, isso quer dizer três co
   os pets que já o usam.
 - **Um mundo ativo por vez.** Na ida, o habitat fica guardado no estado do motor (que sai do log), e a região é montada. Na volta, o
   contrário.
-- **O habitat enquanto o pet está fora (PAR-6):** a recomendação é que ele siga por regras simples (a comida apodrece, a sujeira fica), sem
-  simular o pet ausente. O tempo que passa é o mesmo `t` do log.
+- **O habitat enquanto o pet está fora (PAR-6, DECIDIDO):** congela. Nada no habitat muda entre a ida e a volta: os objetos, a comida, a
+  sujeira e os relógios do mundo da casa ficam como estavam. O tempo do pet (o corpo, a idade, o cérebro) continua andando na região pelo
+  mesmo `t` do log.
 - **A memória por área:** hoje a troca zera a orientação e o registro do controlador. Proposta: guardar a memória espacial por chave de área
   (`habitat`, `regiao:<id>`), para o pet lembrar de onde fica a água da região quando voltar a ela. O que ele aprendeu (pesos, hábitos)
   nunca zera: é o mesmo cérebro.
@@ -80,7 +81,7 @@ serem correlacionadas". Num projeto com event sourcing, isso quer dizer três co
 - **PAR-7 (PROPOSTO):** na POC, cada habitante tem um controlador por regras com necessidades (fome, sono, território) e memória curta,
   com a sua rng derivada. Não é o DigiBrain.
 - **Por quê:** o replay refaz cada habitante a cada tick. Um DigiBrain por habitante multiplica o custo e a superfície de paridade.
-- **O orçamento (PROPOSTO, SEM FONTE):** o número de habitantes e o custo por tick saem da POC, medidos no Python e no Node. A referência
+- **O orçamento (PROPOSTO, SEM FONTE):** o número de habitantes e o custo por tick saem da POC, medidos no Node e no Chrome do celular. A referência
   de hoje é o replay da luta (`web/app/scripts/medicoes/replay_lp2.json`), e o alvo é que o replay de uma vida com jornada continue na
   mesma ordem de grandeza.
 - **O que o pet percebe dos habitantes:** entra pela percepção do cérebro (a `sens` do modular), como hoje o outro pet entra na cooperação.
@@ -121,14 +122,22 @@ serem correlacionadas". Num projeto com event sourcing, isso quer dizer três co
 
 ### 4.8 Python e TS
 
-- **PAR-14 (PROPOSTO):** a região nasce no Python (a bancada mede o "vivo" e o G-MESMO-CEREBRO) e passa ao TS com paridade bit a bit,
-  como a árvore que sacode (S1 no Python, #727; S2 no TS, #817).
-- **Os gabaritos** saem de um exportador `experiments/exportar_regiao_*.py` para `web/app/test/gabaritos/`.
+- **PAR-14 (DECIDIDO pelo Matheus, 2026-11-12):** a jornada fica só no jogo web. Não há região, habitante, evento nem escolha no Python,
+  nem exportador ou gabarito do Python para ela. É uma exceção à regra "toda regra de jogo nova entra no motor TS, com paridade", que
+  vale para o que tem gêmeo no Python.
+- **O que continua valendo:** o determinismo e o replay no TS (a mesma semente e o mesmo log dão a mesma vida, no mesmo runtime), as
+  chaves desligadas e o byte a byte das vidas de hoje.
+- **A fronteira com o cérebro:** o DigiBrain tem gêmeo no Python, com paridade. Por isso:
+  - as vidas sem jornada continuam com a paridade do cérebro de hoje, intacta;
+  - o que a região acrescenta ao cérebro (classes novas na percepção) entra só no TS, atrás da chave da jornada;
+  - **uma vida com jornada não se refaz no Python.** É a consequência aceita do PAR-14: o pet viajante é um pet do jogo, não da pesquisa.
+- **Os testes da região** são do Vitest: testes de propriedade (a região vive, a ida e volta refaz igual) e gabaritos gravados pelo
+  próprio TS, para pegar mudança sem querer.
 - **O que fica só na vista:** o desenho 3D da região, as animações, os balões e a câmera.
 
 ### 4.9 Versão, chave e save
 
-- **A chave:** `ConfigRegiao.ligada` no Python e o espelho no TS, desligada por padrão. Desligada, a vida de hoje sai byte a byte.
+- **A chave:** uma constante da jornada no motor TS (nome a fechar na espec), desligada por padrão. Desligada, a vida de hoje sai byte a byte.
 - **A versão:** a jornada entra numa `VERSAO_PET` nova. Os pets antigos não ganham o botão de viajar sem uma decisão do Matheus.
 - **O save** continua `{semente, log, versao}`. O log cresce com a viagem. O tamanho do save já foi medido na conta (CN0), e a jornada
   entra nessa conta antes de ligar.
@@ -138,8 +147,9 @@ serem correlacionadas". Num projeto com event sourcing, isso quer dizer três co
 | gate | o que confere | onde |
 |---|---|---|
 | G-BYTE | com a chave desligada, as vidas de hoje saem byte a byte | um gabarito gravado antes, num commit próprio |
-| G-IDA-VOLTA | um log com `vj` ida e volta refaz igual, duas vezes, no mesmo runtime | teste de replay no Python e no Node |
-| G-PAR | a região, os habitantes e os eventos dão o mesmo resultado no Python e no TS | gabaritos do exportador |
+| G-IDA-VOLTA | um log com `vj` ida e volta refaz igual, duas vezes, no mesmo runtime, e o habitat volta idêntico (PAR-6) | teste de replay no Node (Vitest) |
+| G-ESTAVEL | a região, os habitantes e os eventos não mudam sem querer | gabaritos gravados pelo próprio TS |
+| G-PAR-CEREBRO | as vidas sem jornada continuam com a paridade do cérebro com o Python | os gabaritos de hoje |
 | G-ESTRITO | `vj` e `es` com chave a mais, id desconhecido ou evento fechado levantam erro | testes de leitura |
 | G-MESMO-CEREBRO | a política é a mesma instância nas duas áreas, e o que muda numa aparece na outra | o critério da POC (roadmap, J1) |
 | G-CUSTO | o replay de uma vida com jornada fica dentro do orçamento PROPOSTO da POC | uma medição em disco, como `replay_lp2.json` |
@@ -148,7 +158,7 @@ serem correlacionadas". Num projeto com event sourcing, isso quer dizer três co
 
 | risco | efeito | mitigação |
 |---|---|---|
-| a região em float diverge entre o Chrome e o Node | a paridade falha no último bit | física e ciclos em inteiros, como o mundo de hoje |
+| a região em float diverge entre o Chrome e o Node | o replay do celular difere do Node no último bit | física e ciclos em inteiros, como o mundo de hoje |
 | habitantes demais | o replay fica lento, e o celular sofre | controlador simples (PAR-7) e um teto medido na POC |
 | a memória espacial por área cresce | o estado do cérebro pesa | chave por área e o alcance de hoje (128 células) |
 | o catálogo de eventos muda e quebra logs antigos | o replay de um pet antigo falha | catálogo com versão, nunca editar uma entrada publicada |

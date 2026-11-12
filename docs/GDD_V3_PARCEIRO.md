@@ -1,6 +1,6 @@
 # GDD do parceiro: um Digimon, um cérebro, uma jornada (2026-11-12)
 
-**Status:** PROPOSTO, sem código. Três decisões já são do Matheus (PAR-1 a PAR-3, seção 11). As outras estão PROPOSTAS, com a recomendação
+**Status:** PROPOSTO, sem código. Cinco decisões já são do Matheus (PAR-1 a PAR-3, PAR-6 e PAR-14, seção 11). As outras estão PROPOSTAS, com a recomendação
 e o custo de errar. Todo número é **PROPOSTO, SEM FONTE**, e se acerta na rodada de equilíbrio do fim ("equilíbrio só no fim").
 
 **Os três documentos da frente:**
@@ -87,6 +87,7 @@ O roteiro e a simulação criam as situações. O pet responde com o que aprende
   memória curta. Não são o DigiBrain do parceiro (PAR-7).
 - **Recursos:** frutas que amadurecem e apodrecem, água, abrigo. Os habitantes disputam os recursos, e o pet também.
 - **Tempo:** dia e noite e um clima simples mudam quem está onde.
+- **O habitat congela enquanto o pet está fora (PAR-6):** a casa volta exatamente como ficou.
 - **Lugares:** pontos com nome (uma clareira, uma ruína, um ninho), onde os eventos roteirizados podem disparar.
 - **O que torna a área "viva" (o gate da POC):** sem o jogador fazer nada, um dia na região tem acontecimentos diferentes de outro dia, e o
   pet que volta encontra a área mudada. A medida está no roadmap (fase J1).
@@ -180,7 +181,7 @@ Cada entrada nova é uma versão de pet nova, com paridade. Os pets antigos não
 | PAR-3 | começar por uma POC de um mundo simulado vivo, de uma região | **DECIDIDO** (Matheus, 2026-11-12) | — | — |
 | PAR-4 | o brasão sai das primeiras interações, não de um menu | PROPOSTO | sim, numa abertura curta, ainda com os quatro brasões | um menu fica mais claro para quem joga pela primeira vez; uma abertura mal feita parece sorteio |
 | PAR-5 | evento nenhum dá ou tira caráter direto | PROPOSTO | sim | um "+1 Coragem" vira a nota que a decisão de 2026-10-07 tirou, e o cérebro deixa de importar |
-| PAR-6 | enquanto o pet está fora, o habitat congela ou segue | PROPOSTO | segue por regras simples (comida apodrece, sujeira fica), sem simular o pet ausente | congelar é mais simples, mas a volta para casa deixa de ter consequência |
+| PAR-6 | enquanto o pet está fora, o habitat congela | **DECIDIDO** (Matheus, 2026-11-12: "ele pode ficar congelado, não precisa ter alteração nenhuma no universo enquanto o pet está fora") | — | — |
 | PAR-7 | os habitantes da área têm um controlador simples, não o DigiBrain | PROPOSTO | sim na POC; um cérebro de verdade só se a POC pedir | com o DigiBrain, o replay e o desempenho pesam N vezes; com regras pobres demais, a área não parece viva |
 | PAR-8 | os golpes destravados ficam com o pet entre as formas | PROPOSTO | sim | sem isso, a evolução apaga o que o jogador construiu |
 | PAR-9 | o cérebro do pet escolhe o golpe na luta | PROPOSTO, **depois do núcleo da luta** | decidir só quando o núcleo (N0–N4) fechar | mexer agora briga com a LP-3 e com o trabalho em curso |
@@ -188,11 +189,12 @@ Cada entrada nova é uma versão de pet nova, com paridade. Os pets antigos não
 | PAR-11 | a jogress é temporária e pede afinidade com o personagem e vínculo com o dono | PROPOSTO | sim | permanente cria um segundo parceiro e quebra o P1 |
 | PAR-12 | o Tamer ganha nome, rosto e roupa | PROPOSTO | sim, depois da jornada jogável | é custo de arte sem jornada para usar |
 | PAR-13 | a personalização do Digimon fica fora do desenho (aura, rastro, efeito, emblema, item) | PROPOSTO | sim; a regra "sem acréscimos" fica | revisar a regra multiplica a arte por espécie e nível |
-| PAR-14 | a pesquisa da área viva começa no Python e passa ao TS com paridade, como a árvore que sacode (S1 → S2) | PROPOSTO | sim | começar no TS deixa a POC sem a bancada para medir o "vivo" |
+| PAR-14 | a jornada (a área aberta, os habitantes, os eventos) fica só no jogo web, sem Python e sem paridade com o Python | **DECIDIDO** (Matheus, 2026-11-12: "não vai fazer parte da pesquisa [...] fica só na parte web do jogo") | — | — |
 | PAR-15 | a fala da camaradagem espera a voz validada; até lá, gesto e rosto | PROPOSTO | sim | uma fala ruim na hora mais íntima do jogo pesa mais que nenhuma fala |
 
 ## 12. Fora deste desenho
 
+- A pesquisa em Python: a jornada é só do jogo web (PAR-14). Os critérios da POC são de produto, não gates de pesquisa.
 - O multijogador e o ranking (`docs/PLANO_V3_MMO.md`), e a conta (`docs/PLANO_V3_CONTA*`): a jornada é do jogador sozinho.
 - Venda de qualquer coisa: os Bits nunca são vendidos (CN-11/12).
 - Mudar a pergunta do dono, encerrada (`docs/LEITURA_CONSOLIDADA_DONO.md`).

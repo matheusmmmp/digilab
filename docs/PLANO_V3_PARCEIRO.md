@@ -23,8 +23,8 @@ Com o acréscimo dele: começar por uma POC de um mundo simulado vivo, com o mes
 | fase | o que entrega | depende de | tamanho |
 |---|---|---|---|
 | **J0** | este desenho (GDD, engenharia, roadmap) e as decisões PAR-4 a PAR-15 | — | P |
-| **J1** | a POC do mundo vivo no Python: uma região, habitantes, recursos, dia e noite, a viagem de ida e volta, o mesmo cérebro | J0; o plano de análise da J1 | G |
-| **J2** | o porte da J1 para o TS, com paridade, e uma vista mínima: sair pelo cais, andar na região, voltar | J1 | G |
+| **J1** | a POC do mundo vivo no motor do jogo (TS, sem vista): uma região, habitantes, recursos, dia e noite, a viagem de ida e volta, o mesmo cérebro | J0; a PAR-7 | G |
+| **J2** | a vista mínima da J1: sair pelo cais, andar na região, voltar | J1 | M |
 | **J3** | a evolução por progresso e relação (os contadores do log; o vínculo no Champion e no Ultimate) | J0 (corre em paralelo com a J1) | M |
 | **J4** | os eventos roteirizados e as escolhas do dono na região; a abertura do brasão (PAR-4) | J2 | M |
 | **J5** | a camaradagem: os gatilhos novos, primeiro com gesto e rosto, depois com a fala | J4; a voz validada (DC5) para a parte falada | M |
@@ -39,44 +39,38 @@ Com o acréscimo dele: começar por uma POC de um mundo simulado vivo, com o mes
 
 - **Entrega:** os três documentos e a lista de decisões.
 - **Aceite:** o Matheus decide as PAR-4 a PAR-15, ou adia cada uma com o motivo.
-- **Precisa do Matheus:** as decisões da seção 11 do GDD. As que travam a J1 são a PAR-6 (o habitat enquanto o pet está fora), a PAR-7 (o
-  controlador dos habitantes) e a PAR-14 (Python primeiro).
+- **Precisa do Matheus:** as decisões da seção 11 do GDD. A PAR-6 (o habitat congela) e a PAR-14 (só no web) já estão decididas; a que
+  ainda trava a J1 é a PAR-7 (o controlador dos habitantes).
 
-### J1. A POC do mundo vivo (pesquisa, no Python)
+### J1. A POC do mundo vivo (motor do jogo, sem vista)
 
-- **Antes da primeira vida:**
-  - a seção da J1 na tarefa ([`TAREFA_V3_PARCEIRO.md`](TAREFA_V3_PARCEIRO.md));
-  - o plano de análise (`docs/PLANO_ANALISE_V3_PARCEIRO.md`);
-  - a faixa de sementes pedida ao coordenador e posta em `FAIXAS_RESERVADAS`.
-- **O que se constrói:**
-  - `ConfigRegiao` (desligada) e o gabarito byte a byte das vidas de hoje, num commit próprio;
+- **Só no jogo web (PAR-14):** sem Python, sem plano de análise, sem faixa de sementes. Os critérios abaixo são **de produto**, conferidos
+  por testes do Vitest e por uma medição gravada em disco, não gates de pesquisa.
+- **O que se constrói, em `web/app/motor/`:**
+  - a chave da jornada (desligada) e o gabarito byte a byte das vidas de hoje, num commit próprio;
   - a região gerada da semente, com recursos em ciclos inteiros e dia e noite;
   - os habitantes com controlador simples (PAR-7);
-  - o evento `vj` de ida e volta, e a memória espacial por área;
-  - a bancada: vidas com e sem jornada, com o mesmo genoma e o mesmo dono.
-- **Os critérios (PROPOSTOS, a fechar no plano de análise):**
-  - **G-VIVO:** sem o dono agir, dias diferentes da região têm acontecimentos diferentes. A medida proposta é a diversidade de eventos
-    emergentes por dia, contra uma região "parada" (os mesmos habitantes sem necessidades) como controle;
-  - **G-MESMO-CEREBRO:** o que o pet viveu na região muda o que ele faz no habitat, e vice-versa. A comparação proposta é pareada por
-    semente: com e sem viagem, a mesma medida de comportamento no habitat;
-  - **G-IDA-VOLTA** e **G-BYTE** (seção 5 da engenharia);
-  - **G-CUSTO:** o tempo do replay de uma vida com jornada, medido e gravado em disco.
-- **Se um gate falhar:** a V3 não para. O resultado negativo é registrado, e a J2 decide com o Matheus.
-- **Máquina:** no máximo 4 processos, uma run de pesquisa por vez.
+  - o evento `vj` de ida e volta, o habitat congelado (PAR-6) e a memória espacial por área;
+  - uma `VERSAO_PET` nova.
+- **Os critérios (PROPOSTOS, a fechar na espec da J1):**
+  - **G-VIVO:** sem o dono agir, dias diferentes da região têm acontecimentos diferentes, contra uma região "parada" (os mesmos habitantes
+    sem necessidades). Um teste do Vitest com algumas sementes de teste;
+  - **G-MESMO-CEREBRO:** a política é a mesma instância nas duas áreas, e um teste mostra um efeito cruzado (algo aprendido na região que
+    muda uma escolha no habitat);
+  - **G-IDA-VOLTA**, **G-BYTE**, **G-ESTAVEL** e **G-PAR-CEREBRO** (seção 5 da engenharia);
+  - **G-CUSTO:** o tempo do replay de uma vida com jornada, medido no Node e gravado em disco (como `replay_lp2.json`).
+- **Se um critério falhar:** o achado é registrado, e a J2 espera a decisão do Matheus.
 
-### J2. O porte e a vista mínima (jogo)
+### J2. A vista mínima (jogo)
 
-- **O que se constrói:**
-  - o porte da região, dos habitantes e do `vj` para o TS, com os gabaritos da J1;
-  - uma `VERSAO_PET` nova;
-  - na vista, a saída pelo cais, a região em 3D no estilo da ilha (objetos em cartoon), os habitantes com sprites que já existem, e a volta.
+- **O que se constrói:** a saída pelo cais, a região em 3D no estilo da ilha (objetos em cartoon), os habitantes com sprites que já existem,
+  e a volta.
 - **Aceite:**
-  - G-PAR bit a bit no Node;
   - o e2e da ida e volta;
   - as capturas no desktop (1920×950) e no celular (390×844).
 - **Fora:** eventos roteirizados, escolhas e fala. A região só vive.
 
-### J3. A evolução por progresso e relação (jogo e Python)
+### J3. A evolução por progresso e relação (jogo web)
 
 - **O que se constrói:**
   - os contadores derivados do log: inimigos derrotados por tipo, golpes usados, marcos vividos;
@@ -85,9 +79,10 @@ Com o acréscimo dele: começar por uma POC de um mundo simulado vivo, com o mes
   - os pets antigos continuam iguais (gabarito);
   - a paridade da nova tabela;
   - a tela da Evolução explica as entradas novas.
-- **Precisa do Matheus:** a tabela nova (quais entradas pesam em cada estágio), com a recomendação na espec da fase.
+- **Precisa do Matheus:** a tabela nova (quais entradas pesam em cada estágio), com a recomendação na espec da fase. A espec confere se
+  a tabela de hoje tem gêmeo no Python; os contadores da jornada só existem no web (PAR-14).
 
-### J4. Os eventos e as escolhas (jogo e Python)
+### J4. Os eventos e as escolhas (jogo web)
 
 - **O que se constrói:**
   - o catálogo fechado de eventos roteirizados, com versão;
@@ -106,14 +101,13 @@ Com o acréscimo dele: começar por uma POC de um mundo simulado vivo, com o mes
 - **J5b (fala):** os mesmos gatilhos pela fala da rede, com a LLM como voz, quando a voz do jogo estiver validada (PAR-15).
 - **Aceite:** só aparece o que o motor tem (P4); a fala vai para o registro de apresentação.
 
-### J6. Os golpes e as competências (jogo e Python)
+### J6. Os golpes e as competências (jogo web)
 
 - **Antes:** o núcleo da luta fechado e a PAR-9 decidida (o cérebro escolhe o golpe ou não).
 - **O que se constrói:**
   - os golpes destravados pelo que o pet viveu, que ficam entre as formas (PAR-8);
   - as competências de exploração que abrem partes da região.
 - **Aceite:**
-  - a paridade;
   - a luta de hoje sai igual com a chave desligada;
   - nenhum desenho novo de Digimon (a regra "sem acréscimos").
 
@@ -143,13 +137,14 @@ Com o acréscimo dele: começar por uma POC de um mundo simulado vivo, com o mes
 | J5a e J6 | a J5a é só vista; a J6 é motor da luta |
 | J7 e J9 | conteúdo de região e personalização não se tocam |
 
-**Sempre uma run de pesquisa por vez** (a J1 e qualquer medição do combate disputam a máquina).
+**A jornada não tem run de pesquisa** (PAR-14). As medições de custo da J1 ainda respeitam o limite de 4 processos.
 
 ## 4. Os riscos do roadmap
 
 | risco | efeito | o que fazer |
 |---|---|---|
 | a J1 mostra que a região não parece viva | a jornada vira um mapa vazio | o G-VIVO falha alto; a J2 só começa com a decisão do Matheus |
+| a jornada não se refaz no Python | um pet viajante não serve à pesquisa | aceito pelo PAR-14; a pesquisa usa vidas sem jornada |
 | o G-MESMO-CEREBRO não aparece | o PAR-2 vale, mas o jogador não sente a ligação | medir antes de construir conteúdo; tornar visível o que já liga (a memória, a fala) |
 | o núcleo da luta atrasa | a J6 espera | a J6 é a única fase presa à luta; o resto anda |
 | a voz não valida | a camaradagem fica só em gesto | a J5a entrega o momento sem a fala |
