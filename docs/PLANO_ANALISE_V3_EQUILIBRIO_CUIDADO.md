@@ -54,7 +54,7 @@ brincar se o pet está acordado, carinho se está dormindo. O brincar também at
 - **o relapso** faz o mesmo nos ticks `t` múltiplos de 360 (6 h de jogo).
 
 O médio e o relapso leem só o corpo: eles não sabem se o chamado ainda está aberto, e não olham se já há ração no comedouro.
-No grupo, o dono faz a mesma conta para cada pet, primeiro o `a` e depois o `b`, cada um pelo `g.agir`.
+No grupo, o dono faz a mesma conta para cada pet, primeiro o `A` e depois o `B`, cada um pelo `g.agir`.
 
 ## 3. A janela
 
