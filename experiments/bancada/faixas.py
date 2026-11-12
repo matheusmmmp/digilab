@@ -31,7 +31,11 @@ BASES_COMPARACAO = {"calibracao": (28101, 28202, 28303, 28404, 28505), "validaca
 PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7", "comparacao-cerebros", "mundo", "corpo", "banheiro", "dois_pets", "rede_de_si",
                      "pet_que_pensa", "competicao", "digibrain_prototipo")
 # faixas queimadas: continuam reservadas e nao podem ser usadas para nada (adendo 4.1 do PLANO_ANALISE_V2_EXPERIMENTO_MAIOR)
-FAIXAS_QUEIMADAS = ((15101, 15505, "a validacao antiga do experimento maior: run indevida parada em 2026-10-06 (PR #183)"),)
+FAIXAS_QUEIMADAS = ((15101, 15505, "a validacao antiga do experimento maior: run indevida parada em 2026-10-06 (PR #183)"),
+                    (90101, 90505, "GOSTO_VISUAL, GV3b do adendo 1: a run parou na vida 213 de 216 por um erro do codigo, as duas TVs "
+                                   "da sonda sem lugar (D-GV-GV3B-12, 2026-11-12); o piloto e a run parcial ficam como registro, nao "
+                                   "como resultado (docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO2.md, secao 6; o coordenador concordou, "
+                                   "2026-11-12)"))
 # faixas reservadas ou ja usadas no repositorio (fonte ao lado); o teste tambem varre experiments/configs/. Intervalos fechados.
 FAIXAS_RESERVADAS = (
     (101, 1010, "testes (101...505) e ovos da personalidade (101...1010)"),
@@ -157,10 +161,14 @@ FAIXAS_RESERVADAS = (
     (89101, 89505, "GOSTO_VISUAL, GV3 (P1e): 89101-89202 o piloto (bases 89101 e 89202, K = 2) e 89303-89505 a run descritiva "
                    "genoma x dono, uma vez (bases 89303, 89404 e 89505, K = 12) (docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md, secao 6; "
                    "confirmada pelo coordenador, 2026-11-11; nenhuma vida antes da aprovacao do plano pelo Matheus)"),
-    (90101, 90505, "GOSTO_VISUAL, GV3b (a GV3 com o enjoo ligado): 90101-90202 o piloto (bases 90101 e 90202, K = 2) e 90303-90505 a "
-                   "run descritiva genoma x dono, uma vez (bases 90303, 90404 e 90505, K = 12) "
+    (90101, 90505, "QUEIMADA (D-GV-GV3B-12; o adendo 2, secao 6); nao usar. GOSTO_VISUAL, GV3b (a GV3 com o enjoo ligado): "
+                   "90101-90202 o piloto (bases 90101 e 90202, K = 2) e 90303-90505 a run descritiva genoma x dono, uma vez (bases 90303, 90404 e 90505, K = 12) "
                    "(docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO1.md, secao 6; confirmada pelo coordenador, 2026-11-12; aprovada pelo "
                    "Matheus em 2026-11-12, \"Sim a tudo\"; nenhuma vida antes do adendo e do codigo na main)"),
+    (91101, 91505, "GOSTO_VISUAL, GV3b do adendo 2 (a GV3b de novo, com a regra para as duas TVs sem lugar): 91101-91202 o piloto "
+                   "(bases 91101 e 91202, K = 2) e 91303-91505 a run descritiva genoma x dono, uma vez (bases 91303, 91404 e 91505, "
+                   "K = 12) (docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO2.md, secao 6; confirmada pelo coordenador, 2026-11-12; aprovada "
+                   "pelo Matheus em 2026-11-12, \"Adendo e faixa nova\"; nenhuma vida antes do adendo e do codigo na main)"),
     (92101, 92505, "LUTA_POC, a investigacao do nucleo da luta (jogo web): as lutas fixas da N2 e os contrafactuais da N4 "
                    "(docs/PLANO_LUTA_NUCLEO.md, secao 2.1; D-N-2; bases 92101, 92202, 92303, 92404 e 92505, com a derivacao da LP5; "
                    "aprovada pelo Matheus em 2026-11-12, \"Aprovo as 7 (Recommended)\", e pedida pelo Gerente de sprites e luta; "

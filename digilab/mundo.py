@@ -165,7 +165,7 @@ from .events import TIPO_SENTIDO_TELA, TIPO_TROCAR_CANAL, ler_sentido_tela, ler_
 from .events import sentido_tela as evento_sentido_tela
 from .events import sentido_tela_desligada as evento_sentido_tela_desligada
 from .events import trocar_canal as evento_trocar_canal
-from .tv import ID_TV, IDS_DUAS_TVS, TV, TVFixa, TVSemChave
+from .tv import ID_TV, IDS_DUAS_TVS, TV, DuasTVsSemLugar, TVFixa, TVSemChave
 from .config import ConfigDuasTVs
 from .frutas import MotorFrutas
 from .policy import Observacao, Transicao
@@ -2518,7 +2518,8 @@ class MotorMundo(MotorFrutas):
         A TV da vida sai de cena (as linhas, o estimulo e o olhar passam a ser so das duas). O perfil A fica na TV de id IDS_DUAS_TVS[0] e o
         B na IDS_DUAS_TVS[1], cada uma a `distancia_celulas` do pet, em direcoes opostas: a direcao da A e sorteada por uma rng propria,
         `duas-tvs-posicao` (derivar_semente com a semente do pet, o tick do mundo e a replica), que nao toca nenhum outro fluxo. Se uma
-        das duas cai fora do mapa (cortada) ou na agua, tenta a direcao seguinte, ate `tentativas`; sem nenhuma, falha alto."""
+        das duas cai fora do mapa (cortada) ou na agua, tenta a direcao seguinte, ate `tentativas`; sem nenhuma, falha alto
+        (`DuasTVsSemLugar`, um RuntimeError)."""
         if not isinstance(cfg, ConfigDuasTVs) or not cfg.ligada:
             raise TVSemChave(f"ligar_duas_tvs precisa da ConfigDuasTVs ligada: {cfg!r}")
         tv = self._exigir_tv("ligar_duas_tvs")
@@ -2545,7 +2546,8 @@ class MotorMundo(MotorFrutas):
             if ds[0] == ds[1] and ds[0] <= self._raio_visao and all(self.mundo.seca(x, y) for x, y in pontos):
                 break
         else:
-            raise RuntimeError(f"a sonda das duas TVs nao coube em {cfg.tentativas} direcoes a partir da {k0} (pet em {self.pet})")
+            raise DuasTVsSemLugar(f"a sonda das duas TVs nao coube em {cfg.tentativas} direcoes a partir da {k0} (pet em {self.pet})",
+                                  self.pet, k0)
         self.mundo.duas_tvs = tuple((ident, TVFixa(p, tv.cfg.escala, x, y)) for ident, p, (x, y) in zip(IDS_DUAS_TVS, perfis, pontos))
         return {"tick": tm, "replica": replica, "direcao_sorteada": k0, "direcao": k, "pet": [px, py],
                 "tvs": {ident: {"x": x, "y": y, "perfil": list(p)} for ident, p, (x, y) in zip(IDS_DUAS_TVS, perfis, pontos)}}
