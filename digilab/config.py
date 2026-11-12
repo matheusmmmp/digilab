@@ -3501,6 +3501,64 @@ class ConfigEnjooTela:
 
 CONFIG_ENJOO_TELA = ConfigEnjooTela()
 CONFIG_ENJOO_TELA_LIGADA = ConfigEnjooTela(ligada=True)
+
+
+@dataclass(frozen=True)
+class ConfigOrgao:
+    """O orgao da visao (e do ouvido) do pet (GOSTO_VISUAL, OV2; docs/ESPEC_V3_ORGAO_VISAO.md; as OV1-1 a OV1-14 DECIDIDAS pelo Matheus em
+    2026-11-12, pela recomendacao). Desligada (o padrao), nada muda. Ligada, so com a TV no mundo (`MotorMundo(cfg_orgao=...)`) e, no
+    DigiBrain modular, so com a subchave `olhar` (`DigiBrain(cfg_orgao=...)`). Os numeros e o porque de cada um (todos PROPOSTOS, SEM FONTE;
+    o desenho, DECIDIDO):
+
+    a TV do jogo (a fonte "grade"; OV1-11):
+    conceitos_por_programa 3   cada programa da grade traz de 0 a 3 conceitos da lista, com o nivel de 4 a 15, sorteados uma vez na
+                               construcao pela rng propria `tv-conceitos` (a `tv-programas` nao muda: a grade de hoje fica)
+    o M-SENS (secao 7.2; OV1-8: a habituacao por conceito no cerebro, sem quimica):
+    tau_hab_subida       22    ticks (~15/ln 2): olhando, a habituacao do conceito anda para o nivel visto com a meia-vida de uma decisao
+                               (a meia_vida_enjoo da ConfigEnjooTela)
+    tau_hab_volta        1040  ticks (~720/ln 2): sem ver o conceito, ela volta a 0 com a meia-vida do desenjoo (meio dia de jogo): voltar
+                               ao gato nao desenjoa de imediato
+    o gosto por conceito (secao 7.3; OV1-9: todo aprendido, nasce 0):
+    tau_exposicao        960   ticks (dois dias de jogo, o da ConfigOlhar): o gosto anda para cima na proporcao do nivel visto e da
+                               novidade dele (a exposicao satura quando o conceito ja nao e novo: o lado de baixo do U)
+    k_consequencia       256   = S/4: o crédito do r_n da opcao de olhar a cada conceito visto, mul(k, mul(a_c, r_n))
+    teto_gosto           256   = S/4: o gosto de um conceito fica em [-teto, teto]; no agrado, um conceito no teto, visto inteiro e novo
+                               soma S/4 (o termo div_arred(a x g x nov, S x S))
+    o mito (secao 6; OV1-4, OV1-5, OV1-10; a subchave `mito`, para a pesquisa separar a percepcao da crenca):
+    mito                 False a subchave do termo de valencia das especies no M-AFETO
+    peso_mito            128   = S/8: so na valencia da decisao, como a culpa e a inveja da CO7; div_arred(peso x a_e x nov_e, S x S) por
+                               especie do mesmo brasao do pet (o parentesco, +1; os outros brasoes, 0)"""
+
+    ligada: bool = False
+    conceitos_por_programa: int = 3
+    tau_hab_subida: int = 22
+    tau_hab_volta: int = 1040
+    tau_exposicao: int = 960
+    k_consequencia: int = _S // 4
+    teto_gosto: int = _S // 4
+    mito: bool = False
+    peso_mito: int = _S // 8
+
+    def __post_init__(self) -> None:
+        for campo in ("ligada", "mito"):
+            if type(getattr(self, campo)) is not bool:
+                raise TypeError(f"ConfigOrgao.{campo} e bool: {getattr(self, campo)!r}")
+        if self.mito and not self.ligada:
+            raise ValueError("ConfigOrgao.mito so com o orgao ligado")
+        if type(self.conceitos_por_programa) is not int or not 0 <= self.conceitos_por_programa <= 3:
+            raise ValueError(f"ConfigOrgao.conceitos_por_programa de 0 a 3 (o maximo do evento): {self.conceitos_por_programa!r}")
+        for campo in ("tau_hab_subida", "tau_hab_volta", "tau_exposicao"):
+            v = getattr(self, campo)
+            if type(v) is not int or v < 15:
+                raise ValueError(f"ConfigOrgao.{campo} inteiro, no minimo o passo do cerebro (15 ticks): {v!r}")
+        for campo in ("k_consequencia", "teto_gosto", "peso_mito"):
+            v = getattr(self, campo)
+            if type(v) is not int or not 0 <= v <= _S:
+                raise ValueError(f"ConfigOrgao.{campo} em [0, S]: {v!r}")
+
+
+CONFIG_ORGAO = ConfigOrgao()
+CONFIG_ORGAO_LIGADA = ConfigOrgao(ligada=True)
 _FONTE_ENJOO = "docs/registro/2026-11.md, D-GV-ENJOO-PY-3 e D-GV-ENJOO-CER; o P0 (web/app/src/gostoVisual/gosto.ts) como referencia; SEM FONTE"
 PARAMETROS_ENJOO_TELA: dict[str, tuple[str, str]] = {
     "ligada": ("PROPOSTO", "a chave do enjoo, desligada (D-GV-ENJOO-CER-1); " + _FONTE_ENJOO),
