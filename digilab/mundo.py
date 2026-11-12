@@ -108,6 +108,15 @@ deixada pelo dono no mesmo tick (a racao de referencia); a fruta nasce madura co
 `frutas_ao_lado` (tick, id, tipo, x, y, racao) e no resumo do mundo fisico, e o estado() ganha `fruta_ao_lado` (as maduras ao lado no
 chao, por tipo). E fora do orcamento e sem contato (o canal nao a ve; o deixar_bola e o modelo). Quem poe e o `DonoFrutaAoLado`, pelo
 `simular_vida_mundo(..., ao_lado=)`.
+
+A TV (GOSTO_VISUAL, P1c; docs/ESPEC_GOSTO_VISUAL_P1.md, secao 1; `cfg_tv`, ConfigTV; a grade e o modo livre em digilab/tv.py): so com o
+mundo, um pet (fora do grupo) e o corpo na frente com a ConfigTela (o MotorCorpo confere). Desligada, nada muda (nem rng, nem registro, nem
+chave no estado() ou no resumo). Ligada, a TV e um objeto do `Mundo` no centro de `ConfigTV.celula` (fora dos `vistos` da percepcao: a
+classe `tela` do M-SENS e da P1d). O motor da ao corpo, a cada tick, o que ela passa se o pet olha (`_intensidades_da_tela`; zeros se nao):
+o pet olha quando esta acordado, parado (o ocioso; o `olhar` e da P1d) e com a TV no raio da visao. Os eventos `trocar_canal(programa)`
+(a fonte "grade") e `sentido_tela(fonte, niveis)` (a fonte "evento", o modo livre gravado) so mudam a TV: nao sao contato nem cuidado e
+nao passam pelo estado, pelo corpo nem pelo cerebro; o replay os refaz. O estado() ganha `tv` (o programa, se esta ligada, se o pet olha) e o
+resumo, o registro da TV. O `mudar_ilha` com a TV falha alto.
 """
 
 from __future__ import annotations
@@ -128,9 +137,10 @@ from .config import CONFIG_CONTRATO, ConfigContrato
 from .config import AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, ARVORE_FECHADA, MARCO_FECHADO, PONTE, TERRA
 from .config import CONFIG_BOLA_NO_GOLPE, CONFIG_DECISAO_NA_COMIDA, ConfigBolaNoGolpe, ConfigDecisaoNaComida
 from .config import CONFIG_FRUTA_COMO_COMIDA, CONFIG_SACUDIR, ConfigFrutaComoComida, ConfigSacudir
+from .config import CONFIG_TV, ConfigTV
 from . import contrato as ct
 from .config import ConfigOlfato, ConfigOuvido, ConfigSentidos
-from .corpo import leitura_orgao
+from .corpo import CANAIS_TELA, leitura_orgao
 from .donos import Visao
 from .engine import Motor
 from .events import ACOES_PARAR_ARVORES, tipo_parado
@@ -148,6 +158,10 @@ from .events import resumo_luta as evento_resumo_luta
 from .events import deixar_comida as evento_deixar_comida
 from .events import ler_sacudir_arvore
 from .events import sacudir_arvore as evento_sacudir_arvore
+from .events import TIPO_SENTIDO_TELA, TIPO_TROCAR_CANAL, ler_sentido_tela, ler_trocar_canal
+from .events import sentido_tela as evento_sentido_tela
+from .events import trocar_canal as evento_trocar_canal
+from .tv import TV, TVSemChave
 from .frutas import MotorFrutas
 from .policy import Observacao, Transicao
 from .protocol import derivar_semente
@@ -827,6 +841,9 @@ class Mundo:
         self.sacudidas: list[dict] | None = None
         self.rng_sacode: random.Random | None = None
         self.csa: ConfigSacudir | None = None
+        # a TV (GOSTO_VISUAL, P1c; digilab/tv.py): so depois de `ligar_tv` (o motor com a ConfigTV); sem ela, None e nada muda (nem o
+        # resumo)
+        self.tv: TV | None = None
 
     # ------------------------------------------------------------ a agua (docs/TAREFA_V3_ILHA_AGUA.md, IA1)
     def _conferir_agua(self) -> None:
@@ -1103,6 +1120,23 @@ class Mundo:
         self.sacudidas.append(reg)
         return reg
 
+    # ------------------------------------------------------------ a TV (GOSTO_VISUAL, P1c)
+    def ligar_tv(self, ctv: ConfigTV) -> None:
+        """liga a TV no centro da celula `ctv.celula` (dentro do mapa e em terra; falha alto fora) e, na fonte "grade", o fluxo proprio
+        `tv-programas`; nenhum outro fluxo muda"""
+        if not isinstance(ctv, ConfigTV) or not ctv.ligada:
+            raise TVSemChave(f"ligar_tv precisa da ConfigTV ligada: {ctv!r}")
+        if self.tv is not None:
+            raise RuntimeError("a TV ja esta ligada neste Mundo")
+        cm = self.cmf
+        cx, cy = ctv.celula
+        if not (cx < cm.celulas_x and cy < cm.celulas_y):
+            raise ValueError(f"a celula da TV {ctv.celula} fora do mapa ({cm.celulas_x} x {cm.celulas_y})")
+        x, y = centro_da_celula(ctv.celula, cm)
+        if not self.seca(x, y):
+            raise ValueError(f"a celula da TV {ctv.celula} e agua")
+        self.tv = TV(ctv, self.semente, x, y)
+
     # ------------------------------------------------------------ o banheiro
     def ligar_necessidades(self) -> None:
         """Chamado pelo motor com o banheiro (todos os pets do mundo com ele chamam; a segunda vez nao faz nada)."""
@@ -1316,8 +1350,11 @@ class MotorMundo(MotorFrutas):
                  cfg_paladar: ConfigPaladar | None = None, cfg_fruta_ao_lado: ConfigFrutaAoLado | None = None,
                  cfg_contrato: ConfigContrato | None = None, cfg_decisao_comida: ConfigDecisaoNaComida | None = None,
                  cfg_bola_golpe: ConfigBolaNoGolpe | None = None, cfg_sacudir: ConfigSacudir | None = None,
-                 cfg_fruta_comida: ConfigFrutaComoComida | None = None, **kw) -> None:
+                 cfg_fruta_comida: ConfigFrutaComoComida | None = None, cfg_tv: ConfigTV | None = None, **kw) -> None:
         super().__init__(*a, **kw)
+        self.ctv = cfg_tv or CONFIG_TV
+        if not isinstance(self.ctv, ConfigTV):
+            raise TypeError(f"cfg_tv e uma ConfigTV: {self.ctv!r}")
         self.csa = cfg_sacudir or CONFIG_SACUDIR
         if not isinstance(self.csa, ConfigSacudir):
             raise TypeError(f"cfg_sacudir e uma ConfigSacudir: {self.csa!r}")
@@ -1363,6 +1400,8 @@ class MotorMundo(MotorFrutas):
                 raise SacudirSemChave("o sacudir a arvore (ConfigSacudir) exige o mundo fisico (ConfigMundo.ligada)")
             if self.cfc.ligada:
                 raise ValueError("a fruta do mundo como comida (ConfigFrutaComoComida) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.ctv.ligada:
+                raise TVSemChave("a TV (ConfigTV) exige o mundo fisico (ConfigMundo.ligada)")
             return                                     # desligado: o MotorFrutas byte a byte (nem embrulho, nem Mundo)
         if self.cf.ligada or self.cb.ligada:
             raise ValueError("o mundo substitui o cenario do N4 e da A1: ConfigFrutas e ConfigBola desligadas com ConfigMundo.ligada")
@@ -1437,6 +1476,15 @@ class MotorMundo(MotorFrutas):
             if mundo is not None:
                 raise SacudirSemChave("o sacudir a arvore (ConfigSacudir) roda com um pet, fora do grupo")
             self.mundo.ligar_sacudir(self.csa)
+
+        if self.ctv.ligada:
+            # a TV (GOSTO_VISUAL, P1c): so com um pet, fora do grupo, e com o corpo na frente (o MotorCorpo confere a ConfigTela)
+            if mundo is not None:
+                raise TVSemChave("a TV (ConfigTV) roda com um pet, fora do grupo")
+            from .motor_corpo import MotorCorpo
+            if not isinstance(self, MotorCorpo):
+                raise TVSemChave("a TV exige o corpo na frente do motor (com_corpo(MotorMundo)) com a ConfigTela ligada")
+            self.mundo.ligar_tv(self.ctv)
 
         if self.cct.ligada:
             # a P4 (docs/TAREFA_V2_P4_CEREBRO_MUNDO.md, secao 3.1): o contrato, so com um pet (o grupo nao tem o cone nem as paredes). A
@@ -2192,6 +2240,8 @@ class MotorMundo(MotorFrutas):
         maior = ILHAS_MAIORES.get(nome)      # a ilha de outro tamanho (IG4): pode vir depois da agua, com o contrato ja ligado
         if self._grupo is not None or self.cbh.ligada or (self.cct.ligada and maior is None):
             raise ValueError("mudar_ilha roda com um pet (fora do grupo), sem o banheiro e sem o contrato ligado antes")
+        if self.ctv.ligada:
+            raise TVSemChave("mudar_ilha com a TV (ConfigTV) ligada: a TV ficaria onde a agua pode chegar (P1c)")
         layout, contrato = ILHAS_DE_TROCA[nome]
         if not contrato.controlador:
             raise ValueError(f"a ilha {nome!r} tem agua e pede o controlador do contrato")
@@ -2247,6 +2297,64 @@ class MotorMundo(MotorFrutas):
         self.mundo.atualizar(tm)
         self.mundo.sacudir(arvore, tm)
         self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o deixar_bola)
+
+    # ------------------------------------------------------------ a TV (GOSTO_VISUAL, P1c; digilab/tv.py)
+    def _tv_ligada(self) -> bool:
+        return self.cmf.ligada and self.ctv.ligada
+
+    def _exigir_tv(self, onde: str) -> TV:
+        if not self._tv_ligada():
+            raise TVSemChave(f"{onde} sem o mundo e a ConfigTV ligados")
+        return self.mundo.tv
+
+    def _olhando_tv(self, passa: dict[str, int] | None) -> bool:
+        """O pet olha a TV (P1c, D-GV-P1c-4; o comportamento `olhar` e da P1d): a TV ligada (`passa` nao e None), o pet acordado e parado
+        (a acao atual e o ocioso) e a TV no raio da visao dele."""
+        if passa is None or self._estado.dormindo or self._acao_atual is not AcaoPet.OCIOSO:
+            return False
+        tv = self.mundo.tv
+        return distancia(tv.x - self.pet[0], tv.y - self.pet[1]) <= self._raio_visao
+
+    def olhando_tv(self) -> bool:
+        """se o pet olha a TV agora (so le)"""
+        tv = self._exigir_tv("olhando_tv")
+        return self._olhando_tv(tv.em(self._tm(self._estado.tick)))
+
+    def _intensidades_da_tela(self) -> dict[str, int]:
+        """O estimulo da tela do tick, para o corpo (`Corpo.sentir_tela`): o que a TV passa, se o pet olha; zeros se nao. A TV e sempre
+        perguntada (a grade e estendida ate o tick, nao importa o pet)."""
+        tv = self._exigir_tv("o estimulo da tela")
+        passa = tv.em(self._tm(self._estado.tick))
+        if self._olhando_tv(passa):
+            return dict(passa)
+        return {c: 0 for c in CANAIS_TELA}
+
+    def trocar_canal(self, programa: int) -> None:
+        """O dono troca o canal da TV do jogo (a fonte "grade"). Valida o evento e o programa antes do log."""
+        self._exigir_tv("trocar_canal")
+        evento = evento_trocar_canal(self._estado.tick, programa)
+        self._aplicar_trocar_canal(ler_trocar_canal(evento))
+        self._log.anexar(evento)
+
+    def _aplicar_trocar_canal(self, programa: int) -> None:
+        """So a TV muda: o programa passa ate o fim do programa da grade. Nao e contato nem cuidado e nao passa pelo estado, pelo corpo nem
+        pelo cerebro (o assistir junto fica fora, GV-22), como o sacudir a arvore. Vale com o pet acordado ou dormindo."""
+        tv = self._exigir_tv("trocar_canal")
+        tv.trocar_canal(programa, self._tm(self._estado.tick))
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato (o deixar_bola)
+
+    def sentido_tela(self, fonte: str, niveis) -> None:
+        """O modo livre gravado (a fonte "evento"): o que a TV passa a partir de agora. Valida o evento antes do log."""
+        self._exigir_tv("sentido_tela")
+        evento = evento_sentido_tela(self._estado.tick, fonte, niveis)
+        self._aplicar_sentido_tela(*ler_sentido_tela(evento))
+        self._log.anexar(evento)
+
+    def _aplicar_sentido_tela(self, fonte: str, niveis: tuple[int, ...]) -> None:
+        """So a TV muda (o replay le o evento e nao chama ninguem). Nao e contato nem cuidado."""
+        tv = self._exigir_tv("sentido_tela")
+        tv.sentir(fonte, niveis, self._tm(self._estado.tick))
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato
 
     def no_galho(self) -> dict[str, int]:
         """as frutas no galho de cada arvore agora (o que o cartao da arvore mostra); so le"""
@@ -2310,6 +2418,9 @@ class MotorMundo(MotorFrutas):
             d["fruta_ao_lado"] = {"no_chao": self.ao_lado_no_chao(), "postas": len(self.frutas_ao_lado)}
         if self.csa.ligada:
             d["sacudir"] = {"no_galho": self.no_galho(), "sacudidas": len(self.mundo.sacudidas)}
+        if self.ctv.ligada:
+            tv = self.mundo.tv
+            d["tv"] = {"programa": tv.programa_em(t), "ligada": tv.em(t) is not None, "olhando": self.olhando_tv()}
         return d
 
     def resumo_mundo_fisico(self) -> dict:
@@ -2337,7 +2448,8 @@ class MotorMundo(MotorFrutas):
                 **({} if not self.cct.ligada else {"orientacao": self.orientacao, "contrato_decisoes": self.contrato_decisoes}),
                 **({} if not self.levadas else {"levadas": self.levadas}),
                 **({} if m.galhos is None else {"galhos": {i: dict(g) for i, g in m.galhos.items()}, "sacudidas": m.sacudidas,
-                                                "rng_sacode": m.rng_sacode.getstate()})}     # so com alguma levada: a vida de antes sai byte a byte
+                                                "rng_sacode": m.rng_sacode.getstate()}),
+                **({} if m.tv is None else {"tv": m.tv.resumo()})}     # so com alguma levada: a vida de antes sai byte a byte
 
     # ------------------------------------------------------------ o avanco em ticks (o grupo, dois pets, etapa 2)
     # O `_avancar(n)` de hoje e: o que cada classe faz uma vez por avanco (o MotorPersonalidade conta o evento de avanco no indice dos
@@ -2363,7 +2475,8 @@ class MotorMundo(MotorFrutas):
 def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config | None = None, semente: int = 42,
                      fabrica_motor: Callable | None = None, ate_tick: int | None = None,
                      cfg_genoma: ConfigGenoma | None = None) -> MotorMundo:
-    """O replay que entende os eventos do mundo (`deixar_comida`, `deixar_bola`, `levar_pet`, `sacudir_arvore`). `ate_tick`: para antes do primeiro evento nesse
+    """O replay que entende os eventos do mundo (`deixar_comida`, `deixar_bola`, `levar_pet`, `sacudir_arvore` e, com a ConfigTV,
+    `trocar_canal` e `sentido_tela`). `ate_tick`: para antes do primeiro evento nesse
     tick (corta o avanco que o atravessa), como o reproduzir_educacao. Evento desconhecido levanta erro; luta, origem, fala e
     decisao externa tambem: o mundo minimo roda sem educacao e sem lesoes.
 
@@ -2400,6 +2513,10 @@ def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config 
             motor._aplicar_deixar_fruta(*ler_deixar_fruta(evento, tamanho_do_mapa(motor.cmf)))
         elif evento.tipo == "sacudir_arvore":
             motor._aplicar_sacudir_arvore(ler_sacudir_arvore(evento))
+        elif evento.tipo == TIPO_TROCAR_CANAL:
+            motor._aplicar_trocar_canal(ler_trocar_canal(evento))
+        elif evento.tipo == TIPO_SENTIDO_TELA:
+            motor._aplicar_sentido_tela(*ler_sentido_tela(evento))
         elif evento.tipo == "lt":
             motor._aplicar_resumo_luta(*ler_resumo_luta(evento))
         else:
