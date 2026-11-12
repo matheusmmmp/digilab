@@ -1,0 +1,189 @@
+{
+ "H-CUSTO": {
+  "diferenca": -9.300595238095227e-06,
+  "ic": [
+   -0.00010230654761904762,
+   5.580357142857143e-05
+  ],
+  "leitura": "CONFIRMA",
+  "n": 160
+ },
+ "H-DOSE": {
+  "ic": [
+   0.0,
+   0.014634146341463417
+  ],
+  "inclinacao": 0.004878048780487805,
+  "leitura": "NAO CONFIRMA",
+  "medias": {
+   "B1": 0.08981892091648189,
+   "D0": 0.08494087213599409,
+   "DM": 0.08494087213599409
+  },
+  "n": 41,
+  "ordem": true
+ },
+ "H-EMERGE": {
+  "diferenca": 0.004878048780487805,
+  "ic": [
+   0.0,
+   0.014634146341463417
+  ],
+  "leitura": "NAO CONFIRMA",
+  "n": 41
+ },
+ "H-REP": {
+  "P1_A": {
+   "diferenca": 0.0,
+   "ic": [
+    0.0,
+    0.0
+   ],
+   "n": 16,
+   "passa": false
+  },
+  "k_A": {
+   "diferenca": -0.03211805555555536,
+   "ic": [
+    -0.33027343749999966,
+    0.23391927083333358
+   ],
+   "n": 160,
+   "passa": false
+  },
+  "leitura": "INCONCLUSIVO POR PREMISSA"
+ },
+ "R-ESCUDO": {
+  "B1": {
+   "diferenca_P1_contra_B0": 0.004878048780487805,
+   "n": 41
+  },
+  "B1A": {
+   "diferenca_P1_contra_B0": 0.0,
+   "n": 41
+  },
+  "B1E": {
+   "diferenca_P1_contra_B0": 0.004878048780487805,
+   "n": 41
+  },
+  "B1U": {
+   "diferenca_P1_contra_B0": 0.0,
+   "n": 41
+  },
+  "D0": {
+   "diferenca_P1_contra_B0": 0.0,
+   "n": 41
+  },
+  "DM": {
+   "diferenca_P1_contra_B0": 0.0,
+   "n": 41
+  },
+  "RM": {
+   "diferenca_P1_contra_B0": 0.0,
+   "n": 41
+  }
+ },
+ "descritivos": {
+  "B0": {
+   "P2": 0.5243025948660714,
+   "P4": {
+    "contencao": 703,
+    "disputa_anti": 6,
+    "encostar": 0
+   },
+   "P6": 0.08136160714285715,
+   "oportunidades": 197,
+   "vidas_com_oportunidade": 41
+  },
+  "B1": {
+   "P2": 0.5244340587797619,
+   "P4": {
+    "contencao": 706,
+    "disputa_anti": 6,
+    "encostar": 0
+   },
+   "P6": 0.08151041666666667,
+   "oportunidades": 197,
+   "vidas_com_oportunidade": 41
+  },
+  "B1A": {
+   "P2": 0.5243025948660714,
+   "P4": {
+    "contencao": 703,
+    "disputa_anti": 6,
+    "encostar": 0
+   },
+   "P6": 0.08136160714285715,
+   "oportunidades": 197,
+   "vidas_com_oportunidade": 41
+  },
+  "B1E": {
+   "P2": 0.5244340587797619,
+   "P4": {
+    "contencao": 706,
+    "disputa_anti": 6,
+    "encostar": 0
+   },
+   "P6": 0.08151041666666667,
+   "oportunidades": 197,
+   "vidas_com_oportunidade": 41
+  },
+  "B1U": {
+   "P2": 0.5243025948660714,
+   "P4": {
+    "contencao": 703,
+    "disputa_anti": 6,
+    "encostar": 0
+   },
+   "P6": 0.0814360119047619,
+   "oportunidades": 197,
+   "vidas_com_oportunidade": 41
+  },
+  "D0": {
+   "P2": 0.5243025948660714,
+   "P4": {
+    "contencao": 703,
+    "disputa_anti": 6,
+    "encostar": 0
+   },
+   "P6": 0.08136160714285715,
+   "oportunidades": 197,
+   "vidas_com_oportunidade": 41
+  },
+  "DM": {
+   "P2": 0.5244583333333334,
+   "P4": {
+    "contencao": 706,
+    "disputa_anti": 6,
+    "encostar": 0
+   },
+   "P6": 0.08139880952380953,
+   "oportunidades": 197,
+   "vidas_com_oportunidade": 41
+  },
+  "RM": {
+   "P2": 0.5243025948660714,
+   "P4": {
+    "contencao": 703,
+    "disputa_anti": 6,
+    "encostar": 0
+   },
+   "P6": 0.08136160714285715,
+   "oportunidades": 197,
+   "vidas_com_oportunidade": 41
+  }
+ },
+ "fonte": {
+  "delta": 0.1,
+  "epsilon": 0.02,
+  "n_min": 30,
+  "reamostras": 10000,
+  "semente_bootstrap": 91000,
+  "sementes": [
+   91201,
+   91360
+  ],
+  "vidas": "experiments\\runs\\cooperacao_bancada\\principal.jsonl"
+ },
+ "n_sementes": 160
+}
