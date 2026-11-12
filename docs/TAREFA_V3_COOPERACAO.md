@@ -429,3 +429,15 @@ Atrás da subchave `co7` da `ConfigCooperacao` (só com a `co6`), no grupo e no 
 - **Os testes** (`tests/test_cooperacao_co7.py`): o G2; o G-ESCUDO nas 7 decisões em que o escudo vale; o G-RECEPTOR-SOCIAL pela árvore do
   `dever.py`; os casos à mão; e o gabarito do G-PAR-CO7 para o TS (`web/app/test/gabaritos/co7_python.json.gz`).
 - **Os desvios:** D-CO7b-1 a D-CO7b-9, no registro de 2026-11.
+
+## CO7c, o espelho TS, o G-PAR-CO7 e o gesto (2026-11-12, Claude Code, Opus 5.5, branch `v3-cooperacao-co7c`)
+
+- **O motor:** `motor/digibrain/dever.ts` é o porte do `dever.py`; o M-SENS, o M-ARB e o M-AFETO do modular ganham o `ligarDever`, e o
+  `DigiBrain` recebe a `ConfigCooperacao` com a `co7` (a `CONFIG_COOPERACAO_CO7`, com os números no `CCOOP`).
+- **O G-PAR-CO7** (`test/cooperacao_co7.test.ts`, bit a bit no Node, contra `co7_python.json.gz`): cada conta, decisão a decisão, nas seis
+  vidas do gabarito.
+- **No jogo** (`test/coop_co7_jogo.test.ts`): a CO7 fica desligada (D-CO7c-1). Ligada no teste, cada decisão do modular registra o `dever`,
+  o grupo o guarda e nenhuma escolha com o escudo valendo come a comida proibida.
+- **O gesto** (`src/telas/pet/AtosDoIrmao.tsx`), sem número (D-MM-8): hesitar e deixar a comida para o irmão aflito, e querer consolá-lo;
+  em Últimas ações e com o coração na ilha. Só aparece com a CO7 ligada no jogo.
+- **Os desvios:** D-CO7c-1 a D-CO7c-4, no registro de 2026-11.
