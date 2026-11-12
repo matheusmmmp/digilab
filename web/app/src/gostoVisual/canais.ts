@@ -40,10 +40,15 @@ export class Canais {
   private i = -1;
   private anterior: Float32Array | null = null;
   private relogio: ReturnType<typeof setInterval> | null;
+  private readonly aoSentir: (s: Sentido) => void;
+  private readonly aoMudar: () => void;
+  private readonly aoAcabar: (motivo: string) => void;
 
   /** `aoSentir`: um Sentido por segundo do canal atual; `aoMudar`: o canal atual mudou; `aoAcabar`: a última fonte acabou */
-  constructor(private readonly aoSentir: (s: Sentido) => void, private readonly aoMudar: () => void,
-    private readonly aoAcabar: (motivo: string) => void, periodoMs: number = PERIODO_MS) {
+  constructor(aoSentir: (s: Sentido) => void, aoMudar: () => void, aoAcabar: (motivo: string) => void, periodoMs: number = PERIODO_MS) {
+    this.aoSentir = aoSentir;
+    this.aoMudar = aoMudar;
+    this.aoAcabar = aoAcabar;
     if (!(periodoMs > 0) || !Number.isFinite(periodoMs)) throw new Error(`Canais: período inválido ${periodoMs}`);
     this.relogio = setInterval(() => this.segundo(), periodoMs);
   }
