@@ -127,9 +127,26 @@ toca. Cada IC95 é o da run do adendo 2, com as réplicas que tiveram sonda.
 Escrito em 2026-11-12, antes de qualquer vida da faixa, no branch `v3-gosto-visual-gv3b-resultado` (o branch do registro da falha,
 D-GV-GV3B-12). Este registro é completado num commit próprio por cima do commit do código, que só muda documentos.
 - **O ok do Matheus:** 2026-11-12, nesta sessão: "Adendo e faixa nova" (D-GV-GV3B2-1 no registro).
-- **O commit do código:** (preenchido no commit do registro).
-- **Os sha256** (o conteúdo no commit do código): (preenchidos no commit do registro). O sha256 deste adendo não cabe nele mesmo e fica no
-  `meta.json` de cada pasta (`plano_sha256`), com o do adendo 1 (`plano_adendo1_sha256`) e o do plano da GV3 (`plano_base_sha256`).
+- **O commit do código:** `0f0c2019` (a sonda, a exceção, o orquestrador, a faixa, as configs, os testes e este adendo, com os campos
+  deste registro ainda vazios). Depois dele veio o merge da `origin/main` (`7614ebb7`), que não mudou nenhum dos arquivos abaixo. Antes do
+  piloto, quem roda confere que os sha256 abaixo são os da `main`; se um merge mudar algum, a diferença é registrada antes da primeira
+  vida, e o `meta.json` de cada pasta grava o `git_head` e os sha256 de novo.
+- **Os sha256** (o conteúdo no commit do código):
+  - o orquestrador `experiments/run_v3_gosto_visual.py`: `00291ed9e35689a873ef21c0b4e498c0b12aa9578e82ec1acc123c5bd1e07253`;
+  - a sonda `experiments/sonda_duas_tvs.py`: `45b012ae22f0fcffae85f3f6303f75e0f65759e3a188afd369148935f26e7cd2`;
+  - o `digilab/mundo.py` (o `ligar_duas_tvs` com a exceção): `a656fd5d291ae0b035449a5e5c84c7427fdf7fc64610cb6b3a236a0f97a7023e`;
+  - o `digilab/tv.py` (a `DuasTVsSemLugar`): `0e9f2041f634c461c54512cee385d6e1bfef11270f60e3d8c7d6972c164613ec`;
+  - o `digilab/metrics.py` (sem mudança desde o adendo 1): `7d6eed8b6f4134bde4b37f367fef1d256fdc9b73b8cfcd9c834c544d2b0d94fd`;
+  - o `digilab/config.py`: `74bbe7fafd278f7f8e389d99180d07ceaaae01573fdec6fcace7427cd42049c9` (mudou desde o adendo 1 pelos merges da
+    `main` de outras frentes; este adendo não o toca, e a `ConfigEnjooTela` e a `ConfigDuasTVs` são as mesmas: o `meta.json` grava a
+    config do enjoo inteira);
+  - o `digilab/corpo.py` (sem mudança desde o adendo 1): `ed198a4a664f4d451b88d63ef625fe63006a9996869bbd4b33ddf1ef4c5e256f`;
+  - a config do piloto `experiments/configs/v3_gosto_visual/piloto_enjoo2.json`:
+    `4e9710e9315a98a0967dd5e4733b1a07ca4947d5191a203e3c7c708d613485c8`;
+  - a config da run `experiments/configs/v3_gosto_visual/gosto_visual_enjoo2.json`:
+    `b62fbd0d73785b8d8a9b589b735b57a83aff6415b663552f8df07ef80918077a`;
+  - o sha256 deste adendo não cabe nele mesmo e fica no `meta.json` de cada pasta (`plano_sha256`), com o do adendo 1
+    (`plano_adendo1_sha256`) e o do plano da GV3 (`plano_base_sha256`).
 - **As configs:** `experiments/configs/v3_gosto_visual/piloto_enjoo2.json` (bases 91101 e 91202, K = 2, 14 dias: 4 unidades, 24 vidas) e
   `experiments/configs/v3_gosto_visual/gosto_visual_enjoo2.json` (bases 91303, 91404 e 91505, K = 12, 14 dias: 36 unidades, 216 vidas),
   as duas com a fase `gosto_visual_enjoo2` e este adendo como `plano`.
@@ -140,7 +157,8 @@ D-GV-GV3B-12). Este registro é completado num commit próprio por cima do commi
   - a run, só se o piloto passar nas duas conferências, uma vez:
     `python experiments/run_v3_gosto_visual.py --config experiments/configs/v3_gosto_visual/gosto_visual_enjoo2.json --processos 4`, em
     `artifacts_v3_gosto_visual/gosto_visual_enjoo2/`.
-- **A faixa:** 91101…91505, em `FAIXAS_RESERVADAS`; conferida depois de um `git fetch` (a seção da D-GV-GV3B2-5 no registro).
+- **A faixa:** 91101…91505, em `FAIXAS_RESERVADAS`; conferido em 2026-11-12, depois de um `git fetch`, que nem a `origin/main`
+  (`7614ebb7`) nem nenhum dos 576 branches remotos com um `experiments/bancada/faixas.py` registra uma faixa que a cruze (D-GV-GV3B2-5).
 - **A máquina:** conferir antes do piloto que nenhuma outra run de pesquisa roda (o `tools/pre_run.py` confere).
 
 ## 9. As escolhas deste adendo (com a recomendação e o custo de errar)
