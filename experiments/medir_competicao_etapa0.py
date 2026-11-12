@@ -41,7 +41,7 @@ sys.path.insert(0, str(RAIZ / "tests"))
 import gabarito_competicao as gc  # noqa: E402
 import medir_v3_espaco_acoes as v3m  # noqa: E402
 
-from digilab.events import AcaoPet  # noqa: E402
+from digilab.events import ACOES_PET_BANHEIRO, ACOES_PET_HOJE, AcaoPet  # noqa: E402
 from digilab.policies import lobos  # noqa: E402
 from digilab.protocol import derivar_semente  # noqa: E402
 
@@ -50,7 +50,7 @@ KAPPAS = (1, 2, 4, 8, 16, 32)
 P_INST_MIN = 0.9                 # CR-2, DECIDIDA em 2026-10-21 (SEM FONTE)
 LIMIAR_G0 = 0.10                 # CR-7, DECIDIDA em 2026-10-21 (SEM FONTE)
 URGENTES = tuple(r for r in v3m.ORDEM_INSTINTO if r != "tempo_livre")
-ORDEM_ACOES = tuple(a.value for a in AcaoPet)
+ORDEM_ACOES = tuple(a.value for a in ACOES_PET_HOJE + ACOES_PET_BANHEIRO)     # as de antes da TV no jogo (D-GV-TVJOGO-3)
 
 
 def propostas(valem: list, p: dict) -> dict | None:

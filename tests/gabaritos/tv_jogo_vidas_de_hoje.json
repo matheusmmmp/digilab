@@ -1,0 +1,81 @@
+{
+ "grupo|101": {
+  "eventos": 386,
+  "resumo": "1471c855e68408ec534aacea608c01e575cadb53c7d346699c0062255e85ed74"
+ },
+ "grupo|202": {
+  "eventos": 386,
+  "resumo": "bf4c30b38a73c2bdb8a2e6261d635a2f7e9efe20846301552ce9cdd63e14e509"
+ },
+ "grupo|303": {
+  "eventos": 386,
+  "resumo": "9ad058af7b0ed73ffa3043d54ae8f709fe4a08e9dc18d6f519b25a435bfbfecc"
+ },
+ "rede_de_si": {
+  "acoes": [
+   "ocioso",
+   "dormir",
+   "comer",
+   "brincar",
+   "chamar_atencao",
+   "explorar",
+   "emburrar",
+   "aliviar"
+  ],
+  "acoes_visiveis": [
+   "ocioso",
+   "dormir",
+   "comer",
+   "brincar",
+   "chamar_atencao",
+   "explorar",
+   "emburrar",
+   "aliviar"
+  ],
+  "entradas_sociais": [
+   "outro_a_vista",
+   "viu_comer",
+   "acao_ocioso",
+   "acao_dormir",
+   "acao_comer",
+   "acao_brincar",
+   "acao_chamar_atencao",
+   "acao_explorar",
+   "acao_emburrar",
+   "acao_aliviar",
+   "toque_disputa_ganhou",
+   "toque_disputa_perdeu",
+   "toque_encostou",
+   "toque_encostaram",
+   "toque_esbarrou"
+  ]
+ },
+ "tv|evento|101": {
+  "cerebro": "df261093d645482eed49962d79b866f1bd27bdf97c8a81849b7e7cc0a5931315",
+  "decisoes": 288,
+  "estado": "757053b5e78d77a9d067ff99d24d4239c5f286c7fff746e2493c482ad206eca5",
+  "fisico": "a88500993d656c66715575f6d5f81a24b5fd58eb0520e6b608acdc9374176000",
+  "log": "80a9a04931d5c354a91313be805a00b24280100d197159d8e401c653775dd3f8"
+ },
+ "tv|evento|202": {
+  "cerebro": "dc26b760dd1e528885c78bc4256fec54cd328ad153a7dc6e0b6ee4c968329ae8",
+  "decisoes": 288,
+  "estado": "a401fea1367a749ca098babd179ef9bbe065662e0290a64b89ec948b05035576",
+  "fisico": "a04745f2ea255ff3ccfc75ae4c876824396ab4585b59c47c9d6b1e2176d7cbdf",
+  "log": "8834d84a14d87471efe9fad01052172fefa0ecdb418ef54b512d6c4e19507f85"
+ },
+ "tv|grade|101": {
+  "cerebro": "53674b3c8241021865ee9825b4c956c25120e53c77cbac2d333e29c24c49d878",
+  "decisoes": 288,
+  "estado": "2c9a32c9a51c89dc5dbc18a03b34c2718bebd7571cbdff11c2b153e7d4606bec",
+  "fisico": "8f7ef360403fd96bfc84eeee3e5d972c66bf42df627147ed1305d55b47191d7a",
+  "log": "a7ce2385c802ab1925f5ea9e18bd1cda0ccb47e5bebee306ccd9649385ad6eda"
+ },
+ "tv|grade|202": {
+  "cerebro": "e48feb4764d369dafdf689542249dab8be37275e35f44d882c0aec5cdca1c69f",
+  "decisoes": 288,
+  "estado": "a9170ded9c216278981a3f9a61c424e30036d5a6c7e11e23897696c247251c52",
+  "fisico": "b8ea0c1a8f33af6a9888afeb2193f8bf41e6c9f3335b196a795cbe79c10880dc",
+  "log": "a3d1e26167939952b554a3e989af8d24919fa0ca88aece7cd9691d2a3807c691"
+ }
+}

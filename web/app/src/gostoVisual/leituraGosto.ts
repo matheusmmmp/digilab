@@ -25,6 +25,23 @@ export function linhasDoGosto(ina: Inato, e: EstadoGosto, quais: readonly Compon
     nascenca: ina.otimo[k], deVer: e.exposicao[k], doCarinho: e.carinho[k], hoje: alvo(ina, e, k) }));
 }
 
+/** as linhas do gosto do cerebro (a decisao C, D-GV-TVJOGO-5; os pets com a TV no cerebro): o de nascenca e o de tanto ver vem do DigiBrain
+    (`Motor.gostoVisualDoCerebro`, em [0, 1]); o carinho ainda nao entra no gosto do cerebro (0). Os componentes sao os canais da tela */
+export function linhasDoCerebro(nascenca: Readonly<Record<string, number>>, deVer: Readonly<Record<string, number>>,
+                                quais: readonly Componente[] = COMPONENTES): LinhaGosto[] {
+  return quais.map(k => {
+    const a = nascenca[k], v = deVer[k];
+    if (a === undefined || v === undefined) throw new Error(`o gosto do cerebro sem o canal ${k}`);
+    return { k, nome: NOME_COMPONENTE[k], baixo: PALAVRAS[k][0], alto: PALAVRAS[k][1], nascenca: a, deVer: v, doCarinho: 0, hoje: Math.min(1, Math.max(0, a + v)) };
+  });
+}
+/** os pontos de hoje e os de nascenca de um conjunto de linhas (para o "Gosta mais de") */
+export function pontosDasLinhas(linhas: readonly LinhaGosto[], de: "hoje" | "nascenca"): Record<Componente, number> {
+  const r = Object.fromEntries(COMPONENTES.map(k => [k, 0.5])) as Record<Componente, number>;
+  for (const l of linhas) r[l.k] = l[de];
+  return r;
+}
+
 /** a lista curta: os dois componentes da frase "Gosta mais de" (os mais longe do meio) e depois os que mais mudaram, até LINHAS_CURTAS */
 export function linhasMarcadas(linhas: readonly LinhaGosto[]): LinhaGosto[] {
   const ordem = (l: LinhaGosto): number => COMPONENTES.indexOf(l.k);

@@ -15,6 +15,7 @@ export const REGRA_TXT: Record<RegraLobos, string> = {
 /** a acao como opcao (curta) */
 export const ACAO_CURTA: Record<AcaoPet, string> = {
   ocioso: "à toa", dormir: "dormir", comer: "comer", brincar: "brincar", chamar_atencao: "chamar você", explorar: "explorar", emburrar: "emburrar",
+  ir_tv: "ir até a TV",
 };
 
 export const pct = (v: number, casas: number, sinal: boolean): string =>

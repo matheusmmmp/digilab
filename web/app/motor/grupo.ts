@@ -20,10 +20,11 @@
 import { ACOES_DONO, TPD, type ConfigMundo } from "./constantes.ts";
 import type { ConfigContrato } from "./contrato.ts";
 import {
-  DIR16, Mundo, MundoPartilhado, RandomPy, derivarSemente, distancia, eventoDeixarBola, eventoDeixarComida, lerDeixarBola,
+  DIR16, Mundo, MundoPartilhado, RandomPy, centroDaCelula, derivarSemente, distancia, eventoDeixarBola, eventoDeixarComida, lerDeixarBola,
   lerDeixarComida, type EscolherAlvo, type OpcoesMundo, type EstadoNoMundo, type GanchoGrupo, type PercepcaoMundo, type PercepcaoSocial, type TickSocial,
 } from "./mundo.ts";
 import { CONFIG_COOPERACAO, Cooperacao, TIPOS_MADUROS, type ConfigCooperacao, type ConsumoCoop, type Posicoes } from "./cooperacao.ts";
+import { CONFIG_TVJOGO, TIPO_SENTIDO_TELA, TV, TVSemChave, conferirConfigTV, lerSentidoTela, type ConfigTV, type ConfigTVJogo } from "./tv.ts";
 
 export const ROTULO_ORDEM = "mundo-ordem";              // o fluxo da vez no tick (DP-2)
 export const ROTULO_SEGUNDO_PET = "segundo-pet";        // a semente do segundo pet
@@ -120,7 +121,7 @@ export function tiposDoContato(a: string, b: string, disputa: { vencedor: string
 // ================================================================== o registro do grupo (DP-3)
 export interface EventoGrupo {
   tick: number;
-  tipo: "entrada" | "avanco" | "acao_usuario" | "deixar_comida" | "deixar_bola";
+  tipo: "entrada" | "avanco" | "acao_usuario" | "deixar_comida" | "deixar_bola" | "sentido_tela";   // o sentido_tela: so com a TV (D-GV-TVJOGO-4)
   valor: string | number;        // o avanco em ticks; a acao; "tipo|x|y"; "x|y"; na entrada, o id do pet
   destino: string;               // grupo | mundo | pet:<id>
   pet: string | null;            // o pet do evento (a entrada; o do orcamento do dono)
@@ -221,6 +222,11 @@ export interface OpcoesGrupo {
   /** a medida da cooperacao (CO3); desligada por padrao */
   cooperacao?: Readonly<ConfigCooperacao>;
   sementeDoSegundo?: (semente: number | bigint) => number | bigint;
+  /** a TV do mundo comum (GOSTO_VISUAL, a decisao B; D-GV-TVJOGO-4; o Grupo(cfg_tv=) do Python): so a fonte "evento"; o Grupo a liga, e
+      os pets entram com a opcao `tela` do laco com a mesma ConfigTV. Sem ela, o grupo de hoje */
+  tv?: ConfigTV;
+  /** a TV no jogo no grupo (a ConfigTVJogo; so com a `tv`): a TV desligada */
+  tvJogo?: ConfigTVJogo;
 }
 
 /** um membro: o pet do traco (o engine e o cerebro de fora, `pet`) ou o pet do jogo inteiro (`motor`) */
@@ -265,6 +271,33 @@ export class Grupo implements GanchoGrupo {
     this.sementes = sementesDoGrupo(semente, cg.ids);
     if (op.sementeDoSegundo && cg.ids.length === 2) this.sementes[cg.ids[1]] = op.sementeDoSegundo(semente);
     this.registro = new RegistroGrupo({ versao: VERSAO_REGISTRO_GRUPO, semente, ids: [...cg.ids], layout: cm.layout.nome, pets: {} });
+    this.tvJogo = op.tvJogo ?? CONFIG_TVJOGO;
+    if (op.tv !== undefined && op.tv.ligada) {           // a TV do mundo comum (D-GV-TVJOGO-4), na celula da ConfigTV (terra; falha alto)
+      const ctv = conferirConfigTV(op.tv);
+      if (ctv.fonte !== "evento") throw new TVSemChave("a TV no grupo e a do modo livre gravado (a fonte \"evento\")");
+      const [cx, cy] = ctv.celula;
+      if (!(cx < cm.celulas_x && cy < cm.celulas_y)) throw new Error(`a celula da TV ${ctv.celula} fora do mapa`);
+      const [x, y] = centroDaCelula(ctv.celula, cm);
+      if (!this.comum.seca(x, y)) throw new Error(`a celula da TV ${ctv.celula} e agua`);
+      this.comum.tv = new TV(ctv, semente, x, y);
+      (this.registro.cabecalho as unknown as Record<string, unknown>)["tv"] = { ...ctv, celula: [...ctv.celula] };
+      if (this.tvJogo.desligar || this.tvJogo.ir_ate_tv) (this.registro.cabecalho as unknown as Record<string, unknown>)["tv_jogo"] = { ...this.tvJogo };
+    } else if (op.tvJogo !== undefined && (op.tvJogo.desligar || op.tvJogo.ir_ate_tv)) {
+      throw new TVSemChave("a ConfigTVJogo no grupo exige a TV ligada");
+    }
+  }
+  /** a TV no jogo no grupo (a ConfigTVJogo) */
+  readonly tvJogo: ConfigTVJogo;
+
+  /** o que a TV do mundo comum passa a partir de agora (o modo livre gravado; o valor do `sentido_tela`, `fonte|n1|...|n7` ou, com a
+      ConfigTVJogo.desligar, `fonte|desligada`): um evento do grupo, do mundo, sem pet. Valida antes do registro */
+  sentidoTela(valor: string): void {
+    const tv = this.comum.tv;
+    if (tv === null) throw new TVSemChave("o sentido_tela no grupo exige a TV do mundo comum (a opcao `tv`)");
+    const [fonte, niveis] = lerSentidoTela(valor);
+    if (niveis === null && !this.tvJogo.desligar) throw new TVSemChave("a TV desligada exige a ConfigTVJogo.desligar");
+    this.registro.anexar({ tick: this.tick, tipo: TIPO_SENTIDO_TELA, valor, destino: DESTINO_MUNDO, pet: null, origem: ORIGEM_DONO });
+    tv.sentir(fonte, niveis, this.tick);
   }
 
   // ------------------------------------------------------------ a entrada
@@ -568,7 +601,7 @@ export class Grupo implements GanchoGrupo {
     do mundo. O registro refeito tem de ser o lido (falha alto); evento desconhecido, fora do tick ou de pet que nao entrou tambem. */
 export function reproduzirGrupo(registro: RegistroGrupo, pets: Record<string, () => { pet: PetDoGrupo; opcoes?: OpcoesPetNoGrupo }>,
                                 cm: ConfigMundo, cg: Readonly<ConfigGrupo> = CONFIG_GRUPO_LIGADA,
-                                cco: Readonly<ConfigCooperacao> = CONFIG_COOPERACAO): Grupo {
+                                cco: Readonly<ConfigCooperacao> = CONFIG_COOPERACAO, tv: { tv?: ConfigTV; tvJogo?: ConfigTVJogo } = {}): Grupo {
   const cab = registro.cabecalho as CabecalhoGrupo & { sentidos?: unknown };
   if (cab.versao !== VERSAO_REGISTRO_GRUPO) throw new Error(`versao do registro do grupo desconhecida: ${String(cab.versao)}`);
   if (cab.ids.join("\u0000") !== cg.ids.join("\u0000") || cab.layout !== cm.layout.nome)
@@ -576,7 +609,7 @@ export function reproduzirGrupo(registro: RegistroGrupo, pets: Record<string, ()
   if (cab.sentidos !== undefined && cab.sentidos !== null) throw new Error("o registro tem os sentidos do degrau 1b, fora do grupo em TS");
   if (Object.keys(pets).sort().join() !== Object.keys(cab.pets).sort().join())
     throw new Error(`pets ${Object.keys(pets).sort()} para o cabecalho ${Object.keys(cab.pets).sort()}`);
-  const g = new Grupo(cm, cab.semente, cg, { cooperacao: cco });
+  const g = new Grupo(cm, cab.semente, cg, { cooperacao: cco, ...tv });
   for (const e of registro.eventos) {
     if (e.tick !== g.tick) throw new Error(`evento no tick ${e.tick} com o grupo no tick ${g.tick}: ${jsonPython(e)}`);
     if (e.tipo === "entrada") {
@@ -594,6 +627,8 @@ export function reproduzirGrupo(registro: RegistroGrupo, pets: Record<string, ()
     } else if (e.tipo === "deixar_bola") {
       const [x, y] = lerDeixarBola({ tick: e.tick, tipo: "deixar_bola", valor: String(e.valor) });
       g.deixarBola(e.pet!, x, y);
+    } else if (e.tipo === TIPO_SENTIDO_TELA && e.destino === DESTINO_MUNDO && e.pet === null) {
+      g.sentidoTela(String(e.valor));                     // a TV do mundo comum (D-GV-TVJOGO-4)
     } else {
       throw new Error(`tipo de evento desconhecido no registro do grupo: ${String((e as { tipo: unknown }).tipo)}`);
     }

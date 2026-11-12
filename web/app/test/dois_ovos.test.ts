@@ -32,7 +32,7 @@ describe("os dois ovos", () => {
 
   test("a chave ligou na CO4d: o ovo do brasao choca os dois; o ovo de um pet so (a heranca, o exemplo) segue v25", () => {
     expect(DOIS_OVOS_LIGADO).toBe(true);
-    expect(VERSAO_PET).toBe(32);
+    expect(VERSAO_PET).toBe(35);
   });
 });
 
