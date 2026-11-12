@@ -134,3 +134,36 @@ recusa é o elegível sem chute. As três últimas colunas contam as decisões d
 - **G-BB-3 passa** no Python: o replay pelo log refaz a vida com o lance (REL e A11) e o grupo de dois REL. A paridade com o TS é a BB2.
 
 Os desvios estão em `docs/registro/2026-11.md` (D-BB1-1 a D-BB1-6).
+
+## 10. Resultado da BB2 (2026-11-12)
+
+O lance do dono está no motor TS (`web/app/motor/`), com a paridade bit a bit com o Python:
+- a `ConfigLanceDono` em `motor/digibrain/constantes.ts`; a entrada `bola_do_dono` no M-IMPULSO, o gancho `bolaDoDono` e o motivo `lance`
+  no M-ADAPT;
+- o fluxo `dono-bola` e os `lances` no `MundoPartilhado`; no laço com o mundo, a opção `lance`: o Brincar do dono joga a bola, o convite vai
+  ao cérebro antes de cada decisão, e o modular decide no mesmo tick; o cérebro A não tem o gancho (só a bola se mexe);
+- a falha alta quando o laço e o cérebro divergem na chave, nos dois sentidos.
+
+**As versões (BB-7, D-BB2-1):** a v29 já era a da LP6 na `main`, então o lance ficou com a **v30** (a v27 com o lance; o ovo de um pet, o
+`VERSAO_PET`) e a **v31** (a v29, o grupo de hoje, com o lance; o ovo do brasão, o `VERSAO_GRUPO`). O predicado novo é o `nasceComLance`. Os
+pets v21 a v29 não mudam.
+
+**A paridade** (`test/lance_dono.test.ts`, contra o `test/gabaritos/digibrain_modular_lance_dono.json.gz`): as 3 vidas, 1 152 decisões (384
+por vida), batem decisão a decisão (a ação, o motivo com o `lance` e a assinatura de cada módulo), com o estado interno no fim, os 21 lances
+e as 40 rolagens da bola.
+
+**A medida no motor do jogo** (o roteiro da BB1 na v30 com o modular, 3 dias; as colunas são as da seção 9):
+
+| semente | lances | elegíveis | chutes na janela | recusas | lance com reflexo | lance com fome urgente | decisões com reflexo | com fome urgente | chutes com reflexo | chutes com fome urgente |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 101 | 35 | 21 | 18 | 3 | 6 | 8 | 11 | 14 | 0 | 0 |
+| 202 | 35 | 22 | 17 | 5 | 3 | 10 | 7 | 16 | 0 | 0 |
+| 303 | 35 | 20 | 17 | 3 | 8 | 7 | 14 | 13 | 0 | 1 |
+
+- **G-BB-1 passa:** 52 chutes em 63 lances elegíveis (0,825 ≥ 0,8).
+- **G-BB-2 falha por um chute:** nenhum chute nas 32 decisões da janela com o reflexo do sono, mas 1 nas 43 com a fome urgente (D-BB2-3): o
+  convite vale 0, e o pet escolheu o brincar sozinho, com a bola perto. Fica para a rodada de equilíbrio.
+- **G-BB-3 passa:** a paridade acima; o `Motor.reproduzir` refaz a vida v30 (a assinatura, os lances e os motivos); o `GrupoDoJogo.reproduzir`
+  refaz o grupo v31, em que cada pet joga e recebe o lance dele no mundo de todos; os grupos v28 e v29 seguem sem o lance.
+
+Os desvios estão em `docs/registro/2026-11.md` (D-BB2-1 a D-BB2-5). A vista e o som (a BB3) não foram tocados.
