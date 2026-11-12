@@ -10,7 +10,7 @@ import type { ConfigCooperacao } from "./cooperacao.ts";
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, CUIDADO_NA_HORA, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
   TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehDoGrupo, ehLutaPoc, nasceNaAgua,
-  nasceNaGrande, nasceComMemoriaLonga, nasceComSonoSegura, nasceComLance, nasceComTv, nasceComTvJogo, CMU_GRANDE, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, VERSOES_COM_SACUDIR,
+  nasceNaGrande, nasceComMemoriaLonga, nasceComSonoSegura, nasceComLance, nasceComTv, nasceComTvJogo, nasceComEquilibrioCuidado, CMU_GRANDE, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, VERSOES_COM_SACUDIR,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { LUGARES_V6, NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
@@ -55,7 +55,7 @@ import { NOME_EXERCICIO, chaveSprite, nomeArquetipo, nomeForma } from "./nomes.t
 import { criarRng, hashSemente } from "./rng.ts";
 import { TreinoPet, type ResultadoSessao } from "./treino.ts";
 import { Vinculo } from "./vinculo.ts";
-import { AJUSTE_E1_DESLIGADO, ajusteE1Ligado, inatosComAjuste, lanceComAjuste, sonoComAjuste, validarAjusteE1, type AjusteEquilibrioE1 } from "./equilibrio_e1.ts";
+import { AJUSTE_E1_DESLIGADO, AJUSTE_E1_PROPOSTO, ajusteE1Ligado, inatosComAjuste, lanceComAjuste, sonoComAjuste, validarAjusteE1, type AjusteEquilibrioE1 } from "./equilibrio_e1.ts";
 import type {
   AcaoDono, AcaoPet, Carater, Chamado, ChavesProduto, Desejo, Especie, Estagio, EstadoVida, EventoRegistro, Exercicio, Forma, FormaAdulta, FormaAdultaNormal,
   EstagioTreino, ItemHistorico, Linha, MotivoVida, Observacao, OpItem, Origem, Ramo, Ritmo, Stats, Temperamento, VersaoPet,
@@ -258,7 +258,8 @@ export class Motor {
   private modular: DigiBrain | null = null;
   /** o modular decide agora (a v16 sempre; a v17 depois de um "cb" do modular) */
   private modularAtivo = false;
-  /** o ajuste da calibracao do E1 (EQUILIBRIO_CUIDADO; motor/equilibrio_e1.ts): desligado em todo pet do jogo; so a bancada o liga */
+  /** o ajuste da calibracao do E1 (EQUILIBRIO_CUIDADO; motor/equilibrio_e1.ts): o AJUSTE_E1_PROPOSTO na v38 e na v39, pela versao (o E3, EQ-6;
+      o replay pelo log o refaz); desligado nas versoes de antes, onde so a bancada o liga */
   private ajusteE1: AjusteEquilibrioE1 = AJUSTE_E1_DESLIGADO;
   get equilibrioE1(): AjusteEquilibrioE1 { return this.ajusteE1; }
 
@@ -270,6 +271,7 @@ export class Motor {
     /* so a v21 e o pet de teste (v16): os pets de antes (v1-v19, com o combate por turnos) foram descartados (os descartes 6 e 7, src/tamer.ts) */
     if (!VERSOES_PET.includes(versao) && versao !== VERSAO_PET_LAB) throw new Error(`versão de pet desconhecida: ${versao} (só a ${VERSOES_PET.join(" e a ")} e o pet de teste v${VERSAO_PET_LAB} abrem; os pets de antes, com o combate por turnos, foram descartados)`);
     this.semente = semente; this.versao = versao as VersaoPet;
+    if (nasceComEquilibrioCuidado(versao)) this.ajusteE1 = AJUSTE_E1_PROPOSTO;   // o E3: a v38 e a v39 nascem com a F2 (EQ-6)
     this.noGrupo = opcoes.parteDoMundo !== undefined;
     /* a v26 so existe no grupo, e o grupo so tem a v26 (CO4c) */
     if (this.noGrupo !== ehDoGrupo(versao))
@@ -494,6 +496,7 @@ export class Motor {
   ligarEquilibrioE1(a: AjusteEquilibrioE1): void {
     validarAjusteE1(a);
     if (!ehCerebroTrocavel(this.versao)) throw new Error(`o ajuste do E1 so nos pets de cerebro trocavel (este e v${this.versao})`);
+    if (nasceComEquilibrioCuidado(this.versao)) throw new Error(`o pet v${this.versao} ja nasce com o ajuste do E1 (o E3); a bancada liga so nas versoes de antes`);
     if (this.modular !== null) throw new Error("o ajuste do E1 vem antes da primeira troca para o modular");
     if (ajusteE1Ligado(this.ajusteE1)) throw new Error("o ajuste do E1 duas vezes");
     this.ajusteE1 = a;
@@ -1376,7 +1379,7 @@ export class Motor {
        que segura (SONO_SEGURA) */
     if (v.cerebro === "modular") {
       /* a v32: o modular com a subchave `olhar`, o genoma da visao da semente do ovo (rng propria `visao-ovo`) e o agrado no corpo */
-      const tv = nasceComTv(this.versao), aj = this.ajusteE1;   // `aj`: o ajuste do E1, desligado fora da bancada (os mesmos objetos de hoje)
+      const tv = nasceComTv(this.versao), aj = this.ajusteE1;   // `aj`: o ajuste do E1: o da F2 na v38 e na v39; nas de antes, desligado fora da bancada (os mesmos objetos de hoje)
       this.modular ??= new DigiBrain(tv ? CONFIG_DIGIBRAIN_LAB_OLHAR : CONFIG_DIGIBRAIN_LAB, inatosComAjuste({ ...INATOS_MODULAR, d_max: this.alcanceMemoria } as typeof INATOS_MODULAR, aj), false,
         sonoComAjuste(nasceComSonoSegura(this.versao) ? CONFIG_SONO_SEGURA_LIGADA : CONFIG_SONO_SEGURA, aj),
         tv ? { semente: this.semente, cfgOlhar: CONFIG_OLHAR_JOGO,

@@ -1,6 +1,6 @@
 /* EQUILIBRIO_CUIDADO, E2: a validacao unica (docs/PLANO_ANALISE_V3_EQUILIBRIO_CUIDADO.md, secao 9, o adendo 1, registrado antes). A bancada
    do E0 (e0.ts) no modo de validacao, com a F2 do E1 e as chaves ligadas (o AJUSTE_E1_PROPOSTO e a BITS_V2, como a rodada E1_escolhido), nas
-   30 vidas: 2 versoes (o VERSAO_PET e o VERSAO_GRUPO de hoje) x 3 donos x as 5 sementes da validacao (94101...94505). Roda UMA vez: recusa
+   30 vidas: 2 versoes (os ovos de hoje antes do E3: a v35 e a v37, o NUMERO_VERSAO de e0.ts) x 3 donos x as 5 sementes da validacao (94101...94505). Roda UMA vez: recusa
    rodar se a pasta ja tem vidas. Grava as vidas, o resumo.json, o tabelas.md, o rodada.json e o comparacao.md (cada linha de meta no E0, no E1
    da calibracao e no E2) em scripts/medicoes/equilibrio_cuidado_e2/.
 
@@ -11,7 +11,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { AJUSTE_E1_PROPOSTO } from "../../motor/equilibrio_e1.ts";
-import { VERSAO_PET } from "../../motor/index.ts";
+import { VERSAO_V35 } from "../../motor/index.ts";
 import { BITS_V2 } from "../../src/bits.ts";
 import { DONOS, VERSOES, vida, type OpcoesVida } from "./e0.ts";
 import { resumir } from "./e0_resumo.ts";
@@ -41,8 +41,8 @@ export function validar(pasta: string = PASTA_E2): void {
 
 interface MetaGravada { id: string; medida: string; meta: string; dono: string; hoje: string; passa: boolean | null }
 const lerMetas = (f: string): MetaGravada[] => (JSON.parse(readFileSync(f, "utf8")) as { metas: MetaGravada[] }).metas;
-/** a versao de uma linha de meta, pelo numero no comeco do `hoje` (o pet e sempre o VERSAO_PET; o grupo mudou de v36 para v37) */
-const versaoDe = (m: MetaGravada): "pet" | "grupo" => m.hoje.startsWith(`v${VERSAO_PET}:`) ? "pet" : "grupo";
+/** a versao de uma linha de meta, pelo numero no comeco do `hoje` (o pet e sempre a v35; o grupo mudou de v36 para v37) */
+const versaoDe = (m: MetaGravada): "pet" | "grupo" => m.hoje.startsWith(`v${VERSAO_V35}:`) ? "pet" : "grupo";
 const chave = (m: MetaGravada): string => `${m.id}|${m.dono}|${versaoDe(m)}`;
 const sn = (b: boolean | null | undefined): string => b === undefined ? "—" : b === null ? "sem dado" : b ? "passa" : "**não passa**";
 
