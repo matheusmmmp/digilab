@@ -1,7 +1,7 @@
 # Prancha: a conta (entrar e primeiro acesso)
 
-**Status: PROPOSTA** (2026-11-12). O plano é o `docs/PLANO_UX_CONTA.md`; as regras vêm do `docs/PLANO_V3_CONTA.md` (CN-1 a CN-18
-DECIDIDAS). O código é da etapa CN2 e só vem depois desta prancha aprovada.
+**Status: APROVADA pelo Matheus em 2026-11-12** ("Sim, aprovo", em resposta a "Aprova a prancha da conta pelas seis recomendações (UX-CN-1 a 6)?"): as UX-CN-1 a UX-CN-6 valem pela recomendação. O plano é o `docs/PLANO_UX_CONTA.md`; as regras vêm do `docs/PLANO_V3_CONTA.md` (CN-1 a CN-18
+DECIDIDAS). O código é da etapa CN2, depois da CN1.
 
 É só desenho: HTML estático, sem código do jogo. Os tokens e os moldes são os da prancha dos lugares
 (`../ux-lugares-menus/lugares.css` e `movel.css`, cópias de `web/app/src/estilo/tokens.css`). O que é novo está em `conta.css`. Não há
@@ -30,7 +30,7 @@ cor nova.
 
 ## O que a prancha pede ao Matheus
 
-As UX-CN-1 a UX-CN-6, na seção 7 do `docs/PLANO_UX_CONTA.md`.
+As UX-CN-1 a UX-CN-6, na seção 7 do `docs/PLANO_UX_CONTA.md`: decididas em 2026-11-12, pela recomendação.
 
 ## Como gerar e capturar
 

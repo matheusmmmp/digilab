@@ -1,6 +1,6 @@
 # Plano de UX da conta: entrar e primeiro acesso (2026-11-12)
 
-**Status: PROPOSTO.** Sem código. A prancha está em `docs/pranchas/ux-conta/` e espera a aprovação do Matheus; o código é da etapa CN2
+**Status: APROVADO pelo Matheus em 2026-11-12** ("Sim, aprovo", em resposta a "Aprova a prancha da conta pelas seis recomendações (UX-CN-1 a 6)?"): as UX-CN-1 a UX-CN-6 valem pela recomendação. Sem código. A prancha está em `docs/pranchas/ux-conta/`; o código é da etapa CN2
 do `docs/PLANO_V3_CONTA.md`, depois da CN1 (o servidor). Os tamanhos e os textos de interface são **PROPOSTO, SEM FONTE**.
 Autor: Gerente da UX_TELA_PET (Claude Code, Fable 5.2), branch `v3-ux-conta-pranchas`.
 
@@ -69,6 +69,8 @@ pet fica à vista. O primeiro acesso cabe sem rolar a 390 e a 360.
 - **No e2e:** as telas novas pedem testes próprios na CN2, com o servidor falso; os testes de hoje não mudam, porque sem conta nada muda.
 
 ## 7. Decisões para o Matheus
+
+**DECIDIDAS em 2026-11-12, todas pela recomendação** ("Sim, aprovo").
 
 - **UX-CN-1. A prancha inteira:** aprovar para a CN2 usá-la. Recomendo aprovar. Custo de errar: baixo; é desenho, e a CN2 ainda depende
   da CN1.
