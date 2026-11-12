@@ -27,11 +27,18 @@ continua lendo so se ha cheiro (o G-SEM-DIRECAO).
 de cada uma e o W0[chamar_atencao].z de hoje termo a termo, com o termo do receptor do conteudo (TERMO_DO_CONTEUDO) multiplicado por
 `ganho_conteudo` (mul) e os dos outros dois conteudos por zero; o habito e o da linha de H da unidade (`plast.linha_da_opcao`, uma por conteudo, no
 M-PLAST). Desligada, a unidade e a de hoje.
+**O olhar** (GOSTO_VISUAL, P1d; docs/ESPEC_GOSTO_VISUAL_P1.md, secao 6, GV-19; a subchave `olhar`, com a `ConfigOlhar`): o comportamento
+novo `olhar`, com uma unidade (`olhar`, `tela`, id) por linha da classe `tela` do M-SENS (a TV a vista), no fim da lista (a ordem das
+unidades de hoje nao muda). O inato e o W0[olhar].z (`ConfigOlhar.w0_olhar`: a urgencia do tedio e da curiosidade), a proximidade e a
+novidade da linha (`w0_prox`, `w0_nov`), o incentivo e o G da classe `tela` vezes a proximidade (P1), o habito e a linha H[olhar] (P2) e o
+termo novo `gosto` (so com a subchave, em todas as unidades: 0 fora da TV que o pet ja olhava), que o M-ADAPT entrega pronto. Desligada,
+nenhuma unidade nem termo novo.
 Sem estado e sem rng."""
 from __future__ import annotations
 
-from ..config import (CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTOS_DIGIBRAIN, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_FALA_UNIDADES,
-                      CONTEUDOS_FALA, RECEPTORES_DIGIBRAIN, TERMO_DO_CONTEUDO, ConfigDigibrain, ConfigDigibrainInatos, ConfigFalaUnidades)
+from ..config import (CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTO_OLHAR, COMPORTAMENTOS_DIGIBRAIN, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS,
+                      CONFIG_FALA_UNIDADES, CONFIG_OLHAR, CONTEUDOS_FALA, RECEPTORES_DIGIBRAIN, TERMO_DO_CONTEUDO, ConfigDigibrain,
+                      ConfigDigibrainInatos, ConfigFalaUnidades, ConfigOlhar)
 from ..modelo_mundo import raiz_inteira
 from ._comum import chave_unidade, mul, phi
 from .plast import linha_da_opcao
@@ -44,14 +51,18 @@ class Impulso:
     """o M-IMPULSO (docstring do modulo)"""
 
     def __init__(self, inatos: ConfigDigibrainInatos | None = None, cfg_digibrain: ConfigDigibrain | None = None,
-                 cfg_fala: ConfigFalaUnidades | None = None) -> None:
+                 cfg_fala: ConfigFalaUnidades | None = None, cfg_olhar: ConfigOlhar | None = None) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         self.cf = cfg_fala or CONFIG_FALA_UNIDADES
+        if cfg_olhar is not None and not self.cd.olhar:
+            raise ValueError("M-IMPULSO: a ConfigOlhar so com a subchave olhar")
+        self.co = (cfg_olhar or CONFIG_OLHAR) if self.cd.olhar else None
         self.S = self.p.escala
         idx = {c: j for j, c in enumerate(CARACTERISTICAS_DIGIBRAIN)}
         self.w0 = {}
-        for b, linha in self.p.w0:
+        linhas = self.p.w0 + (((COMPORTAMENTO_OLHAR, self.co.w0_olhar),) if self.co is not None else ())
+        for b, linha in linhas:
             w = [0] * len(CARACTERISTICAS_DIGIBRAIN)
             for c, v in linha:
                 w[idx[c]] = v
@@ -128,13 +139,16 @@ class Impulso:
         return out
 
     def unidades(self, sens: dict, afeto: dict, contexto: dict, plast, memoria: dict | None, drives: tuple,
-                 lembranca: tuple | None = None, facetas: tuple | None = None) -> tuple[list[dict], list]:
+                 lembranca: tuple | None = None, facetas: tuple | None = None, gosto: dict | None = None) -> tuple[list[dict], list]:
         """as unidades da decisao com os termos e a ativacao, e o z. `lembranca` = (o termo da M4, o `casa` do M-MEM) ou None; so com a
         `memoria_autobio` as unidades ganham o termo `lembranca` (L nas que casam com o episodio lembrado, 0 nas outras). `facetas` = (os
         valores das tres facetas, as classes de comida que ja tem episodio positivo); so com a `facetas_mem` as unidades ganham o termo
         `faceta` (6.2: cautela no `comer` de classe sem episodio positivo, apego no `chamar_atencao`, ousadia no `explorar` com alvo fora
-        da vista: o lugar lembrado e o cheiro)"""
+        da vista: o lugar lembrado e o cheiro). `gosto` (so com a subchave `olhar`) = {id da TV: o termo `gosto` da unidade de olhar dela}
+        (vazio se o pet nao olhava); com a subchave, todas as unidades ganham o termo `gosto` e as de olhar vem no fim"""
         S, a_max = self.S, self.p.a_max
+        if (gosto is not None) != (self.co is not None):
+            raise RuntimeError("M-IMPULSO: o termo gosto vem so com a subchave olhar, e com ela sempre")
         z = self.contexto_z(sens, afeto, contexto)
         inato_b = {b: sum(mul(w, zj, S) for w, zj in zip(self.w0[b], z) if w) for b in COMPORTAMENTOS_DIGIBRAIN}
         habito_b = {b: plast.habito(b, z) for b in COMPORTAMENTOS_DIGIBRAIN if not (self.cd.fala_unidades and b == FALA)}
@@ -146,13 +160,31 @@ class Impulso:
         persist = contexto["persistencia"]
         out = []
         em_passeio = contexto["I"] if self.cd.passeio and contexto["I"] is not None and contexto["I"][:2] == ("explorar", "passeio") else None
-        for u in (self.alvos(sens, memoria, em_passeio) if self.cd.passeio else self.alvos(sens, memoria, fala=True) if fala
-                  else self.alvos(sens, memoria)):
+        olhar = self.co is not None
+        if olhar:                                     # o olhar (P1d): o inato e o habito da linha nova
+            inato_b[COMPORTAMENTO_OLHAR] = sum(mul(w, zj, S) for w, zj in zip(self.w0[COMPORTAMENTO_OLHAR], z) if w)
+            habito_b[COMPORTAMENTO_OLHAR] = plast.habito(COMPORTAMENTO_OLHAR, z)
+        lista = (self.alvos(sens, memoria, em_passeio) if self.cd.passeio else self.alvos(sens, memoria, fala=True) if fala
+                 else self.alvos(sens, memoria))
+        if olhar:                                     # uma unidade por TV a vista, no fim da lista
+            lista = lista + [{"chave": chave_unidade(COMPORTAMENTO_OLHAR, o["classe"], o["id"]), "acao": COMPORTAMENTO_OLHAR,
+                              "tipo": o["classe"], "objeto": o, "d": o["d"]} for o in sens["telas"]]
+            if set(gosto) - {o["id"] for o in sens["telas"]}:
+                raise RuntimeError(f"M-IMPULSO: o gosto de uma TV fora da vista: {gosto!r}")
+        for u in lista:
             b, o = u["acao"], u["objeto"]
-            termos = dict.fromkeys(TERMOS + (("lembranca",) if self.cd.memoria_autobio else ()) + (("faceta",) if self.cd.facetas_mem else ()), 0)
+            termos = dict.fromkeys(TERMOS + (("lembranca",) if self.cd.memoria_autobio else ()) + (("faceta",) if self.cd.facetas_mem else ())
+                                   + (("gosto",) if olhar else ()), 0)
             inato = inato_fala[u["chave"][1]] if fala and b == FALA else inato_b[b]
             termos["inato"] = inato + (self.w0_tipo.get(b, {}).get(u["tipo"], 0) if u["tipo"] is not None else 0)
-            if o is not None:
+            if b == COMPORTAMENTO_OLHAR:              # o olhar (P1d): a linha da TV, o incentivo da classe `tela` e o gosto
+                termos["prox"] = mul(self.co.w0_prox, o["prox"], S)
+                termos["nov"] = mul(self.co.w0_nov, o["nov"], S)
+                if o["classe"] not in incentivos:
+                    incentivos[o["classe"]] = plast.incentivo(sens["pc"], o["classe"], drives)
+                termos["incentivo"] = mul(incentivos[o["classe"]], o["prox"], S)
+                termos["gosto"] = gosto.get(o["id"], 0)
+            elif o is not None:
                 termos["prox"] = mul(self.w0_prox.get(b, 0), o["prox"], S)
                 termos["nov"] = mul(self.w0_nov.get(b, 0), o["nov"], S)
                 if b in ("comer", "brincar"):

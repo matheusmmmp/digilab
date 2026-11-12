@@ -21,6 +21,8 @@ import { C, CCO, CCO_V11, DUR_EVO, LIMIAR_PRIVACAO, TPD, type ConfigCorpo, type 
 import { eNoite } from "./estado.ts";
 import { divArred, TIPOS_COMIDA_MUNDO } from "./mundo.ts";
 import type { AcaoPet } from "./tipos.ts";
+import { ATIVIDADE_TELA, CANAIS_ESTRESSE_TELA, CANAIS_TELA, CANAL_SUSTO_TELA, CONFIG_TELA, RECEPTOR_NOVIDADE_TELA, conferirConfigTela,
+  type CanalTela, type ConfigTela } from "./tv.ts";
 
 // ================================================================== os nomes
 export const QUIMICOS_HOJE = ["fome", "desconforto", "cansaco", "tristeza", "dano"] as const;
@@ -116,12 +118,14 @@ export const CONFIG_LUTA_CORPO: ConfigLutaCorpo = { ligada: false };
 export const CONFIG_LUTA_CORPO_LIGADA: ConfigLutaCorpo = { ligada: true };
 
 /** os quimicos que o corpo tem com estas chaves: os cinco de hoje, os de cada orgao ligado e os da etapa 6 (a curiosidade so com o
- *  mundo fisico) */
-export function quimicosDe(cc: ConfigCorpo, comMundo = false): string[] {
+ *  mundo fisico); por ultimo, com a tela (GOSTO_VISUAL, P1f; o orgao do P1b), a adaptacao de cada canal */
+export function quimicosDe(cc: ConfigCorpo, comMundo = false, tela: ConfigTela = CONFIG_TELA): string[] {
   const novos = cc.drives_novos ? NOVOS_CORPO.filter((n) => n !== "curiosidade" || comMundo) : [];
   return [...QUIMICOS_HOJE, ...(cc.digestao ? ORGAO_DIGESTAO : []), ...(cc.vida ? ORGAO_VIDA : []), ...novos,
-    ...(cc.gestos ? GESTOS_CORPO : []), ...(cc.metabolismo ? METABOLISMO_CORPO : [])];
+    ...(cc.gestos ? GESTOS_CORPO : []), ...(cc.metabolismo ? METABOLISMO_CORPO : []), ...(tela.ligada ? ADAPTACOES_TELA : [])];
 }
+/** o quimico da adaptacao de cada canal da tela (corpo.PREFIXO_ADAPTACAO + tela_<canal>) */
+export const ADAPTACOES_TELA: readonly string[] = CANAIS_TELA.map((c) => `adaptacao_tela_${c}`);
 
 // ================================================================== inteiros
 /** x * escala como inteiro exato. Um numero de hoje fora da grade falha alto (a CD-1 diz que nenhum fica fora). */
@@ -206,7 +210,7 @@ export function taxasDe(cc: ConfigCorpo): TaxasCorpo {
 
 // ================================================================== o grafo (secao 18; digilab/corpo_grafo.py)
 export const GATILHOS_TICK = ["tick", "acordado", "dormindo", "noite_acordado", "dia_acordado", "sujeira", "privacao", "sem_privacao",
-  "limiar", "abaixo"] as const;   // abaixo: o metabolismo, um quimico abaixo do limiar (fase 2)
+  "limiar", "abaixo", "tela_acima"] as const;   // tela_acima (P1f): o estimulo da tela acima do corte (fase 2), sem ler quimico   // abaixo: o metabolismo, um quimico abaixo do limiar (fase 2)
 export const LADOS_REACAO = ["acima", "abaixo"] as const;       // o lado do limiar de uma reacao com limiar (a transferencia)
 export const GATILHOS = [...GATILHOS_TICK, "estimulo"] as const;
 export const LEITURAS_RECEPTOR = ["drive", "falta"] as const;   // drive: S - div_arred(q S, C); falta: div_arred(q S, C)
@@ -236,7 +240,12 @@ export interface Emissor {
   nome: string; gatilho: string; fase: number; efeitos: [string, number][]; le: Leitura[]; limiar: number; divisor: number;
   variavel: boolean;
 }
-export interface GrafoCorpo { quimicos: Quimico[]; reacoes: Reacao[]; emissores: Emissor[] }
+/** um orgao da tela (o `Orgao` de corpo_grafo.py com o sentido "tela"; P1f): o receptor e o nivel, a adaptacao so o orgao a move */
+export interface OrgaoTela { receptor: string; adaptacao: string; sentido: "tela"; canal: CanalTela; lado: null; limiar: number; meia_saturacao: number }
+/** o receptor sobre a parte adaptada dos orgaos da tela (o `ReceptorSoma`, o `novidade_tela`): le as adaptacoes, nao emite */
+export interface ReceptorSoma { receptor: string; adaptacoes: string[]; meia_saturacao: number }
+/** a tabela; `orgaos` e `somas` so com a tela (desligada, ausentes: a tabela de hoje) */
+export interface GrafoCorpo { quimicos: Quimico[]; reacoes: Reacao[]; emissores: Emissor[]; orgaos?: OrgaoTela[]; somas?: ReceptorSoma[] }
 
 export const quimico = (nome: string, teto: number, descarte = true, extra: Partial<Quimico> = {}): Quimico =>
   ({ nome, teto, descarte, receptor: null, leitura: null, meia_vida: null, k_meia_vida: null, ...extra });
@@ -296,6 +305,9 @@ function forma(g: GrafoCorpo): void {
         throw new GrafoInvalido(`${e.nome}: leitura ${JSON.stringify(le)}`);
       }
     }
+    if (e.gatilho === "tela_acima" && !(e.le.length === 0 && e.divisor > 1 && e.fase === 2 && Number.isInteger(e.limiar) && e.limiar > 0)) {
+      throw new GrafoInvalido(`${e.nome}: o gatilho tela_acima le o estimulo da tela (nenhum quimico), com corte > 0 e divisor > 1, na fase 2`);
+    }
     if (e.gatilho === "abaixo" && !(e.le.length === 1 && e.le[0].sinal === -1 && e.divisor === 1 && e.fase === 2)) {
       throw new GrafoInvalido(`${e.nome}: o gatilho abaixo le um quimico so, com sinal -1 (menos dele, mais efeito), sem divisor, na fase 2`);
     }
@@ -323,6 +335,34 @@ function forma(g: GrafoCorpo): void {
   }
 }
 
+/** o orgao da tela (o `_forma_orgaos` do Python): a adaptacao existe, tem meia-vida e teto, nao tem receptor e so o orgao a move; a soma le
+ *  so adaptacoes de orgao */
+function formaOrgaos(g: GrafoCorpo): void {
+  const tocados = new Set<string>();
+  for (const r of g.reacoes) for (const q of [...r.consome, ...r.produz, ...(leDe(r) === null ? [] : [leDe(r) as string])]) tocados.add(q);
+  for (const e of g.emissores) { for (const [q] of e.efeitos) tocados.add(q); for (const le of e.le) tocados.add(le.quimico); }
+  const vistos = new Set<string>();
+  for (const o of g.orgaos ?? []) {
+    if (o.sentido !== "tela" || o.lado !== null) throw new GrafoInvalido(`orgao ${o.receptor}: sentido ${o.sentido}, lado ${o.lado}`);
+    if (!Number.isInteger(o.limiar) || o.limiar < 0 || !Number.isInteger(o.meia_saturacao) || o.meia_saturacao <= 0) {
+      throw new GrafoInvalido(`orgao ${o.receptor}: limiar ${o.limiar}, meia saturacao ${o.meia_saturacao}`);
+    }
+    if (vistos.has(o.adaptacao)) throw new GrafoInvalido(`orgao ${o.receptor}: a adaptacao ${o.adaptacao} ja e de outro orgao`);
+    vistos.add(o.adaptacao);
+    const q = quimicoDoGrafo(g, o.adaptacao);
+    if (q.receptor !== null || q.k_meia_vida === null || q.teto <= 0) {
+      throw new GrafoInvalido(`orgao ${o.receptor}: o quimico da adaptacao ${q.nome} tem meia-vida, teto e nenhum receptor`);
+    }
+    if (tocados.has(o.adaptacao)) throw new GrafoInvalido(`orgao ${o.receptor}: so o orgao move a adaptacao ${o.adaptacao}`);
+  }
+  for (const s of g.somas ?? []) {
+    if (!s.adaptacoes.length || s.adaptacoes.some((a) => !vistos.has(a)) || new Set(s.adaptacoes).size !== s.adaptacoes.length) {
+      throw new GrafoInvalido(`receptor ${s.receptor}: soma sobre adaptacoes que nao sao de orgao (ou repetidas)`);
+    }
+    if (!Number.isInteger(s.meia_saturacao) || s.meia_saturacao <= 0) throw new GrafoInvalido(`receptor ${s.receptor}: meia saturacao ${s.meia_saturacao}`);
+  }
+}
+
 function fechado(g: GrafoCorpo): void {
   const conhecidos = new Set(nomesDoGrafo(g));
   const citados: [string, string][] = [];
@@ -346,6 +386,7 @@ function caminhos(g: GrafoCorpo): [Record<string, string[]>, Record<string, stri
     for (const q of r.produz) fontes[q].push(`reacao:${r.nome}`);
   }
   for (const e of g.emissores) for (const [q, d] of e.efeitos) (d < 0 ? sumidouros : fontes)[q].push(`emissor:${e.nome}`);
+  for (const o of g.orgaos ?? []) fontes[o.adaptacao].push(`orgao:${o.receptor}`);   // o estimulo do mundo (a tela, P1f)
   for (const q of g.quimicos) {
     if (q.k_meia_vida !== null) sumidouros[q.nome].push("meia_vida");
     if (q.teto > 0 && q.descarte) sumidouros[q.nome].push("teto");
@@ -436,6 +477,7 @@ export interface RelatoGrafo {
 /** as quatro checagens da secao 18 (falham alto) e o relato: fechado, sumidouro, automantido e laco de ganho >= 1 (em inteiros) */
 export function checarGrafo(g: GrafoCorpo): RelatoGrafo {
   forma(g);
+  formaOrgaos(g);
   fechado(g);
   const [sumidouros, fontes] = caminhos(g);
   const semSumidouro = Object.keys(sumidouros).filter((q) => sumidouros[q].length === 0);
@@ -499,10 +541,13 @@ export const RECEPTOR_DE: Readonly<Record<string, string>> = {
 
 /** corpo.grafo_do_corpo: a tabela unica do corpo com estas chaves. Os estimulos de quantidade variavel guardam so o sinal; com a
  *  digestao, a comida entra no estomago (`alimento`) e a reacao da digestao a tira, junto com a fome */
-export function grafoDoCorpo(cc: ConfigCorpo, t: TaxasCorpo, comMundo = false): GrafoCorpo {
+export function grafoDoCorpo(cc: ConfigCorpo, t: TaxasCorpo, comMundo = false, tela: ConfigTela = CONFIG_TELA): GrafoCorpo {
   const E = cc.escala;
-  const nomes = quimicosDe(cc, comMundo);
+  const nomes = quimicosDe(cc, comMundo, tela);
   const quimicos = nomes.map((n) => {
+    if (tela.ligada && ADAPTACOES_TELA.includes(n)) {          // a tela (P1f): a adaptacao, com a meia-vida do orgao e sem receptor
+      return quimico(n, tela.teto_intensidade, true, { meia_vida: tela.meia_vida_adaptacao, k_meia_vida: tela.k_adaptacao });
+    }
     const receptor = RECEPTOR_DE[n] ?? null;
     const lei = receptor === null ? null : ((QUIMICOS_HOJE as readonly string[]).includes(n) ? "drive" : "falta");
     const h = MEIAS_VIDAS[n];
@@ -579,7 +624,25 @@ export function grafoDoCorpo(cc: ConfigCorpo, t: TaxasCorpo, comMundo = false): 
   if (cc.gestos) {
     em.push(emissor("tapa", "estimulo", 0, [["dor", cc.tapa_dor], ["susto", cc.tapa_susto], ["estresse", cc.tapa_estresse]]));
   }
-  return { quimicos, reacoes, emissores: em };
+  if (!tela.ligada) return { quimicos, reacoes, emissores: em };
+  // a tela (P1b no Python; secao 4 da espec): os orgaos dos sete canais, a soma (`novidade_tela`) e os emissores sobre quimicos que ja existem
+  em.push(emissor(`atividade:${ATIVIDADE_TELA}`, "estimulo", 0, [["tedio", menos(tela.tedio_assistir)]]),
+    emissor("estresse_tela", "tela_acima", 2, [["estresse", 1]], { limiar: tela.estresse_corte, divisor: tela.estresse_divisor }),
+    emissor("susto_tela", "estimulo", 0, [["susto", tela.susto_salto]]),
+    emissor("agrado_tela", "estimulo", 0, [["tristeza", menos(tela.ganho_humor_agrado)]]));
+  const orgaos: OrgaoTela[] = CANAIS_TELA.map((c) => ({ receptor: `tela_${c}`, adaptacao: `adaptacao_tela_${c}`, sentido: "tela", canal: c,
+    lado: null, limiar: tela.limiar, meia_saturacao: tela.meia_saturacao }));
+  return { quimicos, reacoes, emissores: em, orgaos,
+           somas: [{ receptor: RECEPTOR_NOVIDADE_TELA, adaptacoes: orgaos.map((o) => o.adaptacao), meia_saturacao: tela.meia_saturacao }] };
+}
+
+/** o passo da adaptacao de um orgao (corpo.passo_adaptacao): anda para o estimulo, com passo de pelo menos 1; nunca passa dele */
+export function passoAdaptacao(a: number, estimulo: number, k: number, bits = 16): number {
+  const d = estimulo - a;
+  if (d === 0) return a;
+  let s = divArred(d * k, 2 ** bits);
+  if (s === 0) s = d > 0 ? 1 : -1;
+  return a + s;
 }
 
 // ================================================================== orgao 2: os limiares da Vida
@@ -610,6 +673,7 @@ export interface OpcoesCorpo {
   duracoes?: DuracoesEstagio;    // a cfg_evo do Python (so com a Vida)
   comMundo?: boolean;            // o mundo fisico: a curiosidade existe (CD-8)
   lutaCorpo?: ConfigLutaCorpo;   // a ponte da luta (PE3); sem ela, desligada
+  tela?: ConfigTela;             // o orgao da tela (GOSTO_VISUAL, P1f); sem ele, desligado: o corpo de hoje
 }
 type DrivesHoje = { fome: number; higiene: number; energia: number; humor: number; saude: number };
 
@@ -640,6 +704,12 @@ export class Corpo {
   readonly limiares_estagio: number[];
   /** a ponte da luta (PE3): a dor da luta. Mutavel: o pet liga no comeco da vida, pelo evento `pl` do registro (Motor); desligada por padrao */
   luta: ConfigLutaCorpo;
+  /** o orgao da tela (P1f; o P1b do Python): a config, os orgaos, o estimulo de cada canal (o ultimo `sentirTela`) e se ele veio neste tick */
+  readonly tela: ConfigTela;
+  readonly orgaosTela: readonly OrgaoTela[];
+  readonly estimuloTela: Record<string, number> = {};
+  private sentidoTela = false;
+  private readonly adaptacoes: ReadonlySet<string>;
 
   constructor(q: Record<string, number>, opcoes: OpcoesCorpo = {}) {
     this.cc = opcoes.cc ?? CCO_LIGADA;
@@ -650,10 +720,15 @@ export class Corpo {
     this.C = this.cc.escala;
     this.S = this.cc.escala_receptor;
     this.t = taxasDe(this.cc);
-    this.grafo = grafoDoCorpo(this.cc, this.t, this.comMundo);
+    this.tela = conferirConfigTela(opcoes.tela ?? CONFIG_TELA);
+    this.conferirTela();
+    this.grafo = grafoDoCorpo(this.cc, this.t, this.comMundo, this.tela);
     this.relato_grafo = checarGrafo(this.grafo);
     this.quimicos = nomesDoGrafo(this.grafo);
-    const esperados = quimicosDe(this.cc, this.comMundo);
+    this.orgaosTela = this.grafo.orgaos ?? [];
+    this.adaptacoes = new Set(this.orgaosTela.map((o) => o.adaptacao));
+    for (const o of this.orgaosTela) this.estimuloTela[o.canal] = 0;
+    const esperados = quimicosDe(this.cc, this.comMundo, this.tela);
     if (this.quimicos.join() !== esperados.join()) throw new Error("o grafo e a lista de quimicos divergem");
     const chaves = Object.keys(q);
     if (chaves.length !== this.quimicos.length || !this.quimicos.every((n) => n in q)) {
@@ -689,7 +764,7 @@ export class Corpo {
       q.combustivel = cc.combustivel_inicial;
       q.reserva = cc.reserva_inicial;
     }
-    for (const nome of quimicosDe(cc, opcoes.comMundo ?? false)) if (!(nome in q)) q[nome] = 0;
+    for (const nome of quimicosDe(cc, opcoes.comMundo ?? false, opcoes.tela ?? CONFIG_TELA)) if (!(nome in q)) q[nome] = 0;
     return new Corpo(q, { ...opcoes, cc });
   }
 
@@ -756,7 +831,8 @@ export class Corpo {
    *  desta; depois ela entra na janela e a mais antiga sai. So com `drives_novos`. */
   atividade(nome: string): void {
     if (!this.cc.drives_novos) throw new Error("atividade do tedio sem a sub-chave drives_novos");
-    if (!(ATIVIDADES_TEDIO as readonly string[]).includes(nome)) throw new Error(`atividade desconhecida: ${nome} (so ${ATIVIDADES_TEDIO})`);
+    if (nome === ATIVIDADE_TELA && !this.orgaosTela.length) throw new Error(`atividade ${ATIVIDADE_TELA} sem a ConfigTela ligada (GV-21)`);
+    if (nome !== ATIVIDADE_TELA && !(ATIVIDADES_TEDIO as readonly string[]).includes(nome)) throw new Error(`atividade desconhecida: ${nome} (so ${ATIVIDADES_TEDIO})`);
     const base = menos(Object.fromEntries(emissorDoGrafo(this.grafo, `atividade:${nome}`).efeitos).tedio);
     const J = this.cc.janela_tedio;
     const r = this.janela_tedio.filter((a) => a === nome).length;
@@ -904,6 +980,10 @@ export class Corpo {
         v = privacao === (e.gatilho === "privacao") ? 1 : 0;
       } else if (e.gatilho === "abaixo") {
         v = this.q[e.le[0].quimico] < e.limiar ? 1 : 0;
+      } else if (e.gatilho === "tela_acima") {                  // a tela (P1f): o estimulo do tick acima do corte
+        let soma = 0;
+        for (const c of CANAIS_ESTRESSE_TELA) soma += Math.max(0, this.estimuloTela[c]! - e.limiar);
+        v = divArred(soma, e.divisor);
       } else {
         throw new Error(`gatilho ${e.gatilho} fora da fase 2`);
       }
@@ -912,8 +992,9 @@ export class Corpo {
     this.somar(deltas);
     const bits = this.cc.bits_meia_vida;
     for (const qm of this.grafo.quimicos) {
-      if (qm.k_meia_vida !== null) this.q[qm.nome] = passoMeiaVida(this.q[qm.nome], qm.k_meia_vida, bits);
+      if (qm.k_meia_vida !== null && !this.adaptacoes.has(qm.nome)) this.q[qm.nome] = passoMeiaVida(this.q[qm.nome], qm.k_meia_vida, bits);
     }
+    if (this.orgaosTela.length) this.adaptarTela();             // a tela (P1f): a adaptacao anda para o estimulo do tick
     if (this.cc.digestao) {
       this.digerido_no_tick = this.digerido_tick;     // o tick fechou: a taxa volta inteira no proximo
       this.digerido_tick = 0;
@@ -952,8 +1033,77 @@ export class Corpo {
 
   /** o que o pet sente, na escala S, pelos receptores da tabela: os drives de hoje leem S - falta; os novos leem a falta */
   receptores(): Record<string, number> {
-    return Object.fromEntries(receptoresDoGrafo(this.grafo).map((qm) =>
+    const r: Record<string, number> = Object.fromEntries(receptoresDoGrafo(this.grafo).map((qm) =>
       [qm.receptor as string, qm.leitura === "drive" ? this.S - this.falta(qm.nome) : this.falta(qm.nome)]));
+    if (this.orgaosTela.length) Object.assign(r, this.leiturasTela());
+    return r;
+  }
+
+  // ---------------------------------------------------------- o orgao da tela (GOSTO_VISUAL, P1f; o P1b do Python)
+  /** a tela so com o mundo fisico e com `drives_novos` e `gestos`; a k e a da meia-vida; a novidade no teto fica abaixo de S */
+  private conferirTela(): void {
+    const c = this.tela;
+    if (!c.ligada) return;
+    if (!this.comMundo) throw new Error("ConfigTela.ligada sem o mundo fisico: a TV e um objeto do mapa (espec do P1, secao 1.1)");
+    if (!(this.cc.drives_novos && this.cc.gestos)) throw new Error("ConfigTela.ligada exige ConfigCorpo.drives_novos e ConfigCorpo.gestos");
+    const k = kMeiaVida(c.meia_vida_adaptacao, this.cc.bits_meia_vida);
+    if (c.k_adaptacao !== k) throw new Error(`ConfigTela.k_adaptacao ${c.k_adaptacao} nao e a da meia-vida ${c.meia_vida_adaptacao}: ${k}`);
+    const e = CANAIS_TELA.length * Math.max(0, c.teto_intensidade - c.limiar);
+    if (e && divArred(this.S * e, e + c.meia_saturacao) >= this.S) throw new Error("ConfigTela: a novidade chega a S com os sete canais no teto");
+    if (c.corte_novidade >= this.S) throw new Error(`ConfigTela.corte_novidade tem de ficar abaixo de S (${this.S}): ${c.corte_novidade}`);
+  }
+
+  private exigirTela(onde: string): void {
+    if (!this.orgaosTela.length) throw new Error(`${onde} sem a ConfigTela ligada (o orgao da tela)`);
+  }
+
+  /** o estimulo da tela: um inteiro em [0, teto_intensidade] por canal, exatamente CANAIS_TELA (sem olhar, zeros). O volume que sobe mais
+   *  que `salto_volume` desde o anterior assusta na hora (GV-17). Nao mexe na adaptacao: ela anda no tick */
+  sentirTela(intensidades: Readonly<Record<string, number>>): void {
+    this.exigirTela("sentirTela");
+    const chaves = Object.keys(intensidades);
+    if (chaves.length !== CANAIS_TELA.length || !CANAIS_TELA.every((c) => c in intensidades)) {
+      throw new Error(`os canais da tela sao ${[...CANAIS_TELA].sort()}, veio ${chaves.sort()}`);
+    }
+    const teto = this.tela.teto_intensidade;
+    for (const c of CANAIS_TELA) {
+      const v = intensidades[c]!;
+      if (!Number.isInteger(v) || v < 0 || v > teto) throw new Error(`a intensidade da tela em ${c} precisa ser inteiro em [0, ${teto}]: ${v}`);
+    }
+    if (intensidades[CANAL_SUSTO_TELA]! - this.estimuloTela[CANAL_SUSTO_TELA]! > this.tela.salto_volume) this.estimulo("susto_tela");
+    for (const c of CANAIS_TELA) this.estimuloTela[c] = intensidades[c]!;
+    this.sentidoTela = true;
+  }
+
+  private adaptarTela(): void {
+    if (!this.sentidoTela) throw new Error("tick com a tela sem `sentirTela` desde o tick anterior: o estimulo estaria velho (sem olhar, zeros)");
+    const bits = this.cc.bits_meia_vida;
+    for (const o of this.orgaosTela) {
+      const qm = quimicoDoGrafo(this.grafo, o.adaptacao);
+      this.q[o.adaptacao] = passoAdaptacao(this.q[o.adaptacao], this.estimuloTela[o.canal]!, qm.k_meia_vida as number, bits);
+    }
+    this.sentidoTela = false;
+  }
+
+  /** os receptores da tela na escala S: o nivel de cada canal (sem adaptacao) e a novidade (a soma das partes adaptadas, saturada) */
+  leiturasTela(): Record<string, number> {
+    const teto = this.tela.teto_intensidade;
+    const r: Record<string, number> = {};
+    let e = 0;
+    for (const o of this.orgaosTela) {
+      r[o.receptor] = divArred(this.S * this.estimuloTela[o.canal]!, teto);
+      e += Math.max(0, this.estimuloTela[o.canal]! - this.q[o.adaptacao] - o.limiar);
+    }
+    const soma = this.grafo.somas![0]!;
+    r[soma.receptor] = e ? divArred(this.S * e, e + soma.meia_saturacao) : 0;
+    return r;
+  }
+
+  /** o agrado do que o pet olhou (GV-16): a tristeza cai div_arred(ganho x agrado, S), o agrado inteiro em [0, S] */
+  estimuloAgradoTela(agrado: number): void {
+    this.exigirTela("estimuloAgradoTela");
+    if (!Number.isInteger(agrado) || agrado < 0 || agrado > this.S) throw new Error(`o agrado da tela precisa ser inteiro em [0, S = ${this.S}]: ${agrado}`);
+    this.somar(Object.fromEntries(emissorDoGrafo(this.grafo, "agrado_tela").efeitos.map(([q, d]) => [q, divArred(d * agrado, this.S)])));
   }
 
   /** os receptores de estagio sobre a Vida (so com o orgao 2): o numero de limiares que a Vida ja cruzou */
@@ -970,6 +1120,7 @@ export class Corpo {
     if (this.cc.vida) d.estagio = this.estagio();
     if (this.cc.drives_novos) d.janela_tedio = [...this.janela_tedio];
     if (this.contas_metabolismo) d.metabolismo = { resto_combustivel: this.resto_combustivel, contas: { ...this.contas_metabolismo } };
+    if (this.orgaosTela.length) d.tela = { estimulo: { ...this.estimuloTela }, sentido: this.sentidoTela };
     return d;
   }
 }

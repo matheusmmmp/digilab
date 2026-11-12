@@ -140,3 +140,69 @@ volume e movimento, o susto no salto de volume e o `estimulo_agrado_tela` na tri
 saem byte a byte. Testes novos em `tests/test_gosto_visual_corpo.py`. As escolhas estão em `docs/registro/2026-11.md`, D-GV-P1b-1 a 6; a D-GV-P1b-7 é o conserto do exportador do gabarito web do
 modular, que deixa de fora os campos vazios da tela na `PercepcaoCorpo` (os gabaritos da web saem byte a byte, sem regravar).
 Fica para a P1c: a TV, o motor chamando o `sentir_tela` (zeros sem olhar), o assistir e a novidade pelo corte.
+
+## Resultado da etapa P1c (2026-11-11, Claude Code, Opus 5.5, branch `v3-gosto-visual-p1c`)
+
+O mundo ganhou a TV, atrás da `ConfigTV` (desligada; `digilab/config.py`, status em `config.PARAMETROS_TV`, todos PROPOSTOS, SEM FONTE),
+passada ao `MotorMundo` como `cfg_tv`, e o `MotorCorpo` ganhou a `cfg_tela` (a `ConfigTela` do P1b). As duas vão juntas, só com o mundo
+físico, um pet fora do grupo e o corpo na frente; com uma só, falha alto. A TV é um objeto do `Mundo` numa célula da casa (`digilab/tv.py`)
+com duas fontes, uma por vida: a **grade** (a TV do jogo, a única da pesquisa): os perfis e a grade sorteados pela rng própria
+`tv-programas`, que só depende da semente; e o **evento** (o modo livre gravado): o último `sentido_tela` até o tick, desligada antes do
+primeiro. Dois tipos novos no log, `trocar_canal` (o programa vale até o fim do programa da grade) e `sentido_tela` (`fonte|n1|…|n7`, 16
+níveis), que o `reproduzir_mundo` refaz; mal formados, sem a chave ou com a fonte errada, levantam erro. O motor entrega ao corpo, a cada
+tick e a cada percepção, o que a TV passa se o pet olha (zeros se não); chama o `atividade("assistir")` em cada decisão em que o pet olha e
+o `estimulo_novidade(1)` a cada subida do `novidade_tela` acima do corte. O `ResumoTela` (`digilab/tv.py`) é a referência do GV-15 para o
+P1f: a média de 10 amostras em 16 níveis, o evento só na mudança. Desligada, as vidas do gabarito do P1a saem byte a byte. Testes novos em
+`tests/test_gosto_visual_mundo.py`. As escolhas estão em `docs/registro/2026-11.md`, D-GV-P1c-1 a 10; a D-GV-P1c-4 ("o pet olha" é
+provisório: acordado, no ocioso e com a TV no raio da visão) é a que a P1d troca.
+Fica para a P1d: o comportamento `olhar` no lugar do ocioso na regra de quem olha, a TV nos `vistos` (a classe `tela` do M-SENS), o
+`GenomaVisao`, o canal `gosto_visual` e quem chama o `estimulo_agrado_tela`.
+
+## Resultado da etapa P1d (2026-11-11, Claude Code, Opus 5.5, branch `v3-gosto-visual-p1d`)
+
+O DigiBrain modular ganhou o gosto visual, atrás da subchave `olhar` da `ConfigDigibrain` (desligada), com os números numa `ConfigOlhar`
+própria (`digilab/config.py`, `PARAMETROS_OLHAR`, todos PROPOSTOS, SEM FONTE):
+- **o genoma** (`digilab/genoma_visao.py`): o ótimo e a largura do pico por canal, pela rng própria `visao-ovo`; o genoma vazio é o
+  controle; nenhuma outra rng muda;
+- **o M-SENS**: a classe `tela` (as TVs à vista, do gancho novo `ver_tela`, fora dos `objetos`), os receptores da tela lidos à parte, o
+  agrado (o pico em inteiros contra o alvo) e o alvo aprendido pela exposição, com teto;
+- **o comportamento `olhar`** no fim da lista: o inato (o tédio e a curiosidade), a proximidade e a novidade da linha, o incentivo da
+  classe `tela` (P1), a linha H[olhar] (P2) e o termo `gosto` (o agrado do que ele já olhava); o motor o executa como o ocioso, parado;
+- **o canal `gosto_visual`** no r da consequência de olhar; a exposição e o P1 da classe `tela` na mesma consequência;
+- **o motor**: só olha (o `sentir_tela`, o assistir, a novidade) quem o cérebro mandou olhar, pelo gancho `olhando_tela`; sem o gancho (o
+  A, os instintos), a regra provisória da P1c; o agrado no corpo (GV-16) pelo gancho `agrado_tela`, só com a sub-chave `agrado_no_corpo`.
+Desligada, as vidas do gabarito do P1a e os gabaritos do modular para a web saem byte a byte (nada regravado); o A não muda. Testes novos
+em `tests/test_gosto_visual_cerebro.py` (o genoma, o olhar escolhido e reforçado, o genoma × programa, o replay e a chave desligada). As
+escolhas estão em `docs/registro/2026-11.md`, D-GV-P1d-1 a 11; a D-GV-P1d-1 (o `olhar` sem `AcaoPet` novo: o pet só olha a TV que já vê)
+e a D-GV-P1d-4 (o termo `gosto` na ativação, que a espec não tem) são as que pedem o olho do Matheus.
+Fica para a P1e: a sonda das duas TVs (o gancho já aceita várias linhas; o motor só tem uma TV, `ID_TV`) e o plano de análise. Fica para a
+P1f: o porte do olhar ao motor TS (a classe `tela`, a unidade, o termo `gosto`, o canal `gosto_visual`, a exposição, o genoma `visao-ovo` e
+os três ganchos), o exportador `experiments/exportar_gosto_visual.py` e a chave `olhar` nas constantes do modular (D-GV-P1d-7).
+
+## Resultado da etapa P1f (2026-11-11, Claude Code, Opus 5.5, branch `v3-gosto-visual-p1f`)
+
+O motor TS ganhou o gosto visual com paridade bit a bit no Node, atrás de chaves desligadas por padrão (a opção `tela` do
+`MotorCorpoMundo`, a subchave `olhar` da `ConfigDigibrainModular` e as `OpcoesOlhar` do `DigiBrain`; D-GV-P1f-3):
+- **o mundo** (`web/app/motor/tv.ts`): a `ConfigTela`, a `ConfigTV`, os eventos `trocar_canal` e `sentido_tela`, a TV (a grade pela rng
+  `tv-programas` e o modo livre gravado) e o `ResumoTela` (GV-15);
+- **o corpo** (`motor/corpo.ts`): o órgão da tela (as sete adaptações, os receptores `tela_<canal>` e `novidade_tela`, o `sentirTela`, o
+  gatilho `tela_acima`, o susto do salto, o assistir e o `estimuloAgradoTela`), com o grafo conferido na carga;
+- **o laço** (`motor/motor_corpo.ts`, `motor/motor_corpo_mundo.ts`): a tela entregue ao corpo em cada percepção e em cada tick (D-GV-P1f-4),
+  a novidade pelo corte, o assistir e o agrado na decisão em que o pet olha, os ganchos `verTela`, `olhandoTela` e `agradoTela` com a regra
+  de quem olha, e os dois eventos no replay;
+- **o cérebro** (`motor/digibrain/`): o genoma `visao-ovo` (`genoma_visao.ts`), a classe `tela` do M-SENS, a unidade de olhar no fim da
+  lista, o termo `gosto`, o canal `gosto_visual`, a exposição, a linha H[olhar] e o desfecho `tela`.
+O exportador é o `experiments/exportar_gosto_visual.py` (o gabarito `web/app/test/gabaritos/gosto_visual.json.gz`: as constantes, os
+genomas, a grade, o resumo, o grafo e 6 vidas de 288 decisões, a TV do jogo e o modo livre gravado; D-GV-P1f-5). O TS confere tudo em
+`web/app/test/gosto_visual_paridade.test.ts`; o Python confere o gravado contra uma execução nova e duas execuções entre si em
+`tests/test_gabarito_gosto_visual_web.py`. Desligado, o motor TS, o log, o save e os gabaritos de hoje saem iguais (a suíte do web inteira
+passa sem regravar nada; D-GV-P1f-2).
+O achado: o `olhar` da P1d não rodava com a `memoria_autobio`; o conserto mínimo, no Python e no TS, está na D-GV-P1f-1.
+Fica de fora: a chave do web `?gosto_cerebro=1` (proposta) e a ligação do P0 ao cérebro (o `sentido_tela` gravado no registro do jogo e o
+painel lendo o cérebro), que pedem uma versão de pet nova e a decisão do Matheus (D-GV-P1f-6).
+
+## A TV ligada por padrão no jogo (2026-11-11, Claude Code, Opus 5.5, branch `v3-gosto-visual-padrao`)
+
+Decisão do Matheus (D-GV-PADRAO-1, `docs/registro/2026-11.md`): "Quero que a opção da TV esteja padrão no jogo". No web, a chave do
+protótipo (`web/app/src/gostoVisual/chave.ts`) vem ligada; `?gosto_visual=0` desliga naquela aba. A captura continua só no clique do dono,
+fora do motor, do log e do save. As chaves do Python (P1b, P1c) seguem desligadas.

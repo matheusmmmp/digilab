@@ -85,7 +85,7 @@ def gerar() -> dict:
     for v in vidas:
         if None in v["falas"] or sum(v["falas"].values()) == 0:
             raise RuntimeError(f"a vida {v['dono']}/{v['modo']}/{v['semente']} nao falou com conteudo")
-    return {"versao": 1, "braco": dc3.TRATADO, "config_digibrain": asdict(config_fala()),
+    return {"versao": 1, "braco": dc3.TRATADO, "config_digibrain": E.config_digibrain_json(config_fala()),
             "conteudos_fala": list(CONTEUDOS_FALA), "termo_do_conteudo": [list(t) for t in TERMO_DO_CONTEUDO],
             "config_fala_unidades": asdict(CONFIG_FALA_UNIDADES), "vidas": vidas}
 

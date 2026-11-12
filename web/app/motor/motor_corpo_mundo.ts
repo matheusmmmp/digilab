@@ -26,9 +26,21 @@
    O sacudir a arvore (docs/TAREFA_V3_ARVORE_SACODE.md, S2; as chaves `sacudir` e `frutaComoComida`, desligadas): o dono sacode uma
    arvore do layout (`sacudirArvore`, o evento `sacudir_arvore` do log), e so o mundo muda; nao e contato nem cuidado (AS-1).
 
+   O gosto visual (GOSTO_VISUAL, P1f; docs/ESPEC_GOSTO_VISUAL_P1.md, secoes 1, 2, 4 e 8; a opcao `tela`, desligada): o espelho da TV do
+   MotorMundo e do orgao da tela do MotorCorpo do Python (P1b a P1d). Ligada (so com um pet, fora do grupo), a TV e um objeto na celula
+   `ConfigTV.celula`; antes de cada tick e de cada percepcao do corpo, o laco entrega ao corpo o que ela passa se o pet olha (zeros se nao);
+   a novidade pelo corte (GV-23) a cada tick; o assistir (GV-21) e o agrado no corpo (GV-16, pelo gancho `agradoTela`) na decisao em que
+   ele olha; as TVs a vista ao cerebro antes de cada decisao (`verTela`); e os eventos `trocar_canal` e `sentido_tela`, que so mudam a TV.
+   O pet olha quando esta acordado, no ocioso, com a TV no raio da visao e, com o gancho `olhandoTela` (o DigiBrain), quando o cerebro
+   escolheu olhar. Desligada, nada disto roda: a vida, o log e o save de hoje, byte a byte.
+
    `paridade`: o laco aceita tambem o elogio e a bronca, como o MotorCorpo do Python, so para rejogar o gabarito (os donos sinteticos
    da etapa 0 os usam). O jogo nao liga: o v12, como o v11, nao tem elogio nem bronca. */
 import { C } from "./constantes.ts";
+import {
+  ATIVIDADE_TELA, CANAIS_TELA, ID_TV, RECEPTOR_NOVIDADE_TELA, TIPO_SENTIDO_TELA, TIPO_TROCAR_CANAL, TV, TVSemChave, conferirConfigTV,
+  lerSentidoTela, lerTrocarCanal, valorSentidoTela, valorTrocarCanal, type ConfigTela, type ConfigTV,
+} from "./tv.ts";
 import type { ConfigCorpo, ConfigMundo, ConfigSacudir } from "./constantes.ts";
 import { CCO_CORPO_V11 } from "./corpo.ts";
 import type { ConfigContrato } from "./contrato.ts";
@@ -36,7 +48,7 @@ import { efeitoAcaoPet } from "./estado.ts";
 import { ACOES_DONO_V11, MotorCorpo, estadoNascimentoPy, type EventoCorpo, type PoliticaCorpo } from "./motor_corpo.ts";
 import type { ObservacaoLobos } from "./lobos.ts";
 import {
-  Mundo, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, eventoSacudirArvore, lerDeixarComida, lerLevarPet, lerMudarIlha, lerSacudirArvore,
+  Mundo, centroDaCelula, distancia, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, eventoSacudirArvore, lerDeixarComida, lerLevarPet, lerMudarIlha, lerSacudirArvore,
   regiaoDe, tamanhoDoMapa, type OpcoesMundo, type PercepcaoMundo,
 } from "./mundo.ts";
 import type { AcaoPet, EstadoVida } from "./tipos.ts";
@@ -84,6 +96,8 @@ export interface OpcoesLacoMundo {
   /** dois pets (docs/TAREFA_V3_COOPERACAO.md, CO4b): a parte do pet no mundo do grupo, montada pelo Grupo com as opcoes deste laco (o
    *  `mundo=` do MotorMundo do Python). Sem ela, o laco e dono do proprio mundo, com a semente do pet: a vida de hoje */
   parteDoMundo?: (op: OpcoesMundo) => Mundo;
+  /** o gosto visual (P1f): o orgao da tela no corpo e a TV no mundo, juntos e ligados (a `cfg_tela` e a `cfg_tv` do Python). Sem ela, nada */
+  tela?: { readonly tela: ConfigTela; readonly tv: ConfigTV };
 }
 
 const FRUTAS_DO_MUNDO: readonly string[] = ["a", "b", "c"];
@@ -104,10 +118,21 @@ export class MotorCorpoMundo extends MotorCorpo {
   decidirNaComida: boolean;
   /** a fruta do mundo como comida (OpcoesLacoMundo, AS-11) */
   readonly frutaComoComida: boolean;
+  /** a TV (P1f): null sem a opcao `tela` (a vida de hoje) */
+  readonly tv: TV | null = null;
+  /** os ticks em que o `novidade_tela` passou do corte (GV-23), derivados */
+  readonly novidadesTela: number[] = [];
+  private telaAcima = false;
 
   constructor(politica: PoliticaCorpo, semente: number, cc: ConfigCorpo = CCO_CORPO_V11, estado: EstadoVida = estadoNascimentoPy(),
               opcoes: OpcoesLacoMundo = {}) {
-    super(politica, semente, cc, estado, true);
+    if (opcoes.tela !== undefined) {
+      const { tela, tv } = opcoes.tela;
+      if (!tela.ligada || !tv.ligada) throw new TVSemChave("a TV no mundo e o orgao da tela no corpo vao juntos e ligados (espec do P1, secao 8)");
+      if (tv.escala !== tela.teto_intensidade) throw new Error(`a escala da TV (${tv.escala}) tem de ser o teto_intensidade da tela (${tela.teto_intensidade})`);
+      if (opcoes.parteDoMundo !== undefined) throw new TVSemChave("a TV (ConfigTV) roda com um pet, fora do grupo");
+    }
+    super(politica, semente, cc, estado, true, opcoes.tela?.tela);
     if (!cc.drives_novos) throw new Error("o laco com o mundo e o do regime `corpo` com os drives novos (a novidade e a atividade)");
     const op: OpcoesMundo = { semente, cfg: opcoes.cfgMundo, bolaNoGolpe: opcoes.bolaNoGolpe ?? false, contrato: opcoes.contrato,
                               ...(opcoes.sacudir !== undefined ? { sacudir: opcoes.sacudir } : {}) };
@@ -119,6 +144,85 @@ export class MotorCorpoMundo extends MotorCorpo {
     this.paridade = opcoes.paridade ?? false;
     this.digibrain = opcoes.digibrain ?? false;
     this.decidirNaComida = opcoes.decidirNaComida ?? false;
+    if (opcoes.tela !== undefined) {
+      const ctv = conferirConfigTV(opcoes.tela.tv), cm = this.mundo.cm;
+      const [cx, cy] = ctv.celula;
+      if (!(cx < cm.celulas_x && cy < cm.celulas_y)) throw new Error(`a celula da TV ${ctv.celula} fora do mapa (${cm.celulas_x} x ${cm.celulas_y})`);
+      const [x, y] = centroDaCelula(ctv.celula, cm);
+      if (!this.mundo.comum.seca(x, y)) throw new Error(`a celula da TV ${ctv.celula} e agua`);
+      this.tv = new TV(ctv, semente, x, y);
+    }
+  }
+
+  // ------------------------------------------------------------ a TV (GOSTO_VISUAL, P1f; o MotorMundo e o MotorCorpo do Python)
+  private exigirTv(onde: string): TV {
+    if (this.tv === null) throw new TVSemChave(`${onde} sem a TV ligada (a opcao tela do laco)`);
+    return this.tv;
+  }
+
+  /** o pet olha a TV: ela passa algo, o pet esta acordado e no ocioso, a TV esta no raio da visao e, com o gancho `olhandoTela`, o cerebro
+   *  escolheu olhar esta TV */
+  private olhandoTv(passa: unknown): boolean {
+    if (passa === null || this.estado.dormindo || this.acaoAtual !== "ocioso") return false;
+    const olhando = this.politica.olhandoTela;
+    if (olhando !== undefined && olhando.call(this.politica) !== ID_TV) return false;
+    const tv = this.tv!, p = this.mundo.pet;
+    return distancia(tv.x - p[0], tv.y - p[1]) <= this.mundo.raioDaVisao;
+  }
+
+  /** se o pet olha a TV agora (so le) */
+  olhandoTV(): boolean {
+    const tv = this.exigirTv("olhandoTV");
+    return this.olhandoTv(tv.em(this.mundo.tm(this.estado.tick)));
+  }
+
+  /** as TVs a vista para o cerebro (`verTela`): [id, dx, dy, d] da TV ligada no raio da visao; senao, nenhuma */
+  private linhasTela(): [number, number, number, number][] {
+    const tv = this.tv!, p = this.mundo.pet;
+    const dx = tv.x - p[0], dy = tv.y - p[1], d = distancia(dx, dy);
+    if (tv.em(this.mundo.tm(this.estado.tick)) === null || d > this.mundo.raioDaVisao) return [];
+    return [[ID_TV, dx, dy, d]];
+  }
+
+  protected override sentirAgora(): void {
+    if (this.tv === null) return;
+    const passa = this.tv.em(this.mundo.tm(this.estado.tick));
+    this.corpo.sentirTela(this.olhandoTv(passa) ? { ...passa! } : Object.fromEntries(CANAIS_TELA.map((c) => [c, 0])));
+  }
+
+  protected override antesDoPasso(): void {
+    if (this.tv === null) return;
+    this.sentirAgora();
+    const acima = this.corpo.leiturasTela()[RECEPTOR_NOVIDADE_TELA]! > this.corpo.tela.corte_novidade;   // GV-23: uma por subida
+    if (acima && !this.telaAcima) {
+      this.corpo.estimuloNovidade(1);
+      this.novidadesTela.push(this.estado.tick);
+    }
+    this.telaAcima = acima;
+  }
+
+  /** o dono troca o canal da TV do jogo (a fonte "grade"): valida antes do log */
+  trocarCanal(programa: number): void {
+    const valor = valorTrocarCanal(programa);
+    this.canalDoDono(lerTrocarCanal(valor));
+    this.log.push({ tick: this.estado.tick, tipo: TIPO_TROCAR_CANAL, valor });
+  }
+
+  /** o trocar_canal sem o log do laco: so a TV muda (nao e contato nem cuidado, GV-22) */
+  canalDoDono(programa: number): void {
+    this.exigirTv("trocar_canal").trocarCanal(programa, this.mundo.tm(this.estado.tick));
+  }
+
+  /** o modo livre gravado (a fonte "evento"): o que a TV passa a partir de agora; valida antes do log */
+  sentidoTela(fonte: string, niveis: readonly number[]): void {
+    const valor = valorSentidoTela(fonte, niveis);
+    this.telaDoDono(...lerSentidoTela(valor));
+    this.log.push({ tick: this.estado.tick, tipo: TIPO_SENTIDO_TELA, valor });
+  }
+
+  /** o sentido_tela sem o log do laco: so a TV muda (o replay le o evento) */
+  telaDoDono(fonte: string, niveis: readonly number[]): void {
+    this.exigirTv("sentido_tela").sentir(fonte, niveis, this.mundo.tm(this.estado.tick));
   }
 
   // ------------------------------------------------------------ o dono
@@ -185,6 +289,7 @@ export class MotorCorpoMundo extends MotorCorpo {
    *  estado, pelo corpo nem pelo cerebro. Vale com o pet acordado ou dormindo */
   ilhaDoDono(nome: string): void {
     lerMudarIlha(eventoMudarIlha(this.estado.tick, nome));
+    if (this.tv !== null) throw new TVSemChave("mudar_ilha com a TV ligada: a TV ficaria onde a agua pode chegar (P1c)");
     this.conferirSincronia("antes de mudar_ilha");
     this.mundo.mudarIlha(this.estado.tick, nome);
   }
@@ -206,6 +311,12 @@ export class MotorCorpoMundo extends MotorCorpo {
   }
 
   override aplicarEvento(e: EventoCorpo): void {
+    if (e.tipo === TIPO_TROCAR_CANAL || e.tipo === TIPO_SENTIDO_TELA) {
+      if (e.tick !== this.estado.tick) throw new Error(`evento no tick ${e.tick}, o motor esta no ${this.estado.tick}`);
+      if (e.tipo === TIPO_TROCAR_CANAL) this.trocarCanal(lerTrocarCanal(e.valor));
+      else this.sentidoTela(...lerSentidoTela(e.valor));
+      return;
+    }
     if (e.tipo === "sacudir_arvore") {
       if (e.tick !== this.estado.tick) throw new Error(`evento no tick ${e.tick}, o motor esta no ${this.estado.tick}`);
       this.sacudirArvore(lerSacudirArvore(e));
@@ -244,6 +355,7 @@ export class MotorCorpoMundo extends MotorCorpo {
     this.acoesPet.push([this.estado.tick, acao]);
     produzidas.push([this.estado.tick, acao]);
     this.proximaDecisao = this.estado.tick + intervalo;
+    this.sentirAgora();                                   // a TV (P1f): a observacao seguinte do MotorCorpo do Python, antes do mundo
     // o observar do embrulho: a consequencia do mundo antes do cerebro, e a transicao com a observacao de depois dela
     const ocorrido = this.consequencia(acao);
     const seguinte = this.digibrain ? { ...this.observacao(), mundo: this.mundo.perceber(this.estado.tick) } : this.observacao();
@@ -254,6 +366,16 @@ export class MotorCorpoMundo extends MotorCorpo {
     if (this.digibrain && ocorrido !== null) (this.politica as PoliticaCorpoMundo).consequenciaMundo?.(acao, ocorrido, seguinte);
     this.conferirEstimulo("decisao", new Set());
     this.sincronizar();
+    if (this.tv !== null && this.olhandoTV()) {           // a TV (P1f, GV-21): o assistir, depois dos estimulos da acao
+      this.corpo.atividade(ATIVIDADE_TELA);
+      this.estimulos.push(["atividade", ATIVIDADE_TELA]);
+      const a = this.politica.agradoTela === undefined ? null : this.politica.agradoTela(this.corpo.leiturasTela());   // GV-16
+      if (a !== null) {
+        this.corpo.estimuloAgradoTela(a);
+        this.estimulos.push(["agrado_tela", a]);
+        this.sincronizar();
+      }
+    }
     this.politica.consequenciaCorpo(acao, { acao, estimulos: this.estimulos.map((s) => [...s]) }, this.observacao());
     this.consequencias += 1;
   }
@@ -262,6 +384,7 @@ export class MotorCorpoMundo extends MotorCorpo {
   protected antesDaDecisao(): PercepcaoMundo {
     const t = this.estado.tick;
     const p = this.mundo.antesDaDecisao(t, this.estado.fome);
+    if (this.tv !== null && this.politica.verTela !== undefined) this.politica.verTela(this.linhasTela());   // a TV (P1f): as TVs a vista
     for (const v of p.vistos) this.vistosEm.set(v[0], t);
     return p;
   }
@@ -339,6 +462,8 @@ export class MotorCorpoMundo extends MotorCorpo {
       mundo: { pet: [m.pet[0], m.pet[1]], regiao: m.cm.layout.regioes[regiaoDe(m.pet[0], m.cm)][0], bola: m.bolaEm(t),
                comidas: [...m.comidas.values()].filter((c) => m.situacao(c, t) !== null).length },
       ...(m.sacudidas !== null ? { sacudir: { no_galho: m.noGalho(t), sacudidas: m.sacudidas.length } } : {}),
+      ...(this.tv !== null ? { tv: { programa: this.tv.programaEm(m.tm(t)), ligada: this.tv.em(m.tm(t)) !== null, olhando: this.olhandoTV() },
+                               novidades_tela: [...this.novidadesTela] } : {}),
     };
   }
 }
