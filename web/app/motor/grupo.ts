@@ -258,6 +258,7 @@ export class Grupo implements GanchoGrupo {
   constructor(cm: ConfigMundo, semente: number | bigint, cg: Readonly<ConfigGrupo> = CONFIG_GRUPO_LIGADA, op: OpcoesGrupo = {}) {
     validarConfigGrupo(cg);
     const cco = op.cooperacao ?? CONFIG_COOPERACAO;
+    if (cco.co6 && !cco.ligada) throw new Error("ConfigCooperacao.co6 so liga com a cooperacao ligada (ESPEC_V3_COOPERACAO_CO6, secao 4)");
     this.coop = cco.ligada ? new Cooperacao(cco) : null;
     this.cm = cm;
     this.semente = semente;
@@ -393,6 +394,10 @@ export class Grupo implements GanchoGrupo {
         this.coop.fimDoTick(this.tick, this.disputas.slice(nDisputas), this.contatos.slice(nContatos) as { pets: unknown; tipos: Record<string, string> }[],
                             Object.fromEntries(presentes.map(i => [i, this.acaoVisivel(i)])), pos, raios);
       }
+      if (this.coop !== null && this.coop.cfg.co6) {     // a CO6: o peso dos deveres no fim de todo tick; a idade e o tick do pet depois deste
+        const [pos, raios] = this.posicoesERaios(presentes);
+        this.coop.fimDoTickK(this.tick, pos, raios, Object.fromEntries(presentes.map(i => [i, this.tick + 1 - this.membro(i).mundo.entrada])));
+      }
       this.tick++;
     }
   }
@@ -464,7 +469,12 @@ export class Grupo implements GanchoGrupo {
       const o = this.membro(i);
       return [i, o.mundo.pet[0], o.mundo.pet[1], this.acaoVisivel(i)];
     });
-    return perceberSocial(m.pet[0], m.pet[1], this.tick, fisico, m.viuComerDe, m.toques, m.raioDaVisao);
+    const p = perceberSocial(m.pet[0], m.pet[1], this.tick, fisico, m.viuComerDe, m.toques, m.raioDaVisao);
+    if (this.coop !== null && this.coop.cfg.co6) {        // a CO6: a reputacao de cada outro presente e o proprio k (sem ela, nenhum campo)
+      p.reputacao = [...outros].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0)).map((i): [string, number] => [i, this.coop!.reputacao(i, ident, this.tick)]);
+      p.peso_dever = this.coop.pesoDever(ident);
+    }
+    return p;
   }
 
   /** o pet `quem` comeu a comida de (x, y) agora: cada outro que o tem a vista guarda o ponto */

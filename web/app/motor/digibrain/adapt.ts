@@ -43,14 +43,14 @@ import { EstadoDinamico, type OpcaoFim } from "./estado.ts";
 import { Impulso, type UnidadeImpulso } from "./impulso.ts";
 import { Memoria, episodioAutobio, episodioLuta } from "./mem.ts";
 import { Plasticidade, type OpcaoCredito } from "./plast.ts";
-import { COMIDAS_BOAS, Sens, classeDoTipo, type ObservacaoModular, type ResumoLutaSens } from "./sens.ts";
+import { COMIDAS_BOAS, Sens, classeDoTipo, type ObservacaoModular, type ResumoLutaSens, type SocialCo6 } from "./sens.ts";
 
 /** o `VERSAO_PET_DIGIBRAIN` do Python (a DM-5); o pet de teste do jogo tem a versao propria (VERSAO_PET_LAB, motor/constantes.ts) */
 export const VERSAO_PET_DIGIBRAIN = 13;
 
 type Dict = Record<string, any>;
 /** a Observacao do laco com o mundo: o corpo (os receptores) e o mundo (a percepcao) */
-export type ObservacaoMundoLobos = ObservacaoLobos & { mundo?: PercepcaoMundo };
+export type ObservacaoMundoLobos = ObservacaoLobos & { mundo?: PercepcaoMundo; social?: SocialCo6 | null };
 
 /** a escolha do M-ARB vista pelo motor: a acao e, nas acoes com alvo, o tipo do candidato do motor, o id dele e, no lugar lembrado, o ponto */
 export interface Intencao { acao: AcaoPet; tipo_alvo: string | null; id_alvo: number | null; ponto: readonly [number, number] | null }
@@ -174,6 +174,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
     const oMod: ObservacaoModular = {
       corpo: obs.corpo, vetor_estado: obs.v, ticks_desde_cuidado: obs.tdc,
       mundo: { x: m.x, y: m.y, regiao: m.regiao, direcao_cheiro: m.direcao_cheiro, vistos: m.vistos },
+      ...(obs.social !== undefined ? { social: obs.social } : {}),      // a CO6: so o M-SENS a le
     };
     const lutas = this.lutaMemoria ? this.lutas : null;
     if (this.lutaMemoria) this.lutas = [];
@@ -436,6 +437,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
       nome: this.nome, versao_pet: this.versao_pet, k: this.k, pendente: this.pendencia !== null,
       gestos: Object.fromEntries(Object.entries(this.gestos).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))), modulos, motivos: this.motivos,
     };
+    if (this.sens.social !== null) out["social"] = { reputacao: { ...this.sens.social.reputacao }, peso_dever: this.sens.social.peso_dever };   // a CO6
     if (this.cd.olhar) out["olhar"] = { olhando: this.olhando, genoma_visao: { otimo: { ...this.genomaVisao!.otimo }, largura: { ...this.genomaVisao!.largura } } };
     if (this.ce !== null) (out["olhar"] as Dict)["enjoo_tv"] = { ...this.enjooTv };   // o enjoo (D-GV-ENJOO-CER): desligado, nenhum campo novo
     return out;
