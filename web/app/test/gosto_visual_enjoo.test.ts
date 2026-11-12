@@ -3,11 +3,11 @@
 // a olhar; a cena nova devolve o interesse; voltar à primeira logo depois não devolve; o desenjoo lento (horas); a exposição em U invertido;
 // o "adorando" com o interesse alto; a memória de tamanho fixo e a troca determinística; o estado guardado, a migração da versão 1 e o erro
 // alto numa memória estragada. E sem o enjoo migrante (D-GV-MIGRANTE-1 a 3, 2026-11-12): quadros distintos mas próximos nascem com o
-// interesse alto, a volta ao primeiro não o acha desenjoado por arrasto, e o corte de cena não gasta protótipo. Todos os números são
-// PROPOSTOS, SEM FONTE.
+// interesse alto, a volta ao primeiro não o acha desenjoado por arrasto, o corte de cena não gasta protótipo, e o mesmo programa (uma
+// imagem fixa com um som que varia como a fala) cansa. Todos os números são PROPOSTOS, SEM FONTE.
 import { describe, expect, test } from "vitest";
 import {
-  INTERESSE_ADORANDO, PROTOTIPOS, RAIO_GENERALIZACAO, SALTO_CORTE, distancia, doTexto, estadoInicial, inatoDaSemente, paraTexto, passo,
+  INTERESSE_ADORANDO, PROTOTIPOS, RAIO_GENERALIZACAO_VISAO, SALTO_CORTE, distancia, doTexto, estadoInicial, inatoDaSemente, paraTexto, passo,
   type EstadoGosto, type Inato, type Leitura, type Sentido,
 } from "../src/gostoVisual/gosto.ts";
 
@@ -32,7 +32,7 @@ describe("o enjoo da imagem parada", () => {
   const meiaHora = assistir(ina, estadoInicial(), A, MEIA_HORA);
 
   test("as cenas do teste: A e B ficam além do raio da generalização uma da outra, e A agrada de cara", () => {
-    expect(distancia(B.visao, { vetor: A.visao, enjoo: 0 })).toBeGreaterThanOrEqual(RAIO_GENERALIZACAO);
+    expect(distancia(B.visao, { vetor: A.visao, enjoo: 0 })).toBeGreaterThanOrEqual(RAIO_GENERALIZACAO_VISAO);
     expect(meiaHora.leituras[0]!.olhando).toBe(true);
   });
   test("30 min da mesma imagem: o pet olha, enjoa, para e não volta a olhar enquanto ela não muda", () => {
@@ -47,7 +47,7 @@ describe("o enjoo da imagem parada", () => {
   });
   test("a cena nova devolve o interesse: o pet volta a olhar logo", () => {
     const b = assistir(ina, meiaHora.estado, B, 60).leituras;
-    expect(b[0]!.novidade).toBeGreaterThanOrEqual(RAIO_GENERALIZACAO);
+    expect(b[0]!.novidade).toBeGreaterThanOrEqual(RAIO_GENERALIZACAO_VISAO);
     expect(b[0]!.interesse).toBeGreaterThan(0.95);
     expect(b[0]!.reacao).not.toBe("enjoou");
     expect(b.slice(0, 10).some(l => l.olhando)).toBe(true);
@@ -153,7 +153,7 @@ describe("sem o enjoo migrante (D-GV-MIGRANTE-1 a 3)", () => {
     for (let i = 0; i < quadros.length; i++) for (let j = i + 1; j < quadros.length; j++) {
       const d = distancia(quadros[i]!.visao, { vetor: quadros[j]!.visao, enjoo: 0 });
       expect(d).toBeLessThan(0.15);
-      expect(d).toBeGreaterThanOrEqual(RAIO_GENERALIZACAO);
+      expect(d).toBeGreaterThanOrEqual(RAIO_GENERALIZACAO_VISAO);
     }
   });
   test("cada quadro novo começa com o interesse alto: não nasce enjoado do quadro de antes", () => {
@@ -182,5 +182,39 @@ describe("sem o enjoo migrante (D-GV-MIGRANTE-1 a 3)", () => {
     expect(cheia.memoria).toHaveLength(PROTOTIPOS);
     const depois = passo(ina, cheia, pico(quadros[6]!), false).estado;
     expect(depois.memoria).toEqual(cheia.memoria.map(p => ({ vetor: p.vetor, enjoo: p.enjoo * Math.exp(-1 / 7200) })));
+  });
+});
+
+describe("o mesmo programa cansa (D-GV-MIGRANTE-2, um raio para cada sentido)", () => {
+  test("uma imagem fixa com um som que varia de 0,03 a 0,06 por segundo cansa como a imagem parada", () => {
+    const ina = inatoDaSemente(SEMENTE), { A } = cenas(ina), o = ina.otimo;
+    /* o som: cada componente anda de 0,03 a 0,06 por segundo (um passo pseudoaleatório fixo), preso a 0,12 do ótimo do pet */
+    const frac = (x: number): number => x - Math.floor(x);
+    const centro = [o.volume, o.variacao, o.timbre], desvio = [0, 0, 0];
+    const sons: Sentido[] = [];
+    for (let i = 0; i < MEIA_HORA; i++) {
+      for (let k = 0; k < 3; k++) {
+        const passoK = 0.03 + 0.03 * frac(Math.sin(i * 12.9898 + k * 78.233) * 43758.5453);
+        const sobe = Math.abs(desvio[k]!) > 0.09 ? desvio[k]! < 0 : frac(Math.sin(i * 39.346 + k * 11.135) * 24634.6345) < 0.5;
+        desvio[k] = desvio[k]! + (sobe ? passoK : -passoK);
+      }
+      sons.push({ visao: A.visao, som: { volume: centro[0]! + desvio[0]!, variacao: centro[1]! + desvio[1]!, timbre: centro[2]! + desvio[2]! } });
+    }
+    for (let i = 1; i < sons.length; i++) {
+      const a = sons[i - 1]!.som!, b = sons[i]!.som!;
+      const d = (Math.abs(a.volume - b.volume) + Math.abs(a.variacao - b.variacao) + Math.abs(a.timbre - b.timbre)) / 3;
+      expect(d).toBeGreaterThanOrEqual(0.03 - 1e-12);
+      expect(d).toBeLessThanOrEqual(0.06 + 1e-12);
+    }
+    let e = estadoInicial(); const ls: Leitura[] = [];
+    for (const s of sons) { const r = passo(ina, e, s, false); e = r.estado; ls.push(r.leitura); }
+    expect(ls[0]!.olhando).toBe(true);
+    const parou = ls.findIndex(l => !l.olhando);
+    expect(parou).toBeGreaterThan(0);
+    expect(parou).toBeLessThan(600);
+    expect(ls.slice(-300).every(l => !l.olhando)).toBe(true);
+    expect(ls.at(-1)!.reacao).toBe("enjoou");
+    expect(ls.at(-1)!.interesse).toBeLessThan(0.1);
+    expect(e.memoria.length).toBeLessThanOrEqual(2);
   });
 });
