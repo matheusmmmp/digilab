@@ -90,7 +90,7 @@ desligada):
 | **LP6-1: o núcleo** | o campo `apoio` nas formas (gerado, não à mão), a regra de quando ele sai, a elipse por estágio (seção 4a), cada um com a sua chave; os testes: o replay bit a bit e a luta com as chaves desligadas igual à v23 | desligadas |
 | **LP6-2: o palco** | o apoio no desenho (o clipe mais curto, o efeito de acerto, o tiro pequeno) e a câmera na elipse maior, as capturas no desktop e no celular, para a aprovação do Matheus antes do PR | desligada |
 | **LP6-3: a calibração** | uma rodada curta da bancada (`web/app/scripts/equilibrio_poc/`), só nos números do apoio e da elipse e nos que eles mexerem (o dano do projétil, o recuo), nas sementes de calibração, e a conferência nas 87xxx | desligada |
-| **LP6-4: no jogo** | uma `VERSAO_PET` nova com a chave ligada, como a LP5-5 fez com a v23 | ligadas |
+| **LP6-4: no jogo** | uma `VERSAO_PET` nova com a chave ligada, como a LP5-5 fez com a v23 (feita: a v29, a v28 do grupo, com o sono que segura, com a `LUTA_V29`; D-LP6-4-1) | ligadas |
 
 ## 6. O que fica de fora
 

@@ -27,7 +27,8 @@ import type { OcorridoMundo, PoliticaCorpoMundo } from "../motor_corpo_mundo.ts"
 import type { OcorridoCorpo, ObservacaoLobos, TransicaoLobos } from "../lobos.ts";
 import { alvoPonto, type AlvoMundo, type PercepcaoMundo } from "../mundo.ts";
 import type { AcaoPet } from "../tipos.ts";
-import { chaveJson, mul, raizInteira, type ChaveUnidade } from "./_comum.ts";
+import { chaveJson, ganhoDeTau, integrar, mul, raizInteira, type ChaveUnidade } from "./_comum.ts";
+import { conferirConfigEnjooTela, type ConfigEnjooTela } from "../enjoo_tela.ts";
 import { genomaVisao, type GenomaVisao } from "./genoma_visao.ts";
 import { Afeto } from "./afeto.ts";
 import { Arbitragem, type RngPolitica } from "./arb.ts";
@@ -61,7 +62,7 @@ export function intencaoDaUnidade(unidade: UnidadeImpulso): Intencao {
 
 export class DigibrainDesligado extends Error {}
 /** o olhar no DigiBrain (P1f): o genoma dado (o vazio do controle) ou a semente do ovo, e a ConfigOlhar; so com a subchave `olhar` */
-export interface OpcoesOlhar { semente?: number; genoma?: GenomaVisao; cfgOlhar?: ConfigOlhar }
+export interface OpcoesOlhar { semente?: number; genoma?: GenomaVisao; cfgOlhar?: ConfigOlhar; cfgEnjooTela?: ConfigEnjooTela }   // D-GV-ENJOO-CER
 /** a ponte da luta sem a chave ligada (o `LutaSemChave` do Python) */
 export class LutaSemChave extends Error {}
 
@@ -103,6 +104,10 @@ export class DigiBrain implements PoliticaCorpoMundo {
   readonly genomaVisao: GenomaVisao | null = null;
   private telas: [number, number, number, number][] | null = null;
   private olhando: number | null = null;
+  /** o enjoo (D-GV-ENJOO-CER): a ConfigEnjooTela ligada (null desligada), o enjoo lembrado de cada TV e o ganho dele por decisao */
+  readonly ce: ConfigEnjooTela | null = null;
+  private readonly enjooTv: Record<number, number> = {};
+  private kEnjooLembrado = 0;
 
   /** `inatos`: os valores de partida (a ConfigDigibrainInatos); so o G-PAR-VIDA dos fins passa outros (digibrain_modular_fins.json.gz) */
   /** `sono`: a ConfigSonoSegura (o 4o argumento, como na main); `olhar`: as opcoes do olhar (P1f), so com a subchave */
@@ -121,7 +126,11 @@ export class DigiBrain implements PoliticaCorpoMundo {
     } else if (olhar !== undefined) {
       throw new Error("a ConfigOlhar e o genoma da visao so com a subchave olhar");
     }
-    this.sens = new Sens(CONFIG_MODULAR_MUNDO, CONFIG_MODULAR_MUNDO, inatos, this.co, this.genomaVisao);
+    if (olhar?.cfgEnjooTela !== undefined && conferirConfigEnjooTela(olhar.cfgEnjooTela).ligada) {   // o enjoo (D-GV-ENJOO-CER)
+      this.ce = olhar.cfgEnjooTela;
+      this.kEnjooLembrado = ganhoDeTau(this.ce.tau_enjoo_lembrado, CONFIG_MODULAR_MUNDO.intervalo_decisao_ticks, this.S);
+    }
+    this.sens = new Sens(CONFIG_MODULAR_MUNDO, CONFIG_MODULAR_MUNDO, inatos, this.co, this.genomaVisao, this.ce);
     this.afeto = new Afeto(cfg, cd, inatos, null);
     this.estado = new EstadoDinamico(cfg, cd, inatos);
     this.impulso = new Impulso(inatos, cd, undefined, this.co);
@@ -172,7 +181,8 @@ export class DigiBrain implements PoliticaCorpoMundo {
     const memoria = cd.m_mem ? this.mem.recuperar(sens, afeto) : null;
     const [gosto, resumoOlhar] = cd.olhar ? this.gostoDaDecisao(sens) : [null, null];
     const [unidades, z] = this.impulso.unidades(
-      sens, afeto, ctx, this.plast, memoria, this.afeto.drives(receptores), termoLem === null ? null : [termoLem, this.mem.casa], null, gosto);
+      sens, afeto, ctx, this.plast, memoria, this.afeto.drives(receptores), termoLem === null ? null : [termoLem, this.mem.casa], null, gosto,
+      this.ce === null ? null : this.termoEnjoo(resumoOlhar!));
     const esc = this.arb.escolher(unidades, afeto, sens, rng, reflexo, null);   // a rng de politica vai so ao M-ARB
     this.conferirDesligadas(unidades);
     const unidade = esc.unidade;
@@ -222,13 +232,36 @@ export class DigiBrain implements PoliticaCorpoMundo {
     let a: number | null = null, aInato: number | null = null;
     const gosto: Record<number, number> = {};
     const visivel = telas.some(o => o.id === this.olhando);
-    if (this.olhando !== null && visivel && niveis !== null) {
-      a = this.sens.agrado(niveis);
-      aInato = this.sens.agradoInato(niveis);
-      gosto[this.olhando] = mul(this.co!.w_gosto, a - Math.floor(S / 2), S);
+    const leu = this.olhando !== null && visivel && niveis !== null;
+    let eAgora: number | null = null;
+    if (this.ce !== null) {                               // o enjoo (D-GV-ENJOO-CER): o lembrado cai; o da TV olhada vira o lido agora
+      for (const id of Object.keys(this.enjooTv).map(Number).sort((x, y) => x - y)) this.enjooTv[id] = integrar(this.enjooTv[id]!, 0, this.kEnjooLembrado, S);
+      eAgora = sens["tela_enjoo"] as number | null;
+      if (leu) {
+        if (eAgora === null) throw new Error("o enjoo ligado e a percepcao sem o receptor enjoo_tela");
+        this.enjooTv[this.olhando!] = eAgora;
+      }
     }
-    return [gosto, { telas: telas.map(o => o.id), olhava: this.olhando, agrado: a, agrado_inato: aInato,
-                     gosto: this.olhando !== null && this.olhando in gosto ? gosto[this.olhando]! : null }];
+    let aGosto: number | null = null;
+    if (leu) {
+      a = this.sens.agrado(niveis!);
+      aInato = this.sens.agradoInato(niveis!);
+      aGosto = this.ce === null ? a : this.sens.agradoEfetivo(niveis!, eAgora!);
+      gosto[this.olhando!] = mul(this.co!.w_gosto, aGosto - Math.floor(S / 2), S);
+    }
+    const resumo: Dict = { telas: telas.map(o => o.id), olhava: this.olhando, agrado: a, agrado_inato: aInato,
+                           gosto: this.olhando !== null && this.olhando in gosto ? gosto[this.olhando]! : null };
+    if (this.ce !== null) {                               // desligado, nenhum campo novo
+      const termo: Record<number, number> = {};
+      for (const o of telas) if (o.id in this.enjooTv) termo[o.id] = 0 - mul(this.ce.w_enjoo, this.enjooTv[o.id]!, S);   // 0 - x: sem o -0 do TS
+      Object.assign(resumo, { enjoo: leu ? eAgora : null, agrado_efetivo: leu ? aGosto : null, enjoo_tv: { ...this.enjooTv }, termo_enjoo: { ...termo } });
+    }
+    return [gosto, resumo];
+  }
+
+  /** o termo `enjoo` de cada TV a vista (D-GV-ENJOO-CER), do resumo da decisao */
+  private termoEnjoo(resumo: Dict): Record<number, number> {
+    return { ...(resumo["termo_enjoo"] as Record<number, number>) };
   }
 
   private exigirOlhar(gancho: string): ConfigOlhar {
@@ -254,7 +287,9 @@ export class DigiBrain implements PoliticaCorpoMundo {
   agradoTela(leituras: Readonly<Record<string, number>>): number | null {
     const co = this.exigirOlhar("agrado_tela");
     if (!co.agrado_no_corpo || this.olhando === null) return null;
-    return this.sens.agrado(Object.fromEntries(Object.keys(this.sens.otimo).map(c => [c, leituras[`tela_${c}`]!])));
+    const niveis = Object.fromEntries(Object.keys(this.sens.otimo).map(c => [c, leituras[`tela_${c}`]!]));
+    if (this.ce !== null) return this.sens.agradoEfetivo(niveis, leituras["enjoo_tela"]!);   // o enjoo (D-GV-ENJOO-CER)
+    return this.sens.agrado(niveis);
   }
 
   /** o `escolher_alvo` do Python: o candidato do motor do tipo (e do id) da unidade escolhida; o `u` do motor e ignorado. A excecao unica
@@ -360,6 +395,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
       gestos: Object.fromEntries(Object.entries(this.gestos).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))), modulos, motivos: this.motivos,
     };
     if (this.cd.olhar) out["olhar"] = { olhando: this.olhando, genoma_visao: { otimo: { ...this.genomaVisao!.otimo }, largura: { ...this.genomaVisao!.largura } } };
+    if (this.ce !== null) (out["olhar"] as Dict)["enjoo_tv"] = { ...this.enjooTv };   // o enjoo (D-GV-ENJOO-CER): desligado, nenhum campo novo
     return out;
   }
 
@@ -410,15 +446,23 @@ export class DigiBrain implements PoliticaCorpoMundo {
       niveis = this.sens.niveisTela(pc1 as Dict);
       if (niveis !== null) {
         const a = this.sens.agrado(niveis);
-        gv = mul(this.co!.ganho_gosto_visual, a - Math.floor(S / 2), S);
-        olhar = { agrado: a, gosto_visual: gv };
+        if (this.ce !== null) {                           // o enjoo (D-GV-ENJOO-CER): o agrado efetivo, com o enjoo de depois
+          const e1 = (pc1 as Dict)["enjoo_tela"] as number | null | undefined;
+          if (e1 === null || e1 === undefined) throw new Error("o enjoo ligado e o corpo de depois sem o receptor enjoo_tela");
+          const aEf = this.sens.agradoEfetivo(niveis, e1);
+          gv = mul(this.co!.ganho_gosto_visual, aEf - Math.floor(S / 2), S);
+          olhar = { agrado: a, gosto_visual: gv, enjoo: e1, agrado_efetivo: aEf };
+        } else {
+          gv = mul(this.co!.ganho_gosto_visual, a - Math.floor(S / 2), S);
+          olhar = { agrado: a, gosto_visual: gv };
+        }
       }
     }
     const cons = this.afeto.consequencia(pc0, pc1, recs, gv);
     const l0 = recs.map(r => leituraReceptor(pc0 as PercepcaoCorpoLobos, r, S));
     const l1 = recs.map(r => leituraReceptor(pc1, r, S));
     if (olhar !== null) {
-      this.sens.expor(niveis!);                           // a exposicao, so quando o pet olhou
+      this.sens.expor(niveis!, this.ce === null ? null : olhar["enjoo"] as number);   // a exposicao (saturada com o enjoo, D-GV-ENJOO-CER)
       olhar["desloc"] = { ...this.sens.desloc };
     }
     const pos0: readonly [number, number] = p.sens["pos"], pos1: readonly [number, number] = [pm1.x, pm1.y];

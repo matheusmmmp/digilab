@@ -8,8 +8,8 @@
    v21 nao muda (test/luta_poc_pet.test.ts). */
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, CUIDADO_NA_HORA, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
-  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehDoGrupo, ehLutaPoc, nasceNaAgua, VERSAO_V26,
-  nasceNaGrande, nasceComMemoriaLonga, nasceComSonoSegura, CMU_GRANDE, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, VERSOES_COM_SACUDIR,
+  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehDoGrupo, ehLutaPoc, nasceNaAgua,
+  nasceNaGrande, nasceComMemoriaLonga, nasceComSonoSegura, nasceComTv, CMU_GRANDE, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, VERSOES_COM_SACUDIR,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { LUGARES_V6, NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
@@ -37,10 +37,11 @@ import { bracoV11 } from "./pet_v11.ts";
 import { leituraLab, type LeituraLab } from "./digibrain/leitura.ts";
 import { decodificar, decodificarV2, type ConceitosDec } from "./digibrain/decodificador.ts";
 import { DigiBrain } from "./digibrain/adapt.ts";
-import { CONFIG_DIGIBRAIN_LAB, CONFIG_DIGIBRAIN_LAB_FALA, CONFIG_SONO_SEGURA, CONFIG_SONO_SEGURA_LIGADA, CONTEUDOS_FALA, D_MAX_ILHA_GRANDE, INATOS_MODULAR,
+import { CONFIG_DIGIBRAIN_LAB, CONFIG_DIGIBRAIN_LAB_FALA, CONFIG_DIGIBRAIN_LAB_OLHAR, CONFIG_OLHAR_JOGO, CONFIG_SONO_SEGURA, CONFIG_SONO_SEGURA_LIGADA, CONTEUDOS_FALA, D_MAX_ILHA_GRANDE, INATOS_MODULAR,
   type ConteudoFala } from "./digibrain/constantes.ts";
 import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
 import { ConfiancaCombate } from "./confianca.ts";
+import { CONFIG_TELA_LIGADA, CONFIG_TV_JOGO, ID_TV, lerSentidoTela, valorSentidoTela } from "./tv.ts";
 import { lutar as lutarArena, sorteiosPorFluxo, type IdCena, type ResultadoLuta as ResultadoArena, type Stats as StatsArena, type Tiro as TiroLutaPoc, type Esquiva as EsquivaLutaPoc, type Apoio as ApoioLutaPoc, type ArenaPorEstagio as ArenaLutaPoc, type TabelaFormas as TabelaFormasPoc } from "./arena/index.ts";
 import { MAPA_SALAO, MAPA_TORRE, statsRivalForma, ehMapa, esquivaDaTabela, formaDaChave as formaDaChaveMotor, mapaDoLugar, naTabela, rivaisArena, statsDaLuta, statsDoPet, statsNpc, statsRivalArena, tabelaLuta } from "./luta_poc.ts";
 import { condicaoDe } from "./treino.ts";
@@ -102,6 +103,8 @@ export interface ResultadoLutaPoc {
   /** o tiro e a esquiva que a luta usou (a v23 em diante, ou a bancada); ausentes na luta da POC de sempre (v21 e v22). O palco refaz a luta
       com eles (src/lutaPocTela.ts, lutasDoResultado) */
   tiro?: TiroLutaPoc; esquiva?: EsquivaLutaPoc;
+  /** o golpe de apoio e a arena por estagio que a luta usou (a v29, ou a bancada; LP6-4); ausentes sem eles. O palco os repassa tambem */
+  apoio?: ApoioLutaPoc; arenaPorEstagio?: ArenaLutaPoc;
 }
 /** pets v21 (LP2b; LP-5 revista): o Palacio juntou-se a Torre de Batalha, porque na luta nova todo pet decide sozinho */
 export const PALACIO_NA_TORRE = "o Palácio juntou-se à Torre de Batalha na luta nova: lute na Torre";
@@ -177,7 +180,7 @@ export class Motor {
   /** a esquiva pela perspicacia e pela velocidade (D-LP5-14): como o tiroLutaPoc, so a bancada a poe; null = a luta de sempre */
   esquivaLutaPoc: EsquivaLutaPoc | null = null;
   /** as chaves da LP6-1 (o golpe de apoio, a elipse pelo estagio e a tabela das formas com outro ritmo do apoio): como o tiroLutaPoc, so a
-      bancada as poe (LP6-3); null = a luta de sempre. Nenhuma versao de pet as liga ate a LP6-4 */
+      bancada as poe (LP6-3); null = a da tabela da versao (a v29 tem o apoio e a arena, LUTA_V29; LP6-4) */
   apoioLutaPoc: ApoioLutaPoc | null = null;
   arenaLutaPoc: ArenaLutaPoc | null = null;
   formasLutaPoc: TabelaFormasPoc | null = null;
@@ -259,7 +262,7 @@ export class Motor {
     this.noGrupo = opcoes.parteDoMundo !== undefined;
     /* a v26 so existe no grupo, e o grupo so tem a v26 (CO4c) */
     if (this.noGrupo !== ehDoGrupo(versao))
-      throw new Error(this.noGrupo ? `o pet do grupo e da v${VERSAO_V26}, nao da v${versao}` : `o pet v${VERSAO_V26} so nasce no grupo, com o irmao`);
+      throw new Error(this.noGrupo ? `o pet do grupo e da v26, da v28 ou da v29, nao da v${versao}` : `o pet v${versao} so nasce no grupo, com o irmao`);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
     this.temp = temperamentoDe(semente);
     /* o Bandit nao decide nem aprende para o pet; fica so a memoria por espacos dele, como o lobo de memoria e emocao (D-W7 do #201): a
@@ -298,6 +301,14 @@ export class Motor {
       consequenciaCorpo: (a, oc, depois) => { const b = qual(); if (b) b.consequenciaCorpo(a, oc, depois); else braco.consequenciaCorpo(a, oc, depois); },
       receberAcaoDono: (a, tick) => { const b = qual(); if (b) b.receberAcaoDono(a, tick); else braco.receberAcaoDono(a, tick); },
       mudancaNoCorpo: (antes, depois) => { const b = qual(); if (b) b.mudancaNoCorpo(); else braco.mudancaNoCorpo(antes, depois); },
+      /* a TV no cerebro (a v32; D-GV-CEREBRO-5): as TVs a vista e o agrado vao ao modular que decide; com o A, o olhar e a regra provisoria da
+         P1c (o pet olha quando esta parado, acordado e com a TV no raio: o olhandoTela devolve a TV, como sem o gancho no Python) e nao ha agrado.
+         Os tres ganchos so existem na v32: o laco so os le com a TV ligada */
+      ...(nasceComTv(versao) ? {
+        verTela: (linhas: [number, number, number, number][]) => { const b = qual(); if (b) b.verTela(linhas); },
+        olhandoTela: () => { const b = qual(); return b ? b.olhandoTela() : ID_TV; },
+        agradoTela: (leituras: Readonly<Record<string, number>>) => { const b = qual(); return b ? b.agradoTela(leituras) : null; },
+      } : {}),
       escolherAlvo: (acao, candidatos, percepcao, u) => {
         const b = qual();
         if (!b) throw new Error("o laco pediu o alvo ao cerebro A (so o modular escolhe o alvo)");
@@ -333,6 +344,8 @@ export class Motor {
                                        cfgMundo: nasceNaGrande(versao) ? CMU_GRANDE : nasceNaAgua(versao) ? CMU_MVP_AGUA : CMU_MVP,
                                        ...(nasceNaGrande(versao) || nasceNaAgua(versao) ? { contrato: CONFIG_CONTRATO_AGUA } : {}),
                                        bolaNoGolpe: ehCerebroTrocavel(versao),
+                                       /* a v32: o orgao da tela no corpo e a TV do jogo no mundo, pela fonte "evento" (o evento "st") */
+                                       ...(nasceComTv(versao) ? { tela: { tela: CONFIG_TELA_LIGADA, tv: CONFIG_TV_JOGO } } : {}),
                                        ...(opcoes.parteDoMundo ? { parteDoMundo: opcoes.parteDoMundo } : {}) });     // o pet de teste (v16): a bola de antes; a v21, a bola no golpe
     this.v11 = { braco, laco };
     this.e = laco.estado;
@@ -402,7 +415,8 @@ export class Motor {
   /** v12: o mundo fisico do pet (null nos v1-v11). A tela so le */
   get mundo(): Mundo | null { return this.v11 && this.v11.laco instanceof MotorCorpoMundo ? this.v11.laco.mundo : null; }
   /** a observacao de agora, a que o pet le: nos v11, com os receptores do corpo */
-  observacaoAgora(): ObservacaoLobos { return this.v11 ? this.v11.laco.observacao() : observacao(this.e); }
+  /** so le: com a TV (a v32), sem entregar a tela ao corpo de novo (MotorCorpo.leituraObservacao; D-GV-CEREBRO-7) */
+  observacaoAgora(): ObservacaoLobos { return this.v11 ? this.v11.laco.leituraObservacao() : observacao(this.e); }
 
   /* ---------------------------------------------------------------- heranca (pets v4) */
   /** cruza dois adultos vivos (Ultimate ou Mega): o filho (versao atual) herda temperamento (media + ruido) e especie (de um dos pais) */
@@ -664,6 +678,8 @@ export class Motor {
     const pet = this.statsLutaPoc();
     /* o tiro e a esquiva: os da bancada, se ela os pos; senao, os da tabela da versao (a v21 e a v22, nenhum: a luta da POC) */
     const T = tabelaLuta(this.versao), tiro = this.tiroLutaPoc ?? T.tiro, esquiva = this.esquivaLutaPoc ?? esquivaDaTabela(T);
+    /* o golpe de apoio e a arena por estagio: os da bancada, se ela os pos; senao, os da tabela da versao (so a v29; LP6-4) */
+    const apoio = this.apoioLutaPoc ?? T.apoio ?? null, arenaPorEstagio = this.arenaLutaPoc ?? T.arenaPorEstagio ?? null;
     /* a forca do pet para o oraculo (MITOLOGIA E0): a soma dos 6 stats pelo peso de sempre, a mesma em todas as versoes */
     const base = statsDoPet(this.forma, this.carater(), this.pontosDeLuta()), forcaBase = STATS.reduce((t, k) => t + base[k], 0);
     const serie: ResultadoLutaPoc["serie"] = [];
@@ -676,7 +692,7 @@ export class Motor {
       n = k + 1;
       const s = sementeDaSerie(semente, k);
       const r = lutarArena({ cena: rv.mapa, semente: s, a: { forma, stats: pet, ...(k ? { vida0 } : {}) }, b: { forma: rv.forma, stats: rv.stats }, ...(tiro ? { tiro } : {}), ...(esquiva ? { esquiva } : {}),
-        ...(this.apoioLutaPoc ? { apoio: this.apoioLutaPoc } : {}), ...(this.arenaLutaPoc ? { arenaPorEstagio: this.arenaLutaPoc } : {}) }, sorteiosPorFluxo(s), this.formasLutaPoc ?? undefined);
+        ...(apoio ? { apoio } : {}), ...(arenaPorEstagio ? { arenaPorEstagio } : {}) }, sorteiosPorFluxo(s), this.formasLutaPoc ?? undefined);
       const pontosA = r.vencedor === "a" ? 1 : r.vencedor === "b" ? 0 : 0.5, res = pontosA === 1 ? 1 : pontosA === 0 ? -1 : 0;
       serie.push({ ...r, vida0, pontosA, contra: rv.forma, mapa: rv.mapa, rivalStats: rv.stats });
       const chave = rivalDaConfianca(rival, semente, k, est);
@@ -713,7 +729,7 @@ export class Motor {
     this.vida5.lutas.push({ tick: this.e.tick, rival, lesao, resultado: ult.pontosA === 1 ? "vitoria" : ult.pontosA === 0 ? "derrota" : "empate" });
     this.forcaLutas.push({ tick: this.e.tick, rival, forcaPet: forcaBase, resultado: this.vida5.lutas[this.vida5.lutas.length - 1].resultado });
     return { rival, mapa: torneio ? null : mapa as IdCena, semente, arena: !npc && !torneio, torneio, pet, rivalStats: serie[0].rivalStats, forma, serie, venceu, lesao,
-      ...(tiro ? { tiro } : {}), ...(esquiva ? { esquiva } : {}) };
+      ...(tiro ? { tiro } : {}), ...(esquiva ? { esquiva } : {}), ...(apoio ? { apoio } : {}), ...(arenaPorEstagio ? { arenaPorEstagio } : {}) };
   }
   /* ---------------------------------------------------------------- itens do Tamer (pets v6; motor/itens.ts) */
   /** chips que este pet pode ter equipados, pelas medalhas que ele conhece (0 nos v1-v5) */
@@ -859,6 +875,44 @@ export class Motor {
     this._conferirMorte(); this._vivo();
     this.alcanceMemoria = D_MAX_ILHA_GRANDE;
     this.modular?.alcanceDaMemoria(D_MAX_ILHA_GRANDE);
+  }
+  /* ---------------------------------------------------------------- a TV no cerebro (a v32; GOSTO_VISUAL, D-GV-CEREBRO) */
+  /** o pet tem a TV no cerebro (a v32): o que a TV passa entra pelo evento "st" */
+  get temTv(): boolean { return nasceComTv(this.versao); }
+  /** o modo livre gravado (D-GV-CEREBRO-1): o que a TV do jogo passa a partir de agora, o valor do evento `sentido_tela` (`fonte|n1|...|n7`, o
+      que o ResumoTela devolve). So a TV muda: nao e contato nem cuidado, nao passa pelo vinculo nem pelo historico; vale com o pet acordado ou
+      dormindo. Fora da v32, com o pet morto ou com o valor mal formado, falha alto antes do registro */
+  sentidoTela(valor: string): void {
+    this._validarSentidoTela(valor);
+    this._conferirMorte(); this._vivo();
+    const t = this.e.tick;
+    this._sentidoTela(valor);
+    this.log.push([t, "st", valor]);
+  }
+  private _validarSentidoTela(valor: unknown): [string, number[]] {
+    if (!nasceComTv(this.versao)) throw new Error(`só o pet v32 tem a TV no cérebro (este é v${this.versao})`);
+    const [fonte, niveis] = lerSentidoTela(valor);
+    if (valorSentidoTela(fonte, niveis) !== valor) throw new Error(`sentido_tela fora da forma canônica: ${JSON.stringify(valor)}`);
+    return [fonte, niveis];
+  }
+  private _sentidoTela(valor: unknown): void {
+    const [fonte, niveis] = this._validarSentidoTela(valor);
+    this._conferirMorte(); this._vivo();
+    (this.v11!.laco as MotorCorpoMundo).telaDoDono(fonte, niveis);
+  }
+  /** o ultimo `sentido_tela` do registro (o valor), ou null: a TV do cerebro ainda nao recebeu nada. So le */
+  get ultimoSentidoTela(): string | null {
+    const tv = this.v11 && this.v11.laco instanceof MotorCorpoMundo ? this.v11.laco.tv : null;
+    const u = tv === null ? undefined : tv.sentidos[tv.sentidos.length - 1];
+    return u === undefined ? null : valorSentidoTela(u.fonte, u.niveis);
+  }
+  /** a TV no cerebro agora, para as telas (so le): se o pet olha a TV (o OCIOSO do olhar, acordado e com ela no raio), se ela esta no raio da
+      visao, e o `olhar` do ultimo motivo do modular (o agrado, o termo gosto e a TV escolhida); null fora da v32 */
+  tvNoCerebro(): { olhando: boolean; noRaio: boolean; motivo: Record<string, unknown> | null } | null {
+    if (!nasceComTv(this.versao)) return null;
+    const laco = this.v11!.laco as MotorCorpoMundo, tv = laco.tv!, p = laco.mundo.pet, mo = this.lab?.ultimoMotivo ?? null;
+    return { olhando: laco.olhandoTV(), noRaio: Math.hypot(tv.x - p[0], tv.y - p[1]) <= laco.mundo.raioDaVisao,
+             motivo: mo === null ? null : (mo["olhar"] as Record<string, unknown> | undefined) ?? null };
   }
   /** o pet vive na ilha grande (a v24 desde o ovo; a v21, a v22 e a v23 depois do "mi" para ela) */
   get naIlhaGrande(): boolean { return this.mundo !== null && this.mundo.cm.layout.nome === ILHA_DOS_VIVOS; }
@@ -1259,8 +1313,10 @@ export class Motor {
     /* o modular nasce com o alcance da memoria deste pet (o de sempre, ou o da ilha grande: a v25 e o evento "ma"; IG6) e, na v27, com o sono
        que segura (SONO_SEGURA) */
     if (v.cerebro === "modular") {
-      this.modular ??= new DigiBrain(CONFIG_DIGIBRAIN_LAB, { ...INATOS_MODULAR, d_max: this.alcanceMemoria } as typeof INATOS_MODULAR, false,
-        nasceComSonoSegura(this.versao) ? CONFIG_SONO_SEGURA_LIGADA : CONFIG_SONO_SEGURA);
+      /* a v32: o modular com a subchave `olhar`, o genoma da visao da semente do ovo (rng propria `visao-ovo`) e o agrado no corpo */
+      const tv = nasceComTv(this.versao);
+      this.modular ??= new DigiBrain(tv ? CONFIG_DIGIBRAIN_LAB_OLHAR : CONFIG_DIGIBRAIN_LAB, { ...INATOS_MODULAR, d_max: this.alcanceMemoria } as typeof INATOS_MODULAR, false,
+        nasceComSonoSegura(this.versao) ? CONFIG_SONO_SEGURA_LIGADA : CONFIG_SONO_SEGURA, tv ? { semente: this.semente, cfgOlhar: CONFIG_OLHAR_JOGO } : undefined);
       if (this.ponteLuta) this.modular.ligarLutaMemoria();
     }
     this.modularAtivo = v.cerebro === "modular";
@@ -1372,6 +1428,7 @@ export class Motor {
         const arvore = lerSacudirArvore({ tipo: "sacudir_arvore", valor: (a as Record<string, unknown>).arvore });
         this._sacudirArvore(arvore); break;
       }
+      case "st": this._sentidoTela(ev[2]); break;
       case "ma": {
         const a = ev[2] as unknown;
         if (!a || typeof a !== "object" || Object.keys(a).join() !== "alcance")

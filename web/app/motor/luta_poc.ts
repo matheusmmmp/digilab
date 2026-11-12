@@ -1,10 +1,10 @@
 /* A luta do pet no nucleo da POC (docs/TAREFA_V3_LUTA_POC.md, LP2): os numeros do lutador a partir dos 6 stats do pet (LP-3), os rivais da
    Arena e da Campanha e o mapa de cada lugar (LP-4). As seis decisoes da LP2 sao do Matheus ("Aprovo as 6", 2026-11-08); os numeros sao
    PROPOSTOS, SEM FONTE, ate a LP5. Sem rng: so contas sobre o estado. */
-import { ERRO_MIRA_POC, FORMAS_ARENA, IDS_CENA, type Esquiva, type IdCena, type Stats as StatsArena, type Tiro } from "./arena/index.ts";
+import { APOIO_LP6_3, ARENA_POR_ESTAGIO_LP6_3, ERRO_MIRA_POC, FORMAS_ARENA, IDS_CENA, type Apoio, type ArenaPorEstagio, type Esquiva, type IdCena, type Stats as StatsArena, type Tiro } from "./arena/index.ts";
 import { NPC, type Lugar } from "./bots.ts";
 import { caraterCanonico, multEstagio, statsDe } from "./catalogo.ts";
-import { CTR, LINHA_DA_FORMA, STATS, ehLutaV23 } from "./constantes.ts";
+import { CTR, LINHA_DA_FORMA, STATS, ehLutaLp6, ehLutaV23 } from "./constantes.ts";
 import { DIGIMON_DA_FORMA } from "./nomes.ts";
 import type { Carater, Especie, Estagio, Forma, FormaAdultaNormal, Linha, Ramo, Stat, Stats } from "./tipos.ts";
 
@@ -46,6 +46,9 @@ export interface TabelaLuta {
   /** a distancia do tiro e a esquiva do nucleo (D-LP5-12 e D-LP5-14); null = a luta da POC */
   tiro: Readonly<Tiro> | null;
   esquiva: Readonly<Esquiva & { gamaMira: number; gamaFolego: number; kAtento: number }> | null;
+  /** o golpe de apoio e a arena maior por estagio do nucleo (LP6); ausentes = sem eles (a v21 a v28) */
+  apoio?: Readonly<Apoio>;
+  arenaPorEstagio?: Readonly<ArenaPorEstagio>;
 }
 /** a luta da v21 e da v22: a de sempre */
 export const LUTA_V21: TabelaLuta = Object.freeze({
@@ -70,8 +73,12 @@ export const LUTA_V23: TabelaLuta = Object.freeze({
   tiro: { distMin: 110, esperaMax: 1500, recuaAbaixo: .75, recuo: 1.5, recuaNaPrep: 2, danoProj: .7, velProj: 1 },
   esquiva: { kChance: 1, kReacao: 1, kDash: 1, chanceMax: .95, pertoChance: 0, pertoReacao: 200, contraMs: 0, gamaMira: .6, gamaFolego: .6, kAtento: .5 },
 });
-/** a tabela da luta de uma versao de pet: a v23 tem a dela; as outras (a v21 e a v22), a de sempre */
-export const tabelaLuta = (versao: number): TabelaLuta => ehLutaV23(versao) ? LUTA_V23 : LUTA_V21;
+/** a luta da v29 (a v28, o grupo com o sono que segura, com a LP6): a da v23 com o segundo golpe e a arena por estagio da LP6 (docs/PLANO_LP6_SEGUNDO_GOLPE.md; o lp6_3_u120 da LP6-3, PR
+    #834: o apoio so no Ultimate e no Mega, sem o recuo, e a elipse 1,2/1,4; as capturas da LP6-4 aprovadas, "Aprovo, segue", Matheus,
+    2026-11-11). Os numeros sao os do lp6_3_u120 (scripts/equilibrio_poc/candidatos.ts). PROPOSTOS, SEM FONTE */
+export const LUTA_V29: TabelaLuta = Object.freeze({ ...LUTA_V23, versao: 29, apoio: APOIO_LP6_3, arenaPorEstagio: ARENA_POR_ESTAGIO_LP6_3 });
+/** a tabela da luta de uma versao de pet: a v29 tem a dela (a da v23 com a LP6), a v23 a v28 a da v23; as outras (a v21 e a v22), a de sempre */
+export const tabelaLuta = (versao: number): TabelaLuta => ehLutaLp6(versao) ? LUTA_V29 : ehLutaV23(versao) ? LUTA_V23 : LUTA_V21;
 /** a esquiva da tabela na entrada do nucleo (so os numeros do nucleo); null sem esquiva */
 export const esquivaDaTabela = (T: TabelaLuta): Esquiva | null => {
   if (!T.esquiva) return null;

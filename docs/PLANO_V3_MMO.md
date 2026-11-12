@@ -117,7 +117,7 @@ velho ganha sempre, e o top tier vira o ranking semanal de novo.
 
 **A regra dos Bits fica como está (M-1 a M-10):**
 - os Bits pagam o **feito do próprio pet** (M-2), e a Fronteira não paga (M-2);
-- nada de dinheiro real (seção 10 do plano dos Bits);
+- nada de dinheiro real (seção 10 do plano dos Bits) (2026-11-11: o dinheiro real entra só pelo apoio e pela assinatura "Apoiador", fora dos Bits, pela CN-11 e pela CN-12 do `docs/PLANO_V3_CONTA.md`);
 - a troca de Bits entre jogadores fica fora, como o plano dos Bits deixou ("com o multiplayer, se vier");
 - **os Bits não entram no ranking nem são conferidos pelo servidor.** Eles continuam no registro do Tamer, na máquina do jogador. Quem
   adulterar os próprios Bits compra enfeites para a própria ilha e não muda a tabela de ninguém.
@@ -308,10 +308,14 @@ Cada uma com a recomendação e o custo de errar. **APROVADAS pelo Matheus em 20
   acesso pelo túnel, só para convidados. A hospedagem de fora (um serviço que roda JavaScript, porque o motor é TS) vem depois, com uma
   decisão própria. Custo de errar: médio. Começar fora já obriga a pagar e a cuidar de um serviço antes de saber se o ranking pega;
   começar em casa deixa o ranking cair junto com a máquina.
+  **Substituída em 2026-11-11 pela CN-6** (`docs/PLANO_V3_CONTA.md`): o servidor começa numa VPS de teste, só com convidados, no lugar
+  do servidor local. O Matheus: "Eu aceito aquela questão do MMO, que entra como VPS de teste como convidado".
 - **MMO-3. O login:** **por um provedor** (entrar com Google ou com GitHub), sem senha guardada pelo jogo. A outra opção é o link por
   e-mail. Custo de errar: baixo a médio. Guardar senha é o pior caso; o provedor também segura um pouco as contas a mais.
 - **MMO-4. A privacidade da seção 11,** com a entrada por escolha, o apelido gerado, sem texto livre, o log apagado em 30 dias
   (PROPOSTO) e **a revisão da LGPD antes de abrir para fora dos convidados.** Custo de errar: alto, se abrir sem a revisão.
+  **Mudada em 2026-11-11 pela CN-5** (`docs/PLANO_V3_CONTA.md`), só no save: o log do ranking continua apagado em 30 dias, e o log do
+  save fica enquanto a conta existir. O Matheus: "e a parte do save".
 - **MMO-5. Quem manda na pontuação:** **o servidor**, pelo replay no Node. O cliente mostra a prévia e, quando divergir, a conta do
   servidor com o aviso. Depende da MMO0. Custo de errar: confiar no cliente é deixar a tabela para quem edita o save.
 - **MMO-6. A semente das lutas ranqueadas vem do servidor,** com o hash do log no pedido, e **a semente pedida conta como luta**.
@@ -362,5 +366,5 @@ Cada uma com a recomendação e o custo de errar. **APROVADAS pelo Matheus em 20
 
 - A troca entre jogadores (Bits, itens, pets).
 - O chat livre e a luta ao vivo entre dois jogadores ao mesmo tempo.
-- O dinheiro real, a caixa de prêmio e o gacha: nunca.
+- O dinheiro real, a caixa de prêmio e o gacha: nunca (2026-11-11: o dinheiro real entra só pelo apoio e pela assinatura "Apoiador", fora dos Bits, pela CN-11 e pela CN-12 do `docs/PLANO_V3_CONTA.md`).
 - Qualquer mudança no Python, no `engine.py` ou na pesquisa.

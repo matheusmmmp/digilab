@@ -9,12 +9,18 @@ familiarizacao (secao 2.2); a sonda das duas TVs (experiments/sonda_duas_tvs.py)
 gravada, rejogada do disco (G1) e conferida; a sonda confere o G2. As medidas saem de `metrics.medidas_duas_tvs` e
 `metrics.familiarizacao_tv`; a analise e a da secao 5 do plano, descritiva (nao ha gate).
 
+A GV3b (docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO1.md): a mesma run com o enjoo da imagem ligado no corpo e no cerebro
+(`CONFIG_ENJOO_TELA_LIGADA`, D-GV-ENJOO-CER), escolhida pela fase da config (`gosto_visual_enjoo`), com a faixa 90101...90505 e as pastas
+`piloto_enjoo` e `gosto_visual_enjoo`. Tudo o mais e o da GV3. Com as configs antigas (fase `gosto_visual`), o orquestrador faz o que fazia.
+
 A trava (secao 9 do plano): o piloto e a run so rodam com o cabecalho do plano "APROVADO pelo Matheus", a faixa 89101...89505 em
 FAIXAS_RESERVADAS, a secao do registro da run no plano, as bases e o K do plano, no maximo 4 processos e nada por cima de uma pasta que ja
 existe. A fumaca (as sementes dos testes, 101...505) roda sem a faixa e sem o registro, com 2 a 14 dias (a sonda so no ultimo dia).
 
     python experiments/run_v3_gosto_visual.py --config experiments/configs/v3_gosto_visual/piloto.json --processos 4
     python experiments/run_v3_gosto_visual.py --config experiments/configs/v3_gosto_visual/gosto_visual.json --processos 4
+    python experiments/run_v3_gosto_visual.py --config experiments/configs/v3_gosto_visual/piloto_enjoo.json --processos 4
+    python experiments/run_v3_gosto_visual.py --config experiments/configs/v3_gosto_visual/gosto_visual_enjoo.json --processos 4
 """
 from __future__ import annotations
 
@@ -24,6 +30,7 @@ import platform
 import random
 import sys
 import time
+from dataclasses import asdict
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parents[1]
@@ -36,7 +43,7 @@ import run_v2_digibrain_prototipo as orq  # noqa: E402
 import sonda_duas_tvs as sd  # noqa: E402
 from bancada.faixas import FAIXAS_QUEIMADAS, FAIXAS_RESERVADAS  # noqa: E402
 from digilab import metrics as M  # noqa: E402
-from digilab.config import CONFIG_PADRAO, CONFIG_TV_LIGADA  # noqa: E402
+from digilab.config import CONFIG_ENJOO_TELA_LIGADA, CONFIG_PADRAO, CONFIG_TV_LIGADA  # noqa: E402
 from digilab.digibrain.adapt import DigiBrain  # noqa: E402
 from digilab.events import AcaoUsuario  # noqa: E402
 from digilab.genoma_visao import genoma_visao, genoma_visao_vazio  # noqa: E402
@@ -68,36 +75,50 @@ BOOTSTRAP = 2000
 SAIDA = "artifacts_v3_gosto_visual"
 CHAVES_CONFIG = {"descricao", "fase", "plano", "unidades", "dias"}
 PERFIL_DO_DONO = {"calmo": sd.PERFIL_A, "agitado": sd.PERFIL_B}
+# a GV3b (o adendo 1): o enjoo ligado; o resto e o da GV3
+FASE_ENJOO = "gosto_visual_enjoo"
+PLANO_ENJOO = "docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO1.md"
+TITULO_REGISTRO_ENJOO = "## 9. O registro da run"
+FAIXA_ENJOO = (90101, 90505)                                 # confirmada pelo coordenador, 2026-11-12
+BASES_PILOTO_ENJOO = (90101, 90202)                          # secao 6 do adendo (o molde da 89xxx)
+BASES_RUN_ENJOO = (90303, 90404, 90505)
+# por fase: o plano, o titulo do registro, a faixa, as bases do piloto e da run, os nomes dos modos (as pastas) e o enjoo
+FASES = {FASE: {"plano": PLANO, "registro": TITULO_REGISTRO, "faixa": FAIXA, "piloto": BASES_PILOTO, "run": BASES_RUN,
+                "modos": ("piloto", FASE), "enjoo": False},
+         FASE_ENJOO: {"plano": PLANO_ENJOO, "registro": TITULO_REGISTRO_ENJOO, "faixa": FAIXA_ENJOO, "piloto": BASES_PILOTO_ENJOO,
+                      "run": BASES_RUN_ENJOO, "modos": ("piloto_enjoo", FASE_ENJOO), "enjoo": True}}
 
 
 # ================================================================== a trava
-def _plano() -> str:
-    return (RAIZ / PLANO).read_text(encoding="utf-8")
+def _plano(plano: str = PLANO) -> str:
+    return (RAIZ / plano).read_text(encoding="utf-8")
 
 
-def exigir_plano_aprovado(texto: str) -> None:
+def exigir_plano_aprovado(texto: str, titulo_registro: str = TITULO_REGISTRO) -> None:
     linhas = texto.splitlines()
     status = next((x for x in linhas[1:12] if x.startswith("**Status:")), None)
     if status is None or not status.startswith(MARCA_APROVADO):
         raise RuntimeError("o plano do GOSTO_VISUAL sem o status APROVADO pelo Matheus no cabecalho: nenhuma vida da faixa")
-    if sum(1 for x in linhas if x.startswith(TITULO_REGISTRO)) != 1:
-        raise RuntimeError(f"o plano sem a secao {TITULO_REGISTRO!r} (o registro da run): nenhuma vida da faixa")
+    if sum(1 for x in linhas if x.startswith(titulo_registro)) != 1:
+        raise RuntimeError(f"o plano sem a secao {titulo_registro!r} (o registro da run): nenhuma vida da faixa")
 
 
-def exigir_faixa_reservada() -> None:
-    if not any((lo, hi) == FAIXA for lo, hi, _ in FAIXAS_RESERVADAS):
-        raise bv.SementeSemPlano(f"a faixa {FAIXA[0]}...{FAIXA[1]} nao esta em FAIXAS_RESERVADAS")
-    if any(lo <= FAIXA[1] and FAIXA[0] <= hi for lo, hi, _ in FAIXAS_QUEIMADAS):
-        raise bv.SementeSemPlano(f"a faixa {FAIXA} cruza uma faixa queimada")
+def exigir_faixa_reservada(faixa: tuple = FAIXA) -> None:
+    if not any((lo, hi) == faixa for lo, hi, _ in FAIXAS_RESERVADAS):
+        raise bv.SementeSemPlano(f"a faixa {faixa[0]}...{faixa[1]} nao esta em FAIXAS_RESERVADAS")
+    if any(lo <= faixa[1] and faixa[0] <= hi for lo, hi, _ in FAIXAS_QUEIMADAS):
+        raise bv.SementeSemPlano(f"a faixa {faixa} cruza uma faixa queimada")
 
 
 def modo_da_config(cfg: dict, texto_plano: str | None = None) -> str:
-    """'fumaca' (as sementes dos testes), 'piloto' ou 'gosto_visual' (o plano a letra; a trava); o resto falha alto"""
+    """'fumaca' (as sementes dos testes), 'piloto' ou 'gosto_visual' (o plano a letra; a trava); na fase da GV3b, 'fumaca',
+    'piloto_enjoo' ou 'gosto_visual_enjoo' (o adendo 1 a letra, com o plano da GV3 tambem aprovado); o resto falha alto"""
     faltam, sobram = (CHAVES_CONFIG - {"descricao"}) - set(cfg), set(cfg) - CHAVES_CONFIG
     if faltam or sobram:
         raise ValueError(f"config: faltam {sorted(faltam)}, sobram {sorted(sobram)}")
-    if cfg["fase"] != FASE:
-        raise ValueError(f"fase {cfg['fase']!r}: so {FASE!r}")
+    if cfg["fase"] not in FASES:
+        raise ValueError(f"fase {cfg['fase']!r}: so {sorted(FASES)}")
+    f = FASES[cfg["fase"]]
     u = cfg["unidades"]
     bases = tuple(u["bases"])
     if type(u.get("k")) is not int or u["k"] < 1 or set(u) != {"bases", "k"}:
@@ -106,17 +127,19 @@ def modo_da_config(cfg: dict, texto_plano: str | None = None) -> str:
         if not 2 <= cfg["dias"] <= DIAS:
             raise ValueError(f"fumaca com {cfg['dias']} dias: de 2 a {DIAS}")
         return "fumaca"
-    if bases == BASES_PILOTO:
-        modo, k = "piloto", K_PILOTO
-    elif bases == BASES_RUN:
-        modo, k = FASE, K_RUN
+    if bases == f["piloto"]:
+        modo, k = f["modos"][0], K_PILOTO
+    elif bases == f["run"]:
+        modo, k = f["modos"][1], K_RUN
     else:
-        raise bv.SementeSemPlano(f"bases {list(bases)}: so as dos testes (fumaca), {list(BASES_PILOTO)} ou {list(BASES_RUN)}")
-    exigir_faixa_reservada()
-    exigir_plano_aprovado(_plano() if texto_plano is None else texto_plano)
+        raise bv.SementeSemPlano(f"bases {list(bases)}: so as dos testes (fumaca), {list(f['piloto'])} ou {list(f['run'])}")
+    exigir_faixa_reservada(f["faixa"])
+    exigir_plano_aprovado(_plano(f["plano"]) if texto_plano is None else texto_plano, f["registro"])
+    if f["enjoo"]:                                           # o adendo vale sobre o plano da GV3, que tambem tem de estar aprovado
+        exigir_plano_aprovado(_plano(PLANO), TITULO_REGISTRO)
     erros = [f"dias {cfg['dias']}"] if cfg["dias"] != DIAS else []
     erros += [f"K {u['k']}"] if u["k"] != k else []
-    erros += [f"plano {cfg.get('plano')!r}"] if cfg.get("plano") != PLANO else []
+    erros += [f"plano {cfg.get('plano')!r}"] if cfg.get("plano") != f["plano"] else []
     if erros:
         raise ValueError(f"a run segue o plano a letra: {erros}")
     return modo
@@ -154,16 +177,18 @@ def _cc():
     return _CORPO
 
 
-def fabricas(semente: int, genoma) -> tuple:
-    """(fabrica da politica, fabrica do motor) da vida, reusadas no replay e na copia da sonda"""
+def fabricas(semente: int, genoma, enjoo: bool = False) -> tuple:
+    """(fabrica da politica, fabrica do motor) da vida, reusadas no replay e na copia da sonda. `enjoo` (a GV3b): a
+    CONFIG_ENJOO_TELA_LIGADA no cerebro e no corpo; desligado, o caminho de antes, sem o argumento"""
     cv, co = X.config_vida(), X.config_olhar("grade")
+    kw = {"cfg_enjoo_tela": CONFIG_ENJOO_TELA_LIGADA} if enjoo else {}
 
     def fp(cfg=None):
-        return DigiBrain(cfg or CONFIG_PADRAO, cv, orq.CM, semente=semente, cfg_olhar=co, genoma_visao_ovo=genoma)
+        return DigiBrain(cfg or CONFIG_PADRAO, cv, orq.CM, semente=semente, cfg_olhar=co, genoma_visao_ovo=genoma, **kw)
 
     def fm(politica, cfg, s):
         return com_corpo(MotorMundo)(politica, cfg, s, NEUTRO, "brasa", obediencia_desligada=True, cfg_mundo=orq.CM, cfg_corpo=_cc(),
-                                     cfg_tela=X.TELA, cfg_tv=CONFIG_TV_LIGADA)
+                                     cfg_tela=X.TELA, cfg_tv=CONFIG_TV_LIGADA, **kw)
     return fp, fm
 
 
@@ -177,14 +202,14 @@ def programa_do_dono(dono: str, programas: tuple) -> int | None:
     return min(range(len(programas)), key=lambda i: (sum(abs(a - b) for a, b in zip(programas[i], alvo)), i))
 
 
-def viver(genoma_tipo: str, dono: str, unidade: dict, dias: int, fim_do_dia=None):
+def viver(genoma_tipo: str, dono: str, unidade: dict, dias: int, fim_do_dia=None, enjoo: bool = False):
     """a vida (secao 2): devolve (motor, fabricas, o programa do dono). `fim_do_dia(dia, motor, fabricas)`, se dado, e chamado no fim de
-    cada dia (so o teste do G2 o usa, para pr a sonda no meio da vida)"""
+    cada dia (so o teste do G2 o usa, para pr a sonda no meio da vida). `enjoo`: a GV3b (o enjoo ligado)"""
     if genoma_tipo not in GENOMAS:
         raise ValueError(f"genoma desconhecido: {genoma_tipo!r}")
     semente = unidade["semente"]
     g = genoma_visao(unidade["genoma"]) if genoma_tipo == "proprio" else genoma_visao_vazio()
-    fab = fabricas(semente, g)
+    fab = fabricas(semente, g, enjoo)
     fp, fm = fab
     m = fm(fp(CONFIG_PADRAO), CONFIG_PADRAO, semente)
     prog = programa_do_dono(dono, m.mundo.tv.programas)
@@ -219,7 +244,7 @@ def fracoes_olhando(motor, dias: int) -> list[float]:
 def _vida(cfg: dict, genoma_tipo: str, dono: str, unidade: dict, pasta: str) -> dict:
     c0, p0 = time.process_time(), time.perf_counter()
     semente, dias = unidade["semente"], cfg["dias"]
-    motor, fab, prog = viver(genoma_tipo, dono, unidade, dias)
+    motor, fab, prog = viver(genoma_tipo, dono, unidade, dias, enjoo=FASES[cfg["fase"]]["enjoo"])
     nome = f"{genoma_tipo}_{dono}_{semente}"
     arquivo = Path(pasta) / "vidas" / f"{nome}.jsonl"
     arquivo.parent.mkdir(parents=True, exist_ok=True)
@@ -388,10 +413,11 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
     if pasta.exists():
         raise FileExistsError(f"{pasta} ja existe: a run se recusa a gravar por cima")
     us = unidades(cfg["unidades"]["bases"], int(cfg["unidades"]["k"]))
+    fase = FASES[cfg["fase"]]
     pasta.mkdir(parents=True)
     inicio = time.time()
     rc = orq.rc
-    meta = {"modo": modo, "fase": FASE, "plano": PLANO, "plano_sha256": rc._sha_arquivo(RAIZ / PLANO), "config": cfg,
+    meta = {"modo": modo, "fase": cfg["fase"], "plano": fase["plano"], "plano_sha256": rc._sha_arquivo(RAIZ / fase["plano"]), "config": cfg,
             "config_arquivo": None if caminho_config is None else rc._relativo(caminho_config),
             "config_sha256": None if caminho_config is None else rc._sha_arquivo(caminho_config),
             "orquestrador_sha256": rc._sha_arquivo(Path(__file__)), "sonda_sha256": rc._sha_arquivo(Path(sd.__file__)),
@@ -401,6 +427,11 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
             "sha256": {n: rc._sha_arquivo(RAIZ / "digilab" / n) for n in ("config.py", "engine.py", "metrics.py", "mundo.py", "tv.py")}
             | {f"digibrain/{p.name}": rc._sha_arquivo(p) for p in sorted((RAIZ / "digilab" / "digibrain").glob("*.py"))},
             "inicio": time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(inicio))}
+    if fase["enjoo"]:                                        # a GV3b: o plano da GV3 por baixo do adendo, a config do enjoo e o corpo
+        meta["plano_base"] = PLANO
+        meta["plano_base_sha256"] = rc._sha_arquivo(RAIZ / PLANO)
+        meta["enjoo_tela"] = asdict(CONFIG_ENJOO_TELA_LIGADA)
+        meta["sha256"] |= {n: rc._sha_arquivo(RAIZ / "digilab" / n) for n in ("corpo.py", "motor_corpo.py")}
     bv._gravar(pasta / "meta.json", bv._dump(meta))
     t0 = time.perf_counter()
     registros = [r for s in rc._executar([(tarefa, (cfg, u, str(pasta))) for u in us], processos) for r in s]
@@ -409,7 +440,7 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
         raise RuntimeError(f"{len(registros)} vidas, eram {len(us) * len(GENOMAS) * len(DONOS)}")
     bv._gravar(pasta / "medidas.json", bv._dump({r["vida"]: r for r in sorted(registros, key=lambda r: r["vida"])}))
     lidos = list(json.loads((pasta / "medidas.json").read_text(encoding="utf-8")).values())   # a analise sai do artefato gravado
-    resultado = {"modo": modo, "fase": FASE, "plano": PLANO, "vidas": len(lidos), "familiarizacao": familiarizacao(lidos),
+    resultado = {"modo": modo, "fase": cfg["fase"], "plano": fase["plano"], "vidas": len(lidos), "familiarizacao": familiarizacao(lidos),
                  "principal": analisar(lidos, boot, so_estaveis=False), "so_estaveis": analisar(lidos, boot, so_estaveis=True)}
     reps = [x for r in lidos for x in r["medidas"]]
     olhou = sum(1 for x in reps if x["escolha"] is not None) / len(reps) if reps else 0.0
