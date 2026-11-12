@@ -4,8 +4,8 @@
 recomendação. Os números continuam PROPOSTOS.
 **Rodado em 2026-11-12 (CB4):** H-EMERGE e H-DOSE NÃO CONFIRMAM, H-REP INCONCLUSIVO POR PREMISSA, H-CUSTO CONFIRMA; o
 descritivo está em `docs/futuro/cooperacao_bancada_resultado.md` (D-CB-15).
-**O adendo 1 (seção 12), PROPOSTO em 2026-11-12:** o mecanismo, com um irmão aleatório que provoca a situação; as AD1-1 a AD1-6
-vão ao Matheus. **Nenhuma vida deste plano roda antes de cinco coisas:**
+**O adendo 1 (seção 12) está DECIDIDO pelo Matheus em 2026-11-12** ("Aprovo todas"): o mecanismo, com um irmão aleatório que provoca a
+situação; as AD1-1 a AD1-6 estão decididas pela recomendação. **Nenhuma vida deste plano roda antes de cinco coisas:**
 1. este cabeçalho com a marca "APROVADO pelo Matheus" (feito);
 2. a CO6 e a CO7 na `main` (`docs/ESPEC_V3_COOPERACAO_CO6.md` e `docs/ESPEC_V3_COOPERACAO_CO7.md`), com os testes G-ESCUDO,
    G-RECEPTOR-SOCIAL e G-PAR-CO7 verdes;
@@ -198,9 +198,9 @@ do Matheus, e as vidas já rodadas ficam registradas.
 | **CB-8** | o piloto e a regra do N | **40 sementes, B0 e B1, N em {80, 160, 320}** | sem piloto, o N é chute, e os atos raros podem deixar tudo inconclusivo |
 | **CB-9** | o encostar | **segue valendo 0** (D-CO3-3, ainda aberta), e por isso fica fora da P1 e só no descritivo P4 | se a D-CO3-3 mudar depois, só o P4 muda; a P1 não depende dele |
 
-## 12. Adendo 1: o mecanismo, com um irmão que provoca a situação (2026-11-12, PROPOSTO, Claude Code, Opus 5.5)
+## 12. Adendo 1: o mecanismo, com um irmão que provoca a situação (2026-11-12, DECIDIDO, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** As decisões AD1-1 a AD1-6 (12.7) vão ao Matheus. Ele não muda as seções 0 a 11 nem o resultado da CB4
+**Status: DECIDIDO pelo Matheus em 2026-11-12 ("Aprovo todas").** As decisões AD1-1 a AD1-6 (12.7) estão decididas pela recomendação. Ele não muda as seções 0 a 11 nem o resultado da CB4
 (`docs/futuro/cooperacao_bancada_resultado.md`). **Nenhuma vida do adendo roda antes da aprovação, do código (A1-CB1) e do registro
 (A1-CB3).**
 
@@ -265,7 +265,7 @@ segue; abaixo, volta ao Matheus.
 | **A1-CB3** | o registro da análise do adendo, antes da primeira vida principal |
 | **A1-CB4** | as vidas, a análise e o descritivo |
 
-### 12.7 As decisões do adendo (PROPOSTAS; cada uma com a recomendação e o custo de errar)
+### 12.7 As decisões do adendo (DECIDIDAS pelo Matheus em 2026-11-12, todas pela recomendação; cada uma com a recomendação e o custo de errar)
 
 | | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
