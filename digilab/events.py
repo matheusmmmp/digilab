@@ -582,3 +582,50 @@ class LogDeEventos:
             if linha.strip()
         ]
         return LogDeEventos(eventos)
+
+
+# V3, GOSTO_VISUAL, OV2 (docs/ESPEC_V3_ORGAO_VISAO.md, secao 5.1): o que o orgao reconheceu na tela, o modo livre gravado. So com a
+# ConfigOrgao ligada e a TV com a fonte "evento" (quem confere e o motor; a lista, o corte e os sensiveis, o digilab/orgao.py):
+#   `percepcao_tela`  `fonte|lista|c1:n1|c2:n2|c3:n3`, de zero a tres pares; cada c um nome da lista ([a-z0-9_]) e cada n um inteiro
+#                     canonico. Sem par (`fonte|lista`), a percepcao anterior se apaga.
+TIPO_PERCEPCAO_TELA = "percepcao_tela"
+MAX_PARES_PERCEPCAO = 3
+
+
+def _nome_conceito(c) -> str:
+    if type(c) is not str or not c or not all(ch.isascii() and (ch.islower() or ch.isdigit() or ch == "_") for ch in c):
+        raise ValueError(f"conceito do percepcao_tela malformado ([a-z0-9_]): {c!r}")
+    return c
+
+
+def percepcao_tela(tick: int, fonte: str, lista: str, pares) -> Evento:
+    """o orgao, no modo livre gravado: o que ele reconheceu na janela que fecha neste tick (os pares ja canonicos, digilab/orgao.py)"""
+    if fonte not in FONTES_SENTIDO_TELA:
+        raise ValueError(f"fonte do percepcao_tela em {FONTES_SENTIDO_TELA}: {fonte!r}")
+    _nome_conceito(lista.replace("-", "_") if type(lista) is str else lista)
+    if type(pares) not in (tuple, list) or len(pares) > MAX_PARES_PERCEPCAO:
+        raise ValueError(f"percepcao_tela com 0 a {MAX_PARES_PERCEPCAO} pares: {pares!r}")
+    partes = [fonte, lista]
+    for par in pares:
+        if type(par) not in (tuple, list) or len(par) != 2 or type(par[1]) is not int or par[1] < 0:
+            raise ValueError(f"par do percepcao_tela malformado (conceito, nivel): {par!r}")
+        partes.append(f"{_nome_conceito(par[0])}:{par[1]}")
+    return Evento(tick=tick, tipo=TIPO_PERCEPCAO_TELA, valor="|".join(partes))
+
+
+def ler_percepcao_tela(evento: Evento) -> tuple[str, str, tuple[tuple[str, int], ...]]:
+    """(fonte, lista, pares) na ordem gravada; a lista e o corte, quem confere e o motor (digilab/orgao.canonico)"""
+    if evento.tipo != TIPO_PERCEPCAO_TELA:
+        raise ValueError(f"evento nao e {TIPO_PERCEPCAO_TELA}: {evento.tipo!r}")
+    if type(evento.valor) is not str:
+        raise ValueError(f"percepcao_tela malformado: {evento.valor!r}")
+    partes = evento.valor.split("|")
+    if len(partes) < 2 or len(partes) > 2 + MAX_PARES_PERCEPCAO or partes[0] not in FONTES_SENTIDO_TELA:
+        raise ValueError(f"percepcao_tela malformado: {evento.valor!r}")
+    pares = []
+    for p in partes[2:]:
+        c, sep, n = p.partition(":")
+        if not sep:
+            raise ValueError(f"par do percepcao_tela sem ':' : {p!r}")
+        pares.append((_nome_conceito(c), _natural_canonico(n)))
+    return partes[0], partes[1], tuple(pares)
