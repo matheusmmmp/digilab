@@ -180,3 +180,70 @@ ao coordenador, e o mecanismo novo entra atrás de uma chave desligada com o gab
 - Não reabre a GV3 nem a GV3b, não muda as frases dos dois resultados e não junta as 72 unidades numa análise só.
 - Não roda vida, não abre os `vidas.tar.gz`, não toca o código nem as configs.
 - Não diz que o pet "gosta", "prefere" ou "enjoa", e não compara com animais.
+
+## 6. A GVN-2: o que as vidas gravadas mostram (2026-11-12, Claude Code, Opus 5.5, branch `v3-gosto-visual-gvn2`)
+
+As GVN-1 a GVN-6 foram DECIDIDAS pela recomendação (Matheus, 2026-11-12; `docs/registro/2026-11.md`, D-GV-GVN-1). Esta seção é a leitura
+da GVN-2, pelo plano curto `docs/PLANO_ANALISE_V3_GOSTO_VISUAL_GVN2.md`, commitado e empurrado antes de abrir os `vidas.tar.gz`. **É
+descritiva, não confirmatória; os dois negativos ficam como estão, e as frases da GV3 e da GV3b não mudam.** Nenhuma vida nova.
+
+**O script:** `artifacts_v3_gosto_visual/gvn2/leitura.py` (rode `python -I artifacts_v3_gosto_visual/gvn2/leitura.py .` na raiz), só sobre
+os `*_sonda.json` dos dois `vidas.tar.gz`, com o `medidas.json` de cada run para ligar e conferir. A saída é o
+`artifacts_v3_gosto_visual/gvn2/leitura.json`, igual byte a byte a cada execução (`tests/test_gosto_visual_gvn2.py`). As chaves abaixo são
+dela, com o prefixo `gv3.` ou `gv3b.`. Os três donos entram juntos (108 pets por genoma), como na seção 3; os IC95 reamostram unidades
+inteiras (2000, semente 20261112), sem nenhuma reamostra indefinida.
+
+**A conferência C0 passou nas duas:** 216 vidas, 4536 réplicas e 72 576 decisões por run, iguais ao `medidas.json` (`C0`).
+
+**M4, a medida da H5 como a seção 2 a escreve:** a parte do peso da unidade de olhar não se lê nos `vidas.tar.gz`: a sonda não gravou os
+termos (`M4`; de cada decisão, só `acao` e `olha`). Medi-la pelo replay dos logs é a decisão aberta GVN-2b do plano (seção 5 dele).
+
+| o quê | GV3 próprio | GV3 vazio | GV3b próprio | GV3b vazio | chave |
+|---|---|---|---|---|---|
+| réplicas válidas | 2138 | 2145 | 2112 | 2114 | `M1_<g>.replicas_validas` |
+| saídas por réplica válida, média (mediana) | 2,373 (2) | 2,540 (3) | 1,685 (2) | 1,702 (2) | `M1_<g>.saidas` |
+| voltas por réplica válida, média | 1,514 | 1,714 | 0,724 | 0,734 | `M1_<g>.voltas.media` |
+| voltas à mesma TV / à outra, média | 0,860 / 0,654 | 0,965 / 0,749 | 0,227 / 0,497 | 0,241 / 0,493 | `M1_<g>.voltas_mesma.media`, `voltas_outra.media` |
+| fração das réplicas com pelo menos uma volta | 0,793 | 0,833 | 0,592 | 0,604 | `M1_<g>.fracao_com_volta` |
+| viu as duas: réplicas; a segunda TV por troca direta / por volta | 1253; 482 / 771 | 1379; 572 / 807 | 1237; 313 / 924 | 1253; 336 / 917 | `M1_<g>.viu_as_duas` |
+| pares (t, t + 1) com a TV olhada em t | 7258 | 8344 | 4118 | 4166 | `M2_<g>.pares.juntas.n` |
+| fica / troca / sai, juntas | 0,178 / 0,123 / 0,699 | 0,200 / 0,147 / 0,653 | 0,051 / 0,085 / 0,864 | 0,048 / 0,089 / 0,863 | `M2_<g>.pares.juntas` |
+| fica na A / fica na B | 0,168 / 0,188 | 0,196 / 0,204 | 0,045 / 0,057 | 0,051 / 0,045 | `M2_<g>.pares.A.fica`, `B.fica` |
+| as três ações mais contadas na saída | dormir 2205, chamar_atencao 1602, brincar 554 | dormir 2256, chamar_atencao 1795, brincar 600 | dormir 1725, chamar_atencao 814, explorar 388 | dormir 1678, chamar_atencao 904, explorar 391 | `M2_<g>.pares.acoes_na_saida` |
+| pares por pet, média; por réplica válida | 67,2; 3,39 | 77,3; 3,89 | 38,1; 1,95 | 38,6; 1,97 | `M2_<g>.pares_por_pet_medio`, `pares_por_replica_valida_medio` |
+| Spearman(Δ_I, dif_fica), todos os pares | 0,823 [0,694; 0,886] | — | 0,645 [0,485; 0,743] | — | `M2_proprio.spearman_di_dif_fica` |
+| o mesmo, só os pares das réplicas em que viu as duas | 0,766 [0,598; 0,860] | — | 0,566 [0,379; 0,690] | — | `M2_proprio.spearman_di_dif_fica_so_ambas` |
+| a média de dif_fica | — | −0,003 [−0,030; 0,027] | — | 0,006 [−0,005; 0,018] | `M2_vazio.media_dif_fica` |
+| \|d_g\|, o termo `gosto` de A menos o de B, média em S (fração de A_max = 4S); p95 em S | 0,189 (0,047); 0,417 | 0,069 (0,017); 0,174 | 0,217 (0,054); 0,436 | 0,030 (0,007); 0,073 | `M3_<g>.abs_d_g` |
+
+Os 108 pets de cada genoma tiveram pares das duas TVs, inclusive só nas réplicas em que viram as duas (`M2_<g>.pets_com_pares_das_duas`,
+`pets_com_pares_das_duas_so_ambas`).
+
+**As frases do plano:**
+- Por réplica válida, o pet teve em média 2,373 saídas e 1,514 voltas (0,860 à mesma TV, 0,654 à outra) no próprio da GV3, e 1,685 saídas e
+  0,724 voltas (0,227 à mesma, 0,497 à outra) no próprio da GV3b (`M1_proprio`).
+- Nas réplicas em que viu as duas, a segunda TV veio por uma troca direta em 482 e por uma volta em 771 (GV3, próprio), e em 313 e 924
+  (GV3b, próprio) (`M1_proprio.viu_as_duas`).
+- Depois de uma decisão olhando uma TV, a decisão seguinte ficou na mesma TV em 0,178 dos pares, trocou em 0,123 e saiu em 0,699 (GV3,
+  próprio), e 0,051, 0,085 e 0,864 (GV3b, próprio); nas saídas, as ações mais contadas foram dormir e chamar_atencao nas duas
+  (`M2_proprio.pares`).
+- No próprio, Spearman(Δ_I, dif_fica) = 0,823 [0,694; 0,886] na GV3 e 0,645 [0,485; 0,743] na GV3b (`M2_proprio.spearman_di_dif_fica`); o
+  IC95 não contém 0 nas duas. Só nas réplicas em que viu as duas, 0,766 [0,598; 0,860] e 0,566 [0,379; 0,690]; o IC95 não contém 0. Leitura
+  descritiva.
+- No vazio, a média de dif_fica é −0,003 [−0,030; 0,027] na GV3 e 0,006 [−0,005; 0,018] na GV3b (`M2_vazio.media_dif_fica`).
+- O termo `gosto` calculado do agrado gravado diferiu entre as duas TVs, em média, 0,189 S na GV3 e 0,217 S na GV3b (no próprio), contra o
+  teto da ativação de 4 S (`M3_proprio.abs_d_g`); na GV3b, sem o tédio do enjoo, um teto do termo.
+- A parte do peso da unidade de olhar não se lê nos `vidas.tar.gz`: a sonda não gravou os termos (`M4`).
+
+**O que isso diz das H5 e H4 (só as frases da seção 4 do plano):**
+- **H5.** Que a saída da TV seja a regra (0,699 e 0,864 dos pares saem para outra ação, `M2_proprio.pares.juntas.sai`) é o que a H5 prevê
+  na seção 2 ("o pet sai da TV pelos drives"). Que a ordem de dif_fica acompanhe Δ_I, também nas réplicas em que o pet viu as duas
+  (`M2_proprio.spearman_di_dif_fica_so_ambas`), não é o que a H5 prevê na seção 2 (que a diferença entre as duas TVs na chance de ficar
+  seja pequena mesmo ali). O Spearman lê a ordem, não o tamanho: o tamanho de dif_fica por pet não é medida deste plano, e a parte do peso
+  (a H5 como escrita) segue sem medida (`M4`, GVN-2b).
+- **H4.** Que a olhada seja curta (cerca de 2,4 e 1,7 saídas por réplica válida, e 3,39 e 1,95 pares por réplica válida no próprio,
+  `M1_proprio.saidas.media`, `M2_proprio.pares_por_replica_valida_medio`) é o que a H4 prevê na seção 2 ("as olhadas raras e curtas").
+
+**As ressalvas:** a leitura foi escolhida depois dos dois resultados e não tem correção para comparações múltiplas; o "viu as duas"
+condiciona num comportamento (a ressalva da seção 3); o M3 usa o agrado do início da janela e, na GV3b, não tem o tédio; os pares de um pet
+vêm de réplicas do mesmo dia e não são independentes. **Nenhuma alegação de novidade.**
