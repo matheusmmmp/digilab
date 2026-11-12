@@ -134,10 +134,10 @@ D-GV-GV3B-12). Este registro é completado num commit próprio por cima do commi
 - **Os sha256** (o conteúdo no commit do código):
   - o orquestrador `experiments/run_v3_gosto_visual.py`: `00291ed9e35689a873ef21c0b4e498c0b12aa9578e82ec1acc123c5bd1e07253`;
   - a sonda `experiments/sonda_duas_tvs.py`: `45b012ae22f0fcffae85f3f6303f75e0f65759e3a188afd369148935f26e7cd2`;
-  - o `digilab/mundo.py` (o `ligar_duas_tvs` com a exceção): `c31c344c59d32af93d2a3f3abe5f7e2715175a0e6a752f9930f7d7cf5d9e64a1`;
+  - o `digilab/mundo.py` (o `ligar_duas_tvs` com a exceção): `4d2d5c99a9589809da248adc31c8aaeb9252869cd0a8b969bd94fc3554c34080`;
   - o `digilab/tv.py` (a `DuasTVsSemLugar`): `d60f67fb2c99f4cb4d80fbc8404575d4c80f41448a9ccd4c07ac9cd8d616c9fc`;
   - o `digilab/metrics.py` (sem mudança desde o adendo 1): `7d6eed8b6f4134bde4b37f367fef1d256fdc9b73b8cfcd9c834c544d2b0d94fd`;
-  - o `digilab/config.py`: `75c14ef3a6c6f8e4668823b06206110846d57ec7f66a750228b1abd501bd8c92` (mudou desde o adendo 1 pelos merges da
+  - o `digilab/config.py`: `e447611b0757f5e59c803a0af333f62902840335735fed8f4f4af3c5e3de021d` (mudou desde o adendo 1 pelos merges da
     `main` de outras frentes; este adendo não o toca, e a `ConfigEnjooTela` e a `ConfigDuasTVs` são as mesmas: o `meta.json` grava a
     config do enjoo inteira);
   - o `digilab/corpo.py` (sem mudança desde o adendo 1): `ff5c36adf0e6ec91deca50195a7da203f41c94a7efc5f5ec68e70981467591e5`;
@@ -177,3 +177,5 @@ recomendação e vai ao Matheus no PR.
 | **GV3B2-7** | A exceção `DuasTVsSemLugar`, um `RuntimeError` com a mensagem de antes, e só ela tratada pela regra nova. | **Sim**: quem não trata o caso falha como antes, e nenhum outro erro vira "sem sonda". | Pegar um `RuntimeError` qualquer esconderia outro erro como réplica sem lugar. |
 
 **Atualização antes da primeira vida (2026-11-12, D-GV-GV3B2-11).** O merge da `main` com o #883 (a TV no jogo, a v35 e a v36) mudou `digilab/mundo.py` (a656fd5d → c31c344c), `digilab/tv.py` (0e9f2041 → d60f67fb), `digilab/config.py` (74bbe7fa → 75c14ef3), `digilab/corpo.py` (ed198a4a → ff5c36ad). As mudanças do #883 ficam atrás da `ConfigTVJogo`, que está desligada, e os gabaritos dele (`tests/test_gabarito_tv_jogo.py` e os do gosto visual e do enjoo) confirmam que as vidas de hoje saem iguais byte a byte. Os sha256 acima são os do código que vai rodar.
+
+**Segunda atualização antes da primeira vida (2026-11-12).** O merge do #892 (COOPERACAO, CO7) mudou de novo `digilab/mundo.py`, `digilab/config.py`, por mecânicas de outra frente atrás das chaves dela. Daqui em diante, os sha256 que valem para cada execução são os que o orquestrador grava no `meta.json` do piloto e da run, junto com o `git_head`; esta seção registra os do último merge antes do PR.
