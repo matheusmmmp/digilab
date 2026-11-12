@@ -208,5 +208,5 @@ export function montarCantinho(ilha: Ilha, rota: (de: Ponto, para: Ponto) => Pon
   const yTv = ilha.altura(p.tv[0], p.tv[1]), R = CAIXA_TV.raio;
   const caixa = { min: [p.tv[0] - R, yTv, p.tv[1] - R], max: [p.tv[0] + R, yTv + ENFEITES_MODELOS.tv.altura, p.tv[1] + R] } as const;
   const centro: Ponto = [(p.tv[0] + p.assento[0]) / 2, (p.tv[1] + p.assento[1]) / 2];
-  return { grupo, ida, ligada: () => TV.ligada, pontos: p, caixa, centro, painelAberto: painelTvAberto, pose, quadro, carregarTela, dispose };
+  return { grupo, ida, ligada: () => TV.ligada && TV.petVai, pontos: p, caixa, centro, painelAberto: painelTvAberto, pose, quadro, carregarTela, dispose };
 }

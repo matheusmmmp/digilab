@@ -246,6 +246,19 @@ depois o enjoo vira tédio. O "adorando" pede o interesse alto. O estado guardad
 Uma imagem parada por 30 min termina em "enjoou", sem voltar a olhar. Testes em `web/app/test/gosto_visual_enjoo.test.ts`. As escolhas
 (D-GV-ENJOO-1 a 7) e o que diverge do Python estão em `docs/registro/2026-11.md`. A P1f e o Python não mudam.
 
+## A captura ligada ao cérebro no jogo (2026-11-12, Claude Code, Opus 5.5, branch `v3-gosto-visual-cerebro`)
+
+O pedido do Matheus: "Quero ligar a captura ao cerebro" (a D-GV-P1f-6).
+- **A v32:** o ovo de um pet só nasce v32, a v27 com a TV no cérebro: o órgão da tela, a TV do jogo no mundo pela fonte "evento" e o
+  modular com o `olhar` e o agrado no corpo.
+- **O registro:** a captura e a TV do jogo do P0 passam pelo `ResumoTela` e entram no registro pelo evento `"st"`, só com os sete níveis.
+  O replay lê o evento. Sem nenhum `"st"`, a vida da v32 é a da v27.
+- **Os painéis:** o painel da TV lê o cérebro, e o do DigiBrain diz "olhar".
+- **O que não muda:** o grupo (v29) e os pets de antes.
+
+As escolhas e as decisões abertas (a TV desligada, a TV no grupo, o gosto do painel, ir até a TV e a junção com a versão do lance da bola, #872) estão em `docs/registro/2026-11.md`,
+D-GV-CEREBRO-1 a 10. Os testes novos estão em `web/app/test/gosto_visual_cerebro.test.ts` e `web/app/e2e/gosto_visual_cerebro.spec.ts`.
+
 ## O enjoo no cérebro do Python (2026-11-12, Claude Code, Opus 5.5, branch `v3-gosto-visual-enjoo-cerebro`)
 
 O conserto D-GV-ENJOO-PY-3, autorizado pelo Matheus ("Pode fazer o conserto do cérebro e fazer o merge"), ficou atrás da `ConfigEnjooTela`,

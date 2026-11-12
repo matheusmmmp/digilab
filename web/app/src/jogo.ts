@@ -119,6 +119,8 @@ export function jogoAtual(): Jogo {
   if (!jogo) throw new Error("jogo nao iniciado");
   return jogo;
 }
+/** o jogo, ou null antes de ele iniciar (o painel da TV e a ligacao do P0 ao cerebro, que tambem rodam nos testes sem jogo) */
+export const jogoSeHouver = (): Jogo | null => jogo;
 const avisar = (): void => { for (const o of ouvintes) o(); };
 
 /** o id do pet do grupo (o save guarda o foco pelo id) */
@@ -309,6 +311,16 @@ export function ouvirOutrasAbas(): () => void {
   return () => removeEventListener("storage", aoMudar);
 }
 
+/** hook: como o useJogo, mas sem o jogo iniciado devolve null em vez de falhar (o painel da TV) */
+export function useJogoSeHouver(): Jogo | null {
+  const [, setRev] = useState(0);
+  useEffect(() => {
+    const o = () => setRev(r => r + 1);
+    ouvintes.add(o);
+    return () => { ouvintes.delete(o); };
+  }, []);
+  return jogo;
+}
 /** hook: a tela redesenha quando o motor muda */
 export function useJogo(): Jogo {
   const [, setRev] = useState(0);

@@ -176,6 +176,13 @@ export class MotorCorpo {
     return { v: vetor(this.estado), tdc: this.estado.tick - this.estado.ultimoCuidado, corpo: this.corpo.receptores() };
   }
 
+  /** a observacao de agora para quem so le (as telas, o painel do DigiBrain, o desejo da tela): a mesma do `observacao`, sem entregar a tela ao
+   *  corpo de novo (D-GV-CEREBRO-7: com a TV, o `sentirAgora` mexe no corpo, no susto e na marca do tick, e uma leitura da tela mudaria o pet
+   *  fora do replay). Sem a TV (todo pet de antes da v32), e a mesma conta do `observacao` */
+  leituraObservacao(): ObservacaoLobos {
+    return { v: vetor(this.estado), tdc: this.estado.tick - this.estado.ultimoCuidado, corpo: this.corpo.receptores() };
+  }
+
   protected conferirSincronia(onde: string): void {
     const leitura = this.corpo.drives();
     const fora = DRIVES.filter((d) => this.estado[d] !== leitura[d]);

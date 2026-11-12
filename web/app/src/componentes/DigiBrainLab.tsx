@@ -18,6 +18,7 @@ const NOME_SONDA: Record<string, string> = {
 };
 const ACAO_INF: Record<string, string> = {
   ocioso: "ficar à toa", dormir: "dormir", comer: "comer", brincar: "brincar", chamar_atencao: "chamar você", explorar: "explorar", emburrar: "emburrar",
+  olhar: "olhar",                                         // a TV no cérebro (a v32): a unidade de olhar (o motor a executa como o ocioso)
 };
 const maiuscula = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
 
@@ -41,6 +42,7 @@ export function rotuloUnidade(chave: readonly [string, string | null, unknown]):
   if (tipo === "vagar") return `${verbo} vagando`;
   if (tipo === "comida") return `${verbo} a comida à vista`;
   if (tipo === "bola") return `${verbo} com a bola`;
+  if (tipo === "tela") return `${verbo} a TV`;
   return verbo;
 }
 const NOME_CONCEITO: Record<NomeConceito, string> = {
