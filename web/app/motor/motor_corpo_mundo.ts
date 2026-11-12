@@ -44,7 +44,8 @@
 import { C } from "./constantes.ts";
 import {
   ATIVIDADE_TELA, CANAIS_TELA, ID_TV, RECEPTOR_NOVIDADE_TELA, TIPO_SENTIDO_TELA, TIPO_TROCAR_CANAL, TV, TVSemChave, conferirConfigTV,
-  lerSentidoTela, lerTrocarCanal, valorSentidoTela, valorTrocarCanal, type ConfigTela, type ConfigTV,
+  lerSentidoTela, lerTrocarCanal, valorSentidoTela, valorSentidoTelaDesligada, valorTrocarCanal, CONFIG_TVJOGO, type ConfigTela, type ConfigTV,
+  type ConfigTVJogo,
 } from "./tv.ts";
 import type { ConfigCorpo, ConfigMundo, ConfigSacudir } from "./constantes.ts";
 import { CCO_CORPO_V11 } from "./corpo.ts";
@@ -107,7 +108,7 @@ export interface OpcoesLacoMundo {
    *  `mundo=` do MotorMundo do Python). Sem ela, o laco e dono do proprio mundo, com a semente do pet: a vida de hoje */
   parteDoMundo?: (op: OpcoesMundo) => Mundo;
   /** o gosto visual (P1f): o orgao da tela no corpo e a TV no mundo, juntos e ligados (a `cfg_tela` e a `cfg_tv` do Python). Sem ela, nada */
-  tela?: { readonly tela: ConfigTela; readonly tv: ConfigTV; readonly enjoo?: ConfigEnjooTela };   // `enjoo`: D-GV-ENJOO-CER
+  tela?: { readonly tela: ConfigTela; readonly tv: ConfigTV; readonly enjoo?: ConfigEnjooTela; readonly tvJogo?: ConfigTVJogo };   // `enjoo`: D-GV-ENJOO-CER; `tvJogo`: D-GV-TVJOGO
   /** o lance do dono (a ConfigLanceDono do Python, `cfg_lance_dono`; TAREFA_V3_BOLA_BRINCAR), desligado: com ele ligado, o Brincar do dono
    *  joga a bola perto do pet, e o cerebro com o gancho `bolaDoDono` recebe o convite e decide no mesmo tick. No grupo, cada pet liga o
    *  mesmo lance no mundo de todos */
@@ -134,6 +135,8 @@ export class MotorCorpoMundo extends MotorCorpo {
   readonly frutaComoComida: boolean;
   /** a TV (P1f): null sem a opcao `tela` (a vida de hoje) */
   readonly tv: TV | null = null;
+  /** a TV no jogo (as decisoes A e D; D-GV-TVJOGO): a TV desligada e o ir ate a TV; desligada sem a opcao */
+  readonly tvJogo: ConfigTVJogo = CONFIG_TVJOGO;
   /** os ticks em que o `novidade_tela` passou do corte (GV-23), derivados */
   readonly novidadesTela: number[] = [];
   private telaAcima = false;
@@ -148,7 +151,9 @@ export class MotorCorpoMundo extends MotorCorpo {
       const { tela, tv } = opcoes.tela;
       if (!tela.ligada || !tv.ligada) throw new TVSemChave("a TV no mundo e o orgao da tela no corpo vao juntos e ligados (espec do P1, secao 8)");
       if (tv.escala !== tela.teto_intensidade) throw new Error(`a escala da TV (${tv.escala}) tem de ser o teto_intensidade da tela (${tela.teto_intensidade})`);
-      if (opcoes.parteDoMundo !== undefined) throw new TVSemChave("a TV (ConfigTV) roda com um pet, fora do grupo");
+      const tj = opcoes.tela.tvJogo ?? CONFIG_TVJOGO;
+      if (typeof tj.desligar !== "boolean" || typeof tj.ir_ate_tv !== "boolean") throw new Error(`ConfigTVJogo com bools: ${JSON.stringify(tj)}`);
+      if (tj.desligar && tv.fonte !== "evento") throw new TVSemChave("a TV desligada (ConfigTVJogo.desligar) e do modo livre gravado (a fonte \"evento\")");
     }
     super(politica, semente, cc, estado, true, opcoes.tela?.tela, opcoes.tela?.enjoo);
     if (!cc.drives_novos) throw new Error("o laco com o mundo e o do regime `corpo` com os drives novos (a novidade e a atividade)");
@@ -173,7 +178,18 @@ export class MotorCorpoMundo extends MotorCorpo {
       if (!(cx < cm.celulas_x && cy < cm.celulas_y)) throw new Error(`a celula da TV ${ctv.celula} fora do mapa (${cm.celulas_x} x ${cm.celulas_y})`);
       const [x, y] = centroDaCelula(ctv.celula, cm);
       if (!this.mundo.comum.seca(x, y)) throw new Error(`a celula da TV ${ctv.celula} e agua`);
-      this.tv = new TV(ctv, semente, x, y);
+      if (opcoes.parteDoMundo === undefined) this.tv = new TV(ctv, semente, x, y);
+      else {
+        /* no grupo (a decisao B, D-GV-TVJOGO-4): a TV e do mundo comum, ligada pelo Grupo, com a mesma config */
+        const comum = this.mundo.comum.tv;
+        if (comum === null || JSON.stringify(comum.cfg) !== JSON.stringify(ctv))
+          throw new TVSemChave("a TV (ConfigTV) no grupo e do mundo comum: o Grupo a liga com a mesma ConfigTV");
+        this.tv = comum;
+      }
+      this.tvJogo = opcoes.tela.tvJogo ?? CONFIG_TVJOGO;
+      if (this.tvJogo.ir_ate_tv) this.mundo.alvoTv = [this.tv.x, this.tv.y];   // o ir ate a TV (D-GV-TVJOGO-3): o centro da TV
+    } else if (opcoes.parteDoMundo !== undefined && this.mundo.comum.tv !== null) {
+      throw new TVSemChave("os pets do grupo com a TV vem com a opcao tela (a TV e do mundo comum)");
     }
   }
 
@@ -203,7 +219,8 @@ export class MotorCorpoMundo extends MotorCorpo {
   private linhasTela(): [number, number, number, number][] {
     const tv = this.tv!, p = this.mundo.pet;
     const dx = tv.x - p[0], dy = tv.y - p[1], d = distancia(dx, dy);
-    if (tv.em(this.mundo.tm(this.estado.tick)) === null || d > this.mundo.raioDaVisao) return [];
+    /* o ir ate a TV (D-GV-TVJOGO-3): o pet sabe onde a TV fica, e a linha dela vai tambem fora do raio (com ela ligada) */
+    if (tv.em(this.mundo.tm(this.estado.tick)) === null || (d > this.mundo.raioDaVisao && !this.tvJogo.ir_ate_tv)) return [];
     return [[ID_TV, dx, dy, d]];
   }
 
@@ -237,15 +254,19 @@ export class MotorCorpoMundo extends MotorCorpo {
   }
 
   /** o modo livre gravado (a fonte "evento"): o que a TV passa a partir de agora; valida antes do log */
-  sentidoTela(fonte: string, niveis: readonly number[]): void {
-    const valor = valorSentidoTela(fonte, niveis);
+  sentidoTela(fonte: string, niveis: readonly number[] | null): void {
+    const valor = niveis === null ? valorSentidoTelaDesligada(fonte) : valorSentidoTela(fonte, niveis);
     this.telaDoDono(...lerSentidoTela(valor));
     this.log.push({ tick: this.estado.tick, tipo: TIPO_SENTIDO_TELA, valor });
   }
 
-  /** o sentido_tela sem o log do laco: so a TV muda (o replay le o evento) */
-  telaDoDono(fonte: string, niveis: readonly number[]): void {
-    this.exigirTv("sentido_tela").sentir(fonte, niveis, this.mundo.tm(this.estado.tick));
+  /** o sentido_tela sem o log do laco: so a TV muda (o replay le o evento). Os niveis null: a TV desligada (D-GV-TVJOGO-1; so com a
+   *  ConfigTVJogo.desligar). No grupo, a TV e do mundo comum: quem aplica e o Grupo (`Grupo.sentidoTela`) */
+  telaDoDono(fonte: string, niveis: readonly number[] | null): void {
+    const tv = this.exigirTv("sentido_tela");
+    if (this.mundo.comum.tv !== null) throw new TVSemChave("o sentido_tela no grupo e do mundo comum: Grupo.sentidoTela");
+    if (niveis === null && !this.tvJogo.desligar) throw new TVSemChave("a TV desligada (sentido_tela `fonte|desligada`) exige a ConfigTVJogo.desligar");
+    tv.sentir(fonte, niveis, this.mundo.tm(this.estado.tick));
   }
 
   // ------------------------------------------------------------ o dono

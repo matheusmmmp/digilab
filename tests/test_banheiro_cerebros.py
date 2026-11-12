@@ -93,8 +93,10 @@ def lobos(cl=CONFIG_LOBOS, cb=CB) -> PoliticaLobos:
 # ================================================================== o enum
 def test_aliviar_no_fim_do_enum_e_as_sete_de_hoje():
     from digilab.events import ACOES_PET_BANHEIRO, ACOES_PET_HOJE
-    assert tuple(AcaoPet)[-1] is AcaoPet.ALIVIAR and AcaoPet("aliviar") is AcaoPet.ALIVIAR
-    assert ACOES_PET_HOJE + ACOES_PET_BANHEIRO == tuple(AcaoPet) and len(ACOES_PET_HOJE) == 7
+    # o ir ate a TV (D-GV-TVJOGO-3) entrou depois do aliviar, no fim do enum
+    from digilab.events import ACOES_PET_TV
+    assert tuple(AcaoPet)[-2] is AcaoPet.ALIVIAR and AcaoPet("aliviar") is AcaoPet.ALIVIAR
+    assert ACOES_PET_HOJE + ACOES_PET_BANHEIRO + ACOES_PET_TV == tuple(AcaoPet) and len(ACOES_PET_HOJE) == 7
     assert lb.ACOES == ACOES_PET_HOJE                       # o cerebro sem o banheiro: as tabelas de sempre
     assert (REGRA_ALIVIO_URGENTE, ALVOS_ALIVIO) == (lb.REGRA_ALIVIO_URGENTE, lb.ALVOS_ALIVIO)
 

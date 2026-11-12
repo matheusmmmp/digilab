@@ -15,7 +15,7 @@ export const NOME_ARQ: Record<string, string> = {
 };
 export const NOME_EST: Record<Estagio | "ovo", string> = { ovo: "Digi-Egg", bebe: "In-Training", crianca: "Rookie", adolescente: "Champion", adulto: "Ultimate", mega: "Mega" };
 export const NOME_STAT: Record<Stat, string> = { vigor: "vigor", folego: "fôlego", recuperacao: "recuperação", forca: "força", mira: "mira", guarda: "guarda" };
-export const NOME_PET: Record<AcaoPet, string> = { ocioso: "à toa", dormir: "dormindo", comer: "comendo", brincar: "brincando", chamar_atencao: "chamando você", explorar: "explorando", emburrar: "emburrado" };
+export const NOME_PET: Record<AcaoPet, string> = { ocioso: "à toa", dormir: "dormindo", comer: "comendo", brincar: "brincando", chamar_atencao: "chamando você", explorar: "explorando", emburrar: "emburrado", ir_tv: "indo até a TV" };
 export const NOME_DONO: Record<string, string> = { atencioso: "atencioso", relapso: "relapso", aleatorio: "aleatório", incoerente: "incoerente" };
 export const NOME_COMB: Record<TracoCombate, string> = { golpe: "Golpe", bloqueio: "Bloqueio", agarrao: "Agarrão", finta: "Finta", carga: "Carga" };
 export const NOME_EXERCICIO: Record<Exercicio, string> = { levantar_pedra: "Levantar pedra", corrida: "Corrida", alvo: "Alvo", esquiva: "Esquiva", meditar: "Meditar", resistencia: "Resistência" };

@@ -34,7 +34,7 @@ describe("o icone do agora no celular", () => {
     expect(s).toContain(`aria-label="${rotuloAgora(vista("uma"), false)}"`);
   });
   test("cada acao do pet tem o seu icone, e a dormindo e a lua (nao a xicara)", () => {
-    expect(Object.keys(ICONE_AGORA).sort()).toEqual(["brincar", "chamar_atencao", "comer", "dormir", "emburrar", "explorar", "ocioso"]);
+    expect(Object.keys(ICONE_AGORA).sort()).toEqual(["brincar", "chamar_atencao", "comer", "dormir", "emburrar", "explorar", "ir_tv", "ocioso"]);   // o ir_tv: a v35 (D-GV-TVJOGO-3)
     expect(ICONE_AGORA.dormir).not.toBe(ICONE_AGORA.ocioso);
   });
 });

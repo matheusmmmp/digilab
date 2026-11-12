@@ -187,7 +187,8 @@ class DigiBrain:
                  semente: int | None = None, cfg_luta_memoria: ConfigLutaMemoria | None = None,
                  cfg_fala: ConfigFalaUnidades | None = None, cfg_olhar: ConfigOlhar | None = None,
                  genoma_visao_ovo: GenomaVisao | None = None, cfg_sono: ConfigSonoSegura | None = None,
-                 cfg_lance: ConfigLanceDono | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None) -> None:
+                 cfg_lance: ConfigLanceDono | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None,
+                 ir_ate_tv: bool = False) -> None:
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         if not self.cd.ligada:
             raise DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada")
@@ -229,6 +230,15 @@ class DigiBrain:
         if self.ce is not None:
             self.enjoo_tv: dict = {}                  # o enjoo lembrado de cada TV, id -> [0, S]
             self.k_enjoo_lembrado = ganho_de_tau(self.ce.tau_enjoo_lembrado, self.cfg.intervalo_decisao_ticks, self.S)
+        # o ir ate a TV (a decisao D, D-GV-TVJOGO-3; so com a subchave `olhar`): a unidade de olhar de uma TV fora do raio da visao vai ao
+        # motor como o IR_TV (o pet anda ate ela); a do raio, como hoje, o ocioso. Desligado, uma linha longe falha alto no M-SENS
+        if type(ir_ate_tv) is not bool:
+            raise TypeError(f"ir_ate_tv e bool: {ir_ate_tv!r}")
+        self.ir_ate_tv = ir_ate_tv
+        if ir_ate_tv:
+            if not self.cd.olhar:
+                raise ValueError("o ir ate a TV (D-GV-TVJOGO-3) so com a subchave olhar")
+            self.m.sens.ligar_ir_ate_tv()
         self._telas: list | None = None               # o olhar (P1d): as TVs a vista entregues pelo motor para a decisao seguinte
         self._olhando = None                          # o id da TV da unidade de olhar da ultima decisao (None: nao olha)
         self._lutas: list[dict] = []                  # os resumos desde a decisao anterior (so com a luta_memoria)
@@ -301,6 +311,8 @@ class DigiBrain:
             corridas = [{"b": c["b"], "inicio": c["inicio"], "n": c["n"], "r": c["r"]} for c in fechadas]
             creditos += [x for x in (m.plast.creditar(c) for c in fechadas) if x is not None]
         intencao = intencao_da_unidade(unidade)
+        if self.ir_ate_tv and unidade["chave"][0] == COMPORTAMENTO_OLHAR and m.sens.longe(unidade["objeto"]):
+            intencao = Intencao(AcaoPet.IR_TV)        # a TV fora do raio (D-GV-TVJOGO-3): o pet anda ate ela, sem alvo do motor
         urg = afeto["urgencias"]
         self.motivos.append({
             "k": k, "acao": intencao.acao.value, "escolha": chave_json(unidade["chave"]), "tipo_escolha": unidade["tipo"],
@@ -342,7 +354,7 @@ class DigiBrain:
         if self.cl.ligada:                            # o lance do dono (BB-4): desligada, nenhum campo novo
             self.motivos[-1]["lance"] = lance
         if cd.olhar:                                  # o olhar (P1d): desligada, nenhum campo novo
-            self._olhando = unidade["chave"][2] if unidade["chave"][0] == COMPORTAMENTO_OLHAR else None
+            self._olhando = unidade["chave"][2] if unidade["chave"][0] == COMPORTAMENTO_OLHAR and intencao.acao is AcaoPet.OCIOSO else None
             self.motivos[-1]["olhar"] = {**olhar, "olha": self._olhando}
         self._pendencia = {"k": k, "intencao": intencao, "unidade": unidade, "sens": sens, "g_apr": afeto["g_apr"], "pediu": False,
                            "alvo": None, "corpo": None, "transicao": None, "mundo": None}
@@ -384,7 +396,7 @@ class DigiBrain:
         niveis = sens["tela_niveis"]
         a = a_inato = None
         gosto = {}
-        visivel = any(o["id"] == self._olhando for o in sens["telas"])
+        visivel = any(o["id"] == self._olhando and not self.m.sens.longe(o) for o in sens["telas"])
         leu = self._olhando is not None and visivel and niveis is not None
         if self.ce is not None:                       # o enjoo (D-GV-ENJOO-CER): o lembrado cai; o da TV olhada vira o lido agora
             for ident in sorted(self.enjoo_tv):
@@ -600,7 +612,8 @@ class DigiBrain:
             raise RuntimeError("a consequencia sem o corpo ou sem o mundo de depois")
         ocorrido = p["mundo"][0] if p["mundo"] is not None else None
         recs = m.sens.receptores
-        olhou = self.cd.olhar and p["unidade"]["chave"][0] == COMPORTAMENTO_OLHAR
+        # o ir ate a TV (D-GV-TVJOGO-3): a opcao de olhar executada como o IR_TV nao olhou (sem agrado, sem exposicao e sem o P1 da tela)
+        olhou = self.cd.olhar and p["unidade"]["chave"][0] == COMPORTAMENTO_OLHAR and acao is AcaoPet.OCIOSO
         gv = olhar = None
         if olhou:                                     # o olhar (P1d): o agrado do nivel de depois, contra o alvo de antes da exposicao
             niveis = m.sens.niveis_tela(pc1)

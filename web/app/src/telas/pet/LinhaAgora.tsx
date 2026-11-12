@@ -2,7 +2,7 @@
    So le o motor: a acao de agora (Motor.acao, o texto de NOME_PET) e o porque do cerebro A (a leitura da ultima decisao, a mesma do
    painel DigiBrain). Os textos da regra e da acao sao os do painel (REGRA_TXT, ACAO_CURTA); a linha nao inventa frase do pet. A marca
    de "aprendido" so aparece quando o aprendido mudou a escolha (quem_decidiu.mudou); o neutro e silencio. */
-import { Angry, ChevronRight, Coffee, Compass, Drumstick, Megaphone, Moon, Music, type LucideIcon } from "lucide-react";
+import { Angry, ChevronRight, Coffee, Compass, Drumstick, Megaphone, Moon, Music, Tv, type LucideIcon } from "lucide-react";
 import { useEffect, useMemo, useRef, type ReactNode } from "react";
 import { FATORES_TXT, NOME_PET, leituraDecisao, type AcaoPet, type LeituraDecisao, type MotivoVida, type Motor } from "../../../motor/index.ts";
 import { BotaoMovel } from "../../componentes/BotaoMovel.tsx";
@@ -100,7 +100,7 @@ export function LinhaAgora({ aoAbrir, aberto, sobPainel = false }: { aoAbrir?: (
 /** o icone de cada acao do pet (M1-5; PROPOSTO, desenho do ux-designer): a nota e a carne repetem os emotes da cena (cenaAcao.ts). O Record deixa
     o tsc acusar uma acao nova do motor sem icone */
 export const ICONE_AGORA: Record<AcaoPet, LucideIcon> = {
-  ocioso: Coffee, dormir: Moon, comer: Drumstick, brincar: Music, chamar_atencao: Megaphone, explorar: Compass, emburrar: Angry,
+  ocioso: Coffee, dormir: Moon, comer: Drumstick, brincar: Music, chamar_atencao: Megaphone, explorar: Compass, emburrar: Angry, ir_tv: Tv,
 };
 /** a linha do agora abaixo de 900 px: so o icone, sem texto (o nome acessivel e o mesmo da linha). Com `aoAbrir` e um botao que abre o DigiBrain;
     sem ele (os detalhes do pet desligados, M1-11), so desenho. O caso "aprendido" e ciano tracejado; "sem motivo", um "?" no canto */
