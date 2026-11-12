@@ -92,3 +92,32 @@ def test_a_faixa_principal_so_com_o_registro():
     with pytest.raises(SystemExit):
         rb.checar_faixa([91201], None)
     rb.checar_faixa([91201], "abc1234")
+
+
+def _med(p1, op=4, k=(100.0,), p3=0.03, pa=None):
+    pa = pa if pa is not None else p1
+    fav = None if p1 is None else round(p1 * op)
+    return {"P1": p1, "P1_oportunidades": 0 if p1 is None else op, "P1_favoraveis": fav or 0,
+            "P1_por_pet": {"A": {"oportunidades": 0 if pa is None else op, "favoraveis": 0 if pa is None else round(pa * op)},
+                           "B": {"oportunidades": 0, "favoraveis": 0}},
+            "P2": 0.5, "P3": {"A": p3, "B": p3}, "P4": {"contencao": 1, "encostar": 0, "disputa_anti": 0},
+            "P5": {"A": {"k_medio": {"crianca": k[0]}, "no_limiar": 0.0}, "B": {"k_medio": {}, "no_limiar": 0.0}}, "P6": 0.1}
+
+
+def test_a_analise_aplica_a_regra_escrita_antes():
+    """dados feitos a mao: o B1 com +0,5 na P1, a dose em escada, o A com k e P1 maiores no B1 que no RM, o custo igual"""
+    import analisar_v3_cooperacao_bancada as an
+    por = {}
+    for s in range(40):
+        por[s] = {"B0": _med(0.0), "B1": _med(0.5, k=(300.0,)), "D0": _med(0.0), "DM": _med(0.25), "RM": _med(0.25, k=(100.0,)),
+                  "B1E": _med(0.5), "B1U": _med(0.0), "B1A": _med(0.0)}
+    r = an.analisar(por)
+    assert r["H-EMERGE"]["leitura"] == "CONFIRMA" and abs(r["H-EMERGE"]["diferenca"] - 0.5) < 1e-9
+    assert r["H-DOSE"]["leitura"] == "CONFIRMA" and r["H-DOSE"]["ordem"]
+    assert r["H-REP"]["leitura"] == "CONFIRMA"
+    assert r["H-CUSTO"]["leitura"] == "CONFIRMA"
+    assert r["R-ESCUDO"]["B1E"]["diferenca_P1_contra_B0"] == 0.5 and r["R-ESCUDO"]["B1U"]["diferenca_P1_contra_B0"] == 0.0
+    poucos = {s: por[s] for s in range(10)}
+    assert an.analisar(poucos)["H-EMERGE"]["leitura"] == "INCONCLUSIVO POR PREMISSA"
+    iguais = {s: {**por[s], "B1": _med(0.0)} for s in range(40)}
+    assert an.analisar(iguais)["H-EMERGE"]["leitura"] == "NAO CONFIRMA"
