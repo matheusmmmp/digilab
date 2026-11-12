@@ -780,3 +780,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-12 — CONTA: as RC-5 a RC-8 do roadmap decididas pela recomendação (Claude Code, Opus 5.5, branch `v3-conta-roadmap-dev`)](registro/2026-11.md)
 - [2026-11-12 — COOPERACAO: o adendo 1 do plano da bancada, o mecanismo (Claude Code, Opus 5.5, branch `v3-cooperacao-bancada-ad1`)](registro/2026-11.md)
 - [2026-11-12 — COOPERACAO: o adendo 1 aprovado e o código dele, A1-CB1 (Claude Code, Opus 5.5, branch `v3-cooperacao-a1cb1`)](registro/2026-11.md)
+- [2026-11-12 — COOPERACAO: o piloto e o registro da análise do adendo 1, A1-CB2 e A1-CB3 (Claude Code, Opus 5.5, branch `v3-cooperacao-a1cb23`)](registro/2026-11.md)
+- [2026-11-12 — COOPERACAO: as vidas e o resultado do adendo 1, A1-CB4 (Claude Code, Opus 5.5, branch `v3-cooperacao-a1cb4`)](registro/2026-11.md)

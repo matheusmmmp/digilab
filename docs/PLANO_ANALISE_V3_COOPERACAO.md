@@ -5,7 +5,8 @@ recomendação. Os números continuam PROPOSTOS.
 **Rodado em 2026-11-12 (CB4):** H-EMERGE e H-DOSE NÃO CONFIRMAM, H-REP INCONCLUSIVO POR PREMISSA, H-CUSTO CONFIRMA; o
 descritivo está em `docs/futuro/cooperacao_bancada_resultado.md` (D-CB-15).
 **O adendo 1 (seção 12) está DECIDIDO pelo Matheus em 2026-11-12** ("Aprovo todas"): o mecanismo, com um irmão aleatório que provoca a
-situação; as AD1-1 a AD1-6 estão decididas pela recomendação. **Nenhuma vida deste plano roda antes de cinco coisas:**
+situação; as AD1-1 a AD1-6 estão decididas pela recomendação. **Rodado em 2026-11-12 (A1-CB4):** A1-EMERGE e A1-DOSE NÃO
+CONFIRMAM, A1-CUSTO CONFIRMA (D-CB-27). **Nenhuma vida deste plano roda antes de cinco coisas:**
 1. este cabeçalho com a marca "APROVADO pelo Matheus" (feito);
 2. a CO6 e a CO7 na `main` (`docs/ESPEC_V3_COOPERACAO_CO6.md` e `docs/ESPEC_V3_COOPERACAO_CO7.md`), com os testes G-ESCUDO,
    G-RECEPTOR-SOCIAL e G-PAR-CO7 verdes;
