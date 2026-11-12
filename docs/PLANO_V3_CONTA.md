@@ -1,8 +1,8 @@
 # Plano da conta: login, save na nuvem, proteção e servidor (2026-11-11)
 
 **Status:** sem código. As decisões **CN-1 a CN-10 estão DECIDIDAS** pelo Matheus em 2026-11-11, como estão (seção 12); a **CN-11 e a CN-12**
-(a monetização, seção 13) estão **DECIDIDAS** em 2026-11-11, na leitura do registro (D-CONTA-10); a **CN-13 e a CN-14** continuam
-**PROPOSTAS**.
+(a monetização, seção 13) estão **DECIDIDAS** em 2026-11-11, na leitura do registro (D-CONTA-10); a CN-12 foi revista em 2026-11-12 para pôr o anúncio
+que destrava a função paga (D-CONTA-13); a **CN-13 e a CN-14** e as **CN-15 a CN-18** (os detalhes dos anúncios) continuam **PROPOSTAS**.
 Todo número deste plano é **PROPOSTO, SEM FONTE**, salvo onde a fonte está dita. Os custos são **estimativas**: saem da tabela de preços
 do `servidor/fala_llm.py` e de preços públicos que este plano não conferiu, e se conferem na etapa CN5, antes de contratar qualquer coisa.
 
@@ -214,7 +214,7 @@ medido na VPS.
 | **CN4: a proteção** | o `robots.txt`, a borda na Cloudflare, os assets por URL assinada, a cota da fala, o Turnstile | CN1 (a cota da fala, CN2) |
 | **CN5: a hospedagem de teste** | o domínio, a VPS, o R2, o deploy pelo CI, o backup, o painel; os custos da seção 7 conferidos com os preços do dia | CN1 a CN4; o Matheus contrata |
 | **CN6: abrir** | as páginas públicas (tela 6), os termos e a privacidade; a revisão da LGPD; só depois, fora dos convidados | CN5, a revisão |
-| **CN7: o apoio** (CN-11 e CN-12 DECIDIDAS) | a seção 13.4: o processador, a tabela `apoios`, as telas da assinatura e do apoio e as páginas de venda; a doação pode vir antes, sem código, por um link | CN6, CN-11 a CN-14 |
+| **CN7: o apoio** (CN-11 e CN-12 DECIDIDAS) | a seção 13.4: o processador, a tabela `apoios`, as telas da assinatura e do apoio e as páginas de venda; o anúncio da voz (seção 13.7.5) e a medida do eCPM real; a doação pode vir antes, sem código, por um link | CN6, CN-11 a CN-14 |
 
 O MMO segue as etapas dele sobre esta base: a MMO3 (o envio e a conferência) depois da CN2.
 
@@ -265,7 +265,8 @@ e sem mudança: "E sobre a questão do PR859, eu aprovo as decisões ali e eu qu
   alto, se abrir para crianças sem a revisão.
 
 **A CN-11 e a CN-12 estão DECIDIDAS** pelo Matheus em 2026-11-11: "Eu aceito aquela questão do MMO, que entra como VPS de teste como convidado, e a parte do save. E eu também concordo com as questões de monetização, de nunca ser [gacha] e tudo mais, apenas para pagar o serviço prestado no quesito de processamento. Então, um apoiador e um plano de assinatura nessa questão. E a loja de bits, os bits não são vendidos, né? [...] Vão ser apenas cosméticos e coisas assim."
-**A CN-13 e a CN-14 continuam PROPOSTAS.**
+**A CN-12 foi revista** pelo Matheus em 2026-11-12, para pôr o anúncio que destrava a função paga (seção 13.7): "Vamos botar plano de assinatura e daí propagandas. Por exemplo, a partir de tantos consumos no chat, solta um vídeo, um ad, daí a gente consegue manobrar dessa maneira." e "o usuário consegue escapar de jogar o jogo sem ter que participar ativamente de nenhuma propaganda, quase. E daí apenas se ele quiser usar uma feature que é paga e daí consome do meu dinheiro, ele tem que assistir uma propagandinha."
+**A CN-13 e a CN-14 continuam PROPOSTAS, e as CN-15 a CN-18 (os detalhes dos anúncios) também.**
 
 - **CN-11. Reabrir o "sem dinheiro real, nunca": DECIDIDA, reaberta só para o apoio,** para pagar o serviço (o processamento: o
   servidor e a fala). Os Bits continuam sem venda e se ganham só jogando; o gacha, a caixa de prêmio e a venda de stats, chips, tempo ou
@@ -274,8 +275,10 @@ e sem mudança: "E sobre a questão do PR859, eu aprovo as decisões ali e eu qu
   13.1), mantendo no "nunca" a venda de Bits, de stats, de chips, de tempo e de vantagem no ranking, e o gacha e a caixa de prêmio. A outra
   opção é manter a regra como está. Custo de errar: alto. Vender vantagem desfaz a M-2 e o ranking (MMO-7); manter o "nunca" deixa o
   custo da seção 7 todo com o Matheus.
-- **CN-12. O modelo: DECIDIDA como o apoio + a assinatura "Apoiador"** (seção 13.2, linhas B e D, a linha H), **sem enfeites
-  avulsos por dinheiro e sem anúncios.** O que o apoiador recebe são cosméticos (os enfeites e o selo da tabela 13.1) e a cota maior de
+- **CN-12. O modelo: DECIDIDA como o apoio + a assinatura "Apoiador" + o anúncio que destrava a função paga** (revista em
+  2026-11-12; seção 13.3, a linha J, e seção 13.7), **sem enfeites avulsos por dinheiro.** O jogo fica "quase" sem anúncio: o vídeo só
+  aparece para quem quer usar uma função que custa ao Matheus (a voz pela LLM), e o assinante não vê vídeo. Na versão de 2026-11-11,
+  era sem anúncios (a linha H). O que o apoiador recebe são cosméticos (os enfeites e o selo da tabela 13.1) e a cota maior de
   fala. A proposta era o híbrido apoio + cosméticos (a assinatura "Apoiador" e os enfeites avulsos, linha E), sem
   anúncios. A outra opção mais simples é só a doação (linha D). Custo de errar: médio. Os anúncios rendem pouco nesta escala, pioram a
   ilha e trazem a questão dos menores; a assinatura sem nada que se veja vende pouco.
@@ -284,6 +287,23 @@ e sem mudança: "E sobre a questão do PR859, eu aprovo as decisões ali e eu qu
   fiscal e o suporte para dez pessoas.
 - **CN-14. A formalização:** o recebimento por um processador com Pix e cartão (Mercado Pago ou Stripe) e **a conversa com um contador
   antes do primeiro real** (pessoa física ou CNPJ, o imposto). Custo de errar: alto, se receber sem ver o imposto.
+- **CN-15. O formato do anúncio da voz:** **o recompensado, pedido pelo jogador** ("ver um vídeo para mais falas"), nunca entrando
+  sozinho no meio da conversa. A outra opção é o vídeo que entra sozinho depois de tantas falas (o intersticial). Custo de errar: médio.
+  O vídeo que entra sozinho corta a conversa com o pet, o momento mais pessoal do jogo; o recompensado é, pela definição do Google, o
+  anúncio que o jogador escolhe ver.
+- **CN-16. A conta da voz:** **5 falas pela LLM grátis por dia, para conhecer a voz; depois, 1 vídeo libera 10 falas, até as 30 por dia
+  da CN-8; o assinante não vê vídeo e tem 150 por dia** (PROPOSTO, SEM FONTE). Sem vídeo, a fala segue pelo template, de graça. **A
+  proporção só fecha com a voz no Haiku 5.5** (seção 13.7.4). Muda a CN-8 só no modo de liberar as 30 falas, não no teto. Custo de errar:
+  médio. Falas demais por vídeo dão prejuízo; de menos, ninguém usa a voz.
+- **CN-17. A rede:** **o Google H5 Games Ads (a Ad Placement API) como primeira opção, o AppLixir como a outra**, as duas a conferir na
+  CN7: a aprovação (a do Google é um beta fechado, por pedido), a confirmação do vídeo visto, o consentimento e a regra de conteúdo.
+  Custo de errar: médio. Uma rede que recusa o site, ou que não confirma o vídeo, deixa a voz aberta para quem edita o cliente.
+- **CN-18. As outras posições de anúncio (seção 13.7.3):** **recomendo só a P1 (a voz) agora.** A P2 (um vídeo a cada 3 lutas, no
+  máximo 1 a cada 3 minutos) é a opção que o Matheus levantou e rende uns US$ 7 por mês com 100 jogadores por dia e uns US$ 67 com 1 000
+  (o cenário central); ela fica pronta para ligar depois, atrás de uma chave, se a conta não fechar. As P3 (ao abrir o jogo) e P4 (o
+  banner nos menus) não, porque põem o anúncio no jogo todo; a P5 (um enfeite por um dia) só se valer a pena depois. **Nunca:** o
+  anúncio que dá Bits, kit, cura, reviver, stats ou qualquer vantagem (a M-2 e o MMO-7), nem na cena da evolução, no ovo, no sono ou
+  durante a luta. Custo de errar: médio. Cada posição a mais tira o "quase sem anúncio" que o Matheus pediu, por pouco dinheiro.
 
 ## 13. A monetização
 
@@ -304,6 +324,7 @@ referências verificadas. Servem para a ordem de grandeza, não para um orçamen
 | **os enfeites da ilha** só do apoio, que vêm com a assinatura (o padrão cartoon, só objetos da ilha); não se vendem avulsos (CN-12) | **stats, chips, itens de luta, tempo** (pular espera, acelerar além do de hoje) |
 | **a voz:** uma cota maior de falas pela LLM (a CN-8 dá 30 por dia; o apoiador, mais) | **vantagem no ranking**: o MMO-7 continua; quem paga e quem não paga lutam igual |
 | **o selo de apoiador** no perfil | **o gacha, a caixa de prêmio**, qualquer sorteio pago |
+| **o anúncio recompensado**, só para destravar uma função que custa (a voz pela LLM; CN-12, seção 13.7) | **o anúncio que dá Bits, kit, cura, stats ou vantagem**, e o anúncio no meio do cuidado, da luta, da evolução, do ovo ou do sono |
 | | **acréscimo no desenho do Digimon** (a regra "poses sem acréscimos") |
 | | **cobrança de criança**: só adultos pagam (a CN-10) |
 
@@ -325,7 +346,8 @@ As premissas (PROPOSTAS, SEM FONTE):
 | **C** | **enfeites avulsos** | US$ 0,01 a 0,03 por jogador por dia (bem abaixo da faixa dos jogos casuais, que compram tráfego e têm uma loja inteira) | US$ 30 a 90 | US$ 300 a 900 |
 | **D** | **doação** (Apoia.se, Ko-fi, Catarse) | 0,5 % a 1 % dos jogadores do mês, US$ 5 por mês | US$ 12 a 25 | US$ 125 a 250 |
 | **E** | **híbrido B + C** (a recomendação da CN-12, não escolhida) | as duas linhas juntas | US$ 50 a 150 | US$ 500 a 1 500 |
-| **H** | **apoio: B + D** (**o DECIDIDO**, CN-12) | a assinatura e a doação juntas | US$ 32 a 85 | US$ 325 a 850 |
+| **H** | **apoio: B + D** (o decidido em 2026-11-11, revisto) | a assinatura e a doação juntas | US$ 32 a 85 | US$ 325 a 850 |
+| **I** | **o anúncio que destrava a voz** (a P1 da seção 13.7) | a conta da seção 13.7, que já sai líquida | ver 13.3 | ver 13.3 |
 | **F** | **jogo pago** (compra única) | não se compara por jogadores por dia: depende de quantos chegam novos por mês | — | — |
 | **G** | **um portal** (Poki, CrazyGames) | o portal traz jogadores e paga uma parte dos anúncios (40 % a 60 %, sem número público confiável) | muda o número de jogadores, não a conta por jogador | |
 
@@ -337,7 +359,10 @@ A receita líquida tira as taxas de 13.2. Os custos são os da seção 7: a infr
 |---|---|---|
 | **custo**, com a fala no `claude-haiku-5-5` | US$ 13 a 18 | US$ 77 a 98 |
 | **custo**, com a fala no `claude-haiku-4-5` (o padrão de hoje) | US$ 67 a 72 | US$ 617 a 638 |
-| **H (o decidido: assinatura + doação)**, a receita líquida | US$ 26 a 68 | US$ 260 a 680 |
+| **I (o anúncio da voz, a P1)**, a receita líquida (seção 13.7.3) | US$ 3 a 6 | US$ 26 a 58 |
+| **J (o decidido: H + I)**, a receita líquida | US$ 29 a 74 | US$ 286 a 738 |
+| **J, o lucro**, fala no Haiku 5.5 | **uns US$ 11 a 61** | **uns US$ 188 a 661** |
+| **H (assinatura + doação, sem anúncio)**, a receita líquida | US$ 26 a 68 | US$ 260 a 680 |
 | **H, o lucro**, fala no Haiku 5.5 | **uns US$ 8 a 55** | **uns US$ 160 a 600** |
 | **H, o lucro**, fala no Haiku 4.5 | **uns −US$ 46 a +US$ 1** | **uns −US$ 380 a +US$ 60** |
 | **E (híbrido)**, a receita líquida | US$ 40 a 120 | US$ 400 a 1 200 |
@@ -347,7 +372,10 @@ A receita líquida tira as taxas de 13.2. Os custos são os da seção 7: a infr
 | **D (só doação)**, o lucro, fala no Haiku 5.5 | **uns −US$ 8 a +US$ 7** | **uns US$ 2 a 123** |
 
 **A leitura:**
-- **O decidido (H) é o "pagar o serviço" que o Matheus pediu:** com 100 por dia, empata ou sobra pouco, se a fala for no Haiku 5.5;
+- **O anúncio da voz (I) quase não muda o lucro** (uns US$ 3 a 6 por mês com 100 jogadores por dia; uns US$ 26 a 58 com 1 000). O
+  que ele faz é outra coisa: **a voz de quem não paga deixa de sair do bolso do Matheus**, porque cada vídeo paga as falas que libera
+  (seção 13.7.4). O lucro continua vindo da assinatura.
+- **A conta do H, sem o anúncio, já era o "pagar o serviço" que o Matheus pediu:** com 100 por dia, empata ou sobra pouco, se a fala for no Haiku 5.5;
   com 1 000 por dia, paga tudo e sobra umas centenas de dólares. Com o Haiku 4.5, dá prejuízo nos dois tamanhos. **A escolha do modelo
   da voz e a cota da fala são o que segura a conta.**
 - **Com 100 jogadores por dia, nenhum modelo dá renda.** No melhor caso, paga o servidor e sobra pouco. A doação e os
@@ -389,11 +417,98 @@ em 2026-11-11:
 | **os sprites e os nomes do Digimon** | o jogo usa o desenho do Digimon UP com o crédito (a regra 5.1 das `docs/UI_GUIDELINES.md`); cobrar por um jogo com uma marca de outra empresa muda o tamanho do risco, mesmo que só os enfeites próprios sejam vendidos | **vai na conversa da CN-14**, com quem entende de direito autoral, antes do primeiro real. Este plano não é parecer jurídico |
 | **a criança paga** | uma compra sem o responsável | só adultos pagam (a CN-10); o processador pede o titular |
 | **o imposto e o reembolso** | uma cobrança sem nota, um pedido de reembolso sem regra | a CN-14; os termos de venda; o arrependimento de 7 dias |
+| **o vídeo pulado** | quem edita o cliente diz que viu o vídeo e ganha as falas | a fala extra só sai com a confirmação da rede do lado do servidor (CN-17); sem ela, o prejuízo é o custo das falas, pequeno no Haiku 5.5 |
+| **a rede recusa o site** | as redes pedem que o site tenha os direitos do que mostra; o jogo usa o desenho do Digimon UP | entra na conversa da CN-14, junto com o risco dos sprites; conferir a regra de conteúdo da rede na CN7, antes de pedir a aprovação |
+| **o consentimento** | a rede usa cookies e identificadores para o anúncio | o aviso de consentimento antes do primeiro vídeo, recusável; sem consentimento, o anúncio não personalizado (que paga menos) ou o template |
+| **o eCPM real é outro** | os números da seção 13.7 são de aplicativos de celular e de fornecedores; a web e o Brasil podem pagar menos | a CN7 mede o eCPM de verdade no painel da rede, com os convidados, antes de ligar outra posição |
+
+### 13.7 Os anúncios: a análise por posição
+
+**A regra (CN-12, revista em 2026-11-12):** o jogo fica "quase" sem anúncio. Cuidar, lutar, andar pela ilha, ver a evolução e falar
+pelo template não pedem vídeo. **O vídeo aparece para quem quer uma função que custa dinheiro ao Matheus**: hoje, a voz pela LLM. O
+assinante nunca vê vídeo. As outras posições desta seção são **análise**, para decidir na CN-18.
+
+#### 13.7.1 A conta
+
+**receita líquida por mês = jogadores por dia × fração que passa pela posição × vídeos por dia de quem passa × preenchimento × 30 ×
+eCPM ÷ 1 000 × 0,9**
+
+- **eCPM:** quanto o editor recebe por mil anúncios exibidos (seção 13.7.2, com a fonte de cada número);
+- **preenchimento:** a fração dos pedidos de anúncio que a rede atende. **0,8, PROPOSTO, SEM FONTE** (nenhuma fonte pública lida dá
+  esse número para a web);
+- **0,9:** o imposto da seção 13.2 (a rede já entrega o líquido dela; o imposto real é da CN-14);
+- **o público:** o jogo é em português, então a conta usa os números do Brasil e da América Latina, não os dos Estados Unidos, que pagam
+  de 5 a 10 vezes mais.
+
+#### 13.7.2 Os números, de onde vêm
+
+Lidos em 2026-11-12. **Nenhum é uma referência verificada** (a regra do `CLAUDE.md`): são relatórios de redes de anúncio e blogs de
+fornecedores. Quase todos são de aplicativos de celular; a única fonte da web é um fornecedor.
+
+| parâmetro | valor usado | de onde vem | o que pesa contra |
+|---|---|---|---|
+| **eCPM do recompensado, baixo** | US$ 1,80 | Appodeal, Q4 2024, América Latina, Android, mais de 100 mil aplicativos, lido do gráfico do relatório por Playio ([fonte](https://blog.playio.co/mobile-game-ecpm-benchmarks-2026)) | é celular; é a leitura de um gráfico |
+| **eCPM do recompensado, central** | US$ 2,10 | "Brasil, média", citado como Udonis e Adnimation, sem método nem ano (busca de 2026-11-12) | fonte fraca |
+| **eCPM do recompensado, alto** | US$ 4,00 | AppLixir: um bom eCPM do recompensado na web "começa em US$ 4", em mais de 100 milhões de exibições por mês ([fonte](https://www.applixir.com/?p=4428)) | é o próprio fornecedor, sem país nem período |
+| **eCPM do intersticial, baixo** | US$ 1,30 | Appodeal, Q4 2024, América Latina, Android (Playio, a mesma fonte) | celular, gráfico |
+| **eCPM do intersticial, central** | US$ 2,59 | MonetizeMore, 2024, Brasil, mais de 500 editores de aplicativos: a média dos 12 meses (de US$ 2,09 em maio a US$ 3,67 em dezembro) ([fonte](https://www.monetizemore.com/blog/ecpm-insights/)) | celular; é o fornecedor |
+| **eCPM do intersticial, alto** | US$ 3,67 | MonetizeMore, dezembro de 2024, Brasil (o pico do fim do ano, a mesma fonte) | é um pico de um mês |
+| **eCPM do banner** | US$ 0,50 a 2,00 | AppLixir: o display da web "fica em US$ 0,50 a 2" ([fonte](https://www.applixir.com/?p=4428)) | é o fornecedor |
+| **parte do editor no AdSense** | uns 68 % do que o anunciante paga | o Google, na mudança de 2024 para o pagamento por exibição ([9to5Google](https://9to5google.com/2023/11/02/google-adsense-payments-2024/), [SEJ](https://www.searchenginejournal.com/google-adsense-shifts-to-ecpm-payment-model/508132)) | o eCPM das linhas acima já é o do editor; esta linha só explica a diferença para o preço do anunciante |
+| **a frequência do intersticial** | no máximo 1 a cada 3 minutos | o CrazyGames limita o anúncio do meio do jogo a "1 a cada 3 minutos" ([fonte](https://docs.crazygames.com/resources/ad-monetization-guide/)) | é a regra de um portal, usada como teto razoável |
+| **o recompensado é pedido** | cada vídeo pedido pelo jogador | a ajuda do AdSense H5 Games Ads: o recompensado é o anúncio que o jogador "pode escolher" ver em troca de um prêmio no jogo ([fonte](https://support.google.com/publisherpolicies/answer/11975916)) | a regra completa do Google para o recompensado fica para a CN7 |
+| **o Google H5 Games Ads** | a rede da web para jogos, com o intersticial e o recompensado | o Google: a Ad Placement API, num beta fechado, por pedido ([fonte](https://developers.google.com/ad-placement/docs/beta)) | pode não aceitar o site |
+
+#### 13.7.3 As posições e o que cada uma rende
+
+Os hábitos dos jogadores (a fração e os vídeos por dia) são **PROPOSTOS, SEM FONTE**: o jogo ainda não tem jogadores para medir. Cada
+célula dá o cenário **baixo / central / alto** de eCPM, em US$ por mês, já líquido. A conta está no script do relato do PR (a fórmula de
+13.7.1, os parâmetros de 13.7.2 e os hábitos abaixo).
+
+| posição | o formato | quem passa e quantas vezes (PROPOSTO) | vídeos por jogador por dia | 100 por dia | 1 000 por dia | a recomendação (CN-18) |
+|---|---|---|---|---|---|---|
+| **P1, a voz** | recompensado, pedido | 45 % dos jogadores usam a voz além das 5 grátis e pedem 1,5 vídeo | 0,68 | 3 / 3 / 6 | 26 / 31 / 58 | **sim** (é a decidida) |
+| **P2, a cada 3 lutas** | intersticial, entre lutas, máx. 1 a cada 3 min | 60 % lutam, 6 lutas por dia: 2 vídeos | 1,2 | 3 / 7 / 10 | 34 / 67 / 95 | não agora; pronta atrás de uma chave |
+| **P3, ao abrir o jogo** | intersticial | todos, 1,5 vez por dia | 1,5 | 4 / 8 / 12 | 42 / 84 / 119 | não: é anúncio no jogo todo |
+| **P4, o banner nos menus** | banner | todos, 10 exibições por dia | 10 | 11 / 22 / 43 | 108 / 216 / 432 | não: fica na tela o tempo todo |
+| **P5, um enfeite por um dia** | recompensado, pedido | 20 % pedem 1 por dia | 0,2 | 1 / 1 / 2 | 8 / 9 / 17 | depois, se valer a pena |
+| **o exemplo do Matheus: 4 vídeos por jogador por dia** | intersticial | todos, 4 por dia | 4 | 11 / 22 / 32 | 112 / 224 / 317 | é a conta pedida, não uma posição |
+
+**Uma exibição rende, no cenário central:** uns US$ 0,0015 o recompensado, uns US$ 0,0019 o intersticial e uns US$ 0,0007 o banner
+(com o preenchimento e o imposto). **Para ganhar US$ 100 por mês só com anúncio**, são umas 54 mil exibições do intersticial: com 100
+jogadores por dia, 18 por jogador por dia; com 1 000, 1,8.
+
+**A leitura:**
+- **Com 100 jogadores por dia, quase nenhuma posição sozinha paga o custo da seção 7** (US$ 13 a 18 por mês): só o banner e o exemplo
+  de 4 vídeos por dia passam dele, no cenário central e no alto. O que paga é a assinatura.
+- **Com 1 000 por dia, cada posição rende dezenas de dólares por mês.** Somar a P2 à P1 dá uns US$ 100 por mês no cenário central, em
+  troca de pôr vídeo no meio das lutas.
+- **O banner rende mais por estar sempre na tela**, e por isso é o que mais tira o "quase sem anúncio".
+
+#### 13.7.4 A voz: um vídeo paga as falas que libera?
+
+| | 10 falas no `claude-haiku-5-5` | 10 falas no `claude-haiku-4-5` |
+|---|---|---|
+| o custo (a tabela do `servidor/fala_llm.py`, uns 500 tokens de entrada e 60 de saída por fala, estimado) | uns US$ 0,0008 a 0,001 | uns US$ 0,008 a 0,01 |
+| um vídeo recompensado rende (baixo a alto) | US$ 0,0013 a 0,0029 | US$ 0,0013 a 0,0029 |
+| **o vídeo paga** | **de 1,3 a 3,6 vezes as falas** | **só de 13 % a 36 % das falas** |
+
+**É aqui que se manobra:** os dois botões são **quantas falas um vídeo libera** e **o modelo da voz**. No Haiku 5.5, 10 falas por vídeo
+fecham. No Haiku 4.5, seriam 2 ou 3 falas por vídeo, e a voz fica cara para o jogador. O painel de gasto da seção 7 mostra, com os
+convidados, se a conta fecha.
+
+#### 13.7.5 O que entra no código (na CN7)
+
+- O SDK da rede só no cliente, carregado só quando o jogador pede o vídeo: o resto do jogo não baixa nada da rede.
+- A rota no servidor que recebe a confirmação do vídeo e soma as falas na conta, com o contador de falas por conta e por dia da CN-8.
+- O aviso de consentimento antes do primeiro vídeo.
+- **O vídeo e as falas liberadas não entram no log do pet nem no do Tamer**, como o apoio (seção 13.4): o motor não sabe quem viu.
+- A P2, se a CN-18 a ligar depois, atrás de uma chave desligada, com o teto de 1 a cada 3 minutos e nunca para o assinante.
 
 ## 14. Fora deste plano
 
 - O ranking, as sementes e as tabelas: são do `docs/PLANO_V3_MMO.md`.
 - A troca entre jogadores, o chat livre e a luta ao vivo (como no plano MMO).
-- A venda de Bits, de stats, de tempo ou de vantagem, o gacha e a caixa de prêmio: nunca. O dinheiro real só entra pela seção 13 (o apoio e a assinatura, CN-11 e CN-12).
+- A venda de Bits, de stats, de tempo ou de vantagem, o gacha e a caixa de prêmio: nunca. O dinheiro real só entra pela seção 13 (o apoio, a assinatura e o anúncio que destrava a função paga, CN-11 e CN-12).
 - O aplicativo de loja (Android ou iOS): o jogo segue no navegador.
 - Qualquer mudança no Python, no `engine.py`, no motor do pet ou no formato do save.
