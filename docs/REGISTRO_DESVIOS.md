@@ -722,5 +722,8 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — CONTA: o plano da conta e do save na nuvem (Claude Code, Opus 5.5, branch `v3-conta`)](registro/2026-11.md)
 - [2026-11-11 — UX_TELA_PET, três testes antigos do e2e (Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-e2e-conserto`)](registro/2026-11.md)
 - [2026-11-11 — GOSTO_VISUAL, P1e: a sonda das duas TVs e o plano (Claude Code, Opus 5.5, branch `v3-gosto-visual-p1e`)](registro/2026-11.md)
+- [2026-11-11 — GOSTO_VISUAL: o enjoo da imagem no cérebro do Python, achado antes de ler a GV3 (Claude Code, Opus 5.5, branch `v3-gosto-visual-gv3`)](registro/2026-11.md)
 - [2026-11-11 — CONTA: o módulo da monetização no plano (Claude Code, Opus 5.5, branch `v3-conta`)](registro/2026-11.md)
 - [2026-11-11 — CONTA: as decisões CN-1 a CN-10 aprovadas (Claude Code, Opus 5.5, branch `v3-conta`)](registro/2026-11.md)
+- [2026-11-11 — CONTA: a monetização decidida, só o apoio e a assinatura (Claude Code, Opus 5.5, branch `v3-conta-monetizacao`)](registro/2026-11.md)
+- [2026-11-12 — CONTA: a CN-13 e a CN-14 decididas pela recomendação (Claude Code, Opus 5.5, branch `v3-conta-cn13-cn14`)](registro/2026-11.md)
