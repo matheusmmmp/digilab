@@ -283,3 +283,16 @@ O jogo ainda não liga o enjoo: para isso, é preciso uma versão de pet nova e 
 16.
 
 **O próximo passo:** repetir a GV3 com a chave ligada pede um adendo ao plano e uma faixa nova, só com a aprovação do Matheus.
+
+## A GV3b: o adendo para repetir a GV3 com o enjoo ligado (2026-11-12, Claude Code, Opus 5.5, branch `v3-gosto-visual-gv3b`)
+
+O Matheus aprovou a repetição pela recomendação ("Sim a tudo", 2026-11-12). O adendo é o `docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO1.md`:
+- **muda** só o enjoo, ligado no corpo e no cérebro;
+- **fica** o resto: o desenho genoma × dono, a vida, a familiarização, a sonda, os perfis A e B, as medidas, a análise, a GVP-7 e o tamanho;
+- **as expectativas novas:** a habituação na E2, o sinal da parte do dono que pode virar (E3b) e o tempo olhando menor (E4);
+- **a comparação com a GV3** é só lado a lado.
+
+O orquestrador escolhe o enjoo pela fase da config (`gosto_visual_enjoo`), e as configs novas são `piloto_enjoo.json` e
+`gosto_visual_enjoo.json`. Com as configs antigas, ele faz o que fazia. A faixa é 90101…90505, e o teste novo é o
+`tests/test_gosto_visual_gv3b.py`. As escolhas estão no `docs/registro/2026-11.md`, D-GV-GV3B-1 a 10. Nenhuma vida da faixa rodou: o
+piloto e a run esperam o adendo e o código na `main`.
