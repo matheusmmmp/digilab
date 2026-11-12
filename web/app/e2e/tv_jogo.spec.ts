@@ -64,7 +64,7 @@ const capturar = async (page: Page, nome: string) => { if (CAPTURAS) await page.
 
 /** um pet v35 com uma imagem parada: o mesmo "st" desde a primeira hora, levado ate a TV a cada 2 h, por dois dias */
 function petComImagemParada(): string {
-  const m = ligarProduto(new Motor(4242, 33));
+  const m = ligarProduto(new Motor(4242, 35));
   const [x, y] = centroDaCelula(CELULA_PERTO_DA_TV_JOGO, CMU_GRANDE);
   for (let h = 1; h <= 48; h++) {
     m.avancar(60);
@@ -84,7 +84,7 @@ for (const [onde, largura, altura] of TAMANHOS) {
   test(`a v35 no ${onde}: o pet vai ate a TV sozinho, o gosto vem do cerebro e parar desliga a TV`, async ({ browser }) => {
     test.setTimeout(240_000);
     const { ctx, page, erros } = await abrir(browser, largura, altura);
-    expect((await registro(page)).versao).toBe(33);
+    expect((await registro(page)).versao).toBe(35);
     let painel = await abrirPainelTv(page, movel);
     await painel.getByRole("button", { name: "Ligar a TV" }).click();
     await expect(painel.getByTestId("tv-reacao")).toContainText("No cérebro:", { timeout: 15_000 });
@@ -115,7 +115,7 @@ for (const [onde, largura, altura] of TAMANHOS) {
   test(`a v35 no ${onde}: uma imagem parada cansa o pet (enjoado dela)`, async ({ browser }) => {
     test.setTimeout(240_000);
     const { ctx, page, erros } = await abrir(browser, largura, altura, petComImagemParada());
-    expect((await registro(page)).versao).toBe(33);
+    expect((await registro(page)).versao).toBe(35);
     await abrirPainelTv(page, movel);
     const frase = await esperarFrase(page, "enjoado dela", true);
     expect(frase).not.toBeNull();

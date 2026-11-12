@@ -313,3 +313,7 @@ com a versão combinada. O gabarito de antes foi gravado num commit próprio, no
 A paridade com o Python está em `experiments/exportar_tv_jogo.py` e `web/app/test/tv_jogo_paridade.test.ts`; os testes, em
 `tests/test_gosto_visual_tv_jogo.py`, `web/app/test/tv_jogo.test.ts` e `web/app/e2e/tv_jogo.spec.ts`. As escolhas, D-GV-TVJOGO-1 a 9, e
 o que conflita com o #872 estão em `docs/registro/2026-11.md`.
+
+**A combinação com o lance (D-GV-TVJOGO-10 a 13):** o #872 entrou na `main` antes, então este PR combina, pela decisão E. O pet novo é a
+v35 (a v30, com o lance do dono, mais A, C, D e o enjoo), e o grupo novo, a v36 (a v31 mais B, A, D e o enjoo). A v33 e a v34 deixaram de
+existir. O gabarito da v30 e da v31 foi gravado antes, num commit próprio a partir da `main` (`web/app/test/tv_jogo_lance_etapa0.test.ts`).

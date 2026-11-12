@@ -14,7 +14,7 @@ import { gunzipSync } from "node:zlib";
 import { CMU_MVP } from "../motor/constantes.ts";
 import { CCO_CORPO_V11 } from "../motor/corpo.ts";
 import { DigiBrain } from "../motor/digibrain/adapt.ts";
-import { CONFIG_DIGIBRAIN_LAB_OLHAR, CONFIG_OLHAR, CONFIG_SONO_SEGURA, INATOS_MODULAR } from "../motor/digibrain/constantes.ts";
+import { CONFIG_DIGIBRAIN_LAB_OLHAR, CONFIG_LANCE_DONO_LIGADA, CONFIG_OLHAR, CONFIG_SONO_SEGURA, CONFIG_SONO_SEGURA_LIGADA, INATOS_MODULAR } from "../motor/digibrain/constantes.ts";
 import { CONFIG_GRUPO_LIGADA, Grupo } from "../motor/grupo.ts";
 import { sementeDoSegundoJogo } from "../motor/grupo_jogo.ts";
 import { MotorCorpoMundo } from "../motor/motor_corpo_mundo.ts";
@@ -58,11 +58,12 @@ function textoPy(v: unknown, chave = ""): string {
 }
 const sha = (t: string): string => createHash("sha256").update(t, "utf8").digest("hex");
 const CTV: ConfigTV = { ...CONFIG_TV, ligada: true, fonte: "evento" };
-const cerebro = (s: number): DigiBrain => new DigiBrain(CONFIG_DIGIBRAIN_LAB_OLHAR, INATOS_MODULAR, false, CONFIG_SONO_SEGURA,
+/* a combinacao do pet v35 do jogo: o sono que segura e o lance (a v30), com a TV no cerebro, a TV desligada, o ir ate a TV e o enjoo */
+const cerebro = (s: number): DigiBrain => new DigiBrain(CONFIG_DIGIBRAIN_LAB_OLHAR, INATOS_MODULAR, false, CONFIG_SONO_SEGURA_LIGADA,
                                                          { semente: s, cfgOlhar: { ...CONFIG_OLHAR, agrado_no_corpo: true }, irAteTv: true,
-                                                           cfgEnjooTela: CONFIG_ENJOO_TELA_LIGADA });
+                                                           cfgEnjooTela: CONFIG_ENJOO_TELA_LIGADA }, CONFIG_LANCE_DONO_LIGADA);
 /* a combinacao do pet v35 do jogo: a TV desligada, o ir ate a TV e o enjoo da imagem (o #875) */
-const OPCOES = { paridade: true, cfgMundo: CMU_MVP, digibrain: true,
+const OPCOES = { paridade: true, cfgMundo: CMU_MVP, digibrain: true, lance: CONFIG_LANCE_DONO_LIGADA,
                  tela: { tela: CONFIG_TELA_LIGADA, tv: CTV, tvJogo: CONFIG_TVJOGO_LIGADA, enjoo: CONFIG_ENJOO_TELA_LIGADA } };
 /** as decisoes do mundo no formato do Python (o alvo so pelo tipo, como o registro) */
 const decisoesDo = (m: MotorCorpoMundo): unknown => JSON.parse(JSON.stringify(m.mundo.decisoes));
@@ -82,6 +83,7 @@ describe("a TV no jogo: as vidas de um pet so, iguais ao Python", () => {
   test("o gabarito: 3 vidas de 288 decisoes, com o ir ate a TV, o olhar e a TV desligada", () => {
     expect(gab.versao).toBe(1);
     expect((gab as Dict)["enjoo"]).toBe(true);
+    expect((gab as Dict)["lance"]).toBe(true);
     expect(gab.config_tv_jogo).toEqual({ ...CONFIG_TVJOGO_LIGADA });
     expect(gab.vidas.length).toBe(3);
     for (const v of gab.vidas) {
@@ -106,6 +108,8 @@ describe("a TV no jogo: as vidas de um pet so, iguais ao Python", () => {
       conferir("corpo", v.m.corpo.paraDict(), g.corpo);
       conferir("decisoes do mundo", decisoesDo(v.m), g.decisoes_mundo);
       conferir("TV", v.m.tv!.resumo(), g.tv);
+      conferir("lances", v.m.mundo.comum.lances, (g as Dict)["lances"]);
+      expect(((g as Dict)["lances"] as unknown[]).length).toBeGreaterThan(0);
     });
   }
 });
@@ -138,6 +142,7 @@ describe("a TV no grupo (a decisao B): o Grupo do TS rejoga o registro do Python
           lacos[e.valor as string] = laco;
         } else if (e.tipo === "avanco") g.avancar(e.valor as number);
         else if (e.tipo === "deixar_comida") lacos[e.pet!]!().deixarComida(...lerDeixarComida({ tick: e.tick, tipo: "deixar_comida", valor: String(e.valor) }));
+        else if (e.tipo === "acao_usuario") lacos[e.pet!]!().observar(String(e.valor));
         else if (e.tipo === "sentido_tela") { expect([e.destino, e.pet]).toEqual(["mundo", null]); g.sentidoTela(String(e.valor)); }
         else throw new Error(`evento inesperado: ${JSON.stringify(e)}`);
       }
@@ -152,6 +157,7 @@ describe("a TV no grupo (a decisao B): o Grupo do TS rejoga o registro do Python
         expect(p.acoes).toContain("ir_tv");
       }
       conferir("TV do mundo comum", g.comum.tv!.resumo(), vg.tv);
+      conferir("lances do mundo comum", g.comum.lances, (vg as Dict)["lances"]);
       expect(g.contatos.length).toBe(vg.contatos);
     });
   }

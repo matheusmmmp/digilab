@@ -92,7 +92,7 @@ def test_sem_a_config_tv_jogo_a_tv_desligada_e_o_ir_tv_falham_alto():
 
 # ================================================================== A: a TV desligada nao e vista
 def test_a_tv_desligada_sai_das_tvs_a_vista_e_o_pet_nao_a_olha():
-    m = T.laco(_cerebro(202), 202)
+    m = T.laco(T.cerebro(202), 202)
     _ligar(m)
     m.pet = (m.mundo.tv.x, m.mundo.tv.y + X.orq.CM.sub)            # ao lado da TV, no raio
     assert m._linhas_tela() and m.mundo.tv.em(0) is not None
@@ -112,7 +112,7 @@ def test_a_tv_desligada_sai_das_tvs_a_vista_e_o_pet_nao_a_olha():
 # ================================================================== D: o pet vai ate a TV sozinho
 def test_o_pet_vai_ate_a_tv_sozinho_e_depois_a_olha():
     for s in (101, 202, 303):
-        m = T.laco(_cerebro(s), s)
+        m = T.laco(T.cerebro(s), s)
         _ligar(m)
         tv = m.mundo.tv
         m.levar_pet(tv.x + 14 * X.orq.CM.sub, tv.y)                # 14 celulas da TV: fora do raio da visao (6)
