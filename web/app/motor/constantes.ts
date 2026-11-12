@@ -794,4 +794,6 @@ export const LIMIAR_PRIVACAO = .15;
 export const CCOOP = { escala: 1024, pisoFome: .45, meiaVida: 1440, kMeiaVida: 32, janelaNovidade: 1440,
   /* a CO6 (docs/ESPEC_V3_COOPERACAO_CO6.md): o passo do peso dos deveres por tick de encontro e o teto por estagio (CO6-4), PROPOSTOS, SEM
      FONTE; o estagio vem da idade, pelo provisorio da ConfigExpressao (o fim do bebe, da crianca e do adolescente, em dias) */
-  kPasso: 1, kTetoBebe: 0, kTetoCrianca: 256, kTetoAdolescente: 512, kTetoAdulto: 768, diasFimBebe: 1, diasFimCrianca: 3, diasFimAdolescente: 7 };
+  kPasso: 1, kTetoBebe: 0, kTetoCrianca: 256, kTetoAdolescente: 512, kTetoAdulto: 768, diasFimBebe: 1, diasFimCrianca: 3, diasFimAdolescente: 7,
+  /* a CO7 (docs/ESPEC_V3_COOPERACAO_CO7.md): o escudo, a universalizacao e a culpa e a inveja (motor/digibrain/dever.ts), PROPOSTOS, SEM FONTE */
+  limiarEscudo: 256, rEscudoCelulas: 3, pisoPrivacaoS: 461, wUniv: 512, limiarHumor: 512, wCulpa: 128, wInveja: 128, janelaInveja: 30 };

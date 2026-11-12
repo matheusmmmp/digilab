@@ -881,7 +881,9 @@
  },
  "ConfigCooperacao": {
   "co6": false,
+  "co7": false,
   "escala": 1024,
+  "janela_inveja": 30,
   "janela_novidade": 1440,
   "k_meia_vida_pontuacao": 32,
   "k_passo": 1,
@@ -890,8 +892,15 @@
   "k_teto_bebe": 0,
   "k_teto_crianca": 256,
   "ligada": false,
+  "limiar_escudo": 256,
+  "limiar_humor": 512,
   "meia_vida_pontuacao": 1440,
-  "piso_fome": 0.45
+  "piso_fome": 0.45,
+  "piso_privacao_s": 461,
+  "r_escudo_celulas": 3,
+  "w_culpa": 128,
+  "w_inveja": 128,
+  "w_univ": 512
  },
  "ConfigCorpo": {
   "armazenar_limiar": 337500,

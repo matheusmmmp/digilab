@@ -17,7 +17,7 @@
 import { CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA, TICK_INICIAL, ehDoGrupo, nasceComTv, nasceComTvJogo, nasceNaAgua, nasceNaGrande, type ConfigMundo } from "./constantes.ts";
 import { CONFIG_TV_JOGO, CONFIG_TVJOGO_LIGADA, lerSentidoTela, valorSentidoTela, valorSentidoTelaDesligada } from "./tv.ts";
 import { CONFIG_GRUPO_LIGADA, Grupo, ROTULO_SEGUNDO_PET } from "./grupo.ts";
-import { CONFIG_COOPERACAO_CO6, CONFIG_COOPERACAO_LIGADA } from "./cooperacao.ts";
+import { CONFIG_COOPERACAO_CO6, CONFIG_COOPERACAO_CO7, CONFIG_COOPERACAO_LIGADA } from "./cooperacao.ts";
 import { Motor } from "./motor.ts";
 import type { EventoRegistro } from "./tipos.ts";
 import { derivarSemente } from "./mundo.ts";
@@ -54,14 +54,15 @@ export class GrupoDoJogo {
   /** `medir`: a medida da cooperacao (CO3), ligada no jogo; desligada so no teste do G-SEM-DECISAO (ela nao muda nada). `co6`: a reputacao
       e o peso dos deveres na percepcao (docs/ESPEC_V3_COOPERACAO_CO6.md), DESLIGADA no jogo: ligada, ela muda a assinatura dos saves (o
       estado do cerebro ganha a chave `social`) e so entra com uma versao do grupo nova (D-CO6c-1); hoje, so nos testes */
-  constructor(semente: number, versao: number, medir = true, co6 = false) {
+  constructor(semente: number, versao: number, medir = true, co6 = false, co7 = false) {
     if (co6 && !medir) throw new Error("a CO6 so com a medida da cooperacao ligada");
+    if (co7 && !co6) throw new Error("a CO7 so com a CO6 ligada");
     if (!Number.isInteger(semente) || semente < 0 || semente > 0xffffffff) throw new Error(`semente do grupo fora dos 32 bits: ${semente}`);
     if (!ehDoGrupo(versao)) throw new Error(`o grupo do jogo e de pets v26, v28, v29, v31 ou v36, nao v${versao}`);
     this.semente = semente;
     this.versao = versao;
     this.grupo = new Grupo(mundoDaVersao(versao), semente, CONFIG_GRUPO_LIGADA,
-                           { tickInicial: TICK_INICIAL, sementeDoSegundo: sementeDoSegundoJogo, ...(medir ? { cooperacao: co6 ? CONFIG_COOPERACAO_CO6 : CONFIG_COOPERACAO_LIGADA } : {}),   // a medida (CO3), ligada no jogo (CO5): so mede
+                           { tickInicial: TICK_INICIAL, sementeDoSegundo: sementeDoSegundoJogo, ...(medir ? { cooperacao: co7 ? CONFIG_COOPERACAO_CO7 : co6 ? CONFIG_COOPERACAO_CO6 : CONFIG_COOPERACAO_LIGADA } : {}),   // a medida (CO3), ligada no jogo (CO5): so mede
                              /* a v36 (D-GV-TVJOGO-4): a TV do mundo comum, na celula da TV do jogo, com a TV desligada */
                              ...(nasceComTv(versao) ? { tv: CONFIG_TV_JOGO, ...(nasceComTvJogo(versao) ? { tvJogo: CONFIG_TVJOGO_LIGADA } : {}) } : {}) });
     const motores: Record<string, Motor> = {};
@@ -69,6 +70,7 @@ export class GrupoDoJogo {
       const s = Number(this.grupo.sementes[ident]);
       motores[ident] = this.grupo.entrarMotor(ident, TICK_INICIAL, parte => new Motor(s, versao, { parteDoMundo: parte }), "jogo", "jogador") as Motor;
     }
+    if (co7) for (const m of Object.values(motores)) m.ligarDeveres(CONFIG_COOPERACAO_CO7);   // a CO7: o modular de cada um nasce com os deveres
     this.motores = Object.freeze(motores);
     /* CO4c: o avancar de qualquer um dos dois anda o grupo (o relogio do jogo chama o do pet em foco) */
     for (const m of Object.values(motores)) m.ligarAvancoDoGrupo(n => this.avancar(n));
