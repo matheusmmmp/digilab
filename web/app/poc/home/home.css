@@ -97,7 +97,7 @@ main:focus{outline:none}
 /* a linha do Agumon: a placa branca com o degrau, os pets em pé sobre a régua */
 /* a placa vai de ponta a ponta; --lado é resolvido na largura de cada elemento, por isso o herói não tem margem lateral e o texto e a
    placa têm a deles */
-.linha{position:relative;z-index:0;isolation:isolate;margin-top:auto;padding:64px var(--lado) 18px;color:var(--dl-text);--foco:var(--dl-action)}
+.linha{position:relative;z-index:0;isolation:isolate;margin-top:auto;padding:48px var(--lado) 18px;color:var(--dl-text);--foco:var(--dl-action)}
 .linha::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--dl-surface);
   background:linear-gradient(var(--linha) 1px,transparent 1px) 0 0/48px 48px,linear-gradient(90deg,var(--linha) 1px,transparent 1px) 0 0/48px 48px,var(--dl-surface);
   clip-path:polygon(0 38%,57% 38%,62% 0,100% 0,100% 100%,0 100%)}

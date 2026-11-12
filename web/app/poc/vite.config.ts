@@ -16,6 +16,9 @@ const ASSETS = fileURLToPath(new URL("../../../../Assets/", import.meta.url));
 const ATLAS: Record<string, string> = {
   "/Assets/digilab_atlas_up.json": "application/json",
   "/Assets/digilab_atlas_up.png": "image/png",
+  /* o atlas de clipes, o que o jogo usa para as formas (CLIPES_UP): a página de entrada (home/) desenha os pets por ele */
+  "/Assets/digilab_atlas_up_clipes.json": "application/json",
+  "/Assets/digilab_atlas_up_clipes.png": "image/png",
 };
 
 function atlasDev(): Plugin {

@@ -1058,7 +1058,7 @@ Os desvios estão em `docs/registro/2026-11.md`, "UX_TELA_PET, D1e".
 ## 33. A POC da página de entrada (2026-11-12)
 
 A página A da prancha `docs/pranchas/ux-pagina-inicial/` (PI-1, escolhida pelo Matheus) virou uma POC em React + TypeScript + CSS, em
-`web/app/poc/home/`, fora do build do jogo. A POC acrescenta as larguras de 360 a 1920 px, os pets no ciclo parado do atlas, as seções que
+`web/app/poc/home/`, fora do build do jogo. A POC acrescenta as larguras de 360 a 1920 px, os pets no clipe Idle do atlas de clipes (o mesmo do jogo), as seções que
 entram ao rolar (tudo desligado com `prefers-reduced-motion`), o foco visível, o contraste medido pixel a pixel (nenhum texto abaixo de
 4,5:1) e a cortina da passagem para o jogo (PI-4, PROPOSTO). O e2e fica em `web/app/e2e_poc/home.spec.ts`. O que mudou da prancha, e por
 quê, está em `docs/pranchas/ux-pagina-inicial/POC.md`; os desvios, em `docs/registro/2026-11.md` (D-UXHOME-1 a 4).
