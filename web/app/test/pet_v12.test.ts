@@ -31,7 +31,7 @@ function viverV12(m: Motor, dias: number, perto: boolean): void {
 
 describe("o pet v12 no Motor", () => {
   test("o v12 (e o v13, o ovo novo: o v12 com a luta em tempo real): o laco com o mundo, o corpo com a curiosidade e o cerebro A do v11", () => {
-    expect(VERSAO_PET).toBe(30);   // a v30 desde a BB2 (a v27 com o lance do dono)
+    expect(VERSAO_PET).toBe(32);
     const m = new Motor(4242, 21);
     expect(m.versao).toBe(21);
     expect(m.v11!.laco).toBeInstanceOf(MotorCorpoMundo);

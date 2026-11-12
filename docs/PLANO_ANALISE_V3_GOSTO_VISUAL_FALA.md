@@ -1,7 +1,9 @@
 # PLANO DE ANÁLISE V3 — GOSTO_VISUAL, a fala do assistir: o comentário com o órgão contra o comentário sem ele (2026-11-11, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** Nenhuma fala, nenhuma vida e nenhuma chamada a modelo antes de o Matheus aprovar este plano. As decisões GVF-1 a
-GVF-10 (seção 12) são dele. A proposta é a `docs/futuro/fala_do_assistir.md` (seções 2, 10 e 10.10; a FA-20); a frente é a
+**Status: APROVADO pelo Matheus em 2026-11-11** (repassado pela sessão coordenadora). A pergunta: "(a) liberar o merge do #863 quando o CI
+ficar verde; (b) aprovar as GVF-1 a GVF-10 pela recomendação; (c) as duas coisas?". A resposta dele: "segue as recomendaceos". As
+GVF-1 a GVF-10 (seção 12) estão DECIDIDAS pela recomendação; a GVF-7 já estava. **O plano não roda antes de a DC5 declarar uma voz apta
+(GVF-8)**, nem antes das outras condições abaixo. A proposta é a `docs/futuro/fala_do_assistir.md` (seções 2, 10 e 10.10; a FA-20); a frente é a
 `docs/TAREFA_V3_GOSTO_VISUAL.md`.
 
 **Nada roda antes de sete coisas:**
@@ -247,7 +249,7 @@ mudar nada dela:
 | **GVFc** | a validação, uma vez, depois da fila liberada | PR com os artefatos e os pacotes da marcação, sem marcar |
 | **GVFd** | a marcação (o Opus cego e o Matheus), os gates e o `RESULTADO_V3_GOSTO_VISUAL_FALA.md` | PR de resultado |
 
-## 12. As decisões (todas PROPOSTAS)
+## 12. As decisões (DECIDIDAS pelo Matheus em 2026-11-11, pela recomendação)
 
 | id | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|

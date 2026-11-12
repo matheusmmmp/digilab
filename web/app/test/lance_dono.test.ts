@@ -12,8 +12,8 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { gunzipSync } from "node:zlib";
 import {
-  CMU_MVP, TPD, VERSAO_GRUPO, VERSAO_PET, VERSAO_V27, VERSAO_V28, VERSAO_V29, VERSAO_V30, VERSAO_V31, VERSOES_PET, ehCerebroTrocavel, ehDoGrupo,
-  ehLutaLp6, ehLutaPoc, ehLutaV23, nasceComLance, nasceComMemoriaLonga, nasceComSonoSegura, nasceNaGrande,
+  CMU_MVP, TPD, VERSAO_GRUPO, VERSAO_PET, VERSAO_V27, VERSAO_V28, VERSAO_V29, VERSAO_V30, VERSAO_V31, VERSAO_V32, VERSOES_PET, ehCerebroTrocavel, ehDoGrupo,
+  ehLutaLp6, ehLutaPoc, ehLutaV23, nasceComLance, nasceComMemoriaLonga, nasceComSonoSegura, nasceComTv, nasceNaGrande,
 } from "../motor/constantes.ts";
 import { LUTA_V23, LUTA_V29, tabelaLuta } from "../motor/luta_poc.ts";
 import { Motor } from "../motor/motor.ts";
@@ -182,10 +182,11 @@ function v30(semente: number): Motor {
 }
 
 describe("as versoes (BB-7): a v30 e a v27 com o lance, a v31 e a v29 com ele", () => {
-  test("o ovo de um pet nasce v30 e o do brasao choca o grupo v31; os predicados", () => {
-    expect([VERSAO_PET, VERSAO_GRUPO]).toEqual([VERSAO_V30, VERSAO_V31]);
-    expect(VERSOES_PET.slice(-2)).toEqual([30, 31]);
-    for (const v of [21, 22, 23, 24, 25, 26, 27, 28, 29]) expect(nasceComLance(v), `v${v}`).toBe(false);
+  test("o ovo de um pet nasce v32 (a TV, sem o lance; D-BB2-6) e o do brasao choca o grupo v31; os predicados", () => {
+    expect([VERSAO_PET, VERSAO_GRUPO]).toEqual([VERSAO_V32, VERSAO_V31]);
+    expect(VERSOES_PET.slice(-3)).toEqual([30, 31, 32]);
+    for (const v of [21, 22, 23, 24, 25, 26, 27, 28, 29, 32]) expect(nasceComLance(v), `v${v}`).toBe(false);
+    expect([nasceComTv(30), nasceComTv(31), nasceComTv(32)]).toEqual([false, false, true]);
     expect([nasceComLance(30), nasceComLance(31), ehDoGrupo(30), ehDoGrupo(31)]).toEqual([true, true, false, true]);
     for (const v of [30, 31]) {
       expect([ehCerebroTrocavel(v), ehLutaPoc(v), ehLutaV23(v), nasceNaGrande(v), nasceComMemoriaLonga(v), nasceComSonoSegura(v)], `v${v}`)
