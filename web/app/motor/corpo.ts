@@ -23,6 +23,7 @@ import { divArred, TIPOS_COMIDA_MUNDO } from "./mundo.ts";
 import type { AcaoPet } from "./tipos.ts";
 import { ATIVIDADE_TELA, CANAIS_ESTRESSE_TELA, CANAIS_TELA, CANAL_SUSTO_TELA, CONFIG_TELA, RECEPTOR_NOVIDADE_TELA, conferirConfigTela,
   type CanalTela, type ConfigTela } from "./tv.ts";
+import { CONFIG_ENJOO_TELA, RECEPTOR_ENJOO_TELA, conferirConfigEnjooTela, type ConfigEnjooTela } from "./enjoo_tela.ts";
 
 // ================================================================== os nomes
 export const QUIMICOS_HOJE = ["fome", "desconforto", "cansaco", "tristeza", "dano"] as const;
@@ -674,6 +675,7 @@ export interface OpcoesCorpo {
   comMundo?: boolean;            // o mundo fisico: a curiosidade existe (CD-8)
   lutaCorpo?: ConfigLutaCorpo;   // a ponte da luta (PE3); sem ela, desligada
   tela?: ConfigTela;             // o orgao da tela (GOSTO_VISUAL, P1f); sem ele, desligado: o corpo de hoje
+  enjoo?: ConfigEnjooTela;       // o enjoo da imagem (D-GV-ENJOO-CER), so com a tela; sem ele, desligado
 }
 type DrivesHoje = { fome: number; higiene: number; energia: number; humor: number; saude: number };
 
@@ -710,6 +712,12 @@ export class Corpo {
   readonly estimuloTela: Record<string, number> = {};
   private sentidoTela = false;
   private readonly adaptacoes: ReadonlySet<string>;
+  /** o enjoo (D-GV-ENJOO-CER), so com a ConfigEnjooTela ligada: a memoria curta (os prototipos [perfil, enjoo], na ordem em que nasceram)
+   *  e o volume do ultimo estimulo visto (nao zero; null antes do primeiro), a referencia do susto */
+  readonly enjooCfg: ConfigEnjooTela;
+  readonly enjoo: boolean;
+  readonly memoriaTela: [number[], number][] = [];
+  volumeVisto: number | null = null;
 
   constructor(q: Record<string, number>, opcoes: OpcoesCorpo = {}) {
     this.cc = opcoes.cc ?? CCO_LIGADA;
@@ -721,6 +729,8 @@ export class Corpo {
     this.S = this.cc.escala_receptor;
     this.t = taxasDe(this.cc);
     this.tela = conferirConfigTela(opcoes.tela ?? CONFIG_TELA);
+    this.enjooCfg = conferirConfigEnjooTela(opcoes.enjoo ?? CONFIG_ENJOO_TELA);
+    this.enjoo = this.enjooCfg.ligada;
     this.conferirTela();
     this.grafo = grafoDoCorpo(this.cc, this.t, this.comMundo, this.tela);
     this.relato_grafo = checarGrafo(this.grafo);
@@ -1043,7 +1053,10 @@ export class Corpo {
   /** a tela so com o mundo fisico e com `drives_novos` e `gestos`; a k e a da meia-vida; a novidade no teto fica abaixo de S */
   private conferirTela(): void {
     const c = this.tela;
-    if (!c.ligada) return;
+    if (!c.ligada) {
+      if (this.enjoo) throw new Error("ConfigEnjooTela.ligada sem a ConfigTela ligada: o enjoo e do orgao da tela (D-GV-ENJOO-CER)");
+      return;
+    }
     if (!this.comMundo) throw new Error("ConfigTela.ligada sem o mundo fisico: a TV e um objeto do mapa (espec do P1, secao 1.1)");
     if (!(this.cc.drives_novos && this.cc.gestos)) throw new Error("ConfigTela.ligada exige ConfigCorpo.drives_novos e ConfigCorpo.gestos");
     const k = kMeiaVida(c.meia_vida_adaptacao, this.cc.bits_meia_vida);
@@ -1051,6 +1064,13 @@ export class Corpo {
     const e = CANAIS_TELA.length * Math.max(0, c.teto_intensidade - c.limiar);
     if (e && divArred(this.S * e, e + c.meia_saturacao) >= this.S) throw new Error("ConfigTela: a novidade chega a S com os sete canais no teto");
     if (c.corte_novidade >= this.S) throw new Error(`ConfigTela.corte_novidade tem de ficar abaixo de S (${this.S}): ${c.corte_novidade}`);
+    if (this.enjoo) {                                   // o enjoo (D-GV-ENJOO-CER): as k das meias-vidas declaradas
+      const ce = this.enjooCfg;
+      for (const [campo, h] of [["k_desenjoo", ce.meia_vida_desenjoo], ["k_olhando", ce.meia_vida_olhando], ["k_enjoo", ce.meia_vida_enjoo]] as const) {
+        const k = kMeiaVida(h, this.cc.bits_meia_vida);
+        if (ce[campo] !== k) throw new Error(`ConfigEnjooTela.${campo} ${ce[campo]} nao e a da meia-vida ${h}: ${k}`);
+      }
+    }
   }
 
   private exigirTela(onde: string): void {
@@ -1070,7 +1090,13 @@ export class Corpo {
       const v = intensidades[c]!;
       if (!Number.isInteger(v) || v < 0 || v > teto) throw new Error(`a intensidade da tela em ${c} precisa ser inteiro em [0, ${teto}]: ${v}`);
     }
-    if (intensidades[CANAL_SUSTO_TELA]! - this.estimuloTela[CANAL_SUSTO_TELA]! > this.tela.salto_volume) this.estimulo("susto_tela");
+    if (this.enjoo) {                                   // D-GV-ENJOO-CER-6: o salto contra o ultimo estimulo visto, nao contra os zeros
+      if (CANAIS_TELA.some((c) => intensidades[c] !== 0)) {
+        const vol = intensidades[CANAL_SUSTO_TELA]!;
+        if (this.volumeVisto !== null && vol - this.volumeVisto > this.tela.salto_volume) this.estimulo("susto_tela");
+        this.volumeVisto = vol;
+      }
+    } else if (intensidades[CANAL_SUSTO_TELA]! - this.estimuloTela[CANAL_SUSTO_TELA]! > this.tela.salto_volume) this.estimulo("susto_tela");
     for (const c of CANAIS_TELA) this.estimuloTela[c] = intensidades[c]!;
     this.sentidoTela = true;
   }
@@ -1078,6 +1104,11 @@ export class Corpo {
   private adaptarTela(): void {
     if (!this.sentidoTela) throw new Error("tick com a tela sem `sentirTela` desde o tick anterior: o estimulo estaria velho (sem olhar, zeros)");
     const bits = this.cc.bits_meia_vida;
+    if (this.enjoo) {
+      this.adaptarTelaEnjoo(bits);
+      this.sentidoTela = false;
+      return;
+    }
     for (const o of this.orgaosTela) {
       const qm = quimicoDoGrafo(this.grafo, o.adaptacao);
       this.q[o.adaptacao] = passoAdaptacao(this.q[o.adaptacao], this.estimuloTela[o.canal]!, qm.k_meia_vida as number, bits);
@@ -1085,17 +1116,76 @@ export class Corpo {
     this.sentidoTela = false;
   }
 
+  // ---------------------------------------------------------- o enjoo (D-GV-ENJOO-CER), so com a ConfigEnjooTela ligada
+  /** se o estimulo da tela e um estimulo (algum canal acima de 0): sem olhar, o laco manda zeros */
+  olhandoTela(): boolean {
+    return CANAIS_TELA.some((c) => this.estimuloTela[c] !== 0);
+  }
+
+  private perfilTela(): number[] {
+    return CANAIS_TELA.map((c) => this.estimuloTela[c]!);
+  }
+
+  /** o indice do prototipo mais perto do perfil (a distancia media por canal; no empate, o mais antigo) se ele esta a ate `raio_mesmo` */
+  prototipoMesmo(perfil: readonly number[]): number | null {
+    let melhor: number | null = null, dMelhor: number | null = null;
+    this.memoriaTela.forEach(([p], i) => {
+      let soma = 0;
+      for (let k = 0; k < perfil.length; k++) soma += Math.abs(perfil[k]! - p[k]!);
+      const d = divArred(soma, CANAIS_TELA.length);
+      if (dMelhor === null || d < dMelhor) { melhor = i; dMelhor = d; }
+    });
+    return melhor !== null && dMelhor !== null && dMelhor <= this.enjooCfg.raio_mesmo ? melhor : null;
+  }
+
+  /** o tick do enjoo (o `_adaptar_tela_enjoo` do Python): olhando, a adaptacao anda com a k_olhando e o enjoo do prototipo do mesmo estimulo
+   *  (ou de um novo, sem enjoo, parado no perfil visto) anda para C com a k_enjoo; sem olhar, a adaptacao volta com a k_desenjoo; o enjoo dos
+   *  outros prototipos cai com a k_desenjoo. Com a memoria cheia, o novo toma o lugar do de menor enjoo (no empate, o mais antigo) */
+  private adaptarTelaEnjoo(bits: number): void {
+    const ce = this.enjooCfg, olhando = this.olhandoTela();
+    for (const o of this.orgaosTela) {
+      this.q[o.adaptacao] = passoAdaptacao(this.q[o.adaptacao], olhando ? this.estimuloTela[o.canal]! : 0, olhando ? ce.k_olhando : ce.k_desenjoo, bits);
+    }
+    let j: number | null = null;
+    if (olhando) {
+      const perfil = this.perfilTela();
+      j = this.prototipoMesmo(perfil);
+      if (j === null) {
+        if (this.memoriaTela.length >= ce.prototipos) {
+          let vitima = 0;
+          for (let i = 1; i < this.memoriaTela.length; i++) if (this.memoriaTela[i]![1] < this.memoriaTela[vitima]![1]) vitima = i;
+          this.memoriaTela.splice(vitima, 1);
+        }
+        this.memoriaTela.push([perfil, 0]);
+        j = this.memoriaTela.length - 1;
+      }
+    }
+    this.memoriaTela.forEach((item, i) => {
+      item[1] = i === j ? passoAdaptacao(item[1], this.C, ce.k_enjoo, bits) : passoMeiaVida(item[1], ce.k_desenjoo, bits);
+    });
+  }
+
+  /** o enjoo do estimulo de agora, em [0, C]: o do prototipo do mesmo estimulo; 0 sem olhar ou sem prototipo perto */
+  enjooTela(): number {
+    if (!this.olhandoTela()) return 0;
+    const j = this.prototipoMesmo(this.perfilTela());
+    return j === null ? 0 : this.memoriaTela[j]![1];
+  }
+
   /** os receptores da tela na escala S: o nivel de cada canal (sem adaptacao) e a novidade (a soma das partes adaptadas, saturada) */
   leiturasTela(): Record<string, number> {
     const teto = this.tela.teto_intensidade;
     const r: Record<string, number> = {};
     let e = 0;
+    const olhando = this.enjoo ? this.olhandoTela() : true;
     for (const o of this.orgaosTela) {
       r[o.receptor] = divArred(this.S * this.estimuloTela[o.canal]!, teto);
-      e += Math.max(0, this.estimuloTela[o.canal]! - this.q[o.adaptacao] - o.limiar);
+      if (!this.enjoo) e += Math.max(0, this.estimuloTela[o.canal]! - this.q[o.adaptacao] - o.limiar);
+      else if (olhando) e += Math.max(0, Math.abs(this.estimuloTela[o.canal]! - this.q[o.adaptacao]) - o.limiar);   // D-GV-ENJOO-CER-5
     }
     const soma = this.grafo.somas![0]!;
     r[soma.receptor] = e ? divArred(this.S * e, e + soma.meia_saturacao) : 0;
+    if (this.enjoo) r[RECEPTOR_ENJOO_TELA] = divArred(this.S * this.enjooTela(), this.C);   // D-GV-ENJOO-CER-3
     return r;
   }
 
@@ -1120,7 +1210,10 @@ export class Corpo {
     if (this.cc.vida) d.estagio = this.estagio();
     if (this.cc.drives_novos) d.janela_tedio = [...this.janela_tedio];
     if (this.contas_metabolismo) d.metabolismo = { resto_combustivel: this.resto_combustivel, contas: { ...this.contas_metabolismo } };
-    if (this.orgaosTela.length) d.tela = { estimulo: { ...this.estimuloTela }, sentido: this.sentidoTela };
+    if (this.orgaosTela.length) {
+      d.tela = { estimulo: { ...this.estimuloTela }, sentido: this.sentidoTela };
+      if (this.enjoo) Object.assign(d.tela as object, { memoria: this.memoriaTela.map(([p, e]) => [[...p], e]), volume_visto: this.volumeVisto });
+    }
     return d;
   }
 }

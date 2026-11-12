@@ -29,13 +29,21 @@ genoma=GenomaVisao)`). Desligada, um receptor da tela presente falha alto, como 
         pico(x, l) = max(0, S - div_arred(|x| x S, l)),  A = div_arred(sum_k pico(n_k - alvo_k, l_k), 7)        em [0, S],
     com o alvo = o otimo do genoma (na escala S) + o deslocamento aprendido, e `agrado_inato` o mesmo contra o otimo so;
   - a exposicao (Zajonc 1968, `10.1037/h0025848`; espec, 5.3): o estado novo, o deslocamento do alvo por canal, so quando o pet olhou
-    (`expor`): `desloc_k <- clamp(desloc_k + mul(k_expo, n_k - (o_k + desloc_k)), -teto, teto)`, com k_expo da `tau_exposicao`."""
+    (`expor`): `desloc_k <- clamp(desloc_k + mul(k_expo, n_k - (o_k + desloc_k)), -teto, teto)`, com k_expo da `tau_exposicao`.
+
+**O enjoo** (D-GV-ENJOO-CER; so com a subchave `olhar` e a `ConfigEnjooTela` ligada, `Sens(..., enjoo=ConfigEnjooTela)`): o receptor
+`enjoo_tela` do corpo (o enjoo do estimulo de agora, em [0, S]) fica a parte, em `tela_enjoo`, e e exigido (falha alto sem ele). Desligado, o
+receptor, se o corpo o manda, fica fora dos `receptores` e ninguem o le (como o `novidade_tela`). Com ele:
+  - o agrado efetivo cai com a familiaridade: `agrado_efetivo(niveis, e) = max(0, A - mul(peso_tedio, div_arred(max(0, e - sat) S, S - sat)))`,
+    com sat a `saturacao_exposicao` (o tedio, o lado de cima do U invertido);
+  - a exposicao satura: o passo de cada canal e multiplicado por `max(0, S - div_arred(e S, sat))` (na escala S): anda so enquanto a
+    imagem e nova (o lado de baixo do U)."""
 from __future__ import annotations
 
 from dataclasses import fields
 
-from ..config import (CANAIS_TELA, CONFIG_DIGIBRAIN_INATOS, RECEPTORES_DIGIBRAIN, TICKS_POR_DIA, Config, ConfigDigibrainInatos, ConfigMundo,
-                      ConfigOlhar)
+from ..config import (CANAIS_TELA, CONFIG_DIGIBRAIN_INATOS, RECEPTORES_DIGIBRAIN, TICKS_POR_DIA, Config, ConfigDigibrainInatos,
+                      ConfigEnjooTela, ConfigMundo, ConfigOlhar)
 from ..genoma_visao import GenomaVisao
 from ..policies.lobos import div_arred, falta_receptor, leitura_receptor
 from ._comum import clamp, ganho_de_tau, integrar, mul
@@ -44,6 +52,7 @@ CLASSES_OBJETO = ("racao", "a", "b", "c", "podre", "bola")
 COMIDAS_BOAS = ("racao", "a", "b", "c")
 CLASSE_TELA = "tela"                                   # a classe da TV (so com a subchave `olhar`)
 RECEPTORES_TELA = tuple(f"tela_{c}" for c in CANAIS_TELA) + ("novidade_tela",)
+RECEPTOR_ENJOO_TELA = "enjoo_tela"                     # o enjoo (D-GV-ENJOO-CER): o mesmo nome do corpo.RECEPTOR_ENJOO_TELA (conferido por teste)
 
 
 def pico(x: int, largura: int, S: int) -> int:
@@ -66,7 +75,7 @@ class Sens:
     """o M-SENS (docstring do modulo)"""
 
     def __init__(self, cfg: Config, cfg_mundo: ConfigMundo, inatos: ConfigDigibrainInatos | None = None,
-                 olhar: ConfigOlhar | None = None, genoma: GenomaVisao | None = None) -> None:
+                 olhar: ConfigOlhar | None = None, genoma: GenomaVisao | None = None, enjoo: ConfigEnjooTela | None = None) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
         self.S = self.p.escala
         self.cfg = cfg
@@ -76,6 +85,14 @@ class Sens:
         self.hab = {c: 0 for c in CLASSES_OBJETO}
         self.receptores: tuple | None = None          # os receptores presentes, fixados na primeira decisao
         self.olhar = olhar                            # a tela (P1d): so com a subchave `olhar`; None desligada
+        self.enjoo: ConfigEnjooTela | None = None     # o enjoo (D-GV-ENJOO-CER): so com o olhar e a ConfigEnjooTela ligada
+        if enjoo is not None:
+            if not isinstance(enjoo, ConfigEnjooTela):
+                raise TypeError(f"M-SENS: o enjoo pede a ConfigEnjooTela: {enjoo!r}")
+            if enjoo.ligada:
+                if olhar is None:
+                    raise ValueError("M-SENS: o enjoo (ConfigEnjooTela ligada) so com a subchave olhar")
+                self.enjoo = enjoo
         if (olhar is None) != (genoma is None):
             raise ValueError("M-SENS: a ConfigOlhar e o GenomaVisao vem juntos (so com a subchave `olhar`)")
         if olhar is not None:
@@ -98,7 +115,12 @@ class Sens:
                 self.tela_presente = bool(tela)
             elif bool(tela) != self.tela_presente:
                 raise ValueError("M-SENS: os receptores da tela mudaram desde a primeira decisao")
-            presentes = tuple(r for r in presentes if r not in RECEPTORES_TELA)
+            enjoo = RECEPTOR_ENJOO_TELA in presentes
+            if self.enjoo is not None and self.tela_presente and not enjoo:
+                raise ValueError("M-SENS: o enjoo ligado (ConfigEnjooTela) sem o receptor enjoo_tela do corpo")
+            if enjoo and not tela:
+                raise ValueError("M-SENS: o receptor enjoo_tela sem os receptores da tela")
+            presentes = tuple(r for r in presentes if r not in RECEPTORES_TELA and r != RECEPTOR_ENJOO_TELA)
         fora = [r for r in presentes if r not in RECEPTORES_DIGIBRAIN]
         if fora:
             raise ValueError(f"M-SENS: receptores fora do prototipo (os orgaos, o paladar, o banheiro; espec, secao 6): {fora}")
@@ -140,14 +162,41 @@ class Sens:
         self._exigir_olhar("agrado_inato")
         return self._agrado(niveis, dict.fromkeys(CANAIS_TELA, 0))
 
-    def expor(self, niveis: dict) -> None:
-        """a exposicao: o alvo de cada canal anda para o nivel visto, com o teto do deslocamento (so quando o pet olhou)"""
+    def expor(self, niveis: dict, enjoo: int | None = None) -> None:
+        """a exposicao: o alvo de cada canal anda para o nivel visto, com o teto do deslocamento (so quando o pet olhou). Com o enjoo
+        (D-GV-ENJOO-CER), `enjoo` e o do que o pet olhou, em [0, S], e o passo cai a zero quando ele chega a saturacao"""
         co = self._exigir_olhar("expor")
         S = self.S
+        fator = None
+        if self.enjoo is not None:
+            self._conferir_enjoo(enjoo)
+            fator = max(0, S - div_arred(enjoo * S, self.enjoo.saturacao_exposicao))
+        elif enjoo is not None:
+            raise RuntimeError("M-SENS: o enjoo na exposicao sem a ConfigEnjooTela ligada")
         for c in CANAIS_TELA:
             alvo = self.otimo[c] + self.desloc[c]
-            self.desloc[c] = clamp(self.desloc[c] + mul(self.k_expo, niveis[c] - alvo, S), -co.teto_exposicao, co.teto_exposicao)
+            passo = mul(self.k_expo, niveis[c] - alvo, S)
+            if fator is not None:
+                passo = mul(fator, passo, S)
+            self.desloc[c] = clamp(self.desloc[c] + passo, -co.teto_exposicao, co.teto_exposicao)
         self.exposicoes += 1
+
+    def _conferir_enjoo(self, enjoo) -> None:
+        if type(enjoo) is not int or not 0 <= enjoo <= self.S:
+            raise ValueError(f"M-SENS: o enjoo da tela e inteiro em [0, S]: {enjoo!r}")
+
+    def tedio(self, enjoo: int) -> int:
+        """o tedio do enjoo (D-GV-ENJOO-CER), em [0, peso_tedio]: 0 ate a saturacao, e mul(peso_tedio, (e - sat)/(S - sat)) acima"""
+        if self.enjoo is None:
+            raise RuntimeError("M-SENS: o tedio sem a ConfigEnjooTela ligada")
+        self._conferir_enjoo(enjoo)
+        S, sat = self.S, self.enjoo.saturacao_exposicao
+        return mul(self.enjoo.peso_tedio, div_arred(max(0, enjoo - sat) * S, S - sat), S)
+
+    def agrado_efetivo(self, niveis: dict, enjoo: int) -> int:
+        """o agrado do nivel visto menos o tedio do enjoo (D-GV-ENJOO-CER), em [0, S]"""
+        self._exigir_olhar("agrado_efetivo")
+        return max(0, self.agrado(niveis) - self.tedio(enjoo))
 
     def _linhas_tela(self, telas: list | None) -> list[dict]:
         """as linhas da classe `tela` (a TV a vista, do motor): a proximidade e a novidade da linha; a habituacao anda depois"""
@@ -218,6 +267,11 @@ class Sens:
             out["telas"] = linhas_tela
             out["tela_niveis"] = self.niveis_tela(pc)
             out["tela_novidade"] = getattr(pc, "novidade_tela", None)
+            if self.enjoo is not None:                 # o enjoo (D-GV-ENJOO-CER): desligado, nenhum campo novo
+                e = getattr(pc, RECEPTOR_ENJOO_TELA, None)
+                if e is not None:
+                    self._conferir_enjoo(e)
+                out["tela_enjoo"] = e
         return out
 
     def estado_interno(self) -> dict:

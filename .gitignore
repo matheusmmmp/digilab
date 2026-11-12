@@ -147,6 +147,9 @@ artifacts_v2_digibrain_prototipo/**/vidas/
 artifacts_v3_conversa_dc3/**/vidas/
 !artifacts_v3_individualidade/
 artifacts_v3_individualidade/**/vidas/
+# GOSTO_VISUAL, GV3 (docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md): meta, medidas, analise, custo e o vidas.tar.gz no git; as vidas soltas fora
+!artifacts_v3_gosto_visual/
+artifacts_v3_gosto_visual/**/vidas/
 !artifacts_conversa_pet/
 artifacts_conversa_pet/**/vidas/
 !artifacts_linhagem/

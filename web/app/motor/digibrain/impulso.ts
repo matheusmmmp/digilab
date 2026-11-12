@@ -149,9 +149,11 @@ export class Impulso {
    *  a ConfigLanceDono ligada, e com ela sempre; BB-4) = a entrada do convite, 0 ou S: soma mul(w_bola_do_dono, bolaDoDono) ao inato do brincar */
   unidades(sens: SaidaSens, afeto: LeituraAfeto, contexto: ContextoImpulso, plast: PlastImpulso, memoria: MemoriaImpulso | null,
     drives: readonly string[], lembranca: Lembranca | null = null, facetas: unknown = null,
-    gosto: Readonly<Record<number, number>> | null = null, bolaDoDono: number | null = null): [UnidadeImpulso[], number[]] {
+    gosto: Readonly<Record<number, number>> | null = null, bolaDoDono: number | null = null,
+    enjoo: Readonly<Record<number, number>> | null = null): [UnidadeImpulso[], number[]] {
     if (facetas !== null) throw new Error("M-IMPULSO: as facetas ficam fora do laboratorio");
     if ((gosto !== null) !== (this.co !== null)) throw new Error("M-IMPULSO: o termo gosto vem so com a subchave olhar, e com ela sempre");
+    if (enjoo !== null && gosto === null) throw new Error("M-IMPULSO: o termo enjoo (D-GV-ENJOO-CER) so com a subchave olhar");
     const S = this.S, aMax = this.p.a_max;
     const z = this.contextoZ(sens, afeto, contexto);
     const inatoB: Record<string, number> = {}, habitoB: Record<string, number> = {};
@@ -172,7 +174,7 @@ export class Impulso {
     if (fala) for (const c of CONTEUDOS_FALA) habitoB[`${FALA}/${c}`] = plast.habito(`${FALA}/${c}`, z);
     const incentivos: Record<string, number> = {};
     const olhar = this.co !== null;
-    const nomesTermos = [...TERMOS, ...(this.cd.memoria_autobio ? ["lembranca"] : []), ...(olhar ? ["gosto"] : [])];
+    const nomesTermos = [...TERMOS, ...(this.cd.memoria_autobio ? ["lembranca"] : []), ...(olhar ? ["gosto"] : []), ...(enjoo !== null ? ["enjoo"] : [])];
     const lista = Impulso.alvos(sens, memoria, fala);
     if (olhar) {                                        // o olhar (P1f): o inato e o habito da linha nova; uma unidade por TV a vista, no fim
       let soma = 0;
@@ -182,6 +184,7 @@ export class Impulso {
       const telas = sens.telas ?? [];
       for (const o of telas) lista.push({ chave: chaveUnidade(COMPORTAMENTO_OLHAR, o.classe, o.id), acao: COMPORTAMENTO_OLHAR, tipo: o.classe, objeto: o, d: o.d });
       if (Object.keys(gosto!).some(id => !telas.some(o => String(o.id) === id))) throw new Error(`M-IMPULSO: o gosto de uma TV fora da vista: ${JSON.stringify(gosto)}`);
+      if (enjoo !== null && Object.keys(enjoo).some(id => !telas.some(o => String(o.id) === id))) throw new Error(`M-IMPULSO: o enjoo de uma TV fora da vista: ${JSON.stringify(enjoo)}`);
     }
     const out: UnidadeImpulso[] = [];
     for (const u of lista) {
@@ -196,6 +199,7 @@ export class Impulso {
         if (!(ot.classe in incentivos)) incentivos[ot.classe] = plast.incentivo(sens.pc, ot.classe, drives);
         termos["incentivo"] = mul(incentivos[ot.classe]!, ot.prox, S);
         termos["gosto"] = gosto![ot.id] ?? 0;
+        if (enjoo !== null) termos["enjoo"] = enjoo[ot.id] ?? 0;
       } else if (o !== null) {
         termos["prox"] = mul(this.w0_prox[b] ?? 0, o.prox, S);
         termos["nov"] = mul(this.w0_nov[b] ?? 0, o.nov, S);

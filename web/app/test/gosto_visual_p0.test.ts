@@ -1,6 +1,6 @@
 // O protótipo P0 do gosto visual (docs/futuro/gosto_visual_pet.md, seção 14; src/gostoVisual/). Sem DOM (vitest em node).
 // Cobre: a chave desligada por padrão e o app sem nada do protótipo; os sentidos (visão e som) a partir de pixels e amostras; o inato
-// determinístico pela semente; a habituação (o interesse se gasta e volta); a exposição e o carinho deslocando o alvo; o estado guardado
+// determinístico pela semente; a habituação (o interesse se gasta e só volta com a novidade; o resto do enjoo em gosto_visual_enjoo.test.ts); a exposição e o carinho deslocando o alvo; o estado guardado
 // sem quadro nem áudio e o erro alto num estado estranho; o protótipo fora do motor e do log.
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
@@ -55,10 +55,20 @@ describe("a chave", () => {
     /* a etapa 2 nao acrescenta nenhum: o toque na TV e o sinal da reacao chegam ao palco e aos lugares pela cena (cenaEstado.ts) */
     expect(quem.sort()).toEqual(["App.tsx", "TelaPet.tsx", "cantinhoTv.ts", "cantinhoTvConta.ts"]);
   });
-  test("o protótipo fica fora do motor, do log e do save: não importa mudarMotor, aplicarEvento nem o save", () => {
+  test("o protótipo fica fora do motor, do log e do save (salvo o cerebroTv.ts da v32): não importa mudarMotor, aplicarEvento nem o save", () => {
     const dir = join(import.meta.dirname, "..", "src", "gostoVisual");
     for (const n of readdirSync(dir)) {
       const t = readFileSync(join(dir, n), "utf8");
+      /* a captura ligada ao cérebro (D-GV-CEREBRO-1): a única porta a mais é o cerebroTv.ts, só para o pet com a TV no cérebro (a v32), e só
+         com o "st" (o evento do modo livre gravado) e o levar o pet do jogo até a TV; o gosto_visual_cerebro.test.ts confere a vida */
+      if (n === "cerebroTv.ts") {
+        expect(t.match(/mudarMotor\(/g), n).toHaveLength(2);
+        expect(t).toContain("mudarMotor(x => x.sentidoTela(valor), \"adiado\")");
+        expect(t).toContain("mudarMotor(p => p.levarPet(x, y))");
+        expect(t).toMatch(/\.temTv/);
+        expect(t, n).not.toMatch(/aplicarEvento|trocarMotor|from "\.\.\/save\.ts"|jogoAtual|\.observar\(|\.avancar\(|tempo\.ts|tocarNoPet|agir\(/);
+        continue;
+      }
       expect(t, n).not.toMatch(/mudarMotor|aplicarEvento|trocarMotor|from "\.\.\/save\.ts"/);
       /* nem pelas beiradas: nada lê o jogo solto, anda o tempo ou chama o motor direto */
       expect(t, n).not.toMatch(/jogoAtual|\.observar\(|\.avancar\(|tempo\.ts|tocarNoPet/);
@@ -110,7 +120,7 @@ describe("o gosto", () => {
   test("a mesma sequência dá o mesmo estado (determinismo do protótipo)", () => {
     expect(rodar(101, visto(0.8, 0.5, 0.6, 0.4), 200)).toEqual(rodar(101, visto(0.8, 0.5, 0.6, 0.4), 200));
   });
-  test("a habituação: olhando a mesma coisa, o interesse cai e o pet desvia; sem olhar, o interesse volta", () => {
+  test("a habituação: olhando a mesma coisa, o interesse cai e o pet desvia; sem olhar, ele não volta sozinho (o enjoo, D-GV-ENJOO-1)", () => {
     const ina = inatoDaSemente(101), s: Sentido = { visao: { cor: ina.otimo.cor, brilho: ina.otimo.brilho, movimento: ina.otimo.movimento, complexidade: ina.otimo.complexidade }, som: null };
     let e = estadoInicial(), olhou = false, desviou = false;
     for (let i = 0; i < 120; i++) { const r = passo(ina, e, s, false); e = r.estado; if (r.leitura.olhando) olhou = true; else if (olhou) desviou = true; }
@@ -118,6 +128,9 @@ describe("o gosto", () => {
     expect(desviou).toBe(true);
     const cansado = e.interesse;
     expect(cansado).toBeLessThan(0.6);
+    /* de lado, com a imagem parada, o interesse não volta (antes voltava em ~16 s e o pet olhava de novo) */
+    for (let i = 0; i < 120; i++) { const r = passo(ina, e, s, false); e = r.estado; expect(r.leitura.olhando).toBe(false); }
+    expect(e.interesse).toBeLessThanOrEqual(cansado);
     /* um quadro novo devolve interesse (a deshabituação) */
     const novo = passo(ina, e, visto(1 - s.visao.cor, 1 - s.visao.brilho, s.visao.movimento, s.visao.complexidade), false);
     expect(novo.leitura.novidade).toBeGreaterThan(0.1);
@@ -145,12 +158,13 @@ describe("o gosto", () => {
   });
   test("o estado guardado: só o aprendido e o tempo; volta igual; um texto estranho falha alto", () => {
     const e = rodar(101, visto(0.3, 0.7, 0.2, 0.9), 50, true), t = paraTexto(e);
-    expect(Object.keys(JSON.parse(t))).toEqual(["v", "exposicao", "carinho", "segundosJuntos", "carinhos"]);
+    expect(Object.keys(JSON.parse(t))).toEqual(["v", "exposicao", "carinho", "memoria", "segundosJuntos", "carinhos"]);   /* a memória do enjoo (D-GV-ENJOO-3) */
     const d = doTexto(t);
     expect(d.exposicao).toEqual(e.exposicao);
     expect(d.carinho).toEqual(e.carinho);
     expect(d.segundosJuntos).toBe(50);
-    expect(() => doTexto('{"v":2}')).toThrow(/versão/);
+    expect(d.memoria).toEqual(e.memoria);
+    expect(() => doTexto('{"v":3}')).toThrow(/versão/);
     expect(() => doTexto('{"v":1,"exposicao":{},"carinho":{},"segundosJuntos":0,"carinhos":0}')).toThrow(/exposicao/);
   });
   test("o tempo junto em palavras", () => {

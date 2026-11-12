@@ -20,6 +20,7 @@ import type { ObservacaoLobos, OcorridoCorpo, RngCerebro, TransicaoLobos } from 
 import { RandomPy, type EscolherAlvo } from "./mundo.ts";
 import type { ConfigCorpo } from "./constantes.ts";
 import type { ConfigTela } from "./tv.ts";
+import type { ConfigEnjooTela } from "./enjoo_tela.ts";
 import type { AcaoDono, AcaoPet, EstadoVida } from "./tipos.ts";
 
 /** G-BYPASS: com o corpo ligado, um drive do Estado mudou por fora da quimica */
@@ -99,7 +100,7 @@ export class MotorCorpo {
 
   /** `comMundo`: o corpo do laco com o mundo fisico (motor_corpo_mundo.ts, os v12), com a curiosidade (CD-8); os v11 nascem sem */
   constructor(politica: PoliticaCorpo, semente: number, cc: ConfigCorpo = CCO_CORPO_V11, estado: EstadoVida = estadoNascimentoPy(),
-              comMundo = false, tela?: ConfigTela) {
+              comMundo = false, tela?: ConfigTela, enjoo?: ConfigEnjooTela) {
     if (!Number.isSafeInteger(semente)) throw new Error(`semente do motor tem de ser inteira: ${semente}`);
     if (!cc.ligada || !cc.drives_novos || !cc.gestos) {
       throw new Error("o laco do v11 e o do regime `corpo`: ConfigCorpo ligada, com os drives novos e os gestos");
@@ -109,7 +110,7 @@ export class MotorCorpo {
     this.cc = cc;
     this.rngAmbiente = new RandomPy(semente);
     this.rngPolitica = new RandomPy(semente + DESLOCAMENTO_RNG_POLITICA);
-    this.corpo = Corpo.deEstado(estado, tela === undefined ? { cc, comMundo } : { cc, comMundo, tela });
+    this.corpo = Corpo.deEstado(estado, tela === undefined ? { cc, comMundo } : enjoo === undefined ? { cc, comMundo, tela } : { cc, comMundo, tela, enjoo });
     this.estado = this.corpo.noEstado(estado);
   }
 
@@ -172,6 +173,13 @@ export class MotorCorpo {
   // ------------------------------------------------------------ leituras
   observacao(): ObservacaoLobos {
     this.sentirAgora();                                  // a tela (P1f): o estimulo de agora, como o `percepcao_corpo` do Python
+    return { v: vetor(this.estado), tdc: this.estado.tick - this.estado.ultimoCuidado, corpo: this.corpo.receptores() };
+  }
+
+  /** a observacao de agora para quem so le (as telas, o painel do DigiBrain, o desejo da tela): a mesma do `observacao`, sem entregar a tela ao
+   *  corpo de novo (D-GV-CEREBRO-7: com a TV, o `sentirAgora` mexe no corpo, no susto e na marca do tick, e uma leitura da tela mudaria o pet
+   *  fora do replay). Sem a TV (todo pet de antes da v32), e a mesma conta do `observacao` */
+  leituraObservacao(): ObservacaoLobos {
     return { v: vetor(this.estado), tdc: this.estado.tick - this.estado.ultimoCuidado, corpo: this.corpo.receptores() };
   }
 

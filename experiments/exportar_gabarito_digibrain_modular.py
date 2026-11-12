@@ -56,7 +56,7 @@ from bancada.regras_mundo import simular_vida_fisico  # noqa: E402
 from digilab.config import CONFIG_DIGIBRAIN_INATOS, CONFIG_DIGIBRAIN_LIGADA, CONFIG_PADRAO, D_MAX_ILHA_GRANDE  # noqa: E402
 from digilab.digibrain import adapt as adapt_mod  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
-from digilab.corpo import todos_receptores_tela  # noqa: E402
+from digilab.corpo import RECEPTOR_ENJOO_TELA, todos_receptores_tela  # noqa: E402
 from digilab.motor_corpo import PercepcaoCorpo  # noqa: E402
 from digilab.mundo import DonoComLugar  # noqa: E402
 
@@ -98,8 +98,9 @@ def _texto(obj) -> str:
     return json.dumps(obj, sort_keys=True, separators=(",", ":"))
 
 
-# GOSTO_VISUAL P1b: os campos da tela na PercepcaoCorpo, vazios com a ConfigTela desligada, ficam fora (o gabarito de hoje sai byte a byte)
-_TELA = frozenset(todos_receptores_tela())
+# GOSTO_VISUAL P1b: os campos da tela na PercepcaoCorpo, vazios com a ConfigTela desligada, ficam fora (o gabarito de hoje sai byte a byte);
+# o do enjoo (D-GV-ENJOO-CER), vazio com a ConfigEnjooTela desligada, tambem
+_TELA = frozenset(todos_receptores_tela()) | {RECEPTOR_ENJOO_TELA}
 
 
 def paraj(v):

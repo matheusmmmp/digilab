@@ -21,11 +21,14 @@ export interface EstadoTv {
   reacao: Reacao | null;
   /** o vídeo da captura (o mesmo elemento que captura.ts lê uma vez por segundo); null na TV do jogo ou desligada */
   video: HTMLVideoElement | null;
+  /** o pet desenhado vai até a almofada: sempre no P0; no pet com a TV no cérebro (a v32), só quando o cérebro escolheu olhar
+      (D-GV-CEREBRO-9: a vista não mostra o pet assistindo enquanto o cérebro faz outra coisa) */
+  petVai: boolean;
   /** sobe a cada mudança (a cena compara para saber se algo mudou) */
   versao: number;
 }
 
-export const TV: EstadoTv = { ligada: false, origem: null, programa: null, sentido: null, reacao: null, video: null, versao: 0 };
+export const TV: EstadoTv = { ligada: false, origem: null, programa: null, sentido: null, reacao: null, video: null, petVai: true, versao: 0 };
 
 /** muda o estado da TV (só o cartão do P0 chama) */
 export function publicarTv(m: Partial<Omit<EstadoTv, "versao">>): void {
@@ -35,5 +38,5 @@ export function publicarTv(m: Partial<Omit<EstadoTv, "versao">>): void {
 
 /** desliga a TV: tudo volta ao estado de partida */
 export function desligarTv(): void {
-  publicarTv({ ligada: false, origem: null, programa: null, sentido: null, reacao: null, video: null });
+  publicarTv({ ligada: false, origem: null, programa: null, sentido: null, reacao: null, video: null, petVai: true });
 }
