@@ -406,3 +406,26 @@ Atrás da subchave `co6` da `ConfigCooperacao`, desligada por padrão e só com 
 - **O painel:** a seção "Com o irmão" no DigiBrain do modular, em palavras e sem número (CO6-7, D-CO6c-2). Ela só aparece quando a CO6 estiver
   ligada no jogo.
 - **Os desvios:** D-CO6c-1 a D-CO6c-5, no registro de 2026-11.
+
+## CO7a, o gabarito das vidas com a CO6 ligada (2026-11-12, Claude Code, Opus 5.5, branch `v3-cooperacao-co7`)
+
+Gravado com a CO6 inteira e antes de qualquer mudança da CO7, num commit só dele.
+
+- **O exportador:** `experiments/exportar_gabarito_co7.py` grava `tests/gabaritos/co7_vidas_de_hoje.json.gz`, as vidas da CO6a com a CO6
+  ligada.
+- **O teste:** `tests/test_cooperacao_co7.py` refaz as vidas e as compara com o gabarito (o G2 da CO7).
+- **O desvio:** D-CO7a-1, no registro de 2026-11.
+
+## CO7b, o escudo, a universalização e a culpa e a inveja, no Python (2026-11-12, Claude Code, Opus 5.5, branch `v3-cooperacao-co7b`)
+
+Atrás da subchave `co7` da `ConfigCooperacao` (só com a `co6`), no grupo e no cérebro do modular (`DigiBrain(cfg_cooperacao=...)`).
+
+- **As contas** (`digilab/digibrain/dever.py`, só do que o pet vê e do próprio estado): o M-SENS põe a percepção social em posições
+  absolutas, com a posição de antes de cada outro; o M-ARB tira as unidades de comer a comida para a qual um outro aflito vai (o escudo, com
+  `k >= 1/4 de S` e sem a privação do próprio pet) e aplica o peso da universalização; o M-AFETO tira a culpa e a inveja da valência da
+  decisão.
+- **O registro:** o motivo de cada decisão ganha `dever` (a situação, as unidades removidas, as que reprovaram, as que aprovaram, a culpa e a
+  inveja).
+- **Os testes** (`tests/test_cooperacao_co7.py`): o G2; o G-ESCUDO nas 7 decisões em que o escudo vale; o G-RECEPTOR-SOCIAL pela árvore do
+  `dever.py`; os casos à mão; e o gabarito do G-PAR-CO7 para o TS (`web/app/test/gabaritos/co7_python.json.gz`).
+- **Os desvios:** D-CO7b-1 a D-CO7b-9, no registro de 2026-11.
