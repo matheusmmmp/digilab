@@ -184,8 +184,8 @@ def test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain():
                                                                              "experiments/entradas_dc4.py",
                                                                              # COOPERACAO, CO6a: o gabarito das vidas do grupo com o modular
                                                                              "experiments/exportar_gabarito_co6.py",
-                                                                             # COOPERACAO, CO7a: o gabarito das vidas do grupo com a CO6 (pelo exportador da CO6a)
-                                                                             "experiments/exportar_gabarito_co7.py"}
+                                                                             # COOPERACAO, CO7b: o gabarito do G-PAR-CO7 (o modular com a CO7 no grupo)
+                                                                             "experiments/exportar_gabarito_co7_par.py"}
     assert "lembranca" not in (RAIZ / "digilab" / "mundo.py").read_text(encoding="utf-8")
 
 

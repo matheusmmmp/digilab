@@ -82,8 +82,8 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              "experiments/entradas_dc4.py",
                                                                              # COOPERACAO, CO6a: o gabarito das vidas do grupo com o modular (o braco REL pelo orquestrador)
                                                                              "experiments/exportar_gabarito_co6.py",
-                                                                             # COOPERACAO, CO7a: o gabarito das vidas do grupo com a CO6 (pelo exportador da CO6a)
-                                                                             "experiments/exportar_gabarito_co7.py"}
+                                                                             # COOPERACAO, CO7b: o gabarito do G-PAR-CO7 (o modular com a CO7 no grupo)
+                                                                             "experiments/exportar_gabarito_co7_par.py"}
 
 
 def test_o_digibrain_so_existe_com_a_chave_ligada_e_e_a_v13():
@@ -119,7 +119,7 @@ def test_os_ganchos_vazios():
 
 
 # ------------------------------------------------------------ o G-INT, a G-RECEPTOR, o G-SEM-DIRECAO e o preflight
-ARQUIVOS = {"__init__.py", "_comum.py", "adapt.py", "afeto.py", "arb.py", "decodificador.py", "estado.py", "ganchos.py", "impulso.py", "mem.py", "pers.py", "plast.py",
+ARQUIVOS = {"__init__.py", "_comum.py", "adapt.py", "afeto.py", "arb.py", "decodificador.py", "dever.py", "estado.py", "ganchos.py", "impulso.py", "mem.py", "pers.py", "plast.py",
             "sens.py"}
 
 
