@@ -23,7 +23,7 @@ export const TIPOS_ALVO_DIGIBRAIN = ["racao", "a", "b", "c", "podre", "bola", "c
 
 export type InatosMem = typeof INATOS_MODULAR;
 /** o que o M-MEM le da ConfigDigibrain */
-export interface ConfigDigibrainMem { memoria_autobio: boolean; controle_mem: string; facetas_mem?: boolean }
+export interface ConfigDigibrainMem { memoria_autobio: boolean; controle_mem: string; facetas_mem?: boolean; olhar?: boolean }
 export interface ConfigMundoMem { sub: number }
 
 type Dict = Record<string, any>;
@@ -157,6 +157,8 @@ export class Memoria {
   minuto: number | null = null;
   /** a ponte da luta (PE3): a origem `luta`; desligada, nenhum campo novo */
   luta: boolean;
+  /** as classes do episodio completo: as de hoje e, com a subchave `olhar` (P1f, D-GV-P1f-1), a `tela` */
+  readonly classesAutobio: readonly string[];
 
   constructor(cfgMundo: ConfigMundoMem, inatosOuNulo: InatosMem | null, cd: ConfigDigibrainMem, luta = false) {
     this.p = inatosOuNulo ?? INATOS_MODULAR;
@@ -166,6 +168,7 @@ export class Memoria {
     if (cd.controle_mem !== "rel") throw new Error(`M-MEM: o controle_mem ${JSON.stringify(cd.controle_mem)} e controle de pesquisa, fora do laboratorio (so "rel")`);
     this.autobio = cd.memoria_autobio;
     this.luta = luta;
+    this.classesAutobio = cd.olhar ? [...CLASSES_AUTOBIO, "tela"] : [...CLASSES_AUTOBIO];
     if (luta && !cd.memoria_autobio) throw new Error("M-MEM: a origem luta so com a memoria_autobio");
   }
 
@@ -229,7 +232,7 @@ export class Memoria {
     if (!this.autobio) throw new Error("M-MEM: o episodio completo so com a memoria_autobio");
     if (ep.origem === ORIGEM_LUTA) {                  // a ponte da luta (PE3): a classe e o rival, e o outro tambem
       if (!this.luta || typeof ep.outro !== "string" || ep.outro === "" || ep.classe !== ep.outro) throw new Error(`M-MEM: episodio de luta ${JSON.stringify(ep)}`);
-    } else if (!(CLASSES_AUTOBIO as readonly string[]).includes(ep.classe) || !(ORIGENS_AUTOBIO as readonly string[]).includes(ep.origem)) {
+    } else if (!this.classesAutobio.includes(ep.classe) || !(ORIGENS_AUTOBIO as readonly string[]).includes(ep.origem)) {
       throw new Error(`M-MEM: episodio ${JSON.stringify(ep)}`);
     }
     if (ep.origem === "visita" && (ep.sigma > 0 || ep.classe !== "nao_havia")) throw new Error("M-MEM: a visita sem comida tem sigma <= 0 e a classe nao_havia");

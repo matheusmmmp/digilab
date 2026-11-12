@@ -16,6 +16,7 @@ import {
   caraterCanonico, criarRng, rivaisArena, formaDaChave, hashSemente, lutarNucleoPoc, multEstagio, NPC, sorteiosPoc, statsDe,
   type Carater, type Especie, type Estagio, type Exercicio, type Forma, type FormaAdultaNormal, type IdCena, type Stat, type Stats, type StatsPoc, type TiroPoc, type EsquivaPoc,
 } from "../../motor/index.ts";
+import { APOIO_LP6, APOIO_TABELA, ARENA_POR_ESTAGIO_LP6, ORDEM_ESTAGIOS, type Apoio, type ArenaPorEstagio, type DadosForma, type TabelaFormas } from "../../motor/arena/index.ts";
 
 /* ---------------------------------------------------------------- o candidato */
 export type EstagioLuta = "crianca" | "adolescente" | "adulto" | "mega";
@@ -46,6 +47,15 @@ export interface Candidato {
   /** a esquiva pela perspicacia e pela velocidade (o nucleo, D-LP5-14): ligada 0 = a luta da POC. A perspicacia e
       (mira / neutro)^gamaMira x (1 + kAtento x o eixo atento do carater); a agilidade, (folego / neutro)^gamaFolego */
   esquiva: EsquivaPoc & { ligada: number; gamaMira: number; kAtento: number; gamaFolego: number };
+  /** o golpe de apoio (LP6-1; docs/PLANO_LP6_SEGUNDO_GOLPE.md, secao 3): ligado 0 = a luta sem apoio, byte a byte. `ritmo` e o tempo do clipe
+      do apoio em vezes o do golpe (a tabela do git tem 0,6; outro valor so na bancada, pela tabelaDoRitmo) */
+  apoio: Omit<Apoio, "desde" | "recua"> & { ligado: number; ritmo: number;
+    /** o apoio so a partir deste estagio do maior dos dois (o indice no ORDEM_ESTAGIOS: 0 = todos, 3 = Ultimate, 4 = Mega; D-LP6-3-7) */
+    desde: number;
+    /** o recuo depois do apoio de perto (D-LP6-3-4), atras da chave propria: 0 = a regra da LP6-1 */
+    recua: number };
+  /** a elipse pelo estagio (LP6-1; secao 4a): ligada 0 = a elipse de sempre, byte a byte */
+  arena: ArenaPorEstagio & { ligada: number };
 }
 const NPCS_V6 = ["npc_tier1_brutamontes", "npc_tier2_sentinela", "npc_tier2_carcereiro", "npc_tier2_porteiro", "npc_v6_youkomon",
   "npc_v5_myotismon", "npc_v6_marinbullmon", "npc_v5_puppetmon", "npc_v5_machinedramon", "npc_v5_piedmon"] as const;
@@ -62,6 +72,8 @@ export const CANDIDATO_V21: Candidato = Object.freeze({
   fatorRival: { salao: 1, liga: 1, torre: 1, fabrica: 1 },
   tiro: { ...TIRO_POC_V21 },
   esquiva: { ligada: 0, kChance: 1, kReacao: 1, kDash: 1, chanceMax: .95, pertoChance: 0, pertoReacao: 200, contraMs: 0, gamaMira: 1, kAtento: .5, gamaFolego: 1 },
+  apoio: { ligado: 0, ...APOIO_LP6, ritmo: APOIO_TABELA.ritmo, desde: 0, recua: 0 },
+  arena: { ligada: 0, ...ARENA_POR_ESTAGIO_LP6 },
 });
 /** a esquiva do candidato na entrada da luta: so ligada (senao a luta da POC, byte a byte) */
 export const esquivaDe = (c: Candidato): EsquivaPoc | undefined => {
@@ -70,6 +82,40 @@ export const esquivaDe = (c: Candidato): EsquivaPoc | undefined => {
   const { kChance, kReacao, kDash, chanceMax, pertoChance, pertoReacao, contraMs } = c.esquiva;
   return { kChance, kReacao, kDash, chanceMax, pertoChance, pertoReacao, contraMs };
 };
+/** as chaves da LP6 na entrada da luta (LP6-3): o apoio, a elipse pelo estagio e a tabela das formas do ritmo do apoio. Desligadas, nada
+    entra, e a luta sai a de sempre, byte a byte */
+export interface ExtrasLp6 { apoio?: Apoio; arenaPorEstagio?: ArenaPorEstagio; tabela?: TabelaFormas }
+const zeroOuUm = (x: number, nome: string) => { if (x !== 0 && x !== 1) throw new Error(`bancada: ${nome} e 0 ou 1 (${x})`); return x === 1; };
+export function extrasLp6(c: Candidato): ExtrasLp6 {
+  const ap = zeroOuUm(c.apoio.ligado, "apoio.ligado"), ar = zeroOuUm(c.arena.ligada, "arena.ligada");
+  if (!ap && c.apoio.ritmo !== APOIO_TABELA.ritmo) throw new Error("bancada: o ritmo do apoio so muda com o apoio ligado");
+  const tabela = ap ? tabelaDoRitmo(c.apoio.ritmo) : undefined;
+  const { desde, recua } = c.apoio;
+  if (!(Number.isInteger(desde) && desde >= 0 && desde < ORDEM_ESTAGIOS.length)) throw new Error(`bancada: apoio.desde e um indice do ORDEM_ESTAGIOS (${desde})`);
+  const rec = zeroOuUm(recua, "apoio.recua");
+  if (!ap && (desde || rec)) throw new Error("bancada: o desde e o recua do apoio so mudam com o apoio ligado");
+  return {
+    ...(ap ? { apoio: { dano: c.apoio.dano, recarga: c.apoio.recarga, longeMs: c.apoio.longeMs, ...(desde ? { desde: ORDEM_ESTAGIOS[desde] } : {}), ...(rec ? { recua: true } : {}) } } : {}),
+    ...(ar ? { arenaPorEstagio: { Ultimate: c.arena.Ultimate, Mega: c.arena.Mega } } : {}),
+    ...(tabela ? { tabela } : {}),
+  };
+}
+const TABELAS_RITMO = new Map<number, TabelaFormas>();
+/** a tabela das formas com o clipe do apoio a `ritmo` vezes o do golpe (a regra do tools/gerar_tabela_arena.py: o instante do golpe e o clipe
+    vezes o ritmo; o resto igual). No ritmo do git (0,6), undefined: a tabela do git. O teste confere que a regra refaz a tabela do git */
+export function tabelaDoRitmo(ritmo: number): TabelaFormas | undefined {
+  if (ritmo === APOIO_TABELA.ritmo) return undefined;
+  if (!(Number.isFinite(ritmo) && ritmo >= .2 && ritmo <= 1.5)) throw new Error(`bancada: ritmo do apoio fora da faixa (${ritmo})`);
+  let t = TABELAS_RITMO.get(ritmo);
+  if (!t) { t = Object.freeze(refazerApoio(FORMAS_ARENA, ritmo)); TABELAS_RITMO.set(ritmo, t); }
+  return t;
+}
+export function refazerApoio(base: TabelaFormas, ritmo: number): Record<string, DadosForma> {
+  return Object.fromEntries(Object.entries(base).map(([k, f]) => {
+    if (!f.apoio || typeof f.msApoio !== "number") throw new Error(`bancada: a forma ${k} nao tem o apoio na tabela`);
+    return [k, { ...f, apoio: { ...f.apoio, t: f.golpe.t * ritmo }, msApoio: Math.round(f.msGolpe * ritmo) }];
+  }));
+}
 /** o tiro do candidato e o da POC? (entao a luta nao leva o `tiro` na entrada, e sai a de sempre, byte a byte) */
 export const tiroDaPoc = (t: TiroPoc): boolean => (Object.keys(TIRO_POC_V21) as (keyof TiroPoc)[]).every(k => t[k] === TIRO_POC_V21[k]);
 const ehEstagioLuta = (e: string): e is EstagioLuta => (ESTAGIOS_LUTA as readonly string[]).includes(e);
@@ -182,8 +228,9 @@ export const lutadorDoPet = (c: Candidato, p: PetBancada, n: number): StatsPoc =
 export const sementeLuta = (base: number, k: number): number => hashSemente("equilibrio-poc", base, k);
 export interface Lado { forma: string; stats: StatsPoc; vida0?: number }
 export interface Luta1 { vencedor: "a" | "b" | null; fim: boolean; relogio: number; vidaA: number }
-export function lutar(cena: IdCena, semente: number, a: Lado, b: Lado, tiro?: TiroPoc, esquiva?: EsquivaPoc): Luta1 {
-  const r = lutarNucleoPoc({ cena, semente, a, b, ...(tiro && !tiroDaPoc(tiro) ? { tiro } : {}), ...(esquiva ? { esquiva } : {}) }, sorteiosPoc(semente));
+export function lutar(cena: IdCena, semente: number, a: Lado, b: Lado, tiro?: TiroPoc, esquiva?: EsquivaPoc, lp6: ExtrasLp6 = {}): Luta1 {
+  const r = lutarNucleoPoc({ cena, semente, a, b, ...(tiro && !tiroDaPoc(tiro) ? { tiro } : {}), ...(esquiva ? { esquiva } : {}),
+    ...(lp6.apoio ? { apoio: lp6.apoio } : {}), ...(lp6.arenaPorEstagio ? { arenaPorEstagio: lp6.arenaPorEstagio } : {}) }, sorteiosPoc(semente), lp6.tabela);
   return { vencedor: r.vencedor, fim: r.fim, relogio: r.relogio, vidaA: r.vidaA };
 }
 /** um contador de vitorias, empates, lutas sem fim e o relogio (histograma em 100 ms) */

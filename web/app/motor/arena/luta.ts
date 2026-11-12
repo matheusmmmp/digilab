@@ -1,7 +1,7 @@
 /* A luta inteira, sem tela (LP1): a entrada (o mapa, as duas formas, os stats de cada lado e a semente) da sempre o mesmo resultado, que
    e o que o replay da LP2 vai refazer. Os dois lados sao a IA da arena na dificuldade "normal" (a LP-3); a tela da LP3 assiste passo a
    passo com a mesma configuracao. */
-import { ACAO, LIMITE_MS, OPCOES_PADRAO, type Apoio, type ArenaPorEstagio, type Esquiva, type Tiro } from "./constantes.ts";
+import { ACAO, LIMITE_MS, OPCOES_PADRAO, ORDEM_ESTAGIOS, type Apoio, type ArenaPorEstagio, type Esquiva, type Tiro } from "./constantes.ts";
 import { FORMAS_ARENA } from "./formas.ts";
 import type { DadosForma } from "./tipos.ts";
 import { sorteiosPorFluxo } from "./rng.ts";
@@ -35,7 +35,9 @@ const numOk = (v: unknown, min: number, max: number) => typeof v === "number" &&
 /** o golpe de apoio da entrada (LP6-1): cada numero finito e na faixa, senao falha alto */
 export function conferirApoio(x: Apoio): Apoio {
   if (!numOk(x.dano, 0.05, 2) || !numOk(x.recarga, 0.25, 10) || !numOk(x.longeMs, 0, 10_000)) throw new Error(`arena: golpe de apoio invalido ${JSON.stringify(x)}`);
-  return { dano: x.dano, recarga: x.recarga, longeMs: x.longeMs };
+  if (x.desde !== undefined && !(ORDEM_ESTAGIOS as readonly string[]).includes(x.desde)) throw new Error(`arena: estagio do apoio invalido ${JSON.stringify(x.desde)}`);
+  if (x.recua !== undefined && typeof x.recua !== "boolean") throw new Error(`arena: recua do apoio invalido ${JSON.stringify(x.recua)}`);
+  return { dano: x.dano, recarga: x.recarga, longeMs: x.longeMs, ...(x.desde !== undefined ? { desde: x.desde } : {}), ...(x.recua !== undefined ? { recua: x.recua } : {}) };
 }
 /** a elipse pelo estagio da entrada (LP6-1): fatores finitos, de 1 a 2, e o do Mega pelo menos o do Ultimate, senao falha alto */
 export function conferirArenaPorEstagio(x: ArenaPorEstagio): ArenaPorEstagio {

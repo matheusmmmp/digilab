@@ -5,7 +5,7 @@
    Visual (2026-11-01, no lugar da Aparencia; #/config/aparencia leva a ela), e as dicas ficam no menu principal; nada aqui muda o motor, as regras ou o save, a nao ser pelas mesmas acoes de antes
    (tempo e ovo novo, via jogo.ts/tempo.ts). Opcoes das pranchas que o app nao tem ficam de fora. Rotas #/config/<parte> iguais. */
 import { useId } from "react";
-import { Activity, Camera, ChevronRight, Clock, Eye, FlaskConical, Info, Lightbulb, MessageCircle, Mountain, RotateCcw, ScrollText, Volume1, Volume2, type LucideIcon } from "lucide-react";
+import { Activity, Camera, ChevronRight, Clock, Eye, FlaskConical, Info, Lightbulb, MessageCircle, Mountain, RotateCcw, ScrollText, Users, Volume1, Volume2, type LucideIcon } from "lucide-react";
 import { Balao, propsBalao } from "../../componentes/Dica.tsx";
 import { escolherViagem, useViagemLigada } from "../../viagem.ts";
 import { useState } from "react";
@@ -17,7 +17,7 @@ import { ICONE } from "../../decoracao.ts";
 import { FALA_LLM, ligarFalaLLM, rotuloLLM, useFalaLLM } from "../../fala.ts";
 import { escolherConversaNova, escolherFalaRede, escolherModo, useFalaLivre, type ModoFala } from "../../falaLivre.ts";
 import { replayDaTelaConfere, textoDaTela, useJogo } from "../../jogo.ts";
-import { abrirEscolhaBrasao } from "../../jornada.ts";
+import { abrirEscolhaBrasao, chocarDoBrasao } from "../../jornada.ts";
 import type { ParteConfig } from "../../rotas.ts";
 import { AvisoSom } from "../../componentes/AvisoSom.tsx";
 import { SOM, useSom } from "../../som.ts";
@@ -57,7 +57,7 @@ function Aj({ ic: I, nome, rotulo, resumo, tag, novo, interruptor, abrir }: {
     </span>
   );
 }
-function Principal({ abrir }: { abrir: (p: ParteConfig) => void }) {
+function Principal({ abrir, irPet }: { abrir: (p: ParteConfig) => void; irPet: () => void }) {
   const { motor: m } = useJogo(), tema = useTema(), pele = usePele(), habitat = useHabitat(), fl = useFalaLivre(), { velocidade } = useTempo(), viagem = useViagemLigada(), som = useSom(), mitologia = useMitologia();
   const [dicas, setDicas] = useState(dicasLigadas), detalhesPet = useDetalhesPet(), [revisto, setRevisto] = useState(false);
   useFalaLLM(); useLab();
@@ -81,11 +81,36 @@ function Principal({ abrir }: { abrir: (p: ParteConfig) => void }) {
         <Volume rotulo="Volume dos efeitos" nome="Efeitos" v={som.volEfeitos} mudar={v => SOM.volumeEfeitos(v)} />
       </>)}
       <AvisoSom />
+      <PetGemeo irPet={irPet} />
       <Aj ic={ScrollText} nome="Registro" rotulo="Registro e replay" resumo={`semente ${m.semente} · ${m.log.length} eventos · exportar`} abrir={() => abrir("dados")} />
       <Aj ic={Clock} nome="Tempo" tag="teste" resumo={velocidade === 0 ? "pausado" : `velocidade ${nomeVelocidade(velocidade)}`} abrir={() => abrir("dados")} />
       <Aj ic={FlaskConical} nome="Laboratório" tag="experimental" resumo={labLigado() ? "modo ligado · o pet de teste com o DigiBrain modular" : "desligado · o jogo é o de hoje"} abrir={() => abrir("laboratorio")} />
       <Aj ic={Info} nome="Sobre" resumo="versão, créditos e procedência" abrir={() => abrir("sobre")} />
     </div>
+  );
+}
+/** o pet gemeo (COOPERACAO, CO4c; a chave DOIS_OVOS_LIGADO): choca os dois ovos juntos, o primeiro do brasao do pet de agora e o segundo
+    surpresa (D-CO4b-6), para o dono ver os dois no mesmo mundo e comparar o que cada um faz. O pet de agora (ou o par) vai inteiro para a
+    espera, como no ovo novo da conclusao (chocarDoBrasao com guardarAtivo): nada se apaga. Fora do laboratorio */
+function PetGemeo({ irPet }: { irPet: () => void }) {
+  const { motor: m, grupo, emLab } = useJogo(), [confirmar, setConfirmar] = useState(false), [erro, setErro] = useState<string | null>(null);
+  const resumo = emLab ? "volte ao seu pet para chocar os gêmeos" : grupo ? "choca outro par de gêmeos; o par de agora vai para a espera"
+    : "choca dois ovos juntos, um do brasão do seu pet e o outro surpresa, para comparar o que cada um faz; o pet de agora vai para a espera";
+  const chocar = () => {
+    try { chocarDoBrasao(m.especie, true, m.ritmo); setConfirmar(false); setErro(null); irPet(); }
+    catch (err) { setErro(err instanceof Error ? err.message : String(err)); }
+  };
+  return (
+    <>
+      <Aj ic={Users} nome="Pet gêmeo" rotulo="Gerar o pet gêmeo" tag="teste" resumo={resumo} abrir={emLab ? undefined : () => setConfirmar(c => !c)} />
+      {confirmar && !emLab && (
+        <div className="mc-linha">
+          <BotaoHx onClick={chocar}>Chocar os gêmeos (o pet de agora vai para a espera)</BotaoHx>
+          <BotaoHx onClick={() => setConfirmar(false)}>Cancelar</BotaoHx>
+        </div>
+      )}
+      {erro && <p className="mc-erro" role="alert">{erro}</p>}
+    </>
   );
 }
 /** a subarea Visual: os menus (a pele) e o habitat (o tema, o mapa, a camera e o visual) */
@@ -254,7 +279,7 @@ export function TelaConfig({ parte, abrir, irPet }: { parte: ParteConfig; abrir:
           <h3 className="mc-bloco__tit" id="tela-titulo">{TITULO[parte]}</h3>
         </div>
       )}
-      {parte === "principal" ? <Principal abrir={abrir} /> : parte === "visual" ? <Visual /> : parte === "dados" ? <Dados irPet={irPet} />
+      {parte === "principal" ? <Principal abrir={abrir} irPet={irPet} /> : parte === "visual" ? <Visual /> : parte === "dados" ? <Dados irPet={irPet} />
         : parte === "fala" ? <Fala /> : parte === "laboratorio" ? <Laboratorio irPet={irPet} /> : <Sobre />}
     </section>
   );

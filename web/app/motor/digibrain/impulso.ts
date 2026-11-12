@@ -8,11 +8,11 @@
    do receptor do conteudo (TERMO_DO_CONTEUDO) vezes o `ganho_conteudo` (mul) e os dos outros dois conteudos fora; o habito e o da linha de H
    da unidade (linhaDaOpcao). Desligada, a unidade e a de hoje. */
 import { chaveUnidade, mul, phi, raizInteira, textoDaChave, type ChaveUnidade } from "./_comum.ts";
-import { CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTOS_DIGIBRAIN, CONFIG_FALA_UNIDADES, CONTEUDOS_FALA, INATOS_MODULAR, RECEPTORES_DIGIBRAIN,
-  TERMO_DO_CONTEUDO } from "./constantes.ts";
+import { CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTO_OLHAR, COMPORTAMENTOS_DIGIBRAIN, CONFIG_FALA_UNIDADES, CONFIG_OLHAR, CONTEUDOS_FALA,
+  INATOS_MODULAR, RECEPTORES_DIGIBRAIN, TERMO_DO_CONTEUDO, type ConfigOlhar } from "./constantes.ts";
 import { linhaDaOpcao } from "./plast.ts";
 import type { LeituraAfeto } from "./afeto.ts";
-import type { CorpoModular, ObjetoSens, SaidaSens } from "./sens.ts";
+import type { CorpoModular, LinhaTela, ObjetoSens, SaidaSens } from "./sens.ts";
 
 export const TERMOS = ["inato", "prox", "nov", "incentivo", "habito", "memoria", "persistencia"] as const;
 /** o comportamento que vira as unidades de fala (so com a subchave `fala_unidades`) */
@@ -22,7 +22,7 @@ export type ConfigFalaUnidades = { readonly ganho_conteudo: number };
 
 export type InatosImpulso = typeof INATOS_MODULAR;
 /** o que o M-IMPULSO le da ConfigDigibrain */
-export interface ConfigDigibrainImpulso { cheiro_inato: boolean; memoria_autobio: boolean; facetas_mem: boolean; fala_unidades: boolean }
+export interface ConfigDigibrainImpulso { cheiro_inato: boolean; memoria_autobio: boolean; facetas_mem: boolean; fala_unidades: boolean; olhar?: boolean }
 
 /** a saida do `mem.recuperar` que o impulso le: o lugar lembrado (ponto) e o termo M */
 export interface MemoriaImpulso { recuperado: number | null; ponto: readonly [number, number] | null; M: number }
@@ -38,7 +38,7 @@ export interface PlastImpulso {
 }
 
 export interface AlvoImpulso {
-  chave: ChaveUnidade; acao: string; tipo: string | null; objeto: ObjetoSens | null; d: number | null;
+  chave: ChaveUnidade; acao: string; tipo: string | null; objeto: ObjetoSens | LinhaTela | null; d: number | null;
 }
 export interface UnidadeImpulso extends AlvoImpulso { termos: Record<string, number>; soma: number; a: number }
 
@@ -53,15 +53,22 @@ export class Impulso {
   cf: ConfigFalaUnidades;
   /** o indice em z do termo de cada conteudo de fala (3.1), na ordem de CONTEUDOS_FALA */
   jConteudo: Record<string, number>;
+  /** o olhar (GOSTO_VISUAL, P1f): a ConfigOlhar com a subchave, null sem ela */
+  readonly co: ConfigOlhar | null;
 
-  constructor(inatosOuNulo: InatosImpulso | null, cfgDigibrain: ConfigDigibrainImpulso, cfgFala: ConfigFalaUnidades = CONFIG_FALA_UNIDADES) {
+  constructor(inatosOuNulo: InatosImpulso | null, cfgDigibrain: ConfigDigibrainImpulso, cfgFala: ConfigFalaUnidades = CONFIG_FALA_UNIDADES,
+              cfgOlhar: ConfigOlhar | null = null) {
     const inatos = inatosOuNulo ?? INATOS_MODULAR;
     this.p = inatos;
     this.cd = cfgDigibrain;
     this.S = inatos.escala;
     if (cfgDigibrain.facetas_mem) throw new Error("M-IMPULSO: a facetas_mem fica fora do laboratorio (docs/TAREFA_V3_LAB_MODULAR.md, secao 3)");
+    if (cfgOlhar !== null && !cfgDigibrain.olhar) throw new Error("M-IMPULSO: a ConfigOlhar so com a subchave olhar");
+    this.co = cfgDigibrain.olhar ? (cfgOlhar ?? CONFIG_OLHAR) : null;
     const idx = new Map<string, number>(CARACTERISTICAS_DIGIBRAIN.map((c, j) => [c, j]));
-    for (const [b, linha] of inatos.w0) {
+    const linhasW0: (readonly [string, readonly (readonly [string, number])[]])[] = [...inatos.w0];
+    if (this.co !== null) linhasW0.push([COMPORTAMENTO_OLHAR, this.co.w0_olhar]);
+    for (const [b, linha] of linhasW0) {
       const w = new Array<number>(CARACTERISTICAS_DIGIBRAIN.length).fill(0);
       for (const [c, v] of linha) {
         const j = idx.get(c);
@@ -135,8 +142,10 @@ export class Impulso {
   /** as unidades da decisao com os termos e a ativacao, e o z. `lembranca` = [o termo da M4, o `casa` do M-MEM] ou null; so com a
    *  `memoria_autobio` as unidades ganham o termo `lembranca` (L nas que casam com o episodio lembrado, 0 nas outras) */
   unidades(sens: SaidaSens, afeto: LeituraAfeto, contexto: ContextoImpulso, plast: PlastImpulso, memoria: MemoriaImpulso | null,
-    drives: readonly string[], lembranca: Lembranca | null = null, facetas: unknown = null): [UnidadeImpulso[], number[]] {
+    drives: readonly string[], lembranca: Lembranca | null = null, facetas: unknown = null,
+    gosto: Readonly<Record<number, number>> | null = null): [UnidadeImpulso[], number[]] {
     if (facetas !== null) throw new Error("M-IMPULSO: as facetas ficam fora do laboratorio");
+    if ((gosto !== null) !== (this.co !== null)) throw new Error("M-IMPULSO: o termo gosto vem so com a subchave olhar, e com ela sempre");
     const S = this.S, aMax = this.p.a_max;
     const z = this.contextoZ(sens, afeto, contexto);
     const inatoB: Record<string, number> = {}, habitoB: Record<string, number> = {};
@@ -150,14 +159,32 @@ export class Impulso {
     const inatoF = fala ? this.inatoFala(z) : null;
     if (fala) for (const c of CONTEUDOS_FALA) habitoB[`${FALA}/${c}`] = plast.habito(`${FALA}/${c}`, z);
     const incentivos: Record<string, number> = {};
-    const nomesTermos = this.cd.memoria_autobio ? [...TERMOS, "lembranca"] : [...TERMOS];
+    const olhar = this.co !== null;
+    const nomesTermos = [...TERMOS, ...(this.cd.memoria_autobio ? ["lembranca"] : []), ...(olhar ? ["gosto"] : [])];
+    const lista = Impulso.alvos(sens, memoria, fala);
+    if (olhar) {                                        // o olhar (P1f): o inato e o habito da linha nova; uma unidade por TV a vista, no fim
+      let soma = 0;
+      this.w0[COMPORTAMENTO_OLHAR]!.forEach((w, j) => { if (w) soma += mul(w, z[j]!, S); });
+      inatoB[COMPORTAMENTO_OLHAR] = soma;
+      habitoB[COMPORTAMENTO_OLHAR] = plast.habito(COMPORTAMENTO_OLHAR, z);
+      const telas = sens.telas ?? [];
+      for (const o of telas) lista.push({ chave: chaveUnidade(COMPORTAMENTO_OLHAR, o.classe, o.id), acao: COMPORTAMENTO_OLHAR, tipo: o.classe, objeto: o, d: o.d });
+      if (Object.keys(gosto!).some(id => !telas.some(o => String(o.id) === id))) throw new Error(`M-IMPULSO: o gosto de uma TV fora da vista: ${JSON.stringify(gosto)}`);
+    }
     const out: UnidadeImpulso[] = [];
-    for (const u of Impulso.alvos(sens, memoria, fala)) {
+    for (const u of lista) {
       const b = u.acao, o = u.objeto;
       const termos: Record<string, number> = Object.fromEntries(nomesTermos.map(t => [t, 0]));
       const inato = inatoF !== null && b === FALA ? inatoF[u.chave[1] as string]! : inatoB[b]!;
       termos["inato"] = inato + (u.tipo !== null ? (this.w0_tipo[b]?.[u.tipo] ?? 0) : 0);
-      if (o !== null) {
+      if (b === COMPORTAMENTO_OLHAR) {                  // o olhar (P1f): a linha da TV, o incentivo da classe `tela` e o gosto
+        const co = this.co!, ot = o as LinhaTela;
+        termos["prox"] = mul(co.w0_prox, ot.prox, S);
+        termos["nov"] = mul(co.w0_nov, ot.nov, S);
+        if (!(ot.classe in incentivos)) incentivos[ot.classe] = plast.incentivo(sens.pc, ot.classe, drives);
+        termos["incentivo"] = mul(incentivos[ot.classe]!, ot.prox, S);
+        termos["gosto"] = gosto![ot.id] ?? 0;
+      } else if (o !== null) {
         termos["prox"] = mul(this.w0_prox[b] ?? 0, o.prox, S);
         termos["nov"] = mul(this.w0_nov[b] ?? 0, o.nov, S);
         if (b === "comer" || b === "brincar") {

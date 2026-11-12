@@ -141,7 +141,7 @@ def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: Co
     return Modulos(sens=Sens(cfg, cm, inatos, cfg_olhar, genoma), afeto=Afeto(cfg, cd, inatos, serie_e_doadora),
                    estado=EstadoDinamico(cfg, cd, inatos), impulso=Impulso(inatos, cd, cfg_fala, cfg_olhar), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
                                  None if semente is None else random.Random(derivar_semente(semente, "mem_emb")),
-                                 luta), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem, cfg_sono), plast=Plasticidade(cd, inatos),
+                                 luta, cd.olhar), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem, cfg_sono), plast=Plasticidade(cd, inatos),
                    pers=Personalidade(inatos.eta_faceta, inatos.teto_faceta, True) if cd.facetas_mem else None)
 
 
