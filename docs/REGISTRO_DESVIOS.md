@@ -780,3 +780,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-12 — GOSTO_VISUAL: o porquê das GV3 negativas e a OV0 (Claude Code, Opus 5.5, branch `v3-gosto-visual-porque`)](registro/2026-11.md)
 - [2026-11-12 — INDIVIDUALIDADE, o adendo 4 do I7 (Claude Code, Opus 5.5, branch `v3-individualidade-ad4`)](registro/2026-11.md)
 - [2026-11-12 — CONTA: as RC-5 a RC-8 do roadmap decididas pela recomendação (Claude Code, Opus 5.5, branch `v3-conta-roadmap-dev`)](registro/2026-11.md)
+- [2026-11-12 — EQUILIBRIO_CUIDADO (E2 e E3): a validação única e a versão nova (Claude Code, Opus 5.5, branch `v3-equilibrio-e2`)](registro/2026-11.md)

@@ -75,5 +75,6 @@ sementes. Nenhum gate que falha para a rodada (adendo 1): segue o E3.
 
 ## 3. O que vem
 
-O E3 (a versão nova do pet, EQ-6) entra no mesmo branch, com os números da F2 como estão. As propostas ao Matheus seguem as do E1 (D-EQ1-6 a
+O E3 (a versão nova do pet, EQ-6) entrou no mesmo branch, com os números da F2 como estão: a v38 (a v35 com a F2, o ovo de um pet) e a v39
+(a v37 com a F2, o grupo); a seção "Resultado do E2 e do E3" do `docs/TAREFA_V3_EQUILIBRIO_CUIDADO.md` e os D-EQ2-5 a D-EQ2-8. As propostas ao Matheus seguem as do E1 (D-EQ1-6 a
 D-EQ1-8: a régua da M-A1, a da M-C1 e uma fonte de Bits que pague o cuidado bom), agora com os números da validação ao lado.
