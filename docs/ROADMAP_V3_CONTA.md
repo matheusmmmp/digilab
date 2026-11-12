@@ -1,6 +1,6 @@
 # Roadmap da conta, da nuvem e do multijogador (2026-11-12)
 
-**Status:** PROPOSTO. Junta numa ordem só as etapas dos planos já decididos; não decide nada novo de produto. A ordem, os prazos e os custos
+**Status:** as **RC-1 a RC-4 estão DECIDIDAS** pelo Matheus em 2026-11-12, pela recomendação e sem mudança ("Sim, segue e mergeia"). Junta numa ordem só as etapas dos planos já decididos; não decide nada novo de produto. A ordem, os prazos e os custos
 são **PROPOSTOS, SEM FONTE**; os prazos são em semanas de trabalho do projeto, não em datas. As decisões RC-1 a RC-4 (seção 7) são só
 sobre a ordem.
 
@@ -167,12 +167,12 @@ Em ordem de quando aparece:
 
 ## 7. Decisões para o Matheus
 
-Só sobre a ordem; o resto já está decidido nos planos.
+Só sobre a ordem; o resto já está decidido nos planos. **Todas DECIDIDAS** pelo Matheus em 2026-11-12, pela recomendação: "Sim, segue e mergeia".
 
-- **RC-1. Começar pela F0 agora, com as cinco frentes em paralelo.** A outra opção é ir direto à CN1 (o servidor). Custo de errar: baixo.
+- **RC-1 (DECIDIDA). Começar pela F0 agora, com as cinco frentes em paralelo.** A outra opção é ir direto à CN1 (o servidor). Custo de errar: baixo.
   Sem a CN0, a CN3 desenha a sincronização sem saber o tamanho do log; sem a PI1, o código do servidor nasce num repositório público.
-- **RC-2. A F5 (o MMO) em paralelo com a F3 (o save),** depois da F2. A outra opção é uma depois da outra. Custo de errar: médio. Em série,
+- **RC-2 (DECIDIDA). A F5 (o MMO) em paralelo com a F3 (o save),** depois da F2. A outra opção é uma depois da outra. Custo de errar: médio. Em série,
   o caminho até o ranking fica umas 6 a 10 semanas mais longo; em paralelo, duas frentes grandes ao mesmo tempo pedem mais revisão.
-- **RC-3. A F6 começa no papel durante a F3** (pedir a revisão da LGPD e o certificado do INPI). Custo de errar: baixo.
-- **RC-4. Abrir para fora só depois do portão F6,** mesmo que o código esteja pronto antes. Custo de errar: alto, se abrir sem a revisão
+- **RC-3 (DECIDIDA). A F6 começa no papel durante a F3** (pedir a revisão da LGPD e o certificado do INPI). Custo de errar: baixo.
+- **RC-4 (DECIDIDA). Abrir para fora só depois do portão F6,** mesmo que o código esteja pronto antes. Custo de errar: alto, se abrir sem a revisão
   da LGPD e sem os termos (a CN-10 e a MMO-4 já pediam isso).
