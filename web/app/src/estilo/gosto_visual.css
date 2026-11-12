@@ -47,6 +47,8 @@ body:has(> .jtv){ margin:0; background:var(--hx-miolo) }
 .tvp-erro{ margin:10px 14px 0; padding:6px 10px; border:1px solid var(--hx-perigo); color:var(--hx-perigo) }
 .tvp-bts{ display:flex; flex-wrap:wrap; gap:8px; align-items:center }
 .tvp-bts > .hx-btn{ flex:1 1 0; min-height:44px; white-space:nowrap; display:inline-flex; align-items:center; justify-content:center; gap:8px }
+/* a linha dos canais (D-GV-CANAL): "Canal ▸", "+ Canal" e "+ Vídeo" quebram de linha em vez de cortar o texto */
+.tvp-bts--canais > .hx-btn{ flex:1 1 auto }
 .tvp-cheio{ width:100%; min-height:44px; display:inline-flex; align-items:center; justify-content:center; gap:8px }
 .tvp-p{ align-self:flex-start; min-height:44px }
 .tvp svg{ width:18px; height:18px; flex:none }
