@@ -357,5 +357,6 @@ corpus do Digimundo e uma mitologia em volta (a `docs/futuro/fala_do_assistir.md
 - **A OV1** é a `docs/ESPEC_V3_ORGAO_VISAO.md`, só papel e PROPOSTA. Ela traz a lista (24 genéricos e as 56 espécies do corpus), o SigLIP
   base no navegador, a regra da confiança, o evento `percepcao_tela`, os receptores sem química, o M-SENS e o gosto por conceito, e o patrono
   pelo brasão do jogo como estado no afeto, só na valência. Separa a percepção da crença e traz o painel em palavras.
-- As decisões são as OV1-1 a OV1-14, e as leituras estão em `docs/registro/2026-11.md` (D-OV1-1 a 5). Nada de código antes da revisão do
-  Matheus.
+- As decisões OV1-1 a OV1-14 ficaram DECIDIDAS pelo Matheus em 2026-11-12, pela recomendação ("Eu aprovo todas as recomendações e segue
+  em diante"). As leituras estão em `docs/registro/2026-11.md` (D-OV1-1 a 6). O próximo passo é a OV2, o código Python atrás da chave
+  desligada.

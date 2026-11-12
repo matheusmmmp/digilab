@@ -1,8 +1,8 @@
 # ESPEC V3 — GOSTO_VISUAL, OV1: o órgão da visão (e do ouvido) do pet (2026-11-12, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** Só papel: nenhum código, nenhuma faixa, nenhuma vida, nenhum plano de análise. **Nada de código antes da revisão do
-Matheus.** As decisões OV1-1 a OV1-14 (seção 12) são dele, cada uma com a recomendação e o custo de errar. Todos os números são PROPOSTOS;
-onde não há fonte, SEM FONTE. **Nenhuma alegação de novidade.**
+**Status: revisada pelo Matheus; as OV1-1 a OV1-14 (seção 12) DECIDIDAS em 2026-11-12, pela recomendação** ("Eu aprovo todas as
+recomendações e segue em diante"). Os números continuam PROPOSTOS; onde não há fonte, SEM FONTE. Esta espec é só papel: nenhum código,
+nenhuma faixa, nenhuma vida, nenhum plano de análise; o código é a OV2. **Nenhuma alegação de novidade.**
 
 **De onde vem:**
 - a proposta `docs/futuro/fala_do_assistir.md`, seção 10 (o órgão, as FA-9 a FA-13, a tabela OV0/OV1) e 10.10 (os conceitos do Digimundo,
@@ -442,7 +442,7 @@ O painel lê o `estado_interno` do pet refeito do log (função pura), como o pa
 - **a lista aberta** (o dono escrevendo conceitos): devolveria ao pet o gosto do dono (GV-3);
 - **o SigLIP 2 e os modelos de licença de pesquisa.**
 
-## 12. As decisões do Matheus (todas PROPOSTAS)
+## 12. As decisões do Matheus (todas DECIDIDAS em 2026-11-12, pela recomendação)
 
 | id | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
