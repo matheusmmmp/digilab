@@ -63,3 +63,30 @@ def test_o_episodio_de_olhar_so_com_a_subchave():
     assert "tela" not in CLASSES_AUTOBIO
     assert Memoria(CONFIG_MUNDO_MVP, autobio=True).classes_autobio == CLASSES_AUTOBIO
     assert Memoria(CONFIG_MUNDO_MVP, autobio=True, olhar=True).classes_autobio == CLASSES_AUTOBIO + ("tela",)
+
+
+# ================================================================== o enjoo da imagem (D-GV-ENJOO-CER), num arquivo novo
+@pytest.fixture(scope="module")
+def texto_enjoo() -> bytes:
+    return X.texto_enjoo()
+
+
+def test_o_gabarito_do_enjoo_sai_igual_de_uma_execucao_nova(texto_enjoo):
+    """web/app/test/gabaritos/gosto_visual_enjoo.json.gz, conferido pelo TS em web/app/test/gosto_visual_enjoo_paridade.test.ts"""
+    assert texto_enjoo == gzip.decompress(X.ARQUIVO_ENJOO.read_bytes())
+
+
+def test_o_gabarito_do_enjoo_sai_igual_em_duas_execucoes(texto_enjoo):
+    assert X.texto_enjoo() == texto_enjoo
+
+
+def test_o_gabarito_do_enjoo_tem_a_chave_ligada_e_as_vidas(texto_enjoo):
+    from dataclasses import asdict
+    from digilab.config import CONFIG_ENJOO_TELA_LIGADA
+    g = json.loads(texto_enjoo)
+    assert g["config_enjoo_tela"] == asdict(CONFIG_ENJOO_TELA_LIGADA) and g["config_enjoo_tela"]["ligada"] is True
+    assert len(g["vidas"]) == 9 and all(len(v["decisoes"]) == 288 and v["olhares"] > 0 for v in g["vidas"])
+    assert sum(1 for v in g["vidas"] if "imagem" in v) == 3
+    # a chave ligada: o corpo guarda a memoria, e o motivo do olhar le o enjoo
+    assert all("memoria" in v["corpo"]["tela"] for v in g["vidas"])
+    assert all("enjoo" in d["motivo"]["olhar"] for v in g["vidas"] for d in v["decisoes"])
