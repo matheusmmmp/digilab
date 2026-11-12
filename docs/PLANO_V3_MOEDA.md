@@ -111,7 +111,7 @@ novo. A outra opção é uma aba na barraca.
 | **cosméticos da ilha** (enfeites: postes, bancos, luzes, a cor da barraca) | 50 a 500 | **só objetos da ilha.** Nunca acréscimo no desenho do Digimon (a regra "poses sem acréscimos": nada de chapéu, asa ou braço a mais) |
 | **temas dos menus** (Vidro, Militar, Holográfico) | — | continuam de graça, em Ajustes: são acessibilidade e gosto, não prêmio |
 
-**Sem dinheiro real, nunca.** Os Bits só se ganham jogando.
+**Sem dinheiro real, nunca.** Os Bits só se ganham jogando (2026-11-11: o dinheiro real entra só pelo apoio e pela assinatura "Apoiador", fora dos Bits, pela CN-11 e pela CN-12 do `docs/PLANO_V3_CONTA.md`).
 
 ## 6. Onde a moeda mora, e o custo em determinismo
 
@@ -185,7 +185,7 @@ Cada uma com a recomendação e o custo de errar. **DECIDIDAS em 2026-11-10 pelo
 
 ## 10. Fora deste plano
 
-- Moeda por dinheiro real, gacha, caixa de prêmio: nunca.
+- Moeda por dinheiro real, gacha, caixa de prêmio: nunca (2026-11-11: o dinheiro real entra só pelo apoio e pela assinatura "Apoiador", fora dos Bits, pela CN-11 e pela CN-12 do `docs/PLANO_V3_CONTA.md`).
 - Uma segunda moeda para a Fronteira (os BP): só se a Fronteira um dia vender alguma coisa.
 - A troca de Bits entre jogadores: com o multiplayer, se vier.
 - Qualquer mudança no motor do pet, no Python ou na pesquisa.
