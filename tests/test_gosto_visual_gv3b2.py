@@ -173,6 +173,9 @@ def test_a_contagem_das_replicas_sem_lugar_e_o_teto():
 def test_a_run_do_adendo_2_recusa_sem_o_piloto_no_git(tmp_path, monkeypatch):
     cfg = _cfg("gosto_visual_enjoo2.json")
     assert R.modo_da_config(cfg) == "gosto_visual_enjoo2"
+    # o git simulado com o piloto fora dele: o teste nunca depende do git local (num checkout limpo, com o piloto no git, a recusa nao
+    # viria e a run de pesquisa inteira rodaria; D-GV-GV3B2-13)
+    monkeypatch.setattr(R.orq.rc, "_git", lambda *a: "" if a[0] == "ls-files" else "")
     with pytest.raises(RuntimeError, match="piloto fora do git"):
         R.rodar(cfg, tmp_path / "run", 1)
     assert not (tmp_path / "run").exists()                   # antes de qualquer pasta e de qualquer vida
