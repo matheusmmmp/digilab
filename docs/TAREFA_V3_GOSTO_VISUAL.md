@@ -333,3 +333,17 @@ ficam com a regra "falha" e saem as mesmas. O piloto e a run parcial do adendo 1
 são lidos como resultado. O teste novo é o `tests/test_gosto_visual_gv3b2.py`, com o caso da falha (o pet em (25, 478)). As escolhas
 estão no `docs/registro/2026-11.md`, D-GV-GV3B2-1 a 10. Nenhuma vida da faixa nova rodou: o piloto e a run esperam o adendo 2 e o código
 na `main`.
+
+## Resultado da GV3b (adendo 2)
+
+2026-11-12, branch `v3-gosto-visual-gv3b2`.
+- **O piloto** (91101…91202) passou na GVP-7 (0,952 das réplicas com uma olhada) e no teto das sem lugar (0 de 504).
+- **A run** (91303…91505, 216 vidas, 4 processos, 1662,6 s, `artifacts_v3_gosto_visual/gosto_visual_enjoo2/`) rodou uma vez, com 0
+  réplicas sem lugar em 4536.
+- **Com o enjoo ligado, nada aparece com 36 unidades,** como na GV3: nem a parte do genoma, nem a do dono, nem a interação (todo IC95
+  contém 0). A escolha fica perto de 0,5 (E1).
+- **Lado a lado com a GV3:** o tempo total na sonda (0,115 a 0,119) e a fração olhando a TV da vida (0,024 a 0,026) são menores (E4), sem
+  teste nem atribuição ao enjoo.
+- **A leitura** cita o estresse de B e o salto de volume de A para B.
+
+O resultado está em `docs/RESULTADO_V3_GOSTO_VISUAL_ENJOO.md`.
