@@ -76,6 +76,8 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              "experiments/exportar_gabarito_fala_unidades.py",
                                                                              # GOSTO_VISUAL, P1f: o exportador do gabarito do olhar para a web (o laboratorio com o olhar)
                                                                              "experiments/exportar_gosto_visual.py",
+                                                                             # GOSTO_VISUAL, P1e: o orquestrador da GV3 (o laboratorio com o olhar)
+                                                                             "experiments/run_v3_gosto_visual.py",
                                                                              # a DC4a (e6da35cc): as entradas da avaliacao da voz so importam o decodificador; nenhuma vida
                                                                              "experiments/entradas_dc4.py"}
 

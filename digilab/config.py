@@ -2451,6 +2451,42 @@ PARAMETROS_TV: dict[str, tuple[str, str]] = {
 }
 
 
+@dataclass(frozen=True)
+class ConfigDuasTVs:
+    """As duas TVs da sonda (GOSTO_VISUAL, P1e; docs/ESPEC_GOSTO_VISUAL_P1.md, secao 7; GV-11). So existem numa copia do pet, pelo
+    `MotorMundo.ligar_duas_tvs`; a vida nunca as liga, e com a ConfigDuasTVs desligada o metodo falha alto. Os numeros (todos PROPOSTOS,
+    SEM FONTE):
+
+    distancia_celulas   3     cada TV a 3 celulas do pet, em direcoes opostas (6 entre elas): as duas no raio da visao (6 celulas) de
+                              quem esta parado e a mesma distancia dele (a proximidade da linha de objeto e a mesma nas duas)
+    tentativas          16    as direcoes tentadas a partir da sorteada (as 16 do DIR16), ate as duas caberem em terra, dentro do mapa e
+                              a mesma distancia; sem nenhuma, falha alto"""
+
+    ligada: bool = False
+    distancia_celulas: int = 3
+    tentativas: int = 16
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigDuasTVs.ligada e bool: {self.ligada!r}")
+        for campo in ("distancia_celulas", "tentativas"):
+            v = getattr(self, campo)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigDuasTVs.{campo} tem de ser inteiro positivo: {v!r}")
+        if self.tentativas > 16:
+            raise ValueError(f"ConfigDuasTVs.tentativas ate 16 (as direcoes do DIR16): {self.tentativas}")
+
+
+CONFIG_DUAS_TVS = ConfigDuasTVs()
+CONFIG_DUAS_TVS_LIGADA = ConfigDuasTVs(ligada=True)
+# o status de cada campo da ConfigDuasTVs (conferido por teste): todos PROPOSTOS, SEM FONTE; o porque esta na docstring
+PARAMETROS_DUAS_TVS: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "a sonda das duas TVs atras de chave desligada (espec do P1, secao 8); SEM FONTE"),
+    "distancia_celulas": ("PROPOSTO", "metade do raio da visao: as duas a vista e a mesma distancia do pet; SEM FONTE"),
+    "tentativas": ("PROPOSTO", "as 16 direcoes do DIR16; SEM FONTE"),
+}
+
+
 # =====================================================================
 # V2, rede de si, etapa 2b (docs/TAREFA_V2_REDE_DE_SI.md; docs/PLANO_ANALISE_V2_REDE_DE_SI.md, secao 3, RS-3): a troca da digestao num
 # tick, gravada no registro como a troca do mutavel. O tick vem de quem monta a vida (a bancada: o fim do dia 7 numa vida de 14); a taxa
