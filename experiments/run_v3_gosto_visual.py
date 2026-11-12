@@ -13,6 +13,12 @@ A GV3b (docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO1.md): a mesma run com o enjoo 
 (`CONFIG_ENJOO_TELA_LIGADA`, D-GV-ENJOO-CER), escolhida pela fase da config (`gosto_visual_enjoo`), com a faixa 90101...90505 e as pastas
 `piloto_enjoo` e `gosto_visual_enjoo`. Tudo o mais e o da GV3. Com as configs antigas (fase `gosto_visual`), o orquestrador faz o que fazia.
 
+O adendo 2 da GV3b (docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO2.md): a GV3b de novo, depois que a run do adendo 1 parou porque as duas TVs
+nao couberam (D-GV-GV3B-12). A fase `gosto_visual_enjoo2` escolhe a regra "sem_sonda" da sonda (a replica sem lugar fica sem sonda e e
+contada, com o teto TETO_SEM_LUGAR), a faixa 91101...91505 e as pastas `piloto_enjoo2` e `gosto_visual_enjoo2`; a run so roda com a pasta
+do piloto no git, o piloto aprovado na conferencia e o git limpo. As fases antigas seguem com a regra "falha", e os artefatos delas saem
+os de antes. A faixa 90101...90505 esta queimada: as configs do adendo 1 nao passam mais na trava.
+
 A trava (secao 9 do plano): o piloto e a run so rodam com o cabecalho do plano "APROVADO pelo Matheus", a faixa 89101...89505 em
 FAIXAS_RESERVADAS, a secao do registro da run no plano, as bases e o K do plano, no maximo 4 processos e nada por cima de uma pasta que ja
 existe. A fumaca (as sementes dos testes, 101...505) roda sem a faixa e sem o registro, com 2 a 14 dias (a sonda so no ultimo dia).
@@ -21,6 +27,8 @@ existe. A fumaca (as sementes dos testes, 101...505) roda sem a faixa e sem o re
     python experiments/run_v3_gosto_visual.py --config experiments/configs/v3_gosto_visual/gosto_visual.json --processos 4
     python experiments/run_v3_gosto_visual.py --config experiments/configs/v3_gosto_visual/piloto_enjoo.json --processos 4
     python experiments/run_v3_gosto_visual.py --config experiments/configs/v3_gosto_visual/gosto_visual_enjoo.json --processos 4
+    python experiments/run_v3_gosto_visual.py --config experiments/configs/v3_gosto_visual/piloto_enjoo2.json --processos 4
+    python experiments/run_v3_gosto_visual.py --config experiments/configs/v3_gosto_visual/gosto_visual_enjoo2.json --processos 4
 """
 from __future__ import annotations
 
@@ -82,11 +90,24 @@ TITULO_REGISTRO_ENJOO = "## 9. O registro da run"
 FAIXA_ENJOO = (90101, 90505)                                 # confirmada pelo coordenador, 2026-11-12
 BASES_PILOTO_ENJOO = (90101, 90202)                          # secao 6 do adendo (o molde da 89xxx)
 BASES_RUN_ENJOO = (90303, 90404, 90505)
-# por fase: o plano, o titulo do registro, a faixa, as bases do piloto e da run, os nomes dos modos (as pastas) e o enjoo
+# o adendo 2 da GV3b: a regra "sem_sonda" para as duas TVs sem lugar, a faixa nova e o piloto no git antes da run
+FASE_ENJOO2 = "gosto_visual_enjoo2"
+PLANO_ENJOO2 = "docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO2.md"
+TITULO_REGISTRO_ENJOO2 = "## 8. O registro da run"
+FAIXA_ENJOO2 = (91101, 91505)                                # confirmada pelo coordenador, 2026-11-12
+BASES_PILOTO_ENJOO2 = (91101, 91202)                         # secao 6 do adendo 2 (o molde da 89xxx e da 90xxx)
+BASES_RUN_ENJOO2 = (91303, 91404, 91505)
+TETO_SEM_LUGAR = 0.05                                        # PROPOSTO, SEM FONTE: o adendo 2, secao 2 (D-GV-GV3B2-2)
+# por fase: o plano, o titulo do registro, a faixa, as bases do piloto e da run, os nomes dos modos (as pastas), o enjoo, a regra da sonda
+# para as duas TVs sem lugar e os planos por baixo (que tambem tem de estar aprovados)
 FASES = {FASE: {"plano": PLANO, "registro": TITULO_REGISTRO, "faixa": FAIXA, "piloto": BASES_PILOTO, "run": BASES_RUN,
-                "modos": ("piloto", FASE), "enjoo": False},
+                "modos": ("piloto", FASE), "enjoo": False, "sem_lugar": "falha", "base": ()},
          FASE_ENJOO: {"plano": PLANO_ENJOO, "registro": TITULO_REGISTRO_ENJOO, "faixa": FAIXA_ENJOO, "piloto": BASES_PILOTO_ENJOO,
-                      "run": BASES_RUN_ENJOO, "modos": ("piloto_enjoo", FASE_ENJOO), "enjoo": True}}
+                      "run": BASES_RUN_ENJOO, "modos": ("piloto_enjoo", FASE_ENJOO), "enjoo": True, "sem_lugar": "falha",
+                      "base": ((PLANO, TITULO_REGISTRO),)},
+         FASE_ENJOO2: {"plano": PLANO_ENJOO2, "registro": TITULO_REGISTRO_ENJOO2, "faixa": FAIXA_ENJOO2, "piloto": BASES_PILOTO_ENJOO2,
+                       "run": BASES_RUN_ENJOO2, "modos": ("piloto_enjoo2", FASE_ENJOO2), "enjoo": True, "sem_lugar": "sem_sonda",
+                       "base": ((PLANO, TITULO_REGISTRO), (PLANO_ENJOO, TITULO_REGISTRO_ENJOO))}}
 
 
 # ================================================================== a trava
@@ -135,8 +156,8 @@ def modo_da_config(cfg: dict, texto_plano: str | None = None) -> str:
         raise bv.SementeSemPlano(f"bases {list(bases)}: so as dos testes (fumaca), {list(f['piloto'])} ou {list(f['run'])}")
     exigir_faixa_reservada(f["faixa"])
     exigir_plano_aprovado(_plano(f["plano"]) if texto_plano is None else texto_plano, f["registro"])
-    if f["enjoo"]:                                           # o adendo vale sobre o plano da GV3, que tambem tem de estar aprovado
-        exigir_plano_aprovado(_plano(PLANO), TITULO_REGISTRO)
+    for plano_base, titulo in f["base"]:                     # o adendo vale sobre o plano da GV3 (e o 2 sobre o 1): aprovados tambem
+        exigir_plano_aprovado(_plano(plano_base), titulo)
     erros = [f"dias {cfg['dias']}"] if cfg["dias"] != DIAS else []
     erros += [f"K {u['k']}"] if u["k"] != k else []
     erros += [f"plano {cfg.get('plano')!r}"] if cfg.get("plano") != f["plano"] else []
@@ -244,7 +265,8 @@ def fracoes_olhando(motor, dias: int) -> list[float]:
 def _vida(cfg: dict, genoma_tipo: str, dono: str, unidade: dict, pasta: str) -> dict:
     c0, p0 = time.process_time(), time.perf_counter()
     semente, dias = unidade["semente"], cfg["dias"]
-    motor, fab, prog = viver(genoma_tipo, dono, unidade, dias, enjoo=FASES[cfg["fase"]]["enjoo"])
+    fase = FASES[cfg["fase"]]
+    motor, fab, prog = viver(genoma_tipo, dono, unidade, dias, enjoo=fase["enjoo"])
     nome = f"{genoma_tipo}_{dono}_{semente}"
     arquivo = Path(pasta) / "vidas" / f"{nome}.jsonl"
     arquivo.parent.mkdir(parents=True, exist_ok=True)
@@ -253,16 +275,18 @@ def _vida(cfg: dict, genoma_tipo: str, dono: str, unidade: dict, pasta: str) -> 
     fr = fracoes_olhando(motor, dias)
     familiar = fr[:min(DIAS_FAMILIARIZACAO, dias - 1)]
     crit = M.familiarizacao_tv(familiar, TOLERANCIA_FAMILIARIZACAO) if len(familiar) >= 4 else None
-    s = sd.sonda(motor, fab, semente, dias_da_sonda(dias), REPLICAS)
+    s = sd.sonda(motor, fab, semente, dias_da_sonda(dias), REPLICAS, fase["sem_lugar"])
     bv._gravar(Path(pasta) / "vidas" / f"{nome}_sonda.json", bv._dump(s))
     medidas = [{"dia": d["dia"], "replica": r["replica"], **M.medidas_duas_tvs(r, sd.JANELA_TICKS),
                 "agrado_inato": r["agrado"]["A"]["inato"] - r["agrado"]["B"]["inato"],
                 "agrado_agora": r["agrado"]["A"]["agora"] - r["agrado"]["B"]["agora"]}
-               for d in s["por_dia"] for r in d["replicas"]]
+               for d in s["por_dia"] for r in d["replicas"] if "sem_lugar" not in r]
+    sem_lugar = [{"dia": d["dia"], **r} for d in s["por_dia"] for r in d["replicas"] if "sem_lugar" in r]
+    extra = {} if fase["sem_lugar"] == "falha" else {"replicas_sem_lugar": sem_lugar}   # o adendo 2; as fases antigas, o de antes
     return {"vida": f"{genoma_tipo}|{dono}|{semente}", "genoma_tipo": genoma_tipo, "dono": dono, "semente": semente,
             "base": unidade["base"], "k": unidade["k"], "programa_do_dono": prog, "fracoes_olhando": fr, "familiarizacao": crit,
             "dias_sem_sonda": sum(1 for d in s["por_dia"] if d["tick"] is None), "medidas": medidas,
-            "custo": {"vida_cpu": time.process_time() - c0, "vida_parede": time.perf_counter() - p0}}
+            "custo": {"vida_cpu": time.process_time() - c0, "vida_parede": time.perf_counter() - p0}, **extra}
 
 
 def tarefa(cfg: dict, unidade: dict, pasta: str) -> list[dict]:
@@ -406,6 +430,39 @@ def familiarizacao(registros: list[dict]) -> dict:
     return out
 
 
+def contar_sem_lugar(registros: list[dict], teto: float = TETO_SEM_LUGAR) -> dict:
+    """o adendo 2, secao 2: as replicas sem sonda porque as duas TVs nao couberam, no total e por celula genoma x dono, contra o teto.
+    A fracao e sobre todas as replicas tentadas (as medidas mais as sem lugar). Passar do teto no total ou numa celula e escrito na leitura
+    e, no piloto, segura a run"""
+    def conta(rs):
+        n_sem = sum(len(r["replicas_sem_lugar"]) for r in rs)
+        n = n_sem + sum(len(r["medidas"]) for r in rs)
+        return {"tentadas": n, "sem_lugar": n_sem, "fracao": n_sem / n if n else 0.0}
+    out = {"teto": teto, "total": conta(registros), "celulas": {}}
+    for g in GENOMAS:
+        for d in DONOS:
+            out["celulas"][f"{g}|{d}"] = conta([r for r in registros if r["genoma_tipo"] == g and r["dono"] == d])
+    acima = [k for k, c in out["celulas"].items() if c["fracao"] > teto]
+    out["celulas_acima_do_teto"] = acima
+    out["passou_do_teto"] = out["total"]["fracao"] > teto or bool(acima)
+    return out
+
+
+def exigir_piloto_no_git(fase: dict) -> None:
+    """o adendo 2, secao 7: a run so roda com a pasta do piloto commitada (o `git_limpo` da run sai verdadeiro; o segundo problema da
+    D-GV-GV3B-12), o git limpo e o piloto aprovado na conferencia; senao, falha alto antes de qualquer vida"""
+    rc = orq.rc
+    rel = f"{SAIDA}/{fase['modos'][0]}"
+    for n in ("meta.json", "medidas.json", "analise.json", "custo.json", "vidas.tar.gz"):
+        if rc._git("ls-files", f"{rel}/{n}") != f"{rel}/{n}":
+            raise RuntimeError(f"o piloto fora do git: {rel}/{n} (o adendo 2, secao 7): nenhuma vida da run")
+    if rc._git("status", "--porcelain") != "":
+        raise RuntimeError("o git nao esta limpo (o adendo 2, secao 7): nenhuma vida da run")
+    analise = json.loads((RAIZ / rel / "analise.json").read_text(encoding="utf-8"))
+    if analise["conferencia"]["a_run_pode_rodar"] is not True:
+        raise RuntimeError("o piloto nao passou na conferencia (a GVP-7 ou o teto das replicas sem lugar): a run nao roda")
+
+
 def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = None, boot: int = BOOTSTRAP) -> dict:
     if processos > MAX_PROCESSOS:
         raise ValueError(f"no maximo {MAX_PROCESSOS} processos (V3-D8)")
@@ -414,6 +471,8 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
         raise FileExistsError(f"{pasta} ja existe: a run se recusa a gravar por cima")
     us = unidades(cfg["unidades"]["bases"], int(cfg["unidades"]["k"]))
     fase = FASES[cfg["fase"]]
+    if fase["sem_lugar"] == "sem_sonda" and modo == fase["modos"][1]:
+        exigir_piloto_no_git(fase)
     pasta.mkdir(parents=True)
     inicio = time.time()
     rc = orq.rc
@@ -432,6 +491,10 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
         meta["plano_base_sha256"] = rc._sha_arquivo(RAIZ / PLANO)
         meta["enjoo_tela"] = asdict(CONFIG_ENJOO_TELA_LIGADA)
         meta["sha256"] |= {n: rc._sha_arquivo(RAIZ / "digilab" / n) for n in ("corpo.py", "motor_corpo.py")}
+    if fase["sem_lugar"] != "falha":                         # o adendo 2: a regra, o teto e o adendo 1 por baixo
+        meta["sem_lugar"] = {"regra": fase["sem_lugar"], "teto": TETO_SEM_LUGAR}
+        meta["plano_adendo1"] = PLANO_ENJOO
+        meta["plano_adendo1_sha256"] = rc._sha_arquivo(RAIZ / PLANO_ENJOO)
     bv._gravar(pasta / "meta.json", bv._dump(meta))
     t0 = time.perf_counter()
     registros = [r for s in rc._executar([(tarefa, (cfg, u, str(pasta))) for u in us], processos) for r in s]
@@ -447,6 +510,10 @@ def rodar(cfg: dict, pasta: Path, processos: int, caminho_config: Path | None = 
     # secao 6 do plano: o piloto so confere que o pet olha; abaixo de 1 replica em 4, a run nao roda e o caso volta ao Matheus
     resultado["conferencia"] = {"replicas": len(reps), "fracao_olhou": olhou, "minimo": FRACAO_MINIMA_OLHOU,
                                 "a_run_pode_rodar": olhou >= FRACAO_MINIMA_OLHOU}
+    if fase["sem_lugar"] != "falha":                         # o adendo 2: a contagem das sem lugar e o teto; no piloto, o teto segura a run
+        resultado["sem_lugar"] = contar_sem_lugar(lidos)
+        resultado["conferencia"]["sem_lugar_passou_do_teto"] = resultado["sem_lugar"]["passou_do_teto"]
+        resultado["conferencia"]["a_run_pode_rodar"] = olhou >= FRACAO_MINIMA_OLHOU and not resultado["sem_lugar"]["passou_do_teto"]
     bv._gravar(pasta / "analise.json", bv._dump(resultado))
     custos = [r["custo"]["vida_parede"] for r in registros]
     bv._gravar(pasta / "custo.json", bv._dump({"vidas": len(custos), "parede_media_s": _media(custos), "parede_max_s": max(custos),

@@ -317,3 +317,19 @@ o que conflita com o #872 estão em `docs/registro/2026-11.md`.
 **A combinação com o lance (D-GV-TVJOGO-10 a 13):** o #872 entrou na `main` antes, então este PR combina, pela decisão E. O pet novo é a
 v35 (a v30, com o lance do dono, mais A, C, D e o enjoo), e o grupo novo, a v36 (a v31 mais B, A, D e o enjoo). A v33 e a v34 deixaram de
 existir. O gabarito da v30 e da v31 foi gravado antes, num commit próprio a partir da `main` (`web/app/test/tv_jogo_lance_etapa0.test.ts`).
+
+## A GV3b: o adendo 2, depois da falha da run (2026-11-12, Claude Code, Opus 5.5, branch `v3-gosto-visual-gv3b-resultado`)
+
+A run do adendo 1 parou na vida 213 de 216: as duas TVs da sonda não couberam em nenhuma direção (D-GV-GV3B-12). O Matheus escolheu
+"Adendo e faixa nova". O adendo é o `docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO2.md`:
+- **a regra nova:** a réplica em que as duas TVs não cabem fica sem sonda e é contada, com um teto de 5 %, no total e por célula. No
+  piloto, passar do teto segura a run; na run, vira ressalva. As alternativas (as distâncias seguintes, mover o pet) ficam registradas;
+- **o processo:** o piloto é commitado antes da run, e o orquestrador confere isso, o git limpo e a conferência do piloto;
+- **a faixa:** 91101…91505 (confirmada pelo coordenador). A 90101…90505 foi para `FAIXAS_QUEIMADAS`;
+- **o resto** é o do adendo 1: o enjoo ligado, os perfis, as medidas, a GVP-7 e as expectativas E1 a E4.
+
+A fase `gosto_visual_enjoo2` escolhe a regra, e as configs novas são `piloto_enjoo2.json` e `gosto_visual_enjoo2.json`. As fases antigas
+ficam com a regra "falha" e saem as mesmas. O piloto e a run parcial do adendo 1 estão no git como registro, com um `LEIA.md`, e não
+são lidos como resultado. O teste novo é o `tests/test_gosto_visual_gv3b2.py`, com o caso da falha (o pet em (25, 478)). As escolhas
+estão no `docs/registro/2026-11.md`, D-GV-GV3B2-1 a 10. Nenhuma vida da faixa nova rodou: o piloto e a run esperam o adendo 2 e o código
+na `main`.

@@ -18,7 +18,13 @@ O que a sonda grava, por replica (as medidas sao do plano, docs/PLANO_ANALISE_V3
 Os perfis (sete inteiros em [0, C], na ordem de CANAIS_TELA) sao os do plano: o A em C/5 e o B em 4C/5 em todos os canais, simetricos em
 volta do meio (o otimo do genoma vazio, C/2): no controle, o agrado inato das duas e o mesmo. Nenhum programa da grade e igual a eles (os
 perfis da grade sao sorteados; a sonda confere). Todos os numeros abaixo sao PROPOSTOS, SEM FONTE (ferramenta de medida, nao mecanica do
-pet: nao entram no `config.py`; os da ConfigDuasTVs estao la). O termo `gosto` da P1d fica fora da sonda (D-GV-P1d-4): a sonda so le."""
+pet: nao entram no `config.py`; os da ConfigDuasTVs estao la). O termo `gosto` da P1d fica fora da sonda (D-GV-P1d-4): a sonda so le.
+
+Quando as duas TVs nao cabem (a D-GV-P1e-3; a GV3b parou nisso, D-GV-GV3B-12), a regra `sem_lugar` decide
+(docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO2.md, secao 2):
+  - "falha" (o padrao, a GV3 e a GV3b do adendo 1): o `DuasTVsSemLugar` sobe, e a run para, como antes;
+  - "sem_sonda" (o adendo 2): a replica fica sem sonda e e gravada so com o registro do caso ({"replica", "sem_lugar": {"pet",
+    "direcao_sorteada"}}), sem olhadas nem medidas; a copia nao anda. As replicas que cabem saem iguais as da regra "falha"."""
 from __future__ import annotations
 
 import copy
@@ -35,7 +41,7 @@ from digilab.config import CANAIS_TELA, CONFIG_DUAS_TVS_LIGADA, CONFIG_TV_LIGADA
 from digilab.corpo import div_arred  # noqa: E402
 from digilab.mundo import reproduzir_mundo  # noqa: E402
 from digilab.protocol import derivar_semente  # noqa: E402
-from digilab.tv import IDS_DUAS_TVS  # noqa: E402
+from digilab.tv import IDS_DUAS_TVS, DuasTVsSemLugar  # noqa: E402
 
 C = CONFIG_TV_LIGADA.escala
 PERFIL_A = tuple(C // 5 for _ in CANAIS_TELA)              # PROPOSTO, SEM FONTE: o programa calmo (0,2 C em todo canal)
@@ -44,6 +50,7 @@ ROTULO = {IDS_DUAS_TVS[0]: "A", IDS_DUAS_TVS[1]: "B"}
 JANELA_TICKS = si.JANELA_TICKS                             # PROPOSTO, SEM FONTE: 240 ticks, 16 decisoes (a janela das sondas do I1)
 REPLICAS = si.REPLICAS                                     # PROPOSTO, SEM FONTE: 3
 FLUXO_POLITICA = "gosto-visual-politica"
+REGRAS_SEM_LUGAR = ("falha", "sem_sonda")                  # o adendo 2 da GV3b, secao 2 (D-GV-GV3B2-1)
 
 
 def cerebro_da_copia(motor):
@@ -93,14 +100,26 @@ def _trechos(seq: list) -> list[list]:
     return out
 
 
-def ler_replica(m, replica: int) -> dict:
-    """liga as duas TVs na copia, anda a janela um tick por vez e le qual TV o pet olha"""
+def _exigir_regra(sem_lugar: str) -> None:
+    if sem_lugar not in REGRAS_SEM_LUGAR:
+        raise ValueError(f"a regra para as duas TVs sem lugar: so {REGRAS_SEM_LUGAR}, nao {sem_lugar!r}")
+
+
+def ler_replica(m, replica: int, sem_lugar: str = "falha") -> dict:
+    """liga as duas TVs na copia, anda a janela um tick por vez e le qual TV o pet olha. Sem lugar para as duas TVs: com a regra "falha",
+    o DuasTVsSemLugar sobe; com "sem_sonda", a replica volta so com o registro do caso (o adendo 2)"""
+    _exigir_regra(sem_lugar)
     programas = getattr(m.mundo.tv, "programas", ())
     if PERFIL_A in programas or PERFIL_B in programas:
         raise RuntimeError("um perfil da sonda e um programa da grade: a sonda pede programas que o dono nunca mostrou")
     c = cerebro_da_copia(m)
     ag = agrados(c)
-    pos = m.ligar_duas_tvs(CONFIG_DUAS_TVS_LIGADA, (PERFIL_A, PERFIL_B), replica)
+    try:
+        pos = m.ligar_duas_tvs(CONFIG_DUAS_TVS_LIGADA, (PERFIL_A, PERFIL_B), replica)
+    except DuasTVsSemLugar as e:
+        if sem_lugar == "falha":
+            raise
+        return {"replica": replica, "sem_lugar": {"pet": list(e.pet), "direcao_sorteada": e.direcao_sorteada}}
     n0 = len(c.motivos)
     seq = []
     for _ in range(JANELA_TICKS):
@@ -117,9 +136,11 @@ def ler_replica(m, replica: int) -> dict:
             "primeira": primeira, "agrado": ag, "decisoes": decisoes, "posicao": pos, "dormiu": m.estado()["dormindo"]}
 
 
-def sonda(motor, fabricas_vida: tuple, semente: int, dias: tuple, replicas: int = REPLICAS) -> dict:
+def sonda(motor, fabricas_vida: tuple, semente: int, dias: tuple, replicas: int = REPLICAS, sem_lugar: str = "falha") -> dict:
     """a sonda nos dias pedidos, no momento das sondas da INDIVIDUALIDADE (a primeira decisao acordada a partir das 10 h, ate as 18 h; sem
-    nenhuma, o dia fica sem sonda). Nada do motor da vida muda (G2: o log e conferido)."""
+    nenhuma, o dia fica sem sonda). Nada do motor da vida muda (G2: o log e conferido). `sem_lugar`: a regra para as duas TVs sem lugar
+    (REGRAS_SEM_LUGAR; o padrao "falha" e o de antes do adendo 2)."""
+    _exigir_regra(sem_lugar)
     if not dias or len(set(dias)) != len(dias) or any(type(d) is not int or d < 0 for d in dias):
         raise ValueError(f"os dias da sonda: inteiros >= 0, sem repeticao: {dias!r}")
     if type(replicas) is not int or replicas < 1:
@@ -135,9 +156,12 @@ def sonda(motor, fabricas_vida: tuple, semente: int, dias: tuple, replicas: int 
             for r in range(replicas):
                 m = copy.deepcopy(base)
                 m._rng_politica = random.Random(derivar_semente(FLUXO_POLITICA, semente, dia, r))
-                reg["replicas"].append(ler_replica(m, r))
+                reg["replicas"].append(ler_replica(m, r, sem_lugar))
         saida.append(reg)
     if motor.log.para_jsonl() != log_antes:
         raise RuntimeError("a sonda mudou o log da vida (G2)")
-    return {"semente": semente, "dias": list(dias), "replicas": replicas, "hora": si.HORA_SONDA, "janela_ticks": JANELA_TICKS,
-            "perfis": {"A": list(PERFIL_A), "B": list(PERFIL_B)}, "por_dia": saida}
+    out = {"semente": semente, "dias": list(dias), "replicas": replicas, "hora": si.HORA_SONDA, "janela_ticks": JANELA_TICKS,
+           "perfis": {"A": list(PERFIL_A), "B": list(PERFIL_B)}, "por_dia": saida}
+    if sem_lugar != "falha":                                 # o adendo 2: a regra vai no artefato; com "falha", o artefato e o de antes
+        out["sem_lugar"] = sem_lugar
+    return out
