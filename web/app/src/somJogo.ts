@@ -32,7 +32,7 @@ export function tocarInstante(i: InstanteSom): void {
   const rapido = velocidadeAtual() > VEL_MAX_CUIDADO;
   if (i.tipo === "efeito") { if (!(rapido && FREQUENTES.has(i.efeito))) void SOM.efeito(i.efeito); }
   else if (i.tipo === "voz") {
-    if (rapido || !podeFalar(performance.now())) return;
+    if (rapido || !podeFalar(performance.now(), i.espontanea)) return;
     const m = jogoAtual().motor;
     void SOM.voz(taxaDaVoz(i.humor, m.especie, m.estagioAtual));
   }

@@ -18,8 +18,9 @@ export const CHAVE_SOM_VOL_EFEITOS = CHAVE + "-som-vol-efeitos";
 export const SONS_URL = "../../../Assets/sons/";
 /** volume padrao ao ligar pela primeira vez (PROPOSTO, SEM FONTE) */
 export const VOLUME_PADRAO = 0.6;
-/** a musica de fundo nasce mais baixa que os efeitos (SD-6: baixa, para nao cansar). PROPOSTOS, SEM FONTE */
-export const VOL_MUSICA_PADRAO = 0.5;
+/** a musica de fundo nasce bem mais baixa que os efeitos (SD-6: baixa, para nao cansar; 0,5 ate 2026-11-12, quando o Matheus pediu "bem mais
+    baixa por padrao"). Quem ja mexeu no volume da musica em Ajustes fica com o que escolheu. PROPOSTOS, SEM FONTE */
+export const VOL_MUSICA_PADRAO = 0.15;
 export const VOL_EFEITOS_PADRAO = 1;
 /** no maximo tantas copias do mesmo arquivo tocando juntas (o golpe de luta em rajada nao satura). PROPOSTO, SEM FONTE */
 export const VOZES_POR_ARQUIVO = 4;

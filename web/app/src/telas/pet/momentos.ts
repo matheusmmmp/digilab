@@ -86,20 +86,20 @@ export function vigiarMomentos(e: EntradaMomentos, agora: number): void {
   if (e.morto) { fila = []; tocando = null; return; }
   /* a casca quebrou: o pet aparece Feliz, com o som do nascimento */
   if (v.nascendo > 0 && e.nascendo <= 0) { emitirSom("nascer"); agendar("Feliz", agora, "nasceu"); }
-  /* dormiu e acordou: o bocejo; acordado, Cansado por um instante */
-  if (!v.dormindo && e.dormindo) emitirVoz("bocejo");
-  if (v.dormindo && !e.dormindo) { registrarMomentoRosto("Cansado", agora, MOMENTOS.acordarMs); emitirVoz("bocejo"); }
+  /* dormiu e acordou: o bocejo; acordado, Cansado por um instante. A voz do que o pet faz sozinho e espontanea (a pausa longa de somVoz.ts) */
+  if (!v.dormindo && e.dormindo) emitirVoz("bocejo", true);
+  if (v.dormindo && !e.dormindo) { registrarMomentoRosto("Cansado", agora, MOMENTOS.acordarMs); emitirVoz("bocejo", true); }
   /* o chamado: abre (o bipe e a voz chamando), aperta (o bipe insistente), e atendido (o contador sobe) ou perdido (um tipo some sem o
      contador subir, com o bipe descendo) */
-  if (e.abertos.some(t => !v.abertos.includes(t))) { emitirBipe("abre"); emitirVoz("chamando"); }
-  else if (e.urgente && !v.urgente) { emitirBipe("urgente"); emitirVoz("chamando"); }
+  if (e.abertos.some(t => !v.abertos.includes(t))) { emitirBipe("abre"); emitirVoz("chamando", true); }
+  else if (e.urgente && !v.urgente) { emitirBipe("urgente"); emitirVoz("chamando", true); }
   if (e.atendidos > v.atendidos) { emitirSom("chamado_atendido"); agendar("Feliz", agora, "chamado"); }
   else if (v.abertos.some(t => !e.abertos.includes(t))) { emitirBipe("perdido"); registrarMomentoRosto("Triste", agora, MOMENTOS.perdidoMs); }
   /* a acao do motor que comeca: brincar alegra a voz, emburrar resmunga, chamar atencao chama */
   if (e.acao !== v.acao && !e.dormindo) {
-    if (e.acao === "brincar") emitirVoz("contente");
-    else if (e.acao === "emburrar") emitirVoz("resmungo");
-    else if (e.acao === "chamar_atencao") emitirVoz("chamando");
+    if (e.acao === "brincar") emitirVoz("contente", true);
+    else if (e.acao === "emburrar") emitirVoz("resmungo", true);
+    else if (e.acao === "chamar_atencao") emitirVoz("chamando", true);
   }
   /* o lugar lembrado estava vazio (CADEIA, etapa 2, D6): Triste por um instante, com o rosto que o atlas ja tem */
   if (e.vazio !== null && (v.vazio === null || e.vazio > v.vazio)) registrarMomentoRosto("Triste", agora, MOMENTOS.vazioMs);
