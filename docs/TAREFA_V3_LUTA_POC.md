@@ -1009,6 +1009,8 @@ não do atributo: a alternativa H-ATR do A1 cai.
 
 ### As chaves que a N2 confirma (para a D-N-5)
 
+**DECIDIDA (2026-11-12):** o Matheus, "As 4 (Recommended)" (repassado pelo Gerente). As 4 entram na N3, todas desligadas no jogo.
+
 São PROPOSTAS, SEM FONTE. Cada uma iria atrás de uma chave desligada na `EntradaLuta`, com o gabarito das versões vivas antes (a seção 4
 do plano):
 
