@@ -21,6 +21,7 @@ from __future__ import annotations
 
 from ..config import CONFIG_DIGIBRAIN_INATOS, Config, ConfigDigibrain, ConfigDigibrainInatos
 from ..policies.lobos import contribuicoes_corpo, div_arred, falta_receptor, sinal_corpo
+from . import dever as _dever
 from ._comum import clamp, ganho_de_tau, integrar, mul
 
 EXCITANTES = ("dor", "susto", "estresse")
@@ -62,6 +63,13 @@ class Afeto:
         self.decisoes = 0
         self.serie_e: list[int] = []
         self.ultimo: dict | None = None
+        self.dever = None                             # a CO7 (`ligar_dever`): a ConfigCooperacao; None desligada
+
+    def ligar_dever(self, cfg) -> None:
+        """a CO7 (4; CO7-6): a culpa e a inveja tiram da valencia da decisao (o V que o M-IMPULSO le), sem mexer no V guardado nem no corpo"""
+        if not cfg.co7:
+            raise ValueError("M-AFETO: os deveres so com a subchave co7")
+        self.dever = cfg
 
     def urgencia(self, falta: int) -> int:
         p, S = self.p, self.S
@@ -92,7 +100,11 @@ class Afeto:
         g_exp = clamp(p.e0 + mul(p.beta_t, falta.get("tedio", 0), S) - mul(p.beta_u, max(urg.values()), S), 0, p.e_max)
         self.serie_e.append(self.E)
         self.decisoes += 1
-        return {"urgencias": urg, "V": self.V, "E": self.E, "e_usada": e_usada, "g_apr": g_apr, "g_exp": g_exp}
+        out = {"urgencias": urg, "V": self.V, "E": self.E, "e_usada": e_usada, "g_apr": g_apr, "g_exp": g_exp}
+        if self.dever is not None:                    # a CO7: a culpa e a inveja so na valencia desta decisao (desligada, a de hoje)
+            culpa, inveja = _dever.culpa_inveja(sens, self.dever)
+            out.update(V=clamp(self.V - culpa - inveja, -S, S), culpa=culpa, inveja=inveja)
+        return out
 
     def drives(self, receptores: tuple) -> tuple:
         return tuple(r for r in receptores if r not in self.p.fora_do_r)

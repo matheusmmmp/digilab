@@ -58,7 +58,9 @@ export const CENA: {
   /** o sinal da TV sobre o pet (o prototipo do gosto visual, o modulo sinalTv dele): o icone de agora (a chave de grades.ts) ou null. O PalcoPet
       o pinta por ultimo, quando o jogo nao tem emote. null: sem o prototipo (`?gosto_visual=1` desligada), e o palco e o de hoje */
   sinalTv: ((agora: number) => string | null) | null;
-} = { modo3d: false, modoMundo: false, ret: null, irmaos: {}, medir: null, mundo: null, coberto: false, bolaNaMao: false, petNaMao: false, maoPet: null, treino: null, cocoNoChao: false, zzX: null, cabeca: null, aoLugares: null, aoObjetos: null, sinalTv: null };
+  /** quantos objetos da ilha estao transparentes agora por taparem o pet em foco (ilha/transparente.ts; o e2e moita_ninho le pelo __digilab) */
+  tapando: number;
+} = { modo3d: false, modoMundo: false, ret: null, irmaos: {}, medir: null, mundo: null, coberto: false, bolaNaMao: false, petNaMao: false, maoPet: null, treino: null, cocoNoChao: false, zzX: null, cabeca: null, aoLugares: null, aoObjetos: null, sinalTv: null, tapando: 0 };
 
 /** o pe que a caixa do habitat reservava no celular antes do mobile minimo (M1): a altura do dock de entao (69 px) + a folga de 24 px + a barra de abas
     (--casca-barra, 64 px), medido em 390x844 e 360x800 (caixa de 687 e 643 px). Sem a barra a caixa ocupa a tela inteira por tras das acoes, mas a camera
