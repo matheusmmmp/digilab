@@ -33,9 +33,10 @@ from __future__ import annotations
 from dataclasses import fields
 
 from .config import CONFIG_REDE_DE_SI, ConfigRedeDeSi
-from .events import FRUTAS, AcaoPet
+from .events import ACOES_PET_BANHEIRO, ACOES_PET_HOJE, FRUTAS, AcaoPet
 
-ACOES = tuple(AcaoPet)
+# as oito acoes de antes da TV no jogo (o IR_TV, D-GV-TVJOGO-3, fica de fora: a rede de hoje nao muda com o membro novo do enum)
+ACOES = ACOES_PET_HOJE + ACOES_PET_BANHEIRO
 CONTEXTO = ("bola", "comida", "pedido")
 TIPOS_COMIDA_BOA = ("racao",) + FRUTAS          # os tipos maduros entre os `vistos` do mundo fisico (a podre vem com `_podre`)
 

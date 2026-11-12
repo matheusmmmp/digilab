@@ -406,3 +406,12 @@ Atrás da subchave `co6` da `ConfigCooperacao`, desligada por padrão e só com 
 - **O painel:** a seção "Com o irmão" no DigiBrain do modular, em palavras e sem número (CO6-7, D-CO6c-2). Ela só aparece quando a CO6 estiver
   ligada no jogo.
 - **Os desvios:** D-CO6c-1 a D-CO6c-5, no registro de 2026-11.
+
+## CO7a, o gabarito das vidas com a CO6 ligada (2026-11-12, Claude Code, Opus 5.5, branch `v3-cooperacao-co7`)
+
+Gravado com a CO6 inteira e antes de qualquer mudança da CO7, num commit só dele.
+
+- **O exportador:** `experiments/exportar_gabarito_co7.py` grava `tests/gabaritos/co7_vidas_de_hoje.json.gz`, as vidas da CO6a com a CO6
+  ligada.
+- **O teste:** `tests/test_cooperacao_co7.py` refaz as vidas e as compara com o gabarito (o G2 da CO7).
+- **O desvio:** D-CO7a-1, no registro de 2026-11.

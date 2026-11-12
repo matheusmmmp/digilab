@@ -250,7 +250,8 @@ def test_a_tv_e_a_tela_vao_juntas_e_falham_alto():
         MotorMundo(_fp_instinto(), CFG, 101, obediencia_desligada=True, cfg_mundo=CM, cfg_tv=CONFIG_TV_LIGADA)
     with pytest.raises(TVSemChave, match="mundo fisico"):
         MotorMundoCorpo(_fp_instinto(), CFG, 101, obediencia_desligada=True, cfg_corpo=CC, cfg_tela=TELA, cfg_tv=CONFIG_TV_LIGADA)
-    with pytest.raises(TVSemChave, match="fora do grupo"):
+    # no grupo (a decisao B, D-GV-TVJOGO): a TV e do mundo comum, e o motor so a aceita ligada pelo Grupo, com a mesma config
+    with pytest.raises(TVSemChave, match="mundo comum"):
         MotorMundoCorpo(_fp_instinto(), CFG, 101, obediencia_desligada=True, cfg_mundo=CM, cfg_corpo=CC, cfg_tela=TELA,
                         cfg_tv=CONFIG_TV_LIGADA, mundo=Mundo(CM, 101))
     with pytest.raises(ValueError, match="agua|fora do mapa"):

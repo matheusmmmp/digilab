@@ -2086,6 +2086,10 @@
   "programa_min_ticks": 30,
   "variacao": 27000
  },
+ "ConfigTVJogo": {
+  "desligar": false,
+  "ir_ate_tv": false
+ },
  "ConfigTela": {
   "corte_novidade": 512,
   "estresse_corte": 337500,

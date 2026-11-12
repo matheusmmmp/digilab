@@ -47,6 +47,14 @@ ouvido (pela direcao do ultimo passo de quem ouve); a caixa vai para a percepcao
 comida num canal separado, OA-1), a direcao pronta do mundo (OA-2) e a intensidade no ponto de cada narina, para o orgao do corpo (DP-13). Os
 sons emitidos (`sons`) sao derivados; a ConfigSentidos vai no cabecalho do registro (so ligada), e o replay a confere.
 
+A TV no grupo (GOSTO_VISUAL, a decisao B da captura ligada ao cerebro; "Sim a tudo", Matheus, 2026-11-12; D-GV-TVJOGO-4), atras da ConfigTV
+(desligada: o grupo de hoje, byte a byte). Ligada, a TV e uma so, do mundo comum (`Mundo.ligar_tv`, na celula da ConfigTV): o Grupo a liga, e
+cada pet que entra tem de vir com a mesma ConfigTV (e a mesma ConfigTVJogo), o corpo com a ConfigTela e o motor que olha (MotorMundo: o
+olhar, o estimulo e as linhas ao cerebro de cada pet sao os de um pet so, cada um com a posicao dele). O que a TV passa e um evento do
+grupo, do mundo (`sentido_tela`, a fonte "evento"; e, com a ConfigTVJogo.desligar, a TV desligada), no relogio do mundo, sem pet e com a
+origem do dono: nao e contato nem cuidado e nao entra na projecao de nenhum pet. A ConfigTV (e a ConfigTVJogo ligada) vai no cabecalho, e o
+replay a confere. O trocar_canal (a fonte "grade") fica fora do grupo.
+
 So biblioteca padrao.
 """
 
@@ -59,14 +67,18 @@ from typing import Callable
 
 from .config import CONFIG_DONOS, CONFIG_GRUPO_LIGADA, CONFIG_PADRAO, CONFIG_SENTIDOS, TICKS_POR_DIA, Config, ConfigDonos, ConfigGrupo
 from .config import CONFIG_COOPERACAO, ConfigCooperacao, ConfigMundo, ConfigSentidos
+from .config import CONFIG_TV, CONFIG_TVJOGO, ConfigTV, ConfigTVJogo
 from .cooperacao import TIPOS_MADUROS, Cooperacao
 from .donos import Visao
-from .events import AcaoUsuario, Evento, LogDeEventos, avanco, ler_deixar_bola, ler_deixar_comida
+from .events import TIPO_SENTIDO_TELA, AcaoUsuario, Evento, LogDeEventos, avanco, ler_deixar_bola, ler_deixar_comida, ler_sentido_tela
+from .events import sentido_tela as evento_sentido_tela
+from .events import sentido_tela_desligada as evento_sentido_tela_desligada
 from .events import deixar_bola as evento_deixar_bola
 from .events import deixar_comida as evento_deixar_comida
-from .mundo import (CANDIDATOS_SOCIAIS, SONS, CanalMundo, MotorMundo, Mundo, PercepcaoSentidos, PercepcaoSocial, celula_de,
+from .mundo import (CANDIDATOS_SOCIAIS, SONS, CanalMundo, acao_visivel, MotorMundo, Mundo, PercepcaoSentidos, PercepcaoSocial, celula_de,
                     cheiro_do_pet, direcao_vizinha, distancia, em_contato, fontes_do_pet, perceber_social, som_ouvido, tipos_do_contato)
 from .protocol import derivar_semente
+from .tv import TVSemChave
 
 ROTULO_ORDEM = "mundo-ordem"                 # o fluxo da vez no tick (DP-2)
 ROTULO_SEGUNDO_PET = "segundo-pet"           # a semente do segundo pet (secao 2)
@@ -173,7 +185,8 @@ class Grupo:
     """N motores sobre um `Mundo`, no mesmo relogio. Nao decide nada: so chama cada motor na vez sorteada e grava o registro."""
 
     def __init__(self, cfg_mundo: ConfigMundo, semente: int, cfg_grupo: ConfigGrupo | None = None, cfg: Config | None = None,
-                 cfg_sentidos: ConfigSentidos | None = None, cfg_cooperacao: ConfigCooperacao | None = None) -> None:
+                 cfg_sentidos: ConfigSentidos | None = None, cfg_cooperacao: ConfigCooperacao | None = None,
+                 cfg_tv: ConfigTV | None = None, cfg_tv_jogo: ConfigTVJogo | None = None) -> None:
         self.cg = cfg_grupo or CONFIG_GRUPO_LIGADA
         if not self.cg.ligada:
             raise GrupoSemChave("o grupo so existe com ConfigGrupo.ligada (sem ela, o MotorMundo de um pet e dono do proprio Mundo)")
@@ -200,6 +213,20 @@ class Grupo:
             self.mundo.ligar_marcas()
             self.sons: list[dict] = []               # os sons emitidos (derivados): tick, quem, o som, onde, quem ouviu
             self.registro.cabecalho["sentidos"] = asdict(self.cs)
+        # a TV no grupo (D-GV-TVJOGO-4): desligada, o grupo de hoje (nem a TV, nem a chave no cabecalho)
+        self.ctv = cfg_tv or CONFIG_TV
+        self.ctj = cfg_tv_jogo or CONFIG_TVJOGO
+        if not isinstance(self.ctv, ConfigTV) or not isinstance(self.ctj, ConfigTVJogo):
+            raise TypeError(f"cfg_tv e uma ConfigTV e cfg_tv_jogo uma ConfigTVJogo: {self.ctv!r}, {self.ctj!r}")
+        if self.ctj.ligada and not self.ctv.ligada:
+            raise TVSemChave("a ConfigTVJogo no grupo exige a ConfigTV ligada")
+        if self.ctv.ligada:
+            if self.ctv.fonte != "evento":
+                raise TVSemChave("a TV no grupo e a do modo livre gravado (a fonte \"evento\"): o trocar_canal fica fora do grupo")
+            self.mundo.ligar_tv(self.ctv)
+            self.registro.cabecalho["tv"] = asdict(self.ctv)
+            if self.ctj.ligada:
+                self.registro.cabecalho["tv_jogo"] = asdict(self.ctj)
 
     # ------------------------------------------------------------ a entrada
     def entrar(self, ident: str, politica, fabrica_motor: Callable, cerebro: str, dono: str) -> MotorMundo:
@@ -224,6 +251,8 @@ class Grupo:
         if motor._estado.tick != 0 or len(motor.log):
             raise ValueError("o pet entra recem-nascido (tick 0, log vazio)")
         self._conferir_orgaos(motor)
+        if motor.ctv != self.ctv or motor.ctj != self.ctj:
+            raise TVSemChave("os pets do grupo vem com a ConfigTV e a ConfigTVJogo do grupo (a TV e do mundo comum)")
         motor._grupo, motor.ident = self, ident
         if self.cs.ligada:
             motor._ligar_propriocepcao()             # a direcao do ultimo passo antes do primeiro passo
@@ -316,7 +345,7 @@ class Grupo:
         if not outros:
             return None
         m = self.motores[ident]
-        fisico = [(i, *self.motores[i].pet, self.motores[i]._acao_atual.value) for i in outros]
+        fisico = [(i, *self.motores[i].pet, acao_visivel(self.motores[i]._acao_atual)) for i in outros]
         sentidos = self.perceber_sentidos(ident, outros) if self.cs.ligada else None
         p = perceber_social(*m.pet, self.tick, fisico, m._viu_comer, m._toques, m._raio_visao, sentidos)
         if self.cco.co6:                         # a CO6: a reputacao de cada outro presente e o proprio `k` (desligada, os campos ficam None)
@@ -481,6 +510,24 @@ class Grupo:
         self.registro.anexar(EventoGrupo(self.tick, ev.tipo, ev.valor, DESTINO_MUNDO, ident, ORIGEM_DONO))
         m.deixar_bola(x, y)
 
+    # ------------------------------------------------------------ a TV do mundo comum (D-GV-TVJOGO-4)
+    def sentido_tela(self, fonte: str, niveis) -> None:
+        """o que a TV do mundo comum passa a partir de agora (o modo livre gravado): um evento do grupo, do mundo, sem pet"""
+        self._sentir(evento_sentido_tela(self.tick, fonte, niveis))
+
+    def desligar_tela(self, fonte: str) -> None:
+        """a TV desligada (a decisao A; so com a ConfigTVJogo.desligar)"""
+        self._sentir(evento_sentido_tela_desligada(self.tick, fonte))
+
+    def _sentir(self, ev: Evento) -> None:
+        if not self.ctv.ligada:
+            raise TVSemChave("o sentido_tela no grupo exige a ConfigTV ligada (Grupo(cfg_tv=))")
+        fonte, niveis = ler_sentido_tela(ev)                     # valida antes do registro
+        if niveis is None and not self.ctj.desligar:
+            raise TVSemChave("a TV desligada (sentido_tela `fonte|desligada`) exige a ConfigTVJogo.desligar")
+        self.registro.anexar(EventoGrupo(self.tick, ev.tipo, ev.valor, DESTINO_MUNDO, None, ORIGEM_DONO))
+        self.mundo.tv.sentir(fonte, niveis, self.tick)
+
     # ------------------------------------------------------------ leitura
     def resumo(self) -> dict:
         """o mundo, as vezes sorteadas e o que cada pet guarda (o G1 do grupo compara isto bit a bit)"""
@@ -533,7 +580,8 @@ class PetNoGrupo:
 # ================================================================== o replay
 def reproduzir_grupo(registro: RegistroGrupo, fabricas: dict[str, tuple[Callable, Callable]], cfg_mundo: ConfigMundo,
                      cfg_grupo: ConfigGrupo | None = None, cfg: Config | None = None, cfg_sentidos: ConfigSentidos | None = None,
-                     cfg_cooperacao: ConfigCooperacao | None = None) -> Grupo:
+                     cfg_cooperacao: ConfigCooperacao | None = None, cfg_tv: ConfigTV | None = None,
+                     cfg_tv_jogo: ConfigTVJogo | None = None) -> Grupo:
     """Refaz o grupo do cabecalho e rejoga os eventos no mesmo relogio. `fabricas[id] = (fabrica da politica, fabrica do motor)`. O
     registro refeito tem de ser o lido (falha alto); evento desconhecido, fora do tick ou de pet que nao entrou tambem."""
     cab = registro.cabecalho
@@ -545,10 +593,13 @@ def reproduzir_grupo(registro: RegistroGrupo, fabricas: dict[str, tuple[Callable
     cs = cfg_sentidos or CONFIG_SENTIDOS
     if cab.get("sentidos") != (asdict(cs) if cs.ligada else None):
         raise ValueError(f"o cabecalho do registro nao e o desta ConfigSentidos: {cab.get('sentidos')!r}")
+    ctv, ctj = cfg_tv or CONFIG_TV, cfg_tv_jogo or CONFIG_TVJOGO
+    if cab.get("tv") != (asdict(ctv) if ctv.ligada else None) or cab.get("tv_jogo") != (asdict(ctj) if ctj.ligada else None):
+        raise ValueError(f"o cabecalho do registro nao e o desta ConfigTV/ConfigTVJogo: {cab.get('tv')!r}, {cab.get('tv_jogo')!r}")
     if set(fabricas) != set(cab["pets"]):
         raise ValueError(f"fabricas {sorted(fabricas)} para os pets {sorted(cab['pets'])}")
     cfg = cfg or CONFIG_PADRAO
-    g = Grupo(cfg_mundo, cab["semente"], cg, cfg, cs, cfg_cooperacao)
+    g = Grupo(cfg_mundo, cab["semente"], cg, cfg, cs, cfg_cooperacao, ctv, ctj)
     for e in registro.eventos:
         if e.tick != g.tick:
             raise ValueError(f"evento no tick {e.tick} com o grupo no tick {g.tick}: {e}")
@@ -564,6 +615,8 @@ def reproduzir_grupo(registro: RegistroGrupo, fabricas: dict[str, tuple[Callable
             g.deixar_comida(e.pet, *ler_deixar_comida(Evento(e.tick, e.tipo, e.valor)))
         elif e.tipo == "deixar_bola":
             g.deixar_bola(e.pet, *ler_deixar_bola(Evento(e.tick, e.tipo, e.valor)))
+        elif e.tipo == TIPO_SENTIDO_TELA and e.destino == DESTINO_MUNDO and e.pet is None:
+            g._sentir(Evento(e.tick, e.tipo, e.valor))
         else:
             raise ValueError(f"tipo de evento desconhecido no registro do grupo: {e.tipo!r}")
     if g.registro != registro:
@@ -587,7 +640,8 @@ class PetDoGrupo:
 
 def simular_grupo(cfg_mundo: ConfigMundo, semente: int, pets: list[PetDoGrupo], dias: int, cfg_grupo: ConfigGrupo | None = None,
                   cfg: Config | None = None, cfg_donos: ConfigDonos | None = None, canal_classe: type | None = None,
-                  cfg_sentidos: ConfigSentidos | None = None, cfg_cooperacao: ConfigCooperacao | None = None) -> Grupo:
+                  cfg_sentidos: ConfigSentidos | None = None, cfg_cooperacao: ConfigCooperacao | None = None,
+                  cfg_tv: ConfigTV | None = None, cfg_tv_jogo: ConfigTVJogo | None = None) -> Grupo:
     """O `simular_vida_mundo` do grupo (DP-7, a validacao inicial): a cada passo do dono o grupo anda o passo e, para cada pet presente
     (na ordem dos ids), o dono decide o cuidado dele pelo que ve dele, com o orcamento dele (`orcamento_por_dia` por dia vivido) e a rng
     `dono` dele (`derivar_semente("dono", semente do pet, rotulo do dono)`). Um pet so, entrando no tick 0, e o `simular_vida_mundo` de
@@ -607,7 +661,7 @@ def simular_grupo(cfg_mundo: ConfigMundo, semente: int, pets: list[PetDoGrupo], 
         if type(p.entrada) is not int or p.entrada % TICKS_POR_DIA:
             # sem isto o pet nunca entrava, em silencio (o laco so o poe num passo do dono): a entrada e um tick do mundo, num inicio de dia
             raise ValueError(f"o pet {p.ident} entra num inicio de dia do mundo (multiplo de {TICKS_POR_DIA}): {p.entrada!r}")
-    g = Grupo(cfg_mundo, semente, cg, cfg, cfg_sentidos, cfg_cooperacao)
+    g = Grupo(cfg_mundo, semente, cg, cfg, cfg_sentidos, cfg_cooperacao, cfg_tv, cfg_tv_jogo)
     por_id = sorted(pets, key=lambda p: p.ident)           # G-ORDEM: a ordem da lista nao importa
     canais: dict[str, CanalMundo] = {}
     rngs: dict[str, random.Random] = {}
