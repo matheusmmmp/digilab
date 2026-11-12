@@ -360,3 +360,18 @@ corpus do Digimundo e uma mitologia em volta (a `docs/futuro/fala_do_assistir.md
 - As decisões OV1-1 a OV1-14 ficaram DECIDIDAS pelo Matheus em 2026-11-12, pela recomendação ("Eu aprovo todas as recomendações e segue
   em diante"). As leituras estão em `docs/registro/2026-11.md` (D-OV1-1 a 6). O próximo passo é a OV2, o código Python atrás da chave
   desligada.
+
+## A OV2: o órgão da visão no Python, atrás da chave (2026-11-12, Claude Code, Opus 5.5, branch `v3-orgao-visao-ov2`)
+
+O código da espec `docs/ESPEC_V3_ORGAO_VISAO.md`, pedido pelo Matheus ("segue em diante", 2026-11-12), atrás da `ConfigOrgao` desligada. O
+gabarito das vidas de hoje foi gravado antes, num commit próprio, e sai igual byte a byte com a chave desligada.
+- **A lista** `ov-lista-1` (`digilab/orgao.py`): os 24 genéricos e as 56 espécies, o brasão e o patrono, os sensíveis, os pares canônicos e o
+  `ResumoOrgao` de quem grava (o máximo da janela de 5 classificações, o corte 4, os 3 mais altos, só na mudança).
+- **O evento** `percepcao_tela` (`digilab/events.py`), aplicado pela TV no modo livre gravado e lido pelo replay.
+- **A TV** (`digilab/tv.py`): os conceitos por programa da grade, pela rng `tv-conceitos`, e os do último evento na fonte "evento".
+- **O cérebro:** o gancho `ver_conceitos`; no M-SENS, a habituação e a novidade por conceito (duas velocidades) e o gosto por conceito (a
+  exposição e a consequência); o termo dos conceitos no agrado do olhar; no M-AFETO, o termo do mito só na valência da decisão (a subchave
+  `mito`, com o brasão do pet).
+- **Os testes:** `tests/test_orgao_visao.py` e `tests/test_gabarito_orgao_visao.py`.
+
+As leituras estão em `docs/registro/2026-11.md`, D-OV2-1 a 8. O web, a paridade e o órgão no navegador são a OV3.

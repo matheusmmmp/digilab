@@ -16,11 +16,16 @@ Na consequencia (`consequencia`), dos receptores de antes e de depois:
 A serie da excitacao lida em cada decisao fica em `serie_e` (a doadora do M4-emb e a serie de uma vida M4).
 **O canal `gosto_visual`** (GOSTO_VISUAL, P1d; docs/ESPEC_GOSTO_VISUAL_P1.md, secao 5.2; so com a subchave `olhar`): na consequencia de
 uma opcao de olhar, o M-ADAPT passa o termo pronto (`gosto_visual`, o agrado do que o pet olhou, centrado); ele soma ao r antes do r_n,
-como o canal `gosto` do paladar no A, e entra em `canais` (a soma dos canais segue sendo o r). Sem ele, a conta de hoje. Sem rng."""
+como o canal `gosto` do paladar no A, e entra em `canais` (a soma dos canais segue sendo o r). Sem ele, a conta de hoje. Sem rng.
+**O mito** (GOSTO_VISUAL, OV2; docs/ESPEC_V3_ORGAO_VISAO.md, secao 6; so com a ConfigOrgao.mito, `ligar_mito`): a especie vista na TV cujo
+patrono e o do brasao do proprio pet (o parentesco, OV1-5) soma `div_arred(peso_mito x a_e x nov_e, S x S)` so a valencia desta decisao
+(o V que o M-IMPULSO le), sem mexer no V guardado, na excitacao nem no corpo (a D-MM-10 por analogia, como a culpa e a inveja da CO7). As
+outras especies e os conceitos genericos somam 0."""
 from __future__ import annotations
 
 from ..config import CONFIG_DIGIBRAIN_INATOS, Config, ConfigDigibrain, ConfigDigibrainInatos
 from ..policies.lobos import contribuicoes_corpo, div_arred, falta_receptor, sinal_corpo
+from .. import orgao as _orgao
 from . import dever as _dever
 from ._comum import clamp, ganho_de_tau, integrar, mul
 
@@ -64,12 +69,28 @@ class Afeto:
         self.serie_e: list[int] = []
         self.ultimo: dict | None = None
         self.dever = None                             # a CO7 (`ligar_dever`): a ConfigCooperacao; None desligada
+        self.mito: tuple | None = None                # o mito (OV2, `ligar_mito`): (peso, brasao do pet); None desligado
 
     def ligar_dever(self, cfg) -> None:
         """a CO7 (4; CO7-6): a culpa e a inveja tiram da valencia da decisao (o V que o M-IMPULSO le), sem mexer no V guardado nem no corpo"""
         if not cfg.co7:
             raise ValueError("M-AFETO: os deveres so com a subchave co7")
         self.dever = cfg
+
+    def ligar_mito(self, cfg, brasao: str) -> None:
+        """o mito (a docstring do modulo): o termo das especies do mesmo brasao do pet, so na valencia da decisao"""
+        if not cfg.mito:
+            raise ValueError("M-AFETO: ligar_mito com a ConfigOrgao.mito desligada")
+        if brasao not in _orgao.BRASOES:
+            raise ValueError(f"M-AFETO: o brasao do pet em {_orgao.BRASOES}: {brasao!r}")
+        self.mito = (cfg.peso_mito, brasao)
+
+    def termo_mito(self, sens: dict) -> int:
+        """o termo do mito na valencia desta decisao (a docstring do modulo)"""
+        peso, brasao = self.mito
+        S = self.S
+        return sum(div_arred(peso * a * sens["nov_conceito"][c], S * S) for c, a in sens["conceitos"].items()
+                   if _orgao.BRASAO.get(c) == brasao)
 
     def urgencia(self, falta: int) -> int:
         p, S = self.p, self.S
@@ -104,6 +125,9 @@ class Afeto:
         if self.dever is not None:                    # a CO7: a culpa e a inveja so na valencia desta decisao (desligada, a de hoje)
             culpa, inveja = _dever.culpa_inveja(sens, self.dever)
             out.update(V=clamp(self.V - culpa - inveja, -S, S), culpa=culpa, inveja=inveja)
+        if self.mito is not None:                     # o mito (OV2): so na valencia desta decisao (desligado, a de hoje)
+            termo = self.termo_mito(sens)
+            out.update(V=clamp(out["V"] + termo, -S, S), mito=termo)
         return out
 
     def drives(self, receptores: tuple) -> tuple:
