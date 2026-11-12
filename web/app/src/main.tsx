@@ -20,7 +20,7 @@ import { ligarEscala } from "../motor/index.ts";
 import { comerAgora, dormirAgora, emburrarAgora, reacaoAtual } from "./telas/pet/cenaAcao.ts";
 import { CENA } from "./telas/pet/cenaEstado.ts";
 import { reacaoRostoAgora } from "./telas/pet/reacao.ts";
-import { clipeMomentoAgora, motivoAgora } from "./telas/pet/momentos.ts";
+import { bolaVista, clipeMomentoAgora, motivoAgora } from "./telas/pet/momentos.ts";
 import { lugaresNomeados } from "./telas/pet/vistaMundo.ts";
 import "./estilo/tokens.css";
 import "./estilo/base.css";
@@ -72,15 +72,18 @@ const lerMundo = () => {
   const m = jogoAtual().motor, mu = m.mundo;
   return mu && { pet: [...mu.pet], comedouro: [...mu.comedouro], comidas: [...mu.comidas.values()].map(c => ({ id: c.id, x: c.x, y: c.y, situacao: mu.situacao(c, m.e.tick) })),
     consumos: mu.consumos.map(c => ({ id: c.id, tick: c.tick, situacao: c.situacao, fome_antes: c.fome_antes, fome_depois: c.fome_depois })), fome: m.e.fome, acao: m.acao,
-    lugares: lugaresNomeados(mu), bola: mu.bolaEm(m.e.tick), rolagens: mu.rolagens.length };
+    lugares: lugaresNomeados(mu), bola: mu.bolaEm(m.e.tick), rolagens: mu.rolagens.length,
+    /* o lance do dono (BOLA_BRINCAR, BB3): os lances e os ticks das rolagens no relogio do mundo, e o tick de agora nele (null sem o lance) */
+    lances: mu.lances && mu.lances.map(l => ({ tick: l.tick, para: [...l.para] })), rolagensTicks: mu.rolagens.map(r => (r as { tick: number }).tick), tickMundo: mu.tm(m.e.tick),
+    versao: m.versao, cerebro: m.cerebroAtual };
 };
-Object.assign(window, { __digilab: { assinatura: () => jogoAtual().motor.assinatura(), registro: () => textoDaTela(), grupo: () => { const j = jogoAtual(); return j.grupo ? { foco: j.foco, ids: [...j.grupo.ids], ticks: j.grupo.ids.map(i => j.grupo!.motor(i).e.tick), especies: j.grupo.ids.map(i => j.grupo!.motor(i).especie) } : null; }, focar: (i: string) => focar(i), tick: () => jogoAtual().motor.e.tick, digibrain: () => jogoAtual().motor.digibrain(),
+Object.assign(window, { __digilab: { assinatura: () => jogoAtual().motor.assinatura(), registro: () => textoDaTela(), grupo: () => { const j = jogoAtual(); return j.grupo ? { foco: j.foco, ids: [...j.grupo.ids], ticks: j.grupo.ids.map(i => j.grupo!.motor(i).e.tick), especies: j.grupo.ids.map(i => j.grupo!.motor(i).especie), chamados: j.grupo.ids.map(i => j.grupo!.motor(i).chamadosAbertos()) } : null; }, focar: (i: string) => focar(i), tick: () => jogoAtual().motor.e.tick, digibrain: () => jogoAtual().motor.digibrain(),
   /* a TV no cérebro (a v32; o e2e gosto_visual_cerebro): o que o cérebro faz com a TV e o relógio do jogo, para a captura parar no olhar */
   tvCerebro: () => jogoAtual().motor.tvNoCerebro(), velocidade: (v: number) => escolherVelocidade(v),
   mundo: lerMundo, cena: () => CENA.mundo && { pet: [...CENA.mundo.pet], bola: CENA.mundo.bola ?? null, modo3d: CENA.modo3d, ret: CENA.ret },
   reacao: () => reacaoAtual(performance.now()),
   /* o que tocou no comer no ultimo quadro da ilha: "clipe", "gesto" ou null (cenaAcao.ts, escolherComer; docs/TAREFA_V3_SPRITES_ACOES.md, M4) */
-  comer: () => comerAgora().tocou, emburrar: () => emburrarAgora(), dormir: () => dormirAgora(), reacaoRosto: () => reacaoRostoAgora(), clipeMomento: () => clipeMomentoAgora(), momento: () => motivoAgora(), cenaPara: (x: number, y: number) => CENA.mundo?.paraTela(x, y) ?? null,
+  comer: () => comerAgora().tocou, emburrar: () => emburrarAgora(), dormir: () => dormirAgora(), reacaoRosto: () => reacaoRostoAgora(), clipeMomento: () => clipeMomentoAgora(), momento: () => motivoAgora(), bolaVista: () => bolaVista(), cenaPara: (x: number, y: number) => CENA.mundo?.paraTela(x, y) ?? null,
   /* o pet na mao (PegarPet.tsx; docs/TAREFA_V3_PEGAR_PET.md, P2) */
   petNaMao: () => CENA.petNaMao,
   /* o prototipo do gosto visual (so com `?gosto_visual=1`; sem ela, falso e null): a TV da ilha sob o ponto, e o sinal da reacao sobre o pet.
