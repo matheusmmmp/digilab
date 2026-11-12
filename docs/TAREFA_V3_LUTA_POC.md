@@ -932,3 +932,10 @@ PR #834, em rascunho. O plano e a régua estão na seção 8 do `docs/PLANO_LP6_
 - **Os testes da v29** (`test/lp6_4_v29.test.ts`): a tabela; os grupos v26 e v28 de antes abrem pelo save como eram; a vida do grupo v29
   igual à do v28 até a primeira luta no Ultimate e diferente depois; o palco refaz as lutas do Mega com o apoio e a arena da tabela (o
   `ResultadoLutaPoc` os guarda); o gabarito da vida alta e o replay.
+
+## A investigação do núcleo, N0: o plano (2026-11-12)
+
+O plano é o `docs/PLANO_LUTA_NUCLEO.md`, PROPOSTO, com as decisões D-N-1 a D-N-7. Ele cobre as metas que a LP5 e a LP6 não fecharam e
+separa cada uma pela causa: o núcleo, o mapa, a série sem cura, a tabela das formas ou a régua. As etapas vão da N1 à N5: as releituras e as
+contas, as lutas fixas, as chaves desligadas com o gabarito das versões vivas, os contrafactuais e o relatório. Nenhum número do jogo muda.
+Os desvios estão em `docs/registro/2026-11.md`, seção "LUTA_POC, N0".
