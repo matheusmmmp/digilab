@@ -51,6 +51,9 @@ export const FORCA_ATR_MAX = 3;
 /** a chave puloMax (N3; a H-PULO da N2: com o folego treinado, o pulo da esquiva bate na cerca quase sempre): a faixa (px) do teto do pulo.
     O pulo dura os passos que cobrem o ACAO.desvioCpuMs, e a velocidade dele fica ate o teto / essa duracao. PROPOSTO, SEM FONTE */
 export const PULO_MAX_FAIXA = [10, 400] as const;
+/** a chave bordaRingue (N3; a H-RINGUE da N2: o recuo na preparacao do tiro e o pulo jogam quem atira para fora do Ringue): a faixa do
+    limite, em fracao do raio da elipse (a queda e acima de 1,02, cenas.ts). PROPOSTO, SEM FONTE */
+export const BORDA_RINGUE_FAIXA = [0.5, 1] as const;
 
 /** a distancia do tiro (LUTA_POC, LP5, D-LP5-12: "Desenho agora, motor na LP5"): como quem atira mantem distancia de quem luta de perto.
     So vale quando a entrada da luta traz o `tiro` (o candidato da bancada; no jogo, a versao do pet que o ligar, na LP5-5). Sem ele, a luta

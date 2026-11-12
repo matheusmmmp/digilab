@@ -12,7 +12,7 @@
 import { ACAO, DIFIC, ELIPSE, EQ, ORDEM_ESTAGIOS, PASSO_MS, PX_POR_UNIDADE, RECUO_APOIO_SEM_TIRO_MS, type Apoio, type ArenaPorEstagio } from "./constantes.ts";
 import { dist, seno } from "./aritmetica.ts";
 import { CENAS, iniciarCena } from "./cenas.ts";
-import { bloqueio, colidir, dentroArena, evento, lutador, mudar, obstaculoEm, outro, prender, ref } from "./nucleo.ts";
+import { bloqueio, colidir, dentroArena, evento, lutador, mudar, normArena, obstaculoEm, outro, prender, ref } from "./nucleo.ts";
 import type { Atributo, ConfigLuta, DadosForma, Elipse, Evento, GolpeBase, Lado, Luta, Lutador, Sorteios } from "./tipos.ts";
 
 const def = (L: Luta) => CENAS[L.cena.id];
@@ -160,9 +160,16 @@ function soltarGolpe(L: Luta, u: Lutador): void {
   else evento(L, { tipo: "golpe_ar", u: ref(u) });
 }
 
-function andar(L: Luta, u: Lutador, mx: number, my: number, vel: number, dt: number): void {
-  const p = vel * (def(L).mov?.(L.cena, u) ?? 1) * dt / 1000;
+/** `borda`: o passo e um recuo ou um pulo da esquiva (N3, a chave bordaRingue): no Ringue, com a chave, ele nao leva o lutador alem do
+    limite (a fracao do raio da elipse); o passo que passaria do limite e se afastaria do centro nao anda. Sem a chave, o andar de sempre */
+function andar(L: Luta, u: Lutador, mx: number, my: number, vel: number, dt: number, borda = false): void {
+  const p = vel * (def(L).mov?.(L.cena, u) ?? 1) * dt / 1000, x0 = u.x, y0 = u.y;
   u.x += mx * p; u.y += my * p * ACAO.eixoY; prender(L, u); colidir(L, u);
+  const lim = L.cfg.bordaRingue;
+  if (borda && lim !== undefined && L.cena.id === "ringue") {
+    const n = normArena(L, u.x, u.y);
+    if (n > lim && n > normArena(L, x0, y0)) { u.x = x0; u.y = y0; }
+  }
 }
 
 /** a esquiva (D-LP5-14): o fator de um lutador pela perspicacia ou pela agilidade x (1 = o neutro), com o peso k; linear, sem `**` (a
@@ -229,7 +236,7 @@ function atualizar(L: Luta, u: Lutador, dt: number): void {
     const T = L.cfg.tiro;
     if (T && T.recuaNaPrep > 0 && dg.proj && !u.golpeDado && !o.morto) {
       const ix = o.x - u.x, iy = o.y - u.y, id = dist(ix, iy) || 1;
-      if (id < Math.max(T.distMin, u.alcance * T.recuaAbaixo)) andar(L, u, -ix / id, -iy / id, u.st.vel * T.recuaNaPrep, dt);
+      if (id < Math.max(T.distMin, u.alcance * T.recuaAbaixo)) andar(L, u, -ix / id, -iy / id, u.st.vel * T.recuaNaPrep, dt, true);
     }
     if (!u.golpeDado && u.t >= dg.t * 1000) { u.golpeDado = true; if (!o.morto) soltarGolpe(L, u); }
     if (u.usandoApoio) {
@@ -251,7 +258,7 @@ function atualizar(L: Luta, u: Lutador, dt: number): void {
     const Es = L.cfg.esquiva;
     const vPulo = Es ? ACAO.desvioCpu * fatorEsq(u.st.agil ?? 1, Es.kDash) : ACAO.desvioCpu;
     /* o teto do pulo (N3, a chave puloMax): a velocidade ate o teto / a duracao do pulo em passos; sem a chave, a de sempre */
-    u.dash -= dt; andar(L, u, u.dashDir[0], u.dashDir[1], L.cfg.puloMax !== undefined ? Math.min(vPulo, L.cfg.puloMax * 1000 / MS_DO_PULO) : vPulo, dt); mudar(u, "run");
+    u.dash -= dt; andar(L, u, u.dashDir[0], u.dashDir[1], L.cfg.puloMax !== undefined ? Math.min(vPulo, L.cfg.puloMax * 1000 / MS_DO_PULO) : vPulo, dt, true); mudar(u, "run");
     if (Es && u.dash <= 0 && u.contraPend) { u.contraPend = false; u.recarga = Math.min(u.recarga, Es.contraMs); }
     return;
   }
@@ -318,7 +325,7 @@ function atualizar(L: Luta, u: Lutador, dt: number): void {
   const m = dist(mx, my);
   const recua = mx * dx + my * dy < 0;
   const vRecuo = T && u.g.proj ? T.recuo : EQ.recuo;
-  if (m > 0.15) { andar(L, u, mx / Math.max(1, m), my / Math.max(1, m), u.st.vel * (recua ? vRecuo : 1), dt); mudar(u, "run"); } else mudar(u, "idle");
+  if (m > 0.15) { andar(L, u, mx / Math.max(1, m), my / Math.max(1, m), u.st.vel * (recua ? vRecuo : 1), dt, recua); mudar(u, "run"); } else mudar(u, "idle");
 }
 
 /** um passo de PASSO_MS: a regra da arena, os dois lutadores, os corpos, os projeteis e o fim. Devolve os eventos do passo. */

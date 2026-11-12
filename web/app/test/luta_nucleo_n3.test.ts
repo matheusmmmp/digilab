@@ -115,3 +115,43 @@ describe("a chave puloMax (o teto do pulo da esquiva)", () => {
     expect(resumoLutaLp6(e)).toEqual(resumoLutaLp6(e));
   });
 });
+
+/** as quedas do Ringue de cada lado, separadas pelo golpe nos 4 passos antes (o empurrao) ou sem golpe (o recuo, o pulo, o andar) */
+function quedasRingue(e: EntradaLuta): { comGolpe: number; semGolpe: number } {
+  const L = criarLuta(configLuta(e), sorteiosPorFluxo(e.semente)), ult: Record<string, number> = { a: -99, b: -99 };
+  let passo = 0, comGolpe = 0, semGolpe = 0;
+  rodarAteOFim(L, ev => {
+    passo++;
+    for (const x of ev) {
+      if (x.tipo === "queda_ringue") { if (passo - ult[x.u.lado] <= 4) comGolpe++; else semGolpe++; }
+      if (x.tipo === "dano") ult[x.alvo.lado] = passo;
+    }
+  });
+  return { comGolpe, semGolpe };
+}
+describe("a chave bordaRingue (o recuo e o pulo param antes da borda do Ringue)", () => {
+  /* o Gabumon (atira) contra o Veemon (de perto), na v23, nos dois lados e em 10 sementes */
+  const pares = [101, 202, 303, 404, 505, 606, 707, 808, 909, 1001].flatMap(s => [
+    entradaDaTabela(LUTA_V23, "ringue", "cirro_crianca_arisco", "ferrugem_crianca_arisco", s), entradaDaTabela(LUTA_V23, "ringue", "ferrugem_crianca_arisco", "cirro_crianca_arisco", s)]);
+  const soma = (xs: { comGolpe: number; semGolpe: number }[]) => xs.reduce((a, x) => ({ comGolpe: a.comGolpe + x.comGolpe, semGolpe: a.semGolpe + x.semGolpe }), { comGolpe: 0, semGolpe: 0 });
+  test("sem a chave, quem atira cai do Ringue sem levar golpe; com 0,9, essas quedas quase somem", () => {
+    const antes = soma(pares.map(quedasRingue)), depois = soma(pares.map(e => quedasRingue({ ...e, bordaRingue: 0.9 })));
+    expect(antes.semGolpe).toBeGreaterThan(10);
+    expect(depois.semGolpe).toBeLessThan(antes.semGolpe / 4);
+  });
+  test("fora do Ringue, a chave nao muda a luta", () => {
+    for (const cena of ["campo", "praia", "castelo"] as const) {
+      const e = entradaDaTabela(LUTA_V23, cena, "cirro_crianca_arisco", "ferrugem_crianca_arisco", 101);
+      expect(resumoLutaLp6({ ...e, bordaRingue: 0.9 })).toEqual(resumoLutaLp6(e));
+    }
+  });
+  test("fora da faixa falha alto; o replay bit a bit com ela", () => {
+    for (const x of [0.49, 1.01, Number.NaN]) expect(() => configLuta({ ...pares[0], bordaRingue: x })).toThrow(/limite da borda do Ringue invalido/);
+    const e = { ...pares[0], bordaRingue: 0.9 };
+    expect(resumoLutaLp6(e)).toEqual(resumoLutaLp6(e));
+  });
+  test("as 4 chaves juntas: o replay bit a bit", () => {
+    const e = { ...pares[1], forcaAtr: 1.15, tiroDoMorto: true as const, puloMax: 90, bordaRingue: 0.9 };
+    expect(resumoLutaLp6(e)).toEqual(resumoLutaLp6(e));
+  });
+});

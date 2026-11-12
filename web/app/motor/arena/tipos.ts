@@ -49,6 +49,8 @@ export interface ConfigLuta {
   tiroDoMorto?: true;
   /** a N3: o teto (px) do pulo da esquiva; sem ele, o pulo sem teto */
   puloMax?: number;
+  /** a N3: no Ringue, o limite (fracao do raio) do recuo e do pulo; sem ele, eles nao olham a borda */
+  bordaRingue?: number;
 }
 
 // ---------- estado ----------
