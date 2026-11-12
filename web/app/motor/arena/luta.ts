@@ -1,7 +1,7 @@
 /* A luta inteira, sem tela (LP1): a entrada (o mapa, as duas formas, os stats de cada lado e a semente) da sempre o mesmo resultado, que
    e o que o replay da LP2 vai refazer. Os dois lados sao a IA da arena na dificuldade "normal" (a LP-3); a tela da LP3 assiste passo a
    passo com a mesma configuracao. */
-import { ACAO, FORCA_ATR_MAX, LIMITE_MS, OPCOES_PADRAO, ORDEM_ESTAGIOS, type Apoio, type ArenaPorEstagio, type Esquiva, type Tiro } from "./constantes.ts";
+import { ACAO, FORCA_ATR_MAX, LIMITE_MS, PULO_MAX_FAIXA, OPCOES_PADRAO, ORDEM_ESTAGIOS, type Apoio, type ArenaPorEstagio, type Esquiva, type Tiro } from "./constantes.ts";
 import { FORMAS_ARENA } from "./formas.ts";
 import type { DadosForma } from "./tipos.ts";
 import { sorteiosPorFluxo } from "./rng.ts";
@@ -26,7 +26,9 @@ export interface EntradaLuta { cena: IdCena; a: { forma: string; stats: Stats; v
       desligadas sem elas; nenhuma versao de pet as liga. `forcaAtr`: a vantagem do atributo (sem ela, o OPCOES_PADRAO.forca, 1,5) */
   forcaAtr?: number;
   /** `tiroDoMorto` ligado (true): o projetil de quem ja caiu some no ar, sem dano (a causa da maior parte dos empates, a N2) */
-  tiroDoMorto?: true }
+  tiroDoMorto?: true;
+  /** `puloMax`: o teto (px) do pulo da esquiva; a velocidade do pulo fica ate puloMax / a duracao dele (sem ela, o pulo sem teto) */
+  puloMax?: number }
 
 /** a configuracao da luta 1 contra 1: os dois pela IA, com a dificuldade, o atributo e os projeteis do padrao da POC */
 export function configLuta(e: EntradaLuta, tabela: TabelaFormas = FORMAS_ARENA): ConfigLuta {
@@ -35,13 +37,19 @@ export function configLuta(e: EntradaLuta, tabela: TabelaFormas = FORMAS_ARENA):
     b: { forma: formaArena(e.b.forma, tabela), stats: e.b.stats, ...(e.b.vida0 !== undefined ? { vida0: e.b.vida0 } : {}) },
     ...(e.tiro ? { tiro: conferirTiro(e.tiro) } : {}), ...(e.esquiva ? { esquiva: conferirEsquiva(e.esquiva) } : {}),
     ...(e.apoio ? { apoio: conferirApoio(e.apoio) } : {}), ...(e.arenaPorEstagio ? { arenaPorEstagio: conferirArenaPorEstagio(e.arenaPorEstagio) } : {}),
-    ...(e.tiroDoMorto !== undefined ? { tiroDoMorto: conferirLigada(e.tiroDoMorto, "tiroDoMorto") } : {}) };
+    ...(e.tiroDoMorto !== undefined ? { tiroDoMorto: conferirLigada(e.tiroDoMorto, "tiroDoMorto") } : {}),
+    ...(e.puloMax !== undefined ? { puloMax: conferirPuloMax(e.puloMax) } : {}) };
 }
 const numOk = (v: unknown, min: number, max: number) => typeof v === "number" && Number.isFinite(v) && v >= min && v <= max;
 /** uma chave ligada da N3: so true (desligada = sem o campo, para a configuracao sair igual a de antes), senao falha alto */
 function conferirLigada(x: unknown, nome: string): true {
   if (x !== true) throw new Error(`arena: a chave ${nome} so vale ligada (true) ou fora da entrada (${JSON.stringify(x)})`);
   return true;
+}
+/** o teto do pulo da entrada (N3, a chave puloMax): finito, de PULO_MAX_FAIXA[0] a PULO_MAX_FAIXA[1] px, senao falha alto */
+export function conferirPuloMax(x: number): number {
+  if (!numOk(x, PULO_MAX_FAIXA[0], PULO_MAX_FAIXA[1])) throw new Error(`arena: teto do pulo invalido ${JSON.stringify(x)}`);
+  return x;
 }
 /** a vantagem do atributo da entrada (N3, a chave forcaAtr): finita, de 1 (sem vantagem) a FORCA_ATR_MAX, senao falha alto */
 export function conferirForcaAtr(x: number): number {

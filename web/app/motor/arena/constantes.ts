@@ -48,6 +48,9 @@ export const OPCOES_PADRAO = { forca: 1.5, pvel: 0.15, dific: "normal" as Dificu
 /** a chave forcaAtr (N3 da investigacao do nucleo, docs/PLANO_LUTA_NUCLEO.md; D-N-3 e D-N-5): a vantagem do atributo vem na entrada da
     luta, de 1 (o triangulo sem efeito) ate este teto; sem a chave, o OPCOES_PADRAO.forca. Nenhuma versao de pet a liga. PROPOSTO, SEM FONTE */
 export const FORCA_ATR_MAX = 3;
+/** a chave puloMax (N3; a H-PULO da N2: com o folego treinado, o pulo da esquiva bate na cerca quase sempre): a faixa (px) do teto do pulo.
+    O pulo dura os passos que cobrem o ACAO.desvioCpuMs, e a velocidade dele fica ate o teto / essa duracao. PROPOSTO, SEM FONTE */
+export const PULO_MAX_FAIXA = [10, 400] as const;
 
 /** a distancia do tiro (LUTA_POC, LP5, D-LP5-12: "Desenho agora, motor na LP5"): como quem atira mantem distancia de quem luta de perto.
     So vale quando a entrada da luta traz o `tiro` (o candidato da bancada; no jogo, a versao do pet que o ligar, na LP5-5). Sem ele, a luta

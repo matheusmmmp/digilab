@@ -168,6 +168,8 @@ function andar(L: Luta, u: Lutador, mx: number, my: number, vel: number, dt: num
 /** a esquiva (D-LP5-14): o fator de um lutador pela perspicacia ou pela agilidade x (1 = o neutro), com o peso k; linear, sem `**` (a
     aritmetica do nucleo), e pelo menos 0,1 */
 const fatorEsq = (x: number, k: number): number => Math.max(0.1, 1 + k * (x - 1));
+/** a duracao do pulo da esquiva em ms, nos passos que ele anda (o dash conta o ACAO.desvioCpuMs de PASSO_MS em PASSO_MS) */
+export const MS_DO_PULO = Math.ceil(ACAO.desvioCpuMs / PASSO_MS) * PASSO_MS;
 function desviar(L: Luta, u: Lutador, dt: number): void {
   const cfg = dific(L), E = L.cfg.esquiva;
   /* a esquiva (D-LP5-14): a perspicacia sobe a chance e encurta a reacao; sem a `esquiva`, a da POC */
@@ -247,7 +249,9 @@ function atualizar(L: Luta, u: Lutador, dt: number): void {
   desviar(L, u, dt);
   if (u.dash > 0) {
     const Es = L.cfg.esquiva;
-    u.dash -= dt; andar(L, u, u.dashDir[0], u.dashDir[1], Es ? ACAO.desvioCpu * fatorEsq(u.st.agil ?? 1, Es.kDash) : ACAO.desvioCpu, dt); mudar(u, "run");
+    const vPulo = Es ? ACAO.desvioCpu * fatorEsq(u.st.agil ?? 1, Es.kDash) : ACAO.desvioCpu;
+    /* o teto do pulo (N3, a chave puloMax): a velocidade ate o teto / a duracao do pulo em passos; sem a chave, a de sempre */
+    u.dash -= dt; andar(L, u, u.dashDir[0], u.dashDir[1], L.cfg.puloMax !== undefined ? Math.min(vPulo, L.cfg.puloMax * 1000 / MS_DO_PULO) : vPulo, dt); mudar(u, "run");
     if (Es && u.dash <= 0 && u.contraPend) { u.contraPend = false; u.recarga = Math.min(u.recarga, Es.contraMs); }
     return;
   }

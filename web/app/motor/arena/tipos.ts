@@ -47,6 +47,8 @@ export interface ConfigLuta {
   arenaPorEstagio?: ArenaPorEstagio;
   /** a N3 da investigacao do nucleo (docs/PLANO_LUTA_NUCLEO.md, secao 4): o projetil de quem ja caiu some no ar; sem ela, ele ainda acerta */
   tiroDoMorto?: true;
+  /** a N3: o teto (px) do pulo da esquiva; sem ele, o pulo sem teto */
+  puloMax?: number;
 }
 
 // ---------- estado ----------
