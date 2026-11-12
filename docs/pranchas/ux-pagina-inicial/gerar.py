@@ -46,6 +46,11 @@ def ic(n: str, cls: str = "ic") -> str:
     return f'<svg class="{cls}" viewBox="0 0 24 24" aria-hidden="true">{IC[n]}</svg>' if n in IC else G.svg(n, cls)
 
 
+# o primeiro quadro do Greymon esta de olho fechado (o Matheus viu, 2026-11-12): a folha tem 7 x 7 quadros de 622/7 x 552/7 px, e o
+# escolhido e o da coluna 5, linha 5 (parado, de olho aberto)
+REGIAO = {"Greymon": (355, 315, 444, 394)}
+
+
 def _primeira_faixa(ocupado: list) -> tuple[int, int]:
     """a primeira faixa ocupada com 8 px ou mais (algumas folhas tem um pixel solto antes do primeiro quadro)"""
     i = 0
@@ -63,10 +68,13 @@ def pet(nome: str, k: float, vira: bool = False, arq: str = "") -> str:
     im = Image.open(ASSETS / f"{arq}.png").convert("RGBA")
     al = im.getchannel("A")
     W, H = im.size
-    x0, x1 = _primeira_faixa([al.crop((x, 0, x + 1, H)).getbbox() is not None for x in range(W)])
-    y0, y1 = _primeira_faixa([al.crop((x0, y, x1, y + 1)).getbbox() is not None for y in range(H)])
+    if nome in REGIAO:   # um quadro escolhido a mao, pela regiao dele na folha
+        x0, y0, x1, y1 = REGIAO[nome]
+    else:
+        x0, x1 = _primeira_faixa([al.crop((x, 0, x + 1, H)).getbbox() is not None for x in range(W)])
+        y0, y1 = _primeira_faixa([al.crop((x0, y, x1, y + 1)).getbbox() is not None for y in range(H)])
     bx = al.crop((x0, y0, x1, y1)).getbbox()
-    x0, x1 = x0 + bx[0], x0 + bx[2]
+    x0, x1, y0, y1 = x0 + bx[0], x0 + bx[2], y0 + bx[1], y0 + bx[3]
     return (f'<span class="pet{" vira" if vira else ""}" role="img" aria-label="{nome}" style="width:{(x1 - x0) * k:.0f}px;height:{(y1 - y0) * k:.0f}px;'
             f"background-image:url('{G.A}/sprites/{arq}.png');background-size:{W * k:.0f}px {H * k:.0f}px;"
             f'background-position:{-x0 * k:.0f}px {-y0 * k:.0f}px"></span>')
