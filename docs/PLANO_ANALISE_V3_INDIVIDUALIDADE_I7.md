@@ -17,6 +17,10 @@ amarrado, em 360 pets novos. Ele não muda as seções 0 a 13; as AD2-1 a AD2-7 
 **O adendo 3 (seção 16) está DECIDIDO pelo Matheus em 2026-11-11** ("Aprovo as questões e pode seguir com as recomendações"): o que separa o pet que absorve o tapa do que se afasta, descoberto nas vidas do
 adendo 2 e conferido nas do I7b, sem vidas novas. Ele não muda as seções 0 a 15; as AD3-1 a AD3-6 estão decididas pela recomendação.
 
+**O adendo 4 (seção 18) está DECIDIDO pelo Matheus em 2026-11-12** ("Eu concordo com todas as recomendações e daí pode efetuar o merge das pendências finalizadas e daí seguir em frente com as recomendações"): o desenho causal do humor, com o tapa dado no humor
+baixo e no humor alto no mesmo pet, com o sorteio amarrado, em 360 pets novos. Ele não muda as seções 0 a 17; as AD4-1 a AD4-8 estão decididas
+pela recomendação.
+
 **De onde vem:** a conversa de 2026-11-10 sobre como tirar da frente um achado e não só uma implementação organizada. Dela saíram as
 perguntas Q1 a Q4, e o Matheus escolheu começar pela Q3, o desenvolvimento contrafactual ("Segue a recomendação").
 - **Por que esta pergunta:** o motor é determinístico e guarda o log. Dá para viver de novo a vida de um pet com uma única coisa diferente
@@ -706,3 +710,140 @@ Escrito em 2026-11-11 (Claude Code, Opus 5.5, branch `v3-individualidade-i7e`), 
   - as medianas: a energia 0,3637, a fome 0,6000 e o humor 0,5800;
   - a ação mais comum: `dormir` (2543 de 3521 momentos com grupo na descoberta, contando o E e o R).
 
+## 18. Adendo 4: o humor decide? O desenho causal (2026-11-12, DECIDIDO, Claude Code, Opus 5.5)
+
+**Status: DECIDIDO pelo Matheus em 2026-11-12** ("Eu concordo com todas as recomendações e daí pode efetuar o merge das pendências finalizadas e daí seguir em frente com as recomendações"), as AD4-1 a AD4-8 pela recomendação. O Matheus pediu em 2026-11-12 que a frente seguisse as recomendações do roadmap ("Ok, siga com essas recomendações"),
+e uma delas é o desenho causal que a 11.5 do resultado deixou PROPOSTO e a AD3-6 adiou. **Nada deste adendo roda antes de cinco coisas:**
+1. as decisões AD4-1 a AD4-8 (18.9) decididas pelo Matheus e este cabeçalho marcado DECIDIDO (feito);
+2. a faixa da AD4-2 posta em `experiments/bancada/faixas.py`, com a fonte;
+3. o código do I7f na `main` (18.8), com os testes e a fumaça medida;
+4. o registro do adendo, numa seção nova no fim deste plano, empurrado antes da primeira vida;
+5. nenhuma outra run de pesquisa na máquina enquanto ele roda (V3-D8).
+
+O adendo não muda nada das seções 0 a 17 nem as leituras do I7b, do adendo 2 e do adendo 3, que ficam como estão.
+
+**De onde vem:** o adendo 3 (a seção 11 do resultado) achou dois candidatos que separam o pet que absorve o tapa do que se afasta, nas duas
+amostras: o dono relapso (+0,17 na confirmação) e o humor abaixo da mediana no momento do tapa (+0,07 a +0,10). Os dois se somam: com o
+relapso e o humor baixo, de 62 % a 68 % dos ramos se afastam, contra 15 % a 21 % com os outros donos e o humor alto. A análise era de
+associação, e a 11.4 diz o que ela não demonstra: o humor baixo pode ser só um sinal do dono relapso.
+
+**A pergunta, Q-AD4: dar o tapa com o humor baixo, em vez de com o humor alto, no mesmo pet, no mesmo dia e com o mesmo sorteio, muda a
+chance de o pet se afastar do original?**
+
+- **Por que o desenho separa o humor do dono:** os dois tapas são dados no mesmo pet, com o mesmo genoma, o mesmo dono e a mesma história
+  até o dia t. O que muda entre eles é o momento, escolhido pelo humor. O dono, o genoma e o braço ficam iguais dentro do par.
+- **Por que o sorteio amarrado:** o adendo 2 mostrou que o efeito que dura vem da história (ρ de 0,75 a 0,96), mas o tapa ainda desloca o
+  fluxo da rng. Com o amarrado (14.3), a diferença entre os dois ramos não vem de um sorteio a mais.
+
+**O que este adendo não afirma:** que o humor do pet é um humor no sentido de um animal, nem que o mecanismo é o mesmo de um animal. A
+manipulação é do momento, e não do humor: o humor não é posto à mão, porque isso seria um mecanismo novo no pet (IN-7). O momento com o humor
+baixo também difere do momento com o humor alto em outras coisas (a hora, a energia, a fome, a ação em curso), e a 18.5 trata disso. Todos
+os números novos são PROPOSTOS e SEM FONTE como escolha, e não há alegação de novidade.
+
+### 18.1 Os pets (AD4-1, AD4-2)
+
+**360 pets novos:** os mesmos 2 braços (REL e REL+F), os 3 donos (atencioso, relapso, aleatório) e 14 dias no `comedouro`, com o orçamento
+de 16 por dia, como no adendo 2. As sementes vêm da faixa **95101…95505** (bases 95101, 95202, 95303, 95404 e 95505, K = 12, o prefixo
+`digibrain_prototipo`).
+- **A faixa** estava livre na `origin/main` e nos PRs abertos em 2026-11-12. A 93xxx e a 94xxx estão pedidas pelo EQUILIBRIO_CUIDADO
+  (#890, #898). Ela entra na tabela com a fonte antes da run.
+- **Por que pets novos:** o humor como candidato nasceu nas vidas do adendo 2 e se confirmou nas do I7b. Um teste causal nas mesmas vidas
+  usaria a amostra que sugeriu a hipótese.
+
+### 18.2 Os momentos (AD4-3)
+
+No dia t (as idades do I7: t = 2, 4, 6, 8 e 10), entre as decisões acordadas do original, lidas pelo replay até cada uma (como no I7e):
+- **M_baixo(t):** a primeira decisão acordada do dia t com o humor abaixo de **0,58**;
+- **M_alto(t):** a primeira decisão acordada do dia t com o humor em 0,58 ou acima.
+
+O corte 0,58 é a mediana do humor da descoberta do adendo 3, já registrada na seção 17, e não é recalculado aqui.
+- **O par existe** só se os dois momentos existirem no dia t. Um pet-dia sem um dos dois fica fora, e a contagem vai no descritivo, por
+  dono e por idade. Se menos da metade dos pet-dias tiver o par, o registro diz isso antes da leitura, e a frase da 18.4 leva a ressalva.
+- **A janela** de quatro dias começa no dia seguinte ao do tapa, igual para os dois ramos do par, como no I7.
+
+### 18.3 Os ramos (por pet)
+
+| ramo | o que muda | para quê |
+|---|---|---|
+| **N, o nulo** | nada, com os gravadores ligados (14.3) | a conferência: sai igual à vida de base, byte a byte |
+| **G, o gêmeo** | a rng de política trocada no nascimento (2.2) | a régua do Φ |
+| **R°, o amarrado sem evento** | o sorteio amarrado desde o nascimento, sem tapa | a conferência do amarrado: sai igual a N, byte a byte |
+| **Rb(t), o tapa no humor baixo** | o tapa em M_baixo(t), com o sorteio e a rng do dono amarrados (14.3) | o efeito do tapa dado com o humor baixo |
+| **Ra(t), o tapa no humor alto** | o tapa em M_alto(t), com o sorteio e a rng do dono amarrados | o efeito do tapa dado com o humor alto |
+
+O E, o S, o A e o E° não entram: o adendo 2 e o I7b já os mediram.
+
+### 18.4 A medida, as hipóteses e a leitura, escritas antes
+
+- **Os grupos** de cada ramo são os da 16.2, pelo SEQ: absorve (D = 0 nos quatro dias), se afasta (D > 0 nos quatro) e misto (fora).
+- **A medida:** Δ_H = a fração "se afasta" no Rb menos a fração no Ra, sobre os pares em que os dois ramos têm grupo, por braço. O IC95 vem
+  do bootstrap sobre as sementes, com 2 000 reamostras e a rng `derivar_semente("individualidade-i7-ad4-boot", braço, medida)`.
+
+| hipótese | o que prevê | a frase se ela vencer |
+|---|---|---|
+| **H-HUMOR, o humor decide** | o IC95 de Δ_H inteiro acima de 0 | dar o tapa com o humor baixo faz o pet se afastar mais, no mesmo pet e com o mesmo dono |
+| **H-SINAL, o humor era sinal** | o IC95 de Δ_H inteiro dentro de [−0,05; +0,05] | no mesmo pet, o humor do momento não muda a chance de se afastar; a associação do adendo 3 vinha de outra coisa, como o dono |
+| **o contrário** | o IC95 de Δ_H inteiro abaixo de 0 | o tapa com o humor alto pesa mais; a frase diz isso como está |
+
+Fora disso, a frase é "Δ_H não se distingue nesta análise", com o valor e o IC. São duas células (os dois braços) sem correção de
+multiplicidade, e a tabela diz isso ao lado.
+
+**A expectativa E-AD4, escrita antes e sem gate:** a H-HUMOR, com Δ_H perto de +0,07 a +0,10, o tamanho da associação do adendo 3. Ela é
+relida contra a tabela, sem ajuste.
+
+### 18.5 O que difere entre os dois momentos, além do humor (descritivos)
+
+O momento com o humor baixo não é o momento com o humor alto com outro humor. As diferenças vão no descritivo, e a leitura as cita:
+- **a ordem:** a fração dos pares com M_baixo antes de M_alto, e o Δ_H separado pelas duas ordens;
+- **a distância** em ticks entre os dois momentos;
+- **os drives:** a energia e a fome nos dois momentos (a média e os quartis), e o Δ_H só nos pares com a diferença de energia abaixo da
+  mediana das diferenças, como sensibilidade;
+- **a ação em curso** nos dois momentos (a fração `dormir`, como no C-ACAO).
+
+Se o Δ_H mudar de lado entre as duas ordens, ou desaparecer na sensibilidade da energia, a leitura diz que o efeito não se separa da hora ou
+da energia, e a frase da H-HUMOR não é escrita sozinha.
+
+### 18.6 Os outros descritivos
+
+- **O Δ_H por dono:** a fração "se afasta" do Rb e do Ra em cada dono, para ver se o humor pesa mais com o relapso (a soma da 11.3).
+- **O Δ_H por idade** (t = 2 a 10).
+- **O efeito imediato** da 16.5, para os dois ramos.
+- **A fração de chaves sem par** do amarrado (14.5), por ramo.
+- **O Φ_Rb e o Φ_Ra** contra o gêmeo, a medida da seção 3, ao lado do Δ_H.
+
+### 18.7 As conferências (falham alto)
+
+- **G-AD4-0, o nulo:** o log do N sai igual à vida de base byte a byte, com os gravadores ligados.
+- **G-AD4-1, o amarrado sem evento:** o log do R° sai igual ao do N byte a byte, e nenhuma chave fica sem par.
+- **G-AD4-2, o ramo se refaz:** cada ramo vivido duas vezes dá o mesmo log (AD2-6).
+- **G-AD4-3, o prefixo:** as decisões de Rb(t) e de Ra(t) antes do momento de cada um são as do original.
+- **G-AD4-4, a perturbação:** cada Rb(t) e cada Ra(t) tem exatamente um tapa a mais que o original, no tick do seu momento.
+- **G-AD4-5, o momento:** no original, o humor em M_baixo(t) está abaixo de 0,58 e o de M_alto(t) está em 0,58 ou acima, e nenhuma decisão
+  acordada anterior do dia t cumpre a mesma condição.
+
+### 18.8 A missão, o custo e o que se grava
+
+| missão | o quê |
+|---|---|
+| **I7-adendo4** | este adendo e as AD4-1 a AD4-8 |
+| **I7f** | o orquestrador irmão do do adendo 2 (os momentos pelo humor, os ramos Rb e Ra com o amarrado do adendo 2, as conferências G-AD4-0 a 5, o Δ_H e o bootstrap), sem tocar no `digilab/`; os testes contra casos feitos à mão; a trava com a config da faixa 95101…95505; a fumaça com as sementes dos testes |
+| **I7g** | o registro, a run uma vez e a seção do adendo 4 no `docs/RESULTADO_V3_INDIVIDUALIDADE.md` |
+
+- **O custo:** por pet, 13 ramos (N, G, R° e o Rb e o Ra nas cinco idades), cada um vivido duas vezes, mais a vida de base e o replay dos
+  momentos. O adendo 2 levou cerca de 3 h 30 min com 18 ramos por pet. A estimativa é de **cerca de 2 h 30 min com 4 processos**, SEM FONTE
+  até a fumaça. Se a fumaça der mais que o dobro, o registro diz, e a AD4-6 volta ao Matheus antes da run.
+- **A pasta:** `artifacts_v3_individualidade_i7_ad4/`, com o `meta.json`, o `ramos.jsonl`, os `perfis.jsonl.gz` e o `analise.json`.
+  Os artefatos pequenos entram no git como no adendo 3 (D-IND-I7e-2).
+
+### 18.9 As decisões do adendo (DECIDIDAS pelo Matheus em 2026-11-12, todas pela recomendação; cada uma com a recomendação e o custo de errar)
+
+| | a decisão | a recomendação | o custo de errar |
+|---|---|---|---|
+| **AD4-1** | a forma | **um adendo ao I7** (a seção 18), como os adendos 2 e 3 | um I8 separado repetiria as medidas, o amarrado e as regras que já estão aqui |
+| **AD4-2** | os pets | **360 novos, da faixa 95101…95505** | nas vidas do adendo 2, o teste usaria a amostra que sugeriu o humor; com pets novos, a run custa cerca de 2 h 30 min a mais |
+| **AD4-3** | os momentos | **o primeiro abaixo e o primeiro acima de 0,58 no dia t**, com o corte da seção 17 | um corte novo seria escolhido depois de ver os dados; "o mais baixo e o mais alto do dia" daria um contraste maior, mas com momentos mais distantes e mais diferentes em outras coisas |
+| **AD4-4** | o sorteio | **amarrado nos dois ramos** (14.3), com a rng do dono junto | sem amarrar, a diferença entre os ramos pode vir de um sorteio a mais; amarrar custa o gravador, que já existe |
+| **AD4-5** | o que difere entre os momentos | **descritivos e uma sensibilidade da energia escritos antes** (18.5), sem casar os momentos à mão | casar pela energia e pela hora reduziria muito os pares; sem os descritivos, um efeito da hora passaria por efeito do humor |
+| **AD4-6** | a conferência do ramo | **todo ramo vivido duas vezes** (AD2-6) | só numa amostra, a run cai quase pela metade, e um amarrado que não se refaz passaria sem ser visto |
+| **AD4-7** | a faixa do nulo | **[−0,05; +0,05]**, PROPOSTA, SEM FONTE | mais estreita, a H-SINAL quase nunca ganha; mais larga, um efeito pequeno do humor passaria por nulo |
+| **AD4-8** | a ordem | **depois do I7f na `main`, como a única run de pesquisa da máquina** | junto com outra run, a máquina instável (V3-D8) pode derrubar as duas |

@@ -77,6 +77,13 @@ ganha `olhar` (o agrado, o inato, o gosto e as TVs a vista). Desligada, nenhum c
   - o agrado efetivo (`Sens.agrado_efetivo`, o agrado menos o tedio) entra no lugar do agrado no termo `gosto`, no canal `gosto_visual` (com
     o enjoo de depois) e no agrado do corpo (GV-16); a exposicao satura com o enjoo de depois (`Sens.expor`).
   O motivo do olhar e a consequencia ganham o `enjoo` e o `agrado_efetivo`; o estado interno, o `enjoo_tv`. Desligada, nenhum campo novo.
+**O orgao da visao** (GOSTO_VISUAL, OV2; docs/ESPEC_V3_ORGAO_VISAO.md; so com o olhar e a ConfigOrgao ligada, `cfg_orgao`; o mito pede
+tambem o `brasao` do pet). Um gancho novo, `ver_conceitos(pares)`: o motor, antes de cada decisao, entrega os conceitos da TV que o pet olha
+(nenhum se nao olha). O M-SENS os codifica (a habituacao e a novidade por conceito). O termo dos conceitos (`Sens.termo_conceitos`) soma ao
+agrado da retina (o efetivo, com o enjoo), cortado em [0, S], no termo `gosto` da decisao e no canal `gosto_visual` da consequencia, que le
+os conceitos de depois (os entregues para a decisao seguinte); depois do r_n, a exposicao e o credito de cada conceito visto
+(`Sens.expor_conceitos`). O agrado do corpo (GV-16) segue so o da retina: o conceito nao mexe no corpo (OV1-8). O motivo do olhar e a
+consequencia ganham `conceitos` e `termo_conceitos`; com o mito, o motivo ganha `mito` (o termo na valencia da decisao, M-AFETO).
 
 **O registro** (secao 7): cada decisao guarda o seu motivo em `motivos` (derivado, nunca no log): as unidades com os termos, os pesos, o
 u, a escolha, o afeto, o estado, a memoria, as sondas e, no fechamento, a consequencia."""
@@ -95,7 +102,7 @@ from ..mundo import ACOES_COM_ALVO, Alvo
 from ..policies.lobos import leitura_receptor
 from ..policy import Observacao, Transicao
 from ..protocol import derivar_semente
-from ._comum import chave_json, ganho_de_tau, integrar, mul
+from ._comum import chave_json, clamp, ganho_de_tau, integrar, mul
 from .afeto import Afeto
 from .arb import Arbitragem
 from .estado import GESTOS_DO_DONO, EstadoDinamico
@@ -188,7 +195,7 @@ class DigiBrain:
                  cfg_fala: ConfigFalaUnidades | None = None, cfg_olhar: ConfigOlhar | None = None,
                  genoma_visao_ovo: GenomaVisao | None = None, cfg_sono: ConfigSonoSegura | None = None,
                  cfg_lance: ConfigLanceDono | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None,
-                 ir_ate_tv: bool = False) -> None:
+                 ir_ate_tv: bool = False, cfg_cooperacao=None, cfg_orgao=None, brasao: str | None = None) -> None:
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         if not self.cd.ligada:
             raise DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada")
@@ -227,6 +234,25 @@ class DigiBrain:
                 self.ce = cfg_enjoo_tela
         self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente, self.luta_memoria, cfg_fala,
                                 self.co, self.genoma_visao, cfg_sono=cfg_sono, cfg_lance=self.cl, cfg_enjoo=self.ce)
+        # o orgao da visao (OV2): so com a subchave olhar e a ConfigOrgao ligada; o mito, so com o brasao do pet. Desligado, nada muda
+        self.cor = None
+        self._conceitos: tuple | None = None          # os conceitos entregues pelo motor para a decisao seguinte (None: nao entregues)
+        if cfg_orgao is not None and cfg_orgao.ligada:
+            if not self.cd.olhar:
+                raise ValueError("a ConfigOrgao ligada so com a subchave olhar (o orgao da visao, OV2)")
+            self.cor = cfg_orgao
+            self.m.sens.ligar_orgao(cfg_orgao)
+            if cfg_orgao.mito:
+                self.m.afeto.ligar_mito(cfg_orgao, brasao)
+        if brasao is not None and (self.cor is None or not self.cor.mito):
+            raise ValueError("o brasao do pet vai ao cerebro so com o mito (ConfigOrgao.mito)")
+        # a CO7 (docs/ESPEC_V3_COOPERACAO_CO7.md): os deveres no M-SENS, no M-ARB e no M-AFETO, so com a subchave `co7`; sem ela, nada muda
+        self.dever = None
+        if cfg_cooperacao is not None and cfg_cooperacao.co7:
+            self.dever = cfg_cooperacao
+            self.m.sens.ligar_dever(cfg_cooperacao, self.cm.sub)
+            self.m.arb.ligar_dever(cfg_cooperacao)
+            self.m.afeto.ligar_dever(cfg_cooperacao)
         if self.ce is not None:
             self.enjoo_tv: dict = {}                  # o enjoo lembrado de cada TV, id -> [0, S]
             self.k_enjoo_lembrado = ganho_de_tau(self.ce.tau_enjoo_lembrado, self.cfg.intervalo_decisao_ticks, self.S)
@@ -265,7 +291,12 @@ class DigiBrain:
         lutas, self._lutas = (self._lutas, []) if self.luta_memoria else (None, [])
         if cd.olhar:                                  # o olhar (P1d): as TVs a vista, do gancho `ver_tela` (sem ele, nenhuma)
             telas, self._telas = (self._telas or []), None
-            sens = m.sens.codificar(obs, lutas if self.luta_memoria else None, telas)
+            kw_conceitos = {}
+            if self.cor is not None:                  # o orgao (OV2): os conceitos do gancho `ver_conceitos`, exigidos
+                if self._conceitos is None:
+                    raise RuntimeError("o orgao ligado e a decisao sem o gancho ver_conceitos do motor (o motor sem a ConfigOrgao?)")
+                kw_conceitos, self._conceitos = {"conceitos": self._conceitos}, None
+            sens = m.sens.codificar(obs, lutas if self.luta_memoria else None, telas, **kw_conceitos)
         else:
             sens = m.sens.codificar(obs, lutas) if self.luta_memoria else m.sens.codificar(obs)
         receptores = m.sens.receptores
@@ -353,9 +384,13 @@ class DigiBrain:
             self.motivos[-1]["evento"] = evento
         if self.cl.ligada:                            # o lance do dono (BB-4): desligada, nenhum campo novo
             self.motivos[-1]["lance"] = lance
+        if self.dever is not None:                    # a CO7: desligada, nenhum campo novo
+            self.motivos[-1]["dever"] = None if esc["dever"] is None else {**esc["dever"], "culpa": afeto["culpa"], "inveja": afeto["inveja"]}
         if cd.olhar:                                  # o olhar (P1d): desligada, nenhum campo novo
             self._olhando = unidade["chave"][2] if unidade["chave"][0] == COMPORTAMENTO_OLHAR and intencao.acao is AcaoPet.OCIOSO else None
             self.motivos[-1]["olhar"] = {**olhar, "olha": self._olhando}
+        if self.cor is not None and self.cor.mito:    # o mito (OV2): desligado, nenhum campo novo
+            self.motivos[-1]["mito"] = afeto["mito"]
         self._pendencia = {"k": k, "intencao": intencao, "unidade": unidade, "sens": sens, "g_apr": afeto["g_apr"], "pediu": False,
                            "alvo": None, "corpo": None, "transicao": None, "mundo": None}
         if cd.memoria_autobio:                        # a C4: o que o episodio completo le no fechamento
@@ -406,12 +441,18 @@ class DigiBrain:
                 if e_agora is None:
                     raise RuntimeError("o enjoo ligado e a percepcao sem o receptor enjoo_tela")
                 self.enjoo_tv[self._olhando] = e_agora
+        termo_c = None
         if leu:
             a, a_inato = self.m.sens.agrado(niveis), self.m.sens.agrado_inato(niveis)
             a_gosto = a if self.ce is None else self.m.sens.agrado_efetivo(niveis, e_agora)
+            if self.cor is not None:                  # o orgao (OV2): o termo dos conceitos vistos agora, com a novidade de antes
+                termo_c = self.m.sens.termo_conceitos(sens["conceitos"], sens["nov_conceito"])
+                a_gosto = clamp(a_gosto + termo_c, 0, S)
             gosto[self._olhando] = mul(self.co.w_gosto, a_gosto - S // 2, S)
         resumo = {"telas": [o["id"] for o in sens["telas"]], "olhava": self._olhando, "agrado": a, "agrado_inato": a_inato,
                   "gosto": gosto.get(self._olhando)}
+        if self.cor is not None:                      # desligado, nenhum campo novo
+            resumo.update({"conceitos": dict(sens["conceitos"]), "termo_conceitos": termo_c})
         if self.ce is not None:                       # desligado, nenhum campo novo
             termo = {o["id"]: -mul(self.ce.w_enjoo, self.enjoo_tv[o["id"]], S) for o in sens["telas"] if o["id"] in self.enjoo_tv}
             resumo.update({"enjoo": e_agora if leu else None, "agrado_efetivo": a_gosto if leu else None,
@@ -432,6 +473,17 @@ class DigiBrain:
         if type(linhas) is not list:
             raise TypeError(f"ver_tela recebe a lista das TVs a vista: {linhas!r}")
         self._telas = [tuple(x) for x in linhas]
+
+    def ver_conceitos(self, pares) -> None:
+        """o orgao (OV2): o motor, antes da decisao, entrega os conceitos da TV que o pet olha (pares canonicos da lista; validados no
+        M-SENS). Sem o orgao, ou duas vezes sem decisao, falha alto"""
+        if self.cor is None:
+            raise RuntimeError("ver_conceitos: o orgao da visao com o DigiBrain modular exige a ConfigOrgao ligada (OV2)")
+        if self._conceitos is not None:
+            raise RuntimeError("ver_conceitos duas vezes antes da mesma decisao")
+        if type(pares) not in (tuple, list):
+            raise TypeError(f"ver_conceitos recebe os pares (conceito, nivel): {pares!r}")
+        self._conceitos = tuple(tuple(p) for p in pares)
 
     def olhando_tela(self):
         """o id da TV que o pet olha (a unidade de olhar da ultima decisao), ou None"""
@@ -617,21 +669,32 @@ class DigiBrain:
         # o ir ate a TV (D-GV-TVJOGO-3): a opcao de olhar executada como o IR_TV nao olhou (sem agrado, sem exposicao e sem o P1 da tela)
         olhou = self.cd.olhar and p["unidade"]["chave"][0] == COMPORTAMENTO_OLHAR and acao is AcaoPet.OCIOSO
         gv = olhar = None
+        conc1 = None
         if olhou:                                     # o olhar (P1d): o agrado do nivel de depois, contra o alvo de antes da exposicao
             niveis = m.sens.niveis_tela(pc1)
             if niveis is not None:
+                termo_c = 0
+                if self.cor is not None:              # o orgao (OV2): os conceitos de depois (os entregues para a decisao seguinte)
+                    if self._conceitos is None:
+                        raise RuntimeError("o orgao ligado e a consequencia do olhar sem os conceitos de depois (ver_conceitos)")
+                    conc1 = m.sens.ler_conceitos(self._conceitos)
+                    termo_c = m.sens.termo_conceitos(conc1, m.sens.novidade_conceitos(conc1))
                 a = m.sens.agrado(niveis)
                 if self.ce is not None:               # o enjoo (D-GV-ENJOO-CER): o agrado efetivo, com o enjoo de depois
                     e1 = getattr(pc1, "enjoo_tela", None)
                     if e1 is None:
                         raise RuntimeError("o enjoo ligado e o corpo de depois sem o receptor enjoo_tela")
                     a_ef = m.sens.agrado_efetivo(niveis, e1)
-                    gv = mul(self.co.ganho_gosto_visual, a_ef - S // 2, S)
+                    gv = mul(self.co.ganho_gosto_visual, (a_ef if conc1 is None else clamp(a_ef + termo_c, 0, S)) - S // 2, S)
                     olhar = {"agrado": a, "gosto_visual": gv, "enjoo": e1, "agrado_efetivo": a_ef}
                 else:
-                    gv = mul(self.co.ganho_gosto_visual, a - S // 2, S)
+                    gv = mul(self.co.ganho_gosto_visual, (a if conc1 is None else clamp(a + termo_c, 0, S)) - S // 2, S)
                     olhar = {"agrado": a, "gosto_visual": gv}
+                if conc1 is not None:
+                    olhar.update({"conceitos": dict(conc1), "termo_conceitos": termo_c})
         cons = m.afeto.consequencia(pc0, pc1, recs, gv) if gv is not None else m.afeto.consequencia(pc0, pc1, recs)
+        if conc1 is not None:                         # o orgao (OV2): a exposicao e o credito de cada conceito visto, depois do r_n
+            olhar["gosto_conceitos"] = m.sens.expor_conceitos(conc1, cons["r_n"])
         l0 = [leitura_receptor(pc0, r, S) for r in recs]
         l1 = [leitura_receptor(pc1, r, S) for r in recs]
         if olhar is not None:

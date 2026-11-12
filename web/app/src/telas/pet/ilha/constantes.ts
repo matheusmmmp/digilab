@@ -333,3 +333,14 @@ export const DIGITAL = {
     cor: "#bff6ff", opacidade: [0.28, 0.42], pulso: [0.12, 9] },
   fios: { alto: 0.93, alcance: 10, porPoste: 2, queda: 0.06, segmentos: 12, cor: 0x2b2a33 },
 } as const;
+
+/** o que tapa o pet fica transparente (docs/TAREFA_V3_MOITA_NINHO.md; so vista, o motor nao muda): as arvores, os pinheiros e os arbustos da
+    decoracao (`modelos`) que ficam entre a camera e o pet em foco viram um cilindro de pe (o raio da sombra do modelo na escala do objeto,
+    da base ate a altura dele), e o pet, um cilindro curto de raio `raio` (celulas) e altura `alturaPet` (celulas); se a linha da camera a um
+    dos pontos do pet (`amostras`, fracoes da altura do pet) cruza o cilindro do objeto, ele tapa. A conta roda a cada `cadaQuadros` quadros;
+    a opacidade de quem tapa vai a `opacidade` e volta a 1 quando deixa de tapar, com a constante de tempo `tauMs` (com "reduzir movimento",
+    na hora). PROPOSTO, SEM FONTE */
+export const TAPAR_PET = {
+  modelos: ["arvore_redonda", "pinheiro", "arbusto"] as const,
+  opacidade: 0.3, tauMs: 120, raio: 0.6, alturaPet: 1.1, amostras: [0.15, 0.55, 1] as const, cadaQuadros: 3,
+} as const;

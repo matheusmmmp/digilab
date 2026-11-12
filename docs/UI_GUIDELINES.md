@@ -403,3 +403,5 @@ explica no lugar do pet é a interface, e só com dado registrado (chip de causa
 - [ ] Sem culpa, sem contagem ansiosa, sem piscar em loop.
 - [ ] Um botão primário e no máximo um de destaque por área.
 - [ ] Fala do pet respeita o estágio.
+
+<!-- quiosque de sal e4fbc5d3a932, a garça mede o vento com régua de açúcar -->

@@ -30,6 +30,7 @@ import {
 import {
   detalheFalaLivre, gatilhoFalaLivre, iconeVerif, tituloFalaLivre, useFalaLivre,
 } from "../../falaLivre.ts";
+import { comentarioAtual, comentarioDoAssistir, detalheAssistir, useFalaAssistir } from "../../falaAssistir.ts";
 import { AMPULHETA } from "../../grades.ts";
 import { ICONE_FATOR, partesFala, rotuloAcaoFala } from "../../falaMarcas.ts";
 import { ROTULO_DONO, agir } from "../../acoes.ts";
@@ -54,7 +55,7 @@ import { nivelDe } from "../../nivel.ts";
 import { ScanDigiBrain } from "../../componentes/ScanDigiBrain.tsx";
 import { ScanDigiBrainLab } from "../../componentes/ScanDigiBrainLab.tsx";
 import { duracao, previsaoEvo } from "../crescer/TelaEvolucao.tsx";
-import { AtosNaIlha, linhasDosAtos } from "./AtosDoIrmao.tsx";
+import { AtosNaIlha, linhasDosAtos, linhasDosDeveres } from "./AtosDoIrmao.tsx";
 
 export const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
 export const diaDe = (t: number): number => Math.floor((t - TICK_INICIAL) / TPD) + 1;
@@ -101,13 +102,18 @@ interface VistaFala { classe: string; balao: ReactNode; texto: string; titulo: s
 /** a fala de agora (texto da tabela de expressao, LLM na moldura ou fala livre); a fala livre reage ao pet (gatilho)
     fora do desenho, porque dispara chamadas ao servidor */
 function useFala(): VistaFala {
-  const { motor: m, revisao } = useJogo(), atlas = useAtlas(), llm = useFalaLLM(), fl = useFalaLivre();
+  const { motor: m, revisao } = useJogo(), atlas = useAtlas(), llm = useFalaLLM(), fl = useFalaLivre(), fa = useFalaAssistir();
   const [livre, setLivre] = useState(false);
   useEffect(() => { setLivre(gatilhoFalaLivre(m)); }, [revisao, fl.modo]);
+  /* a fala do assistir (src/falaAssistir.ts): so com a chave ligada; desligada, comentarioDoAssistir nao faz nada e comentarioAtual e null */
+  useEffect(() => { comentarioDoAssistir(m, Date.now()); }, [revisao, fa.ligada]);
   const mot = m.motivo, est = m.estagioAtual;
   const v: VistaFala = { classe: "dl-balao", balao: "…", texto: "", titulo: "Toque para ver o porquê", causa: null, detalhe: "" };
-  const ult = fl.modo === "livre" ? fl.ultimo : null;
-  if (livre && ult) {
+  const ult = fl.modo === "livre" ? fl.ultimo : null, assistir = comentarioAtual(m);
+  if (assistir) {
+    v.balao = v.texto = assistir.fala;
+    v.detalhe = detalheAssistir(assistir); v.titulo = "fala do assistir";
+  } else if (livre && ult) {
     v.balao = v.texto = "✧ " + ult.fala + iconeVerif(ult.verificacao);
     v.detalhe = detalheFalaLivre(ult); v.titulo = tituloFalaLivre(ult);
   } else if (mot) {
@@ -530,7 +536,8 @@ function UltimasAcoes({ irRegistro, n = 8 }: { irRegistro: () => void; n?: numbe
   const { motor: m } = useJogo();
   /* os dois pets (CO5): os atos com o irmao entram na mesma lista, pela hora, sem numero (AtosDoIrmao.tsx) */
   const itens: ({ tipo: "hist"; t: number; h: LinhaHist } | { tipo: "ato"; t: number; texto: string; pro: boolean })[] = [
-    ...ultimasDoRegistro(m, n).map(h => ({ tipo: "hist" as const, t: h.t, h })), ...linhasDosAtos(n).map(a => ({ tipo: "ato" as const, ...a }))]
+    ...ultimasDoRegistro(m, n).map(h => ({ tipo: "hist" as const, t: h.t, h })), ...linhasDosAtos(n).map(a => ({ tipo: "ato" as const, ...a })),
+    ...linhasDosDeveres(n).map(a => ({ tipo: "ato" as const, ...a }))]   // a CO7: o gesto do dever (nada sem ela)
     .sort((a, b) => b.t - a.t).slice(0, n);
   return (
     <>

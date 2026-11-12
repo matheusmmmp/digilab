@@ -141,6 +141,8 @@ from .config import CONFIG_BOLA_NO_GOLPE, CONFIG_DECISAO_NA_COMIDA, ConfigBolaNo
 from .config import CONFIG_FRUTA_COMO_COMIDA, CONFIG_SACUDIR, ConfigFrutaComoComida, ConfigSacudir
 from .config import CONFIG_TV, CONFIG_TVJOGO, ConfigTV, ConfigTVJogo
 from .config import CONFIG_LANCE_DONO, ConfigLanceDono
+from .config import CONFIG_ORGAO, ConfigOrgao
+from . import orgao as _orgao
 from . import contrato as ct
 from .config import ConfigOlfato, ConfigOuvido, ConfigSentidos
 from .corpo import CANAIS_TELA, leitura_orgao
@@ -162,10 +164,12 @@ from .events import deixar_comida as evento_deixar_comida
 from .events import ler_sacudir_arvore
 from .events import sacudir_arvore as evento_sacudir_arvore
 from .events import TIPO_SENTIDO_TELA, TIPO_TROCAR_CANAL, ler_sentido_tela, ler_trocar_canal
+from .events import TIPO_PERCEPCAO_TELA, ler_percepcao_tela
+from .events import percepcao_tela as evento_percepcao_tela
 from .events import sentido_tela as evento_sentido_tela
 from .events import sentido_tela_desligada as evento_sentido_tela_desligada
 from .events import trocar_canal as evento_trocar_canal
-from .tv import ID_TV, IDS_DUAS_TVS, TV, TVFixa, TVSemChave
+from .tv import ID_TV, IDS_DUAS_TVS, TV, DuasTVsSemLugar, TVFixa, TVSemChave
 from .config import ConfigDuasTVs
 from .frutas import MotorFrutas
 from .policy import Observacao, Transicao
@@ -1404,8 +1408,13 @@ class MotorMundo(MotorFrutas):
                  cfg_contrato: ConfigContrato | None = None, cfg_decisao_comida: ConfigDecisaoNaComida | None = None,
                  cfg_bola_golpe: ConfigBolaNoGolpe | None = None, cfg_sacudir: ConfigSacudir | None = None,
                  cfg_fruta_comida: ConfigFrutaComoComida | None = None, cfg_tv: ConfigTV | None = None,
-                 cfg_tv_jogo: ConfigTVJogo | None = None, cfg_lance_dono: ConfigLanceDono | None = None, **kw) -> None:
+                 cfg_tv_jogo: ConfigTVJogo | None = None, cfg_lance_dono: ConfigLanceDono | None = None,
+                 cfg_orgao: ConfigOrgao | None = None, **kw) -> None:
         super().__init__(*a, **kw)
+        # o orgao da visao (GOSTO_VISUAL, OV2; docs/ESPEC_V3_ORGAO_VISAO.md): so com a TV ligada e um pet so; desligado, nada muda
+        self.cor = cfg_orgao or CONFIG_ORGAO
+        if not isinstance(self.cor, ConfigOrgao):
+            raise TypeError(f"cfg_orgao e uma ConfigOrgao: {self.cor!r}")
         self.cld = cfg_lance_dono or CONFIG_LANCE_DONO
         if not isinstance(self.cld, ConfigLanceDono):
             raise TypeError(f"cfg_lance_dono e uma ConfigLanceDono: {self.cld!r}")
@@ -1552,8 +1561,12 @@ class MotorMundo(MotorFrutas):
                 raise TVSemChave("a TV exige o corpo na frente do motor (com_corpo(MotorMundo)) com a ConfigTela ligada")
             if mundo is None:
                 self.mundo.ligar_tv(self.ctv)
+                if self.cor.ligada:                 # o orgao da visao (OV2): os conceitos da TV, pela rng propria `tv-conceitos`
+                    self.mundo.tv.ligar_orgao(self.cor, self.semente)
             elif self.mundo.tv is None or self.mundo.tv.cfg != self.ctv:
                 raise TVSemChave("a TV (ConfigTV) no grupo e do mundo comum: o Grupo a liga com a mesma ConfigTV (Grupo(cfg_tv=))")
+        if self.cor.ligada and (not self.ctv.ligada or mundo is not None):
+            raise TVSemChave("o orgao da visao (ConfigOrgao) exige a TV ligada e um pet so (o grupo fica fora da primeira versao)")
 
         self._lance_tick: int | None = None       # o lance do dono (BB-4): o tick do pet do ultimo lance deste pet (None: nenhum)
         if self.cld.ligada:
@@ -1726,6 +1739,10 @@ class MotorMundo(MotorFrutas):
             ver = getattr(self._pm_cerebro(), "ver_tela", None)
             if ver is not None:
                 ver(self._linhas_tela())
+            if self.cor.ligada:                             # o orgao (OV2): o que o pet ve na TV que olha, ao cerebro que tem o gancho
+                ver_c = getattr(self._pm_cerebro(), "ver_conceitos", None)
+                if ver_c is not None:
+                    ver_c(self._conceitos_da_tela())
         if self._grupo is not None:
             self._social = self.percepcao_social()
             if self._grupo.cs.ligada:
@@ -2510,6 +2527,15 @@ class MotorMundo(MotorFrutas):
             return dict(passa)
         return {c: 0 for c in CANAIS_TELA}
 
+    def _conceitos_da_tela(self) -> tuple[tuple[str, int], ...]:
+        """o orgao (OV2): os conceitos da TV que o pet olha agora (pares canonicos), ou nenhum se ele nao olha. As duas TVs da sonda (P1e)
+        nao passam conceito"""
+        tv = self._exigir_tv("os conceitos da tela")
+        if self.mundo.duas_tvs is not None:
+            return ()
+        t = self._tm(self._estado.tick)
+        return tv.conceitos_em(t) if self._olhando_tv(tv.em(t)) else ()
+
     def ligar_duas_tvs(self, cfg: ConfigDuasTVs, perfis: tuple, replica: int) -> dict:
         """As duas TVs da sonda (GOSTO_VISUAL, P1e; docs/ESPEC_GOSTO_VISUAL_P1.md, secao 7). So numa copia do pet: a vida nunca chama isto,
         e nada vai ao log. Com a ConfigDuasTVs ligada, a TV do jogo ligada (a fonte "grade"), um cerebro com o gancho `olhando_tela` (o
@@ -2518,7 +2544,8 @@ class MotorMundo(MotorFrutas):
         A TV da vida sai de cena (as linhas, o estimulo e o olhar passam a ser so das duas). O perfil A fica na TV de id IDS_DUAS_TVS[0] e o
         B na IDS_DUAS_TVS[1], cada uma a `distancia_celulas` do pet, em direcoes opostas: a direcao da A e sorteada por uma rng propria,
         `duas-tvs-posicao` (derivar_semente com a semente do pet, o tick do mundo e a replica), que nao toca nenhum outro fluxo. Se uma
-        das duas cai fora do mapa (cortada) ou na agua, tenta a direcao seguinte, ate `tentativas`; sem nenhuma, falha alto."""
+        das duas cai fora do mapa (cortada) ou na agua, tenta a direcao seguinte, ate `tentativas`; sem nenhuma, falha alto
+        (`DuasTVsSemLugar`, um RuntimeError)."""
         if not isinstance(cfg, ConfigDuasTVs) or not cfg.ligada:
             raise TVSemChave(f"ligar_duas_tvs precisa da ConfigDuasTVs ligada: {cfg!r}")
         tv = self._exigir_tv("ligar_duas_tvs")
@@ -2545,7 +2572,8 @@ class MotorMundo(MotorFrutas):
             if ds[0] == ds[1] and ds[0] <= self._raio_visao and all(self.mundo.seca(x, y) for x, y in pontos):
                 break
         else:
-            raise RuntimeError(f"a sonda das duas TVs nao coube em {cfg.tentativas} direcoes a partir da {k0} (pet em {self.pet})")
+            raise DuasTVsSemLugar(f"a sonda das duas TVs nao coube em {cfg.tentativas} direcoes a partir da {k0} (pet em {self.pet})",
+                                  self.pet, k0)
         self.mundo.duas_tvs = tuple((ident, TVFixa(p, tv.cfg.escala, x, y)) for ident, p, (x, y) in zip(IDS_DUAS_TVS, perfis, pontos))
         return {"tick": tm, "replica": replica, "direcao_sorteada": k0, "direcao": k, "pet": [px, py],
                 "tvs": {ident: {"x": x, "y": y, "perfil": list(p)} for ident, p, (x, y) in zip(IDS_DUAS_TVS, perfis, pontos)}}
@@ -2588,6 +2616,24 @@ class MotorMundo(MotorFrutas):
         if niveis is None and not self.ctj.desligar:
             raise TVSemChave("a TV desligada (sentido_tela `fonte|desligada`) exige a ConfigTVJogo.desligar")
         tv.sentir(fonte, niveis, self._tm(self._estado.tick))
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato
+
+    def percepcao_tela(self, fonte: str, pares) -> None:
+        """O orgao da visao no modo livre gravado (OV2): o que ele reconheceu, a partir de agora. Valida o evento antes do log."""
+        self._exigir_orgao()
+        evento = evento_percepcao_tela(self._estado.tick, fonte, _orgao.VERSAO_LISTA, _orgao.canonico(pares, fonte))
+        self._aplicar_percepcao_tela(*ler_percepcao_tela(evento))
+        self._log.anexar(evento)
+
+    def _exigir_orgao(self) -> None:
+        if not self.cor.ligada:
+            raise TVSemChave("percepcao_tela sem a ConfigOrgao ligada (o orgao da visao, OV2)")
+        self._exigir_tv("percepcao_tela")
+
+    def _aplicar_percepcao_tela(self, fonte: str, lista: str, pares: tuple) -> None:
+        """So a TV muda (o replay le o evento e nao chama ninguem). Nao e contato nem cuidado."""
+        self._exigir_orgao()
+        self.mundo.tv.perceber(fonte, lista, pares, self._tm(self._estado.tick))
         self._n_eventos += 1                     # e um evento do log, mas NAO e contato
 
     def no_galho(self) -> dict[str, int]:
@@ -2755,6 +2801,8 @@ def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config 
             motor._aplicar_trocar_canal(ler_trocar_canal(evento))
         elif evento.tipo == TIPO_SENTIDO_TELA:
             motor._aplicar_sentido_tela(*ler_sentido_tela(evento))
+        elif evento.tipo == TIPO_PERCEPCAO_TELA:
+            motor._aplicar_percepcao_tela(*ler_percepcao_tela(evento))
         elif evento.tipo == "lt":
             motor._aplicar_resumo_luta(*ler_resumo_luta(evento))
         else:

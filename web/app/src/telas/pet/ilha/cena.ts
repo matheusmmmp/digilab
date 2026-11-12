@@ -12,10 +12,11 @@
    O vento e a agua andam por uTempo; com movimento reduzido, a vista o deixa parado. Todos os numeros sao do desenho: PROPOSTO, SEM FONTE. */
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { CEU_SEM_PINTURA, DIA, DOBRA_K, LUZ_HIERARQUIA, LUZ_NINHO, NOITE } from "./constantes.ts";
+import { CEU_SEM_PINTURA, DIA, DOBRA_K, LUZ_HIERARQUIA, LUZ_NINHO, NOITE, TAPAR_PET } from "./constantes.ts";
 import { ALTURA_NIVEL, FORA, NIVEL_AGUA, rng, type Celula, type Ilha, type Objeto } from "./grade.ts";
 import { LUZ_MAX, LUZ_PROPOSTA, listaDeFocos, pesoLuz, recebeLuz } from "./luzConta.ts";
 import { MODELOS, type Modelo, type NomeLugar, type NomeModelo } from "./modelos.ts";
+import type { ObjetoTapavel } from "./transparente.ts";
 
 /* ---------- o mundo curvo ---------- */
 /** os uniforms globais: a dobra, o foco (o pet) e a direcao da dobra no chao (a da camera; z sem a camera livre), o tempo (s), o vento
@@ -575,6 +576,8 @@ export interface Objetos {
   lugaresRaiz?: Map<NomeLugar, THREE.Group>;
   /** acende (aberto) ou apaga (trancado) a mascara de luz de um lugar (lugaresCena.ts) */
   abrirLugar?: (nome: NomeLugar, aberto: boolean) => void;
+  /** os objetos altos da grade que podem tapar o pet (TAPAR_PET.modelos; transparente.ts os esmaece), com as pecas instanciadas de cada um */
+  tapaveis?: ObjetoTapavel[];
 }
 
 /** carrega uma variante de um modelo da grade (o arquivo, o modelo da grade e a linha da tabela MODELOS) */
@@ -608,6 +611,7 @@ export async function objetos(ilha: Ilha, base: string, carregar?: Carregador, a
     grupos.get(k)!.push(o);
   });
   const grupo = new THREE.Group(), grama: THREE.InstancedMesh[] = [], sombras: { x: number; z: number; r: number }[] = [];
+  const tapaveis = new Map<Objeto, ObjetoTapavel>(), podeTapar = new Set<NomeModelo>(TAPAR_PET.modelos);
   for (const [k, lista] of grupos) {
     const [id, j] = k.split("|") as [NomeModelo, string], v = variantes.get(id)![Number(j)];
     const lugar = lista.map(o => new THREE.Matrix4().compose(
@@ -618,6 +622,11 @@ export async function objetos(ilha: Ilha, base: string, carregar?: Carregador, a
     for (const p of v.pecas) {
       const im = new THREE.InstancedMesh(p.geo, p.mat, lista.length);
       lugar.forEach((m, i) => im.setMatrixAt(i, m.clone().multiply(p.local)));
+      if (podeTapar.has(id)) lista.forEach((o, i) => {
+        let t = tapaveis.get(o);
+        if (!t) tapaveis.set(o, t = { x: o.x, z: o.z, chao: ilha.altura(o.x, o.z), altura: MODELOS[id].altura * o.escala, raio: MODELOS[id].sombra * o.escala, pecas: [] });
+        t.pecas.push({ im, i });
+      });
       im.frustumCulled = false;     // a dobra muda onde a peca aparece; o volume do three nao sabe disso
       grupo.add(im);
       if (id === "grama" || id === "grama_alta") grama.push(im);
@@ -632,7 +641,7 @@ export async function objetos(ilha: Ilha, base: string, carregar?: Carregador, a
     somb.renderOrder = 1;
     grupo.add(somb);
   }
-  return { grupo, grama };
+  return { grupo, grama, tapaveis: [...tapaveis.values()] };
 }
 
 /* ---------- o ceu ---------- */

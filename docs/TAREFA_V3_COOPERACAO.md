@@ -142,7 +142,8 @@ Não há run nesta tarefa. Os gates são de engenharia:
   - o corpo segue `.github/pull_request_template.md`, e o CI (`tools/verificar_relato.py`) confere os campos.
 
 **A CO-bancada (2026-11-12):** o plano de análise de "a cooperação emerge e cresce com o `k`?" está em
-`docs/PLANO_ANALISE_V3_COOPERACAO.md`, APROVADO (as CB-1 a CB-9 DECIDIDAS pelo Matheus em 2026-11-12). Nenhuma vida roda antes da CO7 na `main` e da aprovação.
+`docs/PLANO_ANALISE_V3_COOPERACAO.md`, APROVADO (as CB-1 a CB-9 DECIDIDAS pelo Matheus em 2026-11-12). Rodado em 2026-11-12 (CB1 a CB4, #900, #907, #908 e o PR da CB4): os deveres quase não agem no mundo de hoje
+(`docs/futuro/cooperacao_bancada_resultado.md`).
 
 ## 6. Fora desta tarefa
 
@@ -393,3 +394,59 @@ Atrás da subchave `co6` da `ConfigCooperacao`, desligada por padrão e só com 
   decaimento e o teto à mão; o M-SENS; e o gabarito do G-PAR-CO6 para o TS (`experiments/exportar_gabarito_co6_par.py`,
   `web/app/test/gabaritos/co6_python.json.gz`), que confere o G-SEM-DECISAO-CO6 nas 7 vidas da CO3.
 - **Os desvios:** D-CO6b-1 a D-CO6b-7, no registro de 2026-11.
+
+## CO6c, o espelho TS, o G-PAR-CO6 e o painel (2026-11-12, Claude Code, Opus 5.5, branch `v3-cooperacao-co6c`)
+
+- **O motor:** `motor/cooperacao.ts` ganha o `k` (`fimDoTickK`, `tetoK`, `pesoDever`, o estágio pela idade) e a `CONFIG_COOPERACAO_CO6`;
+  `motor/grupo.ts` anda o `k` no fim de todo tick e põe a `reputacao` e o `peso_dever` na percepção social; o M-SENS do modular
+  (`motor/digibrain/sens.ts`) os lê e o `estadoInterno()` os mostra na chave `social`.
+- **O G-PAR-CO6** (`test/cooperacao_co6.test.ts`, bit a bit no Node, contra `co6_python.json.gz`): o `k` e a reputação tick a tick nas
+  chamadas sintéticas e nas 7 vidas da CO3, a percepção de cada decisão e o G-SEM-DECISAO-CO6.
+- **No jogo** (`test/coop_co6_jogo.test.ts`): a CO6 fica desligada (D-CO6c-1). Ligada no teste, os dois pets do modular vivem igual, e o
+  M-SENS lê o que a percepção trouxe.
+- **O painel:** a seção "Com o irmão" no DigiBrain do modular, em palavras e sem número (CO6-7, D-CO6c-2). Ela só aparece quando a CO6 estiver
+  ligada no jogo.
+- **Os desvios:** D-CO6c-1 a D-CO6c-5, no registro de 2026-11.
+
+## CO7a, o gabarito das vidas com a CO6 ligada (2026-11-12, Claude Code, Opus 5.5, branch `v3-cooperacao-co7`)
+
+Gravado com a CO6 inteira e antes de qualquer mudança da CO7, num commit só dele.
+
+- **O exportador:** `experiments/exportar_gabarito_co7.py` grava `tests/gabaritos/co7_vidas_de_hoje.json.gz`, as vidas da CO6a com a CO6
+  ligada.
+- **O teste:** `tests/test_cooperacao_co7.py` refaz as vidas e as compara com o gabarito (o G2 da CO7).
+- **O desvio:** D-CO7a-1, no registro de 2026-11.
+
+## CO7b, o escudo, a universalização e a culpa e a inveja, no Python (2026-11-12, Claude Code, Opus 5.5, branch `v3-cooperacao-co7b`)
+
+Atrás da subchave `co7` da `ConfigCooperacao` (só com a `co6`), no grupo e no cérebro do modular (`DigiBrain(cfg_cooperacao=...)`).
+
+- **As contas** (`digilab/digibrain/dever.py`, só do que o pet vê e do próprio estado): o M-SENS põe a percepção social em posições
+  absolutas, com a posição de antes de cada outro; o M-ARB tira as unidades de comer a comida para a qual um outro aflito vai (o escudo, com
+  `k >= 1/4 de S` e sem a privação do próprio pet) e aplica o peso da universalização; o M-AFETO tira a culpa e a inveja da valência da
+  decisão.
+- **O registro:** o motivo de cada decisão ganha `dever` (a situação, as unidades removidas, as que reprovaram, as que aprovaram, a culpa e a
+  inveja).
+- **Os testes** (`tests/test_cooperacao_co7.py`): o G2; o G-ESCUDO nas 7 decisões em que o escudo vale; o G-RECEPTOR-SOCIAL pela árvore do
+  `dever.py`; os casos à mão; e o gabarito do G-PAR-CO7 para o TS (`web/app/test/gabaritos/co7_python.json.gz`).
+- **Os desvios:** D-CO7b-1 a D-CO7b-9, no registro de 2026-11.
+
+## CO7c, o espelho TS, o G-PAR-CO7 e o gesto (2026-11-12, Claude Code, Opus 5.5, branch `v3-cooperacao-co7c`)
+
+- **O motor:** `motor/digibrain/dever.ts` é o porte do `dever.py`; o M-SENS, o M-ARB e o M-AFETO do modular ganham o `ligarDever`, e o
+  `DigiBrain` recebe a `ConfigCooperacao` com a `co7` (a `CONFIG_COOPERACAO_CO7`, com os números no `CCOOP`).
+- **O G-PAR-CO7** (`test/cooperacao_co7.test.ts`, bit a bit no Node, contra `co7_python.json.gz`): cada conta, decisão a decisão, nas seis
+  vidas do gabarito.
+- **No jogo, a v37** ("Sim, juntas", Matheus, 2026-11-12; D-CO7c-1): o ovo do brasão choca o grupo v37, a v36 com a CO6 e a CO7 ligadas. Os
+  grupos de antes seguem sem elas. Em `test/coop_co7_jogo.test.ts`: cada decisão do modular registra o `dever`, o grupo o guarda, o replay dá a
+  mesma assinatura e nenhuma escolha com o escudo valendo come a comida proibida.
+- **Os ganchos da bancada** (só no Python, D-CO7c-5): o `fator_teto_k` e as subchaves `co7_escudo`, `co7_universalizacao` e `co7_afeto`.
+- **O gesto** (`src/telas/pet/AtosDoIrmao.tsx`), sem número (D-MM-8): hesitar e deixar a comida para o irmão aflito, e querer consolá-lo;
+  em Últimas ações e com o coração na ilha, nos grupos v37.
+- **Os desvios:** D-CO7c-1 a D-CO7c-6, no registro de 2026-11.
+
+## As capturas da v37 (2026-11-12, Claude Code, Opus 5.5, branch `v3-cooperacao-co7-capturas`)
+
+- **Aprovadas pelo Matheus** ("Eu aprovo", D-CO7c-7): o gesto do dever em Últimas ações e o painel "Com o irmão", a 390 e 1280 px, nas duas
+  peles, em `D:\Trab\digilab\capturas_coop_co7\` (fora do git). O gesto "hesitou e deixou a comida" não tem captura: ele não acontece nas
+  vidas do jogo dos testes.

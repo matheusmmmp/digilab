@@ -3,6 +3,7 @@
    `sem_lembranca`). As facetas (`sem_faceta`) e a escolha segurada (a C3, `segurar`) ficam fora do laboratorio (LAB-1): ligadas, falham alto.
    O sono que segura (docs/TAREFA_V3_SONO_SEGURA.md; `sono` com a chave ligada): o reflexo tambem vale com o pet dormindo (o `contexto.dormindo`
    do M-SENS) e a energia abaixo de `lambda_acordar`, salvo a fome urgente (acima do `urgencia_lambda`). Desligado, o reflexo de hoje. */
+import { ajustarDever, situacaoDever, type ConfigDever, type SensDever, type SituacaoDever } from "./dever.ts";
 import { chaveJson, mul, phi } from "./_comum.ts";
 import { CONFIG_SONO_SEGURA, INATOS_MODULAR, type ConfigSonoSegura } from "./constantes.ts";
 import type { LeituraAfeto } from "./afeto.ts";
@@ -39,6 +40,8 @@ export function sortearInteiro(pesos: readonly number[], u: number): number {
 export interface SaidaArb {
   indice: number; unidade: UnidadeImpulso; u: number | null; reflexo: boolean; nada_a_fazer: boolean; pesos: number[];
   sondas: Record<string, unknown>; segurada: boolean; fora: boolean;
+  /** a CO7 (so com `ligarDever`): a situacao, as chaves removidas pelo escudo, as que reprovaram e quantas aprovaram; null sem outro pet */
+  dever?: (SituacaoDever & { removidas: unknown[]; reprovadas: unknown[]; aprovadas: number }) | null;
 }
 
 export class Arbitragem {
@@ -100,12 +103,23 @@ export class Arbitragem {
     return sens.contexto.dormindo > 0 && energia < this.sono.lambda_acordar && fome <= this.p.urgencia_lambda;
   }
 
-  escolher(unidades: readonly UnidadeImpulso[], afeto: Pick<LeituraAfeto, "g_exp">, sens: Pick<SaidaSens, "leitura">, rng: RngPolitica,
+  /** a CO7: o escudo e o peso da universalizacao (motor/digibrain/dever.ts) sobre os pesos, antes do sorteio e em cada sonda */
+  ligarDever(cfg: ConfigDever): void { this.dever = cfg; }
+  dever: ConfigDever | null = null;
+
+  escolher(unidades: readonly UnidadeImpulso[], afeto: Pick<LeituraAfeto, "g_exp"> & Partial<Pick<LeituraAfeto, "urgencias">>,
+    sens: Pick<SaidaSens, "leitura"> & Partial<SaidaSens>, rng: RngPolitica,
     reflexoOuNulo: boolean | null = null, segurar: unknown = null): SaidaArb {
     const p = this.p;
     if (segurar !== null) throw new Error("M-ARB: a escolha segurada (redecidir_evento) fica fora do laboratorio");
     const reflexo = reflexoOuNulo ?? this.reflexo(sens);
-    const w = this.pesos(unidades.map(x => x.a), afeto.g_exp);
+    let w = this.pesos(unidades.map(x => x.a), afeto.g_exp);
+    let sit: SituacaoDever | null = null, reg: ReturnType<typeof ajustarDever>[1] | null = null;
+    const chaves = unidades.map(x => x.chave as readonly unknown[]);
+    if (this.dever !== null && sens.social !== undefined && sens.social !== null) {    // a CO7: o escudo e a universalizacao, antes de tudo
+      sit = situacaoDever(sens as SensDever, afeto.urgencias!, this.dever, this.S);
+      [w, reg] = ajustarDever(chaves, w, sit);
+    }
     let i: number;
     let u: number | null;
     if (reflexo) {
@@ -138,11 +152,17 @@ export class Arbitragem {
         return phi(soma, p.a_max);
       });
       const gExp = nome === "sem_afeto" ? p.e0 : afeto.g_exp;
-      const j = this.escolher_(unidades, this.pesos(ativ, gExp), u);
+      let ws = this.pesos(ativ, gExp);
+      if (sit !== null) ws = ajustarDever(chaves, ws, sit)[0];   // a CO7: a sonda com o mesmo escudo e a mesma universalizacao
+      const j = this.escolher_(unidades, ws, u);
       sondas[nome] = chaveJson(unidades[j]!.chave);
       sondas[this.decidiu[nome]!] = j !== i;
     }
-    return { indice: i, unidade: unidades[i]!, u, reflexo, nada_a_fazer: !reflexo && w.every(x => x === 0), pesos: w, sondas, segurada: false, fora: false };
+    const out: SaidaArb = { indice: i, unidade: unidades[i]!, u, reflexo, nada_a_fazer: !reflexo && w.every(x => x === 0), pesos: w, sondas, segurada: false, fora: false };
+    if (this.dever !== null)                           // a CO7: desligada, nenhum campo novo
+      out.dever = sit === null ? null : { ...sit, removidas: reg!.removidas.map(j => chaveJson(unidades[j]!.chave)),
+                                          reprovadas: reg!.reprovadas.map(j => chaveJson(unidades[j]!.chave)), aprovadas: reg!.aprovadas };
+    return out;
   }
 
   estadoInterno(): Record<string, number> {

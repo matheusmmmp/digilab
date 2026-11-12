@@ -7,6 +7,7 @@ import { clamp, divArred, ganhoDeTau, integrar, mul } from "./_comum.ts";
 import { INATOS_MODULAR, RECEPTORES_DIGIBRAIN, TICKS_POR_DIA, type ConfigOlhar } from "./constantes.ts";
 import { genomaNaEscala, type GenomaVisao } from "./genoma_visao.ts";
 import { RECEPTOR_ENJOO_TELA, type ConfigEnjooTela } from "../enjoo_tela.ts";
+import { socialDever, type ConfigDever, type SocialDaPercepcao, type SocialDever } from "./dever.ts";
 
 /** a classe da TV (so com a subchave `olhar`; GOSTO_VISUAL, P1f) */
 export const CLASSE_TELA = "tela";
@@ -28,7 +29,13 @@ export type CorpoModular = Readonly<Record<string, number | null | undefined>>;
 export type VistoModular = readonly [number, string, number, number, number];
 export interface MundoModular { x: number; y: number; regiao: number; direcao_cheiro: number; vistos: readonly VistoModular[] }
 /** o que o M-SENS le da Observacao do Python (a `_obs_enxuta` do exportador) */
+/** a CO6 na percepcao social (o que o M-SENS le dela): a reputacao de cada outro e o peso dos deveres; sem a CO6, ausentes */
+export interface SocialCo6 { reputacao?: readonly (readonly [string, number])[]; peso_dever?: number }
+/** a percepcao social que chega ao M-SENS: os campos da CO6 e, para a CO7, os fisicos (os outros a vista e onde os viu comer) */
+export type SocialSens = SocialCo6 & Partial<SocialDaPercepcao>;
 export interface ObservacaoModular {
+  /** a percepcao social (so no grupo); o M-SENS so le os campos da CO6 */
+  social?: SocialSens | null;
   corpo: CorpoModular; mundo: MundoModular; vetor_estado: readonly number[]; ticks_desde_cuidado: number;
 }
 
@@ -51,6 +58,8 @@ export interface SaidaSens {
   tela_niveis?: Record<string, number> | null;
   tela_novidade?: number | null;
   tela_enjoo?: number | null;              // o enjoo (D-GV-ENJOO-CER), so com a ConfigEnjooTela ligada
+  /** a CO7 (so com a subchave `co7`): a percepcao social em posicoes absolutas (motor/digibrain/dever.ts); null sem outro pet */
+  social?: SocialDever | null;
 }
 /** o resumo da luta na Observacao: em inteiros (o rival, o resultado -1, 0, +1, a vida perdida em S e o tick) */
 export interface ResumoLutaSens { rival: string; resultado: number; vida_perdida_s: number; tick: number }
@@ -87,6 +96,12 @@ export class Sens {
   hab: Record<ClasseObjeto, number>;
   /** os receptores presentes, fixados na primeira decisao */
   receptores: string[] | null = null;
+  /** a CO6: a reputacao e o peso dos deveres da ultima decisao que os trouxe (senao null) */
+  social: { reputacao: Record<string, number>; peso_dever: number } | null = null;
+  /** a CO7 (`ligarDever`): os numeros, o raio do escudo em subunidades e a posicao em que o pet viu cada outro na ultima decisao em que o via */
+  dever: ConfigDever | null = null;
+  private rEscudo = 0;
+  private readonly antes: Record<string, [number, number]> = {};
   /** a tela (P1f): so com a subchave `olhar` (null desligada) */
   readonly olhar: ConfigOlhar | null = null;
   otimo: Record<string, number> = {};
@@ -243,8 +258,32 @@ export class Sens {
     });
   }
 
+  /** a CO6 (docs/ESPEC_V3_COOPERACAO_CO6.md, 2.3; o _ler_social do Python): a reputacao e o peso dos deveres, se a percepcao social os
+   *  traz, vao ao estado (o painel e as medidas); nenhum modulo os usa na decisao. Sem eles, o estado fica como estava; um sem o outro ou
+   *  fora da escala falha alto */
+  /** a CO7 (docs/ESPEC_V3_COOPERACAO_CO7.md): a percepcao social em posicoes absolutas vai ao `sens.social` (o ligar_dever do Python) */
+  ligarDever(cfg: ConfigDever, sub: number): void {
+    this.dever = cfg;
+    this.rEscudo = cfg.rEscudoCelulas * sub;
+  }
+
+  lerSocial(ps: SocialCo6 | null | undefined): void {
+    if (ps === null || ps === undefined || (ps.reputacao === undefined && ps.peso_dever === undefined)) return;
+    const S = this.S;
+    if (ps.reputacao === undefined || ps.peso_dever === undefined) throw new Error("M-SENS: a reputacao e o peso dos deveres vem juntos (a CO6)");
+    if (!Number.isInteger(ps.peso_dever) || ps.peso_dever < 0 || ps.peso_dever > S) throw new Error(`M-SENS: o peso dos deveres e inteiro em [0, S]: ${ps.peso_dever}`);
+    const rep: Record<string, number> = {};
+    for (const item of ps.reputacao) {
+      if (!Array.isArray(item) || item.length !== 2 || typeof item[0] !== "string" || !Number.isInteger(item[1]) || item[0] in rep)
+        throw new Error(`M-SENS: a reputacao e (id, r inteiro), um por outro: ${JSON.stringify(ps.reputacao)}`);
+      rep[item[0]] = item[1];
+    }
+    this.social = { reputacao: rep, peso_dever: ps.peso_dever };
+  }
+
   codificar(obs: ObservacaoModular, lutas?: readonly ResumoLutaSens[] | null, telas?: readonly (readonly number[])[]): SaidaSens {
     const S = this.S, pc = obs.corpo, pm = obs.mundo;
+    this.lerSocial(obs.social);
     if (telas !== undefined && this.olhar === null) throw new Error("M-SENS: as linhas da tela sem a subchave olhar");
     const recs = this._receptores(pc);
     const pcl = pc as PercepcaoCorpoLobos;
@@ -282,6 +321,12 @@ export class Sens {
     const out: SaidaSens = { falta, leitura, contexto, objetos, conjuncoes: { comida_vista: comida, sem_comida: S - comida, bola_vista: bola },
       ha_cheiro: pm.direcao_cheiro !== 0, pos: [pm.x, pm.y], regiao: pm.regiao, minuto, pc };
     if (lutas !== undefined && lutas !== null) out.lutas = this.resumirLutas(lutas);      // a ponte da luta (PE3): desligada, nenhum campo novo
+    if (this.dever !== null) {                         // a CO7: desligada, nenhum campo novo
+      const ps = obs.social === undefined || obs.social === null ? null
+        : { outros: obs.social.outros ?? [], onde_comeu: obs.social.onde_comeu ?? [], ...(obs.social.peso_dever !== undefined ? { peso_dever: obs.social.peso_dever } : {}) };
+      out.social = socialDever(ps, [pm.x, pm.y], this.antes, this.rEscudo);
+      if (out.social !== null) for (const o of out.social.outros) this.antes[o.id] = [o.x, o.y];
+    }
     if (linhasTela !== null) {                         // a tela (P1f): desligada, nenhum campo novo
       out.telas = linhasTela;
       out.tela_niveis = this.niveisTela(pc);
@@ -297,6 +342,8 @@ export class Sens {
 
   estadoInterno(): Record<string, unknown> {
     const out: Record<string, unknown> = { hab: { ...this.hab }, receptores: this.receptores === null ? null : [...this.receptores] };
+    if (this.dever !== null)                           // a CO7: desligada, o estado de hoje
+      out["dever_antes"] = Object.fromEntries(Object.keys(this.antes).sort().map(i => [i, [...this.antes[i]!]]));
     if (this.olhar !== null) {                         // a tela (P1f): desligada, o estado de hoje, byte a byte
       out["tela"] = { otimo: { ...this.otimo }, largura: { ...this.largura }, desloc: { ...this.desloc }, exposicoes: this.exposicoes };
     }

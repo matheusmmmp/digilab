@@ -3295,6 +3295,47 @@ PARAMETROS_DECODIFICADOR.update({n: ("DECIDIDO", "SEM FONTE; decidido pelo Mathe
                                  for n in ("limiar_valor", "limiar_desfecho")})
 
 
+# A fala do assistir (docs/futuro/fala_do_assistir.md, FA-2 a FA-5, DECIDIDAS pelo Matheus em 2026-11-12 pela recomendacao): os conceitos do
+# assistir do `dec-v4` (`digilab/digibrain/decodificador.py`). Fica fora da ConfigDecodificador para o gabarito do dec-v1 e
+# do dec-v2 (a config vai nele) sair byte a byte. Cada conceito le um ou dois sinais do motivo (inteiros em [0, S]) e os leva a [0, S] pela
+# escala por partes do decodificador (`_escala`): o sinal no limiar do conceito vale `limiar_ativo`, e o conceito esta ativo a partir dali (a
+# regra da DC: ativo com valor >= 512). Os limiares dos sinais foram calibrados nas vidas GRAVADAS da GV3 e da GV3b (adendo 2) pelo script
+# `artifacts_v3_gosto_visual/fala_limiares/calibrar.py` (a regra dos quantis esta no docstring dele e no `limiares.json`): sao PROPOSTOS,
+# e nenhum vem de literatura (SEM FONTE). Os intervalos da FA-5 sao do jogo (o tempo real), PROPOSTOS, SEM FONTE.
+@dataclass(frozen=True)
+class ConfigFalaAssistir:
+    limiar_ativo: int = _S // 2               # PROPOSTO: o valor a partir do qual o conceito esta ativo (o 512 da DC, DECIDIDO la)
+    limiar_confianca: int = _S // 2           # PROPOSTO: abaixo, a frase vai em duvida ("acho que..."), como na DC
+    gostei_agrado: int = 665                  # calibrado (calibrar.py): o quantil 0,90 do agrado efetivo
+    susto_subida: int = 73                    # calibrado (calibrar.py): o quantil 0,10 das subidas do susto desde a decisao anterior
+    chato_enjoo: int = 612                    # calibrado (calibrar.py): o quantil 0,75 do enjoo
+    chato_tedio: int = 240                    # calibrado (calibrar.py): o quantil 0,75 do tedio
+    o_que_e_agrado: int = 376                 # calibrado (calibrar.py): o quantil 0,10 do agrado sem o enjoo (longe do esperado)
+    o_que_e_enjoo: int = 522                  # calibrado (calibrar.py): a mediana do enjoo (o pet ainda nao cansou da TV; D-GV-FALA-3)
+    intervalo_comentario_s: int = 300         # FA-5: um comentario a cada 5 min reais, so enquanto o pet olha
+    intervalo_susto_s: int = 60               # FA-5: o susto fura o limite, com o proprio intervalo de 1 min
+
+    def __post_init__(self) -> None:
+        for nome, v in self.__dict__.items():
+            if type(v) is not int or v < 0:
+                raise ValueError(f"ConfigFalaAssistir.{nome} e um inteiro >= 0: {v!r}")
+        for nome in ("limiar_ativo", "limiar_confianca", "gostei_agrado", "susto_subida", "chato_enjoo", "chato_tedio", "o_que_e_agrado",
+                     "o_que_e_enjoo"):
+            if not 0 < getattr(self, nome) < _S:
+                raise ValueError(f"ConfigFalaAssistir.{nome} fica em (0, S): {getattr(self, nome)!r}")
+        if not 0 < self.intervalo_susto_s <= self.intervalo_comentario_s:
+            raise ValueError("ConfigFalaAssistir: o intervalo do susto fica em (0, intervalo_comentario_s] (FA-5)")
+
+
+CONFIG_FALA_ASSISTIR = ConfigFalaAssistir()
+PARAMETROS_FALA_ASSISTIR = {f.name: ("PROPOSTO", "SEM FONTE; calibrado nas vidas gravadas da GV3 e da GV3b, "
+                                                 "artifacts_v3_gosto_visual/fala_limiares/limiares.json") for f in fields(ConfigFalaAssistir)}
+PARAMETROS_FALA_ASSISTIR.update({"limiar_ativo": ("PROPOSTO", "SEM FONTE; o limiar_valor da DC (DECIDIDO pelo Matheus em 2026-11-07, PR #663)"),
+                                 "limiar_confianca": ("PROPOSTO", "SEM FONTE; o limiar_confianca da DC"),
+                                 "intervalo_comentario_s": ("PROPOSTO", "SEM FONTE; FA-5, docs/futuro/fala_do_assistir.md, secao 2.5"),
+                                 "intervalo_susto_s": ("PROPOSTO", "SEM FONTE; FA-5, docs/futuro/fala_do_assistir.md, secao 2.5")})
+
+
 # As unidades de fala do DigiBrain modular (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, secao 3.1, APROVADO em 2026-11-07; DC3-4), so com a
 # subchave `fala_unidades` da ConfigDigibrain: o `chamar_atencao` vira tres unidades, (chamar_atencao, c) com c em CONTEUDOS_FALA. O inato de
 # cada uma e o W0[chamar_atencao].z de hoje com o termo do receptor do conteudo (TERMO_DO_CONTEUDO: a fome entra no W0 do chamar pela
@@ -3460,6 +3501,64 @@ class ConfigEnjooTela:
 
 CONFIG_ENJOO_TELA = ConfigEnjooTela()
 CONFIG_ENJOO_TELA_LIGADA = ConfigEnjooTela(ligada=True)
+
+
+@dataclass(frozen=True)
+class ConfigOrgao:
+    """O orgao da visao (e do ouvido) do pet (GOSTO_VISUAL, OV2; docs/ESPEC_V3_ORGAO_VISAO.md; as OV1-1 a OV1-14 DECIDIDAS pelo Matheus em
+    2026-11-12, pela recomendacao). Desligada (o padrao), nada muda. Ligada, so com a TV no mundo (`MotorMundo(cfg_orgao=...)`) e, no
+    DigiBrain modular, so com a subchave `olhar` (`DigiBrain(cfg_orgao=...)`). Os numeros e o porque de cada um (todos PROPOSTOS, SEM FONTE;
+    o desenho, DECIDIDO):
+
+    a TV do jogo (a fonte "grade"; OV1-11):
+    conceitos_por_programa 3   cada programa da grade traz de 0 a 3 conceitos da lista, com o nivel de 4 a 15, sorteados uma vez na
+                               construcao pela rng propria `tv-conceitos` (a `tv-programas` nao muda: a grade de hoje fica)
+    o M-SENS (secao 7.2; OV1-8: a habituacao por conceito no cerebro, sem quimica):
+    tau_hab_subida       22    ticks (~15/ln 2): olhando, a habituacao do conceito anda para o nivel visto com a meia-vida de uma decisao
+                               (a meia_vida_enjoo da ConfigEnjooTela)
+    tau_hab_volta        1040  ticks (~720/ln 2): sem ver o conceito, ela volta a 0 com a meia-vida do desenjoo (meio dia de jogo): voltar
+                               ao gato nao desenjoa de imediato
+    o gosto por conceito (secao 7.3; OV1-9: todo aprendido, nasce 0):
+    tau_exposicao        960   ticks (dois dias de jogo, o da ConfigOlhar): o gosto anda para cima na proporcao do nivel visto e da
+                               novidade dele (a exposicao satura quando o conceito ja nao e novo: o lado de baixo do U)
+    k_consequencia       256   = S/4: o crédito do r_n da opcao de olhar a cada conceito visto, mul(k, mul(a_c, r_n))
+    teto_gosto           256   = S/4: o gosto de um conceito fica em [-teto, teto]; no agrado, um conceito no teto, visto inteiro e novo
+                               soma S/4 (o termo div_arred(a x g x nov, S x S))
+    o mito (secao 6; OV1-4, OV1-5, OV1-10; a subchave `mito`, para a pesquisa separar a percepcao da crenca):
+    mito                 False a subchave do termo de valencia das especies no M-AFETO
+    peso_mito            128   = S/8: so na valencia da decisao, como a culpa e a inveja da CO7; div_arred(peso x a_e x nov_e, S x S) por
+                               especie do mesmo brasao do pet (o parentesco, +1; os outros brasoes, 0)"""
+
+    ligada: bool = False
+    conceitos_por_programa: int = 3
+    tau_hab_subida: int = 22
+    tau_hab_volta: int = 1040
+    tau_exposicao: int = 960
+    k_consequencia: int = _S // 4
+    teto_gosto: int = _S // 4
+    mito: bool = False
+    peso_mito: int = _S // 8
+
+    def __post_init__(self) -> None:
+        for campo in ("ligada", "mito"):
+            if type(getattr(self, campo)) is not bool:
+                raise TypeError(f"ConfigOrgao.{campo} e bool: {getattr(self, campo)!r}")
+        if self.mito and not self.ligada:
+            raise ValueError("ConfigOrgao.mito so com o orgao ligado")
+        if type(self.conceitos_por_programa) is not int or not 0 <= self.conceitos_por_programa <= 3:
+            raise ValueError(f"ConfigOrgao.conceitos_por_programa de 0 a 3 (o maximo do evento): {self.conceitos_por_programa!r}")
+        for campo in ("tau_hab_subida", "tau_hab_volta", "tau_exposicao"):
+            v = getattr(self, campo)
+            if type(v) is not int or v < 15:
+                raise ValueError(f"ConfigOrgao.{campo} inteiro, no minimo o passo do cerebro (15 ticks): {v!r}")
+        for campo in ("k_consequencia", "teto_gosto", "peso_mito"):
+            v = getattr(self, campo)
+            if type(v) is not int or not 0 <= v <= _S:
+                raise ValueError(f"ConfigOrgao.{campo} em [0, S]: {v!r}")
+
+
+CONFIG_ORGAO = ConfigOrgao()
+CONFIG_ORGAO_LIGADA = ConfigOrgao(ligada=True)
 _FONTE_ENJOO = "docs/registro/2026-11.md, D-GV-ENJOO-PY-3 e D-GV-ENJOO-CER; o P0 (web/app/src/gostoVisual/gosto.ts) como referencia; SEM FONTE"
 PARAMETROS_ENJOO_TELA: dict[str, tuple[str, str]] = {
     "ligada": ("PROPOSTO", "a chave do enjoo, desligada (D-GV-ENJOO-CER-1); " + _FONTE_ENJOO),
@@ -3535,7 +3634,22 @@ class ConfigCooperacao:
     k_passo                o que o `k` de i ganha, na escala S, a cada tick de encontro (o outro a ate o raio da visao de cada um, com a
                            reputacao dele vista por i positiva); sem encontro, o `k` decai pela meia-vida da pontuacao (CO6-3)
     k_teto_<estagio>       o teto do `k` no estagio da idade (o provisorio da ConfigExpressao; CO6-4): bebe, crianca, adolescente e
-                           adulto; o Mega (S) entra quando o estagio vier da evolucao"""
+                           adulto; o Mega (S) entra quando o estagio vier da evolucao
+    co7                    a CO7 (docs/ESPEC_V3_COOPERACAO_CO7.md): o escudo no M-ARB, o peso da universalizacao e a culpa e a inveja no
+                           M-AFETO; so com `co6` (senao, falha alto); desligada, o grupo da CO6
+    limiar_escudo          o `k` a partir do qual o escudo vale (CO7-2: 1/4 de S, o teto da crianca)
+    r_escudo_celulas       o "indo para": o outro a ate esta distancia da comida, em celulas, e mais perto dela que na decisao anterior
+    piso_privacao_s        a privacao do proprio pet (CO7-3): a leitura da fome abaixo disto, na escala S (= piso_fome x S, arredondado)
+    w_univ                 o peso da universalizacao (CO7-4): a acao que reprova perde mul(k, w_univ), a que aprova ganha o mesmo, com o teto
+                           na urgencia mais forte
+    limiar_humor           a culpa com a leitura do humor a partir disto, a inveja abaixo, na escala S
+    w_culpa, w_inveja      o quanto a culpa e a inveja tiram da valencia da decisao, na escala S (os pesos neutros; CO7-6)
+    janela_inveja          o "viu comer ha pouco" da inveja: a idade do `onde_comeu` ate isto, em ticks
+    fator_teto_k           (pesquisa, a CO-bancada: docs/PLANO_ANALISE_V3_COOPERACAO.md) o teto do `k` de cada estagio vezes isto, na
+                           escala S (S: o teto da CO6-4; 0 e S/2 sao as doses da bancada); o jogo fica em S
+    co7_escudo, co7_universalizacao, co7_afeto
+                           (pesquisa, as ablacoes da bancada) cada parte da CO7 sozinha; com a `co7`, todas ligadas por padrao (a CO7
+                           inteira); sem a `co7`, nada vale"""
 
     ligada: bool = False
     escala: int = _S
@@ -3549,13 +3663,38 @@ class ConfigCooperacao:
     k_teto_crianca: int = _S // 4
     k_teto_adolescente: int = _S // 2
     k_teto_adulto: int = 3 * _S // 4
+    co7: bool = False
+    limiar_escudo: int = _S // 4
+    r_escudo_celulas: int = 3
+    piso_privacao_s: int = 461
+    w_univ: int = _S // 2
+    limiar_humor: int = _S // 2
+    w_culpa: int = _S // 8
+    w_inveja: int = _S // 8
+    janela_inveja: int = 30
+    fator_teto_k: int = _S
+    co7_escudo: bool = True
+    co7_universalizacao: bool = True
+    co7_afeto: bool = True
 
     def __post_init__(self) -> None:
-        for nome in ("ligada", "co6"):
+        for nome in ("ligada", "co6", "co7", "co7_escudo", "co7_universalizacao", "co7_afeto"):
             if type(getattr(self, nome)) is not bool:
                 raise TypeError(f"ConfigCooperacao.{nome} e bool: {getattr(self, nome)!r}")
         if self.co6 and not self.ligada:
             raise ValueError("ConfigCooperacao.co6 so liga com a cooperacao ligada (ESPEC_V3_COOPERACAO_CO6, secao 4)")
+        if self.co7 and not self.co6:
+            raise ValueError("ConfigCooperacao.co7 so liga com a co6 ligada (ESPEC_V3_COOPERACAO_CO7, secao 6)")
+        for nome in ("limiar_escudo", "piso_privacao_s", "w_univ", "limiar_humor", "w_culpa", "w_inveja", "fator_teto_k"):
+            v = getattr(self, nome)
+            if type(v) is not int or not 0 <= v <= self.escala:
+                raise ValueError(f"ConfigCooperacao.{nome} inteiro em [0, escala]: {v!r}")
+        for nome in ("r_escudo_celulas", "janela_inveja"):
+            v = getattr(self, nome)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigCooperacao.{nome} tem de ser inteiro positivo: {v!r}")
+        if self.piso_privacao_s != int(self.piso_fome * self.escala + 0.5):
+            raise ValueError(f"ConfigCooperacao.piso_privacao_s = piso_fome x escala, arredondado: {self.piso_privacao_s!r}")
         if type(self.k_passo) is not int or not 0 < self.k_passo <= self.escala:
             raise ValueError(f"ConfigCooperacao.k_passo inteiro em (0, escala]: {self.k_passo!r}")
         tetos = [self.k_teto_bebe, self.k_teto_crianca, self.k_teto_adolescente, self.k_teto_adulto]
@@ -3572,6 +3711,7 @@ class ConfigCooperacao:
 CONFIG_COOPERACAO = ConfigCooperacao()
 CONFIG_COOPERACAO_LIGADA = ConfigCooperacao(ligada=True)
 CONFIG_COOPERACAO_CO6 = ConfigCooperacao(ligada=True, co6=True)
+CONFIG_COOPERACAO_CO7 = ConfigCooperacao(ligada=True, co6=True, co7=True)
 PARAMETROS_COOPERACAO = {
     "ligada": ("DECIDIDO", "CO-3 (Matheus, 2026-11-11): a CO3 so mede e mostra; desligada, o grupo de hoje"),
     "escala": ("DECIDIDO", "PE-12: S = 1024, a do cerebro A (ConfigLobos.bits_ponto_fixo = 10)"),
@@ -3586,6 +3726,21 @@ PARAMETROS_COOPERACAO = {
     "k_teto_crianca": ("PROPOSTO", "CO6-4 (2026-11-11): 1/4 de S, SEM FONTE"),
     "k_teto_adolescente": ("PROPOSTO", "CO6-4 (2026-11-11): 1/2 de S, SEM FONTE"),
     "k_teto_adulto": ("PROPOSTO", "CO6-4 (2026-11-11): 3/4 de S, SEM FONTE"),
+    "co7": ("DECIDIDO", "CO7-1 a CO7-8 (Matheus, 2026-11-11): desligada, o grupo da CO6 (o G2 da CO7)"),
+    "limiar_escudo": ("PROPOSTO", "CO7-2 (2026-11-11): 1/4 de S, o teto da crianca, SEM FONTE; o escudo e o shielding de Alshiekh et al. 2018, "
+                                  "10.1609/aaai.v32i1.11797"),
+    "r_escudo_celulas": ("PROPOSTO", "SEM FONTE (D-CO7b-2): tres celulas, o 'indo para' da secao 2.1"),
+    "piso_privacao_s": ("PROPOSTO", "CO7-3: o piso_fome (CO-9) na escala S, arredondado"),
+    "w_univ": ("PROPOSTO", "CO7-4: SEM FONTE, 1/2 de S (D-CO7b-4); a forma e a de Levine et al. 2020, 10.1073/pnas.2014505117, e Roemer 2010, "
+                           "10.1111/j.1467-9442.2009.01592.x"),
+    "limiar_humor": ("PROPOSTO", "SEM FONTE (D-CO7b-5): o meio da escala"),
+    "w_culpa": ("PROPOSTO", "SEM FONTE (D-CO7b-5): 1/8 de S; a forma e a de Hughes et al. 2018, arXiv 1803.08884, preprint"),
+    "w_inveja": ("PROPOSTO", "SEM FONTE (D-CO7b-5): 1/8 de S; a forma e a de Hughes et al. 2018, arXiv 1803.08884, preprint"),
+    "janela_inveja": ("PROPOSTO", "SEM FONTE (D-CO7b-5): dois intervalos de decisao"),
+    "fator_teto_k": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12, o plano da bancada): pesquisa; S no jogo, 0 e S/2 nas doses da bancada"),
+    "co7_escudo": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12): pesquisa, a ablacao 'so o escudo'; ligada com a co7 no jogo"),
+    "co7_universalizacao": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12): pesquisa, a ablacao 'so a universalizacao'; ligada com a co7 no jogo"),
+    "co7_afeto": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12): pesquisa, a ablacao 'so o afeto'; ligada com a co7 no jogo"),
 }
 
 
