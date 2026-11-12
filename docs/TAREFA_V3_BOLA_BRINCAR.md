@@ -167,3 +167,24 @@ e as 40 rolagens da bola.
   refaz o grupo v31, em que cada pet joga e recebe o lance dele no mundo de todos; os grupos v28 e v29 seguem sem o lance.
 
 Os desvios estão em `docs/registro/2026-11.md` (D-BB2-1 a D-BB2-5). A vista e o som (a BB3) não foram tocados.
+
+## 11. Resultado da BB3 (2026-11-12)
+
+A vista e o som do lance estão na ilha 3D (`web/app/src/`), só na vista; o motor não mudou:
+- **o arco** (`src/telas/pet/ilha/arcoBola.ts`, `itens.ts`): no lance novo do `Mundo.lances`, a bola voa do lado da câmera até o ponto do
+  lance, num arco de 650 ms, com a sombra no chão;
+- **o chute** (`vista.ts`): a cada rolagem, o pet desenhado corre até a bola, dá o golpe (o Attack_1) nela e volta; a bola espera o braço
+  chegar para rolar. Era por isso que o golpe não aparecia na bola (D-BB3-2);
+- **o som** (`momentos.ts`, `vigiarBola`): o `cuidado_toque` no lance, o `treino_alvo` e a voz contente no chute;
+- **a recusa**: a janela do convite passa sem chute, e o rosto mostra a Recusa (ou o Cansado, com a energia baixa) por 2 s, só com o modular
+  e com o pet acordado.
+
+**Os testes:** `test/bola_brincar_vista.test.ts` (11 testes: o arco, o chute desenhado, a janela, o lance, o chute e a recusa); a suíte do
+Vitest, 167 arquivos, 1 708 testes passam e 3 pulados; `npm run tipos` limpo. O e2e novo "Brincar joga a bola e o pet chuta" passa (o ovo do
+brasão, o grupo v31 com o modular; o chute na janela no primeiro lance). O `npm run e2e` inteiro passa: 133 testes, no Chrome, porta 8799,
+com o `e2e/dois_pets.spec.ts` ajustado para a v31 (D-BB3-8).
+
+**As capturas** (`docs/capturas_bola_brincar/`): `bola_no_ar_1280.png`, `pet_corre_a_bola_1280.png` e `pet_chuta_1280.png`.
+
+Os desvios estão em `docs/registro/2026-11.md` (D-BB3-1 a D-BB3-8). Fica de fora: a cena de reserva sem WebGL, um som próprio da bola e a
+moita que tapa o pet perto do ninho.

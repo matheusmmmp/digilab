@@ -1403,36 +1403,44 @@ test("Brincar joga a bola e o pet chuta", async ({ page }) => {
   const m0 = await mundo();
   expect([m0.versao, m0.cerebro, m0.lances]).toEqual([VERSAO_GRUPO, "modular", []]);
   const JANELA = 30;                                    /* CONFIG_LANCE_DONO_LIGADA.janela_convite_ticks */
-  /* o chamado aberto de qualquer um dos bebes poe o tempo em 1x (tempo.ts): os dois chocam pedindo carinho. Antes de cada lance, o dono atende o
-     chamado do irmao (B) pelo Carinho, no foco dele, e volta ao A; o do A, o proprio Brincar atende (ACAO_CHAMADO.carinho) */
+  /* o chamado aberto de qualquer um dos bebes poe o tempo em 1x (tempo.ts): os dois chocam pedindo carinho, e outros chamados abrem pelo corpo.
+     Antes de cada lance e enquanto a janela corre, o dono atende os chamados abertos pela acao deles (o carinho pelo Carinho), no foco de cada
+     um, e volta ao A; assim o tempo segue a 10 min/s */
   type Grupo = { foco: string; ids: string[]; chamados: string[][] };
   const ROTULO: Record<string, string> = { carinho: "Carinho", higiene: "Limpar", fome: "Alimentar" };
-  async function atenderIrmao(): Promise<void> {
+  async function atenderChamados(): Promise<void> {
     const g = await page.evaluate(() => (window as any).__digilab.grupo() as Grupo);
     for (const [k, id] of g.ids.entries()) {
-      if (id === "A" || !g.chamados[k]!.length) continue;
+      if (!g.chamados[k]!.length) continue;
       await page.evaluate(i => (window as any).__digilab.focar(i), id);
       await expect.poll(() => page.evaluate(() => (window as any).__digilab.grupo().foco)).toBe(id);
       for (const c of g.chamados[k]!) await page.locator(".acoes-pet button", { hasText: ROTULO[c]! }).first().click();
-      await expect.poll(async () => (await page.evaluate(() => (window as any).__digilab.grupo() as Grupo)).chamados[k]!.length).toBe(0);
+      await expect.poll(async () => (await page.evaluate(() => (window as any).__digilab.grupo() as Grupo)).chamados[k]!.length, { timeout: 5_000 }).toBe(0);
       await page.evaluate(() => (window as any).__digilab.focar("A"));
       await expect.poll(() => page.evaluate(() => (window as any).__digilab.grupo().foco)).toBe("A");
     }
   }
   let chutou = false;
+  const vista = { lances: 0, chutes: 0 };
+  const olharVista = async () => {
+    const v = await page.evaluate(() => (window as any).__digilab.bolaVista() as { lances: number; chutes: number });
+    vista.lances = Math.max(vista.lances, v.lances); vista.chutes = Math.max(vista.chutes, v.chutes);
+  };
   for (let i = 0; i < 3 && !chutou; i++) {
-    await atenderIrmao();
+    /* o tempo anda (os chamados do nascimento atendidos) antes do lance */
+    const t0 = (await mundo()).tickMundo;
+    await expect.poll(async () => { await atenderChamados(); return (await mundo()).tickMundo; }, { timeout: 30_000 }).toBeGreaterThan(t0 + 2);
     const antes = (await mundo()).lances!.length;
     await page.locator(".acoes-pet button", { hasText: "Brincar" }).first().click();
     await expect.poll(async () => (await mundo()).lances!.length, { timeout: 5_000 }).toBe(antes + 1);
     const lance = (await mundo()).lances!.at(-1)!.tick;
     /* a janela passa (10 min/s: 30 ticks em ~3 s); o chute e uma rolagem dentro dela */
-    await expect.poll(async () => (await mundo()).tickMundo, { timeout: 30_000 }).toBeGreaterThanOrEqual(lance + JANELA);
+    await expect.poll(async () => { await olharVista(); await atenderChamados(); return (await mundo()).tickMundo; }, { timeout: 30_000 }).toBeGreaterThanOrEqual(lance + JANELA);
+    await olharVista();
     chutou = (await mundo()).rolagensTicks.some(r => r >= lance && r < lance + JANELA);
   }
   expect(chutou, "o pet nao chutou a bola em tres lances").toBe(true);
-  /* a vista viu os lances e o chute (momentos.ts, vigiarBola) */
-  const vista = await page.evaluate(() => (window as any).__digilab.bolaVista() as { lances: number; chutes: number; recusas: number });
+  /* a vista viu o lance e o chute (momentos.ts, vigiarBola; a troca de foco para atender o irmao zera a contagem dela, entao vale o maior visto) */
   expect(vista.lances).toBeGreaterThanOrEqual(1);
   expect(vista.chutes).toBeGreaterThanOrEqual(1);
   expect(erros).toEqual([]);
