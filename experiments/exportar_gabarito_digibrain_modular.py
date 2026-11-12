@@ -80,8 +80,8 @@ METODOS = {
     "mem": ("relogio", "consolidar", "lembrar", "termo_lembranca", "recuperar", "codificar", "codificar_autobio",
             "classes_com_positivo"),
 }
-GANCHOS = ("agir", "escolher_alvo", "consequencia_corpo", "observar", "consequencia_mundo", "receber_acao_dono",
-           "bola_do_dono")                 # o convite do lance do dono (BOLA_BRINCAR): so chamado com a ConfigLanceDono ligada
+GANCHOS = ("agir", "escolher_alvo", "consequencia_corpo", "observar", "consequencia_mundo", "receber_acao_dono")
+GANCHOS_LANCE = GANCHOS + ("bola_do_dono",)       # o convite do lance do dono (BOLA_BRINCAR): so nas vidas com a ConfigLanceDono ligada
 ASSINADOS = ("sens", "afeto", "estado", "mem", "arb", "plast")
 
 
@@ -131,7 +131,7 @@ def _obs_enxuta(obs) -> dict:
 class Gravador:
     """embrulha o cerebro de uma vida e junta as chamadas por decisao"""
 
-    def __init__(self, cerebro) -> None:
+    def __init__(self, cerebro, ganchos: tuple = GANCHOS) -> None:
         self.c = cerebro
         self.chamadas: dict[int, list] = {}
         self.assinaturas: dict[int, dict] = {}
@@ -141,7 +141,7 @@ class Gravador:
             modulo = getattr(cerebro.m, nome)
             for metodo in metodos:
                 setattr(modulo, metodo, self._embrulhar(f"{nome}.{metodo}", getattr(modulo, metodo), 1, nome))
-        for gancho in GANCHOS:
+        for gancho in ganchos:
             setattr(cerebro, gancho, self._embrulhar(f"adapt.{gancho}", getattr(cerebro, gancho), 0, "adapt"))
         self._episodio_original = adapt_mod.episodio_autobio
         adapt_mod.episodio_autobio = self._embrulhar("adapt.episodio_autobio", self._episodio_original, 1, "adapt")
@@ -233,7 +233,7 @@ def viver(dono: str, lugar: str, semente: int, gravar: bool = True, inatos=None,
     cerebro = orq.cerebro_de(registro)
     if ao_montar is not None:                    # (IG6) o gabarito do alcance troca o `d_max` no meio da vida, antes de uma decisao
         ao_montar(cerebro)
-    g = Gravador(cerebro) if gravar else None
+    g = Gravador(cerebro, GANCHOS if lance is None else GANCHOS_LANCE) if gravar else None
     try:
         d = DonoComLugar(criar_dono(dono), lugar, semente, dono, orq.CM)
         motor, _ = simular_vida_fisico(d, registro, semente, DIAS, orq.ORCAMENTO_POR_DIA * DIAS, dono, fm)
@@ -627,7 +627,8 @@ def lance_dono() -> bytes:
                                f"{len(v['lances'])} lances, {v['convites']} convites")
         vidas.append(v)
     return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "config_sono_segura": paraj(CONFIG_SONO_SEGURA_LIGADA),
-                                           "config_lance_dono": paraj(CONFIG_LANCE_DONO_LIGADA), "vidas": vidas}).encode("utf-8"),
+                                           "config_lance_dono": paraj(CONFIG_LANCE_DONO_LIGADA),
+                                           "ganchos": list(GANCHOS_LANCE), "vidas": vidas}).encode("utf-8"),
                          compresslevel=9, mtime=0)
 
 
