@@ -2,7 +2,7 @@
 
 **Status:** as **RC-1 a RC-4 estão DECIDIDAS** pelo Matheus em 2026-11-12, pela recomendação e sem mudança ("Sim, segue e mergeia"). Junta numa ordem só as etapas dos planos já decididos; não decide nada novo de produto. A ordem, os prazos e os custos
 são **PROPOSTOS, SEM FONTE**; os prazos são em semanas de trabalho do projeto, não em datas. As decisões RC-1 a RC-4 (seção 7) são só
-sobre a ordem. **As RC-5 a RC-8** (a integração, seção 8, e o plano de desenvolvimento, seção 9, de 2026-11-12) são PROPOSTAS.
+sobre a ordem. **As RC-5 a RC-8** (a integração, seção 8, e o plano de desenvolvimento, seção 9) estão **DECIDIDAS** pela recomendação em 2026-11-12.
 
 **Origem:** o Matheus, em 2026-11-12: "Como começar essa estrutura toda, monte um roadmap para projeção dessa arquitetura".
 
@@ -178,18 +178,18 @@ Só sobre a ordem; o resto já está decidido nos planos. **Todas DECIDIDAS** pe
 - **RC-4 (DECIDIDA). Abrir para fora só depois do portão F6,** mesmo que o código esteja pronto antes. Custo de errar: alto, se abrir sem a revisão
   da LGPD e sem os termos (a CN-10 e a MMO-4 já pediam isso).
 
-**As RC-5 a RC-8** vêm da seção 8 (a integração), pedida pelo Matheus em 2026-11-12. **PROPOSTAS.**
+**As RC-5 a RC-8** vêm da seção 8 (a integração), pedida pelo Matheus em 2026-11-12. **DECIDIDAS** pela recomendação: "Eu aceito as recomendações e pode efetuar o merge e seguir com as próximas etapas."
 
-- **RC-5. A página de entrada sobe na F1,** antes da conta, com o "entrar" escondido até a F2. A outra opção é esperar a CN6, como estava.
+- **RC-5 (DECIDIDA). A página de entrada sobe na F1,** antes da conta, com o "entrar" escondido até a F2. A outra opção é esperar a CN6, como estava.
   Custo de errar: baixo. Ela é estática e já aprovada; publicar cedo dá o endereço para os convidados e testa o Pages e o domínio.
-- **RC-6. Os endereços:** a página na raiz do domínio, o jogo em `/jogo/` (os dois no Pages), a API em `api.` (o Lightsail, atrás da
+- **RC-6 (DECIDIDA). Os endereços:** a página na raiz do domínio, o jogo em `/jogo/` (os dois no Pages), a API em `api.` (o Lightsail, atrás da
   Cloudflare) e os assets em `assets.` (o R2). A outra opção é a API na mesma origem, em `/api/`, por um Worker que repassa para o
   Lightsail. Custo de errar: médio. O subdomínio é o caminho comum e não precisa de Worker; a mesma origem evita o CORS, mas põe um Worker
   no meio de toda chamada.
-- **RC-7. O save do servidor local para o domínio:** pelo **exportar e importar que o jogo já tem** (`web/app/src/importar.ts`; Ajustes >
+- **RC-7 (DECIDIDA). O save do servidor local para o domínio:** pelo **exportar e importar que o jogo já tem** (`web/app/src/importar.ts`; Ajustes >
   Registro > Exportar pet), com um aviso na primeira abertura do jogo no domínio novo. A outra opção é uma ferramenta própria de mudança.
   Custo de errar: médio. Sem aviso, o convidado abre o jogo no domínio e acha que perdeu o pet, porque o `localStorage` é por endereço.
-- **RC-8. O "entrar" da página de entrada abre o jogo já na tela Entrar** (os Ajustes > Conta > Entrar, a tela 2 da prancha da conta),
+- **RC-8 (DECIDIDA). O "entrar" da página de entrada abre o jogo já na tela Entrar** (os Ajustes > Conta > Entrar, a tela 2 da prancha da conta),
   por um parâmetro no endereço do jogo. A outra opção é a página ter a sua própria tela de login. Custo de errar: médio. Uma tela de login
   fora do jogo duplica a tela aprovada e contraria a CN-1 (a conta mora nos Ajustes).
 
