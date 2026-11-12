@@ -16,7 +16,7 @@ daqui são propostas para a calibração geral ("equilíbrio só no fim"). Os n�
 | **N3** | as 4 chaves no núcleo, desligadas, com o gabarito das versões vivas antes (PR #893, na `main`) | `web/app/test/gabaritos/luta_nucleo_n3.json` |
 | **N4** | 10 medidas inteiras da bancada (as 21 metas) na faixa `investigacao` (92101 a 92505): a base da v23, cada chave sozinha, as 4 juntas, e a base e as juntas da v29 | `web/app/scripts/medicoes/equilibrio_poc/n4_*/investigacao/` e a comparação em `web/app/scripts/medicoes/luta_nucleo/n4/` |
 
-Os contrafactuais e os critérios de leitura foram registrados antes da primeira medida, na seção 8 do plano (commit `c16705f6`). Cada medida
+Os contrafactuais e os critérios de leitura foram registrados antes da primeira medida, na seção 8 do plano (commit `c16705f6` no branch `v3-luta-nucleo-n4`, `7a7dc06d` neste; D-N4-6). Cada medida
 levou de 4 a 7 min, em 4 processos e uma por vez, cada uma liberada pelo `pre_run`. As 10 juntas levaram uns 50 min.
 
 ## 2. A resposta: a causa de cada meta
