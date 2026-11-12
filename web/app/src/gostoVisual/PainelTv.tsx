@@ -62,7 +62,7 @@ const Legenda = () => (
   <p className="tvp-legenda" aria-hidden="true">
     <span><i className="tvp-leg"><i className="tvp-nasc" /></i>de nascença</span>
     <span><i className="tvp-leg"><i className="tvp-ver tvp-ver--dir" /></i>de tanto ver</span>
-    <span><i className="tvp-leg"><i className="tvp-car" /></i>do carinho</span>
+    <span><i className="tvp-leg"><i className="tvp-car" /></i>do elogio</span>
     <span><i className="tvp-leg"><i className="tvp-hoje" /></i>hoje</span>
   </p>
 );
@@ -173,7 +173,7 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
       <p className="tvp-fraco" data-testid="tv-tempo">Assistiram juntos: {tempoJunto(s.estado.segundosJuntos)}</p>
       {ligada && s.origem === "tela" && <Privacidade />}
       {cer !== null
-        ? <p className="tvp-fraco tvp-prot" data-testid="tv-prot">O que a TV passa entra no cérebro dele: sete números a cada 10 segundos, no registro. O gosto acima é o do cérebro: o de nascença e o de tanto ver (o carinho ainda não entra nele).</p>
+        ? <p className="tvp-fraco tvp-prot" data-testid="tv-prot">O que a TV passa entra no cérebro dele: sete números a cada 10 segundos, no registro. O gosto acima é o do cérebro: o de nascença e o de tanto ver (o elogio ainda não entra nele).</p>
         : <p className="tvp-fraco tvp-prot" data-testid="tv-prot">Protótipo: o gosto ainda não entra no cérebro do pet.</p>}
     </div>
   );
