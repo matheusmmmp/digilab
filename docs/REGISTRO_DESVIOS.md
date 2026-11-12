@@ -738,6 +738,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-12 — GOSTO_VISUAL, GV3b: o adendo da GV3 com o enjoo ligado (Claude Code, Opus 5.5, branch `v3-gosto-visual-gv3b`)](registro/2026-11.md)
 - [2026-11-12 — CONTA: o anúncio que destrava a função paga e a análise por posição (Claude Code, Opus 5.5, branch `v3-conta-anuncios`)](registro/2026-11.md)
 - [2026-11-12 — CONTA: as CN-15 a CN-18 decididas pela recomendação (Claude Code, Opus 5.5, branch `v3-conta-anuncios`)](registro/2026-11.md)
+- [2026-11-12 — UX_TELA_PET, a prancha da conta: entrar e primeiro acesso (Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-conta-pranchas`)](registro/2026-11.md)
 - [2026-11-12 — GOSTO_VISUAL: a TV no jogo, as decisões A a E e o enjoo ligado (Claude Code, Opus 5.5, branch `v3-gosto-visual-tv-jogo`)](registro/2026-11.md)
 - [2026-11-12 — CONTA: a comparação dos provedores de nuvem (Claude Code, Opus 5.5, branch `v3-conta-hospedagem`)](registro/2026-11.md)
 - [2026-11-12 — BOLA_BRINCAR (BB2), a junção com a v32 (Claude Code, Opus 5.5, branch `v3-bola-bb2`)](registro/2026-11.md)
