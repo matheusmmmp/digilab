@@ -33,14 +33,17 @@ unidades de hoje nao muda). O inato e o W0[olhar].z (`ConfigOlhar.w0_olhar`: a u
 novidade da linha (`w0_prox`, `w0_nov`), o incentivo e o G da classe `tela` vezes a proximidade (P1), o habito e a linha H[olhar] (P2) e o
 termo novo `gosto` (so com a subchave, em todas as unidades: 0 fora da TV que o pet ja olhava), que o M-ADAPT entrega pronto. Desligada,
 nenhuma unidade nem termo novo.
+**O convite do lance do dono** (TAREFA_V3_BOLA_BRINCAR, BB-4; a `ConfigLanceDono` ligada): a entrada `bola_do_dono` (0 ou S, o M-ADAPT a
+monta) soma mul(w_bola_do_dono, bola_do_dono) ao inato do brincar (todas as unidades do brincar: a da bola a vista ou, sem ela, a sem alvo).
+Fica fora do z (CARACTERISTICAS_DIGIBRAIN e o W0 nao mudam). Desligada, nenhum termo.
 **O enjoo** (D-GV-ENJOO-CER; so com o olhar e a `ConfigEnjooTela` ligada): todas as unidades ganham o termo `enjoo` (0 fora das unidades
 de olhar), que o M-ADAPT entrega pronto por TV: -mul(w_enjoo, o enjoo lembrado da TV). Desligado, nenhum termo novo.
 Sem estado e sem rng."""
 from __future__ import annotations
 
 from ..config import (CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTO_OLHAR, COMPORTAMENTOS_DIGIBRAIN, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS,
-                      CONFIG_FALA_UNIDADES, CONFIG_OLHAR, CONTEUDOS_FALA, RECEPTORES_DIGIBRAIN, TERMO_DO_CONTEUDO, ConfigDigibrain,
-                      ConfigDigibrainInatos, ConfigFalaUnidades, ConfigOlhar)
+                      CONFIG_FALA_UNIDADES, CONFIG_LANCE_DONO, CONFIG_OLHAR, CONTEUDOS_FALA, RECEPTORES_DIGIBRAIN, TERMO_DO_CONTEUDO, ConfigDigibrain,
+                      ConfigDigibrainInatos, ConfigFalaUnidades, ConfigLanceDono, ConfigOlhar)
 from ..modelo_mundo import raiz_inteira
 from ._comum import chave_unidade, mul, phi
 from .plast import linha_da_opcao
@@ -53,8 +56,12 @@ class Impulso:
     """o M-IMPULSO (docstring do modulo)"""
 
     def __init__(self, inatos: ConfigDigibrainInatos | None = None, cfg_digibrain: ConfigDigibrain | None = None,
-                 cfg_fala: ConfigFalaUnidades | None = None, cfg_olhar: ConfigOlhar | None = None) -> None:
+                 cfg_fala: ConfigFalaUnidades | None = None, cfg_olhar: ConfigOlhar | None = None,
+                 cfg_lance: ConfigLanceDono | None = None) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
+        self.cl = cfg_lance or CONFIG_LANCE_DONO
+        if not isinstance(self.cl, ConfigLanceDono):
+            raise TypeError(f"M-IMPULSO: cfg_lance e uma ConfigLanceDono: {self.cl!r}")
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         self.cf = cfg_fala or CONFIG_FALA_UNIDADES
         if cfg_olhar is not None and not self.cd.olhar:
@@ -142,13 +149,14 @@ class Impulso:
 
     def unidades(self, sens: dict, afeto: dict, contexto: dict, plast, memoria: dict | None, drives: tuple,
                  lembranca: tuple | None = None, facetas: tuple | None = None, gosto: dict | None = None,
-                 enjoo: dict | None = None) -> tuple[list[dict], list]:
+                 bola_do_dono: int | None = None, enjoo: dict | None = None) -> tuple[list[dict], list]:
         """as unidades da decisao com os termos e a ativacao, e o z. `lembranca` = (o termo da M4, o `casa` do M-MEM) ou None; so com a
         `memoria_autobio` as unidades ganham o termo `lembranca` (L nas que casam com o episodio lembrado, 0 nas outras). `facetas` = (os
         valores das tres facetas, as classes de comida que ja tem episodio positivo); so com a `facetas_mem` as unidades ganham o termo
         `faceta` (6.2: cautela no `comer` de classe sem episodio positivo, apego no `chamar_atencao`, ousadia no `explorar` com alvo fora
         da vista: o lugar lembrado e o cheiro). `gosto` (so com a subchave `olhar`) = {id da TV: o termo `gosto` da unidade de olhar dela}
-        (vazio se o pet nao olhava); com a subchave, todas as unidades ganham o termo `gosto` e as de olhar vem no fim"""
+        (vazio se o pet nao olhava); com a subchave, todas as unidades ganham o termo `gosto` e as de olhar vem no fim. `bola_do_dono` (so
+        com a `ConfigLanceDono` ligada, BB-4) = a entrada do convite, 0 ou S: soma mul(w_bola_do_dono, bola_do_dono) ao inato do brincar"""
         S, a_max = self.S, self.p.a_max
         if (gosto is not None) != (self.co is not None):
             raise RuntimeError("M-IMPULSO: o termo gosto vem so com a subchave olhar, e com ela sempre")
@@ -156,6 +164,12 @@ class Impulso:
             raise RuntimeError("M-IMPULSO: o termo enjoo (D-GV-ENJOO-CER) so com a subchave olhar")
         z = self.contexto_z(sens, afeto, contexto)
         inato_b = {b: sum(mul(w, zj, S) for w, zj in zip(self.w0[b], z) if w) for b in COMPORTAMENTOS_DIGIBRAIN}
+        if (bola_do_dono is not None) != self.cl.ligada:
+            raise RuntimeError("M-IMPULSO: a entrada bola_do_dono vem so com a ConfigLanceDono ligada, e com ela sempre")
+        if bola_do_dono is not None:                  # o convite do lance do dono (BB-4): so o inato do brincar
+            if bola_do_dono not in (0, S):
+                raise ValueError(f"M-IMPULSO: bola_do_dono e 0 ou S: {bola_do_dono!r}")
+            inato_b["brincar"] += mul(self.cl.w_bola_do_dono, bola_do_dono, S)
         habito_b = {b: plast.habito(b, z) for b in COMPORTAMENTOS_DIGIBRAIN if not (self.cd.fala_unidades and b == FALA)}
         fala = self.cd.fala_unidades
         if fala:

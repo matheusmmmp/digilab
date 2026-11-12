@@ -7,7 +7,7 @@
    Os tempos sao da vista: PROPOSTO, SEM FONTE. */
 import type { ClipeReacao } from "../../atlas.ts";
 import { CAT, type Motor } from "../../../motor/index.ts";
-import { registrarMomentoRosto } from "./reacao.ts";
+import { REACAO, registrarMomentoRosto } from "./reacao.ts";
 import { emitirBipe, emitirSom, emitirVoz } from "../../somEventos.ts";
 
 /** o clipe de acao que um momento toca uma vez */
@@ -29,6 +29,8 @@ export const MOMENTOS = {
   acordarMs: 1500, perdidoMs: 2000, podreMs: 2000, vazioMs: 2000,
   /** o pet dormindo vira de lado quando o dono tenta pegar: quanto dura */
   viraMs: 600,
+  /** o lance do dono que o pet recusou (BOLA_BRINCAR, BB-9): quanto dura o rosto da recusa */
+  recusaBolaMs: 2000,
 } as const;
 
 /** o que a vista le do motor a cada quadro */
@@ -164,5 +166,77 @@ export const motivoAgora = (): string | null => tocando?.motivo ?? null;
 /** os rostos que um momento usa (para o teste conferir que existem em CLIPES_REACOES) */
 export const ROSTOS_DOS_MOMENTOS: readonly ClipeReacao[] = ["Cansado", "Triste", "Recusa"];
 
+/* ------------------------------------------------------------------ a bola do dono (docs/TAREFA_V3_BOLA_BRINCAR.md, BB-9; a etapa BB3)
+   O motor ja decidiu tudo: o Brincar do dono jogou a bola (o `lances` do Mundo, BB-1), e o pet chutou (uma rolagem nova) ou nao, dentro da janela
+   do convite (`janela_convite_ticks`, BB-4). A vista so mostra: o som do lance, o som do chute com a voz contente, e, se a janela passou sem chute,
+   o rosto da recusa (Cansado com a energia baixa, senao Recusa; o momento de hoje do emburrar e do cansado). So vista, como o resto do arquivo. */
+
+/** um lance do motor, como a vista o le (o `Lance` do Mundo): o tick (relogio do mundo) e onde a bola caiu (subunidades) */
+export interface LanceLido { tick: number; para: readonly [number, number] }
+/** o que a vista le do mundo para a bola a cada quadro */
+export interface EntradaBola {
+  chave: string;
+  /** os lances do mundo (null sem o lance ligado: o pet de antes da v30) */
+  lances: readonly LanceLido[] | null;
+  /** os ticks (relogio do mundo) das rolagens da bola, em ordem */
+  rolagens: readonly number[];
+  /** o tick de agora no relogio do mundo */
+  tickMundo: number;
+  /** a janela do convite (ticks) */
+  janela: number;
+  /** a energia do pet (0..1), para o rosto da recusa */
+  energia: number;
+  dormindo: boolean;
+  /** o cerebro recebe o convite (o modular)? Com o A (BB-6) o pet nao foi convidado, e nao ha recusa a mostrar */
+  convidado: boolean;
+}
+/** o que aconteceu desde a ultima olhada: o lance novo (para o arco), se houve chute, e o rosto da recusa */
+export interface SaidaBola { lance: LanceLido | null; chutou: boolean; recusa: ClipeReacao | null }
+
+let vistoBola: { chave: string; lances: number; rolagens: number } | null = null;
+/** quantos lances, chutes e recusas a vista mostrou desde a ultima troca de pet (o e2e le por window.__digilab.bolaVista) */
+let contaBola = { lances: 0, chutes: 0, recusas: 0 };
+export const bolaVista = (): { lances: number; chutes: number; recusas: number } => ({ ...contaBola });
+/** o lance que ainda espera o chute (o tick dele no relogio do mundo) */
+let esperaChute: number | null = null;
+
+/** a rolagem do tick `r` responde ao lance do tick `l`, na janela do convite? */
+export const chuteNaJanela = (l: number, r: number, janela: number): boolean => r >= l && r < l + janela;
+
+/** olha o mundo e diz o que a bola fez desde a ultima olhada; emite o som do lance, o do chute e a voz, e registra o rosto da recusa. A primeira
+    olhada e a troca de pet nao contam. Idempotente no mesmo estado */
+export function vigiarBola(e: EntradaBola, agora: number): SaidaBola {
+  for (const k of ["tickMundo", "janela", "energia"] as const) if (!Number.isFinite(e[k])) throw new Error(`vigiarBola: ${k} nao finito`);
+  if (!(e.janela > 0)) throw new Error(`vigiarBola: janela invalida ${e.janela}`);
+  const nl = e.lances?.length ?? 0, nr = e.rolagens.length, v = vistoBola;
+  vistoBola = { chave: e.chave, lances: nl, rolagens: nr };
+  const saida: SaidaBola = { lance: null, chutou: false, recusa: null };
+  if (!v || v.chave !== e.chave) { esperaChute = null; contaBola = { lances: 0, chutes: 0, recusas: 0 }; return saida; }
+  if (nl > v.lances) {
+    const l = e.lances![nl - 1]!;
+    saida.lance = l;
+    esperaChute = l.tick;
+    contaBola.lances++;
+    emitirSom("cuidado_toque");                       /* o gesto do dono que joga a bola */
+  }
+  if (nr > v.rolagens) {
+    saida.chutou = true;
+    contaBola.chutes++;
+    emitirSom("treino_alvo"); emitirVoz("contente");  /* a batida na bola e o pet contente */
+    if (esperaChute !== null && e.rolagens.slice(v.rolagens).some(r => chuteNaJanela(esperaChute!, r, e.janela))) esperaChute = null;
+  }
+  if (esperaChute !== null && e.tickMundo >= esperaChute + e.janela) {
+    esperaChute = null;
+    if (e.convidado && !e.dormindo) {
+      const r: ClipeReacao = e.energia < REACAO.energiaBaixa ? "Cansado" : "Recusa";
+      registrarMomentoRosto(r, agora, MOMENTOS.recusaBolaMs);
+      emitirVoz(r === "Cansado" ? "bocejo" : "resmungo");
+      saida.recusa = r;
+      contaBola.recusas++;
+    }
+  }
+  return saida;
+}
+
 /** so para os testes */
-export function esquecerMomentos(): void { visto = null; fila = []; tocando = null; viraDesde = -1e9; noCorpo = null; }
+export function esquecerMomentos(): void { visto = null; fila = []; tocando = null; viraDesde = -1e9; noCorpo = null; vistoBola = null; esperaChute = null; contaBola = { lances: 0, chutes: 0, recusas: 0 }; }
