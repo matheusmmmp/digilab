@@ -34,6 +34,7 @@ import { AFASTAR_MAX, BATER_BOLA_MS, duracaoPetViagem, CAMERAS, COBERTO_MS, GOLP
   RAZAO_MAX, TEXEL_ALVO, TREINO_MS, type CameraHabitat } from "./constantes.ts";
 import { CURVA, type CenaIlha, type Objetos, cobrirFundo } from "./cena.ts";
 import { estiloDe, type Estilo } from "./estilos.ts";
+import { Esmaecer } from "./transparente.ts";
 import { dobrarY, lugarNoPonto, paraMundoCel, paraTelaNdc, type CameraLida, type Dobra } from "./curva.ts";
 import { fimDaIlha, type FimDaIlha } from "./fimDaIlha.ts";
 import { ilhaDe, type Ilha } from "./grade.ts";
@@ -111,6 +112,7 @@ class VistaIlha {
   private readonly vLugar = new THREE.Vector3();
   private rectCanvas = { left: 0, top: 0, width: 1, height: 1 };
   private objetos: Objetos | null = null;
+  private esmaecer: Esmaecer | null = null;
   /** a qualidade caiu (regra 10): sem vento, metade da grama e pixelRatio 1 */
   private baixa = false;
   private ppu = 1;              // pixels do canvas por unidade do mundo na distancia do pet
@@ -259,6 +261,8 @@ class VistaIlha {
     const [o] = await Promise.all([this.estilo.objetos(this.ilha), this.itens.carregar(document.baseURI)]);
     this.objetos = o;
     this.cenaIlha.cena.add(o.grupo);
+    /* o que tapa o pet fica transparente (transparente.ts; docs/TAREFA_V3_MOITA_NINHO.md) */
+    this.esmaecer = o.tapaveis?.length ? new Esmaecer(o.grupo, o.tapaveis) : null;
     /* os modelos 3D dos lugares (lugares.ts) chegaram: o marcador provisorio de cada um sai, e as trancas se aplicam de novo (aos modelos e ao saco
        gerado, que entrou agora) */
     for (const id of o.lugaresRaiz?.keys() ?? []) if (id === "portao" || id === "barraca") this.marcadores.tirar(id);
@@ -771,6 +775,12 @@ class VistaIlha {
       ppu, pxPorTexel, yPe, canvas: [this.renderer.domElement.width, this.renderer.domElement.height],
       razao: this.renderer.getPixelRatio(), reduzido, noite, golpe: cor.golpe, andandoVista: cor.andando, suspenso, olharPara,
     });
+    /* o que tapa o pet em foco (o do grupo inclusive) fica transparente; com "reduzir movimento", na hora */
+    if (this.esmaecer) {
+      const dobra = this.dobra, c = this.camera.position;
+      this.esmaecer.quadro([c.x, c.y, c.z], [this.petCel[0], yPe, this.petCel[1]], (y, x, z) => dobrarY(y, z, dobra, x), dtMs, reduzido);
+      CENA.tapando = this.esmaecer.transparentes;
+    }
     this.desenharIrmaos(agora, quadro, dtMs, reduzido, noite);
     /* o cantinho da TV: a tela, e se o pet esta sentado (o sinal da reacao e do PalcoPet, no lugar dos emotes) */
     this.cantinho?.quadro({ agora, reduzido, sentado: this.tvSentado && !this.naMao });
