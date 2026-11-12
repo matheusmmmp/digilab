@@ -2,7 +2,7 @@
 
 **Status:** as **RC-1 a RC-4 estão DECIDIDAS** pelo Matheus em 2026-11-12, pela recomendação e sem mudança ("Sim, segue e mergeia"). Junta numa ordem só as etapas dos planos já decididos; não decide nada novo de produto. A ordem, os prazos e os custos
 são **PROPOSTOS, SEM FONTE**; os prazos são em semanas de trabalho do projeto, não em datas. As decisões RC-1 a RC-4 (seção 7) são só
-sobre a ordem.
+sobre a ordem. **As RC-5 a RC-8** (a integração, seção 8, e o plano de desenvolvimento, seção 9, de 2026-11-12) são PROPOSTAS.
 
 **Origem:** o Matheus, em 2026-11-12: "Como começar essa estrutura toda, monte um roadmap para projeção dessa arquitetura".
 
@@ -21,8 +21,8 @@ sobre a ordem.
 |---|---|
 | o jogo | pronto para um jogador, no navegador; o save no `localStorage` |
 | as decisões | todas tomadas: CN-1 a 18, CH-1 a 7, PI-1 a 9, MMO-1 a 19, UX-CN-1 a 6 |
-| o que já tem código | a MMO0 (a paridade Chrome × Node), a MMO1 (a conta dos pontos), a PI0 (o CI enxuto) |
-| as pranchas | a conta (entrar, primeiro acesso, ajustes, apagar) e a página de entrada, aprovadas; faltam as do save na nuvem (a tela 3, levar o pet, e a tela 5, os estados) |
+| o que já tem código | a MMO0 (a paridade Chrome × Node), a MMO1 (a conta dos pontos), a PI0 (o CI enxuto, #897), a CN0 (a medida do save, #903), a PI2 (a licença e os canários, #904) |
+| as pranchas | **aprovadas:** as sete telas da conta (`docs/PLANO_UX_CONTA.md`, UX-CN-1 a 6: a linha Conta nos Ajustes, Entrar, os estados de Entrar, o primeiro acesso, trocar o apelido, o perfil, apagar) e **a página de entrada A**, a clara, de laboratório (`docs/pranchas/ux-pagina-inicial/`, escolhida em 2026-11-12). **Faltam:** as do save na nuvem (a tela 3, levar o pet, e a tela 5, os estados) |
 | o servidor | só o `servidor/servidor_local.py`, na máquina do Matheus |
 | o repositório | **público**; a troca para privado (PI1) espera o Matheus |
 
@@ -32,7 +32,7 @@ Cada fase termina num **portão**: o critério que precisa valer antes da próxi
 
 ```mermaid
 flowchart LR
-  F0["F0 · A base<br/>PI1 · PI2 · CN0 · MMO2"] --> F1["F1 · O servidor<br/>CN1 · CN5"]
+  F0["F0 · A base<br/>PI1 · PI2 ✓ · CN0 ✓ · MMO2"] --> F1["F1 · O servidor e a página<br/>CN1 · CN5 · a página de entrada"]
   F1 --> F2["F2 · A conta<br/>CN2 · CN4 · PI3"]
   F2 --> F3["F3 · O save na nuvem<br/>CN3"]
   F3 --> F4["F4 · Os convidados<br/>a medida"]
@@ -47,18 +47,19 @@ flowchart LR
 | etapa | o que entrega | quem | depende de |
 |---|---|---|---|
 | **PI1** | o repositório privado e o teto de gasto do Actions (PI-2: US$ 20 por mês) | **o Matheus**, nas configurações do GitHub | a PI0 (na `main`) |
-| **PI2** | o `LICENSE` "todos os direitos reservados", o aviso de autoria no bundle, os canários, o teste que falha com um `.map` no `dist/` | uma sessão | nada |
-| **CN0** | a medida dos saves do jogo web: o tamanho do log por dia de jogo, comprimido e não; a passada chave a chave do `localStorage` (a seção 5.4 do plano da conta); o que o tempo faz entre fechar e abrir | uma sessão | nada |
+| **PI2** ✓ | o `LICENSE` "todos os direitos reservados", o aviso de autoria no bundle, os canários, o teste que falha com um `.map` no `dist/` | **na `main` (#904)** | — |
+| **CN0** ✓ | a medida dos saves: um dia de jogo manda de 0,6 a 23 kB cru (de 0,2 a 1,6 kB em brotli); as 37 chaves e mais três com destino; o pet não envelhece com o jogo fechado (`docs/RESULTADO_V3_CONTA_CN0.md`) | **na `main` (#903)** | — |
 | **MMO2** | o marco do nível 10 e o nível no registro do Tamer (a versão nova do Tamer) | a frente MMO | os Bits na `main` (#765) |
 | as pranchas que faltam | a tela 3 (levar o pet para a conta) e a tela 5 (os estados: sincronizado, offline, "aberto no outro aparelho", a escolha da história) | a frente UX | nada |
 
 **Portão F0:** o repositório privado com o CI andando; a CN0 diz o tamanho do log e fecha a lista do que sincroniza; as pranchas das telas 3
 e 5 aprovadas. **As quatro etapas correm em paralelo**, cada uma na sua sessão.
 
-### F1 · O servidor · 2 a 3 semanas
+### F1 · O servidor e a página de entrada · 2 a 3 semanas
 
 | etapa | o que entrega | quem | depende de |
 |---|---|---|---|
+| **a página de entrada (a tela 6, adiantada da CN6)** | a página A em código, estática, no Cloudflare Pages, na raiz do domínio; "Começar agora" leva ao jogo, sem conta; o "Já tenho conta: entrar" fica escondido até a F2 (RC-5) | uma sessão (a frente UX, que fez a prancha) | a prancha A aprovada; o domínio (a CN5) para publicar |
 | **CN1** | o servidor Node 24 + Hono (em `servidor_web/`, PROPOSTO), com as rotas do jogo e a `/api/fala` portada para o SDK TS, com as regras do `servidor/CLAUDE.md` (o catálogo fechado, o teto de gasto); roda local e na VPS | uma sessão | F0 |
 | **CN5, a parte da conta da AWS** | a conta da AWS, o Lightsail de 2 GB em São Paulo, o domínio, a Cloudflare na frente (o DNS, o Pages para o build, o R2 para os assets), o Sentry e o Better Stack; os preços da seção 8 do plano da hospedagem conferidos no dia | **o Matheus** contrata; uma sessão monta o deploy pelo CI | a CN1 rodando local |
 
@@ -113,7 +114,7 @@ As etapas do `docs/PLANO_V3_MMO.md`, sobre a conta da F2. Cada uma com a sua pra
 
 | etapa | o que entrega | quem |
 |---|---|---|
-| **CN6** | as páginas públicas (a página de entrada, a prancha já aprovada), os termos de uso e a política de privacidade | uma sessão escreve; **o Matheus** aprova |
+| **CN6** | as outras páginas públicas: os termos de uso, a política de privacidade e os créditos, ligados do rodapé da página de entrada (que já entrou na F1) | uma sessão escreve; **o Matheus** aprova |
 | **a revisão da LGPD** | o consentimento, os menores (CN-10), a transferência internacional | **quem entende da lei**; o Matheus contrata |
 | **PI4** | o registro no INPI (R$ 210, o certificado ICP-Brasil); os termos contra a raspagem | **o Matheus** |
 | **os ambientes** | o de produção separado do de teste (CH-7 previa um só até aqui); uma segunda VPS ou o mesmo Lightsail maior | **o Matheus** contrata; uma sessão monta |
@@ -176,3 +177,93 @@ Só sobre a ordem; o resto já está decidido nos planos. **Todas DECIDIDAS** pe
 - **RC-3 (DECIDIDA). A F6 começa no papel durante a F3** (pedir a revisão da LGPD e o certificado do INPI). Custo de errar: baixo.
 - **RC-4 (DECIDIDA). Abrir para fora só depois do portão F6,** mesmo que o código esteja pronto antes. Custo de errar: alto, se abrir sem a revisão
   da LGPD e sem os termos (a CN-10 e a MMO-4 já pediam isso).
+
+**As RC-5 a RC-8** vêm da seção 8 (a integração), pedida pelo Matheus em 2026-11-12. **PROPOSTAS.**
+
+- **RC-5. A página de entrada sobe na F1,** antes da conta, com o "entrar" escondido até a F2. A outra opção é esperar a CN6, como estava.
+  Custo de errar: baixo. Ela é estática e já aprovada; publicar cedo dá o endereço para os convidados e testa o Pages e o domínio.
+- **RC-6. Os endereços:** a página na raiz do domínio, o jogo em `/jogo/` (os dois no Pages), a API em `api.` (o Lightsail, atrás da
+  Cloudflare) e os assets em `assets.` (o R2). A outra opção é a API na mesma origem, em `/api/`, por um Worker que repassa para o
+  Lightsail. Custo de errar: médio. O subdomínio é o caminho comum e não precisa de Worker; a mesma origem evita o CORS, mas põe um Worker
+  no meio de toda chamada.
+- **RC-7. O save do servidor local para o domínio:** pelo **exportar e importar que o jogo já tem** (`web/app/src/importar.ts`; Ajustes >
+  Registro > Exportar pet), com um aviso na primeira abertura do jogo no domínio novo. A outra opção é uma ferramenta própria de mudança.
+  Custo de errar: médio. Sem aviso, o convidado abre o jogo no domínio e acha que perdeu o pet, porque o `localStorage` é por endereço.
+- **RC-8. O "entrar" da página de entrada abre o jogo já na tela Entrar** (os Ajustes > Conta > Entrar, a tela 2 da prancha da conta),
+  por um parâmetro no endereço do jogo. A outra opção é a página ter a sua própria tela de login. Custo de errar: médio. Uma tela de login
+  fora do jogo duplica a tela aprovada e contraria a CN-1 (a conta mora nos Ajustes).
+
+## 8. A integração: como as peças se ligam
+
+### 8.1 Os endereços (RC-6, PROPOSTO)
+
+| endereço | o que serve | onde | da decisão |
+|---|---|---|---|
+| `dominio/` | a página de entrada A | Cloudflare Pages | CH-3, RC-5 |
+| `dominio/jogo/` | o build do jogo (`npm run build`) | Cloudflare Pages | CH-3 |
+| `dominio/termos`, `/privacidade`, `/creditos` | as páginas públicas | Cloudflare Pages | CN6 |
+| `api.dominio` | o servidor Node + Hono: `/auth/*`, `/conta/*`, `/sync/*`, `/fala`, depois `/ranking/*` | o Lightsail em São Paulo, com o DNS na Cloudflare (o proxy ligado) | CH-1, CH-2, CN1 |
+| `assets.dominio` | o atlas, os sons, os pacotes, por URL assinada | o R2 | CH-3, CN-9 |
+
+O nome do domínio é do Matheus (a CN5). **O cookie da sessão** fica em `api.dominio`, com `SameSite=Lax`: a página e o jogo são do mesmo
+site, então o cookie vai junto nas chamadas do jogo para a API (com o CORS aberto só para `dominio`).
+
+### 8.2 O caminho do jogador
+
+```mermaid
+sequenceDiagram
+  participant J as Jogador
+  participant P as Página de entrada (dominio/)
+  participant G as Jogo (dominio/jogo/)
+  participant A as API (api.dominio)
+  participant O as Google ou GitHub
+  J->>P: abre o endereço
+  alt Começar agora (sem conta, CN-1)
+    P->>G: /jogo/ (o save no localStorage, como hoje)
+  else Já tenho conta: entrar (RC-8)
+    P->>G: /jogo/?entrar (abre os Ajustes > Conta > Entrar)
+    G->>A: /auth/google ou /auth/github
+    A->>O: o OAuth
+    O->>A: a volta (/auth/callback)
+    A->>G: o cookie da sessão; volta ao jogo
+    G->>A: /conta (primeiro acesso: o apelido, a idade, o aceite)
+    G->>A: /sync (a vez do pet e os eventos, CN3)
+  end
+```
+
+### 8.3 O que muda para quem já joga
+
+Hoje o jogo abre pelo servidor local (`http://localhost:8765/v1/web/dist/`) ou pelo túnel. **O `localStorage` é por endereço:** no
+domínio novo, o jogo abre vazio. O caminho (RC-7) é exportar o pet no endereço antigo e importar no novo, com o que o jogo já tem. Na
+primeira abertura no domínio, um aviso diz isso. Depois da CN3, a conta resolve de vez: o pet fica na nuvem.
+
+## 9. O plano de desenvolvimento: o que começa já
+
+### 9.1 Pode começar hoje (nada depende de contratar)
+
+| o quê | quem | o que entrega | depende de |
+|---|---|---|---|
+| **a página de entrada em código** | a frente UX | a página A estática, com o "Começar agora" e o rodapé, pronta para o Pages; roda local com `npm run dev` | a prancha A (aprovada) |
+| **o esqueleto do servidor (CN1, parte local)** | uma sessão nova | `servidor_web/` (PROPOSTO) com o Hono, a `/fala` portada para o SDK TS com o catálogo fechado e o teto, um teste por rota, e o `npm run dev` local; sem conta e sem nuvem | nada |
+| **as pranchas das telas 3 e 5** | a frente UX | levar o pet para a conta; os estados do save no HUD; a escolha da história | nada |
+| **a MMO2** | a frente MMO | o nível 10 no registro do Tamer | nada |
+| **a preparação do Matheus** | **o Matheus** | o repositório privado e o teto (PI1); escolher o domínio; abrir as contas da AWS e da Cloudflare; a chave da API da Anthropic só para o servidor | nada |
+
+### 9.2 A ordem dos PRs, depois
+
+Cada linha é um PR; o tamanho é PROPOSTO (P: um dia, M: uns três dias, G: uma semana ou mais).
+
+| ordem | o PR | tamanho | depende de |
+|---|---|---|---|
+| 1 | a página de entrada em código | M | — |
+| 2 | o esqueleto do servidor e a `/fala` portada | M | — |
+| 3 | o deploy: o Pages (a página e o jogo), o Lightsail, o DNS, o CI que publica da `main`, o Sentry e o Better Stack | M | o domínio e as contas (o Matheus) |
+| 4 | o aviso da mudança de endereço no jogo (RC-7) | P | 3 |
+| 5 | o login: o OAuth, a sessão, o SQLite com o Litestream | G | 3; os apps OAuth (o Matheus) |
+| 6 | as telas da conta no jogo (as sete da prancha), com o servidor falso no e2e | G | 5 |
+| 7 | o "entrar" da página de entrada (RC-8) | P | 6 |
+| 8 | a cota da fala, o Turnstile, as URLs assinadas, o `robots.txt` e a borda (CN4, PI3) | M | 5 |
+| 9 | o save na nuvem (CN3), atrás de chave | G (o maior) | 6; as pranchas 3 e 5 |
+| 10 | o MMO3 em diante (a F5) | G, vários | 5 |
+
+**Em paralelo:** 1 e 2 já; 3 quando o Matheus tiver o domínio; 8 junto com 6; 9 e 10 juntos (RC-2).
