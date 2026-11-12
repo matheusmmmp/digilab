@@ -141,6 +141,23 @@ saem byte a byte. Testes novos em `tests/test_gosto_visual_corpo.py`. As escolha
 modular, que deixa de fora os campos vazios da tela na `PercepcaoCorpo` (os gabaritos da web saem byte a byte, sem regravar).
 Fica para a P1c: a TV, o motor chamando o `sentir_tela` (zeros sem olhar), o assistir e a novidade pelo corte.
 
+## Resultado da etapa P1c (2026-11-11, Claude Code, Opus 5.5, branch `v3-gosto-visual-p1c`)
+
+O mundo ganhou a TV, atrás da `ConfigTV` (desligada; `digilab/config.py`, status em `config.PARAMETROS_TV`, todos PROPOSTOS, SEM FONTE),
+passada ao `MotorMundo` como `cfg_tv`, e o `MotorCorpo` ganhou a `cfg_tela` (a `ConfigTela` do P1b). As duas vão juntas, só com o mundo
+físico, um pet fora do grupo e o corpo na frente; com uma só, falha alto. A TV é um objeto do `Mundo` numa célula da casa (`digilab/tv.py`)
+com duas fontes, uma por vida: a **grade** (a TV do jogo, a única da pesquisa): os perfis e a grade sorteados pela rng própria
+`tv-programas`, que só depende da semente; e o **evento** (o modo livre gravado): o último `sentido_tela` até o tick, desligada antes do
+primeiro. Dois tipos novos no log, `trocar_canal` (o programa vale até o fim do programa da grade) e `sentido_tela` (`fonte|n1|…|n7`, 16
+níveis), que o `reproduzir_mundo` refaz; mal formados, sem a chave ou com a fonte errada, levantam erro. O motor entrega ao corpo, a cada
+tick e a cada percepção, o que a TV passa se o pet olha (zeros se não); chama o `atividade("assistir")` em cada decisão em que o pet olha e
+o `estimulo_novidade(1)` a cada subida do `novidade_tela` acima do corte. O `ResumoTela` (`digilab/tv.py`) é a referência do GV-15 para o
+P1f: a média de 10 amostras em 16 níveis, o evento só na mudança. Desligada, as vidas do gabarito do P1a saem byte a byte. Testes novos em
+`tests/test_gosto_visual_mundo.py`. As escolhas estão em `docs/registro/2026-11.md`, D-GV-P1c-1 a 10; a D-GV-P1c-4 ("o pet olha" é
+provisório: acordado, no ocioso e com a TV no raio da visão) é a que a P1d troca.
+Fica para a P1d: o comportamento `olhar` no lugar do ocioso na regra de quem olha, a TV nos `vistos` (a classe `tela` do M-SENS), o
+`GenomaVisao`, o canal `gosto_visual` e quem chama o `estimulo_agrado_tela`.
+
 ## A TV ligada por padrão no jogo (2026-11-11, Claude Code, Opus 5.5, branch `v3-gosto-visual-padrao`)
 
 Decisão do Matheus (D-GV-PADRAO-1, `docs/registro/2026-11.md`): "Quero que a opção da TV esteja padrão no jogo". No web, a chave do
