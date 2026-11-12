@@ -9,7 +9,7 @@
    quadro. A pausa do acerto (E1) e a camera lenta do nocaute (E5) so mudam o desenho: os passos e o fim sao os mesmos. */
 import { useEffect, useReducer } from "react";
 import {
-  APOIO_LP6, ARENA_POR_ESTAGIO_LP6, LUTA_V23, esquivaDaTabela, CENAS, FORMAS_ARENA, LIGA, VERSAO_V21, arenaDaLuta, RIVAL_LIGA, ehInstalacao, LIMITE_POC_MS, NOME_BOT, NPC, configLutaPoc, criarLutaPoc, formaDaChave, naTabela, nomeForma, passoPoc, sementeDaSerie,
+  APOIO_LP6, APOIO_LP6_3, ARENA_POR_ESTAGIO_LP6, ARENA_POR_ESTAGIO_LP6_3, LUTA_V23, esquivaDaTabela, CENAS, FORMAS_ARENA, LIGA, VERSAO_V21, arenaDaLuta, RIVAL_LIGA, ehInstalacao, LIMITE_POC_MS, NOME_BOT, NPC, configLutaPoc, criarLutaPoc, formaDaChave, naTabela, nomeForma, passoPoc, sementeDaSerie,
   sorteiosPoc, statsNpc, statsRivalArena, type EntradaLutaPoc, type IdCena, type LutaPoc, type ResultadoLutaPoc,
 } from "../motor/index.ts";
 import { lutaPocLigada } from "./lutaPoc.ts";
@@ -64,13 +64,14 @@ export const ladoDesenho = (k: string): LadoDesenhoPoc => {
 };
 
 /** as lutas de um resultado do motor (uma, ou a serie: a Cidadela, a Liga, a Torre), com a mesma entrada que o motor usou (Motor._lutarPoc),
-    o tiro e a esquiva inclusive (os da v23; sem eles o palco refazia outra luta e o fim nao batia) */
+    o tiro e a esquiva inclusive (os da v23; sem eles o palco refazia outra luta e o fim nao batia), e o apoio e a arena por estagio (os da v29) */
 export function lutasDoResultado(r: ResultadoLutaPoc): LutaNaTela[] {
   /* a serie da Cidadela: as lutas que ela tem (as jogadas param na primeira que nao for vitoria) */
   const nSerie = NPC[r.rival] ? arenaDaLuta(r.rival, VERSAO_V21)?.lutas ?? 1 : 1;
   return r.serie.map((s, k) => ({
     entrada: { cena: s.mapa, semente: sementeDaSerie(r.semente, k), a: { forma: r.forma, stats: r.pet, ...(k ? { vida0: s.vida0 } : {}) }, b: { forma: s.contra, stats: s.rivalStats },
-      ...(r.tiro ? { tiro: r.tiro } : {}), ...(r.esquiva ? { esquiva: r.esquiva } : {}) },
+      ...(r.tiro ? { tiro: r.tiro } : {}), ...(r.esquiva ? { esquiva: r.esquiva } : {}),
+      ...(r.apoio ? { apoio: r.apoio } : {}), ...(r.arenaPorEstagio ? { arenaPorEstagio: r.arenaPorEstagio } : {}) },
     esperado: { vencedor: s.vencedor, relogio: s.relogio, passos: s.passos, ko: s.vidaA <= 0 || s.vidaB <= 0 },
     A: ladoDesenho(r.forma), B: ladoDesenho(s.contra),
     /* a Liga tem 6 lutas, a Cidadela 3; a Torre vai ate a primeira que nao for vitoria (o numero de lutas nao aparece) */
@@ -194,7 +195,9 @@ export function fimDoPet(L: LutaPoc, A: LadoDesenhoPoc, B: LadoDesenhoPoc, extra
 /** ?luta_poc=1&palco_poc=<mapa>,<forma do lado azul>,<forma do lado vermelho>,<semente>: uma luta montada direto no nucleo, com o perfil
     canonico de cada forma (statsRivalArena) ou o do NPC (statsNpc), sem pet e sem registro. So com a chave ligada; nada grava.
     LP6-2 (as capturas do golpe de apoio e da elipse por estagio): &palco_lp6=ligadas monta a luta com a tabela da v23 (o tiro, a esquiva e
-    os numeros dela) e as duas chaves da LP6-1 ligadas; &palco_lp6=desligadas, a mesma luta da v23 sem elas (a de hoje, para comparar) */
+    os numeros dela) e as duas chaves da LP6-1 ligadas; &palco_lp6=desligadas, a mesma luta da v23 sem elas (a de hoje, para comparar).
+    LP6-4 (as capturas da elipse nova): &palco_lp6=lp6_3, as duas chaves com os numeros da LP6-3 (o apoio so no Ultimate e no Mega e a elipse
+    1,2/1,4) */
 export function lutaMontadaDoEndereco(busca: string = typeof location !== "undefined" ? location.search : ""): LutaNaTela | null {
   if (!lutaPocLigada()) return null;
   const q = new URLSearchParams(busca).get("palco_poc"); if (!q) return null;
@@ -203,11 +206,12 @@ export function lutaMontadaDoEndereco(busca: string = typeof location !== "undef
   for (const f of [fa, fb]) if (!f || !naTabela(f)) throw new Error(`palco_poc: forma fora da tabela ${f}`);
   const semente = Number(s); if (!Number.isInteger(semente)) throw new Error(`palco_poc: semente inválida ${s}`);
   const lp6 = new URLSearchParams(busca).get("palco_lp6");
-  if (lp6 !== null && lp6 !== "ligadas" && lp6 !== "desligadas") throw new Error(`palco_lp6: use ligadas ou desligadas (${lp6})`);
+  if (lp6 !== null && lp6 !== "ligadas" && lp6 !== "desligadas" && lp6 !== "lp6_3") throw new Error(`palco_lp6: use ligadas, lp6_3 ou desligadas (${lp6})`);
   const T = lp6 ? LUTA_V23 : undefined;
   const st = (k: string) => (NPC[k] ? statsNpc(k, T) : statsRivalArena(k, T));
   const esq = T ? esquivaDaTabela(T) : null;
   const v23 = T ? { ...(T.tiro ? { tiro: T.tiro } : {}), ...(esq ? { esquiva: esq } : {}) } : {};
-  const chaves = lp6 === "ligadas" ? { apoio: APOIO_LP6, arenaPorEstagio: ARENA_POR_ESTAGIO_LP6 } : {};
+  const chaves = lp6 === "ligadas" ? { apoio: APOIO_LP6, arenaPorEstagio: ARENA_POR_ESTAGIO_LP6 }
+    : lp6 === "lp6_3" ? { apoio: APOIO_LP6_3, arenaPorEstagio: ARENA_POR_ESTAGIO_LP6_3 } : {};
   return { entrada: { cena: cena as IdCena, semente, a: { forma: fa, stats: st(fa) }, b: { forma: fb, stats: st(fb) }, ...v23, ...chaves }, esperado: null, A: ladoDesenho(fa), B: ladoDesenho(fb), rotulo: "" };
 }

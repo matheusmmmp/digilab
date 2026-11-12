@@ -82,8 +82,8 @@ const semTrajetoriaFechada = (m: Motor): void => {
 describe("as versoes: o ovo novo nasce na ilha grande", () => {
   test("a v24 e a v23 com o mundo grande; a v23, a v22 e a v21 seguem abrindo", () => {
     expect([VERSAO_PET, VERSAO_V25, VERSAO_V24, VERSAO_V23, VERSAO_V22, VERSAO_V21]).toEqual([27, 25, 24, 23, 22, 21]);
-    expect(VERSOES_PET).toEqual([21, 22, 23, 24, 25, 26, 27]);   // a v26: os dois pets (CO4c); a v27: o sono que segura
-    expect([versaoDoOvo(), versoesQueAbrem()]).toEqual([27, [21, 22, 23, 24, 25, 26, 27]]);   // a v26: os dois pets (CO4c); a v27: o sono que segura
+    expect(VERSOES_PET).toEqual([21, 22, 23, 24, 25, 26, 27, 28, 29]);   // a v26: os dois pets (CO4c); a v27: o sono que segura
+    expect([versaoDoOvo(), versoesQueAbrem()]).toEqual([27, [21, 22, 23, 24, 25, 26, 27, 28, 29]]);   // a v26: os dois pets (CO4c); a v27: o sono que segura
     expect([21, 22, 23, 24, 25, 27].map(v => [ehCerebroTrocavel(v), ehLutaPoc(v)])).toEqual([[true, true], [true, true], [true, true], [true, true], [true, true], [true, true]]);
     /* a v24 luta com a tabela da v23 (a rodada de equilibrio); a v22 e a v21, com a delas */
     expect([21, 22, 23, 24, 25, 27].map(tabelaLuta).map(x => x === tabelaLuta(23))).toEqual([false, false, true, true, true, true]);

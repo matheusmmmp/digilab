@@ -6,7 +6,7 @@
      save, e a mudanca grava o grupo;
    - a chave DOIS_OVOS_LIGADO ligou na CO4d; o ovo de um pet so segue v25, e o pet v25 salvo abre igual (o G-HOJE). */
 import { describe, expect, test } from "vitest";
-import { DOIS_OVOS_LIGADO, ESPECIES, GrupoDoJogo, TPD, VERSAO_PET, VERSAO_V26, sementeDoSegundoJogo } from "../motor/index.ts";
+import { DOIS_OVOS_LIGADO, ESPECIES, GrupoDoJogo, TPD, VERSAO_PET, VERSAO_GRUPO, sementeDoSegundoJogo } from "../motor/index.ts";
 import { CHAVE, lerSave, textoSave, textoSaveGrupo, type Armazenamento } from "../src/save.ts";
 import { focar, iniciarJogo, jogoAtual, mudarMotor, trocarGrupo } from "../src/jogo.ts";
 import { chocarDoisOvos, especieDaSemente, sementeDoBrasao } from "../src/jornada.ts";
@@ -21,7 +21,7 @@ const SEMENTE = (() => { for (let s = 1; ; s++) if (especieDaSemente(s) === ESP)
 describe("os dois ovos", () => {
   test("o primeiro e do brasao, o segundo e surpresa, e os dois nascem com o produto", () => {
     const g = chocarDoisOvos(ESP, "rapida", SEMENTE);
-    expect(g.versao).toBe(VERSAO_V26);
+    expect(g.versao).toBe(VERSAO_GRUPO);
     expect(g.motor("A").especie).toBe(ESP);
     expect(g.motor("B").semente).toBe(sementeDoSegundoJogo(SEMENTE));
     expect(g.motor("B").especie).toBe(especieDaSemente(g.motor("B").semente));
@@ -46,7 +46,7 @@ describe("o save do grupo", () => {
     if (l.tipo !== "ok") throw new Error(JSON.stringify(l));
     expect(l.grupo!.assinatura()).toBe(g.assinatura());
     expect(l.motor).toBe(l.grupo!.motor("B"));
-    expect(JSON.parse(a.dados[CHAVE])).toMatchObject({ semente: SEMENTE, versao: VERSAO_V26, grupo: true, foco: "B" });
+    expect(JSON.parse(a.dados[CHAVE])).toMatchObject({ semente: SEMENTE, versao: VERSAO_GRUPO, grupo: true, foco: "B" });
   });
 
   test("o save malformado abre como erro visivel", () => {
@@ -96,6 +96,6 @@ describe("o jogo com os dois pets", () => {
     expect(j.grupo).toBeNull();
     expect(j.motor.noGrupo).toBe(false);
     expect(() => focar("B")).toThrow(/so os dois pets/);
-    expect(GrupoDoJogo.reproduzir(SEMENTE, VERSAO_V26, []).tick).toBe(chocarDoisOvos(ESP, "rapida", SEMENTE).tick);
+    expect(GrupoDoJogo.reproduzir(SEMENTE, VERSAO_GRUPO, []).tick).toBe(chocarDoisOvos(ESP, "rapida", SEMENTE).tick);
   });
 });
