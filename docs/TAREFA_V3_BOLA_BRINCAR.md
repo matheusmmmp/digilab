@@ -103,3 +103,88 @@ Para mudar depois, se for o caso:
 - **BB-4 (convite × ordem):** a ordem, em que o pet sempre chuta, é mais simples, mas tira a escolha do cérebro e não deixa ver o pet
   emburrado recusar.
 - **BB-5 (um passe por clique × vários passes):** vários passes deixam a brincadeira mais longa, mas exigem decidir quando ela acaba.
+
+## 9. Resultado da BB1 (2026-11-11)
+
+O lance do dono está no Python atrás da `ConfigLanceDono` (desligada): o Brincar do dono com o mundo ligado pega a bola e a joga de 2 a 3
+células do pet (o fluxo `dono-bola` do `Mundo`), o DigiBrain modular decide no mesmo tick e recebe o convite `bola_do_dono` por 30 ticks
+(0 com a fome urgente), com o peso `w_bola_do_dono` = 4 S (PROPOSTO) no inato do brincar. O cérebro A não muda e não recebe o convite. Com a
+chave desligada, as 47 vidas do gabarito de hoje (`tests/gabaritos/lance_dono_de_hoje.json`, gravado no commit a670f7e9, antes da mudança)
+saem byte a byte. O gabarito para a BB2 é o `web/app/test/gabaritos/digibrain_modular_lance_dono.json.gz`
+(`python experiments/exportar_gabarito_digibrain_modular.py --lance`).
+
+**A medida** (`python tests/test_lance_dono.py`): o roteiro do dono que brinca (`tests/gabarito_lance_dono.py`: o Brincar a cada 2 h de jogo
+e a ração no comedouro a cada 6 h; "sem ração", só o Brincar), o braço REL com o sono que segura e o lance (o pet v29), 3 dias. O lance
+elegível é o de primeira decisão (no mesmo tick) sem o reflexo do sono e sem a fome urgente; o chute é uma rolagem da bola na janela; a
+recusa é o elegível sem chute. As três últimas colunas contam as decisões da janela com o reflexo ou a fome urgente, e os chutes nelas.
+
+| semente | roteiro | lances | elegíveis | chutes na janela | recusas | lance com reflexo | lance com fome urgente | decisões com reflexo | com fome urgente | chutes nelas |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 101 | com ração | 35 | 22 | 20 | 2 | 5 | 8 | 10 | 13 | 0 |
+| 101 | sem ração | 35 | 2 | 2 | 0 | 27 | 6 | 51 | 15 | 0 |
+| 202 | com ração | 35 | 24 | 16 | 8 | 2 | 9 | 7 | 16 | 0 |
+| 202 | sem ração | 35 | 2 | 2 | 0 | 30 | 3 | 50 | 16 | 0 |
+| 303 | com ração | 35 | 20 | 18 | 2 | 7 | 8 | 14 | 18 | 0 |
+| 303 | sem ração | 35 | 2 | 2 | 0 | 28 | 5 | 55 | 11 | 0 |
+
+- **G-BB-1 passa, por pouco:** 54 chutes em 66 lances elegíveis com ração (0,82 ≥ 0,8), somando 101, 202 e 303. As 12 recusas são o chamar,
+  o explorar e o dormir sorteados nas duas decisões da janela: o sorteio do M-ARB é proporcional e a ativação satura no `a_max` (4 S), então
+  um peso maior não sobe a taxa (D-BB1-4).
+- **G-BB-2 passa:** nenhuma das 276 decisões da janela com o reflexo do sono ou com a fome urgente chuta.
+- **G-BB-3 passa** no Python: o replay pelo log refaz a vida com o lance (REL e A11) e o grupo de dois REL. A paridade com o TS é a BB2.
+
+Os desvios estão em `docs/registro/2026-11.md` (D-BB1-1 a D-BB1-6).
+
+## 10. Resultado da BB2 (2026-11-12)
+
+O lance do dono está no motor TS (`web/app/motor/`), com a paridade bit a bit com o Python:
+- a `ConfigLanceDono` em `motor/digibrain/constantes.ts`; a entrada `bola_do_dono` no M-IMPULSO, o gancho `bolaDoDono` e o motivo `lance`
+  no M-ADAPT;
+- o fluxo `dono-bola` e os `lances` no `MundoPartilhado`; no laço com o mundo, a opção `lance`: o Brincar do dono joga a bola, o convite vai
+  ao cérebro antes de cada decisão, e o modular decide no mesmo tick; o cérebro A não tem o gancho (só a bola se mexe);
+- a falha alta quando o laço e o cérebro divergem na chave, nos dois sentidos.
+
+**As versões (BB-7, D-BB2-1):** a v29 já era a da LP6 na `main`, então o lance ficou com a **v30** (a v27 com o lance; o ovo de um pet, o
+`VERSAO_PET`) e a **v31** (a v29, o grupo de hoje, com o lance; o ovo do brasão, o `VERSAO_GRUPO`). O predicado novo é o `nasceComLance`. Os
+pets v21 a v29 não mudam.
+
+**A paridade** (`test/lance_dono.test.ts`, contra o `test/gabaritos/digibrain_modular_lance_dono.json.gz`): as 3 vidas, 1 152 decisões (384
+por vida), batem decisão a decisão (a ação, o motivo com o `lance` e a assinatura de cada módulo), com o estado interno no fim, os 21 lances
+e as 40 rolagens da bola.
+
+**A medida no motor do jogo** (o roteiro da BB1 na v30 com o modular, 3 dias; as colunas são as da seção 9):
+
+| semente | lances | elegíveis | chutes na janela | recusas | lance com reflexo | lance com fome urgente | decisões com reflexo | com fome urgente | chutes com reflexo | chutes com fome urgente |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 101 | 35 | 21 | 18 | 3 | 6 | 8 | 11 | 14 | 0 | 0 |
+| 202 | 35 | 22 | 17 | 5 | 3 | 10 | 7 | 16 | 0 | 0 |
+| 303 | 35 | 20 | 17 | 3 | 8 | 7 | 14 | 13 | 0 | 1 |
+
+- **G-BB-1 passa:** 52 chutes em 63 lances elegíveis (0,825 ≥ 0,8).
+- **G-BB-2 falha por um chute:** nenhum chute nas 32 decisões da janela com o reflexo do sono, mas 1 nas 43 com a fome urgente (D-BB2-3): o
+  convite vale 0, e o pet escolheu o brincar sozinho, com a bola perto. Fica para a rodada de equilíbrio.
+- **G-BB-3 passa:** a paridade acima; o `Motor.reproduzir` refaz a vida v30 (a assinatura, os lances e os motivos); o `GrupoDoJogo.reproduzir`
+  refaz o grupo v31, em que cada pet joga e recebe o lance dele no mundo de todos; os grupos v28 e v29 seguem sem o lance.
+
+Os desvios estão em `docs/registro/2026-11.md` (D-BB2-1 a D-BB2-5). A vista e o som (a BB3) não foram tocados.
+
+## 11. Resultado da BB3 (2026-11-12)
+
+A vista e o som do lance estão na ilha 3D (`web/app/src/`), só na vista; o motor não mudou:
+- **o arco** (`src/telas/pet/ilha/arcoBola.ts`, `itens.ts`): no lance novo do `Mundo.lances`, a bola voa do lado da câmera até o ponto do
+  lance, num arco de 650 ms, com a sombra no chão;
+- **o chute** (`vista.ts`): a cada rolagem, o pet desenhado corre até a bola, dá o golpe (o Attack_1) nela e volta; a bola espera o braço
+  chegar para rolar. Era por isso que o golpe não aparecia na bola (D-BB3-2);
+- **o som** (`momentos.ts`, `vigiarBola`): o `cuidado_toque` no lance, o `treino_alvo` e a voz contente no chute;
+- **a recusa**: a janela do convite passa sem chute, e o rosto mostra a Recusa (ou o Cansado, com a energia baixa) por 2 s, só com o modular
+  e com o pet acordado.
+
+**Os testes:** `test/bola_brincar_vista.test.ts` (11 testes: o arco, o chute desenhado, a janela, o lance, o chute e a recusa); a suíte do
+Vitest, 167 arquivos, 1 708 testes passam e 3 pulados; `npm run tipos` limpo. O e2e novo "Brincar joga a bola e o pet chuta" passa (o ovo do
+brasão, o grupo v31 com o modular; o chute na janela no primeiro lance). O `npm run e2e` inteiro passa: 133 testes, no Chrome, porta 8799,
+com o `e2e/dois_pets.spec.ts` ajustado para a v31 (D-BB3-8).
+
+**As capturas** (`docs/capturas_bola_brincar/`): `bola_no_ar_1280.png`, `pet_corre_a_bola_1280.png` e `pet_chuta_1280.png`.
+
+Os desvios estão em `docs/registro/2026-11.md` (D-BB3-1 a D-BB3-8). Fica de fora: a cena de reserva sem WebGL, um som próprio da bola e a
+moita que tapa o pet perto do ninho.
