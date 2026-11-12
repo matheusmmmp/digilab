@@ -47,6 +47,7 @@ import type { ConfigContrato } from "./contrato.ts";
 import { efeitoAcaoPet } from "./estado.ts";
 import { ACOES_DONO_V11, MotorCorpo, estadoNascimentoPy, type EventoCorpo, type PoliticaCorpo } from "./motor_corpo.ts";
 import type { ObservacaoLobos } from "./lobos.ts";
+import type { ConfigEnjooTela } from "./enjoo_tela.ts";
 import {
   Mundo, centroDaCelula, distancia, eventoDeixarComida, eventoLevarPet, eventoMudarIlha, eventoSacudirArvore, lerDeixarComida, lerLevarPet, lerMudarIlha, lerSacudirArvore,
   regiaoDe, tamanhoDoMapa, type OpcoesMundo, type PercepcaoMundo,
@@ -97,7 +98,7 @@ export interface OpcoesLacoMundo {
    *  `mundo=` do MotorMundo do Python). Sem ela, o laco e dono do proprio mundo, com a semente do pet: a vida de hoje */
   parteDoMundo?: (op: OpcoesMundo) => Mundo;
   /** o gosto visual (P1f): o orgao da tela no corpo e a TV no mundo, juntos e ligados (a `cfg_tela` e a `cfg_tv` do Python). Sem ela, nada */
-  tela?: { readonly tela: ConfigTela; readonly tv: ConfigTV };
+  tela?: { readonly tela: ConfigTela; readonly tv: ConfigTV; readonly enjoo?: ConfigEnjooTela };   // `enjoo`: D-GV-ENJOO-CER
 }
 
 const FRUTAS_DO_MUNDO: readonly string[] = ["a", "b", "c"];
@@ -132,7 +133,7 @@ export class MotorCorpoMundo extends MotorCorpo {
       if (tv.escala !== tela.teto_intensidade) throw new Error(`a escala da TV (${tv.escala}) tem de ser o teto_intensidade da tela (${tela.teto_intensidade})`);
       if (opcoes.parteDoMundo !== undefined) throw new TVSemChave("a TV (ConfigTV) roda com um pet, fora do grupo");
     }
-    super(politica, semente, cc, estado, true, opcoes.tela?.tela);
+    super(politica, semente, cc, estado, true, opcoes.tela?.tela, opcoes.tela?.enjoo);
     if (!cc.drives_novos) throw new Error("o laco com o mundo e o do regime `corpo` com os drives novos (a novidade e a atividade)");
     const op: OpcoesMundo = { semente, cfg: opcoes.cfgMundo, bolaNoGolpe: opcoes.bolaNoGolpe ?? false, contrato: opcoes.contrato,
                               ...(opcoes.sacudir !== undefined ? { sacudir: opcoes.sacudir } : {}) };

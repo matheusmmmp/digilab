@@ -6,6 +6,7 @@ import { CANAIS_TELA, RECEPTORES_TELA } from "../tv.ts";
 import { clamp, divArred, ganhoDeTau, integrar, mul } from "./_comum.ts";
 import { INATOS_MODULAR, RECEPTORES_DIGIBRAIN, TICKS_POR_DIA, type ConfigOlhar } from "./constantes.ts";
 import { genomaNaEscala, type GenomaVisao } from "./genoma_visao.ts";
+import { RECEPTOR_ENJOO_TELA, type ConfigEnjooTela } from "../enjoo_tela.ts";
 
 /** a classe da TV (so com a subchave `olhar`; GOSTO_VISUAL, P1f) */
 export const CLASSE_TELA = "tela";
@@ -49,6 +50,7 @@ export interface SaidaSens {
   telas?: LinhaTela[];
   tela_niveis?: Record<string, number> | null;
   tela_novidade?: number | null;
+  tela_enjoo?: number | null;              // o enjoo (D-GV-ENJOO-CER), so com a ConfigEnjooTela ligada
 }
 /** o resumo da luta na Observacao: em inteiros (o rival, o resultado -1, 0, +1, a vida perdida em S e o tick) */
 export interface ResumoLutaSens { rival: string; resultado: number; vida_perdida_s: number; tick: number }
@@ -93,9 +95,11 @@ export class Sens {
   kExpo = 0;
   exposicoes = 0;
   telaPresente: boolean | null = null;
+  /** o enjoo (D-GV-ENJOO-CER): so com o olhar e a ConfigEnjooTela ligada (null desligado) */
+  readonly enjoo: ConfigEnjooTela | null = null;
 
   constructor(cfg: ConfigSens, cfgMundo: ConfigMundoSens, inatos: InatosSens = INATOS_MODULAR, olhar: ConfigOlhar | null = null,
-              genoma: GenomaVisao | null = null) {
+              genoma: GenomaVisao | null = null, enjoo: ConfigEnjooTela | null = null) {
     this.p = inatos;
     this.S = inatos.escala;
     this.cfg = cfg;
@@ -110,6 +114,10 @@ export class Sens {
       [this.otimo, this.largura] = genomaNaEscala(genoma!, this.S, olhar.escala);
       this.desloc = Object.fromEntries(CANAIS_TELA.map(c => [c, 0]));
       this.kExpo = ganhoDeTau(olhar.tau_exposicao, cfg.intervalo_decisao_ticks, this.S);
+    }
+    if (enjoo !== null && enjoo.ligada) {
+      if (olhar === null) throw new Error("M-SENS: o enjoo (ConfigEnjooTela ligada) so com a subchave olhar");
+      this.enjoo = enjoo;
     }
   }
 
@@ -145,13 +153,38 @@ export class Sens {
   }
 
   /** a exposicao: o alvo de cada canal anda para o nivel visto, com o teto do deslocamento (so quando o pet olhou) */
-  expor(niveis: Readonly<Record<string, number>>): void {
+  expor(niveis: Readonly<Record<string, number>>, enjoo: number | null = null): void {
     const co = this.exigirOlhar("expor"), S = this.S;
+    let fator: number | null = null;
+    if (this.enjoo !== null) {                         // o enjoo (D-GV-ENJOO-CER): o passo cai a zero na saturacao
+      this.conferirEnjoo(enjoo);
+      fator = Math.max(0, S - divArred(enjoo! * S, this.enjoo.saturacao_exposicao));
+    } else if (enjoo !== null) throw new Error("M-SENS: o enjoo na exposicao sem a ConfigEnjooTela ligada");
     for (const c of CANAIS_TELA) {
       const alvo = this.otimo[c]! + this.desloc[c]!;
-      this.desloc[c] = clamp(this.desloc[c]! + mul(this.kExpo, niveis[c]! - alvo, S), -co.teto_exposicao, co.teto_exposicao);
+      let passo = mul(this.kExpo, niveis[c]! - alvo, S);
+      if (fator !== null) passo = mul(fator, passo, S);
+      this.desloc[c] = clamp(this.desloc[c]! + passo, -co.teto_exposicao, co.teto_exposicao);
     }
     this.exposicoes += 1;
+  }
+
+  private conferirEnjoo(enjoo: unknown): void {
+    if (!Number.isInteger(enjoo) || (enjoo as number) < 0 || (enjoo as number) > this.S) throw new Error(`M-SENS: o enjoo da tela e inteiro em [0, S]: ${String(enjoo)}`);
+  }
+
+  /** o tedio do enjoo (D-GV-ENJOO-CER), em [0, peso_tedio]: 0 ate a saturacao, mul(peso_tedio, (e - sat)/(S - sat)) acima */
+  tedio(enjoo: number): number {
+    if (this.enjoo === null) throw new Error("M-SENS: o tedio sem a ConfigEnjooTela ligada");
+    this.conferirEnjoo(enjoo);
+    const S = this.S, sat = this.enjoo.saturacao_exposicao;
+    return mul(this.enjoo.peso_tedio, divArred(Math.max(0, enjoo - sat) * S, S - sat), S);
+  }
+
+  /** o agrado do nivel visto menos o tedio do enjoo (D-GV-ENJOO-CER), em [0, S] */
+  agradoEfetivo(niveis: Readonly<Record<string, number>>, enjoo: number): number {
+    this.exigirOlhar("agrado_efetivo");
+    return Math.max(0, this.agrado(niveis) - this.tedio(enjoo));
   }
 
   private linhasTela(telas: readonly (readonly number[])[]): LinhaTela[] {
@@ -173,7 +206,10 @@ export class Sens {
       if (tela.length && tela.length !== RECEPTORES_TELA.length) throw new Error(`M-SENS: os receptores da tela vem todos juntos: ${tela}`);
       if (this.telaPresente === null) this.telaPresente = tela.length > 0;
       else if ((tela.length > 0) !== this.telaPresente) throw new Error("M-SENS: os receptores da tela mudaram desde a primeira decisao");
-      presentesTodos = presentesTodos.filter(r => !(RECEPTORES_TELA as readonly string[]).includes(r));
+      const enjoo = presentesTodos.includes(RECEPTOR_ENJOO_TELA);
+      if (this.enjoo !== null && this.telaPresente && !enjoo) throw new Error("M-SENS: o enjoo ligado (ConfigEnjooTela) sem o receptor enjoo_tela do corpo");
+      if (enjoo && !tela.length) throw new Error("M-SENS: o receptor enjoo_tela sem os receptores da tela");
+      presentesTodos = presentesTodos.filter(r => !(RECEPTORES_TELA as readonly string[]).includes(r) && r !== RECEPTOR_ENJOO_TELA);
     }
     const fora = presentesTodos.filter(r => !(RECEPTORES_DIGIBRAIN as readonly string[]).includes(r));
     if (fora.length) throw new Error(`M-SENS: receptores fora do prototipo (os orgaos, o paladar, o banheiro; espec, secao 6): ${fora}`);
@@ -240,6 +276,11 @@ export class Sens {
       out.telas = linhasTela;
       out.tela_niveis = this.niveisTela(pc);
       out.tela_novidade = (pc["novidade_tela"] ?? null) as number | null;
+      if (this.enjoo !== null) {                       // o enjoo (D-GV-ENJOO-CER): desligado, nenhum campo novo
+        const e = (pc[RECEPTOR_ENJOO_TELA] ?? null) as number | null;
+        if (e !== null) this.conferirEnjoo(e);
+        out.tela_enjoo = e;
+      }
     }
     return out;
   }

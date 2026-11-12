@@ -77,7 +77,7 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 
 from .config import CONFIG_CORPO, CONFIG_LUTA_CORPO, CONFIG_OLFATO, CONFIG_OUVIDO, ConfigCorpo, ConfigLutaCorpo, ConfigOlfato, ConfigOuvido
-from .config import CONFIG_TELA, ConfigTela
+from .config import CONFIG_ENJOO_TELA, CONFIG_TELA, ConfigEnjooTela, ConfigTela
 from .corpo import ATIVIDADE_TELA, DRIVE_DO_QUIMICO, RECEPTOR_NOVIDADE_TELA, Corpo, grafo_do_corpo, taxas_de
 from .corpo_grafo import checar
 from .educacao import MotorEducacao
@@ -143,6 +143,9 @@ class PercepcaoCorpo:
     paladar_azedo: int | None = None
     paladar_amargo: int | None = None
     paladar_salgado: int | None = None
+    # o enjoo da imagem (D-GV-ENJOO-CER): o enjoo do estimulo da tela de agora, na escala S (corpo.RECEPTOR_ENJOO_TELA). Fica antes dos
+    # receptores da tela (que fecham a lista); so com a ConfigEnjooTela ligada; desligado, None
+    enjoo_tela: int | None = None
     # o orgao da tela (GOSTO_VISUAL, P1b): o nivel de cada canal, div_arred(S x I, teto_intensidade), e a novidade, a soma das partes
     # adaptadas saturada (corpo.todos_receptores_tela, conferido por teste). Desligado (a ConfigTela, o padrao), None
     tela_cor: int | None = None
@@ -160,12 +163,18 @@ class MotorCorpo:
 
     def __init__(self, *a, cfg_corpo: ConfigCorpo | None = None, cfg_olfato: ConfigOlfato | None = None,
                  cfg_ouvido: ConfigOuvido | None = None, troca_digestao: tuple[int, int] | None = None,
-                 cfg_luta_corpo: ConfigLutaCorpo | None = None, cfg_tela: ConfigTela | None = None, **kw) -> None:
+                 cfg_luta_corpo: ConfigLutaCorpo | None = None, cfg_tela: ConfigTela | None = None,
+                 cfg_enjoo_tela: ConfigEnjooTela | None = None, **kw) -> None:
         super().__init__(*a, **kw)
         self.cc = cfg_corpo or CONFIG_CORPO
         self.ctl = cfg_tela or CONFIG_TELA
         if not isinstance(self.ctl, ConfigTela):
             raise TypeError(f"cfg_tela e uma ConfigTela: {self.ctl!r}")
+        self.cet = cfg_enjoo_tela or CONFIG_ENJOO_TELA        # o enjoo da imagem (D-GV-ENJOO-CER): so com a tela; o Corpo confere
+        if not isinstance(self.cet, ConfigEnjooTela):
+            raise TypeError(f"cfg_enjoo_tela e uma ConfigEnjooTela: {self.cet!r}")
+        if self.cet.ligada and not (self.cc.ligada and self.ctl.ligada):
+            raise ValueError("ConfigEnjooTela.ligada sem o corpo com a ConfigTela ligada (D-GV-ENJOO-CER)")
         self.cll = cfg_luta_corpo or CONFIG_LUTA_CORPO         # a ponte da luta, PE1 (desligada: o evento lt levanta erro)
         self.co = cfg_olfato or CONFIG_OLFATO
         self.cv = cfg_ouvido or CONFIG_OUVIDO
@@ -185,12 +194,12 @@ class MotorCorpo:
         self._cfg_evo = treino.cfg_evo if treino is not None else None
         if self._orgaos_ligados():                    # os orgaos: so com o mundo fisico (conferido acima)
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=True, cfg_olfato=self.co,
-                                         cfg_ouvido=self.cv, cfg_luta=self.cll, cfg_tela=self.ctl)
+                                         cfg_ouvido=self.cv, cfg_luta=self.cll, cfg_tela=self.ctl, cfg_enjoo_tela=self.cet)
         elif self.cc.drives_novos or self.cc.paladar:  # etapa 6: a curiosidade so existe com o mundo fisico (CD-8); o paladar exige o mundo
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=self._mundo_ligado(),
-                                         cfg_luta=self.cll, cfg_tela=self.ctl)
+                                         cfg_luta=self.cll, cfg_tela=self.ctl, cfg_enjoo_tela=self.cet)
         else:
-            self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, cfg_luta=self.cll, cfg_tela=self.ctl)
+            self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, cfg_luta=self.cll, cfg_tela=self.ctl, cfg_enjoo_tela=self.cet)
         self._estado = self.corpo.no_estado(self._estado)
         self._estimulos: list[tuple] = []             # os estimulos da decisao em curso (para o `ocorrido`)
         self.consequencias = 0                        # quantas vezes o gancho `consequencia_corpo` foi chamado
