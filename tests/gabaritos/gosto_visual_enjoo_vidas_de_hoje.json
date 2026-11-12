@@ -1,0 +1,209 @@
+{
+ "gv3|proprio|agitado|101": {
+  "cerebro": "61b06e9e5f459a99d29268b8c0dc523af6b091b2e5f67faa969d70b69d5bc02f",
+  "corpo": "e7c5880415fcb2e159e4ca06496f4e307faaef5fd505ae881fbb38a421cde8ba",
+  "decisoes": 288,
+  "estado": "862eb1c87e256b63f84ee16795b93b7a92be00ee22d87b1c31176ffc65b6f675",
+  "log": "7c399b498882a4ea160a5a4b6f67524ae2303089d8884091eefa3a86ce23d8f9",
+  "mundo": "ce1fac55aa6f2f26d2b66eb13765fe39de50f9eb9dba75401eae9c31c890501f",
+  "olhares": 8,
+  "sonda": "8bb482d4e78c87d56d6b8d108cd06cfd745477c44b9b627e7d672b962526644c"
+ },
+ "gv3|proprio|agitado|202": {
+  "cerebro": "0e4feba3d39a1bab666a121baab71665997c28d55c0f3166b3fd389699d81173",
+  "corpo": "67889304c6d0ef0727f0aa5de0c801919c310799aa3c99363543c344af416e22",
+  "decisoes": 288,
+  "estado": "a058aa37328601a1c0f896e6844b63cc6df3af63986df5bfd312ebce1f0eef96",
+  "log": "aa923be5fbf0b70fc680167bb37e781b34b66e5bb1def349357aeb5d04cd078b",
+  "mundo": "f1ec193b1e0b0baec88e6ceb62d9c11e6c1942fafed4847418d69c80b7db5e34",
+  "olhares": 4,
+  "sonda": "837032c68d2bf48eee3971a6d94fd8acef6d7d53e90f618f407e6ae7ae670a07"
+ },
+ "gv3|proprio|agitado|303": {
+  "cerebro": "f1d0fddd6deb597c54044b4a115ebbcbe1d532ccac517ddabbe917694069da70",
+  "corpo": "d1066a4f10e2a83deb4c9d155a2a9735b7dcc76759ccfba4cb1480c8ae026783",
+  "decisoes": 288,
+  "estado": "713bb15f95010de967e2f2c8c5be2b3843cfda04f4eeee8970cd755a601c2342",
+  "log": "e86409316057ac225439e412d53f0b9280bbc3dd650cc2b194b0fa8d16d0e267",
+  "mundo": "06f89a5e394f1dbe73bc0443a19582fe35a39d8589f3741c75ed84b1ebbfd71a",
+  "olhares": 13,
+  "sonda": "a28bcb5bd389f56bdca3f1d2f3893ac4ee86cb6332c5d5b52d73302a9677d8e1"
+ },
+ "gv3|proprio|calmo|101": {
+  "cerebro": "3629d503bddf819d08a494bb0572b22ad703b582a7d7c562819031a4390a0c9a",
+  "corpo": "34bccc39e50f8c840191269e3203639635ca443e13fdfe4d9045aab960738dbf",
+  "decisoes": 288,
+  "estado": "c5d3176a2bb5af184328a50b70316cef23dc554578d6e77e87bc585f14d47409",
+  "log": "00efe7e4160125b1939b1df0197212b03efffa5a31d2af27c6c4f473ab0dccd8",
+  "mundo": "37aad65f78400018429a9cf70e199e534d121e74eba34c6e599b37021f786d2e",
+  "olhares": 8,
+  "sonda": "8bb482d4e78c87d56d6b8d108cd06cfd745477c44b9b627e7d672b962526644c"
+ },
+ "gv3|proprio|calmo|202": {
+  "cerebro": "9004a97defd66a7af67150e16a698ed5386f2cd32fef67d7a414e9ec4bfa7c98",
+  "corpo": "553bb45043c5880b28f332e4b3ae0cededa3bfaba79aa6d798680f32195d5c07",
+  "decisoes": 288,
+  "estado": "8d31a0f8c545e904225d42150da316b4f93c4baabb42f9acb7708aa5a1e2b56d",
+  "log": "0955bddae9cdc7c7473d237060cf5957ed8f58145bfb70141841078a1a0b00fd",
+  "mundo": "4cf569d63a4a1827159478ba6fd6c1e5ea6cf31826adb3739434bbe59a41bc57",
+  "olhares": 8,
+  "sonda": "16b818db56354254abc8c8f01e63b2a7032cd24b185ce4d83f40e8b967cfc3a6"
+ },
+ "gv3|proprio|calmo|303": {
+  "cerebro": "0b2cae7cde7c299f52d6755f25a8a76349883e24278f36be2d5dbefb77d01cf9",
+  "corpo": "e8d60091ab13f3911da04cafc04d645c8db58d98be00214abb77544be7f9ee62",
+  "decisoes": 288,
+  "estado": "fdc358b1bab2fd2314952db537a0916646bb75ed2c46adc3b2fbbe903dd9ef18",
+  "log": "082f6cdc90d7bd3297ab25fd519b01777cb842a5d7596bd418a7fef5425333cf",
+  "mundo": "65fd675eb3c008ebc18ba928821dbffa714114807de322a547df9d1c3a3e98e0",
+  "olhares": 15,
+  "sonda": "fe0a631e21310bf46ed2935ee6ee1017a44c56f1f9befb1e29b3c63090a8b751"
+ },
+ "gv3|proprio|nenhum|101": {
+  "cerebro": "2ecd723d7390747b4f0c46ea9b2c83e62a428efc713a36407f137578250bd6dd",
+  "corpo": "cbaee66952b89667e9ae37054ba817ce79822f51d030af64e6bba59164b97616",
+  "decisoes": 288,
+  "estado": "33d5e799235239a6bf8cd0eb2459b47bd280839c9bf0f31b72c803b12d304d53",
+  "log": "bb8edb03276f3a0f414b6e44e6ee6eaeeef213576d6bbc578fad30f10559ac9a",
+  "mundo": "bf3f9371a8419756165339876d475a4f9c26803f6d5020199cf47d26de4b77a9",
+  "olhares": 8,
+  "sonda": "8bb482d4e78c87d56d6b8d108cd06cfd745477c44b9b627e7d672b962526644c"
+ },
+ "gv3|proprio|nenhum|202": {
+  "cerebro": "5b15ccec2411788b533860a52bbee469da4f6e5b1c0629881467452e76bff7e9",
+  "corpo": "444cac95fa1e691a6f0be7fe69d953ff5ace7303ad26f6bc1ad632e9d3cb0bb8",
+  "decisoes": 288,
+  "estado": "3efc8dec1a95ec51deb7659b376279eac19218de68c0906432a69fe69dbb5a15",
+  "log": "96195c43c88eb645b43e35d4000aec8072822d8d2c827c4bd0230a7be811cb01",
+  "mundo": "8a2e83279993714f1ce2dc67e4c271fe6b5b295b3d76258f1ce73fd45c9da47f",
+  "olhares": 4,
+  "sonda": "f8b4b3d1938e7b990ba087ef499842882e934e7b30dec267ba2e5565e64f37fc"
+ },
+ "gv3|proprio|nenhum|303": {
+  "cerebro": "2e5b3d0c1227fd3aa12ebb50a360eb3a8ab004504932a2542d48aa0871a09603",
+  "corpo": "54624210869774613554943891084bcf7714a2a755a2a486edd830fc2afae013",
+  "decisoes": 288,
+  "estado": "1bdd776c23f6b0714bee5e6061a2ee01787fef8cc3bfc028dc07d64edac38bad",
+  "log": "02686b42b0460e81f2750c614ea679f3b22bf9161675b3367c92feb27f4b3a4c",
+  "mundo": "818ce98b1be193c772efab5bdc2b63a72138a9978ef86c5f37728a1a798b1c07",
+  "olhares": 13,
+  "sonda": "1778d3c981ef6c9a0fad7dd12aa2987606c2df0dabad5a6aefb2c9184fba1ade"
+ },
+ "gv3|vazio|agitado|101": {
+  "cerebro": "c89bb7f4ac82615184be254fc54b63d9cc4ff06892375c1335c3a1a49172eea6",
+  "corpo": "8570fd6e1c7e8ca3a1af8ff1c5914908a28e81ae1b330814115de0368d487aca",
+  "decisoes": 288,
+  "estado": "c4f056ea12e8940fe413d7b4f87b7b84600b63ab852883b9eba7a393398e9d87",
+  "log": "12cab5c4e14ac68a94bd10530add52330698c737786cba9bfa577ef4cab331e5",
+  "mundo": "6321e840897b5d80dd239582633196e108d5637f2e7039808936006168fba098",
+  "olhares": 7,
+  "sonda": "d6f61ffa5fd921ca78f7a35459e3e5217cb64505a457066c7c777688d85a5dba"
+ },
+ "gv3|vazio|agitado|202": {
+  "cerebro": "ad151edb1d4a480d5e05e92cef2d2c0684bd74c5db39401dc13f1ea73d33dca1",
+  "corpo": "63c146fd4ddb9640c50f066db772465481d9eda233522e443d7dc20114c768f2",
+  "decisoes": 288,
+  "estado": "e47f434f3fea7db020dd8c850b891c797d68f562513f78ab6b8e7548fed824f3",
+  "log": "ca1a7c69e12c1d25cfa1e25868a6a2fed15a929deaa6e6c57f30b47725b5b23d",
+  "mundo": "3c9579827693dd1ca342e9111ac02727d600fb072e5c64c07776885aee837980",
+  "olhares": 3,
+  "sonda": "19640cb81b6d8b591c7c02c1f42f6178206e4ffe94716c42ba48b01f2c2d6b63"
+ },
+ "gv3|vazio|agitado|303": {
+  "cerebro": "b90fe9f3585ecb18be65fcf489bc6b884a8783f9c119e96f188b533a3bde2864",
+  "corpo": "d77ea590f9f3ca32516a3e29fa6df1d15f5baafec74d7a06e5ce26b3419f6d3a",
+  "decisoes": 288,
+  "estado": "6e61998f1e3d2b3b15a09274d7d72687b6936145cf9cd2bdfc88fc56a7b0bf31",
+  "log": "0f2611d44519ad24b82496f3648c0025ddd5d2e7fb80b58c2a9f5a807699cb59",
+  "mundo": "0dfdf29f75efb5c2ae1bc04addfa3003f32a7d7c407ff5a525a822d237711f6c",
+  "olhares": 19,
+  "sonda": "021a499256daffee923c9b4ebb122155592ad1010d4250857be92f4493a4234f"
+ },
+ "gv3|vazio|calmo|101": {
+  "cerebro": "208cad387625922a42c093fbaa74fae58c722d3fe620788cb8f0a64f88fcfcfb",
+  "corpo": "8504290afb600c2b65d0aa1d1fd53ff3724f065f39afc3738a90a2e25d8c6dd5",
+  "decisoes": 288,
+  "estado": "4f7882d8f6fb9dbe005da18b4ad5de269f20e02f743348894b4b8e6b11b3efff",
+  "log": "314dbcc4c03d40be1af4e5eb0602fc8378005a5899f8a09fc1c1c131e5af4e96",
+  "mundo": "4b3242af4e395fd76f5b839c097dba253438c48300cf57b2b193620d672d9459",
+  "olhares": 7,
+  "sonda": "0abd677988ce69fa3fa6bdd323f5fba6c471e1cda2cb2bbe2924415cddcaa750"
+ },
+ "gv3|vazio|calmo|202": {
+  "cerebro": "9acf07e7569b0dd8ca645ba0fb5b6de84f7c8f40bdaeccd1a25cdee19a73ffc0",
+  "corpo": "63c146fd4ddb9640c50f066db772465481d9eda233522e443d7dc20114c768f2",
+  "decisoes": 288,
+  "estado": "e47f434f3fea7db020dd8c850b891c797d68f562513f78ab6b8e7548fed824f3",
+  "log": "ed0ffa30ac82e5cabcf9eea62c52fba96d7975b57c17b89869809ac247c2ab89",
+  "mundo": "90fadfad8fc29232f5b05a83394a098677a5f5204abbee540032943eed25cf38",
+  "olhares": 3,
+  "sonda": "163b9946caa3f6a7b9863f0da3ae9235997a64c09bff29977d2bd3c36e7e1c6b"
+ },
+ "gv3|vazio|calmo|303": {
+  "cerebro": "6b6ba8a83516c60e461a4030cd2c3f0cf3825786800926f1a93e697d979d4e56",
+  "corpo": "9929e7124b6ce05ba1f01c60968560f213f8a4d7b5836daeb213d531ad32395b",
+  "decisoes": 288,
+  "estado": "d61d29559db811c14c1679525e0190aa00c2627a094d613834b5fd96241d2e37",
+  "log": "efc56859e20632cee5d64167f7e69e1840e356358d370b091005a1f2c826a439",
+  "mundo": "143e77873689513a0cceb79c20c65b4e39baf4cbf682c503f778fe3ac604264b",
+  "olhares": 32,
+  "sonda": "f1b2287ccd5d8ec5663075e181dc3028e56fd2c6039ede2f1f5cd00bbd76f389"
+ },
+ "gv3|vazio|nenhum|101": {
+  "cerebro": "12cb63541e40cba3b4945e25b492d10ff014a3769ec7e58767f9efd9aa10d0b5",
+  "corpo": "c82ca2953f103066509a55911fc3ca0e42492eddb7d8bd94bae6a97d0657075b",
+  "decisoes": 288,
+  "estado": "cd32e55b92e2371c615ce478c816089a1130140326e662cc9c1135d1a23ab01e",
+  "log": "83e80c8a7e2dcd2cbe02d651aa00e138b5721dfb1d064057bc0b4a0d9990c0e5",
+  "mundo": "fde335a65fecfda0f63fdec84285d2ab1e398c693a9871e88110bbb4510625e4",
+  "olhares": 7,
+  "sonda": "d6f61ffa5fd921ca78f7a35459e3e5217cb64505a457066c7c777688d85a5dba"
+ },
+ "gv3|vazio|nenhum|202": {
+  "cerebro": "ed67bbfe97d1008271cb851144924919833f261a98e36f721e23e5b17116c449",
+  "corpo": "63c146fd4ddb9640c50f066db772465481d9eda233522e443d7dc20114c768f2",
+  "decisoes": 288,
+  "estado": "e47f434f3fea7db020dd8c850b891c797d68f562513f78ab6b8e7548fed824f3",
+  "log": "ad41cbd407aaa5c5661a8c9159b2cf566ee07f4eedacf295f5dccebec1855a40",
+  "mundo": "cdd038bad55f8934d287f9316f7ddb0300cc5922d7da5ae3d4767d6f05478016",
+  "olhares": 3,
+  "sonda": "91a45c8a06f93026fda32ca62c3e3570643846706001692f736f3793ec910721"
+ },
+ "gv3|vazio|nenhum|303": {
+  "cerebro": "765d704db34d547c1f58c31229b51afd526ec37a40887f7003cf1fda7dfd69df",
+  "corpo": "38e9c37bbbc689007125c347e4642e3a261064bee895f8bce5b357c37db9c540",
+  "decisoes": 288,
+  "estado": "4fb761a37afc853861975b04e13e66d23304d73553df8388b0f25b08160e1ce2",
+  "log": "f65ec834d957a6baa32597ccd7714d6cc22f45a73ce6d9d1c487581a5d574fe9",
+  "mundo": "ccdb81cbcf3ff07c5457405885c3bbd47c1d64e7f0aaadba37067a69dbeccb19",
+  "olhares": 9,
+  "sonda": "17141a3a62bfc4be7f28bb5d2c658d17fb24cd6e74c69ec17b771231571c1801"
+ },
+ "parada|101": {
+  "cerebro": "f64994308ef1116106785a74fdbe7d37caf98826536b76451d4bc7abaff06bc2",
+  "corpo": "220f29c5ea12a0bef82492b886707820a9d55f96cbb893d50d6beb2575f54de2",
+  "decisoes": 192,
+  "estado": "98a3defd7c37a399e961ecba9097df4045de05d2bedbe020085b1a2b5d74b5d0",
+  "log": "cda84ffb485a6caa78a31a40c0d829c99ca4c40f00a98eda7ca99cb949c249ba",
+  "mundo": "0822a93b65151515ec5de672fdefc026583fd5b06796890d18bf4c6a0e3d7e19",
+  "olhares": 2
+ },
+ "parada|202": {
+  "cerebro": "1e6f96c48e346d934754f23c1a9997cd4f448488fde4a2a8de4a8ed2b88d7357",
+  "corpo": "f22817d2f29655eae6fe9497c8545230b4b39bb66ab695ebbab414a84fada095",
+  "decisoes": 192,
+  "estado": "c141eae8329c7e34f83edeb1d6c682eaa289f6a7075e7b3e6d63407373e0d94e",
+  "log": "6fe451a307323aafb285cc728a990362fd87d974f4baaed53ae3fc75419b3926",
+  "mundo": "10eafe812df6f18fa1ec3668cb632c06afdb4f69febf1175beb892e8316179e6",
+  "olhares": 15
+ },
+ "parada|303": {
+  "cerebro": "a99cdb87b7415b760af64988f1953ae04464ce16057af89d9e638ae607675878",
+  "corpo": "9af833d022641052b36f7ce20d33dd0cb0d564aca6ca9f9a8a45a6170a230d42",
+  "decisoes": 192,
+  "estado": "7e5877462e3eed2c96627c16b6e2cbb468900f2aecc39fb393f8a04d2334b277",
+  "log": "8b469e6cb42b5bbb395a6f2321168f2859def900f9e55044cededaa3a7a35108",
+  "mundo": "ccd5c6a79ea03e2248b450267c1563b132ea162fd6d0da634da449831d1c9efc",
+  "olhares": 8
+ }
+}
