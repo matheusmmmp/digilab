@@ -1786,6 +1786,46 @@
    "web": "CCOOP.janelaNovidade",
    "fonte": "python",
    "py": "ConfigCooperacao.janela_novidade"
+  },
+  {
+   "web": "CCOOP.kPasso",
+   "fonte": "python",
+   "py": "ConfigCooperacao.k_passo"
+  },
+  {
+   "web": "CCOOP.kTetoBebe",
+   "fonte": "python",
+   "py": "ConfigCooperacao.k_teto_bebe"
+  },
+  {
+   "web": "CCOOP.kTetoCrianca",
+   "fonte": "python",
+   "py": "ConfigCooperacao.k_teto_crianca"
+  },
+  {
+   "web": "CCOOP.kTetoAdolescente",
+   "fonte": "python",
+   "py": "ConfigCooperacao.k_teto_adolescente"
+  },
+  {
+   "web": "CCOOP.kTetoAdulto",
+   "fonte": "python",
+   "py": "ConfigCooperacao.k_teto_adulto"
+  },
+  {
+   "web": "CCOOP.diasFimBebe",
+   "fonte": "python",
+   "py": "ConfigExpressao.dias_fim_bebe"
+  },
+  {
+   "web": "CCOOP.diasFimCrianca",
+   "fonte": "python",
+   "py": "ConfigExpressao.dias_fim_crianca"
+  },
+  {
+   "web": "CCOOP.diasFimAdolescente",
+   "fonte": "python",
+   "py": "ConfigExpressao.dias_fim_adolescente"
   }
  ],
  "convertidos": [

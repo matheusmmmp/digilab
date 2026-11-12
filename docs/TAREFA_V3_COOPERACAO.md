@@ -379,3 +379,39 @@ Gravado com o código da `main` (`bf381ef9`) antes de qualquer mudança da CO6, 
   sha256 do `estado_interno()` de cada cérebro, o dos logs e o do resumo do grupo.
 - **O teste:** `tests/test_cooperacao_co6.py` refaz as vidas e as compara com o gabarito (o G2 da CO6).
 - **Os desvios:** D-CO6a-1 e D-CO6a-2, no registro de 2026-11.
+
+## CO6b, a reputação e o peso dos deveres na percepção, no Python (2026-11-12, Claude Code, Opus 5.5, branch `v3-cooperacao-co6b`)
+
+Atrás da subchave `co6` da `ConfigCooperacao`, desligada por padrão e só com a `ligada` (sem ela, falha alto).
+
+- **O `k`** (`digilab/cooperacao.py`, `fim_do_tick_k` e `peso_dever`): ganha `k_passo` por tick de encontro com um outro de reputação
+  positiva, um vendo o outro; decai pela meia-vida da pontuação sem encontro; fica no teto do estágio da idade (0, 1/4, 1/2 e 3/4 de S).
+- **A percepção** (`digilab/mundo.py`, `digilab/grupo.py`): a `PercepcaoSocial` ganha a `reputacao` de cada outro presente e o
+  `peso_dever` do próprio pet. Desligada, os dois ficam None.
+- **O cérebro:** o M-SENS lê os dois campos, e o `estado_interno()` do modular os mostra na chave `social`. Nenhum módulo os usa.
+- **Os testes** (`tests/test_cooperacao_co6.py`): o G2; o G-SEM-DECISAO-CO6 nas vidas do modular; o G-RECEPTOR-SOCIAL; o passo, o
+  decaimento e o teto à mão; o M-SENS; e o gabarito do G-PAR-CO6 para o TS (`experiments/exportar_gabarito_co6_par.py`,
+  `web/app/test/gabaritos/co6_python.json.gz`), que confere o G-SEM-DECISAO-CO6 nas 7 vidas da CO3.
+- **Os desvios:** D-CO6b-1 a D-CO6b-7, no registro de 2026-11.
+
+## CO6c, o espelho TS, o G-PAR-CO6 e o painel (2026-11-12, Claude Code, Opus 5.5, branch `v3-cooperacao-co6c`)
+
+- **O motor:** `motor/cooperacao.ts` ganha o `k` (`fimDoTickK`, `tetoK`, `pesoDever`, o estágio pela idade) e a `CONFIG_COOPERACAO_CO6`;
+  `motor/grupo.ts` anda o `k` no fim de todo tick e põe a `reputacao` e o `peso_dever` na percepção social; o M-SENS do modular
+  (`motor/digibrain/sens.ts`) os lê e o `estadoInterno()` os mostra na chave `social`.
+- **O G-PAR-CO6** (`test/cooperacao_co6.test.ts`, bit a bit no Node, contra `co6_python.json.gz`): o `k` e a reputação tick a tick nas
+  chamadas sintéticas e nas 7 vidas da CO3, a percepção de cada decisão e o G-SEM-DECISAO-CO6.
+- **No jogo** (`test/coop_co6_jogo.test.ts`): a CO6 fica desligada (D-CO6c-1). Ligada no teste, os dois pets do modular vivem igual, e o
+  M-SENS lê o que a percepção trouxe.
+- **O painel:** a seção "Com o irmão" no DigiBrain do modular, em palavras e sem número (CO6-7, D-CO6c-2). Ela só aparece quando a CO6 estiver
+  ligada no jogo.
+- **Os desvios:** D-CO6c-1 a D-CO6c-5, no registro de 2026-11.
+
+## CO7a, o gabarito das vidas com a CO6 ligada (2026-11-12, Claude Code, Opus 5.5, branch `v3-cooperacao-co7`)
+
+Gravado com a CO6 inteira e antes de qualquer mudança da CO7, num commit só dele.
+
+- **O exportador:** `experiments/exportar_gabarito_co7.py` grava `tests/gabaritos/co7_vidas_de_hoje.json.gz`, as vidas da CO6a com a CO6
+  ligada.
+- **O teste:** `tests/test_cooperacao_co7.py` refaz as vidas e as compara com o gabarito (o G2 da CO7).
+- **O desvio:** D-CO7a-1, no registro de 2026-11.

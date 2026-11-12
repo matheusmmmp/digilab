@@ -506,10 +506,13 @@ export type TipoToque = typeof TIPOS_TOQUE[number];
 
 /** A PercepcaoSocial do Python (secao 5), sem campo de estado interno do outro: `outros` = (id, dx, dy, d, acao visivel) a ate o raio da
     visao, em ordem de d e de id; `onde_comeu` = (id, x, y, idade) do ultimo consumo visto de cada outro; `toque` = (id, tipo, direcao,
-    idade) do ultimo contato; `sentidos` (o degrau 1b) fica null: a cooperacao usa so a visao e o toque */
+    idade) do ultimo contato; `sentidos` (o degrau 1b) fica null: a cooperacao usa so a visao e o toque. A CO6 (so com a subchave `co6`;
+    sem ela, os dois campos nao existem): `reputacao` = (id, r) de cada outro presente, em ordem de id, com r a reputacao dele vista por
+    este pet (a memoria dos atos que ele testemunhou); `peso_dever` = o peso dos deveres k deste pet, na escala S */
 export interface PercepcaoSocial {
   outros: [string, number, number, number, string][]; onde_comeu: [string, number, number, number][];
   toque: [string, string, number, number][]; sentidos: null;
+  reputacao?: [string, number][]; peso_dever?: number;
 }
 
 /** o que o grupo da a parte de um pet (o `_grupo` do MotorMundo) */

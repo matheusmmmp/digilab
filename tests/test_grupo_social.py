@@ -93,11 +93,12 @@ def _cerebro(g: Grupo, ident: str):
 
 # ================================================================== G-RECEPTOR-SOCIAL
 def test_a_percepcao_social_nao_tem_estado_interno():
-    # o quarto campo, `sentidos`, e o degrau 1b (a etapa 8, tests/test_sentidos_mundo.py): None com a ConfigSentidos desligada
-    assert [f.name for f in fields(PercepcaoSocial)] == ["outros", "onde_comeu", "toque", "sentidos"]
+    # o quarto campo, `sentidos`, e o degrau 1b (a etapa 8, tests/test_sentidos_mundo.py): None com a ConfigSentidos desligada; a
+    # `reputacao` e o `peso_dever` sao da CO6 (tests/test_cooperacao_co6.py: a memoria dos atos testemunhados e o proprio k), None sem ela
+    assert [f.name for f in fields(PercepcaoSocial)] == ["outros", "onde_comeu", "toque", "sentidos", "reputacao", "peso_dever"]
     g = simular_grupo(CM, 101, [pet("A", 0, 101), pet("B", 0, 101)], 1)
     p = g.perceber_social("A")
-    assert p.sentidos is None
+    assert p.sentidos is None and p.reputacao is None and p.peso_dever is None
     for campo in (p.outros, p.onde_comeu, p.toque):
         for item in campo:
             assert all(type(v) in (int, str) for v in item), item     # so numeros e nomes: posicao, acao, tipo, direcao, idade
