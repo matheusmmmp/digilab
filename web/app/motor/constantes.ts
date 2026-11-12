@@ -104,7 +104,8 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    duas mecanicas e a decisao E (D-GV-CEREBRO). Os v21 a v29 seguem como estao, sem a TV
    no cerebro; so os ovos novos de um pet so nasciam v32 (o grupo seguia v29: a TV do Python era de um pet so);
    33 = a v32 com a TV no jogo (GOSTO_VISUAL, as decisoes A, C e D da captura ligada ao cerebro; "Sim a tudo", Matheus, 2026-11-12;
-   D-GV-TVJOGO; VERSAO_V33, abaixo): a TV desligada (o "st" `fonte|desligada`) e o ir ate a TV (a acao "ir_tv" do modular). Os ovos novos de um
+   D-GV-TVJOGO; VERSAO_V33, abaixo): a TV desligada (o "st" `fonte|desligada`), o ir ate a TV (a acao "ir_tv" do modular) e o enjoo da imagem
+   (a ConfigEnjooTela do #875 no corpo e no cerebro; a decisao E). Os ovos novos de um
    pet so nascem v33; os v32 que ja existem seguem como estao;
    34 = a v29 com a TV no cerebro e no jogo (a decisao B; VERSAO_V34, abaixo): a TV do mundo comum, os dois pets olhando, a TV desligada e o ir
    ate a TV. O ovo do brasao choca o grupo v34; os grupos v29 que ja existem seguem como estao */
@@ -169,17 +170,19 @@ export const VERSAO_V29 = 29;
 /** 32 = a v27 com a TV no cerebro (GOSTO_VISUAL, D-GV-CEREBRO-1; a opcao `tela` do laco com a CONFIG_TV_JOGO, motor/tv.ts, e o modular com
     a subchave `olhar` e o agrado no corpo). O resto e a v27: um pet so, a luta da v23 */
 export const VERSAO_V32 = 32;
-/** 33 = a v32 com a TV no jogo (as decisoes A, C e D; D-GV-TVJOGO): a TV desligada (o "st" `fonte|desligada`, a CONFIG_TVJOGO_LIGADA de
-    motor/tv.ts) e o ir ate a TV (o modular com o `irAteTv`: a unidade de olhar de uma TV fora do raio vira a acao "ir_tv"). O resto e a v32 */
+/** 33 = a v32 com a TV no jogo (as decisoes A, C, D e E; D-GV-TVJOGO): a TV desligada (o "st" `fonte|desligada`, a CONFIG_TVJOGO_LIGADA de
+    motor/tv.ts), o ir ate a TV (o modular com o `irAteTv`: a unidade de olhar de uma TV fora do raio vira a acao "ir_tv") e o enjoo da imagem
+    (a CONFIG_ENJOO_TELA_LIGADA de motor/enjoo_tela.ts, no corpo e no cerebro). O resto e a v32 */
 export const VERSAO_V33 = 33;
 /** 34 = a v29 com a TV no cerebro e no jogo (a decisao B; D-GV-TVJOGO-4): a TV do mundo comum (motor/grupo.ts, a opcao `tv`), cada pet com o
-    orgao da tela e o modular com o olhar, o agrado no corpo, a TV desligada e o ir ate a TV. O resto e a v29 (o grupo, a LP6) */
+    orgao da tela e o modular com o olhar, o agrado no corpo, a TV desligada, o ir ate a TV e o enjoo da imagem. O resto e a v29 (o grupo, a LP6) */
 export const VERSAO_V34 = 34;
 /** a versao do grupo de dois pets que o ovo do brasao choca hoje (os dois ovos, src/jornada.ts): a v34 (a v29 com a TV no cerebro e no jogo) */
 export const VERSAO_GRUPO = VERSAO_V34;
 /** a versao nasce com a TV no cerebro: a v32, a v33 e a v34 */
 export const nasceComTv = (versao: number): boolean => versao === VERSAO_V32 || versao === VERSAO_V33 || versao === VERSAO_V34;
-/** a versao nasce com a TV no jogo (a TV desligada e o ir ate a TV; D-GV-TVJOGO): a v33 e a v34 */
+/** a versao nasce com a TV no jogo (D-GV-TVJOGO): a TV desligada, o ir ate a TV e o enjoo da imagem no corpo e no cerebro (a ConfigEnjooTela
+    do #875, motor/enjoo_tela.ts; a decisao E: "ligar o enjoo do cerebro no jogo junto com a versao combinada"): a v33 e a v34 */
 export const nasceComTvJogo = (versao: number): boolean => versao === VERSAO_V33 || versao === VERSAO_V34;
 /** a versao luta com o apoio e a arena por estagio da LP6 (a tabela LUTA_V29): a v29 */
 export const ehLutaLp6 = (versao: number): boolean => versao === VERSAO_V29 || versao === VERSAO_V34;

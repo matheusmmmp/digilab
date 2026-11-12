@@ -7,15 +7,18 @@
      de tanto ver, do carinho, cada uma com a forma dela); o que está passando numa faixa à parte;
    - o carinho é o Carinho do jogo (UX-GV-7): aqui não há botão de carinho, e nenhuma contagem de carinhos (a GV-14: o jogo não pontua);
    - no celular (UX-GV-8) o painel é uma folha baixa: recolhida, a reação e o gosto; "Mais" a estica.
-   - no pet com a TV no cérebro (a v32; D-GV-CEREBRO-8): a reação é a do cérebro (o que o motor diz que ele faz, a mesma fonte do painel do
-     DigiBrain), o botão "Levar até a TV" aparece quando a TV está fora da vista dele, e o rodapé diz que o que passa entra no cérebro. O gosto
-     ("Gosta mais de", o porquê) segue o do protótipo, fora do cérebro, e o rodapé diz isso.
+   - no pet com a TV no cérebro (a v32, a v33 e o grupo v34; D-GV-CEREBRO-8): a reação é a do cérebro (o que o motor diz que ele faz, a
+     mesma fonte do painel do DigiBrain), o botão "Levar até a TV" aparece quando a TV está fora da vista dele, e o rodapé diz que o que passa
+     entra no cérebro. O gosto ("Gosta mais de", o porquê) é o do cérebro (a decisão C, D-GV-TVJOGO-5): o genoma da visão e a exposição do
+     DigiBrain; o carinho ainda não entra nele.
    Só existe com `?gosto_visual=1`. Fora do motor, do log e do save, salvo o "st" e o levar o pet da v32 (cerebroTv.ts). */
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ChevronRight, Lock, MonitorUp, PictureInPicture2, Square, Tv } from "lucide-react";
 import { COMPONENTES, alvos, gostaMaisDe, tempoJunto, valores, type Componente } from "./gosto.ts";
 import { abrirJanelaDaTv, fecharJanelaDaTv, temJanelaPequena, useJanelaDaTv } from "./janelaPequena.ts";
-import { IMAGEM, SOM, descricaoDaLinha, fraseDaReacao, linhasDoGosto, linhasMarcadas, nascencaDifere, ondeFica, type LinhaGosto } from "./leituraGosto.ts";
+import {
+  IMAGEM, SOM, descricaoDaLinha, fraseDaReacao, linhasDoCerebro, linhasDoGosto, linhasMarcadas, nascencaDifere, ondeFica, pontosDasLinhas, type LinhaGosto,
+} from "./leituraGosto.ts";
 import { ligarTela, ligarTvJogo, pararTv, podeMostrarTela, useSessaoTv, type SessaoTv } from "./sessaoTv.ts";
 import { leituraDoCerebro, levarPetATv } from "./cerebroTv.ts";
 import { useJogoSeHouver } from "../jogo.ts";
@@ -97,7 +100,10 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
   const comTela = podeMostrarTela() && !movel, comJanela = temJanelaPequena() && !movel;
   /* sem som na captura, o grupo do som não entra nas contas (o pet não ouve) */
   const quais: readonly Componente[] = ligada && !s.temSom ? IMAGEM : COMPONENTES;
-  const linhas = linhasDoGosto(s.inato, s.estado, quais), curtas = linhasMarcadas(linhas), agora = s.sentido ? valores(s.sentido) : {};
+  /* o pet com a TV no cérebro: o gosto é o do cérebro (a decisão C, D-GV-TVJOGO-5); nos outros pets, o do protótipo */
+  const gv = motor === null ? null : motor.gostoVisualDoCerebro();
+  const linhas = gv !== null ? linhasDoCerebro(gv.nascenca, gv.deVer, quais) : linhasDoGosto(s.inato, s.estado, quais);
+  const curtas = linhasMarcadas(linhas), agora = s.sentido ? valores(s.sentido) : {};
   const img = linhas.filter(l => IMAGEM.includes(l.k)), som = linhas.filter(l => SOM.includes(l.k));
   /* a v32: a reação é a do cérebro (D-GV-CEREBRO-8); nos outros pets, a do protótipo */
   const cer = motor === null ? null : leituraDoCerebro(motor);
@@ -105,7 +111,10 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
   const levar = cer !== null && motor !== null && !cer.noRaio && !motor.e.dormindo && motor.morte === null
     ? <button type="button" className="hx-btn tvp-cheio" data-tv-levar="" onClick={levarPetATv}>Levar até a TV</button> : null;
   const noCerebro = cer !== null && !ligada ? <p className="tvp-fraco" data-testid="tv-cerebro">{cer.frase}</p> : null;
-  const gosto = `Gosta mais de: ${gostaMaisDe(alvos(s.inato, s.estado), quais)}.`;
+  const gosto = `Gosta mais de: ${gv !== null ? gostaMaisDe(pontosDasLinhas(linhas, "hoje"), quais) : gostaMaisDe(alvos(s.inato, s.estado), quais)}.`;
+  const nascDifere = gv !== null ? gostaMaisDe(pontosDasLinhas(linhas, "nascenca"), quais) !== gostaMaisDe(pontosDasLinhas(linhas, "hoje"), quais)
+    : nascencaDifere(s.inato, s.estado, quais);
+  const nascFrase = gv !== null ? gostaMaisDe(pontosDasLinhas(linhas, "nascenca"), quais) : gostaMaisDe(s.inato.otimo, quais);
 
   const controle = ligada ? (
     <div className="tvp-sec">
@@ -134,8 +143,8 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
   const leitura = (
     <div className="tvp-sec">
       <h3 className="tvp-tit">Do que o {nome} gosta</h3>
-      <p className="tvp-forte" data-testid="tv-gosto">{gosto}</p>
-      {nascencaDifere(s.inato, s.estado, quais) && <p className="tvp-fraco" data-testid="tv-nascenca">De nascença, preferia {gostaMaisDe(s.inato.otimo, quais)}.</p>}
+      <p className="tvp-forte" data-testid="tv-gosto" data-gosto-fonte={gv !== null ? "cerebro" : "prototipo"}>{gosto}</p>
+      {nascDifere && <p className="tvp-fraco" data-testid="tv-nascenca">De nascença, preferia {nascFrase}.</p>}
       <Abre aberto={porque} alternar={() => setPorque(v => !v)}>Por quê</Abre>
       {porque && (todos ? (
         <>
@@ -164,7 +173,7 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
       <p className="tvp-fraco" data-testid="tv-tempo">Assistiram juntos: {tempoJunto(s.estado.segundosJuntos)}</p>
       {ligada && s.origem === "tela" && <Privacidade />}
       {cer !== null
-        ? <p className="tvp-fraco tvp-prot" data-testid="tv-prot">O que a TV passa entra no cérebro dele: sete números a cada 10 segundos, no registro. O gosto acima ainda é o do protótipo, fora do cérebro.</p>
+        ? <p className="tvp-fraco tvp-prot" data-testid="tv-prot">O que a TV passa entra no cérebro dele: sete números a cada 10 segundos, no registro. O gosto acima é o do cérebro: o de nascença e o de tanto ver (o carinho ainda não entra nele).</p>
         : <p className="tvp-fraco tvp-prot" data-testid="tv-prot">Protótipo: o gosto ainda não entra no cérebro do pet.</p>}
     </div>
   );

@@ -1,7 +1,7 @@
 /* GOSTO_VISUAL, a TV no jogo (as decisoes A, B e D da captura ligada ao cerebro; docs/registro/2026-11.md, D-GV-TVJOGO): a paridade com o
    Python. O gabarito e o test/gabaritos/tv_jogo.json.gz (experiments/exportar_tv_jogo.py; o tests/test_gabarito_tv_jogo_web.py confere que
    ele sai igual de uma execucao nova). Confere, bit a bit no Node:
-     - as vidas de um pet so (3 sementes, 3 dias): o laboratorio com o olhar, a ConfigTVJogo ligada (a TV desligada das 20 h as 23 h) e o
+     - as vidas de um pet so (3 sementes, 3 dias): o laboratorio com o olhar, o enjoo (#875), a ConfigTVJogo ligada (a TV desligada das 20 h as 23 h) e o
        DigiBrain com o ir ate a TV; o laco do TS rejoga o log do Python e confere, decisao a decisao, a acao (o "ir_tv" incluido), o motivo,
        a assinatura de cada modulo e os estimulos do corpo; no fim, o cerebro, o corpo, as decisoes do mundo e o registro da TV;
      - as vidas do grupo (2 sementes, 2 dias): a TV do mundo comum, dois lacos com o mesmo laboratorio; o Grupo do TS rejoga o registro do
@@ -21,6 +21,7 @@ import { MotorCorpoMundo } from "../motor/motor_corpo_mundo.ts";
 import { estadoNascimentoPy, type EventoCorpo } from "../motor/motor_corpo.ts";
 import { lerDeixarComida, type Mundo, type OpcoesMundo } from "../motor/mundo.ts";
 import { CONFIG_TELA_LIGADA, CONFIG_TV, CONFIG_TVJOGO, CONFIG_TVJOGO_LIGADA, type ConfigTV } from "../motor/tv.ts";
+import { CONFIG_ENJOO_TELA_LIGADA } from "../motor/enjoo_tela.ts";
 import { assinar, conferir } from "./digibrain_modular_gabarito.ts";
 
 const ASSINADOS = ["sens", "afeto", "estado", "mem", "arb", "plast"] as const;
@@ -58,8 +59,11 @@ function textoPy(v: unknown, chave = ""): string {
 const sha = (t: string): string => createHash("sha256").update(t, "utf8").digest("hex");
 const CTV: ConfigTV = { ...CONFIG_TV, ligada: true, fonte: "evento" };
 const cerebro = (s: number): DigiBrain => new DigiBrain(CONFIG_DIGIBRAIN_LAB_OLHAR, INATOS_MODULAR, false, CONFIG_SONO_SEGURA,
-                                                         { semente: s, cfgOlhar: { ...CONFIG_OLHAR, agrado_no_corpo: true }, irAteTv: true });
-const OPCOES = { paridade: true, cfgMundo: CMU_MVP, digibrain: true, tela: { tela: CONFIG_TELA_LIGADA, tv: CTV, tvJogo: CONFIG_TVJOGO_LIGADA } };
+                                                         { semente: s, cfgOlhar: { ...CONFIG_OLHAR, agrado_no_corpo: true }, irAteTv: true,
+                                                           cfgEnjooTela: CONFIG_ENJOO_TELA_LIGADA });
+/* a combinacao do pet v33 do jogo: a TV desligada, o ir ate a TV e o enjoo da imagem (o #875) */
+const OPCOES = { paridade: true, cfgMundo: CMU_MVP, digibrain: true,
+                 tela: { tela: CONFIG_TELA_LIGADA, tv: CTV, tvJogo: CONFIG_TVJOGO_LIGADA, enjoo: CONFIG_ENJOO_TELA_LIGADA } };
 /** as decisoes do mundo no formato do Python (o alvo so pelo tipo, como o registro) */
 const decisoesDo = (m: MotorCorpoMundo): unknown => JSON.parse(JSON.stringify(m.mundo.decisoes));
 
@@ -77,6 +81,7 @@ function viver(g: Vida) {
 describe("a TV no jogo: as vidas de um pet so, iguais ao Python", () => {
   test("o gabarito: 3 vidas de 288 decisoes, com o ir ate a TV, o olhar e a TV desligada", () => {
     expect(gab.versao).toBe(1);
+    expect((gab as Dict)["enjoo"]).toBe(true);
     expect(gab.config_tv_jogo).toEqual({ ...CONFIG_TVJOGO_LIGADA });
     expect(gab.vidas.length).toBe(3);
     for (const v of gab.vidas) {

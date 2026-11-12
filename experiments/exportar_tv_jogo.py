@@ -5,7 +5,8 @@ bit no Node.
 
 O que vai no arquivo (`web/app/test/gabaritos/tv_jogo.json.gz`, so; nada dos gabaritos de hoje e regravado):
   - as vidas de um pet so: o laboratorio com o olhar (a vida do gosto visual, `exportar_gosto_visual.viver`, a fonte "evento" com o agrado
-    no corpo), com a ConfigTVJogo ligada (a TV desligada e o ir ate a TV) e o DigiBrain com o `ir_ate_tv`; o dono e o do gosto visual, e a TV
+    no corpo), com a ConfigTVJogo ligada (a TV desligada e o ir ate a TV), o DigiBrain com o `ir_ate_tv` e o enjoo da imagem ligado no corpo
+    e no cerebro (a ConfigEnjooTela do #875): a combinacao do pet v33 do jogo; o dono e o do gosto visual, e a TV
     fica desligada das 20 h as 23 h de cada dia (`desligar_tela`). Sementes dos testes, 3 dias. O TS rejoga o log e confere, decisao a
     decisao, a acao, o motivo, a assinatura de cada modulo e os estimulos do corpo; no fim, o estado interno do cerebro, o corpo, o mundo
     fisico e o registro da TV;
@@ -33,7 +34,7 @@ sys.path.insert(0, str(RAIZ / "experiments"))
 import exportar_gabarito_digibrain_modular as E  # noqa: E402
 import exportar_gosto_visual as X  # noqa: E402
 
-from digilab.config import CANAIS_TELA, CONFIG_GRUPO_LIGADA, CONFIG_PADRAO, CONFIG_TVJOGO_LIGADA  # noqa: E402
+from digilab.config import CANAIS_TELA, CONFIG_ENJOO_TELA_LIGADA, CONFIG_GRUPO_LIGADA, CONFIG_PADRAO, CONFIG_TVJOGO_LIGADA  # noqa: E402
 from digilab.digibrain.adapt import DigiBrain  # noqa: E402
 from digilab.events import AcaoUsuario, ler_sentido_tela  # noqa: E402
 from digilab.grupo import Grupo, ROTULO_SEGUNDO_PET  # noqa: E402
@@ -56,12 +57,14 @@ CTV = X.config_tv(FONTE)
 
 
 def cerebro(semente: int) -> DigiBrain:
-    return DigiBrain(CONFIG_PADRAO, X.config_vida(), X.orq.CM, semente=semente, cfg_olhar=X.config_olhar(FONTE), ir_ate_tv=True)
+    return DigiBrain(CONFIG_PADRAO, X.config_vida(), X.orq.CM, semente=semente, cfg_olhar=X.config_olhar(FONTE), ir_ate_tv=True,
+                     cfg_enjoo_tela=CONFIG_ENJOO_TELA_LIGADA)
 
 
 def laco(politica, semente: int, **kw):
     return com_corpo(MotorMundo)(politica, CONFIG_PADRAO, semente, NEUTRO, "brasa", obediencia_desligada=True, cfg_mundo=X.orq.CM,
-                                 cfg_corpo=X._cc(), cfg_tela=X.TELA, cfg_tv=CTV, cfg_tv_jogo=CONFIG_TVJOGO_LIGADA, **kw)
+                                 cfg_corpo=X._cc(), cfg_tela=X.TELA, cfg_tv=CTV, cfg_tv_jogo=CONFIG_TVJOGO_LIGADA,
+                                 cfg_enjoo_tela=CONFIG_ENJOO_TELA_LIGADA, **kw)
 
 
 def roteiro_tv(h: int, resumo: ResumoTela, rng: random.Random, tick: int, sentir, desligar) -> ResumoTela:
@@ -167,7 +170,7 @@ def _vida_grupo(semente: int) -> dict:
 
 
 def gerar() -> dict:
-    return {"versao": 1, "config_tv_jogo": {"desligar": True, "ir_ate_tv": True},
+    return {"versao": 1, "config_tv_jogo": {"desligar": True, "ir_ate_tv": True}, "enjoo": True,
             "vidas": [_vida(s) for s in SEMENTES], "grupos": [_vida_grupo(s) for s in SEMENTES_GRUPO]}
 
 

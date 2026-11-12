@@ -41,6 +41,8 @@ import { CONFIG_DIGIBRAIN_LAB, CONFIG_DIGIBRAIN_LAB_FALA, CONFIG_DIGIBRAIN_LAB_O
   type ConteudoFala } from "./digibrain/constantes.ts";
 import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
 import { ConfiancaCombate } from "./confianca.ts";
+import { CONFIG_ENJOO_TELA_LIGADA } from "./enjoo_tela.ts";
+import { genomaVisao } from "./digibrain/genoma_visao.ts";
 import { CONFIG_TELA_LIGADA, CONFIG_TV_JOGO, CONFIG_TVJOGO_LIGADA, ID_TV, lerSentidoTela, valorSentidoTela, valorSentidoTelaDesligada } from "./tv.ts";
 import { lutar as lutarArena, sorteiosPorFluxo, type IdCena, type ResultadoLuta as ResultadoArena, type Stats as StatsArena, type Tiro as TiroLutaPoc, type Esquiva as EsquivaLutaPoc, type Apoio as ApoioLutaPoc, type ArenaPorEstagio as ArenaLutaPoc, type TabelaFormas as TabelaFormasPoc } from "./arena/index.ts";
 import { MAPA_SALAO, MAPA_TORRE, statsRivalForma, ehMapa, esquivaDaTabela, formaDaChave as formaDaChaveMotor, mapaDoLugar, naTabela, rivaisArena, statsDaLuta, statsDoPet, statsNpc, statsRivalArena, tabelaLuta } from "./luta_poc.ts";
@@ -345,9 +347,10 @@ export class Motor {
                                        ...(nasceNaGrande(versao) || nasceNaAgua(versao) ? { contrato: CONFIG_CONTRATO_AGUA } : {}),
                                        bolaNoGolpe: ehCerebroTrocavel(versao),
                                        /* a v32: o orgao da tela no corpo e a TV do jogo no mundo, pela fonte "evento" (o evento "st") */
-                                       /* a v33 e a v34: a TV no jogo (a TV desligada e o ir ate a TV; D-GV-TVJOGO) */
+                                       /* a v33 e a v34: a TV no jogo (a TV desligada e o ir ate a TV; D-GV-TVJOGO) e o enjoo da imagem no corpo
+                                          (a ConfigEnjooTela do #875; a decisao E) */
                                        ...(nasceComTv(versao) ? { tela: { tela: CONFIG_TELA_LIGADA, tv: CONFIG_TV_JOGO,
-                                                                          ...(nasceComTvJogo(versao) ? { tvJogo: CONFIG_TVJOGO_LIGADA } : {}) } } : {}),
+                                                                          ...(nasceComTvJogo(versao) ? { tvJogo: CONFIG_TVJOGO_LIGADA, enjoo: CONFIG_ENJOO_TELA_LIGADA } : {}) } } : {}),
                                        ...(opcoes.parteDoMundo ? { parteDoMundo: opcoes.parteDoMundo } : {}) });     // o pet de teste (v16): a bola de antes; a v21, a bola no golpe
     this.v11 = { braco, laco };
     this.e = laco.estado;
@@ -913,6 +916,21 @@ export class Motor {
   }
   /** a TV no cerebro agora, para as telas (so le): se o pet olha a TV (o OCIOSO do olhar, acordado e com ela no raio), se ela esta no raio da
       visao, e o `olhar` do ultimo motivo do modular (o agrado, o termo gosto e a TV escolhida); null fora da v32 */
+  /** o gosto visual do cerebro, para o "Gosta mais de" do painel da TV (a decisao C, D-GV-TVJOGO-5; so le): por canal, o otimo de nascenca
+      e o deslocamento de tanto ver, em [0, 1] (o genoma da visao do DigiBrain e a exposicao dele, na escala S). Com o A decidindo e o modular
+      ainda nao criado, o genoma da semente do ovo (o mesmo que o modular tera) e nenhum deslocamento. null fora dos pets com a TV no cerebro */
+  gostoVisualDoCerebro(): { nascenca: Record<string, number>; deVer: Record<string, number> } | null {
+    if (!nasceComTv(this.versao)) return null;
+    const b = this.modular;
+    if (b !== null && b.co !== null) {
+      const S = b.S;
+      return { nascenca: Object.fromEntries(Object.entries(b.sens.otimo).map(([c, v]) => [c, v / S])),
+               deVer: Object.fromEntries(Object.entries(b.sens.desloc).map(([c, v]) => [c, v / S])) };
+    }
+    const g = genomaVisao(this.semente, CONFIG_OLHAR_JOGO);
+    return { nascenca: Object.fromEntries(Object.entries(g.otimo).map(([c, v]) => [c, v / CONFIG_OLHAR_JOGO.escala])),
+             deVer: Object.fromEntries(Object.keys(g.otimo).map(c => [c, 0])) };
+  }
   tvNoCerebro(): { olhando: boolean; noRaio: boolean; motivo: Record<string, unknown> | null } | null {
     if (!nasceComTv(this.versao)) return null;
     const laco = this.v11!.laco as MotorCorpoMundo, tv = laco.tv!, p = laco.mundo.pet, mo = this.lab?.ultimoMotivo ?? null;
@@ -1324,7 +1342,8 @@ export class Motor {
       const tv = nasceComTv(this.versao);
       this.modular ??= new DigiBrain(tv ? CONFIG_DIGIBRAIN_LAB_OLHAR : CONFIG_DIGIBRAIN_LAB, { ...INATOS_MODULAR, d_max: this.alcanceMemoria } as typeof INATOS_MODULAR, false,
         nasceComSonoSegura(this.versao) ? CONFIG_SONO_SEGURA_LIGADA : CONFIG_SONO_SEGURA,
-        tv ? { semente: this.semente, cfgOlhar: CONFIG_OLHAR_JOGO, ...(nasceComTvJogo(this.versao) ? { irAteTv: true } : {}) } : undefined);
+        tv ? { semente: this.semente, cfgOlhar: CONFIG_OLHAR_JOGO,
+               ...(nasceComTvJogo(this.versao) ? { irAteTv: true, cfgEnjooTela: CONFIG_ENJOO_TELA_LIGADA } : {}) } : undefined);   // a v33 e a v34: o ir ate a TV e o enjoo (D-GV-TVJOGO)
       if (this.ponteLuta) this.modular.ligarLutaMemoria();
     }
     this.modularAtivo = v.cerebro === "modular";
