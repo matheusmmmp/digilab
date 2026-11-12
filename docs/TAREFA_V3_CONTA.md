@@ -1,7 +1,7 @@
 # TAREFA V3 — CONTA (2026-11-11)
 
 Coordenador: o Matheus, nesta sessão. Worker: Claude Code (Opus 5.5). Worktree e branch: `v3-conta`. Status: ABERTA (o plano entregue,
-PROPOSTO; as decisões CN-1 a CN-10 com o Matheus).
+PROPOSTO; as decisões CN-1 a CN-14 com o Matheus).
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-11: planejar a conta (login, primeiro acesso, perfil), o save na nuvem entre aparelhos, a proteção contra raspagem e a infraestrutura de servidor.
 
@@ -21,7 +21,7 @@ A pesquisa em Python não muda.
 ## 2. Depende de
 
 - **Para o plano (esta entrega):** nada.
-- **Para as etapas de código:** as decisões CN-1 a CN-10 (seção 12 do `docs/PLANO_V3_CONTA.md`); a CN-5 e a CN-6 mudam a MMO-4 e a
+- **Para as etapas de código:** as decisões CN-1 a CN-14 (seção 12 do `docs/PLANO_V3_CONTA.md`); a CN-5 e a CN-6 mudam a MMO-4 e a
   MMO-2 aprovadas, e precisam do ok explícito do Matheus.
 
 ## 3. Mudança mínima
@@ -56,10 +56,10 @@ Não há run. A etapa CN0 é uma medida de engenharia (o tamanho dos saves), nã
 
 - O `docs/PLANO_V3_CONTA.md` existe e tem: o que existe hoje; a conta e o login; as telas; a sessão e o banco; o save na nuvem (a
   sincronização, os dois aparelhos, a divergência, o que sincroniza, as versões, as cópias); a proteção; a infraestrutura com o custo
-  estimado; o que muda no plano MMO; a privacidade; as etapas; os riscos; as decisões CN-n com a recomendação e o custo de errar.
+  estimado; o que muda no plano MMO; a privacidade; as etapas; os riscos; a monetização (os modelos, a receita e o lucro com 100 e 1 000 jogadores por dia); as decisões CN-n com a recomendação e o custo de errar.
 - Cada número novo do plano está marcado PROPOSTO, SEM FONTE, ou tem a fonte dita.
 - O corpo do PR passa em `python tools/verificar_relato.py --arquivo F --base origin/main`.
 
 ## 8. Precisa do Matheus
 
-As decisões CN-1 a CN-10, na seção 12 do plano, cada uma com a recomendação e o custo de errar.
+As decisões CN-1 a CN-14, na seção 12 do plano, cada uma com a recomendação e o custo de errar.

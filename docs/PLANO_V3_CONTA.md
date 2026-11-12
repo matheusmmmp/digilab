@@ -1,6 +1,6 @@
 # Plano da conta: login, save na nuvem, proteção e servidor (2026-11-11)
 
-**Status:** PROPOSTO, sem código. As decisões CN-1 a CN-10 (seção 12) vão ao Matheus, cada uma com a recomendação e o custo de errar.
+**Status:** PROPOSTO, sem código. As decisões CN-1 a CN-14 (seção 12) vão ao Matheus, cada uma com a recomendação e o custo de errar.
 Todo número deste plano é **PROPOSTO, SEM FONTE**, salvo onde a fonte está dita. Os custos são **estimativas**: saem da tabela de preços
 do `servidor/fala_llm.py` e de preços públicos que este plano não conferiu, e se conferem na etapa CN5, antes de contratar qualquer coisa.
 
@@ -212,6 +212,7 @@ medido na VPS.
 | **CN4: a proteção** | o `robots.txt`, a borda na Cloudflare, os assets por URL assinada, a cota da fala, o Turnstile | CN1 (a cota da fala, CN2) |
 | **CN5: a hospedagem de teste** | o domínio, a VPS, o R2, o deploy pelo CI, o backup, o painel; os custos da seção 7 conferidos com os preços do dia | CN1 a CN4; o Matheus contrata |
 | **CN6: abrir** | as páginas públicas (tela 6), os termos e a privacidade; a revisão da LGPD; só depois, fora dos convidados | CN5, a revisão |
+| **CN7: o apoio** (só se a CN-11 for aprovada) | a seção 13.4: o processador, a tabela `apoios`, as telas do apoio e as páginas de venda; a doação pode vir antes, sem código, por um link | CN6, CN-11 a CN-14 |
 
 O MMO segue as etapas dele sobre esta base: a MMO3 (o envio e a conferência) depois da CN2.
 
@@ -260,10 +261,122 @@ Cada uma com a recomendação e o custo de errar. **Todas PROPOSTAS.**
 - **CN-10. Os menores:** **só convidados adultos até a revisão da LGPD**, com a pergunta da idade no primeiro acesso. Custo de errar:
   alto, se abrir para crianças sem a revisão.
 
-## 13. Fora deste plano
+- **CN-11. Reabrir o "sem dinheiro real, nunca":** a regra está no `docs/PLANO_V3_MOEDA.md` (seção 5 e "fora do plano"), no
+  `docs/PLANO_V3_MMO.md` (seções 7 e 15) e na primeira versão deste plano. **Recomendo reabrir só para o apoio e o cosmético** (seção
+  13.1), mantendo no "nunca" a venda de Bits, de stats, de chips, de tempo e de vantagem no ranking, e o gacha e a caixa de prêmio. A outra
+  opção é manter a regra como está. Custo de errar: alto. Vender vantagem desfaz a M-2 e o ranking (MMO-7); manter o "nunca" deixa o
+  custo da seção 7 todo com o Matheus.
+- **CN-12. O modelo:** **o híbrido apoio + cosméticos** (a assinatura "Apoiador" e os enfeites avulsos, seção 13.2, linha E), **sem
+  anúncios**. A outra opção mais simples é só a doação (linha D). Custo de errar: médio. Os anúncios rendem pouco nesta escala, pioram a
+  ilha e trazem a questão dos menores; a assinatura sem nada que se veja vende pouco.
+- **CN-13. Quando começa:** **a doação logo que a CN6 abrir para os convidados; a assinatura e os cosméticos só depois**, com o
+  número de jogadores por dia medido (PROPOSTO: a partir de 300 por dia). Custo de errar: médio. Cobrar cedo demais monta um caixa, a nota
+  fiscal e o suporte para dez pessoas.
+- **CN-14. A formalização:** o recebimento por um processador com Pix e cartão (Mercado Pago ou Stripe) e **a conversa com um contador
+  antes do primeiro real** (pessoa física ou CNPJ, o imposto). Custo de errar: alto, se receber sem ver o imposto.
+
+## 13. A monetização
+
+**Origem:** o Matheus, em 2026-11-11: "um módulo referente a modelos de monetização em sistemas de jogos assim e quanto seria baseado em
+100 jogadores por dia e 1000 jogadores por dia [...] Quanto que geraria de lucro?"
+
+**Status:** PROPOSTO, e **reabre uma regra decidida.** Os Bits foram aprovados com "sem dinheiro real, nunca" (M-1 a M-10), e o plano MMO
+repetiu a regra. Nada desta seção vale sem a CN-11. **Todos os números são PROPOSTOS, SEM FONTE:** as taxas de conversão, os valores
+por jogador e os preços dos anúncios saem de blogs de fornecedores e de guias de mercado (seção 13.5), que discordam entre si e não são
+referências verificadas. Servem para a ordem de grandeza, não para um orçamento.
+
+### 13.1 O que pode e o que nunca pode ser vendido
+
+| pode (se a CN-11 for aprovada) | nunca |
+|---|---|
+| **o apoio:** a assinatura "Apoiador" e a doação avulsa | os **Bits** (continuam só jogando, M-1 a M-10) |
+| **os enfeites da ilha** só do apoio (o padrão cartoon, só objetos da ilha) | **stats, chips, itens de luta, tempo** (pular espera, acelerar além do de hoje) |
+| **a voz:** uma cota maior de falas pela LLM (a CN-8 dá 30 por dia; o apoiador, mais) | **vantagem no ranking**: o MMO-7 continua; quem paga e quem não paga lutam igual |
+| **o selo de apoiador** no perfil | **o gacha, a caixa de prêmio**, qualquer sorteio pago |
+| | **acréscimo no desenho do Digimon** (a regra "poses sem acréscimos") |
+| | **cobrança de criança**: só adultos pagam (a CN-10) |
+
+**A voz no apoio** casa a receita com o custo: a fala é o que mais pesa na conta da seção 7, e quem fala mais é quem paga por ela.
+
+### 13.2 Os modelos e a receita por mês
+
+As premissas (PROPOSTAS, SEM FONTE):
+- **jogadores no mês = 5 × jogadores por dia** (a razão DAU/MAU de 0,2, comum nos guias de mercado). 100 por dia são uns 500 no mês; 1
+  000 por dia, uns 5 000;
+- **o mês tem 30 dias**; o dólar fica em dólar (a conversão para real muda todo dia);
+- **as taxas:** uns 10 % para o processador nos pagamentos pequenos (a parte fixa por cobrança pesa num valor de US$ 4) e uns 10 % de
+  imposto. **O imposto real depende da forma de receber (CN-14) e é do contador, não deste plano.** Nos anúncios, só o imposto.
+
+| | o modelo | a premissa | receita bruta: 100 por dia | receita bruta: 1 000 por dia |
+|---|---|---|---|---|
+| **A** | **anúncios recompensados** (o jogador escolhe ver, por um enfeite ou falas) | 2 por jogador por dia, US$ 2 a 4 por mil vistos (eCPM da web) | US$ 12 a 24 | US$ 120 a 240 |
+| **B** | **assinatura "Apoiador"** | US$ 4 por mês, 1 % a 3 % dos jogadores do mês | US$ 20 a 60 | US$ 200 a 600 |
+| **C** | **enfeites avulsos** | US$ 0,01 a 0,03 por jogador por dia (bem abaixo da faixa dos jogos casuais, que compram tráfego e têm uma loja inteira) | US$ 30 a 90 | US$ 300 a 900 |
+| **D** | **doação** (Apoia.se, Ko-fi, Catarse) | 0,5 % a 1 % dos jogadores do mês, US$ 5 por mês | US$ 12 a 25 | US$ 125 a 250 |
+| **E** | **híbrido B + C** (recomendado, CN-12) | as duas linhas juntas | US$ 50 a 150 | US$ 500 a 1 500 |
+| **F** | **jogo pago** (compra única) | não se compara por jogadores por dia: depende de quantos chegam novos por mês | — | — |
+| **G** | **um portal** (Poki, CrazyGames) | o portal traz jogadores e paga uma parte dos anúncios (40 % a 60 %, sem número público confiável) | muda o número de jogadores, não a conta por jogador | |
+
+### 13.3 O lucro por mês
+
+A receita líquida tira as taxas de 13.2. Os custos são os da seção 7: a infraestrutura (a Cloudflare, a VPS, o domínio) mais a fala.
+
+| | 100 por dia | 1 000 por dia |
+|---|---|---|
+| **custo**, com a fala no `claude-haiku-5-5` | US$ 13 a 18 | US$ 77 a 98 |
+| **custo**, com a fala no `claude-haiku-4-5` (o padrão de hoje) | US$ 67 a 72 | US$ 617 a 638 |
+| **E (híbrido)**, a receita líquida | US$ 40 a 120 | US$ 400 a 1 200 |
+| **E, o lucro**, fala no Haiku 5.5 | **uns US$ 22 a 107** | **uns US$ 300 a 1 120** |
+| **E, o lucro**, fala no Haiku 4.5 | **uns −US$ 32 a +US$ 53** | **uns −US$ 240 a +US$ 580** |
+| **A (só anúncios)**, o lucro, fala no Haiku 5.5 | **uns −US$ 7 a +US$ 9** | **uns US$ 10 a 140** |
+| **D (só doação)**, o lucro, fala no Haiku 5.5 | **uns −US$ 8 a +US$ 7** | **uns US$ 2 a 123** |
+
+**A leitura:**
+- **Com 100 jogadores por dia, nenhum modelo dá renda.** No melhor caso, paga o servidor e sobra pouco. A doação e os
+  anúncios mal empatam.
+- **Com 1 000 por dia, o híbrido paga tudo e sobra de umas centenas até uns mil dólares por mês**, se a conversão ficar na faixa de cima.
+- **O modelo da voz decide se dá lucro ou prejuízo.** Com o Haiku 4.5, o custo da fala come o híbrido nos dois tamanhos, e o resultado pode
+  ser negativo. Por isso a cota da CN-8 e a voz maior só para o apoiador.
+- **O lucro não conta o tempo do Matheus** (o suporte, a loja, a contabilidade) nem a aquisição de jogadores: os 100 ou 1 000 por dia
+  têm de chegar de algum lugar, e os jogos casuais que chegam a esses números costumam pagar por eles.
+
+### 13.4 O que entra no código e na infraestrutura (a etapa CN7, depois da CN6)
+
+- **O processador:** o checkout do Mercado Pago ou do Stripe (Pix e cartão), com a confirmação por webhook no servidor. **O jogo nunca
+  vê o cartão.**
+- **No banco:** a tabela `apoios` (a conta, o plano, a validade, o id do processador). O apoio é do Tamer, não do pet, e não entra no log
+  do pet nem no do Tamer: **o motor não sabe quem pagou** (o replay e o ranking ficam iguais para todos).
+- **As telas** (com a prancha antes): "Apoiar" no perfil (tela 4); a vitrine dos enfeites do apoio na loja do carro, marcada à parte dos
+  Bits; o recibo; "cancelar", com um clique.
+- **As páginas públicas:** os termos de venda, o reembolso e o arrependimento de 7 dias (Código de Defesa do Consumidor, art. 49, na compra
+  pela internet).
+
+### 13.5 As fontes de mercado (não verificadas)
+
+São blogs de fornecedores e guias; os números discordam entre si, e nenhum é uma referência verificada (a regra do `CLAUDE.md`). Lidas
+em 2026-11-11:
+- valor por jogador por dia (ARPDAU) por gênero: <https://www.juegostudio.com/blog/arpdau-benchmarks-by-game-genre>,
+  <https://blog.playio.co/arpdau-benchmarks-mobile-games>, <https://metricstree.vercel.app/en/blog/arpdau-mobile-games>;
+- a conversão de pagantes: <https://blog.playio.co/arppu-mobile-games>, <https://appfollow.io/blog/mobile-game-kpis>;
+- os anúncios na web e os portais: <https://docs.crazygames.com/resources/ad-monetization-guide/>,
+  <https://www.applixir.com/?p=4428>, <https://app.cinevva.com/guides/web-game-monetization>,
+  <https://app.cinevva.com/guides/publish-game-poki>.
+
+### 13.6 Os riscos próprios
+
+| risco | o que se vê | o que segura |
+|---|---|---|
+| **pagar para ganhar por um atalho** | um enfeite ou uma fala paga muda o pet | o apoio fica fora dos logs; o motor não sabe quem pagou; a tabela 13.1 |
+| **a voz paga sai mais cara do que rende** | o apoiador fala muito no modelo caro | a cota do apoiador também tem teto; o teto total de gasto continua |
+| **os sprites e os nomes do Digimon** | o jogo usa o desenho do Digimon UP com o crédito (a regra 5.1 das `docs/UI_GUIDELINES.md`); cobrar por um jogo com uma marca de outra empresa muda o tamanho do risco, mesmo que só os enfeites próprios sejam vendidos | **vai na conversa da CN-14**, com quem entende de direito autoral, antes do primeiro real. Este plano não é parecer jurídico |
+| **a criança paga** | uma compra sem o responsável | só adultos pagam (a CN-10); o processador pede o titular |
+| **o imposto e o reembolso** | uma cobrança sem nota, um pedido de reembolso sem regra | a CN-14; os termos de venda; o arrependimento de 7 dias |
+
+## 14. Fora deste plano
 
 - O ranking, as sementes e as tabelas: são do `docs/PLANO_V3_MMO.md`.
 - A troca entre jogadores, o chat livre e a luta ao vivo (como no plano MMO).
-- O dinheiro real: nunca.
+- A venda de Bits, de stats, de tempo ou de vantagem, o gacha e a caixa de prêmio: nunca. O dinheiro real só entra pela seção 13, se a
+  CN-11 for aprovada.
 - O aplicativo de loja (Android ou iOS): o jogo segue no navegador.
 - Qualquer mudança no Python, no `engine.py`, no motor do pet ou no formato do save.
