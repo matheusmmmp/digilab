@@ -23,7 +23,7 @@ Com o acréscimo dele: começar por uma POC de um mundo simulado vivo, com o mes
 | fase | o que entrega | depende de | tamanho |
 |---|---|---|---|
 | **J0** | este desenho (GDD, engenharia, roadmap) e as decisões PAR-4 a PAR-15 | — | P |
-| **J1** | a POC do mundo vivo no motor do jogo (TS, sem vista): uma região, habitantes, recursos, dia e noite, a viagem de ida e volta, o mesmo cérebro | J0; a PAR-7 | G |
+| **J1** | a POC do mundo vivo no motor do jogo (TS, sem vista): uma região, habitantes comuns e um especial, recursos, dia e noite, a viagem de ida e volta, o mesmo cérebro | J0 | G |
 | **J2** | a vista mínima da J1: sair pelo cais, andar na região, voltar | J1 | M |
 | **J3** | a evolução por progresso e relação (os contadores do log; o vínculo no Champion e no Ultimate) | J0 (corre em paralelo com a J1) | M |
 | **J4** | os eventos roteirizados e as escolhas do dono na região; a abertura do brasão (PAR-4) | J2 | M |
@@ -39,8 +39,7 @@ Com o acréscimo dele: começar por uma POC de um mundo simulado vivo, com o mes
 
 - **Entrega:** os três documentos e a lista de decisões.
 - **Aceite:** o Matheus decide as PAR-4 a PAR-15, ou adia cada uma com o motivo.
-- **Precisa do Matheus:** as decisões da seção 11 do GDD. A PAR-6 (o habitat congela) e a PAR-14 (só no web) já estão decididas; a que
-  ainda trava a J1 é a PAR-7 (o controlador dos habitantes).
+- **Precisa do Matheus:** as decisões da seção 11 do GDD. As que travavam a J1 (PAR-6, PAR-7 e PAR-14) estão decididas.
 
 ### J1. A POC do mundo vivo (motor do jogo, sem vista)
 
@@ -49,7 +48,7 @@ Com o acréscimo dele: começar por uma POC de um mundo simulado vivo, com o mes
 - **O que se constrói, em `web/app/motor/`:**
   - a chave da jornada (desligada) e o gabarito byte a byte das vidas de hoje, num commit próprio;
   - a região gerada da semente, com recursos em ciclos inteiros e dia e noite;
-  - os habitantes com controlador simples (PAR-7);
+  - os habitantes comuns com controlador simples e **um habitante especial com DigiBrain**, preso a uma rotina (PAR-7);
   - o evento `vj` de ida e volta, o habitat congelado (PAR-6) e a memória espacial por área;
   - uma `VERSAO_PET` nova.
 - **Os critérios (PROPOSTOS, a fechar na espec da J1):**
@@ -58,7 +57,10 @@ Com o acréscimo dele: começar por uma POC de um mundo simulado vivo, com o mes
   - **G-MESMO-CEREBRO:** a política é a mesma instância nas duas áreas, e um teste mostra um efeito cruzado (algo aprendido na região que
     muda uma escolha no habitat);
   - **G-IDA-VOLTA**, **G-BYTE**, **G-ESTAVEL** e **G-PAR-CEREBRO** (seção 5 da engenharia);
-  - **G-CUSTO:** o tempo do replay de uma vida com jornada, medido no Node e gravado em disco (como `replay_lp2.json`).
+  - **G-CUSTO:** o tempo do replay de uma vida com jornada, medido no Node e gravado em disco (como `replay_lp2.json`), com e sem o
+    especial. Daí sai o teto de especiais por região;
+  - **G-SURPRESA (PROPOSTO):** o especial produz situações diferentes entre visitas com o mesmo começo, e um controlador simples no lugar
+    dele não produz.
 - **Se um critério falhar:** o achado é registrado, e a J2 espera a decisão do Matheus.
 
 ### J2. A vista mínima (jogo)

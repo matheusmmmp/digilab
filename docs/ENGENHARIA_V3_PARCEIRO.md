@@ -76,11 +76,19 @@ serem correlacionadas". Num projeto com event sourcing, isso quer dizer três co
 - **Os recursos** (fruta, água, abrigo) têm ciclos em ticks inteiros: amadurecer, apodrecer, renascer.
 - **Dia, noite e clima:** funções do `t` e de uma rng do ambiente da região, nunca da política.
 
-### 4.3 Os habitantes: agentes com controlador simples
+### 4.3 Os habitantes: comuns com controlador simples, especiais com DigiBrain
 
-- **PAR-7 (PROPOSTO):** na POC, cada habitante tem um controlador por regras com necessidades (fome, sono, território) e memória curta,
-  com a sua rng derivada. Não é o DigiBrain.
-- **Por quê:** o replay refaz cada habitante a cada tick. Um DigiBrain por habitante multiplica o custo e a superfície de paridade.
+- **PAR-7 (DECIDIDO pelo Matheus, 2026-11-12):**
+  - **os comuns** têm um controlador por regras, com necessidades (fome, sono, território), memória curta e a sua rng derivada;
+  - **os especiais** (poucos por região) têm uma instância própria do DigiBrain modular, com a sua semente derivada
+    (`derivar_semente(semente_do_pet, "especial", id)`).
+- **A rotina que prende o especial:** o cérebro dele só escolhe entre as ações e os lugares que a rotina permite naquela hora (uma
+  máscara sobre o espaço de ação, PROPOSTA). A rotina dá a forma, e o cérebro dá a surpresa dentro dela.
+- **A memória do especial:** como tudo sai do log, o estado do cérebro do especial se refaz no replay. Ele lembra do pet entre as
+  visitas sem nenhum save à parte.
+- **Por que só alguns:** o replay refaz cada habitante a cada tick, e um DigiBrain custa muito mais que um controlador. Os especiais
+  só pensam enquanto o pet está na região (a região congela fora da visita, como o habitat, PAR-6), e o número deles por região tem
+  um teto medido na POC (G-CUSTO).
 - **O orçamento (PROPOSTO, SEM FONTE):** o número de habitantes e o custo por tick saem da POC, medidos no Node e no Chrome do celular. A referência
   de hoje é o replay da luta (`web/app/scripts/medicoes/replay_lp2.json`), e o alvo é que o replay de uma vida com jornada continue na
   mesma ordem de grandeza.
@@ -159,7 +167,7 @@ serem correlacionadas". Num projeto com event sourcing, isso quer dizer três co
 | risco | efeito | mitigação |
 |---|---|---|
 | a região em float diverge entre o Chrome e o Node | o replay do celular difere do Node no último bit | física e ciclos em inteiros, como o mundo de hoje |
-| habitantes demais | o replay fica lento, e o celular sofre | controlador simples (PAR-7) e um teto medido na POC |
+| habitantes demais, ou especiais demais | o replay fica lento, e o celular sofre | os comuns com controlador simples; os especiais com teto por região, medido na POC (PAR-7) |
 | a memória espacial por área cresce | o estado do cérebro pesa | chave por área e o alcance de hoje (128 células) |
 | o catálogo de eventos muda e quebra logs antigos | o replay de um pet antigo falha | catálogo com versão, nunca editar uma entrada publicada |
 | a semente da luta pela posição no log | o jogador "rola" a luta | semente por `derivar_semente` do evento da jornada |

@@ -1,6 +1,6 @@
 # GDD do parceiro: um Digimon, um cérebro, uma jornada (2026-11-12)
 
-**Status:** PROPOSTO, sem código. Cinco decisões já são do Matheus (PAR-1 a PAR-3, PAR-6 e PAR-14, seção 11). As outras estão PROPOSTAS, com a recomendação
+**Status:** PROPOSTO, sem código. Seis decisões já são do Matheus (PAR-1 a PAR-3, PAR-6, PAR-7 e PAR-14, seção 11). As outras estão PROPOSTAS, com a recomendação
 e o custo de errar. Todo número é **PROPOSTO, SEM FONTE**, e se acerta na rodada de equilíbrio do fim ("equilíbrio só no fim").
 
 **Os três documentos da frente:**
@@ -83,8 +83,12 @@ O roteiro e a simulação criam as situações. O pet responde com o que aprende
 
 **O que é:** uma região fora da ilha, de um bioma, onde o pet vai com o dono. Ela tem vida própria.
 
-- **Habitantes:** Digimon selvagens com rotina (comer, dormir, defender um lugar, andar em grupo). Eles têm necessidades simples e
-  memória curta. Não são o DigiBrain do parceiro (PAR-7).
+- **Habitantes comuns:** Digimon selvagens com rotina (comer, dormir, defender um lugar, andar em grupo). Têm um controlador simples,
+  com necessidades e memória curta (PAR-7). São a maioria.
+- **Habitantes especiais:** poucos seres da região (PROPOSTO: de 1 a 3 por região) têm um **DigiBrain próprio**, preso a uma rotina
+  específica, como um guardião que ronda uma ruína ou um viajante que passa de lugar em lugar. Dentro da rotina, o cérebro escolhe, e
+  é daí que saem as situações inesperadas: um dia o guardião deixa o pet passar, noutro briga; ele lembra do pet entre as visitas
+  (PAR-7, nas palavras do Matheus: "o digibrain gerando eventos que possam ser imersivos [...] para ocasionar situações inesperadas").
 - **Recursos:** frutas que amadurecem e apodrecem, água, abrigo. Os habitantes disputam os recursos, e o pet também.
 - **Tempo:** dia e noite e um clima simples mudam quem está onde.
 - **O habitat congela enquanto o pet está fora (PAR-6):** a casa volta exatamente como ficou.
@@ -182,7 +186,7 @@ Cada entrada nova é uma versão de pet nova, com paridade. Os pets antigos não
 | PAR-4 | o brasão sai das primeiras interações, não de um menu | PROPOSTO | sim, numa abertura curta, ainda com os quatro brasões | um menu fica mais claro para quem joga pela primeira vez; uma abertura mal feita parece sorteio |
 | PAR-5 | evento nenhum dá ou tira caráter direto | PROPOSTO | sim | um "+1 Coragem" vira a nota que a decisão de 2026-10-07 tirou, e o cérebro deixa de importar |
 | PAR-6 | enquanto o pet está fora, o habitat congela | **DECIDIDO** (Matheus, 2026-11-12: "ele pode ficar congelado, não precisa ter alteração nenhuma no universo enquanto o pet está fora") | — | — |
-| PAR-7 | os habitantes da área têm um controlador simples, não o DigiBrain | PROPOSTO | sim na POC; um cérebro de verdade só se a POC pedir | com o DigiBrain, o replay e o desempenho pesam N vezes; com regras pobres demais, a área não parece viva |
+| PAR-7 | os habitantes comuns têm um controlador simples; poucos habitantes especiais têm um DigiBrain próprio, preso a uma rotina específica, para gerar situações inesperadas | **DECIDIDO** (Matheus, 2026-11-12: "não todos os NPCs, para não pesar tanto") | — | — |
 | PAR-8 | os golpes destravados ficam com o pet entre as formas | PROPOSTO | sim | sem isso, a evolução apaga o que o jogador construiu |
 | PAR-9 | o cérebro do pet escolhe o golpe na luta | PROPOSTO, **depois do núcleo da luta** | decidir só quando o núcleo (N0–N4) fechar | mexer agora briga com a LP-3 e com o trabalho em curso |
 | PAR-10 | personagens guardam afinidade feita de atos, sem diálogo de agradar | PROPOSTO | sim | diálogo de agradar vira uma árvore de respostas certas |

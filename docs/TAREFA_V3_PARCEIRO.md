@@ -10,7 +10,7 @@ Como dar ao jogo um parceiro só, que vive entre o habitat e uma área viva com 
 
 ## 2. Depende de
 
-As decisões PAR-1 a PAR-3, PAR-6 e PAR-14 (Matheus, 2026-11-12). Para a J1 falta a PAR-7.
+As decisões PAR-1 a PAR-3, PAR-6, PAR-7 e PAR-14 (Matheus, 2026-11-12). Nada mais trava a espec da J1.
 
 ## 3. Mudança mínima
 
