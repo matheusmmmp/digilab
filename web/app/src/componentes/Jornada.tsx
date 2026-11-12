@@ -107,7 +107,7 @@ export function Conclusao({ m, fechar }: { m: Motor; fechar: () => void }) {
    P-9 (docs/PLANO_V3_PROGRESSAO_TUTORIAL.md, decidido em 2026-11-06): uma pagina so, a "Cuide". A "Ensine" dizia "Elogie ou repreenda", que os pets v11 nao tem
    (docs/DECISAO_PRODUTO_SEM_ELOGIO_BRONCA.md), e o resto vem com os cartoes dos niveis (CartaoNivel.tsx): o Crescer no Nv 3 e o Forcar no Nv 6 (as Regras de luta sairam com o combate por turnos, LP4) */
 const PAGINAS: { tit: string; txt: string; sprites: string[]; chips?: [string, string][]; faixa?: string }[] = [
-  { tit: "Cuide", txt: "Ele chama quando tem fome, fica sujo ou quer carinho. Atender logo conta.", sprites: ["brasa_bebe"], chips: [["emoji_carne", ""]] },
+  { tit: "Cuide", txt: "Ele chama quando tem fome, fica sujo ou quer atenção. Atender logo conta.", sprites: ["brasa_bebe"], chips: [["emoji_carne", ""]] },
 ];
 const ROTULO_EST = ["bebê", "criança", "adolescente", "adulto"];
 

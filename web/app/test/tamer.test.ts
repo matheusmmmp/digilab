@@ -49,7 +49,7 @@ describe("registro do Tamer", () => {
     expect(r.n).toBe(2);
     expect(r.medalhas).toEqual(t.medalhas);
     expect(r.ganha("floresta")).toMatchObject({ n: 2, quando: 2000, pet: 5 });
-    expect(JSON.parse(a.dados[CHAVE_TAMER])).toEqual({ versao: 9, log: t.log });
+    expect(JSON.parse(a.dados[CHAVE_TAMER])).toEqual({ versao: 10, log: t.log });
     expect(lerTamer(armaz()).n).toBe(0);                          /* sem a chave: Tamer novo */
   });
   test("evento desconhecido, medalha repetida, contador fora de ordem e JSON quebrado falham alto", () => {
@@ -59,7 +59,7 @@ describe("registro do Tamer", () => {
     expect(() => Tamer.reproduzir([["medalha", { ...ok[1], n: 2 }]])).toThrow(/fora de ordem/);
     expect(() => Tamer.reproduzir([["medalha", { ...ok[1], id: "lua" }]])).toThrow(/desconhecida/);
     expect(() => lerTamer(armaz({ [CHAVE_TAMER]: "{" }))).toThrow(/JSON/);
-    expect(() => lerTamer(armaz({ [CHAVE_TAMER]: JSON.stringify({ versao: 10, log: [] }) }))).toThrow(/versão/);
+    expect(() => lerTamer(armaz({ [CHAVE_TAMER]: JSON.stringify({ versao: 11, log: [] }) }))).toThrow(/versão/);
   });
   test("medalha so na primeira vitoria contra o lider, uma vez por Tamer", () => {
     const t = new Tamer(), m = rookieTreinado(21);
@@ -118,7 +118,7 @@ describe("o descarte 8 (LUTA_POC, LP4; o 7 da LP2 e LP-6 junto): com a chave da 
     expect(JSON.parse(a.dados[CHAVE_DESCARTADOS])).toEqual([{ tamer: { versao: 7, log } }]);
     const r = lerTamer(a);
     expect(r.fabrica).toEqual([]); expect(r.titulo).not.toBeNull(); expect(r.n).toBe(6);
-    expect(JSON.parse(a.dados[CHAVE_TAMER])).toEqual({ versao: 9, log: base });
+    expect(JSON.parse(a.dados[CHAVE_TAMER])).toEqual({ versao: 10, log: base });
     expect(a.dados[CHAVE_DESCARTE]).toBe("8");
     expect(semFabricaAntiga(log).tentativas).toBe(2);
     expect(semFabricaAntiga(base).tentativas).toBe(0);
@@ -159,7 +159,7 @@ describe("descarte unico dos pets antigos (o 6: a luta em tempo real, pets v13; 
     expect(a.dados[GUARDADOS]).toBe("[]");
     expect(avisoTR(a)).toEqual({ pets: 2, fabrica: 0 });
     expect(lerTamer(a).n).toBe(1);
-    expect(JSON.parse(a.dados[CHAVE_TAMER]).versao).toBe(9);
+    expect(JSON.parse(a.dados[CHAVE_TAMER]).versao).toBe(10);
   });
   test("a Fabrica de antes sai do Tamer (D-4): o aviso conta as tentativas; o resto do Tamer fica", () => {
     /* o registro de um Tamer com o titulo e uma tentativa da Fabrica dos v9 (as lutas dela nao precisam estar no registro) */
@@ -173,7 +173,7 @@ describe("descarte unico dos pets antigos (o 6: a luta em tempo real, pets v13; 
     expect(avisoTR(a)).toEqual({ pets: 0, fabrica: 1 });
     const r = lerTamer(a);
     expect(r.fabrica).toEqual([]); expect(r.titulo).not.toBeNull();
-    expect(JSON.parse(a.dados[CHAVE_TAMER]).versao).toBe(9);
+    expect(JSON.parse(a.dados[CHAVE_TAMER]).versao).toBe(10);
     /* o registro 7 nao aceita a Fabrica de antes */
     const b = armaz({ [CHAVE_TAMER]: JSON.stringify({ versao: 7, log }) });
     expect(() => lerTamer(b)).toThrow(/regras de antes/);

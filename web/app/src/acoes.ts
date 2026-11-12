@@ -11,13 +11,13 @@ import { ajustarVelocidadeChamado } from "./tempo.ts";
 
 /** rotulo dos botoes (tela do Pet) e do chip do comando ("Alimentar?") */
 export const ROTULO_DONO: Record<AcaoDono, string> = {
-  alimentar: "Alimentar", limpar: "Limpar", brincar: "Brincar", acariciar: "Carinho", elogiar: "Elogiar", repreender: "Repreender",
-  petisco: "Petisco", levar_ao_banheiro: "Banheiro", tratar_lesao: "Tratar", tapa: "Tapa",
+  alimentar: "Alimentar", limpar: "Limpar", brincar: "Brincar", acariciar: "Elogiar", elogiar: "Elogiar (v1)", repreender: "Repreender (v1)",
+  petisco: "Petisco", levar_ao_banheiro: "Banheiro", tratar_lesao: "Tratar", tapa: "Repreender",
 };
 /** o que o dono fez, no historico da conversa ("✓ alimentou") */
 export const FEITO_DONO: Record<AcaoDono, string> = {
-  alimentar: "alimentou", limpar: "limpou", brincar: "brincou", acariciar: "fez carinho", elogiar: "elogiou", repreender: "repreendeu",
-  petisco: "deu petisco", levar_ao_banheiro: "levou ao banheiro", tratar_lesao: "tratou a lesão", tapa: "deu um tapa",
+  alimentar: "alimentou", limpar: "limpou", brincar: "brincou", acariciar: "elogiou", elogiar: "elogiou (v1)", repreender: "repreendeu (v1)",
+  petisco: "deu petisco", levar_ao_banheiro: "levou ao banheiro", tratar_lesao: "tratou a lesão", tapa: "repreendeu",
 };
 export const ICONE_DONO: Record<AcaoDono, string> = {
   alimentar: "carne", limpar: "brilho", brincar: "nota", acariciar: "coracao", elogiar: "coracao", repreender: "gota",
@@ -46,9 +46,15 @@ export function agir(a: AcaoDono): boolean {
 export const noCatalogo = (c: unknown): AcaoDono | null =>
   typeof c === "string" && (ACOES_DONO_V4 as readonly string[]).includes(c) ? c as AcaoDono : null;
 
+/** a troca das palavras (2026-11-12, Matheus): na tela, o carinho se chama "Elogiar" e o tapa, "Repreender". A LLM continua
+    classificando o elogio e a bronca do chat como os ids antigos (elogiar, repreender, que os pets v11 nao tem); aqui eles viram
+    o gesto de hoje com o mesmo nome na tela. Os ids, o log e o prompt nao mudam. */
+const GESTO_DO_COMANDO: Partial<Record<AcaoDono, AcaoDono>> = { elogiar: "acariciar", repreender: "tapa" };
+
 export function validarComando(m: Motor, nascendo: number, c: unknown): AcaoDono | null {
-  const a = noCatalogo(c);
-  if (!a) return null;
+  const cru = noCatalogo(c);
+  if (!cru) return null;
+  const a = GESTO_DO_COMANDO[cru] ?? cru;
   if (!podeAgir(m, nascendo)) return null;
   if (!ACOES_DONO_JOGO_V11.includes(a)) return null;          /* sem elogio, bronca, petisco e banheiro (os do dono dos v11 em diante) */
   if (a === "tratar_lesao" && m.lesionadoDesde === null) return null;

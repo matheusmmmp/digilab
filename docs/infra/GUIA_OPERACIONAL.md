@@ -15,7 +15,7 @@ pesquisa, hipótese, desenho  ──►  Matheus/coordenador: nova_tarefa.py
                                   → docs/TAREFA_V2_<FRENTE>.md (PR)  ──►  worker na worktree v2-<frente>
                                                                           implementa, testa, registra desvio
                                   PR com o relato  ◄────────────────────  abre o PR e para
-                                  CI: verificar-relato (relato) + verificar-pr (testes, web)
+                                  CI: verificar-relato (relato) + verificar-pr (testes, web, servidor-web)
 Work lê o PR pelo conector   ◄──  (testado em 2026-10-18; gatilho opcional)
 revisão, inconsistências  ──────► Matheus decide e faz o merge
                                   coordenador: PAINEL_V2 + gerar_estado_atual.py
@@ -159,6 +159,9 @@ Uma frase como "os testes passam" no corpo vira **alerta DECLARADA**: só conta 
 **Job `web`** (Linux; INFRA_AGENTES E5, `docs/TAREFA_V3_INFRA_AGENTES.md`, seção 3.5): só quando o PR muda `web/app/`, roda em `web/app`
 o `npm ci`, o `npm run tipos`, o `npm test` (Vitest) e o `npm run build`. O e2e fica fora: os specs leem o atlas de `D:\Trab\digilab\Assets`
 e as referências das capturas, que não estão no git (D-IA-3). Ele continua com o Gerente na junção e com o testador.
+
+**Job `servidor-web`** (Linux): só quando o PR muda `servidor_web/` (ou o `verificar-pr.yml`), roda em `servidor_web` o `npm ci`, o
+`npm run tipos` e o `npm test` (Vitest), com o cliente da Anthropic falso: nenhuma chamada paga e nenhuma chave no CI.
 
 A suíte inteira (~36 min) roda só manualmente: Actions > verificar-pr > Run workflow > `suite_inteira` (continua no `verificar-pr`).
 

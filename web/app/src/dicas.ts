@@ -17,7 +17,7 @@ export const DICAS = {
   rookie: "Virou Rookie. A sala de treino fica em Crescer · Treinar, e o primeiro rival da Campina pede treino.",
   ensinar: "Elogie ou repreenda o que ele ACABOU de fazer: vale por 2 min e muda a vontade dele numa situação parecida.",
   /* pets v11: sem elogio nem bronca; ele aprende pelo corpo, e o carinho e o tapa sao gestos */
-  ensinar_v11: "Ele aprende sozinho com o que as próprias ações fazem no corpo dele. O carinho acalma; o tapa diz que você não gostou do que ele ACABOU de fazer.",
+  ensinar_v11: "Ele aprende sozinho com o que as próprias ações fazem no corpo dele. Elogiar acalma; repreender diz que você não gostou do que ele ACABOU de fazer.",
   derrota_campanha: "Faltou força: treine e volte. Cada ponto treinado aumenta o tamanho dele na campanha.",
   champion: "Virou Champion. Com fadiga 40 ele pede pausa; com 60 o treino vira Forçar: rende mais e gera sobrecarga.",
   regra_nova: "Ele tirou uma regra da luta. Travar a mantém na posição; Vetar proíbe. O resto ele aprende sozinho.",

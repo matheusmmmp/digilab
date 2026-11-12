@@ -18,7 +18,10 @@ import { conceitosDaVoz, estadoDaVoz, fatosDoDono } from "./falaRede.ts";
 import { jogoAtual } from "./jogo.ts";
 import { CHAVE } from "./save.ts";
 
-const LOG = CHAVE + ".fala.jsonl", MODO = CHAVE + "-modo-fala", CONVERSA_NOVA = CHAVE + "-conversa-nova", FALA_REDE = CHAVE + "-fala-rede";
+/** o log de apresentacao da fala; as linhas da fala do assistir (src/falaAssistir.ts, `situacao: "assistir"`) moram nele tambem e sao lidas
+    so por la (lerLogAssistir): `lerLog` as pula */
+export const LOG_FALA = CHAVE + ".fala.jsonl";
+const LOG = LOG_FALA, MODO = CHAVE + "-modo-fala", CONVERSA_NOVA = CHAVE + "-conversa-nova", FALA_REDE = CHAVE + "-fala-rede";
 /* versao 2 (comando pelo chat): `comando` e `comando_executado`; a 1 continua sendo lida (campos ausentes = null/false) */
 export const VERSAO_LOG = 2;
 const MAX_TROCAS = 10, INTERVALO_ESPONTANEA_MS = 20000;
@@ -50,8 +53,7 @@ try { FL.falaRede = localStorage.getItem(FALA_REDE) === "1"; } catch { /* sem ar
 /* ------------------------------------------------ log de apresentacao (separado do registro do pet) */
 export function lerLog(): RegistroFala[] {
   let txt = ""; try { txt = localStorage.getItem(LOG) || ""; } catch { return []; }
-  return txt.split("\n").filter(Boolean).map((l, i) => {
-    const r = JSON.parse(l);
+  return txt.split("\n").filter(Boolean).map(l => JSON.parse(l)).filter(r => r.situacao !== "assistir").map((r, i) => {
     if (!(r.versao === 1 || r.versao === VERSAO_LOG) || typeof r.fala !== "string") throw new Error(`log de fala invalido (linha ${i + 1})`);
     if (r.versao === 1) { r.comando = null; r.comando_executado = false; }      /* a versao 1 nao tinha comando */
     return r as RegistroFala;
@@ -61,7 +63,7 @@ function anexar(reg: RegistroFala): void {
   try { localStorage.setItem(LOG, (localStorage.getItem(LOG) || "") + JSON.stringify(reg) + "\n"); } catch { /* sem armazenamento */ }
 }
 /* ------------------------------------------------ fatos do pet (mesmo formato que digilab_fala_livre/fatos.py) */
-const NOME_MEM: Record<string, string> = { demora: "Você me deixou esperando", bronca: "Broncas", elogio: "Elogios", carinho: "Carinho" };
+const NOME_MEM: Record<string, string> = { demora: "Você me deixou esperando", bronca: "Broncas", elogio: "Elogios", carinho: "Atenção" };
 const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
 const diaDe = (t: number): number => Math.floor((t - TICK_INICIAL) / TPD) + 1;
 const fatoresTxt = (f: string[]): string[] => f.map(x => (FATORES_TXT[x] && FATORES_TXT[x].marcador) || x.replace(/_/g, " ")).slice(0, 4);

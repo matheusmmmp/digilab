@@ -48,10 +48,15 @@
    Os Bits, a moeda (docs/PLANO_V3_MOEDA.md, etapa MO1; M-1 a M-10 decididas pelo Matheus em 2026-11-10): registro versao 9 (le 1 a 8).
    Evento "bits": um feito que valeu moeda (o id dele, o pet, o valor, a origem, o tick do pet e a hora de parede). A conta do feito e do
    valor e a de src/bits.ts; aqui so se confere que o mesmo feito nao entra duas vezes. O saldo nao e guardado: e a soma dos "bits" (a MO2 e
-   a MO3 trazem o gasto, o evento "compra"). Nada disso entra no registro do pet. */
+   a MO3 trazem o gasto, o evento "compra"). Nada disso entra no registro do pet.
+
+   O nivel 10 no registro (docs/PLANO_V3_MMO.md, etapa MMO2; P-5 opcao T e MMO-13, APROVADAS): registro versao 10 (le 1 a 9). Evento
+   "nivel": um marco do nivel do Tamer que o servidor precisa conferir. Hoje so o marco 10, o primeiro Mega de um pet do jogador (o pet, a
+   forma e o tick da evolucao dele). Os marcos 1 a 9 continuam so na vista (src/nivel.ts, MMO-15). O servidor confere o evento refazendo o
+   log do pet (marcoConfere). Um registro de antes da 10 com o evento falha alto. */
 import {
   ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, VERSAO_FABRICA_ATUAL, VERSOES_FABRICA, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto,
-  cartaDe, ehInstalacao, itemDe, medalhaDoLider, nomeForma, temEfeito, type Estagio, type IdInstalacao, type Medalha,
+  cartaDe, ehInstalacao, itemDe, medalhaDoLider, nomeForma, temEfeito, type Estagio, type Evolucao, type IdInstalacao, type Medalha,
 } from "../motor/index.ts";
 import { CHAVE, type Armazenamento } from "./save.ts";
 import { BITS, ORIGENS_BITS, ORIGENS_DO_TAMER, bitsDaMedalha, feitosDoPet, type OrigemBits } from "./bits.ts";
@@ -70,10 +75,16 @@ export const CHAVE_AVISO_POC = CHAVE + "-aviso-poc";
 /** versao do registro do Tamer: 1 = medalhas (parte 1); 2 = medalhas e itens (parte 3); 3 = e o titulo da Liga (parte 4a); 4 = e os
     recordes das instalacoes da Fronteira (parte 4b); 5 = e a Fabrica e o Salao (parte 4c); 6 = e a versao das regras de cada tentativa da
     Fabrica (campo `v`, equilibrio geral fase 3); 7 = so a Fabrica em tempo real (v: 13; COMBATE-TR, D-4; a v: 14 da B2 e a v: 21 da LP2b cabiam
-    nele); 8 = so a Fabrica da luta da POC (v: 21; LUTA_POC, LP4); 9 = e os Bits (evento "bits", MOEDA, MO1). Grava a 9; le as nove (da 7 em diante
-    so com as tentativas v: 21: as outras saem no descarte 8) */
-export const VERSAO_TAMER = 9;
-const VERSOES_TAMER = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    nele); 8 = so a Fabrica da luta da POC (v: 21; LUTA_POC, LP4); 9 = e os Bits (evento "bits", MOEDA, MO1); 10 = e o marco do nivel 10 (evento "nivel",
+    MMO2). Grava a 10; le as dez (da 7 em diante so com as tentativas v: 21: as outras saem no descarte 8) */
+export const VERSAO_TAMER = 10;
+const VERSOES_TAMER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+/** a versao do registro que traz o evento "nivel" */
+const VERSAO_TAMER_NIVEL = 10;
+/** os marcos do nivel do Tamer que vao para o registro (o resto fica so na vista): o 10, o primeiro Mega (MMO-13) */
+export const MARCOS_NO_REGISTRO: readonly number[] = [10];
+/** o marco do primeiro Mega */
+export const MARCO_MEGA = 10;
 /** os eventos da Fabrica no registro do Tamer */
 const EVENTOS_FABRICA = ["fabrica", "fabrica_luta", "fabrica_troca"];
 
@@ -103,8 +114,12 @@ export interface TrocaFabrica { n: number; k: number; quando: number }
 export interface LutaSalao { est: Estagio; pet: number; forma: string; k: number; s: number; tick: number; venceu: boolean }
 /** Salao: uma tentativa (n = 1 a primeira), as lutas na ordem dos estagios, ate a primeira que nao foi vitoria */
 export interface TentativaSalao { n: number; quando: number; lutas: LutaSalao[] }
+/** um marco do nivel do Tamer no registro (MMO2): qual (hoje so o 10), a hora de parede e o pet que o fez (semente, forma e o tick da
+    evolucao a Mega, que o servidor acha no log dele) */
+export interface MarcoNivel { n: number; quando: number; pet: number; forma: string; tick: number }
 export type EventoTamer = ["medalha", MedalhaGanha] | ["item", ItemGanho] | ["carta_usada", CartaUsada] | ["campeao", Campeao] | ["recorde", Recorde]
-  | ["fabrica", InicioFabrica] | ["fabrica_luta", EventoLutaFabrica] | ["fabrica_troca", TrocaFabrica] | ["salao", TentativaSalao] | ["bits", BitsGanhos];
+  | ["fabrica", InicioFabrica] | ["fabrica_luta", EventoLutaFabrica] | ["fabrica_troca", TrocaFabrica] | ["salao", TentativaSalao] | ["bits", BitsGanhos]
+  | ["nivel", MarcoNivel];
 /** um recorde da Fabrica ou do Salao, tirado das tentativas: o valor, a tentativa que o fez (a primeira que chegou nele) e a hora de parede */
 export interface RecordeTentativa { valor: number; n: number; quando: number }
 const ESTAGIOS: readonly string[] = ["bebe", "crianca", "adolescente", "adulto", "mega"];
@@ -128,6 +143,8 @@ export class Tamer {
   /** os Bits ganhos, na ordem, e as chaves dos feitos ja pagos (o mesmo feito nao paga duas vezes) */
   ganhos: BitsGanhos[] = [];
   private pagos = new Set<string>();
+  /** os marcos do nivel que estao no registro (MMO2; hoje so o 10) */
+  marcos: MarcoNivel[] = [];
   /** o saldo de Bits: a soma do que se ganhou (o gasto chega na MO2) */
   get bits(): number { return this.ganhos.reduce((s, g) => s + g.valor, 0); }
   /** o feito ja foi pago: os do Tamer (a medalha, o nivel) pelo id; os do pet pelo pet e pelo id */
@@ -175,8 +192,9 @@ export class Tamer {
 
   /** um evento do registro (replay): confere tudo antes de aplicar */
   aplicar(ev: EventoTamer): void {
-    if (!Array.isArray(ev) || !["medalha", "item", "carta_usada", "campeao", "recorde", "fabrica", "fabrica_luta", "fabrica_troca", "salao", "bits"].includes(ev[0]))
+    if (!Array.isArray(ev) || !["medalha", "item", "carta_usada", "campeao", "recorde", "fabrica", "fabrica_luta", "fabrica_troca", "salao", "bits", "nivel"].includes(ev[0]))
       throw new Error("tipo de evento desconhecido no registro do Tamer: " + JSON.stringify(Array.isArray(ev) ? ev[0] : ev));
+    if (ev[0] === "nivel") { this._nivel(ev[1]); return; }
     if (ev[0] === "item") { this._item(ev[1]); return; }
     if (ev[0] === "bits") { this._bits(ev[1]); return; }
     if (ev[0] === "fabrica") { this._fabrica(ev[1]); return; }
@@ -223,6 +241,21 @@ export class Tamer {
     if (this.pagos.has(k)) throw new Error(`o mesmo feito pago duas vezes no registro do Tamer: ${k}`);
     this.pagos.add(k);
     this.ganhos.push({ ...x });
+  }
+  private _nivel(x: MarcoNivel): void {
+    this._campos(x, "Marco do nível", ["n", "quando", "pet", "tick"]);
+    if (!MARCOS_NO_REGISTRO.includes(x.n)) throw new Error(`marco do nível que não vai ao registro do Tamer: ${JSON.stringify(x.n)}`);
+    if (typeof x.forma !== "string" || !x.forma) throw new Error(`marco ${x.n} sem a forma do pet no registro do Tamer`);
+    if (!Number.isInteger(x.pet) || !Number.isInteger(x.tick)) throw new Error(`marco ${x.n} com o pet ou o tick inválido no registro do Tamer`);
+    if (this.marco(x.n)) throw new Error(`marco ${x.n} repetido no registro do Tamer`);
+    this.marcos.push({ ...x });
+  }
+  /** o marco n do nivel, se esta no registro */
+  marco(n: number): MarcoNivel | null { return this.marcos.find(x => x.n === n) ?? null; }
+  /** grava o marco n do nivel agora, com o pet m e o tick dado (o da evolucao que fez o marco) */
+  ganharMarco(n: number, m: Motor, tick: number, forma: string, quando: number = Date.now()): MarcoNivel {
+    this._gravar(["nivel", { n, quando, pet: m.semente, forma, tick }]);
+    return this.marcos[this.marcos.length - 1];
   }
   /** paga o feito agora (grava o evento "bits") */
   ganharBits(x: Omit<BitsGanhos, "quando">, quando: number = Date.now()): BitsGanhos {
@@ -403,6 +436,9 @@ function lerLogTamer(armaz: Armazenamento): { versao: number; log: EventoTamer[]
   const l = lerLogTamerCru(armaz)!;
   /* os registros 7 e 8 so tem a Fabrica que ainda se refaz (a da luta da POC): uma tentativa de outra versao neles sobrou de um descarte
      que nao rodou, e o registro nao abre (falha alto; o descarte 8 a tira) */
+  /* o marco do nivel so existe da versao 10 em diante: num registro de antes, falha alto */
+  if (l.versao < VERSAO_TAMER_NIVEL && l.log.some(ev => Array.isArray(ev) && ev[0] === "nivel"))
+    throw new Error(`o registro ${l.versao} do Tamer tem o marco do nível, que só existe da versão ${VERSAO_TAMER_NIVEL} em diante`);
   if (l.versao >= 7) for (const ev of l.log)
     if (Array.isArray(ev) && ev[0] === "fabrica" && !VERSOES_FABRICA.includes((ev[1] as InicioFabrica).v as number))
       throw new Error(`o registro ${l.versao} do Tamer tem a tentativa ${(ev[1] as InicioFabrica).n} da Fábrica com as regras de antes (v ${JSON.stringify((ev[1] as InicioFabrica).v)})`);
@@ -452,6 +488,24 @@ export function conferirItensDasMedalhas(t: Tamer, m: Motor, quando: number = Da
 export function conferirCampeao(t: Tamer, m: Motor, quando: number = Date.now()): Campeao | null {
   if (m.liga.titulos < 1 || t.n < MEDALHAS_LIGA || t.tituloDe(m.semente)) return null;
   return t.ganharTitulo(m, quando);
+}
+/** a evolucao a Mega de um pet (a primeira; null: o pet nunca chegou ao Mega) */
+export const evolucaoMega = (m: Motor): Evolucao | null => m.evolucoes.find(x => x.estagio === "mega") ?? null;
+/** o marco 10 (o primeiro Mega; MMO2, MMO-13): o primeiro pet dos dados que chegou ao Mega, se o registro ainda nao tem o marco. Quem
+    chama passa so os pets do jogador (sem o de exemplo intocado). Devolve o marco novo (ja aplicado) ou null */
+export function conferirMarcoMega(t: Tamer, pets: readonly Motor[], quando: number = Date.now()): MarcoNivel | null {
+  if (t.marco(MARCO_MEGA)) return null;
+  for (const m of pets) {
+    const ev = evolucaoMega(m);
+    if (ev) return t.ganharMarco(MARCO_MEGA, m, ev.tick, nomeForma(ev.forma), quando);
+  }
+  return null;
+}
+/** a conferencia do servidor (MMO3): o pet refeito do log dele (a semente do marco) tem a evolucao a Mega no tick do marco */
+export function marcoConfere(x: MarcoNivel, m: Motor): boolean {
+  if (x.n !== MARCO_MEGA || m.semente !== x.pet) return false;
+  const ev = evolucaoMega(m);
+  return !!ev && ev.tick === x.tick && nomeForma(ev.forma) === x.forma;
 }
 /** os recordes que o pet acabou de dar ao Tamer: a maior sequencia dele numa instalacao da Fronteira, quando passa a do Tamer (o motor
     conta as sequencias do pet pelo evento de luta da instalacao). So depois do titulo. Devolve os recordes novos (ja aplicados) */
