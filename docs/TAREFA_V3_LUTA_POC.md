@@ -939,3 +939,86 @@ O plano é o `docs/PLANO_LUTA_NUCLEO.md`, PROPOSTO, com as decisões D-N-1 a D-N
 separa cada uma pela causa: o núcleo, o mapa, a série sem cura, a tabela das formas ou a régua. As etapas vão da N1 à N5: as releituras e as
 contas, as lutas fixas, as chaves desligadas com o gabarito das versões vivas, os contrafactuais e o relatório. Nenhum número do jogo muda.
 Os desvios estão em `docs/registro/2026-11.md`, seção "LUTA_POC, N0".
+
+## Resultado da N1 e da N2 da investigação do núcleo (2026-11-12)
+
+O plano é o `docs/PLANO_LUTA_NUCLEO.md`, APROVADO (D-N-1 a D-N-7). Os desvios são o D-N12-1 a 6, em `docs/registro/2026-11.md`. Nenhum
+número do jogo mudou, nenhuma chave entrou no núcleo e nenhuma grade rodou.
+
+**Os artefatos:**
+- **a N1:** `web/app/scripts/medicoes/luta_nucleo/n1/leitura.json` e `leitura.md`, feitos pelo `scripts/equilibrio_poc/leitura_nucleo.ts`;
+- **a N2:** `web/app/scripts/medicoes/luta_nucleo/n2/<candidato>.json`, feitos pelo `scripts/equilibrio_poc/lutas_fixas_nucleo.ts`.
+
+A N2 rodou com a luta da v21 (`v21`), a da v23 (`lp5_3`) e a da v29 (`lp6_3_u120`): 95 280 lutas por luta, de 56 a 61 s cada, em 1
+processo, nas bases 92101 a 92505.
+
+### A N1: o atributo (as releituras)
+
+**O atributo decide quase toda luta.** A leitura preliminar do plano se repete com artefato:
+- na v23 e na v29, a forma com vantagem vence de 0,991 a 0,999 dos pares, e a com desvantagem de 0,001 a 0,009;
+- na v21, de 0,82 a 0,99 e de 0,01 a 0,12.
+
+**O V1 é quase todo o atributo.** A taxa de cada forma, prevista só pela classe dos pares dela, explica de 0,83 a 0,97 da variância do V1 na
+v23 e na v29 (o R²). Na v21, de −0,18 a 0,19.
+
+**Os NPCs.** Pela H-ATR, o "sem treino" tem um piso igual à fração de pets com vantagem, e o típico tem um teto igual a 1 menos a fração com
+desvantagem.
+- **Não cabem pelo atributo,** qualquer que seja o total: o Guardromon (o piso 0,42 contra o limite 0,35), o Piedmon (0,48 contra 0,27), o
+  Puppetmon e o Machinedramon (0,48 contra 0,42) e o Youkomon (o teto 0,58 contra 0,65).
+- **O Devidramon cabe,** mas o típico nos pares neutros fica em 0,66.
+- **O Myotismon não é o atributo:** com vantagem, o típico vence a série de 3 do Castelo só em 0,515.
+
+**O A1 nos pares neutros** não muda o Ringue e o Castelo. No Ringue fica de 0,04 a 0,17, e no Castelo de 0,12 a 0,47. Os dois são do mapa,
+não do atributo: a alternativa H-ATR do A1 cai.
+
+**O colosso (P5):**
+- o Growlmon (Virus) tem 0,50 dos rivais do Champion com vantagem sobre ele, e vence 0,52;
+- os três colossos Vaccine têm 0,19 e vencem de 0,63 a 0,78;
+- o Gatomon, o único de perto, fica em 0,63, contra 0,76 e 0,78 dos outros dois Vaccine.
+
+### A N2: as lutas fixas
+
+| pergunta | v21 | v23 | v29 | a leitura |
+|---|---|---|---|---|
+| **a série (G1):** a soma das perdas da vida nas 6 lutas da Liga, com a vida cheia em cada | 0,22 | 3,30 | 3,48 | na v23, o vencedor fica com 0,42 a 0,58 da vida. A Liga pede menos de 1 |
+| a mesma, com o fator 0,1 nos rivais | 0,001 | 2,62 | 2,72 | o fator tira 4,5 % da vida do rival (2 627 → 2 509) |
+| **a Torre (G2):** o Mega típico vence a 1.ª luta do Ringue | 1,00 | 0,36 | 0,31 | 98 % e 96 % das derrotas têm a queda do pet |
+| as quedas do pet na Torre pelo pulo da esquiva | — | 77 % | 90 % | o rival sem treino quase não cai |
+| **o Ringue (A1):** as quedas de quem atira, por luta | 0,46 a 0,89 | 3,10 a 3,35 | 1,56 a 3,20 | na v23, 54 % a 61 % pelo recuo na preparação do tiro e o resto pela habilidade. Na v21, todas pela habilidade |
+| **o Castelo (A1):** a runa pega por luta | 0,34 a 0,58 (de perto) | 0,001 a 0,003 | 0,002 a 0,1 | ninguém pega a runa na v23, e o A1 fica em 0,17 a 0,39 assim mesmo |
+| os tiros no pilar, por luta | 0,05 a 0,41 | 0,43 a 0,50 | 0,15 a 0,50 | pouco para explicar o A1 |
+| **os empates (D2):** os que vêm do tiro de quem já caiu | 65 % a 82 % | 77 % a 92 % | 77 % a 93 % | o resto são os dois no mesmo passo; o dano do mapa quase nunca |
+| **o fôlego (T2):** 8 pontos no fôlego contra o mesmo pet sem treino | 0,53 e 0,59 | 0,49 e 0,44 | 0,49 e 0,44 | Rookie e Ultimate |
+| o pulo médio da esquiva do pet com o fôlego | 46 e 48 px | 99 e 98 px | 99 e 118 px | o maior pulo chega a 312 px |
+| os pulos que acabam na cerca | 25 % e 31 % | 99,5 % | 99,5 % | |
+| **o espelho (S1):** o lado A, nas lutas com vencedor, no Campo | 0,49 a 0,51 | 0,47 a 0,50 | 0,43 a 0,50 | sem lado claro |
+| o mesmo, na Praia | 0,41 a 0,45 | 0,45 a 0,53 | 0,44 a 0,53 | na Praia, o lado A bate mais na rocha da direita |
+
+### As hipóteses depois da N1 e da N2
+
+| hipótese | o que ficou | as metas |
+|---|---|---|
+| **H-ATR** (o atributo) | **confirmada** pela N1 | V1, V2, P2, P3 (6 dos 7 NPCs), P5 (o Growlmon) |
+| **H-SÉRIE** (a série sem cura) | **confirmada.** A causa é o mapeamento da v23: o pet típico é uns 5 % mais forte que o rival canônico, e cada vitória custa metade da vida. Não é o mapa | G1, G3, a Cidadela (o Myotismon) |
+| **H-RINGUE** (a borda) | **confirmada.** O recuo na preparação do tiro (o `recuaNaPrep` 2 da v23) e a habilidade (o empurrão 7) jogam quem atira para fora | A1 no Ringue, G2 |
+| **H-PULO** (a agilidade sem teto) | **confirmada.** Com o fôlego treinado, o pulo bate na cerca quase sempre, e no Ringue leva o pet para fora | T2, G2 |
+| **H-TIRO-MORTO** | **confirmada** | D2 |
+| **H-PILAR** (o Castelo) | **não confirmada.** Na v23 a runa quase não é pega, e os tiros no pilar são poucos. A causa do Castelo fica aberta | A1 no Castelo |
+| **H-ORDEM** (o lado A primeiro) | **não confirmada.** No Campo o lado A fica perto de 0,5 | S1 |
+| **H-ROCHA** (a Praia) | **fraca.** O lado A bate mais na rocha da direita, mas o sinal do S1 muda de estágio para estágio na v23 | S1 na Praia |
+
+### As chaves que a N2 confirma (para a D-N-5)
+
+**DECIDIDA (2026-11-12):** o Matheus, "As 4 (Recommended)" (repassado pelo Gerente). As 4 entram na N3, todas desligadas no jogo.
+
+São PROPOSTAS, SEM FONTE. Cada uma iria atrás de uma chave desligada na `EntradaLuta`, com o gabarito das versões vivas antes (a seção 4
+do plano):
+
+1. **`forcaAtr`:** o `forca` do atributo na entrada. A N4 mede 1,0, 1,15 e 1,25. Ela move o V1, o V2, os NPCs e o P5.
+2. **`tiroDoMorto`:** o projétil de quem caiu não causa dano. Ela move o D2.
+3. **`puloMax`:** um teto para o pulo da esquiva, em px. Ela move o T2 e a Torre.
+4. **`bordaRingue`:** no Ringue, o recuo (também o da preparação do tiro) e o pulo param antes da borda. Ela move o A1 do Ringue e a Torre.
+
+**Ficam fora:** a `ordemAlterna` (não confirmada) e as chaves de mapa da Praia e do Castelo, porque a causa do Castelo não foi achada.
+**A série sem cura não tem chave do núcleo.** A causa é o mapeamento (o `gama`), que é da calibração geral. A regra das séries sem cura
+(a decisão 5 da LP2) fica.
