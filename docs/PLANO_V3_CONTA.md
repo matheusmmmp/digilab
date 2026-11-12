@@ -3,7 +3,8 @@
 **Status:** sem código. As decisões **CN-1 a CN-10 estão DECIDIDAS** pelo Matheus em 2026-11-11, como estão (seção 12); a **CN-11 e a CN-12**
 (a monetização, seção 13) estão **DECIDIDAS** em 2026-11-11, na leitura do registro (D-CONTA-10), e a CN-12 foi revista em 2026-11-12
 para pôr o anúncio que destrava a função paga (D-CONTA-14); a **CN-13 e a CN-14** estão **DECIDIDAS** pela recomendação em 2026-11-12
-(D-CONTA-13); as **CN-15 a CN-18** (os detalhes dos anúncios) continuam **PROPOSTAS**.
+(D-CONTA-13); as **CN-15 a CN-18** (os detalhes dos anúncios) estão **DECIDIDAS** pela recomendação em 2026-11-12
+(D-CONTA-18). **Todas as CN-n deste plano estão decididas.**
 Todo número deste plano é **PROPOSTO, SEM FONTE**, salvo onde a fonte está dita. Os custos são **estimativas**: saem da tabela de preços
 do `servidor/fala_llm.py` e de preços públicos que este plano não conferiu, e se conferem na etapa CN5, antes de contratar qualquer coisa.
 
@@ -268,7 +269,7 @@ e sem mudança: "E sobre a questão do PR859, eu aprovo as decisões ali e eu qu
 **A CN-11 e a CN-12 estão DECIDIDAS** pelo Matheus em 2026-11-11: "Eu aceito aquela questão do MMO, que entra como VPS de teste como convidado, e a parte do save. E eu também concordo com as questões de monetização, de nunca ser [gacha] e tudo mais, apenas para pagar o serviço prestado no quesito de processamento. Então, um apoiador e um plano de assinatura nessa questão. E a loja de bits, os bits não são vendidos, né? [...] Vão ser apenas cosméticos e coisas assim."
 **A CN-12 foi revista** pelo Matheus em 2026-11-12, para pôr o anúncio que destrava a função paga (seção 13.7): "Vamos botar plano de assinatura e daí propagandas. Por exemplo, a partir de tantos consumos no chat, solta um vídeo, um ad, daí a gente consegue manobrar dessa maneira." e "o usuário consegue escapar de jogar o jogo sem ter que participar ativamente de nenhuma propaganda, quase. E daí apenas se ele quiser usar uma feature que é paga e daí consome do meu dinheiro, ele tem que assistir uma propagandinha."
 **A CN-13 e a CN-14 estão DECIDIDAS** pelo Matheus em 2026-11-12, pela recomendação e sem mudança: "Eu quero que siga as recomendações daí faça um merge se tiver alguma pendência".
-**As CN-15 a CN-18 (os detalhes dos anúncios) continuam PROPOSTAS.**
+**As CN-15 a CN-18 estão DECIDIDAS** pelo Matheus em 2026-11-12, pela recomendação e sem mudança: "Segue as recomendações e faça o merge ao final".
 
 - **CN-11. Reabrir o "sem dinheiro real, nunca": DECIDIDA, reaberta só para o apoio,** para pagar o serviço (o processamento: o
   servidor e a fala). Os Bits continuam sem venda e se ganham só jogando; o gacha, a caixa de prêmio e a venda de stats, chips, tempo ou
@@ -289,18 +290,18 @@ e sem mudança: "E sobre a questão do PR859, eu aprovo as decisões ali e eu qu
   fiscal e o suporte para dez pessoas.
 - **CN-14. A formalização: DECIDIDA pela recomendação (2026-11-12).** O recebimento por um processador com Pix e cartão (Mercado Pago ou Stripe) e **a conversa com um contador
   antes do primeiro real** (pessoa física ou CNPJ, o imposto). Custo de errar: alto, se receber sem ver o imposto.
-- **CN-15. O formato do anúncio da voz:** **o recompensado, pedido pelo jogador** ("ver um vídeo para mais falas"), nunca entrando
+- **CN-15. O formato do anúncio da voz: DECIDIDA pela recomendação (2026-11-12).** **o recompensado, pedido pelo jogador** ("ver um vídeo para mais falas"), nunca entrando
   sozinho no meio da conversa. A outra opção é o vídeo que entra sozinho depois de tantas falas (o intersticial). Custo de errar: médio.
   O vídeo que entra sozinho corta a conversa com o pet, o momento mais pessoal do jogo; o recompensado é, pela definição do Google, o
   anúncio que o jogador escolhe ver.
-- **CN-16. A conta da voz:** **5 falas pela LLM grátis por dia, para conhecer a voz; depois, 1 vídeo libera 10 falas, até as 30 por dia
+- **CN-16. A conta da voz: DECIDIDA pela recomendação (2026-11-12).** **5 falas pela LLM grátis por dia, para conhecer a voz; depois, 1 vídeo libera 10 falas, até as 30 por dia
   da CN-8; o assinante não vê vídeo e tem 150 por dia** (PROPOSTO, SEM FONTE). Sem vídeo, a fala segue pelo template, de graça. **A
   proporção só fecha com a voz no Haiku 5.5** (seção 13.7.4). Muda a CN-8 só no modo de liberar as 30 falas, não no teto. Custo de errar:
   médio. Falas demais por vídeo dão prejuízo; de menos, ninguém usa a voz.
-- **CN-17. A rede:** **o Google H5 Games Ads (a Ad Placement API) como primeira opção, o AppLixir como a outra**, as duas a conferir na
+- **CN-17. A rede: DECIDIDA pela recomendação (2026-11-12).** **o Google H5 Games Ads (a Ad Placement API) como primeira opção, o AppLixir como a outra**, as duas a conferir na
   CN7: a aprovação (a do Google é um beta fechado, por pedido), a confirmação do vídeo visto, o consentimento e a regra de conteúdo.
   Custo de errar: médio. Uma rede que recusa o site, ou que não confirma o vídeo, deixa a voz aberta para quem edita o cliente.
-- **CN-18. As outras posições de anúncio (seção 13.7.3):** **recomendo só a P1 (a voz) agora.** A P2 (um vídeo a cada 3 lutas, no
+- **CN-18. As outras posições de anúncio (seção 13.7.3): DECIDIDA pela recomendação (2026-11-12): só a P1 (a voz) agora.** A P2 (um vídeo a cada 3 lutas, no
   máximo 1 a cada 3 minutos) é a opção que o Matheus levantou e rende uns US$ 7 por mês com 100 jogadores por dia e uns US$ 67 com 1 000
   (o cenário central); ela fica pronta para ligar depois, atrás de uma chave, se a conta não fechar. As P3 (ao abrir o jogo) e P4 (o
   banner nos menus) não, porque põem o anúncio no jogo todo; a P5 (um enfeite por um dia) só se valer a pena depois. **Nunca:** o
@@ -428,7 +429,7 @@ em 2026-11-11:
 
 **A regra (CN-12, revista em 2026-11-12):** o jogo fica "quase" sem anúncio. Cuidar, lutar, andar pela ilha, ver a evolução e falar
 pelo template não pedem vídeo. **O vídeo aparece para quem quer uma função que custa dinheiro ao Matheus**: hoje, a voz pela LLM. O
-assinante nunca vê vídeo. As outras posições desta seção são **análise**, para decidir na CN-18.
+assinante nunca vê vídeo. As outras posições desta seção são **análise**: pela CN-18 (DECIDIDA), só a P1 liga agora, e a P2 fica pronta atrás de uma chave.
 
 #### 13.7.1 A conta
 
@@ -502,12 +503,12 @@ convidados, se a conta fecha.
 #### 13.7.5 O que entra no código (na CN7)
 
 - **Quando entra:** pela CN-13 (DECIDIDA), a doação abre com a CN6, e a assinatura depois do número de jogadores medido. O anúncio da
-  voz entra junto com a assinatura, porque é a outra metade da mesma escolha: ver o vídeo ou assinar (PROPOSTO).
+  voz entra junto com a assinatura, porque é a outra metade da mesma escolha: ver o vídeo ou assinar (a recomendação, seguida em 2026-11-12).
 - O SDK da rede só no cliente, carregado só quando o jogador pede o vídeo: o resto do jogo não baixa nada da rede.
 - A rota no servidor que recebe a confirmação do vídeo e soma as falas na conta, com o contador de falas por conta e por dia da CN-8.
 - O aviso de consentimento antes do primeiro vídeo.
 - **O vídeo e as falas liberadas não entram no log do pet nem no do Tamer**, como o apoio (seção 13.4): o motor não sabe quem viu.
-- A P2, se a CN-18 a ligar depois, atrás de uma chave desligada, com o teto de 1 a cada 3 minutos e nunca para o assinante.
+- A P2, se uma decisão nova a ligar depois, atrás de uma chave desligada, com o teto de 1 a cada 3 minutos e nunca para o assinante.
 
 ## 14. Fora deste plano
 
