@@ -355,3 +355,19 @@ O pedido do Matheus: um botão para trocar a tela que o pet está vendo, "como m
 canais já escolhidos (PROPOSTO), sem parar a sessão nem o cérebro; o "st" só leva os números do canal atual, no formato de sempre. Uma
 fonte encerrada sai da lista. No celular nada muda. As escolhas D-GV-CANAL-1 a 8 estão em `docs/registro/2026-11.md`; o código em
 `web/app/src/gostoVisual/canais.ts`, `captura.ts`, `sessaoTv.ts` e `PainelTv.tsx`.
+
+## A fala do assistir por template (2026-11-12, Claude Code, Opus 5.5, branch `v3-gosto-visual-fala`)
+
+O Matheus aprovou as FA-2 a FA-8 de `docs/futuro/fala_do_assistir.md` pela recomendação (D-GV-FALA-1). Feito:
+- **o `dec-v4`** no Python (`digilab/digibrain/decodificador.py`) e no TS (`decodificarV4`), bit a bit contra o gabarito novo
+  `decodificador_v4_python.json.gz` (`experiments/exportar_decodificador_v4.py`): o `olhar` no catálogo e os conceitos `gostei`, `susto`,
+  `chato` e `o_que_e`. O `dec-v1`, o `dec-v2` e os gabaritos deles não mudaram;
+- **os limiares** na `ConfigFalaAssistir`, PROPOSTOS, calibrados nas vidas gravadas da GV3 e da GV3b, rejogadas e conferidas
+  (`artifacts_v3_gosto_visual/fala_limiares/`);
+- **a fala por template no jogo** (`web/app/src/falaAssistir.ts`), atrás da chave "Fala do assistir (teste)", desligada: uma frase por
+  conceito, o limite de 5 min (1 min no susto), a linha no log de apresentação, e o conceito refeito do registro do pet pelo replay;
+- **o plano da FA-8,** `docs/PLANO_ANALISE_V3_GOSTO_VISUAL_FALA_ASSISTIR.md`, PROPOSTO. Nenhuma fala com LLM rodou.
+
+Ficou de fora: a voz com LLM e o verificador estendido (a etapa FA3, depois da DC5c), o `de_novo` (FA-3), o susto de brilho (FA-4) e o
+órgão (FA-9 a FA-13). As escolhas estão em `docs/registro/2026-11.md`, D-GV-FALA-1 a 10.
+
