@@ -1,6 +1,7 @@
 # Plano da conta: login, save na nuvem, proteção e servidor (2026-11-11)
 
-**Status:** PROPOSTO, sem código. As decisões CN-1 a CN-14 (seção 12) vão ao Matheus, cada uma com a recomendação e o custo de errar.
+**Status:** sem código. As decisões **CN-1 a CN-10 estão DECIDIDAS** pelo Matheus em 2026-11-11, como estão (seção 12); as **CN-11 a CN-14**
+(a monetização, seção 13) continuam **PROPOSTAS**.
 Todo número deste plano é **PROPOSTO, SEM FONTE**, salvo onde a fonte está dita. Os custos são **estimativas**: saem da tabela de preços
 do `servidor/fala_llm.py` e de preços públicos que este plano não conferiu, e se conferem na etapa CN5, antes de contratar qualquer coisa.
 
@@ -231,7 +232,8 @@ O MMO segue as etapas dele sobre esta base: a MMO3 (o envio e a conferência) de
 
 ## 12. Decisões para o Matheus
 
-Cada uma com a recomendação e o custo de errar. **Todas PROPOSTAS.**
+Cada uma com a recomendação e o custo de errar. **As CN-1 a CN-10 estão DECIDIDAS** pelo Matheus em 2026-11-11, todas pela recomendação
+e sem mudança: "E sobre a questão do PR859, eu aprovo as decisões ali e eu quero manter exatamente aquilo" (repassada pela sessão "CO2 em três PRs") e, nesta sessão, "Sim, só CN-1 a 10". Os números continuam PROPOSTOS. **As CN-11 a CN-14 continuam PROPOSTAS.**
 
 - **CN-1. Quando a conta aparece:** **o jogo primeiro, a conta depois** (pelo cais e por Ajustes). A outra opção é o login na entrada.
   Custo de errar: alto. O login obrigatório espanta quem quer só experimentar e quebra o jogo de hoje, que funciona sem servidor.
