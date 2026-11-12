@@ -880,9 +880,15 @@
   "ticks_bloqueado": 3
  },
  "ConfigCooperacao": {
+  "co6": false,
   "escala": 1024,
   "janela_novidade": 1440,
   "k_meia_vida_pontuacao": 32,
+  "k_passo": 1,
+  "k_teto_adolescente": 512,
+  "k_teto_adulto": 768,
+  "k_teto_bebe": 0,
+  "k_teto_crianca": 256,
   "ligada": false,
   "meia_vida_pontuacao": 1440,
   "piso_fome": 0.45
@@ -1021,6 +1027,7 @@
   "m_mem": true,
   "memoria_autobio": false,
   "modula_g_apr": false,
+  "olhar": false,
   "p1": true,
   "p2": true,
   "passeio": false,
@@ -1311,6 +1318,11 @@
   "sujeira_para_limpar": 2,
   "visitas_por_dia_relapso": 3
  },
+ "ConfigDuasTVs": {
+  "distancia_celulas": 3,
+  "ligada": false,
+  "tentativas": 16
+ },
  "ConfigDuracoes": {
   "canonica": [
    360,
@@ -1365,6 +1377,21 @@
  "ConfigEmocao": {
   "limiar_eixo": 0.2,
   "modula_memoria": false
+ },
+ "ConfigEnjooTela": {
+  "k_desenjoo": 63,
+  "k_enjoo": 2960,
+  "k_olhando": 4389,
+  "ligada": false,
+  "meia_vida_desenjoo": 720,
+  "meia_vida_enjoo": 15,
+  "meia_vida_olhando": 10,
+  "peso_tedio": 512,
+  "prototipos": 6,
+  "raio_mesmo": 67500,
+  "saturacao_exposicao": 512,
+  "tau_enjoo_lembrado": 1040,
+  "w_enjoo": 512
  },
  "ConfigEquilibrio": {
   "margem_max": 0.15,
@@ -1566,6 +1593,13 @@
  "ConfigJulgamentoFruta": {
   "ligada": false,
   "no_orcamento": true
+ },
+ "ConfigLanceDono": {
+  "janela_convite_ticks": 30,
+  "lance_max_celulas": 3,
+  "lance_min_celulas": 2,
+  "ligada": false,
+  "w_bola_do_dono": 4096
  },
  "ConfigLesoes": {
   "efeito_qualificacao": "condicao_adulto",
@@ -1848,6 +1882,32 @@
   "raio_celulas": 24,
   "teto_intensidade": 4096
  },
+ "ConfigOlhar": {
+  "agrado_no_corpo": false,
+  "escala": 450000,
+  "ganho_gosto_visual": 1024,
+  "largura_max": 450000,
+  "largura_min": 112500,
+  "tau_exposicao": 960,
+  "teto_exposicao": 128,
+  "w0_nov": 256,
+  "w0_olhar": [
+   [
+    "vies",
+    -256
+   ],
+   [
+    "u_tedio",
+    512
+   ],
+   [
+    "u_curiosidade",
+    512
+   ]
+  ],
+  "w0_prox": 256,
+  "w_gosto": 1024
+ },
  "ConfigOuvido": {
   "afastamento_ouvidos": 8,
   "k_adaptacao": 753,
@@ -2001,11 +2061,45 @@
   "teto_vinculo": 0.6,
   "turnos_pele_colosso_partido": 3
  },
+ "ConfigSonoSegura": {
+  "lambda_acordar": 922,
+  "ligada": false
+ },
  "ConfigSparring": {
   "intervalo_min": 30,
   "lutas": 10,
   "lutas_braco_lutador": 20,
   "primeira_apos_inicio_min": 30
+ },
+ "ConfigTV": {
+  "celula": [
+   4,
+   10
+  ],
+  "cena_ticks": 5,
+  "escala": 450000,
+  "fonte": "grade",
+  "janela_resumo_s": 10,
+  "ligada": false,
+  "n_programas": 4,
+  "programa_max_ticks": 90,
+  "programa_min_ticks": 30,
+  "variacao": 27000
+ },
+ "ConfigTela": {
+  "corte_novidade": 512,
+  "estresse_corte": 337500,
+  "estresse_divisor": 256,
+  "ganho_humor_agrado": 4500,
+  "k_adaptacao": 753,
+  "ligada": false,
+  "limiar": 15000,
+  "meia_saturacao": 450000,
+  "meia_vida_adaptacao": 60,
+  "salto_volume": 225000,
+  "susto_salto": 90000,
+  "tedio_assistir": 45000,
+  "teto_intensidade": 450000
  },
  "ConfigTemperamento": {
   "amplitude": 1.0,
@@ -2186,5 +2280,9 @@
   "n_ditas": 3,
   "n_sequencias_es": 6,
   "ngrama_repeticao": 3
+ },
+ "ConfigVozV4B": {
+  "palavras_copia_citacao": 5,
+  "palavras_trecho_repetido": 4
  }
 }

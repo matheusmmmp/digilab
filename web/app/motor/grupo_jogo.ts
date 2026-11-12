@@ -16,7 +16,7 @@
    para o relogio do jogo e as telas, que leem o pet em foco, seguirem como hoje (src/jogo.ts). */
 import { CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA, TICK_INICIAL, ehDoGrupo, nasceNaAgua, nasceNaGrande, type ConfigMundo } from "./constantes.ts";
 import { CONFIG_GRUPO_LIGADA, Grupo, ROTULO_SEGUNDO_PET } from "./grupo.ts";
-import { CONFIG_COOPERACAO_LIGADA } from "./cooperacao.ts";
+import { CONFIG_COOPERACAO_CO6, CONFIG_COOPERACAO_LIGADA } from "./cooperacao.ts";
 import { Motor } from "./motor.ts";
 import type { EventoRegistro } from "./tipos.ts";
 import { derivarSemente } from "./mundo.ts";
@@ -50,14 +50,17 @@ export class GrupoDoJogo {
   readonly motores: Readonly<Record<string, Motor>>;
   readonly log: EventoGrupoJogo[] = [];
 
-  /** `medir`: a medida da cooperacao (CO3), ligada no jogo; desligada so no teste do G-SEM-DECISAO (ela nao muda nada) */
-  constructor(semente: number, versao: number, medir = true) {
+  /** `medir`: a medida da cooperacao (CO3), ligada no jogo; desligada so no teste do G-SEM-DECISAO (ela nao muda nada). `co6`: a reputacao
+      e o peso dos deveres na percepcao (docs/ESPEC_V3_COOPERACAO_CO6.md), DESLIGADA no jogo: ligada, ela muda a assinatura dos saves (o
+      estado do cerebro ganha a chave `social`) e so entra com uma versao do grupo nova (D-CO6c-1); hoje, so nos testes */
+  constructor(semente: number, versao: number, medir = true, co6 = false) {
+    if (co6 && !medir) throw new Error("a CO6 so com a medida da cooperacao ligada");
     if (!Number.isInteger(semente) || semente < 0 || semente > 0xffffffff) throw new Error(`semente do grupo fora dos 32 bits: ${semente}`);
     if (!ehDoGrupo(versao)) throw new Error(`o grupo do jogo e de pets v26, v28, v29 ou v31, nao v${versao}`);
     this.semente = semente;
     this.versao = versao;
     this.grupo = new Grupo(mundoDaVersao(versao), semente, CONFIG_GRUPO_LIGADA,
-                           { tickInicial: TICK_INICIAL, sementeDoSegundo: sementeDoSegundoJogo, ...(medir ? { cooperacao: CONFIG_COOPERACAO_LIGADA } : {}) });   // a medida (CO3), ligada no jogo (CO5): so mede
+                           { tickInicial: TICK_INICIAL, sementeDoSegundo: sementeDoSegundoJogo, ...(medir ? { cooperacao: co6 ? CONFIG_COOPERACAO_CO6 : CONFIG_COOPERACAO_LIGADA } : {}) });   // a medida (CO3), ligada no jogo (CO5): so mede
     const motores: Record<string, Motor> = {};
     for (const ident of CONFIG_GRUPO_LIGADA.ids) {
       const s = Number(this.grupo.sementes[ident]);

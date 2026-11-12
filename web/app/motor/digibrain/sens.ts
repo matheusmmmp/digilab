@@ -28,7 +28,11 @@ export type CorpoModular = Readonly<Record<string, number | null | undefined>>;
 export type VistoModular = readonly [number, string, number, number, number];
 export interface MundoModular { x: number; y: number; regiao: number; direcao_cheiro: number; vistos: readonly VistoModular[] }
 /** o que o M-SENS le da Observacao do Python (a `_obs_enxuta` do exportador) */
+/** a CO6 na percepcao social (o que o M-SENS le dela): a reputacao de cada outro e o peso dos deveres; sem a CO6, ausentes */
+export interface SocialCo6 { reputacao?: readonly (readonly [string, number])[]; peso_dever?: number }
 export interface ObservacaoModular {
+  /** a percepcao social (so no grupo); o M-SENS so le os campos da CO6 */
+  social?: SocialCo6 | null;
   corpo: CorpoModular; mundo: MundoModular; vetor_estado: readonly number[]; ticks_desde_cuidado: number;
 }
 
@@ -87,6 +91,8 @@ export class Sens {
   hab: Record<ClasseObjeto, number>;
   /** os receptores presentes, fixados na primeira decisao */
   receptores: string[] | null = null;
+  /** a CO6: a reputacao e o peso dos deveres da ultima decisao que os trouxe (senao null) */
+  social: { reputacao: Record<string, number>; peso_dever: number } | null = null;
   /** a tela (P1f): so com a subchave `olhar` (null desligada) */
   readonly olhar: ConfigOlhar | null = null;
   otimo: Record<string, number> = {};
@@ -234,8 +240,26 @@ export class Sens {
     });
   }
 
+  /** a CO6 (docs/ESPEC_V3_COOPERACAO_CO6.md, 2.3; o _ler_social do Python): a reputacao e o peso dos deveres, se a percepcao social os
+   *  traz, vao ao estado (o painel e as medidas); nenhum modulo os usa na decisao. Sem eles, o estado fica como estava; um sem o outro ou
+   *  fora da escala falha alto */
+  lerSocial(ps: SocialCo6 | null | undefined): void {
+    if (ps === null || ps === undefined || (ps.reputacao === undefined && ps.peso_dever === undefined)) return;
+    const S = this.S;
+    if (ps.reputacao === undefined || ps.peso_dever === undefined) throw new Error("M-SENS: a reputacao e o peso dos deveres vem juntos (a CO6)");
+    if (!Number.isInteger(ps.peso_dever) || ps.peso_dever < 0 || ps.peso_dever > S) throw new Error(`M-SENS: o peso dos deveres e inteiro em [0, S]: ${ps.peso_dever}`);
+    const rep: Record<string, number> = {};
+    for (const item of ps.reputacao) {
+      if (!Array.isArray(item) || item.length !== 2 || typeof item[0] !== "string" || !Number.isInteger(item[1]) || item[0] in rep)
+        throw new Error(`M-SENS: a reputacao e (id, r inteiro), um por outro: ${JSON.stringify(ps.reputacao)}`);
+      rep[item[0]] = item[1];
+    }
+    this.social = { reputacao: rep, peso_dever: ps.peso_dever };
+  }
+
   codificar(obs: ObservacaoModular, lutas?: readonly ResumoLutaSens[] | null, telas?: readonly (readonly number[])[]): SaidaSens {
     const S = this.S, pc = obs.corpo, pm = obs.mundo;
+    this.lerSocial(obs.social);
     if (telas !== undefined && this.olhar === null) throw new Error("M-SENS: as linhas da tela sem a subchave olhar");
     const recs = this._receptores(pc);
     const pcl = pc as PercepcaoCorpoLobos;

@@ -384,7 +384,8 @@ export class MotorCorpoMundo extends MotorCorpo {
     const intervalo = C.intervalo;
     const base = this.observacao();
     const percepcao = this.antesDaDecisao();
-    const obs = this.digibrain ? { ...base, mundo: percepcao } : base;       // a chave do laboratorio: o cerebro ve o mundo (obs.mundo)
+    const soc = this.mundo.social;                                           // a CO6: a percepcao social vai ao cerebro so com os campos dela
+    const obs = this.digibrain ? { ...base, mundo: percepcao, ...(soc !== null && soc.peso_dever !== undefined ? { social: soc } : {}) } : base;   // a chave do laboratorio: o cerebro ve o mundo (obs.mundo)
     const acao = this.politica.agir(obs, this.rngPolitica);
     this.acaoAtual = acao;
     const e = efeitoAcaoPet(this.estado, acao);
