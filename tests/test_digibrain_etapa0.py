@@ -83,7 +83,9 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              # COOPERACAO, CO6a: o gabarito das vidas do grupo com o modular (o braco REL pelo orquestrador)
                                                                              "experiments/exportar_gabarito_co6.py",
                                                                              # COOPERACAO, CO7b: o gabarito do G-PAR-CO7 (o modular com a CO7 no grupo)
-                                                                             "experiments/exportar_gabarito_co7_par.py"}
+                                                                             "experiments/exportar_gabarito_co7_par.py",
+                                                                             # GOSTO_VISUAL, a TV no jogo (#883): o exportador do gabarito, que faltava aqui (D-CO7b-9)
+                                                                             "experiments/exportar_tv_jogo.py"}
 
 
 def test_o_digibrain_so_existe_com_a_chave_ligada_e_e_a_v13():
