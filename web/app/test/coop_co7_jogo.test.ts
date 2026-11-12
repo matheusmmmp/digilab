@@ -5,7 +5,7 @@
      escudo valendo escolhe comer a comida proibida (o G-ESCUDO no motor do jogo);
    - o texto do gesto: hesitar e deixar a comida, consolar; nenhum algarismo. */
 import { describe, expect, test } from "vitest";
-import { GrupoDoJogo, TPD, VERSAO_GRUPO, VERSAO_V36, VERSAO_V37 } from "../motor/index.ts";
+import { GrupoDoJogo, TPD, VERSAO_GRUPO, VERSAO_V36, VERSAO_V37, VERSAO_V39 } from "../motor/index.ts";
 import { gestoDoDever } from "../src/telas/pet/AtosDoIrmao.tsx";
 
 function viver(co7: boolean, semente = 303): GrupoDoJogo {
@@ -22,7 +22,7 @@ const LIGADA = viver(true), DESLIGADA = viver(false);
 describe("a CO7 no grupo do jogo", () => {
   test("desligada na v36: nenhum motivo tem o dever, e o grupo nao guarda nada; a v37, o grupo de hoje, a liga", () => {
     expect(new GrupoDoJogo(101, VERSAO_V36).grupo.coop!.cfg.co7).toBe(false);
-    expect(VERSAO_GRUPO).toBe(VERSAO_V37);
+    expect(VERSAO_GRUPO).toBe(VERSAO_V39);   // a v39: a v37 com o equilibrio do cuidado (E3)
     expect(new GrupoDoJogo(101, VERSAO_GRUPO).grupo.coop!.cfg.co7).toBe(true);
     for (const m of Object.values(DESLIGADA.motores)) expect(m.lab!.motivos.some(x => "dever" in x)).toBe(false);
     expect(DESLIGADA.grupo.deveres).toEqual([]);

@@ -21,11 +21,11 @@ const arquivos = (d: string): string[] => readdirSync(d).flatMap(n => statSync(j
 describe("a chave ligada (LP4)", () => {
   test("LUTA_POC_LIGADA, a v21 nos ovos novos e so a v21 (e o pet de teste) abrindo", () => {
     expect(LUTA_POC_LIGADA).toBe(true);
-    expect(VERSAO_PET).toBe(35);
-    expect(VERSOES_PET).toEqual([21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 35, 36, 37]);   // a v37: a v36 com a CO6 e a CO7 (CO7c)   // a v26: os dois pets (CO4c)
+    expect(VERSAO_PET).toBe(38);
+    expect(VERSOES_PET).toEqual([21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 35, 36, 37, 38, 39]);   // a v37: a v36 com a CO6 e a CO7 (CO7c)   // a v26: os dois pets (CO4c)
     expect(lutaPocLigada()).toBe(true);
-    expect(versaoDoOvo()).toBe(35);
-    expect(versoesQueAbrem()).toEqual([21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 35, 36, 37]);   // a v37: a v36 com a CO6 e a CO7 (CO7c)
+    expect(versaoDoOvo()).toBe(38);
+    expect(versoesQueAbrem()).toEqual([21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 35, 36, 37, 38, 39]);   // a v37: a v36 com a CO6 e a CO7 (CO7c)
     expect(new Motor(1, 21).versao).toBe(21);
     expect(new Motor(1, VERSAO_PET_LAB).versao).toBe(16);
     for (const v of [1, 6, 12, 13, 14, 15, 17, 18, 19, 20]) expect(() => new Motor(1, v), `v${v}`).toThrow(/versão de pet desconhecida/);

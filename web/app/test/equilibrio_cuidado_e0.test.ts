@@ -6,7 +6,7 @@ import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { TPD, VERSAO_GRUPO, VERSAO_PET } from "../motor/constantes.ts";
+import { TPD, VERSAO_V35 as VERSAO_PET, VERSAO_V37 as VERSAO_GRUPO } from "../motor/constantes.ts";
 import { vida } from "../scripts/equilibrio_cuidado/e0.ts";
 
 const SCRIPT = fileURLToPath(new URL("../scripts/equilibrio_cuidado/e0.ts", import.meta.url));

@@ -9,7 +9,7 @@ import { describe, expect, test } from "vitest";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { gunzipSync } from "node:zlib";
-import { CMU_MVP, VERSAO_PET } from "../motor/constantes.ts";
+import { CMU_MVP, VERSAO_V35 as VERSAO_PET } from "../motor/constantes.ts";   // a bancada do E1 liga o ajuste so nas versoes de antes do E3
 import { CCO_CORPO_V11 } from "../motor/corpo.ts";
 import { DigiBrain } from "../motor/digibrain/adapt.ts";
 import {

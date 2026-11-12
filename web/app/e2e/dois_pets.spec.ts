@@ -44,7 +44,7 @@ for (const [largura, altura] of [[390, 844], [1280, 800]] as const) {
     /* os dois ovos: o save do grupo, v37, com o primeiro em foco */
     await expect.poll(async () => (await lerSave(page))?.grupo).toBe(true);
     const s = (await lerSave(page))!;
-    expect([s.versao, s.foco]).toEqual([37, "A"]);   // a v29 desde a LP6-4; a v31 (com o lance) desde a BB2; a v36 (a v31 com a TV) desde a TV no jogo; a v37 (a v36 com a CO6 e a CO7) desde a CO7c
+    expect([s.versao, s.foco]).toEqual([39, "A"]);   // a v39 (a v37 com o equilibrio do cuidado) desde o E3;   // a v29 desde a LP6-4; a v31 (com o lance) desde a BB2; a v36 (a v31 com a TV) desde a TV no jogo; a v37 (a v36 com a CO6 e a CO7) desde a CO7c
     const g = await page.evaluate(() => (window as unknown as { __digilab: { grupo(): { ids: string[]; foco: string; ticks: number[] } } }).__digilab.grupo());
     expect(g.ids).toEqual(["A", "B"]);
     expect(g.ticks[0]).toBe(g.ticks[1]);

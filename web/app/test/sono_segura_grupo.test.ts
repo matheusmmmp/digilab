@@ -41,7 +41,7 @@ function medir(versao: number, semente: number): { linhas: Medida[]; g: GrupoDoJ
 
 describe("o sono que segura no grupo de dois pets (v26 x v28)", () => {
   test("a v28 e o grupo com o sono que segura (o de hoje e a v29, a v28 com a luta da LP6); a v26 segue com o de antes", () => {
-    expect(VERSAO_GRUPO).toBe(37);   // a v37 (a v36 com a CO6 e a CO7) desde a CO7c;   // a v29 desde a LP6-4; a v31, a v29 com o lance, desde a BB2; a v36, a v31 com a TV, desde a TV no jogo
+    expect(VERSAO_GRUPO).toBe(39);   // a v37 (a v36 com a CO6 e a CO7) desde a CO7c;   // a v29 desde a LP6-4; a v31, a v29 com o lance, desde a BB2; a v36, a v31 com a TV, desde a TV no jogo
     expect([ehDoGrupo(VERSAO_V28), nasceComSonoSegura(VERSAO_V28), nasceComSonoSegura(VERSAO_V26)]).toEqual([true, true, false]);
   });
   test("a tabela: no grupo v28 os dois pets dormem em menos cochilos e acordam mais descansados", () => {

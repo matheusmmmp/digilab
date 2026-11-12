@@ -25,7 +25,7 @@ const LIGADA = viver(true), DESLIGADA = viver(false);
 describe("a CO6 no grupo do jogo", () => {
   test("desligada nos grupos de antes (v36), ligada no de hoje (v37), e o cerebro so ganha a chave social com ela", () => {
     expect(new GrupoDoJogo(101, VERSAO_V36).grupo.coop!.cfg.co6).toBe(false);
-    expect(VERSAO_GRUPO).toBe(37);
+    expect(VERSAO_GRUPO).toBe(39);
     expect(new GrupoDoJogo(101, VERSAO_GRUPO).grupo.coop!.cfg.co6).toBe(true);
     for (const m of Object.values(DESLIGADA.motores)) {
       expect(m.lab).not.toBeNull();
