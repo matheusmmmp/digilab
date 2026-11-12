@@ -331,6 +331,8 @@ export function passo(L: Luta): Evento[] {
   }
   // projeteis em linha reta: acertam o inimigo que cruzarem, somem ao passar do alcance
   for (const pr of L.projeteis) {
+    /* o tiro de quem caiu (N3, a chave tiroDoMorto): some no ar, sem dano; sem a chave, ele segue e ainda acerta */
+    if (L.cfg.tiroDoMorto && pr.de.morto) { pr.fim = true; evento(L, { tipo: "tiro_errou", u: ref(pr.de) }); continue; }
     const n = Math.max(1, Math.ceil(dist(pr.vx, pr.vy) * dt / 1000 / 6));
     pr.t += dt;
     for (let k = 0; k < n && !pr.fim; k++) {

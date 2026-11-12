@@ -5,7 +5,7 @@ import { describe, expect, test } from "vitest";
 import { OPCOES_PADRAO, configLuta, criarLuta, rodarAteOFim, sorteiosPorFluxo, type EntradaLuta, type Evento } from "../motor/arena/index.ts";
 import { LUTA_V23 } from "../motor/luta_poc.ts";
 import { resumoLutaLp6 } from "./arena_lp6_lutas.ts";
-import { entradaDaTabela } from "./luta_nucleo_n3_lutas.ts";
+import { entradaDaTabela, lutasDoGabaritoN3 } from "./luta_nucleo_n3_lutas.ts";
 
 /** os eventos de uma luta inteira */
 function eventos(e: EntradaLuta): Evento[] {
@@ -37,6 +37,46 @@ describe("a chave forcaAtr (a vantagem do atributo na entrada)", () => {
   });
   test("o replay bit a bit com ela ligada", () => {
     const e = { ...AGU_GUI, forcaAtr: 1.15 };
+    expect(resumoLutaLp6(e)).toEqual(resumoLutaLp6(e));
+  });
+});
+
+/** a luta, com o lado que caiu primeiro e se algum dano veio de quem ja tinha caido */
+function tiroDeQuemCaiu(e: EntradaLuta): { vencedor: string | null; doMorto: number } {
+  const L = criarLuta(configLuta(e), sorteiosPorFluxo(e.semente)), caiu = new Set<string>();
+  let doMorto = 0;
+  const r = rodarAteOFim(L, ev => { for (const x of ev) { if (x.tipo === "dano" && caiu.has(x.at.lado)) doMorto++; if (x.tipo === "queda") caiu.add(x.u.lado); } });
+  return { vencedor: r.vencedor, doMorto };
+}
+describe("a chave tiroDoMorto (o projetil de quem caiu some)", () => {
+  /* as lutas do gabarito da v23 em que o tiro de quem caiu ainda acertou */
+  const comTiro = lutasDoGabaritoN3().filter(l => l.id.startsWith("v23|")).map(l => l.entrada).filter(e => tiroDeQuemCaiu(e).doMorto > 0);
+  test("o gabarito tem lutas em que o tiro de quem caiu acerta (sem a chave)", () => {
+    expect(comTiro.length).toBeGreaterThan(0);
+  });
+  test("com a chave, nenhum dano vem de quem ja caiu, e as lutas desses tiros deixam de empatar", () => {
+    let empatesAntes = 0, empatesDepois = 0;
+    for (const e of comTiro) {
+      const antes = tiroDeQuemCaiu(e), depois = tiroDeQuemCaiu({ ...e, tiroDoMorto: true });
+      expect(depois.doMorto).toBe(0);
+      if (antes.vencedor === null) empatesAntes++;
+      if (depois.vencedor === null) empatesDepois++;
+    }
+    expect(empatesAntes).toBeGreaterThan(0);
+    expect(empatesDepois).toBeLessThan(empatesAntes);
+  });
+  test("a luta sem tiro no ar quando alguem cai sai igual com a chave", () => {
+    const sem = lutasDoGabaritoN3().filter(l => l.id.startsWith("v23|")).map(l => l.entrada).find(e => {
+      const L = criarLuta(configLuta(e), sorteiosPorFluxo(e.semente)); let ar = false;
+      rodarAteOFim(L, (ev, Lx) => { if (ev.some(x => x.tipo === "queda") && Lx.projeteis.length) ar = true; });
+      return !ar;
+    })!;
+    const { sha: a, ...ra } = resumoLutaLp6(sem), { sha: b, ...rb } = resumoLutaLp6({ ...sem, tiroDoMorto: true });
+    expect(rb).toEqual(ra); expect(b).toBe(a);
+  });
+  test("so vale ligada; o replay bit a bit com ela", () => {
+    expect(() => configLuta({ ...AGU_GUI, tiroDoMorto: false as unknown as true })).toThrow(/so vale ligada/);
+    const e = { ...comTiro[0], tiroDoMorto: true as const };
     expect(resumoLutaLp6(e)).toEqual(resumoLutaLp6(e));
   });
 });

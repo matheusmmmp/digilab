@@ -24,7 +24,9 @@ export interface EntradaLuta { cena: IdCena; a: { forma: string; stats: Stats; v
   apoio?: Apoio; arenaPorEstagio?: ArenaPorEstagio;
   /** as chaves da N3 da investigacao do nucleo (docs/PLANO_LUTA_NUCLEO.md, secao 4; D-N-5, "As 4 (Recommended)", Matheus, 2026-11-12),
       desligadas sem elas; nenhuma versao de pet as liga. `forcaAtr`: a vantagem do atributo (sem ela, o OPCOES_PADRAO.forca, 1,5) */
-  forcaAtr?: number }
+  forcaAtr?: number;
+  /** `tiroDoMorto` ligado (true): o projetil de quem ja caiu some no ar, sem dano (a causa da maior parte dos empates, a N2) */
+  tiroDoMorto?: true }
 
 /** a configuracao da luta 1 contra 1: os dois pela IA, com a dificuldade, o atributo e os projeteis do padrao da POC */
 export function configLuta(e: EntradaLuta, tabela: TabelaFormas = FORMAS_ARENA): ConfigLuta {
@@ -32,9 +34,15 @@ export function configLuta(e: EntradaLuta, tabela: TabelaFormas = FORMAS_ARENA):
     a: { forma: formaArena(e.a.forma, tabela), stats: e.a.stats, ...(e.a.vida0 !== undefined ? { vida0: e.a.vida0 } : {}) },
     b: { forma: formaArena(e.b.forma, tabela), stats: e.b.stats, ...(e.b.vida0 !== undefined ? { vida0: e.b.vida0 } : {}) },
     ...(e.tiro ? { tiro: conferirTiro(e.tiro) } : {}), ...(e.esquiva ? { esquiva: conferirEsquiva(e.esquiva) } : {}),
-    ...(e.apoio ? { apoio: conferirApoio(e.apoio) } : {}), ...(e.arenaPorEstagio ? { arenaPorEstagio: conferirArenaPorEstagio(e.arenaPorEstagio) } : {}) };
+    ...(e.apoio ? { apoio: conferirApoio(e.apoio) } : {}), ...(e.arenaPorEstagio ? { arenaPorEstagio: conferirArenaPorEstagio(e.arenaPorEstagio) } : {}),
+    ...(e.tiroDoMorto !== undefined ? { tiroDoMorto: conferirLigada(e.tiroDoMorto, "tiroDoMorto") } : {}) };
 }
 const numOk = (v: unknown, min: number, max: number) => typeof v === "number" && Number.isFinite(v) && v >= min && v <= max;
+/** uma chave ligada da N3: so true (desligada = sem o campo, para a configuracao sair igual a de antes), senao falha alto */
+function conferirLigada(x: unknown, nome: string): true {
+  if (x !== true) throw new Error(`arena: a chave ${nome} so vale ligada (true) ou fora da entrada (${JSON.stringify(x)})`);
+  return true;
+}
 /** a vantagem do atributo da entrada (N3, a chave forcaAtr): finita, de 1 (sem vantagem) a FORCA_ATR_MAX, senao falha alto */
 export function conferirForcaAtr(x: number): number {
   if (!numOk(x, 1, FORCA_ATR_MAX)) throw new Error(`arena: vantagem do atributo invalida ${JSON.stringify(x)}`);

@@ -45,6 +45,8 @@ export interface ConfigLuta {
   apoio?: Apoio;
   /** a elipse pelo estagio dos dois (LP6-1, secao 4a do plano); sem ela, a elipse de sempre */
   arenaPorEstagio?: ArenaPorEstagio;
+  /** a N3 da investigacao do nucleo (docs/PLANO_LUTA_NUCLEO.md, secao 4): o projetil de quem ja caiu some no ar; sem ela, ele ainda acerta */
+  tiroDoMorto?: true;
 }
 
 // ---------- estado ----------
