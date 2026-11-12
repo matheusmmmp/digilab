@@ -77,6 +77,6 @@ muda" foi descartado porque o `testes` confere os documentos (D-CONTA-27). A med
 
 A etapa PI2 do `docs/PLANO_V3_CONTA_PROTECAO.md` (PI-4 e PI-9). O `LICENSE` da raiz é "todos os direitos reservados", em português e
 em inglês, e deixa os sprites e os nomes do Digimon UP fora da licença, com o crédito da seção 5.1 das `docs/UI_GUIDELINES.md`
-(D-CONTA-34). Cada JS do build começa pelo aviso de autoria, posto por um plugin do `web/app/vite.config.ts` depois da minificação
-(D-CONTA-35), e o `npm run build` reprova um build com `.map` ou sem o aviso (`web/app/scripts/conferir_build.ts`, D-CONTA-36). Os seis
-canários ficam fora do motor, e a lista só no vault (D-CONTA-37).
+(D-CONTA-39). Cada JS do build começa pelo aviso de autoria, posto por um plugin do `web/app/vite.config.ts` depois da minificação
+(D-CONTA-40), e o `npm run build` reprova um build com `.map` ou sem o aviso (`web/app/scripts/conferir_build.ts`, D-CONTA-41). Os seis
+canários ficam fora do motor, e a lista só no vault (D-CONTA-42).
