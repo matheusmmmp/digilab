@@ -148,3 +148,53 @@ A comparação com a quinta tela da referência fica fora do repositório, porqu
 **O que ficou para depois.**
 - Algumas regras antigas da aba no `crescer.css` (`.evo-resumo`, o cartão da `.evo-principal`) ficaram sem uso ou sobrescritas pelo
   `evolucao.css`. Saem numa limpeza, sem mudar a tela.
+
+## 10. O enquadramento do pet no cartão (2026-11-11, branch `v3-ux-evolucao-enquadramento`)
+
+O Matheus mandou uma captura da evolução Tsunomon → Patamon em ~1710 × 855: "O digimon na tela de evolução está fora do enquadramento".
+O pet aparecia pequeno, à direita e abaixo do meio do anel, e havia um quadrado azul-escuro atrás do anel.
+
+**As duas causas.**
+- **O pet fora do meio:** o canvas do `PetGrande` era a caixa do sprite. Desde a chave `CLIPES_UP` (2026-10-30), a caixa do sprite é a
+  comum a todos os clipes (o golpe, a corrida, a queda), e o corpo parado não fica no meio dela. No atlas de hoje, o meio do Idle fica
+  até 36 px fora do meio da caixa, antes da escala (o Koromon, 19,5 px à direita; o Gallantmon, 36 px à esquerda). A escala
+  também saía da caixa grande, e o pet ficava menor do que o desenho pedia.
+- **O quadrado escuro:** a peça `UI_Fx_Glow_Circle_01` é uma textura de somar: um anel branco em fundo preto opaco, sem alfa. Ela entrou
+  com `mix-blend-mode`, que saiu no gate da seção 9 porque variava 1/255 entre capturas. Sem a mistura, o `<img>` pintava o fundo preto a
+  45 % por cima da grade.
+
+**O conserto** (só a vista; o motor, o save e as rotas não mudam):
+- `caixaIdle` e `enquadrarIdle` em `web/app/src/atlas.ts`: o canvas do `PetGrande` passa a ser a caixa que os quadros do Idle ocupam
+  juntos, com 1 px de borda (o contorno da sombria). O meio do corpo fica no meio do canvas, o pé na base dele, e a escala inteira sai
+  dessa caixa.
+- o pé segue o meio da plataforma: a margem do `.evm-pet` sai das mesmas variáveis da plataforma (`--evm-plat-base` e `--evm-plat-alt`).
+  Antes era 36 px fixos, e o que punha o pé perto do meio era a folga da caixa embaixo do pé, que muda de 5 a 26 px de sprite para sprite.
+- o brilho entra como máscara pela luminância (`mask-mode:luminance`) de um branco, sem mistura de cores. Num navegador sem `mask-mode`,
+  o brilho não aparece.
+
+**O que muda fora do cartão:** o `PetGrande` também desenha o "de → para" do cartão e o palco de Crescer · Evolução (`.evl-palco`). Nos
+dois o pet fica no meio e maior, pela mesma conta.
+
+**Medido** (Chrome, servidor local, movimento reduzido; Koromon → Agumon e Agumon → Growlmon; peles vidro e xcom, iguais):
+
+| vista | desvio do meio do corpo ao meio da plataforma, antes | depois | largura do corpo, antes | depois |
+|---|---|---|---|---|
+| 1920 × 950, 1710 × 855 e 1440 × 900, Agumon | 24 px | 0 px | 132 px | 220 px |
+| as mesmas, Growlmon | 28,5 px | 2 px | 174 px | 232 px |
+| 390 × 844, Agumon | 16 px | 0 px | 88 px | 176 px |
+| 390 × 844, Growlmon | 19 px | 1,5 px | 116 px | 174 px |
+
+Os 2 px do Growlmon são o balanço do Idle: a caixa é a de todos os quadros do Idle, e a medida é de um quadro só. O pé fica de 3 a 5 px
+acima do meio da plataforma (a borda de 1 px vezes a escala). As medidas saem do script de capturas da sessão, que não está no
+repositório.
+
+**As capturas** ficam fora do git, em `D:\Trab\digilab\capturas_evolucao_enquadre\` (32 telas e 3 lado a lado; o `LEIA.txt` da pasta diz
+o que é cada uma), porque mostram os sprites e a decoração do UP.
+
+**O teste:** `web/app/test/evolucao_enquadre.test.ts`, 6 testes: a caixa do Idle, o enquadre de um sprite com o corpo fora do meio, a
+fonte do `PetGrande`, o CSS do pé e do brilho e, com o `Assets` na máquina, as 60 formas do atlas real.
+
+**O que ficou para depois.**
+- A reserva `Evol` da cena oficial (`CenaEvolucao.tsx`, `reservaEvol`) centra pela caixa do sprite. Ela só toca para uma forma sem cena
+  no mapa, e o clipe `Evol` se move pela caixa; não foi mexida.
+- As cores do brilho não mudam, mas ele passa a ser branco puro pela máscara; com a mistura, somava ao azul do fundo.
