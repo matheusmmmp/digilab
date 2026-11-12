@@ -354,16 +354,18 @@ def inatos_do_meta(meta: dict) -> ConfigDigibrainInatos:
 
 
 def fabricas(braco: str, dono: str, semente: int, dias: int, orcamento_por_dia: int, serie_e: tuple | None = None,
-             g_apr_con: int | None = None, inatos: ConfigDigibrainInatos | None = None, conserto: bool = False, sono=None):
+             g_apr_con: int | None = None, inatos: ConfigDigibrainInatos | None = None, conserto: bool = False, sono=None, lance=None):
     """(a fabrica do cerebro, a do motor) da vida: o motor e o mesmo em todo braco. `inatos` (so para rejogar uma rodada antiga): os
     valores daquela rodada; None, os de hoje (CONFIG_DIGIBRAIN_INATOS). `sono`: a ConfigSonoSegura do modular
-    (docs/TAREFA_V3_SONO_SEGURA.md); None, a desligada"""
+    (docs/TAREFA_V3_SONO_SEGURA.md); None, a desligada. `lance`: a ConfigLanceDono (docs/TAREFA_V3_BOLA_BRINCAR.md), no motor e no
+    cerebro modular (o A11 so a recebe no motor, BB-6); None, a desligada"""
     b = bancada(dias, orcamento_por_dia)
     espec = bv.EspecVida(dono, gl.BRACO_V11, semente)
     cc = b.cfg_corpo_de(espec)
 
     def fm(politica, cfg, s):
-        return com_corpo(MotorMundo)(politica, cfg, s, NEUTRO, "brasa", obediencia_desligada=True, cfg_mundo=CM, cfg_corpo=cc)
+        return com_corpo(MotorMundo)(politica, cfg, s, NEUTRO, "brasa", obediencia_desligada=True, cfg_mundo=CM, cfg_corpo=cc,
+                                     **({} if lance is None else {"cfg_lance_dono": lance}))
 
     if braco == "A11":
         def fp(cfg=None):
@@ -372,15 +374,16 @@ def fabricas(braco: str, dono: str, semente: int, dias: int, orcamento_por_dia: 
         cd = config_do_braco(braco, g_apr_con, conserto)
 
         def fp(cfg=None):
-            return Registro(DigiBrain(cfg or CONFIG_PADRAO, cd, CM, inatos=inatos, serie_e_doadora=serie_e, semente=semente, cfg_sono=sono),
-                            CONFIG_DIGIBRAIN_INATOS.escala)
+            return Registro(DigiBrain(cfg or CONFIG_PADRAO, cd, CM, inatos=inatos, serie_e_doadora=serie_e, semente=semente, cfg_sono=sono,
+                                      **({} if lance is None else {"cfg_lance": lance})), CONFIG_DIGIBRAIN_INATOS.escala)
     return fp, fm
 
 
 def viver(braco: str, dono: str, lugar: str, semente: int, dias: int, orcamento_por_dia: int, serie_e: tuple | None = None,
-          g_apr_con: int | None = None, conserto: bool = False, inatos: ConfigDigibrainInatos | None = None, sono=None):
+          g_apr_con: int | None = None, conserto: bool = False, inatos: ConfigDigibrainInatos | None = None, sono=None, lance=None):
     """uma vida: (o motor, o registro, as fabricas); `conserto`, os bracos do adendo 3; `inatos`, os da calibracao do conserto (A3.11)"""
-    fp, fm = fabricas(braco, dono, semente, dias, orcamento_por_dia, serie_e, g_apr_con, inatos=inatos, conserto=conserto, sono=sono)
+    fp, fm = fabricas(braco, dono, semente, dias, orcamento_por_dia, serie_e, g_apr_con, inatos=inatos, conserto=conserto, sono=sono,
+                      lance=lance)
     registro = fp(CONFIG_PADRAO)
     d = DonoComLugar(criar_dono(dono), lugar, semente, dono, CM)
     motor, _ = simular_vida_fisico(d, registro, semente, dias, orcamento_por_dia * dias, dono, fm)

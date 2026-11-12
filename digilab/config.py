@@ -3055,6 +3055,50 @@ PARAMETROS_SONO_SEGURA: dict[str, tuple[str, str]] = {
 
 CONFIG_SONO_SEGURA = ConfigSonoSegura()
 CONFIG_SONO_SEGURA_LIGADA = ConfigSonoSegura(ligada=True)
+
+
+@dataclass(frozen=True)
+class ConfigLanceDono:
+    """O lance do dono (docs/TAREFA_V3_BOLA_BRINCAR.md, BB-1 a BB-6; as decisoes DECIDIDAS pelo Matheus em 2026-11-11, os numeros PROPOSTOS).
+    Ligada, com o mundo ligado, o Brincar do dono pega a bola onde ela estiver e a joga perto do pet: a direcao (uma das 16) e a distancia
+    (de `lance_min_celulas` a `lance_max_celulas` celulas) saem do fluxo novo `dono-bola` do `Mundo`, e a bola cai parada em terra, como no
+    `deixar_bola` (BB-1). O Brincar de sempre continua (BB-2), e o pet decide no mesmo tick (BB-3, o padrao da decisao na comida). O
+    DigiBrain modular com a mesma config ligada ganha a entrada `bola_do_dono` (BB-4): S durante `janela_convite_ticks` ticks depois do lance
+    e 0 fora da janela (e 0 com a fome urgente, que segue ganhando, como o reflexo do sono); ela soma `mul(w_bola_do_dono, bola_do_dono)` ao
+    inato do brincar. O cerebro A nao tem a entrada (BB-6): com ele, so a bola se mexe. Fica numa config propria, como a `ConfigSonoSegura`,
+    para o dump dos inatos e da `ConfigDigibrain` nao mudar. Desligada (o padrao), a vida de hoje sai byte a byte
+    (tests/gabaritos/lance_dono_de_hoje.json) e o fluxo `dono-bola` nem e criado. Status em PARAMETROS_LANCE_DONO."""
+
+    ligada: bool = False                      # PROPOSTO: a chave (so os pets do jogo da versao do lance a ligam)
+    lance_min_celulas: int = 2                # PROPOSTO, SEM FONTE: a distancia minima do lance ao pet, em celulas
+    lance_max_celulas: int = 3                # PROPOSTO, SEM FONTE: a distancia maxima do lance ao pet, em celulas
+    janela_convite_ticks: int = 30            # PROPOSTO, SEM FONTE: a janela da entrada `bola_do_dono` depois do lance, em ticks
+    w_bola_do_dono: int = 4 * _S              # PROPOSTO, SEM FONTE: o peso da entrada no inato do brincar (4 S = a_max; o menor da grade
+                                              # {S/4, S/2, S, 2 S, 3 S, 4 S} que passa o G-BB-1, D-BB1-4)
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigLanceDono.ligada e bool: {self.ligada!r}")
+        for campo in ("lance_min_celulas", "lance_max_celulas", "janela_convite_ticks", "w_bola_do_dono"):
+            v = getattr(self, campo)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigLanceDono.{campo} e inteiro positivo: {v!r}")
+        if self.lance_min_celulas > self.lance_max_celulas:
+            raise ValueError(f"ConfigLanceDono: lance_min_celulas > lance_max_celulas ({self.lance_min_celulas} > {self.lance_max_celulas})")
+
+
+# Status dos campos da ConfigLanceDono (conferido por teste). A fome urgente nao tem numero proprio: e o `urgencia_lambda` dos inatos.
+PARAMETROS_LANCE_DONO: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "TAREFA_V3_BOLA_BRINCAR (BB-1 a BB-9 DECIDIDAS pelo Matheus em 2026-11-11); a chave, SEM FONTE"),
+    "lance_min_celulas": ("PROPOSTO", "TAREFA_V3_BOLA_BRINCAR, BB-1 (2 a 3 celulas); SEM FONTE"),
+    "lance_max_celulas": ("PROPOSTO", "TAREFA_V3_BOLA_BRINCAR, BB-1 (2 a 3 celulas); SEM FONTE"),
+    "janela_convite_ticks": ("PROPOSTO", "TAREFA_V3_BOLA_BRINCAR, BB-4 (30 ticks); SEM FONTE"),
+    "w_bola_do_dono": ("PROPOSTO", "TAREFA_V3_BOLA_BRINCAR, BB-4: o menor da grade que passa o G-BB-1 nas sementes 101, 202 e 303 "
+                                   "(D-BB1-4); SEM FONTE"),
+}
+
+CONFIG_LANCE_DONO = ConfigLanceDono()
+CONFIG_LANCE_DONO_LIGADA = ConfigLanceDono(ligada=True)
 # a versao do pet do cerebro modular (DM-5, DECIDIDA em 2026-10-25): a v13, so com a ConfigDigibrain ligada. Os saves v1 a v12, as
 # assinaturas e os gabaritos nao mudam; no jogo (web/app/), a v13 entra na etapa 1b
 VERSAO_PET_DIGIBRAIN = 13
