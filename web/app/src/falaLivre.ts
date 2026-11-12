@@ -63,7 +63,7 @@ function anexar(reg: RegistroFala): void {
   try { localStorage.setItem(LOG, (localStorage.getItem(LOG) || "") + JSON.stringify(reg) + "\n"); } catch { /* sem armazenamento */ }
 }
 /* ------------------------------------------------ fatos do pet (mesmo formato que digilab_fala_livre/fatos.py) */
-const NOME_MEM: Record<string, string> = { demora: "Você me deixou esperando", bronca: "Broncas", elogio: "Elogios", carinho: "Carinho" };
+const NOME_MEM: Record<string, string> = { demora: "Você me deixou esperando", bronca: "Broncas", elogio: "Elogios", carinho: "Atenção" };
 const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
 const diaDe = (t: number): number => Math.floor((t - TICK_INICIAL) / TPD) + 1;
 const fatoresTxt = (f: string[]): string[] => f.map(x => (FATORES_TXT[x] && FATORES_TXT[x].marcador) || x.replace(/_/g, " ")).slice(0, 4);
