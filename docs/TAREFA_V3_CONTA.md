@@ -72,3 +72,11 @@ A primeira etapa do `docs/PLANO_V3_CONTA_PROTECAO.md`, antes de o repositório f
 quando chega um commit, e o `web` só liga a máquina quando o PR muda `web/app/`. Nenhuma conferência saiu: o filtro "só quando o Python
 muda" foi descartado porque o `testes` confere os documentos (D-CONTA-27). A medida: 20 % das execuções repetiam o mesmo commit
 (D-CONTA-28). A economia é estimada e ainda não cabe na cota grátis (D-CONTA-30).
+
+## A PI2: a licença, o aviso no build e os canários (2026-11-12)
+
+A etapa PI2 do `docs/PLANO_V3_CONTA_PROTECAO.md` (PI-4 e PI-9). O `LICENSE` da raiz é "todos os direitos reservados", em português e
+em inglês, e deixa os sprites e os nomes do Digimon UP fora da licença, com o crédito da seção 5.1 das `docs/UI_GUIDELINES.md`
+(D-CONTA-34). Cada JS do build começa pelo aviso de autoria, posto por um plugin do `web/app/vite.config.ts` depois da minificação
+(D-CONTA-35), e o `npm run build` reprova um build com `.map` ou sem o aviso (`web/app/scripts/conferir_build.ts`, D-CONTA-36). Os seis
+canários ficam fora do motor, e a lista só no vault (D-CONTA-37).
