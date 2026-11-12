@@ -31,8 +31,13 @@ decisao (quem comeu o que, a fome e o humor), lidos por quem mede, igual em todo
     python experiments/run_v3_cooperacao_bancada.py --sementes 101,202 --bracos B0,B1 --saida /tmp/x.jsonl    # a fumaca
     python experiments/run_v3_cooperacao_bancada.py --faixa 91101 40 --bracos B0,B1 --processos 4 --saida ...   # o piloto (CB2)
 
-Nenhuma vida principal roda antes do registro da analise (secao 10 do plano). O orquestrador recusa a faixa principal (91201 em diante)
-sem `--registro` apontando para o commit do registro.
+O adendo 1 (secao 12 do plano, DECIDIDO em 2026-11-12): `--mundo irmao_aleatorio` poe no B o cerebro aleatorio do gabarito do mundo (o
+`CerebroAleatorio`, D-CO7b-6), que provoca a situacao; a CO7 so no A, nos sete braços sem o RM. As medidas ganham a P1-neg (a parte das
+oportunidades em que o proprio pet comeu a comida proibida) e a contagem da culpa e da inveja (a parte das decisoes do pet, a partir do dia 1,
+em que cada uma passou de 0, do campo `dever` dos motivos do modular).
+
+Nenhuma vida principal roda antes do registro da analise (secao 10 do plano). O orquestrador recusa as faixas principais (91201 em diante,
+fora dos pilotos 91101-91140 e 92101-92140) sem `--registro` apontando para o commit do registro.
 """
 from __future__ import annotations
 
@@ -63,6 +68,8 @@ DONO = "atencioso"                        # CB-4
 LUGAR = "comedouro"                       # CB-3
 JANELA_P1 = 4                             # decisoes do pet (plano, 3.1; PROPOSTO)
 FAIXA_PILOTO = (91101, 91140)             # plano, secao 6
+FAIXA_PILOTO_AD1 = (92101, 92140)         # plano, 12.5
+MUNDOS = ("cb4", "irmao_aleatorio")
 INICIO_PRINCIPAL = 91201
 CMED = CONFIG_COOPERACAO_CO7              # a configuracao da medida (a CO7 padrao)
 S = CMED.escala
@@ -161,16 +168,24 @@ def _fabrica_motor(semente_pet: int, dias: int):
     return fm
 
 
-def rodar_vida(semente: int, braco: str, dias: int = DIAS):
-    """(o grupo, a coleta) de uma vida do braco"""
+def rodar_vida(semente: int, braco: str, dias: int = DIAS, mundo: str = "cb4"):
+    """(o grupo, a coleta) de uma vida do braco; no `irmao_aleatorio` (o adendo 1), o B e o cerebro aleatorio, sem coleta de antes"""
+    if mundo not in MUNDOS:
+        raise ValueError(f"mundo desconhecido: {mundo!r} ({MUNDOS})")
+    if mundo == "irmao_aleatorio" and braco == "RM":
+        raise ValueError("o RM nao existe no adendo 1 (AD1-3): o irmao aleatorio nao retribui")
     cco_grupo, cco_a, cco_b = configs(braco)
     ss = sementes_do_grupo(semente, CONFIG_GRUPO_LIGADA.ids)
     coleta = Coleta()
     pets = []
     for ident, cco in (("A", cco_a), ("B", cco_b)):
-        fp = _fabrica_cerebro(coleta, ident, ss[ident], cco)
+        if mundo == "irmao_aleatorio" and ident == "B":
+            from exportar_gabarito_mundo import CerebroAleatorio
+            fp, rotulo = (lambda cfg=None: CerebroAleatorio(cfg or CONFIG_PADRAO)), "aleatorio"
+        else:
+            fp, rotulo = _fabrica_cerebro(coleta, ident, ss[ident], cco), "digibrain"
         d = DonoComLugar(criar_dono(DONO), LUGAR, ss[ident], DONO, CM)
-        pets.append(PetDoGrupo(ident, 0, fp, _fabrica_motor(ss[ident], dias), d, DONO, "digibrain"))
+        pets.append(PetDoGrupo(ident, 0, fp, _fabrica_motor(ss[ident], dias), d, DONO, rotulo))
     agir0, coop0 = DigiBrain.agir, Grupo._coop_decisao
 
     def agir(self, obs, rng):
@@ -185,7 +200,7 @@ def rodar_vida(semente: int, braco: str, dias: int = DIAS):
         g = simular_grupo(CM, semente, pets, dias, cfg_cooperacao=cco_grupo)
     finally:
         DigiBrain.agir, Grupo._coop_decisao = agir0, coop0
-    for i in g.motores:
+    for i in coleta.antes:
         if len(coleta.antes.get(i, [])) != len(coleta.depois.get(i, [])):
             raise RuntimeError(f"a coleta do pet {i} nao casou: {len(coleta.antes.get(i, []))} vistas x {len(coleta.depois.get(i, []))} decisoes")
     return g, coleta
@@ -208,10 +223,12 @@ def medidas(g, coleta: Coleta) -> dict:
             if comeu is not None and comeu not in comidas_comidas:
                 comidas_comidas[comeu] = (tick, i)
     p1_op, p1_fav, por_pet = 0, 0, {}
-    p3, p5, acoes = {}, {}, {}
+    p3, p5, acoes, culpa_inveja = {}, {}, {}, {}
     for i in ids:
+        acoes[i] = Counter(a for t, _f, _c, _h, a in coleta.depois[i] if t >= TICKS_POR_DIA)
+    for i in [i for i in ids if i in coleta.antes]:
         vistas, depois = coleta.antes[i], coleta.depois[i]
-        op_i = fav_i = 0
+        op_i = fav_i = neg_i = 0
         priv = dec = 0
         kk: dict[str, list] = {}
         no_limiar = 0
@@ -231,11 +248,16 @@ def medidas(g, coleta: Coleta) -> dict:
                 op_i += 1
                 quem = comidas_comidas.get(cid)
                 fav_i += quem is not None and tick <= quem[0] <= fim and quem[1] == aflito
+                neg_i += quem is not None and tick <= quem[0] <= fim and quem[1] == i
         p1_op, p1_fav = p1_op + op_i, p1_fav + fav_i
-        por_pet[i] = {"oportunidades": op_i, "favoraveis": fav_i}
+        por_pet[i] = {"oportunidades": op_i, "favoraveis": fav_i, "proprio_comeu": neg_i}
         p3[i] = priv / dec if dec else None
         p5[i] = {"k_medio": {e: sum(v) / len(v) for e, v in sorted(kk.items())}, "no_limiar": no_limiar / dec if dec else None}
-        acoes[i] = Counter(a for t, _f, _c, _h, a in depois if t >= TICKS_POR_DIA)
+        mot = getattr(g.motores[i].politica, "motivos", None) or []
+        ds = [m.get("dever") for m, de in zip(mot, depois) if de[0] >= TICKS_POR_DIA]
+        ds = [d for d in ds if d]
+        culpa_inveja[i] = None if not ds else {"decisoes": len(ds), "culpa": sum(d.get("culpa", 0) > 0 for d in ds) / len(ds),
+                                               "inveja": sum(d.get("inveja", 0) > 0 for d in ds) / len(ds)}
     # P2: o piso diario do humor do par
     pisos = []
     for dia in range(1, DIAS):
@@ -255,19 +277,19 @@ def medidas(g, coleta: Coleta) -> dict:
     tot = [sum(acoes[i].values()) or 1 for i in ids]
     p6 = sum(abs(acoes[ids[0]][a] / tot[0] - acoes[ids[1]][a] / tot[1]) for a in todas)
     return {"P1": None if p1_op == 0 else p1_fav / p1_op, "P1_oportunidades": p1_op, "P1_favoraveis": p1_fav, "P1_por_pet": por_pet,
-            "P2": sum(pisos) / len(pisos) if pisos else None, "P3": p3, "P4": p4, "P5": p5, "P6": p6}
+            "P2": sum(pisos) / len(pisos) if pisos else None, "P3": p3, "P4": p4, "P5": p5, "P6": p6, "culpa_inveja": culpa_inveja}
 
 
 def conferir(g, coleta: Coleta, braco: str) -> None:
     """as travas da secao 5 que se conferem dentro de cada vida (falham alto)"""
     cco_grupo, cco_a, cco_b = configs(braco)
     if braco == "D0":
-        for i in g.motores:
+        for i in coleta.antes:
             ks = [v["k"] for v in coleta.antes[i] if v["k"] is not None]
             if any(k >= CMED.limiar_escudo for k in ks):
                 raise RuntimeError(f"D0: o k do pet {i} chegou ao limiar do escudo")
     for i, cco in (("A", cco_a), ("B", cco_b)):           # o G-ESCUDO: nenhum cerebro com o escudo come a comida proibida
-        if cco is None:
+        if cco is None or i not in coleta.antes:
             continue
         for mt in [g.motores[i]]:
             for m in mt.politica.motivos:
@@ -278,16 +300,19 @@ def conferir(g, coleta: Coleta, braco: str) -> None:
 
 def checar_faixa(sementes: list[int], registro: str | None) -> None:
     """a trava da secao 10: a faixa principal (91201 em diante) so com o commit do registro da analise"""
-    if any(s >= INICIO_PRINCIPAL for s in sementes) and not registro:
+    def piloto(s: int) -> bool:
+        return FAIXA_PILOTO[0] <= s <= FAIXA_PILOTO[1] or FAIXA_PILOTO_AD1[0] <= s <= FAIXA_PILOTO_AD1[1]
+    if any(s >= INICIO_PRINCIPAL and not piloto(s) for s in sementes) and not registro:
         raise SystemExit("a faixa principal (91201 em diante) so roda com --registro (o commit do registro da analise, secao 10 do plano)")
 
 
 def uma(args: tuple) -> dict:
-    semente, braco, dias = args
+    semente, braco, dias, mundo = args
     t0 = time.perf_counter()
-    g, c = rodar_vida(semente, braco, dias)
+    g, c = rodar_vida(semente, braco, dias, mundo)
     conferir(g, c, braco)
-    return {"semente": semente, "braco": braco, "dias": dias, "segundos": round(time.perf_counter() - t0, 2), "medidas": medidas(g, c)}
+    return {"semente": semente, "braco": braco, "dias": dias, "mundo": mundo, "segundos": round(time.perf_counter() - t0, 2),
+            "medidas": medidas(g, c)}
 
 
 def main() -> None:
@@ -297,6 +322,7 @@ def main() -> None:
     gr.add_argument("--faixa", nargs=2, type=int, metavar=("INICIO", "N"), help="N sementes a partir de INICIO, sem pular")
     ap.add_argument("--bracos", default=",".join(BRACOS))
     ap.add_argument("--dias", type=int, default=DIAS)
+    ap.add_argument("--mundo", default="cb4", choices=MUNDOS, help="cb4 (a CB4) ou irmao_aleatorio (o adendo 1)")
     ap.add_argument("--processos", type=int, default=1, help="ate 4 (a maquina; memoria maquina-instavel-carga-total)")
     ap.add_argument("--registro", help="o commit do registro da analise (secao 10): exigido para a faixa principal")
     ap.add_argument("--saida", required=True, help="o .jsonl das vidas (fora do git: experiments/runs/cooperacao_bancada/)")
@@ -306,16 +332,20 @@ def main() -> None:
     if a.processos > 4:
         raise SystemExit("no maximo 4 processos (a maquina)")
     bracos = a.bracos.split(",")
+    if a.mundo == "irmao_aleatorio" and a.bracos == ",".join(BRACOS):
+        bracos = [b for b in BRACOS if b != "RM"]
     for b in bracos:
         configs(b)
-    tarefas = [(s, b, a.dias) for s in sementes for b in bracos]
+        if a.mundo == "irmao_aleatorio" and b == "RM":
+            raise SystemExit("o RM nao existe no adendo 1 (AD1-3)")
+    tarefas = [(s, b, a.dias, a.mundo) for s in sementes for b in bracos]
     saida = Path(a.saida)
     saida.parent.mkdir(parents=True, exist_ok=True)
     feitas = set()
     if saida.exists():                                    # retomar: as vidas ja gravadas nao rodam de novo
         for linha in saida.read_text(encoding="utf-8").splitlines():
             r = json.loads(linha)
-            feitas.add((r["semente"], r["braco"], r["dias"]))
+            feitas.add((r["semente"], r["braco"], r["dias"], r.get("mundo", "cb4")))
     tarefas = [t for t in tarefas if t not in feitas]
     t0 = time.perf_counter()
     with saida.open("a", encoding="utf-8") as f:

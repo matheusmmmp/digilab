@@ -7,7 +7,8 @@
    sobre o pet passa a ser a do cérebro (D-GV-CEREBRO-9). */
 import { useSyncExternalStore } from "react";
 import { ultimoCarinhoEm } from "../telas/pet/reacao.ts";
-import { capturarTela } from "./captura.ts";
+import { abrirTela, abrirVideo } from "./captura.ts";
+import { Canais, type CanalAgora, type Fonte } from "./canais.ts";
 import { desligarTv, publicarTv } from "./estadoTv.ts";
 import { chaveGuardada, doTexto, estadoInicial, inatoDaSemente, paraTexto, passo, type EstadoGosto, type Inato, type Leitura, type Sentido } from "./gosto.ts";
 import { ligarTvDoJogo } from "./tvDoJogo.ts";
@@ -25,14 +26,16 @@ export interface SessaoTv {
   /** o programa da TV do jogo de agora; null fora dela */
   programa: string | null;
   temSom: boolean;
+  /** o canal da tela do dono (canais.ts): o número, quantos há e o tipo; null fora da captura */
+  canal: CanalAgora | null;
   /** sobe a cada carinho que o gosto associou (o painel pulsa a origem "do carinho") */
   carinhosVistos: number;
   erro: string | null;
 }
 
 const VAZIA: SessaoTv = { semente: null, inato: null, estado: estadoInicial(), leitura: null, sentido: null, origem: null, programa: null, temSom: false,
-  carinhosVistos: 0, erro: null };
-let atual: SessaoTv = VAZIA, parador: (() => void) | null = null, carinhoVisto: number | null = null;
+  canal: null, carinhosVistos: 0, erro: null };
+let atual: SessaoTv = VAZIA, parador: (() => void) | null = null, carinhoVisto: number | null = null, canais: Canais | null = null;
 const ouvintes = new Set<() => void>();
 const mudar = (m: Partial<SessaoTv>): void => { atual = { ...atual, ...m }; for (const f of ouvintes) f(); };
 
@@ -83,24 +86,58 @@ export function ligarTvJogo(): void {
 function desligar(erro: string | null): void {
   pararNoCerebro();                                       // a v32: a tela preta e muda entra no registro
   desligarTv();
-  mudar({ origem: null, programa: null, temSom: false, leitura: null, sentido: null, erro });
+  mudar({ origem: null, programa: null, temSom: false, canal: null, leitura: null, sentido: null, erro });
 }
 
-/** mostra a tela do dono ao pet (precisa vir de um clique; o seletor é o do navegador). Cancelar no seletor não é erro */
-export async function ligarTela(): Promise<void> {
+/** abre uma fonte (o seletor do navegador ou o arquivo escolhido); `aoAcabar` recebe o motivo quando ela acaba por fora */
+export type AbrirFonte = (aoAcabar: (motivo: string) => void) => Promise<Fonte>;
+
+/** o canal atual mudou (a troca, o canal novo, a fonte encerrada): o painel e a ilha seguem a fonte de agora; a sessão não para */
+function canalMudou(): void {
+  const c = canais, f = c?.atual ?? null;
+  if (c === null || f === null) return;
+  mudar({ temSom: f.temSom, canal: c.agora });
+  publicarTv({ video: f.video });
+}
+
+/** um canal novo da tela do dono (D-GV-CANAL-1): com a TV desligada ou na TV do jogo, liga a captura com ele; com a captura ligada, ele
+    entra na lista e vira o atual, sem parar a sessão nem o cérebro. Cancelar no seletor não é erro */
+export async function ligarCanal(abrir: AbrirFonte): Promise<void> {
   if (atual.semente === null) throw new Error("mostrar a tela sem pet");
-  pararTv(); comecar();
-  comecarNoCerebro("tela");
+  const jaLigada = atual.origem === "tela" && canais !== null;
+  if (!jaLigada) { pararTv(); comecar(); comecarNoCerebro("tela"); }
+  let f: Fonte | null = null;
   try {
-    const c = await capturarTela(sentir, motivo => { parador = null; desligar(motivo); });
-    parador = c.parar;
-    mudar({ origem: "tela", programa: null, temSom: c.temSom, erro: null });
-    publicarTv({ ligada: true, origem: "tela", programa: null, video: c.video ?? null });
+    f = await abrir(motivo => { const c = canais; if (f !== null && c !== null && c.tem(f)) c.encerrada(f, motivo); });
   } catch (x) {
-    pararNoCerebro();
+    if (!jaLigada) pararNoCerebro();
     const cancelou = x instanceof DOMException && (x.name === "NotAllowedError" || x.name === "AbortError");
     mudar({ erro: cancelou ? null : `a tela não foi compartilhada: ${(x as Error).message}` });
+    return;
   }
+  if (jaLigada) {
+    if (canais === null) { f.parar(); return; }          /* a captura acabou enquanto o seletor estava aberto: o canal novo não entra */
+    canais.adicionar(f);
+    mudar({ erro: null });
+    return;
+  }
+  const c = new Canais(sentir, canalMudou, motivo => { if (canais === c) { canais = null; parador = null; desligar(motivo); } });
+  canais = c;
+  parador = () => { if (canais === c) canais = null; c.parar(); };
+  mudar({ origem: "tela", programa: null, temSom: f.temSom, erro: null });
+  publicarTv({ ligada: true, origem: "tela", programa: null, video: f.video });
+  c.adicionar(f);
+}
+
+/** mostra a tela do dono ao pet (precisa vir de um clique; o seletor é o do navegador): o primeiro canal, ou um canal a mais */
+export const ligarTela = (): Promise<void> => ligarCanal(abrirTela);
+/** um vídeo deste computador vira um canal (D-GV-CANAL-7); o arquivo não sai da máquina */
+export const ligarVideo = (arquivo: File): Promise<void> => ligarCanal(aoAcabar => abrirVideo(arquivo, aoAcabar));
+
+/** o "Canal ▸": o próximo canal já escolhido, sem abrir o seletor; a sessão continua */
+export function proximoCanal(): void {
+  if (canais === null) throw new Error("mudar de canal sem a tela do dono ligada");
+  canais.proximo();
 }
 
 /** desliga a TV (o botão Parar, o pet que mudou, a tela que fechou) */
@@ -110,6 +147,9 @@ export function pararTv(): void {
   p?.();
   if (atual.origem !== null) desligar(null);
 }
+
+/** o navegador abre um vídeo deste computador? (o arquivo e o <video> local; no celular o painel não oferece, D-GV-CANAL-6) */
+export const podeAbrirVideo = (): boolean => typeof document !== "undefined" && typeof URL?.createObjectURL === "function";
 
 /** o navegador deixa mostrar a tela? (o celular e o navegador sem a captura ficam só com a TV do jogo: nenhum botão que falha) */
 export const podeMostrarTela = (): boolean =>

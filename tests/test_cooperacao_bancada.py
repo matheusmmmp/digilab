@@ -79,7 +79,7 @@ def test_a_coleta_as_medidas_e_as_travas(braco):
     for i in g.motores:
         assert len(c.antes[i]) == len(c.depois[i]) > 0
     m = rb.medidas(g, c)
-    assert set(m) == {"P1", "P1_oportunidades", "P1_favoraveis", "P1_por_pet", "P2", "P3", "P4", "P5", "P6"}
+    assert set(m) == {"P1", "P1_oportunidades", "P1_favoraveis", "P1_por_pet", "P2", "P3", "P4", "P5", "P6", "culpa_inveja"}
     assert m["P1_oportunidades"] == sum(p["oportunidades"] for p in m["P1_por_pet"].values())
     assert m["P1"] is None or 0.0 <= m["P1"] <= 1.0
     assert 0.0 <= m["P2"] <= 1.0 and 0.0 <= m["P6"] <= 2.0
@@ -121,3 +121,38 @@ def test_a_analise_aplica_a_regra_escrita_antes():
     assert an.analisar(poucos)["H-EMERGE"]["leitura"] == "INCONCLUSIVO POR PREMISSA"
     iguais = {s: {**por[s], "B1": _med(0.0)} for s in range(40)}
     assert an.analisar(iguais)["H-EMERGE"]["leitura"] == "NAO CONFIRMA"
+
+
+# ------------------------------------------------------------------ o adendo 1 (secao 12 do plano): o irmao aleatorio
+def test_o_adendo_1_o_irmao_aleatorio_e_a_co7_so_no_a():
+    g, c = rb.rodar_vida(202, "B1", mundo="irmao_aleatorio")
+    assert sorted(c.antes) == ["A"] and sorted(c.depois) == ["A", "B"]
+    assert g.registro.cabecalho["pets"]["B"]["cerebro"] == "aleatorio" and not hasattr(g.motores["B"].politica, "motivos")
+    rb.conferir(g, c, "B1")
+    m = rb.medidas(g, c)
+    assert set(m["P1_por_pet"]) == {"A"} and "proprio_comeu" in m["P1_por_pet"]["A"]
+    assert m["P1_por_pet"]["A"]["oportunidades"] > 0                      # a situacao acontece (12.1)
+    assert m["culpa_inveja"]["A"]["decisoes"] > 0 and 0.0 <= m["culpa_inveja"]["A"]["culpa"] <= 1.0
+    g0, c0 = rb.rodar_vida(202, "B0", mundo="irmao_aleatorio")
+    assert rb.medidas(g0, c0)["culpa_inveja"]["A"] is None               # sem a CO7 no cerebro, nada a contar
+    with pytest.raises(ValueError):
+        rb.rodar_vida(202, "RM", mundo="irmao_aleatorio")
+    with pytest.raises(ValueError):
+        rb.rodar_vida(202, "B0", mundo="outro")
+
+
+def test_o_adendo_1_a_faixa_e_a_analise_do_pet_a():
+    import analisar_v3_cooperacao_bancada as an
+    rb.checar_faixa([92101, 92140], None)
+    with pytest.raises(SystemExit):
+        rb.checar_faixa([92201], None)
+    por = {}
+    for s in range(40):
+        b0 = _med(0.0, pa=0.0)
+        b1 = _med(0.0, pa=0.5)                                            # so a P1 do A sobe
+        por[s] = {"B0": b0, "B1": b1, "D0": _med(0.0, pa=0.0), "DM": _med(0.0, pa=0.25),
+                  "B1E": _med(0.0, pa=0.5), "B1U": _med(0.0, pa=0.0), "B1A": _med(0.0, pa=0.0)}
+    r = an.analisar(por, pet="A")
+    assert r["H-EMERGE"]["leitura"] == "CONFIRMA" and r["H-REP"]["leitura"] == "FORA (sem o RM)"
+    assert r["H-DOSE"]["leitura"] == "CONFIRMA" and r["H-CUSTO"]["leitura"] == "CONFIRMA"
+    assert an.analisar(por)["H-EMERGE"]["leitura"] == "NAO CONFIRMA"      # sem o pet, a P1 do par (0) nao sobe
