@@ -20,16 +20,19 @@ da ultima decisao dela. O termo do habito de cada comportamento e `sum_j mul(H[b
 Com a subchave `fala_unidades` (docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1), a linha do `chamar_atencao` da lugar a tres, uma por unidade de
 fala (`chamar_atencao/fome`, `/higiene`, `/solidao`, no lugar dela, na mesma ordem), e a opcao de fala credita a linha do seu conteudo; a
 regra e a mesma. Desligada, as linhas sao as de hoje.
+Com a subchave `olhar` (GOSTO_VISUAL, P1d; espec, secao 5.3), o desfecho ganha a classe `tela` (o quanto olhar muda cada receptor, o
+`consequencia_olhar` em cada opcao de olhar) e o H ganha a linha `olhar`, as duas no fim. Desligada, as de hoje.
 Sem rng."""
 from __future__ import annotations
 
-from ..config import (CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTOS_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONTEUDOS_FALA, ConfigDigibrain,
+from ..config import (CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTO_OLHAR, COMPORTAMENTOS_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONTEUDOS_FALA, ConfigDigibrain,
                       ConfigDigibrainInatos)
 from ..modelo_mundo import raiz_inteira
 from ..policies.lobos import div_arred, valor_previsto
 from ._comum import clamp, mul
 
 CLASSES_DESFECHO = ("racao", "a", "b", "c", "podre", "bola")
+CLASSE_TELA = "tela"                            # o olhar (P1d): a classe do desfecho de olhar, so com a subchave `olhar`
 
 
 def linha_da_opcao(chave: tuple, fala_unidades: bool) -> str:
@@ -51,19 +54,20 @@ class Plasticidade:
         self.receptores: tuple | None = None
         self.desfecho: dict | None = None             # classe -> [d_r na ordem dos receptores]
         self.andar = 0
-        linhas = [b for b in COMPORTAMENTOS_DIGIBRAIN]
+        linhas = [b for b in COMPORTAMENTOS_DIGIBRAIN] + ([COMPORTAMENTO_OLHAR] if self.cd.olhar else [])   # o olhar (P1d), no fim
+        self.classes = CLASSES_DESFECHO + ((CLASSE_TELA,) if self.cd.olhar else ())   # a classe `tela` do desfecho (P1d), no fim
         if self.cd.fala_unidades:                     # as tres linhas da fala no lugar da do chamar (a ordem fixa)
             i = linhas.index("chamar_atencao")
             linhas[i:i + 1] = [f"chamar_atencao/{c}" for c in CONTEUDOS_FALA]
         self.H = {b: [0] * len(CARACTERISTICAS_DIGIBRAIN) for b in linhas}
-        self.consumos = {c: 0 for c in CLASSES_DESFECHO}
+        self.consumos = {c: 0 for c in self.classes}
         self.amostras_andar = 0
         self.creditos = 0
 
     def montar(self, receptores: tuple) -> None:
         if self.receptores is None:
             self.receptores = tuple(receptores)
-            self.desfecho = {c: [0] * len(self.receptores) for c in CLASSES_DESFECHO}
+            self.desfecho = {c: [0] * len(self.receptores) for c in self.classes}
         elif tuple(receptores) != self.receptores:
             raise ValueError(f"M-PLAST: receptores {receptores}, montado com {self.receptores}")
 
@@ -110,9 +114,18 @@ class Plasticidade:
             delta[ie] -= div_arred(self.andar * d, S)
         return self.consumo(classe, delta, g_apr)
 
+    def consequencia_olhar(self, l0: list, l1: list, g_apr: int) -> dict | None:
+        """P1 na consequencia de olhar (P1d; espec, secao 5.3, a consequencia): o desfecho da classe `tela` anda para o Delta dos
+        receptores, como no comer (sem o andar: olhar e parado). Sem o P1, None."""
+        if not self.cd.p1:
+            return None
+        if CLASSE_TELA not in self.classes:
+            raise RuntimeError("M-PLAST: a consequencia de olhar sem a subchave olhar")
+        return self.consumo(CLASSE_TELA, [b - a for a, b in zip(l0, l1)], g_apr)
+
     def consumo(self, classe: str, delta: list, g_apr: int) -> dict:
         """um consumo percebido da classe: o desfecho anda em direcao a `delta` (os receptores, na ordem do layout)"""
-        if classe not in CLASSES_DESFECHO:
+        if classe not in self.classes:
             raise ValueError(f"M-PLAST: classe {classe!r}")
         if len(delta) != len(self.receptores) or any(type(v) is not int for v in delta):
             raise ValueError(f"M-PLAST: delta {delta!r} fora do layout {self.receptores}")

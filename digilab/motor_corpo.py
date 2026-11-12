@@ -59,6 +59,17 @@ O Paladar (docs/futuro/paladar.md, secao 3.2; ConfigCorpo.paladar, so com o mund
 "achou e comeu") e a fruta na mao levam ao corpo o perfil do tipo (um inteiro em [0, C] por qualidade), do lado do mundo (o A, etapa 1):
 no mapa, o `ocorrido["comeu"]["perfil"]`; na mao, a `ConfigPaladar` do MotorMundo (`cpal.perfis`). O corpo com o paladar exige o mundo com
 o paladar (`cpal.ligada`; falha alto na construcao). A podre nao tem perfil. Os receptores `paladar_<q>` vao a `PercepcaoCorpo`.
+A TV e o orgao da tela (GOSTO_VISUAL, P1c; docs/ESPEC_GOSTO_VISUAL_P1.md, secoes 1, 2 e 4): a `cfg_tela` (ConfigTela, o orgao do P1b) e a
+ConfigTV do MotorMundo vao juntas (falha alto com uma so; a escala da TV e o teto_intensidade da tela). Ligadas:
+  - antes de cada tick e de cada percepcao, o motor entrega ao corpo o que a TV passa (`Corpo.sentir_tela`), do lado do mundo
+    (`_intensidades_da_tela()`: zeros quando o pet nao olha);
+  - a novidade pelo corte (GV-23): a cada tick, depois do `sentir_tela`, quando o `novidade_tela` passa de `corte_novidade` (estava no
+    corte ou abaixo no tick anterior), `Corpo.estimulo_novidade(1)`; o tick vai para `novidades_tela`;
+  - o assistir (GV-21): em cada decisao em que o pet olha a TV depois da propria acao, `Corpo.atividade("assistir")`, depois dos estimulos
+    da acao e antes do gancho `consequencia_corpo` (no `ocorrido`, ("atividade", "assistir"));
+  - o agrado no corpo (GV-16, P1d): logo depois do assistir, se o cerebro tem o gancho `agrado_tela` e ele da um agrado (o DigiBrain
+    modular com a subchave `olhar` e a `ConfigOlhar.agrado_no_corpo`), `Corpo.estimulo_agrado_tela(agrado)` (no `ocorrido`,
+    ("agrado_tela", agrado)). Sem o gancho, ou com None, nada.
 """
 
 from __future__ import annotations
@@ -66,7 +77,8 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 
 from .config import CONFIG_CORPO, CONFIG_LUTA_CORPO, CONFIG_OLFATO, CONFIG_OUVIDO, ConfigCorpo, ConfigLutaCorpo, ConfigOlfato, ConfigOuvido
-from .corpo import DRIVE_DO_QUIMICO, Corpo, grafo_do_corpo, taxas_de
+from .config import CONFIG_TELA, ConfigTela
+from .corpo import ATIVIDADE_TELA, DRIVE_DO_QUIMICO, RECEPTOR_NOVIDADE_TELA, Corpo, grafo_do_corpo, taxas_de
 from .corpo_grafo import checar
 from .educacao import MotorEducacao
 from .engine import Motor
@@ -148,9 +160,12 @@ class MotorCorpo:
 
     def __init__(self, *a, cfg_corpo: ConfigCorpo | None = None, cfg_olfato: ConfigOlfato | None = None,
                  cfg_ouvido: ConfigOuvido | None = None, troca_digestao: tuple[int, int] | None = None,
-                 cfg_luta_corpo: ConfigLutaCorpo | None = None, **kw) -> None:
+                 cfg_luta_corpo: ConfigLutaCorpo | None = None, cfg_tela: ConfigTela | None = None, **kw) -> None:
         super().__init__(*a, **kw)
         self.cc = cfg_corpo or CONFIG_CORPO
+        self.ctl = cfg_tela or CONFIG_TELA
+        if not isinstance(self.ctl, ConfigTela):
+            raise TypeError(f"cfg_tela e uma ConfigTela: {self.ctl!r}")
         self.cll = cfg_luta_corpo or CONFIG_LUTA_CORPO         # a ponte da luta, PE1 (desligada: o evento lt levanta erro)
         self.co = cfg_olfato or CONFIG_OLFATO
         self.cv = cfg_ouvido or CONFIG_OUVIDO
@@ -162,6 +177,7 @@ class MotorCorpo:
         if banheiro != (self.cc.ligada and self.cc.banheiro):
             raise ValueError("o banheiro no mapa (ConfigBanheiro.ligada) e a vontade no corpo (ConfigCorpo.banheiro) vao juntos "
                              f"(TAREFA_V2_BANHEIRO, secao 2): mapa {banheiro}, corpo {self.cc.ligada and self.cc.banheiro}")
+        self._conferir_tela()
         if not self.cc.ligada:
             return                                   # desligado: o motor de baixo, byte a byte
         self._recusar_o_que_o_corpo_nao_cobre()
@@ -169,12 +185,12 @@ class MotorCorpo:
         self._cfg_evo = treino.cfg_evo if treino is not None else None
         if self._orgaos_ligados():                    # os orgaos: so com o mundo fisico (conferido acima)
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=True, cfg_olfato=self.co,
-                                         cfg_ouvido=self.cv, cfg_luta=self.cll)
+                                         cfg_ouvido=self.cv, cfg_luta=self.cll, cfg_tela=self.ctl)
         elif self.cc.drives_novos or self.cc.paladar:  # etapa 6: a curiosidade so existe com o mundo fisico (CD-8); o paladar exige o mundo
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=self._mundo_ligado(),
-                                         cfg_luta=self.cll)
+                                         cfg_luta=self.cll, cfg_tela=self.ctl)
         else:
-            self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, cfg_luta=self.cll)
+            self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, cfg_luta=self.cll, cfg_tela=self.ctl)
         self._estado = self.corpo.no_estado(self._estado)
         self._estimulos: list[tuple] = []             # os estimulos da decisao em curso (para o `ocorrido`)
         self.consequencias = 0                        # quantas vezes o gancho `consequencia_corpo` foi chamado
@@ -182,6 +198,10 @@ class MotorCorpo:
         # etapa 6, secao 7: o registro do que o pet viu e quando (o id do objeto -> o ultimo tick em que o viu), so com os drives novos
         # e o mundo fisico; derivado (o replay o refaz)
         self._vistos_em: dict[int, int] | None = {} if (self.cc.drives_novos and self._mundo_ligado()) else None
+        # a TV (P1c): se o `novidade_tela` estava acima do corte no tick anterior, e os ticks em que ele passou do corte (derivados)
+        if self._tela_ligada():
+            self._tela_acima = False
+            self.novidades_tela: list[int] = []
 
     def _recusar_o_que_o_corpo_nao_cobre(self) -> None:
         """Secao 2: o corpo vale nos motores dos mundos da pesquisa, sem educacao, lesoes nem obediencia. As classes do meio so podem
@@ -227,6 +247,28 @@ class MotorCorpo:
             raise NotImplementedError("o motor nao tem `_intensidades_do_orgao`: o lado do mundo do orgao (a intensidade no ponto de "
                                       "cada narina e de cada ouvido) e do A, etapa 8b")
 
+    def _conferir_tela(self) -> None:
+        """A tela (P1c): o orgao da tela no corpo (a ConfigTela) e a TV no mundo (a ConfigTV do MotorMundo) vao juntos, com o corpo
+        ligado; a escala da TV e o teto_intensidade da tela. O resto (o mundo, `drives_novos` e `gestos`) o Corpo confere."""
+        ctv = getattr(self, "ctv", None)
+        tv = ctv is not None and ctv.ligada and self._mundo_ligado()
+        if tv != (self.cc.ligada and self.ctl.ligada):
+            raise ValueError("a TV no mundo (ConfigTV.ligada) e o orgao da tela no corpo (ConfigTela.ligada, com o corpo) vao juntos "
+                             f"(espec do P1, secao 8): TV {tv}, tela {self.cc.ligada and self.ctl.ligada}")
+        if tv and ctv.escala != self.ctl.teto_intensidade:
+            raise ValueError(f"a escala da TV ({ctv.escala}) tem de ser o teto_intensidade da tela ({self.ctl.teto_intensidade})")
+
+    def _tela_ligada(self) -> bool:
+        return self.cc.ligada and self.ctl.ligada
+
+    def _novidade_tela(self) -> None:
+        """GV-23: a novidade pelo corte, uma vez por subida do `novidade_tela` acima de `corte_novidade` (depois do `sentir_tela` do tick)."""
+        acima = self.corpo.leituras_tela()[RECEPTOR_NOVIDADE_TELA] > self.ctl.corte_novidade
+        if acima and not self._tela_acima:
+            self.corpo.estimulo_novidade(1)
+            self.novidades_tela.append(self._estado.tick)
+        self._tela_acima = acima
+
     def _conferir_troca(self, troca) -> tuple[int, int] | None:
         """A troca da digestao so com o corpo e a digestao ligados, um tick positivo e uma taxa inteira positiva diferente da de hoje."""
         if troca is None:
@@ -270,6 +312,8 @@ class MotorCorpo:
         """O estimulo de cada receptor de orgao, do lado do mundo, entregue ao corpo (antes de cada tick e de cada percepcao)."""
         if self.cc.ligada and self._orgaos_ligados():
             self.corpo.sentir(self._intensidades_do_orgao())
+        if self._tela_ligada():
+            self.corpo.sentir_tela(self._intensidades_da_tela())     # a TV (P1c): zeros quando o pet nao olha
 
     # ------------------------------------------------------------ leituras
     def _ligado(self) -> bool:
@@ -341,6 +385,8 @@ class MotorCorpo:
                 self._decidir(intervalo, produzidas)
             antes = self._estado
             self._sentir()                            # os orgaos: o estimulo deste tick (a adaptacao anda para ele no passo)
+            if self._tela_ligada():
+                self._novidade_tela()                 # a TV (P1c, GV-23): a novidade pelo corte, com o estimulo deste tick
             if self.cc.banheiro:
                 self.corpo.passo(antes, necessidades=self.necessidades_na_zona())   # o banheiro: as necessidades na zona do pet
             else:
@@ -377,6 +423,15 @@ class MotorCorpo:
         self._sincronizar()
         if self.cc.drives_novos and not self._mundo_ligado():      # com o mundo, a atividade vem na consequencia dele
             self._atividade(acao, bola)
+        if self._tela_ligada() and self.olhando_tv():             # a TV (P1c, GV-21): o assistir, depois dos estimulos da acao
+            self.corpo.atividade(ATIVIDADE_TELA)
+            self._estimulos.append(("atividade", ATIVIDADE_TELA))
+            agrado = getattr(self._pm_cerebro(), "agrado_tela", None)     # GV-16 (P1d): o agrado no corpo, se o cerebro o da
+            a = None if agrado is None else agrado(self.corpo.leituras_tela())
+            if a is not None:
+                self.corpo.estimulo_agrado_tela(a)
+                self._estimulos.append(("agrado_tela", a))
+                self._sincronizar()                   # a tristeza e o humor de hoje: o Estado volta a ser a leitura do corpo
         gancho = getattr(self.politica, "consequencia_corpo", None)
         if gancho is not None:
             ocorrido = {"acao": acao.value, "estimulos": list(self._estimulos)}
@@ -571,6 +626,8 @@ class MotorCorpo:
             d["corpo"] = self.corpo.para_dict()       # so com a chave: desligado, o estado() de baixo
         if self._troca_pedida is not None:
             d["troca_digestao"] = None if self.troca_digestao is None else dict(self.troca_digestao)
+        if self._tela_ligada():
+            d["novidades_tela"] = list(self.novidades_tela)
         return d
 
 

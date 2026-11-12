@@ -141,7 +141,7 @@ SONS = ("comendo", "bola", "chamado", "emburrado")                # secao 5.4: o
 LADOS = ("esq", "dir")
 PREFIXO_ADAPTACAO = "adaptacao_"
 # o orgao da tela (GOSTO_VISUAL, P1b): 4 canais da visao e 3 do som (secao 1.1 da espec)
-CANAIS_TELA = ("cor", "brilho", "movimento", "complexidade", "volume", "variacao", "timbre")
+from .config import CANAIS_TELA  # noqa: E402,F401  (os sete canais: definidos no config.py, o cerebro os le de la)
 CANAIS_ESTRESSE_TELA = ("movimento", "volume")                    # GV-17: o movimento demais e o som alto estressam
 CANAL_SUSTO_TELA = "volume"                                       # GV-17: o susto e um salto de volume
 ATIVIDADE_TELA = "assistir"                                       # GV-21: a atividade do tedio, so com a tela ligada
