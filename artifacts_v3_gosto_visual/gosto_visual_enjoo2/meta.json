@@ -1,0 +1,321 @@
+{
+  "artefatos_sha256": {
+    "analise.json": "4f88b38dd6b339fe50a2f19912a6aa0d6e26412e4051ef3a04f9f3a62f273e08",
+    "custo.json": "eafb13b42987ddc591f05643672855a224a62aeb40b4f97ad45f92220d2d259a",
+    "medidas.json": "f814349c5ea34ebb60587e9956ab9963672b8f7e830ceafd1e9a1a8188be7508"
+  },
+  "bootstrap": 2000,
+  "config": {
+    "descricao": "GOSTO_VISUAL, GV3b do adendo 2: a run descritiva genoma x dono com o enjoo ligado e a regra sem_sonda para as duas TVs sem lugar, uma vez (docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO2.md). So roda com o adendo 2 e o codigo na main, a pasta do piloto commitada, o piloto aprovado na conferencia e o git limpo.",
+    "dias": 14,
+    "fase": "gosto_visual_enjoo2",
+    "plano": "docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO2.md",
+    "unidades": {
+      "bases": [
+        91303,
+        91404,
+        91505
+      ],
+      "k": 12
+    }
+  },
+  "config_arquivo": "experiments/configs/v3_gosto_visual/gosto_visual_enjoo2.json",
+  "config_sha256": "b62fbd0d73785b8d8a9b589b735b57a83aff6415b663552f8df07ef80918077a",
+  "dias_sonda": [
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "donos": [
+    "nenhum",
+    "calmo",
+    "agitado"
+  ],
+  "duracao_s": 1662.6162490844727,
+  "enjoo_tela": {
+    "k_desenjoo": 63,
+    "k_enjoo": 2960,
+    "k_olhando": 4389,
+    "ligada": true,
+    "meia_vida_desenjoo": 720,
+    "meia_vida_enjoo": 15,
+    "meia_vida_olhando": 10,
+    "peso_tedio": 512,
+    "prototipos": 6,
+    "raio_mesmo": 67500,
+    "saturacao_exposicao": 512,
+    "tau_enjoo_lembrado": 1040,
+    "w_enjoo": 512
+  },
+  "fase": "gosto_visual_enjoo2",
+  "fim": "2026-11-12T12:51:13",
+  "genomas": [
+    "proprio",
+    "vazio"
+  ],
+  "git_head": "597638b2e2b896b1f51c8ecd347c8085f070cd7e",
+  "git_limpo": true,
+  "inicio": "2026-11-12T12:23:30",
+  "modo": "gosto_visual_enjoo2",
+  "orquestrador_sha256": "00291ed9e35689a873ef21c0b4e498c0b12aa9578e82ec1acc123c5bd1e07253",
+  "plano": "docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO2.md",
+  "plano_adendo1": "docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO1.md",
+  "plano_adendo1_sha256": "664de580bc3b483696290abbace40cb55fff7e12166fa9008b3b9dac3d98cbc2",
+  "plano_base": "docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md",
+  "plano_base_sha256": "010d268721ac4eae16a0f6aa543ab3100434c28851884a1b7168d0315de7f146",
+  "plano_sha256": "5c1de89710840e61e3a37909548fdcd008581b5eee6535b49aff6203d97e3198",
+  "processos": 4,
+  "python": "3.13.0",
+  "replicas": 3,
+  "sem_lugar": {
+    "regra": "sem_sonda",
+    "teto": 0.05
+  },
+  "sha256": {
+    "config.py": "4233c86b91ee78b4c5d1450b7a38576cdef4599feb5aa576aae2042eae435fdb",
+    "corpo.py": "ff5c36adf0e6ec91deca50195a7da203f41c94a7efc5f5ec68e70981467591e5",
+    "digibrain/__init__.py": "3d50ce23bd4001f607018485282fbea22b021d7e4f825c070b9be87197cb2b55",
+    "digibrain/_comum.py": "164ef9c3e5781f68a711d50de9a014751073ea7343540e5d6af9feff0a81d160",
+    "digibrain/adapt.py": "9ca39f11398eb13e0d512827dca60a035339e57745d11098e72ae52d21e34d5e",
+    "digibrain/afeto.py": "ffc7709657faf811b730f029540d10d1b7d88fa9924065cccaf355574680bb61",
+    "digibrain/arb.py": "3c67bb7d6c20514612b9843aff475e377231dc29095789cbcb492a816d622506",
+    "digibrain/decodificador.py": "743764f0b230862f88d99ea3e997b4b27b1da6604b0f796fbb912cd4577df1f8",
+    "digibrain/dever.py": "bbbfbc3277c3df9dd8c3e944879f53d9c2965589337a4edda41666b644b45a0b",
+    "digibrain/estado.py": "76a5f54acccdee3ec3305d6127f2f459b67ce615e0970c3e350955150b34b3c6",
+    "digibrain/ganchos.py": "595e7f57fddb5e3d06bf2aa939acd59dce379843b503a7f04021821b2328a224",
+    "digibrain/impulso.py": "6c553ae10c664f0306f2415888ab41e5dc84bc28afca228503e5a1225e94119c",
+    "digibrain/mem.py": "d0d61e22032cf339b568aa7dd7e6a57cb5173eaca3beb66f8f0c70b4c9068169",
+    "digibrain/pers.py": "c0e3ef850d84d12b7263baeba438f5395512f34a05e49fea831c346ab1594528",
+    "digibrain/plast.py": "6745c38a6840678b7dabf7e669c155822b6c9ecc527f73633389e00acabb1f0d",
+    "digibrain/sens.py": "320c94781a54bc0a42dc06a4a9a97f060830976c4080ece7d66b946ad309ff1b",
+    "engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "metrics.py": "7d6eed8b6f4134bde4b37f367fef1d256fdc9b73b8cfcd9c834c544d2b0d94fd",
+    "motor_corpo.py": "0b381108f599f3650ceed3a90439fc3213f343ab3346ef4d1d930c1116139c33",
+    "mundo.py": "4d2d5c99a9589809da248adc31c8aaeb9252869cd0a8b969bd94fc3554c34080",
+    "tv.py": "d60f67fb2c99f4cb4d80fbc8404575d4c80f41448a9ccd4c07ac9cd8d616c9fc"
+  },
+  "sonda_sha256": "45b012ae22f0fcffae85f3f6303f75e0f65759e3a188afd369148935f26e7cd2",
+  "unidades": [
+    {
+      "base": 91303,
+      "genoma": 6657395401434816684,
+      "k": 0,
+      "semente": 7727972435084196880
+    },
+    {
+      "base": 91303,
+      "genoma": 3553121665561920941,
+      "k": 1,
+      "semente": 628857738599790185
+    },
+    {
+      "base": 91303,
+      "genoma": 4318422488274043444,
+      "k": 2,
+      "semente": 3002131582658610464
+    },
+    {
+      "base": 91303,
+      "genoma": 3888143481037551861,
+      "k": 3,
+      "semente": 6469833442746299038
+    },
+    {
+      "base": 91303,
+      "genoma": 14319597818000256733,
+      "k": 4,
+      "semente": 7247798045485918052
+    },
+    {
+      "base": 91303,
+      "genoma": 15893360236033473678,
+      "k": 5,
+      "semente": 10041864498193237401
+    },
+    {
+      "base": 91303,
+      "genoma": 13287230470822795128,
+      "k": 6,
+      "semente": 7494500905417694704
+    },
+    {
+      "base": 91303,
+      "genoma": 469071196905407118,
+      "k": 7,
+      "semente": 18091547484602577525
+    },
+    {
+      "base": 91303,
+      "genoma": 13186408550306301605,
+      "k": 8,
+      "semente": 8774623349152870458
+    },
+    {
+      "base": 91303,
+      "genoma": 4516324166695565833,
+      "k": 9,
+      "semente": 8958155735389516580
+    },
+    {
+      "base": 91303,
+      "genoma": 3000989921028732170,
+      "k": 10,
+      "semente": 17207556378849923775
+    },
+    {
+      "base": 91303,
+      "genoma": 416492850381354722,
+      "k": 11,
+      "semente": 8164614036385107224
+    },
+    {
+      "base": 91404,
+      "genoma": 1550320120890846266,
+      "k": 0,
+      "semente": 6851288745179166850
+    },
+    {
+      "base": 91404,
+      "genoma": 3344829565941427098,
+      "k": 1,
+      "semente": 16274343788473701043
+    },
+    {
+      "base": 91404,
+      "genoma": 14842005871770563889,
+      "k": 2,
+      "semente": 5598631763966157344
+    },
+    {
+      "base": 91404,
+      "genoma": 16175206442079633402,
+      "k": 3,
+      "semente": 2487184912373320742
+    },
+    {
+      "base": 91404,
+      "genoma": 6914209735766458407,
+      "k": 4,
+      "semente": 16144544554900655435
+    },
+    {
+      "base": 91404,
+      "genoma": 10084615350381307030,
+      "k": 5,
+      "semente": 5191931374451208703
+    },
+    {
+      "base": 91404,
+      "genoma": 1624255965022192476,
+      "k": 6,
+      "semente": 4263300170941683259
+    },
+    {
+      "base": 91404,
+      "genoma": 10385784645263030011,
+      "k": 7,
+      "semente": 16017052670741189628
+    },
+    {
+      "base": 91404,
+      "genoma": 15387178052854625684,
+      "k": 8,
+      "semente": 13101782670426061492
+    },
+    {
+      "base": 91404,
+      "genoma": 5344419732560089712,
+      "k": 9,
+      "semente": 15525555277462862968
+    },
+    {
+      "base": 91404,
+      "genoma": 11775674278920510169,
+      "k": 10,
+      "semente": 615126938381213171
+    },
+    {
+      "base": 91404,
+      "genoma": 6127818256740062327,
+      "k": 11,
+      "semente": 10105300143088582201
+    },
+    {
+      "base": 91505,
+      "genoma": 17327326815483438336,
+      "k": 0,
+      "semente": 6960081668314122614
+    },
+    {
+      "base": 91505,
+      "genoma": 7352608311755285938,
+      "k": 1,
+      "semente": 8245550459268045567
+    },
+    {
+      "base": 91505,
+      "genoma": 13213094950176799352,
+      "k": 2,
+      "semente": 10530928125207439915
+    },
+    {
+      "base": 91505,
+      "genoma": 914258259245967180,
+      "k": 3,
+      "semente": 6438867048836513771
+    },
+    {
+      "base": 91505,
+      "genoma": 4818308691465636966,
+      "k": 4,
+      "semente": 4288838881570555456
+    },
+    {
+      "base": 91505,
+      "genoma": 14409074686963905877,
+      "k": 5,
+      "semente": 4986230880384086061
+    },
+    {
+      "base": 91505,
+      "genoma": 2130606907455647636,
+      "k": 6,
+      "semente": 12009785227851036249
+    },
+    {
+      "base": 91505,
+      "genoma": 8356915764159157935,
+      "k": 7,
+      "semente": 2984320000073788905
+    },
+    {
+      "base": 91505,
+      "genoma": 14015312299006475480,
+      "k": 8,
+      "semente": 16419662372704121875
+    },
+    {
+      "base": 91505,
+      "genoma": 11750369829494209124,
+      "k": 9,
+      "semente": 18070469739796856948
+    },
+    {
+      "base": 91505,
+      "genoma": 3235021508693302938,
+      "k": 10,
+      "semente": 13195232668295312965
+    },
+    {
+      "base": 91505,
+      "genoma": 14999209335662024404,
+      "k": 11,
+      "semente": 5041275955603946259
+    }
+  ],
+  "vidas_parede_s": 1660.0850957999937
+}
