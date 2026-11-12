@@ -258,3 +258,28 @@ O pedido do Matheus: "Quero ligar a captura ao cerebro" (a D-GV-P1f-6).
 
 As escolhas e as decisões abertas (a TV desligada, a TV no grupo, o gosto do painel, ir até a TV e a junção com a versão do lance da bola, #872) estão em `docs/registro/2026-11.md`,
 D-GV-CEREBRO-1 a 10. Os testes novos estão em `web/app/test/gosto_visual_cerebro.test.ts` e `web/app/e2e/gosto_visual_cerebro.spec.ts`.
+
+## O enjoo no cérebro do Python (2026-11-12, Claude Code, Opus 5.5, branch `v3-gosto-visual-enjoo-cerebro`)
+
+O conserto D-GV-ENJOO-PY-3, autorizado pelo Matheus ("Pode fazer o conserto do cérebro e fazer o merge"), ficou atrás da `ConfigEnjooTela`,
+desligada. O gabarito de antes foi gravado num commit próprio. Com a chave ligada:
+
+- **No corpo:** a adaptação fica presa ao estímulo. Ela sobe rápido olhando e volta devagar sem olhar. Uma memória de 6 protótipos parados
+  guarda o enjoo de cada um, e o receptor `enjoo_tela` mostra o enjoo do que o pet vê agora. A novidade conta a mudança nos dois sentidos,
+  e o susto é medido contra o último estímulo visto.
+- **No cérebro:** cada TV tem um enjoo lembrado, e a unidade de olhar ganha o termo `enjoo`. O agrado efetivo cai com o tédio, e a
+  exposição satura (o U invertido).
+- **O estresse do B** fica justificado pela GV-17. A docstring do `corte_novidade` foi corrigida.
+
+Os testes estão em `tests/test_gosto_visual_enjoo_cerebro.py`, e o gabarito em `tests/test_gabarito_gosto_visual_enjoo.py`. As escolhas,
+D-GV-ENJOO-CER-1 a 11, estão em `docs/registro/2026-11.md`. O conserto foi ajustado ao diagnóstico com as mídias reais (D-GV-VIDEO-9 a 13).
+
+**A paridade TS** foi feita no mesmo branch:
+- o motor TS tem o enjoo atrás da mesma chave (`web/app/motor/enjoo_tela.ts`, o corpo, o laço e o DigiBrain);
+- o gabarito novo é o `web/app/test/gabaritos/gosto_visual_enjoo.json.gz`, com 9 vidas com a chave ligada;
+- o teste é o `web/app/test/gosto_visual_enjoo_paridade.test.ts`.
+
+O jogo ainda não liga o enjoo: para isso, é preciso uma versão de pet nova e a decisão do Matheus. As escolhas são as D-GV-ENJOO-CER-12 a
+16.
+
+**O próximo passo:** repetir a GV3 com a chave ligada pede um adendo ao plano e uma faixa nova, só com a aprovação do Matheus.
