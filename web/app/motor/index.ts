@@ -35,7 +35,7 @@ export * from "./motor_corpo.ts";
 export * from "./motor_corpo_mundo.ts";
 export * from "./digibrain.ts";
 export * from "./pet_lab.ts";
-export { decodificar, decodificarV2, episodioDec, desfechoDoEpisodio, CATALOGO_CONCEITOS, CLASSES_EPISODIO_DEC, DESFECHOS, VERSAO_DECODIFICADOR, VERSAO_DECODIFICADOR_V2, type Conceito, type ConceitosDec, type EpisodioDec, type NomeConceito } from "./digibrain/decodificador.ts";
+export { decodificar, decodificarV2, decodificarV4, conceitosAssistir, episodioDec, desfechoDoEpisodio, CATALOGO_CONCEITOS, CATALOGO_ASSISTIR, CLASSES_EPISODIO_DEC, DESFECHOS, VERSAO_DECODIFICADOR, VERSAO_DECODIFICADOR_V2, VERSAO_DECODIFICADOR_V4, type Assistir, type Conceito, type ConceitoAssistir, type ConceitosDec, type ConceitosDecV4, type EpisodioDec, type NomeAssistir, type NomeConceito } from "./digibrain/decodificador.ts";
 export { CONTEUDOS_FALA, type ConteudoFala } from "./digibrain/constantes.ts";
 export { CANAIS_TELA, CELULA_PERTO_DA_TV_JOGO, CONFIG_TV_JOGO, CONFIG_TVJOGO, CONFIG_TVJOGO_LIGADA, NIVEL_MAX_TELA, ResumoTela, TELA_DESLIGADA, lerSentidoTela, valorSentidoTela, valorSentidoTelaDesligada } from "./tv.ts";
 export { ORDEM_TERMOS, resultadoAnterior, type BarraLab, type ChanceLab, type LeituraLab, type ResultadoLab, type SondaLab, type TermoLab } from "./digibrain/leitura.ts";
