@@ -355,3 +355,7 @@ O pedido do Matheus: um botão para trocar a tela que o pet está vendo, "como m
 canais já escolhidos (PROPOSTO), sem parar a sessão nem o cérebro; o "st" só leva os números do canal atual, no formato de sempre. Uma
 fonte encerrada sai da lista. No celular nada muda. As escolhas D-GV-CANAL-1 a 8 estão em `docs/registro/2026-11.md`; o código em
 `web/app/src/gostoVisual/canais.ts`, `captura.ts`, `sessaoTv.ts` e `PainelTv.tsx`.
+
+- **GVN-2, a leitura das vidas gravadas (2026-11-12, Claude Code, Opus 5.5, branch `v3-gosto-visual-gvn2`):** descritiva, sem vida nova,
+  pelo plano curto `docs/PLANO_ANALISE_V3_GOSTO_VISUAL_GVN2.md`; o resultado na seção 6 de `docs/futuro/gosto_visual_porque_negativo.md`
+  (`artifacts_v3_gosto_visual/gvn2/leitura.json`). A parte do peso da H5 não se lê nos `vidas.tar.gz` (GVN-2b aberta).
