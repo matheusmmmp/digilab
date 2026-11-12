@@ -10,7 +10,7 @@ import { ligarProduto } from "./produto.ts";
 import { podeTrocarCerebro, type Cerebro } from "./cerebro.ts";
 import { CHAVE_LAB } from "./lab.ts";
 import { CHAVE, gravarSave, lerSave, petExemplo, textoSave, textoSaveGrupo, type Armazenamento } from "./save.ts";
-import { CHAVE_TAMER, Tamer, conferirBits, conferirBitsDoNivel, conferirCampeao, conferirItensDasMedalhas, conferirMedalhas, conferirRecordes, gravarTamer, lerTamer, sincronizarPet, type MedalhaGanha } from "./tamer.ts";
+import { CHAVE_TAMER, Tamer, conferirBits, conferirBitsDoNivel, conferirCampeao, conferirMarcoMega, conferirItensDasMedalhas, conferirMedalhas, conferirRecordes, gravarTamer, lerTamer, sincronizarPet, type MedalhaGanha } from "./tamer.ts";
 import { versaoDoOvo } from "./lutaPoc.ts";
 import { assinaturaIntocada } from "./nivel.ts";
 import { emitirSom } from "./somEventos.ts";
@@ -112,6 +112,16 @@ export function pagarNivel(nivel: number): void {
   const j = jogoAtual();
   if (!armazenamento || j.erroTamer || j.emLab) return;
   if (!conferirBitsDoNivel(tamer, nivel).length) return;
+  gravarTamer(armazenamento, tamer);
+  j.revisao++; avisar();
+}
+/** o marco 10 do nivel do Tamer (o primeiro Mega; docs/PLANO_V3_MMO.md, MMO2): com um pet do jogador no Mega e o registro sem o marco,
+    grava o evento "nivel", grava e avisa. Quem chama (nivelTela.ts) passa so os pets do jogador; no laboratorio, ou com o registro do
+    Tamer que nao abriu, nao faz nada */
+export function registrarMarcoMega(pets: readonly Motor[]): void {
+  const j = jogoAtual();
+  if (!armazenamento || j.erroTamer || j.emLab) return;
+  if (!conferirMarcoMega(tamer, pets)) return;
   gravarTamer(armazenamento, tamer);
   j.revisao++; avisar();
 }
