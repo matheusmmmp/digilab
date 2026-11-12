@@ -1,7 +1,8 @@
-# PLANO DE ANÁLISE V3 — COOPERACAO, a bancada: a cooperação emerge e cresce com o peso dos deveres? (2026-11-12, Claude Code, Opus 5.5)
+# PLANO DE ANÁLISE V3 — COOPERACAO, a bancada: a cooperação emerge e cresce com o peso dos deveres? (2026-11-12, CB-1 a CB-9 DECIDIDAS, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** As decisões CB-1 a CB-9 (seção 11) vão ao Matheus. **Nenhuma vida deste plano roda antes de cinco coisas:**
-1. este cabeçalho com a marca "APROVADO pelo Matheus";
+**Status: APROVADO pelo Matheus em 2026-11-12 ("Aprovo todas").** As decisões CB-1 a CB-9 (seção 11) estão DECIDIDAS, todas pela
+recomendação. Os números continuam PROPOSTOS. **Nenhuma vida deste plano roda antes de cinco coisas:**
+1. este cabeçalho com a marca "APROVADO pelo Matheus" (feito);
 2. a CO6 e a CO7 na `main` (`docs/ESPEC_V3_COOPERACAO_CO6.md` e `docs/ESPEC_V3_COOPERACAO_CO7.md`), com os testes G-ESCUDO,
    G-RECEPTOR-SOCIAL e G-PAR-CO7 verdes;
 3. o código da CB1 na `main` (seção 9): o orquestrador, as medidas e as travas;
@@ -179,7 +180,7 @@ Antes da primeira vida principal, um commit grava em `docs/registro/` (a seção
 δ e ε, a semente do bootstrap, o mundo e o cérebro escolhidos. Depois desse commit, nada da seção 4 muda; uma mudança vira adendo com o ok
 do Matheus, e as vidas já rodadas ficam registradas.
 
-## 11. As decisões (PROPOSTAS; cada uma com a recomendação e o custo de errar)
+## 11. As decisões (DECIDIDAS pelo Matheus em 2026-11-12, todas pela recomendação; cada uma com a recomendação e o custo de errar)
 
 | | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
