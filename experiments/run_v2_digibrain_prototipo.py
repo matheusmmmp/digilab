@@ -354,11 +354,13 @@ def inatos_do_meta(meta: dict) -> ConfigDigibrainInatos:
 
 
 def fabricas(braco: str, dono: str, semente: int, dias: int, orcamento_por_dia: int, serie_e: tuple | None = None,
-             g_apr_con: int | None = None, inatos: ConfigDigibrainInatos | None = None, conserto: bool = False, sono=None, lance=None):
+             g_apr_con: int | None = None, inatos: ConfigDigibrainInatos | None = None, conserto: bool = False, sono=None, lance=None,
+             equilibrio=None):
     """(a fabrica do cerebro, a do motor) da vida: o motor e o mesmo em todo braco. `inatos` (so para rejogar uma rodada antiga): os
     valores daquela rodada; None, os de hoje (CONFIG_DIGIBRAIN_INATOS). `sono`: a ConfigSonoSegura do modular
     (docs/TAREFA_V3_SONO_SEGURA.md); None, a desligada. `lance`: a ConfigLanceDono (docs/TAREFA_V3_BOLA_BRINCAR.md), no motor e no
-    cerebro modular (o A11 so a recebe no motor, BB-6); None, a desligada"""
+    cerebro modular (o A11 so a recebe no motor, BB-6); None, a desligada. `equilibrio`: a ConfigEquilibrioCuidado do modular (as regras
+    do E1, docs/PLANO_V3_EQUILIBRIO_CUIDADO.md, EQ-7); None, a desligada"""
     b = bancada(dias, orcamento_por_dia)
     espec = bv.EspecVida(dono, gl.BRACO_V11, semente)
     cc = b.cfg_corpo_de(espec)
@@ -375,7 +377,8 @@ def fabricas(braco: str, dono: str, semente: int, dias: int, orcamento_por_dia: 
 
         def fp(cfg=None):
             return Registro(DigiBrain(cfg or CONFIG_PADRAO, cd, CM, inatos=inatos, serie_e_doadora=serie_e, semente=semente, cfg_sono=sono,
-                                      **({} if lance is None else {"cfg_lance": lance})), CONFIG_DIGIBRAIN_INATOS.escala)
+                                      **({} if lance is None else {"cfg_lance": lance}),
+                                      **({} if equilibrio is None else {"cfg_equilibrio": equilibrio})), CONFIG_DIGIBRAIN_INATOS.escala)
     return fp, fm
 
 

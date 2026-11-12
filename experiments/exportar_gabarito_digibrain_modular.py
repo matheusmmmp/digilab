@@ -226,10 +226,11 @@ class Gravador:
         return {nome: _sha(_texto(paraj(getattr(m, nome).estado_interno())), 16) for nome in ASSINADOS}
 
 
-def viver(dono: str, lugar: str, semente: int, gravar: bool = True, inatos=None, ao_montar=None, sono=None, lance=None):
+def viver(dono: str, lugar: str, semente: int, gravar: bool = True, inatos=None, ao_montar=None, sono=None, lance=None, equilibrio=None):
     """a vida: (o motor, o cerebro, o gravador). Sem `gravar`, a mesma vida sem o embrulho (o gravador e None): o teste confere que o
     Gravador nao a muda. `inatos` (LM4, so o arquivo dos fins): os valores de partida de outra `ConfigDigibrainInatos`; None, os de hoje"""
-    fp, fm = orq.fabricas(BRACO, dono, semente, DIAS, orq.ORCAMENTO_POR_DIA, conserto=True, inatos=inatos, sono=sono, lance=lance)
+    fp, fm = orq.fabricas(BRACO, dono, semente, DIAS, orq.ORCAMENTO_POR_DIA, conserto=True, inatos=inatos, sono=sono, lance=lance,
+                          equilibrio=equilibrio)
     registro = fp(CONFIG_PADRAO)
     cerebro = orq.cerebro_de(registro)
     if ao_montar is not None:                    # (IG6) o gabarito do alcance troca o `d_max` no meio da vida, antes de uma decisao
@@ -418,9 +419,10 @@ VIDAS_FINS = (("incoerente", "longe", 404, {}), ("incoerente", "longe", 505, {})
               ("incoerente", "longe_fixo", 101, INATOS_DESISTE), ("incoerente", "longe_fixo", 202, INATOS_DESISTE))
 
 
-def _vida_fins(dono: str, lugar: str, semente: int, ajuste: dict, sono=None, lance=None, com_motor: bool = False):
+def _vida_fins(dono: str, lugar: str, semente: int, ajuste: dict, sono=None, lance=None, com_motor: bool = False, equilibrio=None,
+               ao_montar=None):
     inatos = replace(CONFIG_DIGIBRAIN_INATOS, **ajuste) if ajuste else None
-    motor, cerebro, g = viver(dono, lugar, semente, inatos=inatos, sono=sono, lance=lance)
+    motor, cerebro, g = viver(dono, lugar, semente, inatos=inatos, sono=sono, lance=lance, equilibrio=equilibrio, ao_montar=ao_montar)
     decisoes = [{"k": k, "acao": cerebro.motivos[k]["acao"], "assinatura": g.assinaturas[k], "motivo": paraj(cerebro.motivos[k])}
                 for k in range(len(cerebro.motivos))]
     fins = sorted({f["motivo"] for m in cerebro.motivos for f in m["fins"]})
@@ -633,7 +635,56 @@ def lance_dono() -> bytes:
                          compresslevel=9, mtime=0)
 
 
+# ---------------------------------------------------------------------------------------------------------------------------------------
+# As regras do E1 da rodada de equilibrio do cuidado (docs/PLANO_V3_EQUILIBRIO_CUIDADO.md, EQ-7): o G-PAR da guarda da fome urgente no
+# brincar e do bebe que come com a fome dele (a ConfigEquilibrioCuidado com as duas chaves ligadas). Arquivo novo, no molde do do lance: as
+# mesmas tres vidas do laboratorio, com o sono que segura e o lance ligados (o cerebro dos ovos de hoje do jogo, v35 e v36). O motor do Python
+# nao tem estagio: o pet e "bebe" nas primeiras `K_BEBE` decisoes (o embrulho chama o gancho `estagio_bebe` antes de cada `agir`, como o
+# motor do jogo; o TS faz o mesmo). Cada vida tem de diferir da mesma vida sem a config, ter a entrada `bebe` = S em alguma decisao e a guarda
+# em alguma decisao. Sementes dos testes; nao sao vidas de pesquisa.
+ARQUIVO_EQUILIBRIO = f"{PREFIXO}equilibrio_cuidado.json.gz"
+VIDAS_EQUILIBRIO = VIDAS_SONO
+K_BEBE = 96                                       # as decisoes do "bebe" roteirizado: o 1o dia (intervalo de 15 ticks)
+
+
+def _bebe_pelas_decisoes(cerebro) -> None:
+    """o embrulho do `agir`: antes de cada decisao, o gancho `estagio_bebe` com o pet bebe nas primeiras K_BEBE"""
+    agir = cerebro.agir
+
+    def com_estagio(obs, rng):
+        cerebro.estagio_bebe(cerebro.k < K_BEBE)
+        return agir(obs, rng)
+    cerebro.agir = com_estagio
+
+
+def equilibrio_cuidado() -> bytes:
+    """o gz (mtime 0, nivel 9) das vidas com as regras do E1; cada uma difere da de hoje (a do sono que segura e do lance)"""
+    from digilab.config import CONFIG_LANCE_DONO_LIGADA, CONFIG_SONO_SEGURA_LIGADA, ConfigEquilibrioCuidado
+    ceq = ConfigEquilibrioCuidado(guarda_fome_brincar=True, comer_bebe=True)
+    vidas = []
+    for dono, lugar, semente in VIDAS_EQUILIBRIO:
+        v = _vida_fins(dono, lugar, semente, {}, sono=CONFIG_SONO_SEGURA_LIGADA, lance=CONFIG_LANCE_DONO_LIGADA, equilibrio=ceq,
+                       ao_montar=_bebe_pelas_decisoes)
+        hoje = _vida_fins(dono, lugar, semente, {}, sono=CONFIG_SONO_SEGURA_LIGADA, lance=CONFIG_LANCE_DONO_LIGADA)
+        v["difere_de_hoje"] = v["estado"] != hoje["estado"]
+        v["bebes"] = sum(1 for d in v["decisoes"] if d["motivo"]["equilibrio"]["bebe"])
+        v["guardas"] = sum(1 for d in v["decisoes"] if d["motivo"]["equilibrio"]["fome_urgente_sem_brincar"])
+        if not v["difere_de_hoje"] or v["bebes"] != K_BEBE or not v["guardas"]:
+            raise RuntimeError(f"a vida {dono}/{lugar}/{semente} nao exercita as regras: {v['difere_de_hoje']}, {v['bebes']} bebes, "
+                               f"{v['guardas']} guardas")
+        vidas.append(v)
+    return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "config_sono_segura": paraj(CONFIG_SONO_SEGURA_LIGADA),
+                                           "config_lance_dono": paraj(CONFIG_LANCE_DONO_LIGADA),
+                                           "config_equilibrio_cuidado": paraj(ceq), "k_bebe": K_BEBE,
+                                           "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
+
+
 if __name__ == "__main__":
+    if "--equilibrio" in sys.argv:                    # so o arquivo das regras do E1 (EQUILIBRIO_CUIDADO)
+        b = equilibrio_cuidado()
+        (PASTA / ARQUIVO_EQUILIBRIO).write_bytes(b)
+        print(f"{PASTA / ARQUIVO_EQUILIBRIO} ({len(b) / 1024 / 1024:.2f} MiB)")
+        sys.exit(0)
     if "--lance" in sys.argv:                         # so o arquivo do lance do dono (BOLA_BRINCAR, BB1)
         b = lance_dono()
         (PASTA / ARQUIVO_LANCE).write_bytes(b)
