@@ -718,4 +718,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — GOSTO_VISUAL, P1f: a paridade com o web (Claude Code, Opus 5.5, branch `v3-gosto-visual-p1f`)](registro/2026-11.md)
 - [2026-11-11 — ILHA_AGUA: a ilha grande fechada (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-grande-fecha`)](registro/2026-11.md)
 - [2026-11-11 — SONO_SEGURA: o sono do modular segura até a energia passar de 90 % (worker, Claude Code, branch `v3-sono-segura`)](registro/2026-11.md)
-- [2026-11-11 — LUTA_POC, LP6-4: a luta da LP6 no jogo, a v28 (Claude Code, Opus 5.5, sessão lateral, branch `v3-luta-poc-lp6-4`)](registro/2026-11.md)
+- [2026-11-11 — LUTA_POC, LP6-4: a luta da LP6 no jogo, a v29 (Claude Code, Opus 5.5, sessão lateral, branch `v3-luta-poc-lp6-4`)](registro/2026-11.md)
