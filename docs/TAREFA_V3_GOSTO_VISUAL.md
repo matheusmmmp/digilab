@@ -228,3 +228,12 @@ fora do motor, do log e do save. As chaves do Python (P1b, P1c) seguem desligada
   primeira olhada não pode ler o agrado) é a que mais pede o olho do Matheus.
 
 Fica para depois do ok: o registro da run no plano (seção 11), o piloto, a run e o `docs/RESULTADO_V3_GOSTO_VISUAL.md`.
+
+## O enjoo da imagem parada no P0 (2026-11-11, Claude Code, Opus 5.5, branch `v3-gosto-visual-enjoo`)
+
+O pedido do Matheus: "Era pra ele ficar enjoado de uma mesma imagem." No P0 (`web/app/src/gostoVisual/gosto.ts`), o interesse deixou de
+voltar sozinho em segundos. Agora há uma memória de até 6 protótipos do vetor, cada um com o seu enjoo, que decai em 2 h de TV ligada. Só a
+cena nova ou essa constante lenta devolvem o interesse, e voltar à mesma imagem não desenjoa. A exposição puxa o alvo só até a saturação, e
+depois o enjoo vira tédio. O "adorando" pede o interesse alto. O estado guardado vai à versão 2, e a versão 1 migra com a memória vazia.
+Uma imagem parada por 30 min termina em "enjoou", sem voltar a olhar. Testes em `web/app/test/gosto_visual_enjoo.test.ts`. As escolhas
+(D-GV-ENJOO-1 a 7) e o que diverge do Python estão em `docs/registro/2026-11.md`. A P1f e o Python não mudam.
