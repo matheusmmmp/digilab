@@ -46,7 +46,7 @@ import { ConfiancaCombate } from "./confianca.ts";
 import { CONFIG_ENJOO_TELA_LIGADA } from "./enjoo_tela.ts";
 import { genomaVisao } from "./digibrain/genoma_visao.ts";
 import { CONFIG_TELA_LIGADA, CONFIG_TV_JOGO, CONFIG_TVJOGO_LIGADA, ID_TV, lerSentidoTela, valorSentidoTela, valorSentidoTelaDesligada } from "./tv.ts";
-import { lutar as lutarArena, sorteiosPorFluxo, type IdCena, type ResultadoLuta as ResultadoArena, type Stats as StatsArena, type Tiro as TiroLutaPoc, type Esquiva as EsquivaLutaPoc, type Apoio as ApoioLutaPoc, type ArenaPorEstagio as ArenaLutaPoc, type TabelaFormas as TabelaFormasPoc } from "./arena/index.ts";
+import { lutar as lutarArena, sorteiosPorFluxo, type IdCena, type ResultadoLuta as ResultadoArena, type Stats as StatsArena, type Tiro as TiroLutaPoc, type Esquiva as EsquivaLutaPoc, type Apoio as ApoioLutaPoc, type ArenaPorEstagio as ArenaLutaPoc, type TabelaFormas as TabelaFormasPoc, type EntradaLuta as EntradaLutaArena } from "./arena/index.ts";
 import { MAPA_SALAO, MAPA_TORRE, statsRivalForma, ehMapa, esquivaDaTabela, formaDaChave as formaDaChaveMotor, mapaDoLugar, naTabela, rivaisArena, statsDaLuta, statsDoPet, statsNpc, statsRivalArena, tabelaLuta } from "./luta_poc.ts";
 import { condicaoDe } from "./treino.ts";
 import { caraterCanonico } from "./catalogo.ts";
@@ -188,6 +188,9 @@ export class Motor {
   apoioLutaPoc: ApoioLutaPoc | null = null;
   arenaLutaPoc: ArenaLutaPoc | null = null;
   formasLutaPoc: TabelaFormasPoc | null = null;
+  /** as chaves da N3 da investigacao do nucleo (docs/PLANO_LUTA_NUCLEO.md, secao 4): como o tiroLutaPoc, so a bancada as poe (a N4); null =
+      nenhuma, a luta de sempre. Nenhuma versao de pet as liga (D-N-7). Nao vai ao registro nem ao save */
+  nucleoLutaPoc: Pick<EntradaLutaArena, "forcaAtr" | "tiroDoMorto" | "puloMax" | "bordaRingue"> | null = null;
   /** DC3d da CONVERSA_PET: o registro tem a marca "fu" (so o pet de teste v16): o modular decide com a subchave `fala_unidades` (o
       `chamar_atencao` em tres unidades de fala com conteudo, docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1 e A1.1); sem ela, o modular de hoje */
   falaUnidades = false;
@@ -707,7 +710,7 @@ export class Motor {
       n = k + 1;
       const s = sementeDaSerie(semente, k);
       const r = lutarArena({ cena: rv.mapa, semente: s, a: { forma, stats: pet, ...(k ? { vida0 } : {}) }, b: { forma: rv.forma, stats: rv.stats }, ...(tiro ? { tiro } : {}), ...(esquiva ? { esquiva } : {}),
-        ...(apoio ? { apoio } : {}), ...(arenaPorEstagio ? { arenaPorEstagio } : {}) }, sorteiosPorFluxo(s), this.formasLutaPoc ?? undefined);
+        ...(apoio ? { apoio } : {}), ...(arenaPorEstagio ? { arenaPorEstagio } : {}), ...(this.nucleoLutaPoc ?? {}) }, sorteiosPorFluxo(s), this.formasLutaPoc ?? undefined);
       const pontosA = r.vencedor === "a" ? 1 : r.vencedor === "b" ? 0 : 0.5, res = pontosA === 1 ? 1 : pontosA === 0 ? -1 : 0;
       serie.push({ ...r, vida0, pontosA, contra: rv.forma, mapa: rv.mapa, rivalStats: rv.stats });
       const chave = rivalDaConfianca(rival, semente, k, est);
