@@ -1,0 +1,98 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DigiLab · a página de entrada (prancha)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@400;500;600;700;800&family=Barlow:wght@400;500;600;700;800;900&family=Rajdhani:wght@700&display=swap">
+<link rel="stylesheet" href="../ux-lugares-menus/lugares.css">
+<link rel="stylesheet" href="inicial.css">
+<script>const q=new URLSearchParams(location.search);document.documentElement.dataset.pele=q.get("pele")==="xcom"?"xcom":"vidro";if(q.has("sem"))addEventListener("DOMContentLoaded",()=>document.body.classList.add("sem-notas"));</script>
+</head><body><div class="pi">
+
+<header class="pi-barra">
+  <a class="pi-marca" href="#topo" aria-label="DigiLab"><i aria-hidden="true">//</i>DIGILAB</a>
+  <nav class="pi-nav" aria-label="Nesta página"><a href="#comeca">Como começa</a><a href="#jogo">O jogo</a><a href="#regras">Sem pegadinha</a></nav>
+  <a class="bt" href="#/config/conta"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Entrar</a>
+  <a class="bt acao" href="#/pet"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>Jogar</a>
+</header>
+
+<main id="topo">
+<section class="pi-heroi" aria-labelledby="pi-h1">
+  <div class="txt">
+    <span class="rot">Pet virtual com cérebro próprio</span>
+    <h1 id="pi-h1">Crie um Digimon que decide sozinho</h1>
+    <p class="sub">Você cuida, ensina e treina. Ele escolhe o que fazer, e o jogo mostra o porquê.</p>
+    <div class="pi-cta">
+      <a class="bt acao jogar" href="#/pet"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>Começar agora</a>
+      <ul class="pi-garantias" aria-label="Para começar"><li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>No navegador</li><li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Sem conta</li><li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Sem instalar</li></ul>
+      <a class="pi-ja" href="#/config/conta">Já tenho conta: entrar</a>
+    </div>
+  </div>
+  <figure class="caixa pi-tela "><img src="../ilha-grande/saco_em_terra_1440.jpg" alt="O jogo: um Gomamon ao lado do saco de pancada, na ilha, com o menu de treino aberto" loading="lazy"><figcaption>O jogo de hoje: a ilha, o pet e o treino.</figcaption></figure>
+  <span class="nota" style="left:20px;top:16px;max-width:330px">1 · o botão principal está na primeira dobra e leva direto ao jogo (#/pet): a CN-1 diz que o jogo abre sem conta. Nenhum formulário antes</span>
+  <span class="nota" style="right:20px;top:16px;max-width:260px">a imagem é uma captura real do jogo (2026-11-11), não uma ilustração</span>
+  <span class="nota" style="left:20px;bottom:14px;max-width:300px">'Entrar' é discreto, para quem já tem conta; leva a Ajustes › Conta (a prancha ux-conta)</span>
+</section>
+
+<section class="pi-sec" id="comeca" aria-labelledby="pi-comeca">
+  <span class="rot">Em um minuto</span>
+  <h2 id="pi-comeca">Como começa</h2>
+  <ol class="pi-passos">
+    <li class="caixa pi-passo"><span class="n" aria-hidden="true">1</span><h3>Escolha um brasão</h3><p>Ele define o ovo que você recebe.</p><div class="pi-brasoes"><span class="etq">Coragem</span><span class="etq">Amizade</span><span class="etq">Conhecimento</span><span class="etq">Sinceridade</span></div></li>
+    <li class="caixa pi-passo"><span class="n" aria-hidden="true">2</span><h3>O ovo choca</h3><p>Nasce um In-Training. Daí em diante ele cresce com o que vive.</p><div class="pi-linha-evo"><span class="spr" style="width:56.5px;height:46.0px;background-image:url('../../../../Assets/arena_up/sprites/Koromon.png');background-size:398.5px 278.5px;background-position:0.0px 0.0px"></span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg><span class="spr" style="width:75.2px;height:54.4px;background-image:url('../../../../Assets/arena_up/sprites/Agumon.png');background-size:531.2px 385.6px;background-position:0.0px 0.0px"></span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg><span class="q" role="img" aria-label="Champion: ainda não se sabe">?</span></div></li>
+    <li class="caixa pi-passo"><span class="n" aria-hidden="true">3</span><h3>Cuide e ensine</h3><p>Ponha a comida na ilha, brinque, elogie ou corrija. Ele lembra.</p><div class="pi-acoes"><span class="etq">Alimentar</span><span class="etq">Brincar</span><span class="etq">Limpar</span><span class="etq">Carinho</span></div></li>
+  </ol>
+  <span class="nota" style="right:20px;top:20px;max-width:300px">2 · os três primeiros minutos do jogo, na ordem em que acontecem. Os nomes são os do jogo (brasões, níveis, ações)</span>
+  <span class="nota" style="left:38%;bottom:8px;max-width:300px">o Champion é um '?': a página não promete uma forma que depende de como o pet foi criado</span>
+</section>
+
+<div id="jogo">
+<section class="pi-faixa" aria-labelledby="pi-f1">
+  <div class="txt"><span class="rot">DigiBrain</span><h2 id="pi-f1">Veja o que ele pensa</h2>
+    <p>Cada escolha do pet sai de uma rede que muda com a vida dele. Abra o DigiBrain e veja a escolha de agora e a chance de cada opção.</p>
+    <ul class="pts"><li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4c-4 0-7 3-7 7 0 4 3 8 7 8s7-4 7-8c0-4-3-7-7-7z"/><path d="M12 4v15"/></svg><span>O motivo de cada ação, sem texto inventado.</span></li>
+      <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/></svg><span>O que veio de você aparece marcado: <span class="etq apr">aprendido</span></span></li></ul></div>
+  <figure class="caixa pi-tela estreita"><img src="../digibrain-lab/scan_lab_mapa_1280.png" alt="O DigiBrain: a rede do pet e a escolha de agora, explorar, 48 %" loading="lazy"><figcaption>O DigiBrain aberto no jogo.</figcaption></figure>
+  <span class="nota" style="left:20px;top:10px;max-width:300px">3 · três faixas, uma por coisa que o jogo tem hoje. Cada afirmação tem origem (o cabeçalho do gerar.py)</span>
+</section>
+<section class="pi-faixa inv" aria-labelledby="pi-f2">
+  <div class="txt"><span class="rot">Crescer e lutar</span><h2 id="pi-f2">Treine, lute e evolua</h2>
+    <p>Do Digi-Egg ao Mega. O treino muda os golpes, a luta rende medalhas, e a evolução depende de como ele foi criado.</p>
+    <ul class="pts"><li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/></svg><span>Seis exercícios no saco de pancada.</span></li>
+      <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="15" r="5"/><path d="M8 3l4 7 4-7"/></svg><span>Seis medalhas até a Liga.</span></li>
+      <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="8" r="2"/><path d="M6 7v10M18 10c0 4-6 3-12 7"/></svg><span>Mais de uma forma possível em cada nível.</span></li></ul></div>
+  <figure class="caixa pi-tela "><img src="../b3/capturas_codigo/luta_1280_vidro.png" alt="A luta: Gabumon contra Monochromon na arena" loading="lazy"><figcaption>A arena: o pet luta sozinho, e o jogo diz a regra que ele usou.</figcaption></figure>
+</section>
+<section class="pi-faixa" aria-labelledby="pi-f3">
+  <div class="txt"><span class="rot">Seu aparelho, seu pet</span><h2 id="pi-f3">Comece agora, guarde depois</h2>
+    <p>O pet fica salvo neste navegador. Se quiser levá-lo para outro aparelho, crie uma conta depois, com Google ou GitHub.</p>
+    <a class="bt acao jogar" href="#/pet"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>Começar agora</a></div>
+  <figure class="caixa pi-tela fina"><img src="../ux-conta/capturas/entrar_390_vidro.jpg" alt="A tela Entrar no celular: o que vai para o servidor e os botões do Google e do GitHub" loading="lazy"><figcaption>A conta é opcional e fica nos Ajustes.</figcaption></figure>
+  <span class="nota" style="left:20px;bottom:10px;max-width:260px">o botão se repete aqui, no fim e, no celular, numa barra fixa embaixo</span>
+</section>
+</div>
+
+<section class="pi-sec" id="regras" aria-labelledby="pi-regras" style="border-top:1px solid var(--hx-borda)">
+  <span class="rot">Sem pegadinha</span>
+  <h2 id="pi-regras">O que o jogo não faz</h2>
+  <ul class="pi-nao">
+    <li><b>Sem gacha</b><span>Nada de caixa de prêmio nem sorteio pago.</span></li>
+    <li><b>Sem vantagem à venda</b><span>Os Bits só se ganham jogando.</span></li>
+    <li><b>Sem culpa</b><span>Nenhuma contagem nem aviso insistente para você voltar.</span></li>
+    <li><b>Sem conta obrigatória</b><span>Entrar é escolha, e você pode apagar tudo.</span></li>
+  </ul>
+  <span class="nota" style="right:20px;top:20px;max-width:320px">4 · só o que já está decidido (CN-11, M-2, o princípio 5 do guia, CN-1). Não diz 'sem anúncios': a CN-12 prevê o vídeo pedido para a voz</span>
+</section>
+
+<section class="pi-fim" aria-labelledby="pi-fim">
+  <h2 id="pi-fim">O ovo está esperando</h2>
+  <a class="bt acao jogar" href="#/pet"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>Começar agora</a>
+  <ul class="pi-garantias" aria-label="Para começar"><li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>No navegador</li><li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Sem conta</li><li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Sem instalar</li></ul>
+</section>
+</main>
+
+<footer class="pi-rodape">
+  <nav aria-label="Rodapé"><a href="#termos">Termos</a><a href="#privacidade">Privacidade</a><a href="#creditos">Créditos</a></nav>
+  <span>Sprites, ícones e fundos: Digimon UP (Bandai).</span>
+  <span>DigiLab é um projeto pessoal.</span>
+</footer>
+
+<div class="pi-fixo"><a class="bt acao" href="#/pet"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>Começar agora</a></div>
+</div></body></html>

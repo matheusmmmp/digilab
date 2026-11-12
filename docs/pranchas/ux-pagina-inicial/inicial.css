@@ -1,0 +1,111 @@
+/* Prancha "a pagina de entrada" (a tela 6 do docs/PLANO_V3_CONTA.md, secao 3: "uma pagina inicial curta"; etapa CN6). So desenho.
+   Por cima do ../ux-lugares-menus/lugares.css (os tokens --hx-* e --hud-*, copias do web/app/src/estilo/tokens.css). Nenhuma cor nova:
+   tudo aqui usa token. Os tamanhos sao PROPOSTO, SEM FONTE. A pagina rola e e uma so, com a quebra a 900 px (o corte do app). */
+html,body{width:auto;height:auto}
+/* os fundos da pele sao translucidos: por baixo fica o fundo escuro do proprio navegador (cor de sistema, nenhum hex) */
+html{color-scheme:dark;background:Canvas}
+body{overflow:visible;font:500 16px/1.45 var(--hx-f);background:var(--hud-fundo-2)}
+a{color:inherit}
+.pi{--col:1120px;--lado:max(20px,calc((100% - var(--col))/2))}
+.pi-sec{padding:72px var(--lado)}
+.pi h1{font:800 56px/1.02 var(--hx-f);letter-spacing:-.01em;text-wrap:balance}
+.pi h2{font:700 32px/1.1 var(--hx-f);text-wrap:balance}
+.pi h3{font:700 20px/1.15 var(--hx-f)}
+.pi p{color:var(--hx-texto-2);max-width:56ch}
+.pi .rot{font-size:13px}
+
+/* ---- a barra de cima: a marca, tres ancoras, Entrar e Jogar */
+.pi-barra{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:8px;min-height:64px;padding:8px var(--lado);
+  background:linear-gradient(180deg,var(--hud-fundo-1),var(--hud-fundo-2));border-bottom:1px solid var(--hx-borda);
+  -webkit-backdrop-filter:var(--hud-desfoque);backdrop-filter:var(--hud-desfoque)}
+.pi-marca{display:flex;align-items:center;gap:8px;margin-right:auto;font:800 22px/1 var(--hx-f);letter-spacing:.16em;text-decoration:none}
+.pi-marca i{font-style:normal;color:var(--hx-rotulo);letter-spacing:-.1em}
+.pi-nav{display:flex;gap:2px}
+.pi-nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;font:600 14px/1 var(--hx-f);letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--hx-texto-2)}
+.pi .bt{text-decoration:none;white-space:nowrap}
+
+/* ---- o heroi: a ilha de verdade ao fundo, a frase, o botao e a tela do jogo */
+.pi-heroi{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:48px;align-items:center;padding:64px var(--lado) 72px;overflow:hidden;
+  border-bottom:1px solid var(--hx-borda)}
+.pi-heroi::before{content:"";position:absolute;inset:0;background:url("../ux-lugares-menus/img/cena_sem_pet.jpg") 50% 40%/cover no-repeat;z-index:0}
+.pi-heroi::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--hud-fundo-2) 0 38%,var(--chao-sombra));z-index:0}
+.pi-heroi > *{position:relative;z-index:1}
+.pi-heroi .txt{display:flex;flex-direction:column;gap:20px;align-items:flex-start}
+.pi-heroi p.sub{font:500 20px/1.4 var(--hx-f);color:var(--hx-texto);max-width:34ch}
+.pi-cta{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.pi .bt.jogar{min-height:64px;padding:0 36px;font:800 22px/1 var(--hx-f);letter-spacing:.06em;text-transform:uppercase;gap:12px;box-shadow:var(--hx-sombra)}
+.pi .bt.jogar .ic{width:24px;height:24px}
+.pi-garantias{display:flex;flex-wrap:wrap;gap:6px 16px;font:600 14px/1.2 var(--hx-f);color:var(--hx-texto-2)}
+.pi-garantias li{display:inline-flex;align-items:center;gap:6px}
+.pi-garantias .ic{width:16px;height:16px;color:var(--hx-ok);stroke-width:3}
+.pi-ja{display:inline-flex;align-items:center;min-height:44px;font:600 14px/1 var(--hx-f);color:var(--hx-texto-2);text-underline-offset:3px}
+/* a tela do jogo: uma captura real, numa moldura da pele */
+.pi-tela{padding:6px;display:block}
+.pi-tela img{display:block;width:100%;height:auto}
+.pi-tela figcaption{padding:8px 8px 4px;font:500 13px/1.3 var(--hx-f);color:var(--hx-sec)}
+
+/* ---- como comeca: tres passos */
+.pi-passos{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+.pi-passo{display:flex;flex-direction:column;gap:10px;padding:18px 18px 20px}
+.pi-passo .n{font:700 34px/1 var(--hx-f-num);color:var(--hx-num)}
+.pi-brasoes{display:flex;flex-wrap:wrap;gap:6px}
+.pi-linha-evo{display:flex;align-items:flex-end;gap:10px;min-height:66px}
+.pi-linha-evo .q{width:44px;height:44px;display:grid;place-items:center;border:1px dashed var(--hx-borda);font:700 20px/1 var(--hx-f-num);color:var(--hx-sec)}
+.pi-linha-evo .ic{color:var(--hx-sec);margin-bottom:12px}
+.pi-acoes{display:flex;flex-wrap:wrap;gap:6px}
+
+/* ---- as tres faixas do jogo: o texto de um lado, a captura do outro */
+.pi-faixa{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:48px;align-items:center;padding:56px var(--lado);border-top:1px solid var(--hx-borda)}
+.pi-faixa.inv .pi-tela{order:-1}
+.pi-faixa .txt{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.pi-faixa ul.pts{display:flex;flex-direction:column;gap:8px}
+.pi-faixa ul.pts li{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;color:var(--hx-texto-2)}
+.pi-faixa ul.pts .ic{color:var(--hx-rotulo);margin-top:2px}
+.pi-tela.estreita{max-width:420px;justify-self:center}
+.pi-tela.fina{max-width:300px;justify-self:center}
+.etq.apr{font-size:12px}
+
+/* ---- o que o jogo nao faz */
+.pi-nao{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px}
+.pi-nao li{display:flex;flex-direction:column;gap:6px;padding:14px 16px;border:1px solid var(--hx-borda);background:var(--hx-tecla)}
+.pi-nao b{font:700 16px/1.2 var(--hx-f)}
+.pi-nao span{font:500 14px/1.35 var(--hx-f);color:var(--hx-texto-2)}
+
+/* ---- a chamada do fim e o rodape */
+.pi-fim{display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center;padding:72px var(--lado);border-top:1px solid var(--hx-borda);
+  background:linear-gradient(180deg,var(--hud-fundo-1),var(--hud-fundo-2))}
+.pi-fim .pi-garantias{justify-content:center}
+.pi-rodape{display:flex;flex-wrap:wrap;align-items:center;gap:6px 20px;padding:20px var(--lado) 28px;border-top:1px solid var(--hx-borda);font:500 13px/1.4 var(--hx-f);color:var(--hx-sec)}
+.pi-rodape nav{display:flex;gap:4px;margin-right:auto}
+.pi-rodape nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 10px;color:var(--hx-texto-2);text-underline-offset:3px}
+
+/* a barra de baixo do celular: o Jogar sempre a mao */
+.pi-fixo{display:none}
+
+/* as notas da prancha rolam com a pagina */
+.pi .nota{position:absolute}
+.pi-sec,.pi-faixa,.pi-fim{position:relative}
+
+@media (max-width:899px){
+  .pi-sec{padding:44px var(--lado)}
+  .pi h1{font-size:38px}
+  .pi h2{font-size:26px}
+  .pi-nav{display:none}
+  .pi-barra{min-height:56px}
+  .pi-barra .bt.acao{display:none}
+  .pi-heroi{grid-template-columns:1fr;gap:24px;padding:32px var(--lado) 40px}
+  .pi-heroi::after{background:linear-gradient(180deg,var(--hud-fundo-2) 0 52%,var(--chao-sombra))}
+  .pi-heroi p.sub{font-size:18px}
+  .pi .bt.jogar{width:100%;justify-content:center}
+  .pi-cta{align-items:stretch;width:100%}
+  .pi-passos{grid-template-columns:1fr}
+  .pi-faixa{grid-template-columns:1fr;gap:20px;padding:40px var(--lado)}
+  .pi-faixa.inv .pi-tela{order:0}
+  .pi-nao{grid-template-columns:1fr 1fr}
+  .pi-fim{padding:48px var(--lado) 104px}
+  .pi-rodape{padding-bottom:96px}
+  .pi-fixo{display:flex;position:fixed;z-index:50;left:0;right:0;bottom:0;padding:10px 16px 14px;gap:10px;
+    background:linear-gradient(180deg,var(--hud-fundo-1),var(--hud-fundo-2));border-top:1px solid var(--hx-borda)}
+  .pi-fixo .bt{flex:1;min-height:52px;font:800 18px/1 var(--hx-f);letter-spacing:.06em;text-transform:uppercase}
+  .pi .nota{display:none}
+}

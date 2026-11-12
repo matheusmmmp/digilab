@@ -749,3 +749,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-12 — COOPERACAO, CO6b: a reputação e o peso dos deveres na percepção, no Python (Claude Code, Opus 5.5, branch `v3-cooperacao-co6b`)](registro/2026-11.md)
 - [2026-11-12 — CONTA: as CH-1 a CH-7 decididas pela recomendação (Claude Code, Opus 5.5, branch `v3-conta-hospedagem`)](registro/2026-11.md)
 - [2026-11-12 — COOPERACAO: o plano da bancada aprovado (Claude Code, Opus 5.5, branch `v3-cooperacao-bancada-aprovado`)](registro/2026-11.md)
+- [2026-11-12 — UX_TELA_PET, a prancha da página de entrada (Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-pagina-inicial`)](registro/2026-11.md)
