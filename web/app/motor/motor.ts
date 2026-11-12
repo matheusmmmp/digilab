@@ -8,7 +8,7 @@
    v21 nao muda (test/luta_poc_pet.test.ts). */
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, CUIDADO_NA_HORA, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
-  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehDoGrupo, ehLutaPoc, nasceNaAgua, VERSAO_V26,
+  TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehDoGrupo, ehLutaPoc, nasceNaAgua,
   nasceNaGrande, nasceComMemoriaLonga, nasceComSonoSegura, CMU_GRANDE, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, VERSOES_COM_SACUDIR,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
@@ -254,7 +254,7 @@ export class Motor {
     this.noGrupo = opcoes.parteDoMundo !== undefined;
     /* a v26 so existe no grupo, e o grupo so tem a v26 (CO4c) */
     if (this.noGrupo !== ehDoGrupo(versao))
-      throw new Error(this.noGrupo ? `o pet do grupo e da v${VERSAO_V26}, nao da v${versao}` : `o pet v${VERSAO_V26} so nasce no grupo, com o irmao`);
+      throw new Error(this.noGrupo ? `o pet do grupo e da v26 ou da v28, nao da v${versao}` : `o pet v${versao} so nasce no grupo, com o irmao`);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
     this.temp = temperamentoDe(semente);
     /* o Bandit nao decide nem aprende para o pet; fica so a memoria por espacos dele, como o lobo de memoria e emocao (D-W7 do #201): a

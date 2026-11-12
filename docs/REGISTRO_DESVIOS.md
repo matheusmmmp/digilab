@@ -707,6 +707,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — MITOLOGIA: a pedra na ilha grande (Gerente da V3, Claude Code, Opus 5.5, branch `v3-mitologia-ilha-grande`)](registro/2026-11.md)
 - [2026-11-11 — COOPERACAO, a espec da CO6 (Claude Code, Opus 5.5, sessão da INDIVIDUALIDADE, branch `v3-cooperacao-co6-espec`)](registro/2026-11.md)
 - [2026-11-11 — GOSTO_VISUAL, P1c: a TV no mundo (Claude Code, Opus 5.5, branch `v3-gosto-visual-p1c`)](registro/2026-11.md)
+- [2026-11-11 — GOSTO_VISUAL, P1d: o gosto no cérebro (Claude Code, Opus 5.5, branch `v3-gosto-visual-p1d`)](registro/2026-11.md)
 - [2026-11-11 — EVOLUCAO, o enquadramento do pet no cartão da evolução (sessão aberta pela Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-evolucao-enquadramento`)](registro/2026-11.md)
 - [2026-11-11 — UX_TELA_PET, o saco de pancada no mar da ilha grande (Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-saco-ilha`)](registro/2026-11.md)
 - [2026-11-11 — COOPERACAO, a espec da CO7 (Claude Code, Opus 5.5, sessão da INDIVIDUALIDADE, branch `v3-cooperacao-co7-espec`)](registro/2026-11.md)
