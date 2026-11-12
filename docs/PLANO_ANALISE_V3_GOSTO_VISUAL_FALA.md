@@ -189,8 +189,11 @@ Por braço:
   - a validação, 288 × 0,000335 × 1,5 ≈ US$ 0,145;
   - a calibração, 144 × 0,000335 × 1,5 ≈ US$ 0,072;
   - **juntas, perto de US$ 0,22.** Sem a PM, cerca de dois terços disso.
-- **O teto** (GVF-7):
-  - o teto da fala livre é **US$ 3,00**; o acumulado, pelo último artefato, é **US$ 2,201673** (`calibracao_v4b/meta.json`, `fim_usd`),
+- **O teto** (GVF-7, **DECIDIDA** pelo Matheus em 2026-11-11, repassada pela sessão coordenadora: "Pode aumentar o teto mas esse valor da
+  llm está vinculado a que conta? Se for a do Claude, pode aumentar pra bastante pq tenho cota mensal que não gastei"; o teto sobe para
+  **US$ 3,50**, o recomendado. O teto é o da API da Anthropic, `ANTHROPIC_API_KEY`, pré-pago por token, em `servidor/fala_llm.py` e
+  `fala_livre_claude.py`; não é a cota mensal da assinatura do Claude. Um teto maior ou outra via voltam a ele):
+  - o teto da fala livre era **US$ 3,00**; o acumulado, pelo último artefato, é **US$ 2,201673** (`calibracao_v4b/meta.json`, `fim_usd`),
     não mais os US$ 2,08 do plano da DC5;
   - a validação da DC5c ainda não rodou e foi estimada em **US$ 0,196** (TAREFA_V3_CONVERSA_PET, DC5c): depois dela, o acumulado fica perto
     de **US$ 2,40**, e sobram cerca de **US$ 0,60**;
@@ -254,7 +257,7 @@ mudar nada dela:
 | **GVF-4** | Os braços de modelo. | **G (`gemma2:9b`) e H (`claude-haiku-5-5`), como na DC5.** | Só o G, o resultado vale para o jogo, mas sem o par que a DC5 mediu; só o H, não vale para o padrão do jogo. |
 | **GVF-5** | O limiar da naturalidade. | **≥ 10 de 12 pares por braço,** o mesmo da DC5. | Mais baixo (9 de 12), a chance de passar sem preferência sobe de ≈ 0,019 para ≈ 0,073 por braço. Mais alto, o órgão pode ser útil e não passar. |
 | **GVF-6** | "Melhor desenvolvida" como gate ou descritivo. | **Descritivo**, com as três medidas da 4.4 escritas antes. | Como gate sem medida estabelecida, convida a escolher a medida depois. Como descritivo, a palavra do pedido não decide nada sozinha. |
-| **GVF-7** | O teto da fala livre. | **Subir de US$ 3,00 para US$ 3,50.** | Sem subir, este plano cabe (≈ US$ 2,69 no fim), mas uma queda numa validação para a rodada no teto e a refaz noutro dia. Subir demais tira a função do teto. |
+| **GVF-7** | O teto da fala livre. | **DECIDIDA (Matheus, 2026-11-11): subir de US$ 3,00 para US$ 3,50.** O teto é o da API da Anthropic (pré-pago por token), não o da cota da assinatura. | Sem subir, este plano cabe (≈ US$ 2,69 no fim), mas uma queda numa validação para a rodada no teto e a refaz noutro dia. Subir demais tira a função do teto. |
 | **GVF-8** | A voz, e o que fazer sem voz apta. | **A voz que a DC5d declarar apta; sem voz apta, este plano não roda.** | Rodar na voz-v3 do jogo, sem validação, mede o órgão sobre uma voz que nunca mostrou fidelidade. Esperar a DC5d atrasa este plano até lá. |
 | **GVF-9** | A pergunta dos pares. | **"Qual dos dois pets parece estar assistindo de verdade e comentando o que vê?"** | Uma pergunta só de naturalidade ("qual parece um pet falando?") pode preferir o S, mais curto; uma que cita "o que vê" puxa para o P. A pergunta proposta é a do pedido, e o relato diz isso. |
 | **GVF-10** | O tamanho e o ritmo. | **12 programas de 8 cenas, um comentário por cena, sem limite de frequência na pesquisa;** a composição da seção 3. | Menos programas, o G-NATURAL fica com poucos pares; mais cenas por programa, a sessão cansa o leitor. O limite do jogo (FA-5) na pesquisa daria números diferentes de comentários por célula e quebraria o pareamento. |
