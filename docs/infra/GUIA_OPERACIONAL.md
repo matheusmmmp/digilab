@@ -15,7 +15,7 @@ pesquisa, hipótese, desenho  ──►  Matheus/coordenador: nova_tarefa.py
                                   → docs/TAREFA_V2_<FRENTE>.md (PR)  ──►  worker na worktree v2-<frente>
                                                                           implementa, testa, registra desvio
                                   PR com o relato  ◄────────────────────  abre o PR e para
-                                  CI: verificar-pr (relato + testes)
+                                  CI: verificar-relato (relato) + verificar-pr (testes, web)
 Work lê o PR pelo conector   ◄──  (testado em 2026-10-18; gatilho opcional)
 revisão, inconsistências  ──────► Matheus decide e faz o merge
                                   coordenador: PAINEL_V2 + gerar_estado_atual.py
@@ -131,7 +131,12 @@ tem a marca do app. A defesa, nesse caso, é a regra do `AGENTS.md` e do worker:
 
 GitHub Actions: use o `verificar-pr` que já existe; esta POC não adiciona Actions, secrets, serviços pagos nem execução automática de agentes.
 
-## 3. O que o CI confere (`.github/workflows/verificar-pr.yml`)
+## 3. O que o CI confere (`.github/workflows/verificar-relato.yml` e `.github/workflows/verificar-pr.yml`)
+
+**Os dois workflows (PI0, `docs/PLANO_V3_CONTA_PROTECAO.md`, PI-2):** o `verificar-relato` roda o job `relato` em todo evento do PR,
+inclusive a edição do corpo; o `verificar-pr` roda o `testes` e o `web` só quando chega um commit (aberto, novo commit, reaberto). Editar o
+corpo do PR confere de novo só o relato, e não roda de novo os testes do mesmo commit. O `web` só liga a máquina quando o PR muda `web/app/`
+(o passo `mudou` do job `testes` decide).
 
 **Job `relato`** (`tools/verificar_relato.py`). Confere os campos `Tarefa`, `Categoria`, `Executor` e `Branch` e as seções do template. Um
 `<...>` que sobrou do modelo conta como vazio. Depois aplica a regra da categoria:
@@ -155,7 +160,7 @@ Uma frase como "os testes passam" no corpo vira **alerta DECLARADA**: só conta 
 o `npm ci`, o `npm run tipos`, o `npm test` (Vitest) e o `npm run build`. O e2e fica fora: os specs leem o atlas de `D:\Trab\digilab\Assets`
 e as referências das capturas, que não estão no git (D-IA-3). Ele continua com o Gerente na junção e com o testador.
 
-A suíte inteira (~36 min) roda só manualmente: Actions > verificar-pr > Run workflow > `suite_inteira`.
+A suíte inteira (~36 min) roda só manualmente: Actions > verificar-pr > Run workflow > `suite_inteira` (continua no `verificar-pr`).
 
 **O que o CI não confere:**
 - se a run de um experimento reproduz;
