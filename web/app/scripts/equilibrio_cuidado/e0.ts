@@ -16,7 +16,8 @@ import {
 } from "../../motor/index.ts";
 import { CONFIG_LANCE_DONO_LIGADA } from "../../motor/digibrain/constantes.ts";
 import type { MotorCorpoMundo } from "../../motor/motor_corpo_mundo.ts";
-import { BITS, feitosDoPet } from "../../src/bits.ts";
+import { BITS, feitosDoPet, type TabelaBits } from "../../src/bits.ts";
+import { ajusteE1Ligado, type AjusteEquilibrioE1 } from "../../motor/equilibrio_e1.ts";
 import { marcosDoPet } from "../../src/nivel.ts";
 
 export const DONOS = ["atento", "medio", "relapso"] as const;
@@ -91,8 +92,13 @@ const mediana = (xs: number[]): number | null => {
 };
 const r4 = (x: number | null): number | null => x === null ? null : Math.round(x * 1e4) / 1e4;
 
+/** as chaves do E1 (EQUILIBRIO_CUIDADO; scripts/equilibrio_cuidado/e1.ts): o ajuste do modular e a tabela dos Bits. Sem elas, a vida do E0,
+    byte a byte */
+export interface OpcoesVida { ajuste?: AjusteEquilibrioE1; bits?: TabelaBits }
+
 /** a vida inteira: o resultado por pet e o do Tamer */
-export function vida(versao: NomeVersao, dono: NomeDono, semente: number, dias = 3, teste = false) {
+export function vida(versao: NomeVersao, dono: NomeDono, semente: number, dias = 3, teste = false, opcoes: OpcoesVida = {}) {
+  const tabela = opcoes.bits ?? BITS, ajuste = opcoes.ajuste;
   if (!DONOS.includes(dono)) throw new Error(`dono desconhecido: ${JSON.stringify(dono)}`);
   if (!VERSOES.includes(versao)) throw new Error(`versao desconhecida: ${JSON.stringify(versao)}`);
   if (!Number.isInteger(dias) || dias < 1) throw new Error(`dias precisa ser inteiro >= 1: ${dias}`);
@@ -100,6 +106,7 @@ export function vida(versao: NomeVersao, dono: NomeDono, semente: number, dias =
     throw new Error(`semente ${semente} fora da faixa ${teste ? "de teste (101...505)" : "de calibracao (93101...93505)"}`);
   /* a montagem do jogo (src/produto.ts e src/cerebro.ts): as tres chaves, o modular e a ponte da luta, na ordem do ligarProduto */
   const montar = (m: Motor): void => {
+    if (ajuste !== undefined && ajusteE1Ligado(ajuste)) m.ligarEquilibrioE1(ajuste);   // o E1: antes da troca para o modular
     m.ligarProduto({ chamadoPelaFome: true, decisaoNaComida: true, chamadosPeloCorpo: true });
     m.trocarCerebro("modular");
     m.ligarPonteLuta(true);
@@ -177,7 +184,7 @@ export function vida(versao: NomeVersao, dono: NomeDono, semente: number, dias =
     }
     for (const [tk, a] of donos[i]!.acoes) { const c = conta(i, celulaDe(m, tk)); c.acoes_dono[a] = (c.acoes_dono[a] ?? 0) + 1; }
     const nLances = mundo.lances === null ? null : mundo.lances.length;
-    const feitos = feitosDoPet(m).filter(f => f.tick - TICK_INICIAL < T);
+    const feitos = feitosDoPet(m, tabela).filter(f => f.tick - TICK_INICIAL < T);
     const celulas = [...contas[i]!.entries()].map(([k, c]) => {
       const [estagio, dia] = k.split("|");
       const { energia_ao_acordar, ...resto } = c;
@@ -193,7 +200,7 @@ export function vida(versao: NomeVersao, dono: NomeDono, semente: number, dias =
   /* os Bits do Tamer: os feitos dos pets e os niveis (30 por marco, uma vez por Tamer) */
   const bits: { tick: number; valor: number; origem: string }[] = [];
   for (const p of porPet) for (const f of p.feitos_bits) bits.push({ tick: f.tick, valor: f.valor, origem: f.origem });
-  for (const [n, tk] of marcos) if (tk - TICK_INICIAL < T) bits.push({ tick: tk, valor: BITS.nivel, origem: `nivel:${n}` });
+  for (const [n, tk] of marcos) if (tk - TICK_INICIAL < T) bits.push({ tick: tk, valor: tabela.nivel, origem: `nivel:${n}` });
   bits.sort((a, b) => a.tick - b.tick);
   let soma = 0, tick150: number | null = null;
   const porDia: Record<string, number> = {}, porOrigem: Record<string, number> = {};
