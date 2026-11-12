@@ -3,7 +3,9 @@
 **Status: APROVADO pelo Matheus em 2026-11-12 ("Aprovo todas").** As decisões CB-1 a CB-9 (seção 11) estão DECIDIDAS, todas pela
 recomendação. Os números continuam PROPOSTOS.
 **Rodado em 2026-11-12 (CB4):** H-EMERGE e H-DOSE NÃO CONFIRMAM, H-REP INCONCLUSIVO POR PREMISSA, H-CUSTO CONFIRMA; o
-descritivo está em `docs/futuro/cooperacao_bancada_resultado.md` (D-CB-15). **Nenhuma vida deste plano roda antes de cinco coisas:**
+descritivo está em `docs/futuro/cooperacao_bancada_resultado.md` (D-CB-15).
+**O adendo 1 (seção 12), PROPOSTO em 2026-11-12:** o mecanismo, com um irmão aleatório que provoca a situação; as AD1-1 a AD1-6
+vão ao Matheus. **Nenhuma vida deste plano roda antes de cinco coisas:**
 1. este cabeçalho com a marca "APROVADO pelo Matheus" (feito);
 2. a CO6 e a CO7 na `main` (`docs/ESPEC_V3_COOPERACAO_CO6.md` e `docs/ESPEC_V3_COOPERACAO_CO7.md`), com os testes G-ESCUDO,
    G-RECEPTOR-SOCIAL e G-PAR-CO7 verdes;
@@ -195,3 +197,81 @@ do Matheus, e as vidas já rodadas ficam registradas.
 | **CB-7** | os limiares | **δ = 0,10 na P1, ε = 0,02 na P3**, PROPOSTOS, SEM FONTE | δ pequeno pede N grande e acha efeitos sem importância; grande perde um efeito real |
 | **CB-8** | o piloto e a regra do N | **40 sementes, B0 e B1, N em {80, 160, 320}** | sem piloto, o N é chute, e os atos raros podem deixar tudo inconclusivo |
 | **CB-9** | o encostar | **segue valendo 0** (D-CO3-3, ainda aberta), e por isso fica fora da P1 e só no descritivo P4 | se a D-CO3-3 mudar depois, só o P4 muda; a P1 não depende dele |
+
+## 12. Adendo 1: o mecanismo, com um irmão que provoca a situação (2026-11-12, PROPOSTO, Claude Code, Opus 5.5)
+
+**Status: PROPOSTO.** As decisões AD1-1 a AD1-6 (12.7) vão ao Matheus. Ele não muda as seções 0 a 11 nem o resultado da CB4
+(`docs/futuro/cooperacao_bancada_resultado.md`). **Nenhuma vida do adendo roda antes da aprovação, do código (A1-CB1) e do registro
+(A1-CB3).**
+
+**De onde vem:** o Matheus, em 2026-11-12, depois do resultado da CB4: "Sim, escreva o adendo", em resposta a "Faço um adendo do estudo com
+um mundo de mais disputa pela comida?". A CB4 mostrou que a CO7 quase não tem onde agir: só 41 das 160 vidas tiveram oportunidade, e a CO7
+mudou alguma medida em 5. Ela não respondeu se a CO7 muda o que o pet faz **quando** a situação acontece.
+
+### 12.1 A sondagem que escolheu o mundo (dita às claras)
+
+Antes de escrever o adendo, três mundos com alavancas que o motor já tem foram sondados nas cinco sementes dos testes (101 a 505), 8 dias,
+só o B0, contando as oportunidades do pet A. É pouca coisa e foi olhada antes de escrever: o adendo usa só a escolha do mundo, e nenhum
+número dela entra na análise.
+
+| mundo | vidas com oportunidade | oportunidades | a privação de A | o que mostra |
+|---|---|---|---|---|
+| o da CB4 (os dois atenciosos) | 2 de 5 | 9 | ~3 % | a situação é rara |
+| donos desiguais (A atencioso, B relapso) | 2 de 5 | 11 | ~3 % | não muda nada |
+| escassez (os dois relapsos) | 0 de 5 | 0 | 26 a 52 % | a fome tira o escudo (CO7-3): nada a medir |
+| **o irmão aleatório** (o `CerebroAleatorio` do gabarito do mundo, no B) | **5 de 5** | **34** | ~5 % | a situação acontece |
+
+### 12.2 A pergunta e as hipóteses, escritas antes
+
+**A pergunta:** num pet de verdade (o modular, o A), quando um outro aflito vai para a comida que ele vê, os deveres (a CO7) mudam o que ele
+faz? **O B é o irmão aleatório:** ele emburra e anda muito, e chega perto da comida (D-CO7b-6), mas não é um pet de verdade. Por isso o
+adendo testa o **mecanismo**, e não a cooperação entre os gêmeos do jogo, que fica com a resposta da CB4.
+
+| hipótese | o que diz | o contraste |
+|---|---|---|
+| **A1-EMERGE** | com a CO7 no A, o irmão aflito come a comida disputada mais vezes (a P1 do A) | B1 − B0, pareado, IC todo acima de δ = 0,10 |
+| **A1-DOSE** | o efeito cresce com o `k` | D0, DM, B1, como a H-DOSE |
+| **A1-CUSTO** | o A não passa mais fome por dever | B1 − B0 na P3 do A, IC todo abaixo de ε = 0,02 |
+| **A1-ESCUDO** (descritivo, como o R-ESCUDO) | de onde vem o efeito | B1E, B1U e B1A contra o B0 |
+
+A H-REP não entra: o irmão aleatório não retribui nem aprende, e o `k` do A depende só dos atos que ele vê o aleatório fazer.
+
+### 12.3 Os braços
+
+Os mesmos da seção 2.2, **com a CO7 só no cérebro do A**, e sem o RM: B0, B1, D0, DM, B1E, B1U e B1A (sete). O B é sempre o aleatório, nos
+sete. O mundo, o dono (o atencioso nos dois), o comedouro, os 8 dias e o modular do A são os da CB4.
+
+### 12.4 As medidas
+
+- **A primária:** a P1 do pet A (o `P1_por_pet["A"]` do orquestrador), com a oportunidade e o desfecho da seção 3.1.
+- **A P3 do A**, como a H-CUSTO.
+- **Dois descritivos novos:**
+  - **a P1-neg**, a parte das oportunidades em que o próprio A comeu a comida proibida (o efeito direto do escudo, visto de fora);
+  - **a contagem da culpa e da inveja:** a parte das decisões do A, no B1 e no B1A, em que cada uma passou de 0 (o campo `dever` dos motivos
+    do modular). Responde à questão aberta da CB4: elas não disparam, ou disparam e não viram decisão?
+
+### 12.5 O piloto, o N e as sementes
+
+A mesma regra da seção 6, numa faixa nova: o piloto em **92101 a 92140** (B0 e B1), o N em {80, 160, 320}, e as principais a partir de
+**92201**. A faixa 92xxx não aparece no registro nem nos planos até 2026-11-12. Com o piloto acima de 1 oportunidade por vida, o estudo
+segue; abaixo, volta ao Matheus.
+
+### 12.6 As missões
+
+| missão | o quê |
+|---|---|
+| **A1-CB1** | o orquestrador com o mundo `irmao_aleatorio` (a CO7 só no A, o B aleatório), a P1-neg e a contagem da culpa e da inveja, com testes |
+| **A1-CB2** | a fumaça e o piloto; o N |
+| **A1-CB3** | o registro da análise do adendo, antes da primeira vida principal |
+| **A1-CB4** | as vidas, a análise e o descritivo |
+
+### 12.7 As decisões do adendo (PROPOSTAS; cada uma com a recomendação e o custo de errar)
+
+| | a decisão | a recomendação | o custo de errar |
+|---|---|---|---|
+| **AD1-1** | o mundo | **o irmão aleatório**, como teste do mecanismo | os donos desiguais não dão mais situações; a escassez as zera; sem o adendo, não se sabe se a CO7 age quando a situação existe |
+| **AD1-2** | o que a leitura pode dizer | **só sobre o mecanismo** ("quando a situação acontece, os deveres mudam X"), nunca sobre os gêmeos | ler como cooperação entre os gêmeos seria afirmar sobre dois pets de verdade com um pet que não é |
+| **AD1-3** | os braços | **os sete, sem o RM**; a H-REP fora | com o RM, a comparação não teria sentido: o aleatório não retribui |
+| **AD1-4** | a primária | **a P1 do A**, como a CB-1; a P1-neg só descritiva | pela P1-neg, o escudo passa por construção (ele tira exatamente essa ação) |
+| **AD1-5** | a culpa e a inveja | **contar quando disparam**, descritivo | sem a contagem, a questão aberta da CB4 continua sem resposta |
+| **AD1-6** | a faixa e a regra | **92xxx, a mesma regra da seção 6, δ, ε e n_min iguais** | mudar a regra depois de ver a CB4 seria escolher depois |
