@@ -55,10 +55,20 @@ describe("a chave", () => {
     /* a etapa 2 nao acrescenta nenhum: o toque na TV e o sinal da reacao chegam ao palco e aos lugares pela cena (cenaEstado.ts) */
     expect(quem.sort()).toEqual(["App.tsx", "TelaPet.tsx", "cantinhoTv.ts", "cantinhoTvConta.ts"]);
   });
-  test("o protótipo fica fora do motor, do log e do save: não importa mudarMotor, aplicarEvento nem o save", () => {
+  test("o protótipo fica fora do motor, do log e do save (salvo o cerebroTv.ts da v31): não importa mudarMotor, aplicarEvento nem o save", () => {
     const dir = join(import.meta.dirname, "..", "src", "gostoVisual");
     for (const n of readdirSync(dir)) {
       const t = readFileSync(join(dir, n), "utf8");
+      /* a captura ligada ao cérebro (D-GV-CEREBRO-1): a única porta a mais é o cerebroTv.ts, só para o pet com a TV no cérebro (a v31), e só
+         com o "st" (o evento do modo livre gravado) e o levar o pet do jogo até a TV; o gosto_visual_cerebro.test.ts confere a vida */
+      if (n === "cerebroTv.ts") {
+        expect(t.match(/mudarMotor\(/g), n).toHaveLength(2);
+        expect(t).toContain("mudarMotor(x => x.sentidoTela(valor), \"adiado\")");
+        expect(t).toContain("mudarMotor(p => p.levarPet(x, y))");
+        expect(t).toMatch(/\.temTv/);
+        expect(t, n).not.toMatch(/aplicarEvento|trocarMotor|from "\.\.\/save\.ts"|jogoAtual|\.observar\(|\.avancar\(|tempo\.ts|tocarNoPet|agir\(/);
+        continue;
+      }
       expect(t, n).not.toMatch(/mudarMotor|aplicarEvento|trocarMotor|from "\.\.\/save\.ts"/);
       /* nem pelas beiradas: nada lê o jogo solto, anda o tempo ou chama o motor direto */
       expect(t, n).not.toMatch(/jogoAtual|\.observar\(|\.avancar\(|tempo\.ts|tocarNoPet/);

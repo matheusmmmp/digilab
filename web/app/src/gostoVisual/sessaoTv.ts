@@ -2,13 +2,16 @@
    vive fora dos componentes, porque o painel da TV fecha e a TV continua ligada. O painel (PainelTv.tsx), o selo da captura e a janela
    pequena leem daqui; a ilha continua lendo o estadoTv.ts, que esta sessão escreve.
    O carinho é o Carinho do jogo (UX-GV-7): a sessão só LÊ quando foi o último (telas/pet/reacao.ts, só vista) e, se houve um desde o
-   segundo anterior, o gosto do protótipo associa o que está passando a ele. A sessão não escreve nada no motor, no log nem no save. */
+   segundo anterior, o gosto do protótipo associa o que está passando a ele. A sessão não escreve nada no motor, no log nem no save, salvo
+   no pet com a TV no cérebro (a v31): ali o vetor de cada segundo vai ao cerebroTv.ts, que grava o evento "st" (D-GV-CEREBRO-1), e a reação
+   sobre o pet passa a ser a do cérebro (D-GV-CEREBRO-9). */
 import { useSyncExternalStore } from "react";
 import { ultimoCarinhoEm } from "../telas/pet/reacao.ts";
 import { capturarTela } from "./captura.ts";
 import { desligarTv, publicarTv } from "./estadoTv.ts";
 import { chaveGuardada, doTexto, estadoInicial, inatoDaSemente, paraTexto, passo, type EstadoGosto, type Inato, type Leitura, type Sentido } from "./gosto.ts";
 import { ligarTvDoJogo } from "./tvDoJogo.ts";
+import { comecarNoCerebro, pararNoCerebro, reacaoDoCerebroAgora, sentirNoCerebro } from "./cerebroTv.ts";
 
 export interface SessaoTv {
   /** o pet de agora (a semente dele); null antes de `usarPet` */
@@ -56,7 +59,9 @@ function sentir(s: Sentido): void {
   const c = ultimoCarinhoEm(), houve = c !== null && c !== carinhoVisto;
   carinhoVisto = c;
   const { estado, leitura } = passo(inato, atual.estado, s, houve);
-  publicarTv({ sentido: s, reacao: leitura.reacao });
+  sentirNoCerebro(s);                                     // a v31: o vetor vai ao resumo, e o "st" ao registro
+  const cer = reacaoDoCerebroAgora();
+  publicarTv({ sentido: s, reacao: cer === null ? leitura.reacao : cer.reacao, petVai: cer === null ? true : cer.olhando });
   let erro = atual.erro;
   try { localStorage.setItem(chaveGuardada(semente), paraTexto(estado)); } catch (x) { erro = `o gosto não foi guardado neste navegador: ${(x as Error).message}`; }
   mudar({ estado, leitura, sentido: s, carinhosVistos: atual.carinhosVistos + (houve ? 1 : 0), erro });
@@ -68,6 +73,7 @@ const comecar = (): void => { carinhoVisto = ultimoCarinhoEm(); };   /* os carin
 export function ligarTvJogo(): void {
   if (atual.semente === null) throw new Error("ligar a TV sem pet");
   pararTv(); comecar();
+  comecarNoCerebro("jogo");
   const tv = ligarTvDoJogo(atual.semente, (s, nome) => { if (atual.programa !== nome) { mudar({ programa: nome }); publicarTv({ programa: nome }); } sentir(s); });
   parador = tv.parar;
   mudar({ origem: "jogo", programa: null, temSom: true, erro: null });
@@ -75,6 +81,7 @@ export function ligarTvJogo(): void {
 }
 
 function desligar(erro: string | null): void {
+  pararNoCerebro();                                       // a v31: a tela preta e muda entra no registro
   desligarTv();
   mudar({ origem: null, programa: null, temSom: false, leitura: null, sentido: null, erro });
 }
@@ -83,12 +90,14 @@ function desligar(erro: string | null): void {
 export async function ligarTela(): Promise<void> {
   if (atual.semente === null) throw new Error("mostrar a tela sem pet");
   pararTv(); comecar();
+  comecarNoCerebro("tela");
   try {
     const c = await capturarTela(sentir, motivo => { parador = null; desligar(motivo); });
     parador = c.parar;
     mudar({ origem: "tela", programa: null, temSom: c.temSom, erro: null });
     publicarTv({ ligada: true, origem: "tela", programa: null, video: c.video ?? null });
   } catch (x) {
+    pararNoCerebro();
     const cancelou = x instanceof DOMException && (x.name === "NotAllowedError" || x.name === "AbortError");
     mudar({ erro: cancelou ? null : `a tela não foi compartilhada: ${(x as Error).message}` });
   }
