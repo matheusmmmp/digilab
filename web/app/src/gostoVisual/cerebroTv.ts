@@ -93,18 +93,22 @@ export function leituraDoCerebro(m: Motor): { frase: string; reacao: Reacao; olh
   const c = m.tvNoCerebro();
   if (c === null) return null;
   const mo = c.motivo, a = mo === null ? null : (mo["agrado"] as number | null), pct = a === null ? null : Math.round((a * 100) / S);
-  const e = mo === null ? null : (mo["enjoo"] as number | null | undefined) ?? null;
+  /* o enjoo (a v33 e a v34): o lido agora, quando o pet ja olhava; senao, o lembrado da TV (o enjoo_tv do DigiBrain, que cai devagar) */
+  const lembrado = mo === null ? undefined : (mo["enjoo_tv"] as Record<string, number> | undefined)?.["1"];
+  const e = mo === null ? null : (mo["enjoo"] as number | null | undefined) ?? lembrado ?? null;
+  const enjoado = e !== null && e >= CORTE_ENJOO * S, pe = e === null ? 0 : Math.round((e * 100) / S);
   const base = { noRaio: c.noRaio, agrado: a, indo: false, enjoo: e };
   if (m.e.dormindo) return { ...base, frase: "No cérebro: está dormindo.", reacao: "distraido", olhando: false };
+  if (!c.ligada) return { ...base, frase: "No cérebro: a TV está desligada.", reacao: "distraido", olhando: false };
   if (c.olhando) {
-    if (e !== null && e >= CORTE_ENJOO * S)
-      return { ...base, frase: `No cérebro: olhando a TV, mas enjoado dela (enjoo de ${Math.round((e * 100) / S)}%).`, reacao: "enjoou", olhando: true, noRaio: true };
+    if (enjoado) return { ...base, frase: `No cérebro: olhando a TV, mas enjoado dela (enjoo de ${pe}%).`, reacao: "enjoou", olhando: true, noRaio: true };
     const reacao: Reacao = a === null ? "curioso" : a >= CORTES_AGRADO.adorando * S ? "adorando" : a <= CORTES_AGRADO.naoGosta * S ? "nao_gosta" : "olhando";
     return { ...base, frase: `No cérebro: olhando a TV${pct === null ? " (a primeira olhada)" : `, agrado de ${pct}%`}.`, reacao, olhando: true, noRaio: true };
   }
   /* a v33 e a v34 (D-GV-TVJOGO-3): o cérebro escolheu a TV de longe, e o pet anda até ela */
   if (m.lab?.ultimoMotivo?.["acao"] === "ir_tv") return { ...base, frase: "No cérebro: indo até a TV.", reacao: "curioso", olhando: false, indo: true };
   if (!c.noRaio) return { ...base, frase: "No cérebro: a TV está longe, fora da vista dele.", reacao: "distraido", olhando: false };
+  if (enjoado) return { ...base, frase: `No cérebro: vê a TV, mas está enjoado dela (enjoo de ${pe}%).`, reacao: "enjoou", olhando: false };
   const esc = m.lab?.ultimoMotivo?.["escolha"] as unknown[] | undefined, acao = esc ? String(esc[0]) : m.acao;
   return { ...base, frase: `No cérebro: vê a TV, mas escolheu ${NOME_ACAO[acao] ?? acao}.`, reacao: "distraido", olhando: false };
 }

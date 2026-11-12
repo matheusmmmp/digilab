@@ -931,10 +931,11 @@ export class Motor {
     return { nascenca: Object.fromEntries(Object.entries(g.otimo).map(([c, v]) => [c, v / CONFIG_OLHAR_JOGO.escala])),
              deVer: Object.fromEntries(Object.keys(g.otimo).map(c => [c, 0])) };
   }
-  tvNoCerebro(): { olhando: boolean; noRaio: boolean; motivo: Record<string, unknown> | null } | null {
+  tvNoCerebro(): { olhando: boolean; noRaio: boolean; ligada: boolean; motivo: Record<string, unknown> | null } | null {
     if (!nasceComTv(this.versao)) return null;
     const laco = this.v11!.laco as MotorCorpoMundo, tv = laco.tv!, p = laco.mundo.pet, mo = this.lab?.ultimoMotivo ?? null;
-    return { olhando: laco.olhandoTV(), noRaio: Math.hypot(tv.x - p[0], tv.y - p[1]) <= laco.mundo.raioDaVisao,
+    /* `ligada`: a TV passa algo (null antes do primeiro "st" e, na v33 e na v34, depois da TV desligada; D-GV-TVJOGO-1) */
+    return { olhando: laco.olhandoTV(), noRaio: Math.hypot(tv.x - p[0], tv.y - p[1]) <= laco.mundo.raioDaVisao, ligada: tv.em(laco.mundo.tm(this.e.tick)) !== null,
              motivo: mo === null ? null : (mo["olhar"] as Record<string, unknown> | undefined) ?? null };
   }
   /** o pet vive na ilha grande (a v24 desde o ovo; a v21, a v22 e a v23 depois do "mi" para ela) */

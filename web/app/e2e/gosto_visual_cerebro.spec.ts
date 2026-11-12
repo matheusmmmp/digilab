@@ -49,7 +49,7 @@ const capturar = async (page: Page, nome: string) => { if (CAPTURAS) await page.
 test("a TV no cérebro, no desktop: o st no registro, o painel da TV diz olhando e o DigiBrain diz olhar", async ({ browser }) => {
   test.setTimeout(240_000);
   const { ctx, page, erros } = await abrir(browser, 1440, 900);
-  expect((await estado(page)).versao).toBe(32);
+  expect((await estado(page)).versao).toBe(33);   // o ovo novo: a v33 (a v32 com a TV no jogo)
   await page.locator(".pet-hud [data-painel-pet='tv'] button").click();
   const painel = page.getByTestId("painel-tv");
   await expect(painel.getByTestId("tv-prot")).toContainText("entra no cérebro dele");
