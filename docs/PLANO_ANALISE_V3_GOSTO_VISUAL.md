@@ -7,9 +7,8 @@ coisas:**
 1. este cabeçalho com a marca "APROVADO pelo Matheus" (o orquestrador confere; feito);
 2. a faixa 89101…89505 em `experiments/bancada/faixas.py` (já está, confirmada pelo coordenador, 2026-11-11);
 3. o código da P1e na `main`: a segunda TV no motor, a sonda, as medidas em `digilab/metrics.py` e o orquestrador
-   `experiments/run_v3_gosto_visual.py`, com a fumaça nas sementes dos testes (101…505) (**não feito como escrito:** o código está no
-   branch `v3-gosto-visual-p1e`, PR #863, commit `a124353c`, ainda sem merge; a sessão coordenadora mandou rodar nesse branch. O desvio
-   é o D-GV-P1e-12, no `docs/registro/2026-11.md`);
+   `experiments/run_v3_gosto_visual.py`, com a fumaça nas sementes dos testes (101…505) (feito: o PR #863 entrou na
+   `main` no merge `846dadd9`, antes da primeira vida; D-GV-P1e-12, no `docs/registro/2026-11.md`);
 4. o registro da run (seção 11) preenchido num commit empurrado antes da primeira vida.
 
 **De onde vem:** a seção 7 e a linha P1e da `docs/ESPEC_GOSTO_VISUAL_P1.md`; a seção 5 da `docs/futuro/gosto_visual_pet.md` (a medida
@@ -217,7 +216,7 @@ Escrito em 2026-11-11, antes da primeira vida da faixa, no branch `v3-gosto-visu
 - **O commit do código:** `a124353c` (o P1e, `827b9672`, com a `origin/main` `680a0408` por cima). O registro entra num commit próprio
   por cima dele, que não muda o código da run (o orquestrador, a sonda, as medidas e as configs ficam como estão); só o teste da
   trava (`tests/test_gosto_visual_sonda.py`), que conferia o status PROPOSTO no texto do plano, passa a conferir a trava numa cópia do
-  texto. O código não está na `main` (D-GV-P1e-12).
+  texto. O código entrou na `main` no merge `846dadd9`, antes da primeira vida (D-GV-P1e-12).
 - **Os sha256** (o conteúdo no commit `a124353c`):
   - este plano, no texto que o Matheus aprovou (antes deste registro e da marca):
     `eddb2019422ca990db1472828f7c08f05f186579305bc457cb2cfb4fab544a70`;
