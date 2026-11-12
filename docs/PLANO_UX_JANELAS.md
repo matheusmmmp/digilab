@@ -1,6 +1,6 @@
 # Plano de UX das janelas do pet: arrastar, esconder e arrumar (2026-11-12)
 
-**Status: PROPOSTO.** Sem código. A prancha está em `docs/pranchas/ux-janelas/` e espera a aprovação do Matheus. Os tamanhos, as
+**Status: APROVADO pelo Matheus em 2026-11-12** ("Sim, aprovo", em resposta a "Aprova a prancha das janelas pelas sete recomendações (UX-JN-1 a 7)?"): as UX-JN-1 a UX-JN-7 valem pela recomendação. Sem código ainda; a prancha está em `docs/pranchas/ux-janelas/`, e o código começa pela JN1. Os tamanhos, as
 distâncias e os nomes são **PROPOSTO, SEM FONTE**. Autor: Gerente da UX_TELA_PET (Claude Code, Fable 5.2), branch `v3-ux-janelas`.
 
 **O pedido do Matheus (2026-11-12):** "eu pedi para os menus [...] serem todos modulares, eles serem drag and drop, e a gente conseguir
@@ -92,6 +92,8 @@ chaves de Ajustes › Exibir: cada uma põe ou tira o botão daquele painel no l
   capturas de referência da tela do pet só mudam com o ok do Matheus (nunca rodo `--update-snapshots` sem ele).
 
 ## 8. Decisões para o Matheus
+
+**DECIDIDAS em 2026-11-12, todas pela recomendação** ("Sim, aprovo").
 
 - **UX-JN-1. A prancha inteira:** aprovar para o código começar pela JN1. Recomendo aprovar. Custo de errar: baixo; cada etapa é um PR.
 - **UX-JN-2. Soltar livre ou só em encaixes:** **livre, com o encaixe perto das bordas e das outras janelas.** A outra opção é uma

@@ -1,7 +1,6 @@
 # Prancha: as janelas do pet (arrastar, esconder e arrumar)
 
-**Status: PROPOSTA** (2026-11-12). O plano é o `docs/PLANO_UX_JANELAS.md`, com as decisões UX-JN-1 a 7. O código só vem depois desta
-prancha aprovada.
+**Status: APROVADA pelo Matheus em 2026-11-12** ("Sim, aprovo", em resposta a "Aprova a prancha das janelas pelas sete recomendações (UX-JN-1 a 7)?"): as UX-JN-1 a UX-JN-7 valem pela recomendação. O plano é o `docs/PLANO_UX_JANELAS.md`. O código começa pela JN1.
 
 É só desenho: HTML estático, sem código do jogo, só do desktop (a 390 há só a lista de Ajustes). Os tokens e a HUD em volta são os da
 prancha dos lugares; a caixa dos Ajustes é a da prancha da conta. O que é novo está em `janelas.css`. Não há cor nova.
