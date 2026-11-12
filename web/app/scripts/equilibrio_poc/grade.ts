@@ -15,7 +15,7 @@ interface Grade { fase: string; bases: number; grupos: string[]; tam: Record<str
 const arq = resolve(argumento("grade")), processos = Number(argumento("processos", "4"));
 if (!(Number.isInteger(processos) && processos >= 1 && processos <= 4)) throw new Error(`grade: de 1 a 4 processos (V3-D8), nao ${processos}`);
 const g = JSON.parse(readFileSync(arq, "utf-8")) as Grade, raiz = dirname(arq);
-if (!/^lp5_[123]$/.test(g.fase)) throw new Error(`grade: fase invalida ${g.fase}`);
+if (!/^lp5_[123]$|^lp6_3$/.test(g.fase)) throw new Error(`grade: fase invalida ${g.fase}`);
 for (const x of g.grupos) if (!(GRUPOS as readonly string[]).includes(x) || x === "vida") throw new Error(`grade: grupo invalido ${x}`);
 const nomes = new Set<string>();
 for (const t of g.candidatos) { candidatoDe(t); if (nomes.has(t.nome)) throw new Error(`grade: candidato repetido ${t.nome}`); nomes.add(t.nome); }

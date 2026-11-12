@@ -3,8 +3,8 @@
    Os candidatos com nome ficam no CANDIDATOS; os da grade (grade.ts) vem de um JSON e so rodam com --grade. Os numeros novos sao
    PROPOSTOS, SEM FONTE, ate o Matheus decidir. */
 import { readFileSync } from "node:fs";
-import { conferirEsquiva as conferirEsquivaPoc, conferirTiro as conferirTiroPoc } from "../../motor/arena/luta.ts";
-import { CANDIDATO_V21, conferirDivisao, esquivaDe, type Candidato } from "./comum.ts";
+import { conferirApoio as conferirApoioPoc, conferirArenaPorEstagio as conferirArenaPoc, conferirEsquiva as conferirEsquivaPoc, conferirTiro as conferirTiroPoc } from "../../motor/arena/luta.ts";
+import { CANDIDATO_V21, conferirDivisao, esquivaDe, extrasLp6, type Candidato } from "./comum.ts";
 
 /** as trocas de um candidato: cada chave do Candidato, com as sub-chaves que mudam */
 export type Troca = { nome: string } & { [K in Exclude<keyof Candidato, "nome">]?: Partial<Candidato[K]> | number };
@@ -35,14 +35,15 @@ export function candidatoDe(t: Troca): Candidato {
     const alvo = atual as Record<string, number>;
     for (const [s, x] of Object.entries(v)) {
       if (!(s in alvo)) throw new Error(`candidato ${t.nome}: ${k}.${s} nao existe`);
-      /* o treino dos rivais e o tiro podem ser 0 (o nucleo confere a faixa do tiro); o resto e positivo */
-      if (typeof x !== "number" || !Number.isFinite(x) || x < 0 || (x === 0 && k !== "treinoRival" && k !== "tiro" && k !== "esquiva")) throw new Error(`candidato ${t.nome}: ${k}.${s} invalido (${x})`);
+      /* o treino dos rivais, o tiro, a esquiva e as chaves da LP6 podem ser 0 (o nucleo confere as faixas); o resto e positivo */
+      if (typeof x !== "number" || !Number.isFinite(x) || x < 0 || (x === 0 && k !== "treinoRival" && k !== "tiro" && k !== "esquiva" && k !== "apoio" && k !== "arena")) throw new Error(`candidato ${t.nome}: ${k}.${s} invalido (${x})`);
       alvo[s] = x;
     }
   }
   out.nome = t.nome;
   conferirTiroPoc(base.tiro);
   const esq = esquivaDe(base); if (esq) conferirEsquivaPoc(esq);
+  const x = extrasLp6(base); if (x.apoio) conferirApoioPoc(x.apoio); if (x.arenaPorEstagio) conferirArenaPoc(x.arenaPorEstagio);
   return Object.freeze(base);
 }
 
@@ -93,7 +94,34 @@ export const LP5_3 = candidatoDe({
   npcTotal: { npc_tier1_brutamontes: 76.8 },
   fatorRival: { salao: .8 },
 });
-export const CANDIDATOS: Readonly<Record<string, Candidato>> = { v21: CANDIDATO_V21, lp5_1_r1: LP5_1_R1, lp5_1_r2: LP5_1_R2, lp5_1_esq: LP5_1_ESQ, lp5_2: LP5_2, lp5_3: LP5_3 };
+/** LP6-3 (docs/PLANO_LP6_SEGUNDO_GOLPE.md, secao 5; o adendo da LP6-3 no PLANO_EQUILIBRIO_LUTA_POC.md): o ponto de partida, o lp5_3 com as
+    duas chaves da LP6-1 ligadas e os numeros da LP6-1 (o apoio a 0,6 do dano, recarga 2 vezes, clipe a 0,6; a elipse 1,15 e 1,3).
+    PROPOSTO, SEM FONTE */
+export const LP6_0 = candidatoDe({
+  nome: "lp6_0", pesoPonto: 15,
+  gama: { vigor: .02, recuperacao: .02, guarda: .06, forca: .02, mira: .14, folego: .14 },
+  mapa: { hp: 1300, vel: 60 }, multVida: E(.6, .9, 1.35, 2.025), multAtk: E(1, 1.5, 2.25, 3.375),
+  tiro: { distMin: 110, esperaMax: 1500, recuo: 1.5, recuaNaPrep: 2, recuaAbaixo: .75, danoProj: .7, velProj: 1 },
+  esquiva: { ligada: 1, gamaMira: .6, gamaFolego: .6, kAtento: .5, pertoChance: 0, pertoReacao: 200, contraMs: 0 },
+  npcTotal: { npc_tier1_brutamontes: 76.8 },
+  fatorRival: { salao: .8 },
+  apoio: { ligado: 1 }, arena: { ligada: 1 },
+});
+/** LP6-3, os 3 finalistas da R2 (lp6_3/r2; D-LP6-3-7 e D-LP6-3-8): o lp6_0 com o apoio so desde o Ultimate (sem o recuo), dano 0,6, recarga
+    3 vezes, e a elipse do Ultimate e do Mega em 1,1/1,2, 1,15/1,3 ou 1,2/1,4. PROPOSTOS, SEM FONTE */
+const finalista = (nome: string, Ultimate: number, Mega: number) => candidatoDe({
+  nome, pesoPonto: 15,
+  gama: { vigor: .02, recuperacao: .02, guarda: .06, forca: .02, mira: .14, folego: .14 },
+  mapa: { hp: 1300, vel: 60 }, multVida: E(.6, .9, 1.35, 2.025), multAtk: E(1, 1.5, 2.25, 3.375),
+  tiro: { distMin: 110, esperaMax: 1500, recuo: 1.5, recuaNaPrep: 2, recuaAbaixo: .75, danoProj: .7, velProj: 1 },
+  esquiva: { ligada: 1, gamaMira: .6, gamaFolego: .6, kAtento: .5, pertoChance: 0, pertoReacao: 200, contraMs: 0 },
+  npcTotal: { npc_tier1_brutamontes: 76.8 },
+  fatorRival: { salao: .8 },
+  apoio: { ligado: 1, dano: .6, recarga: 3, desde: 3 }, arena: { ligada: 1, Ultimate, Mega },
+});
+export const LP6_3_U110 = finalista("lp6_3_u110", 1.1, 1.2), LP6_3_U115 = finalista("lp6_3_u115", 1.15, 1.3), LP6_3_U120 = finalista("lp6_3_u120", 1.2, 1.4);
+export const CANDIDATOS: Readonly<Record<string, Candidato>> = { v21: CANDIDATO_V21, lp5_1_r1: LP5_1_R1, lp5_1_r2: LP5_1_R2, lp5_1_esq: LP5_1_ESQ, lp5_2: LP5_2, lp5_3: LP5_3, lp6_0: LP6_0,
+  lp6_3_u110: LP6_3_U110, lp6_3_u115: LP6_3_U115, lp6_3_u120: LP6_3_U120 };
 /** o candidato da linha de comando: --candidato <nome>, ou --candidato-json <arquivo> (so a grade) */
 export function candidatoDaLinha(nome: string, json: string, grade: boolean): Candidato {
   if (json) {

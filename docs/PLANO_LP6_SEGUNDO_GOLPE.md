@@ -100,7 +100,8 @@ desligada):
 
 ## 7. Decisões do Matheus
 
-As decisões 1 a 3 foram DECIDIDAS como recomendadas ("pode seguir para o plano lp6", 2026-11-11). A 4 está PROPOSTA.
+As decisões 1 a 3 foram DECIDIDAS como recomendadas ("pode seguir para o plano lp6", 2026-11-11). A 4 foi DECIDIDA na LP6-3 (2026-11-11), com os números da calibração. A 2 foi atualizada na LP6-3,
+pela R2 (abaixo).
 
 1. **O apoio sai pela distância, com recarga própria (seção 3), ou ele ocupa o lugar da habilidade das 68 formas que a repetem?**
    - **Recomendado:** pela distância, com recarga própria. A habilidade sai pela recarga longa e na hora errada para o atirador.
@@ -109,6 +110,13 @@ As decisões 1 a 3 foram DECIDIDAS como recomendadas ("pode seguir para o plano 
 2. **As 7 formas com habilidade própria também ganham o apoio?**
    - **Recomendado:** sim, para todo Digimon ter as duas distâncias. Quatro delas estão entre os NPCs que nenhum total fecha.
    - **O custo de errar:** os líderes ficam com três ataques, e a identidade deles muda um pouco.
+   - **Atualizada na LP6-3 (2026-11-11), pela R2:** o Matheus escolheu "(a) Apoio só no Ult/Mega (Recommended)", e o Gerente repassou.
+     - **O que vale agora:** o apoio só existe na luta em que o maior estágio dos dois lutadores é Ultimate ou Mega.
+     - **O que muda da decisão original:** ela queria todo Digimon com as duas distâncias. Agora, no In-Training, no Rookie e no Champion,
+       ninguém tem o apoio. As 7 formas com habilidade própria seguem com ele quando a luta é de Ultimate ou de Mega.
+     - **Por quê:** a R0 e a R1 mostraram que o apoio derruba quem atira no Rookie e no Champion, nas duas regras do apoio de perto. Só com a
+       elipse, esses dois estágios ficam como no `lp5_3`.
+     - **A regra antiga:** o apoio de perto sem o recuo. A regra do recuo da R1 fica atrás de uma chave própria, desligada (D-LP6-3-7).
 3. **O clipe do apoio:** reaproveitar o `Attack_1` (seção 4) ou gerar uma pose-chave por Digimon já na LP6-2?
    - **Recomendado:** reaproveitar o `Attack_1` na LP6-2. A pose-chave fica como passo opcional, depois das capturas.
    - **O custo de errar:** com o clipe reaproveitado, o apoio pode parecer igual ao golpe; as capturas mostram isso antes do PR.
@@ -116,3 +124,142 @@ As decisões 1 a 3 foram DECIDIDAS como recomendadas ("pode seguir para o plano 
    - **Recomendado:** espaço de verdade, com a elipse por estágio, atrás de chave, e calibrada junto com o segundo golpe.
    - **O custo de errar:** com espaço de verdade, a luta do Mega fica mais longa, e os torneios e os NPCs mudam (a LP6-3 mede isso). Só o
      visual mantém os corpos grandes se empurrando e o tiro sem espaço para recuar.
+   - **DECIDIDA em 2026-11-11, na LP6-3:** espaço de verdade, com a elipse em **1,2 no Ultimate e 1,4 no Mega**, os números do
+     `lp6_3_u120` (D-LP6-3-9). O Matheus: "(a) 1,2 e 1,4 (Recommended)", repassado pelo Gerente. Os fatores 1,15 e 1,3 da seção 4a
+     ficam como a proposta original. A tabela da seção 4a não muda, e esta linha vale sobre ela.
+
+## 8. A LP6-3: o que a rodada mede (registrado antes de qualquer luta, 2026-11-11)
+
+O pedido veio do Gerente, com as palavras do Matheus: "pode seguir para o plano lp6 e a outra pendência do tamanho da arena". A rodada
+usa a bancada da LP5 (`web/app/scripts/equilibrio_poc/`) sem mudar as metas, a régua nem a regra de escolha
+(`docs/PLANO_EQUILIBRIO_LUTA_POC.md`, seções 2, 4.2 e 4.4).
+
+**O ponto de partida.** O candidato `lp6_0` (`candidatos.ts`) é o `lp5_3` com as duas chaves da LP6-1 ligadas e os números dela: o apoio
+com dano de 0,6, recarga de 2 vezes, clipe de 0,6 e espera de 1 500 ms (`APOIO_LP6`), e a elipse de 1,15 e 1,3 (`ARENA_POR_ESTAGIO_LP6`).
+O teste `test/equilibrio_poc_lp6.test.ts` confere três coisas. Primeiro, o `lp6_0` só difere do `lp5_3` nas duas chaves. Segundo,
+desligadas, nada entra na luta. Terceiro, a luta da bancada é a do núcleo com as mesmas entradas.
+
+**A comparação.** O `lp5_3` sem as chaves, das medidas que já estão no git. Na calibração, `lp5_3/calibracao/resumo.json` (commit
+`4a59d680`) dá 10 de 21: P1, P4, T1, T3, E1, D1, D3, A2, G4 e S1. Na conferência, `lp5_4/conferencia/resumo.json` (commit `d4debac3`)
+dá 9 de 21, as mesmas sem o P4.
+
+**As metas.** São as mesmas 21 da LP5, com os mesmos critérios (`criterios.ts` e `resumo_metas.ts`):
+
+| tipo | metas |
+|---|---|
+| **protegidas** | as 10 que o `lp5_3` passa na calibração |
+| **as que a LP6 deve mexer** (SEM FONTE) | A1 (atira × de perto), D1 e D2 (duração e empates), A2 (a distância do tiro), V1 (variedade) e as do Ultimate e do Mega (os grupos de formas, o P3, o G1 a G3) |
+
+**As alavancas.** Só no candidato da bancada, PROPOSTAS, SEM FONTE.
+
+| alavanca | hoje | o que é |
+|---|---|---|
+| `apoio.dano` | 0,6 | fração do dano do golpe principal |
+| `apoio.recarga` | 2 | vezes o ciclo do ataque |
+| `apoio.ritmo` | 0,6 | o tempo do clipe e do instante do golpe, em vezes os do golpe |
+| `apoio.longeMs` | 1 500 | quanto o alvo fica longe antes do tiro fraco |
+| `arena.Ultimate` e `arena.Mega` | 1,15 e 1,3 | a elipse por estágio |
+| `tiro.danoProj` e `tiro.recuo` | 0,7 e 1,5 | as do tiro que o apoio e a elipse mexem |
+
+Sobre o `apoio.ritmo`: a tabela do git tem 0,6. Outro ritmo só existe na bancada, pela mesma regra do `tools/gerar_tabela_arena.py`
+(`tabelaDoRitmo`), e um teste confere que a regra refaz a tabela do git.
+
+Ficam fora:
+- a velocidade do tiro fraco (20) e o resto do `tiro`;
+- o mapeamento, os NPCs, os rivais e a esquiva, já fechados na LP5;
+- o núcleo fora das duas chaves.
+
+**As fases.**
+1. **R0:** a medida inteira do `lp6_0` nas sementes de calibração. É a linha de base com as chaves, para a primeira decisão.
+2. **R1 a R3:** grades curtas (`grade.ts`, fase `lp6_3`) nas alavancas acima. São no máximo 3 rodadas, com a regra de parada e a regra
+   de escolha da LP5 (seção 4.2): um número muda só quando uma meta reprovada passa. Um ajuste que reprova uma meta protegida volta atrás.
+3. **A medida inteira** do candidato escolhido na calibração.
+4. **A conferência, uma vez** nas sementes de conferência, com o candidato fechado num commit antes dela. A bancada recusa rodar de novo um
+   grupo que já tem o JSON dela, e nada se ajusta olhando para a conferência.
+
+**As sementes.**
+- **A calibração:** as bases 86101…86505.
+- **A conferência:** as bases 87101…87505, como na LP5, pelo pedido do Gerente.
+- **O desvio D-LP6-3-1:** as 87xxx já foram vistas na LP5-4 pelo `lp5_3`. Nada da LP6 se ajusta nelas, mas o valor do `lp5_3` nelas é
+  conhecido.
+
+**Os pontos de decisão.** A rodada para em cada um e leva ao Matheus as opções, a recomendação e o custo de errar: depois da R0, depois de
+cada grade e antes da conferência.
+
+**A carga.** No máximo 4 processos e uma medida por vez (V3-D8), pelo gate `tools/pre_run.py --medicao`.
+
+**A R0 e a decisão da R1 (2026-11-11).**
+- **A R0** (PR #834): o `lp6_0` passa 6 de 21. Caem o P1, o P4, o G4 e o S1, e o A1 piora no Rookie (0,256) e no Champion (0,298).
+  - O apoio de perto prende quem atira junto do inimigo.
+- **A R1:** a resposta do Matheus ao #834, repassada pelo Gerente, foi "Regra e grade": a (b) e a (a) juntas, na mesma rodada. Antes dela,
+  nesta sessão, ele tinha escolhido só a (a), "Grade do apoio (a)". A grade não chegou a rodar com a regra antiga.
+- **A regra (D-LP6-3-4):** o atirador bate e recua, como a seção 3 já dizia, e a R0 mostrou que ele ficava colado.
+  - Depois do apoio de perto, quem atira recua sem atacar até o alvo ficar na `distMin` do tiro. O recuo dura no máximo a espera do tiro
+    (`esperaMax`, 1 500 ms no `lp5_3`), na velocidade do recuo do tiro.
+  - Encurralado, o recuo acaba pelo tempo, a espera do tiro já vale como cumprida, e ele atira.
+  - Sem o `tiro` na entrada, o limite é a metade do alcance, e o tempo é o `RECUO_APOIO_SEM_TIRO_MS` (1 500 ms; PROPOSTO, SEM FONTE).
+  - Com as chaves desligadas, a luta é a de sempre: o gabarito da LP6-1 (`arena_lp6_v23.json`, a v21 e a v23) confere igual.
+  - Os testes ficam em `web/app/test/arena_lp6_recuo.test.ts`.
+- **A grade,** registrada aqui antes de rodar e já com a regra nova, mexe nos números do apoio:
+  - O dano do apoio em 0,3, 0,45 e 0,6.
+  - A recarga em 2, 3 e 4 vezes.
+  - A espera do tiro fraco em 1 500 e 3 000 ms.
+  - São 18 pontos, mais o controle `ctrl_arena`: a elipse ligada e o apoio desligado. O ponto `d60_r2_l15` é o `lp6_0`, agora com a regra
+    nova. A R0 (6 de 21) foi medida com a regra antiga.
+  - O ritmo fica em 0,6 e a elipse em 1,15 e 1,3; os dois ficam para a R2.
+- **Como roda:** a grade usa a fase `lp6_3/r1`. Roda em todos os grupos, menos a vida, em 3 bases da calibração e com os tamanhos
+  inteiros. A regra de escolha é a da seção 4.2 do plano da LP5, com as 10 metas protegidas do `lp5_3`.
+- **Se nenhum ponto devolve o A1 e as protegidas,** a rodada para e volta ao Matheus com os números, antes de qualquer outra alavanca.
+
+**A R1 e a decisão da R2 (2026-11-11).**
+- **A R1** (PR #834, `lp6_3/r1`): nenhum dos 18 pontos do apoio passa nas protegidas. O recuo da regra nova piorou quem atira: no
+  Rookie, o A1 fica de 0,13 a 0,27.
+- **O controle `ctrl_arena`** (só a elipse, sem o apoio) passa 8 de 21. Deixa o Rookie e o Champion como hoje (0,47 e 0,54), mas o
+  Ultimate (0,74) e o Mega (0,65) pendem para quem atira.
+- **A R2:** o Matheus escolheu "Apoio só no Ult/Mega (a)".
+- **As regras (D-LP6-3-7, no núcleo, atrás da chave do apoio):**
+  - **o apoio pelo estágio:** o apoio tem o campo opcional `desde`. Com ele, o apoio só existe quando o maior estágio dos dois lutadores
+    é esse ou maior. Abaixo, a luta é a mesma sem a chave, byte a byte;
+  - **o recuo:** a regra do recuo da R1 (D-LP6-3-4) fica atrás do campo opcional `recua`, desligado. Sem ele, o apoio de perto é o da
+    LP6-1, a regra antiga da R0;
+  - **os testes:** `web/app/test/arena_lp6_recuo.test.ts`.
+- **A grade (`lp6_3/r2`, registrada aqui antes de rodar):**
+  - o apoio desde o Ultimate (`desde: 3`), sem o recuo, com a espera do tiro fraco em 1 500 ms e o clipe em 0,6;
+  - o dano do apoio em 0,45 e 0,6;
+  - a recarga em 2 e 3 vezes;
+  - a elipse (Ultimate e Mega) em 1/1, 1,1/1,2, 1,15/1,3 e 1,2/1,4;
+  - são 16 pontos, em todos os grupos menos a vida, em 3 bases da calibração e com os tamanhos inteiros;
+  - a regra de escolha é a da seção 4.2 do plano da LP5, com as 10 protegidas do `lp5_3`;
+  - todos os números são PROPOSTOS, SEM FONTE.
+
+**A R2 e a escolha do candidato (2026-11-11, registrada antes das medidas inteiras).**
+- **A R2** (PR #834, `lp6_3/r2`): 10 dos 16 pontos passam 9 de 21, e voltam o P1, o P4 e o G4.
+  - **O S1** cai em todos os pontos. No Rookie, é ruído das 3 bases. No Ultimate e no Mega, depende da elipse.
+- **A decisão:** o Matheus escolheu "(a) Medir os 3 (Recommended)", repassado pelo Gerente.
+- **Os finalistas** (`candidatos.ts`) têm o apoio desde o Ultimate, sem o recuo, dano 0,6 e recarga 3 vezes:
+  - `lp6_3_u110`, a elipse em 1,1/1,2;
+  - `lp6_3_u115`, em 1,15/1,3;
+  - `lp6_3_u120`, em 1,2/1,4.
+- **As medidas:** cada finalista roda inteiro nas 5 bases da calibração, um por vez, com o `medir_tudo.ts`, nas fases `lp6_3_u110`,
+  `lp6_3_u115` e `lp6_3_u120`.
+- **O critério, nesta ordem:**
+  1. **As 10 protegidas do `lp5_3` passam,** o S1 inclusive. Quem reprova uma delas sai.
+  2. **Entre os que ficam, o de menor desvio do A1** no Ultimate e no Mega, o maior entre `|A1 Ultimate − 0,5|` e `|A1 Mega − 0,5|`
+     (o A1 na soma dos 8 mapas).
+  3. **Se dois ficam a menos de 0,01 um do outro,** vence o mais perto dos números da LP6-1, o `lp6_3_u115`, e depois o de menor fator.
+- **Se nenhum passa as 10 protegidas,** a escolha volta ao Matheus antes da conferência, com os números.
+- **Se o escolhido não tiver a elipse 1,15/1,3,** a decisão 4 do plano muda. Isso é um desvio a registrar e a avisar ao Gerente.
+- **A conferência** roda uma vez nas 87xxx, com o escolhido, na fase `lp6_3`. A comparação usa o `comparar_conferencia.ts
+  --conferencia lp6_3`.
+
+**A escolha: o `lp6_3_u120` (2026-11-11, antes da conferência).** As 3 medidas inteiras (commit `c0b99b68`, 5 bases das 86xxx):
+
+| finalista | elipse | metas | protegidas que caem | A1 Ultimate / Mega | o desvio do A1 |
+|---|---|---|---|---|---|
+| `lp6_3_u110` | 1,1 / 1,2 | 10 | nenhuma | 0,488 / 0,416 | 0,084 |
+| `lp6_3_u115` | 1,15 / 1,3 | 9 | **S1** (o Deserto do Ultimate, 0,563) | 0,509 / 0,442 | 0,058 |
+| `lp6_3_u120` | 1,2 / 1,4 | 10 | nenhuma | 0,528 / 0,471 | **0,029** |
+
+- **Pelo critério:** o `lp6_3_u115` sai no passo 1, e o `lp6_3_u120` vence o `lp6_3_u110` no passo 2.
+- **A decisão 4 muda (D-LP6-3-9):** a elipse do Mega passa de 1,3 para 1,4, e a do Ultimate de 1,15 para 1,2. O espaço de verdade fica,
+  com fatores maiores que os do plano. PROPOSTO, SEM FONTE, até o Matheus decidir.
