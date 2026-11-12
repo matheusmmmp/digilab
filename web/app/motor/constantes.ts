@@ -111,15 +111,18 @@ export const CDJ = { limiarNecessidade: .3, limiarVontade: .1, limiarTom: .2, kC
    seguem como estao;
    36 = a v31 com a TV no cerebro e no jogo (a decisao B; VERSAO_V36, abaixo): o lance, a TV do mundo comum, os dois pets olhando, a TV
    desligada, o ir ate a TV e o enjoo. O ovo do brasao choca o grupo v36; os grupos v31 que ja existem seguem como estao. A v33 e a v34 (a TV
-   no jogo antes da juncao com o lance) nunca entraram na main e nao existem (D-GV-TVJOGO-11) */
+   no jogo antes da juncao com o lance) nunca entraram na main e nao existem (D-GV-TVJOGO-11);
+   37 = a v36 com a CO6 e a CO7 ligadas (docs/ESPEC_V3_COOPERACAO_CO6.md e _CO7.md; "Sim, juntas", Matheus, 2026-11-12; VERSAO_V37, abaixo): a
+   reputacao do irmao e o peso dos deveres na percepcao (o painel "Com o irmao"), o escudo, a universalizacao e a culpa e a inveja no modular
+   (o gesto do dever). O ovo do brasao choca o grupo v37; os grupos v26 a v36 seguem como estao, sem a CO6 e a CO7 (D-CO6c-1) */
 export const VERSAO_PET = 35;
 /** as versoes de pet que abrem: a v21, a luta da POC (LUTA_POC, LP4: o descarte 7 tirou os v13 a v19, que lutavam pelo combate por
     turnos; LP-6), a v22, a v21 que nasce na ilha com agua, a v23, a v22 com a luta da rodada de equilibrio, a v24, a v23 que nasce na
     ilha grande, a v25, a v24 com a memoria de 128 celulas (IG6), a v26, a v25 no grupo de dois pets (CO4c), e a v27, a v25 com o sono que
     segura (SONO_SEGURA), a v28, a v26 com o sono que segura, a v29, a v28 com a luta da LP6 (LP6-4), a v30, a v27 com o lance do dono, a
     v31, a v29 com ele (BOLA_BRINCAR, BB-7), a v32, a v27 com a TV no cerebro (GOSTO_VISUAL), a v35, a v30 com a TV no jogo, e a v36, a v31
-    com ela (D-GV-TVJOGO-10). A v16 e so a do laboratorio */
-export const VERSOES_PET: readonly number[] = [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 35, 36];
+    com ela (D-GV-TVJOGO-10), e a v37, a v36 com a CO6 e a CO7. A v16 e so a do laboratorio */
+export const VERSOES_PET: readonly number[] = [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 35, 36, 37];
 /** a versao de pet do cerebro trocavel (o evento "cb") */
 export const VERSAO_V17 = 17;
 /** a versao de pet do empurrao de verdade na luta (a v17 com o RELOGIO_V18) */
@@ -131,7 +134,7 @@ export const VERSAO_V19 = 19;
 export const ehCerebroTrocavel = (versao: number): boolean =>
   versao === VERSAO_V17 || versao === VERSAO_V18 || versao === VERSAO_V19 || versao === VERSAO_V21 || versao === VERSAO_V22 || versao === VERSAO_V23 || versao === VERSAO_V24 || versao === VERSAO_V25 ||
   versao === VERSAO_V26 || versao === VERSAO_V27 || versao === VERSAO_V28 || versao === VERSAO_V29 || versao === VERSAO_V30 || versao === VERSAO_V31 ||
-  versao === VERSAO_V32 || versao === VERSAO_V35 || versao === VERSAO_V36;
+  versao === VERSAO_V32 || versao === VERSAO_V35 || versao === VERSAO_V36 || versao === VERSAO_V37;
 /** 21 = a v19 com a luta da POC (docs/TAREFA_V3_LUTA_POC.md, LP2; as seis decisoes da LP2, Matheus, "Aprovo as 6", 2026-11-08): a luta do pet
     e a simulacao em tempo real de motor/arena/, 1 contra 1, com os numeros saidos dos 6 stats do pet (motor/luta_poc.ts); o evento "l" guarda
     o rival (uma forma do estagio do pet, na Arena, ou o NPC da Campanha), a semente e o mapa; sem gambits ("g"), cartas ("k") nem chips de
@@ -154,7 +157,7 @@ export const VERSAO_V25 = 25;
     "IG6 v25, grupo v26", Matheus, 2026-11-11) */
 export const VERSAO_V26 = 26;
 /** o pet so existe dentro do grupo de dois (a v26, a v28, a v29 e a v31) */
-export const ehDoGrupo = (versao: number): boolean => versao === VERSAO_V26 || versao === VERSAO_V28 || versao === VERSAO_V29 || versao === VERSAO_V31 || versao === VERSAO_V36;
+export const ehDoGrupo = (versao: number): boolean => versao === VERSAO_V26 || versao === VERSAO_V28 || versao === VERSAO_V29 || versao === VERSAO_V31 || versao === VERSAO_V36 || versao === VERSAO_V37;
 /** a chave dos dois ovos (CO4c), ligada na CO4d com as telas dos dois pets: o ovo do brasao choca o grupo de dois (v26). Ficou desligada ate as
     telas (a CO4d): ligada sem elas, o segundo pet viveria sem aparecer */
 export const DOIS_OVOS_LIGADO = true;
@@ -163,7 +166,7 @@ export const VERSAO_V27 = 27;
 /** a versao nasce com o sono que segura (o modular dela dorme ate a energia passar de 90 %): a v27, a v28, a v29 (a v28 com a LP6), a v30 e a
     v31 (as duas com o lance do dono) e a v32 (a v27 com a TV) */
 export const nasceComSonoSegura = (versao: number): boolean =>
-  versao === VERSAO_V27 || versao === VERSAO_V28 || versao === VERSAO_V29 || versao === VERSAO_V30 || versao === VERSAO_V31 || versao === VERSAO_V32 || versao === VERSAO_V35 || versao === VERSAO_V36;
+  versao === VERSAO_V27 || versao === VERSAO_V28 || versao === VERSAO_V29 || versao === VERSAO_V30 || versao === VERSAO_V31 || versao === VERSAO_V32 || versao === VERSAO_V35 || versao === VERSAO_V36 || versao === VERSAO_V37;
 /** 28 = a v26 com o sono que segura (o grupo de dois pets com a CONFIG_SONO_SEGURA_LIGADA; SONO_SEGURA, D-SONO-7). O resto e a v26 */
 export const VERSAO_V28 = 28;
 /** 29 = a v28 com a luta da LP6 (docs/PLANO_LP6_SEGUNDO_GOLPE.md, LP6-4; o lp6_3_u120 da LP6-3, PR #834; as capturas aprovadas pelo
@@ -193,34 +196,40 @@ export const VERSAO_V35 = 35;
 /** 36 = a v31 com a TV no cerebro e no jogo (a decisao B; D-GV-TVJOGO-4 e 10): o lance, a TV do mundo comum (motor/grupo.ts, a opcao `tv`), cada
     pet com o orgao da tela e o modular com o olhar, o agrado no corpo, a TV desligada, o ir ate a TV e o enjoo. O resto e a v31 (o grupo, a LP6) */
 export const VERSAO_V36 = 36;
-/** a versao do grupo de dois pets que o ovo do brasao choca hoje (os dois ovos, src/jornada.ts): a v36 (a v31 com a TV no cerebro e no jogo) */
-export const VERSAO_GRUPO = VERSAO_V36;
+/** 37 = a v36 com a CO6 e a CO7 ligadas no grupo (docs/TAREFA_V3_COOPERACAO.md, CO7c; "Sim, juntas", Matheus, 2026-11-12): a ConfigCooperacao da
+    CO7 no grupo (a reputacao e o peso dos deveres na percepcao) e no modular de cada pet (o escudo, a universalizacao, a culpa e a inveja). O
+    resto e a v36 */
+export const VERSAO_V37 = 37;
+/** a versao do grupo de dois pets que o ovo do brasao choca hoje (os dois ovos, src/jornada.ts): a v37 (a v36 com a CO6 e a CO7) */
+export const VERSAO_GRUPO = VERSAO_V37;
+/** a versao do grupo nasce com a CO6 e a CO7 ligadas (o GrupoDoJogo): a v37 */
+export const nasceComDeveres = (versao: number): boolean => versao === VERSAO_V37;
 /** a versao nasce com a TV no cerebro: a v32, a v35 e a v36 */
-export const nasceComTv = (versao: number): boolean => versao === VERSAO_V32 || versao === VERSAO_V35 || versao === VERSAO_V36;
+export const nasceComTv = (versao: number): boolean => versao === VERSAO_V32 || versao === VERSAO_V35 || versao === VERSAO_V36 || versao === VERSAO_V37;
 /** a versao nasce com a TV no jogo (D-GV-TVJOGO): a TV desligada, o ir ate a TV e o enjoo da imagem no corpo e no cerebro (a ConfigEnjooTela
     do #875; a decisao E): a v35 e a v36 */
-export const nasceComTvJogo = (versao: number): boolean => versao === VERSAO_V35 || versao === VERSAO_V36;
+export const nasceComTvJogo = (versao: number): boolean => versao === VERSAO_V35 || versao === VERSAO_V36 || versao === VERSAO_V37;
 /** a versao nasce com o lance do dono (o Brincar do dono joga a bola; BOLA_BRINCAR): a v30 (um pet so) e a v31 (o grupo) */
-export const nasceComLance = (versao: number): boolean => versao === VERSAO_V30 || versao === VERSAO_V31 || versao === VERSAO_V35 || versao === VERSAO_V36;
+export const nasceComLance = (versao: number): boolean => versao === VERSAO_V30 || versao === VERSAO_V31 || versao === VERSAO_V35 || versao === VERSAO_V36 || versao === VERSAO_V37;
 /** a versao luta com o apoio e a arena por estagio da LP6 (a tabela LUTA_V29): a v29 e a v31 (a v29 com o lance) */
-export const ehLutaLp6 = (versao: number): boolean => versao === VERSAO_V29 || versao === VERSAO_V31 || versao === VERSAO_V36;
+export const ehLutaLp6 = (versao: number): boolean => versao === VERSAO_V29 || versao === VERSAO_V31 || versao === VERSAO_V36 || versao === VERSAO_V37;
 /** a versao luta pela luta da POC: a v21 a v32 */
 export const ehLutaPoc = (versao: number): boolean =>
   versao === VERSAO_V21 || versao === VERSAO_V22 || versao === VERSAO_V23 || versao === VERSAO_V24 || versao === VERSAO_V25 ||
   versao === VERSAO_V26 || versao === VERSAO_V27 || versao === VERSAO_V28 || versao === VERSAO_V29 || versao === VERSAO_V30 || versao === VERSAO_V31 ||
-  versao === VERSAO_V32 || versao === VERSAO_V35 || versao === VERSAO_V36;
+  versao === VERSAO_V32 || versao === VERSAO_V35 || versao === VERSAO_V36 || versao === VERSAO_V37;
 /** a versao luta com a tabela da rodada de equilibrio (LUTA_V23): a v23, a v24 (a v23 na ilha grande) a v25 (a v24 com a memoria longa) a v26 (a v25 no grupo), a v27 (a v25 com o sono que segura), a v28 (a v26 com ele), a v29 (a v28 com a LP6), a v30 (a v27 com o lance), a v31 (a v29 com ele) e a v32 (a v27 com a TV) */
 export const ehLutaV23 = (versao: number): boolean =>
   versao === VERSAO_V23 || versao === VERSAO_V24 || versao === VERSAO_V25 || versao === VERSAO_V26 || versao === VERSAO_V27 || versao === VERSAO_V28 || versao === VERSAO_V29 ||
-  versao === VERSAO_V30 || versao === VERSAO_V31 || versao === VERSAO_V32 || versao === VERSAO_V35 || versao === VERSAO_V36;
+  versao === VERSAO_V30 || versao === VERSAO_V31 || versao === VERSAO_V32 || versao === VERSAO_V35 || versao === VERSAO_V36 || versao === VERSAO_V37;
 /** a versao nasce na ilha com agua de 64 x 30: a v22 e a v23 (a v23 e a v22 com a luta nova) */
 export const nasceNaAgua = (versao: number): boolean => versao === VERSAO_V22 || versao === VERSAO_V23;
 /** a versao nasce na ilha grande: a v24 a v32 */
 export const nasceNaGrande = (versao: number): boolean => versao === VERSAO_V24 || versao === VERSAO_V25 || versao === VERSAO_V26 || versao === VERSAO_V27 || versao === VERSAO_V28 || versao === VERSAO_V29 ||
-  versao === VERSAO_V30 || versao === VERSAO_V31 || versao === VERSAO_V32 || versao === VERSAO_V35 || versao === VERSAO_V36;
+  versao === VERSAO_V30 || versao === VERSAO_V31 || versao === VERSAO_V32 || versao === VERSAO_V35 || versao === VERSAO_V36 || versao === VERSAO_V37;
 /** a versao nasce com a memoria de lugar de 128 celulas: a v25, a v26 (a v25 no grupo), a v27 (a v25 com o sono que segura), a v28 (a v26 com ele), a v29 (a v28 com a LP6), a v30 (a v27 com o lance), a v31 (a v29 com ele) e a v32 (a v27 com a TV) */
 export const nasceComMemoriaLonga = (versao: number): boolean => versao === VERSAO_V25 || versao === VERSAO_V26 || versao === VERSAO_V27 || versao === VERSAO_V28 || versao === VERSAO_V29 ||
-  versao === VERSAO_V30 || versao === VERSAO_V31 || versao === VERSAO_V32 || versao === VERSAO_V35 || versao === VERSAO_V36;
+  versao === VERSAO_V30 || versao === VERSAO_V31 || versao === VERSAO_V32 || versao === VERSAO_V35 || versao === VERSAO_V36 || versao === VERSAO_V37;
 /** a ilha com agua para onde os pets v21 passaram entre a IA4 e a IG4 (o evento "mi" dos registros dessa epoca; o destino do
     ILHAS_DE_TROCA). Desde a IG4 ninguem mais passa para ela: o registro que ja tem o evento continua abrindo */
 export const ILHA_DOS_V21 = "mvp_agua";

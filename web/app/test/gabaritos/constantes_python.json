@@ -882,7 +882,11 @@
  "ConfigCooperacao": {
   "co6": false,
   "co7": false,
+  "co7_afeto": true,
+  "co7_escudo": true,
+  "co7_universalizacao": true,
   "escala": 1024,
+  "fator_teto_k": 1024,
   "janela_inveja": 30,
   "janela_novidade": 1440,
   "k_meia_vida_pontuacao": 32,

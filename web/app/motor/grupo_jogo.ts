@@ -14,7 +14,7 @@
 
    Os pets sao da v26 (a v25 no grupo; CO4c; motor/constantes.ts): o pet v26 so existe no grupo. O `avancar` de qualquer um dos dois anda o grupo inteiro,
    para o relogio do jogo e as telas, que leem o pet em foco, seguirem como hoje (src/jogo.ts). */
-import { CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA, TICK_INICIAL, ehDoGrupo, nasceComTv, nasceComTvJogo, nasceNaAgua, nasceNaGrande, type ConfigMundo } from "./constantes.ts";
+import { CMU_GRANDE, CMU_MVP, CMU_MVP_AGUA, TICK_INICIAL, ehDoGrupo, nasceComDeveres, nasceComTv, nasceComTvJogo, nasceNaAgua, nasceNaGrande, type ConfigMundo } from "./constantes.ts";
 import { CONFIG_TV_JOGO, CONFIG_TVJOGO_LIGADA, lerSentidoTela, valorSentidoTela, valorSentidoTelaDesligada } from "./tv.ts";
 import { CONFIG_GRUPO_LIGADA, Grupo, ROTULO_SEGUNDO_PET } from "./grupo.ts";
 import { CONFIG_COOPERACAO_CO6, CONFIG_COOPERACAO_CO7, CONFIG_COOPERACAO_LIGADA } from "./cooperacao.ts";
@@ -55,10 +55,12 @@ export class GrupoDoJogo {
       e o peso dos deveres na percepcao (docs/ESPEC_V3_COOPERACAO_CO6.md), DESLIGADA no jogo: ligada, ela muda a assinatura dos saves (o
       estado do cerebro ganha a chave `social`) e so entra com uma versao do grupo nova (D-CO6c-1); hoje, so nos testes */
   constructor(semente: number, versao: number, medir = true, co6 = false, co7 = false) {
+    /* a v37 nasce com a CO6 e a CO7 ("Sim, juntas", Matheus, 2026-11-12); as versoes de antes, so com os parametros (os testes) */
+    if (nasceComDeveres(versao) && medir) { co6 = true; co7 = true; }
     if (co6 && !medir) throw new Error("a CO6 so com a medida da cooperacao ligada");
     if (co7 && !co6) throw new Error("a CO7 so com a CO6 ligada");
     if (!Number.isInteger(semente) || semente < 0 || semente > 0xffffffff) throw new Error(`semente do grupo fora dos 32 bits: ${semente}`);
-    if (!ehDoGrupo(versao)) throw new Error(`o grupo do jogo e de pets v26, v28, v29, v31 ou v36, nao v${versao}`);
+    if (!ehDoGrupo(versao)) throw new Error(`o grupo do jogo e de pets v26, v28, v29, v31, v36 ou v37, nao v${versao}`);
     this.semente = semente;
     this.versao = versao;
     this.grupo = new Grupo(mundoDaVersao(versao), semente, CONFIG_GRUPO_LIGADA,

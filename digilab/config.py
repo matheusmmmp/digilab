@@ -3545,7 +3545,12 @@ class ConfigCooperacao:
                            na urgencia mais forte
     limiar_humor           a culpa com a leitura do humor a partir disto, a inveja abaixo, na escala S
     w_culpa, w_inveja      o quanto a culpa e a inveja tiram da valencia da decisao, na escala S (os pesos neutros; CO7-6)
-    janela_inveja          o "viu comer ha pouco" da inveja: a idade do `onde_comeu` ate isto, em ticks"""
+    janela_inveja          o "viu comer ha pouco" da inveja: a idade do `onde_comeu` ate isto, em ticks
+    fator_teto_k           (pesquisa, a CO-bancada: docs/PLANO_ANALISE_V3_COOPERACAO.md) o teto do `k` de cada estagio vezes isto, na
+                           escala S (S: o teto da CO6-4; 0 e S/2 sao as doses da bancada); o jogo fica em S
+    co7_escudo, co7_universalizacao, co7_afeto
+                           (pesquisa, as ablacoes da bancada) cada parte da CO7 sozinha; com a `co7`, todas ligadas por padrao (a CO7
+                           inteira); sem a `co7`, nada vale"""
 
     ligada: bool = False
     escala: int = _S
@@ -3568,16 +3573,20 @@ class ConfigCooperacao:
     w_culpa: int = _S // 8
     w_inveja: int = _S // 8
     janela_inveja: int = 30
+    fator_teto_k: int = _S
+    co7_escudo: bool = True
+    co7_universalizacao: bool = True
+    co7_afeto: bool = True
 
     def __post_init__(self) -> None:
-        for nome in ("ligada", "co6", "co7"):
+        for nome in ("ligada", "co6", "co7", "co7_escudo", "co7_universalizacao", "co7_afeto"):
             if type(getattr(self, nome)) is not bool:
                 raise TypeError(f"ConfigCooperacao.{nome} e bool: {getattr(self, nome)!r}")
         if self.co6 and not self.ligada:
             raise ValueError("ConfigCooperacao.co6 so liga com a cooperacao ligada (ESPEC_V3_COOPERACAO_CO6, secao 4)")
         if self.co7 and not self.co6:
             raise ValueError("ConfigCooperacao.co7 so liga com a co6 ligada (ESPEC_V3_COOPERACAO_CO7, secao 6)")
-        for nome in ("limiar_escudo", "piso_privacao_s", "w_univ", "limiar_humor", "w_culpa", "w_inveja"):
+        for nome in ("limiar_escudo", "piso_privacao_s", "w_univ", "limiar_humor", "w_culpa", "w_inveja", "fator_teto_k"):
             v = getattr(self, nome)
             if type(v) is not int or not 0 <= v <= self.escala:
                 raise ValueError(f"ConfigCooperacao.{nome} inteiro em [0, escala]: {v!r}")
@@ -3629,6 +3638,10 @@ PARAMETROS_COOPERACAO = {
     "w_culpa": ("PROPOSTO", "SEM FONTE (D-CO7b-5): 1/8 de S; a forma e a de Hughes et al. 2018, arXiv 1803.08884, preprint"),
     "w_inveja": ("PROPOSTO", "SEM FONTE (D-CO7b-5): 1/8 de S; a forma e a de Hughes et al. 2018, arXiv 1803.08884, preprint"),
     "janela_inveja": ("PROPOSTO", "SEM FONTE (D-CO7b-5): dois intervalos de decisao"),
+    "fator_teto_k": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12, o plano da bancada): pesquisa; S no jogo, 0 e S/2 nas doses da bancada"),
+    "co7_escudo": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12): pesquisa, a ablacao 'so o escudo'; ligada com a co7 no jogo"),
+    "co7_universalizacao": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12): pesquisa, a ablacao 'so a universalizacao'; ligada com a co7 no jogo"),
+    "co7_afeto": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12): pesquisa, a ablacao 'so o afeto'; ligada com a co7 no jogo"),
 }
 
 

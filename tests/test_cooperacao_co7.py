@@ -156,3 +156,21 @@ def test_g_escudo_nenhuma_decisao_faz_o_ato_proibido():
     reprovou = sum(len(d["reprovadas"]) for v in PAR["vidas"] for es in v["escolhas"].values() for _, _, d in es if d)
     aprovou = sum(1 for v in PAR["vidas"] for es in v["escolhas"].values() for _, _, d in es if d and d["aprovadas"])
     assert reprovou > 0 and aprovou > 0
+
+
+# ------------------------------------------------------------------ os ganchos da bancada (docs/PLANO_ANALISE_V3_COOPERACAO.md)
+def test_os_ganchos_da_bancada_nao_mudam_o_padrao_e_desligam_cada_parte():
+    from dataclasses import replace
+    from digilab.cooperacao import Cooperacao
+    assert (CFG.fator_teto_k, CFG.co7_escudo, CFG.co7_universalizacao, CFG.co7_afeto) == (S, True, True, True)
+    meio = Cooperacao(replace(CFG, fator_teto_k=S // 2))
+    zero = Cooperacao(replace(CFG, fator_teto_k=0))
+    cheio = Cooperacao(CFG)
+    for idade in (0, 1440, 3 * 1440, 7 * 1440):
+        assert meio.teto_k(idade) == (cheio.teto_k(idade) + 1) // 2 and zero.teto_k(idade) == 0
+    sens = _sens(_social_indo())
+    so_univ = dv.situacao(sens, {"fome": 200}, replace(CFG, co7_escudo=False), S)
+    assert not so_univ["escudo"] and so_univ["delta"] > 0 and so_univ["proibidas"] == [7]
+    so_escudo = dv.situacao(sens, {"fome": 200}, replace(CFG, co7_universalizacao=False), S)
+    assert so_escudo["escudo"] and so_escudo["delta"] == 0
+    assert dv.culpa_inveja(_sens(_social_indo(), humor=900), replace(CFG, co7_afeto=False)) == (0, 0)
