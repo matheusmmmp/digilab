@@ -751,3 +751,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-12 — COOPERACAO: o plano da bancada aprovado (Claude Code, Opus 5.5, branch `v3-cooperacao-bancada-aprovado`)](registro/2026-11.md)
 - [2026-11-12 — COOPERACAO, CO6c: o espelho TS, o G-PAR-CO6 e o painel (Claude Code, Opus 5.5, branch `v3-cooperacao-co6c`)](registro/2026-11.md)
 - [2026-11-12 — COOPERACAO, CO7a: o gabarito das vidas com a CO6 ligada (Claude Code, Opus 5.5, branch `v3-cooperacao-co7`)](registro/2026-11.md)
+- [2026-11-12 — LUTA_POC, N1 e N2: as releituras e as lutas fixas da investigação do núcleo (Claude Code, Opus 5.5, branch `v3-luta-nucleo-n1`)](registro/2026-11.md)
+- [2026-11-12 — LUTA_POC, N2: a D-N-5 decidida (Claude Code, Opus 5.5, branch `v3-luta-nucleo-n1`)](registro/2026-11.md)
