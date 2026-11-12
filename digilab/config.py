@@ -3172,22 +3172,23 @@ class ConfigEquilibrioCuidado:
 
 # Status dos campos da ConfigEquilibrioCuidado (conferido por teste). A fome urgente nao tem numero proprio: e o `urgencia_lambda` dos inatos.
 PARAMETROS_EQUILIBRIO_CUIDADO: dict[str, tuple[str, str]] = {
-    "guarda_fome_brincar": ("PROPOSTO", "PLANO_V3_EQUILIBRIO_CUIDADO, EQ-7 (a regra DECIDIDA em 2026-11-12; D-BB2-3); a chave, SEM FONTE"),
-    "comer_bebe": ("PROPOSTO", "PLANO_V3_EQUILIBRIO_CUIDADO, EQ-7 (a regra DECIDIDA em 2026-11-12); a chave, SEM FONTE"),
-    "w_comer_bebe": ("PROPOSTO", "RESULTADO_V3_EQUILIBRIO_CUIDADO_E1 (a grade do E1 nas sementes de calibracao 93101-93505); SEM FONTE"),
+    "guarda_fome_brincar": ("DECIDIDO", "PLANO_V3_EQUILIBRIO_CUIDADO, EQ-7 (a regra DECIDIDA em 2026-11-12; D-BB2-3); ligada, APROVADA pelo Matheus em 2026-11-12 ('Aprovo, siga'); validado uma vez no E2 (94101-94505, RESULTADO_V3_EQUILIBRIO_CUIDADO_E2); no jogo, a v38 e a v39 (E3); SEM FONTE"),
+    "comer_bebe": ("DECIDIDO", "PLANO_V3_EQUILIBRIO_CUIDADO, EQ-7 (a regra DECIDIDA em 2026-11-12); ligada, APROVADA pelo Matheus em 2026-11-12 ('Aprovo, siga'); validado uma vez no E2 (94101-94505, RESULTADO_V3_EQUILIBRIO_CUIDADO_E2); no jogo, a v38 e a v39 (E3); SEM FONTE"),
+    "w_comer_bebe": ("DECIDIDO", "RESULTADO_V3_EQUILIBRIO_CUIDADO_E1 (a grade do E1 nas sementes de calibracao 93101-93505); APROVADO pelo Matheus em 2026-11-12 ('Aprovo, siga'); validado uma vez no E2 (94101-94505, RESULTADO_V3_EQUILIBRIO_CUIDADO_E2); no jogo, a v38 e a v39 (E3); SEM FONTE"),
 }
 
 CONFIG_EQUILIBRIO_CUIDADO = ConfigEquilibrioCuidado()
 
 # Os numeros do modular que o E1 propoe trocar de valor (docs/RESULTADO_V3_EQUILIBRIO_CUIDADO_E1.md, a rodada F2 da grade), nos inatos de hoje
-# (CONFIG_DIGIBRAIN_INATOS fica como esta: nenhuma versao de pet os usa; a versao nova e o E3, EQ-6). PROPOSTOS, SEM FONTE.
+# (CONFIG_DIGIBRAIN_INATOS fica como esta; no jogo, a v38 e a v39 os usam desde o E3, EQ-6). DECIDIDOS (APROVADOS em 2026-11-12), SEM FONTE.
+# O nome (_PROPOSTOS) ficou o do E1, para nao mudar quem o importa.
 INATOS_E1_PROPOSTOS: dict[str, int] = {
     "urgencia_lambda": 640,                   # a fome urgente (hoje 512): o pet que dorme so acorda pela fome mais baixa (M-B1, M-B2)
     "vies_brincar": 0,                        # o vies do brincar no W0 (hoje -256): o Rookie do dono atento brinca mais (M-B4)
 }
 PARAMETROS_E1: dict[str, tuple[str, str]] = {
-    "urgencia_lambda": ("PROPOSTO", "RESULTADO_V3_EQUILIBRIO_CUIDADO_E1, a grade do bloco B e a rodada F2 (93101-93505); SEM FONTE"),
-    "vies_brincar": ("PROPOSTO", "RESULTADO_V3_EQUILIBRIO_CUIDADO_E1, a grade do bloco B4 e a rodada F2 (93101-93505); SEM FONTE"),
+    "urgencia_lambda": ("DECIDIDO", "RESULTADO_V3_EQUILIBRIO_CUIDADO_E1, a grade do bloco B e a rodada F2 (93101-93505); APROVADO pelo Matheus em 2026-11-12 ('Aprovo, siga'); validado uma vez no E2 (94101-94505, RESULTADO_V3_EQUILIBRIO_CUIDADO_E2); no jogo, a v38 e a v39 (E3); SEM FONTE"),
+    "vies_brincar": ("DECIDIDO", "RESULTADO_V3_EQUILIBRIO_CUIDADO_E1, a grade do bloco B4 e a rodada F2 (93101-93505); APROVADO pelo Matheus em 2026-11-12 ('Aprovo, siga'); validado uma vez no E2 (94101-94505, RESULTADO_V3_EQUILIBRIO_CUIDADO_E2); no jogo, a v38 e a v39 (E3); SEM FONTE"),
 }
 
 

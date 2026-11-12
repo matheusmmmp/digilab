@@ -115,7 +115,7 @@ for (const [onde, largura, altura] of TAMANHOS) {
   test(`a v35 no ${onde}: uma imagem parada cansa o pet (enjoado dela)`, async ({ browser }) => {
     test.setTimeout(240_000);
     const { ctx, page, erros } = await abrir(browser, largura, altura, petComImagemParada());
-    expect((await registro(page)).versao).toBe(38);
+    expect((await registro(page)).versao).toBe(35);   // o pet semeado e um v35 (petComImagemParada)
     await abrirPainelTv(page, movel);
     const frase = await esperarFrase(page, "enjoado dela", true);
     expect(frase).not.toBeNull();

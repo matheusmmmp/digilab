@@ -4,9 +4,10 @@
      come com a fome dele);
    - os numeros do modular que ja existem e so trocam de valor (null: o de hoje): o `lambda_acordar` do sono que segura, o `urgencia_lambda`
      dos inatos (a fome urgente, que tambem acorda), o vies do brincar no W0 e o `w_bola_do_dono` do lance (so o do cerebro).
-   O `Motor.ligarEquilibrioE1` o aplica ao modular do pet, ANTES da primeira troca para o modular. Nao entra no registro: e so da bancada do E1
-   (scripts/equilibrio_cuidado/); o jogo nao o chama, e os pets de hoje (todas as versoes) seguem byte a byte. A versao nova, com os valores
-   escolhidos, e o E3 (EQ-6). Os Bits (so do jogo) ficam fora daqui: a tabela BITS_V2 de src/bits.ts. */
+   Desde o E3 (EQ-6), a v38 e a v39 nascem com o AJUSTE_E1_PROPOSTO, pela versao (o construtor do Motor): o replay pelo log o refaz. Nas versoes
+   de antes, o `Motor.ligarEquilibrioE1` o aplica ao modular do pet, ANTES da primeira troca para o modular, so na bancada
+   (scripts/equilibrio_cuidado/); nao entra no registro, e os pets dessas versoes seguem byte a byte. Os Bits (so do jogo) ficam fora daqui: a
+   tabela BITS_V2 de src/bits.ts. */
 import { CONFIG_EQUILIBRIO_CUIDADO, INATOS_MODULAR, validarEquilibrioCuidado, type ConfigEquilibrioCuidado, type ConfigLanceDono,
   type ConfigSonoSegura } from "./digibrain/constantes.ts";
 
@@ -70,7 +71,7 @@ export const lanceComAjuste = (l: ConfigLanceDono, a: AjusteEquilibrioE1): Confi
 
 /** o ajuste que o E1 propoe (a rodada F2 da grade; docs/RESULTADO_V3_EQUILIBRIO_CUIDADO_E1.md): as duas regras ligadas, o peso do bebe de
     hoje da config (S/2), a fome urgente em 640 e o vies do brincar em 0; o `lambda_acordar` e o `w_bola_do_dono` ficam os de hoje (a grade nao
-    achou ganho neles). PROPOSTO, SEM FONTE; o Python tem os mesmos numeros (config.INATOS_E1_PROPOSTOS), conferidos pelo gabarito do
+    achou ganho neles). APROVADO pelo Matheus em 2026-11-12 ("Aprovo, siga"), validado uma vez no E2, SEM FONTE; o da v38 e da v39; o Python tem os mesmos numeros (config.INATOS_E1_PROPOSTOS), conferidos pelo gabarito do
     test/equilibrio_cuidado_paridade.test.ts */
 export const AJUSTE_E1_PROPOSTO: AjusteEquilibrioE1 = {
   cerebro: { ...CONFIG_EQUILIBRIO_CUIDADO, guarda_fome_brincar: true, comer_bebe: true }, lambda_acordar: null, urgencia_lambda: 640,
