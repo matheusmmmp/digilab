@@ -165,6 +165,12 @@ FAIXAS_RESERVADAS = (
                    "(docs/PLANO_LUTA_NUCLEO.md, secao 2.1; D-N-2; bases 92101, 92202, 92303, 92404 e 92505, com a derivacao da LP5; "
                    "aprovada pelo Matheus em 2026-11-12, \"Aprovo as 7 (Recommended)\", e pedida pelo Gerente de sprites e luta; "
                    "conferida livre na origin/main em 2026-11-12)"),
+    (93101, 93505, "EQUILIBRIO_CUIDADO, a calibracao (jogo web): o E0, o retrato de hoje, nas bases 93101, 93202, 93303, 93404 e "
+                   "93505, e o E1 (docs/PLANO_ANALISE_V3_EQUILIBRIO_CUIDADO.md, secao 5; EQ-5, Matheus, 2026-11-12; conferida livre "
+                   "na origin/main em 2026-11-12)"),
+    (94101, 94505, "EQUILIBRIO_CUIDADO, a validacao unica (jogo web): o E2, uma vez; nao e tocada no E0 nem no E1 "
+                   "(docs/PLANO_ANALISE_V3_EQUILIBRIO_CUIDADO.md, secao 5; EQ-5, Matheus, 2026-11-12; conferida livre na origin/main "
+                   "em 2026-11-12)"),
 )
 
 
