@@ -15,7 +15,7 @@ import { gunzipSync } from "node:zlib";
 import { CMU_MVP } from "../motor/constantes.ts";
 import { CCO_CORPO_V11, Corpo, grafoDoCorpo, taxasDe } from "../motor/corpo.ts";
 import { DigiBrain } from "../motor/digibrain/adapt.ts";
-import { CONFIG_DIGIBRAIN_LAB, CONFIG_DIGIBRAIN_LAB_OLHAR, CONFIG_OLHAR, INATOS_MODULAR } from "../motor/digibrain/constantes.ts";
+import { CONFIG_DIGIBRAIN_LAB, CONFIG_DIGIBRAIN_LAB_OLHAR, CONFIG_OLHAR, CONFIG_SONO_SEGURA, INATOS_MODULAR } from "../motor/digibrain/constantes.ts";
 import { genomaVisao, genomaVisaoVazio } from "../motor/digibrain/genoma_visao.ts";
 import { MotorCorpoMundo } from "../motor/motor_corpo_mundo.ts";
 import { estadoNascimentoPy, type EventoCorpo } from "../motor/motor_corpo.ts";
@@ -52,7 +52,7 @@ const sha = (t: string): string => createHash("sha256").update(t, "utf8").digest
 const cfgTv = (fonte: "grade" | "evento"): ConfigTV => ({ ...CONFIG_TV, ligada: true, fonte });
 
 function viver(g: Vida) {
-  const cerebro = new DigiBrain(CONFIG_DIGIBRAIN_LAB_OLHAR, INATOS_MODULAR, false,
+  const cerebro = new DigiBrain(CONFIG_DIGIBRAIN_LAB_OLHAR, INATOS_MODULAR, false, CONFIG_SONO_SEGURA,
                                 { semente: g.semente, cfgOlhar: { ...CONFIG_OLHAR, agrado_no_corpo: g.fonte === "evento" } });
   const assinaturas: Record<string, string>[] = [], estimulos: unknown[][][] = [];
   const agir = cerebro.agir.bind(cerebro), cons = cerebro.consequenciaCorpo.bind(cerebro);
@@ -157,10 +157,10 @@ describe("P1f: desligado, nada muda", () => {
     expect(() => c.agradoTela({})).toThrow(/olhar/);
     expect("olhar" in c.estadoInterno()).toBe(false);
     expect(Object.keys(m.corpo.q).some(q => q.startsWith("adaptacao_tela"))).toBe(false);
-    expect(() => new DigiBrain(CONFIG_DIGIBRAIN_LAB, INATOS_MODULAR, false, { semente: 1 })).toThrow(/subchave olhar/);
+    expect(() => new DigiBrain(CONFIG_DIGIBRAIN_LAB, INATOS_MODULAR, false, CONFIG_SONO_SEGURA, { semente: 1 })).toThrow(/subchave olhar/);
   });
   test("a TV e o orgao da tela vao juntos, ligados e com um pet so; eventos mal formados falham alto", () => {
-    const c = new DigiBrain(CONFIG_DIGIBRAIN_LAB_OLHAR, INATOS_MODULAR, false, { semente: 101 });
+    const c = new DigiBrain(CONFIG_DIGIBRAIN_LAB_OLHAR, INATOS_MODULAR, false, CONFIG_SONO_SEGURA, { semente: 101 });
     const op = { paridade: true, cfgMundo: CMU_MVP, digibrain: true };
     expect(() => new MotorCorpoMundo(c, 101, CCO_CORPO_V11, estadoNascimentoPy(0), { ...op, tela: { tela: CONFIG_TELA, tv: cfgTv("grade") } })).toThrow(/juntos/);
     expect(() => new MotorCorpoMundo(c, 101, CCO_CORPO_V11, estadoNascimentoPy(0), { ...op, tela: { tela: CONFIG_TELA_LIGADA, tv: { ...cfgTv("grade"), escala: 9 } } })).toThrow(/escala/);

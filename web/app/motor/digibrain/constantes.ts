@@ -158,3 +158,11 @@ export type ConfigDecodificador = typeof CONFIG_DECODIFICADOR;
     64 x 30). So os pets do jogo na ilha grande o usam (a v25 desde o ovo; os vivos, pelo evento "ma"). DECIDIDO (Matheus, 2026-11-11:
     "Sim, para 128 celulas") */
 export const D_MAX_ILHA_GRANDE = 2048;
+
+/** o sono que segura (docs/TAREFA_V3_SONO_SEGURA.md; a ConfigSonoSegura do Python, numa config propria para o dump do modular nao mudar):
+    ligado, o pet que esta dormindo segue no reflexo do sono ate a leitura da energia chegar a `lambda_acordar` (o primeiro inteiro acima de
+    0,9 S), salvo a fome urgente (a urgencia da fome acima do `urgencia_lambda`) e o dono que o acorda. PROPOSTO, SEM FONTE; conferido
+    contra o gabarito test/gabaritos/digibrain_modular_sono_segura.json.gz por test/digibrain_modular_sono_segura.test.ts */
+export interface ConfigSonoSegura { readonly ligada: boolean; readonly lambda_acordar: number }
+export const CONFIG_SONO_SEGURA: ConfigSonoSegura = { ligada: false, lambda_acordar: 922 };
+export const CONFIG_SONO_SEGURA_LIGADA: ConfigSonoSegura = { ...CONFIG_SONO_SEGURA, ligada: true };

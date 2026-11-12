@@ -9,7 +9,7 @@
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, CUIDADO_NA_HORA, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
   TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehDoGrupo, ehLutaPoc, nasceNaAgua, VERSAO_V26,
-  nasceNaGrande, nasceComMemoriaLonga, CMU_GRANDE, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, VERSOES_COM_SACUDIR,
+  nasceNaGrande, nasceComMemoriaLonga, nasceComSonoSegura, CMU_GRANDE, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, VERSOES_COM_SACUDIR,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { LUGARES_V6, NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
@@ -37,7 +37,8 @@ import { bracoV11 } from "./pet_v11.ts";
 import { leituraLab, type LeituraLab } from "./digibrain/leitura.ts";
 import { decodificar, decodificarV2, type ConceitosDec } from "./digibrain/decodificador.ts";
 import { DigiBrain } from "./digibrain/adapt.ts";
-import { CONFIG_DIGIBRAIN_LAB, CONFIG_DIGIBRAIN_LAB_FALA, CONTEUDOS_FALA, D_MAX_ILHA_GRANDE, INATOS_MODULAR, type ConteudoFala } from "./digibrain/constantes.ts";
+import { CONFIG_DIGIBRAIN_LAB, CONFIG_DIGIBRAIN_LAB_FALA, CONFIG_SONO_SEGURA, CONFIG_SONO_SEGURA_LIGADA, CONTEUDOS_FALA, D_MAX_ILHA_GRANDE, INATOS_MODULAR,
+  type ConteudoFala } from "./digibrain/constantes.ts";
 import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
 import { ConfiancaCombate } from "./confianca.ts";
 import { lutar as lutarArena, sorteiosPorFluxo, type IdCena, type ResultadoLuta as ResultadoArena, type Stats as StatsArena, type Tiro as TiroLutaPoc, type Esquiva as EsquivaLutaPoc } from "./arena/index.ts";
@@ -1249,9 +1250,11 @@ export class Motor {
   private _trocarCerebro(v: unknown): void {
     this._validarCerebro(v);
     this._conferirMorte(); this._vivo();
-    /* o modular nasce com o alcance da memoria deste pet (o de sempre, ou o da ilha grande: a v25 e o evento "ma"; IG6) */
+    /* o modular nasce com o alcance da memoria deste pet (o de sempre, ou o da ilha grande: a v25 e o evento "ma"; IG6) e, na v27, com o sono
+       que segura (SONO_SEGURA) */
     if (v.cerebro === "modular") {
-      this.modular ??= new DigiBrain(CONFIG_DIGIBRAIN_LAB, { ...INATOS_MODULAR, d_max: this.alcanceMemoria } as typeof INATOS_MODULAR);
+      this.modular ??= new DigiBrain(CONFIG_DIGIBRAIN_LAB, { ...INATOS_MODULAR, d_max: this.alcanceMemoria } as typeof INATOS_MODULAR, false,
+        nasceComSonoSegura(this.versao) ? CONFIG_SONO_SEGURA_LIGADA : CONFIG_SONO_SEGURA);
       if (this.ponteLuta) this.modular.ligarLutaMemoria();
     }
     this.modularAtivo = v.cerebro === "modular";

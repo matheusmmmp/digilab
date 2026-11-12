@@ -151,7 +151,8 @@ function iconeAgora(): string | null {
   const m = jogoAtual().motor, clipe = comeNoClipe();
   const doJogo = emoteDaReacaoAgora() ?? flashAtual() ?? emoteAgora(entradaCena(), performance.now(), clipe) ?? (!clipe && m.acao !== "dormir" && fomeNoEmote(m) ? "carne" : null);
   /* por ultimo, o sinal da TV do prototipo do gosto visual (so com `?gosto_visual=1`; sem ela, CENA.sinalTv e null): sai do alto da cabeca */
-  const daTv = doJogo === null ? CENA.sinalTv?.(performance.now()) ?? null : null;
+  /* dormindo, o "zz" e do pet: o sinal da TV nao entra por cima dele */
+  const daTv = doJogo === null && m.acao !== "dormir" ? CENA.sinalTv?.(performance.now()) ?? null : null;
   iconeDaTv = daTv !== null;
   return doJogo ?? daTv;
 }

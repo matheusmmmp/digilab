@@ -12,7 +12,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ChevronRight, Lock, MonitorUp, PictureInPicture2, Square, Tv } from "lucide-react";
 import { COMPONENTES, alvos, gostaMaisDe, tempoJunto, valores, type Componente } from "./gosto.ts";
 import { abrirJanelaDaTv, fecharJanelaDaTv, temJanelaPequena, useJanelaDaTv } from "./janelaPequena.ts";
-import { IMAGEM, SOM, descricaoDaLinha, fraseDaReacao, linhasDoGosto, linhasMarcadas, nascencaDifere, type LinhaGosto } from "./leituraGosto.ts";
+import { IMAGEM, SOM, descricaoDaLinha, fraseDaReacao, linhasDoGosto, linhasMarcadas, nascencaDifere, ondeFica, type LinhaGosto } from "./leituraGosto.ts";
 import { ligarTela, ligarTvJogo, pararTv, podeMostrarTela, useSessaoTv, type SessaoTv } from "./sessaoTv.ts";
 
 export const FRASE_PRIVACIDADE = "Ele só sente cores, brilho, movimento e som: sete números por segundo. Nenhuma imagem é guardada e nada sai deste computador.";
@@ -26,7 +26,7 @@ export const passandoEmPalavras = (s: Pick<SessaoTv, "origem" | "programa">): st
 function Linha({ l, pulso }: { l: LinhaGosto; pulso: number }) {
   const a = l.nascenca, b = Math.min(1, Math.max(0, a + l.deVer)), c = l.hoje;
   return (
-    <li className="tvp-linha" role="img" aria-label={descricaoDaLinha(l)}>
+    <li className="tvp-linha"><span className="tvp-linha__img" role="img" aria-label={descricaoDaLinha(l)}>
       <b className="tvp-nome">{l.nome}</b>
       <span className="tvp-trilho" aria-hidden="true">
         <i className="tvp-nasc" style={{ left: pct(a) }} />
@@ -35,7 +35,7 @@ function Linha({ l, pulso }: { l: LinhaGosto; pulso: number }) {
         <i className="tvp-hoje" style={{ left: pct(c) }} />
       </span>
       <span className="tvp-ext" aria-hidden="true"><span>{l.baixo}</span><span>{l.alto}</span></span>
-    </li>
+    </span></li>
   );
 }
 
@@ -43,7 +43,7 @@ function Linha({ l, pulso }: { l: LinhaGosto; pulso: number }) {
 function LinhaAgora({ l, agora }: { l: LinhaGosto; agora: number }) {
   return (
     <li className="tvp-linha">
-      <b className="tvp-nome">{l.nome}</b>
+      <b className="tvp-nome">{l.nome}<span className="sr-only">: {ondeFica(l, agora)}</span></b>
       <span className="tvp-trilho" aria-hidden="true"><i className="tvp-agora" style={{ left: pct(agora) }} /></span>
       <span className="tvp-ext" aria-hidden="true"><span>{l.baixo}</span><span>{l.alto}</span></span>
     </li>
@@ -59,9 +59,9 @@ const Legenda = () => (
   </p>
 );
 
-function Abre({ aberto, alternar, children }: { aberto: boolean; alternar: () => void; children: ReactNode }) {
+function Abre({ aberto, alternar, children, mais = false }: { aberto: boolean; alternar: () => void; children: ReactNode; mais?: boolean }) {
   return (
-    <button type="button" className="tvp-abre" aria-expanded={aberto} onClick={alternar}>
+    <button type="button" className="tvp-abre" aria-expanded={aberto} data-tv-mais={mais ? "" : undefined} onClick={alternar}>
       <ChevronRight aria-hidden="true" className={aberto ? "tvp-seta tvp-seta--aberta" : "tvp-seta"} />{children}
     </button>
   );
@@ -81,6 +81,13 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
     const a = document.activeElement;
     if (!a || a === document.body) raiz.current?.querySelector<HTMLElement>(ligada ? "[data-tv-parar]" : "[data-tv-ligar]")?.focus();
   }, [ligada]);
+  /* "Mais" e "Menos" da folha do celular trocam a árvore inteira: o foco vai para o botão que ficou no lugar */
+  const maisAntes = useRef(mais);
+  useEffect(() => {
+    if (maisAntes.current === mais) return;
+    maisAntes.current = mais;
+    raiz.current?.querySelector<HTMLElement>("[data-tv-mais]")?.focus();
+  }, [mais]);
   if (!s.inato) return <p className="tvp-fraco">O pet ainda não está aqui.</p>;
   const comTela = podeMostrarTela() && !movel, comJanela = temJanelaPequena() && !movel;
   /* sem som na captura, o grupo do som não entra nas contas (o pet não ouve) */
@@ -126,7 +133,7 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
         </>
       ) : <ul className="tvp-linhas">{curtas.map(l => <Linha key={l.k} l={l} pulso={s.carinhosVistos} />)}</ul>)}
       {porque && <Legenda />}
-      {porque && <button type="button" className="hx-btn tvp-p" aria-pressed={todos} onClick={() => setTodos(v => !v)}>{todos ? "Ver menos" : "Ver todos"}</button>}
+      {porque && <button type="button" className="hx-btn tvp-p" onClick={() => setTodos(v => !v)}>{todos ? "Ver menos" : "Ver todos"}</button>}
       {ligada && <Abre aberto={passando} alternar={() => setPassando(v => !v)}>O que está passando</Abre>}
       {ligada && passando && (
         <>
@@ -158,7 +165,7 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
         <p data-testid="tv-gosto">{gosto}</p>
         <div className="tvp-bts">
           {ligada && <button type="button" className="hx-btn" data-tv-parar="" onClick={pararTv}><Square aria-hidden="true" />Parar</button>}
-          <Abre aberto={false} alternar={() => setMais(true)}>Mais</Abre>
+          <Abre aberto={false} alternar={() => setMais(true)} mais>Mais</Abre>
         </div>
       </div>
     </div>
@@ -169,7 +176,7 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
       {controle}
       {leitura}
       {rodape}
-      {movel && <div className="tvp-sec"><Abre aberto alternar={() => setMais(false)}>Menos</Abre></div>}
+      {movel && <div className="tvp-sec"><Abre aberto alternar={() => setMais(false)} mais>Menos</Abre></div>}
     </div>
   );
 }

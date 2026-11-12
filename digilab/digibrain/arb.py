@@ -19,10 +19,14 @@ Mesmo u, nenhuma rng nova. Desligada, as sondas sao as de hoje.
 com `faceta_decidiu`; `so_inato` tira tambem a faceta (e aprendida). Mesmo u, nenhuma rng nova.
 **A escolha segurada** (a C3, docs/ESPEC_REDECIDIR_EVENTO_DIGIBRAIN_MODULAR.md, secao 2; so com a subchave `redecidir_evento`): sem evento,
 o M-ADAPT passa o candidato (`segurar`, a chave da escolha anterior); com ele na lista e peso positivo, o M-ARB o escolhe sem sorteio e sem
-chamar a rng, e, como no reflexo, nenhuma sonda decide. Fora da lista ou com peso 0 (RE-2), o sorteio de hoje, e o registro marca `fora`."""
+chamar a rng, e, como no reflexo, nenhuma sonda decide. Fora da lista ou com peso 0 (RE-2), o sorteio de hoje, e o registro marca `fora`.
+**O sono que segura** (docs/TAREFA_V3_SONO_SEGURA.md; `Arbitragem(sono=ConfigSonoSegura(ligada=True))`): o reflexo tambem vale com o pet
+dormindo (o `contexto["dormindo"]` do M-SENS, o `dormindo` do vetor de estado) e a energia abaixo de `lambda_acordar`, salvo com a fome
+urgente (a urgencia da fome acima do `urgencia_lambda`, a guarda do passeio). O dono que acorda o pet tira o `dormindo`, e a decisao
+seguinte ja nao segura. Nenhuma rng nova; desligada, o reflexo de hoje."""
 from __future__ import annotations
 
-from ..config import CONFIG_DIGIBRAIN_INATOS, ConfigDigibrainInatos
+from ..config import CONFIG_DIGIBRAIN_INATOS, CONFIG_SONO_SEGURA, ConfigDigibrainInatos, ConfigSonoSegura
 from ._comum import chave_json, mul, phi
 
 SONDAS = {"sem_incentivo": ("incentivo",), "sem_habito": ("habito",), "sem_memoria": ("memoria",), "sem_persistencia": ("persistencia",),
@@ -48,8 +52,10 @@ def sortear_inteiro(pesos: list[int], u) -> int:
 class Arbitragem:
     """o M-ARB (docstring do modulo)"""
 
-    def __init__(self, inatos: ConfigDigibrainInatos | None = None, autobio: bool = False, facetas: bool = False) -> None:
+    def __init__(self, inatos: ConfigDigibrainInatos | None = None, autobio: bool = False, facetas: bool = False,
+                 sono: ConfigSonoSegura | None = None) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
+        self.sono = sono or CONFIG_SONO_SEGURA
         self.sondas = SONDAS
         self.decidiu = DECIDIU
         if autobio:                                   # a C4, M4 (6.1): sem_memoria tira tambem a lembranca; sem_lembranca tira so ela
@@ -82,13 +88,20 @@ class Arbitragem:
             return max(positivos, key=lambda i: (w[i], -i))
         return sortear_inteiro(w, u)
 
-    def reflexo(self, sens: dict) -> bool:
+    def reflexo(self, sens: dict, urgencias: dict | None = None) -> bool:
         """o reflexo do sono: a leitura da energia abaixo de `lambda_sono` (a conta de sempre, sem rng). O M-ADAPT a chama uma vez por
-        decisao e passa o valor ao M-ESTADO e ao `escolher` (a L-2, secao 2.3)"""
+        decisao e passa o valor ao M-ESTADO e ao `escolher` (a L-2, secao 2.3). Com o sono que segura, tambem o pet dormindo com a energia
+        abaixo de `lambda_acordar` e sem a fome urgente; as `urgencias` sao as do M-AFETO da decisao (so lidas com a chave ligada)"""
         energia = sens["leitura"].get("energia")
         if energia is None:
             raise RuntimeError("M-ARB: o reflexo do sono le a energia, e ela nao esta na percepcao do corpo")
-        return energia < self.p.lambda_sono
+        if energia < self.p.lambda_sono:
+            return True
+        if not self.sono.ligada:
+            return False
+        if urgencias is None or "fome" not in urgencias:
+            raise RuntimeError("M-ARB: o sono que segura le a urgencia da fome, e ela nao veio do M-AFETO")
+        return sens["contexto"]["dormindo"] > 0 and energia < self.sono.lambda_acordar and urgencias["fome"] <= self.p.urgencia_lambda
 
     def escolher(self, unidades: list[dict], afeto: dict, sens: dict, rng, reflexo: bool | None = None,
                  segurar: tuple | None = None) -> dict:
