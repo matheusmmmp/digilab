@@ -45,3 +45,41 @@ braços, 8 dias, o modular nos dois pets, o dono atencioso, o comedouro comum) r
 - **Os atos novos** (dividir, levar comida), que a CO7-5 já diz que fariam a universalização valer além da tabela da CO3.
 - **A culpa e a inveja:** medir se disparam (uma contagem por decisão), antes de mexer nos pesos.
 - **A H-REP** precisa de mais vidas com oportunidade do pet A; ela depende do mesmo mundo com mais disputa.
+
+## 5. O adendo 1: o mecanismo, com o irmão aleatório (2026-11-12, A1-CB4)
+
+**De onde vem:** a seção 12 do plano (DECIDIDA, AD1-1 a AD1-6), o piloto (D-CB-22, N = 80) e o registro (D-CB-24, `0d101300`). As 560
+vidas (sementes 92201 a 92280, sete braços, o B com o cérebro aleatório, a CO7 só no A) rodaram em 270 s. O resultado está em
+`artifacts_v3_cooperacao_bancada/resultado_ad1.json`, com o manifesto ao lado. **A leitura vale só para o mecanismo** (AD1-2): o B não é um
+pet de verdade.
+
+| hipótese | n | o que se mediu | IC 95 % | leitura |
+|---|---|---|---|---|
+| **A1-EMERGE** | 69 | B1 − B0 na P1 do A: +0,0008 | [−0,0014; 0,0039] | **NÃO CONFIRMA** (δ = 0,10) |
+| **A1-DOSE** | 69 | a inclinação: +0,0008 (médias 0,139, 0,140, 0,140) | [−0,0014; 0,0039] | **NÃO CONFIRMA** |
+| **A1-CUSTO** | 80 | B1 − B0 na P3 do A: +0,0009 | [−0,0012; 0,0034] | **CONFIRMA** (ε = 0,02) |
+
+**O que explica a tabela:**
+- **Agora a situação acontece:** 69 das 80 vidas com oportunidade, 837 a 839 oportunidades por braço, e o `k` do A no limiar do escudo em 56 %
+  das decisões. Mesmo assim, a CO7 mudou alguma medida em só 12 das 80 vidas.
+- **O pet de verdade quase não disputa a comida do aflito:** sem a CO7, o próprio A come a comida que o escudo proibiria em 8,1 % das
+  oportunidades (a P1-neg); com a CO7, 7,2 %. O escudo tira essa pequena parte, e quem come no lugar quase nunca é o aflito: a P1 do A fica
+  em 0,14 nos braços.
+- **De onde vem o pouco que muda (o A1-ESCUDO):** o B1E (só o escudo) repete o B1 (+0,0008); o B1U (só a universalização) dá +0,0015; o
+  B1A (só a culpa e a inveja) e o D0 repetem o B0.
+- **A culpa e a inveja disparam, mas não viram decisão:** o termo da culpa passa de 0 em 11,7 % das decisões do A e o da inveja em 5,9 %, e
+  o B1A é igual ao B0 em todas as medidas. A questão aberta da CB4 fica respondida: elas disparam, e com os pesos neutros (S/8) não mudam
+  nenhuma escolha.
+
+**As frases que a leitura sustenta:**
+- "Mesmo quando a situação acontece muitas vezes, os deveres da CO7, com os pesos de hoje, quase não mudam o que o pet de verdade faz: o
+  irmão aflito come a comida disputada +0,0008 vezes a mais (IC [−0,0014; 0,0039])."
+- "O motivo é que o pet quase não disputava essa comida: o escudo só tem 8 % de escolhas para tirar, e a culpa e a inveja disparam sem mudar a
+  escolha."
+- **Não entra:** nada sobre os gêmeos do jogo (o B não é um pet de verdade), nem "a CO7 não funciona": o escudo faz o que diz (o G-ESCUDO
+  passou em todas as vidas), só que há pouco a proibir.
+
+**O que fica para decidir (nada roda sem o ok do Matheus):**
+- **Os pesos da culpa e da inveja** (`w_culpa`, `w_inveja`, hoje S/8, PROPOSTOS) e o `w_univ`, na rodada de equilíbrio: são o único caminho
+  da CO7 que empurra para o bem, e hoje não mudam nenhuma escolha.
+- **Os atos novos** (dividir, levar comida), que dariam ao pet algo a fazer pelo outro, além de não pegar a comida dele.
