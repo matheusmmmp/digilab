@@ -791,4 +791,7 @@ export const LIMIAR_PRIVACAO = .15;
     (digilab/config.py, com o status e a fonte de cada numero em PARAMETROS_COOPERACAO), conferido por constantes.test.mjs. So mede
     (motor/cooperacao.ts); desligada por padrao, e o jogo ainda nao a liga (a CO4 e a CO5). Os numeros sao PROPOSTOS, SEM FONTE, menos a
     escala (a S do cerebro A) e o piso de fome (o fome_moderada do instinto, CO-9) */
-export const CCOOP = { escala: 1024, pisoFome: .45, meiaVida: 1440, kMeiaVida: 32, janelaNovidade: 1440 };
+export const CCOOP = { escala: 1024, pisoFome: .45, meiaVida: 1440, kMeiaVida: 32, janelaNovidade: 1440,
+  /* a CO6 (docs/ESPEC_V3_COOPERACAO_CO6.md): o passo do peso dos deveres por tick de encontro e o teto por estagio (CO6-4), PROPOSTOS, SEM
+     FONTE; o estagio vem da idade, pelo provisorio da ConfigExpressao (o fim do bebe, da crianca e do adolescente, em dias) */
+  kPasso: 1, kTetoBebe: 0, kTetoCrianca: 256, kTetoAdolescente: 512, kTetoAdulto: 768, diasFimBebe: 1, diasFimCrianca: 3, diasFimAdolescente: 7 };

@@ -127,6 +127,7 @@ describe("o treino tipico (D-LP5-2) e os pets", () => {
   test("as faixas: as 5 bases, e um nome fora falha alto", () => {
     expect(basesDa("calibracao")).toEqual([86101, 86202, 86303, 86404, 86505]);
     expect(basesDa("conferencia")).toEqual([87101, 87202, 87303, 87404, 87505]);
+    expect(basesDa("investigacao")).toEqual([92101, 92202, 92303, 92404, 92505]);
     expect(() => basesDa("calibracao2")).toThrow(/faixa desconhecida/);
   });
 });
