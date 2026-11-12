@@ -2592,6 +2592,39 @@ def tracos_individualidade(janelas: Mapping[str, Mapping]) -> dict[str, float | 
             "brincar": contra_nula(janelas["bola"], "brincar"), "susto": contra_nula(janelas["susto"], "emburrar")}
 
 
+# ================================================================== GOSTO_VISUAL, P1e: a sonda das duas TVs
+# (docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md, secao 4; a sonda em experiments/sonda_duas_tvs.py)
+
+def medidas_duas_tvs(replica: Mapping, janela_ticks: int) -> dict[str, float | None]:
+    """Secao 4.1 do plano: as medidas de uma replica da sonda, sempre separadas (GV-5).
+    `escolha` 1.0 se a primeira TV olhada foi a A, 0.0 se foi a B, None se nao olhou nenhuma;
+    `tempo_relativo` ticks olhando a A / ticks olhando as duas, None se nao olhou nenhuma;
+    `tempo_total` ticks olhando as duas / janela_ticks (o efeito colateral, 0.0 se nao olhou).
+    Falha alto com ticks fora da janela ou incoerentes com a primeira."""
+    a, b = replica["ticks"]["A"], replica["ticks"]["B"]
+    if type(a) is not int or type(b) is not int or a < 0 or b < 0 or a + b > janela_ticks:
+        raise ValueError(f"ticks da sonda incoerentes: A {a!r}, B {b!r}, janela {janela_ticks}")
+    p = replica["primeira"]
+    if (p is None) != (a + b == 0) or p not in (None, "A", "B") or (p == "A" and a == 0) or (p == "B" and b == 0):
+        raise ValueError(f"a primeira olhada {p!r} nao bate com os ticks A {a}, B {b}")
+    if p is None:
+        return {"escolha": None, "tempo_relativo": None, "tempo_total": 0.0}
+    return {"escolha": 1.0 if p == "A" else 0.0, "tempo_relativo": a / (a + b), "tempo_total": (a + b) / janela_ticks}
+
+
+def familiarizacao_tv(fracoes: Sequence[float], tolerancia: float) -> dict:
+    """Secao 2.2 do plano: o criterio da familiarizacao (GV-6). `fracoes` sao, dia a dia, as fracoes das decisoes acordadas em que o pet
+    olhou a TV da vida, nos dias da familiarizacao (pelo menos 4). Estavel quando a media dos dois ultimos dias difere da media dos dois
+    anteriores por no maximo `tolerancia` (em valor absoluto). Falha alto com menos de 4 dias ou uma fracao fora de [0, 1]."""
+    if len(fracoes) < 4:
+        raise ValueError(f"familiarizacao_tv: pelo menos 4 dias, vieram {len(fracoes)}")
+    if any(not 0.0 <= f <= 1.0 for f in fracoes):
+        raise ValueError(f"familiarizacao_tv: fracoes em [0, 1]: {list(fracoes)}")
+    ultimos = (fracoes[-1] + fracoes[-2]) / 2.0
+    antes = (fracoes[-3] + fracoes[-4]) / 2.0
+    return {"ultimos": ultimos, "antes": antes, "diferenca": ultimos - antes, "estavel": abs(ultimos - antes) <= tolerancia}
+
+
 def icc1_grupos(grupos: Sequence[Sequence[float]]) -> dict:
     """Secao 4.2: o ICC(1) de uma ANOVA de um fator com grupos desiguais. QM_entre e QM_dentro; n0 = (N - soma n_i^2 / N) / (k - 1);
     s2_entre = max(0, (QM_entre - QM_dentro) / n0) (o componente negativo truncado em 0), s2_dentro = QM_dentro, R = s2_entre / (s2_entre +

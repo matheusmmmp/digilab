@@ -206,3 +206,25 @@ painel lendo o cérebro), que pedem uma versão de pet nova e a decisão do Math
 Decisão do Matheus (D-GV-PADRAO-1, `docs/registro/2026-11.md`): "Quero que a opção da TV esteja padrão no jogo". No web, a chave do
 protótipo (`web/app/src/gostoVisual/chave.ts`) vem ligada; `?gosto_visual=0` desliga naquela aba. A captura continua só no clique do dono,
 fora do motor, do log e do save. As chaves do Python (P1b, P1c) seguem desligadas.
+
+## Resultado da etapa P1e (a sonda e o plano; a run espera o Matheus)
+
+2026-11-11, Claude Code, Opus 5.5, branch `v3-gosto-visual-p1e`. **Nenhuma vida da faixa rodou.**
+- **A segunda TV no motor**, atrás da `ConfigDuasTVs` (desligada; `digilab/config.py`, `PARAMETROS_DUAS_TVS`, todos PROPOSTOS, SEM FONTE):
+  o `MotorMundo.ligar_duas_tvs` põe, só numa cópia do pet, duas `tv.TVFixa` (ids 2 e 3, os perfis A e B), à mesma distância e em direções
+  opostas, a direção pela rng própria `duas-tvs-posicao`; a TV da vida sai de cena, e o `MotorMundo.tv_olhada` diz qual TV o pet olha.
+  Com a `ConfigTV` de hoje, a vida sai byte a byte (os gabaritos do P1a e da web passam sem regravar).
+- **A sonda** (`experiments/sonda_duas_tvs.py`), só leitura: nos dias pedidos, a cópia pelo replay, três réplicas, a janela de 240 ticks
+  lida tick a tick; grava as olhadas, a primeira, os ticks em cada TV e o agrado dos dois perfis no cérebro da cópia. O G2: a vida com a
+  sonda no meio e no fim sai igual à vida sem ela (o log, o estado, o corpo, o mundo, o cérebro e os motivos).
+- **As medidas** em `digilab/metrics.py`: `medidas_duas_tvs` (a escolha, o tempo relativo e o tempo total, separados) e
+  `familiarizacao_tv` (o critério da GV-6).
+- **O orquestrador** `experiments/run_v3_gosto_visual.py`, pronto e não executado na faixa: a trava (o plano APROVADO, a faixa, a seção do
+  registro, as bases, o K, os 14 dias, no máximo 4 processos), a vida genoma × dono, a análise descritiva e a conferência do piloto. As
+  configs estão em `experiments/configs/v3_gosto_visual/`. A fumaça roda com as sementes dos testes.
+- **O plano** `docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md` (PROPOSTO), com as decisões GVP-1 a GVP-8.
+- **A faixa** 89101…89505 em `FAIXAS_RESERVADAS` (confirmada pelo coordenador, 2026-11-11).
+- Testes novos em `tests/test_gosto_visual_sonda.py`. As escolhas estão em `docs/registro/2026-11.md`, D-GV-P1e-1 a 10; a D-GV-P1e-4 (a
+  primeira olhada não pode ler o agrado) é a que mais pede o olho do Matheus.
+
+Fica para depois do ok: o registro da run no plano (seção 11), o piloto, a run e o `docs/RESULTADO_V3_GOSTO_VISUAL.md`.

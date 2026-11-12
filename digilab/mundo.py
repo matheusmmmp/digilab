@@ -163,7 +163,8 @@ from .events import sacudir_arvore as evento_sacudir_arvore
 from .events import TIPO_SENTIDO_TELA, TIPO_TROCAR_CANAL, ler_sentido_tela, ler_trocar_canal
 from .events import sentido_tela as evento_sentido_tela
 from .events import trocar_canal as evento_trocar_canal
-from .tv import ID_TV, TV, TVSemChave
+from .tv import ID_TV, IDS_DUAS_TVS, TV, TVFixa, TVSemChave
+from .config import ConfigDuasTVs
 from .frutas import MotorFrutas
 from .policy import Observacao, Transicao
 from .protocol import derivar_semente
@@ -846,6 +847,8 @@ class Mundo:
         # a TV (GOSTO_VISUAL, P1c; digilab/tv.py): so depois de `ligar_tv` (o motor com a ConfigTV); sem ela, None e nada muda (nem o
         # resumo)
         self.tv: TV | None = None
+        # as duas TVs da sonda (P1e): so numa copia do pet, depois do `MotorMundo.ligar_duas_tvs`; ((id, TVFixa), (id, TVFixa)) ou None
+        self.duas_tvs: tuple | None = None
 
     # ------------------------------------------------------------ a agua (docs/TAREFA_V3_ILHA_AGUA.md, IA1)
     def _conferir_agua(self) -> None:
@@ -2313,20 +2316,39 @@ class MotorMundo(MotorFrutas):
             raise TVSemChave(f"{onde} sem o mundo e a ConfigTV ligados")
         return self.mundo.tv
 
-    def _olhando_tv(self, passa: dict[str, int] | None) -> bool:
+    def _olhando_tv(self, passa: dict[str, int] | None, ident: int = ID_TV, tv=None) -> bool:
         """O pet olha a TV: a TV ligada (`passa` nao e None), o pet acordado e parado (a acao atual e o ocioso) e a TV no raio da visao
         dele (P1c, D-GV-P1c-4). Com um cerebro que tem o comportamento `olhar` (o gancho `olhando_tela`, P1d: o DigiBrain modular com a
-        subchave), tambem a unidade de olhar desta TV escolhida na ultima decisao; sem o gancho (o A, os instintos), a regra da P1c."""
+        subchave), tambem a unidade de olhar desta TV escolhida na ultima decisao; sem o gancho (o A, os instintos), a regra da P1c.
+        `ident` e `tv`: a TV perguntada (a da vida, ID_TV, por padrao; uma das duas da sonda, P1e)."""
         if passa is None or self._estado.dormindo or self._acao_atual is not AcaoPet.OCIOSO:
             return False
         olhando = getattr(self._pm_cerebro(), "olhando_tela", None)
-        if olhando is not None and olhando() != ID_TV:
+        if olhando is not None and olhando() != ident:
             return False
-        tv = self.mundo.tv
+        tv = self.mundo.tv if tv is None else tv
         return distancia(tv.x - self.pet[0], tv.y - self.pet[1]) <= self._raio_visao
 
+    def _tv_olhada_duas(self) -> tuple[int, TVFixa, dict[str, int]] | None:
+        """as duas TVs da sonda (P1e): (id, TV, o que ela passa) da TV que o pet olha, ou None"""
+        t = self._tm(self._estado.tick)
+        for ident, tv in self.mundo.duas_tvs:
+            passa = tv.em(t)
+            if self._olhando_tv(passa, ident, tv):
+                return ident, tv, passa
+        return None
+
     def _linhas_tela(self) -> list[tuple[int, int, int, int]]:
-        """as TVs a vista para o cerebro (o gancho `ver_tela`, P1d): (id, dx, dy, d) da TV ligada no raio da visao; senao, nenhuma"""
+        """as TVs a vista para o cerebro (o gancho `ver_tela`, P1d): (id, dx, dy, d) da TV ligada no raio da visao; senao, nenhuma. Com as
+        duas TVs da sonda (P1e), so elas (a TV da vida fica de fora), na ordem dos ids"""
+        if self.mundo.duas_tvs is not None:
+            linhas = []
+            for ident, tv in self.mundo.duas_tvs:
+                dx, dy = tv.x - self.pet[0], tv.y - self.pet[1]
+                d = distancia(dx, dy)
+                if d <= self._raio_visao:
+                    linhas.append((ident, dx, dy, d))
+            return linhas
         tv = self.mundo.tv
         dx, dy = tv.x - self.pet[0], tv.y - self.pet[1]
         d = distancia(dx, dy)
@@ -2335,18 +2357,71 @@ class MotorMundo(MotorFrutas):
         return [(ID_TV, dx, dy, d)]
 
     def olhando_tv(self) -> bool:
-        """se o pet olha a TV agora (so le)"""
+        """se o pet olha a TV agora (so le); com as duas TVs da sonda, se olha alguma delas"""
         tv = self._exigir_tv("olhando_tv")
+        if self.mundo.duas_tvs is not None:
+            return self._tv_olhada_duas() is not None
         return self._olhando_tv(tv.em(self._tm(self._estado.tick)))
+
+    def tv_olhada(self) -> int | None:
+        """o id da TV que o pet olha agora (ID_TV, ou um dos IDS_DUAS_TVS na sonda), ou None (so le)"""
+        tv = self._exigir_tv("tv_olhada")
+        if self.mundo.duas_tvs is not None:
+            o = self._tv_olhada_duas()
+            return None if o is None else o[0]
+        return ID_TV if self._olhando_tv(tv.em(self._tm(self._estado.tick))) else None
 
     def _intensidades_da_tela(self) -> dict[str, int]:
         """O estimulo da tela do tick, para o corpo (`Corpo.sentir_tela`): o que a TV passa, se o pet olha; zeros se nao. A TV e sempre
-        perguntada (a grade e estendida ate o tick, nao importa o pet)."""
+        perguntada (a grade e estendida ate o tick, nao importa o pet). Com as duas TVs da sonda (P1e), o que passa a TV olhada."""
         tv = self._exigir_tv("o estimulo da tela")
+        if self.mundo.duas_tvs is not None:
+            o = self._tv_olhada_duas()
+            return dict(o[2]) if o is not None else {c: 0 for c in CANAIS_TELA}
         passa = tv.em(self._tm(self._estado.tick))
         if self._olhando_tv(passa):
             return dict(passa)
         return {c: 0 for c in CANAIS_TELA}
+
+    def ligar_duas_tvs(self, cfg: ConfigDuasTVs, perfis: tuple, replica: int) -> dict:
+        """As duas TVs da sonda (GOSTO_VISUAL, P1e; docs/ESPEC_GOSTO_VISUAL_P1.md, secao 7). So numa copia do pet: a vida nunca chama isto,
+        e nada vai ao log. Com a ConfigDuasTVs ligada, a TV do jogo ligada (a fonte "grade"), um cerebro com o gancho `olhando_tela` (o
+        olhar do DigiBrain modular) e nenhuma dupla ligada antes; senao, falha alto.
+
+        A TV da vida sai de cena (as linhas, o estimulo e o olhar passam a ser so das duas). O perfil A fica na TV de id IDS_DUAS_TVS[0] e o
+        B na IDS_DUAS_TVS[1], cada uma a `distancia_celulas` do pet, em direcoes opostas: a direcao da A e sorteada por uma rng propria,
+        `duas-tvs-posicao` (derivar_semente com a semente do pet, o tick do mundo e a replica), que nao toca nenhum outro fluxo. Se uma
+        das duas cai fora do mapa (cortada) ou na agua, tenta a direcao seguinte, ate `tentativas`; sem nenhuma, falha alto."""
+        if not isinstance(cfg, ConfigDuasTVs) or not cfg.ligada:
+            raise TVSemChave(f"ligar_duas_tvs precisa da ConfigDuasTVs ligada: {cfg!r}")
+        tv = self._exigir_tv("ligar_duas_tvs")
+        if self.ctv.fonte != "grade":
+            raise TVSemChave(f"a sonda das duas TVs e da TV do jogo (a fonte \"grade\"), nao {self.ctv.fonte!r}")
+        if self.mundo.duas_tvs is not None:
+            raise TVSemChave("as duas TVs da sonda ja estao ligadas")
+        if getattr(self._pm_cerebro(), "olhando_tela", None) is None:
+            raise TVSemChave("a sonda das duas TVs exige um cerebro com o olhar (o gancho olhando_tela)")
+        if type(replica) is not int or replica < 0:
+            raise ValueError(f"a replica da sonda e inteiro >= 0: {replica!r}")
+        perfis = tuple(tuple(p) for p in perfis)
+        if len(perfis) != 2 or perfis[0] == perfis[1]:
+            raise ValueError(f"a sonda das duas TVs pede dois perfis diferentes: {perfis!r}")
+        tm = self._tm(self._estado.tick)
+        rng = random.Random(derivar_semente("duas-tvs-posicao", self.semente, tm, replica))
+        k0 = rng.randrange(len(DIR16))
+        cm, dist = self.cmf, cfg.distancia_celulas * self.cmf.sub
+        px, py = self.pet
+        for i in range(cfg.tentativas):
+            k = (k0 + i) % len(DIR16)
+            pontos = (deslocar(px, py, k, dist, cm), deslocar(px, py, (k + len(DIR16) // 2) % len(DIR16), dist, cm))
+            ds = [distancia(x - px, y - py) for x, y in pontos]
+            if ds[0] == ds[1] and ds[0] <= self._raio_visao and all(self.mundo.seca(x, y) for x, y in pontos):
+                break
+        else:
+            raise RuntimeError(f"a sonda das duas TVs nao coube em {cfg.tentativas} direcoes a partir da {k0} (pet em {self.pet})")
+        self.mundo.duas_tvs = tuple((ident, TVFixa(p, tv.cfg.escala, x, y)) for ident, p, (x, y) in zip(IDS_DUAS_TVS, perfis, pontos))
+        return {"tick": tm, "replica": replica, "direcao_sorteada": k0, "direcao": k, "pet": [px, py],
+                "tvs": {ident: {"x": x, "y": y, "perfil": list(p)} for ident, p, (x, y) in zip(IDS_DUAS_TVS, perfis, pontos)}}
 
     def trocar_canal(self, programa: int) -> None:
         """O dono troca o canal da TV do jogo (a fonte "grade"). Valida o evento e o programa antes do log."""
@@ -2440,6 +2515,8 @@ class MotorMundo(MotorFrutas):
         if self.ctv.ligada:
             tv = self.mundo.tv
             d["tv"] = {"programa": tv.programa_em(t), "ligada": tv.em(t) is not None, "olhando": self.olhando_tv()}
+            if m_duas := self.mundo.duas_tvs:          # a sonda das duas TVs (P1e): so na copia; a vida sai byte a byte
+                d["tv"] |= {"duas_tvs": [i for i, _ in m_duas], "olhada": self.tv_olhada()}
         return d
 
     def resumo_mundo_fisico(self) -> dict:
@@ -2468,7 +2545,8 @@ class MotorMundo(MotorFrutas):
                 **({} if not self.levadas else {"levadas": self.levadas}),
                 **({} if m.galhos is None else {"galhos": {i: dict(g) for i, g in m.galhos.items()}, "sacudidas": m.sacudidas,
                                                 "rng_sacode": m.rng_sacode.getstate()}),
-                **({} if m.tv is None else {"tv": m.tv.resumo()})}     # so com alguma levada: a vida de antes sai byte a byte
+                **({} if m.tv is None else {"tv": m.tv.resumo()}),
+                **({} if m.duas_tvs is None else {"duas_tvs": {i: t.resumo() for i, t in m.duas_tvs}})}     # so com alguma levada: a vida de antes sai byte a byte
 
     # ------------------------------------------------------------ o avanco em ticks (o grupo, dois pets, etapa 2)
     # O `_avancar(n)` de hoje e: o que cada classe faz uma vez por avanco (o MotorPersonalidade conta o evento de avanco no indice dos

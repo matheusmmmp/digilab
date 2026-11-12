@@ -35,6 +35,9 @@ if len(CANAIS_TELA) != N_CANAIS_TELA:                  # pragma: no cover - conf
 
 # o id da TV do Mundo (uma so por mundo, na P1d) nas linhas da classe `tela` que o motor entrega ao cerebro (`ver_tela`) e no `olhando_tela`
 ID_TV = 1
+# os ids das duas TVs da sonda (P1e; `MotorMundo.ligar_duas_tvs`): o perfil A na 2 e o B na 3; nenhum e o da TV da vida, entao o cerebro nao
+# traz para a sonda o `gosto` da TV que ele olhava antes
+IDS_DUAS_TVS = (2, 3)
 
 
 class TVSemChave(ValueError):
@@ -133,6 +136,28 @@ class TV:
     def resumo(self) -> dict:
         return {"x": self.x, "y": self.y, "fonte": self.cfg.fonte, "trocas_canal": [dict(t) for t in self.trocas_canal],
                 "sentidos": [dict(s) for s in self.sentidos]}
+
+
+class TVFixa:
+    """Uma das duas TVs da sonda (P1e; docs/ESPEC_GOSTO_VISUAL_P1.md, secao 7): passa sempre o mesmo perfil, sete inteiros em [0, escala] na
+    ordem de CANAIS_TELA. Sem grade, sem cena, sem rng e sem evento: so existe na copia do pet que a sonda faz (`MotorMundo.ligar_duas_tvs`)."""
+
+    def __init__(self, perfil: tuple[int, ...], escala: int, x: int, y: int) -> None:
+        perfil = tuple(perfil)
+        if len(perfil) != len(CANAIS_TELA) or any(type(v) is not int or not 0 <= v <= escala for v in perfil):
+            raise ValueError(f"o perfil da TV da sonda: {len(CANAIS_TELA)} inteiros em [0, {escala}]: {perfil!r}")
+        self.perfil, self.escala, self.x, self.y = perfil, escala, x, y
+
+    def em(self, tick: int) -> dict[str, int]:
+        if type(tick) is not int or tick < 0:
+            raise ValueError(f"tick da TV inteiro >= 0: {tick!r}")
+        return dict(zip(CANAIS_TELA, self.perfil))
+
+    def programa_em(self, tick: int) -> None:
+        return None
+
+    def resumo(self) -> dict:
+        return {"x": self.x, "y": self.y, "fonte": "fixa", "perfil": list(self.perfil)}
 
 
 # ================================================================== o resumo do GV-15 (quem grava o evento)
