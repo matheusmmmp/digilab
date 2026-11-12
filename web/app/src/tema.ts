@@ -7,6 +7,7 @@ import { CHAVE } from "./save.ts";
 export type Tema = "sistema" | "claro" | "escuro";
 export const CHAVE_TEMA = CHAVE + "-tema";
 export const PROXIMO_TEMA: Record<Tema, Tema> = { sistema: "claro", claro: "escuro", escuro: "sistema" };
+export const GRAO_TEMA_VIME = 0x4ae8f03b84c9;
 export const NOME_TEMA: Record<Tema, string> = { sistema: "Auto", claro: "Claro", escuro: "Escuro" };
 
 let tema: Tema = "sistema";
