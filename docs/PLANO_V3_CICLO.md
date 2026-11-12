@@ -1,7 +1,8 @@
 # Plano do ciclo: a vida como rodada, com legado (2026-11-12)
 
-**Status:** PROPOSTO, sem código. O Matheus pediu em 2026-11-12 que o ciclo no estilo roguelike "já esteja desenhado". A direção é dele
-(CR-0); o como e todos os números são **PROPOSTOS, SEM FONTE**, e se acertam na rodada de equilíbrio do fim.
+**Status:** APROVADO, sem código. O Matheus pediu o ciclo "já desenhado" (CR-0) e aprovou as CR-1 a CR-9 pela recomendação em
+2026-11-12 ("Sim, as duas"). A CR-10 fica para depois. Todos os números são **PROPOSTOS, SEM FONTE**, e se acertam na rodada de
+equilíbrio do fim.
 
 **Origem:** o Matheus, em 2026-11-12: "o pet vai chegar num estágio onde o jogador vai poder herdar os stats e fazer como se fosse num
 roguelike, que ele vai zerar o ciclo. Na próxima rodagem o pet vai estar com os stats melhorados e ele vai poder crescer."
@@ -135,13 +136,13 @@ A MMO-18 recusou a herança de stats por um motivo: ela "dá ao veterano uma van
 | # | decisão | estado | recomendação | custo de errar |
 |---|---|---|---|---|
 | CR-0 | a vida é uma rodada, com legado de stats para o ovo seguinte | **DECIDIDO** (Matheus, 2026-11-12) | — | — |
-| CR-1 | o ciclo acaba pela morte ou pela escolha do dono, do Ultimate em diante | PROPOSTO | sim | só pela morte faz o jogador matar o pet para avançar |
-| CR-2 | a morte por descuido passa a metade do legado | PROPOSTO | sim | sem isso, descuidar no fim não custa nada |
-| CR-3 | passa uma parte dos pontos treinados, maior quanto mais longe o pet chegou | PROPOSTO | sim | legado igual para todos tira o motivo de ir até o Mega |
-| CR-4 | o legado entra dentro do teto do estágio; só o teto da vida cresce, +2 por geração até +10 | PROPOSTO | sim | sem teto, as gerações quebram o equilíbrio da campanha |
-| CR-5 | o cérebro, o vínculo e o caráter **não** passam | PROPOSTO | sim | passando, a segunda vida repete a primeira, e o DigiBrain deixa de importar |
-| CR-6 | trocar de brasão passa a metade do legado | PROPOSTO | sim | legado inteiro em qualquer brasão tira o peso da escolha; nenhum prende o jogador a uma árvore |
-| CR-7 | rever a MMO-18: o legado de stats passa a existir, somado ao Respeito e aos Bits do reset | PROPOSTO | sim, com a CR-8 | manter a MMO-18 como está impede o ciclo que o Matheus pediu |
-| CR-8 | nas lutas ranqueadas, os stats são cortados no teto de base | PROPOSTO | sim | sem o corte, o ranking vira contagem de gerações |
-| CR-9 | o cruzamento de hoje continua, ao lado do ciclo | PROPOSTO | sim | tirar o cruzamento apaga uma mecânica que já está no jogo |
+| CR-1 | o ciclo acaba pela morte ou pela escolha do dono, do Ultimate em diante | **DECIDIDO** (Matheus, 2026-11-12) | sim | só pela morte faz o jogador matar o pet para avançar |
+| CR-2 | a morte por descuido passa a metade do legado | **DECIDIDO** (Matheus, 2026-11-12) | sim | sem isso, descuidar no fim não custa nada |
+| CR-3 | passa uma parte dos pontos treinados, maior quanto mais longe o pet chegou | **DECIDIDO** (Matheus, 2026-11-12) | sim | legado igual para todos tira o motivo de ir até o Mega |
+| CR-4 | o legado entra dentro do teto do estágio; só o teto da vida cresce, +2 por geração até +10 | **DECIDIDO** (Matheus, 2026-11-12) | sim | sem teto, as gerações quebram o equilíbrio da campanha |
+| CR-5 | o cérebro, o vínculo e o caráter **não** passam | **DECIDIDO** (Matheus, 2026-11-12) | sim | passando, a segunda vida repete a primeira, e o DigiBrain deixa de importar |
+| CR-6 | trocar de brasão passa a metade do legado | **DECIDIDO** (Matheus, 2026-11-12) | sim | legado inteiro em qualquer brasão tira o peso da escolha; nenhum prende o jogador a uma árvore |
+| CR-7 | rever a MMO-18: o legado de stats passa a existir, somado ao Respeito e aos Bits do reset | **DECIDIDO** (Matheus, 2026-11-12) | sim, com a CR-8 | manter a MMO-18 como está impede o ciclo que o Matheus pediu |
+| CR-8 | nas lutas ranqueadas, os stats são cortados no teto de base | **DECIDIDO** (Matheus, 2026-11-12) | sim | sem o corte, o ranking vira contagem de gerações |
+| CR-9 | o cruzamento de hoje continua, ao lado do ciclo | **DECIDIDO** (Matheus, 2026-11-12) | sim | tirar o cruzamento apaga uma mecânica que já está no jogo |
 | CR-10 | a rodada com condição (legado maior em troca de uma restrição) | PROPOSTO | depois | cedo demais, complica a primeira volta do ciclo |
