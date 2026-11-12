@@ -92,7 +92,7 @@ function serie() {
 }
 
 /* ---------------------------------------------------------------- o rastro de cada lutador nos passos antes de um evento */
-interface Marca { dash: boolean; golpe: boolean; hab: boolean; recua: boolean; estado: string; norm: number }
+interface Marca { dash: boolean; golpe: boolean; hab: boolean; recua: boolean; prep: boolean; estado: string; norm: number }
 const JANELA = 16;
 function rastreador() {
   const buf: Record<string, Marca[]> = { a: [], b: [] };
@@ -104,15 +104,19 @@ function rastreador() {
         const dx = u.x - o.x, dy = u.y - o.y, norm = Math.hypot((u.x - Lt.el.cx) / Lt.el.rx, (u.y - Lt.el.cy) / Lt.el.ry);
         const ant = buf[lado][buf[lado].length - 1];
         const recua = !!ant && u.estado === "run" && u.dash <= 0 && Math.hypot(dx, dy) > 0 && norm > ant.norm;
-        buf[lado].push({ dash: u.dash > 0, golpe: !!golpe, hab: !!golpe?.hab, recua, estado: u.estado, norm });
+        /* o recuo na preparacao do tiro (D-LP5-12, o recuaNaPrep): andando para fora no estado de ataque */
+        const prep = !!ant && u.estado === "attack" && norm > ant.norm + 1e-9;
+        buf[lado].push({ dash: u.dash > 0, golpe: !!golpe, hab: !!golpe?.hab, recua, prep, estado: u.estado, norm });
         if (buf[lado].length > JANELA) buf[lado].shift();
       }
     },
-    /** a causa da queda do lado: o golpe nos ultimos 4 passos (o empurrao), senao o pulo nos ultimos 16, senao o andar (o recuo ou a IA) */
+    /** a causa da queda do lado: o golpe nos ultimos 4 passos (o empurrao), senao o pulo nos ultimos 16, senao o recuo na preparacao do
+        tiro nos ultimos 6, senao o andar para fora (o recuo ou a IA) */
     causa(lado: "a" | "b"): string {
       const b = buf[lado], n = b.length;
       for (let k = n - 1; k >= Math.max(0, n - 4); k--) if (b[k].golpe) return b[k].hab ? "golpe_habilidade" : "golpe";
       if (b.some(m => m.dash)) return "pulo_esquiva";
+      if (b.slice(-6).some(m => m.prep)) return "recuo_na_preparacao_do_tiro";
       if (b.slice(-6).some(m => m.recua)) return "andar_para_fora";
       return "outro";
     },
@@ -126,12 +130,14 @@ function pares(cena: IdCena) {
     const rv = rivaisArena(est), longe = rv.filter(atira), perto = rv.filter(k => !atira(k)), lados = Object.fromEntries(rv.map(k => [k, { forma: k, stats: rivalCanonico(C!, k) }]));
     const quedas: Record<string, Record<string, number>> = { longe: {}, perto: {} }, cont = { lutas: 0, vitoria_longe: 0, empates: 0, lutas_neutras: 0, vitoria_longe_neutras: 0 };
     const pilar: Record<string, number> = {}, runa: Record<string, number> = {}, comRuna: Record<string, { lutas: number; vence: number }> = {};
-    let x0 = 0;
+    let x0 = 0, passosTodos = 0, passosPerto = 0;
     for (const x of longe) for (const y of perto) for (const base of BASES) for (let q = 0; q < TAM.lutasPar; q++) for (const ladoLonge of ["a", "b"] as const) {
-      const s = sem(base, 200_000 + (cena === "ringue" ? 0 : 50_000), x0++);
+      const s = sem(base, 200_000 + (cena === "ringue" ? 0 : cena === "castelo" ? 50_000 : 75_000), x0++);
       const A = ladoLonge === "a" ? lados[x] : lados[y], B = ladoLonge === "a" ? lados[y] : lados[x], Lt = montar(cena, s, A, B), tr = rastreador();
       const tipo = (lado: string) => lado === ladoLonge ? "longe" : "perto", pegou: Record<string, boolean> = {};
       andar(Lt, (ev, Lt2) => {
+        /* o alcance do golpe de perto mais a investida (EQ.alcanceCorpo 44 + o raio 18 + a investida 58): quem atira esta ao alcance */
+        passosTodos++; if (Math.hypot(Lt2.a.x - Lt2.b.x, Lt2.a.y - Lt2.b.y) <= 44 + 18 + 58) passosPerto++;
         for (const e of ev) {
           if (e.tipo === "queda_ringue") inc(quedas[tipo(e.u.lado)], tr.causa(e.u.lado));
           if (e.tipo === "pilar") inc(pilar, tipo(e.u.lado));
@@ -146,7 +152,7 @@ function pares(cena: IdCena) {
       if (cena === "castelo") { const k = pegou.longe && pegou.perto ? "os_dois" : pegou.longe ? "so_longe" : pegou.perto ? "so_perto" : "nenhum"; const z = comRuna[k] ??= { lutas: 0, vence: 0 }; z.lutas++; if (venceLonge) z.vence++; }
     }
     out[est] = {
-      longe: longe.length, perto: perto.length, ...cont, taxa_longe: cont.lutas ? r3(cont.vitoria_longe / cont.lutas) : null,
+      longe: longe.length, perto: perto.length, ...cont, fracao_passos_ao_alcance_de_perto: r3(passosPerto / Math.max(1, passosTodos)), taxa_longe: cont.lutas ? r3(cont.vitoria_longe / cont.lutas) : null,
       taxa_longe_neutras: cont.lutas_neutras ? r3(cont.vitoria_longe_neutras / cont.lutas_neutras) : null,
       ...(cena === "ringue" ? { quedas_por_lutador_e_causa: quedas, quedas_por_luta: { longe: r3(Object.values(quedas.longe).reduce((a, b) => a + b, 0) / Math.max(1, cont.lutas)), perto: r3(Object.values(quedas.perto).reduce((a, b) => a + b, 0) / Math.max(1, cont.lutas)) } } : {}),
       ...(cena === "castelo" ? { pilar_e_bloqueio_por_luta: Object.fromEntries(Object.entries(pilar).map(([k, v]) => [k, r3(v / Math.max(1, cont.lutas))])), runa_por_luta: Object.fromEntries(Object.entries(runa).map(([k, v]) => [k, r3(v / Math.max(1, cont.lutas))])),
@@ -261,7 +267,7 @@ function espelho() {
 
 /* ---------------------------------------------------------------- a saida */
 const t0 = Date.now();
-const dados = { serie: serie(), ringue: pares("ringue"), torre: torre(), castelo: pares("castelo"), empates: empates(), folego: folego(), espelho: espelho() };
+const dados = { serie: serie(), ringue: pares("ringue"), torre: torre(), castelo: pares("castelo"), campo_controle: pares("campo"), empates: empates(), folego: folego(), espelho: espelho() };
 const SAIDA = fileURLToPath(new URL("../medicoes/luta_nucleo/n2/", import.meta.url));
 mkdirSync(SAIDA, { recursive: true });
 const res = { tarefa: "LUTA_POC, investigacao do nucleo, N2", commit: commitAtual(), candidato: C, faixa: "investigacao", bases: BASES, tamanhos: TAM, lutas: LUTAS, segundos: (Date.now() - t0) / 1000, dados };
