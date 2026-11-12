@@ -96,7 +96,7 @@ export type EventoMudarIlha = [tick: number, tipo: "mi", troca: { ilha: string }
 /** a memoria de lugar do DigiBrain modular passa a alcancar `alcance` subunidades (docs/TAREFA_V3_ILHA_AGUA.md, secao 12.16, IG6): os pets
     v21 a v24 que estao na ilha grande, uma vez. So o alcance muda */
 export type EventoAlcanceMemoria = [tick: number, tipo: "ma", troca: { alcance: number }];
-/** a TV no cerebro (a v31; GOSTO_VISUAL, D-GV-CEREBRO-1): o modo livre gravado, o que a TV passa a partir deste tick, no formato do evento
+/** a TV no cerebro (a v32; GOSTO_VISUAL, D-GV-CEREBRO-1): o modo livre gravado, o que a TV passa a partir deste tick, no formato do evento
     `sentido_tela` do Python (`fonte|n1|...|n7`, os sete niveis de 0 a 15 do ResumoTela; GV-15). So muda a TV: nao e contato nem cuidado */
 export type EventoSentidoTela = [tick: number, tipo: "st", valor: string];
 /** o sacudir a arvore (docs/TAREFA_V3_ARVORE_SACODE.md, S2): o dono sacode a arvore `arvore` do layout; so o mundo muda (o galho e a fruta

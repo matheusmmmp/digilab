@@ -301,9 +301,9 @@ export class Motor {
       consequenciaCorpo: (a, oc, depois) => { const b = qual(); if (b) b.consequenciaCorpo(a, oc, depois); else braco.consequenciaCorpo(a, oc, depois); },
       receberAcaoDono: (a, tick) => { const b = qual(); if (b) b.receberAcaoDono(a, tick); else braco.receberAcaoDono(a, tick); },
       mudancaNoCorpo: (antes, depois) => { const b = qual(); if (b) b.mudancaNoCorpo(); else braco.mudancaNoCorpo(antes, depois); },
-      /* a TV no cerebro (a v31; D-GV-CEREBRO-5): as TVs a vista e o agrado vao ao modular que decide; com o A, o olhar e a regra provisoria da
+      /* a TV no cerebro (a v32; D-GV-CEREBRO-5): as TVs a vista e o agrado vao ao modular que decide; com o A, o olhar e a regra provisoria da
          P1c (o pet olha quando esta parado, acordado e com a TV no raio: o olhandoTela devolve a TV, como sem o gancho no Python) e nao ha agrado.
-         Os tres ganchos so existem na v31: o laco so os le com a TV ligada */
+         Os tres ganchos so existem na v32: o laco so os le com a TV ligada */
       ...(nasceComTv(versao) ? {
         verTela: (linhas: [number, number, number, number][]) => { const b = qual(); if (b) b.verTela(linhas); },
         olhandoTela: () => { const b = qual(); return b ? b.olhandoTela() : ID_TV; },
@@ -344,7 +344,7 @@ export class Motor {
                                        cfgMundo: nasceNaGrande(versao) ? CMU_GRANDE : nasceNaAgua(versao) ? CMU_MVP_AGUA : CMU_MVP,
                                        ...(nasceNaGrande(versao) || nasceNaAgua(versao) ? { contrato: CONFIG_CONTRATO_AGUA } : {}),
                                        bolaNoGolpe: ehCerebroTrocavel(versao),
-                                       /* a v31: o orgao da tela no corpo e a TV do jogo no mundo, pela fonte "evento" (o evento "st") */
+                                       /* a v32: o orgao da tela no corpo e a TV do jogo no mundo, pela fonte "evento" (o evento "st") */
                                        ...(nasceComTv(versao) ? { tela: { tela: CONFIG_TELA_LIGADA, tv: CONFIG_TV_JOGO } } : {}),
                                        ...(opcoes.parteDoMundo ? { parteDoMundo: opcoes.parteDoMundo } : {}) });     // o pet de teste (v16): a bola de antes; a v21, a bola no golpe
     this.v11 = { braco, laco };
@@ -415,7 +415,7 @@ export class Motor {
   /** v12: o mundo fisico do pet (null nos v1-v11). A tela so le */
   get mundo(): Mundo | null { return this.v11 && this.v11.laco instanceof MotorCorpoMundo ? this.v11.laco.mundo : null; }
   /** a observacao de agora, a que o pet le: nos v11, com os receptores do corpo */
-  /** so le: com a TV (a v31), sem entregar a tela ao corpo de novo (MotorCorpo.leituraObservacao; D-GV-CEREBRO-7) */
+  /** so le: com a TV (a v32), sem entregar a tela ao corpo de novo (MotorCorpo.leituraObservacao; D-GV-CEREBRO-7) */
   observacaoAgora(): ObservacaoLobos { return this.v11 ? this.v11.laco.leituraObservacao() : observacao(this.e); }
 
   /* ---------------------------------------------------------------- heranca (pets v4) */
@@ -876,12 +876,12 @@ export class Motor {
     this.alcanceMemoria = D_MAX_ILHA_GRANDE;
     this.modular?.alcanceDaMemoria(D_MAX_ILHA_GRANDE);
   }
-  /* ---------------------------------------------------------------- a TV no cerebro (a v31; GOSTO_VISUAL, D-GV-CEREBRO) */
-  /** o pet tem a TV no cerebro (a v31): o que a TV passa entra pelo evento "st" */
+  /* ---------------------------------------------------------------- a TV no cerebro (a v32; GOSTO_VISUAL, D-GV-CEREBRO) */
+  /** o pet tem a TV no cerebro (a v32): o que a TV passa entra pelo evento "st" */
   get temTv(): boolean { return nasceComTv(this.versao); }
   /** o modo livre gravado (D-GV-CEREBRO-1): o que a TV do jogo passa a partir de agora, o valor do evento `sentido_tela` (`fonte|n1|...|n7`, o
       que o ResumoTela devolve). So a TV muda: nao e contato nem cuidado, nao passa pelo vinculo nem pelo historico; vale com o pet acordado ou
-      dormindo. Fora da v31, com o pet morto ou com o valor mal formado, falha alto antes do registro */
+      dormindo. Fora da v32, com o pet morto ou com o valor mal formado, falha alto antes do registro */
   sentidoTela(valor: string): void {
     this._validarSentidoTela(valor);
     this._conferirMorte(); this._vivo();
@@ -890,7 +890,7 @@ export class Motor {
     this.log.push([t, "st", valor]);
   }
   private _validarSentidoTela(valor: unknown): [string, number[]] {
-    if (!nasceComTv(this.versao)) throw new Error(`só o pet v31 tem a TV no cérebro (este é v${this.versao})`);
+    if (!nasceComTv(this.versao)) throw new Error(`só o pet v32 tem a TV no cérebro (este é v${this.versao})`);
     const [fonte, niveis] = lerSentidoTela(valor);
     if (valorSentidoTela(fonte, niveis) !== valor) throw new Error(`sentido_tela fora da forma canônica: ${JSON.stringify(valor)}`);
     return [fonte, niveis];
@@ -907,7 +907,7 @@ export class Motor {
     return u === undefined ? null : valorSentidoTela(u.fonte, u.niveis);
   }
   /** a TV no cerebro agora, para as telas (so le): se o pet olha a TV (o OCIOSO do olhar, acordado e com ela no raio), se ela esta no raio da
-      visao, e o `olhar` do ultimo motivo do modular (o agrado, o termo gosto e a TV escolhida); null fora da v31 */
+      visao, e o `olhar` do ultimo motivo do modular (o agrado, o termo gosto e a TV escolhida); null fora da v32 */
   tvNoCerebro(): { olhando: boolean; noRaio: boolean; motivo: Record<string, unknown> | null } | null {
     if (!nasceComTv(this.versao)) return null;
     const laco = this.v11!.laco as MotorCorpoMundo, tv = laco.tv!, p = laco.mundo.pet, mo = this.lab?.ultimoMotivo ?? null;
@@ -1313,7 +1313,7 @@ export class Motor {
     /* o modular nasce com o alcance da memoria deste pet (o de sempre, ou o da ilha grande: a v25 e o evento "ma"; IG6) e, na v27, com o sono
        que segura (SONO_SEGURA) */
     if (v.cerebro === "modular") {
-      /* a v31: o modular com a subchave `olhar`, o genoma da visao da semente do ovo (rng propria `visao-ovo`) e o agrado no corpo */
+      /* a v32: o modular com a subchave `olhar`, o genoma da visao da semente do ovo (rng propria `visao-ovo`) e o agrado no corpo */
       const tv = nasceComTv(this.versao);
       this.modular ??= new DigiBrain(tv ? CONFIG_DIGIBRAIN_LAB_OLHAR : CONFIG_DIGIBRAIN_LAB, { ...INATOS_MODULAR, d_max: this.alcanceMemoria } as typeof INATOS_MODULAR, false,
         nasceComSonoSegura(this.versao) ? CONFIG_SONO_SEGURA_LIGADA : CONFIG_SONO_SEGURA, tv ? { semente: this.semente, cfgOlhar: CONFIG_OLHAR_JOGO } : undefined);

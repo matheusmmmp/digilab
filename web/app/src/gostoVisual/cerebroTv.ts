@@ -1,5 +1,5 @@
 /* A captura ligada ao cérebro (GOSTO_VISUAL, 2026-11-12; "Quero ligar a captura ao cerebro", Matheus; docs/registro/2026-11.md,
-   D-GV-CEREBRO-1 a 10). Só para o pet que tem a TV no cérebro (a v31, `Motor.temTv`); nos outros pets nada daqui roda e o P0 segue fora do
+   D-GV-CEREBRO-1 a 10). Só para o pet que tem a TV no cérebro (a v32, `Motor.temTv`); nos outros pets nada daqui roda e o P0 segue fora do
    motor, do log e do save, como antes.
    - É a ÚNICA porta do P0 para o registro além do Carinho (o teste gosto_visual_p0 confere): o vetor de cada segundo (o da captura da tela ou
      o da TV do jogo do P0, sete números em [0, 1]) vai ao ResumoTela do motor (GV-15: a média de 10 s em 16 níveis, só na mudança), e cada
@@ -42,7 +42,7 @@ function gravar(m: Motor, valor: string): void {
   }
 }
 
-/** a TV ligou: com o pet da v31, o resumo começa, com a fonte da origem */
+/** a TV ligou: com o pet da v32, o resumo começa, com a fonte da origem */
 export function comecarNoCerebro(origem: "tela" | "jogo"): void {
   alvo = petComTv();
   resumo = alvo === null ? null : new ResumoTela(origem === "tela" ? "tela" : "tv");
@@ -67,7 +67,7 @@ export function pararNoCerebro(): void {
   if (u !== preta) gravar(m, preta);
 }
 
-/** o que o cérebro faz com a TV agora, em palavras e na reação mostrada sobre o pet; null fora da v31 */
+/** o que o cérebro faz com a TV agora, em palavras e na reação mostrada sobre o pet; null fora da v32 */
 export function leituraDoCerebro(m: Motor): { frase: string; reacao: Reacao; olhando: boolean; noRaio: boolean; agrado: number | null } | null {
   const c = m.tvNoCerebro();
   if (c === null) return null;
@@ -86,7 +86,7 @@ const NOME_ACAO: Record<string, string> = {
   olhar: "olhar",
 };
 
-/** a reação do cérebro do pet de agora para o sinal e a pose (a sessão lê a cada segundo); null fora da v31 */
+/** a reação do cérebro do pet de agora para o sinal e a pose (a sessão lê a cada segundo); null fora da v32 */
 export function reacaoDoCerebroAgora(): { reacao: Reacao; olhando: boolean } | null {
   const m = petComTv(), l = m === null ? null : leituraDoCerebro(m);
   return l === null ? null : { reacao: l.reacao, olhando: l.olhando };

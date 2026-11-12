@@ -75,7 +75,7 @@ const lerMundo = () => {
     lugares: lugaresNomeados(mu), bola: mu.bolaEm(m.e.tick), rolagens: mu.rolagens.length };
 };
 Object.assign(window, { __digilab: { assinatura: () => jogoAtual().motor.assinatura(), registro: () => textoDaTela(), grupo: () => { const j = jogoAtual(); return j.grupo ? { foco: j.foco, ids: [...j.grupo.ids], ticks: j.grupo.ids.map(i => j.grupo!.motor(i).e.tick), especies: j.grupo.ids.map(i => j.grupo!.motor(i).especie) } : null; }, focar: (i: string) => focar(i), tick: () => jogoAtual().motor.e.tick, digibrain: () => jogoAtual().motor.digibrain(),
-  /* a TV no cérebro (a v31; o e2e gosto_visual_cerebro): o que o cérebro faz com a TV e o relógio do jogo, para a captura parar no olhar */
+  /* a TV no cérebro (a v32; o e2e gosto_visual_cerebro): o que o cérebro faz com a TV e o relógio do jogo, para a captura parar no olhar */
   tvCerebro: () => jogoAtual().motor.tvNoCerebro(), velocidade: (v: number) => escolherVelocidade(v),
   mundo: lerMundo, cena: () => CENA.mundo && { pet: [...CENA.mundo.pet], bola: CENA.mundo.bola ?? null, modo3d: CENA.modo3d, ret: CENA.ret },
   reacao: () => reacaoAtual(performance.now()),

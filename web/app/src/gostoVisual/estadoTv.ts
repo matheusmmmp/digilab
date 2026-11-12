@@ -21,7 +21,7 @@ export interface EstadoTv {
   reacao: Reacao | null;
   /** o vídeo da captura (o mesmo elemento que captura.ts lê uma vez por segundo); null na TV do jogo ou desligada */
   video: HTMLVideoElement | null;
-  /** o pet desenhado vai até a almofada: sempre no P0; no pet com a TV no cérebro (a v31), só quando o cérebro escolheu olhar
+  /** o pet desenhado vai até a almofada: sempre no P0; no pet com a TV no cérebro (a v32), só quando o cérebro escolheu olhar
       (D-GV-CEREBRO-9: a vista não mostra o pet assistindo enquanto o cérebro faz outra coisa) */
   petVai: boolean;
   /** sobe a cada mudança (a cena compara para saber se algo mudou) */

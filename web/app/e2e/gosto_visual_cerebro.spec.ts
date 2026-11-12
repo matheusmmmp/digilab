@@ -1,4 +1,4 @@
-/* A captura ligada ao cérebro no jogo (GOSTO_VISUAL, 2026-11-12; docs/registro/2026-11.md, D-GV-CEREBRO-1 a 10): o pet de um só da v31 (o pet de
+/* A captura ligada ao cérebro no jogo (GOSTO_VISUAL, 2026-11-12; docs/registro/2026-11.md, D-GV-CEREBRO-1 a 10): o pet de um só da v32 (o pet de
    exemplo do primeiro acesso, sem save), a TV do jogo do P0 ligada pelo painel da TV, o pet levado até ela pelo botão "Levar até a TV". O que a
    TV passa entra no registro pelo "st" (só os sete níveis), o cérebro escolhe olhar, e o painel da TV e o do DigiBrain dizem a mesma coisa:
    "olhando a TV" e "olhar". A captura real é bloqueada no navegador do app; a TV do jogo alimenta o cérebro pela mesma via (a fonte "tv").
@@ -49,7 +49,7 @@ const capturar = async (page: Page, nome: string) => { if (CAPTURAS) await page.
 test("a TV no cérebro, no desktop: o st no registro, o painel da TV diz olhando e o DigiBrain diz olhar", async ({ browser }) => {
   test.setTimeout(240_000);
   const { ctx, page, erros } = await abrir(browser, 1440, 900);
-  expect((await estado(page)).versao).toBe(31);
+  expect((await estado(page)).versao).toBe(32);
   await page.locator(".pet-hud [data-painel-pet='tv'] button").click();
   const painel = page.getByTestId("painel-tv");
   await expect(painel.getByTestId("tv-prot")).toContainText("entra no cérebro dele");

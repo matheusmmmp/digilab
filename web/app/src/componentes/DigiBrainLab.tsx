@@ -18,7 +18,7 @@ const NOME_SONDA: Record<string, string> = {
 };
 const ACAO_INF: Record<string, string> = {
   ocioso: "ficar à toa", dormir: "dormir", comer: "comer", brincar: "brincar", chamar_atencao: "chamar você", explorar: "explorar", emburrar: "emburrar",
-  olhar: "olhar",                                         // a TV no cérebro (a v31): a unidade de olhar (o motor a executa como o ocioso)
+  olhar: "olhar",                                         // a TV no cérebro (a v32): a unidade de olhar (o motor a executa como o ocioso)
 };
 const maiuscula = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
 

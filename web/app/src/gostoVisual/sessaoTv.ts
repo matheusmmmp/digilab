@@ -3,7 +3,7 @@
    pequena leem daqui; a ilha continua lendo o estadoTv.ts, que esta sessão escreve.
    O carinho é o Carinho do jogo (UX-GV-7): a sessão só LÊ quando foi o último (telas/pet/reacao.ts, só vista) e, se houve um desde o
    segundo anterior, o gosto do protótipo associa o que está passando a ele. A sessão não escreve nada no motor, no log nem no save, salvo
-   no pet com a TV no cérebro (a v31): ali o vetor de cada segundo vai ao cerebroTv.ts, que grava o evento "st" (D-GV-CEREBRO-1), e a reação
+   no pet com a TV no cérebro (a v32): ali o vetor de cada segundo vai ao cerebroTv.ts, que grava o evento "st" (D-GV-CEREBRO-1), e a reação
    sobre o pet passa a ser a do cérebro (D-GV-CEREBRO-9). */
 import { useSyncExternalStore } from "react";
 import { ultimoCarinhoEm } from "../telas/pet/reacao.ts";
@@ -59,7 +59,7 @@ function sentir(s: Sentido): void {
   const c = ultimoCarinhoEm(), houve = c !== null && c !== carinhoVisto;
   carinhoVisto = c;
   const { estado, leitura } = passo(inato, atual.estado, s, houve);
-  sentirNoCerebro(s);                                     // a v31: o vetor vai ao resumo, e o "st" ao registro
+  sentirNoCerebro(s);                                     // a v32: o vetor vai ao resumo, e o "st" ao registro
   const cer = reacaoDoCerebroAgora();
   publicarTv({ sentido: s, reacao: cer === null ? leitura.reacao : cer.reacao, petVai: cer === null ? true : cer.olhando });
   let erro = atual.erro;
@@ -81,7 +81,7 @@ export function ligarTvJogo(): void {
 }
 
 function desligar(erro: string | null): void {
-  pararNoCerebro();                                       // a v31: a tela preta e muda entra no registro
+  pararNoCerebro();                                       // a v32: a tela preta e muda entra no registro
   desligarTv();
   mudar({ origem: null, programa: null, temSom: false, leitura: null, sentido: null, erro });
 }

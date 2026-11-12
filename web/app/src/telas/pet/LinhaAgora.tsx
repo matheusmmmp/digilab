@@ -29,7 +29,7 @@ export function decisaoAgora(m: Motor): LeituraDecisao | null {
   return c === null || mo === null ? null : leituraDecisao(mo, c.prior[mo.regra][mo.acao], c.escala, c.receptoresNovos);
 }
 
-/** o nome do que o pet faz agora: o da acao do motor; no pet com a TV no cerebro (a v31), "vendo TV" quando o cerebro escolheu olhar (o motor
+/** o nome do que o pet faz agora: o da acao do motor; no pet com a TV no cerebro (a v32), "vendo TV" quando o cerebro escolheu olhar (o motor
     executa o olhar como o ocioso; D-GV-CEREBRO-8: a linha nao diz "a toa" enquanto o DigiBrain diz "olhar") */
 export const nomeAcaoAgora = (m: Motor): string => (m.temTv && m.tvNoCerebro()?.olhando ? "vendo TV" : NOME_PET[m.acao]);
 

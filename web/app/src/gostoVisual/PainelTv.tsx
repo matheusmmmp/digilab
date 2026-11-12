@@ -7,10 +7,10 @@
      de tanto ver, do carinho, cada uma com a forma dela); o que está passando numa faixa à parte;
    - o carinho é o Carinho do jogo (UX-GV-7): aqui não há botão de carinho, e nenhuma contagem de carinhos (a GV-14: o jogo não pontua);
    - no celular (UX-GV-8) o painel é uma folha baixa: recolhida, a reação e o gosto; "Mais" a estica.
-   - no pet com a TV no cérebro (a v31; D-GV-CEREBRO-8): a reação é a do cérebro (o que o motor diz que ele faz, a mesma fonte do painel do
+   - no pet com a TV no cérebro (a v32; D-GV-CEREBRO-8): a reação é a do cérebro (o que o motor diz que ele faz, a mesma fonte do painel do
      DigiBrain), o botão "Levar até a TV" aparece quando a TV está fora da vista dele, e o rodapé diz que o que passa entra no cérebro. O gosto
      ("Gosta mais de", o porquê) segue o do protótipo, fora do cérebro, e o rodapé diz isso.
-   Só existe com `?gosto_visual=1`. Fora do motor, do log e do save, salvo o "st" e o levar o pet da v31 (cerebroTv.ts). */
+   Só existe com `?gosto_visual=1`. Fora do motor, do log e do save, salvo o "st" e o levar o pet da v32 (cerebroTv.ts). */
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ChevronRight, Lock, MonitorUp, PictureInPicture2, Square, Tv } from "lucide-react";
 import { COMPONENTES, alvos, gostaMaisDe, tempoJunto, valores, type Componente } from "./gosto.ts";
@@ -99,7 +99,7 @@ export function PainelTv({ nome, movel }: { nome: string; movel: boolean }) {
   const quais: readonly Componente[] = ligada && !s.temSom ? IMAGEM : COMPONENTES;
   const linhas = linhasDoGosto(s.inato, s.estado, quais), curtas = linhasMarcadas(linhas), agora = s.sentido ? valores(s.sentido) : {};
   const img = linhas.filter(l => IMAGEM.includes(l.k)), som = linhas.filter(l => SOM.includes(l.k));
-  /* a v31: a reação é a do cérebro (D-GV-CEREBRO-8); nos outros pets, a do protótipo */
+  /* a v32: a reação é a do cérebro (D-GV-CEREBRO-8); nos outros pets, a do protótipo */
   const cer = motor === null ? null : leituraDoCerebro(motor);
   const frase = cer !== null && ligada ? cer.frase : s.leitura ? fraseDaReacao(s.inato, s.estado, s.sentido, s.leitura.reacao) : ligada ? "Ligando…" : null;
   const levar = cer !== null && motor !== null && !cer.noRaio && !motor.e.dormindo && motor.morte === null

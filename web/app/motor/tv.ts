@@ -72,7 +72,7 @@ export const CONFIG_TV: ConfigTV = {
   cena_ticks: 5, variacao: 27000, janela_resumo_s: 10,
 };
 
-/** a TV do jogo no cerebro (a v31; D-GV-CEREBRO-2 e 3): a fonte "evento" (o modo livre gravado: o que a captura da tela ou a TV do P0
+/** a TV do jogo no cerebro (a v32; D-GV-CEREBRO-2 e 3): a fonte "evento" (o modo livre gravado: o que a captura da tela ou a TV do P0
     passa entra no registro pelo evento "st") e a celula logo ao sul da TV da ilha grande: o marco do #814 (PLANTA_ILHA_GRANDE.marcos.tv,
     busca 0) fica na celula (96, 17), que o mapa fecha (nao e seca), e a TV do motor pede uma celula seca (falha alto, como o Python).
     Nada daqui e do Python: a pesquisa usa a CONFIG_TV. PROPOSTO, SEM FONTE */

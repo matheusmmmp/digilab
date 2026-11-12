@@ -1,5 +1,5 @@
-/* GOSTO_VISUAL: a captura ligada ao cerebro no jogo (a v31; docs/registro/2026-11.md, D-GV-CEREBRO-1 a 10). Confere, no motor do jogo:
-     - o G2: sem nenhum "st" no registro, a vida da v31 e a da v27, byte a byte no que a vida e (as decisoes, o estado do pet, o corpo fora dos
+/* GOSTO_VISUAL: a captura ligada ao cerebro no jogo (a v32; docs/registro/2026-11.md, D-GV-CEREBRO-1 a 10). Confere, no motor do jogo:
+     - o G2: sem nenhum "st" no registro, a vida da v32 e a da v27, byte a byte no que a vida e (as decisoes, o estado do pet, o corpo fora dos
        quimicos da tela, a posicao), com o mesmo registro; e os pets de antes (a v27 e o grupo v28) nao ganham a TV;
      - o replay: uma vida com o "st" gravado (o ResumoTela sobre amostras sinteticas, as duas fontes, o pet levado ate a TV) refaz a mesma
        assinatura pelo registro, e o save em texto reabre igual;
@@ -43,9 +43,9 @@ function levarATv(m: Motor): void {
 /** amostras sinteticas de um "programa" por hora (sete numeros em [0, 1]), sem rng: o programa h muda o perfil */
 const amostra = (h: number, s: number): number[] => [0, 1, 2, 3, 4, 5, 6].map(k => ((h * 7 + k * 3 + (s % 5)) % 11) / 10);
 
-describe("a v31: a TV no cerebro", () => {
-  test("os ovos novos de um pet so nascem v31; o grupo segue v29, sem a TV", () => {
-    expect(VERSAO_PET).toBe(31);
+describe("a v32: a TV no cerebro", () => {
+  test("os ovos novos de um pet so nascem v32; o grupo segue v29, sem a TV", () => {
+    expect(VERSAO_PET).toBe(32);
     expect(new Motor(1).temTv).toBe(true);
     expect(new Motor(1, 27).temTv).toBe(false);
     expect(laco(new Motor(1, 27)).tv).toBeNull();
@@ -57,9 +57,9 @@ describe("a v31: a TV no cerebro", () => {
     expect(t.em(0)).toBeNull();                                    // sem nenhum "st", a TV esta desligada
   });
 
-  test("G2: sem nenhum \"st\", a vida da v31 e a da v27 (as decisoes, o estado, o corpo fora da tela e a posicao), sementes 101 e 202, 2 dias", () => {
+  test("G2: sem nenhum \"st\", a vida da v32 e a da v27 (as decisoes, o estado, o corpo fora da tela e a posicao), sementes 101 e 202, 2 dias", () => {
     for (const s of [101, 202]) {
-      const a = ovo(s, 27), b = ovo(s, 31);
+      const a = ovo(s, 27), b = ovo(s, 32);
       cuidar(a, 48); cuidar(b, 48);
       expect(b.log).toEqual(a.log);
       expect(b.lab!.motivos.map(x => x["escolha"])).toEqual(a.lab!.motivos.map(x => x["escolha"]));
@@ -74,11 +74,11 @@ describe("a v31: a TV no cerebro", () => {
     }
   });
 
-  test("o \"st\" so na v31; mal formado ou fora da forma do ResumoTela falha alto antes do registro", () => {
+  test("o \"st\" so na v32; mal formado ou fora da forma do ResumoTela falha alto antes do registro", () => {
     const v27 = ovo(101, 27);
-    expect(() => v27.sentidoTela("tela|1|1|1|1|1|1|1")).toThrow(/v31/);
+    expect(() => v27.sentidoTela("tela|1|1|1|1|1|1|1")).toThrow(/v32/);
     expect(v27.log.some(e => e[1] === "st")).toBe(false);
-    const m = ovo(101, 31), n = m.log.length;
+    const m = ovo(101, 32), n = m.log.length;
     expect(() => m.sentidoTela("tela|1|1|1|1|1|1")).toThrow(/malformado/);
     expect(() => m.sentidoTela("tela|16|1|1|1|1|1|1")).toThrow(/fora de 0 a 15/);
     expect(() => m.sentidoTela("radio|1|1|1|1|1|1|1")).toThrow(/malformado/);
@@ -94,7 +94,7 @@ describe("a v31: a TV no cerebro", () => {
 /** uma vida de jogo com a TV: o pet levado ate a TV a cada 2 h, e o P0 mandando um vetor por "segundo" (12 por hora de jogo, um evento a cada
     10 amostras so na mudanca), a fonte trocando no meio da vida */
 function vidaComTv(s: number, horas: number): { m: Motor; eventos: number } {
-  const m = ovo(s, 31);
+  const m = ovo(s, 32);
   let r = new ResumoTela("tela"), eventos = 0;
   cuidar(m, horas, (mm, h) => {
     if (h === Math.floor(horas / 2)) r = new ResumoTela("tv");
@@ -156,33 +156,33 @@ describe("o save antigo", () => {
     expect(l.motor.assinatura()).toBe(a.assinatura());
     expect(l.motor.temTv).toBe(false);
     expect(l.motor.tvNoCerebro()).toBeNull();
-    expect(() => l.motor.aplicarEvento([l.motor.e.tick, "st", valorSentidoTela("tela", [1, 1, 1, 1, 1, 1, 1])])).toThrow(/v31/);
+    expect(() => l.motor.aplicarEvento([l.motor.e.tick, "st", valorSentidoTela("tela", [1, 1, 1, 1, 1, 1, 1])])).toThrow(/v32/);
   });
 });
 
 describe("ler a tela nao muda o pet (D-GV-CEREBRO-7)", () => {
   test("com a TV ligada e um \"st\" de volume alto no mesmo tick, a leitura (observacao, DigiBrain, TV no cerebro) nao muda a assinatura nem o replay", () => {
-    const m = ovo(505, 31);
+    const m = ovo(505, 32);
     cuidar(m, 10, (mm, h) => { if (h % 2 === 0) levarATv(mm); mm.sentidoTela(valorSentidoTela("tv", h % 2 ? [3, 3, 3, 3, 2, 2, 2] : [12, 12, 12, 12, 15, 15, 15])); });
     m.sentidoTela(valorSentidoTela("tv", [1, 1, 1, 1, 15, 15, 15]));     // o salto de volume: o susto so no proximo sentir do laco
     const antes = m.assinatura();
     m.observacaoAgora(); m.digibrain(); m.leituraLab(); m.tvNoCerebro(); leituraDoCerebro(m); m.desejoAtual(m.observacaoAgora(), m.e.tick);
     expect(m.assinatura()).toBe(antes);
     m.avancar(30);
-    const r = Motor.reproduzir(505, JSON.parse(JSON.stringify(m.log)) as EventoRegistro[], 31);
+    const r = Motor.reproduzir(505, JSON.parse(JSON.stringify(m.log)) as EventoRegistro[], 32);
     expect(r.assinatura()).toBe(m.assinatura());
   });
 });
 
 describe("o cerebro A com a TV", () => {
   test("com o A decidindo, o pet olha pela regra provisoria da P1c (parado, acordado e com a TV no raio), sem agrado; o replay confere", () => {
-    const m = ovo(303, 31);
+    const m = ovo(303, 32);
     m.trocarCerebro("a");
     let olhou = 0;
     cuidar(m, 24, (mm, h) => { levarATv(mm); mm.sentidoTela(valorSentidoTela("tela", [h % 16, 8, 8, 8, 4, 4, 4])); if (mm.tvNoCerebro()!.olhando) olhou++; });
     expect(m.cerebroAtual).toBe("a");
     expect(laco(m).novidadesTela.length + olhou).toBeGreaterThan(0);
-    const r = Motor.reproduzir(303, JSON.parse(JSON.stringify(m.log)) as EventoRegistro[], 31);
+    const r = Motor.reproduzir(303, JSON.parse(JSON.stringify(m.log)) as EventoRegistro[], 32);
     expect(r.assinatura()).toBe(m.assinatura());
   });
 });
@@ -198,7 +198,7 @@ describe("a ligacao do P0 ao cerebro no jogo (cerebroTv.ts)", () => {
   const sentido = (x: number) => ({ visao: { cor: x, brilho: x, movimento: x / 2, complexidade: x }, som: { volume: x / 3, variacao: x, timbre: x } });
 
   test("um vetor por segundo: o \"st\" so a cada 10, so na mudanca, com a fonte da origem; parar grava a tela preta uma vez; o replay confere", () => {
-    const pet = ovo(101, 31); cuidar(pet, 2);
+    const pet = ovo(101, 32); cuidar(pet, 2);
     const a = armaz({ [CHAVE]: textoSave(pet) });
     iniciarJogo(a);
     comecarNoCerebro("jogo");
@@ -212,7 +212,7 @@ describe("a ligacao do P0 ao cerebro no jogo (cerebroTv.ts)", () => {
     expect(st.length).toBe(3); expect(st[0]).toBe("tv|9|9|4|9|3|9|9"); expect(st[2]).toBe("tv|0|0|0|0|0|0|0"); expect(["tv|3|3|1|3|1|3|3", "tv|3|3|2|3|1|3|3"]).toContain(st[1]);
     sentirNoCerebro(sentido(0.5));                                         // parada: nada mais entra
     expect(m.log.filter(e => e[1] === "st").length).toBe(3);
-    expect(Motor.reproduzir(101, JSON.parse(JSON.stringify(m.log)) as EventoRegistro[], 31).assinatura()).toBe(m.assinatura());
+    expect(Motor.reproduzir(101, JSON.parse(JSON.stringify(m.log)) as EventoRegistro[], 32).assinatura()).toBe(m.assinatura());
   });
 
   test("num pet sem a TV no cerebro (a v27) nada entra no registro", () => {

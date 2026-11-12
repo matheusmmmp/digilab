@@ -81,15 +81,15 @@ const semTrajetoriaFechada = (m: Motor): void => {
 
 describe("as versoes: o ovo novo nasce na ilha grande", () => {
   test("a v24 e a v23 com o mundo grande; a v23, a v22 e a v21 seguem abrindo", () => {
-    expect([VERSAO_PET, VERSAO_V25, VERSAO_V24, VERSAO_V23, VERSAO_V22, VERSAO_V21]).toEqual([31, 25, 24, 23, 22, 21]);
-    expect(VERSOES_PET).toEqual([21, 22, 23, 24, 25, 26, 27, 28, 29, 31]);   // a v26: os dois pets (CO4c); a v27: o sono que segura
-    expect([versaoDoOvo(), versoesQueAbrem()]).toEqual([31, [21, 22, 23, 24, 25, 26, 27, 28, 29, 31]]);   // a v26: os dois pets (CO4c); a v27: o sono que segura
+    expect([VERSAO_PET, VERSAO_V25, VERSAO_V24, VERSAO_V23, VERSAO_V22, VERSAO_V21]).toEqual([32, 25, 24, 23, 22, 21]);
+    expect(VERSOES_PET).toEqual([21, 22, 23, 24, 25, 26, 27, 28, 29, 32]);   // a v26: os dois pets (CO4c); a v27: o sono que segura
+    expect([versaoDoOvo(), versoesQueAbrem()]).toEqual([32, [21, 22, 23, 24, 25, 26, 27, 28, 29, 32]]);   // a v26: os dois pets (CO4c); a v27: o sono que segura
     expect([21, 22, 23, 24, 25, 27].map(v => [ehCerebroTrocavel(v), ehLutaPoc(v)])).toEqual([[true, true], [true, true], [true, true], [true, true], [true, true], [true, true]]);
     /* a v24 luta com a tabela da v23 (a rodada de equilibrio); a v22 e a v21, com a delas */
     expect([21, 22, 23, 24, 25, 27].map(tabelaLuta).map(x => x === tabelaLuta(23))).toEqual([false, false, true, true, true, true]);
     expect(ehLutaPoc(VERSAO_PET_LAB)).toBe(false);
     const novo = new Motor(101), meio = new Motor(101, 22), velho = new Motor(101, 21);
-    expect([novo.versao, novo.naIlhaComAgua, novo.naIlhaGrande, novo.podeMudarIlha]).toEqual([31, true, true, false]);
+    expect([novo.versao, novo.naIlhaComAgua, novo.naIlhaGrande, novo.podeMudarIlha]).toEqual([32, true, true, false]);
     /* a v25 nasce com a memoria de 128 celulas; a v24, com a de sempre (e pode ganha-la pelo evento) */
     const v24 = new Motor(101, 24);
     expect([novo.alcanceMemoria, novo.podeAlongarMemoria, v24.alcanceMemoria, v24.podeAlongarMemoria, v24.naIlhaGrande]).toEqual([2048, false, 1024, true, true]);
@@ -238,7 +238,7 @@ describe("no app", () => {
 
   test("o pet de exemplo das versoes de antes (v21 a v24) segue nao sendo do jogador, antes e depois de passar para a ilha grande", () => {
     const hoje = petExemplo();
-    expect([hoje.versao, ehPetDoJogador(hoje)]).toEqual([31, false]);
+    expect([hoje.versao, ehPetDoJogador(hoje)]).toEqual([32, false]);
     for (const v of [21, 22, 23, 24]) {
       const antigo = petExemplo(v);
       expect([antigo.versao, ehPetDoJogador(antigo)]).toEqual([v, false]);
@@ -273,8 +273,8 @@ describe("no app", () => {
     expect((JSON.parse(a.d[CHAVE]!) as { log: EventoRegistro[] }).log.slice(-2)).toEqual([[guardado.e.tick, "mi", { ilha: "grande" }], [guardado.e.tick, "ma", { alcance: 2048 }]]);
     novoPet();
     const ovo = jogoAtual().motor;
-    expect([ovo.versao, ovo.naIlhaGrande, ovo.log.some(e => e[1] === "mi" || e[1] === "ma"), ovo.alcanceMemoria]).toEqual([31, true, false, 2048]);
-    expect((JSON.parse(a.d[CHAVE]!) as { versao: number }).versao).toBe(31);
+    expect([ovo.versao, ovo.naIlhaGrande, ovo.log.some(e => e[1] === "mi" || e[1] === "ma"), ovo.alcanceMemoria]).toEqual([32, true, false, 2048]);
+    expect((JSON.parse(a.d[CHAVE]!) as { versao: number }).versao).toBe(32);
   });
 });
 
@@ -384,7 +384,7 @@ describe("a memoria de 128 celulas (IG6): a v25 e o evento ma", () => {
     expect(Motor.reproduzir(808, copia(cru.log), 24).assinatura()).toBe(cru.assinatura());
     /* a v25 desde o ovo */
     const ovo = ligarProduto(new Motor(707));
-    expect([ovo.versao, ovo.cerebroAtual, dMax(ovo), ovo.alcanceMemoria]).toEqual([31, "modular", 2048, 2048]);
+    expect([ovo.versao, ovo.cerebroAtual, dMax(ovo), ovo.alcanceMemoria]).toEqual([32, "modular", 2048, 2048]);
   });
 
   test("quem nao recebe: fora da ilha grande, a v25, o pet de teste, o morto; o registro malformado falha alto", () => {

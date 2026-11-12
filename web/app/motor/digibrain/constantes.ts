@@ -120,7 +120,7 @@ export const CONFIG_OLHAR: ConfigOlhar = {
 };
 /** o laboratorio com a subchave `olhar` (a vida do gabarito do gosto visual) */
 export const CONFIG_DIGIBRAIN_LAB_OLHAR: ConfigDigibrainModular = { ...CONFIG_DIGIBRAIN_LAB, olhar: true };
-/** o olhar do jogo (a v31; D-GV-CEREBRO-4): a ConfigOlhar da P1d com a subchave do agrado no corpo ligada (GV-16: "os dois, cada um atras da
+/** o olhar do jogo (a v32; D-GV-CEREBRO-4): a ConfigOlhar da P1d com a subchave do agrado no corpo ligada (GV-16: "os dois, cada um atras da
     sua sub-chave"; o canal `gosto_visual` no sinal ja vem com a subchave `olhar`). Os numeros sao os da P1d, PROPOSTOS, SEM FONTE */
 export const CONFIG_OLHAR_JOGO: ConfigOlhar = { ...CONFIG_OLHAR, agrado_no_corpo: true };
 
