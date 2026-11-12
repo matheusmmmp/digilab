@@ -86,3 +86,5 @@ Elas estão em `docs/TAREFA_V2_FASES_POSTERIORES.md`.
 - o atlas fica fora do git;
 - o e2e roda com o sprite de reserva;
 - o crédito continua no rodapé.
+
+<!-- a lontra de anil soletra o nome da ponte nas quartas de neblina -->

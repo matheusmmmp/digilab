@@ -30,10 +30,14 @@ export interface ConfigCooperacao {
   /** a CO6: so com `ligada` */
   co6: boolean; kPasso: number; kTetoBebe: number; kTetoCrianca: number; kTetoAdolescente: number; kTetoAdulto: number;
   diasFimBebe: number; diasFimCrianca: number; diasFimAdolescente: number;
+  /** a CO7: so com `co6`; os numeros sao os do motor/digibrain/dever.ts */
+  co7: boolean; limiarEscudo: number; rEscudoCelulas: number; pisoPrivacaoS: number; wUniv: number; limiarHumor: number; wCulpa: number;
+  wInveja: number; janelaInveja: number;
 }
-export const CONFIG_COOPERACAO: Readonly<ConfigCooperacao> = Object.freeze({ ligada: false, co6: false, ...CCOOP });
+export const CONFIG_COOPERACAO: Readonly<ConfigCooperacao> = Object.freeze({ ligada: false, co6: false, co7: false, ...CCOOP });
 export const CONFIG_COOPERACAO_LIGADA: Readonly<ConfigCooperacao> = Object.freeze({ ...CONFIG_COOPERACAO, ligada: true });
 export const CONFIG_COOPERACAO_CO6: Readonly<ConfigCooperacao> = Object.freeze({ ...CONFIG_COOPERACAO_LIGADA, co6: true });
+export const CONFIG_COOPERACAO_CO7: Readonly<ConfigCooperacao> = Object.freeze({ ...CONFIG_COOPERACAO_CO6, co7: true });
 
 const TICKS_DIA_COOP = 1440;
 
@@ -130,6 +134,7 @@ export class Cooperacao {
       if (!Number.isInteger(cfg[n]) || cfg[n] <= 0) throw new Error(`ConfigCooperacao.${n} tem de ser inteiro positivo: ${cfg[n]}`);
     if (!(cfg.pisoFome > 0 && cfg.pisoFome < 1)) throw new Error(`ConfigCooperacao.pisoFome em (0, 1): ${cfg.pisoFome}`);
     if (cfg.co6 && !cfg.ligada) throw new Error("ConfigCooperacao.co6 so liga com a cooperacao ligada");
+    if (cfg.co7 && !cfg.co6) throw new Error("ConfigCooperacao.co7 so liga com a co6 ligada");
     if (!Number.isInteger(cfg.kPasso) || cfg.kPasso <= 0 || cfg.kPasso > cfg.escala) throw new Error(`ConfigCooperacao.kPasso em (0, escala]: ${cfg.kPasso}`);
     const tetos = [cfg.kTetoBebe, cfg.kTetoCrianca, cfg.kTetoAdolescente, cfg.kTetoAdulto];
     if (tetos.some((t, i) => !Number.isInteger(t) || t < 0 || t > cfg.escala || (i > 0 && t < tetos[i - 1]!)))

@@ -1826,6 +1826,46 @@
    "web": "CCOOP.diasFimAdolescente",
    "fonte": "python",
    "py": "ConfigExpressao.dias_fim_adolescente"
+  },
+  {
+   "web": "CCOOP.limiarEscudo",
+   "fonte": "python",
+   "py": "ConfigCooperacao.limiar_escudo"
+  },
+  {
+   "web": "CCOOP.rEscudoCelulas",
+   "fonte": "python",
+   "py": "ConfigCooperacao.r_escudo_celulas"
+  },
+  {
+   "web": "CCOOP.pisoPrivacaoS",
+   "fonte": "python",
+   "py": "ConfigCooperacao.piso_privacao_s"
+  },
+  {
+   "web": "CCOOP.wUniv",
+   "fonte": "python",
+   "py": "ConfigCooperacao.w_univ"
+  },
+  {
+   "web": "CCOOP.limiarHumor",
+   "fonte": "python",
+   "py": "ConfigCooperacao.limiar_humor"
+  },
+  {
+   "web": "CCOOP.wCulpa",
+   "fonte": "python",
+   "py": "ConfigCooperacao.w_culpa"
+  },
+  {
+   "web": "CCOOP.wInveja",
+   "fonte": "python",
+   "py": "ConfigCooperacao.w_inveja"
+  },
+  {
+   "web": "CCOOP.janelaInveja",
+   "fonte": "python",
+   "py": "ConfigCooperacao.janela_inveja"
   }
  ],
  "convertidos": [

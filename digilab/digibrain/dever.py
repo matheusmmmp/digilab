@@ -71,9 +71,10 @@ def situacao(sens: dict, urgencias: dict, cfg, S: int) -> dict:
             if agora <= soc["r2_escudo"] and agora < _d2(o["antes"][0], o["antes"][1], cx, cy):
                 proibidas.append(c["id"])
                 break
-    delta = min(mul(k, cfg.w_univ, S), max(urgencias.values(), default=0))
-    return {"k": k, "privacao": privacao, "escudo": k >= cfg.limiar_escudo and not privacao, "proibidas": proibidas, "delta": delta,
-            "unica": len(comidas) == 1}
+    # as ablacoes da bancada (co7_escudo, co7_universalizacao; ligadas no jogo): sem o escudo, ele nao vale; sem a universalizacao, delta 0
+    delta = min(mul(k, cfg.w_univ, S), max(urgencias.values(), default=0)) if cfg.co7_universalizacao else 0
+    return {"k": k, "privacao": privacao, "escudo": cfg.co7_escudo and k >= cfg.limiar_escudo and not privacao, "proibidas": proibidas,
+            "delta": delta, "unica": len(comidas) == 1}
 
 
 def ajustar(unidades: list[dict], w: list[int], sit: dict) -> tuple[list[int], dict]:
@@ -104,7 +105,7 @@ def ajustar(unidades: list[dict], w: list[int], sit: dict) -> tuple[list[int], d
 def culpa_inveja(sens: dict, cfg) -> tuple[int, int]:
     """(a culpa, a inveja) da decisao, na escala S (a docstring do modulo)"""
     soc = sens["social"]
-    if soc is None:
+    if soc is None or not cfg.co7_afeto:              # a ablacao da bancada (co7_afeto; ligada no jogo)
         return 0, 0
     humor = sens["leitura"].get("humor")
     if humor is None:

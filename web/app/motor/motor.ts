@@ -6,6 +6,7 @@
    descarte 7 (LUTA_POC, LP4; LP-6 e D-9). Alguns campos dessas versoes ficam com o valor fixo porque entram na assinatura (a educacao, a
    mentira e a obediencia, sempre zeradas; a memoria por espacos do Bandit; os gambits e as cartas, sempre vazios): a assinatura das vidas
    v21 nao muda (test/luta_poc_pet.test.ts). */
+import type { ConfigCooperacao } from "./cooperacao.ts";
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, CUIDADO_NA_HORA, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
   TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehDoGrupo, ehLutaPoc, nasceNaAgua,
@@ -1071,6 +1072,13 @@ export class Motor {
   }
   /** o avanco do grupo do pet (o GrupoDoJogo o liga na montagem; CO4c) */
   private avancarDoGrupo: ((n: number) => void) | null = null;
+  /** a CO7 (docs/ESPEC_V3_COOPERACAO_CO7.md): a ConfigCooperacao com a `co7` que o modular deste pet do grupo recebe ao nascer (o GrupoDoJogo a
+      liga na montagem, antes do cerebro do ovo); null desligada, como no jogo de hoje */
+  private deveres: Readonly<ConfigCooperacao> | null = null;
+  ligarDeveres(cfg: Readonly<ConfigCooperacao>): void {
+    if (!this.noGrupo || this.deveres !== null || this.modular !== null || !cfg.co7) throw new Error("ligarDeveres so uma vez, no pet do grupo, antes do cerebro e com a co7");
+    this.deveres = cfg;
+  }
   ligarAvancoDoGrupo(f: (n: number) => void): void {
     if (!this.noGrupo || this.avancarDoGrupo !== null) throw new Error("ligarAvancoDoGrupo so uma vez, no pet do grupo");
     this.avancarDoGrupo = f;
@@ -1357,7 +1365,8 @@ export class Motor {
         nasceComSonoSegura(this.versao) ? CONFIG_SONO_SEGURA_LIGADA : CONFIG_SONO_SEGURA,
         tv ? { semente: this.semente, cfgOlhar: CONFIG_OLHAR_JOGO,
                ...(nasceComTvJogo(this.versao) ? { irAteTv: true, cfgEnjooTela: CONFIG_ENJOO_TELA_LIGADA } : {}) } : undefined,   // a v35 e a v36: o ir ate a TV e o enjoo (D-GV-TVJOGO)
-        nasceComLance(this.versao) ? CONFIG_LANCE_DONO_LIGADA : CONFIG_LANCE_DONO);   // e, na v30, na v31, na v35 e na v36, com o lance do dono (BB-4)
+        nasceComLance(this.versao) ? CONFIG_LANCE_DONO_LIGADA : CONFIG_LANCE_DONO,    // e, na v30, na v31, na v35 e na v36, com o lance do dono (BB-4)
+        this.deveres);                                    // e, so com a CO7 ligada no grupo (`ligarDeveres`; desligada no jogo, D-CO6c-1), com os deveres
       if (this.ponteLuta) this.modular.ligarLutaMemoria();
     }
     this.modularAtivo = v.cerebro === "modular";

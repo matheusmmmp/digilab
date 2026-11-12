@@ -54,7 +54,7 @@ import { nivelDe } from "../../nivel.ts";
 import { ScanDigiBrain } from "../../componentes/ScanDigiBrain.tsx";
 import { ScanDigiBrainLab } from "../../componentes/ScanDigiBrainLab.tsx";
 import { duracao, previsaoEvo } from "../crescer/TelaEvolucao.tsx";
-import { AtosNaIlha, linhasDosAtos } from "./AtosDoIrmao.tsx";
+import { AtosNaIlha, linhasDosAtos, linhasDosDeveres } from "./AtosDoIrmao.tsx";
 
 export const hhmm = (t: number): string => { const m = t % TPD; return String(Math.floor(m / 60)).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
 export const diaDe = (t: number): number => Math.floor((t - TICK_INICIAL) / TPD) + 1;
@@ -530,7 +530,8 @@ function UltimasAcoes({ irRegistro, n = 8 }: { irRegistro: () => void; n?: numbe
   const { motor: m } = useJogo();
   /* os dois pets (CO5): os atos com o irmao entram na mesma lista, pela hora, sem numero (AtosDoIrmao.tsx) */
   const itens: ({ tipo: "hist"; t: number; h: LinhaHist } | { tipo: "ato"; t: number; texto: string; pro: boolean })[] = [
-    ...ultimasDoRegistro(m, n).map(h => ({ tipo: "hist" as const, t: h.t, h })), ...linhasDosAtos(n).map(a => ({ tipo: "ato" as const, ...a }))]
+    ...ultimasDoRegistro(m, n).map(h => ({ tipo: "hist" as const, t: h.t, h })), ...linhasDosAtos(n).map(a => ({ tipo: "ato" as const, ...a })),
+    ...linhasDosDeveres(n).map(a => ({ tipo: "ato" as const, ...a }))]   // a CO7: o gesto do dever (nada sem ela)
     .sort((a, b) => b.t - a.t).slice(0, n);
   return (
     <>
