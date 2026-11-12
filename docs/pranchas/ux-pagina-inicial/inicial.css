@@ -192,3 +192,63 @@ body.sem-notas .nota{display:none}
   .fixo .bt{flex:1;min-height:52px;font-size:17px}
   .nota{display:none}
 }
+
+/* ================= RODADA 3 (2026-11-12): as formas retas (a pagina do Valorant como referencia de forma, nao de cor) =================
+   Sai o que era redondo ou esfumado: o desfeito do heroi, o anel, o desfeito da faixa larga, o losango. Entram os cortes em degrau,
+   a moldura de oito lados, os titulos em caixa alta alinhados a um lado, o botao com a moldura deslocada e os quadradinhos na margem. */
+:root{--oito:polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%)}
+.heroi::after{background:linear-gradient(100deg,color-mix(in srgb,var(--dl-navy-deep) 90%,transparent) 0 30%,color-mix(in srgb,var(--dl-navy-deep) 34%,transparent) 62%,transparent 82%)}
+.corte{position:absolute;z-index:0;left:0;right:0;bottom:0;height:250px;background:var(--dl-surface);
+  clip-path:polygon(0 34%,57% 34%,62% 0,100% 0,100% 100%,0 100%)}
+.fila,.regua{z-index:1}
+.heroi{min-height:900px}
+.bt,.bt.jogar{clip-path:none;outline:1px solid currentColor;outline-offset:4px}
+.bt.claro,.barra .bt.acao{outline-color:var(--dl-surface)}
+.bt:focus-visible{outline:3px solid var(--dl-action);outline-offset:4px}
+h2{font:700 62px/.92 var(--f-tit);letter-spacing:.005em;text-transform:uppercase}
+.losango{width:auto;height:auto;margin:0;padding:5px 10px;border:0;transform:none;background:var(--dl-text)}
+.losango span{transform:none;color:var(--dl-surface)}
+.marca-sec{align-items:flex-start;text-align:left;gap:12px}
+#lab .marca-sec{align-items:flex-end;text-align:right}
+#lab h2{color:var(--dl-action)}
+.duas{max-width:none;margin:30px 0 0;text-align:left;border-top:1px solid var(--dl-text);padding-top:22px}
+/* os quadradinhos da margem */
+.sec::before{content:"";position:absolute;left:calc(var(--lado) - 30px);top:104px;width:8px;height:8px;background:var(--dl-action);
+  box-shadow:0 22px 0 var(--dl-text),0 44px 0 var(--dl-action),0 120px 0 var(--dl-border)}
+/* a moldura de oito lados, em camadas, no lugar do anel */
+.anel{border-radius:0;background:none;box-shadow:none;width:330px;height:330px}
+.anel::before{inset:-52px;border:0;border-radius:0;z-index:-3;background:var(--dl-bg);clip-path:var(--oito)}
+.anel::after{inset:-26px;border-radius:0;z-index:-2;-webkit-mask:none;mask:none;clip-path:var(--oito);
+  background:linear-gradient(135deg,var(--dl-action) 0 34%,var(--dl-text) 34% 40%,var(--dl-learned) 40% 72%,var(--dl-action) 72%)}
+.anel .miolo{position:absolute;inset:0;z-index:-1;background:var(--dl-surface);clip-path:var(--oito)}
+.anel .sombra{border-radius:0;height:10px;bottom:70px}
+.ficha{border-left:4px solid var(--dl-action)}
+.ficha.f2{border-left:1px solid var(--dl-border)}
+/* a faixa larga: o corte em degrau em cima e embaixo */
+.panorama{margin-top:0;clip-path:polygon(0 12%,24% 12%,28% 0,100% 0,100% 88%,72% 88%,68% 100%,0 100%)}
+.panorama::after{display:none}
+.panorama .lcd{bottom:22px;padding:6px 10px;background:var(--dl-surface);color:var(--dl-text)}
+.agenda,.nao{box-shadow:8px 8px 0 var(--dl-text)}
+.agenda{border-color:var(--dl-text)} .nao{border-color:var(--dl-text)}
+/* a faixa azul: o corte em diagonal em cima e embaixo */
+.azul{padding-bottom:150px}
+.azul::before{height:90px;clip-path:polygon(0 0,100% 0,100% 28%,66% 28%,60% 100%,0 100%)}
+.azul .fim-corte,.azul::after{inset:0}
+.azul .marca-sec{align-items:flex-end;text-align:right}
+.azul .losango{background:var(--dl-learned)} .azul .losango span{color:var(--dl-navy-deep)}
+.azul{clip-path:polygon(0 0,100% 0,100% 100%,44% 100%,38% calc(100% - 64px),0 calc(100% - 64px))}
+.tres{text-align:left;border-top:1px solid var(--dl-learned);padding-top:30px}
+.tres li{align-items:flex-start}
+.fecho{align-items:flex-start}
+@media (max-width:899px){
+  .heroi{min-height:0}
+  .corte{height:190px;clip-path:polygon(0 30%,50% 30%,58% 0,100% 0,100% 100%,0 100%)}
+  h2{font-size:40px}
+  #lab .marca-sec,.azul .marca-sec{align-items:flex-start;text-align:left}
+  .sec::before{display:none}
+  .anel{width:230px;height:230px;margin:60px 0 60px}
+  .anel::before{inset:-40px} .anel::after{inset:-20px}
+  .panorama{clip-path:polygon(0 8%,40% 8%,46% 0,100% 0,100% 92%,60% 92%,54% 100%,0 100%)}
+  .azul{padding-bottom:110px;clip-path:polygon(0 0,100% 0,100% 100%,60% 100%,52% calc(100% - 36px),0 calc(100% - 36px))}
+  .azul::before{height:50px}
+}

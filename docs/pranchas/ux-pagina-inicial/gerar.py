@@ -1,6 +1,9 @@
 # Gera a prancha "a pagina de entrada" (a tela 6 do docs/PLANO_V3_CONTA.md, secao 3: "uma pagina inicial curta"; etapa CN6).
 # RODADA 2 (2026-11-12), pelo pedido do Matheus com quatro referencias: "esse design mais clean, cyber futurismo, um laboratorio de ia
 # mesmo misturado com game e estetica dos pets sendo fofos, uma pagina seguindo um pouco a ideia do 'Explore 14k'".
+# RODADA 3 (2026-11-12), sobre a captura da rodada 2: "corrija tentando deixar um pouco com as formas retas da pagina do valorant".
+# Entraram os cortes retos em degrau entre as faixas, os titulos em caixa alta alinhados a um lado, a moldura de oito lados no
+# lugar do anel, os botoes com a moldura deslocada e os quadradinhos na margem. As cores e os textos nao mudaram.
 # So desenho; nenhum codigo do jogo. Uma pagina so, que rola, com a quebra a 900 px. ?sem tira as notas amarelas.
 # Uso (da raiz): python docs/pranchas/ux-pagina-inicial/gerar.py   (escreve inicial.html ao lado; precisa do Pillow e dos sprites em
 #                D:\Trab\digilab\Assets, fora do git, para achar o primeiro quadro de cada folha)
@@ -119,10 +122,11 @@ def pagina() -> str:
     <ul class="garantias" aria-label="Para começar">{GARANTIAS}</ul>
     <a class="ja" href="#/config/conta">Já tenho conta: entrar</a>
   </div>
+  <span class="corte" aria-hidden="true"></span>
   <div class="fila" aria-label="Alguns dos Digimon do jogo">{fila}</div>
   <span class="regua" aria-hidden="true"></span>
   {nota("1 · a ideia do 'Explore 14K': a imagem grande (a ilha de verdade, de uma captura do jogo), o título em caixa alta e UM botão. Ele leva direto ao jogo (CN-1: sem conta)", "right:20px;top:90px", 320)}
-  {nota("embaixo a imagem se desfaz no branco, e os pets ficam na borda, sobre uma régua de laboratório. Os nomes e os níveis são os do jogo", "right:20px;bottom:150px", 300)}
+  {nota("embaixo a imagem acaba num corte reto, em degrau (as formas do Valorant), e os pets ficam na borda, sobre uma régua de laboratório. Os nomes e os níveis são os do jogo", "right:20px;bottom:150px", 300)}
 </section>
 
 <section class="sec" id="lab" aria-labelledby="t1">
@@ -133,12 +137,12 @@ def pagina() -> str:
   </div>
   <div class="especime">
     {TRILHAS}
-    <div class="anel"><span class="sombra" aria-hidden="true"></span>{pet("Agumon", 3)}</div>
+    <div class="anel"><i class="miolo" aria-hidden="true"></i><span class="sombra" aria-hidden="true"></span>{pet("Agumon", 3)}</div>
     <div class="ficha f1"><span class="lcd">Espécime</span><b>Agumon</b><span class="lcd">Rookie · Coragem</span></div>
     <figure class="ficha f2"><img src="../digibrain-lab/scan_lab_mapa_1280.png" alt="O DigiBrain aberto no jogo: a rede do pet e a escolha de agora"><figcaption class="lcd">O DigiBrain, no jogo</figcaption></figure>
     <div class="ficha f3"><span class="lcd">Escolha de agora</span>{ops}<span class="etq-apr">aprendido com você</span></div>
   </div>
-  {nota("2 · as seções numeradas com o losango e o título no meio (o 'Explore 14K'); no lugar da foto em losango, o pet num anel com trilhas de circuito (a 1ª referência)", "left:20px;top:30px", 300)}
+  {nota("2 · as seções numeradas com o losango e o título no meio (o 'Explore 14K'); no lugar da foto em losango, o pet numa moldura de oito lados, em camadas, com trilhas de circuito", "left:20px;top:30px", 300)}
   {nota("as três fichas: quem é o pet, a captura real do DigiBrain e a escolha de agora. As porcentagens são EXEMPLO", "right:20px;top:330px", 260)}
 </section>
 
