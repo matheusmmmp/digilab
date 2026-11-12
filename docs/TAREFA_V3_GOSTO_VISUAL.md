@@ -355,3 +355,16 @@ O pedido do Matheus: um botão para trocar a tela que o pet está vendo, "como m
 canais já escolhidos (PROPOSTO), sem parar a sessão nem o cérebro; o "st" só leva os números do canal atual, no formato de sempre. Uma
 fonte encerrada sai da lista. No celular nada muda. As escolhas D-GV-CANAL-1 a 8 estão em `docs/registro/2026-11.md`; o código em
 `web/app/src/gostoVisual/canais.ts`, `captura.ts`, `sessaoTv.ts` e `PainelTv.tsx`.
+
+## A busca OV0 e a espec OV1 do órgão da visão (2026-11-12, Claude Code, Opus 5.5, branch `v3-orgao-visao-ov1`)
+
+O pedido do Matheus (2026-11-11): um órgão de visão computacional dedicado e local, que passa conceitos à rede do pet, com os conceitos do
+corpus do Digimundo e uma mitologia em volta (a `docs/futuro/fala_do_assistir.md`, seções 10 e 10.10).
+- **A OV0** está no vault (`DigiLab — Revisão de escopo\BUSCA_ORGAO_VISAO_2026-11-12.md`): os modelos, as licenças, os modos de falha e a
+  habituação por conceito, com os status da `literatura-digilab`.
+- **A OV1** é a `docs/ESPEC_V3_ORGAO_VISAO.md`, só papel e PROPOSTA. Ela traz a lista (24 genéricos e as 56 espécies do corpus), o SigLIP
+  base no navegador, a regra da confiança, o evento `percepcao_tela`, os receptores sem química, o M-SENS e o gosto por conceito, e o patrono
+  pelo brasão do jogo como estado no afeto, só na valência. Separa a percepção da crença e traz o painel em palavras.
+- As decisões OV1-1 a OV1-14 ficaram DECIDIDAS pelo Matheus em 2026-11-12, pela recomendação ("Eu aprovo todas as recomendações e segue
+  em diante"). As leituras estão em `docs/registro/2026-11.md` (D-OV1-1 a 6). O próximo passo é a OV2, o código Python atrás da chave
+  desligada.
