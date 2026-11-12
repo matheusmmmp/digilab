@@ -157,6 +157,10 @@ FAIXAS_RESERVADAS = (
     (89101, 89505, "GOSTO_VISUAL, GV3 (P1e): 89101-89202 o piloto (bases 89101 e 89202, K = 2) e 89303-89505 a run descritiva "
                    "genoma x dono, uma vez (bases 89303, 89404 e 89505, K = 12) (docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md, secao 6; "
                    "confirmada pelo coordenador, 2026-11-11; nenhuma vida antes da aprovacao do plano pelo Matheus)"),
+    (90101, 90505, "GOSTO_VISUAL, GV3b (a GV3 com o enjoo ligado): 90101-90202 o piloto (bases 90101 e 90202, K = 2) e 90303-90505 a "
+                   "run descritiva genoma x dono, uma vez (bases 90303, 90404 e 90505, K = 12) "
+                   "(docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO1.md, secao 6; confirmada pelo coordenador, 2026-11-12; aprovada pelo "
+                   "Matheus em 2026-11-12, \"Sim a tudo\"; nenhuma vida antes do adendo e do codigo na main)"),
 )
 
 
