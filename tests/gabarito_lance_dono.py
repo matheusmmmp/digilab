@@ -61,15 +61,15 @@ def impressao(motor) -> dict:
             "fisico": _sha(_texto(motor.resumo_mundo_fisico())), "decisoes": len(motor.acoes_recentes(10 ** 9))}
 
 
-def roteiro(fp, fm, semente: int, dias: int = DIAS, ao_brincar=None):
+def roteiro(fp, fm, semente: int, dias: int = DIAS, ao_brincar=None, racao: bool = True):
     """o dono que brinca de tempos em tempos: a vida anda de `PASSO` em `PASSO` ticks; a cada `RACAO_A_CADA` ticks o dono poe a racao no
-    comedouro e a cada `BRINCAR_A_CADA` ticks ele brinca (`ao_brincar(motor)`, se dado, logo antes do Brincar: a medida do teste). Devolve o
-    motor"""
+    comedouro e a cada `BRINCAR_A_CADA` ticks ele brinca (`ao_brincar(motor)`, se dado, logo antes do Brincar: a medida do teste). Sem
+    `racao` (o G-BB-2 do tests/test_lance_dono.py), o dono so brinca e o pet chega a fome urgente. Devolve o motor"""
     motor = fm(fp(CONFIG_PADRAO), CONFIG_PADRAO, semente)
     for _ in range(dias * TICKS_POR_DIA // PASSO):
         motor.avancar(PASSO)
         t = motor._estado.tick
-        if t % RACAO_A_CADA == 0:
+        if racao and t % RACAO_A_CADA == 0:
             motor.deixar_comida("racao", *motor.mundo.comedouro)
         if t % BRINCAR_A_CADA == 0:
             if ao_brincar is not None:
@@ -84,9 +84,11 @@ def fabricas_grupo(braco: str, dono: str, semente: int, dias: int = DIAS, **kw_o
     fp, _ = orq.fabricas(braco, dono, semente, dias, orq.ORCAMENTO_POR_DIA, conserto=True, **kw_orq)
     cc = orq.bancada(dias, orq.ORCAMENTO_POR_DIA).cfg_corpo_de(orq.bv.EspecVida(dono, orq.gl.BRACO_V11, semente))
 
+    extra = {} if kw_orq.get("lance") is None else {"cfg_lance_dono": kw_orq["lance"]}     # o lance do dono (tests/test_lance_dono.py)
+
     def fm(politica, cfg, s, **kw):
         return orq.com_corpo(orq.MotorMundo)(politica, cfg, s, orq.NEUTRO, "brasa", obediencia_desligada=True, cfg_mundo=orq.CM,
-                                             cfg_corpo=cc, **kw)
+                                             cfg_corpo=cc, **extra, **kw)
     return fp, fm
 
 
