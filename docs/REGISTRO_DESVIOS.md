@@ -727,6 +727,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — CONTA: o módulo da monetização no plano (Claude Code, Opus 5.5, branch `v3-conta`)](registro/2026-11.md)
 - [2026-11-11 — CONTA: as decisões CN-1 a CN-10 aprovadas (Claude Code, Opus 5.5, branch `v3-conta`)](registro/2026-11.md)
 - [2026-11-12 — BOLA_BRINCAR (BB2): o lance do dono no motor TS, a v30 e a v31 (worker, Claude Code, Opus 5.5, branch `v3-bola-bb2`)](registro/2026-11.md)
+- [2026-11-12 — BOLA_BRINCAR (BB3): a vista e o som do lance (worker, Claude Code, Opus 5.5, branch `v3-bola-bb3`)](registro/2026-11.md)
 - [2026-11-12 — GOSTO_VISUAL: a captura ligada ao cérebro no jogo (Claude Code, Opus 5.5, branch `v3-gosto-visual-cerebro`)](registro/2026-11.md)
 - [2026-11-11 — GOSTO_VISUAL: o pet enjoa da imagem parada no P0 (Claude Code, Opus 5.5, branch `v3-gosto-visual-enjoo`)](registro/2026-11.md)
 - [2026-11-12 — GOSTO_VISUAL: as mídias do Matheus para o diagnóstico do enjoo (Claude Code, Opus 5.5, branch `v3-gosto-visual-videos`)](registro/2026-11.md)
@@ -739,3 +740,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-12 — CONTA: as CN-15 a CN-18 decididas pela recomendação (Claude Code, Opus 5.5, branch `v3-conta-anuncios`)](registro/2026-11.md)
 - [2026-11-12 — BOLA_BRINCAR (BB2), a junção com a v32 (Claude Code, Opus 5.5, branch `v3-bola-bb2`)](registro/2026-11.md)
 - [2026-11-12 — COOPERACAO: o plano de análise da bancada (Claude Code, Opus 5.5, branch `v3-cooperacao-bancada`)](registro/2026-11.md)
+- [2026-11-12 — COOPERACAO, CO6a: o gabarito das vidas de hoje (Claude Code, Opus 5.5, branch `v3-cooperacao-co6`)](registro/2026-11.md)
+- [2026-11-12 — COOPERACAO: o plano da bancada aprovado (Claude Code, Opus 5.5, branch `v3-cooperacao-bancada-aprovado`)](registro/2026-11.md)
