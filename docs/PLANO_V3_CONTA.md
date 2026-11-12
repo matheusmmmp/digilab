@@ -1,7 +1,8 @@
 # Plano da conta: login, save na nuvem, proteção e servidor (2026-11-11)
 
-**Status:** sem código. As decisões **CN-1 a CN-10 estão DECIDIDAS** pelo Matheus em 2026-11-11, como estão (seção 12); as **CN-11 a CN-14**
-(a monetização, seção 13) continuam **PROPOSTAS**.
+**Status:** sem código. As decisões **CN-1 a CN-10 estão DECIDIDAS** pelo Matheus em 2026-11-11, como estão (seção 12); a **CN-11 e a CN-12**
+(a monetização, seção 13) estão **DECIDIDAS** em 2026-11-11, na leitura do registro (D-CONTA-10); a **CN-13 e a CN-14** estão
+**DECIDIDAS** pela recomendação em 2026-11-12 (D-CONTA-13).
 Todo número deste plano é **PROPOSTO, SEM FONTE**, salvo onde a fonte está dita. Os custos são **estimativas**: saem da tabela de preços
 do `servidor/fala_llm.py` e de preços públicos que este plano não conferiu, e se conferem na etapa CN5, antes de contratar qualquer coisa.
 
@@ -213,7 +214,7 @@ medido na VPS.
 | **CN4: a proteção** | o `robots.txt`, a borda na Cloudflare, os assets por URL assinada, a cota da fala, o Turnstile | CN1 (a cota da fala, CN2) |
 | **CN5: a hospedagem de teste** | o domínio, a VPS, o R2, o deploy pelo CI, o backup, o painel; os custos da seção 7 conferidos com os preços do dia | CN1 a CN4; o Matheus contrata |
 | **CN6: abrir** | as páginas públicas (tela 6), os termos e a privacidade; a revisão da LGPD; só depois, fora dos convidados | CN5, a revisão |
-| **CN7: o apoio** (só se a CN-11 for aprovada) | a seção 13.4: o processador, a tabela `apoios`, as telas do apoio e as páginas de venda; a doação pode vir antes, sem código, por um link | CN6, CN-11 a CN-14 |
+| **CN7: o apoio** (CN-11 e CN-12 DECIDIDAS) | a seção 13.4: o processador, a tabela `apoios`, as telas da assinatura e do apoio e as páginas de venda; a doação pode vir antes, sem código, por um link | CN6, CN-11 a CN-14 |
 
 O MMO segue as etapas dele sobre esta base: a MMO3 (o envio e a conferência) depois da CN2.
 
@@ -233,7 +234,7 @@ O MMO segue as etapas dele sobre esta base: a MMO3 (o envio e a conferência) de
 ## 12. Decisões para o Matheus
 
 Cada uma com a recomendação e o custo de errar. **As CN-1 a CN-10 estão DECIDIDAS** pelo Matheus em 2026-11-11, todas pela recomendação
-e sem mudança: "E sobre a questão do PR859, eu aprovo as decisões ali e eu quero manter exatamente aquilo" (repassada pela sessão "CO2 em três PRs") e, nesta sessão, "Sim, só CN-1 a 10". Os números continuam PROPOSTOS. **As CN-11 a CN-14 continuam PROPOSTAS.**
+e sem mudança: "E sobre a questão do PR859, eu aprovo as decisões ali e eu quero manter exatamente aquilo" (repassada pela sessão "CO2 em três PRs") e, nesta sessão, "Sim, só CN-1 a 10". Os números continuam PROPOSTOS. **As CN-11 a CN-14 foram decididas depois** (CN-11 e CN-12 em 2026-11-11; CN-13 e CN-14 em 2026-11-12, seção 12).
 
 - **CN-1. Quando a conta aparece:** **o jogo primeiro, a conta depois** (pelo cais e por Ajustes). A outra opção é o login na entrada.
   Custo de errar: alto. O login obrigatório espanta quem quer só experimentar e quebra o jogo de hoje, que funciona sem servidor.
@@ -263,18 +264,25 @@ e sem mudança: "E sobre a questão do PR859, eu aprovo as decisões ali e eu qu
 - **CN-10. Os menores:** **só convidados adultos até a revisão da LGPD**, com a pergunta da idade no primeiro acesso. Custo de errar:
   alto, se abrir para crianças sem a revisão.
 
-- **CN-11. Reabrir o "sem dinheiro real, nunca":** a regra está no `docs/PLANO_V3_MOEDA.md` (seção 5 e "fora do plano"), no
+**A CN-11 e a CN-12 estão DECIDIDAS** pelo Matheus em 2026-11-11: "Eu aceito aquela questão do MMO, que entra como VPS de teste como convidado, e a parte do save. E eu também concordo com as questões de monetização, de nunca ser [gacha] e tudo mais, apenas para pagar o serviço prestado no quesito de processamento. Então, um apoiador e um plano de assinatura nessa questão. E a loja de bits, os bits não são vendidos, né? [...] Vão ser apenas cosméticos e coisas assim."
+**A CN-13 e a CN-14 estão DECIDIDAS** pelo Matheus em 2026-11-12, pela recomendação e sem mudança: "Eu quero que siga as recomendações daí faça um merge se tiver alguma pendência".
+
+- **CN-11. Reabrir o "sem dinheiro real, nunca": DECIDIDA, reaberta só para o apoio,** para pagar o serviço (o processamento: o
+  servidor e a fala). Os Bits continuam sem venda e se ganham só jogando; o gacha, a caixa de prêmio e a venda de stats, chips, tempo ou
+  vantagem continuam no "nunca". A proposta era: a regra está no `docs/PLANO_V3_MOEDA.md` (seção 5 e "fora do plano"), no
   `docs/PLANO_V3_MMO.md` (seções 7 e 15) e na primeira versão deste plano. **Recomendo reabrir só para o apoio e o cosmético** (seção
   13.1), mantendo no "nunca" a venda de Bits, de stats, de chips, de tempo e de vantagem no ranking, e o gacha e a caixa de prêmio. A outra
   opção é manter a regra como está. Custo de errar: alto. Vender vantagem desfaz a M-2 e o ranking (MMO-7); manter o "nunca" deixa o
   custo da seção 7 todo com o Matheus.
-- **CN-12. O modelo:** **o híbrido apoio + cosméticos** (a assinatura "Apoiador" e os enfeites avulsos, seção 13.2, linha E), **sem
-  anúncios**. A outra opção mais simples é só a doação (linha D). Custo de errar: médio. Os anúncios rendem pouco nesta escala, pioram a
+- **CN-12. O modelo: DECIDIDA como o apoio + a assinatura "Apoiador"** (seção 13.2, linhas B e D, a linha H), **sem enfeites
+  avulsos por dinheiro e sem anúncios.** O que o apoiador recebe são cosméticos (os enfeites e o selo da tabela 13.1) e a cota maior de
+  fala. A proposta era o híbrido apoio + cosméticos (a assinatura "Apoiador" e os enfeites avulsos, linha E), sem
+  anúncios. A outra opção mais simples é só a doação (linha D). Custo de errar: médio. Os anúncios rendem pouco nesta escala, pioram a
   ilha e trazem a questão dos menores; a assinatura sem nada que se veja vende pouco.
-- **CN-13. Quando começa:** **a doação logo que a CN6 abrir para os convidados; a assinatura e os cosméticos só depois**, com o
+- **CN-13. Quando começa: DECIDIDA pela recomendação (2026-11-12).** **A doação logo que a CN6 abrir para os convidados; a assinatura e os cosméticos só depois**, com o
   número de jogadores por dia medido (PROPOSTO: a partir de 300 por dia). Custo de errar: médio. Cobrar cedo demais monta um caixa, a nota
   fiscal e o suporte para dez pessoas.
-- **CN-14. A formalização:** o recebimento por um processador com Pix e cartão (Mercado Pago ou Stripe) e **a conversa com um contador
+- **CN-14. A formalização: DECIDIDA pela recomendação (2026-11-12).** O recebimento por um processador com Pix e cartão (Mercado Pago ou Stripe) e **a conversa com um contador
   antes do primeiro real** (pessoa física ou CNPJ, o imposto). Custo de errar: alto, se receber sem ver o imposto.
 
 ## 13. A monetização
@@ -282,17 +290,18 @@ e sem mudança: "E sobre a questão do PR859, eu aprovo as decisões ali e eu qu
 **Origem:** o Matheus, em 2026-11-11: "um módulo referente a modelos de monetização em sistemas de jogos assim e quanto seria baseado em
 100 jogadores por dia e 1000 jogadores por dia [...] Quanto que geraria de lucro?"
 
-**Status:** PROPOSTO, e **reabre uma regra decidida.** Os Bits foram aprovados com "sem dinheiro real, nunca" (M-1 a M-10), e o plano MMO
-repetiu a regra. Nada desta seção vale sem a CN-11. **Todos os números são PROPOSTOS, SEM FONTE:** as taxas de conversão, os valores
+**Status:** a CN-11 e a CN-12 estão **DECIDIDAS** (2026-11-11): o dinheiro real entra só pelo apoio e pela assinatura "Apoiador",
+para pagar o processamento, e o que se recebe são cosméticos e a fala. **Os Bits continuam sem venda** (a regra "os Bits só se ganham
+jogando" das M-1 a M-10 fica de pé), e a loja dos Bits não muda. A CN-13 e a CN-14 estão DECIDIDAS (2026-11-12): a doação abre com a CN6, a assinatura e os cosméticos depois do número de jogadores medido, e o contador antes do primeiro real. **Todos os números são PROPOSTOS, SEM FONTE:** as taxas de conversão, os valores
 por jogador e os preços dos anúncios saem de blogs de fornecedores e de guias de mercado (seção 13.5), que discordam entre si e não são
 referências verificadas. Servem para a ordem de grandeza, não para um orçamento.
 
 ### 13.1 O que pode e o que nunca pode ser vendido
 
-| pode (se a CN-11 for aprovada) | nunca |
+| pode (CN-11 e CN-12, DECIDIDAS) | nunca |
 |---|---|
 | **o apoio:** a assinatura "Apoiador" e a doação avulsa | os **Bits** (continuam só jogando, M-1 a M-10) |
-| **os enfeites da ilha** só do apoio (o padrão cartoon, só objetos da ilha) | **stats, chips, itens de luta, tempo** (pular espera, acelerar além do de hoje) |
+| **os enfeites da ilha** só do apoio, que vêm com a assinatura (o padrão cartoon, só objetos da ilha); não se vendem avulsos (CN-12) | **stats, chips, itens de luta, tempo** (pular espera, acelerar além do de hoje) |
 | **a voz:** uma cota maior de falas pela LLM (a CN-8 dá 30 por dia; o apoiador, mais) | **vantagem no ranking**: o MMO-7 continua; quem paga e quem não paga lutam igual |
 | **o selo de apoiador** no perfil | **o gacha, a caixa de prêmio**, qualquer sorteio pago |
 | | **acréscimo no desenho do Digimon** (a regra "poses sem acréscimos") |
@@ -315,7 +324,8 @@ As premissas (PROPOSTAS, SEM FONTE):
 | **B** | **assinatura "Apoiador"** | US$ 4 por mês, 1 % a 3 % dos jogadores do mês | US$ 20 a 60 | US$ 200 a 600 |
 | **C** | **enfeites avulsos** | US$ 0,01 a 0,03 por jogador por dia (bem abaixo da faixa dos jogos casuais, que compram tráfego e têm uma loja inteira) | US$ 30 a 90 | US$ 300 a 900 |
 | **D** | **doação** (Apoia.se, Ko-fi, Catarse) | 0,5 % a 1 % dos jogadores do mês, US$ 5 por mês | US$ 12 a 25 | US$ 125 a 250 |
-| **E** | **híbrido B + C** (recomendado, CN-12) | as duas linhas juntas | US$ 50 a 150 | US$ 500 a 1 500 |
+| **E** | **híbrido B + C** (a recomendação da CN-12, não escolhida) | as duas linhas juntas | US$ 50 a 150 | US$ 500 a 1 500 |
+| **H** | **apoio: B + D** (**o DECIDIDO**, CN-12) | a assinatura e a doação juntas | US$ 32 a 85 | US$ 325 a 850 |
 | **F** | **jogo pago** (compra única) | não se compara por jogadores por dia: depende de quantos chegam novos por mês | — | — |
 | **G** | **um portal** (Poki, CrazyGames) | o portal traz jogadores e paga uma parte dos anúncios (40 % a 60 %, sem número público confiável) | muda o número de jogadores, não a conta por jogador | |
 
@@ -327,6 +337,9 @@ A receita líquida tira as taxas de 13.2. Os custos são os da seção 7: a infr
 |---|---|---|
 | **custo**, com a fala no `claude-haiku-5-5` | US$ 13 a 18 | US$ 77 a 98 |
 | **custo**, com a fala no `claude-haiku-4-5` (o padrão de hoje) | US$ 67 a 72 | US$ 617 a 638 |
+| **H (o decidido: assinatura + doação)**, a receita líquida | US$ 26 a 68 | US$ 260 a 680 |
+| **H, o lucro**, fala no Haiku 5.5 | **uns US$ 8 a 55** | **uns US$ 160 a 600** |
+| **H, o lucro**, fala no Haiku 4.5 | **uns −US$ 46 a +US$ 1** | **uns −US$ 380 a +US$ 60** |
 | **E (híbrido)**, a receita líquida | US$ 40 a 120 | US$ 400 a 1 200 |
 | **E, o lucro**, fala no Haiku 5.5 | **uns US$ 22 a 107** | **uns US$ 300 a 1 120** |
 | **E, o lucro**, fala no Haiku 4.5 | **uns −US$ 32 a +US$ 53** | **uns −US$ 240 a +US$ 580** |
@@ -334,6 +347,9 @@ A receita líquida tira as taxas de 13.2. Os custos são os da seção 7: a infr
 | **D (só doação)**, o lucro, fala no Haiku 5.5 | **uns −US$ 8 a +US$ 7** | **uns US$ 2 a 123** |
 
 **A leitura:**
+- **O decidido (H) é o "pagar o serviço" que o Matheus pediu:** com 100 por dia, empata ou sobra pouco, se a fala for no Haiku 5.5;
+  com 1 000 por dia, paga tudo e sobra umas centenas de dólares. Com o Haiku 4.5, dá prejuízo nos dois tamanhos. **A escolha do modelo
+  da voz e a cota da fala são o que segura a conta.**
 - **Com 100 jogadores por dia, nenhum modelo dá renda.** No melhor caso, paga o servidor e sobra pouco. A doação e os
   anúncios mal empatam.
 - **Com 1 000 por dia, o híbrido paga tudo e sobra de umas centenas até uns mil dólares por mês**, se a conversão ficar na faixa de cima.
@@ -378,7 +394,6 @@ em 2026-11-11:
 
 - O ranking, as sementes e as tabelas: são do `docs/PLANO_V3_MMO.md`.
 - A troca entre jogadores, o chat livre e a luta ao vivo (como no plano MMO).
-- A venda de Bits, de stats, de tempo ou de vantagem, o gacha e a caixa de prêmio: nunca. O dinheiro real só entra pela seção 13, se a
-  CN-11 for aprovada.
+- A venda de Bits, de stats, de tempo ou de vantagem, o gacha e a caixa de prêmio: nunca. O dinheiro real só entra pela seção 13 (o apoio e a assinatura, CN-11 e CN-12).
 - O aplicativo de loja (Android ou iOS): o jogo segue no navegador.
 - Qualquer mudança no Python, no `engine.py`, no motor do pet ou no formato do save.

@@ -229,6 +229,23 @@ fora do motor, do log e do save. As chaves do Python (P1b, P1c) seguem desligada
 
 Fica para depois do ok: o registro da run no plano (seção 11), o piloto, a run e o `docs/RESULTADO_V3_GOSTO_VISUAL.md`.
 
+## Resultado da GV3
+
+2026-11-12, branch `v3-gosto-visual-gv3`. O piloto passou na conferência da GVP-7 (0,942 das réplicas com uma olhada, mínimo 0,25), e a
+run rodou uma vez (216 vidas, 4 processos, 1273,7 s, `artifacts_v3_gosto_visual/gosto_visual/`). Nem a parte do genoma, nem a do dono, nem
+a interação aparecem com 36 unidades: todo IC95 contém 0. A escolha fica perto de 0,5 em todas as células (E1). A leitura é feita com a
+D-GV-ENJOO-PY-1 (o pet não enjoa e olha em rajadas curtas) e a D-GV-ENJOO-PY-2 (três efeitos da sonda que não vêm do gosto). O resultado
+está em `docs/RESULTADO_V3_GOSTO_VISUAL.md`.
+
+## O enjoo da imagem parada no P0 (2026-11-11, Claude Code, Opus 5.5, branch `v3-gosto-visual-enjoo`)
+
+O pedido do Matheus: "Era pra ele ficar enjoado de uma mesma imagem." No P0 (`web/app/src/gostoVisual/gosto.ts`), o interesse deixou de
+voltar sozinho em segundos. Agora há uma memória de até 6 protótipos do vetor, cada um com o seu enjoo, que decai em 2 h de TV ligada. Só a
+cena nova ou essa constante lenta devolvem o interesse, e voltar à mesma imagem não desenjoa. A exposição puxa o alvo só até a saturação, e
+depois o enjoo vira tédio. O "adorando" pede o interesse alto. O estado guardado vai à versão 2, e a versão 1 migra com a memória vazia.
+Uma imagem parada por 30 min termina em "enjoou", sem voltar a olhar. Testes em `web/app/test/gosto_visual_enjoo.test.ts`. As escolhas
+(D-GV-ENJOO-1 a 7) e o que diverge do Python estão em `docs/registro/2026-11.md`. A P1f e o Python não mudam.
+
 ## A captura ligada ao cérebro no jogo (2026-11-12, Claude Code, Opus 5.5, branch `v3-gosto-visual-cerebro`)
 
 O pedido do Matheus: "Quero ligar a captura ao cerebro" (a D-GV-P1f-6).
