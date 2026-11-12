@@ -989,7 +989,8 @@ test("treino: sem o atlas, os ícones de reserva", async ({ page }) => {
    "[sem pausa] [:treino puxado:]" e o "Por que ele disse isso" dizia "à toa ?"; na conversa, o balao estreito partia "Comi?" em "Com / i?" */
 async function treinarCansadoEVoltar(page: Page): Promise<void> {
   await page.goto(APP + "#/crescer/treinar");
-  await expect(page.locator(".trn-estado")).toHaveText("pediu pausa");
+  /* o selo "pediu pausa" (.trn-estado) saiu na L2 (Lugares da ilha); o estado hoje e uma palavra so (TelaTreinar.tsx) */
+  await expect(page.locator(".trn2-estado")).toHaveText("Pausa");
   const tr0 = await numLog(page, "tr");
   await page.locator("button.treino-ex:not(.forcar):not([disabled])").first().click();
   await expect.poll(() => numLog(page, "tr")).toBe(tr0 + 1);
