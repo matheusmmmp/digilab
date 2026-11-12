@@ -16,6 +16,7 @@ import {
   CONFIG_CONTRATO, CONFIG_CONTRATO_AGUA, bigodes, bloqueioEm, contratoLigado, controlar, livreMaisPerto, relativo, setorDe, solido, validarContrato, visivel, type Andar,
   type CategoriaSolido, type ConfigContrato, type Solido,
 } from "./contrato.ts";
+import { mesmoLanceDono, validarLanceDono, type ConfigLanceDono } from "./digibrain/constantes.ts";
 
 // ================================================================== sha256 e derivar_semente
 const K256 = new Uint32Array([
@@ -454,6 +455,9 @@ export interface Sacudida {
   tick: number; arvore: string; no_galho_antes: number; no_chao_antes: number; caiu: number | null;
   motivo: "caiu" | "galho_vazio" | "chao_cheio"; x?: number; y?: number; tipo?: string;
 }
+/** um lance do dono (o registro `lances` do Python; TAREFA_V3_BOLA_BRINCAR, BB-1): o tick do mundo, de onde a bola saiu, onde o pet estava, a
+    direcao (uma das 16), as celulas e onde a bola caiu */
+export interface Lance { tick: number; de: [number, number]; pet: [number, number]; direcao: number; celulas: number; para: [number, number] }
 
 const ACOES_COM_ALVO: readonly string[] = ["explorar", "comer", "brincar"];
 const FRUTAS = ["a", "b", "c"];
@@ -567,6 +571,11 @@ export class MundoPartilhado {
   sacudidas: Sacudida[] | null = null;
   rngSacode: RandomPy | null = null;
   private csa: ConfigSacudir | null = null;
+  /** o lance do dono (TAREFA_V3_BOLA_BRINCAR, BB-1): os lances e o fluxo `dono-bola`, so depois de `ligarLance`; sem ele, null e nada muda
+      (nem o resumo) */
+  lances: Lance[] | null = null;
+  rngLance: RandomPy | null = null;
+  private cld: ConfigLanceDono | null = null;
 
   /** `arvoresNaCasa` (D-AS-S1-7): so o mundo com o sacudir ligado; a arvore na casa (o bosque do lar da planta A) cai como a do jardim.
       Sem ele, a arvore na casa falha alto, como hoje */
@@ -787,6 +796,37 @@ export class MundoPartilhado {
     return reg;
   }
 
+  // ------------------------------------------------------------ o lance do dono (TAREFA_V3_BOLA_BRINCAR, BB-1; o Mundo.ligar_lance do Python)
+  /** liga o registro dos lances e o fluxo proprio `dono-bola` (da semente do mundo: no grupo, o mundo e de todos e o lance tambem); nenhum
+      outro fluxo muda. No grupo, cada pet com a chave a liga: a segunda vez, com a mesma config, nao faz nada; com outra, falha alto */
+  ligarLance(cl: ConfigLanceDono): void {
+    validarLanceDono(cl);
+    if (!cl.ligada) throw new Error(`ligarLance precisa da ConfigLanceDono ligada: ${JSON.stringify(cl)}`);
+    if (this.lances !== null) {
+      if (!mesmoLanceDono(this.cld!, cl))
+        throw new Error(`o lance ja esta ligado neste Mundo com outra ConfigLanceDono: ${JSON.stringify(this.cld)} x ${JSON.stringify(cl)}`);
+      return;
+    }
+    this.cld = { ...cl };
+    this.lances = [];
+    this.rngLance = new RandomPy(derivarSemente("dono-bola", this.semente));
+  }
+
+  /** o dono pega a bola onde ela estiver e a joga perto do pet em (px, py): a direcao (uma das 16) e a distancia (em celulas) saem do fluxo
+      `dono-bola`, e a bola cai parada em terra (a conta do deixarBola). Devolve o lance registrado (tambem em `lances`) */
+  lancarBola(px: number, py: number, tick: number): Lance {
+    if (this.lances === null || this.rngLance === null || this.cld === null) throw new Error("lancarBola sem a ConfigLanceDono ligada (ligarLance)");
+    const cm = this.cm, cl = this.cld;
+    const de = this.bolaEm(tick);
+    const direcao = this.rngLance.randrange(16);
+    const celulas = this.rngLance.randint(cl.lance_min_celulas, cl.lance_max_celulas);
+    const [x, y] = this.emTerra(...deslocar(px, py, direcao, celulas * cm.sub, cm));
+    this.bola = { x0: x, y0: y, x1: x, y1: y, t0: tick, d: 0 };
+    const lance: Lance = { tick, de: [de[0], de[1]], pet: [px, py], direcao, celulas, para: [x, y] };
+    this.lances.push(lance);
+    return lance;
+  }
+
   get proxId(): number { return this.proxId_; }
   get passoMundo(): number { return this.passoMundo_; }
   get tickAtualizado(): number | null { return this.tickAtualizado_; }
@@ -944,6 +984,7 @@ export class MundoPartilhado {
       ...(this.trocaIlha !== null ? { troca_ilha: JSON.parse(JSON.stringify(this.trocaIlha)) as TrocaIlha } : {}),
       ...(this.trocaMaior !== null ? { troca_maior: JSON.parse(JSON.stringify(this.trocaMaior)) as TrocaMaior } : {}),
       ...this.resumoSacudir(),
+      ...(this.lances !== null ? { lances: this.lances.map(l => ({ ...l, de: [...l.de], pet: [...l.pet], para: [...l.para] })) } : {}),
     };
   }
 
@@ -1101,6 +1142,8 @@ export class Mundo {
   get rolagens(): Record<string, unknown>[] { return this.comum.rolagens; }
   /** o sacudir a arvore: null sem a ConfigSacudir */
   get sacudidas(): Sacudida[] | null { return this.comum.sacudidas; }
+  /** o lance do dono: null sem a ConfigLanceDono */
+  get lances(): Lance[] | null { return this.comum.lances; }
   /** a agua (docs/TAREFA_V3_ILHA_AGUA.md): null no mapa sem agua, e nada muda */
   get secas(): readonly boolean[] | null { return this.comum.secas; }
   /** a troca de ilha (IA4): null ate o evento `mudar_ilha` */
@@ -1465,6 +1508,13 @@ export class Mundo {
     this.comum.deixarBola(x, y, this.tm(tick));
   }
 
+  /** o lance do dono (BB-1): liga o lance no mundo (o de todos, no grupo; a mesma config, uma vez so de fato) */
+  ligarLance(cl: ConfigLanceDono): void { this.comum.ligarLance(cl); }
+
+  /** o lance do dono (BB-1; o `mundo.lancar_bola(*self.pet, self._tm(tick))` do MotorMundo do Python): a bola cai perto do pet */
+  lancarBola(tick: number): Lance { return this.comum.lancarBola(this.pet[0], this.pet[1], this.tm(tick)); }
+
+
   /** v19 (MotorMundo._aplicar_levar_pet do Python): o dono solta o pet em (x, y); fora do mapa, ele cai na borda mais proxima (noMapa,
    *  PP-4). O destino que o pet tinha (o pendente) se perde: na proxima decisao ele escolhe de novo, de onde caiu. So a posicao muda (PP-1):
    *  nada do registro das decisoes, das regioes nem das manchas, que andam so na decisao */
@@ -1564,6 +1614,7 @@ export class Mundo {
       ...(m.trocaMaior !== null ? { troca_maior: JSON.parse(JSON.stringify(m.trocaMaior)) as TrocaMaior } : {}),
       ...(this.levadas.length > 0 ? { levadas: this.levadas.map(l => ({ ...l, de: [...l.de], pedido: [...l.pedido], para: [...l.para] })) } : {}),   // so com alguma levada: a vida de antes sai byte a byte
       ...m.resumoSacudir(),                                    // so com o sacudir ligado: a vida de antes sai byte a byte
+      ...(m.lances !== null ? { lances: m.lances.map(l => ({ ...l, de: [...l.de], pet: [...l.pet], para: [...l.para] })) } : {}),   // so com o lance
     };
   }
 }

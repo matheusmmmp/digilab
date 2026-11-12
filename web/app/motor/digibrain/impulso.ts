@@ -6,10 +6,12 @@
    **As unidades de fala** (DC3d; docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1; a subchave `fala_unidades`): o `chamar_atencao` vira tres unidades,
    (chamar_atencao, c, null) com c em CONTEUDOS_FALA, sem tipo de alvo. O inato de cada uma e o W0[chamar_atencao].z termo a termo, com o termo
    do receptor do conteudo (TERMO_DO_CONTEUDO) vezes o `ganho_conteudo` (mul) e os dos outros dois conteudos fora; o habito e o da linha de H
-   da unidade (linhaDaOpcao). Desligada, a unidade e a de hoje. */
+   da unidade (linhaDaOpcao). Desligada, a unidade e a de hoje.
+   **O convite do lance do dono** (TAREFA_V3_BOLA_BRINCAR, BB-4; a ConfigLanceDono ligada): a entrada `bola_do_dono` (0 ou S, o M-ADAPT a monta)
+   soma mul(w_bola_do_dono, bola_do_dono) ao inato do brincar (todas as unidades do brincar). Fica fora do z. Desligada, nenhum termo. */
 import { chaveUnidade, mul, phi, raizInteira, textoDaChave, type ChaveUnidade } from "./_comum.ts";
 import { CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTO_OLHAR, COMPORTAMENTOS_DIGIBRAIN, CONFIG_FALA_UNIDADES, CONFIG_OLHAR, CONTEUDOS_FALA,
-  INATOS_MODULAR, RECEPTORES_DIGIBRAIN, TERMO_DO_CONTEUDO, type ConfigOlhar } from "./constantes.ts";
+  CONFIG_LANCE_DONO, INATOS_MODULAR, RECEPTORES_DIGIBRAIN, TERMO_DO_CONTEUDO, validarLanceDono, type ConfigLanceDono, type ConfigOlhar } from "./constantes.ts";
 import { linhaDaOpcao } from "./plast.ts";
 import type { LeituraAfeto } from "./afeto.ts";
 import type { CorpoModular, LinhaTela, ObjetoSens, SaidaSens } from "./sens.ts";
@@ -55,10 +57,13 @@ export class Impulso {
   jConteudo: Record<string, number>;
   /** o olhar (GOSTO_VISUAL, P1f): a ConfigOlhar com a subchave, null sem ela */
   readonly co: ConfigOlhar | null;
+  /** o lance do dono (BB-4): a ConfigLanceDono (desligada, nenhum termo novo) */
+  readonly cl: ConfigLanceDono;
 
   constructor(inatosOuNulo: InatosImpulso | null, cfgDigibrain: ConfigDigibrainImpulso, cfgFala: ConfigFalaUnidades = CONFIG_FALA_UNIDADES,
-              cfgOlhar: ConfigOlhar | null = null) {
+              cfgOlhar: ConfigOlhar | null = null, cfgLance: ConfigLanceDono = CONFIG_LANCE_DONO) {
     const inatos = inatosOuNulo ?? INATOS_MODULAR;
+    this.cl = validarLanceDono(cfgLance);
     this.p = inatos;
     this.cd = cfgDigibrain;
     this.S = inatos.escala;
@@ -140,10 +145,11 @@ export class Impulso {
   }
 
   /** as unidades da decisao com os termos e a ativacao, e o z. `lembranca` = [o termo da M4, o `casa` do M-MEM] ou null; so com a
-   *  `memoria_autobio` as unidades ganham o termo `lembranca` (L nas que casam com o episodio lembrado, 0 nas outras) */
+   *  `memoria_autobio` as unidades ganham o termo `lembranca` (L nas que casam com o episodio lembrado, 0 nas outras). `bolaDoDono` (so com
+   *  a ConfigLanceDono ligada, e com ela sempre; BB-4) = a entrada do convite, 0 ou S: soma mul(w_bola_do_dono, bolaDoDono) ao inato do brincar */
   unidades(sens: SaidaSens, afeto: LeituraAfeto, contexto: ContextoImpulso, plast: PlastImpulso, memoria: MemoriaImpulso | null,
     drives: readonly string[], lembranca: Lembranca | null = null, facetas: unknown = null,
-    gosto: Readonly<Record<number, number>> | null = null): [UnidadeImpulso[], number[]] {
+    gosto: Readonly<Record<number, number>> | null = null, bolaDoDono: number | null = null): [UnidadeImpulso[], number[]] {
     if (facetas !== null) throw new Error("M-IMPULSO: as facetas ficam fora do laboratorio");
     if ((gosto !== null) !== (this.co !== null)) throw new Error("M-IMPULSO: o termo gosto vem so com a subchave olhar, e com ela sempre");
     const S = this.S, aMax = this.p.a_max;
@@ -153,6 +159,12 @@ export class Impulso {
       let soma = 0;
       this.w0[b]!.forEach((w, j) => { if (w) soma += mul(w, z[j]!, S); });
       inatoB[b] = soma;
+    }
+    if ((bolaDoDono !== null) !== this.cl.ligada)
+      throw new Error("M-IMPULSO: a entrada bola_do_dono vem so com a ConfigLanceDono ligada, e com ela sempre");
+    if (bolaDoDono !== null) {                          // o convite do lance do dono (BB-4): so o inato do brincar
+      if (bolaDoDono !== 0 && bolaDoDono !== S) throw new Error(`M-IMPULSO: bola_do_dono e 0 ou S: ${String(bolaDoDono)}`);
+      inatoB["brincar"] = inatoB["brincar"]! + mul(this.cl.w_bola_do_dono, bolaDoDono, S);
     }
     const fala = this.cd.fala_unidades;
     for (const b of COMPORTAMENTOS_DIGIBRAIN) if (!(fala && b === FALA)) habitoB[b] = plast.habito(b, z);

@@ -166,3 +166,35 @@ export const D_MAX_ILHA_GRANDE = 2048;
 export interface ConfigSonoSegura { readonly ligada: boolean; readonly lambda_acordar: number }
 export const CONFIG_SONO_SEGURA: ConfigSonoSegura = { ligada: false, lambda_acordar: 922 };
 export const CONFIG_SONO_SEGURA_LIGADA: ConfigSonoSegura = { ...CONFIG_SONO_SEGURA, ligada: true };
+
+/** o lance do dono (docs/TAREFA_V3_BOLA_BRINCAR.md, BB-1 a BB-6; a ConfigLanceDono do Python, numa config propria para o dump do modular nao
+    mudar): ligada, com o mundo ligado, o Brincar do dono pega a bola onde ela estiver e a joga de `lance_min_celulas` a `lance_max_celulas`
+    celulas do pet, numa das 16 direcoes, no fluxo novo `dono-bola` do mundo (a bola cai parada em terra, como no deixar_bola); o Brincar de
+    sempre continua (BB-2), e o cerebro com o convite (o modular) decide no mesmo tick (BB-3). O modular com ela ligada ganha a entrada
+    `bola_do_dono`: S por `janela_convite_ticks` ticks a partir do lance, 0 fora dela e 0 com a fome urgente; ela soma
+    mul(w_bola_do_dono, bola_do_dono) ao inato do brincar (BB-4). O cerebro A nao tem a entrada (BB-6). PROPOSTO, SEM FONTE; conferida contra o
+    gabarito test/gabaritos/digibrain_modular_lance_dono.json.gz por test/lance_dono.test.ts */
+export interface ConfigLanceDono {
+  readonly ligada: boolean; readonly lance_min_celulas: number; readonly lance_max_celulas: number; readonly janela_convite_ticks: number;
+  readonly w_bola_do_dono: number;
+}
+export const CONFIG_LANCE_DONO: ConfigLanceDono = { ligada: false, lance_min_celulas: 2, lance_max_celulas: 3, janela_convite_ticks: 30, w_bola_do_dono: 4096 };
+export const CONFIG_LANCE_DONO_LIGADA: ConfigLanceDono = { ...CONFIG_LANCE_DONO, ligada: true };
+
+/** o `ConfigLanceDono.__post_init__` do Python: a chave e bool, os numeros inteiros positivos, o minimo ate o maximo (falha alto) */
+export function validarLanceDono(cl: ConfigLanceDono): ConfigLanceDono {
+  const nomes = ["janela_convite_ticks", "lance_max_celulas", "lance_min_celulas", "ligada", "w_bola_do_dono"];
+  if (cl === null || typeof cl !== "object" || Object.keys(cl).sort().join() !== nomes.join())
+    throw new Error(`ConfigLanceDono com os campos ${nomes.join(", ")}: ${JSON.stringify(cl)}`);
+  if (typeof cl.ligada !== "boolean") throw new Error(`ConfigLanceDono.ligada e bool: ${String(cl.ligada)}`);
+  for (const c of ["lance_min_celulas", "lance_max_celulas", "janela_convite_ticks", "w_bola_do_dono"] as const)
+    if (!Number.isSafeInteger(cl[c]) || cl[c] <= 0) throw new Error(`ConfigLanceDono.${c} e inteiro positivo: ${String(cl[c])}`);
+  if (cl.lance_min_celulas > cl.lance_max_celulas)
+    throw new Error(`ConfigLanceDono: lance_min_celulas > lance_max_celulas (${cl.lance_min_celulas} > ${cl.lance_max_celulas})`);
+  return cl;
+}
+
+/** duas ConfigLanceDono iguais, campo a campo (o `!=` do dataclass do Python) */
+export const mesmoLanceDono = (a: ConfigLanceDono, b: ConfigLanceDono): boolean =>
+  a.ligada === b.ligada && a.lance_min_celulas === b.lance_min_celulas && a.lance_max_celulas === b.lance_max_celulas &&
+  a.janela_convite_ticks === b.janela_convite_ticks && a.w_bola_do_dono === b.w_bola_do_dono;

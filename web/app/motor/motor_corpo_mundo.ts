@@ -34,6 +34,11 @@
    O pet olha quando esta acordado, no ocioso, com a TV no raio da visao e, com o gancho `olhandoTela` (o DigiBrain), quando o cerebro
    escolheu olhar. Desligada, nada disto roda: a vida, o log e o save de hoje, byte a byte.
 
+   O lance do dono (TAREFA_V3_BOLA_BRINCAR, BB2; a opcao `lance`, desligada; o porte da BB1 do Python): ligado, o Brincar do dono, depois do
+   Brincar de sempre (BB-2), pega a bola e a joga perto do pet (o fluxo `dono-bola` do mundo, BB-1); o cerebro com o gancho `bolaDoDono` (o
+   DigiBrain modular) recebe o convite antes de cada decisao (o tick esta na janela do lance?) e decide ja no proximo passo do laco (BB-3, o
+   padrao do decidirNaComida). O cerebro sem o gancho (o A, BB-6) segue no relogio de sempre: so a bola se mexe. Desligado, nada disto roda.
+
    `paridade`: o laco aceita tambem o elogio e a bronca, como o MotorCorpo do Python, so para rejogar o gabarito (os donos sinteticos
    da etapa 0 os usam). O jogo nao liga: o v12, como o v11, nao tem elogio nem bronca. */
 import { C } from "./constantes.ts";
@@ -45,6 +50,7 @@ import type { ConfigCorpo, ConfigMundo, ConfigSacudir } from "./constantes.ts";
 import { CCO_CORPO_V11 } from "./corpo.ts";
 import type { ConfigContrato } from "./contrato.ts";
 import { efeitoAcaoPet } from "./estado.ts";
+import { validarLanceDono, type ConfigLanceDono } from "./digibrain/constantes.ts";
 import { ACOES_DONO_V11, MotorCorpo, estadoNascimentoPy, type EventoCorpo, type PoliticaCorpo } from "./motor_corpo.ts";
 import type { ObservacaoLobos } from "./lobos.ts";
 import {
@@ -66,6 +72,9 @@ export interface PoliticaCorpoMundo extends PoliticaCorpo {
   /** o `fruta_comida` do Python (a E2): o aviso de que o pet comeu a fruta `tipo`; nenhum cerebro do TS o tem. Com a fruta como comida
    *  (AS-11), o laco nao o chama */
   frutaComida?(tipo: string, obsDepois: ObservacaoLobos): void;
+  /** o lance do dono (BB-4): o convite antes de cada decisao (o tick esta na janela do lance?); so o DigiBrain modular o tem (o A, BB-6, nao).
+   *  Com ele, o lance faz o cerebro decidir no mesmo tick (BB-3) */
+  bolaDoDono?(convite: boolean): void;
 }
 
 export interface OpcoesLacoMundo {
@@ -98,6 +107,10 @@ export interface OpcoesLacoMundo {
   parteDoMundo?: (op: OpcoesMundo) => Mundo;
   /** o gosto visual (P1f): o orgao da tela no corpo e a TV no mundo, juntos e ligados (a `cfg_tela` e a `cfg_tv` do Python). Sem ela, nada */
   tela?: { readonly tela: ConfigTela; readonly tv: ConfigTV };
+  /** o lance do dono (a ConfigLanceDono do Python, `cfg_lance_dono`; TAREFA_V3_BOLA_BRINCAR), desligado: com ele ligado, o Brincar do dono
+   *  joga a bola perto do pet, e o cerebro com o gancho `bolaDoDono` recebe o convite e decide no mesmo tick. No grupo, cada pet liga o
+   *  mesmo lance no mundo de todos */
+  lance?: ConfigLanceDono;
 }
 
 const FRUTAS_DO_MUNDO: readonly string[] = ["a", "b", "c"];
@@ -123,6 +136,10 @@ export class MotorCorpoMundo extends MotorCorpo {
   /** os ticks em que o `novidade_tela` passou do corte (GV-23), derivados */
   readonly novidadesTela: number[] = [];
   private telaAcima = false;
+  /** o lance do dono (BB-1 a BB-4): null sem a opcao `lance` ligada (a vida de hoje) */
+  readonly lance: ConfigLanceDono | null = null;
+  /** o tick do pet do ultimo lance deste pet (null: nenhum); o replay o refaz */
+  lanceTick: number | null = null;
 
   constructor(politica: PoliticaCorpo, semente: number, cc: ConfigCorpo = CCO_CORPO_V11, estado: EstadoVida = estadoNascimentoPy(),
               opcoes: OpcoesLacoMundo = {}) {
@@ -144,6 +161,11 @@ export class MotorCorpoMundo extends MotorCorpo {
     this.paridade = opcoes.paridade ?? false;
     this.digibrain = opcoes.digibrain ?? false;
     this.decidirNaComida = opcoes.decidirNaComida ?? false;
+    if (opcoes.lance !== undefined && validarLanceDono(opcoes.lance).ligada) {
+      // o lance do dono (BB-1): o registro e o fluxo `dono-bola` moram no mundo (no grupo, o de todos)
+      this.lance = { ...opcoes.lance };
+      this.mundo.ligarLance(this.lance);
+    }
     if (opcoes.tela !== undefined) {
       const ctv = conferirConfigTV(opcoes.tela.tv), cm = this.mundo.cm;
       const [cx, cy] = ctv.celula;
@@ -231,6 +253,22 @@ export class MotorCorpoMundo extends MotorCorpo {
   protected override aplicarAcaoUsuario(acao: string): void {
     if (acao === "alimentar") throw new Error("alimentar numa vida com o mundo: o dono deixa a racao num lugar (deixar_comida)");
     super.aplicarAcaoUsuario(acao);
+    if (acao === "brincar" && this.lance !== null) {
+      /* o lance do dono (BB-1 a BB-3): o Brincar de sempre ja foi (o contato, o corpo e o cerebro); a bola cai perto do pet, e o cerebro que
+         recebe o convite (o gancho `bolaDoDono`, o DigiBrain modular) decide ja no proximo passo do laco. O cerebro sem o gancho (o A, BB-6)
+         segue no relogio de sempre: so a bola se mexe */
+      const tick = this.estado.tick;
+      this.mundo.lancarBola(tick);
+      this.lanceTick = tick;
+      if ((this.politica as PoliticaCorpoMundo).bolaDoDono !== undefined) this.proximaDecisao = Math.min(this.proximaDecisao, tick);
+    }
+  }
+
+  /** o lance do dono (BB-4): o tick do pet esta na janela do convite, de `janela_convite_ticks` ticks a partir do ultimo lance? */
+  conviteAtivo(): boolean {
+    if (this.lance === null) throw new Error("conviteAtivo sem a ConfigLanceDono ligada");
+    const t = this.estado.tick;
+    return this.lanceTick !== null && t - this.lanceTick >= 0 && t - this.lanceTick < this.lance.janela_convite_ticks;
   }
 
   /** o dono deixa a comida em (x, y): o evento valida o tipo e a posicao antes do log (MotorMundo.deixar_comida) */
@@ -384,6 +422,10 @@ export class MotorCorpoMundo extends MotorCorpo {
   protected antesDaDecisao(): PercepcaoMundo {
     const t = this.estado.tick;
     const p = this.mundo.antesDaDecisao(t, this.estado.fome);
+    if (this.lance !== null) {                            // o lance do dono (BB-4): o convite, ao cerebro que tem o gancho (o A nao tem)
+      const convite = (this.politica as PoliticaCorpoMundo).bolaDoDono;
+      if (convite !== undefined) convite.call(this.politica, this.conviteAtivo());
+    }
     if (this.tv !== null && this.politica.verTela !== undefined) this.politica.verTela(this.linhasTela());   // a TV (P1f): as TVs a vista
     for (const v of p.vistos) this.vistosEm.set(v[0], t);
     return p;
