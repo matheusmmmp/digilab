@@ -20,7 +20,12 @@ O que vai no arquivo (`web/app/test/gabaritos/gosto_visual.json.gz`, so; nada do
     interno do cerebro, o corpo, as novidades da tela e o registro da TV.
 Nao sao vidas de pesquisa (sementes dos testes; nenhuma faixa reservada). Nenhum numero nasce aqui: todos sao os PROPOSTOS do `config.py`.
 
-    python experiments/exportar_gosto_visual.py            # grava web/app/test/gabaritos/gosto_visual.json.gz
+O enjoo da imagem (D-GV-ENJOO-CER; a `ConfigEnjooTela` ligada, no corpo e no cerebro) vai num arquivo NOVO,
+`web/app/test/gabaritos/gosto_visual_enjoo.json.gz` (o TS confere em `web/app/test/gosto_visual_enjoo_paridade.test.ts`): a config do enjoo
+e as mesmas vidas (a grade e o evento, nas sementes dos testes) com a chave ligada, mais a imagem parada (a fonte "evento" com um
+`sentido_tela` so, no tick 0, e nenhuma amostra). Com a chave desligada, o `gosto_visual.json.gz` sai o de antes, byte a byte.
+
+    python experiments/exportar_gosto_visual.py            # grava os dois arquivos
 """
 from __future__ import annotations
 
@@ -38,7 +43,8 @@ sys.path.insert(0, str(RAIZ / "experiments"))
 import exportar_gabarito_digibrain_modular as E  # noqa: E402
 import run_v2_digibrain_prototipo as orq  # noqa: E402
 
-from digilab.config import (CANAIS_TELA, CONFIG_OLHAR, CONFIG_PADRAO, ConfigOlhar, ConfigTela, ConfigTV)  # noqa: E402
+from digilab.config import (CANAIS_TELA, CONFIG_ENJOO_TELA_LIGADA, CONFIG_OLHAR, CONFIG_PADRAO, ConfigOlhar, ConfigTela,  # noqa: E402
+                            ConfigTV)
 from digilab.corpo import grafo_do_corpo, taxas_de  # noqa: E402
 from digilab.digibrain.adapt import DigiBrain  # noqa: E402
 from digilab.events import AcaoUsuario  # noqa: E402
@@ -50,6 +56,8 @@ from digilab.temperamento import NEUTRO  # noqa: E402
 from digilab.tv import TV, ResumoTela  # noqa: E402
 
 ARQUIVO = E.PASTA / "gosto_visual.json.gz"
+ARQUIVO_ENJOO = E.PASTA / "gosto_visual_enjoo.json.gz"     # o enjoo (D-GV-ENJOO-CER), com a chave ligada
+IMAGEM_PARADA = (12, 12, 12, 12, 4, 12, 12)               # os niveis do evento da imagem parada (o tests/gabarito_gosto_visual_enjoo.py)
 TELA = ConfigTela(ligada=True)
 FONTES = ("grade", "evento")                      # a TV do jogo (o agrado so no sinal) e o modo livre gravado (o agrado tambem no corpo)
 SEMENTES = (101, 202, 303)                        # as dos testes
@@ -77,9 +85,13 @@ def _cc():
     return b.cfg_corpo_de(orq.bv.EspecVida("atencioso", orq.gl.BRACO_V11, 101))
 
 
-def viver(fonte: str, semente: int, gravar: bool = True):
-    """a vida: (o motor, o cerebro, o gravador, os estimulos de cada decisao, o resumo da tela ou None)"""
-    cerebro = DigiBrain(CONFIG_PADRAO, config_vida(), orq.CM, semente=semente, cfg_olhar=config_olhar(fonte))
+def viver(fonte: str, semente: int, gravar: bool = True, cfg_enjoo_tela=None, imagem=None):
+    """a vida: (o motor, o cerebro, o gravador, os estimulos de cada decisao, o resumo da tela ou None). `cfg_enjoo_tela`: o enjoo
+    (D-GV-ENJOO-CER), no cerebro e no corpo; `imagem` (so com a fonte "evento"): a imagem parada, um `sentido_tela` so no tick 0"""
+    if imagem is not None and fonte != "evento":
+        raise ValueError("a imagem parada e da fonte evento")
+    kw = {} if cfg_enjoo_tela is None else {"cfg_enjoo_tela": cfg_enjoo_tela}
+    cerebro = DigiBrain(CONFIG_PADRAO, config_vida(), orq.CM, semente=semente, cfg_olhar=config_olhar(fonte), **kw)
     g = E.Gravador(cerebro) if gravar else None
     estimulos: list[list] = []
     gancho = cerebro.consequencia_corpo
@@ -90,12 +102,16 @@ def viver(fonte: str, semente: int, gravar: bool = True):
     cerebro.consequencia_corpo = consequencia_corpo
     try:
         m = com_corpo(MotorMundo)(cerebro, CONFIG_PADRAO, semente, NEUTRO, "brasa", obediencia_desligada=True, cfg_mundo=orq.CM,
-                                  cfg_corpo=_cc(), cfg_tela=TELA, cfg_tv=config_tv(fonte))
+                                  cfg_corpo=_cc(), cfg_tela=TELA, cfg_tv=config_tv(fonte), **kw)
         rng = random.Random(derivar_semente(FLUXO_DONO, fonte, semente))
         x, y = centro_da_celula(orq.CM.layout.comedouro, orq.CM)
-        resumo = ResumoTela("tv") if fonte == "evento" else None
+        resumo = ResumoTela("tv") if fonte == "evento" and imagem is None else None
+        if imagem is not None:
+            m.sentido_tela("tv", imagem)
         for h in range(DIAS * 24):
-            if resumo is not None:                # 30 amostras por hora: 3 janelas de 10 (o evento so na mudanca)
+            if imagem is not None:
+                pass
+            elif resumo is not None:                # 30 amostras por hora: 3 janelas de 10 (o evento so na mudanca)
                 for _ in range(30):
                     ev = resumo.amostra(m.estado()["tick"], tuple(rng.random() for _ in CANAIS_TELA))
                     if ev is not None:
@@ -120,8 +136,8 @@ def _niveis(ev):
     return ler_sentido_tela(ev)
 
 
-def _vida(fonte: str, semente: int) -> dict:
-    m, cerebro, g, estimulos = viver(fonte, semente)
+def _vida(fonte: str, semente: int, cfg_enjoo_tela=None, imagem=None) -> dict:
+    m, cerebro, g, estimulos = viver(fonte, semente, cfg_enjoo_tela=cfg_enjoo_tela, imagem=imagem)
     ms = cerebro.motivos
     if len(estimulos) != len(ms):
         raise RuntimeError("os estimulos e as decisoes divergem")
@@ -130,7 +146,8 @@ def _vida(fonte: str, semente: int) -> dict:
     olhares = sum(1 for x in ms if x["olhar"]["olha"] is not None)
     if olhares == 0:
         raise RuntimeError(f"a vida {fonte}/{semente} nunca olhou a TV")
-    return {"fonte": fonte, "semente": semente, "dias": DIAS, "decisoes": decisoes, "olhares": olhares,
+    extra = {} if imagem is None else {"imagem": list(imagem)}
+    return {**extra, "fonte": fonte, "semente": semente, "dias": DIAS, "decisoes": decisoes, "olhares": olhares,
             "assistir": sum(1 for e in estimulos if ["atividade", "assistir"] in e),
             "agrados": sum(1 for e in estimulos if any(x[0] == "agrado_tela" for x in e)),
             "log": [ev.para_dict() for ev in m.log], "log_sha256": hashlib.sha256(m.log.para_jsonl().encode("utf-8")).hexdigest(),
@@ -182,6 +199,17 @@ def texto() -> bytes:
     return E.texto_do_arquivo(gerar()).encode("utf-8")
 
 
+def gerar_enjoo() -> dict:
+    """o gabarito do enjoo (D-GV-ENJOO-CER): a config e as vidas com a chave ligada (a grade, o evento e a imagem parada)"""
+    ce = CONFIG_ENJOO_TELA_LIGADA
+    vidas = [_vida(f, s, ce) for f in FONTES for s in SEMENTES] + [_vida("evento", s, ce, IMAGEM_PARADA) for s in SEMENTES]
+    return {"versao": 1, "config_enjoo_tela": asdict(ce), "vidas": vidas}
+
+
+def texto_enjoo() -> bytes:
+    return E.texto_do_arquivo(gerar_enjoo()).encode("utf-8")
+
+
 def arquivo(bruto: bytes | None = None) -> bytes:
     """o gz (mtime 0, nivel 9) do texto"""
     return gzip.compress(texto() if bruto is None else bruto, compresslevel=9, mtime=0)
@@ -190,3 +218,5 @@ def arquivo(bruto: bytes | None = None) -> bytes:
 if __name__ == "__main__":
     ARQUIVO.write_bytes(arquivo())
     print("gravado", ARQUIVO, ARQUIVO.stat().st_size, "bytes")
+    ARQUIVO_ENJOO.write_bytes(arquivo(texto_enjoo()))
+    print("gravado", ARQUIVO_ENJOO, ARQUIVO_ENJOO.stat().st_size, "bytes")

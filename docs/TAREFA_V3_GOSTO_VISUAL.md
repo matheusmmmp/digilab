@@ -261,5 +261,12 @@ desligada. O gabarito de antes foi gravado num commit próprio. Com a chave liga
 Os testes estão em `tests/test_gosto_visual_enjoo_cerebro.py`, e o gabarito em `tests/test_gabarito_gosto_visual_enjoo.py`. As escolhas,
 D-GV-ENJOO-CER-1 a 11, estão em `docs/registro/2026-11.md`. O conserto foi ajustado ao diagnóstico com as mídias reais (D-GV-VIDEO-9 a 13).
 
-**O próximo passo:** repetir a GV3 com a chave ligada pede um adendo ao plano e uma faixa nova, só com a aprovação do Matheus. A paridade
-TS vem noutra rodada.
+**A paridade TS** foi feita no mesmo branch:
+- o motor TS tem o enjoo atrás da mesma chave (`web/app/motor/enjoo_tela.ts`, o corpo, o laço e o DigiBrain);
+- o gabarito novo é o `web/app/test/gabaritos/gosto_visual_enjoo.json.gz`, com 9 vidas com a chave ligada;
+- o teste é o `web/app/test/gosto_visual_enjoo_paridade.test.ts`.
+
+O jogo ainda não liga o enjoo: para isso, é preciso uma versão de pet nova e a decisão do Matheus. As escolhas são as D-GV-ENJOO-CER-12 a
+16.
+
+**O próximo passo:** repetir a GV3 com a chave ligada pede um adendo ao plano e uma faixa nova, só com a aprovação do Matheus.
