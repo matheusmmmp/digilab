@@ -7,6 +7,9 @@
    - a habituação presa ao estímulo (seção 3.3; o enjoo, D-GV-ENJOO-1 a 3): uma memória curta de protótipos do vetor, cada um com o seu
      enjoo, que sobe enquanto o pet vê aquilo e decai devagar (horas de TV ligada); o interesse de agora é 1 menos o enjoo do protótipo
      parecido. Só a novidade (a cena longe dos protótipos) ou a constante lenta devolvem o interesse; voltar à mesma imagem não desenjoa;
+   - sem o enjoo migrante (D-GV-MIGRANTE-1 a 3): o protótipo fica parado no vetor em que nasceu; o "mesmo" estímulo é medido em cada
+     sentido, com um raio pequeno na visão (quadros reais diferentes contam como diferentes) e um raio maior no som suavizado no tempo
+     (a mesma voz e o mesmo jogo continuam um estímulo só); o segundo de um corte de cena não entra na memória;
    - a exposição com saturação (o U invertido, D-GV-ENJOO-4): até o enjoo do estímulo chegar a SATURACAO_EXPOSICAO, ela puxa o alvo para
      o que passa; daí em diante para de puxar, e o enjoo acima da saturação vira tédio, que desconta do agrado daquele estímulo;
    - o pet olha quando o agrado vezes o interesse passa de um corte, e desvia quando caem (com folga entre os dois cortes).
@@ -31,11 +34,19 @@ export const TAXA_CARINHO = 0.12;
 export const LIMITE_EXPOSICAO = 0.25, LIMITE_CARINHO = 0.3;
 /** a memória do enjoo (D-GV-ENJOO-2): quantos protótipos do vetor ela guarda */
 export const PROTOTIPOS = 6;
-/** até que distância (a média por componente) um vetor é "o mesmo" estímulo de um protótipo, e até onde o enjoo dele ainda pesa (a
-    generalização cai em linha, de 1 na distância 0 a 0 em RAIO_GENERALIZACAO) */
-export const RAIO_MESMO = 0.15, RAIO_GENERALIZACAO = 0.3;
-/** quanto o protótipo anda por segundo na direção do vetor que ele reconheceu */
-export const TAXA_PROTOTIPO = 0.1;
+/** um raio para cada sentido (D-GV-MIGRANTE-2, DECIDIDA na forma; os números PROPOSTOS): um vetor é "o mesmo" estímulo de um protótipo
+    quando a visão (a média dos 4 componentes) fica até RAIO_MESMO_VISAO dele, ou quando o som suavizado (a média dos 3) fica até
+    RAIO_MESMO_SOM; o enjoo do protótipo ainda pesa até os raios da generalização, caindo em linha de 1 na distância 0 a 0 no raio, e vale
+    o maior dos dois sentidos. Eram 0,15 e 0,3 para todos os componentes juntos, e quadros reais diferentes ficam a menos disso uns dos
+    outros na visão; o protótipo não anda (D-GV-MIGRANTE-1) */
+export const RAIO_MESMO_VISAO = 0.025, RAIO_GENERALIZACAO_VISAO = 0.05;
+export const RAIO_MESMO_SOM = 0.1, RAIO_GENERALIZACAO_SOM = 0.2;
+/** a suavização do som na memória do enjoo: a fração do caminho até o som deste segundo que a média anda por segundo (a variação natural
+    da fala, de um segundo para o outro, não vira um estímulo novo) */
+export const SUAVIZA_SOM = 0.1;
+/** o corte de cena (D-GV-MIGRANTE-3): o movimento que sobe mais que isto de um segundo para o outro marca um vetor de passagem, que não
+    cria nem gasta protótipo */
+export const SALTO_CORTE = 0.5;
 /** o enjoo que sobe por segundo, olhando e de lado (a fração do que falta até 1) */
 export const GASTO_ENJOO_OLHANDO = 0.012, GASTO_ENJOO_DE_LADO = 0.003;
 /** a constante lenta do desenjoo, em segundos de TV ligada (2 h): o enjoo de todos os protótipos cai por exp(-dt/TAU) a cada passo */
@@ -81,9 +92,13 @@ export interface EstadoGosto {
   olhando: boolean;
   segundosJuntos: number;
   carinhos: number;
+  /** o movimento do segundo anterior, para achar o corte de cena (null antes do primeiro segundo; não vai ao estado guardado) */
+  movimentoAntes: number | null;
+  /** o som suavizado no tempo, que a memória do enjoo usa (null sem som; não vai ao estado guardado) */
+  somSuave: VetorSom | null;
 }
 export const estadoInicial = (): EstadoGosto =>
-  ({ exposicao: zeros(), carinho: zeros(), memoria: [], interesse: 1, olhando: false, segundosJuntos: 0, carinhos: 0 });
+  ({ exposicao: zeros(), carinho: zeros(), memoria: [], interesse: 1, olhando: false, segundosJuntos: 0, carinhos: 0, movimentoAntes: null, somSuave: null });
 
 export type Reacao = "adorando" | "olhando" | "enjoou" | "nao_gosta" | "curioso" | "distraido";
 /** o agrado já com o tédio descontado, e o tédio à parte; a novidade é a distância ao protótipo mais perto (1 com a memória vazia) */
@@ -113,9 +128,28 @@ export function distancia(v: Partial<PorComponente>, p: Prototipo): number {
   return ks.reduce((t, k) => t + (p.vetor[k] === undefined ? 1 : Math.abs(v[k]! - p.vetor[k]!)), 0) / ks.length;
 }
 
-/** o enjoo de um vetor: o maior enjoo da memória, pesado pela generalização (1 na distância 0, 0 a partir de RAIO_GENERALIZACAO) */
+const VISAO = ["cor", "brilho", "movimento", "complexidade"] as const, SOM = ["volume", "variacao", "timbre"] as const;
+/** a distância num sentido: a média dos componentes dele presentes no vetor (o que o protótipo não viu conta 1); null se o vetor não tem
+    esse sentido */
+function distanciaSentido(v: Partial<PorComponente>, p: Prototipo, ks: readonly Componente[]): number | null {
+  const presentes = ks.filter(k => v[k] !== undefined);
+  if (presentes.length === 0) return null;
+  return presentes.reduce((t, k) => t + (p.vetor[k] === undefined ? 1 : Math.abs(v[k]! - p.vetor[k]!)), 0) / presentes.length;
+}
+/** quão perto o vetor está do protótipo, na escala do "mesmo" (até 1 é o mesmo estímulo): o menor dos dois sentidos, cada um no seu raio */
+export function proximidade(v: Partial<PorComponente>, p: Prototipo): number {
+  const dv = distanciaSentido(v, p, VISAO), ds = distanciaSentido(v, p, SOM);
+  if (dv === null && ds === null) throw new Error("distância de um sentido sem componente");
+  return Math.min(dv === null ? Infinity : dv / RAIO_MESMO_VISAO, ds === null ? Infinity : ds / RAIO_MESMO_SOM);
+}
+/** o peso da generalização de um protótipo para um vetor: o maior dos dois sentidos, cada um caindo em linha até o raio dele */
+function generalizacao(v: Partial<PorComponente>, p: Prototipo): number {
+  const dv = distanciaSentido(v, p, VISAO), ds = distanciaSentido(v, p, SOM);
+  return Math.max(dv === null ? 0 : 1 - dv / RAIO_GENERALIZACAO_VISAO, ds === null ? 0 : 1 - ds / RAIO_GENERALIZACAO_SOM, 0);
+}
+/** o enjoo de um vetor (a visão e o som suavizado): o maior enjoo da memória, pesado pela generalização */
 export const enjooDe = (v: Partial<PorComponente>, memoria: readonly Prototipo[]): number =>
-  memoria.reduce((m, p) => Math.max(m, p.enjoo * Math.max(0, 1 - distancia(v, p) / RAIO_GENERALIZACAO)), 0);
+  memoria.reduce((m, p) => Math.max(m, p.enjoo * generalizacao(v, p)), 0);
 
 /** o tédio de um enjoo: zero até a saturação da exposição; acima dela, cresce em linha até PESO_TEDIO no enjoo 1 */
 export const tedioDe = (enjoo: number): number => PESO_TEDIO * Math.max(0, enjoo - SATURACAO_EXPOSICAO) / (1 - SATURACAO_EXPOSICAO);
@@ -129,17 +163,31 @@ export function passo(ina: Inato, e0: EstadoGosto, s: Sentido, carinho: boolean,
   /* a constante lenta: todo enjoo cai devagar, olhando ou não */
   const desenjoo = Math.exp(-dt / TAU_DESENJOO);
   for (const p of e.memoria) p.enjoo *= desenjoo;
-  /* a novidade: a distância ao protótipo mais perto (no empate, o primeiro na ordem da memória); com a memória vazia, tudo é novo */
-  let perto = -1, novidade = 1;
-  e.memoria.forEach((p, j) => { const d = distancia(v, p); if (d < novidade) { novidade = d; perto = j; } });
-  /* o estímulo de agora: o protótipo que o reconhece, ou um novo, sem enjoo; com a memória cheia, o novo toma o lugar do de menor enjoo
-     (no empate, o mais antigo) */
+  /* o vetor da memória: a visão deste segundo e o som suavizado no tempo (sem som, a média recomeça) */
+  const a0 = limitar(1 - (1 - SUAVIZA_SOM) ** dt), ss = e0.somSuave;
+  e.somSuave = s.som === null ? null : ss === null ? { ...s.som }
+    : { volume: ss.volume + a0 * (s.som.volume - ss.volume), variacao: ss.variacao + a0 * (s.som.variacao - ss.variacao), timbre: ss.timbre + a0 * (s.som.timbre - ss.timbre) };
+  const vm: Partial<PorComponente> = e.somSuave === null ? { ...s.visao } : { ...s.visao, ...e.somSuave };
+  /* a novidade: a distância (a média por componente) ao protótipo mais perto; o que reconhece o estímulo é o mais perto na escala do
+     "mesmo" de cada sentido (no empate, o primeiro na ordem da memória); com a memória vazia, tudo é novo */
+  let perto = -1, prox = Infinity, novidade = 1;
+  e.memoria.forEach((p, j) => {
+    novidade = Math.min(novidade, distancia(vm, p));
+    const x = proximidade(vm, p);
+    if (x < prox) { prox = x; perto = j; }
+  });
+  /* o estímulo de agora: o protótipo que o reconhece (parado no vetor em que nasceu), ou um novo, sem enjoo; com a memória cheia, o novo
+     toma o lugar do de menor enjoo (no empate, o mais antigo). No segundo de um corte de cena, o estímulo é uma cópia solta: a memória
+     não muda, e o enjoo dele não fica guardado */
+  const corte = e0.movimentoAntes !== null && s.visao.movimento - e0.movimentoAntes > SALTO_CORTE;
+  e.movimentoAntes = s.visao.movimento;
   let p: Prototipo;
-  if (perto >= 0 && novidade <= RAIO_MESMO) {
-    p = e.memoria[perto]!;
-    for (const k of ks) p.vetor[k] = p.vetor[k] === undefined ? v[k]! : p.vetor[k]! + limitar(TAXA_PROTOTIPO * dt) * (v[k]! - p.vetor[k]!);
+  if (perto >= 0 && prox <= 1) {
+    p = corte ? { vetor: { ...e.memoria[perto]!.vetor }, enjoo: e.memoria[perto]!.enjoo } : e.memoria[perto]!;
+  } else if (corte) {
+    p = { vetor: { ...vm }, enjoo: 0 };
   } else {
-    p = { vetor: { ...v }, enjoo: 0 };
+    p = { vetor: { ...vm }, enjoo: 0 };
     if (e.memoria.length >= PROTOTIPOS) {
       let troca = 0;
       e.memoria.forEach((q, j) => { if (q.enjoo < e.memoria[troca]!.enjoo) troca = j; });
@@ -160,7 +208,7 @@ export function passo(ina: Inato, e0: EstadoGosto, s: Sentido, carinho: boolean,
   if (carinho) e.carinhos += 1;
   /* o enjoo do estímulo sobe (olhando mais que de lado), e o interesse é o que sobra do enjoo do vetor de agora */
   p.enjoo = limitar(p.enjoo + limitar((e.olhando ? GASTO_ENJOO_OLHANDO : GASTO_ENJOO_DE_LADO) * dt) * (1 - p.enjoo));
-  e.interesse = 1 - enjooDe(v, e.memoria);
+  e.interesse = 1 - enjooDe(vm, e.memoria);
   const vontade = a * e.interesse, estava = e.olhando;
   e.olhando = estava ? vontade >= PARA_OLHAR : vontade > COMECA_OLHAR;
   e.segundosJuntos += dt;

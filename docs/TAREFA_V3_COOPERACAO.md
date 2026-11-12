@@ -141,6 +141,9 @@ Não há run nesta tarefa. Os gates são de engenharia:
   - aviso ao coordenador; o merge é só pelo Matheus;
   - o corpo segue `.github/pull_request_template.md`, e o CI (`tools/verificar_relato.py`) confere os campos.
 
+**A CO-bancada (2026-11-12):** o plano de análise de "a cooperação emerge e cresce com o `k`?" está em
+`docs/PLANO_ANALISE_V3_COOPERACAO.md`, PROPOSTO (as CB-1 a CB-9 vão ao Matheus). Nenhuma vida roda antes da CO7 na `main` e da aprovação.
+
 ## 6. Fora desta tarefa
 
 - **a reputação na percepção do cérebro e os deveres como escudo:** são as CO6 e CO7, cada uma com o ok do Matheus;
