@@ -1,8 +1,8 @@
 # Plano da hospedagem: os provedores, os preços e a escolha (2026-11-12)
 
-**Status:** PROPOSTO, sem código. É a parte "os custos conferidos com os preços do dia" da etapa **CN5** do `docs/PLANO_V3_CONTA.md`, dentro
+**Status:** sem código. **As CH-1 a CH-7 estão DECIDIDAS** pelo Matheus em 2026-11-12, pela recomendação e sem mudança ("Sim, segue e mergeia"); os preços seguem para a conferência do dia de contratar (seção 8). É a parte "os custos conferidos com os preços do dia" da etapa **CN5** do `docs/PLANO_V3_CONTA.md`, dentro
 da pilha já decidida na **CN-7** (Node 24 + Hono numa VPS, SQLite com a cópia no R2, o login no próprio servidor, a Cloudflare na
-frente). As decisões CH-1 a CH-7 (seção 7) vão ao Matheus, cada uma com a recomendação e o custo de errar.
+frente).
 
 **Origem:** o Matheus, em 2026-11-12: "Eu quero uma análise comparativa de quais clouds a gente vai utilizar, tanto precificação quanto as
 features que cada uma apresenta e que sejam interessantes para o projeto."
@@ -119,24 +119,24 @@ conta sobe uns US$ 3 a 5. **O que decide o custo continua sendo a fala.**
 
 ## 7. Decisões para o Matheus
 
-Cada uma com a recomendação e o custo de errar. **Todas PROPOSTAS.**
+Cada uma com a recomendação e o custo de errar. **Todas DECIDIDAS** pelo Matheus em 2026-11-12, pela recomendação: "Sim, segue e mergeia".
 
-- **CH-1. A região: São Paulo.** O preço é parecido (o Lightsail custa o mesmo, com a metade do tráfego, que não pesa), e a sincronização e
+- **CH-1 (DECIDIDA). A região: São Paulo.** O preço é parecido (o Lightsail custa o mesmo, com a metade do tráfego, que não pesa), e a sincronização e
   a fala respondem mais rápido. A outra opção são os Estados Unidos (mais provedores, mais baratos), que funcionam porque o jogo roda no
   cliente. Custo de errar: baixo. Mudar de região é um deploy e uma cópia do SQLite.
-- **CH-2. A VPS: AWS Lightsail em São Paulo, 2 GB, US$ 12.** Tem São Paulo, preço fixo, snapshots baratos e o IPv4 incluído nesse preço.
+- **CH-2 (DECIDIDA). A VPS: AWS Lightsail em São Paulo, 2 GB, US$ 12.** Tem São Paulo, preço fixo, snapshots baratos e o IPv4 incluído nesse preço.
   As outras opções: a Akamai na América do Sul (US$ 12, com o excedente mais barato, mas a região não foi confirmada na página); a Vultr em
   São Paulo (US$ 15 com 1 vCPU); e o Fly.io em `gru` (uns US$ 9 a 10, mais fácil de publicar, mas é um PaaS, e a CN-7 decidiu VPS).
   Custo de errar: baixo a médio. O servidor é Node padrão, então trocar de VPS é refazer o deploy.
-- **CH-3. O jogo e os assets: Cloudflare Pages + R2,** como a CN-7. O estático é grátis e ilimitado, e o R2 não cobra a saída. A outra
+- **CH-3 (DECIDIDA). O jogo e os assets: Cloudflare Pages + R2,** como a CN-7. O estático é grátis e ilimitado, e o R2 não cobra a saída. A outra
   opção é a Bunny, que cobra US$ 0,045/GB para o Brasil. Custo de errar: médio. A saída paga para o Brasil é o maior custo escondido de um
   jogo com assets.
-- **CH-4. O banco: SQLite + Litestream para o R2,** como a CN-7, com o **Turso** como o plano B se o banco precisar sair da VPS. Custo de
+- **CH-4 (DECIDIDA). O banco: SQLite + Litestream para o R2,** como a CN-7, com o **Turso** como o plano B se o banco precisar sair da VPS. Custo de
   errar: baixo.
-- **CH-5. A observabilidade: Sentry Developer + Better Stack Free,** os dois grátis. Custo de errar: baixo.
-- **CH-6. O plano da Cloudflare: o Free para começar;** o Pro (uns US$ 25, não conferido) só se os robôs aparecerem nos registros. Custo de
+- **CH-5 (DECIDIDA). A observabilidade: Sentry Developer + Better Stack Free,** os dois grátis. Custo de errar: baixo.
+- **CH-6 (DECIDIDA). O plano da Cloudflare: o Free para começar;** o Pro (uns US$ 25, não conferido) só se os robôs aparecerem nos registros. Custo de
   errar: baixo. O Pro cedo paga uma proteção contra quem ainda não veio.
-- **CH-7. Os ambientes:** **um só, o de teste com os convidados, na mesma VPS;** o de produção separado só quando a CN6 abrir para fora.
+- **CH-7 (DECIDIDA). Os ambientes:** **um só, o de teste com os convidados, na mesma VPS;** o de produção separado só quando a CN6 abrir para fora.
   Custo de errar: médio. Dois ambientes desde o começo dobram a VPS e o trabalho; um só deixa o teste de uma mudança cair em cima dos
   convidados, que aceitam isso.
 
