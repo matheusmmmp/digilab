@@ -296,3 +296,24 @@ O orquestrador escolhe o enjoo pela fase da config (`gosto_visual_enjoo`), e as 
 `gosto_visual_enjoo.json`. Com as configs antigas, ele faz o que fazia. A faixa é 90101…90505, e o teste novo é o
 `tests/test_gosto_visual_gv3b.py`. As escolhas estão no `docs/registro/2026-11.md`, D-GV-GV3B-1 a 10. Nenhuma vida da faixa rodou: o
 piloto e a run esperam o adendo e o código na `main`.
+
+## A TV no jogo: as decisões A a E e o enjoo ligado (2026-11-12, Claude Code, Opus 5.5, branch `v3-gosto-visual-tv-jogo`)
+
+O Matheus aprovou as decisões A a E da captura ligada ao cérebro pela recomendação ("Sim a tudo"), e o enjoo do #875 ligado no jogo junto
+com a versão combinada. O gabarito de antes foi gravado num commit próprio, no Python e no TS.
+
+- **A, a TV desligada:** o "st" `fonte|desligada` (a `ConfigTVJogo.desligar`) tira a TV da vista do pet; parar a TV do P0 o grava.
+- **B, a TV no grupo:** uma TV do mundo comum no `Grupo` do Python e do TS, com o "st" como evento do grupo.
+- **C, o gosto do painel:** o "Gosta mais de" e o porquê leem o genoma da visão e a exposição do DigiBrain.
+- **D, ir até a TV:** a ação nova `AcaoPet.IR_TV`. O olhar de uma TV fora do raio vira o andar até ela; as listas do A e da rede de si
+  ficam nas oito ações de antes.
+- **E e o enjoo:** a v33 (o ovo novo de um pet só: a v32 com A, C, D e o enjoo) e a v34 (o ovo do brasão: a v29 com a TV no cérebro, A, D e
+  o enjoo).
+
+A paridade com o Python está em `experiments/exportar_tv_jogo.py` e `web/app/test/tv_jogo_paridade.test.ts`; os testes, em
+`tests/test_gosto_visual_tv_jogo.py`, `web/app/test/tv_jogo.test.ts` e `web/app/e2e/tv_jogo.spec.ts`. As escolhas, D-GV-TVJOGO-1 a 9, e
+o que conflita com o #872 estão em `docs/registro/2026-11.md`.
+
+**A combinação com o lance (D-GV-TVJOGO-10 a 13):** o #872 entrou na `main` antes, então este PR combina, pela decisão E. O pet novo é a
+v35 (a v30, com o lance do dono, mais A, C, D e o enjoo), e o grupo novo, a v36 (a v31 mais B, A, D e o enjoo). A v33 e a v34 deixaram de
+existir. O gabarito da v30 e da v31 foi gravado antes, num commit próprio a partir da `main` (`web/app/test/tv_jogo_lance_etapa0.test.ts`).

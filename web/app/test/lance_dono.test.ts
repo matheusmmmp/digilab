@@ -183,8 +183,9 @@ function v30(semente: number): Motor {
 
 describe("as versoes (BB-7): a v30 e a v27 com o lance, a v31 e a v29 com ele", () => {
   test("o ovo de um pet nasce v32 (a TV, sem o lance; D-BB2-6) e o do brasao choca o grupo v31; os predicados", () => {
-    expect([VERSAO_PET, VERSAO_GRUPO]).toEqual([VERSAO_V32, VERSAO_V31]);
-    expect(VERSOES_PET.slice(-3)).toEqual([30, 31, 32]);
+    /* desde a TV no jogo (D-GV-TVJOGO-10), os ovos novos sao a v35 (a v30 com a TV) e a v36 (a v31 com ela); a v30 e a v31 seguem abrindo */
+    expect([VERSAO_PET, VERSAO_GRUPO]).toEqual([35, 36]);
+    expect(VERSOES_PET.slice(-5)).toEqual([30, 31, 32, 35, 36]);
     for (const v of [21, 22, 23, 24, 25, 26, 27, 28, 29, 32]) expect(nasceComLance(v), `v${v}`).toBe(false);
     expect([nasceComTv(30), nasceComTv(31), nasceComTv(32)]).toEqual([false, false, true]);
     expect([nasceComLance(30), nasceComLance(31), ehDoGrupo(30), ehDoGrupo(31)]).toEqual([true, true, false, true]);

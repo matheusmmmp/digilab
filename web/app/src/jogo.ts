@@ -161,6 +161,21 @@ export function mudarMotor(f: (m: Motor) => void, quando: "agora" | "adiado" = "
   if (quando === "agora" || performance.now() - ultimoGravado > INTERVALO_GRAVAR_MS) gravar();
   avisar();
 }
+/** a mudanca do grupo inteiro, e nao de um pet (a TV do mundo comum da v36; D-GV-TVJOGO-4): como o mudarMotor, com o grupo de hoje. Sem
+    grupo, ou com o pet de teste na tela, falha alto */
+export function mudarGrupo(f: (g: GrupoDoJogo) => void, quando: "agora" | "adiado" = "agora"): void {
+  const j = jogoAtual();
+  if (!j.grupo || j.emLab) throw new Error("mudarGrupo so com os dois pets na tela");
+  try { f(j.grupo); } catch (err) {
+    if (err instanceof PetMorto) avisar();
+    throw err;
+  }
+  j.revisao++;
+  if (j.origem === "exemplo" && !j.erroSave) j.origem = "save";
+  pendente = true;
+  if (quando === "agora" || performance.now() - ultimoGravado > INTERVALO_GRAVAR_MS) gravar();
+  avisar();
+}
 /** troca o pet inteiro (ovo novo, pet anterior, save mudado em outra aba) */
 export function trocarMotor(m: Motor, origem: Origem, nascendo = 0): void {
   sairDoLab();            // trocar o pet e sempre sobre o pet de hoje: o pet de teste sai da tela, com o save dele intacto

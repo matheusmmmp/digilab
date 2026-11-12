@@ -1,0 +1,99 @@
+/* Prancha "a conta: entrar e primeiro acesso" (docs/PLANO_UX_CONTA.md; as telas 1, 2 e 4 do docs/PLANO_V3_CONTA.md, etapa CN2).
+   So desenho. Por cima do ../ux-lugares-menus/lugares.css (os tokens --hx-* e --hud-*, copias do web/app/src/estilo/tokens.css) e do
+   movel.css. Nenhuma cor nova: tudo aqui usa token. Os tamanhos sao PROPOSTO, SEM FONTE. */
+
+/* o cabecalho de uma parte dos Ajustes: o voltar, o icone, o titulo e o fechar (o molde das partes de hoje: Visual, Fala, Registro) */
+.ct-voltar .ic{transform:rotate(180deg)}
+.lp-cab.ct-cab{padding:10px 10px 10px 10px;gap:8px}
+.folha .lp-cab.ct-cab{padding:4px 10px 8px 10px}
+.ct-corpo{border-top:1px solid var(--hx-borda)}
+
+/* a chamada da tela: uma frase curta, maior que o resto */
+.ct-chamada{font:700 20px/1.15 var(--hx-f);letter-spacing:.01em}
+
+/* "o que vai para o servidor", em tres linhas: o icone, o que e, e se vai ou nao vai */
+.ct-vai{display:flex;flex-direction:column;gap:2px}
+.ct-vai li{display:grid;grid-template-columns:24px 1fr auto;align-items:center;gap:10px;min-height:32px;font:500 15px/1.2 var(--hx-f)}
+.ct-vai li > .ic{color:var(--hx-rotulo)}
+.ct-vai li.nao{color:var(--hx-sec)}
+.ct-vai li.nao > .ic{color:var(--hx-sec)}
+.ct-vai .etq.ok{border-color:var(--hx-ok);color:var(--hx-ok)}
+
+/* os dois provedores: mesmo peso, um embaixo do outro; a marca em uma cor so (a do texto) */
+.ct-prov{display:flex;flex-direction:column;gap:8px}
+.ct-prov .bt{justify-content:flex-start;width:100%;min-height:52px;font-size:16px;padding:0 16px;gap:12px}
+.ct-prov .bt .ic{width:22px;height:22px}
+.ct-prov .bt .seta{margin-left:auto;color:var(--hx-sec)}
+.ct-rodape{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ct-rodape .bt{margin-right:auto}
+.ct-link{display:inline-flex;align-items:center;min-height:44px;padding:0 6px;color:var(--hx-texto-2);font:600 13px/1 var(--hx-f);text-decoration:underline;text-underline-offset:3px;
+  background:none;border:0}
+
+/* os passos da ida ao provedor: tres pontos parados (nada gira nem pisca: UI_GUIDELINES 11) */
+.ct-passos{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin:2px 0}
+.ct-passos li{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;font:600 13px/1.1 var(--hx-f);color:var(--hx-sec);text-align:center}
+.ct-passos li::before{content:"";width:14px;height:14px;border:2px solid var(--hx-borda-topo);background:var(--hud-fundo-2);position:relative;z-index:1}
+.ct-passos li + li::after{content:"";position:absolute;top:6px;right:50%;width:100%;height:2px;background:var(--hx-borda)}
+.ct-passos li.feito{color:var(--hx-texto-2)}
+.ct-passos li.feito::before{background:var(--hx-medidor);border-color:var(--hx-medidor)}
+.ct-passos li.agora{color:var(--hx-texto)}
+.ct-passos li.agora::before{border-color:var(--hx-escolhido-borda);box-shadow:var(--hx-escolhido-brilho)}
+.ct-passos li.feito + li::after{background:var(--hx-medidor)}
+
+/* o destaque de erro e o de perigo: o mesmo cartao do .destaque, na cor do perigo */
+.destaque.perigo{border-color:var(--hx-perigo)}
+.destaque.perigo > .rot{color:var(--hx-perigo)}
+.destaque p{color:var(--hx-texto-2);font:500 14px/1.35 var(--hx-f)}
+
+/* o apelido: o Digimon, o nome e o numero */
+.ct-apelido{display:grid;grid-template-columns:64px 1fr auto;align-items:center;gap:12px;min-height:72px;padding:6px 10px 6px 6px}
+.ct-apelido .palquinho{width:64px;height:60px;display:grid;place-items:end center;overflow:hidden;border:1px solid var(--hx-borda);background:var(--hud-fundo-2)}
+.ct-apelido b{display:block;font:700 22px/1.1 var(--hx-f);letter-spacing:.01em}
+.ct-apelido b i{font:700 20px/1 var(--hx-f-num);font-style:normal;color:var(--hx-num)}
+.ct-apelido small{display:block;font:500 13px/1.25 var(--hx-f);color:var(--hx-sec)}
+.ct-nomes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.ct-nomes .filtro{padding:0 4px}
+.folha .ct-nomes{grid-template-columns:repeat(3,1fr)}
+
+/* a idade: duas opcoes lado a lado (o molde do .rival) */
+.ct-idade{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ct-idade .rival{width:100%}
+
+/* o aceite: a caixa de 24 px num alvo de 44 */
+.ct-aceite{display:grid;grid-template-columns:44px 1fr;align-items:center;gap:4px;min-height:48px;padding:2px 10px 2px 0;border:1px solid var(--hx-borda);background:var(--hx-tecla);width:100%;text-align:left}
+.ct-caixa{justify-self:center;width:24px;height:24px;border:2px solid var(--hx-borda-topo);display:grid;place-items:center}
+.ct-aceite[aria-checked="true"] .ct-caixa{background:var(--hx-btn-bg);border-color:var(--hx-btn-borda);color:var(--hx-btn-ink)}
+.ct-caixa .ic{width:16px;height:16px;stroke-width:3;visibility:hidden}
+.ct-aceite[aria-checked="true"] .ct-caixa .ic{visibility:visible}
+.ct-aceite span{font:500 14px/1.3 var(--hx-f)}
+.ct-aceite span u{text-underline-offset:3px}
+.ct-aceite small{display:block;font:500 13px/1.2 var(--hx-f);color:var(--hx-sec)}
+
+.ct-bts{display:flex;gap:8px}
+.ct-bts .bt.acao{flex:1}
+.bt.perigo{border-color:var(--hx-perigo);color:var(--hx-perigo);border-style:dashed}
+
+/* os aparelhos: o molde do .med-li */
+.ct-ap{display:flex;flex-direction:column;gap:4px}
+.ct-ap .med-li{grid-template-columns:24px 1fr auto}
+.ct-ap .med-li > .ic{color:var(--hx-rotulo)}
+.ct-ap .bt{min-height:44px;padding:0 12px;font-size:13px}
+.ct-ap .etq.aqui{border-color:var(--hx-ok);color:var(--hx-ok)}
+
+/* a lista do que some ao apagar */
+.ct-some{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+.ct-some li{display:grid;grid-template-columns:20px 1fr;gap:8px;align-items:start;font:500 14px/1.3 var(--hx-f);color:var(--hx-texto-2)}
+.ct-some li .ic{width:16px;height:16px;margin-top:2px;color:var(--hx-perigo)}
+.ct-some li.fica .ic{color:var(--hx-ok)}
+
+/* a prancha dos estados: os paineis lado a lado, sem a HUD; o rotulo de cada um e nota da prancha */
+.ct-estado{position:absolute;top:150px;width:350px}
+.ct-estado .lp-corpo{min-height:250px}
+.ct-estado .ct-bts{margin-top:auto}
+.ct-estado .ct-bts .bt{flex:1;padding:0 8px}
+
+/* a folha alta do celular: a conta pede mais altura que um lugar (a altura vem de --folha-top, por tela) */
+.folha.ct-folha .lp-corpo{overflow:hidden}
+
+/* a 390 os dois botoes de baixo dividem a largura: menos respiro dos lados */
+.folha .ct-bts .bt{padding:0 10px}

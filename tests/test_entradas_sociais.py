@@ -72,7 +72,9 @@ def test_os_parametros_novos_estao_no_registro():
 
 def test_as_entradas_e_os_tipos_do_toque():
     assert tuple(TIPOS_TOQUE) == lobos.TIPOS_TOQUE_SOCIAL
-    assert ACOES_VISIVEIS == tuple(a.value for a in AcaoPet) and len(ACOES_VISIVEIS) == 8
+    # as oito acoes de antes da TV no jogo: o IR_TV (D-GV-TVJOGO-3) fica de fora e chega como o explorar (mundo.acao_visivel)
+    assert ACOES_VISIVEIS == tuple(a.value for a in AcaoPet)[:8] and len(ACOES_VISIVEIS) == 8
+    assert tuple(AcaoPet)[8:] == (AcaoPet.IR_TV,)
     assert len(ENTRADAS_SOCIAIS) == 2 + 8 + 5 and len(set(ENTRADAS_SOCIAIS)) == len(ENTRADAS_SOCIAIS)
 
 
