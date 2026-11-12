@@ -46,6 +46,7 @@ from ..config import (CANAIS_TELA, CONFIG_DIGIBRAIN_INATOS, RECEPTORES_DIGIBRAIN
                       ConfigEnjooTela, ConfigMundo, ConfigOlhar)
 from ..genoma_visao import GenomaVisao
 from ..policies.lobos import div_arred, falta_receptor, leitura_receptor
+from . import dever as _dever
 from ._comum import clamp, ganho_de_tau, integrar, mul
 
 CLASSES_OBJETO = ("racao", "a", "b", "c", "podre", "bola")
@@ -84,6 +85,7 @@ class Sens:
         self.k_hab = ganho_de_tau(self.p.tau_hab, cfg.intervalo_decisao_ticks, self.S)
         self.hab = {c: 0 for c in CLASSES_OBJETO}
         self.social: dict | None = None               # a CO6: a reputacao e o peso dos deveres da ultima decisao que os trouxe (senao None)
+        self.dever = None                             # a CO7 (`ligar_dever`): a ConfigCooperacao; None desligada
         self.receptores: tuple | None = None          # os receptores presentes, fixados na primeira decisao
         self.olhar = olhar                            # a tela (P1d): so com a subchave `olhar`; None desligada
         self.enjoo: ConfigEnjooTela | None = None     # o enjoo (D-GV-ENJOO-CER): so com o olhar e a ConfigEnjooTela ligada
@@ -228,6 +230,15 @@ class Sens:
             out.append({"rival": r["rival"], "resultado": r["resultado"], "vida_perdida_s": r["vida_perdida_s"], "tick": r["tick"]})
         return out
 
+    def ligar_dever(self, cfg, sub: int) -> None:
+        """a CO7 (docs/ESPEC_V3_COOPERACAO_CO7.md): a percepcao social em posicoes absolutas vai ao `sens["social"]` (digibrain/dever.py), com
+        a posicao em que o pet viu cada outro na decisao anterior em que o via (o estado novo)"""
+        if not cfg.co7:
+            raise ValueError("M-SENS: os deveres so com a subchave co7")
+        self.dever = cfg
+        self.r_escudo = cfg.r_escudo_celulas * sub
+        self.antes: dict[str, tuple[int, int]] = {}
+
     def _ler_social(self, ps) -> None:
         """a CO6 (docs/ESPEC_V3_COOPERACAO_CO6.md, 2.3): a reputacao de cada outro e o peso dos deveres, se a percepcao social os traz, vao
         ao estado (o painel e as medidas); nenhum modulo os usa na decisao (o G-SEM-DECISAO-CO6). Sem eles (a CO6 desligada, o pet sozinho),
@@ -283,6 +294,12 @@ class Sens:
                "ha_cheiro": pm.direcao_cheiro != 0, "pos": (pm.x, pm.y), "regiao": pm.regiao, "minuto": minuto, "pc": pc}
         if lutas is not None:                          # a ponte da luta (PE2): desligada, nenhum campo novo
             out["lutas"] = self.resumir_lutas(lutas)
+        if self.dever is not None:                     # a CO7: desligada, nenhum campo novo
+            ps = getattr(obs, "social", None)
+            out["social"] = _dever.social(ps, (pm.x, pm.y), self.antes, self.r_escudo)
+            if out["social"] is not None:
+                for o in out["social"]["outros"]:
+                    self.antes[o["id"]] = (o["x"], o["y"])
         if self.olhar is not None:                     # a tela (P1d): desligada, nenhum campo novo
             out["telas"] = linhas_tela
             out["tela_niveis"] = self.niveis_tela(pc)
@@ -296,6 +313,8 @@ class Sens:
 
     def estado_interno(self) -> dict:
         out = {"hab": dict(self.hab), "receptores": None if self.receptores is None else list(self.receptores)}
+        if self.dever is not None:                     # a CO7: desligada, o estado de hoje
+            out["dever_antes"] = {i: list(v) for i, v in sorted(self.antes.items())}
         if self.olhar is not None:                     # a tela (P1d): desligada, o estado e o de hoje, byte a byte
             out["tela"] = {"otimo": dict(self.otimo), "largura": dict(self.largura), "desloc": dict(self.desloc),
                            "exposicoes": self.exposicoes}

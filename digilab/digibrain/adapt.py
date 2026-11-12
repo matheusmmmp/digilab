@@ -187,7 +187,8 @@ class DigiBrain:
                  semente: int | None = None, cfg_luta_memoria: ConfigLutaMemoria | None = None,
                  cfg_fala: ConfigFalaUnidades | None = None, cfg_olhar: ConfigOlhar | None = None,
                  genoma_visao_ovo: GenomaVisao | None = None, cfg_sono: ConfigSonoSegura | None = None,
-                 cfg_lance: ConfigLanceDono | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None) -> None:
+                 cfg_lance: ConfigLanceDono | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None,
+                 cfg_cooperacao=None) -> None:
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         if not self.cd.ligada:
             raise DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada")
@@ -226,6 +227,13 @@ class DigiBrain:
                 self.ce = cfg_enjoo_tela
         self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente, self.luta_memoria, cfg_fala,
                                 self.co, self.genoma_visao, cfg_sono=cfg_sono, cfg_lance=self.cl, cfg_enjoo=self.ce)
+        # a CO7 (docs/ESPEC_V3_COOPERACAO_CO7.md): os deveres no M-SENS, no M-ARB e no M-AFETO, so com a subchave `co7`; sem ela, nada muda
+        self.dever = None
+        if cfg_cooperacao is not None and cfg_cooperacao.co7:
+            self.dever = cfg_cooperacao
+            self.m.sens.ligar_dever(cfg_cooperacao, self.cm.sub)
+            self.m.arb.ligar_dever(cfg_cooperacao)
+            self.m.afeto.ligar_dever(cfg_cooperacao)
         if self.ce is not None:
             self.enjoo_tv: dict = {}                  # o enjoo lembrado de cada TV, id -> [0, S]
             self.k_enjoo_lembrado = ganho_de_tau(self.ce.tau_enjoo_lembrado, self.cfg.intervalo_decisao_ticks, self.S)
@@ -341,6 +349,8 @@ class DigiBrain:
             self.motivos[-1]["evento"] = evento
         if self.cl.ligada:                            # o lance do dono (BB-4): desligada, nenhum campo novo
             self.motivos[-1]["lance"] = lance
+        if self.dever is not None:                    # a CO7: desligada, nenhum campo novo
+            self.motivos[-1]["dever"] = None if esc["dever"] is None else {**esc["dever"], "culpa": afeto["culpa"], "inveja": afeto["inveja"]}
         if cd.olhar:                                  # o olhar (P1d): desligada, nenhum campo novo
             self._olhando = unidade["chave"][2] if unidade["chave"][0] == COMPORTAMENTO_OLHAR else None
             self.motivos[-1]["olhar"] = {**olhar, "olha": self._olhando}
