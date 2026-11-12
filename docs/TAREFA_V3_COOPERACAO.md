@@ -141,6 +141,9 @@ Não há run nesta tarefa. Os gates são de engenharia:
   - aviso ao coordenador; o merge é só pelo Matheus;
   - o corpo segue `.github/pull_request_template.md`, e o CI (`tools/verificar_relato.py`) confere os campos.
 
+**A CO-bancada (2026-11-12):** o plano de análise de "a cooperação emerge e cresce com o `k`?" está em
+`docs/PLANO_ANALISE_V3_COOPERACAO.md`, PROPOSTO (as CB-1 a CB-9 vão ao Matheus). Nenhuma vida roda antes da CO7 na `main` e da aprovação.
+
 ## 6. Fora desta tarefa
 
 - **a reputação na percepção do cérebro e os deveres como escudo:** são as CO6 e CO7, cada uma com o ok do Matheus;
@@ -366,3 +369,13 @@ A cooperação aparece sem número (D-MM-8), em `web/app/src/telas/pet/AtosDoIrm
   - **Aprovadas pelo Matheus** em 2026-11-11 (D-CO5-7).
   - **A captura do gesto da luta espera um conserto da `main`:** a luta de todo pet v23 a v26 não termina no palco (D-CO5-5).
 - **Os desvios:** D-CO5-1 a D-CO5-6, no registro de 2026-11.
+
+## CO6a, o gabarito das vidas de hoje (2026-11-12, Claude Code, Opus 5.5, branch `v3-cooperacao-co6`)
+
+Gravado com o código da `main` (`bf381ef9`) antes de qualquer mudança da CO6, num commit só dele (CO6-6).
+
+- **O exportador:** `experiments/exportar_gabarito_co6.py` grava `tests/gabaritos/co6_vidas_de_hoje.json.gz`.
+- **As vidas:** três vidas de 3 dias do `Grupo` com a cooperação ligada e o DigiBrain modular nos dois pets (D-CO6a-1), com as decisões, o
+  sha256 do `estado_interno()` de cada cérebro, o dos logs e o do resumo do grupo.
+- **O teste:** `tests/test_cooperacao_co6.py` refaz as vidas e as compara com o gabarito (o G2 da CO6).
+- **Os desvios:** D-CO6a-1 e D-CO6a-2, no registro de 2026-11.
