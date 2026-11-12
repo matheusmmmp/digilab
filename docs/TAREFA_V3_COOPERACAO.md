@@ -444,3 +444,9 @@ Atrás da subchave `co7` da `ConfigCooperacao` (só com a `co6`), no grupo e no 
 - **O gesto** (`src/telas/pet/AtosDoIrmao.tsx`), sem número (D-MM-8): hesitar e deixar a comida para o irmão aflito, e querer consolá-lo;
   em Últimas ações e com o coração na ilha, nos grupos v37.
 - **Os desvios:** D-CO7c-1 a D-CO7c-6, no registro de 2026-11.
+
+## As capturas da v37 (2026-11-12, Claude Code, Opus 5.5, branch `v3-cooperacao-co7-capturas`)
+
+- **Aprovadas pelo Matheus** ("Eu aprovo", D-CO7c-7): o gesto do dever em Últimas ações e o painel "Com o irmão", a 390 e 1280 px, nas duas
+  peles, em `D:\Trab\digilab\capturas_coop_co7\` (fora do git). O gesto "hesitou e deixou a comida" não tem captura: ele não acontece nas
+  vidas do jogo dos testes.

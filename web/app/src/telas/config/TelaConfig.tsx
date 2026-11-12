@@ -16,6 +16,7 @@ import { BotaoHx, ChipHx } from "../../componentes/hx/index.ts";
 import { ICONE } from "../../decoracao.ts";
 import { FALA_LLM, ligarFalaLLM, rotuloLLM, useFalaLLM } from "../../fala.ts";
 import { escolherConversaNova, escolherFalaRede, escolherModo, useFalaLivre, type ModoFala } from "../../falaLivre.ts";
+import { escolherFalaAssistir, useFalaAssistir } from "../../falaAssistir.ts";
 import { replayDaTelaConfere, textoDaTela, useJogo } from "../../jogo.ts";
 import { abrirEscolhaBrasao, chocarDoBrasao } from "../../jornada.ts";
 import type { ParteConfig } from "../../rotas.ts";
@@ -218,7 +219,7 @@ function Dados({ irPet }: { irPet: () => void }) {
   );
 }
 function Fala() {
-  const llm = useFalaLLM(), fl = useFalaLivre(), r = rotuloLLM(), { motor: pet } = useJogo();
+  const llm = useFalaLLM(), fl = useFalaLivre(), fa = useFalaAssistir(), r = rotuloLLM(), { motor: pet } = useJogo();
   const redeSemEfeito = fl.falaRede && pet.conceitosDec() === null;      /* DC2b: pet sem decisao do modular, a chave nao muda nada */
   const modos: [ModoFala, string, string, string?][] = [
     ["template", "Frases prontas", "Sempre as mesmas frases do jogo. Nunca erra, mas repete."],
@@ -249,6 +250,10 @@ function Fala() {
         <label className="mc-interruptor"><span><b>Fala pela rede (teste)</b><small>Só no modo Livre: a fala nasce do que o cérebro modular decidiu por último; o modelo só põe em palavras e não vê o resto do pet.</small></span>
           <input type="checkbox" role="switch" checked={fl.falaRede} disabled={fl.modo !== "livre"} onChange={ev => escolherFalaRede((ev.target as HTMLInputElement).checked)} /></label>
         {redeSemEfeito && <p className="mc-apoio" role="status">Este pet não tem uma decisão do cérebro modular: a chave não muda nada e a fala segue como antes.</p>}
+      </section>
+      <section className="mc-bloco">
+        <label className="mc-interruptor"><span><b>Fala do assistir (teste)</b><small>Enquanto o pet olha a TV, ele às vezes diz uma frase pronta sobre o que sentiu do que viu (gostei, susto, que chato, o que é isso?), pelo que o cérebro dele calculou. Sem modelo de linguagem; no máximo uma frase a cada 5 minutos.</small></span>
+          <input type="checkbox" role="switch" checked={fa.ligada} onChange={ev => escolherFalaAssistir((ev.target as HTMLInputElement).checked)} /></label>
       </section>
       <p className="mc-apoio">Em todos os modos, a fala não decide nada e o que você escreve na conversa não ensina o pet.</p>
     </>
