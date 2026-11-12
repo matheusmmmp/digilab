@@ -120,5 +120,10 @@ export const APOIO_TABELA = { ritmo: 0.6, vel: 20 } as const;
     PROPOSTO, SEM FONTE */
 export interface ArenaPorEstagio { Ultimate: number; Mega: number }
 export const ARENA_POR_ESTAGIO_LP6: Readonly<ArenaPorEstagio> = Object.freeze({ Ultimate: 1.15, Mega: 1.3 });
+/** os numeros da LP6-3 (docs/PLANO_LP6_SEGUNDO_GOLPE.md, secao 8; o candidato lp6_3_u120 do PR #834): o apoio so na luta de Ultimate ou de
+    Mega, dano 0,6, recarga 3 vezes, sem o recuo (a decisao 2 atualizada; PROPOSTO, SEM FONTE); e a elipse 1,2 no Ultimate e 1,4 no Mega (a
+    decisao 4, DECIDIDA: "(a) 1,2 e 1,4 (Recommended)", Matheus, 2026-11-11). Sao os da v27 na LP6-4 */
+export const APOIO_LP6_3: Readonly<Apoio> = Object.freeze({ dano: 0.6, recarga: 3, longeMs: 1500, desde: "Ultimate" });
+export const ARENA_POR_ESTAGIO_LP6_3: Readonly<ArenaPorEstagio> = Object.freeze({ Ultimate: 1.2, Mega: 1.4 });
 /** a ordem dos estagios da tabela das formas, do menor ao maior (o maior dos dois lutadores escolhe o fator) */
 export const ORDEM_ESTAGIOS = ["In-Training", "Rookie", "Champion", "Ultimate", "Mega"] as const;

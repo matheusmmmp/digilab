@@ -96,3 +96,9 @@ A medida (o pet do jogo com o modular, 4 dias, um tick por vez, alimentado com a
 
 O pet da v27 dorme em cerca de um quarto dos cochilos e acorda descansado (a mediana acima de 0,9); o tempo dormindo sobe de ~40 % para
 ~43 %. Os desvios estão em `docs/registro/2026-11.md` (D-SONO-1 a D-SONO-6).
+
+## 10. A v28: o grupo de dois pets com o sono que segura (2026-11-11)
+
+O Matheus aprovou levar o sono ao grupo ("Sim, os dois"). A v28 é a v26 com a chave ligada; o ovo do brasão choca a v28 (`VERSAO_GRUPO`).
+Nos dois pets do grupo, sementes 101 e 202: os cochilos depois do dia 1 caem de 70–78 para 13–18 e a energia ao acordar sobe de 0,38–0,46
+para 0,92–0,94 (`web/app/test/sono_segura_grupo.test.ts`; D-SONO-7). Os grupos v26 não mudam.

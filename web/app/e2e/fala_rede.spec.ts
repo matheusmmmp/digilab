@@ -88,7 +88,13 @@ test("Fala pela rede: no pet de teste do modular o pedido leva so os conceitos d
   await page.getByRole("button", { name: "Abrir", exact: true }).click();
   await expect(page.locator(".topo-lab .lab-selo")).toBeVisible();
   await page.getByRole("button", { name: "DigiBrain", exact: true }).click();
-  await expect(page.locator("#pet-painel").getByRole("heading", { name: "O peso de cada módulo nesta escolha" })).toBeVisible({ timeout: 90_000 });
+  /* o DigiBrain do modular abre no scan (2026-11-11, como no e2e do laboratorio): a primeira decisao desenha a rede; o motivo inteiro
+     fica no mapa em texto */
+  const painel = page.locator("#pet-painel");
+  await expect(painel.locator("svg.mp.rv")).toBeVisible({ timeout: 90_000 });
+  await painel.getByRole("button", { name: "O mapa em texto" }).click();
+  await expect(painel.getByRole("heading", { name: "O peso de cada módulo nesta escolha" })).toBeVisible();
+  await page.getByRole("button", { name: "Fechar DigiBrain" }).click();       /* o scan e um dialogo: aberto, ele cobre os Ajustes */
 
   await ligarRede(page);
   await expect(page.getByText("Este pet não tem uma decisão do cérebro modular")).toHaveCount(0);

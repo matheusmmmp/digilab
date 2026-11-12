@@ -5,7 +5,7 @@
    - o par vai inteiro para a espera e volta inteiro (Meus pets); o Salao nao o ve;
    - a heranca nao aceita um pet do par nesta etapa, e o arquivo do par ainda nao se importa (D-CO4d-5). */
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import { ESPECIES, GrupoDoJogo, Motor, TPD, VERSAO_PET, VERSAO_V26 } from "../motor/index.ts";
+import { ESPECIES, GrupoDoJogo, Motor, TPD, VERSAO_GRUPO, VERSAO_PET } from "../motor/index.ts";
 import { CHAVE, type Armazenamento } from "../src/save.ts";
 import { focar, iniciarJogo, irmaoEmFoco, jogoAtual, mudarMotor, petsVivos, replayDaTelaConfere, textoDaTela, textoDoSaveAtual, trocarGrupo, trocarMotor } from "../src/jogo.ts";
 import { chocarDoBrasao, chocarDoisOvos, especieDaSemente } from "../src/jornada.ts";
@@ -87,7 +87,7 @@ describe("o save nas telas", () => {
     const g = jogoAtual().grupo!;
     expect(podeSerPai(g.motor("A"))).toBe(false);
     expect(() => lerArquivo(textoDaTela(), "par.digilab")).toThrow(/dois pets/);
-    expect(GrupoDoJogo.reproduzir(g.semente, VERSAO_V26, g.log).assinatura()).toBe(g.assinatura());
+    expect(GrupoDoJogo.reproduzir(g.semente, VERSAO_GRUPO, g.log).assinatura()).toBe(g.assinatura());
   });
 });
 
@@ -100,7 +100,7 @@ describe("o pet gemeo em Ajustes", () => {
     chocarDoBrasao(um.especie, true, um.ritmo);
     const g = jogoAtual().grupo!;
     expect(g).not.toBeNull();
-    expect(g.versao).toBe(VERSAO_V26);
+    expect(g.versao).toBe(VERSAO_GRUPO);
     expect(g.motor("A").especie).toBe(ESP);
     const guardados = lerGuardados();
     expect(guardados).toHaveLength(1);

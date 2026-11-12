@@ -22,10 +22,10 @@ describe("a chave ligada (LP4)", () => {
   test("LUTA_POC_LIGADA, a v21 nos ovos novos e so a v21 (e o pet de teste) abrindo", () => {
     expect(LUTA_POC_LIGADA).toBe(true);
     expect(VERSAO_PET).toBe(27);
-    expect(VERSOES_PET).toEqual([21, 22, 23, 24, 25, 26, 27]);   // a v26: os dois pets (CO4c)
+    expect(VERSOES_PET).toEqual([21, 22, 23, 24, 25, 26, 27, 28, 29]);   // a v26: os dois pets (CO4c)
     expect(lutaPocLigada()).toBe(true);
     expect(versaoDoOvo()).toBe(27);
-    expect(versoesQueAbrem()).toEqual([21, 22, 23, 24, 25, 26, 27]);
+    expect(versoesQueAbrem()).toEqual([21, 22, 23, 24, 25, 26, 27, 28, 29]);
     expect(new Motor(1, 21).versao).toBe(21);
     expect(new Motor(1, VERSAO_PET_LAB).versao).toBe(16);
     for (const v of [1, 6, 12, 13, 14, 15, 17, 18, 19, 20]) expect(() => new Motor(1, v), `v${v}`).toThrow(/versão de pet desconhecida/);
