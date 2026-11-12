@@ -37,8 +37,9 @@ import { conferirConfigEnjooTela, type ConfigEnjooTela } from "../enjoo_tela.ts"
 import { genomaVisao, type GenomaVisao } from "./genoma_visao.ts";
 import { Afeto } from "./afeto.ts";
 import { Arbitragem, type RngPolitica } from "./arb.ts";
-import { COMPORTAMENTO_OLHAR, CONFIG_DIGIBRAIN_LAB, CONFIG_LANCE_DONO, CONFIG_MODULAR_MUNDO, CONFIG_OLHAR, CONFIG_SONO_SEGURA, CONTEUDOS_FALA,
-  INATOS_MODULAR, validarLanceDono, type ConfigDigibrainModular, type ConfigLanceDono, type ConfigOlhar, type ConfigSonoSegura } from "./constantes.ts";
+import { COMPORTAMENTO_OLHAR, CONFIG_DIGIBRAIN_LAB, CONFIG_EQUILIBRIO_CUIDADO, CONFIG_LANCE_DONO, CONFIG_MODULAR_MUNDO, CONFIG_OLHAR, CONFIG_SONO_SEGURA,
+  CONTEUDOS_FALA, INATOS_MODULAR, equilibrioLigado, validarEquilibrioCuidado, validarLanceDono, type ConfigDigibrainModular,
+  type ConfigEquilibrioCuidado, type ConfigLanceDono, type ConfigOlhar, type ConfigSonoSegura } from "./constantes.ts";
 import { EstadoDinamico, type OpcaoFim } from "./estado.ts";
 import { Impulso, type UnidadeImpulso } from "./impulso.ts";
 import { Memoria, episodioAutobio, episodioLuta } from "./mem.ts";
@@ -115,6 +116,9 @@ export class DigiBrain implements PoliticaCorpoMundo {
   /** o lance do dono (BB-4): a ConfigLanceDono e o convite entregue pelo laco para a decisao seguinte (null: nao entregue) */
   readonly cl: ConfigLanceDono;
   private convite: boolean | null = null;
+  /** as regras do E1 (EQ-7): a ConfigEquilibrioCuidado e o estagio entregue pelo motor do jogo para a decisao seguinte (null: nao entregue) */
+  readonly ceq: ConfigEquilibrioCuidado;
+  private bebe: boolean | null = null;
   /** o enjoo (D-GV-ENJOO-CER): a ConfigEnjooTela ligada (null desligada), o enjoo lembrado de cada TV e o ganho dele por decisao */
   readonly ce: ConfigEnjooTela | null = null;
   private readonly enjooTv: Record<number, number> = {};
@@ -124,9 +128,11 @@ export class DigiBrain implements PoliticaCorpoMundo {
   /** `sono`: a ConfigSonoSegura (o 4o argumento, como na main); `olhar`: as opcoes do olhar (P1f), so com a subchave; `lance`: a
    *  ConfigLanceDono (BB-4) */
   constructor(cd: ConfigLab = CONFIG_DIGIBRAIN_LAB, inatos: typeof INATOS_MODULAR = INATOS_MODULAR, lutaMemoria = false,
-    sono: ConfigSonoSegura = CONFIG_SONO_SEGURA, olhar?: OpcoesOlhar, lance: ConfigLanceDono = CONFIG_LANCE_DONO) {
+    sono: ConfigSonoSegura = CONFIG_SONO_SEGURA, olhar?: OpcoesOlhar, lance: ConfigLanceDono = CONFIG_LANCE_DONO,
+    equilibrio: ConfigEquilibrioCuidado = CONFIG_EQUILIBRIO_CUIDADO) {
     if (!cd.ligada) throw new DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada");
     this.cl = validarLanceDono(lance);
+    this.ceq = validarEquilibrioCuidado(equilibrio);
     this.cd = cd;
     this.inatos = inatos;
     const cfg = { intervalo_decisao_ticks: CONFIG_MODULAR_MUNDO.intervalo_decisao_ticks };
@@ -150,7 +156,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
     if (this.irAteTv) this.sens.ligarIrAteTv();
     this.afeto = new Afeto(cfg, cd, inatos, null);
     this.estado = new EstadoDinamico(cfg, cd, inatos);
-    this.impulso = new Impulso(inatos, cd, undefined, this.co, this.cl);
+    this.impulso = new Impulso(inatos, cd, undefined, this.co, this.cl, this.ceq);
     this.lutaMemoria = lutaMemoria;
     if (lutaMemoria && !cd.memoria_autobio) throw new Error("luta_memoria so com a memoria_autobio (docs/TAREFA_V3_PONTE_LUTA.md, 3.2)");
     this.mem = new Memoria({ sub: CONFIG_MODULAR_MUNDO.sub }, inatos, cd, lutaMemoria);
@@ -198,10 +204,21 @@ export class DigiBrain implements PoliticaCorpoMundo {
     const memoria = cd.m_mem ? this.mem.recuperar(sens, afeto) : null;
     const [gosto, resumoOlhar] = cd.olhar ? this.gostoDaDecisao(sens) : [null, null];
     const lance = this.cl.ligada ? this.entradaBolaDoDono(afeto.urgencias) : null;   // o lance do dono (BB-4): o convite, salvo a fome urgente
+    let bebe: number | null = null;                     // o bebe que come com a fome dele (EQ-7): a entrada `bebe` do gancho do motor
+    if (this.ceq.comer_bebe) {
+      if (this.bebe === null) throw new Error("o DigiBrain com a ConfigEquilibrioCuidado.comer_bebe decide sem o gancho estagio_bebe do motor");
+      bebe = this.bebe ? this.S : 0;
+      this.bebe = null;
+    }
+    let guarda: boolean | null = null;                  // a guarda da fome urgente no brincar (EQ-7): a fome urgente do sono e do convite
+    if (this.ceq.guarda_fome_brincar) {
+      if (!("fome" in afeto.urgencias)) throw new Error("a guarda do brincar le a urgencia da fome, e ela nao veio do M-AFETO");
+      guarda = afeto.urgencias["fome"]! > this.inatos.urgencia_lambda;
+    }
     const [unidades, z] = this.impulso.unidades(
       sens, afeto, ctx, this.plast, memoria, this.afeto.drives(receptores), termoLem === null ? null : [termoLem, this.mem.casa], null, gosto,
-      lance === null ? null : lance.bola_do_dono, this.ce === null ? null : this.termoEnjoo(resumoOlhar!));
-    const esc = this.arb.escolher(unidades, afeto, sens, rng, reflexo, null);   // a rng de politica vai so ao M-ARB
+      lance === null ? null : lance.bola_do_dono, this.ce === null ? null : this.termoEnjoo(resumoOlhar!), bebe);
+    const esc = this.arb.escolher(unidades, afeto, sens, rng, reflexo, null, guarda === true);   // a rng de politica vai so ao M-ARB
     this.conferirDesligadas(unidades);
     const unidade = esc.unidade;
     const fins = this.estado.escolhida(unidade, z, afeto.g_apr, k, reflexo);
@@ -233,6 +250,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
     motivo["consolidacao"] = consolidacao;
     if (this.lutaMemoria) motivo["lutas"] = episodiosLuta;      // a ponte da luta (PE3): desligada, nenhum campo novo
     if (lance !== null) motivo["lance"] = lance;               // o lance do dono (BB-4): desligada, nenhum campo novo
+    if (equilibrioLigado(this.ceq)) motivo["equilibrio"] = { bebe, fome_urgente_sem_brincar: guarda };   // as regras do E1: desligadas, nada
     if (cd.olhar) {                                       // o olhar (P1f): desligada, nenhum campo novo
       this.olhando = unidade.chave[0] === COMPORTAMENTO_OLHAR && intencao.acao === "ocioso" ? unidade.chave[2] as number : null;
       motivo["olhar"] = { ...resumoOlhar, olha: this.olhando };
@@ -254,6 +272,15 @@ export class DigiBrain implements PoliticaCorpoMundo {
     if (typeof convite !== "boolean") throw new Error(`bola_do_dono recebe um bool: ${String(convite)}`);
     if (this.convite !== null) throw new Error("bola_do_dono duas vezes antes da mesma decisao");
     this.convite = convite;
+  }
+
+  // ------------------------------------------------------------ o bebe que come com a fome dele (EQ-7, so com a chave `comer_bebe`)
+  /** o motor do jogo, antes de cada decisao: o pet e um bebe (o In-Training da tela)? Sem a chave, ou duas vezes sem decisao, falha alto */
+  estagioBebe(bebe: boolean): void {
+    if (!this.ceq.comer_bebe) throw new Error("estagio_bebe: o gancho do bebe exige a ConfigEquilibrioCuidado.comer_bebe ligada no cerebro (EQ-7)");
+    if (typeof bebe !== "boolean") throw new Error(`estagio_bebe recebe um bool: ${String(bebe)}`);
+    if (this.bebe !== null) throw new Error("estagio_bebe duas vezes antes da mesma decisao");
+    this.bebe = bebe;
   }
 
   /** a entrada `bola_do_dono` da decisao: S na janela do convite, 0 fora dela e 0 com a fome urgente (a urgencia da fome acima do

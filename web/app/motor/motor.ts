@@ -54,6 +54,7 @@ import { NOME_EXERCICIO, chaveSprite, nomeArquetipo, nomeForma } from "./nomes.t
 import { criarRng, hashSemente } from "./rng.ts";
 import { TreinoPet, type ResultadoSessao } from "./treino.ts";
 import { Vinculo } from "./vinculo.ts";
+import { AJUSTE_E1_DESLIGADO, ajusteE1Ligado, inatosComAjuste, lanceComAjuste, sonoComAjuste, validarAjusteE1, type AjusteEquilibrioE1 } from "./equilibrio_e1.ts";
 import type {
   AcaoDono, AcaoPet, Carater, Chamado, ChavesProduto, Desejo, Especie, Estagio, EstadoVida, EventoRegistro, Exercicio, Forma, FormaAdulta, FormaAdultaNormal,
   EstagioTreino, ItemHistorico, Linha, MotivoVida, Observacao, OpItem, Origem, Ramo, Ritmo, Stats, Temperamento, VersaoPet,
@@ -253,6 +254,9 @@ export class Motor {
   private modular: DigiBrain | null = null;
   /** o modular decide agora (a v16 sempre; a v17 depois de um "cb" do modular) */
   private modularAtivo = false;
+  /** o ajuste da calibracao do E1 (EQUILIBRIO_CUIDADO; motor/equilibrio_e1.ts): desligado em todo pet do jogo; so a bancada o liga */
+  private ajusteE1: AjusteEquilibrioE1 = AJUSTE_E1_DESLIGADO;
+  get equilibrioE1(): AjusteEquilibrioE1 { return this.ajusteE1; }
 
   /** dois pets (docs/TAREFA_V3_COOPERACAO.md, CO4b): o pet vive no mundo de um grupo, e o tempo dele anda pelo GrupoDoJogo (motor/grupo_jogo.ts)
       um tick por vez, na vez sorteada; o `avancar` dele falha alto. Fora do grupo, false: a vida de hoje */
@@ -296,7 +300,9 @@ export class Motor {
     const qual = (): DigiBrain | null => m.modularAtivo ? m.modular : null;
     const politicaTrocavel: PoliticaCorpoMundo = {
       agir(o, rng) {
-        const b = qual(), t = m.v11!.laco.estado.tick, d = m.desejoAtual(o, t), a = b ? b.agir(o, rng) : braco.agir(o, rng);
+        const b = qual(), t = m.v11!.laco.estado.tick, d = m.desejoAtual(o, t);
+        if (b !== null && b.ceq.comer_bebe) b.estagioBebe(m.estagioAtual === "bebe");   // o E1 (EQ-7): o estagio ao modular, so com a regra
+        const a = b ? b.agir(o, rng) : braco.agir(o, rng);
         m._decisaoV11(o, a, t, d);
         return a;
       },
@@ -478,6 +484,16 @@ export class Motor {
   /** a ponte da luta (PE3), uma vez, no comeco do registro de um ovo v16 ou v17 (depois das chaves do produto e do "cb" do ovo): a luta passa a
       entregar o resumo ao corpo e, com o modular ativo, ao DigiBrain. O jogo grava nos ovos novos (src/produto.ts); a pesquisa e os gabaritos
       nunca chamam */
+  /** EQUILIBRIO_CUIDADO, E1: liga o ajuste da calibracao no modular deste pet (motor/equilibrio_e1.ts). So a bancada do E1
+      (scripts/equilibrio_cuidado/) chama, num ovo de cerebro trocavel, antes da primeira troca para o modular. NAO entra no registro: um pet
+      com ele nao se refaz pelo log, e o jogo nunca o chama (a versao com os valores escolhidos e o E3, EQ-6) */
+  ligarEquilibrioE1(a: AjusteEquilibrioE1): void {
+    validarAjusteE1(a);
+    if (!ehCerebroTrocavel(this.versao)) throw new Error(`o ajuste do E1 so nos pets de cerebro trocavel (este e v${this.versao})`);
+    if (this.modular !== null) throw new Error("o ajuste do E1 vem antes da primeira troca para o modular");
+    if (ajusteE1Ligado(this.ajusteE1)) throw new Error("o ajuste do E1 duas vezes");
+    this.ajusteE1 = a;
+  }
   ligarPonteLuta(eps = false): void {
     /* PE4: com `eps`, a marca e { luta: true, eps: true } e o epsilon da luta passa a ler o g_exp do modular; sem ela ({ luta: true }, os
        saves da PE3) o epsilon e o de hoje, byte a byte */
@@ -1349,12 +1365,13 @@ export class Motor {
        que segura (SONO_SEGURA) */
     if (v.cerebro === "modular") {
       /* a v32: o modular com a subchave `olhar`, o genoma da visao da semente do ovo (rng propria `visao-ovo`) e o agrado no corpo */
-      const tv = nasceComTv(this.versao);
-      this.modular ??= new DigiBrain(tv ? CONFIG_DIGIBRAIN_LAB_OLHAR : CONFIG_DIGIBRAIN_LAB, { ...INATOS_MODULAR, d_max: this.alcanceMemoria } as typeof INATOS_MODULAR, false,
-        nasceComSonoSegura(this.versao) ? CONFIG_SONO_SEGURA_LIGADA : CONFIG_SONO_SEGURA,
+      const tv = nasceComTv(this.versao), aj = this.ajusteE1;   // `aj`: o ajuste do E1, desligado fora da bancada (os mesmos objetos de hoje)
+      this.modular ??= new DigiBrain(tv ? CONFIG_DIGIBRAIN_LAB_OLHAR : CONFIG_DIGIBRAIN_LAB, inatosComAjuste({ ...INATOS_MODULAR, d_max: this.alcanceMemoria } as typeof INATOS_MODULAR, aj), false,
+        sonoComAjuste(nasceComSonoSegura(this.versao) ? CONFIG_SONO_SEGURA_LIGADA : CONFIG_SONO_SEGURA, aj),
         tv ? { semente: this.semente, cfgOlhar: CONFIG_OLHAR_JOGO,
                ...(nasceComTvJogo(this.versao) ? { irAteTv: true, cfgEnjooTela: CONFIG_ENJOO_TELA_LIGADA } : {}) } : undefined,   // a v35 e a v36: o ir ate a TV e o enjoo (D-GV-TVJOGO)
-        nasceComLance(this.versao) ? CONFIG_LANCE_DONO_LIGADA : CONFIG_LANCE_DONO);   // e, na v30, na v31, na v35 e na v36, com o lance do dono (BB-4)
+        lanceComAjuste(nasceComLance(this.versao) ? CONFIG_LANCE_DONO_LIGADA : CONFIG_LANCE_DONO, aj),   // e, na v30, na v31, na v35 e na v36, com o lance do dono (BB-4)
+        aj.cerebro);
       if (this.ponteLuta) this.modular.ligarLutaMemoria();
     }
     this.modularAtivo = v.cerebro === "modular";

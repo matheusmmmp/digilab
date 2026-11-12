@@ -8,10 +8,13 @@
    do receptor do conteudo (TERMO_DO_CONTEUDO) vezes o `ganho_conteudo` (mul) e os dos outros dois conteudos fora; o habito e o da linha de H
    da unidade (linhaDaOpcao). Desligada, a unidade e a de hoje.
    **O convite do lance do dono** (TAREFA_V3_BOLA_BRINCAR, BB-4; a ConfigLanceDono ligada): a entrada `bola_do_dono` (0 ou S, o M-ADAPT a monta)
-   soma mul(w_bola_do_dono, bola_do_dono) ao inato do brincar (todas as unidades do brincar). Fica fora do z. Desligada, nenhum termo. */
+   soma mul(w_bola_do_dono, bola_do_dono) ao inato do brincar (todas as unidades do brincar). Fica fora do z. Desligada, nenhum termo.
+   **O bebe que come com a fome dele** (docs/PLANO_V3_EQUILIBRIO_CUIDADO.md, EQ-7; a ConfigEquilibrioCuidado.comer_bebe ligada): a entrada
+   `bebe` (0 ou S, do gancho `estagioBebe` do motor do jogo) soma mul(w_comer_bebe, bebe) ao inato do comer. Fora do z. Desligada, nada. */
 import { chaveUnidade, mul, phi, raizInteira, textoDaChave, type ChaveUnidade } from "./_comum.ts";
 import { CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTO_OLHAR, COMPORTAMENTOS_DIGIBRAIN, CONFIG_FALA_UNIDADES, CONFIG_OLHAR, CONTEUDOS_FALA,
-  CONFIG_LANCE_DONO, INATOS_MODULAR, RECEPTORES_DIGIBRAIN, TERMO_DO_CONTEUDO, validarLanceDono, type ConfigLanceDono, type ConfigOlhar } from "./constantes.ts";
+  CONFIG_EQUILIBRIO_CUIDADO, CONFIG_LANCE_DONO, INATOS_MODULAR, RECEPTORES_DIGIBRAIN, TERMO_DO_CONTEUDO, validarEquilibrioCuidado, validarLanceDono,
+  type ConfigEquilibrioCuidado, type ConfigLanceDono, type ConfigOlhar } from "./constantes.ts";
 import { linhaDaOpcao } from "./plast.ts";
 import type { LeituraAfeto } from "./afeto.ts";
 import type { CorpoModular, LinhaTela, ObjetoSens, SaidaSens } from "./sens.ts";
@@ -60,10 +63,15 @@ export class Impulso {
   /** o lance do dono (BB-4): a ConfigLanceDono (desligada, nenhum termo novo) */
   readonly cl: ConfigLanceDono;
 
+  /** as regras do E1 (EQ-7): a ConfigEquilibrioCuidado (desligada, nenhum termo novo) */
+  readonly ceq: ConfigEquilibrioCuidado;
+
   constructor(inatosOuNulo: InatosImpulso | null, cfgDigibrain: ConfigDigibrainImpulso, cfgFala: ConfigFalaUnidades = CONFIG_FALA_UNIDADES,
-              cfgOlhar: ConfigOlhar | null = null, cfgLance: ConfigLanceDono = CONFIG_LANCE_DONO) {
+              cfgOlhar: ConfigOlhar | null = null, cfgLance: ConfigLanceDono = CONFIG_LANCE_DONO,
+              cfgEquilibrio: ConfigEquilibrioCuidado = CONFIG_EQUILIBRIO_CUIDADO) {
     const inatos = inatosOuNulo ?? INATOS_MODULAR;
     this.cl = validarLanceDono(cfgLance);
+    this.ceq = validarEquilibrioCuidado(cfgEquilibrio);
     this.p = inatos;
     this.cd = cfgDigibrain;
     this.S = inatos.escala;
@@ -150,7 +158,7 @@ export class Impulso {
   unidades(sens: SaidaSens, afeto: LeituraAfeto, contexto: ContextoImpulso, plast: PlastImpulso, memoria: MemoriaImpulso | null,
     drives: readonly string[], lembranca: Lembranca | null = null, facetas: unknown = null,
     gosto: Readonly<Record<number, number>> | null = null, bolaDoDono: number | null = null,
-    enjoo: Readonly<Record<number, number>> | null = null): [UnidadeImpulso[], number[]] {
+    enjoo: Readonly<Record<number, number>> | null = null, bebe: number | null = null): [UnidadeImpulso[], number[]] {
     if (facetas !== null) throw new Error("M-IMPULSO: as facetas ficam fora do laboratorio");
     if ((gosto !== null) !== (this.co !== null)) throw new Error("M-IMPULSO: o termo gosto vem so com a subchave olhar, e com ela sempre");
     if (enjoo !== null && gosto === null) throw new Error("M-IMPULSO: o termo enjoo (D-GV-ENJOO-CER) so com a subchave olhar");
@@ -167,6 +175,12 @@ export class Impulso {
     if (bolaDoDono !== null) {                          // o convite do lance do dono (BB-4): so o inato do brincar
       if (bolaDoDono !== 0 && bolaDoDono !== S) throw new Error(`M-IMPULSO: bola_do_dono e 0 ou S: ${String(bolaDoDono)}`);
       inatoB["brincar"] = inatoB["brincar"]! + mul(this.cl.w_bola_do_dono, bolaDoDono, S);
+    }
+    if ((bebe !== null) !== this.ceq.comer_bebe)
+      throw new Error("M-IMPULSO: a entrada bebe vem so com a ConfigEquilibrioCuidado.comer_bebe ligada, e com ela sempre");
+    if (bebe !== null) {                                // o bebe que come com a fome dele (EQ-7): so o inato do comer
+      if (bebe !== 0 && bebe !== S) throw new Error(`M-IMPULSO: bebe e 0 ou S: ${String(bebe)}`);
+      inatoB["comer"] = inatoB["comer"]! + mul(this.ceq.w_comer_bebe, bebe, S);
     }
     const fala = this.cd.fala_unidades;
     for (const b of COMPORTAMENTOS_DIGIBRAIN) if (!(fala && b === FALA)) habitoB[b] = plast.habito(b, z);
