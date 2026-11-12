@@ -1058,3 +1058,19 @@ PROPOSTOS, SEM FONTE. Os desvios são o D-N3-1 a 4, em `docs/registro/2026-11.md
 
 **O que vem depois:** a N4, os contrafactuais na faixa 92xxx, em até 4 processos. Para ela, a bancada (`scripts/equilibrio_poc/`) ganha os
 4 campos no candidato.
+
+## Resultado da N4 e da N5 da investigação do núcleo (2026-11-12)
+
+O relatório é o `docs/RESULTADO_V3_LUTA_NUCLEO.md`. A N4 rodou 10 medidas inteiras da bancada na faixa `investigacao`, com os
+contrafactuais registrados antes na seção 8 do plano. A comparação está em `web/app/scripts/medicoes/luta_nucleo/n4/comparacao.md`. Os
+desvios são o D-N4-1 a 5, em `docs/registro/2026-11.md`. Nenhum número do jogo mudou, e nenhuma chave liga numa versão de pet.
+
+**O que a N4 mostrou:**
+- **O `tiroDoMorto` fecha os empates sem quebrar nada:** 10 de 21 metas, contra 9 na base.
+- **O atributo é a causa do V1, do V2, de 6 dos 7 NPCs e do P5.** Com o `forcaAtr` 1,0, o P5 vai de 0,24 a 0,85. Mas é também a única
+  incerteza da luta: sem ele, o E1, o T3 e o G4 quebram.
+- **O `puloMax` e a `bordaRingue`** tiram uma desvantagem do pet treinado, e o T1 passa do teto. O A1 do Ringue sobe pouco, e o T2 não se
+  move: o fôlego fraco não é o pulo.
+- **As séries (G1, G3) e o Castelo não se movem** com nenhuma chave.
+
+**As decisões que sobram:** a D-N-8 a D-N-12, na seção 5 do relatório.
