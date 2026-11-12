@@ -595,3 +595,15 @@ evento (só a v25 foi medida).
   decoração baixa, e que o ponto da planta A na ilha grande é água.
 - **Conferido na tela:** o Crescer aberto num pet v24, a 1440 e a 390 px: o saco está na grama
   (`docs/pranchas/ilha-grande/saco_em_terra_1440.jpg`). **Não conferido:** a abertura do primeiro dia na ilha grande, e o e2e inteiro.
+
+### 12.19 A ilha grande fechada (2026-11-11)
+
+**Decisão do Matheus (2026-11-11, nesta sessão):** "Basta, fecha". O efeito parcial da memória de 128 células fica como está, e não
+se abre outra etapa para o retorno de longe.
+
+- **Na `main`:** a ilha de 128 × 60 (IG1 a IG4, a v24), a medida (IG5, #831), a memória de 128 células (IG6, #843, a v25 e o evento
+  `ma`) e o portal do céu (#795).
+- **Fica como achado, sem etapa:** de 70 células o pet anda para casa, mas só uma vida de cinco chega a 3 células do comedouro em um
+  dia; a causa não foi investigada (seção 12.17).
+- **Segue sem verificação:** a suíte inteira do Python, o custo num celular de verdade e o retorno medido com a v24 que ganhou o
+  alcance pelo evento.

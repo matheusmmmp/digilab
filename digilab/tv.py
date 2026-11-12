@@ -33,6 +33,9 @@ from .protocol import derivar_semente
 if len(CANAIS_TELA) != N_CANAIS_TELA:                  # pragma: no cover - conferido na carga
     raise RuntimeError("os canais da tela do corpo e o formato do evento sentido_tela divergem")
 
+# o id da TV do Mundo (uma so por mundo, na P1d) nas linhas da classe `tela` que o motor entrega ao cerebro (`ver_tela`) e no `olhando_tela`
+ID_TV = 1
+
 
 class TVSemChave(ValueError):
     """A TV (trocar_canal, sentido_tela) sem a ConfigTV ligada, com a fonte errada, sem o mundo ou no grupo."""
