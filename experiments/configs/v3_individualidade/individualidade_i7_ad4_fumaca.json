@@ -1,0 +1,9 @@
+{
+  "descricao": "INDIVIDUALIDADE, I7, adendo 4: a fumaca do orquestrador com as sementes dos testes (vidas de base feitas aqui; os numeros nao sao resultado)",
+  "fase": "individualidade-i7-ad4",
+  "plano": "docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md",
+  "vidas": null,
+  "unidades": {"bases": [101, 202], "k": 1, "prefixo": "digibrain_prototipo"},
+  "dias": 14,
+  "orcamento_por_dia": 16
+}
