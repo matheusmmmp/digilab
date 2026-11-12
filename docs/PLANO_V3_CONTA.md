@@ -1,8 +1,9 @@
 # Plano da conta: login, save na nuvem, proteção e servidor (2026-11-11)
 
 **Status:** sem código. As decisões **CN-1 a CN-10 estão DECIDIDAS** pelo Matheus em 2026-11-11, como estão (seção 12); a **CN-11 e a CN-12**
-(a monetização, seção 13) estão **DECIDIDAS** em 2026-11-11, na leitura do registro (D-CONTA-10); a CN-12 foi revista em 2026-11-12 para pôr o anúncio
-que destrava a função paga (D-CONTA-13); a **CN-13 e a CN-14** e as **CN-15 a CN-18** (os detalhes dos anúncios) continuam **PROPOSTAS**.
+(a monetização, seção 13) estão **DECIDIDAS** em 2026-11-11, na leitura do registro (D-CONTA-10), e a CN-12 foi revista em 2026-11-12
+para pôr o anúncio que destrava a função paga (D-CONTA-14); a **CN-13 e a CN-14** estão **DECIDIDAS** pela recomendação em 2026-11-12
+(D-CONTA-13); as **CN-15 a CN-18** (os detalhes dos anúncios) continuam **PROPOSTAS**.
 Todo número deste plano é **PROPOSTO, SEM FONTE**, salvo onde a fonte está dita. Os custos são **estimativas**: saem da tabela de preços
 do `servidor/fala_llm.py` e de preços públicos que este plano não conferiu, e se conferem na etapa CN5, antes de contratar qualquer coisa.
 
@@ -234,7 +235,7 @@ O MMO segue as etapas dele sobre esta base: a MMO3 (o envio e a conferência) de
 ## 12. Decisões para o Matheus
 
 Cada uma com a recomendação e o custo de errar. **As CN-1 a CN-10 estão DECIDIDAS** pelo Matheus em 2026-11-11, todas pela recomendação
-e sem mudança: "E sobre a questão do PR859, eu aprovo as decisões ali e eu quero manter exatamente aquilo" (repassada pela sessão "CO2 em três PRs") e, nesta sessão, "Sim, só CN-1 a 10". Os números continuam PROPOSTOS. **As CN-11 a CN-14 continuam PROPOSTAS.**
+e sem mudança: "E sobre a questão do PR859, eu aprovo as decisões ali e eu quero manter exatamente aquilo" (repassada pela sessão "CO2 em três PRs") e, nesta sessão, "Sim, só CN-1 a 10". Os números continuam PROPOSTOS. **As CN-11 a CN-14 foram decididas depois** (CN-11 e CN-12 em 2026-11-11; CN-13 e CN-14 em 2026-11-12, seção 12).
 
 - **CN-1. Quando a conta aparece:** **o jogo primeiro, a conta depois** (pelo cais e por Ajustes). A outra opção é o login na entrada.
   Custo de errar: alto. O login obrigatório espanta quem quer só experimentar e quebra o jogo de hoje, que funciona sem servidor.
@@ -266,7 +267,8 @@ e sem mudança: "E sobre a questão do PR859, eu aprovo as decisões ali e eu qu
 
 **A CN-11 e a CN-12 estão DECIDIDAS** pelo Matheus em 2026-11-11: "Eu aceito aquela questão do MMO, que entra como VPS de teste como convidado, e a parte do save. E eu também concordo com as questões de monetização, de nunca ser [gacha] e tudo mais, apenas para pagar o serviço prestado no quesito de processamento. Então, um apoiador e um plano de assinatura nessa questão. E a loja de bits, os bits não são vendidos, né? [...] Vão ser apenas cosméticos e coisas assim."
 **A CN-12 foi revista** pelo Matheus em 2026-11-12, para pôr o anúncio que destrava a função paga (seção 13.7): "Vamos botar plano de assinatura e daí propagandas. Por exemplo, a partir de tantos consumos no chat, solta um vídeo, um ad, daí a gente consegue manobrar dessa maneira." e "o usuário consegue escapar de jogar o jogo sem ter que participar ativamente de nenhuma propaganda, quase. E daí apenas se ele quiser usar uma feature que é paga e daí consome do meu dinheiro, ele tem que assistir uma propagandinha."
-**A CN-13 e a CN-14 continuam PROPOSTAS, e as CN-15 a CN-18 (os detalhes dos anúncios) também.**
+**A CN-13 e a CN-14 estão DECIDIDAS** pelo Matheus em 2026-11-12, pela recomendação e sem mudança: "Eu quero que siga as recomendações daí faça um merge se tiver alguma pendência".
+**As CN-15 a CN-18 (os detalhes dos anúncios) continuam PROPOSTAS.**
 
 - **CN-11. Reabrir o "sem dinheiro real, nunca": DECIDIDA, reaberta só para o apoio,** para pagar o serviço (o processamento: o
   servidor e a fala). Os Bits continuam sem venda e se ganham só jogando; o gacha, a caixa de prêmio e a venda de stats, chips, tempo ou
@@ -282,10 +284,10 @@ e sem mudança: "E sobre a questão do PR859, eu aprovo as decisões ali e eu qu
   fala. A proposta era o híbrido apoio + cosméticos (a assinatura "Apoiador" e os enfeites avulsos, linha E), sem
   anúncios. A outra opção mais simples é só a doação (linha D). Custo de errar: médio. Os anúncios rendem pouco nesta escala, pioram a
   ilha e trazem a questão dos menores; a assinatura sem nada que se veja vende pouco.
-- **CN-13. Quando começa:** **a doação logo que a CN6 abrir para os convidados; a assinatura e os cosméticos só depois**, com o
+- **CN-13. Quando começa: DECIDIDA pela recomendação (2026-11-12).** **A doação logo que a CN6 abrir para os convidados; a assinatura e os cosméticos só depois**, com o
   número de jogadores por dia medido (PROPOSTO: a partir de 300 por dia). Custo de errar: médio. Cobrar cedo demais monta um caixa, a nota
   fiscal e o suporte para dez pessoas.
-- **CN-14. A formalização:** o recebimento por um processador com Pix e cartão (Mercado Pago ou Stripe) e **a conversa com um contador
+- **CN-14. A formalização: DECIDIDA pela recomendação (2026-11-12).** O recebimento por um processador com Pix e cartão (Mercado Pago ou Stripe) e **a conversa com um contador
   antes do primeiro real** (pessoa física ou CNPJ, o imposto). Custo de errar: alto, se receber sem ver o imposto.
 - **CN-15. O formato do anúncio da voz:** **o recompensado, pedido pelo jogador** ("ver um vídeo para mais falas"), nunca entrando
   sozinho no meio da conversa. A outra opção é o vídeo que entra sozinho depois de tantas falas (o intersticial). Custo de errar: médio.
@@ -312,7 +314,7 @@ e sem mudança: "E sobre a questão do PR859, eu aprovo as decisões ali e eu qu
 
 **Status:** a CN-11 e a CN-12 estão **DECIDIDAS** (2026-11-11): o dinheiro real entra só pelo apoio e pela assinatura "Apoiador",
 para pagar o processamento, e o que se recebe são cosméticos e a fala. **Os Bits continuam sem venda** (a regra "os Bits só se ganham
-jogando" das M-1 a M-10 fica de pé), e a loja dos Bits não muda. A CN-13 e a CN-14 continuam PROPOSTAS. **Todos os números são PROPOSTOS, SEM FONTE:** as taxas de conversão, os valores
+jogando" das M-1 a M-10 fica de pé), e a loja dos Bits não muda. A CN-13 e a CN-14 estão DECIDIDAS (2026-11-12): a doação abre com a CN6, a assinatura e os cosméticos depois do número de jogadores medido, e o contador antes do primeiro real. **Todos os números são PROPOSTOS, SEM FONTE:** as taxas de conversão, os valores
 por jogador e os preços dos anúncios saem de blogs de fornecedores e de guias de mercado (seção 13.5), que discordam entre si e não são
 referências verificadas. Servem para a ordem de grandeza, não para um orçamento.
 
@@ -499,6 +501,8 @@ convidados, se a conta fecha.
 
 #### 13.7.5 O que entra no código (na CN7)
 
+- **Quando entra:** pela CN-13 (DECIDIDA), a doação abre com a CN6, e a assinatura depois do número de jogadores medido. O anúncio da
+  voz entra junto com a assinatura, porque é a outra metade da mesma escolha: ver o vídeo ou assinar (PROPOSTO).
 - O SDK da rede só no cliente, carregado só quando o jogador pede o vídeo: o resto do jogo não baixa nada da rede.
 - A rota no servidor que recebe a confirmação do vídeo e soma as falas na conta, com o contador de falas por conta e por dia da CN-8.
 - O aviso de consentimento antes do primeiro vídeo.
