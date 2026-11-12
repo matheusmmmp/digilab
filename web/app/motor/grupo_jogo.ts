@@ -53,7 +53,7 @@ export class GrupoDoJogo {
   /** `medir`: a medida da cooperacao (CO3), ligada no jogo; desligada so no teste do G-SEM-DECISAO (ela nao muda nada) */
   constructor(semente: number, versao: number, medir = true) {
     if (!Number.isInteger(semente) || semente < 0 || semente > 0xffffffff) throw new Error(`semente do grupo fora dos 32 bits: ${semente}`);
-    if (!ehDoGrupo(versao)) throw new Error(`o grupo do jogo e de pets v26, v28 ou v29, nao v${versao}`);
+    if (!ehDoGrupo(versao)) throw new Error(`o grupo do jogo e de pets v26, v28, v29 ou v31, nao v${versao}`);
     this.semente = semente;
     this.versao = versao;
     this.grupo = new Grupo(mundoDaVersao(versao), semente, CONFIG_GRUPO_LIGADA,

@@ -140,6 +140,7 @@ from .config import AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, ARVORE_FECHADA, MARCO_
 from .config import CONFIG_BOLA_NO_GOLPE, CONFIG_DECISAO_NA_COMIDA, ConfigBolaNoGolpe, ConfigDecisaoNaComida
 from .config import CONFIG_FRUTA_COMO_COMIDA, CONFIG_SACUDIR, ConfigFrutaComoComida, ConfigSacudir
 from .config import CONFIG_TV, ConfigTV
+from .config import CONFIG_LANCE_DONO, ConfigLanceDono
 from . import contrato as ct
 from .config import ConfigOlfato, ConfigOuvido, ConfigSentidos
 from .corpo import CANAIS_TELA, leitura_orgao
@@ -854,6 +855,11 @@ class Mundo:
         self.tv: TV | None = None
         # as duas TVs da sonda (P1e): so numa copia do pet, depois do `MotorMundo.ligar_duas_tvs`; ((id, TVFixa), (id, TVFixa)) ou None
         self.duas_tvs: tuple | None = None
+        # o lance do dono (TAREFA_V3_BOLA_BRINCAR, BB-1): os lances e o fluxo `dono-bola`, so depois de `ligar_lance` (o motor com a
+        # ConfigLanceDono ligada); sem ele, None e nada muda (nem o resumo)
+        self.cld: ConfigLanceDono | None = None
+        self.lances: list[dict] | None = None
+        self.rng_lance: random.Random | None = None
 
     # ------------------------------------------------------------ a agua (docs/TAREFA_V3_ILHA_AGUA.md, IA1)
     def _conferir_agua(self) -> None:
@@ -1068,6 +1074,35 @@ class Mundo:
                 perto.append((arv["id"], dx, dy, d))
         perto.sort(key=lambda t: (t[3], t[0]))
         return perto
+
+    # ------------------------------------------------------------ o lance do dono (TAREFA_V3_BOLA_BRINCAR, BB-1)
+    def ligar_lance(self, cl: ConfigLanceDono) -> None:
+        """liga o registro dos lances e o fluxo proprio `dono-bola` (da semente do mundo: no grupo, o mundo e de todos e o lance tambem);
+        nenhum outro fluxo muda. No grupo, cada motor com a chave a liga: a segunda vez, com a mesma config, nao faz nada"""
+        if not isinstance(cl, ConfigLanceDono) or not cl.ligada:
+            raise ValueError(f"ligar_lance precisa da ConfigLanceDono ligada: {cl!r}")
+        if self.lances is not None:
+            if self.cld != cl:
+                raise ValueError(f"o lance ja esta ligado neste Mundo com outra ConfigLanceDono: {self.cld!r} x {cl!r}")
+            return
+        self.cld = cl
+        self.lances = []
+        self.rng_lance = random.Random(derivar_semente("dono-bola", self.semente))
+
+    def lancar_bola(self, px: int, py: int, tick: int) -> dict:
+        """o dono pega a bola onde ela estiver e a joga perto do pet em (px, py): a direcao (uma das 16) e a distancia (em celulas) saem do
+        fluxo `dono-bola`, e a bola cai parada em terra (a conta do `deixar_bola`). Devolve o lance registrado"""
+        if self.lances is None:
+            raise ValueError("lancar_bola sem a ConfigLanceDono ligada (ligar_lance)")
+        cm, cl = self.cmf, self.cld
+        de = self.bola_em(tick)
+        direcao = self.rng_lance.randrange(16)
+        celulas = self.rng_lance.randint(cl.lance_min_celulas, cl.lance_max_celulas)
+        x, y = self.em_terra(*deslocar(px, py, direcao, celulas * cm.sub, cm))
+        self.bola = {"x0": x, "y0": y, "x1": x, "y1": y, "t0": tick, "d": 0}
+        lance = {"tick": tick, "de": de, "pet": (px, py), "direcao": direcao, "celulas": celulas, "para": (x, y)}
+        self.lances.append(lance)
+        return lance
 
     # ------------------------------------------------------------ o sacudir a arvore (TAREFA_V3_ARVORE_SACODE, secoes 3.2 e 3.3)
     def ligar_sacudir(self, cs: ConfigSacudir) -> None:
@@ -1344,7 +1379,8 @@ class Mundo:
                 **({} if self.paradas_arvores is None else {"paradas_arvores": self.paradas_arvores}),
                 **({} if self.marcas is None else {"marcas": {i: [list(m) for m in l] for i, l in sorted(self.marcas.items())}}),
                 **({} if self.galhos is None else {"galhos": {i: dict(g) for i, g in self.galhos.items()}, "sacudidas": self.sacudidas,
-                                                   "rng_sacode": self.rng_sacode.getstate()})}
+                                                   "rng_sacode": self.rng_sacode.getstate()}),
+                **({} if self.lances is None else {"lances": self.lances, "rng_lance": self.rng_lance.getstate()})}
 
 
 # ================================================================== o motor
@@ -1360,8 +1396,12 @@ class MotorMundo(MotorFrutas):
                  cfg_paladar: ConfigPaladar | None = None, cfg_fruta_ao_lado: ConfigFrutaAoLado | None = None,
                  cfg_contrato: ConfigContrato | None = None, cfg_decisao_comida: ConfigDecisaoNaComida | None = None,
                  cfg_bola_golpe: ConfigBolaNoGolpe | None = None, cfg_sacudir: ConfigSacudir | None = None,
-                 cfg_fruta_comida: ConfigFrutaComoComida | None = None, cfg_tv: ConfigTV | None = None, **kw) -> None:
+                 cfg_fruta_comida: ConfigFrutaComoComida | None = None, cfg_tv: ConfigTV | None = None,
+                 cfg_lance_dono: ConfigLanceDono | None = None, **kw) -> None:
         super().__init__(*a, **kw)
+        self.cld = cfg_lance_dono or CONFIG_LANCE_DONO
+        if not isinstance(self.cld, ConfigLanceDono):
+            raise TypeError(f"cfg_lance_dono e uma ConfigLanceDono: {self.cld!r}")
         self.ctv = cfg_tv or CONFIG_TV
         if not isinstance(self.ctv, ConfigTV):
             raise TypeError(f"cfg_tv e uma ConfigTV: {self.ctv!r}")
@@ -1412,6 +1452,8 @@ class MotorMundo(MotorFrutas):
                 raise ValueError("a fruta do mundo como comida (ConfigFrutaComoComida) exige o mundo fisico (ConfigMundo.ligada)")
             if self.ctv.ligada:
                 raise TVSemChave("a TV (ConfigTV) exige o mundo fisico (ConfigMundo.ligada)")
+            if self.cld.ligada:
+                raise ValueError("o lance do dono (ConfigLanceDono) exige o mundo fisico (ConfigMundo.ligada)")
             return                                     # desligado: o MotorFrutas byte a byte (nem embrulho, nem Mundo)
         if self.cf.ligada or self.cb.ligada:
             raise ValueError("o mundo substitui o cenario do N4 e da A1: ConfigFrutas e ConfigBola desligadas com ConfigMundo.ligada")
@@ -1495,6 +1537,11 @@ class MotorMundo(MotorFrutas):
             if not isinstance(self, MotorCorpo):
                 raise TVSemChave("a TV exige o corpo na frente do motor (com_corpo(MotorMundo)) com a ConfigTela ligada")
             self.mundo.ligar_tv(self.ctv)
+
+        self._lance_tick: int | None = None       # o lance do dono (BB-4): o tick do pet do ultimo lance deste pet (None: nenhum)
+        if self.cld.ligada:
+            # o lance do dono (TAREFA_V3_BOLA_BRINCAR, BB-1): o registro e o fluxo `dono-bola` moram no Mundo (no grupo, o de todos)
+            self.mundo.ligar_lance(self.cld)
 
         if self.cct.ligada:
             # a P4 (docs/TAREFA_V2_P4_CEREBRO_MUNDO.md, secao 3.1): o contrato, so com um pet (o grupo nao tem o cone nem as paredes). A
@@ -1654,6 +1701,10 @@ class MotorMundo(MotorFrutas):
             self._ligar_propriocepcao()                     # os orgaos usam a direcao do ultimo passo (5.6), venha de onde vier o estimulo
         if self.cpq.ligada:
             self._ver_troncos(self._percepcao.troncos, self._tm(t))
+        if self.cld.ligada:                                 # o lance do dono (BB-4): o convite, ao cerebro que tem o gancho (o A nao tem)
+            convite = getattr(self._pm_cerebro(), "bola_do_dono", None)
+            if convite is not None:
+                convite(self.convite_ativo())
         if self._tv_ligada():                               # a TV (P1d): as TVs a vista, ao cerebro que tem o gancho `ver_tela`
             ver = getattr(self._pm_cerebro(), "ver_tela", None)
             if ver is not None:
@@ -1669,6 +1720,13 @@ class MotorMundo(MotorFrutas):
                 for ident, *_ in self._social.outros:
                     self.a_vista[ident] = self.a_vista.get(ident, 0) + 1
         return self._percepcao
+
+    def convite_ativo(self) -> bool:
+        """o lance do dono (BB-4): o tick do pet esta na janela do convite, de `janela_convite_ticks` ticks a partir do ultimo lance?"""
+        if not self.cld.ligada:
+            raise ValueError("convite_ativo sem a ConfigLanceDono ligada")
+        t = self._estado.tick
+        return self._lance_tick is not None and 0 <= t - self._lance_tick < self.cld.janela_convite_ticks
 
     def _intensidades_do_orgao(self) -> dict[str, int]:
         """O lado do mundo dos orgaos do Olfato e da Audicao (dois pets, secao 5.6; DP-13 e DP-14), pedido pelo MotorCorpo antes de cada tick
@@ -2127,6 +2185,15 @@ class MotorMundo(MotorFrutas):
         if self.cmf.ligada and acao in GESTOS_PROIBIDOS:
             raise GestoForaDoMundo(f"{acao.value} numa vida com o mundo: use deixar_comida/deixar_bola")
         super()._aplicar_acao_usuario(acao)
+        if acao is AcaoUsuario.BRINCAR and self.cmf.ligada and self.cld.ligada:
+            # o lance do dono (BB-1 a BB-3): o Brincar de sempre ja foi (o contato, o corpo e o cerebro); a bola cai perto do pet, e o
+            # cerebro que recebe o convite (o gancho `bola_do_dono`, o DigiBrain modular) decide ja no proximo passo do laco (o padrao da
+            # decisao na comida: so o momento da decisao). O cerebro sem o gancho (o A, BB-6) segue no relogio de sempre: so a bola se mexe
+            tick = self._estado.tick
+            self.mundo.lancar_bola(*self.pet, self._tm(tick))
+            self._lance_tick = tick
+            if getattr(self._pm_cerebro(), "bola_do_dono", None) is not None:
+                self._proxima_decisao = min(self._proxima_decisao, tick)
         if acao is AcaoUsuario.LIMPAR and self.cmf.ligada and self.cbh.ligada:
             # o banheiro (secao 3): o limpar de hoje passa a recolher as necessidades da zona do pet (o efeito no corpo e o de sempre)
             cbh, cm = self.cbh, self.cmf
@@ -2551,6 +2618,7 @@ class MotorMundo(MotorFrutas):
                 **({} if m.galhos is None else {"galhos": {i: dict(g) for i, g in m.galhos.items()}, "sacudidas": m.sacudidas,
                                                 "rng_sacode": m.rng_sacode.getstate()}),
                 **({} if m.tv is None else {"tv": m.tv.resumo()}),
+                **({} if not self.cld.ligada else {"lances": m.lances, "rng_lance": m.rng_lance.getstate(), "lance_tick": self._lance_tick}),
                 **({} if m.duas_tvs is None else {"duas_tvs": {i: t.resumo() for i, t in m.duas_tvs}})}     # so com alguma levada: a vida de antes sai byte a byte
 
     # ------------------------------------------------------------ o avanco em ticks (o grupo, dois pets, etapa 2)

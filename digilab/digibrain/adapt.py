@@ -85,9 +85,9 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from ..config import (COMPORTAMENTO_OLHAR, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_OLHAR,
+from ..config import (COMPORTAMENTO_OLHAR, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_LANCE_DONO, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_OLHAR,
                       CONFIG_PADRAO, CONTEUDOS_FALA, VERSAO_PET_DIGIBRAIN, Config, ConfigDigibrain, ConfigDigibrainInatos,
-                      ConfigEnjooTela, ConfigFalaUnidades, ConfigLutaMemoria, ConfigMundo, ConfigOlhar, ConfigSonoSegura)
+                      ConfigEnjooTela, ConfigFalaUnidades, ConfigLanceDono, ConfigLutaMemoria, ConfigMundo, ConfigOlhar, ConfigSonoSegura)
 from ..events import AcaoPet, AcaoUsuario, LutaSemChave, resumo_luta
 from ..genoma_visao import GenomaVisao, genoma_visao
 from ..modelo_mundo import raiz_inteira
@@ -145,9 +145,9 @@ def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: Co
                    serie_e_doadora: tuple | None, semente: int | None = None, luta: bool = False,
                    cfg_fala: ConfigFalaUnidades | None = None, cfg_olhar: ConfigOlhar | None = None,
                    genoma: GenomaVisao | None = None, cfg_sono: ConfigSonoSegura | None = None,
-                   cfg_enjoo: ConfigEnjooTela | None = None) -> Modulos:
+                   cfg_lance: ConfigLanceDono | None = None, cfg_enjoo: ConfigEnjooTela | None = None) -> Modulos:
     return Modulos(sens=Sens(cfg, cm, inatos, cfg_olhar, genoma, cfg_enjoo), afeto=Afeto(cfg, cd, inatos, serie_e_doadora),
-                   estado=EstadoDinamico(cfg, cd, inatos), impulso=Impulso(inatos, cd, cfg_fala, cfg_olhar), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
+                   estado=EstadoDinamico(cfg, cd, inatos), impulso=Impulso(inatos, cd, cfg_fala, cfg_olhar, cfg_lance), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
                                  None if semente is None else random.Random(derivar_semente(semente, "mem_emb")),
                                  luta, cd.olhar), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem, cfg_sono), plast=Plasticidade(cd, inatos),
                    pers=Personalidade(inatos.eta_faceta, inatos.teto_faceta, True) if cd.facetas_mem else None)
@@ -187,7 +187,7 @@ class DigiBrain:
                  semente: int | None = None, cfg_luta_memoria: ConfigLutaMemoria | None = None,
                  cfg_fala: ConfigFalaUnidades | None = None, cfg_olhar: ConfigOlhar | None = None,
                  genoma_visao_ovo: GenomaVisao | None = None, cfg_sono: ConfigSonoSegura | None = None,
-                 cfg_enjoo_tela: ConfigEnjooTela | None = None) -> None:
+                 cfg_lance: ConfigLanceDono | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None) -> None:
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         if not self.cd.ligada:
             raise DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada")
@@ -210,6 +210,11 @@ class DigiBrain:
             self.genoma_visao = genoma_visao_ovo
         elif cfg_olhar is not None or genoma_visao_ovo is not None:
             raise ValueError("a ConfigOlhar e o genoma da visao so com a subchave olhar")
+        # o lance do dono (BB-4): a entrada `bola_do_dono`, do gancho `bola_do_dono` que o motor chama antes de cada decisao
+        self.cl = cfg_lance or CONFIG_LANCE_DONO
+        if not isinstance(self.cl, ConfigLanceDono):
+            raise TypeError(f"cfg_lance e uma ConfigLanceDono: {self.cl!r}")
+        self._convite: bool | None = None             # o convite entregue pelo motor para a decisao seguinte (None: nao entregue)
         # o enjoo (D-GV-ENJOO-CER): so com a subchave olhar e a ConfigEnjooTela ligada; desligada, nada muda
         self.ce: ConfigEnjooTela | None = None
         if cfg_enjoo_tela is not None:
@@ -220,7 +225,7 @@ class DigiBrain:
                     raise ValueError("a ConfigEnjooTela ligada so com a subchave olhar (D-GV-ENJOO-CER)")
                 self.ce = cfg_enjoo_tela
         self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente, self.luta_memoria, cfg_fala,
-                                self.co, self.genoma_visao, cfg_sono=cfg_sono, cfg_enjoo=self.ce)
+                                self.co, self.genoma_visao, cfg_sono=cfg_sono, cfg_lance=self.cl, cfg_enjoo=self.ce)
         if self.ce is not None:
             self.enjoo_tv: dict = {}                  # o enjoo lembrado de cada TV, id -> [0, S]
             self.k_enjoo_lembrado = ganho_de_tau(self.ce.tau_enjoo_lembrado, self.cfg.intervalo_decisao_ticks, self.S)
@@ -274,10 +279,14 @@ class DigiBrain:
         gosto, olhar = None, None
         if cd.olhar:                                  # o olhar (P1d): o agrado do que o pet ja olhava, no termo `gosto` da unidade dela
             gosto, olhar = self._gosto_da_decisao(sens)
+        extra = {} if gosto is None else {"gosto": gosto}
+        if self.cl.ligada:                            # o lance do dono (BB-4): o convite, salvo com a fome urgente (que segue ganhando)
+            lance = self._entrada_bola_do_dono(afeto["urgencias"])
+            extra["bola_do_dono"] = lance["bola_do_dono"]
         unidades, z = m.impulso.unidades(
             sens, afeto, ctx, m.plast, memoria, m.afeto.drives(receptores),
             None if not cd.memoria_autobio or termo_lem is None else (termo_lem, m.mem.casa),
-            (dict(m.pers.valores), m.mem.classes_com_positivo()) if cd.facetas_mem else None, **({} if gosto is None else {"gosto": gosto}),
+            (dict(m.pers.valores), m.mem.classes_com_positivo()) if cd.facetas_mem else None, **extra,
             **({} if self.ce is None else {"enjoo": olhar.pop("_termo_enjoo")}))
         esc = m.arb.escolher(unidades, afeto, sens, rng, reflexo, segurar)  # a rng de politica vai so ao M-ARB
         self._conferir_desligadas(unidades)
@@ -330,6 +339,8 @@ class DigiBrain:
         if cd.redecidir_evento:                       # a C3: desligada, nenhum campo novo
             self.motivos[-1]["segurada"] = esc["segurada"]
             self.motivos[-1]["evento"] = evento
+        if self.cl.ligada:                            # o lance do dono (BB-4): desligada, nenhum campo novo
+            self.motivos[-1]["lance"] = lance
         if cd.olhar:                                  # o olhar (P1d): desligada, nenhum campo novo
             self._olhando = unidade["chave"][2] if unidade["chave"][0] == COMPORTAMENTO_OLHAR else None
             self.motivos[-1]["olhar"] = {**olhar, "olha": self._olhando}
@@ -341,6 +352,29 @@ class DigiBrain:
         self._gestos = []
         self.k += 1
         return intencao.acao
+
+    # ------------------------------------------------------------ o lance do dono (BB-4, so com a ConfigLanceDono ligada)
+    def bola_do_dono(self, convite: bool) -> None:
+        """o motor com o lance do dono, antes de cada decisao: o tick esta na janela do convite (`janela_convite_ticks` depois do lance)?
+        Sem a chave, ou duas vezes sem decisao, falha alto"""
+        if not self.cl.ligada:
+            raise RuntimeError("bola_do_dono: o lance do dono com o DigiBrain modular exige a ConfigLanceDono ligada no cerebro (BB-4)")
+        if type(convite) is not bool:
+            raise TypeError(f"bola_do_dono recebe um bool: {convite!r}")
+        if self._convite is not None:
+            raise RuntimeError("bola_do_dono duas vezes antes da mesma decisao")
+        self._convite = convite
+
+    def _entrada_bola_do_dono(self, urgencias: dict) -> dict:
+        """a entrada `bola_do_dono` da decisao: S na janela do convite, 0 fora dela e 0 com a fome urgente (a urgencia da fome acima do
+        `urgencia_lambda`, a guarda do passeio e do sono que segura). Sem o gancho do motor antes da decisao, falha alto"""
+        if self._convite is None:
+            raise RuntimeError("o DigiBrain com a ConfigLanceDono ligada decide sem o gancho bola_do_dono do motor (o motor sem o lance?)")
+        if "fome" not in urgencias:
+            raise RuntimeError("o convite le a urgencia da fome, e ela nao veio do M-AFETO")
+        convite, self._convite = self._convite, None
+        urgente = urgencias["fome"] > self.inatos.urgencia_lambda
+        return {"convite": convite, "fome_urgente": urgente, "bola_do_dono": self.S if convite and not urgente else 0}
 
     # ------------------------------------------------------------ o olhar (P1d, so com a subchave `olhar`)
     def _gosto_da_decisao(self, sens: dict) -> tuple[dict, dict]:

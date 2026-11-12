@@ -33,6 +33,7 @@ Sementes: as dos testes (101 a 505); nao sao vidas de pesquisa e nenhuma faixa e
     sha256 do texto original fica nas constantes (`arquivos`).
 
     python experiments/exportar_gabarito_digibrain_modular.py            # grava os tres arquivos
+    python experiments/exportar_gabarito_digibrain_modular.py --lance    # so o do lance do dono (BOLA_BRINCAR, BB1)
 """
 from __future__ import annotations
 
@@ -80,6 +81,7 @@ METODOS = {
             "classes_com_positivo"),
 }
 GANCHOS = ("agir", "escolher_alvo", "consequencia_corpo", "observar", "consequencia_mundo", "receber_acao_dono")
+GANCHOS_LANCE = GANCHOS + ("bola_do_dono",)       # o convite do lance do dono (BOLA_BRINCAR): so nas vidas com a ConfigLanceDono ligada
 ASSINADOS = ("sens", "afeto", "estado", "mem", "arb", "plast")
 
 
@@ -130,7 +132,7 @@ def _obs_enxuta(obs) -> dict:
 class Gravador:
     """embrulha o cerebro de uma vida e junta as chamadas por decisao"""
 
-    def __init__(self, cerebro) -> None:
+    def __init__(self, cerebro, ganchos: tuple = GANCHOS) -> None:
         self.c = cerebro
         self.chamadas: dict[int, list] = {}
         self.assinaturas: dict[int, dict] = {}
@@ -140,7 +142,7 @@ class Gravador:
             modulo = getattr(cerebro.m, nome)
             for metodo in metodos:
                 setattr(modulo, metodo, self._embrulhar(f"{nome}.{metodo}", getattr(modulo, metodo), 1, nome))
-        for gancho in GANCHOS:
+        for gancho in ganchos:
             setattr(cerebro, gancho, self._embrulhar(f"adapt.{gancho}", getattr(cerebro, gancho), 0, "adapt"))
         self._episodio_original = adapt_mod.episodio_autobio
         adapt_mod.episodio_autobio = self._embrulhar("adapt.episodio_autobio", self._episodio_original, 1, "adapt")
@@ -151,7 +153,7 @@ class Gravador:
     # ------------------------------------------------------------ o registro de uma chamada
     def _k(self, rotulo: str) -> int:
         k = self.c.k
-        if rotulo == "adapt.agir" or rotulo == "adapt.receber_acao_dono":
+        if rotulo in ("adapt.agir", "adapt.receber_acao_dono", "adapt.bola_do_dono"):
             return k
         if rotulo.startswith("adapt."):
             return k - 1
@@ -224,15 +226,15 @@ class Gravador:
         return {nome: _sha(_texto(paraj(getattr(m, nome).estado_interno())), 16) for nome in ASSINADOS}
 
 
-def viver(dono: str, lugar: str, semente: int, gravar: bool = True, inatos=None, ao_montar=None, sono=None):
+def viver(dono: str, lugar: str, semente: int, gravar: bool = True, inatos=None, ao_montar=None, sono=None, lance=None):
     """a vida: (o motor, o cerebro, o gravador). Sem `gravar`, a mesma vida sem o embrulho (o gravador e None): o teste confere que o
     Gravador nao a muda. `inatos` (LM4, so o arquivo dos fins): os valores de partida de outra `ConfigDigibrainInatos`; None, os de hoje"""
-    fp, fm = orq.fabricas(BRACO, dono, semente, DIAS, orq.ORCAMENTO_POR_DIA, conserto=True, inatos=inatos, sono=sono)
+    fp, fm = orq.fabricas(BRACO, dono, semente, DIAS, orq.ORCAMENTO_POR_DIA, conserto=True, inatos=inatos, sono=sono, lance=lance)
     registro = fp(CONFIG_PADRAO)
     cerebro = orq.cerebro_de(registro)
     if ao_montar is not None:                    # (IG6) o gabarito do alcance troca o `d_max` no meio da vida, antes de uma decisao
         ao_montar(cerebro)
-    g = Gravador(cerebro) if gravar else None
+    g = Gravador(cerebro, GANCHOS if lance is None else GANCHOS_LANCE) if gravar else None
     try:
         d = DonoComLugar(criar_dono(dono), lugar, semente, dono, orq.CM)
         motor, _ = simular_vida_fisico(d, registro, semente, DIAS, orq.ORCAMENTO_POR_DIA * DIAS, dono, fm)
@@ -416,16 +418,16 @@ VIDAS_FINS = (("incoerente", "longe", 404, {}), ("incoerente", "longe", 505, {})
               ("incoerente", "longe_fixo", 101, INATOS_DESISTE), ("incoerente", "longe_fixo", 202, INATOS_DESISTE))
 
 
-def _vida_fins(dono: str, lugar: str, semente: int, ajuste: dict, sono=None) -> dict:
+def _vida_fins(dono: str, lugar: str, semente: int, ajuste: dict, sono=None, lance=None, com_motor: bool = False):
     inatos = replace(CONFIG_DIGIBRAIN_INATOS, **ajuste) if ajuste else None
-    motor, cerebro, g = viver(dono, lugar, semente, inatos=inatos, sono=sono)
+    motor, cerebro, g = viver(dono, lugar, semente, inatos=inatos, sono=sono, lance=lance)
     decisoes = [{"k": k, "acao": cerebro.motivos[k]["acao"], "assinatura": g.assinaturas[k], "motivo": paraj(cerebro.motivos[k])}
                 for k in range(len(cerebro.motivos))]
     fins = sorted({f["motivo"] for m in cerebro.motivos for f in m["fins"]})
     return {"dono": dono, "lugar": lugar, "semente": semente, "dias": DIAS, "inatos": dict(ajuste), "decisoes": decisoes, "fins": fins,
             "log": [ev.para_dict() for ev in motor.log], "log_sha256": hashlib.sha256(motor.log.para_jsonl().encode("utf-8")).hexdigest(),
             "estado": hashlib.sha256(_texto(paraj(cerebro.estado_interno())).encode("utf-8")).hexdigest(),
-            "assinatura_final": g.assinar()}
+            "assinatura_final": g.assinar(), **({"_motor": motor} if com_motor else {})}
 
 
 def fins() -> bytes:
@@ -600,7 +602,43 @@ def sono_segura() -> bytes:
                                            "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
 
 
+# ---------------------------------------------------------------------------------------------------------------------------------------
+# O lance do dono (docs/TAREFA_V3_BOLA_BRINCAR.md, BB1): o G-PAR do lance, do convite `bola_do_dono` e da decisao no mesmo tick (a
+# ConfigLanceDono ligada), para a BB2. Arquivo novo, no molde do do sono que segura: as mesmas tres vidas do laboratorio, nascidas com o sono
+# que segura e o lance ligados (o pet v29 do jogo e a v27 com o lance, BB-7), com a ConfigLanceDono do Python (o TS confere a dele contra
+# ela). Cada vida tem de diferir da mesma vida so com o sono que segura, ter ao menos um lance e uma decisao com o convite. Por vida, a mais:
+# os lances e as rolagens do Mundo (o TS confere a bola). Sementes dos testes; nao sao vidas de pesquisa.
+ARQUIVO_LANCE = f"{PREFIXO}lance_dono.json.gz"
+VIDAS_LANCE = VIDAS_SONO
+
+
+def lance_dono() -> bytes:
+    """o gz (mtime 0, nivel 9) das vidas com o lance do dono; cada uma difere da de hoje (a do sono que segura)"""
+    from digilab.config import CONFIG_LANCE_DONO_LIGADA, CONFIG_SONO_SEGURA_LIGADA
+    vidas = []
+    for dono, lugar, semente in VIDAS_LANCE:
+        v = _vida_fins(dono, lugar, semente, {}, sono=CONFIG_SONO_SEGURA_LIGADA, lance=CONFIG_LANCE_DONO_LIGADA, com_motor=True)
+        motor = v.pop("_motor")
+        v["difere_de_hoje"] = v["estado"] != _vida_fins(dono, lugar, semente, {}, sono=CONFIG_SONO_SEGURA_LIGADA)["estado"]
+        v["lances"] = paraj(motor.mundo.lances)
+        v["rolagens"] = paraj(motor.mundo.rolagens)
+        v["convites"] = sum(1 for d in v["decisoes"] if d["motivo"]["lance"]["bola_do_dono"])
+        if not v["difere_de_hoje"] or not v["lances"] or not v["convites"]:
+            raise RuntimeError(f"a vida {dono}/{lugar}/{semente} com o lance nao exercita a chave: {v['difere_de_hoje']}, "
+                               f"{len(v['lances'])} lances, {v['convites']} convites")
+        vidas.append(v)
+    return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "config_sono_segura": paraj(CONFIG_SONO_SEGURA_LIGADA),
+                                           "config_lance_dono": paraj(CONFIG_LANCE_DONO_LIGADA),
+                                           "ganchos": list(GANCHOS_LANCE), "vidas": vidas}).encode("utf-8"),
+                         compresslevel=9, mtime=0)
+
+
 if __name__ == "__main__":
+    if "--lance" in sys.argv:                         # so o arquivo do lance do dono (BOLA_BRINCAR, BB1)
+        b = lance_dono()
+        (PASTA / ARQUIVO_LANCE).write_bytes(b)
+        print(f"{PASTA / ARQUIVO_LANCE} ({len(b) / 1024 / 1024:.2f} MiB)")
+        sys.exit(0)
     if "--sono" in sys.argv:                          # so o arquivo do sono que segura (SONO_SEGURA)
         b = sono_segura()
         (PASTA / ARQUIVO_SONO).write_bytes(b)
