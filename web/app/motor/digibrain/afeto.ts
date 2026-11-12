@@ -105,12 +105,18 @@ export class Afeto {
     return receptores.filter(r => !(this.p.fora_do_r as readonly string[]).includes(r));
   }
 
-  consequencia(pcAntes: CorpoModular, pcDepois: CorpoModular, receptores: readonly string[]): UltimoAfeto {
+  /** `gostoVisual` (GOSTO_VISUAL, P1f; so na opcao de olhar, com a subchave `olhar`): o termo pronto soma ao r e entra nos canais */
+  consequencia(pcAntes: CorpoModular, pcDepois: CorpoModular, receptores: readonly string[], gostoVisual: number | null = null): UltimoAfeto {
     const p = this.p, S = this.S;
     const drives = this.drives(receptores);
     const antes = pcAntes as PercepcaoCorpoLobos, depois = pcDepois as PercepcaoCorpoLobos;
-    const r = sinalCorpo(antes, depois, drives, p.ganho_r, S, pesosUm(drives));
+    let r = sinalCorpo(antes, depois, drives, p.ganho_r, S, pesosUm(drives));
     const canais = canaisDoSinal(pcAntes, pcDepois, drives, p.ganho_r, S);
+    if (gostoVisual !== null) {
+      if (!Number.isInteger(gostoVisual)) throw new Error(`M-AFETO: gosto_visual e inteiro: ${gostoVisual}`);
+      r += gostoVisual;
+      canais["gosto_visual"] = gostoVisual;
+    }
     const rN = clamp(divArred(r, p.r_norm), -S, S);
     this.V = integrar(this.V, rN, this.kV, S);
     const exc = Math.max(Math.abs(rN), ...EXCITANTES.filter(x => receptores.includes(x)).map(x => faltaReceptor(depois, x, S)));

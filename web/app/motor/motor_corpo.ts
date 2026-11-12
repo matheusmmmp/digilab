@@ -19,6 +19,7 @@ import { aplicarAcaoDono, avancarTick, efeitoAcaoPet, vetor } from "./estado.ts"
 import type { ObservacaoLobos, OcorridoCorpo, RngCerebro, TransicaoLobos } from "./lobos.ts";
 import { RandomPy, type EscolherAlvo } from "./mundo.ts";
 import type { ConfigCorpo } from "./constantes.ts";
+import type { ConfigTela } from "./tv.ts";
 import type { AcaoDono, AcaoPet, EstadoVida } from "./tipos.ts";
 
 /** G-BYPASS: com o corpo ligado, um drive do Estado mudou por fora da quimica */
@@ -37,10 +38,18 @@ export interface PoliticaCorpo {
   /** a ponte da luta (PE3): o DigiBrain com a `luta_memoria` recebe o resumo pronto; o A nao tem o gancho (3.7) */
   readonly lutaMemoria?: boolean;
   receberLuta?(rival: string, resultado: number, vidaPerdidaS: number, tick: number): void;
+  /** o gosto visual (GOSTO_VISUAL, P1f; os ganchos `ver_tela`, `olhando_tela` e `agrado_tela` do Python): so o laco com a TV os procura */
+  verTela?(linhas: [number, number, number, number][]): void;
+  olhandoTela?(): number | null;
+  agradoTela?(leituras: Readonly<Record<string, number>>): number | null;
 }
 
 /** um evento do log do Python (events.py): o avanco e a acao do dono (e, no laco com o mundo dos v12, a comida deixada pelo dono) */
-export interface EventoCorpo { tick: number; tipo: "avanco" | "acao_usuario" | "deixar_comida" | "levar_pet" | "mudar_ilha" | "sacudir_arvore" | "lt"; valor: number | string }
+export interface EventoCorpo {
+  tick: number;
+  tipo: "avanco" | "acao_usuario" | "deixar_comida" | "levar_pet" | "mudar_ilha" | "sacudir_arvore" | "lt" | "trocar_canal" | "sentido_tela";
+  valor: number | string;
+}
 
 /** o resumo pronto de uma luta, em inteiros (docs/TAREFA_V3_PONTE_LUTA.md, 3.4; o `events.resumo_luta` do Python): o valor do evento `lt` e
  *  `rival|resultado|vida_perdida_s`. O rival sem `|` nem quebra de linha, o resultado em -1, 0, +1, a vida perdida inteira >= 0 */
@@ -90,7 +99,7 @@ export class MotorCorpo {
 
   /** `comMundo`: o corpo do laco com o mundo fisico (motor_corpo_mundo.ts, os v12), com a curiosidade (CD-8); os v11 nascem sem */
   constructor(politica: PoliticaCorpo, semente: number, cc: ConfigCorpo = CCO_CORPO_V11, estado: EstadoVida = estadoNascimentoPy(),
-              comMundo = false) {
+              comMundo = false, tela?: ConfigTela) {
     if (!Number.isSafeInteger(semente)) throw new Error(`semente do motor tem de ser inteira: ${semente}`);
     if (!cc.ligada || !cc.drives_novos || !cc.gestos) {
       throw new Error("o laco do v11 e o do regime `corpo`: ConfigCorpo ligada, com os drives novos e os gestos");
@@ -100,7 +109,7 @@ export class MotorCorpo {
     this.cc = cc;
     this.rngAmbiente = new RandomPy(semente);
     this.rngPolitica = new RandomPy(semente + DESLOCAMENTO_RNG_POLITICA);
-    this.corpo = Corpo.deEstado(estado, { cc, comMundo });
+    this.corpo = Corpo.deEstado(estado, tela === undefined ? { cc, comMundo } : { cc, comMundo, tela });
     this.estado = this.corpo.noEstado(estado);
   }
 
@@ -162,6 +171,7 @@ export class MotorCorpo {
 
   // ------------------------------------------------------------ leituras
   observacao(): ObservacaoLobos {
+    this.sentirAgora();                                  // a tela (P1f): o estimulo de agora, como o `percepcao_corpo` do Python
     return { v: vetor(this.estado), tdc: this.estado.tick - this.estado.ultimoCuidado, corpo: this.corpo.receptores() };
   }
 
@@ -181,6 +191,11 @@ export class MotorCorpo {
     this.estado = this.corpo.noEstado(this.estado);
   }
 
+  /** o `_sentir` do Python, antes de cada percepcao do corpo: sem orgao (todo pet de hoje), nada; o laco com a TV entrega a tela */
+  protected sentirAgora(): void { /* nada */ }
+  /** antes do passo do corpo no tick (o `_sentir` e a novidade da tela do `_laco` do Python): sem orgao, nada */
+  protected antesDoPasso(): void { /* nada */ }
+
   // ------------------------------------------------------------ o laco do tick (MotorCorpo._laco)
   private laco(ticks: number): [number, AcaoPet][] {
     const produzidas: [number, AcaoPet][] = [];
@@ -188,6 +203,7 @@ export class MotorCorpo {
       this.conferirSincronia("tick");
       if (this.estado.tick >= this.proximaDecisao) this.decidir(produzidas);
       const antes = this.estado;
+      this.antesDoPasso();
       this.corpo.passo(antes);
       // o tick e a sujeira de hoje (a mesma rng, na mesma ordem); os drives float dele sao trocados pela leitura
       this.estado = this.corpo.noEstado(avancarTick(antes, this.rngAmbiente));

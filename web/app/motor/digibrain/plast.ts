@@ -3,7 +3,7 @@
    creditado por opcao). Sem rng. A aritmetica e a do Python (`divArred`, `mul`). */
 import { leituraReceptor, sinalCorpo, type PercepcaoCorpoLobos } from "../lobos.ts";
 import { clamp, divArred, mul, raizInteira } from "./_comum.ts";
-import { CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTOS_DIGIBRAIN, CONTEUDOS_FALA, INATOS_MODULAR } from "./constantes.ts";
+import { CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTO_OLHAR, COMPORTAMENTOS_DIGIBRAIN, CONTEUDOS_FALA, INATOS_MODULAR } from "./constantes.ts";
 import type { PlastImpulso } from "./impulso.ts";
 import type { CorpoModular } from "./sens.ts";
 
@@ -11,7 +11,9 @@ export const CLASSES_DESFECHO = ["racao", "a", "b", "c", "podre", "bola"] as con
 
 export type InatosPlast = typeof INATOS_MODULAR;
 /** o que o M-PLAST le da ConfigDigibrain */
-export interface ConfigDigibrainPlast { p1: boolean; p2: boolean; fala_unidades: boolean }
+export interface ConfigDigibrainPlast { p1: boolean; p2: boolean; fala_unidades: boolean; olhar?: boolean }
+/** o olhar (P1f): a classe do desfecho de olhar, so com a subchave `olhar` */
+export const CLASSE_TELA_DESFECHO = "tela";
 
 /** a linha de H que a opcao credita (`plast.linha_da_opcao`): a do comportamento; com a `fala_unidades` (DC3, 3.1), a opcao de fala credita a
  *  do conteudo (`chamar_atencao/<c>`) */
@@ -51,6 +53,8 @@ export class Plasticidade implements PlastImpulso {
   consumos: Record<string, number>;
   amostras_andar = 0;
   creditos = 0;
+  /** as classes do desfecho: as de hoje e, com a subchave `olhar`, a `tela` no fim */
+  readonly classes: readonly string[];
 
   constructor(cfgDigibrain: ConfigDigibrainPlast, inatosOuNulo: InatosPlast | null = null) {
     this.p = inatosOuNulo ?? INATOS_MODULAR;
@@ -59,14 +63,16 @@ export class Plasticidade implements PlastImpulso {
     /* com a `fala_unidades`, as tres linhas da fala no lugar da do chamar, na mesma ordem (a do Python) */
     const linhas: string[] = COMPORTAMENTOS_DIGIBRAIN.flatMap(b =>
       cfgDigibrain.fala_unidades && b === "chamar_atencao" ? CONTEUDOS_FALA.map(c => `chamar_atencao/${c}`) : [b]);
+    if (cfgDigibrain.olhar) linhas.push(COMPORTAMENTO_OLHAR);     // o olhar (P1f), no fim
+    this.classes = cfgDigibrain.olhar ? [...CLASSES_DESFECHO, CLASSE_TELA_DESFECHO] : [...CLASSES_DESFECHO];
     this.H = Object.fromEntries(linhas.map(b => [b, new Array<number>(CARACTERISTICAS_DIGIBRAIN.length).fill(0)]));
-    this.consumos = Object.fromEntries(CLASSES_DESFECHO.map(c => [c, 0]));
+    this.consumos = Object.fromEntries(this.classes.map(c => [c, 0]));
   }
 
   montar(receptores: readonly string[]): void {
     if (this.receptores === null) {
       this.receptores = [...receptores];
-      this.desfecho = Object.fromEntries(CLASSES_DESFECHO.map(c => [c, new Array<number>(receptores.length).fill(0)]));
+      this.desfecho = Object.fromEntries(this.classes.map(c => [c, new Array<number>(receptores.length).fill(0)]));
     } else if (receptores.length !== this.receptores.length || receptores.some((r, i) => r !== this.receptores![i])) {
       throw new Error(`M-PLAST: receptores ${JSON.stringify(receptores)}, montado com ${JSON.stringify(this.receptores)}`);
     }
@@ -115,9 +121,16 @@ export class Plasticidade implements PlastImpulso {
     return this.consumo(classe, delta, gApr);
   }
 
+  /** P1 na consequencia de olhar (P1f): o desfecho da classe `tela` anda para o Delta dos receptores, sem o andar. Sem o P1, null */
+  consequenciaOlhar(l0: readonly number[], l1: readonly number[], gApr: number): RegistroP1 | null {
+    if (!this.cd.p1) return null;
+    if (!this.classes.includes(CLASSE_TELA_DESFECHO)) throw new Error("M-PLAST: a consequencia de olhar sem a subchave olhar");
+    return this.consumo(CLASSE_TELA_DESFECHO, l1.map((b, i) => b - l0[i]!), gApr);
+  }
+
   /** um consumo percebido da classe: o desfecho anda em direcao a `delta` (os receptores, na ordem do layout) */
   consumo(classe: string, delta: readonly number[], gApr: number): RegistroP1 {
-    if (!(CLASSES_DESFECHO as readonly string[]).includes(classe)) throw new Error(`M-PLAST: classe ${classe}`);
+    if (!this.classes.includes(classe)) throw new Error(`M-PLAST: classe ${classe}`);
     if (delta.length !== this.receptores!.length || delta.some(v => !Number.isInteger(v))) {
       throw new Error(`M-PLAST: delta ${JSON.stringify(delta)} fora do layout ${JSON.stringify(this.receptores)}`);
     }

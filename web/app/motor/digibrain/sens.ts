@@ -2,8 +2,20 @@
    Le so a Observacao (corpo, mundo, o vetor de estado e os ticks desde o cuidado); a aritmetica e inteira; sem rng. O estado e a habituacao
    por classe: a novidade da decisao sai da habituacao de antes dela, e so depois a habituacao anda. */
 import { faltaReceptor, leituraReceptor, type PercepcaoCorpoLobos } from "../lobos.ts";
-import { clamp, divArred, ganhoDeTau, integrar } from "./_comum.ts";
-import { INATOS_MODULAR, RECEPTORES_DIGIBRAIN, TICKS_POR_DIA } from "./constantes.ts";
+import { CANAIS_TELA, RECEPTORES_TELA } from "../tv.ts";
+import { clamp, divArred, ganhoDeTau, integrar, mul } from "./_comum.ts";
+import { INATOS_MODULAR, RECEPTORES_DIGIBRAIN, TICKS_POR_DIA, type ConfigOlhar } from "./constantes.ts";
+import { genomaNaEscala, type GenomaVisao } from "./genoma_visao.ts";
+
+/** a classe da TV (so com a subchave `olhar`; GOSTO_VISUAL, P1f) */
+export const CLASSE_TELA = "tela";
+/** o pico em inteiros sobre a distancia x ao alvo: S em x = 0, 0 a partir de |x| = largura */
+export function pico(x: number, largura: number, S: number): number {
+  if (!Number.isInteger(largura) || largura <= 0) throw new Error(`M-SENS: largura do pico ${largura}`);
+  return Math.max(0, S - divArred(Math.abs(x) * S, largura));
+}
+/** uma linha da classe `tela` (a TV a vista, do gancho `verTela`) */
+export interface LinhaTela { id: number; tipo: "tela"; classe: "tela"; dx: number; dy: number; d: number; prox: number; nov: number }
 
 export const CLASSES_OBJETO = ["racao", "a", "b", "c", "podre", "bola"] as const;
 export const COMIDAS_BOAS = ["racao", "a", "b", "c"] as const;
@@ -33,6 +45,10 @@ export interface SaidaSens {
   ha_cheiro: boolean; pos: readonly [number, number]; regiao: number; minuto: number; pc: CorpoModular;
   /** a ponte da luta (PE3): os resumos desde a decisao anterior; so com a `luta_memoria` (desligada, o campo nao existe) */
   lutas?: ResumoLutaSens[];
+  /** a tela (P1f; so com a subchave `olhar`): as TVs a vista, os niveis lidos e a novidade do corpo */
+  telas?: LinhaTela[];
+  tela_niveis?: Record<string, number> | null;
+  tela_novidade?: number | null;
 }
 /** o resumo da luta na Observacao: em inteiros (o rival, o resultado -1, 0, +1, a vida perdida em S e o tick) */
 export interface ResumoLutaSens { rival: string; resultado: number; vida_perdida_s: number; tick: number }
@@ -69,8 +85,17 @@ export class Sens {
   hab: Record<ClasseObjeto, number>;
   /** os receptores presentes, fixados na primeira decisao */
   receptores: string[] | null = null;
+  /** a tela (P1f): so com a subchave `olhar` (null desligada) */
+  readonly olhar: ConfigOlhar | null = null;
+  otimo: Record<string, number> = {};
+  largura: Record<string, number> = {};
+  desloc: Record<string, number> = {};
+  kExpo = 0;
+  exposicoes = 0;
+  telaPresente: boolean | null = null;
 
-  constructor(cfg: ConfigSens, cfgMundo: ConfigMundoSens, inatos: InatosSens = INATOS_MODULAR) {
+  constructor(cfg: ConfigSens, cfgMundo: ConfigMundoSens, inatos: InatosSens = INATOS_MODULAR, olhar: ConfigOlhar | null = null,
+              genoma: GenomaVisao | null = null) {
     this.p = inatos;
     this.S = inatos.escala;
     this.cfg = cfg;
@@ -78,11 +103,78 @@ export class Sens {
     this.maxVistos = cfgMundo.max_vistos;
     this.kHab = ganhoDeTau(inatos.tau_hab, cfg.intervalo_decisao_ticks, this.S);
     this.hab = { racao: 0, a: 0, b: 0, c: 0, podre: 0, bola: 0 };
+    if ((olhar === null) !== (genoma === null)) throw new Error("M-SENS: a ConfigOlhar e o GenomaVisao vem juntos (so com a subchave `olhar`)");
+    if (olhar !== null) {
+      this.olhar = olhar;
+      (this.hab as Record<string, number>)[CLASSE_TELA] = 0;
+      [this.otimo, this.largura] = genomaNaEscala(genoma!, this.S, olhar.escala);
+      this.desloc = Object.fromEntries(CANAIS_TELA.map(c => [c, 0]));
+      this.kExpo = ganhoDeTau(olhar.tau_exposicao, cfg.intervalo_decisao_ticks, this.S);
+    }
+  }
+
+  // ------------------------------------------------------------ a tela (P1f, so com a subchave `olhar`)
+  private exigirOlhar(onde: string): ConfigOlhar {
+    if (this.olhar === null) throw new Error(`M-SENS: ${onde} sem a subchave olhar`);
+    return this.olhar;
+  }
+
+  /** os niveis da tela na percepcao do corpo (canal -> [0, S]), ou null sem os receptores da tela */
+  niveisTela(pc: CorpoModular): Record<string, number> | null {
+    this.exigirOlhar("niveis_tela");
+    if (pc["tela_cor"] === null || pc["tela_cor"] === undefined) return null;
+    const niveis = Object.fromEntries(CANAIS_TELA.map(c => [c, pc[`tela_${c}`] as number]));
+    if (Object.values(niveis).some(v => !Number.isInteger(v) || v < 0 || v > this.S)) throw new Error(`M-SENS: niveis da tela fora de [0, S]: ${JSON.stringify(niveis)}`);
+    return niveis;
+  }
+
+  private agradoCom(niveis: Readonly<Record<string, number>>, desloc: Readonly<Record<string, number>>): number {
+    if (Object.keys(niveis).join() !== CANAIS_TELA.join()) throw new Error(`M-SENS: os niveis da tela por canal, na ordem ${CANAIS_TELA}`);
+    let soma = 0;
+    for (const c of CANAIS_TELA) soma += pico(niveis[c]! - (this.otimo[c]! + desloc[c]!), this.largura[c]!, this.S);
+    return divArred(soma, CANAIS_TELA.length);
+  }
+
+  /** o agrado do nivel visto contra o alvo (o otimo do genoma mais o deslocamento da exposicao), em [0, S] */
+  agrado(niveis: Readonly<Record<string, number>>): number { this.exigirOlhar("agrado"); return this.agradoCom(niveis, this.desloc); }
+
+  /** o agrado do nivel visto contra o otimo do genoma so */
+  agradoInato(niveis: Readonly<Record<string, number>>): number {
+    this.exigirOlhar("agrado_inato");
+    return this.agradoCom(niveis, Object.fromEntries(CANAIS_TELA.map(c => [c, 0])));
+  }
+
+  /** a exposicao: o alvo de cada canal anda para o nivel visto, com o teto do deslocamento (so quando o pet olhou) */
+  expor(niveis: Readonly<Record<string, number>>): void {
+    const co = this.exigirOlhar("expor"), S = this.S;
+    for (const c of CANAIS_TELA) {
+      const alvo = this.otimo[c]! + this.desloc[c]!;
+      this.desloc[c] = clamp(this.desloc[c]! + mul(this.kExpo, niveis[c]! - alvo, S), -co.teto_exposicao, co.teto_exposicao);
+    }
+    this.exposicoes += 1;
+  }
+
+  private linhasTela(telas: readonly (readonly number[])[]): LinhaTela[] {
+    const S = this.S, nov = S - (this.hab as Record<string, number>)[CLASSE_TELA]!;
+    const out = telas.map(l => {
+      if (l.length !== 4 || l.some(v => !Number.isInteger(v)) || l[3]! < 0) throw new Error(`M-SENS: linha da tela malformada: ${JSON.stringify(l)}`);
+      const [id, dx, dy, d] = l as [number, number, number, number];
+      return { id, tipo: CLASSE_TELA, classe: CLASSE_TELA, dx, dy, d, prox: this.proximidade(d), nov } as LinhaTela;
+    });
+    if (new Set(out.map(o => o.id)).size !== out.length) throw new Error("M-SENS: duas linhas da tela com o mesmo id");
+    return out;
   }
 
   private _receptores(pc: CorpoModular): string[] {
     // os onze do prototipo vem na ordem da PercepcaoCorpo, que e a de RECEPTORES_DIGIBRAIN; qualquer outro receptor presente e de fora
-    const presentesTodos = Object.keys(pc).filter(k => pc[k] !== null && pc[k] !== undefined);
+    let presentesTodos = Object.keys(pc).filter(k => pc[k] !== null && pc[k] !== undefined);
+    if (this.olhar !== null) {                         // a tela (P1f): os receptores dela ficam a parte, fora dos `receptores`
+      const tela = RECEPTORES_TELA.filter(r => presentesTodos.includes(r));
+      if (tela.length && tela.length !== RECEPTORES_TELA.length) throw new Error(`M-SENS: os receptores da tela vem todos juntos: ${tela}`);
+      if (this.telaPresente === null) this.telaPresente = tela.length > 0;
+      else if ((tela.length > 0) !== this.telaPresente) throw new Error("M-SENS: os receptores da tela mudaram desde a primeira decisao");
+      presentesTodos = presentesTodos.filter(r => !(RECEPTORES_TELA as readonly string[]).includes(r));
+    }
     const fora = presentesTodos.filter(r => !(RECEPTORES_DIGIBRAIN as readonly string[]).includes(r));
     if (fora.length) throw new Error(`M-SENS: receptores fora do prototipo (os orgaos, o paladar, o banheiro; espec, secao 6): ${fora}`);
     const presentes = RECEPTORES_DIGIBRAIN.filter(r => presentesTodos.includes(r)) as string[];
@@ -106,8 +198,9 @@ export class Sens {
     });
   }
 
-  codificar(obs: ObservacaoModular, lutas?: readonly ResumoLutaSens[]): SaidaSens {
+  codificar(obs: ObservacaoModular, lutas?: readonly ResumoLutaSens[] | null, telas?: readonly (readonly number[])[]): SaidaSens {
     const S = this.S, pc = obs.corpo, pm = obs.mundo;
+    if (telas !== undefined && this.olhar === null) throw new Error("M-SENS: as linhas da tela sem a subchave olhar");
     const recs = this._receptores(pc);
     const pcl = pc as PercepcaoCorpoLobos;
     const falta: Record<string, number> = {}, leitura: Record<string, number> = {};
@@ -129,7 +222,12 @@ export class Sens {
       vistas.add(c);
       objetos.push({ id, tipo, classe: c, dx, dy, d, prox: this.proximidade(d), nov: S - this.hab[c] });
     }
+    const linhasTela = this.olhar !== null ? this.linhasTela(telas ?? []) : null;
     for (const c of CLASSES_OBJETO) this.hab[c] = integrar(this.hab[c], vistas.has(c) ? S : 0, this.kHab, S);   // a habituacao anda depois da novidade
+    if (linhasTela !== null) {                         // a classe `tela` (P1f), no fim, com a mesma regra
+      const h = this.hab as Record<string, number>;
+      h[CLASSE_TELA] = integrar(h[CLASSE_TELA]!, linhasTela.length ? S : 0, this.kHab, S);
+    }
     let comida = 0, bola = 0;
     for (const o of objetos) {
       if ((COMIDAS_BOAS as readonly string[]).includes(o.classe)) comida = Math.max(comida, o.prox);
@@ -137,11 +235,20 @@ export class Sens {
     }
     const out: SaidaSens = { falta, leitura, contexto, objetos, conjuncoes: { comida_vista: comida, sem_comida: S - comida, bola_vista: bola },
       ha_cheiro: pm.direcao_cheiro !== 0, pos: [pm.x, pm.y], regiao: pm.regiao, minuto, pc };
-    if (lutas !== undefined) out.lutas = this.resumirLutas(lutas);      // a ponte da luta (PE3): desligada, nenhum campo novo
+    if (lutas !== undefined && lutas !== null) out.lutas = this.resumirLutas(lutas);      // a ponte da luta (PE3): desligada, nenhum campo novo
+    if (linhasTela !== null) {                         // a tela (P1f): desligada, nenhum campo novo
+      out.telas = linhasTela;
+      out.tela_niveis = this.niveisTela(pc);
+      out.tela_novidade = (pc["novidade_tela"] ?? null) as number | null;
+    }
     return out;
   }
 
-  estadoInterno(): { hab: Record<string, number>; receptores: string[] | null } {
-    return { hab: { ...this.hab }, receptores: this.receptores === null ? null : [...this.receptores] };
+  estadoInterno(): Record<string, unknown> {
+    const out: Record<string, unknown> = { hab: { ...this.hab }, receptores: this.receptores === null ? null : [...this.receptores] };
+    if (this.olhar !== null) {                         // a tela (P1f): desligada, o estado de hoje, byte a byte
+      out["tela"] = { otimo: { ...this.otimo }, largura: { ...this.largura }, desloc: { ...this.desloc }, exposicoes: this.exposicoes };
+    }
+    return out;
   }
 }
