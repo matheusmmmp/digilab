@@ -2,8 +2,8 @@
 
 Status (2026-11-11): **PROPOSTO**, com duas direções do Matheus já DECIDIDAS (o caminho A e o órgão, sem léxico do pet). Só papel: nenhum código, nenhuma faixa, nenhuma vida, nenhum plano de
 análise. A frente é a `docs/TAREFA_V3_GOSTO_VISUAL.md`. **Entra depois da GV3** (a run descritiva genoma × dono da
-`docs/futuro/gosto_visual_pet.md`, seção 9, que é a P1e da `docs/ESPEC_GOSTO_VISUAL_P1.md`). A GV3 ainda não rodou: o plano
-`docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md` está PROPOSTO e a run espera o ok do Matheus.
+`docs/futuro/gosto_visual_pet.md`, seção 9, que é a P1e da `docs/ESPEC_GOSTO_VISUAL_P1.md`). A GV3 está em curso: o plano
+`docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md` foi APROVADO pelo Matheus em 2026-11-11, e não há resultado ainda.
 
 **A decisão do Matheus (2026-11-11), DECIDIDA:** "quero que siga o recomendado. Quero que os comentários tecidos venham da percepção do
 pet" (ditado por voz; o "patch" do ditado é "pet"). Ficam decididos:
@@ -25,6 +25,12 @@ conceitos para essa rede neural, para ela interpretar esses preceitos." Ficam de
 
 O desenho do órgão (a seção 10) é PROPOSTO, vem depois da GV3 e não tem código antes da revisão do Matheus. A GV3 em curso segue com os
 quatro números.
+
+**A terceira direção do Matheus (2026-11-11):** "Os conceitos, eles podem ser populados pela base de dados dos [corpus] do Digimundo?
+[...] Aquela base de dados que envolve o Digimon World, o Digimon, os anime e tudo, os conceitos de Digimon. E criar uma mitologia em volta
+e inserir dentro desses conceitos, dentro desse órgão. Ele identificar isso, pelo menos como um estado." E depois: "Vamos testar um braço
+da pesquisa com isso". O desenho está na seção 10.10 (PROPOSTO, FA-14 a FA-20); o braço de pesquisa, no plano
+`docs/PLANO_ANALISE_V3_GOSTO_VISUAL_FALA.md` (PROPOSTO, nenhuma run antes da aprovação do Matheus).
 
 **Regras deste documento:**
 - referências só as que o projeto já tem conferidas: as da nota do vault `BUSCA_GOSTO_VISUAL_2026-11-10.md` citadas na
@@ -156,7 +162,7 @@ cérebro dele; no caminho B, a LLM lê dados de fora e fala por cima do pet.
 
 | dependência | o estado | o que pede |
 |---|---|---|
-| **a GV3** | não rodou: o plano `PLANO_ANALISE_V3_GOSTO_VISUAL.md` PROPOSTO, a faixa 89101…89505 reservada, o orquestrador pronto e não executado (TAREFA_V3_GOSTO_VISUAL, resultado da P1e) | os limiares da seção 2.2 vêm da distribuição que ela mostrar |
+| **a GV3** | em curso, sem resultado: o plano `PLANO_ANALISE_V3_GOSTO_VISUAL.md` APROVADO pelo Matheus em 2026-11-11, a faixa 89101…89505 reservada, o código da P1e no PR #863 ainda sem merge (D-GV-P1e-12) | os limiares da seção 2.2 vêm da distribuição que ela mostrar |
 | **a voz-v3**, a voz do jogo no `dec-v3` | **não validada com modelo de verdade.** A DC4 validou a `voz-v3b` no laboratório e fechou sem os gates (D-DC4D-2); o aviso de `docs/RESULTADO_V3_CONVERSA_DC4.md` diz que a voz-v3 continua não validada | a fala do assistir não pode herdar uma fidelidade que a voz não mostrou |
 | **a DC5**, voz-v4 contra a voz do jogo | o plano `PLANO_ANALISE_V3_CONVERSA_DC5.md` APROVADO (2026-11-10); a calibração (DC5b) e a recalibração com a `voz-v4b` (DC5b2) feitas; o adendo da DC5c (a validação: voz do jogo × `voz-v4b`, com espécie e com a `verif-v8b`/`verif-v9b`) escrito; **a validação ainda não rodou** e não há `RESULTADO_V3_CONVERSA_DC5.md` | a voz que a DC5c aprovar é a que dá voz aos conceitos do assistir (FA-7) |
 | **o decodificador** | o `dec-v1`/`dec-v2` (Python e TS) tem a lista fechada de sete comportamentos, sem o `olhar`: um motivo com a unidade de olhar **levanta erro** em `_validar` | uma versão nova do decodificador (FA-2), com paridade; o `dec-v1`/`dec-v2` não muda |
@@ -359,3 +365,98 @@ Até a busca, toda alegação desta seção sobre os modelos é SEM FONTE.
 | **OV2** | o Python atrás de chave desligada: o catálogo de cenas com conceitos fixos na TV do jogo, os receptores e a adaptação por conceito, o M-SENS por conceito, o evento gravado; o gabarito das vidas de hoje antes, num commit próprio | OV1 | sim |
 | **OV3** | o web com paridade no catálogo de cenas; o órgão no navegador (o modelo local) gravando o evento no modo livre | OV2; a FA2 | sim |
 | **OV4** | a fala com os conceitos percebidos (a voz da FA-7, o verificador da FA-8) e o painel da FA-13; a revisão de privacidade da GV5 incluindo o órgão | OV3 | sim |
+
+### 10.10 Os conceitos do Digimundo — PROPOSTO
+
+Pedido do Matheus de 2026-11-11 (a terceira direção do topo). O órgão, além dos conceitos genéricos da 10.1, reconhece **as espécies do
+Digimundo**, e cada uma traz um **sentido mítico** da mitologia do jogo. O reconhecimento vira, pelo menos, um estado do pet. Tudo PROPOSTO,
+SEM FONTE no desenho; nada antes da GV3 e da revisão do Matheus.
+
+#### 10.10.1 A origem dos conceitos: o corpus das espécies
+
+- **O arquivo:** `digilab_fala_livre/corpus_especies.json` (versão `corpus-auditado-1`, 60 espécies, as do jogo, `web/app/motor/nomes.ts`),
+  lido pelo `digilab_fala_livre/corpus.py`. O carregador tira as espécies sem nenhuma obra apta e filtra cada item pela marca da auditoria.
+- **O que o carregador deixa entrar, ao pé da letra** (o docstring e o `_entra` do `corpus.py`):
+  - `VERIFICADO` e `VERIFICADO EM OUTRA FONTE`, só de obras com veredito `APTO` ou `APTO COM RESSALVAS`;
+  - `PARCIAL` só reescrito na auditoria (`"reescrito": true`);
+  - `OUTRA MIDIA` só anime e só com `meta.liberar_outra_midia` (liberado pelo Matheus em 2026-09-30, segundo a `meta` do arquivo);
+  - fora: `INFERENCIA`, `DIVERGENTE`, `SEM FONTE`, `FONTE INVALIDA`, e o texto com letra fora do alfabeto latino.
+- **O que sai hoje** (conferido com `corpus.carregar()` em 2026-11-11, sha256 do arquivo começando por `785f7834a2ee`; sem artefato gravado,
+  é uma contagem do arquivo versionado): **56 espécies** de 60; entram 219 traços, 117 jeitos de falar, 106 interações e 62 citações; ficam
+  fora 23 `INFERENCIA`, 9 `OUTRA MIDIA`, 5 `PARCIAL` e 1 `SEM FONTE`.
+- **A diferença com o pedido da coordenação** ("só VERIFICADO e VERIFICADO EM OUTRA FONTE"): o carregador também deixa entrar `PARCIAL`
+  reescrito e anime. A FA-14 decide qual dos dois filtros vale para o órgão.
+- **O conceito é a espécie** (o nome, como `Agumon`). Os itens do corpus não viram conceito: eles alimentam o sentido mítico (10.10.3) e o
+  estilo da voz, como já alimentam hoje, e **não sustentam afirmação** (a regra do `bloco_estilo`).
+- **Uma lacuna:** o Piedmon (o deus da Diversão, D-MM-4) e o Myotismon (o termômetro fora do aro), que a MITOLOGIA já usa, **não estão**
+  entre as 56 espécies do corpus. Pô-los na lista do órgão pede uma entrada nova no corpus, auditada, ou uma exceção (FA-15).
+
+#### 10.10.2 Como o órgão reconhece: as imagens de referência e o som
+
+- **Na visão:** além do texto com o nome, o órgão compara o quadro com **imagens de referência de cada espécie: os sprites do atlas** (os do
+  Digimon UP, autorizados pelo Matheus, `docs/UI_GUIDELINES.md`, 5.1). Os vetores das imagens de referência são calculados no computador do
+  usuário. **As imagens e os vetores ficam locais, fora do git** (FA-16).
+- **No som:** os **nomes falados** ("Agumon!"), por um reconhecimento de fala local (do tipo Whisper; tamanho, licença e acerto em português
+  e japonês SEM FONTE). Só o casamento com a lista fechada dos nomes sai da função, com a confiança em inteiros; **a transcrição é descartada
+  na hora**, como o quadro (FA-17).
+- **O limite de estilo:** o anime desenha as espécies de um jeito, os sprites de outro (pixel art pequena). Um órgão de referência por sprite
+  pode não reconhecer o Agumon do anime. **Isso precisa ser medido:** uma bateria local, fora do git, com quadros de sprite e quadros de
+  anime por espécie, e o acerto do órgão em cada um, em separado, antes de o órgão valer na tela real. É risco (10.10.6) e medida (na OV2;
+  o plano da fala, que nesta fase não usa modelo, não mede isso).
+
+#### 10.10.3 O sentido mítico: uma mitologia só, a da MITOLOGIA
+
+- **Cada espécie ganha um sentido mítico,** combinado com a frente MITOLOGIA (`docs/TAREFA_V3_MITOLOGIA.md` e as D-MM-1 a D-MM-18). **Não
+  se cria outra mitologia:** o sentido sai do que a MITOLOGIA já tem, isto é, os cinco deuses do aro (Coragem, Amizade, Conhecimento,
+  Sinceridade e a Diversão, o macaco, encarnada pelo Piedmon, D-MM-4), o Myotismon fora do aro e a lenda do macaco sob a montanha.
+- **A forma PROPOSTA:** cada espécie aponta para um deus (o "patrono") e, no máximo, para uma frase do Códice. O mapa é desenho, SEM FONTE,
+  escrito pela frente MITOLOGIA e decidido pelo Matheus (FA-15). Os traços do corpus podem orientar o mapa (um traço de coragem verificado
+  puxa para a Coragem), mas o mapa não é um fato do corpus e não pode ser dito como fato da obra.
+- **A fala da MITOLOGIA espera o G-NATURAL da DC5** (D-MM-11, `TAREFA_V3_MITOLOGIA.md`, seção 6). O sentido mítico na fala do assistir
+  segue a mesma espera.
+
+#### 10.10.4 O reconhecimento vira um estado no afeto, não no corpo
+
+- **A D-MM-10, no texto que os documentos dão:** "nenhuma correção mexe nos stats da luta nem no corpo" (`docs/TAREFA_V3_COOPERACAO.md`;
+  `docs/futuro/kant_cooperacao.md`). Ela foi escrita para as correções morais; a COOPERACAO a aplicou à culpa e à inveja, que ficaram no
+  M-AFETO pela valência (CO7-6, K-4). **Aqui ela vale por analogia**, não pela letra: a crença mítica é da mesma família, e a recomendação é
+  tratá-la do mesmo jeito.
+- **O desenho PROPOSTO:**
+  - o órgão tem o receptor de cada espécie (é o sentido, a G-RECEPTOR da 10.3), mas **sem emissor químico** e sem adaptação química: o
+    reconhecimento de uma espécie não mexe no tédio, no humor nem em nada do corpo;
+  - o reconhecimento entra no **M-AFETO como um termo de valência**, com o sinal e o peso dados pelo sentido mítico (o patrono e o que o
+    pet já viveu com o sinal daquele deus, nos eventos da MITOLOGIA); o peso é PROPOSTO, SEM FONTE;
+  - a habituação ao reconhecimento fica no M-SENS (a habituação por classe, PE-11), não no corpo.
+- **A consequência:** os conceitos genéricos da 10.4 mexem no corpo pela tela; os do Digimundo não. Um Agumon na TV muda o estado afetivo
+  do pet sem virar química, e a D-MM-10 não reabre (FA-18).
+
+#### 10.10.5 O painel e a pesquisa separam percepção e crença
+
+- **No painel** (sem número, FA-13): "viu: Agumon" (a percepção do órgão, com a confiança em palavra) numa linha; "acredita: Agumon é do
+  deus da Coragem" (a crença mítica) noutra. Nunca as duas numa frase só.
+- **Na fala:** a percepção pode ser dita como percepção ("é o Agumon!"); a crença só como crença ("dizem que ele é da Coragem", "acho que
+  isso é sinal da Coragem"). A crença dita como fato conta como sem sustento (FA-19).
+- **Na pesquisa:** as medidas separam o que vem do órgão e o que vem do mito, por braço (`docs/PLANO_ANALISE_V3_GOSTO_VISUAL_FALA.md`).
+
+#### 10.10.6 Os riscos próprios
+
+- **O estilo do anime contra o dos sprites** (10.10.2). Mitigação: a bateria de acerto separada por estilo, e a confiança baixa dita como
+  dúvida.
+- **O mito dito como fato da obra.** Mitigação: a separação da 10.10.5 e a rubrica.
+- **Os direitos das imagens.** Os sprites são autorizados para o jogo (UI_GUIDELINES 5.1); os quadros de anime da bateria não são, e ficam
+  locais, fora do git, nunca publicados.
+- **A fala ouvida do usuário.** O reconhecimento de fala ouve o que o usuário fala ou assiste. Mitigação: a lista fechada de nomes, a
+  transcrição descartada na hora, e a FA-17 adiando o som.
+- **Duas mitologias.** Mitigação: o mapa é da frente MITOLOGIA (FA-15).
+
+#### 10.10.7 As decisões novas (FA-14 a FA-20)
+
+| id | a decisão | a recomendação | o custo de errar |
+|---|---|---|---|
+| **FA-14** | O filtro do corpus que vale para o órgão. | **A lista de conceitos é a das espécies que o `carregar()` deixa entrar (56 hoje); o sentido mítico só se apoia nos itens `VERIFICADO` e `VERIFICADO EM OUTRA FONTE`** (o filtro estrito, sem `PARCIAL` reescrito nem anime). | Com o filtro do carregador inteiro, o mito pode se apoiar num texto reescrito ou de anime que a auditoria só aceitou para o tom. Com o filtro estrito também na lista, espécies sem item estrito somem do órgão sem razão de percepção. |
+| **FA-15** | Quem faz o mapa espécie → sentido mítico, e o Piedmon e o Myotismon. | **A frente MITOLOGIA escreve o mapa, um patrono por espécie, só com os deuses que ela já tem; o Matheus decide.** O Piedmon e o Myotismon entram na lista do órgão só com uma entrada nova no corpus, auditada como as outras. | Feito aqui, nasce uma segunda mitologia. Sem o Piedmon e o Myotismon, o pet não reconhece justamente os dois que a mitologia mais usa; com uma exceção sem auditoria, o corpus perde a regra. |
+| **FA-16** | As imagens de referência. | **Só os sprites do atlas, com os vetores calculados no computador do usuário, locais e fora do git;** nenhum quadro de anime como referência. Os quadros de anime só na bateria de medida, locais. | Com quadros de anime na referência, o repositório ou o pacote do jogo carrega imagem sem autorização. Só com sprites, o órgão pode falhar no anime, e é por isso que a bateria mede. |
+| **FA-17** | Os nomes falados no som. | **Depois da visão,** num passo próprio, com a revisão de privacidade da GV5: reconhecimento de fala local, só o casamento com a lista fechada, a transcrição descartada na hora. | Junto com a visão, o órgão ouve a fala do usuário antes de a privacidade da imagem estar revista. Sem o som, o pet não reconhece o "Agumon!" do anime, só o desenho. |
+| **FA-18** | Onde o reconhecimento mexe no pet. | **No M-AFETO, pela valência, com o sinal do sentido mítico; nenhum emissor no corpo** (a D-MM-10 por analogia). | No corpo, reabre a D-MM-10 e mexe na química das vidas com a chave ligada. Sem estado nenhum, o reconhecimento vira só palavra, contra o "pelo menos como um estado" do pedido. |
+| **FA-19** | Como a crença aparece na fala e no painel. | **Separada da percepção, sempre; a crença dita como crença; a crença dita como fato conta como sem sustento.** | Juntas, o dono lê o mito como o que o pet viu, e a fidelidade da fala não se mede. |
+| **FA-20** | O braço de pesquisa ("Vamos testar um braço da pesquisa com isso"). | **Sim, pelo `docs/PLANO_ANALISE_V3_GOSTO_VISUAL_FALA.md`, sem modelo de visão,** com a TV do jogo e um catálogo de cenas roteirizadas; o plano aprovado pelo Matheus antes de qualquer fala. | Testar com o órgão de verdade mistura a pergunta da fala com o acerto do modelo e não é repetível. Sem o braço, o órgão entra no jogo sem saber se melhora a fala. |
