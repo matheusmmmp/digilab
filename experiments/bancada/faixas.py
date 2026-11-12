@@ -161,6 +161,10 @@ FAIXAS_RESERVADAS = (
                    "run descritiva genoma x dono, uma vez (bases 90303, 90404 e 90505, K = 12) "
                    "(docs/PLANO_ANALISE_V3_GOSTO_VISUAL_ADENDO1.md, secao 6; confirmada pelo coordenador, 2026-11-12; aprovada pelo "
                    "Matheus em 2026-11-12, \"Sim a tudo\"; nenhuma vida antes do adendo e do codigo na main)"),
+    (92101, 92505, "LUTA_POC, a investigacao do nucleo da luta (jogo web): as lutas fixas da N2 e os contrafactuais da N4 "
+                   "(docs/PLANO_LUTA_NUCLEO.md, secao 2.1; D-N-2; bases 92101, 92202, 92303, 92404 e 92505, com a derivacao da LP5; "
+                   "aprovada pelo Matheus em 2026-11-12, \"Aprovo as 7 (Recommended)\", e pedida pelo Gerente de sprites e luta; "
+                   "conferida livre na origin/main em 2026-11-12)"),
 )
 
 
