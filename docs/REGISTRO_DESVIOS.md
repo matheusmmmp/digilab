@@ -718,4 +718,8 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-11 — GOSTO_VISUAL, P1f: a paridade com o web (Claude Code, Opus 5.5, branch `v3-gosto-visual-p1f`)](registro/2026-11.md)
 - [2026-11-11 — ILHA_AGUA: a ilha grande fechada (Gerente de MUNDO_ENFEITES, Claude Code, Fable 5.2, branch `v3-ilha-grande-fecha`)](registro/2026-11.md)
 - [2026-11-11 — SONO_SEGURA: o sono do modular segura até a energia passar de 90 % (worker, Claude Code, branch `v3-sono-segura`)](registro/2026-11.md)
+- [2026-11-11 — CONTA: o plano da conta e do save na nuvem (Claude Code, Opus 5.5, branch `v3-conta`)](registro/2026-11.md)
+- [2026-11-11 — UX_TELA_PET, três testes antigos do e2e (Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-e2e-conserto`)](registro/2026-11.md)
 - [2026-11-11 — GOSTO_VISUAL, P1e: a sonda das duas TVs e o plano (Claude Code, Opus 5.5, branch `v3-gosto-visual-p1e`)](registro/2026-11.md)
+- [2026-11-11 — CONTA: o módulo da monetização no plano (Claude Code, Opus 5.5, branch `v3-conta`)](registro/2026-11.md)
+- [2026-11-11 — CONTA: as decisões CN-1 a CN-10 aprovadas (Claude Code, Opus 5.5, branch `v3-conta`)](registro/2026-11.md)
