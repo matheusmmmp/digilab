@@ -41,10 +41,10 @@ for (const [largura, altura] of [[390, 844], [1280, 800]] as const) {
     await brasao.locator(".br-card").first().click();
     await expect(page.locator("dialog.brasao-tela[open]")).toHaveCount(0);
 
-    /* os dois ovos: o save do grupo, v34, com o primeiro em foco */
+    /* os dois ovos: o save do grupo, v36, com o primeiro em foco */
     await expect.poll(async () => (await lerSave(page))?.grupo).toBe(true);
     const s = (await lerSave(page))!;
-    expect([s.versao, s.foco]).toEqual([34, "A"]);   // a v29 desde a LP6-4 (a v28, o grupo com o sono, com a luta da LP6); a v34 (a v29 com a TV) desde a TV no jogo
+    expect([s.versao, s.foco]).toEqual([36, "A"]);   // a v29 desde a LP6-4; a v31 (com o lance) desde a BB2; a v36 (a v31 com a TV) desde a TV no jogo
     const g = await page.evaluate(() => (window as unknown as { __digilab: { grupo(): { ids: string[]; foco: string; ticks: number[] } } }).__digilab.grupo());
     expect(g.ids).toEqual(["A", "B"]);
     expect(g.ticks[0]).toBe(g.ticks[1]);

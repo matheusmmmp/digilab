@@ -17,9 +17,9 @@ import { SEMENTES_ALTA, gabaritoAlta, gravarAlta, reproduzirAlta, viverAlta, typ
 
 describe("a versao e a tabela (LP6-4)", () => {
   test("a v29 e do grupo, com o sono que segura, luta pela LUTA_V29, e o grupo de hoje e ela; a v26 a v28 seguem na LUTA_V23", () => {
-    expect(VERSAO_GRUPO).toBe(34);                        // a v34 (a v29 com a TV no cerebro e no jogo; D-GV-TVJOGO-4)
-    expect(ehLutaLp6(34)).toBe(true);
-    expect(VERSAO_PET).toBe(33);   // o ovo de um pet so segue na v27, na luta da v23
+    expect(VERSAO_GRUPO).toBe(36);   // a v31 desde a BB2 (a v29 com o lance); a v36 (a v31 com a TV no jogo) desde a TV no jogo
+    expect(ehLutaLp6(36)).toBe(true);
+    expect(VERSAO_PET).toBe(35);   // o ovo de um pet so: a v32 (a v27 com a TV, sem o lance; D-BB2-6), na luta da v23
     expect([ehDoGrupo(VERSAO_V29), nasceComSonoSegura(VERSAO_V29)]).toEqual([true, true]);
     expect([ehLutaLp6(VERSAO_V26), ehLutaLp6(VERSAO_V27), ehLutaLp6(VERSAO_V28), ehLutaLp6(VERSAO_V29)]).toEqual([false, false, false, true]);
     expect(tabelaLuta(VERSAO_V29)).toBe(LUTA_V29);

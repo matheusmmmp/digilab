@@ -1,9 +1,9 @@
 /* A TV no jogo (GOSTO_VISUAL, as decisoes A a E da captura ligada ao cerebro; docs/registro/2026-11.md, D-GV-TVJOGO), no desktop (1440 x 900)
    e no celular (390 x 844):
-     - o pet de exemplo do primeiro acesso nasce v33; com a TV do jogo ligada pelo painel, ele vai ate a TV sozinho ("No cerebro: indo ate a
+     - o pet de exemplo do primeiro acesso nasce v35; com a TV do jogo ligada pelo painel, ele vai ate a TV sozinho ("No cerebro: indo ate a
        TV.") e o "Gosta mais de" vem do cerebro (`data-gosto-fonte="cerebro"`), com o porque aberto;
      - parar a TV grava a TV desligada ("tv|desligada") e o painel diz "No cerebro: a TV esta desligada.";
-     - um pet v33 semeado com uma imagem parada (o mesmo "st" por dois dias, levado ate a TV) mostra o enjoo: "enjoado dela".
+     - um pet v35 semeado com uma imagem parada (o mesmo "st" por dois dias, levado ate a TV) mostra o enjoo: "enjoado dela".
    As capturas vao para DIGILAB_CAPTURAS (tvjogo_*.png), quando a variavel existe. */
 import { expect, test, type Browser, type Page } from "@playwright/test";
 import { basename, join } from "node:path";
@@ -62,7 +62,7 @@ const esperarFrase = (page: Page, texto: string, levar = false) => page.evaluate
 }, [texto, levar] as const);
 const capturar = async (page: Page, nome: string) => { if (CAPTURAS) await page.screenshot({ path: join(CAPTURAS, nome) }); };
 
-/** um pet v33 com uma imagem parada: o mesmo "st" desde a primeira hora, levado ate a TV a cada 2 h, por dois dias */
+/** um pet v35 com uma imagem parada: o mesmo "st" desde a primeira hora, levado ate a TV a cada 2 h, por dois dias */
 function petComImagemParada(): string {
   const m = ligarProduto(new Motor(4242, 33));
   const [x, y] = centroDaCelula(CELULA_PERTO_DA_TV_JOGO, CMU_GRANDE);
@@ -81,7 +81,7 @@ function petComImagemParada(): string {
 
 for (const [onde, largura, altura] of TAMANHOS) {
   const movel = onde === "celular";
-  test(`a v33 no ${onde}: o pet vai ate a TV sozinho, o gosto vem do cerebro e parar desliga a TV`, async ({ browser }) => {
+  test(`a v35 no ${onde}: o pet vai ate a TV sozinho, o gosto vem do cerebro e parar desliga a TV`, async ({ browser }) => {
     test.setTimeout(240_000);
     const { ctx, page, erros } = await abrir(browser, largura, altura);
     expect((await registro(page)).versao).toBe(33);
@@ -112,7 +112,7 @@ for (const [onde, largura, altura] of TAMANHOS) {
     await ctx.close();
   });
 
-  test(`a v33 no ${onde}: uma imagem parada cansa o pet (enjoado dela)`, async ({ browser }) => {
+  test(`a v35 no ${onde}: uma imagem parada cansa o pet (enjoado dela)`, async ({ browser }) => {
     test.setTimeout(240_000);
     const { ctx, page, erros } = await abrir(browser, largura, altura, petComImagemParada());
     expect((await registro(page)).versao).toBe(33);

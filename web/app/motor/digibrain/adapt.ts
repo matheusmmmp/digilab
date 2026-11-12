@@ -21,7 +21,12 @@
    (`genomaVisao(semente)`, rng propria `visao-ovo`, ou o dado), a classe `tela` do M-SENS, a unidade de olhar no fim da lista (entregue ao
    motor como o ocioso, sem alvo), o termo `gosto`, o canal `gosto_visual` no r, a exposicao e o P1 da classe `tela`, e os tres ganchos que o
    laco com a TV procura: `verTela`, `olhandoTela` e `agradoTela`. Desligada, nenhum campo, estado nem gancho que funcione (os tres falham
-   alto). O gabarito e o test/gabaritos/gosto_visual.json.gz (experiments/exportar_gosto_visual.py). */
+   alto). O gabarito e o test/gabaritos/gosto_visual.json.gz (experiments/exportar_gosto_visual.py).
+
+   O lance do dono (TAREFA_V3_BOLA_BRINCAR, BB2; o porte da BB1 do Python): com a ConfigLanceDono ligada, o laco entrega o convite antes de cada
+   decisao pelo gancho `bolaDoDono(bool)` (o tick esta na janela do lance?), e o M-IMPULSO recebe a entrada `bola_do_dono` (S no convite, 0 fora
+   dele e 0 com a fome urgente); o motivo ganha `lance`. Com a chave e sem o gancho antes da decisao, falha alto; o gancho sem a chave tambem.
+   Desligada, nenhum campo novo. O gabarito e o test/gabaritos/digibrain_modular_lance_dono.json.gz. */
 import { leituraReceptor, type PercepcaoCorpoLobos } from "../lobos.ts";
 import type { OcorridoMundo, PoliticaCorpoMundo } from "../motor_corpo_mundo.ts";
 import type { OcorridoCorpo, ObservacaoLobos, TransicaoLobos } from "../lobos.ts";
@@ -32,8 +37,8 @@ import { conferirConfigEnjooTela, type ConfigEnjooTela } from "../enjoo_tela.ts"
 import { genomaVisao, type GenomaVisao } from "./genoma_visao.ts";
 import { Afeto } from "./afeto.ts";
 import { Arbitragem, type RngPolitica } from "./arb.ts";
-import { COMPORTAMENTO_OLHAR, CONFIG_DIGIBRAIN_LAB, CONFIG_MODULAR_MUNDO, CONFIG_OLHAR, CONFIG_SONO_SEGURA, CONTEUDOS_FALA, INATOS_MODULAR,
-  type ConfigDigibrainModular, type ConfigOlhar, type ConfigSonoSegura } from "./constantes.ts";
+import { COMPORTAMENTO_OLHAR, CONFIG_DIGIBRAIN_LAB, CONFIG_LANCE_DONO, CONFIG_MODULAR_MUNDO, CONFIG_OLHAR, CONFIG_SONO_SEGURA, CONTEUDOS_FALA,
+  INATOS_MODULAR, validarLanceDono, type ConfigDigibrainModular, type ConfigLanceDono, type ConfigOlhar, type ConfigSonoSegura } from "./constantes.ts";
 import { EstadoDinamico, type OpcaoFim } from "./estado.ts";
 import { Impulso, type UnidadeImpulso } from "./impulso.ts";
 import { Memoria, episodioAutobio, episodioLuta } from "./mem.ts";
@@ -107,16 +112,21 @@ export class DigiBrain implements PoliticaCorpoMundo {
   readonly genomaVisao: GenomaVisao | null = null;
   private telas: [number, number, number, number][] | null = null;
   private olhando: number | null = null;
+  /** o lance do dono (BB-4): a ConfigLanceDono e o convite entregue pelo laco para a decisao seguinte (null: nao entregue) */
+  readonly cl: ConfigLanceDono;
+  private convite: boolean | null = null;
   /** o enjoo (D-GV-ENJOO-CER): a ConfigEnjooTela ligada (null desligada), o enjoo lembrado de cada TV e o ganho dele por decisao */
   readonly ce: ConfigEnjooTela | null = null;
   private readonly enjooTv: Record<number, number> = {};
   private kEnjooLembrado = 0;
 
   /** `inatos`: os valores de partida (a ConfigDigibrainInatos); so o G-PAR-VIDA dos fins passa outros (digibrain_modular_fins.json.gz) */
-  /** `sono`: a ConfigSonoSegura (o 4o argumento, como na main); `olhar`: as opcoes do olhar (P1f), so com a subchave */
+  /** `sono`: a ConfigSonoSegura (o 4o argumento, como na main); `olhar`: as opcoes do olhar (P1f), so com a subchave; `lance`: a
+   *  ConfigLanceDono (BB-4) */
   constructor(cd: ConfigLab = CONFIG_DIGIBRAIN_LAB, inatos: typeof INATOS_MODULAR = INATOS_MODULAR, lutaMemoria = false,
-    sono: ConfigSonoSegura = CONFIG_SONO_SEGURA, olhar?: OpcoesOlhar) {
+    sono: ConfigSonoSegura = CONFIG_SONO_SEGURA, olhar?: OpcoesOlhar, lance: ConfigLanceDono = CONFIG_LANCE_DONO) {
     if (!cd.ligada) throw new DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada");
+    this.cl = validarLanceDono(lance);
     this.cd = cd;
     this.inatos = inatos;
     const cfg = { intervalo_decisao_ticks: CONFIG_MODULAR_MUNDO.intervalo_decisao_ticks };
@@ -140,7 +150,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
     if (this.irAteTv) this.sens.ligarIrAteTv();
     this.afeto = new Afeto(cfg, cd, inatos, null);
     this.estado = new EstadoDinamico(cfg, cd, inatos);
-    this.impulso = new Impulso(inatos, cd, undefined, this.co);
+    this.impulso = new Impulso(inatos, cd, undefined, this.co, this.cl);
     this.lutaMemoria = lutaMemoria;
     if (lutaMemoria && !cd.memoria_autobio) throw new Error("luta_memoria so com a memoria_autobio (docs/TAREFA_V3_PONTE_LUTA.md, 3.2)");
     this.mem = new Memoria({ sub: CONFIG_MODULAR_MUNDO.sub }, inatos, cd, lutaMemoria);
@@ -187,9 +197,10 @@ export class DigiBrain implements PoliticaCorpoMundo {
     const episodiosLuta = this.lutaMemoria ? this.episodiosLuta(sens, afeto, tick) : null;
     const memoria = cd.m_mem ? this.mem.recuperar(sens, afeto) : null;
     const [gosto, resumoOlhar] = cd.olhar ? this.gostoDaDecisao(sens) : [null, null];
+    const lance = this.cl.ligada ? this.entradaBolaDoDono(afeto.urgencias) : null;   // o lance do dono (BB-4): o convite, salvo a fome urgente
     const [unidades, z] = this.impulso.unidades(
       sens, afeto, ctx, this.plast, memoria, this.afeto.drives(receptores), termoLem === null ? null : [termoLem, this.mem.casa], null, gosto,
-      this.ce === null ? null : this.termoEnjoo(resumoOlhar!));
+      lance === null ? null : lance.bola_do_dono, this.ce === null ? null : this.termoEnjoo(resumoOlhar!));
     const esc = this.arb.escolher(unidades, afeto, sens, rng, reflexo, null);   // a rng de politica vai so ao M-ARB
     this.conferirDesligadas(unidades);
     const unidade = esc.unidade;
@@ -221,6 +232,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
     };
     motivo["consolidacao"] = consolidacao;
     if (this.lutaMemoria) motivo["lutas"] = episodiosLuta;      // a ponte da luta (PE3): desligada, nenhum campo novo
+    if (lance !== null) motivo["lance"] = lance;               // o lance do dono (BB-4): desligada, nenhum campo novo
     if (cd.olhar) {                                       // o olhar (P1f): desligada, nenhum campo novo
       this.olhando = unidade.chave[0] === COMPORTAMENTO_OLHAR && intencao.acao === "ocioso" ? unidade.chave[2] as number : null;
       motivo["olhar"] = { ...resumoOlhar, olha: this.olhando };
@@ -232,6 +244,27 @@ export class DigiBrain implements PoliticaCorpoMundo {
     this.gestosAgora = [];
     this.k += 1;
     return intencao.acao;
+  }
+
+  // ------------------------------------------------------------ o lance do dono (BB-4, so com a ConfigLanceDono ligada)
+  /** o laco com o lance do dono, antes de cada decisao: o tick esta na janela do convite (`janela_convite_ticks` depois do lance)? Sem a chave,
+   *  ou duas vezes sem decisao, falha alto (o motor e o cerebro divergem na chave) */
+  bolaDoDono(convite: boolean): void {
+    if (!this.cl.ligada) throw new Error("bola_do_dono: o lance do dono com o DigiBrain modular exige a ConfigLanceDono ligada no cerebro (BB-4)");
+    if (typeof convite !== "boolean") throw new Error(`bola_do_dono recebe um bool: ${String(convite)}`);
+    if (this.convite !== null) throw new Error("bola_do_dono duas vezes antes da mesma decisao");
+    this.convite = convite;
+  }
+
+  /** a entrada `bola_do_dono` da decisao: S na janela do convite, 0 fora dela e 0 com a fome urgente (a urgencia da fome acima do
+   *  `urgencia_lambda`). Sem o gancho do laco antes da decisao, falha alto */
+  private entradaBolaDoDono(urgencias: Readonly<Record<string, number>>): { convite: boolean; fome_urgente: boolean; bola_do_dono: number } {
+    if (this.convite === null) throw new Error("o DigiBrain com a ConfigLanceDono ligada decide sem o gancho bola_do_dono do motor (o motor sem o lance?)");
+    if (!("fome" in urgencias)) throw new Error("o convite le a urgencia da fome, e ela nao veio do M-AFETO");
+    const convite = this.convite;
+    this.convite = null;
+    const urgente = urgencias["fome"]! > this.inatos.urgencia_lambda;
+    return { convite, fome_urgente: urgente, bola_do_dono: convite && !urgente ? this.S : 0 };
   }
 
   // ------------------------------------------------------------ o olhar (P1f, so com a subchave `olhar`)

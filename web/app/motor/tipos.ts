@@ -1,7 +1,7 @@
 /* Tipos do motor: acoes, formas, estagios, especies e eventos do registro. Os ids sao os do save e do
    log (sem acentos); os nomes de tela (Digimon, brasoes, niveis) ficam em catalogo.ts. */
 
-/** "ir_tv": o ir ate a TV (GOSTO_VISUAL, a decisao D da captura ligada ao cerebro; D-GV-TVJOGO-3): so os pets v33 e v34, pelo DigiBrain
+/** "ir_tv": o ir ate a TV (GOSTO_VISUAL, a decisao D da captura ligada ao cerebro; D-GV-TVJOGO-3): so os pets v35 e v36, pelo DigiBrain
     modular com o olhar; as acoes de hoje (ACOES_PET, o A, o bandit, os tracos) sao as sete de sempre (AcaoPetHoje) */
 export type AcaoPet = AcaoPetHoje | "ir_tv";
 export type AcaoPetHoje = "ocioso" | "dormir" | "comer" | "brincar" | "chamar_atencao" | "explorar" | "emburrar";

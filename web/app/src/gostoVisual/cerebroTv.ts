@@ -1,15 +1,15 @@
 /* A captura ligada ao cérebro (GOSTO_VISUAL, 2026-11-12; "Quero ligar a captura ao cerebro", Matheus; docs/registro/2026-11.md,
-   D-GV-CEREBRO-1 a 10, e a TV no jogo, D-GV-TVJOGO). Só para o pet que tem a TV no cérebro (a v32 e a v33, `Motor.temTv`) e para o grupo com
-   a TV do mundo comum (a v34, `GrupoDoJogo.temTv`); nos outros pets nada daqui roda e o P0 segue fora do motor, do log e do save, como antes.
+   D-GV-CEREBRO-1 a 10, e a TV no jogo, D-GV-TVJOGO). Só para o pet que tem a TV no cérebro (a v32 e a v35, `Motor.temTv`) e para o grupo com
+   a TV do mundo comum (a v36, `GrupoDoJogo.temTv`); nos outros pets nada daqui roda e o P0 segue fora do motor, do log e do save, como antes.
    - É a ÚNICA porta do P0 para o registro além do Carinho (o teste gosto_visual_p0 confere): o vetor de cada segundo (o da captura da tela ou
      o da TV do jogo do P0, sete números em [0, 1]) vai ao ResumoTela do motor (GV-15: a média de 10 s em 16 níveis, só na mudança), e cada
      valor que ele devolve entra no registro pelo evento "st" (`Motor.sentidoTela`; no grupo, `GrupoDoJogo.sentidoTela`, um evento do grupo:
      os dois pets veem a mesma TV), o modo livre gravado. Nada da imagem nem do som: só os sete inteiros. O replay lê o evento.
    - A fonte do evento: "tela" para a captura e "tv" para a TV do jogo do P0 (D-GV-CEREBRO-3).
-   - Ao parar a TV: na v33 e na v34, a TV desligada (`fonte|desligada`, a decisão A, D-GV-TVJOGO-1: a TV sai da vista do pet e ele não a
+   - Ao parar a TV: na v35 e na v36, a TV desligada (`fonte|desligada`, a decisão A, D-GV-TVJOGO-1: a TV sai da vista do pet e ele não a
      olha); na v32, um "st" com os sete níveis em 0 (a tela preta e muda; D-GV-CEREBRO-6).
    - A leitura para as telas (o painel da TV e o sinal sobre o pet): o que o cérebro faz agora, do motor (`Motor.tvNoCerebro`), para o painel
-     da TV não contradizer o do DigiBrain (D-GV-CEREBRO-8); na v33 e na v34, também o "indo até a TV" e o enjoo (D-GV-TVJOGO). */
+     da TV não contradizer o do DigiBrain (D-GV-CEREBRO-8); na v35 e na v36, também o "indo até a TV" e o enjoo (D-GV-TVJOGO). */
 import {
   CELULA_PERTO_DA_TV_JOGO, CMU_GRANDE, PetMorto, ResumoTela, centroDaCelula, nasceComTvJogo, valorSentidoTela, valorSentidoTelaDesligada,
   type GrupoDoJogo, type Motor,
@@ -20,7 +20,7 @@ import type { Reacao, Sentido } from "./gosto.ts";
 /** a escala do cérebro (S) e os cortes do agrado para a reação mostrada sobre o pet (a pose e o ícone). PROPOSTO, SEM FONTE */
 const S = 1024;
 export const CORTES_AGRADO = { adorando: 0.65, naoGosta: 0.35 } as const;
-/** a partir de quanto enjoo lido (na escala S) a reação do cérebro é "enjoou" (a v33 e a v34, com o enjoo do #875; D-GV-TVJOGO-6). PROPOSTO,
+/** a partir de quanto enjoo lido (na escala S) a reação do cérebro é "enjoou" (a v35 e a v36, com o enjoo do #875; D-GV-TVJOGO-6). PROPOSTO,
     SEM FONTE: a metade, o ponto em que a exposição para de andar e o tédio começa a sair do agrado (D-GV-ENJOO-CER-8) */
 export const CORTE_ENJOO = 0.5;
 
@@ -28,7 +28,7 @@ export const CORTE_ENJOO = 0.5;
 type Alvo = { tipo: "pet"; m: Motor } | { tipo: "grupo"; g: GrupoDoJogo };
 let resumo: ResumoTela | null = null, alvo: Alvo | null = null;
 
-/** quem tem a TV no cérebro agora: o pet de um só da v32 ou da v33, ou o grupo da v34 (o de teste não tem) */
+/** quem tem a TV no cérebro agora: o pet de um só da v32 ou da v35, ou o grupo da v36 (o de teste não tem) */
 function alvoComTv(): Alvo | null {
   const j = jogoSeHouver();
   if (j === null || j.emLab !== null) return null;
@@ -76,7 +76,7 @@ export function sentirNoCerebro(s: Sentido): void {
   if (valor !== null) gravar(alvo, valor);
 }
 
-/** a TV parou (a janela incompleta é descartada): na v33 e na v34, a TV desligada; na v32, a tela preta e muda. Só se o último "st" não era
+/** a TV parou (a janela incompleta é descartada): na v35 e na v36, a TV desligada; na v32, a tela preta e muda. Só se o último "st" não era
     esse, e só se a TV já recebeu algo */
 export function pararNoCerebro(): void {
   const r = resumo, a = alvo;
@@ -93,7 +93,7 @@ export function leituraDoCerebro(m: Motor): { frase: string; reacao: Reacao; olh
   const c = m.tvNoCerebro();
   if (c === null) return null;
   const mo = c.motivo, a = mo === null ? null : (mo["agrado"] as number | null), pct = a === null ? null : Math.round((a * 100) / S);
-  /* o enjoo (a v33 e a v34): o lido agora, quando o pet ja olhava; senao, o lembrado da TV (o enjoo_tv do DigiBrain, que cai devagar) */
+  /* o enjoo (a v35 e a v36): o lido agora, quando o pet ja olhava; senao, o lembrado da TV (o enjoo_tv do DigiBrain, que cai devagar) */
   const lembrado = mo === null ? undefined : (mo["enjoo_tv"] as Record<string, number> | undefined)?.["1"];
   const e = mo === null ? null : (mo["enjoo"] as number | null | undefined) ?? lembrado ?? null;
   const enjoado = e !== null && e >= CORTE_ENJOO * S, pe = e === null ? 0 : Math.round((e * 100) / S);
@@ -105,7 +105,7 @@ export function leituraDoCerebro(m: Motor): { frase: string; reacao: Reacao; olh
     const reacao: Reacao = a === null ? "curioso" : a >= CORTES_AGRADO.adorando * S ? "adorando" : a <= CORTES_AGRADO.naoGosta * S ? "nao_gosta" : "olhando";
     return { ...base, frase: `No cérebro: olhando a TV${pct === null ? " (a primeira olhada)" : `, agrado de ${pct}%`}.`, reacao, olhando: true, noRaio: true };
   }
-  /* a v33 e a v34 (D-GV-TVJOGO-3): o cérebro escolheu a TV de longe, e o pet anda até ela */
+  /* a v35 e a v36 (D-GV-TVJOGO-3): o cérebro escolheu a TV de longe, e o pet anda até ela */
   if (m.lab?.ultimoMotivo?.["acao"] === "ir_tv") return { ...base, frase: "No cérebro: indo até a TV.", reacao: "curioso", olhando: false, indo: true };
   if (!c.noRaio) return { ...base, frase: "No cérebro: a TV está longe, fora da vista dele.", reacao: "distraido", olhando: false };
   if (enjoado) return { ...base, frase: `No cérebro: vê a TV, mas está enjoado dela (enjoo de ${pe}%).`, reacao: "enjoou", olhando: false };

@@ -103,7 +103,7 @@ describe("o reflexo do sono com a histerese (o espelho do tests/test_sono_segura
 
 describe("a v27: o ovo novo de um pet so nasce com o sono que segura", () => {
   test("a versao e o modular dela", () => {
-    expect(VERSAO_PET).toBe(33);
+    expect(VERSAO_PET).toBe(35);
     expect([nasceComSonoSegura(VERSAO_V27), nasceComSonoSegura(VERSAO_V25)]).toEqual([true, false]);
     const novo = new Motor(101), antigo = new Motor(101, VERSAO_V25);
     for (const m of [novo, antigo]) { m.trocarCerebro("modular"); m.avancar(15); }

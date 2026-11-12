@@ -161,7 +161,7 @@ export function mudarMotor(f: (m: Motor) => void, quando: "agora" | "adiado" = "
   if (quando === "agora" || performance.now() - ultimoGravado > INTERVALO_GRAVAR_MS) gravar();
   avisar();
 }
-/** a mudanca do grupo inteiro, e nao de um pet (a TV do mundo comum da v34; D-GV-TVJOGO-4): como o mudarMotor, com o grupo de hoje. Sem
+/** a mudanca do grupo inteiro, e nao de um pet (a TV do mundo comum da v36; D-GV-TVJOGO-4): como o mudarMotor, com o grupo de hoje. Sem
     grupo, ou com o pet de teste na tela, falha alto */
 export function mudarGrupo(f: (g: GrupoDoJogo) => void, quando: "agora" | "adiado" = "agora"): void {
   const j = jogoAtual();

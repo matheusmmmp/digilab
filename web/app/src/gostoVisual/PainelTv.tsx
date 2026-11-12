@@ -7,7 +7,7 @@
      de tanto ver, do carinho, cada uma com a forma dela); o que está passando numa faixa à parte;
    - o carinho é o Carinho do jogo (UX-GV-7): aqui não há botão de carinho, e nenhuma contagem de carinhos (a GV-14: o jogo não pontua);
    - no celular (UX-GV-8) o painel é uma folha baixa: recolhida, a reação e o gosto; "Mais" a estica.
-   - no pet com a TV no cérebro (a v32, a v33 e o grupo v34; D-GV-CEREBRO-8): a reação é a do cérebro (o que o motor diz que ele faz, a
+   - no pet com a TV no cérebro (a v32, a v35 e o grupo v36; D-GV-CEREBRO-8): a reação é a do cérebro (o que o motor diz que ele faz, a
      mesma fonte do painel do DigiBrain), o botão "Levar até a TV" aparece quando a TV está fora da vista dele, e o rodapé diz que o que passa
      entra no cérebro. O gosto ("Gosta mais de", o porquê) é o do cérebro (a decisão C, D-GV-TVJOGO-5): o genoma da visão e a exposição do
      DigiBrain; o carinho ainda não entra nele.

@@ -9,7 +9,7 @@
 import {
   ACAO_CHAMADO, ACOES_DONO_JOGO_V11, CUIDADO_NA_HORA, ACOES_PET, CAT, CDJ, CHAMADO_BEBE, CHAMADO_BEBE_CORPO, CHAMADO_FOME_CORPO, CHE, CLE, CMG, EIXOS_TEMP, CSO, CT, CTR, C, DUR_CLASSICA, DUR_EVO, ESPECIES,
   TICK_INICIAL, VERSAO_PET, VERSAO_PET_LAB, VERSAO_V21, VERSAO_V17, VERSAO_V19, VERSOES_PET, CEREBROS, ehCerebroTrocavel, ehDoGrupo, ehLutaPoc, nasceNaAgua,
-  nasceNaGrande, nasceComMemoriaLonga, nasceComSonoSegura, nasceComTv, nasceComTvJogo, CMU_GRANDE, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, VERSOES_COM_SACUDIR,
+  nasceNaGrande, nasceComMemoriaLonga, nasceComSonoSegura, nasceComLance, nasceComTv, nasceComTvJogo, CMU_GRANDE, CMU_MVP_AGUA, ILHA_DOS_V21, ILHA_DOS_VIVOS, VERSOES_COM_SACUDIR,
 } from "./constantes.ts";
 import { Bandit } from "./bandit.ts";
 import { LUGARES_V6, NOME_BOT, NPC, campanhaDe, lugaresDe, type Lugar } from "./bots.ts";
@@ -37,7 +37,8 @@ import { bracoV11 } from "./pet_v11.ts";
 import { leituraLab, type LeituraLab } from "./digibrain/leitura.ts";
 import { decodificar, decodificarV2, type ConceitosDec } from "./digibrain/decodificador.ts";
 import { DigiBrain } from "./digibrain/adapt.ts";
-import { CONFIG_DIGIBRAIN_LAB, CONFIG_DIGIBRAIN_LAB_FALA, CONFIG_DIGIBRAIN_LAB_OLHAR, CONFIG_OLHAR_JOGO, CONFIG_SONO_SEGURA, CONFIG_SONO_SEGURA_LIGADA, CONTEUDOS_FALA, D_MAX_ILHA_GRANDE, INATOS_MODULAR,
+import { CONFIG_DIGIBRAIN_LAB, CONFIG_DIGIBRAIN_LAB_FALA, CONFIG_DIGIBRAIN_LAB_OLHAR, CONFIG_LANCE_DONO, CONFIG_LANCE_DONO_LIGADA, CONFIG_OLHAR_JOGO, CONFIG_SONO_SEGURA,
+  CONFIG_SONO_SEGURA_LIGADA, CONTEUDOS_FALA, D_MAX_ILHA_GRANDE, INATOS_MODULAR,
   type ConteudoFala } from "./digibrain/constantes.ts";
 import { leituraAprendido, leituraDecisao, mapaDecisao, mapaPesos, type ArestaMapa, type LeituraDecisao, type MapaDecisao } from "./digibrain.ts";
 import { ConfiancaCombate } from "./confianca.ts";
@@ -264,7 +265,7 @@ export class Motor {
     this.noGrupo = opcoes.parteDoMundo !== undefined;
     /* a v26 so existe no grupo, e o grupo so tem a v26 (CO4c) */
     if (this.noGrupo !== ehDoGrupo(versao))
-      throw new Error(this.noGrupo ? `o pet do grupo e da v26, da v28 ou da v29, nao da v${versao}` : `o pet v${versao} so nasce no grupo, com o irmao`);
+      throw new Error(this.noGrupo ? `o pet do grupo e da v26, da v28, da v29 ou da v31, nao da v${versao}` : `o pet v${versao} so nasce no grupo, com o irmao`);
     /* temperamento do ovo: rng propria, nao mexe nas outras */
     this.temp = temperamentoDe(semente);
     /* o Bandit nao decide nem aprende para o pet; fica so a memoria por espacos dele, como o lobo de memoria e emocao (D-W7 do #201): a
@@ -321,6 +322,12 @@ export class Motor {
         if (!b) throw new Error("o laco deu a consequencia do mundo ao cerebro A (so o modular a recebe)");
         b.consequenciaMundo(a, oc, depois);
       },
+      /* o lance do dono (BOLA_BRINCAR, BB-4 e BB-6): o gancho do convite existe so com o modular decidindo; com o A, o laco nao o acha (so a
+         bola se mexe, no relogio de sempre) */
+      get bolaDoDono() {
+        const b = qual();
+        return b === null ? undefined : (convite: boolean) => b.bolaDoDono(convite);
+      },
     };
     /* o modular do pet de teste e lido a cada gancho: a marca "fu" (DC3d) o troca, antes da primeira decisao, pelo da `fala_unidades` */
     const doLab = (): DigiBrain => m.modular!;
@@ -346,8 +353,10 @@ export class Motor {
                                        cfgMundo: nasceNaGrande(versao) ? CMU_GRANDE : nasceNaAgua(versao) ? CMU_MVP_AGUA : CMU_MVP,
                                        ...(nasceNaGrande(versao) || nasceNaAgua(versao) ? { contrato: CONFIG_CONTRATO_AGUA } : {}),
                                        bolaNoGolpe: ehCerebroTrocavel(versao),
+                                       /* a v30 e a v31 nascem com o lance do dono (BOLA_BRINCAR, BB-7): o Brincar joga a bola */
+                                       ...(nasceComLance(versao) ? { lance: CONFIG_LANCE_DONO_LIGADA } : {}),
                                        /* a v32: o orgao da tela no corpo e a TV do jogo no mundo, pela fonte "evento" (o evento "st") */
-                                       /* a v33 e a v34: a TV no jogo (a TV desligada e o ir ate a TV; D-GV-TVJOGO) e o enjoo da imagem no corpo
+                                       /* a v35 e a v36: a TV no jogo (a TV desligada e o ir ate a TV; D-GV-TVJOGO) e o enjoo da imagem no corpo
                                           (a ConfigEnjooTela do #875; a decisao E) */
                                        ...(nasceComTv(versao) ? { tela: { tela: CONFIG_TELA_LIGADA, tv: CONFIG_TV_JOGO,
                                                                           ...(nasceComTvJogo(versao) ? { tvJogo: CONFIG_TVJOGO_LIGADA, enjoo: CONFIG_ENJOO_TELA_LIGADA } : {}) } } : {}),
@@ -897,8 +906,8 @@ export class Motor {
   private _validarSentidoTela(valor: unknown): [string, number[] | null] {
     if (!nasceComTv(this.versao)) throw new Error(`só o pet v32 tem a TV no cérebro (este é v${this.versao})`);
     const [fonte, niveis] = lerSentidoTela(valor);
-    /* a TV desligada (a decisao A, D-GV-TVJOGO-1): so nos pets da TV no jogo (a v33 e a v34); a v32 a recusa */
-    if (niveis === null && !nasceComTvJogo(this.versao)) throw new Error(`a TV desligada só no pet v33 (este é v${this.versao})`);
+    /* a TV desligada (a decisao A, D-GV-TVJOGO-1): so nos pets da TV no jogo (a v35 e a v36); a v32 a recusa */
+    if (niveis === null && !nasceComTvJogo(this.versao)) throw new Error(`a TV desligada só no pet v35 (este é v${this.versao})`);
     if ((niveis === null ? valorSentidoTelaDesligada(fonte) : valorSentidoTela(fonte, niveis)) !== valor)
       throw new Error(`sentido_tela fora da forma canônica: ${JSON.stringify(valor)}`);
     return [fonte, niveis];
@@ -934,7 +943,7 @@ export class Motor {
   tvNoCerebro(): { olhando: boolean; noRaio: boolean; ligada: boolean; motivo: Record<string, unknown> | null } | null {
     if (!nasceComTv(this.versao)) return null;
     const laco = this.v11!.laco as MotorCorpoMundo, tv = laco.tv!, p = laco.mundo.pet, mo = this.lab?.ultimoMotivo ?? null;
-    /* `ligada`: a TV passa algo (null antes do primeiro "st" e, na v33 e na v34, depois da TV desligada; D-GV-TVJOGO-1) */
+    /* `ligada`: a TV passa algo (null antes do primeiro "st" e, na v35 e na v36, depois da TV desligada; D-GV-TVJOGO-1) */
     return { olhando: laco.olhandoTV(), noRaio: Math.hypot(tv.x - p[0], tv.y - p[1]) <= laco.mundo.raioDaVisao, ligada: tv.em(laco.mundo.tm(this.e.tick)) !== null,
              motivo: mo === null ? null : (mo["olhar"] as Record<string, unknown> | undefined) ?? null };
   }
@@ -1114,7 +1123,7 @@ export class Motor {
     this.pol.observar(obs, a, t);
     this._desejo(obs, a, t, d);
     this._conferirMorte();
-    /* o ir ate a TV (v33 e v34; D-GV-TVJOGO-3) conta como o explorar nos tracos (e andar); as outras, como sao */
+    /* o ir ate a TV (v35 e v36; D-GV-TVJOGO-3) conta como o explorar nos tracos (e andar); as outras, como sao */
     const at = a === "ir_tv" ? "explorar" : a;
     for (const k of ACOES_PET) this.tracos[k] = (1 - CT.alfa) * this.tracos[k] + (k === at ? CT.alfa : 0);
     this.nDecisoes++;
@@ -1344,7 +1353,8 @@ export class Motor {
       this.modular ??= new DigiBrain(tv ? CONFIG_DIGIBRAIN_LAB_OLHAR : CONFIG_DIGIBRAIN_LAB, { ...INATOS_MODULAR, d_max: this.alcanceMemoria } as typeof INATOS_MODULAR, false,
         nasceComSonoSegura(this.versao) ? CONFIG_SONO_SEGURA_LIGADA : CONFIG_SONO_SEGURA,
         tv ? { semente: this.semente, cfgOlhar: CONFIG_OLHAR_JOGO,
-               ...(nasceComTvJogo(this.versao) ? { irAteTv: true, cfgEnjooTela: CONFIG_ENJOO_TELA_LIGADA } : {}) } : undefined);   // a v33 e a v34: o ir ate a TV e o enjoo (D-GV-TVJOGO)
+               ...(nasceComTvJogo(this.versao) ? { irAteTv: true, cfgEnjooTela: CONFIG_ENJOO_TELA_LIGADA } : {}) } : undefined,   // a v35 e a v36: o ir ate a TV e o enjoo (D-GV-TVJOGO)
+        nasceComLance(this.versao) ? CONFIG_LANCE_DONO_LIGADA : CONFIG_LANCE_DONO);   // e, na v30, na v31, na v35 e na v36, com o lance do dono (BB-4)
       if (this.ponteLuta) this.modular.ligarLutaMemoria();
     }
     this.modularAtivo = v.cerebro === "modular";

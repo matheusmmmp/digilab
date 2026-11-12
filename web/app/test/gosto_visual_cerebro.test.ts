@@ -45,7 +45,7 @@ const amostra = (h: number, s: number): number[] => [0, 1, 2, 3, 4, 5, 6].map(k 
 
 describe("a v32: a TV no cerebro", () => {
   test("os ovos novos de um pet so nascem v32; o grupo segue v29, sem a TV", () => {
-    expect(VERSAO_PET).toBe(33);
+    expect(VERSAO_PET).toBe(35);
     expect(new Motor(1).temTv).toBe(true);
     expect(new Motor(1, 27).temTv).toBe(false);
     expect(laco(new Motor(1, 27)).tv).toBeNull();

@@ -61,7 +61,7 @@ const CTV: ConfigTV = { ...CONFIG_TV, ligada: true, fonte: "evento" };
 const cerebro = (s: number): DigiBrain => new DigiBrain(CONFIG_DIGIBRAIN_LAB_OLHAR, INATOS_MODULAR, false, CONFIG_SONO_SEGURA,
                                                          { semente: s, cfgOlhar: { ...CONFIG_OLHAR, agrado_no_corpo: true }, irAteTv: true,
                                                            cfgEnjooTela: CONFIG_ENJOO_TELA_LIGADA });
-/* a combinacao do pet v33 do jogo: a TV desligada, o ir ate a TV e o enjoo da imagem (o #875) */
+/* a combinacao do pet v35 do jogo: a TV desligada, o ir ate a TV e o enjoo da imagem (o #875) */
 const OPCOES = { paridade: true, cfgMundo: CMU_MVP, digibrain: true,
                  tela: { tela: CONFIG_TELA_LIGADA, tv: CTV, tvJogo: CONFIG_TVJOGO_LIGADA, enjoo: CONFIG_ENJOO_TELA_LIGADA } };
 /** as decisoes do mundo no formato do Python (o alvo so pelo tipo, como o registro) */

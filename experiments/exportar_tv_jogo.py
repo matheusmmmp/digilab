@@ -6,7 +6,7 @@ bit no Node.
 O que vai no arquivo (`web/app/test/gabaritos/tv_jogo.json.gz`, so; nada dos gabaritos de hoje e regravado):
   - as vidas de um pet so: o laboratorio com o olhar (a vida do gosto visual, `exportar_gosto_visual.viver`, a fonte "evento" com o agrado
     no corpo), com a ConfigTVJogo ligada (a TV desligada e o ir ate a TV), o DigiBrain com o `ir_ate_tv` e o enjoo da imagem ligado no corpo
-    e no cerebro (a ConfigEnjooTela do #875): a combinacao do pet v33 do jogo; o dono e o do gosto visual, e a TV
+    e no cerebro (a ConfigEnjooTela do #875): a combinacao do pet v35 do jogo; o dono e o do gosto visual, e a TV
     fica desligada das 20 h as 23 h de cada dia (`desligar_tela`). Sementes dos testes, 3 dias. O TS rejoga o log e confere, decisao a
     decisao, a acao, o motivo, a assinatura de cada modulo e os estimulos do corpo; no fim, o estado interno do cerebro, o corpo, o mundo
     fisico e o registro da TV;
