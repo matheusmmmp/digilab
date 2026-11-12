@@ -128,6 +128,8 @@ um bug apagou o pet). Restaurar não apaga a versão de agora: ela vira uma cóp
 
 ## 6. A proteção contra raspagem e abuso
 
+**O projeto inteiro** (o repositório, a licença, o INPI, o rastreio) está no `docs/PLANO_V3_CONTA_PROTECAO.md` (PI-1 a PI-9).
+
 **O limite, dito antes:** o que chega ao navegador pode ser copiado. O código JS é sempre legível, e um agente que controla um navegador de
 verdade tira uma captura de tela. A proteção encarece a cópia em lote; não a impede. O que é protegido de verdade fica no servidor.
 
