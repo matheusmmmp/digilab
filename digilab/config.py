@@ -2335,7 +2335,10 @@ class ConfigTela:
     salto_volume         225000 = C/2: o susto so quando o volume sobe mais que meia escala entre dois `sentir_tela` (um estouro)
     susto_salto          90000  o susto de um estouro: a metade do tapa (180000)
     corte_novidade       512    = S/2: o `novidade_tela` acima disto conta como uma novidade (GV-23; quem chama o estimulo_novidade e o
-                                  motor, na P1c): um nivel a mais num canal nao conta, uma troca de cena conta"""
+                                  motor, na P1c): um nivel a mais num canal nao conta, e uma troca de cena da grade (+-0,06 C por canal)
+                                  tambem nao (nunca passa do corte; a docstring dizia que contava, D-GV-ENJOO-CER-9). Conta o que muda
+                                  muito em relacao ao adaptado: ligar a TV com os canais no meio (~784) ou um programa longe do de antes
+                                  em quase todos os canais; tres canais mudando C/3 (~485) ainda nao"""
 
     ligada: bool = False
     limiar: int = 15000
@@ -3345,6 +3348,90 @@ PARAMETROS_OLHAR: dict[str, tuple[str, str]] = {
     "tau_exposicao": ("PROPOSTO", "dois dias de jogo: a exposicao anda devagar (a direcao: Zajonc 1968); SEM FONTE como valor"),
     "teto_exposicao": ("PROPOSTO", "S/8: o teto do deslocamento do alvo aprendido, como no P0; SEM FONTE"),
     "agrado_no_corpo": ("PROPOSTO", "GV-16: a sub-chave do agrado no corpo, desligada; SEM FONTE"),
+}
+
+
+# O enjoo da imagem no corpo e no cerebro do Python (GOSTO_VISUAL; docs/registro/2026-11.md, D-GV-ENJOO-PY-1 a 3 e D-GV-ENJOO-CER-1...).
+# Desligada por padrao: a vida de hoje byte a byte. Fica numa config propria, e nao na ConfigTela nem na ConfigOlhar, para o dump delas no
+# gabarito da web nao mudar (o padrao da D-GV-P1c-1). O corpo a recebe pelo motor (`cfg_enjoo_tela`, so com a ConfigTela ligada) e o
+# cerebro pelo DigiBrain (`cfg_enjoo_tela`, so com a subchave `olhar`); o cerebro com ela ligada exige o receptor `enjoo_tela` do corpo.
+@dataclass(frozen=True)
+class ConfigEnjooTela:
+    """O enjoo da imagem (D-GV-ENJOO-CER). Os numeros e o porque de cada um (todos PROPOSTOS, SEM FONTE):
+
+    o corpo (a escala C dos quimicos e da TV):
+    meia_vida_desenjoo   720    ticks (meio dia de jogo): sem olhar, a adaptacao de cada canal volta a 0 com esta meia-vida, e nao com a de
+                                60 (a recuperacao lenta, D-GV-ENJOO-PY-3); o enjoo de cada prototipo que o pet nao olha cai com a mesma
+    k_desenjoo           63     = corpo.k_meia_vida(720), na escala 2**bits_meia_vida (conferido pelo corpo)
+    meia_vida_olhando    10     ticks: olhando, a adaptacao de cada canal anda para o estimulo com esta meia-vida, e nao com a de 60. O pet
+                                olha em rajadas de uma decisao (15 ticks), de 1 a 5 vezes por dia de jogo (D-GV-VIDEO, o diagnostico com as
+                                midias reais): com 60, um olhar mal subia a adaptacao (~16%); com 10, ~65%
+    k_olhando            4389   = corpo.k_meia_vida(10)
+    meia_vida_enjoo      15     ticks olhando (uma decisao): o enjoo do prototipo olhado anda para C com esta meia-vida, e um olhar o leva
+                                a metade do que falta (o traco preso ao estimulo que sobe a cada olhar)
+    k_enjoo              2960   = corpo.k_meia_vida(15)
+    prototipos           6      a memoria curta: ate 6 prototipos do perfil visto, cada um com o seu enjoo (os 6 do P0, D-GV-ENJOO-2)
+    raio_mesmo           67500  = 0,15 C, a distancia media por canal ate a qual o perfil visto e o mesmo estimulo (o RAIO_MESMO do P0);
+                                as cenas da grade (+-0,06 C) ficam no mesmo prototipo, e um programa diferente nasce noutro. O prototipo
+                                fica parado no perfil em que nasceu (nao anda para o visto): sem o "enjoo migrante" do P0
+    o cerebro (a escala S):
+    w_enjoo              512    = S/2: o termo `enjoo` da unidade de olhar, -mul(w_enjoo, enjoo lembrado da TV); metade do w_gosto
+    tau_enjoo_lembrado   1040   ticks (~720/ln 2): o enjoo lembrado de cada TV cai para 0 com a meia-vida do desenjoo do corpo, ate o pet
+                                olhar de novo e ler o receptor
+    saturacao_exposicao  512    = S/2: a exposicao desloca o alvo multiplicada por max(0, 1 - enjoo/(S/2)) (o SATURACAO_EXPOSICAO do P0)
+    peso_tedio           512    = S/2: acima da saturacao, o tedio mul(peso_tedio, (enjoo - S/2)/(S/2)) sai do agrado (o PESO_TEDIO do P0;
+                                o U invertido)"""
+
+    ligada: bool = False
+    meia_vida_desenjoo: int = 720
+    k_desenjoo: int = 63
+    meia_vida_olhando: int = 10
+    k_olhando: int = 4389
+    meia_vida_enjoo: int = 15
+    k_enjoo: int = 2960
+    prototipos: int = 6
+    raio_mesmo: int = 67500
+    w_enjoo: int = _S // 2
+    tau_enjoo_lembrado: int = 1040
+    saturacao_exposicao: int = _S // 2
+    peso_tedio: int = _S // 2
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigEnjooTela.ligada e bool: {self.ligada!r}")
+        for campo in ("meia_vida_desenjoo", "k_desenjoo", "meia_vida_olhando", "k_olhando", "meia_vida_enjoo", "k_enjoo", "prototipos", "raio_mesmo", "tau_enjoo_lembrado",
+                      "saturacao_exposicao"):
+            v = getattr(self, campo)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigEnjooTela.{campo} tem de ser inteiro positivo: {v!r}")
+        for campo in ("w_enjoo", "peso_tedio"):
+            v = getattr(self, campo)
+            if type(v) is not int or not 0 <= v <= _S:
+                raise ValueError(f"ConfigEnjooTela.{campo} em [0, S]: {v!r}")
+        if self.saturacao_exposicao >= _S:
+            raise ValueError(f"ConfigEnjooTela.saturacao_exposicao abaixo de S: {self.saturacao_exposicao}")
+        if self.tau_enjoo_lembrado < 15:
+            raise ValueError(f"ConfigEnjooTela.tau_enjoo_lembrado abaixo do passo do cerebro (15 ticks): {self.tau_enjoo_lembrado}")
+
+
+CONFIG_ENJOO_TELA = ConfigEnjooTela()
+CONFIG_ENJOO_TELA_LIGADA = ConfigEnjooTela(ligada=True)
+_FONTE_ENJOO = "docs/registro/2026-11.md, D-GV-ENJOO-PY-3 e D-GV-ENJOO-CER; o P0 (web/app/src/gostoVisual/gosto.ts) como referencia; SEM FONTE"
+PARAMETROS_ENJOO_TELA: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "a chave do enjoo, desligada (D-GV-ENJOO-CER-1); " + _FONTE_ENJOO),
+    "meia_vida_desenjoo": ("PROPOSTO", "720 ticks, a proposta da D-GV-ENJOO-PY-3; " + _FONTE_ENJOO),
+    "k_desenjoo": ("PROPOSTO", "= k_meia_vida(meia_vida_desenjoo); SEM FONTE como a meia-vida"),
+    "meia_vida_olhando": ("PROPOSTO", "10 ticks: um olhar de 15 ticks adapta ~65% (D-GV-VIDEO-9 a 13, o diagnostico com as midias reais); "
+                          + _FONTE_ENJOO),
+    "k_olhando": ("PROPOSTO", "= k_meia_vida(meia_vida_olhando); SEM FONTE como a meia-vida"),
+    "meia_vida_enjoo": ("PROPOSTO", "15 ticks olhando (uma decisao): o traco sobe a cada olhar (D-GV-VIDEO-9 a 13); " + _FONTE_ENJOO),
+    "k_enjoo": ("PROPOSTO", "= k_meia_vida(meia_vida_enjoo); SEM FONTE como a meia-vida"),
+    "prototipos": ("PROPOSTO", "6, os PROTOTIPOS do P0; " + _FONTE_ENJOO),
+    "raio_mesmo": ("PROPOSTO", "0,15 C, o RAIO_MESMO do P0; " + _FONTE_ENJOO),
+    "w_enjoo": ("PROPOSTO", "S/2, metade do w_gosto; " + _FONTE_ENJOO),
+    "tau_enjoo_lembrado": ("PROPOSTO", "~720/ln 2 ticks, a meia-vida do desenjoo do corpo; " + _FONTE_ENJOO),
+    "saturacao_exposicao": ("PROPOSTO", "S/2, o SATURACAO_EXPOSICAO do P0; " + _FONTE_ENJOO),
+    "peso_tedio": ("PROPOSTO", "S/2, o PESO_TEDIO do P0; " + _FONTE_ENJOO),
 }
 
 

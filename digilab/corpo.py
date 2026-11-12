@@ -113,8 +113,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 
-from .config import (CONFIG_EVOLUCAO_PESQUISA, CONFIG_LUTA_CORPO, CONFIG_OLFATO, CONFIG_OUVIDO, CONFIG_PADRAO, CONFIG_TELA, TICKS_POR_DIA,
-                     Config, ConfigCorpo, ConfigEvolucaoPesquisa, ConfigLutaCorpo, ConfigMundo, ConfigOlfato, ConfigOuvido, ConfigTela)
+from .config import (CONFIG_ENJOO_TELA, CONFIG_EVOLUCAO_PESQUISA, CONFIG_LUTA_CORPO, CONFIG_OLFATO, CONFIG_OUVIDO, CONFIG_PADRAO, CONFIG_TELA,
+                     TICKS_POR_DIA, Config, ConfigCorpo, ConfigEnjooTela, ConfigEvolucaoPesquisa, ConfigLutaCorpo, ConfigMundo, ConfigOlfato,
+                     ConfigOuvido, ConfigTela)
 from .corpo_grafo import Emissor, Grafo, Leitura, Orgao, Quimico, Reacao, ReceptorSoma, checar
 from .events import ACOES_PET_BANHEIRO, ACOES_PET_HOJE, FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario
 from .state import Estado
@@ -146,6 +147,7 @@ CANAIS_ESTRESSE_TELA = ("movimento", "volume")                    # GV-17: o mov
 CANAL_SUSTO_TELA = "volume"                                       # GV-17: o susto e um salto de volume
 ATIVIDADE_TELA = "assistir"                                       # GV-21: a atividade do tedio, so com a tela ligada
 RECEPTOR_NOVIDADE_TELA = "novidade_tela"
+RECEPTOR_ENJOO_TELA = "enjoo_tela"                                # o enjoo (D-GV-ENJOO-CER): so com a ConfigEnjooTela ligada
 
 
 def _nomes_por_lado(base: str, n: int) -> tuple[tuple[str, str | None], ...]:
@@ -630,7 +632,7 @@ class Corpo:
     def __init__(self, q: dict[str, int], cfg: Config | None = None, cc: ConfigCorpo | None = None,
                  cfg_evo: ConfigEvolucaoPesquisa | None = None, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
                  cfg_ouvido: ConfigOuvido | None = None, cfg_luta: ConfigLutaCorpo | None = None,
-                 cfg_tela: ConfigTela | None = None) -> None:
+                 cfg_tela: ConfigTela | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None) -> None:
         self.cfg = cfg or CONFIG_PADRAO
         self.cfg_evo = cfg_evo or CONFIG_EVOLUCAO_PESQUISA
         self.cc = cc or ConfigCorpo(ligada=True)
@@ -641,6 +643,9 @@ class Corpo:
         self.cv = cfg_ouvido or CONFIG_OUVIDO
         self.cl = cfg_luta or CONFIG_LUTA_CORPO
         self.ct = cfg_tela or CONFIG_TELA
+        self.ce = cfg_enjoo_tela or CONFIG_ENJOO_TELA          # o enjoo da imagem (D-GV-ENJOO-CER), so com a tela ligada
+        if not isinstance(self.ce, ConfigEnjooTela):
+            raise TypeError(f"cfg_enjoo_tela e uma ConfigEnjooTela: {self.ce!r}")
         if self.cl.ligada and not self.cc.gestos:
             raise ValueError("ConfigLutaCorpo.ligada exige ConfigCorpo.gestos (a dor da luta e o quimico dos gestos)")
         self.C = self.cc.escala
@@ -691,6 +696,11 @@ class Corpo:
         self._soma_tela = self.grafo.somas[0] if self.orgaos_tela else None
         self.estimulo_tela: dict[str, int] = {o.canal: 0 for o in self.orgaos_tela}
         self._sentido_tela = False
+        # o enjoo (D-GV-ENJOO-CER), so com a ConfigEnjooTela ligada: a memoria curta (os prototipos [perfil, enjoo], na ordem em que
+        # nasceram) e o volume do ultimo estimulo visto (nao zero; None antes do primeiro), a referencia do susto
+        self.enjoo = self.ce.ligada
+        self.memoria_tela: list[list] = []
+        self.volume_visto: int | None = None
 
     def _conferir_orgaos(self) -> None:
         """Os orgaos so existem com o mundo fisico (o estimulo e a intensidade num ponto do mapa); a k da adaptacao e a da meia-vida
@@ -712,6 +722,8 @@ class Corpo:
         da novidade tambem."""
         c = self.ct
         if not c.ligada:
+            if self.ce.ligada:
+                raise ValueError("ConfigEnjooTela.ligada sem a ConfigTela ligada: o enjoo e do orgao da tela (D-GV-ENJOO-CER)")
             return
         if not self.com_mundo:
             raise ValueError("ConfigTela.ligada sem o mundo fisico: a TV e um objeto do mapa (espec do P1, secao 1.1)")
@@ -727,12 +739,18 @@ class Corpo:
             raise ValueError(f"ConfigTela: a novidade chega a S com os sete canais no teto ({c.teto_intensidade}); o receptor e em [0, S)")
         if c.corte_novidade >= self.S:
             raise ValueError(f"ConfigTela.corte_novidade tem de ficar abaixo de S ({self.S}): {c.corte_novidade}")
+        if self.ce.ligada:                                # o enjoo (D-GV-ENJOO-CER): as k das meias-vidas declaradas
+            for campo, h in (("k_desenjoo", self.ce.meia_vida_desenjoo), ("k_olhando", self.ce.meia_vida_olhando),
+                             ("k_enjoo", self.ce.meia_vida_enjoo)):
+                k = k_meia_vida(h, self.cc.bits_meia_vida)
+                if getattr(self.ce, campo) != k:
+                    raise ValueError(f"ConfigEnjooTela.{campo} {getattr(self.ce, campo)} nao e a da meia-vida {h}: {k}")
 
     @classmethod
     def de_estado(cls, estado: Estado, cfg: Config | None = None, cc: ConfigCorpo | None = None,
                   cfg_evo: ConfigEvolucaoPesquisa | None = None, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
                   cfg_ouvido: ConfigOuvido | None = None, cfg_luta: ConfigLutaCorpo | None = None,
-                  cfg_tela: ConfigTela | None = None) -> Corpo:
+                  cfg_tela: ConfigTela | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None) -> Corpo:
         """O corpo de um Estado de hoje (o do nascimento, por exemplo). Cada drive tem de cair na grade de C. A Vida e a do tick do
         Estado (C no nascimento). Os quimicos da etapa 6 comecam em 0 (`com_mundo`: a curiosidade existe)."""
         cc = cc or ConfigCorpo(ligada=True)
@@ -747,7 +765,7 @@ class Corpo:
             q["reserva"] = cc.reserva_inicial
         for nome in quimicos_de(cc, com_mundo, cfg_olfato, cfg_ouvido, cfg_tela):
             q.setdefault(nome, 0)                          # os drives novos, os gestos e a adaptacao dos orgaos: zero no nascimento
-        return cls(q, cfg, cc, cfg_evo, com_mundo, cfg_olfato, cfg_ouvido, cfg_luta, cfg_tela)
+        return cls(q, cfg, cc, cfg_evo, com_mundo, cfg_olfato, cfg_ouvido, cfg_luta, cfg_tela, cfg_enjoo_tela)
 
     # ---------------------------------------------------------- estimulos
 
@@ -1028,7 +1046,13 @@ class Corpo:
         for c, v in intensidades.items():
             if type(v) is not int or not 0 <= v <= teto:
                 raise ValueError(f"a intensidade da tela em {c} precisa ser inteiro em [0, {teto}]: {v!r}")
-        if intensidades[CANAL_SUSTO_TELA] - self.estimulo_tela[CANAL_SUSTO_TELA] > self.ct.salto_volume:
+        if self.enjoo:                                    # D-GV-ENJOO-CER-6: o salto contra o ultimo estimulo visto, nao contra os zeros
+            if any(intensidades.values()):
+                vol = intensidades[CANAL_SUSTO_TELA]
+                if self.volume_visto is not None and vol - self.volume_visto > self.ct.salto_volume:
+                    self._estimulo("susto_tela")
+                self.volume_visto = vol
+        elif intensidades[CANAL_SUSTO_TELA] - self.estimulo_tela[CANAL_SUSTO_TELA] > self.ct.salto_volume:
             self._estimulo("susto_tela")
         for c in CANAIS_TELA:
             self.estimulo_tela[c] = intensidades[c]
@@ -1040,18 +1064,79 @@ class Corpo:
             raise RuntimeError("tick com a tela sem `sentir_tela` desde o tick anterior: o estimulo estaria velho (sem olhar, o motor "
                                "manda zeros)")
         bits = self.cc.bits_meia_vida
+        if self.enjoo:
+            self._adaptar_tela_enjoo(bits)
+            self._sentido_tela = False
+            return
         for o in self.orgaos_tela:
             qm = self.grafo.quimico(o.adaptacao)
             self.q[o.adaptacao] = passo_adaptacao(self.q[o.adaptacao], self.estimulo_tela[o.canal], qm.k_meia_vida, bits)
         self._sentido_tela = False
+
+    # ---------------------------------------------------------- o enjoo (D-GV-ENJOO-CER), so com a ConfigEnjooTela ligada
+
+    def olhando_tela(self) -> bool:
+        """Se o estimulo da tela e um estimulo (algum canal acima de 0): sem olhar, o motor manda zeros."""
+        return any(self.estimulo_tela.values())
+
+    def _perfil_tela(self) -> tuple[int, ...]:
+        return tuple(self.estimulo_tela[c] for c in CANAIS_TELA)
+
+    def prototipo_mesmo(self, perfil: tuple[int, ...]) -> int | None:
+        """O indice do prototipo mais perto do perfil (a distancia media por canal, div_arred(soma |I - p|, 7); no empate, o mais antigo)
+        se ele esta a ate `raio_mesmo`; senao, None."""
+        melhor, d_melhor = None, None
+        for i, (p, _) in enumerate(self.memoria_tela):
+            d = div_arred(sum(abs(a - b) for a, b in zip(perfil, p)), len(CANAIS_TELA))
+            if d_melhor is None or d < d_melhor:
+                melhor, d_melhor = i, d
+        return melhor if d_melhor is not None and d_melhor <= self.ce.raio_mesmo else None
+
+    def _adaptar_tela_enjoo(self, bits: int) -> None:
+        """O tick do enjoo. Olhando, a adaptacao anda para o estimulo com a k_olhando (rapida), e o enjoo do prototipo do mesmo estimulo
+        (ou de um novo, sem enjoo, no perfil visto) anda para C com a k_enjoo; o prototipo nao anda (sem o "enjoo migrante" do P0). Sem
+        olhar, a adaptacao volta a 0 com a k_desenjoo (a recuperacao lenta). O enjoo de todo prototipo que nao e o olhado cai com a
+        k_desenjoo. Com a memoria cheia, o prototipo novo toma o lugar do de menor enjoo (no empate, o mais antigo) e vai para o fim."""
+        ce, C = self.ce, self.C
+        olhando = self.olhando_tela()
+        for o in self.orgaos_tela:
+            if olhando:
+                self.q[o.adaptacao] = passo_adaptacao(self.q[o.adaptacao], self.estimulo_tela[o.canal], ce.k_olhando, bits)
+            else:
+                self.q[o.adaptacao] = passo_adaptacao(self.q[o.adaptacao], 0, ce.k_desenjoo, bits)
+        j = None
+        if olhando:
+            perfil = self._perfil_tela()
+            j = self.prototipo_mesmo(perfil)
+            if j is None:
+                if len(self.memoria_tela) >= ce.prototipos:
+                    vitima = min(range(len(self.memoria_tela)), key=lambda i: (self.memoria_tela[i][1], i))
+                    del self.memoria_tela[vitima]
+                self.memoria_tela.append([perfil, 0])
+                j = len(self.memoria_tela) - 1
+        for i, item in enumerate(self.memoria_tela):
+            item[1] = passo_adaptacao(item[1], C, ce.k_enjoo, bits) if i == j else passo_meia_vida(item[1], ce.k_desenjoo, bits)
+
+    def enjoo_tela(self) -> int:
+        """O enjoo do estimulo de agora, em [0, C]: o do prototipo do mesmo estimulo; 0 sem olhar ou sem prototipo perto."""
+        if not self.olhando_tela():
+            return 0
+        j = self.prototipo_mesmo(self._perfil_tela())
+        return 0 if j is None else self.memoria_tela[j][1]
 
     def leituras_tela(self) -> dict[str, int]:
         """Os receptores da tela, na escala S, pelo nome: o nivel de cada canal (div_arred(S x I, teto_intensidade), sem adaptacao) e a
         novidade (a soma das partes adaptadas e = max(0, I - a - limiar), saturada: div_arred(S E, E + meia_saturacao))."""
         teto = self.ct.teto_intensidade
         r = {o.receptor: div_arred(self.S * self.estimulo_tela[o.canal], teto) for o in self.orgaos_tela}
-        e = sum(max(0, self.estimulo_tela[o.canal] - self.q[o.adaptacao] - o.limiar) for o in self.orgaos_tela)
+        if self.enjoo:                                    # D-GV-ENJOO-CER-5: a mudanca nos dois sentidos, e 0 sem olhar
+            e = (sum(max(0, abs(self.estimulo_tela[o.canal] - self.q[o.adaptacao]) - o.limiar) for o in self.orgaos_tela)
+                 if self.olhando_tela() else 0)
+        else:
+            e = sum(max(0, self.estimulo_tela[o.canal] - self.q[o.adaptacao] - o.limiar) for o in self.orgaos_tela)
         r[self._soma_tela.receptor] = div_arred(self.S * e, e + self._soma_tela.meia_saturacao) if e else 0
+        if self.enjoo:                                    # D-GV-ENJOO-CER-3: o enjoo do estimulo de agora, na escala S
+            r[RECEPTOR_ENJOO_TELA] = div_arred(self.S * self.enjoo_tela(), self.C)
         return r
 
     def estimulo_agrado_tela(self, agrado: int) -> None:
@@ -1213,4 +1298,7 @@ class Corpo:
             d["orgaos"] = {"estimulo": dict(self.estimulo), "sentido": self._sentido}
         if self.orgaos_tela:
             d["tela"] = {"estimulo": dict(self.estimulo_tela), "sentido": self._sentido_tela}
+            if self.enjoo:                                # o enjoo (D-GV-ENJOO-CER): desligado, nenhum campo novo
+                d["tela"]["memoria"] = [[list(p), e] for p, e in self.memoria_tela]
+                d["tela"]["volume_visto"] = self.volume_visto
         return d
