@@ -1,10 +1,10 @@
 /* O HUD da tela Pet que aparece e some (o Matheus, 2026-11-04): o resumo do alto ("agora: à toa") e o balão da fala só ficam na tela
    por AVISO_MS depois de mudar, e os dois se arrastam pela tela (a posição fica gravada no navegador, fora do save). A fome: o pet só
    diz que está com fome abaixo de FOME_FALA; abaixo de FOME_EMOTE ele só mostra o emoji da carne sobre a cabeça; acima, nada (o dono
-   percebe pelo pet). E a opção "Exibir detalhes do pet" (Ajustes): liga ou desliga os painéis Estado, Evolução, Últimas ações e
-   DigiBrain. Tudo só apresentação: o motor, o log, o chamado e o replay não mudam. PROPOSTO, SEM FONTE. */
+   percebe pelo pet). O "exibir" de cada janela (Estado, Evolução, Últimas ações, DigiBrain, Agora, Minimapa) saiu daqui para o
+   janelasPet.ts (JN1, 2026-11-12), no lugar da chave única "Exibir detalhes do pet". Tudo só apresentação: o motor, o log, o chamado e o replay não mudam. PROPOSTO, SEM FONTE. */
 import type { PointerEvent as PE, MouseEvent as ME, CSSProperties, RefObject } from "react";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Chamado, Motor } from "../motor/index.ts";
 import { CHAVE } from "./save.ts";
 
@@ -102,18 +102,4 @@ export function useArrastavel<T extends HTMLElement>(id: string) {
     arrastar ou arrumar o layout desses menus"). Devolve o estilo e os eventos para o elemento do painel */
 export function useArrastavelPorAlca<T extends HTMLElement>(id: string, ref: RefObject<T | null>, alca: string) {
   return useArraste(id, ref, alca, true);
-}
-
-/* ---------- a opção "Exibir detalhes do pet" (Ajustes): os painéis Estado, Evolução, Últimas ações e DigiBrain */
-const CHAVE_DETALHES = CHAVE + "-detalhes-pet";
-const ouvintes = new Set<() => void>();
-function lerDetalhes(): boolean {
-  try { return localStorage.getItem(CHAVE_DETALHES) !== "0"; } catch { return true; }    /* padrão: ligado (o jogo de hoje) */
-}
-export function ligarDetalhesPet(v: boolean): void {
-  try { localStorage.setItem(CHAVE_DETALHES, v ? "1" : "0"); } catch { /* preferência de tela */ }
-  for (const o of ouvintes) o();
-}
-export function useDetalhesPet(): boolean {
-  return useSyncExternalStore(o => { ouvintes.add(o); return () => { ouvintes.delete(o); }; }, lerDetalhes, () => true);
 }

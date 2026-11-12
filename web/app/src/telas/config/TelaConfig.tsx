@@ -5,7 +5,7 @@
    Visual (2026-11-01, no lugar da Aparencia; #/config/aparencia leva a ela), e as dicas ficam no menu principal; nada aqui muda o motor, as regras ou o save, a nao ser pelas mesmas acoes de antes
    (tempo e ovo novo, via jogo.ts/tempo.ts). Opcoes das pranchas que o app nao tem ficam de fora. Rotas #/config/<parte> iguais. */
 import { useId } from "react";
-import { Activity, Camera, ChevronRight, Clock, Eye, FlaskConical, Info, Lightbulb, MessageCircle, Mountain, RotateCcw, ScrollText, Users, Volume1, Volume2, type LucideIcon } from "lucide-react";
+import { Activity, Brain, Camera, ChevronRight, Clock, Eye, FlaskConical, GitBranch, History, Info, LayoutDashboard, Lightbulb, Map as IconeMapa, MessageCircle, Mountain, RotateCcw, ScrollText, Users, Volume1, Volume2, type LucideIcon } from "lucide-react";
 import { Balao, propsBalao } from "../../componentes/Dica.tsx";
 import { escolherViagem, useViagemLigada } from "../../viagem.ts";
 import { useState } from "react";
@@ -25,7 +25,8 @@ import { SOM, useSom } from "../../som.ts";
 import { dicasLigadas, ligarDicas } from "../../dicas.ts";
 import { reverOTutorial } from "../../nivelTela.ts";
 import { ligarMitologia, useMitologia } from "../../mitologia.ts";
-import { ligarDetalhesPet, temPainelMovido, useDetalhesPet, voltarPaineis } from "../../hudPet.ts";
+import { temPainelMovido, voltarPaineis } from "../../hudPet.ts";
+import { IDS_JANELA, JANELAS, exibirJanela, quantasAMostra, useJanelas, type IdJanela } from "../../janelasPet.ts";
 import { textoSave } from "../../save.ts";
 import { useHabitat } from "../../habitat.ts";
 import { usePele } from "../../pele.ts";
@@ -36,7 +37,7 @@ import { Laboratorio } from "./Laboratorio.tsx";
 import { labLigado, useLab } from "../../lab.ts";
 import { VELOCIDADES, escolherVelocidade, pularUmaHora, useTempo } from "../../tempo.ts";
 
-const TITULO: Record<ParteConfig, string> = { principal: "Ajustes", visual: "Visual", dados: "Registro e replay", fala: "Fala do pet", laboratorio: "Laboratório", sobre: "Sobre" };
+const TITULO: Record<ParteConfig, string> = { principal: "Ajustes", visual: "Visual", exibir: "Exibir", dados: "Registro e replay", fala: "Fala do pet", laboratorio: "Laboratório", sobre: "Sobre" };
 const NOME_MODO: Record<ModoFala, string> = { template: "frases prontas", moldura: "moldura", livre: "livre" };
 export const nomeVelocidade = (v: number): string => VELOCIDADES.find(([, x]) => x === v)?.[0] ?? `${v} min/s`;
 
@@ -60,7 +61,7 @@ function Aj({ ic: I, nome, rotulo, resumo, tag, novo, interruptor, abrir }: {
 }
 function Principal({ abrir, irPet }: { abrir: (p: ParteConfig) => void; irPet: () => void }) {
   const { motor: m } = useJogo(), tema = useTema(), pele = usePele(), habitat = useHabitat(), fl = useFalaLivre(), { velocidade } = useTempo(), viagem = useViagemLigada(), som = useSom(), mitologia = useMitologia();
-  const [dicas, setDicas] = useState(dicasLigadas), detalhesPet = useDetalhesPet(), [revisto, setRevisto] = useState(false);
+  const [dicas, setDicas] = useState(dicasLigadas), janelas = useJanelas(), [revisto, setRevisto] = useState(false);
   useFalaLLM(); useLab();
   return (
     <div className="aj-lista lg">
@@ -69,8 +70,8 @@ function Principal({ abrir, irPet }: { abrir: (p: ParteConfig) => void; irPet: (
       <Aj ic={RotateCcw} nome="Rever o tutorial" tag={revisto ? "feito" : undefined} resumo="os cartões dos níveis e as dicas do Professor Agumon voltam, cada um no seu momento (com as dicas ligadas)"
         abrir={() => { reverOTutorial(); setRevisto(true); }} />
       <span className="sr-only" role="status" aria-live="polite">{revisto ? "Tutorial reiniciado" : ""}</span>
-      <Aj ic={Activity} nome="Detalhes do pet" rotulo="Exibir detalhes do pet" resumo="os painéis Estado atual, Evolução, Últimas ações e DigiBrain na tela do pet"
-        interruptor={{ ligado: detalhesPet, mudar: ligarDetalhesPet }} />
+      <Aj ic={LayoutDashboard} nome="Exibir" rotulo="Exibir as janelas do pet" novo resumo={`as janelas da tela do pet, uma por uma: ${quantasAMostra(janelas)} de ${IDS_JANELA.length} à mostra`}
+        abrir={() => abrir("exibir")} />
       <Aj ic={Mountain} nome="Mitologia" novo resumo="o oráculo Jijimon conta lendas, os cinco deuses deixam sinais na ilha e o Diário ganha o Códice das lendas; desligada, nada aparece"
         interruptor={{ ligado: mitologia, mudar: ligarMitologia }} />
       <Aj ic={Camera} nome="Viagem da câmera" novo resumo="desligada, os lugares abrem num corte seco" interruptor={{ ligado: viagem, mudar: escolherViagem }} />
@@ -115,6 +116,21 @@ function PetGemeo({ irPet }: { irPet: () => void }) {
   );
 }
 /** a subarea Visual: os menus (a pele) e o habitat (o tema, o mapa, a camera e o visual) */
+/* Ajustes > Exibir (JN1 do docs/PLANO_UX_JANELAS.md; a prancha docs/pranchas/ux-janelas/exibir_*): uma chave por janela da tela do pet, no
+   lugar da chave unica "Exibir detalhes do pet". A lista sai do cadastro (janelasPet.ts). So preferencia de tela */
+const ICONE_JANELA: Record<IdJanela, LucideIcon> = { estado: Activity, evolucao: GitBranch, acoes: History, digibrain: Brain, agora: Clock, minimapa: IconeMapa };
+function Exibir() {
+  const janelas = useJanelas();
+  return (
+    <div className="aj-lista lg" role="group" aria-label="Janelas da tela do pet">
+      {IDS_JANELA.map(id => (
+        <Aj key={id} ic={ICONE_JANELA[id]} nome={JANELAS[id].nome} rotulo={`Exibir ${JANELAS[id].nome}`} resumo={JANELAS[id].resumo}
+          interruptor={{ ligado: janelas[id], mudar: v => exibirJanela(id, v) }} />
+      ))}
+    </div>
+  );
+}
+
 function Visual() {
   const { motor: m } = useJogo(), tema = useTema(), opcoes: [Tema, string][] = [["claro", "Claro"], ["escuro", "Escuro"], ["sistema", "Sistema"]];
   return (
@@ -284,7 +300,7 @@ export function TelaConfig({ parte, abrir, irPet }: { parte: ParteConfig; abrir:
           <h3 className="mc-bloco__tit" id="tela-titulo">{TITULO[parte]}</h3>
         </div>
       )}
-      {parte === "principal" ? <Principal abrir={abrir} irPet={irPet} /> : parte === "visual" ? <Visual /> : parte === "dados" ? <Dados irPet={irPet} />
+      {parte === "principal" ? <Principal abrir={abrir} irPet={irPet} /> : parte === "visual" ? <Visual /> : parte === "exibir" ? <Exibir /> : parte === "dados" ? <Dados irPet={irPet} />
         : parte === "fala" ? <Fala /> : parte === "laboratorio" ? <Laboratorio irPet={irPet} /> : <Sobre />}
     </section>
   );
