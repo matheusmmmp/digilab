@@ -21,10 +21,10 @@ const fonte = (rel: string): string => readFileSync(join(import.meta.dirname, ".
 const tudo = (i: ReturnType<typeof ilhaDe>) => JSON.stringify([i.celulas, i.objetos, i.extras, i.enfeites, i.lugares, i.caminhos, [...i.escondidos], i.pontes]);
 
 describe("a chave desligada: a ilha de hoje", () => {
-  test("sem ?gosto_visual=1 o cantinho não entra na vista", () => {
-    expect(cantinhoNaVista("")).toBe(false);
+  test("com ?gosto_visual=0 o cantinho não entra na vista; sem o parâmetro (o padrão desde a D-GV-PADRAO-1) ele entra", () => {
     expect(cantinhoNaVista("?gosto_visual=0")).toBe(false);
-    expect(cantinhoNaVista("?luta_poc=1")).toBe(false);
+    expect(cantinhoNaVista("")).toBe(true);
+    expect(cantinhoNaVista("?luta_poc=1")).toBe(true);
     expect(cantinhoNaVista("?gosto_visual=1")).toBe(true);
   });
   test("a vista só monta o cantinho atrás da chave, e só põe o grupo dele na cena se ele existe", () => {

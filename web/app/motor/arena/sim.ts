@@ -9,7 +9,7 @@
    4. nada daqui toca no pet, no log nem no save (a LP2 liga).
    LP6-1 (docs/PLANO_LP6_SEGUNDO_GOLPE.md), cada um atras da sua chave da entrada, desligada: o golpe de apoio (`apoio`) e a elipse pelo
    estagio dos dois (`arenaPorEstagio`). Sem as chaves, a luta sai byte a byte igual (test/arena_lp6_gabarito.test.ts). */
-import { ACAO, DIFIC, ELIPSE, EQ, ORDEM_ESTAGIOS, PASSO_MS, PX_POR_UNIDADE, type ArenaPorEstagio } from "./constantes.ts";
+import { ACAO, DIFIC, ELIPSE, EQ, ORDEM_ESTAGIOS, PASSO_MS, PX_POR_UNIDADE, RECUO_APOIO_SEM_TIRO_MS, type Apoio, type ArenaPorEstagio } from "./constantes.ts";
 import { dist, seno } from "./aritmetica.ts";
 import { CENAS, iniciarCena } from "./cenas.ts";
 import { bloqueio, colidir, dentroArena, evento, lutador, mudar, obstaculoEm, outro, prender, ref } from "./nucleo.ts";
@@ -38,13 +38,16 @@ function conferirStats(l: Lado, cfg: ConfigLuta): void {
 }
 
 /** o fator da elipse pelo maior estagio dos dois (LP6-1, secao 4a): o do Ultimate, o do Mega ou 1 (In-Training, Rookie e Champion) */
+const indiceEstagio = (f: DadosForma): number => {
+  const k = (ORDEM_ESTAGIOS as readonly string[]).indexOf(f.estagio);
+  if (k < 0) throw new Error(`arena: estagio desconhecido ${String(f.estagio)} (${f.digimon})`);
+  return k;
+};
+/** o apoio vale nesta luta? (LP6-3, D-LP6-3-7): sem o `desde`, sempre; com ele, se o maior estagio dos dois e pelo menos o dele */
+export const apoioNaLuta = (a: DadosForma, b: DadosForma, ap: Apoio): boolean =>
+  ap.desde === undefined || Math.max(indiceEstagio(a), indiceEstagio(b)) >= (ORDEM_ESTAGIOS as readonly string[]).indexOf(ap.desde);
 export function fatorElipse(a: DadosForma, b: DadosForma, F: ArenaPorEstagio): number {
-  const i = (f: DadosForma) => {
-    const k = (ORDEM_ESTAGIOS as readonly string[]).indexOf(f.estagio);
-    if (k < 0) throw new Error(`arena: estagio desconhecido ${String(f.estagio)} (${f.digimon})`);
-    return k;
-  };
-  const m = ORDEM_ESTAGIOS[Math.max(i(a), i(b))];
+  const m = ORDEM_ESTAGIOS[Math.max(indiceEstagio(a), indiceEstagio(b))];
   return m === "Mega" ? F.Mega : m === "Ultimate" ? F.Ultimate : 1;
 }
 
@@ -53,7 +56,8 @@ function criarLutador(L: Luta, lado: Lado): Lutador {
   /* o golpe de apoio (LP6-1): so com a chave; a forma tem de trazer o apoio, do tipo que falta ao golpe, e o clipe dele */
   if (L.cfg.apoio && !(forma.apoio && typeof forma.msApoio === "number" && forma.msApoio > 0 && !forma.apoio.proj === !!forma.golpe.proj))
     throw new Error(`arena: a forma ${forma.digimon} nao tem o golpe de apoio do tipo que falta (motor/arena/formas.ts)`);
-  const ap = L.cfg.apoio ? forma.apoio! : null;
+  /* o apoio pelo estagio (LP6-3, D-LP6-3-7): abaixo do `desde`, os dois lutam sem ele, como sem a chave */
+  const ap = L.cfg.apoio && apoioNaLuta(L.cfg.a.forma, L.cfg.b.forma, L.cfg.apoio) ? forma.apoio! : null;
   const g = forma.golpe, sk = forma.habilidade || g, st = { ...stats };
   /* a ordem dos sorteios e a do literal do prototipo: recSk, recarga, fase */
   const recSk = ACAO.recSkIni + L.r.ia() * ACAO.recSkVar, recarga = ACAO.recargaIni + L.r.ia() * ACAO.recargaVar, fase = L.r.ia() * 6.28;
@@ -65,7 +69,7 @@ function criarLutador(L: Luta, lado: Lado): Lutador {
     alcance: g.proj ? ACAO.alcanceDist : EQ.alcanceCorpo, raio: EQ.raio, alvo: null, fase,
     morto: false, dano: 0, golpes: 0, mira: null, dash: 0, dashCd: 0, dashDir: [0, 0], reacao: 0, desvioDir: [0, 0],
     atordoado: 0, caiuEm: 0, foraAte: 0, escondido: false, naRuna: 0, buffAte: 0, bloq: 0, ladoDesvio: 0, esperaTiro: 0, nAtaque: 0, leuAtaque: -1, contraPend: false,
-    ap, msAp: ap ? forma.msApoio! : 0, recAp: 0, usandoApoio: false, longeMs: 0,
+    ap, msAp: ap ? forma.msApoio! : 0, recAp: 0, usandoApoio: false, longeMs: 0, recuoAp: 0,
     acDano: 0, ultAmb: 0, ultNum: 0, decisao: "",
   };
 }
@@ -228,7 +232,12 @@ function atualizar(L: Luta, u: Lutador, dt: number): void {
     if (!u.golpeDado && u.t >= dg.t * 1000) { u.golpeDado = true; if (!o.morto) soltarGolpe(L, u); }
     if (u.usandoApoio) {
       /* o fim do apoio (LP6-1): a recarga do golpe segue a dela, com o minimo de sempre */
-      if (u.t >= u.msAp) { mudar(u, "idle"); u.recarga = Math.max(ACAO.recargaMin, u.recarga); u.usandoApoio = false; }
+      if (u.t >= u.msAp) {
+        mudar(u, "idle"); u.recarga = Math.max(ACAO.recargaMin, u.recarga); u.usandoApoio = false;
+        /* o atirador bate e recua (LP6-3, D-LP6-3-4), so com o `recua` do apoio (D-LP6-3-7): o recuo ate a distancia do tiro, no maximo a
+           espera dele */
+        if (!u.ap!.proj && L.cfg.apoio!.recua) u.recuoAp = L.cfg.tiro ? L.cfg.tiro.esperaMax : RECUO_APOIO_SEM_TIRO_MS;
+      }
     } else if (u.t >= (u.usandoHab ? u.msSk : u.msAtk)) { mudar(u, "idle"); u.recarga = Math.max(ACAO.recargaMin, u.st.cad - u.msAtk); u.usandoHab = false; }
     return;
   }
@@ -253,25 +262,38 @@ function atualizar(L: Luta, u: Lutador, dt: number): void {
   const folga = (p: unknown) => p ? 0 : o.raio * 0.8 + EQ.investida * 0.8;
   /* a distancia do tiro (D-LP5-12): abaixo da distMin o tiro de projetil espera ate o esperaMax; sem o `tiro`, a luta da POC */
   const T = L.cfg.tiro;
-  let perto = false;
-  if (T && T.distMin > 0 && (u.g.proj || u.sk.proj) && d < T.distMin) { u.esperaTiro += dt; perto = u.esperaTiro < T.esperaMax; } else u.esperaTiro = 0;
-  if (u.recSk <= 0 && d <= alcHab + folga(u.sk.proj) && (livre || !u.sk.proj) && !(perto && u.sk.proj)) { iniciarAtaque(L, u, mira(), true); return; }
-  /* o golpe de apoio (LP6-1), pela distancia e com a recarga propria */
-  const ap = u.ap;
-  if (ap && !ap.proj) {
-    /* quem atira: o golpe de perto com o alvo abaixo da distMin do tiro (sem o `tiro`, a do recuo da POC) e ao alcance de perto. Sai
-       durante a espera do tiro (D-LP5-12) e nao troca o recuo: o atirador bate e, de volta ao idle, recua como antes */
-    const limite = T && T.distMin > 0 ? T.distMin : u.alcance * (T ? T.recuaAbaixo : 0.5);
-    if (u.recAp <= 0 && d < limite && d <= EQ.alcanceCorpo + folga(null)) { iniciarAtaque(L, u, mira(), false, true); return; }
-  } else if (ap) {
-    /* quem bate de perto: o tiro fraco quando o alvo fica alem do alcance de perto por um tempo (ele foge ou se esconde), ao alcance do
-       tiro e sem arvore ou rocha no caminho */
-    if (d > u.alcance + folga(u.g.proj)) u.longeMs += dt; else u.longeMs = 0;
-    if (u.recAp <= 0 && u.longeMs >= L.cfg.apoio!.longeMs && d <= ACAO.alcanceDist && livre) { u.longeMs = 0; iniciarAtaque(L, u, mira(), false, true); return; }
+  /* o recuo depois do apoio de perto (LP6-3, D-LP6-3-4): sem atacar, ate o alvo ficar na distancia do tiro (a mesma do apoio); se o tempo
+     acaba antes (encurralado), a espera do tiro ja vale como cumprida e ele atira */
+  let recuando = false;
+  if (u.recuoAp > 0) {
+    u.recuoAp -= dt;
+    const lim = T && T.distMin > 0 ? T.distMin : u.alcance * (T ? T.recuaAbaixo : 0.5);
+    if (d >= lim) u.recuoAp = 0;
+    else if (u.recuoAp <= 0) { u.recuoAp = 0; if (T) u.esperaTiro = T.esperaMax; }
+    else { recuando = true; u.esperaTiro = 0; }
   }
-  if (d <= u.alcance + folga(u.g.proj) && u.recarga <= 0 && (livre || !u.g.proj) && !(perto && u.g.proj)) { iniciarAtaque(L, u, mira(), false); return; }
+  let perto = false;
+  if (!recuando) {
+    if (T && T.distMin > 0 && (u.g.proj || u.sk.proj) && d < T.distMin) { u.esperaTiro += dt; perto = u.esperaTiro < T.esperaMax; } else u.esperaTiro = 0;
+    if (u.recSk <= 0 && d <= alcHab + folga(u.sk.proj) && (livre || !u.sk.proj) && !(perto && u.sk.proj)) { iniciarAtaque(L, u, mira(), true); return; }
+    /* o golpe de apoio (LP6-1), pela distancia e com a recarga propria */
+    const ap = u.ap;
+    if (ap && !ap.proj) {
+      /* quem atira: o golpe de perto com o alvo abaixo da distMin do tiro (sem o `tiro`, a do recuo da POC) e ao alcance de perto. Sai
+         durante a espera do tiro (D-LP5-12) e nao troca o recuo: o atirador bate e, de volta ao idle, recua ate a distMin (D-LP6-3-4) */
+      const limite = T && T.distMin > 0 ? T.distMin : u.alcance * (T ? T.recuaAbaixo : 0.5);
+      if (u.recAp <= 0 && d < limite && d <= EQ.alcanceCorpo + folga(null)) { iniciarAtaque(L, u, mira(), false, true); return; }
+    } else if (ap) {
+      /* quem bate de perto: o tiro fraco quando o alvo fica alem do alcance de perto por um tempo (ele foge ou se esconde), ao alcance do
+         tiro e sem arvore ou rocha no caminho */
+      if (d > u.alcance + folga(u.g.proj)) u.longeMs += dt; else u.longeMs = 0;
+      if (u.recAp <= 0 && u.longeMs >= L.cfg.apoio!.longeMs && d <= ACAO.alcanceDist && livre) { u.longeMs = 0; iniciarAtaque(L, u, mira(), false, true); return; }
+    }
+    if (d <= u.alcance + folga(u.g.proj) && u.recarga <= 0 && (livre || !u.g.proj) && !(perto && u.g.proj)) { iniciarAtaque(L, u, mira(), false); return; }
+  }
   let mx = 0, my = 0;
-  if (!livre) {
+  if (recuando) { u.ladoDesvio = 0; mx = -dx / d; my = -dy / d; }
+  else if (!livre) {
     // contorna andando de lado; os dois lados desviam para o mesmo lado do mundo e trocam juntos a cada 4 s
     u.ladoDesvio = (u.lado === "a" ? 1 : -1) * (Math.floor(L.relogio / 4000) % 2 ? -1 : 1);
     const avanco = d > u.alcance * 0.9 ? 0.6 : 0.3;

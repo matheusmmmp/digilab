@@ -15,17 +15,24 @@
    A subchave `fala_unidades` (DC3d; docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1 e o adendo 1, A1.1): o M-IMPULSO divide o `chamar_atencao` nas
    tres unidades de fala (o conteudo so na chave da escolha, [chamar_atencao, c, null]); a acao entregue ao motor e o chamar de hoje, e a
    opcao de fala credita a linha de H do conteudo. A consequencia da opcao de fala le o corpo de depois na percepcao da decisao seguinte (o
-   `obs` do `agir` seguinte, antes da acao seguinte); o mundo de depois e o de hoje. Desligada (todo pet de hoje), nada muda. */
+   `obs` do `agir` seguinte, antes da acao seguinte); o mundo de depois e o de hoje. Desligada (todo pet de hoje), nada muda.
+
+   A subchave `olhar` (GOSTO_VISUAL, P1f; o porte da P1d do Python, docs/ESPEC_GOSTO_VISUAL_P1.md, secoes 5 e 6): o genoma da visao do ovo
+   (`genomaVisao(semente)`, rng propria `visao-ovo`, ou o dado), a classe `tela` do M-SENS, a unidade de olhar no fim da lista (entregue ao
+   motor como o ocioso, sem alvo), o termo `gosto`, o canal `gosto_visual` no r, a exposicao e o P1 da classe `tela`, e os tres ganchos que o
+   laco com a TV procura: `verTela`, `olhandoTela` e `agradoTela`. Desligada, nenhum campo, estado nem gancho que funcione (os tres falham
+   alto). O gabarito e o test/gabaritos/gosto_visual.json.gz (experiments/exportar_gosto_visual.py). */
 import { leituraReceptor, type PercepcaoCorpoLobos } from "../lobos.ts";
 import type { OcorridoMundo, PoliticaCorpoMundo } from "../motor_corpo_mundo.ts";
 import type { OcorridoCorpo, ObservacaoLobos, TransicaoLobos } from "../lobos.ts";
 import { alvoPonto, type AlvoMundo, type PercepcaoMundo } from "../mundo.ts";
 import type { AcaoPet } from "../tipos.ts";
-import { chaveJson, raizInteira, type ChaveUnidade } from "./_comum.ts";
+import { chaveJson, mul, raizInteira, type ChaveUnidade } from "./_comum.ts";
+import { genomaVisao, type GenomaVisao } from "./genoma_visao.ts";
 import { Afeto } from "./afeto.ts";
 import { Arbitragem, type RngPolitica } from "./arb.ts";
-import { CONFIG_DIGIBRAIN_LAB, CONFIG_MODULAR_MUNDO, CONFIG_SONO_SEGURA, CONTEUDOS_FALA, INATOS_MODULAR, type ConfigDigibrainModular,
-  type ConfigSonoSegura } from "./constantes.ts";
+import { COMPORTAMENTO_OLHAR, CONFIG_DIGIBRAIN_LAB, CONFIG_MODULAR_MUNDO, CONFIG_OLHAR, CONFIG_SONO_SEGURA, CONTEUDOS_FALA, INATOS_MODULAR,
+  type ConfigDigibrainModular, type ConfigOlhar, type ConfigSonoSegura } from "./constantes.ts";
 import { EstadoDinamico, type OpcaoFim } from "./estado.ts";
 import { Impulso, type UnidadeImpulso } from "./impulso.ts";
 import { Memoria, episodioAutobio, episodioLuta } from "./mem.ts";
@@ -44,6 +51,8 @@ export interface Intencao { acao: AcaoPet; tipo_alvo: string | null; id_alvo: nu
 
 export function intencaoDaUnidade(unidade: UnidadeImpulso): Intencao {
   const [acao, tipo, ident] = unidade.chave;
+  /* o olhar (P1f): o motor o executa como o ocioso, parado e sem alvo (D-GV-P1d-1) */
+  if (acao === COMPORTAMENTO_OLHAR) return { acao: "ocioso", tipo_alvo: null, id_alvo: null, ponto: null };
   if (tipo === "ponto") return { acao: acao as AcaoPet, tipo_alvo: "ponto", id_alvo: null, ponto: ident as readonly [number, number] };
   /* a unidade de fala (DC3, 3.1): o conteudo fica so na chave; o mundo e o do chamar */
   if (acao === "chamar_atencao") return { acao: acao as AcaoPet, tipo_alvo: null, id_alvo: null, ponto: null };
@@ -51,6 +60,8 @@ export function intencaoDaUnidade(unidade: UnidadeImpulso): Intencao {
 }
 
 export class DigibrainDesligado extends Error {}
+/** o olhar no DigiBrain (P1f): o genoma dado (o vazio do controle) ou a semente do ovo, e a ConfigOlhar; so com a subchave `olhar` */
+export interface OpcoesOlhar { semente?: number; genoma?: GenomaVisao; cfgOlhar?: ConfigOlhar }
 /** a ponte da luta sem a chave ligada (o `LutaSemChave` do Python) */
 export class LutaSemChave extends Error {}
 
@@ -87,19 +98,33 @@ export class DigiBrain implements PoliticaCorpoMundo {
   lutaMemoria: boolean;
   private lutas: ResumoLutaSens[] = [];                  // os resumos desde a decisao anterior (so com a luta_memoria)
   private pcAntesLuta: Dict | null = null;               // o corpo da ultima consequencia fechada (so com a luta_memoria)
+  /** o olhar (P1f): a ConfigOlhar e o genoma da visao (null sem a subchave), as TVs a vista para a decisao seguinte e a TV que o pet olha */
+  readonly co: ConfigOlhar | null = null;
+  readonly genomaVisao: GenomaVisao | null = null;
+  private telas: [number, number, number, number][] | null = null;
+  private olhando: number | null = null;
 
   /** `inatos`: os valores de partida (a ConfigDigibrainInatos); so o G-PAR-VIDA dos fins passa outros (digibrain_modular_fins.json.gz) */
+  /** `sono`: a ConfigSonoSegura (o 4o argumento, como na main); `olhar`: as opcoes do olhar (P1f), so com a subchave */
   constructor(cd: ConfigLab = CONFIG_DIGIBRAIN_LAB, inatos: typeof INATOS_MODULAR = INATOS_MODULAR, lutaMemoria = false,
-    sono: ConfigSonoSegura = CONFIG_SONO_SEGURA) {
+    sono: ConfigSonoSegura = CONFIG_SONO_SEGURA, olhar?: OpcoesOlhar) {
     if (!cd.ligada) throw new DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada");
     this.cd = cd;
     this.inatos = inatos;
     const cfg = { intervalo_decisao_ticks: CONFIG_MODULAR_MUNDO.intervalo_decisao_ticks };
     this.S = inatos.escala;
-    this.sens = new Sens(CONFIG_MODULAR_MUNDO, CONFIG_MODULAR_MUNDO, inatos);
+    if (cd.olhar) {                                       // o olhar (P1f): o genoma dado, ou o da semente do ovo (rng propria `visao-ovo`)
+      if (cd.fala_unidades) throw new Error("olhar nao se combina com a fala_unidades (GOSTO_VISUAL, P1d: PROPOSTO, sem teste da combinacao)");
+      this.co = olhar?.cfgOlhar ?? CONFIG_OLHAR;
+      if (olhar?.genoma === undefined && olhar?.semente === undefined) throw new Error("o olhar pede o genoma da visao: a semente do ovo ou o genoma");
+      this.genomaVisao = olhar.genoma ?? genomaVisao(olhar.semente!, this.co);
+    } else if (olhar !== undefined) {
+      throw new Error("a ConfigOlhar e o genoma da visao so com a subchave olhar");
+    }
+    this.sens = new Sens(CONFIG_MODULAR_MUNDO, CONFIG_MODULAR_MUNDO, inatos, this.co, this.genomaVisao);
     this.afeto = new Afeto(cfg, cd, inatos, null);
     this.estado = new EstadoDinamico(cfg, cd, inatos);
-    this.impulso = new Impulso(inatos, cd);
+    this.impulso = new Impulso(inatos, cd, undefined, this.co);
     this.lutaMemoria = lutaMemoria;
     if (lutaMemoria && !cd.memoria_autobio) throw new Error("luta_memoria so com a memoria_autobio (docs/TAREFA_V3_PONTE_LUTA.md, 3.2)");
     this.mem = new Memoria({ sub: CONFIG_MODULAR_MUNDO.sub }, inatos, cd, lutaMemoria);
@@ -126,7 +151,14 @@ export class DigiBrain implements PoliticaCorpoMundo {
     };
     const lutas = this.lutaMemoria ? this.lutas : null;
     if (this.lutaMemoria) this.lutas = [];
-    const sens = lutas === null ? this.sens.codificar(oMod) : this.sens.codificar(oMod, lutas);
+    let sens;
+    if (cd.olhar) {                                       // o olhar (P1f): as TVs a vista, do gancho `verTela` (sem ele, nenhuma)
+      const telas = this.telas ?? [];
+      this.telas = null;
+      sens = this.sens.codificar(oMod, lutas, telas);
+    } else {
+      sens = lutas === null ? this.sens.codificar(oMod) : this.sens.codificar(oMod, lutas);
+    }
     const receptores = this.sens.receptores!;
     this.plast.montar(receptores);
     const afeto = this.afeto.ler(sens);
@@ -138,8 +170,9 @@ export class DigiBrain implements PoliticaCorpoMundo {
     const termoLem = this.mem.termoLembranca(lembranca);
     const episodiosLuta = this.lutaMemoria ? this.episodiosLuta(sens, afeto, tick) : null;
     const memoria = cd.m_mem ? this.mem.recuperar(sens, afeto) : null;
+    const [gosto, resumoOlhar] = cd.olhar ? this.gostoDaDecisao(sens) : [null, null];
     const [unidades, z] = this.impulso.unidades(
-      sens, afeto, ctx, this.plast, memoria, this.afeto.drives(receptores), termoLem === null ? null : [termoLem, this.mem.casa], null);
+      sens, afeto, ctx, this.plast, memoria, this.afeto.drives(receptores), termoLem === null ? null : [termoLem, this.mem.casa], null, gosto);
     const esc = this.arb.escolher(unidades, afeto, sens, rng, reflexo, null);   // a rng de politica vai so ao M-ARB
     this.conferirDesligadas(unidades);
     const unidade = esc.unidade;
@@ -169,6 +202,10 @@ export class DigiBrain implements PoliticaCorpoMundo {
     };
     motivo["consolidacao"] = consolidacao;
     if (this.lutaMemoria) motivo["lutas"] = episodiosLuta;      // a ponte da luta (PE3): desligada, nenhum campo novo
+    if (cd.olhar) {                                       // o olhar (P1f): desligada, nenhum campo novo
+      this.olhando = unidade.chave[0] === COMPORTAMENTO_OLHAR ? unidade.chave[2] as number : null;
+      motivo["olhar"] = { ...resumoOlhar, olha: this.olhando };
+    }
     this.pendencia = {
       k, intencao, unidade, sens, g_apr: afeto.g_apr, pediu: false, alvo: null, corpo: null, transicao: null, mundo: null,
       tick, afeto: { V: afeto.V, E: afeto.E }, gestos: this.gestosAgora,
@@ -176,6 +213,48 @@ export class DigiBrain implements PoliticaCorpoMundo {
     this.gestosAgora = [];
     this.k += 1;
     return intencao.acao;
+  }
+
+  // ------------------------------------------------------------ o olhar (P1f, so com a subchave `olhar`)
+  /** o termo `gosto` da unidade da TV que o pet olhava (se ela ainda esta a vista e o corpo le a tela): mul(w_gosto, agrado - S/2); e o resumo */
+  private gostoDaDecisao(sens: Dict): [Record<number, number>, Dict] {
+    const S = this.S, niveis = sens["tela_niveis"] as Record<string, number> | null, telas = sens["telas"] as { id: number }[];
+    let a: number | null = null, aInato: number | null = null;
+    const gosto: Record<number, number> = {};
+    const visivel = telas.some(o => o.id === this.olhando);
+    if (this.olhando !== null && visivel && niveis !== null) {
+      a = this.sens.agrado(niveis);
+      aInato = this.sens.agradoInato(niveis);
+      gosto[this.olhando] = mul(this.co!.w_gosto, a - Math.floor(S / 2), S);
+    }
+    return [gosto, { telas: telas.map(o => o.id), olhava: this.olhando, agrado: a, agrado_inato: aInato,
+                     gosto: this.olhando !== null && this.olhando in gosto ? gosto[this.olhando]! : null }];
+  }
+
+  private exigirOlhar(gancho: string): ConfigOlhar {
+    if (!this.cd.olhar) throw new Error(`${gancho}: a TV com o DigiBrain modular exige a subchave olhar (GOSTO_VISUAL, P1d)`);
+    return this.co!;
+  }
+
+  /** o laco, antes da decisao: as TVs a vista, [id, dx, dy, d] inteiros (validadas no M-SENS). Duas vezes sem decisao falha alto */
+  verTela(linhas: [number, number, number, number][]): void {
+    this.exigirOlhar("ver_tela");
+    if (this.telas !== null) throw new Error("ver_tela duas vezes antes da mesma decisao");
+    if (!Array.isArray(linhas)) throw new Error("ver_tela recebe a lista das TVs a vista");
+    this.telas = linhas.map(l => [...l] as [number, number, number, number]);
+  }
+
+  /** o id da TV que o pet olha (a unidade de olhar da ultima decisao), ou null */
+  olhandoTela(): number | null {
+    this.exigirOlhar("olhando_tela");
+    return this.olhando;
+  }
+
+  /** GV-16, com a `agrado_no_corpo`: o agrado do nivel lido agora, quando o pet olha; sem ela, ou sem olhar, null */
+  agradoTela(leituras: Readonly<Record<string, number>>): number | null {
+    const co = this.exigirOlhar("agrado_tela");
+    if (!co.agrado_no_corpo || this.olhando === null) return null;
+    return this.sens.agrado(Object.fromEntries(Object.keys(this.sens.otimo).map(c => [c, leituras[`tela_${c}`]!])));
   }
 
   /** o `escolher_alvo` do Python: o candidato do motor do tipo (e do id) da unidade escolhida; o `u` do motor e ignorado. A excecao unica
@@ -276,10 +355,12 @@ export class DigiBrain implements PoliticaCorpoMundo {
     const modulos: Dict = {};
     for (const [nome, mod] of [["sens", this.sens], ["afeto", this.afeto], ["estado", this.estado], ["mem", this.mem], ["arb", this.arb],
                                ["plast", this.plast]] as const) modulos[nome] = mod.estadoInterno();
-    return {
+    const out: Dict = {
       nome: this.nome, versao_pet: this.versao_pet, k: this.k, pendente: this.pendencia !== null,
       gestos: Object.fromEntries(Object.entries(this.gestos).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))), modulos, motivos: this.motivos,
     };
+    if (this.cd.olhar) out["olhar"] = { olhando: this.olhando, genoma_visao: { otimo: { ...this.genomaVisao!.otimo }, largura: { ...this.genomaVisao!.largura } } };
+    return out;
   }
 
   // ------------------------------------------------------------ a pendencia
@@ -299,6 +380,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
     if (!cd.p1 && !this.plast.desfechoZero()) throw new Error("sem o P1, o desfecho e o andar ficam em 0");
     if (!cd.p2 && !this.plast.habitoZero()) throw new Error("sem o P2, o habito fica em 0");
     if (!cd.m_mem && this.mem.episodios.length) throw new Error("sem o M-MEM, a memoria fica vazia");
+    if (!cd.olhar && unidades.some(x => x.acao === COMPORTAMENTO_OLHAR || "gosto" in x.termos)) throw new Error("sem a subchave olhar, nenhuma unidade de olhar nem termo gosto");
     const fala = unidades.filter(x => x.acao === "chamar_atencao").map(x => x.chave[1]);
     if (JSON.stringify(fala) !== JSON.stringify(cd.fala_unidades ? [...CONTEUDOS_FALA] : [null]))
       throw new Error(`as unidades do chamar ${JSON.stringify(fala)} nao sao as da fala_unidades ${cd.fala_unidades ? "ligada" : "desligada"}`);
@@ -322,9 +404,23 @@ export class DigiBrain implements PoliticaCorpoMundo {
     if (pc1 === undefined || pm1 === undefined) throw new Error("a consequencia sem o corpo ou sem o mundo de depois");
     const ocorrido: OcorridoMundo | null = p.mundo === null ? null : p.mundo[0];
     const recs = this.sens.receptores!;
-    const cons = this.afeto.consequencia(pc0, pc1, recs);
+    const olhou = this.cd.olhar === true && p.unidade.chave[0] === COMPORTAMENTO_OLHAR;
+    let gv: number | null = null, olhar: Dict | null = null, niveis: Record<string, number> | null = null;
+    if (olhou) {                                          // o olhar (P1f): o agrado do nivel de depois, contra o alvo de antes da exposicao
+      niveis = this.sens.niveisTela(pc1 as Dict);
+      if (niveis !== null) {
+        const a = this.sens.agrado(niveis);
+        gv = mul(this.co!.ganho_gosto_visual, a - Math.floor(S / 2), S);
+        olhar = { agrado: a, gosto_visual: gv };
+      }
+    }
+    const cons = this.afeto.consequencia(pc0, pc1, recs, gv);
     const l0 = recs.map(r => leituraReceptor(pc0 as PercepcaoCorpoLobos, r, S));
     const l1 = recs.map(r => leituraReceptor(pc1, r, S));
+    if (olhar !== null) {
+      this.sens.expor(niveis!);                           // a exposicao, so quando o pet olhou
+      olhar["desloc"] = { ...this.sens.desloc };
+    }
     const pos0: readonly [number, number] = p.sens["pos"], pos1: readonly [number, number] = [pm1.x, pm1.y];
     const comeu = ocorrido === null ? null : ocorrido.comeu as Dict | null;
     const classeComida = comeu === null ? null : (comeu["situacao"] === "podre" ? "podre" : comeu["tipo"] as string);
@@ -333,6 +429,8 @@ export class DigiBrain implements PoliticaCorpoMundo {
       p1 = this.plast.consequenciaP1("comer", comeu !== null && comeu["como"] === "comer" ? classeComida : null, l0, l1, pos0, pos1, p.g_apr);
     } else if (acao === "brincar") {
       p1 = this.plast.consequenciaP1("brincar", ocorrido!.brincou_com_bola ? "bola" : null, l0, l1, pos0, pos1, p.g_apr);
+    } else if (olhou) {                                   // o olhar (P1f): o desfecho da classe `tela`
+      p1 = this.plast.consequenciaOlhar(l0, l1, p.g_apr);
     }
     const chave = p.unidade.chave;
     let visto = true, d: number | null = null;
@@ -371,6 +469,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
       comeu: comeu === null ? null : { id: comeu["id"], tipo: comeu["tipo"], situacao: comeu["situacao"], como: comeu["como"] },
       chegou: ocorrido === null ? null : ocorrido.chegou, p1, creditos, episodio, autobio,
     };
+    if (this.cd.olhar) motivo["consequencia"]["olhar"] = olhar;   // o olhar (P1f): desligada, nenhum campo novo
     motivo["fins"] = [...motivo["fins"], ...registrados(fins)];
   }
 }

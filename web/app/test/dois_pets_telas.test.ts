@@ -5,11 +5,11 @@
    - o par vai inteiro para a espera e volta inteiro (Meus pets); o Salao nao o ve;
    - a heranca nao aceita um pet do par nesta etapa, e o arquivo do par ainda nao se importa (D-CO4d-5). */
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
-import { ESPECIES, GrupoDoJogo, TPD, VERSAO_GRUPO } from "../motor/index.ts";
+import { ESPECIES, GrupoDoJogo, Motor, TPD, VERSAO_GRUPO, VERSAO_PET } from "../motor/index.ts";
 import { CHAVE, type Armazenamento } from "../src/save.ts";
-import { focar, iniciarJogo, irmaoEmFoco, jogoAtual, mudarMotor, petsVivos, replayDaTelaConfere, textoDaTela, textoDoSaveAtual, trocarGrupo } from "../src/jogo.ts";
-import { chocarDoisOvos, especieDaSemente } from "../src/jornada.ts";
-import { CHAVE_GUARDADOS, abrirGuardado, ativarGuardado, ehGrupoGuardado, lerGuardados } from "../src/pets.ts";
+import { focar, iniciarJogo, irmaoEmFoco, jogoAtual, mudarMotor, petsVivos, replayDaTelaConfere, textoDaTela, textoDoSaveAtual, trocarGrupo, trocarMotor } from "../src/jogo.ts";
+import { chocarDoBrasao, chocarDoisOvos, especieDaSemente } from "../src/jornada.ts";
+import { CHAVE_GUARDADOS, abrirGrupoGuardado, abrirGuardado, ativarGuardado, ehGrupoGuardado, lerGuardados } from "../src/pets.ts";
 import { podeSerPai } from "../src/heranca.ts";
 import { lerArquivo } from "../src/importar.ts";
 import { ajustarVelocidadeChamado, escolherVelocidade, freadoPorChamado } from "../src/tempo.ts";
@@ -88,5 +88,33 @@ describe("o save nas telas", () => {
     expect(podeSerPai(g.motor("A"))).toBe(false);
     expect(() => lerArquivo(textoDaTela(), "par.digilab")).toThrow(/dois pets/);
     expect(GrupoDoJogo.reproduzir(g.semente, VERSAO_GRUPO, g.log).assinatura()).toBe(g.assinatura());
+  });
+});
+
+/* o botao Pet gemeo de Ajustes (TelaConfig, PetGemeo): o par nasce do brasao do pet de agora, e o pet de agora vai inteiro para a espera */
+describe("o pet gemeo em Ajustes", () => {
+  test("de um pet so: o par nasce do mesmo brasao e o pet vai para a espera", () => {
+    const um = new Motor(SEMENTE, VERSAO_PET);
+    trocarMotor(um, "novo");
+    um.avancar(30);
+    chocarDoBrasao(um.especie, true, um.ritmo);
+    const g = jogoAtual().grupo!;
+    expect(g).not.toBeNull();
+    expect(g.versao).toBe(VERSAO_GRUPO);
+    expect(g.motor("A").especie).toBe(ESP);
+    const guardados = lerGuardados();
+    expect(guardados).toHaveLength(1);
+    expect(ehGrupoGuardado(guardados[0])).toBe(false);
+    expect(abrirGuardado(guardados[0]).assinatura()).toBe(um.assinatura());
+  });
+
+  test("de um par: outro par nasce e o de agora vai inteiro para a espera", () => {
+    const antes = jogoAtual().grupo!.assinatura();
+    chocarDoBrasao(ESP, true);
+    const guardados = lerGuardados();
+    expect(guardados).toHaveLength(1);
+    expect(ehGrupoGuardado(guardados[0])).toBe(true);
+    expect(abrirGrupoGuardado(guardados[0]).assinatura()).toBe(antes);
+    expect(jogoAtual().grupo!.assinatura()).not.toBe(antes);
   });
 });

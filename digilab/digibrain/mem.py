@@ -148,7 +148,7 @@ class Memoria:
     """o M-MEM (docstring do modulo)"""
 
     def __init__(self, cfg_mundo: ConfigMundo, inatos: ConfigDigibrainInatos | None = None, autobio: bool = False,
-                 controle: str = "rel", rng_emb=None, luta: bool = False) -> None:
+                 controle: str = "rel", rng_emb=None, luta: bool = False, olhar: bool = False) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
         self.S = self.p.escala
         self.sub = cfg_mundo.sub
@@ -158,6 +158,9 @@ class Memoria:
         self.recuperacoes = 0
         self.autobio = autobio
         self.luta = luta                              # a ponte da luta (PE2): a origem `luta`; desligada, nenhum campo novo
+        # o olhar (GOSTO_VISUAL, P1f, D-GV-P1f-1): o episodio completo de uma opcao de olhar tem a classe do objeto, `tela`; so com a
+        # subchave `olhar` ela e aceita (a lista CLASSES_AUTOBIO e o decodificador nao mudam)
+        self.classes_autobio = CLASSES_AUTOBIO + (("tela",) if olhar else ())
         if luta and not autobio:
             raise ValueError("M-MEM: a origem luta so com a memoria_autobio")
         self.controle = controle
@@ -241,7 +244,7 @@ class Memoria:
         if ep["origem"] == "luta":                    # a ponte da luta (PE2): a classe e o rival, e o outro tambem
             if not self.luta or type(ep["outro"]) is not str or not ep["outro"] or ep["classe"] != ep["outro"]:
                 raise ValueError(f"M-MEM: episodio de luta {ep!r}")
-        elif ep["classe"] not in CLASSES_AUTOBIO or ep["origem"] not in ORIGENS_AUTOBIO:
+        elif ep["classe"] not in self.classes_autobio or ep["origem"] not in ORIGENS_AUTOBIO:
             raise ValueError(f"M-MEM: episodio {ep!r}")
         if ep["origem"] == "visita" and (ep["sigma"] > 0 or ep["classe"] != "nao_havia"):
             raise ValueError("M-MEM: a visita sem comida tem sigma <= 0 e a classe nao_havia")
