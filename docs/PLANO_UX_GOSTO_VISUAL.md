@@ -544,3 +544,103 @@ Os desvios estão em `docs/registro/2026-11.md`, D-UXGV-14 a 18.
 - **O chamado segura o sinal** enquanto durar. Um pet com fome por muito tempo fica sem o ícone da TV, e a reação segue no painel.
 
 Os desvios estão em `docs/registro/2026-11.md`, D-UXGV-19 a 24.
+
+---
+
+## 15. A etapa 3 do código: a janela pequena (2026-11-11, Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-gosto-visual-c3`)
+
+**O pedido do Matheus (2026-11-11):** "Sim, etapa 3".
+
+**O que mudou** (tudo atrás de `?gosto_visual=1`):
+- **O miolo novo** (`web/app/src/gostoVisual/JanelaTv.tsx`), como a prancha `janela_360`: o pet, a reação num balão, a linha "Gosta mais
+  de" e dois botões, Carinho e Parar. Saíram as barras, o "de nascença", o tempo junto e a rolagem.
+- **O balão fica fora do elemento que espelha o pet** (o problema 4): o "Não curtiu" não aparece mais invertido. Ele diz a reação em
+  palavras e troca no ritmo do sinal, no mínimo a cada 3 s.
+- **No alto,** o selo "Vendo a sua tela" enquanto a tela do dono é lida; na TV do jogo, a linha "Passando: a TV do jogo" com o programa.
+- **A janela é sempre escura,** na pele dos menus (tokens `--hx-*`), e acompanha a pele escolhida: Vidro ou Militar.
+- **O Carinho é o do jogo** (UX-GV-7), e entra no registro como o do botão.
+- **O teclado:** ao abrir, o foco vai ao Carinho. O Esc fecha a janela, e a TV continua.
+- **O leitor de tela** ouve a reação por uma região de status, no mesmo ritmo do painel (uma vez a cada 5 s, no máximo).
+- **A vista `PetAssistindo` e as classes `gv-*`** do cartão do P0 saíram do código e do CSS.
+
+**Os testes:** `web/app/test/gosto_visual_janela.test.ts` (11 testes) e um quarto teste em `web/app/e2e/gosto_visual_painel.spec.ts`, que
+abre a janela flutuante de verdade no Chrome.
+
+**As capturas do jogo** estão em `docs/pranchas/ux-gosto-visual/capturas_codigo/`: `etapa3_janela_360_vidro.jpg` e
+`etapa3_janela_360_militar.jpg`.
+
+**Não feito nem conferido:**
+- a janela com a tela do dono de verdade ("Mostrar minha tela") não foi testada, porque o seletor é do navegador; o selo dela está
+  coberto só pelo teste da vista;
+- a janela não foi aberta num Chrome com tela (só no Chrome sem tela do e2e), então ficar por cima das outras janelas não foi visto;
+- o pet aparece um pouco à direita do meio, porque o quadro que a cena entrega não é centrado;
+- nenhum revisor (`rev-a11y`, `rev-cena`, `rev-replay`) viu a etapa, e o contraste não foi medido.
+
+Com esta etapa, as três vistas do plano estão no código. Os desvios estão em `docs/registro/2026-11.md`, D-UXGV-25 a 28.
+
+---
+
+## 16. A revisão das três etapas (2026-11-11, Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-gosto-visual-c3`)
+
+**O pedido do Matheus (2026-11-11):** "Sim, revisar".
+
+**Quem revisou:** três agentes de leitura, cada um com a definição de `.claude/agents/` (`rev-a11y`, `rev-cena`, `rev-replay`). Nenhum
+achou algo que bloqueie. O contraste foi medido pelo Gerente.
+
+### 16.1 O contraste
+
+Medido pelas cores computadas no Chrome do e2e, contra o ponto mais claro do fundo de cada pele. O mínimo do guia é 4,5 para 1.
+
+| o texto | Vidro | Militar |
+|---|---|---|
+| principal | 15,4 | 13,3 |
+| a frase da privacidade | 13,3 | 10,5 |
+| o esmaecido (11,5 a 13,5 px) | 11,5 | 6,7 |
+| o título de seção | 10,9 | 9,0 |
+| "Ligar a TV" | 10,0 | 12,2 |
+| a janela pequena, o esmaecido | 12,6 | 7,4 |
+
+- **Um conserto:** na pele Vidro o miolo é translúcido, e o documento da janela pequena tinha o fundo branco do navegador por baixo.
+  Agora o documento é escuro (`color-scheme: dark`).
+- **Não medido:** o ícone da reação sobre a cena (ele tem contorno, mas o fundo muda com a ilha e a hora).
+
+### 16.2 Consertado
+
+**Acessibilidade:**
+- "Mais" e "Menos" da folha do celular perdiam o foco; agora o foco fica no botão que tomou o lugar.
+- A TV ligando e desligando e a reação estão em duas regiões de status. Antes, cada reação repetia "A TV do jogo está ligada".
+- "A TV foi desligada." fica 5 s na região; antes ela saía no mesmo instante.
+- A reação é dita quando a reação muda, e não mais quando só o motivo muda.
+- Cada linha do porquê é um item de lista com a figura dentro; antes o papel de figura apagava o item.
+- "O que está passando" diz onde cada componente está ("cor: mais para cores fortes").
+- "Ver todos" tem 44 px e não leva mais `aria-pressed` junto com o rótulo que muda.
+- Fechar o painel aberto pelo toque na TV, no celular, devolve o foco ao retrato.
+- O Parar do selo, com o painel fechado, devolve o foco à linha "TV" (ou ao retrato).
+- Na janela pequena o palco encolhe até zero antes de os botões serem cortados.
+
+**Replay e isolamento:**
+- **O Carinho da janela pequena só vale onde o toque no pet vale.** A janela fica à mão em qualquer rota, e antes gravava o carinho
+  durante uma luta ou com um menu aberto. Nesses casos o botão fica desligado, com uma linha que diz por quê.
+- O teste de isolamento ficou mais forte: `agir(` aparece uma vez, só no hospedeiro, e o protótipo não lê o jogo solto nem anda o tempo.
+
+**Cena:**
+- O sinal da TV não entra com o pet dormindo; antes ele escondia o "zz".
+- A bola ou a tigela na frente da TV fica com o toque; antes o mesmo toque também abria o painel.
+- Na planta sem água a TV virava para o leste, e o cantinho caía a 5,9 células dela. Agora ela vira para o meio da área.
+
+### 16.3 Não consertado, para decidir
+
+- **O painel não é um diálogo para o leitor de tela:** o `#pet-painel` é uma `div` sem papel nem nome, e a linha "TV" aponta para ele
+  com `aria-haspopup` e `aria-controls`. O padrão é o da linha do DigiBrain e vale para todos os painéis da tela Pet. Mudar isso é uma
+  tarefa da tela Pet, não do protótipo.
+- **A câmera anda até o cantinho e não aproxima.** O plano (seção 6) dizia "anda e aproxima".
+- **A câmera solta fica sem efeito com o painel da TV aberto,** e ao fechar a câmera vai para onde o ponto solto foi.
+- **A ilha grande (128 × 60) não está neste branch.** O `rev-cena` simulou o cantinho sobre a `main` e ele cabe. Ao juntar com a `main`
+  há um conflito de uma linha no `grade.ts`, e vale pôr a ilha grande nos testes do cantinho.
+- **Textos de 11,5 e 12 px** (os extremos das linhas, a legenda e o aviso de protótipo) ficam abaixo dos 13 px do guia.
+- **A frase da privacidade** usa o texto secundário, e o plano prometia o principal. O contraste dela passa (13,3 e 10,5).
+- **Um carinho que o motor recusa** ainda conta no gosto do protótipo. A ordem é do `acoes.ts`, anterior a este trabalho.
+- **Os testes da sessão da TV dependem da ordem** em que rodam. Na ordem padrão passam.
+
+Nada disto foi conferido com um leitor de tela de verdade, nem com zoom de 200 %. Os desvios estão em `docs/registro/2026-11.md`,
+D-UXGV-29 a 31.

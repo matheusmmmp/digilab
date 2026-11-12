@@ -223,10 +223,10 @@ class Gravador:
         return {nome: _sha(_texto(paraj(getattr(m, nome).estado_interno())), 16) for nome in ASSINADOS}
 
 
-def viver(dono: str, lugar: str, semente: int, gravar: bool = True, inatos=None, ao_montar=None):
+def viver(dono: str, lugar: str, semente: int, gravar: bool = True, inatos=None, ao_montar=None, sono=None):
     """a vida: (o motor, o cerebro, o gravador). Sem `gravar`, a mesma vida sem o embrulho (o gravador e None): o teste confere que o
     Gravador nao a muda. `inatos` (LM4, so o arquivo dos fins): os valores de partida de outra `ConfigDigibrainInatos`; None, os de hoje"""
-    fp, fm = orq.fabricas(BRACO, dono, semente, DIAS, orq.ORCAMENTO_POR_DIA, conserto=True, inatos=inatos)
+    fp, fm = orq.fabricas(BRACO, dono, semente, DIAS, orq.ORCAMENTO_POR_DIA, conserto=True, inatos=inatos, sono=sono)
     registro = fp(CONFIG_PADRAO)
     cerebro = orq.cerebro_de(registro)
     if ao_montar is not None:                    # (IG6) o gabarito do alcance troca o `d_max` no meio da vida, antes de uma decisao
@@ -415,9 +415,9 @@ VIDAS_FINS = (("incoerente", "longe", 404, {}), ("incoerente", "longe", 505, {})
               ("incoerente", "longe_fixo", 101, INATOS_DESISTE), ("incoerente", "longe_fixo", 202, INATOS_DESISTE))
 
 
-def _vida_fins(dono: str, lugar: str, semente: int, ajuste: dict) -> dict:
+def _vida_fins(dono: str, lugar: str, semente: int, ajuste: dict, sono=None) -> dict:
     inatos = replace(CONFIG_DIGIBRAIN_INATOS, **ajuste) if ajuste else None
-    motor, cerebro, g = viver(dono, lugar, semente, inatos=inatos)
+    motor, cerebro, g = viver(dono, lugar, semente, inatos=inatos, sono=sono)
     decisoes = [{"k": k, "acao": cerebro.motivos[k]["acao"], "assinatura": g.assinaturas[k], "motivo": paraj(cerebro.motivos[k])}
                 for k in range(len(cerebro.motivos))]
     fins = sorted({f["motivo"] for m in cerebro.motivos for f in m["fins"]})
@@ -572,7 +572,39 @@ def luta() -> bytes:
     return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
 
 
+# ---------------------------------------------------------------------------------------------------------------------------------------
+# O sono que segura (docs/TAREFA_V3_SONO_SEGURA.md): o G-PAR do reflexo do sono com a histerese (a ConfigSonoSegura ligada). Arquivo novo, no
+# molde do dos fins: vidas do laboratorio nascidas com a chave ligada, com a ConfigSonoSegura do Python (o TS confere a CONFIG_SONO_SEGURA
+# contra ela). Cada vida tem de diferir da mesma vida com a chave desligada, ter o reflexo segurando o sono acima de `lambda_sono` e ao
+# menos uma acordada pela energia acima de `lambda_acordar`; o atencioso brinca com o pet dormindo (o dono que o acorda). Sementes dos
+# testes; nao sao vidas de pesquisa.
+ARQUIVO_SONO = f"{PREFIXO}sono_segura.json.gz"
+VIDAS_SONO = (("atencioso", "comedouro", 101), ("relapso", "longe_fixo", 202), ("incoerente", "comedouro", 303))
+
+
+def sono_segura() -> bytes:
+    """o gz (mtime 0, nivel 9) das vidas com o sono que segura; cada uma difere da de hoje"""
+    from digilab.config import CONFIG_SONO_SEGURA_LIGADA
+    vidas = []
+    for dono, lugar, semente in VIDAS_SONO:
+        v = _vida_fins(dono, lugar, semente, {}, sono=CONFIG_SONO_SEGURA_LIGADA)
+        v["difere_de_hoje"] = v["estado"] != _vida_fins(dono, lugar, semente, {})["estado"]
+        ms = [d["motivo"] for d in v["decisoes"]]
+        v["cochilos"] = sum(1 for i, m in enumerate(ms) if m["acao"] == "dormir" and (i == 0 or ms[i - 1]["acao"] != "dormir"))
+        v["reflexos"] = sum(1 for m in ms if m["reflexo"])
+        if not v["difere_de_hoje"]:
+            raise RuntimeError(f"a vida {dono}/{lugar}/{semente} com o sono que segura e a de hoje: o arquivo nao exercita a chave")
+        vidas.append(v)
+    return gzip.compress(texto_do_arquivo({"versao": 1, "braco": BRACO, "config_sono_segura": paraj(CONFIG_SONO_SEGURA_LIGADA),
+                                           "vidas": vidas}).encode("utf-8"), compresslevel=9, mtime=0)
+
+
 if __name__ == "__main__":
+    if "--sono" in sys.argv:                          # so o arquivo do sono que segura (SONO_SEGURA)
+        b = sono_segura()
+        (PASTA / ARQUIVO_SONO).write_bytes(b)
+        print(f"{PASTA / ARQUIVO_SONO} ({len(b) / 1024 / 1024:.2f} MiB)")
+        sys.exit(0)
     if "--luta" in sys.argv:                          # so o arquivo da PE3 da ponte da luta
         b = luta()
         (PASTA / ARQUIVO_LUTA).write_bytes(b)

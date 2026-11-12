@@ -1,8 +1,10 @@
 /* M-ARB, a arbitragem: o espelho de digilab/digibrain/arb.py (docs/ESPEC_DIGIBRAIN_MODULAR.md, secoes 4.7 e 7; PE-5; LM2). O reflexo do sono, os
    pesos, o sorteio proporcional (uma `rng.random()` com dois candidatos ou mais, a unica rng do cerebro) e as sondas "quem decidiu" (a C4, M4:
-   `sem_lembranca`). As facetas (`sem_faceta`) e a escolha segurada (a C3, `segurar`) ficam fora do laboratorio (LAB-1): ligadas, falham alto. */
+   `sem_lembranca`). As facetas (`sem_faceta`) e a escolha segurada (a C3, `segurar`) ficam fora do laboratorio (LAB-1): ligadas, falham alto.
+   O sono que segura (docs/TAREFA_V3_SONO_SEGURA.md; `sono` com a chave ligada): o reflexo tambem vale com o pet dormindo (o `contexto.dormindo`
+   do M-SENS) e a energia abaixo de `lambda_acordar`, salvo a fome urgente (acima do `urgencia_lambda`). Desligado, o reflexo de hoje. */
 import { chaveJson, mul, phi } from "./_comum.ts";
-import { INATOS_MODULAR } from "./constantes.ts";
+import { CONFIG_SONO_SEGURA, INATOS_MODULAR, type ConfigSonoSegura } from "./constantes.ts";
 import type { LeituraAfeto } from "./afeto.ts";
 import type { SaidaSens } from "./sens.ts";
 import type { UnidadeImpulso } from "./impulso.ts";
@@ -48,8 +50,11 @@ export class Arbitragem {
   reflexos = 0;
   nada_a_fazer = 0;
 
-  constructor(inatosOuNulo: InatosArb | null = null, autobio = false, facetas = false) {
+  readonly sono: ConfigSonoSegura;
+
+  constructor(inatosOuNulo: InatosArb | null = null, autobio = false, facetas = false, sono: ConfigSonoSegura = CONFIG_SONO_SEGURA) {
     this.p = inatosOuNulo ?? INATOS_MODULAR;
+    this.sono = sono;
     if (facetas) throw new Error("M-ARB: a facetas_mem fica fora do laboratorio (docs/TAREFA_V3_LAB_MODULAR.md, secao 3)");
     this.sondas = SONDAS_BASE;
     this.decidiu = DECIDIU_BASE;
@@ -82,11 +87,17 @@ export class Arbitragem {
     return sortearInteiro(w, u);
   }
 
-  /** o reflexo do sono: a leitura da energia abaixo de `lambda_sono` (sem rng) */
-  reflexo(sens: Pick<SaidaSens, "leitura">): boolean {
+  /** o reflexo do sono: a leitura da energia abaixo de `lambda_sono` (sem rng); com o sono que segura, tambem o pet dormindo com a energia
+   *  abaixo de `lambda_acordar` e sem a fome urgente (as `urgencias` do M-AFETO da decisao, so lidas com a chave ligada) */
+  reflexo(sens: Pick<SaidaSens, "leitura"> & { contexto?: SaidaSens["contexto"] }, urgencias: Record<string, number> | null = null): boolean {
     const energia = sens.leitura["energia"];
     if (energia === undefined || energia === null) throw new Error("M-ARB: o reflexo do sono le a energia, e ela nao esta na percepcao do corpo");
-    return energia < this.p.lambda_sono;
+    if (energia < this.p.lambda_sono) return true;
+    if (!this.sono.ligada) return false;
+    const fome = urgencias?.["fome"];
+    if (fome === undefined) throw new Error("M-ARB: o sono que segura le a urgencia da fome, e ela nao veio do M-AFETO");
+    if (sens.contexto === undefined) throw new Error("M-ARB: o sono que segura le o dormindo do contexto do M-SENS");
+    return sens.contexto.dormindo > 0 && energia < this.sono.lambda_acordar && fome <= this.p.urgencia_lambda;
   }
 
   escolher(unidades: readonly UnidadeImpulso[], afeto: Pick<LeituraAfeto, "g_exp">, sens: Pick<SaidaSens, "leitura">, rng: RngPolitica,

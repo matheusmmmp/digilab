@@ -210,6 +210,23 @@ export function desenharSprite(ctx: CanvasRenderingContext2D, e: AtlasOk, nome: 
   else ctx.drawImage(img, q[0], q[1], q[2], q[3], x + q[4] * escala, y + q[5] * escala, q[2] * escala, q[3] * escala);
   ctx.restore();
 }
+/** a caixa do Idle: o retangulo [x, y, w, h] que os quadros do Idle ocupam, juntos, dentro da caixa do sprite. Com a chave CLIPES_UP a caixa
+    do sprite e a comum a TODOS os clipes (o golpe, a corrida, a queda) e o corpo parado nao fica no meio dela nem encosta no pe dela: quem
+    mostra o pet parado e sozinho (a Revelacao, o "de -> para") enquadra por aqui. Sem quadro desenhavel, a caixa inteira */
+export function caixaIdle(s: SpriteUp): [number, number, number, number] {
+  const qs = s.quadros.filter(q => q[2] > 0);
+  if (!qs.length) return [0, 0, s.caixa[0], s.caixa[1]];
+  const x0 = Math.min(...qs.map(q => q[4])), y0 = Math.min(...qs.map(q => q[5]));
+  return [x0, y0, Math.max(...qs.map(q => q[4] + q[2])) - x0, Math.max(...qs.map(q => q[5] + q[3])) - y0];
+}
+/** o enquadre do pet parado num canvas so dele: a maior escala inteira (ate maxEscala) em que a caixa do Idle, com 1 px de borda (o contorno
+    da sombria), cabe em alvo; w e h sao o tamanho do canvas e x e y a origem para o desenharSprite (a caixa do sprite deslocada, para a
+    caixa do Idle cair em 1 px da borda). O meio do corpo fica no meio do canvas e o pe na base dele */
+export function enquadrarIdle(s: SpriteUp, alvo: [number, number], maxEscala: number): { esc: number; w: number; h: number; x: number; y: number } {
+  const [cx, cy, cw, ch] = caixaIdle(s);
+  const esc = Math.max(1, Math.min(maxEscala, Math.floor(alvo[0] / (cw + 2)), Math.floor(alvo[1] / (ch + 2))));
+  return { esc, w: (cw + 2) * esc, h: (ch + 2) * esc, x: (1 - cx) * esc, y: (1 - cy) * esc };
+}
 /** silhueta preta (primeiro quadro) para o que o motor ainda nao decidiu */
 const cacheSilhueta = new Map<string, { url: string; w: number; h: number }>();
 export function silhuetaAtlas(a: AtlasOk, nome: string, opc: { recortar?: boolean } = {}): { url: string; w: number; h: number } {
