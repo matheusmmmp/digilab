@@ -4,6 +4,8 @@ Fase: V3. Frente: EQUILIBRIO_CUIDADO, etapa E1. Data: 2026-11-12. Worker: Claude
 Plano: `docs/PLANO_V3_EQUILIBRIO_CUIDADO.md` (EQ-1 a EQ-8 DECIDIDAS). Metas: seção 6 do `docs/PLANO_ANALISE_V3_EQUILIBRIO_CUIDADO.md`,
 APROVADAS pelo Matheus em 2026-11-12. O retrato de antes: `docs/RESULTADO_V3_EQUILIBRIO_CUIDADO_E0.md`.
 
+**Os valores da rodada F2 foram APROVADOS pelo Matheus em 2026-11-12 ("Aprovo, siga").** Eles seguem SEM FONTE e passam à validação única (E2) e à versão nova (E3).
+
 **Tudo o que o E1 mudou está atrás de chave desligada.** Os pets de hoje (todas as versões) saem byte a byte, e nenhuma versão de pet liga
 as chaves: a versão nova, com os valores daqui, é o E3 (EQ-6).
 
