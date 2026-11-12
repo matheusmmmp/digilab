@@ -17,8 +17,9 @@ amarrado, em 360 pets novos. Ele não muda as seções 0 a 13; as AD2-1 a AD2-7 
 **O adendo 3 (seção 16) está DECIDIDO pelo Matheus em 2026-11-11** ("Aprovo as questões e pode seguir com as recomendações"): o que separa o pet que absorve o tapa do que se afasta, descoberto nas vidas do
 adendo 2 e conferido nas do I7b, sem vidas novas. Ele não muda as seções 0 a 15; as AD3-1 a AD3-6 estão decididas pela recomendação.
 
-**O adendo 4 (seção 18) está PROPOSTO** (2026-11-12): o desenho causal do humor, com o tapa dado no humor baixo e no humor alto no mesmo pet, com o
-sorteio amarrado, em 360 pets novos. Ele não muda as seções 0 a 17; as AD4-1 a AD4-8 esperam o Matheus.
+**O adendo 4 (seção 18) está DECIDIDO pelo Matheus em 2026-11-12** ("Eu concordo com todas as recomendações e daí pode efetuar o merge das pendências finalizadas e daí seguir em frente com as recomendações"): o desenho causal do humor, com o tapa dado no humor
+baixo e no humor alto no mesmo pet, com o sorteio amarrado, em 360 pets novos. Ele não muda as seções 0 a 17; as AD4-1 a AD4-8 estão decididas
+pela recomendação.
 
 **De onde vem:** a conversa de 2026-11-10 sobre como tirar da frente um achado e não só uma implementação organizada. Dela saíram as
 perguntas Q1 a Q4, e o Matheus escolheu começar pela Q3, o desenvolvimento contrafactual ("Segue a recomendação").
@@ -709,11 +710,11 @@ Escrito em 2026-11-11 (Claude Code, Opus 5.5, branch `v3-individualidade-i7e`), 
   - as medianas: a energia 0,3637, a fome 0,6000 e o humor 0,5800;
   - a ação mais comum: `dormir` (2543 de 3521 momentos com grupo na descoberta, contando o E e o R).
 
-## 18. Adendo 4: o humor decide? O desenho causal (2026-11-12, PROPOSTO, Claude Code, Opus 5.5)
+## 18. Adendo 4: o humor decide? O desenho causal (2026-11-12, DECIDIDO, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** O Matheus pediu em 2026-11-12 que a frente seguisse as recomendações do roadmap ("Ok, siga com essas recomendações"),
+**Status: DECIDIDO pelo Matheus em 2026-11-12** ("Eu concordo com todas as recomendações e daí pode efetuar o merge das pendências finalizadas e daí seguir em frente com as recomendações"), as AD4-1 a AD4-8 pela recomendação. O Matheus pediu em 2026-11-12 que a frente seguisse as recomendações do roadmap ("Ok, siga com essas recomendações"),
 e uma delas é o desenho causal que a 11.5 do resultado deixou PROPOSTO e a AD3-6 adiou. **Nada deste adendo roda antes de cinco coisas:**
-1. as decisões AD4-1 a AD4-8 (18.9) decididas pelo Matheus e este cabeçalho marcado DECIDIDO;
+1. as decisões AD4-1 a AD4-8 (18.9) decididas pelo Matheus e este cabeçalho marcado DECIDIDO (feito);
 2. a faixa da AD4-2 posta em `experiments/bancada/faixas.py`, com a fonte;
 3. o código do I7f na `main` (18.8), com os testes e a fumaça medida;
 4. o registro do adendo, numa seção nova no fim deste plano, empurrado antes da primeira vida;
@@ -834,7 +835,7 @@ da energia, e a frase da H-HUMOR não é escrita sozinha.
 - **A pasta:** `artifacts_v3_individualidade_i7_ad4/`, com o `meta.json`, o `ramos.jsonl`, os `perfis.jsonl.gz` e o `analise.json`.
   Os artefatos pequenos entram no git como no adendo 3 (D-IND-I7e-2).
 
-### 18.9 As decisões do adendo (PROPOSTAS; cada uma com a recomendação e o custo de errar)
+### 18.9 As decisões do adendo (DECIDIDAS pelo Matheus em 2026-11-12, todas pela recomendação; cada uma com a recomendação e o custo de errar)
 
 | | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
