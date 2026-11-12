@@ -4,7 +4,7 @@
    muda a luta: o resultado e o do nucleo. */
 import { describe, expect, test } from "vitest";
 import {
-  APOIO_LP6, ARENA_POR_ESTAGIO_LP6, ELIPSE_POC, FORMAS_ARENA, LIMITE_POC_MS, LUTA_V23, configLutaPoc, criarLutaPoc, esquivaDaTabela, passoPoc,
+  APOIO_LP6, APOIO_LP6_3, ARENA_POR_ESTAGIO_LP6, ARENA_POR_ESTAGIO_LP6_3, ELIPSE_POC, FORMAS_ARENA, LIMITE_POC_MS, LUTA_V23, configLutaPoc, criarLutaPoc, esquivaDaTabela, passoPoc,
   sorteiosPoc, statsRivalArena, type EntradaLutaPoc, type LutaPoc,
 } from "../motor/index.ts";
 import { lutar as lutarArena } from "../motor/arena/luta.ts";
@@ -114,6 +114,15 @@ describe("a luta montada das capturas", () => {
     expect(lig.entrada.apoio).toEqual(APOIO_LP6); expect(lig.entrada.arenaPorEstagio).toEqual(ARENA_POR_ESTAGIO_LP6); expect(lig.entrada.tiro).toEqual(T.tiro);
     expect(des.entrada.apoio).toBeUndefined(); expect(des.entrada.tiro).toEqual(T.tiro);
     expect(() => lutaMontadaDoEndereco(busca("talvez"))).toThrow(/palco_lp6/);
+  });
+  test("lp6_3 (LP6-4): a v23 com as chaves nos numeros da LP6-3, o apoio so no Ultimate e no Mega e a elipse 1,2/1,4", () => {
+    const x = lutaMontadaDoEndereco(busca("lp6_3"));
+    if (!x) throw new Error("teste: a luta da POC desligada (LUTA_POC_LIGADA)");
+    expect(x.entrada.apoio).toEqual({ dano: 0.6, recarga: 3, longeMs: 1500, desde: "Ultimate" });
+    expect(x.entrada.apoio).toEqual(APOIO_LP6_3);
+    expect(x.entrada.arenaPorEstagio).toEqual({ Ultimate: 1.2, Mega: 1.4 });
+    expect(x.entrada.arenaPorEstagio).toEqual(ARENA_POR_ESTAGIO_LP6_3);
+    expect(x.entrada.tiro).toEqual(T.tiro);
   });
 });
 
