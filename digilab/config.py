@@ -2898,6 +2898,40 @@ PARAMETROS_DIGIBRAIN_INATOS: dict[str, tuple[str, str]] = {
              ("PROPOSTO", "docs/ESPEC_DIGIBRAIN_MODULAR.md, secoes 2 a 7; valor de partida a mao (etapa 1a), SEM FONTE salvo o que o "
                           "comentario do campo cita"))
     for f in fields(ConfigDigibrainInatos)}
+
+
+@dataclass(frozen=True)
+class ConfigSonoSegura:
+    """O sono que segura do DigiBrain modular (docs/TAREFA_V3_SONO_SEGURA.md; a histerese do sono, Matheus, 2026-11-11). Hoje o reflexo do
+    sono do M-ARB so forca o dormir com a leitura da energia abaixo de `lambda_sono` (S/4); acima dele o dormir disputa com as outras
+    opcoes e perde assim que a energia sobe um pouco (o sono picado em cochilos de 15 a 45 min). Ligada, o pet que esta dormindo (o
+    `dormindo` do vetor de estado, que o M-SENS ja le em `contexto["dormindo"]`) segue no reflexo ate a leitura da energia chegar a
+    `lambda_acordar`. So acorda antes pela fome urgente (a urgencia da fome acima do `urgencia_lambda` dos inatos, a mesma guarda do
+    passeio, AN-4; nenhum limiar novo) ou pelo dono que o acorda (o brincar do dono tira o `dormindo`, como hoje). Abaixo de `lambda_sono`
+    o reflexo de sempre vale, com fome ou sem. Fica numa config propria, e nao em `ConfigDigibrain` nem nos inatos, para o dump deles (o
+    gabarito de paridade do modular, digibrain_modular_constantes.json) nao mudar, como a `ConfigLutaMemoria`. Desligada (o padrao), a
+    vida de hoje sai byte a byte (tests/gabaritos/sono_segura_de_hoje.json). Status em PARAMETROS_SONO_SEGURA."""
+
+    ligada: bool = False                      # PROPOSTO: a chave (so os pets do jogo da versao do sono que segura a ligam)
+    lambda_acordar: int = -(-9 * _S // 10)    # PROPOSTO, SEM FONTE: a leitura da energia em que o sono acaba; o primeiro inteiro acima
+                                              # de 0,9 S (922 de 1 024: "ate a energia passar de 90 %")
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigSonoSegura.ligada e bool: {self.ligada!r}")
+        if type(self.lambda_acordar) is not int or not CONFIG_DIGIBRAIN_INATOS.lambda_sono < self.lambda_acordar <= _S:
+            raise ValueError(f"ConfigSonoSegura.lambda_acordar e inteiro em (lambda_sono, S]: {self.lambda_acordar!r}")
+
+
+# Status dos campos da ConfigSonoSegura (conferido por teste). A fome urgente nao tem numero proprio: e o `urgencia_lambda` dos inatos.
+PARAMETROS_SONO_SEGURA: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "TAREFA_V3_SONO_SEGURA (a histerese do sono APROVADA pelo Matheus em 2026-11-11); a chave, SEM FONTE"),
+    "lambda_acordar": ("PROPOSTO", "TAREFA_V3_SONO_SEGURA (Matheus, 2026-11-11: dormir ate a energia passar de 90 %); 0,9 S arredondado "
+                                   "para cima, SEM FONTE"),
+}
+
+CONFIG_SONO_SEGURA = ConfigSonoSegura()
+CONFIG_SONO_SEGURA_LIGADA = ConfigSonoSegura(ligada=True)
 # a versao do pet do cerebro modular (DM-5, DECIDIDA em 2026-10-25): a v13, so com a ConfigDigibrain ligada. Os saves v1 a v12, as
 # assinaturas e os gabaritos nao mudam; no jogo (web/app/), a v13 entra na etapa 1b
 VERSAO_PET_DIGIBRAIN = 13

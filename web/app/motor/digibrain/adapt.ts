@@ -24,7 +24,8 @@ import type { AcaoPet } from "../tipos.ts";
 import { chaveJson, raizInteira, type ChaveUnidade } from "./_comum.ts";
 import { Afeto } from "./afeto.ts";
 import { Arbitragem, type RngPolitica } from "./arb.ts";
-import { CONFIG_DIGIBRAIN_LAB, CONFIG_MODULAR_MUNDO, CONTEUDOS_FALA, INATOS_MODULAR, type ConfigDigibrainModular } from "./constantes.ts";
+import { CONFIG_DIGIBRAIN_LAB, CONFIG_MODULAR_MUNDO, CONFIG_SONO_SEGURA, CONTEUDOS_FALA, INATOS_MODULAR, type ConfigDigibrainModular,
+  type ConfigSonoSegura } from "./constantes.ts";
 import { EstadoDinamico, type OpcaoFim } from "./estado.ts";
 import { Impulso, type UnidadeImpulso } from "./impulso.ts";
 import { Memoria, episodioAutobio, episodioLuta } from "./mem.ts";
@@ -88,7 +89,8 @@ export class DigiBrain implements PoliticaCorpoMundo {
   private pcAntesLuta: Dict | null = null;               // o corpo da ultima consequencia fechada (so com a luta_memoria)
 
   /** `inatos`: os valores de partida (a ConfigDigibrainInatos); so o G-PAR-VIDA dos fins passa outros (digibrain_modular_fins.json.gz) */
-  constructor(cd: ConfigLab = CONFIG_DIGIBRAIN_LAB, inatos: typeof INATOS_MODULAR = INATOS_MODULAR, lutaMemoria = false) {
+  constructor(cd: ConfigLab = CONFIG_DIGIBRAIN_LAB, inatos: typeof INATOS_MODULAR = INATOS_MODULAR, lutaMemoria = false,
+    sono: ConfigSonoSegura = CONFIG_SONO_SEGURA) {
     if (!cd.ligada) throw new DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada");
     this.cd = cd;
     this.inatos = inatos;
@@ -101,7 +103,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
     this.lutaMemoria = lutaMemoria;
     if (lutaMemoria && !cd.memoria_autobio) throw new Error("luta_memoria so com a memoria_autobio (docs/TAREFA_V3_PONTE_LUTA.md, 3.2)");
     this.mem = new Memoria({ sub: CONFIG_MODULAR_MUNDO.sub }, inatos, cd, lutaMemoria);
-    this.arb = new Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem);
+    this.arb = new Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem, sono);   // `sono`: o sono que segura (SONO_SEGURA)
     this.plast = new Plasticidade(cd, inatos);
   }
 
@@ -128,7 +130,7 @@ export class DigiBrain implements PoliticaCorpoMundo {
     const receptores = this.sens.receptores!;
     this.plast.montar(receptores);
     const afeto = this.afeto.ler(sens);
-    const reflexo = this.arb.reflexo(sens);                    // uma conta so, ao M-ESTADO e ao M-ARB
+    const reflexo = this.arb.reflexo(sens, afeto.urgencias);   // uma conta so, ao M-ESTADO e ao M-ARB (o sono que segura le a fome)
     const ctx = this.estado.contexto();
     const tick = this.mem.relogio(sens.minuto);                // a C4, M2 e M3: o relogio, a consolidacao do dia novo e a lembranca
     const consolidacao = this.mem.consolidar(k);
