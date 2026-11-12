@@ -1,7 +1,7 @@
 # TAREFA_V3_BOLA_BRINCAR: o Brincar joga a bola
 
-Fase: V3. Trilha: C (o cérebro e o mundo do pet). Coordenador: o Gerente da V3. Data: 2026-11-11. Estado: **plano, com as decisões BB-1 a
-BB-9 PROPOSTAS**; nenhum código antes da aprovação do Matheus.
+Fase: V3. Trilha: C (o cérebro e o mundo do pet). Coordenador: o Gerente da V3. Data: 2026-11-11. Estado: **plano aprovado: as decisões BB-1 a
+BB-9 DECIDIDAS** (Matheus, 2026-11-11, "Aprovo as nove"); os números dentro delas seguem PROPOSTOS para a rodada de equilíbrio.
 
 ## 1. Pergunta
 
@@ -28,7 +28,7 @@ bola, ele não fez nada, ele só gerou um emote". Entre as duas saídas proposta
 - O padrão do `decidirNaComida`: a ração posta pelo dono faz o pet decidir no mesmo tick, em `motor_corpo_mundo.ts`.
 - A v27 (um pet) e a v28 (o grupo, PR #861), por causa do número da versão.
 
-## 3. Mudança mínima: as decisões propostas
+## 3. Mudança mínima: as decisões (DECIDIDAS em 2026-11-11)
 
 - **BB-1, o lance.**
   - Com o mundo ligado, o Brincar do dono pega a bola onde ela estiver e a joga a uma distância curta do pet: o "lance do dono".
@@ -96,7 +96,7 @@ São três PRs, cada um com o relato no corpo:
 
 ## 8. Precisa do Matheus
 
-Aprovar ou mudar as decisões BB-1 a BB-9. **Recomendo aprová-las como estão.** O custo de errar é baixo: a chave fica desligada até a BB2, e
+**Feito:** o Matheus aprovou as BB-1 a BB-9 em 2026-11-11 ("Aprovo as nove"). O custo de errar é baixo: a chave fica desligada até a BB2, e
 os números ficam PROPOSTOS para a rodada de equilíbrio.
 
 Para mudar depois, se for o caso:
