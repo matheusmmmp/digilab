@@ -75,6 +75,24 @@ versão de pet nova e gabarito antes.
 | MN-3 | **cavar deixa terra por cima do chão**, um modelo 3D, que o dono limpa ou não, do mesmo jeito do cocô | cavar não existe; a sujeira é uma contagem e o cocô 3D é só vista | a ação de cavar; a terra cavada como uma sujeira com lugar no mapa; o limpar por toque ou anel (TU-4); o modelo 3D em cartoon |
 | MN-4 | **a comida jogada no chão:** o dono a deixa perto do pet e ele come, ou o dono pede "Come" e o pet aceita ou recusa | o "Por ração" põe a comida no chão e o pet decide ir comer | o arrasto da comida (IT4) e o comando Come (EN-9) |
 
+### 3.1c Os apontamentos da análise do Wobbledogs (WD)
+
+**PROPOSTAS** (2026-11-12): o Matheus pediu para incorporá-las ao GDD, e ainda não as decidiu uma a uma. A análise, com a fonte, está no
+vault (`DigiLab Research/20 Temas/Wobbledogs — mecânicas para adaptar.md`). Referência de design, NÃO VERIFICADA em fonte primária.
+
+| # | proposta | recomendação |
+|---|---|---|
+| WD-1 | o painel de hábitos, só de leitura, lido do cérebro: mostra o quanto o pet passou a fazer cada ação | sim; nunca uma barra que o jogador enche |
+| WD-2 | os feitos do Tamer no Diário, que liberam enfeites, comidas e brinquedos; sem feito de tempo puro (revê a TU-7) | sim, no Diário, sem tela nova |
+| WD-3 | o achado ao cavar depende do chão, com um caderno de achados no Diário | sim |
+| WD-4 | mais comandos no arco: Enterra, Pega, Senta, Vê TV | sim, um por etapa |
+| WD-5 | o comedouro com botão, que o pet aprende a usar | sim, do Rookie em diante |
+| WD-6 | o ninho que o pet arruma sozinho | sim, depois |
+| WD-7 | a cena da evolução começa com um toque do dono | sim |
+| WD-8 | o memorial do pet que morreu | sim |
+| WD-9 | a opção "morte desligada", com aviso | a decidir |
+| WD-10 | as partes da ilha abrem por feitos | a decidir |
+
 ### 3.2 A entrada e o arco (EN)
 
 | # | decisão |
