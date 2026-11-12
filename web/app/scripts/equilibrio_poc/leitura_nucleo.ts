@@ -8,7 +8,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { FORMAS_ARENA, LIGA, chaveSprite, formaLiga, type Forma } from "../../motor/index.ts";
-import { VENCE } from "../../motor/arena/index.ts";
+import { atributoDe, catAtr } from "./atributo_nucleo.ts";
 import { ESTAGIOS_LUTA, TIPICO, commitAtual, type Conta } from "./comum.ts";
 import { limitesNpc } from "./criterios.ts";
 import { LP5_3 } from "./candidatos.ts";
@@ -25,14 +25,7 @@ const ler = (fase: string, g: string): J => {
   return JSON.parse(readFileSync(p, "utf-8"));
 };
 const r3 = (x: number) => Math.round(x * 1000) / 1000;
-const atr = (chave: string): string => { const f = FORMAS_ARENA[chave]; if (!f) throw new Error(`leitura: ${chave} fora da tabela`); return f.atributo; };
-/** o atributo do par, do lado de x contra y */
-export function catAtr(x: string, y: string): "+" | "-" | "0" {
-  const a = atr(x), b = atr(y);
-  if (VENCE[a as keyof typeof VENCE] === b) return "+";
-  if (VENCE[b as keyof typeof VENCE] === a) return "-";
-  return "0";
-}
+const atr = atributoDe;
 type Acc = { n: number; v: number; e: number };
 const acc = (): Acc => ({ n: 0, v: 0, e: 0 });
 const tx = (a: Acc): number | null => a.n ? r3(a.v / a.n) : null;
