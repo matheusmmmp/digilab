@@ -1,6 +1,6 @@
 # Plano de análise V3: o modular contra uma baseline trivial (EVIDENCIA A1)
 
-**Status: PROPOSTO, aguardando o Matheus.** Escrito em 2026-11-16 (Claude Code, Opus 5.5, branch `v3-evidencia-a1`), na fase A1 do pedido de
+**Status: APROVADO pelo Matheus em 2026-11-16,** com as BT-1 a BT-9 DECIDIDAS pela recomendação: "Aprovo, pode rodar", nesta sessão. Escrito em 2026-11-16 (Claude Code, Opus 5.5, branch `v3-evidencia-a1`), na fase A1 do pedido de
 2026-11-16 (`docs/TAREFA_V3_EVIDENCIA.md`), depois do ok do Matheus à auditoria A0 e às 12 células da C4 ("Aprovo, siga a A1").
 
 ## 0. A trava e o que já foi visto
@@ -196,10 +196,12 @@ Com a máquina livre (V3-D8), cada etapa é a única run de pesquisa na hora del
 
 ## 9. As decisões para o Matheus
 
+Todas DECIDIDAS pela recomendação em 2026-11-16 ("Aprovo, pode rodar"); os números seguem SEM FONTE onde dito.
+
 | id | decisão | a recomendação | o custo de errar |
 |---|---|---|---|
 | BT-1 | o modular é o REL da C4 | sim: o melhor modular medido no `longe_fixo`, o mais forte contra a baseline | com outro braço, a comparação não fala do modular que o C4 validou |
-| BT-2 | as 12 células da C4 | **DECIDIDA** (2026-11-16) | — |
+| BT-2 | as 12 células da C4 | **DECIDIDA** (2026-11-16, "Aprovo, siga a A1") | — |
 | BT-3 | as faixas 96101…96505 (calibração) e 97101…97505 (validação) | aprovar | uma faixa ocupada: a run ficaria sem fonte |
 | BT-4 | K = 5 na calibração (25 unidades por ponto) | sim: 9 600 vidas, ~1 h | pouco K: o ponto escolhido pelo ruído, e uma baseline um pouco mais fraca |
 | BT-5 | K = 40 na validação (N = 200) | sim: o N da C4 | N menor: o IC mais largo, e mais chance de "indeterminado" |
