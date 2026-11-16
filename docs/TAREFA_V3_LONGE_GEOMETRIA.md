@@ -1,6 +1,6 @@
 # TAREFA V3 — LONGE_GEOMETRIA (2026-11-13)
 
-Coordenador: Gerente da V3. Worker: Claude Code (sessão do Matheus, Opus 5.5). Worktree e branch: `v3-longe-geometria`. Status: ABERTA (plano APROVADO em 2026-11-16; a run a rodar).
+Coordenador: Gerente da V3. Worker: Claude Code (sessão do Matheus, Opus 5.5). Worktree e branch: `v3-longe-geometria`. Status: ABERTA (plano APROVADO em 2026-11-16; a run rodou em 2026-11-16, resultado em `docs/RESULTADO_V3_LONGE_GEOMETRIA.md`; falta a decomposição da D-C1-3, D-LG-3).
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-13: a regularidade do longe separada da geometria (lado e ancora), pedida pelo Matheus em 2026-11-13 depois das auditorias externas.
 
@@ -24,7 +24,7 @@ Não muda: o `engine.py`, o motor, o corpo, o mundo, o cheiro, o A, o cérebro m
 ## 4. Experimento e gate (se houver run)
 
 - Plano de análise: `docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md`, commitado antes da run.
-- Sementes reservadas: sem calibração; a run única na faixa proposta 96101…96505, a confirmar com o coordenador.
+- Sementes reservadas: sem calibração; a run única rodou na 93101…93505 (a LG-6), aceita pelo Matheus em 2026-11-16 (D-LGR-1); a troca para a 96101…96505 (D-EQ2-11) foi desfeita.
 - Métrica e gate: a taxa de fechamento por episódio; os primários I-M3 e I-PAD (a interação do ganho da memória entre o `longe_fixo` e o `longe_ancora`), com Holm; K = 200 e δ = 0,034, pelo script de poder (artifacts_v3_longe_geometria/poder.json). DECIDIDOS pelo Matheus em 2026-11-16.
 - GPU: não. CPU, 4 processos, cerca de 3 h a 4 h para 12 800 vidas (K = 200, a LG-5 revista pelo script de poder).
 
@@ -51,3 +51,10 @@ Separar o lado da âncora (pede um mapa maior); o teste causal das idas da D-C1-
 ## 8. Precisa do Matheus
 
 As LG-1 a LG-8 do plano (seção 9), cada uma com a recomendação e o custo de errar.
+
+## 9. O resultado da run (2026-11-16)
+
+A leitura é a primeira linha da seção 7 do plano: a regularidade explica o ganho. I-PAD +0,0709 [+0,0544; +0,0874] e I-M3 +0,0524
+[+0,0367; +0,0682], os dois "> 0" com o Holm; a M-ANCORA "≈ 0" nos dois. 12 800 vidas, o G1 em todas, na faixa 93101…93505 (D-LGR-1). O
+relato completo, com cada número ligado ao artefato, está em `docs/RESULTADO_V3_LONGE_GEOMETRIA.md`; os desvios D-LGR-1 a D-LGR-3, em
+`docs/registro/2026-11.md`. Falta a decomposição da D-C1-3 (D-LG-3), num script à parte.
