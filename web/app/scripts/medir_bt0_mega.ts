@@ -39,8 +39,9 @@ export const VERSAO_MEDIDA = 1;
 export const DIAS_MAX = 60;
 const EXERCICIOS = Object.keys(CTR.exercicios) as Exercicio[];
 /** os estagios medidos e o nome Digimon de cada um (nomes-digimon-na-tela) */
-/** os niveis do Tamer (a contagem dos marcos) em que a chave de beta poderia abrir o cais (secao 3 do plano: o 9 ou um mais cedo) */
-export const NIVEIS_CAIS = [7, 8, 9, 10] as const;
+/** os marcos do Tamer (src/nivel.ts, 3.3) em que a chave de beta poderia abrir o cais (secao 3 do plano: o 9 ou um mais cedo). Cada peca
+    abre pelo PROPRIO marco, nao pela contagem: o 6 e o Champion, o 7 as tres medalhas, o 8 as seis, o 9 o titulo da Liga, o 10 o Mega */
+export const MARCOS_CAIS = [6, 7, 8, 9, 10] as const;
 export const ESTAGIOS: readonly [Estagio, string][] = [["crianca", "Rookie"], ["adolescente", "Champion"], ["adulto", "Ultimate"], ["mega", "Mega"]];
 
 /* ------------------------------------------------ as hipoteses do relogio (PROPOSTAS, SEM FONTE) */
@@ -96,13 +97,13 @@ export interface VidaBt0 {
   pets: PetVida[]; lutas: number; vitorias: number; lideresTentados: number; segundosPalco: number; chamadosBebe: number;
   /** o primeiro estagio que QUALQUER dos dois pets alcancou: e o que o jogador ve (o marco do Tamer e por jogador) */
   primeiro: Partial<Record<Estagio, Marca & { pet: string }>>;
-  /** o nivel do Tamer (marcosFeitos) no fim de cada dia de jogo */
+  /** o nivel do Tamer (a contagem de marcosFeitos) no fim de cada dia de jogo */
   nivelPorDia: number[];
   /** o dia de jogo em que o Tamer chegou ao ULTIMO_MARCO (null: nao chegou) */
   diaNivel10: number | null;
   medalhas: number;
-  /** o fim do primeiro dia de jogo em que o Tamer chegou a cada nivel de NIVEIS_CAIS (null: nao chegou) */
-  nivelAlcancado: Record<number, Marca | null>;
+  /** o fim do primeiro dia de jogo em que o Tamer tinha cada marco de MARCOS_CAIS (null: nao chegou) */
+  marcoAlcancado: Record<number, Marca | null>;
 }
 
 /** as duas variantes do dono: o da CN0 como esta (nunca equipa) e o que equipa os chips que o Tamer ganhou, nas vagas livres, no fim de
@@ -120,7 +121,7 @@ export function viver(perfil: Perfil, brasao: Especie, i: number, diasMax = DIAS
   let chipsEquipados = 0, lutas = 0, vitorias = 0, lideres = 0, palco = 0, chamados = 0, niveis = [8, 8, 8, 8, 0, 0, 0], morreu = false, dia = 0;
   const abertosAntes = ms.map(() => new Set<string>());
   const pets: PetVida[] = ms.map((m, k) => ({ id: ids[k], especie: m.especie, estagios: {}, morreu: false, medalhasNoFim: 0, forma: "" }));
-  const nivelPorDia: number[] = [], porDia: (Marca & { nivel: number; medalhas: number })[] = [];
+  const nivelPorDia: number[] = [], porDia: (Marca & { nivel: number; marcos: number[]; medalhas: number })[] = [];
   let diaNivel10: number | null = null;
   const marcar = (): void => {
     ms.forEach((m, k) => {
@@ -202,9 +203,9 @@ export function viver(perfil: Perfil, brasao: Especie, i: number, diasMax = DIAS
         if (variante === "chips") for (const it of tamer.itens) if (m.porqueNaoEquipa(it.id) === null) { agir(m, x => { x.equipar(it.id); }); chipsEquipados++; }
       }
       marcar();
-      const nivel = marcosFeitos(ms, tamer).length;
+      const marcos = marcosFeitos(ms, tamer), nivel = marcos.length;
       nivelPorDia.push(nivel);
-      porDia.push({ tick: ms[0].e.tick, minutosDeJogo: ms[0].e.tick - TICK_INICIAL, lutas, segundosPalco: +palco.toFixed(1), chamadosBebe: chamados, dia: dia + 1, nivel, medalhas: tamer.medalhas.length });
+      porDia.push({ tick: ms[0].e.tick, minutosDeJogo: ms[0].e.tick - TICK_INICIAL, lutas, segundosPalco: +palco.toFixed(1), chamadosBebe: chamados, dia: dia + 1, nivel, marcos, medalhas: tamer.medalhas.length });
       if (diaNivel10 === null && marcosFeitos(ms, tamer).includes(ULTIMO_MARCO)) diaNivel10 = dia + 1;
     }
   } catch (err) { if (!(err instanceof PetMorto)) throw err; morreu = true; }
@@ -217,7 +218,7 @@ export function viver(perfil: Perfil, brasao: Especie, i: number, diasMax = DIAS
   }
   return { perfil: perfil.nome, variante, chipsEquipados, brasao, i, semente, versao, dias: nivelPorDia.length, morreu, pets, lutas, vitorias, lideresTentados: lideres,
     segundosPalco: +palco.toFixed(1), chamadosBebe: chamados, primeiro, nivelPorDia, diaNivel10, medalhas: tamer.medalhas.length,
-    nivelAlcancado: Object.fromEntries(NIVEIS_CAIS.map(n => [n, porDia.find(x => x.nivel >= n) ?? null])) };
+    marcoAlcancado: Object.fromEntries(MARCOS_CAIS.map(n => [n, porDia.find(x => x.marcos.includes(n)) ?? null])) };
 }
 
 /* ------------------------------------------------ o relogio */
@@ -268,13 +269,13 @@ export function medir(opc: { vidas: number; especies: readonly Especie[]; dias: 
       const ds = vs.map(v => v.primeiro.mega ? diasDeRelogio(segundosAbertos(v.primeiro.mega, minPorSegundo, p.nome), mpd) : Infinity);
       return [`${mpd}minPorDia`, Object.fromEntries(HIPOTESES.marcosDias.map(d => [`ate${d}dias`, ds.filter(x => x <= d).length]))];
     }))]));
-    /* cada nivel do Tamer de NIVEIS_CAIS: quantos chegam, em quantos dias de relogio (velocidade padrao, sessoes do perfil), e em 3 e 7 dias */
-    const niveis = Object.fromEntries(NIVEIS_CAIS.map(n => {
-      const ds = vs.map(v => v.nivelAlcancado[n] ? diasDeRelogio(segundosAbertos(v.nivelAlcancado[n]!, vPad, p.nome), minPorDia) : Infinity), ok = ds.filter(Number.isFinite);
-      return [`nivel${n}`, { chegaram: ok.length, de: vs.length, diasDeJogoMediana: ok.length ? r2(mediana(vs.flatMap(v => v.nivelAlcancado[n] ? [v.nivelAlcancado[n]!.minutosDeJogo / TPD] : []))) : null,
+    /* cada marco do Tamer de MARCOS_CAIS: quantos chegam, em quantos dias de relogio (velocidade padrao, sessoes do perfil), e em 3 e 7 dias */
+    const marcos = Object.fromEntries(MARCOS_CAIS.map(n => {
+      const ds = vs.map(v => v.marcoAlcancado[n] ? diasDeRelogio(segundosAbertos(v.marcoAlcancado[n]!, vPad, p.nome), minPorDia) : Infinity), ok = ds.filter(Number.isFinite);
+      return [`marco${n}`, { chegaram: ok.length, de: vs.length, diasDeJogoMediana: ok.length ? r2(mediana(vs.flatMap(v => v.marcoAlcancado[n] ? [v.marcoAlcancado[n]!.minutosDeJogo / TPD] : []))) : null,
         diasDeRelogioMediana: ok.length ? r2(mediana(ok)) : null, ...Object.fromEntries(HIPOTESES.marcosDias.map(d => [`ate${d}dias`, ds.filter(x => x <= d).length])) }];
     }));
-    return { variante: va, perfil: p.nome, niveis, brasao: e, vidas: vs.length, sessoes: ses, minutosAbertosPorDia: minPorDia, estagios,
+    return { variante: va, perfil: p.nome, marcos, brasao: e, vidas: vs.length, sessoes: ses, minutosAbertosPorDia: minPorDia, estagios,
       megaNaVelocidadePadrao: { ...emDias, de: vs.length, diasDeRelogio: diasMega.map(x => Number.isFinite(x) ? r2(x) : null) },
       gradeMega: grade,
       diaDeJogoNivel10: vs.map(v => v.diaNivel10), mortes: vs.filter(v => v.morreu).length };

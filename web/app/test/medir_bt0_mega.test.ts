@@ -3,7 +3,7 @@
 // O relogio: o tempo aberto e o tempo de jogo na velocidade mais o que segura o relogio, e os dias saem das sessoes.
 import { describe, expect, test } from "vitest";
 import { ESPECIES, GrupoDoJogo, TPD, VERSAO_GRUPO } from "../motor/index.ts";
-import { HIPOTESES, NIVEIS_CAIS, VARIANTES, diasDeRelogio, medir, segundosAbertos, sementeDoBrasao, viver } from "../scripts/medir_bt0_mega.ts";
+import { HIPOTESES, MARCOS_CAIS, VARIANTES, diasDeRelogio, medir, segundosAbertos, sementeDoBrasao, viver } from "../scripts/medir_bt0_mega.ts";
 import { PERFIS } from "../scripts/medir_cn0_save.ts";
 
 describe("BT0: a vida ate o Mega", () => {
@@ -45,11 +45,11 @@ describe("BT0: o relogio", () => {
     expect(diasDeRelogio(7200, 120)).toBe(1);
     expect(diasDeRelogio(7200, 30)).toBe(4);
   });
-  test("a tabela do --rapido tem cada variante, perfil e especie, e os niveis do cais", () => {
+  test("a tabela do --rapido tem cada variante, perfil e especie, e os marcos do cais", () => {
     const r = medir({ vidas: 1, especies: ESPECIES.slice(0, 1), dias: 2 });
     expect(r.tabela.length).toBe(VARIANTES.length * PERFIS.length * 2);
     for (const t of r.tabela) {
-      expect(Object.keys(t.niveis)).toEqual(NIVEIS_CAIS.map(n => `nivel${n}`));
+      expect(Object.keys(t.marcos)).toEqual(MARCOS_CAIS.map(n => `marco${n}`));
       expect(t.estagios.Rookie.chegaram).toBe(t.vidas);
     }
   }, 300_000);
