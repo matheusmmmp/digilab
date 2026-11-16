@@ -88,7 +88,7 @@ restaurar uma cópia funciona. O e2e cobre os quatro casos.
 
 ### F4 · Os convidados · 2 a 4 semanas de uso
 
-**Desde 2026-11-16, a F4 é o beta fechado do `docs/PLANO_V3_BETA.md`** (PROPOSTO): 30 convidados para 20 ativos, 7 dias, de segunda a
+**Desde 2026-11-16, a F4 é o beta fechado do `docs/PLANO_V3_BETA.md`** (BT-1 a BT-9 DECIDIDAS): 30 convidados para 20 ativos, 7 dias, de segunda a
 domingo, **com o multijogador inteiro**, e por isso **depois da F3 e da F5**, não antes. O texto abaixo é a F4 de antes, que o beta absorve.
 
 Não é uma etapa de código: é o tempo de os convidados jogarem com a conta e o save na nuvem, no ambiente único (CH-7). **O que se mede:**

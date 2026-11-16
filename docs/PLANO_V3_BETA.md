@@ -1,6 +1,6 @@
 # Plano do beta fechado: 20 jogadores, 7 dias, com o multijogador (2026-11-16)
 
-**Status:** PROPOSTO, sem código. As decisões BT-1 a BT-9 (seção 10) vão ao Matheus, cada uma com a recomendação e o custo de errar. Todo
+**Status:** sem código. **As BT-1 a BT-9 estão DECIDIDAS** pelo Matheus em 2026-11-16, pela recomendação e sem mudança ("Sim, segue e mergeia"). Todo
 número é **PROPOSTO, SEM FONTE**: o jogo ainda não teve jogadores de fora, e os critérios do beta saem justamente dele.
 
 **Origem:** o Matheus, em 2026-11-16: "Quero fazer também uma sessão de beta teste de ao menos 20 jogadores por 7 dias e mapear o desempenho
@@ -157,22 +157,22 @@ motor, cada um com o registro de quando entrou.
 
 ## 10. Decisões para o Matheus
 
-Cada uma com a recomendação e o custo de errar. **Todas PROPOSTAS.**
+Cada uma com a recomendação e o custo de errar. **Todas DECIDIDAS** pelo Matheus em 2026-11-16, pela recomendação: "Sim, segue e mergeia".
 
-- **BT-1. O beta é a F4, depois da F3 e da F5,** com todo o multijogador (o pedido). A outra opção é um beta mais cedo, só com a conta e o
+- **BT-1 (DECIDIDA). O beta é a F4, depois da F3 e da F5,** com todo o multijogador (o pedido). A outra opção é um beta mais cedo, só com a conta e o
   save (a F4 de antes), e um segundo beta com o MMO. Custo de errar: médio. Esperar o MMO adia o primeiro contato com jogadores de fora em
   umas 6 a 10 semanas; dois betas gastam convidados duas vezes.
-- **BT-2. 30 convidados para ter 20 ativos,** adultos, PC e celular, com o termo de participação. Custo de errar: médio. Com 20 convites
+- **BT-2 (DECIDIDA). 30 convidados para ter 20 ativos,** adultos, PC e celular, com o termo de participação. Custo de errar: médio. Com 20 convites
   exatos, o dia 7 tem menos de 20.
-- **BT-3. A medida do tempo até o Mega antes (BT0),** e a chave de beta que abre o cais mais cedo se passar de uns 3 dias. A outra opção é
+- **BT-3 (DECIDIDA). A medida do tempo até o Mega antes (BT0),** e a chave de beta que abre o cais mais cedo se passar de uns 3 dias. A outra opção é
   o save inicial com um pet crescido. Custo de errar: alto. Sem isso, o beta pode acabar sem ninguém no ranking.
-- **BT-4. Começar numa segunda-feira, 00:00 de Brasília,** para o beta ser uma semana inteira do ranking. Custo de errar: baixo.
-- **BT-5. O que se mede é só o da seção 5, do próprio servidor,** com o envio do cliente opcional e sem ferramenta de terceiros. Custo de
+- **BT-4 (DECIDIDA). Começar numa segunda-feira, 00:00 de Brasília,** para o beta ser uma semana inteira do ranking. Custo de errar: baixo.
+- **BT-5 (DECIDIDA). O que se mede é só o da seção 5, do próprio servidor,** com o envio do cliente opcional e sem ferramenta de terceiros. Custo de
   errar: médio. Uma ferramenta de terceiros coleta mais do que o termo diz.
-- **BT-6. O plano de análise registrado antes (BT1),** só descritivo, com os logs na pesquisa só com o aceite. Custo de errar: alto. A regra
+- **BT-6 (DECIDIDA). O plano de análise registrado antes (BT1),** só descritivo, com os logs na pesquisa só com o aceite. Custo de errar: alto. A regra
   do projeto pede o plano antes, e o dado é de pessoas.
-- **BT-7. O ensaio de 3 a 5 pessoas, uma semana antes (BT3).** Custo de errar: médio. Sem o ensaio, o que quebra no primeiro dia gasta os 20.
-- **BT-8. Os critérios da seção 6,** com os quatro técnicos travando a abertura. Custo de errar: médio.
-- **BT-9. Sem cobrança e sem anúncio no beta.** A assinatura e o anúncio da voz (a F7) só depois da abertura, como a CN-13 já diz. Sem o vídeo, a
+- **BT-7 (DECIDIDA). O ensaio de 3 a 5 pessoas, uma semana antes (BT3).** Custo de errar: médio. Sem o ensaio, o que quebra no primeiro dia gasta os 20.
+- **BT-8 (DECIDIDA). Os critérios da seção 6,** com os quatro técnicos travando a abertura. Custo de errar: médio.
+- **BT-9 (DECIDIDA). Sem cobrança e sem anúncio no beta.** A assinatura e o anúncio da voz (a F7) só depois da abertura, como a CN-13 já diz. Sem o vídeo, a
   cota da CN-16 (5 grátis e o resto por vídeo) deixaria o jogador com 5 falas por dia; **no beta, as 30 falas por dia da CN-8 saem de
   graça**, sem vídeo. Custo de errar: baixo. A conta da seção 9 já conta as 30.
