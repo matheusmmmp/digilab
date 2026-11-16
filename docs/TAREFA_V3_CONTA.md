@@ -96,3 +96,14 @@ TypeScript, com a `/saude` e a fala por LLM portada do `servidor/` no mesmo cont
 a chave só no ambiente e o template quando não dá (D-CONTA-47, 50, 51). O catálogo e o gabarito dos testes são gerados do Python, e o
 Vitest confere a paridade (D-CONTA-49). Ficaram de fora o Ollama, o alerta por e-mail, a fala livre e o `--remoto`; o `servidor/` não muda.
 Dois achados: o id datado do modelo cai no preço mais caro da tabela (D-CONTA-52), e o Mega nunca usa a LLM (D-CONTA-53).
+
+## A CN2 local: a conta no servidor (2026-11-16)
+
+A conta do lado do servidor em `servidor_web/src/conta/`, sem os apps OAuth reais e sem nuvem. O banco SQLite pelo `node:sqlite`, com as
+tabelas da seção 4 e três de apoio, migração pelo `PRAGMA user_version` e o arquivo fora do git (D-CONTA-60). O login atrás da interface
+`Provedor`: o Google e o GitHub com `state` e PKCE, prontos para as chaves no ambiente e desligados sem elas; o provedor falso só no local,
+para os testes e o `npm run dev` (D-CONTA-68). A sessão em cookie `httpOnly`, `SameSite=Lax`, `Secure` fora do local, com o CSRF e o CORS só
+para a origem do jogo. As rotas do primeiro acesso (o apelido de um Rookie, a idade em duas opções, o aceite com a versão do rascunho,
+D-CONTA-62), da conta, dos aparelhos, de sair, de baixar os dados e de apagar (na hora, D-CONTA-63); a lista de convidados por variável ou
+tabela, com o e-mail do Google só na memória (D-CONTA-61). Ficaram de fora as telas, a sessão na `/fala` e trocar o apelido depois
+(D-CONTA-67).
