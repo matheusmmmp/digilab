@@ -50,6 +50,17 @@ test("o tom da voz: humor x especie x estagio, dentro dos limites; especie ou es
   expect(() => taxaDaVoz("contente", "brasa", "velho")).toThrow(/estagio/);
 });
 
+test("a voz espontanea espera a pausa longa; a resposta ao dono, a curta", () => {
+  esquecerVoz();
+  expect(VOZ.pausaEspontaneaMs).toBeGreaterThan(VOZ.pausaMs);
+  expect(podeFalar(1000, true)).toBe(true);
+  expect(podeFalar(1000 + VOZ.pausaMs, true)).toBe(false);          /* o pet mudando de acao sozinho nao fala de novo tao cedo */
+  expect(podeFalar(1000 + VOZ.pausaMs)).toBe(true);                 /* mas responde ao gesto do dono */
+  expect(podeFalar(1000 + VOZ.pausaMs + VOZ.pausaEspontaneaMs - 1, true)).toBe(false);
+  expect(podeFalar(1000 + VOZ.pausaMs + VOZ.pausaEspontaneaMs, true)).toBe(true);
+  esquecerVoz();
+});
+
 test("a pausa entre duas falas: so uma a cada VOZ.pausaMs", () => {
   expect(podeFalar(1000)).toBe(true);
   expect(podeFalar(1000 + VOZ.pausaMs - 1)).toBe(false);

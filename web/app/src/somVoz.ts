@@ -9,8 +9,11 @@ export type HumorVoz = (typeof HUMORES_VOZ)[number];
 
 /** os numeros da voz (PROPOSTOS, SEM FONTE; a rodada de equilibrio e o ouvido do Matheus acertam) */
 export const VOZ = {
-  /** a pausa minima entre duas falas do pet, em ms (HR-4) */
+  /** a pausa minima entre duas falas do pet, em ms (HR-4): a resposta a um gesto do dono */
   pausaMs: 4000,
+  /** a pausa antes da voz espontanea (o pet dorme, acorda, chama, muda de acao sozinho), em ms: com o tempo a 10 min/s ele muda de acao a cada
+      ~1,5 s, e a pausa de 4 s deixava a voz tocando sem parar (Matheus, 2026-11-12: "irrita"). PROPOSTO, SEM FONTE */
+  pausaEspontaneaMs: 30000,
   /** o tom de cada humor (a taxa de reproducao: 1 = o arquivo como e) */
   humor: { contente: 1.15, resmungo: 0.8, susto: 1.4, choro: 0.9, bocejo: 0.65, chamando: 1.25 } as Readonly<Record<HumorVoz, number>>,
   /** o tom de cada especie (o brasao: brasa Coragem, cirro Amizade, ferrugem Conhecimento, limo Sinceridade) */
@@ -30,11 +33,12 @@ export function taxaDaVoz(humor: HumorVoz, especie: string, estagio: string): nu
   return Math.min(VOZ.max, Math.max(VOZ.min, h * e * g));
 }
 
-/** a pausa da voz: devolve true (e marca) se o pet pode falar agora; false se falou ha menos de VOZ.pausaMs */
+/** a pausa da voz: devolve true (e marca) se o pet pode falar agora; false se falou ha menos de VOZ.pausaMs (a resposta ao dono) ou de
+    VOZ.pausaEspontaneaMs (a voz espontanea) */
 let ultima = -Infinity;
-export function podeFalar(agora: number): boolean {
+export function podeFalar(agora: number, espontanea = false): boolean {
   if (!Number.isFinite(agora)) throw new Error("podeFalar: agora nao finito");
-  if (agora - ultima < VOZ.pausaMs) return false;
+  if (agora - ultima < (espontanea ? VOZ.pausaEspontaneaMs : VOZ.pausaMs)) return false;
   ultima = agora;
   return true;
 }

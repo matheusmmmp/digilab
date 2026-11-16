@@ -42,3 +42,40 @@ test("Conversar: 'vai comer' manda comando:true e grava o evento do botão Alime
   expect(JSON.stringify(novo)).toMatch(/alimentar|racao/);
   await expect(page.locator(".mc-balao", { hasText: "Nhã, comida!" })).toBeVisible();
 });
+
+/* a mensagem nao some calada (2026-11-12): sem o servidor da fala livre a barra fica travada e diz por que; com o servidor e a fala falhando, a nota
+   do erro aparece na conversa */
+async function abrirConversa(browser: import("@playwright/test").Browser) {
+  const ctx = await browser.newContext({ baseURL: test.info().project.use.baseURL, viewport: { width: 1280, height: 800 } });
+  const page = await ctx.newPage();
+  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.evaluate(([chave, s]) => {
+    localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 1, log: [] }));
+    localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
+    localStorage.setItem(chave, s);
+  }, [CHAVE, JSON.stringify(SAVE)] as const);
+  return page;
+}
+
+test("Conversar: sem o servidor da fala livre, a barra fica travada e diz por quê", async ({ browser }) => {
+  test.setTimeout(120_000);
+  const page = await abrirConversa(browser);
+  await page.route("**/api/fala-livre/status", r => r.abort());
+  await page.goto(APP + "#/conversar/chat");
+  await page.getByRole("button", { name: "Livre", exact: true }).click();
+  await expect(page.locator("#conv-msg")).toBeDisabled();
+  await expect(page.locator("#conv-msg")).toHaveAttribute("placeholder", "A fala livre precisa do servidor local ligado");
+  await expect(page.getByRole("button", { name: "Enviar" })).toBeDisabled();
+});
+
+test("Conversar: a fala que falha mostra o erro em vez de sumir", async ({ browser }) => {
+  test.setTimeout(120_000);
+  const page = await abrirConversa(browser);
+  await page.route("**/api/fala-livre/status", r => r.fulfill({ json: { modelo: "falso", carregado: true } }));
+  await page.route("**/api/fala-livre", r => r.fulfill({ status: 503, json: { erro: "modelo fora do ar" } }));
+  await page.goto(APP + "#/conversar/chat");
+  await page.getByRole("button", { name: "Livre", exact: true }).click();
+  await page.locator("#conv-msg").fill("oi");
+  await page.getByRole("button", { name: "Enviar" }).click();
+  await expect(page.getByRole("alert").filter({ hasText: "A fala não saiu: modelo fora do ar" })).toBeVisible();
+});

@@ -20,7 +20,7 @@ export type InstanteSom =
   | { tipo: "golpe"; evento: EventoSom; sprite: string; habilidade: boolean }
   | { tipo: "musica"; fonte: FonteMusica; alvo: AlvoMusica | null }
   /* HR2 e HR3: a voz do pet (o tom sai da especie, do estagio e do humor, na casca) e o bipe do chamado */
-  | { tipo: "voz"; humor: HumorVoz }
+  | { tipo: "voz"; humor: HumorVoz; espontanea: boolean }
   | { tipo: "bipe"; bipe: TipoBipe };
 
 const ouvintes = new Set<(i: InstanteSom) => void>();
@@ -34,10 +34,11 @@ export function emitirSom(e: EfeitoSom): void {
 }
 /** o golpe, o acerto ou o fim de uma forma da luta (a chave de sprite do mapa de sons) */
 export function emitirGolpe(evento: EventoSom, sprite: string, habilidade: boolean): void { emitir({ tipo: "golpe", evento, sprite, habilidade }); }
-/** o pet fala com este humor (a casca escolhe o tom e respeita a pausa entre duas falas) */
-export function emitirVoz(humor: HumorVoz): void {
+/** o pet fala com este humor (a casca escolhe o tom e respeita a pausa entre duas falas). `espontanea`: o pet fala sozinho (dorme, acorda,
+    chama, muda de acao), nao em resposta ao dono; espera a pausa longa (somVoz.ts, VOZ.pausaEspontaneaMs) */
+export function emitirVoz(humor: HumorVoz, espontanea = false): void {
   if (!(HUMORES_VOZ as readonly string[]).includes(humor)) throw new Error("humor de voz desconhecido: " + humor);
-  emitir({ tipo: "voz", humor });
+  emitir({ tipo: "voz", humor, espontanea });
 }
 /** o bipe do chamado do bebe (HR3) */
 export function emitirBipe(bipe: TipoBipe): void { emitir({ tipo: "bipe", bipe }); }

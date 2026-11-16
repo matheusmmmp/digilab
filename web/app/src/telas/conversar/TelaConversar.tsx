@@ -82,7 +82,9 @@ export function TelaConversar(_: { voltar: () => void }) {
   const nome = nascendo > 0 ? "o ovo" : nomeForma(m.forma), livre = fl.modo === "livre";
   const pronto = livre ? !!fl.status : fl.modo === "moldura" ? llm.ativo : true;
   const direita = livre ? (fl.status ? `${fl.status.modelo} pronto` : fl.statusErro ? "servidor sem a fala livre" : "conferindo…") : r.texto;
-  const enviar = (ev: FormEvent) => { ev.preventDefault(); enviarConversa(msg); setMsg(""); };
+  /* a fala livre precisa do servidor local: sem ele, nao da para enviar (a mensagem sumia sem resposta) */
+  const podeEscrever = livre && !!fl.status;
+  const enviar = (ev: FormEvent) => { ev.preventDefault(); if (!podeEscrever) return; enviarConversa(msg); setMsg(""); };
   return (
     <section className="mc mc-conv" aria-label="Conversar">
       <p className="mc-apoio">{nascendo > 0 ? "Digi-Egg" : nomeForma(m.forma)} · {nomeEstagio(m.forma)} · {COMO_FALA[m.estagioAtual]}</p>
@@ -102,6 +104,7 @@ export function TelaConversar(_: { voltar: () => void }) {
           </div>
         )) : <p className="mc-apoio">{livre ? `Escreva algo para ${nome}.` : "A conversa por texto usa a fala livre (modelo local, experimental). Escolha Livre acima para conversar."}</p>}
         {fl.pendente && <div className="mc-conv__linha"><RetratoPequeno /><div className="mc-balao">…</div></div>}
+        {livre && fl.erro && !fl.pendente && <p className="mc-nota" role="alert"><b>?</b>A fala não saiu: {fl.erro}</p>}
         <div ref={fim} />
       </div>
       <div className="mc-conv__atalhos" role="group" aria-label="Ensinar agora">
@@ -111,9 +114,10 @@ export function TelaConversar(_: { voltar: () => void }) {
       </div>
       <form className="mc-conv__escrever" onSubmit={enviar}>
         <label htmlFor="conv-msg" className="sr-only">Mensagem para {nome}</label>
-        <input id="conv-msg" type="text" maxLength={300} autoComplete="off" placeholder={livre ? `Escreva para ${nome}` : "Escolha Livre para escrever"} disabled={!livre}
+        <input id="conv-msg" type="text" maxLength={300} autoComplete="off" disabled={!podeEscrever}
+          placeholder={!livre ? "Escolha Livre para escrever" : fl.status ? `Escreva para ${nome}` : fl.statusErro ? "A fala livre precisa do servidor local ligado" : "Conferindo o servidor…"}
           value={msg} onChange={ev => setMsg((ev.target as HTMLInputElement).value)} />
-        <BotaoHx type="submit" aria-label="Enviar" disabled={!livre || !msg.trim()}>
+        <BotaoHx type="submit" aria-label="Enviar" disabled={!podeEscrever || !msg.trim()}>
           <svg viewBox="0 0 16 16" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 8h10M8 4l4 4-4 4" /></svg>
         </BotaoHx>
       </form>
