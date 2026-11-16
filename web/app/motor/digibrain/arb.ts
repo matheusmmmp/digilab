@@ -1,6 +1,8 @@
 /* M-ARB, a arbitragem: o espelho de digilab/digibrain/arb.py (docs/ESPEC_DIGIBRAIN_MODULAR.md, secoes 4.7 e 7; PE-5; LM2). O reflexo do sono, os
    pesos, o sorteio proporcional (uma `rng.random()` com dois candidatos ou mais, a unica rng do cerebro) e as sondas "quem decidiu" (a C4, M4:
    `sem_lembranca`). As facetas (`sem_faceta`) e a escolha segurada (a C3, `segurar`) ficam fora do laboratorio (LAB-1): ligadas, falham alto.
+   A guarda da fome urgente no brincar (docs/PLANO_V3_EQUILIBRIO_CUIDADO.md, EQ-7; `escolher(..., semBrincar = true)`, que o M-ADAPT passa
+   so com a ConfigEquilibrioCuidado.guarda_fome_brincar e a fome urgente): o peso 0 nas unidades do brincar, no sorteio e nas sondas.
    O sono que segura (docs/TAREFA_V3_SONO_SEGURA.md; `sono` com a chave ligada): o reflexo tambem vale com o pet dormindo (o `contexto.dormindo`
    do M-SENS) e a energia abaixo de `lambda_acordar`, salvo a fome urgente (acima do `urgencia_lambda`). Desligado, o reflexo de hoje. */
 import { ajustarDever, situacaoDever, type ConfigDever, type SensDever, type SituacaoDever } from "./dever.ts";
@@ -71,6 +73,11 @@ export class Arbitragem {
     this.S = this.p.escala;
   }
 
+  /** a guarda da fome urgente no brincar (EQ-7): o peso 0 nas unidades do brincar */
+  private static semBrincar(unidades: readonly UnidadeImpulso[], w: number[]): number[] {
+    return w.map((x, i) => (unidades[i]!.acao === "brincar" ? 0 : x));
+  }
+
   pesos(ativacoes: readonly number[], gExp: number): number[] {
     const extra = mul(gExp, this.p.epsilon, this.S);
     return ativacoes.map(a => (a > 0 ? a + extra : 0));
@@ -109,10 +116,11 @@ export class Arbitragem {
 
   escolher(unidades: readonly UnidadeImpulso[], afeto: Pick<LeituraAfeto, "g_exp"> & Partial<Pick<LeituraAfeto, "urgencias">>,
     sens: Pick<SaidaSens, "leitura"> & Partial<SaidaSens>, rng: RngPolitica,
-    reflexoOuNulo: boolean | null = null, segurar: unknown = null): SaidaArb {
+    reflexoOuNulo: boolean | null = null, segurar: unknown = null, semBrincar = false): SaidaArb {
     const p = this.p;
     if (segurar !== null) throw new Error("M-ARB: a escolha segurada (redecidir_evento) fica fora do laboratorio");
     const reflexo = reflexoOuNulo ?? this.reflexo(sens);
+    if (typeof semBrincar !== "boolean") throw new Error(`M-ARB: sem_brincar e bool: ${String(semBrincar)}`);
     let w = this.pesos(unidades.map(x => x.a), afeto.g_exp);
     let sit: SituacaoDever | null = null, reg: ReturnType<typeof ajustarDever>[1] | null = null;
     const chaves = unidades.map(x => x.chave as readonly unknown[]);
@@ -120,6 +128,7 @@ export class Arbitragem {
       sit = situacaoDever(sens as SensDever, afeto.urgencias!, this.dever, this.S);
       [w, reg] = ajustarDever(chaves, w, sit);
     }
+    if (semBrincar) w = Arbitragem.semBrincar(unidades, w);   // a guarda da fome urgente no brincar (EQ-7), depois da CO7 (D-EQ2-2)
     let i: number;
     let u: number | null;
     if (reflexo) {
@@ -154,7 +163,7 @@ export class Arbitragem {
       const gExp = nome === "sem_afeto" ? p.e0 : afeto.g_exp;
       let ws = this.pesos(ativ, gExp);
       if (sit !== null) ws = ajustarDever(chaves, ws, sit)[0];   // a CO7: a sonda com o mesmo escudo e a mesma universalizacao
-      const j = this.escolher_(unidades, ws, u);
+      const j = this.escolher_(unidades, semBrincar ? Arbitragem.semBrincar(unidades, ws) : ws, u);
       sondas[nome] = chaveJson(unidades[j]!.chave);
       sondas[this.decidiu[nome]!] = j !== i;
     }
