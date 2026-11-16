@@ -1658,7 +1658,7 @@
    "raiz": false
   },
   "tests/gabarito_lugar_estilos_lg.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -1724,7 +1724,7 @@
    "raiz": false
   },
   "tests/gabarito_paladar_mundo.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -1743,7 +1743,7 @@
    "raiz": false
   },
   "tests/gabarito_pqp_adendo7.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -2038,7 +2038,7 @@
    "raiz": false
   },
   "tests/test_banheiro_g2.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -2219,7 +2219,7 @@
    "raiz": false
   },
   "tests/test_competicao_etapa0.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -2407,7 +2407,7 @@
    "raiz": false
   },
   "tests/test_credito_canal_etapa0.py": {
-   "classe": "SAI",
+   "classe": "REFAZ",
    "importa_direto_o_que_sai": [
     "digilab/policies/lobos.py"
    ],
@@ -2641,7 +2641,7 @@
    "raiz": false
   },
   "tests/test_gabarito_arvore_sacode.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -2656,7 +2656,7 @@
    "raiz": false
   },
   "tests/test_gabarito_conversa_dc3.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -2686,17 +2686,17 @@
    "raiz": false
   },
   "tests/test_gabarito_genoma_g0.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "tests/test_gabarito_gosto_visual.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "tests/test_gabarito_gosto_visual_enjoo.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -2706,12 +2706,12 @@
    "raiz": false
   },
   "tests/test_gabarito_habito_intencao.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "tests/test_gabarito_lance_dono.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -2721,17 +2721,17 @@
    "raiz": false
   },
   "tests/test_gabarito_lugar_estilos.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "tests/test_gabarito_lugar_estilos_lg.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "tests/test_gabarito_memoria_autobio.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -2751,22 +2751,22 @@
    "raiz": false
   },
   "tests/test_gabarito_orgao_visao.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "tests/test_gabarito_redecidir_evento.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "tests/test_gabarito_sono_segura.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "tests/test_gabarito_tv_jogo.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -2776,7 +2776,7 @@
    "raiz": false
   },
   "tests/test_gabaritos_mundo_corpo.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -3206,7 +3206,7 @@
    "raiz": false
   },
   "tests/test_p4_gabaritos.py": {
-   "classe": "SAI",
+   "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -3640,10 +3640,10 @@
    "FICA": 6
   },
   "tests": {
-   "FICA": 215,
-   "REFAZ": 80,
+   "FICA": 236,
+   "REFAZ": 81,
    "REVER": 16,
-   "SAI": 41
+   "SAI": 19
   },
   "tools": {
    "FICA": 26,

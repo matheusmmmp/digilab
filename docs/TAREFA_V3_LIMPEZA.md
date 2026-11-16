@@ -26,9 +26,13 @@ cada arquivo Python em SAI, REFAZ, FICA ou REVER (a docstring do script define a
 |---|---|---|---|---|
 | `digilab/` | 13 | 15 | 53 | 2 |
 | `experiments/` | 130 | 9 | 42 | 10 |
-| `tests/` | 41 | 80 | 215 | 16 |
+| `tests/` | 19 | 81 | 236 | 16 |
 | `tools/` | 0 | 1 | 26 | 0 |
 | `servidor/` | 0 | 0 | 6 | 0 |
+
+**O limite do inventário:** ele lê imports, não o que a vida roda. A bancada é uma raiz viva e ainda monta os braços do A (o A11, o
+J5, o pet que pensa), então os testes e gabaritos das vidas do A que passam pela bancada saem como FICA ou REFAZ. Eles viram SAI na LZ2,
+quando a bancada perde esses braços, e a lista da LZ1 separa um caso do outro.
 
 **Os cérebros não saem só movendo arquivos.** Três amarras:
 

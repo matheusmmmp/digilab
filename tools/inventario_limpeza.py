@@ -9,7 +9,10 @@ So le o codigo (AST); nao importa nada do projeto. As classes:
   - REVER: um arquivo que nenhuma raiz viva alcanca e que nao toca os cerebros (codigo de etapas antigas a decidir caso a caso).
 
 As raizes vivas sao o motor, o DigiBrain modular, a bancada, as runs da V3, as ferramentas e o servidor (RAIZES abaixo). Os testes
-seguem a classe do que testam: um teste que importa direto um arquivo que sai e nada vivo e SAI; um que importa os dois e REFAZ.
+seguem a classe do que testam (um auxiliar de tests/, como os gabarito_*.py, conta como vivo se importa algo vivo): um teste que importa direto um arquivo que sai e nada vivo e SAI; um que importa os dois e REFAZ.
+
+O limite: o script le imports, nao o que a vida roda. A bancada e uma raiz viva e ainda monta os bracos do A, entao o que chega ao A pela
+bancada sai como FICA ou REFAZ ate a bancada perder esses bracos (a LZ2).
 
     python tools/inventario_limpeza.py            # grava docs/limpeza/inventario_python.json e imprime o resumo
 """
@@ -129,6 +132,16 @@ def classificar(arestas: dict[str, list[str]]) -> dict[str, dict]:
     raizes -= saem
     vivos = _fecho(arestas, raizes, saem)
     tocam = {r for r in arestas if _fecho(arestas, {r}, set()) & saem}
+    # os modulos auxiliares de tests/ (os gabarito_*.py, que nao sao test_*) contam como vivos quando importam algo vivo, ate o ponto fixo:
+    # um test_gabarito_x.py que so importa o gabarito_x.py testa o que o gabarito_x.py testa
+    mudou = True
+    while mudou:
+        mudou = False
+        for r, alvos in arestas.items():
+            if (r.startswith("tests/") and not Path(r).name.startswith("test_") and r not in vivos and r not in saem
+                    and any(a in vivos for a in alvos)):
+                vivos.add(r)
+                mudou = True
     out = {}
     for r, alvos in arestas.items():
         diretos = sorted(set(alvos) & saem)
