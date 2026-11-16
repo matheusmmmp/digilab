@@ -1,0 +1,346 @@
+{
+  "descritivo": {
+    "acoes": {
+      "REL": {
+        "comedouro": {
+          "brincar": 17481,
+          "chamar_atencao": 139057,
+          "comer": 55387,
+          "dormir": 503260,
+          "emburrar": 5182,
+          "explorar": 347145,
+          "ocioso": 7688
+        },
+        "longe": {
+          "brincar": 23518,
+          "chamar_atencao": 178026,
+          "comer": 68163,
+          "dormir": 500985,
+          "emburrar": 16818,
+          "explorar": 281132,
+          "ocioso": 6558
+        },
+        "longe_fixo": {
+          "brincar": 23744,
+          "chamar_atencao": 185310,
+          "comer": 59925,
+          "dormir": 498745,
+          "emburrar": 14564,
+          "explorar": 286582,
+          "ocioso": 6330
+        }
+      },
+      "TRIV": {
+        "comedouro": {
+          "brincar": 89605,
+          "comer": 373515,
+          "dormir": 376166,
+          "explorar": 235914
+        },
+        "longe": {
+          "brincar": 109635,
+          "comer": 440419,
+          "dormir": 330922,
+          "explorar": 194224
+        },
+        "longe_fixo": {
+          "brincar": 85459,
+          "comer": 614820,
+          "dormir": 241858,
+          "explorar": 133063
+        }
+      }
+    },
+    "niveis": {
+      "d_fe": {
+        "REL": {
+          "comedouro": {
+            "media": 0.5193536729600694,
+            "n": 200
+          },
+          "longe": {
+            "media": 0.6799812695829199,
+            "n": 200
+          },
+          "longe_fixo": {
+            "media": 0.6068977115885417,
+            "n": 200
+          }
+        },
+        "TRIV": {
+          "comedouro": {
+            "media": 0.8176720323867395,
+            "n": 200
+          },
+          "longe": {
+            "media": 0.8066873597676918,
+            "n": 200
+          },
+          "longe_fixo": {
+            "media": 0.8834797390666336,
+            "n": 200
+          }
+        }
+      },
+      "episodio": {
+        "REL": {
+          "comedouro": {
+            "media": 0.8787147364479463,
+            "n": 200
+          },
+          "longe": {
+            "media": 0.44371077499212175,
+            "n": 200
+          },
+          "longe_fixo": {
+            "media": 0.5624230809645971,
+            "n": 200
+          }
+        },
+        "TRIV": {
+          "comedouro": {
+            "media": 0.9530245117580399,
+            "n": 200
+          },
+          "longe": {
+            "media": 0.8059667357345311,
+            "n": 200
+          },
+          "longe_fixo": {
+            "media": 0.6452408386648194,
+            "n": 200
+          }
+        }
+      },
+      "episodios_n": {
+        "REL": {
+          "comedouro": {
+            "media": 17.005,
+            "n": 200
+          },
+          "longe": {
+            "media": 11.78,
+            "n": 200
+          },
+          "longe_fixo": {
+            "media": 12.94125,
+            "n": 200
+          }
+        },
+        "TRIV": {
+          "comedouro": {
+            "media": 27.87625,
+            "n": 200
+          },
+          "longe": {
+            "media": 21.3975,
+            "n": 200
+          },
+          "longe_fixo": {
+            "media": 17.96125,
+            "n": 200
+          }
+        }
+      },
+      "exaustao": {
+        "REL": {
+          "comedouro": {
+            "media": 0.16744791666666667,
+            "n": 200
+          },
+          "longe": {
+            "media": 0.3048549107142857,
+            "n": 200
+          },
+          "longe_fixo": {
+            "media": 0.23863095238095236,
+            "n": 200
+          }
+        },
+        "TRIV": {
+          "comedouro": {
+            "media": 1.0,
+            "n": 200
+          },
+          "longe": {
+            "media": 1.0,
+            "n": 200
+          },
+          "longe_fixo": {
+            "media": 1.0,
+            "n": 200
+          }
+        }
+      },
+      "privacao": {
+        "REL": {
+          "comedouro": {
+            "media": 0.1567782738095238,
+            "n": 200
+          },
+          "longe": {
+            "media": 0.5303776041666667,
+            "n": 200
+          },
+          "longe_fixo": {
+            "media": 0.3822488839285715,
+            "n": 200
+          }
+        },
+        "TRIV": {
+          "comedouro": {
+            "media": 0.9814378720238095,
+            "n": 200
+          },
+          "longe": {
+            "media": 0.9752120535714286,
+            "n": 200
+          },
+          "longe_fixo": {
+            "media": 0.9858556547619048,
+            "n": 200
+          }
+        }
+      }
+    }
+  },
+  "etapa": "validacao",
+  "fase": "baseline_trivial",
+  "leitura": {
+    "classe": "< 0",
+    "exclui_trivial": false,
+    "texto": "a baseline vence o modular"
+  },
+  "modo": "validacao",
+  "nao_demonstra": [
+    "que a baseline e a melhor politica trivial possivel (so a grade da secao 4)",
+    "o resultado fora das 12 celulas da C4, do mundo do MVP e dos 14 dias",
+    "algo sobre o jogo web (as vidas sao do Python)",
+    "que o modular e pior ou melhor em outra medida"
+  ],
+  "plano": "docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md",
+  "primario": {
+    "bootstrap": {
+      "ic90": {
+        "ic_inferior": -0.11871921999382348,
+        "ic_superior": -0.052557376147445115,
+        "nivel": 0.9
+      },
+      "ic95": {
+        "ic_inferior": -0.1274651625973692,
+        "ic_superior": -0.05032611904460845,
+        "nivel": 0.95
+      },
+      "motivo": null,
+      "p_unilateral": 1.0,
+      "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+    },
+    "classe": {
+      "classe": "< 0",
+      "motivo": null,
+      "sinal": null
+    },
+    "contraste": "REL - TRIV, a taxa de fechamento por episodio, nas 4 celulas do longe_fixo",
+    "g1": 0.8200881333657002,
+    "gl": 199,
+    "ic95": {
+      "ic_inferior": -0.12781436820852335,
+      "ic_superior": -0.03782114719192125,
+      "nivel": 0.95
+    },
+    "margem": 0.032,
+    "margem_efetiva": 0.0642009398090596,
+    "media": -0.0828177577002223,
+    "motivo": null,
+    "n": 200,
+    "n_grupos": 5,
+    "p_unilateral": 0.9998194476771819,
+    "ressalva_assimetria": null,
+    "t": -3.629451583849416,
+    "teste": "t sobre as unidades (A4.4.6)"
+  },
+  "secundarias": {
+    "comedouro": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": -0.08425882502568299,
+          "ic_superior": -0.061590172375241344,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.08485170616745781,
+          "ic_superior": -0.05973210323794273,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 1.0,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "classe": {
+        "classe": "< 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "REL - TRIV, a taxa de fechamento por episodio, nas 4 celulas do comedouro",
+      "g1": 4.207394337643615,
+      "gl": 199,
+      "ic95": {
+        "ic_inferior": -0.09947014119404948,
+        "ic_superior": -0.04914940942613788,
+        "nivel": 0.95
+      },
+      "margem": 0.032,
+      "margem_efetiva": 0.0358986847551943,
+      "media": -0.07430977531009368,
+      "motivo": null,
+      "n": 200,
+      "n_grupos": 5,
+      "p_unilateral": 0.9999999886159442,
+      "ressalva_assimetria": null,
+      "t": -5.824066645153928,
+      "teste": "t sobre as unidades (A4.4.6)"
+    },
+    "longe": {
+      "bootstrap": {
+        "ic90": {
+          "ic_inferior": -0.37151279415487265,
+          "ic_superior": -0.3544055709756735,
+          "nivel": 0.9
+        },
+        "ic95": {
+          "ic_inferior": -0.37383506711960857,
+          "ic_superior": -0.35296579160965197,
+          "nivel": 0.95
+        },
+        "motivo": null,
+        "p_unilateral": 1.0,
+        "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)"
+      },
+      "classe": {
+        "classe": "< 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "REL - TRIV, a taxa de fechamento por episodio, nas 4 celulas do longe",
+      "g1": 0.15689263587268884,
+      "gl": 199,
+      "ic95": {
+        "ic_inferior": -0.3733665031025063,
+        "ic_superior": -0.3511454183823125,
+        "nivel": 0.95
+      },
+      "margem": 0.032,
+      "margem_efetiva": 0.015852466513560957,
+      "media": -0.3622559607424094,
+      "motivo": null,
+      "n": 200,
+      "n_grupos": 5,
+      "p_unilateral": 1.0,
+      "ressalva_assimetria": null,
+      "t": -64.29506223258456,
+      "teste": "t sobre as unidades (A4.4.6)"
+    }
+  },
+  "unidades": 200,
+  "vidas": 4800
+}

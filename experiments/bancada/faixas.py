@@ -188,6 +188,11 @@ FAIXAS_RESERVADAS = (
                    "aprovada pelo Matheus em 2026-11-16, \"Eu aprovo o plano, pode seguir com as recomendacoes e o merge\"; "
                    "trocada da 93101-93505, que colidia com a calibracao da EQUILIBRIO_CUIDADO (D-EQ2-11; Matheus, 2026-11-16, "
                    "\"A LONGE_GEOMETRIA\"), antes de qualquer vida; a 96xxx conferida livre em todos os branches remotos em 2026-11-16)"),
+    # EVIDENCIA A1: a calibracao da baseline trivial (K = 5, so a baseline) tambem usou a 96101-96505 em 2026-11-16, a mesma da
+    # LONGE_GEOMETRIA (D-EV-A1-8; a decisao de qual frente fica com a faixa e do Matheus). A linha da main fica, como na D-EQ2-11.
+    (97101, 97505, "EVIDENCIA A1, a baseline trivial: a validacao, uma vez, o REL da C4 e a baseline nas 12 celulas da C4 "
+                   "(docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md, secao 5; BT-3; bases 97101, 97202, 97303, 97404 e 97505, K = 40); "
+                   "aprovada pelo Matheus em 2026-11-16, \"Aprovo, pode rodar\" (BT-3); conferida livre em todos os branches remotos em 2026-11-16"),
 )
 
 
