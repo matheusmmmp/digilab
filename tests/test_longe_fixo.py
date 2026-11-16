@@ -36,7 +36,8 @@ def _vida(semente, rotulo="atencioso", dias=3):
 
 
 def test_o_estilo_esta_nos_estilos_e_as_runs_de_antes_iteram_os_tres():
-    assert ESTILOS_LUGAR == ESTILOS_LUGAR_V2 + ("longe_fixo",) and ESTILOS_LUGAR_V2 == ("comedouro", "perto", "longe")
+    # o longe_ancora entrou depois (LONGE_GEOMETRIA); as runs de antes seguem iterando os tres do ESTILOS_LUGAR_V2
+    assert ESTILOS_LUGAR == ESTILOS_LUGAR_V2 + ("longe_fixo", "longe_ancora") and ESTILOS_LUGAR_V2 == ("comedouro", "perto", "longe")
     assert N_PONTOS_LONGE_FIXO == 3 and _dono().n_pontos == 3
     assert not hasattr(ConfigMundo(), "n_pontos_longe_fixo")           # fora do asdict(ConfigMundo): os gabaritos do web nao mudam
     for n in (0, 17):

@@ -1,12 +1,12 @@
 # Plano de análise V3: a regularidade do longe separada da geometria (LG)
 
-**Status: PROPOSTO** (2026-11-13, Claude Code, Opus 5.5, na sessão com o Matheus). Nenhuma vida roda antes de quatro coisas:
+**Status: APROVADO pelo Matheus em 2026-11-16,** com as LG-1 a LG-8 DECIDIDAS pela recomendação (K = 200 e δ = 0,034, a LG-5 revista pelo script de poder): "Eu aprovo o plano, pode seguir com as recomendações e o merge", nesta sessão. Escrito em 2026-11-13 (Claude Code, Opus 5.5, na sessão com o Matheus). Nenhuma vida roda antes de quatro coisas:
 1. este plano commitado na `main`, com a marca de aprovação do Matheus no cabeçalho;
 2. as decisões LG-1 a LG-8 (seção 9) DECIDIDAS;
 3. a faixa na `FAIXAS_RESERVADAS` (`experiments/bancada/faixas.py`), num commit próprio;
 4. o código da seção 4 na `main`: os dois estilos novos, o gabarito dos estilos byte a byte, o orquestrador e o script de poder da seção 6.
 
-Todo número novo aqui é **PROPOSTO e SEM FONTE**, salvo onde dito.
+Os números novos daqui ficam **DECIDIDOS com a aprovação e seguem SEM FONTE**, salvo onde dito.
 
 **De onde vem:**
 - a ressalva da geometria do adendo 6 da C1 (`docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`, A6.2): "o contraste `longe_fixo` × `longe` mistura a regularidade com o lado do mapa e com a âncora";
@@ -102,8 +102,8 @@ A distribuição de cada ração é a mesma nos dois estilos (seção 3.2). **A 
 
 - **A faixa proposta: 93101…93505.** Conferida em 2026-11-13: não aparece em `faixas.py` nem em `docs/` em nenhum branch remoto. **A confirmar com o coordenador** antes de entrar na tabela.
 - **As bases:** 93101, 93202, 93303, 93404 e 93505.
-- **O K proposto: 30 por base, 150 unidades,** o da C1 (seção 6). São **9 600 vidas.**
-- **A derivação:** a da C1 (A6.3), `bancada_v2.unidades_derivadas(bases, 30, prefixo="digibrain_prototipo")`.
+- **O K proposto: 40 por base, 200 unidades** (seção 6; a LG-5). São **12 800 vidas.**
+- **A derivação:** a da C1 (A6.3), `bancada_v2.unidades_derivadas(bases, 40, prefixo="digibrain_prototipo")`.
 - **A run roda uma vez,** com todas as bases. As sementes 101…505 servem só à fumaça do orquestrador.
 
 ## 4. O código, antes da run
@@ -125,7 +125,7 @@ A distribuição de cada ração é a mesma nos dois estilos (seção 3.2). **A 
 - **A unidade:** a (base, semente). Em cada unidade e estilo, a diferença entre braços célula a célula (no mesmo dono), com a média das 4 células.
 - **O I-M3:** a diferença de M3\* − M2 do `longe_fixo` menos a do `longe_ancora`. Cada unidade dá um valor.
 - **O I-PAD:** o mesmo, com o PAD no lugar do M3\*.
-- **O teste:** o IC95 pelo t sobre as 150 unidades (`metrics.ic_t`). **O Holm na família dos dois** (α = 0,025 unilateral, como na C4). **Passa** com o limite inferior acima de 0 e o p ajustado dentro do Holm.
+- **O teste:** o IC95 pelo t sobre as 200 unidades (`metrics.ic_t`). **O Holm na família dos dois** (α = 0,025 unilateral, como na C4). **Passa** com o limite inferior acima de 0 e o p ajustado dentro do Holm.
 - **As premissas** (A6.4, por estilo, no M3\* e no PAD):
   - **G-PESA da memória:** a fração das decisões com `memoria_decidiu`, com o limite inferior do IC95 acima de 0,01, no `longe_fixo` e no `longe_ancora`;
   - **G-ELEGIVEL-EP:** ao menos 80 % das vidas com 3 episódios ou mais, nos mesmos dois estilos.
@@ -135,20 +135,37 @@ A distribuição de cada ração é a mesma nos dois estilos (seção 3.2). **A 
 
 ## 6. A margem e o K, pelo poder
 
-**A conta de bolso** (a refazer no script, que é o que vale):
-- o primário da C1 tem IC95 [+0,0355; +0,0624] com 150 unidades, então o dp das diferenças por unidade é cerca de **0,083**;
-- o I é a diferença de duas diferenças, em células diferentes da mesma unidade. Sem correlação, o dp fica perto de 0,083 × √2 ≈ **0,12**; com correlação positiva, fica menor;
-- com o poder de 0,8 e α = 0,025 unilateral, a margem δ(K) ≈ 2,8 × σ / √K:
+**A conta** (o `experiments/poder_longe_geometria.py`, que só lê as vidas da C1 e da C4 já no git; ele grava o
+`artifacts_v3_longe_geometria/poder.json`, sha256 `01fe7ffd…26b1`, e, rodado duas vezes, sai igual byte a byte. **Nenhuma vida, nenhum
+replay e nenhuma semente nova.** Abaixo, **[poder]** é esse artefato):
+1. **A dispersão.** O `longe_ancora` ainda não existe. A dispersão do I é lida na interação mais parecida que existe, a do `longe_fixo`
+   contra o longe sorteado, nas mesmas unidades:
 
-| K (unidades) | por base | vidas | δ(K) com σ = 0,12 |
-|---|---|---|---|
-| 100 | 20 | 6 400 | 0,034 |
-| **150** | **30** | **9 600** | **0,027** |
-| 200 | 40 | 12 800 | 0,024 |
-| 300 | 60 | 19 200 | 0,019 |
+   | fonte | a proxy | média | IC95 (t) | dp entre as unidades | unidades |
+   |---|---|---|---|---|---|
+   | a C1 (o `medidas.json`, sha256 `5a4fb207…`) | (M3\* − M2) no `longe_fixo` − (M3\* − M2) no longe | +0,0596 | [+0,0423; +0,0768] | 0,107 | 150 |
+   | a C4 (o `medidas.json.gz`, json `869ff397…`) | (REL − SEM) no `longe_fixo` − (REL − SEM) no longe | +0,0869 | [+0,0687; +0,1051] | 0,131 | 200 |
 
-- **A escala do que se procura:** se o `longe_ancora` se comportar como o longe sorteado da C1, o I fica perto de +0,049 − (−0,011) ≈ **+0,06**, mais de duas vezes a margem com K = 150. Se a geometria explicar tudo, o I fica perto de 0. Uma margem perto de 0,027 separa os dois.
-- **O script** faz a conta como a A6.5: a dispersão das diferenças por unidade na C1 e na C4, o σ de planejamento com a folga de 20 %, a aproximação normal do t não central e a conferência por simulação (2 000 réplicas, semente 4242). O K e a δ ficam DECIDIDOS pelo Matheus depois do script, antes da run (LG-5).
+   A C4 não tem o M2; o SEM é o braço dela mais perto de "sem memória" (o episódio guardado e nunca lido, sem lugar lembrado).
+2. **O σ de planejamento:** o maior dos dois, com a folga de 20 % da A5.9: **σ = 0,131 × 1,2 = 0,157** (a conta de bolso anterior a este
+   script dava 0,12; a correlação entre o ganho no fixo e no sorteado, por unidade, é baixa: 0,15 na C1 e −0,01 na C4).
+3. **O poder e a margem,** como na A6.5: o menor δ com poder 0,8 do critério de A6.4, pela aproximação normal do t não central, com a
+   conferência por simulação (2 000 réplicas, semente 4242). Ao lado, a margem com o α do primeiro passo do Holm (0,0125), a conservadora:
+
+| K (unidades) | por base | vidas | a margem δ(K) | δ com o α do Holm | o poder simulado em δ(K) |
+|---|---|---|---|---|---|
+| 100 | 20 | 6 400 | 0,044 | 0,049 | 0,790 |
+| 150 | 30 | 9 600 | 0,036 | 0,040 | 0,809 |
+| **200** | **40** | **12 800** | **0,031** | **0,034** | **0,805** |
+| 300 | 60 | 19 200 | 0,025 | 0,028 | 0,807 |
+
+- **A escala do que se procura** [poder]: se o `longe_ancora` se comportar como o longe sorteado, o I fica perto das proxies, **+0,060**
+  (M3\*) e **+0,087** (PAD). Se a geometria explicar tudo, o I fica perto de 0. Com K = 200, a margem com o α do Holm (0,034) fica
+  abaixo da metade das duas proxies, e o "≈ 0" cabe: com o efeito 0, a meia largura do IC95 fica perto de 1,97 × 0,157 / √200 ≈ 0,022.
+- **A recomendação muda de K = 150 para K = 200** (LG-5): com K = 150 a margem fica em 0,036, acima do teto de 0,03 que a LG-5 pedia. O
+  K e a δ ficam DECIDIDOS pelo Matheus antes da run. **A δ proposta: 0,034** (a do α do Holm com K = 200).
+- **As ressalvas:** a proxy mistura a regularidade com a geometria (é exatamente o que a run separa), então o σ do I real pode ser outro;
+  a margem efetiva sai no relato, e o critério não muda. Os números da C1 e da C4 servem só para o tamanho, nunca como evidência da LG.
 
 ## 7. A classificação e a regra de leitura
 
@@ -183,7 +200,7 @@ A distribuição de cada ração é a mesma nos dois estilos (seção 3.2). **A 
 6. **As medidas da C5** (a viabilidade do corpo), como na C1.
 7. **Por dono, só descritivo.**
 
-## 9. As decisões para o Matheus (todas PROPOSTAS)
+## 9. As decisões do Matheus (todas DECIDIDAS em 2026-11-16, pela recomendação)
 
 | id | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
@@ -191,7 +208,7 @@ A distribuição de cada ração é a mesma nos dois estilos (seção 3.2). **A 
 | LG-2 | os 4 braços (PAD, M3\*, M2, M0), com o sono que segura desligado | sim | sem o PAD, a leitura não vale para o cérebro do jogo; sem o M0, perde-se a geometria sem aprendizado; com o sono que segura ligado, a run deixa de ser comparável à C1 e à C4 |
 | LG-3 | os dois primários com Holm (I-M3 e I-PAD) | sim | um primário só deixaria o outro cérebro como leitura solta |
 | LG-4 | a regra de leitura da seção 7, escrita antes | sim | regra escrita depois abre espaço para escolher a leitura |
-| LG-5 | K = 150 e δ pelo script, decididos antes da run | K = 150, se o script der δ ≤ 0,03 | K menor pode não separar o +0,06 do 0; maior custa mais horas de máquina |
+| LG-5 | o K e a δ, pelo script (seção 6), decididos antes da run | K = 200 (40 por base) e δ = 0,034 | com K = 150 a margem (0,036 a 0,040) fica perto da proxy menor dividida por 1,5; com K = 300 a run passa de 5 h |
 | LG-6 | a faixa 93101…93505, a confirmar | sim | nenhum, se a conferência no coordenador passar |
 | LG-7 | nenhuma calibração e nenhum piloto | sim | a variância vem de vidas de outra faixa; se o σ real for maior, a margem efetiva sai no relato e o critério não muda |
 | LG-8 | a separação do lado e da âncora fica fora (seção 10) | sim | a pergunta da regularidade fica respondida; a do lado contra a âncora fica para outro plano |
@@ -204,7 +221,8 @@ A distribuição de cada ração é a mesma nos dois estilos (seção 3.2). **A 
 
 ## 11. O tamanho da run e a máquina
 
-- **150 unidades × 64 vidas = 9 600 vidas,** 14 dias cada.
-- **O tempo estimado:** a L-2 levou 0,88 s de parede por vida com 4 processos (seção 12 do RESULTADO), então são cerca de **2 h 20 min a 3 h 30 min,** com o G1. O orquestrador grava a medida real no `meta.json`.
+- **200 unidades × 64 vidas = 12 800 vidas,** 14 dias cada.
+- **O tempo estimado** [poder]: as vidas da C1 e da C4 custaram de 3,2 a 4,2 s de parede por vida num processo; com 4 processos, cerca de
+  **3 h a 4 h,** com o G1. O orquestrador grava a medida real no `meta.json`.
 - **No máximo 4 processos e uma run de pesquisa por vez** (a V3-D8).
 - **Os artefatos:** `artifacts_v3_longe_geometria/` (o `poder.json`, e o `run/` com o `meta.json`, o `resultado.json`, as medidas e as vidas compactadas, como na C1). O resultado vai no `docs/RESULTADO_V3_LONGE_GEOMETRIA.md`, e os desvios em `docs/registro/2026-11.md`.
