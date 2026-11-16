@@ -181,6 +181,12 @@ FAIXAS_RESERVADAS = (
                    "(docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md, secao 3.4; LG-6; bases 93101, 93202, 93303, 93404 e 93505, K = 40; "
                    "aprovada pelo Matheus em 2026-11-16, \"Eu aprovo o plano, pode seguir com as recomendacoes e o merge\"; "
                    "conferida livre em faixas.py e docs/ de todos os branches remotos em 2026-11-13 e de novo em 2026-11-16)"),
+    (96101, 96505, "EVIDENCIA A1, a baseline trivial: a calibracao de X, Y e Z, so a baseline (docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md, "
+                   "secao 4; BT-3; bases 96101, 96202, 96303, 96404 e 96505, K = 5); PROPOSTA, conferida livre em faixas.py e em todos os "
+                   "branches remotos em 2026-11-16 (a 94xxx fica com o EQUILIBRIO_CUIDADO); nenhuma vida antes do APROVADO do plano"),
+    (97101, 97505, "EVIDENCIA A1, a baseline trivial: a validacao, uma vez, o REL da C4 e a baseline nas 12 celulas da C4 "
+                   "(docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md, secao 5; BT-3; bases 97101, 97202, 97303, 97404 e 97505, K = 40); "
+                   "PROPOSTA, conferida livre junto com a 96xxx; nenhuma vida antes do APROVADO do plano"),
 )
 
 
