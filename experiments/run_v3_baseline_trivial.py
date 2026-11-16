@@ -114,7 +114,7 @@ def modo_da_config(cfg: dict) -> str:
 
 # ================================================================== a vida da baseline
 def fabricas_triv(limiares: LimiaresTriviais, dono: str, semente: int, dias: int, orcamento_por_dia: int) -> tuple:
-    """(a fabrica da politica, a do motor): o motor e o da C4 (o lr.MotorGravaCorpo com o corpo do v11 e o CONFIG_MUNDO_MVP)"""
+    """(a fabrica da politica, a do motor): o motor e o da C4 (o lr.MotorGravaCorpo com o corpo do v11 e o mundo do MVP, o orq.CM)"""
     cc = orq.bancada(dias, orcamento_por_dia).cfg_corpo_de(bv.EspecVida(dono, gl.BRACO_V11, semente))
     S = cc.escala_receptor                       # a escala dos receptores do corpo (o tedio e a falta da fome do Registro)
 
