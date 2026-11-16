@@ -113,3 +113,9 @@ As seções acima são cópias inteiras do CLAUDE.md antigo (o G-NADA-PERDIDO co
   `src/luta.ts` e as telas do combate de antes (`TelaLuta`, `TelaArena`, `TelaCampanha`, `ModalResultado`, `EditorRegras`, `PainelAprendizado`,
   `EscolhaCarta`, o mapa da Exploração), os scripts `scripts/equilibrio_tr/` e os testes deles. A Arena e a Campanha são as do palco novo
   (`src/telas/lutar/palcoPoc/TelaLugaresPoc.tsx`), e o descarte 8 (`src/tamer.ts`) tira os pets v13 a v19 e a Fábrica de antes.
+- **2026-11-12, CONTA, CN1 (local):** `servidor_web/` é o servidor do jogo web (`docs/PLANO_V3_CONTA.md`, seção 10; Node 24 + Hono em
+  TypeScript, por ora só local, sem conta): a `/saude` e a fala por LLM portada do `servidor/` no mesmo contrato (`GET /api/fala/status`,
+  `POST /api/fala`). O catálogo fechado (`servidor_web/catalogo_fala.json`) e o gabarito dos testes (`servidor_web/test/gabarito_fala.json`)
+  são gerados do Python por `python tools/gerar_catalogo_fala_web.py`; o `tests/test_catalogo_fala_web.py` confere que estão em dia. Regras e
+  comandos em `servidor_web/CLAUDE.md` (`cd servidor_web && npm install && npm test && npm run dev`; `npm run dev -- --porta 8765` serve o
+  `npm run dev` do `web/app`). O `servidor/` continua para o jogo local e a pesquisa.

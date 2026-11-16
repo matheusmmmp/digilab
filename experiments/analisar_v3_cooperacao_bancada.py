@@ -65,9 +65,17 @@ def _p1_pet(m: dict, pet: str) -> float | None:
     return p["favoraveis"] / p["oportunidades"] if p["oportunidades"] else None
 
 
-def analisar(por: dict[int, dict[str, dict]]) -> dict:
+def _so_do_pet(m: dict, pet: str) -> dict:
+    """as medidas vistas so pelo pet (o adendo 1, AD1-4): a P1 e a P3 dele"""
+    return {**m, "P1": _p1_pet(m, pet), "P3": {pet: m["P3"][pet]}}
+
+
+def analisar(por: dict[int, dict[str, dict]], pet: str | None = None) -> dict:
+    """`pet`: so a P1 e a P3 desse pet (o adendo 1: o A); sem ele, as da CB4"""
+    if pet is not None:
+        por = {s: {b: _so_do_pet(m, pet) for b, m in bs.items()} for s, bs in por.items()}
     s_ord = sorted(por)
-    out: dict = {"n_sementes": len(s_ord)}
+    out: dict = {"n_sementes": len(s_ord), "pet": pet}
     # H-EMERGE
     d = [por[s]["B1"]["P1"] - por[s]["B0"]["P1"] for s in s_ord if por[s]["B0"]["P1"] is not None and por[s]["B1"]["P1"] is not None]
     if d:
@@ -94,7 +102,16 @@ def analisar(por: dict[int, dict[str, dict]]) -> dict:
                          "leitura": _leitura(len(inclinacoes), lo > 0 and ordem)}
     else:
         out["H-DOSE"] = {"n": 0, "leitura": "INCONCLUSIVO POR PREMISSA"}
-    # H-REP: o pet A no B1 contra o RM
+    # H-REP: o pet A no B1 contra o RM (fora do adendo 1, AD1-3)
+    if not all("RM" in por[s] for s in s_ord):
+        out["H-REP"] = {"leitura": "FORA (sem o RM)"}
+    else:
+        out.update(_h_rep(por, s_ord))
+    return _resto(out, por, s_ord, pet)
+
+
+def _h_rep(por, s_ord) -> dict:
+    out = {}
     dk = [_k_medio(por[s]["B1"]["P5"]["A"]) - _k_medio(por[s]["RM"]["P5"]["A"]) for s in s_ord
           if _k_medio(por[s]["B1"]["P5"]["A"]) is not None and _k_medio(por[s]["RM"]["P5"]["A"]) is not None]
     dp = [_p1_pet(por[s]["B1"], "A") - _p1_pet(por[s]["RM"], "A") for s in s_ord
@@ -108,6 +125,10 @@ def analisar(por: dict[int, dict[str, dict]]) -> dict:
             rep[nome] = {"n": 0, "passa": False}
     n_rep = min(rep["k_A"]["n"], rep["P1_A"]["n"])
     out["H-REP"] = {**rep, "leitura": _leitura(n_rep, rep["k_A"]["passa"] and rep["P1_A"]["passa"])}
+    return out
+
+
+def _resto(out, por, s_ord, pet) -> dict:
     # H-CUSTO
     def p3(m):
         vs = [v for v in m["P3"].values() if v is not None]
@@ -130,6 +151,15 @@ def analisar(por: dict[int, dict[str, dict]]) -> dict:
             "P4": {k: sum(por[s][b]["P4"][k] for s in s_ord if b in por[s]) for k in ("contencao", "encostar", "disputa_anti")},
             "P6": st.mean(por[s][b]["P6"] for s in s_ord if b in por[s])}
         for b in bracos}
+    if pet is not None:                                   # os dois descritivos do adendo 1 (12.4)
+        for b in bracos:
+            op = sum(por[s][b]["P1_por_pet"][pet]["oportunidades"] for s in s_ord if b in por[s])
+            neg = sum(por[s][b]["P1_por_pet"][pet].get("proprio_comeu", 0) for s in s_ord if b in por[s])
+            ci = [por[s][b].get("culpa_inveja", {}).get(pet) for s in s_ord if b in por[s]]
+            ci = [c for c in ci if c]
+            out["descritivos"][b]["P1_neg"] = neg / op if op else None
+            out["descritivos"][b]["culpa"] = st.mean(c["culpa"] for c in ci) if ci else None
+            out["descritivos"][b]["inveja"] = st.mean(c["inveja"] for c in ci) if ci else None
     return out
 
 
@@ -138,6 +168,7 @@ def main() -> None:
     ap.add_argument("vidas", type=Path)
     ap.add_argument("--inicio", type=int, default=91201)
     ap.add_argument("--n", type=int, default=160, help="o N da regra (D-CB-12)")
+    ap.add_argument("--pet", default=None, help="so a P1 e a P3 deste pet (o adendo 1: A)")
     ap.add_argument("--saida", type=Path, required=True)
     a = ap.parse_args()
     sementes = set(range(a.inicio, a.inicio + a.n))
@@ -145,7 +176,7 @@ def main() -> None:
     faltam = sorted(sementes - set(por))
     if faltam:
         raise SystemExit(f"faltam sementes: {faltam[:5]}... ({len(faltam)})")
-    r = analisar(por)
+    r = analisar(por, a.pet)
     r["fonte"] = {"vidas": str(a.vidas), "sementes": [a.inicio, a.inicio + a.n - 1], "delta": DELTA, "epsilon": EPSILON, "n_min": N_MIN,
                   "reamostras": REAMOSTRAS, "semente_bootstrap": SEMENTE_BOOTSTRAP}
     a.saida.write_text(json.dumps(r, indent=1, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")

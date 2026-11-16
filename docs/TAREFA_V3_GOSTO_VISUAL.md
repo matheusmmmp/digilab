@@ -355,3 +355,51 @@ O pedido do Matheus: um botão para trocar a tela que o pet está vendo, "como m
 canais já escolhidos (PROPOSTO), sem parar a sessão nem o cérebro; o "st" só leva os números do canal atual, no formato de sempre. Uma
 fonte encerrada sai da lista. No celular nada muda. As escolhas D-GV-CANAL-1 a 8 estão em `docs/registro/2026-11.md`; o código em
 `web/app/src/gostoVisual/canais.ts`, `captura.ts`, `sessaoTv.ts` e `PainelTv.tsx`.
+
+## A busca OV0 e a espec OV1 do órgão da visão (2026-11-12, Claude Code, Opus 5.5, branch `v3-orgao-visao-ov1`)
+
+O pedido do Matheus (2026-11-11): um órgão de visão computacional dedicado e local, que passa conceitos à rede do pet, com os conceitos do
+corpus do Digimundo e uma mitologia em volta (a `docs/futuro/fala_do_assistir.md`, seções 10 e 10.10).
+- **A OV0** está no vault (`DigiLab — Revisão de escopo\BUSCA_ORGAO_VISAO_2026-11-12.md`): os modelos, as licenças, os modos de falha e a
+  habituação por conceito, com os status da `literatura-digilab`.
+- **A OV1** é a `docs/ESPEC_V3_ORGAO_VISAO.md`, só papel e PROPOSTA. Ela traz a lista (24 genéricos e as 56 espécies do corpus), o SigLIP
+  base no navegador, a regra da confiança, o evento `percepcao_tela`, os receptores sem química, o M-SENS e o gosto por conceito, e o patrono
+  pelo brasão do jogo como estado no afeto, só na valência. Separa a percepção da crença e traz o painel em palavras.
+- As decisões OV1-1 a OV1-14 ficaram DECIDIDAS pelo Matheus em 2026-11-12, pela recomendação ("Eu aprovo todas as recomendações e segue
+  em diante"). As leituras estão em `docs/registro/2026-11.md` (D-OV1-1 a 6). O próximo passo é a OV2, o código Python atrás da chave
+  desligada.
+
+## A OV2: o órgão da visão no Python, atrás da chave (2026-11-12, Claude Code, Opus 5.5, branch `v3-orgao-visao-ov2`)
+
+O código da espec `docs/ESPEC_V3_ORGAO_VISAO.md`, pedido pelo Matheus ("segue em diante", 2026-11-12), atrás da `ConfigOrgao` desligada. O
+gabarito das vidas de hoje foi gravado antes, num commit próprio, e sai igual byte a byte com a chave desligada.
+- **A lista** `ov-lista-1` (`digilab/orgao.py`): os 24 genéricos e as 56 espécies, o brasão e o patrono, os sensíveis, os pares canônicos e o
+  `ResumoOrgao` de quem grava (o máximo da janela de 5 classificações, o corte 4, os 3 mais altos, só na mudança).
+- **O evento** `percepcao_tela` (`digilab/events.py`), aplicado pela TV no modo livre gravado e lido pelo replay.
+- **A TV** (`digilab/tv.py`): os conceitos por programa da grade, pela rng `tv-conceitos`, e os do último evento na fonte "evento".
+- **O cérebro:** o gancho `ver_conceitos`; no M-SENS, a habituação e a novidade por conceito (duas velocidades) e o gosto por conceito (a
+  exposição e a consequência); o termo dos conceitos no agrado do olhar; no M-AFETO, o termo do mito só na valência da decisão (a subchave
+  `mito`, com o brasão do pet).
+- **Os testes:** `tests/test_orgao_visao.py` e `tests/test_gabarito_orgao_visao.py`.
+
+As leituras estão em `docs/registro/2026-11.md`, D-OV2-1 a 8. O web, a paridade e o órgão no navegador são a OV3.
+
+- **GVN-2, a leitura das vidas gravadas (2026-11-12, Claude Code, Opus 5.5, branch `v3-gosto-visual-gvn2`):** descritiva, sem vida nova,
+  pelo plano curto `docs/PLANO_ANALISE_V3_GOSTO_VISUAL_GVN2.md`; o resultado na seção 6 de `docs/futuro/gosto_visual_porque_negativo.md`
+  (`artifacts_v3_gosto_visual/gvn2/leitura.json`). A parte do peso da H5 não se lê nos `vidas.tar.gz` (GVN-2b aberta).
+
+## A fala do assistir por template (2026-11-12, Claude Code, Opus 5.5, branch `v3-gosto-visual-fala`)
+
+O Matheus aprovou as FA-2 a FA-8 de `docs/futuro/fala_do_assistir.md` pela recomendação (D-GV-FALA-1). Feito:
+- **o `dec-v4`** no Python (`digilab/digibrain/decodificador.py`) e no TS (`decodificarV4`), bit a bit contra o gabarito novo
+  `decodificador_v4_python.json.gz` (`experiments/exportar_decodificador_v4.py`): o `olhar` no catálogo e os conceitos `gostei`, `susto`,
+  `chato` e `o_que_e`. O `dec-v1`, o `dec-v2` e os gabaritos deles não mudaram;
+- **os limiares** na `ConfigFalaAssistir`, PROPOSTOS, calibrados nas vidas gravadas da GV3 e da GV3b, rejogadas e conferidas
+  (`artifacts_v3_gosto_visual/fala_limiares/`);
+- **a fala por template no jogo** (`web/app/src/falaAssistir.ts`), atrás da chave "Fala do assistir (teste)", desligada: uma frase por
+  conceito, o limite de 5 min (1 min no susto), a linha no log de apresentação, e o conceito refeito do registro do pet pelo replay;
+- **o plano da FA-8,** `docs/PLANO_ANALISE_V3_GOSTO_VISUAL_FALA_ASSISTIR.md`, PROPOSTO. Nenhuma fala com LLM rodou.
+
+Ficou de fora: a voz com LLM e o verificador estendido (a etapa FA3, depois da DC5c), o `de_novo` (FA-3), o susto de brilho (FA-4) e o
+órgão (FA-9 a FA-13). As escolhas estão em `docs/registro/2026-11.md`, D-GV-FALA-1 a 10.
+

@@ -12,6 +12,12 @@ mesmo programa nao importa quem pergunta nem quando. No tick t, cada canal e o p
 [0, escala]. O dono troca o canal (`trocar_canal`, o evento do log): o programa escolhido passa no lugar do da grade ate o fim do programa
 da grade (as cenas sao as da grade; a grade nao muda nem consome sorteio).
 
+O orgao da visao (GOSTO_VISUAL, OV2; docs/ESPEC_V3_ORGAO_VISAO.md; so com `ligar_orgao`, a ConfigOrgao ligada): na fonte "grade", a rng
+propria `tv-conceitos` (derivar_semente com a semente do mundo; a `tv-programas` nao muda) sorteia uma vez, para cada programa, de 0 a
+`conceitos_por_programa` conceitos da lista `ov-lista-1` (digilab/orgao.py), sem repeticao, cada um com um nivel uniforme de NIVEL_CORTE a
+NIVEL_MAX (OV1-11: os conceitos fixos por programa, no lugar do catalogo de cenas da GVFa, que ainda nao existe). Na fonte "evento", os
+conceitos sao os do ultimo `percepcao_tela` ate o tick (nenhum antes do primeiro). `conceitos_em(tick)` os da. Desligado, nada muda.
+
 A fonte "evento" (o modo livre gravado, secao 1.2): o que a TV passa e o ultimo `sentido_tela` ate o tick, cada nivel n em [0, 15] vira
 div_arred(n x escala, 15); sem nenhum, a TV esta desligada (`em` da None). A grade nao existe e nada se sorteia. A TV desligada de novo (a
 decisao A da captura ligada ao cerebro, D-GV-TVJOGO-1; o motor confere a ConfigTVJogo.desligar): o `sentido_tela` `fonte|desligada` (os
@@ -27,7 +33,8 @@ import bisect
 import math
 import random
 
-from .config import CONFIG_TV, ConfigTV
+from . import orgao as _orgao
+from .config import CONFIG_TV, ConfigOrgao, ConfigTV
 from .corpo import CANAIS_TELA, div_arred
 from .events import FONTES_SENTIDO_TELA, N_CANAIS_TELA, NIVEL_MAX_TELA, Evento, sentido_tela
 from .protocol import derivar_semente
@@ -79,6 +86,10 @@ class TV:
         self.grade: list[dict] = []                    # os programas da grade ja sorteados: inicio, fim, programa, cenas
         self._inicios: list[int] = []
         self._dono: dict | None = None                 # o canal do dono: {"segmento", "programa"}, ate o fim daquele programa da grade
+        self.orgao: ConfigOrgao | None = None          # o orgao da visao (OV2): so com `ligar_orgao`; None desligado
+        self.conceitos_programas: tuple = ()           # na grade: os conceitos de cada programa (pares canonicos)
+        self._percepcao: tuple = ()                    # na fonte "evento": os pares do ultimo percepcao_tela
+        self.percepcoes: list[dict] = []
         if cfg.fonte == "grade":
             r = self.rng = random.Random(derivar_semente("tv-programas", semente))
             self.programas = tuple(tuple(r.randint(0, cfg.escala) for _ in CANAIS_TELA) for _ in range(cfg.n_programas))
@@ -123,6 +134,45 @@ class TV:
         cena = seg["cenas"][(tick - seg["inicio"]) // cfg.cena_ticks]
         return {c: min(cfg.escala, max(0, p + o)) for c, p, o in zip(CANAIS_TELA, perfil, cena)}
 
+    # ------------------------------------------------------------ o orgao da visao (OV2)
+    def ligar_orgao(self, cfg: ConfigOrgao, semente: int) -> None:
+        """liga os conceitos da TV (a docstring do modulo); duas vezes, ou com a ConfigOrgao desligada, falha alto"""
+        if not isinstance(cfg, ConfigOrgao) or not cfg.ligada:
+            raise TVSemChave(f"ligar_orgao precisa da ConfigOrgao ligada: {cfg!r}")
+        if self.orgao is not None:
+            raise TVSemChave("o orgao da TV ja esta ligado")
+        self.orgao = cfg
+        if self.cfg.fonte == "grade":
+            r = random.Random(derivar_semente("tv-conceitos", semente))
+            lista = _orgao.CONCEITOS
+            progs = []
+            for _ in range(self.cfg.n_programas):
+                k = r.randint(0, cfg.conceitos_por_programa)
+                cs = r.sample(lista, k)
+                progs.append(_orgao.canonico([(c, r.randint(_orgao.NIVEL_CORTE, _orgao.NIVEL_MAX)) for c in cs], "tv"))
+            self.conceitos_programas = tuple(progs)
+
+    def conceitos_em(self, tick: int) -> tuple[tuple[str, int], ...]:
+        """os conceitos que a TV passa no tick (pares canonicos); a TV desligada nao passa nenhum. Sem o orgao, falha alto"""
+        if self.orgao is None:
+            raise TVSemChave("conceitos_em sem o orgao da TV ligado (ConfigOrgao)")
+        if self.cfg.fonte == "evento":
+            return self._percepcao if self._sentido is not None else ()
+        p = self.programa_em(tick)
+        return self.conceitos_programas[p]
+
+    def perceber(self, fonte: str, lista: str, pares, tick: int) -> None:
+        """o modo livre gravado (so na fonte "evento", com o orgao): a partir do tick, a TV passa estes conceitos"""
+        if self.orgao is None:
+            raise TVSemChave("percepcao_tela sem o orgao da TV ligado (ConfigOrgao)")
+        if self.cfg.fonte != "evento":
+            raise TVSemChave(f"percepcao_tela com a fonte {self.cfg.fonte!r}: o modo livre gravado e a fonte \"evento\"")
+        if fonte not in FONTES_SENTIDO_TELA:
+            raise ValueError(f"fonte do percepcao_tela em {FONTES_SENTIDO_TELA}: {fonte!r}")
+        pares = _orgao.canonico(pares, fonte, lista)
+        self._percepcao = pares
+        self.percepcoes.append({"tick": tick, "fonte": fonte, "pares": [list(p) for p in pares]})
+
     # ------------------------------------------------------------ os eventos
     def trocar_canal(self, programa: int, tick: int) -> dict:
         """o dono poe o programa `programa` (so na fonte "grade"); vale ate o fim do programa da grade que passa no tick"""
@@ -148,8 +198,12 @@ class TV:
         self.sentidos.append({"tick": tick, "fonte": fonte, "niveis": None if niveis is None else list(niveis)})
 
     def resumo(self) -> dict:
-        return {"x": self.x, "y": self.y, "fonte": self.cfg.fonte, "trocas_canal": [dict(t) for t in self.trocas_canal],
-                "sentidos": [dict(s) for s in self.sentidos]}
+        out = {"x": self.x, "y": self.y, "fonte": self.cfg.fonte, "trocas_canal": [dict(t) for t in self.trocas_canal],
+               "sentidos": [dict(s) for s in self.sentidos]}
+        if self.orgao is not None:                     # o orgao (OV2): desligado, o resumo de hoje, byte a byte
+            out["percepcoes"] = [dict(p) for p in self.percepcoes]
+            out["conceitos_programas"] = [[list(p) for p in ps] for ps in self.conceitos_programas]
+        return out
 
 
 class TVFixa:

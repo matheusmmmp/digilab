@@ -158,6 +158,10 @@ FAIXAS_RESERVADAS = (
                    "(docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md, secao 14, AD2-1; bases 88101, 88202, 88303, 88404 e 88505, K = 12; "
                    "aprovada pelo Matheus em 2026-11-11, \"Aprova as recomendacoes e segue\"; conferida livre nesta tabela em 2026-11-11, "
                    "o ok do Gerente da V3 pedido no PR do I7c)"),
+    (95101, 95505, "INDIVIDUALIDADE, I7, adendo 4: o humor decide?, a run unica dos 360 pets novos "
+                   "(docs/PLANO_ANALISE_V3_INDIVIDUALIDADE_I7.md, secao 18, AD4-2; bases 95101, 95202, 95303, 95404 e 95505, K = 12; "
+                   "aprovada pelo Matheus em 2026-11-12, \"Eu concordo com todas as recomendacoes\"; conferida livre nesta tabela, nos "
+                   "planos e nos PRs abertos em 2026-11-12)"),
     (89101, 89505, "GOSTO_VISUAL, GV3 (P1e): 89101-89202 o piloto (bases 89101 e 89202, K = 2) e 89303-89505 a run descritiva "
                    "genoma x dono, uma vez (bases 89303, 89404 e 89505, K = 12) (docs/PLANO_ANALISE_V3_GOSTO_VISUAL.md, secao 6; "
                    "confirmada pelo coordenador, 2026-11-11; nenhuma vida antes da aprovacao do plano pelo Matheus)"),

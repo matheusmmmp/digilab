@@ -23,18 +23,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # O testes decide, no primeiro passo, se o job web roda (PI0): o web nem liga a máquina quando o PR não muda web/app/.
+  # O testes decide, no primeiro passo, se os jobs web e servidor-web rodam (PI0): cada um nem liga a máquina quando o PR não muda a pasta
+  # dele.
   testes:
     if: github.event_name == 'pull_request'
     runs-on: windows-latest
     timeout-minutes: 60
     outputs:
       web: ${{ steps.mudou.outputs.web }}
+      servidor: ${{ steps.mudou.outputs.servidor }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: O PR muda web/app?
+      - name: O PR muda web/app ou servidor_web?
         id: mudou
         shell: bash
         env:
@@ -46,6 +48,14 @@ jobs:
           else
             echo "web=sim" >> "$GITHUB_OUTPUT"
             echo "O PR muda web/app/: tipos, Vitest e build no job web (VERIFICADA); o e2e fica fora do CI (D-IA-3)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+          # O servidor_web (CN1) roda também quando o PR muda este workflow, para a mudança do CI se provar no próprio PR.
+          if git diff --quiet "origin/$BASE_REF...HEAD" -- servidor_web/ .github/workflows/verificar-pr.yml; then
+            echo "servidor=nao" >> "$GITHUB_OUTPUT"
+            echo "O PR não muda servidor_web/: o job servidor-web não roda." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "servidor=sim" >> "$GITHUB_OUTPUT"
+            echo "O PR muda servidor_web/ (ou este workflow): tipos e Vitest no job servidor-web (VERIFICADA)." >> "$GITHUB_STEP_SUMMARY"
           fi
       - uses: actions/setup-python@v5
         with:
@@ -101,6 +111,29 @@ jobs:
         run: npm test
       - name: Build
         run: npm run build
+
+  # O servidor do jogo web (CN1, servidor_web/CLAUDE.md): os tipos e o Vitest, com o cliente da Anthropic falso (nenhuma chamada paga,
+  # nenhuma chave). Com `always()`, roda mesmo se os testes do Python reprovarem.
+  servidor-web:
+    needs: testes
+    if: always() && github.event_name == 'pull_request' && needs.testes.outputs.servidor == 'sim'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: servidor_web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: servidor_web/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - name: Tipos
+        run: npm run tipos
+      - name: Vitest
+        run: npm test
 
   suite-inteira:
     if: github.event_name == 'workflow_dispatch' && inputs.suite_inteira

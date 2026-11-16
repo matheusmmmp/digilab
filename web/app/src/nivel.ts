@@ -3,7 +3,10 @@
    Nada aqui entra no motor, no save, no registro do Tamer nem nos gabaritos, e "a vista nunca abre antes do motor": cada peca so anuncia o que
    o motor ja libera. Sem DOM e sem armazenamento (o armazenamento e o nivelTela.ts); o teste le este modulo sozinho.
    - os marcos (3.3): 1 chocou o ovo, 2 atendeu 3 chamados, 3 virou Rookie, 4 o primeiro treino, 5 a primeira medalha, 6 virou Champion, 7 tres
-     medalhas, 8 seis medalhas, 9 o titulo da Liga. O nivel 10 em diante (multiplayer) e futuro e nao tem marco;
+     medalhas, 8 seis medalhas, 9 o titulo da Liga; 10 o primeiro Mega
+     (MMO-13, docs/PLANO_V3_MMO.md, etapa MMO2): o marco que abre o multijogador, o unico que tambem vai para o registro do Tamer (P-5,
+     opcao T; o evento "nivel" de src/tamer.ts). O cartao do 10 espera a prancha (a tela 1 das pranchas do MMO): sem cartao, o marco conta
+     em silencio;
    - CADA PECA ABRE PELO PROPRIO MARCO, nao pelo numero (pergunta 11 da prancha): "Tamer Nv N" e so a contagem. Um save com o Champion e sem a
      primeira medalha tem o Nv 5 (chocou, chamados, Rookie, treino, Champion), e o Forcar (marco 6) abre enquanto os Itens (marco 5) nao.
      As Regras de luta (o editor dos gambits, tambem no marco 6) sairam com o combate por turnos (LUTA_POC, LP4): o cartao do Nv 6 passou a ser
@@ -13,14 +16,14 @@
      cartoes deles vistos em silencio, para nunca trancar o que o jogador ja usava.
    Os numeros e os textos sao PROPOSTO, SEM FONTE (numero de interface, nao de jogo). */
 import { TICK_INICIAL, type Motor } from "../motor/index.ts";
-import type { Tamer } from "./tamer.ts";
+import { MARCO_MEGA, evolucaoMega, type Tamer } from "./tamer.ts";
 import type { Aba, Destino, Rota } from "./rotas.ts";
 import type { Lugar } from "./viagem.ts";
 
 /** o piso dos saves de antes (P-6): Pet, Diario, Crescer e Lutar abertos */
 export const PISO_NIVEL = 4;
-/** o ultimo marco (o titulo da Liga); do 10 em diante ficam as mecanicas futuras (3.3), sem marco ainda */
-export const ULTIMO_MARCO = 9;
+/** o ultimo marco: o 10, o primeiro Mega (MMO-13); do 11 em diante, o nivel sera lido no Respeito (MMO-15, a MMO8) */
+export const ULTIMO_MARCO = 10;
 /** os chamados atendidos do marco 2 e a vida minima (min do pet) que o vale quando o contador nao serve. PROPOSTO, SEM FONTE */
 export const CHAMADOS_MARCO = 3, VIDA_MARCO_MIN = 60;
 /** as medalhas dos marcos 5, 7 e 8 (a ultima e MEDALHAS_LIGA, a trava de hoje da Fronteira) */
@@ -74,7 +77,7 @@ export const PECA_DO_LUGAR: Readonly<Record<Lugar, Peca>> = { saco: "crescer", p
 /* ---------------------------------------------------------------------------------------------------- os marcos */
 /** a vida do pet em minutos (o tick de agora menos o do ovo) */
 export const vidaDoPet = (m: Motor): number => m.e.tick - TICK_INICIAL;
-/** os marcos que um pet cumpre (1 so por existir; 2, 3, 4 e 6 pelo registro dele). O contador de chamados zera na evolucao (motor.ts, _evoluir), entao o
+/** os marcos que um pet cumpre (1 so por existir; 2, 3, 4, 6 e 10 pelo registro dele). O contador de chamados zera na evolucao (motor.ts, _evoluir), entao o
     marco 2 tambem vale com 1 h de vida quando o contador nao serve: o pet fora do In-Training, ou sem as chaves de produto dos chamados (3.3, linha 2) */
 export function marcosDoPet(m: Motor): number[] {
   const out = [1], vida = vidaDoPet(m), semChaves = !m.produto.chamadoPelaFome && !m.produto.chamadosPeloCorpo;
@@ -82,15 +85,18 @@ export function marcosDoPet(m: Motor): number[] {
   if (m.evolucoes.some(x => x.estagio === "crianca")) out.push(3);
   if (m.log.some(e => e[1] === "tr")) out.push(4);
   if (m.evolucoes.some(x => x.estagio === "adolescente")) out.push(6);
+  if (evolucaoMega(m)) out.push(MARCO_MEGA);
   return out;
 }
-/** os marcos que o registro do Tamer cumpre: as medalhas (5, 7, 8) e o titulo da Liga (9) */
+/** os marcos que o registro do Tamer cumpre: as medalhas (5, 7, 8), o titulo da Liga (9) e o marco 10 gravado (MMO2; o pet que o fez pode
+    ter saido) */
 export function marcosDoTamer(t: Tamer): number[] {
   const out: number[] = [], n = t.medalhas.length;
   if (n >= MEDALHAS_MARCO.primeira) out.push(5);
   if (n >= MEDALHAS_MARCO.tres) out.push(7);
   if (n >= MEDALHAS_MARCO.seis) out.push(8);
   if (t.titulo) out.push(9);
+  if (t.marco(MARCO_MEGA)) out.push(MARCO_MEGA);
   return out;
 }
 /** a uniao dos marcos do Tamer e dos pets (o ativo e os guardados; sem o pet de exemplo), em ordem */

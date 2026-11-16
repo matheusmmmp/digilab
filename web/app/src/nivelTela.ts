@@ -12,7 +12,7 @@
 import { VERSOES_PET } from "../motor/index.ts";
 import { useEffect, useSyncExternalStore } from "react";
 import { type Motor } from "../motor/index.ts";
-import { motorReal, pagarNivel, tamerAtual, useJogo } from "./jogo.ts";
+import { motorReal, pagarNivel, registrarMarcoMega, tamerAtual, useJogo } from "./jogo.ts";
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados } from "./pets.ts";
 import { CHAVE, SEMENTE_EXEMPLO, petExemplo } from "./save.ts";
 import { dicasLigadas, pedirCartao, retirarCartao, esquecerDicasVistas } from "./dicas.ts";
@@ -87,7 +87,7 @@ function guardadosDoJogador(agora: number): { motores: Motor[]; id: number } {
 
 /* ---------------------------------------------------------------------------------------------------- a avaliacao (sem efeito colateral) */
 interface Resultado { estado: EstadoNivel; novos: number[] }
-let memo: { chave: string; r: Resultado } | null = null;
+let memo: { chave: string; r: Resultado; pets: Motor[] } | null = null;
 let brilhos = new Set<Lugar>();
 /** os lugares que acabaram de abrir e ainda nao brilharam (o brilho consome na hora de desenhar) */
 export const brilhosPendentes = (): readonly Lugar[] => [...brilhos];
@@ -109,7 +109,7 @@ function calcularNivel(): Resultado {
   if (memo && memo.chave === chave) return memo.r;
   const pets: Motor[] = [...(doJogador ? [ativo] : []), ...g.motores];
   const r = sincronizar(confirmado, marcosFeitos(pets, t), pets.length > 0 || t.log.length > 0);
-  memo = { chave, r };
+  memo = { chave, r, pets };
   return r;
 }
 const lerAgora = (): EstadoNivel => calcularNivel().estado;
@@ -118,6 +118,8 @@ const lerAgora = (): EstadoNivel => calcularNivel().estado;
 function confirmarNivel(): void {
   const r = calcularNivel(), antes = confirmado;
   /* os Bits de cada nivel do Tamer (docs/PLANO_V3_MOEDA.md, MO1): pagos uma vez, a partir do nivel confirmado (com o piso dos saves antigos) */
+  /* o marco 10 (o primeiro Mega; MMO2) vai para o registro do Tamer, com o pet do jogador que o fez (o ativo ou um guardado) */
+  registrarMarcoMega(memo!.pets);
   pagarNivel(nivelDe(r.estado));
   definirTrancas({ saco: !pecaAberta(r.estado, "crescer"), portao: !pecaAberta(r.estado, "lutar"), barraca: !pecaAberta(r.estado, "diario") });
   if (antes !== null && r.estado === antes) return;

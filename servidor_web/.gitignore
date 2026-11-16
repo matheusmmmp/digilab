@@ -1,0 +1,3 @@
+node_modules/
+# o gasto da fala fica fora do git (por padrao no servidor/gasto_fala.json, que o .gitignore da raiz ja cobre)
+gasto_fala*.json

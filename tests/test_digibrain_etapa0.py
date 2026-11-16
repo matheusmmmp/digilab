@@ -87,7 +87,10 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              # GOSTO_VISUAL, a TV no jogo (#883): o exportador do gabarito, que faltava aqui (D-CO7b-9)
                                                                              "experiments/exportar_tv_jogo.py",
                                                                              # COOPERACAO, CB1: a bancada da cooperacao (o modular nos dois pets do grupo)
-                                                                             "experiments/run_v3_cooperacao_bancada.py"}
+                                                                             "experiments/run_v3_cooperacao_bancada.py",
+                                                                             # GOSTO_VISUAL, a fala do assistir (FA-2): o gabarito do dec-v4 (vidas curtas da GV3b
+                                                                             # nas sementes dos testes, pelo orquestrador da GV3; o decodificador so le)
+                                                                             "experiments/exportar_decodificador_v4.py"}
 
 
 def test_o_digibrain_so_existe_com_a_chave_ligada_e_e_a_v13():

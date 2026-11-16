@@ -126,3 +126,29 @@ Pedido do Matheus nesta sessão: "Faca o merge e siga para o proximo passo", dep
 - **A luta ranqueada é o evento "l" na posição pedida:** o pedido da semente leva o tamanho do registro naquela hora (`indice`), e a luta
   conta só se o evento nessa posição for a luta com essa semente. O hash do registro até ali fica para o servidor (MMO3 e MMO4).
 - **Fora desta etapa:** o portão ★ (a MO2), o servidor e o registro do Tamer. O Tamer entra com o Respeito, na MMO8.
+
+## 11. MMO2: o nível 10 no registro do Tamer (2026-11-12)
+
+Pedido do Matheus: "segue para proxima etapa", depois do merge da MMO1 (#824). Na F0 do `docs/ROADMAP_V3_CONTA.md` (seção 9.1), ao lado
+do servidor (CN1). O motor, o save do pet e as rotas não mudam.
+
+- **O que entrega:**
+  - **o marco 10, o primeiro Mega** (MMO-13): `ULTIMO_MARCO` passa a 10 em `web/app/src/nivel.ts`. O pet do jogador com a evolução a Mega
+    cumpre o marco, e o registro do Tamer com o marco também;
+  - **o registro do Tamer na versão 10** (P-5, opção T), em `web/app/src/tamer.ts`. Ela lê as versões 1 a 9 e traz o evento novo
+    `"nivel"`: `{n: 10, quando, pet, forma, tick}`, com o pet que chegou ao Mega e o tick da evolução dele. O marco entra uma vez. Um registro
+    de antes da 10 com o evento falha alto;
+  - **a gravação:** o marco vai para o registro quando o nível é confirmado (`nivelTela.ts`, por `registrarMarcoMega` em `jogo.ts`), com os
+    pets do jogador, o ativo e os guardados. O pet de exemplo intocado não conta, e o laboratório também não;
+  - **a conferência do servidor:** `marcoConfere(marco, pet)`. O pet refeito do log dele (a semente do marco) tem a evolução a Mega no tick
+    e na forma do marco. A MMO3 e a CN1 a usam no Node;
+  - `web/app/test/tamer_nivel10.test.ts`, com 7 testes.
+- **Os Bits do nível:** o nível 10 paga como os outros (`conferirBitsDoNivel`, a regra da M-2: cada nível do Tamer). Não é uma fonte nova.
+  Como o nível é a contagem dos marcos, os Bits do nível 10 só saem com os dez marcos feitos.
+- **Fora desta etapa:**
+  - o cartão do marco 10 e o cais trancado e depois aberto: são a tela 1 das pranchas do MMO. Até a prancha ser aprovada, o marco conta em
+    silêncio (sem cartão, só o som do nível novo e a contagem);
+  - os marcos 1 a 9 continuam só na vista (MMO-15);
+  - o nível do 11 em diante, pelo Respeito, fica para a MMO8.
+- **O limite:** nenhum teste chega ao Mega pelo motor, porque leva dias de vida simulada. O teste põe a evolução a Mega à mão no registro
+  das evoluções, que é a lista que o marco lê.

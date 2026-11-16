@@ -155,6 +155,14 @@ export const CONFIG_DECODIFICADOR = {
   p_curiosidade_urgencia: 1, p_curiosidade_tedio: 1, p_curiosidade_g_exp: 1, p_curiosidade_fracao: 1,
 } as const;
 export type ConfigDecodificador = typeof CONFIG_DECODIFICADOR;
+/** A ConfigFalaAssistir (digilab/config.py; a fala do assistir, FA-2 a FA-5): os limiares do `dec-v4`, calibrados nas vidas gravadas da GV3 e
+ *  da GV3b (artifacts_v3_gosto_visual/fala_limiares/), e os intervalos da FA-5 em segundos reais. PROPOSTOS, SEM FONTE. Conferida contra
+ *  test/gabaritos/decodificador_v4_python.json.gz por test/decodificador_v4.test.ts. */
+export const CONFIG_FALA_ASSISTIR = {
+  limiar_ativo: 512, limiar_confianca: 512, gostei_agrado: 665, susto_subida: 73, chato_enjoo: 612, chato_tedio: 240, o_que_e_agrado: 376,
+  o_que_e_enjoo: 522, intervalo_comentario_s: 300, intervalo_susto_s: 60,
+} as const;
+export type ConfigFalaAssistir = { readonly [K in keyof typeof CONFIG_FALA_ASSISTIR]: number };
 
 /** o alcance da memoria de lugar na ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secoes 12.14 a 12.16; a IG-6; o D_MAX_ILHA_GRANDE do
     Python): o `d_max` na proporcao do mapa de 128 x 60 celulas (2 048 subunidades = 128 celulas; o de sempre, 1 024, e a largura do mapa de
