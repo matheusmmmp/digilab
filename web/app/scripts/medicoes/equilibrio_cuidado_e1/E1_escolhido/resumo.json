@@ -1,0 +1,2925 @@
+{
+ "descricao": "o E1, rodada E1_escolhido (o F2 pelas constantes AJUSTE_E1_PROPOSTO e BITS_V2): media [min; max] das 5 sementes da calibracao",
+ "resumo": {
+  "pet|atento": {
+   "numero_versao": 35,
+   "celulas": {
+    "In-Training|1": {
+     "racao_comida": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 3,
+      "min": 2,
+      "max": 4,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 0.8,
+      "min": 0,
+      "max": 1,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": null,
+      "min": null,
+      "max": null,
+      "n": 0
+     },
+     "explorar_frac": {
+      "media": 0.046153846153846156,
+      "min": 0,
+      "max": 0.07692307692307693,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.2923076923076923,
+      "min": 0.07692307692307693,
+      "max": 0.5384615384615384,
+      "n": 5
+     },
+     "lances": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     }
+    },
+    "Rookie|1": {
+     "racao_comida": {
+      "media": 0.8888888888888888,
+      "min": 0.6666666666666666,
+      "max": 1,
+      "n": 3
+     },
+     "postas": {
+      "media": 1.6,
+      "min": 0,
+      "max": 3,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.023968253968253965,
+      "min": 0,
+      "max": 0.06984126984126984,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 5.6,
+      "min": 5,
+      "max": 7,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.9364799999999999,
+      "min": 0.9164,
+      "max": 0.9501,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.27431372549019606,
+      "min": 0.2235294117647059,
+      "max": 0.3058823529411765,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.054341736694677865,
+      "min": 0.03529411764705882,
+      "max": 0.08235294117647059,
+      "n": 5
+     },
+     "lances": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": null,
+      "min": null,
+      "max": null,
+      "n": 0
+     }
+    },
+    "Rookie|2": {
+     "racao_comida": {
+      "media": 0.7742063492063492,
+      "min": 0.5555555555555556,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 6.6,
+      "min": 3,
+      "max": 9,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 12.4,
+      "min": 0,
+      "max": 61,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.12388888888888887,
+      "min": 0.05277777777777778,
+      "max": 0.1673611111111111,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 5.8,
+      "min": 4,
+      "max": 8,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.9411999999999999,
+      "min": 0.9243,
+      "max": 0.9659,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.335352233676976,
+      "min": 0.28865979381443296,
+      "max": 0.3917525773195876,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.06630154639175258,
+      "min": 0.041237113402061855,
+      "max": 0.08333333333333333,
+      "n": 5
+     },
+     "lances": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": null,
+      "min": null,
+      "max": null,
+      "n": 0
+     }
+    },
+    "Rookie|3": {
+     "racao_comida": {
+      "media": 0.78,
+      "min": 0.4,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 2.8,
+      "min": 2,
+      "max": 5,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.041944444444444444,
+      "min": 0.021527777777777778,
+      "max": 0.09444444444444444,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 4.8,
+      "min": 4,
+      "max": 5,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.9280799999999999,
+      "min": 0.9199,
+      "max": 0.9377,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.31752577319587627,
+      "min": 0.27835051546391754,
+      "max": 0.36082474226804123,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.059793814432989686,
+      "min": 0.05154639175257732,
+      "max": 0.061855670103092786,
+      "n": 5
+     },
+     "lances": {
+      "media": 0.2,
+      "min": 0,
+      "max": 1,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 1
+     }
+    }
+   },
+   "dias": {
+    "1": {
+     "fome_025_min": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 6.4,
+      "min": 6,
+      "max": 7,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "bits": {
+      "media": 173,
+      "min": 167,
+      "max": 180,
+      "n": 5
+     }
+    },
+    "2": {
+     "fome_025_min": {
+      "media": 12.4,
+      "min": 0,
+      "max": 61,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 5.8,
+      "min": 4,
+      "max": 8,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "bits": {
+      "media": 34,
+      "min": 25,
+      "max": 45,
+      "n": 5
+     }
+    },
+    "3": {
+     "fome_025_min": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 4.8,
+      "min": 4,
+      "max": 5,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "bits": {
+      "media": 28,
+      "min": 20,
+      "max": 35,
+      "n": 5
+     }
+    }
+   },
+   "chutes_por_lance_vida": {
+    "media": 1,
+    "min": 1,
+    "max": 1,
+    "n": 5
+   },
+   "lances_por_pet_vida": {
+    "media": 1.2,
+    "min": 1,
+    "max": 2,
+    "n": 5
+   },
+   "tamer": {
+    "bits_total": {
+     "media": 235,
+     "min": 225,
+     "max": 243,
+     "n": 5
+    },
+    "dia_150": {
+     "media": 1,
+     "min": 1,
+     "max": 1,
+     "n": 5
+    },
+    "tick_150_pet": {
+     "media": 180,
+     "min": 180,
+     "max": 180,
+     "n": 5
+    },
+    "tick_pronto_champion_pet": {
+     "media": 900,
+     "min": 900,
+     "max": 900,
+     "n": 5
+    },
+    "ha_150_antes": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "bits_por_origem": {
+     "chamado": {
+      "media": 10,
+      "min": 8,
+      "max": 12,
+      "n": 5
+     },
+     "cuidado": {
+      "media": 75,
+      "min": 65,
+      "max": 85,
+      "n": 5
+     },
+     "evolucao": {
+      "media": 60,
+      "min": 60,
+      "max": 60,
+      "n": 5
+     },
+     "nivel": {
+      "media": 90,
+      "min": 90,
+      "max": 90,
+      "n": 5
+     },
+     "pausa": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "luta": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     }
+    },
+    "mortes": 0
+   }
+  },
+  "pet|medio": {
+   "numero_versao": 35,
+   "celulas": {
+    "In-Training|1": {
+     "racao_comida": {
+      "media": null,
+      "min": null,
+      "max": null,
+      "n": 0
+     },
+     "postas": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 0.2,
+      "min": 0,
+      "max": 1,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": null,
+      "min": null,
+      "max": null,
+      "n": 0
+     },
+     "explorar_frac": {
+      "media": 0.19999999999999998,
+      "min": 0.16666666666666666,
+      "max": 0.25,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.25,
+      "min": 0.16666666666666666,
+      "max": 0.4166666666666667,
+      "n": 5
+     },
+     "lances": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": 1.2,
+      "min": 1,
+      "max": 2,
+      "n": 5
+     }
+    },
+    "Rookie|1": {
+     "racao_comida": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 2.4,
+      "min": 2,
+      "max": 3,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 45,
+      "min": 0,
+      "max": 165,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.27365079365079364,
+      "min": 0.19047619047619047,
+      "max": 0.32142857142857145,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 5.4,
+      "min": 4,
+      "max": 7,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.93254,
+      "min": 0.9187,
+      "max": 0.9605,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.20952380952380953,
+      "min": 0.16666666666666666,
+      "max": 0.23809523809523808,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.07857142857142857,
+      "min": 0.011904761904761904,
+      "max": 0.11904761904761904,
+      "n": 5
+     },
+     "lances": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": null,
+      "min": null,
+      "max": null,
+      "n": 0
+     }
+    },
+    "Rookie|2": {
+     "racao_comida": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 3,
+      "min": 2,
+      "max": 4,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 33,
+      "min": 0,
+      "max": 105,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.2648611111111111,
+      "min": 0.17708333333333334,
+      "max": 0.36527777777777776,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 4.2,
+      "min": 3,
+      "max": 5,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.93596,
+      "min": 0.9219,
+      "max": 0.9573,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.225,
+      "min": 0.15625,
+      "max": 0.2708333333333333,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.07708333333333334,
+      "min": 0.052083333333333336,
+      "max": 0.10416666666666667,
+      "n": 5
+     },
+     "lances": {
+      "media": 0.2,
+      "min": 0,
+      "max": 1,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 1
+     }
+    },
+    "Rookie|3": {
+     "racao_comida": {
+      "media": 0.9099999999999999,
+      "min": 0.75,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 3.4,
+      "min": 2,
+      "max": 5,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 42,
+      "min": 0,
+      "max": 150,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.26013888888888886,
+      "min": 0.16666666666666666,
+      "max": 0.4375,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 4.4,
+      "min": 4,
+      "max": 5,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.9383799999999999,
+      "min": 0.927,
+      "max": 0.952,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.275,
+      "min": 0.22916666666666666,
+      "max": 0.3125,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.0625,
+      "min": 0.041666666666666664,
+      "max": 0.08333333333333333,
+      "n": 5
+     },
+     "lances": {
+      "media": 0.2,
+      "min": 0,
+      "max": 1,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 1
+     }
+    }
+   },
+   "dias": {
+    "1": {
+     "fome_025_min": {
+      "media": 45,
+      "min": 0,
+      "max": 165,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 5.6,
+      "min": 4,
+      "max": 7,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "bits": {
+      "media": 167,
+      "min": 165,
+      "max": 170,
+      "n": 5
+     }
+    },
+    "2": {
+     "fome_025_min": {
+      "media": 33,
+      "min": 0,
+      "max": 105,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 4.2,
+      "min": 3,
+      "max": 5,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "bits": {
+      "media": 25,
+      "min": 20,
+      "max": 35,
+      "n": 5
+     }
+    },
+    "3": {
+     "fome_025_min": {
+      "media": 42,
+      "min": 0,
+      "max": 150,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 4.4,
+      "min": 4,
+      "max": 5,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 0.9996,
+      "min": 0.998,
+      "max": 1,
+      "n": 5
+     },
+     "bits": {
+      "media": 33,
+      "min": 20,
+      "max": 50,
+      "n": 5
+     }
+    }
+   },
+   "chutes_por_lance_vida": {
+    "media": 1.2,
+    "min": 1,
+    "max": 2,
+    "n": 5
+   },
+   "lances_por_pet_vida": {
+    "media": 1.4,
+    "min": 1,
+    "max": 2,
+    "n": 5
+   },
+   "tamer": {
+    "bits_total": {
+     "media": 225,
+     "min": 210,
+     "max": 240,
+     "n": 5
+    },
+    "dia_150": {
+     "media": 1,
+     "min": 1,
+     "max": 1,
+     "n": 5
+    },
+    "tick_150_pet": {
+     "media": 180,
+     "min": 180,
+     "max": 180,
+     "n": 5
+    },
+    "tick_pronto_champion_pet": {
+     "media": 900,
+     "min": 900,
+     "max": 900,
+     "n": 5
+    },
+    "ha_150_antes": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "bits_por_origem": {
+     "chamado": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "cuidado": {
+      "media": 75,
+      "min": 60,
+      "max": 90,
+      "n": 5
+     },
+     "evolucao": {
+      "media": 60,
+      "min": 60,
+      "max": 60,
+      "n": 5
+     },
+     "nivel": {
+      "media": 90,
+      "min": 90,
+      "max": 90,
+      "n": 5
+     },
+     "pausa": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "luta": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     }
+    },
+    "mortes": 0
+   }
+  },
+  "pet|relapso": {
+   "numero_versao": 35,
+   "celulas": {
+    "In-Training|1": {
+     "racao_comida": {
+      "media": null,
+      "min": null,
+      "max": null,
+      "n": 0
+     },
+     "postas": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": null,
+      "min": null,
+      "max": null,
+      "n": 0
+     },
+     "explorar_frac": {
+      "media": 0.2833333333333333,
+      "min": 0.25,
+      "max": 0.3333333333333333,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.03333333333333333,
+      "min": 0,
+      "max": 0.08333333333333333,
+      "n": 5
+     },
+     "lances": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": null,
+      "min": null,
+      "max": null,
+      "n": 0
+     }
+    },
+    "Rookie|1": {
+     "racao_comida": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 2,
+      "min": 2,
+      "max": 2,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 288,
+      "min": 135,
+      "max": 420,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.5452380952380953,
+      "min": 0.39285714285714285,
+      "max": 0.7142857142857143,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 9.4,
+      "min": 7,
+      "max": 12,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.4337,
+      "min": 0.284,
+      "max": 0.9415,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.1380952380952381,
+      "min": 0.05952380952380952,
+      "max": 0.17857142857142858,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.05952380952380952,
+      "min": 0,
+      "max": 0.14285714285714285,
+      "n": 5
+     },
+     "lances": {
+      "media": 0.4,
+      "min": 0,
+      "max": 1,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": 0.5,
+      "min": 0,
+      "max": 1,
+      "n": 2
+     }
+    },
+    "Rookie|2": {
+     "racao_comida": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 2,
+      "min": 2,
+      "max": 2,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 167,
+      "min": 59,
+      "max": 269,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.5576388888888889,
+      "min": 0.43680555555555556,
+      "max": 0.6451388888888889,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 4.8,
+      "min": 4,
+      "max": 6,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.92082,
+      "min": 0.8583,
+      "max": 0.9509,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.3208333333333334,
+      "min": 0.2604166666666667,
+      "max": 0.3541666666666667,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.05208333333333333,
+      "min": 0.03125,
+      "max": 0.0625,
+      "n": 5
+     },
+     "lances": {
+      "media": 0.6,
+      "min": 0,
+      "max": 1,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": 1,
+      "min": 0,
+      "max": 2,
+      "n": 3
+     }
+    },
+    "Rookie|3": {
+     "racao_comida": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 3,
+      "min": 3,
+      "max": 3,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 133,
+      "min": 61,
+      "max": 211,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.5104166666666667,
+      "min": 0.375,
+      "max": 0.5833333333333334,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 4.4,
+      "min": 4,
+      "max": 5,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.90086,
+      "min": 0.8308,
+      "max": 0.9269,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.26458333333333334,
+      "min": 0.23958333333333334,
+      "max": 0.3229166666666667,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.05,
+      "min": 0.03125,
+      "max": 0.0625,
+      "n": 5
+     },
+     "lances": {
+      "media": 0.4,
+      "min": 0,
+      "max": 1,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 2
+     }
+    }
+   },
+   "dias": {
+    "1": {
+     "fome_025_min": {
+      "media": 288,
+      "min": 135,
+      "max": 420,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 9.4,
+      "min": 7,
+      "max": 12,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 0.9824999999999999,
+      "min": 0.9175,
+      "max": 1,
+      "n": 5
+     },
+     "bits": {
+      "media": 169,
+      "min": 165,
+      "max": 175,
+      "n": 5
+     }
+    },
+    "2": {
+     "fome_025_min": {
+      "media": 167,
+      "min": 59,
+      "max": 269,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 4.8,
+      "min": 4,
+      "max": 6,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "bits": {
+      "media": 24,
+      "min": 20,
+      "max": 30,
+      "n": 5
+     }
+    },
+    "3": {
+     "fome_025_min": {
+      "media": 133,
+      "min": 61,
+      "max": 211,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 4.4,
+      "min": 4,
+      "max": 5,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 0.9932000000000001,
+      "min": 0.978,
+      "max": 1,
+      "n": 5
+     },
+     "bits": {
+      "media": 27,
+      "min": 25,
+      "max": 30,
+      "n": 5
+     }
+    }
+   },
+   "chutes_por_lance_vida": {
+    "media": 0.875,
+    "min": 0,
+    "max": 2,
+    "n": 4
+   },
+   "lances_por_pet_vida": {
+    "media": 1.4,
+    "min": 0,
+    "max": 3,
+    "n": 5
+   },
+   "tamer": {
+    "bits_total": {
+     "media": 220,
+     "min": 210,
+     "max": 235,
+     "n": 5
+    },
+    "dia_150": {
+     "media": 1,
+     "min": 1,
+     "max": 1,
+     "n": 5
+    },
+    "tick_150_pet": {
+     "media": 180,
+     "min": 180,
+     "max": 180,
+     "n": 5
+    },
+    "tick_pronto_champion_pet": {
+     "media": 900,
+     "min": 900,
+     "max": 900,
+     "n": 5
+    },
+    "ha_150_antes": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "bits_por_origem": {
+     "chamado": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "cuidado": {
+      "media": 70,
+      "min": 60,
+      "max": 85,
+      "n": 5
+     },
+     "evolucao": {
+      "media": 60,
+      "min": 60,
+      "max": 60,
+      "n": 5
+     },
+     "nivel": {
+      "media": 90,
+      "min": 90,
+      "max": 90,
+      "n": 5
+     },
+     "pausa": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "luta": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     }
+    },
+    "mortes": 0
+   }
+  },
+  "grupo|atento": {
+   "numero_versao": 36,
+   "celulas": {
+    "In-Training|1": {
+     "racao_comida": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 2.9,
+      "min": 1.5,
+      "max": 4,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 0.8,
+      "min": 0,
+      "max": 1,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": null,
+      "min": null,
+      "max": null,
+      "n": 0
+     },
+     "explorar_frac": {
+      "media": 0.053846153846153856,
+      "min": 0,
+      "max": 0.11538461538461539,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.39230769230769225,
+      "min": 0.15384615384615385,
+      "max": 0.6538461538461539,
+      "n": 5
+     },
+     "lances": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": 1.8,
+      "min": 1,
+      "max": 2,
+      "n": 5
+     }
+    },
+    "Rookie|1": {
+     "racao_comida": {
+      "media": 0.9692307692307691,
+      "min": 0.8461538461538461,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 2.8,
+      "min": 1.5,
+      "max": 6.5,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 4.6,
+      "min": 0,
+      "max": 23,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.05626984126984127,
+      "min": 0.03015873015873016,
+      "max": 0.1376984126984127,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 5.9,
+      "min": 5,
+      "max": 6.5,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.93764,
+      "min": 0.9279999999999999,
+      "max": 0.95765,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.28177672252332886,
+      "min": 0.2,
+      "max": 0.32142857142857145,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.0886689705467986,
+      "min": 0.05952380952380952,
+      "max": 0.15294117647058825,
+      "n": 5
+     },
+     "lances": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": null,
+      "min": null,
+      "max": null,
+      "n": 0
+     }
+    },
+    "Rookie|2": {
+     "racao_comida": {
+      "media": 0.885,
+      "min": 0.625,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 4.1,
+      "min": 2.5,
+      "max": 7.5,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.07444444444444445,
+      "min": 0.03784722222222222,
+      "max": 0.14548611111111112,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 5.7,
+      "min": 5,
+      "max": 6.5,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.9366900000000001,
+      "min": 0.9275500000000001,
+      "max": 0.9527,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.2840372048939967,
+      "min": 0.20207253886010362,
+      "max": 0.3160621761658031,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.07545602840084972,
+      "min": 0.06153846153846154,
+      "max": 0.09844559585492228,
+      "n": 5
+     },
+     "lances": {
+      "media": 0.1,
+      "min": 0,
+      "max": 0.5,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 1
+     }
+    },
+    "Rookie|3": {
+     "racao_comida": {
+      "media": 0.831111111111111,
+      "min": 0.6,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 4.3,
+      "min": 2,
+      "max": 6,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 9.3,
+      "min": 0,
+      "max": 23,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.073125,
+      "min": 0.03263888888888889,
+      "max": 0.11180555555555556,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 4.9,
+      "min": 4,
+      "max": 6,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.92445,
+      "min": 0.9172,
+      "max": 0.93035,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.29416421158742617,
+      "min": 0.24102564102564103,
+      "max": 0.32989690721649484,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.06193650624076349,
+      "min": 0.03608247422680412,
+      "max": 0.09326424870466321,
+      "n": 5
+     },
+     "lances": {
+      "media": 0.2,
+      "min": 0,
+      "max": 0.5,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 2
+     }
+    }
+   },
+   "dias": {
+    "1": {
+     "fome_025_min": {
+      "media": 4.6,
+      "min": 0,
+      "max": 23,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 6.7,
+      "min": 6,
+      "max": 7.5,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "bits": {
+      "media": 267,
+      "min": 257,
+      "max": 298,
+      "n": 5
+     }
+    },
+    "2": {
+     "fome_025_min": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 5.7,
+      "min": 5,
+      "max": 6.5,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "bits": {
+      "media": 54,
+      "min": 35,
+      "max": 90,
+      "n": 5
+     }
+    },
+    "3": {
+     "fome_025_min": {
+      "media": 9.3,
+      "min": 0,
+      "max": 23,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 4.9,
+      "min": 4,
+      "max": 6,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "bits": {
+      "media": 56,
+      "min": 20,
+      "max": 70,
+      "n": 5
+     }
+    }
+   },
+   "chutes_por_lance_vida": {
+    "media": 1.5333333333333334,
+    "min": 1,
+    "max": 2,
+    "n": 5
+   },
+   "lances_por_pet_vida": {
+    "media": 1.3,
+    "min": 1,
+    "max": 1.5,
+    "n": 5
+   },
+   "tamer": {
+    "bits_total": {
+     "media": 377,
+     "min": 364,
+     "max": 398,
+     "n": 5
+    },
+    "dia_150": {
+     "media": 1,
+     "min": 1,
+     "max": 1,
+     "n": 5
+    },
+    "tick_150_pet": {
+     "media": 180,
+     "min": 180,
+     "max": 180,
+     "n": 5
+    },
+    "tick_pronto_champion_pet": {
+     "media": 900,
+     "min": 900,
+     "max": 900,
+     "n": 5
+    },
+    "ha_150_antes": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "bits_por_origem": {
+     "chamado": {
+      "media": 19.6,
+      "min": 14,
+      "max": 24,
+      "n": 5
+     },
+     "cuidado": {
+      "media": 147.4,
+      "min": 135,
+      "max": 172,
+      "n": 5
+     },
+     "evolucao": {
+      "media": 120,
+      "min": 120,
+      "max": 120,
+      "n": 5
+     },
+     "nivel": {
+      "media": 90,
+      "min": 90,
+      "max": 90,
+      "n": 5
+     },
+     "pausa": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "luta": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     }
+    },
+    "mortes": 0
+   }
+  },
+  "grupo|medio": {
+   "numero_versao": 36,
+   "celulas": {
+    "In-Training|1": {
+     "racao_comida": {
+      "media": null,
+      "min": null,
+      "max": null,
+      "n": 0
+     },
+     "postas": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 0.6,
+      "min": 0,
+      "max": 1,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": null,
+      "min": null,
+      "max": null,
+      "n": 0
+     },
+     "explorar_frac": {
+      "media": 0.19166666666666665,
+      "min": 0.16666666666666666,
+      "max": 0.25,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.26666666666666666,
+      "min": 0.20833333333333334,
+      "max": 0.2916666666666667,
+      "n": 5
+     },
+     "lances": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": 2.2,
+      "min": 1,
+      "max": 4,
+      "n": 5
+     }
+    },
+    "Rookie|1": {
+     "racao_comida": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 2.7,
+      "min": 2,
+      "max": 4,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 100.5,
+      "min": 52.5,
+      "max": 210,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.32222222222222224,
+      "min": 0.2619047619047619,
+      "max": 0.39285714285714285,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 6.2,
+      "min": 4.5,
+      "max": 9,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.86761,
+      "min": 0.61605,
+      "max": 0.93435,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.18571428571428572,
+      "min": 0.1488095238095238,
+      "max": 0.23214285714285715,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.07738095238095237,
+      "min": 0.03571428571428571,
+      "max": 0.1488095238095238,
+      "n": 5
+     },
+     "lances": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": null,
+      "min": null,
+      "max": null,
+      "n": 0
+     }
+    },
+    "Rookie|2": {
+     "racao_comida": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 3.2,
+      "min": 1.5,
+      "max": 4,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 37.5,
+      "min": 0,
+      "max": 82.5,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.2334027777777778,
+      "min": 0.14548611111111112,
+      "max": 0.2760416666666667,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 4.6,
+      "min": 4,
+      "max": 5,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.92585,
+      "min": 0.91825,
+      "max": 0.9290499999999999,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.25520833333333337,
+      "min": 0.234375,
+      "max": 0.265625,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.06666666666666667,
+      "min": 0.057291666666666664,
+      "max": 0.078125,
+      "n": 5
+     },
+     "lances": {
+      "media": 0.3,
+      "min": 0,
+      "max": 0.5,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 3
+     }
+    },
+    "Rookie|3": {
+     "racao_comida": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 3.1,
+      "min": 2.5,
+      "max": 3.5,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 33,
+      "min": 0,
+      "max": 60,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.20229166666666668,
+      "min": 0.16701388888888888,
+      "max": 0.23472222222222222,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 4.4,
+      "min": 3.5,
+      "max": 5,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.9295499999999999,
+      "min": 0.9237,
+      "max": 0.93715,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.27291666666666664,
+      "min": 0.23958333333333334,
+      "max": 0.3020833333333333,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.07916666666666666,
+      "min": 0.057291666666666664,
+      "max": 0.109375,
+      "n": 5
+     },
+     "lances": {
+      "media": 0.4,
+      "min": 0,
+      "max": 1,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": 1.3333333333333333,
+      "min": 1,
+      "max": 2,
+      "n": 3
+     }
+    }
+   },
+   "dias": {
+    "1": {
+     "fome_025_min": {
+      "media": 100.5,
+      "min": 52.5,
+      "max": 210,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 6.8,
+      "min": 5,
+      "max": 9.5,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 0.999,
+      "min": 0.995,
+      "max": 1,
+      "n": 5
+     },
+     "bits": {
+      "media": 247,
+      "min": 240,
+      "max": 260,
+      "n": 5
+     }
+    },
+    "2": {
+     "fome_025_min": {
+      "media": 37.5,
+      "min": 0,
+      "max": 82.5,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 4.6,
+      "min": 4,
+      "max": 5,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "bits": {
+      "media": 56,
+      "min": 35,
+      "max": 65,
+      "n": 5
+     }
+    },
+    "3": {
+     "fome_025_min": {
+      "media": 33,
+      "min": 0,
+      "max": 60,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 4.4,
+      "min": 3.5,
+      "max": 5,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "bits": {
+      "media": 57,
+      "min": 35,
+      "max": 75,
+      "n": 5
+     }
+    }
+   },
+   "chutes_por_lance_vida": {
+    "media": 1.8,
+    "min": 1.5,
+    "max": 2.5,
+    "n": 5
+   },
+   "lances_por_pet_vida": {
+    "media": 1.7,
+    "min": 1.5,
+    "max": 2,
+    "n": 5
+   },
+   "tamer": {
+    "bits_total": {
+     "media": 360,
+     "min": 335,
+     "max": 370,
+     "n": 5
+    },
+    "dia_150": {
+     "media": 1,
+     "min": 1,
+     "max": 1,
+     "n": 5
+    },
+    "tick_150_pet": {
+     "media": 180,
+     "min": 180,
+     "max": 180,
+     "n": 5
+    },
+    "tick_pronto_champion_pet": {
+     "media": 900,
+     "min": 900,
+     "max": 900,
+     "n": 5
+    },
+    "ha_150_antes": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "bits_por_origem": {
+     "chamado": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "cuidado": {
+      "media": 150,
+      "min": 125,
+      "max": 160,
+      "n": 5
+     },
+     "evolucao": {
+      "media": 120,
+      "min": 120,
+      "max": 120,
+      "n": 5
+     },
+     "nivel": {
+      "media": 90,
+      "min": 90,
+      "max": 90,
+      "n": 5
+     },
+     "pausa": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "luta": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     }
+    },
+    "mortes": 0
+   }
+  },
+  "grupo|relapso": {
+   "numero_versao": 36,
+   "celulas": {
+    "In-Training|1": {
+     "racao_comida": {
+      "media": null,
+      "min": null,
+      "max": null,
+      "n": 0
+     },
+     "postas": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": null,
+      "min": null,
+      "max": null,
+      "n": 0
+     },
+     "explorar_frac": {
+      "media": 0.25,
+      "min": 0.20833333333333334,
+      "max": 0.2916666666666667,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.041666666666666664,
+      "min": 0,
+      "max": 0.08333333333333333,
+      "n": 5
+     },
+     "lances": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": null,
+      "min": null,
+      "max": null,
+      "n": 0
+     }
+    },
+    "Rookie|1": {
+     "racao_comida": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 1.8,
+      "min": 1.5,
+      "max": 2,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 287.8,
+      "min": 187.5,
+      "max": 382,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.531904761904762,
+      "min": 0.4523809523809524,
+      "max": 0.6424603174603175,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 8.9,
+      "min": 7,
+      "max": 11,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.4918,
+      "min": 0.28700000000000003,
+      "max": 0.6475,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.14404761904761904,
+      "min": 0.08333333333333333,
+      "max": 0.17857142857142858,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.051190476190476196,
+      "min": 0.011904761904761904,
+      "max": 0.07738095238095238,
+      "n": 5
+     },
+     "lances": {
+      "media": 0.5,
+      "min": 0,
+      "max": 1,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": 0.3333333333333333,
+      "min": 0,
+      "max": 1,
+      "n": 3
+     }
+    },
+    "Rookie|2": {
+     "racao_comida": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 2.4,
+      "min": 2,
+      "max": 3,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 235.3,
+      "min": 60,
+      "max": 479.5,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.5225,
+      "min": 0.35381944444444446,
+      "max": 0.6815972222222222,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 6.1,
+      "min": 4,
+      "max": 11,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.8527699999999999,
+      "min": 0.6213,
+      "max": 0.9210499999999999,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.275,
+      "min": 0.234375,
+      "max": 0.3072916666666667,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.05625,
+      "min": 0.036458333333333336,
+      "max": 0.07291666666666667,
+      "n": 5
+     },
+     "lances": {
+      "media": 0.9,
+      "min": 0.5,
+      "max": 1.5,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": 0.9,
+      "min": 0,
+      "max": 2,
+      "n": 5
+     }
+    },
+    "Rookie|3": {
+     "racao_comida": {
+      "media": 1,
+      "min": 1,
+      "max": 1,
+      "n": 5
+     },
+     "postas": {
+      "media": 2.7,
+      "min": 2.5,
+      "max": 3,
+      "n": 5
+     },
+     "fome_025_min": {
+      "media": 282.1,
+      "min": 105,
+      "max": 502.5,
+      "n": 5
+     },
+     "fome_045_frac": {
+      "media": 0.4531944444444445,
+      "min": 0.328125,
+      "max": 0.578125,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 8.6,
+      "min": 4.5,
+      "max": 13,
+      "n": 5
+     },
+     "energia_ao_acordar": {
+      "media": 0.66871,
+      "min": 0.5943499999999999,
+      "max": 0.9172499999999999,
+      "n": 5
+     },
+     "explorar_frac": {
+      "media": 0.2739583333333333,
+      "min": 0.20833333333333334,
+      "max": 0.3020833333333333,
+      "n": 5
+     },
+     "brincar_frac": {
+      "media": 0.052083333333333336,
+      "min": 0.036458333333333336,
+      "max": 0.078125,
+      "n": 5
+     },
+     "lances": {
+      "media": 0.7,
+      "min": 0.5,
+      "max": 1,
+      "n": 5
+     },
+     "chutes_por_lance": {
+      "media": 0.5,
+      "min": 0,
+      "max": 1,
+      "n": 5
+     }
+    }
+   },
+   "dias": {
+    "1": {
+     "fome_025_min": {
+      "media": 287.8,
+      "min": 187.5,
+      "max": 382,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 8.9,
+      "min": 7,
+      "max": 11,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 0.9452999999999999,
+      "min": 0.9099999999999999,
+      "max": 1,
+      "n": 5
+     },
+     "bits": {
+      "media": 245,
+      "min": 235,
+      "max": 250,
+      "n": 5
+     }
+    },
+    "2": {
+     "fome_025_min": {
+      "media": 235.3,
+      "min": 60,
+      "max": 479.5,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 6.1,
+      "min": 4,
+      "max": 11,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 0.9617999999999999,
+      "min": 0.86625,
+      "max": 1,
+      "n": 5
+     },
+     "bits": {
+      "media": 50,
+      "min": 40,
+      "max": 55,
+      "n": 5
+     }
+    },
+    "3": {
+     "fome_025_min": {
+      "media": 282.1,
+      "min": 105,
+      "max": 502.5,
+      "n": 5
+     },
+     "cochilos": {
+      "media": 8.6,
+      "min": 4.5,
+      "max": 13,
+      "n": 5
+     },
+     "saude_fim": {
+      "media": 0.9417500000000001,
+      "min": 0.893,
+      "max": 0.9904999999999999,
+      "n": 5
+     },
+     "bits": {
+      "media": 54,
+      "min": 50,
+      "max": 60,
+      "n": 5
+     }
+    }
+   },
+   "chutes_por_lance_vida": {
+    "media": 0.5199999999999999,
+    "min": 0.2,
+    "max": 1,
+    "n": 5
+   },
+   "lances_por_pet_vida": {
+    "media": 2.1,
+    "min": 1.5,
+    "max": 2.5,
+    "n": 5
+   },
+   "tamer": {
+    "bits_total": {
+     "media": 349,
+     "min": 340,
+     "max": 365,
+     "n": 5
+    },
+    "dia_150": {
+     "media": 1,
+     "min": 1,
+     "max": 1,
+     "n": 5
+    },
+    "tick_150_pet": {
+     "media": 180,
+     "min": 180,
+     "max": 180,
+     "n": 5
+    },
+    "tick_pronto_champion_pet": {
+     "media": 900,
+     "min": 900,
+     "max": 900,
+     "n": 5
+    },
+    "ha_150_antes": [
+     true,
+     true,
+     true,
+     true,
+     true
+    ],
+    "bits_por_origem": {
+     "chamado": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "cuidado": {
+      "media": 139,
+      "min": 130,
+      "max": 155,
+      "n": 5
+     },
+     "evolucao": {
+      "media": 120,
+      "min": 120,
+      "max": 120,
+      "n": 5
+     },
+     "nivel": {
+      "media": 90,
+      "min": 90,
+      "max": 90,
+      "n": 5
+     },
+     "pausa": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     },
+     "luta": {
+      "media": 0,
+      "min": 0,
+      "max": 0,
+      "n": 5
+     }
+    },
+    "mortes": 0
+   }
+  }
+ },
+ "metas": [
+  {
+   "id": "M-A1",
+   "medida": "ração comida",
+   "meta": "≥ 0,8 em cada estágio",
+   "dono": "atento",
+   "hoje": "v35: In-Training d1 1.00 [1.00; 1.00]; Rookie d1 0.89 [0.67; 1.00]; Rookie d2 0.77 [0.56; 1.00]; Rookie d3 0.78 [0.40; 1.00]",
+   "passa": false
+  },
+  {
+   "id": "M-A2",
+   "medida": "fome < 0,25 (min)",
+   "meta": "≤ 60 min/dia; 0 no In-Training",
+   "dono": "atento",
+   "hoje": "v35: In-Training 0 [0; 0]; d1 0 [0; 0]; d2 12 [0; 61]; d3 0 [0; 0]",
+   "passa": true
+  },
+  {
+   "id": "M-A4",
+   "medida": "fome < 0,45 (fração do tempo)",
+   "meta": "≤ 0,30",
+   "dono": "atento",
+   "hoje": "v35: In-Training d1 0.00 [0.00; 0.00]; Rookie d1 0.02 [0.00; 0.07]; Rookie d2 0.12 [0.05; 0.17]; Rookie d3 0.04 [0.02; 0.09]",
+   "passa": true
+  },
+  {
+   "id": "M-B4",
+   "medida": "brincar (fração das decisões)",
+   "meta": "≥ 0,05 no Rookie",
+   "dono": "atento",
+   "hoje": "v35: Rookie d1 0.054 [0.035; 0.082]; Rookie d2 0.066 [0.041; 0.083]; Rookie d3 0.060 [0.052; 0.062]",
+   "passa": true
+  },
+  {
+   "id": "M-E2",
+   "medida": "Bits por dia",
+   "meta": "≥ 20 nos três dias",
+   "dono": "atento",
+   "hoje": "v35: d1 173 [167; 180]; d2 34 [25; 45]; d3 28 [20; 35]",
+   "passa": true
+  },
+  {
+   "id": "M-A5",
+   "medida": "saúde no fim do dia",
+   "meta": "≥ 0,9",
+   "dono": "atento",
+   "hoje": "v35: d1 1.00 [1.00; 1.00]; d2 1.00 [1.00; 1.00]; d3 1.00 [1.00; 1.00]",
+   "passa": true
+  },
+  {
+   "id": "M-B1",
+   "medida": "cochilos por dia",
+   "meta": "de 2 a 6 nos dias 2 e 3",
+   "dono": "atento",
+   "hoje": "v35: d1 6.4 [6.0; 7.0]; d2 5.8 [4.0; 8.0]; d3 4.8 [4.0; 5.0]",
+   "passa": true
+  },
+  {
+   "id": "M-B2",
+   "medida": "energia mediana ao acordar",
+   "meta": "≥ 0,9",
+   "dono": "atento",
+   "hoje": "v35: Rookie d1 0.94 [0.92; 0.95]; Rookie d2 0.94 [0.92; 0.97]; Rookie d3 0.93 [0.92; 0.94]",
+   "passa": true
+  },
+  {
+   "id": "M-B3",
+   "medida": "explorar (fração das decisões)",
+   "meta": "≥ 0,10 no Rookie",
+   "dono": "atento",
+   "hoje": "v35: Rookie d1 0.27 [0.22; 0.31]; Rookie d2 0.34 [0.29; 0.39]; Rookie d3 0.32 [0.28; 0.36]",
+   "passa": true
+  },
+  {
+   "id": "M-C1",
+   "medida": "chutes por lance (a vida)",
+   "meta": "≥ 0,8",
+   "dono": "atento",
+   "hoje": "v35: 1.00 [1.00; 1.00] (lances por pet 1.2 [1.0; 2.0])",
+   "passa": true
+  },
+  {
+   "id": "M-E1",
+   "medida": "★★ (150 Bits) antes do Champion",
+   "meta": "nas 5 sementes",
+   "dono": "atento",
+   "hoje": "v35: 150 no min 180 [180; 180] do pet; o tempo do Champion no min 900 [900; 900]; 5/5",
+   "passa": true
+  },
+  {
+   "id": "M-D1",
+   "medida": "mortes",
+   "meta": "0",
+   "dono": "atento",
+   "hoje": "v35: 0",
+   "passa": true
+  },
+  {
+   "id": "M-A1",
+   "medida": "ração comida",
+   "meta": "≥ 0,8 em cada estágio",
+   "dono": "medio",
+   "hoje": "v35: In-Training d1 —; Rookie d1 1.00 [1.00; 1.00]; Rookie d2 1.00 [1.00; 1.00]; Rookie d3 0.91 [0.75; 1.00]",
+   "passa": true
+  },
+  {
+   "id": "M-A3",
+   "medida": "fome < 0,25 (min)",
+   "meta": "≤ 180 min/dia",
+   "dono": "medio",
+   "hoje": "v35: d1 45 [0; 165]; d2 33 [0; 105]; d3 42 [0; 150]",
+   "passa": true
+  },
+  {
+   "id": "M-A5",
+   "medida": "saúde no fim do dia",
+   "meta": "≥ 0,7",
+   "dono": "medio",
+   "hoje": "v35: d1 1.00 [1.00; 1.00]; d2 1.00 [1.00; 1.00]; d3 1.00 [1.00; 1.00]",
+   "passa": true
+  },
+  {
+   "id": "M-B1",
+   "medida": "cochilos por dia",
+   "meta": "de 2 a 6 nos dias 2 e 3",
+   "dono": "medio",
+   "hoje": "v35: d1 5.6 [4.0; 7.0]; d2 4.2 [3.0; 5.0]; d3 4.4 [4.0; 5.0]",
+   "passa": true
+  },
+  {
+   "id": "M-B2",
+   "medida": "energia mediana ao acordar",
+   "meta": "≥ 0,9",
+   "dono": "medio",
+   "hoje": "v35: Rookie d1 0.93 [0.92; 0.96]; Rookie d2 0.94 [0.92; 0.96]; Rookie d3 0.94 [0.93; 0.95]",
+   "passa": true
+  },
+  {
+   "id": "M-B3",
+   "medida": "explorar (fração das decisões)",
+   "meta": "≥ 0,10 no Rookie",
+   "dono": "medio",
+   "hoje": "v35: Rookie d1 0.21 [0.17; 0.24]; Rookie d2 0.23 [0.16; 0.27]; Rookie d3 0.28 [0.23; 0.31]",
+   "passa": true
+  },
+  {
+   "id": "M-C1",
+   "medida": "chutes por lance (a vida)",
+   "meta": "≥ 0,8",
+   "dono": "medio",
+   "hoje": "v35: 1.20 [1.00; 2.00] (lances por pet 1.4 [1.0; 2.0])",
+   "passa": true
+  },
+  {
+   "id": "M-E1",
+   "medida": "★★ (150 Bits) antes do Champion",
+   "meta": "nas 5 sementes",
+   "dono": "medio",
+   "hoje": "v35: 150 no min 180 [180; 180] do pet; o tempo do Champion no min 900 [900; 900]; 5/5",
+   "passa": true
+  },
+  {
+   "id": "M-D1",
+   "medida": "mortes",
+   "meta": "0",
+   "dono": "medio",
+   "hoje": "v35: 0",
+   "passa": true
+  },
+  {
+   "id": "M-A5",
+   "medida": "saúde no fim do dia",
+   "meta": "≥ 0,3",
+   "dono": "relapso",
+   "hoje": "v35: d1 0.98 [0.92; 1.00]; d2 1.00 [1.00; 1.00]; d3 0.99 [0.98; 1.00]",
+   "passa": true
+  },
+  {
+   "id": "M-B1",
+   "medida": "cochilos por dia",
+   "meta": "de 2 a 6 nos dias 2 e 3",
+   "dono": "relapso",
+   "hoje": "v35: d1 9.4 [7.0; 12.0]; d2 4.8 [4.0; 6.0]; d3 4.4 [4.0; 5.0]",
+   "passa": true
+  },
+  {
+   "id": "M-B2",
+   "medida": "energia mediana ao acordar",
+   "meta": "≥ 0,9",
+   "dono": "relapso",
+   "hoje": "v35: Rookie d1 0.43 [0.28; 0.94]; Rookie d2 0.92 [0.86; 0.95]; Rookie d3 0.90 [0.83; 0.93]",
+   "passa": false
+  },
+  {
+   "id": "M-C1",
+   "medida": "chutes por lance (a vida)",
+   "meta": "≥ 0,8",
+   "dono": "relapso",
+   "hoje": "v35: 0.88 [0.00; 2.00] (lances por pet 1.4 [0.0; 3.0])",
+   "passa": true
+  },
+  {
+   "id": "M-D1",
+   "medida": "mortes",
+   "meta": "0",
+   "dono": "relapso",
+   "hoje": "v35: 0",
+   "passa": true
+  },
+  {
+   "id": "M-A1",
+   "medida": "ração comida",
+   "meta": "≥ 0,8 em cada estágio",
+   "dono": "atento",
+   "hoje": "v36: In-Training d1 1.00 [1.00; 1.00]; Rookie d1 0.97 [0.85; 1.00]; Rookie d2 0.89 [0.63; 1.00]; Rookie d3 0.83 [0.60; 1.00]",
+   "passa": true
+  },
+  {
+   "id": "M-A2",
+   "medida": "fome < 0,25 (min)",
+   "meta": "≤ 60 min/dia; 0 no In-Training",
+   "dono": "atento",
+   "hoje": "v36: In-Training 0 [0; 0]; d1 5 [0; 23]; d2 0 [0; 0]; d3 9 [0; 23]",
+   "passa": true
+  },
+  {
+   "id": "M-A4",
+   "medida": "fome < 0,45 (fração do tempo)",
+   "meta": "≤ 0,30",
+   "dono": "atento",
+   "hoje": "v36: In-Training d1 0.00 [0.00; 0.00]; Rookie d1 0.06 [0.03; 0.14]; Rookie d2 0.07 [0.04; 0.15]; Rookie d3 0.07 [0.03; 0.11]",
+   "passa": true
+  },
+  {
+   "id": "M-B4",
+   "medida": "brincar (fração das decisões)",
+   "meta": "≥ 0,05 no Rookie",
+   "dono": "atento",
+   "hoje": "v36: Rookie d1 0.089 [0.060; 0.153]; Rookie d2 0.075 [0.062; 0.098]; Rookie d3 0.062 [0.036; 0.093]",
+   "passa": true
+  },
+  {
+   "id": "M-E2",
+   "medida": "Bits por dia",
+   "meta": "≥ 20 nos três dias",
+   "dono": "atento",
+   "hoje": "v36: d1 267 [257; 298]; d2 54 [35; 90]; d3 56 [20; 70]",
+   "passa": true
+  },
+  {
+   "id": "M-A5",
+   "medida": "saúde no fim do dia",
+   "meta": "≥ 0,9",
+   "dono": "atento",
+   "hoje": "v36: d1 1.00 [1.00; 1.00]; d2 1.00 [1.00; 1.00]; d3 1.00 [1.00; 1.00]",
+   "passa": true
+  },
+  {
+   "id": "M-B1",
+   "medida": "cochilos por dia",
+   "meta": "de 2 a 6 nos dias 2 e 3",
+   "dono": "atento",
+   "hoje": "v36: d1 6.7 [6.0; 7.5]; d2 5.7 [5.0; 6.5]; d3 4.9 [4.0; 6.0]",
+   "passa": true
+  },
+  {
+   "id": "M-B2",
+   "medida": "energia mediana ao acordar",
+   "meta": "≥ 0,9",
+   "dono": "atento",
+   "hoje": "v36: Rookie d1 0.94 [0.93; 0.96]; Rookie d2 0.94 [0.93; 0.95]; Rookie d3 0.92 [0.92; 0.93]",
+   "passa": true
+  },
+  {
+   "id": "M-B3",
+   "medida": "explorar (fração das decisões)",
+   "meta": "≥ 0,10 no Rookie",
+   "dono": "atento",
+   "hoje": "v36: Rookie d1 0.28 [0.20; 0.32]; Rookie d2 0.28 [0.20; 0.32]; Rookie d3 0.29 [0.24; 0.33]",
+   "passa": true
+  },
+  {
+   "id": "M-C1",
+   "medida": "chutes por lance (a vida)",
+   "meta": "≥ 0,8",
+   "dono": "atento",
+   "hoje": "v36: 1.53 [1.00; 2.00] (lances por pet 1.3 [1.0; 1.5])",
+   "passa": true
+  },
+  {
+   "id": "M-E1",
+   "medida": "★★ (150 Bits) antes do Champion",
+   "meta": "nas 5 sementes",
+   "dono": "atento",
+   "hoje": "v36: 150 no min 180 [180; 180] do pet; o tempo do Champion no min 900 [900; 900]; 5/5",
+   "passa": true
+  },
+  {
+   "id": "M-D1",
+   "medida": "mortes",
+   "meta": "0",
+   "dono": "atento",
+   "hoje": "v36: 0",
+   "passa": true
+  },
+  {
+   "id": "M-A1",
+   "medida": "ração comida",
+   "meta": "≥ 0,8 em cada estágio",
+   "dono": "medio",
+   "hoje": "v36: In-Training d1 —; Rookie d1 1.00 [1.00; 1.00]; Rookie d2 1.00 [1.00; 1.00]; Rookie d3 1.00 [1.00; 1.00]",
+   "passa": true
+  },
+  {
+   "id": "M-A3",
+   "medida": "fome < 0,25 (min)",
+   "meta": "≤ 180 min/dia",
+   "dono": "medio",
+   "hoje": "v36: d1 101 [53; 210]; d2 38 [0; 83]; d3 33 [0; 60]",
+   "passa": true
+  },
+  {
+   "id": "M-A5",
+   "medida": "saúde no fim do dia",
+   "meta": "≥ 0,7",
+   "dono": "medio",
+   "hoje": "v36: d1 1.00 [0.99; 1.00]; d2 1.00 [1.00; 1.00]; d3 1.00 [1.00; 1.00]",
+   "passa": true
+  },
+  {
+   "id": "M-B1",
+   "medida": "cochilos por dia",
+   "meta": "de 2 a 6 nos dias 2 e 3",
+   "dono": "medio",
+   "hoje": "v36: d1 6.8 [5.0; 9.5]; d2 4.6 [4.0; 5.0]; d3 4.4 [3.5; 5.0]",
+   "passa": true
+  },
+  {
+   "id": "M-B2",
+   "medida": "energia mediana ao acordar",
+   "meta": "≥ 0,9",
+   "dono": "medio",
+   "hoje": "v36: Rookie d1 0.87 [0.62; 0.93]; Rookie d2 0.93 [0.92; 0.93]; Rookie d3 0.93 [0.92; 0.94]",
+   "passa": false
+  },
+  {
+   "id": "M-B3",
+   "medida": "explorar (fração das decisões)",
+   "meta": "≥ 0,10 no Rookie",
+   "dono": "medio",
+   "hoje": "v36: Rookie d1 0.19 [0.15; 0.23]; Rookie d2 0.26 [0.23; 0.27]; Rookie d3 0.27 [0.24; 0.30]",
+   "passa": true
+  },
+  {
+   "id": "M-C1",
+   "medida": "chutes por lance (a vida)",
+   "meta": "≥ 0,8",
+   "dono": "medio",
+   "hoje": "v36: 1.80 [1.50; 2.50] (lances por pet 1.7 [1.5; 2.0])",
+   "passa": true
+  },
+  {
+   "id": "M-E1",
+   "medida": "★★ (150 Bits) antes do Champion",
+   "meta": "nas 5 sementes",
+   "dono": "medio",
+   "hoje": "v36: 150 no min 180 [180; 180] do pet; o tempo do Champion no min 900 [900; 900]; 5/5",
+   "passa": true
+  },
+  {
+   "id": "M-D1",
+   "medida": "mortes",
+   "meta": "0",
+   "dono": "medio",
+   "hoje": "v36: 0",
+   "passa": true
+  },
+  {
+   "id": "M-A5",
+   "medida": "saúde no fim do dia",
+   "meta": "≥ 0,3",
+   "dono": "relapso",
+   "hoje": "v36: d1 0.95 [0.91; 1.00]; d2 0.96 [0.87; 1.00]; d3 0.94 [0.89; 0.99]",
+   "passa": true
+  },
+  {
+   "id": "M-B1",
+   "medida": "cochilos por dia",
+   "meta": "de 2 a 6 nos dias 2 e 3",
+   "dono": "relapso",
+   "hoje": "v36: d1 8.9 [7.0; 11.0]; d2 6.1 [4.0; 11.0]; d3 8.6 [4.5; 13.0]",
+   "passa": false
+  },
+  {
+   "id": "M-B2",
+   "medida": "energia mediana ao acordar",
+   "meta": "≥ 0,9",
+   "dono": "relapso",
+   "hoje": "v36: Rookie d1 0.49 [0.29; 0.65]; Rookie d2 0.85 [0.62; 0.92]; Rookie d3 0.67 [0.59; 0.92]",
+   "passa": false
+  },
+  {
+   "id": "M-C1",
+   "medida": "chutes por lance (a vida)",
+   "meta": "≥ 0,8",
+   "dono": "relapso",
+   "hoje": "v36: 0.52 [0.20; 1.00] (lances por pet 2.1 [1.5; 2.5])",
+   "passa": false
+  },
+  {
+   "id": "M-D1",
+   "medida": "mortes",
+   "meta": "0",
+   "dono": "relapso",
+   "hoje": "v36: 0",
+   "passa": true
+  }
+ ]
+}

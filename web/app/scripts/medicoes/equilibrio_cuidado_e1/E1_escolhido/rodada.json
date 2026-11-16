@@ -1,0 +1,40 @@
+{
+ "nome": "E1_escolhido",
+ "bloco": "F",
+ "tenta": "o F2 pelas constantes AJUSTE_E1_PROPOSTO e BITS_V2",
+ "opcoes": {
+  "ajuste": {
+   "cerebro": {
+    "guarda_fome_brincar": true,
+    "comer_bebe": true,
+    "w_comer_bebe": 512
+   },
+   "lambda_acordar": null,
+   "urgencia_lambda": 640,
+   "vies_brincar": 0,
+   "w_bola_do_dono": null
+  },
+  "bits": {
+   "faixa": {
+    "bebe": 10,
+    "crianca": 10,
+    "adolescente": 25,
+    "adulto": 60,
+    "mega": 150
+   },
+   "lider": 5,
+   "chamado": 2,
+   "pausa": 3,
+   "cuidado": 5,
+   "tetoCuidadoDia": 40,
+   "evolucao": {
+    "bebe": 0,
+    "crianca": 60,
+    "adolescente": 100,
+    "adulto": 200,
+    "mega": 400
+   },
+   "nivel": 30
+  }
+ }
+}

@@ -1,0 +1,300 @@
+{
+ "versao": "pet",
+ "numero_versao": 35,
+ "dono": "atento",
+ "semente": 93303,
+ "dias": 3,
+ "ritmo": "rapida",
+ "pets": [
+  {
+   "ident": "pet",
+   "semente_pet": 93303,
+   "especie": "cirro",
+   "estagio_final": "Rookie",
+   "evolucoes": [
+    {
+     "tick": 660,
+     "estagio": "Rookie"
+    }
+   ],
+   "pronto_champion_pelo_tempo": 1380,
+   "morte": null,
+   "saude_fim_do_dia": [
+    {
+     "dia": 1,
+     "saude": 1
+    },
+    {
+     "dia": 2,
+     "saude": 1
+    },
+    {
+     "dia": 3,
+     "saude": 1
+    }
+   ],
+   "celulas": [
+    {
+     "estagio": "In-Training",
+     "dia": 1,
+     "minutos": 180,
+     "fome_025": 0,
+     "fome_045": 0,
+     "postas": 4,
+     "comidas": 4,
+     "comidas_por_ele": 4,
+     "cochilos": 1,
+     "decisoes": 13,
+     "explorar": 1,
+     "brincar": 3,
+     "lances": 1,
+     "chutes": 1,
+     "acoes_dono": {
+      "brincar": 1,
+      "alimentar": 4,
+      "limpar": 1
+     },
+     "energia_mediana_ao_acordar": null,
+     "acordou": 0
+    },
+    {
+     "estagio": "Rookie",
+     "dia": 1,
+     "minutos": 1260,
+     "fome_025": 0,
+     "fome_045": 1,
+     "postas": 1,
+     "comidas": 1,
+     "comidas_por_ele": 1,
+     "cochilos": 5,
+     "decisoes": 84,
+     "explorar": 28,
+     "brincar": 3,
+     "lances": 0,
+     "chutes": 0,
+     "acoes_dono": {
+      "alimentar": 1,
+      "limpar": 1
+     },
+     "energia_mediana_ao_acordar": 0.9172,
+     "acordou": 6
+    },
+    {
+     "estagio": "Rookie",
+     "dia": 2,
+     "minutos": 1440,
+     "fome_025": 0,
+     "fome_045": 122,
+     "postas": 6,
+     "comidas": 5,
+     "comidas_por_ele": 5,
+     "cochilos": 5,
+     "decisoes": 99,
+     "explorar": 28,
+     "brincar": 6,
+     "lances": 1,
+     "chutes": 0,
+     "acoes_dono": {
+      "alimentar": 6,
+      "limpar": 2,
+      "brincar": 1
+     },
+     "energia_mediana_ao_acordar": 0.9488,
+     "acordou": 4
+    },
+    {
+     "estagio": "Rookie",
+     "dia": 3,
+     "minutos": 1440,
+     "fome_025": 0,
+     "fome_045": 136,
+     "postas": 5,
+     "comidas": 2,
+     "comidas_por_ele": 2,
+     "cochilos": 5,
+     "decisoes": 97,
+     "explorar": 33,
+     "brincar": 3,
+     "lances": 0,
+     "chutes": 0,
+     "acoes_dono": {
+      "limpar": 1,
+      "alimentar": 5
+     },
+     "energia_mediana_ao_acordar": 0.9234,
+     "acordou": 5
+    }
+   ],
+   "lances_no_mundo": 2,
+   "feitos_bits": [
+    {
+     "id": "chamado:0",
+     "valor": 2,
+     "origem": "chamado",
+     "tick": 481
+    },
+    {
+     "id": "chamado:1",
+     "valor": 2,
+     "origem": "chamado",
+     "tick": 541
+    },
+    {
+     "id": "chamado:2",
+     "valor": 2,
+     "origem": "chamado",
+     "tick": 571
+    },
+    {
+     "id": "chamado:3",
+     "valor": 2,
+     "origem": "chamado",
+     "tick": 601
+    },
+    {
+     "id": "chamado:4",
+     "valor": 2,
+     "origem": "chamado",
+     "tick": 631
+    },
+    {
+     "id": "chamado:5",
+     "valor": 2,
+     "origem": "chamado",
+     "tick": 631
+    },
+    {
+     "id": "cuidado:6",
+     "valor": 1,
+     "origem": "cuidado",
+     "tick": 841
+    },
+    {
+     "id": "cuidado:7",
+     "valor": 1,
+     "origem": "cuidado",
+     "tick": 1757
+    },
+    {
+     "id": "cuidado:8",
+     "valor": 1,
+     "origem": "cuidado",
+     "tick": 2537
+    },
+    {
+     "id": "cuidado:9",
+     "valor": 1,
+     "origem": "cuidado",
+     "tick": 2567
+    },
+    {
+     "id": "cuidado:10",
+     "valor": 1,
+     "origem": "cuidado",
+     "tick": 2593
+    },
+    {
+     "id": "cuidado:11",
+     "valor": 1,
+     "origem": "cuidado",
+     "tick": 2597
+    },
+    {
+     "id": "cuidado:12",
+     "valor": 1,
+     "origem": "cuidado",
+     "tick": 2606
+    },
+    {
+     "id": "cuidado:13",
+     "valor": 1,
+     "origem": "cuidado",
+     "tick": 2627
+    },
+    {
+     "id": "cuidado:14",
+     "valor": 1,
+     "origem": "cuidado",
+     "tick": 3303
+    },
+    {
+     "id": "cuidado:15",
+     "valor": 1,
+     "origem": "cuidado",
+     "tick": 3323
+    },
+    {
+     "id": "cuidado:16",
+     "valor": 1,
+     "origem": "cuidado",
+     "tick": 3333
+    },
+    {
+     "id": "cuidado:17",
+     "valor": 1,
+     "origem": "cuidado",
+     "tick": 4050
+    },
+    {
+     "id": "cuidado:18",
+     "valor": 1,
+     "origem": "cuidado",
+     "tick": 4504
+    },
+    {
+     "id": "cuidado:19",
+     "valor": 1,
+     "origem": "cuidado",
+     "tick": 4534
+    },
+    {
+     "id": "cuidado:20",
+     "valor": 1,
+     "origem": "cuidado",
+     "tick": 4564
+    },
+    {
+     "id": "cuidado:21",
+     "valor": 1,
+     "origem": "cuidado",
+     "tick": 4594
+    },
+    {
+     "id": "cuidado:22",
+     "valor": 1,
+     "origem": "cuidado",
+     "tick": 4624
+    },
+    {
+     "id": "evolucao:crianca",
+     "valor": 50,
+     "origem": "evolucao",
+     "tick": 660
+    }
+   ]
+  }
+ ],
+ "tamer": {
+  "bits_total": 169,
+  "bits_por_dia": {
+   "1": 154,
+   "2": 9,
+   "3": 6
+  },
+  "bits_por_origem": {
+   "nivel": 90,
+   "chamado": 12,
+   "evolucao": 50,
+   "cuidado": 17
+  },
+  "marcos": {
+   "1": 480,
+   "2": 572,
+   "3": 660
+  },
+  "tick_150": 660,
+  "dia_150": 1,
+  "tick_pronto_champion": 1380,
+  "ha_150_antes_do_champion": true
+ }
+}

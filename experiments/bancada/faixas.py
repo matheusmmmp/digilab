@@ -177,10 +177,17 @@ FAIXAS_RESERVADAS = (
                    "(docs/PLANO_LUTA_NUCLEO.md, secao 2.1; D-N-2; bases 92101, 92202, 92303, 92404 e 92505, com a derivacao da LP5; "
                    "aprovada pelo Matheus em 2026-11-12, \"Aprovo as 7 (Recommended)\", e pedida pelo Gerente de sprites e luta; "
                    "conferida livre na origin/main em 2026-11-12)"),
-    (93101, 93505, "LONGE_GEOMETRIA, a regularidade do longe separada da geometria: a run unica "
-                   "(docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md, secao 3.4; LG-6; bases 93101, 93202, 93303, 93404 e 93505, K = 40; "
+    (93101, 93505, "EQUILIBRIO_CUIDADO, a calibracao (jogo web): o E0, o retrato de hoje, nas bases 93101, 93202, 93303, 93404 e "
+                   "93505, e o E1 (docs/PLANO_ANALISE_V3_EQUILIBRIO_CUIDADO.md, secao 5; EQ-5, Matheus, 2026-11-12; conferida livre "
+                   "na origin/main em 2026-11-12)"),
+    (94101, 94505, "EQUILIBRIO_CUIDADO, a validacao unica (jogo web): o E2, uma vez; nao e tocada no E0 nem no E1 "
+                   "(docs/PLANO_ANALISE_V3_EQUILIBRIO_CUIDADO.md, secao 5; EQ-5, Matheus, 2026-11-12; conferida livre na origin/main "
+                   "em 2026-11-12)"),
+    (96101, 96505, "LONGE_GEOMETRIA, a regularidade do longe separada da geometria: a run unica "
+                   "(docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md, secao 3.4; LG-6; bases 96101, 96202, 96303, 96404 e 96505, K = 40; "
                    "aprovada pelo Matheus em 2026-11-16, \"Eu aprovo o plano, pode seguir com as recomendacoes e o merge\"; "
-                   "conferida livre em faixas.py e docs/ de todos os branches remotos em 2026-11-13 e de novo em 2026-11-16)"),
+                   "trocada da 93101-93505, que colidia com a calibracao da EQUILIBRIO_CUIDADO (D-EQ2-11; Matheus, 2026-11-16, "
+                   "\"A LONGE_GEOMETRIA\"), antes de qualquer vida; a 96xxx conferida livre em todos os branches remotos em 2026-11-16)"),
 )
 
 
