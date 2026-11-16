@@ -99,9 +99,23 @@ instância (`tools/cerebro_do_gabarito.py`). O resultado:
     V3-9 da V2. Os quatro recusam regravar, e o script não os rodou.
 
 **O achado:** várias mecânicas que o jogo usa só têm gabarito com o A: a árvore que sacode, a TV do jogo, o lance do dono, o banheiro, o
-metabolismo ligado, os órgãos, a fruta ao lado e os dois pets. Quando o A sair, elas ficam sem guarda byte a byte no Python. A LZ1 parte 2
-(PROPOSTA) grava, para cada uma, o mesmo cenário com o braço do modular, antes da LZ2. A paridade do web (os gabaritos `*_python.json`)
-continua guardando o lado TS.
+metabolismo ligado, os órgãos, a fruta ao lado e os dois pets. Quando o A sair, elas ficariam sem guarda byte a byte no Python. A paridade do web
+(os gabaritos `*_python.json`) continua guardando o lado TS.
+
+**A LZ1 parte 2 (feita, aprovada pelo Matheus: "Sim, grave"):** o `tests/gabarito_limpeza_mecanicas.py`
+(`tests/gabaritos/limpeza_mecanicas_de_hoje.json`, 60 vidas, num commit próprio) grava as mecânicas com os cérebros que ficam: o modular
+do jogo (o REL) e o instinto do mundo.
+- **As mecânicas:**
+  - a árvore que sacode, só com a chave e com o roteiro do dono que sacode (18 sacudidas por vida, na ilha);
+  - o banheiro, o metabolismo e o corpo da etapa 6;
+  - a fruta ao lado e o lance do dono.
+- **As recusas de hoje ficam gravadas:** o modular recusa o corpo do banheiro (os receptores `vontade` e `conforto`, fora do protótipo).
+- **Onde a guarda vem de outros gabaritos:**
+  - os dois pets e o lance com o modular: as entradas do REL do `lance_dono`;
+  - o modular com a TV: o `gosto_visual_enjoo` e o `orgao_visao`.
+- **O que segue sem guarda Python com o modular:** a TV do jogo (`cfg_tv_jogo`, só no modo livre gravado) e a ilha com água (exige o
+  controlador do contrato). As entradas do instinto nos gabaritos do A (a árvore, o banheiro, os dois pets) continuam valendo e ficam na
+  LZ2, sem as do A.
 
 ## 4. Experimento e gate
 
