@@ -1,5 +1,5 @@
 """O orquestrador da LONGE_GEOMETRIA (experiments/run_v3_longe_geometria.py; docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md, secoes 3 a 7) e o
-script de poder (experiments/poder_longe_geometria.py; secao 6): o desenho, a config e a trava (o plano APROVADO, a faixa 93101...93505,
+script de poder (experiments/poder_longe_geometria.py; secao 6): o desenho, a config e a trava (o plano APROVADO, a faixa 96101...96505,
 as bases, o K, os dias, no maximo 4 processos, nada por cima de uma pasta existente), os lugares (o `longe_um` com 1 ponto), a interacao, a
 regra de leitura da secao 7 e a fumaca de ponta a ponta. Vidas so com as sementes dos testes (101...505): nenhuma da faixa 93xxx roda aqui."""
 from __future__ import annotations
@@ -29,7 +29,7 @@ def _cfg(nome: str = "longe_geometria") -> dict:
 
 # ------------------------------------------------------------------ o que o plano fixa
 def test_o_desenho_e_o_do_plano():
-    assert lg.BASES == (93101, 93202, 93303, 93404, 93505) and lg.K_POR_BASE == 40 and lg.DIAS == 14 and lg.ORCAMENTO_POR_DIA == 16
+    assert lg.BASES == (96101, 96202, 96303, 96404, 96505) and lg.K_POR_BASE == 40 and lg.DIAS == 14 and lg.ORCAMENTO_POR_DIA == 16
     assert lg.LUGARES == ("longe_um", "longe_fixo", "longe_ancora", "longe") and len(lg.CELULAS) == 16
     assert lg.BRACOS == ("PAD", "M3", "M2", "M0") and lg.BRACO_DO_ORQ["PAD"] == "REL" and lg.CONTROLE == "M2"
     assert lg.PREFIXO == "digibrain_prototipo" and lg.MARGEM == 0.034 and lg.MAX_PROCESSOS == 4 and lg.ALFA_FAMILIA == 0.025
@@ -47,8 +47,8 @@ def test_os_bracos_sao_os_do_conserto_e_o_pad_e_o_rel_da_c4():
 
 
 def test_a_faixa_esta_reservada():
-    """a faixa 93101...93505 (LG-6), reservada pelo Matheus em 2026-11-16 num commit proprio"""
-    assert na_faixa_reservada(93101) and na_faixa_reservada(93505) and not na_faixa_reservada(93506)
+    """a faixa 96101...96505 (LG-6), reservada pelo Matheus em 2026-11-16 num commit proprio"""
+    assert na_faixa_reservada(96101) and na_faixa_reservada(96505) and not na_faixa_reservada(96506)
     lg.exigir_faixa_reservada()
 
 
@@ -63,7 +63,7 @@ def test_a_run_segue_o_plano_aprovado_e_a_faixa_reservada():
 
 def test_a_run_e_recusada_sem_a_faixa_ou_sem_a_aprovacao(monkeypatch):
     todas = lg.FAIXAS_RESERVADAS
-    monkeypatch.setattr(lg, "FAIXAS_RESERVADAS", tuple(f for f in todas if f[0] != 93101))
+    monkeypatch.setattr(lg, "FAIXAS_RESERVADAS", tuple(f for f in todas if f[0] != 96101))
     with pytest.raises(bv.SementeSemPlano, match="FAIXAS_RESERVADAS"):
         lg.modo_da_config(_cfg())
     monkeypatch.setattr(lg, "FAIXAS_RESERVADAS", todas)
@@ -75,8 +75,8 @@ def test_a_run_e_recusada_sem_a_faixa_ou_sem_a_aprovacao(monkeypatch):
     lg.modo_da_config(_cfg("fumaca"))                                 # a fumaca nao precisa da aprovacao
 
 
-@pytest.mark.parametrize("bases", [[93101, 93202, 93303, 93404], [93101, 93202, 93303, 93404, 93506], [71101, 71202, 71303, 71404, 71505],
-                                   [101, 93101]])
+@pytest.mark.parametrize("bases", [[96101, 96202, 96303, 96404], [96101, 96202, 96303, 96404, 96506], [71101, 71202, 71303, 71404, 71505],
+                                   [101, 96101]])
 def test_recusa_outra_base_e_sementes_fora_da_faixa(bases):
     c = _cfg()
     c["unidades"]["bases"] = bases

@@ -40,7 +40,7 @@ const dTv = (m: Motor): number => { const l = laco(m), tv = l.tv!; return distan
 
 describe("as versoes: a v35 e a v36", () => {
   test("o ovo novo de um pet so nasce v35 e o do brasao v36; as chaves da TV no jogo so nelas", () => {
-    expect([VERSAO_PET, VERSAO_GRUPO]).toEqual([35, 37]);   // o grupo: a v37 (a v36 com a CO6 e a CO7, CO7c)
+    expect([VERSAO_PET, VERSAO_GRUPO]).toEqual([38, 39]);   // desde o E3 do EQUILIBRIO_CUIDADO: a v38 (a v35) e a v39 (a v37)   // o grupo: a v37 (a v36 com a CO6 e a CO7, CO7c)
     expect([27, 29, 30, 31, 32, 35, 36].map(nasceComTv)).toEqual([false, false, false, false, true, true, true]);
     expect([27, 29, 30, 31, 32, 35, 36].map(nasceComTvJogo)).toEqual([false, false, false, false, false, true, true]);
     const m = new Motor(1);
