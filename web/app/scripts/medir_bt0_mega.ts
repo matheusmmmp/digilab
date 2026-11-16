@@ -102,6 +102,8 @@ export interface VidaBt0 {
   /** o dia de jogo em que o Tamer chegou ao ULTIMO_MARCO (null: nao chegou) */
   diaNivel10: number | null;
   medalhas: number;
+  /** as lutas e as vitorias contra cada NPC da campanha (os lideres das medalhas e os outros), somados os dois pets */
+  porLider: Record<string, { lutas: number; vitorias: number }>;
   /** o fim do primeiro dia de jogo em que o Tamer tinha cada marco de MARCOS_CAIS (null: nao chegou) */
   marcoAlcancado: Record<number, Marca | null>;
 }
@@ -119,7 +121,7 @@ export function viver(perfil: Perfil, brasao: Especie, i: number, diasMax = DIAS
   const rTv = criarRng(hashSemente("bt0-tv", semente)), rLuta = criarRng(hashSemente("bt0-luta", semente));
   const passosDia = TPD / CD.passo, passos = passosDia * diasMax, orc = Math.round(CD.porDia * diasMax), gasto = ms.map(() => 0);
   let chipsEquipados = 0, lutas = 0, vitorias = 0, lideres = 0, palco = 0, chamados = 0, niveis = [8, 8, 8, 8, 0, 0, 0], morreu = false, dia = 0;
-  const abertosAntes = ms.map(() => new Set<string>());
+  const abertosAntes = ms.map(() => new Set<string>()), porLider: Record<string, { lutas: number; vitorias: number }> = {};
   const pets: PetVida[] = ms.map((m, k) => ({ id: ids[k], especie: m.especie, estagios: {}, morreu: false, medalhasNoFim: 0, forma: "" }));
   const nivelPorDia: number[] = [], porDia: (Marca & { nivel: number; marcos: number[]; medalhas: number })[] = [];
   let diaNivel10: number | null = null;
@@ -142,6 +144,7 @@ export function viver(perfil: Perfil, brasao: Especie, i: number, diasMax = DIAS
     try { agir(m, x => { r = x.lutarPoc(rival, s, mapa); }); } catch (err) { if (err instanceof PetMorto) return false; return false; }
     if (!r) return false;
     lutas++; palco += segundosDoPalco(r); if ((r as ResultadoLutaPoc).venceu) vitorias++;
+    if (rival in m.campanha) { const c = (porLider[rival] ??= { lutas: 0, vitorias: 0 }); c.lutas++; if ((r as ResultadoLutaPoc).venceu) c.vitorias++; }
     return true;
   };
   const lutar = (m: Motor, s: number, k: number, lider: boolean): boolean => {
@@ -217,7 +220,7 @@ export function viver(perfil: Perfil, brasao: Especie, i: number, diasMax = DIAS
     if (cs.length) primeiro[e] = cs[0];
   }
   return { perfil: perfil.nome, variante, chipsEquipados, brasao, i, semente, versao, dias: nivelPorDia.length, morreu, pets, lutas, vitorias, lideresTentados: lideres,
-    segundosPalco: +palco.toFixed(1), chamadosBebe: chamados, primeiro, nivelPorDia, diaNivel10, medalhas: tamer.medalhas.length,
+    segundosPalco: +palco.toFixed(1), chamadosBebe: chamados, primeiro, nivelPorDia, diaNivel10, medalhas: tamer.medalhas.length, porLider,
     marcoAlcancado: Object.fromEntries(MARCOS_CAIS.map(n => [n, porDia.find(x => x.marcos.includes(n)) ?? null])) };
 }
 
@@ -278,6 +281,7 @@ export function medir(opc: { vidas: number; especies: readonly Especie[]; dias: 
     return { variante: va, perfil: p.nome, marcos, brasao: e, vidas: vs.length, sessoes: ses, minutosAbertosPorDia: minPorDia, estagios,
       megaNaVelocidadePadrao: { ...emDias, de: vs.length, diasDeRelogio: diasMega.map(x => Number.isFinite(x) ? r2(x) : null) },
       gradeMega: grade,
+      porLider: vs.reduce((acc, v) => { for (const [k, x] of Object.entries(v.porLider)) { const a = (acc[k] ??= { lutas: 0, vitorias: 0 }); a.lutas += x.lutas; a.vitorias += x.vitorias; } return acc; }, {} as Record<string, { lutas: number; vitorias: number }>),
       diaDeJogoNivel10: vs.map(v => v.diaNivel10), mortes: vs.filter(v => v.morreu).length };
   });
   return { vidas, tabela, velocidades: vels };
