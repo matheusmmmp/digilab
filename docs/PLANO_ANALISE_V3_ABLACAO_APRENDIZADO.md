@@ -1,6 +1,6 @@
 # Plano de análise V3: a ablação do aprendizado no jogo (EVIDENCIA A2)
 
-**Status: PROPOSTO, aguardando o Matheus.** Escrito em 2026-11-16 (Claude Code, Opus 5.5, branch `v3-evidencia-a2`), na fase A2 do pedido de
+**Status: APROVADO pelo Matheus em 2026-11-16,** com as AB-1 a AB-7 DECIDIDAS pela recomendação ("Aprovo, pode rodar") e a AB-2b ("Mapear para acariciar/tapa"), nesta sessão. Escrito em 2026-11-16 (Claude Code, Opus 5.5, branch `v3-evidencia-a2`), na fase A2 do pedido de
 2026-11-16 (`docs/TAREFA_V3_EVIDENCIA.md`), depois do CHECKPOINT A2 ("Aceitar e seguir A2", D-EV-A1-7).
 
 ## 0. A trava e o que já foi visto
@@ -10,11 +10,14 @@
 2. as decisões AB-1 a AB-7 (seção 9) DECIDIDAS;
 3. a faixa da seção 2.3 em `FAIXAS_RESERVADAS` (o orquestrador confere).
 
-O código (o harness, o orquestrador, a config e os testes) entra **no mesmo commit que este plano**, antes de qualquer vida, e fica no
-branch até o merge do Matheus.
+O plano entrou PROPOSTO num commit só dele (`2481e33e`). O código (o harness, o orquestrador, as configs e os testes) entra **no commit
+da aprovação**, antes de qualquer vida da run, e fica no branch até o merge do Matheus.
 
 **O que já foi visto antes deste plano:** uma vida de 3 dias do ovo do jogo (v38, montado como na seção 2.1), semente 101 (dos testes,
 fora da faixa), dono atencioso, braço A, só para medir o tempo: 0,28 s e 288 decisões. Nenhuma medida de ação ou de motivo foi lida.
+Depois da aprovação, a fumaça do harness (semente 101, os 3 donos, os 2 braços) mostrou só o que o código precisava: o B sem unidade com
+aprendido e o A com; a unidade escolhida achada pela chave em lista; e o dono incoerente com o mesmo log do atencioso, porque o retorno dele
+(`elogiar`, `repreender`) não é ação do dono no jogo e o laço o descartava. Daí a AB-2b. Nenhuma fração de ação ou de motivo foi lida.
 
 **O que este plano não afirma:** que o aprendizado é bom ou ruim para o pet; nada sobre o Python (a C4 já mediu lá); nenhuma alegação de
 novidade.
@@ -39,6 +42,9 @@ aprendido zerado a cada decisão (o braço B). A previsão é "difere"; o sinal 
 - **O dono:** os donos sintéticos do motor (`motor/donos.ts`, `criarDono`, o espelho do `donos.py` da C4), no laço do
   `test/evolucao_canonica.test.ts`: um passo de `CD.passo` minutos, o orçamento de 16 ações por dia, só as `ACOES_DONO_JOGO_V11`, a rng do
   dono `hashSemente("dono", semente, tipo)`. Sem luta (AB-4).
+- **O retorno do dono (AB-2b):** o `elogiar` vira `acariciar` e o `repreender` vira `tapa`, a correspondência da tela do jogo (Elogiar =
+  acariciar, Repreender = tapa), antes do filtro das `ACOES_DONO_JOGO_V11`. Uma ação que o motor recusa (o `observar` levanta, sem ser a
+  morte) é contada e a vida segue, como no `test/dc3d_hoje.ts`; o número de recusas vai no descritivo.
 - **As "3 vidas" do pedido:** os três donos `atencioso`, `relapso` e `incoerente`, cada um uma vida de **3 dias** (AB-2).
 - **A morte:** a vida para em `m.morte`; as medidas usam as decisões até ali, e o número de mortes por braço vai no resultado.
 
@@ -85,7 +91,7 @@ vale a dupla execução.
 ### 5.1 O teste
 
 - Para cada uma das **15 medidas** (7 de ação, 8 de motivo), a diferença A − B por unidade, o IC95 pelo t (gl 199) e o p bilateral, com
-  o `orq.contraste_t` da C4 (`experiments/run_v2_digibrain_prototipo.py`).
+  o `ic_t` e o `t_unilateral` de `digilab/metrics.py` (os mesmos do `contraste_t` da C4, que dá só o p unilateral).
 - **Uma família de 15, com Holm** sobre os p bilaterais, α = 0,05.
 - Ao lado, sem mudar a decisão: a margem efetiva de cada medida (o menor efeito com poder 0,8 pelo dp observado).
 
@@ -98,7 +104,7 @@ para que um "nula" com IC largo não seja lido como "igual".
 
 | o que sai | condição | a leitura |
 |---|---|---|
-| **muda** | ao menos uma das 15 medidas com o p de Holm < 0,05 | o P1 e o P2 mudam o comportamento no jogo. **H confirmada** |
+| **muda** | ao menos uma das 15 medidas rejeitada pelo Holm (`metrics.holm`, α = 0,05) | o P1 e o P2 mudam o comportamento no jogo. **H confirmada** |
 | **nula** | o IC95 (sem ajuste) de **todas** as 15 inclui o 0 | as distribuições iguais. **H refutada** |
 | **indeterminado** | algum IC95 sem ajuste exclui o 0, mas nenhum passa no Holm | **H não confirmada nem refutada** |
 
@@ -135,6 +141,7 @@ a lacuna. Nada se conserta para o número sair.
 | AB-4 | a luta | sem luta e sem arena | a luta mexe no corpo e no humor; fica para outra pergunta |
 | AB-5 | a faixa | 98101…98505 | — |
 | AB-6 | o braço B | o zerar no lugar antes de cada leitura do `impulso.unidades` (seção 2.2), não antes do `agir` (que deixaria o P1 da decisão anterior entrar na de agora) | zerar antes do `agir` deixa um resto do aprendizado em B |
+| AB-2b | o retorno do dono | `elogiar` → `acariciar`, `repreender` → `tapa` (decidida depois da fumaça; seção 2.1) | sem o mapa, o incoerente é o atencioso de novo |
 | AB-7 | a regra | a da seção 5.3: uma família de 15 com Holm; "nula" só com todos os IC incluindo o 0 | uma regra mais frouxa daria "muda" por acaso; uma mais dura, "indeterminado" demais |
 
 ## 10. Referências

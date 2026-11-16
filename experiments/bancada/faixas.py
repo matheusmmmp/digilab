@@ -188,6 +188,9 @@ FAIXAS_RESERVADAS = (
                    "aprovada pelo Matheus em 2026-11-16, \"Eu aprovo o plano, pode seguir com as recomendacoes e o merge\"; "
                    "trocada da 93101-93505, que colidia com a calibracao da EQUILIBRIO_CUIDADO (D-EQ2-11; Matheus, 2026-11-16, "
                    "\"A LONGE_GEOMETRIA\"), antes de qualquer vida; a 96xxx conferida livre em todos os branches remotos em 2026-11-16)"),
+    (98101, 98505, "EVIDENCIA A2, a ablacao do aprendizado no jogo (jogo web): a run unica, sementes 98101...98300 "
+                   "(docs/PLANO_ANALISE_V3_ABLACAO_APRENDIZADO.md, secao 2.3; AB-5; aprovada pelo Matheus em 2026-11-16, "
+                   "\"Aprovo, pode rodar\"; conferida livre na origin/main e em todos os branches remotos em 2026-11-16)"),
 )
 
 

@@ -162,3 +162,5 @@ web/app/scripts/mmo0/dist/
 # a LONGE_GEOMETRIA (docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md): o poder.json e a run; as vidas ficam fora (compactadas depois, como na C1)
 !artifacts_v3_longe_geometria/
 artifacts_v3_longe_geometria/**/vidas/
+# EVIDENCIA A2: os artefatos da ablacao do aprendizado (docs/PLANO_ANALISE_V3_ABLACAO_APRENDIZADO.md, secao 6)
+!artifacts_v3_ablacao_aprendizado/
