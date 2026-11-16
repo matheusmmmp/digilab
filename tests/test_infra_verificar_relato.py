@@ -151,6 +151,9 @@ def test_implementacao_aceita_teste_do_web_app_com_alerta(tmp_path):
     ("web/app/poc/mundo3d/fisica.test.ts", True),
     ("web/app/node_modules/x/y.test.ts", False),
     ("web/app/src/x.ts", False),
+    ("servidor_web/test/conta.test.ts", True),  # D-CONTA-69: o Vitest do servidor do jogo web
+    ("servidor_web/node_modules/x/y.test.ts", False),
+    ("servidor_web/src/app.ts", False),
 ])
 def test_caminhos_de_teste_do_web_app(caminho, conta):
     assert bool(vr.CAMINHO_TESTE_WEB.fullmatch(caminho)) is conta

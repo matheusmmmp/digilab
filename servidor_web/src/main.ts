@@ -4,11 +4,14 @@
      npm run dev -- --provedor nenhum              # so template
      npm run dev -- --modelo claude-haiku-4-5 --limite-usd 2
    A chave so no ambiente (ANTHROPIC_API_KEY). O teto e TOTAL e acumulado no mesmo arquivo do servidor Python (servidor/gasto_fala.json,
-   fora do git), para os dois servidores somarem um teto so; DIGILAB_GASTO_FALA troca o arquivo. So escuta em 127.0.0.1. */
+   fora do git), para os dois servidores somarem um teto so; DIGILAB_GASTO_FALA troca o arquivo. So escuta em 127.0.0.1.
+   A conta (CN2) pelas variaveis de src/conta/config.ts (DIGILAB_BANCO, DIGILAB_URL_API, DIGILAB_URL_JOGO, DIGILAB_CONVIDADOS, as chaves
+   dos apps OAuth); no local, o provedor falso liga sozinho e a pagina de teste fica em /dev/conta. --sem-conta sobe so a CN1. */
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { serve } from "@hono/node-server";
 import { criarApp } from "./app.ts";
+import { configDoAmbiente } from "./conta/config.ts";
 import { CATALOGO } from "./catalogo.ts";
 import { criarClienteClaude, GeradorFala, ProvedorClaude } from "./fala.ts";
 import { ControleGasto } from "./gasto.ts";
@@ -22,6 +25,7 @@ const { values: a } = parseArgs({
     provedor: { type: "string", default: "auto" },
     modelo: { type: "string" },
     "limite-usd": { type: "string", default: String(CATALOGO.limite_usd_padrao) },
+    "sem-conta": { type: "boolean", default: false },
   },
   strict: true,
 });
@@ -50,5 +54,12 @@ if (cliente === null) {
   estado = `LLM: Claude ${gerador.modelo}; gasto US$ ${gasto.gasto.toFixed(4)} de US$ ${gasto.limite.toFixed(2)} (${arquivo})`;
 }
 
-serve({ fetch: criarApp({ gerador, motivoInicial: motivo }).fetch, hostname: "127.0.0.1", port: porta }, info =>
-  console.log(`Digilab servidor_web em http://127.0.0.1:${info.port}  (/saude, /api/fala/status, POST /api/fala)  [${estado}]`));
+const conta = a["sem-conta"] ? undefined : configDoAmbiente({ porta });
+const estadoConta = conta === undefined ? "sem conta (--sem-conta)"
+  : [...conta.provedores.values()].map(p => { const [ligado, m] = p.estado(); return ligado ? `${p.nome}: ligado` : `${p.nome}: desligado (${m})`; }).join("; ");
+
+serve({ fetch: criarApp({ gerador, motivoInicial: motivo, conta }).fetch, hostname: "127.0.0.1", port: porta }, info => {
+  console.log(`Digilab servidor_web em http://127.0.0.1:${info.port}  (/saude, /api/fala/status, POST /api/fala)  [${estado}]`);
+  console.log(`  conta: ${estadoConta}`);
+  if (conta?.local) console.log(`  teste do fluxo da conta: ${conta.urlApi}/dev/conta`);
+});
