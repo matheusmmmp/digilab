@@ -239,7 +239,7 @@ Cada uma tem a recomendação e o custo de errar.
 
 ## Adendo 1: o braço A fora da run (D-VAL-11)
 
-**Status do adendo 1: PROPOSTO.** Escrito em 2026-11-16 (Claude Code, Opus 5.5, branch `v3-valuation-v2`), na montagem do código da V2,
+**Status do adendo 1: APROVADO pelo Matheus em 2026-11-16** ("Aprovo o adendo 1", nesta sessão; D-VAL-11 DECIDIDA). Escrito em 2026-11-16 (Claude Code, Opus 5.5, branch `v3-valuation-v2`), na montagem do código da V2,
 antes de qualquer vida. O orquestrador recusa a run de verdade até esta linha dizer "APROVADO pelo Matheus".
 
 **A1.1 O que se achou.** O braço A liga a `ConfigDecisaoNaComida`: o pet decide no passo seguinte à queda da ração, fora da grade de 15
