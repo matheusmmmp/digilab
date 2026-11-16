@@ -693,6 +693,9 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave():
                       "experiments/run_v3_acoes_novas.py",
                       # o descritivo da D-C1-3 no REL (adendo 11, #646): so le os artefatos da run da C4 e importa o orquestrador dela; nenhuma vida
                       "experiments/descritivo_dc13_rel.py",
+                      # a decomposicao da D-C1-3 na LONGE_GEOMETRIA (D-LG-3): so confere o sha256 do orquestrador da C4 e rejoga as
+                      # vidas do disco pelo orquestrador da run; nenhuma vida nova
+                      "experiments/descritivo_dc13_longe_geometria.py",
                       # o orquestrador da DC3 (#672): monta o LAB (o REL da C4) e o LAB+F pela config do orquestrador da C4
                       "experiments/run_v3_conversa_dc3.py",
                       # a bateria da INDIVIDUALIDADE (I1): importa o orquestrador da C4 so pela vida (`viver`); nao le a chave
