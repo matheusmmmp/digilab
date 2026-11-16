@@ -25,8 +25,8 @@ Não muda: o `engine.py`, o motor, o corpo, o mundo, o cheiro, o A, o cérebro m
 
 - Plano de análise: `docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md`, commitado antes da run.
 - Sementes reservadas: sem calibração; a run única na faixa proposta 93101…93505, a confirmar com o coordenador.
-- Métrica e gate: a taxa de fechamento por episódio; os primários I-M3 e I-PAD (a interação do ganho da memória entre o `longe_fixo` e o `longe_ancora`), com Holm; K = 150 e δ pelo script de poder (cerca de 0,027 pela conta de bolso). Todos PROPOSTOS.
-- GPU: não. CPU, 4 processos, cerca de 2 h 20 a 3 h 30 para 9 600 vidas.
+- Métrica e gate: a taxa de fechamento por episódio; os primários I-M3 e I-PAD (a interação do ganho da memória entre o `longe_fixo` e o `longe_ancora`), com Holm; K = 200 e δ = 0,034, pelo script de poder (artifacts_v3_longe_geometria/poder.json). Todos PROPOSTOS.
+- GPU: não. CPU, 4 processos, cerca de 3 h a 4 h para 12 800 vidas (K = 200, a LG-5 revista pelo script de poder).
 
 ## 5. Entrega
 

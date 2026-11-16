@@ -707,7 +707,10 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave():
                       # a medicao de desempenho (docs/DESEMPENHO_PERFIL_2026-11.md): importa o orquestrador da C4 pela vida e pela analise; nao le a chave
                       "experiments/medir_desempenho_perfil.py",
                       # a auditoria do PET_VIVO: so cita a pasta da run da C4 (memoria_autobio/run) para reler os logs; nao le a chave
-                      "experiments/auditoria_pet_vivo.py"}
+                      "experiments/auditoria_pet_vivo.py",
+                      # a LONGE_GEOMETRIA: o orquestrador importa o da C4 so pela conferir_memoria (o papel REL do PAD; a config passa pelo
+                      # orquestrador do prototipo), e o poder so le o medidas.json.gz da run da C4 no git; nao leem a chave
+                      "experiments/run_v3_longe_geometria.py", "experiments/poder_longe_geometria.py"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre"):
         if not (RAIZ / pasta).exists():
@@ -982,7 +985,9 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave_das_facetas():
                     "web/app/test/digibrain_modular_impulso.test.ts", "web/app/test/digibrain_modular_mem.test.ts",
                     "experiments/exportar_gabarito_digibrain_modular.py", "tests/test_gabarito_digibrain_modular_web.py",
                     # o teste da DC3a (#672): confere que o LAB+F e o REL da C4 com a fala_unidades ligada e nada mais
-                    "tests/test_conversa_dc3a.py"}
+                    "tests/test_conversa_dc3a.py",
+                    # o teste do orquestrador da LONGE_GEOMETRIA: confere que o PAD (o REL da C4) roda sem as facetas; nao le a chave
+                    "tests/test_longe_geometria.py"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre", "tests"):
         if not (RAIZ / pasta).exists():
