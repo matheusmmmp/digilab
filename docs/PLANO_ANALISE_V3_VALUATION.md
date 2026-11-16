@@ -236,3 +236,37 @@ Cada uma tem a recomendação e o custo de errar.
   - **A recomendação:** os 7 contrastes numa família, com α = 0,025 unilateral, como a C4.
   - **O custo de errar:** sem o Holm, 7 testes dão uma chance de falso "confirmada" bem acima de 2,5 %. Com ele, um efeito pequeno pode sair
     "indeterminado", e a margem efetiva mostra quando isso acontece.
+
+## Adendo 1: o braço A fora da run (D-VAL-11)
+
+**Status do adendo 1: PROPOSTO.** Escrito em 2026-11-16 (Claude Code, Opus 5.5, branch `v3-valuation-v2`), na montagem do código da V2,
+antes de qualquer vida. O orquestrador recusa a run de verdade até esta linha dizer "APROVADO pelo Matheus".
+
+**A1.1 O que se achou.** O braço A liga a `ConfigDecisaoNaComida`: o pet decide no passo seguinte à queda da ração, fora da grade de 15
+ticks. As medidas da A1, que o plano não muda, pressupõem a grade:
+- o `orq.medidas` recusa a vida no primeiro consumo fora de um múltiplo de 15 ("consumo fora do tick de uma decisao") e exige
+  `decisões × 15 = os ticks da vida`;
+- o `metrics.episodios_de_fome` conta a janela W(d0) em decisões k = 0, 1, …, cada uma de 15 ticks. Com decisões extras, a mesma W cobre menos
+  tempo, e o contraste com o REL deixa de comparar a mesma coisa.
+
+Medir o braço A pede mudar a métrica da A1, o que o pedido proíbe ("não mudar a métrica da A1").
+
+**A1.2 O que muda.**
+- **Os braços:** o braço A sai da run (`run_v3_valuation.FORA`; pedi-lo falha alto). A run passa a ter **7 braços**: o REL, B, C, E, F, G
+  e R.
+- **As vidas:** **5 600** (7 × 4 células × 200 unidades), cerca de 5,8 h de CPU.
+- **A família do Holm:** **6** contrastes, com o mesmo α = 0,025 unilateral.
+- **A hipótese A** fica sem ablação. O `nao_demonstra` do resultado o diz, e o MAPA (seção 3) já registrava que a TRIV decide na mesma
+  cadência de 15 ticks.
+
+**A1.3 Dois acertos de leitura, sem mudança de número:**
+- **O consumo de todas as comidas (5.3)** é o mesmo número que as refeições de ração. O T-CENARIO-1 confere em toda vida que toda comida
+  do mundo é ração do dono, e por isso o descritivo sai uma vez só.
+- **A conferência do braço F (seção 3)** não pode ler o z decisão a decisão, porque o motivo do cérebro não guarda o z. A vida confere a
+  chave ligada nos dois módulos e o cérebro do braço, e o `tests/test_valuation.py` confere a conta (o z com o V e o E em 0, o resto igual).
+
+**A1.4 A decisão (D-VAL-11).**
+- **A recomendação:** aprovar o braço A fora.
+- **A alternativa:** um plano próprio para a cadência, com uma medida em ticks no lugar da janela em decisões. Isso seria outra métrica,
+  fora do pedido.
+- **O custo de errar:** perde-se a única ablação da A. O MAPA já previa que a cadência sozinha não separa o REL da TRIV.

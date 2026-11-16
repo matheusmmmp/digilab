@@ -194,4 +194,20 @@ E, F, G e R) nas 4 células do `longe_fixo`, com 200 unidades pareadas e 6 400 v
 O segundo braço da R (a `intencao_suspensa`) não pode ser montado, porque a config recusa a combinação com a `memoria_autobio`
 (D-VAL-7).
 
-Status: PROPOSTO, no CHECKPOINT V2, com as D-VAL-7 a D-VAL-10 (seção 10 do plano).
+Status: o Matheus aprovou o CHECKPOINT V2 em 2026-11-16 ("Aprovado, siga a V2"). As D-VAL-7 a D-VAL-10 ficaram DECIDIDAS pela
+recomendação.
+
+### V2, o código da ablação (2026-11-16, Claude Code, Opus 5.5)
+
+O código está pronto, e a run ainda não rodou.
+- **O que entrou:**
+  - as duas chaves de ablação, desligadas e só de pesquisa: a `ConfigAblacaoValuation` (`ve_z`, `maior_peso`), com o gabarito "desligada,
+    byte a byte" gravado num commit anterior (`tests/gabaritos/valuation_de_hoje.json`);
+  - o `experiments/run_v3_valuation.py` e a config;
+  - os testes `tests/test_valuation.py` e `tests/test_gabarito_valuation.py`.
+- **Um achado na montagem:** o braço A não pode ser medido com a métrica da A1, porque a decisão sai da grade de 15 ticks. O adendo 1 do
+  plano o tira (D-VAL-11, PROPOSTO).
+- **O que a run espera:**
+  - o adendo 1 aprovado;
+  - a ordem da D-VAL-6 (o PR #943 na `main` e os imports do `lobos.py` estáveis);
+  - a máquina livre.
