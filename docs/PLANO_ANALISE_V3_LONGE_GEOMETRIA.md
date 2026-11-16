@@ -1,12 +1,12 @@
 # Plano de análise V3: a regularidade do longe separada da geometria (LG)
 
-**Status: PROPOSTO** (2026-11-13, Claude Code, Opus 5.5, na sessão com o Matheus). Nenhuma vida roda antes de quatro coisas:
+**Status: APROVADO pelo Matheus em 2026-11-16,** com as LG-1 a LG-8 DECIDIDAS pela recomendação (K = 200 e δ = 0,034, a LG-5 revista pelo script de poder): "Eu aprovo o plano, pode seguir com as recomendações e o merge", nesta sessão. Escrito em 2026-11-13 (Claude Code, Opus 5.5, na sessão com o Matheus). Nenhuma vida roda antes de quatro coisas:
 1. este plano commitado na `main`, com a marca de aprovação do Matheus no cabeçalho;
 2. as decisões LG-1 a LG-8 (seção 9) DECIDIDAS;
 3. a faixa na `FAIXAS_RESERVADAS` (`experiments/bancada/faixas.py`), num commit próprio;
 4. o código da seção 4 na `main`: os dois estilos novos, o gabarito dos estilos byte a byte, o orquestrador e o script de poder da seção 6.
 
-Todo número novo aqui é **PROPOSTO e SEM FONTE**, salvo onde dito.
+Os números novos daqui ficam **DECIDIDOS com a aprovação e seguem SEM FONTE**, salvo onde dito.
 
 **De onde vem:**
 - a ressalva da geometria do adendo 6 da C1 (`docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md`, A6.2): "o contraste `longe_fixo` × `longe` mistura a regularidade com o lado do mapa e com a âncora";
@@ -200,7 +200,7 @@ replay e nenhuma semente nova.** Abaixo, **[poder]** é esse artefato):
 6. **As medidas da C5** (a viabilidade do corpo), como na C1.
 7. **Por dono, só descritivo.**
 
-## 9. As decisões para o Matheus (todas PROPOSTAS)
+## 9. As decisões do Matheus (todas DECIDIDAS em 2026-11-16, pela recomendação)
 
 | id | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|

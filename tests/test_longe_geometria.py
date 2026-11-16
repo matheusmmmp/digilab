@@ -57,17 +57,22 @@ def test_a_fumaca_passa_sem_faixa_e_sem_aprovacao():
     assert lg.modo_da_config(_cfg("fumaca")) == "fumaca"
 
 
-def test_a_run_e_recusada_sem_a_faixa_e_sem_a_aprovacao(monkeypatch):
-    sem = tuple(f for f in lg.FAIXAS_RESERVADAS if f[0] != 93101)
-    monkeypatch.setattr(lg, "FAIXAS_RESERVADAS", sem)
+def test_a_run_segue_o_plano_aprovado_e_a_faixa_reservada():
+    assert lg.modo_da_config(_cfg()) == "longe_geometria"             # o plano APROVADO em 2026-11-16 e a faixa na tabela
+
+
+def test_a_run_e_recusada_sem_a_faixa_ou_sem_a_aprovacao(monkeypatch):
+    todas = lg.FAIXAS_RESERVADAS
+    monkeypatch.setattr(lg, "FAIXAS_RESERVADAS", tuple(f for f in todas if f[0] != 93101))
     with pytest.raises(bv.SementeSemPlano, match="FAIXAS_RESERVADAS"):
         lg.modo_da_config(_cfg())
-    monkeypatch.setattr(lg, "FAIXAS_RESERVADAS", sem + ((93101, 93505, "teste"),))
-    with pytest.raises(RuntimeError, match="nao esta APROVADO"):
-        lg.modo_da_config(_cfg())                         # o plano de hoje e PROPOSTO
+    monkeypatch.setattr(lg, "FAIXAS_RESERVADAS", todas)
     plano = lg._plano()
-    monkeypatch.setattr(lg, "_plano", lambda: plano.replace("**Status: PROPOSTO**", "**Status: APROVADO pelo Matheus em 2026-11-16**", 1))
-    assert lg.modo_da_config(_cfg()) == "longe_geometria"
+    assert plano.count("**Status: APROVADO pelo Matheus em 2026-11-16,**") == 1
+    monkeypatch.setattr(lg, "_plano", lambda: plano.replace("**Status: APROVADO pelo Matheus em 2026-11-16,**", "**Status: PROPOSTO,**", 1))
+    with pytest.raises(RuntimeError, match="nao esta APROVADO"):
+        lg.modo_da_config(_cfg())
+    lg.modo_da_config(_cfg("fumaca"))                                 # a fumaca nao precisa da aprovacao
 
 
 @pytest.mark.parametrize("bases", [[93101, 93202, 93303, 93404], [93101, 93202, 93303, 93404, 93506], [71101, 71202, 71303, 71404, 71505],
@@ -79,10 +84,7 @@ def test_recusa_outra_base_e_sementes_fora_da_faixa(bases):
         lg.modo_da_config(c)
 
 
-def test_recusa_outro_k_outros_dias_outro_orcamento_e_outro_plano(monkeypatch):
-    monkeypatch.setattr(lg, "FAIXAS_RESERVADAS", lg.FAIXAS_RESERVADAS + ((93101, 93505, "teste"),))
-    plano = lg._plano().replace("**Status: PROPOSTO**", "**Status: APROVADO pelo Matheus em 2026-11-16**", 1)
-    monkeypatch.setattr(lg, "_plano", lambda: plano)
+def test_recusa_outro_k_outros_dias_outro_orcamento_e_outro_plano():
     for chave, valor in (("k", 30), ("dias", 13), ("orcamento_por_dia", 15), ("plano", "outro.md")):
         c = _cfg()
         if chave == "k":
