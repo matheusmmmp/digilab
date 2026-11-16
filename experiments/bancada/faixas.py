@@ -193,6 +193,9 @@ FAIXAS_RESERVADAS = (
     (97101, 97505, "EVIDENCIA A1, a baseline trivial: a validacao, uma vez, o REL da C4 e a baseline nas 12 celulas da C4 "
                    "(docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md, secao 5; BT-3; bases 97101, 97202, 97303, 97404 e 97505, K = 40); "
                    "aprovada pelo Matheus em 2026-11-16, \"Aprovo, pode rodar\" (BT-3); conferida livre em todos os branches remotos em 2026-11-16"),
+    (98101, 98505, "EVIDENCIA A2, a ablacao do aprendizado no jogo (jogo web): a run unica, sementes 98101...98300 "
+                   "(docs/PLANO_ANALISE_V3_ABLACAO_APRENDIZADO.md, secao 2.3; AB-5; aprovada pelo Matheus em 2026-11-16, "
+                   "\"Aprovo, pode rodar\"; conferida livre na origin/main e em todos os branches remotos em 2026-11-16)"),
 )
 
 
