@@ -122,3 +122,10 @@ artefatos das frentes que saem vão para o backup (D-LZ-3).
     `artifacts_*` delas, vão para o backup. No repositório ficam o `docs/LEITURA_CONSOLIDADA_DONO.md`, o `docs/FECHAMENTO_V2.md` e o
     índice da LZ5.
   - **Custo de errar:** um resultado antigo citado num documento vivo fica sem o artefato no repositório. Ele continua na tag e no backup.
+
+## 9. Depois da limpeza
+
+As fases L0 a L6 da complexidade acidental (versões, chaves, constantes duplicadas, `core/` sem DOM, CI) começam da `main` depois da LZ5
+("Limpeza antes", Matheus, 2026-11-16). O pedido e as adaptações dele estão em `docs/futuro/complexidade_acidental_l0_l6.md`. A principal
+adaptação é que, pela D-LZ-1, a garantia de replay dos saves vale da versão da LZ3 em diante.
+
