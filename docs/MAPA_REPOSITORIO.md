@@ -119,3 +119,10 @@ As seções acima são cópias inteiras do CLAUDE.md antigo (o G-NADA-PERDIDO co
   são gerados do Python por `python tools/gerar_catalogo_fala_web.py`; o `tests/test_catalogo_fala_web.py` confere que estão em dia. Regras e
   comandos em `servidor_web/CLAUDE.md` (`cd servidor_web && npm install && npm test && npm run dev`; `npm run dev -- --porta 8765` serve o
   `npm run dev` do `web/app`). O `servidor/` continua para o jogo local e a pesquisa.
+- **2026-11-16, CONTA, CN2 (a parte local):** a conta do lado do servidor em `servidor_web/src/conta/`: o banco SQLite pelo `node:sqlite`
+  (`banco.ts`; as tabelas `contas`, `identidades`, `consentimentos`, `aparelhos`, `sessoes` e as de apoio, com a migração pelo
+  `PRAGMA user_version`; o arquivo em `servidor_web/dados/`, fora do git, ou em `DIGILAB_BANCO`), o login atrás da interface `Provedor`
+  (`provedores.ts`: o Google e o GitHub com `state` e PKCE, desligados sem as chaves no ambiente, e o provedor falso, só local), a lista de
+  convidados (`convidados.ts`), o apelido de um Rookie (`apelido.ts`), a configuração pelo ambiente (`config.ts`), as rotas `/auth/*` e
+  `/conta/*` com o cookie de sessão, o CSRF e o CORS (`rotas.ts`) e a página de teste `/dev/conta` (`paginas.ts`, só local). Os testes em
+  `servidor_web/test/conta.test.ts`; o `npm run dev` liga o provedor falso, e o fluxo se percorre em `http://127.0.0.1:8766/dev/conta`.
