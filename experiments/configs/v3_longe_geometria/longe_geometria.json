@@ -1,14 +1,14 @@
 {
-  "descricao": "A run da LONGE_GEOMETRIA (docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md, PROPOSTO; so roda depois do APROVADO pelo Matheus e da faixa em FAIXAS_RESERVADAS; secoes 3.3 e 3.4): os bracos PAD (o REL da C4), M3*, M2 e M0 nas 16 celulas (4 donos x longe_um, longe_fixo, longe_ancora e longe), bases 93101, 93202, 93303, 93404 e 93505 (faixa PROPOSTA), K = 40 por base (LG-5, PROPOSTO) (200 unidades), 14 dias. 12 800 vidas, uma vez, da main limpa, com ate 4 processos.",
+  "descricao": "A run da LONGE_GEOMETRIA (docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md, PROPOSTO; so roda depois do APROVADO pelo Matheus e da faixa em FAIXAS_RESERVADAS; secoes 3.3 e 3.4): os bracos PAD (o REL da C4), M3*, M2 e M0 nas 16 celulas (4 donos x longe_um, longe_fixo, longe_ancora e longe), bases 96101, 96202, 96303, 96404 e 96505 (faixa PROPOSTA), K = 40 por base (LG-5, PROPOSTO) (200 unidades), 14 dias. 12 800 vidas, uma vez, da main limpa, com ate 4 processos.",
   "plano": "docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md",
   "fase": "longe_geometria",
   "unidades": {
     "bases": [
-      93101,
-      93202,
-      93303,
-      93404,
-      93505
+      96101,
+      96202,
+      96303,
+      96404,
+      96505
     ],
     "k": 40,
     "prefixo": "digibrain_prototipo"

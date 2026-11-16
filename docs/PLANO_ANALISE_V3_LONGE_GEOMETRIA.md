@@ -100,8 +100,8 @@ A distribuição de cada ração é a mesma nos dois estilos (seção 3.2). **A 
 
 ### 3.4 As sementes e a faixa
 
-- **A faixa proposta: 93101…93505.** Conferida em 2026-11-13: não aparece em `faixas.py` nem em `docs/` em nenhum branch remoto. **A confirmar com o coordenador** antes de entrar na tabela.
-- **As bases:** 93101, 93202, 93303, 93404 e 93505.
+- **A faixa: 96101…96505** (trocada em 2026-11-16, antes de qualquer vida: a 93101…93505 colidia com a calibração da EQUILIBRIO_CUIDADO, que já tinha usado essa faixa em 2026-11-12; o Matheus escolheu que a LONGE_GEOMETRIA trocasse, "A LONGE_GEOMETRIA", desvio D-EQ2-11). O texto de 2026-11-13, sobre a faixa antiga: Conferida em 2026-11-13: não aparece em `faixas.py` nem em `docs/` em nenhum branch remoto. **A confirmar com o coordenador** antes de entrar na tabela.
+- **As bases:** 96101, 96202, 96303, 96404 e 96505.
 - **O K proposto: 40 por base, 200 unidades** (seção 6; a LG-5). São **12 800 vidas.**
 - **A derivação:** a da C1 (A6.3), `bancada_v2.unidades_derivadas(bases, 40, prefixo="digibrain_prototipo")`.
 - **A run roda uma vez,** com todas as bases. As sementes 101…505 servem só à fumaça do orquestrador.
@@ -209,7 +209,7 @@ replay e nenhuma semente nova.** Abaixo, **[poder]** é esse artefato):
 | LG-3 | os dois primários com Holm (I-M3 e I-PAD) | sim | um primário só deixaria o outro cérebro como leitura solta |
 | LG-4 | a regra de leitura da seção 7, escrita antes | sim | regra escrita depois abre espaço para escolher a leitura |
 | LG-5 | o K e a δ, pelo script (seção 6), decididos antes da run | K = 200 (40 por base) e δ = 0,034 | com K = 150 a margem (0,036 a 0,040) fica perto da proxy menor dividida por 1,5; com K = 300 a run passa de 5 h |
-| LG-6 | a faixa 93101…93505, a confirmar | sim | nenhum, se a conferência no coordenador passar |
+| LG-6 | a faixa 96101…96505 (era a 93101…93505; D-EQ2-11) | sim | nenhum, se a conferência no coordenador passar |
 | LG-7 | nenhuma calibração e nenhum piloto | sim | a variância vem de vidas de outra faixa; se o σ real for maior, a margem efetiva sai no relato e o critério não muda |
 | LG-8 | a separação do lado e da âncora fica fora (seção 10) | sim | a pergunta da regularidade fica respondida; a do lado contra a âncora fica para outro plano |
 
