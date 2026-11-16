@@ -195,11 +195,12 @@ describe("a câmera vai ao cantinho com o painel da TV aberto (seção 6)", () =
     /* o cantinho fica à esquerda do painel de 900 px em diante */
     expect(CAMERA_CANTINHO.largo).toBeLessThan(0.5);
   });
-  test('com "Exibir detalhes do pet" desligado, a pilha fica só com a linha "TV"', () => {
+  test('com as janelas da pilha escondidas (Ajustes > Exibir), a pilha fica só com a linha "TV"', () => {
     const t = fonte("src/telas/pet/TelaPet.tsx");
-    expect(t).toContain("{largo ? (!atual && (detalhesPet || temTv) && (");
-    expect(t).toContain('{detalhesPet && <PainelHud id="estado"');
-    expect(t).toContain("{detalhesPet && nascendo === 0 && <LinhaDigiBrain");
+    expect(t).toContain("{largo ? (!atual && (naPilha || temTv) && (");
+    expect(t).toContain("const naPilha = jn.estado || jn.evolucao || jn.acoes || jn.digibrain;");
+    expect(t).toContain('{jn.estado && <PainelHud id="estado"');
+    expect(t).toContain("{jn.digibrain && nascendo === 0 && <LinhaDigiBrain");
     expect(t).toContain("{temTv && <LinhaTv");
   });
 });

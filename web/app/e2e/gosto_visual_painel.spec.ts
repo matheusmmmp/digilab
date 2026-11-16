@@ -168,8 +168,8 @@ test("gosto visual: a janela pequena mostra o pet, a reação e a linha do gosto
   expect(j.pele).toBe(await page.evaluate(() => document.documentElement.dataset.pele));
   expect(j.passando).toContain("Passando: a TV do jogo");
   expect(j.gosto).toMatch(/^Gosta mais de: .+\.$/);
-  expect(j.botoes).toEqual(["Carinho", "Parar"]);
-  expect([j.velho, j.rola, j.foco]).toEqual([0, false, "Carinho"]);
+  expect(j.botoes).toEqual(["Elogiar", "Parar"]);
+  expect([j.velho, j.rola, j.foco]).toEqual([0, false, "Elogiar"]);
   expect(j.fundo).not.toBe("rgba(0, 0, 0, 0)");
   /* o Carinho da janela é o Carinho do jogo: entra no registro como o do botão */
   const antes = await registro(page);

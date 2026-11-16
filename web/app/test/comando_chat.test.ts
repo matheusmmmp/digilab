@@ -54,7 +54,11 @@ describe("validacao do comando no app", () => {
     expect(ac.validarComando(morto, 0, "alimentar")).toBeNull();
     expect(ac.validarComando(m, 0, "brincar")).toBe("brincar");
     /* os pets v13 (os ovos novos, como os v11): sem elogio, bronca, petisco e banheiro */
-    for (const fora of ["petisco", "elogiar", "repreender", "levar_ao_banheiro"]) expect(ac.validarComando(m, 0, fora)).toBeNull();
+    for (const fora of ["petisco", "levar_ao_banheiro"]) expect(ac.validarComando(m, 0, fora)).toBeNull();
+    /* a troca das palavras (2026-11-12): o elogio e a bronca do chat viram o gesto com o mesmo nome na tela */
+    expect(ac.validarComando(m, 0, "elogiar")).toBe("acariciar");
+    expect(ac.validarComando(m, 0, "repreender")).toBe("tapa");
+    expect(ac.validarComando(m, 16, "elogiar")).toBeNull();                         /* nascendo */
     expect(ac.validarComando(m, 0, "tratar_lesao")).toBeNull();                     /* sem lesao */
     const lesionado = new Motor(7); lesionado.lesionadoDesde = 5;
     expect(ac.validarComando(lesionado, 0, "tratar_lesao")).toBe("tratar_lesao");

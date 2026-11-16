@@ -221,6 +221,9 @@ depressa do que o primeiro. Sem trava, recomeçar viraria a fonte mais rápida d
 - **para os Bits (a economia local):** um reset pago por semana de relógio (PROPOSTO). Os Bits não são conferidos pelo servidor (seção 7),
   então a trava só segura o equilíbrio, não a trapaça.
 
+**Revisão de 2026-11-12 (CR-7 e CR-8 do `docs/PLANO_V3_CICLO.md`, aprovadas pelo Matheus):** o legado de stats passa a existir, somado ao
+Respeito e aos Bits do reset; nas lutas ranqueadas, os stats são cortados no teto de base. O texto abaixo é o da decisão original.
+
 **Qual é o bônus (MMO-18):** a recomendação é **Respeito e Bits, sem herança de stats no motor.** Os Bits compram chips na loja, dentro do
 teto de hoje (M-9). Assim, o bônus ajuda o pet novo sem passar do teto do estágio. A outra opção é a herança do Digimon World: o ovo novo
 nasce com uma parte dos stats do anterior. Ela pede uma versão de pet nova e um evento de origem no motor, e dá ao veterano uma vantagem que

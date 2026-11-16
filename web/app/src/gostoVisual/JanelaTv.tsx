@@ -50,10 +50,10 @@ export function JanelaDaTv({ v, carinho, parar }: { v: VistaJanela; carinho: () 
       </div>
       <p className="sr-only" role="status" data-testid="janela-tv-status">{v.dito}</p>
       <p className="jtv-gosto" data-testid="janela-tv-gosto">Gosta mais de: {gostaMaisDe(alvos(v.inato, v.estado), quais)}.</p>
-      {!v.podeCarinho && <p className="jtv-fraco" id="jtv-sem-carinho" data-testid="janela-tv-sem-carinho">O carinho volta quando o jogo estiver na tela do pet.</p>}
+      {!v.podeCarinho && <p className="jtv-fraco" id="jtv-sem-carinho" data-testid="janela-tv-sem-carinho">O elogio volta quando o jogo estiver na tela do pet.</p>}
       <div className="jtv-bts">
         <button type="button" className="hx-continuar" data-janela-tv-carinho="" disabled={!v.podeCarinho} aria-describedby={v.podeCarinho ? undefined : "jtv-sem-carinho"}
-          onClick={carinho}><Hand aria-hidden="true" />Carinho</button>
+          onClick={carinho}><Hand aria-hidden="true" />Elogiar</button>
         <button type="button" className="hx-btn" onClick={parar}><Square aria-hidden="true" />Parar</button>
       </div>
     </div>

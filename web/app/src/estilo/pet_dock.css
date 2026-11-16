@@ -39,6 +39,8 @@
 .pet-dock .dock .dock-bt:hover{ background:var(--hx-tecla-hover) }
 .pet-dock .dock .dock-bt:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:-4px }
 .dock .dock-bt span{ max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+/* a partir de 1280 px cabe o rótulo mais longo ("Repreender", 2026-11-12) sem as reticências: sete botões de 84 px e os vãos, 620 px */
+@media (min-width:1280px){ .pet-dock .dock .dock-bt{ min-width:84px } }
 .dock .dock-bt img, .dock .dock-bt svg{ width:22px; height:22px; flex:none; object-fit:contain; image-rendering:pixelated }
 .pet-dock .dock .acao-destaque--sugerida, .pet-dock .dock .acao-destaque--sugerida:hover{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda) }
 .dock .acao-reserva{ display:block; font-size:10px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; opacity:.85; line-height:1 }

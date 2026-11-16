@@ -1,0 +1,66 @@
+/* Prancha "as janelas do pet: arrastar, esconder e arrumar" (docs/PLANO_UX_JANELAS.md). So desenho, so o desktop (a 390 so a lista de
+   Ajustes). Por cima do ../ux-lugares-menus/lugares.css e do ../ux-conta/conta.css. Nenhuma cor nova: tudo aqui usa token --hx-* ou
+   --hud-*. Os tamanhos sao PROPOSTO, SEM FONTE. */
+
+/* ---- a janela: um painel da pilha de hoje, solto. O cabecalho e a alca; o corpo abre e fecha como hoje */
+.jn{--ch:var(--hud-ch-p);position:absolute;z-index:8;width:300px;display:flex;flex-direction:column}
+.jn-cab{display:flex;align-items:center;gap:8px;min-height:48px;padding:4px 4px 4px 6px;cursor:grab}
+.jn-alca{width:20px;height:44px;display:grid;place-items:center;color:var(--hx-sec);flex:none}
+.jn-alca .ic{width:16px;height:16px}
+.jn-cab > .ic{color:var(--hx-rotulo)}
+.jn-cab .tit{font:700 15px/1.1 var(--hx-f);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;margin-right:auto}
+:root[data-pele="vidro"] .jn-cab .tit{font-size:13px;letter-spacing:2px}
+.jn-cab .resumo{display:block;color:var(--hx-sec);font:500 13px/1.2 var(--hx-f);letter-spacing:0;text-transform:none}
+.jn-bt{width:44px;height:44px;display:grid;place-items:center;flex:none;border:0;background:none;color:var(--hx-texto-2)}
+.jn-bt.aberto .ic{transform:rotate(90deg)}
+.jn-bt[aria-expanded="true"]{background:var(--hx-tecla-hover);color:var(--hx-texto)}
+.jn-corpo{display:flex;flex-direction:column;gap:8px;padding:10px 12px 12px;border-top:1px solid var(--hx-borda)}
+.jn-corpo img{display:block;width:100%;height:auto}
+.jn.sem-corpo .jn-corpo{padding:0;border-top:0}
+
+/* a coluna do arranjo padrao: as quatro janelas uma embaixo da outra, no lugar da pilha de hoje */
+.jn-col{position:absolute;z-index:8;right:12px;top:72px;width:300px;display:flex;flex-direction:column;gap:8px}
+.jn-col .jn{position:relative}
+
+/* os corpos (os mesmos de hoje, encurtados) */
+.vital{display:grid;grid-template-columns:70px 1fr 34px;align-items:center;gap:8px;font:600 13px/1 var(--hx-f);letter-spacing:.06em;text-transform:uppercase;color:var(--hx-texto-2)}
+.vital .barra{height:var(--hx-medidor-alt);background:var(--hx-medidor-trilho);position:relative}
+.vital .barra i{position:absolute;inset:0 auto 0 0;background:var(--hx-medidor)}
+.vital b{font:700 14px/1 var(--hx-f-num);color:var(--hx-num);text-align:right}
+.acao-l{display:grid;grid-template-columns:48px 1fr;gap:8px;font:500 14px/1.2 var(--hx-f)}
+.acao-l b{font:600 13px/1.2 var(--hx-f-num);color:var(--hx-num)}
+
+/* ---- arrastando: a janela na mao, o lugar de onde saiu e as guias do encaixe */
+.jn.na-mao{z-index:40;outline:2px solid var(--hx-foco);outline-offset:2px;box-shadow:var(--hx-sombra);opacity:.96}
+.jn.na-mao .jn-cab{cursor:grabbing}
+.jn-fantasma{position:absolute;z-index:7;border:1px dashed var(--hx-borda-topo);background:var(--hx-tecla)}
+.jn-guia{position:absolute;z-index:39;background:var(--hx-escolhido-borda)}
+.jn-guia.v{width:1px} .jn-guia.h{height:1px}
+.jn-encaixe{position:absolute;z-index:38;border:1px dashed var(--hx-escolhido-borda);background:var(--hx-tecla)}
+.jn-dica{--ch:var(--hud-ch-p);position:absolute;z-index:45;display:inline-flex;align-items:center;gap:10px;min-height:36px;padding:0 12px;font:600 13px/1 var(--hx-f);white-space:nowrap}
+.jn-dica kbd{font:600 12px/1 var(--hx-f-num);padding:3px 6px;border:1px solid var(--hx-borda);color:var(--hx-num)}
+
+/* ---- o menu da janela (o botao dos tres pontos) */
+.jn-menu{--ch:var(--hud-ch-p);position:absolute;z-index:46;width:232px;display:flex;flex-direction:column;padding:6px}
+.jn-menu button{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 10px;border:0;background:none;text-align:left;font:600 14px/1.1 var(--hx-f)}
+.jn-menu button .ic{color:var(--hx-rotulo)}
+.jn-menu button.foco{background:var(--hx-tecla-hover)}
+.jn-menu button kbd{margin-left:auto;font:600 11px/1 var(--hx-f-num);color:var(--hx-sec)}
+.jn.movendo{outline:2px dashed var(--hx-foco);outline-offset:3px}
+
+/* ---- Ajustes > Exibir */
+.ex-lista{display:flex;flex-direction:column;gap:6px}
+.ex-lista .aj small{font-size:13px}
+.ex-arranjos{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.ex-arranjos .filtro{padding:0 6px}
+
+/* ---- o modo arrumar: a grade, as janelas com o contorno, a faixa das escondidas */
+.grade{position:absolute;inset:0;z-index:5;background:
+  linear-gradient(var(--hx-borda) 1px,transparent 1px) 0 0/96px 96px,linear-gradient(90deg,var(--hx-borda) 1px,transparent 1px) 0 0/96px 96px;opacity:.28}
+.arrumando .jn{outline:1px dashed var(--hx-escolhido-borda);outline-offset:3px}
+.jn-canto{position:absolute;right:-3px;bottom:-3px;width:14px;height:14px;border-right:3px solid var(--hx-escolhido-borda);border-bottom:3px solid var(--hx-escolhido-borda)}
+.faixa-arrumar{--ch:var(--hud-ch-p);position:absolute;z-index:42;left:50%;top:14px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:6px 6px 6px 14px;font:700 14px/1 var(--hx-f);letter-spacing:.08em;text-transform:uppercase}
+.faixa-arrumar .bt{min-height:44px}
+.bandeja{--ch:var(--hud-ch-p);position:absolute;z-index:42;left:50%;bottom:16px;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:8px 10px}
+.bandeja .rot{margin-right:4px}
+.bandeja .bt{min-height:44px;padding:0 12px;font-size:14px;border-style:dashed}
