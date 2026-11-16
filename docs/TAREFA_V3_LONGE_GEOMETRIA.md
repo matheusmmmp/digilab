@@ -1,6 +1,6 @@
 # TAREFA V3 — LONGE_GEOMETRIA (2026-11-13)
 
-Coordenador: Gerente da V3. Worker: Claude Code (sessão do Matheus, Opus 5.5). Worktree e branch: `v3-longe-geometria`. Status: ABERTA (plano APROVADO em 2026-11-16; a run rodou em 2026-11-16, resultado em `docs/RESULTADO_V3_LONGE_GEOMETRIA.md`; falta a decomposição da D-C1-3, D-LG-3).
+Coordenador: Gerente da V3. Worker: Claude Code (sessão do Matheus, Opus 5.5). Worktree e branch: `v3-longe-geometria`. Status: ABERTA (plano APROVADO em 2026-11-16; a run rodou em 2026-11-16, resultado em `docs/RESULTADO_V3_LONGE_GEOMETRIA.md`; a decomposição da D-C1-3 feita, seção 8 do resultado).
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-13: a regularidade do longe separada da geometria (lado e ancora), pedida pelo Matheus em 2026-11-13 depois das auditorias externas.
 
@@ -57,4 +57,5 @@ As LG-1 a LG-8 do plano (seção 9), cada uma com a recomendação e o custo de 
 A leitura é a primeira linha da seção 7 do plano: a regularidade explica o ganho. I-PAD +0,0709 [+0,0544; +0,0874] e I-M3 +0,0524
 [+0,0367; +0,0682], os dois "> 0" com o Holm; a M-ANCORA "≈ 0" nos dois. 12 800 vidas, o G1 em todas, na faixa 93101…93505 (D-LGR-1). O
 relato completo, com cada número ligado ao artefato, está em `docs/RESULTADO_V3_LONGE_GEOMETRIA.md`; os desvios D-LGR-1 a D-LGR-3, em
-`docs/registro/2026-11.md`. Falta a decomposição da D-C1-3 (D-LG-3), num script à parte.
+`docs/registro/2026-11.md`. A decomposição da D-C1-3 (D-LG-3, `experiments/descritivo_dc13_longe_geometria.py`) põe quase todo o I na queda
+das perdas para o sono (P-a): 0,91 do I-M3 e 0,96 do I-PAD; seção 8 do resultado.

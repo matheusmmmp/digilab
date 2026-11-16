@@ -151,7 +151,7 @@ média das contagens saem do histograma gravado, e as contagens por direção es
 - A visita ao lugar lembrado quase nunca acha a ração no próprio lugar, nem no `longe_fixo`, onde o ganho existe.
 - Isso não contradiz o caminho que a D-C1-3 achou na C1: as idas e a queda das perdas para o sono (o plano, a abertura), e não o ato de
   achar a ração no próprio lugar.
-- O teste desse caminho nesta run é a decomposição da D-C1-3 (item 3 da seção 8), que sai num script à parte (D-LG-3). Não está neste PR.
+- O caminho do ganho nesta run está na decomposição da D-C1-3 (item 3 da seção 8), na seção 8 abaixo.
 
 **O corpo** (`descritivo.corpo`, a C5, com o limiar 0,15):
 - No `longe_fixo` e no `longe_um`, a memória diminui a fração do tempo com algum sistema abaixo do limiar. Nos dias 8 a 14: M3\* − M2
@@ -173,9 +173,84 @@ Como no `resultado.json` (`nao_demonstra`), este resultado não demonstra:
   qual dos dois importa para o GEO;
 - um tamanho de efeito fora das condições da run.
 
-Também não diz por qual caminho a repetição paga. Essa é a pergunta da decomposição da D-C1-3, descritiva e geradora de hipótese.
+A decomposição da seção 8 diz por qual caminho a repetição paga, mas é descritiva e geradora de hipótese: ela reparte o ganho entre os
+modos de fechar e de perder um episódio, e não prova causa nenhuma.
 
 ## 7. Os desvios
 
 Estão em `docs/registro/2026-11.md`, na seção "2026-11-16 — LONGE_GEOMETRIA: o resultado da run": D-LGR-1 (a faixa), D-LGR-2 (a máquina)
-e D-LGR-3 (os artefatos).
+e D-LGR-3 (os artefatos). Os da decomposição, D-LGR-4 e D-LGR-5, estão na seção "2026-11-16 — LONGE_GEOMETRIA: a decomposição da D-C1-3".
+
+## 8. A decomposição da D-C1-3 (seção 8, item 3; D-LG-3)
+
+**Descritivo, sem gate e sem regra de leitura:** nada aqui muda a seção 7. A partição é a do adendo 10 da C1 (A10.4), aplicada sem mudança:
+- **os fechados:** F-a, à vista na abertura; F-b, a ração entrou na vista numa ida (a intenção explorar/ponto da memória); F-c, entrou numa
+  busca pelo cheiro; F-d, outro modo;
+- **os perdidos:** P-a, com um dormir antes de a ração entrar na vista; P-b, trocou pelo reflexo; P-c, a janela venceu; P-d, saciado por
+  outra comida; P-e, a vida acabou.
+
+Em cada lugar, o ganho G (X − M2 na taxa por episódio) é a soma das diferenças das F e é também menos a soma das diferenças das P. Uma P
+negativa, portanto, soma ao ganho.
+
+- **Como rodou:**
+  - `python experiments/descritivo_dc13_longe_geometria.py --codigo <worktree destacada do 58a22928> --processos 4`, do commit
+    `db89294f`, das 19h14 às 20h04 de 2026-11-16 (2 979 s), com a saída 0;
+  - o script reusa as funções do `experiments/descritivo_dc13_longe_fixo.py` da C1;
+  - as conferências passaram: o código igual ao do `meta.json`, e o G1 nas 6 400 vidas refeitas. As vidas são as 800 de cada braço (PAD,
+    M3\*, M2 e M0) no `longe_fixo` e no `longe_ancora`, e o G1 confere o log, as medidas e os lugares das rações;
+  - as somas fecham em cada lugar no G da escada do ganho e, na interação, no I-M3 e no I-PAD do `resultado.json`, a 10⁻¹²;
+  - o artefato é `artifacts_v3_longe_geometria/dc13/descritivo.json` (sha256 `9d4a7d58…3f15`), e todo número abaixo vem dele.
+
+**As parcelas por lugar** (X − M2, por episódio, IC95 do t sobre as 200 unidades; `por_lugar_e_contraste.<lugar>|<X>-M2.estagio2`):
+
+| parcela | `longe_fixo`, M3\* − M2 | `longe_ancora`, M3\* − M2 | `longe_fixo`, PAD − M2 | `longe_ancora`, PAD − M2 |
+|---|---|---|---|---|
+| G | +0,0426 | −0,0098 | +0,0550 | −0,0159 |
+| F-a | +0,018 [+0,008; +0,029] | +0,002 [−0,007; +0,011] | +0,015 [+0,004; +0,025] | −0,009 [−0,019; +0,001] |
+| **F-b** | **+0,110** [+0,103; +0,116] | **+0,086** [+0,081; +0,091] | **+0,134** [+0,126; +0,142] | **+0,092** [+0,086; +0,097] |
+| F-c | −0,051 [−0,059; −0,042] | −0,041 [−0,049; −0,033] | −0,067 [−0,075; −0,058] | −0,055 [−0,064; −0,047] |
+| F-d | −0,035 [−0,044; −0,026] | −0,057 [−0,067; −0,046] | −0,027 [−0,036; −0,017] | −0,043 [−0,054; −0,032] |
+| **P-a** (entra com o sinal trocado) | **−0,041** [−0,053; −0,029] | +0,007 [−0,003; +0,017] | **−0,046** [−0,059; −0,032] | +0,022 [+0,011; +0,034] |
+| P-b, P-c, P-d, P-e | todas "≈ 0" | todas "≈ 0" | todas "≈ 0" | todas "≈ 0" |
+
+- **Nos dois lugares, a memória põe a ração na vista numa ida (F-b),** e o M2 nunca fecha por F-b (`cobertura`: 0 episódios nos dois
+  lugares). Parte desse ganho é troca: ele sai da busca pelo cheiro (F-c) e do outro modo (F-d), que ficam "< 0" nos dois lugares. É a
+  substituição que a C1 já tinha visto.
+- **A diferença entre os lugares está nos episódios perdidos para o sono (P-a).** No `longe_fixo`, a memória perde menos episódios com um
+  dormir antes de a ração entrar na vista (−0,041 no M3\* e −0,046 no PAD). No `longe_ancora`, ela não perde menos (+0,007, "≈ 0") ou
+  perde mais (+0,022 no PAD).
+- **A ração cai mais perto do pet (D1)** nos dois lugares e nos dois braços com memória: de −0,66 a −0,89 célula, todos "< 0".
+
+**A decomposição do I** (o mesmo, no `longe_fixo` menos no `longe_ancora`, pareado por unidade; `interacao`; s = a parte do I):
+
+| parcela | I-M3 (+0,0524) | s | I-PAD (+0,0709) | s |
+|---|---|---|---|---|
+| F-a | +0,017 [+0,002; +0,031] | 0,32 | +0,024 [+0,009; +0,039] | 0,34 |
+| F-b | +0,024 [+0,015; +0,032] | 0,45 | +0,042 [+0,033; +0,052] | 0,59 |
+| F-c | −0,010 [−0,022; +0,003] | −0,18 | −0,012 [−0,024; +0,001] | −0,16 |
+| F-d | +0,022 [+0,008; +0,036] | 0,42 | +0,017 [+0,002; +0,031] | 0,23 |
+| **P-a** (sinal trocado) | **−0,048** [−0,064; −0,032] | **0,91** | **−0,068** [−0,085; −0,051] | **0,96** |
+| P-b a P-e | "≈ 0" | perto de 0 | "≈ 0" | perto de 0 |
+
+O s das P está escrito já com o sinal trocado. As F somam o I, e as P, com o sinal trocado, também.
+- **Pelo lado dos perdidos, quase todo o I está no sono:** a queda das perdas para o P-a responde por 0,91 do I-M3 e 0,96 do I-PAD.
+- **Pelo lado dos fechados, o I se espalha:** um pouco mais de F-b no fixo (0,45 e 0,59), e também F-a e F-d.
+- **Em palavras, como hipótese descritiva:** a ida da memória põe a ração na vista nos dois lugares. Só quando os lugares se repetem é que
+  ela também evita que o pet durma antes de a ração entrar na vista, e é por aí que a repetição paga. Na C1, a D-C1-3 já tinha apontado as idas e a queda
+  das perdas para o sono como o caminho do ganho. Esta conta separa as duas coisas: a ida existe sem repetição, e a queda do sono só com
+  ela.
+
+**O que a decomposição não demonstra:**
+- **Uma causa:** as parcelas são descritivas (A10.6 da C1). O teste causal das idas, um braço que proíbe a ida perto da queda, fica fora
+  (seção 10).
+- **A separação do lado e da âncora.**
+- **Nada que mude a seção 7.**
+
+**As idas** (`idas`, só por braço e lugar, sem contraste):
+
+| braço e lugar | idas | a ração entrou na vista | entrou e foi comida depois |
+|---|---|---|---|
+| M3\*, `longe_fixo` | 39 726 | 0,086 | 0,077 |
+| M3\*, `longe_ancora` | 40 981 | 0,064 | 0,051 |
+| PAD, `longe_fixo` | 57 527 | 0,059 | 0,053 |
+| PAD, `longe_ancora` | 50 637 | 0,044 | 0,035 |
