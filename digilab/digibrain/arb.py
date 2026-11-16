@@ -26,10 +26,14 @@ urgente (a urgencia da fome acima do `urgencia_lambda`, a guarda do passeio). O 
 seguinte ja nao segura. Nenhuma rng nova; desligada, o reflexo de hoje.
 **A guarda da fome urgente no brincar** (docs/PLANO_V3_EQUILIBRIO_CUIDADO.md, EQ-7; `escolher(..., sem_brincar=True)`, que o M-ADAPT passa so
 com a `ConfigEquilibrioCuidado.guarda_fome_brincar` ligada e a fome urgente): o peso de todas as unidades do brincar vira 0, no sorteio e nas
-sondas, antes de contar os candidatos. Nenhuma rng nova; sem ela (o padrao), o sorteio de hoje."""
+sondas, antes de contar os candidatos. Nenhuma rng nova; sem ela (o padrao), o sorteio de hoje.
+**A ablacao `maior_peso` da VALUATION** (`ConfigAblacaoValuation`, so de pesquisa; docs/PLANO_ANALISE_V3_VALUATION.md, secao 3): fora do
+reflexo e da escolha segurada, a escolha e a unidade de maior peso (o primeiro no empate: o caminho de `_escolher` sem u), sem chamar a rng;
+as sondas, com o u None, leem o mesmo caminho. Desligada (o padrao), o sorteio de hoje."""
 from __future__ import annotations
 
-from ..config import CONFIG_DIGIBRAIN_INATOS, CONFIG_SONO_SEGURA, ConfigDigibrainInatos, ConfigSonoSegura
+from ..config import (CONFIG_ABLACAO_VALUATION, CONFIG_DIGIBRAIN_INATOS, CONFIG_SONO_SEGURA, ConfigAblacaoValuation, ConfigDigibrainInatos,
+                      ConfigSonoSegura)
 from . import dever as _dever
 from ._comum import chave_json, mul, phi
 
@@ -57,8 +61,11 @@ class Arbitragem:
     """o M-ARB (docstring do modulo)"""
 
     def __init__(self, inatos: ConfigDigibrainInatos | None = None, autobio: bool = False, facetas: bool = False,
-                 sono: ConfigSonoSegura | None = None) -> None:
+                 sono: ConfigSonoSegura | None = None, ablacao: ConfigAblacaoValuation | None = None) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
+        self.ab = ablacao or CONFIG_ABLACAO_VALUATION
+        if not isinstance(self.ab, ConfigAblacaoValuation):
+            raise TypeError(f"M-ARB: ablacao e uma ConfigAblacaoValuation: {self.ab!r}")
         self.sono = sono or CONFIG_SONO_SEGURA
         self.sondas = SONDAS
         self.decidiu = DECIDIU
@@ -145,7 +152,7 @@ class Arbitragem:
             self.reflexos += 1
         else:
             n_pos = sum(1 for x in w if x > 0)
-            u = rng.random() if n_pos >= 2 else None
+            u = rng.random() if n_pos >= 2 and not self.ab.maior_peso else None   # a ablacao G (VALUATION): sem u, o maior peso
             if u is not None:
                 self.sorteios += 1
             if n_pos == 0:

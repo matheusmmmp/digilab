@@ -3183,6 +3183,43 @@ PARAMETROS_EQUILIBRIO_CUIDADO: dict[str, tuple[str, str]] = {
 
 CONFIG_EQUILIBRIO_CUIDADO = ConfigEquilibrioCuidado()
 
+
+@dataclass(frozen=True)
+class ConfigAblacaoValuation:
+    """As duas chaves de ablacao da VALUATION (docs/PLANO_ANALISE_V3_VALUATION.md, secao 3; D-VAL-3, APROVADA pelo Matheus em 2026-11-16),
+    so de pesquisa, so no DigiBrain modular do Python. Nao sao mecanismo: tiram uma entrada ou usam um caminho de escolha que o M-ARB ja tem.
+    - `ve_z` (a hipotese F): o V e o E entram como 0 no contexto z do M-IMPULSO (o inato, o habito e a elegibilidade do P2 leem o mesmo z);
+      o M-AFETO continua andando com eles;
+    - `maior_peso` (a hipotese G): fora do reflexo e da escolha segurada, o M-ARB escolhe a unidade de maior peso (o primeiro no empate, o
+      caminho de `_escolher` sem u), sem chamar a rng de politica; as sondas leem o mesmo caminho.
+    Fica numa config propria, como a `ConfigEquilibrioCuidado`, para o dump dos inatos e da `ConfigDigibrain` nao mudar. Nenhum pet do jogo a
+    liga, e o jogo web nao a espelha (D-VAL-5). Desligada (o padrao), a vida de hoje sai byte a byte (tests/gabaritos/valuation_de_hoje.json).
+    Status em PARAMETROS_ABLACAO_VALUATION."""
+
+    ve_z: bool = False                        # PROPOSTO: a ablacao do V e do E no z (hipotese F)
+    maior_peso: bool = False                  # PROPOSTO: a ablacao do sorteio proporcional (hipotese G)
+
+    def __post_init__(self) -> None:
+        for campo in ("ve_z", "maior_peso"):
+            if type(getattr(self, campo)) is not bool:
+                raise TypeError(f"ConfigAblacaoValuation.{campo} e bool: {getattr(self, campo)!r}")
+        if self.ve_z and self.maior_peso:
+            raise ValueError("ConfigAblacaoValuation: uma ablacao por braco (docs/PLANO_ANALISE_V3_VALUATION.md, secao 3)")
+
+    @property
+    def ligada(self) -> bool:
+        """alguma das duas ablacoes ligada"""
+        return self.ve_z or self.maior_peso
+
+
+# Status dos campos da ConfigAblacaoValuation (conferido por teste)
+PARAMETROS_ABLACAO_VALUATION: dict[str, tuple[str, str]] = {
+    "ve_z": ("PROPOSTO", "PLANO_ANALISE_V3_VALUATION, secao 3 (D-VAL-3, APROVADA pelo Matheus em 2026-11-16); so de pesquisa; SEM FONTE"),
+    "maior_peso": ("PROPOSTO", "PLANO_ANALISE_V3_VALUATION, secao 3 (D-VAL-3, APROVADA pelo Matheus em 2026-11-16); so de pesquisa; SEM FONTE"),
+}
+
+CONFIG_ABLACAO_VALUATION = ConfigAblacaoValuation()
+
 # Os numeros do modular que o E1 propoe trocar de valor (docs/RESULTADO_V3_EQUILIBRIO_CUIDADO_E1.md, a rodada F2 da grade), nos inatos de hoje
 # (CONFIG_DIGIBRAIN_INATOS fica como esta; no jogo, a v38 e a v39 os usam desde o E3, EQ-6). DECIDIDOS (APROVADOS em 2026-11-12), SEM FONTE.
 # O nome (_PROPOSTOS) ficou o do E1, para nao mudar quem o importa.

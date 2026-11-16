@@ -94,7 +94,7 @@ from dataclasses import dataclass
 
 from ..config import (COMPORTAMENTO_OLHAR, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_EQUILIBRIO_CUIDADO, CONFIG_LANCE_DONO, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_OLHAR,
                       CONFIG_PADRAO, CONTEUDOS_FALA, VERSAO_PET_DIGIBRAIN, Config, ConfigDigibrain, ConfigDigibrainInatos,
-                      ConfigEnjooTela, ConfigEquilibrioCuidado, ConfigFalaUnidades, ConfigLanceDono, ConfigLutaMemoria, ConfigMundo, ConfigOlhar, ConfigSonoSegura)
+                      ConfigAblacaoValuation, ConfigEnjooTela, ConfigEquilibrioCuidado, ConfigFalaUnidades, ConfigLanceDono, ConfigLutaMemoria, ConfigMundo, ConfigOlhar, ConfigSonoSegura)
 from ..events import AcaoPet, AcaoUsuario, LutaSemChave, resumo_luta
 from ..genoma_visao import GenomaVisao, genoma_visao
 from ..modelo_mundo import raiz_inteira
@@ -153,11 +153,12 @@ def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: Co
                    cfg_fala: ConfigFalaUnidades | None = None, cfg_olhar: ConfigOlhar | None = None,
                    genoma: GenomaVisao | None = None, cfg_sono: ConfigSonoSegura | None = None,
                    cfg_lance: ConfigLanceDono | None = None, cfg_enjoo: ConfigEnjooTela | None = None,
-                   cfg_equilibrio: ConfigEquilibrioCuidado | None = None) -> Modulos:
+                   cfg_equilibrio: ConfigEquilibrioCuidado | None = None,
+                   cfg_ablacao: ConfigAblacaoValuation | None = None) -> Modulos:
     return Modulos(sens=Sens(cfg, cm, inatos, cfg_olhar, genoma, cfg_enjoo), afeto=Afeto(cfg, cd, inatos, serie_e_doadora),
-                   estado=EstadoDinamico(cfg, cd, inatos), impulso=Impulso(inatos, cd, cfg_fala, cfg_olhar, cfg_lance, cfg_equilibrio), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
+                   estado=EstadoDinamico(cfg, cd, inatos), impulso=Impulso(inatos, cd, cfg_fala, cfg_olhar, cfg_lance, cfg_equilibrio, cfg_ablacao), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
                                  None if semente is None else random.Random(derivar_semente(semente, "mem_emb")),
-                                 luta, cd.olhar), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem, cfg_sono), plast=Plasticidade(cd, inatos),
+                                 luta, cd.olhar), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem, cfg_sono, cfg_ablacao), plast=Plasticidade(cd, inatos),
                    pers=Personalidade(inatos.eta_faceta, inatos.teto_faceta, True) if cd.facetas_mem else None)
 
 
@@ -197,7 +198,7 @@ class DigiBrain:
                  genoma_visao_ovo: GenomaVisao | None = None, cfg_sono: ConfigSonoSegura | None = None,
                  cfg_lance: ConfigLanceDono | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None,
                  ir_ate_tv: bool = False, cfg_cooperacao=None, cfg_equilibrio: ConfigEquilibrioCuidado | None = None,
-                 cfg_orgao=None, brasao: str | None = None) -> None:
+                 cfg_orgao=None, brasao: str | None = None, cfg_ablacao: ConfigAblacaoValuation | None = None) -> None:
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         if not self.cd.ligada:
             raise DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada")
@@ -241,7 +242,7 @@ class DigiBrain:
                 self.ce = cfg_enjoo_tela
         self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente, self.luta_memoria, cfg_fala,
                                 self.co, self.genoma_visao, cfg_sono=cfg_sono, cfg_lance=self.cl, cfg_enjoo=self.ce,
-                                cfg_equilibrio=self.ceq)
+                                cfg_equilibrio=self.ceq, cfg_ablacao=cfg_ablacao)
         # o orgao da visao (OV2): so com a subchave olhar e a ConfigOrgao ligada; o mito, so com o brasao do pet. Desligado, nada muda
         self.cor = None
         self._conceitos: tuple | None = None          # os conceitos entregues pelo motor para a decisao seguinte (None: nao entregues)

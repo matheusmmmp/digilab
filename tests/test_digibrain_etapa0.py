@@ -90,7 +90,10 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              "experiments/run_v3_cooperacao_bancada.py",
                                                                              # GOSTO_VISUAL, a fala do assistir (FA-2): o gabarito do dec-v4 (vidas curtas da GV3b
                                                                              # nas sementes dos testes, pelo orquestrador da GV3; o decodificador so le)
-                                                                             "experiments/exportar_decodificador_v4.py"}
+                                                                             "experiments/exportar_decodificador_v4.py",
+                                                                             # VALUATION, a ablacao do Valuation (V2): os bracos montam o REL da C4
+                                                                             # com uma mudanca so (docs/PLANO_ANALISE_V3_VALUATION.md, secao 3)
+                                                                             "experiments/run_v3_valuation.py"}
 
 
 def test_o_digibrain_so_existe_com_a_chave_ligada_e_e_a_v13():
