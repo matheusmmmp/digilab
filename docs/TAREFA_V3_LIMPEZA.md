@@ -1,7 +1,7 @@
 # TAREFA V3 — LIMPEZA (2026-11-16)
 
-Coordenador: sessão do Matheus (Claude Code). Worker: Claude Code, worktree `v3-limpeza`. Worktree e branch: `v3-limpeza`. Status: ABERTA
-(etapa LZ0, o inventário e o plano; nenhum código muda nela).
+Coordenador: sessão do Matheus (Claude Code). Worker: Claude Code, worktree `v3-limpeza`. Worktree e branch: `v3-limpeza`. Status: EM ANDAMENTO
+(a LZ0 e a LZ1; as decisões D-LZ-1 a D-LZ-3 DECIDIDAS pelo Matheus em 2026-11-16, pela recomendação: "Aceito").
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-16: "vamos tentar enxugar o projeto [...] separar o que era do Bandit, que não está
 sendo mais usado, do Cérebro A, que também não está sendo mais usado", com as escolhas (nesta sessão):
@@ -99,6 +99,10 @@ Não há run. O gate de cada etapa é o byte a byte dos gabaritos da LZ1 e a su�
 - A suíte inteira e os testes do web passam na LZ4.
 
 ## 8. Precisa do Matheus
+
+**DECIDIDAS em 2026-11-16** pela recomendação ("Aceito", nesta sessão): a versão nova sem o `Bandit` e sem o A, com as de hoje
+fechando com aviso (D-LZ-1); a LZ0 e a LZ1 já, a LZ2 em diante depois do resultado da LONGE_GEOMETRIA (D-LZ-2); os documentos e os
+artefatos das frentes que saem vão para o backup (D-LZ-3).
 
 - **D-LZ-1, os pets de hoje no web (antes da LZ3).** Tirar o `Bandit` do `Motor` muda a assinatura de toda vida salva.
   - **Recomendação:** uma versão nova sem o `Bandit` e sem o A; as versões de hoje deixam de abrir, com aviso, como as v13 a v19 na LP-6. Não
