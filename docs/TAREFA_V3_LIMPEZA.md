@@ -81,7 +81,7 @@ Cada etapa é um PR. Nenhuma muda o `engine.py`.
 ## 3.1 A LZ1: o que guarda cada gabarito de hoje
 
 Cada gerador `tests/gabarito_*.py` foi rodado com as classes do bandit, do A, do B, do C e da camada única armadas para parar na primeira
-instância (o script está no relato do PR da LZ1). O resultado:
+instância (`tools/cerebro_do_gabarito.py`). O resultado:
 
 - **Guardam o modular (10), e são a guarda da LZ2 em diante:**
   - o `limpeza_lg` (novo, LZ1);
