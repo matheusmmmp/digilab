@@ -1,6 +1,7 @@
 # Plano de análise V3: a ablação do Valuation (VALUATION V1)
 
-**Status: PROPOSTO.** Escrito em 2026-11-16 (Claude Code, Opus 5.5, branch `v3-valuation`), na Fase V1 do pedido
+**Status: APROVADO pelo Matheus em 2026-11-16,** com as D-VAL-7 a D-VAL-10 DECIDIDAS pela recomendação: "Aprovado, siga a V2", nesta
+sessão (o CHECKPOINT V2). Escrito em 2026-11-16 (Claude Code, Opus 5.5, branch `v3-valuation`), na Fase V1 do pedido
 ([TAREFA_V3_VALUATION.md](TAREFA_V3_VALUATION.md)). O Matheus aprovou o CHECKPOINT V1 nesta sessão ("Aprovado, siga a V1"), com as
 D-VAL-1 a D-VAL-6 pela recomendação. O plano para no **CHECKPOINT V2**.
 
