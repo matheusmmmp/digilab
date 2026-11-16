@@ -46,11 +46,10 @@ def test_os_bracos_sao_os_do_conserto_e_o_pad_e_o_rel_da_c4():
     assert not orq.config_do_braco("M2", conserto=True).m_mem and orq.config_do_braco("M3", conserto=True).m_mem
 
 
-def test_a_faixa_ainda_nao_esta_reservada():
-    """a faixa e PROPOSTA (LG-6): ela entra na tabela num commit proprio, depois do coordenador; ate la a run e recusada"""
-    assert not na_faixa_reservada(93101)
-    with pytest.raises(bv.SementeSemPlano, match="FAIXAS_RESERVADAS"):
-        lg.exigir_faixa_reservada()
+def test_a_faixa_esta_reservada():
+    """a faixa 93101...93505 (LG-6), reservada pelo Matheus em 2026-11-16 num commit proprio"""
+    assert na_faixa_reservada(93101) and na_faixa_reservada(93505) and not na_faixa_reservada(93506)
+    lg.exigir_faixa_reservada()
 
 
 # ------------------------------------------------------------------ a config e a trava
@@ -59,9 +58,11 @@ def test_a_fumaca_passa_sem_faixa_e_sem_aprovacao():
 
 
 def test_a_run_e_recusada_sem_a_faixa_e_sem_a_aprovacao(monkeypatch):
+    sem = tuple(f for f in lg.FAIXAS_RESERVADAS if f[0] != 93101)
+    monkeypatch.setattr(lg, "FAIXAS_RESERVADAS", sem)
     with pytest.raises(bv.SementeSemPlano, match="FAIXAS_RESERVADAS"):
         lg.modo_da_config(_cfg())
-    monkeypatch.setattr(lg, "FAIXAS_RESERVADAS", lg.FAIXAS_RESERVADAS + ((93101, 93505, "teste"),))
+    monkeypatch.setattr(lg, "FAIXAS_RESERVADAS", sem + ((93101, 93505, "teste"),))
     with pytest.raises(RuntimeError, match="nao esta APROVADO"):
         lg.modo_da_config(_cfg())                         # o plano de hoje e PROPOSTO
     plano = lg._plano()

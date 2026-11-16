@@ -177,6 +177,10 @@ FAIXAS_RESERVADAS = (
                    "(docs/PLANO_LUTA_NUCLEO.md, secao 2.1; D-N-2; bases 92101, 92202, 92303, 92404 e 92505, com a derivacao da LP5; "
                    "aprovada pelo Matheus em 2026-11-12, \"Aprovo as 7 (Recommended)\", e pedida pelo Gerente de sprites e luta; "
                    "conferida livre na origin/main em 2026-11-12)"),
+    (93101, 93505, "LONGE_GEOMETRIA, a regularidade do longe separada da geometria: a run unica "
+                   "(docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md, secao 3.4; LG-6; bases 93101, 93202, 93303, 93404 e 93505, K = 40; "
+                   "aprovada pelo Matheus em 2026-11-16, \"Eu aprovo o plano, pode seguir com as recomendacoes e o merge\"; "
+                   "conferida livre em faixas.py e docs/ de todos os branches remotos em 2026-11-13 e de novo em 2026-11-16)"),
 )
 
 
