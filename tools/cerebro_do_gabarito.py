@@ -1,7 +1,9 @@
 """Roda um gerador de gabarito (tests/gabarito_*.py) como __main__ e para na primeira politica que sai (o A, o bandit, o B, o C, a camada
 unica). Imprime uma linha JSON: {"arquivo", "cerebro": nome da classe ou null, "segundos"}.
 uso (da raiz do repo): python tools/cerebro_do_gabarito.py tests/gabarito_x.py
-(docs/TAREFA_V3_LIMPEZA.md, 3.1; um gerador que ja tem o gabarito gravado recusa regravar e sai sem linha)"""
+(docs/TAREFA_V3_LIMPEZA.md, 3.1; um gerador que ja tem o gabarito gravado recusa regravar e sai sem linha)
+CUIDADO: um gerador que nao para no A roda inteiro e pode regravar o gabarito dele; rodar so numa arvore limpa e conferir o git status
+depois (na LZ1 nenhum gabarito mudou)."""
 import json, runpy, sys, time
 from pathlib import Path
 
