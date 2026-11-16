@@ -140,7 +140,8 @@ def test_t_me_0_o_m_mem_so_recebe_o_que_o_cerebro_recebeu():
     episodio so tem os parametros da Observacao, dos receptores, do afeto, dos gestos, da unidade e do desfecho que o M-ADAPT ja le"""
     arvore = ast.parse(inspect.getsource(M))
     origens = {n.module for n in ast.walk(arvore) if isinstance(n, ast.ImportFrom)}
-    assert origens == {"__future__", "config", "modelo_mundo", "policies.lobos", "_comum"}
+    # o `dataclasses` (o `replace`, da biblioteca padrao; ILHA_AGUA IG6, af254d5b) nao e objeto do motor
+    assert origens == {"__future__", "dataclasses", "config", "modelo_mundo", "policies.lobos", "_comum"}
     assert not any(isinstance(n, ast.Import) for n in ast.walk(arvore))
     assert list(inspect.signature(M.episodio_autobio).parameters) == [
         "sens", "pm1", "recs", "l0", "l1", "afeto_antes", "cons", "gestos", "unidade", "desfecho", "k", "tick", "p"]
@@ -710,7 +711,13 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave():
                       "experiments/auditoria_pet_vivo.py",
                       # a LONGE_GEOMETRIA: o orquestrador importa o da C4 so pela conferir_memoria (o papel REL do PAD; a config passa pelo
                       # orquestrador do prototipo), e o poder so le o medidas.json.gz da run da C4 no git; nao leem a chave
-                      "experiments/run_v3_longe_geometria.py", "experiments/poder_longe_geometria.py"}
+                      "experiments/run_v3_longe_geometria.py", "experiments/poder_longe_geometria.py",
+                      # as figuras do artigo A1: so citam as pastas da run da C4 (memoria_autobio/run e dc13) para ler os artefatos; nao leem a chave
+                      "experiments/figuras_artigo_a1.py",
+                      # o orquestrador do adendo 4 do I7: importa o da C4 pela vida de base, como o do adendo 2; nao le a chave
+                      "experiments/run_v3_individualidade_i7_ad4.py",
+                      # o teste da ilha maior (IG6): monta a Memoria com a config do REL para a memoria de 128 celulas; nao le a chave
+                      "web/app/test/ilha_maior.test.ts"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre"):
         if not (RAIZ / pasta).exists():
@@ -987,7 +994,9 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave_das_facetas():
                     # o teste da DC3a (#672): confere que o LAB+F e o REL da C4 com a fala_unidades ligada e nada mais
                     "tests/test_conversa_dc3a.py",
                     # o teste do orquestrador da LONGE_GEOMETRIA: confere que o PAD (o REL da C4) roda sem as facetas; nao le a chave
-                    "tests/test_longe_geometria.py"}
+                    "tests/test_longe_geometria.py",
+                    # o teste da ilha maior (IG6): monta a Memoria com a config do REL, as facetas desligadas; nao le a chave
+                    "web/app/test/ilha_maior.test.ts"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre", "tests"):
         if not (RAIZ / pasta).exists():
