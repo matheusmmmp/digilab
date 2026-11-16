@@ -1,7 +1,7 @@
 # TAREFA V3 — VALUATION (2026-11-16)
 
 Coordenador: a sessão da LONGE_GEOMETRIA e da LIMPEZA (Claude Code). Worker: Claude Code, Opus 5.5, sessão filha. Worktree e branch:
-`v3-valuation`. Status: ABERTA, na Fase V0 (CHECKPOINT V1).
+`v3-valuation`. Status: ABERTA, na Fase V1 (CHECKPOINT V2). O CHECKPOINT V1 foi aprovado em 2026-11-16.
 
 Categoria: experimento. Origem: Matheus, 2026-11-16. O pedido é diagnosticar por que o modular sente a fome e não fecha o episódio de fome
 (o elo Valuation), nas fases V0 a V5.
@@ -178,4 +178,20 @@ O [MAPA_VALUATION.md](MAPA_VALUATION.md) segue o fluxo de uma decisão do REL, d
 - **B e F** têm predição de nulo pelas sondas e pela forma do código: nenhuma linha de W0 lê V nem E.
 - **F e G** não têm controle que já exista (D-VAL-3).
 
-Status: PROPOSTO, no CHECKPOINT V1.
+Status: o Matheus aprovou o CHECKPOINT V1 em 2026-11-16 ("Aprovado, siga a V1"). As D-VAL-1 a D-VAL-6 ficaram DECIDIDAS pela
+recomendação.
+
+### V1, o plano de análise (2026-11-16, Claude Code, Opus 5.5)
+
+O [PLANO_ANALISE_V3_VALUATION.md](PLANO_ANALISE_V3_VALUATION.md) desenha a ablação: oito braços (o REL e uma ablação por hipótese A, B, C,
+E, F, G e R) nas 4 células do `longe_fixo`, com 200 unidades pareadas e 6 400 vidas, rodadas uma vez.
+- **O primário:** a taxa por episódio da A1, braço − REL, com o IC95 pelo t e o Holm sobre os 7 contrastes.
+- **A guarda do bem-estar:** a privação e a exaustão, sem gate na V2 e vinculante na V3.
+- **A regra de leitura:** confirmada, efeito trivial, refutada ou indeterminada, escrita antes. Sem nenhuma confirmada, a frente para com
+  "causa não localizada".
+- **A faixa:** a 99101…99505, reservada em `faixas.py` como PROPOSTA.
+
+O segundo braço da R (a `intencao_suspensa`) não pode ser montado, porque a config recusa a combinação com a `memoria_autobio`
+(D-VAL-7).
+
+Status: PROPOSTO, no CHECKPOINT V2, com as D-VAL-7 a D-VAL-10 (seção 10 do plano).

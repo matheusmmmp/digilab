@@ -188,6 +188,9 @@ FAIXAS_RESERVADAS = (
                    "aprovada pelo Matheus em 2026-11-16, \"Eu aprovo o plano, pode seguir com as recomendacoes e o merge\"; "
                    "trocada da 93101-93505, que colidia com a calibracao da EQUILIBRIO_CUIDADO (D-EQ2-11; Matheus, 2026-11-16, "
                    "\"A LONGE_GEOMETRIA\"), antes de qualquer vida; a 96xxx conferida livre em todos os branches remotos em 2026-11-16)"),
+    (99101, 99505, "VALUATION, a ablacao do Valuation: a run unica da V2, 8 bracos x 4 celulas do longe_fixo x 200 unidades "
+                   "(docs/PLANO_ANALISE_V3_VALUATION.md, secao 4; D-VAL-9, PROPOSTA; bases 99101, 99202, 99303, 99404 e 99505, K = 40; "
+                   "conferida livre no faixas.py da origin/main e nos branches remotos em 2026-11-16)"),
 )
 
 
