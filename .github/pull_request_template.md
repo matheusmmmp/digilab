@@ -2,6 +2,7 @@ Tarefa: `docs/TAREFA_V2_<FRENTE>.md` ou `docs/TAREFA_V3_<FRENTE>.md`
 Categoria: <implementacao | experimento | literatura | arquitetura | documentacao>
 Executor: <Claude Code (sessão, worktree) | Codex | ChatGPT Work | Matheus>
 Branch: `v2-<frente>` ou `v3-<frente>`. Commit base: `<sha curto da main de onde saiu>`
+Pré-registro: `docs/PREREGISTRO.md`, seção `PR-<id>` (obrigatório no experimento; nas outras categorias, apague a linha ou escreva "não se aplica")
 
 <!--
 O relato de volta (docs/modelos/TAREFA_V2_MODELO.md, seção 5). O CI confere com tools/verificar_relato.py:
