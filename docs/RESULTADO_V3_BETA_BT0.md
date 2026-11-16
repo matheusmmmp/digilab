@@ -4,7 +4,7 @@
 leva do ovo ao primeiro Mega, o marco 10 do Tamer (`web/app/src/nivel.ts`, `ULTIMO_MARCO = 10`), onde o multijogador abre (MMO-13). É uma
 medida de engenharia: o motor, o save e as versões de pet não mudam, e nenhuma chave de beta é implementada. As sementes saem de
 `hashSemente("bt0", ...)`, fora das faixas reservadas. Os perfis, as sessões e os tempos fixos são **PROPOSTOS, SEM FONTE**. O desvio está
-no `docs/registro/2026-11.md`, seção "BETA: a BT0" (D-CONTA-60 a D-CONTA-65).
+no `docs/registro/2026-11.md`, seção "BETA: a BT0" (D-CONTA-70 a D-CONTA-75; renumerados depois dos D-CONTA-60 a 69 da CN2).
 
 **Para refazer:**
 
