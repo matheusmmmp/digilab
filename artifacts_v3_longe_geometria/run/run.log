@@ -1,0 +1,178 @@
+{
+ "modo": "longe_geometria",
+ "vidas": 12800,
+ "primarios": {
+  "I-M3": {
+   "contraste": "(M3 - M2) no longe_fixo - (M3 - M2) no longe_ancora, taxa por episodio",
+   "n": 200,
+   "n_grupos": 5,
+   "media": 0.052433923063181294,
+   "teste": "t sobre as unidades (A4.4.6)",
+   "p_unilateral": 2.0511631725418428e-10,
+   "ic95": {
+    "ic_inferior": 0.03671686282810151,
+    "ic_superior": 0.06815098329826108,
+    "nivel": 0.95
+   },
+   "t": 6.578674139993066,
+   "gl": 199,
+   "motivo": null,
+   "g1": 0.024969588017891144,
+   "ressalva_assimetria": null,
+   "bootstrap": {
+    "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)",
+    "p_unilateral": 0.0,
+    "ic95": {
+     "ic_inferior": 0.037235247276868375,
+     "ic_superior": 0.06763259884949421,
+     "nivel": 0.95
+    },
+    "ic90": {
+     "ic_inferior": 0.039358956890414694,
+     "ic_superior": 0.06471664890326218,
+     "nivel": 0.9
+    },
+    "motivo": null
+   },
+   "classe": {
+    "classe": "> 0",
+    "sinal": null,
+    "motivo": null
+   },
+   "margem": 0.034,
+   "margem_efetiva": 0.0224250232790661,
+   "holm": {
+    "p": 2.0511631725418428e-10,
+    "ordem": 2,
+    "limiar": 0.025,
+    "rejeita": true,
+    "p_ajustado": 2.0511631725418428e-10
+   },
+   "passa": true
+  },
+  "I-PAD": {
+   "contraste": "(PAD - M2) no longe_fixo - (PAD - M2) no longe_ancora, taxa por episodio",
+   "n": 200,
+   "n_grupos": 5,
+   "media": 0.07089472775651434,
+   "teste": "t sobre as unidades (A4.4.6)",
+   "p_unilateral": 2.6223308670125526e-15,
+   "ic95": {
+    "ic_inferior": 0.05439751304584613,
+    "ic_superior": 0.08739194246718256,
+    "nivel": 0.95
+   },
+   "t": 8.474237912536783,
+   "gl": 199,
+   "motivo": null,
+   "g1": 0.005310364854763323,
+   "ressalva_assimetria": null,
+   "bootstrap": {
+    "rotulo": "a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)",
+    "p_unilateral": 0.0,
+    "ic95": {
+     "ic_inferior": 0.058475943865001524,
+     "ic_superior": 0.08331351164802715,
+     "nivel": 0.95
+    },
+    "ic90": {
+     "ic_inferior": 0.06083390713412125,
+     "ic_superior": 0.08180481093164749,
+     "nivel": 0.9
+    },
+    "motivo": null
+   },
+   "classe": {
+    "classe": "> 0",
+    "sinal": null,
+    "motivo": null
+   },
+   "margem": 0.034,
+   "margem_efetiva": 0.023538143799994693,
+   "holm": {
+    "p": 2.6223308670125526e-15,
+    "ordem": 1,
+    "limiar": 0.0125,
+    "rejeita": true,
+    "p_ajustado": 5.244661734025105e-15
+   },
+   "passa": true
+  }
+ },
+ "premissas": {
+  "PAD": {
+   "longe_fixo": {
+    "G-PESA-memoria": {
+     "n": 200,
+     "media": 0.18886532738095238,
+     "dp": 0.026601747864573373,
+     "ic95": {
+      "ic_inferior": 0.18515602263478273,
+      "ic_superior": 0.19257463212712203
+     },
+     "classe": {
+      "classe": "> 0",
+      "sinal": null,
+      "motivo": null
+     },
+     "motivo": null,
+     "passa": true,
+     "limiar": 0.01
+    },
+    "G-ELEGIVEL-EP": {
+     "frac_vidas": 0.95875,
+     "vidas": 800,
+     "limiar": 0.8,
+     "passa": true
+    }
+   },
+   "longe_ancora": {
+    "G-PESA-memoria": {
+     "n": 200,
+     "media": 0.17887276785714284,
+     "dp": 0.02113685979305666,
+     "ic95": {
+      "ic_inferior": 0.17592547827494512,
+      "ic_superior": 0.18182005743934057
+     },
+     "classe": {
+      "classe": "> 0",
+      "sinal": null,
+      "motivo": null
+     },
+     "motivo": null,
+     "passa": true,
+     "limiar": 0.01
+    },
+    "G-ELEGIVEL-EP": {
+     "frac_vidas": 1.0,
+     "vidas": 800,
+     "limiar": 0.8,
+     "passa": true
+    }
+   },
+   "conclusivo": true
+  },
+  "M3": {
+   "longe_fixo": {
+    "G-PESA-memoria": {
+     "n": 200,
+     "media": 0.11878720238095238,
+     "dp": 0.03296666808452308,
+     "ic95": {
+      "ic_inferior": 0.11419038344206711,
+      "ic_superior": 0.12338402131983764
+     },
+     "classe": {
+      "classe": "> 0",
+      "sinal": null,
+      "motivo": null
+     },
+     "motivo": null,
+     "passa": true,
+     "limiar": 0.01
+    },
+    "G-ELEGIVEL-EP": {
+     "frac_vidas": 0.95375,
+    
+saida=0

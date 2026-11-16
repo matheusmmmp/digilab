@@ -1,5 +1,5 @@
 {
-  "descricao": "Fumaca da run da LONGE_GEOMETRIA: as sementes dos testes, 2 dias; so confere que o orquestrador roda. Nenhuma semente da faixa 96101...96505.",
+  "descricao": "Fumaca da run da LONGE_GEOMETRIA: as sementes dos testes, 2 dias; so confere que o orquestrador roda. Nenhuma semente da faixa 93101...93505.",
   "plano": "docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md",
   "fase": "longe_geometria",
   "unidades": {

@@ -6,8 +6,8 @@ o G1, o T-CENARIO-1, o G-MECANISMO e o credito em toda vida), com a conferencia 
 
 O desenho (secao 3): as celulas 4 donos x 4 lugares (`longe_um`, o `longe_fixo` com 1 ponto; `longe_fixo`; `longe_ancora`, um ponto novo a
 cada racao sorteado como os do `longe_fixo`; `longe`, o sorteado de sempre), os bracos PAD (o REL da C4), M3* (o "M3" do conserto), M2 e
-M0, todos com a `intencao_suspensa` e o sono que segura desligados, K = 200 unidades (40 por base) nas bases 96101, 96202, 96303, 96404 e
-96505 (faixa PROPOSTA, a confirmar), o prefixo `digibrain_prototipo`: 200 x 64 = 12 800 vidas. A run roda uma vez, sem calibracao nem piloto.
+M0, todos com a `intencao_suspensa` e o sono que segura desligados, K = 200 unidades (40 por base) nas bases 93101, 93202, 93303, 93404 e
+93505 (faixa PROPOSTA, a confirmar), o prefixo `digibrain_prototipo`: 200 x 64 = 12 800 vidas. A run roda uma vez, sem calibracao nem piloto.
 
 A analise (secoes 5 a 8), no `resultado.json`: os primarios I-M3 e I-PAD (o ganho da memoria por episodio no `longe_fixo` menos o mesmo no
 `longe_ancora`, pareados por unidade, o IC95 pelo t e o Holm sobre os dois p unilaterais), as premissas (G-PESA da memoria e G-ELEGIVEL-EP
@@ -16,7 +16,7 @@ descritivo da secao 8 (a conferencia da construcao nas vidas, as taxas por faixa
 geometria sem aprendizado no M0, o corpo e por dono), sem gate. A decomposicao da D-C1-3 (secao 8, item 3) sai num script a parte, depois
 da run, que rejoga as vidas do disco (como o experiments/descritivo_dc13_longe_fixo.py da C1).
 
-A trava (secao 0 do plano): o plano APROVADO pelo Matheus no cabecalho (`exigir_plano_aprovado`), a faixa 96101...96505 reservada em
+A trava (secao 0 do plano): o plano APROVADO pelo Matheus no cabecalho (`exigir_plano_aprovado`), a faixa 93101...93505 reservada em
 `experiments/bancada/faixas.py`, so as bases, o K, os dias e o orcamento do plano, no maximo 4 processos, e nenhuma gravacao por cima de uma
 pasta que ja existe. Na fumaca (as sementes dos testes 101...505) a run roda sem a faixa, sem o K e sem a aprovacao, com menos dias se a
 config pedir.
@@ -54,9 +54,9 @@ from digilab.temperamento import NEUTRO  # noqa: E402
 PLANO = "docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md"
 PREFIXO = orq.PREFIXO                                                                 # 3.4 (o da C1)
 FASE = "longe_geometria"
-BASES = (96101, 96202, 96303, 96404, 96505)                                           # 3.4, PROPOSTA (LG-6)
+BASES = (93101, 93202, 93303, 93404, 93505)                                           # 3.4, PROPOSTA (LG-6)
 K_POR_BASE = 40                                                                       # 3.4 e 6, PROPOSTO (LG-5): 200 unidades
-FAIXA = (96101, 96505)
+FAIXA = (93101, 93505)
 SAIDA = "artifacts_v3_longe_geometria/run"                                            # a pasta-mae tem o poder.json
 DIAS, ORCAMENTO_POR_DIA = orq.DIAS, orq.ORCAMENTO_POR_DIA                             # secao 2 (o cenario da C1)
 MAX_PROCESSOS = 4                                                                     # secao 11 (V3-D8)
@@ -93,7 +93,7 @@ def exigir_plano_aprovado(plano: str) -> None:
 
 
 def exigir_faixa_reservada() -> None:
-    """a faixa 96101...96505 esta em FAIXAS_RESERVADAS (3.4); sem ela a run nao tem fonte para as sementes"""
+    """a faixa 93101...93505 esta em FAIXAS_RESERVADAS (3.4); sem ela a run nao tem fonte para as sementes"""
     if not any((lo, hi) == FAIXA for lo, hi, _ in FAIXAS_RESERVADAS):
         raise bv.SementeSemPlano(f"a faixa {FAIXA[0]}...{FAIXA[1]} nao esta em FAIXAS_RESERVADAS (3.4)")
 
