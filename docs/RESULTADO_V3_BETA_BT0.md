@@ -113,7 +113,7 @@ em 3 dias com 30 min abertos por dia ou mais (os 2, nas duas variantes). Com 15 
 
 ## 5. Decisão para o Matheus
 
-**BT0-1. A chave do beta abre o cais no marco 7 (3 medalhas), não no 9 nem no 10, só no ambiente do beta.**
+**BT0-1 (DECIDIDA pelo Matheus em 2026-11-16, pela recomendação: "Sim, aceita e mergeia"). A chave do beta abre o cais no marco 7 (3 medalhas), não no 9 nem no 10, só no ambiente do beta.**
 - **A recomendação:** no beta, o multijogador abre com as 3 medalhas. Pela medida, 11 dos 12 dedicados e os 12 casuais chegam lá antes do
   3º dia de relógio; no marco 10, chegam 2 de 12 e 0 de 12. A MMO-13 não muda no jogo, e a chave sai depois do beta (BT-3).
 - **As outras opções:**
