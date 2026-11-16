@@ -78,6 +78,31 @@ Cada etapa é um PR. Nenhuma muda o `engine.py`.
 - **LZ5, os documentos:** o `CLAUDE.md` (a decisão do A e a seção Arquitetura), o `docs/MAPA_REPOSITORIO.md`, o `docs/PAINEL_V3.md`, um índice
   de uma página do que saiu (`docs/historico/LIMPEZA_2026-11.md`, com a tag) e a memória das sessões, que nunca lê a pasta do backup.
 
+## 3.1 A LZ1: o que guarda cada gabarito de hoje
+
+Cada gerador `tests/gabarito_*.py` foi rodado com as classes do bandit, do A, do B, do C e da camada única armadas para parar na primeira
+instância (o script está no relato do PR da LZ1). O resultado:
+
+- **Guardam o modular (10), e são a guarda da LZ2 em diante:**
+  - o `limpeza_lg` (novo, LZ1);
+  - o `digibrain_conserto`, o `digibrain_modular` e o `memoria_autobio`;
+  - o `sono_segura`, o `redecidir_evento`, o `habito_intencao` e o `conversa_dc3`;
+  - o `gosto_visual_enjoo` e o `orgao_visao`.
+  - Fora dos `tests/gabarito_*.py`, os gabaritos do CO6 e do CO7 (`experiments/exportar_gabarito_co6.py` e `co7`) usam o modular.
+- **Rodam o A (38), e saem na LZ2 com os braços do A:**
+  - pelo script (34): `arvore_sacode`, `bancada_k4`, `bancada_liga`, `bancada_montagem`, `banheiro`, `banheiro_ligado`, `banheiro_perto`,
+    `corpo`, `corpo_mundo`, `digibrain`, `dois_pets`, `fruta_ao_lado`, `genoma_g0`, `gosto_visual`, `lance_dono`, `lugar_estilos`,
+    `lugar_estilos_lg`, `metabolismo`, `metabolismo_ligado`, `mundo`, `orgao_sem_direcao`, `orgaos`, `p2d_p3i`, `p2d_p3i_bancada`, `p4`,
+    `paladar`, `paladar_mundo`, `pet_que_pensa`, `pet_que_pensa_plano`, `pqp_adendo7`, `pqp_ao_lado`, `pqp_mundo`, `rede_de_si` e
+    `tv_jogo`;
+  - pela leitura do código (4): o `canais_reforco`, o `cerebro_n6_n7` e o `competicao` importam o `lobos.py`, e o `credito_canal` é da
+    V3-9 da V2. Os quatro recusam regravar, e o script não os rodou.
+
+**O achado:** várias mecânicas que o jogo usa só têm gabarito com o A: a árvore que sacode, a TV do jogo, o lance do dono, o banheiro, o
+metabolismo ligado, os órgãos, a fruta ao lado e os dois pets. Quando o A sair, elas ficam sem guarda byte a byte no Python. A LZ1 parte 2
+(PROPOSTA) grava, para cada uma, o mesmo cenário com o braço do modular, antes da LZ2. A paridade do web (os gabaritos `*_python.json`)
+continua guardando o lado TS.
+
 ## 4. Experimento e gate
 
 Não há run. O gate de cada etapa é o byte a byte dos gabaritos da LZ1 e a suíte.
