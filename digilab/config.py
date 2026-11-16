@@ -1855,6 +1855,10 @@ class ConfigMundo:
 # Matheus em 2026-10-30 (PR #495): 3, uma regularidade parcial (1 ponto seria um "comedouro longe"). Fica fora do ConfigMundo de proposito:
 # um campo novo no asdict(ConfigMundo) mudaria os gabaritos do web mesmo com o estilo desligado.
 N_PONTOS_LONGE_FIXO = 3
+# O nivel `longe_um` da LONGE_GEOMETRIA (docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md, secao 3.1): o `longe_fixo` com um ponto so, o degrau de
+# regularidade total da escada um -> tres -> nenhum, com o lado e a ancora do `longe_fixo`. PROPOSTO, SEM FONTE (LG-1). Fica fora do
+# ConfigMundo pelo mesmo motivo do N_PONTOS_LONGE_FIXO.
+N_PONTOS_LONGE_UM = 1
 
 CONFIG_MUNDO = ConfigMundo()
 CONFIG_MUNDO_LIGADA = ConfigMundo(ligada=True)

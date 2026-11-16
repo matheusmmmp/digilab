@@ -2845,13 +2845,17 @@ class DeixarBola:
 
 
 ESTILOS_LUGAR_V2 = ("comedouro", "perto", "longe")          # os estilos das runs ate a C1 (as runs de antes iteram estes, nao os novos)
-ESTILOS_LUGAR = ESTILOS_LUGAR_V2 + ("longe_fixo",)
+ESTILOS_LUGAR = ESTILOS_LUGAR_V2 + ("longe_fixo", "longe_ancora")    # o `longe_ancora`: LONGE_GEOMETRIA (PLANO_ANALISE_V3_LONGE_GEOMETRIA, 3.2)
 
 
 class DonoComLugar:
     """Embrulha um dono sintetico (secao 4): o `alimentar` vira `deixar_comida("racao", x, y)` no lugar do estilo. A rng do lugar e
     `derivar_semente("dono-lugar", semente, rotulo_dono)`, sem o braco: P0 e P1 sorteiam os mesmos desvios. Um sorteio fixo por
-    `alimentar` em cada estilo (perto e longe: direcao e distancia; comedouro: nenhum)."""
+    `alimentar` em cada estilo (perto e longe: direcao e distancia; comedouro: nenhum).
+
+    O `longe_ancora` (LONGE_GEOMETRIA, docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md, secao 3.2): cada racao cai num ponto novo, sorteado como
+    um ponto do `longe_fixo` (as mesmas direcoes viaveis, a mesma faixa de distancia ao comedouro, o mesmo teste de corte e as mesmas 1 000
+    tentativas), com a rng propria `derivar_semente("dono-lugar-ancora", semente, rotulo_dono)`. So a repeticao dos lugares muda."""
 
     def __init__(self, base, estilo: str, semente: int, rotulo_dono: str, cfg_mundo: ConfigMundo | None = None,
                  n_pontos: int = N_PONTOS_LONGE_FIXO) -> None:
@@ -2868,36 +2872,50 @@ class DonoComLugar:
         self.lugares: list[dict] = []
         self.pontos_fixos: tuple[tuple[int, int], ...] = ()
         self._rng_fixo: random.Random | None = None
+        self._rng_ancora: random.Random | None = None
+        self._viaveis_ancora: tuple[int, ...] = ()
         if estilo == "longe_fixo":                         # rng propria: os outros estilos nao consomem nenhum sorteio novo
             self._rng_fixo = random.Random(derivar_semente("dono-lugar-fixo", semente, rotulo_dono))
             self.pontos_fixos = self._sortear_pontos_fixos()
+        elif estilo == "longe_ancora":                     # idem, com a rng dele; as direcoes viaveis sao as do longe_fixo
+            self._rng_ancora = random.Random(derivar_semente("dono-lugar-ancora", semente, rotulo_dono))
+            self._viaveis_ancora = tuple(self._direcoes_viaveis())
+            if not self._viaveis_ancora:
+                raise ValueError(f"longe_ancora: nenhuma direcao cabe no mapa a {self.cmf.longe_min_celulas} celulas do comedouro")
+
+    def _cabe_inteiro(self, direcao: int, r: int) -> bool:
+        """o ponto a r subunidades do comedouro na direcao cai dentro do mapa sem corte (a distancia fica na faixa, a menos de 1 subunidade)"""
+        cm = self.cmf
+        cx, cy = centro_da_celula(cm.layout.comedouro, cm)
+        x, y = deslocar(cx, cy, direcao, r, cm)
+        return distancia(x - cx, y - cy) >= r - 1
+
+    def _direcoes_viaveis(self) -> list[int]:
+        """as direcoes das 16 em que o ponto a `longe_min_celulas` do comedouro cabe sem corte (o `longe_fixo` e o `longe_ancora`)"""
+        cm = self.cmf
+        return [d for d in range(16) if self._cabe_inteiro(d, cm.longe_min_celulas * cm.sub)]
+
+    def _ponto_na_direcao(self, rng: random.Random, direcao: int) -> tuple[int, int]:
+        """um ponto na direcao, a uma distancia uniforme em `longe_min_celulas`...`longe_max_celulas` do comedouro que caiba sem corte;
+        em 1 000 sorteios sem nenhuma que caiba, falha alto"""
+        cm = self.cmf
+        cx, cy = centro_da_celula(cm.layout.comedouro, cm)
+        rmin, rmax = cm.longe_min_celulas * cm.sub, cm.longe_max_celulas * cm.sub
+        for _ in range(1000):
+            r = rng.randint(rmin, rmax)
+            if self._cabe_inteiro(direcao, r):
+                return deslocar(cx, cy, direcao, r, cm)
+        raise RuntimeError(f"{self.estilo}: nenhuma distancia da direcao {direcao} cabe no mapa em 1000 sorteios")
 
     def _sortear_pontos_fixos(self) -> tuple[tuple[int, int], ...]:
         """Os `n_pontos` lugares da vida (C1, secao 3.1): cada um a `longe_min_celulas`...`longe_max_celulas` do comedouro (LR-2),
         em direcoes distintas das 16. O corte do mapa nao pode encurtar a distancia: so valem as direcoes e distancias cujo ponto cai
         dentro do mapa sem corte (a distancia fica na faixa, a menos do arredondamento de 1 subunidade); sem direcoes bastantes, falha alto."""
-        cm = self.cmf
-        cx, cy = centro_da_celula(cm.layout.comedouro, cm)
-        rmin, rmax = cm.longe_min_celulas * cm.sub, cm.longe_max_celulas * cm.sub
-
-        def inteiro(direcao: int, r: int) -> bool:
-            x, y = deslocar(cx, cy, direcao, r, cm)
-            return distancia(x - cx, y - cy) >= r - 1
-
-        viaveis = [d for d in range(16) if inteiro(d, rmin)]
+        viaveis = self._direcoes_viaveis()
         if len(viaveis) < self.n_pontos:
-            raise ValueError(f"longe_fixo: so {len(viaveis)} direcoes cabem no mapa a {cm.longe_min_celulas} celulas do comedouro, "
+            raise ValueError(f"longe_fixo: so {len(viaveis)} direcoes cabem no mapa a {self.cmf.longe_min_celulas} celulas do comedouro, "
                              f"e o n_pontos pede {self.n_pontos}")
-        pontos = []
-        for direcao in self._rng_fixo.sample(viaveis, self.n_pontos):
-            for _ in range(1000):
-                r = self._rng_fixo.randint(rmin, rmax)
-                if inteiro(direcao, r):
-                    pontos.append(deslocar(cx, cy, direcao, r, cm))
-                    break
-            else:
-                raise RuntimeError(f"longe_fixo: nenhuma distancia da direcao {direcao} cabe no mapa em 1000 sorteios")
-        return tuple(pontos)
+        return tuple(self._ponto_na_direcao(self._rng_fixo, direcao) for direcao in self._rng_fixo.sample(viaveis, self.n_pontos))
 
     def lugar(self, estado: dict) -> tuple[int, int]:
         m = estado.get("mundo")
@@ -2908,6 +2926,8 @@ class DonoComLugar:
             return centro_da_celula(cm.layout.comedouro, cm)
         if self.estilo == "longe_fixo":
             return self.pontos_fixos[self._rng_fixo.randrange(len(self.pontos_fixos))]
+        if self.estilo == "longe_ancora":
+            return self._ponto_na_direcao(self._rng_ancora, self._viaveis_ancora[self._rng_ancora.randrange(len(self._viaveis_ancora))])
         px, py = m["pet"]
         direcao = self._rng.randrange(16)
         if self.estilo == "perto":
