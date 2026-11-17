@@ -45,3 +45,5 @@ registrada está na espec, seção 5.4.
    2.2 e 2.4 (o sinal do `andar`, os objetos relativos ao pet, as duas memórias de lugar e os alvos do explorar). Aceitas pelo Matheus
    em 2026-11-17: "Aceito as correções".
 3. **SE2:** o plano de análise commitado; depois, a medida nas vidas da D-F5-2 e o resultado em `docs/RESULTADO_V3_SONDA_EMPOWERMENT.md`.
+   Feita em 2026-11-17: o plano APROVADO ("Aprovo o plano", commit `c27ecb91`), a medida uma vez (commit `aed22443`). A leitura
+   é "plano pelas entradas": a F5 espera a D-F5-2 (b) e a D-F5-10 (o resultado, seção 6).
