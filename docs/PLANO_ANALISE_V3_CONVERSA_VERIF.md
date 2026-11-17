@@ -53,6 +53,9 @@ Por isso **não há chamada nova a modelo, e não falta campo.** O adendo da DC5
 
 - **"As falas da voz"** são as que não caíram na genérica (`erro` vazio). As genéricas são contadas à parte, com o motivo, porque não são
   fala da LLM e não passam pelo verificador.
+- **O formato válido não é o sentido certo.** O GARP mostra que um JSON válido pode ser inútil no sentido (leitura do texto completo,
+  vault `LEITURA_GARP_2026-11-17.md`, p. 11). Por isso o relato separa três grupos: as genéricas por formato quebrado; as falas que passam
+  no formato e erram o sentido (o V1); e as que passam nos dois. O esquema não substitui o verificador.
 - **O V1 é o numerador do G-FIEL da DC5, por outro nome.** Ele não é recalculado com regra nova: o número é o da DC5d, com o mesmo
   denominador que ela usar. Se a DC5d contar as genéricas no denominador, o relato dá as duas frações.
 - **O V2 em fração das sem sustento é 1 − a sensibilidade.** O G-VERIF a mede por voz; aqui ela aparece também por célula e em fração de
@@ -117,8 +120,11 @@ Elas entram na skill antes de qualquer texto de resultado citá-las.
   `10.21437/WoChat.2026-2`, **texto completo lido**: três gates booleanos com ablação (tirar a compatibilidade quebra 27 de 84 células);
   42 de 64 decisões ao vivo tomadas pela política ou pelo fallback. Lá a LLM propõe **ações**; aqui ela só põe em palavras, e a ponte é
   analogia nossa.
-- **Molino et al. (2026),** GARP, arXiv:2611.11064, preprint (resumo e seção IV-C): as respostas presas a JSON. Só para a frase "não é
-  contribuição".
+- **Molino et al. (2026),** GARP, arXiv:2611.11064, preprint (texto completo lido em 2026-11-17, vault `LEITURA_GARP_2026-11-17.md`): as
+  respostas presas a JSON, e um JSON válido que pode não servir no sentido (p. 11). Ele **não** mede a taxa de fallback; para isso, a
+  referência continua sendo o PacaPet.
+- **O limite da fala** (Harnad 1990 e Searle 1980, VERIFICADAS na rodada Dreyfus, PR #954): nada aqui diz que o pet entende, nem que o
+  decodificador resolve o aterramento do símbolo.
 
 ## 7. As decisões (para o Matheus; nenhuma decidida)
 
