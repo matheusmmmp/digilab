@@ -1,6 +1,6 @@
 # Plano de UX da luta ranqueada (2026-11-17)
 
-**Status: PROPOSTO, à espera do Matheus.** Sem código de tela. A prancha está em `docs/pranchas/ux-luta-ranqueada/`; o servidor e o
+**Status: APROVADO** (UX-LR-1 a 6 pelas recomendações, Matheus, 2026-11-17: "Sim, aprovo"). Sem código de tela ainda. A prancha está em `docs/pranchas/ux-luta-ranqueada/`; o servidor e o
 protocolo do pedido são da etapa MMO4 local (`docs/TAREFA_V3_MMO.md`, seção 13; PR #966). Os tamanhos e os textos de interface são
 **PROPOSTO, SEM FONTE**.
 Autor: Claude Code (Fable 5.2), sessão lateral da conta, branch `v3-mmo4-prancha`.
@@ -65,6 +65,9 @@ botão ao lado do Lutar, e os textos encurtam ("vencido 1× · metade"; o rótul
 - **No e2e:** testes próprios com o servidor falso; os de hoje não mudam, porque o treino não muda.
 
 ## 7. Decisões para o Matheus
+
+**APROVADAS em 2026-11-17, todas pela recomendação (em negrito em cada item):** "Sim, aprovo", em resposta a "Você aprova a prancha
+pelas seis recomendações, ou prefere o rival sorteado pelo servidor?". Na UX-LR-5 vale a escolha do jogador.
 
 - **UX-LR-1. Onde mora:** **na aba Arena do portão, com a escolha "Treino / Ranqueada".** A outra opção é o cais. Custo de errar: baixo.
   No cais, a luta fica longe do rival e do mapa, e o jogador aprende duas telas de luta; o cais fica para as tabelas (MMO5).

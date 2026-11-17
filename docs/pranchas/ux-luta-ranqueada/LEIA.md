@@ -1,8 +1,8 @@
 # Prancha: a luta ranqueada
 
-**Status: PROPOSTA, à espera do Matheus** (UX-LR-1 a UX-LR-6, na seção 7 do `docs/PLANO_UX_LUTA_RANQUEADA.md`). As regras vêm do
+**Status: APROVADA** (UX-LR-1 a 6 pelas recomendações, Matheus, 2026-11-17: "Sim, aprovo"; seção 7 do `docs/PLANO_UX_LUTA_RANQUEADA.md`). As regras vêm do
 `docs/PLANO_V3_MMO.md` (MMO-5 a MMO-9, MMO-13 e MMO-14 APROVADAS) e do servidor da MMO4 (`servidor_web/src/envio/sementes.ts`). A tela é
-da MMO4, depois da aprovação.
+da MMO4 e ainda não foi feita.
 
 É só desenho: HTML estático, sem código do jogo. Os tokens e os moldes são os da prancha dos lugares
 (`../ux-lugares-menus/lugares.css` e `movel.css`) e os da conta (`../ux-conta/conta.css`: os estados, os passos, os botões). O que é novo

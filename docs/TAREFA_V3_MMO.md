@@ -214,4 +214,7 @@ prancha, a prévia no cliente e o resultado na tela ficam para depois da prancha
 
 Pedido do Matheus: "Sim, a prancha" (2026-11-17). O plano de UX é o `docs/PLANO_UX_LUTA_RANQUEADA.md` (PROPOSTO), e a prancha está em
 `docs/pranchas/ux-luta-ranqueada/`: a aba Arena com a escolha "Treino / Ranqueada", os seis estados do pedido e os cinco resultados, no
-desktop (1920) e no celular (390 e 360), nas peles Vidro e Militar. Só desenho; a tela espera as UX-LR-1 a 6. Desvios: D-UXLR-1 a 7.
+desktop (1920) e no celular (390 e 360), nas peles Vidro e Militar. Só desenho. Desvios: D-UXLR-1 a 8.
+
+**As UX-LR-1 a 6 foram APROVADAS pelas recomendações** (Matheus, 2026-11-17: "Sim, aprovo"): a luta na aba Arena, o aviso acima do
+botão, a prévia que vira "conferido", o reenvio sozinho e o rival escolhido pelo jogador. A tela ainda não foi feita.
