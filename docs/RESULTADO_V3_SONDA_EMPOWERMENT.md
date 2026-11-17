@@ -1,7 +1,8 @@
 # RESULTADO V3 — SONDA_EMPOWERMENT, F5: o E(P) varia entre lugares? (2026-11-17, sessão da F5, Claude Code, Opus 5.5)
 
-**A leitura registrada: "plano pelas entradas".** A F5 não acaba. Ela espera a decisão do Matheus sobre a opção (b) da D-F5-2 (uma
-run já feita, depois de conferir o replay). Há uma segunda decisão, sobre como ler a M-S2 (seção 4).
+**A leitura final, pela (b2) do adendo 1 (seção 7): "plano". A F5 acaba sem plano para a H-EMP-1.** A primeira medida, nas vidas
+da AN0, tinha dado **"plano pelas entradas"**. Por isso a F5 seguiu para a opção (b) da D-F5-2,
+que as decisões D-F5-10 e D-F5-11 levaram às vidas no mundo com árvores (seções 4, 6 e 7).
 
 O papel é descritivo, sem gate (D-F5-1, "Pesquisa, com sonda").
 
@@ -78,3 +79,71 @@ As da seção 6 do plano continuam valendo. Além delas:
 
 **Decisão:** as duas aceitas como recomendadas. À pergunta "Aprova a D-F5-2 (b) e a D-F5-10 como recomendadas?", o Matheus respondeu "Aprovo as duas" (2026-11-17). A F5 segue para a opção (b): primeiro um adendo a este plano
 (PROPOSTO, com a run escolhida e a conferência do replay), depois a medida. A M-S2 desta medida fica como "não leu".
+
+## 7. A (b2): o mundo com árvores (adendo 1, 2026-11-17)
+
+**A leitura: "plano". Pelo plano, seção 4, a F5 acaba aqui, sem plano para a H-EMP-1.**
+
+**De onde vem:**
+- o adendo 1, `docs/PLANO_ANALISE_V3_SONDA_EMPOWERMENT_ADENDO1.md`, APROVADO ("Aprovo a (b2)") no commit `1026eb55`;
+- o código e os testes no commit `86f7ba5d` (26 testes passam);
+- o gabarito, `tests/gabaritos/sonda_f5_b2.json`, num commit próprio, o `096ba70c`, antes da medida.
+
+**As vidas:** as oito células da AN0 (2 donos × 2 lugares × as sementes 101 e 202), 4 dias cada, no `CONFIG_MUNDO_ILHA`, com o sacudir
+ligado e nenhum dono sacudindo.
+
+**A medida:** rodou uma vez com `--b2 --processos 4`, em 5 s. As 8 vidas saíram iguais ao gabarito (G-S0), e nenhuma leitura mudou uma
+rng (G-S1). São 3.072 decisões.
+
+| arquivo (`artifacts_v3_f5_sonda/b2/`) | sha256 |
+|---|---|
+| `sonda.json` | `6f8663f3043834d87c73760b981867fff24fc5aa6be1974eebdcabd5d150cd7f` |
+| `sonda_decisoes.json.gz` | `f24cecc090e1178f9ddbc92464d6613f9117d1532c8bae5078185626add6d4c1` |
+
+As fontes no `sonda.json`: o plano `8ada173a…`, o adendo `ab2725de…` e o gabarito `0a2b9479…`.
+
+### 7.1 As entradas (a conferência do adendo, seção 5)
+
+As frutas chegaram ao pet. Caíram 4 frutas nas vidas da semente 101 e 10 nas da 202. Em todas as oito vidas há episódios de consumo de
+fruta guardados no fim: a `a` em quatro vidas, a `b` em sete, a `c` em quatro. Numa vida também há um consumo de ração podre. Nas duas
+vidas da semente 101 no `longe_fixo`, o pet só guardou consumos de fruta.
+
+### 7.2 Os números (FATO VERIFICADO, `sonda.json`, chave `todas`)
+
+**M-S1, a variação:**
+- o `E` do lugar do pet: mínimo 1, quartis 1, 1 e 2, máximo **8** (na primeira medida, o máximo era 5);
+- `E > 1` em 1.398 das 3.072 decisões;
+- a amplitude entre os lugares de cada decisão: quartis 0, 0 e 0, máximo 3;
+- amplitude ≥ 2 em **79 das 3.072** decisões (1/10 seria 307). Por vida, isso vai de 1 a 34 em 384;
+- o `CONT` do lugar do pet ≤ 1 em **973 das 3.072** decisões. A metade seria 1.536, então a exceção da D-F5-9 não vale.
+
+**M-S2, os pares (122.542):**
+
+| concordantes | discordantes | empate só no `E` | empate só no `CONT` | empate nos dois |
+|---|---|---|---|---|
+| 0 | 0 | 0 | 10.302 | 112.240 |
+
+Como na primeira medida, o `CONT` é o mesmo em todos os lugares de cada decisão. Pela D-F5-10, a M-S2 **não leu**.
+
+**M-S3:** nenhuma decisão de `explorar/ponto` teve dois candidatos.
+
+### 7.3 A leitura
+
+- **"plano": sim.** 79 × 10 < 3.072.
+- **"plano pelas entradas": não.** 973 × 2 < 3.072. Agora o pet tinha mais de uma classe ao alcance na maioria das decisões, e o `E`
+  continuou quase igual entre os lugares.
+- **"igual ao CONT":** o código escreveu "sim", e a linha do `sonda.json` diz "a F5 acaba: plano e igual ao CONT". O código não lê a
+  D-F5-10, que veio depois dele. Pela D-F5-10, essa parte fica "não leu". A conclusão não muda, porque o "plano" sozinho encerra a F5.
+
+**A F5 acaba sem plano.** A H-EMP-1 não segue para um plano depois da F3.
+
+O que esta leitura **não** diz:
+- que o `E` não varia em outro mundo. O mapa de hoje cabe no alcance da memória (`d_max = 1024`), e por isso todo lugar alcança o mesmo;
+- nada sobre a ilha grande;
+- nada sobre a separação do `CONT`, que não leu nas duas medidas.
+
+### 7.4 Limitações
+
+As da seção 5 continuam valendo, e mais duas:
+- É um mundo do jogo, sem run de pesquisa, com oito vidas curtas de sementes dos testes. O resultado não fala do pet da pesquisa.
+- As frutas são poucas: de 4 a 10 quedas por vida.

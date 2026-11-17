@@ -1,7 +1,7 @@
 # TAREFA V3 — SONDA_EMPOWERMENT (2026-11-17)
 
 Coordenador: Matheus, pela sessão da F5, aberta pela Gerente das cinco frentes. Worker: Claude Code, Opus 5.5, na worktree
-`wt-v3-f5-sonda`, branch `v3-f5-sonda-empowerment`. Status: **ABERTA; a espec APROVADA pelo Matheus; as D-F5-2 a D-F5-8 aceitas (2026-11-17).**
+`wt-v3-f5-sonda`, branch `v3-f5-sonda-empowerment`. Status: **FECHADA em 2026-11-17: a leitura final é "plano", e a F5 acaba sem plano para a H-EMP-1.**
 
 Categoria: arquitetura. Origem: a frente F5 do prompt das cinco frentes (vault, `30 Decisões e protocolo/PROMPT_CINCO_FRENTES_2026-11-16.md`)
 e o levantamento do vault (`DigiLab — Revisão de escopo/LEVANTAMENTO_EMPOWERMENT_F5_2026-11-17.md`). Decisões do Matheus, as três de
@@ -48,3 +48,5 @@ registrada está na espec, seção 5.4.
    Feita em 2026-11-17: o plano APROVADO ("Aprovo o plano", commit `c27ecb91`), a medida uma vez (commit `aed22443`). A leitura
    é "plano pelas entradas": a F5 espera a D-F5-2 (b) e a D-F5-10 (o resultado, seção 6).
    À pergunta "Aprova a D-F5-2 (b) e a D-F5-10 como recomendadas?", o Matheus respondeu "Aprovo as duas" (2026-11-17). A próxima etapa é o adendo do plano para a (b).
+4. **SE3, a (b2) do adendo 1:** o adendo APROVADO ("Aprovo a (b2)", `1026eb55`), o código (`86f7ba5d`), o gabarito num commit
+   próprio (`096ba70c`) e a medida uma vez. A leitura é "plano": a F5 acaba sem plano para a H-EMP-1 (o resultado, seção 7).
