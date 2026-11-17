@@ -15,7 +15,7 @@ conhecimento social). A tabela é a [`v3_dreyfus_referencias_verificadas.csv`](v
   foi lido.
 - **O status segue o vocabulário da skill `literatura-digilab`:** VERIFICADA só quando o título ou o resumo sustentam o que a coluna
   `o_que_sustenta` diz.
-  - Quando só havia o TLDR gerado pelo Semantic Scholar, ele não contou como resumo: a linha ficou EXISTÊNCIA CONFIRMADA; CONTEÚDO
+  - Quando só havia o TLDR gerado pelo Semantic Scholar, ele não contou como resumo: a linha ficou (até a leitura do texto completo) EXISTÊNCIA CONFIRMADA; CONTEÚDO
     NÃO LIDO, exceto onde o próprio título já sustenta a tese (Brooks 1991, Friston 2010).
   - Nesses dois casos, a coluna se limita ao título e diz que o resumo do autor não foi obtido.
 
@@ -23,9 +23,8 @@ conhecimento social). A tabela é a [`v3_dreyfus_referencias_verificadas.csv`](v
 
 | status | n | referências |
 |---|---|---|
-| VERIFICADA | 13 | Dreyfus 2007 e Dreyfus 2002 (texto completo, 2026-11-16), McCarthy 1996, Brooks 1991, Varela et al. 1991, Pfeifer e Bongard 2006, Harnad 1990, Searle 1980, Damasio 1996, Friston 2010, Clark 2013, Lake et al. 2017, Collins 1990 |
+| VERIFICADA | 16 | Dreyfus 2007 e Dreyfus 2002 (texto completo, 2026-11-16), Haugeland 1996, Collins 1996 e Koschmann 1996 (texto completo, 2026-11-17), McCarthy 1996, Brooks 1991, Varela et al. 1991, Pfeifer e Bongard 2006, Harnad 1990, Searle 1980, Damasio 1996, Friston 2010, Clark 2013, Lake et al. 2017, Collins 1990 |
 | VERIFICADA (sem DOI) | 2 | Dreyfus 1972/1992 (pela resenha `10.2307/1575958`), Dreyfus e Dreyfus 1986 (pela resenha `10.1109/mex.1987.4307079`) |
-| EXISTÊNCIA CONFIRMADA; CONTEÚDO NÃO LIDO | 3 | Haugeland 1996, Collins 1996, Koschmann 1996 |
 
 O **Dreyfus 2007**, o texto mais próximo do Digilab, subiu a VERIFICADA no mesmo dia, depois da leitura do texto completo (pedido do
 Matheus, D-LIT-DR-3). O Dreyfus 2002 seguiu o mesmo caminho (D-LIT-DR-5). São as duas referências desta rodada lidas por inteiro.
@@ -85,6 +84,38 @@ em Lehman et al. (2020).
 
 **O que não autoriza:** dizer que o pet tem arco intencional ou pega máxima, ou que o corpo químico satisfaz as três restrições.
 
+## As resenhas de 1996, lidas
+
+As três resenhas de *Artificial Intelligence* 80 foram lidas no texto completo em 2026-11-17 (D-LIT-DR-6), no PDF do editor, aberto no
+Chrome do Matheus.
+
+- **Haugeland, "Body and world" (pp. 119-128):** a resenha é simpática e se concentra na Parte III do livro.
+  - As três teses que ele atribui a Dreyfus: a inteligência é corporificada, situada e humana. As três dizem a mesma coisa: a
+    inteligência mora no corpo, no mundo (pp. 119-120, 128).
+  - Não há "instrução" independente do corpo: o padrão que produz uma ação depende do corpo particular e da situação concreta
+    (pp. 121-123).
+  - O que tem significado é o próprio mundo, não só as representações (pp. 123-125).
+  - A ciência cognitiva deveria olhar para a neurobiologia e para a antropologia (p. 128).
+- **Collins, "Embedded or embodied?" (pp. 99-117):** a resenha vê três falhas no livro.
+  - O **erro profissional:** tratar a ciência e os domínios formais como fora da situação (pp. 99-103).
+  - A **elisão filosófica:** confundir o corpo do indivíduo com a forma de vida do coletivo. O indivíduo partilha a forma de vida
+    pela socialização linguística, e cães não se socializam assim (pp. 103-106).
+  - O **erro sociológico:** quem usa o computador conserta as deficiências dele sem notar (ELIZA, a calculadora) (pp. 106-108).
+  - Além disso: as máquinas reproduzem as ações "mimeomórficas" (pp. 108-110); as redes neurais aprendem por estímulo-resposta, e isso
+    não é socialização (pp. 113-115); a questão de fundo é a socializabilidade (p. 116).
+- **Koschmann, "Of Hubert Dreyfus and dead horses" (pp. 129-141):**
+  - resume os três argumentos de Dreyfus: o filosófico, o psicológico e o fenomenológico (pp. 129-133);
+  - critica a omissão da literatura de raciocínio não monotônico (p. 133);
+  - contesta o privilégio do especialista intuitivo: diante do problema novo, o especialista volta à análise (p. 134);
+  - defende o papel da representação no ensino (pp. 136-138).
+
+**O que autorizam dizer no Digilab:**
+- o **erro sociológico** de Collins é o enquadramento para não atribuir ao pet o que o dono completa ao interpretar o comportamento;
+- o ponto de Collins sobre estímulo-resposta é o enquadramento para não chamar o treino pelo dono de socialização;
+- Koschmann dá o contraponto publicado aos cinco estágios.
+
+**O que não autorizam:** nenhuma das três diz nada sobre pets virtuais nem valida mecânica do projeto.
+
 ## O que as verificadas autorizam dizer (e o que não)
 
 - **A crítica existe e tem tese própria.** Dreyfus (1972; 2ª ed. 1992) sustenta que as máquinas sem corpo não imitam as funções mentais
@@ -105,7 +136,8 @@ diferencial) e a regra 9 (corpo com homeostase, aprendizado em vida e memória n
 
 ## Limites
 
-- Os resumos foram lidos. Só o Dreyfus 2007 e o Dreyfus 2002 foram lidos no texto completo, em cópias de terceiros da versão do editor.
+- Cinco referências foram lidas no texto completo: os dois artigos de Dreyfus, em cópias de terceiros da versão do editor, e as três resenhas de
+  1996, no PDF do editor. As outras, só pelos resumos.
 - O regex de DOI do `tools/verificar_relato.py` para no `(`. Os DOIs da Elsevier dos anos 1990, como `10.1016/0004-3702(91)90053-M`,
   entram cortados no `10.1016/0004-3702(91`. E já colide: as três resenhas de 1996 (McCarthy, Haugeland, Koschmann) viram
   `10.1016/0004-3702(95`, e o verificador trata o McCarthy, VERIFICADA aqui, como não citável. Até o regex mudar, cite o McCarthy num
