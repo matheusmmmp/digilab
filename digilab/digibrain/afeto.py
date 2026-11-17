@@ -24,7 +24,7 @@ outras especies e os conceitos genericos somam 0."""
 from __future__ import annotations
 
 from ..config import CONFIG_DIGIBRAIN_INATOS, Config, ConfigDigibrain, ConfigDigibrainInatos
-from ..policies.lobos import contribuicoes_corpo, div_arred, falta_receptor, sinal_corpo
+from .base import contribuicoes_corpo, div_arred, falta_receptor, sinal_corpo
 from .. import orgao as _orgao
 from . import dever as _dever
 from ._comum import clamp, ganho_de_tau, integrar, mul

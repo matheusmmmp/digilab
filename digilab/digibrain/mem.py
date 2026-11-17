@@ -63,7 +63,7 @@ from dataclasses import replace
 
 from ..config import CONFIG_DIGIBRAIN_INATOS, TICKS_POR_DIA, TIPOS_ALVO_DIGIBRAIN, ConfigDigibrainInatos, ConfigMundo
 from ..modelo_mundo import raiz_inteira
-from ..policies.lobos import div_arred
+from .base import div_arred
 from ._comum import chave_json, mul
 
 COMIDAS_BOAS = ("racao", "a", "b", "c")             # as classes de comida boa (igual a `sens.COMIDAS_BOAS`; o mem.py nao importa o M-SENS)

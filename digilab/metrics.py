@@ -3196,3 +3196,51 @@ def fracao_amarrada(pares: Sequence[tuple[float | None, float | None]]) -> float
     """rho (14.4): soma(D_R) / soma(D_E) sobre os pares (D_R, D_E) com os dois termos; None sem par ou com a soma do E 0. E a razao de
     somas do Phi com o E no lugar do gemeo."""
     return razao_de_somas(pares)
+
+
+# ================================================================== CONVERSA_PET, F1: quanto o verificador muda o que chega ao jogador
+# docs/PLANO_ANALISE_V3_CONVERSA_VERIF.md (APROVADO pelo Matheus em 2026-11-17; D-VB-1 e D-VB-2). Contas puras sobre os campos que a DC5
+# ja grava (`verificacao`) e a referencia da DC5d. A leitura, os cortes e o relato ficam em experiments/analise_verif_dc5.py.
+
+COMPONENTES_VERIF = ("sem_sustento", "citado_inexistente", "manipulacao_padrao", "manipulacao_extraida", "falha_extrator")   # secao 3, (a)-(e)
+
+
+def componentes_verificador(v: Mapping) -> dict:
+    """secao 3: o que cada componente do verificador marcou numa fala. Falha alto se falta campo ou se a `manipulacao` nao e a uniao das
+    duas listas (verificador.py: manipulacao = padroes ou extraida)."""
+    for k in ("erro", "nao_suportadas", "citados_inexistentes", "manipulacao", "manipulacao_padroes", "manipulacao_extraida"):
+        if k not in v:
+            raise KeyError(f"F1: a verificacao sem o campo {k}")
+    comp = {"sem_sustento": bool(v["nao_suportadas"]), "citado_inexistente": bool(v["citados_inexistentes"]),
+            "manipulacao_padrao": bool(v["manipulacao_padroes"]), "manipulacao_extraida": bool(v["manipulacao_extraida"]),
+            "falha_extrator": bool(v["erro"])}
+    if bool(v["manipulacao"]) != (comp["manipulacao_padrao"] or comp["manipulacao_extraida"]):
+        raise ValueError("F1: a manipulacao nao e a uniao dos padroes e da extraida")
+    return comp
+
+
+def marcou_sem(comp: Mapping[str, bool], tirar: str | None = None) -> bool:
+    """secao 3: o verificador marcaria a fala sem o componente `tirar` (None = o verificador inteiro, igual ao `marcou` da DC5)"""
+    if tirar is not None and tirar not in COMPONENTES_VERIF:
+        raise ValueError(f"F1: componente desconhecido {tirar}")
+    return any(m for k, m in comp.items() if k != tirar)
+
+
+def _fracao_wilson(k: int, n: int) -> dict:
+    return {"k": k, "n": n, "fracao": k / n if n else None, "ic95": ic_wilson(k, n) if n else None}
+
+
+def tabela_trava(itens: Sequence[tuple[bool, bool]]) -> dict:
+    """secao 1: V1 a V4 sobre as falas da voz, cada item (sem sustento pela referencia, o verificador marcou):
+    - V1, sem sustento / falas; V2, sem sustento nao marcadas / sem sustento (= 1 - sensibilidade) e / falas;
+    - V3, marcadas / falas (a taxa de recusa ou troca na trava P1; a de aviso na P0); V4, sustentadas marcadas / falas.
+    Cada fracao com o k, o n e o IC95 de Wilson; None com o denominador 0."""
+    n = len(itens)
+    ss = sum(1 for s, _ in itens if s)
+    passa = sum(1 for s, m in itens if s and not m)
+    marc = sum(1 for _, m in itens if m)
+    a_toa = sum(1 for s, m in itens if m and not s)
+    return {"falas": n, "v1_sem_sustento": _fracao_wilson(ss, n), "v2_passam_das_sem_sustento": _fracao_wilson(passa, ss),
+            "v2_passam_de_todas": _fracao_wilson(passa, n), "v3_marcadas": _fracao_wilson(marc, n),
+            "v4_marcadas_a_toa": _fracao_wilson(a_toa, n)}
+
