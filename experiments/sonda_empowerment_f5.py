@@ -23,6 +23,12 @@ codigo de hoje e conferidas contra o gabarito (o G-S0: o log, o estado e os moti
     python experiments/sonda_empowerment_f5.py --medir-tempo        # so o tempo por decisao numa semente dos testes (sem medida)
     python experiments/sonda_empowerment_f5.py --processos 4         # a medida (SE2): so com o plano de analise commitado (D-F5-8)
 grava artifacts_v3_f5_sonda/sonda.json e sonda_decisoes.json.gz (o `--medir-tempo` grava so tempo.json)
+
+A (b2) do adendo 1 (docs/PLANO_ANALISE_V3_SONDA_EMPOWERMENT_ADENDO1.md, APROVADO em 2026-11-17, "Aprovo a (b2)"): as mesmas oito celulas
+da AN0, vidas novas no CONFIG_MUNDO_ILHA com o sacudir ligado, as sementes dos testes. O gabarito vai num commit proprio, antes da medida.
+
+    python experiments/sonda_empowerment_f5.py --gravar-gabarito-b2 --processos 4   # grava tests/gabaritos/sonda_f5_b2.json
+    python experiments/sonda_empowerment_f5.py --b2 --processos 4                   # a medida da (b2): artifacts_v3_f5_sonda/b2/
 """
 from __future__ import annotations
 
@@ -393,12 +399,168 @@ def principal(processos: int, saida: Path = SAIDA) -> dict:
     return out
 
 
+# ================================================================== a (b2) do adendo 1: vidas novas e curtas no mundo com arvores
+ADENDO1 = RAIZ / "docs" / "PLANO_ANALISE_V3_SONDA_EMPOWERMENT_ADENDO1.md"
+GABARITO_B2 = RAIZ / "tests" / "gabaritos" / "sonda_f5_b2.json"
+SAIDA_B2 = SAIDA / "b2"
+DONOS_B2 = ("atencioso", "relapso")                                 # adendo 1, secao 5: as celulas da AN0
+LUGARES_B2 = ("comedouro", "longe_fixo")
+SEMENTES_B2 = (101, 202)                                            # so as dos testes
+
+
+def vidas_b2() -> list[tuple]:
+    """as oito vidas da (b2): (dono, lugar, semente)"""
+    return [(d, lu, s) for lu in LUGARES_B2 for d in DONOS_B2 for s in SEMENTES_B2]
+
+
+def viver_b2(dono: str, lugar: str, semente: int, com_sonda: bool) -> tuple:
+    """(o motor, o cerebro, o coletor ou None): a vida do gabarito da AN0 (o REL do conserto, 4 dias, o corpo do orquestrador), so com o
+    CONFIG_MUNDO_ILHA (as tres frutiferas) e o sacudir ligado no motor, como o `sacudir_ilha` do tests/gabarito_limpeza_mecanicas.py;
+    nenhum dono sacode, e as frutas caem sozinhas"""
+    import exportar_gabarito_digibrain_modular as gab
+    from bancada.regras_mundo import simular_vida_fisico
+    from digilab.config import CONFIG_DIGIBRAIN_INATOS, CONFIG_MUNDO_ILHA, CONFIG_PADRAO, CONFIG_SACUDIR_LIGADA
+    from digilab.digibrain import DigiBrain
+    from digilab.donos import criar_dono
+    from digilab.motor_corpo import com_corpo
+    from digilab.mundo import DonoComLugar, MotorMundo
+    from digilab.temperamento import NEUTRO
+    orq, cm = gab.orq, CONFIG_MUNDO_ILHA
+    cc = orq.bancada(gab.DIAS, orq.ORCAMENTO_POR_DIA).cfg_corpo_de(orq.bv.EspecVida(dono, orq.gl.BRACO_V11, semente))
+
+    def fm(politica, cfg, s):
+        return com_corpo(MotorMundo)(politica, cfg, s, NEUTRO, "brasa", obediencia_desligada=True, cfg_mundo=cm, cfg_corpo=cc,
+                                     cfg_sacudir=CONFIG_SACUDIR_LIGADA)
+
+    cd = orq.config_do_braco(gab.BRACO, None, True)
+    registro = orq.Registro(DigiBrain(CONFIG_PADRAO, cd, cm, semente=semente), CONFIG_DIGIBRAIN_INATOS.escala)
+    cerebro = orq.cerebro_de(registro)
+    col = Coletor(cerebro) if com_sonda else None
+    try:
+        d = DonoComLugar(criar_dono(dono), lugar, semente, dono, cm)
+        motor, _ = simular_vida_fisico(d, registro, semente, gab.DIAS, orq.ORCAMENTO_POR_DIA * gab.DIAS, dono, fm)
+    finally:
+        if col is not None:
+            col.soltar()
+    return motor, cerebro, col
+
+
+def _paraj(x):
+    import exportar_gabarito_digibrain_modular as gab
+    return gab.paraj(x)
+
+
+def _sha_txt(obj) -> str:
+    return hashlib.sha256(json.dumps(obj, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+
+
+def assinatura_b2(motor, cerebro) -> dict:
+    a = assinatura(motor, cerebro)
+    return {"log": a["log"], "estado": a["estado"], "motivos": _sha_txt(a["motivos"]), "decisoes": len(a["motivos"])}
+
+
+def entradas_b2(motor, cerebro) -> dict:
+    """a conferencia das entradas (adendo 1, secao 5): as quedas de fruta no mundo e as classes dos episodios de consumo guardados no fim"""
+    cont: dict = {}
+    for e in episodios_de(cerebro.m.mem):
+        if e["origem"] == "consumo":
+            cont[e["classe"]] = cont.get(e["classe"], 0) + 1
+    return {"quedas": len(motor.mundo.quedas), "consumos_guardados": dict(sorted(cont.items()))}
+
+
+def _rotulo_b2(dono: str, lugar: str, semente: int) -> str:
+    return f"ilha|{dono}|{lugar}|{semente}"
+
+
+def _uma_b2(x: tuple) -> tuple:
+    motor, cerebro, _ = viver_b2(*x, False)
+    return _rotulo_b2(*x), assinatura_b2(motor, cerebro)
+
+
+def gravar_gabarito_b2(processos: int, arquivo: Path = GABARITO_B2) -> dict:
+    """o gabarito da (b2), sem o coletor, num commit proprio antes da medida (adendo 1, secao 5); recusa por cima de um que ja existe"""
+    if arquivo.exists():
+        raise FileExistsError(f"{arquivo} ja existe: o gabarito da (b2) e gravado uma vez")
+    if not 1 <= processos <= MAX_PROCESSOS:
+        raise SystemExit(f"de 1 a {MAX_PROCESSOS} processos (V3-D8)")
+    with ProcessPoolExecutor(max_workers=processos) as pool:
+        out = {"rotulo": "gabarito da (b2) da sonda da F5 (adendo 1): o log, o estado e os motivos de cada vida, sem o coletor",
+               "vidas": dict(pool.map(_uma_b2, vidas_b2()))}
+    arquivo.parent.mkdir(parents=True, exist_ok=True)
+    arquivo.write_text(json.dumps(out, indent=1, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
+    return out
+
+
+def sondar_b2(tarefa: tuple) -> dict:
+    """uma vida da (b2): refeita com o coletor, o G-S0 contra o gabarito da (b2), o registro por decisao e as entradas"""
+    dono, lugar, semente, gabarito = tarefa
+    rotulo = _rotulo_b2(dono, lugar, semente)
+    t0 = time.perf_counter()
+    motor, cerebro, col = viver_b2(dono, lugar, semente, True)
+    a = assinatura_b2(motor, cerebro)
+    for k in ("log", "estado", "motivos", "decisoes"):
+        if a[k] != gabarito[k]:
+            raise RuntimeError(f"G-S0: {k} de {rotulo} nao e o do gabarito da (b2)")
+    motivos = [_paraj(x) for x in cerebro.motivos]
+    if len(col.registros) != len(motivos) or col.leituras_rng != len(col.registros):
+        raise RuntimeError(f"{rotulo}: {len(col.registros)} leituras para {len(motivos)} decisoes")
+    for reg, mot in zip(col.registros, motivos):
+        esc = mot["escolha"]
+        reg["escolha"] = esc
+        reg["alvo"] = (list(cerebro.m.mem.lugar_de(*esc[2])) if esc[0] == "explorar" and esc[1] == "ponto" else None)
+    return {"vida": rotulo, "dono": dono, "lugar": lugar, "semente": semente, "log_sha256": a["log"],
+            "entradas": entradas_b2(motor, cerebro),
+            "parede_s": {"total": time.perf_counter() - t0, "sonda": col.t}, "decisoes": col.registros}
+
+
+def exigir_aprovado(caminho: Path) -> None:
+    status = [x for x in caminho.read_text(encoding="utf-8").splitlines() if x.startswith("**Status:")]
+    if not status or not status[0].startswith("**Status: APROVADO pelo Matheus"):
+        raise SystemExit(f"D-F5-8: {caminho.name} nao esta APROVADO pelo Matheus no cabecalho")
+
+
+def principal_b2(processos: int, saida: Path = SAIDA_B2, gabarito: Path = GABARITO_B2) -> dict:
+    """a medida da (b2), uma vez: o plano e o adendo 1 aprovados, o gabarito gravado antes, ate 4 processos"""
+    exigir_aprovado(PLANO)
+    exigir_aprovado(ADENDO1)
+    if not gabarito.exists():
+        raise SystemExit(f"o gabarito da (b2) {gabarito.name} nao existe: ele e gravado e commitado antes da medida")
+    if (saida / "sonda.json").exists():
+        raise FileExistsError(f"{saida / 'sonda.json'} ja existe: a medida roda uma vez")
+    if not 1 <= processos <= MAX_PROCESSOS:
+        raise SystemExit(f"de 1 a {MAX_PROCESSOS} processos (V3-D8)")
+    gab = json.loads(gabarito.read_text(encoding="utf-8"))["vidas"]
+    tarefas = [(*x, gab[_rotulo_b2(*x)]) for x in vidas_b2()]
+    with ProcessPoolExecutor(max_workers=processos) as pool:
+        res = list(pool.map(sondar_b2, tarefas))
+    total = medir([d for v in res for d in v["decisoes"]])
+    out = {"rotulo": "sonda descritiva do E(P) da F5, a (b2) do adendo 1, no mundo com arvores; so leitura, nao e gate",
+           "fontes": {"plano": hashlib.sha256(PLANO.read_bytes()).hexdigest(), "adendo1": hashlib.sha256(ADENDO1.read_bytes()).hexdigest(),
+                      "gabarito_b2": hashlib.sha256(gabarito.read_bytes()).hexdigest()},
+           "vidas": [{"vida": v["vida"], "log_sha256": v["log_sha256"], "entradas": v["entradas"], "parede_s": v["parede_s"],
+                      **medir(v["decisoes"])} for v in res],
+           "todas": total, "leitura": leitura(total)}
+    saida.mkdir(parents=True, exist_ok=True)
+    (saida / "sonda.json").write_text(json.dumps(out, indent=1, sort_keys=True), encoding="utf-8", newline="\n")
+    with gzip.open(saida / "sonda_decisoes.json.gz", "wt", encoding="utf-8") as f:
+        json.dump([{"vida": v["vida"], "decisoes": v["decisoes"]} for v in res], f, sort_keys=True)
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--medir-tempo", action="store_true")
+    ap.add_argument("--gravar-gabarito-b2", action="store_true")
+    ap.add_argument("--b2", action="store_true")
     ap.add_argument("--processos", type=int, default=4)
     a = ap.parse_args()
-    print(json.dumps(medir_tempo() if a.medir_tempo else principal(a.processos)["leitura"], indent=1))
+    if a.gravar_gabarito_b2:
+        out = {"gravado": str(GABARITO_B2.relative_to(RAIZ)), "vidas": len(gravar_gabarito_b2(a.processos)["vidas"])}
+    elif a.b2:
+        out = principal_b2(a.processos)["leitura"]
+    else:
+        out = medir_tempo() if a.medir_tempo else principal(a.processos)["leitura"]
+    print(json.dumps(out, indent=1))
 
 
 if __name__ == "__main__":

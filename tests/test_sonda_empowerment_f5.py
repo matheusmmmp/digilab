@@ -214,3 +214,31 @@ def test_a_medida_espera_o_plano(tmp_path, monkeypatch):
     monkeypatch.setattr(sd, "PLANO", tmp_path / "nao_existe.md")
     with pytest.raises(SystemExit, match="D-F5-8"):
         sd.principal(1, tmp_path / "saida")
+
+
+# ================================================================== a (b2) do adendo 1
+def test_b2_a_sonda_nao_muda_a_vida_na_ilha():
+    """o G-S0 da (b2): a vida no mundo com arvores sai igual com e sem o coletor, e ha uma leitura por decisao"""
+    x = ("atencioso", "comedouro", 101)
+    m, c, _ = sd.viver_b2(*x, False)
+    m2, c2, col = sd.viver_b2(*x, True)
+    a = sd.assinatura_b2(m, c)
+    assert sd.assinatura_b2(m2, c2) == a
+    assert len(col.registros) == a["decisoes"] == col.leituras_rng
+
+
+def test_b2_vidas_sao_as_oito_celulas_da_an0():
+    assert len(sd.vidas_b2()) == 8 and {s for _, _, s in sd.vidas_b2()} <= {101, 202}
+
+
+def test_b2_a_medida_espera_o_gabarito(tmp_path):
+    with pytest.raises(SystemExit, match="gabarito"):
+        sd.principal_b2(1, tmp_path / "saida", tmp_path / "nao_existe.json")
+
+
+def test_b2_a_medida_espera_o_adendo_aprovado(tmp_path, monkeypatch):
+    falso = tmp_path / "adendo.md"
+    falso.write_text("**Status: PROPOSTO.**\n", encoding="utf-8")
+    monkeypatch.setattr(sd, "ADENDO1", falso)
+    with pytest.raises(SystemExit, match="D-F5-8"):
+        sd.principal_b2(1, tmp_path / "saida", tmp_path / "nao_existe.json")
