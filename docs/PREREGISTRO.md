@@ -25,7 +25,7 @@ link para o plano commitado.
 | [PR-C1](#pr-c1--o-longe-regular) | o longe regular | positivo no `longe_fixo`; indeterminado no sorteado | repetição interna, mesma máquina |
 | [PR-C2](#pr-c2--o-crédito-na-intenção) | o crédito na intenção | negativo | não |
 | [PR-C3](#pr-c3--redecidir-por-evento) | redecidir por evento | indeterminado | não |
-| [PR-C4](#pr-c4--a-memória-autobiográfica) | a memória autobiográfica | positivo, com a ressalva do M-MEM | [a réplica da A3](#pr-replicacao-c4--a-réplica-da-c4) |
+| [PR-C4](#pr-c4--a-memória-autobiográfica) | a memória autobiográfica | positivo, com a ressalva do M-MEM | [a réplica da A3](#pr-replicacao-c4--a-réplica-da-c4): divergiu; o `resultado.json` igual byte a byte, o `medidas.json` não (causa provável: os tempos por vida) |
 | [PR-AN4](#pr-an4--o-passeio) | o passeio | negativo | não |
 | [PR-GVN2](#pr-gvn2--o-gosto-visual-a-leitura) | o gosto visual, a leitura | descritivo | a leitura sai igual byte a byte (teste) |
 | [PR-PET-VIVO](#pr-pet-vivo--a-auditoria-da-escolha) | a auditoria da escolha | descritivo, pós hoc | não |
@@ -217,4 +217,31 @@ de uma réplica já rodada. O teste é o `tests/test_replicar_run.py`.
 
 ## A réplica da C4
 
-Em andamento (2026-11-16). O resultado entra aqui com o comando e a saída.
+**Resultado: divergiu** (pelo critério D-EV-A3-2, escrito antes). A causa provável está abaixo e não foi provada; o Matheus decidiu
+registrá-la como provável, sem nova réplica (2026-11-17, "Registre como provável").
+
+- **O comando:** `PYTHONIOENCODING=utf-8 python tools/replicar_run.py c4 a287ba20fafdc1fbbf9be7100f89d9c90f466948 --relatorio replica_c4.json`,
+  de 2026-11-16T20:40:14 a 2026-11-17T00:47:21, 14 826 s de parede, 4 processos. O orquestrador saiu com 0; a ferramenta saiu com 1.
+- **O ambiente:** Python 3.13.0 (o mesmo da run original), Node v24.19.0, git 2.45.1.windows.1, Windows-11-10.0.26300-SP0.
+- **A saída:** o relatório inteiro em
+  [`artifacts_v3_evidencia_a3/replica_c4.json`](../artifacts_v3_evidencia_a3/replica_c4.json), e o que a ferramenta imprimiu em
+  [`replica_c4_saida.txt`](../artifacts_v3_evidencia_a3/replica_c4_saida.txt).
+
+| artefato | sha256 versionado (conteúdo) | sha256 da réplica | bytes versionado → réplica | igual |
+|---|---|---|---|---|
+| `resultado.json` | `6f8c91d8e2b8…` | `6f8c91d8e2b8…` | 290 719 → 290 719 | **sim** |
+| `medidas.json` | `869ff3971b91…` | `479fecf097c2…` | 138 153 669 → 138 151 421 | **não** |
+
+- **A causa provável:** o orquestrador da C4 grava em cada vida o tempo de CPU e de relógio dela
+  (`"custo": {"vida_cpu": time.process_time() - c0, "vida_parede": time.perf_counter() - p0}`, `experiments/run_v2_memoria_autobio.py:298`
+  e `:312` no `a287ba20`). Esses dois campos aparecem 14 400 vezes cada no `medidas.json` versionado (um por vida) e mudam a cada execução.
+  São os únicos campos do `medidas.json` que vêm do relógio: os outros usos de `time` no orquestrador (`:554-581`) vão para o `meta.json`.
+  A diferença de tamanho (−2 248 bytes em 138 MB) é do tamanho que a troca de 28 800 números de ponto flutuante dá.
+- **O que apoia:** o `resultado.json`, que sai das medidas pela análise, saiu idêntico byte a byte. A análise não lê o `custo`.
+- **A lacuna:** a ferramenta apagou a worktree da réplica no fim (sem `--manter`), e o `medidas.json` da réplica se perdeu. Por isso não
+  dá para mostrar que, tirando o `custo`, os dois `medidas.json` são iguais; outra fonte de não determinismo nas medidas não está
+  excluída. **Para fechar:** rodar de novo com `--manter` (cerca de 4 h) e comparar os dois `medidas.json` sem a chave `custo`.
+- **O que isto autoriza dizer:** o resultado da C4 (o `resultado.json`) se reproduz byte a byte a partir do snapshot do código. Não
+  autoriza dizer que a run inteira se reproduz byte a byte.
+- **Para runs novas:** um campo de relógio dentro do artefato comparado faz toda réplica "divergir". Isto é um achado, não uma mudança:
+  o orquestrador da C4 não muda.

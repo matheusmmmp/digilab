@@ -169,3 +169,5 @@ artifacts_v3_longe_geometria/**/vidas/
 artifacts_v3_baseline_trivial/**/vidas/
 # EVIDENCIA A2: os artefatos da ablacao do aprendizado (docs/PLANO_ANALISE_V3_ABLACAO_APRENDIZADO.md, secao 6)
 !artifacts_v3_ablacao_aprendizado/
+# EVIDENCIA A3: o relatorio da replica da C4 (docs/PREREGISTRO.md, PR-REPLICACAO-C4)
+!artifacts_v3_evidencia_a3/
