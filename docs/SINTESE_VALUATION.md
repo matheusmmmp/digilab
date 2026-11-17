@@ -54,10 +54,10 @@ REL − TRIV = −0,083 [−0,128; −0,038] na taxa por episódio. Qual elo, do
 - nada sobre uma guarda mais estreita, como a fome urgente **com** a comida à vista. Ela ficou como a opção (b) do CHECKPOINT V3 e não
   foi escolhida.
 
-## 6. Em aberto, para o Matheus
+## 6. As decisões finais e o que resta
 
-- **A chave `guarda_fome_reflexo` no código:** ela pode ficar como registro do teste, desligada, ou sair num PR de limpeza. Fica como
-  está até a decisão.
+- **As chaves de pesquisa ficam no código, desligadas, como registro** (o Matheus, 2026-11-17: "Aprovo, deixa as chaves no código";
+  D-VAL-26).
 - **Os merges dos PRs empilhados** (#945, #946, #949, #969 e o desta V5) são do Matheus, na ordem.
 - **Uma frente nova sobre o regime de energia e fome** só com pergunta nova. Esta frente não propõe nenhuma.
 

@@ -1,7 +1,7 @@
 # TAREFA V3 — VALUATION (2026-11-16)
 
 Coordenador: a sessão da LONGE_GEOMETRIA e da LIMPEZA (Claude Code). Worker: Claude Code, Opus 5.5, sessão filha. Worktree e branch:
-`v3-valuation`. Status: ENCERRADA com o diagnóstico, sem conserto (V5, CHECKPOINT V5; D-VAL-23). A síntese: `docs/SINTESE_VALUATION.md`.
+`v3-valuation`. Status: ENCERRADA com o diagnóstico, sem conserto (V5 aprovada; D-VAL-23 e D-VAL-26). A síntese: `docs/SINTESE_VALUATION.md`.
 
 Categoria: experimento. Origem: Matheus, 2026-11-16. O pedido é diagnosticar por que o modular sente a fome e não fecha o episódio de fome
 (o elo Valuation), nas fases V0 a V5.
@@ -253,4 +253,5 @@ O Matheus escolheu a opção (a) no CHECKPOINT V3: "Encerrar, ir à V5" (D-VAL-2
 
 A linha do PAINEL vai proposta na seção 7 da síntese, para o coordenador. As chaves de pesquisa ficam no código, desligadas.
 
-Status: o CHECKPOINT V5. Os merges (#945, #946, #949, #969 e o desta V5) são do Matheus.
+Status: o CHECKPOINT V5 aprovado pelo Matheus em 2026-11-17 ("Aprovo, deixa as chaves no código"; D-VAL-26). As chaves ficam
+no código, desligadas. Os merges (#945, #946, #949, #969 e #973) são do Matheus.
