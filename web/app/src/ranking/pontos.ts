@@ -64,6 +64,12 @@ export function semanaDe(hora: number): string {
 /** as lutas ranqueadas de um pet: refaz o registro e acha, para cada semente entregue, a luta dela. Falha alto num registro que nao
     reproduz, numa semente entregue duas vezes e em indices fora de ordem (o servidor nunca entrega assim) */
 export function lutasRanqueadas(semente: number, versao: number, log: readonly EventoRegistro[], entregues: readonly SementeEntregue[]): LutaRanqueada[] {
+  return refazerComLutas(semente, versao, log, entregues).lutas;
+}
+
+/** a mesma conta de lutasRanqueadas, devolvendo tambem o pet refeito (o servidor, MMO3, confere o marco nele, sem refazer o registro de novo).
+    A luta e refeita pelo lutarPoc, que confere se ela era possivel; o resto, pelo aplicarEvento */
+export function refazerComLutas(semente: number, versao: number, log: readonly EventoRegistro[], entregues: readonly SementeEntregue[]): { lutas: LutaRanqueada[]; motor: Motor } {
   const vistas = new Set<number>();
   entregues.forEach((x, k) => {
     if (!Number.isInteger(x.semente) || !Number.isInteger(x.indice) || x.indice < 0 || !Number.isFinite(x.hora))
@@ -113,7 +119,7 @@ export function lutasRanqueadas(semente: number, versao: number, log: readonly E
     repeticoes.set(chave, k + 1);
     l.pontos = PONTOS_FAIXA[l.faixa!] / 2 ** k;
   }
-  return lutas;
+  return { lutas, motor: m };
 }
 
 /** as linhas das tabelas da semana de um pet: uma por (semana, estagio) em que ele usou uma luta ranqueada. A semente acima do limite e a
