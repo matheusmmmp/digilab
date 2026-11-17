@@ -125,6 +125,17 @@ positivo, `H[comer, u_energia]` **sobe**, e o pet aprende a comer cansado.
 - **Falsifica:** `H[comer, u_energia]` com média negativa nas vidas da bancada.
 - Esta parte pede vidas, e por isso só roda com um plano de análise e uma faixa reservados (D-UR-9).
 
+**2.4b A força da sonda: o cenário separa os desenhos acima da variação?** O GARP (preprint, a lição das inclinações: 1,375× sumiu na
+variação entre rodadas e 1,75× apareceu; nota `LEITURA_GARP_2026-11-17` do vault, pp. 6 e 12) lembra que um efeito pequeno some no ruído.
+- **No C-UR, não há variação.** É uma decisão montada à mão, sem rng: os pesos são inteiros, e `π` sai exata da conta. Qualquer diferença
+  de `w[comer]` maior que zero separa os desenhos, e cada célula da tabela 2.3 é um teste de igualdade ou de sinal, sem limiar estatístico.
+- **O que pode esconder o efeito é o arredondamento e os tetos,** não o ruído: o `div_arred` de cada `mul`, o `φ` com `A_max` e o teto do
+  incentivo (2.5). Por isso o teste escolhe as células da grade em que a diferença prevista passa de um passo de arredondamento, e o teste
+  de (a) usa um `d̂` com o incentivo abaixo do teto. A escolha das células é desenho do teste, não calibração.
+- **Nas vidas (2.4 e D-UR-9) a variação existe** (as sementes, o dono, o mundo). Lá, o plano de análise tem de dizer, antes da run, qual
+  diferença entre desenhos ele consegue ver acima da variação entre vidas. Sem isso, um resultado nulo não distingue "não há efeito" de
+  "o efeito é menor que o ruído".
+
 **2.5 O que falsifica cada desenho** (o teste falha se):
 - (a): `w[comer]` muda com `f_E` sem desfecho, ou não cai com desfecho. Com uma ressalva: o incentivo tem teto (`g_max_incentivo`,
   `plast.py:82`), e com o incentivo no teto nos dois casos a diferença some. O teste escolhe um `d̂` que deixe o incentivo abaixo do teto.
@@ -396,7 +407,8 @@ Cada uma com a pergunta curta, a recomendação e o custo de errar. A resposta d
 - **D-UR-9. A parte em vidas (o hábito da 2.4 e a comparação de (a) e (d)) ganha um plano de análise próprio, ou entra na rodada de
   equilíbrio?**
   - Recomendação: **um plano de análise próprio**, `docs/PLANO_ANALISE_V3_URGENCIAS.md`, depois dos testes de uma decisão, com a faixa
-    pedida ao coordenador. Não entra na rodada de equilíbrio, que calibra números e não compara mecanismos.
+    pedida ao coordenador, e com a menor diferença entre desenhos que ele consegue ver acima da variação entre vidas, dita antes da run
+    (2.4b). Não entra na rodada de equilíbrio, que calibra números e não compara mecanismos.
   - Custo de errar: na rodada de equilíbrio, a escolha do mecanismo e a dos números se misturam.
   - Resposta:
 
@@ -410,6 +422,16 @@ As fontes, o que cada uma afirma e o que ficou sem conferir estão no levantamen
 - Kenrick et al. (2010), `10.1177/1745691610369469`; Tay e Diener (2011), `10.1037/a0023779`: pelo resumo, só para dizer que a ordem estrita
   não serve de mecanismo;
 - Carandini e Heeger (2012), `10.1038/nrn3136`: só o título, para o nome da forma de (d).
+
+Trazidos pela sessão das referências em 2026-11-17, a pedido do Matheus (enquadramento, não evidência sobre o pet):
+- **GARP** (Molino et al. 2026, arXiv:2611.11064, preprint sem revisão por pares; nota `LEITURA_GARP_2026-11-17` do vault, lida no texto
+  completo): não tem prioridade nem interação entre necessidades. Acima de 0,6, a necessidade vira texto no prompt, e a LLM decide (pp. 2
+  e 7). É o extremo oposto: a prioridade toda implícita, fora do código. Num ponto ele pesa a favor de comparar com o desenho (c): dar
+  prioridade à mão aos compromissos do dia piorou o resultado e foi retirado (p. 12). É um relato de um sistema só, sem estatística;
+- **Dreyfus (2007)**, `10.1080/09515080701239510`, VERIFICADA pelo texto completo (a skill `literatura-digilab`, rodada de 2026-11-16;
+  pp. 251 e 258, segundo a sessão das referências): a relevância vem das necessidades do corpo, e as conexões se reforçam na medida em que o
+  resultado satisfez a necessidade. Enquadra a prioridade aprendida (c). **Não** autoriza dizer que o DigiLab resolve o problema do quadro
+  (*frame problem*).
 
 **Nenhuma alegação de novidade.** O impulso de Keramati e Gutkin num agente artificial já existe (o próprio artigo; o CTCS-HRRL).
 
