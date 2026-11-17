@@ -197,7 +197,7 @@ from digilab.modelo_mundo import TIPOS as MODELO_TIPOS, PoliticaComModelo  # noq
 from digilab.metrics import busca_transicao, exposto_transicao, mudanca_de_escolha, oportunidade_revalorizacao  # noqa: E402
 from digilab.mundo import (ESTILOS_LUGAR, CanalMundo, DeixarBola, DeixarComida, DonoComLugar, MotorMundo,  # noqa: E402
                            _PoliticaComMundo, centro_da_celula, reproduzir_mundo)
-from digilab.obediencia import MotorPersonalidade, _PoliticaObservada  # noqa: E402
+from digilab.personalidade import MotorPersonalidade, _PoliticaObservada  # noqa: E402
 from digilab.policies import PoliticaLobos  # noqa: E402
 from digilab.policies.lobos import desarranjo_n6 as desarranjo_dos_lobos  # noqa: E402
 from digilab.policies.lobos import sinal_homeostatico  # noqa: E402

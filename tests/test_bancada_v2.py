@@ -21,7 +21,7 @@ from digilab.config import CONFIG_LOBOS_APRENDIZ, TICKS_POR_DIA  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.events import AcaoUsuario, LogDeEventos  # noqa: E402
 from digilab.metrics import custo_da_plasticidade, desempenho_no_ambiente, tabela_braco_condicao  # noqa: E402
-from digilab.obediencia import MotorPersonalidade  # noqa: E402
+from digilab.personalidade import MotorPersonalidade  # noqa: E402
 from digilab.policies import PoliticaLobos  # noqa: E402
 from digilab.policies.lobos import REGRAS  # noqa: E402
 from digilab.protocol import ENGINE_SHA256_V0, sha256_engine  # noqa: E402

@@ -90,7 +90,7 @@ def test_luta_treina_desligada_por_padrao_e_funciona_se_ligada(vida):
     assert all(h["treinou"] is None for h in vida[0].motor.historico_lutas)       # opcao B: desligada
     from dataclasses import replace
     from digilab.combate_v2.v21.bots import lutador_adulto
-    from digilab.educacao import fabricas_educacao
+    from digilab.obediencia import fabricas_educacao
     esp, _ = ovo(S)
     fp, fm = fabricas_educacao(S, esp, sortear(S), ce=CONFIG_EDUCACAO_LIGADA,
                                cl=replace(CONFIG_LESOES_LIGADA, luta_treina=True),

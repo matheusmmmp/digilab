@@ -20,7 +20,8 @@ from digilab.expressao import ESTAGIOS, EMOCAO_TXT, TOM_CARATER, carateres_citad
     expressar_carater, expressar_emocao, expressar_temperamento, marcadores_citados, tons_citados, \
     validar_tabelas_personalidade  # noqa: E402
 from digilab.memoria_espacos import MemoriaEspacos  # noqa: E402
-from digilab.obediencia import MotorPersonalidade, PoliticaBanditPersonalidade  # noqa: E402
+from digilab.obediencia import PoliticaBanditPersonalidade  # noqa: E402
+from digilab.personalidade import MotorPersonalidade  # noqa: E402
 from digilab.protocol import PROTOCOLO_ARENA_V1_HABITUACAO, PROTOCOLO_ARENA_V1_PERSONALIDADE, \
     PROTOCOLO_ARENA_V1_SEM_HABITUACAO, hash_protocolo  # noqa: E402
 from digilab.temperamento import EIXOS, NEUTRO, Temperamento, sortear  # noqa: E402

@@ -21,7 +21,7 @@ RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 
 from digilab.config import CONFIG_EDUCACAO_LIGADA, CONFIG_MENTIRA_LIGADA  # noqa: E402
-from digilab.educacao import fabricas_educacao  # noqa: E402
+from digilab.obediencia import fabricas_educacao  # noqa: E402
 from digilab.events import AcaoUsuario  # noqa: E402
 from digilab.historia import RegistroVida, escolher_assunto, extrair, selecionar  # noqa: E402
 from digilab.temperamento import NEUTRO  # noqa: E402
