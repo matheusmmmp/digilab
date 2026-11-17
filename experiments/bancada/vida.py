@@ -16,7 +16,7 @@ from digilab.events import LogDeEventos
 from digilab.frutas import MotorFrutas
 from digilab.genoma import TIPO_EVENTO as TIPO_GENOMA, Genoma
 from digilab.mundo import MotorMundo
-from digilab.obediencia import MotorPersonalidade
+from digilab.personalidade import MotorPersonalidade
 from digilab.treino import MotorComFeedback
 
 

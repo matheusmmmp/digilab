@@ -97,6 +97,12 @@ ACOES_EDUCACAO = (AcaoUsuario.PETISCO, AcaoUsuario.LEVAR_AO_BANHEIRO, AcaoUsuari
 ACOES_BOLA = (AcaoUsuario.POR_BOLA, AcaoUsuario.TIRAR_BOLA)
 ACOES_FRUTAS = (AcaoUsuario.OFERECER_FRUTA_A, AcaoUsuario.OFERECER_FRUTA_B, AcaoUsuario.OFERECER_FRUTA_C)
 ACOES_CORPO = (AcaoUsuario.TAPA,)
+# os cuidados do dono que atendem um chamado do pet (veio do policies/bandit.py, a LZ2b da LIMPEZA, D-LZ-9): petisco e levar ao
+# banheiro (educacao-v1) atendem como cuidado: ceder com petisco a um chamado REFORCA o chamar_atencao
+CUIDADOS_QUE_ATENDEM = frozenset(
+    {AcaoUsuario.ALIMENTAR, AcaoUsuario.LIMPAR, AcaoUsuario.BRINCAR, AcaoUsuario.ACARICIAR, AcaoUsuario.PETISCO,
+     AcaoUsuario.LEVAR_AO_BANHEIRO, AcaoUsuario.TRATAR_LESAO}
+)
 FRUTAS = ("a", "b", "c")
 
 

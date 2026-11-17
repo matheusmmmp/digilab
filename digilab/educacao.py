@@ -72,7 +72,6 @@ from .config import (CONFIG_CONFIANCA, CONFIG_EDUCACAO, CONFIG_EVOLUCAO_PESQUISA
                      ConfigConfianca, ConfigEducacao, ConfigLesoes, ConfigMentira)
 from .events import ACOES_EDUCACAO, AcaoUsuario, LogDeEventos, decisao_externa, fala, ler_decisao, ler_luta, luta
 from .heranca import HerancaInvalida, Origem, ler_origem
-from .obediencia import PoliticaBanditPersonalidade
 from .protocol import derivar_semente
 from .state import aplicar_acao_usuario
 from .temperamento import NEUTRO, Temperamento
@@ -660,26 +659,3 @@ def politica_no_tick_educacao(log: LogDeEventos, politica_fabrica: Callable, sem
     """evolucao.politica_no_tick para vidas com educacao (entende os eventos novos; lutas nao mudam a politica)"""
     return reproduzir_educacao(log, politica_fabrica, semente=semente, fabrica_motor=fabrica_motor, ate_tick=tick,
                                pular_lutas=True).politica
-
-
-def fabricas_filho(origem: Origem, **kw):
-    """fabricas_educacao com a especie e o temperamento herdados (a semente do motor vem de quem chama)."""
-    return fabricas_educacao(0, origem.especie, origem.temperamento, **kw)
-
-
-def fabricas_educacao(semente: int, especie: str, temperamento: Temperamento, obediencia_desligada: bool = False,
-                      ct=None, ce: ConfigEducacao | None = None, cl: ConfigLesoes | None = None,
-                      lutador_do_pet: Callable | None = None, rival_por_nome: Callable = rival_padrao,
-                      cfg_evo=None, decisor_externo=None, cm: ConfigMentira | None = None,
-                      honestidade_especie: float = 1.0, cc: ConfigConfianca | None = None,
-                      politica_fabrica: Callable | None = None):
-    """(fabrica da politica, fabrica do motor) de uma vida com educacao; reusadas no replay (sem o decisor).
-    politica_fabrica (V2, L1): troca a politica do pet (padrao: o bandit da personalidade, bit a bit como antes)."""
-    fp = politica_fabrica or (lambda cfg=None: PoliticaBanditPersonalidade(cfg, temperamento))  # noqa: E731
-    fm = (lambda politica, cfg, s: MotorEducacao(politica, cfg, s, temperamento, especie,  # noqa: E731
-                                                 obediencia_desligada=obediencia_desligada, cfg_treino=ct,
-                                                 cfg_educacao=ce, cfg_lesoes=cl, lutador_do_pet=lutador_do_pet,
-                                                 rival_por_nome=rival_por_nome, cfg_evo=cfg_evo,
-                                                 decisor_externo=decisor_externo, cfg_mentira=cm,
-                                                 honestidade_especie=honestidade_especie, cfg_confianca=cc))
-    return fp, fm

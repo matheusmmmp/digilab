@@ -13,7 +13,8 @@ sys.path.insert(0, str(RAIZ / "tools"))
 
 from digilab.config import CONFIG_EDUCACAO_LIGADA  # noqa: E402
 from digilab.donos_educacao import simular_vida_educacao  # noqa: E402
-from digilab.educacao import fabricas_educacao, reproduzir_educacao  # noqa: E402
+from digilab.educacao import reproduzir_educacao  # noqa: E402
+from digilab.obediencia import fabricas_educacao  # noqa: E402
 from digilab.events import LogDeEventos  # noqa: E402
 from digilab.evolucao import ovo  # noqa: E402
 from digilab.personas import PersonaInvalida, carregar_lote, validar_persona  # noqa: E402

@@ -197,14 +197,14 @@
   },
   "digilab/donos_educacao.py": {
    "classe": "SAI",
-   "importa_direto_o_que_sai": [],
-   "raiz": false
-  },
-  "digilab/educacao.py": {
-   "classe": "REFAZ",
    "importa_direto_o_que_sai": [
     "digilab/obediencia.py"
    ],
+   "raiz": false
+  },
+  "digilab/educacao.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "digilab/emocao.py": {
@@ -312,10 +312,8 @@
    "raiz": false
   },
   "digilab/motor_corpo.py": {
-   "classe": "REFAZ",
-   "importa_direto_o_que_sai": [
-    "digilab/obediencia.py"
-   ],
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": true
   },
   "digilab/mundo.py": {
@@ -339,6 +337,11 @@
    "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": true
+  },
+  "digilab/personalidade.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
   },
   "digilab/personas.py": {
    "classe": "FICA",
@@ -428,10 +431,8 @@
    "raiz": false
   },
   "digilab/treino_vida.py": {
-   "classe": "REFAZ",
-   "importa_direto_o_que_sai": [
-    "digilab/obediencia.py"
-   ],
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "digilab/tv.py": {
@@ -440,10 +441,8 @@
    "raiz": true
   },
   "digilab/vinculo.py": {
-   "classe": "SAI",
-   "importa_direto_o_que_sai": [
-    "digilab/policies/bandit.py"
-   ],
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "experiments/adendo4_poder_digibrain_modular.py": {
@@ -482,7 +481,7 @@
    "raiz": false
   },
   "experiments/analisar_empates_cheiro.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -528,7 +527,9 @@
   },
   "experiments/avaliar_voz.py": {
    "classe": "SAI",
-   "importa_direto_o_que_sai": [],
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
    "raiz": false
   },
   "experiments/bancada/__init__.py": {
@@ -561,7 +562,6 @@
   "experiments/bancada/medidas.py": {
    "classe": "REFAZ",
    "importa_direto_o_que_sai": [
-    "digilab/obediencia.py",
     "digilab/policies/lobos.py"
    ],
    "raiz": true
@@ -574,7 +574,6 @@
   "experiments/bancada/nucleo.py": {
    "classe": "REFAZ",
    "importa_direto_o_que_sai": [
-    "digilab/obediencia.py",
     "digilab/policies/__init__.py",
     "digilab/policies/lobos.py"
    ],
@@ -604,16 +603,13 @@
    "raiz": true
   },
   "experiments/bancada/vida.py": {
-   "classe": "REFAZ",
-   "importa_direto_o_que_sai": [
-    "digilab/obediencia.py"
-   ],
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": true
   },
   "experiments/bancada_v2.py": {
    "classe": "REFAZ",
    "importa_direto_o_que_sai": [
-    "digilab/obediencia.py",
     "digilab/policies/__init__.py",
     "digilab/policies/lobos.py"
    ],
@@ -675,7 +671,7 @@
    "raiz": false
   },
   "experiments/calibrar_treino.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -997,7 +993,7 @@
    "raiz": false
   },
   "experiments/exportar_gabarito_vinculo.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -1013,7 +1009,9 @@
   },
   "experiments/exportar_gabaritos_voz.py": {
    "classe": "SAI",
-   "importa_direto_o_que_sai": [],
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
    "raiz": false
   },
   "experiments/exportar_gosto_visual.py": {
@@ -1220,7 +1218,9 @@
   },
   "experiments/run_educacao.py": {
    "classe": "SAI",
-   "importa_direto_o_que_sai": [],
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
    "raiz": false
   },
   "experiments/run_natureza_criacao.py": {
@@ -1235,7 +1235,9 @@
   },
   "experiments/run_poder.py": {
    "classe": "SAI",
-   "importa_direto_o_que_sai": [],
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
    "raiz": false
   },
   "experiments/run_revisao_aprendiz.py": {
@@ -1245,11 +1247,13 @@
   },
   "experiments/run_treino.py": {
    "classe": "SAI",
-   "importa_direto_o_que_sai": [],
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
    "raiz": false
   },
   "experiments/run_v2_a1.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -1333,6 +1337,7 @@
   "experiments/run_v2_l1.py": {
    "classe": "SAI",
    "importa_direto_o_que_sai": [
+    "digilab/obediencia.py",
     "digilab/policies/__init__.py"
    ],
    "raiz": false
@@ -1360,7 +1365,7 @@
    "raiz": false
   },
   "experiments/run_v2_n4.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -1451,7 +1456,9 @@
   },
   "experiments/run_vinculo_novo.py": {
    "classe": "SAI",
-   "importa_direto_o_que_sai": [],
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
    "raiz": false
   },
   "experiments/sinal_dono.py": {
@@ -1465,10 +1472,8 @@
    "raiz": false
   },
   "experiments/sondas_individualidade.py": {
-   "classe": "REFAZ",
-   "importa_direto_o_que_sai": [
-    "digilab/obediencia.py"
-   ],
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "experiments/validar_v21d.py": {
@@ -1633,6 +1638,11 @@
    "raiz": false
   },
   "tests/gabarito_lance_dono.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_limpeza_cadeia.py": {
    "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
@@ -1999,7 +2009,6 @@
   "tests/test_bancada_v2.py": {
    "classe": "REFAZ",
    "importa_direto_o_que_sai": [
-    "digilab/obediencia.py",
     "digilab/policies/__init__.py",
     "digilab/policies/lobos.py"
    ],
@@ -2233,8 +2242,10 @@
    "raiz": false
   },
   "tests/test_confianca.py": {
-   "classe": "FICA",
-   "importa_direto_o_que_sai": [],
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
    "raiz": false
   },
   "tests/test_connectome_cerebro_a.py": {
@@ -2330,7 +2341,6 @@
   "tests/test_corpo.py": {
    "classe": "REFAZ",
    "importa_direto_o_que_sai": [
-    "digilab/obediencia.py",
     "digilab/policies/__init__.py",
     "digilab/policies/lobos.py"
    ],
@@ -2394,8 +2404,10 @@
    "raiz": false
   },
   "tests/test_corpo_vida.py": {
-   "classe": "FICA",
-   "importa_direto_o_que_sai": [],
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
    "raiz": false
   },
   "tests/test_corpus_latino.py": {
@@ -2543,8 +2555,10 @@
    "raiz": false
   },
   "tests/test_educacao.py": {
-   "classe": "FICA",
-   "importa_direto_o_que_sai": [],
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
    "raiz": false
   },
   "tests/test_emocao_habituacao.py": {
@@ -2727,6 +2741,11 @@
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
+  "tests/test_gabarito_limpeza_cadeia.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
   "tests/test_gabarito_limpeza_lg.py": {
    "classe": "FICA",
    "importa_direto_o_que_sai": [],
@@ -2872,7 +2891,6 @@
   "tests/test_grupo.py": {
    "classe": "REFAZ",
    "importa_direto_o_que_sai": [
-    "digilab/obediencia.py",
     "digilab/policies/lobos.py"
    ],
    "raiz": false
@@ -3099,8 +3117,10 @@
    "raiz": false
   },
   "tests/test_mentira.py": {
-   "classe": "FICA",
-   "importa_direto_o_que_sai": [],
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
    "raiz": false
   },
   "tests/test_metabolismo.py": {
@@ -3283,8 +3303,10 @@
    "raiz": false
   },
   "tests/test_personas_modo_livre.py": {
-   "classe": "FICA",
-   "importa_direto_o_que_sai": [],
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
    "raiz": false
   },
   "tests/test_pesos_janela.py": {
@@ -3392,8 +3414,10 @@
    "raiz": false
   },
   "tests/test_run_educacao.py": {
-   "classe": "FICA",
-   "importa_direto_o_que_sai": [],
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
    "raiz": false
   },
   "tests/test_run_v2_competicao.py": {
@@ -3454,8 +3478,10 @@
    "raiz": false
   },
   "tests/test_treino_sombrio.py": {
-   "classe": "FICA",
-   "importa_direto_o_que_sai": [],
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
    "raiz": false
   },
   "tests/test_troca_digestao.py": {
@@ -3484,8 +3510,10 @@
    "raiz": false
   },
   "tests/test_vinculo_b.py": {
-   "classe": "FICA",
-   "importa_direto_o_que_sai": [],
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/obediencia.py"
+   ],
    "raiz": false
   },
   "tests/test_vontade_lobos.py": {
@@ -3659,23 +3687,22 @@
  },
  "resumo": {
   "digilab": {
-   "FICA": 66,
-   "REFAZ": 3,
+   "FICA": 71,
    "REVER": 4,
-   "SAI": 11
+   "SAI": 10
   },
   "experiments": {
-   "FICA": 42,
-   "REFAZ": 9,
-   "REVER": 27,
-   "SAI": 114
+   "FICA": 44,
+   "REFAZ": 7,
+   "REVER": 32,
+   "SAI": 109
   },
   "servidor": {
    "FICA": 6
   },
   "tests": {
-   "FICA": 243,
-   "REFAZ": 81,
+   "FICA": 237,
+   "REFAZ": 89,
    "REVER": 25,
    "SAI": 11
   },
