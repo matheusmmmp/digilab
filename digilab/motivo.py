@@ -33,10 +33,10 @@ from typing import Callable, Sequence
 
 from .config import CONFIG_EXPRESSAO, ConfigExpressao
 from .events import AcaoPet, AcaoUsuario, LogDeEventos
-from .memoria import FATORES_MEMORIA
-from .memoria_espacos import FATORES_ESPACOS
+from .protocol import FATORES_ESPACOS, FATORES_MEMORIA
 from .policy import Observacao, Politica, PoliticaInstinto, Transicao
-from .policies.lobos import ENTRADAS as ENTRADAS_LOBOS, ENTRADAS_MUNDO, FATORES_PLANO, REGRAS_MUNDO, sortear as sortear_lobos
+from .digibrain.base import ENTRADAS as ENTRADAS_LOBOS, ENTRADAS_MUNDO, FATORES_PLANO, REGRAS_MUNDO
+from .policy import sortear as sortear_lobos
 
 ORIGENS = ("vida", "combate")
 

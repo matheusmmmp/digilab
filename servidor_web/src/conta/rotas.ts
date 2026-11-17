@@ -21,10 +21,12 @@
    O que muda algo (POST e DELETE em /conta e /auth/sair) pede o cabeçalho X-CSRF-Token (o csrf da sessão ou do acesso pendente) e, se o
    navegador manda Origin, a origem do jogo ou a da API. O CORS abre só para a origem do jogo, com credenciais. */
 import { createHash, randomUUID, timingSafeEqual } from "node:crypto";
-import type { Context, Hono } from "hono";
+import type { Context, Hono, MiddlewareHandler } from "hono";
 import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 import { cors } from "hono/cors";
 import { ROOKIES, sortearApelido } from "./apelido.ts";
+import { enviosDaConta } from "../envio/rotas.ts";
+import { sementesDaConta } from "../envio/sementes.ts";
 import { transacao } from "./banco.ts";
 import type { ConfigConta } from "./config.ts";
 import { paginaAutorizarFalso, paginaDevConta } from "./paginas.ts";
@@ -61,10 +63,17 @@ export function nomeDoAparelho(ua: string | undefined): string {
   return nav && so ? `${nav} no ${so}` : nav || so || "aparelho";
 }
 
-interface Sessao { token_hash: string; conta_id: string; aparelho_id: string; csrf: string; expira_em: number }
+export interface Sessao { token_hash: string; conta_id: string; aparelho_id: string; csrf: string; expira_em: number }
 interface Pendente { token_hash: string; provedor: NomeProvedor; id_provedor: string; apelido: string; csrf: string; destino: string; expira_em: number }
 
-export function montarRotasConta(app: Hono, cfg: ConfigConta): void {
+/** o que outras rotas com a sessão (o envio dos logs, MMO3) usam da conta: a sessão, a sessão com o CSRF e o CORS */
+export interface GuardasConta {
+  sessaoDe: (c: Context) => Sessao | null;
+  sessaoParaMudar: (c: Context) => Sessao | Response;
+  cors: MiddlewareHandler;
+}
+
+export function montarRotasConta(app: Hono, cfg: ConfigConta): GuardasConta {
   const { banco, agora } = cfg;
   const origemApi = new URL(cfg.urlApi).origin;
   const redirectUri = `${cfg.urlApi}/auth/callback`;
@@ -365,6 +374,10 @@ export function montarRotasConta(app: Hono, cfg: ConfigConta): void {
         "SELECT id, nome, criado_em, visto_em FROM aparelhos WHERE conta_id = ? ORDER BY criado_em").map(r => ({ ...r, criado_em: iso(r.criado_em), visto_em: iso(r.visto_em) })),
       sessoes: todos<{ aparelho_id: string; criada_em: number; expira_em: number }>(
         "SELECT aparelho_id, criada_em, expira_em FROM sessoes WHERE conta_id = ? ORDER BY criada_em").map(r => ({ ...r, criada_em: iso(r.criada_em), expira_em: iso(r.expira_em) })),
+      /* os envios dos logs (MMO3): a linha de cada um, sem os registros (que são os do próprio jogador) */
+      envios: enviosDaConta(banco, s.conta_id),
+      /* as sementes ranqueadas entregues (MMO4): o número, o pet, o indice, o hash do pedido, a semente e a hora */
+      sementes: sementesDaConta(banco, s.conta_id),
       nao_guardamos: ["o nome", "o e-mail", "o lugar", "a fala", "a senha (não há senha)"],
     };
     const arquivo = `digilab-conta-${conta.apelido.replace(/[^A-Za-z0-9_-]/g, "-")}.json`;
@@ -378,7 +391,7 @@ export function montarRotasConta(app: Hono, cfg: ConfigConta): void {
     const d = await lerCorpo(c);
     if (d instanceof Response) return d;
     if (d.confirmar !== "apagar") return json(c, 400, { erro: 'apagar pede {"confirmar": "apagar"}' });
-    /* as chaves estrangeiras com ON DELETE CASCADE levam as identidades, os consentimentos, os aparelhos e as sessões */
+    /* as chaves estrangeiras com ON DELETE CASCADE levam as identidades, os consentimentos, os aparelhos, as sessões os envios (MMO3) e as sementes (MMO4) */
     transacao(banco, () => banco.prepare("DELETE FROM contas WHERE id = ?").run(s.conta_id));
     deleteCookie(c, COOKIE_SESSAO, { path: "/", secure: cfg.cookieSeguro });
     return json(c, 200, { apagada: true });
@@ -386,4 +399,5 @@ export function montarRotasConta(app: Hono, cfg: ConfigConta): void {
 
   /* a página de teste do fluxo, só no local */
   if (cfg.local) app.get("/dev/conta", c => c.html(paginaDevConta(), 200, { "Cache-Control": "no-store" }));
+  return { sessaoDe, sessaoParaMudar, cors: corsConta };
 }

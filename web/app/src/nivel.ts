@@ -16,6 +16,7 @@
      cartoes deles vistos em silencio, para nunca trancar o que o jogador ja usava.
    Os numeros e os textos sao PROPOSTO, SEM FONTE (numero de interface, nao de jogo). */
 import { TICK_INICIAL, type Motor } from "../motor/index.ts";
+import { MEDALHAS_MARCO, marcosDoTamer } from "./marcosTamer.ts";
 import { MARCO_MEGA, evolucaoMega, type Tamer } from "./tamer.ts";
 import type { Aba, Destino, Rota } from "./rotas.ts";
 import type { Lugar } from "./viagem.ts";
@@ -26,8 +27,7 @@ export const PISO_NIVEL = 4;
 export const ULTIMO_MARCO = 10;
 /** os chamados atendidos do marco 2 e a vida minima (min do pet) que o vale quando o contador nao serve. PROPOSTO, SEM FONTE */
 export const CHAMADOS_MARCO = 3, VIDA_MARCO_MIN = 60;
-/** as medalhas dos marcos 5, 7 e 8 (a ultima e MEDALHAS_LIGA, a trava de hoje da Fronteira) */
-export const MEDALHAS_MARCO = { primeira: 1, tres: 3, seis: 6 } as const;
+export { MEDALHAS_MARCO, marcosDoTamer };
 /* ---------------------------------------------------------------------------------------------------- os cartoes */
 /** o nome do icone (lucide) de cada cartao; quem desenha troca o nome pelo componente */
 export type IconeNivel = "heart" | "tent" | "dumbbell" | "swords" | "package" | "shield" | "medal" | "flag" | "trophy";
@@ -86,17 +86,6 @@ export function marcosDoPet(m: Motor): number[] {
   if (m.log.some(e => e[1] === "tr")) out.push(4);
   if (m.evolucoes.some(x => x.estagio === "adolescente")) out.push(6);
   if (evolucaoMega(m)) out.push(MARCO_MEGA);
-  return out;
-}
-/** os marcos que o registro do Tamer cumpre: as medalhas (5, 7, 8), o titulo da Liga (9) e o marco 10 gravado (MMO2; o pet que o fez pode
-    ter saido) */
-export function marcosDoTamer(t: Tamer): number[] {
-  const out: number[] = [], n = t.medalhas.length;
-  if (n >= MEDALHAS_MARCO.primeira) out.push(5);
-  if (n >= MEDALHAS_MARCO.tres) out.push(7);
-  if (n >= MEDALHAS_MARCO.seis) out.push(8);
-  if (t.titulo) out.push(9);
-  if (t.marco(MARCO_MEGA)) out.push(MARCO_MEGA);
   return out;
 }
 /** a uniao dos marcos do Tamer e dos pets (o ativo e os guardados; sem o pet de exemplo), em ordem */

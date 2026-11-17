@@ -19,7 +19,7 @@ from digilab import AcaoPet, AcaoUsuario, Observacao, Politica, PoliticaInstinto
 from digilab.events import ACOES_PET_HOJE  # noqa: E402
 from digilab.config import CONFIG_LOBOS, CONFIG_LOBOS_APRENDIZ, ConfigLobos  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
-from digilab.obediencia import MotorPersonalidade  # noqa: E402
+from digilab.personalidade import MotorPersonalidade  # noqa: E402
 from digilab.policies import PoliticaLobos  # noqa: E402
 from digilab.policies.lobos import (ENTRADAS, PARAMETROS_LOBOS, PARAMETROS_LOBOS_L0, PRIOR_INSTINTO, REGRAS, arred,  # noqa: E402
                                     ativacao, div_arred, impulsos, sortear, validar_parametros_lobos)
@@ -458,7 +458,7 @@ def test_l1_motivo_honesto_e_embrulho_nao_muda_a_vida():
 
 
 def test_fabricas_educacao_padrao_intacto():
-    from digilab.educacao import fabricas_educacao
+    from digilab.obediencia import fabricas_educacao
     from digilab.obediencia import PoliticaBanditPersonalidade
     from digilab.temperamento import NEUTRO
 

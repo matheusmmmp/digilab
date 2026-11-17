@@ -41,7 +41,7 @@ from digilab.metrics import drives_novos as medir_drives_novos, tempo_livre_be
 from digilab.metrics import REGRAS_TEMPO_LIVRE, efeitos_do_tapa, metabolismo_da_vida, tempo_comer_brincar, vez_no_grupo
 from digilab.mundo import DonoCarinhoBanheiro
 from digilab.mundo import ESTILOS_LUGAR, DonoComLugar, MotorMundo, centro_da_celula, reproduzir_mundo
-from digilab.obediencia import MotorPersonalidade
+from digilab.personalidade import MotorPersonalidade
 from digilab.policies import PoliticaLobos
 from digilab.policies.lobos import (DRIVES_NOVOS_SINAL, RECEPTOR_DO_INDICE, RECEPTORES_NOVOS, contribuicoes_corpo, sinal_corpo,
                                     sinal_corpo_canais)

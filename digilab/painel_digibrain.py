@@ -26,7 +26,8 @@ from __future__ import annotations
 import math
 
 from .events import ACOES_PET_HOJE
-from .policies.lobos import ENTRADAS, REGRAS, sortear
+from .digibrain.base import ENTRADAS, REGRAS
+from .policy import sortear
 
 N_PERCEPCAO = 3        # quantas entradas a percepcao lista: "as duas ou tres" da tarefa (secao 4); SEM FONTE, so apresentacao
 N_APRENDIDO = 3        # quantas acoes o "o que aprendeu" lista; SEM FONTE, so apresentacao

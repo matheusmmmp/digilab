@@ -179,20 +179,19 @@ FAIXAS_RESERVADAS = (
                    "conferida livre na origin/main em 2026-11-12)"),
     (93101, 93505, "EQUILIBRIO_CUIDADO, a calibracao (jogo web): o E0, o retrato de hoje, nas bases 93101, 93202, 93303, 93404 e "
                    "93505, e o E1 (docs/PLANO_ANALISE_V3_EQUILIBRIO_CUIDADO.md, secao 5; EQ-5, Matheus, 2026-11-12; conferida livre "
-                   "na origin/main em 2026-11-12)"),
+                   "na origin/main em 2026-11-12). Tambem a run unica da LONGE_GEOMETRIA, nas mesmas bases, com K = 40 e o prefixo "
+                   "digibrain_prototipo (docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md, secao 3.4; LG-6): ela rodou em 2026-11-16 de uma "
+                   "worktree de antes da troca para a 96xxx (D-EQ2-11), e o Matheus aceitou a run nesta faixa em 2026-11-16, \"Aceitar "
+                   "na 93xxx\" (D-LGR-1); a 96xxx volta livre)"),
     (94101, 94505, "EQUILIBRIO_CUIDADO, a validacao unica (jogo web): o E2, uma vez; nao e tocada no E0 nem no E1 "
                    "(docs/PLANO_ANALISE_V3_EQUILIBRIO_CUIDADO.md, secao 5; EQ-5, Matheus, 2026-11-12; conferida livre na origin/main "
                    "em 2026-11-12)"),
-    (96101, 96505, "LONGE_GEOMETRIA, a regularidade do longe separada da geometria: a run unica "
-                   "(docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md, secao 3.4; LG-6; bases 96101, 96202, 96303, 96404 e 96505, K = 40; "
-                   "aprovada pelo Matheus em 2026-11-16, \"Eu aprovo o plano, pode seguir com as recomendacoes e o merge\"; "
-                   "trocada da 93101-93505, que colidia com a calibracao da EQUILIBRIO_CUIDADO (D-EQ2-11; Matheus, 2026-11-16, "
-                   "\"A LONGE_GEOMETRIA\"), antes de qualquer vida; a 96xxx conferida livre em todos os branches remotos em 2026-11-16)"),
-    # EVIDENCIA A1: a calibracao da baseline trivial (K = 5, so a baseline) tambem usou a 96101-96505 em 2026-11-16, a mesma da
-    # LONGE_GEOMETRIA (D-EV-A1-8; a decisao de qual frente fica com a faixa e do Matheus). A linha da main fica, como na D-EQ2-11.
+    (96101, 96505, "EVIDENCIA A1, a baseline trivial: a calibracao de X, Y e Z, so a baseline (docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md, "
+                   "secao 4; BT-3; bases 96101, 96202, 96303, 96404 e 96505, K = 5); aprovada pelo Matheus em 2026-11-16, \"Aprovo, pode rodar\" (BT-3); conferida "
+                   "livre em faixas.py e em todos os branches remotos em 2026-11-16 (a 94xxx fica com o EQUILIBRIO_CUIDADO)"),
     (97101, 97505, "EVIDENCIA A1, a baseline trivial: a validacao, uma vez, o REL da C4 e a baseline nas 12 celulas da C4 "
                    "(docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md, secao 5; BT-3; bases 97101, 97202, 97303, 97404 e 97505, K = 40); "
-                   "aprovada pelo Matheus em 2026-11-16, \"Aprovo, pode rodar\" (BT-3); conferida livre em todos os branches remotos em 2026-11-16"),
+                   "aprovada junto com a 96xxx (BT-3); conferida livre junto com ela"),
     (98101, 98505, "EVIDENCIA A2, a ablacao do aprendizado no jogo (jogo web): a run unica, sementes 98101...98300 "
                    "(docs/PLANO_ANALISE_V3_ABLACAO_APRENDIZADO.md, secao 2.3; AB-5; aprovada pelo Matheus em 2026-11-16, "
                    "\"Aprovo, pode rodar\"; conferida livre na origin/main e em todos os branches remotos em 2026-11-16)"),

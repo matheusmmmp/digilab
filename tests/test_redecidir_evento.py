@@ -334,7 +334,10 @@ def test_g2_separado_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                       "web/app/motor/digibrain/estado.ts", "web/app/test/digibrain_modular_estado.test.ts",
                       "experiments/exportar_gabarito_digibrain_modular.py",
                       # a auditoria da evidencia (EVIDENCIA A0): so cita a pasta da run da C3 (redecidir_evento/run) para ler os blobs do git; nao le a chave
-                      "tools/auditar_evidencia.py"}
+                      "tools/auditar_evidencia.py",
+                      # a auditoria do PET_VIVO confere que a chave fica desligada (so le); as figuras do artigo A1 so citam a pasta da run da C3
+                      # (entraram depois desta lista; o teste ja falhava na main, D-EV-A0-6)
+                      "experiments/auditoria_pet_vivo.py", "experiments/figuras_artigo_a1.py"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor"):
         if not (RAIZ / pasta).exists():
