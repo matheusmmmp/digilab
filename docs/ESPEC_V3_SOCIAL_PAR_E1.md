@@ -311,3 +311,71 @@ O adendo também põe um controle novo, cuja resposta é conhecida **por constru
 | **A1-4** | o limiar do G-MET-NULO | **\|c\| ≤ 0,2, ou None** | mais apertado, um P parado com poucos casos reprova por ruído; mais frouxo, o nulo deixa de dizer alguma coisa |
 | **A1-5** | o D-SP-10 | **aceitar a porta no motor**, só com a chave de pesquisa | voltar à troca por explorar faz a gravação mudar a ação que F vê, o que é uma diferença entre VIVO e GRAV que não vem da resposta de P |
 | **A1-6** | o D-SP-11 | **aceitar o alvo resolvido** | a regra da espec deixava P seguir um alvo vivo, e a GRAV voltaria a responder a F |
+
+## 10. Adendo 2: controles só de regra (2026-11-17, PROPOSTO)
+
+**Status: PROPOSTO, esperando o Matheus (A2-1 a A2-5, 10.5).** Nada roda antes da aprovação. As seções 1 a 9 e as duas conferências não
+mudam: `controles_positivos.json` (`7a1049ac…`, D-SP-13) e `controles_positivos_ad1.json` (`e1fe96b6…`, D-SP-18) ficam como saíram.
+
+**De onde vem:** o Matheus, em 2026-11-17, "Controles só de regra", depois de os controles do adendo 1 passarem só na maioria das sementes
+(o C1 em 4 de 5, o C2 em 3 de 5). Nas que falharam, o parceiro estava comendo, brincando, dormindo ou chamando o dono no t0: o instinto
+do mundo, que os controles usavam, põe as necessidades do corpo na frente da regra social.
+
+**A regra desta tentativa:** é a terceira. Se ela falhar em qualquer semente, **a E1 fecha com a ressalva** (a opção "fechar com a
+ressalva" de 2026-11-17), sem um quarto desenho.
+
+### 10.1 Os controles
+
+Três políticas de regra pura, só em `experiments/bancada/parceiro.py`. Nenhuma come, dorme ou chama: o corpo continua rodando, mas a
+decisão não o lê. O sono só vem da ação `dormir` (`digilab/policy.py:177-179`), então elas nunca dormem.
+
+| política | regra |
+|---|---|
+| **Estátua** | sempre `ocioso`: nunca se move |
+| **Seguidor puro** | vê o outro → `explorar` com o alvo `seguir`; não vê → `ocioso` |
+| **Evitador puro** | vê o outro → `explorar` até o ponto a um passo inteiro na direção oposta (o evitador do adendo 1, 9.2); não vê → `ocioso` |
+
+**O pet focal F é sempre a estátua.** Como ele nunca se move, toda mudança de distância depois do t0 é obra do parceiro P, e a resposta de
+P é a única coisa que pode separar a VIVO da GRAV.
+
+| controle | F × P | o d0 | o que acontece por construção |
+|---|---|---|---|
+| **C1** | estátua × seguidor puro | 5 células (dentro da visão de 6) | VIVO: P vê F e vai até ele em 2 decisões (5 / 3,75). GRAV: na vida gravada, P parou ao lado de F antes do t0, e a gravação o mantém lá: não vai até F |
+| **C2** | estátua × evitador puro | 1 célula (o contato) | VIVO: P vê F encostado e foge. GRAV: na vida gravada, P fugiu de F no começo e parou fora da visão; a gravação o mantém parado, e F, posto ao lado dele, fica em contato |
+
+### 10.2 A janela e o t0
+
+- **A janela:** as **8 decisões** depois do t0 (PROPOSTO, SEM FONTE). É curta para o resultado não depender do que vem depois, e longa o
+  bastante para o seguidor puro chegar (2 decisões) com folga.
+- **O t0:** o do fluxo `intervencao-social`, no dia 1, como antes. A estátua nunca dorme, então o `levar_pet` sempre vale no t0 pedido.
+
+### 10.3 O que tem de sair (escrito antes de rodar), em todas as 5 sementes (101 a 505)
+
+| controle | tem de sair | a medida, nas 8 decisões depois do t0 |
+|---|---|---|
+| **C1** | VIVO chega (não censurado) e GRAV não chega (censurado); e a fração de contato maior na VIVO | `tempo_ate_raio` (raio 1 célula, janela 8) e `fracao_em_raio` |
+| **C2** | a fração de contato menor na VIVO que na GRAV | `fracao_em_raio`, raio 1 célula, nas 8 decisões |
+
+- O G-MET-NULO já passou no adendo 1 (D-SP-18) e não se repete: com F parado, a contingência de P a partir de F não tem caso.
+- **Se passar:** o G-CONTROLE-POS entra no `tests/test_social_par_e1.py` com os C1 e C2 deste adendo, e a E1 vai para o PR.
+- **Se falhar em qualquer semente:** a E1 vai para o PR fechada com a ressalva. A seção de limitações diz que o instrumento separou a
+  VIVO da GRAV só na maioria dos casos de regra, com os três arquivos de conferência, e o plano do A0 tem de levar isso em conta.
+
+### 10.4 Os arquivos
+
+| arquivo | o que muda |
+|---|---|
+| `experiments/bancada/parceiro.py` | a `Estatua`, o `SeguidorPuro` e o `EvitadorPuro` |
+| `experiments/conferir_controles_social_par_e1.py` | a conferência do adendo 2, com a saída em `artifacts_v3_social_par_e1/controles_positivos_ad2.json`; a do adendo 1 fica no histórico do git |
+| `tests/test_social_par_e1.py` | o G-CONTROLE-POS, só se o 10.3 sair |
+| `docs/registro/2026-11.md` | o resultado |
+
+### 10.5 As decisões do adendo 2 (PROPOSTAS; cada uma com a recomendação e o custo de errar)
+
+| id | a decisão | a recomendação | o custo de errar |
+|---|---|---|---|
+| **A2-1** | os controles | **só de regra:** a estátua, o seguidor puro e o evitador puro, sem comer, dormir nem chamar | com o instinto embaixo, a semente passa ou falha pelo estado do corpo (D-SP-18) |
+| **A2-2** | o pet focal | **sempre a estátua** | um F que se move mistura a resposta de P com a de F, e a resposta conhecida deixa de ser por construção |
+| **A2-3** | o d0 | **5 células no C1 e 1 no C2** | o C2 com 5 células mediria a fuga de longe, que pode não acontecer se P já estiver fora da visão |
+| **A2-4** | a janela | **8 decisões depois do t0** | a janela de um dia (96) deixa o resultado depender do que vem depois, que é o que derrubou o adendo 1 |
+| **A2-5** | se falhar | **fechar a E1 com a ressalva**, sem um quarto desenho | um quarto desenho depois de três falhas vira ajustar até dar certo |
