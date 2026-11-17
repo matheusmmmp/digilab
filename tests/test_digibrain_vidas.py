@@ -195,7 +195,10 @@ def test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain():
                                                                              "experiments/exportar_decodificador_v4.py",
                                                                              # VALUATION, a ablacao do Valuation (V2): os bracos montam o REL da C4
                                                                              # com uma mudanca so (docs/PLANO_ANALISE_V3_VALUATION.md, secao 3)
-                                                                             "experiments/run_v3_valuation.py"}
+                                                                             "experiments/run_v3_valuation.py",
+                                                                             # VALUATION, o conserto (V3): o REL da C4 com a guarda da fome no reflexo
+                                                                             # (docs/PLANO_ANALISE_V3_VALUATION_CONSERTO.md, secao 2)
+                                                                             "experiments/run_v3_valuation_conserto.py"}
     assert "lembranca" not in (RAIZ / "digilab" / "mundo.py").read_text(encoding="utf-8")
 
 

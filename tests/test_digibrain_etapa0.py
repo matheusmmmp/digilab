@@ -96,7 +96,10 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              "experiments/exportar_decodificador_v4.py",
                                                                              # VALUATION, a ablacao do Valuation (V2): os bracos montam o REL da C4
                                                                              # com uma mudanca so (docs/PLANO_ANALISE_V3_VALUATION.md, secao 3)
-                                                                             "experiments/run_v3_valuation.py"}
+                                                                             "experiments/run_v3_valuation.py",
+                                                                             # VALUATION, o conserto (V3): o REL da C4 com a guarda da fome no reflexo
+                                                                             # (docs/PLANO_ANALISE_V3_VALUATION_CONSERTO.md, secao 2)
+                                                                             "experiments/run_v3_valuation_conserto.py"}
 
 
 def test_o_digibrain_so_existe_com_a_chave_ligada_e_e_a_v13():

@@ -3220,6 +3220,34 @@ PARAMETROS_ABLACAO_VALUATION: dict[str, tuple[str, str]] = {
 
 CONFIG_ABLACAO_VALUATION = ConfigAblacaoValuation()
 
+
+@dataclass(frozen=True)
+class ConfigConsertoValuation:
+    """O conserto da VALUATION (docs/PLANO_ANALISE_V3_VALUATION_CONSERTO.md, secao 2; D-VAL-16, APROVADA pelo Matheus em 2026-11-17), so de
+    pesquisa, so no DigiBrain modular do Python (D-VAL-17). A V2 confirmou que o reflexo do sono do M-ARB (a leitura da energia abaixo de
+    `lambda_sono`) troca o comer pelo dormir com fome ou sem. Ligada, a `guarda_fome_reflexo` faz o reflexo nao disparar com a fome urgente
+    (a urgencia da fome do M-AFETO acima do `urgencia_lambda` dos inatos, a mesma fome urgente do sono que segura, do passeio, do brincar e
+    do convite da bola; nenhum numero novo): a decisao segue pelo sorteio de hoje, em que o dormir continua concorrendo. Sem a fome urgente,
+    o reflexo de hoje. Fica numa config propria, como a `ConfigSonoSegura`, para o dump dos inatos e da `ConfigDigibrain` nao mudar. Nenhum
+    pet do jogo a liga, e o jogo web nao a espelha. Desligada (o padrao), a vida de hoje sai byte a byte
+    (tests/gabaritos/valuation_conserto_de_hoje.json). Status em PARAMETROS_CONSERTO_VALUATION."""
+
+    guarda_fome_reflexo: bool = False         # PROPOSTO: a chave (so a run da V3 da VALUATION a liga)
+
+    def __post_init__(self) -> None:
+        if type(self.guarda_fome_reflexo) is not bool:
+            raise TypeError(f"ConfigConsertoValuation.guarda_fome_reflexo e bool: {self.guarda_fome_reflexo!r}")
+
+
+# Status dos campos da ConfigConsertoValuation (conferido por teste). A fome urgente nao tem numero proprio: e o `urgencia_lambda` dos inatos.
+PARAMETROS_CONSERTO_VALUATION: dict[str, tuple[str, str]] = {
+    "guarda_fome_reflexo": ("PROPOSTO", "PLANO_ANALISE_V3_VALUATION_CONSERTO, secao 2 (D-VAL-16, APROVADA pelo Matheus em 2026-11-17); a "
+                                        "chave, so de pesquisa; SEM FONTE"),
+}
+
+CONFIG_CONSERTO_VALUATION = ConfigConsertoValuation()
+CONFIG_CONSERTO_VALUATION_LIGADO = ConfigConsertoValuation(guarda_fome_reflexo=True)
+
 # Os numeros do modular que o E1 propoe trocar de valor (docs/RESULTADO_V3_EQUILIBRIO_CUIDADO_E1.md, a rodada F2 da grade), nos inatos de hoje
 # (CONFIG_DIGIBRAIN_INATOS fica como esta; no jogo, a v38 e a v39 os usam desde o E3, EQ-6). DECIDIDOS (APROVADOS em 2026-11-12), SEM FONTE.
 # O nome (_PROPOSTOS) ficou o do E1, para nao mudar quem o importa.

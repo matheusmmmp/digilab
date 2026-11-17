@@ -29,11 +29,14 @@ com a `ConfigEquilibrioCuidado.guarda_fome_brincar` ligada e a fome urgente): o 
 sondas, antes de contar os candidatos. Nenhuma rng nova; sem ela (o padrao), o sorteio de hoje.
 **A ablacao `maior_peso` da VALUATION** (`ConfigAblacaoValuation`, so de pesquisa; docs/PLANO_ANALISE_V3_VALUATION.md, secao 3): fora do
 reflexo e da escolha segurada, a escolha e a unidade de maior peso (o primeiro no empate: o caminho de `_escolher` sem u), sem chamar a rng;
-as sondas, com o u None, leem o mesmo caminho. Desligada (o padrao), o sorteio de hoje."""
+as sondas, com o u None, leem o mesmo caminho. Desligada (o padrao), o sorteio de hoje.
+**O conserto da VALUATION** (`ConfigConsertoValuation.guarda_fome_reflexo`, so de pesquisa; docs/PLANO_ANALISE_V3_VALUATION_CONSERTO.md,
+secao 2.3): com a energia abaixo de `lambda_sono` e a fome urgente (a urgencia da fome acima do `urgencia_lambda`), o reflexo nao dispara, e
+a decisao segue pelo sorteio de hoje. Sem as urgencias, falha alto. Nenhuma rng nova; desligada (o padrao), o reflexo de hoje."""
 from __future__ import annotations
 
-from ..config import (CONFIG_ABLACAO_VALUATION, CONFIG_DIGIBRAIN_INATOS, CONFIG_SONO_SEGURA, ConfigAblacaoValuation, ConfigDigibrainInatos,
-                      ConfigSonoSegura)
+from ..config import (CONFIG_ABLACAO_VALUATION, CONFIG_CONSERTO_VALUATION, CONFIG_DIGIBRAIN_INATOS, CONFIG_SONO_SEGURA, ConfigAblacaoValuation,
+                      ConfigConsertoValuation, ConfigDigibrainInatos, ConfigSonoSegura)
 from . import dever as _dever
 from ._comum import chave_json, mul, phi
 
@@ -61,11 +64,15 @@ class Arbitragem:
     """o M-ARB (docstring do modulo)"""
 
     def __init__(self, inatos: ConfigDigibrainInatos | None = None, autobio: bool = False, facetas: bool = False,
-                 sono: ConfigSonoSegura | None = None, ablacao: ConfigAblacaoValuation | None = None) -> None:
+                 sono: ConfigSonoSegura | None = None, ablacao: ConfigAblacaoValuation | None = None,
+                 conserto: ConfigConsertoValuation | None = None) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
         self.ab = ablacao or CONFIG_ABLACAO_VALUATION
         if not isinstance(self.ab, ConfigAblacaoValuation):
             raise TypeError(f"M-ARB: ablacao e uma ConfigAblacaoValuation: {self.ab!r}")
+        self.cv = conserto or CONFIG_CONSERTO_VALUATION
+        if not isinstance(self.cv, ConfigConsertoValuation):
+            raise TypeError(f"M-ARB: conserto e uma ConfigConsertoValuation: {self.cv!r}")
         self.sono = sono or CONFIG_SONO_SEGURA
         self.sondas = SONDAS
         self.decidiu = DECIDIU
@@ -106,6 +113,11 @@ class Arbitragem:
             return max(positivos, key=lambda i: (w[i], -i))
         return sortear_inteiro(w, u)
 
+    @property
+    def le_urgencias(self) -> bool:
+        """o reflexo le as urgencias do M-AFETO: com o sono que segura ou com a guarda da fome do conserto"""
+        return self.sono.ligada or self.cv.guarda_fome_reflexo
+
     def reflexo(self, sens: dict, urgencias: dict | None = None) -> bool:
         """o reflexo do sono: a leitura da energia abaixo de `lambda_sono` (a conta de sempre, sem rng). O M-ADAPT a chama uma vez por
         decisao e passa o valor ao M-ESTADO e ao `escolher` (a L-2, secao 2.3). Com o sono que segura, tambem o pet dormindo com a energia
@@ -114,7 +126,13 @@ class Arbitragem:
         if energia is None:
             raise RuntimeError("M-ARB: o reflexo do sono le a energia, e ela nao esta na percepcao do corpo")
         if energia < self.p.lambda_sono:
-            return True
+            if not self.cv.guarda_fome_reflexo:
+                return True
+            if urgencias is None or "fome" not in urgencias:
+                raise RuntimeError("M-ARB: a guarda da fome no reflexo le a urgencia da fome, e ela nao veio do M-AFETO")
+            if urgencias["fome"] <= self.p.urgencia_lambda:   # o conserto da VALUATION: so a fome urgente tira o reflexo
+                return True
+            return False
         if not self.sono.ligada:
             return False
         if urgencias is None or "fome" not in urgencias:
