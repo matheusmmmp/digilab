@@ -1,13 +1,14 @@
 # TAREFA V3 — SONDA_EMPOWERMENT (2026-11-17)
 
 Coordenador: Matheus, pela sessão da F5, aberta pela Gerente das cinco frentes. Worker: Claude Code, Opus 5.5, na worktree
-`wt-v3-f5-sonda`, branch `v3-f5-sonda-empowerment`. Status: **ABERTA; a espec PROPOSTA; as D-F5-2 a D-F5-8 PROPOSTAS.**
+`wt-v3-f5-sonda`, branch `v3-f5-sonda-empowerment`. Status: **ABERTA; a espec APROVADA pelo Matheus; as D-F5-2 a D-F5-8 aceitas (2026-11-17).**
 
 Categoria: arquitetura. Origem: a frente F5 do prompt das cinco frentes (vault, `30 Decisões e protocolo/PROMPT_CINCO_FRENTES_2026-11-16.md`)
-e o levantamento do vault (`DigiLab — Revisão de escopo/LEVANTAMENTO_EMPOWERMENT_F5_2026-11-17.md`). Decisões do Matheus, as duas de
+e o levantamento do vault (`DigiLab — Revisão de escopo/LEVANTAMENTO_EMPOWERMENT_F5_2026-11-17.md`). Decisões do Matheus, as três de
 2026-11-17 e literais:
 - **D-F5-1**: à pergunta "A F5 fica como pesquisa ou vira frente agora?", ele respondeu "Pesquisa, com sonda";
 - à pergunta "Escrevo agora a espec da sonda do E(P) em docs/, numa worktree com PR?", ele respondeu "Sim, escreva a espec".
+- à pergunta "Você revisa e aprova a espec e as D-F5-2 a D-F5-8 no PR #965?", ele respondeu "Aprovo as recomendações".
 
 ## 1. Pergunta
 
@@ -18,7 +19,7 @@ plano depois da F3. A F5 não é frente.
 ## 2. Depende de
 
 - Na `main`: nada além do que já está. O M-PLAST (`d̂`, `andar`) e o M-MEM (episódios, `_faixa`) são lidos, não mudados.
-- Do Matheus: a aprovação da `docs/ESPEC_V3_SONDA_EMPOWERMENT.md` e as D-F5-2 a D-F5-8, antes de qualquer código.
+- Do Matheus: a aprovação da `docs/ESPEC_V3_SONDA_EMPOWERMENT.md` e as D-F5-2 a D-F5-8, antes de qualquer código (dada em 2026-11-17).
 - Não depende da F3. A H-EMP-1, sim, se a sonda não acabar com ela.
 
 ## 3. Mudança mínima

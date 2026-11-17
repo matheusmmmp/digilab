@@ -1,12 +1,14 @@
 # Espec da sonda do E(P): quantos corpos o pet alcança de um lugar (F5)
 
-Status (2026-11-17): **PROPOSTO**. Esta é a espec da sonda descritiva da frente F5, pedida pela decisão **D-F5-1** do Matheus (2026-11-17,
+Status (2026-11-17): **APROVADO pelo Matheus** (2026-11-17, no chat da sessão da F5): à pergunta "Você revisa e aprova a espec e as
+D-F5-2 a D-F5-8 no PR #965?", a resposta literal foi **"Aprovo as recomendações"**. Os números novos continuam PROPOSTOS, SEM FONTE.
+Esta é a espec da sonda descritiva da frente F5, pedida pela decisão **D-F5-1** do Matheus (2026-11-17,
 no chat da sessão da F5): à pergunta "A F5 fica como pesquisa ou vira frente agora?", a resposta literal foi **"Pesquisa, com sonda"**.
 Depois, a esta pergunta: "Escrevo agora a espec da sonda do E(P) em docs/, numa worktree com PR?", ele respondeu **"Sim, escreva a
 espec"**.
 
-**Nenhuma linha de código antes de esta espec ter "APROVADO pelo Matheus" no cabeçalho.** As decisões D-F5-2 a D-F5-8 (seção 8) são
-dele. A tarefa é a `docs/TAREFA_V3_SONDA_EMPOWERMENT.md`. O levantamento está no vault, em
+O código vem só depois desta aprovação, e só em `experiments/` e `tests/`. As decisões D-F5-2 a D-F5-8 (seção 8) foram aceitas como
+recomendadas. A tarefa é a `docs/TAREFA_V3_SONDA_EMPOWERMENT.md`. O levantamento está no vault, em
 `DigiLab — Revisão de escopo/LEVANTAMENTO_EMPOWERMENT_F5_2026-11-17.md`. O código foi lido na `origin/main` `586b1107` (2026-11-17).
 
 **Regras desta espec:**
@@ -182,6 +184,9 @@ Todas em inteiros ou frações `num/den`, sem teste de hipótese.
 | **D-F5-6** | o código só em `experiments/` e `tests/`, sem tocar no `digilab/`? | sim | se entrar no `digilab/`, vira mecânica e pede G-PAR |
 | **D-F5-7** | os limiares da leitura (1/10 e 1/20) | aceitar como PROPOSTOS | um limiar frouxo mantém viva uma frente que devia acabar |
 | **D-F5-8** | o plano de análise da run vai num `docs/PLANO_ANALISE_V3_SONDA_EMPOWERMENT.md` próprio, commitado antes do artefato, com a seção 5 desta espec? | sim | sem ele, o CI da categoria experimento reprova o PR da medida |
+
+**Decisão (2026-11-17):** "Aprovo as recomendações". Valem as recomendações da tabela: (a) primeiro, n = 2, sem repetir classe, a
+faixa do M-MEM, o código só em `experiments/` e `tests/`, os limiares 1/10 e 1/20 (PROPOSTOS, SEM FONTE) e o plano de análise próprio.
 
 ## 9. Fontes
 
