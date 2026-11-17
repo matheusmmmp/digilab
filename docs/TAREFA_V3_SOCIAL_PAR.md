@@ -69,7 +69,7 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
   - seis medidas em `digilab/metrics.py`;
   - o `experiments/bancada/parceiro.py`;
   - a conferência dos controles, `experiments/conferir_controles_social_par_e1.py`.
-- **O que passa** (`tests/test_social_par_e1.py`, 13 testes):
+- **O que passa** (`tests/test_social_par_e1.py`, 15 testes):
   - o G2: desligada, o grupo de hoje byte a byte, e dois vivos sem perturbação dão o registro do `simular_grupo`;
   - o G-GRAV-IDENT: sem perturbação, o modular gravado refaz a vida ao vivo com zero desvios, em 2 sementes, e o par de seguidores
     também, com os contatos;
@@ -83,6 +83,6 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
   - **o adendo 2** (a estátua como focal, parceiros de regra pura, janela de 8 decisões) passou nas 5 (D-SP-21). O G-CONTROLE-POS e o
     G-MET-NULO entraram nos testes.
 - **Os desvios aceitos:** o D-SP-10 (o ponto gravado pela porta no motor) e o D-SP-11 (o alvo resolvido), pelas A1-5 e A1-6.
-- **Os testes:** `tests/test_social_par_e1.py`, 15 passados.
+- **Os testes:** `tests/test_social_par_e1.py`, 15 passados; a suíte inteira, 2 falhas antigas (D-SP-22), 5907 passados.
 - **O que fica para o A0:** o instrumento separa VIVO e GRAV com certeza só em controles de regra pura. Com pets que se movem e têm
   necessidades, separou na maioria das sementes.
