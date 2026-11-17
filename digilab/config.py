@@ -3134,6 +3134,66 @@ CONFIG_ELOGIO = ConfigElogio()
 CONFIG_ELOGIO_LIGADA = ConfigElogio(ligada=True)
 
 
+BRACOS_PV2 = ("OLF-0", "OLF-DC", "OLF-DCV", "OLF-PLA", "OLF-G")
+
+
+@dataclass(frozen=True)
+class ConfigPV2:
+    """A quimiotaxia pelo orgao do Olfato no DigiBrain modular (docs/PLANO_ANALISE_V3_PET_VIVO_PV2.md, secao 3, APROVADO; a forma dos
+    bracos em docs/futuro/integracao_cadeia_digibrain.md, secao 8, e no D-PV2C-1). Ligada, so com a ConfigOlfato da comida ligada no corpo
+    (duas narinas, DP-13): o cerebro le o nivel `c` (a media das duas narinas) e a variacao `dC` desde a decisao anterior, nunca a diferenca
+    entre elas (PV2-3); o `dC` entra no z como a caracteristica `dc_cheiro` e, com o `w0_dc`, no inato da unidade `comer/cheiro`; o nivel e
+    a proximidade das unidades do cheiro. O executor da busca (o `escolher_alvo` do M-ADAPT, PV2-2) escolhe entre os dois candidatos que o
+    motor ja oferece (`cheiro_seguir`, `cheiro_virar`), pelo braco:
+      - OLF-0: o preferido do motor (a tropotaxia: vira para a narina mais forte quando elas diferem);
+      - OLF-DC: segue; o acumulador da queda `A <- A - dC` (com dC < 0; senao A <- 0) passando de `l_pirueta` vira, e A volta a 0;
+      - OLF-DCV: o OLF-DC, e a pirueta continua virando por `n_varredura` decisoes (a varredura, sempre para a narina mais forte);
+      - OLF-PLA: vira quando os bits baixos do u do alvo, `u & 0xFF`, ficam abaixo de `taxa_placebo` (em 256), com a mesma varredura, sem
+        ler o A (o placebo da hora certa);
+      - OLF-G: o OLF-DCV, com o nivel multiplicado pelo ganho da fome, `clamp(div_arred(c x (g0 + u_fome), g0), 0, S)` (PV2-5).
+    Fica numa config propria, como a ConfigElogio, para o dump do modular nao mudar. Desligada (o padrao), a vida de hoje sai byte a byte
+    (tests/gabaritos/pv2_de_hoje.json). Status em PARAMETROS_PV2."""
+
+    ligada: bool = False                      # PROPOSTO: a chave
+    braco: str = "OLF-DCV"                    # PROPOSTO: o braco principal do plano (PV2-4)
+    # os quatro numeros do mecanismo (PV2-9): medidos nas sementes dos testes (experiments/medir_pv2.py,
+    # artifacts_v3_pet_vivo/pv2/medicao_codigo.json) pelas regras escritas antes, e propostos pelo adendo 1 do plano
+    w0_dc: int = 2849                         # PROPOSTO, SEM FONTE: div_arred(S x S, 8 x 46), uma queda mediana tira S/8 do inato
+    l_pirueta: int = 92                       # PROPOSTO, SEM FONTE: 2 x a mediana das quedas do cheiro (46) no OLF-0 com w0_dc = 0
+    n_varredura: int = 1                      # PROPOSTO, SEM FONTE: sem medida (o plano nao da como medir)
+    taxa_placebo: int = 22                    # PROPOSTO, SEM FONTE: arred(256 x 49 piruetas / 581 decisoes fora da varredura) no OLF-DCV
+    g0: int = 64                              # DECIDIDO (PV2-5, 2026-11-09): o G0 do ganho da fome; o adendo 1 propoe 512 (a INT-4)
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigPV2.ligada e bool: {self.ligada!r}")
+        if self.braco not in BRACOS_PV2:
+            raise ValueError(f"ConfigPV2.braco e um de {BRACOS_PV2}: {self.braco!r}")
+        for campo in ("w0_dc", "l_pirueta", "n_varredura", "taxa_placebo", "g0"):
+            v = getattr(self, campo)
+            if type(v) is not int or v < 0:
+                raise ValueError(f"ConfigPV2.{campo} e inteiro >= 0: {v!r}")
+        if self.l_pirueta < 1 or self.g0 < 1:
+            raise ValueError(f"ConfigPV2: l_pirueta e g0 sao >= 1: {self.l_pirueta!r}, {self.g0!r}")
+        if self.taxa_placebo > 256:
+            raise ValueError(f"ConfigPV2.taxa_placebo e uma taxa em 256: {self.taxa_placebo!r}")
+
+
+# Status dos campos da ConfigPV2 (conferido por teste)
+PARAMETROS_PV2: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "PLANO_ANALISE_V3_PET_VIVO_PV2, secao 3 (APROVADO, PV2-1 a PV2-10 DECIDIDAS em 2026-11-09); a chave, SEM FONTE"),
+    "braco": ("PROPOSTO", "PLANO_ANALISE_V3_PET_VIVO_PV2, PV2-4; a forma de cada braco no D-PV2C-1"),
+    "w0_dc": ("PROPOSTO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1 (artifacts_v3_pet_vivo/pv2/medicao_codigo.json); SEM FONTE"),
+    "l_pirueta": ("PROPOSTO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1 (artifacts_v3_pet_vivo/pv2/medicao_codigo.json); SEM FONTE"),
+    "n_varredura": ("PROPOSTO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1; sem medida, SEM FONTE"),
+    "taxa_placebo": ("PROPOSTO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1 (a taxa da pirueta do OLF-DCV, medicao_codigo.json); SEM FONTE"),
+    "g0": ("DECIDIDO", "PLANO_ANALISE_V3_PET_VIVO_PV2, PV2-5 (2026-11-09); a forma da revisao I, pista do Root et al. 2011; o adendo 1 "
+                       "propoe 512 (a saturacao da INT-4)"),
+}
+
+CONFIG_PV2 = ConfigPV2()
+
+
 @dataclass(frozen=True)
 class ConfigLanceDono:
     """O lance do dono (docs/TAREFA_V3_BOLA_BRINCAR.md, BB-1 a BB-6; as decisoes DECIDIDAS pelo Matheus em 2026-11-11, os numeros PROPOSTOS).
