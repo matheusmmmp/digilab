@@ -1,6 +1,7 @@
 # PLANO DE ANÁLISE V3 — SONDA_EMPOWERMENT, F5: o E(P) varia entre lugares? (2026-11-17, sessão da F5, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** A medida só roda depois de este plano ter "APROVADO pelo Matheus" no cabeçalho e estar commitado (D-F5-8).
+**Status: APROVADO pelo Matheus (2026-11-17).** À pergunta "Aprova o plano de análise e a D-F5-9 como recomendada?", ele respondeu
+"Aprovo o plano". A D-F5-9 fica aceita como recomendada (sim). Este cabeçalho foi commitado antes do primeiro artefato (D-F5-8).
 
 **O papel:** uma medida descritiva, sem gate e sem teste de hipótese. Ela decide uma coisa só: se a H-EMP-1 do levantamento vale um
 plano depois da F3. A F5 não é frente (D-F5-1, "Pesquisa, com sonda").
@@ -85,3 +86,5 @@ A medida roda **uma vez** (o script recusa se o `sonda.json` já existe).
 | id | pergunta | recomendação | custo de errar |
 |---|---|---|---|
 | **D-F5-9** | a exceção "plano pelas entradas" (seção 4): se a falta de classes explica o plano, a F5 espera a opção (b) em vez de acabar? | sim | sem ela, as entradas estreitas podem encerrar a F5 sem que o `E` tenha tido como variar |
+
+Decisão: aceita como recomendada, em 2026-11-17 ("Aprovo o plano").
