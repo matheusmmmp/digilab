@@ -36,7 +36,10 @@ pergunta, sinal por sinal, de onde vem o que faz cada cérebro aprender.
     (`corpo.py:427-471` e os emissores `corpo.py:561-603`). Essas tabelas são PROPOSTAS e SEM FONTE (`corpo.py:219-245`).
   - O único pedaço que é do estado do pet é o peso que a falta de agora dá a essa mudança.
   - **A satisfação é do pet; o que satisfaz, decidimos nós.**
-- **O A do jogo (o v11, em Ajustes) mistura:**
+- **O A sai do jogo.** O Matheus avisou em 2026-11-17 que o cérebro A está fora do jogo e que outra frente o retira e deixa só o
+  modular (a LIMPEZA, `docs/TAREFA_V3_LIMPEZA.md`). Na `main` 136e6088 o código ainda existe (`web/app/motor/pet_v11.ts`), por isso a
+  seção 4 fica como registro histórico, e a conclusão desta auditoria vale para o modular, o único cérebro do jogo.
+- **O A do jogo (o v11, em Ajustes, de saída) misturava:**
   - aprende pelo corpo (o sinal dos drives);
   - aprende pelo carinho medido no corpo;
   - aprende pelo tapa como **constante −S**, um valor do projetista que ignora de propósito o que o tapa faz no corpo (`lobos.py:1110-1116`).
@@ -49,8 +52,8 @@ pergunta, sinal por sinal, de onde vem o que faz cada cérebro aprender.
 |---|---|---|---|---|---|
 | modular, ligado na bancada do Python (`p1`, `p2`, `m_mem`, `persistencia`) | 4 | 1 | 0 | 0 | 3 |
 | modular do jogo (`VERSAO_PET` 38, `web/app/motor/constantes.ts:71-90`, `:124`) | 6 | 2 | 0 | 0 | 4 |
-| A, padrão do Python | 0 | 0 | 0 | 0 | 0 |
-| A do jogo (v11, `web/app/motor/pet_v11.ts:8-15`) | 1 | 0 | 1 (valor do PROJETISTA) | 0 | 1 (o DONO dispara, o CORPO mede) |
+| A, padrão do Python (sai na LIMPEZA) | 0 | 0 | 0 | 0 | 0 |
+| A do jogo (v11, `web/app/motor/pet_v11.ts:8-15`; fora do jogo, retirada em curso) | 1 | 0 | 1 (valor do PROJETISTA) | 0 | 1 (o DONO dispara, o CORPO mede) |
 
 ## 3. O modular, sinal por sinal
 
@@ -79,7 +82,10 @@ pergunta, sinal por sinal, de onde vem o que faz cada cérebro aprender.
 
 O ganho do aprendizado fica constante (`modula_g_apr=False`, g0 = S, `afeto.py:119-120`).
 
-## 4. O A, sinal por sinal
+## 4. O A, sinal por sinal (registro histórico)
+
+O A está saindo do jogo (seção 1). A tabela fica porque o código ainda está na `main` 136e6088 e porque o tapa constante (A6) é o
+exemplo mais claro de sucesso definido pelo projetista. Nada desta seção vale para o pet do jogo depois da retirada.
 
 Todos os sinais do A caem em `_creditar` (`lobos.py:1492-1501`), com a mesma regra de atualização dos pesos (`lobos.py:461-512`).
 
@@ -103,8 +109,8 @@ Todos os sinais do A caem em `_creditar` (`lobos.py:1492-1501`), com a mesma reg
 1. **As tabelas de ação** (seção 1): o r do modular e o A2 do A leem uma mudança do corpo cuja direção e cujo tamanho nós escrevemos.
 2. **O `gosto_visual`** (M12) não passa por receptor.
 3. **A visita vazia tem valor fixado** (M7: r = 0; M8: σ ≤ 0).
-4. **O tapa é constante no A**, e o carinho é medido no corpo. O modular não aprende com nenhum dos dois.
-5. **O A escolhe o que conta:** humor e saúde ficam fora dos drives, salvo a fruta no E2. O modular inclui os dois.
+4. **O tapa era constante no A** (que sai do jogo), e o carinho medido no corpo. O modular não aprende com nenhum dos dois.
+5. **O A escolhia o que conta:** humor e saúde ficavam fora dos drives, salvo a fruta no E2. O modular inclui os dois.
 6. **No P1 (M4), o mundo escolhe o que se aprende:** só o comer e a bola atualizam o desfecho.
 
 ## 6. O que isto autoriza dizer, e o que não
