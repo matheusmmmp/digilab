@@ -725,7 +725,10 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave():
                       # a EVIDENCIA A1 (a baseline trivial): o orquestrador importa o da C4 so pela vida do REL (`_vida`) e pelas celulas; nao le a chave
                       "experiments/run_v3_baseline_trivial.py",
                       # a auditoria da evidencia (EVIDENCIA A0): so cita a pasta da run da C4 (memoria_autobio/run) para ler os blobs do git; nao le a chave
-                      "tools/auditar_evidencia.py"}
+                      "tools/auditar_evidencia.py",
+                      # a replicacao da EVIDENCIA A3 (tools/replicar_run.py): so cita a pasta, a config e o orquestrador da C4 para refazer a run
+                      # numa worktree no SHA dela; nao le a chave
+                      "tools/replicar_run.py"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre"):
         if not (RAIZ / pasta).exists():
