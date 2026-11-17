@@ -1,7 +1,11 @@
 # A integração da cadeia no DigiBrain modular: diagnóstico, recomendação e plano (2026-11-17, Claude Code, Opus 5.5)
 
-**Status: RECOMENDAÇÃO, PROPOSTA.** Nada aqui está decidido. As decisões abertas estão na seção 9 (INT-1 a INT-9), cada uma com a
-recomendação e o custo de errar. Todo número novo é PROPOSTO e SEM FONTE, salvo onde a fonte está escrita.
+**Status: as INT-1 a INT-9 (seção 9) estão DECIDIDAS pela recomendação, em 2026-11-17.** O Matheus escreveu, nesta sessão: "Aprovo as
+INT-1 a INT-9 pela recomendação" (D-INT-9).
+- **O que isso decide:** a ordem das etapas, o lugar e as regras do desenho.
+- **O que continua PROPOSTO e SEM FONTE:** todo número novo do documento, como o K, o λ e o η do traço, o θ_dor e o corte da saturação
+  da INT-4, salvo onde a fonte está escrita. Esses números se medem e se propõem no PR de cada etapa.
+- **O que não muda:** as PV2-1 a PV2-10, salvo a ordem da PV2-10, que a INT-1 refaz em parte.
 
 **A origem:** pedido do Matheus, repassado na íntegra pela sessão que abriu esta: "investigue como melhorar a experiência do pet virtual
 por meio da integração entre órgãos, bioquímica, percepção, estado interno, memória, decisão, ação e aprendizado". Esta sessão não ouviu
@@ -459,7 +463,7 @@ texto, e o teste lê esse texto. A legibilidade com pessoas é da frente LEGIBIL
 | **R6** | **a saciedade e os órgãos de dentro** | o receptor da saciedade, o freio do B2, o paladar no M-SENS | seção 9.3 do plano do PV-2; o ELOGIO precisa do paladar (D-EL-9) | uma tarefa de corpo | sim |
 | **Web** | cada etapa, depois da validação dela | o espelho com paridade | a regra "sempre aplicar na web"; **a LZ3 tira a vontade do A do balão** (INT-7) | a validação da etapa; a LZ3 | — |
 
-**A alternativa:** manter a PV2-10 como está, isto é, o R5 logo depois do R0. O custo de errar está na INT-1.
+**A ordem acima é a decidida (INT-1, 2026-11-17).** A alternativa, manter a PV2-10 como estava (o R5 logo depois do R0), ficou de fora.
 
 ## 7. O plano de código por mudança (as etapas R1 a R6, em resumo; o R0 está na seção 8)
 
@@ -595,7 +599,7 @@ O que segue é o detalhe que o plano deixou "para o PR do código", com as confe
 - a F3 antes do R3;
 - a máquina livre e uma faixa para cada run.
 
-**As decisões com o Matheus:**
+**As decisões com o Matheus (DECIDIDAS pela recomendação em 2026-11-17, "Aprovo as INT-1 a INT-9 pela recomendação"; D-INT-9):**
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|

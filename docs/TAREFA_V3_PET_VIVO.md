@@ -169,4 +169,7 @@ esta. O documento é o [integracao_cadeia_digibrain.md](futuro/integracao_cadeia
 - **Recomenda o código do PV-2 como a primeira etapa,** com a especificação na seção 8 dele.
 - **Propõe reordenar a PV2-10 em parte** (INT-1): o rastro e o crédito do intervalo vêm antes do sorteio, pela evidência nova de que o r
   é medido no mesmo tick (D-INT-3).
-- **Os desvios:** D-INT-1 a D-INT-8. As decisões INT-1 a INT-9 ficam com o Matheus.
+- **Os desvios:** D-INT-1 a D-INT-9.
+- **As decisões:** as INT-1 a INT-9 estão DECIDIDAS pela recomendação. O Matheus escreveu, em 2026-11-17: "Aprovo as INT-1 a
+  INT-9 pela recomendação" (D-INT-9).
+- **A próxima etapa desta frente** é o PR do código do PV-2 (o R0), pela seção 8 do documento.
