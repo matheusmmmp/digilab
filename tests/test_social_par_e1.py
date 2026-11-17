@@ -2,8 +2,8 @@
 
 Os gates desta etapa que nao dependem dos controles positivos: o G2 (desligada, o grupo de hoje), o G-GRAV-IDENT (sem perturbacao, a
 gravacao refaz a vida ao vivo), o G-GRAV-CEGA (a gravada nao le a observacao), o G-LEVAR (a perturbacao no grupo e no replay) e o
-G-METRICAS (as medidas em casos feitos a mao). O G-CONTROLE-POS e o G-MET-NULO nao estao aqui: na primeira tentativa os controles
-positivos, como escritos na espec, nao separaram as condicoes (D-SP-10, docs/registro/2026-11.md), e a E1 parou para o Matheus decidir.
+G-METRICAS (as medidas em casos feitos a mao), o G-CONTROLE-POS (os controles de regra pura do adendo 2, secao 10, que separam a VIVO
+da GRAV nas 5 sementes; os da secao 3 e do adendo 1 falharam, D-SP-13 e D-SP-18) e o G-MET-NULO (o adendo 1, 9.3).
 """
 from __future__ import annotations
 
@@ -200,3 +200,24 @@ def test_g_metricas_alternancia_e_o_substituto_circular():
     assert mt.alternancia_substituta([10, 50], [20, 90], 30, [0, 30], 100) == [0.5, 0.5]
     with pytest.raises(ValueError):
         mt.alternancia([5, 1], [], 3)
+
+
+# ------------------------------------------------------------------ G-CONTROLE-POS (o adendo 2) e G-MET-NULO (o adendo 1)
+def test_g_controle_pos_os_controles_de_regra_pura_separam_vivo_e_grav():
+    import conferir_controles_social_par_e1 as cc
+    r = cc.conferir()
+    assert r["o_que_a_espec_espera_saiu"] == {"C1": True, "C2": True}
+    for linha in r["pares"]["C1_estatua_x_seguidor_puro"].values():
+        assert linha["VIVO"]["desvios_B"] == 0                       # o vivo nao tem gravacao
+        assert linha["GRAV"]["distancias"] == [linha["GRAV"]["distancia_no_t0"]] * (cc.JANELA + 1)   # o gravado nao sai do lugar
+
+
+def test_g_met_nulo_o_parceiro_gravado_nao_responde_ao_focal():
+    seg, evi = (lambda c: pc.Seguidor(c)), (lambda c: pc.Evitador(CM, c))  # noqa: E731
+    for s in (101, 202, 303, 404, 505):
+        t0, direcao = pc.sortear_perturbacao(s, TICKS_POR_DIA, 2 * TICKS_POR_DIA - 15, 15)
+        base = pc.viver_par(CM, s, [_vivo("A", s, seg, rotulo="c"), _vivo("B", s, evi, gravar=True, rotulo="c")], DIAS)
+        grav = pc.viver_par(CM, s, [_vivo("A", s, seg, rotulo="c"), _gravado("B", s, base)], DIAS, perturbacao=("A", "B", t0, direcao, 5))
+        k = pc.indice_do_passo(grav, grav.t0)
+        c = mt.contingencia(grav.posicoes["B"][k:], grav.posicoes["A"][k:])
+        assert c is None or abs(c) <= 0.2, (s, c)                   # A1-4

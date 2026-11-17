@@ -1,17 +1,18 @@
-"""SOCIAL_PAR, E1: a conferencia dos controles positivos do adendo 1 (docs/ESPEC_V3_SOCIAL_PAR_E1.md, secao 9, APROVADO em 2026-11-17).
+"""SOCIAL_PAR, E1: a conferencia dos controles positivos do adendo 2 (docs/ESPEC_V3_SOCIAL_PAR_E1.md, secao 10, APROVADO em 2026-11-17).
 
-Nao e uma run de pesquisa: e a validacao do instrumento, nas sementes dos testes (101 a 505), sem faixa. Os pares (A e o pet focal F, B o
-parceiro P):
-  C1   passivo x seguidor     tem de sair: o tempo ate o contato menor na VIVO e a fracao de contato maior na VIVO, em todas
-  C2   seguidor x evitador    tem de sair: a fracao de contato menor na VIVO, em todas; e o G-MET-NULO na GRAV (contingencia None ou |c| <= 0,2)
-  seguidor x seguidor          so descritivo (A1-3)
-Em cada semente: a vida VIVO sem perturbacao da a gravacao de B; depois a VIVO e a GRAV com a mesma perturbacao (A levado a d0 = 5 celulas
-de B no t0 sorteado do fluxo `intervencao-social`, no dia 1). As medidas sao as de digilab/metrics.py, a partir do passo da perturbacao.
+Nao e uma run de pesquisa: e a validacao do instrumento, nas sementes dos testes (101 a 505), sem faixa. O pet focal (A) e sempre a
+estatua, e o parceiro (B) e de regra pura (nao come, nao dorme, nao chama):
+  C1   estatua x seguidor puro, d0 = 5 celulas   tem de sair: na VIVO B chega (nao censurado) e na GRAV nao chega (censurado), e a
+                                                 fracao de contato maior na VIVO, em todas
+  C2   estatua x evitador puro, d0 = 1 celula    tem de sair: a fracao de contato menor na VIVO, em todas
+As medidas sao as de digilab/metrics.py, nas 8 decisoes depois do passo da perturbacao (A2-4). Em cada semente: a vida VIVO sem
+perturbacao da a gravacao de B; depois a VIVO e a GRAV com a mesma perturbacao (A levado a d0 celulas de B no t0 sorteado do fluxo
+`intervencao-social`, no dia 1).
 
-A primeira conferencia (a secao 3, com o evitador de antes) esta em artifacts_v3_social_par_e1/controles_positivos.json (D-SP-13) e nao se
-refaz com o codigo de hoje: o evitador mudou (A1-2).
+As conferencias de antes estao no git e nao se refazem com o codigo de hoje: a da secao 3 em
+artifacts_v3_social_par_e1/controles_positivos.json (D-SP-13) e a do adendo 1 em controles_positivos_ad1.json (D-SP-18).
 
-    python experiments/conferir_controles_social_par_e1.py artifacts_v3_social_par_e1/controles_positivos_ad1.json
+    python experiments/conferir_controles_social_par_e1.py artifacts_v3_social_par_e1/controles_positivos_ad2.json
 """
 from __future__ import annotations
 
@@ -33,13 +34,12 @@ from digilab.mundo import DonoComLugar  # noqa: E402
 
 CM = e6.CM
 DIAS = 2
-D0 = 5                                      # celulas (a espec, 2.3: o d0 fixo pelo plano; aqui o da conferencia)
 SEMENTES = (101, 202, 303, 404, 505)
 CI = CONFIG_INTERVENCAO_SOCIAL_LIGADA
-LIMIAR_NULO = 0.2                         # A1-4, PROPOSTO, SEM FONTE
-PARES = {"C1_passivo_x_seguidor": (lambda c: pc.Passivo(c), lambda c: pc.Seguidor(c)),
-         "C2_seguidor_x_evitador": (lambda c: pc.Seguidor(c), lambda c: pc.Evitador(CM, c)),
-         "seguidor_x_seguidor": (lambda c: pc.Seguidor(c), lambda c: pc.Seguidor(c))}
+JANELA = 8                                  # A2-4: as 8 decisoes depois do t0, PROPOSTO, SEM FONTE
+# A2-1 a A2-3: o pet focal (A) e sempre a estatua; (o cerebro de A, o de B, o d0 em celulas)
+PARES = {"C1_estatua_x_seguidor_puro": (lambda c: pc.Estatua(c), lambda c: pc.SeguidorPuro(c), 5),
+         "C2_estatua_x_evitador_puro": (lambda c: pc.Estatua(c), lambda c: pc.EvitadorPuro(CM, c), 1)}
 
 
 def _dono(s):
@@ -53,23 +53,25 @@ def _membros(s, pa, pb, gravar_b):
 
 
 def medir(v) -> dict:
+    """nas JANELA decisoes depois do passo da perturbacao (k): o passo k e o da distancia d0, e a janela sao os passos k+1 a k+JANELA"""
     d = pc.distancias_celulas(v, "A", "B")
     k = pc.indice_do_passo(v, v.t0)
-    t, censurado = mt.tempo_ate_raio(d, CI.raio_contato_celulas, k, CI.janela_reencontro)
-    c = mt.contingencia(v.posicoes["B"][k:], v.posicoes["A"][k:])
-    return {"t0": v.t0, "distancia_no_t0": d[k], "tempo_ate_contato": t, "censurado": censurado,
-            "fracao_contato": mt.fracao_em_raio(d, CI.raio_contato_celulas, k), "contingencia_B_de_A": c,
+    if k + JANELA >= len(d):
+        raise RuntimeError(f"a janela passa do fim da vida: t0 {v.t0}, passo {k}, {len(d)} passos")
+    t, censurado = mt.tempo_ate_raio(d[:k + JANELA + 1], CI.raio_contato_celulas, k, JANELA)
+    return {"t0": v.t0, "distancia_no_t0": d[k], "distancias": d[k:k + JANELA + 1], "tempo_ate_contato": t, "censurado": censurado,
+            "fracao_contato": mt.fracao_em_raio(d[k + 1:k + JANELA + 1], CI.raio_contato_celulas),
             "desvios_B": len(v.desvios.get("B", []))}
 
 
 def conferir() -> dict:
     out = {}
-    for nome, (pa, pb) in PARES.items():
+    for nome, (pa, pb, d0) in PARES.items():
         linhas = {}
         for s in SEMENTES:
             ss = sementes_do_grupo(s, CONFIG_GRUPO_LIGADA.ids)
             t0, direcao = pc.sortear_perturbacao(s, TICKS_POR_DIA, 2 * TICKS_POR_DIA - 15, 15)
-            pert = ("A", "B", t0, direcao, D0)
+            pert = ("A", "B", t0, direcao, d0)
             base = pc.viver_par(CM, s, _membros(s, pa, pb, True), DIAS)
             vivo = pc.viver_par(CM, s, _membros(s, pa, pb, False), DIAS, perturbacao=pert)
             gb = pc.Membro("B", "gravado", e6.fabricas("atencioso", ss["B"])[1], gravacao=base.gravacoes["B"],
@@ -77,14 +79,13 @@ def conferir() -> dict:
             grav = pc.viver_par(CM, s, [_membros(s, pa, pb, False)[0], gb], DIAS, perturbacao=pert)
             linhas[str(s)] = {"VIVO": medir(vivo), "GRAV": medir(grav)}
         out[nome] = linhas
-    nulo = lambda c: c is None or abs(c) <= LIMIAR_NULO  # noqa: E731
+    c1, c2 = out["C1_estatua_x_seguidor_puro"].values(), out["C2_estatua_x_evitador_puro"].values()
     esperado = {
-        "C1": all(l["VIVO"]["tempo_ate_contato"] < l["GRAV"]["tempo_ate_contato"]
-                  and l["VIVO"]["fracao_contato"] > l["GRAV"]["fracao_contato"] for l in out["C1_passivo_x_seguidor"].values()),
-        "C2": all(l["VIVO"]["fracao_contato"] < l["GRAV"]["fracao_contato"] for l in out["C2_seguidor_x_evitador"].values()),
-        "G_MET_NULO": all(nulo(l["GRAV"]["contingencia_B_de_A"]) for l in out["C2_seguidor_x_evitador"].values()),
+        "C1": all(not l["VIVO"]["censurado"] and l["GRAV"]["censurado"] and l["VIVO"]["fracao_contato"] > l["GRAV"]["fracao_contato"]
+                  for l in c1),
+        "C2": all(l["VIVO"]["fracao_contato"] < l["GRAV"]["fracao_contato"] for l in c2),
     }
-    return {"espec": "docs/ESPEC_V3_SOCIAL_PAR_E1.md, secao 9 (o adendo 1)", "limiar_nulo": LIMIAR_NULO, "dias": DIAS, "d0_celulas": D0, "sementes": list(SEMENTES),
+    return {"espec": "docs/ESPEC_V3_SOCIAL_PAR_E1.md, secao 10 (o adendo 2)", "janela": JANELA, "dias": DIAS, "sementes": list(SEMENTES),
             "alcance_celulas_por_decisao": CM.velocidade * 15 / CM.sub, "pares": out, "o_que_a_espec_espera_saiu": esperado}
 
 

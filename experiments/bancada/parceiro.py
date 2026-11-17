@@ -187,6 +187,45 @@ class Evitador(PoliticaInstintoMundo):
         return None
 
 
+class Estatua(PoliticaInstintoMundo):
+    """o pet focal dos controles do adendo 2 (docs/ESPEC_V3_SOCIAL_PAR_E1.md, 10.1, A2-2): sempre ocioso, nunca se move nem dorme"""
+
+    nome = "estatua"
+
+    def agir(self, obs, rng):
+        return AcaoPet.OCIOSO
+
+
+class SeguidorPuro(PoliticaInstintoMundo):
+    """o adendo 2 (10.1, A2-1): ve o outro, explora com o alvo `seguir`; nao ve, fica ocioso. Nao come, nao dorme, nao chama"""
+
+    nome = "seguidor_puro"
+
+    def __init__(self, cfg=None) -> None:
+        super().__init__(cfg)
+        self._ve_outro = False
+
+    def agir(self, obs, rng):
+        self._ve_outro = obs.social is not None and bool(obs.social.outros)
+        return AcaoPet.EXPLORAR if self._ve_outro else AcaoPet.OCIOSO
+
+    def escolher_alvo(self, acao, candidatos, percepcao, u):
+        if acao is AcaoPet.EXPLORAR and self._ve_outro:
+            return next(c for c in candidatos if c.tipo == "seguir")
+        return None
+
+
+class EvitadorPuro(Evitador):
+    """o adendo 2 (10.1, A2-1): ve o outro, foge um passo inteiro (a conta do Evitador do adendo 1); nao ve, fica ocioso"""
+
+    nome = "evitador_puro"
+
+    def agir(self, obs, rng):
+        outros = [] if obs.social is None else obs.social.outros
+        self._outro = None if not outros else (outros[0][1], outros[0][2])
+        return AcaoPet.EXPLORAR if self._outro is not None else AcaoPet.OCIOSO
+
+
 class Passivo(PoliticaInstintoMundo):
     """um parceiro que nao mexe no mundo: so fica ocioso ou dorme (o de tests/test_grupo.py:71-80)"""
 

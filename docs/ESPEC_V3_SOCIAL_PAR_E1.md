@@ -314,7 +314,7 @@ O adendo também põe um controle novo, cuja resposta é conhecida **por constru
 
 ## 10. Adendo 2: controles só de regra (2026-11-17, PROPOSTO)
 
-**Status: PROPOSTO, esperando o Matheus (A2-1 a A2-5, 10.5).** Nada roda antes da aprovação. As seções 1 a 9 e as duas conferências não
+**Status: APROVADO pelo Matheus em 2026-11-17 ("Aprovo todas"): as A2-1 a A2-5 (10.5), pela recomendação (D-SP-20).** As seções 1 a 9 e as duas conferências não
 mudam: `controles_positivos.json` (`7a1049ac…`, D-SP-13) e `controles_positivos_ad1.json` (`e1fe96b6…`, D-SP-18) ficam como saíram.
 
 **De onde vem:** o Matheus, em 2026-11-17, "Controles só de regra", depois de os controles do adendo 1 passarem só na maioria das sementes

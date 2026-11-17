@@ -60,7 +60,7 @@ conjunta com papéis, a recuperação depois de uma interrupção e a generaliza
 
 As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), cada uma com a recomendação e o custo de errar.
 
-## E1, o código do parceiro sob intervenção (2026-11-17, Claude Code, Opus 5.5, branch `v3-social-par-e1`): PARADA nos controles positivos
+## E1, o código do parceiro sob intervenção (2026-11-17, Claude Code, Opus 5.5, branch `v3-social-par-e1`)
 
 - **O que entrou:**
   - a `ConfigIntervencaoSocial`, desligada;
@@ -77,4 +77,12 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
 - **O que falhou:** os dois controles positivos da espec, seção 3 (D-SP-13). O seguidor × seguidor não separa a VIVO da GRAV, porque um
   seguidor sozinho fecha o d0 em uma decisão (o teto). O evitador não foge de perto, porque o vetor de fuga some no contato (um defeito do
   desenho). A etapa parou aqui, sem mudar os controles.
-- **O que falta para fechar:** a decisão do Matheus sobre um adendo com controles novos e sobre o D-SP-10.
+- **Os dois adendos:**
+  - **o adendo 1** (C1 passivo × seguidor, o evitador refeito) passou só em 4 e 3 das 5 sementes, porque as necessidades do corpo passam na
+    frente da regra social (D-SP-18);
+  - **o adendo 2** (a estátua como focal, parceiros de regra pura, janela de 8 decisões) passou nas 5 (D-SP-21). O G-CONTROLE-POS e o
+    G-MET-NULO entraram nos testes.
+- **Os desvios aceitos:** o D-SP-10 (o ponto gravado pela porta no motor) e o D-SP-11 (o alvo resolvido), pelas A1-5 e A1-6.
+- **Os testes:** `tests/test_social_par_e1.py`, 15 passados.
+- **O que fica para o A0:** o instrumento separa VIVO e GRAV com certeza só em controles de regra pura. Com pets que se movem e têm
+  necessidades, separou na maioria das sementes.
