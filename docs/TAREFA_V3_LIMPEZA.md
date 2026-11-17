@@ -2,7 +2,8 @@
 
 Coordenador: sessão do Matheus (Claude Code). Worker: Claude Code, worktree `v3-limpeza`. Worktree e branch: `v3-limpeza`. Status: EM ANDAMENTO
 (a LZ0 e a LZ1 na `main`; a LZ2a neste PR; as decisões D-LZ-1 a D-LZ-3 DECIDIDAS pelo Matheus em 2026-11-16, pela
-recomendação: "Aceito"; a D-LZ-4, a LZ2 em três, DECIDIDA em 2026-11-16 pela recomendação, "Aceito", seção 3.2).
+recomendação: "Aceito"; a D-LZ-4, a LZ2 em três, DECIDIDA em 2026-11-16 pela recomendação, "Aceito", seção 3.2; o desenho da LZ2b, D-LZ-8 a D-LZ-12,
+PROPOSTO, seção 3.3).
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-16: "vamos tentar enxugar o projeto [...] separar o que era do Bandit, que não está
 sendo mais usado, do Cérebro A, que também não está sendo mais usado", com as escolhas (nesta sessão):
@@ -146,6 +147,44 @@ Por isso a LZ2 vira três PRs:
   - antes, um gabarito próprio, num commit à parte, das vidas do treino do combate e das vidas com o vínculo, com os cérebros que ficam.
 - **LZ2c, os braços do A, do B e do C na bancada:** vão junto com a LZ4, no mesmo PR que tira os testes deles, depois da tag.
 
+## 3.3 O desenho da LZ2b, a cadeia de motores (2026-11-17, PROPOSTO; D-LZ-8 a D-LZ-12)
+
+**O que a leitura mostrou.** O motor de personalidade quase não depende do bandit. O que prende a cadeia é onde as coisas moram:
+- o `digilab/obediencia.py` sai (o inventário o marca SAI, porque ele define a `PoliticaBanditPersonalidade`, que herda da memória por
+  espaços e do bandit). No mesmo arquivo moram o `MotorPersonalidade`, a `Recusa`, o `_PoliticaObservada`, o `conflito` e o
+  `termos_obediencia`, que não usam o bandit;
+- o `educacao.py`, o `motor_corpo.py` e o `treino_vida.py` (os 3 REFAZ que sobraram da LZ2a) só são REFAZ por importarem o
+  `obediencia.py`;
+- o `digilab/vinculo.py` sai também, por uma constante só: o `CUIDADOS_QUE_ATENDEM`, que ele importa do `policies/bandit.py`;
+- o `desejo_de` (`digilab/desejo.py`, FICA) lê o bandit por duck typing (o `_bracos` da política): sem o bandit, o ramo nunca roda;
+- as duas fábricas de vida da v1, `fabricas_treino` (`treino_vida.py`) e `fabricas_educacao` (`educacao.py`, e o `fabricas_filho` por
+  cima dela), usam a `PoliticaBanditPersonalidade` como padrão. Quem as chama ou cita a política: 18 arquivos de teste e de experimento da v1 (SAI), o
+  `digilab/donos_educacao.py` (SAI) e o `digilab_fala_livre/situacoes.py`, que fica fora do inventário.
+
+**A mudança (nenhuma vida muda; o código é movido sem mudar uma linha da conta):**
+1. **D-LZ-8, o módulo neutro:** `digilab/personalidade.py`, novo, com o `MotorPersonalidade`, a `Recusa`, o `_PoliticaObservada`, o
+   `logistica`, o `conflito`, o `termos_obediencia` e as tabelas `ATENDE` e `_IDX`. O `obediencia.py` fica só com a
+   `PoliticaBanditPersonalidade` e reexporta o resto até sair (a LZ4). O `treino_vida.py`, o `educacao.py` e o `motor_corpo.py` passam a
+   importar do `personalidade.py`.
+2. **D-LZ-9, a constante do vínculo:** o `CUIDADOS_QUE_ATENDEM` vai para o `digilab/events.py`, ao lado do `AcaoUsuario`; o `bandit.py` e o
+   `vinculo.py` importam de lá. O `vinculo.py` vira FICA.
+3. **D-LZ-10, as fábricas da v1:** o `fabricas_treino`, o `fabricas_educacao` e o `fabricas_filho` vão para o `obediencia.py`, que sai, e os
+   chamadores trocam o import. O `MotorTreino` e o `MotorEducacao` ficam onde estão, sem o bandit no padrão.
+4. **D-LZ-11, o ramo do bandit no `desejo_de`:** fica até a LZ4 e sai junto com o bandit; ele não importa nada.
+5. **D-LZ-12, a fala livre:** o `digilab_fala_livre/situacoes.py` monta as situações com um pet do bandit (`fabricas_treino`). Ele passa a
+   importar a fábrica do `obediencia.py` agora, e a troca do pet dele por um cérebro que fica é decidida na LZ4, com o gabarito dele.
+
+**O gabarito, num commit próprio, antes da mudança:** `tests/gabarito_limpeza_cadeia.py`, gravando as vidas que passam pela cadeia
+com os cérebros que ficam (o modular do jogo e o instinto):
+- as vidas com o vínculo e o desejo ligados, com a obediência ligada e desligada, pelo `MotorPersonalidade` e pelo `MotorTreino`;
+- o treino do combate (`MotorTreino` com o plano de treino), com o instinto;
+- o que a cadeia recusa hoje com esses cérebros fica gravado como recusa, como na LZ1 parte 2.
+
+Depois da mudança, o gabarito novo e os da LZ1 saem iguais byte a byte, e o inventário fica com 0 REFAZ no `digilab/`.
+
+**Fora da LZ2b:** a educação, as lesões e a obediência continuam no código até a LZ4 (só a v1 as liga); a troca do pet da fala livre;
+os braços da bancada (a LZ2c).
+
 ## 4. Experimento e gate
 
 Não há run. O gate de cada etapa é o byte a byte dos gabaritos da LZ1 e a suíte.
@@ -192,6 +231,12 @@ artefatos das frentes que saem vão para o backup (D-LZ-3).
     sairiam antes da tag.
   - **Custo de errar:** com a recomendação, são dois PRs a mais; com a alternativa, a cadeia do treino e do vínculo muda sem guarda
     própria.
+- **D-LZ-8 a D-LZ-12, o desenho da LZ2b (seção 3.3), PROPOSTAS.**
+  - **Recomendação:** as cinco como na seção 3.3: o `personalidade.py` neutro, a constante do vínculo no `events.py`, as fábricas da v1
+    no `obediencia.py`, o ramo do `desejo_de` até a LZ4 e a fala livre decidida na LZ4.
+  - **Alternativa para a D-LZ-10:** deixar as fábricas onde estão, com o padrão do bandit importado dentro da função. Mexe em menos
+    arquivos, mas o `treino_vida.py` e o `educacao.py` seguem citando o bandit até a LZ4.
+  - **Custo de errar:** com a recomendação, cerca de 23 arquivos trocam uma linha de import; um import esquecido falha alto na suíte.
 - **D-LZ-3, os documentos e os artefatos das frentes que saem.**
   - **Recomendação:** os `TAREFA`, `PLANO_ANALISE` e `RESULTADO` das frentes do bandit, do A, do B, do C e da v1, com as pastas
     `artifacts_*` delas, vão para o backup. No repositório ficam o `docs/LEITURA_CONSOLIDADA_DONO.md`, o `docs/FECHAMENTO_V2.md` e o
