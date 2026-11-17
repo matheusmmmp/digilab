@@ -1,7 +1,7 @@
 /* A luta ranqueada (MMO4, docs/PLANO_V3_MMO.md seções 3 e 4; MMO-6 e MMO-8): a semente da luta ranqueada vem do servidor, e a semente
    pedida conta como luta feita. Só com a sessão da conta (CN2):
      POST /sementes   {pet: {semente, versao}, indice, hash} -> 201 {numero, semente, indice, hora, dia, semana, restam_hoje}
-                      | 403 nivel_insuficiente | 409 fora_de_ordem, indice_ja_enviado, hash_diferente | 422 versao_pet_desconhecida
+                      | 403 nivel_insuficiente {marco} | 409 fora_de_ordem, indice_ja_enviado, hash_diferente | 422 versao_pet_desconhecida
                       | 429 limite_do_dia {reabre_em} | 400 malformado | 401 sem sessão | 403 sem CSRF
      GET  /sementes   as sementes entregues à conta, da mais nova à mais velha
 
@@ -143,7 +143,7 @@ export function montarRotasSemente(app: Hono, cfg: ConfigConta, g: GuardasConta)
       const t = Math.max(agora(), ultimaHora ?? -Infinity), dia = diaDe(t), semana = semanaDe(t);
       if (!nivelAberto(banco, s.conta_id, marcoRanqueada))
         return recusar(c, 403, "nivel_insuficiente", `a luta ranqueada abre no marco ${marcoRanqueada} do Tamer, num envio aceito desta conta`
-          + (marcoRanqueada === MARCO_MEGA ? " (o primeiro Mega, conferido no registro do pet)" : ""));
+          + (marcoRanqueada === MARCO_MEGA ? " (o primeiro Mega, conferido no registro do pet)" : ""), { marco: marcoRanqueada });
       const hoje = (banco.prepare("SELECT count(*) AS n FROM sementes WHERE conta_id = ? AND dia = ?").get(s.conta_id, dia) as { n: number }).n;
       if (hoje >= LUTAS_POR_DIA)
         return recusar(c, 429, "limite_do_dia", `já foram ${LUTAS_POR_DIA} lutas ranqueadas hoje (o dia de Brasília, pelo relógio do servidor)`,
