@@ -126,3 +126,21 @@ As seções acima são cópias inteiras do CLAUDE.md antigo (o G-NADA-PERDIDO co
   convidados (`convidados.ts`), o apelido de um Rookie (`apelido.ts`), a configuração pelo ambiente (`config.ts`), as rotas `/auth/*` e
   `/conta/*` com o cookie de sessão, o CSRF e o CORS (`rotas.ts`) e a página de teste `/dev/conta` (`paginas.ts`, só local). Os testes em
   `servidor_web/test/conta.test.ts`; o `npm run dev` liga o provedor falso, e o fluxo se percorre em `http://127.0.0.1:8766/dev/conta`.
+- **2026-11-17, MMO, MMO3 (a parte local):** o envio dos logs em `servidor_web/src/envio/`: a rota `POST /envios` e `GET /envios` com a sessão
+  e o CSRF da conta (`rotas.ts`), a conferência pelo replay do motor do jogo no Node, o marco 10 e os pontos da MMO1 (`conferir.ts`), o worker
+  dela (`conferidor.ts`, `trabalhador.ts`), e as
+  tabelas `envios` e `envios_registros` (a migração 2 do `banco.ts`). Os testes em `servidor_web/test/envio.test.ts`, com a vida do gabarito
+  `servidor_web/test/gabaritos/vida_101.json` (`servidor_web/scripts/gerar_vida_teste.ts`); a medida do tempo em
+  `servidor_web/scripts/medir_conferencia.ts` → `servidor_web/medicoes/mmo3_conferencia.json`. No jogo, `web/app/src/chave.ts` (a chave do
+  save e o armazenamento, sem dependências, para o `tamer.ts` rodar no servidor) e o `refazerComLutas` em `web/app/src/ranking/pontos.ts`.
+- **2026-11-17, MMO, MMO4 (a parte local):** a luta ranqueada em `servidor_web/src/envio/sementes.ts`: `POST /sementes` e `GET /sementes`
+  (a semente pelo HMAC do segredo da semana, a trava do nível, o limite do dia, a ordem), as tabelas `sementes` e `segredos_semana` (a
+  migração 3 do `banco.ts`), e o hash do pedido conferido no envio (`hashesAte` em `conferir.ts`). Os testes em
+  `servidor_web/test/sementes.test.ts`. No jogo, `web/app/src/ranking/pedido.ts` (o hash do pedido, sem tela) e `web/app/src/marcosTamer.ts`
+  (os marcos do Tamer, reexportados pelo `nivel.ts`).
+- **2026-11-17, MMO4, a tela da luta ranqueada:** `web/app/src/ranking/ranqueada.ts` (o cliente: pedido, prévia, envio, reenvio),
+  `web/app/src/telas/lutar/palcoPoc/TelaRanqueada.tsx` e `web/app/src/estilo/ranqueada.css` (a aba Arena com "Treino / Ranqueada"),
+  `web/app/test/ranqueada.test.ts`. Só liga com `VITE_DIGILAB_API` no build.
+- **2026-11-17, MMO, a prancha da luta ranqueada:** `docs/PLANO_UX_LUTA_RANQUEADA.md` (APROVADO, UX-LR-1 a 6) e
+  `docs/pranchas/ux-luta-ranqueada/` (`gerar.py`, `ranqueada.css`, `capturar.sh`, os HTML e as capturas): a aba Arena com a escolha
+  "Treino / Ranqueada", os estados do pedido e o resultado. Só desenho.

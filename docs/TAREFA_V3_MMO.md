@@ -152,3 +152,88 @@ do servidor (CN1). O motor, o save do pet e as rotas não mudam.
   - o nível do 11 em diante, pelo Respeito, fica para a MMO8.
 - **O limite:** nenhum teste chega ao Mega pelo motor, porque leva dias de vida simulada. O teste põe a evolução a Mega à mão no registro
   das evoluções, que é a lista que o marco lê.
+
+## 12. MMO3: o envio dos logs e a conferência no Node (2026-11-17)
+
+Pedido do Matheus: "abre a MMO3 local" (2026-11-16), pela sessão que coordena a conta. A primeira etapa da F5 do
+`docs/ROADMAP_V3_CONTA.md`, só a parte local, sobre a conta da CN2 (#948). Sem tela, sem prancha e sem deploy.
+
+- **O que entrega:**
+  - `POST /envios` e `GET /envios` no `servidor_web/` (`src/envio/rotas.ts`), com a sessão e o CSRF da conta: o envio
+    `{pet: {semente, log, versao}, tamer: {versao, log}}`, até 5 MiB (PROPOSTO); recusa a versão desconhecida e falha alto com o motivo;
+  - a conferência no Node (`src/envio/conferir.ts`): o pet e as lutas num passe só pela conta da MMO1 (`refazerComLutas`, o mesmo pet do
+    `Motor.reproduzir`), o Tamer pelo `lerTamer` e o marco 10 por `marcoConfere` (MMO2), num worker (`src/envio/conferidor.ts`). Nunca pela
+    assinatura, que difere no último bit (MMO0);
+  - o banco (a migração 2): a linha de cada envio conferido (os hashes, o resultado, o marco, os pontos, o tempo) e os registros do envio
+    aceito até 30 dias depois do fim da semana (MMO-4). Apagar a conta apaga os envios;
+  - `servidor_web/test/envio.test.ts`, com 26 testes: o envio válido, o repetido, o log adulterado, o evento inventado, a versão do pet e a
+    do Tamer, o Tamer que não reproduz, o marco que não confere e o de outro pet, a forma errada e a pontuação do cliente, sem sessão, sem
+    CSRF, de outra origem, grande demais, sem JSON, a política do log, o "baixar os dados", apagar a conta, o mesmo pet nos dois replays e
+    o worker (o mesmo resultado, o laço livre, a fila).
+- **O tempo** (`servidor_web/medicoes/mmo3_conferencia.json`): na primeira versão, a conferência de uma vida da MMO0 levava de 0,58 a
+  1,65 s com o DigiBrain modular (mediana 0,98 s), metade no replay e metade na conta dos pontos, que refazia o registro. Não são os 70 ms
+  do plano (D-CONTA-84). Com o passe único (D-CONTA-85), ela leva de 0,26 a 0,68 s (mediana 0,43 s, 10 vidas; com o cérebro A, 0,25 s em
+  3 vidas), e roda num worker, fora do laço de eventos (D-CONTA-86). Pedido do Matheus: "Segue com as recomendações".
+- **No jogo:** o `src/chave.ts` (a chave do save e o armazenamento, sem dependências), para o `tamer.ts` rodar no servidor sem o React, e o
+  `refazerComLutas` no `src/ranking/pontos.ts` (o `lutasRanqueadas` devolve o mesmo). O motor, o save e as telas não mudam.
+- **Fora desta etapa:** a semente ranqueada, o limite por dia e a luta ranqueada (MMO4); as tabelas (MMO5); o save na nuvem (CN3); o cais,
+  a entrada e o perfil (precisam de prancha); o deploy e os OAuth reais (CN5). Até a MMO4 não há semente entregue, e os pontos são 0.
+- **Os limites:** o caminho do marco que confere não tem teste de ponta a ponta (nenhuma vida chega ao Mega no teste); a medida é da máquina
+  do Matheus, não do Lightsail; um worker só, com os envios em fila.
+
+## 13. MMO4: a luta ranqueada, a parte local (2026-11-17)
+
+Pedido do Matheus: "Faz o merge e segue para a MMO4" (2026-11-17, depois do #960). Só o servidor e o protocolo do pedido no jogo. A
+prancha, a prévia no cliente e o resultado na tela ficam para depois da prancha (seção 12 do `docs/PLANO_V3_MMO.md`).
+
+- **O que entrega:**
+  - `POST /sementes` e `GET /sementes` no `servidor_web/` (`src/envio/sementes.ts`), com a sessão e o CSRF da conta: o pedido
+    `{pet: {semente, versao}, indice, hash}` devolve a semente da luta ranqueada, um HMAC do segredo da semana com a conta e o número da
+    luta (MMO-6). A semente pedida conta como luta feita;
+  - as travas do pedido: o nível (o marco 10 conferido, ou o 7 no beta, por `DIGILAB_MARCO_RANQUEADA`), o limite de 10 por conta por dia de
+    Brasília pelo relógio do servidor (MMO-8), e a ordem (o `indice` não volta, não fica antes do registro já enviado, e o mesmo `indice`
+    tem o mesmo hash);
+  - no envio, a conferência confere o hash do registro até o `indice` de cada semente pedida (`hash_nao_confere`) e conta as lutas pela conta
+    da MMO1 (vitória pela faixa, derrota, não enviada, pendente). Os pontos deixam de ser sempre 0;
+  - o banco (a migração 3): `sementes` (pende da conta), `segredos_semana` (do servidor), e em `envios` as sementes usadas e os marcos do
+    Tamer. Apagar a conta leva as sementes;
+  - no jogo, `src/ranking/pedido.ts` (o hash do pedido, sem tela) e `src/marcosTamer.ts` (os marcos do Tamer, fora do `nivel.ts`);
+  - `servidor_web/test/sementes.test.ts`, com 24 testes: a trava do nível (sem envio, poucas medalhas, o marco 10 do padrão, o marco
+    inválido), a semente (a resposta, o pedido do jogo igual ao do servidor, o HMAC, um segredo por semana, sem sessão, sem CSRF,
+    malformado, a versão), o limite do dia (a 11ª, o dia seguinte, a virada às 03:00 UTC), a ordem (fora de ordem, o hash diferente, o
+    indice já enviado, o relógio que recua), o envio com a semente (a luta que conta, a pendente, a não enviada, o registro mudado, o
+    worker, apagar a conta, o "baixar os dados") e o hash do prefixo.
+- **Desvios:** D-CONTA-87 a 92.
+- **Fora desta etapa:** a prancha e as telas da luta ranqueada (a prévia e o resultado do servidor); fechar as pendentes como derrota no fim
+  da semana, as tabelas, o congelamento e o segredo publicado (MMO5); o deploy (CN5).
+- **Os limites:** no beta, as medalhas do registro do Tamer não são conferidas contra o pet, e um registro escrito à mão abre o pedido (sem
+  dar pontos; D-CONTA-89); o caminho do marco 10 que confere segue sem teste de ponta a ponta (nenhuma vida chega ao Mega no teste); a
+  luta ranqueada do teste é uma só, a primeira da Arena da vida 101.
+
+## 14. MMO4: a prancha da luta ranqueada (2026-11-17)
+
+Pedido do Matheus: "Sim, a prancha" (2026-11-17). O plano de UX é o `docs/PLANO_UX_LUTA_RANQUEADA.md` (PROPOSTO), e a prancha está em
+`docs/pranchas/ux-luta-ranqueada/`: a aba Arena com a escolha "Treino / Ranqueada", os seis estados do pedido e os cinco resultados, no
+desktop (1920) e no celular (390 e 360), nas peles Vidro e Militar. Só desenho. Desvios: D-UXLR-1 a 8.
+
+**As UX-LR-1 a 6 foram APROVADAS pelas recomendações** (Matheus, 2026-11-17: "Sim, aprovo"): a luta na aba Arena, o aviso acima do
+botão, a prévia que vira "conferido", o reenvio sozinho e o rival escolhido pelo jogador. A tela ainda não foi feita.
+
+## 15. MMO4: a tela da luta ranqueada (2026-11-17)
+
+Pedido do Matheus: "Sim, merge e tela" (2026-11-17), depois do merge do #967. A tela segue a prancha aprovada
+(`docs/PLANO_UX_LUTA_RANQUEADA.md`, UX-LR-1 a 6).
+
+- **A chave:** a luta ranqueada só aparece no build com `VITE_DIGILAB_API` (o endereço do `servidor_web`), com um pet só na tela. Sem
+  ela, a Arena é a de sempre.
+- **O cliente (`web/app/src/ranking/ranqueada.ts`):** o pedido da semente e os estados dele, a prévia, o envio depois da luta e o
+  reenvio; a lista das lutas pedidas fica no aparelho (`CHAVE-ranqueada`). Sem React; 15 testes com o servidor falso.
+- **A tela (`web/app/src/telas/lutar/palcoPoc/TelaRanqueada.tsx`, `src/estilo/ranqueada.css`):** a escolha "Treino / Ranqueada", o
+  placar, os rivais com o valor, o aviso e "Lutar valendo N"; os estados do pedido; o resultado ("prévia", "conferido", "o servidor").
+- **O motor não muda:** a luta é o `lutarPoc` de sempre com a semente do servidor. O pedido segura o tempo do jogo até a luta entrar no
+  registro (`segurarTempoDoPedido`, em `lutaPocTela.ts`).
+- **O servidor:** o 403 `nivel_insuficiente` passa a dizer o `marco`.
+- **Conferido no navegador** (Chrome headless, o `servidor_web` local com o provedor falso): sem conta, trancada, o pedido, a luta no
+  palco, o envio, "conferido +20", o placar da semana e o mesmo rival valendo 10 em seguida.
+- **Não feito:** as telas da conta (o Entrar só abre a página de teste no local), "Ver a semana" (MMO5), o e2e no repositório e a
+  revisão de acessibilidade. Desvios: D-CONTA-93 a 103.

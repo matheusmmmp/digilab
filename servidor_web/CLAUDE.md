@@ -39,6 +39,30 @@ O `servidor/` continua para o jogo local e a pesquisa.
 - **Só convidados adultos (CN-10):** só cria conta quem está em `DIGILAB_CONVIDADOS` ou na tabela `convidados`; "menos de 18" não guarda nada.
 - **A página `/dev/conta`** (só local) percorre o fluxo pela API; não é tela do jogo.
 
+## O envio dos logs (MMO3, `src/envio/`)
+
+- **`POST /envios`** recebe `{pet: {semente, log, versao}, tamer: {versao, log}}` com a sessão e o `X-CSRF-Token` da conta, até 5 MiB
+  (`LIMITE_ENVIO`, PROPOSTO). **A pontuação nunca vem do cliente:** campo a mais leva 400. `GET /envios` lista os envios da conta.
+- **A conferência** (`conferir.ts`) refaz o pet e as lutas num passe só, pela conta da MMO1 (`refazerComLutas` de
+  `web/app/src/ranking/pontos.ts`, o mesmo pet do `Motor.reproduzir`), o Tamer com o `lerTamer` de `web/app/src/tamer.ts`, e confere o marco
+  10 por `marcoConfere` (MMO2). Roda num worker (`conferidor.ts`, `trabalhador.ts`), fora do laço de eventos; os testes da rota usam o
+  `conferirAqui`, no processo. O
+  código do jogo é importado como está: o motor e o `engine.py` não mudam. O que se importa do `web/app` não pode chegar ao React (o CI do
+  servidor não instala o `node_modules` do jogo); por isso o `tamer.ts` lê a chave do `src/chave.ts`, e não do `save.ts`.
+- **Recusa com o motivo, em 422:** `versao_pet_desconhecida` (fora de `VERSOES_PET`; o pet do laboratório não se envia),
+  `versao_tamer_desconhecida` (só a `VERSAO_TAMER` de hoje: atualize o jogo, MMO-14), `pet_nao_reproduz` e `tamer_nao_reproduz` (o texto do
+  erro do motor), `marco_nao_confere`. Nunca pela assinatura do pet, que difere entre o Chrome e o Node no último bit (MMO0).
+- **O que fica (MMO-4):** a linha de cada envio conferido (os hashes SHA-256 dos dois registros, o resultado e o motivo, o marco, os pontos,
+  o tempo); os registros, só do envio aceito, até 30 dias depois do fim da semana de Brasília (`LOG_DIAS_DEPOIS_DA_SEMANA`, PROPOSTO). A
+  limpeza roda em cada envio e em cada `GET /envios`. O mesmo envio de novo devolve a conferência guardada. Apagar a conta leva os envios.
+- **A luta ranqueada (MMO4, `sementes.ts`):** `POST /sementes` `{pet: {semente, versao}, indice, hash}` entrega a semente (HMAC do
+  segredo da semana com a conta e o número da luta; o segredo nasce no banco, um por semana, fora do git e fora da cascata da conta). A
+  semente pedida conta como luta. Travas: o nível (`DIGILAB_MARCO_RANQUEADA`, o 10 conferido por padrão, o 7 no beta), `LUTAS_POR_DIA` por
+  conta por dia de Brasília (429), e a ordem (409). O envio confere o hash do registro até o `indice` de cada semente (`hash_nao_confere`)
+  e conta as lutas pela conta da MMO1. O hash do jogo é o `hashAte` de `web/app/src/ranking/pedido.ts`.
+- **A vida dos testes** é o gabarito `test/gabaritos/vida_101.json`, gravado por `node scripts/gerar_vida_teste.ts` (precisa do
+  `node_modules` do `web/app`, porque o roteiro da MMO0 nasce o ovo pelo `src/produto.ts`).
+
 ## Comandos
 
 ```bash
@@ -50,5 +74,7 @@ npm run dev -- --sem-conta          # sem as rotas da conta (a CN1)
 # o fluxo da conta com o provedor falso: http://127.0.0.1:8766/dev/conta
 npm test                            # Vitest: rotas com o cliente falso e a paridade com o Python
 npm run tipos                       # tsc --noEmit
+node scripts/gerar_vida_teste.ts    # regrava a vida dos testes do envio (com o node_modules do web/app)
+node scripts/medir_conferencia.ts   # o tempo da conferência de 13 vidas -> medicoes/mmo3_conferencia.json
 python tools/gerar_catalogo_fala_web.py   # (da raiz) regera o catálogo e o gabarito
 ```

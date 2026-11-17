@@ -186,6 +186,15 @@ FAIXAS_RESERVADAS = (
     (94101, 94505, "EQUILIBRIO_CUIDADO, a validacao unica (jogo web): o E2, uma vez; nao e tocada no E0 nem no E1 "
                    "(docs/PLANO_ANALISE_V3_EQUILIBRIO_CUIDADO.md, secao 5; EQ-5, Matheus, 2026-11-12; conferida livre na origin/main "
                    "em 2026-11-12)"),
+    (96101, 96505, "EVIDENCIA A1, a baseline trivial: a calibracao de X, Y e Z, so a baseline (docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md, "
+                   "secao 4; BT-3; bases 96101, 96202, 96303, 96404 e 96505, K = 5); aprovada pelo Matheus em 2026-11-16, \"Aprovo, pode rodar\" (BT-3); conferida "
+                   "livre em faixas.py e em todos os branches remotos em 2026-11-16 (a 94xxx fica com o EQUILIBRIO_CUIDADO)"),
+    (97101, 97505, "EVIDENCIA A1, a baseline trivial: a validacao, uma vez, o REL da C4 e a baseline nas 12 celulas da C4 "
+                   "(docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md, secao 5; BT-3; bases 97101, 97202, 97303, 97404 e 97505, K = 40); "
+                   "aprovada junto com a 96xxx (BT-3); conferida livre junto com ela"),
+    (98101, 98505, "EVIDENCIA A2, a ablacao do aprendizado no jogo (jogo web): a run unica, sementes 98101...98300 "
+                   "(docs/PLANO_ANALISE_V3_ABLACAO_APRENDIZADO.md, secao 2.3; AB-5; aprovada pelo Matheus em 2026-11-16, "
+                   "\"Aprovo, pode rodar\"; conferida livre na origin/main e em todos os branches remotos em 2026-11-16)"),
 )
 
 

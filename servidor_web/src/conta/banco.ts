@@ -74,6 +74,64 @@ export const MIGRACOES: readonly string[] = [
     adicionado_em  INTEGER NOT NULL
   ) STRICT;
   `,
+  /* 2: os envios dos logs (MMO3, servidor_web/src/envio/): a linha de cada envio conferido fica; os registros, só do envio aceito e até
+     apagar_em (MMO-4, seção 11 do plano MMO). Os dois pendem da conta: apagar a conta leva os envios */
+  `
+  CREATE TABLE envios (
+    id                TEXT PRIMARY KEY,
+    conta_id          TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    recebido_em       INTEGER NOT NULL,
+    pet               INTEGER NOT NULL,
+    versao_pet        INTEGER NOT NULL,
+    eventos           INTEGER NOT NULL,
+    hash_log          TEXT NOT NULL,
+    versao_tamer      INTEGER NOT NULL,
+    hash_tamer        TEXT NOT NULL,
+    resultado         TEXT NOT NULL CHECK (resultado IN ('aceito', 'recusado')),
+    motivo            TEXT,
+    detalhe           TEXT,
+    marco10           TEXT CHECK (marco10 IN ('confere', 'de_outro_pet', 'sem_marco')),
+    pontos            REAL NOT NULL,
+    lutas_ranqueadas  INTEGER NOT NULL,
+    ms_conferencia    REAL NOT NULL,
+    CHECK ((resultado = 'aceito') = (motivo IS NULL AND marco10 IS NOT NULL))
+  ) STRICT;
+  CREATE INDEX envios_conta ON envios(conta_id, pet);
+  CREATE TABLE envios_registros (
+    envio_id        TEXT PRIMARY KEY REFERENCES envios(id) ON DELETE CASCADE,
+    registro_pet    TEXT NOT NULL,
+    registro_tamer  TEXT NOT NULL,
+    apagar_em       INTEGER NOT NULL
+  ) STRICT;
+  CREATE INDEX envios_registros_apagar ON envios_registros(apagar_em);
+  `,
+  /* 3: a luta ranqueada (MMO4, servidor_web/src/envio/sementes.ts): as sementes entregues (pendem da conta), o segredo de cada semana
+     (do servidor, não da conta: publicado quando a semana fecha, MMO5) e, em cada envio, quantas sementes a conferência usou e os marcos do
+     Tamer (a trava do nível do pedido) */
+  `
+  ALTER TABLE envios ADD COLUMN sementes INTEGER NOT NULL DEFAULT 0;
+  ALTER TABLE envios ADD COLUMN marcos_tamer TEXT NOT NULL DEFAULT '[]';
+  CREATE TABLE segredos_semana (
+    semana     TEXT PRIMARY KEY,
+    segredo    TEXT NOT NULL,
+    criado_em  INTEGER NOT NULL
+  ) STRICT;
+  CREATE TABLE sementes (
+    conta_id    TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    numero      INTEGER NOT NULL,
+    pet         INTEGER NOT NULL,
+    versao_pet  INTEGER NOT NULL,
+    indice      INTEGER NOT NULL,
+    hash_ate    TEXT NOT NULL,
+    semente     INTEGER NOT NULL,
+    hora        INTEGER NOT NULL,
+    dia         TEXT NOT NULL,
+    semana      TEXT NOT NULL,
+    PRIMARY KEY (conta_id, numero)
+  ) STRICT;
+  CREATE INDEX sementes_dia ON sementes(conta_id, dia);
+  CREATE INDEX sementes_pet ON sementes(conta_id, pet, versao_pet, numero);
+  `,
 ];
 
 export const VERSAO_BANCO = MIGRACOES.length;
