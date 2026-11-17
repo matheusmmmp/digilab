@@ -75,3 +75,6 @@ As da seção 6 do plano continuam valendo. Além delas:
 |---|---|---|---|
 | **D-F5-2 (b)** | rejogar uma run já feita, com mais classes ao alcance, depois de conferir o replay dela? | sim, com um adendo a este plano antes da medida | sem ela, a F5 para sem ter visto o `E` num mundo em que ele pode variar; com ela, custa uma etapa de conferência do replay |
 | **D-F5-10** | o "igual ao CONT" degenerado (o `CONT` não varia entre lugares) encerra a F5? | não: ler como "a M-S2 não leu", como no caso sem pares do código | se encerrar, a F5 acaba por uma conta que não comparou nada; se não encerrar, a separação do `CONT` continua sem resposta até a opção (b) |
+
+**Decisão:** as duas aceitas como recomendadas. À pergunta "Aprova a D-F5-2 (b) e a D-F5-10 como recomendadas?", o Matheus respondeu "Aprovo as duas" (2026-11-17). A F5 segue para a opção (b): primeiro um adendo a este plano
+(PROPOSTO, com a run escolhida e a conferência do replay), depois a medida. A M-S2 desta medida fica como "não leu".
