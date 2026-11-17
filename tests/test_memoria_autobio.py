@@ -723,7 +723,10 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave():
                       # o teste da ilha maior (IG6): monta a Memoria com a config do REL para a memoria de 128 celulas; nao le a chave
                       "web/app/test/ilha_maior.test.ts",
                       # a EVIDENCIA A1 (a baseline trivial): o orquestrador importa o da C4 so pela vida do REL (`_vida`) e pelas celulas; nao le a chave
-                      "experiments/run_v3_baseline_trivial.py"}
+                      "experiments/run_v3_baseline_trivial.py",
+                      # a VALUATION (a ablacao): o orquestrador importa o da C4 pela vida do REL e pelas subchaves; o braco C usa a chave
+                      # como o braco SEM da C4 (`controle_mem = "sem"`), sem valor novo
+                      "experiments/run_v3_valuation.py"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre"):
         if not (RAIZ / pasta).exists():
