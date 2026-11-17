@@ -231,3 +231,13 @@ O [PLANO_ANALISE_V3_VALUATION_CONSERTO.md](PLANO_ANALISE_V3_VALUATION_CONSERTO.m
 - **A regra:** passa com a taxa no `longe_fixo` em "> 0", sem a privação nem a exaustão em "> 0" e sem a taxa do comedouro e do longe em "< 0".
 
 Status: o CHECKPOINT V3a, com as D-VAL-16 a D-VAL-20 para o Matheus. Nenhum código do conserto foi escrito.
+
+### V3, o conserto (2026-11-17, Claude Code, Opus 5.5)
+
+A chave `guarda_fome_reflexo` entrou desligada, com o gabarito "desliga não muda" gravado antes. A run rodou uma vez: 4 800 vidas na
+73xxx, em 1 h. O resultado está no [RESULTADO_V3_VALUATION_CONSERTO.md](RESULTADO_V3_VALUATION_CONSERTO.md).
+- **A P passa:** CON − REL = +0,106 [+0,094; +0,118] no `longe_fixo`.
+- **A G1 e a G3 passam:** a privação fica "≈ 0", e a taxa sobe no comedouro e no longe.
+- **A G2 reprova:** a exaustão sobe +0,195 no `longe_fixo` e +0,174 nas 12 células. 63 % das decisões com a energia baixa têm a fome urgente, e o conserto tira 64 % dos reflexos.
+
+Status: o CHECKPOINT V3, com a leitura **falha**. A fase para, e o próximo passo é decisão do Matheus.
