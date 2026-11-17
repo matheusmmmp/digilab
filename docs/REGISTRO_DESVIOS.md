@@ -806,6 +806,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-16 — EVIDENCIA A1: o modular contra uma baseline trivial (Claude Code, Opus 5.5, branch `v3-evidencia-a1`)](registro/2026-11.md)
 - [2026-11-16 — LIMPEZA: o inventário e as decisões (Claude Code, sessão do Matheus)](registro/2026-11.md)
 - [2026-11-16 — EQUILIBRIO_CUIDADO: a colisão da faixa 93101…93505 (o Gerente da V3, Claude Code, Opus 5.5, branch `v3-equilibrio-e2`)](registro/2026-11.md)
+- [2026-11-16 — EVIDENCIA A2: a ablação do aprendizado no jogo (Claude Code, Opus 5.5, branch `v3-evidencia-a2`)](registro/2026-11.md)
 - [2026-11-16 — CONTA: o plano do beta fechado (Claude Code, Opus 5.5, branch `v3-conta-beta`)](registro/2026-11.md)
 - [2026-11-16 — CONTA: as BT-1 a BT-9 do beta decididas pela recomendação (Claude Code, Opus 5.5, branch `v3-conta-beta`)](registro/2026-11.md)
 - [2026-11-16 — LONGE_GEOMETRIA: o resultado da run (Claude Code, Opus 5.5, sessão do Matheus, branch `v3-longe-geometria-resultado`)](registro/2026-11.md)
@@ -826,3 +827,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-17 — EVIDENCIA A1: o merge (o Gerente da V3, Claude Code, Opus 5.5)](registro/2026-11.md)
 - [2026-11-17 — EVIDENCIA A0: o merge (o Gerente da V3, Claude Code, Opus 5.5)](registro/2026-11.md)
 - [2026-11-17 — LEGIBILIDADE: quem define o sucesso e o plano do teste cego (Claude Code, Opus 5.5, branch `v3-sucesso-legibilidade`)](registro/2026-11.md)
+- [2026-11-17 — EVIDENCIA A2: o merge (o Gerente da V3, Claude Code, Opus 5.5)](registro/2026-11.md)
