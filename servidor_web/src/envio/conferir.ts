@@ -1,6 +1,6 @@
 /* A conferência de um envio (MMO3, docs/PLANO_V3_MMO.md seção 3; MMO-5): o servidor refaz no Node o registro do pet com o motor do jogo
    (web/app/motor, o mesmo código, sem DOM), confere o marco do nível 10 no registro do Tamer (marcoConfere, MMO2) e calcula os pontos com a
-   conta pura da MMO1 (web/app/src/ranking/pontos.ts). O cliente nunca manda a pontuação: o número é o que sai daqui.
+   conta pura da MMO1 (web/app/src/ranking/pontos.ts), com as sementes ranqueadas que o servidor entregou (MMO4). O cliente nunca manda a pontuação: o número é o que sai daqui.
 
    O envio: {pet: {semente, log, versao}, tamer: {versao, log}}.
      - a versão do pet tem de ser uma das que o motor abre (VERSOES_PET; o pet de teste do laboratório não se envia);
@@ -12,10 +12,15 @@
    Um passe só (D-CONTA-85): o registro é refeito uma vez, pela conta da MMO1 (refazerComLutas), que refaz a luta pelo lutarPoc (confere se
    ela era possível) e o resto pelo aplicarEvento; o pet que sai dali é o mesmo do Motor.reproduzir (um teste confere a assinatura no Node).
 
+   As sementes ranqueadas (MMO4, sementes.ts): cada semente entregue a este pet leva o hash do registro até o indice do pedido. Antes do
+   replay, a conferência refaz esses hashes do registro enviado; um que não bate é o registro mudado depois do pedido (hash_nao_confere), e o
+   envio inteiro é recusado. O pedido ainda à frente do registro (indice maior que ele) fica pendente, sem conferir.
+
    A conferência NÃO usa a assinatura do pet: ela difere entre o Chrome e o Node no último bit (MMO0). Só o que sai das lutas e do registro. */
-import { createHash } from "node:crypto";
+import { createHash, type Hash } from "node:crypto";
 import { VERSOES_PET, type EventoRegistro, type Motor } from "../../../web/app/motor/index.ts";
 import { linhasDaSemana, refazerComLutas, type LinhaSemana, type LutaRanqueada, type SementeEntregue } from "../../../web/app/src/ranking/pontos.ts";
+import { marcosDoTamer } from "../../../web/app/src/marcosTamer.ts";
 import { CHAVE_TAMER, lerTamer, MARCO_MEGA, marcoConfere, VERSAO_TAMER, type EventoTamer } from "../../../web/app/src/tamer.ts";
 
 /** por que um envio foi recusado (o código vai na resposta e no banco; o detalhe é o texto do erro) */
@@ -24,6 +29,7 @@ export type MotivoRecusa =
   | "versao_tamer_desconhecida"  // o registro do Tamer não é da versão de hoje: atualize o jogo
   | "pet_nao_reproduz"           // o motor recusou um evento do registro do pet
   | "tamer_nao_reproduz"         // o registro do Tamer não se refaz
+  | "hash_nao_confere"           // o registro até o indice de uma semente pedida não é o do pedido (mudou depois da semente)
   | "marco_nao_confere";         // o Tamer diz que este pet chegou ao Mega, e o registro do pet não mostra a evolução no tick e na forma
 
 /** o marco do nível 10 visto deste envio */
@@ -37,9 +43,14 @@ export interface Envio { pet: { semente: number; log: EventoRegistro[]; versao: 
 
 export class EnvioMalformado extends Error {}
 
+/** uma semente que o servidor entregou a este pet, com o número dela na conta e o hash do registro até o indice do pedido */
+export interface EntregueComHash extends SementeEntregue { numero: number; hash: string }
+
 export interface Aceito {
   resultado: "aceito";
   marco10: SituacaoMarco;
+  /** os marcos que o registro do Tamer cumpre (marcosDoTamer: 5, 7, 8, 9, 10); a trava do pedido da semente os lê */
+  marcosTamer: number[];
   lutas: LutaRanqueada[];
   semanas: LinhaSemana[];
   pontos: number;
@@ -54,6 +65,19 @@ export const hashRegistro = (log: unknown): string => createHash("sha256").updat
 
 const msg = (err: unknown): string => err instanceof Error ? err.message : String(err);
 const objeto = (x: unknown): x is Record<string, unknown> => typeof x === "object" && x !== null && !Array.isArray(x);
+
+/** os hashes do registro até cada indice pedido: o SHA-256 de JSON.stringify(log.slice(0, i)), sem montar cada prefixo. O JSON de um
+    array é "[" + os elementos separados por "," + "]", então um hash só corre o registro, e cada indice copia o estado e fecha o "]" */
+export function hashesAte(log: readonly unknown[], indices: Iterable<number>): Map<number, string> {
+  const quer = new Set([...indices].filter(i => i <= log.length)), out = new Map<number, string>();
+  if (!quer.size) return out;
+  const fim = Math.max(...quer), h: Hash = createHash("sha256").update("[");
+  for (let i = 0; i <= fim; i++) {
+    if (quer.has(i)) out.set(i, h.copy().update("]").digest("hex"));
+    if (i < fim) h.update((i > 0 ? "," : "") + JSON.stringify(log[i]));
+  }
+  return out;
+}
 
 /** confere a forma do corpo do envio (sem refazer nada): o que falta ou tem o tipo errado levanta EnvioMalformado (400) */
 export function lerEnvio(d: unknown): Envio {
@@ -75,7 +99,7 @@ export function lerEnvio(d: unknown): Envio {
 
 /** a conferência: refaz o pet e o Tamer, confere o marco e calcula os pontos. `entregues` são as sementes ranqueadas que o servidor
     entregou a este pet (a MMO4; até lá, nenhuma, e os pontos são 0) */
-export function conferir(envio: Envio, entregues: readonly SementeEntregue[] = []): Conferencia {
+export function conferir(envio: Envio, entregues: readonly EntregueComHash[] = []): Conferencia {
   const t0 = performance.now();
   const recusar = (motivo: MotivoRecusa, detalhe: string): Recusado =>
     ({ resultado: "recusado", motivo, detalhe, ms: { total: +(performance.now() - t0).toFixed(2) } });
@@ -85,9 +109,18 @@ export function conferir(envio: Envio, entregues: readonly SementeEntregue[] = [
   if (tamer.versao !== VERSAO_TAMER)
     return recusar("versao_tamer_desconhecida", `o registro do Tamer é da versão ${tamer.versao}, e o servidor confere a ${VERSAO_TAMER}: atualize o jogo`);
 
+  /* 0. o compromisso de cada semente pedida: o registro até o indice do pedido é o mesmo */
+  const hashes = hashesAte(pet.log, entregues.map(x => x.indice));
+  for (const x of entregues) {
+    const h = hashes.get(x.indice);
+    if (h !== undefined && h !== x.hash)
+      return recusar("hash_nao_confere", `o registro até o evento ${x.indice} não é o do pedido da semente ${x.numero}: ele mudou depois do pedido`);
+  }
+
   /* 1. o pet e as lutas: um passe só pela conta da MMO1; o evento inválido (e a luta que não era possível) falha alto */
   let m: Motor, lutas: LutaRanqueada[];
-  try { ({ motor: m, lutas } = refazerComLutas(pet.semente, pet.versao, pet.log, entregues)); }
+  const sementes: SementeEntregue[] = entregues.map(x => ({ semente: x.semente, indice: x.indice, hora: x.hora }));
+  try { ({ motor: m, lutas } = refazerComLutas(pet.semente, pet.versao, pet.log, sementes)); }
   catch (err) { return recusar("pet_nao_reproduz", `o registro do pet não reproduz: ${msg(err)}`); }
   const t1 = performance.now();
 
@@ -107,6 +140,6 @@ export function conferir(envio: Envio, entregues: readonly SementeEntregue[] = [
   const t2 = performance.now();
 
   const r2 = (v: number) => +v.toFixed(2);
-  return { resultado: "aceito", marco10, lutas, semanas: linhasDaSemana(lutas), pontos: lutas.reduce((s, l) => s + l.pontos, 0),
+  return { resultado: "aceito", marco10, marcosTamer: marcosDoTamer(t), lutas, semanas: linhasDaSemana(lutas), pontos: lutas.reduce((s, l) => s + l.pontos, 0),
     ms: { replay: r2(t1 - t0), tamer: r2(t2 - t1), total: r2(performance.now() - t0) } };
 }

@@ -11,6 +11,7 @@ import type { ConfigConta } from "./conta/config.ts";
 import { montarRotasConta } from "./conta/rotas.ts";
 import { ConferidorEmWorker, type Conferidor } from "./envio/conferidor.ts";
 import { montarRotasEnvio } from "./envio/rotas.ts";
+import { montarRotasSemente } from "./envio/sementes.ts";
 import type { GeradorFala } from "./fala.ts";
 
 export const LIMITE_CORPO = 16 * 1024;
@@ -64,7 +65,11 @@ export function criarApp({ gerador, motivoInicial, conta, conferidor }: Opcoes):
     return json(c, 200, { ...resultado, gasto: gerador.gasto?.paraDict() ?? null });
   });
 
-  if (conta) montarRotasEnvio(app, conta, montarRotasConta(app, conta), conferidor ?? new ConferidorEmWorker().conferir);
+  if (conta) {
+    const guardas = montarRotasConta(app, conta);
+    montarRotasEnvio(app, conta, guardas, conferidor ?? new ConferidorEmWorker().conferir);
+    montarRotasSemente(app, conta, guardas);
+  }
 
   app.notFound(c => json(c, 404, { erro: "rota desconhecida" }));
   return app;
