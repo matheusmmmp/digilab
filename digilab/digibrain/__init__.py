@@ -9,7 +9,16 @@ FONTE). Nada no motor, na bancada de hoje nem no jogo usa o pacote: so o orquest
 (experiments/run_v2_digibrain_prototipo.py) o monta, com a chave ligada.
 
 A aritmetica do pacote e so inteira (a DM-2; o G-INT confere pela AST: sem float, sem `/` e sem `math`), nenhum arquivo importa o
-digilab/corpo.py (a G-RECEPTOR) e a direcao do cheiro fica no motor (o G-SEM-DIRECAO: o pacote so le se ha cheiro)."""
-from .adapt import DigiBrain, DigibrainDesligado, Intencao, Modulos
+digilab/corpo.py (a G-RECEPTOR) e a direcao do cheiro fica no motor (o G-SEM-DIRECAO: o pacote so le se ha cheiro).
+
+O import e preguicoso (LIMPEZA, LZ2): o `DigiBrain` e os outros nomes de `__all__` vem do `adapt.py` so quando alguem os pede, entao
+importar o `base.py` (as contas inteiras e a interface do corpo, que o lobos.py tambem usa) nao puxa o pacote inteiro."""
+import importlib
 
 __all__ = ["DigiBrain", "DigibrainDesligado", "Intencao", "Modulos"]
+
+
+def __getattr__(nome: str):
+    if nome in __all__:
+        return getattr(importlib.import_module(".adapt", __name__), nome)
+    raise AttributeError(f"o modulo {__name__!r} nao tem o atributo {nome!r}")

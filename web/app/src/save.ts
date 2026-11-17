@@ -6,12 +6,11 @@
 import { GrupoDoJogo, Motor, type EventoGrupoJogo, type EventoRegistro } from "../motor/index.ts";
 import { ligarProduto } from "./produto.ts";
 import { versaoDoOvo } from "./lutaPoc.ts";
+import { CHAVE, type Armazenamento } from "./chave.ts";
 
-export const CHAVE = "digilab-web-v21-sprites";
+export { CHAVE, type Armazenamento };
+
 export const CHAVE_ABA = CHAVE + "-aba";
-
-/** o armazenamento que o save usa (localStorage no navegador; um Map nos testes) */
-export interface Armazenamento { getItem(k: string): string | null; setItem(k: string, v: string): void }
 
 export type LeituraSave =
   | { tipo: "vazio" }

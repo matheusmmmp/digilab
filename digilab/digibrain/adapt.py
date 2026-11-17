@@ -99,7 +99,7 @@ from ..events import AcaoPet, AcaoUsuario, LutaSemChave, resumo_luta
 from ..genoma_visao import GenomaVisao, genoma_visao
 from ..modelo_mundo import raiz_inteira
 from ..mundo import ACOES_COM_ALVO, Alvo
-from ..policies.lobos import leitura_receptor
+from .base import leitura_receptor
 from ..policy import Observacao, Transicao
 from ..protocol import derivar_semente
 from ._comum import chave_json, clamp, ganho_de_tau, integrar, mul

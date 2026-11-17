@@ -45,7 +45,8 @@ from digilab.evolucao import evoluir, ovo  # noqa: E402
 from digilab.protocol import ENGINE_SHA256_V0, PROTOCOLO_ARENA_V1, derivar_semente, sha256_engine  # noqa: E402
 from digilab.temperamento import sortear  # noqa: E402
 from digilab.treino import reproduzir_com_feedback  # noqa: E402
-from digilab.treino_vida import BRACOS_TREINO, fabricas_treino, orcamento_treino, simular_vida_treino  # noqa: E402
+from digilab.treino_vida import BRACOS_TREINO, orcamento_treino  # noqa: E402
+from digilab.obediencia import fabricas_treino, simular_vida_treino  # noqa: E402
 from run_treino import lutador_pet  # noqa: E402
 
 CFG_PADRAO = RAIZ / "experiments" / "configs" / "poder_pesquisa.json"

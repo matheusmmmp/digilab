@@ -21,7 +21,8 @@ from digilab.evolucao import ovo  # noqa: E402
 from digilab.temperamento import sortear  # noqa: E402
 from digilab.treino import CanalDeInteracao, reproduzir_com_feedback  # noqa: E402
 from digilab.treino_stats import ToqueRejeitado, TreinoInvalido, TreinoPet  # noqa: E402
-from digilab.treino_vida import BRACOS_TREINO, fabricas_treino, orcamento_treino, simular_vida_treino  # noqa: E402
+from digilab.treino_vida import BRACOS_TREINO, orcamento_treino  # noqa: E402
+from digilab.obediencia import fabricas_treino, simular_vida_treino  # noqa: E402
 
 DIAS = 3
 

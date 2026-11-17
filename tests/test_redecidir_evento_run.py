@@ -329,7 +329,7 @@ def test_resumo_no_console_cp1252_nao_quebra(monkeypatch):
 def test_o_orquestrador_e_o_poder_nao_montam_o_digibrain():
     """so o orquestrador do prototipo cita o pacote do DigiBrain e a ConfigDigibrain (tests/test_digibrain_etapa0.py e
     tests/test_digibrain_vidas.py); os dois arquivos novos passam por ele"""
-    nomes = re.compile(r"\b(ConfigDigibrain\w*|CONFIG_DIGIBRAIN\w*)\b|digilab\.digibrain|from \.digibrain|from \.\.digibrain|import digibrain")
+    nomes = re.compile(r"\b(ConfigDigibrain\w*|CONFIG_DIGIBRAIN\w*)\b|digilab\.digibrain(?!\.base\b)|from \.digibrain(?!\.base\b)|from \.\.digibrain(?!\.base\b)|import digibrain")
     for f in ("experiments/run_v2_redecidir_evento.py", "experiments/adendo8_poder_redecidir_evento.py"):
         assert not nomes.search((RAIZ / f).read_text(encoding="utf-8")), f
 

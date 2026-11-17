@@ -83,7 +83,7 @@ from .corpo_grafo import checar
 from .educacao import MotorEducacao
 from .engine import Motor
 from .events import ACOES_CORPO, ACOES_MAO, ACOES_TREINO, ACOES_TROCA_ARVORES, AcaoPet, AcaoUsuario, LutaSemChave
-from .obediencia import MotorPersonalidade
+from .personalidade import MotorPersonalidade
 from .policy import Observacao, Transicao, efeito_da_acao_do_pet
 from .state import avancar_um_tick
 from .treino import PoliticaTreinavel

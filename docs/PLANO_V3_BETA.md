@@ -47,6 +47,10 @@ correm em paralelo (RC-2). **O beta cabe daqui a umas 10 a 16 semanas**, se o do
 
 ## 3. O problema do nível 10
 
+**Medido e decidido (2026-11-16):** a BT0 (`docs/RESULTADO_V3_BETA_BT0.md`) mostrou que, a 10 min/s, só 2 de 12 dedicados e nenhum casual
+chegam ao Mega, travados na Cidadela; a 1x, ninguém chega em 7 dias. **A BT0-1 está DECIDIDA:** no ambiente do beta, o cais abre no
+marco 7 (3 medalhas). A MMO-13 não muda no jogo.
+
 Pela MMO-13 (decidida), **o multijogador só abre no nível 10 do Tamer: o primeiro Mega**. Um jogador novo que começa no dia 1 do beta
 talvez não chegue ao Mega em 7 dias de relógio: **ninguém mediu ainda** quanto tempo de relógio isso leva (a CN0 mediu o tamanho do save,
 não o tempo até o Mega; o tempo do pet só anda com o jogo aberto, D-CONTA-38). Se não chegar, o beta não testa o multijogador.

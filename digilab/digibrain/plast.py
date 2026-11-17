@@ -28,7 +28,7 @@ from __future__ import annotations
 from ..config import (CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTO_OLHAR, COMPORTAMENTOS_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONTEUDOS_FALA, ConfigDigibrain,
                       ConfigDigibrainInatos)
 from ..modelo_mundo import raiz_inteira
-from ..policies.lobos import div_arred, valor_previsto
+from .base import div_arred, valor_previsto
 from ._comum import clamp, mul
 
 CLASSES_DESFECHO = ("racao", "a", "b", "c", "podre", "bola")

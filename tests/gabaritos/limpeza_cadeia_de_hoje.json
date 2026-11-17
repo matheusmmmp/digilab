@@ -1,0 +1,590 @@
+{
+ "personalidade|desligada|neutro|aleatorio|101": {
+  "acoes": "7768f24b847ac34291d64ceafcedb70c1408c3d786813a284e8bcd0c1599ed92",
+  "desejos": "23bdab0b77dc941e03a982b66eb700263966dcbd6295f8b53ec563a6edefd017",
+  "estado": "6ab3cce0e8ce34340541784112288873546df8abd443ce5bf8a791a3f46edd45",
+  "estado_motor": "1752ecc97f68a9ae431ac8ac318dd07c1b14908a906fdeb290b8e4a41a82535d",
+  "interacoes": 48,
+  "log": "9002e146b7ecba326e7a81b6a0f90a2941f79e1f29f7e0162f387ea7388c7680",
+  "motor": "MotorPersonalidade",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "8bffbcd23d4037b7592102aaf807bcf49755a2f8d173a8fca7909dffbab77307",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "rngs": "887fb9613f3dc7fc26f4a8d0c9cbff72e94a8d1dbffe05f25ec20ceb0edbf666",
+  "vinculo": {
+   "atualizacoes": 31,
+   "pedidos_pendentes": [],
+   "valor": 0.5236994599555846,
+   "vontades_pendentes": []
+  }
+ },
+ "personalidade|desligada|neutro|aleatorio|202": {
+  "acoes": "496067d41bacfd7b6987f422e487124d598f61e9e8bc5181001f10f4e8769e38",
+  "desejos": "d078f7dc13ed9a87902c71c8ba4c0ae278f2c4d9ad4a59711c9a4391366c6e41",
+  "estado": "dcf7b1593528a429bfe0f3c38ef3a357884ce4afd1c500f14ae93fd8cd4c2b28",
+  "estado_motor": "153606ffc047eba57eb839ac7cd6c5b95642f5a10388cf3ba3be20d204d65221",
+  "interacoes": 48,
+  "log": "8913a9e068148f7d37a67b118be1adbbfe49d6d21302b1c2e30c50cbd692e90c",
+  "motor": "MotorPersonalidade",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "c8c0b028d03523da15e8345c2465780df39d3be53b4838e7f6e4e678e00ae82e",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "rngs": "72b70c744e5e3b1ad91e0d60a60693475c5e466efb8c7e8c9c0733b0c3c1035c",
+  "vinculo": {
+   "atualizacoes": 100,
+   "pedidos_pendentes": [
+    4260
+   ],
+   "valor": 0.622799063398792,
+   "vontades_pendentes": []
+  }
+ },
+ "personalidade|desligada|neutro|atencioso|101": {
+  "acoes": "6032d45eeff0fa701cab3ea82113e0d45973c839910d3bb04a9dba187ec4b453",
+  "desejos": "0159cf3480e11c89de9d5f457d279c6c079c2078708ad3f174319e892960fff6",
+  "estado": "25eebc8844b5a3d1bbaeafda9ee89fd976e8cbbf2db00fe6704f03d57a086678",
+  "estado_motor": "c170bf268155e88638640473d1d5ba6d42afd2d924e563712eeb4d14e9dcd41e",
+  "interacoes": 48,
+  "log": "e8ce487dd157774e52dbc57f84e03480246afdfb88f4b6f7fd9eca556a99b58a",
+  "motor": "MotorPersonalidade",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "b0464aedb177100c2bdfdf435f7d775ca47dba82fa50a6d22721465e311f3e7e",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "rngs": "f0d2b3c9d78e6013791516cbcae63c936a1413c9eead5a9073f167da41fd7b80",
+  "vinculo": {
+   "atualizacoes": 27,
+   "pedidos_pendentes": [],
+   "valor": 0.7022469259528946,
+   "vontades_pendentes": []
+  }
+ },
+ "personalidade|desligada|neutro|atencioso|202": {
+  "acoes": "e1383ed26422e22232a19c4ca7f9caec5d63cfc20be3ce25c7a20a79cdbc628c",
+  "desejos": "4b94952702f6cb4692556836111f2631ebcf133941196bfb01f2d41696cb12ac",
+  "estado": "07d3a0e7f107fcdc206c4a226d18f324ae3b01cda05f23bd4fddeb0e435c935d",
+  "estado_motor": "73c2a82132c073220cb87c10a4c1f5adc81d6f766f3b12549a325b2074cac9fe",
+  "interacoes": 48,
+  "log": "3bf023c4ce4e44dae8f2d88dc6f0ce1d067b756eebe53dfa7e2ca4e1857450b4",
+  "motor": "MotorPersonalidade",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "b44dd609e3bbbe758afe97966c7dd97d51f1577386e11357429e0cf750f929a3",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "rngs": "212cc09123ef334bc5e232c85a63e7823a92990fed6c4c435608b97fd4826980",
+  "vinculo": {
+   "atualizacoes": 22,
+   "pedidos_pendentes": [],
+   "valor": 0.7283514266432101,
+   "vontades_pendentes": []
+  }
+ },
+ "personalidade|desligada|teimoso|aleatorio|101": {
+  "acoes": "7768f24b847ac34291d64ceafcedb70c1408c3d786813a284e8bcd0c1599ed92",
+  "desejos": "23bdab0b77dc941e03a982b66eb700263966dcbd6295f8b53ec563a6edefd017",
+  "estado": "6ab3cce0e8ce34340541784112288873546df8abd443ce5bf8a791a3f46edd45",
+  "estado_motor": "1752ecc97f68a9ae431ac8ac318dd07c1b14908a906fdeb290b8e4a41a82535d",
+  "interacoes": 48,
+  "log": "9002e146b7ecba326e7a81b6a0f90a2941f79e1f29f7e0162f387ea7388c7680",
+  "motor": "MotorPersonalidade",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "5f6c96d1b74d8b09cabe5a5715435db85697244c0faac6dd6dc5dc3acca33073",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "rngs": "887fb9613f3dc7fc26f4a8d0c9cbff72e94a8d1dbffe05f25ec20ceb0edbf666",
+  "vinculo": {
+   "atualizacoes": 31,
+   "pedidos_pendentes": [],
+   "valor": 0.5236994599555846,
+   "vontades_pendentes": []
+  }
+ },
+ "personalidade|desligada|teimoso|aleatorio|202": {
+  "acoes": "496067d41bacfd7b6987f422e487124d598f61e9e8bc5181001f10f4e8769e38",
+  "desejos": "d078f7dc13ed9a87902c71c8ba4c0ae278f2c4d9ad4a59711c9a4391366c6e41",
+  "estado": "dcf7b1593528a429bfe0f3c38ef3a357884ce4afd1c500f14ae93fd8cd4c2b28",
+  "estado_motor": "153606ffc047eba57eb839ac7cd6c5b95642f5a10388cf3ba3be20d204d65221",
+  "interacoes": 48,
+  "log": "8913a9e068148f7d37a67b118be1adbbfe49d6d21302b1c2e30c50cbd692e90c",
+  "motor": "MotorPersonalidade",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "d2a327504f300f446673c52f72f89654b2c74bf305931ad34ec41ebbdf1e0f0b",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "rngs": "72b70c744e5e3b1ad91e0d60a60693475c5e466efb8c7e8c9c0733b0c3c1035c",
+  "vinculo": {
+   "atualizacoes": 100,
+   "pedidos_pendentes": [
+    4260
+   ],
+   "valor": 0.622799063398792,
+   "vontades_pendentes": []
+  }
+ },
+ "personalidade|desligada|teimoso|atencioso|101": {
+  "acoes": "6032d45eeff0fa701cab3ea82113e0d45973c839910d3bb04a9dba187ec4b453",
+  "desejos": "0159cf3480e11c89de9d5f457d279c6c079c2078708ad3f174319e892960fff6",
+  "estado": "25eebc8844b5a3d1bbaeafda9ee89fd976e8cbbf2db00fe6704f03d57a086678",
+  "estado_motor": "c170bf268155e88638640473d1d5ba6d42afd2d924e563712eeb4d14e9dcd41e",
+  "interacoes": 48,
+  "log": "e8ce487dd157774e52dbc57f84e03480246afdfb88f4b6f7fd9eca556a99b58a",
+  "motor": "MotorPersonalidade",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "e770cf8186fc5c2bf2a5fb554453b33cb4437e3c92cc9440eda5f8b3544e795b",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "rngs": "f0d2b3c9d78e6013791516cbcae63c936a1413c9eead5a9073f167da41fd7b80",
+  "vinculo": {
+   "atualizacoes": 27,
+   "pedidos_pendentes": [],
+   "valor": 0.7022469259528946,
+   "vontades_pendentes": []
+  }
+ },
+ "personalidade|desligada|teimoso|atencioso|202": {
+  "acoes": "e1383ed26422e22232a19c4ca7f9caec5d63cfc20be3ce25c7a20a79cdbc628c",
+  "desejos": "4b94952702f6cb4692556836111f2631ebcf133941196bfb01f2d41696cb12ac",
+  "estado": "07d3a0e7f107fcdc206c4a226d18f324ae3b01cda05f23bd4fddeb0e435c935d",
+  "estado_motor": "73c2a82132c073220cb87c10a4c1f5adc81d6f766f3b12549a325b2074cac9fe",
+  "interacoes": 48,
+  "log": "3bf023c4ce4e44dae8f2d88dc6f0ce1d067b756eebe53dfa7e2ca4e1857450b4",
+  "motor": "MotorPersonalidade",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "cd6d1e3ae7730c0d260a6ae789809e4859bf445a9a4e0a73f489c3ec95932bdf",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "rngs": "212cc09123ef334bc5e232c85a63e7823a92990fed6c4c435608b97fd4826980",
+  "vinculo": {
+   "atualizacoes": 22,
+   "pedidos_pendentes": [],
+   "valor": 0.7283514266432101,
+   "vontades_pendentes": []
+  }
+ },
+ "personalidade|ligada|neutro|aleatorio|101": {
+  "acoes": "0f25e84e1d6070b99832b295ec0af2e85618573979a044af6b0cd0ef725f03b3",
+  "desejos": "e10b61e6d5bf8dc9a7966f0fd9900f00bf7f2438b43be061775afdc66a849f51",
+  "estado": "e90ce50d066ec2357ce70e4295e68793e6f2e2bcd86e7fd5ed8515299c77bafe",
+  "estado_motor": "60005e82850f43e3ad792844e0cbad50c492200bdda1ff43faeb4b530c8c47fe",
+  "interacoes": 48,
+  "log": "9002e146b7ecba326e7a81b6a0f90a2941f79e1f29f7e0162f387ea7388c7680",
+  "motor": "MotorPersonalidade",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "bb3a36750e4d624bb830577071b9eff2b55f0d32b7ae06ef890ec838dd27693a",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "0019689964fc2e67acaf27bddc4f26deb6dbbe4ec458481355825a39999792bb",
+  "rngs": "a18218e9c4631403069b6fcda329698d3e81e0dd7e8d0b58c46018eeaa783f65",
+  "vinculo": {
+   "atualizacoes": 59,
+   "pedidos_pendentes": [
+    4245,
+    4260,
+    4275
+   ],
+   "valor": 0.695246016059887,
+   "vontades_pendentes": []
+  }
+ },
+ "personalidade|ligada|neutro|aleatorio|202": {
+  "acoes": "6486cd4eb0389d51c0b7df05bcfd6b977ecab2039e040faab4caaedcad7ddfdb",
+  "desejos": "1b640f007b97a32e8b06d981e566ebe8439cf539c883b59782f9f4ffde15c957",
+  "estado": "12ce0662f7b3e875f253453c076f794f874311432626602a1323ea5adabc8c8b",
+  "estado_motor": "dffdeb9d7d98aab45ce5a9ac6be8d0606a69a1214b0edc6a3dcf8eabeac52fee",
+  "interacoes": 48,
+  "log": "8913a9e068148f7d37a67b118be1adbbfe49d6d21302b1c2e30c50cbd692e90c",
+  "motor": "MotorPersonalidade",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "a1252de71602ce8746ad0fa62e9c4edbe59c2b0f409f64fcc9ce993756a1e6c0",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "b5860b1aafcd4cc4f7091bf1a449cbd4c3839ac078395b747fdb7aaa77a604ab",
+  "rngs": "1f2aebe77adcf92d712e0e9d17e31fc0041d7279a01b6f36db774ad7e2a6fdbc",
+  "vinculo": {
+   "atualizacoes": 102,
+   "pedidos_pendentes": [
+    4260
+   ],
+   "valor": 0.6230791987904096,
+   "vontades_pendentes": []
+  }
+ },
+ "personalidade|ligada|neutro|atencioso|101": {
+  "acoes": "2b124b238dbec2af47d4d671ec2c752d84c5964747b902d0a8dcd07401f8db56",
+  "desejos": "0159cf3480e11c89de9d5f457d279c6c079c2078708ad3f174319e892960fff6",
+  "estado": "e00ef56ed7c0b8f5b10fe08296fba38ba0d1434f6030e97a14b5fabaaadc6a4d",
+  "estado_motor": "fd2c0593eb365def1256cbde26d2ed12b3c2d16b0e8a75f655ccb7fe19843fab",
+  "interacoes": 48,
+  "log": "36ad1dcf82d0c25a9b68fc9e10f2c7496477dfde6bea7204edf9aa8b598bf93e",
+  "motor": "MotorPersonalidade",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "5e105ab0df117b70b4a5c24394bbd603676f8e5c6e660549f2392da43a354a58",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "451f25612b5a4ee56f0bcd9166e5a2b9a8722cd578a34cd87a3b1f843b4a21fc",
+  "rngs": "a8cfbb2047d90ebfaa3de3f0be8341779b772ad1ee82c34f46cfece42099b529",
+  "vinculo": {
+   "atualizacoes": 24,
+   "pedidos_pendentes": [],
+   "valor": 0.6713306000166456,
+   "vontades_pendentes": []
+  }
+ },
+ "personalidade|ligada|neutro|atencioso|202": {
+  "acoes": "e1383ed26422e22232a19c4ca7f9caec5d63cfc20be3ce25c7a20a79cdbc628c",
+  "desejos": "4b94952702f6cb4692556836111f2631ebcf133941196bfb01f2d41696cb12ac",
+  "estado": "8028e10764ec42c1c77efb0aacc30cca3136470b0a87740b6a2988f2577cd1ee",
+  "estado_motor": "682df40cb89bbf87f6c78d5523d552fbfd8ca7049d2355b30c26369a0d7514e6",
+  "interacoes": 48,
+  "log": "1cf6c888530933229cc8d68fb43b2232ebd9460ecd58523d6015711a0dc0a2ac",
+  "motor": "MotorPersonalidade",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "09e184409133977daf9afaf591d5b571400c4772f760d0c5edea3ecf15e594f7",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "31c3fb1b7da37d92f13e5dcaa2fa0c4b519300a1a6d3395455ab044e6453bfdd",
+  "rngs": "e522d4ac4353c400dc548f12390709cf039ea829ff9ca89a0b33bc50cc4432eb",
+  "vinculo": {
+   "atualizacoes": 21,
+   "pedidos_pendentes": [],
+   "valor": 0.707743222044539,
+   "vontades_pendentes": []
+  }
+ },
+ "personalidade|ligada|teimoso|aleatorio|101": {
+  "acoes": "7288eb5de74e2971ac6ef4ca6dec88ea04c34cb5a9030fd413c227831b4ca9f2",
+  "desejos": "e7d6eb2c37649808aef024ea56be780240b44fa0f54c42f40f82cd1e004bd0e8",
+  "estado": "80c38db5f30aafaf7309ad54021521989123ae9cd037eff67690af70786e28a8",
+  "estado_motor": "551fcb8601e7952b2ef4f820fdb4ad42c176cf9f0e0681a030f6b4331449a2df",
+  "interacoes": 48,
+  "log": "9002e146b7ecba326e7a81b6a0f90a2941f79e1f29f7e0162f387ea7388c7680",
+  "motor": "MotorPersonalidade",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "1241f61d38a221adaf573721336b4646fd51b7fa284bbf664db273f427d6ae56",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "c4242743b0020e9180ef3bbcaef0cc21789edcb2e64fdc08f275164be8655922",
+  "rngs": "ef0ae3f81914859cec70ed72307e7f5617f52af385ecca4c6920b8980f084fee",
+  "vinculo": {
+   "atualizacoes": 63,
+   "pedidos_pendentes": [
+    4290,
+    4305
+   ],
+   "valor": 0.6379399485421487,
+   "vontades_pendentes": []
+  }
+ },
+ "personalidade|ligada|teimoso|aleatorio|202": {
+  "acoes": "ebb81c4d4f8db0d697b21253b4a79a3ecd49d27d5109e7529f9f33832325c41a",
+  "desejos": "b751c5e034894a83e098d62fafa71d487985160193ef9628580784535381aa34",
+  "estado": "c3e90f0b044f5b1b15b4393163ca8e2d4a72a11df20da7b7cbf4dc192fcd3aae",
+  "estado_motor": "357dc684c7f3753d9bd7fc57fe9245b7e52003a2ab5e525283e2112bbec6922b",
+  "interacoes": 48,
+  "log": "8913a9e068148f7d37a67b118be1adbbfe49d6d21302b1c2e30c50cbd692e90c",
+  "motor": "MotorPersonalidade",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "d7945651ed906b94f29e5cb505bd51f799ac0cb77066d08db0de8430f8085330",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "64d80ae1745f7673066ed0bd20af6f584cdf7717d55b7fec774892fb4c029d1d",
+  "rngs": "bc7d246350eeb0c0fcfd6e0504947ac9e5fb7884b41193c223cb87b07ce2c7b4",
+  "vinculo": {
+   "atualizacoes": 143,
+   "pedidos_pendentes": [],
+   "valor": 0.5508425644554307,
+   "vontades_pendentes": []
+  }
+ },
+ "personalidade|ligada|teimoso|atencioso|101": {
+  "acoes": "fd5f59bde7251ecb6434206a0b2ab2bc2bd9cbf846b30bdd826f1ca9dd24aec3",
+  "desejos": "a13dda2cf7494cad0b59559c5c373fa8cf719117571e9c00b7cc61ecfbe92f20",
+  "estado": "bf2663315a255867c9e49b715fce2e2670d3b2eb94dcbc1c368d0ab23a8429ae",
+  "estado_motor": "816e9010aee239578d3b1b2252e81118c87376bb3e106659aab9cc809528e20f",
+  "interacoes": 48,
+  "log": "e969c3e551a878c18a8b19c2e135a21d9f1cfe641ab487ecafc6ad08fb041d4d",
+  "motor": "MotorPersonalidade",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "09a404eacfbcc4a8c037543ea26b1188ac62d4b4cf7ca29d37ea171cd40a7362",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "bc731ef2d6b9b4e88b9464986447300e08ee8beebbf502e2f16f4e9e5cd44c5c",
+  "rngs": "ff4eb53c393a4cb7c714d2437df06c1808e8226a7cf09a304ac0671cc1777e76",
+  "vinculo": {
+   "atualizacoes": 21,
+   "pedidos_pendentes": [
+    4305
+   ],
+   "valor": 0.5963245542066471,
+   "vontades_pendentes": []
+  }
+ },
+ "personalidade|ligada|teimoso|atencioso|202": {
+  "acoes": "e1383ed26422e22232a19c4ca7f9caec5d63cfc20be3ce25c7a20a79cdbc628c",
+  "desejos": "4b94952702f6cb4692556836111f2631ebcf133941196bfb01f2d41696cb12ac",
+  "estado": "8028e10764ec42c1c77efb0aacc30cca3136470b0a87740b6a2988f2577cd1ee",
+  "estado_motor": "682df40cb89bbf87f6c78d5523d552fbfd8ca7049d2355b30c26369a0d7514e6",
+  "interacoes": 48,
+  "log": "1cf6c888530933229cc8d68fb43b2232ebd9460ecd58523d6015711a0dc0a2ac",
+  "motor": "MotorPersonalidade",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "74d25bd1c54e571b3aca4a6703ec42e172922f8092eb3632300d683f87fb24ab",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "1681c6279cca705080d8d40fbb7788ee199a6e1acc219032dfcc26dbc69848fc",
+  "rngs": "e522d4ac4353c400dc548f12390709cf039ea829ff9ca89a0b33bc50cc4432eb",
+  "vinculo": {
+   "atualizacoes": 21,
+   "pedidos_pendentes": [],
+   "valor": 0.707743222044539,
+   "vontades_pendentes": []
+  }
+ },
+ "treino|aleatorio|101": {
+  "acoes": "414fe51c1665ef06d904bc95063e908016d7a7a6b849d600b691605cdf75cbee",
+  "desejos": "0333a20a78157fc2f8e3763629660da9b69560b554b5566a8dd1f2b852231530",
+  "dono": {
+   "carinho_no_slot": 5,
+   "treino": 29
+  },
+  "estado": "dfcf1a4acdf4a35ed51938d1d327b2d8c7edc4830f3a567d734c64288296daa8",
+  "estado_motor": "571dc769c304473645c4a421719f768790509c67dbf1b0a658947d6204f7a5a4",
+  "interacoes": 130,
+  "log": "829c47ec8227ca7bb8dd24d8f525e92e35d0b11066509b046e99c975246c0fad",
+  "motor": "MotorTreino",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "6b69272869315f75bafaa0a10281f9ef12c0e86e1f337952c3d79f5fabb157b1",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "494acf84f3d5dc4f43137e177a712a7c4090cf5af5d4cdff144ec14d8a644d9f",
+  "rngs": "8bbbe32dd82e3166cca51458472d30a36e761dc3ac12173a445bed4621366735",
+  "treino": "7083cf2e9797870a1c16e3bc21f5b3b1ff57e721798c47a0f483d299be082b1c",
+  "vinculo": {
+   "atualizacoes": 141,
+   "pedidos_pendentes": [
+    8490,
+    8505
+   ],
+   "valor": 0.7314282959112209,
+   "vontades_pendentes": []
+  }
+ },
+ "treino|aleatorio|202": {
+  "acoes": "a35618c5f1995a61b6e24eaf0c4295159eb6f7b0dfab4e747c100515e187086b",
+  "desejos": "f0b0a3ec40b1992fde1fb4496d07010b4fedc88d446f07a7b96912a849f9781d",
+  "dono": {
+   "carinho_no_slot": 4,
+   "treino": 30
+  },
+  "estado": "a8216542702bb285aa155d9279488cab66e2b0d57d5bcd8b258f14dc0e6ee494",
+  "estado_motor": "30f0302c30eb02393f9d7a3cfdccccdb5a57aeff95b91f255096f9e99c805b70",
+  "interacoes": 130,
+  "log": "d207a58aa2b8ef5f908468a2e47e333cb6e11df7aefcdde7ccaf2197a5e368db",
+  "motor": "MotorTreino",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "153f1ab3058d27b6bad1cbcc8c4cd9ce87287cc75cd0afbc0307911a3a8635a5",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "c0a7d8831d644c46ade605e75d5766d71cd06a086a6a548b76a566c68925f308",
+  "rngs": "a71e56ea350a441adc5955d6f61a051305efd87b56a260ec7d79bb16263dd285",
+  "treino": "9459c50a89d1a228d51041ad9900c4b4ac8683f48a57ba62b828db1a96ff6313",
+  "vinculo": {
+   "atualizacoes": 295,
+   "pedidos_pendentes": [],
+   "valor": 0.7482204906105465,
+   "vontades_pendentes": []
+  }
+ },
+ "treino|atencioso|101": {
+  "acoes": "b5376f665c17a3ac20ac6917bf7e2e6c9081699c2de2f2653477b1a04b795ef2",
+  "desejos": "48033f808b083be94e1147ecf66a2dc2e3c28c84574727c06528a4403be7be5a",
+  "dono": {
+   "carinho_no_slot": 10,
+   "treino": 24
+  },
+  "estado": "ac8c44161c4c77c96e5d14f64ef6518424e62dcfcf711af2e7308cf88a7cac40",
+  "estado_motor": "c54567fb17dc5c16df633247b49cfd0f5e47d8a0034d839dae123755d6a1e5bb",
+  "interacoes": 130,
+  "log": "e626491d4974c50cf60a07103df45269f379250e05cfa074b2e8f1181d1fd462",
+  "motor": "MotorTreino",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "a50fcb294ac5da62035ef653742821abf058074dfd827b771e34b91ffc6c5f9b",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "b39c5a398b01558137e24a9c5249ef1f6d599d3c1395900723b93c0f2b510a5f",
+  "rngs": "742841e84d41af19600fd0bf86296c344d00011b828b03cbaefa853e0a046501",
+  "treino": "40953178c8c57f05ea18b9b62cee80a717ce82290c8fd6ea8f27bfda6ad8f48b",
+  "vinculo": {
+   "atualizacoes": 54,
+   "pedidos_pendentes": [],
+   "valor": 0.7232762343403666,
+   "vontades_pendentes": []
+  }
+ },
+ "treino|atencioso|202": {
+  "acoes": "a52dd1d4c4311b07fd9b229a213ecae9cdc04d38c6b127e354396131912c7803",
+  "desejos": "f8c526e26f7d4449fbf9c9211e4894929b01bc7c31dd8b68cdb485bae32714bd",
+  "dono": {
+   "carinho_no_slot": 12,
+   "treino": 22
+  },
+  "estado": "30e77985672e3db0a98d5cf58c92be0619a07a00cc1e975f70b03b63e0bc8fe9",
+  "estado_motor": "86d0e84cda657b80d3881fb29e722e7eaf7fca4bd3f6518bbd7ff893a5a61956",
+  "interacoes": 130,
+  "log": "f6645c3cbdc843817281f462e792c8efbb27bebac1c65925098fd1fda223f5dd",
+  "motor": "MotorTreino",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "21719d41a71a82bc14805260cd5e9efe3ff942d65e0281b92da3ed1b274286d1",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "616e243e176138969f540e6cd83b9eb22eaaed82bd1601b7fdb4f3abe5ae9bfe",
+  "rngs": "ac910ec05b932ee3d53f09fe35ae78fd3ca009b237b77d1ad320820b558870bf",
+  "treino": "1368406d92cd53c87691853c69fc33edc4acabdead45a7d2fdbcaec3430c86eb",
+  "vinculo": {
+   "atualizacoes": 47,
+   "pedidos_pendentes": [],
+   "valor": 0.7310480208767428,
+   "vontades_pendentes": []
+  }
+ },
+ "treino|exigente|101": {
+  "acoes": "7cf343f608822d2a75c48dfda0c60f581d62505524100d7425680420b4ca8345",
+  "desejos": "aa7d76b436342b8b97f1e530db432ad0167798cb1a73e68fe4a79ecb824e9b23",
+  "dono": {
+   "carinho_no_slot": 10,
+   "treino": 44
+  },
+  "estado": "ca873c769f195a6a24a6f70c50bc1f6cac588839e1296f38486a0f6d0d23479c",
+  "estado_motor": "b1c81a960b49c20a49b5635b4aa86d23424204966590c7918849dffcd4a8c5cb",
+  "interacoes": 130,
+  "log": "4a9f1a617848b73124f52214513fc249ef11838694a852a3e2bb4fba7399a293",
+  "motor": "MotorTreino",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "215c9ff263c5f0a52152a7a38f56668225f0a59e9769495cdd506de459a49009",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "9ef57888af3b8151d0fb22e566c3a59bd22c54f87cfd11a89a5aad0f074ce475",
+  "rngs": "9015ccd782e057fb6db1f22c61dcbc31537949e7ef63152cded4bb388456ffa1",
+  "treino": "aa493e850495383ba3503370db9372edb956575d618b2fce05206f5152159497",
+  "vinculo": {
+   "atualizacoes": 48,
+   "pedidos_pendentes": [],
+   "valor": 0.20297791414768146,
+   "vontades_pendentes": []
+  }
+ },
+ "treino|exigente|202": {
+  "acoes": "26b9bdf411a4f7d2ea962f3bf5b71654f9a97af97b95170abbde04ebec910a25",
+  "desejos": "5d2a7cf46d866d6f57ed680be8d4c83b326bb5495c6f14a9f028df69887bfed1",
+  "dono": {
+   "carinho_no_slot": 9,
+   "treino": 45
+  },
+  "estado": "7996f35e6c80bf8b05cd4b56f690470e251b1b8cd2125d9330331baf6d82c192",
+  "estado_motor": "fb11f4d6429fbf9a07d32edae62c02faa4b92cb436f7b272b0a5a6e02b4fcf9f",
+  "interacoes": 130,
+  "log": "0c4752b242c32c7b323afbd61445b807d5165f52e92e9169a860e3c3022eac37",
+  "motor": "MotorTreino",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "f0fbc9436bb286586ec91619accbe4571d657b02d1b011b199f58e9f96070a4e",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "196fa7ca8bccb226ba3970a1ce91e1522168cd82460c209d9de510373bb91e90",
+  "rngs": "b5f1b20fe3546be4c02041c0933b3ff21ace2938226d1b45dc1d6e7e2ecc4ca7",
+  "treino": "bd5073a4f498fc54ba68c5db179f723347d91b9dee1143f8ac22ebfc3d368aa0",
+  "vinculo": {
+   "atualizacoes": 43,
+   "pedidos_pendentes": [],
+   "valor": 0.2671766851271666,
+   "vontades_pendentes": []
+  }
+ },
+ "treino|incoerente|101": {
+  "acoes": "9ebca073013d79ddde5143088c4696aaa3830fcdff13a91710dde1bd36de78ce",
+  "desejos": "6048aa343a9abd6647addd833b628927399f11ce22aca103f099ff6fa83fa07c",
+  "dono": {
+   "carinho_no_slot": 10,
+   "treino": 24
+  },
+  "estado": "8d745ccb2bea7c84de6d1b5e603bea9b61aa0d3c417480a8568da8f37962e45e",
+  "estado_motor": "2dd30837a37cbd3f8cdcc83689ae1a831976b4936c3328ff855739ca95c4e5b5",
+  "interacoes": 130,
+  "log": "ff7aa3d74139a9ea640b513a16f77d6c4c8881d77f5217deb8c08ec55003c7bc",
+  "motor": "MotorTreino",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "e647c63f87ad93afe31ab51870cfe3dcaa82e03955204e484a328f1adb46dedc",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "9c06d662fe7c14931e9d55d42538c842e9dd56d3ffbf9ab43e43b14d01088def",
+  "rngs": "49003540351892e67ff8f7a3828490e15e14904708398ec86d9e642673c1f404",
+  "treino": "a341771451d9374c446b7e5fb4eaa9231a2d0f4393670261809a1f7105f1966a",
+  "vinculo": {
+   "atualizacoes": 50,
+   "pedidos_pendentes": [],
+   "valor": 0.6806674070467438,
+   "vontades_pendentes": []
+  }
+ },
+ "treino|incoerente|202": {
+  "acoes": "9949981bbc01c2e7118142c92528f79018ef7bbd93d1963d728d947b7ca8b668",
+  "desejos": "64c6edd35ddcf8b81c1de6ef67364e34389a64df8f616d5604e19cc6868e89c7",
+  "dono": {
+   "carinho_no_slot": 13,
+   "treino": 21
+  },
+  "estado": "5f1afef4152a7aa4d82a1c2f95ae9ae12b4a354b264bf676eba191baeca32a3d",
+  "estado_motor": "3df6abcda28b4347529b4b76b543ba9a0c412850e2a9365ac5f1b9cc513c52c2",
+  "interacoes": 130,
+  "log": "c5b1bca46750228e301e8a88ae8da19a2b99c8eb9646723651cba43df7328605",
+  "motor": "MotorTreino",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "d567d7c234adb3d7fac6123b1c9e02a73012aa3af3d0ceb347234e4a8ccb457c",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "5d3bcea93b14ee3757f4b18c248c1b90cb55d1a8c3aae2adbf21516013ce9999",
+  "rngs": "e8f8cf4a0a23054a72bd50eb1ac94faea9eb5c400000231f6da664dbf1dc7e43",
+  "treino": "ca5265b9953ac671224246be39ac277f3d80eed11e564111d4d20cc1b749455d",
+  "vinculo": {
+   "atualizacoes": 36,
+   "pedidos_pendentes": [],
+   "valor": 0.5174404947904367,
+   "vontades_pendentes": []
+  }
+ },
+ "treino|relapso|101": {
+  "acoes": "7746cb50cbc46307da3789c0bd7bc70d9662f971fd2bb00cda4840b717938ad4",
+  "desejos": "61584631030a3facc212fbbde947d2292abc95428d01baef56b702fc7fb71564",
+  "dono": {
+   "carinho_no_slot": 10,
+   "treino": 24
+  },
+  "estado": "2f2ac907134aa4e0134a836c609efcb3d87ea7a518f13a5939b5d88b048e0c76",
+  "estado_motor": "c71d0a9c81c4e97e0c01df28c75c5a6ccf35b8b0721a64750501a502030ab89a",
+  "interacoes": 130,
+  "log": "3bc301fa3c876e678de071ccb2773e3705ebe308060480bd411c0047ecbedcdb",
+  "motor": "MotorTreino",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "6cc91ea9605769aefa8b8fbd4ff905fc8bb72641056edbdfd96a3b10816150ce",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "f345403b4aed83a5a6fae192660201d228c378a0bcc2973b98cd134d5d690d84",
+  "rngs": "7a43f980c78b6f7bdb35188f88837b8067d0e98239a916fc582a7128abcf0958",
+  "treino": "6eff7d984ff69c1a1ff762f5cb99c445b1ac094559c8421f98bc209ea7313fe6",
+  "vinculo": {
+   "atualizacoes": 238,
+   "pedidos_pendentes": [],
+   "valor": 0.6416873988122611,
+   "vontades_pendentes": []
+  }
+ },
+ "treino|relapso|202": {
+  "acoes": "c2f824b337b446f1e3ce7d6ab5896c6a0c59a46ff28481b8d76a28ac8b794c79",
+  "desejos": "1984f223adea788ea6635e323eeabb304ea6c2790e801721314840db92fa030d",
+  "dono": {
+   "carinho_no_slot": 11,
+   "treino": 23
+  },
+  "estado": "5684bb52d6152b6f9ed99022b5d334e2b2a40e7ac8b30ac628f3fd408777d70a",
+  "estado_motor": "79b138bfe5467fd58357634910831900114e61dff45eb859134fea2845b276cc",
+  "interacoes": 130,
+  "log": "562b90acf199fa33f7ac42f70391794a58281b79a610a34c32a2dd91558153f7",
+  "motor": "MotorTreino",
+  "mundo": "f1f51ee4192559700fd40c264325566e7c12483b80960b7bb852a04c3909c463",
+  "personalidade": "4edfcfc595f3d761f6371bed32e2909d24cf53b8cc20e43218e78e4a2d0f3927",
+  "politica": "42b8c1ea5bf2d6b455f56696811f2af56096f9563b0d321a3b1ccc6b3ec3255b",
+  "recusas": "9d41ae3727d7732a99e2e0c61b91d64872c0cb2d269df679e12075a28a734aa9",
+  "rngs": "bd0c5ec6184bbd49926f4ffa14058d70657f90f2d523f5761ddd30d3e985363a",
+  "treino": "5fdf027ff1af7d16100395b9cb42fb06233ab9cc481315b3b7fe8bc08d669985",
+  "vinculo": {
+   "atualizacoes": 185,
+   "pedidos_pendentes": [],
+   "valor": 0.5335588821396758,
+   "vontades_pendentes": []
+  }
+ }
+}
