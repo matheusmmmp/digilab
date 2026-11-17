@@ -209,3 +209,9 @@ prancha, a prévia no cliente e o resultado na tela ficam para depois da prancha
 - **Os limites:** no beta, as medalhas do registro do Tamer não são conferidas contra o pet, e um registro escrito à mão abre o pedido (sem
   dar pontos; D-CONTA-89); o caminho do marco 10 que confere segue sem teste de ponta a ponta (nenhuma vida chega ao Mega no teste); a
   luta ranqueada do teste é uma só, a primeira da Arena da vida 101.
+
+## 14. MMO4: a prancha da luta ranqueada (2026-11-17)
+
+Pedido do Matheus: "Sim, a prancha" (2026-11-17). O plano de UX é o `docs/PLANO_UX_LUTA_RANQUEADA.md` (PROPOSTO), e a prancha está em
+`docs/pranchas/ux-luta-ranqueada/`: a aba Arena com a escolha "Treino / Ranqueada", os seis estados do pedido e os cinco resultados, no
+desktop (1920) e no celular (390 e 360), nas peles Vidro e Militar. Só desenho; a tela espera as UX-LR-1 a 6. Desvios: D-UXLR-1 a 7.
