@@ -308,13 +308,14 @@ def pares(linhas: list) -> dict:
 
 def medir(decisoes: list[dict]) -> dict:
     """M-S1, M-S2 e M-S3 sobre as decisoes dadas (de uma vida ou de todas)"""
-    e_pet, amps = [], []
+    e_pet, amps, cont_pet = [], [], []
     soma_pares = {"conc": 0, "disc": 0, "emp_E": 0, "emp_CONT": 0, "emp_ambos": 0}
     s3 = {"decisoes": 0, "acertos": 0, "acaso_num": 0, "acaso_den": 1}
     acaso = Fraction(0)
     for d in decisoes:
         es = [x[1] for x in d["P"]]
         e_pet.append(d["P"][0][1])
+        cont_pet.append(d["P"][0][2])
         amps.append(max(es) - min(es))
         for k, v in pares(d["P"]).items():
             soma_pares[k] += v
@@ -330,7 +331,8 @@ def medir(decisoes: list[dict]) -> dict:
     total = sum(soma_pares.values())
     return {"decisoes": n,
             "M_S1": {"E_do_lugar_do_pet": _quantis(e_pet), "E_acima_de_1": [sum(1 for x in e_pet if x > 1), n],
-                     "amplitude": _quantis(amps), "amplitude_2_ou_mais": [sum(1 for x in amps if x >= 2), n]},
+                     "amplitude": _quantis(amps), "amplitude_2_ou_mais": [sum(1 for x in amps if x >= 2), n],
+                     "CONT_do_lugar_do_pet_ate_1": [sum(1 for x in cont_pet if x <= 1), n]},
             "M_S2": {**soma_pares, "pares": total, "discordantes": [soma_pares["disc"], total]},
             "M_S3": s3}
 
@@ -341,13 +343,17 @@ def leitura(m: dict) -> dict:
     d, t = m["M_S2"]["discordantes"]
     plano = n > 0 and a * LIMIAR_PLANO[1] < n * LIMIAR_PLANO[0]
     igual = None if t == 0 else d * LIMIAR_CONT[1] < t * LIMIAR_CONT[0]
-    if plano or igual:
+    c1, nc = m["M_S1"].get("CONT_do_lugar_do_pet_ate_1", [0, n])
+    pelas_entradas = bool(plano) and 2 * c1 > nc                    # o plano, secao 4 (D-F5-9, PROPOSTA)
+    if pelas_entradas:
+        linha = "plano pelas entradas: a F5 espera a decisao do Matheus sobre a opcao (b) da D-F5-2"
+    elif plano or igual:
         linha = "a F5 acaba: " + " e ".join(x for x, f in (("plano", plano), ("igual ao CONT", igual)) if f)
     elif igual is None:
         linha = "sem pares de lugares: a M-S2 nao le"
     else:
         linha = "nem plano nem igual ao CONT: a H-EMP-1 vira um plano depois da F3"
-    return {"plano": plano, "igual_ao_cont": igual, "linha": linha,
+    return {"plano": plano, "igual_ao_cont": igual, "plano_pelas_entradas": pelas_entradas, "linha": linha,
             "limiares": {"plano": list(LIMIAR_PLANO), "igual_ao_cont": list(LIMIAR_CONT)}}
 
 

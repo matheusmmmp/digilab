@@ -126,6 +126,15 @@ def test_a_leitura_segue_os_limiares_em_inteiros():
     assert sd.leitura(m(50, 100, 0, 0))["igual_ao_cont"] is None
 
 
+def test_o_plano_pelas_entradas_segue_a_secao_4_do_plano():
+    def m(amp2, cont1, n=100):
+        return {"M_S1": {"amplitude_2_ou_mais": [amp2, n], "CONT_do_lugar_do_pet_ate_1": [cont1, n]},
+                "M_S2": {"discordantes": [50, 100]}}
+    assert sd.leitura(m(5, 51))["plano_pelas_entradas"] is True and "opcao (b)" in sd.leitura(m(5, 51))["linha"]
+    assert sd.leitura(m(5, 50))["plano_pelas_entradas"] is False and "acaba" in sd.leitura(m(5, 50))["linha"]
+    assert sd.leitura(m(50, 90))["plano_pelas_entradas"] is False
+
+
 def test_a_m_s3_compara_com_o_acaso_dos_empates():
     dec = [{"P": [[[0, 0], 1, 0], [[1, 1], 3, 1], [[2, 2], 3, 1], [[3, 3], 2, 1]], "candidatos": [[1, 1], [2, 2], [3, 3]],
             "alvo": [1, 1]},

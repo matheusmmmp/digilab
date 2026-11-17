@@ -2,6 +2,8 @@
 
 Status (2026-11-17): **APROVADO pelo Matheus** (2026-11-17, no chat da sessão da F5): à pergunta "Você revisa e aprova a espec e as
 D-F5-2 a D-F5-8 no PR #965?", a resposta literal foi **"Aprovo as recomendações"**. Os números novos continuam PROPOSTOS, SEM FONTE.
+As três correções do SE1 (seções 2.1, 2.2 e 2.4) foram aceitas pelo Matheus em 2026-11-17: à pergunta "Aceita as três correções da
+espec feitas no SE1?", a resposta literal foi **"Aceito as correções"**.
 Esta é a espec da sonda descritiva da frente F5, pedida pela decisão **D-F5-1** do Matheus (2026-11-17,
 no chat da sessão da F5): à pergunta "A F5 fica como pesquisa ou vira frente agora?", a resposta literal foi **"Pesquisa, com sonda"**.
 Depois, a esta pergunta: "Escrevo agora a espec da sonda do E(P) em docs/, numa worktree com PR?", ele respondeu **"Sim, escreva a
