@@ -1,6 +1,7 @@
 # ESPEC V3 — SOCIAL_PAR, E1: o parceiro sob intervenção na bancada (2026-11-17, PROPOSTO)
 
-**Status: PROPOSTO, esperando o Matheus (SP-1 e SP-2 da investigação, e as E1-1 a E1-6 da seção 8).** Nenhum código antes delas. A
+**Status: APROVADA pelo Matheus em 2026-11-17 ("Aprovo a E1"): a SP-1 e a SP-2 da investigação e as E1-1 a E1-6 (seção 8), pela
+recomendação (D-SP-8).** Os números continuam PROPOSTOS. A
 investigação que motiva esta etapa é `docs/INVESTIGACAO_V3_SOCIAL_PAR.md`; a tarefa, `docs/TAREFA_V3_SOCIAL_PAR.md`. Commit de
 referência: `358895585858a06a6a8de4b7cab3e3890497dd11`.
 

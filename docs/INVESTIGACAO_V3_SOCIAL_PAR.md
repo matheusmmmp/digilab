@@ -1,6 +1,7 @@
 # INVESTIGAÇÃO V3 — SOCIAL_PAR: como o contato entre dois pets pode virar uma relação (2026-11-17, PROPOSTO)
 
-**Status: PROPOSTO, esperando o Matheus (decisões SP-1 a SP-8, seção 9).** Nada roda e nenhum código muda antes delas. A tarefa é
+**Status: PROPOSTO.** A SP-1 e a SP-2 estão DECIDIDAS pelo Matheus em 2026-11-17 ("Aprovo a E1", D-SP-8); as SP-3 a SP-8
+(seção 9) seguem abertas. A tarefa é
 `docs/TAREFA_V3_SOCIAL_PAR.md`; a primeira etapa está especificada em `docs/ESPEC_V3_SOCIAL_PAR_E1.md`.
 
 **O commit analisado:** `358895585858a06a6a8de4b7cab3e3890497dd11` (a `main` de 2026-11-17). Toda referência `arquivo:linha` vale nele.
