@@ -245,11 +245,11 @@ describe("a conferência no worker", () => {
   afterAll(() => w.fechar());
   it("dá a mesma conferência que no processo, e o laço de eventos fica livre enquanto ela roda", async () => {
     const aqui = conferir(lerEnvio(envioDe()));
-    await w.conferir(lerEnvio(envioDe()));   // o primeiro abre o worker (carrega o motor)
+    await w.conferir(lerEnvio(envioDe()), []);   // o primeiro abre o worker (carrega o motor)
     let batidas = 0;
     const relogio = setInterval(() => { batidas++; }, 10);
     const t0 = performance.now();
-    const la = await w.conferir(lerEnvio(envioDe()));
+    const la = await w.conferir(lerEnvio(envioDe()), []);
     const ms = performance.now() - t0;
     clearInterval(relogio);
     const semMs = (c: typeof aqui) => ({ ...c, ms: null });
@@ -261,7 +261,7 @@ describe("a conferência no worker", () => {
   it("os envios vão em fila e voltam cada um com o seu resultado", async () => {
     const pet = copia(VIDA);
     pet.log[500]![0] = 0;
-    const [a, b] = await Promise.all([w.conferir(lerEnvio(envioDe())), w.conferir(lerEnvio(envioDe(pet)))]);
+    const [a, b] = await Promise.all([w.conferir(lerEnvio(envioDe()), []), w.conferir(lerEnvio(envioDe(pet)), [])]);
     expect(a.resultado).toBe("aceito");
     expect(b).toMatchObject({ resultado: "recusado", motivo: "pet_nao_reproduz" });
     expect(w.naFila).toBe(0);

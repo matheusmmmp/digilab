@@ -44,12 +44,13 @@ const caminho = (url: string): string => { const u = new URL(url); return u.path
 
 export interface Montado { app: App; cfg: ConfigConta; banco: Banco; relogio: { t: number } }
 
-/** o app com a conta; a conferência roda no mesmo processo, a não ser que o teste passe outro conferidor (o worker) */
-export function montar(conferidor: Conferidor = conferirAqui): Montado {
+/** o app com a conta; a conferência roda no mesmo processo, a não ser que o teste passe outro conferidor (o worker); `ambiente` soma às
+    variáveis do ambiente (o marco da luta ranqueada, MMO4) */
+export function montar(conferidor: Conferidor = conferirAqui, ambiente: Record<string, string> = {}): Montado {
   const relogio = { t: Date.UTC(2026, 10, 16, 12) };
   const banco = abrirBanco(":memory:");
   const cfg = configDoAmbiente({ porta: 8766, banco, agora: () => relogio.t,
-    ambiente: { DIGILAB_URL_API: API, DIGILAB_URL_JOGO: JOGO, DIGILAB_CONVIDADOS: "falso:ana falso:caio" } });
+    ambiente: { DIGILAB_URL_API: API, DIGILAB_URL_JOGO: JOGO, DIGILAB_CONVIDADOS: "falso:ana falso:caio", ...ambiente } });
   return { app: criarApp({ gerador: new GeradorFala(null, null), motivoInicial: "", conta: cfg, conferidor }), cfg, banco, relogio };
 }
 

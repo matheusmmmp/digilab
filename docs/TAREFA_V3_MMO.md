@@ -180,3 +180,41 @@ Pedido do Matheus: "abre a MMO3 local" (2026-11-16), pela sessão que coordena a
   a entrada e o perfil (precisam de prancha); o deploy e os OAuth reais (CN5). Até a MMO4 não há semente entregue, e os pontos são 0.
 - **Os limites:** o caminho do marco que confere não tem teste de ponta a ponta (nenhuma vida chega ao Mega no teste); a medida é da máquina
   do Matheus, não do Lightsail; um worker só, com os envios em fila.
+
+## 13. MMO4: a luta ranqueada, a parte local (2026-11-17)
+
+Pedido do Matheus: "Faz o merge e segue para a MMO4" (2026-11-17, depois do #960). Só o servidor e o protocolo do pedido no jogo. A
+prancha, a prévia no cliente e o resultado na tela ficam para depois da prancha (seção 12 do `docs/PLANO_V3_MMO.md`).
+
+- **O que entrega:**
+  - `POST /sementes` e `GET /sementes` no `servidor_web/` (`src/envio/sementes.ts`), com a sessão e o CSRF da conta: o pedido
+    `{pet: {semente, versao}, indice, hash}` devolve a semente da luta ranqueada, um HMAC do segredo da semana com a conta e o número da
+    luta (MMO-6). A semente pedida conta como luta feita;
+  - as travas do pedido: o nível (o marco 10 conferido, ou o 7 no beta, por `DIGILAB_MARCO_RANQUEADA`), o limite de 10 por conta por dia de
+    Brasília pelo relógio do servidor (MMO-8), e a ordem (o `indice` não volta, não fica antes do registro já enviado, e o mesmo `indice`
+    tem o mesmo hash);
+  - no envio, a conferência confere o hash do registro até o `indice` de cada semente pedida (`hash_nao_confere`) e conta as lutas pela conta
+    da MMO1 (vitória pela faixa, derrota, não enviada, pendente). Os pontos deixam de ser sempre 0;
+  - o banco (a migração 3): `sementes` (pende da conta), `segredos_semana` (do servidor), e em `envios` as sementes usadas e os marcos do
+    Tamer. Apagar a conta leva as sementes;
+  - no jogo, `src/ranking/pedido.ts` (o hash do pedido, sem tela) e `src/marcosTamer.ts` (os marcos do Tamer, fora do `nivel.ts`);
+  - `servidor_web/test/sementes.test.ts`, com 24 testes: a trava do nível (sem envio, poucas medalhas, o marco 10 do padrão, o marco
+    inválido), a semente (a resposta, o pedido do jogo igual ao do servidor, o HMAC, um segredo por semana, sem sessão, sem CSRF,
+    malformado, a versão), o limite do dia (a 11ª, o dia seguinte, a virada às 03:00 UTC), a ordem (fora de ordem, o hash diferente, o
+    indice já enviado, o relógio que recua), o envio com a semente (a luta que conta, a pendente, a não enviada, o registro mudado, o
+    worker, apagar a conta, o "baixar os dados") e o hash do prefixo.
+- **Desvios:** D-CONTA-87 a 92.
+- **Fora desta etapa:** a prancha e as telas da luta ranqueada (a prévia e o resultado do servidor); fechar as pendentes como derrota no fim
+  da semana, as tabelas, o congelamento e o segredo publicado (MMO5); o deploy (CN5).
+- **Os limites:** no beta, as medalhas do registro do Tamer não são conferidas contra o pet, e um registro escrito à mão abre o pedido (sem
+  dar pontos; D-CONTA-89); o caminho do marco 10 que confere segue sem teste de ponta a ponta (nenhuma vida chega ao Mega no teste); a
+  luta ranqueada do teste é uma só, a primeira da Arena da vida 101.
+
+## 14. MMO4: a prancha da luta ranqueada (2026-11-17)
+
+Pedido do Matheus: "Sim, a prancha" (2026-11-17). O plano de UX é o `docs/PLANO_UX_LUTA_RANQUEADA.md` (PROPOSTO), e a prancha está em
+`docs/pranchas/ux-luta-ranqueada/`: a aba Arena com a escolha "Treino / Ranqueada", os seis estados do pedido e os cinco resultados, no
+desktop (1920) e no celular (390 e 360), nas peles Vidro e Militar. Só desenho. Desvios: D-UXLR-1 a 8.
+
+**As UX-LR-1 a 6 foram APROVADAS pelas recomendações** (Matheus, 2026-11-17: "Sim, aprovo"): a luta na aba Arena, o aviso acima do
+botão, a prévia que vira "conferido", o reenvio sozinho e o rival escolhido pelo jogador. A tela ainda não foi feita.

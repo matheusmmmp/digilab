@@ -156,6 +156,8 @@ artifacts_conversa_pet/**/vidas/
 artifacts_linhagem/**/vidas/
 !artifacts_v2_descritivo_plato/
 artifacts_v2_descritivo_plato/**/vidas/
+# EVIDENCIA A0 (docs/AUDITORIA_EVIDENCIA.md): o auditoria.json de tools/auditar_evidencia.py
+!artifacts_v3_auditoria_evidencia/
 
 # MMO0: o pacote da medida Chrome x Node (web/app/scripts/mmo0/empacotar.ts)
 web/app/scripts/mmo0/dist/
@@ -169,3 +171,5 @@ artifacts_v3_baseline_trivial/**/vidas/
 # VALUATION (docs/PLANO_ANALISE_V3_VALUATION.md): meta, medidas, resultado e o vidas.tar.gz no git; as vidas soltas fora
 !artifacts_v3_valuation/
 artifacts_v3_valuation/**/vidas/
+# EVIDENCIA A2: os artefatos da ablacao do aprendizado (docs/PLANO_ANALISE_V3_ABLACAO_APRENDIZADO.md, secao 6)
+!artifacts_v3_ablacao_aprendizado/
