@@ -11,6 +11,7 @@ import type { ConfigConta } from "./conta/config.ts";
 import { montarRotasConta } from "./conta/rotas.ts";
 import { ConferidorEmWorker, type Conferidor } from "./envio/conferidor.ts";
 import { montarRotasEnvio } from "./envio/rotas.ts";
+import { montarRotasSemana } from "./envio/semanas.ts";
 import { montarRotasSemente } from "./envio/sementes.ts";
 import type { GeradorFala } from "./fala.ts";
 
@@ -69,6 +70,7 @@ export function criarApp({ gerador, motivoInicial, conta, conferidor }: Opcoes):
     const guardas = montarRotasConta(app, conta);
     montarRotasEnvio(app, conta, guardas, conferidor ?? new ConferidorEmWorker().conferir);
     montarRotasSemente(app, conta, guardas);
+    montarRotasSemana(app, conta, guardas);
   }
 
   app.notFound(c => json(c, 404, { erro: "rota desconhecida" }));

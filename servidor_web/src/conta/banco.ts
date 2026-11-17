@@ -132,6 +132,30 @@ export const MIGRACOES: readonly string[] = [
   CREATE INDEX sementes_dia ON sementes(conta_id, dia);
   CREATE INDEX sementes_pet ON sementes(conta_id, pet, versao_pet, numero);
   `,
+  /* 4: o ranking da semana (MMO5, servidor_web/src/envio/semanas.ts): em cada semente, o que a conferência do envio achou dela (NULL
+     até o primeiro envio que a confere); no segredo, quando a semana congelou e ele foi publicado (NULL com a semana aberta); e as
+     tabelas congeladas, que pendem da conta (apagar a conta tira a linha dela) */
+  `
+  ALTER TABLE sementes ADD COLUMN situacao TEXT CHECK (situacao IN ('vitoria', 'derrota', 'nao_enviada', 'pendente', 'fora_da_arena', 'acima_do_limite'));
+  ALTER TABLE sementes ADD COLUMN estagio TEXT;
+  ALTER TABLE sementes ADD COLUMN rival TEXT;
+  ALTER TABLE sementes ADD COLUMN faixa TEXT;
+  ALTER TABLE sementes ADD COLUMN envio_id TEXT;
+  CREATE INDEX sementes_semana ON sementes(semana);
+  ALTER TABLE segredos_semana ADD COLUMN publicado_em INTEGER;
+  CREATE TABLE tabelas_semana (
+    semana           TEXT NOT NULL,
+    estagio          TEXT NOT NULL,
+    posicao          INTEGER NOT NULL,
+    conta_id         TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    pontos           REAL NOT NULL,
+    rivais_vencidos  INTEGER NOT NULL,
+    lutas_usadas     INTEGER NOT NULL,
+    hora_dos_pontos  INTEGER,
+    PRIMARY KEY (semana, estagio, posicao)
+  ) STRICT;
+  CREATE INDEX tabelas_semana_conta ON tabelas_semana(conta_id);
+  `,
 ];
 
 export const VERSAO_BANCO = MIGRACOES.length;

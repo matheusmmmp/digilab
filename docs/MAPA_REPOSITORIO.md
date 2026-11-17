@@ -141,6 +141,10 @@ As seções acima são cópias inteiras do CLAUDE.md antigo (o G-NADA-PERDIDO co
 - **2026-11-17, MMO4, a tela da luta ranqueada:** `web/app/src/ranking/ranqueada.ts` (o cliente: pedido, prévia, envio, reenvio),
   `web/app/src/telas/lutar/palcoPoc/TelaRanqueada.tsx` e `web/app/src/estilo/ranqueada.css` (a aba Arena com "Treino / Ranqueada"),
   `web/app/test/ranqueada.test.ts`. Só liga com `VITE_DIGILAB_API` no build.
+- **2026-11-17, MMO, MMO5 (a parte local):** o ranking da semana em `servidor_web/src/envio/semanas.ts`: as tabelas por estágio com o
+  desempate, o fechamento da semana e o segredo publicado (`GET /semanas`, `/semanas/:semana/tabelas`, `/semanas/:semana/segredo`); a
+  migração 4 em `servidor_web/src/conta/banco.ts`; `servidor_web/test/semanas.test.ts`. O `pontuar` de
+  `web/app/src/ranking/pontos.ts` passou a ser exportado.
 - **2026-11-17, CONTA, as telas da conta no jogo:** `web/app/src/conta/conta.ts` (o cliente: entrar, primeiro acesso, perfil, sair,
   apagar), `web/app/src/conta/apiDoBuild.ts` (`VITE_DIGILAB_API`, `VITE_DIGILAB_TERMOS`, `VITE_DIGILAB_PRIVACIDADE`),
   `web/app/src/telas/config/TelaConta.tsx` e `web/app/src/estilo/conta.css` (a parte Conta dos Ajustes, `#/config/conta`),

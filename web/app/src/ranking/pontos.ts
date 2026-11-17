@@ -111,15 +111,22 @@ export function refazerComLutas(semente: number, versao: number, log: readonly E
     if (faixa === null || PONTOS_FAIXA[faixa] === undefined) return { ...base, situacao: "fora_da_arena" as const, rival: o.rival, estagio: o.estagio };
     return { ...base, situacao: o.venceu ? "vitoria" as const : "derrota" as const, rival: o.rival, faixa, estagio: o.estagio, vidaFinal: o.vida };
   });
-  /* os pontos: a vitoria pela faixa, com a metade para cada vitoria anterior contra o mesmo rival na mesma semana */
+  pontuar(lutas);
+  return { lutas, motor: m };
+}
+
+/** os pontos das lutas de um pet, na ordem do pedido: a vitoria pela faixa, com a metade para cada vitoria anterior contra o mesmo rival
+    na mesma semana; o resto vale 0. Muda `pontos` no lugar. O servidor (MMO5) refaz por aqui os pontos da tabela da semana */
+export function pontuar(lutas: LutaRanqueada[]): void {
   const repeticoes = new Map<string, number>();
   for (const l of lutas) {
+    l.pontos = 0;
     if (l.situacao !== "vitoria") continue;
+    if (l.faixa === null || PONTOS_FAIXA[l.faixa] === undefined) throw new Error(`vitória sem faixa que vale ponto: ${JSON.stringify(l)}`);
     const chave = l.semana + "|" + l.rival, k = repeticoes.get(chave) ?? 0;
     repeticoes.set(chave, k + 1);
-    l.pontos = PONTOS_FAIXA[l.faixa!] / 2 ** k;
+    l.pontos = PONTOS_FAIXA[l.faixa] / 2 ** k;
   }
-  return { lutas, motor: m };
 }
 
 /** as linhas das tabelas da semana de um pet: uma por (semana, estagio) em que ele usou uma luta ranqueada. A semente acima do limite e a
