@@ -24,7 +24,7 @@ from digilab.metrics import ic_wilson, quantis  # noqa: E402
 LIMITE_L_S = 8.0
 CURVA_S = (2.0, 5.0, 8.0, 15.0)
 MEDIDAS = ("T1", "T2", "T3", "T4")
-CAMPOS = ("situacao", "t_envio", "t_chamada", "t_primeira", "t_balao", "t_verif", "descartada", "modelo", "erro", "latencia_s",
+CAMPOS = ("situacao", "t_envio", "t_chamada", "t_primeira", "t_balao", "t_verif", "descartada", "rede", "modelo", "erro", "latencia_s",
           "conversa", "turno", "fria")
 
 
@@ -112,6 +112,8 @@ def resumir(regs: list[dict]) -> dict:
     for r in conv:
         if r["conversa"] is None or r["fria"] is None:
             raise ValueError(f"conversa sem numero de conversa ou sem `fria`: {r}")
+        if r["t_chamada"] is not None and r["rede"] is not True:
+            raise ValueError(f"conversa que nao saiu pela voz da rede (o pet sem decisao do modular?): {r}")
     fria = [r for r in conv if r["fria"]]
     quente = [r for r in conv if not r["fria"]]
     return {

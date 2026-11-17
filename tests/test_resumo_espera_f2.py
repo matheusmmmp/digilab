@@ -15,7 +15,7 @@ from digilab.metrics import ic_wilson, quantis  # noqa: E402
 def reg(situacao="conversa", envio=0.0, chamada=0.0, balao=1000.0, verif=2000.0, descartada=False, conversa=2, turno=1, fria=False, erro=None):
     conv = situacao == "conversa"
     return {"situacao": situacao, "t_envio": envio, "t_chamada": chamada, "t_primeira": balao, "t_balao": balao, "t_verif": verif,
-            "descartada": descartada, "modelo": "falso", "erro": erro, "latencia_s": 1.0,
+            "descartada": descartada, "rede": True if conv else None, "modelo": "falso", "erro": erro, "latencia_s": 1.0,
             "conversa": conversa if conv else None, "turno": turno if conv else None, "fria": fria if conv else None}
 
 
@@ -90,3 +90,11 @@ def test_ler_e_resumir_de_ponta_a_ponta(tmp_path):
     p.write_text("\n".join(json.dumps(reg(conversa=1 + i // 6, fria=i < 6, balao=1000.0 * (i + 1), verif=1000.0 * (i + 2))) for i in range(12)) + "\n", encoding="utf-8")
     res = r.resumir(r.ler_turnos(p))
     assert res["n_conversas_turnos"] == 12 and res["quente"]["T1"]["n"] == 6 and res["fria"]["T1"]["n"] == 6
+
+
+def test_conversa_fora_da_voz_da_rede_falha_alto():
+    """F2, o risco do pet sem decisao do modular: a conversa que nao saiu pela rede nao e a medida desenhada"""
+    x = reg()
+    x["rede"] = False
+    with pytest.raises(ValueError):
+        r.resumir([x])

@@ -48,10 +48,11 @@ export const FL = {
    Desligada por padrao; so liga com `?medir_espera=1` na URL (lida uma vez, na carga). Ligada, guarda em memoria um registro por chamada com os
    tempos do `performance.now()` e os expoe em `window.__medidaEspera`. Nada vai para o log de apresentacao nem para o registro do pet, e o
    VERSAO_LOG nao muda. T1 = t_balao - t_envio; T2 = igual ao T1 hoje (sem streaming; `t_primeira` = `t_balao`); T3 = t_verif - t_balao;
-   T4 = t_chamada - t_envio (a fila); T5 = as `descartada` entre as espontaneas. */
+   T4 = t_chamada - t_envio (a fila); T5 = as `descartada` entre as espontaneas. `rede` diz se o pedido saiu pela voz da rede (com os conceitos): sem uma
+   decisao do modular ele cai no caminho de sempre, e a medida nao e a da voz pela rede (o resumo falha alto). */
 export interface MedidaEspera {
   situacao: "espontanea" | "conversa"; t_envio: number; t_chamada: number | null; t_primeira: number | null; t_balao: number | null; t_verif: number | null;
-  descartada: boolean; modelo: string | null; erro: string | null; latencia_s: number | null;
+  descartada: boolean; rede: boolean | null; modelo: string | null; erro: string | null; latencia_s: number | null;
 }
 function medidaLigada(): boolean {
   try { return new URLSearchParams(location.search).get("medir_espera") === "1"; } catch { return false; }
@@ -62,7 +63,7 @@ if (MEDIDA_ESPERA) (globalThis as unknown as { __medidaEspera: MedidaEspera[] })
 function abrirMedida(situacao: "espontanea" | "conversa"): MedidaEspera | undefined {
   if (!MEDIDA_ESPERA) return undefined;
   const me: MedidaEspera = { situacao, t_envio: performance.now(), t_chamada: null, t_primeira: null, t_balao: null, t_verif: null,
-    descartada: false, modelo: null, erro: null, latencia_s: null };
+    descartada: false, rede: null, modelo: null, erro: null, latencia_s: null };
   MEDIDA_ESPERA.push(me);
   return me;
 }
@@ -159,7 +160,7 @@ async function falar(situacao: "espontanea" | "conversa", gatilho: string | null
     /* conversa nova (M2): prompt conversa-v1 e o historico de fronteira (so a sessao da pagina e o estagio atual, com o estagio de cada
        troca); os baloes antigos do log de apresentacao ficam na tela mas nao vao ao prompt */
     const historico = nova || rede ? FL.fronteira.filter(t => t[2] === estagio).slice(-MAX_TROCAS) : FL.sessao.slice(-MAX_TROCAS);
-    if (me) me.t_chamada = performance.now();
+    if (me) { me.t_chamada = performance.now(); me.rede = rede; }
     const d = await post("/api/fala-livre", { estado, situacao, fala_jogador: falaJogador, historico, semente,
       ...(situacao === "conversa" ? { comando: true } : {}), ...(nova ? { prompt: "conversa-v1" } : {}), ...(rede ? { conceitos } : {}) });
     const reg: RegistroFala = {

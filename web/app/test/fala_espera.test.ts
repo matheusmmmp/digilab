@@ -79,8 +79,9 @@ describe("a medida da espera (falaLivre.ts)", () => {
     const l = fl.MEDIDA_ESPERA!;
     expect(l).toHaveLength(1);
     const r = l[0];
-    expect(Object.keys(r)).toEqual(["situacao", "t_envio", "t_chamada", "t_primeira", "t_balao", "t_verif", "descartada", "modelo", "erro", "latencia_s"]);
+    expect(Object.keys(r)).toEqual(["situacao", "t_envio", "t_chamada", "t_primeira", "t_balao", "t_verif", "descartada", "rede", "modelo", "erro", "latencia_s"]);
     expect(r.situacao).toBe("conversa");
+    expect(r.rede).toBe(false);                     /* sem a chave FALA_REDE o pedido sai pelo caminho de sempre, e a medida diz isso */
     expect(r.descartada).toBe(false);
     expect(r.modelo).toBe("falso");
     expect(r.erro).toBeNull();
