@@ -23,19 +23,48 @@ conhecimento social). A tabela é a [`v3_dreyfus_referencias_verificadas.csv`](v
 
 | status | n | referências |
 |---|---|---|
-| VERIFICADA | 11 | McCarthy 1996, Brooks 1991, Varela et al. 1991, Pfeifer e Bongard 2006, Harnad 1990, Searle 1980, Damasio 1996, Friston 2010, Clark 2013, Lake et al. 2017, Collins 1990 |
+| VERIFICADA | 12 | Dreyfus 2007 (texto completo, 2026-11-16), McCarthy 1996, Brooks 1991, Varela et al. 1991, Pfeifer e Bongard 2006, Harnad 1990, Searle 1980, Damasio 1996, Friston 2010, Clark 2013, Lake et al. 2017, Collins 1990 |
 | VERIFICADA (sem DOI) | 2 | Dreyfus 1972/1992 (pela resenha `10.2307/1575958`), Dreyfus e Dreyfus 1986 (pela resenha `10.1109/mex.1987.4307079`) |
-| EXISTÊNCIA CONFIRMADA; CONTEÚDO NÃO LIDO | 5 | Dreyfus 2002, Dreyfus 2007, Haugeland 1996, Collins 1996, Koschmann 1996 |
+| EXISTÊNCIA CONFIRMADA; CONTEÚDO NÃO LIDO | 4 | Dreyfus 2002, Haugeland 1996, Collins 1996, Koschmann 1996 |
 
-A lacuna mais relevante é o **Dreyfus 2007**, o texto mais próximo do Digilab, que só tem o primeiro parágrafo lido. A leitura
-corrente de que ele critica a IA "heideggeriana" de Brooks e Agre e propõe a neurodinâmica de Freeman **não foi conferida** e não pode
-ser citada como conteúdo até alguém ler o artigo.
+O **Dreyfus 2007**, o texto mais próximo do Digilab, subiu a VERIFICADA no mesmo dia, depois da leitura do texto completo (pedido do
+Matheus, D-LIT-DR-3). É a única referência desta rodada lida por inteiro.
+
+## O Dreyfus 2007, lido
+
+Ensaio-resenha do livro de Wheeler (2005), na *Philosophical Psychology* 20(2), pp. 247-268. O argumento, com as páginas:
+
+- **A relevância é o problema.** O que derrubou a IA simbólica foi saber quais fatos importam numa situação (o frame problem). Os
+  frames de Minsky caem num regresso, porque é preciso um frame para reconhecer o frame (pp. 248-249).
+- **Três IAs "heideggerianas" que contornam o problema em vez de resolvê-lo:**
+  - os robôs de Brooks respondem a traços fixos e não aprendem (p. 250);
+  - o Pengi de Agre objetifica as funções e a relevância, e também não aprende (p. 253);
+  - as representações orientadas à ação de Wheeler e a mente estendida ainda carregam o problema (pp. 254-255, 262-263).
+- **O que falta:** responder a um mundo organizado pelas necessidades, interesses e capacidades do corpo, sem que a mente imponha
+  sentido a um dado sem sentido (p. 251).
+- **A proposta: a neurodinâmica de Walter Freeman.**
+  - O coelho com fome procura, e as conexões se reforçam na medida em que o resultado satisfez a necessidade (p. 258).
+  - Cada experiência significativa refaz a paisagem de atratores inteira, sem representação fixa (pp. 258-261).
+  - As transições entre atratores são discretas, então dá para modelá-las num computador (p. 261).
+  - Na nota 11 (p. 267), Dreyfus propõe somar ao modelo um aprendizado por diferença temporal ator-crítico para a perícia.
+- **A conclusão é pessimista (p. 265).** Mesmo essa IA precisaria de um modelo de um corpo como o nosso, com necessidades, desejos,
+  prazeres, dores, modos de mover e cultura, e ele julga isso irrealizável.
+- **A nota 7 (p. 266)** restringe o artigo à significância que partilhamos com os animais, e não ao sentido unicamente humano.
+
+**O que autoriza dizer no Digilab:** que a relevância vir das necessidades do corpo, e o aprendizado por consequência que reorganiza
+o todo, são o desenho que Dreyfus aponta como o caminho certo.
+
+**O que não autoriza:**
+- dizer que o Digilab resolve o frame problem;
+- dizer que o corpo químico é "um corpo como o nosso";
+- atribuir a Dreyfus a leitura de que, para um pet, basta a significância animal. Essa leitura é nossa, construída a partir da
+  nota 7.
 
 ## O que as verificadas autorizam dizer (e o que não)
 
 - **A crítica existe e tem tese própria.** Dreyfus (1972; 2ª ed. 1992) sustenta que as máquinas sem corpo não imitam as funções mentais
-  superiores, e a 2ª edição estende a avaliação ao conexionismo. As quatro suposições e o argumento da relevância são do texto, que não
-  foi lido nesta rodada.
+  superiores, e a 2ª edição estende a avaliação ao conexionismo. As quatro suposições do livro não foram conferidas. O argumento da
+  relevância está conferido no Dreyfus 2007 (pp. 248-249, e p. 264 para o exemplo da aposta de corrida do livro).
 - **Há contraponto publicado.** McCarthy (1996) responde no mesmo número da *Artificial Intelligence*.
 - **O corpo molda o comportamento.** Pfeifer e Bongard (2006) e Varela et al. (1991) sustentam o enquadramento, e Damasio (1996) o
   peso do estado do corpo na decisão. Nada disso valida o corpo químico do Digilab: são enquadramento, não evidência sobre o pet.
@@ -51,7 +80,7 @@ diferencial) e a regra 9 (corpo com homeostase, aprendizado em vida e memória n
 
 ## Limites
 
-- Os resumos foram lidos, os textos completos não.
+- Os resumos foram lidos. Só o Dreyfus 2007 foi lido no texto completo, numa cópia de terceiro da versão do editor.
 - O regex de DOI do `tools/verificar_relato.py` para no `(`. Os DOIs da Elsevier dos anos 1990, como `10.1016/0004-3702(91)90053-M`,
   entram cortados no `10.1016/0004-3702(91`. E já colide: as três resenhas de 1996 (McCarthy, Haugeland, Koschmann) viram
   `10.1016/0004-3702(95`, e o verificador trata o McCarthy, VERIFICADA aqui, como não citável. Até o regex mudar, cite o McCarthy num
