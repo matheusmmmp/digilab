@@ -133,3 +133,8 @@ As seções acima são cópias inteiras do CLAUDE.md antigo (o G-NADA-PERDIDO co
   `servidor_web/test/gabaritos/vida_101.json` (`servidor_web/scripts/gerar_vida_teste.ts`); a medida do tempo em
   `servidor_web/scripts/medir_conferencia.ts` → `servidor_web/medicoes/mmo3_conferencia.json`. No jogo, `web/app/src/chave.ts` (a chave do
   save e o armazenamento, sem dependências, para o `tamer.ts` rodar no servidor) e o `refazerComLutas` em `web/app/src/ranking/pontos.ts`.
+- **2026-11-17, MMO, MMO4 (a parte local):** a luta ranqueada em `servidor_web/src/envio/sementes.ts`: `POST /sementes` e `GET /sementes`
+  (a semente pelo HMAC do segredo da semana, a trava do nível, o limite do dia, a ordem), as tabelas `sementes` e `segredos_semana` (a
+  migração 3 do `banco.ts`), e o hash do pedido conferido no envio (`hashesAte` em `conferir.ts`). Os testes em
+  `servidor_web/test/sementes.test.ts`. No jogo, `web/app/src/ranking/pedido.ts` (o hash do pedido, sem tela) e `web/app/src/marcosTamer.ts`
+  (os marcos do Tamer, reexportados pelo `nivel.ts`).

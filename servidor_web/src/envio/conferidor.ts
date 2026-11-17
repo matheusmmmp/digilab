@@ -3,12 +3,13 @@
    O worker nasce no primeiro envio e não segura o processo (unref). Se ele cair, os envios em andamento falham alto, e o próximo envio
    abre outro. */
 import { Worker } from "node:worker_threads";
-import { conferir, type Conferencia, type Envio } from "./conferir.ts";
+import { conferir, type Conferencia, type EntregueComHash, type Envio } from "./conferir.ts";
 
-export type Conferidor = (envio: Envio) => Promise<Conferencia>;
+/** confere um envio com as sementes ranqueadas entregues àquele pet (MMO4) */
+export type Conferidor = (envio: Envio, entregues: readonly EntregueComHash[]) => Promise<Conferencia>;
 
 /** no mesmo processo, sem worker */
-export const conferirAqui: Conferidor = async envio => conferir(envio);
+export const conferirAqui: Conferidor = async (envio, entregues) => conferir(envio, entregues);
 
 export class ConferidorEmWorker {
   private worker: Worker | null = null;
@@ -16,10 +17,10 @@ export class ConferidorEmWorker {
   private readonly pendentes = new Map<number, { aceitar: (r: Conferencia) => void; recusar: (e: Error) => void }>();
 
   /** o Conferidor deste worker, para passar à rota */
-  readonly conferir: Conferidor = envio => new Promise<Conferencia>((aceitar, recusar) => {
+  readonly conferir: Conferidor = (envio, entregues) => new Promise<Conferencia>((aceitar, recusar) => {
     const id = ++this.proximo;
     this.pendentes.set(id, { aceitar, recusar });
-    this.abrir().postMessage({ id, envio });
+    this.abrir().postMessage({ id, envio, entregues });
   });
 
   /** quantos envios estão na fila do worker */
