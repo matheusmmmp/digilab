@@ -801,6 +801,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-12 — GOSTO_VISUAL: o teste da recusa da GV3b sem depender do git local (Claude Code, Opus 5.5, branch `v3-gosto-visual-teste-gv3b2`)](registro/2026-11.md)
 - [2026-11-12 — COOPERACAO, as capturas da v37 aprovadas (Claude Code, Opus 5.5, branch `v3-cooperacao-co7-capturas`)](registro/2026-11.md)
 - [2026-11-12 — CONTA: os testes do servidor_web no CI (Claude Code, Opus 5.5, branch `v3-conta-ci-servidor`)](registro/2026-11.md)
+- [2026-11-16 — EVIDENCIA, A0: a auditoria da evidência existente (Claude Code, Opus 5.5, branch `v3-auditoria-evidencia`)](registro/2026-11.md)
 - [2026-11-16 — LONGE_GEOMETRIA: a etapa de código (Claude Code, Opus 5.5, branch `v3-longe-geometria-codigo`)](registro/2026-11.md)
 - [2026-11-16 — EVIDENCIA A1: o modular contra uma baseline trivial (Claude Code, Opus 5.5, branch `v3-evidencia-a1`)](registro/2026-11.md)
 - [2026-11-16 — LIMPEZA: o inventário e as decisões (Claude Code, sessão do Matheus)](registro/2026-11.md)
@@ -823,3 +824,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-17 — F2 (CONVERSA_PET): a espera da voz no jogo (Claude Code, Opus 5.5, Gerente das cinco frentes, branch `v3-conversa-espera`)](registro/2026-11.md)
 - [2026-11-17 — F1 (CONVERSA_PET): o verificador no jogo só avisa (Claude Code, Opus 5.5, Gerente das cinco frentes, branch `v3-conversa-verif`)](registro/2026-11.md)
 - [2026-11-17 — EVIDENCIA A1: o merge (o Gerente da V3, Claude Code, Opus 5.5)](registro/2026-11.md)
+- [2026-11-17 — EVIDENCIA A0: o merge (o Gerente da V3, Claude Code, Opus 5.5)](registro/2026-11.md)
+- [2026-11-17 — LEGIBILIDADE: quem define o sucesso e o plano do teste cego (Claude Code, Opus 5.5, branch `v3-sucesso-legibilidade`)](registro/2026-11.md)
