@@ -59,3 +59,22 @@ conjunta com papéis, a recuperação depois de uma interrupção e a generaliza
 ## 8. Precisa do Matheus
 
 As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), cada uma com a recomendação e o custo de errar.
+
+## E1, o código do parceiro sob intervenção (2026-11-17, Claude Code, Opus 5.5, branch `v3-social-par-e1`): PARADA nos controles positivos
+
+- **O que entrou:**
+  - a `ConfigIntervencaoSocial`, desligada;
+  - o `Grupo.levar_pet` com a origem `intervencao`, e o replay dele;
+  - o `MotorMundo.aceitar_ponto_gravado` (D-SP-10, um desvio da espec);
+  - seis medidas em `digilab/metrics.py`;
+  - o `experiments/bancada/parceiro.py`;
+  - a conferência dos controles, `experiments/conferir_controles_social_par_e1.py`.
+- **O que passa** (`tests/test_social_par_e1.py`, 13 testes):
+  - o G2: desligada, o grupo de hoje byte a byte, e dois vivos sem perturbação dão o registro do `simular_grupo`;
+  - o G-GRAV-IDENT: sem perturbação, o modular gravado refaz a vida ao vivo com zero desvios, em 2 sementes, e o par de seguidores
+    também, com os contatos;
+  - o G-GRAV-CEGA, o G-LEVAR, o G-METRICAS e o G-ENGINE.
+- **O que falhou:** os dois controles positivos da espec, seção 3 (D-SP-13). O seguidor × seguidor não separa a VIVO da GRAV, porque um
+  seguidor sozinho fecha o d0 em uma decisão (o teto). O evitador não foge de perto, porque o vetor de fuga some no contato (um defeito do
+  desenho). A etapa parou aqui, sem mudar os controles.
+- **O que falta para fechar:** a decisão do Matheus sobre um adendo com controles novos e sobre o D-SP-10.
