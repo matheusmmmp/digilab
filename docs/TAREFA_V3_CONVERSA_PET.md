@@ -698,6 +698,14 @@ gate.
 - **Os testes:** `tests/test_conversa_dc5c.py` (3).
 - **Os desvios:** D-DC5C-1 a 3, em `docs/registro/2026-11.md`.
 
+## F1 — o plano de quanto o verificador muda o que chega ao jogador (Gerente das cinco frentes, Claude Code, Opus 5.5, branch `v3-conversa-verif`, 2026-11-17)
+
+- **O plano:** `docs/PLANO_ANALISE_V3_CONVERSA_VERIF.md`, PROPOSTO. Ele é exploratório e sem gate, e só usa os dados da DC5c e da DC5d, sem
+  chamada nova a modelo e sem campo faltando. A DC5 não muda.
+- **O achado:** no jogo, o verificador só avisa. O plano lê os dados com a política de hoje (P0) e com uma trava hipotética (P1).
+- **As decisões pendentes:** D-VB-1 (aprovar o plano) e D-VB-2 (onde fica o código).
+- **Os desvios:** D-VB-A e D-VB-B, em `docs/registro/2026-11.md`.
+
 ## F2 — o plano da espera da voz no jogo (Gerente das cinco frentes, Claude Code, Opus 5.5, branch `v3-conversa-espera`, 2026-11-17)
 
 - **O plano:** `docs/PLANO_ANALISE_V3_CONVERSA_ESPERA.md`, PROPOSTO. São 120 turnos no jogo de verdade (Playwright, `gemma2:9b`, verificador
