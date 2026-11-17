@@ -222,3 +222,12 @@ A run rodou uma vez: 5 600 vidas na 99xxx, em 1 h 35, sobre o branch do #943 com
   sorteio protege).
 
 Status: o CHECKPOINT V2.5. A R vai à V3 como candidata, marcada como "piora o bem-estar". Qual conserto entra é decisão do Matheus.
+
+### V3a, o plano do conserto (2026-11-17, Claude Code, Opus 5.5)
+
+O [PLANO_ANALISE_V3_VALUATION_CONSERTO.md](PLANO_ANALISE_V3_VALUATION_CONSERTO.md), PROPOSTO.
+- **O conserto recomendado:** com a chave ligada, o reflexo do sono não dispara com a fome urgente (o `urgencia_lambda` de hoje, a mesma guarda do sono que segura). Sem número novo e sem mecanismo novo.
+- **A run:** REL e CON, nas 12 células, com 200 unidades, na 73xxx: 4 800 vidas, uma vez.
+- **A regra:** passa com a taxa no `longe_fixo` em "> 0", sem a privação nem a exaustão em "> 0" e sem a taxa do comedouro e do longe em "< 0".
+
+Status: o CHECKPOINT V3a, com as D-VAL-16 a D-VAL-20 para o Matheus. Nenhum código do conserto foi escrito.

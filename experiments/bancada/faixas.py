@@ -195,6 +195,9 @@ FAIXAS_RESERVADAS = (
     (99101, 99505, "VALUATION, a ablacao do Valuation: a run unica da V2, 8 bracos x 4 celulas do longe_fixo x 200 unidades "
                    "(docs/PLANO_ANALISE_V3_VALUATION.md, secao 4; D-VAL-9, aprovada pelo Matheus em 2026-11-16, \"Aprovado, siga a V2\"; bases 99101, 99202, 99303, 99404 e 99505, K = 40; "
                    "conferida livre no faixas.py da origin/main e nos branches remotos em 2026-11-16)"),
+    (73101, 73505, "VALUATION, a V3: o conserto do reflexo do sono, REL e CON nas 12 celulas da C4 x 200 unidades, uma vez "
+                   "(docs/PLANO_ANALISE_V3_VALUATION_CONSERTO.md, secao 4; D-VAL-18, PROPOSTA; bases 73101, 73202, 73303, 73404 e 73505, "
+                   "K = 40; conferida livre no faixas.py, nas configs, nos planos e nas tarefas dos branches remotos em 2026-11-17)"),
 )
 
 
