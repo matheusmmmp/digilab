@@ -152,3 +152,28 @@ do servidor (CN1). O motor, o save do pet e as rotas não mudam.
   - o nível do 11 em diante, pelo Respeito, fica para a MMO8.
 - **O limite:** nenhum teste chega ao Mega pelo motor, porque leva dias de vida simulada. O teste põe a evolução a Mega à mão no registro
   das evoluções, que é a lista que o marco lê.
+
+## 12. MMO3: o envio dos logs e a conferência no Node (2026-11-17)
+
+Pedido do Matheus: "abre a MMO3 local" (2026-11-16), pela sessão que coordena a conta. A primeira etapa da F5 do
+`docs/ROADMAP_V3_CONTA.md`, só a parte local, sobre a conta da CN2 (#948). Sem tela, sem prancha e sem deploy.
+
+- **O que entrega:**
+  - `POST /envios` e `GET /envios` no `servidor_web/` (`src/envio/rotas.ts`), com a sessão e o CSRF da conta: o envio
+    `{pet: {semente, log, versao}, tamer: {versao, log}}`, até 5 MiB (PROPOSTO); recusa a versão desconhecida e falha alto com o motivo;
+  - a conferência no Node (`src/envio/conferir.ts`): o pet refeito pelo `Motor.reproduzir` do jogo, o Tamer pelo `lerTamer`, o marco 10 por
+    `marcoConfere` (MMO2) e os pontos por `lutasRanqueadas` (MMO1). Nunca pela assinatura, que difere no último bit (MMO0);
+  - o banco (a migração 2): a linha de cada envio conferido (os hashes, o resultado, o marco, os pontos, o tempo) e os registros do envio
+    aceito até 30 dias depois do fim da semana (MMO-4). Apagar a conta apaga os envios;
+  - `servidor_web/test/envio.test.ts`, com 23 testes: o envio válido, o repetido, o log adulterado, o evento inventado, a versão do pet e a
+    do Tamer, o Tamer que não reproduz, o marco que não confere e o de outro pet, a forma errada e a pontuação do cliente, sem sessão, sem
+    CSRF, de outra origem, grande demais, sem JSON, a política do log, o "baixar os dados" e apagar a conta.
+- **O tempo** (`servidor_web/medicoes/mmo3_conferencia.json`): a conferência de uma vida da MMO0 leva de 0,58 a 1,65 s com o DigiBrain
+  modular (mediana 0,98 s, 10 vidas), metade no replay e metade na conta dos pontos, que refaz o registro; com o cérebro A, a mediana é
+  0,56 s (3 vidas). Não são os 70 ms do plano (D-CONTA-84).
+- **No jogo:** só o `src/chave.ts` (a chave do save e o armazenamento, sem dependências), para o `tamer.ts` rodar no servidor sem o React.
+  O motor, o save e as telas não mudam.
+- **Fora desta etapa:** a semente ranqueada, o limite por dia e a luta ranqueada (MMO4); as tabelas (MMO5); o save na nuvem (CN3); o cais,
+  a entrada e o perfil (precisam de prancha); o deploy e os OAuth reais (CN5). Até a MMO4 não há semente entregue, e os pontos são 0.
+- **Os limites:** o caminho do marco que confere não tem teste de ponta a ponta (nenhuma vida chega ao Mega no teste); a medida é da máquina
+  do Matheus, não do Lightsail; a conferência roda no laço de eventos.

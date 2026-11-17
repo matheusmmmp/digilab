@@ -39,6 +39,23 @@ O `servidor/` continua para o jogo local e a pesquisa.
 - **Só convidados adultos (CN-10):** só cria conta quem está em `DIGILAB_CONVIDADOS` ou na tabela `convidados`; "menos de 18" não guarda nada.
 - **A página `/dev/conta`** (só local) percorre o fluxo pela API; não é tela do jogo.
 
+## O envio dos logs (MMO3, `src/envio/`)
+
+- **`POST /envios`** recebe `{pet: {semente, log, versao}, tamer: {versao, log}}` com a sessão e o `X-CSRF-Token` da conta, até 5 MiB
+  (`LIMITE_ENVIO`, PROPOSTO). **A pontuação nunca vem do cliente:** campo a mais leva 400. `GET /envios` lista os envios da conta.
+- **A conferência** (`conferir.ts`) refaz o pet com o `Motor.reproduzir` de `web/app/motor` e o Tamer com o `lerTamer` de
+  `web/app/src/tamer.ts`, confere o marco 10 por `marcoConfere` (MMO2) e calcula os pontos com `web/app/src/ranking/pontos.ts` (MMO1). O
+  código do jogo é importado como está: o motor e o `engine.py` não mudam. O que se importa do `web/app` não pode chegar ao React (o CI do
+  servidor não instala o `node_modules` do jogo); por isso o `tamer.ts` lê a chave do `src/chave.ts`, e não do `save.ts`.
+- **Recusa com o motivo, em 422:** `versao_pet_desconhecida` (fora de `VERSOES_PET`; o pet do laboratório não se envia),
+  `versao_tamer_desconhecida` (só a `VERSAO_TAMER` de hoje: atualize o jogo, MMO-14), `pet_nao_reproduz` e `tamer_nao_reproduz` (o texto do
+  erro do motor), `marco_nao_confere`. Nunca pela assinatura do pet, que difere entre o Chrome e o Node no último bit (MMO0).
+- **O que fica (MMO-4):** a linha de cada envio conferido (os hashes SHA-256 dos dois registros, o resultado e o motivo, o marco, os pontos,
+  o tempo); os registros, só do envio aceito, até 30 dias depois do fim da semana de Brasília (`LOG_DIAS_DEPOIS_DA_SEMANA`, PROPOSTO). A
+  limpeza roda em cada envio e em cada `GET /envios`. O mesmo envio de novo devolve a conferência guardada. Apagar a conta leva os envios.
+- **A vida dos testes** é o gabarito `test/gabaritos/vida_101.json`, gravado por `node scripts/gerar_vida_teste.ts` (precisa do
+  `node_modules` do `web/app`, porque o roteiro da MMO0 nasce o ovo pelo `src/produto.ts`).
+
 ## Comandos
 
 ```bash
@@ -50,5 +67,7 @@ npm run dev -- --sem-conta          # sem as rotas da conta (a CN1)
 # o fluxo da conta com o provedor falso: http://127.0.0.1:8766/dev/conta
 npm test                            # Vitest: rotas com o cliente falso e a paridade com o Python
 npm run tipos                       # tsc --noEmit
+node scripts/gerar_vida_teste.ts    # regrava a vida dos testes do envio (com o node_modules do web/app)
+node scripts/medir_conferencia.ts   # o tempo da conferência de 10 vidas -> medicoes/mmo3_conferencia.json
 python tools/gerar_catalogo_fala_web.py   # (da raiz) regera o catálogo e o gabarito
 ```

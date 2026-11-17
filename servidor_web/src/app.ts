@@ -9,12 +9,13 @@ import { Hono } from "hono";
 import { motivoDeDict, PedidoInvalido } from "./catalogo.ts";
 import type { ConfigConta } from "./conta/config.ts";
 import { montarRotasConta } from "./conta/rotas.ts";
+import { montarRotasEnvio } from "./envio/rotas.ts";
 import type { GeradorFala } from "./fala.ts";
 
 export const LIMITE_CORPO = 16 * 1024;
 const CABECALHOS_DE_FORA = ["cf-ray", "cf-connecting-ip", "x-forwarded-for"];
 
-/** `conta`: a conta (CN2, src/conta/rotas.ts); sem ela, o servidor é o da CN1 (a /saude e a fala) */
+/** `conta`: a conta (CN2, src/conta/rotas.ts) e o envio dos logs (MMO3, src/envio/rotas.ts); sem ela, o servidor é o da CN1 (a /saude e a fala) */
 export interface Opcoes { gerador: GeradorFala; motivoInicial: string; conta?: ConfigConta }
 
 export function criarApp({ gerador, motivoInicial, conta }: Opcoes): Hono {
@@ -61,7 +62,7 @@ export function criarApp({ gerador, motivoInicial, conta }: Opcoes): Hono {
     return json(c, 200, { ...resultado, gasto: gerador.gasto?.paraDict() ?? null });
   });
 
-  if (conta) montarRotasConta(app, conta);
+  if (conta) montarRotasEnvio(app, conta, montarRotasConta(app, conta));
 
   app.notFound(c => json(c, 404, { erro: "rota desconhecida" }));
   return app;
