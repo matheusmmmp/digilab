@@ -1,7 +1,7 @@
 # TAREFA V3 — ELOGIO: o carinho logo depois da ação acelera o aprendizado do modular (2026-11-16)
 
 Coordenador: Gerente da V3 (Claude Code). Worker da etapa 1: Claude Code, Opus 5.5 (método), worktree `v3-elogio`. Status: **ABERTA; etapa 1
-(só papel) ENTREGUE; D-EL-1 a D-EL-8 (seção 8) DECIDIDAS em 2026-11-16, pela recomendação ("Aprovo todas"). Etapa 2 (código): a leitura achou
+(só papel) ENTREGUE; D-EL-1 a D-EL-8 (seção 8) DECIDIDAS em 2026-11-16, pela recomendação ("Aprovo todas"). Etapa 2 (código) ENTREGUE (seção 10): a leitura achou
 que o cenário da D-EL-1 não roda no modular (seção 9); D-EL-9 a D-EL-13 DECIDIDAS em 2026-11-17 ("Aprovo todas").**
 
 Categoria: arquitetura (depois, implementacao e experimento). Origem: Matheus, 2026-11-16: "logo após o pet fazer alguma ação [...] se a gente
@@ -179,3 +179,22 @@ dono é igual ao intervalo da decisão (15 ticks): o carinho do primeiro passo d
 | D-EL-11 | a janela | W em decisões: o carinho credita a decisão j passos para trás (j = 0 é a última), com o peso `S − div_arred(j × S, W)` para j < W. Com W = 1, só a última | médio: em ticks, o carinho de um passo depois teria peso 0 com W = 1 |
 | D-EL-12 | a rota (detalhe da D-EL-2) | no carinho, na hora: o P2 da linha do comportamento da decisão (com o `z` e o `g_apr` dela, r = o sinal pesado) e, se ela comeu uma classe, o desfecho dessa classe anda pelo que o carinho mudou nos receptores, somado (não puxado para o alvo, que apagaria o que a fruta ensinou). A valência do M-AFETO não recebe | médio: sem a valência, o carinho não muda o humor do cérebro, só o que ele aprende |
 | D-EL-13 | a ordem | o gabarito e o código só depois destas decisões | baixo |
+
+## 10. Etapa 2: o código (2026-11-17)
+
+- **O gabarito** (commit próprio, antes do código): `tests/gabarito_elogio.py` e `tests/gabaritos/elogio_de_hoje.json`, 12 vidas do
+  modular (o braço REL) com o carinho pelo corpo: o mundo `casado` e o do laboratório, sem carinho, um a cada 4 passos e um depois de cada
+  fruta, sementes 101 e 202. O `tests/test_gabarito_elogio.py` confere o byte a byte.
+- **A chave:** `ConfigElogio` (`digilab/config.py`; `ligada`, `ganho` = S e `janela` = 1, PROPOSTOS e SEM FONTE; status em
+  `PARAMETROS_ELOGIO`). Fica fora da `ConfigDigibrain` para o dump do modular não mudar (D-EL-14).
+- **O gancho:** `DigiBrain(cfg_elogio=...)`. Com a chave ligada, o cérebro ganha o `mudanca_no_corpo`; desligada, não o tem, e o motor não
+  o chama. O sinal e as duas rotas são os da seção 3 com a D-EL-11 e a D-EL-12; o P1 do carinho é o `Plasticidade.elogio_p1` (soma, não
+  puxa). O registro fica em `elogios` e no estado interno (`elogio`).
+- **Os braços:** `experiments/elogio.py`, com o `DonoElogioFruta` (E-imed, E-atraso, E-sorteado, E-incons; o E0 sem carinho), a fruta X
+  (`elogio-fruta`), o par E-imed × E-sorteado (`viver_par`) e o contingente só na primeira metade. Sem métricas: elas entram no
+  `digilab/metrics.py` com o plano (etapa 3).
+- **Os testes:** `tests/test_elogio.py` (a config, o gancho só com a chave, o P0, a janela e o peso, a decisão que comeu X, o ganho 0, o
+  sorteado sem olhar o consumo, o par, a metade, os atrasos, as falhas altas e o replay com a chave ligada).
+- **O P0 passa** nas vidas dos testes: o modular lê a solidão e o estresse, e todo carinho dá sinal diferente de 0.
+- **Para a etapa 3:** nas vidas de 6 dias dos testes, o pet comeu a fruta X de 1 a 17 vezes. Os 12 dias da D-EL-9 e o critério do M1 (10
+  frutas) precisam ser conferidos no plano, antes da faixa.
