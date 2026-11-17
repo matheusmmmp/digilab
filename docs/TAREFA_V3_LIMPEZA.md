@@ -2,7 +2,7 @@
 
 Coordenador: sessão do Matheus (Claude Code). Worker: Claude Code, worktree `v3-limpeza`. Worktree e branch: `v3-limpeza`. Status: EM ANDAMENTO
 (a LZ0 e a LZ1 na `main`; a LZ2a neste PR; as decisões D-LZ-1 a D-LZ-3 DECIDIDAS pelo Matheus em 2026-11-16, pela
-recomendação: "Aceito"; a D-LZ-4, a LZ2 em três, PROPOSTA, seção 3.2).
+recomendação: "Aceito"; a D-LZ-4, a LZ2 em três, DECIDIDA em 2026-11-16 pela recomendação, "Aceito", seção 3.2).
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-16: "vamos tentar enxugar o projeto [...] separar o que era do Bandit, que não está
 sendo mais usado, do Cérebro A, que também não está sendo mais usado", com as escolhas (nesta sessão):
@@ -118,7 +118,7 @@ do jogo (o REL) e o instinto do mundo.
   controlador do contrato). As entradas do instinto nos gabaritos do A (a árvore, o banheiro, os dois pets) continuam valendo e ficam na
   LZ2, sem as do A.
 
-## 3.2 A LZ2 dividida em três (2026-11-16, PROPOSTO; D-LZ-4)
+## 3.2 A LZ2 dividida em três (2026-11-16, DECIDIDO; D-LZ-4)
 
 A leitura do código na abertura da LZ2 mostrou duas coisas que o inventário não via:
 - **A cadeia de motores é mais funda que a amarra 2:** `Motor` → `MotorComFeedback` → `MotorPersonalidade` (o `obediencia.py`) →
@@ -185,7 +185,7 @@ artefatos das frentes que saem vão para o backup (D-LZ-3).
   - **Recomendação:** a LZ0 e a LZ1 entram já; a LZ2 em diante só depois do resultado da LONGE_GEOMETRIA, porque a análise roda pelo
     código da `main`.
   - **Custo de errar:** se a LZ2 entrar antes, a análise pode quebrar ou mudar o hash do protocolo no meio da frente.
-- **D-LZ-4, a LZ2 em três (seção 3.2), PROPOSTA.**
+- **D-LZ-4, a LZ2 em três (seção 3.2), DECIDIDA pela recomendação ("Aceito", Matheus, 2026-11-16).**
   - **Recomendação:** a LZ2a como está neste PR; a LZ2b (a cadeia de motores) com um desenho e um gabarito próprios antes do código;
     a LZ2c (os braços do A na bancada) junto com a LZ4.
   - **Alternativa:** a LZ2 inteira num PR só, como estava na seção 3. A suíte ficaria vermelha até a LZ4 sair, ou os testes do A
