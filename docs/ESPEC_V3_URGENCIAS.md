@@ -1,8 +1,9 @@
 # Espec V3: as necessidades num conjunto (prioridade e escalonamento entre urgências)
 
-**Status:** PROPOSTO, **não aprovado.** Só papel: nenhuma linha de código, teste ou vida sai antes de o Matheus escrever "APROVADO" neste
-cabeçalho. Todo número novo é PROPOSTO, SEM FONTE, e a calibração fica para a rodada de equilíbrio no fim (`CLAUDE.md`, "Números novos são
-PROPOSTOS"; o prompt das cinco frentes, regras comuns).
+**Status:** APROVADO pelo Matheus no chat da sessão da F3, 2026-11-17 ("Aceito todas"): as D-UR-1 a D-UR-9 como recomendadas
+(seção 8). O aprovado é do desenho e da ordem do trabalho; os números novos continuam PROPOSTO, SEM FONTE, e a calibração fica para a
+rodada de equilíbrio no fim (`CLAUDE.md`, "Números novos são PROPOSTOS"; o prompt das cinco frentes, regras comuns). O código só entra
+pela D-UR-1 e pela D-UR-7: primeiro a sonda e o C-UR, depois da LZ2 e da LZ3.
 
 - **A frente:** F3 das cinco frentes da síntese de 2026-11-16 (o prompt está no vault, `30 Decisões e protocolo/PROMPT_CINCO_FRENTES_2026-11-16`).
 - **O levantamento:** no vault, `DigiLab — Revisão de escopo/LEVANTAMENTO_URGENCIAS_PRIORIDADE_2026-11-17` (as fontes, cada DOI conferido no
@@ -365,52 +366,52 @@ Cada uma com a pergunta curta, a recomendação e o custo de errar. A resposta d
   - Recomendação: **medir antes.** O primeiro PR de código é a sonda por necessidade (seção 3.1) e o C-UR como teste de uma decisão, sem mudar
     o comportamento (o desenho c).
   - Custo de errar: pular a medida é escolher um desenho sem saber se o pet de hoje decide mal com duas necessidades. Medir custa um PR pequeno.
-  - Resposta:
+  - Resposta: Matheus, 2026-11-17, no chat da F3: "Aceito todas". DECIDIDO pela recomendação.
 - **D-UR-2. Quais desenhos entram na comparação?**
   - Recomendação: **(a) e (d)**, atrás de chave, com o de hoje como linha de base. **(b) só como braço de contraste**, não como candidato ao
     jogo. A (c2) não entra.
   - Custo de errar: pôr (b) no jogo arrisca a oscilação e a perda do compromisso que a literatura já descreve. Deixar (a) de fora perde a
     única forma com fonte revisada.
-  - Resposta:
+  - Resposta: Matheus, 2026-11-17, no chat da F3: "Aceito todas". DECIDIDO pela recomendação.
 - **D-UR-3. (n, m) = (4, 2), e a soma sobre os drives do r (sem o susto)?**
   - Recomendação: **sim, como PROPOSTO, SEM FONTE.** É o par mais simples que cumpre `n > m > 1` e fica exato em inteiros.
   - Custo de errar: outro par, como (3, 2), pede a raiz de um número que não é quadrado em todo passo e perde a identidade exata com uma
     necessidade só. A escolha do conjunto muda a força da interação; a rodada de equilíbrio pode revê-la.
-  - Resposta:
+  - Resposta: Matheus, 2026-11-17, no chat da F3: "Aceito todas". DECIDIDO pela recomendação.
 - **D-UR-4. No (a), a raiz entra no r e no incentivo juntos, ou também num braço "só no incentivo"?**
   - Recomendação: **juntos**, como no artigo (é um D só). O braço "só no incentivo" fica como opção, se a comparação misturar demais o efeito
     na decisão com o efeito no aprendizado.
   - Custo de errar: juntos, o resultado não diz de onde veio a diferença. Separados, é um braço a mais na run.
-  - Resposta:
+  - Resposta: Matheus, 2026-11-17, no chat da F3: "Aceito todas". DECIDIDO pela recomendação.
 - **D-UR-5. As três guardas (o reflexo do sono, o sono que segura e a fome no brincar) ficam como estão, lendo a urgência crua, em todos os
   desenhos?**
   - Recomendação: **sim.** Elas estão DECIDIDAS e validadas na rodada do cuidado, e trocá-las pela tabela de (b) seria outro PR.
   - Custo de errar: guardas lendo a urgência normalizada em (d) mudariam quando o pet acorda pela fome, um efeito que a rodada do cuidado já
     mediu e fechou.
-  - Resposta:
+  - Resposta: Matheus, 2026-11-17, no chat da F3: "Aceito todas". DECIDIDO pela recomendação.
 - **D-UR-6. A sonda por necessidade vai também ao jogo web?**
   - Recomendação: **os booleanos `urgencia_decidiu` nos dois, com paridade; os `c_r` por unidade só no Python.**
   - Custo de errar: no web, o registro detalhado pesa no `motivo` de cada decisão. Sem nada no web, a fala não ganha o "porque estava com fome"
     verificável.
-  - Resposta:
+  - Resposta: Matheus, 2026-11-17, no chat da F3: "Aceito todas". DECIDIDO pela recomendação.
 - **D-UR-7. O código de (a) e (d) espera a LZ2 (Python) e a LZ3 (TS), e mora num módulo novo do `digibrain/`?**
   - Recomendação: **sim, depois da LZ2 e da LZ3, num `necessidades.py` (e `.ts`) que importa do `base.py`**, combinado com a sessão da limpeza
     antes do PR. Nada no `lobos.py`.
   - Custo de errar: entrar antes faz a limpeza mover código novo junto e arrisca o gabarito da LZ1.
-  - Resposta:
+  - Resposta: Matheus, 2026-11-17, no chat da F3: "Aceito todas". DECIDIDO pela recomendação.
 - **D-UR-8. A palavra do dono (F4) passa pela prioridade desta frente?**
   - Recomendação: **não.** O "corpo vence" da palavra é uma guarda como as três de hoje: a porta da F4 lê o predicado
     `alguma_urgencia_critica` (seção 6.2), sobre a urgência crua. Ela não depende do desenho escolhido aqui. (A F4 já decidiu, na sessão
     dela, que a palavra entra no z e não como impulso; isso só confirma o lado da F3.)
   - Custo de errar: amarrar a F4 à F3 faz uma esperar a outra. Se (b) for escolhido depois, a guarda da palavra pode virar uma linha da tabela.
-  - Resposta:
+  - Resposta: Matheus, 2026-11-17, no chat da F3: "Aceito todas". DECIDIDO pela recomendação.
 - **D-UR-9. A parte em vidas (o hábito da 2.4 e a comparação de (a) e (d)) ganha um plano de análise próprio, ou entra na rodada de
   equilíbrio?**
   - Recomendação: **um plano de análise próprio**, `docs/PLANO_ANALISE_V3_URGENCIAS.md`, depois dos testes de uma decisão, com a faixa
     pedida ao coordenador, e com a menor diferença entre desenhos que ele consegue ver acima da variação entre vidas, dita antes da run
     (2.4b). Não entra na rodada de equilíbrio, que calibra números e não compara mecanismos.
   - Custo de errar: na rodada de equilíbrio, a escolha do mecanismo e a dos números se misturam.
-  - Resposta:
+  - Resposta: Matheus, 2026-11-17, no chat da F3: "Aceito todas". DECIDIDO pela recomendação.
 
 ## 9. A literatura
 

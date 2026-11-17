@@ -1,7 +1,7 @@
 # TAREFA V3 — URGENCIAS (2026-11-17)
 
 Coordenador: a Gerente das cinco frentes (sessão `gerente-cinco-frentes`). Worker: a sessão da F3 (Claude Code, Opus 5.5). Worktree e
-branch: `v3-urgencias`. Status: ABERTA (etapa de papel entregue; espera as decisões D-UR-1 a D-UR-9).
+branch: `v3-urgencias`. Status: ABERTA (etapa de papel entregue; D-UR-1 a D-UR-9 DECIDIDAS pelo Matheus em 2026-11-17, "Aceito todas"; o código espera a LZ2).
 
 Categoria: arquitetura. Origem: Claude Code, 2026-11-17: frente F3 das cinco frentes da síntese de literatura de 2026-11-16, aberta pela
 Gerente das cinco: prioridade e escalonamento entre urgências do DigiBrain modular. O prompt está no vault,
@@ -48,4 +48,5 @@ Código, testes, gabaritos e vidas; a calibração de qualquer número; a troca 
 
 ## 8. Precisa do Matheus
 
-As D-UR-1 a D-UR-9 (a espec, seção 8), cada uma com a recomendação e o custo de errar.
+Nada nesta etapa. As D-UR-1 a D-UR-9 foram decididas pelo Matheus no chat da F3, 2026-11-17: "Aceito todas" (a espec, seção 8).
+O merge deste PR continua dele.
