@@ -1,6 +1,7 @@
 # PLANO DE ANÁLISE V3 — SONDA_EMPOWERMENT, adendo 1: a opção (b) da D-F5-2 (2026-11-17, sessão da F5, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** Nada roda antes de este adendo ter "APROVADO pelo Matheus" no cabeçalho e estar commitado (D-F5-8).
+**Status: APROVADO pelo Matheus (2026-11-17), com a (b2).** À pergunta "Aprova a D-F5-11 com as vidas novas no mundo com árvores, a
+(b2)?", ele respondeu "Aprovo a (b2)". Este cabeçalho foi commitado antes do gabarito e do primeiro artefato (D-F5-8).
 
 **De onde vem:** a primeira medida (`docs/RESULTADO_V3_SONDA_EMPOWERMENT.md`) deu "plano pelas entradas". O Matheus aceitou as duas
 recomendações da seção 6 dela em 2026-11-17 ("Aprovo as duas"):
@@ -80,3 +81,5 @@ testes, não uma faixa de pesquisa, como na opção (a). As medidas, as conferê
 | id | pergunta | recomendação | custo de errar |
 |---|---|---|---|
 | **D-F5-11** | quais vidas para a (b): rejogar a LONGE_GEOMETRIA (b1), vidas curtas novas no mundo com árvores (b2), ou parar (b3)? | (b2) | seção 4 |
+
+Decisão: a (b2), em 2026-11-17 ("Aprovo a (b2)").
