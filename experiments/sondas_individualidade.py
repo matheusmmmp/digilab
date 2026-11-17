@@ -39,7 +39,7 @@ from digilab.ambiente import _PoliticaComBola  # noqa: E402
 from digilab.frutas import _PoliticaComFrutas  # noqa: E402
 from digilab.modelo_mundo import PoliticaComModelo  # noqa: E402
 from digilab.mundo import _PoliticaComMundo, deslocar  # noqa: E402
-from digilab.obediencia import _PoliticaObservada  # noqa: E402
+from digilab.personalidade import _PoliticaObservada  # noqa: E402
 from digilab.protocol import derivar_semente  # noqa: E402
 from digilab.rede_de_si import PoliticaComRede  # noqa: E402
 

@@ -22,7 +22,7 @@ from digilab.metrics import cuidado_preservado
 from digilab.metrics import leitura_dominancia
 from digilab.metrics import alivios_ate_criterio, alivios_por_dia, curva_sobrevivencia, dia_do_criterio
 from digilab.mundo import _PoliticaComMundo
-from digilab.obediencia import _PoliticaObservada
+from digilab.personalidade import _PoliticaObservada
 from digilab.policies.lobos import RECEPTORES_NOVOS
 from digilab.policies.lobos import arred
 from digilab.config import ConfigRedeDeSi

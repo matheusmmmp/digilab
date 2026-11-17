@@ -9,7 +9,7 @@ float, sem `/` e sem `math` (o G-INT confere pela AST).
 As chaves das unidades (comportamento, alvo) ficam aqui tambem: `chave_unidade` e `chave_json`, as mesmas em todo modulo."""
 from __future__ import annotations
 
-from ..policies.lobos import div_arred
+from .base import div_arred
 
 
 def mul(a: int, b: int, S: int) -> int:
