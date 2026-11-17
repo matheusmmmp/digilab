@@ -42,8 +42,30 @@ export const FL = {
   /* CONVERSA_PET DC2b (DR-1): chave "Fala pela rede (teste)", desligada por padrao; preferencia de tela, fora do registro do pet. Ligada, e o pet tem
      uma decisao do modular, o pedido leva so os conceitos (dec-v2) e a identidade; senao a chave nao muda nada (`redeSemDecisao` avisa a tela). */
   falaRede: false, redeSemDecisao: false,
-  status: null as { modelo: string } | null, statusErro: false, erro: null as string | null, fila: [] as [string, string | null, string | undefined][],
+  status: null as { modelo: string } | null, statusErro: false, erro: null as string | null, fila: [] as [string, string | null, string | undefined, MedidaEspera?][],
 };
+/* ------------------------------------------------ medida da espera (docs/PLANO_ANALISE_V3_CONVERSA_ESPERA.md, F2, D-ES-2)
+   Desligada por padrao; so liga com `?medir_espera=1` na URL (lida uma vez, na carga). Ligada, guarda em memoria um registro por chamada com os
+   tempos do `performance.now()` e os expoe em `window.__medidaEspera`. Nada vai para o log de apresentacao nem para o registro do pet, e o
+   VERSAO_LOG nao muda. T1 = t_balao - t_envio; T2 = igual ao T1 hoje (sem streaming; `t_primeira` = `t_balao`); T3 = t_verif - t_balao;
+   T4 = t_chamada - t_envio (a fila); T5 = as `descartada` entre as espontaneas. */
+export interface MedidaEspera {
+  situacao: "espontanea" | "conversa"; t_envio: number; t_chamada: number | null; t_primeira: number | null; t_balao: number | null; t_verif: number | null;
+  descartada: boolean; modelo: string | null; erro: string | null; latencia_s: number | null;
+}
+function medidaLigada(): boolean {
+  try { return new URLSearchParams(location.search).get("medir_espera") === "1"; } catch { return false; }
+}
+export const MEDIDA_ESPERA: MedidaEspera[] | null = medidaLigada() ? [] : null;
+if (MEDIDA_ESPERA) (globalThis as unknown as { __medidaEspera: MedidaEspera[] }).__medidaEspera = MEDIDA_ESPERA;
+/** abre o registro de uma chamada (conversa enviada ou espontanea disparada); undefined com a medida desligada */
+function abrirMedida(situacao: "espontanea" | "conversa"): MedidaEspera | undefined {
+  if (!MEDIDA_ESPERA) return undefined;
+  const me: MedidaEspera = { situacao, t_envio: performance.now(), t_chamada: null, t_primeira: null, t_balao: null, t_verif: null,
+    descartada: false, modelo: null, erro: null, latencia_s: null };
+  MEDIDA_ESPERA.push(me);
+  return me;
+}
 const ouvintes = new Set<() => void>();
 const avisar = (): void => { for (const o of ouvintes) o(); };
 try { FL.modo = (localStorage.getItem(MODO) as ModoFala) || (FALA_LLM.on ? "moldura" : "template"); } catch { /* sem armazenamento */ }
@@ -119,8 +141,8 @@ async function post(rota: string, corpo: unknown): Promise<Record<string, unknow
   const d = await r.json(); if (!r.ok) throw new Error(d.erro || ("HTTP " + r.status)); return d;
 }
 /* uma chamada por vez (uma GPU): a conversa espera na fila; fala espontanea com chamada em curso e descartada */
-async function falar(situacao: "espontanea" | "conversa", gatilho: string | null, falaJogador?: string): Promise<void> {
-  if (FL.pendente) { if (situacao === "conversa") FL.fila.push([situacao, gatilho, falaJogador]); return; }
+async function falar(situacao: "espontanea" | "conversa", gatilho: string | null, falaJogador?: string, me?: MedidaEspera): Promise<void> {
+  if (FL.pendente) { if (situacao === "conversa") FL.fila.push([situacao, gatilho, falaJogador, me]); else if (me) me.descartada = true; return; }
   FL.pendente = true; avisar();
   const motor = jogoAtual().motor;
   const semente = hashSemente("fala-livre", motor.semente, motor.log.length, FL.sessao.length) >>> 1;
@@ -137,6 +159,7 @@ async function falar(situacao: "espontanea" | "conversa", gatilho: string | null
     /* conversa nova (M2): prompt conversa-v1 e o historico de fronteira (so a sessao da pagina e o estagio atual, com o estagio de cada
        troca); os baloes antigos do log de apresentacao ficam na tela mas nao vao ao prompt */
     const historico = nova || rede ? FL.fronteira.filter(t => t[2] === estagio).slice(-MAX_TROCAS) : FL.sessao.slice(-MAX_TROCAS);
+    if (me) me.t_chamada = performance.now();
     const d = await post("/api/fala-livre", { estado, situacao, fala_jogador: falaJogador, historico, semente,
       ...(situacao === "conversa" ? { comando: true } : {}), ...(nova ? { prompt: "conversa-v1" } : {}), ...(rede ? { conceitos } : {}) });
     const reg: RegistroFala = {
@@ -147,6 +170,7 @@ async function falar(situacao: "espontanea" | "conversa", gatilho: string | null
     };
     if (situacao === "conversa") { FL.sessao.push([falaJogador!, reg.fala]); if (nova || rede) FL.fronteira.push([falaJogador!, reg.fala, estagio]); }
     FL.ultimo = reg;
+    if (me) { me.t_balao = performance.now(); me.t_primeira = me.t_balao; me.modelo = reg.modelo ?? null; me.erro = reg.erro ?? null; me.latencia_s = reg.latencia_s ?? null; }
     /* comando pelo chat (so na conversa): o registro guarda o que a LLM propos; a acao so entra com a validacao do app */
     if (situacao === "conversa") {
       reg.comando = noCatalogo(d.comando);
@@ -158,14 +182,14 @@ async function falar(situacao: "espontanea" | "conversa", gatilho: string | null
     if (!reg.erro) post("/api/fala-livre/verificar", rede
       ? { fala: reg.fala, fatos_citados: reg.fatos_citados, fatos: fatosDoDono(reg.fatos), semente, conceitos }
       : { fala: reg.fala, fatos_citados: reg.fatos_citados, fatos: reg.fatos, semente, ...(nova ? { prompt: "conversa-v1" } : {}) })
-      .then(v => { reg.verificacao = rede ? v as Verificacao : comMemoria(v as Verificacao, reg.fala, reg.fatos); anexar(reg); avisar(); })
+      .then(v => { if (me) me.t_verif = performance.now(); reg.verificacao = rede ? v as Verificacao : comMemoria(v as Verificacao, reg.fala, reg.fatos); anexar(reg); avisar(); })
       .catch((err: Error) => { reg.verificacao = { erro: String(err.message) }; anexar(reg); avisar(); });
     else anexar(reg);
-  } catch (err) { FL.erro = err instanceof Error ? err.message : String(err); }
+  } catch (err) { FL.erro = err instanceof Error ? err.message : String(err); if (me) me.erro = FL.erro; }
   finally {
     FL.pendente = false; avisar();
     const prox = FL.fila.shift();
-    if (prox) falar(prox[0] as "conversa", prox[1], prox[2]);
+    if (prox) falar(prox[0] as "conversa", prox[1], prox[2], prox[3]);
   }
 }
 
@@ -179,7 +203,7 @@ export function gatilhoFalaLivre(m: Motor): boolean {
   const lutas = m.log.reduce((n, x) => n + (x[1] === "l" ? 1 : 0), 0); if (lutas > FL.ultLutas && FL.ultLutas) g = "acabei de lutar"; FL.ultLutas = lutas;
   const d = m.dz && m.dz.atual, dz = d ? d.tipo + ":" + d.alvo : ""; if (dz && dz !== FL.ultDesejo) g = g || "tive uma vontade nova"; FL.ultDesejo = dz;
   const agora = Date.now();
-  if (g && agora - FL.tEspontanea >= INTERVALO_ESPONTANEA_MS) { FL.tEspontanea = agora; falar("espontanea", g); }
+  if (g && agora - FL.tEspontanea >= INTERVALO_ESPONTANEA_MS) { FL.tEspontanea = agora; falar("espontanea", g, undefined, abrirMedida("espontanea")); }
   return !!FL.ultimo;
 }
 export function iconeVerif(v: Verificacao | null): string {
@@ -214,7 +238,7 @@ export function escolherFalaRede(on: boolean): void {
 }
 export function enviarConversa(txt: string): void {
   if (!txt.trim() || FL.modo !== "livre") return;
-  falar("conversa", null, txt.trim());
+  falar("conversa", null, txt.trim(), abrirMedida("conversa"));
 }
 
 /* ------------------------------------------------ comando pelo chat: execucao direta */
