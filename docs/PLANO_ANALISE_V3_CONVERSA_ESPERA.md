@@ -1,7 +1,6 @@
 # PLANO DE ANÁLISE V3 — CONVERSA_PET, F2: a espera da voz no jogo (2026-11-17, Gerente das cinco frentes, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** Nenhuma linha de código e nenhuma medida antes de este cabeçalho dizer "APROVADO pelo Matheus", com a pergunta e a
-resposta dele literais (seção 7).
+**Status: APROVADO pelo Matheus** (2026-11-17, no chat da sessão da Gerente das cinco frentes). A pergunta foi "Aprova as cinco como recomendadas, ou quer discutir alguma?", e a resposta, "Aprovo". As decisões D-ES-1 a D-ES-3 (seção 7) ficam DECIDIDAS como recomendadas; a D-ES-4 continua para depois da medida.
 
 **O papel:** uma medida descritiva do produto, sem gate. Ela não é uma run de pesquisa da bancada: não tem vida do Python, não tem
 resultado sobre o pet e não tem paridade. Ela serve à escolha da saída para a espera (seção 6).
@@ -124,16 +123,16 @@ de uma decisão velha não aparece.
 RECOMENDAÇÃO, para o Matheus decidir depois da medida: (1) a pré-geração; (2) a API como escolha em Ajustes, se a DC5d disser que o H é
 fiel; (3) o streaming por último; (4) o modelo menor fora.
 
-## 7. As decisões (para o Matheus; nenhuma decidida)
+## 7. As decisões (DECIDIDAS pelo Matheus em 2026-11-17, todas como recomendadas)
 
-- **D-ES-1, aprovar a medida como está:** 120 turnos, os roteiros da calibração da DC5, a pausa de 3 s e o limite L = 8 s, com a curva de
+- **D-ES-1, DECIDIDA pelo Matheus em 2026-11-17 como recomendada, aprovar a medida como está:** 120 turnos, os roteiros da calibração da DC5, a pausa de 3 s e o limite L = 8 s, com a curva de
   2, 5, 8 e 15 s. Recomendo sim.
   - **Custo de errar:** pequeno. É uma medida de tempo, e os números (N, pausa, L) só mudam a precisão.
   - **O L = 8 s** é PROPOSTO, SEM FONTE. É o prazo do PacaPet, usado só como referência de contagem.
-- **D-ES-2, a instrumentação fora do log:** a chave `?medir_espera=1`, só em memória, sem mudar o `VERSAO_LOG`. Recomendo sim.
+- **D-ES-2, DECIDIDA pelo Matheus em 2026-11-17 como recomendada, a instrumentação fora do log:** a chave `?medir_espera=1`, só em memória, sem mudar o `VERSAO_LOG`. Recomendo sim.
   - **Custo de errar:** se a medida tiver de existir no jogo de verdade (com jogadores do beta), ela teria de ir para o log, e isso é outra
     decisão.
-- **D-ES-3, o braço H na medida:** as mesmas 120 frases com o Haiku, por cerca de US$ 0,04 pela conta de US$ 0,00034 por fala, dentro do
+- **D-ES-3, DECIDIDA pelo Matheus em 2026-11-17 como recomendada, o braço H na medida:** as mesmas 120 frases com o Haiku, por cerca de US$ 0,04 pela conta de US$ 0,00034 por fala, dentro do
   teto da fala livre. Recomendo sim, depois da DC5c, para não disputar o teto.
   - **Custo de errar:** perto de US$ 0,04.
   - **A alternativa:** medir só o G, e a API fica com o número de fora do jogo.
