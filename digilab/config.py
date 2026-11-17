@@ -3099,6 +3099,42 @@ CONFIG_SONO_SEGURA_LIGADA = ConfigSonoSegura(ligada=True)
 
 
 @dataclass(frozen=True)
+class ConfigElogio:
+    """O credito do carinho no DigiBrain modular (docs/TAREFA_V3_ELOGIO.md, secoes 3 e 9). O motor com os gestos chama o gancho
+    `mudanca_no_corpo(obs_antes, obs_depois)` no carinho; ligada, o modular o tem (desligada, nao tem, e o motor nao o chama). O sinal e o
+    `sinal_corpo` do carinho com os drives e o `ganho_r` do M-AFETO, normalizado como o r_n (`r_norm`) e multiplicado por `ganho` / S. Ele
+    vai as ultimas `janela` decisoes, j = 0 a ultima, com o peso S - div_arred(j x S, janela) (a forma linear da v1, D-EL-3 e D-EL-11), na
+    hora do carinho (D-EL-12): ao P2 (a linha do comportamento da decisao, com o z e o g_apr dela) e, se a decisao consumiu uma classe, ao
+    desfecho dela no P1, somado pelo que o carinho mudou nos receptores. A valencia do M-AFETO nao o recebe. Fica numa config propria, e nao
+    em `ConfigDigibrain` (a `elogio_credito` da secao 3), para o dump do modular (digibrain_modular_constantes.json) nao mudar, como a
+    `ConfigSonoSegura`. Desligada (o padrao), a vida de hoje sai byte a byte (tests/gabaritos/elogio_de_hoje.json). Status em
+    PARAMETROS_ELOGIO."""
+
+    ligada: bool = False                      # PROPOSTO: a chave
+    ganho: int = _S                           # PROPOSTO, SEM FONTE: o g da secao 3, na escala S (a grade da D-EL-8: S/4, S/2, S, 2S)
+    janela: int = 1                           # PROPOSTO, SEM FONTE: o W em decisoes (D-EL-11; a grade da D-EL-8: 1, 2, 4)
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigElogio.ligada e bool: {self.ligada!r}")
+        if type(self.ganho) is not int or self.ganho < 0:
+            raise ValueError(f"ConfigElogio.ganho e inteiro >= 0: {self.ganho!r}")
+        if type(self.janela) is not int or self.janela < 1:
+            raise ValueError(f"ConfigElogio.janela e inteiro >= 1: {self.janela!r}")
+
+
+# Status dos campos da ConfigElogio (conferido por teste)
+PARAMETROS_ELOGIO: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "TAREFA_V3_ELOGIO (D-EL-1 a D-EL-13 DECIDIDAS, 2026-11-16 e 2026-11-17); a chave, SEM FONTE"),
+    "ganho": ("PROPOSTO", "TAREFA_V3_ELOGIO, secao 3 e D-EL-8 (a grade); o valor sai da calibracao, SEM FONTE"),
+    "janela": ("PROPOSTO", "TAREFA_V3_ELOGIO, D-EL-8 e D-EL-11 (em decisoes); o valor sai da calibracao, SEM FONTE"),
+}
+
+CONFIG_ELOGIO = ConfigElogio()
+CONFIG_ELOGIO_LIGADA = ConfigElogio(ligada=True)
+
+
+@dataclass(frozen=True)
 class ConfigLanceDono:
     """O lance do dono (docs/TAREFA_V3_BOLA_BRINCAR.md, BB-1 a BB-6; as decisoes DECIDIDAS pelo Matheus em 2026-11-11, os numeros PROPOSTOS).
     Ligada, com o mundo ligado, o Brincar do dono pega a bola onde ela estiver e a joga perto do pet: a direcao (uma das 16) e a distancia

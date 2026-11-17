@@ -50,6 +50,13 @@ nas acoes com alvo) e `consequencia_corpo`. A decisao guarda tudo numa pendencia
 decisao seguinte. Nenhum modulo os recebe como sinal: o corpo os sente pelos receptores e o dono pesa pela consequencia no mundo, nunca
 como recompensa direta (a D-B do PLANO_V2_PESQUISA, secao 3; escolha PROPOSTA da etapa 1a).
 
+**O elogio** (o gancho `mudanca_no_corpo`, docs/TAREFA_V3_ELOGIO.md, secoes 3 e 9; so com a `ConfigElogio` ligada, `cfg_elogio`): o motor com os
+gestos chama o gancho no carinho, com a Observacao de antes e a de depois. O sinal e o `sinal_corpo` do carinho (os drives e o `ganho_r`
+do M-AFETO), normalizado como o r_n e multiplicado por `ganho` / S; ele vai, na hora, as ultimas `janela` decisoes (j = 0 a ultima, peso
+S - div_arred(j x S, janela)): ao P2 da linha do comportamento de cada uma (o z e o g_apr dela) e, se ela consumiu uma classe, ao desfecho
+dela (`Plasticidade.elogio_p1`). A valencia do M-AFETO nao o recebe (D-EL-12). O registro vai em `elogios` e no estado interno. Desligada,
+o cerebro nao tem o gancho (o motor nao o chama) e nenhum campo novo.
+
 **A luta** (`receber_luta`, a ponte da luta, PE2, docs/TAREFA_V3_PONTE_LUTA.md, secoes 3.1 e 3.2; so com a `ConfigLutaMemoria` ligada e a
 `memoria_autobio`): irma do `receber_acao_dono`, guarda o resumo pronto (rival, resultado, vida perdida em S, tick); na decisao seguinte o
 M-SENS o entrega na Observacao (`sens["lutas"]`) e, depois da consolidacao e da lembranca, o M-MEM o guarda como episodio de origem `luta`
@@ -93,13 +100,13 @@ import random
 from dataclasses import dataclass
 
 from ..config import (COMPORTAMENTO_OLHAR, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_EQUILIBRIO_CUIDADO, CONFIG_LANCE_DONO, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_OLHAR,
-                      CONFIG_PADRAO, CONTEUDOS_FALA, VERSAO_PET_DIGIBRAIN, Config, ConfigDigibrain, ConfigDigibrainInatos,
+                      CONFIG_PADRAO, CONTEUDOS_FALA, VERSAO_PET_DIGIBRAIN, Config, ConfigDigibrain, ConfigDigibrainInatos, ConfigElogio,
                       ConfigEnjooTela, ConfigEquilibrioCuidado, ConfigFalaUnidades, ConfigLanceDono, ConfigLutaMemoria, ConfigMundo, ConfigOlhar, ConfigSonoSegura)
 from ..events import AcaoPet, AcaoUsuario, LutaSemChave, resumo_luta
 from ..genoma_visao import GenomaVisao, genoma_visao
 from ..modelo_mundo import raiz_inteira
 from ..mundo import ACOES_COM_ALVO, Alvo
-from .base import leitura_receptor
+from .base import div_arred, leitura_receptor, sinal_corpo
 from ..policy import Observacao, Transicao
 from ..protocol import derivar_semente
 from ._comum import chave_json, clamp, ganho_de_tau, integrar, mul
@@ -197,7 +204,7 @@ class DigiBrain:
                  genoma_visao_ovo: GenomaVisao | None = None, cfg_sono: ConfigSonoSegura | None = None,
                  cfg_lance: ConfigLanceDono | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None,
                  ir_ate_tv: bool = False, cfg_cooperacao=None, cfg_equilibrio: ConfigEquilibrioCuidado | None = None,
-                 cfg_orgao=None, brasao: str | None = None) -> None:
+                 cfg_orgao=None, brasao: str | None = None, cfg_elogio: ConfigElogio | None = None) -> None:
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         if not self.cd.ligada:
             raise DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada")
@@ -277,6 +284,16 @@ class DigiBrain:
         self._olhando = None                          # o id da TV da unidade de olhar da ultima decisao (None: nao olha)
         self._lutas: list[dict] = []                  # os resumos desde a decisao anterior (so com a luta_memoria)
         self._pc_antes_luta = None                    # o corpo da ultima consequencia fechada (so com a luta_memoria)
+        # o elogio (docs/TAREFA_V3_ELOGIO.md): o gancho `mudanca_no_corpo` so existe com a ConfigElogio ligada; desligada, nada muda
+        self.cel: ConfigElogio | None = None
+        if cfg_elogio is not None:
+            if not isinstance(cfg_elogio, ConfigElogio):
+                raise TypeError(f"cfg_elogio e uma ConfigElogio: {cfg_elogio!r}")
+            if cfg_elogio.ligada:
+                self.cel = cfg_elogio
+                self._recentes: list[dict] = []       # as ultimas `janela` decisoes: a pendencia e o z de cada uma
+                self.elogios: list[dict] = []
+                self.mudanca_no_corpo = self._mudanca_no_corpo
         self.k = 0
         self.motivos: list[dict] = []
         self._pendencia: dict | None = None
@@ -418,6 +435,8 @@ class DigiBrain:
         if cd.memoria_autobio:                        # a C4: o que o episodio completo le no fechamento
             self._pendencia.update({"tick": tick, "afeto": {"V": afeto["V"], "E": afeto["E"]},
                                     "gestos": self._gestos})
+        if self.cel is not None:                      # o elogio: a decisao entra na janela (com o z que comecou a opcao dela)
+            self._recentes = (self._recentes + [{"p": self._pendencia, "e": list(z)}])[-self.cel.janela:]
         self._gestos = []
         self.k += 1
         return intencao.acao
@@ -624,6 +643,29 @@ class DigiBrain:
         self._gestos.append([acao.value, tick])
         self.gestos[acao.value] = self.gestos.get(acao.value, 0) + 1
 
+    def _mudanca_no_corpo(self, obs_antes: Observacao, obs_depois: Observacao) -> None:
+        """o gancho do carinho (o elogio, a docstring do modulo), so com a ConfigElogio ligada"""
+        if obs_antes.corpo is None or obs_depois.corpo is None:
+            raise RuntimeError("mudanca_no_corpo sem Observacao.corpo")
+        reg = {"k": self.k, "creditos": []}
+        self.elogios.append(reg)
+        if not self._recentes:                        # o carinho antes da primeira decisao: nada a creditar
+            return
+        m, S, cel = self.m, self.S, self.cel
+        recs = m.sens.receptores
+        sinal = sinal_corpo(obs_antes.corpo, obs_depois.corpo, m.afeto.drives(recs), m.afeto.p.ganho_r, S)
+        f_n = clamp(div_arred(div_arred(cel.ganho * sinal, S), m.afeto.p.r_norm), -S, S)
+        delta = [leitura_receptor(obs_depois.corpo, r, S) - leitura_receptor(obs_antes.corpo, r, S) for r in recs]
+        reg.update(sinal=sinal, f_n=f_n, delta=dict(zip(recs, delta)))
+        for j, rec in enumerate(reversed(self._recentes)):
+            peso = S - div_arred(j * S, cel.janela)
+            p = rec["p"]
+            r = div_arred(f_n * peso, S)
+            classe = _classe_consumida(p)
+            p2 = m.plast.creditar({"chave": p["unidade"]["chave"], "r": r, "g_apr": p["g_apr"], "e": rec["e"]})
+            p1 = None if classe is None else m.plast.elogio_p1(classe, delta, div_arred(cel.ganho * peso, S), p["g_apr"])
+            reg["creditos"].append({"decisao": p["k"], "j": j, "peso": peso, "r": r, "classe": classe, "p2": p2, "p1": p1})
+
     def receber_luta(self, rival: str, resultado: int, vida_perdida_s: int, tick: int) -> None:
         """o resumo pronto da luta (ponte da luta, PE2), so guardado ate a decisao seguinte (a docstring do modulo). Sem a chave, falha alto"""
         if not self.luta_memoria:
@@ -638,6 +680,8 @@ class DigiBrain:
                "motivos": self.motivos}
         if self.m.sens.social is not None:            # a CO6 (o M-SENS leu a reputacao e o peso dos deveres): desligada, o estado de hoje
             out["social"] = {"reputacao": dict(self.m.sens.social["reputacao"]), "peso_dever": self.m.sens.social["peso_dever"]}
+        if self.cel is not None:                      # o elogio: desligado, nenhum campo novo
+            out["elogio"] = {"ganho": self.cel.ganho, "janela": self.cel.janela, "elogios": self.elogios}
         if self.cd.olhar:                             # o olhar (P1d): desligada, o estado e o de hoje, byte a byte
             out["olhar"] = {"olhando": self._olhando, "genoma_visao": self.genoma_visao.para_dict()}
             if self.ce is not None:                   # o enjoo (D-GV-ENJOO-CER): desligado, nenhum campo novo
@@ -789,6 +833,23 @@ class DigiBrain:
         if self.cd.olhar:                             # o olhar (P1d): desligada, nenhum campo novo
             motivo["consequencia"]["olhar"] = olhar
         motivo["fins"] = motivo["fins"] + _registrados(fins)
+
+
+def _classe_consumida(p: dict) -> str | None:
+    """a classe que a decisao `p` consumiu (o elogio, D-EL-12): a mesma regra do fechamento (o comer com `como` = "comer", a podre como
+    `podre`; o brincar com a bola), lida do consequencia_mundo dela; None sem consumo ou antes do gancho"""
+    ocorrido = None if p["mundo"] is None else p["mundo"][0]
+    if ocorrido is None:
+        return None
+    acao = p["intencao"].acao
+    if acao is AcaoPet.COMER:
+        comeu = ocorrido["comeu"]
+        if comeu is None or comeu["como"] != "comer":
+            return None
+        return "podre" if comeu["situacao"] == "podre" else comeu["tipo"]
+    if acao is AcaoPet.BRINCAR:
+        return "bola" if ocorrido["brincou_com_bola"] else None
+    return None
 
 
 def _creditar(plast: Plasticidade, fins: list[dict], cd: ConfigDigibrain | None = None) -> list[dict]:
