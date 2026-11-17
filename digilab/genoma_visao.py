@@ -19,7 +19,7 @@ import random
 from dataclasses import dataclass
 
 from .config import CANAIS_TELA, CONFIG_OLHAR, ConfigOlhar
-from .policies.lobos import div_arred
+from .digibrain.base import div_arred
 from .protocol import derivar_semente
 
 FLUXO = "visao-ovo"

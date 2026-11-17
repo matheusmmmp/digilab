@@ -37,7 +37,8 @@ from digilab.protocol import (ENGINE_SHA256_V0, PROTOCOLO_ARENA_V1, PROTOCOLO_AR
                               sha256_engine, validar_parametros_vinculo_b)
 from digilab.temperamento import sortear  # noqa: E402
 from digilab.treino import reproduzir_com_feedback  # noqa: E402
-from digilab.treino_vida import BRACOS_TREINO, fabricas_treino, orcamento_treino, simular_vida_treino  # noqa: E402
+from digilab.treino_vida import BRACOS_TREINO, orcamento_treino  # noqa: E402
+from digilab.obediencia import fabricas_treino, simular_vida_treino  # noqa: E402
 
 SAIDA = RAIZ / "artifacts_v2_vinculo_novo"
 SEMENTES = {"calibracao": (3101, 3202, 3303, 3404, 3505), "validacao": (5101, 5202, 5303, 5404, 5505)}
