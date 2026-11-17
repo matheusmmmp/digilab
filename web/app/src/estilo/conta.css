@@ -1,0 +1,97 @@
+/* A conta nos Ajustes (CN2 no jogo; a prancha docs/pranchas/ux-conta/conta.css, UX-CN-1 a 6 APROVADAS). So com os tokens --hx-* das
+   peles: nenhuma cor nova. Os tamanhos sao PROPOSTOS, SEM FONTE (os da prancha). */
+.ct{ display:grid; gap:14px }
+.ct > div{ display:grid; gap:6px }
+.ct > .ct-bts, .ct > .ct-rodape{ display:flex; gap:8px }
+.ct > .ct-apelido{ gap:12px }
+.ct-tit{ margin:0; font:700 16px/1.2 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; color:var(--hx-texto) }
+.ct-rot{ display:inline-flex; align-items:center; gap:6px; color:var(--hx-rotulo); font:600 12px/1 var(--hx-f); letter-spacing:.12em; text-transform:uppercase }
+.ct-rot svg{ width:14px; height:14px }
+.ct-sec{ margin:0; color:var(--hx-sec); font:500 13px/1.35 var(--hx-f) }
+.ct-chamada{ margin:0; font:700 20px/1.15 var(--hx-f); letter-spacing:.01em }
+.ct button:focus-visible, .ct a:focus-visible, .ct-aceite:focus-within{ outline:2px solid var(--hx-foco); outline-offset:2px }
+.ct .hx-btn, .ct .hx-continuar{ display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:48px; padding:0 16px; text-decoration:none }
+.ct .hx-btn svg, .ct .hx-continuar svg{ width:18px; height:18px; flex:none }
+.ct :disabled{ opacity:.55; cursor:default }
+
+/* "o que vai para o servidor": o que e, e se vai ou nao vai, em texto */
+.ct-vai{ display:grid; gap:2px; margin:0; padding:0; list-style:none }
+.ct-vai li{ display:grid; grid-template-columns:1fr auto; align-items:center; gap:10px; min-height:32px; font:500 15px/1.2 var(--hx-f) }
+.ct-vai li.nao{ color:var(--hx-sec) }
+.ct-etq{ display:inline-flex; align-items:center; padding:3px 6px; border:1px solid var(--hx-borda-topo); color:var(--hx-texto-2); font:700 11px/1 var(--hx-f); letter-spacing:.1em; text-transform:uppercase }
+.ct-etq.ok{ border-color:var(--hx-ok); color:var(--hx-ok) }
+
+/* os provedores: mesmo peso, um embaixo do outro; a marca em uma cor so (a do texto) */
+.ct-prov{ display:grid; gap:8px }
+.ct .ct-prov .hx-btn{ justify-content:flex-start; width:100%; min-height:52px; font-size:16px; gap:12px }
+.ct-marca{ display:grid; place-items:center; width:26px; height:26px; border:1px solid currentColor; font:700 12px/1 var(--hx-f); letter-spacing:0 }
+.ct-rodape{ display:flex; align-items:center; gap:8px; flex-wrap:wrap }
+.ct-rodape .hx-btn{ margin-right:auto }
+.ct-link{ display:inline-flex; align-items:center; min-height:44px; padding:0 6px; color:var(--hx-texto-2); font:600 13px/1 var(--hx-f); text-decoration:underline; text-underline-offset:3px }
+
+/* os passos da ida ao provedor: tres pontos parados (nada gira nem pisca) */
+.ct-passos{ display:grid; grid-template-columns:1fr 1fr 1fr; margin:2px 0; padding:0; list-style:none }
+.ct-passos li{ position:relative; display:flex; flex-direction:column; align-items:center; gap:6px; font:600 13px/1.1 var(--hx-f); color:var(--hx-sec); text-align:center }
+.ct-passos li::before{ content:""; width:14px; height:14px; border:2px solid var(--hx-borda-topo); background:var(--hx-tecla); position:relative; z-index:1 }
+.ct-passos li + li::after{ content:""; position:absolute; top:6px; right:50%; width:100%; height:2px; background:var(--hx-borda) }
+.ct-passos li.feito{ color:var(--hx-texto-2) }
+.ct-passos li.feito::before{ background:var(--hx-medidor); border-color:var(--hx-medidor) }
+.ct-passos li.agora{ color:var(--hx-texto) }
+.ct-passos li.agora::before{ border-color:var(--hx-escolhido-borda); box-shadow:var(--hx-escolhido-brilho) }
+.ct-passos li.feito + li::after{ background:var(--hx-medidor) }
+
+/* o destaque de estado; o de erro e o de perigo na cor do perigo, com o texto e o icone */
+.ct-destaque{ display:grid; gap:6px; padding:10px 14px; border:1px solid var(--hx-borda); border-left:4px solid var(--hx-alerta); background:var(--hx-tecla) }
+.ct-destaque > b{ font:700 20px/1.15 var(--hx-f) }
+.ct-destaque p{ margin:0; font:500 14px/1.4 var(--hx-f); color:var(--hx-texto-2) }
+.ct-destaque.perigo{ border-color:var(--hx-perigo) }
+.ct-destaque.perigo .ct-rot{ color:var(--hx-perigo) }
+
+/* o apelido: o Digimon, o nome e o numero */
+.ct-apelido{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:12px; min-height:64px; padding:6px 10px 6px 6px; border:1px solid var(--hx-borda); background:var(--hx-tecla) }
+.ct-apelido b{ display:block; font:700 22px/1.1 var(--hx-f); letter-spacing:.01em }
+.ct-apelido b i{ font:700 20px/1 var(--hx-f-num); font-style:normal; color:var(--hx-num) }
+.ct-apelido small{ display:block; font:500 13px/1.25 var(--hx-f); color:var(--hx-sec) }
+.ct-nomes{ display:grid; grid-template-columns:repeat(4, 1fr); gap:6px }
+.ct-idade{ display:grid; grid-template-columns:1fr 1fr; gap:8px }
+.ct-filtro{ display:inline-flex; align-items:center; justify-content:center; min-height:44px; padding:0 6px; border:1px solid var(--hx-borda); background:var(--hx-tecla); color:var(--hx-texto);
+  font:600 14px/1.1 var(--hx-f); cursor:pointer; min-width:0; overflow:hidden; text-overflow:ellipsis }
+.ct-filtro[aria-checked="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda); box-shadow:var(--hx-escolhido-brilho) }
+
+/* o aceite: a caixa de 24 px num alvo de 48 */
+.ct-aceite{ display:grid; grid-template-columns:44px 1fr; align-items:center; gap:4px; min-height:48px; padding:2px 10px 2px 0; border:1px solid var(--hx-borda); background:var(--hx-tecla); cursor:pointer; position:relative }
+.ct-aceite input{ position:absolute; inset:0; width:100%; height:100%; margin:0; opacity:0; cursor:pointer }
+.ct-aceite a{ position:relative; z-index:1; color:inherit; text-underline-offset:3px }
+.ct-caixa{ justify-self:center; width:24px; height:24px; border:2px solid var(--hx-borda-topo); display:grid; place-items:center }
+.ct-caixa svg{ width:16px; height:16px; stroke-width:3; visibility:hidden }
+.ct-aceite input:checked + .ct-caixa{ background:var(--hx-btn-bg); border-color:var(--hx-btn-borda); color:var(--hx-btn-ink) }
+.ct-aceite input:checked + .ct-caixa svg{ visibility:visible }
+.ct-aceite > span:last-child{ font:500 14px/1.3 var(--hx-f) }
+.ct-aceite small{ display:block; font:500 13px/1.2 var(--hx-f); color:var(--hx-sec) }
+
+.ct-bts{ display:flex; gap:8px; flex-wrap:wrap }
+.ct .ct-bts > *{ flex:1 1 0; width:auto; min-width:0 }
+.ct-bts--fim{ justify-content:space-between }
+.ct .ct-bts--fim > *{ flex:0 1 auto }
+.ct .ct-perigo{ border-color:var(--hx-perigo); color:var(--hx-perigo); border-style:dashed }
+
+/* os aparelhos */
+.ct-ap{ display:grid; gap:4px; margin:0; padding:0; list-style:none }
+.ct-ap li{ display:grid; grid-template-columns:24px 1fr auto; align-items:center; gap:10px; min-height:52px; padding:4px 10px; border:1px solid var(--hx-borda); background:var(--hx-tecla) }
+.ct-ap li > svg{ width:20px; height:20px; color:var(--hx-rotulo) }
+.ct-ap b{ display:block; font:700 15px/1.15 var(--hx-f) }
+.ct-ap small{ display:block; font:500 13px/1.2 var(--hx-f); color:var(--hx-sec) }
+.ct .ct-ap .hx-btn{ min-height:44px; padding:0 12px; font-size:13px }
+.ct-dados{ display:flex; align-items:center; gap:12px; flex-wrap:wrap }
+
+/* a lista do que some ao apagar */
+.ct-some{ display:grid; gap:4px; margin:4px 0 0; padding-left:18px; font:500 14px/1.3 var(--hx-f); color:var(--hx-texto-2) }
+.ct-some li.fica{ color:var(--hx-ok) }
+
+/* o celular: a lista do apelido em tres colunas, os botoes com menos respiro */
+@media (max-width: 520px){
+  .ct{ gap:10px }
+  .ct-nomes{ grid-template-columns:repeat(3, 1fr) }
+  .ct .ct-bts > *{ padding:0 10px }
+  .ct-apelido b{ font-size:19px }
+}
