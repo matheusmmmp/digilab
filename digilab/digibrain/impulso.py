@@ -2,7 +2,8 @@
 
 **O contexto z** (CARACTERISTICAS_DIGIBRAIN, ~20): o vies (S), as urgencias dos onze receptores (0 nos ausentes), o contexto e as
 conjuncoes do M-SENS, duas conjuncoes com a urgencia (`fome_sem_comida = mul(u_fome, sem_comida)`, `cuidado_humor = mul(sem_cuidado,
-u_humor)`), a frustracao F do M-ESTADO e a valencia V e a excitacao E do M-AFETO. Entra em todos os comportamentos.
+u_humor)`), a frustracao F do M-ESTADO e a valencia V e a excitacao E do M-AFETO. Entra em todos os comportamentos. Com a ablacao `ve_z` da
+VALUATION (`ConfigAblacaoValuation`, so de pesquisa; docs/PLANO_ANALISE_V3_VALUATION.md, secao 3), o V e o E entram como 0.
 
 **As unidades (b, o)**, as sete acoes de ACOES_PET_HOJE (sem acao nova), na ordem do enum e, dentro de cada uma, na dos `vistos`:
   - comer: uma por comida vista (a podre tambem, pelo W0 da classe); o cheiro, se ha cheiro;
@@ -45,8 +46,8 @@ Sem estado e sem rng."""
 from __future__ import annotations
 
 from ..config import (CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTO_OLHAR, COMPORTAMENTOS_DIGIBRAIN, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS,
-                      CONFIG_EQUILIBRIO_CUIDADO, CONFIG_FALA_UNIDADES, CONFIG_LANCE_DONO, CONFIG_OLHAR, CONTEUDOS_FALA, RECEPTORES_DIGIBRAIN, TERMO_DO_CONTEUDO, ConfigDigibrain,
-                      ConfigDigibrainInatos, ConfigEquilibrioCuidado, ConfigFalaUnidades, ConfigLanceDono, ConfigOlhar)
+                      CONFIG_ABLACAO_VALUATION, CONFIG_EQUILIBRIO_CUIDADO, CONFIG_FALA_UNIDADES, CONFIG_LANCE_DONO, CONFIG_OLHAR, CONTEUDOS_FALA, RECEPTORES_DIGIBRAIN, TERMO_DO_CONTEUDO, ConfigAblacaoValuation,
+                      ConfigDigibrain, ConfigDigibrainInatos, ConfigEquilibrioCuidado, ConfigFalaUnidades, ConfigLanceDono, ConfigOlhar)
 from ..modelo_mundo import raiz_inteira
 from ._comum import chave_unidade, mul, phi
 from .plast import linha_da_opcao
@@ -60,8 +61,12 @@ class Impulso:
 
     def __init__(self, inatos: ConfigDigibrainInatos | None = None, cfg_digibrain: ConfigDigibrain | None = None,
                  cfg_fala: ConfigFalaUnidades | None = None, cfg_olhar: ConfigOlhar | None = None,
-                 cfg_lance: ConfigLanceDono | None = None, cfg_equilibrio: ConfigEquilibrioCuidado | None = None) -> None:
+                 cfg_lance: ConfigLanceDono | None = None, cfg_equilibrio: ConfigEquilibrioCuidado | None = None,
+                 cfg_ablacao: ConfigAblacaoValuation | None = None) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
+        self.ab = cfg_ablacao or CONFIG_ABLACAO_VALUATION
+        if not isinstance(self.ab, ConfigAblacaoValuation):
+            raise TypeError(f"M-IMPULSO: cfg_ablacao e uma ConfigAblacaoValuation: {self.ab!r}")
         self.ceq = cfg_equilibrio or CONFIG_EQUILIBRIO_CUIDADO
         if not isinstance(self.ceq, ConfigEquilibrioCuidado):
             raise TypeError(f"M-IMPULSO: cfg_equilibrio e uma ConfigEquilibrioCuidado: {self.ceq!r}")
@@ -108,7 +113,7 @@ class Impulso:
         z = [S] + [u.get(r, 0) for r in RECEPTORES_DIGIBRAIN]
         z += [cs["noite"], cs["dormindo"], cs["sem_cuidado"], cj["comida_vista"], cj["sem_comida"], cj["bola_vista"],
               mul(u.get("fome", 0), cj["sem_comida"], S), mul(cs["sem_cuidado"], u.get("humor", 0), S),
-              contexto["F"], afeto["V"], afeto["E"]]
+              contexto["F"], 0 if self.ab.ve_z else afeto["V"], 0 if self.ab.ve_z else afeto["E"]]   # a ablacao F (VALUATION)
         if len(z) != len(CARACTERISTICAS_DIGIBRAIN):          # pragma: no cover - conferido pela config
             raise RuntimeError("M-IMPULSO: z fora de CARACTERISTICAS_DIGIBRAIN")
         return z

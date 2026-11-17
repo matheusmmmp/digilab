@@ -1,0 +1,8 @@
+{
+  "descricao": "O conserto do reflexo do sono (docs/PLANO_ANALISE_V3_VALUATION_CONSERTO.md; so roda com o APROVADO e a faixa em FAIXAS_RESERVADAS): o REL da C4 e o CON (a guarda da fome urgente no reflexo) nas 12 celulas da C4, bases 73101...73505, K = 40 (200 unidades), 14 dias: 4 800 vidas, uma vez, ate 4 processos.",
+  "plano": "docs/PLANO_ANALISE_V3_VALUATION_CONSERTO.md",
+  "fase": "conserto",
+  "unidades": {"bases": [73101, 73202, 73303, 73404, 73505], "k": 40, "prefixo": "digibrain_prototipo"},
+  "dias": 14,
+  "orcamento_por_dia": 16
+}
