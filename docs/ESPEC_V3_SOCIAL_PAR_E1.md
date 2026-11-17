@@ -233,7 +233,7 @@ Se as duas primeiras linhas não saírem, **o instrumento não mede reciprocidad
 
 ## 9. Adendo 1: os controles positivos de novo, e os dois desvios da implementação (2026-11-17, PROPOSTO)
 
-**Status: PROPOSTO, esperando o Matheus (A1-1 a A1-6, 9.6).** Nada roda antes da aprovação. As seções 1 a 8 e o resultado da primeira
+**Status: APROVADO pelo Matheus em 2026-11-17 ("Aprovo todas"): as A1-1 a A1-6 (9.6), pela recomendação (D-SP-17).** As seções 1 a 8 e o resultado da primeira
 conferência não mudam: o `artifacts_v3_social_par_e1/controles_positivos.json` (sha256 `7a1049ac…`) fica como saiu, com os dois `false`
 (D-SP-13).
 
