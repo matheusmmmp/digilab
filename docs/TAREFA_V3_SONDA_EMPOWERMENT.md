@@ -40,5 +40,7 @@ registrada está na espec, seção 5.4.
 ## 5. Etapas
 
 1. **SE0 (este PR):** a espec, a tarefa e as referências.
-2. **SE1, depois da aprovação:** os testes T-E1 a T-E6, as funções puras e o coletor, sem medida.
+2. **SE1, depois da aprovação:** os testes T-E1 a T-E6, as funções puras e o coletor, sem medida. Feita no branch `v3-f5-sonda-se1`
+   (`experiments/sonda_empowerment_f5.py`, `tests/test_sonda_empowerment_f5.py`), com três correções na espec, anotadas nas seções 2.1,
+   2.2 e 2.4 (o sinal do `andar`, os objetos relativos ao pet, as duas memórias de lugar e os alvos do explorar).
 3. **SE2:** o plano de análise commitado; depois, a medida nas vidas da D-F5-2 e o resultado em `docs/RESULTADO_V3_SONDA_EMPOWERMENT.md`.
