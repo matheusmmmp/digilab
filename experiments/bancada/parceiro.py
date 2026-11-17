@@ -16,8 +16,9 @@ ele e devolvido; se nao, P vai ao ponto gravado (o motor aceita um ponto em toda
 `seguir`) ou que F pode mover (a bola) nunca e seguido ao vivo. O dono de P na GRAV e na OUTRA e o gravado (E1-3): os eventos dele sao
 rejogados nos mesmos ticks, e o dono sintetico de P nao roda.
 
-Os controles positivos (E1-6), so aqui, nunca no pacote `digilab/` nem no jogo: o `Seguidor` (no tempo livre, explora com o alvo `seguir`
-quando ve o outro) e o `Evitador` (no tempo livre, explora para o lado oposto ao outro visto).
+Os controles positivos (E1-6 e o adendo 1, A1-1 a A1-3), so aqui, nunca no pacote `digilab/` nem no jogo: o `Seguidor` (no tempo livre,
+explora com o alvo `seguir` quando ve o outro), o `Evitador` (no tempo livre, foge um passo inteiro para o lado oposto ao outro visto) e o
+`Passivo` (so fica ocioso ou dorme).
 
 So biblioteca padrao.
 """
@@ -34,7 +35,7 @@ from digilab.donos import Visao
 from digilab.events import AcaoPet, AcaoUsuario
 from digilab.grupo import ORIGEM_DONO, Grupo, sementes_do_grupo
 from digilab.instinto_mundo import PoliticaInstintoMundo
-from digilab.mundo import ACOES_COM_ALVO, Alvo, CanalMundo, celula_de, deslocar, no_mapa
+from digilab.mundo import Alvo, CanalMundo, celula_de, deslocar, direcao_do_golpe
 from digilab.protocol import derivar_semente
 
 ROTULO_INTERVENCAO = "intervencao-social"        # o fluxo do t0 e da direcao (a espec, 2.3)
@@ -160,13 +161,16 @@ class Seguidor(PoliticaInstintoMundo):
 
 
 class Evitador(PoliticaInstintoMundo):
-    """o instinto do mundo; no tempo livre com o outro a vista, explora para o ponto oposto a ele (o dobro do vetor, cortado no mapa)"""
+    """o instinto do mundo; no tempo livre com o outro a vista, explora para o ponto a um passo inteiro (o alcance de uma decisao) na
+    direcao oposta ao outro: das 16, a mais alinhada com o vetor do outro para o pet (a `direcao_do_golpe`, a mesma conta inteira), e a 0
+    com os dois no mesmo ponto (o adendo 1 da espec, 9.2, A1-2; o de antes fugia para 2 x o vetor e nao saia do lugar de perto)"""
 
     nome = "evitador"
 
     def __init__(self, cfg_mundo: ConfigMundo, cfg=None) -> None:
         super().__init__(cfg)
         self.cmf = cfg_mundo
+        self._passo = cfg_mundo.velocidade * self.cfg.intervalo_decisao_ticks
         self._outro: tuple[int, int] | None = None
 
     def agir(self, obs, rng):
@@ -177,8 +181,9 @@ class Evitador(PoliticaInstintoMundo):
 
     def escolher_alvo(self, acao, candidatos, percepcao, u):
         if acao is AcaoPet.EXPLORAR and self._outro is not None:
-            dx, dy = self._outro
-            return Alvo.ponto(*no_mapa(percepcao.x - 2 * dx, percepcao.y - 2 * dy, self.cmf))
+            dx, dy = self._outro                                 # o outro, relativo ao pet
+            direcao = direcao_do_golpe(dx, dy, 0, 0)             # do outro para o pet
+            return Alvo.ponto(*deslocar(percepcao.x, percepcao.y, 0 if direcao is None else direcao, self._passo, self.cmf))
         return None
 
 

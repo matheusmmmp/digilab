@@ -1,12 +1,17 @@
-"""SOCIAL_PAR, E1: a conferencia dos controles positivos (docs/ESPEC_V3_SOCIAL_PAR_E1.md, secao 3), como a espec os escreveu.
+"""SOCIAL_PAR, E1: a conferencia dos controles positivos do adendo 1 (docs/ESPEC_V3_SOCIAL_PAR_E1.md, secao 9, APROVADO em 2026-11-17).
 
-Nao e uma run de pesquisa: e a validacao do instrumento, nas sementes dos testes (101 a 505), sem faixa. Dois pares de regra fixa:
-  seguidor x seguidor   a espec espera o reencontro mais rapido e o contato mais longo na VIVO do que na GRAV
-  seguidor x evitador   a espec espera o contato mais curto na VIVO do que na GRAV
+Nao e uma run de pesquisa: e a validacao do instrumento, nas sementes dos testes (101 a 505), sem faixa. Os pares (A e o pet focal F, B o
+parceiro P):
+  C1   passivo x seguidor     tem de sair: o tempo ate o contato menor na VIVO e a fracao de contato maior na VIVO, em todas
+  C2   seguidor x evitador    tem de sair: a fracao de contato menor na VIVO, em todas; e o G-MET-NULO na GRAV (contingencia None ou |c| <= 0,2)
+  seguidor x seguidor          so descritivo (A1-3)
 Em cada semente: a vida VIVO sem perturbacao da a gravacao de B; depois a VIVO e a GRAV com a mesma perturbacao (A levado a d0 = 5 celulas
 de B no t0 sorteado do fluxo `intervencao-social`, no dia 1). As medidas sao as de digilab/metrics.py, a partir do passo da perturbacao.
 
-    python experiments/conferir_controles_social_par_e1.py artifacts_v3_social_par_e1/controles_positivos.json
+A primeira conferencia (a secao 3, com o evitador de antes) esta em artifacts_v3_social_par_e1/controles_positivos.json (D-SP-13) e nao se
+refaz com o codigo de hoje: o evitador mudou (A1-2).
+
+    python experiments/conferir_controles_social_par_e1.py artifacts_v3_social_par_e1/controles_positivos_ad1.json
 """
 from __future__ import annotations
 
@@ -31,8 +36,10 @@ DIAS = 2
 D0 = 5                                      # celulas (a espec, 2.3: o d0 fixo pelo plano; aqui o da conferencia)
 SEMENTES = (101, 202, 303, 404, 505)
 CI = CONFIG_INTERVENCAO_SOCIAL_LIGADA
-PARES = {"seguidor_x_seguidor": (lambda c: pc.Seguidor(c), lambda c: pc.Seguidor(c)),
-         "seguidor_x_evitador": (lambda c: pc.Seguidor(c), lambda c: pc.Evitador(CM, c))}
+LIMIAR_NULO = 0.2                         # A1-4, PROPOSTO, SEM FONTE
+PARES = {"C1_passivo_x_seguidor": (lambda c: pc.Passivo(c), lambda c: pc.Seguidor(c)),
+         "C2_seguidor_x_evitador": (lambda c: pc.Seguidor(c), lambda c: pc.Evitador(CM, c)),
+         "seguidor_x_seguidor": (lambda c: pc.Seguidor(c), lambda c: pc.Seguidor(c))}
 
 
 def _dono(s):
@@ -70,12 +77,14 @@ def conferir() -> dict:
             grav = pc.viver_par(CM, s, [_membros(s, pa, pb, False)[0], gb], DIAS, perturbacao=pert)
             linhas[str(s)] = {"VIVO": medir(vivo), "GRAV": medir(grav)}
         out[nome] = linhas
+    nulo = lambda c: c is None or abs(c) <= LIMIAR_NULO  # noqa: E731
     esperado = {
-        "seguidor_x_seguidor": all(l["VIVO"]["tempo_ate_contato"] < l["GRAV"]["tempo_ate_contato"]
-                                   and l["VIVO"]["fracao_contato"] > l["GRAV"]["fracao_contato"] for l in out["seguidor_x_seguidor"].values()),
-        "seguidor_x_evitador": all(l["VIVO"]["fracao_contato"] < l["GRAV"]["fracao_contato"] for l in out["seguidor_x_evitador"].values()),
+        "C1": all(l["VIVO"]["tempo_ate_contato"] < l["GRAV"]["tempo_ate_contato"]
+                  and l["VIVO"]["fracao_contato"] > l["GRAV"]["fracao_contato"] for l in out["C1_passivo_x_seguidor"].values()),
+        "C2": all(l["VIVO"]["fracao_contato"] < l["GRAV"]["fracao_contato"] for l in out["C2_seguidor_x_evitador"].values()),
+        "G_MET_NULO": all(nulo(l["GRAV"]["contingencia_B_de_A"]) for l in out["C2_seguidor_x_evitador"].values()),
     }
-    return {"espec": "docs/ESPEC_V3_SOCIAL_PAR_E1.md, secao 3", "dias": DIAS, "d0_celulas": D0, "sementes": list(SEMENTES),
+    return {"espec": "docs/ESPEC_V3_SOCIAL_PAR_E1.md, secao 9 (o adendo 1)", "limiar_nulo": LIMIAR_NULO, "dias": DIAS, "d0_celulas": D0, "sementes": list(SEMENTES),
             "alcance_celulas_por_decisao": CM.velocidade * 15 / CM.sub, "pares": out, "o_que_a_espec_espera_saiu": esperado}
 
 
