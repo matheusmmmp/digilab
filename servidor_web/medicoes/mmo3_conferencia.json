@@ -1,0 +1,186 @@
+{
+ "medida": "MMO3: a conferência de uma vida no Node (conferir: o passe único com as lutas + o Tamer), mediana de 5 repetições por vida",
+ "node": "v24.19.0",
+ "cpu": "Intel(R) Core(TM) i7-14700KF",
+ "quando": "2026-11-17T03:51:34.555Z",
+ "resumo": {
+  "modular": {
+   "vidas": 10,
+   "ms_total_min": 262.69,
+   "ms_total_mediana": 434.09,
+   "ms_total_max": 680.95,
+   "ms_replay_mediana": 434.07,
+   "ms_motor_reproduzir_mediana": 437.31,
+   "ms_replay_por_evento_mediana": 0.493,
+   "bytes_max": 46430
+  },
+  "a": {
+   "vidas": 3,
+   "ms_total_min": 251.62,
+   "ms_total_mediana": 253.41,
+   "ms_total_max": 345.52,
+   "ms_replay_mediana": 253.39,
+   "ms_motor_reproduzir_mediana": 259.81,
+   "ms_replay_por_evento_mediana": 0.144,
+   "bytes_max": 80027
+  }
+ },
+ "vidas": [
+  {
+   "semente": 101,
+   "cerebro": "modular",
+   "eventos": 1096,
+   "lutas": 310,
+   "bytes": 36488,
+   "mesmo_pet": true,
+   "ms_replay": 571.02,
+   "ms_tamer": 0.03,
+   "ms_total": 571.07,
+   "ms_motor_reproduzir": 556.82
+  },
+  {
+   "semente": 102,
+   "cerebro": "modular",
+   "eventos": 789,
+   "lutas": 210,
+   "bytes": 26465,
+   "mesmo_pet": true,
+   "ms_replay": 348.55,
+   "ms_tamer": 0.04,
+   "ms_total": 348.62,
+   "ms_motor_reproduzir": 358.36
+  },
+  {
+   "semente": 103,
+   "cerebro": "modular",
+   "eventos": 681,
+   "lutas": 179,
+   "bytes": 22484,
+   "mesmo_pet": true,
+   "ms_replay": 317.51,
+   "ms_tamer": 0.02,
+   "ms_total": 317.53,
+   "ms_motor_reproduzir": 331.26
+  },
+  {
+   "semente": 104,
+   "cerebro": "modular",
+   "eventos": 1172,
+   "lutas": 321,
+   "bytes": 39200,
+   "mesmo_pet": true,
+   "ms_replay": 613.01,
+   "ms_tamer": 0.02,
+   "ms_total": 613.04,
+   "ms_motor_reproduzir": 595.17
+  },
+  {
+   "semente": 105,
+   "cerebro": "modular",
+   "eventos": 1286,
+   "lutas": 369,
+   "bytes": 43702,
+   "mesmo_pet": true,
+   "ms_replay": 652.14,
+   "ms_tamer": 0.02,
+   "ms_total": 652.17,
+   "ms_motor_reproduzir": 647.5
+  },
+  {
+   "semente": 106,
+   "cerebro": "modular",
+   "eventos": 722,
+   "lutas": 205,
+   "bytes": 24165,
+   "mesmo_pet": true,
+   "ms_replay": 375.21,
+   "ms_tamer": 0.02,
+   "ms_total": 375.23,
+   "ms_motor_reproduzir": 353.67
+  },
+  {
+   "semente": 107,
+   "cerebro": "modular",
+   "eventos": 607,
+   "lutas": 160,
+   "bytes": 19822,
+   "mesmo_pet": true,
+   "ms_replay": 262.67,
+   "ms_tamer": 0.02,
+   "ms_total": 262.69,
+   "ms_motor_reproduzir": 256.75
+  },
+  {
+   "semente": 108,
+   "cerebro": "modular",
+   "eventos": 1039,
+   "lutas": 276,
+   "bytes": 34788,
+   "mesmo_pet": true,
+   "ms_replay": 492.93,
+   "ms_tamer": 0.02,
+   "ms_total": 492.95,
+   "ms_motor_reproduzir": 516.27
+  },
+  {
+   "semente": 109,
+   "cerebro": "modular",
+   "eventos": 1370,
+   "lutas": 375,
+   "bytes": 46430,
+   "mesmo_pet": true,
+   "ms_replay": 680.92,
+   "ms_tamer": 0.02,
+   "ms_total": 680.95,
+   "ms_motor_reproduzir": 659.15
+  },
+  {
+   "semente": 110,
+   "cerebro": "modular",
+   "eventos": 582,
+   "lutas": 160,
+   "bytes": 19536,
+   "mesmo_pet": true,
+   "ms_replay": 284.59,
+   "ms_tamer": 0.02,
+   "ms_total": 284.62,
+   "ms_motor_reproduzir": 270.28
+  },
+  {
+   "semente": 111,
+   "cerebro": "a",
+   "eventos": 1826,
+   "lutas": 225,
+   "bytes": 61071,
+   "mesmo_pet": true,
+   "ms_replay": 253.39,
+   "ms_tamer": 0.02,
+   "ms_total": 253.41,
+   "ms_motor_reproduzir": 259.81
+  },
+  {
+   "semente": 112,
+   "cerebro": "a",
+   "eventos": 1468,
+   "lutas": 195,
+   "bytes": 48853,
+   "mesmo_pet": true,
+   "ms_replay": 251.55,
+   "ms_tamer": 0.02,
+   "ms_total": 251.62,
+   "ms_motor_reproduzir": 225.85
+  },
+  {
+   "semente": 113,
+   "cerebro": "a",
+   "eventos": 2403,
+   "lutas": 256,
+   "bytes": 80027,
+   "mesmo_pet": true,
+   "ms_replay": 345.49,
+   "ms_tamer": 0.02,
+   "ms_total": 345.52,
+   "ms_motor_reproduzir": 319.14
+  }
+ ]
+}

@@ -93,9 +93,7 @@ Sem funcoes transcendentais (nada de math): paridade com a web quando o L1 for p
 from __future__ import annotations
 
 import random
-from bisect import bisect_right
 from dataclasses import fields, replace
-from itertools import accumulate
 
 from ..config import (CONFIG_BOLA, CONFIG_CONSEQUENCIA, CONFIG_FRUTAS, CONFIG_LOBOS, CONFIG_MEMORIA_ESPACOS, CONFIG_PADRAO,
                       TICKS_POR_DIA, Config, ConfigBanheiro, ConfigBola, ConfigConsequencia, ConfigCorpo, ConfigFrutas, ConfigLobos,
@@ -104,7 +102,10 @@ from ..config import CONFIG_MODELO_MUNDO_LIGADA, ConfigModeloMundo
 from ..config import ConfigCompeticao
 from ..events import ACOES_PET_BANHEIRO, ACOES_PET_HOJE, FRUTAS, AcaoPet, AcaoUsuario
 from ..modelo_mundo import TIPOS as TIPOS_COMIDA_MODELO, ModeloMundo, raiz_inteira
-from ..policy import Observacao, PoliticaInstinto, Transicao
+from ..policy import Observacao, PoliticaInstinto, Transicao, sortear
+from ..digibrain.base import (ENTRADAS, ENTRADAS_MUNDO, FATORES_PLANO, RECEPTORES_FALTA_INVERTIDA, RECEPTORES_HOJE,  # noqa: F401
+                              RECEPTORES_NOVOS, REGRAS, REGRAS_MUNDO, contribuicoes_corpo, div_arred, falta_receptor,
+                              leitura_receptor, sinal_corpo, valor_previsto)
 
 ACOES = ACOES_PET_HOJE                   # as sete de sempre; o ALIVIAR (banheiro) so nas tabelas do cerebro com a chave
 LOBOS = ("percepcao", "memoria_emocao", "impulsos", "decisao")
@@ -112,17 +113,10 @@ LOBOS = ("percepcao", "memoria_emocao", "impulsos", "decisao")
 LOBO_PLANEJAMENTO = "planejamento"
 LOBOS_TODOS = LOBOS + (LOBO_PLANEJAMENTO,)
 ACOES_DO_PLANO = (AcaoPet.COMER, AcaoPet.EXPLORAR)    # o termo do plano so vai a estas duas (a tarefa, secao 2.2)
-FATORES_PLANO = ("plano_arvore", "plano_comida", "plano_evita")   # os fatores do motivo quando o plano decide (motivo.py, expressao.py)
 # as regras do instinto, na ordem em que ele as testa (policy.py: ultima_regra)
-REGRAS = ("sono_exaustao", "sono_continuar", "sono_noite", "pedido_necessidade", "abandono",
-          "fome_moderada", "tempo_livre")
 # entradas da percepcao: vies + Estado.vetor (ordem congelada em state.py) + tempo sem cuidado
-ENTRADAS = ("vies", "fome", "higiene", "energia", "humor", "saude", "sujeira", "dormindo", "hora",
-            "ticks_sem_cuidado")
 N_ENTRADAS = len(ENTRADAS)
 # LOBOS-MUNDO: as regras do instinto do mundo (ambiente.REGRA_BOLA, frutas.REGRA_FRUTA) e as entradas que o motor injeta
-REGRAS_MUNDO = ("bola_no_cenario", "fruta_no_cenario")
-ENTRADAS_MUNDO = ("bola", "fruta")
 # MUNDO-CEREBROS (docs/TAREFA_V2_MUNDO_FISICO.md, secao 9): as acoes com alvo do MotorMundo (mundo.ACOES_COM_ALVO, conferido por teste);
 # no mundo fisico a consequencia delas chega pelo gancho `consequencia_mundo`
 ACOES_COM_ALVO_MUNDO = (AcaoPet.EXPLORAR, AcaoPet.COMER, AcaoPet.BRINCAR)
@@ -213,14 +207,10 @@ CANAL_DO_DRIVE = {0: "fome", 1: "higiene", 2: "energia", INDICE_HUMOR: "humor"}
 ROTA_CANAIS = {"fome": "corpo", "higiene": "corpo", "energia": "corpo", "humor": "fruta"}
 ALVOS_CANAIS = ("corpo", "fruta")
 # CORPO, etapa 5: os receptores pelo nome dos campos da PercepcaoCorpo (motor_corpo.py; o cerebro nao importa o motor nem o corpo).
-RECEPTORES_HOJE = ("fome", "higiene", "energia", "humor", "saude")          # leitura = S - falta, na ordem de Estado.vetor
 RECEPTOR_DO_INDICE = dict(enumerate(RECEPTORES_HOJE))
-RECEPTORES_NOVOS = ("tedio", "curiosidade", "solidao", "estresse", "dor", "susto",   # leitura = a falta (dor e susto: a concentracao)
-                    "vontade", "conforto")                                         # banheiro: a concentracao (a vontade, o conforto)
 DRIVES_NOVOS_SINAL = ("tedio", "curiosidade", "solidao", "estresse", "dor",         # secao 9: o susto fica fora do sinal
                       "vontade", "conforto")                                       # banheiro (secao 3 e BN-6)
 # BN-6: o receptor do conforto le a concentracao; a falta do drive e a falta de conforto, S - leitura (o carinho a reduz)
-RECEPTORES_FALTA_INVERTIDA = ("conforto",)
 REGRAS_ENTRADAS_CORPO = ("tempo_livre", "bola_no_cenario", "fruta_no_cenario")     # secao 11: so nas regras de tempo livre
 # os canais novos (secao 9): um por drive novo, todos ao corpo (a tabela do lobo de decisao); o humor da fruta continua na fruta
 ROTA_CANAIS_CORPO = {d: "corpo" for d in DRIVES_NOVOS_SINAL}
@@ -432,30 +422,11 @@ def termos(pesos: list[int], x: list[float], escala: int) -> list[float]:
     return [(w / escala) * xj for w, xj in zip(pesos, x)]
 
 
-def sortear(pesos: list[float], u: float) -> int:
-    """Indice sorteado com os pesos, dado u = rng.random(): a conta de random.choices(k=1), passo a passo."""
-    cumulativa = list(accumulate(pesos))
-    total = cumulativa[-1] + 0.0
-    if total <= 0.0:
-        raise ValueError(f"soma dos pesos nao positiva: {pesos}")
-    return bisect_right(cumulativa, u * total, 0, len(cumulativa) - 1)
-
-
 def arred(x: float) -> int:
     """Inteiro mais proximo, meio longe do zero (simetrico; round() do Python e meio-para-par)."""
     if x >= 0.0:
         return int(x + 0.5)
     return -int(-x + 0.5)
-
-
-def div_arred(n: int, d: int) -> int:
-    """n / d em inteiros, arredondado ao mais proximo, meio longe do zero. d > 0."""
-    if d <= 0:
-        raise ValueError(f"divisor nao positivo: {d}")
-    q, r = divmod(abs(n), d)
-    if 2 * r >= d:
-        q += 1
-    return q if n >= 0 else -q
 
 
 def atualizar_pesos(pesos: dict, prior: dict, registro: dict, f_S: int, passo: int, teto: int, S: int) -> int:
@@ -2811,54 +2782,9 @@ def receptores_novos(cc: ConfigCorpo, mundo_fisico: bool) -> tuple[str, ...]:
     return tuple(r for r in RECEPTORES_NOVOS if r in tem)
 
 
-def leitura_receptor(pc, nome: str, S: int) -> int:
-    """A leitura do receptor `nome` da PercepcaoCorpo (inteiro em [0, S]); um receptor que nao existe (None) ou fora da escala falha
-    alto."""
-    v = getattr(pc, nome)
-    if v is None:
-        raise RuntimeError(f"corpo: o receptor {nome!r} nao existe nesta Observacao.corpo")
-    if type(v) is not int or not 0 <= v <= S:
-        raise ValueError(f"corpo: receptor {nome!r} fora de inteiros em [0, {S}]: {v!r}")
-    return v
-
-
-def falta_receptor(pc, nome: str, S: int) -> int:
-    """A falta na escala S: S - leitura nos drives de hoje (o receptor le o drive), a propria leitura nos novos (o receptor le a falta,
-    ou a concentracao na dor, no susto e na vontade), e S - leitura no conforto (BN-6: o receptor le o conforto; a falta e a de
-    conforto)."""
-    v = leitura_receptor(pc, nome, S)
-    if nome in RECEPTORES_HOJE or nome in RECEPTORES_FALTA_INVERTIDA:
-        return S - v
-    if nome in RECEPTORES_NOVOS:
-        return v
-    raise KeyError(f"receptor desconhecido: {nome!r}")
-
-
 def faltas_corpo(pc, drives: tuple, S: int) -> dict[str, int]:
     """A falta de cada drive (pelo nome do receptor), na escala S: a janela da A2.4 com o corpo."""
     return {d: falta_receptor(pc, d, S) for d in drives}
-
-
-def contribuicoes_corpo(antes, depois, drives: tuple, S: int, pesos_drives: dict | None = None,
-                        pesos_janela: dict | None = None) -> dict[str, int]:
-    """c_d = w_d * delta_d por drive, delta_d = falta_d(antes)**2 - falta_d(depois)**2 sobre os receptores (secao 9). Com `pesos_janela`
-    (A2.4, na escala S), delta_d e ponderado como em `delta_ponderado`: div_arred(w * delta, S) quando w != S. `pesos_drives` sao os
-    inteiros w_d (ConfigConsequencia.pesos_drives_corpo); sem eles, todos 1. Um drive sem peso falha alto."""
-    c = {}
-    for d in drives:
-        fa, fd = falta_receptor(antes, d, S), falta_receptor(depois, d, S)
-        delta = fa * fa - fd * fd
-        if pesos_janela is not None:
-            w = pesos_janela[d]
-            if type(w) is not int or not 0 <= w <= S:
-                raise ValueError(f"peso da janela do drive {d!r} fora de inteiros em [0, {S}]: {w!r}")
-            if w != S:
-                delta = div_arred(w * delta, S)
-        wd = 1 if pesos_drives is None else pesos_drives[d]
-        if type(wd) is not int or wd < 0:
-            raise ValueError(f"w_d do drive {d!r} precisa ser inteiro >= 0: {wd!r}")
-        c[d] = wd * delta
-    return c
 
 
 def sinal_gosto(depois, h: dict, ganho_gosto: int, S: int) -> int:
@@ -2882,31 +2808,6 @@ def gosto_previsto(pc, delta: dict, h: dict, ganho_gosto: int, S: int) -> int:
         prevista = max(0, min(S, leitura_receptor(pc, r, S) + delta.get(r, 0)))
         soma += div_arred(h[q] * prevista, S)
     return div_arred(ganho_gosto * soma, S)
-
-
-def valor_previsto(pc, delta: dict, drives: tuple, ganho: int, S: int, pesos_drives: dict | None = None) -> int:
-    """O pet que pensa (a tarefa, secao 2.2): o `sinal_corpo` dos receptores de agora (`pc`) para os previstos, a leitura de agora mais
-    `delta` (receptor -> mudanca, na escala S), cortada em [0, S]. Os receptores sem mudanca ficam como estao. Inteiro."""
-    novos = {}
-    for r, v in delta.items():
-        if v != 0:
-            novos[r] = max(0, min(S, leitura_receptor(pc, r, S) + v))
-    if not novos:
-        return 0
-    return sinal_corpo(pc, replace(pc, **novos), drives, ganho, S, pesos_drives)
-
-
-def sinal_corpo(antes, depois, drives: tuple, ganho: int, S: int, pesos_drives: dict | None = None,
-                pesos_janela: dict | None = None) -> int:
-    """V2, corpo (secao 9): f_S = div_arred(ganho * (D(antes) - D(depois)), S), com D = soma_d w_d * falta_d**2 sobre os receptores
-    (`antes` e `depois` sao PercepcaoCorpo). Com os drives de hoje e w_d = 1, o numero do N3 (`sinal_homeostatico`) sobre o mesmo
-    estado: o receptor e S - div_arred(q * S, C), e S - arred(h * S) do drive lido da o mesmo inteiro. Inteiro."""
-    if type(ganho) is not int or ganho < 0:
-        raise ValueError(f"ganho precisa ser inteiro >= 0: {ganho!r}")
-    total = 0
-    for c in contribuicoes_corpo(antes, depois, drives, S, pesos_drives, pesos_janela).values():
-        total += c
-    return div_arred(ganho * total, S)
 
 
 def sinal_corpo_canais(antes, depois, drives: tuple, ganho: int, S: int, pesos_drives: dict | None = None,

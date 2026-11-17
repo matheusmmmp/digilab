@@ -38,7 +38,8 @@ from dataclasses import replace
 from .config import (CONFIG_DONOS, CONFIG_DURACOES, CONFIG_EDUCACAO_LIGADA, CONFIG_PADRAO, CONFIG_TREINO, TICKS_POR_DIA,
                      Config, ConfigDonos, ConfigEducacao)
 from .donos import DonoAtencioso, DonoRelapso, Visao, _DonoBase, _feedback, cuidados_necessarios, julgar_acao
-from .educacao import NECESSIDADE, fabricas_educacao
+from .educacao import NECESSIDADE
+from .obediencia import fabricas_educacao
 from .events import ACOES_EDUCACAO, ACOES_TREINO, AcaoUsuario
 from .personas import Persona
 from .protocol import derivar_semente

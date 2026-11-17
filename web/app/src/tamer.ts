@@ -58,7 +58,7 @@ import {
   ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, VERSAO_FABRICA_ATUAL, VERSOES_FABRICA, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto,
   cartaDe, ehInstalacao, itemDe, medalhaDoLider, nomeForma, temEfeito, type Estagio, type Evolucao, type IdInstalacao, type Medalha,
 } from "../motor/index.ts";
-import { CHAVE, type Armazenamento } from "./save.ts";
+import { CHAVE, type Armazenamento } from "./chave.ts";
 import { BITS, ORIGENS_BITS, ORIGENS_DO_TAMER, bitsDaMedalha, feitosDoPet, type OrigemBits } from "./bits.ts";
 
 export const CHAVE_TAMER = CHAVE + "-tamer";

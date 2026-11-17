@@ -17,7 +17,8 @@ from digilab.config import (CONFIG_EDUCACAO_LIGADA, CONFIG_LESOES_LIGADA, CONFIG
                             CONFIG_MENTIRA_LIGADA)
 from digilab.donos import Visao  # noqa: E402
 from digilab.donos_educacao import DonoComEducacao, simular_vida_educacao  # noqa: E402
-from digilab.educacao import MotorEducacao, fabricas_educacao, reproduzir_educacao  # noqa: E402
+from digilab.educacao import MotorEducacao, reproduzir_educacao  # noqa: E402
+from digilab.obediencia import fabricas_educacao  # noqa: E402
 from digilab.events import AcaoUsuario, LogDeEventos  # noqa: E402
 from digilab.evolucao import ovo  # noqa: E402
 from digilab.protocol import hash_parametros_educacao, validar_parametros_mentira  # noqa: E402

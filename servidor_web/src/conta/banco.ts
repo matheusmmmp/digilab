@@ -74,6 +74,37 @@ export const MIGRACOES: readonly string[] = [
     adicionado_em  INTEGER NOT NULL
   ) STRICT;
   `,
+  /* 2: os envios dos logs (MMO3, servidor_web/src/envio/): a linha de cada envio conferido fica; os registros, só do envio aceito e até
+     apagar_em (MMO-4, seção 11 do plano MMO). Os dois pendem da conta: apagar a conta leva os envios */
+  `
+  CREATE TABLE envios (
+    id                TEXT PRIMARY KEY,
+    conta_id          TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    recebido_em       INTEGER NOT NULL,
+    pet               INTEGER NOT NULL,
+    versao_pet        INTEGER NOT NULL,
+    eventos           INTEGER NOT NULL,
+    hash_log          TEXT NOT NULL,
+    versao_tamer      INTEGER NOT NULL,
+    hash_tamer        TEXT NOT NULL,
+    resultado         TEXT NOT NULL CHECK (resultado IN ('aceito', 'recusado')),
+    motivo            TEXT,
+    detalhe           TEXT,
+    marco10           TEXT CHECK (marco10 IN ('confere', 'de_outro_pet', 'sem_marco')),
+    pontos            REAL NOT NULL,
+    lutas_ranqueadas  INTEGER NOT NULL,
+    ms_conferencia    REAL NOT NULL,
+    CHECK ((resultado = 'aceito') = (motivo IS NULL AND marco10 IS NOT NULL))
+  ) STRICT;
+  CREATE INDEX envios_conta ON envios(conta_id, pet);
+  CREATE TABLE envios_registros (
+    envio_id        TEXT PRIMARY KEY REFERENCES envios(id) ON DELETE CASCADE,
+    registro_pet    TEXT NOT NULL,
+    registro_tamer  TEXT NOT NULL,
+    apagar_em       INTEGER NOT NULL
+  ) STRICT;
+  CREATE INDEX envios_registros_apagar ON envios_registros(apagar_em);
+  `,
 ];
 
 export const VERSAO_BANCO = MIGRACOES.length;

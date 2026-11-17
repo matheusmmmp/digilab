@@ -26,8 +26,8 @@ from .config import CONFIG_MEMORIA, ConfigMemoria
 from .events import AcaoPet, AcaoUsuario
 from .policies.bandit import PoliticaBandit
 from .policy import Observacao, Transicao
+from .protocol import FATORES_MEMORIA  # noqa: F401  (os nomes vivem no protocol.py desde a LZ2)
 
-FATORES_MEMORIA = ("latencia_fome", "latencia_higiene", "repreensoes", "elogios")
 # acao do dono esperada no evento de origem de cada feature
 ORIGEM_ESPERADA = {
     "latencia_fome": AcaoUsuario.ALIMENTAR,

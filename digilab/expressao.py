@@ -355,8 +355,7 @@ def validar_tabelas(fatores_obrigatorios=None) -> None:
 def _fatores_extra() -> tuple[str, ...]:
     """Fatores alem da vida e do catalogo (memoria, Parte B), se o modulo existir."""
     try:
-        from .memoria import FATORES_MEMORIA
-        from .memoria_espacos import FATORES_ESPACOS
+        from .protocol import FATORES_ESPACOS, FATORES_MEMORIA
     except ImportError:
         return ()
     return FATORES_MEMORIA + FATORES_ESPACOS

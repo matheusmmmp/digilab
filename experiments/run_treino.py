@@ -49,7 +49,8 @@ from digilab.protocol import (ENGINE_SHA256_V0, OVOS_PERSONALIDADE, PROTOCOLO_AR
                               sha256_engine)
 from digilab.temperamento import sortear  # noqa: E402
 from digilab.treino import reproduzir_com_feedback  # noqa: E402
-from digilab.treino_vida import BRACOS_TREINO, fabricas_treino, orcamento_treino, simular_vida_treino  # noqa: E402
+from digilab.treino_vida import BRACOS_TREINO, orcamento_treino  # noqa: E402
+from digilab.obediencia import fabricas_treino, simular_vida_treino  # noqa: E402
 
 SAIDA = RAIZ / "artifacts_treino"
 DIAS = 14

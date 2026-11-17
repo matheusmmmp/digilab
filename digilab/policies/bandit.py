@@ -36,16 +36,10 @@ import random
 from dataclasses import dataclass
 
 from ..config import CONFIG_BANDIT, CONFIG_PADRAO, Config, ConfigBandit
-from ..events import ACOES_PET_HOJE, AcaoPet, AcaoUsuario
+from ..events import ACOES_PET_HOJE, CUIDADOS_QUE_ATENDEM, AcaoPet, AcaoUsuario  # noqa: F401 (o CUIDADOS_QUE_ATENDEM mora no events, D-LZ-9)
 from ..policy import Observacao, PoliticaInstinto, Transicao
 
 ACOES = ACOES_PET_HOJE
-# petisco e levar ao banheiro (educacao-v1) atendem como cuidado: ceder com petisco a um chamado REFORCA o
-# chamar_atencao
-CUIDADOS_QUE_ATENDEM = frozenset(
-    {AcaoUsuario.ALIMENTAR, AcaoUsuario.LIMPAR, AcaoUsuario.BRINCAR, AcaoUsuario.ACARICIAR, AcaoUsuario.PETISCO,
-     AcaoUsuario.LEVAR_AO_BANHEIRO, AcaoUsuario.TRATAR_LESAO}
-)
 FEEDBACK = frozenset({AcaoUsuario.ELOGIAR, AcaoUsuario.REPREENDER})
 
 
