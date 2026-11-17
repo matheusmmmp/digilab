@@ -24,6 +24,11 @@ from typing import Any
 
 from . import config as _config
 
+# os nomes das features de memoria dos protocolos da v1 (LIMPEZA, LZ2: vieram do memoria.py e do memoria_espacos.py, com os mesmos
+# valores; o motivo e a expressao tambem os leem daqui)
+FATORES_MEMORIA = ("latencia_fome", "latencia_higiene", "repreensoes", "elogios")
+FATORES_ESPACOS = ("demora", "bronca", "elogio", "carinho")
+
 
 class Status(str, Enum):
     DECIDIDO = "DECIDIDO"
@@ -337,8 +342,6 @@ class ProtocoloMemoria(Protocolo):
 
     def validar(self) -> None:
         super().validar()
-        from .memoria import FATORES_MEMORIA
-
         valor = dict(self.v("memoria"))
         if tuple(valor.get("features", ())) != FATORES_MEMORIA:
             raise ValueError(f"features de memoria do protocolo difere do codigo: {valor.get('features')}")
@@ -348,8 +351,6 @@ class ProtocoloMemoria(Protocolo):
 
 
 def _campo_memoria() -> Campo:
-    from .memoria import FATORES_MEMORIA
-
     return Campo(
         (("features", FATORES_MEMORIA), ("config", tuple(sorted(asdict(_config.CONFIG_MEMORIA).items())))),
         _P,
@@ -368,8 +369,6 @@ class ProtocoloMemoriaEspacos(ProtocoloMemoria):
 
     def validar(self) -> None:
         Protocolo.validar(self)
-        from .memoria_espacos import FATORES_ESPACOS
-
         valor = dict(self.v("memoria"))
         if tuple(valor.get("features", ())) != FATORES_ESPACOS:
             raise ValueError(f"features de memoria do protocolo difere do codigo: {valor.get('features')}")
@@ -379,8 +378,6 @@ class ProtocoloMemoriaEspacos(ProtocoloMemoria):
 
 
 def _campo_memoria_espacos() -> Campo:
-    from .memoria_espacos import FATORES_ESPACOS
-
     return Campo(
         (("features", FATORES_ESPACOS),
          ("config", json.dumps(asdict(_config.CONFIG_MEMORIA_ESPACOS), sort_keys=True, default=list))),

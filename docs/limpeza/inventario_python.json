@@ -41,7 +41,7 @@
    "raiz": false
   },
   "digilab/combate_v2/partida.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -121,24 +121,18 @@
    "raiz": true
   },
   "digilab/digibrain/_comum.py": {
-   "classe": "REFAZ",
-   "importa_direto_o_que_sai": [
-    "digilab/policies/lobos.py"
-   ],
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": true
   },
   "digilab/digibrain/adapt.py": {
-   "classe": "REFAZ",
-   "importa_direto_o_que_sai": [
-    "digilab/policies/lobos.py"
-   ],
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": true
   },
   "digilab/digibrain/afeto.py": {
-   "classe": "REFAZ",
-   "importa_direto_o_que_sai": [
-    "digilab/policies/lobos.py"
-   ],
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": true
   },
   "digilab/digibrain/arb.py": {
@@ -146,11 +140,14 @@
    "importa_direto_o_que_sai": [],
    "raiz": true
   },
+  "digilab/digibrain/base.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": true
+  },
   "digilab/digibrain/decodificador.py": {
-   "classe": "REFAZ",
-   "importa_direto_o_que_sai": [
-    "digilab/policies/lobos.py"
-   ],
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": true
   },
   "digilab/digibrain/dever.py": {
@@ -174,10 +171,8 @@
    "raiz": true
   },
   "digilab/digibrain/mem.py": {
-   "classe": "REFAZ",
-   "importa_direto_o_que_sai": [
-    "digilab/policies/lobos.py"
-   ],
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": true
   },
   "digilab/digibrain/pers.py": {
@@ -186,17 +181,13 @@
    "raiz": true
   },
   "digilab/digibrain/plast.py": {
-   "classe": "REFAZ",
-   "importa_direto_o_que_sai": [
-    "digilab/policies/lobos.py"
-   ],
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": true
   },
   "digilab/digibrain/sens.py": {
-   "classe": "REFAZ",
-   "importa_direto_o_que_sai": [
-    "digilab/policies/lobos.py"
-   ],
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": true
   },
   "digilab/donos.py": {
@@ -237,11 +228,8 @@
    "raiz": false
   },
   "digilab/expressao.py": {
-   "classe": "REFAZ",
-   "importa_direto_o_que_sai": [
-    "digilab/memoria.py",
-    "digilab/memoria_espacos.py"
-   ],
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "digilab/frutas.py": {
@@ -260,10 +248,8 @@
    "raiz": false
   },
   "digilab/genoma_visao.py": {
-   "classe": "REFAZ",
-   "importa_direto_o_que_sai": [
-    "digilab/policies/lobos.py"
-   ],
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "digilab/gestos.py": {
@@ -282,7 +268,7 @@
    "raiz": false
   },
   "digilab/historia.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -321,12 +307,8 @@
    "raiz": false
   },
   "digilab/motivo.py": {
-   "classe": "REFAZ",
-   "importa_direto_o_que_sai": [
-    "digilab/memoria.py",
-    "digilab/memoria_espacos.py",
-    "digilab/policies/lobos.py"
-   ],
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "digilab/motor_corpo.py": {
@@ -354,10 +336,8 @@
    "raiz": false
   },
   "digilab/painel_digibrain.py": {
-   "classe": "REFAZ",
-   "importa_direto_o_que_sai": [
-    "digilab/policies/lobos.py"
-   ],
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": true
   },
   "digilab/personas.py": {
@@ -413,11 +393,8 @@
    "raiz": false
   },
   "digilab/protocol.py": {
-   "classe": "REFAZ",
-   "importa_direto_o_que_sai": [
-    "digilab/memoria.py",
-    "digilab/memoria_espacos.py"
-   ],
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "digilab/rede_de_si.py": {
@@ -500,7 +477,7 @@
    "raiz": false
   },
   "experiments/analisar_dono_ambiente.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -515,7 +492,7 @@
    "raiz": false
   },
   "experiments/analisar_v21d.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -535,7 +512,7 @@
    "raiz": false
   },
   "experiments/avaliar_bots_v2c.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -545,7 +522,7 @@
    "raiz": false
   },
   "experiments/avaliar_v21c.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -648,7 +625,7 @@
    "raiz": false
   },
   "experiments/calibrar_campanha.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -658,7 +635,7 @@
    "raiz": false
   },
   "experiments/calibrar_combate_v2.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -673,12 +650,12 @@
    "raiz": false
   },
   "experiments/calibrar_escala.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "experiments/calibrar_ferrugem_v21c.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -688,12 +665,12 @@
    "raiz": false
   },
   "experiments/calibrar_progressao.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "experiments/calibrar_sombrias.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -722,7 +699,7 @@
    "raiz": false
   },
   "experiments/comparar_calibracoes_dc5.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -763,6 +740,11 @@
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
+  "experiments/descritivo_dc13_longe_geometria.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
   "experiments/descritivo_dc13_rel.py": {
    "classe": "SAI",
    "importa_direto_o_que_sai": [],
@@ -799,7 +781,7 @@
    "raiz": false
   },
   "experiments/diagnostico_calibracao_dc5.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -809,7 +791,7 @@
    "raiz": false
   },
   "experiments/diagnostico_combate.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -883,7 +865,7 @@
    "raiz": false
   },
   "experiments/exportar_gabarito_confianca.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -1025,7 +1007,7 @@
    "raiz": false
   },
   "experiments/exportar_gabarito_voz_v4_dc5.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -1192,7 +1174,7 @@
    "raiz": false
   },
   "experiments/resumo_calibracao_dc5.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -1227,7 +1209,7 @@
    "raiz": false
   },
   "experiments/run_campanha.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -1620,6 +1602,11 @@
    ],
    "raiz": false
   },
+  "tests/gabarito_equilibrio_cuidado.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
   "tests/gabarito_fruta_ao_lado.py": {
    "classe": "FICA",
    "importa_direto_o_que_sai": [],
@@ -1646,6 +1633,16 @@
    "raiz": false
   },
   "tests/gabarito_lance_dono.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_limpeza_lg.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/gabarito_limpeza_mecanicas.py": {
    "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
@@ -1830,7 +1827,7 @@
    "raiz": false
   },
   "tests/test_aparar_fala.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -2176,7 +2173,7 @@
    "raiz": false
   },
   "tests/test_comando_chat.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -2214,7 +2211,7 @@
    "raiz": false
   },
   "tests/test_comparar_calibracoes_dc5.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -2271,17 +2268,17 @@
    "raiz": false
   },
   "tests/test_conversa_m1.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "tests/test_conversa_m2.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "tests/test_conversa_m2b.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -2458,6 +2455,11 @@
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
+  "tests/test_descritivo_dc13_longe_geometria.py": {
+   "classe": "SAI",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
   "tests/test_descritivo_dc13_rel.py": {
    "classe": "FICA",
    "importa_direto_o_que_sai": [],
@@ -2474,7 +2476,7 @@
    "raiz": false
   },
   "tests/test_diagnostico_calibracao_dc5.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -2564,6 +2566,11 @@
     "digilab/policies/__init__.py",
     "digilab/policies/lobos.py"
    ],
+   "raiz": false
+  },
+  "tests/test_equilibrio_cuidado.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
    "raiz": false
   },
   "tests/test_equilibrio_v21d.py": {
@@ -2680,6 +2687,11 @@
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
+  "tests/test_gabarito_equilibrio_cuidado.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
   "tests/test_gabarito_fala_unidades_web.py": {
    "classe": "FICA",
    "importa_direto_o_que_sai": [],
@@ -2711,6 +2723,16 @@
    "raiz": false
   },
   "tests/test_gabarito_lance_dono.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_limpeza_lg.py": {
+   "classe": "FICA",
+   "importa_direto_o_que_sai": [],
+   "raiz": false
+  },
+  "tests/test_gabarito_limpeza_mecanicas.py": {
    "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
@@ -3347,7 +3369,7 @@
    "raiz": false
   },
   "tests/test_resumo_calibracao_dc5.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -3475,7 +3497,7 @@
    "raiz": false
   },
   "tests/test_voz_dc2.py": {
-   "classe": "SAI",
+   "classe": "REVER",
    "importa_direto_o_que_sai": [],
    "raiz": false
   },
@@ -3483,6 +3505,18 @@
    "classe": "FICA",
    "importa_direto_o_que_sai": [],
    "raiz": false
+  },
+  "tools/cerebro_do_gabarito.py": {
+   "classe": "REFAZ",
+   "importa_direto_o_que_sai": [
+    "digilab/policies/__init__.py",
+    "digilab/policies/bandit.py",
+    "digilab/policies/camada_unica.py",
+    "digilab/policies/cerebro_b.py",
+    "digilab/policies/cerebro_c.py",
+    "digilab/policies/lobos.py"
+   ],
+   "raiz": true
   },
   "tools/conferir_autorizacao.py": {
    "classe": "FICA",
@@ -3625,29 +3659,29 @@
  },
  "resumo": {
   "digilab": {
-   "FICA": 53,
-   "REFAZ": 15,
-   "REVER": 2,
-   "SAI": 13
+   "FICA": 66,
+   "REFAZ": 3,
+   "REVER": 4,
+   "SAI": 11
   },
   "experiments": {
    "FICA": 42,
    "REFAZ": 9,
-   "REVER": 10,
-   "SAI": 130
+   "REVER": 27,
+   "SAI": 114
   },
   "servidor": {
    "FICA": 6
   },
   "tests": {
-   "FICA": 236,
+   "FICA": 243,
    "REFAZ": 81,
-   "REVER": 16,
-   "SAI": 19
+   "REVER": 25,
+   "SAI": 11
   },
   "tools": {
    "FICA": 26,
-   "REFAZ": 1
+   "REFAZ": 2
   }
  },
  "rotulo": "inventario da LIMPEZA, gerado por tools/inventario_limpeza.py; so le o codigo",

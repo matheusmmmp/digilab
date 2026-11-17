@@ -44,8 +44,8 @@ from .config import CONFIG_EMOCAO, CONFIG_MEMORIA_ESPACOS, ConfigEmocao, ConfigH
 from .events import AcaoPet, AcaoUsuario
 from .policies.bandit import PoliticaBandit
 from .policy import Observacao, Transicao
+from .protocol import FATORES_ESPACOS  # noqa: F401  (os nomes vivem no protocol.py desde a LZ2)
 
-FATORES_ESPACOS = ("demora", "bronca", "elogio", "carinho")
 _ATENDE = {AcaoUsuario.ALIMENTAR: "fome", AcaoUsuario.LIMPAR: "higiene"}
 _CATEGORIA_DA_ACAO = {AcaoUsuario.REPREENDER: "bronca", AcaoUsuario.ELOGIAR: "elogio",
                       AcaoUsuario.ACARICIAR: "carinho", AcaoUsuario.BRINCAR: "carinho"}

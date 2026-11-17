@@ -57,7 +57,7 @@ from ..config import (CANAIS_TELA, CONFIG_DIGIBRAIN_INATOS, RECEPTORES_DIGIBRAIN
                       ConfigEnjooTela, ConfigMundo, ConfigOlhar)
 from .. import orgao as _orgao
 from ..genoma_visao import GenomaVisao
-from ..policies.lobos import div_arred, falta_receptor, leitura_receptor
+from .base import div_arred, falta_receptor, leitura_receptor
 from . import dever as _dever
 from ._comum import clamp, ganho_de_tau, integrar, mul
 

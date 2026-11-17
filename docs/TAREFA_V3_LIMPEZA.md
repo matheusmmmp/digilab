@@ -1,7 +1,8 @@
 # TAREFA V3 — LIMPEZA (2026-11-16)
 
 Coordenador: sessão do Matheus (Claude Code). Worker: Claude Code, worktree `v3-limpeza`. Worktree e branch: `v3-limpeza`. Status: EM ANDAMENTO
-(a LZ0 e a LZ1; as decisões D-LZ-1 a D-LZ-3 DECIDIDAS pelo Matheus em 2026-11-16, pela recomendação: "Aceito").
+(a LZ0 e a LZ1 na `main`; a LZ2a neste PR; as decisões D-LZ-1 a D-LZ-3 DECIDIDAS pelo Matheus em 2026-11-16, pela
+recomendação: "Aceito"; a D-LZ-4, a LZ2 em três, PROPOSTA, seção 3.2).
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-16: "vamos tentar enxugar o projeto [...] separar o que era do Bandit, que não está
 sendo mais usado, do Cérebro A, que também não está sendo mais usado", com as escolhas (nesta sessão):
@@ -117,6 +118,34 @@ do jogo (o REL) e o instinto do mundo.
   controlador do contrato). As entradas do instinto nos gabaritos do A (a árvore, o banheiro, os dois pets) continuam valendo e ficam na
   LZ2, sem as do A.
 
+## 3.2 A LZ2 dividida em três (2026-11-16, PROPOSTO; D-LZ-4)
+
+A leitura do código na abertura da LZ2 mostrou duas coisas que o inventário não via:
+- **A cadeia de motores é mais funda que a amarra 2:** `Motor` → `MotorComFeedback` → `MotorPersonalidade` (o `obediencia.py`) →
+  `MotorTreino` (o `treino_vida.py`) → `MotorEducacao` → `MotorAmbiente` → `MotorFrutas` → `MotorMundo`.
+  - O `MotorPersonalidade` não é só o bandit: ele tem o vínculo, o desejo, a recusa e o motivo do pet.
+  - O `MotorTreino` é o treino do combate, que fica (seção 6).
+  - Recolher a cadeia pede um desenho próprio, com o gabarito das vidas do treino e das vidas com o vínculo.
+- **Tirar os braços do A da bancada quebra os testes deles,** e esses testes só saem do git na LZ4, depois da tag. Tirar os braços antes
+  deixaria a suíte vermelha entre a LZ2 e a LZ4.
+
+Por isso a LZ2 vira três PRs:
+- **LZ2a (este PR, feita):** as funções e as tabelas da amarra 1 no `digilab/digibrain/base.py`, o `sortear` no `digilab/policy.py`
+  (ele usa float, e o G-INT do pacote do modular proíbe float) e os `FATORES_*` no `protocol.py`.
+  - O `lobos.py`, o `memoria.py` e o `memoria_espacos.py` passam a importar de lá, e cada definição fica num lugar só.
+  - O `__init__` do `digibrain` passou a ser preguiçoso (o `__getattr__` de módulo), porque o `lobos.py` importar o `base.py` armava
+    um ciclo de import (`genoma_visao` → `mundo` → `educacao` → `protocol` → `memoria` → `policies` → `lobos` → `digibrain` →
+    `adapt` → `genoma_visao`).
+  - O `genoma_visao.py` também tira o `div_arred` do `base.py`.
+  - O inventário fica com 3 REFAZ no `digilab/`, contra 15 antes: o `educacao.py`, o `motor_corpo.py` e o `treino_vida.py`, que são a
+    cadeia.
+- **LZ2b, a cadeia de motores (proposta):**
+  - um motor neutro com o vínculo, o desejo e o motivo do `MotorPersonalidade`, sem a `PoliticaBanditPersonalidade`, e o `MotorTreino`
+    e o `MotorEducacao` herdando dele;
+  - a educação, as lesões e a obediência, que só a v1 liga, saem para a LZ4;
+  - antes, um gabarito próprio, num commit à parte, das vidas do treino do combate e das vidas com o vínculo, com os cérebros que ficam.
+- **LZ2c, os braços do A, do B e do C na bancada:** vão junto com a LZ4, no mesmo PR que tira os testes deles, depois da tag.
+
 ## 4. Experimento e gate
 
 Não há run. O gate de cada etapa é o byte a byte dos gabaritos da LZ1 e a suíte.
@@ -156,6 +185,13 @@ artefatos das frentes que saem vão para o backup (D-LZ-3).
   - **Recomendação:** a LZ0 e a LZ1 entram já; a LZ2 em diante só depois do resultado da LONGE_GEOMETRIA, porque a análise roda pelo
     código da `main`.
   - **Custo de errar:** se a LZ2 entrar antes, a análise pode quebrar ou mudar o hash do protocolo no meio da frente.
+- **D-LZ-4, a LZ2 em três (seção 3.2), PROPOSTA.**
+  - **Recomendação:** a LZ2a como está neste PR; a LZ2b (a cadeia de motores) com um desenho e um gabarito próprios antes do código;
+    a LZ2c (os braços do A na bancada) junto com a LZ4.
+  - **Alternativa:** a LZ2 inteira num PR só, como estava na seção 3. A suíte ficaria vermelha até a LZ4 sair, ou os testes do A
+    sairiam antes da tag.
+  - **Custo de errar:** com a recomendação, são dois PRs a mais; com a alternativa, a cadeia do treino e do vínculo muda sem guarda
+    própria.
 - **D-LZ-3, os documentos e os artefatos das frentes que saem.**
   - **Recomendação:** os `TAREFA`, `PLANO_ANALISE` e `RESULTADO` das frentes do bandit, do A, do B, do C e da v1, com as pastas
     `artifacts_*` delas, vão para o backup. No repositório ficam o `docs/LEITURA_CONSOLIDADA_DONO.md`, o `docs/FECHAMENTO_V2.md` e o

@@ -380,7 +380,7 @@ def test_resumo_no_console_cp1252_nao_quebra(monkeypatch):
 # ------------------------------------------------------------------ o isolamento (a licao do #515)
 def test_o_orquestrador_nao_monta_o_digibrain():
     """so o orquestrador do prototipo cita o pacote do DigiBrain e a ConfigDigibrain; o da AN4 passa por ele"""
-    nomes = re.compile(r"\b(ConfigDigibrain\w*|CONFIG_DIGIBRAIN\w*)\b|digilab\.digibrain|from \.digibrain|from \.\.digibrain|import digibrain")
+    nomes = re.compile(r"\b(ConfigDigibrain\w*|CONFIG_DIGIBRAIN\w*)\b|digilab\.digibrain(?!\.base\b)|from \.digibrain(?!\.base\b)|from \.\.digibrain(?!\.base\b)|import digibrain")
     assert not nomes.search((RAIZ / "experiments/run_v3_acoes_novas.py").read_text(encoding="utf-8"))
 
 
