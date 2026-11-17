@@ -1,8 +1,8 @@
 # TAREFA V3 — ELOGIO: o carinho logo depois da ação acelera o aprendizado do modular (2026-11-16)
 
 Coordenador: Gerente da V3 (Claude Code). Worker da etapa 1: Claude Code, Opus 5.5 (método), worktree `v3-elogio`. Status: **ABERTA; etapa 1
-(só papel) ENTREGUE; D-EL-1 a D-EL-8 (seção 8) DECIDIDAS em 2026-11-16, pela recomendação ("Aprovo todas"). Etapa 2 (código) PARADA
-antes do código: a leitura do código achou que o cenário da D-EL-1 não roda no modular (seção 9); D-EL-9 a D-EL-13 PROPOSTAS.**
+(só papel) ENTREGUE; D-EL-1 a D-EL-8 (seção 8) DECIDIDAS em 2026-11-16, pela recomendação ("Aprovo todas"). Etapa 2 (código): a leitura achou
+que o cenário da D-EL-1 não roda no modular (seção 9); D-EL-9 a D-EL-13 DECIDIDAS em 2026-11-17 ("Aprovo todas").**
 
 Categoria: arquitetura (depois, implementacao e experimento). Origem: Matheus, 2026-11-16: "logo após o pet fazer alguma ação [...] se a gente
 usar [...] o carinho, ou o elogiar logo após aquela ação, vai dar um boost maior de ele entender que aquilo é uma coisa boa". Com o pedido de
@@ -153,6 +153,8 @@ escolhidos na calibração voltam ao Matheus.
 | D-EL-8 | a grade | `g` em {S/4, S/2, S, 2S} × `W` em {1, 2, 4} passos | médio: uma grade grande custa vidas na calibração |
 
 ## 9. Etapa 2: o que a leitura do código mudou (2026-11-17)
+
+**D-EL-9 a D-EL-13 DECIDIDAS** pela recomendação: "Aprovo todas" (Matheus, 2026-11-17).
 
 A etapa 2 começou ("Comece a etapa 2 do elogio", Matheus, 2026-11-17) e parou antes do código. Três achados da leitura e de duas vidas de
 sonda (sementes 101 e 202 dos testes, fora de qualquer faixa; nenhum número daqui vai a resultado):
