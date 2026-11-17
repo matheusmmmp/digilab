@@ -26,6 +26,7 @@ import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 import { cors } from "hono/cors";
 import { ROOKIES, sortearApelido } from "./apelido.ts";
 import { enviosDaConta } from "../envio/rotas.ts";
+import { sementesDaConta } from "../envio/sementes.ts";
 import { transacao } from "./banco.ts";
 import type { ConfigConta } from "./config.ts";
 import { paginaAutorizarFalso, paginaDevConta } from "./paginas.ts";
@@ -375,6 +376,8 @@ export function montarRotasConta(app: Hono, cfg: ConfigConta): GuardasConta {
         "SELECT aparelho_id, criada_em, expira_em FROM sessoes WHERE conta_id = ? ORDER BY criada_em").map(r => ({ ...r, criada_em: iso(r.criada_em), expira_em: iso(r.expira_em) })),
       /* os envios dos logs (MMO3): a linha de cada um, sem os registros (que são os do próprio jogador) */
       envios: enviosDaConta(banco, s.conta_id),
+      /* as sementes ranqueadas entregues (MMO4): o número, o pet, o indice, o hash do pedido, a semente e a hora */
+      sementes: sementesDaConta(banco, s.conta_id),
       nao_guardamos: ["o nome", "o e-mail", "o lugar", "a fala", "a senha (não há senha)"],
     };
     const arquivo = `digilab-conta-${conta.apelido.replace(/[^A-Za-z0-9_-]/g, "-")}.json`;
@@ -388,7 +391,7 @@ export function montarRotasConta(app: Hono, cfg: ConfigConta): GuardasConta {
     const d = await lerCorpo(c);
     if (d instanceof Response) return d;
     if (d.confirmar !== "apagar") return json(c, 400, { erro: 'apagar pede {"confirmar": "apagar"}' });
-    /* as chaves estrangeiras com ON DELETE CASCADE levam as identidades, os consentimentos, os aparelhos, as sessões e os envios (MMO3) */
+    /* as chaves estrangeiras com ON DELETE CASCADE levam as identidades, os consentimentos, os aparelhos, as sessões os envios (MMO3) e as sementes (MMO4) */
     transacao(banco, () => banco.prepare("DELETE FROM contas WHERE id = ?").run(s.conta_id));
     deleteCookie(c, COOKIE_SESSAO, { path: "/", secure: cfg.cookieSeguro });
     return json(c, 200, { apagada: true });

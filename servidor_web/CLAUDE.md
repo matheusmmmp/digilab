@@ -55,6 +55,11 @@ O `servidor/` continua para o jogo local e a pesquisa.
 - **O que fica (MMO-4):** a linha de cada envio conferido (os hashes SHA-256 dos dois registros, o resultado e o motivo, o marco, os pontos,
   o tempo); os registros, só do envio aceito, até 30 dias depois do fim da semana de Brasília (`LOG_DIAS_DEPOIS_DA_SEMANA`, PROPOSTO). A
   limpeza roda em cada envio e em cada `GET /envios`. O mesmo envio de novo devolve a conferência guardada. Apagar a conta leva os envios.
+- **A luta ranqueada (MMO4, `sementes.ts`):** `POST /sementes` `{pet: {semente, versao}, indice, hash}` entrega a semente (HMAC do
+  segredo da semana com a conta e o número da luta; o segredo nasce no banco, um por semana, fora do git e fora da cascata da conta). A
+  semente pedida conta como luta. Travas: o nível (`DIGILAB_MARCO_RANQUEADA`, o 10 conferido por padrão, o 7 no beta), `LUTAS_POR_DIA` por
+  conta por dia de Brasília (429), e a ordem (409). O envio confere o hash do registro até o `indice` de cada semente (`hash_nao_confere`)
+  e conta as lutas pela conta da MMO1. O hash do jogo é o `hashAte` de `web/app/src/ranking/pedido.ts`.
 - **A vida dos testes** é o gabarito `test/gabaritos/vida_101.json`, gravado por `node scripts/gerar_vida_teste.ts` (precisa do
   `node_modules` do `web/app`, porque o roteiro da MMO0 nasce o ovo pelo `src/produto.ts`).
 
