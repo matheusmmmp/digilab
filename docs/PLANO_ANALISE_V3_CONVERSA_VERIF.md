@@ -1,7 +1,6 @@
 # PLANO DE ANÁLISE V3 — CONVERSA_PET, F1: quanto o verificador muda o que chega ao jogador (2026-11-17, Gerente das cinco frentes, Claude Code, Opus 5.5)
 
-**Status: PROPOSTO.** Nada roda antes de este cabeçalho dizer "APROVADO pelo Matheus", com a pergunta e a resposta dele literais
-(seção 7).
+**Status: APROVADO pelo Matheus** (2026-11-17, no chat da sessão da Gerente das cinco frentes). A pergunta foi "Aprova as cinco como recomendadas, ou quer discutir alguma?", e a resposta, "Aprovo". As decisões D-VB-1 e D-VB-2 (seção 7) ficam DECIDIDAS como recomendadas.
 
 **O papel: exploratório e descritivo.** Não tem gate, não muda a leitura da DC5 e não decide a voz do jogo.
 
@@ -126,13 +125,13 @@ Elas entram na skill antes de qualquer texto de resultado citá-las.
 - **O limite da fala** (Harnad 1990 e Searle 1980, VERIFICADAS na rodada Dreyfus, PR #954): nada aqui diz que o pet entende, nem que o
   decodificador resolve o aterramento do símbolo.
 
-## 7. As decisões (para o Matheus; nenhuma decidida)
+## 7. As decisões (DECIDIDAS pelo Matheus em 2026-11-17, todas como recomendadas)
 
-- **D-VB-1, aprovar este plano como está:** exploratório, sem gate, sem chamada nova, depois da DC5d. Recomendo sim.
+- **D-VB-1, DECIDIDA pelo Matheus em 2026-11-17 como recomendada, aprovar este plano como está:** exploratório, sem gate, sem chamada nova, depois da DC5d. Recomendo sim.
   - **Custo de errar:** pequeno. São contas sobre dados que já vão existir, e nada da DC5 muda.
   - **A alternativa:** pôr a F1 dentro do `RESULTADO_V3_CONVERSA_DC5.md`. Isso mistura um descritivo sem plano registrado com a leitura dos
     gates.
-- **D-VB-2, onde fica o código:** as contas em `digilab/metrics.py` (a regra das métricas únicas) e um script
+- **D-VB-2, DECIDIDA pelo Matheus em 2026-11-17 como recomendada, onde fica o código:** as contas em `digilab/metrics.py` (a regra das métricas únicas) e um script
   `experiments/analise_verif_dc5.py`, com testes de dados falsos, num PR de código depois do D-VB-1. Recomendo sim.
   - **Custo de errar:** nenhum para a DC5. O script só lê os artefatos.
 
