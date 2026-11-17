@@ -1,7 +1,7 @@
 # TAREFA V3 — VALUATION (2026-11-16)
 
 Coordenador: a sessão da LONGE_GEOMETRIA e da LIMPEZA (Claude Code). Worker: Claude Code, Opus 5.5, sessão filha. Worktree e branch:
-`v3-valuation`. Status: ABERTA, na Fase V1 (CHECKPOINT V2). O CHECKPOINT V1 foi aprovado em 2026-11-16.
+`v3-valuation`. Status: ENCERRADA com o diagnóstico, sem conserto (V5, CHECKPOINT V5; D-VAL-23). A síntese: `docs/SINTESE_VALUATION.md`.
 
 Categoria: experimento. Origem: Matheus, 2026-11-16. O pedido é diagnosticar por que o modular sente a fome e não fecha o episódio de fome
 (o elo Valuation), nas fases V0 a V5.
@@ -241,3 +241,16 @@ A chave `guarda_fome_reflexo` entrou desligada, com o gabarito "desliga não mud
 - **A G2 reprova:** a exaustão sobe +0,195 no `longe_fixo` e +0,174 nas 12 células. 63 % das decisões com a energia baixa têm a fome urgente, e o conserto tira 64 % dos reflexos.
 
 Status: o CHECKPOINT V3, com a leitura **falha**. A fase para, e o próximo passo é decisão do Matheus.
+
+### V5, a síntese (2026-11-17, Claude Code, Opus 5.5)
+
+O Matheus escolheu a opção (a) no CHECKPOINT V3: "Encerrar, ir à V5" (D-VAL-23). A V4 não roda, porque o conserto não passou da V3. A
+[SINTESE_VALUATION.md](SINTESE_VALUATION.md) junta as fases:
+- **a causa:** o reflexo do sono (a R, +0,129 na ablação), a única hipótese confirmada;
+- **o regime:** a energia baixa e a fome urgente andam juntas em 63 % das decisões, então consertar o reflexo troca episódios fechados por
+  exaustão;
+- **o conserto testado:** fecha +0,106, mas reprova pela exaustão (+0,195).
+
+A linha do PAINEL vai proposta na seção 7 da síntese, para o coordenador. As chaves de pesquisa ficam no código, desligadas.
+
+Status: o CHECKPOINT V5. Os merges (#945, #946, #949, #969 e o desta V5) são do Matheus.
