@@ -1,9 +1,9 @@
 # Espec: o dono inventa uma palavra e o pet aprende (F4, 2026-11-17)
 
-**Status:** PROPOSTA, sem código. Os conflitos de partida estão **DECIDIDOS pelo Matheus** (D-PD-1 a D-PD-4, seção 2, no chat da sessão
-F4, em 2026-11-17). A espec, a prancha e o teste **esperam a aprovação dele** (D-PD-5 a D-PD-9, seção 8). Nenhuma linha de código antes de
-"APROVADO pelo Matheus" neste cabeçalho. Todos os números são **PROPOSTOS, SEM FONTE**. Eles se acertam na rodada de equilíbrio do fim, e
-esta frente não calibra nada.
+**Status:** **APROVADO pelo Matheus em 2026-11-17**, no chat da sessão F4. D-PD-1 a D-PD-4 (os conflitos de partida, seção 2) e D-PD-5 a
+D-PD-9 (a prancha, a espec e o teste, seção 8) foram todas decididas pela recomendação. O código começa pela PD1, depois da LZ2a e da etapa 2 do
+`TAREFA_V3_ELOGIO`. Todos os números são **PROPOSTOS, SEM FONTE**. Eles se acertam na rodada de equilíbrio do fim, e esta frente não calibra
+nada.
 
 **Origem:** a frente F4 do prompt das cinco frentes (vault, `30 Decisões e protocolo/PROMPT_CINCO_FRENTES_2026-11-16.md`), que nasceu do
 PacaPet (Karati e Kluver 2026, WOCHAT, `10.21437/WoChat.2026-2`, lido em texto completo; vault, `CONFERENCIA_REFS_FALA_LLM_2026-11-16.md`).
@@ -294,7 +294,9 @@ Em pontos de sonda fixos no plano (PROPOSTO: as decisões de um dia de pet depoi
 | **PD4, a voz** | a transcrição gravada como `pl`, com confirmação na tela | PD3; a decisão da etapa |
 | **PD5, o alvo** (se D-PD-6 abrir) | a tabela `Hα` atrás da segunda subchave e o teste com dois alvos | PD2 |
 
-## 8. As decisões pendentes (para o Matheus, cada uma com a recomendação e o custo de errar)
+## 8. As decisões da prancha, da espec e do teste (DECIDIDAS pelo Matheus, 2026-11-17, no chat da sessão F4)
+
+As perguntas foram levadas com a recomendação e o custo de errar, e as respostas estão literais (a opção escolhida).
 
 | # | a pergunta curta | recomendação | custo de errar |
 |---|---|---|---|
@@ -303,6 +305,13 @@ Em pontos de sonda fixos no plano (PROPOSTO: as decisões de um dia de pet depoi
 | D-PD-7 | 4 vagas de palavra por pet, sem esquecer? | sim (PROPOSTO, se acerta no equilíbrio) | poucas vagas frustram o jogador; muitas engordam o z. Esquecer depende da PE-10 |
 | D-PD-8 | Aprova a espec e o T-PALAVRA (C × I pela sonda, H1 como gate), para a PD1 começar depois da LZ2a e da D-EL? | sim | sem o teste, a mecânica vai ao jogo sem prova de que ensina alguma coisa |
 | D-PD-9 | Se a H1 cair, a palavra fica fora do jogo até um desenho novo? | sim | pôr no jogo uma palavra que não separa o dono coerente do inconsistente promete ao jogador um ensino que o pet não faz |
+
+**As respostas do Matheus (literais):**
+- **D-PD-5:** "Aprovo (Recomendado)".
+- **D-PD-6:** "Só comportamento (Recomendado)".
+- **D-PD-7:** "4 vagas, sem esquecer (Recomendado)".
+- **D-PD-8:** "Aprovo (Recomendado)".
+- **D-PD-9:** "Fica fora (Recomendado)".
 
 ## 9. A literatura usada
 

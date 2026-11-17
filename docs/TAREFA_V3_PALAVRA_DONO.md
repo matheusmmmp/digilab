@@ -1,8 +1,7 @@
 # TAREFA V3 — PALAVRA_DONO (2026-11-17)
 
 Coordenador: a Gerente das cinco frentes (Claude Code). Worker da PD0: Claude Code, Opus 5.5, worktree `v3-palavra-dono`. Status: **ABERTA;
-PD0 (só papel) ENTREGUE.** D-PD-1 a D-PD-4 DECIDIDAS pelo Matheus em 2026-11-17, no chat da sessão F4, pela recomendação. D-PD-5 a D-PD-9
-pendentes. Nenhum código, nenhuma faixa e nenhuma vida.
+PD0 (só papel) ENTREGUE.** D-PD-1 a D-PD-9 DECIDIDAS pelo Matheus em 2026-11-17, no chat da sessão F4, pela recomendação; a espec está APROVADA. Nenhum código, nenhuma faixa e nenhuma vida.
 
 Categoria: arquitetura (depois, implementacao e experimento). Origem: Claude Code, 2026-11-17: a frente F4 das cinco frentes da síntese de
 2026-11-16 (o PacaPet), "o dono inventa uma palavra e o pet aprende". A Gerente abriu a frente pelo prompt do vault,
@@ -65,7 +64,7 @@ Nada muda no código, no motor, no `engine.py` nem nos pets. A mudança das etap
 
 ## 8. Precisa do Matheus
 
-D-PD-5 a D-PD-9, na seção 8 da espec, cada uma com a recomendação e o custo de errar:
+Nada nesta etapa: D-PD-5 a D-PD-9 foram DECIDIDAS em 2026-11-17 pela recomendação (seção 8 da espec, com as respostas literais):
 - **D-PD-5:** a prancha;
 - **D-PD-6:** só o comportamento primeiro;
 - **D-PD-7:** 4 vagas, sem esquecer;

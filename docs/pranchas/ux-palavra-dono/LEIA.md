@@ -1,6 +1,6 @@
 # Prancha: o dono inventa uma palavra e o pet aprende (F4)
 
-**Status: PROPOSTA, espera a aprovação do Matheus (D-PD-5).** A espec é a `docs/ESPEC_V3_PALAVRA_DONO.md`. As decisões de partida (D-PD-1 a
+**Status: APROVADA pelo Matheus em 2026-11-17** ("Aprovo (Recomendado)", em resposta à D-PD-5). A espec é a `docs/ESPEC_V3_PALAVRA_DONO.md`. As decisões de partida (D-PD-1 a
 D-PD-4) estão DECIDIDAS, e esta prancha as segue: a palavra liga pelo corpo, a tela diz "liga" e nunca "entende", só texto, Python com
 paridade.
 
