@@ -10,14 +10,16 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from digilab.config import CONFIG_EDUCACAO, CONFIG_LESOES  # noqa: E402
-from digilab.educacao import MotorEducacao, fabricas_educacao  # noqa: E402
+from digilab.educacao import MotorEducacao  # noqa: E402
+from digilab.obediencia import fabricas_educacao  # noqa: E402
 from digilab.events import ACOES_BOLA, ACOES_EDUCACAO, ACOES_TREINO, ACOES_V1, AcaoUsuario  # noqa: E402
 from digilab.evolucao import ovo  # noqa: E402
 from digilab.protocol import (PARAMETROS_EDUCACAO_V1, Campo, Status, hash_parametros_educacao,  # noqa: E402
                               validar_parametros_educacao)
 from digilab.temperamento import sortear  # noqa: E402
 from digilab.treino import reproduzir_com_feedback  # noqa: E402
-from digilab.treino_vida import MotorTreino, simular_vida_treino  # noqa: E402
+from digilab.treino_vida import MotorTreino  # noqa: E402
+from digilab.obediencia import simular_vida_treino  # noqa: E402
 
 
 def _vida(braco: str, s: int = 3101, dias: int = 3):
@@ -365,7 +367,7 @@ def test_contadores_zeram_e_qualificacao_gravada_na_passagem_para_adulto():
 
 # ================================================================ parte 5: heranca e evento origem
 from digilab.config import CONFIG_HERANCA  # noqa: E402
-from digilab.educacao import fabricas_filho  # noqa: E402
+from digilab.obediencia import fabricas_filho  # noqa: E402
 from digilab.heranca import HerancaInvalida, conferir_pais, cruzar, genitor, ler_origem  # noqa: E402
 from digilab.temperamento import EIXOS  # noqa: E402
 

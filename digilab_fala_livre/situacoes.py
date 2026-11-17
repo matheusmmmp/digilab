@@ -18,7 +18,7 @@ from digilab.events import LogDeEventos
 from digilab.expressao import FATORES
 from digilab.motivo import PoliticaComMotivo, indices_eventos_dono
 from digilab.treino import reproduzir_com_feedback
-from digilab.treino_vida import fabricas_treino
+from digilab.obediencia import fabricas_treino
 from digilab.temperamento import EIXOS, sortear
 from digilab.evolucao import ovo
 

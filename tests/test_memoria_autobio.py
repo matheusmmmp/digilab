@@ -141,7 +141,8 @@ def test_t_me_0_o_m_mem_so_recebe_o_que_o_cerebro_recebeu():
     arvore = ast.parse(inspect.getsource(M))
     origens = {n.module for n in ast.walk(arvore) if isinstance(n, ast.ImportFrom)}
     # o `dataclasses` (o `replace`, da biblioteca padrao; ILHA_AGUA IG6, af254d5b) nao e objeto do motor
-    assert origens == {"__future__", "dataclasses", "config", "modelo_mundo", "policies.lobos", "_comum"}
+    # a conta inteira do A veio para a base neutra do pacote (LZ2a, D-LZ-7): o `base`, no lugar do `policies.lobos`
+    assert origens == {"__future__", "dataclasses", "config", "modelo_mundo", "base", "_comum"}
     assert not any(isinstance(n, ast.Import) for n in ast.walk(arvore))
     assert list(inspect.signature(M.episodio_autobio).parameters) == [
         "sens", "pm1", "recs", "l0", "l1", "afeto_antes", "cons", "gestos", "unidade", "desfecho", "k", "tick", "p"]

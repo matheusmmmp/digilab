@@ -444,7 +444,7 @@ def test_a_mro_do_avancar_e_a_que_o_grupo_parte():
     def com(nome, cls):
         return {c for c in cls.__mro__ if nome in vars(c)}
     from digilab.educacao import MotorEducacao
-    from digilab.obediencia import MotorPersonalidade
+    from digilab.personalidade import MotorPersonalidade
     corpo = com_corpo(MotorMundo)
     assert com("_avancar", MotorMundo) == {MotorEducacao, MotorPersonalidade, Motor}
     assert com("_avancar", corpo) == {MotorCorpo, MotorEducacao, MotorPersonalidade, Motor}

@@ -23,7 +23,7 @@ from digilab.donos_educacao import simular_vida_educacao  # noqa: E402
 from digilab.state import Estado  # noqa: E402
 from digilab.temperamento import NEUTRO  # noqa: E402
 from digilab.treino_stats import estagio_no_tick  # noqa: E402
-from digilab.treino_vida import simular_vida_treino  # noqa: E402
+from digilab.obediencia import simular_vida_treino  # noqa: E402
 
 CFG = CONFIG_PADRAO
 CC_VIDA = ConfigCorpo(ligada=True, digestao=True, vida=True)
