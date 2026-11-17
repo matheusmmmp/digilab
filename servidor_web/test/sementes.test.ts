@@ -59,7 +59,7 @@ describe("POST /sementes: a trava do nível (MMO-13; no beta, o marco 7)", () =>
   it("sem envio aceito, 403 nivel_insuficiente", async () => {
     const r = await pedir();
     expect(r.status).toBe(403);
-    expect(await r.json()).toMatchObject({ motivo: "nivel_insuficiente" });
+    expect(await r.json()).toMatchObject({ motivo: "nivel_insuficiente", marco: 7 });
     expect(contar(M.banco, "sementes")).toBe(0);
   });
   it("um envio aceito com menos de 3 medalhas não abre o marco 7", async () => {
