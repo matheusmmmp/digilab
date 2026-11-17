@@ -40,7 +40,8 @@ from digilab.config import (CONFIG_DONOS, CONFIG_EDUCACAO_LIGADA, CONFIG_LESOES_
                             ConfigLobos)
 from digilab.donos import criar_dono, julgar_acao  # noqa: E402
 from digilab.donos_educacao import simular_vida_educacao  # noqa: E402
-from digilab.educacao import fabricas_educacao, reproduzir_educacao  # noqa: E402
+from digilab.educacao import reproduzir_educacao  # noqa: E402
+from digilab.obediencia import fabricas_educacao  # noqa: E402
 from digilab.events import ACOES_PET_HOJE, AcaoUsuario, LogDeEventos  # noqa: E402
 from digilab.evolucao import ovo, politica_no_tick  # noqa: E402
 from digilab.metrics import (acerto_na_tarefa, bootstrap_ic, distribuicoes_de_acao, divergencia_politicas,  # noqa: E402

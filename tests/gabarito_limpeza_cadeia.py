@@ -32,7 +32,7 @@ import gabarito_mundo as gm  # noqa: E402
 from digilab.ambiente import PoliticaInstintoBola  # noqa: E402
 from digilab.config import CONFIG_DONOS, CONFIG_PADRAO, CONFIG_TREINO, TICKS_POR_DIA  # noqa: E402
 from digilab.donos import Visao, criar_dono  # noqa: E402
-from digilab.obediencia import MotorPersonalidade  # noqa: E402
+from digilab.personalidade import MotorPersonalidade  # noqa: E402
 from digilab.protocol import derivar_semente  # noqa: E402
 from digilab.temperamento import NEUTRO, Temperamento  # noqa: E402
 from digilab.treino import CanalDeInteracao, simular_vida  # noqa: E402

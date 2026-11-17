@@ -18,7 +18,8 @@ from digilab.confianca import (ConfiancaCombate, atualizar_confianca, atualizar_
                                epsilon_confianca, faixa, novidade, tick_saida_faixa)
 from digilab.config import (CONFIG_CONFIANCA, CONFIG_CONFIANCA_LIGADA, CONFIG_EDUCACAO_LIGADA,  # noqa: E402
                             CONFIG_LESOES_LIGADA, ConfigConfianca)
-from digilab.educacao import epsilon_disciplina, epsilon_pet, fabricas_educacao, reproduzir_educacao  # noqa: E402
+from digilab.educacao import epsilon_disciplina, epsilon_pet, reproduzir_educacao  # noqa: E402
+from digilab.obediencia import fabricas_educacao  # noqa: E402
 from digilab.evolucao import ovo  # noqa: E402
 from digilab.expressao import CONFIANCA_TXT, confiancas_citadas, expressar_confianca  # noqa: E402
 from digilab.protocol import (PARAMETROS_CONFIANCA_M1, PARAMETROS_EDUCACAO_V1, Status,  # noqa: E402

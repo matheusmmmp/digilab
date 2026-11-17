@@ -24,8 +24,7 @@ from __future__ import annotations
 from .config import (CONFIG_MEMORIA_ESPACOS, CONFIG_PADRAO, CONFIG_VINCULO, CONFIG_VINCULO_SITUACAO, TICKS_POR_DIA,
                      ConfigVinculo, ConfigVinculoSituacao)
 from .desejo import Desejo
-from .events import AcaoPet, AcaoUsuario
-from .policies.bandit import CUIDADOS_QUE_ATENDEM
+from .events import CUIDADOS_QUE_ATENDEM, AcaoPet, AcaoUsuario
 from .policy import Observacao
 
 # vontade do pet -> acao do dono que a atende (as outras vontades o dono nao tem como atender)
