@@ -260,3 +260,22 @@ Pedido do Matheus: "Sim, a MMO5" (em resposta a "Começo a MMO5 (as tabelas e o 
   fechamento, as rotas e o caminho inteiro do pedido à tabela. `servidor_web`: 127 passaram; `web/app`: 1 981 passaram, 3 pulados.
 - **Fora desta etapa:** a prancha e a tela (o cais, "Ver a semana"); as divisões de 30 (MMO-9, só com 60 jogadores); a recompensa
   (MMO7); o deploy (CN5). Os desvios e os achados estão no registro (D-CONTA-114 a 122).
+
+## 17. MMO4: o rival e o mapa no pedido da semente (2026-11-17)
+
+Decisão do Matheus: "Sim, levar" (em resposta a "O pedido da semente passa a levar o rival e o mapa?"; o achado D-CONTA-116).
+Branch `v3-mmo4-rival`, por cima da `v3-mmo5-local` (#978).
+
+- **A regra:** o jogador escolhe o rival e o mapa antes de a semente existir. O `POST /sementes` passa a pedir `rival` e `mapa`, o
+  servidor os guarda na semente (a migração 5) e os devolve. No envio, a luta do indice só conta se é contra esse rival, nesse mapa;
+  senão a semente fica "não enviada" (0 pontos, luta usada).
+- **No servidor:** `servidor_web/src/envio/sementes.ts` (o pedido, a coluna, a resposta) e `conferir.ts` (passa o rival e o mapa à
+  conta). O pedido sem `rival` ou sem `mapa` leva 400.
+- **Na conta dos pontos:** `web/app/src/ranking/pontos.ts`: a semente entregue leva o rival e o mapa prometidos; a semente sem rival
+  guardado (de antes da regra) não confere nada.
+- **No jogo:** `pedido.ts`, `ranqueada.ts` e `TelaRanqueada.tsx` mandam o rival e o mapa escolhidos na Arena. A tela não muda.
+- **O que não muda:** o motor e o `engine.py`.
+- **Testes:** `servidor_web`: 134 passaram (7 novos em `test/sementes.test.ts`: o 400, o que se guarda, a luta que conta, o outro
+  rival, o outro mapa, a semente de antes da regra). `web/app`: 1 981 passaram, 3 pulados; os tipos e o build.
+- **O que fica:** o servidor não sabe se o rival está na Arena do pet na hora do pedido; o motor confere isso no envio, e a luta
+  impossível recusa o envio inteiro. Os desvios estão no registro (D-CONTA-123 a 126).

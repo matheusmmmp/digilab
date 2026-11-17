@@ -55,11 +55,13 @@ O `servidor/` continua para o jogo local e a pesquisa.
 - **O que fica (MMO-4):** a linha de cada envio conferido (os hashes SHA-256 dos dois registros, o resultado e o motivo, o marco, os pontos,
   o tempo); os registros, só do envio aceito, até 30 dias depois do fim da semana de Brasília (`LOG_DIAS_DEPOIS_DA_SEMANA`, PROPOSTO). A
   limpeza roda em cada envio e em cada `GET /envios`. O mesmo envio de novo devolve a conferência guardada. Apagar a conta leva os envios.
-- **A luta ranqueada (MMO4, `sementes.ts`):** `POST /sementes` `{pet: {semente, versao}, indice, hash}` entrega a semente (HMAC do
+- **A luta ranqueada (MMO4, `sementes.ts`):** `POST /sementes` `{pet: {semente, versao}, indice, hash, rival, mapa}` entrega a semente (HMAC do
   segredo da semana com a conta e o número da luta; o segredo nasce no banco, um por semana, fora do git e fora da cascata da conta). A
   semente pedida conta como luta. Travas: o nível (`DIGILAB_MARCO_RANQUEADA`, o 10 conferido por padrão, o 7 no beta), `LUTAS_POR_DIA` por
   conta por dia de Brasília (429), e a ordem (409). O envio confere o hash do registro até o `indice` de cada semente (`hash_nao_confere`)
   e conta as lutas pela conta da MMO1. O hash do jogo é o `hashAte` de `web/app/src/ranking/pedido.ts`.
+- **O rival e o mapa vão no pedido** (D-CONTA-116, a migração 5): a escolha é de antes da semente, e a luta do `indice` com outro rival
+  ou outro mapa não conta (fica não enviada). A semente sem rival guardado é de antes da regra.
 - **O ranking da semana (MMO5, `semanas.ts`):** cada semente guarda o que a conferência achou dela (a migração 4), e **a primeira
   conferência vale**. As tabelas saem daí, uma por estágio, com os pontos refeitos pelo `pontuar` da MMO1. A semana congela
   `FOLGA_DO_FECHAMENTO_MS` depois do fim (PROPOSTA): a pendente vira não enviada, as tabelas vão para `tabelas_semana` e o segredo é

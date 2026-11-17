@@ -195,7 +195,8 @@ export function ArenaRanqueada({ rivais, rival, setRival, mapa, setMapa, irTrein
     segurarTempoDoPedido(true);
     try {
       const j = jogoAtual().motor;
-      const s = await pedirSemente({ semente: j.semente, versao: j.versao, log: j.log });
+      /* o rival e o mapa vao no pedido: a escolha e de antes da semente (D-CONTA-116) */
+      const s = await pedirSemente({ semente: j.semente, versao: j.versao, log: j.log }, rival, mapa);
       if (!s) return;
       /* o registro tem de estar onde o pedido prometeu; se mudou no meio, a luta pedida ja foi gasta */
       if (jogoAtual().motor !== j || j.log.length !== s.indice) { lutaPerdida(s.numero, "o registro do pet mudou durante o pedido"); return; }
