@@ -136,6 +136,26 @@ class Plasticidade:
         self.consumos[classe] += 1
         return {"regra": "P1", "classe": classe, "antes": antes, "depois": list(dt), "abs": sum(abs(b - a) for a, b in zip(antes, dt))}
 
+    def elogio_p1(self, classe: str, delta: list, g: int, g_apr: int) -> dict | None:
+        """o carinho no desfecho da classe consumida (ELOGIO, D-EL-12; so com a ConfigElogio ligada): SOMA a ele o que o carinho mudou nos
+        receptores (`delta`, na ordem do layout), com o ganho `g` (na escala S, ja com o peso da janela) e o passo do P1:
+        `d[c,r] <- clamp(d[c,r] + mul(mul(g_apr, eta_d), div_arred(g x delta_r, S)), -S, S)`. Nao puxa para o alvo (o que a fruta ensinou
+        fica) e nao conta como consumo. Sem o P1, None."""
+        if not self.cd.p1:
+            return None
+        if classe not in self.classes:
+            raise ValueError(f"M-PLAST: classe {classe!r}")
+        if len(delta) != len(self.receptores) or any(type(v) is not int for v in delta):
+            raise ValueError(f"M-PLAST: delta {delta!r} fora do layout {self.receptores}")
+        S = self.S
+        passo = mul(g_apr, self.p.eta_d, S)
+        dt = self.desfecho[classe]
+        antes = list(dt)
+        for i, v in enumerate(delta):
+            if v:
+                dt[i] = clamp(dt[i] + mul(passo, div_arred(g * v, S), S), -S, S)
+        return {"regra": "P1-elogio", "classe": classe, "antes": antes, "depois": list(dt), "abs": sum(abs(b - a) for a, b in zip(antes, dt))}
+
     # ------------------------------------------------------------ P2
     def creditar(self, op: dict) -> dict | None:
         """P2 numa opcao que acabou: so a linha do comportamento dela. Devolve o registro (None sem o P2)."""

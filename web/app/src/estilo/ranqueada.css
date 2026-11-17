@@ -1,0 +1,86 @@
+/* A luta ranqueada na aba Arena (MMO4; a prancha docs/pranchas/ux-luta-ranqueada/, UX-LR-1 a 6 APROVADAS). Por cima do luta_poc.css, so com
+   os tokens --hx-* das peles: nenhuma cor nova. Os tamanhos sao PROPOSTOS, SEM FONTE (os da prancha). */
+
+/* a escolha no topo: Treino ou Ranqueada, dois botoes de mesmo peso */
+.lr-modo{ display:grid; grid-template-columns:1fr 1fr; gap:6px }
+.lr-filtro{ display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:44px; padding:0 12px; border:1px solid var(--hx-borda); background:var(--hx-tecla);
+  color:var(--hx-texto); font:600 14px/1.1 var(--hx-f); cursor:pointer }
+.lr-modo .lr-filtro{ font-size:15px }
+.lr-filtro svg{ width:16px; height:16px; flex:none }
+.lr-filtro[aria-checked="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); border-color:var(--hx-escolhido-borda); box-shadow:var(--hx-escolhido-brilho) }
+.lr-filtro:disabled{ opacity:.7; cursor:default }
+.lr-filtro:focus-visible, .lr-bts a:focus-visible, .lr-bts button:focus-visible{ outline:2px solid var(--hx-foco); outline-offset:2px }
+
+.lr-rot{ color:var(--hx-rotulo); font:600 12px/1 var(--hx-f); letter-spacing:.12em; text-transform:uppercase }
+.lr-sec{ margin:0; color:var(--hx-sec); font:500 13px/1.3 var(--hx-f) }
+
+/* o placar: as lutas de hoje (numero e pinos) e os pontos da semana */
+.lr-placar{ display:grid; grid-template-columns:auto 1fr; border:1px solid var(--hx-borda); background:var(--hx-tecla) }
+.lr-placar > div{ display:grid; grid-template-columns:auto 1fr; align-items:center; column-gap:10px; row-gap:4px; padding:8px 12px; min-width:0 }
+.lr-placar > div + div{ border-left:1px solid var(--hx-borda) }
+.lr-placar .lr-rot{ grid-column:1 / -1 }
+.lr-num{ font:700 24px/1 var(--hx-f-num); color:var(--hx-num) }
+.lr-num small{ font:600 14px/1 var(--hx-f); color:var(--hx-sec) }
+.lr-pinos{ display:flex; gap:3px }
+.lr-pinos i{ width:9px; height:14px; border:1px solid var(--hx-borda-topo) }
+.lr-pinos i.usada{ background:var(--hx-medidor); border-color:var(--hx-medidor) }
+
+/* o rival com o valor da vitoria a direita; o que vale a metade diz por que em texto */
+.lr-arena .poc-rivais{ display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:6px }
+.lr-rival{ min-height:48px; text-align:left }
+.lr-rival .lr-nome{ display:grid; gap:2px; flex:1; min-width:0 }
+.lr-rival .lr-nome b{ font:700 14px/1.1 var(--hx-f); overflow:hidden; text-overflow:ellipsis }
+.lr-rival .lr-nome small{ font:500 12px/1.2 var(--hx-f); opacity:.85; overflow:hidden; text-overflow:ellipsis }
+.lr-vale{ display:grid; place-items:center; min-width:38px; height:30px; padding:0 6px; border:1px solid currentColor; flex:none; overflow:visible }
+.lr-vale b{ font:700 17px/1 var(--hx-f-num) }
+.lr-vale.meio{ border-style:dashed; opacity:.85 }
+.lr-mapas{ display:flex; gap:6px; flex-wrap:wrap }
+.lr-mapas .lr-filtro{ font-size:13px }
+
+/* o aviso antes do botao: o que se gasta ao pedir */
+.lr-aviso{ display:grid; grid-template-columns:20px 1fr; gap:8px; align-items:start; margin:0; font:500 14px/1.35 var(--hx-f); color:var(--hx-texto-2) }
+.lr-aviso svg{ width:18px; height:18px; margin-top:1px; color:var(--hx-alerta) }
+.lr-aviso b{ color:var(--hx-texto) }
+
+/* os estados do pedido e o resultado */
+.lr-estado, .lr-resultado{ display:grid; gap:12px }
+.lr-destaque{ display:grid; gap:6px; padding:10px 14px; border:1px solid var(--hx-borda); border-left:4px solid var(--hx-alerta); background:var(--hx-tecla) }
+.lr-destaque > b{ font:700 20px/1.15 var(--hx-f) }
+.lr-destaque p{ margin:0; font:500 14px/1.4 var(--hx-f); color:var(--hx-texto-2) }
+.lr-chamada{ margin:0; font:700 20px/1.15 var(--hx-f) }
+.lr-passos{ display:flex; gap:6px; margin:0; padding:0; list-style:none }
+.lr-passos li{ flex:1; padding:6px 8px; border:1px solid var(--hx-borda); border-top-width:3px; font:600 12px/1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase; color:var(--hx-sec) }
+.lr-passos li.feito{ border-top-color:var(--hx-ok); color:var(--hx-texto-2) }
+.lr-passos li.agora{ border-top-color:var(--hx-escolhido-borda); color:var(--hx-texto) }
+.lr-bts{ display:flex; gap:8px; flex-wrap:wrap }
+.lr-bts > *{ display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:48px; padding:0 16px; flex:1; text-decoration:none }
+.lr-bts svg{ width:18px; height:18px; flex:none }
+.lr-luta{ display:grid; grid-template-columns:40px auto 1fr; align-items:center; gap:10px }
+.lr-luta b{ display:block; font:700 17px/1.1 var(--hx-f) }
+.lr-luta small{ display:block; font:500 13px/1.25 var(--hx-f); color:var(--hx-sec) }
+.lr-x{ font:700 18px/1 var(--hx-f); color:var(--hx-sec) }
+.lr-res{ display:grid; grid-template-columns:1fr auto; align-items:center; column-gap:12px; row-gap:4px; padding:10px 14px; border:1px solid var(--hx-borda); border-left-width:4px; background:var(--hx-tecla) }
+.lr-res.ok{ border-color:var(--hx-ok) }
+.lr-res.alerta{ border-color:var(--hx-alerta) }
+.lr-etq{ grid-column:1 / -1; justify-self:start; display:inline-flex; align-items:center; gap:4px; padding:3px 6px; border:1px solid var(--hx-borda-topo); color:var(--hx-texto-2);
+  font:700 11px/1 var(--hx-f); letter-spacing:.1em; text-transform:uppercase }
+.lr-etq svg{ width:12px; height:12px; stroke-width:3 }
+.lr-etq.ok{ border-color:var(--hx-ok); color:var(--hx-ok) }
+.lr-etq.alerta{ border-color:var(--hx-alerta); color:var(--hx-alerta) }
+.lr-grande{ font:700 26px/1.05 var(--hx-f); letter-spacing:.01em }
+.lr-pts{ font:700 28px/1 var(--hx-f-num); color:var(--hx-num) }
+.lr-pts.zero{ color:var(--hx-sec) }
+.lr-serv{ display:flex; align-items:center; gap:8px; margin:0; font:500 14px/1.3 var(--hx-f); color:var(--hx-texto-2) }
+.lr-serv svg{ width:16px; height:16px; color:var(--hx-rotulo); flex:none }
+.lr-serv b{ color:var(--hx-texto) }
+.lr-pontos3{ display:inline-flex; gap:4px; margin-left:auto }
+.lr-pontos3 i{ width:6px; height:6px; background:var(--hx-sec) }
+
+/* o celular: os rivais em duas colunas mais baixas, os textos mais curtos */
+@media (max-width: 520px){
+  .lr-arena .poc-rivais{ grid-template-columns:1fr 1fr }
+  .lr-rival{ min-height:44px; padding:4px 6px; gap:6px }
+  .lr-rival .poc-ret{ display:none }
+  .lr-vale{ min-width:32px; padding:0 4px }
+  .lr-sem .lr-sec{ display:none }
+}

@@ -138,6 +138,13 @@ As seções acima são cópias inteiras do CLAUDE.md antigo (o G-NADA-PERDIDO co
   migração 3 do `banco.ts`), e o hash do pedido conferido no envio (`hashesAte` em `conferir.ts`). Os testes em
   `servidor_web/test/sementes.test.ts`. No jogo, `web/app/src/ranking/pedido.ts` (o hash do pedido, sem tela) e `web/app/src/marcosTamer.ts`
   (os marcos do Tamer, reexportados pelo `nivel.ts`).
+- **2026-11-17, MMO4, a tela da luta ranqueada:** `web/app/src/ranking/ranqueada.ts` (o cliente: pedido, prévia, envio, reenvio),
+  `web/app/src/telas/lutar/palcoPoc/TelaRanqueada.tsx` e `web/app/src/estilo/ranqueada.css` (a aba Arena com "Treino / Ranqueada"),
+  `web/app/test/ranqueada.test.ts`. Só liga com `VITE_DIGILAB_API` no build.
+- **2026-11-17, CONTA, as telas da conta no jogo:** `web/app/src/conta/conta.ts` (o cliente: entrar, primeiro acesso, perfil, sair,
+  apagar), `web/app/src/conta/apiDoBuild.ts` (`VITE_DIGILAB_API`, `VITE_DIGILAB_TERMOS`, `VITE_DIGILAB_PRIVACIDADE`),
+  `web/app/src/telas/config/TelaConta.tsx` e `web/app/src/estilo/conta.css` (a parte Conta dos Ajustes, `#/config/conta`),
+  `web/app/test/conta.test.ts`. Só liga com `VITE_DIGILAB_API` no build.
 - **2026-11-17, MMO, a prancha da luta ranqueada:** `docs/PLANO_UX_LUTA_RANQUEADA.md` (APROVADO, UX-LR-1 a 6) e
   `docs/pranchas/ux-luta-ranqueada/` (`gerar.py`, `ranqueada.css`, `capturar.sh`, os HTML e as capturas): a aba Arena com a escolha
   "Treino / Ranqueada", os estados do pedido e o resultado. Só desenho.

@@ -218,3 +218,22 @@ desktop (1920) e no celular (390 e 360), nas peles Vidro e Militar. Só desenho.
 
 **As UX-LR-1 a 6 foram APROVADAS pelas recomendações** (Matheus, 2026-11-17: "Sim, aprovo"): a luta na aba Arena, o aviso acima do
 botão, a prévia que vira "conferido", o reenvio sozinho e o rival escolhido pelo jogador. A tela ainda não foi feita.
+
+## 15. MMO4: a tela da luta ranqueada (2026-11-17)
+
+Pedido do Matheus: "Sim, merge e tela" (2026-11-17), depois do merge do #967. A tela segue a prancha aprovada
+(`docs/PLANO_UX_LUTA_RANQUEADA.md`, UX-LR-1 a 6).
+
+- **A chave:** a luta ranqueada só aparece no build com `VITE_DIGILAB_API` (o endereço do `servidor_web`), com um pet só na tela. Sem
+  ela, a Arena é a de sempre.
+- **O cliente (`web/app/src/ranking/ranqueada.ts`):** o pedido da semente e os estados dele, a prévia, o envio depois da luta e o
+  reenvio; a lista das lutas pedidas fica no aparelho (`CHAVE-ranqueada`). Sem React; 15 testes com o servidor falso.
+- **A tela (`web/app/src/telas/lutar/palcoPoc/TelaRanqueada.tsx`, `src/estilo/ranqueada.css`):** a escolha "Treino / Ranqueada", o
+  placar, os rivais com o valor, o aviso e "Lutar valendo N"; os estados do pedido; o resultado ("prévia", "conferido", "o servidor").
+- **O motor não muda:** a luta é o `lutarPoc` de sempre com a semente do servidor. O pedido segura o tempo do jogo até a luta entrar no
+  registro (`segurarTempoDoPedido`, em `lutaPocTela.ts`).
+- **O servidor:** o 403 `nivel_insuficiente` passa a dizer o `marco`.
+- **Conferido no navegador** (Chrome headless, o `servidor_web` local com o provedor falso): sem conta, trancada, o pedido, a luta no
+  palco, o envio, "conferido +20", o placar da semana e o mesmo rival valendo 10 em seguida.
+- **Não feito:** as telas da conta (o Entrar só abre a página de teste no local), "Ver a semana" (MMO5), o e2e no repositório e a
+  revisão de acessibilidade. Desvios: D-CONTA-93 a 103.
