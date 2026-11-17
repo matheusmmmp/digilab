@@ -812,6 +812,8 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-16 — CONTA: a CN2, a parte local da conta no servidor_web (Claude Code, Opus 5.5, branch `v3-conta-cn2`)](registro/2026-11.md)
 - [2026-11-16 — BETA: a BT0, o tempo até o primeiro Mega (Claude Code, Opus 5.5, branch `v3-beta-bt0`)](registro/2026-11.md)
 - [2026-11-16 — BETA: a BT0-1 decidida (Claude Code, Opus 5.5, branch `v3-beta-bt0`)](registro/2026-11.md)
+- [2026-11-16 — LITERATURA: Dreyfus e o corpo situado (Claude Code, Opus 5.5, branch `v3-literatura-dreyfus`)](registro/2026-11.md)
+- [2026-11-17 — LITERATURA: as resenhas de 1996 (Claude Code, Opus 5.5, branch `v3-literatura-dreyfus`)](registro/2026-11.md)
 - [2026-11-17 — PALAVRA_DONO: a PD0, só papel (Claude Code, Opus 5.5, branch `v3-palavra-dono`)](registro/2026-11.md)
 - [2026-11-17 — MMO: a MMO3, o envio dos logs e a conferência no Node (Claude Code, Opus 5.5, sessão lateral, branch `v3-mmo3`)](registro/2026-11.md)
 - [2026-11-17 — MMO: a MMO3, um passe só e a conferência no worker (Claude Code, Opus 5.5, sessão lateral, branch `v3-mmo3`)](registro/2026-11.md)
