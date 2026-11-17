@@ -3,7 +3,7 @@
 Coordenador: sessão do Matheus (Claude Code). Worker: Claude Code, worktree `v3-limpeza`. Worktree e branch: `v3-limpeza`. Status: EM ANDAMENTO
 (a LZ0 e a LZ1 na `main`; a LZ2a neste PR; as decisões D-LZ-1 a D-LZ-3 DECIDIDAS pelo Matheus em 2026-11-16, pela
 recomendação: "Aceito"; a D-LZ-4, a LZ2 em três, DECIDIDA em 2026-11-16 pela recomendação, "Aceito", seção 3.2; o desenho da LZ2b, D-LZ-8 a D-LZ-12,
-PROPOSTO, seção 3.3).
+DECIDIDO em 2026-11-17 pela recomendação, "Aprovo todas", seção 3.3).
 
 Categoria: arquitetura. Origem: Matheus, 2026-11-16: "vamos tentar enxugar o projeto [...] separar o que era do Bandit, que não está
 sendo mais usado, do Cérebro A, que também não está sendo mais usado", com as escolhas (nesta sessão):
@@ -147,7 +147,7 @@ Por isso a LZ2 vira três PRs:
   - antes, um gabarito próprio, num commit à parte, das vidas do treino do combate e das vidas com o vínculo, com os cérebros que ficam.
 - **LZ2c, os braços do A, do B e do C na bancada:** vão junto com a LZ4, no mesmo PR que tira os testes deles, depois da tag.
 
-## 3.3 O desenho da LZ2b, a cadeia de motores (2026-11-17, PROPOSTO; D-LZ-8 a D-LZ-12)
+## 3.3 O desenho da LZ2b, a cadeia de motores (2026-11-17, DECIDIDO; D-LZ-8 a D-LZ-12)
 
 **O que a leitura mostrou.** O motor de personalidade quase não depende do bandit. O que prende a cadeia é onde as coisas moram:
 - o `digilab/obediencia.py` sai (o inventário o marca SAI, porque ele define a `PoliticaBanditPersonalidade`, que herda da memória por
@@ -231,7 +231,7 @@ artefatos das frentes que saem vão para o backup (D-LZ-3).
     sairiam antes da tag.
   - **Custo de errar:** com a recomendação, são dois PRs a mais; com a alternativa, a cadeia do treino e do vínculo muda sem guarda
     própria.
-- **D-LZ-8 a D-LZ-12, o desenho da LZ2b (seção 3.3), PROPOSTAS.**
+- **D-LZ-8 a D-LZ-12, o desenho da LZ2b (seção 3.3), DECIDIDAS pela recomendação ("Aprovo todas", Matheus, 2026-11-17).**
   - **Recomendação:** as cinco como na seção 3.3: o `personalidade.py` neutro, a constante do vínculo no `events.py`, as fábricas da v1
     no `obediencia.py`, o ramo do `desejo_de` até a LZ4 e a fala livre decidida na LZ4.
   - **Alternativa para a D-LZ-10:** deixar as fábricas onde estão, com o padrão do bandit importado dentro da função. Mexe em menos
