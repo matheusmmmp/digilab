@@ -21,7 +21,8 @@ from digilab.protocol import (PARAMETROS_VINCULO_B, PROTOCOLO_ARENA_V1_PERSONALI
                               validar_parametros_vinculo_b, vinculo_b_nao_referendados)
 from digilab.temperamento import sortear  # noqa: E402
 from digilab.treino import reproduzir_com_feedback  # noqa: E402
-from digilab.treino_vida import BRACOS_TREINO, fabricas_treino, simular_vida_treino  # noqa: E402
+from digilab.treino_vida import BRACOS_TREINO  # noqa: E402
+from digilab.obediencia import fabricas_treino, simular_vida_treino  # noqa: E402
 from digilab.vinculo import Vinculo, situacao_de  # noqa: E402
 from exportar_gabarito_vinculo import SAIDA as GABARITO_WEB, gerar  # noqa: E402
 

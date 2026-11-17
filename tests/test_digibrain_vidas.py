@@ -168,7 +168,7 @@ def test_t_ponto_2_o_motor_valida_o_ponto():
 def test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain():
     """o G2 das 196 vidas e o tests/test_gabarito_digibrain.py, que passa sem mudanca; aqui, o resto: nenhum modulo do motor, da bancada
     nem das ferramentas cita o pacote (e o explorar do motor nao ganha candidato)"""
-    nomes = re.compile(r"digilab\.digibrain|from \.digibrain|from \.\.digibrain|import digibrain")
+    nomes = re.compile(r"digilab\.digibrain(?!\.base\b)|from \.digibrain(?!\.base\b)|from \.\.digibrain(?!\.base\b)|import digibrain")
     citam = {p.relative_to(RAIZ).as_posix() for pasta in ("digilab", "experiments", "tools") for p in (RAIZ / pasta).rglob("*.py")
              if nomes.search(p.read_text(encoding="utf-8"))}
     assert {c for c in citam if not c.startswith("digilab/digibrain/")} == {"experiments/run_v2_digibrain_prototipo.py",
@@ -189,7 +189,10 @@ def test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain():
                                                                              # GOSTO_VISUAL, a TV no jogo (#883): o exportador do gabarito, que faltava aqui (D-CO7b-9)
                                                                              "experiments/exportar_tv_jogo.py",
                                                                              # COOPERACAO, CB1: a bancada da cooperacao (o modular nos dois pets do grupo)
-                                                                             "experiments/run_v3_cooperacao_bancada.py"}
+                                                                             "experiments/run_v3_cooperacao_bancada.py",
+                                                                             # GOSTO_VISUAL, a fala do assistir (FA-2): o gabarito do dec-v4, que faltava aqui
+                                                                             # (ja estava no test_digibrain_etapa0.py; D-EQ2-12)
+                                                                             "experiments/exportar_decodificador_v4.py"}
     assert "lembranca" not in (RAIZ / "digilab" / "mundo.py").read_text(encoding="utf-8")
 
 

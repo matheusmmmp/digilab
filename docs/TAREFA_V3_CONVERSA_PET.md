@@ -697,3 +697,20 @@ gate.
 - **O registro da rodada** é a seção 14 do plano, com os sha256 de hoje (D-DC5C-3).
 - **Os testes:** `tests/test_conversa_dc5c.py` (3).
 - **Os desvios:** D-DC5C-1 a 3, em `docs/registro/2026-11.md`.
+
+## F1 — o plano de quanto o verificador muda o que chega ao jogador (Gerente das cinco frentes, Claude Code, Opus 5.5, branch `v3-conversa-verif`, 2026-11-17)
+
+- **O plano:** `docs/PLANO_ANALISE_V3_CONVERSA_VERIF.md`, PROPOSTO. Ele é exploratório e sem gate, e só usa os dados da DC5c e da DC5d, sem
+  chamada nova a modelo e sem campo faltando. A DC5 não muda.
+- **O achado:** no jogo, o verificador só avisa. O plano lê os dados com a política de hoje (P0) e com uma trava hipotética (P1).
+- **As decisões pendentes:** D-VB-1 (aprovar o plano) e D-VB-2 (onde fica o código).
+- **Os desvios:** D-VB-A e D-VB-B, em `docs/registro/2026-11.md`.
+
+## F2 — o plano da espera da voz no jogo (Gerente das cinco frentes, Claude Code, Opus 5.5, branch `v3-conversa-espera`, 2026-11-17)
+
+- **O plano:** `docs/PLANO_ANALISE_V3_CONVERSA_ESPERA.md`, PROPOSTO. São 120 turnos no jogo de verdade (Playwright, `gemma2:9b`, verificador
+  ligado). Ele mede do toque até a primeira palavra, até a frase inteira, até o aviso, e a fila, com o p50, o p95 e a fração acima de 8 s.
+- **O levantamento das saídas** (pré-gerar com cache, API do Claude, streaming, modelo menor) fica no vault, em
+  `DigiLab — Revisão de escopo/LEVANTAMENTO_ESPERA_VOZ_2026-11-17.md`.
+- **As decisões pendentes:** D-ES-1 a D-ES-3. A D-ES-4 (a saída) fica para depois da medida.
+- **Os desvios:** D-ES-A e D-ES-B, em `docs/registro/2026-11.md`.

@@ -162,5 +162,6 @@ artifacts_v2_descritivo_plato/**/vidas/
 # MMO0: o pacote da medida Chrome x Node (web/app/scripts/mmo0/empacotar.ts)
 web/app/scripts/mmo0/dist/
 # a LONGE_GEOMETRIA (docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md): o poder.json e a run; as vidas ficam fora (compactadas depois, como na C1)
+!artifacts_v3_conversa_espera/
 !artifacts_v3_longe_geometria/
 artifacts_v3_longe_geometria/**/vidas/

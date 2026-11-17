@@ -14,7 +14,9 @@ hipotese morre.
 from __future__ import annotations
 
 import random
+from bisect import bisect_right
 from dataclasses import dataclass
+from itertools import accumulate
 from typing import Protocol, runtime_checkable
 
 from .config import Config
@@ -196,3 +198,13 @@ def efeito_da_acao_do_pet(
         return replace(novo, humor=_limitar(novo.humor - 0.01))
 
     return novo
+
+
+# o sorteio do instinto e dos cerebros (veio do lobos.py na LIMPEZA, LZ2, sem mudar a conta)
+def sortear(pesos: list[float], u: float) -> int:
+    """Indice sorteado com os pesos, dado u = rng.random(): a conta de random.choices(k=1), passo a passo."""
+    cumulativa = list(accumulate(pesos))
+    total = cumulativa[-1] + 0.0
+    if total <= 0.0:
+        raise ValueError(f"soma dos pesos nao positiva: {pesos}")
+    return bisect_right(cumulativa, u * total, 0, len(cumulativa) - 1)

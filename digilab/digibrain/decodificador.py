@@ -18,7 +18,7 @@ nomeados da fala, cada um com valor e confianca em [0, S], mais a intencao (regr
 from __future__ import annotations
 
 from ..config import CONFIG_DECODIFICADOR, CONFIG_DIGIBRAIN_INATOS, CONFIG_FALA_ASSISTIR, ConfigDecodificador, ConfigFalaAssistir
-from ..policies.lobos import div_arred
+from .base import div_arred
 from ._comum import clamp, mul
 
 VERSAO = "dec-v1"

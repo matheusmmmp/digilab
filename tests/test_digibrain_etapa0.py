@@ -60,7 +60,10 @@ def test_a_chave_desligada_por_padrao_com_as_subchaves():
 def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
     """o G2: a chave nao chega ao motor, a bancada nem as ferramentas; so o config, o pacote, o orquestrador do prototipo e o exportador
     do gabarito do modular para a web (LM0, #543: monta a config do braco REL pelo orquestrador; desvio de 2026-11-03)"""
-    nomes = re.compile(r"\b(ConfigDigibrain\w*|CONFIG_DIGIBRAIN\w*)\b|digilab\.digibrain|from \.digibrain|from \.\.digibrain")
+    # a base neutra (digilab/digibrain/base.py, LIMPEZA LZ2: as contas inteiras e a interface do corpo) nao e a chave: importar so ela
+    # nao conta
+    nomes = re.compile(r"\b(ConfigDigibrain\w*|CONFIG_DIGIBRAIN\w*)\b|digilab\.digibrain(?!\.base\b)|from \.digibrain(?!\.base\b)|"
+                       r"from \.\.digibrain(?!\.base\b)")
     citam = {p.relative_to(RAIZ).as_posix() for pasta in ("digilab", "experiments", "tools") for p in (RAIZ / pasta).rglob("*.py")
              if nomes.search(p.read_text(encoding="utf-8"))}
     assert {c for c in citam if not c.startswith("digilab/digibrain/")} == {"digilab/config.py",
@@ -126,7 +129,7 @@ def test_os_ganchos_vazios():
 
 
 # ------------------------------------------------------------ o G-INT, a G-RECEPTOR, o G-SEM-DIRECAO e o preflight
-ARQUIVOS = {"__init__.py", "_comum.py", "adapt.py", "afeto.py", "arb.py", "decodificador.py", "dever.py", "estado.py", "ganchos.py", "impulso.py", "mem.py", "pers.py", "plast.py",
+ARQUIVOS = {"__init__.py", "_comum.py", "adapt.py", "afeto.py", "arb.py", "base.py", "decodificador.py", "dever.py", "estado.py", "ganchos.py", "impulso.py", "mem.py", "pers.py", "plast.py",
             "sens.py"}
 
 

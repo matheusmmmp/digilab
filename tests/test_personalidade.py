@@ -19,7 +19,8 @@ from digilab.donos import criar_dono  # noqa: E402
 from digilab.events import ACOES_PET_HOJE, AcaoPet, AcaoUsuario as U  # noqa: E402
 from digilab.expressao import expressar, validar_tabelas  # noqa: E402
 from digilab.metrics import cumprimento_desejo, decomposicao_ovo_braco, fracao_tempo_vontade  # noqa: E402
-from digilab.obediencia import MotorPersonalidade, PoliticaBanditPersonalidade, conflito, termos_obediencia  # noqa: E402
+from digilab.obediencia import PoliticaBanditPersonalidade  # noqa: E402
+from digilab.personalidade import MotorPersonalidade, conflito, termos_obediencia  # noqa: E402
 from digilab.policies.bandit import PoliticaBandit  # noqa: E402
 from digilab.policy import Observacao  # noqa: E402
 from digilab.protocol import PROTOCOLO_ARENA_V1_MEMORIA_ESPACOS, PROTOCOLO_ARENA_V1_PERSONALIDADE, \

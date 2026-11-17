@@ -1,0 +1,29 @@
+{
+ "nome": "E_cuidado4_teto30",
+ "bloco": "E",
+ "tenta": "Bits: cuidado = 4, teto do dia = 30",
+ "opcoes": {
+  "bits": {
+   "faixa": {
+    "bebe": 10,
+    "crianca": 10,
+    "adolescente": 25,
+    "adulto": 60,
+    "mega": 150
+   },
+   "lider": 5,
+   "chamado": 2,
+   "pausa": 3,
+   "cuidado": 4,
+   "tetoCuidadoDia": 30,
+   "evolucao": {
+    "bebe": 0,
+    "crianca": 50,
+    "adolescente": 100,
+    "adulto": 200,
+    "mega": 400
+   },
+   "nivel": 30
+  }
+ }
+}
