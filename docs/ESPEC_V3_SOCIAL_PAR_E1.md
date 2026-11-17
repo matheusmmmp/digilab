@@ -230,3 +230,84 @@ Se as duas primeiras linhas não saírem, **o instrumento não mede reciprocidad
 | **E1-4** | a perturbação | **o `levar_pet` que já existe, no grupo, com a origem `intervencao`** | um evento novo pediria outro tipo no registro e outro replay, para o mesmo efeito |
 | **E1-5** | o controle móvel | **a OUTRA: P gravado numa vida com F passivo, na mesma semente** | a "sombra" de Auvray pede mexer na percepção de F, o que separa o que F vê da física do mundo |
 | **E1-6** | os controles positivos | **o seguidor e o evitador, de regra fixa, só na bancada** | sem eles, um "nenhuma diferença" no pet de hoje não se distingue de um instrumento que não mede |
+
+## 9. Adendo 1: os controles positivos de novo, e os dois desvios da implementação (2026-11-17, PROPOSTO)
+
+**Status: PROPOSTO, esperando o Matheus (A1-1 a A1-6, 9.6).** Nada roda antes da aprovação. As seções 1 a 8 e o resultado da primeira
+conferência não mudam: o `artifacts_v3_social_par_e1/controles_positivos.json` (sha256 `7a1049ac…`) fica como saiu, com os dois `false`
+(D-SP-13).
+
+**De onde vem:** o Matheus, em 2026-11-17, "Escreva o adendo", depois de a E1 parar porque os dois controles da seção 3 não separaram a
+VIVO da GRAV.
+
+### 9.1 O que a primeira conferência mostrou, e o que o adendo muda por causa disso
+
+| controle da seção 3 | por que não serviu | o que o adendo faz |
+|---|---|---|
+| seguidor × seguidor | **o teto:** o alcance é de 3,75 células por decisão e o d0 era 5. Um seguidor sozinho fecha o contato em cerca de uma decisão, e a resposta do parceiro não muda o tempo | **sai como controle positivo.** Fica só como descritivo, sem resposta esperada: a vantagem da mutualidade (Froese e Di Paolo 2008) pede uma tarefa em que um sozinho não baste, e este mundo não a tem a esta velocidade |
+| seguidor × evitador | **o desenho:** o ponto de fuga era 2 × o vetor até o outro, que some quando os dois estão na mesma célula ou vizinhos | **o evitador é refeito:** foge um passo inteiro na direção oposta ao outro (9.2), e no empate numa direção fixa |
+
+O adendo também põe um controle novo, cuja resposta é conhecida **por construção**: o pet focal parado e o parceiro que o segue.
+
+### 9.2 Os controles do adendo
+
+- **C1, passivo (F) × seguidor (P).** F é o `Passivo` (só fica ocioso ou dorme) e nunca se move. Depois do t0, F está a d0 células de P.
+  - Na VIVO, P vê F (d0 = 5 é menor que a visão de 6) e vai até ele.
+  - Na GRAV, P repete o caminho gravado, que seguia F onde ele estava antes, e não vai até F.
+  - Como F não se move, todo reencontro é obra de P. É o caso mais simples em que o instrumento tem de ver se o parceiro responde.
+- **C2, seguidor (F) × evitador corrigido (P).** O evitador, no tempo livre com o outro à vista, explora para o ponto a um passo inteiro
+  (o alcance de uma decisão, `velocidade × intervalo`) na direção oposta ao outro:
+  - a direção é a das 16 mais alinhada com o vetor do outro para P (a `direcao_do_golpe` de `digilab/mundo.py`, a mesma conta inteira);
+  - com os dois no mesmo ponto, vale a direção 0;
+  - o ponto é cortado no mapa pela `deslocar`.
+
+  Na VIVO, P foge de F; na GRAV, P repete o caminho gravado e não foge do F de agora.
+- **O resto, igual à seção 3:** as sementes 101 a 505, 2 dias, o dono atencioso no comedouro, o t0 no dia 1 pelo fluxo
+  `intervencao-social`, o d0 = 5 células. As sementes são as mesmas da primeira conferência: é uma validação do instrumento, não uma run,
+  e os controles do adendo são políticas novas. Isso fica dito no resultado.
+
+### 9.3 O que tem de sair (escrito antes de rodar)
+
+| controle | o que tem de sair, em **todas** as 5 sementes | a medida |
+|---|---|---|
+| **C1** | o tempo até o contato menor na VIVO que na GRAV (a GRAV pode sair censurada), e a fração de contato depois do t0 maior na VIVO | `tempo_ate_raio` e `fracao_em_raio`, raio de 1 célula, janela de 96 decisões |
+| **C2** | a fração de contato depois do t0 menor na VIVO que na GRAV | `fracao_em_raio`, raio de 1 célula |
+| **G-MET-NULO** (no C2) | a contingência de P a partir de F, na GRAV e depois do t0, None ou com \|c\| ≤ 0,2 (PROPOSTO, SEM FONTE) | `contingencia` |
+
+- **Se o C1 ou o C2 falhar em alguma semente:** a E1 para de novo e reporta, com o comando, a saída e a lacuna. Nenhum controle é
+  mudado depois de ver o resultado.
+- **Se passarem:** o G-CONTROLE-POS e o G-MET-NULO entram no `tests/test_social_par_e1.py`, e a E1 vai para o PR.
+- **O seguidor × seguidor** continua rodando, só como descritivo.
+
+### 9.4 Os dois desvios da implementação, para decidir
+
+- **D-SP-10, o ponto gravado pela porta no motor.**
+  - A espec (2.2) mandava trocar a ação por "explorar até o ponto" quando comer e brincar não aceitassem um ponto.
+  - A implementação abriu uma porta no motor: o `MotorMundo.aceitar_ponto_gravado`, só com a `ConfigIntervencaoSocial` ligada, deixa
+    comer e brincar irem a um ponto, sem comer nem chutar ao chegar.
+  - O motivo: trocar a ação muda o que F vê de P e o gasto, e a gravação deixaria de repetir a mesma ação.
+- **D-SP-11, a regra do alvo gravado.**
+  - A espec (2.2 e E1-2) dizia: o candidato do mesmo tipo mais perto, e senão o ponto gravado.
+  - A implementação usa o **alvo resolvido**: o candidato idêntico ao gravado (o mesmo tipo, id e ponto), e senão o ponto gravado.
+  - O motivo: "o do mesmo tipo mais perto" poderia escolher um `seguir` ou uma bola em outro lugar, o que é ler onde estão agora. A regra
+    implementada só vai aonde P foi.
+
+### 9.5 Os arquivos
+
+| arquivo | o que muda |
+|---|---|
+| `experiments/bancada/parceiro.py` | o `Evitador` corrigido (9.2); o `Passivo` já existe |
+| `experiments/conferir_controles_social_par_e1.py` | os pares C1, C2 e o seguidor × seguidor descritivo, com a saída nova em `artifacts_v3_social_par_e1/controles_positivos_ad1.json`; o arquivo da primeira conferência fica |
+| `tests/test_social_par_e1.py` | o G-CONTROLE-POS e o G-MET-NULO, só se o 9.3 sair |
+| `docs/registro/2026-11.md` | o resultado do adendo |
+
+### 9.6 As decisões do adendo (PROPOSTAS; cada uma com a recomendação e o custo de errar)
+
+| id | a decisão | a recomendação | o custo de errar |
+|---|---|---|---|
+| **A1-1** | o C1, passivo × seguidor | **entra**, como o controle de resposta conhecida por construção | sem ele, não há nenhum caso em que se saiba de antemão que a resposta do parceiro muda o que F vive |
+| **A1-2** | o evitador | **refeito:** um passo inteiro na direção oposta ao outro, com a direção 0 no empate | o de antes não foge de perto; um passo maior que o alcance não muda nada, porque o motor anda no máximo o alcance |
+| **A1-3** | o seguidor × seguidor | **sai dos controles positivos e fica descritivo** | mantê-lo como gate pede um resultado que a velocidade do mundo não deixa sair; mudar a velocidade mudaria o mundo do jogo |
+| **A1-4** | o limiar do G-MET-NULO | **\|c\| ≤ 0,2, ou None** | mais apertado, um P parado com poucos casos reprova por ruído; mais frouxo, o nulo deixa de dizer alguma coisa |
+| **A1-5** | o D-SP-10 | **aceitar a porta no motor**, só com a chave de pesquisa | voltar à troca por explorar faz a gravação mudar a ação que F vê, o que é uma diferença entre VIVO e GRAV que não vem da resposta de P |
+| **A1-6** | o D-SP-11 | **aceitar o alvo resolvido** | a regra da espec deixava P seguir um alvo vivo, e a GRAV voltaria a responder a F |
