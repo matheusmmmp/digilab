@@ -1,6 +1,7 @@
 # PLANO DE ANÁLISE V3 — VALUATION, a V3: o conserto do reflexo do sono
 
-**Status: PROPOSTO.** Nenhuma linha de código do conserto e nenhuma vida existem antes da aprovação.
+**Status: APROVADO pelo Matheus em 2026-11-17** ("Aprovo, siga", nesta sessão), com as D-VAL-16 a D-VAL-20 como recomendadas.
+Nenhuma linha de código do conserto e nenhuma vida existiam antes da aprovação.
 
 Escrito em 2026-11-17 (Claude Code, Opus 5.5, branch `v3-valuation-v3`), na Fase V3 do pedido
 ([TAREFA_V3_VALUATION.md](TAREFA_V3_VALUATION.md)). O Matheus abriu a V3 nesta sessão ("Sim, abra a V3"), com a R como candidata. O plano
