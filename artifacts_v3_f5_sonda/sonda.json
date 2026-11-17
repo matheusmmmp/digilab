@@ -1,0 +1,650 @@
+{
+ "fontes": {
+  "gabaritos": {
+   "digibrain_modular_comedouro.json.gz": "2034aa7e075809c028234262d6486c83d2f89967490158ec788a7841d63668a5",
+   "digibrain_modular_fins.json.gz": "129177bf123bd65a4e2f5c453f07814075424fd1c4c3cb3a08c79c77d5836314",
+   "digibrain_modular_longe_fixo.json.gz": "5b37fcb0314efff5b74b02116d81a7dcba725b00d89f77439bbb3c93412b109d"
+  },
+  "plano": "8ada173af794244b21367de6e77946db388c29d0f2dd3f5e5c5b2425bf442668"
+ },
+ "leitura": {
+  "igual_ao_cont": true,
+  "limiares": {
+   "igual_ao_cont": [
+    1,
+    20
+   ],
+   "plano": [
+    1,
+    10
+   ]
+  },
+  "linha": "plano pelas entradas: a F5 espera a decisao do Matheus sobre a opcao (b) da D-F5-2",
+  "plano": true,
+  "plano_pelas_entradas": true
+ },
+ "rotulo": "sonda descritiva do E(P) da F5, so leitura; nao e gate (espec, secao 5)",
+ "todas": {
+  "M_S1": {
+   "CONT_do_lugar_do_pet_ate_1": [
+    3485,
+    3840
+   ],
+   "E_acima_de_1": [
+    1720,
+    3840
+   ],
+   "E_do_lugar_do_pet": {
+    "max": 5,
+    "mediana": 1,
+    "min": 1,
+    "n": 3840,
+    "q1": 1,
+    "q3": 2
+   },
+   "amplitude": {
+    "max": 2,
+    "mediana": 0,
+    "min": 0,
+    "n": 3840,
+    "q1": 0,
+    "q3": 0
+   },
+   "amplitude_2_ou_mais": [
+    42,
+    3840
+   ]
+  },
+  "M_S2": {
+   "conc": 0,
+   "disc": 0,
+   "discordantes": [
+    0,
+    122824
+   ],
+   "emp_CONT": 5338,
+   "emp_E": 0,
+   "emp_ambos": 117486,
+   "pares": 122824
+  },
+  "M_S3": {
+   "acaso_den": 1,
+   "acaso_num": 0,
+   "acertos": 0,
+   "decisoes": 0
+  },
+  "decisoes": 3840
+ },
+ "vidas": [
+  {
+   "M_S1": {
+    "CONT_do_lugar_do_pet_ate_1": [
+     384,
+     384
+    ],
+    "E_acima_de_1": [
+     0,
+     384
+    ],
+    "E_do_lugar_do_pet": {
+     "max": 1,
+     "mediana": 1,
+     "min": 1,
+     "n": 384,
+     "q1": 1,
+     "q3": 1
+    },
+    "amplitude": {
+     "max": 0,
+     "mediana": 0,
+     "min": 0,
+     "n": 384,
+     "q1": 0,
+     "q3": 0
+    },
+    "amplitude_2_ou_mais": [
+     0,
+     384
+    ]
+   },
+   "M_S2": {
+    "conc": 0,
+    "disc": 0,
+    "discordantes": [
+     0,
+     7086
+    ],
+    "emp_CONT": 0,
+    "emp_E": 0,
+    "emp_ambos": 7086,
+    "pares": 7086
+   },
+   "M_S3": {
+    "acaso_den": 1,
+    "acaso_num": 0,
+    "acertos": 0,
+    "decisoes": 0
+   },
+   "decisoes": 384,
+   "log_sha256": "cae10f88b2c8f49e5657d57a94bfad550185f57614dfd2a8512a4607caeba7c3",
+   "parede_s": {
+    "sonda": 0.015391699969768524,
+    "total": 1.61982080002781
+   },
+   "vida": "digibrain_modular_longe_fixo.json.gz|atencioso|longe_fixo|101"
+  },
+  {
+   "M_S1": {
+    "CONT_do_lugar_do_pet_ate_1": [
+     290,
+     384
+    ],
+    "E_acima_de_1": [
+     196,
+     384
+    ],
+    "E_do_lugar_do_pet": {
+     "max": 3,
+     "mediana": 2,
+     "min": 1,
+     "n": 384,
+     "q1": 1,
+     "q3": 2
+    },
+    "amplitude": {
+     "max": 2,
+     "mediana": 0,
+     "min": 0,
+     "n": 384,
+     "q1": 0,
+     "q3": 0
+    },
+    "amplitude_2_ou_mais": [
+     7,
+     384
+    ]
+   },
+   "M_S2": {
+    "conc": 0,
+    "disc": 0,
+    "discordantes": [
+     0,
+     15314
+    ],
+    "emp_CONT": 582,
+    "emp_E": 0,
+    "emp_ambos": 14732,
+    "pares": 15314
+   },
+   "M_S3": {
+    "acaso_den": 1,
+    "acaso_num": 0,
+    "acertos": 0,
+    "decisoes": 0
+   },
+   "decisoes": 384,
+   "log_sha256": "1f7c2410de05467d448413871332657ab2cc0fd8e676fce35461f20e99998f6c",
+   "parede_s": {
+    "sonda": 0.07761269900947809,
+    "total": 1.6598587000044063
+   },
+   "vida": "digibrain_modular_longe_fixo.json.gz|atencioso|longe_fixo|202"
+  },
+  {
+   "M_S1": {
+    "CONT_do_lugar_do_pet_ate_1": [
+     339,
+     384
+    ],
+    "E_acima_de_1": [
+     163,
+     384
+    ],
+    "E_do_lugar_do_pet": {
+     "max": 2,
+     "mediana": 1,
+     "min": 1,
+     "n": 384,
+     "q1": 1,
+     "q3": 2
+    },
+    "amplitude": {
+     "max": 2,
+     "mediana": 0,
+     "min": 0,
+     "n": 384,
+     "q1": 0,
+     "q3": 0
+    },
+    "amplitude_2_ou_mais": [
+     4,
+     384
+    ]
+   },
+   "M_S2": {
+    "conc": 0,
+    "disc": 0,
+    "discordantes": [
+     0,
+     18578
+    ],
+    "emp_CONT": 630,
+    "emp_E": 0,
+    "emp_ambos": 17948,
+    "pares": 18578
+   },
+   "M_S3": {
+    "acaso_den": 1,
+    "acaso_num": 0,
+    "acertos": 0,
+    "decisoes": 0
+   },
+   "decisoes": 384,
+   "log_sha256": "e56a24a778cc5b50424e258df980daebee425c4254ff4c29f12b43bd55ef3632",
+   "parede_s": {
+    "sonda": 0.06883799942443147,
+    "total": 1.600003800005652
+   },
+   "vida": "digibrain_modular_longe_fixo.json.gz|relapso|longe_fixo|101"
+  },
+  {
+   "M_S1": {
+    "CONT_do_lugar_do_pet_ate_1": [
+     320,
+     384
+    ],
+    "E_acima_de_1": [
+     275,
+     384
+    ],
+    "E_do_lugar_do_pet": {
+     "max": 5,
+     "mediana": 2,
+     "min": 1,
+     "n": 384,
+     "q1": 1,
+     "q3": 2
+    },
+    "amplitude": {
+     "max": 2,
+     "mediana": 0,
+     "min": 0,
+     "n": 384,
+     "q1": 0,
+     "q3": 0
+    },
+    "amplitude_2_ou_mais": [
+     6,
+     384
+    ]
+   },
+   "M_S2": {
+    "conc": 0,
+    "disc": 0,
+    "discordantes": [
+     0,
+     5542
+    ],
+    "emp_CONT": 177,
+    "emp_E": 0,
+    "emp_ambos": 5365,
+    "pares": 5542
+   },
+   "M_S3": {
+    "acaso_den": 1,
+    "acaso_num": 0,
+    "acertos": 0,
+    "decisoes": 0
+   },
+   "decisoes": 384,
+   "log_sha256": "e7707bd9ba6f7938da583e404dda056011d800111990f8f5f794dde19e08a48c",
+   "parede_s": {
+    "sonda": 0.05072359961923212,
+    "total": 1.5542251999722794
+   },
+   "vida": "digibrain_modular_longe_fixo.json.gz|relapso|longe_fixo|202"
+  },
+  {
+   "M_S1": {
+    "CONT_do_lugar_do_pet_ate_1": [
+     338,
+     384
+    ],
+    "E_acima_de_1": [
+     108,
+     384
+    ],
+    "E_do_lugar_do_pet": {
+     "max": 2,
+     "mediana": 1,
+     "min": 1,
+     "n": 384,
+     "q1": 1,
+     "q3": 2
+    },
+    "amplitude": {
+     "max": 1,
+     "mediana": 0,
+     "min": 0,
+     "n": 384,
+     "q1": 0,
+     "q3": 0
+    },
+    "amplitude_2_ou_mais": [
+     0,
+     384
+    ]
+   },
+   "M_S2": {
+    "conc": 0,
+    "disc": 0,
+    "discordantes": [
+     0,
+     1446
+    ],
+    "emp_CONT": 42,
+    "emp_E": 0,
+    "emp_ambos": 1404,
+    "pares": 1446
+   },
+   "M_S3": {
+    "acaso_den": 1,
+    "acaso_num": 0,
+    "acertos": 0,
+    "decisoes": 0
+   },
+   "decisoes": 384,
+   "log_sha256": "8ded9b0e4187587583dadb442ab3e4953970d92a6d9ae64b4cad9294aff9194f",
+   "parede_s": {
+    "sonda": 0.033194299787282944,
+    "total": 0.496403899975121
+   },
+   "vida": "digibrain_modular_comedouro.json.gz|atencioso|comedouro|101"
+  },
+  {
+   "M_S1": {
+    "CONT_do_lugar_do_pet_ate_1": [
+     384,
+     384
+    ],
+    "E_acima_de_1": [
+     141,
+     384
+    ],
+    "E_do_lugar_do_pet": {
+     "max": 2,
+     "mediana": 1,
+     "min": 1,
+     "n": 384,
+     "q1": 1,
+     "q3": 2
+    },
+    "amplitude": {
+     "max": 1,
+     "mediana": 0,
+     "min": 0,
+     "n": 384,
+     "q1": 0,
+     "q3": 0
+    },
+    "amplitude_2_ou_mais": [
+     0,
+     384
+    ]
+   },
+   "M_S2": {
+    "conc": 0,
+    "disc": 0,
+    "discordantes": [
+     0,
+     2678
+    ],
+    "emp_CONT": 64,
+    "emp_E": 0,
+    "emp_ambos": 2614,
+    "pares": 2678
+   },
+   "M_S3": {
+    "acaso_den": 1,
+    "acaso_num": 0,
+    "acertos": 0,
+    "decisoes": 0
+   },
+   "decisoes": 384,
+   "log_sha256": "c1728cdbcaf3b23b36e3615075c4523679fde178d5bdfcea71e44f0daaf338a9",
+   "parede_s": {
+    "sonda": 0.035103500180412084,
+    "total": 0.4629323999979533
+   },
+   "vida": "digibrain_modular_comedouro.json.gz|atencioso|comedouro|202"
+  },
+  {
+   "M_S1": {
+    "CONT_do_lugar_do_pet_ate_1": [
+     384,
+     384
+    ],
+    "E_acima_de_1": [
+     265,
+     384
+    ],
+    "E_do_lugar_do_pet": {
+     "max": 2,
+     "mediana": 2,
+     "min": 1,
+     "n": 384,
+     "q1": 1,
+     "q3": 2
+    },
+    "amplitude": {
+     "max": 1,
+     "mediana": 0,
+     "min": 0,
+     "n": 384,
+     "q1": 0,
+     "q3": 0
+    },
+    "amplitude_2_ou_mais": [
+     0,
+     384
+    ]
+   },
+   "M_S2": {
+    "conc": 0,
+    "disc": 0,
+    "discordantes": [
+     0,
+     561
+    ],
+    "emp_CONT": 8,
+    "emp_E": 0,
+    "emp_ambos": 553,
+    "pares": 561
+   },
+   "M_S3": {
+    "acaso_den": 1,
+    "acaso_num": 0,
+    "acertos": 0,
+    "decisoes": 0
+   },
+   "decisoes": 384,
+   "log_sha256": "98ef0fd78186a06a3b60fa9bfadb6f9282f7a3eec8da0e0f04a60a464d592884",
+   "parede_s": {
+    "sonda": 0.03365469991695136,
+    "total": 0.42952850001165643
+   },
+   "vida": "digibrain_modular_comedouro.json.gz|relapso|comedouro|101"
+  },
+  {
+   "M_S1": {
+    "CONT_do_lugar_do_pet_ate_1": [
+     384,
+     384
+    ],
+    "E_acima_de_1": [
+     255,
+     384
+    ],
+    "E_do_lugar_do_pet": {
+     "max": 2,
+     "mediana": 2,
+     "min": 1,
+     "n": 384,
+     "q1": 1,
+     "q3": 2
+    },
+    "amplitude": {
+     "max": 1,
+     "mediana": 0,
+     "min": 0,
+     "n": 384,
+     "q1": 0,
+     "q3": 0
+    },
+    "amplitude_2_ou_mais": [
+     0,
+     384
+    ]
+   },
+   "M_S2": {
+    "conc": 0,
+    "disc": 0,
+    "discordantes": [
+     0,
+     2666
+    ],
+    "emp_CONT": 38,
+    "emp_E": 0,
+    "emp_ambos": 2628,
+    "pares": 2666
+   },
+   "M_S3": {
+    "acaso_den": 1,
+    "acaso_num": 0,
+    "acertos": 0,
+    "decisoes": 0
+   },
+   "decisoes": 384,
+   "log_sha256": "ba015dbcf602eceaa15136c9fe596305a08f1b5d784371feccaedb78af8ee883",
+   "parede_s": {
+    "sonda": 0.03010980028193444,
+    "total": 0.4357419000007212
+   },
+   "vida": "digibrain_modular_comedouro.json.gz|relapso|comedouro|202"
+  },
+  {
+   "M_S1": {
+    "CONT_do_lugar_do_pet_ate_1": [
+     344,
+     384
+    ],
+    "E_acima_de_1": [
+     159,
+     384
+    ],
+    "E_do_lugar_do_pet": {
+     "max": 3,
+     "mediana": 1,
+     "min": 1,
+     "n": 384,
+     "q1": 1,
+     "q3": 2
+    },
+    "amplitude": {
+     "max": 2,
+     "mediana": 0,
+     "min": 0,
+     "n": 384,
+     "q1": 0,
+     "q3": 0
+    },
+    "amplitude_2_ou_mais": [
+     7,
+     384
+    ]
+   },
+   "M_S2": {
+    "conc": 0,
+    "disc": 0,
+    "discordantes": [
+     0,
+     25731
+    ],
+    "emp_CONT": 1206,
+    "emp_E": 0,
+    "emp_ambos": 24525,
+    "pares": 25731
+   },
+   "M_S3": {
+    "acaso_den": 1,
+    "acaso_num": 0,
+    "acertos": 0,
+    "decisoes": 0
+   },
+   "decisoes": 384,
+   "log_sha256": "c1e15f683377ed28ab3c3838abdd45d4799e938d2c094059ed69dbf87c896260",
+   "parede_s": {
+    "sonda": 0.09799020079663023,
+    "total": 0.5404558000154793
+   },
+   "vida": "digibrain_modular_fins.json.gz|incoerente|longe|404"
+  },
+  {
+   "M_S1": {
+    "CONT_do_lugar_do_pet_ate_1": [
+     318,
+     384
+    ],
+    "E_acima_de_1": [
+     158,
+     384
+    ],
+    "E_do_lugar_do_pet": {
+     "max": 3,
+     "mediana": 1,
+     "min": 1,
+     "n": 384,
+     "q1": 1,
+     "q3": 2
+    },
+    "amplitude": {
+     "max": 2,
+     "mediana": 0,
+     "min": 0,
+     "n": 384,
+     "q1": 0,
+     "q3": 0
+    },
+    "amplitude_2_ou_mais": [
+     18,
+     384
+    ]
+   },
+   "M_S2": {
+    "conc": 0,
+    "disc": 0,
+    "discordantes": [
+     0,
+     43222
+    ],
+    "emp_CONT": 2591,
+    "emp_E": 0,
+    "emp_ambos": 40631,
+    "pares": 43222
+   },
+   "M_S3": {
+    "acaso_den": 1,
+    "acaso_num": 0,
+    "acertos": 0,
+    "decisoes": 0
+   },
+   "decisoes": 384,
+   "log_sha256": "6fdd1c1ab0ba7a683c98ecea081d880f57862d61acd4ad55371e7f226fb12197",
+   "parede_s": {
+    "sonda": 0.11766590003389865,
+    "total": 0.5563497000257485
+   },
+   "vida": "digibrain_modular_fins.json.gz|incoerente|longe|505"
+  }
+ ]
+}

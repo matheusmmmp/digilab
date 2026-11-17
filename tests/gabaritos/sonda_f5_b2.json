@@ -1,0 +1,53 @@
+{
+ "rotulo": "gabarito da (b2) da sonda da F5 (adendo 1): o log, o estado e os motivos de cada vida, sem o coletor",
+ "vidas": {
+  "ilha|atencioso|comedouro|101": {
+   "decisoes": 384,
+   "estado": "4362cc9507fd6cdfe31047256765715543143cf5677c0f71edb6407949302653",
+   "log": "17221f42d1756890774a02756f3f05ad844841c569c5d528afb7502a05d928ba",
+   "motivos": "cdd4c5f65159705d67313a5eb584f5e7870f4a8f2878a3323e031ac2ef96b7c2"
+  },
+  "ilha|atencioso|comedouro|202": {
+   "decisoes": 384,
+   "estado": "ecacda7f38c5133cd1d17f2f261c2570cab259069e16607e949c3d15be0c7a9b",
+   "log": "f398e2ef7e04f2cde302c637c517eebbc0515097f947ef74b2418bdf63888095",
+   "motivos": "e22bc4d365c079bdd744732f66632c93f3d737252664da9903fe673440e80d62"
+  },
+  "ilha|atencioso|longe_fixo|101": {
+   "decisoes": 384,
+   "estado": "def9909a852edc021b92520ecf74e1c86e5589cc8249ad47dc1cf84af23f74d4",
+   "log": "f50165bce0b508e19ac85e8618555b10147e83a5ad9dce1348b1c30474ab7f95",
+   "motivos": "cda320cf6954e5749069c4b88abf06a46d7331ce758718897dc6ee0d157bcf3b"
+  },
+  "ilha|atencioso|longe_fixo|202": {
+   "decisoes": 384,
+   "estado": "4e37b9712c6a6fdbbe6ed06959a4498ecb931b19e8398440f6fc9ddb9cb87f3e",
+   "log": "dca1438e79ddcc5a7821e1e8c12a4be9403bc5a0aac90275ca0267fac9521a08",
+   "motivos": "704b857059475d8d34ea45407e3c1b9f8c5334f1642d55772d3b769adbb4191d"
+  },
+  "ilha|relapso|comedouro|101": {
+   "decisoes": 384,
+   "estado": "9458100f74fbfca2be8f9290d5d4cd592706b168fc1f3bfbd3b18d682b936925",
+   "log": "3681d1be2376ade4f5ca75ee1d6b37ed2612cefcbcba44f0f3ee3e0356a1e7ea",
+   "motivos": "6d30716bcfb6b9a7991a7f168c662f59a8957d4bbb6d6aca0731d8da46218410"
+  },
+  "ilha|relapso|comedouro|202": {
+   "decisoes": 384,
+   "estado": "912c4345b6d8fbd30935241ba4d2d88c8104f1ba0c7b53353444342d805d2f1f",
+   "log": "7ea9059b7d5f8d7d60c83fbe903ccb1777b0cf426cdcd87439e9f5e00d214434",
+   "motivos": "ee9f7174ed853d232c24970c3b3060924f133d2d6af5110c3e06e0d558c47fc4"
+  },
+  "ilha|relapso|longe_fixo|101": {
+   "decisoes": 384,
+   "estado": "36e78a66b2139a48311a0dc91a231104e17c7ede2e25fb8e2e94358b44293883",
+   "log": "76c168e193527b9ba00cf9675a91e4cb64d7eece8ced1187faaaccf6449e3bad",
+   "motivos": "69a636c42928fa65989ab0d0bf7cba0714d6ab013caf3a05dbbd0535ce1254b8"
+  },
+  "ilha|relapso|longe_fixo|202": {
+   "decisoes": 384,
+   "estado": "509fd0a206a4ac7140951f248f32357ebdeb3ab261d760093c66dfbb3e232832",
+   "log": "eca80f8008a61bb40ebd0d15d06fbecf0c24912897b23693236ea6e71badb815",
+   "motivos": "4be9202c8c7aeb357544ca46a083de2d219506abbed864a195786e80ec34ee8e"
+  }
+ }
+}

@@ -2,6 +2,8 @@
 
 Status (2026-11-17): **APROVADO pelo Matheus** (2026-11-17, no chat da sessão da F5): à pergunta "Você revisa e aprova a espec e as
 D-F5-2 a D-F5-8 no PR #965?", a resposta literal foi **"Aprovo as recomendações"**. Os números novos continuam PROPOSTOS, SEM FONTE.
+As três correções do SE1 (seções 2.1, 2.2 e 2.4) foram aceitas pelo Matheus em 2026-11-17: à pergunta "Aceita as três correções da
+espec feitas no SE1?", a resposta literal foi **"Aceito as correções"**.
 Esta é a espec da sonda descritiva da frente F5, pedida pela decisão **D-F5-1** do Matheus (2026-11-17,
 no chat da sessão da F5): à pergunta "A F5 fica como pesquisa ou vira frente agora?", a resposta literal foi **"Pesquisa, com sonda"**.
 Depois, a esta pergunta: "Escrevo agora a espec da sonda do E(P) em docs/, numa worktree com PR?", ele respondeu **"Sim, escreva a
@@ -63,18 +65,23 @@ FATO VERIFICADO (`origin/main` `586b1107`):
   `CLASSES_DESFECHO` (`plast.py:34`), mais a `tela` com a subchave `olhar`;
 - `Plasticidade.andar`, o custo aprendido de andar (`plast.py:56`). A correção da energia pelo andar previsto é
   `div_arred(andar × d, S)` (docstring, `plast.py:8-9`);
-- os episódios guardados do M-MEM, `Memoria._guardados()` (`digilab/digibrain/mem.py:267`), com `ponto`, `lugar`, `classe` e `origem`. O
-  lugar de um ponto é `lugar_de(x, y)` (`mem.py:186`);
+- os episódios guardados do M-MEM, com `ponto`, `lugar`, `classe` e `origem`: a memória de lugar, `Memoria.episodios` (o `n_ep`), e, com
+  a memória autobiográfica, as três camadas dela, `Memoria._guardados()` (`digilab/digibrain/mem.py:267`). O lugar de um ponto é
+  `lugar_de(x, y)` (`mem.py:186`). **Correção do SE1:** a espec aprovada citava só o `_guardados()`. Nas vidas dos gabaritos, a
+  autobiográfica guarda só os consumos que passam do limiar, e a de lugar guarda todos; a sonda lê as duas;
 - o alcance da memória de lugar, `d_max` (`digilab/config.py:2982`, 1024 subunidades, PROPOSTO, SEM FONTE);
 - a faixa em quartos de S, `_faixa(v, S)` (`mem.py:79`): quantos dos limites S/4, S/2 e 3S/4 o valor alcança, de 0 a 3;
-- a percepção da decisão, `sens`: `pos`, `objetos` (com `classe`, `x` e `y`) e `leitura` (receptor → valor na escala S), como o `lembrar` a
+- a percepção da decisão, `sens`: `pos`, `objetos` (com `classe`, `dx` e `dy`, relativos ao pet: o ponto do objeto é `pos + (dx, dy)`;
+  **correção do SE1**, a espec aprovada dizia `x` e `y`) e `leitura` (receptor → valor na escala S), como o `lembrar` a
   usa (`mem.py:276-290`).
 
 ### 2.2 Os lugares P
 
 PROPOSTO: em cada decisão k, P percorre:
 - o lugar do pet, `lugar_de(sens["pos"])`;
-- os lugares de todo episódio guardado, sem repetir.
+- os lugares de todo episódio guardado, sem repetir;
+- os lugares dos alvos `explorar/ponto` das unidades da decisão, sem repetir (para a M-S3 ler o `E` do alvo; **acréscimo do SE1**, que a
+  espec aprovada deixava implícito no "mais um" do custo).
 
 Cada lugar é representado pelo seu centro, `(lx·sub + sub/2, ly·sub + sub/2)` em subunidades, com a divisão inteira (D-F5-5).
 
@@ -95,7 +102,10 @@ PROPOSTO (D-F5-3, D-F5-4):
   máximo 1 + 6 + 30 = 37 sequências.
 - O caminho de uma sequência é `d(P, c₁)` e, para a segunda, mais a distância entre os pontos escolhidos de c₁ e de c₂.
 - O corpo previsto de cada receptor r:
-  `v_r = clamp( leitura_r + Σ_i d̂[c_i, r] − [r = energia] · div_arred(andar × caminho, S), 0, S )`
+  `v_r = clamp( leitura_r + Σ_i d̂[c_i, r] + [r = energia] · div_arred(andar × caminho, S), 0, S )`
+  **Correção do SE1 (o sinal):** a espec aprovada tinha `−`. O `andar` é a mudança da energia por subunidade andada, × S, e fica negativo
+  quando andar cansa (`plast.py:107`: `amostra = div_arred((energia depois − energia antes) × S, d)`). Ele entra somado, como no
+  `valor_previsto` do lobos (`digilab/policies/lobos.py:2168`). A intenção aprovada (o custo de andar até a comida) não muda.
 - A tupla de faixas da sequência: `( _faixa(v_r, S) for r in receptores )`.
 
 ### 2.5 E(P) e CONT(P)
@@ -105,7 +115,7 @@ PROPOSTO (D-F5-3, D-F5-4):
 - **O `E(P)` não depende do log:** a ordem é a mesma. Nenhuma fração nem float entra na conta.
 
 **Custo:** por decisão, no máximo L × 37 sequências × R receptores, com L lugares (o do pet mais os lugares distintos dos episódios
-guardados, mais um) e R ≤ 11 (NÃO CONFIRMADO: o tempo real; a seção 6 mede).
+guardados, mais os alvos `explorar/ponto` das unidades da decisão) e R ≤ 11 (NÃO CONFIRMADO: o tempo real; a seção 6 mede).
 
 ## 3. Onde fica no código
 
