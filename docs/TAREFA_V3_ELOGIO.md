@@ -1,7 +1,8 @@
 # TAREFA V3 — ELOGIO: o carinho logo depois da ação acelera o aprendizado do modular (2026-11-16)
 
 Coordenador: Gerente da V3 (Claude Code). Worker da etapa 1: Claude Code, Opus 5.5 (método), worktree `v3-elogio`. Status: **ABERTA; etapa 1
-(só papel) ENTREGUE; D-EL-1 a D-EL-8 (seção 8) DECIDIDAS em 2026-11-16, pela recomendação ("Aprovo todas").** Nenhum código, nenhuma faixa e nenhuma vida.
+(só papel) ENTREGUE; D-EL-1 a D-EL-8 (seção 8) DECIDIDAS em 2026-11-16, pela recomendação ("Aprovo todas"). Etapa 2 (código) PARADA
+antes do código: a leitura do código achou que o cenário da D-EL-1 não roda no modular (seção 9); D-EL-9 a D-EL-13 PROPOSTAS.**
 
 Categoria: arquitetura (depois, implementacao e experimento). Origem: Matheus, 2026-11-16: "logo após o pet fazer alguma ação [...] se a gente
 usar [...] o carinho, ou o elogiar logo após aquela ação, vai dar um boost maior de ele entender que aquilo é uma coisa boa". Com o pedido de
@@ -150,3 +151,29 @@ escolhidos na calibração voltam ao Matheus.
 | D-EL-6 | o dono inconsistente | 20 % dos carinhos depois de outra fruta e 10 % antes de comer | baixo: descritivo |
 | D-EL-7 | a retenção | o elogio contingente só na primeira metade da vida; M3 na segunda | médio: vidas mais longas custam tempo de máquina |
 | D-EL-8 | a grade | `g` em {S/4, S/2, S, 2S} × `W` em {1, 2, 4} passos | médio: uma grade grande custa vidas na calibração |
+
+## 9. Etapa 2: o que a leitura do código mudou (2026-11-17)
+
+A etapa 2 começou ("Comece a etapa 2 do elogio", Matheus, 2026-11-17) e parou antes do código. Três achados da leitura e de duas vidas de
+sonda (sementes 101 e 202 dos testes, fora de qualquer faixa; nenhum número daqui vai a resultado):
+
+1. **O P0 passa.** Com o corpo da etapa 6 (`CONFIG_CORPO_DRIVES`, com `gestos`), o modular tem os receptores `solidao` e `estresse`, e o
+   `sinal_corpo` do carinho, com os drives e o `ganho_r` do M-AFETO, fica perto de 200 (a solidão cai de 77 a 108 para 0). O carinho
+   mexe no que o modular lê.
+2. **O mundo do paladar não roda com o modular.** O M-SENS recusa os receptores do paladar (`sens.py`, `_receptores`: "receptores fora
+   do protótipo (os órgãos, o paladar, o banheiro)"). O modular nunca aprendeu fruta pelo paladar. Sem o paladar, no mundo com as árvores
+   (`CONFIG_MUNDO_LIGADA`) e a condição `iguais`, as três frutas têm o mesmo efeito (0 no humor), e o pet comeu 14 e 2 frutas em 6 dias,
+   quase sempre a ração. A P1 (a consequência natural ensina uma fruta) não teria o que mostrar, e o M1 (10 frutas comidas) mal fecha.
+3. **O mundo físico da bancada não aceita os gestos do dono** (`nucleo.py`, `vida`: "os gestos do dono ficam fora do mundo físico"). O
+   caminho que existe é o `carinho` do `simular_vida_fisico`, o do banheiro (BN-2): fora do orçamento, como contato.
+
+E três detalhes do mecanismo que a seção 3 deixava abertos, porque o modular fecha a decisão só no começo da decisão seguinte e o passo do
+dono é igual ao intervalo da decisão (15 ticks): o carinho do primeiro passo depois de comer cai sempre um passo depois da decisão.
+
+| id | decisão | recomendação | custo de errar |
+|---|---|---|---|
+| D-EL-9 | o cenário no lugar do mundo do paladar | o mundo físico com as árvores e a condição `casado` (o efeito de cada fruta no humor pela preferência inata do genoma), com vidas de 12 dias, para o pet comer frutas bastante. A alternativa é dar ao modular os receptores do paladar antes, numa tarefa própria | médio: com o `casado` a fruta X boa é a preferida do genoma; a leitura "X a favor do gosto" e "X contra" continua, pelo genoma |
+| D-EL-10 | o carinho na bancada | o gancho `carinho` do `simular_vida_fisico`, fora do orçamento, como o do banheiro; o E-sorteado tem o mesmo número de carinhos, então a comparação não muda | baixo: o "dentro do orçamento" da seção 3 vira "fora", igual nos braços |
+| D-EL-11 | a janela | W em decisões: o carinho credita a decisão j passos para trás (j = 0 é a última), com o peso `S − div_arred(j × S, W)` para j < W. Com W = 1, só a última | médio: em ticks, o carinho de um passo depois teria peso 0 com W = 1 |
+| D-EL-12 | a rota (detalhe da D-EL-2) | no carinho, na hora: o P2 da linha do comportamento da decisão (com o `z` e o `g_apr` dela, r = o sinal pesado) e, se ela comeu uma classe, o desfecho dessa classe anda pelo que o carinho mudou nos receptores, somado (não puxado para o alvo, que apagaria o que a fruta ensinou). A valência do M-AFETO não recebe | médio: sem a valência, o carinho não muda o humor do cérebro, só o que ele aprende |
+| D-EL-13 | a ordem | o gabarito e o código só depois destas decisões | baixo |
