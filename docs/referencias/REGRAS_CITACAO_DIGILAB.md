@@ -16,7 +16,7 @@ literatura sustenta**; ele não descreve o estado do código nem das runs (isso 
 - `docs/referencias/referencias_verificadas.csv` — a tabela. Colunas: `referencia`,
   `tipo` (par/cinza), `verificada`, `o_que_sustenta`, `trilha`, `relevancia`, `doi_ou_id`.
 - `docs/referencias/verificacao_crossref.json` — registro bruto por DOI, para auditoria.
-- `referencias.bib` nesta skill — 86 entradas (70 da revisão + 2 conferidas depois + 14 da rodada Dreyfus de 2026-11-16), com `note` marcando os itens sem DOI e a cinza.
+- `referencias.bib` nesta skill — 87 entradas (70 da revisão + 2 conferidas depois + 15 da rodada Dreyfus de 2026-11-16), com `note` marcando os itens sem DOI e a cinza.
 
 Ao citar, leia a linha da tabela antes: a coluna `o_que_sustenta` diz exatamente o que aquela fonte
 autoriza afirmar.
@@ -41,14 +41,15 @@ resumo, não texto completo:
 
 Pedida pelo Matheus: 18 referências em `docs/referencias/v3_dreyfus_referencias_verificadas.csv`, com a síntese em
 `docs/referencias/V3_SINTESE_DREYFUS.md`. Conferidas no Crossref; o conteúdo foi conferido só pelos resumos (OpenAlex, Semantic
-Scholar), e só o Dreyfus 2007 pelo texto completo.
+Scholar), e só o Dreyfus 2007 e o Dreyfus 2002 pelo texto completo.
 
-- **VERIFICADA (14):** Dreyfus 2007 `10.1080/09515080701239510` (texto completo: relevância e frame problem; Brooks, Agre e
+- **VERIFICADA (15):** Dreyfus 2002 `10.1023/A:1021351606209` (texto completo: aprendizado e perícia sem representação; cinco
+  estágios; três restrições do corpo à generalização, entre elas o sucesso pela satisfação do agente), Dreyfus 2007 `10.1080/09515080701239510` (texto completo: relevância e frame problem; Brooks, Agre e
   Wheeler o contornam; Freeman como caminho; conclusão: precisaria de um corpo como o nosso), Dreyfus 1972/1992 e Dreyfus e Dreyfus 1986 (sem DOI, pelas resenhas `10.2307/1575958` e
   `10.1109/mex.1987.4307079`), McCarthy 1996, Brooks 1991, Varela et al. 1991, Pfeifer e Bongard 2006, Harnad 1990, Searle 1980,
   Damasio 1996, Friston 2010, Clark 2013, Lake et al. 2017 e Collins 1990.
-- **EXISTÊNCIA CONFIRMADA; CONTEÚDO NÃO LIDO (4), não sustentam conteúdo:** Dreyfus 2002 `10.1023/A:1021351606209` e as resenhas de
-  Haugeland, Collins e Koschmann em *Artificial Intelligence* 80 (1996).
+- **EXISTÊNCIA CONFIRMADA; CONTEÚDO NÃO LIDO (3), não sustentam conteúdo:** as resenhas de Haugeland, Collins e Koschmann em
+  *Artificial Intelligence* 80 (1996).
 - **Enquadramento, não evidência:** nenhuma dessas fontes valida o corpo químico, a fala ou o modelo de mundo do pet. Nunca escrever
   que o pet entende (Searle 1980), nem que o decodificador de conceitos resolve o aterramento do símbolo (Harnad 1990).
 

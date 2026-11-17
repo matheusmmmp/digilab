@@ -23,12 +23,12 @@ conhecimento social). A tabela é a [`v3_dreyfus_referencias_verificadas.csv`](v
 
 | status | n | referências |
 |---|---|---|
-| VERIFICADA | 12 | Dreyfus 2007 (texto completo, 2026-11-16), McCarthy 1996, Brooks 1991, Varela et al. 1991, Pfeifer e Bongard 2006, Harnad 1990, Searle 1980, Damasio 1996, Friston 2010, Clark 2013, Lake et al. 2017, Collins 1990 |
+| VERIFICADA | 13 | Dreyfus 2007 e Dreyfus 2002 (texto completo, 2026-11-16), McCarthy 1996, Brooks 1991, Varela et al. 1991, Pfeifer e Bongard 2006, Harnad 1990, Searle 1980, Damasio 1996, Friston 2010, Clark 2013, Lake et al. 2017, Collins 1990 |
 | VERIFICADA (sem DOI) | 2 | Dreyfus 1972/1992 (pela resenha `10.2307/1575958`), Dreyfus e Dreyfus 1986 (pela resenha `10.1109/mex.1987.4307079`) |
-| EXISTÊNCIA CONFIRMADA; CONTEÚDO NÃO LIDO | 4 | Dreyfus 2002, Haugeland 1996, Collins 1996, Koschmann 1996 |
+| EXISTÊNCIA CONFIRMADA; CONTEÚDO NÃO LIDO | 3 | Haugeland 1996, Collins 1996, Koschmann 1996 |
 
 O **Dreyfus 2007**, o texto mais próximo do Digilab, subiu a VERIFICADA no mesmo dia, depois da leitura do texto completo (pedido do
-Matheus, D-LIT-DR-3). É a única referência desta rodada lida por inteiro.
+Matheus, D-LIT-DR-3). O Dreyfus 2002 seguiu o mesmo caminho (D-LIT-DR-5). São as duas referências desta rodada lidas por inteiro.
 
 ## O Dreyfus 2007, lido
 
@@ -60,6 +60,31 @@ o todo, são o desenho que Dreyfus aponta como o caminho certo.
 - atribuir a Dreyfus a leitura de que, para um pet, basta a significância animal. Essa leitura é nossa, construída a partir da
   nota 7.
 
+## O Dreyfus 2002, lido
+
+*Phenomenology and the Cognitive Sciences* 1, pp. 367-383, também lido no texto completo no mesmo dia (D-LIT-DR-5). O argumento:
+
+- **A tese (pp. 367-368):** aprender e agir com perícia não exigem representação mental nem cerebral. Os conceitos são o arco
+  intencional e a pega máxima, de Merleau-Ponty.
+- **Os cinco estágios da perícia (pp. 368-372):** a perícia é discriminar situações cada vez mais finas, cada uma pareada com a sua
+  resposta. No estágio proficiente, as experiências boas e ruins reforçam o que dá certo (p. 370).
+- **As redes neurais (pp. 374-375):** servem de modelo de um passado que muda a percepção sem guardar memórias. Mas o que conta como
+  "o mesmo tipo" quem define é o projetista.
+- **Três restrições do corpo à generalização (p. 376):**
+  - a arquitetura do cérebro;
+  - a ordem e a frequência das experiências, que dependem do corpo e do mundo;
+  - o sucesso medido pela satisfação do agente. No aprendizado por reforço, quem define o sucesso é o pesquisador.
+
+  Por isso, redes sem corpo ficam em desvantagem (pp. 376-377).
+- **Agir sem representar o objetivo (pp. 377-383):** é a pega máxima, contra Searle. Os atratores de Freeman explicam o movimento:
+  o estado do cérebro tende ao mínimo de energia mais próximo, sem representar o alvo.
+
+**O que autoriza dizer no Digilab:** que medir o sucesso pela satisfação do corpo, e não por uma recompensa escolhida pelo projetista,
+e deixar a ordem das experiências pesar são as restrições que Dreyfus aponta. A segunda faz par com a anedota da ordem de apresentação
+em Lehman et al. (2020).
+
+**O que não autoriza:** dizer que o pet tem arco intencional ou pega máxima, ou que o corpo químico satisfaz as três restrições.
+
 ## O que as verificadas autorizam dizer (e o que não)
 
 - **A crítica existe e tem tese própria.** Dreyfus (1972; 2ª ed. 1992) sustenta que as máquinas sem corpo não imitam as funções mentais
@@ -80,7 +105,7 @@ diferencial) e a regra 9 (corpo com homeostase, aprendizado em vida e memória n
 
 ## Limites
 
-- Os resumos foram lidos. Só o Dreyfus 2007 foi lido no texto completo, numa cópia de terceiro da versão do editor.
+- Os resumos foram lidos. Só o Dreyfus 2007 e o Dreyfus 2002 foram lidos no texto completo, em cópias de terceiros da versão do editor.
 - O regex de DOI do `tools/verificar_relato.py` para no `(`. Os DOIs da Elsevier dos anos 1990, como `10.1016/0004-3702(91)90053-M`,
   entram cortados no `10.1016/0004-3702(91`. E já colide: as três resenhas de 1996 (McCarthy, Haugeland, Koschmann) viram
   `10.1016/0004-3702(95`, e o verificador trata o McCarthy, VERIFICADA aqui, como não citável. Até o regex mudar, cite o McCarthy num
