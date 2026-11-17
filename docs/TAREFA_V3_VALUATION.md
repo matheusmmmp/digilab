@@ -211,3 +211,14 @@ O código está pronto, e a run ainda não rodou.
   - o adendo 1 aprovado;
   - a ordem da D-VAL-6 (o PR #943 na `main` e os imports do `lobos.py` estáveis);
   - a máquina livre.
+
+### V2, a run da ablação (2026-11-17, Claude Code, Opus 5.5)
+
+A run rodou uma vez: 5 600 vidas na 99xxx, em 1 h 35, sobre o branch do #943 com a `main` dentro (o Matheus: "roda já sobre o branch do
+#943"; D-VAL-14). O resultado está no [RESULTADO_V3_VALUATION.md](RESULTADO_V3_VALUATION.md).
+- **Confirmada só a R** (o reflexo do sono): R − REL = +0,129 [+0,117; +0,141], com o Holm rejeitando. É 1,55 vez o gap da A1.
+- **A R piora o bem-estar:** privação +0,084 e exaustão +0,276 (de 0,22 para 0,50).
+- **Refutadas:** B (+0,008), E (+0,003, apesar de comer 4,5 rações por dia), F (−0,012), C (−0,058: a memória ajuda) e G (−0,290: o
+  sorteio protege).
+
+Status: o CHECKPOINT V2.5. A R vai à V3 como candidata, marcada como "piora o bem-estar". Qual conserto entra é decisão do Matheus.
