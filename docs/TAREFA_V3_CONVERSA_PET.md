@@ -697,3 +697,12 @@ gate.
 - **O registro da rodada** é a seção 14 do plano, com os sha256 de hoje (D-DC5C-3).
 - **Os testes:** `tests/test_conversa_dc5c.py` (3).
 - **Os desvios:** D-DC5C-1 a 3, em `docs/registro/2026-11.md`.
+
+## F2 — o plano da espera da voz no jogo (Gerente das cinco frentes, Claude Code, Opus 5.5, branch `v3-conversa-espera`, 2026-11-17)
+
+- **O plano:** `docs/PLANO_ANALISE_V3_CONVERSA_ESPERA.md`, PROPOSTO. São 120 turnos no jogo de verdade (Playwright, `gemma2:9b`, verificador
+  ligado). Ele mede do toque até a primeira palavra, até a frase inteira, até o aviso, e a fila, com o p50, o p95 e a fração acima de 8 s.
+- **O levantamento das saídas** (pré-gerar com cache, API do Claude, streaming, modelo menor) fica no vault, em
+  `DigiLab — Revisão de escopo/LEVANTAMENTO_ESPERA_VOZ_2026-11-17.md`.
+- **As decisões pendentes:** D-ES-1 a D-ES-3. A D-ES-4 (a saída) fica para depois da medida.
+- **Os desvios:** D-ES-A e D-ES-B, em `docs/registro/2026-11.md`.
