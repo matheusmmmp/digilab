@@ -130,7 +130,7 @@ def ouviu_1920() -> str:
     return cena("Ele ouviu", miolo,
                 G.nota("2 · a palavra dita aparece num balão do dono sobre o pet (tracejado, para não se confundir com a fala dele). Some quando acaba a janela em que ele ouve", 1230, 120, 330)
                 + G.nota("o pet faz o que decidir: brincar, outra coisa, nada novo. A tela não marca acerto nem erro. O Elogiar e o Repreender são os de sempre e contam só pelo corpo (D-EL)", 1230, 260, 330)
-                + G.nota("no canto: com uma falta acima de λ (fome, sono…), o corpo vence. O balão sai apagado, com o motivo, e a palavra não entra na decisão nem no aprendizado", 120, 330, 330)
+                + G.nota("no canto: com uma urgência crua acima do limiar (fome, sono…; alguma_urgencia_critica, da F3), o corpo vence. O balão sai apagado, com o motivo, e a palavra não entra na decisão nem no aprendizado", 120, 330, 330)
                 + G.nota("nenhum número na tela: a força só aparece no painel de hábitos", 1230, 420, 330))
 
 

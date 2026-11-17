@@ -19,8 +19,8 @@ de interação. A espec é a [`ESPEC_V3_PALAVRA_DONO.md`](ESPEC_V3_PALAVRA_DONO.
 - **Para a PD1, o código Python:** a LZ2a da LIMPEZA (o modular na base nova) e a etapa 2 do [`TAREFA_V3_ELOGIO.md`](TAREFA_V3_ELOGIO.md)
   (o crédito do carinho pelo corpo, a rota única do elogio até a palavra).
 - **Para a PD3, a vista:** a IT3 (o arco do pet) e o painel de hábitos (WD-1) do [`PLANO_V3_INTERACAO.md`](PLANO_V3_INTERACAO.md).
-- **Da F3:** nenhuma decisão. A palavra não é impulso. Se a F3 criar um predicado de "urgência crítica", a porta do 3.4 o lê (combinado por
-  nota em 2026-11-17).
+- **Da F3:** só o predicado `alguma_urgencia_critica` (`docs/ESPEC_V3_URGENCIAS.md`, seção 6.2, PR #958), que a porta do 3.4 lê. A
+  palavra não é impulso. A D-UR-8 da F3 (decidida pelo Matheus no chat da F3) põe o "corpo vence" como guarda própria.
 
 ## 3. Mudança mínima
 
@@ -77,7 +77,7 @@ Nada nesta etapa: D-PD-5 a D-PD-9 foram DECIDIDAS em 2026-11-17 pela recomendaç
   mais um que a sessão achou: a EN-4 põe o pedido só no TS, e a regra comum põe mecânica nova no Python. Ele decidiu os quatro pela
   recomendação.
 - **A espec** liga a palavra pela P2 sem mudança: uma característica nova de z (`pal_k`, com 4 vagas), com o inato 0, a porta do corpo
-  acima de λ e o evento `pl` no registro. Ela mostra por que a tabela de contagem do PacaPet não basta (a seção 3.7).
+  (`alguma_urgencia_critica`) e o evento `pl` no registro. Ela mostra por que a tabela de contagem do PacaPet não basta (a seção 3.7).
 - **A prancha** tem cinco telas: o Dizer… no arco, o balão do dono (com o caso do corpo que vence), o cartão "liga" e a seção Palavras no
   painel de hábitos. As capturas estão nas peles Vidro e Militar.
 - **O teste:** C × I × S pela sonda contrafactual, sem rng nova.

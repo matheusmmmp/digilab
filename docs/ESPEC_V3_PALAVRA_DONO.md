@@ -19,8 +19,8 @@ PacaPet (Karati e Kluver 2026, WOCHAT, `10.21437/WoChat.2026-2`, lido em texto c
   `W⁰` dela é 0, e o pet nasce sem ligar palavra a nada.
 - **Como ele aprende:** pela regra P2 do M-PLAST, **sem mudança**. Se o pet fez b com a palavra no ar e o corpo melhorou, `H[b, palavra]`
   sobe. O elogio pesa só pela mudança que faz no corpo, pela rota da D-EL-2. Não há sinal novo (D-PD-1).
-- **O corpo vence:** com a falta de qualquer receptor acima do joelho λ da urgência, a palavra fica fora daquela decisão. Ela não puxa e
-  não ganha elegibilidade.
+- **O corpo vence:** com alguma urgência crua acima do limiar (`alguma_urgencia_critica`, o predicado da F3), a palavra fica fora daquela
+  decisão. Ela não puxa e não ganha elegibilidade.
 - **O que o pet mostra:** quando uma ligação passa de um limiar, um cartão diz uma vez "Growlmon liga 'zorp' a brincar", e o painel de
   hábitos (WD-1, só leitura) lista as palavras com a força de cada ligação. **Nunca "entende"** (D-PD-2).
 - **Onde nasce:** no Python, atrás de uma subchave desligada, com paridade no TS (D-PD-4). A voz vem depois e gera o mesmo evento (D-PD-3).
@@ -99,12 +99,16 @@ todas).
 
 ### 3.4 A porta "o corpo vence"
 
-- **A regra:** se algum receptor tem `falta_r > λ_r`, ou seja, o termo convexo da urgência está ativo (`afeto.py:97`), então
-  `pal_k = 0` em z naquela decisão, para todo k.
+- **A regra:** se `alguma_urgencia_critica(urgencias)` é verdadeira, então `pal_k = 0` em z naquela decisão, para todo k. É o predicado da
+  F3 (`docs/ESPEC_V3_URGENCIAS.md`, seção 6.2, PR #958): `urgencias[r] > urgencia_lambda` sobre as urgências **cruas** do M-AFETO. É o
+  mesmo teste das guardas de hoje (`arb.py`, `estado.py:142`, `adapt.py:345`). A guarda compara a **urgência** com o limiar, e não a falta:
+  com os inatos padrão, a urgência passa do limiar com a falta acima de 640, e na v38 e na v39, acima de 800 (números da F3).
 - **Efeito no aprendizado:** como a elegibilidade é `e_j = z_j`, a palavra também não ganha crédito numa decisão dessas. O pet com fome
   crítica não aprende "zorp" comendo.
-- **Ligação com a F3:** se a F3 (prioridade entre urgências) definir um predicado explícito de "urgência crítica", esta porta passa a ler
-  esse predicado, e não um limiar próprio. Combinado com a sessão `f3-urgencias` por nota em 2026-11-17. **A palavra não é um impulso:**
+- **Ligação com a F3:** a D-UR-8 da F3 (decidida pelo Matheus no chat da F3 em 2026-11-17) diz que a palavra não passa pela prioridade da
+  F3, e que o "corpo vence" é uma guarda própria sobre esse predicado. A primeira versão desta espec dizia "falta acima de λ". A correção
+  para a urgência acima do limiar segue o texto da tarefa ("urgência acima de λ ignora a palavra") e as guardas de hoje. Está registrada no
+  registro do mês. **A palavra não é um impulso:**
   não entra na urgência nem no sinal do corpo, e por isso a F4 não depende de uma decisão da F3.
 
 ### 3.5 O aprendizado (D-PD-1): a P2 sem mudança
@@ -118,6 +122,13 @@ todas).
   - Um dono que diz "zorp" para o pet comer sem fome não liga nada. A comida não alivia o corpo, e nada credita.
 - **O que isso não ensina (o custo assumido da D-PD-1):** uma palavra para uma ação sem efeito no corpo ("Senta", quando existir) só se
   liga pelo carinho, pela D-EL. Sem a D-EL, ela não se liga. Isso é o mecanismo, não um defeito a calibrar.
+- **Dizer muitas vezes não é funcionar.** O GARP mostra o risco de a repetição pesar demais (quatro notas quase iguais venceram uma
+  diferente; vault, `LEITURA_GARP_2026-11-17.md`). Aqui ele não aparece por três razões:
+  - a palavra só muda o H quando o corpo responde (`r_n ≠ 0`), e dizer sem consequência não soma nada;
+  - repetir dentro da janela `W_p` não empilha (EN-5): é uma elegibilidade por opção, e não uma por vez que o dono disse;
+  - o braço S do teste (6.1) separa a exposição da contingência.
+
+  O que conta é quantas vezes a palavra esteve no ar quando o corpo melhorou.
 - **A sutileza que o teste mede:** a P2 não tem competição entre as colunas, como teria uma regra delta. A palavra e o contexto ganham
   crédito juntos. Um dono que diz "zorp" sempre no mesmo contexto ensina "zorp" e ensina o contexto. Só a sonda fora desse contexto
   (seção 6.3) separa os dois.
@@ -164,6 +175,15 @@ nome, não aprendizado. A IT6 já cobre isso.
   Isso vale para a tela, as dicas do Professor Agumon e a fala.
 - **A fala:** uma palavra aprendida não é um conceito da fala. A voz não a cita como compreendida, e o verificador recusa uma frase que diga
   que o pet entendeu o dono. Se a frase pode citar a palavra (o pet repete "zorp") é uma pergunta futura, fora desta espec.
+
+### 3.8b De quem vale a palavra
+
+Nesta espec, só a do dono do pet, pelo arco daquele pet: o evento `pl` vai ao registro de um pet só. O GARP lembra que a palavra de primeira
+mão vale mais que a de segunda (vault, `LEITURA_GARP_2026-11-17.md`). Três casos ficam **fora** e voltam como pergunta própria, se um dia
+fizerem sentido:
+- uma palavra dita por outro dono (o MMO);
+- uma palavra ouvida de outro pet;
+- uma palavra passada do pet ao gêmeo dele.
 
 ### 3.9 O registro e o replay
 
@@ -247,7 +267,7 @@ Todos usam:
 - **P0, técnica:** no braço C, `H[brincar, pal_zorp]` sai de 0, e o registro mostra as atualizações.
 - **P1, do corpo:** neste mundo, brincar dá `r_n > 0` com tédio alto. Sem isso, a D-PD-1 não tem o que ligar, e o teste para aí,
   registrado.
-- **P2, a porta:** com uma falta acima de λ, `pal_k = 0` e a elegibilidade da palavra é 0. É conferência de mecanismo, por um teste
+- **P2, a porta:** com `alguma_urgencia_critica` verdadeira, `pal_k = 0` e a elegibilidade da palavra é 0. É conferência de mecanismo, por um teste
   unitário, e não uma hipótese.
 
 ### 6.3 A medida: a sonda contrafactual
@@ -322,6 +342,10 @@ As perguntas foram levadas com a recomendação e o custo de errar, e as respost
 - **A P2 e o sustento dela** (Cliff e Grand 1999; Frémaux e Gerstner 2016; Gerstner et al. 2018; Keramati e Gutkin 2014): os da espec do
   modular, seção 2.4, sem nada novo.
 - **O sinal do corpo como terceiro fator continua SEM FONTE** (espec do modular, seção 2.4), e a palavra herda isso.
-- **"Nunca escrever que o pet entende"** (a skill, a rodada Dreyfus de 2026-11-16, Searle 1980): é enquadramento, e a D-PD-2 o segue.
+- **Dreyfus (2002)**, `10.1023/A:1021351606209`, VERIFICADA pelo texto completo (a skill; o PR #954). A fonte afirma que uma das
+  restrições do corpo é medir o sucesso pela satisfação do próprio agente, e não pelo critério do pesquisador. **Leitura do DigiLab:** é um
+  enquadramento a favor da D-PD-1 (o desfecho no corpo, e não o elogio), e não evidência de que ela funciona. A outra restrição dele, a
+  ordem das experiências, conversa com o braço C × I.
+- **"Nunca escrever que o pet entende"** (a skill, a rodada Dreyfus de 2026-11-16, Searle 1980 e Harnad 1990, VERIFICADAS): é enquadramento, e a D-PD-2 o segue.
 - **Nenhuma alegação de novidade.** A palavra livre que vira gatilho está publicada (PacaPet), e o comportamento ensinado também (a regra 3
   da skill). O que resta é o teste com braço de controle, e ele também não é contribuição sem uma busca dirigida.
