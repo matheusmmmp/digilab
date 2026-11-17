@@ -823,3 +823,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-17 — F2 (CONVERSA_PET): a espera da voz no jogo (Claude Code, Opus 5.5, Gerente das cinco frentes, branch `v3-conversa-espera`)](registro/2026-11.md)
 - [2026-11-17 — F1 (CONVERSA_PET): o verificador no jogo só avisa (Claude Code, Opus 5.5, Gerente das cinco frentes, branch `v3-conversa-verif`)](registro/2026-11.md)
 - [2026-11-17 — EVIDENCIA A0: o merge (o Gerente da V3, Claude Code, Opus 5.5)](registro/2026-11.md)
+- [2026-11-17 — LEGIBILIDADE: quem define o sucesso e o plano do teste cego (Claude Code, Opus 5.5, branch `v3-sucesso-legibilidade`)](registro/2026-11.md)
