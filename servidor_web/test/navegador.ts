@@ -4,6 +4,7 @@ import { expect } from "vitest";
 import { criarApp } from "../src/app.ts";
 import { abrirBanco, type Banco } from "../src/conta/banco.ts";
 import { configDoAmbiente, VERSAO_PRIVACIDADE, VERSAO_TERMOS, type ConfigConta } from "../src/conta/config.ts";
+import { conferirAqui, type Conferidor } from "../src/envio/conferidor.ts";
 import { GeradorFala } from "../src/fala.ts";
 
 export const API = "http://127.0.0.1:8766";
@@ -43,12 +44,13 @@ const caminho = (url: string): string => { const u = new URL(url); return u.path
 
 export interface Montado { app: App; cfg: ConfigConta; banco: Banco; relogio: { t: number } }
 
-export function montar(): Montado {
+/** o app com a conta; a conferência roda no mesmo processo, a não ser que o teste passe outro conferidor (o worker) */
+export function montar(conferidor: Conferidor = conferirAqui): Montado {
   const relogio = { t: Date.UTC(2026, 10, 16, 12) };
   const banco = abrirBanco(":memory:");
   const cfg = configDoAmbiente({ porta: 8766, banco, agora: () => relogio.t,
     ambiente: { DIGILAB_URL_API: API, DIGILAB_URL_JOGO: JOGO, DIGILAB_CONVIDADOS: "falso:ana falso:caio" } });
-  return { app: criarApp({ gerador: new GeradorFala(null, null), motivoInicial: "", conta: cfg }), cfg, banco, relogio };
+  return { app: criarApp({ gerador: new GeradorFala(null, null), motivoInicial: "", conta: cfg, conferidor }), cfg, banco, relogio };
 }
 
 /** o fluxo inteiro pelo provedor falso até a conta criada; devolve o csrf da sessão */

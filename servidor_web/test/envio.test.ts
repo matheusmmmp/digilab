@@ -3,10 +3,12 @@
    A vida é a do gabarito test/gabaritos/vida_101.json (scripts/gerar_vida_teste.ts: a vida 101 da MMO0, com o DigiBrain modular). */
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { Motor, VERSAO_PET_LAB } from "../../web/app/motor/index.ts";
 import { VERSAO_TAMER } from "../../web/app/src/tamer.ts";
+import { refazerComLutas } from "../../web/app/src/ranking/pontos.ts";
 import { conferir, lerEnvio } from "../src/envio/conferir.ts";
+import { ConferidorEmWorker } from "../src/envio/conferidor.ts";
 import { apagarRegistroEm, apagarRegistrosVencidos, fimDaSemana, LIMITE_ENVIO, LOG_DIAS_DEPOIS_DA_SEMANA } from "../src/envio/rotas.ts";
 import { contar, criarConta, montar, Navegador, ORIGEM_JOGO, type Montado } from "./navegador.ts";
 
@@ -225,12 +227,51 @@ describe("a política do log (MMO-4) e o apagar a conta", () => {
 });
 
 describe("a conferência sem a rota", () => {
-  it("é a mesma conta do jogo: o pet refeito pelo Motor.reproduzir e os pontos pela MMO1", () => {
+  it("o passe único da MMO1 dá o mesmo pet que o Motor.reproduzir do jogo (a assinatura inteira, no Node)", () => {
+    const um = refazerComLutas(VIDA.semente, VIDA.versao, VIDA.log as never, []).motor;
+    const jogo = Motor.reproduzir(VIDA.semente, VIDA.log as never, VIDA.versao);
+    expect(um.assinatura()).toBe(jogo.assinatura());
+    expect(um.evolucoes).toEqual(jogo.evolucoes);
     const r = conferir(lerEnvio(envioDe()));
     expect(r.resultado).toBe("aceito");
     if (r.resultado !== "aceito") return;
     expect(r.marco10).toBe("sem_marco");
     expect(r.ms.replay).toBeGreaterThan(0);
-    expect(r.ms.pontos).toBeGreaterThan(0);
+  });
+});
+
+describe("a conferência no worker", () => {
+  const w = new ConferidorEmWorker();
+  afterAll(() => w.fechar());
+  it("dá a mesma conferência que no processo, e o laço de eventos fica livre enquanto ela roda", async () => {
+    const aqui = conferir(lerEnvio(envioDe()));
+    await w.conferir(lerEnvio(envioDe()));   // o primeiro abre o worker (carrega o motor)
+    let batidas = 0;
+    const relogio = setInterval(() => { batidas++; }, 10);
+    const t0 = performance.now();
+    const la = await w.conferir(lerEnvio(envioDe()));
+    const ms = performance.now() - t0;
+    clearInterval(relogio);
+    const semMs = (c: typeof aqui) => ({ ...c, ms: null });
+    expect(semMs(la)).toEqual(semMs(aqui));
+    /* o intervalo de 10 ms bateu durante a conferência: o laço não ficou preso */
+    expect(batidas).toBeGreaterThanOrEqual(Math.floor(ms / 10 / 4));
+    expect(batidas).toBeGreaterThan(3);
+  });
+  it("os envios vão em fila e voltam cada um com o seu resultado", async () => {
+    const pet = copia(VIDA);
+    pet.log[500]![0] = 0;
+    const [a, b] = await Promise.all([w.conferir(lerEnvio(envioDe())), w.conferir(lerEnvio(envioDe(pet)))]);
+    expect(a.resultado).toBe("aceito");
+    expect(b).toMatchObject({ resultado: "recusado", motivo: "pet_nao_reproduz" });
+    expect(w.naFila).toBe(0);
+  });
+  it("a rota pelo worker", async () => {
+    const m = montar(w.conferir);
+    const n = new Navegador(m.app);
+    const c = await criarConta(n);
+    const r = await n.json("POST", "/envios", envioDe(), c);
+    expect(r.status).toBe(201);
+    expect(contar(m.banco, "envios_registros")).toBe(1);
   });
 });

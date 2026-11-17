@@ -9,10 +9,13 @@
      - o save dos dois pets (grupo: true) ainda não se envia (D-CONTA-77).
    Um registro que não reproduz é recusado com o motivo: o motor falha alto no evento inválido, e o texto do erro vai na resposta.
 
+   Um passe só (D-CONTA-85): o registro é refeito uma vez, pela conta da MMO1 (refazerComLutas), que refaz a luta pelo lutarPoc (confere se
+   ela era possível) e o resto pelo aplicarEvento; o pet que sai dali é o mesmo do Motor.reproduzir (um teste confere a assinatura no Node).
+
    A conferência NÃO usa a assinatura do pet: ela difere entre o Chrome e o Node no último bit (MMO0). Só o que sai das lutas e do registro. */
 import { createHash } from "node:crypto";
-import { Motor, VERSOES_PET, type EventoRegistro } from "../../../web/app/motor/index.ts";
-import { linhasDaSemana, lutasRanqueadas, type LinhaSemana, type LutaRanqueada, type SementeEntregue } from "../../../web/app/src/ranking/pontos.ts";
+import { VERSOES_PET, type EventoRegistro, type Motor } from "../../../web/app/motor/index.ts";
+import { linhasDaSemana, refazerComLutas, type LinhaSemana, type LutaRanqueada, type SementeEntregue } from "../../../web/app/src/ranking/pontos.ts";
 import { CHAVE_TAMER, lerTamer, MARCO_MEGA, marcoConfere, VERSAO_TAMER, type EventoTamer } from "../../../web/app/src/tamer.ts";
 
 /** por que um envio foi recusado (o código vai na resposta e no banco; o detalhe é o texto do erro) */
@@ -40,8 +43,8 @@ export interface Aceito {
   lutas: LutaRanqueada[];
   semanas: LinhaSemana[];
   pontos: number;
-  /** o tempo de cada parte, em milissegundos (o replay do pet, a conta dos pontos, o Tamer) */
-  ms: { replay: number; pontos: number; tamer: number; total: number };
+  /** o tempo de cada parte, em milissegundos (o replay do pet com as lutas, o Tamer e o marco) */
+  ms: { replay: number; tamer: number; total: number };
 }
 export interface Recusado { resultado: "recusado"; motivo: MotivoRecusa; detalhe: string; ms: { total: number } }
 export type Conferencia = Aceito | Recusado;
@@ -82,9 +85,9 @@ export function conferir(envio: Envio, entregues: readonly SementeEntregue[] = [
   if (tamer.versao !== VERSAO_TAMER)
     return recusar("versao_tamer_desconhecida", `o registro do Tamer é da versão ${tamer.versao}, e o servidor confere a ${VERSAO_TAMER}: atualize o jogo`);
 
-  /* 1. o pet: o replay oficial (Motor.reproduzir, o mesmo do lerSave do jogo); o evento inválido falha alto */
-  let m: Motor;
-  try { m = Motor.reproduzir(pet.semente, pet.log, pet.versao); }
+  /* 1. o pet e as lutas: um passe só pela conta da MMO1; o evento inválido (e a luta que não era possível) falha alto */
+  let m: Motor, lutas: LutaRanqueada[];
+  try { ({ motor: m, lutas } = refazerComLutas(pet.semente, pet.versao, pet.log, entregues)); }
   catch (err) { return recusar("pet_nao_reproduz", `o registro do pet não reproduz: ${msg(err)}`); }
   const t1 = performance.now();
 
@@ -103,13 +106,7 @@ export function conferir(envio: Envio, entregues: readonly SementeEntregue[] = [
   }
   const t2 = performance.now();
 
-  /* 3. os pontos: a conta da MMO1 (ela refaz o registro de novo, lendo o resultado de cada luta pelo lutarPoc) */
-  let lutas: LutaRanqueada[];
-  try { lutas = lutasRanqueadas(pet.semente, pet.versao, pet.log, entregues); }
-  catch (err) { return recusar("pet_nao_reproduz", `a conta dos pontos não refaz o registro: ${msg(err)}`); }
-  const semanas = linhasDaSemana(lutas);
-  const t3 = performance.now();
   const r2 = (v: number) => +v.toFixed(2);
-  return { resultado: "aceito", marco10, lutas, semanas, pontos: lutas.reduce((s, l) => s + l.pontos, 0),
-    ms: { replay: r2(t1 - t0), tamer: r2(t2 - t1), pontos: r2(t3 - t2), total: r2(t3 - t0) } };
+  return { resultado: "aceito", marco10, lutas, semanas: linhasDaSemana(lutas), pontos: lutas.reduce((s, l) => s + l.pontos, 0),
+    ms: { replay: r2(t1 - t0), tamer: r2(t2 - t1), total: r2(performance.now() - t0) } };
 }

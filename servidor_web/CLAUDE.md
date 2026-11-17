@@ -43,8 +43,10 @@ O `servidor/` continua para o jogo local e a pesquisa.
 
 - **`POST /envios`** recebe `{pet: {semente, log, versao}, tamer: {versao, log}}` com a sessão e o `X-CSRF-Token` da conta, até 5 MiB
   (`LIMITE_ENVIO`, PROPOSTO). **A pontuação nunca vem do cliente:** campo a mais leva 400. `GET /envios` lista os envios da conta.
-- **A conferência** (`conferir.ts`) refaz o pet com o `Motor.reproduzir` de `web/app/motor` e o Tamer com o `lerTamer` de
-  `web/app/src/tamer.ts`, confere o marco 10 por `marcoConfere` (MMO2) e calcula os pontos com `web/app/src/ranking/pontos.ts` (MMO1). O
+- **A conferência** (`conferir.ts`) refaz o pet e as lutas num passe só, pela conta da MMO1 (`refazerComLutas` de
+  `web/app/src/ranking/pontos.ts`, o mesmo pet do `Motor.reproduzir`), o Tamer com o `lerTamer` de `web/app/src/tamer.ts`, e confere o marco
+  10 por `marcoConfere` (MMO2). Roda num worker (`conferidor.ts`, `trabalhador.ts`), fora do laço de eventos; os testes da rota usam o
+  `conferirAqui`, no processo. O
   código do jogo é importado como está: o motor e o `engine.py` não mudam. O que se importa do `web/app` não pode chegar ao React (o CI do
   servidor não instala o `node_modules` do jogo); por isso o `tamer.ts` lê a chave do `src/chave.ts`, e não do `save.ts`.
 - **Recusa com o motivo, em 422:** `versao_pet_desconhecida` (fora de `VERSOES_PET`; o pet do laboratório não se envia),
@@ -68,6 +70,6 @@ npm run dev -- --sem-conta          # sem as rotas da conta (a CN1)
 npm test                            # Vitest: rotas com o cliente falso e a paridade com o Python
 npm run tipos                       # tsc --noEmit
 node scripts/gerar_vida_teste.ts    # regrava a vida dos testes do envio (com o node_modules do web/app)
-node scripts/medir_conferencia.ts   # o tempo da conferência de 10 vidas -> medicoes/mmo3_conferencia.json
+node scripts/medir_conferencia.ts   # o tempo da conferência de 13 vidas -> medicoes/mmo3_conferencia.json
 python tools/gerar_catalogo_fala_web.py   # (da raiz) regera o catálogo e o gabarito
 ```

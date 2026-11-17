@@ -18,7 +18,8 @@ import { FUSO_BRASILIA_MS, semanaDe } from "../../../web/app/src/ranking/pontos.
 import { transacao, type Banco } from "../conta/banco.ts";
 import type { ConfigConta } from "../conta/config.ts";
 import type { GuardasConta } from "../conta/rotas.ts";
-import { conferir, EnvioMalformado, hashRegistro, lerEnvio, type Conferencia } from "./conferir.ts";
+import { EnvioMalformado, hashRegistro, lerEnvio, type Conferencia } from "./conferir.ts";
+import type { Conferidor } from "./conferidor.ts";
 
 /** o corpo do envio, em bytes (PROPOSTO, SEM FONTE): o pior save medido na CN0 tem ~3 MB cru, perto do teto do localStorage; mais o Tamer */
 export const LIMITE_ENVIO = 5 * 1024 * 1024;
@@ -56,7 +57,7 @@ export function enviosDaConta(banco: Banco, contaId: string): Record<string, unk
     .map(l => envioParaDict(banco, l));
 }
 
-export function montarRotasEnvio(app: Hono, cfg: ConfigConta, g: GuardasConta): void {
+export function montarRotasEnvio(app: Hono, cfg: ConfigConta, g: GuardasConta, conferidor: Conferidor): void {
   const { banco, agora } = cfg;
   const json = (c: Context, codigo: number, dados: unknown) => c.json(dados, codigo as 200, { "Cache-Control": "no-store" });
 
@@ -97,8 +98,8 @@ export function montarRotasEnvio(app: Hono, cfg: ConfigConta, g: GuardasConta): 
         .get(s.conta_id, envio.pet.semente, envio.pet.versao, hashLog, envio.tamer.versao, hashTamer) as LinhaEnvio | undefined;
       if (ja) return json(c, ja.resultado === "aceito" ? 200 : 422, { ...envioParaDict(banco, ja), repetido: true });
 
-      /* as sementes ranqueadas entregues a este pet são da MMO4: até lá, nenhuma */
-      const r: Conferencia = conferir(envio, []);
+      /* no worker, fora do laço de eventos (D-CONTA-86); as sementes ranqueadas entregues a este pet são da MMO4: até lá, nenhuma */
+      const r: Conferencia = await conferidor(envio);
       const t = agora(), id = randomUUID();
       const aceito = r.resultado === "aceito";
       transacao(banco, () => {

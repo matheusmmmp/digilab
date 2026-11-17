@@ -9,6 +9,7 @@ import { Hono } from "hono";
 import { motivoDeDict, PedidoInvalido } from "./catalogo.ts";
 import type { ConfigConta } from "./conta/config.ts";
 import { montarRotasConta } from "./conta/rotas.ts";
+import { ConferidorEmWorker, type Conferidor } from "./envio/conferidor.ts";
 import { montarRotasEnvio } from "./envio/rotas.ts";
 import type { GeradorFala } from "./fala.ts";
 
@@ -16,9 +17,10 @@ export const LIMITE_CORPO = 16 * 1024;
 const CABECALHOS_DE_FORA = ["cf-ray", "cf-connecting-ip", "x-forwarded-for"];
 
 /** `conta`: a conta (CN2, src/conta/rotas.ts) e o envio dos logs (MMO3, src/envio/rotas.ts); sem ela, o servidor é o da CN1 (a /saude e a fala) */
-export interface Opcoes { gerador: GeradorFala; motivoInicial: string; conta?: ConfigConta }
+/** `conferidor`: quem confere os envios (src/envio/conferidor.ts); por padrão, um worker só deste app */
+export interface Opcoes { gerador: GeradorFala; motivoInicial: string; conta?: ConfigConta; conferidor?: Conferidor }
 
-export function criarApp({ gerador, motivoInicial, conta }: Opcoes): Hono {
+export function criarApp({ gerador, motivoInicial, conta, conferidor }: Opcoes): Hono {
   const app = new Hono();
   const json = (c: { json: (d: unknown, s?: number, h?: Record<string, string>) => Response }, codigo: number, dados: unknown) =>
     c.json(dados, codigo, { "Cache-Control": "no-store" });
@@ -62,7 +64,7 @@ export function criarApp({ gerador, motivoInicial, conta }: Opcoes): Hono {
     return json(c, 200, { ...resultado, gasto: gerador.gasto?.paraDict() ?? null });
   });
 
-  if (conta) montarRotasEnvio(app, conta, montarRotasConta(app, conta));
+  if (conta) montarRotasEnvio(app, conta, montarRotasConta(app, conta), conferidor ?? new ConferidorEmWorker().conferir);
 
   app.notFound(c => json(c, 404, { erro: "rota desconhecida" }));
   return app;

@@ -1,11 +1,14 @@
-/* MMO3: o tempo da conferência de uma vida no Node (src/envio/conferir.ts), sem a rota: o replay do pet (Motor.reproduzir), o Tamer e a
-   conta dos pontos da MMO1 (que refaz o registro de novo). As vidas são as roteirizadas da MMO0 (web/app/scripts/mmo0/vida.ts, as sementes
+/* MMO3: o tempo da conferência de uma vida no Node (src/envio/conferir.ts), sem a rota e sem o worker: o passe único do registro pela conta
+   da MMO1 (refazerComLutas, D-CONTA-85) e o Tamer. Confere também, em cada vida, que esse passe dá o mesmo pet do Motor.reproduzir (a
+   assinatura inteira) e mede o Motor.reproduzir sozinho, para comparar. As vidas são as roteirizadas da MMO0 (web/app/scripts/mmo0/vida.ts, as sementes
    101 a 110 com o DigiBrain modular, o dos ovos novos, e, para comparar, as 111 a 113 com o cérebro A, como na MMO0; o roteiro chega ao
    React pelo src/produto.ts, então precisa do node_modules do web/app). Cada vida é conferida REPETICOES vezes depois de uma de aquecimento; vale a mediana. Um processo só, a máquina sem outra run.
      cd servidor_web && node scripts/medir_conferencia.ts      ->  medicoes/mmo3_conferencia.json */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { cpus } from "node:os";
+import { Motor } from "../../web/app/motor/index.ts";
 import { viver } from "../../web/app/scripts/mmo0/vida.ts";
+import { refazerComLutas } from "../../web/app/src/ranking/pontos.ts";
 import { VERSAO_TAMER } from "../../web/app/src/tamer.ts";
 import { conferir, lerEnvio } from "../src/envio/conferir.ts";
 
@@ -23,15 +26,21 @@ const vidas = VIDAS.map(([semente, cerebro]) => {
   const bytes = Buffer.byteLength(JSON.stringify(envio), "utf8");
   const primeira = conferir(envio);
   if (primeira.resultado !== "aceito") throw new Error(`a vida ${semente} foi recusada: ${primeira.detalhe}`);
-  const medidas: { replay: number; tamer: number; pontos: number; total: number }[] = [];
+  const jogo = Motor.reproduzir(v.semente, v.log, v.versao);
+  const mesmoPet = refazerComLutas(v.semente, v.versao, v.log, []).motor.assinatura() === jogo.assinatura();
+  if (!mesmoPet) throw new Error(`a vida ${semente}: o passe único não dá o mesmo pet do Motor.reproduzir`);
+  const medidas: { replay: number; tamer: number; total: number }[] = [], soReproduzir: number[] = [];
   for (let k = 0; k < REPETICOES; k++) {
     const r = conferir(envio);
     if (r.resultado !== "aceito") throw new Error(`a vida ${semente} foi recusada na repetição ${k}`);
     medidas.push(r.ms);
+    const t0 = performance.now();
+    Motor.reproduzir(v.semente, v.log, v.versao);
+    soReproduzir.push(performance.now() - t0);
   }
-  const de = (c: "replay" | "tamer" | "pontos" | "total") => r2(mediana(medidas.map(x => x[c])));
-  const linha = { semente, cerebro, eventos: v.log.length, lutas: v.lutas.length, bytes, ms_replay: de("replay"), ms_tamer: de("tamer"),
-    ms_pontos: de("pontos"), ms_total: de("total") };
+  const de = (c: "replay" | "tamer" | "total") => r2(mediana(medidas.map(x => x[c])));
+  const linha = { semente, cerebro, eventos: v.log.length, lutas: v.lutas.length, bytes, mesmo_pet: mesmoPet, ms_replay: de("replay"),
+    ms_tamer: de("tamer"), ms_total: de("total"), ms_motor_reproduzir: r2(mediana(soReproduzir)) };
   console.log(JSON.stringify(linha));
   return linha;
 });
@@ -40,11 +49,11 @@ const modular = vidas.filter(v => v.cerebro === "modular"), a = vidas.filter(v =
 const resumo = (vs: typeof vidas) => {
   const totais = vs.map(v => v.ms_total);
   return { vidas: vs.length, ms_total_min: Math.min(...totais), ms_total_mediana: r2(mediana(totais)), ms_total_max: Math.max(...totais),
-    ms_replay_mediana: r2(mediana(vs.map(v => v.ms_replay))), ms_pontos_mediana: r2(mediana(vs.map(v => v.ms_pontos))),
+    ms_replay_mediana: r2(mediana(vs.map(v => v.ms_replay))), ms_motor_reproduzir_mediana: r2(mediana(vs.map(v => v.ms_motor_reproduzir))),
     ms_replay_por_evento_mediana: +mediana(vs.map(v => v.ms_replay / v.eventos)).toFixed(3), bytes_max: Math.max(...vs.map(v => v.bytes)) };
 };
 const saida = {
-  medida: "MMO3: a conferência de uma vida no Node (conferir: replay + Tamer + pontos), mediana de " + REPETICOES + " repetições por vida",
+  medida: "MMO3: a conferência de uma vida no Node (conferir: o passe único com as lutas + o Tamer), mediana de " + REPETICOES + " repetições por vida",
   node: process.version, cpu: cpus()[0]?.model ?? "?", quando: new Date().toISOString(),
   resumo: { modular: resumo(modular), a: resumo(a) },
   vidas,
