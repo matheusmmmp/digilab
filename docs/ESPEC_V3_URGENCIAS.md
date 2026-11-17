@@ -313,6 +313,25 @@ palavra) depende do desenho escolhido aqui:
 
 Isso é a D-UR-8, e uma nota para a F4 ficou na pasta das notas da Gerente.
 
+**A F4 respondeu (2026-11-17, nota da sessão da F4, sem decisão repassada):** pela D-PD-1 da F4, a palavra entra como característica do z,
+aprendida pelo H, e não como impulso nem urgência. A única ligação com a F3 é a porta "o corpo vence": com uma urgência crítica, a
+característica da palavra vai a 0 naquela decisão. A F4 pediu um nome para o predicado, e a F4 vai ler esse nome.
+
+**O predicado `urgencia_critica`** (PROPOSTO, sem número novo):
+- `urgencia_critica(urgencias, r) = urgencias[r] > urgencia_lambda`, sobre as urgências **cruas** do M-AFETO (a curva de hoje, nunca as
+  normalizadas de (d)) e o `urgencia_lambda` dos inatos do pet (S/2, ou 640 na v38 e na v39);
+- `alguma_urgencia_critica(urgencias) = any(urgencia_critica(urgencias, r) for r in urgencias)`;
+- **é o mesmo teste das três guardas de hoje**, que hoje só o fazem para a fome (`arb.py:115`; `adapt.py:345`; o lance do dono). O
+  predicado dá nome a ele, sem mudar o que elas fazem;
+- **não muda com o desenho escolhido** (D-UR-5): em (a), (b), (c) e (d), ele lê a urgência crua. Em (b), o escalonamento usa `Λ_r`, que
+  por padrão é o mesmo `urgencia_lambda` (seção 7), mas é outro parâmetro;
+- **uma ressalva para a F4:** a nota dela fala em "falta > λ". As guardas comparam a **urgência** (a curva sobre a falta) com o
+  `urgencia_lambda`, e não a falta. O mesmo campo é o joelho da curva e o limiar. Com os inatos padrão (512), a urgência passa
+  do limiar quando a falta passa de 640 (`2f − 768 > 512`). Na v38 e na v39 (640), quando a falta passa de 800 (`2f − 960 > 640`). É conta à
+  mão sobre a curva, sem execução. A F4 deve ler o predicado, e não um limiar sobre a falta.
+- **O lugar no código:** uma função em `digilab/digibrain/afeto.py` (e `afeto.ts`). As guardas de hoje passam a chamá-la quando a F3 tiver
+  código, num PR com o gabarito, sem mudar nenhuma decisão.
+
 **6.3 A rodada de equilíbrio.** Os números (n, m, `π_r`, `Λ_r`, a tabela `SERVE`, a grade do C-UR) são PROPOSTO, SEM FONTE. Nenhum entra
 calibrado.
 
@@ -369,8 +388,9 @@ Cada uma com a pergunta curta, a recomendação e o custo de errar. A resposta d
   - Custo de errar: entrar antes faz a limpeza mover código novo junto e arrisca o gabarito da LZ1.
   - Resposta:
 - **D-UR-8. A palavra do dono (F4) passa pela prioridade desta frente?**
-  - Recomendação: **não.** O "corpo vence" da palavra é uma guarda como as três de hoje, lendo a urgência crua acima do `urgencia_lambda`.
-    Ela não depende do desenho escolhido aqui.
+  - Recomendação: **não.** O "corpo vence" da palavra é uma guarda como as três de hoje: a porta da F4 lê o predicado
+    `alguma_urgencia_critica` (seção 6.2), sobre a urgência crua. Ela não depende do desenho escolhido aqui. (A F4 já decidiu, na sessão
+    dela, que a palavra entra no z e não como impulso; isso só confirma o lado da F3.)
   - Custo de errar: amarrar a F4 à F3 faz uma esperar a outra. Se (b) for escolhido depois, a guarda da palavra pode virar uma linha da tabela.
   - Resposta:
 - **D-UR-9. A parte em vidas (o hábito da 2.4 e a comparação de (a) e (d)) ganha um plano de análise próprio, ou entra na rodada de
