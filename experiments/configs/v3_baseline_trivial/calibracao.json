@@ -1,0 +1,19 @@
+{
+  "descricao": "A calibracao da baseline trivial (docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md, secao 4; so roda com o APROVADO e a faixa em FAIXAS_RESERVADAS): a grade de 96 pontos (X, Y, Z), so a baseline, nas 4 celulas do longe_fixo, bases 96101...96505, K = 5 (25 unidades), 14 dias: 9 600 vidas, ate 4 processos.",
+  "plano": "docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md",
+  "fase": "baseline_trivial",
+  "etapa": "calibracao",
+  "unidades": {
+    "bases": [
+      96101,
+      96202,
+      96303,
+      96404,
+      96505
+    ],
+    "k": 5,
+    "prefixo": "digibrain_prototipo"
+  },
+  "dias": 14,
+  "orcamento_por_dia": 16
+}

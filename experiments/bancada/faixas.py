@@ -191,6 +191,11 @@ FAIXAS_RESERVADAS = (
     (99101, 99505, "VALUATION, a ablacao do Valuation: a run unica da V2, 8 bracos x 4 celulas do longe_fixo x 200 unidades "
                    "(docs/PLANO_ANALISE_V3_VALUATION.md, secao 4; D-VAL-9, aprovada pelo Matheus em 2026-11-16, \"Aprovado, siga a V2\"; bases 99101, 99202, 99303, 99404 e 99505, K = 40; "
                    "conferida livre no faixas.py da origin/main e nos branches remotos em 2026-11-16)"),
+    # a calibracao da EVIDENCIA A1 tambem usou a 96101-96505 (PR #943); a colisao com a LONGE_GEOMETRIA acima e a D-EV-A1-8,
+    # aberta para o Matheus; no branch da VALUATION fica a linha da main ate a decisao (D-VAL-14)
+    (97101, 97505, "EVIDENCIA A1, a baseline trivial: a validacao, uma vez, o REL da C4 e a baseline nas 12 celulas da C4 "
+                   "(docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md, secao 5; BT-3; bases 97101, 97202, 97303, 97404 e 97505, K = 40); "
+                   "aprovada junto com a 96xxx (BT-3); conferida livre junto com ela"),
 )
 
 
