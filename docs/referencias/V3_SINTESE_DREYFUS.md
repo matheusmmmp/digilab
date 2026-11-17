@@ -53,5 +53,6 @@ diferencial) e a regra 9 (corpo com homeostase, aprendizado em vida e memória n
 
 - Os resumos foram lidos, os textos completos não.
 - O regex de DOI do `tools/verificar_relato.py` para no `(`. Os DOIs da Elsevier dos anos 1990, como `10.1016/0004-3702(91)90053-M`,
-  entram cortados no `10.1016/0004-3702(91`. O corte é igual na tabela e no relato, então o verificador continua conferindo, mas dois
-  DOIs com o mesmo prefixo colidiriam.
+  entram cortados no `10.1016/0004-3702(91`. E já colide: as três resenhas de 1996 (McCarthy, Haugeland, Koschmann) viram
+  `10.1016/0004-3702(95`, e o verificador trata o McCarthy, VERIFICADA aqui, como não citável. Até o regex mudar, cite o McCarthy num
+  relato de PR sem o DOI (D-LIT-DR-4).
