@@ -1,6 +1,6 @@
 # Prancha: o cais e a semana
 
-**Status: PROPOSTA** (espera a aprovação do Matheus: UX-CA-1 a 7, seção 7 do `docs/PLANO_UX_CAIS.md`). As regras vêm do
+**Status: APROVADA** (UX-CA-1 a 7 pelas recomendações, Matheus, 2026-11-17: "Sim, aprovo"; seção 7 do `docs/PLANO_UX_CAIS.md`). As regras vêm do
 `docs/PLANO_V3_MMO.md` (MMO-9, MMO-13 e MMO-14 APROVADAS) e do servidor da MMO5 (`servidor_web/src/envio/semanas.ts`). A tela é da
 MMO5 e ainda não foi feita.
 

@@ -1,6 +1,6 @@
 # Plano de UX do cais e da semana (2026-11-17)
 
-**Status: PROPOSTO** (espera a aprovação do Matheus: UX-CA-1 a 7, seção 7). Sem código de tela. A prancha está em
+**Status: APROVADO** (UX-CA-1 a 7 pelas recomendações, Matheus, 2026-11-17: "Sim, aprovo"). Sem código de tela ainda. A prancha está em
 `docs/pranchas/ux-cais/`; o servidor das tabelas é o da MMO5 local (`docs/TAREFA_V3_MMO.md`, seção 16; PR #978, na main). Os tamanhos e
 os textos de interface são **PROPOSTO, SEM FONTE**.
 Autor: Claude Code (Fable 5.2), sessão lateral da conta, branch `v3-mmo5-prancha`.
@@ -70,6 +70,9 @@ estados usam a folha baixa, com a ilha e o pet à vista. O cais não ganha ícon
 - **No e2e:** testes próprios com o servidor falso; os de hoje não mudam.
 
 ## 7. Decisões para o Matheus
+
+**APROVADAS em 2026-11-17, todas pela recomendação (em negrito em cada item):** "Sim, aprovo", em resposta a "Você aprova a prancha
+do cais pelas sete recomendações?". Na UX-CA-4 as tabelas ficam só para quem tem a conta.
 
 - **UX-CA-1. O que o cais abre agora:** **só a semana, sem abas.** A outra opção é mostrar já as abas do desafio, do mural e do perfil,
   trancadas. Custo de errar: baixo. A aba trancada promete o que ainda não tem data.

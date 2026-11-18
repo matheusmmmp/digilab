@@ -289,5 +289,5 @@ plano de UX é o `docs/PLANO_UX_CAIS.md` (PROPOSTO), e a prancha está em `docs/
   semana fechada com o resultado de quem olha, "Conferir a semana" (o segredo publicado), o cais trancado e o cartão de destrave do
   nível 10. No desktop (1920) e no celular (390 e 360), nas peles Vidro e Militar.
 - **De onde vem cada dado:** das três rotas de `servidor_web/src/envio/semanas.ts` (#978, na main).
-- **As decisões UX-CA-1 a 7 esperam o Matheus** (seção 7 do plano). A tela não foi feita.
-- **Desvios:** D-UXCA-1 a 7, no registro.
+- **As UX-CA-1 a 7 foram APROVADAS pelas recomendações** (Matheus, 2026-11-17: "Sim, aprovo"; seção 7 do plano). A tela não foi feita.
+- **Desvios:** D-UXCA-1 a 8, no registro.
