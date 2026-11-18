@@ -30,9 +30,11 @@ export const CHAMADOS_MARCO = 3, VIDA_MARCO_MIN = 60;
 export { MEDALHAS_MARCO, marcosDoTamer };
 /* ---------------------------------------------------------------------------------------------------- os cartoes */
 /** o nome do icone (lucide) de cada cartao; quem desenha troca o nome pelo componente */
-export type IconeNivel = "heart" | "tent" | "dumbbell" | "swords" | "package" | "shield" | "medal" | "flag" | "trophy";
+export type IconeNivel = "heart" | "tent" | "dumbbell" | "swords" | "package" | "shield" | "medal" | "flag" | "trophy" | "anchor";
 /** o cartao de destrave de um marco (4.1 tipo A e 4.2): o icone, o titulo (ate 3 palavras), a frase (ate 8) e, se ha lugar para ir, a rota */
-export interface Cartao { n: number; icone: IconeNivel; titulo: string; frase: string; rota?: Rota; lugar?: Lugar }
+export interface Cartao { n: number; icone: IconeNivel; titulo: string; frase: string; rota?: Rota; lugar?: Lugar;
+  /** o Ir abre o cais (fora dos destinos), no lugar de uma rota */
+  cais?: true }
 export const CARTOES: readonly Cartao[] = [
   { n: 1, icone: "heart", titulo: "Cuide dele", frase: "Ele chama quando precisa. Atenda logo." },
   { n: 2, icone: "tent", titulo: "Diário", frase: "Veja o que ele fez e por quê.", rota: { destino: "diario", aba: "registro" }, lugar: "barraca" },
@@ -45,7 +47,12 @@ export const CARTOES: readonly Cartao[] = [
   { n: 8, icone: "flag", titulo: "Fronteira", frase: "Seis medalhas. A Liga abriu.", rota: { destino: "lutar", aba: "fronteira" } },
   { n: 9, icone: "trophy", titulo: "Campeão", frase: "A Fábrica e o Salão abriram.", rota: { destino: "lutar", aba: "fronteira" } },
 ];
-export const cartaoDe = (n: number): Cartao | undefined => CARTOES.find(c => c.n === n);
+/** o cartao do cais (MMO5; a prancha docs/pranchas/ux-cais/, UX-CA-6): o do marco 10, o primeiro Mega. So existe com o cais ligado
+    (`ligarCartaoDoCais`, chamado pela casca quando o build tem o servidor); desligado, o marco 10 conta em silencio, como antes */
+export const CARTAO_DO_CAIS: Cartao = { n: 10, icone: "anchor", titulo: "Cais", frase: "Veja o ranking da semana.", cais: true };
+let cartaoDoCais = false;
+export function ligarCartaoDoCais(ligado: boolean): void { cartaoDoCais = ligado; }
+export const cartaoDe = (n: number): Cartao | undefined => CARTOES.find(c => c.n === n) ?? (cartaoDoCais && n === CARTAO_DO_CAIS.n ? CARTAO_DO_CAIS : undefined);
 
 /* ---------------------------------------------------------------------------------------------------- as pecas */
 /** o que a trava segura: os menus (Diario, Crescer, Lutar, Conversar), as abas Itens e Fronteira e, dentro do treino, o Forcar */

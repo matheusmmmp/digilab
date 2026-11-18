@@ -44,8 +44,8 @@ export function gravarAbaLembrada(armaz: Armazenamento, r: Rota): void {
 }
 
 /* Configuracoes (desenhos Cfg*): tela fora dos 4 destinos, aberta pela engrenagem do Diario; #/config/<parte> */
-export type ParteConfig = "principal" | "visual" | "exibir" | "dados" | "fala" | "laboratorio" | "sobre";
-const PARTES_CONFIG: readonly ParteConfig[] = ["principal", "visual", "exibir", "dados", "fala", "laboratorio", "sobre"];
+export type ParteConfig = "principal" | "conta" | "visual" | "exibir" | "dados" | "fala" | "laboratorio" | "sobre";
+const PARTES_CONFIG: readonly ParteConfig[] = ["principal", "conta", "visual", "exibir", "dados", "fala", "laboratorio", "sobre"];
 /** "#/config" -> principal; "#/config/dados" -> dados; outra coisa -> null. "#/config/aparencia" (a subarea antiga, ate 2026-11-01)
  *  leva ao Visual, que a substituiu */
 export function configDoEndereco(hash: string): ParteConfig | null {
@@ -55,3 +55,8 @@ export function configDoEndereco(hash: string): ParteConfig | null {
   return !p ? "principal" : (PARTES_CONFIG as readonly string[]).includes(p) ? p as ParteConfig : null;
 }
 export const enderecoDaConfig = (p: ParteConfig): string => p === "principal" ? "#/config" : `#/config/${p}`;
+
+/* O cais (MMO5; docs/PLANO_UX_CAIS.md): uma tela fora dos destinos, como os Ajustes, em #/cais. So existe com a chave do servidor no
+   build (src/telas/cais/TelaCais.tsx, caisNoBuild); quem le o endereco confere a chave */
+export const ENDERECO_DO_CAIS = "#/cais";
+export const caisDoEndereco = (hash: string): boolean => hash.replace(/^#\/?/, "").replace(/\/$/, "") === "cais";
