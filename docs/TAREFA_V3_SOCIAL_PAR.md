@@ -86,3 +86,11 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
 - **Os testes:** `tests/test_social_par_e1.py`, 15 passados; a suíte inteira, 2 falhas antigas (D-SP-22), 5907 passados.
 - **O que fica para o A0:** o instrumento separa VIVO e GRAV com certeza só em controles de regra pura. Com pets que se movem e têm
   necessidades, separou na maioria das sementes.
+
+## O plano do A0 e do B0 (2026-11-17, Claude Code, Opus 5.5, branch `v3-social-par-a0`)
+
+- **O que é:** `docs/PLANO_ANALISE_V3_SOCIAL_PAR_A0.md`, PROPOSTO. São as três condições (VIVO, GRAV, OUTRA) no pet de hoje, o modular com a CO7
+  nos dois, com uma perturbação por vida. Os primários são o tempo até o reencontro (A0) e o excesso de alternância nos chutes de F para P
+  (B0), e o N sai de um piloto que só dá o σ̂ e as frequências.
+- **Aprovado** pelo Matheus em 2026-11-17 ("Aprovo todas"), com as faixas (D-SP-26).
+- **O que falta:** o código da seção 4 do plano, num PR à parte; depois o piloto e a decisão do N.
