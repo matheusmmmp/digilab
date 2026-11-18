@@ -162,6 +162,73 @@ export const MIGRACOES: readonly string[] = [
   ALTER TABLE sementes ADD COLUMN rival_pedido TEXT;
   ALTER TABLE sementes ADD COLUMN mapa_pedido TEXT;
   `,
+  /* 6: o desafio do dia (MMO6, servidor_web/src/desafio/): o segredo de cada dia (do servidor, não da conta: publicado quando o dia
+     congela); a tentativa de cada conta em cada dia (uma só), com o que ela prometeu antes de cada semente (a escolha e as trocas) e o
+     resultado conferido; as sementes das lutas entregues; a linha de cada envio conferido; e as tabelas congeladas com o selo do Top do
+     dia (MMO-11). Tudo o que é da conta pende dela: apagar a conta leva tudo */
+  `
+  CREATE TABLE segredos_dia (
+    dia           TEXT PRIMARY KEY,
+    segredo       TEXT NOT NULL,
+    criado_em     INTEGER NOT NULL,
+    publicado_em  INTEGER
+  ) STRICT;
+  CREATE TABLE desafios (
+    conta_id     TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    dia          TEXT NOT NULL,
+    comecou_em   INTEGER NOT NULL,
+    versao       INTEGER NOT NULL,
+    escolha      INTEGER,
+    trocas       TEXT NOT NULL DEFAULT '[]',
+    vitorias     INTEGER,
+    series       INTEGER,
+    lutas        INTEGER,
+    acabou       INTEGER,
+    vida_ultima  INTEGER,
+    terminou_em  INTEGER,
+    envio_id     TEXT,
+    PRIMARY KEY (conta_id, dia),
+    CHECK ((vitorias IS NULL) = (envio_id IS NULL))
+  ) STRICT;
+  CREATE INDEX desafios_dia ON desafios(dia);
+  CREATE TABLE desafio_lutas (
+    conta_id  TEXT NOT NULL,
+    dia       TEXT NOT NULL,
+    k         INTEGER NOT NULL,
+    semente   INTEGER NOT NULL,
+    hora      INTEGER NOT NULL,
+    escolha   INTEGER NOT NULL,
+    trocas    TEXT NOT NULL,
+    PRIMARY KEY (conta_id, dia, k),
+    FOREIGN KEY (conta_id, dia) REFERENCES desafios(conta_id, dia) ON DELETE CASCADE
+  ) STRICT;
+  CREATE TABLE desafio_envios (
+    id             TEXT PRIMARY KEY,
+    conta_id       TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    dia            TEXT NOT NULL,
+    recebido_em    INTEGER NOT NULL,
+    hash_registro  TEXT NOT NULL,
+    resultado      TEXT NOT NULL CHECK (resultado IN ('aceito', 'recusado')),
+    motivo         TEXT,
+    detalhe        TEXT,
+    vitorias       INTEGER,
+    lutas          INTEGER NOT NULL,
+    ms_conferencia REAL NOT NULL,
+    CHECK ((resultado = 'aceito') = (motivo IS NULL AND vitorias IS NOT NULL))
+  ) STRICT;
+  CREATE INDEX desafio_envios_conta ON desafio_envios(conta_id, dia);
+  CREATE TABLE tabelas_dia (
+    dia          TEXT NOT NULL,
+    posicao      INTEGER NOT NULL,
+    conta_id     TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    vitorias     INTEGER NOT NULL,
+    vida_ultima  INTEGER NOT NULL,
+    terminou_em  INTEGER NOT NULL,
+    selo         INTEGER NOT NULL CHECK (selo IN (0, 1)),
+    PRIMARY KEY (dia, posicao)
+  ) STRICT;
+  CREATE INDEX tabelas_dia_conta ON tabelas_dia(conta_id);
+  `,
 ];
 
 export const VERSAO_BANCO = MIGRACOES.length;
