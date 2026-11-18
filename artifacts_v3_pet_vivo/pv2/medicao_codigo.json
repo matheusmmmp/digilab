@@ -34,32 +34,32 @@
  "custo": {
   "segundos_por_vida": {
    "HOJE": [
-    3.00981389998924,
-    2.954061299969908
+    3.794344399997499,
+    4.0266201000195
    ],
    "OLF-0": [
-    3.979408200015314,
-    4.038985999999568
+    5.055774700012989,
+    5.114571599988267
    ],
    "OLF-DC": [
-    4.032614499970805,
-    4.106216999993194
+    4.800613400002476,
+    5.1197941999998875
    ],
    "OLF-DCV": [
-    3.960625000006985,
-    4.031780900026206
+    4.844839100027457,
+    5.074146599974483
    ],
    "OLF-PLA": [
-    3.934797299967613,
-    3.9736740000080317
+    4.962751500017475,
+    5.10542900004657
    ],
    "OLF-G": [
-    3.9966857999679632,
-    4.223063200013712
+    5.147148600022774,
+    5.908724999986589
    ]
   },
-  "media_s": 3.8534772583273784,
-  "projecao_run_h": 3.8534772583273784,
+  "media_s": 4.912896516674664,
+  "projecao_run_h": 4.912896516674664,
   "vidas": 14400,
   "processos": 4,
   "nota": "com o G1 do replay em cada vida (a run tambem confere); sem o contrafactual da SE-C"
@@ -80,10 +80,10 @@
  "dias": 14,
  "codigo": {
   "digilab/digibrain/sens.py": "0c15c9352732a6c54d72ea1140122d16f0e740071e26c24af8370c9623bc5f38",
-  "digilab/digibrain/impulso.py": "69373fbb3be97f3f90e1e057e08364475aa22a7df45ec86a241512580fbbcddb",
-  "digilab/digibrain/adapt.py": "3398ff512fdba16c506e22cc9b5685ba6d832d5115dc04f9a7cc42acf5cfd1ce",
+  "digilab/digibrain/impulso.py": "0b753b3129917e017b39042a3abd9c2ffc6d6ef2795e3f0a534498d2456fb97f",
+  "digilab/digibrain/adapt.py": "aa0eec5268662f9c4a51d5a1d878e531f9594454a70e173d492deaa3d5206028",
   "digilab/digibrain/plast.py": "ca00797b0a76a9c68d9282cffd01a785c6df4a3f7d4ac1f3ab94889e3fc9a2a4",
-  "digilab/config.py": "c8e491349ecadd954a2b3eaf16e8d14eca1a56c1f62567f80bd5fe438ffe2ba0",
+  "digilab/config.py": "35edf0478e7726f6a9b5a5b2b31f8c2164d005b5a6d5850d3dc27af3778aa9ce",
   "digilab/metrics.py": "d328bab5854eb11c715d82415a195d80f45a7dd5f24515604268b774e3bab503",
   "experiments/pv2.py": "b642ce2ef207e8c2131fb7b4991d2e013bacc840ca53a776a9c67a34298d8137",
   "experiments/medir_pv2.py": "739241a4c2bbf8f3752a8b26746b6a1e993b70f197c22cf220edbd520a23918c"

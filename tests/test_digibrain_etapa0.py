@@ -94,6 +94,12 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              # GOSTO_VISUAL, a fala do assistir (FA-2): o gabarito do dec-v4 (vidas curtas da GV3b
                                                                              # nas sementes dos testes, pelo orquestrador da GV3; o decodificador so le)
                                                                              "experiments/exportar_decodificador_v4.py",
+                                                                             # VALUATION, a ablacao do Valuation (V2): os bracos montam o REL da C4
+                                                                             # com uma mudanca so (docs/PLANO_ANALISE_V3_VALUATION.md, secao 3)
+                                                                             "experiments/run_v3_valuation.py",
+                                                                             # VALUATION, o conserto (V3): o REL da C4 com a guarda da fome no reflexo
+                                                                             # (docs/PLANO_ANALISE_V3_VALUATION_CONSERTO.md, secao 2)
+                                                                             "experiments/run_v3_valuation_conserto.py",
                                                                              # ELOGIO, etapa 2: as vidas dos bracos (o modular REL com a ConfigElogio)
                                                                              "experiments/elogio.py",
                                                                              # PET_VIVO, o codigo do PV-2: as vidas dos bracos (o REL com a ConfigPV2 e o orgao)

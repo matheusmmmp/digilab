@@ -373,8 +373,9 @@ A saturação é a fração das decisões com cheiro (c > 0) em que o nível com
 ### A1.5 O custo (seção 4)
 
 São 2 vidas de 14 dias por braço (sementes 101 e 202, `longe`), com o G1 do replay em cada uma, e a projeção das 14 400 vidas com 4
-processos: 3,85 s por vida, e a projeção dá 3,85 h, abaixo do corte de umas 8 h, então o K não muda. Os números estão no `custo` do
-`medicao_codigo.json`. Uma medição anterior, com a suíte de testes rodando ao mesmo tempo, deu 6,5 s por vida. O contrafactual da SE-C (as 1 440 vidas) não
+processos: 4,91 s por vida, e a projeção dá 4,91 h, abaixo do corte de umas 8 h, então o K não muda. Os números estão no `custo` do
+`medicao_codigo.json`. A máquina estava carregada por outras sessões. As rodadas anteriores da medição deram de 3,85 a 6,5 s por vida,
+e a mais lenta foi com a suíte de testes rodando ao mesmo tempo. O contrafactual da SE-C (as 1 440 vidas) não
 entra: é a conta da 0b, medida lá.
 
 ### A1.6 O que este adendo não faz
