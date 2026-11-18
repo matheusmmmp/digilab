@@ -22,14 +22,22 @@ export function destinoNoPonto(el: Alvo, cx: number, cy: number): Destino | null
   const l = CENA.mundo?.lugarEm?.(cx, cy) ?? null;
   return l && LUGAR_ABERTO[l] ? LUGAR_DESTINO[l] : null;
 }
+/** o ponto esta sobre o cais (MMO5): ele nao e um destino, e so responde com o servidor no build (quem liga passa o `irCais`) */
+export function caisNoPonto(el: Alvo, cx: number, cy: number): boolean {
+  if (CENA.coberto || CENA.bolaNaMao || CENA.petNaMao) return false;
+  if (noSprite(cx, cy, el.getBoundingClientRect(), CENA.ret)) return false;
+  if (CENA.mundo?.tvEm?.(cx, cy)) return false;
+  return CENA.mundo?.lugarEm?.(cx, cy) === "cais";
+}
 
 /** liga o toque nos lugares num alvo (a cena do habitat; nos testes, um EventTarget com o retangulo); devolve a funcao que desliga */
-export function ligarToqueLugar(el: Alvo, ir: (d: Destino) => void): () => void {
+export function ligarToqueLugar(el: Alvo, ir: (d: Destino) => void, irCais?: () => void): () => void {
   type P = Event & { pointerId: number; clientX: number; clientY: number; button: number; buttons: number; pointerType: string };
   let mao: { id: number; x: number; y: number; t: number } | null = null, mouseNaMao = false;
+  const responde = (x: number, y: number): boolean => !!destinoNoPonto(el, x, y) || (!!irCais && caisNoPonto(el, x, y));
   const baixo = (ev: Event) => {
     const e = ev as P;
-    if ((e.pointerType === "mouse" && e.button !== 0) || !destinoNoPonto(el, e.clientX, e.clientY)) return;
+    if ((e.pointerType === "mouse" && e.button !== 0) || !responde(e.clientX, e.clientY)) return;
     mao = { id: e.pointerId, x: e.clientX, y: e.clientY, t: performance.now() };
   };
   const move = (ev: Event) => {
@@ -37,7 +45,7 @@ export function ligarToqueLugar(el: Alvo, ir: (d: Destino) => void): () => void 
     if (mao && mao.id === e.pointerId && (CENA.petNaMao || Math.hypot(e.clientX - mao.x, e.clientY - mao.y) > TOQUE.andaMax)) mao = null;
     /* o cursor: so com o mouse parado (sem botao), e so quando muda */
     if (e.pointerType === "mouse" && e.buttons === 0 && el.style) {
-      const sobre = !!destinoNoPonto(el, e.clientX, e.clientY);
+      const sobre = responde(e.clientX, e.clientY);
       if (sobre !== mouseNaMao) { mouseNaMao = sobre; el.style.cursor = sobre ? "pointer" : ""; }
     }
   };
@@ -47,6 +55,7 @@ export function ligarToqueLugar(el: Alvo, ir: (d: Destino) => void): () => void 
     if (performance.now() - m.t > TOQUE.duraMax || Math.hypot(e.clientX - m.x, e.clientY - m.y) > TOQUE.andaMax) return;
     const d = destinoNoPonto(el, e.clientX, e.clientY);
     if (d) ir(d);
+    else if (irCais && caisNoPonto(el, e.clientX, e.clientY)) irCais();
   };
   const solta = () => { mao = null; };
   el.addEventListener("pointerdown", baixo); el.addEventListener("pointermove", move);
@@ -59,13 +68,15 @@ export function ligarToqueLugar(el: Alvo, ir: (d: Destino) => void): () => void 
 }
 
 /** escuta o ponteiro na cena do habitat (`alvo`) */
-export function ToqueLugar({ alvo, ir }: { alvo: RefObject<HTMLElement | null>; ir: (d: Destino) => void }) {
+export function ToqueLugar({ alvo, ir, irCais }: { alvo: RefObject<HTMLElement | null>; ir: (d: Destino) => void; irCais?: () => void }) {
   /* o `ir` mais novo (o do App le a ultima aba de cada destino), sem religar o ponteiro a cada render */
   const irAgora = useRef(ir);
   irAgora.current = ir;
+  const caisAgora = useRef(irCais), temCais = !!irCais;
+  caisAgora.current = irCais;
   useEffect(() => {
     const el = alvo.current;
-    return el ? ligarToqueLugar(el, d => irAgora.current(d)) : undefined;
-  }, [alvo]);
+    return el ? ligarToqueLugar(el, d => irAgora.current(d), temCais ? () => caisAgora.current?.() : undefined) : undefined;
+  }, [alvo, temCais]);
   return null;
 }

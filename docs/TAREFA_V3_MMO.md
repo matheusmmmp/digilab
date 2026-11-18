@@ -279,3 +279,41 @@ Branch `v3-mmo4-rival`, por cima da `v3-mmo5-local` (#978).
   rival, o outro mapa, a semente de antes da regra). `web/app`: 1 981 passaram, 3 pulados; os tipos e o build.
 - **O que fica:** o servidor não sabe se o rival está na Arena do pet na hora do pedido; o motor confere isso no envio, e a luta
   impossível recusa o envio inteiro. Os desvios estão no registro (D-CONTA-123 a 126).
+
+## 18. MMO5: a prancha do cais e da semana (2026-11-17)
+
+Pedido do Matheus: "Sim, a prancha" (em resposta a "Faço a prancha do cais e de 'Ver a semana' agora?"). Branch `v3-mmo5-prancha`. O
+plano de UX é o `docs/PLANO_UX_CAIS.md` (PROPOSTO), e a prancha está em `docs/pranchas/ux-cais/`. Só desenho.
+
+- **As telas:** a semana aberta (as datas, o estado, os quatro estágios, as primeiras linhas e a de quem olha), os seis estados, a
+  semana fechada com o resultado de quem olha, "Conferir a semana" (o segredo publicado), o cais trancado e o cartão de destrave do
+  nível 10. No desktop (1920) e no celular (390 e 360), nas peles Vidro e Militar.
+- **De onde vem cada dado:** das três rotas de `servidor_web/src/envio/semanas.ts` (#978, na main).
+- **As UX-CA-1 a 7 foram APROVADAS pelas recomendações** (Matheus, 2026-11-17: "Sim, aprovo"; seção 7 do plano). A tela não foi feita.
+- **Desvios:** D-UXCA-1 a 8, no registro.
+
+## 19. MMO5: a tela do cais (2026-11-17)
+
+Pedido do Matheus: "Sim, os dois" (em resposta a "Faço o merge do #983 com o CI verde e começo a tela do cais?"). Branch `v3-mmo5-tela`.
+A prancha é a `docs/pranchas/ux-cais/` (APROVADA, UX-CA-1 a 7).
+
+- **A chave:** `VITE_DIGILAB_API` no build, a mesma da conta e da luta ranqueada. Sem ela, o cais continua sem menu, o marco 10 conta em
+  silêncio e nada muda.
+- **O cliente** (`web/app/src/cais/cais.ts`, sem React): as três rotas de `servidor_web/src/envio/semanas.ts`, os estados (buscando, sem
+  resposta, sem conta, pronto), a troca de semana, "Ver todas" e o segredo. As contas da tela são puras: o texto da semana, quanto
+  falta, "fechando" (deduzido do `fecha_em` e do `congela_em`) e as linhas de cima mais a de quem olha.
+- **A tela** (`web/app/src/telas/cais/TelaCais.tsx`, `src/estilo/cais.css`): em `#/cais`, fora dos destinos, no painel dos Ajustes (sem
+  abas e sem a viagem da câmera). 8 linhas a partir de 900 px e 6 abaixo; no celular a folha é mais alta e a coluna "Lutas" sai.
+- **Por onde se entra:** o toque no cais na ilha (`ToqueLugar.tsx`), o cartão do nível 10, "Ver a semana" no limite de hoje da Arena
+  (`TelaRanqueada.tsx`) e o endereço.
+- **A trava:** o cais abre pelo marco do build (`VITE_DIGILAB_MARCO_RANQUEADA`; vazio, o 10). Trancado, o toque e o endereço abrem o
+  cartão do motivo ("Nv 10 · Abre com o primeiro Mega").
+- **O cartão de destrave** (`nivel.ts`, `CARTAO_DO_CAIS`): "Cais" e "Veja o ranking da semana.", só com o cais ligado e o marco 10.
+- **O que não muda:** o motor, o `engine.py`, o registro e o save. O cais só lê o servidor.
+- **Testes:** `web/app`: 2 002 passaram, 3 pulados (20 novos em `test/cais.test.ts` e 1 em `test/ilha_lugares.test.ts`); os tipos e o
+  build.
+- **No navegador** (Chrome, o servidor e o jogo locais): o cais trancado, o cartão de destrave, sem conta (o 401 do servidor de
+  verdade), Entrar, as tabelas vazias do servidor de verdade, e, com respostas de exemplo, a semana aberta, "Ver todas", o estágio sem
+  luta, a semana fechada, o segredo, o celular (390 e 360, sem rolar), "Ir para a Arena" e sem resposta.
+- **Não feito:** o botão do cais no minimapa, o cadeado "Nv 10" sobre o cais na ilha e a luz do modelo quando abre (os três pedem a
+  vista 3D); a viagem da câmera até o cais; o e2e no repositório. Os desvios estão no registro (D-CONTA-127 a 133).

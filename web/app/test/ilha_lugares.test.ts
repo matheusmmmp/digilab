@@ -196,4 +196,14 @@ describe("o toque nos lugares (LG-G6)", () => {
     el.dispatchEvent(ev("pointermove", 280)); expect(el.style.cursor).toBe("pointer");
     expect(destinoNoPonto(el, 225, 30)).toBeNull();    // o sprite do pet, na frente da barraca
   });
+  test("com o cais ligado (MMO5), o toque nele chama o irCais e o cursor vira a mao; os outros lugares seguem iguais", () => {
+    let cais = 0;
+    const el = alvo(); fora = ligarToqueLugar(el, d => idas.push(d), () => { cais++; });
+    toque(el, 450); toque(el, 50); toque(el, 150);
+    expect(cais).toBe(1);
+    expect(idas).toEqual(["lutar"]);
+    el.dispatchEvent(ev("pointermove", 450)); expect(el.style.cursor).toBe("pointer");
+    CENA.coberto = true; toque(el, 450);
+    expect(cais).toBe(1);
+  });
 });
