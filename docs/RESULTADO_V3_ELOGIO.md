@@ -87,3 +87,8 @@ O E-sorteado contra o E0 dá −0,076 em média (n 196). Os quatro braços com c
 ## 6. O que não muda
 
 Nada vai para a web (a etapa 6 esperava a validação). A chave do ELOGIO continua desligada por padrão, e o jogo não muda.
+
+## 7. A decisão do Matheus (2026-11-18)
+
+"Sim, registre assim": o ELOGIO fica registrado com esta leitura. O G-EL1 confirma contra o E-sorteado, e o carinho na hora não ensina X
+além do E0. A etapa 6 (a web) não começa, e a chave continua desligada. Um g maior só volta com um plano novo.
