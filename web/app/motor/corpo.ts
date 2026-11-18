@@ -131,6 +131,18 @@ export function conferirConfigAcoplamento(ca: ConfigAcoplamentoCorpo): ConfigAco
   return ca;
 }
 
+/** CORPO, a opcao E (a `ConfigDigestaoCorpo` do Python, docs/PLANO_ANALISE_V3_CORPO.md, secao 2; D-CO-1): ligada (`inteira`), a comida que
+ *  sobra no estomago com a fome em 0 vira combustivel de uma vez (pela fracao do metabolismo, com o teto C), em vez de ser descartada. Exige a
+ *  digestao e o metabolismo. Fora da ConfigCorpo para nenhum dump de hoje mudar. Desligada (o padrao), a vida sai byte a byte; so de pesquisa */
+export interface ConfigDigestaoCorpo { readonly inteira: boolean }
+export const CONFIG_DIGESTAO_CORPO: ConfigDigestaoCorpo = { inteira: false };
+export const CONFIG_DIGESTAO_CORPO_INTEIRA: ConfigDigestaoCorpo = { inteira: true };
+/** a conferencia do __post_init__ do Python */
+export function conferirConfigDigestao(cd: ConfigDigestaoCorpo): ConfigDigestaoCorpo {
+  if (typeof cd.inteira !== "boolean") throw new Error(`ConfigDigestaoCorpo.inteira e bool: ${cd.inteira}`);
+  return cd;
+}
+
 /** os quimicos que o corpo tem com estas chaves: os cinco de hoje, os de cada orgao ligado e os da etapa 6 (a curiosidade so com o
  *  mundo fisico); por ultimo, com a tela (GOSTO_VISUAL, P1f; o orgao do P1b), a adaptacao de cada canal */
 export function quimicosDe(cc: ConfigCorpo, comMundo = false, tela: ConfigTela = CONFIG_TELA): string[] {
@@ -690,6 +702,7 @@ export interface OpcoesCorpo {
   comMundo?: boolean;            // o mundo fisico: a curiosidade existe (CD-8)
   lutaCorpo?: ConfigLutaCorpo;   // a ponte da luta (PE3); sem ela, desligada
   acoplamento?: ConfigAcoplamentoCorpo;   // CORPO_ACOPLAMENTO, a opcao D; sem ela, desligada: a ME-1 de hoje
+  digestao?: ConfigDigestaoCorpo;         // CORPO, a opcao E; sem ela, desligada: o descarte de hoje
   tela?: ConfigTela;             // o orgao da tela (GOSTO_VISUAL, P1f); sem ele, desligado: o corpo de hoje
   enjoo?: ConfigEnjooTela;       // o enjoo da imagem (D-GV-ENJOO-CER), so com a tela; sem ele, desligado
 }
@@ -724,6 +737,8 @@ export class Corpo {
   luta: ConfigLutaCorpo;
   /** CORPO_ACOPLAMENTO, a opcao D: a falta de combustivel vira fome (so com o metabolismo) */
   readonly acoplamento: ConfigAcoplamentoCorpo;
+  /** CORPO, a opcao E: a comida que sobra com a fome em 0 vira combustivel (so com a digestao e o metabolismo) */
+  readonly digestao: ConfigDigestaoCorpo;
   /** o orgao da tela (P1f; o P1b do Python): a config, os orgaos, o estimulo de cada canal (o ultimo `sentirTela`) e se ele veio neste tick */
   readonly tela: ConfigTela;
   readonly orgaosTela: readonly OrgaoTela[];
@@ -746,6 +761,10 @@ export class Corpo {
     this.acoplamento = conferirConfigAcoplamento(opcoes.acoplamento ?? CONFIG_ACOPLAMENTO_CORPO);
     if (this.acoplamento.ligada && !this.cc.metabolismo) {
       throw new Error("ConfigAcoplamentoCorpo.ligada exige ConfigCorpo.metabolismo (a ponte e a da falta de combustivel)");
+    }
+    this.digestao = conferirConfigDigestao(opcoes.digestao ?? CONFIG_DIGESTAO_CORPO);
+    if (this.digestao.inteira && !(this.cc.digestao && this.cc.metabolismo)) {
+      throw new Error("ConfigDigestaoCorpo.inteira exige ConfigCorpo.digestao e ConfigCorpo.metabolismo (o excedente vira combustivel)");
     }
     this.C = this.cc.escala;
     this.S = this.cc.escala_receptor;
@@ -963,8 +982,30 @@ export class Corpo {
       }
     }
     if (this.q.fome === 0 && this.q.alimento > 0) {
-      this.descartado_total += this.q.alimento;
-      this.q.alimento = 0;
+      if (this.digestao.inteira) {
+        this.converterExcedente();
+      } else {
+        this.descartado_total += this.q.alimento;
+        this.q.alimento = 0;
+      }
+    }
+  }
+
+  /** CORPO, a opcao E: o que sobra no estomago com a fome em 0 vai ao combustivel de uma vez, pela fracao do metabolismo (num/den, com o
+   *  resto guardado) e o teto C; nada vai a fome, a vontade nem ao `descartado_total` */
+  private converterExcedente(): void {
+    const x = this.q.alimento;
+    this.q.alimento = 0;
+    for (const [nome, num, den] of this.fracoes) {
+      if (nome !== "combustivel") continue;
+      const resto = this.resto_combustivel + x * num;
+      const v = Math.floor(resto / den);
+      this.resto_combustivel = resto - v * den;
+      const novo = this.q[nome] + v;
+      this.q[nome] = Math.min(this.C, novo);
+      const k = this.contas_metabolismo as Record<ContaMetabolismo, number>;
+      k.convertido += v;
+      k.descartado_teto += novo - this.q[nome];
     }
   }
 
