@@ -1,9 +1,9 @@
 # Plano de análise V3: a ablação do corpo (CORPO C1)
 
-**Status: APROVADO pelo Matheus em 2026-11-18, com três ressalvas** (CHECKPOINT C2): "Aprovar o C1 com essas três ressalvas". As
+**Status: APROVADO pelo Matheus em 2026-11-18, com três ressalvas, todas DECIDIDAS** (CHECKPOINT C2): "Aprovar o C1 com essas três ressalvas". As
 ressalvas foram o K = 40, o substrato social sem gate e a privação no comedouro fora dos critérios. Elas entram como as D-CO-5, D-CO-6 e
-D-CO-10 (seção 9): a forma de cada uma é PROPOSTA e precisa ser DECIDIDA antes da primeira vida. As outras decisões estão DECIDIDAS como
-recomendadas. Nenhuma vida desta run existe.
+D-CO-10 (seção 9), e a forma de cada uma foi confirmada pelo Matheus ("Confirmo, siga"). **As D-CO-1 a D-CO-10 estão DECIDIDAS.** Nenhuma
+vida desta run existe.
 
 Escrito em 2026-11-18 por Claude Code (Opus 5.5, sessão lateral da CORPO_ACOPLAMENTO), no branch `v3-corpo-plano`, empilhado no #999. A
 base é a `origin/main` em `8c6d17ae`. A tarefa é a [TAREFA_V3_CORPO.md](TAREFA_V3_CORPO.md), e o mapa que este plano segue é o
@@ -14,7 +14,7 @@ base é a `origin/main` em `8c6d17ae`. A tarefa é a [TAREFA_V3_CORPO.md](TAREFA
 **Nenhuma vida roda antes de cinco coisas:**
 1. este plano na `main`, com "APROVADO pelo Matheus" no cabeçalho. O orquestrador confere, e o `tools/pre_run.py` exige o plano igual ao da
    `origin/main`;
-2. as D-CO-1 a D-CO-10 DECIDIDAS (a D-CO-5, a D-CO-6 e a D-CO-10 na forma das ressalvas);
+2. as D-CO-1 a D-CO-10 DECIDIDAS (feito em 2026-11-18);
 3. a faixa da seção 4 em `FAIXAS_RESERVADAS`;
 4. o código dos braços (seção 7) na `main`, cada um atrás de uma chave desligada, com o gabarito das vidas de hoje gravado antes;
 5. nenhuma outra run de pesquisa rodando (V3-D8).
@@ -80,7 +80,7 @@ A C2, a C3 e a C4 ficam fora, pela prioridade aprovada.
 |---|---|
 | bloco I: o pet sozinho | 4 braços (CTRL e os 3) × 12 células × 200 unidades = **9 600 vidas** |
 | bloco II: o substrato social | 4 braços × 100 pares, no instrumento da SOCIAL_PAR A0 (só a condição VIVO), 5 dias (D-CO-6) |
-| faixa | **104001…104400**, PROPOSTA (D-CO-7): as bases 104001…104200 (k = 1) para o bloco I, e as 104301…104400 (k = 1, prefixo `corpo_par`) para o bloco II |
+| faixa | **104001…104400**, DECIDIDA (D-CO-7): as bases 104001…104200 (k = 1) para o bloco I, e as 104301…104400 (k = 1, prefixo `corpo_par`) para o bloco II |
 | custo | o bloco I, cerca de 2 h com 4 processos (a VALUATION fez 4 800 vidas em 1 h); o bloco II, a medir na fumaça, e declarado no `meta.json` |
 | processos | no máximo 4, uma run de pesquisa por vez |
 
@@ -165,31 +165,30 @@ C1 (este plano) → CHECKPOINT C2 → o código da seção 7 → a run, uma vez 
 ## 9. As decisões
 
 O Matheus aprovou o plano com três ressalvas ("Aprovar o C1 com essas três ressalvas", 2026-11-18). As D-CO-1 a D-CO-4, a D-CO-8 e a
-D-CO-9 ficam **DECIDIDAS** como recomendadas. A D-CO-5, a D-CO-6 e a D-CO-10 dão uma forma a cada ressalva, e a forma é **PROPOSTA**. A
-D-CO-7 muda com a D-CO-5 e também fica PROPOSTA.
+D-CO-9 ficam **DECIDIDAS** como recomendadas. A D-CO-5, a D-CO-6 e a D-CO-10 dão uma forma a cada ressalva, e a D-CO-7 muda com a
+D-CO-5. O Matheus confirmou as quatro ("Confirmo, siga", 2026-11-18): **DECIDIDAS**.
 
 - **D-CO-1 (DECIDIDA), os braços D, D + E e D + C5,** pela regra do mapa, com a D aprovada na run.
   - **O custo de errar:** o que a E e a C5 somam sobre a D só sai pela diferença entre os braços, descritiva.
 - **D-CO-2 (DECIDIDA), o primário no `longe_fixo`,** onde a A1 achou a perda do forrageio.
 - **D-CO-3 (DECIDIDA), os tamanhos da seção 2, SEM FONTE.**
 - **D-CO-4 (DECIDIDA), a C5 sem mexer no `lambda_sono`:** uma mudança por braço.
-- **D-CO-5 (PROPOSTA, a ressalva 1), 200 sementes independentes por célula, com k = 1 por base.**
+- **D-CO-5 (DECIDIDA, a ressalva 1), 200 sementes independentes por célula, com k = 1 por base.**
   - **A forma:** as bases 104001…104200, como no plano da SOCIAL_PAR S. O custo é o mesmo: 9 600 vidas.
   - **O custo de errar:** os braços deixam de usar o mesmo desenho de unidades da A1, da VALUATION e da run da D. Cada contraste é dentro da
     run (o CTRL roda de novo), então isso não estraga o contraste. Só não dá para juntar unidades entre as runs.
-- **D-CO-6 (PROPOSTA, a ressalva 2), o substrato social com gate:** S1, os chutes por dia, não pode sair em "< 0", e S2, o T\*, não pode
+- **D-CO-6 (DECIDIDA, a ressalva 2), o substrato social com gate:** S1, os chutes por dia, não pode sair em "< 0", e S2, o T\*, não pode
   sair em "> 0".
   - **A forma do δ:** 10 % do nível do CTRL na própria run, SEM FONTE.
   - **O custo de errar:** o piloto da SOCIAL_PAR B0 achou a bola quase sem chutes (o registro D-SP-33). Com o CTRL perto de 0, o S1 tem δ
-    quase 0 e pode reprovar por ruído. A alternativa é exigir só que o braço não zere os chutes. O plano fica com a forma de cima se o
-    Matheus não escolher a outra.
-- **D-CO-7 (PROPOSTA), a faixa 104001…104400:** as bases 104001…104200 para o bloco I e as 104301…104400 para o bloco II.
+    quase 0 e pode reprovar por ruído. A alternativa é exigir só que o braço não zere os chutes. O Matheus confirmou a forma de cima.
+- **D-CO-7 (DECIDIDA), a faixa 104001…104400:** as bases 104001…104200 para o bloco I e as 104301…104400 para o bloco II.
   - **Por quê:** a 104xxx inteira foi conferida livre em 2026-11-18 nos códigos, nas configs, nos planos, nas tarefas, nos resultados e no
     registro de todos os branches remotos. A 103xxx não está livre: o branch `v3-social-par-s1` usa as bases 103001…103200 e 103301…103350
     (`docs/PLANO_ANALISE_V3_SOCIAL_PAR_S.md`).
   - **A reserva** é do coordenador.
 - **D-CO-8 (DECIDIDA), o orquestrador em Python,** e não o harness em TS do pedido. O TS entra só na paridade das chaves.
 - **D-CO-9 (DECIDIDA), o Holm sobre os 3 braços.**
-- **D-CO-10 (PROPOSTA, a ressalva 3), a privação de cada lugar como guarda:** o comedouro, o longe e o `longe_fixo`, mais as 12 células.
+- **D-CO-10 (DECIDIDA, a ressalva 3), a privação de cada lugar como guarda:** o comedouro, o longe e o `longe_fixo`, mais as 12 células.
   - **O custo de errar:** pela run da D, os três braços podem sair em "perda" só pelo comedouro (a seção 5). É o que a ressalva quer ver. Se
     acontecer, o trade-off vai ao Matheus, pela regra do programa.
