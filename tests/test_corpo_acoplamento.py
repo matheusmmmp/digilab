@@ -41,6 +41,10 @@ def test_a_contabilidade_fecha(vidas):
     dec = SA.decisoes_da_vida(m, r, b)                  # confere a soma das fontes e a energia baixa, decisao a decisao
     assert len(dec) == DIAS * 96
     assert dec[-1]["acum"]["sono"] < 0 < dec[-1]["acum"]["basal_dia"]
+    # a vida da VALUATION usa o corpo do v11 (o gasto 4/5 do adendo 5: o basal 300/150 e as atividades x 4/5), nao o 375/187 da config
+    cc = m.corpo.cc
+    assert (cc.metabolismo, cc.gasto_basal_acordado, cc.gasto_basal_dormindo, cc.gasto_atividades_num, cc.gasto_atividades_den) == (
+        True, 300, 150, 4, 5)
 
 
 def test_cansaco_sem_fonte_falha_alto(vidas):

@@ -57,6 +57,8 @@ CELULAS = VC.CELULAS
 DIAS, ORCAMENTO_POR_DIA = VC.DIAS, VC.ORCAMENTO_POR_DIA
 SAIDA = "artifacts_v3_corpo_acoplamento/sonda.json"
 C_CORPO = 450000                              # a escala C do corpo (ConfigCorpo.escala); conferida em cada vida
+CORPO_CONFERIDO = ("gasto_basal_acordado", "gasto_basal_dormindo", "gasto_atividades_num", "gasto_atividades_den", "falta_limiar",
+                   "falta_cansaco", "conversao_num", "conversao_den")
 FONTES_BASAL = {"dia": "basal_dia", "noite": "basal_noite", "dormindo": "sono"}
 FONTES = ("basal_dia", "basal_noite", "sono", "falta_combustivel", "atividades", "andar", "outros")
 CLASSES = ("falta_combustivel", "atividades", "andar", "tempo_acordado")
@@ -303,6 +305,8 @@ def uma_vida(braco: str, dono: str, lugar: str, semente: int, dias: int = DIAS) 
     return {"vida": f"{braco}|{dono}|{lugar}|{semente}", "braco": braco, "dono": dono, "lugar": lugar, "semente": semente,
             **corte, "ritmos": ritmos(motor), "ticks": len(serie), "ticks_falta_combustivel": motor.contabil.ticks_falta,
             "refeicoes_em_c": serie[-1][6] / motor.corpo.C, "acum_final": serie[-1][5],
+            "ticks_dormindo": sum(1 for x in serie if x[4]),
+            "corpo": {k: getattr(motor.corpo.cc, k) for k in CORPO_CONFERIDO} | {"fome_por_tick": motor.corpo.t.fome_por_tick},
             "metabolismo": {**motor.corpo.contas_metabolismo, "descartado_fome_zero": motor.corpo.descartado_total,
                             "digerido": motor.corpo.digerido_total}}
 
@@ -312,15 +316,17 @@ def somar(vidas: list[dict]) -> dict:
     if not vidas:
         raise ValueError("sonda: nenhuma vida para somar")
     t = {"vidas": len(vidas), "decisoes": 0, "energia_baixa": 0, "ambas": 0, "ambas_sem_ter_comido": 0, "ticks": 0,
-         "ticks_falta_combustivel": 0, "baixa_sem_fome_combustivel_em_falta": 0,
+         "ticks_falta_combustivel": 0, "baixa_sem_fome_combustivel_em_falta": 0, "ticks_dormindo": 0, "corpo": vidas[0]["corpo"],
          "metabolismo": {k: 0 for k in vidas[0]["metabolismo"]}, "classes": {cl: 0 for cl in CLASSES},
          "cruzado": {cl: {"fome_antes": 0, "fome_depois": 0} for cl in CLASSES}, "acum_final": {f: 0 for f in FONTES},
          "lados": {k: 0 for k in vidas[0]["lados"]}, "ritmos": {lado: {"ticks": 0, "d_fome": 0, "d_cansaco": 0, "ticks_fome_tick": 0}
                                                                 for lado in ("dormindo", "acordado")},
          "parte_somada": {cl: 0.0 for cl in CLASSES}}
     for v in vidas:
+        if v["corpo"] != vidas[0]["corpo"]:
+            raise ValueError(f"sonda: o corpo de {v['vida']} nao e o das outras vidas: {v['corpo']}")
         for k in ("decisoes", "energia_baixa", "ambas", "ambas_sem_ter_comido", "ticks", "ticks_falta_combustivel",
-                  "baixa_sem_fome_combustivel_em_falta"):
+                  "baixa_sem_fome_combustivel_em_falta", "ticks_dormindo"):
             t[k] += v[k]
         for cl in CLASSES:
             t["classes"][cl] += v["classes"][cl]
@@ -348,6 +354,17 @@ def somar(vidas: list[dict]) -> dict:
     dias = t["ticks"] / TICKS_POR_DIA
     t["metabolismo_em_c_por_dia"] = {k: x / C_CORPO / dias for k, x in t["metabolismo"].items()}
     t["cansaco_em_c_por_dia"] = {f: x / C_CORPO / dias for f, x in t["acum_final"].items()}
+    # o orcamento do combustivel (C por dia): o teto do que a digestao converte (ela so poe no combustivel o que tira da fome, e a fome
+    # sobe o fome_tick por tick, mais o brincar do dono) contra a demanda do basal (no sono medido) e das atividades e do andar (o
+    # cansaco delas vezes o fator do gasto, ME-3)
+    cc, dorm = t["corpo"], t["ticks_dormindo"] / t["ticks"]
+    t["fracao_ticks_dormindo_todos"] = dorm
+    demanda_basal = (cc["gasto_basal_acordado"] * (1 - dorm) + cc["gasto_basal_dormindo"] * dorm) * TICKS_POR_DIA / C_CORPO
+    demanda_ativ = (t["cansaco_em_c_por_dia"]["atividades"] + t["cansaco_em_c_por_dia"]["andar"]) * cc["gasto_atividades_num"] / cc["gasto_atividades_den"]
+    t["orcamento_combustivel_em_c_por_dia"] = {
+        "teto_da_conversao_pelo_fome_tick": cc["fome_por_tick"] * TICKS_POR_DIA / C_CORPO * cc["conversao_num"] / cc["conversao_den"],
+        "demanda_basal": demanda_basal, "demanda_atividades_e_andar": demanda_ativ, "demanda_total": demanda_basal + demanda_ativ,
+        "gasto_real": t["metabolismo_em_c_por_dia"]["gasto_basal"] + t["metabolismo_em_c_por_dia"]["gasto_atividade"]}
     t["parte_media"] = {cl: (x / a if a else None) for cl, x in t["parte_somada"].items()}
     jan = sorted(x for v in vidas for x in v["janelas"])
     t["janela_mediana_decisoes"] = jan[len(jan) // 2] if jan else None
