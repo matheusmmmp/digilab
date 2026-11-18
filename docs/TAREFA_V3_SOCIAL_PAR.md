@@ -116,3 +116,11 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
   G1 em todos (D-SP-36).
 - **O resultado** (`docs/RESULTADO_V3_SOCIAL_PAR_A0.md`): o A0 é ≈ 0 (D_A = −0,119 decisão, IC95 [−0,300; +0,061], δ = 4), como previsto.
   O B0 é inconclusivo por premissa, com 0 pares elegíveis. Nenhum secundário rejeita.
+
+## S0, a observação do que os dois pets fazem juntos (2026-11-18, branch `v3-social-par-s0`)
+
+- **O que é:** `docs/OBSERVACAO_V3_SOCIAL_PAR.md`, feita sem vida nova. As 210 VIVO da run do A0 foram refeitas e conferidas pelo sha256
+  (D-SP-37).
+- **O que mostra:** perto é o estado normal (64 % da vida). F volta sozinho, e P não muda o T\* em 193 de 201 pares. A bola quase nunca é
+  chutada, e a CO7 muda 7 de 201.600 decisões (D-SP-40).
+- **O que falta:** o checkpoint S1, a aprovação do Matheus. Depois vem o plano da S1, com a ordem proposta: B1 e depois B2.
