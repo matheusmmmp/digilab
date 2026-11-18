@@ -65,3 +65,31 @@ social (M1–M4, SP-3, CO6/CO7).
   - o worker regenerar o índice de desvios, contra o CLAUDE.md.
 
   A recomendação para os três é ficar com a regra do projeto.
+
+## 9. O código das chaves da ablação (C2, a primeira parte; 2026-11-18)
+
+O plano da C1 (`docs/PLANO_ANALISE_V3_CORPO.md`, seção 7) pede as chaves dos braços na `main` antes de qualquer vida. Este PR põe as duas
+que faltavam, desligadas, no Python e no TS. Nenhuma vida de faixa rodou, e nenhum pet do jogo liga nenhuma das duas.
+
+- **A E, a digestão inteira** (`ConfigDigestaoCorpo.inteira`, em `digilab/config.py`; `Corpo._converter_excedente`, em
+  `digilab/corpo.py`).
+  - Ligada, a comida que sobra no estômago com a fome em 0 vai inteira ao combustível, pela fração do metabolismo, com o teto C.
+  - A fome cai como hoje, e nada vai ao `descartado_total`.
+  - Exige a digestão e o metabolismo.
+  - O `MotorCorpo` recebe a `cfg_digestao_corpo`.
+- **A C5, o reflexo suave** (`ConfigConsertoValuation.reflexo_suave` e `peso_reflexo_suave` = S, em `digilab/config.py`;
+  `Arbitragem._suave`, em `digilab/digibrain/arb.py`).
+  - Ligado, o `reflexo()` dá False. No `escolher`, com a energia abaixo de `lambda_sono`, o `dormir` ganha +S no peso, no sorteio e nas
+    sondas, e a escolha segue pelo sorteio.
+  - Ele não convive com a guarda da fome da VALUATION, porque cada braço muda uma coisa.
+  - No TS, ele é a `ConfigReflexoSuave` do `web/app/motor/digibrain/arb.ts`.
+- **"Desliga não muda":** o gabarito das vidas de hoje (`tests/gabaritos/corpo_acoplamento_de_hoje.json`) e o da VALUATION
+  (`tests/gabaritos/valuation_conserto_de_hoje.json`) passam byte a byte.
+  - Os dois foram gravados antes de qualquer chave do corpo, e nenhum foi regravado.
+  - O `tests/test_corpo_chaves.py` também confere cada chave passada desligada explicitamente.
+- **A paridade:** o `experiments/exportar_gabarito_corpo_chaves.py` grava o `tests/gabaritos/corpo_chaves_python.json`, num arquivo
+  próprio. O gabarito tem duas partes:
+  - a E, sozinha e com a D, nos três corpos do gabarito da D;
+  - 400 casos do `escolher` com a C5.
+
+  O `web/app/test/corpo_chaves.test.ts` o reproduz inteiro a inteiro.
