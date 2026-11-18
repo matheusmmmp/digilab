@@ -4,7 +4,7 @@
   mudança no código do jogo ou da bancada.
 - **Snapshot:** a `main` em 8c6d17ae (2026-11-18), mais o branch da run do A0 (`v3-social-par-a0-run`, PR #998, ainda aberto). O pedido
   cita o A0 como #973, mas a run está no #998. Os artefatos da run só existem nesse branch, e por isso este PR fica em cima dele.
-- **De onde vem cada número:** `artifacts_v3_social_par_s/s0/resumo.json` (sha256 `844755bc…0511`). Ele é feito por
+- **De onde vem cada número:** `artifacts_v3_social_par_s/s0/resumo.json` (sha256 `c09b1dee…0d25`). Ele é feito por
   `python experiments/resumir_v3_social_par_s0.py` a partir de dois arquivos:
   - o `observacao.json` (sha256 `676a5ba7…8508`), feito por `python experiments/observar_v3_social_par_s0.py --processos 1`, no commit
     2044e420, em 275 s;

@@ -154,7 +154,8 @@ def main() -> None:
            "gravacao": gravacao(medidas),
            "fonte": {"observacao_sha256": _sha(S0 / "observacao.json"), "medidas_sha256": _sha(RUN / "medidas.json"),
                      "script_sha256": _sha(Path(__file__))}}
-    (S0 / "resumo.json").write_text(json.dumps(out, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
+    with open(S0 / "resumo.json", "w", encoding="utf-8", newline="\n") as f:     # LF: o sha256 e o mesmo no checkout do git
+        f.write(json.dumps(out, ensure_ascii=False, indent=1, sort_keys=True))
     print(_sha(S0 / "resumo.json"))
 
 
