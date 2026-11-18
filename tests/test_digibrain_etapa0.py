@@ -105,7 +105,9 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              # PET_VIVO, o codigo do PV-2: as vidas dos bracos (o REL com a ConfigPV2 e o orgao)
                                                                              "experiments/pv2.py",
                                                                              # PET_VIVO, o codigo do PV-2: a medicao nas sementes dos testes (le o CONFIG_DIGIBRAIN_INATOS)
-                                                                             "experiments/medir_pv2.py"}
+                                                                             "experiments/medir_pv2.py",
+                                                                             # ELOGIO, etapas 4 e 5: o orquestrador da calibracao e da validacao
+                                                                             "experiments/run_v3_elogio.py"}
 
 
 def test_o_digibrain_so_existe_com_a_chave_ligada_e_e_a_v13():

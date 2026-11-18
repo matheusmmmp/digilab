@@ -1,6 +1,6 @@
 /* A luta ranqueada (MMO4, docs/PLANO_V3_MMO.md seções 3 e 4; MMO-6 e MMO-8): a semente da luta ranqueada vem do servidor, e a semente
    pedida conta como luta feita. Só com a sessão da conta (CN2):
-     POST /sementes   {pet: {semente, versao}, indice, hash} -> 201 {numero, semente, indice, hora, dia, semana, restam_hoje}
+     POST /sementes   {pet: {semente, versao}, indice, hash, rival, mapa} -> 201 {numero, semente, indice, rival, mapa, hora, dia, semana, restam_hoje}
                       | 403 nivel_insuficiente {marco} | 409 fora_de_ordem, indice_ja_enviado, hash_diferente | 422 versao_pet_desconhecida
                       | 429 limite_do_dia {reabre_em} | 400 malformado | 401 sem sessão | 403 sem CSRF
      GET  /sementes   as sementes entregues à conta, da mais nova à mais velha
@@ -15,6 +15,10 @@
    do motor). O segredo de cada semana nasce no primeiro pedido dela (32 bytes aleatórios), fica só no banco do servidor, fora do git, e é
    publicado quando a semana fecha (MMO5). O número é o contador de sementes da conta (1, 2, ...).
 
+   O rival e o mapa (D-CONTA-116): vão no pedido, antes de a semente existir, e ficam na semente. O envio só conta a luta do indice se ela
+   é contra esse rival, nesse mapa (pontos.ts); senão a semente fica não enviada. Sem isso, com a semente na mão dava para testar cada
+   rival fora do jogo e enviar só o que vence. O servidor não sabe se o rival está na Arena do pet: isso o motor confere no envio.
+
    As travas do pedido:
      - o nível (MMO-13): a conta tem um envio aceito com o marco do Tamer da config (`marcoRanqueada`: o 10 por padrão, só com o marco
        conferido no registro do pet; no beta, o 7, BT0-1);
@@ -23,13 +27,14 @@
        `indice`, o hash tem de ser o mesmo do pedido anterior. */
 import { createHmac, randomBytes } from "node:crypto";
 import type { Context, Hono } from "hono";
-import { VERSOES_PET } from "../../../web/app/motor/index.ts";
+import { IDS_CENA, VERSOES_PET } from "../../../web/app/motor/index.ts";
 import { diaDe, FUSO_BRASILIA_MS, LUTAS_POR_DIA, semanaDe } from "../../../web/app/src/ranking/pontos.ts";
 import { MARCO_MEGA } from "../../../web/app/src/tamer.ts";
 import { transacao, type Banco } from "../conta/banco.ts";
 import type { ConfigConta } from "../conta/config.ts";
 import type { GuardasConta } from "../conta/rotas.ts";
 import type { EntregueComHash } from "./conferir.ts";
+import { fecharSemanas } from "./semanas.ts";
 
 const DIA_MS = 86_400_000;
 /** o tamanho do segredo da semana, em bytes */
@@ -46,14 +51,14 @@ export type MotivoPedido =
 
 export class PedidoMalformado extends Error {}
 
-export interface Pedido { pet: { semente: number; versao: number }; indice: number; hash: string }
+export interface Pedido { pet: { semente: number; versao: number }; indice: number; hash: string; rival: string; mapa: string | null }
 
 const objeto = (x: unknown): x is Record<string, unknown> => typeof x === "object" && x !== null && !Array.isArray(x);
 
 /** confere a forma do corpo do pedido; o que falta, sobra ou tem o tipo errado levanta PedidoMalformado (400) */
 export function lerPedido(d: unknown): Pedido {
-  if (!objeto(d)) throw new PedidoMalformado("o pedido é um objeto {pet, indice, hash}");
-  const extra = Object.keys(d).filter(k => !["pet", "indice", "hash"].includes(k));
+  if (!objeto(d)) throw new PedidoMalformado("o pedido é um objeto {pet, indice, hash, rival, mapa}");
+  const extra = Object.keys(d).filter(k => !["pet", "indice", "hash", "rival", "mapa"].includes(k));
   if (extra.length) throw new PedidoMalformado(`campo desconhecido no pedido: ${extra.join(", ")}`);
   const pet = d.pet;
   if (!objeto(pet)) throw new PedidoMalformado("'pet' é {semente, versao}");
@@ -63,7 +68,10 @@ export function lerPedido(d: unknown): Pedido {
   if (!Number.isSafeInteger(pet.versao)) throw new PedidoMalformado("'pet.versao' é um inteiro");
   if (!Number.isSafeInteger(d.indice) || (d.indice as number) < 0) throw new PedidoMalformado("'indice' é um inteiro de 0 em diante");
   if (typeof d.hash !== "string" || !/^[0-9a-f]{64}$/.test(d.hash)) throw new PedidoMalformado("'hash' é o SHA-256 em hexadecimal minúsculo");
-  return { pet: { semente: pet.semente as number, versao: pet.versao as number }, indice: d.indice as number, hash: d.hash };
+  if (typeof d.rival !== "string" || !/^[a-z0-9_]{1,64}$/.test(d.rival)) throw new PedidoMalformado("'rival' é a chave do rival da luta (o pedido promete o rival antes da semente)");
+  if (!("mapa" in d) || (d.mapa !== null && (typeof d.mapa !== "string" || !(IDS_CENA as readonly string[]).includes(d.mapa))))
+    throw new PedidoMalformado(`'mapa' é um dos mapas da luta (${IDS_CENA.join(", ")}) ou null`);
+  return { pet: { semente: pet.semente as number, versao: pet.versao as number }, indice: d.indice as number, hash: d.hash, rival: d.rival, mapa: d.mapa as string | null };
 }
 
 /** o segredo da semana (cria no primeiro pedido dela) */
@@ -82,18 +90,21 @@ export const sementeDe = (segredo: Buffer, contaId: string, numero: number): num
 /** o começo do dia seguinte de Brasília, em ms UTC (quando o limite do dia reabre) */
 export const proximoDia = (hora: number): number => Date.parse(diaDe(hora) + "T00:00:00Z") - FUSO_BRASILIA_MS + DIA_MS;
 
-interface LinhaSemente { numero: number; pet: number; versao_pet: number; indice: number; hash_ate: string; semente: number; hora: number; dia: string; semana: string }
+interface LinhaSemente { numero: number; pet: number; versao_pet: number; indice: number; hash_ate: string; semente: number; hora: number; dia: string; semana: string;
+  rival_pedido: string | null; mapa_pedido: string | null;
+  situacao: string | null; estagio: string | null; rival: string | null; faixa: string | null }
 
 /** as sementes entregues a um pet da conta, na ordem do pedido (o que a conferência do envio usa) */
 export function entreguesDoPet(banco: Banco, contaId: string, pet: number, versao: number): EntregueComHash[] {
-  return (banco.prepare("SELECT numero, indice, hash_ate, semente, hora FROM sementes WHERE conta_id = ? AND pet = ? AND versao_pet = ? ORDER BY numero")
+  return (banco.prepare("SELECT numero, indice, hash_ate, semente, hora, rival_pedido, mapa_pedido FROM sementes WHERE conta_id = ? AND pet = ? AND versao_pet = ? ORDER BY numero")
     .all(contaId, pet, versao) as unknown as LinhaSemente[])
-    .map(l => ({ numero: l.numero, semente: l.semente, indice: l.indice, hora: l.hora, hash: l.hash_ate }));
+    .map(l => ({ numero: l.numero, semente: l.semente, indice: l.indice, hora: l.hora, hash: l.hash_ate,
+      ...(l.rival_pedido === null ? {} : { rival: l.rival_pedido, mapa: l.mapa_pedido }) }));
 }
 
 /** as sementes da conta para o GET e o "baixar os meus dados" (as horas em ISO) */
 export function sementesDaConta(banco: Banco, contaId: string): Record<string, unknown>[] {
-  return (banco.prepare("SELECT numero, pet, versao_pet, indice, hash_ate, semente, hora, dia, semana FROM sementes WHERE conta_id = ? ORDER BY numero DESC")
+  return (banco.prepare("SELECT numero, pet, versao_pet, indice, hash_ate, semente, hora, dia, semana, rival_pedido, mapa_pedido, situacao, estagio, rival, faixa FROM sementes WHERE conta_id = ? ORDER BY numero DESC")
     .all(contaId) as unknown as LinhaSemente[]).map(l => ({ ...l, hora: new Date(l.hora).toISOString() }));
 }
 
@@ -136,6 +147,7 @@ export function montarRotasSemente(app: Hono, cfg: ConfigConta, g: GuardasConta)
     if (!VERSOES_PET.includes(p.pet.versao))
       return recusar(c, 422, "versao_pet_desconhecida", `versão de pet desconhecida: ${p.pet.versao} (o servidor confere a ${VERSOES_PET.join(", ")})`);
 
+    fecharSemanas(banco, agora());
     /* tudo numa transação, sem await no meio: dois pedidos ao mesmo tempo não passam juntos do limite */
     return transacao(banco, () => {
       /* a hora nunca volta dentro da conta (a conta da MMO1 pede as sementes em ordem de hora): um relógio que recua fica na última */
@@ -166,9 +178,9 @@ export function montarRotasSemente(app: Hono, cfg: ConfigConta, g: GuardasConta)
       let numero = Number((banco.prepare("SELECT coalesce(max(numero), 0) AS n FROM sementes WHERE conta_id = ?").get(s.conta_id) as { n: number }).n) + 1;
       let semente = sementeDe(segredo, s.conta_id, numero);
       while (doPet.has(semente)) semente = sementeDe(segredo, s.conta_id, ++numero);
-      banco.prepare("INSERT INTO sementes (conta_id, numero, pet, versao_pet, indice, hash_ate, semente, hora, dia, semana) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
-        .run(s.conta_id, numero, p.pet.semente, p.pet.versao, p.indice, p.hash, semente, t, dia, semana);
-      return json(c, 201, { numero, semente, indice: p.indice, hora: new Date(t).toISOString(), dia, semana, restam_hoje: LUTAS_POR_DIA - hoje - 1 });
+      banco.prepare("INSERT INTO sementes (conta_id, numero, pet, versao_pet, indice, hash_ate, semente, hora, dia, semana, rival_pedido, mapa_pedido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+        .run(s.conta_id, numero, p.pet.semente, p.pet.versao, p.indice, p.hash, semente, t, dia, semana, p.rival, p.mapa);
+      return json(c, 201, { numero, semente, indice: p.indice, rival: p.rival, mapa: p.mapa, hora: new Date(t).toISOString(), dia, semana, restam_hoje: LUTAS_POR_DIA - hoje - 1 });
     });
   });
 }

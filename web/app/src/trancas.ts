@@ -12,3 +12,13 @@ export function definirTrancas(t: Readonly<Record<Lugar, boolean>>): boolean {
   return true;
 }
 export const lugarTrancado = (l: Lugar): boolean => TRANCAS[l];
+
+/* O cais (MMO5; docs/PLANO_UX_CAIS.md): so existe com o servidor no build. `ligado` falso: a vista o deixa como sempre foi (o modelo
+   normal, sem cadeado e sem marca no minimapa). Ligado e trancado, a vista o apaga como os outros lugares trancados; ligado e aberto,
+   ele volta ao normal. Quem escreve e o nivelTela.ts; `versao` sobe so quando algo muda. So vista. */
+export const CAIS: { ligado: boolean; trancado: boolean; versao: number } = { ligado: false, trancado: true, versao: 0 };
+export function definirCais(ligado: boolean, trancado: boolean): boolean {
+  if (CAIS.ligado === ligado && CAIS.trancado === trancado) return false;
+  CAIS.ligado = ligado; CAIS.trancado = trancado; CAIS.versao++;
+  return true;
+}

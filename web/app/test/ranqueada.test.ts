@@ -42,26 +42,27 @@ afterEach(() => desligarRanqueada());
 describe("o pedido da semente", () => {
   it("201: guarda a luta, manda o csrf e a sessão, e conta a luta de hoje", async () => {
     const a = ambiente({ "GET /conta": conta, "POST /sementes": () => entregue(8, 2) });
-    const l = await pedirSemente(PET);
+    const l = await pedirSemente(PET, RIVAL, "campo");
     expect(l).toMatchObject({ numero: 8, semente: 1008, indice: 0, doDia: 8, pet: 101, envio: "pendente", previa: null });
     expect(RQ.pedido.tipo).toBe("parado");
     expect(RQ.hoje).toBe(8);
     const p = a.pedidos.find(x => x.rota === "POST /sementes")!;
     expect(p.csrf).toBe("tok");
     expect(p.credentials).toBe("include");
-    expect(p.corpo).toMatchObject({ pet: { semente: 101, versao: 21 }, indice: 0 });
+    expect(p.corpo).toMatchObject({ pet: { semente: 101, versao: 21 }, indice: 0, rival: RIVAL, mapa: "campo" });
+    expect(l).toMatchObject({ rival: RIVAL, mapa: "campo" });
     expect((p.corpo as { hash: string }).hash).toMatch(/^[0-9a-f]{64}$/);
     expect(lerGuardado(a.guardado.get(CHAVE_RANQUEADA)!)).toHaveLength(1);
   });
   it("sem sessão (401 no /conta): sem_conta, e nada é pedido", async () => {
     const a = ambiente({ "GET /conta": () => ({ status: 401, corpo: { erro: "sem sessão" } }) });
-    expect(await pedirSemente(PET)).toBeNull();
+    expect(await pedirSemente(PET, RIVAL, "campo")).toBeNull();
     expect(RQ.pedido.tipo).toBe("sem_conta");
     expect(a.pedidos.some(x => x.rota === "POST /sementes")).toBe(false);
   });
   it("o servidor não responde: sem_resposta, e nada fica guardado", async () => {
     ambiente({ "GET /conta": conta, "POST /sementes": () => "cai" });
-    expect(await pedirSemente(PET)).toBeNull();
+    expect(await pedirSemente(PET, RIVAL, "campo")).toBeNull();
     expect(RQ.pedido.tipo).toBe("sem_resposta");
     expect(RQ.lutas).toHaveLength(0);
     fecharEstado();
@@ -69,32 +70,32 @@ describe("o pedido da semente", () => {
   });
   it("429: limite, com a hora em que volta", async () => {
     ambiente({ "GET /conta": conta, "POST /sementes": () => ({ status: 429, corpo: { motivo: "limite_do_dia", erro: "x", reabre_em: "2026-11-19T03:00:00.000Z" } }) });
-    expect(await pedirSemente(PET)).toBeNull();
+    expect(await pedirSemente(PET, RIVAL, "campo")).toBeNull();
     expect(RQ.pedido).toEqual({ tipo: "limite", reabreEm: Date.parse("2026-11-19T03:00:00Z") });
     expect(RQ.hoje).toBe(10);
   });
   it("403 nivel_insuficiente: trancada, com o marco; 422: versão; 409: recusado sem gastar", async () => {
     ambiente({ "GET /conta": conta, "POST /sementes": () => ({ status: 403, corpo: { motivo: "nivel_insuficiente", erro: "x", marco: 7 } }) });
-    expect(await pedirSemente(PET)).toBeNull();
+    expect(await pedirSemente(PET, RIVAL, "campo")).toBeNull();
     expect(RQ.pedido).toEqual({ tipo: "trancada", marco: 7 });
     expect(RQ.trancada).toBe(7);
     ambiente({ "GET /conta": conta, "POST /sementes": () => ({ status: 422, corpo: { motivo: "versao_pet_desconhecida", erro: "x" } }) });
-    expect(await pedirSemente(PET)).toBeNull();
+    expect(await pedirSemente(PET, RIVAL, "campo")).toBeNull();
     expect(RQ.pedido.tipo).toBe("versao");
     ambiente({ "GET /conta": conta, "POST /sementes": () => ({ status: 409, corpo: { motivo: "fora_de_ordem", erro: "x" } }) });
-    expect(await pedirSemente(PET)).toBeNull();
+    expect(await pedirSemente(PET, RIVAL, "campo")).toBeNull();
     expect(RQ.pedido).toEqual({ tipo: "recusado", motivo: "fora_de_ordem", gasta: false });
   });
   it("resposta que o jogo não entende levanta (falha alto), e o pedido volta a parado", async () => {
     ambiente({ "GET /conta": conta, "POST /sementes": () => ({ status: 201, corpo: { numero: 1 } }) });
-    await expect(pedirSemente(PET)).rejects.toThrow(/não entende/);
+    await expect(pedirSemente(PET, RIVAL, "campo")).rejects.toThrow(/não entende/);
     expect(RQ.pedido.tipo).toBe("parado");
     ambiente({ "GET /conta": conta, "POST /sementes": () => ({ status: 500, corpo: { erro: "quebrou" } }) });
-    await expect(pedirSemente(PET)).rejects.toThrow(/quebrou/);
+    await expect(pedirSemente(PET, RIVAL, "campo")).rejects.toThrow(/quebrou/);
   });
   it("a luta pedida que não entrou no registro fica gasta", async () => {
     ambiente({ "GET /conta": conta, "POST /sementes": () => entregue(1, 9) });
-    const l = (await pedirSemente(PET))!;
+    const l = (await pedirSemente(PET, RIVAL, "campo"))!;
     lutaPerdida(l.numero, "o registro do pet mudou durante o pedido");
     expect(RQ.pedido).toEqual({ tipo: "recusado", motivo: "o registro do pet mudou durante o pedido", gasta: true });
   });
@@ -105,13 +106,13 @@ describe("a prévia e o valor do rival", () => {
     let n = 0;
     ambiente({ "GET /conta": conta, "POST /sementes": () => { n++; return entregue(n, 10 - n, n - 1); } });
     expect(valorDoRival(RIVAL, 101, AGORA)).toEqual({ pontos: VALE, vencido: 0 });
-    const a = (await pedirSemente(PET))!;
+    const a = (await pedirSemente(PET, RIVAL, "campo"))!;
     registrarPrevia(a.numero, RIVAL, "campo", true, AGORA);
     expect(RQ.lutas[0].previa).toEqual({ venceu: true, pontos: VALE });
     expect(RQ.resultado).toBe(a.numero);
     expect(valorDoRival(RIVAL, 101, AGORA)).toEqual({ pontos: VALE / 2, vencido: 1 });
     /* a derrota vale 0 e não mexe na metade; outro pet não herda a metade */
-    const b = (await pedirSemente({ ...PET, log: [[0, "x", {}]] as never[] }))!;
+    const b = (await pedirSemente({ ...PET, log: [[0, "x", {}]] as never[] }, RIVAL, "campo"))!;
     registrarPrevia(b.numero, RIVAL, "campo", false, AGORA);
     expect(RQ.lutas[1].previa).toEqual({ venceu: false, pontos: 0 });
     expect(valorDoRival(RIVAL, 101, AGORA).vencido).toBe(1);
@@ -126,7 +127,7 @@ describe("o envio", () => {
     estagio: "Champion", pontos, vidaFinal: 1 });
   async function comPrevia(envio: (corpo: unknown) => Resposta) {
     const a = ambiente({ "GET /conta": conta, "POST /sementes": () => entregue(3, 7), "POST /envios": envio });
-    const l = (await pedirSemente(PET))!;
+    const l = (await pedirSemente(PET, RIVAL, "campo"))!;
     registrarPrevia(l.numero, RIVAL, "campo", true, AGORA);
     return { a, l };
   }
@@ -181,7 +182,7 @@ describe("o envio", () => {
 describe("o que fica guardado", () => {
   it("volta ao ligar de novo; formato desconhecido levanta", async () => {
     const a = ambiente({ "GET /conta": conta, "POST /sementes": () => entregue(1, 9) });
-    await pedirSemente(PET);
+    await pedirSemente(PET, RIVAL, "campo");
     const texto = a.guardado.get(CHAVE_RANQUEADA)!;
     desligarRanqueada();
     expect(RQ.lutas).toHaveLength(0);
