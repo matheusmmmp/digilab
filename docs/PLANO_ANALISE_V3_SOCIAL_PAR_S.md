@@ -1,7 +1,8 @@
 # PLANO DE ANÁLISE V3 — SOCIAL_PAR S: o substrato que deixa o social aparecer
 
 - **Status:** APROVADO pelo Matheus em 2026-11-18 ("Aprovado"), com as decisões S-1 a S-8 da seção 10 como DECIDIDAS. Nenhuma vida
-  rodou antes desta aprovação.
+  rodou antes desta aprovação. O adendo 1 (seção 11: d0 = 5 e o primário pelo contato) foi APROVADO em 2026-11-18, e as A1-1 a
+  A1-4 ficam DECIDIDAS; onde o adendo e as seções 2 a 9 divergem, vale o adendo.
 - **Snapshot:** a `main` em 8c6d17ae (2026-11-18), com o branch da S0 (`v3-social-par-s0`, PR #1000), que fica em cima do da run do A0
   (#998). O plano depende dos artefatos dos dois.
 - **Pedido:** a fase S1 do pedido do Matheus de 2026-11-18. O Matheus aprovou a S0 e a ordem dos bloqueios: "Aprovado, B1 e B2".
@@ -185,3 +186,43 @@ Nada disso muda a leitura.
 | S-6 | as margens e as medidas do A0, sem mudança | sim | baixo |
 | S-7 | as células do A0 (atencioso × comedouro), e não "3 lugares × 2 doadores" | sim | médio: mais células mudam mais de uma coisa |
 | S-8 | nenhuma mudança no pet nem no jogo: os braços são intervenções do experimento no t0 | sim | baixo: virar mecânica é outra decisão |
+
+## 11. Adendo 1 (APROVADO pelo Matheus em 2026-11-18, "Aprovo o adendo 1"): o parceiro não vê o focal deslocado
+
+**O que se achou ao começar a S2,** antes de qualquer vida e antes do código do orquestrador:
+- **O pet de hoje só percebe o outro a até 6 células.** A percepção social filtra os outros pela distância de visão (`digilab/mundo.py`, o
+  `perceber_social`, com `d <= raio_visao`, e o `raio_visao_celulas` é 6). O cheiro e o som do outro existem só atrás da
+  `ConfigSentidos` (V2, dois pets, etapa 8), que vem desligada e não está no jogo.
+- **No A0, F é levado a 9–12 células de P, onde nenhum dos dois vê o outro.** O T\* é o tempo até 6 células, que é exatamente o raio da
+  visão. **Por construção, P não pode responder a F antes do reencontro,** e por isso o T\* da GRAV é o da VIVO em 193 de 201 pares (a S0,
+  seção 4). F volta pela casa (o candidato fixo do explorar), não porque vê P.
+- **O efeito no plano aprovado:**
+  - **o G-DET falharia em todos os braços:** o `SeguidorPuro` só segue quem vê, então na VIVO ele fica ocioso, longe de F;
+  - **o B1, sozinho, não muda isso:** fora da casa, os dois continuam sem se ver depois do deslocamento.
+
+**A proposta: o deslocamento fica dentro da visão, e o primário passa a ser o tempo até o contato.**
+- **A1-1, o d0 = 5 células em linha reta** (de 4 a 5 pelo maior eixo, dentro das 6 da visão). No t0, os dois se veem, e P pode seguir,
+  fugir ou ignorar F desde o primeiro passo. Isso vale para os braços C, B1 (F a 5 células de Q) e B2.
+- **A1-2, o primário do A passa a ser o tempo até o contato:** D_A = T\*c_VIVO − T\*c_GRAV, com T\*c o tempo até 1 célula (o raio do
+  contato, a medida `metrics.tempo_restrito` com o raio 1), restrito à janela de 96. O par é elegível com a distância > 1 no t0. A δ_A
+  continua 4 decisões. O tempo até 6 células sai do primário, porque com d0 = 5 ele já começa alcançado.
+  - **As premissas:** a PA-2 conta os elegíveis pela distância > 1. A PA-3 conta os com contato na janela.
+  - **Os secundários:** os S1, S2 e S3 continuam, com o S1 sobre o T\*c.
+- **A1-3, o G-DET continua com o `SeguidorPuro`:** agora ele vê F no t0.
+- **A1-4, o controle C deixa de ser a A0 refeita,** porque o d0 e o primário mudam. A run do A0 (#998) fica como a referência do d0 = 12.
+  O gate G-C-IGUAL-A0 vira um teste do código: com o d0 = 12, a perturbação de tupla refaz as vidas do A0 com o mesmo sha256.
+- **O resto não muda:** os braços, o B1 fora da casa, o B2 com a bola na posição de P, as sementes, a faixa, as margens, a regra de leitura
+  da seção 7 e o custo.
+
+**A alternativa, não recomendada: ligar os sentidos** (o cheiro do outro até 24 células e o som até 16) nos dois pets. É mudar a percepção
+do pet, o que o pedido chama de M1, a "percepção do outro", e o pedido proíbe antes da S4. E não é o pet do jogo.
+
+**O custo de errar:** é alto. Sem o adendo, a run da S3 sai cega por construção: o G-DET falha, e os três braços dão "o substrato não
+deixa ver".
+
+| | a decisão | a recomendação |
+|---|---|---|
+| A1-1 | o d0 = 5 células, dentro da visão | sim |
+| A1-2 | o primário do A pelo tempo até o contato (1 célula), com a δ_A = 4 | sim |
+| A1-3 | o G-DET com o `SeguidorPuro`, como antes | sim |
+| A1-4 | o C com o d0 novo, e a run do A0 como a referência do d0 = 12 | sim |
