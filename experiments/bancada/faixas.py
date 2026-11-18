@@ -198,6 +198,9 @@ FAIXAS_RESERVADAS = (
     (73101, 73505, "VALUATION, a V3: o conserto do reflexo do sono, REL e CON nas 12 celulas da C4 x 200 unidades, uma vez "
                    "(docs/PLANO_ANALISE_V3_VALUATION_CONSERTO.md, secao 4; D-VAL-18, aprovada pelo Matheus em 2026-11-17, \"Aprovo, siga\"; bases 73101, 73202, 73303, 73404 e 73505, "
                    "K = 40; conferida livre no faixas.py, nas configs, nos planos e nas tarefas dos branches remotos em 2026-11-17)"),
+    (69101, 69505, "VALUATION, a V4: a validacao contra a baseline trivial, TRIV, REL e CON nas 12 celulas da C4 x 200 unidades, uma vez "
+                   "(docs/PLANO_ANALISE_V3_VALUATION_VALIDACAO.md, secao 2.3; VB-3, aprovada pelo Matheus em 2026-11-18, \"Aprovo os dois\" e \"Sim, aprovei\"; "
+                   "bases 69101, 69202, 69303, 69404 e 69505, K = 40; conferida livre no faixas.py da origin/main e nos branches remotos em 2026-11-18)"),
     (26101, 26505, "PET_VIVO, PV-2: a run unica da quimiotaxia, 6 bracos x 12 celulas da C4 x 200 unidades, com o contrafactual da SE-C "
                    "nos k de 0 a 7 e a checagem do v38 (docs/PLANO_ANALISE_V3_PET_VIVO_PV2.md, secao 4 e adendo 2, A2.1; bases 26101, "
                    "26202, 26303, 26404 e 26505, K = 40; proposta pelo coordenador em 2026-11-18, no lugar da 83xxx, que e a calibracao da "

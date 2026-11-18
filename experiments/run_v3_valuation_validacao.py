@@ -46,8 +46,8 @@ ORQUESTRADOR = "experiments/run_v3_valuation_validacao.py"
 PLANO = "docs/PLANO_ANALISE_V3_VALUATION_VALIDACAO.md"
 FASE = "validacao"
 PREFIXO = orq.PREFIXO
-BASES = (81101, 81202, 81303, 81404, 81505)                   # secao 2.3 (VB-3)
-FAIXA = (81101, 81505)
+BASES = (69101, 69202, 69303, 69404, 69505)                   # secao 2.3 (VB-3)
+FAIXA = (69101, 69505)
 K_POR_BASE = 40                                                # N = 200 (VB-3)
 DIAS, ORCAMENTO_POR_DIA = orq.DIAS, orq.ORCAMENTO_POR_DIA      # secao 2.1 (os da C4)
 SAIDA = "artifacts_v3_valuation/validacao"                     # secao 4

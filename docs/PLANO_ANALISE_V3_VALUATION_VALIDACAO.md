@@ -1,8 +1,7 @@
 # Plano de análise V3: VALUATION, a V4, a validação contra a baseline trivial
 
-**Status: PROPOSTO.** Escrito em 2026-11-18 (Claude Code, Opus 5.5, branch `v3-valuation-v4`), a pedido do Matheus: "Então faz a
-validação contra o baseline trivial". Nenhuma vida roda antes do "APROVADO pelo Matheus" neste cabeçalho; o orquestrador confere e recusa
-sem ele. A tarefa é a [TAREFA_V3_VALUATION.md](TAREFA_V3_VALUATION.md).
+**Status: APROVADO pelo Matheus em 2026-11-18,** com as VB-1 a VB-5 DECIDIDAS pela recomendação: "Aprovo os dois", na sessão do coordenador, confirmado nesta sessão ("Sim, aprovei"). Escrito em 2026-11-18 (Claude Code, Opus 5.5, branch `v3-valuation-v4`), a pedido do Matheus: "Então faz a
+validação contra o baseline trivial". O orquestrador confere este cabeçalho e recusa sem ele. A tarefa é a [TAREFA_V3_VALUATION.md](TAREFA_V3_VALUATION.md).
 
 ## 0. O contexto e o que já foi visto
 
@@ -14,7 +13,7 @@ sem ele. A tarefa é a [TAREFA_V3_VALUATION.md](TAREFA_V3_VALUATION.md).
   - **V3** (73xxx, `artifacts_v3_valuation/conserto/resultado.json`): CON 0,671 e REL 0,564 no `longe_fixo`, CON − REL = +0,106.
   - Pela comparação **entre runs**, só descritiva, o CON ficaria perto da TRIV ou acima dela. Esse número não é um contraste, e esta V4
     existe para medi-lo de verdade, nas mesmas sementes.
-- **Nenhum número deste plano** (as faixas, o N, a margem, a regra) é ajustado depois de vista uma vida da 81xxx.
+- **Nenhum número deste plano** (as faixas, o N, a margem, a regra) é ajustado depois de vista uma vida da 69xxx.
 
 ## 1. A pergunta, a hipótese e a previsão
 
@@ -48,10 +47,11 @@ sem ele. A tarefa é a [TAREFA_V3_VALUATION.md](TAREFA_V3_VALUATION.md).
 ### 2.3 As células, as sementes e o N (VB-3, VB-4)
 
 - **As 12 células da C4:** os 4 donos × `longe_fixo` (o primário), o comedouro e o longe sorteado.
-- **A faixa:** 81101…81505, nas bases 81101, 81202, 81303, 81404 e 81505, com K = 40, ou seja, **N = 200 unidades**.
+- **A faixa:** 69101…69505, nas bases 69101, 69202, 69303, 69404 e 69505, com K = 40, ou seja, **N = 200 unidades**.
   - A derivação é a da C4: `derivar_semente("digibrain_prototipo", base, k)`.
   - A faixa foi conferida livre em 2026-11-18, no `faixas.py` da `main` e nos branches remotos.
-  - Ela entra no `FAIXAS_RESERVADAS` antes da run.
+  - Ela está no `FAIXAS_RESERVADAS` (VB-3). A primeira proposta, a 81101…81505, caía dentro da 80001…82004, já reservada, e foi
+    trocada antes de qualquer vida (D-VAL-31).
 - **As vidas:** 3 braços × 12 células × 200 unidades = **7 200 vidas**, cerca de 1 h 30 com 4 processos.
 
 ## 3. A análise
@@ -114,9 +114,9 @@ Nada se conserta para o número sair.
 
 | id | decisão | a recomendação | o custo de errar |
 |---|---|---|---|
-| VB-1 | os 3 braços TRIV, REL e CON | sim: o CON é o que a pergunta mede, e o REL dá a réplica da A1 na mesma faixa, por pouco custo | sem o REL, não há como ver se a 81xxx repete o gap da A1 |
+| VB-1 | os 3 braços TRIV, REL e CON | sim: o CON é o que a pergunta mede, e o REL dá a réplica da A1 na mesma faixa, por pouco custo | sem o REL, não há como ver se a 69xxx repete o gap da A1 |
 | VB-2 | a TRIV com o ponto da calibração da A1, sem calibrar de novo | sim: a mesma baseline que a A1 julgou, e a calibração não se repete | uma calibração nova gastaria uma faixa e mudaria a régua |
-| VB-3 | a faixa 81101…81505, K = 40, N = 200 | aprovar | uma faixa ocupada: a run ficaria sem fonte |
+| VB-3 | a faixa 69101…69505, K = 40, N = 200 | aprovar | uma faixa ocupada: a run ficaria sem fonte |
 | VB-4 | as 12 células, com o primário no `longe_fixo` | sim: as da A1 e da V3 | só o `longe_fixo`: sem o descritivo do comedouro e do longe |
 | VB-5 | a regra da seção 3.2, com δ = 0,032 | sim: a régua da A1 | outra margem: a V4 deixa de comparar com a A1 |
 
