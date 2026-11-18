@@ -103,7 +103,7 @@ function EstadoDoPedido({ pet, irTreino, tentar }: { pet: number; irTreino: () =
     <div className="lr-estado" data-testid="lr-estado-limite">
       <div className="lr-destaque" role="status"><span className="lr-rot">Limite de hoje</span><b>{LUTAS_POR_DIA} de {LUTAS_POR_DIA} lutas feitas</b>
         <p>Volta à meia-noite, no horário de Brasília. Faltam {falta(e.reabreEm)}.</p></div>
-      <Botoes>{treino(true)}</Botoes>
+      <Botoes>{treino(true)}<a className="hx-btn" href="#/cais" onClick={fecharEstado} data-testid="lr-ver-semana">Ver a semana</a></Botoes>
     </div>
   );
   if (e.tipo === "trancada") return (

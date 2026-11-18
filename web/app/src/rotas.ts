@@ -55,3 +55,8 @@ export function configDoEndereco(hash: string): ParteConfig | null {
   return !p ? "principal" : (PARTES_CONFIG as readonly string[]).includes(p) ? p as ParteConfig : null;
 }
 export const enderecoDaConfig = (p: ParteConfig): string => p === "principal" ? "#/config" : `#/config/${p}`;
+
+/* O cais (MMO5; docs/PLANO_UX_CAIS.md): uma tela fora dos destinos, como os Ajustes, em #/cais. So existe com a chave do servidor no
+   build (src/telas/cais/TelaCais.tsx, caisNoBuild); quem le o endereco confere a chave */
+export const ENDERECO_DO_CAIS = "#/cais";
+export const caisDoEndereco = (hash: string): boolean => hash.replace(/^#\/?/, "").replace(/\/$/, "") === "cais";
