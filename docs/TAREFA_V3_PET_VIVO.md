@@ -182,3 +182,18 @@ O Matheus, nesta sessão, escreveu "Sim, começa o R0", a primeira etapa da INT-
   - o custo.
 - **Os desvios:** D-PV2C-1 a D-PV2C-11.
 - **Nenhuma vida da run, nenhuma faixa.** Próximo: a faixa e o PR da run.
+
+## O PR da run do PV-2 (2026-11-17, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2-run`, empilhado no #981)
+
+- **O orquestrador:** `experiments/run_v3_pet_vivo_pv2.py`, com as configs em `experiments/configs/v3_pet_vivo/` (a run e a fumaça). Os
+  testes estão em `tests/test_run_v3_pet_vivo_pv2.py`.
+- **O adendo 2 do plano, PROPOSTO:**
+  - a faixa 83101–83505;
+  - o que o orquestrador faz;
+  - a checagem do v38 (a INT-8), descritiva;
+  - o custo.
+- **A fumaça** (bases 101 e 202, K = 1, 2 dias): 192 vidas, todas com o G1 e o T-CENARIO-1 conferidos, em 77 s com 2 processos.
+- **Os desvios:** D-PV2R-1 a D-PV2R-7.
+- **Próximo:** o APROVADO do adendo 2, o ok do coordenador à faixa e a vez da máquina. Depois, a run, uma vez, e o
+  `RESULTADO_V3_PET_VIVO_PV2.md`.
+

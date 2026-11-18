@@ -384,3 +384,63 @@ entra: é a conta da 0b, medida lá.
 - **Não escreve o orquestrador da run,** com a SE-C pelo contrafactual da 0b em três braços: fica para o PR da run, depois do APROVADO
   deste adendo.
 - **Não muda nenhum gate nem a regra de leitura.**
+
+## Adendo 2: a faixa, o orquestrador da run e a checagem do v38 (2026-11-17, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2-run`; PROPOSTO)
+
+**Status do adendo 2: PROPOSTO.** O Matheus pediu nesta sessão: "pede a faixa ao coordenador e escreve o PR da run". O orquestrador
+(`experiments/run_v3_pet_vivo_pv2.py`) recusa a run de verdade sem o APROVADO nesta linha. Os gates, as margens e a regra de leitura são
+os das seções 6 e 7, sem mudança.
+
+### A2.1 A faixa
+
+- **A faixa é 83101–83505,** com as bases 83101, 83202, 83303, 83404 e 83505 e K = 40. O prefixo é o `digibrain_prototipo`, o da C4.
+- **Ela foi pedida ao coordenador em 2026-11-17.** Estava livre no `faixas.py` da `origin/main` e em todos os branches remotos.
+- Ela entra em `FAIXAS_RESERVADAS` neste PR. Se o coordenador indicar outra, a faixa e as bases mudam antes da run.
+
+### A2.2 O que o orquestrador faz
+
+- **As vidas:** o `pv2.viver` (o REL da C4, com o órgão e a `ConfigPV2` do adendo 1 nos braços OLF-*). São os 6 braços nas 12 células,
+  200 unidades e 14 dias: 14 400 vidas.
+- **As conferências que falham alto, em cada vida:**
+  - o G1 do replay, refeito sem o leitor da SE-C, o que confere também que o leitor não muda a vida;
+  - o T-CENARIO-1;
+  - a `ConfigPV2` do cérebro, que precisa ser a do braço.
+- **O contrafactual da SE-C** é o `Leitor` da 0b (`auditoria_pet_vivo.py`, a A-4, com Δ = S/4), nos k de 0 a 7, no OLF-0, no OLF-DCV
+  e no OLF-G: 1 440 vidas. A A_r é fixada em cada (braço, lugar) pelas vidas dele, antes da medida (PV-0-7). A SE-C de cada vida é a
+  `se_c` do `metrics.py`.
+- **Os contrastes:** a diferença por unidade (base, semente), com a média dos donos do lugar, e o IC95 pelo t (`ic_t`), como na C4.
+- **A regra de leitura** é a tabela da seção 7, com o "custa perto de casa" lido primeiro, porque ele vale qualquer que seja o resto. O
+  OLF-G sai separado.
+- **O G-UNIDADES** continua sendo a conferência dos testes (`tests/test_pv2_codigo.py`), antes da run.
+
+### A2.3 A checagem do v38 (a INT-8)
+
+A INT-8 (decidida em 2026-11-17) pede uma checagem descritiva com a config do v38 em cada run da cadeia, sem gate.
+
+- **O pet do v38 em Python:** não existe um objeto só. A checagem junta o que o gabarito do EQUILIBRIO_CUIDADO já junta
+  (`exportar_gabarito_digibrain_modular.equilibrio_cuidado`):
+  - os inatos do E1;
+  - o sono que segura;
+  - o lance do dono, no cérebro e no motor;
+  - as duas regras do E1;
+  - o bebê nas primeiras 96 decisões.
+- **O olhar (o órgão da visão) fica de fora.** O custo do SigLIP numa run desse tamanho não foi medido, e o PV-2 não lê a visão.
+- **As vidas:** o HOJE, o OLF-0 e o OLF-DCV, nos k de 0 a 7, no `longe` e no `longe_fixo`, com os 4 donos: 960 vidas a mais.
+- **Os descritivos:** a taxa por episódio de cada braço, OLF-DCV − OLF-0 e HOJE − OLF-DCV, sem classe e sem gate.
+- **A leitura:** a checagem só diz se o sinal do G-PV2-LONGE aparece com as chaves do jogo. Ela não troca a leitura da seção 7.
+
+### A2.4 O custo
+
+O custo é SEM MEDIDA na run inteira. Ele vem da fumaça e do adendo 1:
+- 14 400 vidas a uns 5 s;
+- o contrafactual em 1 440 delas, a uns 4,5 s a mais;
+- as 960 do v38.
+
+Isso projeta umas 5,6 h com 4 processos, abaixo do corte de umas 8 h. A máquina segue a V3-D8: no máximo 4 processos, e só quando o
+Gerente liberar a vez.
+
+### A2.5 O que este adendo não faz
+
+- **Não roda nenhuma vida da faixa.** Isso espera o APROVADO, o ok do coordenador e a vez da máquina.
+- **Não muda nenhum gate, margem ou regra de leitura** das seções 6 e 7, nem os números do adendo 1.
+
