@@ -216,6 +216,10 @@ FAIXAS_RESERVADAS = (
     (101101, 101505, "SOCIAL_PAR, a run unica do A0 e do B0: as bases 101101...101505, prefixo social_par, o K pela regra da secao 6 "
                      "decidido depois do piloto (docs/PLANO_ANALISE_V3_SOCIAL_PAR_A0.md, secao 3.4; A0-8, aprovada pelo Matheus em "
                      "2026-11-17, \"Aprovo todas\"; conferida livre na origin/main e em todos os branches remotos em 2026-11-17)"),
+    (103001, 103400, "SOCIAL_PAR S, o substrato que deixa o social aparecer: a run 103001...103200 (200 bases, k = 1, prefixo social_par_s, "
+                     "os mesmos nos tres bracos) e o G-DET 103301...103350 (prefixo social_par_s_det) (docs/PLANO_ANALISE_V3_SOCIAL_PAR_S.md, "
+                     "secao 4; reservada para o plano PROPOSTO, a aprovacao e o checkpoint S2; conferida livre no faixas.py, nos planos e nas "
+                     "configs da origin/main e de todos os branches remotos em 2026-11-18)"),
 )
 
 
