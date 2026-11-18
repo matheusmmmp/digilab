@@ -1,4 +1,14 @@
 {
   "modo": "run",
-  "unidades": {"bases": [101101, 101202, 101303, 101404, 101505], "k": 42}
+  "plano": "docs/PLANO_ANALISE_V3_SOCIAL_PAR_A0.md",
+  "unidades": {
+    "bases": [
+      101101,
+      101202,
+      101303,
+      101404,
+      101505
+    ],
+    "k": 42
+  }
 }
