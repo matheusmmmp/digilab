@@ -29,7 +29,7 @@ BASES_COMPARACAO = {"calibracao": (28101, 28202, 28303, 28404, 28505), "validaca
 # competicao entre as regras, PLANO_ANALISE_V2_V3_COMPETICAO, secao 4; o do prototipo do DigiBrain modular,
 # PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO, secao 3)
 PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7", "comparacao-cerebros", "mundo", "corpo", "banheiro", "dois_pets", "rede_de_si",
-                     "pet_que_pensa", "competicao", "digibrain_prototipo", "social_par", "social_par_piloto")
+                     "pet_que_pensa", "competicao", "digibrain_prototipo", "social_par", "social_par_piloto", "corpo_par")
 # faixas queimadas: continuam reservadas e nao podem ser usadas para nada (adendo 4.1 do PLANO_ANALISE_V2_EXPERIMENTO_MAIOR)
 FAIXAS_QUEIMADAS = ((15101, 15505, "a validacao antiga do experimento maior: run indevida parada em 2026-10-06 (PR #183)"),
                     (90101, 90505, "GOSTO_VISUAL, GV3b do adendo 1: a run parou na vida 213 de 216 por um erro do codigo, as duas TVs "
@@ -220,6 +220,11 @@ FAIXAS_RESERVADAS = (
                      "unidades (docs/PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md, secao 4; D-CA-10, aprovada pelo Matheus em 2026-11-18, "
                      "\"Aprovo, siga\" e \"Aprovo todas\"; bases 100101, 100202, 100303, 100404 e 100505, K = 40; conferida livre no faixas.py, nas configs, "
                      "nos planos, nas tarefas, nos resultados e nos orquestradores de todos os branches remotos em 2026-11-18)"),
+    (104001, 104400, "CORPO, a ablacao do corpo (C2): o bloco I nas bases 104001...104200 (k = 1, 200 sementes independentes, prefixo "
+                     "digibrain_prototipo) e o bloco II nas bases 104301...104400 (k = 1, prefixo corpo_par), os bracos CTRL, D, D + E e "
+                     "D + C5 (docs/PLANO_ANALISE_V3_CORPO.md, secoes 3 e 4; D-CO-5 e D-CO-7, decididas pelo Matheus em 2026-11-18, "
+                     "\"Confirmo, siga\"; a 104xxx conferida livre nos codigos, configs, planos, tarefas, resultados e registro de todos os "
+                     "branches remotos em 2026-11-18)"),
 )
 
 
