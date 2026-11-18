@@ -141,6 +141,28 @@ As seções acima são cópias inteiras do CLAUDE.md antigo (o G-NADA-PERDIDO co
 - **2026-11-17, MMO4, a tela da luta ranqueada:** `web/app/src/ranking/ranqueada.ts` (o cliente: pedido, prévia, envio, reenvio),
   `web/app/src/telas/lutar/palcoPoc/TelaRanqueada.tsx` e `web/app/src/estilo/ranqueada.css` (a aba Arena com "Treino / Ranqueada"),
   `web/app/test/ranqueada.test.ts`. Só liga com `VITE_DIGILAB_API` no build.
+- **2026-11-17, MMO4, o rival e o mapa no pedido da semente:** `servidor_web/src/envio/sementes.ts` e a migração 5
+  (`rival_pedido`, `mapa_pedido`); `web/app/src/ranking/pontos.ts` (a luta com outro rival ou mapa não conta), `pedido.ts` e
+  `ranqueada.ts`.
+- **2026-11-17, MMO, MMO5 (a parte local):** o ranking da semana em `servidor_web/src/envio/semanas.ts`: as tabelas por estágio com o
+  desempate, o fechamento da semana e o segredo publicado (`GET /semanas`, `/semanas/:semana/tabelas`, `/semanas/:semana/segredo`); a
+  migração 4 em `servidor_web/src/conta/banco.ts`; `servidor_web/test/semanas.test.ts`. O `pontuar` de
+  `web/app/src/ranking/pontos.ts` passou a ser exportado.
+- **2026-11-17, CONTA, as telas da conta no jogo:** `web/app/src/conta/conta.ts` (o cliente: entrar, primeiro acesso, perfil, sair,
+  apagar), `web/app/src/conta/apiDoBuild.ts` (`VITE_DIGILAB_API`, `VITE_DIGILAB_TERMOS`, `VITE_DIGILAB_PRIVACIDADE`),
+  `web/app/src/telas/config/TelaConta.tsx` e `web/app/src/estilo/conta.css` (a parte Conta dos Ajustes, `#/config/conta`),
+  `web/app/test/conta.test.ts`. Só liga com `VITE_DIGILAB_API` no build.
+- **2026-11-18, MMO5, o e2e do cais:** `web/app/playwright.conta.config.ts` e `web/app/e2e_conta/` (`comum.ts`, `montar.ts`,
+  `cais.spec.ts`): o build com `VITE_DIGILAB_API` em `web/dist_conta/` e o servidor falso por `page.route`. Comando:
+  `cd web/app && npm run e2e:conta`.
+- **2026-11-18, MMO5, o cais na ilha 3D:** `web/app/src/trancas.ts` (`CAIS`), `src/componentes/CadeadoDoCais.tsx`, a marca do cais em
+  `src/telas/pet/Minimapa.tsx` e o modelo apagado em `src/telas/pet/ilha/vista.ts`. Só com `VITE_DIGILAB_API` no build.
+- **2026-11-17, MMO5, a tela do cais:** `web/app/src/cais/cais.ts` (o cliente das rotas da semana), `src/telas/cais/TelaCais.tsx` e
+  `src/estilo/cais.css` (a tela, em `#/cais`), o cartão do nível 10 em `src/nivel.ts`, o toque no cais em `src/telas/pet/ToqueLugar.tsx`
+  e `test/cais.test.ts`. Só com `VITE_DIGILAB_API` no build.
+- **2026-11-17, MMO5, a prancha do cais e da semana:** `docs/PLANO_UX_CAIS.md` (APROVADO, UX-CA-1 a 7) e `docs/pranchas/ux-cais/`
+  (`gerar.py`, `cais.css`, `capturar.sh`, os HTML e as capturas): a tabela da semana, os estados, a semana fechada, o segredo e o
+  cais trancado e destravado.
 - **2026-11-17, MMO, a prancha da luta ranqueada:** `docs/PLANO_UX_LUTA_RANQUEADA.md` (APROVADO, UX-LR-1 a 6) e
   `docs/pranchas/ux-luta-ranqueada/` (`gerar.py`, `ranqueada.css`, `capturar.sh`, os HTML e as capturas): a aba Arena com a escolha
   "Treino / Ranqueada", os estados do pedido e o resultado. Só desenho.

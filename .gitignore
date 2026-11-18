@@ -50,6 +50,7 @@ servidor/gasto_fala.json
 node_modules/
 web/dist/
 web/dist_poc/
+web/dist_conta/
 web/app/test-results/
 web/app/playwright-report/
 
@@ -168,5 +169,11 @@ artifacts_v3_longe_geometria/**/vidas/
 # EVIDENCIA A1 (docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md): meta, medidas, resultado e o vidas.tar.gz no git; as vidas soltas fora
 !artifacts_v3_baseline_trivial/
 artifacts_v3_baseline_trivial/**/vidas/
+# VALUATION (docs/PLANO_ANALISE_V3_VALUATION.md): meta, medidas, resultado e o vidas.tar.gz no git; as vidas soltas fora
+!artifacts_v3_valuation/
+artifacts_v3_valuation/**/vidas/
 # EVIDENCIA A2: os artefatos da ablacao do aprendizado (docs/PLANO_ANALISE_V3_ABLACAO_APRENDIZADO.md, secao 6)
 !artifacts_v3_ablacao_aprendizado/
+# SOCIAL_PAR E1: a conferencia dos controles positivos (docs/ESPEC_V3_SOCIAL_PAR_E1.md, secao 3; D-SP-10)
+!artifacts_v3_social_par_e1/
+!artifacts_v3_social_par_a0/

@@ -173,3 +173,44 @@ esta. O documento é o [integracao_cadeia_digibrain.md](futuro/integracao_cadeia
 - **As decisões:** as INT-1 a INT-9 estão DECIDIDAS pela recomendação. O Matheus escreveu, em 2026-11-17: "Aprovo as INT-1 a
   INT-9 pela recomendação" (D-INT-9).
 - **A próxima etapa desta frente** é o PR do código do PV-2 (o R0), pela seção 8 do documento.
+- **Os repasses (2026-11-18, D-INT-10):**
+  - **a INT-5** fica como premissa do plano do R2: uma estrutura de traço só no cérebro, usada pela janela do ELOGIO e pelo crédito do
+    intervalo, com os sinais separados no registro. Está anotada também na `TAREFA_V3_ELOGIO.md`;
+  - **a INT-7** foi para a LZ3, na `TAREFA_V3_LIMPEZA.md`: o balão e a fala passam a ler o motivo do modular.
+
+## O código do PV-2, o R0 (2026-11-17, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2-codigo`)
+
+O Matheus, nesta sessão, escreveu "Sim, começa o R0", a primeira etapa da INT-1 da análise da integração.
+
+- **Entregue:**
+  - a `ConfigPV2`, desligada;
+  - o olfato no M-SENS: o nível e a variação, nunca a diferença;
+  - o `dC` no z e o `w0_dc`;
+  - o executor da busca com os cinco braços OLF;
+  - as medidas (`medidas_pv2`, no `metrics.py`);
+  - as vidas (`experiments/pv2.py`) e a medição (`experiments/medir_pv2.py`).
+- **O gabarito** das vidas de hoje está num commit próprio (`5322a82a`) e sai igual byte a byte.
+- **Os testes:** `tests/test_pv2_codigo.py` e `tests/test_gabarito_pv2.py`. Eles cobrem o G1 de cada braço, o G-UNIDADES, a troca das
+  narinas, as chamadas da rng e o cenário da ração longe.
+- **O adendo 1** (`PLANO_ANALISE_V3_PET_VIVO_PV2.md`), APROVADO pelo Matheus em 2026-11-17 ("Sim, G0 = 512"), traz:
+  - os números do mecanismo;
+  - a forma dos braços;
+  - o G0 = 512, no lugar do 64, porque a saturação passou do corte;
+  - o custo.
+- **Os desvios:** D-PV2C-1 a D-PV2C-11.
+- **Nenhuma vida da run, nenhuma faixa.** Próximo: a faixa e o PR da run.
+
+## O PR da run do PV-2 (2026-11-17, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2-run`, empilhado no #981)
+
+- **O orquestrador:** `experiments/run_v3_pet_vivo_pv2.py`, com as configs em `experiments/configs/v3_pet_vivo/` (a run e a fumaça). Os
+  testes estão em `tests/test_run_v3_pet_vivo_pv2.py`.
+- **O adendo 2 do plano, APROVADO pelo Matheus em 2026-11-18** ("Sim, aprovo", D-PV2R-8):
+  - a faixa 26101–26505, proposta pelo coordenador no lugar da 83xxx (D-PV2R-6);
+  - o que o orquestrador faz;
+  - a checagem do v38 (a INT-8), descritiva;
+  - o custo.
+- **A fumaça** (bases 101 e 202, K = 1, 2 dias): 192 vidas, todas com o G1 e o T-CENARIO-1 conferidos, em 77 s com 2 processos.
+- **Os desvios:** D-PV2R-1 a D-PV2R-8.
+- **Próximo:** o merge do #981 e do #984, porque o `pre_run` exige o plano da `origin/main` (D-PV2R-9); a vez da máquina já foi dada. Depois, a run, uma vez, e o
+  `RESULTADO_V3_PET_VIVO_PV2.md`.
+

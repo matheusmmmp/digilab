@@ -3244,3 +3244,195 @@ def tabela_trava(itens: Sequence[tuple[bool, bool]]) -> dict:
             "v2_passam_de_todas": _fracao_wilson(passa, n), "v3_marcadas": _fracao_wilson(marc, n),
             "v4_marcadas_a_toa": _fracao_wilson(a_toa, n)}
 
+
+
+# ================================================================== o par: contato e contingencia (docs/ESPEC_V3_SOCIAL_PAR_E1.md, 2.5)
+# As series sao por decisao do pet focal: a distancia ao parceiro (em celulas, Chebyshev, a do toque; ou em subunidades) logo depois de
+# cada decisao. "Aproximar" e a distancia cair entre duas decisoes seguidas; "afastar", subir. Tudo em inteiros, sem arredondar nada.
+def _serie_de_inteiros(nome: str, valores: Sequence[int]) -> list[int]:
+    out = list(valores)
+    if any(type(v) is not int or v < 0 for v in out):
+        raise ValueError(f"{nome}: a serie e de inteiros nao negativos")
+    return out
+
+
+def fracao_em_raio(dists: Sequence[int], raio: int, desde: int = 0) -> float:
+    """a fracao das decisoes a partir de `desde` com a distancia <= `raio`; sem decisao nenhuma, falha alto"""
+    d = _serie_de_inteiros("fracao_em_raio", dists)[desde:]
+    if not d:
+        raise ValueError("fracao_em_raio sem decisao depois de `desde`")
+    return sum(1 for v in d if v <= raio) / len(d)
+
+
+def tempo_ate_raio(dists: Sequence[int], raio: int, desde: int, janela: int) -> tuple[int, bool]:
+    """(o numero de decisoes depois de `desde` ate a primeira com a distancia <= `raio`, censurado): a decisao `desde` conta 0. Sem
+    reencontro nas `janela` decisoes seguintes (ou no fim da serie, se vier antes), devolve (o que foi observado, True)."""
+    d = _serie_de_inteiros("tempo_ate_raio", dists)
+    if not 0 <= desde < len(d) or type(janela) is not int or janela <= 0:
+        raise ValueError(f"tempo_ate_raio: desde={desde!r} fora da serie ou janela={janela!r} invalida")
+    fim = min(len(d), desde + janela + 1)
+    for k in range(desde, fim):
+        if d[k] <= raio:
+            return k - desde, False
+    return fim - 1 - desde, True
+
+
+def tempo_restrito(dists: Sequence[int], raio: int, desde: int, janela: int) -> int:
+    """o T* do A0 (docs/PLANO_ANALISE_V3_SOCIAL_PAR_A0.md, secao 4, item 3): o tempo ate o raio, ou a janela inteira se nao chegou. A serie
+    tem de cobrir a janela inteira (o `desde` mais `janela` decisoes), senao a censura no fim da serie daria um tempo menor que a janela, e
+    a funcao falha alto."""
+    d = _serie_de_inteiros("tempo_restrito", dists)
+    if type(janela) is not int or janela <= 0 or not 0 <= desde or desde + janela >= len(d):
+        raise ValueError(f"tempo_restrito: a janela de {janela!r} decisoes depois de {desde!r} nao cabe na serie de {len(d)}")
+    t, censurado = tempo_ate_raio(d, raio, desde, janela)
+    return janela if censurado else t
+
+
+def episodios_em_raio(dists: Sequence[int], raio: int) -> list[int]:
+    """as duracoes (em decisoes) de cada trecho seguido com a distancia <= `raio`, na ordem"""
+    out, corrida = [], 0
+    for v in _serie_de_inteiros("episodios_em_raio", dists):
+        if v <= raio:
+            corrida += 1
+        elif corrida:
+            out.append(corrida)
+            corrida = 0
+    if corrida:
+        out.append(corrida)
+    return out
+
+
+def _aproximou(eu_antes: tuple, eu_depois: tuple, outro: tuple) -> int:
+    """+1 se o passo de `eu` chegou mais perto de onde o `outro` estava, -1 se ficou mais longe, 0 se igual (distancia ao quadrado, inteira)"""
+    d0 = (eu_antes[0] - outro[0]) ** 2 + (eu_antes[1] - outro[1]) ** 2
+    d1 = (eu_depois[0] - outro[0]) ** 2 + (eu_depois[1] - outro[1]) ** 2
+    return (d1 < d0) - (d1 > d0)
+
+
+def contingencia(pos_meu: Sequence[tuple[int, int]], pos_outro: Sequence[tuple[int, int]]) -> float | None:
+    """P(eu me aproximo em t+1 | o outro se aproximou em t) - P(eu me aproximo em t+1 | o outro se afastou em t).
+
+    As series sao as posicoes (subunidades inteiras) dos dois pets no fim de cada passo de decisao do par, alinhadas. "O outro se
+    aproximou em t" e o passo dele de t-1 para t ter chegado mais perto de onde eu estava em t-1; "eu me aproximei em t+1", o meu passo de
+    t para t+1 ter chegado mais perto de onde o outro estava em t. Cada um e medido pelo proprio passo, contra a posicao do outro antes
+    dele: quem se moveu fica separado. None se um dos dois condicionais nao tem caso."""
+    a = [tuple(p) for p in pos_meu]
+    b = [tuple(p) for p in pos_outro]
+    if len(a) != len(b):
+        raise ValueError(f"contingencia: series de tamanhos diferentes ({len(a)} x {len(b)})")
+    if any(len(p) != 2 or type(p[0]) is not int or type(p[1]) is not int for p in a + b):
+        raise ValueError("contingencia: as posicoes sao pares de inteiros")
+    casos = {True: [0, 0], False: [0, 0]}                 # o outro se aproximou? -> [eu me aproximei depois, total]
+    for t in range(1, len(a) - 1):
+        passo_outro = _aproximou(b[t - 1], b[t], a[t - 1])
+        if passo_outro == 0:
+            continue
+        casos[passo_outro > 0][1] += 1
+        casos[passo_outro > 0][0] += int(_aproximou(a[t], a[t + 1], b[t]) > 0)
+    if not casos[True][1] or not casos[False][1]:
+        return None
+    return casos[True][0] / casos[True][1] - casos[False][0] / casos[False][1]
+
+
+def alternancia(chutes_a: Sequence[int], chutes_b: Sequence[int], janela: int) -> float | None:
+    """a fracao dos chutes de A seguidos por um chute de B em ate `janela` ticks (estritamente depois), antes do proximo chute de A.
+    `chutes_*` sao os ticks de cada chute na bola, crescentes. None sem chute de A."""
+    a, b = list(chutes_a), list(chutes_b)
+    if any(type(v) is not int for v in a + b) or a != sorted(a) or b != sorted(b):
+        raise ValueError("alternancia: os chutes sao ticks inteiros crescentes")
+    if type(janela) is not int or janela <= 0:
+        raise ValueError(f"alternancia: janela invalida {janela!r}")
+    if not a:
+        return None
+    seguidos = 0
+    for k, t in enumerate(a):
+        limite = min(t + janela, a[k + 1] - 1) if k + 1 < len(a) else t + janela
+        j = bisect_left(b, t + 1)
+        seguidos += int(j < len(b) and b[j] <= limite)
+    return seguidos / len(a)
+
+
+def alternancia_substituta(chutes_a: Sequence[int], chutes_b: Sequence[int], janela: int, deslocamentos: Sequence[int],
+                           duracao: int) -> list[float | None]:
+    """a alternancia com os chutes de B deslocados no tempo, circularmente na vida de `duracao` ticks, um valor por deslocamento: preserva
+    a taxa de cada um e quebra o acoplamento (o substituto do estimulo comum, a espec da E1, 3.2 da investigacao)"""
+    if type(duracao) is not int or duracao <= 0 or any(type(t) is not int or not 0 <= t < duracao for t in list(chutes_a) + list(chutes_b)):
+        raise ValueError("alternancia_substituta: os chutes ficam em [0, duracao)")
+    return [alternancia(chutes_a, sorted((t + d) % duracao for t in chutes_b), janela) for d in deslocamentos]
+
+
+# ---------------------------------------------------------------- V3, ELOGIO (docs/PLANO_ANALISE_V3_ELOGIO.md, secao 4; D-EL-19, D-EL-24)
+def consumos_com_presentes(consumos: Sequence[tuple[int, str]], vistas: Sequence[tuple[int, Iterable[str]]]) -> list[tuple[int, str, frozenset]]:
+    """D-EL-19: cada consumo (tick, fruta) com as frutas presentes, os tipos no mapa na ultima vista (tick, tipos) com tick <= o do consumo,
+    mais a fruta comida; antes da primeira vista, so a comida. A entrada da `fracao_da_fruta`. Falha alto com as vistas fora de ordem ou com
+    um consumo fora de ordem."""
+    ticks = [t for t, _ in vistas]
+    if any(b <= a for a, b in zip(ticks, ticks[1:])):
+        raise ValueError("as vistas precisam vir em ordem estrita de tick")
+    if any(b[0] < a[0] for a, b in zip(consumos, consumos[1:])):
+        raise ValueError("os consumos precisam vir em ordem de tick")
+    out, i, atual = [], 0, frozenset()
+    for t, f in consumos:
+        while i < len(vistas) and vistas[i][0] <= t:
+            atual = frozenset(vistas[i][1])
+            i += 1
+        out.append((t, f, atual | {f}))
+    return out
+
+
+def decisao_do_criterio(consumos: Sequence[tuple[int, str]], fruta: str, janela: int, minimo: int, passo: int) -> int | None:
+    """M1 (D-EL-4, D-EL-24, descritiva): a decisao (tick // passo) do primeiro consumo de fruta em que `minimo` das ultimas `janela` frutas
+    comidas sao `fruta`; None se nunca (censurada no fim da vida). `consumos` = (tick, fruta), so as frutas, em ordem."""
+    if not 1 <= minimo <= janela or passo < 1:
+        raise ValueError(f"janela {janela}, minimo {minimo}, passo {passo}")
+    ultimas: list[str] = []
+    for t, f in consumos:
+        ultimas = (ultimas + [f])[-janela:]
+        if len(ultimas) == janela and sum(1 for x in ultimas if x == fruta) >= minimo:
+            return t // passo
+    return None
+
+
+# ================================================================== o PV-2 (docs/PLANO_ANALISE_V3_PET_VIVO_PV2.md, secao 5)
+FINS_BUSCA_ACHOU = ("meta", "achou")
+
+
+def medidas_pv2(motivos: Sequence[dict], consumos: Sequence[dict], com_orgao: bool, S: int) -> dict:
+    """As medidas de uma vida do PV-2, so dos motivos do DigiBrain e dos consumos do mundo (as descritivas da secao 5 do plano; a taxa por
+    episodio de fome e a do G-MVP-EP, `episodios_de_fome`, fora daqui):
+      - as decisoes, as da unidade do cheiro (comer/cheiro e explorar/cheiro) e as racoes comidas;
+      - o achado pelo cheiro: a fracao das buscas comer/cheiro (os fins registrados da DX-4) que acabam em "meta" ou "achou";
+      - as decisoes ate comer desde a primeira decisao com cheiro (None sem cheiro ou sem consumo depois dele);
+      - as unidades por decisao (a media, e a de cada comportamento): a base do G-UNIDADES;
+      - com o orgao (`com_orgao`): as viradas e as seguidas do executor, as piruetas, a hora da virada (a fracao das viradas com dC < 0) e a
+        saturacao do nivel (a fracao das decisoes com cheiro em que o nivel do cheiro, com o ganho no OLF-G, chega a S; a INT-4)."""
+    n = len(motivos)
+    if n == 0:
+        raise ValueError("medidas_pv2: a vida sem decisoes")
+    cheiro = [m for m in motivos if m["tipo_escolha"] == "cheiro"]
+    buscas = [f for m in motivos for f in m["fins"] if f["chave"][:2] == ["comer", "cheiro"]]
+    achou = sum(1 for f in buscas if f["motivo"] in FINS_BUSCA_ACHOU)
+    com_cheiro = [m["k"] for m in motivos if any(u["chave"][1:2] == ["cheiro"] for u in m["unidades"])]
+    primeira = com_cheiro[0] if com_cheiro else None
+    comeu = [m["k"] for m in motivos if m["consequencia"] is not None and m["consequencia"]["comeu"] is not None
+             and m["consequencia"]["comeu"]["como"] == "comer"]
+    depois = [k for k in comeu if primeira is not None and k >= primeira]
+    por_b: dict = {}
+    for m in motivos:
+        for u in m["unidades"]:
+            por_b[u["chave"][0]] = por_b.get(u["chave"][0], 0) + 1
+    out = {"decisoes": n, "decisoes_cheiro": len(cheiro), "racao": sum(1 for c in consumos if c["tipo"] == "racao"),
+           "buscas": len(buscas), "achou_pelo_cheiro": None if not buscas else achou / len(buscas),
+           "primeira_com_cheiro": primeira, "decisoes_ate_comer": None if not depois else depois[0] - primeira,
+           "unidades_por_decisao": sum(len(m["unidades"]) for m in motivos) / n,
+           "unidades_por_comportamento": {b: v / n for b, v in sorted(por_b.items())}}
+    if com_orgao:
+        exe = [m["pv2"] for m in motivos if "pv2" in m]
+        viradas = [e for e in exe if e["escolheu"] == "cheiro_virar"]
+        com_ch = [m["olfato"] for m in motivos if m["olfato"]["c"] > 0]
+        out.update({"executor": len(exe), "viradas": len(viradas), "seguidas": len(exe) - len(viradas),
+                    "taxa_viradas": None if not exe else len(viradas) / len(exe),
+                    "hora_da_virada": None if not viradas else sum(1 for e in viradas if e["dC"] < 0) / len(viradas),
+                    "decisoes_com_cheiro": len(com_ch),
+                    "saturacao": None if not com_ch else sum(1 for o in com_ch if o["nivel"] >= S) / len(com_ch)})
+    return out

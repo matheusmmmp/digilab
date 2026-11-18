@@ -237,3 +237,131 @@ Pedido do Matheus: "Sim, merge e tela" (2026-11-17), depois do merge do #967. A 
   palco, o envio, "conferido +20", o placar da semana e o mesmo rival valendo 10 em seguida.
 - **Não feito:** as telas da conta (o Entrar só abre a página de teste no local), "Ver a semana" (MMO5), o e2e no repositório e a
   revisão de acessibilidade. Desvios: D-CONTA-93 a 103.
+
+## 16. MMO5: o ranking da semana, a parte local (2026-11-17)
+
+Pedido do Matheus: "Sim, a MMO5" (em resposta a "Começo a MMO5 (as tabelas e o cais)?"). Esta etapa é só o servidor; a tela (o cais e
+"Ver a semana") pede a prancha antes. Branch `v3-mmo5-local`.
+
+- **O que o servidor passa a guardar (a migração 4):** em cada semente entregue, o que a conferência do envio achou dela (a situação, o
+  estágio do pet, o rival e a faixa); no segredo da semana, quando ele foi publicado; e as tabelas congeladas (`tabelas_semana`).
+- **As tabelas (`servidor_web/src/envio/semanas.ts`):** uma por estágio (Rookie, Champion, Ultimate, Mega), na ordem do desempate da
+  seção 5: os pontos, os rivais diferentes vencidos, menos lutas usadas, quem chegou antes aos pontos. Os pontos são refeitos pela conta
+  da MMO1 (`pontuar`, agora exportada de `web/app/src/ranking/pontos.ts`), por pet, e os pets da conta somam.
+- **A primeira conferência vale:** a semente que já tem vitória, derrota, não enviada, fora da Arena ou acima do limite não muda num
+  envio seguinte. Só a pendente e a nunca conferida mudam.
+- **O fechamento:** a semana congela uma hora depois do fim (segunda, 01:00 de Brasília). Numa transação: a pendente e a nunca
+  conferida viram "não enviada", as tabelas são gravadas, e o segredo é publicado. Roda sozinho na primeira chamada depois da hora
+  (as rotas das semanas, o envio e o pedido da semente).
+- **As rotas:** `GET /semanas` (a semana aberta, quando fecha e as fechadas), `GET /semanas/:semana/tabelas` (com a sessão; as 100
+  primeiras linhas de cada estágio e a de quem pede) e `GET /semanas/:semana/segredo` (sem sessão; 404 com a semana aberta).
+- **O que não muda:** o motor e o `engine.py`. A conferência do envio devolve o mesmo de antes.
+- **Testes:** `servidor_web/test/semanas.test.ts` (29): a migração, a semana, a regra da metade, o desempate passo a passo, o
+  fechamento, as rotas e o caminho inteiro do pedido à tabela. `servidor_web`: 127 passaram; `web/app`: 1 981 passaram, 3 pulados.
+- **Fora desta etapa:** a prancha e a tela (o cais, "Ver a semana"); as divisões de 30 (MMO-9, só com 60 jogadores); a recompensa
+  (MMO7); o deploy (CN5). Os desvios e os achados estão no registro (D-CONTA-114 a 122).
+
+## 17. MMO4: o rival e o mapa no pedido da semente (2026-11-17)
+
+Decisão do Matheus: "Sim, levar" (em resposta a "O pedido da semente passa a levar o rival e o mapa?"; o achado D-CONTA-116).
+Branch `v3-mmo4-rival`, por cima da `v3-mmo5-local` (#978).
+
+- **A regra:** o jogador escolhe o rival e o mapa antes de a semente existir. O `POST /sementes` passa a pedir `rival` e `mapa`, o
+  servidor os guarda na semente (a migração 5) e os devolve. No envio, a luta do indice só conta se é contra esse rival, nesse mapa;
+  senão a semente fica "não enviada" (0 pontos, luta usada).
+- **No servidor:** `servidor_web/src/envio/sementes.ts` (o pedido, a coluna, a resposta) e `conferir.ts` (passa o rival e o mapa à
+  conta). O pedido sem `rival` ou sem `mapa` leva 400.
+- **Na conta dos pontos:** `web/app/src/ranking/pontos.ts`: a semente entregue leva o rival e o mapa prometidos; a semente sem rival
+  guardado (de antes da regra) não confere nada.
+- **No jogo:** `pedido.ts`, `ranqueada.ts` e `TelaRanqueada.tsx` mandam o rival e o mapa escolhidos na Arena. A tela não muda.
+- **O que não muda:** o motor e o `engine.py`.
+- **Testes:** `servidor_web`: 134 passaram (7 novos em `test/sementes.test.ts`: o 400, o que se guarda, a luta que conta, o outro
+  rival, o outro mapa, a semente de antes da regra). `web/app`: 1 981 passaram, 3 pulados; os tipos e o build.
+- **O que fica:** o servidor não sabe se o rival está na Arena do pet na hora do pedido; o motor confere isso no envio, e a luta
+  impossível recusa o envio inteiro. Os desvios estão no registro (D-CONTA-123 a 126).
+
+## 18. MMO5: a prancha do cais e da semana (2026-11-17)
+
+Pedido do Matheus: "Sim, a prancha" (em resposta a "Faço a prancha do cais e de 'Ver a semana' agora?"). Branch `v3-mmo5-prancha`. O
+plano de UX é o `docs/PLANO_UX_CAIS.md` (PROPOSTO), e a prancha está em `docs/pranchas/ux-cais/`. Só desenho.
+
+- **As telas:** a semana aberta (as datas, o estado, os quatro estágios, as primeiras linhas e a de quem olha), os seis estados, a
+  semana fechada com o resultado de quem olha, "Conferir a semana" (o segredo publicado), o cais trancado e o cartão de destrave do
+  nível 10. No desktop (1920) e no celular (390 e 360), nas peles Vidro e Militar.
+- **De onde vem cada dado:** das três rotas de `servidor_web/src/envio/semanas.ts` (#978, na main).
+- **As UX-CA-1 a 7 foram APROVADAS pelas recomendações** (Matheus, 2026-11-17: "Sim, aprovo"; seção 7 do plano). A tela não foi feita.
+- **Desvios:** D-UXCA-1 a 8, no registro.
+
+## 19. MMO5: a tela do cais (2026-11-17)
+
+Pedido do Matheus: "Sim, os dois" (em resposta a "Faço o merge do #983 com o CI verde e começo a tela do cais?"). Branch `v3-mmo5-tela`.
+A prancha é a `docs/pranchas/ux-cais/` (APROVADA, UX-CA-1 a 7).
+
+- **A chave:** `VITE_DIGILAB_API` no build, a mesma da conta e da luta ranqueada. Sem ela, o cais continua sem menu, o marco 10 conta em
+  silêncio e nada muda.
+- **O cliente** (`web/app/src/cais/cais.ts`, sem React): as três rotas de `servidor_web/src/envio/semanas.ts`, os estados (buscando, sem
+  resposta, sem conta, pronto), a troca de semana, "Ver todas" e o segredo. As contas da tela são puras: o texto da semana, quanto
+  falta, "fechando" (deduzido do `fecha_em` e do `congela_em`) e as linhas de cima mais a de quem olha.
+- **A tela** (`web/app/src/telas/cais/TelaCais.tsx`, `src/estilo/cais.css`): em `#/cais`, fora dos destinos, no painel dos Ajustes (sem
+  abas e sem a viagem da câmera). 8 linhas a partir de 900 px e 6 abaixo; no celular a folha é mais alta e a coluna "Lutas" sai.
+- **Por onde se entra:** o toque no cais na ilha (`ToqueLugar.tsx`), o cartão do nível 10, "Ver a semana" no limite de hoje da Arena
+  (`TelaRanqueada.tsx`) e o endereço.
+- **A trava:** o cais abre pelo marco do build (`VITE_DIGILAB_MARCO_RANQUEADA`; vazio, o 10). Trancado, o toque e o endereço abrem o
+  cartão do motivo ("Nv 10 · Abre com o primeiro Mega").
+- **O cartão de destrave** (`nivel.ts`, `CARTAO_DO_CAIS`): "Cais" e "Veja o ranking da semana.", só com o cais ligado e o marco 10.
+- **O que não muda:** o motor, o `engine.py`, o registro e o save. O cais só lê o servidor.
+- **Testes:** `web/app`: 2 002 passaram, 3 pulados (20 novos em `test/cais.test.ts` e 1 em `test/ilha_lugares.test.ts`); os tipos e o
+  build.
+- **No navegador** (Chrome, o servidor e o jogo locais): o cais trancado, o cartão de destrave, sem conta (o 401 do servidor de
+  verdade), Entrar, as tabelas vazias do servidor de verdade, e, com respostas de exemplo, a semana aberta, "Ver todas", o estágio sem
+  luta, a semana fechada, o segredo, o celular (390 e 360, sem rolar), "Ir para a Arena" e sem resposta.
+- **Não feito:** o botão do cais no minimapa, o cadeado "Nv 10" sobre o cais na ilha e a luz do modelo quando abre (os três pedem a
+  vista 3D); a viagem da câmera até o cais; o e2e no repositório. Os desvios estão no registro (D-CONTA-127 a 133).
+
+## 20. MMO5: o cais na ilha 3D (2026-11-18)
+
+Pedido do Matheus: "Sim, a ilha 3D" (em resposta a "Faço agora o cais na ilha 3D (minimapa, cadeado e luz)?"). Branch
+`v3-mmo5-cais-3d`. São os três itens da prancha que a seção 19 deixou de fora.
+
+- **A chave:** a mesma (`VITE_DIGILAB_API`). Sem ela, o cais fica como sempre foi: sem cadeado, sem marca no minimapa e com o modelo
+  normal.
+- **O estado para a vista** (`web/app/src/trancas.ts`, `CAIS`): ligado ou não, trancado ou não. Quem escreve é o `nivelTela.ts`, pelo
+  marco do build.
+- **O cadeado** (`web/app/src/componentes/CadeadoDoCais.tsx`): o mesmo desenho dos outros lugares, com "Nv 10"; tocar nele abre o cartão
+  do motivo. Quando o nível abre o cais, o cadeado aberto e o brilho aparecem uma vez.
+- **O minimapa** (`Minimapa.tsx`): a marca do cais (a âncora); trancado, tracejada, com o cadeado e o "Nv 10", e a frase na descrição
+  para o leitor de tela. A marca não é botão, como as dos outros lugares.
+- **O modelo** (`ilha/vista.ts`): trancado, o cais sai apagado como os outros lugares trancados; aberto, volta ao normal. O cais não tem
+  parte que acende (`LUGARES_LUZ`), então não há máscara de luz para ligar.
+- **O que não muda:** o motor, o `engine.py`, o registro e o save. É só vista.
+- **Testes:** `web/app`: 2 003 passaram, 3 pulados (1 novo, o estado do cais em `test/cais.test.ts`); os tipos e o build.
+- **No navegador** (Chrome, com a câmera de desenvolvimento no cais): com a chave e trancado, o cadeado, a marca tracejada e o modelo
+  apagado, e o cadeado e o toque no modelo abrem o cartão do motivo; com a chave e aberto, sem cadeado, a marca cheia e o toque abre a
+  tela; sem a chave, nada do cais.
+- **Não feito:** o foco de luz no chão do cais aberto (a hierarquia de luz é montada uma vez, no carregamento); a viagem da câmera até
+  o cais; o brilho de "acabou de abrir" não foi visto no navegador. Os desvios estão no registro (D-CONTA-134 a 137).
+
+## 21. MMO5: o e2e do cais (2026-11-18)
+
+Pedido do Matheus: "Sim, o e2e" (em resposta a "Faço agora o e2e do cais com o servidor falso?"). Branch `v3-mmo5-cais-e2e`. Só teste:
+nenhum arquivo de `web/app/src` nem do motor muda.
+
+- **Por que um e2e à parte:** o `npm run e2e` roda o build sem a chave do servidor, onde o cais não existe. O e2e novo monta outro build,
+  com a `VITE_DIGILAB_API`, em `web/dist_conta/` (não versionado), e o serve pelo servidor local. O `web/dist/` e o e2e do jogo não mudam.
+- **O comando:** `cd web/app && npm run e2e:conta` (`playwright.conta.config.ts`, pasta `e2e_conta/`, porta 8801 ou
+  `DIGILAB_PORTA_E2E_CONTA`).
+- **O servidor falso:** o `servidor_web` não sobe. Cada teste responde as rotas das semanas com o `page.route`, num caminho da mesma
+  origem da página (`/api_falsa`). Nenhum endereço de servidor de verdade e nenhuma chave entram no repositório.
+- **O que o `e2e_conta/cais.spec.ts` cobre** (6 testes, o Champion de `e2e/saves.json`, o relógio da página parado numa quarta-feira):
+  - trancado, a 1920 px: a marca tracejada do minimapa, o cadeado "Nv 10" sobre o cais, e o cadeado e o endereço `#/cais` abrindo o
+    cartão do motivo, sem nenhuma chamada ao servidor;
+  - aberto, a 1920 px: a semana, a tabela do estágio do pet, a linha de quem olha depois do salto, "Ver todas", os outros estágios,
+    "Atualizar", a semana fechada com o resultado, "Conferir a semana" (o segredo) e "Ir para a Arena";
+  - sem a conta (401) e sem resposta (a rede fora), e a volta com "Tentar de novo";
+  - a folha do celular (390 px): 6 linhas, sem a coluna das lutas, sem rolagem de lado;
+  - trancado no celular: o endereço abre o cartão do motivo;
+  - o cartão de destrave do nível 10 e o "Ir" dele.
+- **Resultado:** os 6 passaram, em duas rodadas seguidas. `web/app`: os tipos e o `npm test` como antes (nenhum teste novo no Vitest).
+- **Fora do e2e:** o brilho de "acabou de abrir" (pede um save de Mega, que o `e2e/saves.json` não tem), o toque no modelo 3D do cais,
+  "Ver a semana" na Arena (pede o servidor falso da luta ranqueada), a tela da conta e a luta ranqueada. O e2e fica fora do CI, como o
+  do jogo (D-IA-3). O desvio está no registro (D-CONTA-138).
