@@ -862,3 +862,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-18 — ELOGIO: a calibração e a validação (etapas 4 e 5)](registro/2026-11.md)
 - [2026-11-18 — CORPO_ACOPLAMENTO: o diagnóstico (etapa 1, só papel)](registro/2026-11.md)
 - [2026-11-18 — PET_VIVO: a run do PV-2 (Claude Code, Opus 5.5, sessão lateral, branch `v3-pet-vivo-pv2-resultado`)](registro/2026-11.md)
+- [2026-11-18 — CORPO_ACOPLAMENTO: a opção D atrás da chave (etapa 2)](registro/2026-11.md)
+- [2026-11-18 — CORPO_ACOPLAMENTO: o plano de análise da opção D](registro/2026-11.md)
