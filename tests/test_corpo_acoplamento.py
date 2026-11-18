@@ -78,7 +78,7 @@ def test_o_corte_a_mao():
                ingerido=5, lim=lim),
     ]
     r = SA.cortar(dec, lim, C, falta)
-    assert (r["energia_baixa"], r["ambas"]) == (3, 2)
+    assert (r["energia_baixa"], r["ambas"], r["fome_urgente"]) == (3, 2, 3)
     # na decisao 2: entraram 30 do basal, 30 da falta e 10 das atividades desde a decisao 0 (o empate vai a primeira classe); na 4, 45
     # do basal
     assert r["classes"] == {"falta_combustivel": 1, "atividades": 0, "andar": 0, "tempo_acordado": 1}

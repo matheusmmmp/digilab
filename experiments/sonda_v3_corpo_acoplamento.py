@@ -231,7 +231,7 @@ def cortar(dec: list[dict], lim: int, C: int, falta_limiar: int) -> dict:
     lados = {k: 0 for k in LADOS}
     desde_comer, janelas = [], []
     parte = {cl: 0.0 for cl in CLASSES}
-    n_baixa = n_ambas = baixa_sem_fome_em_falta = 0
+    n_baixa = n_ambas = baixa_sem_fome_em_falta = n_urgente = 0
     entrada = None                                       # a entrada do trecho cansado corrente
     ultima_comida = None                                 # a ultima decisao em que o ingerido subiu
     r = 0                                                # a ultima decisao descansada
@@ -242,6 +242,7 @@ def cortar(dec: list[dict], lim: int, C: int, falta_limiar: int) -> dict:
         if x["cansaco"] <= metade:
             r = d
         u = (u if u is not None else d) if x["urgente"] else None
+        n_urgente += x["urgente"]
         if not x["baixa"]:
             entrada = None
             continue
@@ -277,7 +278,7 @@ def cortar(dec: list[dict], lim: int, C: int, falta_limiar: int) -> dict:
             lados[k] += bool(v)
         desde_comer.append(None if ultima_comida is None else d - ultima_comida)
     sem_comer = sum(1 for v in desde_comer if v is None)
-    return {"decisoes": n, "energia_baixa": n_baixa, "ambas": n_ambas, "classes": cont, "cruzado": cruz, "lados": lados,
+    return {"decisoes": n, "energia_baixa": n_baixa, "ambas": n_ambas, "fome_urgente": n_urgente, "classes": cont, "cruzado": cruz, "lados": lados,
             "decisoes_desde_comer": sorted(v for v in desde_comer if v is not None), "ambas_sem_ter_comido": sem_comer,
             "parte_somada": parte, "janelas": sorted(janelas), "baixa_sem_fome_combustivel_em_falta": baixa_sem_fome_em_falta}
 
@@ -322,7 +323,7 @@ def somar(vidas: list[dict]) -> dict:
     """as contagens somadas e as fracoes sobre as decisoes com as duas"""
     if not vidas:
         raise ValueError("sonda: nenhuma vida para somar")
-    t = {"vidas": len(vidas), "decisoes": 0, "energia_baixa": 0, "ambas": 0, "ambas_sem_ter_comido": 0, "ticks": 0,
+    t = {"vidas": len(vidas), "decisoes": 0, "energia_baixa": 0, "ambas": 0, "fome_urgente": 0, "ambas_sem_ter_comido": 0, "ticks": 0,
          "ticks_falta_combustivel": 0, "baixa_sem_fome_combustivel_em_falta": 0, "ticks_dormindo": 0, "ticks_combustivel_abaixo_do_limiar": 0,
          "corpo": vidas[0]["corpo"],
          "metabolismo": {k: 0 for k in vidas[0]["metabolismo"]}, "classes": {cl: 0 for cl in CLASSES},
@@ -333,7 +334,7 @@ def somar(vidas: list[dict]) -> dict:
     for v in vidas:
         if v["corpo"] != vidas[0]["corpo"]:
             raise ValueError(f"sonda: o corpo de {v['vida']} nao e o das outras vidas: {v['corpo']}")
-        for k in ("decisoes", "energia_baixa", "ambas", "ambas_sem_ter_comido", "ticks", "ticks_falta_combustivel",
+        for k in ("decisoes", "energia_baixa", "ambas", "fome_urgente", "ambas_sem_ter_comido", "ticks", "ticks_falta_combustivel",
                   "baixa_sem_fome_combustivel_em_falta", "ticks_dormindo", "ticks_combustivel_abaixo_do_limiar"):
             t[k] += v[k]
         for cl in CLASSES:
@@ -353,6 +354,11 @@ def somar(vidas: list[dict]) -> dict:
                 t["ritmos"][lado][k] += v["ritmos"][lado][k]
     a = t["ambas"]
     t["fracao_ambas_na_energia_baixa"] = a / t["energia_baixa"] if t["energia_baixa"] else None
+    # a taxa de base (a etapa 2): a fome urgente em todas as decisoes e nas com a energia boa; a coincidencia so e acoplamento acima dela
+    t["fracao_fome_urgente_nas_decisoes"] = t["fome_urgente"] / t["decisoes"]
+    boas = t["decisoes"] - t["energia_baixa"]
+    t["fracao_fome_urgente_na_energia_boa"] = (t["fome_urgente"] - a) / boas if boas else None
+    t["fracao_energia_baixa_nas_decisoes"] = t["energia_baixa"] / t["decisoes"]
     t["fracao_por_classe"] = {cl: (x / a if a else None) for cl, x in t["classes"].items()}
     t["fracao_lados"] = {k: (x / a if a else None) for k, x in t["lados"].items()}
     t["por_tick"] = {lado: {"fome": r["d_fome"] / r["ticks"], "cansaco": r["d_cansaco"] / r["ticks"]} if r["ticks"] else None
