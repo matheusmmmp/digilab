@@ -65,6 +65,7 @@ CLASSES_OBJETO = ("racao", "a", "b", "c", "podre", "bola")
 COMIDAS_BOAS = ("racao", "a", "b", "c")
 CLASSE_TELA = "tela"                                   # a classe da TV (so com a subchave `olhar`)
 RECEPTORES_TELA = tuple(f"tela_{c}" for c in CANAIS_TELA) + ("novidade_tela",)
+RECEPTORES_OLFATO_COMIDA = ("olfato_comida_esq", "olfato_comida_dir")   # as duas narinas do Olfato da comida (o PV-2, DP-13)
 RECEPTOR_ENJOO_TELA = "enjoo_tela"                     # o enjoo (D-GV-ENJOO-CER): o mesmo nome do corpo.RECEPTOR_ENJOO_TELA (conferido por teste)
 
 
@@ -73,6 +74,13 @@ def pico(x: int, largura: int, S: int) -> int:
     if type(largura) is not int or largura <= 0:
         raise ValueError(f"M-SENS: largura do pico {largura!r}")
     return max(0, S - div_arred(abs(x) * S, largura))
+
+
+def leitura_do_orgao(intensidade: int, co, S: int) -> int:
+    """a leitura de uma narina sem adaptacao a uma intensidade (a conta do orgao, `corpo.leitura_orgao` com a = 0; o M-SENS nao importa o
+    corpo, a G-RECEPTOR, e um teste confere as duas): e = max(0, I - limiar), r = div_arred(S e, e + K)"""
+    e = max(0, intensidade - co.limiar)
+    return div_arred(S * e, e + co.meia_saturacao) if e else 0
 
 
 def classe_do_tipo(tipo: str) -> str:
@@ -121,6 +129,30 @@ class Sens:
             self.tela_presente: bool | None = None    # se os receptores da tela estao no corpo, fixado na primeira decisao
         self.ir_ate_tv = False                        # a TV no jogo (D-GV-TVJOGO-3): as linhas da TV fora do raio, so com `ligar_ir_ate_tv`
         self.orgao = None                             # o orgao da visao (OV2): a ConfigOrgao, so com `ligar_orgao`; None desligado
+        self.olfato: dict | None = None               # o PV-2 (so com `ligar_olfato`): o limiar do cheiro forte; None desligado
+        self.c_ant: int | None = None                 # o PV-2: o nivel do cheiro da decisao anterior (None na primeira)
+
+    def ligar_olfato(self, limiar_forte: int) -> None:
+        """o PV-2 (docstring do modulo): as duas narinas do Olfato da comida ficam a parte, fora dos `receptores` (como a tela), e o M-SENS
+        le o nivel e a variacao. `limiar_forte` e o do cheiro forte do explorar, na escala do receptor (o mesmo do motor, `olfato_forte`)"""
+        if self.olfato is not None:
+            raise RuntimeError("M-SENS: ligar_olfato duas vezes")
+        if type(limiar_forte) is not int or limiar_forte < 0:
+            raise ValueError(f"M-SENS: limiar do cheiro forte {limiar_forte!r}")
+        self.olfato = {"limiar_forte": limiar_forte}
+
+    def _ler_olfato(self, pc) -> dict:
+        """o nivel (a media das duas narinas, PV2-3: nunca a diferenca), a variacao desde a decisao anterior e o cheiro forte do explorar
+        (a maior narina acima do limiar, a regra do motor). O estado anda aqui, uma vez por decisao"""
+        S = self.S
+        esq, dir_ = (getattr(pc, r) for r in RECEPTORES_OLFATO_COMIDA)
+        if any(type(v) is not int or not 0 <= v <= S for v in (esq, dir_)):
+            raise ValueError(f"M-SENS: leitura das narinas fora de [0, S]: {esq!r}, {dir_!r}")
+        maximo = max(esq, dir_)
+        c = div_arred(esq + dir_, 2)
+        dc = 0 if self.c_ant is None else clamp(c - self.c_ant, -S, S)
+        self.c_ant = c
+        return {"c": c, "dC": dc, "ha": maximo > 0, "forte": maximo > self.olfato["limiar_forte"]}
 
     def ligar_orgao(self, cfg) -> None:
         """o orgao da visao (a docstring do modulo; so com a subchave `olhar`)"""
@@ -189,6 +221,10 @@ class Sens:
             if enjoo and not tela:
                 raise ValueError("M-SENS: o receptor enjoo_tela sem os receptores da tela")
             presentes = tuple(r for r in presentes if r not in RECEPTORES_TELA and r != RECEPTOR_ENJOO_TELA)
+        if self.olfato is not None:                   # o PV-2: as narinas ficam a parte, e vem as duas
+            if any(r not in presentes for r in RECEPTORES_OLFATO_COMIDA):
+                raise ValueError(f"M-SENS: o PV-2 ligado e o corpo sem as duas narinas do Olfato da comida: {presentes}")
+            presentes = tuple(r for r in presentes if r not in RECEPTORES_OLFATO_COMIDA)
         fora = [r for r in presentes if r not in RECEPTORES_DIGIBRAIN]
         if fora:
             raise ValueError(f"M-SENS: receptores fora do prototipo (os orgaos, o paladar, o banheiro; espec, secao 6): {fora}")
@@ -363,6 +399,11 @@ class Sens:
         out = {"falta": falta, "leitura": leitura, "contexto": contexto, "objetos": objetos,
                "conjuncoes": {"comida_vista": comida, "sem_comida": S - comida, "bola_vista": bola},
                "ha_cheiro": pm.direcao_cheiro != 0, "pos": (pm.x, pm.y), "regiao": pm.regiao, "minuto": minuto, "pc": pc}
+        if self.olfato is not None:                    # o PV-2: o cheiro das narinas no lugar do oraculo (o mundo nao manda a direcao)
+            if pm.direcao_cheiro != 0:
+                raise RuntimeError("M-SENS: o PV-2 ligado e o mundo mandando a direcao do cheiro (o motor sem a ConfigOlfato da comida?)")
+            out["olfato"] = self._ler_olfato(pc)
+            out["ha_cheiro"] = out["olfato"]["ha"]
         if lutas is not None:                          # a ponte da luta (PE2): desligada, nenhum campo novo
             out["lutas"] = self.resumir_lutas(lutas)
         if self.dever is not None:                     # a CO7: desligada, nenhum campo novo
@@ -397,6 +438,8 @@ class Sens:
         if self.olhar is not None:                     # a tela (P1d): desligada, o estado e o de hoje, byte a byte
             out["tela"] = {"otimo": dict(self.otimo), "largura": dict(self.largura), "desloc": dict(self.desloc),
                            "exposicoes": self.exposicoes}
+        if self.olfato is not None:                    # o PV-2: desligado, o estado de hoje
+            out["olfato"] = {"c_ant": self.c_ant}
         if self.orgao is not None:                     # o orgao (OV2): desligado, o estado de hoje
             out["orgao"] = {"hab": {c: v for c, v in self.hab_conceito.items() if v},
                             "gosto": {c: v for c, v in self.gosto_conceito.items() if v}}
