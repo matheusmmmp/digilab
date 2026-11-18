@@ -4,7 +4,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { beforeEach, describe, expect, it } from "vitest";
-import { DIGIMON_DA_FORMA, MEDALHAS, Motor } from "../../web/app/motor/index.ts";
+import { DIGIMON_DA_FORMA, IDS_CENA, MEDALHAS, Motor } from "../../web/app/motor/index.ts";
 import { hashAte, pedidoDaSemente } from "../../web/app/src/ranking/pedido.ts";
 import { LUTAS_POR_DIA, PONTOS_FAIXA } from "../../web/app/src/ranking/pontos.ts";
 import { Tamer, VERSAO_TAMER } from "../../web/app/src/tamer.ts";
@@ -35,7 +35,7 @@ function tamerCom(n: number): { versao: number; log: unknown[] } {
   return { versao: VERSAO_TAMER, log: JSON.parse(JSON.stringify(t.log)) };
 }
 const pet = (log: Evento[]) => ({ semente: VIDA.semente, log, versao: VIDA.versao });
-const pedido = (indice = K, hash = sha(VIDA.log.slice(0, indice))) => ({ pet: { semente: VIDA.semente, versao: VIDA.versao }, indice, hash });
+const pedido = (indice = K, hash = sha(VIDA.log.slice(0, indice))) => ({ pet: { semente: VIDA.semente, versao: VIDA.versao }, indice, hash, rival: LUTA[2].r, mapa: LUTA[2].m ?? null });
 
 let M: Montado, nav: Navegador, csrf: string;
 const enviar = (log: Evento[], tamer = tamerCom(3)) => nav.json("POST", "/envios", { pet: pet(log), tamer }, csrf);
@@ -103,7 +103,7 @@ describe("POST /sementes: a semente", () => {
     expect(lista[0]).toMatchObject({ numero: 1, semente: d.semente, hash_ate: sha(VIDA.log.slice(0, K)) });
   });
   it("o pedido do jogo (pedidoDaSemente, crypto.subtle) é o mesmo que o servidor confere", async () => {
-    const p = await pedidoDaSemente(pet(prefixo(K)) as never);
+    const p = await pedidoDaSemente(pet(prefixo(K)) as never, LUTA[2].r, LUTA[2].m ?? null);
     expect(p).toEqual(pedido());
     expect((await pedir(p)).status).toBe(201);
   });
@@ -262,5 +262,56 @@ describe("o hash do registro até o indice", () => {
     }
     expect(h.get(0)).toBe(sha([]));
     await expect(hashAte(VIDA.log as never, VIDA.log.length + 1)).rejects.toThrow(/fora do registro/);
+  });
+});
+
+describe("o rival e o mapa vão no pedido (D-CONTA-116)", () => {
+  const OUTRO_RIVAL = Motor.reproduzir(VIDA.semente, prefixo(K) as never, VIDA.versao).rivaisArenaPoc().find(r => r !== LUTA[2].r)!;
+  const MAPA = LUTA[2].m ?? null, OUTRO_MAPA = IDS_CENA.find(m => m !== MAPA)!;
+  const lutaCom = (semente: number, troca: { r?: string; m?: string }): Evento[] => [...prefixo(K), [LUTA[0], "l", { ...LUTA[2], s: semente, ...troca }]];
+  beforeEach(async () => { expect((await enviar(prefixo(K))).status).toBe(201); });
+
+  it("a vida tem outro rival na Arena e outro mapa para trocar", () => {
+    expect(OUTRO_RIVAL).toBeTruthy();
+    expect(OUTRO_MAPA).toBeTruthy();
+  });
+  it("sem o rival, com o rival fora da forma ou com o mapa desconhecido, 400, e nenhuma semente sai", async () => {
+    const { rival: _r, ...semRival } = pedido();
+    const { mapa: _m, ...semMapa } = pedido();
+    for (const corpo of [semRival, semMapa, { ...pedido(), rival: "" }, { ...pedido(), rival: "Agumon; DROP" }, { ...pedido(), mapa: "lua" }, { ...pedido(), mapa: 3 }])
+      expect((await pedir(corpo)).status).toBe(400);
+    expect(contar(M.banco, "sementes")).toBe(0);
+  });
+  it("201 devolve e guarda o rival e o mapa prometidos; o mapa pode ser null", async () => {
+    const d = await (await pedir()).json() as any;
+    expect(d).toMatchObject({ rival: LUTA[2].r, mapa: MAPA });
+    expect(M.banco.prepare("SELECT rival_pedido, mapa_pedido FROM sementes").get()).toEqual({ rival_pedido: LUTA[2].r, mapa_pedido: MAPA });
+    expect((await (await nav.pedir("/sementes")).json() as any)[0]).toMatchObject({ rival_pedido: LUTA[2].r, mapa_pedido: MAPA });
+  });
+  it("a luta contra o rival prometido, no mapa prometido, conta", async () => {
+    const s = await (await pedir()).json() as any;
+    const d = await (await enviar(comLuta(s.semente))).json() as any;
+    expect(["vitoria", "derrota"]).toContain(d.lutas[0].situacao);
+    expect(d.lutas[0].rival).toBe(LUTA[2].r);
+  });
+  it("a mesma semente contra outro rival não conta: fica não enviada, com 0", async () => {
+    const s = await (await pedir()).json() as any;
+    const e = await enviar(lutaCom(s.semente, { r: OUTRO_RIVAL }));
+    expect(e.status).toBe(201);
+    const d = await e.json() as any;
+    expect(d.lutas[0]).toMatchObject({ situacao: "nao_enviada", pontos: 0, rival: null });
+    expect(d.pontos).toBe(0);
+  });
+  it("a mesma semente em outro mapa não conta", async () => {
+    const s = await (await pedir()).json() as any;
+    const d = await (await enviar(lutaCom(s.semente, { m: OUTRO_MAPA }))).json() as any;
+    expect(d.lutas[0]).toMatchObject({ situacao: "nao_enviada", pontos: 0 });
+  });
+  it("a semente de antes da regra (sem rival guardado) conta com qualquer rival", async () => {
+    const s = await (await pedir()).json() as any;
+    M.banco.prepare("UPDATE sementes SET rival_pedido = NULL, mapa_pedido = NULL").run();
+    const d = await (await enviar(lutaCom(s.semente, { r: OUTRO_RIVAL }))).json() as any;
+    expect(["vitoria", "derrota"]).toContain(d.lutas[0].situacao);
+    expect(d.lutas[0].rival).toBe(OUTRO_RIVAL);
   });
 });

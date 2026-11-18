@@ -107,3 +107,26 @@ para a origem do jogo. As rotas do primeiro acesso (o apelido de um Rookie, a id
 D-CONTA-62), da conta, dos aparelhos, de sair, de baixar os dados e de apagar (na hora, D-CONTA-63); a lista de convidados por variável ou
 tabela, com o e-mail do Google só na memória (D-CONTA-61). Ficaram de fora as telas, a sessão na `/fala` e trocar o apelido depois
 (D-CONTA-67).
+
+## A CN2 no jogo: as telas da conta (2026-11-17)
+
+Pedido do Matheus: "Sim, as telas" (em resposta a "Começo as telas da conta no jogo?"). As telas seguem as pranchas aprovadas
+(`docs/PLANO_UX_CONTA.md`, UX-CN-1 a 6) e falam com as rotas da CN2 local do `servidor_web`. Branch `v3-conta-telas`.
+
+- **A chave:** só aparece no build com `VITE_DIGILAB_API` (a mesma da luta ranqueada). Sem ela, os Ajustes são os de sempre.
+- **A porta:** a linha "Conta" no topo dos Ajustes ("sem conta" ou o apelido); a parte é `#/config/conta`. O "Entrar" do estado "só com
+  a conta" da luta ranqueada leva a ela.
+- **As telas:** Entrar (o que vai para o servidor, os provedores ligados, "Agora não"); os estados (abrindo a entrada, conferindo, não
+  deu, fora da lista, menos de 18); o primeiro acesso (o apelido, a idade, o aceite com a versão); a troca do apelido (a lista fechada
+  e o número sorteado); o perfil (o apelido, os aparelhos, baixar os dados, sair, apagar); apagar a conta ("Manter a conta" é o
+  principal).
+- **O código:** `web/app/src/conta/conta.ts` (o cliente, sem React), `web/app/src/conta/apiDoBuild.ts` (os endereços do build),
+  `web/app/src/telas/config/TelaConta.tsx`, `web/app/src/estilo/conta.css` e `web/app/test/conta.test.ts` (24 testes com o servidor
+  falso). A ida ao provedor é na mesma aba; a volta lê o `?conta=` do endereço uma vez e o tira.
+- **O que não muda:** o motor, o registro e o save. A conta não guarda nada no navegador; a sessão é o cookie do servidor.
+- **Conferido:** `npm run tipos`, `npm run build` e `npm test` (1 981 passaram, 3 pulados). No Chrome headless, com o `servidor_web`
+  local e o provedor falso: sem conta, fora da lista, primeiro acesso, menos de 18, troca do apelido, conta criada, a linha dos Ajustes
+  com o apelido, baixar os dados, sair, entrar de novo, apagar e "não deu"; a 1920, a 390 e a 360.
+- **O que falta:** os Termos e a Privacidade não existem (CN6); a marca oficial dos provedores (UX-CN-3); a troca do apelido depois de
+  criada a conta (UX-CN-6, sem rota no servidor); o Google e o GitHub de verdade; o e2e no repositório; o revisor de acessibilidade.
+  Os desvios estão no registro (D-CONTA-104 a 113).

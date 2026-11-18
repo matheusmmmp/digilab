@@ -3244,3 +3244,35 @@ def tabela_trava(itens: Sequence[tuple[bool, bool]]) -> dict:
             "v2_passam_de_todas": _fracao_wilson(passa, n), "v3_marcadas": _fracao_wilson(marc, n),
             "v4_marcadas_a_toa": _fracao_wilson(a_toa, n)}
 
+
+
+# ---------------------------------------------------------------- V3, ELOGIO (docs/PLANO_ANALISE_V3_ELOGIO.md, secao 4; D-EL-19, D-EL-24)
+def consumos_com_presentes(consumos: Sequence[tuple[int, str]], vistas: Sequence[tuple[int, Iterable[str]]]) -> list[tuple[int, str, frozenset]]:
+    """D-EL-19: cada consumo (tick, fruta) com as frutas presentes, os tipos no mapa na ultima vista (tick, tipos) com tick <= o do consumo,
+    mais a fruta comida; antes da primeira vista, so a comida. A entrada da `fracao_da_fruta`. Falha alto com as vistas fora de ordem ou com
+    um consumo fora de ordem."""
+    ticks = [t for t, _ in vistas]
+    if any(b <= a for a, b in zip(ticks, ticks[1:])):
+        raise ValueError("as vistas precisam vir em ordem estrita de tick")
+    if any(b[0] < a[0] for a, b in zip(consumos, consumos[1:])):
+        raise ValueError("os consumos precisam vir em ordem de tick")
+    out, i, atual = [], 0, frozenset()
+    for t, f in consumos:
+        while i < len(vistas) and vistas[i][0] <= t:
+            atual = frozenset(vistas[i][1])
+            i += 1
+        out.append((t, f, atual | {f}))
+    return out
+
+
+def decisao_do_criterio(consumos: Sequence[tuple[int, str]], fruta: str, janela: int, minimo: int, passo: int) -> int | None:
+    """M1 (D-EL-4, D-EL-24, descritiva): a decisao (tick // passo) do primeiro consumo de fruta em que `minimo` das ultimas `janela` frutas
+    comidas sao `fruta`; None se nunca (censurada no fim da vida). `consumos` = (tick, fruta), so as frutas, em ordem."""
+    if not 1 <= minimo <= janela or passo < 1:
+        raise ValueError(f"janela {janela}, minimo {minimo}, passo {passo}")
+    ultimas: list[str] = []
+    for t, f in consumos:
+        ultimas = (ultimas + [f])[-janela:]
+        if len(ultimas) == janela and sum(1 for x in ultimas if x == fruta) >= minimo:
+            return t // passo
+    return None
