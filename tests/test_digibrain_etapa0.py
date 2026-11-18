@@ -102,6 +102,10 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              "experiments/run_v3_valuation_conserto.py",
                                                                              # ELOGIO, etapa 2: as vidas dos bracos (o modular REL com a ConfigElogio)
                                                                              "experiments/elogio.py",
+                                                                             # PET_VIVO, o codigo do PV-2: as vidas dos bracos (o REL com a ConfigPV2 e o orgao)
+                                                                             "experiments/pv2.py",
+                                                                             # PET_VIVO, o codigo do PV-2: a medicao nas sementes dos testes (le o CONFIG_DIGIBRAIN_INATOS)
+                                                                             "experiments/medir_pv2.py",
                                                                              # ELOGIO, etapas 4 e 5: o orquestrador da calibracao e da validacao
                                                                              "experiments/run_v3_elogio.py",
                                                                              # SOCIAL_PAR, A0 (D-SP-29): o orquestrador monta o pet de hoje (o modular com a CO7)
@@ -176,16 +180,20 @@ def test_g_receptor_nenhum_arquivo_importa_o_corpo():
 
 def test_g_sem_direcao_a_direcao_do_cheiro_fica_no_motor():
     """o pacote so pergunta se ha cheiro (`direcao_cheiro != 0`); nunca le a intensidade, o campo, as fontes nem as comidas do mundo, e do
-    mundo so importa o `Alvo` e as acoes com alvo"""
+    mundo so importa o `Alvo`, as acoes com alvo e os nomes dos candidatos do orgao. Com o PV-2 (a leitura da PV2-3, DECIDIDA em
+    2026-11-09: o cerebro le o nivel e a variacao do que as narinas sentem, nunca a direcao), as narinas so se leem pelos nomes de
+    RECEPTORES_OLFATO_COMIDA, no M-SENS (o nivel, a media) e no M-ADAPT (se ha cheiro depois, o maximo); a troca das narinas nao muda o
+    que o M-SENS entrega (tests/test_pv2_codigo.py)"""
     proibidos = {"cheiro", "fontes_de_cheiro", "comidas", "direcao_do_cheiro", "direcao_do_campo", "cheiro_em", "campo_em",
                  "alvos_do_olfato", "leitura_do_olfato", "direcao_em_8", "direcao_em_16", "olfato_comida", "olfato_comida_esq",
                  "olfato_comida_dir"}
     usos = 0
+    leem_narinas = []
     for nome, arvore in _arvores():
         pais = {filho: pai for pai in ast.walk(arvore) for filho in ast.iter_child_nodes(pai)}
         for no in ast.walk(arvore):
             if isinstance(no, ast.ImportFrom) and no.level == 2 and no.module == "mundo":
-                assert {a.name for a in no.names} <= {"Alvo", "ACOES_COM_ALVO"}, nome
+                assert {a.name for a in no.names} <= {"Alvo", "ACOES_COM_ALVO", "CANDIDATOS_CHEIRO_ORGAO"}, nome
             if isinstance(no, ast.Attribute):
                 assert no.attr not in proibidos, f"{nome}: .{no.attr}"
                 if no.attr == "direcao_cheiro":
@@ -194,7 +202,16 @@ def test_g_sem_direcao_a_direcao_do_cheiro_fica_no_motor():
                     usos += 1
             if isinstance(no, ast.Name):
                 assert no.id not in proibidos - {"cheiro", "comidas"}, f"{nome}: {no.id}"
-    assert usos == 2                                    # o M-SENS na decisao e o M-ADAPT na consequencia
+                if no.id == "RECEPTORES_OLFATO_COMIDA" and isinstance(no.ctx, ast.Load):
+                    funcao = pais[no]
+                    while not isinstance(funcao, (ast.FunctionDef, ast.Module)):
+                        funcao = pais[funcao]
+                    leem_narinas.append((nome, getattr(funcao, "name", None)))
+            if isinstance(no, ast.Constant) and no.value in ("olfato_comida_esq", "olfato_comida_dir"):
+                assert nome == "sens.py", f"{nome}: o nome de uma narina fora do M-SENS"
+    # o M-SENS na decisao, a conferencia do PV-2 no M-SENS (o mundo nao manda a direcao com o orgao) e o M-ADAPT na consequencia
+    assert usos == 3
+    assert sorted(set(leem_narinas)) == [("adapt.py", "_ha_cheiro_depois"), ("sens.py", "_ler_olfato"), ("sens.py", "_receptores")]
 
 
 def test_o_engine_intacto_e_o_pacote_so_com_a_biblioteca_padrao():

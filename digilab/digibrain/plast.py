@@ -47,7 +47,7 @@ def linha_da_opcao(chave: tuple, fala_unidades: bool) -> str:
 class Plasticidade:
     """o M-PLAST (docstring do modulo)"""
 
-    def __init__(self, cfg_digibrain: ConfigDigibrain, inatos: ConfigDigibrainInatos | None = None) -> None:
+    def __init__(self, cfg_digibrain: ConfigDigibrain, inatos: ConfigDigibrainInatos | None = None, dc_cheiro: bool = False) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
         self.cd = cfg_digibrain
         self.S = self.p.escala
@@ -59,7 +59,8 @@ class Plasticidade:
         if self.cd.fala_unidades:                     # as tres linhas da fala no lugar da do chamar (a ordem fixa)
             i = linhas.index("chamar_atencao")
             linhas[i:i + 1] = [f"chamar_atencao/{c}" for c in CONTEUDOS_FALA]
-        self.H = {b: [0] * len(CARACTERISTICAS_DIGIBRAIN) for b in linhas}
+        # o PV-2 (`dc_cheiro`): a coluna do dC do cheiro no fim do z, e do H (desligado, o H de hoje)
+        self.H = {b: [0] * (len(CARACTERISTICAS_DIGIBRAIN) + (1 if dc_cheiro else 0)) for b in linhas}
         self.consumos = {c: 0 for c in self.classes}
         self.amostras_andar = 0
         self.creditos = 0
