@@ -119,7 +119,8 @@ export function conferir(envio: Envio, entregues: readonly EntregueComHash[] = [
 
   /* 1. o pet e as lutas: um passe só pela conta da MMO1; o evento inválido (e a luta que não era possível) falha alto */
   let m: Motor, lutas: LutaRanqueada[];
-  const sementes: SementeEntregue[] = entregues.map(x => ({ semente: x.semente, indice: x.indice, hora: x.hora }));
+  const sementes: SementeEntregue[] = entregues.map(x => ({ semente: x.semente, indice: x.indice, hora: x.hora,
+    ...(x.rival === undefined ? {} : { rival: x.rival, mapa: x.mapa ?? null }) }));
   try { ({ motor: m, lutas } = refazerComLutas(pet.semente, pet.versao, pet.log, sementes)); }
   catch (err) { return recusar("pet_nao_reproduz", `o registro do pet não reproduz: ${msg(err)}`); }
   const t1 = performance.now();

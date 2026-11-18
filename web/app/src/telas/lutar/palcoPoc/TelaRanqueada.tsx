@@ -103,7 +103,7 @@ function EstadoDoPedido({ pet, irTreino, tentar }: { pet: number; irTreino: () =
     <div className="lr-estado" data-testid="lr-estado-limite">
       <div className="lr-destaque" role="status"><span className="lr-rot">Limite de hoje</span><b>{LUTAS_POR_DIA} de {LUTAS_POR_DIA} lutas feitas</b>
         <p>Volta à meia-noite, no horário de Brasília. Faltam {falta(e.reabreEm)}.</p></div>
-      <Botoes>{treino(true)}</Botoes>
+      <Botoes>{treino(true)}<a className="hx-btn" href="#/cais" onClick={fecharEstado} data-testid="lr-ver-semana">Ver a semana</a></Botoes>
     </div>
   );
   if (e.tipo === "trancada") return (
@@ -195,7 +195,8 @@ export function ArenaRanqueada({ rivais, rival, setRival, mapa, setMapa, irTrein
     segurarTempoDoPedido(true);
     try {
       const j = jogoAtual().motor;
-      const s = await pedirSemente({ semente: j.semente, versao: j.versao, log: j.log });
+      /* o rival e o mapa vao no pedido: a escolha e de antes da semente (D-CONTA-116) */
+      const s = await pedirSemente({ semente: j.semente, versao: j.versao, log: j.log }, rival, mapa);
       if (!s) return;
       /* o registro tem de estar onde o pedido prometeu; se mudou no meio, a luta pedida ja foi gasta */
       if (jogoAtual().motor !== j || j.log.length !== s.indice) { lutaPerdida(s.numero, "o registro do pet mudou durante o pedido"); return; }

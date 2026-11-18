@@ -207,6 +207,9 @@ FAIXAS_RESERVADAS = (
     (98101, 98505, "EVIDENCIA A2, a ablacao do aprendizado no jogo (jogo web): a run unica, sementes 98101...98300 "
                    "(docs/PLANO_ANALISE_V3_ABLACAO_APRENDIZADO.md, secao 2.3; AB-5; aprovada pelo Matheus em 2026-11-16, "
                    "\"Aprovo, pode rodar\"; conferida livre na origin/main e em todos os branches remotos em 2026-11-16)"),
+    (25101, 25505, "ELOGIO, o credito do carinho no modular: a calibracao 25101...25200 (100 unidades, a grade g x W) e a validacao "
+                   "25301...25500 (200 unidades, uma vez) (docs/PLANO_ANALISE_V3_ELOGIO.md, secoes 5 e 6; D-EL-22, aprovada pelo Matheus em "
+                   "2026-11-18, \"Aprovo todas\"; conferida livre no faixas.py da origin/main e dos branches remotos em 2026-11-18)"),
 )
 
 

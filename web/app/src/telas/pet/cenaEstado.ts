@@ -53,6 +53,8 @@ export const CENA: {
   /** o consumidor da posicao dos lugares (CadeadosDaIlha.tsx, so quando ha cadeado ou brilho na tela): a vista o chama no fim de cada quadro com [x, y do pe, altura]
       de cada lugar, em px de CSS. null: ninguem quer, e a vista nem calcula */
   aoLugares: ((p: Readonly<Record<"saco" | "portao" | "barraca", readonly [number, number, number]>>) => void) | null;
+  /** o consumidor da posicao do cais (CadeadoDoCais.tsx, MMO5; so com cadeado ou brilho na tela): [x, y do pe, altura] em px de CSS. null: ninguem quer */
+  aoCais: ((p: readonly [number, number, number]) => void) | null;
   /** o consumidor dos objetos que falam (ObjetosDaIlha.tsx): os mesmos lugares e os px por celula na distancia do foco. null: ninguem quer */
   aoObjetos: ((p: Readonly<Record<"saco" | "portao" | "barraca", readonly [number, number, number]>>, pxPorCelula: number) => void) | null;
   /** o sinal da TV sobre o pet (o prototipo do gosto visual, o modulo sinalTv dele): o icone de agora (a chave de grades.ts) ou null. O PalcoPet
@@ -60,7 +62,7 @@ export const CENA: {
   sinalTv: ((agora: number) => string | null) | null;
   /** quantos objetos da ilha estao transparentes agora por taparem o pet em foco (ilha/transparente.ts; o e2e moita_ninho le pelo __digilab) */
   tapando: number;
-} = { modo3d: false, modoMundo: false, ret: null, irmaos: {}, medir: null, mundo: null, coberto: false, bolaNaMao: false, petNaMao: false, maoPet: null, treino: null, cocoNoChao: false, zzX: null, cabeca: null, aoLugares: null, aoObjetos: null, sinalTv: null, tapando: 0 };
+} = { modo3d: false, modoMundo: false, ret: null, irmaos: {}, medir: null, mundo: null, coberto: false, bolaNaMao: false, petNaMao: false, maoPet: null, treino: null, cocoNoChao: false, zzX: null, cabeca: null, aoLugares: null, aoCais: null, aoObjetos: null, sinalTv: null, tapando: 0 };
 
 /** o pe que a caixa do habitat reservava no celular antes do mobile minimo (M1): a altura do dock de entao (69 px) + a folga de 24 px + a barra de abas
     (--casca-barra, 64 px), medido em 390x844 e 360x800 (caixa de 687 e 643 px). Sem a barra a caixa ocupa a tela inteira por tras das acoes, mas a camera

@@ -167,13 +167,13 @@ export async function atualizarHoje(): Promise<void> {
 /* ---------------------------------------------------------------- o pedido */
 /** pede a semente da proxima luta do pet. Devolve a luta guardada, ou null com o motivo em RQ.pedido. Quem chama segura o tempo do jogo
     ate a luta entrar no registro: o `indice` do pedido e o fim do registro de agora */
-export async function pedirSemente(pet: PetDoEnvio): Promise<LutaGuardada | null> {
+export async function pedirSemente(pet: PetDoEnvio, rival: string, mapa: string | null): Promise<LutaGuardada | null> {
   if (!amb) throw new Error("a luta ranqueada está desligada");
   if (RQ.pedido.tipo === "pedindo") throw new Error("já há um pedido de luta ranqueada a caminho");
   RQ.pedido = { tipo: "pedindo" }; avisar();
   const fim = (e: EstadoPedido): null => { RQ.pedido = e; avisar(); return null; };
   try {
-    const pedido = await pedidoDaSemente(pet);
+    const pedido = await pedidoDaSemente(pet, rival, mapa);
     const { status, corpo } = await postar("/sementes", pedido, ESPERA_PEDIDO_MS);
     const motivo = typeof corpo.motivo === "string" ? corpo.motivo : "";
     if (status === 201) {
@@ -182,7 +182,7 @@ export async function pedirSemente(pet: PetDoEnvio): Promise<LutaGuardada | null
       if (!inteiro(numero) || !inteiro(semente) || indice !== pedido.indice || !Number.isFinite(ms) || typeof dia !== "string" || typeof semana !== "string" || !inteiro(restam))
         throw new Error(`o servidor entregou uma semente que o jogo não entende: ${JSON.stringify(corpo)}`);
       const luta: LutaGuardada = { numero, semente, indice, hora: ms, dia, semana, doDia: LUTAS_POR_DIA - restam, pet: pet.semente, versao: pet.versao,
-        rival: null, mapa: null, previa: null, servidor: null, envio: "pendente" };
+        rival, mapa, previa: null, servidor: null, envio: "pendente" };
       RQ.lutas.push(luta); RQ.hoje = luta.doDia; RQ.trancada = null; RQ.pedido = { tipo: "parado" };
       gravar(); avisar();
       return luta;
