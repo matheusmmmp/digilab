@@ -41,7 +41,7 @@ def test_a_trava_recusa_fora_do_plano(tmp_path):
         with pytest.raises((ValueError, RuntimeError)):
             R.modo_da_config({**CFG, **mudar})
     with pytest.raises(bv.SementeSemPlano):
-        R.modo_da_config({**CFG, "unidades": {**CFG["unidades"], "bases": [83101]}})
+        R.modo_da_config({**CFG, "unidades": {**CFG["unidades"], "bases": [26101]}})
     with pytest.raises(ValueError, match="processos"):
         R.rodar(FUMACA, tmp_path / "x", 5)
     (tmp_path / "existe").mkdir()

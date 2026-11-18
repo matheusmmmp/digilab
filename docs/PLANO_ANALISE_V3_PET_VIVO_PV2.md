@@ -393,9 +393,15 @@ os das seções 6 e 7, sem mudança.
 
 ### A2.1 A faixa
 
-- **A faixa é 83101–83505,** com as bases 83101, 83202, 83303, 83404 e 83505 e K = 40. O prefixo é o `digibrain_prototipo`, o da C4.
-- **Ela foi pedida ao coordenador em 2026-11-17.** Estava livre no `faixas.py` da `origin/main` e em todos os branches remotos.
-- Ela entra em `FAIXAS_RESERVADAS` neste PR. Se o coordenador indicar outra, a faixa e as bases mudam antes da run.
+- **A faixa é 26101–26505,** com as bases 26101, 26202, 26303, 26404 e 26505 e K = 40. O prefixo é o `digibrain_prototipo`, o da C4.
+- **A faixa foi proposta pelo coordenador em 2026-11-18.**
+  - **A primeira proposta,** a 83101–83505, não estava livre: é a calibração da rodada 3 da luta (D-R3-5,
+    `docs/PLANO_EQUILIBRIO_COMBATE_TR_R3.md`). A busca de 2026-11-17 não a achou (D-PV2R-6).
+  - **A conferência da 26xxx:** o coordenador a fez, e esta sessão a refez em 2026-11-18, com `git grep -w` no `faixas.py`, nas
+    configs e nos `PLANO_*` e `TAREFA_*` da `origin/main` e de todos os branches remotos.
+  - **Um falso alarme conhecido:** o 26505 aparece como tick num gabarito da web (`vinculo_python.json`). Não é semente: está em
+    `docs/LEITURA_PARCIAL_V2_FASE1.md`.
+- **Ela entra em `FAIXAS_RESERVADAS` neste PR.**
 
 ### A2.2 O que o orquestrador faz
 
