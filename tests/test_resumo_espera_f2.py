@@ -98,3 +98,21 @@ def test_conversa_fora_da_voz_da_rede_falha_alto():
     x["rede"] = False
     with pytest.raises(ValueError):
         r.resumir([x])
+
+
+def test_decomposicao_divide_o_t1_quente():
+    # a conversa 1 (fria) fica fora; a 2 sai 1 s antes de a verificacao repetida da 1 acabar (trava 1 s); a 3 sai com a trava livre
+    a = {**reg(envio=0.0, chamada=0.0, balao=8000.0, verif=12000.0, fria=True, conversa=1), "latencia_s": 5.0}
+    b = {**reg(envio=11000.0, chamada=11000.0, balao=19000.0, verif=23000.0), "latencia_s": 2.0}
+    c = {**reg(envio=30000.0, chamada=30000.0, balao=36000.0, verif=40000.0), "latencia_s": 2.5}
+    d = r.decomposicao([a, b, c])
+    assert d["n"] == 2 and d["turnos_com_trava"] == 1
+    assert sorted([d["trava"]["p50"], d["trava"]["p95"]]) == [0.0, 1.0]
+    # b: 8 s ate o balao = 2 de geracao + 1 de trava + 5 de resto; c: 6 = 2,5 + 0 + 3,5
+    assert set(quantis(sorted([5.0, 3.5]), [0.5, 0.95])) == {d["resto"]["p50"], d["resto"]["p95"]}
+
+
+def test_decomposicao_falha_alto_sem_t_verif_anterior():
+    a = reg(verif=None)
+    with pytest.raises(ValueError):
+        r.decomposicao([a, reg(chamada=5000.0, balao=6000.0)])
