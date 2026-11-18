@@ -195,9 +195,12 @@ def test_g_sem_direcao_a_dx4_nao_le_a_distancia_nem_a_direcao_do_cheiro():
     herdar = _funcao(estado, "_herdar_busca")
     leituras_d = [no for no in ast.walk(herdar) if isinstance(no, ast.Subscript) and isinstance(no.slice, ast.Constant) and no.slice.value == "d"]
     assert len(leituras_d) == 1 and leituras_d[0].value.id == "unidade"
-    # o M-ADAPT entrega ao M-ESTADO so a presenca: se ha cheiro (direcao_cheiro != 0, a leitura de hoje) e o tipo dos `vistos`
+    # o M-ADAPT entrega ao M-ESTADO so a presenca: se ha cheiro (direcao_cheiro != 0, a leitura de hoje; com o PV-2, alguma narina acima
+    # de 0, D-PV2C-6) e o tipo dos `vistos`
     fechar = ast.unparse(_funcao(adapt.DigiBrain, "_fechar"))
-    assert "classe_do_tipo(v[1]) in COMIDAS_BOAS for v in pm1.vistos" in fechar and fechar.count("direcao_cheiro") == 1
+    assert "classe_do_tipo(v[1]) in COMIDAS_BOAS for v in pm1.vistos" in fechar and "self._ha_cheiro_depois(pc1, pm1)" in fechar
+    assert "direcao_cheiro" not in fechar
+    assert ast.unparse(_funcao(adapt.DigiBrain, "_ha_cheiro_depois")).count("direcao_cheiro") == 1
 
 
 # ================================================================== T-CHEIRO-1 (DX-3)

@@ -50,6 +50,7 @@ servidor/gasto_fala.json
 node_modules/
 web/dist/
 web/dist_poc/
+web/dist_conta/
 web/app/test-results/
 web/app/playwright-report/
 

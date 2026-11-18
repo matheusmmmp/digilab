@@ -1,0 +1,91 @@
+{
+ "descricao": "A medicao do PR do codigo do PV-2 (docs/PLANO_ANALISE_V3_PET_VIVO_PV2.md, secao 4 e PV2-9): so nas sementes dos testes, sem faixa e sem",
+ "quedas": {
+  "n": 199,
+  "mediana": 46,
+  "p25": 23.0,
+  "p75": 116.0,
+  "maxima": 395
+ },
+ "propostos": {
+  "l_pirueta": 92,
+  "w0_dc": 2849,
+  "n_varredura": 1,
+  "taxa_placebo": 22
+ },
+ "pirueta": {
+  "executor": 592,
+  "fora_da_varredura": 581,
+  "piruetas": 49,
+  "taxa_placebo": 22,
+  "nivel_c": {
+   "n": 3013,
+   "mediana": 641,
+   "maximo": 1000
+  },
+  "saturacao_olf_g": {
+   "64": 0.808496515101228,
+   "128": 0.7149020909392632,
+   "256": 0.6053767009624959,
+   "512": 0.4374377696647859,
+   "1024": 0.32791237968801856
+  }
+ },
+ "custo": {
+  "segundos_por_vida": {
+   "HOJE": [
+    3.794344399997499,
+    4.0266201000195
+   ],
+   "OLF-0": [
+    5.055774700012989,
+    5.114571599988267
+   ],
+   "OLF-DC": [
+    4.800613400002476,
+    5.1197941999998875
+   ],
+   "OLF-DCV": [
+    4.844839100027457,
+    5.074146599974483
+   ],
+   "OLF-PLA": [
+    4.962751500017475,
+    5.10542900004657
+   ],
+   "OLF-G": [
+    5.147148600022774,
+    5.908724999986589
+   ]
+  },
+  "media_s": 4.912896516674664,
+  "projecao_run_h": 4.912896516674664,
+  "vidas": 14400,
+  "processos": 4,
+  "nota": "com o G1 do replay em cada vida (a run tambem confere); sem o contrafactual da SE-C"
+ },
+ "sementes": [
+  101,
+  202,
+  303,
+  404,
+  505
+ ],
+ "lugares": [
+  "comedouro",
+  "longe_fixo",
+  "longe"
+ ],
+ "dono": "atencioso",
+ "dias": 14,
+ "codigo": {
+  "digilab/digibrain/sens.py": "0c15c9352732a6c54d72ea1140122d16f0e740071e26c24af8370c9623bc5f38",
+  "digilab/digibrain/impulso.py": "0b753b3129917e017b39042a3abd9c2ffc6d6ef2795e3f0a534498d2456fb97f",
+  "digilab/digibrain/adapt.py": "aa0eec5268662f9c4a51d5a1d878e531f9594454a70e173d492deaa3d5206028",
+  "digilab/digibrain/plast.py": "ca00797b0a76a9c68d9282cffd01a785c6df4a3f7d4ac1f3ab94889e3fc9a2a4",
+  "digilab/config.py": "35edf0478e7726f6a9b5a5b2b31f8c2164d005b5a6d5850d3dc27af3778aa9ce",
+  "digilab/metrics.py": "d328bab5854eb11c715d82415a195d80f45a7dd5f24515604268b774e3bab503",
+  "experiments/pv2.py": "b642ce2ef207e8c2131fb7b4991d2e013bacc840ca53a776a9c67a34298d8137",
+  "experiments/medir_pv2.py": "739241a4c2bbf8f3752a8b26746b6a1e993b70f197c22cf220edbd520a23918c"
+ }
+}

@@ -3391,3 +3391,48 @@ def decisao_do_criterio(consumos: Sequence[tuple[int, str]], fruta: str, janela:
         if len(ultimas) == janela and sum(1 for x in ultimas if x == fruta) >= minimo:
             return t // passo
     return None
+
+
+# ================================================================== o PV-2 (docs/PLANO_ANALISE_V3_PET_VIVO_PV2.md, secao 5)
+FINS_BUSCA_ACHOU = ("meta", "achou")
+
+
+def medidas_pv2(motivos: Sequence[dict], consumos: Sequence[dict], com_orgao: bool, S: int) -> dict:
+    """As medidas de uma vida do PV-2, so dos motivos do DigiBrain e dos consumos do mundo (as descritivas da secao 5 do plano; a taxa por
+    episodio de fome e a do G-MVP-EP, `episodios_de_fome`, fora daqui):
+      - as decisoes, as da unidade do cheiro (comer/cheiro e explorar/cheiro) e as racoes comidas;
+      - o achado pelo cheiro: a fracao das buscas comer/cheiro (os fins registrados da DX-4) que acabam em "meta" ou "achou";
+      - as decisoes ate comer desde a primeira decisao com cheiro (None sem cheiro ou sem consumo depois dele);
+      - as unidades por decisao (a media, e a de cada comportamento): a base do G-UNIDADES;
+      - com o orgao (`com_orgao`): as viradas e as seguidas do executor, as piruetas, a hora da virada (a fracao das viradas com dC < 0) e a
+        saturacao do nivel (a fracao das decisoes com cheiro em que o nivel do cheiro, com o ganho no OLF-G, chega a S; a INT-4)."""
+    n = len(motivos)
+    if n == 0:
+        raise ValueError("medidas_pv2: a vida sem decisoes")
+    cheiro = [m for m in motivos if m["tipo_escolha"] == "cheiro"]
+    buscas = [f for m in motivos for f in m["fins"] if f["chave"][:2] == ["comer", "cheiro"]]
+    achou = sum(1 for f in buscas if f["motivo"] in FINS_BUSCA_ACHOU)
+    com_cheiro = [m["k"] for m in motivos if any(u["chave"][1:2] == ["cheiro"] for u in m["unidades"])]
+    primeira = com_cheiro[0] if com_cheiro else None
+    comeu = [m["k"] for m in motivos if m["consequencia"] is not None and m["consequencia"]["comeu"] is not None
+             and m["consequencia"]["comeu"]["como"] == "comer"]
+    depois = [k for k in comeu if primeira is not None and k >= primeira]
+    por_b: dict = {}
+    for m in motivos:
+        for u in m["unidades"]:
+            por_b[u["chave"][0]] = por_b.get(u["chave"][0], 0) + 1
+    out = {"decisoes": n, "decisoes_cheiro": len(cheiro), "racao": sum(1 for c in consumos if c["tipo"] == "racao"),
+           "buscas": len(buscas), "achou_pelo_cheiro": None if not buscas else achou / len(buscas),
+           "primeira_com_cheiro": primeira, "decisoes_ate_comer": None if not depois else depois[0] - primeira,
+           "unidades_por_decisao": sum(len(m["unidades"]) for m in motivos) / n,
+           "unidades_por_comportamento": {b: v / n for b, v in sorted(por_b.items())}}
+    if com_orgao:
+        exe = [m["pv2"] for m in motivos if "pv2" in m]
+        viradas = [e for e in exe if e["escolheu"] == "cheiro_virar"]
+        com_ch = [m["olfato"] for m in motivos if m["olfato"]["c"] > 0]
+        out.update({"executor": len(exe), "viradas": len(viradas), "seguidas": len(exe) - len(viradas),
+                    "taxa_viradas": None if not exe else len(viradas) / len(exe),
+                    "hora_da_virada": None if not viradas else sum(1 for e in viradas if e["dC"] < 0) / len(viradas),
+                    "decisoes_com_cheiro": len(com_ch),
+                    "saturacao": None if not com_ch else sum(1 for o in com_ch if o["nivel"] >= S) / len(com_ch)})
+    return out
