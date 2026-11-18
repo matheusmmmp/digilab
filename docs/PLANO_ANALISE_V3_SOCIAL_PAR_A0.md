@@ -206,6 +206,10 @@ As classes de S2 e S3 usam o IC e o sinal, sem margem.
     dividido por 5.
   - **Se nem 1 600 bastar,** o N fica em 1 600. A margem efetiva vai no relato, e o critério não muda.
   - **O N e o K ficam DECIDIDOS pelo Matheus** depois do piloto e antes da run, num commit que atualiza esta seção.
+  - **DECIDIDO pelo Matheus em 2026-11-18 ("Sim, K = 42"): N = 200 e K = 42 por base** (210 pares). O piloto
+    (`artifacts_v3_social_par_a0/piloto.json`, D-SP-33) dá σ̂_A = 0,664 e 0,96 de elegíveis no A: o N = 200 basta (a meia-largura prevista é 0,111,
+    contra δ_A/2 = 2), e 200 / 0,96 / 5 = 41,7 dá K = 42. O B não tem nenhum par elegível no piloto e não tem σ̂, então o N é o do A, e o B0
+    sai inconclusivo por premissa (a PB-1), como manda a seção 5.
 - **O que o piloto não faz:**
   - não lê nenhuma média;
   - não muda o d0, a janela, as margens nem as premissas;

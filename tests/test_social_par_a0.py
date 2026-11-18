@@ -154,3 +154,19 @@ def test_o_piloto_nao_grava_media_e_a_regra_do_n(fumaca):
     r1600 = pl.regra_do_n(1000.0, 4.0)
     assert r1600["n"] == 1600 and r1600["bastou"] is False
     assert pl.regra_do_n(None, 4.0)["n"] is None
+
+
+def test_o_main_passa_pelo_pre_run_fora_da_fumaca(monkeypatch):
+    """D-IA-2: o main() de um run_v3_* novo chama o pre_run antes de tudo (o plano na origin/main, a faixa, nenhuma outra run)"""
+    import run_v3_social_par_a0 as a0
+    chamadas = []
+
+    def recusa(orq, config, processos):
+        chamadas.append((orq, config, processos))
+        raise a0.pre_run.Recusa("recusada")
+    monkeypatch.setattr(a0.pre_run, "exigir", recusa)
+    monkeypatch.setattr(sys, "argv", ["x", "--config", "experiments/configs/v3_social_par_a0/run.json", "--processos", "4"])
+    with pytest.raises(a0.pre_run.Recusa):
+        a0.main()
+    assert chamadas == [(a0.ORQUESTRADOR, "experiments/configs/v3_social_par_a0/run.json", 4)]
+    assert json.loads((RAIZ / "experiments/configs/v3_social_par_a0/run.json").read_text(encoding="utf-8"))["unidades"]["k"] == a0.K_RUN

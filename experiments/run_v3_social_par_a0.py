@@ -34,8 +34,10 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 sys.path.insert(0, str(RAIZ / "experiments"))
+sys.path.insert(0, str(RAIZ / "tools"))
 
 import exportar_gabarito_co6 as e6  # noqa: E402
+import pre_run  # noqa: E402
 import run_v2_digibrain_prototipo as orq  # noqa: E402
 import run_v2_longe_regular as lr  # noqa: E402
 from bancada import parceiro as pc  # noqa: E402
@@ -73,7 +75,8 @@ PREFIXO = {"fumaca": "social_par", "piloto": "social_par_piloto", "run": "social
 BASES = {"piloto": (102101, 102202, 102303, 102404, 102505), "run": (101101, 101202, 101303, 101404, 101505)}     # 3.4, A0-8
 FAIXA = {"piloto": (102101, 102505), "run": (101101, 101505)}
 K_PILOTO = 20                                                 # 3.4, A0-7
-K_RUN = None                                                  # 6: o Matheus decide depois do piloto; None recusa a run
+K_RUN = 42                                                    # 6: DECIDIDO pelo Matheus em 2026-11-18 depois do piloto (D-SP-34)
+ORQUESTRADOR = "experiments/run_v3_social_par_a0.py"
 SAIDA = "artifacts_v3_social_par_a0/run"
 CONDICOES = pc.CONDICOES
 
@@ -504,8 +507,11 @@ def main() -> None:
     a = ap.parse_args()
     caminho = Path(a.config)
     cfg = json.loads(caminho.read_text(encoding="utf-8"))
-    if cfg.get("modo") == "fumaca" and a.saida is None:
-        raise SystemExit("a fumaca precisa de --saida (fora de artifacts_v3_social_par_a0/)")
+    if cfg.get("modo") == "fumaca":
+        if a.saida is None:
+            raise SystemExit("a fumaca precisa de --saida (fora de artifacts_v3_social_par_a0/)")
+    else:
+        pre_run.exigir(ORQUESTRADOR, a.config, a.processos)          # o H10 (D-IA-6: o plano na origin/main) e a V3-D8, antes de tudo
     r = rodar(cfg, Path(a.saida) if a.saida else RAIZ / SAIDA, a.processos, caminho)["resultado"]
     print(json.dumps({k: r[k] for k in ("modo", "pares", "premissas", "primarios", "leitura")}, indent=1, ensure_ascii=True,
                      default=str)[:4000])
