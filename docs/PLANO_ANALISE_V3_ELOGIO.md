@@ -1,7 +1,7 @@
 # PLANO DE ANÁLISE V3 — ELOGIO: o carinho logo depois de comer X acelera o aprendizado do modular
 
-**Status: PROPOSTO** (2026-11-17), parado no **CHECKPOINT EL-3** antes das medidas no `digilab/metrics.py`, da faixa no `faixas.py` e de
-qualquer vida da faixa. As D-EL-18 a D-EL-24 (seção 8) esperam o Matheus.
+**Status: APROVADO pelo Matheus em 2026-11-18** ("Aprovo todas", nesta sessão), com as D-EL-18 a D-EL-24 (seção 8) como recomendadas.
+Nenhuma medida no `digilab/metrics.py`, nenhuma faixa no `faixas.py` e nenhuma vida da faixa existiam antes da aprovação.
 
 Escrito em 2026-11-17 (Claude Code, Opus 5.5, branch `v3-elogio-plano`), na etapa 3 da [TAREFA_V3_ELOGIO.md](TAREFA_V3_ELOGIO.md)
 ("Comece a etapa 3 do elogio", Matheus, 2026-11-17). O código da etapa 2 está na `main` (#968, 1f77a5b8).
@@ -101,7 +101,7 @@ sem piora, com a mesma regra. A classe: "confirma" com os dois; "não confirma" 
 
 O pre-run do projeto confere a faixa e se há outra run.
 
-## 8. As decisões para o CHECKPOINT EL-3
+## 8. As decisões do CHECKPOINT EL-3 (DECIDIDAS em 2026-11-18, "Aprovo todas")
 
 | id | decisão | recomendação | custo de errar |
 |---|---|---|---|

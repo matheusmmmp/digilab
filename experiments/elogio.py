@@ -97,6 +97,7 @@ class DonoElogioFruta:
         self.rng_atraso = random.Random(derivar_semente("elogio-atraso", semente))
         self.rng_incons = random.Random(derivar_semente("elogio-incons", semente))
         self.carinhos: list[tuple[int, str]] = []
+        self.atrasos: list[int] = []                  # E-atraso: o atraso sorteado de cada carinho marcado (D-EL-5), na ordem
         self.consumos_x = 0
 
     def _indo_comer_x(self) -> bool:
@@ -125,6 +126,7 @@ class DonoElogioFruta:
                     agora.append("imed")
                 elif self.braco == "E-atraso":
                     d = ATRASOS[self.rng_atraso.randrange(len(ATRASOS))]
+                    self.atrasos.append(d)
                     if d == 1:
                         agora.append("atraso")
                     else:
@@ -150,8 +152,25 @@ class DonoElogioFruta:
         return [AcaoUsuario.ACARICIAR] * len(agora)
 
 
-def fabricas(semente: int, cfg_elogio: ConfigElogio, dono: DonoElogioFruta | None):
-    """(a fabrica do cerebro, a do motor) da vida; a do motor entrega o motor ao dono do carinho"""
+class VistaFrutas:
+    """So le (o plano, D-EL-19): no fim de cada passo do dono, antes do carinho, os tipos de fruta no mapa (as `presentes` da fracao de X).
+    Embrulha o dono do carinho (None no E0): o motor recebe dele as mesmas acoes, e a vida e a mesma (conferido por teste)."""
+
+    def __init__(self, dono: DonoElogioFruta | None) -> None:
+        self.dono = dono
+        self.motor = None
+        self.passos: list[tuple[int, frozenset]] = []
+
+    def acoes(self, estado: dict) -> list:
+        if self.motor is None:
+            raise RuntimeError("a VistaFrutas sem o motor (a fabrica o entrega)")
+        tipos = frozenset(c["tipo"] for c in self.motor.mundo.comidas.values() if c["tipo"] in FRUTAS)
+        self.passos.append((estado["tick"], tipos))
+        return [] if self.dono is None else self.dono.acoes(estado)
+
+
+def fabricas(semente: int, cfg_elogio: ConfigElogio, dono: DonoElogioFruta | None, vista: VistaFrutas | None = None):
+    """(a fabrica do cerebro, a do motor) da vida; a do motor entrega o motor ao dono do carinho e a vista"""
     efeito = efeitos_da_condicao(genoma_frutas(semente, CONFIG_FRUTAS), CONFIG_FRUTAS, CONDICAO)
     cd = orq.config_do_braco("REL", None, True)
 
@@ -163,20 +182,31 @@ def fabricas(semente: int, cfg_elogio: ConfigElogio, dono: DonoElogioFruta | Non
                                       cfg_corpo=CONFIG_CORPO_DRIVES, efeito_frutas=efeito)
         if dono is not None and dono.motor is None:   # so a vida; o replay monta outro motor e nao o entrega
             dono.motor = motor
+        if vista is not None and vista.motor is None:
+            vista.motor = motor
         return motor
 
     return fp, fm
 
 
-def viver(braco: str, semente: int, dias: int, cfg_elogio: ConfigElogio = CONFIG_ELOGIO, sorteados: list[int] | None = None):
-    """uma vida do braco: (o motor, o cerebro, o dono do carinho ou None no E0, as fabricas)"""
+def viver_completo(braco: str, semente: int, dias: int, cfg_elogio: ConfigElogio = CONFIG_ELOGIO, sorteados: list[int] | None = None,
+                   vista: bool = False) -> dict:
+    """uma vida do braco, com tudo o que a medida le: o motor, o registro, o cerebro, o dono do carinho (None no E0), a vista (com
+    `vista`; senao None) e as fabricas"""
     passos = passos_da_vida(dias)
     dono = None if braco == "E0" else DonoElogioFruta(braco, fruta_elogio(semente), semente, passos // 2, sorteados)
-    fp, fm = fabricas(semente, cfg_elogio, dono)
+    vf = VistaFrutas(dono) if vista else None
+    fp, fm = fabricas(semente, cfg_elogio, dono, vf)
     registro = fp(CONFIG_PADRAO)
     motor, _ = simular_vida_fisico(DonoComLugar(criar_dono(DONO), LUGAR, semente, DONO, CM), registro, semente, dias,
-                                   orq.ORCAMENTO_POR_DIA * dias, DONO, fm, carinho=dono)
-    return motor, orq.cerebro_de(registro), dono, (fp, fm)
+                                   orq.ORCAMENTO_POR_DIA * dias, DONO, fm, carinho=vf if vista else dono)
+    return {"motor": motor, "registro": registro, "cerebro": orq.cerebro_de(registro), "dono": dono, "vista": vf, "fabricas": (fp, fm)}
+
+
+def viver(braco: str, semente: int, dias: int, cfg_elogio: ConfigElogio = CONFIG_ELOGIO, sorteados: list[int] | None = None):
+    """uma vida do braco: (o motor, o cerebro, o dono do carinho ou None no E0, as fabricas)"""
+    v = viver_completo(braco, semente, dias, cfg_elogio, sorteados)
+    return v["motor"], v["cerebro"], v["dono"], v["fabricas"]
 
 
 def viver_par(semente: int, dias: int, cfg_elogio: ConfigElogio = CONFIG_ELOGIO):

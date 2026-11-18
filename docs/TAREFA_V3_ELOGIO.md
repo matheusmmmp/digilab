@@ -2,7 +2,7 @@
 
 Coordenador: Gerente da V3 (Claude Code). Worker da etapa 1: Claude Code, Opus 5.5 (método), worktree `v3-elogio`. Status: **ABERTA; etapa 1
 (só papel) ENTREGUE; D-EL-1 a D-EL-8 (seção 8) DECIDIDAS em 2026-11-16, pela recomendação ("Aprovo todas"). Etapa 2 (código) ENTREGUE (seção 10): a leitura achou
-que o cenário da D-EL-1 não roda no modular (seção 9); D-EL-9 a D-EL-13 DECIDIDAS em 2026-11-17 ("Aprovo todas"). Etapa 3 (plano) PROPOSTA em 2026-11-17: `docs/PLANO_ANALISE_V3_ELOGIO.md`, parado no CHECKPOINT EL-3 com D-EL-18 a D-EL-24.**
+que o cenário da D-EL-1 não roda no modular (seção 9); D-EL-9 a D-EL-13 DECIDIDAS em 2026-11-17 ("Aprovo todas"). Etapa 3 (plano) APROVADA em 2026-11-18: `docs/PLANO_ANALISE_V3_ELOGIO.md`, D-EL-18 a D-EL-24 DECIDIDAS ("Aprovo todas").**
 
 Categoria: arquitetura (depois, implementacao e experimento). Origem: Matheus, 2026-11-16: "logo após o pet fazer alguma ação [...] se a gente
 usar [...] o carinho, ou o elogiar logo após aquela ação, vai dar um boost maior de ele entender que aquilo é uma coisa boa". Com o pedido de
@@ -201,7 +201,7 @@ dono é igual ao intervalo da decisão (15 ticks): o carinho do primeiro passo d
 
 ## 11. Etapa 3: o plano de análise (2026-11-17)
 
-O plano é o [PLANO_ANALISE_V3_ELOGIO.md](PLANO_ANALISE_V3_ELOGIO.md), PROPOSTO e parado no CHECKPOINT EL-3. Uma sonda nas sementes dos
+O plano é o [PLANO_ANALISE_V3_ELOGIO.md](PLANO_ANALISE_V3_ELOGIO.md), APROVADO em 2026-11-18 ("Aprovo todas": D-EL-18 a D-EL-24). Uma sonda nas sementes dos
 testes (`experiments/sonda_elogio_plano.py`) decidiu o desenho:
 - os 12 dias da D-EL-9 bastam para a M2;
 - 36 dias diluem o efeito;
@@ -209,3 +209,22 @@ testes (`experiments/sonda_elogio_plano.py`) decidiu o desenho:
 - a premissa P1 (a natural) não aparece na escolha da fruta.
 
 A faixa proposta é 25101 a 25505. As medidas entram no `digilab/metrics.py`, e a faixa no `faixas.py`, depois do sim às D-EL-18 a D-EL-24.
+
+## 12. Etapa 4: o código da calibração (2026-11-18)
+
+Com o plano aprovado ("Aprovo todas", 2026-11-18), o código da run, antes de qualquer vida da faixa:
+- **a faixa** 25101 a 25505 em `FAIXAS_RESERVADAS` (D-EL-22);
+- **as medidas** no `digilab/metrics.py`:
+  - `consumos_com_presentes`: as frutas presentes de cada consumo, D-EL-19;
+  - `decisao_do_criterio`: o M1, D-EL-24;
+  - a M2, a M3 e a M4 usam as funções que já existiam;
+- **a vista das frutas** (`experiments/elogio.py`, `VistaFrutas` e `viver_completo`): só lê os tipos no mapa a cada passo do dono. Um
+  teste confere que a vida sai igual com ela e sem ela, e que o E0 com a chave ligada dá o mesmo log do E0 desligado;
+- **o orquestrador** `experiments/run_v3_elogio.py`, com a config `experiments/configs/v3_elogio/calibracao.json`:
+  - as duas fases;
+  - a regra da escolha (D-EL-21) e o G-EL1 (D-EL-23);
+  - as travas: o `pre_run`, o plano aprovado, a config à letra e a pasta nova;
+- **os testes:** `tests/test_run_v3_elogio.py`, com as medidas, a vista, a regra da escolha, as travas e a fumaça das duas fases.
+
+A calibração só roda depois do merge: o `pre_run` exige o plano na `origin/main` (D-IA-6).
+
