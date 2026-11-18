@@ -1,7 +1,7 @@
 # TAREFA V3 — CORPO (2026-11-18)
 
 Coordenador: a sessão "Auditoria de projeto com LLM". Worker: Claude Code (Opus 5.5, a sessão lateral da CORPO_ACOPLAMENTO). Worktree e
-branch: `v3-corpo-mapa` para a C0 (o `v3-corpo` fica para as fases seguintes). Status: ABERTA; a C0 APROVADA ("Aprovado", 2026-11-18, CHECKPOINT C1); a C1 em curso.
+branch: `v3-corpo-mapa` para a C0 (o `v3-corpo` fica para as fases seguintes). Status: ABERTA; a C0 APROVADA ("Aprovado", 2026-11-18, CHECKPOINT C1); a C1, o plano, no PR empilhado no #999, esperando o CHECKPOINT C2.
 
 Categoria: documentacao. Origem: Matheus, 2026-11-18: o programa C0-C5 do corpo, colado pelo Matheus na sessao lateral da CORPO_ACOPLAMENTO em 2026-11-18.
 
