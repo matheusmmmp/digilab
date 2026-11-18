@@ -1,9 +1,11 @@
 # TAREFA V3 — CORPO_ACOPLAMENTO (2026-11-18)
 
 Coordenador: a sessão do Matheus que abriu esta (Claude Code). Worker: Claude Code, Opus 5.5, sessão lateral. Worktree e branch:
-`v3-corpo-acoplamento`. Status: **ABERTA; a etapa 1 (só papel) entregue, todas as decisões PROPOSTAS.**
+`v3-corpo-acoplamento` (a etapa 1) e `v3-corpo-acoplamento-e2` (a etapa 2). Status: **ABERTA; a etapa 1 (#994) e a etapa 2 entregues; as
+D-CA-1 a D-CA-7 APROVADAS (Matheus, 2026-11-18); a D-CA-8 DECIDIDA, (a) (seção 11.4); o plano da run APROVADO
+(`docs/PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md`), com as D-CA-9 a D-CA-12 DECIDIDAS.**
 
-Categoria: arquitetura (o PR da etapa 1 vai como implementação: ver o desvio D-CA-R1). Origem: Matheus, 2026-11-18: redesenhar o corpo
+Categoria: arquitetura (os PRs vão como implementação: ver o desvio no `docs/registro/2026-11.md`). Origem: Matheus, 2026-11-18: redesenhar o corpo
 para que a fome e a energia não disputem a mesma decisão. A etapa 1 é só papel: o diagnóstico do acoplamento, as opções atrás de chave e
 as decisões D-CA-n.
 
@@ -69,7 +71,8 @@ descansar ao mesmo tempo. O Matheus concluiu que o gargalo é o corpo, e não o 
 
 ## 8. Precisa do Matheus
 
-Todas as decisões são PROPOSTAS. A etapa 2 só começa com elas.
+**As D-CA-1 a D-CA-7 foram APROVADAS pelo Matheus em 2026-11-18 ("Aprovo a D-CA-1 a D-CA-7, siga para a etapa 2").** O texto abaixo é o
+que ele aprovou, sem mudança; o que veio depois está na seção 11.
 
 - **D-CA-1. Aceitar o diagnóstico.** As duas chegam juntas por uma causa comum: ficar sem comer.
   - A fome que o cérebro lê é um relógio, que sobe a cada tick, dormindo ou acordado.
@@ -256,3 +259,109 @@ Comum a todas:
 
 A E fecha o déficit sem tirar a ponte. A A, a B e a C não atacam a causa. O tamanho da D, o k, é um número novo, PROPOSTO, SEM FONTE, para
 a etapa 2 (o 500 de hoje é o ponto de partida natural).
+
+## 11. Etapa 2: a opção D atrás da chave (2026-11-18)
+
+O pedido (as D-CA-2, D-CA-5, D-CA-6 e D-CA-7 aprovadas):
+1. o gabarito das vidas de hoje, num commit próprio;
+2. a subchave da opção D no Python e no TS, desligada, com paridade;
+3. a sonda com a chave ligada, nas sementes dos testes, como descritivo.
+
+Nenhuma run de pesquisa rodou, e nenhum pet do jogo liga a chave.
+
+### 11.1 O que entrou
+
+- **O gabarito de antes** (o commit `fd784619`, antes de qualquer código): `tests/gabarito_corpo_acoplamento.py` grava
+  `tests/gabaritos/corpo_acoplamento_de_hoje.json`.
+  - São as vidas da VALUATION: o REL, os quatro donos, o `longe_fixo` e o comedouro, a semente 101, 3 dias.
+  - De cada vida, o sha256 do log, do estado do cérebro, do resumo do mundo físico e da série do corpo.
+  - O `tests/test_gabarito_corpo_acoplamento.py` confere com a chave padrão e com a desligada passada explícita.
+- **A chave no Python:** a `ConfigAcoplamentoCorpo` (`digilab/config.py`), com `ligada` e `falta_fome`.
+  - O status fica em `PARAMETROS_ACOPLAMENTO_CORPO`: a `ligada` DECIDIDA pela D-CA-2; o `falta_fome` = 500 PROPOSTO, SEM FONTE (o 500 do
+    `falta_cansaco` de hoje).
+  - Ela é uma config própria, como a `ConfigLutaCorpo`, para o dump da `ConfigCorpo` não mudar. Um campo novo ali mudaria os gabaritos do
+    corpo e do cérebro A sem mudar vida nenhuma.
+  - Ligada, o emissor `falta_combustivel` sobe a fome em vez do cansaço (`grafo_do_corpo`). Ela exige o metabolismo e entra pelo
+    `Corpo(cfg_acoplamento=...)` e pelo `MotorCorpo(cfg_acoplamento_corpo=...)`.
+  - Os testes estão em `tests/test_corpo_acoplamento_chave.py`.
+- **A chave no TS:** a `ConfigAcoplamentoCorpo` em `web/app/motor/corpo.ts`, com as mesmas conferências, pelo `Corpo({acoplamento})` e pelo
+  `grafoDoCorpo`.
+  - A paridade vem do `experiments/exportar_gabarito_corpo_acoplamento.py`, que grava `tests/gabaritos/corpo_acoplamento_python.json`, um
+    arquivo próprio: o `corpo_quimica_python.json` não muda.
+  - O `web/app/test/corpo_acoplamento.test.ts` rejoga três corpos: o do v11 sem o mundo, o do v11 com o mundo, e a etapa 6 com o
+    metabolismo. De cada um, a tabela, o relato, a grade de casos e a sequência de 3 000 operações com o sha256.
+  - O motor do jogo (`motor_corpo.ts`, `motor.ts`) não muda: nenhum pet liga a chave (D-CA-7).
+- **A sonda** ganhou o `--chave-d` e a taxa de base: a fome urgente em todas as decisões e nas com a energia boa.
+  - Os dois artefatos novos rodaram no `59aad74e`, com a árvore limpa:
+    - `artifacts_v3_corpo_acoplamento/sonda_e2_hoje.json`, a chave desligada, sha256 `1b785c33…`;
+    - `artifacts_v3_corpo_acoplamento/sonda_chave_d.json`, a chave ligada, sha256 `b9600350…`.
+  - O `sonda.json` da etapa 1 fica como estava. A `sonda_e2_hoje.json` repete os números dele e acrescenta os campos novos.
+
+### 11.2 Os números (o `agregado.REL.todas` dos dois artefatos; 60 vidas cada)
+
+| medida | hoje (`sonda_e2_hoje`) | com a D (`sonda_chave_d`) |
+|---|---|---|
+| decisões com a energia baixa (`energia_baixa`) | 15 906 (0,197 das decisões) | **11 127** (0,138) |
+| decisões com as duas (`ambas`) | 12 070 (0,150 das decisões) | **8 466** (0,105) |
+| a fome urgente na energia baixa (`fracao_ambas_na_energia_baixa`) | 0,759 | **0,761** |
+| a fome urgente na energia boa (`fracao_fome_urgente_na_energia_boa`) | 0,248 | 0,328 |
+| a fome urgente em todas as decisões (`fracao_fome_urgente_nas_decisoes`) | 0,349 | 0,388 |
+| o cansaço da falta de combustível, C por dia | 0,829 | **0** |
+| a classe `tempo_acordado` | 0,222 | 0,990 |
+| os ticks dormindo (`fracao_ticks_dormindo_todos`) | 0,465 | **0,375** |
+| as atividades e o andar, cansaço em C por dia | 0,634 e 0,279 | 0,694 e 0,324 |
+| o combustível abaixo de C/4, nos ticks (`fracao_ticks_combustivel_abaixo_do_limiar`) | | 0,419 |
+| a fome no teto, nas decisões com as duas | 0,577 | 0,695 |
+| o andar desde a fome urgente necessário (`andar_na_fome`) | 0,732 | 0,814 |
+| o pet dormindo, nas decisões com as duas | 0,176 | 0,039 |
+| a conversão e o descarte, C por dia | 1,041 e 0,386 | 1,187 e 0,439 |
+
+Por lugar, a fome urgente na energia baixa fica perto de onde estava:
+- comedouro: 0,537 → 0,614;
+- longe: 0,845 → 0,838;
+- `longe_fixo`: 0,821 → 0,791.
+
+No CON, ela sobe de 0,767 para 0,830, e as decisões com as duas, de 22 027 para 23 615 (`agregado.CON.todas`).
+
+### 11.3 A leitura (descritiva; nenhuma classe, nenhum gate)
+
+- **A D faz o que promete no corpo.** O jejum deixa de cansar: o cansaço da falta vai a 0. As decisões com a energia baixa caem 30 %, e as
+  com as duas também caem 30 %: de 201 para 141 por vida.
+- **A coincidência condicional não cai.** Nas decisões com a energia baixa que sobram, a fome está urgente na mesma fração, 0,761.
+  - O acoplamento é real hoje: a fome urgente é 0,759 na energia baixa contra 0,248 na boa.
+  - Com a D, ele fica menor (0,761 contra 0,328), mas continua.
+- **O que sobra não é do corpo, pela leitura da sonda:**
+  - a energia baixa vem do tempo acordado em 0,990;
+  - o pet dorme menos (0,375 dos ticks);
+  - o pet anda e explora mais (as atividades e o andar sobem);
+  - o andar desde a fome urgente pesa em 0,814;
+  - a fome chega ao teto em 0,695.
+
+  O pet faminto sai atrás de comida, anda, e cansa. Esse caminho é do comportamento, não da química. É uma interpretação: a sonda não
+  separa o cérebro do corpo.
+- **A D mexe no sono, como a D-CA-7 previu:** os ticks dormindo vão de 0,465 a 0,375. O I-PAD da LONGE_GEOMETRIA, que vem do sono, não se
+  transfere sem medir.
+- **No CON, a D piora a coincidência** (0,830): o pet que não dorme com a fome urgente fica com mais fome.
+- **O que não demonstra:** são cinco sementes, sem IC e sem classe. Nada sobre a privação, a exaustão e a taxa por episódio da VALUATION
+  (os gates de uma run). Nada sobre o jogo.
+
+### 11.4 O que a D-CA-6 pede agora, e a decisão nova
+
+A D-CA-6 diz: "só depois, se o descritivo mostrar a coincidência caindo", o plano de análise com uma faixa nova. O descritivo é misto: a
+contagem cai 30 %, e a fração não cai. A regra não decide sozinha, e por isso a run não foi preparada.
+
+- **D-CA-8. O que vem depois da D.** DECIDIDA pelo Matheus em 2026-11-18, "(a) Plano da D". O plano é o
+  [PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md](PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md), APROVADO pelo Matheus em 2026-11-18, com as D-CA-9 a
+  D-CA-12 DECIDIDAS como recomendadas ("Aprovo, siga", na sessão lateral, e "Aprovo todas", na sessão coordenadora). As opções eram:
+  - **(a)** Seguir para o plano de análise da D, pela contagem. O primário seria as decisões com as duas por vida, e os gates os da
+    VALUATION: a exaustão, a privação e a taxa por episódio. A faixa seria pedida ao coordenador.
+  - **(b)** Somar a E (a digestão converte a comida inteira) na mesma bancada e repetir a sonda antes do plano.
+  - **(c)** Aceitar que o que sobra é do comportamento e levar a pergunta ao cérebro: o pet faminto que anda até cansar.
+  - **Recomendação:** a (a). A D já tira 30 % dos conflitos e a ponte que os causava no corpo. O que sobra pede uma medida com IC, e a run
+    da D responde se a exaustão e a privação melhoram de fato.
+    - A (b) mexe no combustível, que não é mais o que cansa.
+    - A (c) é outra frente.
+  - **Custo de errar:**
+    - na (a), queimar uma faixa numa mudança que não mexe na fração que motivou a tarefa;
+    - na (b), mais uma etapa de código sem medida;
+    - na (c), deixar no corpo uma ponte que hoje é a maior fonte de cansaço.

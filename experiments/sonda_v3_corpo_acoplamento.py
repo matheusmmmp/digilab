@@ -25,7 +25,8 @@ classe da decisao e a fonte que mais pos cansaco na janela (o empate vai a prime
 Ao lado ainda: o balanco do metabolismo (as contas do corpo e a comida descartada com a fome em zero), o cansaco por fonte por dia e a
 subida da fome por tick, dormindo e acordado.
 
-Uso: python experiments/sonda_v3_corpo_acoplamento.py [--saida artifacts_v3_corpo_acoplamento/sonda.json]
+Uso: python experiments/sonda_v3_corpo_acoplamento.py [--chave-d] [--saida <arquivo>]
+  (sem a chave: sonda.json, a etapa 1; com --chave-d: sonda_chave_d.json, a etapa 2, a opcao D ligada)
 """
 from __future__ import annotations
 
@@ -45,7 +46,7 @@ sys.path.insert(0, str(RAIZ / "experiments"))
 import run_v2_longe_regular as lr  # noqa: E402
 import run_v3_valuation_conserto as VC  # noqa: E402
 from bancada.regras_mundo import simular_vida_fisico  # noqa: E402
-from digilab.config import CONFIG_PADRAO, TICKS_POR_DIA  # noqa: E402
+from digilab.config import CONFIG_ACOPLAMENTO_CORPO_LIGADA, CONFIG_PADRAO, TICKS_POR_DIA, ConfigAcoplamentoCorpo  # noqa: E402
 from digilab.corpo import div_arred  # noqa: E402
 from digilab.donos import criar_dono  # noqa: E402
 from digilab.mundo import DonoComLugar  # noqa: E402
@@ -56,6 +57,7 @@ BRACOS = ("REL", "CON")                       # o REL e a vida de hoje; o CON (a
 CELULAS = VC.CELULAS
 DIAS, ORCAMENTO_POR_DIA = VC.DIAS, VC.ORCAMENTO_POR_DIA
 SAIDA = "artifacts_v3_corpo_acoplamento/sonda.json"
+SAIDA_CHAVE = "artifacts_v3_corpo_acoplamento/sonda_chave_d.json"
 C_CORPO = 450000                              # a escala C do corpo (ConfigCorpo.escala); conferida em cada vida
 CORPO_CONFERIDO = ("gasto_basal_acordado", "gasto_basal_dormindo", "gasto_atividades_num", "gasto_atividades_den", "falta_limiar",
                    "falta_cansaco", "conversao_num", "conversao_den")
@@ -148,16 +150,20 @@ class MotorSonda(lr.MotorGravaCorpo):
 
 
 def viver(braco: str, dono: str, lugar: str, semente: int, dias: int = DIAS, orcamento_por_dia: int = ORCAMENTO_POR_DIA,
-          instrumentar: bool = True):
+          instrumentar: bool = True, cfg_acoplamento: ConfigAcoplamentoCorpo | None = None):
     """a vida do `run_v3_valuation_conserto.viver` (o mesmo cerebro, o mesmo motor, o mesmo dono), com o MotorSonda no lugar do
-    MotorGravaCorpo quando `instrumentar`. Devolve (o motor, o registro, a energia baixa de cada decisao)."""
+    MotorGravaCorpo quando `instrumentar`. `cfg_acoplamento` (a etapa 2, a opcao D) vai ao motor; sem ela, nada muda. Devolve (o motor,
+    o registro, a energia baixa de cada decisao)."""
     fp, fm0 = VC.fabricas(braco, dono, semente, dias, orcamento_por_dia)
     cc = VC.orq.bancada(dias, orcamento_por_dia).cfg_corpo_de(VC.bv.EspecVida(dono, VC.gl.BRACO_V11, semente))
 
+    extra = {} if cfg_acoplamento is None else {"cfg_acoplamento_corpo": cfg_acoplamento}
+
     def fm(politica, cfg, s):
-        if not instrumentar:
+        if not instrumentar and not extra:
             return fm0(politica, cfg, s)
-        return MotorSonda(politica, cfg, s, NEUTRO, "brasa", obediencia_desligada=True, cfg_mundo=VC.orq.CM, cfg_corpo=cc)
+        classe = MotorSonda if instrumentar else lr.MotorGravaCorpo
+        return classe(politica, cfg, s, NEUTRO, "brasa", obediencia_desligada=True, cfg_mundo=VC.orq.CM, cfg_corpo=cc, **extra)
 
     registro = fp(CONFIG_PADRAO)
     c = VC.orq.cerebro_de(registro)
@@ -225,7 +231,7 @@ def cortar(dec: list[dict], lim: int, C: int, falta_limiar: int) -> dict:
     lados = {k: 0 for k in LADOS}
     desde_comer, janelas = [], []
     parte = {cl: 0.0 for cl in CLASSES}
-    n_baixa = n_ambas = baixa_sem_fome_em_falta = 0
+    n_baixa = n_ambas = baixa_sem_fome_em_falta = n_urgente = 0
     entrada = None                                       # a entrada do trecho cansado corrente
     ultima_comida = None                                 # a ultima decisao em que o ingerido subiu
     r = 0                                                # a ultima decisao descansada
@@ -236,6 +242,7 @@ def cortar(dec: list[dict], lim: int, C: int, falta_limiar: int) -> dict:
         if x["cansaco"] <= metade:
             r = d
         u = (u if u is not None else d) if x["urgente"] else None
+        n_urgente += x["urgente"]
         if not x["baixa"]:
             entrada = None
             continue
@@ -271,7 +278,7 @@ def cortar(dec: list[dict], lim: int, C: int, falta_limiar: int) -> dict:
             lados[k] += bool(v)
         desde_comer.append(None if ultima_comida is None else d - ultima_comida)
     sem_comer = sum(1 for v in desde_comer if v is None)
-    return {"decisoes": n, "energia_baixa": n_baixa, "ambas": n_ambas, "classes": cont, "cruzado": cruz, "lados": lados,
+    return {"decisoes": n, "energia_baixa": n_baixa, "ambas": n_ambas, "fome_urgente": n_urgente, "classes": cont, "cruzado": cruz, "lados": lados,
             "decisoes_desde_comer": sorted(v for v in desde_comer if v is not None), "ambas_sem_ter_comido": sem_comer,
             "parte_somada": parte, "janelas": sorted(janelas), "baixa_sem_fome_combustivel_em_falta": baixa_sem_fome_em_falta}
 
@@ -293,8 +300,8 @@ def ritmos(motor) -> dict:
 
 
 # ================================================================== a sonda
-def uma_vida(braco: str, dono: str, lugar: str, semente: int, dias: int = DIAS) -> dict:
-    motor, registro, baixas = viver(braco, dono, lugar, semente, dias)
+def uma_vida(braco: str, dono: str, lugar: str, semente: int, dias: int = DIAS, cfg_acoplamento=None) -> dict:
+    motor, registro, baixas = viver(braco, dono, lugar, semente, dias, cfg_acoplamento=cfg_acoplamento)
     dec = decisoes_da_vida(motor, registro, baixas)
     c = VC.orq.cerebro_de(registro)
     lim = limiar_cansaco(motor.corpo.C, motor.corpo.S, c.inatos.lambda_sono)
@@ -304,6 +311,7 @@ def uma_vida(braco: str, dono: str, lugar: str, semente: int, dias: int = DIAS) 
     serie = motor.serie_sonda
     return {"vida": f"{braco}|{dono}|{lugar}|{semente}", "braco": braco, "dono": dono, "lugar": lugar, "semente": semente,
             **corte, "ritmos": ritmos(motor), "ticks": len(serie), "ticks_falta_combustivel": motor.contabil.ticks_falta,
+            "ticks_combustivel_abaixo_do_limiar": sum(1 for x in serie if x[3] < motor.corpo.cc.falta_limiar),
             "refeicoes_em_c": serie[-1][6] / motor.corpo.C, "acum_final": serie[-1][5],
             "ticks_dormindo": sum(1 for x in serie if x[4]),
             "corpo": {k: getattr(motor.corpo.cc, k) for k in CORPO_CONFERIDO} | {"fome_por_tick": motor.corpo.t.fome_por_tick},
@@ -315,8 +323,9 @@ def somar(vidas: list[dict]) -> dict:
     """as contagens somadas e as fracoes sobre as decisoes com as duas"""
     if not vidas:
         raise ValueError("sonda: nenhuma vida para somar")
-    t = {"vidas": len(vidas), "decisoes": 0, "energia_baixa": 0, "ambas": 0, "ambas_sem_ter_comido": 0, "ticks": 0,
-         "ticks_falta_combustivel": 0, "baixa_sem_fome_combustivel_em_falta": 0, "ticks_dormindo": 0, "corpo": vidas[0]["corpo"],
+    t = {"vidas": len(vidas), "decisoes": 0, "energia_baixa": 0, "ambas": 0, "fome_urgente": 0, "ambas_sem_ter_comido": 0, "ticks": 0,
+         "ticks_falta_combustivel": 0, "baixa_sem_fome_combustivel_em_falta": 0, "ticks_dormindo": 0, "ticks_combustivel_abaixo_do_limiar": 0,
+         "corpo": vidas[0]["corpo"],
          "metabolismo": {k: 0 for k in vidas[0]["metabolismo"]}, "classes": {cl: 0 for cl in CLASSES},
          "cruzado": {cl: {"fome_antes": 0, "fome_depois": 0} for cl in CLASSES}, "acum_final": {f: 0 for f in FONTES},
          "lados": {k: 0 for k in vidas[0]["lados"]}, "ritmos": {lado: {"ticks": 0, "d_fome": 0, "d_cansaco": 0, "ticks_fome_tick": 0}
@@ -325,8 +334,8 @@ def somar(vidas: list[dict]) -> dict:
     for v in vidas:
         if v["corpo"] != vidas[0]["corpo"]:
             raise ValueError(f"sonda: o corpo de {v['vida']} nao e o das outras vidas: {v['corpo']}")
-        for k in ("decisoes", "energia_baixa", "ambas", "ambas_sem_ter_comido", "ticks", "ticks_falta_combustivel",
-                  "baixa_sem_fome_combustivel_em_falta", "ticks_dormindo"):
+        for k in ("decisoes", "energia_baixa", "ambas", "fome_urgente", "ambas_sem_ter_comido", "ticks", "ticks_falta_combustivel",
+                  "baixa_sem_fome_combustivel_em_falta", "ticks_dormindo", "ticks_combustivel_abaixo_do_limiar"):
             t[k] += v[k]
         for cl in CLASSES:
             t["classes"][cl] += v["classes"][cl]
@@ -345,6 +354,11 @@ def somar(vidas: list[dict]) -> dict:
                 t["ritmos"][lado][k] += v["ritmos"][lado][k]
     a = t["ambas"]
     t["fracao_ambas_na_energia_baixa"] = a / t["energia_baixa"] if t["energia_baixa"] else None
+    # a taxa de base (a etapa 2): a fome urgente em todas as decisoes e nas com a energia boa; a coincidencia so e acoplamento acima dela
+    t["fracao_fome_urgente_nas_decisoes"] = t["fome_urgente"] / t["decisoes"]
+    boas = t["decisoes"] - t["energia_baixa"]
+    t["fracao_fome_urgente_na_energia_boa"] = (t["fome_urgente"] - a) / boas if boas else None
+    t["fracao_energia_baixa_nas_decisoes"] = t["energia_baixa"] / t["decisoes"]
     t["fracao_por_classe"] = {cl: (x / a if a else None) for cl, x in t["classes"].items()}
     t["fracao_lados"] = {k: (x / a if a else None) for k, x in t["lados"].items()}
     t["por_tick"] = {lado: {"fome": r["d_fome"] / r["ticks"], "cansaco": r["d_cansaco"] / r["ticks"]} if r["ticks"] else None
@@ -371,7 +385,8 @@ def somar(vidas: list[dict]) -> dict:
     t["fracao_fome_tick"] = {lado: (r["ticks_fome_tick"] / r["ticks"] if r["ticks"] else None) for lado, r in t["ritmos"].items()}
     desde = sorted(x for v in vidas for x in v["decisoes_desde_comer"])
     t["decisoes_desde_comer_mediana"] = desde[len(desde) // 2] if desde else None
-    t["fracao_ticks_combustivel_em_falta"] = t["ticks_falta_combustivel"] / t["ticks"]
+    t["fracao_ticks_combustivel_em_falta"] = t["ticks_falta_combustivel"] / t["ticks"]      # os ticks em que a ponte subiu o cansaco
+    t["fracao_ticks_combustivel_abaixo_do_limiar"] = t["ticks_combustivel_abaixo_do_limiar"] / t["ticks"]   # no comeco do tick
     refeicoes = sorted(v["refeicoes_em_c"] for v in vidas)
     t["refeicoes_em_c_por_vida"] = {"min": refeicoes[0], "mediana": refeicoes[len(refeicoes) // 2], "max": refeicoes[-1]}
     t["fracao_por_classe_cruzada"] = {cl: {k: (x / a if a else None) for k, x in c.items()} for cl, c in t["cruzado"].items()}
@@ -379,8 +394,8 @@ def somar(vidas: list[dict]) -> dict:
     return t
 
 
-def rodar(sementes=SEMENTES, bracos=BRACOS, celulas=CELULAS, dias: int = DIAS) -> dict:
-    vidas = [uma_vida(b, d, lu, s, dias) for b in bracos for s in sementes for d, lu in celulas]
+def rodar(sementes=SEMENTES, bracos=BRACOS, celulas=CELULAS, dias: int = DIAS, cfg_acoplamento=None) -> dict:
+    vidas = [uma_vida(b, d, lu, s, dias, cfg_acoplamento) for b in bracos for s in sementes for d, lu in celulas]
     agreg = {}
     for b in bracos:
         vb = [v for v in vidas if v["braco"] == b]
@@ -395,14 +410,20 @@ def _git(*a) -> str:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--saida", default=SAIDA)
+    ap.add_argument("--saida", default=None, help=f"padrao: {SAIDA}, ou {SAIDA_CHAVE} com --chave-d")
+    ap.add_argument("--chave-d", action="store_true", help="a etapa 2: a ConfigAcoplamentoCorpo ligada (a falta de combustivel sobe a fome)")
     a = ap.parse_args()
+    padrao = SAIDA_CHAVE if a.chave_d else SAIDA
+    a.saida = a.saida or padrao
+    ca = CONFIG_ACOPLAMENTO_CORPO_LIGADA if a.chave_d else None
     saida = RAIZ / a.saida
     if saida.exists():
         raise SystemExit(f"{saida} ja existe: a sonda nao sobrescreve")
     t0 = time.perf_counter()
-    r = rodar()
-    r["meta"] = {"comando": "python experiments/sonda_v3_corpo_acoplamento.py" + (f" --saida {a.saida}" if a.saida != SAIDA else ""),
+    r = rodar(cfg_acoplamento=ca)
+    r["meta"] = {"comando": "python experiments/sonda_v3_corpo_acoplamento.py" + (" --chave-d" if a.chave_d else "")
+                 + (f" --saida {a.saida}" if a.saida != padrao else ""),
+                 "acoplamento": None if ca is None else {"ligada": ca.ligada, "falta_fome": ca.falta_fome},
                  "commit": _git("rev-parse", "HEAD"), "git_limpo": _git("status", "--porcelain") == "",
                  "sementes": list(SEMENTES), "bracos": list(BRACOS), "celulas": [list(c) for c in CELULAS], "dias": DIAS,
                  "orcamento_por_dia": ORCAMENTO_POR_DIA, "python": platform.python_version(), "processos": 1,
