@@ -116,5 +116,5 @@ As 1 864 vidas da tentativa interrompida foram comparadas, arquivo a arquivo, co
 ## 7. O próximo passo
 
 - **O programa do corpo:** a D passou, e pela regra da seção 8 do `docs/MAPA_CORPO.md` os braços da C1 são D, D + E e D + C5
-  (`docs/PLANO_ANALISE_V3_CORPO.md`).
+  (o plano da C1, num PR empilhado no #999).
 - **O jogo:** ligar a D num pet do jogo é decisão do Matheus, depois de uma rodada nova do cuidado (D-CA-7).
