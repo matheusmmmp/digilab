@@ -295,9 +295,9 @@ Nenhuma delas mede um pet como o do Digilab. Elas só são o motivo do desenho.
 - **O `engine.py`** não muda.
 - **Os arquivos da INDIVIDUALIDADE e da 0b:** ficam como estão.
 
-## Adendo 1: o código, os números do mecanismo e o G0 (2026-11-17, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2-codigo`; PROPOSTO)
+## Adendo 1: o código, os números do mecanismo e o G0 (2026-11-17, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2-codigo`; APROVADO)
 
-**Status: PROPOSTO.** É o adendo que a PV2-9 pede antes da run. A ordem das etapas vem da INT-1 da análise da integração
+**Status: APROVADO** pelo Matheus em 2026-11-17, nesta sessão, à pergunta "Aprova o adendo 1 com o G0 = 512 para o OLF-G?": "Sim, G0 = 512" (D-PV2C-11). O G0 = 512 refaz o 64 da PV2-5; os números da A1.3 e a forma dos braços da A1.2 ficam DECIDIDOS como estão. É o adendo que a PV2-9 pede antes da run. A ordem das etapas vem da INT-1 da análise da integração
 (`docs/futuro/integracao_cadeia_digibrain.md`, seção 8), DECIDIDA pelo Matheus em 2026-11-17. Nenhuma vida da run, nenhuma faixa: os
 números saem das sementes dos testes.
 
@@ -368,7 +368,7 @@ A saturação é a fração das decisões com cheiro (c > 0) em que o nível com
 - **A alternativa:** manter o 64 decidido, aceitando que o OLF-G mede sobretudo "a fome liga o cheiro no teto".
 - **O custo de errar:** com o 64, o G-ESTADO pode passar por um efeito de degrau, e não de ganho. Com o 512, o efeito da fome fica menor,
   e o G-ESTADO pode não passar por falta de tamanho.
-- O código lê o G0 da `ConfigPV2`, que segue com 64 até a decisão.
+- **Decidido: G0 = 512** (D-PV2C-11). O código lê o G0 da `ConfigPV2`, que passou a 512.
 
 ### A1.5 O custo (seção 4)
 

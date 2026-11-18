@@ -3157,12 +3157,12 @@ class ConfigPV2:
     ligada: bool = False                      # PROPOSTO: a chave
     braco: str = "OLF-DCV"                    # PROPOSTO: o braco principal do plano (PV2-4)
     # os quatro numeros do mecanismo (PV2-9): medidos nas sementes dos testes (experiments/medir_pv2.py,
-    # artifacts_v3_pet_vivo/pv2/medicao_codigo.json) pelas regras escritas antes, e propostos pelo adendo 1 do plano
-    w0_dc: int = 2849                         # PROPOSTO, SEM FONTE: div_arred(S x S, 8 x 46), uma queda mediana tira S/8 do inato
-    l_pirueta: int = 92                       # PROPOSTO, SEM FONTE: 2 x a mediana das quedas do cheiro (46) no OLF-0 com w0_dc = 0
-    n_varredura: int = 1                      # PROPOSTO, SEM FONTE: sem medida (o plano nao da como medir)
-    taxa_placebo: int = 22                    # PROPOSTO, SEM FONTE: arred(256 x 49 piruetas / 581 decisoes fora da varredura) no OLF-DCV
-    g0: int = 64                              # DECIDIDO (PV2-5, 2026-11-09): o G0 do ganho da fome; o adendo 1 propoe 512 (a INT-4)
+    # artifacts_v3_pet_vivo/pv2/medicao_codigo.json) pelas regras escritas antes, e aprovados com o adendo 1 do plano (2026-11-17)
+    w0_dc: int = 2849                         # DECIDIDO (adendo 1, 2026-11-17), SEM FONTE: div_arred(S x S, 8 x 46), uma queda mediana tira S/8 do inato
+    l_pirueta: int = 92                       # DECIDIDO (adendo 1, 2026-11-17), SEM FONTE: 2 x a mediana das quedas do cheiro (46) no OLF-0 com w0_dc = 0
+    n_varredura: int = 1                      # DECIDIDO (adendo 1, 2026-11-17), SEM FONTE: sem medida (o plano nao da como medir)
+    taxa_placebo: int = 22                    # DECIDIDO (adendo 1, 2026-11-17), SEM FONTE: arred(256 x 49 piruetas / 581 decisoes fora da varredura) no OLF-DCV
+    g0: int = 512                             # DECIDIDO (adendo 1, 2026-11-17; refaz o 64 da PV2-5): o G0 do ganho da fome (a INT-4)
 
     def __post_init__(self) -> None:
         if type(self.ligada) is not bool:
@@ -3183,12 +3183,12 @@ class ConfigPV2:
 PARAMETROS_PV2: dict[str, tuple[str, str]] = {
     "ligada": ("PROPOSTO", "PLANO_ANALISE_V3_PET_VIVO_PV2, secao 3 (APROVADO, PV2-1 a PV2-10 DECIDIDAS em 2026-11-09); a chave, SEM FONTE"),
     "braco": ("PROPOSTO", "PLANO_ANALISE_V3_PET_VIVO_PV2, PV2-4; a forma de cada braco no D-PV2C-1"),
-    "w0_dc": ("PROPOSTO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1 (artifacts_v3_pet_vivo/pv2/medicao_codigo.json); SEM FONTE"),
-    "l_pirueta": ("PROPOSTO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1 (artifacts_v3_pet_vivo/pv2/medicao_codigo.json); SEM FONTE"),
-    "n_varredura": ("PROPOSTO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1; sem medida, SEM FONTE"),
-    "taxa_placebo": ("PROPOSTO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1 (a taxa da pirueta do OLF-DCV, medicao_codigo.json); SEM FONTE"),
-    "g0": ("DECIDIDO", "PLANO_ANALISE_V3_PET_VIVO_PV2, PV2-5 (2026-11-09); a forma da revisao I, pista do Root et al. 2011; o adendo 1 "
-                       "propoe 512 (a saturacao da INT-4)"),
+    "w0_dc": ("DECIDIDO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1 APROVADO em 2026-11-17 (artifacts_v3_pet_vivo/pv2/medicao_codigo.json); SEM FONTE"),
+    "l_pirueta": ("DECIDIDO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1 APROVADO em 2026-11-17 (artifacts_v3_pet_vivo/pv2/medicao_codigo.json); SEM FONTE"),
+    "n_varredura": ("DECIDIDO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1 APROVADO em 2026-11-17; sem medida, SEM FONTE"),
+    "taxa_placebo": ("DECIDIDO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1 APROVADO em 2026-11-17 (a taxa da pirueta do OLF-DCV, medicao_codigo.json); SEM FONTE"),
+    "g0": ("DECIDIDO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1 APROVADO em 2026-11-17 (512, a saturacao da INT-4; refaz o 64 da "
+                       "PV2-5); a forma da revisao I, pista do Root et al. 2011"),
 }
 
 CONFIG_PV2 = ConfigPV2()

@@ -29,7 +29,7 @@ DIAS = 2
 def test_a_config_do_pv2_tem_status_em_todo_campo_e_falha_alto():
     assert set(PARAMETROS_PV2) == {f.name for f in fields(ConfigPV2)}
     assert all(s in ("PROPOSTO", "DECIDIDO") and fonte for s, fonte in PARAMETROS_PV2.values())
-    assert CONFIG_PV2.ligada is False and CONFIG_PV2.g0 == 64
+    assert CONFIG_PV2.ligada is False and CONFIG_PV2.g0 == 512
     for kw in ({"braco": "OLF-X"}, {"l_pirueta": 0}, {"taxa_placebo": 257}, {"w0_dc": -1}, {"g0": 0}):
         with pytest.raises(ValueError):
             ConfigPV2(**kw)
