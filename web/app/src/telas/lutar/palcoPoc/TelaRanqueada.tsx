@@ -15,17 +15,14 @@ import { jogoAtual, tamerAtual, useJogo } from "../../../jogo.ts";
 import { nomeDaChave, segurarTempoDoPedido, temReplayPoc, useLutaPoc, verReplayPoc } from "../../../lutaPocTela.ts";
 import { LUTAS_POR_DIA } from "../../../ranking/pontos.ts";
 import {
-  RQ, apiRanqueada, atualizarHoje, divergiu, enviarRegistro, fecharEstado, fecharResultado, ligarRanqueada, lutaPerdida, ouvirRanqueada, pedirSemente,
+  RQ, atualizarHoje, divergiu, enviarRegistro, fecharEstado, fecharResultado, ligarRanqueada, lutaPerdida, ouvirRanqueada, pedirSemente,
   placarDoPet, ranqueadaLigada, registrarPrevia, revisaoRanqueada, temPendente, valorDoRival, type LutaGuardada,
 } from "../../../ranking/ranqueada.ts";
 import { VERSAO_TAMER } from "../../../tamer.ts";
 import { Retrato, lutarNoPalco } from "./TelaLugaresPoc.tsx";
+import { apiDoBuild } from "../../../conta/apiDoBuild.ts";
 import "../../../estilo/ranqueada.css";
 
-/** o endereco do servidor no build (VITE_DIGILAB_API); vazio: a luta ranqueada fica desligada */
-function apiDoBuild(): string {
-  try { return String(import.meta.env?.VITE_DIGILAB_API ?? "").trim(); } catch { return ""; }
-}
 let tentouLigar = false;
 function ligarSeHouver(): void {
   if (tentouLigar) return;
@@ -106,7 +103,7 @@ function EstadoDoPedido({ pet, irTreino, tentar }: { pet: number; irTreino: () =
     <div className="lr-estado" data-testid="lr-estado-limite">
       <div className="lr-destaque" role="status"><span className="lr-rot">Limite de hoje</span><b>{LUTAS_POR_DIA} de {LUTAS_POR_DIA} lutas feitas</b>
         <p>Volta à meia-noite, no horário de Brasília. Faltam {falta(e.reabreEm)}.</p></div>
-      <Botoes>{treino(true)}</Botoes>
+      <Botoes>{treino(true)}<a className="hx-btn" href="#/cais" onClick={fecharEstado} data-testid="lr-ver-semana">Ver a semana</a></Botoes>
     </div>
   );
   if (e.tipo === "trancada") return (
@@ -118,13 +115,12 @@ function EstadoDoPedido({ pet, irTreino, tentar }: { pet: number; irTreino: () =
     </div>
   );
   if (e.tipo === "sem_conta") {
-    /* as telas da conta ainda nao existem no jogo: no local, o Entrar abre a pagina de teste do servidor; fora dele, nao ha botao */
-    const api = apiRanqueada(), local = api !== null && /^http:\/\/(127\.0\.0\.1|localhost|\[::1\])(:\d+)?$/.test(api);
+    /* o Entrar leva a parte Conta dos Ajustes (telas/config/TelaConta.tsx) */
     return (
       <div className="lr-estado" data-testid="lr-estado-sem-conta">
         <div className="lr-destaque" role="status"><span className="lr-rot">Só com a conta</span><b>A luta ranqueada pede a conta</b>
           <p>O servidor confere cada luta. Sem conta, nada muda no jogo.</p></div>
-        <Botoes>{local && <a className="hx-continuar" href={`${api}/dev/conta`} target="_blank" rel="noreferrer" data-testid="lr-entrar"><UserRound aria-hidden="true" />Entrar</a>}
+        <Botoes><a className="hx-continuar" href="#/config/conta" onClick={fecharEstado} data-testid="lr-entrar"><UserRound aria-hidden="true" />Entrar</a>
           <button type="button" className="hx-btn" onClick={() => { fecharEstado(); irTreino(); }} data-testid="lr-agora-nao">Agora não</button></Botoes>
       </div>
     );
@@ -199,7 +195,8 @@ export function ArenaRanqueada({ rivais, rival, setRival, mapa, setMapa, irTrein
     segurarTempoDoPedido(true);
     try {
       const j = jogoAtual().motor;
-      const s = await pedirSemente({ semente: j.semente, versao: j.versao, log: j.log });
+      /* o rival e o mapa vao no pedido: a escolha e de antes da semente (D-CONTA-116) */
+      const s = await pedirSemente({ semente: j.semente, versao: j.versao, log: j.log }, rival, mapa);
       if (!s) return;
       /* o registro tem de estar onde o pedido prometeu; se mudou no meio, a luta pedida ja foi gasta */
       if (jogoAtual().motor !== j || j.log.length !== s.indice) { lutaPerdida(s.numero, "o registro do pet mudou durante o pedido"); return; }

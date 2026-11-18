@@ -22,6 +22,7 @@ import type { ConfigConta } from "../conta/config.ts";
 import type { GuardasConta } from "../conta/rotas.ts";
 import { EnvioMalformado, hashRegistro, lerEnvio, type Conferencia } from "./conferir.ts";
 import type { Conferidor } from "./conferidor.ts";
+import { fecharSemanas, gravarLutas } from "./semanas.ts";
 import { entreguesDoPet } from "./sementes.ts";
 
 /** o corpo do envio, em bytes (PROPOSTO, SEM FONTE): o pior save medido na CN0 tem ~3 MB cru, perto do teto do localStorage; mais o Tamer */
@@ -106,6 +107,8 @@ export function montarRotasEnvio(app: Hono, cfg: ConfigConta, g: GuardasConta, c
       const r: Conferencia = await conferidor(envio, entregues);
       const t = agora(), id = randomUUID();
       const aceito = r.resultado === "aceito";
+      /* a semana que ja passou da hora congela antes: a luta dela que chega agora nao entra mais (MMO5) */
+      fecharSemanas(banco, t);
       transacao(banco, () => {
         apagarRegistrosVencidos(banco, t);
         banco.prepare(`INSERT INTO envios (${COLUNAS}, conta_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).run(
@@ -114,6 +117,8 @@ export function montarRotasEnvio(app: Hono, cfg: ConfigConta, g: GuardasConta, c
           aceito ? r.lutas.length : 0, r.ms.total, entregues.length, JSON.stringify(aceito ? r.marcosTamer : []), s.conta_id);
         if (aceito) banco.prepare("INSERT INTO envios_registros (envio_id, registro_pet, registro_tamer, apagar_em) VALUES (?, ?, ?, ?)")
           .run(id, JSON.stringify(envio.pet.log), JSON.stringify(envio.tamer.log), apagarRegistroEm(t));
+        /* o que a conferencia achou de cada semente fica na semente, para a tabela da semana (MMO5): a primeira conferencia vale */
+        if (aceito) gravarLutas(banco, s.conta_id, entregues, r.lutas, id);
       });
       const linha = banco.prepare(`SELECT ${COLUNAS} FROM envios WHERE id = ?`).get(id) as unknown as LinhaEnvio;
       const base = envioParaDict(banco, linha);

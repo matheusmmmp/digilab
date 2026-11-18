@@ -1,0 +1,8 @@
+{
+  "descricao": "A ablacao do Valuation (docs/PLANO_ANALISE_V3_VALUATION.md; so roda com o APROVADO, o adendo 1 APROVADO e a faixa em FAIXAS_RESERVADAS): o REL da C4 e as ablacoes B, C, E, F, G e R (o A fora, D-VAL-11) nas 4 celulas do longe_fixo, bases 99101...99505, K = 40 (200 unidades), 14 dias: 5 600 vidas, uma vez, ate 4 processos.",
+  "plano": "docs/PLANO_ANALISE_V3_VALUATION.md",
+  "fase": "valuation",
+  "unidades": {"bases": [99101, 99202, 99303, 99404, 99505], "k": 40, "prefixo": "digibrain_prototipo"},
+  "dias": 14,
+  "orcamento_por_dia": 16
+}
