@@ -182,7 +182,7 @@ def test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain():
                                                                              "experiments/run_v3_social_par_a0.py",
                                                                              # os que ja citavam o pacote e faltavam aqui (o teste falhava na main, D-CO6b-4): o GOSTO_VISUAL
                                                                              # (P1e, P1f) e a DC4a
-                                                                             "experiments/run_v3_gosto_visual.py", "experiments/exportar_gosto_visual.py",
+                                                                             "experiments/run_v3_gosto_visual.py", "experiments/exportar_gosto_visual.py", "experiments/exportar_gabarito_corpo_chaves.py",
                                                                              "experiments/entradas_dc4.py",
                                                                              # COOPERACAO, CO6a: o gabarito das vidas do grupo com o modular
                                                                              "experiments/exportar_gabarito_co6.py",
