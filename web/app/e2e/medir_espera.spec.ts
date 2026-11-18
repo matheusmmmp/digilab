@@ -20,6 +20,8 @@ const REPO = resolve(fileURLToPath(new URL("../../..", import.meta.url)));
 const PREFIXO = "/" + basename(REPO);
 const APP = `${PREFIXO}/web/dist/`, CHAVE = "digilab-web-v21-sprites";
 const BRACO = process.env.MEDIR_ESPERA_BRACO ?? "G";
+/* D-ES-4 (a saida (0)): MEDIR_ESPERA_VERIF_DEPOIS=1 liga a chave `-fala-verif-depois` (a voz sem a verificacao dentro da chamada) */
+const VERIF_DEPOIS = process.env.MEDIR_ESPERA_VERIF_DEPOIS === "1";
 const N_CONVERSAS = 20, N_TURNOS = 6, PAUSA_MS = 3000, TIMEOUT_TURNO_MS = 180_000;
 const MODELO = process.env.MEDIR_ESPERA_MODELO ?? "gemma2:9b";
 const OLLAMA = process.env.OLLAMA_HOST_URL ?? "http://127.0.0.1:11434";
@@ -51,7 +53,7 @@ function comando(exe: string, args: string[]): { saida: string | null; motivo: s
 
 async function semear(page: Page): Promise<void> {
   await page.goto("/Assets/digilab_atlas_up.json");                        /* uma pagina da mesma origem que nao e o app */
-  await page.evaluate(chave => {
+  await page.evaluate(([chave, verifDepois]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 1, log: [] }));
     localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
     localStorage.setItem(chave + "-nivel", JSON.stringify({ marcos: [1, 2, 3], cartoes: [1, 2, 3] }));      /* o Conversar aberto */
@@ -59,7 +61,8 @@ async function semear(page: Page): Promise<void> {
     localStorage.setItem(chave + "-lab", JSON.stringify({ semente: 4242, log: [], versao: 16 }));            /* o pet de teste modular, sempre o mesmo save */
     localStorage.setItem(chave + "-modo-fala", "livre");                                                      /* falaLivre.ts: MODO */
     localStorage.setItem(chave + "-fala-rede", "1");                                                          /* falaLivre.ts: FALA_REDE */
-  }, CHAVE);
+    if (verifDepois) localStorage.setItem(chave + "-fala-verif-depois", "1");                                 /* falaLivre.ts: VERIF_DEPOIS */
+  }, [CHAVE, VERIF_DEPOIS] as const);
 }
 
 test(`medir a espera da voz, braco ${BRACO}: ${N_CONVERSAS} conversas de ${N_TURNOS} turnos`, async ({ browser }) => {
@@ -132,7 +135,7 @@ test(`medir a espera da voz, braco ${BRACO}: ${N_CONVERSAS} conversas de ${N_TUR
     servidor_sha256: sha256Arquivo(join(REPO, "servidor", "servidor_local.py")), modelo: MODELO,
     gpu: gpu.saida, gpu_motivo: gpu.motivo, ollama_ps_inicio: psInicio.saida, ollama_ps_inicio_motivo: psInicio.motivo,
     ollama_ps_fim: psFim.saida, ollama_ps_fim_motivo: psFim.motivo, descarga_do_modelo: descarga,
-    duracao_s: (Date.now() - t0) / 1000, provedor_livre: process.env.DIGILAB_PROVEDOR_LIVRE ?? null,
+    duracao_s: (Date.now() - t0) / 1000, provedor_livre: process.env.DIGILAB_PROVEDOR_LIVRE ?? null, verif_depois: VERIF_DEPOIS,
   }, null, 2) + "\n");
   await ctx.close();
 });

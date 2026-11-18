@@ -22,6 +22,9 @@ import { CHAVE } from "./save.ts";
     so por la (lerLogAssistir): `lerLog` as pula */
 export const LOG_FALA = CHAVE + ".fala.jsonl";
 const LOG = LOG_FALA, MODO = CHAVE + "-modo-fala", CONVERSA_NOVA = CHAVE + "-conversa-nova", FALA_REDE = CHAVE + "-fala-rede";
+/* F2 da CONVERSA_PET, D-ES-4 (a saida (0)): com a chave, a voz da rede pede a fala sem a verificacao dentro da chamada; o aviso vem da
+   verificacao de depois do balao, a de sempre. Desligada por padrao: o pedido e o de hoje. */
+const VERIF_DEPOIS = CHAVE + "-fala-verif-depois";
 /* versao 2 (comando pelo chat): `comando` e `comando_executado`; a 1 continua sendo lida (campos ausentes = null/false) */
 export const VERSAO_LOG = 2;
 const MAX_TROCAS = 10, INTERVALO_ESPONTANEA_MS = 20000;
@@ -72,6 +75,8 @@ const avisar = (): void => { for (const o of ouvintes) o(); };
 try { FL.modo = (localStorage.getItem(MODO) as ModoFala) || (FALA_LLM.on ? "moldura" : "template"); } catch { /* sem armazenamento */ }
 try { FL.conversaNova = localStorage.getItem(CONVERSA_NOVA) === "1"; } catch { /* sem armazenamento */ }
 try { FL.falaRede = localStorage.getItem(FALA_REDE) === "1"; } catch { /* sem armazenamento */ }
+let verifDepois = false;
+try { verifDepois = localStorage.getItem(VERIF_DEPOIS) === "1"; } catch { /* sem armazenamento */ }
 
 /* ------------------------------------------------ log de apresentacao (separado do registro do pet) */
 export function lerLog(): RegistroFala[] {
@@ -162,7 +167,7 @@ async function falar(situacao: "espontanea" | "conversa", gatilho: string | null
     const historico = nova || rede ? FL.fronteira.filter(t => t[2] === estagio).slice(-MAX_TROCAS) : FL.sessao.slice(-MAX_TROCAS);
     if (me) { me.t_chamada = performance.now(); me.rede = rede; }
     const d = await post("/api/fala-livre", { estado, situacao, fala_jogador: falaJogador, historico, semente,
-      ...(situacao === "conversa" ? { comando: true } : {}), ...(nova ? { prompt: "conversa-v1" } : {}), ...(rede ? { conceitos } : {}) });
+      ...(situacao === "conversa" ? { comando: true } : {}), ...(nova ? { prompt: "conversa-v1" } : {}), ...(rede ? { conceitos, ...(verifDepois ? { verificar_na_chamada: false } : {}) } : {}) });
     const reg: RegistroFala = {
       versao: VERSAO_LOG, t, situacao, fala_jogador: falaJogador || null, fala: d.fala as string, fatos_citados: d.fatos_citados as string[],
       fatos: d.fatos, estagio: d.estagio as string, modelo: d.modelo as string, versao_prompt: d.versao_prompt as string, semente,
