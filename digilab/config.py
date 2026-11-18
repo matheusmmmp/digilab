@@ -1712,6 +1712,37 @@ CONFIG_LUTA_CORPO_LIGADA = ConfigLutaCorpo(ligada=True)
 
 
 @dataclass(frozen=True)
+class ConfigAcoplamentoCorpo:
+    """CORPO_ACOPLAMENTO, a opcao D (docs/TAREFA_V3_CORPO_ACOPLAMENTO.md, secao 10; D-CA-2 e D-CA-5, Matheus, 2026-11-18). Ligada, a
+    falta de combustivel (o emissor `falta_combustivel` do metabolismo, abaixo de `ConfigCorpo.falta_limiar`) sobe a fome em
+    `falta_fome` por tick, e nao o cansaco: a ponte ME-1 passa do cansaco para a fome. O jejum deixa de cansar o pet e passa a lhe dar mais
+    fome, e a digestao (que so converte o que tira da fome) ganha teto justo quando o combustivel falta. Exige o corpo com o metabolismo.
+    Desligada (o padrao), a ME-1 vale como hoje e a vida sai byte a byte. Fica numa config propria, e nao em `ConfigCorpo`, para o dump
+    da ConfigCorpo (os gabaritos de paridade do corpo e do cerebro A e o espelho TS) nao mudar, como a ConfigLutaCorpo. Status em
+    PARAMETROS_ACOPLAMENTO_CORPO."""
+
+    ligada: bool = False
+    falta_fome: int = 500                    # por tick com a falta; o 500 do `falta_cansaco` de hoje (o ponto de partida, secao 10)
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigAcoplamentoCorpo.ligada e bool: {self.ligada!r}")
+        if type(self.falta_fome) is not int or self.falta_fome <= 0:
+            raise ValueError(f"ConfigAcoplamentoCorpo.falta_fome e inteiro positivo: {self.falta_fome!r}")
+
+
+# Status dos campos da ConfigAcoplamentoCorpo (conferido por teste).
+PARAMETROS_ACOPLAMENTO_CORPO: dict[str, tuple[str, str]] = {
+    "ligada": ("DECIDIDO", "TAREFA_V3_CORPO_ACOPLAMENTO, D-CA-2 e D-CA-5 (Matheus, 2026-11-18, 'Aprovo a D-CA-1 a D-CA-7'): a opcao D, "
+                           "atras de chave desligada; ligar num pet so depois da validacao (D-CA-6 e D-CA-7)"),
+    "falta_fome": ("PROPOSTO", "TAREFA_V3_CORPO_ACOPLAMENTO, secao 10: o 500 do falta_cansaco de hoje, o ponto de partida; SEM FONTE"),
+}
+
+CONFIG_ACOPLAMENTO_CORPO = ConfigAcoplamentoCorpo()
+CONFIG_ACOPLAMENTO_CORPO_LIGADA = ConfigAcoplamentoCorpo(ligada=True)
+
+
+@dataclass(frozen=True)
 class ConfigLutaMemoria:
     """A ponte da luta, o lado da memoria (docs/TAREFA_V3_PONTE_LUTA.md, secoes 3.2 e 3.7; PL-2, PL-6, PL-7 e PL-9; etapa PE2). Ligada, o
     DigiBrain modular recebe o resumo da luta (`receber_luta`, irmao do `receber_acao_dono`), o entrega ao M-SENS na decisao seguinte (a
