@@ -1,7 +1,7 @@
 # PLANO DE ANÁLISE V3 — CORPO_ACOPLAMENTO: a opção D numa run
 
-**Status: PROPOSTO.** Aguarda a aprovação do Matheus, com as D-CA-9 a D-CA-12 (seção 8). Nenhum orquestrador e nenhuma vida de faixa
-existem antes dela.
+**Status: APROVADO pelo Matheus em 2026-11-18** ("Aprovo, siga", na sessão lateral), com as D-CA-9 a D-CA-12 como recomendadas.
+Nenhum orquestrador e nenhuma vida de faixa existiam antes da aprovação.
 
 Escrito em 2026-11-18 por Claude Code (Opus 5.5, sessão lateral), no branch `v3-corpo-acoplamento-plano`, empilhado no #995. Ele segue a
 D-CA-8 (a), que o Matheus escolheu: "(a) Plano da D". A tarefa é a [TAREFA_V3_CORPO_ACOPLAMENTO.md](TAREFA_V3_CORPO_ACOPLAMENTO.md), e o
