@@ -152,6 +152,8 @@ As seções acima são cópias inteiras do CLAUDE.md antigo (o G-NADA-PERDIDO co
   apagar), `web/app/src/conta/apiDoBuild.ts` (`VITE_DIGILAB_API`, `VITE_DIGILAB_TERMOS`, `VITE_DIGILAB_PRIVACIDADE`),
   `web/app/src/telas/config/TelaConta.tsx` e `web/app/src/estilo/conta.css` (a parte Conta dos Ajustes, `#/config/conta`),
   `web/app/test/conta.test.ts`. Só liga com `VITE_DIGILAB_API` no build.
+- **2026-11-18, MMO5, o cais na ilha 3D:** `web/app/src/trancas.ts` (`CAIS`), `src/componentes/CadeadoDoCais.tsx`, a marca do cais em
+  `src/telas/pet/Minimapa.tsx` e o modelo apagado em `src/telas/pet/ilha/vista.ts`. Só com `VITE_DIGILAB_API` no build.
 - **2026-11-17, MMO5, a tela do cais:** `web/app/src/cais/cais.ts` (o cliente das rotas da semana), `src/telas/cais/TelaCais.tsx` e
   `src/estilo/cais.css` (a tela, em `#/cais`), o cartão do nível 10 em `src/nivel.ts`, o toque no cais em `src/telas/pet/ToqueLugar.tsx`
   e `test/cais.test.ts`. Só com `VITE_DIGILAB_API` no build.

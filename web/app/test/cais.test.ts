@@ -231,3 +231,18 @@ describe("o endereço e o cartão do nível 10", () => {
     expect(cartoesPendentes(estado)).toEqual([10]);
   });
 });
+
+describe("o cais na vista 3D (trancas.ts)", () => {
+  it("desligado de partida; a versão só sobe quando algo muda", async () => {
+    const { CAIS, definirCais } = await import("../src/trancas.ts");
+    expect(CAIS).toMatchObject({ ligado: false, trancado: true });
+    const v0 = CAIS.versao;
+    expect(definirCais(false, true)).toBe(false);
+    expect(CAIS.versao).toBe(v0);
+    expect(definirCais(true, true)).toBe(true);
+    expect(definirCais(true, false)).toBe(true);
+    expect(definirCais(true, false)).toBe(false);
+    expect(CAIS).toMatchObject({ ligado: true, trancado: false, versao: v0 + 2 });
+    definirCais(false, true);
+  });
+});

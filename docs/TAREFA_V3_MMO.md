@@ -317,3 +317,26 @@ A prancha é a `docs/pranchas/ux-cais/` (APROVADA, UX-CA-1 a 7).
   luta, a semana fechada, o segredo, o celular (390 e 360, sem rolar), "Ir para a Arena" e sem resposta.
 - **Não feito:** o botão do cais no minimapa, o cadeado "Nv 10" sobre o cais na ilha e a luz do modelo quando abre (os três pedem a
   vista 3D); a viagem da câmera até o cais; o e2e no repositório. Os desvios estão no registro (D-CONTA-127 a 133).
+
+## 20. MMO5: o cais na ilha 3D (2026-11-18)
+
+Pedido do Matheus: "Sim, a ilha 3D" (em resposta a "Faço agora o cais na ilha 3D (minimapa, cadeado e luz)?"). Branch
+`v3-mmo5-cais-3d`. São os três itens da prancha que a seção 19 deixou de fora.
+
+- **A chave:** a mesma (`VITE_DIGILAB_API`). Sem ela, o cais fica como sempre foi: sem cadeado, sem marca no minimapa e com o modelo
+  normal.
+- **O estado para a vista** (`web/app/src/trancas.ts`, `CAIS`): ligado ou não, trancado ou não. Quem escreve é o `nivelTela.ts`, pelo
+  marco do build.
+- **O cadeado** (`web/app/src/componentes/CadeadoDoCais.tsx`): o mesmo desenho dos outros lugares, com "Nv 10"; tocar nele abre o cartão
+  do motivo. Quando o nível abre o cais, o cadeado aberto e o brilho aparecem uma vez.
+- **O minimapa** (`Minimapa.tsx`): a marca do cais (a âncora); trancado, tracejada, com o cadeado e o "Nv 10", e a frase na descrição
+  para o leitor de tela. A marca não é botão, como as dos outros lugares.
+- **O modelo** (`ilha/vista.ts`): trancado, o cais sai apagado como os outros lugares trancados; aberto, volta ao normal. O cais não tem
+  parte que acende (`LUGARES_LUZ`), então não há máscara de luz para ligar.
+- **O que não muda:** o motor, o `engine.py`, o registro e o save. É só vista.
+- **Testes:** `web/app`: 2 003 passaram, 3 pulados (1 novo, o estado do cais em `test/cais.test.ts`); os tipos e o build.
+- **No navegador** (Chrome, com a câmera de desenvolvimento no cais): com a chave e trancado, o cadeado, a marca tracejada e o modelo
+  apagado, e o cadeado e o toque no modelo abrem o cartão do motivo; com a chave e aberto, sem cadeado, a marca cheia e o toque abre a
+  tela; sem a chave, nada do cais.
+- **Não feito:** o foco de luz no chão do cais aberto (a hierarquia de luz é montada uma vez, no carregamento); a viagem da câmera até
+  o cais; o brilho de "acabou de abrir" não foi visto no navegador. Os desvios estão no registro (D-CONTA-134 a 137).

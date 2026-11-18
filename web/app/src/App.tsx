@@ -58,9 +58,10 @@ import { CHAVE } from "./save.ts";
 import { AnuncioNivel, CartaoMotivo } from "./componentes/CartaoNivel.tsx";
 import { useSomDoJogo } from "./somJogo.ts";
 import { CadeadosDaIlha } from "./componentes/CadeadosDaIlha.tsx";
+import { CadeadoDoCais } from "./componentes/CadeadoDoCais.tsx";
 import { ObjetosDaIlha } from "./componentes/ObjetosDaIlha.tsx";
 import { marcarDiarioVisto } from "./telas/pet/objetosIlha.ts";
-import { abrirMotivo, abrirMotivoDoCais, jaConhecoOJogo, useNivelRaiz } from "./nivelTela.ts";
+import { abrirMotivo, abrirMotivoDoCais, jaConhecoOJogo, ligarCaisNoNivel, useNivelRaiz } from "./nivelTela.ts";
 import { CARTAO_DO_CAIS, PECAS, ligarCartaoDoCais, nivelDaPeca, pecaAberta, pecaDaAba, pecaDoDestino, type EstadoNivel, type Peca } from "./nivel.ts";
 import { GostoVisual } from "./gostoVisual/GostoVisual.tsx";
 
@@ -70,6 +71,7 @@ const armaz = (): Storage => localStorage;
    cartao de destrave e o do marco 10, entao so existe quando o marco do build e o 10 */
 const CAIS = caisNoBuild(), MARCO_CAIS = CAIS ? marcoDoCaisNoBuild() : CARTAO_DO_CAIS.n;
 ligarCartaoDoCais(CAIS && MARCO_CAIS === CARTAO_DO_CAIS.n);
+ligarCaisNoNivel(CAIS ? MARCO_CAIS : null);
 const caisTrancado = (n: EstadoNivel): boolean => !n.marcos.includes(MARCO_CAIS);
 
 /** os icones das abas do lugar (Crescer, L2; Lutar e Diario, L3): so a escolhida mostra o rotulo; as teclas 1 a 4 trocam de aba */
@@ -319,6 +321,7 @@ export function App() {
         abrirConfig={() => abrirConfig("principal")} abrirMeusPets={abrirMeusPets} />}
       {idLugar && lado && <MarcasDoLugar lugar={idLugar} />}
       {!idLugar && !painel && <CadeadosDaIlha abrir={l => acoes.current.abrir(l)} />}
+      {CAIS && !idLugar && !painel && <CadeadoDoCais abrir={abrirCais} />}
       {!idLugar && !painel && <ObjetosDaIlha />}
       {lugar && (lado ? <LugarLado d={lugar.d}>{lugar.corpo}</LugarLado> : <LugarFolha d={lugar.d}>{lugar.corpo}</LugarFolha>)}
       {painel && (lado ? <PainelLado d={painel.d}>{painel.corpo}</PainelLado> : <PainelModal d={painel.d}>{painel.corpo}</PainelModal>)}
