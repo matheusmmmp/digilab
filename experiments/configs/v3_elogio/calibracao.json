@@ -1,0 +1,9 @@
+{
+ "descricao": "ELOGIO, a calibracao (etapa 4): a grade g x W da D-EL-8, 100 unidades (docs/PLANO_ANALISE_V3_ELOGIO.md, secao 5)",
+ "fase": "calibracao",
+ "plano": "docs/PLANO_ANALISE_V3_ELOGIO.md",
+ "dias": 12,
+ "unidades": {"bases": [25101], "n": 100},
+ "ganho": null,
+ "janela": null
+}
