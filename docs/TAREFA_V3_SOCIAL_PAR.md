@@ -101,3 +101,11 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
   o G-INSTR, o G1, a análise das seções 5, 7 e 8) e o piloto (só o dp, as frequências e a regra do N).
 - **O que passa:** `tests/test_social_par_a0.py`, 10 testes. Entre eles, o G-GRAV-IDENT-CO7 (D-SP-28) e o G-ORQ (a fumaça, D-SP-30).
 - **O que falta:** rodar o piloto (`python experiments/piloto_social_par_a0.py --processos 4`) depois do merge, e o Matheus decidir o N e o K.
+
+## O piloto do A0 e do B0 (2026-11-18, branch `v3-social-par-a0-piloto`)
+
+- **O que rodou:** `python experiments/piloto_social_par_a0.py --processos 2`, uma vez, no commit 82d658e4, ao lado da validação do
+  ELOGIO, por decisão do Matheus ("Rode já assim"; D-SP-31).
+- **O que mostra** (`artifacts_v3_social_par_a0/piloto.json`): no A0, 96 % dos pares são elegíveis, todos com reencontro na janela, e o dp
+  do D_A é 0,664. O N = 200 basta, com K = 42 por base. No B0, nenhum par é elegível: o B0 sai inconclusivo por premissa (D-SP-33).
+- **O que falta:** o Matheus decidir o N e o K. Depois, num commit que atualiza a seção 6 do plano e o `K_RUN`, a run.
