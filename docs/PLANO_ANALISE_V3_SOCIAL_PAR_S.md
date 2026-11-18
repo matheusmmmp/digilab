@@ -1,7 +1,8 @@
 # PLANO DE ANÁLISE V3 — SOCIAL_PAR S: o substrato que deixa o social aparecer
 
 - **Status:** APROVADO pelo Matheus em 2026-11-18 ("Aprovado"), com as decisões S-1 a S-8 da seção 10 como DECIDIDAS. Nenhuma vida
-  rodou antes desta aprovação.
+  rodou antes desta aprovação. O adendo 1 (seção 11: d0 = 5 e o primário pelo contato) foi APROVADO em 2026-11-18, e as A1-1 a
+  A1-4 ficam DECIDIDAS; onde o adendo e as seções 2 a 9 divergem, vale o adendo.
 - **Snapshot:** a `main` em 8c6d17ae (2026-11-18), com o branch da S0 (`v3-social-par-s0`, PR #1000), que fica em cima do da run do A0
   (#998). O plano depende dos artefatos dos dois.
 - **Pedido:** a fase S1 do pedido do Matheus de 2026-11-18. O Matheus aprovou a S0 e a ordem dos bloqueios: "Aprovado, B1 e B2".
@@ -186,7 +187,7 @@ Nada disso muda a leitura.
 | S-7 | as células do A0 (atencioso × comedouro), e não "3 lugares × 2 doadores" | sim | médio: mais células mudam mais de uma coisa |
 | S-8 | nenhuma mudança no pet nem no jogo: os braços são intervenções do experimento no t0 | sim | baixo: virar mecânica é outra decisão |
 
-## 11. Adendo 1 (PROPOSTO, 2026-11-18): o parceiro não vê o focal deslocado
+## 11. Adendo 1 (APROVADO pelo Matheus em 2026-11-18, "Aprovo o adendo 1"): o parceiro não vê o focal deslocado
 
 **O que se achou ao começar a S2,** antes de qualquer vida e antes do código do orquestrador:
 - **O pet de hoje só percebe o outro a até 6 células.** A percepção social filtra os outros pela distância de visão (`digilab/mundo.py`, o
