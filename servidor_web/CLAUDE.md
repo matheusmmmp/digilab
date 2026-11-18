@@ -60,6 +60,10 @@ O `servidor/` continua para o jogo local e a pesquisa.
   semente pedida conta como luta. Travas: o nível (`DIGILAB_MARCO_RANQUEADA`, o 10 conferido por padrão, o 7 no beta), `LUTAS_POR_DIA` por
   conta por dia de Brasília (429), e a ordem (409). O envio confere o hash do registro até o `indice` de cada semente (`hash_nao_confere`)
   e conta as lutas pela conta da MMO1. O hash do jogo é o `hashAte` de `web/app/src/ranking/pedido.ts`.
+- **O ranking da semana (MMO5, `semanas.ts`):** cada semente guarda o que a conferência achou dela (a migração 4), e **a primeira
+  conferência vale**. As tabelas saem daí, uma por estágio, com os pontos refeitos pelo `pontuar` da MMO1. A semana congela
+  `FOLGA_DO_FECHAMENTO_MS` depois do fim (PROPOSTA): a pendente vira não enviada, as tabelas vão para `tabelas_semana` e o segredo é
+  publicado. O fechamento roda na primeira chamada depois da hora. As tabelas pedem a sessão; o segredo publicado, não.
 - **A vida dos testes** é o gabarito `test/gabaritos/vida_101.json`, gravado por `node scripts/gerar_vida_teste.ts` (precisa do
   `node_modules` do `web/app`, porque o roteiro da MMO0 nasce o ovo pelo `src/produto.ts`).
 

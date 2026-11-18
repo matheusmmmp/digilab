@@ -30,6 +30,7 @@ import { transacao, type Banco } from "../conta/banco.ts";
 import type { ConfigConta } from "../conta/config.ts";
 import type { GuardasConta } from "../conta/rotas.ts";
 import type { EntregueComHash } from "./conferir.ts";
+import { fecharSemanas } from "./semanas.ts";
 
 const DIA_MS = 86_400_000;
 /** o tamanho do segredo da semana, em bytes */
@@ -82,7 +83,8 @@ export const sementeDe = (segredo: Buffer, contaId: string, numero: number): num
 /** o começo do dia seguinte de Brasília, em ms UTC (quando o limite do dia reabre) */
 export const proximoDia = (hora: number): number => Date.parse(diaDe(hora) + "T00:00:00Z") - FUSO_BRASILIA_MS + DIA_MS;
 
-interface LinhaSemente { numero: number; pet: number; versao_pet: number; indice: number; hash_ate: string; semente: number; hora: number; dia: string; semana: string }
+interface LinhaSemente { numero: number; pet: number; versao_pet: number; indice: number; hash_ate: string; semente: number; hora: number; dia: string; semana: string;
+  situacao: string | null; estagio: string | null; rival: string | null; faixa: string | null }
 
 /** as sementes entregues a um pet da conta, na ordem do pedido (o que a conferência do envio usa) */
 export function entreguesDoPet(banco: Banco, contaId: string, pet: number, versao: number): EntregueComHash[] {
@@ -93,7 +95,7 @@ export function entreguesDoPet(banco: Banco, contaId: string, pet: number, versa
 
 /** as sementes da conta para o GET e o "baixar os meus dados" (as horas em ISO) */
 export function sementesDaConta(banco: Banco, contaId: string): Record<string, unknown>[] {
-  return (banco.prepare("SELECT numero, pet, versao_pet, indice, hash_ate, semente, hora, dia, semana FROM sementes WHERE conta_id = ? ORDER BY numero DESC")
+  return (banco.prepare("SELECT numero, pet, versao_pet, indice, hash_ate, semente, hora, dia, semana, situacao, estagio, rival, faixa FROM sementes WHERE conta_id = ? ORDER BY numero DESC")
     .all(contaId) as unknown as LinhaSemente[]).map(l => ({ ...l, hora: new Date(l.hora).toISOString() }));
 }
 
@@ -136,6 +138,7 @@ export function montarRotasSemente(app: Hono, cfg: ConfigConta, g: GuardasConta)
     if (!VERSOES_PET.includes(p.pet.versao))
       return recusar(c, 422, "versao_pet_desconhecida", `versão de pet desconhecida: ${p.pet.versao} (o servidor confere a ${VERSOES_PET.join(", ")})`);
 
+    fecharSemanas(banco, agora());
     /* tudo numa transação, sem await no meio: dois pedidos ao mesmo tempo não passam juntos do limite */
     return transacao(banco, () => {
       /* a hora nunca volta dentro da conta (a conta da MMO1 pede as sementes em ordem de hora): um relógio que recua fica na última */

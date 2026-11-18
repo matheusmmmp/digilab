@@ -237,3 +237,26 @@ Pedido do Matheus: "Sim, merge e tela" (2026-11-17), depois do merge do #967. A 
   palco, o envio, "conferido +20", o placar da semana e o mesmo rival valendo 10 em seguida.
 - **Não feito:** as telas da conta (o Entrar só abre a página de teste no local), "Ver a semana" (MMO5), o e2e no repositório e a
   revisão de acessibilidade. Desvios: D-CONTA-93 a 103.
+
+## 16. MMO5: o ranking da semana, a parte local (2026-11-17)
+
+Pedido do Matheus: "Sim, a MMO5" (em resposta a "Começo a MMO5 (as tabelas e o cais)?"). Esta etapa é só o servidor; a tela (o cais e
+"Ver a semana") pede a prancha antes. Branch `v3-mmo5-local`.
+
+- **O que o servidor passa a guardar (a migração 4):** em cada semente entregue, o que a conferência do envio achou dela (a situação, o
+  estágio do pet, o rival e a faixa); no segredo da semana, quando ele foi publicado; e as tabelas congeladas (`tabelas_semana`).
+- **As tabelas (`servidor_web/src/envio/semanas.ts`):** uma por estágio (Rookie, Champion, Ultimate, Mega), na ordem do desempate da
+  seção 5: os pontos, os rivais diferentes vencidos, menos lutas usadas, quem chegou antes aos pontos. Os pontos são refeitos pela conta
+  da MMO1 (`pontuar`, agora exportada de `web/app/src/ranking/pontos.ts`), por pet, e os pets da conta somam.
+- **A primeira conferência vale:** a semente que já tem vitória, derrota, não enviada, fora da Arena ou acima do limite não muda num
+  envio seguinte. Só a pendente e a nunca conferida mudam.
+- **O fechamento:** a semana congela uma hora depois do fim (segunda, 01:00 de Brasília). Numa transação: a pendente e a nunca
+  conferida viram "não enviada", as tabelas são gravadas, e o segredo é publicado. Roda sozinho na primeira chamada depois da hora
+  (as rotas das semanas, o envio e o pedido da semente).
+- **As rotas:** `GET /semanas` (a semana aberta, quando fecha e as fechadas), `GET /semanas/:semana/tabelas` (com a sessão; as 100
+  primeiras linhas de cada estágio e a de quem pede) e `GET /semanas/:semana/segredo` (sem sessão; 404 com a semana aberta).
+- **O que não muda:** o motor e o `engine.py`. A conferência do envio devolve o mesmo de antes.
+- **Testes:** `servidor_web/test/semanas.test.ts` (29): a migração, a semana, a regra da metade, o desempate passo a passo, o
+  fechamento, as rotas e o caminho inteiro do pedido à tabela. `servidor_web`: 127 passaram; `web/app`: 1 981 passaram, 3 pulados.
+- **Fora desta etapa:** a prancha e a tela (o cais, "Ver a semana"); as divisões de 30 (MMO-9, só com 60 jogadores); a recompensa
+  (MMO7); o deploy (CN5). Os desvios e os achados estão no registro (D-CONTA-114 a 122).
