@@ -19,8 +19,9 @@ das 12 celulas: REL - D na classe "> 0", que e o D - REL "< 0" do plano, e p uni
 privacao e a exaustao, no `longe_fixo` e nas 12 celulas, nenhuma "> 0" em D - REL) e G3 (a taxa por episodio, no `longe_fixo` e nas 12
 celulas, nenhuma "< 0" em D - REL). O veredito passa so com todas. O D ("desliga nao muda") e o teste do gabarito, antes da run.
 
-A trava: a run de verdade recusa rodar sem o "APROVADO pelo Matheus" no cabecalho do plano, sem a faixa em FAIXAS_RESERVADAS e com a pasta
-de saida ja existente. A fumaca usa as sementes dos testes.
+A trava: a run de verdade passa pelo `tools/pre_run.py` (o plano no disco igual ao da `origin/main`, a faixa, nenhuma outra run, no maximo
+4 processos) e recusa rodar sem o "APROVADO pelo Matheus" no cabecalho do plano, sem a faixa em FAIXAS_RESERVADAS e com a pasta de saida
+ja existente. A fumaca usa as sementes dos testes e nao passa pelo pre_run.
 Uso: python experiments/run_v3_corpo_acoplamento.py --config experiments/configs/v3_corpo_acoplamento/run.json --processos 4
 """
 from __future__ import annotations
@@ -35,12 +36,14 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 sys.path.insert(0, str(RAIZ / "experiments"))
+sys.path.insert(0, str(RAIZ / "tools"))
 
 import bancada_v2 as bv  # noqa: E402
 import run_v2_longe_regular as lr  # noqa: E402
 import run_v2_memoria_autobio as ma  # noqa: E402
 import run_v3_valuation as V  # noqa: E402
 import run_v3_valuation_conserto as VC  # noqa: E402
+import pre_run  # noqa: E402
 import sonda_v3_corpo_acoplamento as SA  # noqa: E402
 from bancada.faixas import FAIXAS_RESERVADAS  # noqa: E402
 from bancada.regras_mundo import simular_vida_fisico  # noqa: E402
@@ -53,6 +56,7 @@ from digilab.temperamento import NEUTRO  # noqa: E402
 
 orq = VC.orq
 PLANO = "docs/PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md"
+ORQUESTRADOR = "experiments/run_v3_corpo_acoplamento.py"
 FASE = "corpo_acoplamento"
 PREFIXO = orq.PREFIXO
 BASES = (100101, 100202, 100303, 100404, 100505)              # secao 4 (D-CA-10, aprovada em 2026-11-18)
@@ -360,8 +364,11 @@ def main() -> None:
     a = ap.parse_args()
     caminho = Path(a.config)
     cfg = json.loads(caminho.read_text(encoding="utf-8"))
-    if modo_da_config(cfg) == "fumaca" and a.saida is None:
-        raise SystemExit(f"a fumaca precisa de --saida (fora de {SAIDA})")
+    if modo_da_config(cfg) == "fumaca":
+        if a.saida is None:
+            raise SystemExit(f"a fumaca precisa de --saida (fora de {SAIDA})")
+    else:
+        pre_run.exigir(ORQUESTRADOR, a.config, a.processos)             # o H10 (D-IA-6: o plano da origin/main) e a V3-D8, antes de tudo
     print(_resumo(rodar(cfg, Path(a.saida) if a.saida else RAIZ / SAIDA, a.processos, caminho)["resultado"]))
 
 
