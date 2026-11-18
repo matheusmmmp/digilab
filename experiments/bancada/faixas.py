@@ -29,7 +29,7 @@ BASES_COMPARACAO = {"calibracao": (28101, 28202, 28303, 28404, 28505), "validaca
 # competicao entre as regras, PLANO_ANALISE_V2_V3_COMPETICAO, secao 4; o do prototipo do DigiBrain modular,
 # PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO, secao 3)
 PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7", "comparacao-cerebros", "mundo", "corpo", "banheiro", "dois_pets", "rede_de_si",
-                     "pet_que_pensa", "competicao", "digibrain_prototipo")
+                     "pet_que_pensa", "competicao", "digibrain_prototipo", "social_par", "social_par_piloto")
 # faixas queimadas: continuam reservadas e nao podem ser usadas para nada (adendo 4.1 do PLANO_ANALISE_V2_EXPERIMENTO_MAIOR)
 FAIXAS_QUEIMADAS = ((15101, 15505, "a validacao antiga do experimento maior: run indevida parada em 2026-10-06 (PR #183)"),
                     (90101, 90505, "GOSTO_VISUAL, GV3b do adendo 1: a run parou na vida 213 de 216 por um erro do codigo, as duas TVs "
@@ -195,6 +195,12 @@ FAIXAS_RESERVADAS = (
     (98101, 98505, "EVIDENCIA A2, a ablacao do aprendizado no jogo (jogo web): a run unica, sementes 98101...98300 "
                    "(docs/PLANO_ANALISE_V3_ABLACAO_APRENDIZADO.md, secao 2.3; AB-5; aprovada pelo Matheus em 2026-11-16, "
                    "\"Aprovo, pode rodar\"; conferida livre na origin/main e em todos os branches remotos em 2026-11-16)"),
+    (102101, 102505, "SOCIAL_PAR, o piloto do A0 e do B0: 100 pares (5 bases x 20, prefixo social_par_piloto), so o dp dos primarios "
+                     "e as frequencias das premissas (docs/PLANO_ANALISE_V3_SOCIAL_PAR_A0.md, secoes 3.4 e 6; A0-7 e A0-8, aprovadas pelo "
+                     "Matheus em 2026-11-17, \"Aprovo todas\"; conferida livre na origin/main e em todos os branches remotos em 2026-11-17)"),
+    (101101, 101505, "SOCIAL_PAR, a run unica do A0 e do B0: as bases 101101...101505, prefixo social_par, o K pela regra da secao 6 "
+                     "decidido depois do piloto (docs/PLANO_ANALISE_V3_SOCIAL_PAR_A0.md, secao 3.4; A0-8, aprovada pelo Matheus em "
+                     "2026-11-17, \"Aprovo todas\"; conferida livre na origin/main e em todos os branches remotos em 2026-11-17)"),
 )
 
 

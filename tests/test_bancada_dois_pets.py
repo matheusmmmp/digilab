@@ -82,6 +82,9 @@ BASES = {
     # o prototipo do DigiBrain modular (PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO, secao 9; experiments/run_v2_digibrain_prototipo.py)
     "digibrain_prototipo": {"calibracao": (63101, 63202), "piloto": (63303, 63404, 63505),
                             "avaliacao": (64101, 64202, 64303, 64404, 64505)},
+    # a SOCIAL_PAR, o A0 e o B0 (PLANO_ANALISE_V3_SOCIAL_PAR_A0, secao 3.4; experiments/run_v3_social_par_a0.py)
+    "social_par": {"run": (101101, 101202, 101303, 101404, 101505)},
+    "social_par_piloto": {"piloto": (102101, 102202, 102303, 102404, 102505)},
 }
 NOVAS = {(43101, 43505): "calibracao e piloto", (44101, 44505): "validacao"}
 K_UNIDADES = 40

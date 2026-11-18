@@ -94,3 +94,10 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
   (B0), e o N sai de um piloto que só dá o σ̂ e as frequências.
 - **Aprovado** pelo Matheus em 2026-11-17 ("Aprovo todas"), com as faixas (D-SP-26).
 - **O que falta:** o código da seção 4 do plano, num PR à parte; depois o piloto e a decisão do N.
+
+## O código do A0 e do B0 (2026-11-17, Claude Code, Opus 5.5, branch `v3-social-par-a0-codigo`)
+
+- **O que entrou:** a seção 4 do plano. As faixas e os prefixos, a fábrica do par de hoje com a CO7, o T\*, o orquestrador (as cinco vidas,
+  o G-INSTR, o G1, a análise das seções 5, 7 e 8) e o piloto (só o dp, as frequências e a regra do N).
+- **O que passa:** `tests/test_social_par_a0.py`, 10 testes. Entre eles, o G-GRAV-IDENT-CO7 (D-SP-28) e o G-ORQ (a fumaça, D-SP-30).
+- **O que falta:** rodar o piloto (`python experiments/piloto_social_par_a0.py --processos 4`) depois do merge, e o Matheus decidir o N e o K.

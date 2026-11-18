@@ -53,6 +53,21 @@ class DecisaoGravada:
     acao_alvo: AcaoPet | None = None           # a acao com que o motor pediu o alvo (None: o motor nao pediu)
     alvo: Alvo | None = None
 
+    def para_dict(self) -> dict:
+        """a decisao em JSON (o A0 guarda as gravacoes em disco para o G1; docs/PLANO_ANALISE_V3_SOCIAL_PAR_A0.md, secao 4, item 5)"""
+        return {"indice": self.indice, "acao": self.acao.value, "acao_alvo": None if self.acao_alvo is None else self.acao_alvo.value,
+                "alvo": None if self.alvo is None else self.alvo.para_dict()}
+
+    @staticmethod
+    def de_dict(d: dict) -> "DecisaoGravada":
+        if set(d) != {"indice", "acao", "acao_alvo", "alvo"}:
+            raise ValueError(f"decisao gravada com os campos {sorted(d)}")
+        alvo = d["alvo"]
+        if alvo is not None and set(alvo) != {"tipo", "x", "y", "id", "de"}:
+            raise ValueError(f"alvo gravado com os campos {sorted(alvo)}")
+        return DecisaoGravada(d["indice"], AcaoPet(d["acao"]), None if d["acao_alvo"] is None else AcaoPet(d["acao_alvo"]),
+                              None if alvo is None else Alvo(**alvo))
+
 
 class Gravador:
     """Embrulha a politica viva de P SEM muda-la (como a `Coleta` da bancada da cooperacao): troca so os metodos da instancia, guarda
@@ -264,6 +279,7 @@ class VidaPar:
     desvios: dict[str, list[tuple[int, str]]]     # pet -> os desvios da reexecucao (so os gravados)
     t0: int | None = None                         # o tick da perturbacao, ou None
     levado: str | None = None
+    no_t0: dict | None = None                     # o mundo no passo da perturbacao, logo antes do levar (o descritivo do A0, secao 8)
 
 
 def eventos_do_dono(grupo: Grupo, ident: str) -> list:
@@ -332,13 +348,14 @@ def viver_par(cfg_mundo: ConfigMundo, semente: int, membros: list[Membro], dias:
             canais[m.ident] = CanalMundo(g.pet(m.ident), orcamento, cd.max_interacoes_por_passo)
             rngs[m.ident] = random.Random(derivar_semente("dono", g.sementes[m.ident], m.rotulo_dono))
     passos, posicoes = [], {m.ident: [] for m in por_id}
-    feita, t0_feito = perturbacao is None, None
+    feita, t0_feito, no_t0 = perturbacao is None, None, None
     for k in range(total // passo):
         t = k * passo
         g.avancar(passo)
         if not feita and g.tick >= perturbacao[2]:
             quem, ref, _t0, direcao, d0 = perturbacao
             if not g.motores[quem]._estado.dormindo:
+                no_t0 = retrato_do_mundo(g)
                 rx, ry = g.motores[ref].pet
                 x, y = deslocar(rx, ry, direcao, d0 * cfg_mundo.sub, cfg_mundo)
                 g.levar_pet(quem, x, y)
@@ -363,7 +380,18 @@ def viver_par(cfg_mundo: ConfigMundo, semente: int, membros: list[Membro], dias:
     for canal in canais.values():
         canal.fechar()
     return VidaPar(g, passos, posicoes, {i: list(gv.decisoes) for i, gv in gravadores.items()},
-                   {i: list(p.desvios) for i, p in gravadas.items()}, t0_feito, None if perturbacao is None else perturbacao[0])
+                   {i: list(p.desvios) for i, p in gravadas.items()}, t0_feito, None if perturbacao is None else perturbacao[0], no_t0)
+
+
+def retrato_do_mundo(g: Grupo) -> dict:
+    """o que o descritivo do A0 le no t0 (o plano, secao 8, itens 2 e 3): as comidas no mapa, onde a bola esta, e de cada pet se dorme e
+    a ultima acao (a decisao do passo que acabou de terminar); so leitura"""
+    b = g.mundo.bola
+    return {"comidas": len(g.mundo.comidas), "bola": [b["x1"], b["y1"]],
+            "pets": {i: {"dormindo": bool(m._estado.dormindo),
+                         "ultima_acao": m.decisoes_mundo[-1]["acao"] if m.decisoes_mundo else None,
+                         "comeu": bool(m.decisoes_mundo[-1]["comeu"]) if m.decisoes_mundo else False}
+                     for i, m in sorted(g.motores.items())}}
 
 
 # ================================================================== as series que as medidas leem
