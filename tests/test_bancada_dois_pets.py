@@ -85,6 +85,8 @@ BASES = {
     # a SOCIAL_PAR, o A0 e o B0 (PLANO_ANALISE_V3_SOCIAL_PAR_A0, secao 3.4; experiments/run_v3_social_par_a0.py)
     "social_par": {"run": (101101, 101202, 101303, 101404, 101505)},
     "social_par_piloto": {"piloto": (102101, 102202, 102303, 102404, 102505)},
+    # a CORPO, o bloco II da ablacao (PLANO_ANALISE_V3_CORPO, secao 4; experiments/run_v3_corpo.py)
+    "corpo_par": {"run": tuple(range(104301, 104401))},
 }
 NOVAS = {(43101, 43505): "calibracao e piloto", (44101, 44505): "validacao"}
 K_UNIDADES = 40
