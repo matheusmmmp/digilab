@@ -1,6 +1,7 @@
 # PLANO DE ANÁLISE V3 — SOCIAL_PAR S: o substrato que deixa o social aparecer
 
-- **Status:** PROPOSTO, à espera do "aprovado" do Matheus (o checkpoint S2). Nenhuma vida roda antes disso.
+- **Status:** APROVADO pelo Matheus em 2026-11-18 ("Aprovado"), com as decisões S-1 a S-8 da seção 10 como DECIDIDAS. Nenhuma vida
+  rodou antes desta aprovação.
 - **Snapshot:** a `main` em 8c6d17ae (2026-11-18), com o branch da S0 (`v3-social-par-s0`, PR #1000), que fica em cima do da run do A0
   (#998). O plano depende dos artefatos dos dois.
 - **Pedido:** a fase S1 do pedido do Matheus de 2026-11-18. O Matheus aprovou a S0 e a ordem dos bloqueios: "Aprovado, B1 e B2".
@@ -172,7 +173,7 @@ Nada disso muda a leitura.
 - **Tempo:** a ~9 s por par com o G1 (o A0), 750 pares com 4 processos levam uns 30 minutos de parede.
 - **A máquina:** no máximo 4 processos, e uma run de pesquisa por vez (V3-D8), pelo `pre_run`.
 
-## 10. As decisões para o Matheus (PROPOSTAS)
+## 10. As decisões (DECIDIDAS pelo Matheus em 2026-11-18, "Aprovado")
 
 | | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|

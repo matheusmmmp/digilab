@@ -218,7 +218,7 @@ FAIXAS_RESERVADAS = (
                      "2026-11-17, \"Aprovo todas\"; conferida livre na origin/main e em todos os branches remotos em 2026-11-17)"),
     (103001, 103400, "SOCIAL_PAR S, o substrato que deixa o social aparecer: a run 103001...103200 (200 bases, k = 1, prefixo social_par_s, "
                      "os mesmos nos tres bracos) e o G-DET 103301...103350 (prefixo social_par_s_det) (docs/PLANO_ANALISE_V3_SOCIAL_PAR_S.md, "
-                     "secao 4; reservada para o plano PROPOSTO, a aprovacao e o checkpoint S2; conferida livre no faixas.py, nos planos e nas "
+                     "secao 4; S-5, aprovada pelo Matheus em 2026-11-18, \"Aprovado\"; conferida livre no faixas.py, nos planos e nas "
                      "configs da origin/main e de todos os branches remotos em 2026-11-18)"),
 )
 
