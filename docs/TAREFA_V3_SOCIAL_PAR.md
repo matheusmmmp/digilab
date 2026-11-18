@@ -146,3 +146,4 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
   - a fumaça.
 - **O risco:** o `SeguidorPuro` perde F de vista quando F anda para casa, e o G-DET pode falhar (D-SP-50).
 - **O que falta:** o checkpoint S3, a aprovação do substrato antes do merge. Depois vem a run da S3.
+- **O checkpoint S3 (2026-11-18):** "Aprovado, rodar como está" (D-SP-51). A run vem depois do merge da cadeia.
