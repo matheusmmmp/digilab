@@ -844,6 +844,8 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-17 — VALUATION: a V3, o conserto rodado (Claude Code, Opus 5.5, branch `v3-valuation-v3`)](registro/2026-11.md)
 - [2026-11-17 — VALUATION: a V5, a frente encerrada (Claude Code, Opus 5.5, branch `v3-valuation-v5`)](registro/2026-11.md)
 - [2026-11-17 — PET_VIVO: o adendo 1 do PV-2 APROVADO, com o G0 = 512 (Claude Code, Opus 5.5, sessão lateral, branch `v3-pet-vivo-pv2-codigo`)](registro/2026-11.md)
+- [2026-11-17 — PET_VIVO: o PR da run do PV-2, o adendo 2 (Claude Code, Opus 5.5, sessão lateral, branch `v3-pet-vivo-pv2-run`)](registro/2026-11.md)
+- [2026-11-18 — PET_VIVO: o adendo 2 do PV-2 APROVADO (Claude Code, Opus 5.5, sessão lateral, branch `v3-pet-vivo-pv2-run`)](registro/2026-11.md)
 - [2026-11-17 — MMO5: o ranking da semana, a parte local (Claude Code, Fable 5.2, sessão lateral, branch `v3-mmo5-local`)](registro/2026-11.md)
 - [2026-11-17 — MMO4: o rival e o mapa no pedido da semente (Claude Code, Fable 5.2, sessão lateral, branch `v3-mmo4-rival`)](registro/2026-11.md)
 - [2026-11-17 — ELOGIO: o plano de análise (etapa 3)](registro/2026-11.md)

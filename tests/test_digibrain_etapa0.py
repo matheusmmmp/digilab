@@ -106,6 +106,9 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              "experiments/pv2.py",
                                                                              # PET_VIVO, o codigo do PV-2: a medicao nas sementes dos testes (le o CONFIG_DIGIBRAIN_INATOS)
                                                                              "experiments/medir_pv2.py",
+                                                                             # a run do PV-2 (o adendo 2): so le a escala dos inatos e o
+                                                                             # DigiBrain das vidas do pv2.py (D-PV2R-1)
+                                                                             "experiments/run_v3_pet_vivo_pv2.py",
                                                                              # ELOGIO, etapas 4 e 5: o orquestrador da calibracao e da validacao
                                                                              "experiments/run_v3_elogio.py"}
 
