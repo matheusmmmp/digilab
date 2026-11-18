@@ -1,0 +1,62 @@
+/* Prancha "o cais e a semana" (docs/PLANO_UX_CAIS.md; a etapa MMO5 do docs/PLANO_V3_MMO.md). So desenho. Por cima do
+   ../ux-lugares-menus/lugares.css e movel.css (os tokens --hx-* e --hud-*) e do ../ux-conta/conta.css (os estados, os botoes).
+   Nenhuma cor nova: tudo aqui usa token. Os tamanhos sao PROPOSTO, SEM FONTE. */
+
+.so-leitor{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+
+/* a semana: as datas, o estado em texto e as setas das semanas fechadas */
+.ca-sem{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:8px;border:1px solid var(--hx-borda);background:var(--hx-tecla);padding:4px}
+.ca-sem .bt-ic{width:44px;height:44px}
+.ca-sem .bt-ic[disabled]{opacity:.35}
+.ca-sem-txt{display:grid;grid-template-columns:auto 1fr;align-items:center;column-gap:8px;row-gap:2px}
+.ca-sem-txt b{font:700 17px/1.15 var(--hx-f)}
+.ca-sem-txt .etq{justify-self:start}
+.ca-sem-txt small{grid-column:1 / -1;font:500 13px/1.25 var(--hx-f);color:var(--hx-sec)}
+.etq.ok{border-color:var(--hx-ok);color:var(--hx-ok)}
+.etq.aqui{border-color:var(--hx-ok);color:var(--hx-ok)}
+
+/* os estagios: quatro tabelas, uma escolhida; a marca diz qual e a do pet de agora */
+.ca-est{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.ca-est .filtro{display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 6px;font-size:14px}
+.ca-est .filtro small{font:600 12px/1 var(--hx-f-num);color:var(--hx-sec)}
+.ca-est .filtro[aria-pressed="true"]{box-shadow:var(--hx-escolhido-brilho)}
+.ca-meu{display:inline-block;width:8px;height:8px;transform:rotate(45deg);border:2px solid var(--hx-ok);flex:none}
+.ca-leg{display:flex;align-items:center;gap:8px;margin-top:-4px;font:500 13px/1.2 var(--hx-f);color:var(--hx-sec)}
+
+/* a tabela: a posicao, o apelido, os pontos e as colunas do desempate */
+.ca-tab{width:100%;border-collapse:collapse;font:500 14px/1.2 var(--hx-f)}
+.ca-tab thead th{padding:4px 8px;text-align:right;font:700 11px/1.1 var(--hx-f);letter-spacing:.08em;text-transform:uppercase;color:var(--hx-rotulo);border-bottom:1px solid var(--hx-borda-topo)}
+.ca-tab thead th:nth-child(1),.ca-tab thead th:nth-child(2){text-align:left}
+.ca-tab tbody td,.ca-tab tbody th{height:34px;padding:0 8px;border-bottom:1px solid var(--hx-borda);text-align:right;font-family:var(--hx-f-num);color:var(--hx-texto-2)}
+.ca-tab tbody th{text-align:left;font:600 14px/1.2 var(--hx-f);color:var(--hx-texto)}
+.ca-tab tbody th .etq{margin-left:8px}
+.ca-tab .ca-pos{width:40px;text-align:left;font-weight:700;color:var(--hx-texto)}
+.ca-tab .ca-pts{font-weight:700;font-size:16px;color:var(--hx-num)}
+.ca-tab tr.ca-eu td,.ca-tab tr.ca-eu th{background:var(--hx-tecla);border-top:1px solid var(--hx-ok);border-bottom:1px solid var(--hx-ok)}
+.ca-tab tr.ca-eu td:first-child{box-shadow:inset 4px 0 0 var(--hx-ok)}
+.ca-tab tr.ca-salto td{height:18px;text-align:center;color:var(--hx-sec);border-bottom:0;letter-spacing:.3em}
+.ca-mais{align-self:flex-start;min-height:44px}
+
+.ca-parcial{display:grid;grid-template-columns:20px 1fr;gap:8px;align-items:start;font:500 14px/1.35 var(--hx-f);color:var(--hx-texto-2)}
+.ca-parcial .ic{margin-top:2px;color:var(--hx-rotulo)}
+.ca-txt{font:500 14px/1.4 var(--hx-f);color:var(--hx-texto-2);margin-top:4px}
+.ca-txt.sec{color:var(--hx-sec);margin-top:0}
+
+/* a tabela sem ninguem: uma frase, sem tabela desenhada */
+.ca-vazia{display:grid;gap:4px;place-items:center;text-align:center;padding:22px 12px;border:1px dashed var(--hx-borda)}
+.ca-vazia b{font:700 16px/1.2 var(--hx-f)}
+.ca-vazia span{font:500 14px/1.3 var(--hx-f);color:var(--hx-sec)}
+
+/* a semana fechada: o resultado de quem olha e o segredo */
+.ca-final b.grande small{font:600 14px/1 var(--hx-f);color:var(--hx-sec)}
+.ca-seg{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-top:6px}
+.ca-seg code{display:block;padding:8px 10px;border:1px solid var(--hx-borda);background:var(--hx-tecla);font:500 13px/1.4 var(--hx-f-num);color:var(--hx-texto);word-break:break-all}
+
+.ca-estado .lp-corpo{min-height:190px}
+
+/* o celular: a folha sem rolar */
+.folha.ca-folha .lp-corpo{overflow:hidden}
+.folha.ca-folha .ct-bts .bt{flex:1;padding:0 8px}
+.folha.ca-folha .ca-tab tbody td,.folha.ca-folha .ca-tab tbody th{height:32px;padding:0 6px}
+.folha.ca-folha .ca-est .filtro{font-size:13px;gap:4px;padding:0 2px}
+.folha.ca-folha{z-index:30}

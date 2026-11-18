@@ -279,3 +279,15 @@ Branch `v3-mmo4-rival`, por cima da `v3-mmo5-local` (#978).
   rival, o outro mapa, a semente de antes da regra). `web/app`: 1 981 passaram, 3 pulados; os tipos e o build.
 - **O que fica:** o servidor não sabe se o rival está na Arena do pet na hora do pedido; o motor confere isso no envio, e a luta
   impossível recusa o envio inteiro. Os desvios estão no registro (D-CONTA-123 a 126).
+
+## 18. MMO5: a prancha do cais e da semana (2026-11-17)
+
+Pedido do Matheus: "Sim, a prancha" (em resposta a "Faço a prancha do cais e de 'Ver a semana' agora?"). Branch `v3-mmo5-prancha`. O
+plano de UX é o `docs/PLANO_UX_CAIS.md` (PROPOSTO), e a prancha está em `docs/pranchas/ux-cais/`. Só desenho.
+
+- **As telas:** a semana aberta (as datas, o estado, os quatro estágios, as primeiras linhas e a de quem olha), os seis estados, a
+  semana fechada com o resultado de quem olha, "Conferir a semana" (o segredo publicado), o cais trancado e o cartão de destrave do
+  nível 10. No desktop (1920) e no celular (390 e 360), nas peles Vidro e Militar.
+- **De onde vem cada dado:** das três rotas de `servidor_web/src/envio/semanas.ts` (#978, na main).
+- **As decisões UX-CA-1 a 7 esperam o Matheus** (seção 7 do plano). A tela não foi feita.
+- **Desvios:** D-UXCA-1 a 7, no registro.
