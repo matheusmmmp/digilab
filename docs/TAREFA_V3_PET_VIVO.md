@@ -194,6 +194,6 @@ O Matheus, nesta sessão, escreveu "Sim, começa o R0", a primeira etapa da INT-
   - o custo.
 - **A fumaça** (bases 101 e 202, K = 1, 2 dias): 192 vidas, todas com o G1 e o T-CENARIO-1 conferidos, em 77 s com 2 processos.
 - **Os desvios:** D-PV2R-1 a D-PV2R-8.
-- **Próximo:** a vez da máquina. Depois, a run, uma vez, e o
+- **Próximo:** o merge do #981 e do #984, porque o `pre_run` exige o plano da `origin/main` (D-PV2R-9); a vez da máquina já foi dada. Depois, a run, uma vez, e o
   `RESULTADO_V3_PET_VIVO_PV2.md`.
 

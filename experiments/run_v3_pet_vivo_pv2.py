@@ -17,7 +17,8 @@ com a media dos donos e o IC95 pelo t, como na C4; a regra de leitura da secao 7
 (tests/test_pv2_codigo.py), antes da run. Ao lado, os descritivos: a H-VARR, a H-CUSTO, a hora da virada, o achado pelo cheiro, a RV.
 
 A trava: a run de verdade recusa rodar sem o "APROVADO pelo Matheus" no adendo 2, sem a faixa em FAIXAS_RESERVADAS e com a pasta de saida
-ja existente. A fumaca usa as sementes dos testes.
+ja existente, e sem o `tools/pre_run.py` (o plano igual ao da `origin/main`, D-IA-6; nenhuma outra run; ate 4 processos).
+A fumaca usa as sementes dos testes e nao passa pelo pre_run.
 Uso: python experiments/run_v3_pet_vivo_pv2.py --config experiments/configs/v3_pet_vivo/pv2.json --processos 4
 """
 from __future__ import annotations
@@ -35,8 +36,10 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RAIZ))
 sys.path.insert(0, str(RAIZ / "experiments"))
+sys.path.insert(0, str(RAIZ / "tools"))
 
 import auditoria_pet_vivo as ap  # noqa: E402
+import pre_run  # noqa: E402
 import bancada_v2 as bv  # noqa: E402
 import exportar_gabarito_digibrain_modular as gab  # noqa: E402
 import pv2  # noqa: E402
@@ -50,6 +53,7 @@ from digilab.config import CONFIG_DIGIBRAIN_INATOS, CONFIG_PV2  # noqa: E402
 from digilab.metrics import medidas_pv2  # noqa: E402
 
 PLANO = "docs/PLANO_ANALISE_V3_PET_VIVO_PV2.md"
+ORQUESTRADOR = "experiments/run_v3_pet_vivo_pv2.py"
 STATUS_ADENDO_2 = "**Status do adendo 2: APROVADO pelo Matheus"
 FASE = "pv2"
 PREFIXO = orq.PREFIXO
@@ -366,7 +370,10 @@ def main() -> None:
     a = ap_.parse_args()
     caminho = Path(a.config)
     cfg = json.loads(caminho.read_text(encoding="utf-8"))
-    if modo_da_config(cfg) == "fumaca" and a.saida is None:
+    modo = modo_da_config(cfg)
+    if modo != "fumaca":
+        pre_run.exigir(ORQUESTRADOR, a.config, a.processos)          # o H10 (D-IA-6: o plano da origin/main) e a V3-D8, antes de tudo
+    if modo == "fumaca" and a.saida is None:
         raise SystemExit(f"a fumaca precisa de --saida (fora de {SAIDA})")
     print(_resumo(rodar(cfg, Path(a.saida) if a.saida else RAIZ / SAIDA, a.processos, caminho)["resultado"]))
 
