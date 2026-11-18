@@ -1,0 +1,8 @@
+{
+  "descricao": "A opcao D numa run (docs/PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md; so roda com o APROVADO e a faixa em FAIXAS_RESERVADAS): o REL da VALUATION e o D (a falta de combustivel sobe a fome) nas 12 celulas da C4, bases 100101...100505, K = 40 (200 unidades), 14 dias: 4 800 vidas, uma vez, ate 4 processos.",
+  "plano": "docs/PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md",
+  "fase": "corpo_acoplamento",
+  "unidades": {"bases": [100101, 100202, 100303, 100404, 100505], "k": 40, "prefixo": "digibrain_prototipo"},
+  "dias": 14,
+  "orcamento_por_dia": 16
+}
