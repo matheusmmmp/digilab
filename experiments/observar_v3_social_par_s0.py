@@ -80,12 +80,18 @@ def observar_par(arquivo: str) -> dict:
     v = a0._viver(s, [a0._vivo("A", ss), a0._vivo("B", ss)], pert)
     if a0._sha_vida(v) != disco["sha256"]["VIVO"]:
         raise RuntimeError(f"S0: a VIVO do par {disco['par']} nao se refaz com o sha256 da run")
+    return observar_vida(v, disco["par"])
+
+
+def observar_vida(v: pc.VidaPar, nome: str) -> dict:
+    """as contagens da observacao de uma vida de par ja vivida (com o t0 feito); o `observar_par` e a SOCIAL_PAR S (o descritivo da
+    riqueza) a usam"""
     cm = v.grupo.mundo.cmf
     dec = {i: v.grupo.motores[i].decisoes_mundo for i in "AB"}
     pos = v.posicoes
     n = len(v.passos)
     if any(len(dec[i]) != n or len(pos[i]) != n for i in "AB"):
-        raise RuntimeError(f"S0: o par {disco['par']} nao tem uma decisao por passo")
+        raise RuntimeError(f"S0: o par {nome} nao tem uma decisao por passo")
     d = [_cheb(pos["A"][k], pos["B"][k], cm) for k in range(n)]
     acao = {i: [x["acao"] for x in dec[i]] for i in "AB"}
     k0 = pc.indice_do_passo(v, v.t0)
@@ -139,7 +145,7 @@ def observar_par(arquivo: str) -> dict:
         mot = getattr(v.grupo.motores[i].politica, "motivos", None)
         co7[i] = None if mot is None or len(mot) != n else _dever(mot, v.passos)
     hist = Counter(min(x, 30) for x in d)
-    return {"par": disco["par"], "n": n, "k0": k0, "acoes": {i: dict(Counter(acao[i])) for i in "AB"},
+    return {"par": nome, "n": n, "k0": k0, "acoes": {i: dict(Counter(acao[i])) for i in "AB"},
             "perto": {i: dict(perto[i]) for i in "AB"}, "longe": {i: dict(longe[i]) for i in "AB"},
             "junto": dict(junto), "toda": dict(toda), "depois_da_aproximacao": {i: dict(depois[i]) for i in "AB"},
             "fecha_a_distancia": dict(fecha), "distancia_hist": {str(k): c for k, c in sorted(hist.items())},
