@@ -73,7 +73,7 @@ PREFIXO = {"fumaca": "social_par", "piloto": "social_par_piloto", "run": "social
 BASES = {"piloto": (102101, 102202, 102303, 102404, 102505), "run": (101101, 101202, 101303, 101404, 101505)}     # 3.4, A0-8
 FAIXA = {"piloto": (102101, 102505), "run": (101101, 101505)}
 K_PILOTO = 20                                                 # 3.4, A0-7
-K_RUN = None                                                  # 6: o Matheus decide depois do piloto; None recusa a run
+K_RUN = 42                                                    # 6: DECIDIDO pelo Matheus em 2026-11-18 depois do piloto (D-SP-34)
 SAIDA = "artifacts_v3_social_par_a0/run"
 CONDICOES = pc.CONDICOES
 
