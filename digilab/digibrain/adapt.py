@@ -102,11 +102,12 @@ from dataclasses import dataclass
 
 from ..config import (COMPORTAMENTO_OLHAR, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_EQUILIBRIO_CUIDADO, CONFIG_LANCE_DONO, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_OLHAR,
                       CONFIG_PADRAO, CONTEUDOS_FALA, VERSAO_PET_DIGIBRAIN, Config, ConfigDigibrain, ConfigDigibrainInatos, ConfigElogio,
-                      ConfigAblacaoValuation, ConfigConsertoValuation, ConfigEnjooTela, ConfigEquilibrioCuidado, ConfigFalaUnidades, ConfigLanceDono, ConfigLutaMemoria, ConfigMundo, ConfigOlhar, ConfigSonoSegura)
+                      ConfigAblacaoValuation, ConfigConsertoValuation, ConfigEnjooTela, ConfigEquilibrioCuidado, ConfigFalaUnidades, ConfigLanceDono, ConfigLutaMemoria, ConfigMundo, ConfigOlfato, ConfigOlhar,
+                      ConfigPV2, ConfigSonoSegura)
 from ..events import AcaoPet, AcaoUsuario, LutaSemChave, resumo_luta
 from ..genoma_visao import GenomaVisao, genoma_visao
 from ..modelo_mundo import raiz_inteira
-from ..mundo import ACOES_COM_ALVO, Alvo
+from ..mundo import ACOES_COM_ALVO, CANDIDATOS_CHEIRO_ORGAO, Alvo
 from .base import div_arred, leitura_receptor, sinal_corpo
 from ..policy import Observacao, Transicao
 from ..protocol import derivar_semente
@@ -118,7 +119,7 @@ from .impulso import Impulso
 from .mem import Memoria, episodio_autobio, episodio_luta
 from .pers import FACETAS, SENTIDO, Personalidade
 from .plast import Plasticidade
-from .sens import COMIDAS_BOAS, Sens, classe_do_tipo
+from .sens import COMIDAS_BOAS, RECEPTORES_OLFATO_COMIDA, Sens, classe_do_tipo, leitura_do_orgao
 
 
 class DigibrainDesligado(RuntimeError):
@@ -163,11 +164,12 @@ def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: Co
                    cfg_lance: ConfigLanceDono | None = None, cfg_enjoo: ConfigEnjooTela | None = None,
                    cfg_equilibrio: ConfigEquilibrioCuidado | None = None,
                    cfg_ablacao: ConfigAblacaoValuation | None = None,
-                   cfg_conserto: ConfigConsertoValuation | None = None) -> Modulos:
+                   cfg_conserto: ConfigConsertoValuation | None = None, cfg_pv2: ConfigPV2 | None = None) -> Modulos:
+    dc = cfg_pv2 is not None and cfg_pv2.ligada
     return Modulos(sens=Sens(cfg, cm, inatos, cfg_olhar, genoma, cfg_enjoo), afeto=Afeto(cfg, cd, inatos, serie_e_doadora),
-                   estado=EstadoDinamico(cfg, cd, inatos), impulso=Impulso(inatos, cd, cfg_fala, cfg_olhar, cfg_lance, cfg_equilibrio, cfg_ablacao), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
+                   estado=EstadoDinamico(cfg, cd, inatos), impulso=Impulso(inatos, cd, cfg_fala, cfg_olhar, cfg_lance, cfg_equilibrio, cfg_ablacao, cfg_pv2=cfg_pv2), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
                                  None if semente is None else random.Random(derivar_semente(semente, "mem_emb")),
-                                 luta, cd.olhar), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem, cfg_sono, cfg_ablacao, cfg_conserto), plast=Plasticidade(cd, inatos),
+                                 luta, cd.olhar), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem, cfg_sono, cfg_ablacao, cfg_conserto), plast=Plasticidade(cd, inatos, dc_cheiro=dc),
                    pers=Personalidade(inatos.eta_faceta, inatos.teto_faceta, True) if cd.facetas_mem else None)
 
 
@@ -208,7 +210,8 @@ class DigiBrain:
                  cfg_lance: ConfigLanceDono | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None,
                  ir_ate_tv: bool = False, cfg_cooperacao=None, cfg_equilibrio: ConfigEquilibrioCuidado | None = None,
                  cfg_orgao=None, brasao: str | None = None, cfg_ablacao: ConfigAblacaoValuation | None = None,
-                 cfg_conserto: ConfigConsertoValuation | None = None, cfg_elogio: ConfigElogio | None = None) -> None:
+                 cfg_conserto: ConfigConsertoValuation | None = None, cfg_elogio: ConfigElogio | None = None,
+                 cfg_pv2: ConfigPV2 | None = None, cfg_olfato: ConfigOlfato | None = None) -> None:
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         if not self.cd.ligada:
             raise DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada")
@@ -250,9 +253,23 @@ class DigiBrain:
                 if not self.cd.olhar:
                     raise ValueError("a ConfigEnjooTela ligada so com a subchave olhar (D-GV-ENJOO-CER)")
                 self.ce = cfg_enjoo_tela
+        # o PV-2 (docs/PLANO_ANALISE_V3_PET_VIVO_PV2.md, secao 3): so com a ConfigOlfato da comida ligada, duas narinas; desligado, nada muda
+        self.pv2: ConfigPV2 | None = None
+        if cfg_pv2 is not None:
+            if not isinstance(cfg_pv2, ConfigPV2):
+                raise TypeError(f"cfg_pv2 e uma ConfigPV2: {cfg_pv2!r}")
+            if cfg_pv2.ligada:
+                if not isinstance(cfg_olfato, ConfigOlfato) or not (cfg_olfato.ligada and cfg_olfato.comida and cfg_olfato.narinas == 2):
+                    raise ValueError(f"o PV-2 pede a ConfigOlfato da comida ligada, com duas narinas (a do corpo): {cfg_olfato!r}")
+                self.pv2 = cfg_pv2
+        if self.pv2 is None and cfg_olfato is not None:
+            raise ValueError("a ConfigOlfato vai ao cerebro so com o PV-2 ligado")
         self.m = montar_modulos(self.cfg, self.cd, self.cm, self.inatos, serie_e_doadora, semente, self.luta_memoria, cfg_fala,
                                 self.co, self.genoma_visao, cfg_sono=cfg_sono, cfg_lance=self.cl, cfg_enjoo=self.ce,
-                                cfg_equilibrio=self.ceq, cfg_ablacao=cfg_ablacao, cfg_conserto=cfg_conserto)
+                                cfg_equilibrio=self.ceq, cfg_ablacao=cfg_ablacao, cfg_conserto=cfg_conserto, cfg_pv2=self.pv2)
+        if self.pv2 is not None:                      # o limiar do cheiro forte do explorar, pela conta do orgao (a mesma do motor)
+            self.m.sens.ligar_olfato(leitura_do_orgao(self.cm.limiar_cheiro_explorar, cfg_olfato, self.S))
+            self.executor = {"A": 0, "varrer": 0, "viradas": 0, "piruetas": 0, "seguidas": 0}
         # o orgao da visao (OV2): so com a subchave olhar e a ConfigOrgao ligada; o mito, so com o brasao do pet. Desligado, nada muda
         self.cor = None
         self._conceitos: tuple | None = None          # os conceitos entregues pelo motor para a decisao seguinte (None: nao entregues)
@@ -373,6 +390,8 @@ class DigiBrain:
                else m.arb.escolher(unidades, afeto, sens, rng, reflexo, segurar, sem_brincar=guarda))
         self._conferir_desligadas(unidades)
         unidade = esc["unidade"]
+        if self.pv2 is not None and unidade["tipo"] != "cheiro":   # o PV-2: a corrida pelo cheiro acabou; o acumulador e a varredura zeram
+            self.executor["A"], self.executor["varrer"] = 0, 0
         fins = fins_susp + fins_passeio + m.estado.escolhida(unidade, z, afeto["g_apr"], k, reflexo)
         if cd.redecidir_evento:                       # a C3: o candidato fora da lista (ou com peso 0) e o E-FIM (RE-2)
             evento = evento + (["E-FIM"] if esc["fora"] else [])
@@ -439,6 +458,9 @@ class DigiBrain:
         if cd.memoria_autobio:                        # a C4: o que o episodio completo le no fechamento
             self._pendencia.update({"tick": tick, "afeto": {"V": afeto["V"], "E": afeto["E"]},
                                     "gestos": self._gestos})
+        if self.pv2 is not None:                      # o PV-2: desligado, nenhum campo novo
+            o = sens["olfato"]
+            self.motivos[-1]["olfato"] = {"c": o["c"], "dC": o["dC"], "forte": o["forte"], "nivel": m.impulso.nivel_cheiro(sens, afeto)}
         if self.cel is not None:                      # o elogio: a decisao entra na janela (com o z que comecou a opcao dela)
             self._recentes = (self._recentes + [{"p": self._pendencia, "e": list(z)}])[-self.cel.janela:]
         self._gestos = []
@@ -606,6 +628,11 @@ class DigiBrain:
                 self.motivos[-1]["alvo"]["do_passeio"] = it.passeio
             p["alvo"] = alvo
             return alvo
+        if self.pv2 is not None and it.tipo_alvo == "cheiro":     # o PV-2: o executor da busca escolhe entre os candidatos do orgao
+            alvo = self._executar_cheiro(candidatos, p["sens"]["olfato"]["dC"], u)
+            self.motivos[-1]["alvo"] = {**alvo.para_dict(), "do_mem": False}
+            p["alvo"] = alvo
+            return alvo
         alvo = next((c for c in candidatos if c.tipo == it.tipo_alvo and (it.id_alvo is None or c.id == it.id_alvo)), None)
         if alvo is None:
             raise ValueError(f"o alvo da intencao ({it.tipo_alvo}, {it.id_alvo}) nao esta entre os candidatos do motor: "
@@ -677,6 +704,47 @@ class DigiBrain:
         resumo_luta(tick, rival, resultado, vida_perdida_s)       # a validacao do evento (rival, resultado, vida perdida)
         self._lutas.append({"rival": rival, "resultado": resultado, "vida_perdida_s": vida_perdida_s, "tick": tick})
 
+    # ------------------------------------------------------------ o PV-2 (so com a ConfigPV2 ligada)
+    def _executar_cheiro(self, candidatos: list, dc: int, u: int):
+        """O executor da busca pelo cheiro (PV2-2; a forma dos bracos na ConfigPV2): escolhe entre o `cheiro_seguir` e o `cheiro_virar` do
+        motor. O cerebro nunca le o lado: quem vira para a narina mais forte e o motor (PV2-3). O OLF-0 toma o preferido do motor (o
+        primeiro); os outros seguem, salvo na pirueta (o acumulador da queda passando de L; no placebo, os bits baixos do u) e na
+        varredura que a continua."""
+        orgao = [c for c in candidatos if c.tipo in CANDIDATOS_CHEIRO_ORGAO]
+        tipos = sorted(c.tipo for c in orgao)
+        if tipos != sorted(CANDIDATOS_CHEIRO_ORGAO):
+            raise ValueError(f"o PV-2: a busca pelo cheiro sem os dois candidatos do orgao: {[(c.tipo, c.id) for c in candidatos]}")
+        seguir = next(c for c in orgao if c.tipo == "cheiro_seguir")
+        virar = next(c for c in orgao if c.tipo == "cheiro_virar")
+        ex, pv = self.executor, self.pv2
+        if pv.braco == "OLF-0":
+            alvo, fase = orgao[0], "preferido"
+        elif ex["varrer"] > 0:                        # a varredura: continua virando para a narina mais forte
+            ex["varrer"] -= 1
+            alvo, fase = virar, "varredura"
+        else:
+            if pv.braco == "OLF-PLA":                 # o placebo: a hora sorteada pelos bits baixos do u do motor, sem ler o A
+                pirueta = (u & 0xFF) < pv.taxa_placebo
+            else:                                     # o acumulador da queda (o dC < 0 soma; subir ou ficar zera)
+                ex["A"] = ex["A"] - dc if dc < 0 else 0
+                pirueta = ex["A"] >= pv.l_pirueta
+            if pirueta:
+                ex["A"] = 0
+                ex["piruetas"] += 1
+                ex["varrer"] = 0 if pv.braco == "OLF-DC" else pv.n_varredura
+                alvo, fase = virar, "pirueta"
+            else:
+                alvo, fase = seguir, "seguir"
+        ex["viradas" if alvo.tipo == "cheiro_virar" else "seguidas"] += 1
+        self.motivos[-1]["pv2"] = {"dC": dc, "A": ex["A"], "varrer": ex["varrer"], "fase": fase, "escolheu": alvo.tipo}
+        return alvo
+
+    def _ha_cheiro_depois(self, pc1, pm1) -> bool:
+        """se ha cheiro depois da consequencia: o oraculo do mundo hoje; com o PV-2, alguma narina acima de 0 (a regra do motor)"""
+        if self.pv2 is None:
+            return pm1.direcao_cheiro != 0
+        return max(getattr(pc1, r) for r in RECEPTORES_OLFATO_COMIDA) > 0
+
     def estado_interno(self) -> dict:
         out = {"nome": self.nome, "versao_pet": self.versao_pet, "k": self.k, "pendente": self._pendencia is not None,
                "gestos": dict(sorted(self.gestos.items())), "modulos": {nome: mod.estado_interno() for nome, mod in self.m.itens()
@@ -684,6 +752,8 @@ class DigiBrain:
                "motivos": self.motivos}
         if self.m.sens.social is not None:            # a CO6 (o M-SENS leu a reputacao e o peso dos deveres): desligada, o estado de hoje
             out["social"] = {"reputacao": dict(self.m.sens.social["reputacao"]), "peso_dever": self.m.sens.social["peso_dever"]}
+        if self.pv2 is not None:                      # o PV-2: desligado, nenhum campo novo
+            out["pv2"] = {"braco": self.pv2.braco, "executor": dict(self.executor)}
         if self.cel is not None:                      # o elogio: desligado, nenhum campo novo
             out["elogio"] = {"ganho": self.cel.ganho, "janela": self.cel.janela, "elogios": self.elogios}
         if self.cd.olhar:                             # o olhar (P1d): desligada, o estado e o de hoje, byte a byte
@@ -805,7 +875,7 @@ class DigiBrain:
             px, py = chave[2]
             d = raiz_inteira((px - pos1[0]) * (px - pos1[0]) + (py - pos1[1]) * (py - pos1[1]))
         fins = m.estado.consequencia(cons["r_n"], ocorrido, {
-            "visto": visto, "d": d, "ha_cheiro": pm1.direcao_cheiro != 0,
+            "visto": visto, "d": d, "ha_cheiro": self._ha_cheiro_depois(pc1, pm1),
             "comida_boa_vista": any(classe_do_tipo(v[1]) in COMIDAS_BOAS for v in pm1.vistos)})
         creditos = _creditar(m.plast, fins, self.cd)
         episodio = None

@@ -340,3 +340,28 @@ Pedido do Matheus: "Sim, a ilha 3D" (em resposta a "Faço agora o cais na ilha 3
   tela; sem a chave, nada do cais.
 - **Não feito:** o foco de luz no chão do cais aberto (a hierarquia de luz é montada uma vez, no carregamento); a viagem da câmera até
   o cais; o brilho de "acabou de abrir" não foi visto no navegador. Os desvios estão no registro (D-CONTA-134 a 137).
+
+## 21. MMO5: o e2e do cais (2026-11-18)
+
+Pedido do Matheus: "Sim, o e2e" (em resposta a "Faço agora o e2e do cais com o servidor falso?"). Branch `v3-mmo5-cais-e2e`. Só teste:
+nenhum arquivo de `web/app/src` nem do motor muda.
+
+- **Por que um e2e à parte:** o `npm run e2e` roda o build sem a chave do servidor, onde o cais não existe. O e2e novo monta outro build,
+  com a `VITE_DIGILAB_API`, em `web/dist_conta/` (não versionado), e o serve pelo servidor local. O `web/dist/` e o e2e do jogo não mudam.
+- **O comando:** `cd web/app && npm run e2e:conta` (`playwright.conta.config.ts`, pasta `e2e_conta/`, porta 8801 ou
+  `DIGILAB_PORTA_E2E_CONTA`).
+- **O servidor falso:** o `servidor_web` não sobe. Cada teste responde as rotas das semanas com o `page.route`, num caminho da mesma
+  origem da página (`/api_falsa`). Nenhum endereço de servidor de verdade e nenhuma chave entram no repositório.
+- **O que o `e2e_conta/cais.spec.ts` cobre** (6 testes, o Champion de `e2e/saves.json`, o relógio da página parado numa quarta-feira):
+  - trancado, a 1920 px: a marca tracejada do minimapa, o cadeado "Nv 10" sobre o cais, e o cadeado e o endereço `#/cais` abrindo o
+    cartão do motivo, sem nenhuma chamada ao servidor;
+  - aberto, a 1920 px: a semana, a tabela do estágio do pet, a linha de quem olha depois do salto, "Ver todas", os outros estágios,
+    "Atualizar", a semana fechada com o resultado, "Conferir a semana" (o segredo) e "Ir para a Arena";
+  - sem a conta (401) e sem resposta (a rede fora), e a volta com "Tentar de novo";
+  - a folha do celular (390 px): 6 linhas, sem a coluna das lutas, sem rolagem de lado;
+  - trancado no celular: o endereço abre o cartão do motivo;
+  - o cartão de destrave do nível 10 e o "Ir" dele.
+- **Resultado:** os 6 passaram, em duas rodadas seguidas. `web/app`: os tipos e o `npm test` como antes (nenhum teste novo no Vitest).
+- **Fora do e2e:** o brilho de "acabou de abrir" (pede um save de Mega, que o `e2e/saves.json` não tem), o toque no modelo 3D do cais,
+  "Ver a semana" na Arena (pede o servidor falso da luta ranqueada), a tela da conta e a luta ranqueada. O e2e fica fora do CI, como o
+  do jogo (D-IA-3). O desvio está no registro (D-CONTA-138).

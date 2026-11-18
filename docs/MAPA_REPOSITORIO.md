@@ -152,6 +152,9 @@ As seções acima são cópias inteiras do CLAUDE.md antigo (o G-NADA-PERDIDO co
   apagar), `web/app/src/conta/apiDoBuild.ts` (`VITE_DIGILAB_API`, `VITE_DIGILAB_TERMOS`, `VITE_DIGILAB_PRIVACIDADE`),
   `web/app/src/telas/config/TelaConta.tsx` e `web/app/src/estilo/conta.css` (a parte Conta dos Ajustes, `#/config/conta`),
   `web/app/test/conta.test.ts`. Só liga com `VITE_DIGILAB_API` no build.
+- **2026-11-18, MMO5, o e2e do cais:** `web/app/playwright.conta.config.ts` e `web/app/e2e_conta/` (`comum.ts`, `montar.ts`,
+  `cais.spec.ts`): o build com `VITE_DIGILAB_API` em `web/dist_conta/` e o servidor falso por `page.route`. Comando:
+  `cd web/app && npm run e2e:conta`.
 - **2026-11-18, MMO5, o cais na ilha 3D:** `web/app/src/trancas.ts` (`CAIS`), `src/componentes/CadeadoDoCais.tsx`, a marca do cais em
   `src/telas/pet/Minimapa.tsx` e o modelo apagado em `src/telas/pet/ilha/vista.ts`. Só com `VITE_DIGILAB_API` no build.
 - **2026-11-17, MMO5, a tela do cais:** `web/app/src/cais/cais.ts` (o cliente das rotas da semana), `src/telas/cais/TelaCais.tsx` e
