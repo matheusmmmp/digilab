@@ -8,7 +8,7 @@
 import type { EventoRegistro } from "../../motor/index.ts";
 
 /** o corpo do POST /sementes */
-export interface PedidoSemente { pet: { semente: number; versao: number }; indice: number; hash: string }
+export interface PedidoSemente { pet: { semente: number; versao: number }; indice: number; hash: string; rival: string; mapa: string | null }
 
 /** o SHA-256 do JSON dos `indice` primeiros eventos do registro */
 export async function hashAte(log: readonly EventoRegistro[], indice: number): Promise<string> {
@@ -18,7 +18,9 @@ export async function hashAte(log: readonly EventoRegistro[], indice: number): P
   return Array.from(d, b => b.toString(16).padStart(2, "0")).join("");
 }
 
-/** o pedido para a proxima luta do pet: o indice e o fim do registro de agora */
-export async function pedidoDaSemente(pet: { semente: number; versao: number; log: readonly EventoRegistro[] }): Promise<PedidoSemente> {
-  return { pet: { semente: pet.semente, versao: pet.versao }, indice: pet.log.length, hash: await hashAte(pet.log, pet.log.length) };
+/** o pedido para a proxima luta do pet: o indice e o fim do registro de agora. O rival e o mapa vao no pedido (D-CONTA-116): o jogador
+    escolhe antes de a semente chegar, e a luta com outro rival ou outro mapa nao conta */
+export async function pedidoDaSemente(pet: { semente: number; versao: number; log: readonly EventoRegistro[] }, rival: string, mapa: string | null): Promise<PedidoSemente> {
+  if (!rival) throw new Error("o pedido da semente pede o rival");
+  return { pet: { semente: pet.semente, versao: pet.versao }, indice: pet.log.length, hash: await hashAte(pet.log, pet.log.length), rival, mapa };
 }

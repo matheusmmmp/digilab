@@ -26,7 +26,7 @@ function tamerCom(n: number): { versao: number; log: unknown[] } {
   return { versao: VERSAO_TAMER, log: JSON.parse(JSON.stringify(t.log)) };
 }
 const pet = (log: Evento[]) => ({ semente: VIDA.semente, log, versao: VIDA.versao });
-const pedido = () => ({ pet: { semente: VIDA.semente, versao: VIDA.versao }, indice: K, hash: sha(VIDA.log.slice(0, K)) });
+const pedido = () => ({ pet: { semente: VIDA.semente, versao: VIDA.versao }, indice: K, hash: sha(VIDA.log.slice(0, K)), rival: LUTA[2].r, mapa: LUTA[2].m ?? null });
 
 const SEMANA = "2026-11-16", SEGUINTE = "2026-11-23";
 let M: Montado, nav: Navegador, csrf: string;
@@ -56,7 +56,7 @@ const ROOKIE_A = "brasa_crianca_sereno", ROOKIE_B = "cirro_crianca_arisco", CHAM
 
 describe("o banco", () => {
   it("a migração 4 é a última, e as colunas novas nascem vazias", () => {
-    expect(VERSAO_BANCO).toBe(4);
+    expect(VERSAO_BANCO).toBe(5);
     expect(MIGRACOES[3]).toContain("tabelas_semana");
     expect(contar(M.banco, "tabelas_semana")).toBe(0);
   });

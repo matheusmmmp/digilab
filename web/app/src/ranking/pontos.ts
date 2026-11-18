@@ -25,11 +25,16 @@ export const FUSO_BRASILIA_MS = -3 * 3600_000;
 const DIA_MS = 86_400_000;
 
 /** uma semente que o servidor entregou: a semente, o tamanho do registro do pet no pedido e a hora do servidor (ms UTC) */
-export interface SementeEntregue { semente: number; indice: number; hora: number }
+export interface SementeEntregue {
+  semente: number; indice: number; hora: number;
+  /** o rival e o mapa que o pedido prometeu (D-CONTA-116): a luta com outro rival ou outro mapa nao e a luta pedida. Ausente numa
+      semente de antes da regra: nada a conferir */
+  rival?: string; mapa?: string | null;
+}
 /** o que aconteceu com a semente entregue */
 export type Situacao =
   | "vitoria" | "derrota"
-  | "nao_enviada"     // o registro ja passou do indice e o evento ali nao e esta luta: conta como derrota
+  | "nao_enviada"     // o registro ja passou do indice e o evento ali nao e esta luta (outra semente, outro rival ou outro mapa): conta como derrota
   | "pendente"        // o registro ainda nao chegou ao indice: 0 por enquanto (o servidor fecha como derrota no fim da semana)
   | "fora_da_arena"   // a semente foi gasta na Fronteira ou na Campanha: 0
   | "acima_do_limite"; // a 11a semente do dia em diante: nao conta
@@ -72,7 +77,7 @@ export function lutasRanqueadas(semente: number, versao: number, log: readonly E
 export function refazerComLutas(semente: number, versao: number, log: readonly EventoRegistro[], entregues: readonly SementeEntregue[]): { lutas: LutaRanqueada[]; motor: Motor } {
   const vistas = new Set<number>();
   entregues.forEach((x, k) => {
-    if (!Number.isInteger(x.semente) || !Number.isInteger(x.indice) || x.indice < 0 || !Number.isFinite(x.hora))
+    if (!Number.isInteger(x.semente) || !Number.isInteger(x.indice) || x.indice < 0 || !Number.isFinite(x.hora) || (x.rival === undefined && x.mapa != null))
       throw new Error(`semente entregue inválida: ${JSON.stringify(x)}`);
     if (vistas.has(x.semente)) throw new Error(`semente entregue duas vezes: ${x.semente}`);
     vistas.add(x.semente);
@@ -81,10 +86,10 @@ export function refazerComLutas(semente: number, versao: number, log: readonly E
   /* o estagio do pet em cada indice pedido e o resultado da luta que esta nele, refazendo o registro uma vez */
   const pedidos = new Map<number, SementeEntregue[]>();
   for (const x of entregues) pedidos.set(x.indice, [...(pedidos.get(x.indice) ?? []), x]);
-  const noIndice = new Map<number, { estagio: string; venceu: boolean | null; rival: string | null; s: number | null; vida: number | null }>();
+  const noIndice = new Map<number, { estagio: string; venceu: boolean | null; rival: string | null; mapa: string | null; s: number | null; vida: number | null }>();
   const m = new Motor(semente, versao);
   for (let i = 0; i <= log.length; i++) {
-    let venceu: boolean | null = null, rival: string | null = null, s: number | null = null, vida: number | null = null;
+    let venceu: boolean | null = null, rival: string | null = null, mapa: string | null = null, s: number | null = null, vida: number | null = null;
     const estagio = NIVEL_DO_ESTAGIO[m.estagioAtual];
     if (i < log.length) {
       const ev = log[i];
@@ -92,10 +97,10 @@ export function refazerComLutas(semente: number, versao: number, log: readonly E
         /* a luta pelo lutarPoc, para ler o resultado; o tick e conferido aqui, como no aplicarEvento */
         if (ev[0] !== m.e.tick) throw new Error(`registro fora de ordem no tick ${ev[0]}`);
         const r = m.lutarPoc(ev[2].r, ev[2].s, (ev[2].m ?? null) as IdCena | null);   // o mapa do registro; o lutarPoc o confere
-        venceu = r.venceu; rival = ev[2].r; s = ev[2].s; vida = r.serie.length ? r.serie[r.serie.length - 1].vidaA : null;
+        venceu = r.venceu; rival = ev[2].r; mapa = ev[2].m ?? null; s = ev[2].s; vida = r.serie.length ? r.serie[r.serie.length - 1].vidaA : null;
       } else m.aplicarEvento(ev);
     }
-    if (pedidos.has(i)) noIndice.set(i, { estagio, venceu, rival, s, vida });
+    if (pedidos.has(i)) noIndice.set(i, { estagio, venceu, rival, mapa, s, vida });
   }
   /* as sementes do dia, na ordem: a 11a em diante fica acima do limite */
   const porDia = new Map<string, number>();
@@ -107,6 +112,8 @@ export function refazerComLutas(semente: number, versao: number, log: readonly E
     if (x.indice >= log.length) return { ...base, situacao: "pendente" as const, estagio: x.indice === log.length ? noIndice.get(x.indice)!.estagio : null };
     const o = noIndice.get(x.indice)!;
     if (o.s !== x.semente) return { ...base, situacao: "nao_enviada" as const, estagio: o.estagio };
+    /* a luta tem a semente, mas nao e a que o pedido prometeu: o rival ou o mapa foram trocados depois de a semente chegar */
+    if (x.rival !== undefined && (o.rival !== x.rival || o.mapa !== (x.mapa ?? null))) return { ...base, situacao: "nao_enviada" as const, estagio: o.estagio };
     const faixa = DIGIMON_DA_FORMA[o.rival!]?.[1] ?? null;
     if (faixa === null || PONTOS_FAIXA[faixa] === undefined) return { ...base, situacao: "fora_da_arena" as const, rival: o.rival, estagio: o.estagio };
     return { ...base, situacao: o.venceu ? "vitoria" as const : "derrota" as const, rival: o.rival, faixa, estagio: o.estagio, vidaFinal: o.vida };

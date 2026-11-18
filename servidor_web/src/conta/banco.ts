@@ -156,6 +156,12 @@ export const MIGRACOES: readonly string[] = [
   ) STRICT;
   CREATE INDEX tabelas_semana_conta ON tabelas_semana(conta_id);
   `,
+  /* 5: o rival e o mapa que o pedido da semente prometeu (D-CONTA-116): a luta com outro rival ou outro mapa não é a luta pedida. NULL
+     no rival: a semente é de antes da regra, e nada se confere */
+  `
+  ALTER TABLE sementes ADD COLUMN rival_pedido TEXT;
+  ALTER TABLE sementes ADD COLUMN mapa_pedido TEXT;
+  `,
 ];
 
 export const VERSAO_BANCO = MIGRACOES.length;
