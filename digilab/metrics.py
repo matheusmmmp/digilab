@@ -3277,6 +3277,17 @@ def tempo_ate_raio(dists: Sequence[int], raio: int, desde: int, janela: int) -> 
     return fim - 1 - desde, True
 
 
+def tempo_restrito(dists: Sequence[int], raio: int, desde: int, janela: int) -> int:
+    """o T* do A0 (docs/PLANO_ANALISE_V3_SOCIAL_PAR_A0.md, secao 4, item 3): o tempo ate o raio, ou a janela inteira se nao chegou. A serie
+    tem de cobrir a janela inteira (o `desde` mais `janela` decisoes), senao a censura no fim da serie daria um tempo menor que a janela, e
+    a funcao falha alto."""
+    d = _serie_de_inteiros("tempo_restrito", dists)
+    if type(janela) is not int or janela <= 0 or not 0 <= desde or desde + janela >= len(d):
+        raise ValueError(f"tempo_restrito: a janela de {janela!r} decisoes depois de {desde!r} nao cabe na serie de {len(d)}")
+    t, censurado = tempo_ate_raio(d, raio, desde, janela)
+    return janela if censurado else t
+
+
 def episodios_em_raio(dists: Sequence[int], raio: int) -> list[int]:
     """as duracoes (em decisoes) de cada trecho seguido com a distancia <= `raio`, na ordem"""
     out, corrida = [], 0

@@ -110,7 +110,9 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              # DigiBrain das vidas do pv2.py (D-PV2R-1)
                                                                              "experiments/run_v3_pet_vivo_pv2.py",
                                                                              # ELOGIO, etapas 4 e 5: o orquestrador da calibracao e da validacao
-                                                                             "experiments/run_v3_elogio.py"}
+                                                                             "experiments/run_v3_elogio.py",
+                                                                             # SOCIAL_PAR, A0 (D-SP-29): o orquestrador monta o pet de hoje (o modular com a CO7)
+                                                                             "experiments/run_v3_social_par_a0.py"}
 
 
 def test_o_digibrain_so_existe_com_a_chave_ligada_e_e_a_v13():
