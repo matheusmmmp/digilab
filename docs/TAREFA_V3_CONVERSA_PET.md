@@ -722,5 +722,5 @@ gate.
 - **O achado:** pela rede, o servidor verifica antes de devolver a fala, e o jogo verifica de novo depois do balão. O resto da espera,
   depois da geração, é de 4,4 s no G e de 5,1 s no H (D-ES-C).
 - **O código:** a `decomposicao` em `experiments/resumo_espera_f2.py`, com 2 testes novos.
-- **A decisão pendente:** a D-ES-4 (a saída), com a saída nova (0), o balão sem esperar a verificação.
+- **A D-ES-4, DECIDIDA pelo Matheus em 2026-11-18:** a saída (0) primeiro, o balão sem esperar a verificação ("Yes, option (0)").
 - **Os desvios:** D-ES-C e D-ES-D, em `docs/registro/2026-11.md`.

@@ -84,7 +84,9 @@ O levantamento da seção 6 do plano não tinha esta saída, porque partia de um
   **3 s no H**. É uma estimativa. Só a medida de novo diz.
 - Ela também acaba com as duas verificações de sementes diferentes: fica uma só, a que o jogador já vê.
 
-RECOMENDAÇÃO, para o Matheus decidir (D-ES-4):
+**D-ES-4, DECIDIDA pelo Matheus em 2026-11-18:** a pergunta foi "D-ES-4: do I take option (0), the balloon not waiting for the verification, first?", e a resposta, "Yes, option (0)" (no chat da Gerente das cinco frentes). A ordem abaixo fica como estava.
+
+RECOMENDAÇÃO (D-ES-4):
 1. **(0) primeiro,** atrás de uma chave e com a medida do G e do H de novo. Ela é barata, local, e não troca o modelo nem a fidelidade.
 2. **A API em Ajustes,** depois da DC5d, se ela disser que o H é fiel. Com a (0), o H ficaria perto de 3 s.
 3. **A pré-geração** para a espontânea e para a primeira fala da conversa, como no plano. Ela não resolve a resposta a uma frase do jogador.
