@@ -2,7 +2,7 @@
 
 Coordenador: Gerente da V3 (Claude Code). Worker da etapa 1: Claude Code, Opus 5.5 (método), worktree `v3-elogio`. Status: **ABERTA; etapa 1
 (só papel) ENTREGUE; D-EL-1 a D-EL-8 (seção 8) DECIDIDAS em 2026-11-16, pela recomendação ("Aprovo todas"). Etapa 2 (código) ENTREGUE (seção 10): a leitura achou
-que o cenário da D-EL-1 não roda no modular (seção 9); D-EL-9 a D-EL-13 DECIDIDAS em 2026-11-17 ("Aprovo todas").**
+que o cenário da D-EL-1 não roda no modular (seção 9); D-EL-9 a D-EL-13 DECIDIDAS em 2026-11-17 ("Aprovo todas"). Etapa 3 (plano) PROPOSTA em 2026-11-17: `docs/PLANO_ANALISE_V3_ELOGIO.md`, parado no CHECKPOINT EL-3 com D-EL-18 a D-EL-24.**
 
 Categoria: arquitetura (depois, implementacao e experimento). Origem: Matheus, 2026-11-16: "logo após o pet fazer alguma ação [...] se a gente
 usar [...] o carinho, ou o elogiar logo após aquela ação, vai dar um boost maior de ele entender que aquilo é uma coisa boa". Com o pedido de
@@ -198,3 +198,14 @@ dono é igual ao intervalo da decisão (15 ticks): o carinho do primeiro passo d
 - **O P0 passa** nas vidas dos testes: o modular lê a solidão e o estresse, e todo carinho dá sinal diferente de 0.
 - **Para a etapa 3:** nas vidas de 6 dias dos testes, o pet comeu a fruta X de 1 a 17 vezes. Os 12 dias da D-EL-9 e o critério do M1 (10
   frutas) precisam ser conferidos no plano, antes da faixa.
+
+## 11. Etapa 3: o plano de análise (2026-11-17)
+
+O plano é o [PLANO_ANALISE_V3_ELOGIO.md](PLANO_ANALISE_V3_ELOGIO.md), PROPOSTO e parado no CHECKPOINT EL-3. Uma sonda nas sementes dos
+testes (`experiments/sonda_elogio_plano.py`) decidiu o desenho:
+- os 12 dias da D-EL-9 bastam para a M2;
+- 36 dias diluem o efeito;
+- o M1 quase não fecha e vira descritivo;
+- a premissa P1 (a natural) não aparece na escolha da fruta.
+
+A faixa proposta é 25101 a 25505. As medidas entram no `digilab/metrics.py`, e a faixa no `faixas.py`, depois do sim às D-EL-18 a D-EL-24.
