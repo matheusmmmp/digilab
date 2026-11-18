@@ -209,7 +209,10 @@ FAIXAS_RESERVADAS = (
                    "\"Aprovo, pode rodar\"; conferida livre na origin/main e em todos os branches remotos em 2026-11-16)"),
     (25101, 25505, "ELOGIO, o credito do carinho no modular: a calibracao 25101...25200 (100 unidades, a grade g x W) e a validacao "
                    "25301...25500 (200 unidades, uma vez) (docs/PLANO_ANALISE_V3_ELOGIO.md, secoes 5 e 6; D-EL-22, aprovada pelo Matheus em "
-                   "2026-11-18, \"Aprovo todas\"; conferida livre no faixas.py da origin/main e dos branches remotos em 2026-11-18)"),
+                   "2026-11-18, \"Aprovo todas\"; conferida livre no faixas.py da origin/main e dos branches remotos em 2026-11-18)"),    (100101, 100505, "CORPO_ACOPLAMENTO, a opcao D (a falta de combustivel sobe a fome): a run unica, REL e D nas 12 celulas da C4 x 200 "
+                     "unidades (docs/PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md, secao 4; D-CA-10, aprovada pelo Matheus em 2026-11-18, "
+                     "\"Aprovo, siga\"; bases 100101, 100202, 100303, 100404 e 100505, K = 40; conferida livre no faixas.py, nas configs, "
+                     "nos planos, nas tarefas, nos resultados e nos orquestradores de todos os branches remotos em 2026-11-18)"),
 )
 
 
