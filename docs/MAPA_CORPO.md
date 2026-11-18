@@ -1,6 +1,7 @@
 # MAPA DO CORPO — fome, energia e as ações que as satisfazem (C0)
 
-**Status: PROPOSTO.** Espera o "aprovado" do Matheus no CHECKPOINT C1. Nenhum código mudou, e nenhuma vida rodou para este documento.
+**Status: APROVADO pelo Matheus em 2026-11-18** ("Aprovado", no CHECKPOINT C1): o mapa e a prioridade da seção 8. Nenhum código mudou, e
+nenhuma vida rodou para este documento.
 
 Escrito em 2026-11-18 por Claude Code (Opus 5.5, sessão lateral da CORPO_ACOPLAMENTO), no branch `v3-corpo-mapa`, sobre a `origin/main` em
 **`8c6d17ae`** (o merge do #996). As linhas citadas são desse commit. Os números de comportamento vêm da sonda da etapa 1 da
@@ -213,7 +214,7 @@ O custo conta as linhas de código e os arquivos tocados, sem os testes e os gab
 | **D. a falta de combustível sobe a fome, não o cansaço** | a ponte ME-1 troca de alvo: abaixo de C/4, +500 na fome em vez de +500 no cansaço | a coincidência cai, porque a maior fonte de cansaço some; a fome sobe mais quando o combustível falta, e o teto da conversão sobe com ela | **já está atrás da chave** (`ConfigAcoplamentoCorpo`, #995). Na sonda, as decisões com as duas caíram 30 % (0,150 → 0,105 das decisões), mas a fração condicional não (0,759 → 0,761), e o pet dormiu menos (0,465 → 0,375 dos ticks). **A run com o plano aprovado está rodando** (o `PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md`, faixa 100101…100505) | feito: 1 linha do grafo em cada língua |
 | **E. a digestão converte a comida inteira** | o alimento vai ao combustível pela quantidade comida; a fome cai como hoje | o déficit quase fecha: 1,041 + 0,386 = 1,427 contra 1,467 C por dia; a ponte liga menos no pet que come | a ponte segue ligada no pet que não come (o `longe_fixo`). Fecha o déficit sem tirar a ponte, então combina com a D | médio: ~30 linhas, 4 arquivos; a contabilidade do metabolismo muda |
 
-## 8. A prioridade (PROPOSTA)
+## 8. A prioridade (APROVADA no CHECKPOINT C1)
 
 O critério é o triplo do pedido: o forrageio, o bem-estar (a privação e a exaustão) e o substrato social. A ordem vem do mapa e da sonda,
 sem simular.
