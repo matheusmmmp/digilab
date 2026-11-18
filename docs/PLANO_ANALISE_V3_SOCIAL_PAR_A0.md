@@ -1,13 +1,15 @@
 # Plano de análise V3: SOCIAL_PAR A0 e B0, o parceiro que responde no pet de hoje
 
-**Status: PROPOSTO.** Escrito em 2026-11-17 (Claude Code, Opus 5.5, na sessão com o Matheus, branch `v3-social-par-a0`). Nenhuma vida
-roda, nem a do piloto, antes de quatro coisas:
+**Status: APROVADO pelo Matheus em 2026-11-17,** com as A0-1 a A0-10 DECIDIDAS pela recomendação: "Aprovo todas", nesta sessão. Escrito
+em 2026-11-17 (Claude Code, Opus 5.5, na sessão com o Matheus, branch `v3-social-par-a0`). Nenhuma vida roda, nem a do piloto, antes de
+quatro coisas:
 1. este plano commitado na `main`, com a marca de aprovação do Matheus no cabeçalho;
 2. as decisões A0-1 a A0-10 (seção 10) DECIDIDAS;
 3. as duas faixas na `FAIXAS_RESERVADAS` (`experiments/bancada/faixas.py`), num commit próprio;
 4. o código da seção 4 na `main`, com os gates dele passando.
 
-Os números novos daqui são **PROPOSTOS e SEM FONTE**, salvo onde dito.
+Os números novos daqui ficam **DECIDIDOS com a aprovação e seguem SEM FONTE**, salvo onde dito. O N e o K ficam para depois do piloto
+(seção 6).
 
 **De onde vem:**
 - a investigação `docs/INVESTIGACAO_V3_SOCIAL_PAR.md`: os experimentos A (seção 3.1) e B (seção 3.2), o esqueleto de validade (seção 4) e a
@@ -96,7 +98,7 @@ Cada par (a semente do grupo) vive cinco vidas, sempre na mesma semente:
 ### 3.4 As sementes e as faixas
 
 Conferidas em 2026-11-17: não aparecem em `experiments/bancada/faixas.py`, em `docs/` nem em `experiments/` da `origin/main`, nem na
-história de nenhum branch remoto. **As duas estão a confirmar com o coordenador** (A0-8) antes de entrar na tabela.
+história de nenhum branch remoto. **As duas estão confirmadas pelo Matheus** (A0-8, 2026-11-17) e entram na tabela no PR do código (seção 4, item 1).
 - **O piloto: 102101…102505.**
   - Bases 102101, 102202, 102303, 102404 e 102505; 20 pares por base, 100 pares.
   - Derivação: `unidades_derivadas(bases, 20, prefixo="social_par_piloto")`.
@@ -270,7 +272,7 @@ As classes de S2 e S3 usam o IC e o sinal, sem margem.
   - o resultado no `docs/RESULTADO_V3_SOCIAL_PAR_A0.md`;
   - os desvios em `docs/registro/2026-11.md`.
 
-## 10. As decisões do Matheus
+## 10. As decisões do Matheus (todas DECIDIDAS em 2026-11-17, pela recomendação)
 
 | id | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
@@ -281,7 +283,7 @@ As classes de S2 e S3 usam o IC e o sinal, sem margem.
 | A0-5 | o primário e a margem do A0 | **D_A pelo T\* restrito, δ_A = 4 decisões** | uma δ maior aceita como ≈ 0 uma diferença que o jogador veria; uma menor pede um N fora do teto |
 | A0-6 | o primário e a margem do B0 | **D_B pelo excesso de alternância de F para P, com a janela de 60 ticks e δ_B = 0,05** | as duas direções juntas misturariam a resposta de F, que a GRAV não tira |
 | A0-7 | o piloto e a regra do N | **100 pares, só o σ̂ e as frequências, e a regra da seção 6, com o N de 200 a 1 600** | sem piloto, o N vem de chute, e foi assim que a CB4 ficou inconclusiva |
-| A0-8 | as faixas | **102101…102505 para o piloto e 101101…101505 para a run**, a confirmar | nenhum, se a conferência no coordenador passar |
+| A0-8 | as faixas | **102101…102505 para o piloto e 101101…101505 para a run** | nenhum, se a conferência no coordenador passar |
 | A0-9 | o que fica fora | **a variante sem comida, a plasticidade congelada e a CO7 desligada ficam para um adendo**, só se o A0 der ≠ 0 | rodar tudo agora triplica as condições para uma pergunta cuja previsão é ≈ 0 |
 | A0-10 | a regra de leitura | **a da seção 7, escrita antes** | uma regra escrita depois abre espaço para escolher a leitura |
 

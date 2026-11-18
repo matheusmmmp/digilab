@@ -92,4 +92,5 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
 - **O que é:** `docs/PLANO_ANALISE_V3_SOCIAL_PAR_A0.md`, PROPOSTO. São as três condições (VIVO, GRAV, OUTRA) no pet de hoje, o modular com a CO7
   nos dois, com uma perturbação por vida. Os primários são o tempo até o reencontro (A0) e o excesso de alternância nos chutes de F para P
   (B0), e o N sai de um piloto que só dá o σ̂ e as frequências.
-- **O que falta:** as decisões A0-1 a A0-10, a confirmação das faixas, e depois o código da seção 4 do plano, num PR à parte.
+- **Aprovado** pelo Matheus em 2026-11-17 ("Aprovo todas"), com as faixas (D-SP-26).
+- **O que falta:** o código da seção 4 do plano, num PR à parte; depois o piloto e a decisão do N.
