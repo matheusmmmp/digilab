@@ -174,3 +174,5 @@ artifacts_v3_baseline_trivial/**/vidas/
 artifacts_v3_valuation/**/vidas/
 # EVIDENCIA A2: os artefatos da ablacao do aprendizado (docs/PLANO_ANALISE_V3_ABLACAO_APRENDIZADO.md, secao 6)
 !artifacts_v3_ablacao_aprendizado/
+# SOCIAL_PAR E1: a conferencia dos controles positivos (docs/ESPEC_V3_SOCIAL_PAR_E1.md, secao 3; D-SP-10)
+!artifacts_v3_social_par_e1/

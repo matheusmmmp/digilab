@@ -3974,6 +3974,39 @@ PARAMETROS_COOPERACAO = {
 
 
 @dataclass(frozen=True)
+class ConfigIntervencaoSocial:
+    """O parceiro sob intervencao (docs/ESPEC_V3_SOCIAL_PAR_E1.md, APROVADA pelo Matheus em 2026-11-17, "Aprovo a E1"): so pesquisa, na
+    bancada do Python; o jogo nunca a liga (SP-2).
+    ligada                 o `Grupo.levar_pet` (a perturbacao, com a origem `intervencao` no registro) e o ponto gravado em toda acao com
+                           alvo (o parceiro em laco aberto, `experiments/bancada/parceiro.py`); desligada, o grupo de hoje byte a byte
+    janela_reencontro      a janela do tempo ate o reencontro depois da perturbacao, em decisoes do pet focal
+    raio_contato_celulas   o contato, em celulas (Chebyshev): o do toque de hoje
+    raio_perto_celulas     o perto, em celulas: o da visao de hoje"""
+
+    ligada: bool = False
+    janela_reencontro: int = 96
+    raio_contato_celulas: int = 1
+    raio_perto_celulas: int = 6
+
+    def __post_init__(self) -> None:
+        for nome in ("janela_reencontro", "raio_contato_celulas", "raio_perto_celulas"):
+            v = getattr(self, nome)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigIntervencaoSocial.{nome} e um inteiro positivo: {v!r}")
+
+
+CONFIG_INTERVENCAO_SOCIAL = ConfigIntervencaoSocial()
+CONFIG_INTERVENCAO_SOCIAL_LIGADA = ConfigIntervencaoSocial(ligada=True)
+PARAMETROS_INTERVENCAO_SOCIAL = {
+    "ligada": ("DECIDIDO", "SP-1, SP-2 e E1-1 a E1-6 (Matheus, 2026-11-17, \"Aprovo a E1\"): so pesquisa, nunca no jogo; desligada, o grupo "
+                           "de hoje (o G2 da E1)"),
+    "janela_reencontro": ("PROPOSTO", "SEM FONTE: um dia de decisoes (96 x 15 ticks = TICKS_POR_DIA); a espec da E1, secao 2.1"),
+    "raio_contato_celulas": ("PROPOSTO", "o raio_toque_celulas da ConfigGrupo (1), para o contato medido ser o toque de hoje"),
+    "raio_perto_celulas": ("PROPOSTO", "o raio_visao_celulas da ConfigMundo (6), para o perto medido ser o que o pet ve"),
+}
+
+
+@dataclass(frozen=True)
 class ConfigVozV4B:
     """A voz-v4b da DC5 (CONVERSA_PET, DC5a2; D-DC5B-5, a decisao do Matheus em 2026-11-11, "Segue as recomendacoes e faca o merge").
     Os numeros da voz-v4 que nao mudam ficam em `ConfigVozV4`."""
