@@ -2,7 +2,7 @@
 
 Coordenador: Gerente da V3 (Claude Code). Worker da etapa 1: Claude Code, Opus 5.5 (método), worktree `v3-elogio`. Status: **ABERTA; etapa 1
 (só papel) ENTREGUE; D-EL-1 a D-EL-8 (seção 8) DECIDIDAS em 2026-11-16, pela recomendação ("Aprovo todas"). Etapa 2 (código) ENTREGUE (seção 10): a leitura achou
-que o cenário da D-EL-1 não roda no modular (seção 9); D-EL-9 a D-EL-13 DECIDIDAS em 2026-11-17 ("Aprovo todas"). Etapa 3 (plano) APROVADA em 2026-11-18: `docs/PLANO_ANALISE_V3_ELOGIO.md`, D-EL-18 a D-EL-24 DECIDIDAS ("Aprovo todas").**
+que o cenário da D-EL-1 não roda no modular (seção 9); D-EL-9 a D-EL-13 DECIDIDAS em 2026-11-17 ("Aprovo todas"). Etapa 3 (plano) APROVADA em 2026-11-18: `docs/PLANO_ANALISE_V3_ELOGIO.md`, D-EL-18 a D-EL-24 DECIDIDAS ("Aprovo todas"). Etapas 4 e 5 RODADAS em 2026-11-18 (`docs/RESULTADO_V3_ELOGIO.md`): o G-EL1 confirma, mas o E-imed fica igual ao E0.**
 
 Categoria: arquitetura (depois, implementacao e experimento). Origem: Matheus, 2026-11-16: "logo após o pet fazer alguma ação [...] se a gente
 usar [...] o carinho, ou o elogiar logo após aquela ação, vai dar um boost maior de ele entender que aquilo é uma coisa boa". Com o pedido de
@@ -228,3 +228,10 @@ Com o plano aprovado ("Aprovo todas", 2026-11-18), o código da run, antes de qu
 
 A calibração só roda depois do merge: o `pre_run` exige o plano na `origin/main` (D-IA-6).
 
+
+## 13. Etapas 4 e 5: a calibração e a validação (2026-11-18)
+
+A calibração (25101–25200) escolheu g = 256 e W = 2. A validação (25301–25500) rodou uma vez nessa célula: o G-EL1 dá "confirma"
+(+0,073 [+0,042; +0,104] contra o E-sorteado, sem piora da M4), mas o E-imed − E0 é −0,003 [−0,027; +0,022]. A P0 falha por um carinho
+com sinal 0, e a P1 falha. Os números e a leitura estão no `docs/RESULTADO_V3_ELOGIO.md`; os desvios, em `docs/registro/2026-11.md`.
+A etapa 6 (a web) não começa.
