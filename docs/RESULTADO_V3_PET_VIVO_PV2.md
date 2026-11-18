@@ -127,3 +127,9 @@ Nada vai para a web: a regra de leitura manda não levar. A chave do PV-2 contin
 - Nada sobre o freio da saciedade (a lacuna 3).
 - Nada sobre outro L da pirueta, outro `w0_dc` ou outro G0 além dos do adendo 1.
 - Nada sobre uma pirueta somada à tropotaxia, em vez de no lugar dela: o A1.2 a desenhou no lugar, e esse é o braço que perdeu.
+
+## 8. A decisão do Matheus (2026-11-18)
+
+"Sim, registra assim", à pergunta "Registra o PV-2 como 'não levar'?". O PV-2 fica registrado com a leitura "custa perto de casa": a
+quimiotaxia (OLF-DC, OLF-DCV) e o ganho da fome (OLF-G) não vão ao cérebro padrão nem à web, e a chave continua desligada. A pirueta
+somada à tropotaxia, outro G0 ou trocar o oráculo do jogo só voltam com um plano novo.

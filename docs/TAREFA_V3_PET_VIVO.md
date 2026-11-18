@@ -203,6 +203,6 @@ O Matheus, nesta sessão, escreveu "Sim, começa o R0", a primeira etapa da INT-
 - **A leitura: "custa perto de casa"** (D-PV2R-11). No `comedouro`, o OLF-DCV perde 0,142 da taxa por episódio para o OLF-0, e os
   outros gates também falham. O OLF-G sai como "o ganho não entra". Pela seção 7, a sugestão é não levar.
 - **Nada vai para a web,** e a chave do PV-2 continua desligada.
-- **Próximo:** a decisão do Matheus sobre o resultado. As etapas seguintes da INT (R1 rastro, R2 crédito com o ELOGIO) e a seção 9 do
-  plano são dele.
+- **A decisão do Matheus (2026-11-18): "Sim, registra assim"** (D-PV2R-13). O PV-2 não vai ao cérebro padrão nem à web.
+- **Próximo:** as etapas seguintes da INT (R1 rastro, R2 crédito com o ELOGIO) e a seção 9 do plano, na ordem que o Matheus escolher.
 
