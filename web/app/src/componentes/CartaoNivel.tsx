@@ -6,17 +6,17 @@
    So tokens; o visual e o do .dica-bit.ab-hx (abertas.css) com o destaque do --hx-alerta (estilo/nivel.css). So vista. */
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Dumbbell, Flag, Heart, Lock, Medal, Package, Shield, Swords, Tent, Trophy, type LucideIcon } from "lucide-react";
+import { Anchor, Dumbbell, Flag, Heart, Lock, Medal, Package, Shield, Swords, Tent, Trophy, type LucideIcon } from "lucide-react";
 import { BotaoContinuar, BotaoHx } from "./hx/index.ts";
 import { cartaoDe, nivelDaPeca, PECAS, type IconeNivel } from "../nivel.ts";
-import { cartaoVisto, fecharMotivo, useAnuncioNivel, useMotivo } from "../nivelTela.ts";
+import { cartaoVisto, fecharMotivo, marcoDoMotivoDoCais, motivoDoCais, useAnuncioNivel, useMotivo } from "../nivelTela.ts";
 import { numeroDoCartao, type IdCartao } from "../dicas.ts";
 import { ICONE_PECA } from "./iconesNivel.ts";
 import type { Rota } from "../rotas.ts";
 import "../estilo/nivel.css";
 
 export const ICONE_NIVEL: Record<IconeNivel, LucideIcon> = {
-  heart: Heart, tent: Tent, dumbbell: Dumbbell, swords: Swords, package: Package, shield: Shield, medal: Medal, flag: Flag, trophy: Trophy,
+  heart: Heart, tent: Tent, dumbbell: Dumbbell, swords: Swords, package: Package, shield: Shield, medal: Medal, flag: Flag, trophy: Trophy, anchor: Anchor,
 };
 
 /** o Esc fecha o cartao (como o Depois) enquanto `ativo`; nao quando outro tratador ja usou a tecla (um balao, o leque do retrato: o dele para a propagacao, entao um Esc
@@ -39,7 +39,7 @@ function useEsc(ativo: boolean, fechar: () => void, ref: { current: HTMLElement 
 }
 
 /** o cartao de destrave do marco `id`; `ir` leva a camera ao lugar (a casca navega) */
-export function CartaoDestrave({ id, ir }: { id: IdCartao; ir: (r: Rota) => void }) {
+export function CartaoDestrave({ id, ir, irCais }: { id: IdCartao; ir: (r: Rota) => void; irCais?: () => void }) {
   const n = numeroDoCartao(id), c = cartaoDe(n);
   const ref = useRef<HTMLElement>(null), anterior = useRef<HTMLElement | null>(null);
   /* ao fechar pelo teclado o foco volta a quem o tinha antes de entrar no cartao (e nao ao body); o cartao nao rouba o foco ao aparecer */
@@ -58,7 +58,8 @@ export function CartaoDestrave({ id, ir }: { id: IdCartao; ir: (r: Rota) => void
         <span id={`cd-txt-${n}`}>{c.frase}</span>
         <span className="cd-bts">
           {c.rota && <BotaoContinuar className="cd-ir" onClick={() => { cartaoVisto(n); ir(c.rota!); }}>Ir</BotaoContinuar>}
-          <BotaoHx className="cd-depois" onClick={depois}>{c.rota ? "Depois" : "Entendi"}</BotaoHx>
+          {c.cais && irCais && <BotaoContinuar className="cd-ir" onClick={() => { cartaoVisto(n); irCais(); }}>Ir</BotaoContinuar>}
+          <BotaoHx className="cd-depois" onClick={depois}>{c.rota || (c.cais && irCais) ? "Depois" : "Entendi"}</BotaoHx>
         </span>
       </div>
     </aside>
@@ -83,12 +84,14 @@ export function CartaoMotivo() {
   }, [aberto]);
   useEsc(aberto, fecharMotivo, ref, true);
   if (!p) return null;
-  const d = PECAS[p], I = ICONE_PECA[p];
+  /* o cais nao e uma peca do nivel (so existe com o servidor no build): o marco dele vem com o pedido */
+  const d = p === "cais" ? { nome: "Cais", motivo: motivoDoCais(marcoDoMotivoDoCais()) } : PECAS[p], I = p === "cais" ? Anchor : ICONE_PECA[p];
+  const nv = p === "cais" ? marcoDoMotivoDoCais() : nivelDaPeca(p);
   const cartao = (
     <aside className="dica-bit cartao-destrave cartao-motivo ab-hx" role="dialog" aria-labelledby="cm-tit" aria-describedby="cm-txt" ref={ref} data-trancado={p}>
       <span className="cd-ic" aria-hidden="true"><I /></span>
       <div className="cd-txt">
-        <span className="cd-nv"><Lock aria-hidden="true" />Nv {nivelDaPeca(p)}</span>
+        <span className="cd-nv"><Lock aria-hidden="true" />Nv {nv}</span>
         <b id="cm-tit">{d.nome}</b>
         <span id="cm-txt">{d.motivo}.</span>
         <span className="cd-bts"><BotaoHx className="cd-depois" onClick={fecharMotivo}>Entendi</BotaoHx></span>

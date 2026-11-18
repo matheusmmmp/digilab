@@ -192,9 +192,18 @@ FAIXAS_RESERVADAS = (
     (97101, 97505, "EVIDENCIA A1, a baseline trivial: a validacao, uma vez, o REL da C4 e a baseline nas 12 celulas da C4 "
                    "(docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md, secao 5; BT-3; bases 97101, 97202, 97303, 97404 e 97505, K = 40); "
                    "aprovada junto com a 96xxx (BT-3); conferida livre junto com ela"),
+    (99101, 99505, "VALUATION, a ablacao do Valuation: a run unica da V2, 8 bracos x 4 celulas do longe_fixo x 200 unidades "
+                   "(docs/PLANO_ANALISE_V3_VALUATION.md, secao 4; D-VAL-9, aprovada pelo Matheus em 2026-11-16, \"Aprovado, siga a V2\"; bases 99101, 99202, 99303, 99404 e 99505, K = 40; "
+                   "conferida livre no faixas.py da origin/main e nos branches remotos em 2026-11-16)"),
+    (73101, 73505, "VALUATION, a V3: o conserto do reflexo do sono, REL e CON nas 12 celulas da C4 x 200 unidades, uma vez "
+                   "(docs/PLANO_ANALISE_V3_VALUATION_CONSERTO.md, secao 4; D-VAL-18, aprovada pelo Matheus em 2026-11-17, \"Aprovo, siga\"; bases 73101, 73202, 73303, 73404 e 73505, "
+                   "K = 40; conferida livre no faixas.py, nas configs, nos planos e nas tarefas dos branches remotos em 2026-11-17)"),
     (98101, 98505, "EVIDENCIA A2, a ablacao do aprendizado no jogo (jogo web): a run unica, sementes 98101...98300 "
                    "(docs/PLANO_ANALISE_V3_ABLACAO_APRENDIZADO.md, secao 2.3; AB-5; aprovada pelo Matheus em 2026-11-16, "
                    "\"Aprovo, pode rodar\"; conferida livre na origin/main e em todos os branches remotos em 2026-11-16)"),
+    (25101, 25505, "ELOGIO, o credito do carinho no modular: a calibracao 25101...25200 (100 unidades, a grade g x W) e a validacao "
+                   "25301...25500 (200 unidades, uma vez) (docs/PLANO_ANALISE_V3_ELOGIO.md, secoes 5 e 6; D-EL-22, aprovada pelo Matheus em "
+                   "2026-11-18, \"Aprovo todas\"; conferida livre no faixas.py da origin/main e dos branches remotos em 2026-11-18)"),
     (102101, 102505, "SOCIAL_PAR, o piloto do A0 e do B0: 100 pares (5 bases x 20, prefixo social_par_piloto), so o dp dos primarios "
                      "e as frequencias das premissas (docs/PLANO_ANALISE_V3_SOCIAL_PAR_A0.md, secoes 3.4 e 6; A0-7 e A0-8, aprovadas pelo "
                      "Matheus em 2026-11-17, \"Aprovo todas\"; conferida livre na origin/main e em todos os branches remotos em 2026-11-17)"),

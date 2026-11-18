@@ -34,10 +34,11 @@ import { escolherTema, useTema, type Tema } from "../../tema.ts";
 import { EscolhaHabitat, resumoVisual } from "./EscolhaHabitat.tsx";
 import { EscolhaPele } from "./EscolhaPele.tsx";
 import { Laboratorio } from "./Laboratorio.tsx";
+import { IconeConta, TelaConta, useApelidoNosAjustes } from "./TelaConta.tsx";
 import { labLigado, useLab } from "../../lab.ts";
 import { VELOCIDADES, escolherVelocidade, pularUmaHora, useTempo } from "../../tempo.ts";
 
-const TITULO: Record<ParteConfig, string> = { principal: "Ajustes", visual: "Visual", exibir: "Exibir", dados: "Registro e replay", fala: "Fala do pet", laboratorio: "Laboratório", sobre: "Sobre" };
+const TITULO: Record<ParteConfig, string> = { principal: "Ajustes", conta: "Conta", visual: "Visual", exibir: "Exibir", dados: "Registro e replay", fala: "Fala do pet", laboratorio: "Laboratório", sobre: "Sobre" };
 const NOME_MODO: Record<ModoFala, string> = { template: "frases prontas", moldura: "moldura", livre: "livre" };
 export const nomeVelocidade = (v: number): string => VELOCIDADES.find(([, x]) => x === v)?.[0] ?? `${v} min/s`;
 
@@ -62,9 +63,13 @@ function Aj({ ic: I, nome, rotulo, resumo, tag, novo, interruptor, abrir }: {
 function Principal({ abrir, irPet }: { abrir: (p: ParteConfig) => void; irPet: () => void }) {
   const { motor: m } = useJogo(), tema = useTema(), pele = usePele(), habitat = useHabitat(), fl = useFalaLivre(), { velocidade } = useTempo(), viagem = useViagemLigada(), som = useSom(), mitologia = useMitologia();
   const [dicas, setDicas] = useState(dicasLigadas), janelas = useJanelas(), [revisto, setRevisto] = useState(false);
+  const conta = useApelidoNosAjustes();
   useFalaLLM(); useLab();
   return (
     <div className="aj-lista lg">
+      {/* a porta da conta (UX-CN-2): so com o servidor no build */}
+      {conta.ligada && <Aj ic={IconeConta} nome="Conta" tag={conta.apelido ?? "sem conta"} novo={!conta.apelido}
+        resumo={conta.apelido ? "o apelido, os aparelhos, os seus dados, sair e apagar" : "a conta abre a luta ranqueada; sem conta, nada muda"} abrir={() => abrir("conta")} />}
       <Aj ic={Eye} nome="Visual" resumo={resumoVisual(pele, tema, habitat, !!m.mundo)} abrir={() => abrir("visual")} />
       <Aj ic={Lightbulb} nome="Dicas" resumo="o Professor Agumon explica cada coisa nova, uma vez" interruptor={{ ligado: dicas, mudar: v => { ligarDicas(v); setDicas(dicasLigadas()); } }} />
       <Aj ic={RotateCcw} nome="Rever o tutorial" tag={revisto ? "feito" : undefined} resumo="os cartões dos níveis e as dicas do Professor Agumon voltam, cada um no seu momento (com as dicas ligadas)"
@@ -300,7 +305,7 @@ export function TelaConfig({ parte, abrir, irPet }: { parte: ParteConfig; abrir:
           <h3 className="mc-bloco__tit" id="tela-titulo">{TITULO[parte]}</h3>
         </div>
       )}
-      {parte === "principal" ? <Principal abrir={abrir} irPet={irPet} /> : parte === "visual" ? <Visual /> : parte === "exibir" ? <Exibir /> : parte === "dados" ? <Dados irPet={irPet} />
+      {parte === "principal" ? <Principal abrir={abrir} irPet={irPet} /> : parte === "conta" ? <TelaConta agoraNao={() => abrir("principal")} irPet={irPet} /> : parte === "visual" ? <Visual /> : parte === "exibir" ? <Exibir /> : parte === "dados" ? <Dados irPet={irPet} />
         : parte === "fala" ? <Fala /> : parte === "laboratorio" ? <Laboratorio irPet={irPet} /> : <Sobre />}
     </section>
   );
