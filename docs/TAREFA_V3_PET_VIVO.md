@@ -187,13 +187,13 @@ O Matheus, nesta sessão, escreveu "Sim, começa o R0", a primeira etapa da INT-
 
 - **O orquestrador:** `experiments/run_v3_pet_vivo_pv2.py`, com as configs em `experiments/configs/v3_pet_vivo/` (a run e a fumaça). Os
   testes estão em `tests/test_run_v3_pet_vivo_pv2.py`.
-- **O adendo 2 do plano, PROPOSTO:**
+- **O adendo 2 do plano, APROVADO pelo Matheus em 2026-11-18** ("Sim, aprovo", D-PV2R-8):
   - a faixa 26101–26505, proposta pelo coordenador no lugar da 83xxx (D-PV2R-6);
   - o que o orquestrador faz;
   - a checagem do v38 (a INT-8), descritiva;
   - o custo.
 - **A fumaça** (bases 101 e 202, K = 1, 2 dias): 192 vidas, todas com o G1 e o T-CENARIO-1 conferidos, em 77 s com 2 processos.
-- **Os desvios:** D-PV2R-1 a D-PV2R-7.
-- **Próximo:** o APROVADO do adendo 2 e a vez da máquina. Depois, a run, uma vez, e o
+- **Os desvios:** D-PV2R-1 a D-PV2R-8.
+- **Próximo:** a vez da máquina. Depois, a run, uma vez, e o
   `RESULTADO_V3_PET_VIVO_PV2.md`.
 

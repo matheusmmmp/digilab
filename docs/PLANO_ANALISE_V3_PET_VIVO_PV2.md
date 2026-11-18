@@ -385,9 +385,9 @@ entra: é a conta da 0b, medida lá.
   deste adendo.
 - **Não muda nenhum gate nem a regra de leitura.**
 
-## Adendo 2: a faixa, o orquestrador da run e a checagem do v38 (2026-11-17, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2-run`; PROPOSTO)
+## Adendo 2: a faixa, o orquestrador da run e a checagem do v38 (2026-11-17, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2-run`; APROVADO)
 
-**Status do adendo 2: PROPOSTO.** O Matheus pediu nesta sessão: "pede a faixa ao coordenador e escreve o PR da run". O orquestrador
+**Status do adendo 2: APROVADO pelo Matheus em 2026-11-18,** nesta sessão, à pergunta "Aprova o adendo 2 da run do PV-2?": "Sim, aprovo" (D-PV2R-8). A checagem do v38 fica sem o olhar, como na A2.3. O Matheus pediu nesta sessão: "pede a faixa ao coordenador e escreve o PR da run". O orquestrador
 (`experiments/run_v3_pet_vivo_pv2.py`) recusa a run de verdade sem o APROVADO nesta linha. Os gates, as margens e a regra de leitura são
 os das seções 6 e 7, sem mudança.
 

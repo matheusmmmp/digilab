@@ -845,3 +845,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-17 — VALUATION: a V5, a frente encerrada (Claude Code, Opus 5.5, branch `v3-valuation-v5`)](registro/2026-11.md)
 - [2026-11-17 — PET_VIVO: o adendo 1 do PV-2 APROVADO, com o G0 = 512 (Claude Code, Opus 5.5, sessão lateral, branch `v3-pet-vivo-pv2-codigo`)](registro/2026-11.md)
 - [2026-11-17 — PET_VIVO: o PR da run do PV-2, o adendo 2 (Claude Code, Opus 5.5, sessão lateral, branch `v3-pet-vivo-pv2-run`)](registro/2026-11.md)
+- [2026-11-18 — PET_VIVO: o adendo 2 do PV-2 APROVADO (Claude Code, Opus 5.5, sessão lateral, branch `v3-pet-vivo-pv2-run`)](registro/2026-11.md)
