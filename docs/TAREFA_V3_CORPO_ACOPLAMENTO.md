@@ -2,8 +2,8 @@
 
 Coordenador: a sessão do Matheus que abriu esta (Claude Code). Worker: Claude Code, Opus 5.5, sessão lateral. Worktree e branch:
 `v3-corpo-acoplamento` (a etapa 1) e `v3-corpo-acoplamento-e2` (a etapa 2). Status: **ABERTA; a etapa 1 (#994) e a etapa 2 entregues; as
-D-CA-1 a D-CA-7 APROVADAS (Matheus, 2026-11-18); a D-CA-8 DECIDIDA, (a) (seção 11.4); o plano da run PROPOSTO
-(`docs/PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md`).**
+D-CA-1 a D-CA-7 APROVADAS (Matheus, 2026-11-18); a D-CA-8 DECIDIDA, (a) (seção 11.4); o plano da run APROVADO
+(`docs/PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md`), com as D-CA-9 a D-CA-12 DECIDIDAS.**
 
 Categoria: arquitetura (os PRs vão como implementação: ver o desvio no `docs/registro/2026-11.md`). Origem: Matheus, 2026-11-18: redesenhar o corpo
 para que a fome e a energia não disputem a mesma decisão. A etapa 1 é só papel: o diagnóstico do acoplamento, as opções atrás de chave e
@@ -351,7 +351,8 @@ A D-CA-6 diz: "só depois, se o descritivo mostrar a coincidência caindo", o pl
 contagem cai 30 %, e a fração não cai. A regra não decide sozinha, e por isso a run não foi preparada.
 
 - **D-CA-8. O que vem depois da D.** DECIDIDA pelo Matheus em 2026-11-18, "(a) Plano da D". O plano é o
-  [PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md](PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md), PROPOSTO, com as D-CA-9 a D-CA-12. As opções eram:
+  [PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md](PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md), APROVADO pelo Matheus em 2026-11-18, com as D-CA-9 a
+  D-CA-12 DECIDIDAS como recomendadas ("Aprovo, siga", na sessão lateral, e "Aprovo todas", na sessão coordenadora). As opções eram:
   - **(a)** Seguir para o plano de análise da D, pela contagem. O primário seria as decisões com as duas por vida, e os gates os da
     VALUATION: a exaustão, a privação e a taxa por episódio. A faixa seria pedida ao coordenador.
   - **(b)** Somar a E (a digestão converte a comida inteira) na mesma bancada e repetir a sonda antes do plano.

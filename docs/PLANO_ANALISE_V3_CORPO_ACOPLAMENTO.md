@@ -1,7 +1,7 @@
 # PLANO DE ANÁLISE V3 — CORPO_ACOPLAMENTO: a opção D numa run
 
-**Status: PROPOSTO.** Aguarda a aprovação do Matheus, com as D-CA-9 a D-CA-12 (seção 8). Nenhum orquestrador e nenhuma vida de faixa
-existem antes dela.
+**Status: APROVADO pelo Matheus em 2026-11-18** ("Aprovo, siga", na sessão lateral, e "Aprovo todas", na sessão coordenadora), com as
+D-CA-9 a D-CA-12 DECIDIDAS como recomendadas (seção 8). Nenhum orquestrador e nenhuma vida de faixa existiam antes da aprovação.
 
 Escrito em 2026-11-18 por Claude Code (Opus 5.5, sessão lateral), no branch `v3-corpo-acoplamento-plano`, empilhado no #995. Ele segue a
 D-CA-8 (a), que o Matheus escolheu: "(a) Plano da D". A tarefa é a [TAREFA_V3_CORPO_ACOPLAMENTO.md](TAREFA_V3_CORPO_ACOPLAMENTO.md), e o
@@ -138,14 +138,17 @@ Em `artifacts_v3_corpo_acoplamento/run/`, como na VALUATION:
 - **A fumaça e o teste do orquestrador,** nas sementes dos testes.
 - **O relato:** o `docs/RESULTADO_V3_CORPO_ACOPLAMENTO.md`, num PR próprio.
 
-## 8. As decisões abertas (todas PROPOSTAS)
+## 8. As decisões (DECIDIDAS)
 
-- **D-CA-9, o primário: os conflitos sobre todas as decisões, nas 12 células.**
+As quatro foram DECIDIDAS como recomendadas pelo Matheus em 2026-11-18: "Aprovo, siga" (na sessão lateral) e "Aprovo todas" (na sessão
+coordenadora, repassado por ela).
+
+- **D-CA-9 (DECIDIDA), o primário: os conflitos sobre todas as decisões, nas 12 células.**
   - **A recomendação:** esta. Ela mede o que o pet vive: quantas vezes precisa comer e descansar ao mesmo tempo.
   - **A alternativa:** a fração condicional, a fome urgente na energia baixa. A sonda mostrou que ela não se mexe com a D (0,759 contra
     0,761). Ela entra ao lado.
   - **O custo de errar:** a P pode passar com o pet ainda tendo fome em 3 de cada 4 decisões cansadas. A fração ao lado mostra isso.
-- **D-CA-10, a faixa 100101…100505.**
+- **D-CA-10 (DECIDIDA), a faixa 100101…100505.**
   - **A recomendação:** aprovar e pedir a reserva ao coordenador. Ela foi conferida livre em 2026-11-18 nos 981 branches remotos, no
     `faixas.py`, nas configs, nos planos, nas tarefas, nos resultados e nos orquestradores.
   - **Por que não outra:**
@@ -153,9 +156,9 @@ Em `artifacts_v3_corpo_acoplamento/run/`, como na VALUATION:
     - a 83xxx e a 84xxx são da rodada 3 da luta;
     - abaixo de 10101, as bases colidem com as sementes pequenas.
   - **O custo:** é a primeira base de seis dígitos. A bancada não limita os dígitos, mas um leitor pode estranhar.
-- **D-CA-11, os braços: o REL e o D, sem o CON.**
+- **D-CA-11 (DECIDIDA), os braços: o REL e o D, sem o CON.**
   - **A recomendação:** só esses dois. O conserto da VALUATION falhou e está desligado. Na sonda, o CON com a D piorou a fração.
   - **O custo de errar:** a combinação dos dois fica sem medida.
-- **D-CA-12, as guardas pela classe com δ = 0,032.**
+- **D-CA-12 (DECIDIDA), as guardas pela classe com δ = 0,032.**
   - **A recomendação:** a mesma regra da VALUATION (D-VAL-20).
   - **O custo de errar:** uma piora pequena na exaustão, abaixo de δ, passa.
