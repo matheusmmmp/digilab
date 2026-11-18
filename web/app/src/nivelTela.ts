@@ -182,11 +182,18 @@ export function useAnuncioNivel(): string {
 
 /* ---------------------------------------------------------------------------------------------------- o cartao do motivo (3.4) */
 /** a peca trancada cujo motivo o cartao mostra (a tecla, a rota ou o toque num lugar trancado), ou null */
-let motivo: Peca | null = null;
+let motivo: Peca | "cais" | null = null, marcoCais = 10;
 const ouvMotivo = new Set<() => void>();
 export function abrirMotivo(p: Peca): void { motivo = p; for (const o of ouvMotivo) o(); }
+/** o cartao do motivo do cais trancado (MMO5): o marco e o do build (o 10; no beta, outro) */
+export function abrirMotivoDoCais(marco: number): void { marcoCais = marco; motivo = "cais"; for (const o of ouvMotivo) o(); }
+export const marcoDoMotivoDoCais = (): number => marcoCais;
+/** a frase do cadeado do cais: o marco 10 e o primeiro Mega (MMO-13) */
+export const motivoDoCais = (marco: number): string => marco === 10 ? "Abre com o primeiro Mega" : `Abre no nível ${marco} do Tamer`;
+/** o marco esta feito agora (o cais abre por ele) */
+export const marcoFeito = (marco: number): boolean => lerAgora().marcos.includes(marco);
 export function fecharMotivo(): void { if (motivo === null) return; motivo = null; for (const o of ouvMotivo) o(); }
-export function useMotivo(): Peca | null {
+export function useMotivo(): Peca | "cais" | null {
   return useSyncExternalStore(o => { ouvMotivo.add(o); return () => { ouvMotivo.delete(o); }; }, () => motivo, () => null);
 }
 

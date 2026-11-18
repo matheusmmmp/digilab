@@ -8,9 +8,10 @@ import { BoasVindas } from "./componentes/BoasVindas.tsx";
 import { RevelacaoEvolucao } from "./componentes/Revelacao.tsx";
 import { sairDoLab, useJogo } from "./jogo.ts";
 import {
-  DESTINOS, NOME_ABA, NOME_DESTINO, ROTA_INICIAL, configDoEndereco, enderecoDaConfig, enderecoDaRota, gravarAbaLembrada, lerAbaLembrada,
+  DESTINOS, ENDERECO_DO_CAIS, NOME_ABA, NOME_DESTINO, ROTA_INICIAL, caisDoEndereco, configDoEndereco, enderecoDaConfig, enderecoDaRota, gravarAbaLembrada, lerAbaLembrada,
   rotaDoEndereco, type Aba, type Destino, type ParteConfig, type Rota,
 } from "./rotas.ts";
+import { TelaCais, caisNoBuild, marcoDoCaisNoBuild } from "./telas/cais/TelaCais.tsx";
 import { TelaConfig } from "./telas/config/TelaConfig.tsx";
 import { TelaCatalogo } from "./telas/diario/TelaCatalogo.tsx";
 import { TelaCenarios } from "./telas/diario/TelaCenarios.tsx";
@@ -36,7 +37,7 @@ import { TopoHabitat } from "./componentes/Topo.tsx";
 import { Habitat } from "./componentes/Habitat.tsx";
 import { PainelLado, PainelModal, type DadosPainel } from "./componentes/PainelTela.tsx";
 import { LugarFolha, LugarLado, type DadosLugar } from "./componentes/PainelLugar.tsx";
-import { BookMarked, BookOpen, Brain, Compass, Dna, Dumbbell, GitBranch, Lock, Medal, Mountain, Package, ScrollText, Sprout, Swords, Theater, type LucideIcon } from "lucide-react";
+import { Anchor, BookMarked, BookOpen, Brain, Compass, Dna, Dumbbell, GitBranch, Lock, Medal, Mountain, Package, ScrollText, Sprout, Swords, Theater, type LucideIcon } from "lucide-react";
 import { MarcasDoLugar } from "./componentes/MarcasDoLugar.tsx";
 import { dAbreDiario, ligarAtalhosLugar } from "./atalhosLugar.ts";
 import { entrarLugar, sairLugar, type Lugar } from "./viagem.ts";
@@ -59,11 +60,17 @@ import { useSomDoJogo } from "./somJogo.ts";
 import { CadeadosDaIlha } from "./componentes/CadeadosDaIlha.tsx";
 import { ObjetosDaIlha } from "./componentes/ObjetosDaIlha.tsx";
 import { marcarDiarioVisto } from "./telas/pet/objetosIlha.ts";
-import { abrirMotivo, jaConhecoOJogo, useNivelRaiz } from "./nivelTela.ts";
-import { PECAS, nivelDaPeca, pecaAberta, pecaDaAba, pecaDoDestino, type EstadoNivel, type Peca } from "./nivel.ts";
+import { abrirMotivo, abrirMotivoDoCais, jaConhecoOJogo, useNivelRaiz } from "./nivelTela.ts";
+import { CARTAO_DO_CAIS, PECAS, ligarCartaoDoCais, nivelDaPeca, pecaAberta, pecaDaAba, pecaDoDestino, type EstadoNivel, type Peca } from "./nivel.ts";
 import { GostoVisual } from "./gostoVisual/GostoVisual.tsx";
 
 const armaz = (): Storage => localStorage;
+
+/* o cais (MMO5; docs/PLANO_UX_CAIS.md): so com o servidor no build. Abre pelo marco do build (o 10, o primeiro Mega; no beta, outro); o
+   cartao de destrave e o do marco 10, entao so existe quando o marco do build e o 10 */
+const CAIS = caisNoBuild(), MARCO_CAIS = CAIS ? marcoDoCaisNoBuild() : CARTAO_DO_CAIS.n;
+ligarCartaoDoCais(CAIS && MARCO_CAIS === CARTAO_DO_CAIS.n);
+const caisTrancado = (n: EstadoNivel): boolean => !n.marcos.includes(MARCO_CAIS);
 
 /** os icones das abas do lugar (Crescer, L2; Lutar e Diario, L3): so a escolhida mostra o rotulo; as teclas 1 a 4 trocam de aba */
 const ICONE_ABA: Partial<Record<Aba, ReactNode>> = {
@@ -118,6 +125,8 @@ export function App() {
   rotaRef.current = rota;
   /* Configuracoes: por cima do destino (engrenagem do Diario no celular, da barra lateral no desktop) */
   const [config, setConfig] = useState<ParteConfig | null>(() => configDoEndereco(location.hash));
+  /* o cais aberto (#/cais): fora dos destinos, como os Ajustes; trancado, o endereco nao o abre */
+  const [cais, setCais] = useState<boolean>(() => CAIS && caisDoEndereco(location.hash) && !caisTrancado(nivel));
   /* tutorial contextual (Bit): cada momento da jornada pede a sua dica uma vez */
   const { motor: mDica, nascendo: nascDica } = jogo;
   useEffect(() => {
@@ -156,24 +165,29 @@ export function App() {
   /* endereco e aba lembrada acompanham a rota; voltar/avancar do navegador muda a rota */
   useEffect(() => {
     if (boasVindas) return;                      /* primeira vez aberta: o endereco e #/inicio */
-    const alvo = config ? enderecoDaConfig(config) : enderecoDaRota(rota);
+    const alvo = config ? enderecoDaConfig(config) : cais ? ENDERECO_DO_CAIS : enderecoDaRota(rota);
     if (location.hash !== alvo) history.replaceState(null, "", alvo);
     gravarAbaLembrada(armaz(), rota);
     document.body.dataset.destino = rota.destino;
-    document.title = `${config ? "Configurações" : NOME_DESTINO[rota.destino]} · Digilab Pet`;
-  }, [rota, config, boasVindas]);
+    document.title = `${config ? "Configurações" : cais ? "Cais" : NOME_DESTINO[rota.destino]} · Digilab Pet`;
+  }, [rota, config, cais, boasVindas]);
   /* o Diario aberto marca o que o dono ja viu (o ponto de "diario novo" na barraca, ObjetosDaIlha.tsx; I1-5): so a tela, fora do save */
   const diarioAberto = rota.destino === "diario" && !config, tickAgora = jogo.motor.e.tick, sementeAgora = jogo.motor.semente;
   useEffect(() => { if (diarioAberto) marcarDiarioVisto(sementeAgora, tickAgora); }, [diarioAberto, sementeAgora, tickAgora]);
   useEffect(() => {
     const aoMudar = () => {
-      const c = configDoEndereco(location.hash); if (c) { setConfig(c); return; }
+      const c = configDoEndereco(location.hash); if (c) { setCais(false); setConfig(c); return; }
+      if (CAIS && caisDoEndereco(location.hash)) {
+        /* o endereco do cais trancado abre o cartao do motivo; o endereco volta ao da rota de agora */
+        if (caisTrancado(nivelRef.current)) { abrirMotivoDoCais(MARCO_CAIS); history.replaceState(null, "", enderecoDaRota(rotaRef.current)); return; }
+        setConfig(null); setMeusPets(false); fecharImportar(); fecharHeranca(); setCais(true); return;
+      }
       const r = rotaDoEndereco(location.hash);
       if (r) {
         /* o endereco de um lugar trancado abre o cartao do motivo, nao o painel; o endereco volta ao da rota de agora */
         const p = destinoTrancado(nivelRef.current, r.destino);
         if (p) { abrirMotivo(p); history.replaceState(null, "", enderecoDaRota(rotaRef.current)); return; }
-        setConfig(null); setMeusPets(false); fecharImportar(); fecharHeranca(); setRota(r);
+        setConfig(null); setCais(false); setMeusPets(false); fecharImportar(); fecharHeranca(); setRota(r);
       }
     };
     addEventListener("hashchange", aoMudar);
@@ -184,10 +198,15 @@ export function App() {
   const ir = (r: Rota) => {
     const p = destinoTrancado(nivel, r.destino);
     if (p) { abrirMotivo(p); return; }
-    setConfig(null); setMeusPets(false); fecharImportar(); fecharHeranca(); setRota(r); setUltima(u => ({ ...u, [r.destino]: r.aba }));
+    setConfig(null); setCais(false); setMeusPets(false); fecharImportar(); fecharHeranca(); setRota(r); setUltima(u => ({ ...u, [r.destino]: r.aba }));
   };
   const irDestino = (d: Destino) => { ir({ destino: d, aba: ultima[d] ?? DESTINOS[d][0] }); scrollTo(0, 0); };
-  const abrirConfig = (p: ParteConfig) => { setMeusPets(false); setConfig(p); scrollTo(0, 0); };
+  const abrirConfig = (p: ParteConfig) => { setMeusPets(false); setCais(false); setConfig(p); scrollTo(0, 0); };
+  /* o cais: o toque no lugar, o cartao do nivel 10 e "Ver a semana" da Arena; trancado, abre o cartao do motivo no lugar do painel */
+  const abrirCais = () => {
+    if (caisTrancado(nivel)) { abrirMotivoDoCais(MARCO_CAIS); return; }
+    setConfig(null); setMeusPets(false); fecharImportar(); fecharHeranca(); setCais(true); scrollTo(0, 0);
+  };
   const abas = DESTINOS[rota.destino];
   /* o painel dos destinos que nao sao o Pet (PainelTela): Crescer, Lutar, Diario, Conversar, Ajustes e, no desktop, as paginas de
      Importar, Nova geracao e Meus pets. O "x" volta para #/pet/estado. */
@@ -217,6 +236,9 @@ export function App() {
   /* Ajustes (config): nao e um lugar. O mesmo painel dos lugares, sem abas e sem viagem da camera: a 1920 perto do retrato, a 390 a folha de baixo sobre a ilha de sempre */
   else if (config) lugar = { d: { titulo: "Ajustes", sub: "", icone: null, abas: [], aba: "", irAba: () => {}, fechar: fecharPainel, idBase, semLugar: true },
     corpo: <TelaConfig parte={config} abrir={abrirConfig} fechar={() => { setConfig(null); scrollTo(0, 0); }} irPet={irPet} /> };
+  /* o cais (MMO5): uma tela so, sem abas e sem a viagem da camera (o mesmo painel dos Ajustes) */
+  else if (cais) lugar = { d: { titulo: "Cais", sub: "ranking da semana", icone: <Anchor aria-hidden="true" />, abas: [], aba: "", irAba: () => {}, fechar: fecharPainel, idBase, semLugar: true },
+    corpo: <TelaCais curto={!lado} irArena={() => { ir({ destino: "lutar", aba: "arena" }); scrollTo(0, 0); }} fechar={fecharPainel} /> };
   /* Crescer, Lutar e o Diario sao lugares da ilha (L2 e L3): o painel ao lado do saco, do portao ou da barraca, com a ilha viva em volta; so com o mundo (os pets sem mundo ficam na sala) */
   else if (LUGAR_DO_DESTINO[rota.destino] && !!jogo.motor.mundo) {
     const L = LUGAR_DO_DESTINO[rota.destino]!, I = L.icone;
@@ -237,7 +259,7 @@ export function App() {
   useEffect(() => { if (idLugar) { soltarTeclas(); entrarLugar(performance.now(), idLugar); } else sairLugar(); }, [idLugar]);
   /* os atalhos diretos (atalhosLugar.ts): C, 1 a 4 e Esc; valem so com a casca livre (sem luta, boas-vindas, aviso ou tela por cima) */
   const ref = useRef({ ativo: false, lugar: null as Lugar | null, aba: "" });
-  ref.current = { ativo: !lutaPoc.palco && !boasVindas && !comoJogar && !escolhendoBrasao && !descartados && !avisoTR && !avisoPoc && !conclusao && !config && !meusPets && !importando && !her,
+  ref.current = { ativo: !lutaPoc.palco && !boasVindas && !comoJogar && !escolhendoBrasao && !descartados && !avisoTR && !avisoPoc && !conclusao && !config && !cais && !meusPets && !importando && !her,
     lugar: idLugar, aba: rota.aba };
   useEffect(() => ligarAtalhosLugar({
     ativo: () => ref.current.ativo, lugarAberto: () => ref.current.lugar,
@@ -257,7 +279,7 @@ export function App() {
       <TelaLutaPoc sair={() => scrollTo(0, 0)} />
     </div>
   );
-  const nav = <Nav atual={config ? null : rota.destino} ir={irDestino} configAberta={!!config} abrirConfig={() => abrirConfig("principal")} />;
+  const nav = <Nav atual={config || cais ? null : rota.destino} ir={irDestino} configAberta={!!config} abrirConfig={() => abrirConfig("principal")} />;
   /* abaixo de 900 px nao ha barra de destinos (M1 do mobile minimo): Crescer, Lutar, Diario e Conversar sao a coluna do topo (Topo.tsx), e o painel e um
      modal que volta ao Pet pelo x, pelo Esc ou pelo toque fora */
   const abrirMeusPets = () => { sairDoLab(); setMeusPets(true); };
@@ -286,12 +308,12 @@ export function App() {
         </div>
       )}
       </div>
-      <DicaBit livre={cartaoLivre} ir={r => { ir(r); scrollTo(0, 0); }} />
+      <DicaBit livre={cartaoLivre} ir={r => { ir(r); scrollTo(0, 0); }} irCais={CAIS ? abrirCais : undefined} />
       <BalaoOraculo livre={cartaoLivre} />
       <CartaoMotivo />
       <AnuncioNivel />
       {/* o habitat (a cena do Pet) e a camada de fundo de toda rota: fica montado, nao sobe nem desce ao trocar de destino */}
-      <Habitat escurecer={!!painel} irLugar={irDestino} />
+      <Habitat escurecer={!!painel} irLugar={irDestino} irCais={CAIS ? abrirCais : undefined} />
       <TopoHabitat lugar={idLugar ? rota.destino : null} abrirMeusPets={abrirMeusPets} irConversar={() => irDestino("conversar")} irDestino={irDestino} abrirConfig={() => abrirConfig("principal")} />
       {!painel && (!lugar || lugar.d.semLugar) && <TelaPet irRegistro={() => ir({ destino: "diario", aba: "registro" })} irEvolucao={() => { ir({ destino: "crescer", aba: "evolucao" }); scrollTo(0, 0); }}
         abrirConfig={() => abrirConfig("principal")} abrirMeusPets={abrirMeusPets} />}
