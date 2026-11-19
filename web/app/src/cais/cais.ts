@@ -59,6 +59,8 @@ function zerar(): void { CA.passo = null; CA.semanas = null; CA.semana = null; C
 
 export function ligarCais(a: AmbienteCais): void { amb = { ...a, api: a.api.replace(/\/+$/, "") }; zerar(); avisar(); }
 export function desligarCais(): void { amb = null; zerar(); avisar(); }
+/** o relogio do ambiente do cais (as recompensas o leem: o titulo no perfil por uma semana) */
+export const agoraDoCais = (): number => exigir().agora();
 export const caisLigado = (): boolean => amb !== null;
 export const ouvirCais = (f: () => void): (() => void) => { ouvintes.add(f); return () => { ouvintes.delete(f); }; };
 export const revisaoCais = (): number => revisao;
@@ -121,9 +123,10 @@ export function linhasDaTela(linhas: readonly Linha[], n: number, todas: boolean
 }
 
 /* ------------------------------------------------------------ o servidor */
-class SemResposta extends Error {}
+/** a rede caiu, o servidor esta fora ou a espera acabou (a tela diz "nao veio", sem erro alto) */
+export class SemResposta extends Error {}
 function exigir(): AmbienteCais { if (!amb) throw new Error("o cais está desligado"); return amb; }
-async function chamar(caminho: string): Promise<{ status: number; corpo: unknown }> {
+export async function chamar(caminho: string): Promise<{ status: number; corpo: unknown }> {
   const a = exigir(), controle = new AbortController(), relogio = setTimeout(() => controle.abort(), ESPERA_CAIS_MS);
   try {
     const r = await a.buscar(a.api + caminho, { method: "GET", credentials: "include", signal: controle.signal });
@@ -137,14 +140,14 @@ async function chamar(caminho: string): Promise<{ status: number; corpo: unknown
     throw err;
   } finally { clearTimeout(relogio); }
 }
-const objeto = (v: unknown): Record<string, unknown> => {
+export const objeto = (v: unknown): Record<string, unknown> => {
   if (typeof v !== "object" || v === null || Array.isArray(v)) throw new Error(`o servidor respondeu algo que o jogo não entende: ${JSON.stringify(v)}`);
   return v as Record<string, unknown>;
 };
-const texto = (v: unknown, campo: string): string => { if (typeof v !== "string" || !v) throw new Error(`a resposta do servidor veio sem "${campo}"`); return v; };
-const hora = (v: unknown, campo: string): number => { const t = Date.parse(texto(v, campo)); if (!Number.isFinite(t)) throw new Error(`"${campo}" não é uma data: ${String(v)}`); return t; };
-const inteiro = (v: unknown, campo: string): number => { if (typeof v !== "number" || !Number.isInteger(v) || v < 0) throw new Error(`"${campo}" não é um inteiro: ${String(v)}`); return v; };
-const numero = (v: unknown, campo: string): number => { if (typeof v !== "number" || !Number.isFinite(v) || v < 0) throw new Error(`"${campo}" não é um número: ${String(v)}`); return v; };
+export const texto = (v: unknown, campo: string): string => { if (typeof v !== "string" || !v) throw new Error(`a resposta do servidor veio sem "${campo}"`); return v; };
+export const hora = (v: unknown, campo: string): number => { const t = Date.parse(texto(v, campo)); if (!Number.isFinite(t)) throw new Error(`"${campo}" não é uma data: ${String(v)}`); return t; };
+export const inteiro = (v: unknown, campo: string): number => { if (typeof v !== "number" || !Number.isInteger(v) || v < 0) throw new Error(`"${campo}" não é um inteiro: ${String(v)}`); return v; };
+export const numero = (v: unknown, campo: string): number => { if (typeof v !== "number" || !Number.isFinite(v) || v < 0) throw new Error(`"${campo}" não é um número: ${String(v)}`); return v; };
 
 async function lerSemanas(): Promise<Semanas> {
   const r = await chamar("/semanas");

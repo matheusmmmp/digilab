@@ -27,11 +27,13 @@ OBJETOS = {
                 "A barraca de antes (a malha e a textura da Meshy) saiu do jogo; o historico esta em docs/TAREFA_V3_LUGARES_3D.md e em docs/objetos3d/barraca/."),
     "tv": ("enfeites", "docs/enfeites", "a TV de tubo, um marco da ilha", "o gabinete, a moldura, a tela, os botoes, os pes, a antena, o musgo",
            None, "A forma segue a televisionVintage do Kenney Furniture Kit (CC0) so como referencia de desenho: nenhum vertice e nenhum pixel dela esta nestes arquivos."),
+    "trofeu": ("enfeites", "docs/enfeites", "a taca da temporada, o enfeite do ranking (MMO7) que nao se vende na loja", "o pedestal, a laje, a taca, as alcas, o musgo",
+               None, "E o primeiro enfeite do ranking: nao ha versao de antes."),
     "portao": ("lugares", "docs/lugares3d", "o portao da arena, o lugar do Lutar", "os pilares, as pedras do arco, o portal, as flamulas, o musgo",
                "docs/objetos3d/portao/esbocos/esboco_1_pedra_blocos.png",
                "O portao de antes (a malha e a textura da Meshy) saiu do jogo; o historico esta em docs/TAREFA_V3_LUGARES_3D.md e em docs/objetos3d/portao/."),
 }
-DATAS = {"tv": "2026-11-11"}   # quando o objeto foi feito, se nao foi em 2026-11-10
+DATAS = {"tv": "2026-11-11", "trofeu": "2026-11-19"}   # quando o objeto foi feito, se nao foi em 2026-11-10
 
 
 def main(nome: str, saida: str, lib: str) -> None:
