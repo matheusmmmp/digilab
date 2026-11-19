@@ -287,8 +287,9 @@ def cobertura_da_vida(c) -> dict:
 
 def config_digibrain_json(cd) -> dict:
     """a ConfigDigibrain nas constantes: sem a subchave `olhar` desligada (GOSTO_VISUAL, P1d, D-GV-P1d-7: as constantes gravadas saem
-    byte a byte; na P1f, com o olhar na web, ela entra)"""
-    return {k: v for k, v in asdict(cd).items() if not (k == "olhar" and v is False)}
+    byte a byte; na P1f, com o olhar na web, ela entra) e sem a `unidades_sociais` desligada (SOCIAL_PAR M1: so no Python ate a medida,
+    M1-4)"""
+    return {k: v for k, v in asdict(cd).items() if not (k in ("olhar", "unidades_sociais") and v is False)}
 
 
 def constantes() -> dict:

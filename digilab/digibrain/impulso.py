@@ -42,12 +42,19 @@ de olhar), que o M-ADAPT entrega pronto por TV: -mul(w_enjoo, o enjoo lembrado d
 **O bebe que come com a fome dele** (docs/PLANO_V3_EQUILIBRIO_CUIDADO.md, EQ-7; a `ConfigEquilibrioCuidado.comer_bebe` ligada): a entrada
 `bebe` (0 ou S, o M-ADAPT a monta do gancho `estagio_bebe` do motor do jogo) soma mul(w_comer_bebe, bebe) ao inato do comer (todas as
 unidades do comer). Fica fora do z. Desligada, nenhum termo.
+**As unidades sociais** (SOCIAL_PAR M1; docs/ESPEC_SOCIAL_PAR_M1.md, secao 3.3; a subchave `unidades_sociais`): no fim do bloco do
+`explorar` (depois do vagar, do cheiro e do lugar lembrado), uma `explorar/seguir:<id>` por outro a vista e uma `explorar/onde_comeu:<id>`
+por outro visto comendo, na ordem das listas do M-SENS. Os termos sao os de hoje, sem termo novo: o inato do explorar mais o W0_TIPO_SOCIAL
+(0, M1-2), a proximidade pelo w0_prox do explorar, a novidade pelo NOV_SOCIAL (0, M1-3), o incentivo da classe do tipo (P1) vezes a
+proximidade, o habito da linha do explorar e a persistencia. Sem ninguem a vista e sem onde_comeu, nenhuma unidade nova (a ordem e o indice
+das de hoje nao mudam). Desligada, nenhuma unidade nova.
 Sem estado e sem rng."""
 from __future__ import annotations
 
 from ..config import (CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTO_OLHAR, COMPORTAMENTOS_DIGIBRAIN, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS,
                       CONFIG_ABLACAO_VALUATION, CONFIG_EQUILIBRIO_CUIDADO, CONFIG_FALA_UNIDADES, CONFIG_LANCE_DONO, CONFIG_OLHAR, CONTEUDOS_FALA, RECEPTORES_DIGIBRAIN, TERMO_DO_CONTEUDO, ConfigAblacaoValuation,
-                      ConfigDigibrain, ConfigDigibrainInatos, ConfigEquilibrioCuidado, ConfigFalaUnidades, ConfigLanceDono, ConfigOlhar, ConfigPV2)
+                      ConfigDigibrain, ConfigDigibrainInatos, ConfigEquilibrioCuidado, ConfigFalaUnidades, ConfigLanceDono, ConfigOlhar, ConfigPV2,
+                      NOV_SOCIAL, TIPOS_ALVO_SOCIAIS, W0_TIPO_SOCIAL)
 from ..modelo_mundo import raiz_inteira
 from .base import div_arred
 from ._comum import chave_unidade, clamp, mul, phi
@@ -137,10 +144,11 @@ class Impulso:
         return clamp(div_arred(c * (g0 + afeto["urgencias"].get("fome", 0)), g0), 0, self.S)
 
     @staticmethod
-    def alvos(sens: dict, memoria: dict | None, passeio: tuple | None = None, fala: bool = False) -> list[dict]:
+    def alvos(sens: dict, memoria: dict | None, passeio: tuple | None = None, fala: bool = False, social: bool = False) -> list[dict]:
         """as unidades possiveis da decisao, na ordem fixa: {chave, acao, tipo (o tipo do alvo para o W0_tipo), objeto, d}. `passeio` = a chave
         (explorar, passeio, (x, y)) do passeio em curso (so com a subchave): a unidade dele ocupa o lugar do vagar, com o mesmo tipo. `fala`
-        (so com a `fala_unidades`): o chamar vira as tres unidades de fala, na ordem de CONTEUDOS_FALA, sem tipo de alvo"""
+        (so com a `fala_unidades`): o chamar vira as tres unidades de fala, na ordem de CONTEUDOS_FALA, sem tipo de alvo. `social` (so com a
+        `unidades_sociais`): as unidades com o outro como alvo, no fim do explorar"""
         out = []
         x, y = sens["pos"]
         for b in COMPORTAMENTOS_DIGIBRAIN:
@@ -169,6 +177,10 @@ class Impulso:
                     px, py = memoria["ponto"]
                     d = raiz_inteira((px - x) * (px - x) + (py - y) * (py - y))
                     out.append({"chave": chave_unidade(b, "ponto", (px, py)), "acao": b, "tipo": "ponto", "objeto": None, "d": d})
+                if social:                            # o SOCIAL_PAR M1: o outro como alvo, no fim do explorar
+                    for tipo, lista in zip(TIPOS_ALVO_SOCIAIS, (sens["outros"], sens["onde_comeu"])):
+                        for o in lista:
+                            out.append({"chave": chave_unidade(b, tipo, o["id"]), "acao": b, "tipo": tipo, "objeto": o, "d": o["d"]})
             elif b == FALA and fala:
                 for c in CONTEUDOS_FALA:
                     out.append({"chave": chave_unidade(b, c), "acao": b, "tipo": None, "objeto": None, "d": None})
@@ -220,7 +232,7 @@ class Impulso:
             inato_b[COMPORTAMENTO_OLHAR] = sum(mul(w, zj, S) for w, zj in zip(self.w0[COMPORTAMENTO_OLHAR], z) if w)
             habito_b[COMPORTAMENTO_OLHAR] = plast.habito(COMPORTAMENTO_OLHAR, z)
         lista = (self.alvos(sens, memoria, em_passeio) if self.cd.passeio else self.alvos(sens, memoria, fala=True) if fala
-                 else self.alvos(sens, memoria))
+                 else self.alvos(sens, memoria, social=True) if self.cd.unidades_sociais else self.alvos(sens, memoria))
         if olhar:                                     # uma unidade por TV a vista, no fim da lista
             lista = lista + [{"chave": chave_unidade(COMPORTAMENTO_OLHAR, o["classe"], o["id"]), "acao": COMPORTAMENTO_OLHAR,
                               "tipo": o["classe"], "objeto": o, "d": o["d"]} for o in sens["telas"]]
@@ -233,8 +245,18 @@ class Impulso:
             termos = dict.fromkeys(TERMOS + (("lembranca",) if self.cd.memoria_autobio else ()) + (("faceta",) if self.cd.facetas_mem else ())
                                    + (("gosto",) if olhar else ()) + (("enjoo",) if enjoo is not None else ()), 0)
             inato = inato_fala[u["chave"][1]] if fala and b == FALA else inato_b[b]
-            termos["inato"] = inato + (self.w0_tipo.get(b, {}).get(u["tipo"], 0) if u["tipo"] is not None else 0)
-            if b == COMPORTAMENTO_OLHAR:              # o olhar (P1d): a linha da TV, o incentivo da classe `tela` e o gosto
+            social = u["tipo"] in TIPOS_ALVO_SOCIAIS
+            if social:                                # o SOCIAL_PAR M1: o inato do explorar mais o W0_TIPO_SOCIAL (M1-2)
+                termos["inato"] = inato + W0_TIPO_SOCIAL
+            else:
+                termos["inato"] = inato + (self.w0_tipo.get(b, {}).get(u["tipo"], 0) if u["tipo"] is not None else 0)
+            if social:                                # a proximidade, a novidade 0 (M1-3) e o incentivo da classe do tipo (P1)
+                termos["prox"] = mul(self.w0_prox.get(b, 0), o["prox"], S)
+                termos["nov"] = mul(self.w0_nov.get(b, 0), NOV_SOCIAL, S)
+                if u["tipo"] not in incentivos:
+                    incentivos[u["tipo"]] = plast.incentivo(sens["pc"], u["tipo"], drives)
+                termos["incentivo"] = mul(incentivos[u["tipo"]], o["prox"], S)
+            elif b == COMPORTAMENTO_OLHAR:              # o olhar (P1d): a linha da TV, o incentivo da classe `tela` e o gosto
                 termos["prox"] = mul(self.co.w0_prox, o["prox"], S)
                 termos["nov"] = mul(self.co.w0_nov, o["nov"], S)
                 if o["classe"] not in incentivos:

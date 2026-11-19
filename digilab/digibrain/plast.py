@@ -22,11 +22,14 @@ fala (`chamar_atencao/fome`, `/higiene`, `/solidao`, no lugar dela, na mesma ord
 regra e a mesma. Desligada, as linhas sao as de hoje.
 Com a subchave `olhar` (GOSTO_VISUAL, P1d; espec, secao 5.3), o desfecho ganha a classe `tela` (o quanto olhar muda cada receptor, o
 `consequencia_olhar` em cada opcao de olhar) e o H ganha a linha `olhar`, as duas no fim. Desligada, as de hoje.
+Com a subchave `unidades_sociais` (SOCIAL_PAR M1; docs/ESPEC_SOCIAL_PAR_M1.md, secao 3.4), o desfecho ganha as classes `seguir` e
+`onde_comeu`, no fim: cada decisao de uma unidade social vai ao `consequencia_p1` com a classe igual ao tipo (o Delta dos receptores da
+decisao, com a energia corrigida pelo andar previsto), e o incentivo delas e o da classe. O H nao muda (a linha e a do explorar).
 Sem rng."""
 from __future__ import annotations
 
 from ..config import (CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTO_OLHAR, COMPORTAMENTOS_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONTEUDOS_FALA, ConfigDigibrain,
-                      ConfigDigibrainInatos)
+                      ConfigDigibrainInatos, TIPOS_ALVO_SOCIAIS)
 from ..modelo_mundo import raiz_inteira
 from .base import div_arred, valor_previsto
 from ._comum import clamp, mul
@@ -56,6 +59,7 @@ class Plasticidade:
         self.andar = 0
         linhas = [b for b in COMPORTAMENTOS_DIGIBRAIN] + ([COMPORTAMENTO_OLHAR] if self.cd.olhar else [])   # o olhar (P1d), no fim
         self.classes = CLASSES_DESFECHO + ((CLASSE_TELA,) if self.cd.olhar else ())   # a classe `tela` do desfecho (P1d), no fim
+        self.classes += TIPOS_ALVO_SOCIAIS if self.cd.unidades_sociais else ()        # o SOCIAL_PAR M1: as classes sociais, no fim
         if self.cd.fala_unidades:                     # as tres linhas da fala no lugar da do chamar (a ordem fixa)
             i = linhas.index("chamar_atencao")
             linhas[i:i + 1] = [f"chamar_atencao/{c}" for c in CONTEUDOS_FALA]
@@ -97,8 +101,9 @@ class Plasticidade:
         return valor + mul(mul(g_apr, self.p.eta_d, self.S), alvo - valor, self.S)
 
     def consequencia_p1(self, acao: str, classe: str | None, l0: list, l1: list, pos0: tuple, pos1: tuple, g_apr: int) -> dict | None:
-        """P1 na consequencia de comer (o andar e o consumo) ou de brincar com a bola (o consumo). `classe` = o que foi consumido (None:
-        nada). Devolve o registro da atualizacao do desfecho (None sem consumo)."""
+        """P1 na consequencia de comer (o andar e o consumo), de brincar com a bola (o consumo) ou, com a `unidades_sociais`, de explorar
+        uma unidade social (a classe e o tipo). `classe` = o que foi consumido (None: nada). Devolve o registro da atualizacao do desfecho
+        (None sem consumo)."""
         if not self.cd.p1:
             return None
         S = self.S

@@ -169,3 +169,21 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
   `explorar/onde_comeu:<id>`, atrás da `unidades_sociais`. O motor não muda.
 - **O painel:** uma linha no `docs/PAINEL_V3.md`.
 - **O que falta:** o checkpoint S5, com as decisões M1-1 a M1-5 da espec.
+
+## M1: o código do M1 (2026-11-19)
+
+- **O checkpoint S5:** o Matheus aprovou a síntese e a espec, com as cinco recomendações (D-SP-59).
+- **O gabarito, antes do código:** `tests/gabarito_social_m1.py` e `tests/gabaritos/social_m1_de_hoje.json`, num commit próprio.
+- **A subchave `ConfigDigibrain.unidades_sociais`, desligada:**
+  - **o M-SENS** lê da `PercepcaoSocial` só os `outros` e o `onde_comeu` (`Sens.ler_outros`);
+  - **o M-IMPULSO** põe as unidades `explorar/seguir:<id>` e `explorar/onde_comeu:<id>` no fim do explorar, com o inato e a novidade
+    sociais em 0 (`W0_TIPO_SOCIAL`, `NOV_SOCIAL`);
+  - **o M-ADAPT** acha o candidato do motor por tipo e ponto;
+  - **o M-PLAST** ganha as classes `seguir` e `onde_comeu` no desfecho, e o M-MEM as aceita no episódio.
+- **O motor não mudou:** o `engine.py`, o `mundo.py` e o `grupo.py` saem iguais.
+- **Os testes:** `tests/test_digibrain_m1_social.py`, com o G2, o G2b, as unidades, o alvo, dois na mesma célula, o P1, o prox, o
+  G-RECEPTOR-SOCIAL, as combinações, o determinismo e a escolha só com o outro à vista.
+- **O achado (D-SP-62):** cada unidade social leva o inato do explorar, e o sorteio é proporcional. O outro à vista aumenta a chance de ir
+  até ele antes de qualquer aprendizado. O Matheus escolheu a opção (a) (D-SP-63): o código fica, e o plano da medida ganha o braço de
+  controle M1 com o incentivo social em 0.
+- **O que falta:** o código do M2 (M1-5) e o plano da medida, com os braços M1 e M1+M2.
