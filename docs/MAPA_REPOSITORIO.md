@@ -160,6 +160,12 @@ As seções acima são cópias inteiras do CLAUDE.md antigo (o G-NADA-PERDIDO co
 - **2026-11-17, MMO5, a tela do cais:** `web/app/src/cais/cais.ts` (o cliente das rotas da semana), `src/telas/cais/TelaCais.tsx` e
   `src/estilo/cais.css` (a tela, em `#/cais`), o cartão do nível 10 em `src/nivel.ts`, o toque no cais em `src/telas/pet/ToqueLugar.tsx`
   e `test/cais.test.ts`. Só com `VITE_DIGILAB_API` no build.
+- **2026-11-18, MMO6, o desafio do dia (a parte local):** a Fábrica do dia com as sementes de fora em `web/app/motor/fabrica.ts`
+  (`TentativaFabrica.doDia`, `receberSemente`, `proximoRival`; sem elas, a de sempre); a conta pura em `web/app/src/ranking/desafio.ts`
+  (o registro, o replay, o desempate, o selo); o servidor em `servidor_web/src/desafio/desafio.ts` (a semente do dia, a tentativa única, as
+  sementes das lutas, o envio, a tabela do dia, o fechamento com o selo e o segredo; `/desafio/*`) e a migração 6; os testes
+  `web/app/test/mmo6_fabrica_hoje.test.ts` (o gabarito de antes, `test/gabaritos/mmo6_fabrica_hoje.json`, por `test/gerar_gabarito_mmo6.ts`),
+  `web/app/test/mmo6_fabrica_do_dia.test.ts` e `servidor_web/test/desafio.test.ts`.
 - **2026-11-17, MMO5, a prancha do cais e da semana:** `docs/PLANO_UX_CAIS.md` (APROVADO, UX-CA-1 a 7) e `docs/pranchas/ux-cais/`
   (`gerar.py`, `cais.css`, `capturar.sh`, os HTML e as capturas): a tabela da semana, os estados, a semana fechada, o segredo e o
   cais trancado e destravado.
