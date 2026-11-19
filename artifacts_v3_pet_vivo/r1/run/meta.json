@@ -1,0 +1,145 @@
+{
+  "artefatos_sha256": {
+    "medidas.json": "e98280f02ea24c43e80b09809bfebdbee99ac40e37633735b828b78546815ae9",
+    "medidas.json.gz": "fa406f7a68e049081946700f2dce0cebf4c613f92b49335422d521775267b678",
+    "resultado.json": "9644571201177aaa13c895acd5dcd71f03335c73c466b94b873d60d3d036a2a9"
+  },
+  "celulas": [
+    [
+      "atencioso",
+      "longe_fixo"
+    ],
+    [
+      "atencioso",
+      "comedouro"
+    ],
+    [
+      "atencioso",
+      "longe"
+    ],
+    [
+      "relapso",
+      "longe_fixo"
+    ],
+    [
+      "relapso",
+      "comedouro"
+    ],
+    [
+      "relapso",
+      "longe"
+    ],
+    [
+      "aleatorio",
+      "longe_fixo"
+    ],
+    [
+      "aleatorio",
+      "comedouro"
+    ],
+    [
+      "aleatorio",
+      "longe"
+    ],
+    [
+      "incoerente",
+      "longe_fixo"
+    ],
+    [
+      "incoerente",
+      "comedouro"
+    ],
+    [
+      "incoerente",
+      "longe"
+    ]
+  ],
+  "comando": "python experiments/run_v3_pet_vivo_r1.py --config experiments/configs/v3_pet_vivo/r1.json --processos 4",
+  "config": {
+    "descricao": "O replay do R1 (docs/PLANO_ANALISE_V3_PET_VIVO_R1.md, APROVADO): as vidas ja gravadas da run do PV-2 (o HOJE e o OLF-0 da run e o HOJE da checagem do v38; 5 120 vidas), rejogadas pelo log com a ConfigRastro ligada, so leitura. Nenhuma vida nova e nenhuma faixa nova: as bases sao as da run do PV-2, para a conferencia. Uma vez, ate 4 processos.",
+    "dias": 14,
+    "fase": "r1",
+    "orcamento_por_dia": 16,
+    "plano": "docs/PLANO_ANALISE_V3_PET_VIVO_R1.md",
+    "unidades": {
+      "bases": [
+        26101,
+        26202,
+        26303,
+        26404,
+        26505
+      ],
+      "k": 40,
+      "prefixo": "digibrain_prototipo"
+    }
+  },
+  "config_arquivo": "experiments/configs/v3_pet_vivo/r1.json",
+  "config_sha256": "7a22daf6d457bf9aafe524d5cf1f46c72bf511764915fe8d9110531c665b94f3",
+  "conjuntos": [
+    [
+      "run",
+      "HOJE"
+    ],
+    [
+      "run",
+      "OLF-0"
+    ],
+    [
+      "v38",
+      "HOJE"
+    ]
+  ],
+  "cortes": {
+    "eta2": 0.05,
+    "fora_alto": 0.5,
+    "fora_baixo": 0.25
+  },
+  "duracao_s": 2271.306890487671,
+  "fase": "r1",
+  "fim": "2026-11-19T18:12:39",
+  "fonte": {
+    "artefatos_sha256": {
+      "medidas.json": "b7acc323af11c7f1f8a3d863392667e1d70000de92526f0acb392690c5eb9e0b",
+      "medidas.json.gz": "0bea4881a24e14c08f5b925c06ea06c8fcb4192287b5ec63c8fad2c65e53193c",
+      "resultado.json": "fc3f48ca03fb96a7069981f1f2f8694bc774672126cf4b0c11c677a2534b9464",
+      "vidas.tar.gz": "3dcb15b7d74c4fe385fd5c8c648f38c240e386749ef6b972047cd337776474df"
+    },
+    "git_head": "34894b505f1ac0f7cba4526b5263439cd365e8f3",
+    "pasta": "artifacts_v3_pet_vivo/pv2/run",
+    "vidas_tar": "D:\\Trab\\digilab\\v3-pet-vivo-pv2-run\\artifacts_v3_pet_vivo\\pv2\\run\\vidas.tar.gz"
+  },
+  "git_head": "3c4b72a60ff627840afe47c98d185c7452da6fde",
+  "git_limpo": true,
+  "inicio": "2026-11-19T17:34:48",
+  "orquestrador_sha256": "d67d6e96327b7231aa3ab35a779aa2fcd2f0205a2a220cc6cb94738ea038f7e9",
+  "plano": "docs/PLANO_ANALISE_V3_PET_VIVO_R1.md",
+  "plano_sha256": "2caf57fd8659e5e166381ecb9e543e482faa199bcae7b6e71f90c7b6b608026f",
+  "processos": 4,
+  "pv2_sha256": "c6d031a445b91e0dfedaa56af4e2954ac9e86fbbcab4faed4f7ba3bc5a357f31",
+  "python": "3.13.0",
+  "sha256": {
+    "config.py": "ce809aac73659b6ebdbe4fc22771741582df36a0acc8cec31ac3b88f2b674ee3",
+    "corpo.py": "d5600c8e08a140861ddec694ee36fc3eed28a6d8f7bff0774e996a3c952ec6c4",
+    "digibrain/__init__.py": "a18292fc00ac5e260970d9de4d5afdcfb70d904b3cf660c351d8dcc0a9d8b5f2",
+    "digibrain/_comum.py": "ab4b8b0622c0b419833a68284594bd1519eb2a04041b313701dd0eee23d8f3a4",
+    "digibrain/adapt.py": "be941486b6f70901dedca6bbbaf1d9c83597d8281305230af8096f86a45029ca",
+    "digibrain/afeto.py": "89f33f272faa44253a1594f7b4fe52055aca2b4eddb974af79eed69d0af0b2bb",
+    "digibrain/arb.py": "ace91ebfedeec9f8884badc12ce95b771b6f38570d4b633e54f25f0cf7a9458c",
+    "digibrain/base.py": "723fc6aa7da85f0588e6c15173ce68b4bc0f9711341c29da9f30e229ddd6c724",
+    "digibrain/decodificador.py": "c597db7e836adf400707f56382f2443feb274512dba935a8e5c7e822fa988b3c",
+    "digibrain/dever.py": "c6cf340cb7c5cb18a81435caa8ff0b576b48890115f6149f193df4a1863cedb7",
+    "digibrain/estado.py": "76a5f54acccdee3ec3305d6127f2f459b67ce615e0970c3e350955150b34b3c6",
+    "digibrain/ganchos.py": "595e7f57fddb5e3d06bf2aa939acd59dce379843b503a7f04021821b2328a224",
+    "digibrain/impulso.py": "0b753b3129917e017b39042a3abd9c2ffc6d6ef2795e3f0a534498d2456fb97f",
+    "digibrain/mem.py": "7c28530030d060c83af85f700c39a72d3c1e92e232d0299316f922d10b28ff6e",
+    "digibrain/pers.py": "c0e3ef850d84d12b7263baeba438f5395512f34a05e49fea831c346ab1594528",
+    "digibrain/plast.py": "ca00797b0a76a9c68d9282cffd01a785c6df4a3f7d4ac1f3ab94889e3fc9a2a4",
+    "digibrain/rastro.py": "d15d5773ad41908ce360ae4e148dd4282c26a2385857738232ee4eb57d1cccec",
+    "digibrain/sens.py": "0c15c9352732a6c54d72ea1140122d16f0e740071e26c24af8370c9623bc5f38",
+    "engine.py": "48ba51ce6426eb98a726c05e07f3a57992ae0f328f517740ec36f1c3db153630",
+    "metrics.py": "16d649f032e095f5398358354d847677c5f21cbdcb728e75676994b72b41172c",
+    "mundo.py": "3f5d0361365d0f492d2d0cea135c899e45d86d56e981fbe5fc1bf936a1f9caaa"
+  },
+  "vidas": 5120,
+  "vidas_parede_s": 2172.31983329996
+}
