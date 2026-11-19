@@ -127,3 +127,13 @@ A run única, pelo `docs/PLANO_ANALISE_V3_CORPO.md`: 9 600 vidas e 400 pares, em
 **A leitura: os três braços saem em "perda".** O F sobe nos três (D +0,120, D + E +0,110, D + C5 +0,168 na taxa por episódio do
 `longe_fixo`, todos com o Holm rejeitando). Mas a privação do comedouro sobe nos três, e na D + C5 a exaustão quase dobra. O S1 não mede
 (zero chutes). **O programa para no CHECKPOINT C2.5:** o diagnóstico e o trade-off vão ao Matheus.
+
+## 12. O diagnóstico da C2.5 (2026-11-19)
+
+O Matheus respondeu "Sim, diagnosticar". O diagnóstico está no `docs/RESULTADO_V3_CORPO.md`, seção 5, feito só com as vidas gravadas,
+rejogadas do log (`experiments/diagnostico_v3_corpo_c25.py`).
+
+**A causa:** a D tira a falta de combustível do cansaço, que o sono resolve, e a põe na fome, que só a comida resolve. Com o atencioso e o
+incoerente, o pet come mais e a privação cai. Com o relapso e o aleatório, não há comida a mais, a fome fica acima do limiar, e o dano da
+privação baixa a saúde (−0,12 a −0,24). O comedouro só sai em "> 0" porque ali a privação com os donos bons já está perto de 0. **As
+opções da C3** (a ponte com teto, a ponte dividida ou nenhuma mudança) vão ao Matheus.
