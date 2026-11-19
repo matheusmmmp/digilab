@@ -16,7 +16,8 @@ import { motorReal, pagarNivel, registrarMarcoMega, tamerAtual, useJogo } from "
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados } from "./pets.ts";
 import { CHAVE, SEMENTE_EXEMPLO, petExemplo } from "./save.ts";
 import { dicasLigadas, pedirCartao, retirarCartao, esquecerDicasVistas } from "./dicas.ts";
-import { definirCais, definirTrancas } from "./trancas.ts";
+import { CAIS, definirCais, definirTrancas } from "./trancas.ts";
+import { buscarTacas } from "./cais/premios.ts";
 import {
   LUGAR_DA_PECA, PECAS, PECA_DO_LUGAR, VIDA_MARCO_MIN, anuncioDeAbertura, assinaturaIntocada, cartoesPendentes, ehPetIntocado, jaConheco, lerEstado, marcarCartao, marcosFeitos,
   nivelDe, pecaAberta, reverTutorial, sincronizar, textoEstado, vidaDoPet, type EstadoNivel, type Peca,
@@ -89,7 +90,7 @@ function guardadosDoJogador(agora: number): { motores: Motor[]; id: number } {
 interface Resultado { estado: EstadoNivel; novos: number[] }
 let memo: { chave: string; r: Resultado; pets: Motor[] } | null = null;
 /* o cais (MMO5): o marco que o abre, ou null com o cais desligado (sem o servidor no build). Quem liga e a casca (App.tsx), uma vez */
-let marcoDoCais: number | null = null, brilhoDoCais = false;
+let marcoDoCais: number | null = null, brilhoDoCais = false, tacasBuscadas = false;
 export function ligarCaisNoNivel(marco: number | null): void { marcoDoCais = marco; }
 /** o cais acabou de abrir e ainda nao brilhou (CadeadoDoCais.tsx consome) */
 export const caisAcabouDeAbrir = (): boolean => brilhoDoCais;
@@ -129,6 +130,9 @@ function confirmarNivel(): void {
   pagarNivel(nivelDe(r.estado));
   definirTrancas({ saco: !pecaAberta(r.estado, "crescer"), portao: !pecaAberta(r.estado, "lutar"), barraca: !pecaAberta(r.estado, "diario") });
   definirCais(marcoDoCais !== null, marcoDoCais === null || !r.estado.marcos.includes(marcoDoCais));
+  /* as tacas da temporada (MMO7): uma busca por sessao, so com o cais aberto (trancado, o jogo nao chama o servidor); sem conta ou sem
+     resposta, a ilha fica como esta */
+  if (CAIS.ligado && !CAIS.trancado && !tacasBuscadas) { tacasBuscadas = true; void buscarTacas(); }
   if (antes !== null && r.estado === antes) return;
   confirmado = r.estado; versaoConfirmado++;
   gravarChave(r.estado);

@@ -22,6 +22,7 @@ import type { ConfigConta } from "../conta/config.ts";
 import type { GuardasConta } from "../conta/rotas.ts";
 import { EnvioMalformado, hashRegistro, lerEnvio, type Conferencia } from "./conferir.ts";
 import type { Conferidor } from "./conferidor.ts";
+import { gravarFronteira } from "../premios/premios.ts";
 import { fecharSemanas, gravarLutas } from "./semanas.ts";
 import { entreguesDoPet } from "./sementes.ts";
 
@@ -119,6 +120,8 @@ export function montarRotasEnvio(app: Hono, cfg: ConfigConta, g: GuardasConta, c
           .run(id, JSON.stringify(envio.pet.log), JSON.stringify(envio.tamer.log), apagarRegistroEm(t));
         /* o que a conferencia achou de cada semente fica na semente, para a tabela da semana (MMO5): a primeira conferencia vale */
         if (aceito) gravarLutas(banco, s.conta_id, entregues, r.lutas, id);
+        /* os recordes da Torre, da Fábrica e do Salão que a conferência refez vão para o mural (MMO7) */
+        if (aceito) gravarFronteira(banco, s.conta_id, envio.pet.semente, r.fronteira, id, t);
       });
       const linha = banco.prepare(`SELECT ${COLUNAS} FROM envios WHERE id = ?`).get(id) as unknown as LinhaEnvio;
       const base = envioParaDict(banco, linha);
