@@ -59,7 +59,7 @@ describe("registro do Tamer", () => {
     expect(() => Tamer.reproduzir([["medalha", { ...ok[1], n: 2 }]])).toThrow(/fora de ordem/);
     expect(() => Tamer.reproduzir([["medalha", { ...ok[1], id: "lua" }]])).toThrow(/desconhecida/);
     expect(() => lerTamer(armaz({ [CHAVE_TAMER]: "{" }))).toThrow(/JSON/);
-    expect(() => lerTamer(armaz({ [CHAVE_TAMER]: JSON.stringify({ versao: 11, log: [] }) }))).toThrow(/versão/);
+    expect(() => lerTamer(armaz({ [CHAVE_TAMER]: JSON.stringify({ versao: 12, log: [] }) }))).toThrow(/versão/);
   });
   test("medalha so na primeira vitoria contra o lider, uma vez por Tamer", () => {
     const t = new Tamer(), m = rookieTreinado(21);

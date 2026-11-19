@@ -138,3 +138,43 @@ As seções acima são cópias inteiras do CLAUDE.md antigo (o G-NADA-PERDIDO co
   migração 3 do `banco.ts`), e o hash do pedido conferido no envio (`hashesAte` em `conferir.ts`). Os testes em
   `servidor_web/test/sementes.test.ts`. No jogo, `web/app/src/ranking/pedido.ts` (o hash do pedido, sem tela) e `web/app/src/marcosTamer.ts`
   (os marcos do Tamer, reexportados pelo `nivel.ts`).
+- **2026-11-17, MMO4, a tela da luta ranqueada:** `web/app/src/ranking/ranqueada.ts` (o cliente: pedido, prévia, envio, reenvio),
+  `web/app/src/telas/lutar/palcoPoc/TelaRanqueada.tsx` e `web/app/src/estilo/ranqueada.css` (a aba Arena com "Treino / Ranqueada"),
+  `web/app/test/ranqueada.test.ts`. Só liga com `VITE_DIGILAB_API` no build.
+- **2026-11-17, MMO4, o rival e o mapa no pedido da semente:** `servidor_web/src/envio/sementes.ts` e a migração 5
+  (`rival_pedido`, `mapa_pedido`); `web/app/src/ranking/pontos.ts` (a luta com outro rival ou mapa não conta), `pedido.ts` e
+  `ranqueada.ts`.
+- **2026-11-17, MMO, MMO5 (a parte local):** o ranking da semana em `servidor_web/src/envio/semanas.ts`: as tabelas por estágio com o
+  desempate, o fechamento da semana e o segredo publicado (`GET /semanas`, `/semanas/:semana/tabelas`, `/semanas/:semana/segredo`); a
+  migração 4 em `servidor_web/src/conta/banco.ts`; `servidor_web/test/semanas.test.ts`. O `pontuar` de
+  `web/app/src/ranking/pontos.ts` passou a ser exportado.
+- **2026-11-17, CONTA, as telas da conta no jogo:** `web/app/src/conta/conta.ts` (o cliente: entrar, primeiro acesso, perfil, sair,
+  apagar), `web/app/src/conta/apiDoBuild.ts` (`VITE_DIGILAB_API`, `VITE_DIGILAB_TERMOS`, `VITE_DIGILAB_PRIVACIDADE`),
+  `web/app/src/telas/config/TelaConta.tsx` e `web/app/src/estilo/conta.css` (a parte Conta dos Ajustes, `#/config/conta`),
+  `web/app/test/conta.test.ts`. Só liga com `VITE_DIGILAB_API` no build.
+- **2026-11-18, MMO5, o e2e do cais:** `web/app/playwright.conta.config.ts` e `web/app/e2e_conta/` (`comum.ts`, `montar.ts`,
+  `cais.spec.ts`): o build com `VITE_DIGILAB_API` em `web/dist_conta/` e o servidor falso por `page.route`. Comando:
+  `cd web/app && npm run e2e:conta`.
+- **2026-11-18, MMO5, o cais na ilha 3D:** `web/app/src/trancas.ts` (`CAIS`), `src/componentes/CadeadoDoCais.tsx`, a marca do cais em
+  `src/telas/pet/Minimapa.tsx` e o modelo apagado em `src/telas/pet/ilha/vista.ts`. Só com `VITE_DIGILAB_API` no build.
+- **2026-11-17, MMO5, a tela do cais:** `web/app/src/cais/cais.ts` (o cliente das rotas da semana), `src/telas/cais/TelaCais.tsx` e
+  `src/estilo/cais.css` (a tela, em `#/cais`), o cartão do nível 10 em `src/nivel.ts`, o toque no cais em `src/telas/pet/ToqueLugar.tsx`
+  e `test/cais.test.ts`. Só com `VITE_DIGILAB_API` no build.
+- **2026-11-18, MMO6, o desafio do dia (a parte local):** a Fábrica do dia com as sementes de fora em `web/app/motor/fabrica.ts`
+  (`TentativaFabrica.doDia`, `receberSemente`, `proximoRival`; sem elas, a de sempre); a conta pura em `web/app/src/ranking/desafio.ts`
+  (o registro, o replay, o desempate, o selo); o servidor em `servidor_web/src/desafio/desafio.ts` (a semente do dia, a tentativa única, as
+  sementes das lutas, o envio, a tabela do dia, o fechamento com o selo e o segredo; `/desafio/*`) e a migração 6; os testes
+  `web/app/test/mmo6_fabrica_hoje.test.ts` (o gabarito de antes, `test/gabaritos/mmo6_fabrica_hoje.json`, por `test/gerar_gabarito_mmo6.ts`),
+  `web/app/test/mmo6_fabrica_do_dia.test.ts` e `servidor_web/test/desafio.test.ts`.
+- **2026-11-19, MMO8, as duas pontuações e o reset (a parte local):** o evento `"reset"` e os Bits do reset no registro do Tamer
+  (`web/app/src/tamer.ts`, versão 11, atrás de `RESET_LIGADO`); a conta pura dos pontos do Digimon, do Respeito e do nível do reset em
+  `web/app/src/ranking/pontos.ts`; o reset do pet em `web/app/src/reset.ts` (com o `aposentar` do `heranca.ts`); o servidor em
+  `servidor_web/src/premios/rankings.ts` (o máximo histórico dos Digimon, os resets, os feitos vistos, o Respeito conferido; `/digimons` e
+  `/tamers`) e a migração 8; os testes `web/app/test/mmo8_tamer_hoje.test.ts` (o gabarito de antes, `test/gabaritos/mmo8_tamer_hoje.json`,
+  por `test/gerar_gabarito_mmo8.ts`), `web/app/test/mmo8_reset.test.ts` e `servidor_web/test/pontuacoes.test.ts`.
+- **2026-11-17, MMO5, a prancha do cais e da semana:** `docs/PLANO_UX_CAIS.md` (APROVADO, UX-CA-1 a 7) e `docs/pranchas/ux-cais/`
+  (`gerar.py`, `cais.css`, `capturar.sh`, os HTML e as capturas): a tabela da semana, os estados, a semana fechada, o segredo e o
+  cais trancado e destravado.
+- **2026-11-17, MMO, a prancha da luta ranqueada:** `docs/PLANO_UX_LUTA_RANQUEADA.md` (APROVADO, UX-LR-1 a 6) e
+  `docs/pranchas/ux-luta-ranqueada/` (`gerar.py`, `ranqueada.css`, `capturar.sh`, os HTML e as capturas): a aba Arena com a escolha
+  "Treino / Ranqueada", os estados do pedido e o resultado. Só desenho.

@@ -1,0 +1,24 @@
+{
+ "descricao": "CORPO C3: a fumaca, nas sementes dos testes",
+ "fase": "corpo_c3",
+ "plano": "docs/PLANO_ANALISE_V3_CORPO_C3.md",
+ "dias": 1,
+ "orcamento_por_dia": 16,
+ "unidades": {
+  "prefixo": "digibrain_prototipo",
+  "bases": [
+   101,
+   202
+  ],
+  "k": 1
+ },
+ "pares": {
+  "prefixo": "corpo_par",
+  "bases": [
+   101,
+   202
+  ],
+  "k": 1,
+  "dias": 2
+ }
+}

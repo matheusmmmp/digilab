@@ -1,0 +1,8 @@
+{
+  "descricao": "A run unica do PV-2 (docs/PLANO_ANALISE_V3_PET_VIVO_PV2.md, com os adendos 1 e 2; so roda com o adendo 2 APROVADO e a faixa em FAIXAS_RESERVADAS): o REL da C4 nos 6 bracos (HOJE, OLF-0, OLF-DC, OLF-DCV, OLF-PLA, OLF-G) nas 12 celulas da C4, bases 26101...26505, K = 40 (200 unidades), 14 dias: 14 400 vidas, com o contrafactual da SE-C em 1 440 e a checagem do v38 em 960 a mais, uma vez, ate 4 processos.",
+  "plano": "docs/PLANO_ANALISE_V3_PET_VIVO_PV2.md",
+  "fase": "pv2",
+  "unidades": {"bases": [26101, 26202, 26303, 26404, 26505], "k": 40, "prefixo": "digibrain_prototipo"},
+  "dias": 14,
+  "orcamento_por_dia": 16
+}

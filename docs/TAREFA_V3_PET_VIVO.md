@@ -160,3 +160,115 @@ repasse do Gerente da V3.
 
 **Próximo (as PV2-1 a PV2-10 DECIDIDAS em 2026-11-09, D-PV2P-6):** o merge pelo Matheus. Depois, o PR do código, com o gabarito, a chave desligada e o custo medido nas sementes
 dos testes.
+
+## A análise da integração da cadeia (2026-11-17, Claude Code, Opus 5.5, branch `v3-integracao-cadeia-analise`)
+
+Fora das etapas desta frente: um pedido do Matheus sobre a cadeia órgão → cérebro → ação → aprendizado, repassado pela sessão que abriu
+esta. O documento é o [integracao_cadeia_digibrain.md](futuro/integracao_cadeia_digibrain.md), só leitura, sem vida e sem código.
+
+- **Recomenda o código do PV-2 como a primeira etapa,** com a especificação na seção 8 dele.
+- **Propõe reordenar a PV2-10 em parte** (INT-1): o rastro e o crédito do intervalo vêm antes do sorteio, pela evidência nova de que o r
+  é medido no mesmo tick (D-INT-3).
+- **Os desvios:** D-INT-1 a D-INT-9.
+- **As decisões:** as INT-1 a INT-9 estão DECIDIDAS pela recomendação. O Matheus escreveu, em 2026-11-17: "Aprovo as INT-1 a
+  INT-9 pela recomendação" (D-INT-9).
+- **A próxima etapa desta frente** é o PR do código do PV-2 (o R0), pela seção 8 do documento.
+- **Os repasses (2026-11-18, D-INT-10):**
+  - **a INT-5** fica como premissa do plano do R2: uma estrutura de traço só no cérebro, usada pela janela do ELOGIO e pelo crédito do
+    intervalo, com os sinais separados no registro. Está anotada também na `TAREFA_V3_ELOGIO.md`;
+  - **a INT-7** foi para a LZ3, na `TAREFA_V3_LIMPEZA.md`: o balão e a fala passam a ler o motivo do modular.
+
+## O código do PV-2, o R0 (2026-11-17, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2-codigo`)
+
+O Matheus, nesta sessão, escreveu "Sim, começa o R0", a primeira etapa da INT-1 da análise da integração.
+
+- **Entregue:**
+  - a `ConfigPV2`, desligada;
+  - o olfato no M-SENS: o nível e a variação, nunca a diferença;
+  - o `dC` no z e o `w0_dc`;
+  - o executor da busca com os cinco braços OLF;
+  - as medidas (`medidas_pv2`, no `metrics.py`);
+  - as vidas (`experiments/pv2.py`) e a medição (`experiments/medir_pv2.py`).
+- **O gabarito** das vidas de hoje está num commit próprio (`5322a82a`) e sai igual byte a byte.
+- **Os testes:** `tests/test_pv2_codigo.py` e `tests/test_gabarito_pv2.py`. Eles cobrem o G1 de cada braço, o G-UNIDADES, a troca das
+  narinas, as chamadas da rng e o cenário da ração longe.
+- **O adendo 1** (`PLANO_ANALISE_V3_PET_VIVO_PV2.md`), APROVADO pelo Matheus em 2026-11-17 ("Sim, G0 = 512"), traz:
+  - os números do mecanismo;
+  - a forma dos braços;
+  - o G0 = 512, no lugar do 64, porque a saturação passou do corte;
+  - o custo.
+- **Os desvios:** D-PV2C-1 a D-PV2C-11.
+- **Nenhuma vida da run, nenhuma faixa.** Próximo: a faixa e o PR da run.
+
+## O PR da run do PV-2 (2026-11-17, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2-run`, empilhado no #981)
+
+- **O orquestrador:** `experiments/run_v3_pet_vivo_pv2.py`, com as configs em `experiments/configs/v3_pet_vivo/` (a run e a fumaça). Os
+  testes estão em `tests/test_run_v3_pet_vivo_pv2.py`.
+- **O adendo 2 do plano, APROVADO pelo Matheus em 2026-11-18** ("Sim, aprovo", D-PV2R-8):
+  - a faixa 26101–26505, proposta pelo coordenador no lugar da 83xxx (D-PV2R-6);
+  - o que o orquestrador faz;
+  - a checagem do v38 (a INT-8), descritiva;
+  - o custo.
+- **A fumaça** (bases 101 e 202, K = 1, 2 dias): 192 vidas, todas com o G1 e o T-CENARIO-1 conferidos, em 77 s com 2 processos.
+- **Os desvios:** D-PV2R-1 a D-PV2R-8.
+- **O #981 e o #984 na main** (2026-11-18, `34894b50`).
+
+## A run do PV-2 (2026-11-18, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2-resultado`)
+
+- **Rodou uma vez:** 15 360 vidas na faixa 26101–26505, em 4 h 15 min com 4 processos (D-PV2R-10). O resultado está em
+  [RESULTADO_V3_PET_VIVO_PV2.md](RESULTADO_V3_PET_VIVO_PV2.md).
+- **A leitura: "custa perto de casa"** (D-PV2R-11). No `comedouro`, o OLF-DCV perde 0,142 da taxa por episódio para o OLF-0, e os
+  outros gates também falham. O OLF-G sai como "o ganho não entra". Pela seção 7, a sugestão é não levar.
+- **Nada vai para a web,** e a chave do PV-2 continua desligada.
+- **A decisão do Matheus (2026-11-18): "Sim, registra assim"** (D-PV2R-13). O PV-2 não vai ao cérebro padrão nem à web.
+- **Próximo:** as etapas seguintes da INT (R1 rastro, R2 crédito com o ELOGIO) e a seção 9 do plano, na ordem que o Matheus escolher.
+
+
+## O plano do R1, o rastro da cadeia (2026-11-19, Claude Code, Fable 5.2, branch `v3-integracao-r1-plano`)
+
+- **O pedido do Matheus (2026-11-19):** "escreve o plano do R1". O plano está em
+  [PLANO_ANALISE_V3_PET_VIVO_R1.md](PLANO_ANALISE_V3_PET_VIVO_R1.md), **APROVADO pelo Matheus em 2026-11-19** ("Aprovo todas", D-RA-7).
+- **O que o R1 é:** só leitura. O cérebro registra, por decisão, o que muda no corpo entre uma decisão e a seguinte, sem creditar
+  nada (a subchave `rastro`, desligada). Um replay das vidas da run do PV-2 mede quanto do corpo fica fora do r de hoje.
+- **A fonte:** o HOJE da run do PV-2 (2 400 vidas), com o OLF-0 e o HOJE do v38 ao lado. Nenhuma vida nova e nenhuma faixa (D-RA-1).
+- **A regra de leitura, escrita antes:** diz o que o plano do R2 recebe. Nenhuma medida é gate, e nada vai para a web por ela.
+- **O TypeScript fica para depois da LZ3** (RA-3).
+- **As decisões RA-1 a RA-6** estão DECIDIDAS pela recomendação, na seção 10 do plano.
+- **Próximo:** o PR do código (a seção 7 do plano) e o replay, uma vez, com a vez da máquina.
+
+## O código do R1, o rastro da cadeia (2026-11-19, Claude Code, Fable 5.2, branch `v3-integracao-r1-codigo`, empilhado no #1017)
+
+O pedido do Matheus (2026-11-19): "Sim, começa o código". É a seção 7 do [plano do R1](PLANO_ANALISE_V3_PET_VIVO_R1.md). **O replay
+não rodou:** ele espera o plano e este código na `main` e a vez da máquina.
+
+- **A chave:** `ConfigRastro` (`digilab/config.py`), desligada por padrão, numa config própria (D-RA-8). Vai ao cérebro como
+  `cfg_rastro`.
+- **O registro:** com a chave ligada, o fechamento de cada decisão grava `motivo["cadeia"]` (`adapt.py`, `_cadeia`): o r do mesmo
+  tick, o r do intervalo até a decisão seguinte (`Afeto.r_intervalo`, só cálculo), a variação de cada receptor nos dois trechos, os
+  gestos do dono no intervalo, as atualizações (P1, P2, episódios) e o que pesou na escolha. Nada é creditado.
+- **O texto:** `digilab/digibrain/rastro.py` (`texto_cadeia`, `texto_da_vida`), uma linha por decisão.
+- **As medidas:** `metrics.medidas_rastro` (M-FORA, M-AÇÃO, M-DONO, M-TROCA e M-MUDA da seção 4 do plano).
+- **O orquestrador:** `experiments/run_v3_pet_vivo_r1.py`, com a config `experiments/configs/v3_pet_vivo/r1.json`. Faz a C-FONTE, a
+  C-G1, a C-FECHO e a C-UMA-VEZ, falhando alto, e depois as medidas e a regra de leitura. Recusa rodar sem o plano APROVADO, com a
+  pasta de saída existente e sem o `pre_run`.
+- **A vida não muda:** com o rastro ligado, a vida sai igual decisão a decisão (o resumo do motor, os motivos sem o campo novo e o
+  estado do cérebro), no HOJE e no v38, e o G1 do replay passa (`tests/test_rastro_cadeia.py`, 20 testes).
+- **A fumaça da C-G1:** 2 vidas reais do HOJE da run do PV-2, rejogadas com o rastro na `main` de hoje, saem com o log e as medidas
+  iguais às gravadas. Nenhuma medida do rastro foi lida nelas.
+- **O custo** (`artifacts_v3_pet_vivo/r1/custo.json`): 2,6 s por vida rejogada, o que projeta 0,92 h de parede para os 5 120 replays
+  com 4 processos, abaixo do corte de 4 h (RA-6).
+- **Desvios:** D-RA-8 a D-RA-16.
+- **Próximo:** o merge do #1017 e deste PR; depois o replay, uma vez, com a vez da máquina, e o `RESULTADO_V3_PET_VIVO_R1.md`.
+
+## O replay do R1 (2026-11-19, Claude Code, Fable 5.2, branch `v3-pet-vivo-r1-resultado`)
+
+O pedido do Matheus (2026-11-19): "Sim, merge e roda". O #1025 entrou na `main` (`60fcfdc2`), e o replay rodou uma vez, 38 min com 4
+processos, sobre as 5 120 vidas gravadas. O resultado está em [RESULTADO_V3_PET_VIVO_R1.md](RESULTADO_V3_PET_VIVO_R1.md).
+
+- **As conferências que falham alto passaram em todas as vidas** (C-FONTE, C-G1, C-FECHO, C-UMA-VEZ).
+- **L-FORA: "a maior parte do sinal está fora do r"** (a `F_sinal` de 0,776 a 0,780 no HOJE).
+- **L-AÇÃO: "o sinal do intervalo é o sono, e a linha de base por contexto o apaga"** (η² global de 0,46 a 0,50; por contexto, de
+  0,011 a 0,019).
+- **O que o plano do R2 recebe:** propor outra linha de base, ou outro contexto, antes do código (a tarefa CREDITO_INTERVALO).
+- **Desvios:** D-RA-17 a D-RA-19.
+- **Próximo:** nada nesta frente até a decisão do Matheus sobre o plano do R2. O TS do rastro, depois da LZ3.

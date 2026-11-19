@@ -1,0 +1,223 @@
+{
+ "alcance_celulas_por_decisao": 3.75,
+ "d0_celulas": 5,
+ "dias": 2,
+ "espec": "docs/ESPEC_V3_SOCIAL_PAR_E1.md, secao 3",
+ "o_que_a_espec_espera_saiu": {
+  "seguidor_x_evitador": false,
+  "seguidor_x_seguidor": false
+ },
+ "pares": {
+  "seguidor_x_evitador": {
+   "101": {
+    "GRAV": {
+     "censurado": false,
+     "contingencia_B_de_A": null,
+     "desvios_B": 0,
+     "distancia_no_t0": 4,
+     "fracao_contato": 0.989010989010989,
+     "t0": 1530,
+     "tempo_ate_contato": 1
+    },
+    "VIVO": {
+     "censurado": false,
+     "contingencia_B_de_A": null,
+     "desvios_B": 0,
+     "distancia_no_t0": 4,
+     "fracao_contato": 0.989010989010989,
+     "t0": 1530,
+     "tempo_ate_contato": 1
+    }
+   },
+   "202": {
+    "GRAV": {
+     "censurado": false,
+     "contingencia_B_de_A": null,
+     "desvios_B": 0,
+     "distancia_no_t0": 5,
+     "fracao_contato": 0.9855072463768116,
+     "t0": 1860,
+     "tempo_ate_contato": 1
+    },
+    "VIVO": {
+     "censurado": false,
+     "contingencia_B_de_A": -0.2,
+     "desvios_B": 0,
+     "distancia_no_t0": 5,
+     "fracao_contato": 0.10144927536231885,
+     "t0": 1860,
+     "tempo_ate_contato": 37
+    }
+   },
+   "303": {
+    "GRAV": {
+     "censurado": false,
+     "contingencia_B_de_A": null,
+     "desvios_B": 0,
+     "distancia_no_t0": 5,
+     "fracao_contato": 0.9830508474576272,
+     "t0": 2010,
+     "tempo_ate_contato": 1
+    },
+    "VIVO": {
+     "censurado": false,
+     "contingencia_B_de_A": 0.0,
+     "desvios_B": 0,
+     "distancia_no_t0": 5,
+     "fracao_contato": 0.7627118644067796,
+     "t0": 2010,
+     "tempo_ate_contato": 2
+    }
+   },
+   "404": {
+    "GRAV": {
+     "censurado": false,
+     "contingencia_B_de_A": null,
+     "desvios_B": 0,
+     "distancia_no_t0": 5,
+     "fracao_contato": 0.9885057471264368,
+     "t0": 1590,
+     "tempo_ate_contato": 1
+    },
+    "VIVO": {
+     "censurado": false,
+     "contingencia_B_de_A": 0.0,
+     "desvios_B": 0,
+     "distancia_no_t0": 5,
+     "fracao_contato": 0.5172413793103449,
+     "t0": 1590,
+     "tempo_ate_contato": 2
+    }
+   },
+   "505": {
+    "GRAV": {
+     "censurado": false,
+     "contingencia_B_de_A": null,
+     "desvios_B": 0,
+     "distancia_no_t0": 5,
+     "fracao_contato": 0.9879518072289156,
+     "t0": 1650,
+     "tempo_ate_contato": 1
+    },
+    "VIVO": {
+     "censurado": false,
+     "contingencia_B_de_A": null,
+     "desvios_B": 0,
+     "distancia_no_t0": 5,
+     "fracao_contato": 0.9879518072289156,
+     "t0": 1650,
+     "tempo_ate_contato": 1
+    }
+   }
+  },
+  "seguidor_x_seguidor": {
+   "101": {
+    "GRAV": {
+     "censurado": false,
+     "contingencia_B_de_A": null,
+     "desvios_B": 0,
+     "distancia_no_t0": 4,
+     "fracao_contato": 0.989010989010989,
+     "t0": 1530,
+     "tempo_ate_contato": 1
+    },
+    "VIVO": {
+     "censurado": false,
+     "contingencia_B_de_A": null,
+     "desvios_B": 0,
+     "distancia_no_t0": 4,
+     "fracao_contato": 0.989010989010989,
+     "t0": 1530,
+     "tempo_ate_contato": 1
+    }
+   },
+   "202": {
+    "GRAV": {
+     "censurado": false,
+     "contingencia_B_de_A": null,
+     "desvios_B": 1,
+     "distancia_no_t0": 5,
+     "fracao_contato": 0.9855072463768116,
+     "t0": 1860,
+     "tempo_ate_contato": 1
+    },
+    "VIVO": {
+     "censurado": false,
+     "contingencia_B_de_A": 0.0,
+     "desvios_B": 0,
+     "distancia_no_t0": 5,
+     "fracao_contato": 0.9130434782608695,
+     "t0": 1860,
+     "tempo_ate_contato": 1
+    }
+   },
+   "303": {
+    "GRAV": {
+     "censurado": false,
+     "contingencia_B_de_A": null,
+     "desvios_B": 1,
+     "distancia_no_t0": 5,
+     "fracao_contato": 0.9830508474576272,
+     "t0": 2010,
+     "tempo_ate_contato": 1
+    },
+    "VIVO": {
+     "censurado": false,
+     "contingencia_B_de_A": 0.0,
+     "desvios_B": 0,
+     "distancia_no_t0": 5,
+     "fracao_contato": 0.9830508474576272,
+     "t0": 2010,
+     "tempo_ate_contato": 1
+    }
+   },
+   "404": {
+    "GRAV": {
+     "censurado": false,
+     "contingencia_B_de_A": null,
+     "desvios_B": 6,
+     "distancia_no_t0": 5,
+     "fracao_contato": 0.9120879120879121,
+     "t0": 1530,
+     "tempo_ate_contato": 8
+    },
+    "VIVO": {
+     "censurado": false,
+     "contingencia_B_de_A": 0.0,
+     "desvios_B": 0,
+     "distancia_no_t0": 5,
+     "fracao_contato": 0.945054945054945,
+     "t0": 1530,
+     "tempo_ate_contato": 4
+    }
+   },
+   "505": {
+    "GRAV": {
+     "censurado": false,
+     "contingencia_B_de_A": null,
+     "desvios_B": 0,
+     "distancia_no_t0": 5,
+     "fracao_contato": 0.9879518072289156,
+     "t0": 1650,
+     "tempo_ate_contato": 1
+    },
+    "VIVO": {
+     "censurado": false,
+     "contingencia_B_de_A": null,
+     "desvios_B": 0,
+     "distancia_no_t0": 5,
+     "fracao_contato": 0.9879518072289156,
+     "t0": 1650,
+     "tempo_ate_contato": 1
+    }
+   }
+  }
+ },
+ "sementes": [
+  101,
+  202,
+  303,
+  404,
+  505
+ ]
+}

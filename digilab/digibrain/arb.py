@@ -26,10 +26,17 @@ urgente (a urgencia da fome acima do `urgencia_lambda`, a guarda do passeio). O 
 seguinte ja nao segura. Nenhuma rng nova; desligada, o reflexo de hoje.
 **A guarda da fome urgente no brincar** (docs/PLANO_V3_EQUILIBRIO_CUIDADO.md, EQ-7; `escolher(..., sem_brincar=True)`, que o M-ADAPT passa so
 com a `ConfigEquilibrioCuidado.guarda_fome_brincar` ligada e a fome urgente): o peso de todas as unidades do brincar vira 0, no sorteio e nas
-sondas, antes de contar os candidatos. Nenhuma rng nova; sem ela (o padrao), o sorteio de hoje."""
+sondas, antes de contar os candidatos. Nenhuma rng nova; sem ela (o padrao), o sorteio de hoje.
+**A ablacao `maior_peso` da VALUATION** (`ConfigAblacaoValuation`, so de pesquisa; docs/PLANO_ANALISE_V3_VALUATION.md, secao 3): fora do
+reflexo e da escolha segurada, a escolha e a unidade de maior peso (o primeiro no empate: o caminho de `_escolher` sem u), sem chamar a rng;
+as sondas, com o u None, leem o mesmo caminho. Desligada (o padrao), o sorteio de hoje.
+**O conserto da VALUATION** (`ConfigConsertoValuation.guarda_fome_reflexo`, so de pesquisa; docs/PLANO_ANALISE_V3_VALUATION_CONSERTO.md,
+secao 2.3): com a energia abaixo de `lambda_sono` e a fome urgente (a urgencia da fome acima do `urgencia_lambda`), o reflexo nao dispara, e
+a decisao segue pelo sorteio de hoje. Sem as urgencias, falha alto. Nenhuma rng nova; desligada (o padrao), o reflexo de hoje."""
 from __future__ import annotations
 
-from ..config import CONFIG_DIGIBRAIN_INATOS, CONFIG_SONO_SEGURA, ConfigDigibrainInatos, ConfigSonoSegura
+from ..config import (CONFIG_ABLACAO_VALUATION, CONFIG_CONSERTO_VALUATION, CONFIG_DIGIBRAIN_INATOS, CONFIG_SONO_SEGURA, ConfigAblacaoValuation,
+                      ConfigConsertoValuation, ConfigDigibrainInatos, ConfigSonoSegura)
 from . import dever as _dever
 from ._comum import chave_json, mul, phi
 
@@ -57,8 +64,15 @@ class Arbitragem:
     """o M-ARB (docstring do modulo)"""
 
     def __init__(self, inatos: ConfigDigibrainInatos | None = None, autobio: bool = False, facetas: bool = False,
-                 sono: ConfigSonoSegura | None = None) -> None:
+                 sono: ConfigSonoSegura | None = None, ablacao: ConfigAblacaoValuation | None = None,
+                 conserto: ConfigConsertoValuation | None = None) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
+        self.ab = ablacao or CONFIG_ABLACAO_VALUATION
+        if not isinstance(self.ab, ConfigAblacaoValuation):
+            raise TypeError(f"M-ARB: ablacao e uma ConfigAblacaoValuation: {self.ab!r}")
+        self.cv = conserto or CONFIG_CONSERTO_VALUATION
+        if not isinstance(self.cv, ConfigConsertoValuation):
+            raise TypeError(f"M-ARB: conserto e uma ConfigConsertoValuation: {self.cv!r}")
         self.sono = sono or CONFIG_SONO_SEGURA
         self.sondas = SONDAS
         self.decidiu = DECIDIU
@@ -74,6 +88,7 @@ class Arbitragem:
         self.sorteios = 0
         self.reflexos = 0
         self.nada_a_fazer = 0
+        self.suaves = 0                               # CORPO, a C5: as vezes que o reflexo suave somou peso (fora do estado_interno)
 
     def ligar_dever(self, cfg) -> None:
         """a CO7: o escudo e o peso da universalizacao (digilab/digibrain/dever.py) sobre os pesos, antes do sorteio e em cada sonda"""
@@ -99,6 +114,11 @@ class Arbitragem:
             return max(positivos, key=lambda i: (w[i], -i))
         return sortear_inteiro(w, u)
 
+    @property
+    def le_urgencias(self) -> bool:
+        """o reflexo le as urgencias do M-AFETO: com o sono que segura ou com a guarda da fome do conserto"""
+        return self.sono.ligada or self.cv.guarda_fome_reflexo
+
     def reflexo(self, sens: dict, urgencias: dict | None = None) -> bool:
         """o reflexo do sono: a leitura da energia abaixo de `lambda_sono` (a conta de sempre, sem rng). O M-ADAPT a chama uma vez por
         decisao e passa o valor ao M-ESTADO e ao `escolher` (a L-2, secao 2.3). Com o sono que segura, tambem o pet dormindo com a energia
@@ -106,8 +126,16 @@ class Arbitragem:
         energia = sens["leitura"].get("energia")
         if energia is None:
             raise RuntimeError("M-ARB: o reflexo do sono le a energia, e ela nao esta na percepcao do corpo")
+        if self.cv.reflexo_suave:                    # CORPO, a C5: o reflexo vira peso no `escolher`, nenhum evento de reflexo
+            return False
         if energia < self.p.lambda_sono:
-            return True
+            if not self.cv.guarda_fome_reflexo:
+                return True
+            if urgencias is None or "fome" not in urgencias:
+                raise RuntimeError("M-ARB: a guarda da fome no reflexo le a urgencia da fome, e ela nao veio do M-AFETO")
+            if urgencias["fome"] <= self.p.urgencia_lambda:   # o conserto da VALUATION: so a fome urgente tira o reflexo
+                return True
+            return False
         if not self.sono.ligada:
             return False
         if urgencias is None or "fome" not in urgencias:
@@ -119,6 +147,23 @@ class Arbitragem:
         """a guarda da fome urgente no brincar (EQ-7): o peso 0 nas unidades do brincar"""
         return [0 if x["acao"] == "brincar" else wi for x, wi in zip(unidades, w)]
 
+    def _suave(self, unidades: list[dict], w: list[int], sens: dict, contar: bool = False) -> list[int]:
+        """CORPO, a C5 (`ConfigConsertoValuation.reflexo_suave`): com a energia abaixo de `lambda_sono`, o `dormir` ganha
+        `peso_reflexo_suave` no peso, antes da CO7 e da guarda do brincar; desligado, os pesos de hoje"""
+        if not self.cv.reflexo_suave:
+            return w
+        energia = sens["leitura"].get("energia")
+        if energia is None:
+            raise RuntimeError("M-ARB: o reflexo suave le a energia, e ela nao esta na percepcao do corpo")
+        if energia >= self.p.lambda_sono:
+            return w
+        i = next((j for j, x in enumerate(unidades) if x["acao"] == "dormir"), None)
+        if i is None:
+            raise RuntimeError("M-ARB: o reflexo suave sem a unidade dormir")
+        if contar:
+            self.suaves += 1
+        return [wi + self.cv.peso_reflexo_suave if j == i else wi for j, wi in enumerate(w)]
+
     def escolher(self, unidades: list[dict], afeto: dict, sens: dict, rng, reflexo: bool | None = None,
                  segurar: tuple | None = None, sem_brincar: bool = False) -> dict:
         p = self.p
@@ -126,7 +171,7 @@ class Arbitragem:
             reflexo = self.reflexo(sens)
         if type(sem_brincar) is not bool:
             raise TypeError(f"M-ARB: sem_brincar e bool: {sem_brincar!r}")
-        w = self.pesos([x["a"] for x in unidades], afeto["g_exp"])
+        w = self._suave(unidades, self.pesos([x["a"] for x in unidades], afeto["g_exp"]), sens, contar=True)
         sit, reg = None, None
         if self.dever is not None and sens["social"] is not None:     # a CO7: o escudo e a universalizacao, antes de tudo
             sit = _dever.situacao(sens, afeto["urgencias"], self.dever, self.S)
@@ -145,7 +190,7 @@ class Arbitragem:
             self.reflexos += 1
         else:
             n_pos = sum(1 for x in w if x > 0)
-            u = rng.random() if n_pos >= 2 else None
+            u = rng.random() if n_pos >= 2 and not self.ab.maior_peso else None   # a ablacao G (VALUATION): sem u, o maior peso
             if u is not None:
                 self.sorteios += 1
             if n_pos == 0:
@@ -160,7 +205,7 @@ class Arbitragem:
             ativ = [0 if ("memoria" in tirar and x.get("tipo") == "ponto") else phi(x["soma"] - sum(x["termos"][t] for t in tirar), p.a_max)
                     for x in unidades]
             g_exp = p.e0 if nome == "sem_afeto" else afeto["g_exp"]
-            ws = self.pesos(ativ, g_exp)
+            ws = self._suave(unidades, self.pesos(ativ, g_exp), sens)
             if sit is not None:                      # a CO7: a sonda com o mesmo escudo e a mesma universalizacao
                 ws = _dever.ajustar(unidades, ws, sit)[0]
             j = self._escolher(unidades, self._sem_brincar(unidades, ws) if sem_brincar else ws, u)

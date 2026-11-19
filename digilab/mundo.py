@@ -140,6 +140,7 @@ from .config import AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, ARVORE_FECHADA, MARCO_
 from .config import CONFIG_BOLA_NO_GOLPE, CONFIG_DECISAO_NA_COMIDA, ConfigBolaNoGolpe, ConfigDecisaoNaComida
 from .config import CONFIG_FRUTA_COMO_COMIDA, CONFIG_SACUDIR, ConfigFrutaComoComida, ConfigSacudir
 from .config import CONFIG_TV, CONFIG_TVJOGO, ConfigTV, ConfigTVJogo
+from .config import ConfigIntervencaoSocial
 from .config import CONFIG_LANCE_DONO, ConfigLanceDono
 from .config import CONFIG_ORGAO, ConfigOrgao
 from . import orgao as _orgao
@@ -1519,6 +1520,8 @@ class MotorMundo(MotorFrutas):
         self.consumos_mundo: list[dict] = []
         self.deixadas: list[dict] = []
         self.levadas: list[dict] = []           # cada vez que o dono levou o pet (levar_pet): tick, de, o ponto pedido e onde ele caiu
+        # o parceiro gravado (docs/ESPEC_V3_SOCIAL_PAR_E1.md, 2.2): so a bancada o liga, por `aceitar_ponto_gravado`; desligado, nada muda
+        self._ponto_gravado = False
         self.decisoes_mundo: list[dict] = []
         self.regioes: list[dict] = []
         self.visitas: list[dict] = []
@@ -1921,10 +1924,18 @@ class MotorMundo(MotorFrutas):
             return next(a for a in cands if a.tipo == "aqui")
         return alvo_padrao_de(acao, cands, self._percepcao, self.cmf)
 
+    def aceitar_ponto_gravado(self, ci: ConfigIntervencaoSocial) -> None:
+        """O parceiro gravado da bancada (docs/ESPEC_V3_SOCIAL_PAR_E1.md, 2.2; E1-2): o cerebro pode devolver um ponto em toda acao com
+        alvo (comer e brincar tambem), para a reexecucao ir ao ponto gravado sem ler onde o outro esta agora. Chegar a um ponto nao come nem
+        chuta (o comer e o brincar pedem o objeto). So com a ConfigIntervencaoSocial ligada; o jogo nunca chama isto."""
+        if not isinstance(ci, ConfigIntervencaoSocial) or not ci.ligada:
+            raise ValueError(f"aceitar_ponto_gravado so com a ConfigIntervencaoSocial ligada: {ci!r}")
+        self._ponto_gravado = True
+
     def _validar_alvo(self, acao: AcaoPet, alvo: Alvo, cands: list[Alvo]) -> None:
         if alvo in cands:
             return
-        if acao is AcaoPet.EXPLORAR and alvo.tipo == "ponto" and alvo.id is None and alvo.de is None:
+        if (acao is AcaoPet.EXPLORAR or self._ponto_gravado) and alvo.tipo == "ponto" and alvo.id is None and alvo.de is None:
             if type(alvo.x) is int and type(alvo.y) is int and no_mapa(alvo.x, alvo.y, self.cmf) == (alvo.x, alvo.y):
                 return
             raise ValueError(f"ponto fora do mapa ou nao inteiro: ({alvo.x!r}, {alvo.y!r})")

@@ -4,7 +4,8 @@ docs/ESPEC_V3_ORGAO_VISAO.md, com as OV1-1 a OV1-14 DECIDIDAS pelo Matheus em 20
 Componente puro, sem modelo: o reconhecimento de verdade (o SigLIP no navegador) e da OV3, e o Python so conhece o evento `percepcao_tela`
 (digilab/events.py) e a TV do jogo com os conceitos por programa (digilab/tv.py). Aqui ficam:
   - a lista (secao 2 da espec; OV1-1 e OV1-13): 18 conceitos genericos da visao, 6 do som e as 56 especies que o
-    `digilab_fala_livre/corpus.py` deixa entrar (o teste confere contra o `corpus.carregar()`), na ordem do desempate;
+    corpus da fala de apresentacao deixa entrar (o `corpus.py` do pacote da fala, fora do `digilab/`; o tests/test_orgao_visao.py confere
+    contra o `corpus.carregar()`), na ordem do desempate;
   - o brasao de cada especie no jogo (web/app/motor/nomes.ts, DIGIMON_DA_FORMA; o teste confere) e o patrono dele (OV1-4): brasa ->
     coragem, cirro -> amizade, ferrugem -> conhecimento, limo -> sinceridade (os deuses da E1, web/app/motor/lendas_e1.ts). A Diversao e o
     Myotismon ficam sem especie; as 4 especies fora do corpus (Valkyrimon, DemiVeemon, SlashAngemon, DinoBeemon) ficam fora da lista;

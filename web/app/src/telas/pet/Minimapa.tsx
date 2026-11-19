@@ -7,9 +7,9 @@
      elementos posicionados por estilo direto (sem setState por quadro). So vista: nada do motor, do save nem do replay.
    Nao importa nada de ilha/ nem o three (teste ilha_fronteira). */
 import { useEffect, useId, useRef, type ReactNode, type RefObject } from "react";
-import { Bed, Dumbbell, Lock, Swords, Tent, Utensils, Volleyball } from "lucide-react";
+import { Anchor, Bed, Dumbbell, Lock, Swords, Tent, Utensils, Volleyball } from "lucide-react";
 import { VISTA, andar, irPara, seguirPet, useCameraLivre, type Par, type VistaPublicada } from "./cameraLivre.ts";
-import { useNivel } from "../../nivelTela.ts";
+import { motivoDoCais, useCais, useNivel } from "../../nivelTela.ts";
 import { PECAS, PECA_DO_LUGAR, nivelDaPeca, pecaAberta } from "../../nivel.ts";
 import {
   LIMIAR_ARRASTO, MINIMAPA_PX, ZOOM_PASSO, celulaParaPx, corComAlfa, corDoNumero, dentroDoCirculo, janelaDe, limitarZoom, passoDaSeta,
@@ -40,7 +40,7 @@ function lerTokens() {
 
 interface Estado { chama: boolean; solta: boolean; podeSoltar: boolean }
 type Ref = RefObject<HTMLDivElement | null>;
-interface Marcas { ninho: Ref; comedouro: Ref; saco: Ref; portao: Ref; barraca: Ref; bola: Ref; pet: Ref }
+interface Marcas { ninho: Ref; comedouro: Ref; saco: Ref; portao: Ref; barraca: Ref; cais: Ref; bola: Ref; pet: Ref }
 
 function desenhar(ctx: CanvasRenderingContext2D, dpr: number, v: VistaPublicada, j: Janela, e: Estado, marcas: Marcas): void {
   const k = lerTokens(), px = (c: Par): Par => celulaParaPx(c, j);
@@ -78,7 +78,7 @@ function desenhar(ctx: CanvasRenderingContext2D, dpr: number, v: VistaPublicada,
     if (!p || !dentroDoCirculo(p, 9)) { el.style.visibility = "hidden"; return; }
     el.style.visibility = "visible"; el.style.transform = `translate(${p[0].toFixed(1)}px, ${p[1].toFixed(1)}px)`;
   };
-  poe(marcas.ninho.current, v.ninho); poe(marcas.comedouro.current, v.comedouro); poe(marcas.saco.current, v.saco); poe(marcas.portao.current, v.portao); poe(marcas.barraca.current, v.barraca); poe(marcas.bola.current, v.bola);
+  poe(marcas.ninho.current, v.ninho); poe(marcas.comedouro.current, v.comedouro); poe(marcas.saco.current, v.saco); poe(marcas.portao.current, v.portao); poe(marcas.barraca.current, v.barraca); poe(marcas.cais.current, v.cais); poe(marcas.bola.current, v.bola);
   poe(marcas.pet.current, v.pet);
   marcas.pet.current?.classList.toggle("chama", e.chama);
 }
@@ -87,10 +87,10 @@ function desenhar(ctx: CanvasRenderingContext2D, dpr: number, v: VistaPublicada,
 export function Minimapa({ chama = false, soMostra = false }: { chama?: boolean; soMostra?: boolean }) {
   const { ativa, podeSoltar, solta } = useCameraLivre();
   const cv = useRef<HTMLCanvasElement>(null);
-  const marcas: Marcas = { ninho: useRef(null), comedouro: useRef(null), saco: useRef(null), portao: useRef(null), barraca: useRef(null), bola: useRef(null), pet: useRef(null) };
+  const marcas: Marcas = { ninho: useRef(null), comedouro: useRef(null), saco: useRef(null), portao: useRef(null), barraca: useRef(null), cais: useRef(null), bola: useRef(null), pet: useRef(null) };
   const estado = useRef<Estado>({ chama, solta, podeSoltar });
   estado.current = { chama, solta, podeSoltar };
-  const idDesc = useId(), nivel = useNivel();
+  const idDesc = useId(), nivel = useNivel(), cais = useCais();
   /* o lugar trancado (docs/PLANO_V3_PROGRESSAO_TUTORIAL.md, 3.4): a marca apagada e tracejada, com o cadeado e o "Nv N" */
   const trancados = (["saco", "portao", "barraca"] as const).filter(l => !pecaAberta(nivel, PECA_DO_LUGAR[l]));
   const marca = (l: "saco" | "portao" | "barraca", icone: ReactNode) => (
@@ -189,13 +189,18 @@ export function Minimapa({ chama = false, soMostra = false }: { chama?: boolean;
           aria-keyshortcuts={podeSoltar ? "ArrowUp ArrowDown ArrowLeft ArrowRight Enter" : undefined}
           tabIndex={podeSoltar ? 0 : -1} style={{ width: MINIMAPA_PX, height: MINIMAPA_PX }} />}
       {!soMostra && <span id={idDesc} className="minimapa-desc">Clique ou arraste para levar a câmera. Setas movem a câmera, Enter volta ao pet, a roda aproxima.
-        {trancados.map(l => ` ${PECAS[PECA_DO_LUGAR[l]].nome} trancado, Nv ${nivelDaPeca(PECA_DO_LUGAR[l])}: ${PECAS[PECA_DO_LUGAR[l]].motivo}.`).join("")}</span>}
+        {trancados.map(l => ` ${PECAS[PECA_DO_LUGAR[l]].nome} trancado, Nv ${nivelDaPeca(PECA_DO_LUGAR[l])}: ${PECAS[PECA_DO_LUGAR[l]].motivo}.`).join("")}
+        {cais?.trancado ? ` Cais trancado, Nv ${cais.marco}: ${motivoDoCais(cais.marco)}.` : ""}</span>}
       <span className="minimapa-n" aria-hidden="true">N</span>
       <div ref={marcas.ninho} className="minimapa-marca minimapa-ic" aria-hidden="true"><Bed /></div>
       <div ref={marcas.comedouro} className="minimapa-marca minimapa-ic" aria-hidden="true"><Utensils /></div>
       {marca("saco", <Dumbbell />)}
       {marca("portao", <Swords />)}
       {marca("barraca", <Tent />)}
+      {/* o cais (MMO5): a marca so existe com o cais ligado (o servidor no build); trancado, tracejada, com o cadeado e o "Nv N" */}
+      {cais && <div ref={marcas.cais} className={"minimapa-marca minimapa-ic" + (cais.trancado ? " minimapa-marca--trancado" : "")} aria-hidden="true" data-lugar="cais">
+        <Anchor />{cais.trancado && <span className="nivel-nv"><Lock />Nv {cais.marco}</span>}
+      </div>}
       <div ref={marcas.bola} className="minimapa-marca minimapa-ic" aria-hidden="true"><Volleyball /></div>
       <div ref={marcas.pet} className="minimapa-marca minimapa-pet" aria-hidden="true" />
     </div>

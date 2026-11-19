@@ -86,7 +86,11 @@ def test_o_layout_do_mvp_nao_vaza_para_a_pesquisa():
                   Path("tests/test_mudar_ilha.py"),
                   Path("tests/test_ilha_grande.py"),
                   Path("experiments/exportar_gabarito_ilha_maior.py"),   # a ida para a ilha grande (IG4): do MVP, sem agua ou com ela
-                  Path("tests/test_ilha_maior.py")}                # a ilha grande (secao 12): compara as regioes e os pontos com os do MVP                  # a agua (ILHA_AGUA, IA1): o MVP com agua tem a mesma terra do MVP
+                  Path("tests/test_ilha_maior.py"),                # a ilha grande (secao 12): compara as regioes e os pontos com os do MVP                  # a agua (ILHA_AGUA, IA1): o MVP com agua tem a mesma terra do MVP
+                  Path("tests/gabarito_elogio.py"),
+                  # os que ja citavam o mundo do produto e faltavam aqui (o teste falhava na main): a CO6, a CO7 e o gosto visual da web
+                  Path("experiments/exportar_gabarito_co6.py"), Path("tests/test_cooperacao_co6.py"), Path("tests/test_cooperacao_co7.py"),
+                  Path("tests/test_gabarito_gosto_visual_web.py")}                # o gabarito do ELOGIO: as vidas do lab (o MVP) com a chave desligada
     citam = {p.relative_to(RAIZ) for pasta in ("digilab", "experiments", "tests", "tools") for p in (RAIZ / pasta).rglob("*.py")
              if nomes.search(p.read_text(encoding="utf-8"))}
     assert citam == permitidos

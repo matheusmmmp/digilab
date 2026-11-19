@@ -48,6 +48,8 @@ export interface VistaPublicada {
   comidas: { x: number; z: number; cor: number }[];
   /** os lugares fixos: o ninho, o comedouro, o saco de pancada, o portao da arena e a barraca do Tamer (celulas; ilha/lugares.ts) */
   ninho: Par; comedouro: Par; saco: Par; portao: Par; barraca: Par;
+  /** o cais (celulas; ilha.lugares), ou null num mapa sem ele. A marca dele so aparece com o cais ligado (MMO5) */
+  cais: Par | null;
   /** as arvores de fruta do layout (celulas) */
   arvores: Par[];
   /** o pet esta fora da tela, e de que lado */

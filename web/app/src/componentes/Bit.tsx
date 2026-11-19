@@ -56,10 +56,10 @@ export function RetratoGuia() {
 
 /** a faixa do Professor Agumon, ou o cartao de destrave do nivel quando ele esta na frente da fila (dicas.ts). `livre`: a tela Pet esta a vista, fora da luta
     e de outra tela cheia; o cartao espera por ela (e as dicas atras dele, que seguem a ordem da fila). `ir` leva a camera ao lugar do cartao */
-export function DicaBit({ livre = true, ir }: { livre?: boolean; ir: (r: Rota) => void }) {
+export function DicaBit({ livre = true, ir, irCais }: { livre?: boolean; ir: (r: Rota) => void; irCais?: () => void }) {
   const id = useDicaAtual();
   if (!id) return null;
-  if (ehCartao(id)) return livre ? <CartaoDestrave id={id} ir={ir} /> : null;
+  if (ehCartao(id)) return livre ? <CartaoDestrave id={id} ir={ir} irCais={irCais} /> : null;
   return (
     <aside className="dica-bit ab-hx" role="status" aria-live="polite">
       <RetratoGuia />

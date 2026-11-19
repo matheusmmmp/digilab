@@ -39,7 +39,7 @@ import { dobrarY, lugarNoPonto, paraMundoCel, paraTelaNdc, type CameraLida, type
 import { fimDaIlha, type FimDaIlha } from "./fimDaIlha.ts";
 import { ilhaDe, type Ilha } from "./grade.ts";
 import { Itens } from "./itens.ts";
-import type { NomeLugar } from "./modelos.ts";
+import { LUGARES_MODELOS, type NomeLugar } from "./modelos.ts";
 import { Papel, type Ret, type Suspenso } from "./papel.ts";
 import { MAO, Pendulo, alturaDepoisDeSoltar, soltarAcabou, tremorAgora } from "./mao.ts";
 import { ORBITA, aplicarOrbita, ligarControles, recentrar } from "../orbita.ts";
@@ -52,7 +52,9 @@ import { PRESETS, Pos, SEM_CONTORNO } from "./pos.ts";
 import { SACO_NA_TELA, VIAGEM, ZOOM_LUGAR_MOVEL, lugarAberto, progressoViagem, type Lugar } from "../../../viagem.ts";
 import { LUGARES, ORDEM_LUGARES, chaoDoLugar, estadoDoLugar, gradeDosLugares, idaDoTreino, pontoDoLugar as pontoLugarDe, pontoDoPet, type BaseDoMundo } from "./lugares.ts";
 import { Apagador, montarMarcadores, type Marcadores } from "./marcadoresLugar.ts";
-import { TRANCAS } from "../../../trancas.ts";
+import { CAIS, TACAS_DA_CONTA, TRANCAS } from "../../../trancas.ts";
+import { montarTacas } from "./premiosCena.ts";
+import { temporadasNaIlha } from "./premiosConta.ts";
 import { mitologiaLigada } from "../../../mitologia.ts";
 import { SinaisDaIlha } from "./mitologia.ts";
 import { cantinhoNaVista, montarCantinho, type Cantinho } from "./cantinhoTv.ts";
@@ -107,6 +109,14 @@ class VistaIlha {
   /** os lugares trancados (nivel do Tamer, trancas.ts) saem apagados: a versao da tabela de trancas que a cena ja aplicou */
   private readonly apagador = new Apagador();
   private versaoTrancas = -1;
+  /** o cais (MMO5): a versao da tabela dele que a cena ja aplicou, o ponto dele (celulas: x, z e o chao) e onde ele cai na tela */
+  private versaoCais = -1;
+  /** as tacas da temporada (MMO7): a versao da lista do servidor que a cena ja aplicou, o grupo na cena e o pedido em curso (o mais novo ganha) */
+  private versaoTacas = -1;
+  private tacas: THREE.Group | null = null;
+  private pedidoTacas = 0;
+  private pontoCais: [number, number, number] | null = null;
+  private readonly caisTela: [number, number, number] = [0, 0, 0];
   /** onde cada lugar cai na tela (o pe em px de CSS e a altura em px), reaproveitado a cada quadro; o retangulo do canvas e lido so em `ajustar` */
   private readonly lugaresTela: Record<Lugar, [number, number, number]> = { saco: [0, 0, 0], portao: [0, 0, 0], barraca: [0, 0, 0] };
   private readonly vLugar = new THREE.Vector3();
@@ -215,6 +225,8 @@ class VistaIlha {
       grade: gradeDosLugares(this.ilha), saco: this.ilha.planta.lugares.saco };
     this.pontos = Object.fromEntries(ORDEM_LUGARES.map(id => [id, [...pontoLugarDe(id, base)]])) as Record<Lugar, [number, number]>;
     this.chaoLugar = Object.fromEntries(ORDEM_LUGARES.map(id => [id, chaoDoLugar(id, base)])) as Record<Lugar, number>;
+    const cais = this.ilha.lugares.find(l => l.nome === "cais");
+    this.pontoCais = cais ? [cais.x, cais.z, cais.y] : null;
     /* o portao e a barraca: marcadores provisorios no ponto de cada um, ate o modelo 3D chegar (carregarObjetos); nos estilos sem lugares, ficam */
     this.marcadores = montarMarcadores(base);
     this.mitologia = new SinaisDaIlha(this.itens.ninhoEm, mu.cm);
@@ -266,7 +278,7 @@ class VistaIlha {
     /* os modelos 3D dos lugares (lugares.ts) chegaram: o marcador provisorio de cada um sai, e as trancas se aplicam de novo (aos modelos e ao saco
        gerado, que entrou agora) */
     for (const id of o.lugaresRaiz?.keys() ?? []) if (id === "portao" || id === "barraca") this.marcadores.tirar(id);
-    this.versaoTrancas = -1;
+    this.versaoTrancas = -1; this.versaoCais = -1; this.versaoTacas = -1;
     /* data-objetos: os kits e os itens ja estao na cena (as capturas dos itens esperam por ele, como o data-pronto) */
     this.renderer.domElement.parentElement?.setAttribute("data-objetos", "1");
     if (this.baixa) this.menosGrama();
@@ -828,8 +840,33 @@ class VistaIlha {
     }
   }
 
+  /** poe `n` tacas da temporada perto do cais, no lugar das de antes; o erro de carga fica no console e a ilha segue sem elas */
+  private trocarTacas(n: number): void {
+    const meu = ++this.pedidoTacas;
+    const tirar = () => { if (this.tacas) { this.cenaIlha.cena.remove(this.tacas); this.tacas = null; } };
+    if (n === 0) { tirar(); return; }
+    montarTacas(this.ilha, document.baseURI, n).then(g => {
+      if (meu !== this.pedidoTacas) return;
+      tirar();
+      this.tacas = g;
+      this.cenaIlha.cena.add(g);
+    }).catch(err => console.error("as taças da temporada não entraram na ilha:", err));
+  }
+
   /** o lugar trancado fica apagado e o destrancado volta ao normal; so quando a tabela de trancas mudou (trancas.ts, escrita pelo nivel do Tamer) */
   private aplicarTrancas(): void {
+    /* o cais (MMO5): ligado e trancado, o modelo sai apagado como os outros; aberto ou desligado, fica como sempre foi */
+    if (this.versaoCais !== CAIS.versao) {
+      this.versaoCais = CAIS.versao;
+      const raiz = this.objetos?.lugaresRaiz?.get("cais");
+      if (raiz) this.apagador.aplicar(raiz, CAIS.ligado && CAIS.trancado);
+    }
+    /* as tacas da temporada (MMO7): so com o cais ligado e os objetos na cena; a lista mudou, troca o grupo */
+    const chaveTacas = TACAS_DA_CONTA.versao * 2 + (CAIS.ligado ? 1 : 0);
+    if (this.objetos && this.versaoTacas !== chaveTacas) {
+      this.versaoTacas = chaveTacas;
+      this.trocarTacas(CAIS.ligado ? temporadasNaIlha(TACAS_DA_CONTA.temporadas).length : 0);
+    }
     if (this.versaoTrancas === TRANCAS.versao) return;
     this.versaoTrancas = TRANCAS.versao;
     for (const id of ORDEM_LUGARES) {
@@ -843,7 +880,16 @@ class VistaIlha {
   /** onde cada lugar cai na tela (o pe, em px de CSS, e a altura dele em px): o cadeado com o "Nv N" (CadeadosDaIlha.tsx) fica sobre ele, e os selos e as
       etiquetas dos objetos que falam (ObjetosDaIlha.tsx) tambem. Em qualquer largura */
   private publicarLugaresTela(): void {
-    const cb = CENA.aoLugares, cbObjetos = CENA.aoObjetos;
+    const cb = CENA.aoLugares, cbObjetos = CENA.aoObjetos, cbCais = CENA.aoCais;
+    /* o cais (MMO5): o pe e a altura pelo topo projetado, como o portao e a barraca */
+    if (cbCais && this.pontoCais) {
+      const [x, z, y0] = this.pontoCais, r = this.rectCanvas, v = this.vLugar, a = this.caisTela;
+      v.set(x, dobrarY(y0, z, this.dobra, x), z).project(this.camera);
+      a[0] = r.left + ((v.x + 1) / 2) * r.width; a[1] = r.top + ((1 - v.y) / 2) * r.height;
+      v.set(x, dobrarY(y0 + LUGARES_MODELOS.cais.altura, z, this.dobra, x), z).project(this.camera);
+      a[2] = a[1] - (r.top + ((1 - v.y) / 2) * r.height);
+      cbCais(a);
+    }
     if (!cb && !cbObjetos) return;                      // sem consumidor (nenhum cadeado, brilho ou objeto que fala na tela): nao calcula
     const ppc = this.ppu / this.renderer.getPixelRatio(), r = this.rectCanvas, v = this.vLugar, alvo = this.lugaresTela;
     for (const id of ORDEM_LUGARES) {
@@ -876,7 +922,7 @@ class VistaIlha {
     const meia = Math.atan(Math.tan(THREE.MathUtils.degToRad(this.cam.fov / 2)) * this.camera.aspect);
     publicarVista({
       foco: [ox, oz], pet: [px, pz], bola: this.itens.bolaCelula, frente: [fx, fz], meiaAbertura: meia,
-      comidas: this.itens.comidasNoMapa(mu, tick), ninho: this.itens.ninhoEm, comedouro: [mu.comedouro[0] / sub, mu.comedouro[1] / sub], saco: this.itens.sacoEm, portao: this.pontos.portao, barraca: this.pontos.barraca,
+      comidas: this.itens.comidasNoMapa(mu, tick), ninho: this.itens.ninhoEm, comedouro: [mu.comedouro[0] / sub, mu.comedouro[1] / sub], saco: this.itens.sacoEm, portao: this.pontos.portao, barraca: this.pontos.barraca, cais: this.pontoCais ? [this.pontoCais[0], this.pontoCais[1]] : null,
       /* as arvores de fruta do motor (o layout MVP dos pets v13+ nao tem nenhuma; as arvores da ilha sao enfeite da vista) */
       arvores: mu.arvores.map(t => [t.x / sub, t.y / sub] as [number, number]),
       petFora: fora, lado: Math.abs(lado) >= Math.abs(frente) ? (lado > 0 ? "direita" : "esquerda") : (frente > 0 ? "cima" : "baixo"),
