@@ -259,3 +259,16 @@ não rodou:** ele espera o plano e este código na `main` e a vez da máquina.
   com 4 processos, abaixo do corte de 4 h (RA-6).
 - **Desvios:** D-RA-8 a D-RA-16.
 - **Próximo:** o merge do #1017 e deste PR; depois o replay, uma vez, com a vez da máquina, e o `RESULTADO_V3_PET_VIVO_R1.md`.
+
+## O replay do R1 (2026-11-19, Claude Code, Fable 5.2, branch `v3-pet-vivo-r1-resultado`)
+
+O pedido do Matheus (2026-11-19): "Sim, merge e roda". O #1025 entrou na `main` (`60fcfdc2`), e o replay rodou uma vez, 38 min com 4
+processos, sobre as 5 120 vidas gravadas. O resultado está em [RESULTADO_V3_PET_VIVO_R1.md](RESULTADO_V3_PET_VIVO_R1.md).
+
+- **As conferências que falham alto passaram em todas as vidas** (C-FONTE, C-G1, C-FECHO, C-UMA-VEZ).
+- **L-FORA: "a maior parte do sinal está fora do r"** (a `F_sinal` de 0,776 a 0,780 no HOJE).
+- **L-AÇÃO: "o sinal do intervalo é o sono, e a linha de base por contexto o apaga"** (η² global de 0,46 a 0,50; por contexto, de
+  0,011 a 0,019).
+- **O que o plano do R2 recebe:** propor outra linha de base, ou outro contexto, antes do código (a tarefa CREDITO_INTERVALO).
+- **Desvios:** D-RA-17 a D-RA-19.
+- **Próximo:** nada nesta frente até a decisão do Matheus sobre o plano do R2. O TS do rastro, depois da LZ3.
