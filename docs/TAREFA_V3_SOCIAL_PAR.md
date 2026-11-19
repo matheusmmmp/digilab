@@ -158,3 +158,14 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
   - o B é inconclusivo por premissa nos três.
 - **A leitura:** o social não existe no pet de hoje, e o próximo passo é mecanismo (D-SP-52 a D-SP-54).
 - **O que falta:** o "aprovado" do resultado. Depois vem a S4, com a síntese e a espec do M1.
+
+## S4: a síntese e a espec do M1 (2026-11-19)
+
+- **A síntese:** `docs/SINTESE_SOCIAL_PAR_S.md`.
+  - **Os bloqueios resolvidos:** o parceiro que não via (o C e o primário T\*c) e o teto da casa (o B1).
+  - **O que ficou em parte:** a bola (o B2). Os chutes subiram de ~0 para 0,5 por dia, mas não houve pares elegíveis.
+  - **O D_A** dá ≈ 0 com um instrumento que vê. O D_B segue sem leitura.
+- **A espec do M1:** `docs/ESPEC_SOCIAL_PAR_M1.md`. Ela leva o outro ao M-SENS e acrescenta as unidades `explorar/seguir:<id>` e
+  `explorar/onde_comeu:<id>`, atrás da `unidades_sociais`. O motor não muda.
+- **O painel:** uma linha no `docs/PAINEL_V3.md`.
+- **O que falta:** o checkpoint S5, com as decisões M1-1 a M1-5 da espec.
