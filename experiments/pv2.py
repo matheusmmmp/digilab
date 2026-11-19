@@ -57,15 +57,18 @@ def config_pv2(braco: str, base: ConfigPV2 | None = None) -> ConfigPV2 | None:
     return replace(base or CONFIG_PV2, ligada=True, braco=braco)
 
 
-def fabricas(braco: str, dono: str, semente: int, dias: int, orcamento_por_dia: int, base: ConfigPV2 | None = None, v38: bool = False):
+def fabricas(braco: str, dono: str, semente: int, dias: int, orcamento_por_dia: int, base: ConfigPV2 | None = None, v38: bool = False,
+             extra_cerebro: dict | None = None):
     """(a fabrica do cerebro, a do motor) da vida, como `orq.fabricas` do REL, com o orgao e a ConfigPV2 nos bracos OLF-*; com `v38`, as
-    chaves do pet do jogo que o Python tem (EQUILIBRIO_V38 e vizinhos), no cerebro e, o lance, no motor"""
+    chaves do pet do jogo que o Python tem (EQUILIBRIO_V38 e vizinhos), no cerebro e, o lance, no motor. `extra_cerebro` leva ao DigiBrain
+    uma config so de leitura a mais (o rastro do R1, `cfg_rastro`); sem ele, a vida de hoje"""
     b = orq.bancada(dias, orcamento_por_dia)
     cc = b.cfg_corpo_de(bv.EspecVida(dono, gl.BRACO_V11, semente))
     cd = orq.config_do_braco("REL", None, True)
     cp = config_pv2(braco, base)
     kw_motor = {} if cp is None else {"cfg_olfato": OLFATO}
     kw_cerebro = {} if cp is None else {"cfg_pv2": cp, "cfg_olfato": OLFATO}
+    kw_cerebro.update(extra_cerebro or {})
     if v38:
         kw_motor["cfg_lance_dono"] = CONFIG_LANCE_DONO_LIGADA
         kw_cerebro.update(inatos=inatos_e1(), cfg_sono=CONFIG_SONO_SEGURA_LIGADA, cfg_lance=CONFIG_LANCE_DONO_LIGADA,

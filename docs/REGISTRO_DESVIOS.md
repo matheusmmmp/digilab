@@ -882,3 +882,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-18 — CORPO: o orquestrador da ablação (o código da C2, a segunda parte)](registro/2026-11.md)
 - [2026-11-19 — VALUATION: a V4 rodada, a leitura indeterminado (Claude Code, Opus 5.5, branch `v3-valuation-v4-run`)](registro/2026-11.md)
 - [2026-11-19 — PET_VIVO: o plano do R1, o rastro da cadeia (Claude Code, Fable 5.2, branch `v3-integracao-r1-plano`)](registro/2026-11.md)
+- [2026-11-19 — PET_VIVO: o código do R1, o rastro da cadeia (Claude Code, Fable 5.2, branch `v3-integracao-r1-codigo`)](registro/2026-11.md)
