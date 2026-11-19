@@ -204,3 +204,9 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
   leem o corpo da decisão seguinte, como a fala.
 - **Os testes:** `tests/test_corpo_companhia.py`.
 - **O que falta:** o plano da medida, com os braços M1, M1-inc0 e M1+M2.
+
+## MD: o plano da medida do M1 e do M2 (2026-11-19)
+
+- **O plano:** `docs/PLANO_ANALISE_V3_SOCIAL_PAR_MD.md`, PROPOSTO. É o instrumento da S3 com os braços M1, M1-inc0, M1+M2 e M1-inc0+M2,
+  no B1 e no C, com o G-DET em cada célula e a premissa PM-1 (D-SP-70 a D-SP-72).
+- **O que falta:** o "aprovado" do plano (MD-1 a MD-8) e a faixa pelo coordenador; depois, o código da medida (MD1) e a run (MD2).
