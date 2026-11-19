@@ -118,3 +118,46 @@ que faltavam, desligadas, no Python e no TS. Nenhuma vida de faixa rodou, e nenh
   - o #999, o #1002, o #1003, o #1005 e este PR na `main`;
   - nenhuma outra run de pesquisa rodando;
   - o `pre_run` sem motivo de recusa.
+
+## 11. A ablação rodada (C2, 2026-11-19)
+
+A run única, pelo `docs/PLANO_ANALISE_V3_CORPO.md`: 9 600 vidas e 400 pares, em 2 h 6 min com 4 processos, a partir da `main` em
+`eedfb2f4`. O resultado está no `docs/RESULTADO_V3_CORPO.md`.
+
+**A leitura: os três braços saem em "perda".** O F sobe nos três (D +0,120, D + E +0,110, D + C5 +0,168 na taxa por episódio do
+`longe_fixo`, todos com o Holm rejeitando). Mas a privação do comedouro sobe nos três, e na D + C5 a exaustão quase dobra. O S1 não mede
+(zero chutes). **O programa para no CHECKPOINT C2.5:** o diagnóstico e o trade-off vão ao Matheus.
+
+## 12. O diagnóstico da C2.5 (2026-11-19)
+
+O Matheus respondeu "Sim, diagnosticar". O diagnóstico está no `docs/RESULTADO_V3_CORPO.md`, seção 5, feito só com as vidas gravadas,
+rejogadas do log (`experiments/diagnostico_v3_corpo_c25.py`).
+
+**A causa:** a D tira a falta de combustível do cansaço, que o sono resolve, e a põe na fome, que só a comida resolve. Com o atencioso e o
+incoerente, o pet come mais e a privação cai. Com o relapso e o aleatório, não há comida a mais, a fome fica acima do limiar, e o dano da
+privação baixa a saúde (−0,12 a −0,24). O comedouro só sai em "> 0" porque ali a privação com os donos bons já está perto de 0. **As
+opções da C3** (a ponte com teto, a ponte dividida ou nenhuma mudança) vão ao Matheus.
+
+## 13. O plano da C3, a ponte com teto (2026-11-19)
+
+O Matheus escolheu "Ponte com teto". O plano é o `docs/PLANO_ANALISE_V3_CORPO_C3.md`, PROPOSTO. Os braços são CTRL, D, DTL (o teto no
+limiar da privação, T_L = 382 500) e DTB (o teto em C/2, se a D-C3-2 for aprovada), nas 12 células × 200 unidades e no bloco II. **O que o
+mecanismo prevê:** o teto no limiar tira pouco do dano, porque o dano da privação é um degrau e vem da chegada mais cedo ao limiar.
+Há uma guarda nova da saúde (D-C3-4). A pergunta do incoerente igual ao atencioso vai como pergunta do plano (D-C3-6). A faixa
+106001…106400 está pedida ao coordenador. Nenhuma vida antes da aprovação e do código.
+
+## 14. O código da C3 (2026-11-19)
+
+Pelo `docs/PLANO_ANALISE_V3_CORPO_C3.md`, seção 7. Nenhuma vida da faixa rodou.
+- **A chave:** a `ConfigTetoFomeCorpo` (`digilab/config.py`), numa config própria para nenhum dump de hoje mudar, com `teto = None` por
+  padrão. Com um teto, num tick com a falta de combustível, a ponte da D soma à fome `min(500, max(0, teto − fome))`
+  (`digilab/corpo.py`, a fase 2 do tick). O `ticks_teto` conta os ticks em que o teto cortou a ponte. O teto exige a D e não passa de C.
+- **O DTL e o DTB:** `CONFIG_TETO_FOME_LIMIAR` (382 500, igual ao `t.limiar_privacao`, conferido por teste) e `CONFIG_TETO_FOME_BAIXO`
+  (225 000, C/2, SEM FONTE).
+- **O web:** o espelho em `web/app/motor/corpo.ts` (`opcoes.tetoFome`, desligada por padrão) e o gabarito
+  `tests/gabaritos/corpo_teto_python.json` (`experiments/exportar_gabarito_corpo_teto.py`), reproduzido inteiro a inteiro em
+  `web/app/test/corpo_teto.test.ts`.
+- **O orquestrador:** o `experiments/run_v3_corpo_c3.py`, um arquivo próprio para o `run_v3_corpo.py` da C2 ficar intacto (o sha256 dele
+  está no `meta.json` da C2). Ele reaproveita as vidas e a análise da C2, com os braços CTRL, D, DTL e DTB, as oito guardas do bem-estar
+  (com a saúde), o S2 e o descritivo (braço − D, por dono, a decomposição da privação, os ticks no teto e o incoerente). As configs ficam
+  em `experiments/configs/v3_corpo_c3/`.
