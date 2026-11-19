@@ -175,6 +175,8 @@ As seções acima são cópias inteiras do CLAUDE.md antigo (o G-NADA-PERDIDO co
 - **2026-11-17, MMO5, a prancha do cais e da semana:** `docs/PLANO_UX_CAIS.md` (APROVADO, UX-CA-1 a 7) e `docs/pranchas/ux-cais/`
   (`gerar.py`, `cais.css`, `capturar.sh`, os HTML e as capturas): a tabela da semana, os estados, a semana fechada, o segredo e o
   cais trancado e destravado.
+- **2026-11-19, MMO8, a prancha do reset e das duas pontuações:** `docs/PLANO_UX_RESET.md` (PROPOSTO, UX-RS-1 a 7) e `docs/pranchas/ux-reset/`
+  (o gerador, o CSS, as capturas e o `LEIA.md`).
 - **2026-11-17, MMO, a prancha da luta ranqueada:** `docs/PLANO_UX_LUTA_RANQUEADA.md` (APROVADO, UX-LR-1 a 6) e
   `docs/pranchas/ux-luta-ranqueada/` (`gerar.py`, `ranqueada.css`, `capturar.sh`, os HTML e as capturas): a aba Arena com a escolha
   "Treino / Ranqueada", os estados do pedido e o resultado. Só desenho.
