@@ -14,8 +14,9 @@
 import { LUGARES_V6, MEDALHA_POR_ID, RIVAL_LIGA, RIVAL_SALAO, TPD, ehInstalacao, nasceComEquilibrioCuidado, type Estagio, type Motor } from "../motor/index.ts";
 
 /** de onde vieram os Bits de um evento do Tamer */
-export type OrigemBits = "luta" | "lider" | "chamado" | "pausa" | "cuidado" | "evolucao" | "nivel";
-export const ORIGENS_BITS: readonly OrigemBits[] = ["luta", "lider", "chamado", "pausa", "cuidado", "evolucao", "nivel"];
+export type OrigemBits = "luta" | "lider" | "chamado" | "pausa" | "cuidado" | "evolucao" | "nivel" | "reset";
+/** "reset": os Bits do reset (MMO8; MMO-19 APROVADA, uma linha nova da M-2), so no registro do Tamer da versao 11 (src/tamer.ts, pagarReset) */
+export const ORIGENS_BITS: readonly OrigemBits[] = ["luta", "lider", "chamado", "pausa", "cuidado", "evolucao", "nivel", "reset"];
 /** as origens que sao do Tamer, nao de um pet: o id basta (a medalha e o nivel acontecem uma vez por Tamer) */
 export const ORIGENS_DO_TAMER: readonly OrigemBits[] = ["lider", "nivel"];
 

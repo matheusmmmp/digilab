@@ -433,3 +433,28 @@ de UX é o `docs/PLANO_UX_RESET.md` (PROPOSTO), e a prancha está em `docs/pranc
 - **As capturas:** a 1920 × 950 e a 390 × 844, nas peles Vidro e Militar.
 - **Desvios:** D-UXRS-1 a 6, no registro. **Decisões:** UX-RS-1 a 7, esperam o Matheus. A tela não foi feita.
 
+## 25. MMO8: as duas pontuações e o reset, a parte local (2026-11-19)
+
+Pedido da sessão da conta (a linha da MMO8 na seção 12 do plano, as seções 8 e 9, as MMO-15 a MMO-19). Branch `v3-mmo8`. Local, sem
+tela e sem deploy; a prancha está num PR à parte (seção 24) e espera o Matheus.
+
+- **No jogo:**
+  - o evento `"reset"` no registro do Tamer (`src/tamer.ts`, versão 11), atrás da chave `RESET_LIGADO` (desligada; o gabarito dos
+    registros de hoje veio num commit anterior, `test/gabaritos/mmo8_tamer_hoje.json`);
+  - os Bits do reset, a origem nova `"reset"` (MMO-19), um reset pago por semana de relógio (`pagarReset`);
+  - a conta pura em `src/ranking/pontos.ts`: o nível do reset (`nivelDoReset`), o bônus (`BONUS_RESET`), os pontos do Digimon
+    (`pontosDoDigimon`), o Respeito (`respeito`, `respeitoDoReset`, `respeitoLocal`), o nível do 11 em diante (`nivelPeloRespeito`) e
+    "Tamer Lendário" (`tituloDoRespeito`);
+  - `src/reset.ts`: a prévia, o evento e o reset do pet ativo, reaproveitando o `heranca.ts` (`aposentar`) e o `jornada.ts`
+    (`chocarDoBrasao`); o cruzamento registra o reset do pai. Nada chama o reset com a chave desligada.
+- **No servidor (a migração 8, `src/premios/rankings.ts`):**
+  - a conferência diz o Digimon (os pontos da vida, o estágio, a forma, o nível do reset), os feitos do Tamer vistos no replay do pet e o
+    reset no registro final do pet (`reset_nao_confere`);
+  - o envio aceito grava o máximo histórico dos Digimon (`digimons`), os resets (`resets`) e os feitos (`feitos_tamer`);
+  - o Respeito conferido inteiro, ligado ao da MMO7 (os títulos e os selos), com a trava dos 200 pontos;
+  - `GET /digimons` e `GET /tamers`, com a sessão; o "baixar os dados" traz as pontuações; apagar a conta leva tudo.
+- **Desvios:** D-CONTA-161 a 170, no registro.
+- **Fora desta etapa:** as telas (Aposentar, o perfil, as abas do cais), o envio sozinho do registro do aposentado (UX-RS-4), o nível na
+  tela e os Bits do nível 11 em diante (UX-RS-6), o reset do par (D-CONTA-161), o legado de stats da revisão CR-7 e CR-8 do
+  `docs/PLANO_V3_CICLO.md` e o deploy.
+

@@ -103,7 +103,7 @@ from dataclasses import dataclass
 from ..config import (COMPORTAMENTO_OLHAR, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_EQUILIBRIO_CUIDADO, CONFIG_LANCE_DONO, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_OLHAR,
                       CONFIG_PADRAO, CONTEUDOS_FALA, VERSAO_PET_DIGIBRAIN, Config, ConfigDigibrain, ConfigDigibrainInatos, ConfigElogio,
                       ConfigAblacaoValuation, ConfigConsertoValuation, ConfigEnjooTela, ConfigEquilibrioCuidado, ConfigFalaUnidades, ConfigLanceDono, ConfigLutaMemoria, ConfigMundo, ConfigOlfato, ConfigOlhar,
-                      ConfigPV2, ConfigSonoSegura)
+                      ConfigPV2, ConfigRastro, ConfigSonoSegura)
 from ..events import AcaoPet, AcaoUsuario, LutaSemChave, resumo_luta
 from ..genoma_visao import GenomaVisao, genoma_visao
 from ..modelo_mundo import raiz_inteira
@@ -211,7 +211,8 @@ class DigiBrain:
                  ir_ate_tv: bool = False, cfg_cooperacao=None, cfg_equilibrio: ConfigEquilibrioCuidado | None = None,
                  cfg_orgao=None, brasao: str | None = None, cfg_ablacao: ConfigAblacaoValuation | None = None,
                  cfg_conserto: ConfigConsertoValuation | None = None, cfg_elogio: ConfigElogio | None = None,
-                 cfg_pv2: ConfigPV2 | None = None, cfg_olfato: ConfigOlfato | None = None) -> None:
+                 cfg_pv2: ConfigPV2 | None = None, cfg_olfato: ConfigOlfato | None = None,
+                 cfg_rastro: ConfigRastro | None = None) -> None:
         self.cd = cfg_digibrain or CONFIG_DIGIBRAIN
         if not self.cd.ligada:
             raise DigibrainDesligado("o DigiBrain modular so existe com a ConfigDigibrain ligada")
@@ -315,6 +316,12 @@ class DigiBrain:
                 self._recentes: list[dict] = []       # as ultimas `janela` decisoes: a pendencia e o z de cada uma
                 self.elogios: list[dict] = []
                 self.mudanca_no_corpo = self._mudanca_no_corpo
+        # o rastro da cadeia (docs/PLANO_ANALISE_V3_PET_VIVO_R1.md, secao 2): so leitura, com a ConfigRastro ligada; desligada, nada muda
+        self.rastro = False
+        if cfg_rastro is not None:
+            if not isinstance(cfg_rastro, ConfigRastro):
+                raise TypeError(f"cfg_rastro e uma ConfigRastro: {cfg_rastro!r}")
+            self.rastro = cfg_rastro.ligada
         self.k = 0
         self.motivos: list[dict] = []
         self._pendencia: dict | None = None
@@ -357,6 +364,8 @@ class DigiBrain:
         ctx = m.estado.contexto(afeto["urgencias"]) if cd.passeio else m.estado.contexto()
         if cd.memoria_autobio:                        # a C4, M2 e M3: o relogio, a consolidacao do dia novo e a lembranca da decisao
             tick = m.mem.relogio(sens["minuto"])
+            if self.rastro and k > 0:                 # o rastro: o intervalo da decisao anterior acaba no tick desta
+                self.motivos[k - 1]["cadeia"]["intervalo"]["tick_ate"] = tick
             consolidacao = m.mem.consolidar(k)
             mudancas = self._mudar_facetas(consolidacao) if cd.facetas_mem and consolidacao is not None else []
             lembranca = m.mem.lembrar(sens)
@@ -907,6 +916,38 @@ class DigiBrain:
         if self.cd.olhar:                             # o olhar (P1d): desligada, nenhum campo novo
             motivo["consequencia"]["olhar"] = olhar
         motivo["fins"] = motivo["fins"] + _registrados(fins)
+        if self.rastro:                               # o rastro: desligada, nenhum campo novo
+            motivo["cadeia"] = self._cadeia(p, motivo, cons, pc1, obs_seguinte, recs, l0, l1)
+
+    def _cadeia(self, p: dict, motivo: dict, cons: dict, pc1, obs_seguinte: Observacao, recs: tuple, l0: list, l1: list) -> dict:
+        """O rastro da decisao `p` (docs/PLANO_ANALISE_V3_PET_VIVO_R1.md, secao 2), so leitura: o r do mesmo tick (o da consequencia), o r
+        do intervalo (o corpo de depois dos estimulos da acao contra o corpo da decisao seguinte, pela `Afeto.r_intervalo`, sem credito
+        nenhum), os gestos do dono no intervalo, as atualizacoes que a decisao causou e o que pesou na escolha. Com a opcao de fala (a
+        `fala_unidades` no chamar) o corpo de depois ja e o da decisao seguinte: o intervalo sai marcado `ja_contado`, com tudo em 0."""
+        if obs_seguinte.corpo is None:
+            raise RuntimeError("o rastro sem o corpo da decisao seguinte")
+        S = self.S
+        pc2 = obs_seguinte.corpo
+        inter = self.m.afeto.r_intervalo(pc1, pc2, recs)
+        l2 = [leitura_receptor(pc2, r, S) for r in recs]
+        escolhida = next((x for x in motivo["unidades"] if x["chave"] == motivo["escolha"]), None)
+        if escolhida is None:
+            raise RuntimeError(f"o rastro: a unidade escolhida da decisao {p['k']} nao esta entre as unidades do motivo")
+        con = motivo["consequencia"]
+        return {
+            "id": p["k"], "tick": p.get("tick"), "acao": motivo["acao"], "reflexo": motivo["reflexo"],
+            "leitura": dict(zip(recs, l0)),
+            "mesmo_tick": {"r": cons["r"], "r_n": cons["r_n"], "canais": dict(cons["canais"]),
+                           "delta": dict(zip(recs, [b - a for a, b in zip(l0, l1)]))},
+            "intervalo": {"r": inter["r"], "r_n": inter["r_n"], "canais": inter["canais"],
+                          "delta": dict(zip(recs, [b - a for a, b in zip(l1, l2)])),
+                          "de": p["k"], "ate": p["k"] + 1, "tick_de": p.get("tick"), "tick_ate": None,
+                          "ja_contado": pc1 is pc2},
+            "gestos": [list(g) for g in self._gestos],
+            "atualizacoes": {"p1": con["p1"], "p2": con["creditos"], "episodio": con["episodio"], "autobio": con.get("autobio")},
+            "pesou": {"termos": {n: v for n, v in escolhida["termos"].items() if v != 0}, "sondas": motivo["sondas"],
+                      "memoria": motivo["memoria"],
+                      "lembranca": None if "lembranca" not in motivo else motivo["lembranca"].get("L")}}
 
 
 def _classe_consumida(p: dict) -> str | None:

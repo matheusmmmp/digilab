@@ -1769,6 +1769,33 @@ CONFIG_DIGESTAO_CORPO_INTEIRA = ConfigDigestaoCorpo(inteira=True)
 
 
 @dataclass(frozen=True)
+class ConfigTetoFomeCorpo:
+    """CORPO C3, a ponte com teto (docs/PLANO_ANALISE_V3_CORPO_C3.md, secao 2; D-C3-1 e D-C3-2, Matheus, 2026-11-19). Com `teto` (so com a
+    D, a `ConfigAcoplamentoCorpo` ligada), num tick com a falta de combustivel a ponte soma a fome min(falta_fome, max(0, teto - fome)):
+    a fome quimica so sobe pela falta ate `teto`. A fome basal e o resto do corpo nao mudam, e acima do teto a falta nao sobe nem a fome nem
+    o cansaco. `None` (o padrao): a D de hoje, byte a byte. Fica numa config propria, como a ConfigDigestaoCorpo, para nenhum dump de hoje
+    mudar. Status em PARAMETROS_TETO_FOME_CORPO."""
+
+    teto: int | None = None
+
+    def __post_init__(self) -> None:
+        if self.teto is not None and (type(self.teto) is not int or self.teto <= 0):
+            raise ValueError(f"ConfigTetoFomeCorpo.teto e None ou inteiro positivo: {self.teto!r}")
+
+
+# Status dos campos da ConfigTetoFomeCorpo (conferido por teste).
+PARAMETROS_TETO_FOME_CORPO: dict[str, tuple[str, str]] = {
+    "teto": ("DECIDIDO", "PLANO_ANALISE_V3_CORPO_C3, D-C3-1 e D-C3-2 (Matheus, 2026-11-19, 'Ponte com teto' e 'Aprovo todas'): None hoje; "
+                         "o DTL em 382 500, o limiar da privacao (C - 0,15 C, derivado, nao e numero novo); o DTB em C/2 = 225 000, "
+                         "PROPOSTO, SEM FONTE; so de pesquisa ate a validacao"),
+}
+
+CONFIG_TETO_FOME_CORPO = ConfigTetoFomeCorpo()
+CONFIG_TETO_FOME_LIMIAR = ConfigTetoFomeCorpo(teto=382_500)      # o DTL: o limiar da privacao (o Corpo confere que e o t.limiar_privacao)
+CONFIG_TETO_FOME_BAIXO = ConfigTetoFomeCorpo(teto=225_000)       # o DTB: C/2, SEM FONTE
+
+
+@dataclass(frozen=True)
 class ConfigLutaMemoria:
     """A ponte da luta, o lado da memoria (docs/TAREFA_V3_PONTE_LUTA.md, secoes 3.2 e 3.7; PL-2, PL-6, PL-7 e PL-9; etapa PE2). Ligada, o
     DigiBrain modular recebe o resumo da luta (`receber_luta`, irmao do `receber_acao_dono`), o entrega ao M-SENS na decisao seguinte (a
@@ -3189,6 +3216,30 @@ PARAMETROS_ELOGIO: dict[str, tuple[str, str]] = {
 
 CONFIG_ELOGIO = ConfigElogio()
 CONFIG_ELOGIO_LIGADA = ConfigElogio(ligada=True)
+
+
+@dataclass(frozen=True)
+class ConfigRastro:
+    """O rastro da cadeia no DigiBrain modular (docs/PLANO_ANALISE_V3_PET_VIVO_R1.md, secao 2, APROVADO): so leitura. Ligada, o fechamento
+    de cada decisao grava `motivo["cadeia"]`: o r do mesmo tick, o r do intervalo ate a decisao seguinte (medido, nunca creditado), os
+    gestos do dono no intervalo, as atualizacoes que a decisao causou e o que pesou na escolha. Nao toca em V, E, P1, P2, memoria nem rng: a
+    vida sai igual, decisao a decisao. Fica numa config propria, e nao em `ConfigDigibrain` (a subchave `rastro` do plano; D-RA-8), para o
+    dump do modular nao mudar, como a `ConfigElogio`. Desligada (o padrao), nenhum campo novo e a vida de hoje byte a byte. Status em
+    PARAMETROS_RASTRO."""
+
+    ligada: bool = False                      # PROPOSTO: a chave
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigRastro.ligada e bool: {self.ligada!r}")
+
+
+PARAMETROS_RASTRO: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "PLANO_ANALISE_V3_PET_VIVO_R1, secao 2 (APROVADO em 2026-11-19, RA-1 a RA-6); a chave, SEM FONTE"),
+}
+
+CONFIG_RASTRO = ConfigRastro()
+CONFIG_RASTRO_LIGADA = ConfigRastro(ligada=True)
 
 
 BRACOS_PV2 = ("OLF-0", "OLF-DC", "OLF-DCV", "OLF-PLA", "OLF-G")

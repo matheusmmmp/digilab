@@ -12,15 +12,16 @@
      - o enfeite da temporada: quem ficou entre os ENFEITE_ATE primeiros (com pontos) de uma tabela de estágio de uma semana da temporada.
        Um por temporada de SEMANAS_POR_TEMPORADA semanas, contadas de EPOCA_TEMPORADAS. Não se vende na loja: o jogo só o põe na ilha
        quando esta rota diz que a conta o tem;
-     - o Respeito conferido (seção 8): só o que o servidor viu e deu. Aqui, o título da semana e o selo, pelos valores da tabela do plano.
-       As medalhas, o título da Liga e o reset entram na MMO8, com a conta pura dos dois pontos (D-CONTA-156).
+     - o Respeito conferido (seção 8): só o que o servidor viu e deu. A MMO7 trouxe o título da semana e o selo; a MMO8 soma as medalhas,
+       o título da Liga e o reset, com a conta pura dos dois pontos (rankings.ts, respeitoDaConta).
    Os recordes (a migração 7): a cada envio aceito, `gravarFronteira` guarda o que a conferência refez (FronteiraVista, conferir.ts): a
    Torre pelo replay do pet, a Fábrica pelo replay do Tamer, e o Salão juntando as lutas que o replay de cada pet viu com as tentativas do
    Tamer. O recorde só sobe. No mural, o desempate é quem chegou primeiro ao valor, pela hora do servidor.
 
    Todo número daqui é PROPOSTO, SEM FONTE, até o Matheus decidir (os do Respeito são os da tabela do plano). */
 import type { Context, Hono } from "hono";
-import { semanaDe } from "../../../web/app/src/ranking/pontos.ts";
+import { RESPEITO_FEITO, semanaDe } from "../../../web/app/src/ranking/pontos.ts";
+import { respeitoParaDict } from "./rankings.ts";
 import type { Banco } from "../conta/banco.ts";
 import type { ConfigConta } from "../conta/config.ts";
 import type { GuardasConta } from "../conta/rotas.ts";
@@ -37,8 +38,9 @@ export const ENFEITE_ATE = 10;
     primeira temporada com a MMO5 no ar). A semana de antes da época fica na temporada 1 */
 export const SEMANAS_POR_TEMPORADA = 4;
 export const EPOCA_TEMPORADAS = "2026-11-02";
-/** o Respeito de cada recompensa (a tabela da seção 8 do plano; PROPOSTO, SEM FONTE) */
-export const RESPEITO = { titulo_semana: 100, selo_dia: 20 } as const;
+/** o Respeito de cada recompensa (a tabela da seção 8 do plano; PROPOSTO, SEM FONTE). Desde a MMO8, a tabela inteira é a da conta pura
+    (RESPEITO_FEITO, web/app/src/ranking/pontos.ts), e o Respeito da conta sai de rankings.ts (respeitoDaConta) */
+export const RESPEITO = { titulo_semana: RESPEITO_FEITO.titulo_semana, selo_dia: RESPEITO_FEITO.selo_dia } as const;
 /** as linhas de cada recorde que o mural mostra; a de quem olha vem sempre (PROPOSTO, SEM FONTE) */
 export const LINHAS_DO_MURAL = 10;
 /** as instalações do mural, na ordem da tela */
@@ -133,7 +135,7 @@ export function selosDaConta(banco: Banco, contaId: string): { dia: string; posi
   return banco.prepare("SELECT dia, posicao, vitorias FROM tabelas_dia WHERE conta_id = ? AND selo = 1 ORDER BY dia DESC").all(contaId) as never;
 }
 
-/** o Respeito que o servidor deu a uma conta (só os títulos da semana e os selos; MMO8 soma o resto) */
+/** o Respeito dos títulos da semana e dos selos (a parte da MMO7; a conta inteira, com as medalhas, a Liga e o reset, é respeitoDaConta) */
 export function respeitoConferido(nTitulos: number, nSelos: number): number {
   return nTitulos * RESPEITO.titulo_semana + nSelos * RESPEITO.selo_dia;
 }
@@ -178,8 +180,7 @@ export function montarRotasPremios(app: Hono, cfg: ConfigConta, g: GuardasConta)
       selos: { total: selos.length, lista: selos },
       enfeites: enfeitesDaConta(banco, s.conta_id),
       recordes,
-      respeito: { conferido: respeitoConferido(ts.length, selos.length), titulos: ts.length * RESPEITO.titulo_semana, selos: selos.length * RESPEITO.selo_dia,
-        como: `só o que o servidor deu: ${RESPEITO.titulo_semana} por título da semana e ${RESPEITO.selo_dia} por selo Top do dia (as medalhas, a Liga e o reset entram depois)` },
+      respeito: respeitoParaDict(banco, s.conta_id),
       temporada_atual: temporadaDe(semanaDe(t)),
     });
   });
