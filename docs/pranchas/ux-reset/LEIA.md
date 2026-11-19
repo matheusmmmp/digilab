@@ -1,6 +1,6 @@
 # Prancha: o reset e as duas pontuações
 
-**Status: PROPOSTA** (UX-RS-1 a 7, seção 8 do `docs/PLANO_UX_RESET.md`, esperam o Matheus). As regras vêm do `docs/PLANO_V3_MMO.md`
+**Status: APROVADA** pelo Matheus em 2026-11-19, pela recomendação (UX-RS-1 a 7, seção 8 do `docs/PLANO_UX_RESET.md`). As regras vêm do `docs/PLANO_V3_MMO.md`
 (seções 8 e 9; MMO-15 a MMO-19 APROVADAS em 2026-11-11). A tela é da MMO8 e só começa depois da aprovação.
 
 É só desenho: HTML estático, sem código do jogo. Os tokens e os moldes são os da prancha dos lugares (`../ux-lugares-menus/lugares.css` e

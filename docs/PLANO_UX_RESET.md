@@ -1,6 +1,7 @@
 # Plano de UX do reset e das duas pontuações (2026-11-19)
 
-**Status: PROPOSTO.** Sem código de tela. A prancha está em `docs/pranchas/ux-reset/`. As regras vêm do `docs/PLANO_V3_MMO.md` (seções 8 e
+**Status: APROVADO** pelo Matheus em 2026-11-19 ("Aprovo as UX-RS pelas recomendações, segue para as telas"): UX-RS-1 a 7 valem como
+recomendadas. As telas vêm no PR das telas da MMO8. A prancha está em `docs/pranchas/ux-reset/`. As regras vêm do `docs/PLANO_V3_MMO.md` (seções 8 e
 9; MMO-15 a MMO-19 APROVADAS pelo Matheus em 2026-11-11 pela recomendação). Os tamanhos e os textos de interface são **PROPOSTO, SEM
 FONTE**.
 Autor: Claude Code (Opus 5.5), sessão lateral da conta, branch `v3-mmo8-prancha`, worktree `D:\Trab\digilab\v3-mmo8`.
@@ -76,7 +77,7 @@ Todas na pele dos menus (`--hx-*`, Vidro por padrão e Militar), sem cor nova.
 Só o que o motor e o servidor já têm (ou têm no PR do código da MMO8): nenhuma tela pede mecânica nova. A tela do reset usa o `cruzar` e o
 `chocarDoBrasao` de hoje; o perfil e o cais leem três rotas. O que custa é o envio do registro do aposentado (UX-RS-4).
 
-## 8. Decisões para o Matheus
+## 8. Decisões para o Matheus (APROVADAS em 2026-11-19, pela recomendação)
 
 Cada uma com a recomendação em negrito e o custo de errar.
 
