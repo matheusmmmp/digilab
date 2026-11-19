@@ -29,7 +29,8 @@ BASES_COMPARACAO = {"calibracao": (28101, 28202, 28303, 28404, 28505), "validaca
 # competicao entre as regras, PLANO_ANALISE_V2_V3_COMPETICAO, secao 4; o do prototipo do DigiBrain modular,
 # PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO, secao 3)
 PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7", "comparacao-cerebros", "mundo", "corpo", "banheiro", "dois_pets", "rede_de_si",
-                     "pet_que_pensa", "competicao", "digibrain_prototipo", "social_par", "social_par_piloto", "corpo_par")
+                     "pet_que_pensa", "competicao", "digibrain_prototipo", "social_par", "social_par_piloto",
+                     "social_par_s", "social_par_s_det", "corpo_par")
 # faixas queimadas: continuam reservadas e nao podem ser usadas para nada (adendo 4.1 do PLANO_ANALISE_V2_EXPERIMENTO_MAIOR)
 FAIXAS_QUEIMADAS = ((15101, 15505, "a validacao antiga do experimento maior: run indevida parada em 2026-10-06 (PR #183)"),
                     (90101, 90505, "GOSTO_VISUAL, GV3b do adendo 1: a run parou na vida 213 de 216 por um erro do codigo, as duas TVs "
@@ -198,6 +199,9 @@ FAIXAS_RESERVADAS = (
     (73101, 73505, "VALUATION, a V3: o conserto do reflexo do sono, REL e CON nas 12 celulas da C4 x 200 unidades, uma vez "
                    "(docs/PLANO_ANALISE_V3_VALUATION_CONSERTO.md, secao 4; D-VAL-18, aprovada pelo Matheus em 2026-11-17, \"Aprovo, siga\"; bases 73101, 73202, 73303, 73404 e 73505, "
                    "K = 40; conferida livre no faixas.py, nas configs, nos planos e nas tarefas dos branches remotos em 2026-11-17)"),
+    (69101, 69505, "VALUATION, a V4: a validacao contra a baseline trivial, TRIV, REL e CON nas 12 celulas da C4 x 200 unidades, uma vez "
+                   "(docs/PLANO_ANALISE_V3_VALUATION_VALIDACAO.md, secao 2.3; VB-3, aprovada pelo Matheus em 2026-11-18, \"Aprovo os dois\" e \"Sim, aprovei\"; "
+                   "bases 69101, 69202, 69303, 69404 e 69505, K = 40; conferida livre no faixas.py da origin/main e nos branches remotos em 2026-11-18)"),
     (26101, 26505, "PET_VIVO, PV-2: a run unica da quimiotaxia, 6 bracos x 12 celulas da C4 x 200 unidades, com o contrafactual da SE-C "
                    "nos k de 0 a 7 e a checagem do v38 (docs/PLANO_ANALISE_V3_PET_VIVO_PV2.md, secao 4 e adendo 2, A2.1; bases 26101, "
                    "26202, 26303, 26404 e 26505, K = 40; proposta pelo coordenador em 2026-11-18, no lugar da 83xxx, que e a calibracao da "
@@ -225,6 +229,10 @@ FAIXAS_RESERVADAS = (
                      "D + C5 (docs/PLANO_ANALISE_V3_CORPO.md, secoes 3 e 4; D-CO-5 e D-CO-7, decididas pelo Matheus em 2026-11-18, "
                      "\"Confirmo, siga\"; a 104xxx conferida livre nos codigos, configs, planos, tarefas, resultados e registro de todos os "
                      "branches remotos em 2026-11-18)"),
+    (103001, 103400, "SOCIAL_PAR S, o substrato que deixa o social aparecer: a run 103001...103200 (200 bases, k = 1, prefixo social_par_s, "
+                     "os mesmos nos tres bracos) e o G-DET 103301...103350 (prefixo social_par_s_det) (docs/PLANO_ANALISE_V3_SOCIAL_PAR_S.md, "
+                     "secao 4; S-5, aprovada pelo Matheus em 2026-11-18, \"Aprovado\"; conferida livre no faixas.py, nos planos e nas "
+                     "configs da origin/main e de todos os branches remotos em 2026-11-18)"),
 )
 
 

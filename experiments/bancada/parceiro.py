@@ -309,8 +309,21 @@ def sortear_perturbacao(semente: int, tick_min: int, tick_max: int, passo: int) 
     return t0, rng.randrange(16)
 
 
+@dataclass(frozen=True)
+class IntervencaoT0:
+    """A intervencao do experimento no t0, generalizada (SOCIAL_PAR S: docs/PLANO_ANALISE_V3_SOCIAL_PAR_S.md, secao 2): no primeiro passo
+    com o tick >= `t0` em que todos os `acordados` estao acordados, `aplicar(g)` roda uma vez (o `levar_pet` e o `deixar_bola_intervencao`
+    do grupo, com a origem `intervencao`). `levado` e o pet que a medida trata como focal (o `VidaPar.levado`). A `perturbacao` de tupla
+    (a E1 e o A0) continua sendo o caminho deles, byte a byte."""
+    t0: int
+    acordados: tuple[str, ...]
+    aplicar: Callable
+    levado: str | None = None
+
+
 def viver_par(cfg_mundo: ConfigMundo, semente: int, membros: list[Membro], dias: int, perturbacao: tuple | None = None,
-              cfg=None, cfg_intervencao: ConfigIntervencaoSocial = CONFIG_INTERVENCAO_SOCIAL_LIGADA, cfg_cooperacao=None) -> VidaPar:
+              cfg=None, cfg_intervencao: ConfigIntervencaoSocial = CONFIG_INTERVENCAO_SOCIAL_LIGADA, cfg_cooperacao=None,
+              intervencao: IntervencaoT0 | None = None) -> VidaPar:
     """O laco do `simular_grupo` (digilab/grupo.py) para um par nascido junto no tick 0, com o membro gravado e a perturbacao.
     `perturbacao` = (quem e levado, a referencia (o outro), t0, direcao, d0 em celulas): no primeiro passo >= t0 em que quem e levado esta
     acordado, ele vai para d0 celulas da referencia, na direcao. Sem perturbacao e com dois vivos, e o `simular_grupo` byte a byte (o G2)."""
@@ -348,17 +361,24 @@ def viver_par(cfg_mundo: ConfigMundo, semente: int, membros: list[Membro], dias:
             canais[m.ident] = CanalMundo(g.pet(m.ident), orcamento, cd.max_interacoes_por_passo)
             rngs[m.ident] = random.Random(derivar_semente("dono", g.sementes[m.ident], m.rotulo_dono))
     passos, posicoes = [], {m.ident: [] for m in por_id}
-    feita, t0_feito, no_t0 = perturbacao is None, None, None
+    if perturbacao is not None and intervencao is not None:
+        raise ValueError("a perturbacao (a tupla da E1 e do A0) e a IntervencaoT0 nao vao juntas")
+    feita, t0_feito, no_t0 = perturbacao is None and intervencao is None, None, None
     for k in range(total // passo):
         t = k * passo
         g.avancar(passo)
-        if not feita and g.tick >= perturbacao[2]:
+        if not feita and perturbacao is not None and g.tick >= perturbacao[2]:
             quem, ref, _t0, direcao, d0 = perturbacao
             if not g.motores[quem]._estado.dormindo:
                 no_t0 = retrato_do_mundo(g)
                 rx, ry = g.motores[ref].pet
                 x, y = deslocar(rx, ry, direcao, d0 * cfg_mundo.sub, cfg_mundo)
                 g.levar_pet(quem, x, y)
+                feita, t0_feito = True, g.tick
+        if not feita and intervencao is not None and g.tick >= intervencao.t0:
+            if not any(g.motores[i]._estado.dormindo for i in intervencao.acordados):
+                no_t0 = retrato_do_mundo(g)
+                intervencao.aplicar(g)
                 feita, t0_feito = True, g.tick
         for m in por_id:
             if m.ident in canais:
@@ -380,7 +400,8 @@ def viver_par(cfg_mundo: ConfigMundo, semente: int, membros: list[Membro], dias:
     for canal in canais.values():
         canal.fechar()
     return VidaPar(g, passos, posicoes, {i: list(gv.decisoes) for i, gv in gravadores.items()},
-                   {i: list(p.desvios) for i, p in gravadas.items()}, t0_feito, None if perturbacao is None else perturbacao[0], no_t0)
+                   {i: list(p.desvios) for i, p in gravadas.items()}, t0_feito,
+                   intervencao.levado if intervencao is not None else None if perturbacao is None else perturbacao[0], no_t0)
 
 
 def retrato_do_mundo(g: Grupo) -> dict:
