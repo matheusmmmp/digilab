@@ -365,3 +365,30 @@ nenhum arquivo de `web/app/src` nem do motor muda.
 - **Fora do e2e:** o brilho de "acabou de abrir" (pede um save de Mega, que o `e2e/saves.json` não tem), o toque no modelo 3D do cais,
   "Ver a semana" na Arena (pede o servidor falso da luta ranqueada), a tela da conta e a luta ranqueada. O e2e fica fora do CI, como o
   do jogo (D-IA-3). O desvio está no registro (D-CONTA-138).
+
+## 22. MMO6: o desafio do dia, a parte local (2026-11-18)
+
+Pedido do Matheus: "Sim, abre a MMO6". Branch `v3-mmo6`. Só o motor atrás da chave e o servidor; a prancha e a tela pedem a aprovação
+antes do código.
+
+- **No motor (`web/app/motor/fabrica.ts`):** a Fábrica do dia, `TentativaFabrica.doDia(escolha, semente do dia, sementes das lutas)`. Os
+  3 alugados e os rivais saem da semente do dia; a semente de cada luta vem de fora, uma por vez (`receberSemente`), e `proximoRival`
+  mostra o rival antes da semente. A chave é a ausência das sementes de fora: o construtor de sempre sai byte a byte igual ao gabarito de
+  40 tentativas gravado antes (`test/gabaritos/mmo6_fabrica_hoje.json`, commit c45766d1). As regras da luta não mudam.
+- **A conta pura (`web/app/src/ranking/desafio.ts`):** o registro `{v, escolha, lutas, trocas}`, o replay pelo motor, o desempate (mais
+  vitórias, mais vida no fim da última vitória, quem terminou antes) e o número de selos.
+- **No servidor (`servidor_web/src/desafio/desafio.ts`, a migração 6):**
+  - a semente do dia, igual para todos, HMAC do segredo do dia (um por dia de Brasília, no banco, fora do git);
+  - uma tentativa por conta por dia: `POST /desafio/tentativa` já a gasta, e a segunda leva 409;
+  - as sementes das lutas, da conta, só depois da escolha: `POST /desafio/lutas` guarda a escolha e as trocas prometidas;
+  - o envio conferido pelo replay (`POST /desafio/envios`), com o resultado e o motivo guardados;
+  - a tabela do dia (`GET /desafio/:dia/tabela`), congelada uma hora depois do fim do dia com o selo dos primeiros (MMO-11), os selos da
+    conta (`GET /desafio/selos`) e o segredo publicado (`GET /desafio/:dia/segredo`);
+  - apagar a conta leva tudo dela, e o "baixar os meus dados" traz o desafio.
+- **Testes:** `servidor_web`: 155 passaram (21 novos em `test/desafio.test.ts`). `web/app`: os 47 novos de `test/mmo6_fabrica_hoje.test.ts`
+  e `test/mmo6_fabrica_do_dia.test.ts`, mais a suíte inteira (a contagem está no PR).
+- **O achado (D-CONTA-150):** em 80,7 % dos pares (dia, alugado), a primeira luta dá o mesmo resultado com a semente de qualquer conta
+  (`servidor_web/medicoes/mmo6_sorte_do_dia.json`). A dica de um jogador vale para os outros nesta luta. Vai ao Matheus.
+- **O que não muda:** o `engine.py`, a Fábrica de sempre, o registro do Tamer e as telas.
+- **Fora desta etapa:** a prancha e a tela; as recompensas e o mural (MMO7); o reset (MMO8); o deploy. Os desvios estão no registro
+  (D-CONTA-139 a 151).

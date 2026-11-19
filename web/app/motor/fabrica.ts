@@ -13,6 +13,11 @@
    "fabrica_troca"), reproduziveis sozinhas a partir dele. A semente da tentativa sai do registro do Tamer (o numero da tentativa,
    sementeFabrica); os alugueis, os rivais e as sementes das lutas saem dela, e o replay confere cada uma. Nada daqui toca pet nenhum.
 
+   A Fabrica do dia (MMO6, docs/PLANO_V3_MMO.md secao 6; MMO-10): as sementes vem de fora, do servidor (TentativaFabrica.doDia). Os
+   alugados e os rivais saem da semente do dia, a mesma para todos; a semente de cada luta e da conta e chega do servidor so depois da
+   escolha (o alugado, as trocas), uma por vez (receberSemente). A chave e o `fora`: sem ele (o construtor de sempre), as sementes saem de
+   dentro e a Fabrica sai byte a byte igual (test/mmo6_fabrica_hoje.test.ts, o gabarito gravado antes). As regras da luta nao mudam.
+
    As Fabricas do combate por turnos (v6, v9, v13 e v14) sairam com ele: o registro do Tamer descarta as tentativas delas (src/tamer.ts, o
    descarte 7 da LP4). So ha a v21. */
 import { caraterCanonico } from "./catalogo.ts";
@@ -80,6 +85,12 @@ export interface LutaFabrica {
 /** a proxima luta da tentativa: o indice, a semente, a serie (1 = a primeira), a luta dentro dela (1 a 3) e o rival */
 export interface ProximaLutaFabrica { k: number; s: number; serie: number; naSerie: number; rival: Forma }
 
+/** a semente de uma luta ou do dia vinda de fora: um inteiro sem sinal de 32 bits, como o hashSemente */
+const sementeDeFora = (x: unknown, o: string): number => {
+  if (!Number.isInteger(x) || (x as number) < 0 || (x as number) > 0xffffffff) throw new Error(`${o} da Fábrica do dia inválida: ${JSON.stringify(x)}`);
+  return x as number;
+};
+
 /** uma tentativa da Fabrica, refeita das decisoes do jogador (a escolha, as lutas e as trocas) e das sementes. Deterministica: o registro do
     Tamer guarda so as decisoes e as sementes (e a versao das regras), e o replay joga as lutas de novo por aqui.
     `versao`: as regras da tentativa (regraFabrica; sem ela, as de hoje). `semente`: so as conferencias (test/) usam outra (a do jogo sai de n) */
@@ -96,11 +107,45 @@ export class TentativaFabrica {
   acabou = false;
   /** na luta da POC: a vida (inteira) com que o alugado comeca a proxima luta, dentro da serie; null = inteiro */
   private iniPoc: number | null = null;
-  constructor(n: number, escolha: number, versao: number = VERSAO_FABRICA_ATUAL, semente: number = sementeFabrica(n)) {
+  /** a Fabrica do dia (MMO6): as sementes das lutas vindas de fora, na ordem (null: a Fabrica de sempre, as sementes de dentro) */
+  private readonly lutasDeFora: number[] | null;
+  constructor(n: number, escolha: number, versao: number = VERSAO_FABRICA_ATUAL, semente: number = sementeFabrica(n), lutasDeFora: readonly number[] | null = null) {
     this.regra = regraFabrica(versao);
     this.n = n; this.s = semente; this.alugueis = alugueisFabrica(this.s);
     if (!Number.isInteger(escolha) || escolha < 0 || escolha >= ALUGUEIS_FABRICA) throw new Error("escolha de alugado inválida na Fábrica: " + JSON.stringify(escolha));
     this.escolha = escolha; this.alugado = this.alugueis[escolha];
+    this.lutasDeFora = lutasDeFora === null ? null : lutasDeFora.map((x, k) => sementeDeFora(x, `a semente da luta ${k}`));
+  }
+  /** a Fabrica do dia (MMO6): a tentativa com a semente do dia (os alugados e os rivais, os mesmos para todos) e as sementes das lutas que o
+      servidor ja entregou a conta (as outras chegam por receberSemente). O numero da tentativa e 1: ha uma por dia */
+  static doDia(escolha: number, dia: number, lutas: readonly number[] = [], versao: number = VERSAO_FABRICA_ATUAL): TentativaFabrica {
+    return new TentativaFabrica(1, escolha, versao, sementeDeFora(dia, "a semente do dia"), lutas);
+  }
+  /** a Fabrica do dia: as sementes vem de fora */
+  get ehDoDia(): boolean { return this.lutasDeFora !== null; }
+  /** a Fabrica do dia: quantas sementes de luta ja chegaram */
+  get sementesRecebidas(): number {
+    if (this.lutasDeFora === null) throw new Error("a Fábrica de sempre tira as sementes de dentro; só a do dia as recebe");
+    return this.lutasDeFora.length;
+  }
+  /** a Fabrica do dia: a semente da luta k chegou do servidor (na ordem: k e a proxima que falta) */
+  receberSemente(k: number, s: number): void {
+    if (this.lutasDeFora === null) throw new Error("a Fábrica de sempre tira as sementes de dentro; só a do dia as recebe");
+    if (k !== this.lutasDeFora.length) throw new Error(`a semente da luta ${k} da Fábrica do dia fora de ordem (falta a da luta ${this.lutasDeFora.length})`);
+    this.lutasDeFora.push(sementeDeFora(s, `a semente da luta ${k}`));
+  }
+  /** a semente da luta k: de dentro (sementeLutaFabrica) ou, na Fabrica do dia, a que veio do servidor */
+  private sementeDaLuta(k: number): number {
+    if (this.lutasDeFora === null) return sementeLutaFabrica(this.s, k);
+    const s = this.lutasDeFora[k];
+    if (s === undefined) throw new Error(`a semente da luta ${k} da Fábrica do dia ainda não veio do servidor`);
+    return s;
+  }
+  /** a proxima luta sem a semente: o rival ja se sabe (sai da semente do dia), a semente da luta, na Fabrica do dia, so depois da escolha */
+  proximoRival(): Omit<ProximaLutaFabrica, "s"> | null {
+    if (this.acabou) return null;
+    const k = this.lutas.length;
+    return { k, serie: Math.floor(k / LUTAS_SERIE_FABRICA) + 1, naSerie: k % LUTAS_SERIE_FABRICA + 1, rival: formaRivalFabrica(this.s, k) };
   }
   get vitorias(): number { return this.lutas.filter(x => x.venceu).length; }
   /** as series vencidas (3 vitorias seguidas cada; a tentativa para na primeira derrota) */
@@ -112,7 +157,7 @@ export class TentativaFabrica {
   proxima(): ProximaLutaFabrica | null {
     if (this.acabou) return null;
     const k = this.lutas.length;
-    return { k, s: sementeLutaFabrica(this.s, k), serie: Math.floor(k / LUTAS_SERIE_FABRICA) + 1, naSerie: k % LUTAS_SERIE_FABRICA + 1, rival: formaRivalFabrica(this.s, k) };
+    return { k, s: this.sementeDaLuta(k), serie: Math.floor(k / LUTAS_SERIE_FABRICA) + 1, naSerie: k % LUTAS_SERIE_FABRICA + 1, rival: formaRivalFabrica(this.s, k) };
   }
   /** os numeros de um Mega na luta da POC: o perfil canonico pelo mapeamento da LP2-2 (alugado e rival iguais, sem fator) */
   statsPoc(f: Forma): StatsArena {
@@ -120,7 +165,7 @@ export class TentativaFabrica {
     if (f.est !== "mega" || !FORMAS_AD.includes(adulta)) throw new Error("a Fábrica só tem Megas das 8 formas adultas: " + JSON.stringify(f));
     return statsRivalForma(f, caraterCanonico(adulta));
   }
-  /** joga a proxima luta com a semente dada (tem de ser a da tentativa: ninguem escolhe os rivais) */
+  /** joga a proxima luta com a semente dada (tem de ser a da tentativa: ninguem escolhe os rivais; na Fabrica do dia, a que veio do servidor) */
   lutar(s: number): LutaFabrica {
     const p = this.proxima();
     if (!p) throw new Error(`a tentativa ${this.n} da Fábrica já acabou`);

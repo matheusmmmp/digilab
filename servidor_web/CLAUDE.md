@@ -66,6 +66,13 @@ O `servidor/` continua para o jogo local e a pesquisa.
   conferência vale**. As tabelas saem daí, uma por estágio, com os pontos refeitos pelo `pontuar` da MMO1. A semana congela
   `FOLGA_DO_FECHAMENTO_MS` depois do fim (PROPOSTA): a pendente vira não enviada, as tabelas vão para `tabelas_semana` e o segredo é
   publicado. O fechamento roda na primeira chamada depois da hora. As tabelas pedem a sessão; o segredo publicado, não.
+- **O desafio do dia (MMO6, `src/desafio/desafio.ts`):** a Fábrica do dia, uma tentativa por conta por dia de Brasília. `POST
+  /desafio/tentativa` `{v}` entrega a semente do dia (HMAC do segredo do dia, a mesma para todos: os alugados e os rivais) e já gasta a
+  tentativa (409 `tentativa_usada`); `POST /desafio/lutas` `{dia, k, escolha, trocas}` entrega a semente da luta k, da conta (HMAC com a
+  conta e o k), e guarda a escolha e as trocas prometidas; `POST /desafio/envios` `{dia, registro}` refaz a tentativa pelo motor
+  (`TentativaFabrica.doDia`, a conta pura de `web/app/src/ranking/desafio.ts`), no processo. O segredo do dia nasce no banco, um por dia, e
+  é publicado quando o dia congela (a mesma folga da semana); a tabela congela em `tabelas_dia`, com o selo do Top do dia (MMO-11). A
+  trava do nível é a da luta ranqueada. Apagar a conta leva a tentativa, as sementes, os envios e as linhas da tabela.
 - **A vida dos testes** é o gabarito `test/gabaritos/vida_101.json`, gravado por `node scripts/gerar_vida_teste.ts` (precisa do
   `node_modules` do `web/app`, porque o roteiro da MMO0 nasce o ovo pelo `src/produto.ts`).
 
