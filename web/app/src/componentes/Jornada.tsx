@@ -7,7 +7,8 @@ import { dimSprite, imagemAtlas, useAtlas } from "../atlas.ts";
 import { useDesktop } from "../desktop.ts";
 import { BRASAO } from "../decoracao.ts";
 import { chocarDoBrasao, fecharEscolhaBrasao, guardarAtivoNoProximoOvo, marcarConclusao, marcos, novoOvoGuardandoAtivo } from "../jornada.ts";
-import { tamerAtual } from "../jogo.ts";
+import { jogoAtual, tamerAtual } from "../jogo.ts";
+import { chocarDoReset, ovoDoResetPendente } from "../reset.ts";
 import { SeloMedalha } from "./Medalha.tsx";
 import { abrirModal } from "./modal.ts";
 import { emitirMusica } from "../somEventos.ts";
@@ -28,7 +29,8 @@ export function EscolherBrasao({ podeVoltar }: { podeVoltar: boolean }) {
   /* SOM-UP: a musica do nascimento do Digimon UP enquanto o jogador escolhe o brasao */
   useEffect(() => { emitirMusica("jornada", { lugar: "nascimento" }); return () => emitirMusica("jornada", null); }, []);
   const escolher = (esp: Especie) => {
-    try { chocarDoBrasao(esp, guardarAtivoNoProximoOvo(), ritmo); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
+    /* o ovo do reset (MMO8): o pet aposentado ja esta em Geracoes e nao vai para os guardados */
+    try { if (ovoDoResetPendente(jogoAtual())) chocarDoReset(esp, ritmo); else chocarDoBrasao(esp, guardarAtivoNoProximoOvo(), ritmo); } catch (err) { setMsg(err instanceof Error ? err.message : String(err)); }
   };
   return (
     <dialog className="brasao-tela ab-hx dl" ref={ref} aria-labelledby="br-tit" onCancel={e => { if (!podeVoltar) e.preventDefault(); }} onClose={fecharEscolhaBrasao}>

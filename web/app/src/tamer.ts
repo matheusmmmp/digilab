@@ -56,7 +56,7 @@
    log do pet (marcoConfere). Um registro de antes da 10 com o evento falha alto.
 
    O reset (docs/PLANO_V3_MMO.md, etapa MMO8, secao 9; MMO-17 a MMO-19 APROVADAS): registro versao 11 (le 1 a 10), atras da chave
-   RESET_LIGADO (desligada: o jogo grava a 10, byte a byte como antes; test/mmo8_tamer_hoje.test.ts). Evento "reset": o pet ativo se
+   RESET_LIGADO (ligada desde as telas, 2026-11-19; desligada, o jogo grava a 10, byte a byte como antes; test/mmo8_tamer_hoje.test.ts). Evento "reset": o pet ativo se
    aposentou em Geracoes (pelo reset ou pelo cruzamento), com a semente dele, o hash do registro dele na hora (o SHA-256 do JSON do log, o
    mesmo do pedido da semente), quantos eventos o registro tinha, o estagio, a forma, o nivel do reset (0 a 3, nivelDoReset em
    src/ranking/pontos.ts), o tick e a hora. Um por pet. O servidor confere o nivel refazendo o log do aposentado. Os Bits do reset sao a
@@ -93,9 +93,9 @@ export const VERSAO_TAMER_RESET = 11;
 export const VERSOES_TAMER: readonly number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 /** a versao do registro que traz o evento "nivel" */
 const VERSAO_TAMER_NIVEL = 10;
-/** a chave do reset (MMO8): desligada ate a tela, que espera a prancha (docs/PLANO_UX_RESET.md). Desligada, o registro do Tamer sai na versao
-    10, como antes; ligada, na 11 */
-export const RESET_LIGADO = false;
+/** a chave do reset (MMO8): ligada com as telas (a prancha docs/PLANO_UX_RESET.md, UX-RS-1 a 7 APROVADAS em 2026-11-19). Ligada, o registro
+    do Tamer sai na versao 11; desligada, na 10, byte a byte como antes (test/mmo8_tamer_hoje.test.ts confere os dois) */
+export const RESET_LIGADO = true;
 /** o registro tem o reset (o evento ou os Bits dele): so cabe da versao 11 em diante */
 const temReset = (log: readonly EventoTamer[]): boolean =>
   log.some(ev => Array.isArray(ev) && (ev[0] === "reset" || (ev[0] === "bits" && (ev[1] as BitsGanhos | undefined)?.origem === "reset")));
@@ -521,8 +521,9 @@ export function semFabricaAntiga(log: readonly EventoTamer[]): { log: EventoTame
   if (!inicios.some(ev => !VERSOES_FABRICA.includes(ev[1].v as number))) return { log: [...log], tentativas: 0 };
   return { log: log.filter(ev => !EVENTOS_FABRICA.includes(ev[0])), tentativas: inicios.length };
 }
-export const textoTamer = (t: Tamer): string => JSON.stringify({ versao: versaoTamerDe(t.log), log: t.log });
-export function gravarTamer(armaz: Armazenamento, t: Tamer): void { armaz.setItem(CHAVE_TAMER, textoTamer(t)); }
+/** `ligado`: a chave do reset (o padrao e a RESET_LIGADO; o teste do gabarito da MMO8 grava tambem com ela desligada) */
+export const textoTamer = (t: Tamer, ligado: boolean = RESET_LIGADO): string => JSON.stringify({ versao: versaoTamerDe(t.log, ligado), log: t.log });
+export function gravarTamer(armaz: Armazenamento, t: Tamer, ligado: boolean = RESET_LIGADO): void { armaz.setItem(CHAVE_TAMER, textoTamer(t, ligado)); }
 
 /** medalhas que o pet acabou de ganhar para o Tamer: a primeira vitoria dele contra um lider cuja medalha o Tamer
     ainda nao tem. Devolve as medalhas novas (ja aplicadas ao Tamer) */

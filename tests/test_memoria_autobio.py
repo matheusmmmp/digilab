@@ -726,6 +726,9 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave():
                       "experiments/run_v3_baseline_trivial.py",
                       # a auditoria da evidencia (EVIDENCIA A0): so cita a pasta da run da C4 (memoria_autobio/run) para ler os blobs do git; nao le a chave
                       "tools/auditar_evidencia.py",
+                      # a replicacao da EVIDENCIA A3 (tools/replicar_run.py): so cita a pasta, a config e o orquestrador da C4 para refazer a run
+                      # numa worktree no SHA dela; nao le a chave
+                      "tools/replicar_run.py",
                       # a VALUATION (a ablacao): o orquestrador importa o da C4 pela vida do REL e pelas subchaves; o braco C usa a chave
                       # como o braco SEM da C4 (`controle_mem = "sem"`), sem valor novo
                       "experiments/run_v3_valuation.py",

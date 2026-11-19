@@ -1,0 +1,60 @@
+{
+ "run": "c4",
+ "descricao": "C4, a memoria autobiografica (adendo 9 do PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO)",
+ "sha": "a287ba20fafdc1fbbf9be7100f89d9c90f466948",
+ "artefatos_ref": "9d9e8996f193cbe5b6a869a5de2f20c61d734108",
+ "pasta": "artifacts_v2_digibrain_prototipo/memoria_autobio/run",
+ "python_original": "3.13.0",
+ "node_original": null,
+ "python": "3.13.0",
+ "node": "v24.19.0",
+ "git": "git version 2.45.1.windows.1",
+ "so": "Windows-11-10.0.26300-SP0",
+ "nao_comparados": {
+  "vidas.tar.gz": "feito fora do orquestrador, depois da run (o commit 1df2e328); a replica grava as vidas soltas"
+ },
+ "modo": "replica",
+ "trabalho": "D:\\Trab\\digilab\\v3-replica-c4-a287ba20",
+ "saida": "D:\\Trab\\digilab\\v3-replica-c4-a287ba20\\_replica\\artifacts_v2_digibrain_prototipo\\memoria_autobio\\run",
+ "comando": [
+  "C:\\Users\\mathe\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+  "experiments/run_v2_memoria_autobio.py",
+  "--config",
+  "experiments/configs/v2_memoria_autobio/memoria_autobio.json",
+  "--processos",
+  "4",
+  "--saida",
+  "D:\\Trab\\digilab\\v3-replica-c4-a287ba20\\_replica\\artifacts_v2_digibrain_prototipo\\memoria_autobio\\run"
+ ],
+ "fonte_do_comando": "o plano, adendo 9, A9.13 (o meta da C4 nao grava o comando; docs/AUDITORIA_EVIDENCIA.md, secao 1.4)",
+ "inicio": "2026-11-16T20:40:14",
+ "parede_s": 14826.345924100024,
+ "fim": "2026-11-17T00:47:21",
+ "saida_codigo": 0,
+ "log_fim": "ull,\n    \"motivo\": null\n   },\n   \"margem\": 0.032,\n   \"margem_efetiva\": 0.01875153883019203,\n   \"holm\": {\n    \"p\": 9.46829930206178e-19,\n    \"ordem\": 2,\n    \"limiar\": 0.0125,\n    \"rejeita\": true,\n    \"p_ajustado\": 2.45935311820478e-18\n   },\n   \"passa\": true\n  },\n  \"REL - REC\": {\n   \"contraste\": \"REL - REC, a taxa de fechamento por episodio, nas 4 celulas do longe_fixo\",\n   \"n\": 200,\n   \"n_grupos\": 5,\n   \"media\": 0.05598556638916041,\n   \"teste\": \"t sobre as unidades (A4.4.6)\",\n   \"p_unilateral\": 8.716585733969441e-15,\n   \"ic95\": {\n    \"ic_inferior\": 0.04265681188287439,\n    \"ic_superior\": 0.06931432089544644,\n    \"nivel\": 0.95\n   },\n   \"t\": 8.282927258708128,\n   \"gl\": 199,\n   \"motivo\": null,\n   \"g1\": 0.04960180122778971,\n   \"ressalva_assimetria\": null,\n   \"bootstrap\": {\n    \"rotulo\": \"a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)\",\n    \"p_unilateral\": 0.0,\n    \"ic95\": {\n     \"ic_inferior\": 0.046805191297842566,\n     \"ic_superior\": 0.06533693596298969,\n     \"nivel\": 0.95\n    },\n    \"ic90\": {\n     \"ic_inferior\": 0.04814885356060523,\n     \"ic_superior\": 0.06411085952144305,\n     \"nivel\": 0.9\n    },\n    \"motivo\": null\n   },\n   \"classe\": {\n    \"classe\": \"> 0\",\n    \"sinal\": null,\n    \"motivo\": null\n   },\n   \"margem\": 0.032,\n   \"margem_efetiva\": 0.01901740055798061,\n   \"holm\": {\n    \"p\": 8.716585733969441e-15,\n    \"ordem\": 3,\n    \"limiar\": 0.025,\n    \"rejeita\": true,\n    \"p_ajustado\": 8.716585733969441e-15\n   },\n   \"passa\": true\n  },\n  \"REL - EMB\": {\n   \"contraste\": \"REL - EMB, a taxa de fechamento por episodio, nas 4 celulas do longe_fixo\",\n   \"n\": 200,\n   \"n_grupos\": 5,\n   \"media\": 0.06355029022945899,\n   \"teste\": \"t sobre as unidades (A4.4.6)\",\n   \"p_unilateral\": 8.197843727349267e-19,\n   \"ic95\": {\n    \"ic_inferior\": 0.050653308992138775,\n    \"ic_superior\": 0.07644727146677921,\n    \"nivel\": 0.95\n   },\n   \"t\": 9.71687935347562,\n   \"gl\": 199,\n   \"motivo\": null,\n   \"g1\": 0.11597059231535366,\n   \"ressalva_assimetria\": null,\n   \"bootstrap\": {\n    \"rotulo\": \"a convencao da secao 5.2.1, anticonservadora com 5 bases (A4.4)\",\n    \"p_unilateral\": 0.0,\n    \"ic95\": {\n     \"ic_inferior\": 0.047258972548256103,\n     \"ic_superior\": 0.0824543198989004,\n     \"nivel\": 0.95\n    },\n    \"ic90\": {\n     \"ic_inferior\": 0.048905456815660074,\n     \"ic_superior\": 0.07962742358651323,\n     \"nivel\": 0.9\n    },\n    \"motivo\": null\n   },\n   \"classe\": {\n    \"classe\": \"> 0\",\n    \"sinal\": null,\n    \"motivo\": null\n   },\n   \"margem\": 0.032,\n   \"margem_efetiva\": 0.01840134860786937,\n   \"holm\": {\n    \"p\": 8.197843727349267e-19,\n    \"ordem\": 1,\n    \"limiar\": 0.008333333333333333,\n    \"rejeita\": true,\n    \"p_ajustado\": 2.45935311820478e-18\n   },\n   \"passa\": true\n  }\n },\n \"guarda\": {\n  \"contraste\": \"G-COMEDOURO: REL - SEM, a taxa por episodio, nas 4 celulas do comedouro\",\n  \"n\": 200,\n  \"n_grupos\": 5,\n  \"media\": 0.19814347367771895,\n  \"teste\": \"t sobre as unidades (A4.4.6)\",\n  \"p_unilateral\": 5.76260848137104e-82,\n  \"ic95\": {\n   \"ic_inferior\": 0.18614403297862855,\n   \"ic_super\n",
+ "comparacoes": [
+  {
+   "artefato": "resultado.json",
+   "versionado": "artifacts_v2_digibrain_prototipo/memoria_autobio/run/resultado.json",
+   "sha256_versionado": "6f8c91d8e2b857194de1de00145a4da817efca76eb882bcd2d090dd3101cd6d3",
+   "sha256_conteudo_versionado": "6f8c91d8e2b857194de1de00145a4da817efca76eb882bcd2d090dd3101cd6d3",
+   "sha256_no_meta": "6f8c91d8e2b857194de1de00145a4da817efca76eb882bcd2d090dd3101cd6d3",
+   "sha256_replica": "6f8c91d8e2b857194de1de00145a4da817efca76eb882bcd2d090dd3101cd6d3",
+   "bytes_versionado": 290719,
+   "bytes_replica": 290719,
+   "igual": true
+  },
+  {
+   "artefato": "medidas.json",
+   "versionado": "artifacts_v2_digibrain_prototipo/memoria_autobio/run/medidas.json.gz",
+   "sha256_versionado": "8b48d0a234afc69adfaf72d150d0d4317d4f7dd9abfa7fc2e49908a6758fd93b",
+   "sha256_conteudo_versionado": "869ff3971b91e6d848f3f9e16d1798049105442bde1968a6852daa852c153023",
+   "sha256_no_meta": "869ff3971b91e6d848f3f9e16d1798049105442bde1968a6852daa852c153023",
+   "sha256_replica": "479fecf097c2f43aaf80038ae5aec628d1b2112da32c846ac3713534b4005079",
+   "bytes_versionado": 138153669,
+   "bytes_replica": 138151421,
+   "igual": false
+  }
+ ],
+ "byte_a_byte": false
+}

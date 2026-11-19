@@ -3545,3 +3545,75 @@ def medidas_rastro(motivos: Sequence[dict]) -> dict:
     return {"n": n, "fora": {"receptores": fora_r, "canais": fora_c, "F_sinal": _razao(si, st + si), "sinal_tick": st, "sinal_intervalo": si,
                              "soma_r": sum(c["mesmo_tick"]["r"] for c in cadeias), "soma_r_int": sum(c["intervalo"]["r"] for c in cadeias)},
             "acao": acao, "dono": dono, "troca": troca, "muda": muda}
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------
+# A linha de base do intervalo (docs/PLANO_ANALISE_V3_PET_VIVO_RA.md, secoes 4 e 5): que linha de base preserva o sono
+LINHAS_BASE_FIXAS = ("GLOBAL", "CTX", "FASE", "ESTADO")
+KS_MOVEL = (4, 16, 96)                         # RB-2: 1 h, 4 h e 1 dia de decisoes, so para ver a forma; SEM FONTE
+PISO_LINHA_BASE = 5                            # RB-3: decisoes de um comportamento numa vida para ele entrar no eta2 do acordado; SEM FONTE
+QUANTIS_ESTADO = 4                             # a secao 4: o quartil da carga do corpo na vida
+
+
+def medidas_linha_base(motivos: Sequence[dict], S: int, e_noite, ks: Sequence[int] = KS_MOVEL, piso: int = PISO_LINHA_BASE) -> dict:
+    """As medidas do R-a numa vida com o rastro ligado, so do `motivo["cadeia"]`. Para cada linha de base, o resto de cada decisao e o
+    r_n do intervalo menos a linha de base dela:
+      - GLOBAL: a media da vida (a do R1);
+      - CTX: a media do contexto (dormindo na decisao de dormir, acordado nas outras) na vida (a do R1; a unica que olha a acao);
+      - FASE: a media da fase do dia (noite ou dia, pelo tick do comeco do intervalo, com `e_noite(tick do dia)`) na vida;
+      - ESTADO: a media do quartil da carga do corpo na vida; a carga e a soma dos quadrados das faltas dos receptores logo depois da
+        acao (a leitura da decisao mais o delta do mesmo tick), e o quartil sai da ordem das decisoes pela carga (o empate pela ordem);
+      - MOVEL-k: a media movel exponencial dos r_n anteriores da vida, sem o atual (b <- b + (x - b) / k, de 0), em float.
+    Por linha de base: o resto medio do dormir, o eta2 entre todos os comportamentos, o eta2 so nas decisoes acordadas entre os
+    comportamentos acordados com `piso` decisoes ou mais na vida, e o resto medio por comportamento. As quatro primeiras sao exatas
+    (Fraction). Falha alto sem o rastro, sem o tick ou com um receptor desconhecido."""
+    from .digibrain.base import RECEPTORES_FALTA_INVERTIDA, RECEPTORES_HOJE, RECEPTORES_NOVOS
+    cadeias = [m["cadeia"] for m in motivos if "cadeia" in m and not m["cadeia"]["intervalo"]["ja_contado"]]
+    if not cadeias:
+        raise ValueError("medidas_linha_base: a vida sem nenhuma decisao com o rastro (a ConfigRastro ligada?)")
+    n = len(cadeias)
+    rn = [Fraction(c["intervalo"]["r_n"]) for c in cadeias]
+    comp = [motivos[c["id"]]["escolha"][0] for c in cadeias]
+
+    def falta(nome: str, leitura: int) -> int:
+        if nome in RECEPTORES_HOJE or nome in RECEPTORES_FALTA_INVERTIDA:
+            return S - leitura
+        if nome in RECEPTORES_NOVOS:
+            return leitura
+        raise KeyError(f"medidas_linha_base: receptor desconhecido: {nome!r}")
+    ticks = [c["intervalo"]["tick_de"] for c in cadeias]
+    if any(type(t) is not int for t in ticks):
+        raise ValueError("medidas_linha_base: decisao sem o tick (a memoria autobiografica ligada?)")
+    fase = ["noite" if e_noite(t % TICKS_POR_DIA) else "dia" for t in ticks]
+    carga = [sum(falta(r, c["leitura"][r] + c["mesmo_tick"]["delta"][r]) ** 2 for r in c["leitura"]) for c in cadeias]
+    ordem = sorted(range(n), key=lambda j: (carga[j], j))
+    quartil = [0] * n
+    for posto, j in enumerate(ordem):
+        quartil[j] = posto * QUANTIS_ESTADO // n
+    ctx = ["dormindo" if b == "dormir" else "acordado" for b in comp]
+
+    def por_grupo(chaves: list) -> list:
+        soma: dict = {}
+        for v, k in zip(rn, chaves):
+            s, q = soma.get(k, (Fraction(0), 0))
+            soma[k] = (s + v, q + 1)
+        return [v - soma[k][0] / soma[k][1] for v, k in zip(rn, chaves)]
+    restos: dict = {"GLOBAL": por_grupo([0] * n), "CTX": por_grupo(ctx), "FASE": por_grupo(fase), "ESTADO": por_grupo(quartil)}
+    for k in ks:
+        b, r = 0.0, []
+        for v in rn:
+            x = float(v)
+            r.append(x - b)
+            b += (x - b) / k
+        restos[f"MOVEL-{k}"] = r
+    nomes = sorted(set(comp))
+    contagem = {b: comp.count(b) for b in nomes}
+    acordados = [b for b in nomes if b != "dormir" and contagem[b] >= piso]
+    linhas = {}
+    for nome, resto in restos.items():
+        grupos = {b: [resto[j] for j in range(n) if comp[j] == b] for b in nomes}
+        linhas[nome] = {"resto_dormir": None if "dormir" not in grupos else float(sum(grupos["dormir"]) / len(grupos["dormir"])),
+                        "eta2_todas": _eta2(grupos), "eta2_acordado": _eta2({b: grupos[b] for b in acordados}),
+                        "resto": {b: float(sum(grupos[b]) / len(grupos[b])) for b in nomes}}
+    return {"n": n, "piso": piso, "contagem": contagem, "acordados_no_eta2": acordados,
+            "fase": {x: fase.count(x) for x in ("dia", "noite")}, "linhas": linhas}

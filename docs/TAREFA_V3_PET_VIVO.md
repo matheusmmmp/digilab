@@ -272,3 +272,32 @@ processos, sobre as 5 120 vidas gravadas. O resultado está em [RESULTADO_V3_PET
 - **O que o plano do R2 recebe:** propor outra linha de base, ou outro contexto, antes do código (a tarefa CREDITO_INTERVALO).
 - **Desvios:** D-RA-17 a D-RA-19.
 - **Próximo:** nada nesta frente até a decisão do Matheus sobre o plano do R2. O TS do rastro, depois da LZ3.
+
+## O plano do R-a, a linha de base do intervalo (2026-11-19, Claude Code, Fable 5.2, branch `v3-pet-vivo-ra-plano`)
+
+Pedido pela sessão coordenadora, com o planejamento das próximas runs aprovado pelo Matheus ("Aprovo, repasse"). O plano está em
+[PLANO_ANALISE_V3_PET_VIVO_RA.md](PLANO_ANALISE_V3_PET_VIVO_RA.md), **APROVADO pelo Matheus em 2026-11-19** ("Aprovo todas"; RB-1 a RB-5 DECIDIDAS, D-RB-4).
+
+- **O que é:** um replay das mesmas 5 120 vidas do R1, sem vida nova, com três linhas de base que não olham a ação (a fase do dia,
+  o estado do corpo e a média móvel), para dizer quais preservam o sono e se sobra algo entre as ações acordadas.
+- **O desfecho esperado, escrito antes:** "só o sono".
+- **Nada rodou e nenhum código mudou.** O replay espera o APROVADO, o código na `main`, o fim da C3 da CORPO e o `pre_run`.
+- **O R2 não começa aqui:** segue na tarefa CREDITO_INTERVALO.
+- **Desvios:** D-RB-1 a D-RB-4.
+
+## O código do R-a (2026-11-19, Claude Code, Fable 5.2, branch `v3-pet-vivo-ra-codigo`, empilhado no #1030)
+
+A seção 7 do [plano do R-a](PLANO_ANALISE_V3_PET_VIVO_RA.md), APROVADO ("Aprovo todas", D-RB-4). **O replay não rodou.**
+
+- **A medida:** `metrics.medidas_linha_base` lê o `motivo["cadeia"]` que o R1 já grava e dá, por linha de base (GLOBAL, CTX, FASE,
+  ESTADO e MÓVEL com k 4, 16 e 96), o resto do dormir, o η² entre todos os comportamentos, o η² do acordado (com o piso de 5
+  decisões) e o resto por comportamento. Nada muda no cérebro, no corpo nem no motor.
+- **O orquestrador:** `experiments/run_v3_pet_vivo_ra.py`, com a config `experiments/configs/v3_pet_vivo/ra.json`. Reusa a fonte
+  e as conferências do R1 e acrescenta a C-IGUAL-R1. Recusa rodar sem o plano APROVADO, com a pasta de saída existente, sem o
+  `pre_run` e com menos de 10 GB livres.
+- **Os testes:** `tests/test_linha_base_ra.py`, 14 testes: cada linha de base conferida à mão numa vida curta, a C-IGUAL-R1 numa
+  vida das sementes dos testes, o piso, as falhas altas e a regra de leitura.
+- **A fumaça:** 2 vidas reais do HOJE da run do PV-2 passam em todas as conferências, com a C-IGUAL-R1. Nenhuma medida da linha de
+  base foi lida nelas. O tempo dela (14,5 s por vida) saiu com a run da C3 ocupando a máquina e não serve de projeção (D-RB-8).
+- **Desvios:** D-RB-5 a D-RB-8.
+- **Próximo:** o merge do #1030 e deste PR; com a C3 terminada, a fumaça de novo para o tempo, e o replay, uma vez.
