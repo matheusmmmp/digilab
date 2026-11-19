@@ -1,7 +1,7 @@
 # TAREFA V3 — VALUATION (2026-11-16)
 
 Coordenador: a sessão da LONGE_GEOMETRIA e da LIMPEZA (Claude Code). Worker: Claude Code, Opus 5.5, sessão filha. Worktree e branch:
-`v3-valuation`. Status: ENCERRADA com o diagnóstico, sem conserto (V5 aprovada; D-VAL-23 e D-VAL-26). A síntese: `docs/SINTESE_VALUATION.md`.
+`v3-valuation`. Status: ENCERRADA com o diagnóstico, sem conserto (V5 aprovada; D-VAL-23 e D-VAL-26); a V4 reaberta e rodada em 2026-11-19, leitura indeterminado (D-VAL-34). A síntese: `docs/SINTESE_VALUATION.md`.
 
 Categoria: experimento. Origem: Matheus, 2026-11-16. O pedido é diagnosticar por que o modular sente a fome e não fecha o episódio de fome
 (o elo Valuation), nas fases V0 a V5.
@@ -255,3 +255,14 @@ A linha do PAINEL vai proposta na seção 7 da síntese, para o coordenador. As 
 
 Status: o CHECKPOINT V5 aprovado pelo Matheus em 2026-11-17 ("Aprovo, deixa as chaves no código"; D-VAL-26). As chaves ficam
 no código, desligadas. Os merges (#945, #946, #949, #969 e #973) são do Matheus.
+
+### V4, a validação contra a baseline trivial (2026-11-18 e 2026-11-19, Claude Code, Opus 5.5)
+
+O Matheus reabriu a V4 em 2026-11-18 ("Então faz a validação contra o baseline trivial"; D-VAL-27). O plano
+[PLANO_ANALISE_V3_VALUATION_VALIDACAO.md](PLANO_ANALISE_V3_VALUATION_VALIDACAO.md) e o código entraram pelo #1008. A run, 7 200 vidas na
+69xxx, rodou uma vez em 2026-11-19: [RESULTADO_V3_VALUATION_VALIDACAO.md](RESULTADO_V3_VALUATION_VALIDACAO.md).
+- **O primário, CON − TRIV no `longe_fixo`:** −0,003 [−0,042; +0,036], **indeterminado** (a margem efetiva, 0,056, passa de δ).
+- **A réplica da A1, REL − TRIV:** −0,102 [−0,141; −0,062], "< 0".
+- **No longe sorteado,** a TRIV fecha 0,815 contra 0,510 do CON.
+
+Status: o CHECKPOINT V4, com a leitura **indeterminado**. O conserto continua fora de qualquer pet, e as chaves, desligadas.
