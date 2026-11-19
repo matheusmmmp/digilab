@@ -133,3 +133,100 @@ As médias das 12 células, salvo onde dito; os números vêm do `resultado.json
 **O que esta run não demonstra** (o `nao_demonstra` do `resultado.json`): nada sobre o jogo web, onde as chaves ficam desligadas; nada
 sobre a calibração do cuidado (E1 e E2) nem sobre o I-PAD da LONGE_GEOMETRIA; nada sobre outros tamanhos nem sobre combinações fora dos
 braços; nada sobre o social além do substrato, onde nenhum mecanismo social entra.
+
+## 5. O diagnóstico da C2.5: por que a D sobe a privação no comedouro (2026-11-19)
+
+O Matheus respondeu "Sim, diagnosticar" ao CHECKPOINT C2.5: nenhum braço vai ao jogo, e o diagnóstico usa só as vidas e o código que já
+existem. **Nenhuma vida nova:** o `experiments/diagnostico_v3_corpo_c25.py` rejoga do log gravado as vidas das 50 primeiras unidades
+(104001…104050) no comedouro e no `longe_fixo`, nos braços CTRL, D e D + E (1 200 vidas). Cada replay refaz o log byte a byte, e a
+privação rejogada de cada vida tem de sair igual à do `medidas.json` (falha alta). Por decisão da janela dos dias 8 a 14, o script lê o
+`Estado` (fome, higiene, energia, saúde, dormindo, noite) e a química (combustível, fome). A saída é o
+`artifacts_v3_corpo/diagnostico_c25/diagnostico.json` (sha256 `a9c17057…25d0`). As contas por dono nas 200 unidades vêm do
+`medidas.json` da run.
+
+### 5.1 O que sobe é a fome, com o pet acordado
+
+No comedouro, nas 50 unidades (D − CTRL):
+
+| componente da privação | CTRL | D | D − CTRL |
+|---|---|---|---|
+| a privação | 0,158 | 0,232 | +0,074 [+0,067; +0,081] |
+| só a fome abaixo de 0,15 | 0,079 | 0,155 | **+0,075** [+0,070; +0,080] |
+| a higiene abaixo de 0,15 | 0,076 | 0,077 | +0,000 |
+| só a energia abaixo de 0,15 | 0,001 | 0,000 | −0,001 |
+| a fome baixa, acordado | 0,050 | 0,124 | **+0,074** |
+| a fome baixa, dormindo | 0,059 | 0,074 | +0,015 |
+
+- **Toda a privação a mais é de fome.** A energia quase nunca fica abaixo de 0,15, nem no CTRL: o cansaço da falta de combustível aparece
+  na exaustão (o limiar de 0,25), e não na privação.
+- **É acordado, e não no sono.** A hipótese de que a fome subiria demais durante a noite não se sustenta: o sono contribui com +0,015.
+- **Toda decisão com a fome abaixo de 0,15 tem o combustível abaixo de C/4,** nos dois braços, e nenhuma tem comida no estômago.
+
+### 5.2 Vem dos donos que deixam faltar comida
+
+Por dono, nas 200 unidades da run (D − CTRL, `medidas.json`):
+
+| lugar | dono | privação CTRL | D − CTRL | refeições por dia, D − CTRL | exaustão, D − CTRL |
+|---|---|---|---|---|---|
+| comedouro | atencioso | 0,016 | −0,009 ± 0,006 | **+1,02** | −0,046 |
+| comedouro | relapso | 0,134 | **+0,201 ± 0,007** | −0,01 | −0,035 |
+| comedouro | aleatório | 0,438 | **+0,114 ± 0,007** | +0,01 | −0,059 |
+| comedouro | incoerente | 0,016 | −0,009 ± 0,006 | +1,02 | −0,046 |
+| `longe_fixo` | atencioso | 0,290 | **−0,133 ± 0,034** | +1,14 | −0,097 |
+| `longe_fixo` | relapso | 0,281 | **+0,142 ± 0,013** | +0,10 | −0,046 |
+| `longe_fixo` | aleatório | 0,496 | **+0,096 ± 0,010** | +0,10 | −0,069 |
+| `longe_fixo` | incoerente | 0,300 | **−0,135 ± 0,034** | +1,10 | −0,101 |
+
+(± é a meia largura do IC95 aproximado, 1,96 × dp / √200.)
+
+- **Com o atencioso e o incoerente,** que põem comida quando o pet precisa, a D faz o pet comer cerca de uma refeição a mais por dia e
+  baixa a privação nos dois lugares.
+- **Com o relapso e o aleatório,** a comida é o limite: as refeições por dia quase não mudam (no comedouro, −0,01 e +0,01). A falta de
+  combustível é a mesma, mas a D a põe na fome, e a privação sobe.
+- **O comedouro não é especial.** O efeito é o mesmo nos dois lugares e depende do dono. No `longe_fixo`, a queda com os donos bons
+  (−0,13) compensa a subida com os outros, e a média fica em "≈ 0". No comedouro, a privação com os donos bons já está perto de 0 (0,016)
+  e não tem como cair, e a média sobe.
+
+### 5.3 É dano de verdade, não só um sinal maior
+
+A saúde, nas 50 unidades (D − CTRL, a média na janela dos dias 8 a 14):
+
+| lugar | dono | saúde CTRL | D − CTRL | combustível médio, D − CTRL (fração de C) |
+|---|---|---|---|---|
+| comedouro | atencioso | 0,996 | +0,004 ± 0,003 | +0,125 |
+| comedouro | relapso | 0,962 | **−0,119 ± 0,017** | +0,009 |
+| comedouro | aleatório | 0,411 | **−0,216 ± 0,042** | +0,013 |
+| `longe_fixo` | atencioso | 0,771 | +0,132 ± 0,070 | +0,164 |
+| `longe_fixo` | relapso | 0,791 | **−0,236 ± 0,064** | −0,004 |
+| `longe_fixo` | aleatório | 0,317 | **−0,165 ± 0,047** | +0,012 |
+
+**O mecanismo** (pelo código: `digilab/corpo.py`, os emissores `falta_combustivel` e `dano_privacao`):
+1. **No CTRL,** a falta de combustível abaixo de C/4 sobe o **cansaço**, e o cansaço cai dormindo. O pet dorme, o cansaço desce, e a
+   necessidade quase nunca passa do limiar da privação (85 % de C).
+2. **Na D,** a mesma falta sobe a **fome**: 875 por tick em vez de 375, e a fome só cai comendo. Com comida, o pet come mais (o ganho com
+   os donos bons). Sem comida, a fome fica acima do limiar.
+3. **Acima do limiar,** o emissor `dano_privacao` sobe o dano, e a saúde cai. Por isso a viabilidade do corpo piora nos donos que deixam
+   faltar comida (`corpo.dias_8_14.fracao_fora` no comedouro: relapso +0,195, aleatório +0,162), e a saúde cai mesmo com o mesmo
+   combustível.
+
+**Em uma frase:** a D tira a falta de combustível de um canal que o sono resolve e a põe num canal que só a comida resolve. Com comida, é
+melhor para o pet. Sem comida, é pior, e o corpo cobra em saúde.
+
+**A E não muda o quadro:** na D + E, a fome a mais do comedouro é quase a mesma (só a fome: +0,069 contra +0,075). A E guarda melhor a comida que sobra, mas
+não cria comida onde o dono não põe.
+
+### 5.4 Um achado à parte: o incoerente é o atencioso no comedouro
+
+No comedouro, as 400 vidas do incoerente (CTRL e D × 200) saem iguais às do atencioso em todas as medidas. No longe e no `longe_fixo`
+elas diferem pouco. As 12 células da C4 têm, no comedouro, só 3 donos distintos. Isso não muda a leitura (os contrastes são pareados),
+mas pesa o atencioso duas vezes nas médias das 12 células. Fica como questão aberta para o instrumento.
+
+### 5.5 O que a C3 poderia tentar (opções para o Matheus, nenhuma decidida)
+
+1. **A ponte da D com teto:** a falta de combustível sobe a fome só até o limiar da privação, e não acima dele. Ela manteria o empurrão
+   para comer e tiraria o dano da fome que o pet não pode resolver. É a opção mais direta pelo mecanismo.
+2. **A ponte dividida:** parte da falta vai à fome e parte ao cansaço, como hoje. Ela suavizaria os dois lados, sem resolver o dano.
+3. **Nenhuma mudança no corpo:** aceitar que a D só serve com um dono que alimenta, e ler a privação por dono.
+
+**O custo de errar:** com a opção 1, os tamanhos e o teto seriam números novos (PROPOSTOS, SEM FONTE) e precisariam de um plano novo e de
+uma run nova. Ligar a D como está leva ao jogo um pet que perde saúde com um dono que deixa faltar comida.
