@@ -145,3 +145,19 @@ limiar da privação, T_L = 382 500) e DTB (o teto em C/2, se a D-C3-2 for aprov
 mecanismo prevê:** o teto no limiar tira pouco do dano, porque o dano da privação é um degrau e vem da chegada mais cedo ao limiar.
 Há uma guarda nova da saúde (D-C3-4). A pergunta do incoerente igual ao atencioso vai como pergunta do plano (D-C3-6). A faixa
 106001…106400 está pedida ao coordenador. Nenhuma vida antes da aprovação e do código.
+
+## 14. O código da C3 (2026-11-19)
+
+Pelo `docs/PLANO_ANALISE_V3_CORPO_C3.md`, seção 7. Nenhuma vida da faixa rodou.
+- **A chave:** a `ConfigTetoFomeCorpo` (`digilab/config.py`), numa config própria para nenhum dump de hoje mudar, com `teto = None` por
+  padrão. Com um teto, num tick com a falta de combustível, a ponte da D soma à fome `min(500, max(0, teto − fome))`
+  (`digilab/corpo.py`, a fase 2 do tick). O `ticks_teto` conta os ticks em que o teto cortou a ponte. O teto exige a D e não passa de C.
+- **O DTL e o DTB:** `CONFIG_TETO_FOME_LIMIAR` (382 500, igual ao `t.limiar_privacao`, conferido por teste) e `CONFIG_TETO_FOME_BAIXO`
+  (225 000, C/2, SEM FONTE).
+- **O web:** o espelho em `web/app/motor/corpo.ts` (`opcoes.tetoFome`, desligada por padrão) e o gabarito
+  `tests/gabaritos/corpo_teto_python.json` (`experiments/exportar_gabarito_corpo_teto.py`), reproduzido inteiro a inteiro em
+  `web/app/test/corpo_teto.test.ts`.
+- **O orquestrador:** o `experiments/run_v3_corpo_c3.py`, um arquivo próprio para o `run_v3_corpo.py` da C2 ficar intacto (o sha256 dele
+  está no `meta.json` da C2). Ele reaproveita as vidas e a análise da C2, com os braços CTRL, D, DTL e DTB, as oito guardas do bem-estar
+  (com a saúde), o S2 e o descritivo (braço − D, por dono, a decomposição da privação, os ticks no teto e o incoerente). As configs ficam
+  em `experiments/configs/v3_corpo_c3/`.

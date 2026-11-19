@@ -131,6 +131,17 @@ export function conferirConfigAcoplamento(ca: ConfigAcoplamentoCorpo): ConfigAco
   return ca;
 }
 
+/** CORPO C3, a ponte com teto (a `ConfigTetoFomeCorpo` do Python): com `teto` (so com a D), a ponte da fome so sobe a fome ate o teto.
+ *  null (o padrao): a D de hoje, byte a byte. Config propria para nenhum dump de hoje mudar */
+export interface ConfigTetoFomeCorpo { readonly teto: number | null }
+export const CONFIG_TETO_FOME_CORPO: ConfigTetoFomeCorpo = { teto: null };
+export const CONFIG_TETO_FOME_LIMIAR: ConfigTetoFomeCorpo = { teto: 382_500 };   // o DTL: o limiar da privacao
+export const CONFIG_TETO_FOME_BAIXO: ConfigTetoFomeCorpo = { teto: 225_000 };    // o DTB: C/2
+export function conferirConfigTetoFome(ct: ConfigTetoFomeCorpo): ConfigTetoFomeCorpo {
+  if (ct.teto !== null && (!Number.isInteger(ct.teto) || ct.teto <= 0)) throw new Error(`ConfigTetoFomeCorpo.teto e null ou inteiro positivo: ${ct.teto}`);
+  return ct;
+}
+
 /** CORPO, a opcao E (a `ConfigDigestaoCorpo` do Python, docs/PLANO_ANALISE_V3_CORPO.md, secao 2; D-CO-1): ligada (`inteira`), a comida que
  *  sobra no estomago com a fome em 0 vira combustivel de uma vez (pela fracao do metabolismo, com o teto C), em vez de ser descartada. Exige a
  *  digestao e o metabolismo. Fora da ConfigCorpo para nenhum dump de hoje mudar. Desligada (o padrao), a vida sai byte a byte; so de pesquisa */
@@ -703,6 +714,7 @@ export interface OpcoesCorpo {
   lutaCorpo?: ConfigLutaCorpo;   // a ponte da luta (PE3); sem ela, desligada
   acoplamento?: ConfigAcoplamentoCorpo;   // CORPO_ACOPLAMENTO, a opcao D; sem ela, desligada: a ME-1 de hoje
   digestao?: ConfigDigestaoCorpo;         // CORPO, a opcao E; sem ela, desligada: o descarte de hoje
+  tetoFome?: ConfigTetoFomeCorpo;         // CORPO C3, a ponte com teto (so com a D); sem ela, teto null: a D de hoje
   tela?: ConfigTela;             // o orgao da tela (GOSTO_VISUAL, P1f); sem ele, desligado: o corpo de hoje
   enjoo?: ConfigEnjooTela;       // o enjoo da imagem (D-GV-ENJOO-CER), so com a tela; sem ele, desligado
 }
@@ -739,6 +751,10 @@ export class Corpo {
   readonly acoplamento: ConfigAcoplamentoCorpo;
   /** CORPO, a opcao E: a comida que sobra com a fome em 0 vira combustivel (so com a digestao e o metabolismo) */
   readonly digestao: ConfigDigestaoCorpo;
+  /** CORPO C3, a ponte com teto: a fome so sobe pela falta de combustivel ate o teto (so com a D); null = a D de hoje */
+  readonly tetoFome: ConfigTetoFomeCorpo;
+  /** os ticks com a falta em que o teto cortou a ponte (so medida) */
+  ticksTeto = 0;
   /** o orgao da tela (P1f; o P1b do Python): a config, os orgaos, o estimulo de cada canal (o ultimo `sentirTela`) e se ele veio neste tick */
   readonly tela: ConfigTela;
   readonly orgaosTela: readonly OrgaoTela[];
@@ -766,8 +782,15 @@ export class Corpo {
     if (this.digestao.inteira && !(this.cc.digestao && this.cc.metabolismo)) {
       throw new Error("ConfigDigestaoCorpo.inteira exige ConfigCorpo.digestao e ConfigCorpo.metabolismo (o excedente vira combustivel)");
     }
+    this.tetoFome = conferirConfigTetoFome(opcoes.tetoFome ?? CONFIG_TETO_FOME_CORPO);
+    if (this.tetoFome.teto !== null && !this.acoplamento.ligada) {
+      throw new Error("ConfigTetoFomeCorpo.teto exige a D (ConfigAcoplamentoCorpo.ligada): o teto e o da ponte da fome");
+    }
     this.C = this.cc.escala;
     this.S = this.cc.escala_receptor;
+    if (this.tetoFome.teto !== null && this.tetoFome.teto > this.C) {
+      throw new Error(`ConfigTetoFomeCorpo.teto passa de C: ${this.tetoFome.teto} > ${this.C}`);
+    }
     this.t = taxasDe(this.cc);
     this.tela = conferirConfigTela(opcoes.tela ?? CONFIG_TELA);
     this.enjooCfg = conferirConfigEnjooTela(opcoes.enjoo ?? CONFIG_ENJOO_TELA);
@@ -1061,7 +1084,18 @@ export class Corpo {
       } else {
         throw new Error(`gatilho ${e.gatilho} fora da fase 2`);
       }
-      if (v) for (const [q, d] of e.efeitos) deltas[q] = (deltas[q] ?? 0) + d * v;
+      if (v) {
+        for (const [q, d0] of e.efeitos) {
+          let d = d0;
+          if (e.nome === "falta_combustivel" && this.tetoFome.teto !== null) {
+            // a C3: a ponte da fome so sobe ate o teto (a fome desta fase, depois da fase 1); v e 1, o degrau
+            const d2 = Math.min(d, Math.max(0, this.tetoFome.teto - this.q[q]));
+            if (d2 < d) this.ticksTeto += 1;
+            d = d2;
+          }
+          deltas[q] = (deltas[q] ?? 0) + d * v;
+        }
+      }
     }
     this.somar(deltas);
     const bits = this.cc.bits_meia_vida;

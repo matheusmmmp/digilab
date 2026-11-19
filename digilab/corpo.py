@@ -113,9 +113,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 
-from .config import (CONFIG_ACOPLAMENTO_CORPO, CONFIG_DIGESTAO_CORPO, CONFIG_ENJOO_TELA, CONFIG_EVOLUCAO_PESQUISA, CONFIG_LUTA_CORPO, CONFIG_OLFATO,
+from .config import (CONFIG_ACOPLAMENTO_CORPO, CONFIG_DIGESTAO_CORPO, CONFIG_ENJOO_TELA, CONFIG_TETO_FOME_CORPO, CONFIG_EVOLUCAO_PESQUISA, CONFIG_LUTA_CORPO, CONFIG_OLFATO,
                      CONFIG_OUVIDO, CONFIG_PADRAO, CONFIG_TELA, TICKS_POR_DIA, Config, ConfigAcoplamentoCorpo, ConfigCorpo, ConfigDigestaoCorpo, ConfigEnjooTela, ConfigEvolucaoPesquisa, ConfigLutaCorpo, ConfigMundo, ConfigOlfato,
-                     ConfigOuvido, ConfigTela)
+                     ConfigOuvido, ConfigTela, ConfigTetoFomeCorpo)
 from .corpo_grafo import Emissor, Grafo, Leitura, Orgao, Quimico, Reacao, ReceptorSoma, checar
 from .events import ACOES_PET_BANHEIRO, ACOES_PET_HOJE, FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario
 from .state import Estado
@@ -636,7 +636,8 @@ class Corpo:
                  cfg_evo: ConfigEvolucaoPesquisa | None = None, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
                  cfg_ouvido: ConfigOuvido | None = None, cfg_luta: ConfigLutaCorpo | None = None,
                  cfg_tela: ConfigTela | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None,
-                 cfg_acoplamento: ConfigAcoplamentoCorpo | None = None, cfg_digestao: ConfigDigestaoCorpo | None = None) -> None:
+                 cfg_acoplamento: ConfigAcoplamentoCorpo | None = None, cfg_digestao: ConfigDigestaoCorpo | None = None,
+                 cfg_teto_fome: ConfigTetoFomeCorpo | None = None) -> None:
         self.cfg = cfg or CONFIG_PADRAO
         self.cfg_evo = cfg_evo or CONFIG_EVOLUCAO_PESQUISA
         self.cc = cc or ConfigCorpo(ligada=True)
@@ -662,9 +663,17 @@ class Corpo:
             raise TypeError(f"cfg_digestao e uma ConfigDigestaoCorpo: {self.cd!r}")
         if self.cd.inteira and not (self.cc.digestao and self.cc.metabolismo):
             raise ValueError("ConfigDigestaoCorpo.inteira exige ConfigCorpo.digestao e ConfigCorpo.metabolismo (o excedente vira combustivel)")
+        self.ctf = cfg_teto_fome or CONFIG_TETO_FOME_CORPO       # CORPO C3, a ponte com teto: so com a D
+        if not isinstance(self.ctf, ConfigTetoFomeCorpo):
+            raise TypeError(f"cfg_teto_fome e uma ConfigTetoFomeCorpo: {self.ctf!r}")
+        if self.ctf.teto is not None and not self.ca.ligada:
+            raise ValueError("ConfigTetoFomeCorpo.teto exige a D (ConfigAcoplamentoCorpo.ligada): o teto e o da ponte da fome")
+        self.ticks_teto = 0                                      # os ticks com a falta em que o teto cortou a ponte (so medida)
         self.C = self.cc.escala
         self.S = self.cc.escala_receptor
         self.t = taxas_de(self.cfg, self.cc)
+        if self.ctf.teto is not None and self.ctf.teto > self.C:
+            raise ValueError(f"ConfigTetoFomeCorpo.teto passa de C: {self.ctf.teto} > {self.C}")
         self._conferir_orgaos()
         self._conferir_tela()
         if self.cc.paladar and not com_mundo:
@@ -765,7 +774,8 @@ class Corpo:
                   cfg_evo: ConfigEvolucaoPesquisa | None = None, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
                   cfg_ouvido: ConfigOuvido | None = None, cfg_luta: ConfigLutaCorpo | None = None,
                   cfg_tela: ConfigTela | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None,
-                  cfg_acoplamento: ConfigAcoplamentoCorpo | None = None, cfg_digestao: ConfigDigestaoCorpo | None = None) -> Corpo:
+                  cfg_acoplamento: ConfigAcoplamentoCorpo | None = None, cfg_digestao: ConfigDigestaoCorpo | None = None,
+                  cfg_teto_fome: ConfigTetoFomeCorpo | None = None) -> Corpo:
         """O corpo de um Estado de hoje (o do nascimento, por exemplo). Cada drive tem de cair na grade de C. A Vida e a do tick do
         Estado (C no nascimento). Os quimicos da etapa 6 comecam em 0 (`com_mundo`: a curiosidade existe)."""
         cc = cc or ConfigCorpo(ligada=True)
@@ -780,7 +790,8 @@ class Corpo:
             q["reserva"] = cc.reserva_inicial
         for nome in quimicos_de(cc, com_mundo, cfg_olfato, cfg_ouvido, cfg_tela):
             q.setdefault(nome, 0)                          # os drives novos, os gestos e a adaptacao dos orgaos: zero no nascimento
-        return cls(q, cfg, cc, cfg_evo, com_mundo, cfg_olfato, cfg_ouvido, cfg_luta, cfg_tela, cfg_enjoo_tela, cfg_acoplamento, cfg_digestao)
+        return cls(q, cfg, cc, cfg_evo, com_mundo, cfg_olfato, cfg_ouvido, cfg_luta, cfg_tela, cfg_enjoo_tela, cfg_acoplamento, cfg_digestao,
+                   cfg_teto_fome)
 
     # ---------------------------------------------------------- estimulos
 
@@ -1258,6 +1269,11 @@ class Corpo:
                 raise ValueError(f"gatilho {e.gatilho!r} fora da fase 2")
             if v:
                 for q, d in e.efeitos:
+                    if e.nome == "falta_combustivel" and self.ctf.teto is not None:
+                        # a C3: a ponte da fome so sobe ate o teto (a fome desta fase, depois da fase 1); v e 1, o degrau
+                        d2 = min(d, max(0, self.ctf.teto - self.q[q]))
+                        self.ticks_teto += d2 < d
+                        d = d2
                     deltas[q] = deltas.get(q, 0) + d * v
         self._somar(deltas)
         bits = self.cc.bits_meia_vida
