@@ -14,7 +14,7 @@
 
    A semana e o dia (secao 5): pelo relogio do servidor (`hora`, em milissegundos UTC), no horario de Brasilia (UTC-3, sem horario de
    verao); a semana vai de segunda 00:00 a domingo 23:59. */
-import { DIGIMON_DA_FORMA, Motor, NIVEL_DO_ESTAGIO, type EventoRegistro, type IdCena } from "../../motor/index.ts";
+import { DIGIMON_DA_FORMA, Motor, NIVEL_DO_ESTAGIO, RIVAL_SALAO, type EventoRegistro, type IdCena } from "../../motor/index.ts";
 
 /** os pontos da vitoria pela faixa do rival (PROPOSTO, SEM FONTE) */
 export const PONTOS_FAIXA: Readonly<Record<string, number>> = { Rookie: 10, Champion: 20, Ultimate: 40, Mega: 80 };
@@ -74,7 +74,10 @@ export function lutasRanqueadas(semente: number, versao: number, log: readonly E
 
 /** a mesma conta de lutasRanqueadas, devolvendo tambem o pet refeito (o servidor, MMO3, confere o marco nele, sem refazer o registro de novo).
     A luta e refeita pelo lutarPoc, que confere se ela era possivel; o resto, pelo aplicarEvento */
-export function refazerComLutas(semente: number, versao: number, log: readonly EventoRegistro[], entregues: readonly SementeEntregue[]): { lutas: LutaRanqueada[]; motor: Motor } {
+/** uma luta do Salao da Fronteira que o replay do pet refez (MMO7: o mural so conta o Salao que o servidor viu): a semente, o tick e se venceu */
+export interface LutaSalaoVista { s: number; tick: number; venceu: boolean }
+
+export function refazerComLutas(semente: number, versao: number, log: readonly EventoRegistro[], entregues: readonly SementeEntregue[]): { lutas: LutaRanqueada[]; motor: Motor; salao: LutaSalaoVista[] } {
   const vistas = new Set<number>();
   entregues.forEach((x, k) => {
     if (!Number.isInteger(x.semente) || !Number.isInteger(x.indice) || x.indice < 0 || !Number.isFinite(x.hora) || (x.rival === undefined && x.mapa != null))
@@ -87,7 +90,7 @@ export function refazerComLutas(semente: number, versao: number, log: readonly E
   const pedidos = new Map<number, SementeEntregue[]>();
   for (const x of entregues) pedidos.set(x.indice, [...(pedidos.get(x.indice) ?? []), x]);
   const noIndice = new Map<number, { estagio: string; venceu: boolean | null; rival: string | null; mapa: string | null; s: number | null; vida: number | null }>();
-  const m = new Motor(semente, versao);
+  const m = new Motor(semente, versao), salao: LutaSalaoVista[] = [];
   for (let i = 0; i <= log.length; i++) {
     let venceu: boolean | null = null, rival: string | null = null, mapa: string | null = null, s: number | null = null, vida: number | null = null;
     const estagio = NIVEL_DO_ESTAGIO[m.estagioAtual];
@@ -98,6 +101,7 @@ export function refazerComLutas(semente: number, versao: number, log: readonly E
         if (ev[0] !== m.e.tick) throw new Error(`registro fora de ordem no tick ${ev[0]}`);
         const r = m.lutarPoc(ev[2].r, ev[2].s, (ev[2].m ?? null) as IdCena | null);   // o mapa do registro; o lutarPoc o confere
         venceu = r.venceu; rival = ev[2].r; mapa = ev[2].m ?? null; s = ev[2].s; vida = r.serie.length ? r.serie[r.serie.length - 1].vidaA : null;
+        if (rival === RIVAL_SALAO) salao.push({ s: ev[2].s, tick: ev[0], venceu: r.venceu });
       } else m.aplicarEvento(ev);
     }
     if (pedidos.has(i)) noIndice.set(i, { estagio, venceu, rival, mapa, s, vida });
@@ -119,7 +123,7 @@ export function refazerComLutas(semente: number, versao: number, log: readonly E
     return { ...base, situacao: o.venceu ? "vitoria" as const : "derrota" as const, rival: o.rival, faixa, estagio: o.estagio, vidaFinal: o.vida };
   });
   pontuar(lutas);
-  return { lutas, motor: m };
+  return { lutas, motor: m, salao };
 }
 
 /** os pontos das lutas de um pet, na ordem do pedido: a vitoria pela faixa, com a metade para cada vitoria anterior contra o mesmo rival

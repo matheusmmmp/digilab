@@ -392,3 +392,31 @@ antes do código.
 - **O que não muda:** o `engine.py`, a Fábrica de sempre, o registro do Tamer e as telas.
 - **Fora desta etapa:** a prancha e a tela; as recompensas e o mural (MMO7); o reset (MMO8); o deploy. Os desvios estão no registro
   (D-CONTA-139 a 151).
+
+## 23. MMO7: as recompensas e o mural, a parte local (2026-11-19)
+
+Pedido da sessão da conta (a linha da MMO7 na seção 12 do plano, a MMO-12 e a seção 7). Branch `v3-mmo7`. Local, sem deploy. O ranking
+paga prestígio, não Bits: nada aqui toca os Bits, a loja, o motor, o registro do Tamer nem o save.
+
+- **No servidor (`servidor_web/src/premios/premios.ts`, a migração 7):**
+  - os recordes de todos os tempos da Torre, da Fábrica e do Salão, só do que a conferência do envio aceito refaz (D-CONTA-152): a Torre
+    pelo replay do pet, a Fábrica pelo replay do Tamer, o Salão juntando as lutas vistas no replay de cada pet (`recordes`, `salao_vistas`);
+  - o título da semana: o 1º com pontos de cada tabela congelada da MMO5, "Campeão Rookie da semana 46", no perfil por 7 dias depois do
+    congelamento e no mural para sempre (D-CONTA-153 e 155);
+  - o selo "Top do dia": o que o fechamento do dia da MMO6 já marca, lido daqui;
+  - o enfeite da temporada: um por temporada de 4 semanas para quem ficou entre os 10 primeiros com pontos de uma tabela da semana
+    (D-CONTA-154);
+  - o Respeito conferido: só o título da semana (100) e o selo (20), os valores da seção 8; o resto é da MMO8 (D-CONTA-156);
+  - `GET /premios` (o que a conta ganhou) e `GET /mural` (os recordes e os títulos), com a sessão; o "baixar os meus dados" traz os
+    recordes; apagar a conta leva tudo.
+- **No jogo:** "Mural e prêmios" no cais (`src/cais/premios.ts`, `TelaCais.tsx`), o mínimo nas peças do cais, sem prancha; e a taça da
+  temporada em cartoon por script (`docs/objetos3d/cartoon/trofeu.py`, `public/enfeites/trofeu/`), posta perto do cais só quando o servidor
+  diz que a conta a ganhou (`ilha/premiosConta.ts`, `ilha/premiosCena.ts`, `TACAS_DA_CONTA` em `trancas.ts`). Sem a chave do cais, nada
+  disso existe; com o cais trancado, o jogo não chama o servidor (D-CONTA-157).
+- **Testes:** `servidor_web`: 170 passaram (15 novos em `test/premios.test.ts`). `web/app`: a suíte inteira e os tipos (a contagem está
+  no PR; 15 novos em `test/premios_cais.test.ts`); `npm run e2e:conta`: 9 passaram (3 novos em `e2e_conta/mural.spec.ts`, com as fotos da
+  taça na ilha e do mural a 1920 e a 390 px).
+- **Pendente com o Matheus:** a prancha do mural e dos selos no perfil; o desenho da taça de cada temporada; os números PROPOSTOS
+  (D-CONTA-152 a 159).
+- **Fora desta etapa:** o Respeito das medalhas, da Liga e do reset e o ranking dos Tamers (MMO8); as telas da conta; o deploy. Os
+  desvios estão no registro (D-CONTA-152 a 160).

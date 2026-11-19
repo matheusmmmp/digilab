@@ -73,6 +73,11 @@ export const ENFEITES_MODELOS = {
   tv: { arquivos: ["tv/tv.gltf"], altura: 2.6, vento: 0, sombra: 1.0, baixo: false },
 } as const satisfies Record<string, Modelo>;
 export type NomeEnfeite = keyof typeof ENFEITES_MODELOS;
+/** o enfeite da temporada (MMO7; docs/objetos3d/cartoon/trofeu.py): a taca no pedestal, em public/enfeites/trofeu/. Fora da grade: so entra
+    na ilha, ao lado do cais, quando o servidor diz que a conta a ganhou (ilha/premiosConta.ts). Na escala de brinquedo da TV. PROPOSTO, SEM FONTE */
+export const PREMIOS_MODELOS = {
+  trofeu: { arquivos: ["trofeu/trofeu.gltf"], altura: 2.2, vento: 0, sombra: 0.9, baixo: false },
+} as const satisfies Record<string, Modelo>;
 /** a mascara das partes que acendem a noite (o emissiveMap; fora do glTF, ao lado dele), por enfeite que tem luz */
 export const ENFEITES_LUZ: Partial<Record<NomeEnfeite, string>> = { poste: "poste/poste_luz.png" };
 
