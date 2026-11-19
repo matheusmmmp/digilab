@@ -835,6 +835,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-17 — LEGIBILIDADE: quem define o sucesso e o plano do teste cego (Claude Code, Opus 5.5, branch `v3-sucesso-legibilidade`)](registro/2026-11.md)
 - [2026-11-17 — MMO: a prancha da luta ranqueada (Claude Code, Fable 5.2, sessão lateral, branch `v3-mmo4-prancha`)](registro/2026-11.md)
 - [2026-11-17 — EVIDENCIA A2: o merge (o Gerente da V3, Claude Code, Opus 5.5)](registro/2026-11.md)
+- [2026-11-16 — EVIDENCIA A3: o pré-registro visível e a replicação da C4 (Claude Code, Opus 5.5, branch `v3-evidencia-a3`)](registro/2026-11.md)
 - [2026-11-17 — MMO: a prancha da luta ranqueada aprovada (Claude Code, Fable 5.2, sessão lateral, branch `v3-mmo4-prancha`)](registro/2026-11.md)
 - [2026-11-17 — MMO4: a tela da luta ranqueada (Claude Code, Fable 5.2, sessão lateral, branch `v3-mmo4-tela`)](registro/2026-11.md)
 - [2026-11-17 — A integração da cadeia no DigiBrain: análise e plano (Claude Code, Opus 5.5, sessão lateral, branch `v3-integracao-cadeia-analise`)](registro/2026-11.md)

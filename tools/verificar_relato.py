@@ -9,7 +9,8 @@ O relato é o corpo do PR. Esta ferramenta separa duas coisas:
 Cada categoria tem a própria regra de evidência (docs/infra/GUIA_OPERACIONAL.md, seção "O que o CI confere"):
 - implementacao: algum arquivo de teste (tests/*.py, ou web/app/test e web/app/e2e) mudou ou é citado, e todo teste citado existe; os
   testes do web/app não rodam no CI, então a execução deles fica só declarada;
-- experimento: o plano de análise citado existe e foi commitado antes de todo artefato novo; todo caminho de artefato citado existe;
+- experimento: o plano de análise citado existe e foi commitado antes de todo artefato novo; todo caminho de artefato citado existe; o
+  campo Pré-registro cita o docs/PREREGISTRO.md e uma seção dele (PR-<id>) que existe (EVIDENCIA A3);
 - literatura: Origem, DOIs, Resultados e Limitações preenchidos; todo DOI está em docs/referencias; nada mudou fora de docs/;
 - arquitetura: o relato diz PROPOSTO, as decisões do Matheus estão listadas, nada mudou em digilab/, experiments/ ou web/app/src/;
 - documentacao: só mudaram documentos; todo link relativo dos .md mudados resolve.
@@ -49,6 +50,8 @@ CAMINHO_TESTE = re.compile(r"\btests/[\w/-]+\.py\b")
 # pastas separadas das POCs, como e2e_poc/ e poc/ (achados do worker A, #355 e #358). O CI não roda esses. Os do servidor do jogo web
 # (servidor_web/test/, o Vitest que o job servidor-web roda) contam do mesmo jeito (D-CONTA-69).
 CAMINHO_TESTE_WEB = re.compile(r"\b(?:web/app|servidor_web)/(?!node_modules/)(?:[\w.-]+/)*[\w.-]+?\.(?:test|spec)\.(?:ts|tsx|js)\b")
+PREREGISTRO = "docs/PREREGISTRO.md"
+SECAO_PREREGISTRO = re.compile(r"\bPR-[A-Za-z0-9_-]*[A-Za-z0-9]")
 CAMINHO_PLANO = re.compile(r"\bdocs/PLANO_ANALISE_V[23]_[\w-]+\.md\b")
 LINK_MD = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")
 SUCESSO = re.compile(r"\b(testes?|su[ií]te|ci|pytest)\b[^\n]{0,60}?\b(passa|passam|passaram|passou|passed|verde|ok)\b", re.I)
@@ -209,8 +212,27 @@ def _implementacao(corpo, sec, mudados, raiz):
     return itens
 
 
+def secoes_do_preregistro(raiz: Path) -> set[str]:
+    """Os ids das seções do docs/PREREGISTRO.md: o PR-<id> no começo de cada título '## '."""
+    texto = (raiz / PREREGISTRO).read_text(encoding="utf-8")
+    return {m.group(1) for m in re.finditer(r"^##\s+(PR-[A-Za-z0-9_-]*[A-Za-z0-9])\b", texto, re.M)}
+
+
+def _preregistro(corpo, raiz):
+    valor = campo(corpo, "Pré-registro")
+    if vazio(valor):
+        return [Item("campo Pré-registro", "DECLARADA", False, "falta: o experimento cita a seção dele no docs/PREREGISTRO.md")]
+    if PREREGISTRO not in valor or not (raiz / PREREGISTRO).exists():
+        return [Item("o pré-registro existe", "VERIFICADA", False, f"o campo não cita {PREREGISTRO}, ou ele não existe: {valor}")]
+    citadas = sorted(set(SECAO_PREREGISTRO.findall(valor)))
+    if not citadas:
+        return [Item("a seção do pré-registro", "VERIFICADA", False, f"o campo não cita uma seção PR-<id>: {valor}")]
+    existem = secoes_do_preregistro(raiz)
+    return [Item("a seção do pré-registro existe", "VERIFICADA", s in existem, f"{PREREGISTRO}, {s}") for s in citadas]
+
+
 def _experimento(corpo, sec, mudados, raiz):
-    itens = []
+    itens = _preregistro(corpo, raiz)
     planos = sorted(set(CAMINHO_PLANO.findall(corpo)))
     itens.append(Item("plano de análise citado", "DECLARADA", bool(planos), ", ".join(planos) or "nenhum"))
     artefatos_citados = sorted(set(a.rstrip(".") for a in CAMINHO_ARTEFATO.findall(corpo)))
