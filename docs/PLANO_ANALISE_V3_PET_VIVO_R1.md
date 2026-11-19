@@ -1,8 +1,9 @@
 # PLANO DE ANÁLISE V3 — PET_VIVO, R1: o rastro da cadeia e o que fica fora do r (2026-11-19, Claude Code, Fable 5.2)
 
-**Status: PROPOSTO, aguardando o Matheus.** As decisões RA-1 a RA-6 da seção 10 estão PROPOSTAS, cada uma com a recomendação e o
-custo de errar. **Nenhum replay e nenhuma conta deste plano rodam antes de três coisas:**
-1. a marca "APROVADO pelo Matheus" neste cabeçalho;
+**Status: APROVADO pelo Matheus em 2026-11-19.** À pergunta "Aprova o plano do R1 e as RA-1 a RA-6 pela recomendação?", nesta sessão,
+a resposta foi "Aprovo todas" (D-RA-7). As decisões RA-1 a RA-6 da seção 10 estão DECIDIDAS pela recomendação. Os cortes seguem SEM
+FONTE. **Nenhum replay e nenhuma conta deste plano rodam antes de três coisas:**
+1. a marca "APROVADO pelo Matheus" neste cabeçalho (feita acima);
 2. o código da seção 7 na `main`, com os testes dele;
 3. as conferências da seção 3.3, que falham alto antes de qualquer medida.
 
@@ -165,7 +166,7 @@ somas são inteiras, e as razões são exatas (`fractions`). A última decisão 
 ## 5. A regra de leitura, escrita antes
 
 Nenhuma medida deste plano é gate: nada muda no cérebro, e nada vai para a web por ela. A regra diz **o que o plano do R2 recebe**. Ela
-se lê no HOJE, nos 3 lugares, pelo limite do IC95. Os cortes são PROPOSTOS e SEM FONTE (RA-5).
+se lê no HOJE, nos 3 lugares, pelo limite do IC95. Os cortes são os da RA-5, SEM FONTE.
 
 **L-FORA, se há o que creditar** (pela `F_sinal`):
 
@@ -235,7 +236,7 @@ D-PV0R-6. O OLF-0 e a checagem do v38 saem ao lado, sem leitura.
 Este plano não cita referência nova. O mecanismo que o R1 prepara (o crédito com um traço e uma linha de base) está na análise, com as
 referências dela e o estado de cada uma. Aqui só se mede o que o código de hoje já faz.
 
-## 10. As decisões com o Matheus (PROPOSTAS)
+## 10. As decisões com o Matheus (DECIDIDAS pela recomendação em 2026-11-19, "Aprovo todas"; D-RA-7)
 
 | # | decisão | recomendação | custo de errar |
 |---|---|---|---|

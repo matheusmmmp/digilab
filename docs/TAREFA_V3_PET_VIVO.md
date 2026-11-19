@@ -227,11 +227,11 @@ O Matheus, nesta sessão, escreveu "Sim, começa o R0", a primeira etapa da INT-
 ## O plano do R1, o rastro da cadeia (2026-11-19, Claude Code, Fable 5.2, branch `v3-integracao-r1-plano`)
 
 - **O pedido do Matheus (2026-11-19):** "escreve o plano do R1". O plano está em
-  [PLANO_ANALISE_V3_PET_VIVO_R1.md](PLANO_ANALISE_V3_PET_VIVO_R1.md), **PROPOSTO, aguardando o Matheus.**
+  [PLANO_ANALISE_V3_PET_VIVO_R1.md](PLANO_ANALISE_V3_PET_VIVO_R1.md), **APROVADO pelo Matheus em 2026-11-19** ("Aprovo todas", D-RA-7).
 - **O que o R1 é:** só leitura. O cérebro registra, por decisão, o que muda no corpo entre uma decisão e a seguinte, sem creditar
   nada (a subchave `rastro`, desligada). Um replay das vidas da run do PV-2 mede quanto do corpo fica fora do r de hoje.
 - **A fonte:** o HOJE da run do PV-2 (2 400 vidas), com o OLF-0 e o HOJE do v38 ao lado. Nenhuma vida nova e nenhuma faixa (D-RA-1).
 - **A regra de leitura, escrita antes:** diz o que o plano do R2 recebe. Nenhuma medida é gate, e nada vai para a web por ela.
 - **O TypeScript fica para depois da LZ3** (RA-3).
-- **As decisões RA-1 a RA-6** estão PROPOSTAS, na seção 10 do plano.
-- **Próximo:** a aprovação do plano; depois, o PR do código (a seção 7 do plano) e o replay, uma vez.
+- **As decisões RA-1 a RA-6** estão DECIDIDAS pela recomendação, na seção 10 do plano.
+- **Próximo:** o PR do código (a seção 7 do plano) e o replay, uma vez, com a vez da máquina.
