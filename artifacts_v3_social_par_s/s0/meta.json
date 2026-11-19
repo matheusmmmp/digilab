@@ -1,0 +1,18 @@
+{
+ "comando": "python experiments/observar_v3_social_par_s0.py --processos 1",
+ "fase": "social_par_s0",
+ "fim": "2026-11-18T16:35:35",
+ "fonte": {
+  "pares": 210,
+  "run_medidas_sha256": "5685b377a279304609f86c1219418595acd93c0866c45bbd54b9a6148a201e0c",
+  "run_meta_sha256": "cca1737f5a73c19e17c25c187c5a1a2203d151d9582abbf2b5eee4927bec0411"
+ },
+ "git_head": "2044e420576deff79a96265b59ca66396f47de7a",
+ "git_limpo": false,
+ "inicio": "2026-11-18T16:31:00",
+ "observacao_sha256": "676a5ba758aa1201687dafba35a7deb187cf056dd4a05336e39ae44beebc8508",
+ "parede_s": 274.61991180002224,
+ "processos": 1,
+ "python": "3.13.0",
+ "script_sha256": "023111f7c0026f5a9bf81c94dfba5e10f1491ff9778510d82d5b2739998f19ee"
+}
