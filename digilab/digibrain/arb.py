@@ -88,6 +88,7 @@ class Arbitragem:
         self.sorteios = 0
         self.reflexos = 0
         self.nada_a_fazer = 0
+        self.suaves = 0                               # CORPO, a C5: as vezes que o reflexo suave somou peso (fora do estado_interno)
 
     def ligar_dever(self, cfg) -> None:
         """a CO7: o escudo e o peso da universalizacao (digilab/digibrain/dever.py) sobre os pesos, antes do sorteio e em cada sonda"""
@@ -125,6 +126,8 @@ class Arbitragem:
         energia = sens["leitura"].get("energia")
         if energia is None:
             raise RuntimeError("M-ARB: o reflexo do sono le a energia, e ela nao esta na percepcao do corpo")
+        if self.cv.reflexo_suave:                    # CORPO, a C5: o reflexo vira peso no `escolher`, nenhum evento de reflexo
+            return False
         if energia < self.p.lambda_sono:
             if not self.cv.guarda_fome_reflexo:
                 return True
@@ -144,6 +147,23 @@ class Arbitragem:
         """a guarda da fome urgente no brincar (EQ-7): o peso 0 nas unidades do brincar"""
         return [0 if x["acao"] == "brincar" else wi for x, wi in zip(unidades, w)]
 
+    def _suave(self, unidades: list[dict], w: list[int], sens: dict, contar: bool = False) -> list[int]:
+        """CORPO, a C5 (`ConfigConsertoValuation.reflexo_suave`): com a energia abaixo de `lambda_sono`, o `dormir` ganha
+        `peso_reflexo_suave` no peso, antes da CO7 e da guarda do brincar; desligado, os pesos de hoje"""
+        if not self.cv.reflexo_suave:
+            return w
+        energia = sens["leitura"].get("energia")
+        if energia is None:
+            raise RuntimeError("M-ARB: o reflexo suave le a energia, e ela nao esta na percepcao do corpo")
+        if energia >= self.p.lambda_sono:
+            return w
+        i = next((j for j, x in enumerate(unidades) if x["acao"] == "dormir"), None)
+        if i is None:
+            raise RuntimeError("M-ARB: o reflexo suave sem a unidade dormir")
+        if contar:
+            self.suaves += 1
+        return [wi + self.cv.peso_reflexo_suave if j == i else wi for j, wi in enumerate(w)]
+
     def escolher(self, unidades: list[dict], afeto: dict, sens: dict, rng, reflexo: bool | None = None,
                  segurar: tuple | None = None, sem_brincar: bool = False) -> dict:
         p = self.p
@@ -151,7 +171,7 @@ class Arbitragem:
             reflexo = self.reflexo(sens)
         if type(sem_brincar) is not bool:
             raise TypeError(f"M-ARB: sem_brincar e bool: {sem_brincar!r}")
-        w = self.pesos([x["a"] for x in unidades], afeto["g_exp"])
+        w = self._suave(unidades, self.pesos([x["a"] for x in unidades], afeto["g_exp"]), sens, contar=True)
         sit, reg = None, None
         if self.dever is not None and sens["social"] is not None:     # a CO7: o escudo e a universalizacao, antes de tudo
             sit = _dever.situacao(sens, afeto["urgencias"], self.dever, self.S)
@@ -185,7 +205,7 @@ class Arbitragem:
             ativ = [0 if ("memoria" in tirar and x.get("tipo") == "ponto") else phi(x["soma"] - sum(x["termos"][t] for t in tirar), p.a_max)
                     for x in unidades]
             g_exp = p.e0 if nome == "sem_afeto" else afeto["g_exp"]
-            ws = self.pesos(ativ, g_exp)
+            ws = self._suave(unidades, self.pesos(ativ, g_exp), sens)
             if sit is not None:                      # a CO7: a sonda com o mesmo escudo e a mesma universalizacao
                 ws = _dever.ajustar(unidades, ws, sit)[0]
             j = self._escolher(unidades, self._sem_brincar(unidades, ws) if sem_brincar else ws, u)

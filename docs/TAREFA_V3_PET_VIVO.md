@@ -161,6 +161,23 @@ repasse do Gerente da V3.
 **Próximo (as PV2-1 a PV2-10 DECIDIDAS em 2026-11-09, D-PV2P-6):** o merge pelo Matheus. Depois, o PR do código, com o gabarito, a chave desligada e o custo medido nas sementes
 dos testes.
 
+## A análise da integração da cadeia (2026-11-17, Claude Code, Opus 5.5, branch `v3-integracao-cadeia-analise`)
+
+Fora das etapas desta frente: um pedido do Matheus sobre a cadeia órgão → cérebro → ação → aprendizado, repassado pela sessão que abriu
+esta. O documento é o [integracao_cadeia_digibrain.md](futuro/integracao_cadeia_digibrain.md), só leitura, sem vida e sem código.
+
+- **Recomenda o código do PV-2 como a primeira etapa,** com a especificação na seção 8 dele.
+- **Propõe reordenar a PV2-10 em parte** (INT-1): o rastro e o crédito do intervalo vêm antes do sorteio, pela evidência nova de que o r
+  é medido no mesmo tick (D-INT-3).
+- **Os desvios:** D-INT-1 a D-INT-9.
+- **As decisões:** as INT-1 a INT-9 estão DECIDIDAS pela recomendação. O Matheus escreveu, em 2026-11-17: "Aprovo as INT-1 a
+  INT-9 pela recomendação" (D-INT-9).
+- **A próxima etapa desta frente** é o PR do código do PV-2 (o R0), pela seção 8 do documento.
+- **Os repasses (2026-11-18, D-INT-10):**
+  - **a INT-5** fica como premissa do plano do R2: uma estrutura de traço só no cérebro, usada pela janela do ELOGIO e pelo crédito do
+    intervalo, com os sinais separados no registro. Está anotada também na `TAREFA_V3_ELOGIO.md`;
+  - **a INT-7** foi para a LZ3, na `TAREFA_V3_LIMPEZA.md`: o balão e a fala passam a ler o motivo do modular.
+
 ## O código do PV-2, o R0 (2026-11-17, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2-codigo`)
 
 O Matheus, nesta sessão, escreveu "Sim, começa o R0", a primeira etapa da INT-1 da análise da integração.
@@ -194,6 +211,15 @@ O Matheus, nesta sessão, escreveu "Sim, começa o R0", a primeira etapa da INT-
   - o custo.
 - **A fumaça** (bases 101 e 202, K = 1, 2 dias): 192 vidas, todas com o G1 e o T-CENARIO-1 conferidos, em 77 s com 2 processos.
 - **Os desvios:** D-PV2R-1 a D-PV2R-8.
-- **Próximo:** o merge do #981 e do #984, porque o `pre_run` exige o plano da `origin/main` (D-PV2R-9); a vez da máquina já foi dada. Depois, a run, uma vez, e o
-  `RESULTADO_V3_PET_VIVO_PV2.md`.
+- **O #981 e o #984 na main** (2026-11-18, `34894b50`).
+
+## A run do PV-2 (2026-11-18, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2-resultado`)
+
+- **Rodou uma vez:** 15 360 vidas na faixa 26101–26505, em 4 h 15 min com 4 processos (D-PV2R-10). O resultado está em
+  [RESULTADO_V3_PET_VIVO_PV2.md](RESULTADO_V3_PET_VIVO_PV2.md).
+- **A leitura: "custa perto de casa"** (D-PV2R-11). No `comedouro`, o OLF-DCV perde 0,142 da taxa por episódio para o OLF-0, e os
+  outros gates também falham. O OLF-G sai como "o ganho não entra". Pela seção 7, a sugestão é não levar.
+- **Nada vai para a web,** e a chave do PV-2 continua desligada.
+- **A decisão do Matheus (2026-11-18): "Sim, registra assim"** (D-PV2R-13). O PV-2 não vai ao cérebro padrão nem à web.
+- **Próximo:** as etapas seguintes da INT (R1 rastro, R2 crédito com o ELOGIO) e a seção 9 do plano, na ordem que o Matheus escolher.
 

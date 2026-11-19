@@ -1712,6 +1712,63 @@ CONFIG_LUTA_CORPO_LIGADA = ConfigLutaCorpo(ligada=True)
 
 
 @dataclass(frozen=True)
+class ConfigAcoplamentoCorpo:
+    """CORPO_ACOPLAMENTO, a opcao D (docs/TAREFA_V3_CORPO_ACOPLAMENTO.md, secao 10; D-CA-2 e D-CA-5, Matheus, 2026-11-18). Ligada, a
+    falta de combustivel (o emissor `falta_combustivel` do metabolismo, abaixo de `ConfigCorpo.falta_limiar`) sobe a fome em
+    `falta_fome` por tick, e nao o cansaco: a ponte ME-1 passa do cansaco para a fome. O jejum deixa de cansar o pet e passa a lhe dar mais
+    fome, e a digestao (que so converte o que tira da fome) ganha teto justo quando o combustivel falta. Exige o corpo com o metabolismo.
+    Desligada (o padrao), a ME-1 vale como hoje e a vida sai byte a byte. Fica numa config propria, e nao em `ConfigCorpo`, para o dump
+    da ConfigCorpo (os gabaritos de paridade do corpo e do cerebro A e o espelho TS) nao mudar, como a ConfigLutaCorpo. Status em
+    PARAMETROS_ACOPLAMENTO_CORPO."""
+
+    ligada: bool = False
+    falta_fome: int = 500                    # por tick com a falta; o 500 do `falta_cansaco` de hoje (o ponto de partida, secao 10)
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigAcoplamentoCorpo.ligada e bool: {self.ligada!r}")
+        if type(self.falta_fome) is not int or self.falta_fome <= 0:
+            raise ValueError(f"ConfigAcoplamentoCorpo.falta_fome e inteiro positivo: {self.falta_fome!r}")
+
+
+# Status dos campos da ConfigAcoplamentoCorpo (conferido por teste).
+PARAMETROS_ACOPLAMENTO_CORPO: dict[str, tuple[str, str]] = {
+    "ligada": ("DECIDIDO", "TAREFA_V3_CORPO_ACOPLAMENTO, D-CA-2 e D-CA-5 (Matheus, 2026-11-18, 'Aprovo a D-CA-1 a D-CA-7'): a opcao D, "
+                           "atras de chave desligada; ligar num pet so depois da validacao (D-CA-6 e D-CA-7)"),
+    "falta_fome": ("PROPOSTO", "TAREFA_V3_CORPO_ACOPLAMENTO, secao 10: o 500 do falta_cansaco de hoje, o ponto de partida; SEM FONTE"),
+}
+
+CONFIG_ACOPLAMENTO_CORPO = ConfigAcoplamentoCorpo()
+CONFIG_ACOPLAMENTO_CORPO_LIGADA = ConfigAcoplamentoCorpo(ligada=True)
+
+
+@dataclass(frozen=True)
+class ConfigDigestaoCorpo:
+    """CORPO, a opcao E (docs/MAPA_CORPO.md, secao 7; docs/PLANO_ANALISE_V3_CORPO.md, secao 2; D-CO-1, Matheus, 2026-11-18). Ligada, a
+    comida que sobra no estomago com a fome em 0 vira combustivel, em vez de ser descartada: a digestao converte a comida inteira, e a fome
+    cai como hoje (o corte de `Corpo._digerir` no que tira da fome nao muda). O excedente vai ao combustivel de uma vez, pela fracao do
+    metabolismo, com o teto C (o que passa conta em `descartado_teto`). Exige o corpo com a digestao e o metabolismo. Desligada (o padrao),
+    a vida sai byte a byte. Fica numa config propria, como a ConfigAcoplamentoCorpo, para nenhum dump de hoje mudar. Status em
+    PARAMETROS_DIGESTAO_CORPO."""
+
+    inteira: bool = False
+
+    def __post_init__(self) -> None:
+        if type(self.inteira) is not bool:
+            raise TypeError(f"ConfigDigestaoCorpo.inteira e bool: {self.inteira!r}")
+
+
+# Status dos campos da ConfigDigestaoCorpo (conferido por teste).
+PARAMETROS_DIGESTAO_CORPO: dict[str, tuple[str, str]] = {
+    "inteira": ("DECIDIDO", "PLANO_ANALISE_V3_CORPO, D-CO-1 (Matheus, 2026-11-18, 'Confirmo, siga'): a opcao E do MAPA_CORPO, atras de "
+                            "chave desligada, so de pesquisa ate a validacao"),
+}
+
+CONFIG_DIGESTAO_CORPO = ConfigDigestaoCorpo()
+CONFIG_DIGESTAO_CORPO_INTEIRA = ConfigDigestaoCorpo(inteira=True)
+
+
+@dataclass(frozen=True)
 class ConfigLutaMemoria:
     """A ponte da luta, o lado da memoria (docs/TAREFA_V3_PONTE_LUTA.md, secoes 3.2 e 3.7; PL-2, PL-6, PL-7 e PL-9; etapa PE2). Ligada, o
     DigiBrain modular recebe o resumo da luta (`receber_luta`, irmao do `receber_acao_dono`), o entrega ao M-SENS na decisao seguinte (a
@@ -3329,20 +3386,36 @@ class ConfigConsertoValuation:
     (tests/gabaritos/valuation_conserto_de_hoje.json). Status em PARAMETROS_CONSERTO_VALUATION."""
 
     guarda_fome_reflexo: bool = False         # PROPOSTO: a chave (so a run da V3 da VALUATION a liga)
+    # CORPO, a opcao C5 (docs/PLANO_ANALISE_V3_CORPO.md, secao 2; D-CO-1 e D-CO-3): o reflexo suave. Ligado, o reflexo do sono deixa de
+    # pular o sorteio: com a energia abaixo de `lambda_sono`, a unidade `dormir` ganha `peso_reflexo_suave` no peso (no sorteio e nas
+    # sondas), e a escolha segue pelo sorteio. O `Arbitragem.reflexo` passa a dar False (nenhum evento de reflexo). O jogo web o espelha
+    # (web/app/motor/digibrain/arb.ts, `ConfigReflexoSuave`), com paridade. Exclusivo com a guarda da fome (uma mudanca por braco)
+    reflexo_suave: bool = False
+    peso_reflexo_suave: int = 1024            # +S no peso do dormir (D-CO-3), SEM FONTE
 
     def __post_init__(self) -> None:
         if type(self.guarda_fome_reflexo) is not bool:
             raise TypeError(f"ConfigConsertoValuation.guarda_fome_reflexo e bool: {self.guarda_fome_reflexo!r}")
+        if type(self.reflexo_suave) is not bool:
+            raise TypeError(f"ConfigConsertoValuation.reflexo_suave e bool: {self.reflexo_suave!r}")
+        if type(self.peso_reflexo_suave) is not int or self.peso_reflexo_suave <= 0:
+            raise ValueError(f"ConfigConsertoValuation.peso_reflexo_suave e inteiro positivo: {self.peso_reflexo_suave!r}")
+        if self.reflexo_suave and self.guarda_fome_reflexo:
+            raise ValueError("ConfigConsertoValuation: o reflexo suave e a guarda da fome sao bracos diferentes, nao juntos")
 
 
 # Status dos campos da ConfigConsertoValuation (conferido por teste). A fome urgente nao tem numero proprio: e o `urgencia_lambda` dos inatos.
 PARAMETROS_CONSERTO_VALUATION: dict[str, tuple[str, str]] = {
     "guarda_fome_reflexo": ("PROPOSTO", "PLANO_ANALISE_V3_VALUATION_CONSERTO, secao 2 (D-VAL-16, APROVADA pelo Matheus em 2026-11-17); a "
                                         "chave, so de pesquisa; SEM FONTE"),
+    "reflexo_suave": ("PROPOSTO", "PLANO_ANALISE_V3_CORPO, D-CO-1 (Matheus, 2026-11-18, 'Confirmo, siga'): a opcao C5 do MAPA_CORPO, "
+                                  "a chave, so de pesquisa ate a validacao (como a guarda); SEM FONTE"),
+    "peso_reflexo_suave": ("PROPOSTO", "PLANO_ANALISE_V3_CORPO, secao 2 (D-CO-3): +S, o maximo de uma ativacao; SEM FONTE"),
 }
 
 CONFIG_CONSERTO_VALUATION = ConfigConsertoValuation()
 CONFIG_CONSERTO_VALUATION_LIGADO = ConfigConsertoValuation(guarda_fome_reflexo=True)
+CONFIG_REFLEXO_SUAVE = ConfigConsertoValuation(reflexo_suave=True)
 
 # Os numeros do modular que o E1 propoe trocar de valor (docs/RESULTADO_V3_EQUILIBRIO_CUIDADO_E1.md, a rodada F2 da grade), nos inatos de hoje
 # (CONFIG_DIGIBRAIN_INATOS fica como esta; no jogo, a v38 e a v39 os usam desde o E3, EQ-6). DECIDIDOS (APROVADOS em 2026-11-12), SEM FONTE.
@@ -3970,6 +4043,39 @@ PARAMETROS_COOPERACAO = {
     "co7_escudo": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12): pesquisa, a ablacao 'so o escudo'; ligada com a co7 no jogo"),
     "co7_universalizacao": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12): pesquisa, a ablacao 'so a universalizacao'; ligada com a co7 no jogo"),
     "co7_afeto": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12): pesquisa, a ablacao 'so o afeto'; ligada com a co7 no jogo"),
+}
+
+
+@dataclass(frozen=True)
+class ConfigIntervencaoSocial:
+    """O parceiro sob intervencao (docs/ESPEC_V3_SOCIAL_PAR_E1.md, APROVADA pelo Matheus em 2026-11-17, "Aprovo a E1"): so pesquisa, na
+    bancada do Python; o jogo nunca a liga (SP-2).
+    ligada                 o `Grupo.levar_pet` (a perturbacao, com a origem `intervencao` no registro) e o ponto gravado em toda acao com
+                           alvo (o parceiro em laco aberto, `experiments/bancada/parceiro.py`); desligada, o grupo de hoje byte a byte
+    janela_reencontro      a janela do tempo ate o reencontro depois da perturbacao, em decisoes do pet focal
+    raio_contato_celulas   o contato, em celulas (Chebyshev): o do toque de hoje
+    raio_perto_celulas     o perto, em celulas: o da visao de hoje"""
+
+    ligada: bool = False
+    janela_reencontro: int = 96
+    raio_contato_celulas: int = 1
+    raio_perto_celulas: int = 6
+
+    def __post_init__(self) -> None:
+        for nome in ("janela_reencontro", "raio_contato_celulas", "raio_perto_celulas"):
+            v = getattr(self, nome)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigIntervencaoSocial.{nome} e um inteiro positivo: {v!r}")
+
+
+CONFIG_INTERVENCAO_SOCIAL = ConfigIntervencaoSocial()
+CONFIG_INTERVENCAO_SOCIAL_LIGADA = ConfigIntervencaoSocial(ligada=True)
+PARAMETROS_INTERVENCAO_SOCIAL = {
+    "ligada": ("DECIDIDO", "SP-1, SP-2 e E1-1 a E1-6 (Matheus, 2026-11-17, \"Aprovo a E1\"): so pesquisa, nunca no jogo; desligada, o grupo "
+                           "de hoje (o G2 da E1)"),
+    "janela_reencontro": ("PROPOSTO", "SEM FONTE: um dia de decisoes (96 x 15 ticks = TICKS_POR_DIA); a espec da E1, secao 2.1"),
+    "raio_contato_celulas": ("PROPOSTO", "o raio_toque_celulas da ConfigGrupo (1), para o contato medido ser o toque de hoje"),
+    "raio_perto_celulas": ("PROPOSTO", "o raio_visao_celulas da ConfigMundo (6), para o perto medido ser o que o pet ve"),
 }
 
 

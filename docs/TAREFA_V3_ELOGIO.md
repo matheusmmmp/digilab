@@ -235,3 +235,10 @@ A calibração (25101–25200) escolheu g = 256 e W = 2. A validação (25301–
 (+0,073 [+0,042; +0,104] contra o E-sorteado, sem piora da M4), mas o E-imed − E0 é −0,003 [−0,027; +0,022]. A P0 falha por um carinho
 com sinal 0, e a P1 falha. Os números e a leitura estão no `docs/RESULTADO_V3_ELOGIO.md`; os desvios, em `docs/registro/2026-11.md`.
 A etapa 6 (a web) não começa: "Sim, registre assim" (Matheus, 2026-11-18).
+
+## 14. Para o plano do R2: a INT-5 (2026-11-18, repasse da análise da integração)
+
+A INT-5 (`docs/futuro/integracao_cadeia_digibrain.md`, seção 9; aprovada pelo Matheus em 2026-11-17) pede **uma estrutura de traço só**
+no cérebro: a janela W deste ELOGIO e o traço K do crédito do intervalo (o R2) usam a mesma, com os sinais separados no registro. Dois
+mecanismos de crédito no mesmo P2 somariam o mesmo intervalo duas vezes, porque o carinho está dentro do r do intervalo. Nada muda no
+código daqui agora: vale como premissa de quem escrever o plano do R2.

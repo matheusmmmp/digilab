@@ -77,7 +77,8 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 
 from .config import CONFIG_CORPO, CONFIG_LUTA_CORPO, CONFIG_OLFATO, CONFIG_OUVIDO, ConfigCorpo, ConfigLutaCorpo, ConfigOlfato, ConfigOuvido
-from .config import CONFIG_ENJOO_TELA, CONFIG_TELA, ConfigEnjooTela, ConfigTela
+from .config import (CONFIG_ACOPLAMENTO_CORPO, CONFIG_DIGESTAO_CORPO, CONFIG_ENJOO_TELA, CONFIG_TELA, ConfigAcoplamentoCorpo, ConfigDigestaoCorpo,
+                     ConfigEnjooTela, ConfigTela)
 from .corpo import ATIVIDADE_TELA, DRIVE_DO_QUIMICO, RECEPTOR_NOVIDADE_TELA, Corpo, grafo_do_corpo, taxas_de
 from .corpo_grafo import checar
 from .educacao import MotorEducacao
@@ -164,9 +165,20 @@ class MotorCorpo:
     def __init__(self, *a, cfg_corpo: ConfigCorpo | None = None, cfg_olfato: ConfigOlfato | None = None,
                  cfg_ouvido: ConfigOuvido | None = None, troca_digestao: tuple[int, int] | None = None,
                  cfg_luta_corpo: ConfigLutaCorpo | None = None, cfg_tela: ConfigTela | None = None,
-                 cfg_enjoo_tela: ConfigEnjooTela | None = None, **kw) -> None:
+                 cfg_enjoo_tela: ConfigEnjooTela | None = None, cfg_acoplamento_corpo: ConfigAcoplamentoCorpo | None = None,
+                 cfg_digestao_corpo: ConfigDigestaoCorpo | None = None, **kw) -> None:
         super().__init__(*a, **kw)
         self.cc = cfg_corpo or CONFIG_CORPO
+        self.cac = cfg_acoplamento_corpo or CONFIG_ACOPLAMENTO_CORPO   # CORPO_ACOPLAMENTO, a opcao D; o Corpo confere
+        if not isinstance(self.cac, ConfigAcoplamentoCorpo):
+            raise TypeError(f"cfg_acoplamento_corpo e uma ConfigAcoplamentoCorpo: {self.cac!r}")
+        if self.cac.ligada and not self.cc.ligada:
+            raise ValueError("ConfigAcoplamentoCorpo.ligada sem o corpo (ConfigCorpo.ligada)")
+        self.cdgc = cfg_digestao_corpo or CONFIG_DIGESTAO_CORPO          # CORPO, a opcao E; o Corpo confere
+        if not isinstance(self.cdgc, ConfigDigestaoCorpo):
+            raise TypeError(f"cfg_digestao_corpo e uma ConfigDigestaoCorpo: {self.cdgc!r}")
+        if self.cdgc.inteira and not self.cc.ligada:
+            raise ValueError("ConfigDigestaoCorpo.inteira sem o corpo (ConfigCorpo.ligada)")
         self.ctl = cfg_tela or CONFIG_TELA
         if not isinstance(self.ctl, ConfigTela):
             raise TypeError(f"cfg_tela e uma ConfigTela: {self.ctl!r}")
@@ -194,12 +206,14 @@ class MotorCorpo:
         self._cfg_evo = treino.cfg_evo if treino is not None else None
         if self._orgaos_ligados():                    # os orgaos: so com o mundo fisico (conferido acima)
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=True, cfg_olfato=self.co,
-                                         cfg_ouvido=self.cv, cfg_luta=self.cll, cfg_tela=self.ctl, cfg_enjoo_tela=self.cet)
+                                         cfg_ouvido=self.cv, cfg_luta=self.cll, cfg_tela=self.ctl, cfg_enjoo_tela=self.cet,
+                                         cfg_acoplamento=self.cac, cfg_digestao=self.cdgc)
         elif self.cc.drives_novos or self.cc.paladar:  # etapa 6: a curiosidade so existe com o mundo fisico (CD-8); o paladar exige o mundo
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=self._mundo_ligado(),
-                                         cfg_luta=self.cll, cfg_tela=self.ctl, cfg_enjoo_tela=self.cet)
+                                         cfg_luta=self.cll, cfg_tela=self.ctl, cfg_enjoo_tela=self.cet, cfg_acoplamento=self.cac, cfg_digestao=self.cdgc)
         else:
-            self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, cfg_luta=self.cll, cfg_tela=self.ctl, cfg_enjoo_tela=self.cet)
+            self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, cfg_luta=self.cll, cfg_tela=self.ctl, cfg_enjoo_tela=self.cet,
+                                         cfg_acoplamento=self.cac, cfg_digestao=self.cdgc)
         self._estado = self.corpo.no_estado(self._estado)
         self._estimulos: list[tuple] = []             # os estimulos da decisao em curso (para o `ocorrido`)
         self.consequencias = 0                        # quantas vezes o gancho `consequencia_corpo` foi chamado
@@ -297,7 +311,7 @@ class MotorCorpo:
         antiga = self.cc.taxa_digestao
         cc = replace(self.cc, taxa_digestao=nova)
         corpo = self.corpo
-        grafo = grafo_do_corpo(corpo.cfg, cc, taxas_de(corpo.cfg, cc), corpo.com_mundo, corpo.co, corpo.cv, corpo.ct)
+        grafo = grafo_do_corpo(corpo.cfg, cc, taxas_de(corpo.cfg, cc), corpo.com_mundo, corpo.co, corpo.cv, corpo.ct, corpo.ca)
         if grafo.nomes != corpo.quimicos:             # pragma: no cover - a taxa nao muda os quimicos
             raise RuntimeError("a troca da digestao mudou os quimicos do corpo")
         corpo.cc, corpo.t, corpo.grafo, corpo.relato_grafo = cc, taxas_de(corpo.cfg, cc), grafo, checar(grafo)
