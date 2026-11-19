@@ -1,6 +1,7 @@
 # PLANO DE ANÁLISE V3 — SOCIAL_PAR MD: a medida do M1 e do M2
 
-- **Status:** PROPOSTO. Espera o "aprovado" do Matheus, com as decisões MD-1 a MD-8 da seção 10. **Nenhuma vida rodou.**
+- **Status:** APROVADO pelo Matheus em 2026-11-19 ("Aprovado"), com as decisões MD-1 a MD-8 da seção 10 como DECIDIDAS. Nenhuma vida
+  rodou antes desta aprovação.
 - **Snapshot:** o branch `v3-social-par-m2` (PR #1026, o código do M2), em cima do #1019, do #1018, do #1011 e do #1010. O plano depende
   do código dos dois mecanismos e do orquestrador da S (`experiments/run_v3_social_par_s.py`).
 - **Pedido:** o M1-5 ("Siga para o M2") e as decisões já tomadas: o braço de controle do D-SP-63 ("Aprovado, opção (a)"), a espec do M2
@@ -176,7 +177,7 @@ Nada disso muda a leitura.
   custo das unidades sociais na decisão.
 - **A máquina:** no máximo 4 processos, e uma run de pesquisa por vez (V3-D8), pelo `pre_run`.
 
-## 10. As decisões para o Matheus
+## 10. As decisões (DECIDIDAS pelo Matheus em 2026-11-19, "Aprovado", pela recomendação)
 
 | id | o que decidir | recomendação | custo de errar |
 |---|---|---|---|
