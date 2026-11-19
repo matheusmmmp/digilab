@@ -25,7 +25,7 @@ REL − TRIV = −0,083 [−0,128; −0,038] na taxa por episódio. Qual elo, do
 | V1 | o [PLANO_ANALISE_V3_VALUATION.md](PLANO_ANALISE_V3_VALUATION.md), com o adendo 1 (o braço A fora) | #946 | aprovado |
 | V2 | a ablação, 5 600 vidas na 99xxx, uma vez: [RESULTADO_V3_VALUATION.md](RESULTADO_V3_VALUATION.md) | #949 | **só a R confirmada** (+0,129 [+0,117; +0,141]), marcada como "piora o bem-estar" (privação +0,084, exaustão +0,276) |
 | V3 | o [PLANO_ANALISE_V3_VALUATION_CONSERTO.md](PLANO_ANALISE_V3_VALUATION_CONSERTO.md) e o conserto, 4 800 vidas na 73xxx, uma vez: [RESULTADO_V3_VALUATION_CONSERTO.md](RESULTADO_V3_VALUATION_CONSERTO.md) | #969 | **falha** pela G2 (a exaustão +0,195 no `longe_fixo`, +0,174 nas 12 células); a P, a G1 e a G3 passam |
-| V4 | não rodou: o conserto não passou da V3 | — | — |
+| V4 | reaberta pelo Matheus em 2026-11-18 e rodada em 2026-11-19: 7 200 vidas na 69xxx, uma vez: [RESULTADO_V3_VALUATION_VALIDACAO.md](RESULTADO_V3_VALUATION_VALIDACAO.md) | #1008 e o PR do resultado | **indeterminado:** CON − TRIV = −0,003 [−0,042; +0,036] no `longe_fixo`; a réplica da A1, REL − TRIV = −0,102 |
 | V5 | esta síntese | este PR | — |
 
 ## 4. O que fica
@@ -46,7 +46,7 @@ REL − TRIV = −0,083 [−0,128; −0,038] na taxa por episódio. Qual elo, do
 
 ## 5. O que a frente não demonstra
 
-- nada contra a TRIV depois do conserto, porque a V4 não rodou;
+- um empate do conserto com a TRIV: a V4 saiu "indeterminado", sem precisão para o "≈ 0" (a margem efetiva 0,056);
 - nada sobre o jogo web, porque as runs são do Python;
 - nada sobre outro limiar além do `lambda_sono` e do `urgencia_lambda` de hoje;
 - nada com o sono que segura ligado;

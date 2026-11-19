@@ -229,6 +229,28 @@ export const MIGRACOES: readonly string[] = [
   ) STRICT;
   CREATE INDEX tabelas_dia_conta ON tabelas_dia(conta_id);
   `,
+  /* 7: o mural (MMO7, servidor_web/src/premios/): o recorde de todos os tempos de cada conta na Torre, na Fábrica e no Salão, só do que a
+     conferência de um envio aceito refez (visto_em: a hora do servidor em que o valor foi visto pela primeira vez, o desempate do mural);
+     e as lutas do Salão que o replay de cada pet refez, para juntar a tentativa do Tamer, que tem um pet por estágio. Os títulos, os
+     selos e os enfeites não têm tabela: saem das tabelas congeladas da semana e do dia. Tudo pende da conta */
+  `
+  CREATE TABLE recordes (
+    conta_id  TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    inst      TEXT NOT NULL CHECK (inst IN ('torre', 'fabrica', 'salao')),
+    valor     INTEGER NOT NULL CHECK (valor >= 1),
+    visto_em  INTEGER NOT NULL,
+    envio_id  TEXT NOT NULL,
+    PRIMARY KEY (conta_id, inst)
+  ) STRICT;
+  CREATE INDEX recordes_inst ON recordes(inst, valor DESC, visto_em);
+  CREATE TABLE salao_vistas (
+    conta_id  TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    pet       INTEGER NOT NULL,
+    semente   INTEGER NOT NULL,
+    venceu    INTEGER NOT NULL CHECK (venceu IN (0, 1)),
+    PRIMARY KEY (conta_id, pet, semente)
+  ) STRICT;
+  `,
 ];
 
 export const VERSAO_BANCO = MIGRACOES.length;

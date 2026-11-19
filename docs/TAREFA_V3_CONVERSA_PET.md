@@ -714,3 +714,16 @@ gate.
   `DigiLab — Revisão de escopo/LEVANTAMENTO_ESPERA_VOZ_2026-11-17.md`.
 - **As decisões pendentes:** D-ES-1 a D-ES-3. A D-ES-4 (a saída) fica para depois da medida.
 - **Os desvios:** D-ES-A e D-ES-B, em `docs/registro/2026-11.md`.
+
+## F2 — a medida da espera e o resultado (Gerente das cinco frentes, Claude Code, Opus 5.5, branch `v3-conversa-espera-r1`, 2026-11-18)
+
+- **O resultado:** `docs/RESULTADO_V3_CONVERSA_ESPERA.md`. São 120 turnos por braço, sem erro. O T1 quente tem p50 de 11,88 s no G e de
+  7,97 s no H (o Haiku), e o `gemma2:9b` fica 46 % na CPU da RTX 2060.
+- **O achado:** pela rede, o servidor verifica antes de devolver a fala, e o jogo verifica de novo depois do balão. O resto da espera,
+  depois da geração, é de 4,4 s no G e de 5,1 s no H (D-ES-C).
+- **O código:** a `decomposicao` em `experiments/resumo_espera_f2.py`, com 2 testes novos.
+- **A D-ES-4, DECIDIDA pelo Matheus em 2026-11-18:** a saída (0) primeiro, o balão sem esperar a verificação ("Yes, option (0)").
+- **Os desvios:** D-ES-C e D-ES-D, em `docs/registro/2026-11.md`.
+- **O código da (0):** o pedido com `verificar_na_chamada: false`, atrás da chave `-fala-verif-depois` (desligada por padrão), com 8
+  testes do servidor e 4 do jogo. **A medida de novo:** o T1 quente p50 de 8,60 s no G e de 2,93 s no H (seção 6 do resultado).
+- **A D-ES-5, DECIDIDA pelo Matheus em 2026-11-19:** a chave vem ligada de fábrica ("Sim, ligar"); `"0"` a desliga.

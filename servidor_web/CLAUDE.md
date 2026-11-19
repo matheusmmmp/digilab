@@ -73,6 +73,10 @@ O `servidor/` continua para o jogo local e a pesquisa.
   (`TentativaFabrica.doDia`, a conta pura de `web/app/src/ranking/desafio.ts`), no processo. O segredo do dia nasce no banco, um por dia, e
   é publicado quando o dia congela (a mesma folga da semana); a tabela congela em `tabelas_dia`, com o selo do Top do dia (MMO-11). A
   trava do nível é a da luta ranqueada. Apagar a conta leva a tentativa, as sementes, os envios e as linhas da tabela.
+- **As recompensas e o mural (MMO7, `src/premios/premios.ts`):** o ranking paga prestígio, não Bits (MMO-12). Os recordes da Torre, da
+  Fábrica e do Salão vêm só do que a conferência do envio aceito refaz (a migração 7; o Salão junta as lutas vistas no replay de cada pet);
+  o título da semana, o selo e o enfeite da temporada saem das tabelas congeladas da semana e do dia; o Respeito conferido soma só o título
+  e o selo (o resto é da MMO8). `GET /premios` e `GET /mural` pedem a sessão.
 - **A vida dos testes** é o gabarito `test/gabaritos/vida_101.json`, gravado por `node scripts/gerar_vida_teste.ts` (precisa do
   `node_modules` do `web/app`, porque o roteiro da MMO0 nasce o ovo pelo `src/produto.ts`).
 
