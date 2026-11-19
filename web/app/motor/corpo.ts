@@ -118,6 +118,19 @@ export interface ConfigLutaCorpo { readonly ligada: boolean }
 export const CONFIG_LUTA_CORPO: ConfigLutaCorpo = { ligada: false };
 export const CONFIG_LUTA_CORPO_LIGADA: ConfigLutaCorpo = { ligada: true };
 
+/** CORPO_ACOPLAMENTO, a opcao D (a `ConfigAcoplamentoCorpo` do Python, docs/TAREFA_V3_CORPO_ACOPLAMENTO.md, secao 10; D-CA-2 e D-CA-5):
+ *  ligada, a falta de combustivel sobe a fome em `falta_fome` por tick, e nao o cansaco. Fica fora da ConfigCorpo para o dump dela (os
+ *  gabaritos de paridade) nao mudar, como a ponte da luta. Desligada (o padrao), a ME-1 vale como hoje; nenhum pet do jogo a liga (D-CA-7) */
+export interface ConfigAcoplamentoCorpo { readonly ligada: boolean; readonly falta_fome: number }
+export const CONFIG_ACOPLAMENTO_CORPO: ConfigAcoplamentoCorpo = { ligada: false, falta_fome: 500 };
+export const CONFIG_ACOPLAMENTO_CORPO_LIGADA: ConfigAcoplamentoCorpo = { ligada: true, falta_fome: 500 };
+/** as conferencias do __post_init__ do Python */
+export function conferirConfigAcoplamento(ca: ConfigAcoplamentoCorpo): ConfigAcoplamentoCorpo {
+  if (typeof ca.ligada !== "boolean") throw new Error(`ConfigAcoplamentoCorpo.ligada e bool: ${ca.ligada}`);
+  if (!Number.isInteger(ca.falta_fome) || ca.falta_fome <= 0) throw new Error(`ConfigAcoplamentoCorpo.falta_fome e inteiro positivo: ${ca.falta_fome}`);
+  return ca;
+}
+
 /** os quimicos que o corpo tem com estas chaves: os cinco de hoje, os de cada orgao ligado e os da etapa 6 (a curiosidade so com o
  *  mundo fisico); por ultimo, com a tela (GOSTO_VISUAL, P1f; o orgao do P1b), a adaptacao de cada canal */
 export function quimicosDe(cc: ConfigCorpo, comMundo = false, tela: ConfigTela = CONFIG_TELA): string[] {
@@ -542,7 +555,8 @@ export const RECEPTOR_DE: Readonly<Record<string, string>> = {
 
 /** corpo.grafo_do_corpo: a tabela unica do corpo com estas chaves. Os estimulos de quantidade variavel guardam so o sinal; com a
  *  digestao, a comida entra no estomago (`alimento`) e a reacao da digestao a tira, junto com a fome */
-export function grafoDoCorpo(cc: ConfigCorpo, t: TaxasCorpo, comMundo = false, tela: ConfigTela = CONFIG_TELA): GrafoCorpo {
+export function grafoDoCorpo(cc: ConfigCorpo, t: TaxasCorpo, comMundo = false, tela: ConfigTela = CONFIG_TELA,
+  acoplamento: ConfigAcoplamentoCorpo = CONFIG_ACOPLAMENTO_CORPO): GrafoCorpo {
   const E = cc.escala;
   const nomes = quimicosDe(cc, comMundo, tela);
   const quimicos = nomes.map((n) => {
@@ -596,9 +610,10 @@ export function grafoDoCorpo(cc: ConfigCorpo, t: TaxasCorpo, comMundo = false, t
       variavel: true }));
   }
   if (cc.metabolismo) {
-    // a falta de combustivel sobe o cansaco (ME-1, a unica ponte); um degrau, como o dano pela privacao
-    em.push(emissor("falta_combustivel", "abaixo", 2, [["cansaco", cc.falta_cansaco]], { le: [leitura("combustivel", 1, 1, -1)],
-      limiar: cc.falta_limiar }));
+    // a falta de combustivel sobe o cansaco (ME-1, a unica ponte); um degrau, como o dano pela privacao. Com a ConfigAcoplamentoCorpo
+    // ligada (CORPO_ACOPLAMENTO, D-CA-2), a mesma ponte sobe a fome em vez do cansaco
+    const efeito: [string, number] = acoplamento.ligada ? ["fome", acoplamento.falta_fome] : ["cansaco", cc.falta_cansaco];
+    em.push(emissor("falta_combustivel", "abaixo", 2, [efeito], { le: [leitura("combustivel", 1, 1, -1)], limiar: cc.falta_limiar }));
   }
   // os estimulos (fase 0): os de hoje pelas taxas, os do mundo e os da etapa 6
   for (const [acao, efeitos] of Object.entries(t.dono)) {
@@ -674,6 +689,7 @@ export interface OpcoesCorpo {
   duracoes?: DuracoesEstagio;    // a cfg_evo do Python (so com a Vida)
   comMundo?: boolean;            // o mundo fisico: a curiosidade existe (CD-8)
   lutaCorpo?: ConfigLutaCorpo;   // a ponte da luta (PE3); sem ela, desligada
+  acoplamento?: ConfigAcoplamentoCorpo;   // CORPO_ACOPLAMENTO, a opcao D; sem ela, desligada: a ME-1 de hoje
   tela?: ConfigTela;             // o orgao da tela (GOSTO_VISUAL, P1f); sem ele, desligado: o corpo de hoje
   enjoo?: ConfigEnjooTela;       // o enjoo da imagem (D-GV-ENJOO-CER), so com a tela; sem ele, desligado
 }
@@ -706,6 +722,8 @@ export class Corpo {
   readonly limiares_estagio: number[];
   /** a ponte da luta (PE3): a dor da luta. Mutavel: o pet liga no comeco da vida, pelo evento `pl` do registro (Motor); desligada por padrao */
   luta: ConfigLutaCorpo;
+  /** CORPO_ACOPLAMENTO, a opcao D: a falta de combustivel vira fome (so com o metabolismo) */
+  readonly acoplamento: ConfigAcoplamentoCorpo;
   /** o orgao da tela (P1f; o P1b do Python): a config, os orgaos, o estimulo de cada canal (o ultimo `sentirTela`) e se ele veio neste tick */
   readonly tela: ConfigTela;
   readonly orgaosTela: readonly OrgaoTela[];
@@ -725,6 +743,10 @@ export class Corpo {
     this.comMundo = opcoes.comMundo ?? false;
     this.luta = opcoes.lutaCorpo ?? CONFIG_LUTA_CORPO;
     if (this.luta.ligada && !this.cc.gestos) throw new Error("ConfigLutaCorpo.ligada exige ConfigCorpo.gestos (a dor da luta e o quimico dos gestos)");
+    this.acoplamento = conferirConfigAcoplamento(opcoes.acoplamento ?? CONFIG_ACOPLAMENTO_CORPO);
+    if (this.acoplamento.ligada && !this.cc.metabolismo) {
+      throw new Error("ConfigAcoplamentoCorpo.ligada exige ConfigCorpo.metabolismo (a ponte e a da falta de combustivel)");
+    }
     this.C = this.cc.escala;
     this.S = this.cc.escala_receptor;
     this.t = taxasDe(this.cc);
@@ -732,7 +754,7 @@ export class Corpo {
     this.enjooCfg = conferirConfigEnjooTela(opcoes.enjoo ?? CONFIG_ENJOO_TELA);
     this.enjoo = this.enjooCfg.ligada;
     this.conferirTela();
-    this.grafo = grafoDoCorpo(this.cc, this.t, this.comMundo, this.tela);
+    this.grafo = grafoDoCorpo(this.cc, this.t, this.comMundo, this.tela, this.acoplamento);
     this.relato_grafo = checarGrafo(this.grafo);
     this.quimicos = nomesDoGrafo(this.grafo);
     this.orgaosTela = this.grafo.orgaos ?? [];
