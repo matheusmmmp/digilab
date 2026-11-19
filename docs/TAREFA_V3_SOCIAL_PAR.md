@@ -124,3 +124,9 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
 - **O que mostra:** perto é o estado normal (64 % da vida). F volta sozinho, e P não muda o T\* em 193 de 201 pares. A bola quase nunca é
   chutada, e a CO7 muda 7 de 201.600 decisões (D-SP-40).
 - **O que falta:** o checkpoint S1, a aprovação do Matheus. Depois vem o plano da S1, com a ordem proposta: B1 e depois B2.
+
+## S1, o plano do substrato (2026-11-18, branch `v3-social-par-s1`)
+
+- **O que é:** `docs/PLANO_ANALISE_V3_SOCIAL_PAR_S.md`, PROPOSTO. Tem os braços C, B1 (fora da casa) e B2 (a bola perto), e o G-DET com o
+  `SeguidorPuro` como controle positivo. K = 200 bases independentes, e a faixa 103001…103400 (D-SP-41 a D-SP-44).
+- **O que falta:** o checkpoint S2, a aprovação do Matheus, com as decisões S-1 a S-8. Depois vem o código da S2.
