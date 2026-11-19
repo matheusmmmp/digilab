@@ -1,0 +1,1954 @@
+{
+  "bracos": {
+    "B1": {
+      "g_det": {
+        "classe": "< 0",
+        "dp": 38.00756637882536,
+        "ic95": [
+          -80.38163084990738,
+          -58.77836915009261
+        ],
+        "limiar": -4.0,
+        "margem": 4.0,
+        "media": -69.58,
+        "motivo": null,
+        "n": 50,
+        "n_pares": 50,
+        "p_bilateral": 1.9745556118807966e-17,
+        "passa": true
+      },
+      "leitura": {
+        "A": {
+          "classe": "≈ 0",
+          "texto": "nulo com um instrumento que ve: o pet de hoje nao responde ao parceiro neste substrato"
+        },
+        "B": {
+          "classe": "inconclusivo por premissa",
+          "texto": "a PB-1 falha: o braco nao deu substrato para a bola"
+        }
+      },
+      "pares": 200,
+      "premissas": {
+        "A_conclusivo": true,
+        "B_conclusivo": false,
+        "PA-1": {
+          "fracao": 1.0,
+          "minimo": 0.95,
+          "n_cabe": 200,
+          "n_pares": 200,
+          "passa": true
+        },
+        "PA-2": {
+          "fracao": 1.0,
+          "minimo_fracao": 0.8,
+          "minimo_n": 100,
+          "n_elegiveis": 200,
+          "passa": true
+        },
+        "PA-3": {
+          "fracao": 0.9,
+          "minimo": 0.2,
+          "n_com_contato": 180,
+          "passa": true
+        },
+        "PB-1": {
+          "fracao": 0.0,
+          "minimo_n": 100,
+          "n_elegiveis": 0,
+          "passa": false
+        }
+      },
+      "primarios": {
+        "A": {
+          "classe": "≈ 0",
+          "dp": 6.88168313816252,
+          "ic95": [
+            -1.7745707791823835,
+            0.1445707791823836
+          ],
+          "margem": 4.0,
+          "media": -0.815,
+          "medida": "D_A = T*c_VIVO - T*c_GRAV (o tempo ate o contato, em decisoes; negativo = F e P se tocam mais depressa com P que responde)",
+          "motivo": null,
+          "n": 200,
+          "p_bilateral": 0.09553286501044156
+        },
+        "B": {
+          "classe": "indeterminado",
+          "dp": null,
+          "ic95": [
+            null,
+            null
+          ],
+          "margem": 0.05,
+          "media": null,
+          "medida": "D_B = E_VIVO - E_GRAV (o excesso de alternancia de F para P sobre os substitutos)",
+          "motivo": "menos de 2 valores",
+          "n": 0,
+          "p_bilateral": null
+        }
+      },
+      "riqueza": {
+        "distancia": {
+          "acumulada": {
+            "0": 0.07066666666666667,
+            "1": 0.13220833333333334,
+            "10": 0.8398020833333333,
+            "11": 0.8698958333333333,
+            "12": 0.8929791666666667,
+            "13": 0.9111145833333333,
+            "14": 0.9275625,
+            "15": 0.93953125,
+            "16": 0.9491979166666666,
+            "17": 0.9575,
+            "18": 0.9631354166666667,
+            "19": 0.9679375,
+            "2": 0.209375,
+            "20": 0.97325,
+            "21": 0.9771458333333334,
+            "22": 0.9799166666666667,
+            "23": 0.98225,
+            "24": 0.9848125,
+            "25": 0.9875625,
+            "26": 0.98896875,
+            "27": 0.9904895833333334,
+            "28": 0.992,
+            "29": 0.9932083333333334,
+            "3": 0.3283229166666667,
+            "30": 1.0,
+            "4": 0.44769791666666664,
+            "5": 0.5423125,
+            "6": 0.6242291666666666,
+            "7": 0.6972395833333334,
+            "8": 0.752,
+            "9": 0.8001770833333334
+          },
+          "fracao_contato": {
+            "dp": 0.0370570103063103,
+            "ic95": [
+              0.1270411636831349,
+              0.1373755029835318
+            ],
+            "media": 0.13220833333333334,
+            "motivo": null,
+            "n": 200,
+            "negativos": 0,
+            "positivos": 200
+          },
+          "fracao_dormir": {
+            "A": {
+              "dp": 0.014391350428719325,
+              "ic95": [
+                0.430837043345956,
+                0.4348504566540439
+              ],
+              "media": 0.43284374999999997,
+              "motivo": null,
+              "n": 200,
+              "negativos": 0,
+              "positivos": 200
+            },
+            "B": {
+              "dp": 0.015455321717634644,
+              "ic95": [
+                0.432188684908313,
+                0.43649881509168703
+              ],
+              "media": 0.43434375000000003,
+              "motivo": null,
+              "n": 200,
+              "negativos": 0,
+              "positivos": 200
+            }
+          },
+          "fracao_perto": {
+            "dp": 0.06607460281540743,
+            "ic95": [
+              0.6150158307959488,
+              0.6334425025373844
+            ],
+            "media": 0.6242291666666666,
+            "motivo": null,
+            "n": 200,
+            "negativos": 0,
+            "positivos": 200
+          }
+        },
+        "fecha_a_distancia": null,
+        "juntos": {
+          "mesma_acao": {
+            "brincar": {
+              "esperado": 79.92923077303136,
+              "observado": 107,
+              "razao": 1.3386842205930811
+            },
+            "chamar_atencao": {
+              "esperado": 864.9985107579791,
+              "observado": 1266,
+              "razao": 1.4635863348373075
+            },
+            "comer": {
+              "esperado": 186.61692550737757,
+              "observado": 397,
+              "razao": 2.127352590986209
+            },
+            "dormir": {
+              "esperado": 11326.728100654274,
+              "observado": 11625,
+              "razao": 1.0263334562898616
+            },
+            "emburrar": {
+              "esperado": 90.20822471695288,
+              "observado": 183,
+              "razao": 2.0286398560020515
+            },
+            "explorar": {
+              "esperado": 5551.810927486045,
+              "observado": 6126,
+              "razao": 1.1034237440744326
+            },
+            "ocioso": {
+              "esperado": 13.441340458844401,
+              "observado": 136,
+              "razao": 10.118038481088544
+            }
+          },
+          "passos_perto": 59646
+        },
+        "mundo": {
+          "brincar_por_vida": {
+            "A": 15.45,
+            "B": 15.79
+          },
+          "chutes_total": {
+            "A": 54,
+            "B": 47
+          },
+          "comer_junto_em_contato_por_vida": 1.725,
+          "comeu_por_vida": {
+            "A": 18.82,
+            "B": 19.01
+          },
+          "contatos": {
+            "disputa_ganhou|disputa_perdeu": 6,
+            "disputa_perdeu|disputa_ganhou": 5,
+            "esbarrou|esbarrou": 12699
+          },
+          "contatos_por_vida": 63.55,
+          "disputas": {
+            "exemplos": [
+              {
+                "comida": 15,
+                "contato": true,
+                "d_perdedor": 30,
+                "d_vencedor": 61,
+                "par": "B1-103030-0000",
+                "perdedor": "B",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 2235,
+                "tipo": "racao",
+                "vencedor": "A",
+                "vencedor_primeiro": true
+              },
+              {
+                "comida": 3,
+                "contato": true,
+                "d_perdedor": 17,
+                "d_vencedor": 0,
+                "par": "B1-103032-0000",
+                "perdedor": "A",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 495,
+                "tipo": "racao",
+                "vencedor": "B",
+                "vencedor_primeiro": true
+              },
+              {
+                "comida": 1,
+                "contato": false,
+                "d_perdedor": 23,
+                "d_vencedor": 37,
+                "par": "B1-103045-0000",
+                "perdedor": "A",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 390,
+                "tipo": "racao",
+                "vencedor": "B",
+                "vencedor_primeiro": false
+              },
+              {
+                "comida": 2,
+                "contato": true,
+                "d_perdedor": 33,
+                "d_vencedor": 0,
+                "par": "B1-103050-0000",
+                "perdedor": "B",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 420,
+                "tipo": "racao",
+                "vencedor": "A",
+                "vencedor_primeiro": false
+              },
+              {
+                "comida": 2,
+                "contato": true,
+                "d_perdedor": 17,
+                "d_vencedor": 20,
+                "par": "B1-103060-0000",
+                "perdedor": "B",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 1575,
+                "tipo": "racao",
+                "vencedor": "A",
+                "vencedor_primeiro": true
+              },
+              {
+                "comida": 35,
+                "contato": false,
+                "d_perdedor": 24,
+                "d_vencedor": 67,
+                "par": "B1-103071-0000",
+                "perdedor": "B",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 4770,
+                "tipo": "racao",
+                "vencedor": "A",
+                "vencedor_primeiro": false
+              },
+              {
+                "comida": 3,
+                "contato": true,
+                "d_perdedor": 26,
+                "d_vencedor": 0,
+                "par": "B1-103085-0000",
+                "perdedor": "A",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 435,
+                "tipo": "racao",
+                "vencedor": "B",
+                "vencedor_primeiro": true
+              },
+              {
+                "comida": 44,
+                "contato": false,
+                "d_perdedor": 86,
+                "d_vencedor": 0,
+                "par": "B1-103085-0000",
+                "perdedor": "B",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 6120,
+                "tipo": "racao",
+                "vencedor": "A",
+                "vencedor_primeiro": false
+              }
+            ],
+            "pares_com": 14,
+            "total": 15
+          },
+          "viu_o_outro_comer_por_vida": {
+            "A": 14.13,
+            "B": 13.92
+          }
+        },
+        "presenca": {
+          "F": {
+            "acoes": {
+              "brincar": {
+                "dp": 0.017765874995150192,
+                "fracao_longe": 0.02492595028839057,
+                "fracao_perto": 0.036635036029435054,
+                "ic95": [
+                  0.009231840833121417,
+                  0.01418633064896754
+                ],
+                "media": 0.011709085741044479,
+                "motivo": null,
+                "n": 200,
+                "negativos": 43,
+                "positivos": 157
+              },
+              "chamar_atencao": {
+                "dp": 0.047209191984036086,
+                "fracao_longe": 0.18172029475136442,
+                "fracao_perto": 0.11862077145591204,
+                "ic95": [
+                  -0.0696822967575836,
+                  -0.056516749833321125
+                ],
+                "media": -0.06309952329545236,
+                "motivo": null,
+                "n": 200,
+                "negativos": 180,
+                "positivos": 20
+              },
+              "comer": {
+                "dp": 0.023558926302968294,
+                "fracao_longe": 0.0396885627039899,
+                "fracao_perto": 0.05508688677478001,
+                "ic95": [
+                  0.012113305447384598,
+                  0.018683342694195644
+                ],
+                "media": 0.01539832407079012,
+                "motivo": null,
+                "n": 200,
+                "negativos": 50,
+                "positivos": 150
+              },
+              "dormir": {
+                "dp": 0.04236115449982022,
+                "fracao_longe": 0.4351700924153586,
+                "fracao_perto": 0.4334716297008884,
+                "ic95": [
+                  -0.0076052336619787785,
+                  0.004208308233038315
+                ],
+                "media": -0.0016984627144702319,
+                "motivo": null,
+                "n": 200,
+                "negativos": 106,
+                "positivos": 94
+              },
+              "emburrar": {
+                "dp": 0.023442892113614368,
+                "fracao_longe": 0.023318647347118242,
+                "fracao_perto": 0.036930418439417474,
+                "ic95": [
+                  0.010342932088799878,
+                  0.01688061009579859
+                ],
+                "media": 0.013611771092299234,
+                "motivo": null,
+                "n": 200,
+                "negativos": 48,
+                "positivos": 135
+              },
+              "explorar": {
+                "dp": 0.04951660252083459,
+                "fracao_longe": 0.28301930009820864,
+                "fracao_perto": 0.305146869304211,
+                "ic95": [
+                  0.015223054146323467,
+                  0.02903208426568131
+                ],
+                "media": 0.02212756920600239,
+                "motivo": null,
+                "n": 200,
+                "negativos": 61,
+                "positivos": 139
+              },
+              "ocioso": {
+                "dp": 0.01595327539613717,
+                "fracao_longe": 0.012157152395569663,
+                "fracao_perto": 0.01410838829535604,
+                "ic95": [
+                  -0.0002732630483692001,
+                  0.004175734847941952
+                ],
+                "media": 0.0019512358997863762,
+                "motivo": null,
+                "n": 200,
+                "negativos": 91,
+                "positivos": 109
+              }
+            },
+            "pares_usados": 200
+          },
+          "P": {
+            "acoes": {
+              "brincar": {
+                "dp": 0.01871654105608996,
+                "fracao_longe": 0.02660513640646443,
+                "fracao_perto": 0.03676624039099818,
+                "ic95": [
+                  0.0075512997369079566,
+                  0.012770908232159536
+                ],
+                "media": 0.010161103984533746,
+                "motivo": null,
+                "n": 200,
+                "negativos": 63,
+                "positivos": 136
+              },
+              "chamar_atencao": {
+                "dp": 0.04629108909979712,
+                "fracao_longe": 0.17328883409371565,
+                "fracao_perto": 0.11597442449576559,
+                "ic95": [
+                  -0.06376916427713075,
+                  -0.050859654918769356
+                ],
+                "media": -0.057314409597950054,
+                "motivo": null,
+                "n": 200,
+                "negativos": 179,
+                "positivos": 21
+              },
+              "comer": {
+                "dp": 0.026189061540214626,
+                "fracao_longe": 0.041670559691350466,
+                "fracao_perto": 0.055318847712714475,
+                "ic95": [
+                  0.009996527589553545,
+                  0.01730004845317447
+                ],
+                "media": 0.013648288021364008,
+                "motivo": null,
+                "n": 200,
+                "negativos": 59,
+                "positivos": 141
+              },
+              "dormir": {
+                "dp": 0.045084003215598405,
+                "fracao_longe": 0.4315354470673735,
+                "fracao_perto": 0.43761290561440835,
+                "ic95": [
+                  -0.00020898202654320071,
+                  0.012363899120612917
+                ],
+                "media": 0.0060774585470348575,
+                "motivo": null,
+                "n": 200,
+                "negativos": 85,
+                "positivos": 115
+              },
+              "emburrar": {
+                "dp": 0.02467594744259706,
+                "fracao_longe": 0.02295377313285397,
+                "fracao_perto": 0.036607226681068306,
+                "ic95": [
+                  0.010212679301686216,
+                  0.017094227794742452
+                ],
+                "media": 0.013653453548214334,
+                "motivo": null,
+                "n": 200,
+                "negativos": 55,
+                "positivos": 131
+              },
+              "explorar": {
+                "dp": 0.05058045052485374,
+                "fracao_longe": 0.2925594952418119,
+                "fracao_perto": 0.303557539043763,
+                "ic95": [
+                  0.003945187495275884,
+                  0.018050900108626283
+                ],
+                "media": 0.010998043801951083,
+                "motivo": null,
+                "n": 200,
+                "negativos": 86,
+                "positivos": 114
+              },
+              "ocioso": {
+                "dp": 0.015636524537797142,
+                "fracao_longe": 0.011386754366430087,
+                "fracao_perto": 0.014162816061282115,
+                "ic95": [
+                  0.0005957299746611471,
+                  0.004956393415042908
+                ],
+                "media": 0.0027760616948520273,
+                "motivo": null,
+                "n": 200,
+                "negativos": 83,
+                "positivos": 115
+              }
+            },
+            "pares_usados": 200
+          }
+        }
+      },
+      "secundarios": {
+        "S1_GRAV_menos_OUTRA": {
+          "classe": "inclui 0",
+          "dp": 43.81445001538595,
+          "fora": 0,
+          "holm": {
+            "limiar": 0.05,
+            "ordem": 3,
+            "p": 0.3758131624890998,
+            "p_ajustado": 0.4335772287780135,
+            "rejeita": false
+          },
+          "ic95": [
+            -8.859416126348624,
+            3.3594161263486226
+          ],
+          "media": -2.75,
+          "motivo": null,
+          "n": 200,
+          "p_bilateral": 0.3758131624890998
+        },
+        "S2_fracao_perto": {
+          "classe": "inclui 0",
+          "dp": 0.05032782674793633,
+          "fora": 0,
+          "holm": {
+            "limiar": 0.016666666666666666,
+            "ordem": 1,
+            "p": 0.10275810102401939,
+            "p_ajustado": 0.30827430307205816,
+            "rejeita": false
+          },
+          "ic95": [
+            -0.0011842975220111652,
+            0.012850964188677833
+          ],
+          "media": 0.0058333333333333345,
+          "motivo": null,
+          "n": 200,
+          "p_bilateral": 0.10275810102401939
+        },
+        "S3_contingencia_FP": {
+          "classe": "inclui 0",
+          "dp": 0.08397884231311567,
+          "fora": 0,
+          "holm": {
+            "limiar": 0.025,
+            "ordem": 2,
+            "p": 0.21678861438900676,
+            "p_ajustado": 0.4335772287780135,
+            "rejeita": false
+          },
+          "ic95": [
+            -0.004352182105270022,
+            0.0190675660974197
+          ],
+          "media": 0.007357691996074838,
+          "motivo": null,
+          "n": 200,
+          "p_bilateral": 0.21678861438900676
+        }
+      },
+      "substrato": {
+        "chutes_na_janela_VIVO": {
+          "A": 0.24,
+          "B": 0.19
+        },
+        "chutes_por_dia_VIVO": {
+          "A": 0.054000000000000006,
+          "B": 0.047
+        },
+        "contato_fora_da_casa_VIVO": 0.42777777777777776,
+        "desvios_P_janela_GRAV": 1.455,
+        "distancia_no_t0_media": 4.745,
+        "t_contato_GRAV_media": 52.15,
+        "t_contato_VIVO_media": 51.335,
+        "t_perto_GRAV_media": 0.0
+      }
+    },
+    "B2": {
+      "g_det": {
+        "classe": "< 0",
+        "dp": 20.077591834618786,
+        "ic95": [
+          -21.889406692745695,
+          -10.35549126643798
+        ],
+        "limiar": -4.0,
+        "margem": 4.0,
+        "media": -16.122448979591837,
+        "motivo": null,
+        "n": 49,
+        "n_pares": 50,
+        "p_bilateral": 9.456048322145985e-07,
+        "passa": true
+      },
+      "leitura": {
+        "A": {
+          "classe": "≈ 0",
+          "texto": "nulo com um instrumento que ve: o pet de hoje nao responde ao parceiro neste substrato"
+        },
+        "B": {
+          "classe": "inconclusivo por premissa",
+          "texto": "a PB-1 falha: o braco nao deu substrato para a bola"
+        }
+      },
+      "pares": 200,
+      "premissas": {
+        "A_conclusivo": true,
+        "B_conclusivo": false,
+        "PA-1": {
+          "fracao": 1.0,
+          "minimo": 0.95,
+          "n_cabe": 200,
+          "n_pares": 200,
+          "passa": true
+        },
+        "PA-2": {
+          "fracao": 1.0,
+          "minimo_fracao": 0.8,
+          "minimo_n": 100,
+          "n_elegiveis": 200,
+          "passa": true
+        },
+        "PA-3": {
+          "fracao": 1.0,
+          "minimo": 0.2,
+          "n_com_contato": 200,
+          "passa": true
+        },
+        "PB-1": {
+          "fracao": 0.065,
+          "minimo_n": 100,
+          "n_elegiveis": 13,
+          "passa": false
+        }
+      },
+      "primarios": {
+        "A": {
+          "classe": "≈ 0",
+          "dp": 9.823564122063921,
+          "ic95": [
+            -0.8797819108646043,
+            1.8597819108646043
+          ],
+          "margem": 4.0,
+          "media": 0.49,
+          "medida": "D_A = T*c_VIVO - T*c_GRAV (o tempo ate o contato, em decisoes; negativo = F e P se tocam mais depressa com P que responde)",
+          "motivo": null,
+          "n": 200,
+          "p_bilateral": 0.48137962575743665
+        },
+        "B": {
+          "classe": "indeterminado",
+          "dp": 0.2265691639587157,
+          "ic95": [
+            -0.017066322326059383,
+            0.2567624286888324
+          ],
+          "margem": 0.05,
+          "media": 0.11984805318138651,
+          "medida": "D_B = E_VIVO - E_GRAV (o excesso de alternancia de F para P sobre os substitutos)",
+          "motivo": null,
+          "n": 13,
+          "p_bilateral": 0.08070850450027815
+        }
+      },
+      "riqueza": {
+        "distancia": {
+          "acumulada": {
+            "0": 0.050791666666666666,
+            "1": 0.11739583333333334,
+            "10": 0.86975,
+            "11": 0.898875,
+            "12": 0.9225104166666667,
+            "13": 0.940875,
+            "14": 0.95615625,
+            "15": 0.9677291666666666,
+            "16": 0.9760416666666667,
+            "17": 0.9829166666666667,
+            "18": 0.9880625,
+            "19": 0.9910208333333334,
+            "2": 0.20498958333333334,
+            "20": 0.993875,
+            "21": 0.9958854166666666,
+            "22": 0.9971666666666666,
+            "23": 0.9981666666666666,
+            "24": 0.9986458333333333,
+            "25": 0.99928125,
+            "26": 0.9995104166666666,
+            "27": 0.9996458333333333,
+            "28": 0.99978125,
+            "29": 0.999875,
+            "3": 0.32465625,
+            "30": 1.0,
+            "4": 0.44626041666666666,
+            "5": 0.5487395833333333,
+            "6": 0.6379166666666667,
+            "7": 0.7183125,
+            "8": 0.77628125,
+            "9": 0.82728125
+          },
+          "fracao_contato": {
+            "dp": 0.021895803500115944,
+            "ic95": [
+              0.11434271786672372,
+              0.12044894879994296
+            ],
+            "media": 0.11739583333333334,
+            "motivo": null,
+            "n": 200,
+            "negativos": 0,
+            "positivos": 200
+          },
+          "fracao_dormir": {
+            "A": {
+              "dp": 0.014689042427652439,
+              "ic95": [
+                0.4500872003212234,
+                0.45418363301210984
+              ],
+              "media": 0.4521354166666666,
+              "motivo": null,
+              "n": 200,
+              "negativos": 0,
+              "positivos": 200
+            },
+            "B": {
+              "dp": 0.015121381990177128,
+              "ic95": [
+                0.45131858225775157,
+                0.4555355844089152
+              ],
+              "media": 0.45342708333333337,
+              "motivo": null,
+              "n": 200,
+              "negativos": 0,
+              "positivos": 200
+            }
+          },
+          "fracao_perto": {
+            "dp": 0.0570735435858224,
+            "ic95": [
+              0.629958423953392,
+              0.6458749093799414
+            ],
+            "media": 0.6379166666666667,
+            "motivo": null,
+            "n": 200,
+            "negativos": 0,
+            "positivos": 200
+          }
+        },
+        "fecha_a_distancia": null,
+        "juntos": {
+          "mesma_acao": {
+            "brincar": {
+              "esperado": 50.01876242711407,
+              "observado": 85,
+              "razao": 1.699362316767825
+            },
+            "chamar_atencao": {
+              "esperado": 422.09772513474564,
+              "observado": 776,
+              "razao": 1.8384368211230673
+            },
+            "comer": {
+              "esperado": 262.407507199932,
+              "observado": 422,
+              "razao": 1.6081856975169242
+            },
+            "dormir": {
+              "esperado": 13056.964795419377,
+              "observado": 13358,
+              "razao": 1.023055527015454
+            },
+            "emburrar": {
+              "esperado": 0.4834353397118784,
+              "observado": 1,
+              "razao": 2.068528959004089
+            },
+            "explorar": {
+              "esperado": 7137.930658360727,
+              "observado": 7629,
+              "razao": 1.0687971577678579
+            },
+            "ocioso": {
+              "esperado": 17.07513571868748,
+              "observado": 137,
+              "razao": 8.023362288714553
+            }
+          },
+          "passos_perto": 60993
+        },
+        "mundo": {
+          "brincar_por_vida": {
+            "A": 12.765,
+            "B": 13.43
+          },
+          "chutes_total": {
+            "A": 505,
+            "B": 604
+          },
+          "comer_junto_em_contato_por_vida": 1.875,
+          "comeu_por_vida": {
+            "A": 22.76,
+            "B": 22.94
+          },
+          "contatos": {
+            "disputa_ganhou|disputa_perdeu": 9,
+            "disputa_perdeu|disputa_ganhou": 5,
+            "esbarrou|esbarrou": 11279
+          },
+          "contatos_por_vida": 56.465,
+          "disputas": {
+            "exemplos": [
+              {
+                "comida": 10,
+                "contato": true,
+                "d_perdedor": 84,
+                "d_vencedor": 0,
+                "par": "B2-103006-0000",
+                "perdedor": "B",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 2790,
+                "tipo": "racao",
+                "vencedor": "A",
+                "vencedor_primeiro": false
+              },
+              {
+                "comida": 15,
+                "contato": true,
+                "d_perdedor": 30,
+                "d_vencedor": 61,
+                "par": "B2-103030-0000",
+                "perdedor": "B",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 2235,
+                "tipo": "racao",
+                "vencedor": "A",
+                "vencedor_primeiro": true
+              },
+              {
+                "comida": 3,
+                "contato": true,
+                "d_perdedor": 17,
+                "d_vencedor": 0,
+                "par": "B2-103032-0000",
+                "perdedor": "A",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 495,
+                "tipo": "racao",
+                "vencedor": "B",
+                "vencedor_primeiro": true
+              },
+              {
+                "comida": 1,
+                "contato": false,
+                "d_perdedor": 23,
+                "d_vencedor": 37,
+                "par": "B2-103045-0000",
+                "perdedor": "A",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 390,
+                "tipo": "racao",
+                "vencedor": "B",
+                "vencedor_primeiro": false
+              },
+              {
+                "comida": 2,
+                "contato": true,
+                "d_perdedor": 33,
+                "d_vencedor": 0,
+                "par": "B2-103050-0000",
+                "perdedor": "B",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 420,
+                "tipo": "racao",
+                "vencedor": "A",
+                "vencedor_primeiro": false
+              },
+              {
+                "comida": 65,
+                "contato": true,
+                "d_perdedor": 21,
+                "d_vencedor": 0,
+                "par": "B2-103058-0000",
+                "perdedor": "A",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 6915,
+                "tipo": "racao",
+                "vencedor": "B",
+                "vencedor_primeiro": true
+              },
+              {
+                "comida": 2,
+                "contato": true,
+                "d_perdedor": 17,
+                "d_vencedor": 20,
+                "par": "B2-103060-0000",
+                "perdedor": "B",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 1575,
+                "tipo": "racao",
+                "vencedor": "A",
+                "vencedor_primeiro": true
+              },
+              {
+                "comida": 3,
+                "contato": true,
+                "d_perdedor": 26,
+                "d_vencedor": 0,
+                "par": "B2-103085-0000",
+                "perdedor": "A",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 435,
+                "tipo": "racao",
+                "vencedor": "B",
+                "vencedor_primeiro": true
+              }
+            ],
+            "pares_com": 17,
+            "total": 17
+          },
+          "viu_o_outro_comer_por_vida": {
+            "A": 17.565,
+            "B": 17.535
+          }
+        },
+        "presenca": {
+          "F": {
+            "acoes": {
+              "brincar": {
+                "dp": 0.018728445723199916,
+                "fracao_longe": 0.02356953862516385,
+                "fracao_perto": 0.028222618585628106,
+                "ic95": [
+                  0.002041615745289067,
+                  0.007264544175639447
+                ],
+                "media": 0.004653079960464257,
+                "motivo": null,
+                "n": 200,
+                "negativos": 76,
+                "positivos": 124
+              },
+              "chamar_atencao": {
+                "dp": 0.04318894427708294,
+                "fracao_longe": 0.1765381747091447,
+                "fracao_perto": 0.08370663588599653,
+                "ic95": [
+                  -0.09885373543987454,
+                  -0.08680934220642185
+                ],
+                "media": -0.0928315388231482,
+                "motivo": null,
+                "n": 200,
+                "negativos": 199,
+                "positivos": 1
+              },
+              "comer": {
+                "dp": 0.021085803337762055,
+                "fracao_longe": 0.035237286490539935,
+                "fracao_perto": 0.06591569825305743,
+                "ic95": [
+                  0.027738241409962526,
+                  0.03361858211507245
+                ],
+                "media": 0.03067841176251749,
+                "motivo": null,
+                "n": 200,
+                "negativos": 18,
+                "positivos": 182
+              },
+              "dormir": {
+                "dp": 0.046968199608196634,
+                "fracao_longe": 0.43684409708575567,
+                "fracao_perto": 0.46243175766499595,
+                "ic95": [
+                  0.01903849070466441,
+                  0.032136830453816226
+                ],
+                "media": 0.025587660579240317,
+                "motivo": null,
+                "n": 200,
+                "negativos": 56,
+                "positivos": 144
+              },
+              "emburrar": {
+                "dp": 0.007302055744284511,
+                "fracao_longe": 0.0025648576410134205,
+                "fracao_perto": 0.0034883385206862768,
+                "ic95": [
+                  -9.470597658033444e-05,
+                  0.0019416677359260469
+                ],
+                "media": 0.0009234808796728562,
+                "motivo": null,
+                "n": 200,
+                "negativos": 38,
+                "positivos": 59
+              },
+              "explorar": {
+                "dp": 0.04954249222300214,
+                "fracao_longe": 0.31215372652707013,
+                "fracao_perto": 0.34028618802379873,
+                "ic95": [
+                  0.021224336418805192,
+                  0.03504058657465206
+                ],
+                "media": 0.028132461496728624,
+                "motivo": null,
+                "n": 200,
+                "negativos": 51,
+                "positivos": 149
+              },
+              "ocioso": {
+                "dp": 0.015675072686862274,
+                "fracao_longe": 0.013092318921312296,
+                "fracao_perto": 0.015948763065836938,
+                "ic95": [
+                  0.0006707373327040217,
+                  0.005042150956345265
+                ],
+                "media": 0.002856444144524643,
+                "motivo": null,
+                "n": 200,
+                "negativos": 90,
+                "positivos": 110
+              }
+            },
+            "pares_usados": 200
+          },
+          "P": {
+            "acoes": {
+              "brincar": {
+                "dp": 0.01840520285384369,
+                "fracao_longe": 0.025385785711540508,
+                "fracao_perto": 0.02971459395023587,
+                "ic95": [
+                  0.0017624164870128933,
+                  0.006895199990377831
+                ],
+                "media": 0.004328808238695362,
+                "motivo": null,
+                "n": 200,
+                "negativos": 85,
+                "positivos": 115
+              },
+              "chamar_atencao": {
+                "dp": 0.04156901983160801,
+                "fracao_longe": 0.16782848055475166,
+                "fracao_perto": 0.07983297916024554,
+                "ic95": [
+                  -0.0937918183636008,
+                  -0.08219918442541148
+                ],
+                "media": -0.08799550139450614,
+                "motivo": null,
+                "n": 200,
+                "negativos": 199,
+                "positivos": 1
+              },
+              "comer": {
+                "dp": 0.020543609507714732,
+                "fracao_longe": 0.03755512044228183,
+                "fracao_perto": 0.06582267867582806,
+                "ic95": [
+                  0.025402990512719714,
+                  0.031132125954372737
+                ],
+                "media": 0.028267558233546226,
+                "motivo": null,
+                "n": 200,
+                "negativos": 19,
+                "positivos": 181
+              },
+              "dormir": {
+                "dp": 0.045363367124751273,
+                "fracao_longe": 0.4368503117723856,
+                "fracao_perto": 0.46204419501110583,
+                "ic95": [
+                  0.018868488612972245,
+                  0.03151927786446832
+                ],
+                "media": 0.025193883238720283,
+                "motivo": null,
+                "n": 200,
+                "negativos": 54,
+                "positivos": 146
+              },
+              "emburrar": {
+                "dp": 0.007867736275565253,
+                "fracao_longe": 0.0022146929589224435,
+                "fracao_perto": 0.0031119804683655216,
+                "ic95": [
+                  -0.00019977692621495275,
+                  0.0019943519451011095
+                ],
+                "media": 0.0008972875094430784,
+                "motivo": null,
+                "n": 200,
+                "negativos": 32,
+                "positivos": 57
+              },
+              "explorar": {
+                "dp": 0.04789567718337912,
+                "fracao_longe": 0.31761083410159097,
+                "fracao_perto": 0.34327589582443324,
+                "ic95": [
+                  0.018986565873555773,
+                  0.032343557572128694
+                ],
+                "media": 0.025665061722842233,
+                "motivo": null,
+                "n": 200,
+                "negativos": 56,
+                "positivos": 144
+              },
+              "ocioso": {
+                "dp": 0.01597635223677392,
+                "fracao_longe": 0.012554774458527046,
+                "fracao_perto": 0.016197676909785998,
+                "ic95": [
+                  0.001415185705726441,
+                  0.005870619196791463
+                ],
+                "media": 0.003642902451258952,
+                "motivo": null,
+                "n": 200,
+                "negativos": 78,
+                "positivos": 121
+              }
+            },
+            "pares_usados": 200
+          }
+        }
+      },
+      "secundarios": {
+        "S1_GRAV_menos_OUTRA": {
+          "classe": "inclui 0",
+          "dp": 24.698169932000017,
+          "fora": 0,
+          "holm": {
+            "limiar": 0.05,
+            "ordem": 3,
+            "p": 0.5753289635370964,
+            "p_ajustado": 0.5753289635370964,
+            "rejeita": false
+          },
+          "ic95": [
+            -4.423872914549248,
+            2.463872914549248
+          ],
+          "media": -0.98,
+          "motivo": null,
+          "n": 200,
+          "p_bilateral": 0.5753289635370964
+        },
+        "S2_fracao_perto": {
+          "classe": "inclui 0",
+          "dp": 0.13499810490170566,
+          "fora": 0,
+          "holm": {
+            "limiar": 0.016666666666666666,
+            "ordem": 1,
+            "p": 0.1810564600365404,
+            "p_ajustado": 0.5431693801096212,
+            "rejeita": false
+          },
+          "ic95": [
+            -0.031636417653271,
+            0.006011417653271003
+          ],
+          "media": -0.0128125,
+          "motivo": null,
+          "n": 200,
+          "p_bilateral": 0.1810564600365404
+        },
+        "S3_contingencia_FP": {
+          "classe": "inclui 0",
+          "dp": 0.15134513614126266,
+          "fora": 0,
+          "holm": {
+            "limiar": 0.025,
+            "ordem": 2,
+            "p": 0.24621876557251732,
+            "p_ajustado": 0.5431693801096212,
+            "rejeita": false
+          },
+          "ic95": [
+            -0.03354950915537469,
+            0.008657133404838351
+          ],
+          "media": -0.012446187875268168,
+          "motivo": null,
+          "n": 200,
+          "p_bilateral": 0.24621876557251732
+        }
+      },
+      "substrato": {
+        "chutes_na_janela_VIVO": {
+          "A": 1.425,
+          "B": 1.77
+        },
+        "chutes_por_dia_VIVO": {
+          "A": 0.505,
+          "B": 0.604
+        },
+        "contato_fora_da_casa_VIVO": 0.02,
+        "desvios_P_janela_GRAV": 3.13,
+        "distancia_no_t0_media": 4.53,
+        "t_contato_GRAV_media": 16.025,
+        "t_contato_VIVO_media": 16.515,
+        "t_perto_GRAV_media": 0.0
+      }
+    },
+    "C": {
+      "g_det": {
+        "classe": "< 0",
+        "dp": 26.88897556253717,
+        "ic95": [
+          -27.78464004164532,
+          -12.337808937946516
+        ],
+        "limiar": -4.0,
+        "margem": 4.0,
+        "media": -20.06122448979592,
+        "motivo": null,
+        "n": 49,
+        "n_pares": 50,
+        "p_bilateral": 3.7628884908295273e-06,
+        "passa": true
+      },
+      "leitura": {
+        "A": {
+          "classe": "≈ 0",
+          "texto": "nulo com um instrumento que ve: o pet de hoje nao responde ao parceiro neste substrato"
+        },
+        "B": {
+          "classe": "inconclusivo por premissa",
+          "texto": "a PB-1 falha: o braco nao deu substrato para a bola"
+        }
+      },
+      "pares": 200,
+      "premissas": {
+        "A_conclusivo": true,
+        "B_conclusivo": false,
+        "PA-1": {
+          "fracao": 1.0,
+          "minimo": 0.95,
+          "n_cabe": 200,
+          "n_pares": 200,
+          "passa": true
+        },
+        "PA-2": {
+          "fracao": 1.0,
+          "minimo_fracao": 0.8,
+          "minimo_n": 100,
+          "n_elegiveis": 200,
+          "passa": true
+        },
+        "PA-3": {
+          "fracao": 1.0,
+          "minimo": 0.2,
+          "n_com_contato": 200,
+          "passa": true
+        },
+        "PB-1": {
+          "fracao": 0.0,
+          "minimo_n": 100,
+          "n_elegiveis": 0,
+          "passa": false
+        }
+      },
+      "primarios": {
+        "A": {
+          "classe": "≈ 0",
+          "dp": 4.296074520001607,
+          "ic95": [
+            -0.45403769060838306,
+            0.7440376906083831
+          ],
+          "margem": 4.0,
+          "media": 0.145,
+          "medida": "D_A = T*c_VIVO - T*c_GRAV (o tempo ate o contato, em decisoes; negativo = F e P se tocam mais depressa com P que responde)",
+          "motivo": null,
+          "n": 200,
+          "p_bilateral": 0.633656857130241
+        },
+        "B": {
+          "classe": "indeterminado",
+          "dp": null,
+          "ic95": [
+            null,
+            null
+          ],
+          "margem": 0.05,
+          "media": null,
+          "medida": "D_B = E_VIVO - E_GRAV (o excesso de alternancia de F para P sobre os substitutos)",
+          "motivo": "menos de 2 valores",
+          "n": 0,
+          "p_bilateral": null
+        }
+      },
+      "riqueza": {
+        "distancia": {
+          "acumulada": {
+            "0": 0.04965625,
+            "1": 0.12003125,
+            "10": 0.8796145833333333,
+            "11": 0.9084895833333333,
+            "12": 0.9318958333333334,
+            "13": 0.9488020833333334,
+            "14": 0.9619583333333334,
+            "15": 0.9722395833333334,
+            "16": 0.9792604166666666,
+            "17": 0.9848645833333334,
+            "18": 0.9889479166666667,
+            "19": 0.99171875,
+            "2": 0.21089583333333334,
+            "20": 0.9946354166666667,
+            "21": 0.9963541666666667,
+            "22": 0.9976979166666666,
+            "23": 0.9984791666666667,
+            "24": 0.9989375,
+            "25": 0.9994791666666667,
+            "26": 0.99978125,
+            "27": 0.9998541666666667,
+            "28": 0.9999166666666667,
+            "29": 0.9999479166666667,
+            "3": 0.3339270833333333,
+            "30": 1.0,
+            "4": 0.45934375,
+            "5": 0.56540625,
+            "6": 0.6520520833333333,
+            "7": 0.73075,
+            "8": 0.7901354166666666,
+            "9": 0.8390208333333333
+          },
+          "fracao_contato": {
+            "dp": 0.02227103463320564,
+            "ic95": [
+              0.11692581291039156,
+              0.12313668708960845
+            ],
+            "media": 0.12003125,
+            "motivo": null,
+            "n": 200,
+            "negativos": 0,
+            "positivos": 200
+          },
+          "fracao_dormir": {
+            "A": {
+              "dp": 0.012485614279272163,
+              "ic95": [
+                0.45413402611585063,
+                0.4576159738841493
+              ],
+              "media": 0.455875,
+              "motivo": null,
+              "n": 200,
+              "negativos": 0,
+              "positivos": 200
+            },
+            "B": {
+              "dp": 0.01444477956637295,
+              "ic95": [
+                0.4562254266066516,
+                0.460253740060015
+              ],
+              "media": 0.4582395833333333,
+              "motivo": null,
+              "n": 200,
+              "negativos": 0,
+              "positivos": 200
+            }
+          },
+          "fracao_perto": {
+            "dp": 0.05599972919935073,
+            "ic95": [
+              0.644243571563323,
+              0.6598605951033436
+            ],
+            "media": 0.6520520833333333,
+            "motivo": null,
+            "n": 200,
+            "negativos": 0,
+            "positivos": 200
+          }
+        },
+        "fecha_a_distancia": null,
+        "juntos": {
+          "mesma_acao": {
+            "brincar": {
+              "esperado": 46.026628853498,
+              "observado": 50,
+              "razao": 1.0863276595631015
+            },
+            "chamar_atencao": {
+              "esperado": 395.67095335222484,
+              "observado": 743,
+              "razao": 1.8778229579531054
+            },
+            "comer": {
+              "esperado": 258.2443414184619,
+              "observado": 422,
+              "razao": 1.6341113136577374
+            },
+            "dormir": {
+              "esperado": 13524.463594771574,
+              "observado": 13727,
+              "razao": 1.0149755592012333
+            },
+            "emburrar": {
+              "esperado": 0.6270264057709658,
+              "observado": 2,
+              "razao": 3.189658332715482
+            },
+            "explorar": {
+              "esperado": 7501.062381232444,
+              "observado": 7936,
+              "razao": 1.0579834690957597
+            },
+            "ocioso": {
+              "esperado": 14.142501180009392,
+              "observado": 136,
+              "razao": 9.616403652292973
+            }
+          },
+          "passos_perto": 62356
+        },
+        "mundo": {
+          "brincar_por_vida": {
+            "A": 11.77,
+            "B": 11.63
+          },
+          "chutes_total": {
+            "A": 0,
+            "B": 0
+          },
+          "comer_junto_em_contato_por_vida": 1.9,
+          "comeu_por_vida": {
+            "A": 22.745,
+            "B": 22.815
+          },
+          "contatos": {
+            "disputa_ganhou|disputa_perdeu": 8,
+            "disputa_perdeu|disputa_ganhou": 8,
+            "esbarrou|esbarrou": 11530
+          },
+          "contatos_por_vida": 57.73,
+          "disputas": {
+            "exemplos": [
+              {
+                "comida": 46,
+                "contato": true,
+                "d_perdedor": 25,
+                "d_vencedor": 26,
+                "par": "C-103014-0000",
+                "perdedor": "B",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 7035,
+                "tipo": "racao",
+                "vencedor": "A",
+                "vencedor_primeiro": true
+              },
+              {
+                "comida": 32,
+                "contato": true,
+                "d_perdedor": 24,
+                "d_vencedor": 27,
+                "par": "C-103027-0000",
+                "perdedor": "B",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 5385,
+                "tipo": "racao",
+                "vencedor": "A",
+                "vencedor_primeiro": true
+              },
+              {
+                "comida": 15,
+                "contato": true,
+                "d_perdedor": 30,
+                "d_vencedor": 61,
+                "par": "C-103030-0000",
+                "perdedor": "B",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 2235,
+                "tipo": "racao",
+                "vencedor": "A",
+                "vencedor_primeiro": true
+              },
+              {
+                "comida": 3,
+                "contato": true,
+                "d_perdedor": 17,
+                "d_vencedor": 0,
+                "par": "C-103032-0000",
+                "perdedor": "A",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 495,
+                "tipo": "racao",
+                "vencedor": "B",
+                "vencedor_primeiro": true
+              },
+              {
+                "comida": 1,
+                "contato": false,
+                "d_perdedor": 23,
+                "d_vencedor": 37,
+                "par": "C-103045-0000",
+                "perdedor": "A",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 390,
+                "tipo": "racao",
+                "vencedor": "B",
+                "vencedor_primeiro": false
+              },
+              {
+                "comida": 62,
+                "contato": true,
+                "d_perdedor": 18,
+                "d_vencedor": 60,
+                "par": "C-103046-0000",
+                "perdedor": "A",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 6795,
+                "tipo": "racao",
+                "vencedor": "B",
+                "vencedor_primeiro": false
+              },
+              {
+                "comida": 2,
+                "contato": true,
+                "d_perdedor": 33,
+                "d_vencedor": 0,
+                "par": "C-103050-0000",
+                "perdedor": "B",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 420,
+                "tipo": "racao",
+                "vencedor": "A",
+                "vencedor_primeiro": false
+              },
+              {
+                "comida": 19,
+                "contato": true,
+                "d_perdedor": 22,
+                "d_vencedor": 34,
+                "par": "C-103053-0000",
+                "perdedor": "B",
+                "perdedor_decidiu": true,
+                "situacao": "madura",
+                "tick": 2355,
+                "tipo": "racao",
+                "vencedor": "A",
+                "vencedor_primeiro": true
+              }
+            ],
+            "pares_com": 19,
+            "total": 19
+          },
+          "viu_o_outro_comer_por_vida": {
+            "A": 17.715,
+            "B": 17.53
+          }
+        },
+        "presenca": {
+          "F": {
+            "acoes": {
+              "brincar": {
+                "dp": 0.015931441403930647,
+                "fracao_longe": 0.019032523680711805,
+                "fracao_perto": 0.027339374053078826,
+                "ic95": [
+                  0.006085395920811133,
+                  0.010528304823922908
+                ],
+                "media": 0.00830685037236702,
+                "motivo": null,
+                "n": 200,
+                "negativos": 59,
+                "positivos": 139
+              },
+              "chamar_atencao": {
+                "dp": 0.04129275470710344,
+                "fracao_longe": 0.16030710085173175,
+                "fracao_perto": 0.07838734275501338,
+                "ic95": [
+                  -0.08767755310316823,
+                  -0.07616196309026853
+                ],
+                "media": -0.08191975809671838,
+                "motivo": null,
+                "n": 200,
+                "negativos": 198,
+                "positivos": 2
+              },
+              "comer": {
+                "dp": 0.021079646169881134,
+                "fracao_longe": 0.03596864839281837,
+                "fracao_perto": 0.06421934997898018,
+                "ic95": [
+                  0.02531138977914904,
+                  0.03119001339317458
+                ],
+                "media": 0.02825070158616181,
+                "motivo": null,
+                "n": 200,
+                "negativos": 22,
+                "positivos": 178
+              },
+              "dormir": {
+                "dp": 0.050784202301944796,
+                "fracao_longe": 0.4424978433618699,
+                "fracao_perto": 0.46458222872360294,
+                "ic95": [
+                  0.015003118236428421,
+                  0.029165652487037536
+                ],
+                "media": 0.02208438536173298,
+                "motivo": null,
+                "n": 200,
+                "negativos": 65,
+                "positivos": 135
+              },
+              "emburrar": {
+                "dp": 0.008732347915232384,
+                "fracao_longe": 0.0025605218325038116,
+                "fracao_perto": 0.005080209939212984,
+                "ic95": [
+                  0.0013020636208267032,
+                  0.003737312592591643
+                ],
+                "media": 0.002519688106709173,
+                "motivo": null,
+                "n": 200,
+                "negativos": 28,
+                "positivos": 72
+              },
+              "explorar": {
+                "dp": 0.05422602955946093,
+                "fracao_longe": 0.3265088758857507,
+                "fracao_perto": 0.34637463927711765,
+                "ic95": [
+                  0.01230457343366819,
+                  0.02742695334906558
+                ],
+                "media": 0.019865763391366885,
+                "motivo": null,
+                "n": 200,
+                "negativos": 69,
+                "positivos": 131
+              },
+              "ocioso": {
+                "dp": 0.01582291878661623,
+                "fracao_longe": 0.013124485994613577,
+                "fracao_perto": 0.014016855272994089,
+                "ic95": [
+                  -0.0013139529547391872,
+                  0.003098691511500211
+                ],
+                "media": 0.0008923692783805117,
+                "motivo": null,
+                "n": 200,
+                "negativos": 98,
+                "positivos": 102
+              }
+            },
+            "pares_usados": 200
+          },
+          "P": {
+            "acoes": {
+              "brincar": {
+                "dp": 0.01603854262649245,
+                "fracao_longe": 0.01906490796675992,
+                "fracao_perto": 0.027259775999496676,
+                "ic95": [
+                  0.005958479559732673,
+                  0.010431256505740841
+                ],
+                "media": 0.008194868032736757,
+                "motivo": null,
+                "n": 200,
+                "negativos": 56,
+                "positivos": 143
+              },
+              "chamar_atencao": {
+                "dp": 0.04305951838694903,
+                "fracao_longe": 0.15991134384602795,
+                "fracao_perto": 0.07711374142581687,
+                "ic95": [
+                  -0.08880175209990926,
+                  -0.07679345274051291
+                ],
+                "media": -0.08279760242021109,
+                "motivo": null,
+                "n": 200,
+                "negativos": 198,
+                "positivos": 2
+              },
+              "comer": {
+                "dp": 0.02229482729653958,
+                "fracao_longe": 0.037032504719826165,
+                "fracao_perto": 0.06513122420242523,
+                "ic95": [
+                  0.02498996478245321,
+                  0.0312074741827449
+                ],
+                "media": 0.028098719482599056,
+                "motivo": null,
+                "n": 200,
+                "negativos": 22,
+                "positivos": 178
+              },
+              "dormir": {
+                "dp": 0.04614042839866102,
+                "fracao_longe": 0.44313738248772105,
+                "fracao_perto": 0.4663485168187153,
+                "ic95": [
+                  0.01677738753658231,
+                  0.02964488112540628
+                ],
+                "media": 0.023211134330994296,
+                "motivo": null,
+                "n": 200,
+                "negativos": 66,
+                "positivos": 134
+              },
+              "emburrar": {
+                "dp": 0.006095550504321091,
+                "fracao_longe": 0.0025249040917349336,
+                "fracao_perto": 0.003006610830414132,
+                "ic95": [
+                  -0.0003682469760654671,
+                  0.0013316604534238637
+                ],
+                "media": 0.00048170673867919825,
+                "motivo": null,
+                "n": 200,
+                "negativos": 26,
+                "positivos": 55
+              },
+              "explorar": {
+                "dp": 0.048460494835588536,
+                "fracao_longe": 0.32603337041287456,
+                "fracao_perto": 0.3469045305699508,
+                "ic95": [
+                  0.014113907046848666,
+                  0.027628413267303878
+                ],
+                "media": 0.020871160157076272,
+                "motivo": null,
+                "n": 200,
+                "negativos": 72,
+                "positivos": 128
+              },
+              "ocioso": {
+                "dp": 0.015609866306022471,
+                "fracao_longe": 0.012295586475055457,
+                "fracao_perto": 0.014235600153180969,
+                "ic95": [
+                  -0.00023660086129402525,
+                  0.004116628217545052
+                ],
+                "media": 0.0019400136781255132,
+                "motivo": null,
+                "n": 200,
+                "negativos": 81,
+                "positivos": 117
+              }
+            },
+            "pares_usados": 200
+          }
+        }
+      },
+      "secundarios": {
+        "S1_GRAV_menos_OUTRA": {
+          "classe": "inclui 0",
+          "dp": 23.69983514562176,
+          "fora": 0,
+          "holm": {
+            "limiar": 0.016666666666666666,
+            "ordem": 1,
+            "p": 0.30737411869161146,
+            "p_ajustado": 0.9221223560748344,
+            "rejeita": false
+          },
+          "ic95": [
+            -5.019666724781892,
+            1.5896667247818919
+          ],
+          "media": -1.715,
+          "motivo": null,
+          "n": 200,
+          "p_bilateral": 0.30737411869161146
+        },
+        "S2_fracao_perto": {
+          "classe": "inclui 0",
+          "dp": 0.1024183128821047,
+          "fora": 0,
+          "holm": {
+            "limiar": 0.025,
+            "ordem": 2,
+            "p": 0.6717946108385869,
+            "p_ajustado": 1.0,
+            "rejeita": false
+          },
+          "ic95": [
+            -0.017353960754533156,
+            0.011208127421199822
+          ],
+          "media": -0.003072916666666668,
+          "motivo": null,
+          "n": 200,
+          "p_bilateral": 0.6717946108385869
+        },
+        "S3_contingencia_FP": {
+          "classe": "inclui 0",
+          "dp": 0.11712081987241996,
+          "fora": 0,
+          "holm": {
+            "limiar": 0.05,
+            "ordem": 3,
+            "p": 0.9532841685282678,
+            "p_ajustado": 1.0,
+            "rejeita": false
+          },
+          "ic95": [
+            -0.016816917155632473,
+            0.01584535866471741
+          ],
+          "media": -0.00048577924545753075,
+          "motivo": null,
+          "n": 200,
+          "p_bilateral": 0.9532841685282678
+        }
+      },
+      "substrato": {
+        "chutes_na_janela_VIVO": {
+          "A": 0.0,
+          "B": 0.0
+        },
+        "chutes_por_dia_VIVO": {
+          "A": 0.0,
+          "B": 0.0
+        },
+        "contato_fora_da_casa_VIVO": 0.005025125628140704,
+        "desvios_P_janela_GRAV": 2.07,
+        "distancia_no_t0_media": 4.53,
+        "t_contato_GRAV_media": 16.615,
+        "t_contato_VIVO_media": 16.76,
+        "t_perto_GRAV_media": 0.0
+      }
+    }
+  },
+  "conjunto": {
+    "classes_A": {
+      "B1": "≈ 0",
+      "B2": "≈ 0",
+      "C": "≈ 0"
+    },
+    "texto": "o social nao existe no pet de hoje, mesmo num substrato que o deixa ver: o proximo passo e mecanismo (M1-M4)"
+  },
+  "fase": "social_par_s",
+  "modo": "run",
+  "pares": 750,
+  "plano": "docs/PLANO_ANALISE_V3_SOCIAL_PAR_S.md"
+}

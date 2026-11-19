@@ -147,3 +147,14 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
 - **O risco:** o `SeguidorPuro` perde F de vista quando F anda para casa, e o G-DET pode falhar (D-SP-50).
 - **O que falta:** o checkpoint S3, a aprovação do substrato antes do merge. Depois vem a run da S3.
 - **O checkpoint S3 (2026-11-18):** "Aprovado, rodar como está" (D-SP-51). A run vem depois do merge da cadeia.
+
+## S3: a run (2026-11-19)
+
+- **A run:** rodou no e9f4368e, com 750 pares, das 00:52 às 01:14. Os artefatos estão em `artifacts_v3_social_par_s/run/`, e o resultado
+  em `docs/RESULTADO_V3_SOCIAL_PAR_S.md`.
+- **O resultado:**
+  - o G-DET passa no C, no B1 e no B2;
+  - o D_A dá ≈ 0 nos três;
+  - o B é inconclusivo por premissa nos três.
+- **A leitura:** o social não existe no pet de hoje, e o próximo passo é mecanismo (D-SP-52 a D-SP-54).
+- **O que falta:** o "aprovado" do resultado. Depois vem a S4, com a síntese e a espec do M1.
