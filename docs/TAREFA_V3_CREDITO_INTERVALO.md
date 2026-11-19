@@ -1,6 +1,7 @@
 # TAREFA V3 — CREDITO_INTERVALO (2026-11-19)
 
-Coordenador: o Gerente da V3. Worker: a definir. Worktree e branch: `v3-credito-intervalo`. Status: ABERTA; nenhuma etapa começada.
+Coordenador: o Gerente da V3. Worker: a definir (o do R2). Worktree e branch: `v3-credito-intervalo`. Status: ABERTA; o R1 corre na
+PET_VIVO (D-CI-4), e o R2 espera o resultado dele.
 
 Categoria: implementacao. Origem: Matheus, 2026-11-19: "Sim, escreva", a tarefa do R1 (o rastro da cadeia) e do R2 (o crédito do
 intervalo com o ELOGIO), pela INT-1 da análise da cadeia ([integracao_cadeia_digibrain.md](futuro/integracao_cadeia_digibrain.md),
@@ -45,20 +46,16 @@ A tarefa tem duas etapas, em ordem:
 - as medidas no `metrics.py`;
 - a web só depois da validação.
 
-**R1, o rastro (só leitura, Python e TS).** A análise, seções 3.6 e 7, linha R1.
-- **Arquivos:**
-  - `digilab/digibrain/adapt.py`: o `_fechar` e o registro;
-  - `digilab/digibrain/afeto.py`: uma função `r_intervalo`, só o cálculo;
-  - `digilab/metrics.py`: a fração do corpo que fica fora do r;
-  - `web/app/motor/digibrain/leitura.ts` e `adapt.ts`.
-- **O campo:** `registro["cadeia"] = {id, r_mesmo_tick, r_intervalo, atualizacoes, pesou}`, atrás da subchave `rastro` da
-  `ConfigDigibrain`.
-- **O r do intervalo:** `r_int = div_arred(ganho_r · Σ (falta(pc1_k)² − falta(pc0_{k+1})²), S)`, sobre os mesmos receptores do r.
-  Ele é medido e registrado por canal, e não é creditado.
-- **A medida:** a fração do corpo fora do r, por canal (a fome, a energia, o tédio e os outros), nas vidas da 0b e da C4 por replay.
-  Não precisa de vida nova nem de faixa.
-- **O que ela responde:** quanto o sono, o decaimento e os gestos do dono pesam no intervalo. Sem esse número não se escolhem o K e o λ
-  do R2, e não se sabe se a digestão lenta teria o que ensinar.
+**R1, o rastro: fica na frente PET_VIVO, pelo plano aprovado (D-CI-4).** O R1 não é feito por esta tarefa.
+- **O plano:** o `docs/PLANO_ANALISE_V3_PET_VIVO_R1.md` (PR #1017), APROVADO pelo Matheus em 2026-11-19 ("Aprovo todas", D-RA-7),
+  com as RA-1 a RA-6.
+- **Quem faz:** a sessão da análise da cadeia, que escreveu o plano. O código e o replay seguem a seção 7 dele.
+- **Onde esta tarefa dizia outra coisa, vale o plano:**
+  - **RA-1:** o R1 fica na PET_VIVO, e não aqui;
+  - **RA-2:** a fonte é o HOJE da run do PV-2, e não as vidas da 0b e da C4;
+  - **RA-3:** só o Python agora; o TypeScript e o painel vêm depois da LZ3.
+- **O que esta tarefa recebe dele:** a regra de leitura do plano do R1, que diz se há o que creditar e se a linha de base por contexto
+  apaga o sono (a H-CTX). Esses são os números de entrada do R2.
 
 **R2, o crédito do intervalo, com o ELOGIO.** A análise, seção 3.3.
 - **Arquivos:**
@@ -95,7 +92,7 @@ A tarefa tem duas etapas, em ordem:
 
 ## 4. Experimento e gate (se houver run)
 
-- **O R1 não tem run:** só replay de vidas que já existem, nas sementes delas. Não pede faixa.
+- **O R1 não tem run:** só o replay das vidas do HOJE do PV-2, pelo `PLANO_ANALISE_V3_PET_VIVO_R1.md`. Não pede faixa.
 - **O R2:**
   - **Plano de análise:** `docs/PLANO_ANALISE_V3_CREDITO_INTERVALO.md`, commitado e aprovado antes da primeira vida.
   - **Sementes reservadas:** a calibração do K e do λ, e a validação, uma vez. As faixas são pedidas ao coordenador quando o plano
@@ -112,13 +109,13 @@ A tarefa tem duas etapas, em ordem:
 
 ## 5. Entrega
 
-- **Testes:** `python -m pytest tests/ -q`; em `web/app`: `npm test`, `npm run tipos` e `npm run e2e` (o R1 toca a web, no registro).
+- **Testes:** `python -m pytest tests/ -q`; em `web/app`: `npm test`, `npm run tipos` e `npm run e2e` (o R2 só toca a web depois da validação).
 - **Registro:** uma seção própria no fim do arquivo do mês, `docs/registro/AAAA-MM.md` (rodada de saúde, etapa 2).
   - **Não edite o índice `docs/REGISTRO_DESVIOS.md`:** ele é gerado (`python tools/gerar_indice_desvios.py`) por quem faz o merge.
   - Um conflito nele se resolve rodando o gerador, nunca à mão (`docs/TAREFA_V3_INDICE_DESVIOS.md`).
 - **O resumo da etapa** vai no corpo do PR e numa seção no fim do documento da frente (o `RESULTADO_V3_*.md` da run ou o
   `TAREFA_V3_*.md` da etapa), nunca no `CLAUDE.md` (rodada de saúde, etapa 1).
-- **Um PR por etapa:** o R1; o gabarito e o código do R2; o plano do R2; a run do R2; o resultado. Cada um vai contra a `main`, com o
+- **Um PR por etapa:** o gabarito e o código do R2; o plano do R2; a run do R2; o resultado. Cada um vai contra a `main`, com o
   resumo e os números, cada número com o seu artefato.
 - **Depois do PR:** aviso ao coordenador. O merge é só do Matheus.
 - **O corpo do PR** segue o `.github/pull_request_template.md`; o CI (`tools/verificar_relato.py`) confere os campos e a evidência da
@@ -145,11 +142,7 @@ Fica fora de propósito, e cada item tem dono ou espera esta tarefa (D-CI-1):
 
 ## 7. Critérios de aceitação
 
-- **R1:**
-  - o gabarito de hoje num commit próprio, e o `tests/` conferindo que, com o `rastro` desligado, a vida sai igual byte a byte;
-  - com o `rastro` ligado, a escolha é idêntica decisão a decisão às vidas sem ele (um teste compara as unidades escolhidas);
-  - a paridade do `registro["cadeia"]` no TS, contra um gabarito do Python;
-  - a fração do corpo fora do r, por canal, num artefato em disco, com o script que o produz, nas vidas da 0b e da C4.
+- **R1:** os critérios do `PLANO_ANALISE_V3_PET_VIVO_R1.md`, na PET_VIVO.
 - **R2:**
   - o gabarito de hoje num commit próprio, e o byte a byte com o `traco_intervalo` desligado;
   - a `ConfigElogio` desligada reproduzindo o `elogio_de_hoje.json`;
@@ -160,8 +153,7 @@ Fica fora de propósito, e cada item tem dono ou espera esta tarefa (D-CI-1):
 
 ## 8. Precisa do Matheus
 
-- **Abrir o worker do R1.** A recomendação é um Sonnet, porque o R1 é só leitura e tem escopo claro. Custo de errar: baixo, porque o R1
-  não muda nenhuma decisão do pet e o byte a byte confere.
+- **O R1 não pede worker novo:** ele segue na sessão da análise da cadeia, depois do merge do #1017 (D-CI-4).
 - **Depois do R1, o CHECKPOINT do R2:** seguir para o código do R2 com os números do intervalo na mão, ou parar.
   - A recomendação é seguir só se algum canal tiver uma fração relevante fora do r. O corte é PROPOSTO no PR do R1.
   - Custo de errar: seguir sem um canal relevante gasta uma run num crédito sem sinal; parar com um canal relevante deixa o sono, os
