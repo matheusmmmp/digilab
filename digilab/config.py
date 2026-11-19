@@ -1743,6 +1743,32 @@ CONFIG_ACOPLAMENTO_CORPO_LIGADA = ConfigAcoplamentoCorpo(ligada=True)
 
 
 @dataclass(frozen=True)
+class ConfigDigestaoCorpo:
+    """CORPO, a opcao E (docs/MAPA_CORPO.md, secao 7; docs/PLANO_ANALISE_V3_CORPO.md, secao 2; D-CO-1, Matheus, 2026-11-18). Ligada, a
+    comida que sobra no estomago com a fome em 0 vira combustivel, em vez de ser descartada: a digestao converte a comida inteira, e a fome
+    cai como hoje (o corte de `Corpo._digerir` no que tira da fome nao muda). O excedente vai ao combustivel de uma vez, pela fracao do
+    metabolismo, com o teto C (o que passa conta em `descartado_teto`). Exige o corpo com a digestao e o metabolismo. Desligada (o padrao),
+    a vida sai byte a byte. Fica numa config propria, como a ConfigAcoplamentoCorpo, para nenhum dump de hoje mudar. Status em
+    PARAMETROS_DIGESTAO_CORPO."""
+
+    inteira: bool = False
+
+    def __post_init__(self) -> None:
+        if type(self.inteira) is not bool:
+            raise TypeError(f"ConfigDigestaoCorpo.inteira e bool: {self.inteira!r}")
+
+
+# Status dos campos da ConfigDigestaoCorpo (conferido por teste).
+PARAMETROS_DIGESTAO_CORPO: dict[str, tuple[str, str]] = {
+    "inteira": ("DECIDIDO", "PLANO_ANALISE_V3_CORPO, D-CO-1 (Matheus, 2026-11-18, 'Confirmo, siga'): a opcao E do MAPA_CORPO, atras de "
+                            "chave desligada, so de pesquisa ate a validacao"),
+}
+
+CONFIG_DIGESTAO_CORPO = ConfigDigestaoCorpo()
+CONFIG_DIGESTAO_CORPO_INTEIRA = ConfigDigestaoCorpo(inteira=True)
+
+
+@dataclass(frozen=True)
 class ConfigLutaMemoria:
     """A ponte da luta, o lado da memoria (docs/TAREFA_V3_PONTE_LUTA.md, secoes 3.2 e 3.7; PL-2, PL-6, PL-7 e PL-9; etapa PE2). Ligada, o
     DigiBrain modular recebe o resumo da luta (`receber_luta`, irmao do `receber_acao_dono`), o entrega ao M-SENS na decisao seguinte (a
@@ -3360,20 +3386,36 @@ class ConfigConsertoValuation:
     (tests/gabaritos/valuation_conserto_de_hoje.json). Status em PARAMETROS_CONSERTO_VALUATION."""
 
     guarda_fome_reflexo: bool = False         # PROPOSTO: a chave (so a run da V3 da VALUATION a liga)
+    # CORPO, a opcao C5 (docs/PLANO_ANALISE_V3_CORPO.md, secao 2; D-CO-1 e D-CO-3): o reflexo suave. Ligado, o reflexo do sono deixa de
+    # pular o sorteio: com a energia abaixo de `lambda_sono`, a unidade `dormir` ganha `peso_reflexo_suave` no peso (no sorteio e nas
+    # sondas), e a escolha segue pelo sorteio. O `Arbitragem.reflexo` passa a dar False (nenhum evento de reflexo). O jogo web o espelha
+    # (web/app/motor/digibrain/arb.ts, `ConfigReflexoSuave`), com paridade. Exclusivo com a guarda da fome (uma mudanca por braco)
+    reflexo_suave: bool = False
+    peso_reflexo_suave: int = 1024            # +S no peso do dormir (D-CO-3), SEM FONTE
 
     def __post_init__(self) -> None:
         if type(self.guarda_fome_reflexo) is not bool:
             raise TypeError(f"ConfigConsertoValuation.guarda_fome_reflexo e bool: {self.guarda_fome_reflexo!r}")
+        if type(self.reflexo_suave) is not bool:
+            raise TypeError(f"ConfigConsertoValuation.reflexo_suave e bool: {self.reflexo_suave!r}")
+        if type(self.peso_reflexo_suave) is not int or self.peso_reflexo_suave <= 0:
+            raise ValueError(f"ConfigConsertoValuation.peso_reflexo_suave e inteiro positivo: {self.peso_reflexo_suave!r}")
+        if self.reflexo_suave and self.guarda_fome_reflexo:
+            raise ValueError("ConfigConsertoValuation: o reflexo suave e a guarda da fome sao bracos diferentes, nao juntos")
 
 
 # Status dos campos da ConfigConsertoValuation (conferido por teste). A fome urgente nao tem numero proprio: e o `urgencia_lambda` dos inatos.
 PARAMETROS_CONSERTO_VALUATION: dict[str, tuple[str, str]] = {
     "guarda_fome_reflexo": ("PROPOSTO", "PLANO_ANALISE_V3_VALUATION_CONSERTO, secao 2 (D-VAL-16, APROVADA pelo Matheus em 2026-11-17); a "
                                         "chave, so de pesquisa; SEM FONTE"),
+    "reflexo_suave": ("PROPOSTO", "PLANO_ANALISE_V3_CORPO, D-CO-1 (Matheus, 2026-11-18, 'Confirmo, siga'): a opcao C5 do MAPA_CORPO, "
+                                  "a chave, so de pesquisa ate a validacao (como a guarda); SEM FONTE"),
+    "peso_reflexo_suave": ("PROPOSTO", "PLANO_ANALISE_V3_CORPO, secao 2 (D-CO-3): +S, o maximo de uma ativacao; SEM FONTE"),
 }
 
 CONFIG_CONSERTO_VALUATION = ConfigConsertoValuation()
 CONFIG_CONSERTO_VALUATION_LIGADO = ConfigConsertoValuation(guarda_fome_reflexo=True)
+CONFIG_REFLEXO_SUAVE = ConfigConsertoValuation(reflexo_suave=True)
 
 # Os numeros do modular que o E1 propoe trocar de valor (docs/RESULTADO_V3_EQUILIBRIO_CUIDADO_E1.md, a rodada F2 da grade), nos inatos de hoje
 # (CONFIG_DIGIBRAIN_INATOS fica como esta; no jogo, a v38 e a v39 os usam desde o E3, EQ-6). DECIDIDOS (APROVADOS em 2026-11-12), SEM FONTE.
