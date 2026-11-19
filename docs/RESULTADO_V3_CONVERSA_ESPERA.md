@@ -102,3 +102,45 @@ dela teria de vir com um teste do servidor que confira que, sem a opção, a res
 - O jogador de verdade, outra pausa, outro roteiro, outra GPU: o roteiro é o da calibração da DC5 e a pausa é fixa em 3 s.
 - A fidelidade da fala do H no jogo: isso é da DC5d.
 - O T5 com n útil: só uma espontânea por braço.
+
+## 6. Adendo: a medida de novo com a saída (0) ligada (2026-11-18)
+
+**O código:** o commit `c2230891` (o pedido com `verificar_na_chamada: false` atrás da chave `-fala-verif-depois`, desligada por
+padrão). **A medida:** a mesma da seção 1, com `MEDIR_ESPERA_VERIF_DEPOIS=1`, na máquina livre (nenhuma run e a GPU abaixo de 2,5 GB por
+10 min antes de cada braço), em `artifacts_v3_conversa_espera/G_verif_depois` e `H_verif_depois`. Os 120 turnos de cada braço saíram sem
+erro, todos pela rede.
+
+FATO VERIFICADO (os `resumo.json`; quente, n = 114; em segundos):
+
+| medida | G antes | G com (0) | H antes | H com (0) |
+|---|---|---|---|---|
+| **T1 p50** | 11,88 | **8,60** | 7,97 | **2,93** |
+| T1 p95 | 13,39 | 9,17 | 10,68 | 4,44 |
+| T1 acima de 8 s | 114 / 114 | 69 / 114 | 56 / 114 | 0 / 114 |
+| T1 frio p50 / p95 | 9,99 / 28,40 | 6,96 / 24,02 | 6,98 / 28,66 | 2,68 / 22,72 |
+| T3 p50 (o aviso depois do balão) | 4,09 | 4,30 | 4,58 | 4,65 |
+| a geração (p50) | 7,42 | 7,43 | 1,59 | 1,45 |
+| a trava (p50; turnos com ela) | 0,90 (59) | 1,22 (96) | 1,48 (78) | 1,56 (112) |
+| o resto (p50) | 4,36 | 0,00 | 5,09 | 0,00 |
+
+- **O resto foi a zero nos dois braços.** Isso confirma a leitura da seção 3: o resto era a verificação dentro da chamada.
+- **A estimativa da seção 4** (perto de 8 s no G e de 3 s no H) bateu: 8,60 e 2,93.
+- **O que sobra além da voz é a trava:** a verificação de depois do balão, agora a única, ainda está em curso quando a frase seguinte sai,
+  porque a pausa do roteiro é de 3 s e o T3 é de 4,3 a 4,7 s. Ela aparece em mais turnos que antes (96 e 112 de 114) porque a frase
+  seguinte sai mais cedo. É um efeito da pausa fixa do roteiro: um jogador que leva mais de 4 s para escrever não a encontraria. Isto é
+  uma inferência, e não foi medido com outra pausa.
+- **O frio** continua alto no p95 (24 e 23 s). No G, o primeiro turno esperou 14,2 s na fila da página (o T4 frio), atrás da espontânea
+  do começo, que levou 14,8 s com o modelo frio. O frio tem n = 6 e não dá para ler mais que isso.
+- **O aviso não mudou:** o T3 ficou onde estava, como esperado, porque a verificação de depois do balão é a mesma.
+- **O custo do H com (0):** US$ 0,0476 em 121 chamadas (o acumulado de US$ 0,0953 no `H_verif_depois/gasto_fala_livre_acumulado.json`,
+  menos os US$ 0,0477 da seção 2).
+
+**D-ES-5, DECIDIDA pelo Matheus em 2026-11-19:** a pergunta foi "D-ES-5: a chave da opção (0) passa a vir ligada de fábrica?", e a
+resposta, "Sim, ligar" (no chat da Gerente das cinco frentes). A chave agora vem ligada; `"0"` em `-fala-verif-depois` desliga. A
+medida desta seção foi feita antes, com a chave ligada à mão, e o código não mudou além do padrão.
+
+A pergunta, como foi levada: se a chave passa a vir ligada de fábrica. Hoje não há botão em Ajustes; ela só liga pelo
+`localStorage`.
+- RECOMENDAÇÃO: ligar de fábrica no caminho da rede. O ganho é de 3,3 s no G e de 5,0 s no H, e o aviso chega como antes.
+- O custo de errar: pequeno. O balão sai antes de a fala ser verificada, como já acontece fora da rede. O que se perde é só a
+  verificação de dentro da chamada, que o jogo ignorava. A DC5 não muda, porque o orquestrador não manda o campo.
