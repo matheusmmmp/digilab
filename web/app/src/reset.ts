@@ -11,6 +11,9 @@
    O pet de exemplo e o laboratorio tambem nao resetam. */
 import type { Especie, Motor } from "../motor/index.ts";
 import { nomeForma } from "../motor/index.ts";
+import { aposentar } from "./heranca.ts";
+import { jogoAtual, mudarTamer } from "./jogo.ts";
+import { chocarDoBrasao } from "./jornada.ts";
 import { hashAte } from "./ranking/pedido.ts";
 import { BONUS_RESET, nivelDoReset, type NivelReset } from "./ranking/pontos.ts";
 import { RESET_LIGADO, pagarReset, type BitsGanhos, type ResetPet, type Tamer } from "./tamer.ts";
@@ -38,9 +41,6 @@ export function aplicarReset(t: Tamer, x: Omit<ResetPet, "quando">, quando: numb
     com a chave desligada, com o par, com o pet de exemplo e no laboratorio */
 export async function resetar(esp: Especie): Promise<{ reset: ResetPet; bits: BitsGanhos | null }> {
   if (!RESET_LIGADO) throw new Error("o reset está desligado (RESET_LIGADO): a tela espera a prancha");
-  const { jogoAtual, mudarTamer } = await import("./jogo.ts");
-  const { chocarDoBrasao } = await import("./jornada.ts");
-  const { aposentar } = await import("./heranca.ts");
   const j = jogoAtual();
   if (j.emLab) throw new Error("o pet de teste do laboratório não se aposenta");
   if (j.grupo) throw new Error("o reset dos dois pets ainda não existe (D-CONTA-161)");
@@ -56,7 +56,6 @@ export async function resetar(esp: Especie): Promise<{ reset: ResetPet; bits: Bi
     cruzar, com a copia do pai, so com a chave ligada */
 export async function registrarResetDoCruzamento(pai: Motor): Promise<{ reset: ResetPet; bits: BitsGanhos | null }> {
   if (!RESET_LIGADO) throw new Error("o reset está desligado (RESET_LIGADO)");
-  const { mudarTamer } = await import("./jogo.ts");
   const x = await eventoDoReset(pai, "cruzamento");
   return mudarTamer(t => aplicarReset(t, x));
 }

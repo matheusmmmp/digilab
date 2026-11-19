@@ -8,6 +8,7 @@ import { QUADROS_CHOCANDO, jogoAtual, trocarMotor } from "./jogo.ts";
 import { ligarProduto } from "./produto.ts";
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados } from "./pets.ts";
 import { CHAVE, textoSave } from "./save.ts";
+import { registrarResetDoCruzamento } from "./reset.ts";
 import { RESET_LIGADO } from "./tamer.ts";
 
 export const CHAVE_GERACOES = CHAVE + "-geracoes";
@@ -65,7 +66,7 @@ export function cruzar(i: number): Motor {
   localStorage.setItem(CHAVE_GUARDADOS, JSON.stringify(g));
   trocarMotor(filho, "novo", QUADROS_CHOCANDO);
   /* o cruzamento conta como reset do pai ativo (MMO8, MMO-17), so com a chave do reset ligada: o hash do registro dele e assincrono */
-  if (RESET_LIGADO) void import("./reset.ts").then(r => r.registrarResetDoCruzamento(ativo));
+  if (RESET_LIGADO) void registrarResetDoCruzamento(ativo);
   return filho;
 }
 /** o pet vai para Geracoes (o cruzamento e o reset da MMO8): o save dele, a geracao, o filho (0 no reset) e a hora */
