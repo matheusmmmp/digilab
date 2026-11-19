@@ -18,7 +18,7 @@ import {
   RQ, atualizarHoje, divergiu, enviarRegistro, fecharEstado, fecharResultado, ligarRanqueada, lutaPerdida, ouvirRanqueada, pedirSemente,
   placarDoPet, ranqueadaLigada, registrarPrevia, revisaoRanqueada, temPendente, valorDoRival, type LutaGuardada,
 } from "../../../ranking/ranqueada.ts";
-import { VERSAO_TAMER } from "../../../tamer.ts";
+import { versaoTamerDe } from "../../../tamer.ts";
 import { Retrato, lutarNoPalco } from "./TelaLugaresPoc.tsx";
 import { apiDoBuild } from "../../../conta/apiDoBuild.ts";
 import "../../../estilo/ranqueada.css";
@@ -42,7 +42,7 @@ export function useRanqueadaNaArena(): typeof RQ | null {
 /** o pet e o Tamer como o envio os leva */
 function enviarAgora(): void {
   const m = jogoAtual().motor;
-  void enviarRegistro({ semente: m.semente, versao: m.versao, log: m.log }, { versao: VERSAO_TAMER, log: tamerAtual().log });
+  void enviarRegistro({ semente: m.semente, versao: m.versao, log: m.log }, { versao: versaoTamerDe(tamerAtual().log), log: tamerAtual().log });
 }
 
 const plural = (n: number, um: string, varios: string): string => `${n} ${n === 1 ? um : varios}`;

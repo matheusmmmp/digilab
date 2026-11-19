@@ -166,6 +166,12 @@ As seções acima são cópias inteiras do CLAUDE.md antigo (o G-NADA-PERDIDO co
   sementes das lutas, o envio, a tabela do dia, o fechamento com o selo e o segredo; `/desafio/*`) e a migração 6; os testes
   `web/app/test/mmo6_fabrica_hoje.test.ts` (o gabarito de antes, `test/gabaritos/mmo6_fabrica_hoje.json`, por `test/gerar_gabarito_mmo6.ts`),
   `web/app/test/mmo6_fabrica_do_dia.test.ts` e `servidor_web/test/desafio.test.ts`.
+- **2026-11-19, MMO8, as duas pontuações e o reset (a parte local):** o evento `"reset"` e os Bits do reset no registro do Tamer
+  (`web/app/src/tamer.ts`, versão 11, atrás de `RESET_LIGADO`); a conta pura dos pontos do Digimon, do Respeito e do nível do reset em
+  `web/app/src/ranking/pontos.ts`; o reset do pet em `web/app/src/reset.ts` (com o `aposentar` do `heranca.ts`); o servidor em
+  `servidor_web/src/premios/rankings.ts` (o máximo histórico dos Digimon, os resets, os feitos vistos, o Respeito conferido; `/digimons` e
+  `/tamers`) e a migração 8; os testes `web/app/test/mmo8_tamer_hoje.test.ts` (o gabarito de antes, `test/gabaritos/mmo8_tamer_hoje.json`,
+  por `test/gerar_gabarito_mmo8.ts`), `web/app/test/mmo8_reset.test.ts` e `servidor_web/test/pontuacoes.test.ts`.
 - **2026-11-17, MMO5, a prancha do cais e da semana:** `docs/PLANO_UX_CAIS.md` (APROVADO, UX-CA-1 a 7) e `docs/pranchas/ux-cais/`
   (`gerar.py`, `cais.css`, `capturar.sh`, os HTML e as capturas): a tabela da semana, os estados, a semana fechada, o segredo e o
   cais trancado e destravado.

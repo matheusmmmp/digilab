@@ -8,6 +8,7 @@ import { QUADROS_CHOCANDO, jogoAtual, trocarMotor } from "./jogo.ts";
 import { ligarProduto } from "./produto.ts";
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados } from "./pets.ts";
 import { CHAVE, textoSave } from "./save.ts";
+import { RESET_LIGADO } from "./tamer.ts";
 
 export const CHAVE_GERACOES = CHAVE + "-geracoes";
 
@@ -46,7 +47,7 @@ export function previa(p: Motor, q: Motor): Previa {
   };
 }
 
-/** um pai aposentado (Diario · Geracoes): o registro dele, a geracao e o filho */
+/** um pet aposentado em Geracoes: o save dele, a geracao, o filho (a semente do filho do cruzamento; 0 no reset, MMO8) e a hora */
 export interface Aposentado { semente: number; log: EventoRegistro[]; versao: number; ger: number; filho: number; quando: number }
 export function lerAposentados(): Aposentado[] {
   try { return JSON.parse(localStorage.getItem(CHAVE_GERACOES) || "[]") as Aposentado[]; } catch { return []; }
@@ -60,10 +61,16 @@ export function cruzar(i: number): Motor {
   if (!podeSerPai(ativo) || !podeSerPai(outro)) throw new Error("os dois pais precisam ser adultos e vivos");
   const s = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
   const filho = ligarProduto(Motor.cruzar(ativo, outro, s, hashSemente("heranca", s), "dono", [geracao(ativo), geracao(outro)]));
-  const ap = lerAposentados();
-  ap.push({ ...JSON.parse(textoSave(ativo)), ger: geracao(ativo), filho: s, quando: Date.now() });
-  localStorage.setItem(CHAVE_GERACOES, JSON.stringify(ap));
+  aposentar(ativo, s);
   localStorage.setItem(CHAVE_GUARDADOS, JSON.stringify(g));
   trocarMotor(filho, "novo", QUADROS_CHOCANDO);
+  /* o cruzamento conta como reset do pai ativo (MMO8, MMO-17), so com a chave do reset ligada: o hash do registro dele e assincrono */
+  if (RESET_LIGADO) void import("./reset.ts").then(r => r.registrarResetDoCruzamento(ativo));
   return filho;
+}
+/** o pet vai para Geracoes (o cruzamento e o reset da MMO8): o save dele, a geracao, o filho (0 no reset) e a hora */
+export function aposentar(m: Motor, filho: number): void {
+  const ap = lerAposentados();
+  ap.push({ ...JSON.parse(textoSave(m)), ger: geracao(m), filho, quando: Date.now() });
+  localStorage.setItem(CHAVE_GERACOES, JSON.stringify(ap));
 }
