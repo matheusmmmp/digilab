@@ -118,3 +118,12 @@ que faltavam, desligadas, no Python e no TS. Nenhuma vida de faixa rodou, e nenh
   - o #999, o #1002, o #1003, o #1005 e este PR na `main`;
   - nenhuma outra run de pesquisa rodando;
   - o `pre_run` sem motivo de recusa.
+
+## 11. A ablação rodada (C2, 2026-11-19)
+
+A run única, pelo `docs/PLANO_ANALISE_V3_CORPO.md`: 9 600 vidas e 400 pares, em 2 h 6 min com 4 processos, a partir da `main` em
+`eedfb2f4`. O resultado está no `docs/RESULTADO_V3_CORPO.md`.
+
+**A leitura: os três braços saem em "perda".** O F sobe nos três (D +0,120, D + E +0,110, D + C5 +0,168 na taxa por episódio do
+`longe_fixo`, todos com o Holm rejeitando). Mas a privação do comedouro sobe nos três, e na D + C5 a exaustão quase dobra. O S1 não mede
+(zero chutes). **O programa para no CHECKPOINT C2.5:** o diagnóstico e o trade-off vão ao Matheus.
