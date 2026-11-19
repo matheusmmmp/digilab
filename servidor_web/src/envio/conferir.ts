@@ -16,12 +16,26 @@
    replay, a conferência refaz esses hashes do registro enviado; um que não bate é o registro mudado depois do pedido (hash_nao_confere), e o
    envio inteiro é recusado. O pedido ainda à frente do registro (indice maior que ele) fica pendente, sem conferir.
 
-   A conferência NÃO usa a assinatura do pet: ela difere entre o Chrome e o Node no último bit (MMO0). Só o que sai das lutas e do registro. */
+   A conferência NÃO usa a assinatura do pet: ela difere entre o Chrome e o Node no último bit (MMO0). Só o que sai das lutas e do registro.
+
+   As duas pontuações e o reset (MMO8, docs/PLANO_V3_MMO.md seções 8 e 9): o envio aceito diz também
+     - o Digimon: os pontos da vida do pet (a soma das lutas ranqueadas), o maior estágio, a forma e o nível do reset refeito do registro;
+     - os feitos do Tamer que este pet fez e o replay dele mostra: a 1ª medalha de cada líder (a vitória contra o líder na campanha do pet)
+       e o título da Liga (o pet tem o título no Motor.liga). Uma medalha do Tamer que o pet não mostra não conta, sem recusar o envio;
+     - o reset deste pet no registro do Tamer (versão 11): se o registro enviado é o do reset (o mesmo hash e o mesmo tamanho), o nível do
+       reset tem de ser o que o registro dá (reset_nao_confere, senão); um registro de outro momento do pet não confere o reset (fica para o
+       envio do registro final). */
 import { createHash, type Hash } from "node:crypto";
-import { VERSOES_PET, type EventoRegistro, type Motor } from "../../../web/app/motor/index.ts";
-import { linhasDaSemana, refazerComLutas, type LinhaSemana, type LutaRanqueada, type SementeEntregue } from "../../../web/app/src/ranking/pontos.ts";
+import { MEDALHA_POR_ID, VERSOES_PET, nomeForma, type EventoRegistro, type Motor } from "../../../web/app/motor/index.ts";
+import {
+  estagioMaximo, linhasDaSemana, nivelDoReset, pontosDoDigimon, refazerComLutas, type LinhaSemana, type LutaRanqueada, type LutaSalaoVista, type NivelReset,
+  type SementeEntregue,
+} from "../../../web/app/src/ranking/pontos.ts";
 import { marcosDoTamer } from "../../../web/app/src/marcosTamer.ts";
-import { CHAVE_TAMER, lerTamer, MARCO_MEGA, marcoConfere, VERSAO_TAMER, type EventoTamer } from "../../../web/app/src/tamer.ts";
+import { CHAVE_TAMER, lerTamer, MARCO_MEGA, marcoConfere, VERSAO_TAMER, VERSAO_TAMER_RESET, type EventoTamer, type Tamer } from "../../../web/app/src/tamer.ts";
+
+/** as versões do registro do Tamer que o servidor confere: a 10 de hoje e a 11 do reset (MMO8, atrás da chave do jogo; D-CONTA-162) */
+export const VERSOES_TAMER_CONFERIDAS: readonly number[] = [VERSAO_TAMER, VERSAO_TAMER_RESET];
 
 /** por que um envio foi recusado (o código vai na resposta e no banco; o detalhe é o texto do erro) */
 export type MotivoRecusa =
@@ -30,7 +44,8 @@ export type MotivoRecusa =
   | "pet_nao_reproduz"           // o motor recusou um evento do registro do pet
   | "tamer_nao_reproduz"         // o registro do Tamer não se refaz
   | "hash_nao_confere"           // o registro até o indice de uma semente pedida não é o do pedido (mudou depois da semente)
-  | "marco_nao_confere";         // o Tamer diz que este pet chegou ao Mega, e o registro do pet não mostra a evolução no tick e na forma
+  | "marco_nao_confere"          // o Tamer diz que este pet chegou ao Mega, e o registro do pet não mostra a evolução no tick e na forma
+  | "reset_nao_confere";         // o registro enviado é o do reset deste pet, e o nível do reset não é o que o registro dá (MMO8)
 
 /** o marco do nível 10 visto deste envio */
 export type SituacaoMarco =
@@ -46,9 +61,23 @@ export class EnvioMalformado extends Error {}
 /** uma semente que o servidor entregou a este pet, com o número dela na conta e o hash do registro até o indice do pedido */
 export interface EntregueComHash extends SementeEntregue { numero: number; hash: string }
 
+/** o pet deste envio, para o máximo histórico dos Digimon (MMO8): os pontos da vida, o maior estágio, a forma e o nível do reset */
+export interface DigimonVisto { pontos: number; estagio: string; forma: string; nivelReset: NivelReset }
+/** os feitos do Tamer que este pet fez e o replay dele mostra (MMO8): as medalhas (os ids) e o título da Liga */
+export interface FeitosVistos { medalhas: string[]; liga: boolean }
+/** o reset deste pet visto neste envio (MMO8): "confere" (o registro é o do reset, e o nível bate), "outro_registro" (o Tamer tem o reset,
+    e o registro enviado é de outro momento do pet) ou "sem_reset" */
+export interface ResetVisto { situacao: "confere" | "outro_registro" | "sem_reset"; nivel: NivelReset | null; hash: string | null; por: string | null }
+
 export interface Aceito {
   resultado: "aceito";
   marco10: SituacaoMarco;
+  /** as duas pontuações e o reset (MMO8) */
+  digimon: DigimonVisto;
+  feitos: FeitosVistos;
+  reset: ResetVisto;
+  /** o que o mural pode contar (MMO7) */
+  fronteira: FronteiraVista;
   /** os marcos que o registro do Tamer cumpre (marcosDoTamer: 5, 7, 8, 9, 10); a trava do pedido da semente os lê */
   marcosTamer: number[];
   lutas: LutaRanqueada[];
@@ -57,6 +86,19 @@ export interface Aceito {
   /** o tempo de cada parte, em milissegundos (o replay do pet com as lutas, o Tamer e o marco) */
   ms: { replay: number; tamer: number; total: number };
 }
+/** o que o mural (MMO7, servidor_web/src/premios/) pode contar deste envio: só o que a conferência refez.
+    - a Torre: o recorde do pet deste envio na Torre de Batalha, das lutas que o replay do pet refez (Motor.instalacoes);
+    - a Fábrica: o recorde do Tamer, da Fábrica que o replay do Tamer refaz luta por luta (Tamer.recordeFabrica);
+    - o Salão: as lutas do Salão que o replay deste pet refez (com o resultado), e as tentativas do Tamer (que pet lutou em que estágio,
+      com qual semente). A tentativa só conta no mural até onde cada luta dela foi vista no replay do pet que lutou (de um envio deste ou
+      de outro pet da conta). */
+export interface FronteiraVista {
+  torre: number;
+  fabrica: number;
+  salao: LutaSalaoVista[];
+  tentativasSalao: { n: number; lutas: { pet: number; s: number; venceu: boolean }[] }[];
+}
+
 export interface Recusado { resultado: "recusado"; motivo: MotivoRecusa; detalhe: string; ms: { total: number } }
 export type Conferencia = Aceito | Recusado;
 
@@ -106,8 +148,8 @@ export function conferir(envio: Envio, entregues: readonly EntregueComHash[] = [
   const { pet, tamer } = envio;
   if (!VERSOES_PET.includes(pet.versao))
     return recusar("versao_pet_desconhecida", `versão de pet desconhecida: ${pet.versao} (o servidor confere a ${VERSOES_PET.join(", ")})`);
-  if (tamer.versao !== VERSAO_TAMER)
-    return recusar("versao_tamer_desconhecida", `o registro do Tamer é da versão ${tamer.versao}, e o servidor confere a ${VERSAO_TAMER}: atualize o jogo`);
+  if (!VERSOES_TAMER_CONFERIDAS.includes(tamer.versao))
+    return recusar("versao_tamer_desconhecida", `o registro do Tamer é da versão ${tamer.versao}, e o servidor confere a ${VERSOES_TAMER_CONFERIDAS.join(" e a ")}: atualize o jogo`);
 
   /* 0. o compromisso de cada semente pedida: o registro até o indice do pedido é o mesmo */
   const hashes = hashesAte(pet.log, entregues.map(x => x.indice));
@@ -118,9 +160,10 @@ export function conferir(envio: Envio, entregues: readonly EntregueComHash[] = [
   }
 
   /* 1. o pet e as lutas: um passe só pela conta da MMO1; o evento inválido (e a luta que não era possível) falha alto */
-  let m: Motor, lutas: LutaRanqueada[];
-  const sementes: SementeEntregue[] = entregues.map(x => ({ semente: x.semente, indice: x.indice, hora: x.hora }));
-  try { ({ motor: m, lutas } = refazerComLutas(pet.semente, pet.versao, pet.log, sementes)); }
+  let m: Motor, lutas: LutaRanqueada[], salao: LutaSalaoVista[];
+  const sementes: SementeEntregue[] = entregues.map(x => ({ semente: x.semente, indice: x.indice, hora: x.hora,
+    ...(x.rival === undefined ? {} : { rival: x.rival, mapa: x.mapa ?? null }) }));
+  try { ({ motor: m, lutas, salao } = refazerComLutas(pet.semente, pet.versao, pet.log, sementes)); }
   catch (err) { return recusar("pet_nao_reproduz", `o registro do pet não reproduz: ${msg(err)}`); }
   const t1 = performance.now();
 
@@ -137,9 +180,30 @@ export function conferir(envio: Envio, entregues: readonly EntregueComHash[] = [
     else if (marcoConfere(x, m)) marco10 = "confere";
     else return recusar("marco_nao_confere", `o marco ${MARCO_MEGA} do Tamer diz que o pet ${x.pet} chegou ao Mega (${x.forma}) no tick ${x.tick}, e o registro do pet não mostra essa evolução`);
   }
+  /* o reset deste pet (MMO8): o registro enviado é o do reset? Então o nível tem de bater */
+  const rs = t.resetDe(pet.semente), nivelPet = nivelDoReset(m);
+  let reset: ResetVisto = { situacao: "sem_reset", nivel: null, hash: null, por: null };
+  if (rs) {
+    const final = rs.eventos === pet.log.length && rs.hash === hashRegistro(pet.log);
+    if (final && rs.nivel !== nivelPet)
+      return recusar("reset_nao_confere", `o Tamer diz que o pet ${pet.semente} se aposentou no nível ${rs.nivel} do reset, e o registro dele dá o nível ${nivelPet}`);
+    reset = { situacao: final ? "confere" : "outro_registro", nivel: rs.nivel, hash: rs.hash, por: rs.por };
+  }
   const t2 = performance.now();
 
   const r2 = (v: number) => +v.toFixed(2);
-  return { resultado: "aceito", marco10, marcosTamer: marcosDoTamer(t), lutas, semanas: linhasDaSemana(lutas), pontos: lutas.reduce((s, l) => s + l.pontos, 0),
+  const fronteira: FronteiraVista = {
+    torre: m.instalacoes?.torre_batalha?.recorde ?? 0, fabrica: t.recordeFabrica?.valor ?? 0, salao,
+    tentativasSalao: t.salao.map(x => ({ n: x.n, lutas: x.lutas.map(l => ({ pet: l.pet, s: l.s, venceu: l.venceu })) })),
+  };
+  const digimon: DigimonVisto = { pontos: pontosDoDigimon(lutas), estagio: estagioMaximo(m), forma: nomeForma(m.forma), nivelReset: nivelPet };
+  return { resultado: "aceito", marco10, digimon, feitos: feitosVistos(t, m), reset, fronteira, marcosTamer: marcosDoTamer(t), lutas, semanas: linhasDaSemana(lutas), pontos: lutas.reduce((s, l) => s + l.pontos, 0),
     ms: { replay: r2(t1 - t0), tamer: r2(t2 - t1), total: r2(performance.now() - t0) } };
+}
+
+/** os feitos do Tamer que o pet m fez e o replay dele mostra (MMO8): a medalha do registro do Tamer ganha por este pet conta se a campanha
+    do pet tem a vitória contra o líder dela; o título da Liga, se o título do Tamer deste pet tem o título no Motor.liga do pet */
+export function feitosVistos(t: Tamer, m: Motor): FeitosVistos {
+  const medalhas = t.medalhas.filter(g => g.pet === m.semente && (m.campanha[MEDALHA_POR_ID[g.id]!.lider] ?? 0) > 0).map(g => g.id);
+  return { medalhas, liga: !!t.tituloDe(m.semente) && m.liga.titulos > 0 };
 }

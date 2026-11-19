@@ -29,7 +29,8 @@ BASES_COMPARACAO = {"calibracao": (28101, 28202, 28303, 28404, 28505), "validaca
 # competicao entre as regras, PLANO_ANALISE_V2_V3_COMPETICAO, secao 4; o do prototipo do DigiBrain modular,
 # PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO, secao 3)
 PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7", "comparacao-cerebros", "mundo", "corpo", "banheiro", "dois_pets", "rede_de_si",
-                     "pet_que_pensa", "competicao", "digibrain_prototipo")
+                     "pet_que_pensa", "competicao", "digibrain_prototipo", "social_par", "social_par_piloto",
+                     "social_par_s", "social_par_s_det", "corpo_par")
 # faixas queimadas: continuam reservadas e nao podem ser usadas para nada (adendo 4.1 do PLANO_ANALISE_V2_EXPERIMENTO_MAIOR)
 FAIXAS_QUEIMADAS = ((15101, 15505, "a validacao antiga do experimento maior: run indevida parada em 2026-10-06 (PR #183)"),
                     (90101, 90505, "GOSTO_VISUAL, GV3b do adendo 1: a run parou na vida 213 de 216 por um erro do codigo, as duas TVs "
@@ -192,9 +193,51 @@ FAIXAS_RESERVADAS = (
     (97101, 97505, "EVIDENCIA A1, a baseline trivial: a validacao, uma vez, o REL da C4 e a baseline nas 12 celulas da C4 "
                    "(docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md, secao 5; BT-3; bases 97101, 97202, 97303, 97404 e 97505, K = 40); "
                    "aprovada junto com a 96xxx (BT-3); conferida livre junto com ela"),
+    (99101, 99505, "VALUATION, a ablacao do Valuation: a run unica da V2, 8 bracos x 4 celulas do longe_fixo x 200 unidades "
+                   "(docs/PLANO_ANALISE_V3_VALUATION.md, secao 4; D-VAL-9, aprovada pelo Matheus em 2026-11-16, \"Aprovado, siga a V2\"; bases 99101, 99202, 99303, 99404 e 99505, K = 40; "
+                   "conferida livre no faixas.py da origin/main e nos branches remotos em 2026-11-16)"),
+    (73101, 73505, "VALUATION, a V3: o conserto do reflexo do sono, REL e CON nas 12 celulas da C4 x 200 unidades, uma vez "
+                   "(docs/PLANO_ANALISE_V3_VALUATION_CONSERTO.md, secao 4; D-VAL-18, aprovada pelo Matheus em 2026-11-17, \"Aprovo, siga\"; bases 73101, 73202, 73303, 73404 e 73505, "
+                   "K = 40; conferida livre no faixas.py, nas configs, nos planos e nas tarefas dos branches remotos em 2026-11-17)"),
+    (69101, 69505, "VALUATION, a V4: a validacao contra a baseline trivial, TRIV, REL e CON nas 12 celulas da C4 x 200 unidades, uma vez "
+                   "(docs/PLANO_ANALISE_V3_VALUATION_VALIDACAO.md, secao 2.3; VB-3, aprovada pelo Matheus em 2026-11-18, \"Aprovo os dois\" e \"Sim, aprovei\"; "
+                   "bases 69101, 69202, 69303, 69404 e 69505, K = 40; conferida livre no faixas.py da origin/main e nos branches remotos em 2026-11-18)"),
+    (26101, 26505, "PET_VIVO, PV-2: a run unica da quimiotaxia, 6 bracos x 12 celulas da C4 x 200 unidades, com o contrafactual da SE-C "
+                   "nos k de 0 a 7 e a checagem do v38 (docs/PLANO_ANALISE_V3_PET_VIVO_PV2.md, secao 4 e adendo 2, A2.1; bases 26101, "
+                   "26202, 26303, 26404 e 26505, K = 40; proposta pelo coordenador em 2026-11-18, no lugar da 83xxx, que e a calibracao da "
+                   "rodada 3 da luta (D-R3-5); conferida livre pelo coordenador e de novo nesta sessao (git grep -w em faixas.py, "
+                   "experiments/configs, docs/PLANO_* e docs/TAREFA_* da origin/main e de todos os branches remotos, 2026-11-18; o 26505 "
+                   "como tick no gabarito vinculo_python.json da web nao e semente); nenhuma vida antes do APROVADO do adendo 2)"),
     (98101, 98505, "EVIDENCIA A2, a ablacao do aprendizado no jogo (jogo web): a run unica, sementes 98101...98300 "
                    "(docs/PLANO_ANALISE_V3_ABLACAO_APRENDIZADO.md, secao 2.3; AB-5; aprovada pelo Matheus em 2026-11-16, "
                    "\"Aprovo, pode rodar\"; conferida livre na origin/main e em todos os branches remotos em 2026-11-16)"),
+    (25101, 25505, "ELOGIO, o credito do carinho no modular: a calibracao 25101...25200 (100 unidades, a grade g x W) e a validacao "
+                   "25301...25500 (200 unidades, uma vez) (docs/PLANO_ANALISE_V3_ELOGIO.md, secoes 5 e 6; D-EL-22, aprovada pelo Matheus em "
+                   "2026-11-18, \"Aprovo todas\"; conferida livre no faixas.py da origin/main e dos branches remotos em 2026-11-18)"),
+    (102101, 102505, "SOCIAL_PAR, o piloto do A0 e do B0: 100 pares (5 bases x 20, prefixo social_par_piloto), so o dp dos primarios "
+                     "e as frequencias das premissas (docs/PLANO_ANALISE_V3_SOCIAL_PAR_A0.md, secoes 3.4 e 6; A0-7 e A0-8, aprovadas pelo "
+                     "Matheus em 2026-11-17, \"Aprovo todas\"; conferida livre na origin/main e em todos os branches remotos em 2026-11-17)"),
+    (101101, 101505, "SOCIAL_PAR, a run unica do A0 e do B0: as bases 101101...101505, prefixo social_par, o K pela regra da secao 6 "
+                     "decidido depois do piloto (docs/PLANO_ANALISE_V3_SOCIAL_PAR_A0.md, secao 3.4; A0-8, aprovada pelo Matheus em "
+                     "2026-11-17, \"Aprovo todas\"; conferida livre na origin/main e em todos os branches remotos em 2026-11-17)"),
+    (100101, 100505, "CORPO_ACOPLAMENTO, a opcao D (a falta de combustivel sobe a fome): a run unica, REL e D nas 12 celulas da C4 x 200 "
+                     "unidades (docs/PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md, secao 4; D-CA-10, aprovada pelo Matheus em 2026-11-18, "
+                     "\"Aprovo, siga\" e \"Aprovo todas\"; bases 100101, 100202, 100303, 100404 e 100505, K = 40; conferida livre no faixas.py, nas configs, "
+                     "nos planos, nas tarefas, nos resultados e nos orquestradores de todos os branches remotos em 2026-11-18)"),
+    (104001, 104400, "CORPO, a ablacao do corpo (C2): o bloco I nas bases 104001...104200 (k = 1, 200 sementes independentes, prefixo "
+                     "digibrain_prototipo) e o bloco II nas bases 104301...104400 (k = 1, prefixo corpo_par), os bracos CTRL, D, D + E e "
+                     "D + C5 (docs/PLANO_ANALISE_V3_CORPO.md, secoes 3 e 4; D-CO-5 e D-CO-7, decididas pelo Matheus em 2026-11-18, "
+                     "\"Confirmo, siga\"; a 104xxx conferida livre nos codigos, configs, planos, tarefas, resultados e registro de todos os "
+                     "branches remotos em 2026-11-18)"),
+    (103001, 103400, "SOCIAL_PAR S, o substrato que deixa o social aparecer: a run 103001...103200 (200 bases, k = 1, prefixo social_par_s, "
+                     "os mesmos nos tres bracos) e o G-DET 103301...103350 (prefixo social_par_s_det) (docs/PLANO_ANALISE_V3_SOCIAL_PAR_S.md, "
+                     "secao 4; S-5, aprovada pelo Matheus em 2026-11-18, \"Aprovado\"; conferida livre no faixas.py, nos planos e nas "
+                     "configs da origin/main e de todos os branches remotos em 2026-11-18)"),
+    (106001, 106400, "CORPO C3, a ponte com teto: o bloco I nas bases 106001...106200 (k = 1, 200 sementes independentes, prefixo "
+                     "digibrain_prototipo) e o bloco II nas bases 106301...106400 (k = 1, prefixo corpo_par), os bracos CTRL, D, DTL e DTB "
+                     "(docs/PLANO_ANALISE_V3_CORPO_C3.md, secao 4; D-C3-7, reservada pelo coordenador em 2026-11-19; nenhuma vida antes da "
+                     "aprovacao do plano pelo Matheus; a 106xxx conferida livre no faixas.py, nas configs e nos planos de todos os branches "
+                     "remotos em 2026-11-19)"),
 )
 
 

@@ -294,3 +294,159 @@ Nenhuma delas mede um pet como o do Digilab. Elas só são o motivo do desenho.
 - **O Olfato social** (`outro_pet`) e a Audição: são de outra pergunta (os dois pets).
 - **O `engine.py`** não muda.
 - **Os arquivos da INDIVIDUALIDADE e da 0b:** ficam como estão.
+
+## Adendo 1: o código, os números do mecanismo e o G0 (2026-11-17, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2-codigo`; APROVADO)
+
+**Status: APROVADO** pelo Matheus em 2026-11-17, nesta sessão, à pergunta "Aprova o adendo 1 com o G0 = 512 para o OLF-G?": "Sim, G0 = 512" (D-PV2C-11). O G0 = 512 refaz o 64 da PV2-5; os números da A1.3 e a forma dos braços da A1.2 ficam DECIDIDOS como estão. É o adendo que a PV2-9 pede antes da run. A ordem das etapas vem da INT-1 da análise da integração
+(`docs/futuro/integracao_cadeia_digibrain.md`, seção 8), DECIDIDA pelo Matheus em 2026-11-17. Nenhuma vida da run, nenhuma faixa: os
+números saem das sementes dos testes.
+
+### A1.1 O que o código faz
+
+- **A `ConfigPV2`** (`digilab/config.py`) é separada da `ConfigDigibrain`, como a `ConfigElogio`. Ela vem desligada. Desligada, as vidas
+  de hoje saem byte a byte (`tests/gabaritos/pv2_de_hoje.json`, gravado no commit `5322a82a`, antes da mudança).
+- **O M-SENS** (`Sens.ligar_olfato`, `_ler_olfato`): as duas narinas ficam fora dos receptores, como a tela. Ele lê:
+  - o nível `c`, a média das narinas;
+  - a variação `dC` desde a decisão anterior;
+  - se há cheiro: alguma narina acima de 0, a regra do motor;
+  - o cheiro forte do explorar: a maior narina acima do limiar do motor, pela mesma conta do órgão.
+
+  Nunca lê a diferença entre as narinas (PV2-3): um teste troca as narinas e confere que a saída é a mesma.
+- **O M-IMPULSO:**
+  - o `dC` entra no fim do z como a característica `dc_cheiro`, com o W⁰ zero em toda linha, e o H ganha uma coluna;
+  - o `w0_dc` entra no inato da unidade `comer/cheiro`;
+  - o nível do cheiro é a proximidade das duas unidades do cheiro; no OLF-G, com o ganho da fome.
+- **O executor** (`DigiBrain._executar_cheiro`) escolhe entre o `cheiro_seguir` e o `cheiro_virar` que o motor já oferece. O motor não
+  muda.
+
+### A1.2 A forma dos braços (D-PV2C-1)
+
+Com duas narinas, o motor prefere virar sempre que elas diferem (`mundo.py`, `alvos_do_olfato`). Somar a pirueta ao OLF-0 deixaria o
+braço quase igual a ele. A forma de cada braço:
+
+| braço | a regra do executor |
+|---|---|
+| **OLF-0** | o preferido do motor (a tropotaxia) |
+| **OLF-DC** | segue; vira só na pirueta, quando o acumulador da queda passa de L |
+| **OLF-DCV** | o OLF-DC, mais a varredura de `n_varredura` decisões depois da pirueta |
+| **OLF-PLA** | vira quando `u & 0xFF < taxa_placebo`, com a mesma varredura e sem ler o acumulador |
+| **OLF-G** | o OLF-DCV com o ganho da fome no nível |
+
+O lado da virada é sempre o do motor (a narina mais forte). As perguntas Q-PV2 e H-TEMPO continuam as mesmas: o OLF-DCV contra o OLF-0
+pergunta "virar quando o cheiro cai" contra "virar sempre para o lado mais forte".
+
+### A1.3 Os números do mecanismo, medidos (PV2-9)
+
+Os números vêm de `artifacts_v3_pet_vivo/pv2/medicao_codigo.json`, do `experiments/medir_pv2.py`, com as regras escritas antes na
+docstring do script. As vidas: as sementes 101 a 505, os 3 lugares, o dono `atencioso`, 14 dias.
+
+| número | regra (PROPOSTA, SEM FONTE) | medida | proposto |
+|---|---|---|---|
+| `l_pirueta` | 2 × a mediana das quedas do cheiro (o \|dC\| com dC < 0) nas decisões do executor do OLF-0, com o `w0_dc` = 0 (D-PV2C-10) | mediana 46 (n = 199; p25 23, p75 116) | **92** |
+| `w0_dc` | `div_arred(S · S, 8 · mediana)`: uma queda mediana tira S/8 do inato | — | **2 849** |
+| `n_varredura` | sem medida | — | **1** |
+| `taxa_placebo` | `arred(256 × piruetas / decisões fora da varredura)` no OLF-DCV com os números acima | 49 piruetas em 581 decisões | **22** (em 256) |
+
+**Um achado sobre a varredura:** só 11 das 592 decisões do executor do OLF-DCV foram de varredura. Depois de uma pirueta, a decisão
+seguinte quase nunca volta à busca pelo cheiro. Então o OLF-DC e o OLF-DCV devem sair muito parecidos, e a H-VARR, que é só descritiva,
+fica com pouco a separar. Fica como está: o plano não tem gate nela.
+
+### A1.4 O G0 do OLF-G (a INT-4)
+
+A INT-4 (decidida em 2026-11-17) mandava manter o G0 = 64 e medir a saturação. Se mais de metade das decisões com cheiro tivesse o nível
+no teto S, um adendo proporia outro G0 antes da run.
+
+A saturação é a fração das decisões com cheiro (c > 0) em que o nível com o ganho chega a S. Ela sai pela conta, sobre os pares (c,
+`u_fome`) das mesmas vidas do OLF-DCV (3 013 decisões; c mediano 641 e máximo 1 000, na escala S = 1 024):
+
+| G0 | 64 | 128 | 256 | 512 | 1 024 |
+|---|---|---|---|---|---|
+| no teto | **0,81** | 0,71 | 0,61 | **0,44** | 0,33 |
+
+- **O corte passou com o G0 = 64.**
+- **A proposta: G0 = 512**, o menor da grade abaixo da metade. Com ele, o ganho vai de 1 a 3.
+- **A alternativa:** manter o 64 decidido, aceitando que o OLF-G mede sobretudo "a fome liga o cheiro no teto".
+- **O custo de errar:** com o 64, o G-ESTADO pode passar por um efeito de degrau, e não de ganho. Com o 512, o efeito da fome fica menor,
+  e o G-ESTADO pode não passar por falta de tamanho.
+- **Decidido: G0 = 512** (D-PV2C-11). O código lê o G0 da `ConfigPV2`, que passou a 512.
+
+### A1.5 O custo (seção 4)
+
+São 2 vidas de 14 dias por braço (sementes 101 e 202, `longe`), com o G1 do replay em cada uma, e a projeção das 14 400 vidas com 4
+processos: 4,91 s por vida, e a projeção dá 4,91 h, abaixo do corte de umas 8 h, então o K não muda. Os números estão no `custo` do
+`medicao_codigo.json`. A máquina estava carregada por outras sessões. As rodadas anteriores da medição deram de 3,85 a 6,5 s por vida,
+e a mais lenta foi com a suíte de testes rodando ao mesmo tempo. O contrafactual da SE-C (as 1 440 vidas) não
+entra: é a conta da 0b, medida lá.
+
+### A1.6 O que este adendo não faz
+
+- **Não reserva faixa:** a faixa vai ao coordenador.
+- **Não escreve o orquestrador da run,** com a SE-C pelo contrafactual da 0b em três braços: fica para o PR da run, depois do APROVADO
+  deste adendo.
+- **Não muda nenhum gate nem a regra de leitura.**
+
+## Adendo 2: a faixa, o orquestrador da run e a checagem do v38 (2026-11-17, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2-run`; APROVADO)
+
+**Status do adendo 2: APROVADO pelo Matheus em 2026-11-18,** nesta sessão, à pergunta "Aprova o adendo 2 da run do PV-2?": "Sim, aprovo" (D-PV2R-8). A checagem do v38 fica sem o olhar, como na A2.3. O Matheus pediu nesta sessão: "pede a faixa ao coordenador e escreve o PR da run". O orquestrador
+(`experiments/run_v3_pet_vivo_pv2.py`) recusa a run de verdade sem o APROVADO nesta linha. Os gates, as margens e a regra de leitura são
+os das seções 6 e 7, sem mudança.
+
+### A2.1 A faixa
+
+- **A faixa é 26101–26505,** com as bases 26101, 26202, 26303, 26404 e 26505 e K = 40. O prefixo é o `digibrain_prototipo`, o da C4.
+- **A faixa foi proposta pelo coordenador em 2026-11-18.**
+  - **A primeira proposta,** a 83101–83505, não estava livre: é a calibração da rodada 3 da luta (D-R3-5,
+    `docs/PLANO_EQUILIBRIO_COMBATE_TR_R3.md`). A busca de 2026-11-17 não a achou (D-PV2R-6).
+  - **A conferência da 26xxx:** o coordenador a fez, e esta sessão a refez em 2026-11-18, com `git grep -w` no `faixas.py`, nas
+    configs e nos `PLANO_*` e `TAREFA_*` da `origin/main` e de todos os branches remotos.
+  - **Um falso alarme conhecido:** o 26505 aparece como tick num gabarito da web (`vinculo_python.json`). Não é semente: está em
+    `docs/LEITURA_PARCIAL_V2_FASE1.md`.
+- **Ela entra em `FAIXAS_RESERVADAS` neste PR.**
+
+### A2.2 O que o orquestrador faz
+
+- **As vidas:** o `pv2.viver` (o REL da C4, com o órgão e a `ConfigPV2` do adendo 1 nos braços OLF-*). São os 6 braços nas 12 células,
+  200 unidades e 14 dias: 14 400 vidas.
+- **As conferências que falham alto, em cada vida:**
+  - o G1 do replay, refeito sem o leitor da SE-C, o que confere também que o leitor não muda a vida;
+  - o T-CENARIO-1;
+  - a `ConfigPV2` do cérebro, que precisa ser a do braço.
+- **O contrafactual da SE-C** é o `Leitor` da 0b (`auditoria_pet_vivo.py`, a A-4, com Δ = S/4), nos k de 0 a 7, no OLF-0, no OLF-DCV
+  e no OLF-G: 1 440 vidas. A A_r é fixada em cada (braço, lugar) pelas vidas dele, antes da medida (PV-0-7). A SE-C de cada vida é a
+  `se_c` do `metrics.py`.
+- **Os contrastes:** a diferença por unidade (base, semente), com a média dos donos do lugar, e o IC95 pelo t (`ic_t`), como na C4.
+- **A regra de leitura** é a tabela da seção 7, com o "custa perto de casa" lido primeiro, porque ele vale qualquer que seja o resto. O
+  OLF-G sai separado.
+- **O G-UNIDADES** continua sendo a conferência dos testes (`tests/test_pv2_codigo.py`), antes da run.
+
+### A2.3 A checagem do v38 (a INT-8)
+
+A INT-8 (decidida em 2026-11-17) pede uma checagem descritiva com a config do v38 em cada run da cadeia, sem gate.
+
+- **O pet do v38 em Python:** não existe um objeto só. A checagem junta o que o gabarito do EQUILIBRIO_CUIDADO já junta
+  (`exportar_gabarito_digibrain_modular.equilibrio_cuidado`):
+  - os inatos do E1;
+  - o sono que segura;
+  - o lance do dono, no cérebro e no motor;
+  - as duas regras do E1;
+  - o bebê nas primeiras 96 decisões.
+- **O olhar (o órgão da visão) fica de fora.** O custo do SigLIP numa run desse tamanho não foi medido, e o PV-2 não lê a visão.
+- **As vidas:** o HOJE, o OLF-0 e o OLF-DCV, nos k de 0 a 7, no `longe` e no `longe_fixo`, com os 4 donos: 960 vidas a mais.
+- **Os descritivos:** a taxa por episódio de cada braço, OLF-DCV − OLF-0 e HOJE − OLF-DCV, sem classe e sem gate.
+- **A leitura:** a checagem só diz se o sinal do G-PV2-LONGE aparece com as chaves do jogo. Ela não troca a leitura da seção 7.
+
+### A2.4 O custo
+
+O custo é SEM MEDIDA na run inteira. Ele vem da fumaça e do adendo 1:
+- 14 400 vidas a uns 5 s;
+- o contrafactual em 1 440 delas, a uns 4,5 s a mais;
+- as 960 do v38.
+
+Isso projeta umas 5,6 h com 4 processos, abaixo do corte de umas 8 h. A máquina segue a V3-D8: no máximo 4 processos, e só quando o
+Gerente liberar a vez.
+
+### A2.5 O que este adendo não faz
+
+- **Não roda nenhuma vida da faixa.** Isso espera o APROVADO, o ok do coordenador e a vez da máquina.
+- **Não muda nenhum gate, margem ou regra de leitura** das seções 6 e 7, nem os números do adendo 1.
+

@@ -68,6 +68,7 @@ from typing import Callable
 from .config import CONFIG_DONOS, CONFIG_GRUPO_LIGADA, CONFIG_PADRAO, CONFIG_SENTIDOS, TICKS_POR_DIA, Config, ConfigDonos, ConfigGrupo
 from .config import CONFIG_COOPERACAO, ConfigCooperacao, ConfigMundo, ConfigSentidos
 from .config import CONFIG_TV, CONFIG_TVJOGO, ConfigTV, ConfigTVJogo
+from .config import CONFIG_INTERVENCAO_SOCIAL, ConfigIntervencaoSocial
 from .cooperacao import TIPOS_MADUROS, Cooperacao
 from .donos import Visao
 from .events import TIPO_SENTIDO_TELA, AcaoUsuario, Evento, LogDeEventos, avanco, ler_deixar_bola, ler_deixar_comida, ler_sentido_tela
@@ -75,6 +76,8 @@ from .events import sentido_tela as evento_sentido_tela
 from .events import sentido_tela_desligada as evento_sentido_tela_desligada
 from .events import deixar_bola as evento_deixar_bola
 from .events import deixar_comida as evento_deixar_comida
+from .events import levar_pet as evento_levar_pet
+from .events import ler_levar_pet
 from .mundo import (CANDIDATOS_SOCIAIS, SONS, CanalMundo, acao_visivel, MotorMundo, Mundo, PercepcaoSentidos, PercepcaoSocial, celula_de,
                     cheiro_do_pet, direcao_vizinha, distancia, em_contato, fontes_do_pet, perceber_social, som_ouvido, tipos_do_contato)
 from .protocol import derivar_semente
@@ -86,6 +89,7 @@ VERSAO_REGISTRO = 1
 DESTINO_GRUPO = "grupo"
 DESTINO_MUNDO = "mundo"
 ORIGEM_DONO = "dono"                         # um dono para todos (DP-7, a validacao inicial); dois donos: `dono:<id>` (etapa 7)
+ORIGEM_INTERVENCAO = "intervencao"           # a perturbacao do experimento (docs/ESPEC_V3_SOCIAL_PAR_E1.md, 2.3); o jogo nunca a grava
 
 
 class GrupoSemChave(RuntimeError):
@@ -186,7 +190,8 @@ class Grupo:
 
     def __init__(self, cfg_mundo: ConfigMundo, semente: int, cfg_grupo: ConfigGrupo | None = None, cfg: Config | None = None,
                  cfg_sentidos: ConfigSentidos | None = None, cfg_cooperacao: ConfigCooperacao | None = None,
-                 cfg_tv: ConfigTV | None = None, cfg_tv_jogo: ConfigTVJogo | None = None) -> None:
+                 cfg_tv: ConfigTV | None = None, cfg_tv_jogo: ConfigTVJogo | None = None,
+                 cfg_intervencao: ConfigIntervencaoSocial | None = None) -> None:
         self.cg = cfg_grupo or CONFIG_GRUPO_LIGADA
         if not self.cg.ligada:
             raise GrupoSemChave("o grupo so existe com ConfigGrupo.ligada (sem ela, o MotorMundo de um pet e dono do proprio Mundo)")
@@ -227,6 +232,12 @@ class Grupo:
             self.registro.cabecalho["tv"] = asdict(self.ctv)
             if self.ctj.ligada:
                 self.registro.cabecalho["tv_jogo"] = asdict(self.ctj)
+        # o parceiro sob intervencao (docs/ESPEC_V3_SOCIAL_PAR_E1.md, so pesquisa): desligada, o grupo de hoje (nem a chave no cabecalho)
+        self.ci = cfg_intervencao or CONFIG_INTERVENCAO_SOCIAL
+        if not isinstance(self.ci, ConfigIntervencaoSocial):
+            raise TypeError(f"cfg_intervencao e uma ConfigIntervencaoSocial: {self.ci!r}")
+        if self.ci.ligada:
+            self.registro.cabecalho["intervencao"] = asdict(self.ci)
 
     # ------------------------------------------------------------ a entrada
     def entrar(self, ident: str, politica, fabrica_motor: Callable, cerebro: str, dono: str) -> MotorMundo:
@@ -510,6 +521,30 @@ class Grupo:
         self.registro.anexar(EventoGrupo(self.tick, ev.tipo, ev.valor, DESTINO_MUNDO, ident, ORIGEM_DONO))
         m.deixar_bola(x, y)
 
+    # ------------------------------------------------------------ a perturbacao do experimento (docs/ESPEC_V3_SOCIAL_PAR_E1.md, 2.3)
+    def deixar_bola_intervencao(self, ident: str, x: int, y: int) -> None:
+        """A bola posta parada em (x, y) como intervencao do experimento (SOCIAL_PAR S, o braco B2: docs/PLANO_ANALISE_V3_SOCIAL_PAR_S.md,
+        secao 2): a mecanica e a do `deixar_bola` do dono, pelo motor de `ident`, mas no registro com a origem `intervencao`, e so com a
+        ConfigIntervencaoSocial ligada. O jogo nunca a grava; os registros de hoje nao mudam."""
+        if not self.ci.ligada:
+            raise ValueError("deixar_bola_intervencao so com a ConfigIntervencaoSocial ligada (Grupo(cfg_intervencao=)): e pesquisa")
+        m = self.motores[ident]
+        ev = evento_deixar_bola(self.tick, x, y)
+        self.registro.anexar(EventoGrupo(self.tick, ev.tipo, ev.valor, DESTINO_MUNDO, ident, ORIGEM_INTERVENCAO))
+        m.deixar_bola(x, y)
+
+    def levar_pet(self, ident: str, x: int, y: int) -> None:
+        """O pet `ident` e levado a (x, y) pelo `levar_pet` de hoje (o do dono, PP-1 a PP-4), mas como intervencao do experimento: no
+        registro com a origem `intervencao`. So com a ConfigIntervencaoSocial ligada; o pet dormindo falha alto (PP-2), antes do registro."""
+        if not self.ci.ligada:
+            raise ValueError("levar_pet no grupo so com a ConfigIntervencaoSocial ligada (Grupo(cfg_intervencao=)): e pesquisa")
+        m = self.motores[ident]
+        if m._estado.dormindo:
+            raise RuntimeError(f"levar_pet com o pet {ident} dormindo (tick {self.tick}): PP-2")
+        ev = evento_levar_pet(self.tick, x, y)                  # valida antes do registro
+        self.registro.anexar(EventoGrupo(self.tick, ev.tipo, ev.valor, destino_do_pet(ident), ident, ORIGEM_INTERVENCAO))
+        m.levar_pet(*ler_levar_pet(ev))
+
     # ------------------------------------------------------------ a TV do mundo comum (D-GV-TVJOGO-4)
     def sentido_tela(self, fonte: str, niveis) -> None:
         """o que a TV do mundo comum passa a partir de agora (o modo livre gravado): um evento do grupo, do mundo, sem pet"""
@@ -581,7 +616,7 @@ class PetNoGrupo:
 def reproduzir_grupo(registro: RegistroGrupo, fabricas: dict[str, tuple[Callable, Callable]], cfg_mundo: ConfigMundo,
                      cfg_grupo: ConfigGrupo | None = None, cfg: Config | None = None, cfg_sentidos: ConfigSentidos | None = None,
                      cfg_cooperacao: ConfigCooperacao | None = None, cfg_tv: ConfigTV | None = None,
-                     cfg_tv_jogo: ConfigTVJogo | None = None) -> Grupo:
+                     cfg_tv_jogo: ConfigTVJogo | None = None, cfg_intervencao: ConfigIntervencaoSocial | None = None) -> Grupo:
     """Refaz o grupo do cabecalho e rejoga os eventos no mesmo relogio. `fabricas[id] = (fabrica da politica, fabrica do motor)`. O
     registro refeito tem de ser o lido (falha alto); evento desconhecido, fora do tick ou de pet que nao entrou tambem."""
     cab = registro.cabecalho
@@ -596,10 +631,13 @@ def reproduzir_grupo(registro: RegistroGrupo, fabricas: dict[str, tuple[Callable
     ctv, ctj = cfg_tv or CONFIG_TV, cfg_tv_jogo or CONFIG_TVJOGO
     if cab.get("tv") != (asdict(ctv) if ctv.ligada else None) or cab.get("tv_jogo") != (asdict(ctj) if ctj.ligada else None):
         raise ValueError(f"o cabecalho do registro nao e o desta ConfigTV/ConfigTVJogo: {cab.get('tv')!r}, {cab.get('tv_jogo')!r}")
+    ci = cfg_intervencao or CONFIG_INTERVENCAO_SOCIAL
+    if cab.get("intervencao") != (asdict(ci) if ci.ligada else None):
+        raise ValueError(f"o cabecalho do registro nao e o desta ConfigIntervencaoSocial: {cab.get('intervencao')!r}")
     if set(fabricas) != set(cab["pets"]):
         raise ValueError(f"fabricas {sorted(fabricas)} para os pets {sorted(cab['pets'])}")
     cfg = cfg or CONFIG_PADRAO
-    g = Grupo(cfg_mundo, cab["semente"], cg, cfg, cs, cfg_cooperacao, ctv, ctj)
+    g = Grupo(cfg_mundo, cab["semente"], cg, cfg, cs, cfg_cooperacao, ctv, ctj, ci)
     for e in registro.eventos:
         if e.tick != g.tick:
             raise ValueError(f"evento no tick {e.tick} com o grupo no tick {g.tick}: {e}")
@@ -613,10 +651,14 @@ def reproduzir_grupo(registro: RegistroGrupo, fabricas: dict[str, tuple[Callable
             g.acao_dono(e.pet, AcaoUsuario(e.valor))
         elif e.tipo == "deixar_comida":
             g.deixar_comida(e.pet, *ler_deixar_comida(Evento(e.tick, e.tipo, e.valor)))
+        elif e.tipo == "deixar_bola" and e.origem == ORIGEM_INTERVENCAO and e.destino == DESTINO_MUNDO:
+            g.deixar_bola_intervencao(e.pet, *ler_deixar_bola(Evento(e.tick, e.tipo, e.valor)))
         elif e.tipo == "deixar_bola":
             g.deixar_bola(e.pet, *ler_deixar_bola(Evento(e.tick, e.tipo, e.valor)))
         elif e.tipo == TIPO_SENTIDO_TELA and e.destino == DESTINO_MUNDO and e.pet is None:
             g._sentir(Evento(e.tick, e.tipo, e.valor))
+        elif e.tipo == "levar_pet" and e.origem == ORIGEM_INTERVENCAO and e.destino == destino_do_pet(e.pet):
+            g.levar_pet(e.pet, *ler_levar_pet(Evento(e.tick, e.tipo, e.valor)))
         else:
             raise ValueError(f"tipo de evento desconhecido no registro do grupo: {e.tipo!r}")
     if g.registro != registro:

@@ -16,7 +16,8 @@ import { motorReal, pagarNivel, registrarMarcoMega, tamerAtual, useJogo } from "
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados } from "./pets.ts";
 import { CHAVE, SEMENTE_EXEMPLO, petExemplo } from "./save.ts";
 import { dicasLigadas, pedirCartao, retirarCartao, esquecerDicasVistas } from "./dicas.ts";
-import { definirTrancas } from "./trancas.ts";
+import { CAIS, definirCais, definirTrancas } from "./trancas.ts";
+import { buscarTacas } from "./cais/premios.ts";
 import {
   LUGAR_DA_PECA, PECAS, PECA_DO_LUGAR, VIDA_MARCO_MIN, anuncioDeAbertura, assinaturaIntocada, cartoesPendentes, ehPetIntocado, jaConheco, lerEstado, marcarCartao, marcosFeitos,
   nivelDe, pecaAberta, reverTutorial, sincronizar, textoEstado, vidaDoPet, type EstadoNivel, type Peca,
@@ -88,6 +89,12 @@ function guardadosDoJogador(agora: number): { motores: Motor[]; id: number } {
 /* ---------------------------------------------------------------------------------------------------- a avaliacao (sem efeito colateral) */
 interface Resultado { estado: EstadoNivel; novos: number[] }
 let memo: { chave: string; r: Resultado; pets: Motor[] } | null = null;
+/* o cais (MMO5): o marco que o abre, ou null com o cais desligado (sem o servidor no build). Quem liga e a casca (App.tsx), uma vez */
+let marcoDoCais: number | null = null, brilhoDoCais = false, tacasBuscadas = false;
+export function ligarCaisNoNivel(marco: number | null): void { marcoDoCais = marco; }
+/** o cais acabou de abrir e ainda nao brilhou (CadeadoDoCais.tsx consome) */
+export const caisAcabouDeAbrir = (): boolean => brilhoDoCais;
+export function consumirBrilhoDoCais(): void { brilhoDoCais = false; }
 let brilhos = new Set<Lugar>();
 /** os lugares que acabaram de abrir e ainda nao brilharam (o brilho consome na hora de desenhar) */
 export const brilhosPendentes = (): readonly Lugar[] => [...brilhos];
@@ -122,12 +129,17 @@ function confirmarNivel(): void {
   registrarMarcoMega(memo!.pets);
   pagarNivel(nivelDe(r.estado));
   definirTrancas({ saco: !pecaAberta(r.estado, "crescer"), portao: !pecaAberta(r.estado, "lutar"), barraca: !pecaAberta(r.estado, "diario") });
+  definirCais(marcoDoCais !== null, marcoDoCais === null || !r.estado.marcos.includes(marcoDoCais));
+  /* as tacas da temporada (MMO7): uma busca por sessao, so com o cais aberto (trancado, o jogo nao chama o servidor); sem conta ou sem
+     resposta, a ilha fica como esta */
+  if (CAIS.ligado && !CAIS.trancado && !tacasBuscadas) { tacasBuscadas = true; void buscarTacas(); }
   if (antes !== null && r.estado === antes) return;
   confirmado = r.estado; versaoConfirmado++;
   gravarChave(r.estado);
   /* o lugar que acabou de abrir brilha uma vez (quando a ilha aparecer) e o leitor de tela ouve o que abriu */
   for (const n of r.novos) for (const p of Object.keys(LUGAR_DA_PECA) as Peca[]) if (PECAS[p].marco === n) brilhos.add(LUGAR_DA_PECA[p]!);
-  if (brilhos.size) { versaoBrilhos++; for (const o of ouvBrilhos) o(); }
+  if (marcoDoCais !== null && antes !== null && r.novos.includes(marcoDoCais)) brilhoDoCais = true;
+  if (brilhos.size || brilhoDoCais) { versaoBrilhos++; for (const o of ouvBrilhos) o(); }
   if (antes !== null && r.novos.length) emitirSom("nivel");   /* SOM-UP: o nivel novo (nao na primeira leitura) */
   const fala = anuncioDeAbertura(r.novos);
   if (fala) falar(fala);
@@ -182,12 +194,25 @@ export function useAnuncioNivel(): string {
 
 /* ---------------------------------------------------------------------------------------------------- o cartao do motivo (3.4) */
 /** a peca trancada cujo motivo o cartao mostra (a tecla, a rota ou o toque num lugar trancado), ou null */
-let motivo: Peca | null = null;
+let motivo: Peca | "cais" | null = null, marcoCais = 10;
 const ouvMotivo = new Set<() => void>();
 export function abrirMotivo(p: Peca): void { motivo = p; for (const o of ouvMotivo) o(); }
+/** o cartao do motivo do cais trancado (MMO5): o marco e o do build (o 10; no beta, outro) */
+export function abrirMotivoDoCais(marco: number): void { marcoCais = marco; motivo = "cais"; for (const o of ouvMotivo) o(); }
+export const marcoDoMotivoDoCais = (): number => marcoCais;
+/** a frase do cadeado do cais: o marco 10 e o primeiro Mega (MMO-13) */
+export const motivoDoCais = (marco: number): string => marco === 10 ? "Abre com o primeiro Mega" : `Abre no nível ${marco} do Tamer`;
+/** o marco esta feito agora (o cais abre por ele) */
+export const marcoFeito = (marco: number): boolean => lerAgora().marcos.includes(marco);
 export function fecharMotivo(): void { if (motivo === null) return; motivo = null; for (const o of ouvMotivo) o(); }
-export function useMotivo(): Peca | null {
+export function useMotivo(): Peca | "cais" | null {
   return useSyncExternalStore(o => { ouvMotivo.add(o); return () => { ouvMotivo.delete(o); }; }, () => motivo, () => null);
+}
+
+/** o cais na tela (o cadeado da ilha e a marca do minimapa): null com o cais desligado; muda quando o nivel muda */
+export function useCais(): { marco: number; trancado: boolean } | null {
+  const e = useNivel();
+  return marcoDoCais === null ? null : { marco: marcoDoCais, trancado: !e.marcos.includes(marcoDoCais) };
 }
 
 /** o lugar da ilha esta trancado agora (ao tocar nele) */

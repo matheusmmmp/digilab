@@ -1712,6 +1712,90 @@ CONFIG_LUTA_CORPO_LIGADA = ConfigLutaCorpo(ligada=True)
 
 
 @dataclass(frozen=True)
+class ConfigAcoplamentoCorpo:
+    """CORPO_ACOPLAMENTO, a opcao D (docs/TAREFA_V3_CORPO_ACOPLAMENTO.md, secao 10; D-CA-2 e D-CA-5, Matheus, 2026-11-18). Ligada, a
+    falta de combustivel (o emissor `falta_combustivel` do metabolismo, abaixo de `ConfigCorpo.falta_limiar`) sobe a fome em
+    `falta_fome` por tick, e nao o cansaco: a ponte ME-1 passa do cansaco para a fome. O jejum deixa de cansar o pet e passa a lhe dar mais
+    fome, e a digestao (que so converte o que tira da fome) ganha teto justo quando o combustivel falta. Exige o corpo com o metabolismo.
+    Desligada (o padrao), a ME-1 vale como hoje e a vida sai byte a byte. Fica numa config propria, e nao em `ConfigCorpo`, para o dump
+    da ConfigCorpo (os gabaritos de paridade do corpo e do cerebro A e o espelho TS) nao mudar, como a ConfigLutaCorpo. Status em
+    PARAMETROS_ACOPLAMENTO_CORPO."""
+
+    ligada: bool = False
+    falta_fome: int = 500                    # por tick com a falta; o 500 do `falta_cansaco` de hoje (o ponto de partida, secao 10)
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigAcoplamentoCorpo.ligada e bool: {self.ligada!r}")
+        if type(self.falta_fome) is not int or self.falta_fome <= 0:
+            raise ValueError(f"ConfigAcoplamentoCorpo.falta_fome e inteiro positivo: {self.falta_fome!r}")
+
+
+# Status dos campos da ConfigAcoplamentoCorpo (conferido por teste).
+PARAMETROS_ACOPLAMENTO_CORPO: dict[str, tuple[str, str]] = {
+    "ligada": ("DECIDIDO", "TAREFA_V3_CORPO_ACOPLAMENTO, D-CA-2 e D-CA-5 (Matheus, 2026-11-18, 'Aprovo a D-CA-1 a D-CA-7'): a opcao D, "
+                           "atras de chave desligada; ligar num pet so depois da validacao (D-CA-6 e D-CA-7)"),
+    "falta_fome": ("PROPOSTO", "TAREFA_V3_CORPO_ACOPLAMENTO, secao 10: o 500 do falta_cansaco de hoje, o ponto de partida; SEM FONTE"),
+}
+
+CONFIG_ACOPLAMENTO_CORPO = ConfigAcoplamentoCorpo()
+CONFIG_ACOPLAMENTO_CORPO_LIGADA = ConfigAcoplamentoCorpo(ligada=True)
+
+
+@dataclass(frozen=True)
+class ConfigDigestaoCorpo:
+    """CORPO, a opcao E (docs/MAPA_CORPO.md, secao 7; docs/PLANO_ANALISE_V3_CORPO.md, secao 2; D-CO-1, Matheus, 2026-11-18). Ligada, a
+    comida que sobra no estomago com a fome em 0 vira combustivel, em vez de ser descartada: a digestao converte a comida inteira, e a fome
+    cai como hoje (o corte de `Corpo._digerir` no que tira da fome nao muda). O excedente vai ao combustivel de uma vez, pela fracao do
+    metabolismo, com o teto C (o que passa conta em `descartado_teto`). Exige o corpo com a digestao e o metabolismo. Desligada (o padrao),
+    a vida sai byte a byte. Fica numa config propria, como a ConfigAcoplamentoCorpo, para nenhum dump de hoje mudar. Status em
+    PARAMETROS_DIGESTAO_CORPO."""
+
+    inteira: bool = False
+
+    def __post_init__(self) -> None:
+        if type(self.inteira) is not bool:
+            raise TypeError(f"ConfigDigestaoCorpo.inteira e bool: {self.inteira!r}")
+
+
+# Status dos campos da ConfigDigestaoCorpo (conferido por teste).
+PARAMETROS_DIGESTAO_CORPO: dict[str, tuple[str, str]] = {
+    "inteira": ("DECIDIDO", "PLANO_ANALISE_V3_CORPO, D-CO-1 (Matheus, 2026-11-18, 'Confirmo, siga'): a opcao E do MAPA_CORPO, atras de "
+                            "chave desligada, so de pesquisa ate a validacao"),
+}
+
+CONFIG_DIGESTAO_CORPO = ConfigDigestaoCorpo()
+CONFIG_DIGESTAO_CORPO_INTEIRA = ConfigDigestaoCorpo(inteira=True)
+
+
+@dataclass(frozen=True)
+class ConfigTetoFomeCorpo:
+    """CORPO C3, a ponte com teto (docs/PLANO_ANALISE_V3_CORPO_C3.md, secao 2; D-C3-1 e D-C3-2, Matheus, 2026-11-19). Com `teto` (so com a
+    D, a `ConfigAcoplamentoCorpo` ligada), num tick com a falta de combustivel a ponte soma a fome min(falta_fome, max(0, teto - fome)):
+    a fome quimica so sobe pela falta ate `teto`. A fome basal e o resto do corpo nao mudam, e acima do teto a falta nao sobe nem a fome nem
+    o cansaco. `None` (o padrao): a D de hoje, byte a byte. Fica numa config propria, como a ConfigDigestaoCorpo, para nenhum dump de hoje
+    mudar. Status em PARAMETROS_TETO_FOME_CORPO."""
+
+    teto: int | None = None
+
+    def __post_init__(self) -> None:
+        if self.teto is not None and (type(self.teto) is not int or self.teto <= 0):
+            raise ValueError(f"ConfigTetoFomeCorpo.teto e None ou inteiro positivo: {self.teto!r}")
+
+
+# Status dos campos da ConfigTetoFomeCorpo (conferido por teste).
+PARAMETROS_TETO_FOME_CORPO: dict[str, tuple[str, str]] = {
+    "teto": ("DECIDIDO", "PLANO_ANALISE_V3_CORPO_C3, D-C3-1 e D-C3-2 (Matheus, 2026-11-19, 'Ponte com teto' e 'Aprovo todas'): None hoje; "
+                         "o DTL em 382 500, o limiar da privacao (C - 0,15 C, derivado, nao e numero novo); o DTB em C/2 = 225 000, "
+                         "PROPOSTO, SEM FONTE; so de pesquisa ate a validacao"),
+}
+
+CONFIG_TETO_FOME_CORPO = ConfigTetoFomeCorpo()
+CONFIG_TETO_FOME_LIMIAR = ConfigTetoFomeCorpo(teto=382_500)      # o DTL: o limiar da privacao (o Corpo confere que e o t.limiar_privacao)
+CONFIG_TETO_FOME_BAIXO = ConfigTetoFomeCorpo(teto=225_000)       # o DTB: C/2, SEM FONTE
+
+
+@dataclass(frozen=True)
 class ConfigLutaMemoria:
     """A ponte da luta, o lado da memoria (docs/TAREFA_V3_PONTE_LUTA.md, secoes 3.2 e 3.7; PL-2, PL-6, PL-7 e PL-9; etapa PE2). Ligada, o
     DigiBrain modular recebe o resumo da luta (`receber_luta`, irmao do `receber_acao_dono`), o entrega ao M-SENS na decisao seguinte (a
@@ -3099,6 +3183,126 @@ CONFIG_SONO_SEGURA_LIGADA = ConfigSonoSegura(ligada=True)
 
 
 @dataclass(frozen=True)
+class ConfigElogio:
+    """O credito do carinho no DigiBrain modular (docs/TAREFA_V3_ELOGIO.md, secoes 3 e 9). O motor com os gestos chama o gancho
+    `mudanca_no_corpo(obs_antes, obs_depois)` no carinho; ligada, o modular o tem (desligada, nao tem, e o motor nao o chama). O sinal e o
+    `sinal_corpo` do carinho com os drives e o `ganho_r` do M-AFETO, normalizado como o r_n (`r_norm`) e multiplicado por `ganho` / S. Ele
+    vai as ultimas `janela` decisoes, j = 0 a ultima, com o peso S - div_arred(j x S, janela) (a forma linear da v1, D-EL-3 e D-EL-11), na
+    hora do carinho (D-EL-12): ao P2 (a linha do comportamento da decisao, com o z e o g_apr dela) e, se a decisao consumiu uma classe, ao
+    desfecho dela no P1, somado pelo que o carinho mudou nos receptores. A valencia do M-AFETO nao o recebe. Fica numa config propria, e nao
+    em `ConfigDigibrain` (a `elogio_credito` da secao 3), para o dump do modular (digibrain_modular_constantes.json) nao mudar, como a
+    `ConfigSonoSegura`. Desligada (o padrao), a vida de hoje sai byte a byte (tests/gabaritos/elogio_de_hoje.json). Status em
+    PARAMETROS_ELOGIO."""
+
+    ligada: bool = False                      # PROPOSTO: a chave
+    ganho: int = _S                           # PROPOSTO, SEM FONTE: o g da secao 3, na escala S (a grade da D-EL-8: S/4, S/2, S, 2S)
+    janela: int = 1                           # PROPOSTO, SEM FONTE: o W em decisoes (D-EL-11; a grade da D-EL-8: 1, 2, 4)
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigElogio.ligada e bool: {self.ligada!r}")
+        if type(self.ganho) is not int or self.ganho < 0:
+            raise ValueError(f"ConfigElogio.ganho e inteiro >= 0: {self.ganho!r}")
+        if type(self.janela) is not int or self.janela < 1:
+            raise ValueError(f"ConfigElogio.janela e inteiro >= 1: {self.janela!r}")
+
+
+# Status dos campos da ConfigElogio (conferido por teste)
+PARAMETROS_ELOGIO: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "TAREFA_V3_ELOGIO (D-EL-1 a D-EL-13 DECIDIDAS, 2026-11-16 e 2026-11-17); a chave, SEM FONTE"),
+    "ganho": ("PROPOSTO", "TAREFA_V3_ELOGIO, secao 3 e D-EL-8 (a grade); o valor sai da calibracao, SEM FONTE"),
+    "janela": ("PROPOSTO", "TAREFA_V3_ELOGIO, D-EL-8 e D-EL-11 (em decisoes); o valor sai da calibracao, SEM FONTE"),
+}
+
+CONFIG_ELOGIO = ConfigElogio()
+CONFIG_ELOGIO_LIGADA = ConfigElogio(ligada=True)
+
+
+@dataclass(frozen=True)
+class ConfigRastro:
+    """O rastro da cadeia no DigiBrain modular (docs/PLANO_ANALISE_V3_PET_VIVO_R1.md, secao 2, APROVADO): so leitura. Ligada, o fechamento
+    de cada decisao grava `motivo["cadeia"]`: o r do mesmo tick, o r do intervalo ate a decisao seguinte (medido, nunca creditado), os
+    gestos do dono no intervalo, as atualizacoes que a decisao causou e o que pesou na escolha. Nao toca em V, E, P1, P2, memoria nem rng: a
+    vida sai igual, decisao a decisao. Fica numa config propria, e nao em `ConfigDigibrain` (a subchave `rastro` do plano; D-RA-8), para o
+    dump do modular nao mudar, como a `ConfigElogio`. Desligada (o padrao), nenhum campo novo e a vida de hoje byte a byte. Status em
+    PARAMETROS_RASTRO."""
+
+    ligada: bool = False                      # PROPOSTO: a chave
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigRastro.ligada e bool: {self.ligada!r}")
+
+
+PARAMETROS_RASTRO: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "PLANO_ANALISE_V3_PET_VIVO_R1, secao 2 (APROVADO em 2026-11-19, RA-1 a RA-6); a chave, SEM FONTE"),
+}
+
+CONFIG_RASTRO = ConfigRastro()
+CONFIG_RASTRO_LIGADA = ConfigRastro(ligada=True)
+
+
+BRACOS_PV2 = ("OLF-0", "OLF-DC", "OLF-DCV", "OLF-PLA", "OLF-G")
+
+
+@dataclass(frozen=True)
+class ConfigPV2:
+    """A quimiotaxia pelo orgao do Olfato no DigiBrain modular (docs/PLANO_ANALISE_V3_PET_VIVO_PV2.md, secao 3, APROVADO; a forma dos
+    bracos em docs/futuro/integracao_cadeia_digibrain.md, secao 8, e no D-PV2C-1). Ligada, so com a ConfigOlfato da comida ligada no corpo
+    (duas narinas, DP-13): o cerebro le o nivel `c` (a media das duas narinas) e a variacao `dC` desde a decisao anterior, nunca a diferenca
+    entre elas (PV2-3); o `dC` entra no z como a caracteristica `dc_cheiro` e, com o `w0_dc`, no inato da unidade `comer/cheiro`; o nivel e
+    a proximidade das unidades do cheiro. O executor da busca (o `escolher_alvo` do M-ADAPT, PV2-2) escolhe entre os dois candidatos que o
+    motor ja oferece (`cheiro_seguir`, `cheiro_virar`), pelo braco:
+      - OLF-0: o preferido do motor (a tropotaxia: vira para a narina mais forte quando elas diferem);
+      - OLF-DC: segue; o acumulador da queda `A <- A - dC` (com dC < 0; senao A <- 0) passando de `l_pirueta` vira, e A volta a 0;
+      - OLF-DCV: o OLF-DC, e a pirueta continua virando por `n_varredura` decisoes (a varredura, sempre para a narina mais forte);
+      - OLF-PLA: vira quando os bits baixos do u do alvo, `u & 0xFF`, ficam abaixo de `taxa_placebo` (em 256), com a mesma varredura, sem
+        ler o A (o placebo da hora certa);
+      - OLF-G: o OLF-DCV, com o nivel multiplicado pelo ganho da fome, `clamp(div_arred(c x (g0 + u_fome), g0), 0, S)` (PV2-5).
+    Fica numa config propria, como a ConfigElogio, para o dump do modular nao mudar. Desligada (o padrao), a vida de hoje sai byte a byte
+    (tests/gabaritos/pv2_de_hoje.json). Status em PARAMETROS_PV2."""
+
+    ligada: bool = False                      # PROPOSTO: a chave
+    braco: str = "OLF-DCV"                    # PROPOSTO: o braco principal do plano (PV2-4)
+    # os quatro numeros do mecanismo (PV2-9): medidos nas sementes dos testes (experiments/medir_pv2.py,
+    # artifacts_v3_pet_vivo/pv2/medicao_codigo.json) pelas regras escritas antes, e aprovados com o adendo 1 do plano (2026-11-17)
+    w0_dc: int = 2849                         # DECIDIDO (adendo 1, 2026-11-17), SEM FONTE: div_arred(S x S, 8 x 46), uma queda mediana tira S/8 do inato
+    l_pirueta: int = 92                       # DECIDIDO (adendo 1, 2026-11-17), SEM FONTE: 2 x a mediana das quedas do cheiro (46) no OLF-0 com w0_dc = 0
+    n_varredura: int = 1                      # DECIDIDO (adendo 1, 2026-11-17), SEM FONTE: sem medida (o plano nao da como medir)
+    taxa_placebo: int = 22                    # DECIDIDO (adendo 1, 2026-11-17), SEM FONTE: arred(256 x 49 piruetas / 581 decisoes fora da varredura) no OLF-DCV
+    g0: int = 512                             # DECIDIDO (adendo 1, 2026-11-17; refaz o 64 da PV2-5): o G0 do ganho da fome (a INT-4)
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigPV2.ligada e bool: {self.ligada!r}")
+        if self.braco not in BRACOS_PV2:
+            raise ValueError(f"ConfigPV2.braco e um de {BRACOS_PV2}: {self.braco!r}")
+        for campo in ("w0_dc", "l_pirueta", "n_varredura", "taxa_placebo", "g0"):
+            v = getattr(self, campo)
+            if type(v) is not int or v < 0:
+                raise ValueError(f"ConfigPV2.{campo} e inteiro >= 0: {v!r}")
+        if self.l_pirueta < 1 or self.g0 < 1:
+            raise ValueError(f"ConfigPV2: l_pirueta e g0 sao >= 1: {self.l_pirueta!r}, {self.g0!r}")
+        if self.taxa_placebo > 256:
+            raise ValueError(f"ConfigPV2.taxa_placebo e uma taxa em 256: {self.taxa_placebo!r}")
+
+
+# Status dos campos da ConfigPV2 (conferido por teste)
+PARAMETROS_PV2: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "PLANO_ANALISE_V3_PET_VIVO_PV2, secao 3 (APROVADO, PV2-1 a PV2-10 DECIDIDAS em 2026-11-09); a chave, SEM FONTE"),
+    "braco": ("PROPOSTO", "PLANO_ANALISE_V3_PET_VIVO_PV2, PV2-4; a forma de cada braco no D-PV2C-1"),
+    "w0_dc": ("DECIDIDO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1 APROVADO em 2026-11-17 (artifacts_v3_pet_vivo/pv2/medicao_codigo.json); SEM FONTE"),
+    "l_pirueta": ("DECIDIDO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1 APROVADO em 2026-11-17 (artifacts_v3_pet_vivo/pv2/medicao_codigo.json); SEM FONTE"),
+    "n_varredura": ("DECIDIDO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1 APROVADO em 2026-11-17; sem medida, SEM FONTE"),
+    "taxa_placebo": ("DECIDIDO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1 APROVADO em 2026-11-17 (a taxa da pirueta do OLF-DCV, medicao_codigo.json); SEM FONTE"),
+    "g0": ("DECIDIDO", "PLANO_ANALISE_V3_PET_VIVO_PV2, adendo 1 APROVADO em 2026-11-17 (512, a saturacao da INT-4; refaz o 64 da "
+                       "PV2-5); a forma da revisao I, pista do Root et al. 2011"),
+}
+
+CONFIG_PV2 = ConfigPV2()
+
+
+@dataclass(frozen=True)
 class ConfigLanceDono:
     """O lance do dono (docs/TAREFA_V3_BOLA_BRINCAR.md, BB-1 a BB-6; as decisoes DECIDIDAS pelo Matheus em 2026-11-11, os numeros PROPOSTOS).
     Ligada, com o mundo ligado, o Brincar do dono pega a bola onde ela estiver e a joga perto do pet: a direcao (uma das 16) e a distancia
@@ -3182,6 +3386,87 @@ PARAMETROS_EQUILIBRIO_CUIDADO: dict[str, tuple[str, str]] = {
 }
 
 CONFIG_EQUILIBRIO_CUIDADO = ConfigEquilibrioCuidado()
+
+
+@dataclass(frozen=True)
+class ConfigAblacaoValuation:
+    """As duas chaves de ablacao da VALUATION (docs/PLANO_ANALISE_V3_VALUATION.md, secao 3; D-VAL-3, APROVADA pelo Matheus em 2026-11-16),
+    so de pesquisa, so no DigiBrain modular do Python. Nao sao mecanismo: tiram uma entrada ou usam um caminho de escolha que o M-ARB ja tem.
+    - `ve_z` (a hipotese F): o V e o E entram como 0 no contexto z do M-IMPULSO (o inato, o habito e a elegibilidade do P2 leem o mesmo z);
+      o M-AFETO continua andando com eles;
+    - `maior_peso` (a hipotese G): fora do reflexo e da escolha segurada, o M-ARB escolhe a unidade de maior peso (o primeiro no empate, o
+      caminho de `_escolher` sem u), sem chamar a rng de politica; as sondas leem o mesmo caminho.
+    Fica numa config propria, como a `ConfigEquilibrioCuidado`, para o dump dos inatos e da `ConfigDigibrain` nao mudar. Nenhum pet do jogo a
+    liga, e o jogo web nao a espelha (D-VAL-5). Desligada (o padrao), a vida de hoje sai byte a byte (tests/gabaritos/valuation_de_hoje.json).
+    Status em PARAMETROS_ABLACAO_VALUATION."""
+
+    ve_z: bool = False                        # PROPOSTO: a ablacao do V e do E no z (hipotese F)
+    maior_peso: bool = False                  # PROPOSTO: a ablacao do sorteio proporcional (hipotese G)
+
+    def __post_init__(self) -> None:
+        for campo in ("ve_z", "maior_peso"):
+            if type(getattr(self, campo)) is not bool:
+                raise TypeError(f"ConfigAblacaoValuation.{campo} e bool: {getattr(self, campo)!r}")
+        if self.ve_z and self.maior_peso:
+            raise ValueError("ConfigAblacaoValuation: uma ablacao por braco (docs/PLANO_ANALISE_V3_VALUATION.md, secao 3)")
+
+    @property
+    def ligada(self) -> bool:
+        """alguma das duas ablacoes ligada"""
+        return self.ve_z or self.maior_peso
+
+
+# Status dos campos da ConfigAblacaoValuation (conferido por teste)
+PARAMETROS_ABLACAO_VALUATION: dict[str, tuple[str, str]] = {
+    "ve_z": ("PROPOSTO", "PLANO_ANALISE_V3_VALUATION, secao 3 (D-VAL-3, APROVADA pelo Matheus em 2026-11-16); so de pesquisa; SEM FONTE"),
+    "maior_peso": ("PROPOSTO", "PLANO_ANALISE_V3_VALUATION, secao 3 (D-VAL-3, APROVADA pelo Matheus em 2026-11-16); so de pesquisa; SEM FONTE"),
+}
+
+CONFIG_ABLACAO_VALUATION = ConfigAblacaoValuation()
+
+
+@dataclass(frozen=True)
+class ConfigConsertoValuation:
+    """O conserto da VALUATION (docs/PLANO_ANALISE_V3_VALUATION_CONSERTO.md, secao 2; D-VAL-16, APROVADA pelo Matheus em 2026-11-17), so de
+    pesquisa, so no DigiBrain modular do Python (D-VAL-17). A V2 confirmou que o reflexo do sono do M-ARB (a leitura da energia abaixo de
+    `lambda_sono`) troca o comer pelo dormir com fome ou sem. Ligada, a `guarda_fome_reflexo` faz o reflexo nao disparar com a fome urgente
+    (a urgencia da fome do M-AFETO acima do `urgencia_lambda` dos inatos, a mesma fome urgente do sono que segura, do passeio, do brincar e
+    do convite da bola; nenhum numero novo): a decisao segue pelo sorteio de hoje, em que o dormir continua concorrendo. Sem a fome urgente,
+    o reflexo de hoje. Fica numa config propria, como a `ConfigSonoSegura`, para o dump dos inatos e da `ConfigDigibrain` nao mudar. Nenhum
+    pet do jogo a liga, e o jogo web nao a espelha. Desligada (o padrao), a vida de hoje sai byte a byte
+    (tests/gabaritos/valuation_conserto_de_hoje.json). Status em PARAMETROS_CONSERTO_VALUATION."""
+
+    guarda_fome_reflexo: bool = False         # PROPOSTO: a chave (so a run da V3 da VALUATION a liga)
+    # CORPO, a opcao C5 (docs/PLANO_ANALISE_V3_CORPO.md, secao 2; D-CO-1 e D-CO-3): o reflexo suave. Ligado, o reflexo do sono deixa de
+    # pular o sorteio: com a energia abaixo de `lambda_sono`, a unidade `dormir` ganha `peso_reflexo_suave` no peso (no sorteio e nas
+    # sondas), e a escolha segue pelo sorteio. O `Arbitragem.reflexo` passa a dar False (nenhum evento de reflexo). O jogo web o espelha
+    # (web/app/motor/digibrain/arb.ts, `ConfigReflexoSuave`), com paridade. Exclusivo com a guarda da fome (uma mudanca por braco)
+    reflexo_suave: bool = False
+    peso_reflexo_suave: int = 1024            # +S no peso do dormir (D-CO-3), SEM FONTE
+
+    def __post_init__(self) -> None:
+        if type(self.guarda_fome_reflexo) is not bool:
+            raise TypeError(f"ConfigConsertoValuation.guarda_fome_reflexo e bool: {self.guarda_fome_reflexo!r}")
+        if type(self.reflexo_suave) is not bool:
+            raise TypeError(f"ConfigConsertoValuation.reflexo_suave e bool: {self.reflexo_suave!r}")
+        if type(self.peso_reflexo_suave) is not int or self.peso_reflexo_suave <= 0:
+            raise ValueError(f"ConfigConsertoValuation.peso_reflexo_suave e inteiro positivo: {self.peso_reflexo_suave!r}")
+        if self.reflexo_suave and self.guarda_fome_reflexo:
+            raise ValueError("ConfigConsertoValuation: o reflexo suave e a guarda da fome sao bracos diferentes, nao juntos")
+
+
+# Status dos campos da ConfigConsertoValuation (conferido por teste). A fome urgente nao tem numero proprio: e o `urgencia_lambda` dos inatos.
+PARAMETROS_CONSERTO_VALUATION: dict[str, tuple[str, str]] = {
+    "guarda_fome_reflexo": ("PROPOSTO", "PLANO_ANALISE_V3_VALUATION_CONSERTO, secao 2 (D-VAL-16, APROVADA pelo Matheus em 2026-11-17); a "
+                                        "chave, so de pesquisa; SEM FONTE"),
+    "reflexo_suave": ("PROPOSTO", "PLANO_ANALISE_V3_CORPO, D-CO-1 (Matheus, 2026-11-18, 'Confirmo, siga'): a opcao C5 do MAPA_CORPO, "
+                                  "a chave, so de pesquisa ate a validacao (como a guarda); SEM FONTE"),
+    "peso_reflexo_suave": ("PROPOSTO", "PLANO_ANALISE_V3_CORPO, secao 2 (D-CO-3): +S, o maximo de uma ativacao; SEM FONTE"),
+}
+
+CONFIG_CONSERTO_VALUATION = ConfigConsertoValuation()
+CONFIG_CONSERTO_VALUATION_LIGADO = ConfigConsertoValuation(guarda_fome_reflexo=True)
+CONFIG_REFLEXO_SUAVE = ConfigConsertoValuation(reflexo_suave=True)
 
 # Os numeros do modular que o E1 propoe trocar de valor (docs/RESULTADO_V3_EQUILIBRIO_CUIDADO_E1.md, a rodada F2 da grade), nos inatos de hoje
 # (CONFIG_DIGIBRAIN_INATOS fica como esta; no jogo, a v38 e a v39 os usam desde o E3, EQ-6). DECIDIDOS (APROVADOS em 2026-11-12), SEM FONTE.
@@ -3809,6 +4094,39 @@ PARAMETROS_COOPERACAO = {
     "co7_escudo": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12): pesquisa, a ablacao 'so o escudo'; ligada com a co7 no jogo"),
     "co7_universalizacao": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12): pesquisa, a ablacao 'so a universalizacao'; ligada com a co7 no jogo"),
     "co7_afeto": ("DECIDIDO", "CB-1 a CB-9 (Matheus, 2026-11-12): pesquisa, a ablacao 'so o afeto'; ligada com a co7 no jogo"),
+}
+
+
+@dataclass(frozen=True)
+class ConfigIntervencaoSocial:
+    """O parceiro sob intervencao (docs/ESPEC_V3_SOCIAL_PAR_E1.md, APROVADA pelo Matheus em 2026-11-17, "Aprovo a E1"): so pesquisa, na
+    bancada do Python; o jogo nunca a liga (SP-2).
+    ligada                 o `Grupo.levar_pet` (a perturbacao, com a origem `intervencao` no registro) e o ponto gravado em toda acao com
+                           alvo (o parceiro em laco aberto, `experiments/bancada/parceiro.py`); desligada, o grupo de hoje byte a byte
+    janela_reencontro      a janela do tempo ate o reencontro depois da perturbacao, em decisoes do pet focal
+    raio_contato_celulas   o contato, em celulas (Chebyshev): o do toque de hoje
+    raio_perto_celulas     o perto, em celulas: o da visao de hoje"""
+
+    ligada: bool = False
+    janela_reencontro: int = 96
+    raio_contato_celulas: int = 1
+    raio_perto_celulas: int = 6
+
+    def __post_init__(self) -> None:
+        for nome in ("janela_reencontro", "raio_contato_celulas", "raio_perto_celulas"):
+            v = getattr(self, nome)
+            if type(v) is not int or v <= 0:
+                raise ValueError(f"ConfigIntervencaoSocial.{nome} e um inteiro positivo: {v!r}")
+
+
+CONFIG_INTERVENCAO_SOCIAL = ConfigIntervencaoSocial()
+CONFIG_INTERVENCAO_SOCIAL_LIGADA = ConfigIntervencaoSocial(ligada=True)
+PARAMETROS_INTERVENCAO_SOCIAL = {
+    "ligada": ("DECIDIDO", "SP-1, SP-2 e E1-1 a E1-6 (Matheus, 2026-11-17, \"Aprovo a E1\"): so pesquisa, nunca no jogo; desligada, o grupo "
+                           "de hoje (o G2 da E1)"),
+    "janela_reencontro": ("PROPOSTO", "SEM FONTE: um dia de decisoes (96 x 15 ticks = TICKS_POR_DIA); a espec da E1, secao 2.1"),
+    "raio_contato_celulas": ("PROPOSTO", "o raio_toque_celulas da ConfigGrupo (1), para o contato medido ser o toque de hoje"),
+    "raio_perto_celulas": ("PROPOSTO", "o raio_visao_celulas da ConfigMundo (6), para o perto medido ser o que o pet ve"),
 }
 
 

@@ -132,6 +132,162 @@ export const MIGRACOES: readonly string[] = [
   CREATE INDEX sementes_dia ON sementes(conta_id, dia);
   CREATE INDEX sementes_pet ON sementes(conta_id, pet, versao_pet, numero);
   `,
+  /* 4: o ranking da semana (MMO5, servidor_web/src/envio/semanas.ts): em cada semente, o que a conferência do envio achou dela (NULL
+     até o primeiro envio que a confere); no segredo, quando a semana congelou e ele foi publicado (NULL com a semana aberta); e as
+     tabelas congeladas, que pendem da conta (apagar a conta tira a linha dela) */
+  `
+  ALTER TABLE sementes ADD COLUMN situacao TEXT CHECK (situacao IN ('vitoria', 'derrota', 'nao_enviada', 'pendente', 'fora_da_arena', 'acima_do_limite'));
+  ALTER TABLE sementes ADD COLUMN estagio TEXT;
+  ALTER TABLE sementes ADD COLUMN rival TEXT;
+  ALTER TABLE sementes ADD COLUMN faixa TEXT;
+  ALTER TABLE sementes ADD COLUMN envio_id TEXT;
+  CREATE INDEX sementes_semana ON sementes(semana);
+  ALTER TABLE segredos_semana ADD COLUMN publicado_em INTEGER;
+  CREATE TABLE tabelas_semana (
+    semana           TEXT NOT NULL,
+    estagio          TEXT NOT NULL,
+    posicao          INTEGER NOT NULL,
+    conta_id         TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    pontos           REAL NOT NULL,
+    rivais_vencidos  INTEGER NOT NULL,
+    lutas_usadas     INTEGER NOT NULL,
+    hora_dos_pontos  INTEGER,
+    PRIMARY KEY (semana, estagio, posicao)
+  ) STRICT;
+  CREATE INDEX tabelas_semana_conta ON tabelas_semana(conta_id);
+  `,
+  /* 5: o rival e o mapa que o pedido da semente prometeu (D-CONTA-116): a luta com outro rival ou outro mapa não é a luta pedida. NULL
+     no rival: a semente é de antes da regra, e nada se confere */
+  `
+  ALTER TABLE sementes ADD COLUMN rival_pedido TEXT;
+  ALTER TABLE sementes ADD COLUMN mapa_pedido TEXT;
+  `,
+  /* 6: o desafio do dia (MMO6, servidor_web/src/desafio/): o segredo de cada dia (do servidor, não da conta: publicado quando o dia
+     congela); a tentativa de cada conta em cada dia (uma só), com o que ela prometeu antes de cada semente (a escolha e as trocas) e o
+     resultado conferido; as sementes das lutas entregues; a linha de cada envio conferido; e as tabelas congeladas com o selo do Top do
+     dia (MMO-11). Tudo o que é da conta pende dela: apagar a conta leva tudo */
+  `
+  CREATE TABLE segredos_dia (
+    dia           TEXT PRIMARY KEY,
+    segredo       TEXT NOT NULL,
+    criado_em     INTEGER NOT NULL,
+    publicado_em  INTEGER
+  ) STRICT;
+  CREATE TABLE desafios (
+    conta_id     TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    dia          TEXT NOT NULL,
+    comecou_em   INTEGER NOT NULL,
+    versao       INTEGER NOT NULL,
+    escolha      INTEGER,
+    trocas       TEXT NOT NULL DEFAULT '[]',
+    vitorias     INTEGER,
+    series       INTEGER,
+    lutas        INTEGER,
+    acabou       INTEGER,
+    vida_ultima  INTEGER,
+    terminou_em  INTEGER,
+    envio_id     TEXT,
+    PRIMARY KEY (conta_id, dia),
+    CHECK ((vitorias IS NULL) = (envio_id IS NULL))
+  ) STRICT;
+  CREATE INDEX desafios_dia ON desafios(dia);
+  CREATE TABLE desafio_lutas (
+    conta_id  TEXT NOT NULL,
+    dia       TEXT NOT NULL,
+    k         INTEGER NOT NULL,
+    semente   INTEGER NOT NULL,
+    hora      INTEGER NOT NULL,
+    escolha   INTEGER NOT NULL,
+    trocas    TEXT NOT NULL,
+    PRIMARY KEY (conta_id, dia, k),
+    FOREIGN KEY (conta_id, dia) REFERENCES desafios(conta_id, dia) ON DELETE CASCADE
+  ) STRICT;
+  CREATE TABLE desafio_envios (
+    id             TEXT PRIMARY KEY,
+    conta_id       TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    dia            TEXT NOT NULL,
+    recebido_em    INTEGER NOT NULL,
+    hash_registro  TEXT NOT NULL,
+    resultado      TEXT NOT NULL CHECK (resultado IN ('aceito', 'recusado')),
+    motivo         TEXT,
+    detalhe        TEXT,
+    vitorias       INTEGER,
+    lutas          INTEGER NOT NULL,
+    ms_conferencia REAL NOT NULL,
+    CHECK ((resultado = 'aceito') = (motivo IS NULL AND vitorias IS NOT NULL))
+  ) STRICT;
+  CREATE INDEX desafio_envios_conta ON desafio_envios(conta_id, dia);
+  CREATE TABLE tabelas_dia (
+    dia          TEXT NOT NULL,
+    posicao      INTEGER NOT NULL,
+    conta_id     TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    vitorias     INTEGER NOT NULL,
+    vida_ultima  INTEGER NOT NULL,
+    terminou_em  INTEGER NOT NULL,
+    selo         INTEGER NOT NULL CHECK (selo IN (0, 1)),
+    PRIMARY KEY (dia, posicao)
+  ) STRICT;
+  CREATE INDEX tabelas_dia_conta ON tabelas_dia(conta_id);
+  `,
+  /* 7: o mural (MMO7, servidor_web/src/premios/): o recorde de todos os tempos de cada conta na Torre, na Fábrica e no Salão, só do que a
+     conferência de um envio aceito refez (visto_em: a hora do servidor em que o valor foi visto pela primeira vez, o desempate do mural);
+     e as lutas do Salão que o replay de cada pet refez, para juntar a tentativa do Tamer, que tem um pet por estágio. Os títulos, os
+     selos e os enfeites não têm tabela: saem das tabelas congeladas da semana e do dia. Tudo pende da conta */
+  `
+  CREATE TABLE recordes (
+    conta_id  TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    inst      TEXT NOT NULL CHECK (inst IN ('torre', 'fabrica', 'salao')),
+    valor     INTEGER NOT NULL CHECK (valor >= 1),
+    visto_em  INTEGER NOT NULL,
+    envio_id  TEXT NOT NULL,
+    PRIMARY KEY (conta_id, inst)
+  ) STRICT;
+  CREATE INDEX recordes_inst ON recordes(inst, valor DESC, visto_em);
+  CREATE TABLE salao_vistas (
+    conta_id  TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    pet       INTEGER NOT NULL,
+    semente   INTEGER NOT NULL,
+    venceu    INTEGER NOT NULL CHECK (venceu IN (0, 1)),
+    PRIMARY KEY (conta_id, pet, semente)
+  ) STRICT;
+  `,
+  /* 8: as duas pontuações e o reset (MMO8, servidor_web/src/premios/rankings.ts): o máximo histórico dos Digimon (uma linha por pet, pelo
+     total da vida que a conferência refez; pontos_em: a hora do servidor em que o total chegou ao valor de hoje, o desempate; aposentado_em:
+     o envio que conferiu o reset dele); os resets conferidos (o nível refeito do registro final do pet); e os feitos do Tamer que o servidor
+     viu no replay do pet que os fez (a 1ª medalha de cada líder, "medalha:<id>", e o título da Liga, "liga"). Tudo pende da conta */
+  `
+  CREATE TABLE digimons (
+    conta_id       TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    pet            INTEGER NOT NULL,
+    versao_pet     INTEGER NOT NULL,
+    pontos         REAL NOT NULL CHECK (pontos >= 0),
+    estagio        TEXT NOT NULL,
+    forma          TEXT NOT NULL,
+    pontos_em      INTEGER NOT NULL,
+    aposentado_em  INTEGER,
+    envio_id       TEXT NOT NULL,
+    PRIMARY KEY (conta_id, pet, versao_pet)
+  ) STRICT;
+  CREATE INDEX digimons_pontos ON digimons(pontos DESC, pontos_em);
+  CREATE TABLE resets (
+    conta_id  TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    pet       INTEGER NOT NULL,
+    nivel     INTEGER NOT NULL CHECK (nivel BETWEEN 0 AND 3),
+    hash      TEXT NOT NULL,
+    por       TEXT NOT NULL CHECK (por IN ('reset', 'cruzamento')),
+    visto_em  INTEGER NOT NULL,
+    envio_id  TEXT NOT NULL,
+    PRIMARY KEY (conta_id, pet)
+  ) STRICT;
+  CREATE TABLE feitos_tamer (
+    conta_id  TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    feito     TEXT NOT NULL,
+    pet       INTEGER NOT NULL,
+    visto_em  INTEGER NOT NULL,
+    envio_id  TEXT NOT NULL,
+    PRIMARY KEY (conta_id, feito)
+  ) STRICT;
+  `,
 ];
 
 export const VERSAO_BANCO = MIGRACOES.length;

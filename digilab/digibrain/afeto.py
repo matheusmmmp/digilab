@@ -157,5 +157,15 @@ class Afeto:
         r = sinal_corpo(pc_antes, pc_depois, self.drives(receptores), p.ganho_r, S)
         return {"r": r, "r_n": clamp(div_arred(r, p.r_norm), -S, S)}
 
+    def r_intervalo(self, pc_depois, pc_seguinte, receptores: tuple) -> dict:
+        """o r do intervalo (o rastro da cadeia, docs/PLANO_ANALISE_V3_PET_VIVO_R1.md, secao 2): o corpo logo depois dos estimulos da acao
+        contra o corpo da decisao seguinte, com os mesmos drives, o mesmo ganho e a mesma normalizacao do r. So calculo, como a
+        `sigma_luta`: nao mexe em V, em E nem em `ultimo`, e nada o credita."""
+        p, S = self.p, self.S
+        drives = self.drives(receptores)
+        r = sinal_corpo(pc_depois, pc_seguinte, drives, p.ganho_r, S)
+        return {"r": r, "r_n": clamp(div_arred(r, p.r_norm), -S, S),
+                "canais": canais_do_sinal(pc_depois, pc_seguinte, drives, p.ganho_r, S)}
+
     def estado_interno(self) -> dict:
         return {"V": self.V, "E": self.E, "decisoes": self.decisoes, "ultimo": self.ultimo}

@@ -10,34 +10,46 @@ import { mudarMotor, useJogo } from "../../../jogo.ts";
 import { assistirPoc, fimDoPet, ladoDesenho, lutasDoResultado, nomeDaChave, spriteDaChave, useLutaPoc } from "../../../lutaPocTela.ts";
 import type { Motor, ResultadoLutaPoc } from "../../../../motor/index.ts";
 import "../../../estilo/luta_poc.css";
+import { ArenaRanqueada, EscolhaDoModo, useRanqueadaNaArena } from "./TelaRanqueada.tsx";
 
 /** grava a luta (o motor decide e entra no registro) e abre o palco; o erro do motor aparece na tela. A semente e a de sempre (a da luta no
     registro), ou a que o motor da (as instalacoes: a da proxima tentativa) */
-export function lutarNoPalco(rival: string, mapa: IdCena | null, contexto: string, setErro: (e: string | null) => void, semente?: (m: Motor) => number): void {
+export function lutarNoPalco(rival: string, mapa: IdCena | null, contexto: string, setErro: (e: string | null) => void, semente?: (m: Motor) => number): ResultadoLutaPoc | null {
   let r: ResultadoLutaPoc | null = null;
   try { mudarMotor(m => { r = m.lutarPoc(rival, semente ? semente(m) : hashSemente("luta", m.semente, m.log.length), mapa); }); }
-  catch (err) { setErro(err instanceof Error ? err.message : String(err)); return; }
+  catch (err) { setErro(err instanceof Error ? err.message : String(err)); return null; }
   setErro(null);
   const res = r as unknown as ResultadoLutaPoc, lutas = lutasDoResultado(res);
   assistirPoc(lutas, contexto, L => {
     const ult = lutas[lutas.length - 1], serie = lutas.length > 1;
     return { ...fimDoPet(L, ult.A, ult.B, serie ? (res.venceu ? `Venceu as ${lutas.length} lutas seguidas.` : `A série parou na luta ${lutas.length}.`) : ""), doPet: true };
   });
+  return res;
 }
 
-function Retrato({ k }: { k: string }) {
+export function Retrato({ k }: { k: string }) {
   const a = useAtlas(), img = a.tipo === "ok" ? imagemAtlas(a, spriteDaChave(k)) : null;
   return <span className="poc-ret" aria-hidden="true">{img && <img className="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>;
 }
 
+/** a escolha "Treino / Ranqueada" da sessao: a Arena e remontada pelo palco e pela troca de largura, e volta onde estava (nao e gravada) */
+let modoLembrado: "treino" | "ranqueada" = "treino";
+
 export function TelaArenaPoc() {
   const { motor: m, nascendo } = useJogo(), luta = useLutaPoc(), rivais = m.rivaisArenaPoc();
   const [rival, setRival] = useState<string>(() => rivais[0] ?? ""), [mapa, setMapa] = useState<IdCena>("campo"), [erro, setErro] = useState<string | null>(null);
+  /* a luta ranqueada (MMO4): so com a chave do servidor ligada; sem ela, a Arena e a de sempre */
+  /* o palco toma o lugar da Arena durante a luta: na volta, a Arena abre de novo na ranqueada se ha um resultado ou um estado dela para mostrar */
+  const rq = useRanqueadaNaArena(), [modo, setModoTela] = useState<"treino" | "ranqueada">(() => (rq && (modoLembrado === "ranqueada" || rq.resultado !== null || rq.pedido.tipo !== "parado") ? "ranqueada" : "treino"));
+  const setModo = (x: "treino" | "ranqueada") => { modoLembrado = x; setModoTela(x); };
   if (nascendo > 0 || !rivais.length) return <section className="hx-painel poc-lugar"><p>O seu pet ainda não pode lutar na Arena.</p></section>;
   const sel = rivais.includes(rival) ? rival : rivais[0];
+  if (rq && modo === "ranqueada")
+    return <ArenaRanqueada rivais={rivais} rival={sel} setRival={setRival} mapa={mapa} setMapa={setMapa} irTreino={() => setModo("treino")} />;
   return (
     <section className="hx-painel poc-lugar" aria-labelledby="poc-arena-tit" data-testid="poc-arena">
       <h2 id="poc-arena-tit">Arena</h2>
+      {rq && <EscolhaDoModo modo="treino" trocar={setModo} />}
       <p className="poc-nota">Seu pet luta sozinho, em tempo real. Escolha o rival e o mapa e assista.</p>
       <div className="poc-pet"><Retrato k={m.formaLutaPoc} /><b>{ladoDesenho(m.formaLutaPoc).nomeTela}</b></div>
       <fieldset className="poc-grupo"><legend>Rival</legend>

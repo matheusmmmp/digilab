@@ -728,7 +728,19 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave():
                       "tools/auditar_evidencia.py",
                       # a replicacao da EVIDENCIA A3 (tools/replicar_run.py): so cita a pasta, a config e o orquestrador da C4 para refazer a run
                       # numa worktree no SHA dela; nao le a chave
-                      "tools/replicar_run.py"}
+                      "tools/replicar_run.py",
+                      # a VALUATION (a ablacao): o orquestrador importa o da C4 pela vida do REL e pelas subchaves; o braco C usa a chave
+                      # como o braco SEM da C4 (`controle_mem = "sem"`), sem valor novo
+                      "experiments/run_v3_valuation.py",
+                      # a VALUATION (o conserto): o orquestrador importa o da C4 pela vida do REL e pelas celulas; nao le a chave
+                      "experiments/run_v3_valuation_conserto.py",
+                      # a VALUATION (a V4, a validacao contra a TRIV): importa o da C4 so pelas celulas e pela estimativa; nao le a chave
+                      "experiments/run_v3_valuation_validacao.py",
+                      # o PET_VIVO, a run do PV-2: importa o da C4 so pelas celulas e pelo EPISODIO; nao le a chave
+                      "experiments/run_v3_pet_vivo_pv2.py",
+                      # a CORPO_ACOPLAMENTO (a run da D) e a CORPO (a ablacao C2): importam o da C4 so pelas celulas, pelas conferencias e pela
+                      # estimativa; nao leem a chave (faltavam aqui desde o #1002 e o #1007)
+                      "experiments/run_v3_corpo_acoplamento.py", "experiments/run_v3_corpo.py"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre"):
         if not (RAIZ / pasta).exists():

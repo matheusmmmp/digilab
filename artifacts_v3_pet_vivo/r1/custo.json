@@ -1,0 +1,20 @@
+{
+  "corte_h": 4.0,
+  "desligado_s": 1.8249585999874398,
+  "dias": 14,
+  "fumaca_g1": {
+    "c_g1": "passa",
+    "parede_por_vida_s": 2.5808701000059955,
+    "vidas": 2
+  },
+  "ligado_s": 2.095198050024919,
+  "medidas_s": 0.03856424998957664,
+  "projecao_parede_h_4_processos": 0.917642702224354,
+  "razao_ligado_desligado": 1.1480797701599035,
+  "rodadas": 3,
+  "sementes": [
+    101,
+    202
+  ],
+  "vidas_do_replay": 5120
+}
