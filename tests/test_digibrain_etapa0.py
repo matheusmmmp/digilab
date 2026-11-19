@@ -112,7 +112,7 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              # ELOGIO, etapas 4 e 5: o orquestrador da calibracao e da validacao
                                                                              "experiments/run_v3_elogio.py",
                                                                              # SOCIAL_PAR, A0 (D-SP-29): o orquestrador monta o pet de hoje (o modular com a CO7)
-                                                                             "experiments/run_v3_social_par_a0.py",
+                                                                             "experiments/run_v3_social_par_a0.py", "experiments/run_v3_corpo.py",
                                                                              "experiments/run_v3_corpo_acoplamento.py"}
 
 

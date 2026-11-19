@@ -93,3 +93,28 @@ que faltavam, desligadas, no Python e no TS. Nenhuma vida de faixa rodou, e nenh
   - 400 casos do `escolher` com a C5.
 
   O `web/app/test/corpo_chaves.test.ts` o reproduz inteiro a inteiro.
+
+## 10. O orquestrador da ablação (C2, a segunda parte; 2026-11-18)
+
+- **O orquestrador:** `experiments/run_v3_corpo.py`. As configs são `experiments/configs/v3_corpo/run.json` e
+  `experiments/configs/v3_corpo/fumaca.json`, e o teste é o `tests/test_run_v3_corpo.py`.
+- **O bloco I:** a vida do `run_v3_corpo_acoplamento.viver`, com as três chaves do braço. O CTRL e o D saem iguais, byte a byte, às vidas
+  do REL e do D da run da D; o teste confere.
+- **O bloco II:** um par VIVO por unidade e braço, no instrumento da SOCIAL_PAR A0, com as chaves nos dois pets e o replay pelo
+  `reproduzir_grupo`.
+- **A conferência de cada vida, com falha alta:**
+  - as chaves do corpo e do M-ARB;
+  - a ponte;
+  - o cansaço sem a falta nos braços com a D;
+  - na E, nada descartado;
+  - na C5, nenhum reflexo e um peso suave por decisão com a energia baixa;
+  - nos outros braços, o reflexo de hoje;
+  - o replay e as conferências da VALUATION.
+- **A faixa** 104001…104400 e o prefixo `corpo_par` entraram em `experiments/bancada/faixas.py`, num commit antes da run.
+- **O custo medido na fumaça:**
+  - um par de 5 dias leva cerca de 2,3 s, então o bloco II leva cerca de 4 min com 4 processos;
+  - o bloco I, pela run da D (4 800 vidas em 1 h 27 min), leva cerca de 3 h para as 9 600 vidas, e não as 2 h da seção 4 do plano.
+- **A run** espera:
+  - o #999, o #1002, o #1003, o #1005 e este PR na `main`;
+  - nenhuma outra run de pesquisa rodando;
+  - o `pre_run` sem motivo de recusa.
