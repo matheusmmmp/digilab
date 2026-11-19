@@ -1,8 +1,9 @@
 # Plano de análise V3: a ponte com teto (CORPO C3)
 
-**Status: PROPOSTO, esperando o Matheus.** A direção foi escolhida por ele em 2026-11-19 ("Ponte com teto", a opção 1 da seção 5.5 do
-`docs/RESULTADO_V3_CORPO.md`): a falta de combustível sobe a fome só até o limiar da privação. As decisões da seção 9 estão abertas, e
-nenhuma vida desta run existe. A faixa 106001…106400 está reservada pelo coordenador (D-C3-7).
+**Status: APROVADO pelo Matheus em 2026-11-19** ("Aprovo todas", sobre as D-C3-2 a D-C3-8 com as recomendações). A direção foi
+escolhida por ele antes ("Ponte com teto", a opção 1 da seção 5.5 do `docs/RESULTADO_V3_CORPO.md`): a falta de combustível sobe a fome
+só até o limiar da privação. **As D-C3-1 a D-C3-8 estão DECIDIDAS.** Nenhuma vida desta run existe. A faixa 106001…106400 está reservada
+pelo coordenador (D-C3-7).
 
 ## 0. A trava e o que já foi visto
 
@@ -34,7 +35,7 @@ diagnóstico) e a pergunta do incoerente.
 - **Um teto mais baixo atrasa a chegada,** porque de lá ao limiar só sobe a fome basal, como no CTRL. Mas também tira parte do empurrão
   para comer, que é o ganho da D com os donos bons.
 
-Por isso o plano propõe dois tetos (D-C3-2): o do limiar, a escolha do Matheus, e um mais baixo, para ver se o dano se resolve.
+Por isso o plano testa dois tetos (D-C3-2): o do limiar, a escolha do Matheus, e um mais baixo, para ver se o dano se resolve.
 
 **Hipóteses:**
 - **H1, o teto no limiar:** sai perto da D, o F sobe e a privação do comedouro sobe também. A previsão é "perda" pela mesma guarda.
@@ -47,7 +48,7 @@ Por isso o plano propõe dois tetos (D-C3-2): o do limiar, a escolha do Matheus,
 | **CTRL** | sobe o cansaço em 500 por tick, como hoje |
 | **D** | sobe a fome em 500 por tick, a D da C2, como referência pareada |
 | **DTL**, o teto no limiar | sobe a fome em até 500 por tick, só até a fome química chegar a T_L = 382 500 (85 % de C, o limiar da privação) |
-| **DTB**, o teto baixo (se a D-C3-2 for aprovada) | igual, só até T_B = 225 000 (C/2) |
+| **DTB**, o teto baixo (D-C3-2) | igual, só até T_B = 225 000 (C/2) |
 
 **A regra do teto, para as duas:** num tick com a falta, a ponte soma à fome `min(500, max(0, T − fome))`. A fome basal (`fome_tick`,
 +375) continua igual nos quatro braços. Acima de T, a falta não sobe nem a fome nem o cansaço.
@@ -69,7 +70,7 @@ derivação `digibrain_prototipo`), 14 dias e orçamento 16. Cada unidade dá o 
 
 | item | valor |
 |---|---|
-| bloco I | 4 braços × 12 células × 200 unidades = **9 600 vidas** (7 200 sem o DTB) |
+| bloco I | 4 braços × 12 células × 200 unidades = **9 600 vidas** |
 | bloco II | 4 braços × 100 pares, o instrumento da C2 (SOCIAL_PAR A0, só VIVO, 5 dias) |
 | faixa | **106001…106400, RESERVADA pelo coordenador em 2026-11-19** (D-C3-7): as bases 106001…106200 para o bloco I, e as 106301…106400 (prefixo `corpo_par`) para o bloco II |
 | custo | cerca de 2 h com 4 processos (a C2 fez 9 600 vidas em 2 h 6 min) |
@@ -82,7 +83,7 @@ A run roda **uma vez**. A fumaça usa as sementes dos testes.
 **O contraste:** braço − CTRL, pareado por unidade, com o t (`orq.contraste_t`) e as classes da A6.6, com δ = 0,032 (SEM FONTE, o da C2).
 
 **F, o primário:** a taxa de fechamento por episódio de fome no `longe_fixo`, a medida da A1 e da C2. O p é unilateral para braço − CTRL
-> 0, com o **Holm sobre os braços com teto** (DTL e DTB; só o DTL sem a D-C3-2), α = 0,025. A D não entra no Holm: é a referência.
+> 0, com o **Holm sobre os braços com teto** (DTL e DTB), α = 0,025. A D não entra no Holm: é a referência.
 
 **B, o bem-estar, vinculante:**
 - **a privação:** no comedouro, no longe, no `longe_fixo` e nas 12 células, como a ressalva 3 da C2 (D-CO-10); reprova com "> 0";
@@ -141,27 +142,27 @@ corpo (a opção 3 da seção 5.5 do resultado).
 ## 9. As decisões
 
 - **D-C3-1 (DECIDIDA pelo Matheus em 2026-11-19, "Ponte com teto"), a direção:** a ponte da D com teto no limiar da privação.
-- **D-C3-2 (PROPOSTA), o segundo teto:** o braço DTB, com T_B = C/2, SEM FONTE.
+- **D-C3-2 (DECIDIDA pelo Matheus em 2026-11-19, "Aprovo todas"), o segundo teto:** o braço DTB, com T_B = C/2, SEM FONTE.
   - **Por quê:** o mecanismo prevê que o teto no limiar tire pouco do dano (a seção 1). Sem um teto mais baixo, a run pode só confirmar a
     perda.
   - **A recomendação:** incluir. Custa 2 400 vidas, cerca de 30 min.
   - **O custo de errar:** sem o DTB, uma perda do DTL não diz se algum teto serve, e a pergunta volta numa run nova.
-- **D-C3-3 (PROPOSTA), o que fica de fora:** a E, a C5, a ponte dividida e o transbordo para o cansaço acima do teto.
+- **D-C3-3 (DECIDIDA pelo Matheus em 2026-11-19, "Aprovo todas"), o que fica de fora:** a E, a C5, a ponte dividida e o transbordo para o cansaço acima do teto.
   - **A recomendação:** deixar fora, para a run responder só à pergunta do teto.
   - **O custo de errar:** se nenhum teto servir, o transbordo seria o próximo candidato, numa run nova.
-- **D-C3-4 (PROPOSTA), a guarda da saúde:** a saúde média na janela dos dias 8 a 14, nas 12 células e nas 6 células do relapso e do
+- **D-C3-4 (DECIDIDA pelo Matheus em 2026-11-19, "Aprovo todas"), a guarda da saúde:** a saúde média na janela dos dias 8 a 14, nas 12 células e nas 6 células do relapso e do
   aleatório, reprova com "< 0", com δ = 0,032.
   - **Por quê:** a privação mede o tempo abaixo do limiar, e a saúde mede o dano. O diagnóstico achou o dano onde a média das 12 células o
     dilui.
   - **O custo de errar:** sem ela, um braço pode passar com o dano escondido nas células dos donos que deixam faltar comida. Com ela, a
     regra fica mais estrita do que a da C2.
-- **D-C3-5 (PROPOSTA), o bloco II:** o S2 como guarda e o S1 como descritivo. Muda a forma da ressalva 2 da C2 (D-CO-6) só no S1.
+- **D-C3-5 (DECIDIDA pelo Matheus em 2026-11-19, "Aprovo todas"), o bloco II:** o S2 como guarda e o S1 como descritivo. Muda a forma da ressalva 2 da C2 (D-CO-6) só no S1.
   - **A recomendação:** aceitar, porque o S1 não mediu nada na C2 (zero chutes).
   - **O custo de errar:** um efeito na bola passaria sem guarda, mas o instrumento não o veria de qualquer jeito.
-- **D-C3-6 (PROPOSTA), a pergunta do incoerente:** as três leituras da seção 5, sem mexer no dono nem no primário.
+- **D-C3-6 (DECIDIDA pelo Matheus em 2026-11-19, "Aprovo todas"), a pergunta do incoerente:** as três leituras da seção 5, sem mexer no dono nem no primário.
   - **O custo de errar:** se a cópia for um defeito do dono, as médias das 12 células da C2 e desta run pesam o atencioso duas vezes no
     comedouro. A sensibilidade (c) mostra quanto isso muda.
-- **D-C3-7 (RESERVADA pelo coordenador em 2026-11-19), a faixa 106001…106400:** conferida livre no `faixas.py`, nas configs e nos planos de todos os branches
+- **D-C3-7 (DECIDIDA: reservada pelo coordenador e aprovada pelo Matheus em 2026-11-19), a faixa 106001…106400:** conferida livre no `faixas.py`, nas configs e nos planos de todos os branches
   remotos em 2026-11-19.
-- **D-C3-8 (PROPOSTA), os tamanhos:** os da C2, com 200 unidades, 14 dias e δ = 0,032. A C2 deu meias larguras de IC de 0,015 no F e
+- **D-C3-8 (DECIDIDA pelo Matheus em 2026-11-19, "Aprovo todas"), os tamanhos:** os da C2, com 200 unidades, 14 dias e δ = 0,032. A C2 deu meias larguras de IC de 0,015 no F e
   abaixo de 0,01 nas guardas das 12 células, abaixo de δ.
