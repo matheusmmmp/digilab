@@ -130,3 +130,20 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
 - **O que é:** `docs/PLANO_ANALISE_V3_SOCIAL_PAR_S.md`, PROPOSTO. Tem os braços C, B1 (fora da casa) e B2 (a bola perto), e o G-DET com o
   `SeguidorPuro` como controle positivo. K = 200 bases independentes, e a faixa 103001…103400 (D-SP-41 a D-SP-44).
 - **O que falta:** o checkpoint S2, a aprovação do Matheus, com as decisões S-1 a S-8. Depois vem o código da S2.
+
+## S2, o código do substrato (2026-11-18, branch `v3-social-par-s2`)
+
+- **O que entrou:**
+  - o `deixar_bola_intervencao` no grupo;
+  - a `IntervencaoT0` no `viver_par`;
+  - o orquestrador `experiments/run_v3_social_par_s.py`, com os braços C, B1 e B2 e o G-DET;
+  - a S0 refatorada (D-SP-48 e D-SP-49).
+- **O que passa:** `tests/test_social_par_s.py`, com 12 testes:
+  - "desliga não muda": as vidas da run do A0 se refazem com o mesmo sha256;
+  - "liga resolve", em cada braço;
+  - o determinismo;
+  - as travas;
+  - a fumaça.
+- **O risco:** o `SeguidorPuro` perde F de vista quando F anda para casa, e o G-DET pode falhar (D-SP-50).
+- **O que falta:** o checkpoint S3, a aprovação do substrato antes do merge. Depois vem a run da S3.
+- **O checkpoint S3 (2026-11-18):** "Aprovado, rodar como está" (D-SP-51). A run vem depois do merge da cadeia.
