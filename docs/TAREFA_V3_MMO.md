@@ -420,3 +420,16 @@ paga prestígio, não Bits: nada aqui toca os Bits, a loja, o motor, o registro 
   (D-CONTA-152 a 159).
 - **Fora desta etapa:** o Respeito das medalhas, da Liga e do reset e o ranking dos Tamers (MMO8); as telas da conta; o deploy. Os
   desvios estão no registro (D-CONTA-152 a 160).
+
+## 24. MMO8: a prancha do reset e das duas pontuações (2026-11-19)
+
+Pedido da sessão da conta (a linha da MMO8 na seção 12 do plano, as seções 8 e 9, as MMO-15 a MMO-19). Branch `v3-mmo8-prancha`. O plano
+de UX é o `docs/PLANO_UX_RESET.md` (PROPOSTO), e a prancha está em `docs/pranchas/ux-reset/`. Só desenho.
+
+- **O reset:** Aposentar em Meus pets (o pet, a escada do nível do reset, o bônus com as duas travas, o que vai para Gerações e o que fica),
+  a confirmação, o reset feito e os seis estados (sem bônus, nível 2, nível 3, sem os 200 pontos, Bits da semana já pagos, sem conta).
+- **O perfil com as duas pontuações:** o Respeito do Tamer (o conferido e o do jogo, o nível, a barra até "Tamer Lendário"), os pontos do
+  melhor Digimon e a posição, de onde vem o Respeito; os dois rankings como abas do cais; os quatro estados.
+- **As capturas:** a 1920 × 950 e a 390 × 844, nas peles Vidro e Militar.
+- **Desvios:** D-UXRS-1 a 6, no registro. **Decisões:** UX-RS-1 a 7, esperam o Matheus. A tela não foi feita.
+
