@@ -194,6 +194,15 @@ O Matheus, nesta sessão, escreveu "Sim, começa o R0", a primeira etapa da INT-
   - o custo.
 - **A fumaça** (bases 101 e 202, K = 1, 2 dias): 192 vidas, todas com o G1 e o T-CENARIO-1 conferidos, em 77 s com 2 processos.
 - **Os desvios:** D-PV2R-1 a D-PV2R-8.
-- **Próximo:** o merge do #981 e do #984, porque o `pre_run` exige o plano da `origin/main` (D-PV2R-9); a vez da máquina já foi dada. Depois, a run, uma vez, e o
-  `RESULTADO_V3_PET_VIVO_PV2.md`.
+- **O #981 e o #984 na main** (2026-11-18, `34894b50`).
+
+## A run do PV-2 (2026-11-18, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2-resultado`)
+
+- **Rodou uma vez:** 15 360 vidas na faixa 26101–26505, em 4 h 15 min com 4 processos (D-PV2R-10). O resultado está em
+  [RESULTADO_V3_PET_VIVO_PV2.md](RESULTADO_V3_PET_VIVO_PV2.md).
+- **A leitura: "custa perto de casa"** (D-PV2R-11). No `comedouro`, o OLF-DCV perde 0,142 da taxa por episódio para o OLF-0, e os
+  outros gates também falham. O OLF-G sai como "o ganho não entra". Pela seção 7, a sugestão é não levar.
+- **Nada vai para a web,** e a chave do PV-2 continua desligada.
+- **A decisão do Matheus (2026-11-18): "Sim, registra assim"** (D-PV2R-13). O PV-2 não vai ao cérebro padrão nem à web.
+- **Próximo:** as etapas seguintes da INT (R1 rastro, R2 crédito com o ELOGIO) e a seção 9 do plano, na ordem que o Matheus escolher.
 
