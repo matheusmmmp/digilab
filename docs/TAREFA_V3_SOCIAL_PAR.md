@@ -187,3 +187,10 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
   até ele antes de qualquer aprendizado. O Matheus escolheu a opção (a) (D-SP-63): o código fica, e o plano da medida ganha o braço de
   controle M1 com o incentivo social em 0.
 - **O que falta:** o código do M2 (M1-5) e o plano da medida, com os braços M1 e M1+M2.
+
+## M2: a espec da companhia no corpo (2026-11-19)
+
+- **A espec:** `docs/ESPEC_SOCIAL_PAR_M2.md`. O emissor `companhia` baixa a solidão quando outro pet está em contato (até 1 célula),
+  lido só da posição, atrás da `ConfigCompanhia`, desligada.
+- **As decisões M2-1 a M2-6** ficam para o checkpoint do M2 (D-SP-65).
+- **O que falta:** o "aprovado" da espec; depois, o código do M2 e o plano da medida com os braços M1, M1-inc0 e M1+M2.
