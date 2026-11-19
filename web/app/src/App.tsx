@@ -52,6 +52,8 @@ import { fecharImportar, useImportar } from "./importar.ts";
 import { Heranca } from "./componentes/Heranca.tsx";
 import { TelaGeracoes } from "./telas/diario/TelaGeracoes.tsx";
 import { fecharHeranca, useHeranca } from "./heranca.ts";
+import { fecharAposentar, ovoDoResetPendente, useAposentar } from "./reset.ts";
+import { Aposentar } from "./telas/pet/Aposentar.tsx";
 import { abrirEscolhaBrasao, concluiuJornada, conclusaoVista, useEscolhaBrasao } from "./jornada.ts";
 import { dicasDoMomento, type IdDica } from "./dicas.ts";
 import { CHAVE } from "./save.ts";
@@ -156,11 +158,13 @@ export function App() {
   const [avisoTR, setAvisoTR] = useState(avisoTRPendente);
   /* o descarte 7 (a luta da POC, LP2): so aparece com a chave ligada; entra como o avisoTR nas mesmas condicoes */
   const [avisoPoc, setAvisoPoc] = useState(avisoPocPendente);
-  const [conclusao, setConclusao] = useState(false), desk = useDesktop(), lado = usePainelLado(), [comoJogar, setComoJogar] = useState(false), importando = useImportar(), her = useHeranca();
+  const [conclusao, setConclusao] = useState(false), desk = useDesktop(), lado = usePainelLado(), [comoJogar, setComoJogar] = useState(false), importando = useImportar(), her = useHeranca(), aposentando = useAposentar();
+  /* o reset da MMO8: o pet ativo ja se aposentou e espera o ovo novo; a escolha do brasao abre sem "Voltar" (reset.ts) */
+  const ovoDoReset = ovoDoResetPendente(jogo) && !aposentando;
   /* a jornada acabou (pets v6: a Liga dos Lideres; v1-v5: o chefe da campanha): a mensagem de conclusao, uma vez por pet, fora da luta
      e sem outra tela cheia */
   useEffect(() => {
-    if (!conclusao && !lutaPoc.palco && !boasVindas && !comoJogar && !escolhendoBrasao && !descartados && !avisoTR && !avisoPoc && concluiuJornada(jogo.motor) && !conclusaoVista(jogo.motor)) setConclusao(true);
+    if (!conclusao && !lutaPoc.palco && !boasVindas && !comoJogar && !escolhendoBrasao && !descartados && !avisoTR && !avisoPoc && !ovoDoReset && concluiuJornada(jogo.motor) && !conclusaoVista(jogo.motor)) setConclusao(true);
   });
   const [ultima, setUltima] = useState<Partial<Record<Destino, Aba>>>(() => ({ [rota.destino]: rota.aba }));
 
@@ -182,14 +186,14 @@ export function App() {
       if (CAIS && caisDoEndereco(location.hash)) {
         /* o endereco do cais trancado abre o cartao do motivo; o endereco volta ao da rota de agora */
         if (caisTrancado(nivelRef.current)) { abrirMotivoDoCais(MARCO_CAIS); history.replaceState(null, "", enderecoDaRota(rotaRef.current)); return; }
-        setConfig(null); setMeusPets(false); fecharImportar(); fecharHeranca(); setCais(true); return;
+        setConfig(null); setMeusPets(false); fecharImportar(); fecharHeranca(); fecharAposentar(); setCais(true); return;
       }
       const r = rotaDoEndereco(location.hash);
       if (r) {
         /* o endereco de um lugar trancado abre o cartao do motivo, nao o painel; o endereco volta ao da rota de agora */
         const p = destinoTrancado(nivelRef.current, r.destino);
         if (p) { abrirMotivo(p); history.replaceState(null, "", enderecoDaRota(rotaRef.current)); return; }
-        setConfig(null); setCais(false); setMeusPets(false); fecharImportar(); fecharHeranca(); setRota(r);
+        setConfig(null); setCais(false); setMeusPets(false); fecharImportar(); fecharHeranca(); fecharAposentar(); setRota(r);
       }
     };
     addEventListener("hashchange", aoMudar);
@@ -200,14 +204,14 @@ export function App() {
   const ir = (r: Rota) => {
     const p = destinoTrancado(nivel, r.destino);
     if (p) { abrirMotivo(p); return; }
-    setConfig(null); setCais(false); setMeusPets(false); fecharImportar(); fecharHeranca(); setRota(r); setUltima(u => ({ ...u, [r.destino]: r.aba }));
+    setConfig(null); setCais(false); setMeusPets(false); fecharImportar(); fecharHeranca(); fecharAposentar(); setRota(r); setUltima(u => ({ ...u, [r.destino]: r.aba }));
   };
   const irDestino = (d: Destino) => { ir({ destino: d, aba: ultima[d] ?? DESTINOS[d][0] }); scrollTo(0, 0); };
   const abrirConfig = (p: ParteConfig) => { setMeusPets(false); setCais(false); setConfig(p); scrollTo(0, 0); };
   /* o cais: o toque no lugar, o cartao do nivel 10 e "Ver a semana" da Arena; trancado, abre o cartao do motivo no lugar do painel */
   const abrirCais = () => {
     if (caisTrancado(nivel)) { abrirMotivoDoCais(MARCO_CAIS); return; }
-    setConfig(null); setMeusPets(false); fecharImportar(); fecharHeranca(); setCais(true); scrollTo(0, 0);
+    setConfig(null); setMeusPets(false); fecharImportar(); fecharHeranca(); fecharAposentar(); setCais(true); scrollTo(0, 0);
   };
   const abas = DESTINOS[rota.destino];
   /* o painel dos destinos que nao sao o Pet (PainelTela): Crescer, Lutar, Diario, Conversar, Ajustes e, no desktop, as paginas de
@@ -233,6 +237,7 @@ export function App() {
   let painel: { d: DadosPainel; corpo: ReactNode } | null = null;
   let lugar: { d: DadosLugar; corpo: ReactNode } | null = null;
   if (importando && desk) painel = { d: { titulo: "Importar pet", fechar: fecharImportar, idBase }, corpo: <ImportarPet pagina fechar={fecharImportar} /> };
+  else if (aposentando && desk) painel = { d: { titulo: "Aposentar", fechar: fecharAposentar, idBase }, corpo: <Aposentar pagina /> };
   else if (her && desk) painel = { d: { titulo: "Nova geração", fechar: fecharHeranca, idBase }, corpo: <Heranca pagina pai2={her.pai2} fim={irPet} /> };
   else if (meusPets && desk) painel = { d: { titulo: "Meus pets", fechar: () => setMeusPets(false), idBase }, corpo: <><div className="painel-tela__acoes"><AcoesMeusPets /></div><MeusPetsDesktop fechar={() => setMeusPets(false)} /></> };
   /* Ajustes (config): nao e um lugar. O mesmo painel dos lugares, sem abas e sem viagem da camera: a 1920 perto do retrato, a 390 a folha de baixo sobre a ilha de sempre */
@@ -261,7 +266,7 @@ export function App() {
   useEffect(() => { if (idLugar) { soltarTeclas(); entrarLugar(performance.now(), idLugar); } else sairLugar(); }, [idLugar]);
   /* os atalhos diretos (atalhosLugar.ts): C, 1 a 4 e Esc; valem so com a casca livre (sem luta, boas-vindas, aviso ou tela por cima) */
   const ref = useRef({ ativo: false, lugar: null as Lugar | null, aba: "" });
-  ref.current = { ativo: !lutaPoc.palco && !boasVindas && !comoJogar && !escolhendoBrasao && !descartados && !avisoTR && !avisoPoc && !conclusao && !config && !cais && !meusPets && !importando && !her,
+  ref.current = { ativo: !lutaPoc.palco && !boasVindas && !comoJogar && !escolhendoBrasao && !descartados && !avisoTR && !avisoPoc && !conclusao && !config && !cais && !meusPets && !importando && !her && !aposentando && !ovoDoReset,
     lugar: idLugar, aba: rota.aba };
   useEffect(() => ligarAtalhosLugar({
     ativo: () => ref.current.ativo, lugarAberto: () => ref.current.lugar,
@@ -334,11 +339,12 @@ export function App() {
         if (jaConheco) { jaConhecoOJogo(); if (semPetNoInicio) abrirEscolhaBrasao(); } else if (semPetNoInicio) setComoJogar(true);
       }} />}
       {comoJogar && <ComoJogar fechar={() => { setComoJogar(false); abrirEscolhaBrasao(); }} />}
-      {escolhendoBrasao && !boasVindas && !descartados && !avisoTR && !avisoPoc && <EscolherBrasao podeVoltar={!aindaSemPet} />}
+      {(escolhendoBrasao || ovoDoReset) && !boasVindas && !descartados && !avisoTR && !avisoPoc && <EscolherBrasao podeVoltar={!aindaSemPet && !ovoDoReset} />}
       {descartados > 0 && !boasVindas && <AvisoPetsDescartados n={descartados} fechar={() => setDescartados(0)} />}
       {avisoTR && !boasVindas && !descartados && <AvisoCombateTR aviso={avisoTR} fechar={() => setAvisoTR(null)} />}
       {avisoPoc && !avisoTR && !boasVindas && !descartados && <AvisoLutaPoc aviso={avisoPoc} fechar={() => setAvisoPoc(null)} />}
       {her && !desk && <Heranca pai2={her.pai2} fim={irPet} />}
+      {aposentando && !desk && <Aposentar />}
       {importando && !desk && <ImportarPet fechar={fecharImportar} />}
       {conclusao && <Conclusao m={jogo.motor} fechar={() => setConclusao(false)} />}
       {/* o prototipo P0 do gosto visual (docs/futuro/gosto_visual_pet.md, secao 14): so com ?gosto_visual=1; desligado, nao monta */}

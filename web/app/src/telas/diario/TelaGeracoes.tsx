@@ -6,7 +6,7 @@ import { Motor, chaveSprite, hashSemente, nomeEstagio, nomeForma } from "../../.
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { Deco } from "../../componentes/Deco.tsx";
 import { BRASAO } from "../../decoracao.ts";
-import { CHAVE_GERACOES, geracao, lerAposentados } from "../../heranca.ts";
+import { CHAVE_GERACOES, geracao, lerAposentados, petsDoAposentado } from "../../heranca.ts";
 import { useJogo } from "../../jogo.ts";
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados } from "../../pets.ts";
 import { diaDe } from "../pet/TelaPet.tsx";
@@ -19,7 +19,7 @@ export function TelaGeracoes() {
   const bruto = (k: string) => { try { return localStorage.getItem(k) ?? ""; } catch { return ""; } };
   const chave = `${ativo.semente}|${bruto(CHAVE_GUARDADOS).length}|${bruto(CHAVE_GERACOES).length}`;
   const fixos = useMemo((): { ap: Item[]; esp: Item[]; hashes: number[] } => {
-    const ap = lerAposentados().map(x => ({ m: Motor.reproduzir(x.semente, x.log, x.versao), papel: "aposentado" as const }));
+    const ap = lerAposentados().flatMap(x => petsDoAposentado(x).map(m => ({ m, papel: "aposentado" as const })));
     let esp: Item[] = [];
     try { esp = lerGuardados().map(g => ({ m: abrirGuardado(g), papel: "espera" as const })); } catch { esp = []; }
     return { ap, esp, hashes: [...ap, ...esp].map(x => hashSemente(JSON.stringify(x.m.log))) };

@@ -3,13 +3,14 @@
    (src/ranking/pontos.ts). Os pets Ultimate e Mega sao de teste: a evolucao e posta a mao no registro das evolucoes (chegar la pelo motor
    leva dias de vida simulada), como no teste da MMO2. */
 import { describe, expect, test } from "vitest";
-import { MEDALHAS, Motor } from "../motor/index.ts";
+import { GrupoDoJogo, MEDALHAS, Motor, VERSAO_GRUPO } from "../motor/index.ts";
 import { hashAte } from "../src/ranking/pedido.ts";
 import {
   BONUS_RESET, PONTOS_MINIMOS_RESET, TAMER_LENDARIO, estagioMaximo, nivelDoReset, nivelPeloRespeito, pontosDoDigimon, respeito,
   respeitoDoReset, respeitoLocal, semanaDe, tituloDoRespeito, type LutaRanqueada,
 } from "../src/ranking/pontos.ts";
-import { aplicarReset, eventoDoReset, previaDoReset } from "../src/reset.ts";
+import { aplicarReset, eventoDoReset, petDoBonus, previaDoReset } from "../src/reset.ts";
+import { petsDoAposentado } from "../src/heranca.ts";
 import {
   CHAVE_TAMER, RESET_LIGADO, Tamer, VERSAO_TAMER, VERSAO_TAMER_RESET, gravarTamer, lerTamer, pagarReset, versaoTamerDe, type EventoTamer, type ResetPet,
 } from "../src/tamer.ts";
@@ -31,14 +32,14 @@ const reset = (x: Partial<ResetPet> = {}): Omit<ResetPet, "quando"> =>
   ({ pet: 7, hash: H64, eventos: 10, est: "adulto", forma: "WarGrowlmon", nivel: 1, tick: 5000, por: "reset", ...x });
 
 describe("MMO8: a chave e a versao do registro do Tamer", () => {
-  test("a chave esta desligada: o registro sem reset grava a 10; com o reset, ou com a chave ligada, a 11", () => {
-    expect(RESET_LIGADO).toBe(false);
+  test("a chave esta ligada: o registro grava a 11; com ela desligada, a 10 sem o reset e a 11 com ele", () => {
+    expect(RESET_LIGADO).toBe(true);
     expect(VERSAO_TAMER).toBe(10);
-    expect(versaoTamerDe([])).toBe(10);
-    expect(versaoTamerDe([], true)).toBe(VERSAO_TAMER_RESET);
+    expect(versaoTamerDe([])).toBe(VERSAO_TAMER_RESET);
+    expect(versaoTamerDe([], false)).toBe(10);
     const t = new Tamer();
     t.resetar(reset(), SEG);
-    expect(versaoTamerDe(t.log)).toBe(11);
+    expect(versaoTamerDe(t.log, false)).toBe(11);
   });
   test("gravar e ler: a versao 11, o mesmo reset", () => {
     const t = new Tamer(), a = armaz();
@@ -156,5 +157,27 @@ describe("MMO8: os pontos do Digimon e o Respeito (a conta pura)", () => {
     expect(tituloDoRespeito(9999)).toBeNull();
     expect(tituloDoRespeito(10000)).toBe("Tamer Lendário");
     expect(tituloDoRespeito(25000)).toBe("Tamer Lendário");
+  });
+});
+
+describe("MMO8: o reset do par (Matheus, 2026-11-19, \"Bonus do mais alto\"; D-CONTA-179)", () => {
+  const sobe = (m: Motor, est: "crianca" | "adolescente" | "adulto" | "mega") => {
+    const ordem = ["crianca", "adolescente", "adulto", "mega"] as const;
+    ordem.slice(0, ordem.indexOf(est) + 1).forEach((e, i) => m.evolucoes.push({ tick: 1000 * (i + 1), estagio: e, forma: { ...m.forma } }));
+  };
+  test("o bonus e o do pet de nivel mais alto; no empate, o primeiro do grupo", () => {
+    const g = new GrupoDoJogo(303, VERSAO_GRUPO), [a, b] = g.ids;
+    expect(petDoBonus(g)).toBe(g.motor(a!));
+    sobe(g.motor(b!), "adulto");
+    expect(petDoBonus(g)).toBe(g.motor(b!));
+    sobe(g.motor(a!), "mega");
+    expect(petDoBonus(g)).toBe(g.motor(a!));
+  });
+  test("o par aposentado em Geracoes volta pelos dois pets do grupo", () => {
+    const g = new GrupoDoJogo(304, VERSAO_GRUPO);
+    g.avancar(30);
+    const pets = petsDoAposentado({ semente: g.semente, log: g.log as never, versao: g.versao, ger: 1, filho: 0, quando: SEG, grupo: true, foco: g.ids[0] });
+    expect(pets.map(m => m.semente)).toEqual(g.ids.map(i => g.motor(i).semente));
+    expect(pets.map(m => m.log.length)).toEqual(g.ids.map(i => g.motor(i).log.length));
   });
 });

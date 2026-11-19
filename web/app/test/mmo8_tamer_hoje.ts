@@ -35,14 +35,15 @@ export function casosHoje(): { nome: string; t: Tamer | null; bruto?: string }[]
   ];
 }
 
-/** grava cada caso, le de novo e devolve o texto gravado e o estado lido */
-export function jogarHoje(): CasoTamer[] {
+/** grava cada caso, le de novo e devolve o texto gravado e o estado lido. `ligado`: a chave do reset na gravacao (o gabarito foi gravado
+    com ela desligada, antes do reset) */
+export function jogarHoje(ligado = false): CasoTamer[] {
   return casosHoje().map(({ nome, t, bruto }) => {
     const a = armaz(bruto ? { [CHAVE_TAMER]: bruto } : {});
     const x = t ?? lerTamer(a);
-    gravarTamer(a, x);
+    gravarTamer(a, x, ligado);
     const texto = a.dados[CHAVE_TAMER];
-    if (texto !== textoTamer(x)) throw new Error("gravarTamer e textoTamer diferem");
+    if (texto !== textoTamer(x, ligado)) throw new Error("gravarTamer e textoTamer diferem");
     const l = lerTamer(a), d = JSON.parse(texto) as { versao: number; log: unknown[] };
     return { nome, texto, lido: { versao: d.versao, eventos: l.log.length, medalhas: l.n, titulo: !!l.titulo, bits: l.bits, marcos: marcosDoTamer(l) } };
   });

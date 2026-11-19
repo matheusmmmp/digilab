@@ -458,3 +458,35 @@ tela e sem deploy; a prancha está num PR à parte (seção 24) e espera o Mathe
   tela e os Bits do nível 11 em diante (UX-RS-6), o reset do par (D-CONTA-161), o legado de stats da revisão CR-7 e CR-8 do
   `docs/PLANO_V3_CICLO.md` e o deploy.
 
+## 26. MMO8: as telas do reset, do perfil e dos rankings (2026-11-19)
+
+Pedido do Matheus em 2026-11-19: "Aprovo as UX-RS pelas recomendações, segue para as telas". A prancha (seção 24) ficou APROVADA (D-UXRS-7);
+o código local (seção 25) já está na main (#1023). Branch `v3-mmo8-telas`.
+
+- **Aposentar** (`src/telas/pet/Aposentar.tsx`), em Meus pets, no pet ativo (UX-RS-1), no celular e no desktop:
+  - o resumo: o pet, a escada dos três níveis com "este pet", o bônus com as travas em texto (os 200 pontos conferidos, do `GET /digimons`;
+    um reset pago por semana), o que vai e o que fica e "Como o reset funciona";
+  - antes do Ultimate, "sem bônus" (o principal é continuar); sem conta, o Respeito fica "no seu perfil" e aparece "Entrar";
+  - a confirmação em dois passos no molde de "Apagar a conta" (UX-RS-2) e o feito, com um caminho só: "Escolher o brasão";
+  - o par dos dois pets se aposenta junto, num reset só, com o bônus do pet de nível mais alto (Matheus, "Bônus do mais alto",
+    D-CONTA-179); o par vai inteiro para Gerações, e o Respeito dele fica só no jogo enquanto o servidor não conferir o grupo;
+  - o pet de exemplo e o laboratório dizem por que não se aposentam.
+- **O reset em dois momentos** (`src/reset.ts`): `aposentarPorReset` grava o reset e põe o pet em Gerações; o ovo vem da escolha do brasão,
+  que abre sem "Voltar" enquanto o reset espera o ovo, também depois de recarregar (`CHAVE_RESET_PENDENTE`). `chocarDoReset` não guarda o
+  aposentado nos guardados.
+- **O envio do aposentado** (UX-RS-4, `enviarAposentados`): o registro final de cada aposentado vai sozinho ao `POST /envios`, com o do
+  Tamer, depois do reset, depois do cruzamento e a cada abertura do cais, até o servidor responder (`CHAVE_RESETS_ENVIADOS`).
+- **O perfil** (`src/telas/config/TelaConta.tsx`): o Respeito conferido grande e o do jogo ao lado (UX-RS-5), o nível pelo Respeito, a barra
+  até "Tamer Lendário", o melhor Digimon da conta com a posição, "De onde vem o Respeito" e "Ver os rankings no cais". Os aparelhos, os
+  dados e apagar descem para "Aparelhos, dados e a conta".
+- **O cais** (`src/telas/cais/TelaCais.tsx`, `Rankings.tsx`): as abas Semana, Tamers, Digimon e Mural (UX-RS-3, revê a UX-CA-1). A aba
+  Mural substitui o botão "Mural e prêmios".
+- **A chave `RESET_LIGADO` ligada** num commit próprio. O teste do gabarito (`test/mmo8_tamer_hoje.test.ts`) confere os dois lados: com a
+  chave desligada, os registros de hoje saem byte a byte; ligada, só a versão gravada muda (10 para 11).
+- **O nível do 11 em diante não paga os Bits do nível** (UX-RS-6): nada a codificar, os Bits do nível só pagam os marcos 1 a 10
+  (`conferirBitsDoNivel`), e o nível pelo Respeito não passa por eles.
+- **O e2e** (`e2e_conta/reset.spec.ts`): o Aposentar do Champion de ponta a ponta (o reset no Tamer, Gerações, o envio, o ovo novo), o
+  reset que sobrevive a recarregar, o reset do par, as abas Tamers e Digimon, o perfil e o celular sem rolar de lado.
+- **Desvios:** D-CONTA-171 a 179, no registro.
+- **Fora desta etapa:** a conferência do reset do par no servidor (o envio do grupo, D-CONTA-77), o legado de stats (CR-7 e CR-8 do
+  `docs/PLANO_V3_CICLO.md`), "Ver todas" nos dois rankings e o deploy.
