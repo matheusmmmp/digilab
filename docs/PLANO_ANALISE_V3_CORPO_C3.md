@@ -2,7 +2,7 @@
 
 **Status: PROPOSTO, esperando o Matheus.** A direção foi escolhida por ele em 2026-11-19 ("Ponte com teto", a opção 1 da seção 5.5 do
 `docs/RESULTADO_V3_CORPO.md`): a falta de combustível sobe a fome só até o limiar da privação. As decisões da seção 9 estão abertas, e
-nenhuma vida desta run existe. A faixa está pedida ao coordenador (D-C3-7).
+nenhuma vida desta run existe. A faixa 106001…106400 está reservada pelo coordenador (D-C3-7).
 
 ## 0. A trava e o que já foi visto
 
@@ -71,7 +71,7 @@ derivação `digibrain_prototipo`), 14 dias e orçamento 16. Cada unidade dá o 
 |---|---|
 | bloco I | 4 braços × 12 células × 200 unidades = **9 600 vidas** (7 200 sem o DTB) |
 | bloco II | 4 braços × 100 pares, o instrumento da C2 (SOCIAL_PAR A0, só VIVO, 5 dias) |
-| faixa | **106001…106400, PEDIDA ao coordenador** (D-C3-7): as bases 106001…106200 para o bloco I, e as 106301…106400 (prefixo `corpo_par`) para o bloco II |
+| faixa | **106001…106400, RESERVADA pelo coordenador em 2026-11-19** (D-C3-7): as bases 106001…106200 para o bloco I, e as 106301…106400 (prefixo `corpo_par`) para o bloco II |
 | custo | cerca de 2 h com 4 processos (a C2 fez 9 600 vidas em 2 h 6 min) |
 | processos | no máximo 4, uma run de pesquisa por vez |
 
@@ -161,7 +161,7 @@ corpo (a opção 3 da seção 5.5 do resultado).
 - **D-C3-6 (PROPOSTA), a pergunta do incoerente:** as três leituras da seção 5, sem mexer no dono nem no primário.
   - **O custo de errar:** se a cópia for um defeito do dono, as médias das 12 células da C2 e desta run pesam o atencioso duas vezes no
     comedouro. A sensibilidade (c) mostra quanto isso muda.
-- **D-C3-7 (PEDIDA ao coordenador), a faixa 106001…106400:** conferida livre no `faixas.py`, nas configs e nos planos de todos os branches
+- **D-C3-7 (RESERVADA pelo coordenador em 2026-11-19), a faixa 106001…106400:** conferida livre no `faixas.py`, nas configs e nos planos de todos os branches
   remotos em 2026-11-19.
 - **D-C3-8 (PROPOSTA), os tamanhos:** os da C2, com 200 unidades, 14 dias e δ = 0,032. A C2 deu meias larguras de IC de 0,015 no F e
   abaixo de 0,01 nas guardas das 12 células, abaixo de δ.

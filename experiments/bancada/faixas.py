@@ -233,6 +233,11 @@ FAIXAS_RESERVADAS = (
                      "os mesmos nos tres bracos) e o G-DET 103301...103350 (prefixo social_par_s_det) (docs/PLANO_ANALISE_V3_SOCIAL_PAR_S.md, "
                      "secao 4; S-5, aprovada pelo Matheus em 2026-11-18, \"Aprovado\"; conferida livre no faixas.py, nos planos e nas "
                      "configs da origin/main e de todos os branches remotos em 2026-11-18)"),
+    (106001, 106400, "CORPO C3, a ponte com teto: o bloco I nas bases 106001...106200 (k = 1, 200 sementes independentes, prefixo "
+                     "digibrain_prototipo) e o bloco II nas bases 106301...106400 (k = 1, prefixo corpo_par), os bracos CTRL, D, DTL e DTB "
+                     "(docs/PLANO_ANALISE_V3_CORPO_C3.md, secao 4; D-C3-7, reservada pelo coordenador em 2026-11-19; nenhuma vida antes da "
+                     "aprovacao do plano pelo Matheus; a 106xxx conferida livre no faixas.py, nas configs e nos planos de todos os branches "
+                     "remotos em 2026-11-19)"),
 )
 
 
