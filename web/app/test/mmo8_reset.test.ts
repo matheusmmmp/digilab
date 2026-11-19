@@ -31,14 +31,14 @@ const reset = (x: Partial<ResetPet> = {}): Omit<ResetPet, "quando"> =>
   ({ pet: 7, hash: H64, eventos: 10, est: "adulto", forma: "WarGrowlmon", nivel: 1, tick: 5000, por: "reset", ...x });
 
 describe("MMO8: a chave e a versao do registro do Tamer", () => {
-  test("a chave esta desligada: o registro sem reset grava a 10; com o reset, ou com a chave ligada, a 11", () => {
-    expect(RESET_LIGADO).toBe(false);
+  test("a chave esta ligada: o registro grava a 11; com ela desligada, a 10 sem o reset e a 11 com ele", () => {
+    expect(RESET_LIGADO).toBe(true);
     expect(VERSAO_TAMER).toBe(10);
-    expect(versaoTamerDe([])).toBe(10);
-    expect(versaoTamerDe([], true)).toBe(VERSAO_TAMER_RESET);
+    expect(versaoTamerDe([])).toBe(VERSAO_TAMER_RESET);
+    expect(versaoTamerDe([], false)).toBe(10);
     const t = new Tamer();
     t.resetar(reset(), SEG);
-    expect(versaoTamerDe(t.log)).toBe(11);
+    expect(versaoTamerDe(t.log, false)).toBe(11);
   });
   test("gravar e ler: a versao 11, o mesmo reset", () => {
     const t = new Tamer(), a = armaz();

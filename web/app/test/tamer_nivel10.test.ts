@@ -5,6 +5,9 @@ import { describe, expect, test } from "vitest";
 import { Motor, nomeForma } from "../motor/index.ts";
 import { CHAVE_TAMER, MARCO_MEGA, Tamer, conferirMarcoMega, evolucaoMega, gravarTamer, lerTamer, marcoConfere, type EventoTamer } from "../src/tamer.ts";
 import { ULTIMO_MARCO, cartoesPendentes, lerEstado, marcosDoPet, marcosDoTamer, marcosFeitos, sincronizar } from "../src/nivel.ts";
+import { versaoTamerDe } from "../src/tamer.ts";
+/** a versao que o jogo grava hoje: a 11 com a chave do reset ligada (MMO8), a 10 sem ela */
+const GRAVA = versaoTamerDe([]);
 
 const armaz = (dados: Record<string, string> = {}) => ({
   dados, getItem: (k: string) => dados[k] ?? null, setItem: (k: string, v: string) => { dados[k] = v; }, removeItem: (k: string) => { delete dados[k]; },
@@ -43,7 +46,7 @@ describe("MMO2: o marco 10, o primeiro Mega", () => {
     const t = new Tamer(), a = armaz();
     conferirMarcoMega(t, [petMega(7, 9000)], 55);
     gravarTamer(a, t);
-    expect(JSON.parse(a.dados[CHAVE_TAMER]).versao).toBe(10);
+    expect(JSON.parse(a.dados[CHAVE_TAMER]).versao).toBe(GRAVA);
     expect(lerTamer(a).marco(MARCO_MEGA)).toEqual(t.marco(MARCO_MEGA));
   });
   test("o registro 9 de antes abre (e grava como 10); com o evento \"nivel\" ele falha alto", () => {
@@ -52,7 +55,7 @@ describe("MMO2: o marco 10, o primeiro Mega", () => {
     const t = lerTamer(a);
     expect(t.n).toBe(1);
     gravarTamer(a, t);
-    expect(JSON.parse(a.dados[CHAVE_TAMER])).toEqual({ versao: 10, log: [med] });
+    expect(JSON.parse(a.dados[CHAVE_TAMER])).toEqual({ versao: GRAVA, log: [med] });
     const nv: EventoTamer = ["nivel", { n: 10, quando: 2, pet: 7, forma: "Agumon", tick: 9000 }];
     expect(() => lerTamer(armaz({ [CHAVE_TAMER]: JSON.stringify({ versao: 9, log: [med, nv] }) }))).toThrow(/versão 10/);
   });
