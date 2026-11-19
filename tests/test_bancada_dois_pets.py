@@ -86,7 +86,7 @@ BASES = {
     "social_par": {"run": (101101, 101202, 101303, 101404, 101505)},
     "social_par_piloto": {"piloto": (102101, 102202, 102303, 102404, 102505)},
     # a CORPO, o bloco II da ablacao (PLANO_ANALISE_V3_CORPO, secao 4; experiments/run_v3_corpo.py)
-    "corpo_par": {"run": tuple(range(104301, 104401))},
+    "corpo_par": {"run": tuple(range(104301, 104401)), "c3": tuple(range(106301, 106401))},
     # a SOCIAL_PAR S (PLANO_ANALISE_V3_SOCIAL_PAR_S, secao 4; experiments/run_v3_social_par_s.py)
     "social_par_s": {"run": tuple(range(103001, 103201))},
     "social_par_s_det": {"det": tuple(range(103301, 103351))},
