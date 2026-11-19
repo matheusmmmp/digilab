@@ -19,7 +19,7 @@
    A conferência NÃO usa a assinatura do pet: ela difere entre o Chrome e o Node no último bit (MMO0). Só o que sai das lutas e do registro. */
 import { createHash, type Hash } from "node:crypto";
 import { VERSOES_PET, type EventoRegistro, type Motor } from "../../../web/app/motor/index.ts";
-import { linhasDaSemana, refazerComLutas, type LinhaSemana, type LutaRanqueada, type SementeEntregue } from "../../../web/app/src/ranking/pontos.ts";
+import { linhasDaSemana, refazerComLutas, type LinhaSemana, type LutaRanqueada, type LutaSalaoVista, type SementeEntregue } from "../../../web/app/src/ranking/pontos.ts";
 import { marcosDoTamer } from "../../../web/app/src/marcosTamer.ts";
 import { CHAVE_TAMER, lerTamer, MARCO_MEGA, marcoConfere, VERSAO_TAMER, type EventoTamer } from "../../../web/app/src/tamer.ts";
 
@@ -49,6 +49,8 @@ export interface EntregueComHash extends SementeEntregue { numero: number; hash:
 export interface Aceito {
   resultado: "aceito";
   marco10: SituacaoMarco;
+  /** o que o mural pode contar (MMO7) */
+  fronteira: FronteiraVista;
   /** os marcos que o registro do Tamer cumpre (marcosDoTamer: 5, 7, 8, 9, 10); a trava do pedido da semente os lê */
   marcosTamer: number[];
   lutas: LutaRanqueada[];
@@ -57,6 +59,19 @@ export interface Aceito {
   /** o tempo de cada parte, em milissegundos (o replay do pet com as lutas, o Tamer e o marco) */
   ms: { replay: number; tamer: number; total: number };
 }
+/** o que o mural (MMO7, servidor_web/src/premios/) pode contar deste envio: só o que a conferência refez.
+    - a Torre: o recorde do pet deste envio na Torre de Batalha, das lutas que o replay do pet refez (Motor.instalacoes);
+    - a Fábrica: o recorde do Tamer, da Fábrica que o replay do Tamer refaz luta por luta (Tamer.recordeFabrica);
+    - o Salão: as lutas do Salão que o replay deste pet refez (com o resultado), e as tentativas do Tamer (que pet lutou em que estágio,
+      com qual semente). A tentativa só conta no mural até onde cada luta dela foi vista no replay do pet que lutou (de um envio deste ou
+      de outro pet da conta). */
+export interface FronteiraVista {
+  torre: number;
+  fabrica: number;
+  salao: LutaSalaoVista[];
+  tentativasSalao: { n: number; lutas: { pet: number; s: number; venceu: boolean }[] }[];
+}
+
 export interface Recusado { resultado: "recusado"; motivo: MotivoRecusa; detalhe: string; ms: { total: number } }
 export type Conferencia = Aceito | Recusado;
 
@@ -118,10 +133,10 @@ export function conferir(envio: Envio, entregues: readonly EntregueComHash[] = [
   }
 
   /* 1. o pet e as lutas: um passe só pela conta da MMO1; o evento inválido (e a luta que não era possível) falha alto */
-  let m: Motor, lutas: LutaRanqueada[];
+  let m: Motor, lutas: LutaRanqueada[], salao: LutaSalaoVista[];
   const sementes: SementeEntregue[] = entregues.map(x => ({ semente: x.semente, indice: x.indice, hora: x.hora,
     ...(x.rival === undefined ? {} : { rival: x.rival, mapa: x.mapa ?? null }) }));
-  try { ({ motor: m, lutas } = refazerComLutas(pet.semente, pet.versao, pet.log, sementes)); }
+  try { ({ motor: m, lutas, salao } = refazerComLutas(pet.semente, pet.versao, pet.log, sementes)); }
   catch (err) { return recusar("pet_nao_reproduz", `o registro do pet não reproduz: ${msg(err)}`); }
   const t1 = performance.now();
 
@@ -141,6 +156,10 @@ export function conferir(envio: Envio, entregues: readonly EntregueComHash[] = [
   const t2 = performance.now();
 
   const r2 = (v: number) => +v.toFixed(2);
-  return { resultado: "aceito", marco10, marcosTamer: marcosDoTamer(t), lutas, semanas: linhasDaSemana(lutas), pontos: lutas.reduce((s, l) => s + l.pontos, 0),
+  const fronteira: FronteiraVista = {
+    torre: m.instalacoes?.torre_batalha?.recorde ?? 0, fabrica: t.recordeFabrica?.valor ?? 0, salao,
+    tentativasSalao: t.salao.map(x => ({ n: x.n, lutas: x.lutas.map(l => ({ pet: l.pet, s: l.s, venceu: l.venceu })) })),
+  };
+  return { resultado: "aceito", marco10, fronteira, marcosTamer: marcosDoTamer(t), lutas, semanas: linhasDaSemana(lutas), pontos: lutas.reduce((s, l) => s + l.pontos, 0),
     ms: { replay: r2(t1 - t0), tamer: r2(t2 - t1), total: r2(performance.now() - t0) } };
 }
