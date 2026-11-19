@@ -137,3 +137,11 @@ rejogadas do log (`experiments/diagnostico_v3_corpo_c25.py`).
 incoerente, o pet come mais e a privação cai. Com o relapso e o aleatório, não há comida a mais, a fome fica acima do limiar, e o dano da
 privação baixa a saúde (−0,12 a −0,24). O comedouro só sai em "> 0" porque ali a privação com os donos bons já está perto de 0. **As
 opções da C3** (a ponte com teto, a ponte dividida ou nenhuma mudança) vão ao Matheus.
+
+## 13. O plano da C3, a ponte com teto (2026-11-19)
+
+O Matheus escolheu "Ponte com teto". O plano é o `docs/PLANO_ANALISE_V3_CORPO_C3.md`, PROPOSTO. Os braços são CTRL, D, DTL (o teto no
+limiar da privação, T_L = 382 500) e DTB (o teto em C/2, se a D-C3-2 for aprovada), nas 12 células × 200 unidades e no bloco II. **O que o
+mecanismo prevê:** o teto no limiar tira pouco do dano, porque o dano da privação é um degrau e vem da chegada mais cedo ao limiar.
+Há uma guarda nova da saúde (D-C3-4). A pergunta do incoerente igual ao atencioso vai como pergunta do plano (D-C3-6). A faixa
+106001…106400 está pedida ao coordenador. Nenhuma vida antes da aprovação e do código.
