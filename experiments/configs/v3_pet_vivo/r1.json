@@ -1,0 +1,8 @@
+{
+  "descricao": "O replay do R1 (docs/PLANO_ANALISE_V3_PET_VIVO_R1.md, APROVADO): as vidas ja gravadas da run do PV-2 (o HOJE e o OLF-0 da run e o HOJE da checagem do v38; 5 120 vidas), rejogadas pelo log com a ConfigRastro ligada, so leitura. Nenhuma vida nova e nenhuma faixa nova: as bases sao as da run do PV-2, para a conferencia. Uma vez, ate 4 processos.",
+  "plano": "docs/PLANO_ANALISE_V3_PET_VIVO_R1.md",
+  "fase": "r1",
+  "unidades": {"bases": [26101, 26202, 26303, 26404, 26505], "k": 40, "prefixo": "digibrain_prototipo"},
+  "dias": 14,
+  "orcamento_por_dia": 16
+}

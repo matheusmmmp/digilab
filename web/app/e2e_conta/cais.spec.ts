@@ -20,19 +20,29 @@ const ATE9 = [1, 2, 3, 4, 5, 6, 7, 8, 9], ATE10 = [...ATE9, 10];
 const AGORA = new Date("2026-11-18T15:00:00Z");
 const ATUAL = "2026-11-16", ANTES = "2026-11-09", SEGREDO = "ab".repeat(32);
 
+const PREMIOS_VAZIOS = { titulo_atual: [], titulos: [], selos: { total: 0, lista: [] }, enfeites: [], recordes: { torre: null, fabrica: null, salao: null },
+  respeito: { conferido: 0, titulos: 0, selos: 0, como: "..." }, temporada_atual: 1 };
+const MURAL_VAZIO = { recordes: { torre: [], fabrica: [], salao: [] }, total: { torre: 0, fabrica: 0, salao: 0 }, titulos: [] };
 const linha = (posicao: number, apelido: string, pontos: number, voce = false) =>
   ({ posicao, apelido, pontos, rivais_vencidos: posicao, lutas_usadas: 10 + posicao, hora_dos_pontos: null, voce });
-interface Falso { sessao: boolean; fora: boolean; pedidos: string[] }
-/** o servidor falso: as rotas das semanas; qualquer outra rota do servidor responde 404 e fica na lista dos pedidos */
+interface Falso { sessao: boolean; fora: boolean; pedidos: string[]; premios: string[] }
+/** o servidor falso: as rotas das semanas; qualquer outra rota do servidor responde 404 e fica na lista dos pedidos. Os premios e o mural
+    (MMO7; o jogo busca as tacas da temporada quando o cais esta aberto) respondem vazios e ficam numa lista a parte */
 async function servidorFalso(page: Page): Promise<Falso> {
-  const s: Falso = { sessao: true, fora: false, pedidos: [] };
+  const s: Falso = { sessao: true, fora: false, pedidos: [], premios: [] };
   const aberta = Array.from({ length: 12 }, (_, i) => linha(i + 1, `Tamer#${i + 1}`, 300 - i * 20, i === 10));
   const fechada = [linha(1, "Tamer#1", 280), linha(2, "Tamer#11", 240, true), linha(3, "Tamer#2", 200)];
   await page.route(u => u.pathname.startsWith(CAMINHO_API + "/"), async route => {
     const caminho = new URL(route.request().url()).pathname.slice(CAMINHO_API.length);
+    const json = (status: number, corpo: unknown) => route.fulfill({ status, contentType: "application/json", body: JSON.stringify(corpo) });
+    if (caminho === "/premios" || caminho === "/mural") {
+      s.premios.push(caminho);
+      if (s.fora) { await route.abort("connectionrefused"); return; }
+      await json(200, caminho === "/mural" ? MURAL_VAZIO : PREMIOS_VAZIOS);
+      return;
+    }
     s.pedidos.push(caminho);
     if (s.fora) { await route.abort("connectionrefused"); return; }
-    const json = (status: number, corpo: unknown) => route.fulfill({ status, contentType: "application/json", body: JSON.stringify(corpo) });
     if (caminho === "/semanas") {
       await json(200, { atual: ATUAL, fecha_em: "2026-11-23T03:00:00.000Z", congela_em: "2026-11-23T04:00:00.000Z",
         fechadas: [{ semana: ANTES, publicado_em: "2026-11-16T04:00:00.000Z" }] });
@@ -116,6 +126,7 @@ test("trancado (Tamer Nv 9), 1920 px: a marca tracejada, o cadeado Nv 10 e o car
   await expect(page.getByTestId("ca-pronto")).toHaveCount(0);
   await expect(page.getByTestId("ca-buscando")).toHaveCount(0);
   expect(s.pedidos).toEqual([]);
+  expect(s.premios).toEqual([]);
   expect(err).toEqual([]);
 });
 

@@ -106,6 +106,42 @@ def espontaneas(regs: list[dict]) -> dict:
             "pedido_balao_s": resumo_de(saidas)}
 
 
+def decomposicao(regs: list[dict]) -> dict:
+    """A divisao do T1 das conversas quentes (achado de 2026-11-18, docs/RESULTADO_V3_CONVERSA_ESPERA.md; fora da secao 1 do plano).
+
+    Pelo caminho da rede, o servidor verifica a fala antes de responder (servidor/fala_livre.py, `_fala_conceitos`), e o jogo pede a mesma
+    verificacao de novo depois do balao (web/app/src/falaLivre.ts, `post("/api/fala-livre/verificar")`). O servidor atende uma chamada por
+    vez. Por turno quente, em segundos:
+      - `geracao`: o `latencia_s` que o servidor devolve (so a geracao da voz);
+      - `trava`: a verificacao repetida da conversa anterior ainda em curso quando este pedido saiu, max(0, t_verif anterior - t_chamada);
+      - `resto`: (t_balao - t_chamada) - geracao - trava, a verificacao dentro da chamada mais o HTTP. E uma conta, nao uma medida da
+        verificacao: o registro nao tem o tempo dela.
+    Fica fora: a espontanea (que tambem pode segurar a trava; o relato diz quantas houve) e o turno sem os tempos. Turno quente cuja conversa
+    anterior nao tem `t_verif` levanta erro (a trava ficaria desconhecida)."""
+    conv = [r for r in regs if r["situacao"] == "conversa"]
+    partes: dict[str, list[float]] = {"geracao": [], "trava": [], "resto": []}
+    com_trava = 0
+    for ant, r in zip(conv, conv[1:]):
+        if r["fria"] or r["t_balao"] is None or r["latencia_s"] is None:
+            continue
+        if ant["t_verif"] is None:
+            raise ValueError(f"conversa anterior sem t_verif: a trava fica desconhecida: {ant}")
+        trava = max(0.0, (ant["t_verif"] - r["t_chamada"]) / 1000.0)
+        resto = (r["t_balao"] - r["t_chamada"]) / 1000.0 - r["latencia_s"] - trava
+        partes["geracao"].append(float(r["latencia_s"]))
+        partes["trava"].append(trava)
+        partes["resto"].append(resto)
+        com_trava += trava > 0
+    n = len(partes["geracao"])
+    if not n:
+        return {"n": 0}
+    out = {"n": n, "turnos_com_trava": com_trava}
+    for k, v in partes.items():
+        p50, p95 = quantis(sorted(v), [0.5, 0.95])
+        out[k] = {"p50": p50, "p95": p95}
+    return out
+
+
 def resumir(regs: list[dict]) -> dict:
     """o resumo inteiro: frio (a conversa 1) e quente (as outras), por medida; as espontaneas ficam num bloco so (nao tem conversa)"""
     conv = [r for r in regs if r["situacao"] == "conversa"]
@@ -122,6 +158,7 @@ def resumir(regs: list[dict]) -> dict:
         "quente": {m: resumo_de(valores_da_medida(quente, m)) for m in MEDIDAS},
         "fria": {m: resumo_de(valores_da_medida(fria, m)) for m in MEDIDAS},
         "espontaneas": espontaneas(regs),
+        "decomposicao_quente": decomposicao(regs),
     }
 
 
@@ -145,6 +182,10 @@ def main() -> None:
         print(f"espontaneas: {e['descartadas']}/{e['disparadas']} descartadas ({e['fracao_descartada']:.2f}; IC95 {e['ic95'][0]:.2f}..{e['ic95'][1]:.2f})")
     else:
         print("espontaneas: nenhuma disparada")
+    d = res["decomposicao_quente"]
+    if d["n"]:
+        print(f"T1 quente dividido (p50, n={d['n']}): geracao {d['geracao']['p50']:.2f}  trava {d['trava']['p50']:.2f} "
+              f"(em {d['turnos_com_trava']})  resto {d['resto']['p50']:.2f}")
 
 
 if __name__ == "__main__":

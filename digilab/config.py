@@ -3218,6 +3218,30 @@ CONFIG_ELOGIO = ConfigElogio()
 CONFIG_ELOGIO_LIGADA = ConfigElogio(ligada=True)
 
 
+@dataclass(frozen=True)
+class ConfigRastro:
+    """O rastro da cadeia no DigiBrain modular (docs/PLANO_ANALISE_V3_PET_VIVO_R1.md, secao 2, APROVADO): so leitura. Ligada, o fechamento
+    de cada decisao grava `motivo["cadeia"]`: o r do mesmo tick, o r do intervalo ate a decisao seguinte (medido, nunca creditado), os
+    gestos do dono no intervalo, as atualizacoes que a decisao causou e o que pesou na escolha. Nao toca em V, E, P1, P2, memoria nem rng: a
+    vida sai igual, decisao a decisao. Fica numa config propria, e nao em `ConfigDigibrain` (a subchave `rastro` do plano; D-RA-8), para o
+    dump do modular nao mudar, como a `ConfigElogio`. Desligada (o padrao), nenhum campo novo e a vida de hoje byte a byte. Status em
+    PARAMETROS_RASTRO."""
+
+    ligada: bool = False                      # PROPOSTO: a chave
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigRastro.ligada e bool: {self.ligada!r}")
+
+
+PARAMETROS_RASTRO: dict[str, tuple[str, str]] = {
+    "ligada": ("PROPOSTO", "PLANO_ANALISE_V3_PET_VIVO_R1, secao 2 (APROVADO em 2026-11-19, RA-1 a RA-6); a chave, SEM FONTE"),
+}
+
+CONFIG_RASTRO = ConfigRastro()
+CONFIG_RASTRO_LIGADA = ConfigRastro(ligada=True)
+
+
 BRACOS_PV2 = ("OLF-0", "OLF-DC", "OLF-DCV", "OLF-PLA", "OLF-G")
 
 

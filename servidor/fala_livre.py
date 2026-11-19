@@ -170,6 +170,8 @@ class ServicoFalaLivre:
             raise PedidoInvalido("historico invalido")
         if "conceitos" in d:
             return self._fala_conceitos(d, situacao, jog, hist)
+        if "verificar_na_chamada" in d:
+            raise PedidoInvalido("verificar_na_chamada so vale com conceitos")
         prompt = d.get("prompt", None) if "prompt" in d else False
         if prompt is not False and prompt not in PROMPTS_CONVERSA:
             raise PedidoInvalido("prompt invalido")
@@ -253,6 +255,11 @@ class ServicoFalaLivre:
         comando = d.get("comando", False)
         if not isinstance(comando, bool) or (comando and situacao != "conversa"):
             raise PedidoInvalido("comando precisa ser booleano e so vale na conversa")
+        # F2 da CONVERSA_PET, D-ES-4 (Matheus, 2026-11-18, a saida (0)): `verificar_na_chamada: false` devolve a fala sem verificar, e o jogo
+        # verifica depois do balao pela rota /verificar, como ja faz. Sem o campo, a resposta e a de sempre (a DC4 e a DC5 nao o mandam).
+        verificar_agora = d.get("verificar_na_chamada", True)
+        if not isinstance(verificar_agora, bool):
+            raise PedidoInvalido("verificar_na_chamada precisa ser booleano")
         semente = _semente(d.get("semente", 0))
         estagio, forma = self._identidade_da_voz(d.get("estado"))
         conceitos = self._conceitos(d["conceitos"])
@@ -262,7 +269,7 @@ class ServicoFalaLivre:
             r = gerar_voz(self.cliente, conceitos, estagio, situacao, jog, hist, semente, especie=especie, comando=comando,
                           voz=self.voz_dos_conceitos(conceitos), ditas=self.ditas_da_voz(situacao))
             verif = None
-            if r.erro is None:                         # fala generica (erro) nao e fala da LLM: nao ha o que conferir
+            if r.erro is None and verificar_agora:     # fala generica (erro) nao e fala da LLM: nao ha o que conferir
                 dono = [f for f in r.fatos if f["tipo"] == TIPO_DONO_DISSE]
                 verif = verificar_conceitos(self.cliente_verif, r.fala, r.fatos_citados, conceitos, dono, semente + 7919,
                                             versao=self.verificador_dos_conceitos(conceitos)).para_dict()
