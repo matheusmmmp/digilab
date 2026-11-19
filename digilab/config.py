@@ -4110,3 +4110,33 @@ class ConfigVozV4B:
 
 CONFIG_VOZ_V4B = ConfigVozV4B()
 PARAMETROS_VOZ_V4B = {f.name: ("PROPOSTO", "SEM FONTE; a Gerente da CONVERSA_PET, 2026-11-11 (D-DC5B-5)") for f in fields(ConfigVozV4B)}
+
+
+# =====================================================================
+# SOCIAL_PAR M2, a companhia no corpo (docs/ESPEC_SOCIAL_PAR_M2.md; M2-1 a M2-6 APROVADAS pelo Matheus em 2026-11-19, D-SP-67). Desligada,
+# a vida de hoje sai byte a byte (o G2 contra tests/gabaritos/social_m2_de_hoje.json). Ligada, o corpo ganha o emissor `companhia`: com o
+# pet acordado e outro pet em contato (as celulas a ate `raio_celulas` em Chebyshev, com as posicoes do comeco do tick, que o grupo conta),
+# a solidao cai `alivio_solidao` no tick, uma vez so, qualquer que seja o numero de outros. O emissor so le a posicao do outro, nenhum quimico
+# dele (sem laco entre os corpos). Exige a solidao no corpo (`ConfigCorpo.drives_novos`). Os pets de um grupo vem com a mesma config.
+@dataclass(frozen=True)
+class ConfigCompanhia:
+    ligada: bool = False
+    raio_celulas: int = 1          # M2-1: o contato, o raio do toque (ConfigGrupo.raio_toque_celulas) e o do primario da S
+    alivio_solidao: int = 900      # M2-2: 2 x a subida da solidao do corpo da S (ConfigCorpo.solidao_sobe = 450 nele), em unidades de C
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigCompanhia.ligada e bool: {self.ligada!r}")
+        if type(self.raio_celulas) is not int or self.raio_celulas < 0:
+            raise ValueError(f"ConfigCompanhia.raio_celulas e inteiro >= 0: {self.raio_celulas!r}")
+        if type(self.alivio_solidao) is not int or self.alivio_solidao <= 0:
+            raise ValueError(f"ConfigCompanhia.alivio_solidao e inteiro > 0: {self.alivio_solidao!r}")
+
+
+CONFIG_COMPANHIA = ConfigCompanhia()
+CONFIG_COMPANHIA_LIGADA = ConfigCompanhia(ligada=True)
+PARAMETROS_COMPANHIA: dict[str, tuple[str, str]] = {
+    "ligada": ("DECIDIDO", "docs/ESPEC_SOCIAL_PAR_M2.md, secao 2 (2026-11-19, D-SP-67): desligada por padrao"),
+    "raio_celulas": ("DECIDIDO", "M2-1 (2026-11-19, D-SP-67): o contato, 1 celula em Chebyshev, o raio do toque; SEM FONTE"),
+    "alivio_solidao": ("DECIDIDO", "M2-2 (2026-11-19, D-SP-67): 900 = 2 x a solidao_sobe do corpo da S; SEM FONTE"),
+}

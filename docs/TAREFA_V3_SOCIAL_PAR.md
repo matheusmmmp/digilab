@@ -194,3 +194,13 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
   lido só da posição, atrás da `ConfigCompanhia`, desligada.
 - **As decisões M2-1 a M2-6** ficam para o checkpoint do M2 (D-SP-65).
 - **O que falta:** o "aprovado" da espec; depois, o código do M2 e o plano da medida com os braços M1, M1-inc0 e M1+M2.
+
+## M2: o código da companhia (2026-11-19)
+
+- **O checkpoint do M2:** o Matheus aprovou a espec (D-SP-67). O gabarito foi gravado antes, em `tests/gabaritos/social_m2_de_hoje.json`.
+- **A `ConfigCompanhia`, desligada:** o emissor `companhia` no grafo, com um gatilho novo e sem ler químico. O `Corpo.passo(..., companhia=n)`,
+  o motor que recebe a contagem do grupo a cada tick, e o grupo que conta o contato com as posições do começo do tick.
+- **O achado e o conserto (D-SP-68):** a consequência chegava ao cérebro antes de a companhia agir. Pela opção (a), as unidades sociais
+  leem o corpo da decisão seguinte, como a fala.
+- **Os testes:** `tests/test_corpo_companhia.py`.
+- **O que falta:** o plano da medida, com os braços M1, M1-inc0 e M1+M2.
