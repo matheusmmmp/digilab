@@ -1,7 +1,9 @@
 # PLANO DE ANÁLISE V3 — PET_VIVO, R-a: a linha de base do intervalo (2026-11-19, Claude Code, Fable 5.2)
 
-**Status: PROPOSTO, à espera do Matheus.** Nenhum replay e nenhuma conta deste plano rodam antes de quatro coisas:
-1. a marca "APROVADO pelo Matheus" neste cabeçalho, com as decisões RB-1 a RB-5 da seção 9;
+**Status: APROVADO pelo Matheus em 2026-11-19.** À pergunta "Aprova o plano do R-a e as RB-1 a RB-5 pela recomendação?", nesta
+sessão, a resposta foi "Aprovo todas" (D-RB-4). As decisões RB-1 a RB-5 da seção 9 estão DECIDIDAS pela recomendação. Os cortes e os
+pisos seguem SEM FONTE. **Nenhum replay e nenhuma conta deste plano rodam antes de quatro coisas:**
+1. a marca "APROVADO pelo Matheus" neste cabeçalho (feita acima);
 2. o código da seção 7 na `main`, com os testes dele;
 3. a run da C3 da CORPO terminada e o `pre_run` respondendo "pode rodar";
 4. as conferências da seção 3, que falham alto antes de qualquer medida.
@@ -155,7 +157,7 @@ Nenhuma medida é gate. A regra diz o que o plano do R2 recebe. Ela se lê no HO
   piso é 10 GB.
 - **A vez:** uma run por vez, até 4 processos (V3-D8). O R-a só roda depois da C3 da CORPO e com o `pre_run` liberando.
 
-## 9. As decisões com o Matheus (PROPOSTAS)
+## 9. As decisões com o Matheus (DECIDIDAS pela recomendação em 2026-11-19, "Aprovo todas"; D-RB-4)
 
 | nº | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|

@@ -276,11 +276,11 @@ processos, sobre as 5 120 vidas gravadas. O resultado está em [RESULTADO_V3_PET
 ## O plano do R-a, a linha de base do intervalo (2026-11-19, Claude Code, Fable 5.2, branch `v3-pet-vivo-ra-plano`)
 
 Pedido pela sessão coordenadora, com o planejamento das próximas runs aprovado pelo Matheus ("Aprovo, repasse"). O plano está em
-[PLANO_ANALISE_V3_PET_VIVO_RA.md](PLANO_ANALISE_V3_PET_VIVO_RA.md), **PROPOSTO, à espera do Matheus** (RB-1 a RB-5).
+[PLANO_ANALISE_V3_PET_VIVO_RA.md](PLANO_ANALISE_V3_PET_VIVO_RA.md), **APROVADO pelo Matheus em 2026-11-19** ("Aprovo todas"; RB-1 a RB-5 DECIDIDAS, D-RB-4).
 
 - **O que é:** um replay das mesmas 5 120 vidas do R1, sem vida nova, com três linhas de base que não olham a ação (a fase do dia,
   o estado do corpo e a média móvel), para dizer quais preservam o sono e se sobra algo entre as ações acordadas.
 - **O desfecho esperado, escrito antes:** "só o sono".
 - **Nada rodou e nenhum código mudou.** O replay espera o APROVADO, o código na `main`, o fim da C3 da CORPO e o `pre_run`.
 - **O R2 não começa aqui:** segue na tarefa CREDITO_INTERVALO.
-- **Desvios:** D-RB-1 a D-RB-3.
+- **Desvios:** D-RB-1 a D-RB-4.
