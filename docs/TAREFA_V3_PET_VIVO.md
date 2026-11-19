@@ -161,6 +161,23 @@ repasse do Gerente da V3.
 **Próximo (as PV2-1 a PV2-10 DECIDIDAS em 2026-11-09, D-PV2P-6):** o merge pelo Matheus. Depois, o PR do código, com o gabarito, a chave desligada e o custo medido nas sementes
 dos testes.
 
+## A análise da integração da cadeia (2026-11-17, Claude Code, Opus 5.5, branch `v3-integracao-cadeia-analise`)
+
+Fora das etapas desta frente: um pedido do Matheus sobre a cadeia órgão → cérebro → ação → aprendizado, repassado pela sessão que abriu
+esta. O documento é o [integracao_cadeia_digibrain.md](futuro/integracao_cadeia_digibrain.md), só leitura, sem vida e sem código.
+
+- **Recomenda o código do PV-2 como a primeira etapa,** com a especificação na seção 8 dele.
+- **Propõe reordenar a PV2-10 em parte** (INT-1): o rastro e o crédito do intervalo vêm antes do sorteio, pela evidência nova de que o r
+  é medido no mesmo tick (D-INT-3).
+- **Os desvios:** D-INT-1 a D-INT-9.
+- **As decisões:** as INT-1 a INT-9 estão DECIDIDAS pela recomendação. O Matheus escreveu, em 2026-11-17: "Aprovo as INT-1 a
+  INT-9 pela recomendação" (D-INT-9).
+- **A próxima etapa desta frente** é o PR do código do PV-2 (o R0), pela seção 8 do documento.
+- **Os repasses (2026-11-18, D-INT-10):**
+  - **a INT-5** fica como premissa do plano do R2: uma estrutura de traço só no cérebro, usada pela janela do ELOGIO e pelo crédito do
+    intervalo, com os sinais separados no registro. Está anotada também na `TAREFA_V3_ELOGIO.md`;
+  - **a INT-7** foi para a LZ3, na `TAREFA_V3_LIMPEZA.md`: o balão e a fala passam a ler o motivo do modular.
+
 ## O código do PV-2, o R0 (2026-11-17, Claude Code, Opus 5.5, branch `v3-pet-vivo-pv2-codigo`)
 
 O Matheus, nesta sessão, escreveu "Sim, começa o R0", a primeira etapa da INT-1 da análise da integração.

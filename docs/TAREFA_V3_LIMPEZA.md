@@ -71,6 +71,9 @@ Cada etapa é um PR. Nenhuma muda o `engine.py`.
   - o A sai de Ajustes e do fallback (`src/cerebro.ts`, `CEREBROS`, `pet_v11.ts`), e o `Bandit` sai do `Motor`;
   - a saída do `Bandit` muda a assinatura, então pede uma versão nova de pet e decide o que acontece com as de hoje (D-LZ-1);
   - depende do #931 (v38 e v39), que mexe nas mesmas versões.
+  - **a INT-7 da análise da integração** (`docs/futuro/integracao_cadeia_digibrain.md`, seções 1.5 e 9; aprovada pelo Matheus em
+    2026-11-17): o balão e a fala livre do jogo leem hoje a vontade do A parado (`motor.ts`, `desejoLobos`). Na LZ3, eles passam a ler
+    o motivo do modular (`leitura.ts`). Se a LZ3 só apagar o A, o balão fica sem vontade.
 - **LZ4, a saída:**
   - a tag `antes-limpeza` no commit da `main` de antes da saída;
   - os arquivos SAI, com os testes, os experimentos, as configs, os artefatos das runs e os documentos dessas frentes (D-LZ-3), saem do git e
