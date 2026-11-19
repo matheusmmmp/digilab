@@ -894,3 +894,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-19 — CORPO: o código da C3 (a chave do teto e o orquestrador)](registro/2026-11.md)
 - [2026-11-19 — PET_VIVO: o replay do R1 (Claude Code, Fable 5.2, branch `v3-pet-vivo-r1-resultado`)](registro/2026-11.md)
 - [2026-11-19 — PET_VIVO: o plano do R-a, a linha de base do intervalo (Claude Code, Fable 5.2, branch `v3-pet-vivo-ra-plano`)](registro/2026-11.md)
+- [2026-11-19 — PET_VIVO: o código do R-a (Claude Code, Fable 5.2, branch `v3-pet-vivo-ra-codigo`)](registro/2026-11.md)
