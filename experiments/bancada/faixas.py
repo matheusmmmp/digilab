@@ -220,6 +220,10 @@ FAIXAS_RESERVADAS = (
     (101101, 101505, "SOCIAL_PAR, a run unica do A0 e do B0: as bases 101101...101505, prefixo social_par, o K pela regra da secao 6 "
                      "decidido depois do piloto (docs/PLANO_ANALISE_V3_SOCIAL_PAR_A0.md, secao 3.4; A0-8, aprovada pelo Matheus em "
                      "2026-11-17, \"Aprovo todas\"; conferida livre na origin/main e em todos os branches remotos em 2026-11-17)"),
+    (100101, 100505, "CORPO_ACOPLAMENTO, a opcao D (a falta de combustivel sobe a fome): a run unica, REL e D nas 12 celulas da C4 x 200 "
+                     "unidades (docs/PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md, secao 4; D-CA-10, aprovada pelo Matheus em 2026-11-18, "
+                     "\"Aprovo, siga\" e \"Aprovo todas\"; bases 100101, 100202, 100303, 100404 e 100505, K = 40; conferida livre no faixas.py, nas configs, "
+                     "nos planos, nas tarefas, nos resultados e nos orquestradores de todos os branches remotos em 2026-11-18)"),
     (103001, 103400, "SOCIAL_PAR S, o substrato que deixa o social aparecer: a run 103001...103200 (200 bases, k = 1, prefixo social_par_s, "
                      "os mesmos nos tres bracos) e o G-DET 103301...103350 (prefixo social_par_s_det) (docs/PLANO_ANALISE_V3_SOCIAL_PAR_S.md, "
                      "secao 4; S-5, aprovada pelo Matheus em 2026-11-18, \"Aprovado\"; conferida livre no faixas.py, nos planos e nas "
