@@ -1769,6 +1769,33 @@ CONFIG_DIGESTAO_CORPO_INTEIRA = ConfigDigestaoCorpo(inteira=True)
 
 
 @dataclass(frozen=True)
+class ConfigTetoFomeCorpo:
+    """CORPO C3, a ponte com teto (docs/PLANO_ANALISE_V3_CORPO_C3.md, secao 2; D-C3-1 e D-C3-2, Matheus, 2026-11-19). Com `teto` (so com a
+    D, a `ConfigAcoplamentoCorpo` ligada), num tick com a falta de combustivel a ponte soma a fome min(falta_fome, max(0, teto - fome)):
+    a fome quimica so sobe pela falta ate `teto`. A fome basal e o resto do corpo nao mudam, e acima do teto a falta nao sobe nem a fome nem
+    o cansaco. `None` (o padrao): a D de hoje, byte a byte. Fica numa config propria, como a ConfigDigestaoCorpo, para nenhum dump de hoje
+    mudar. Status em PARAMETROS_TETO_FOME_CORPO."""
+
+    teto: int | None = None
+
+    def __post_init__(self) -> None:
+        if self.teto is not None and (type(self.teto) is not int or self.teto <= 0):
+            raise ValueError(f"ConfigTetoFomeCorpo.teto e None ou inteiro positivo: {self.teto!r}")
+
+
+# Status dos campos da ConfigTetoFomeCorpo (conferido por teste).
+PARAMETROS_TETO_FOME_CORPO: dict[str, tuple[str, str]] = {
+    "teto": ("DECIDIDO", "PLANO_ANALISE_V3_CORPO_C3, D-C3-1 e D-C3-2 (Matheus, 2026-11-19, 'Ponte com teto' e 'Aprovo todas'): None hoje; "
+                         "o DTL em 382 500, o limiar da privacao (C - 0,15 C, derivado, nao e numero novo); o DTB em C/2 = 225 000, "
+                         "PROPOSTO, SEM FONTE; so de pesquisa ate a validacao"),
+}
+
+CONFIG_TETO_FOME_CORPO = ConfigTetoFomeCorpo()
+CONFIG_TETO_FOME_LIMIAR = ConfigTetoFomeCorpo(teto=382_500)      # o DTL: o limiar da privacao (o Corpo confere que e o t.limiar_privacao)
+CONFIG_TETO_FOME_BAIXO = ConfigTetoFomeCorpo(teto=225_000)       # o DTB: C/2, SEM FONTE
+
+
+@dataclass(frozen=True)
 class ConfigLutaMemoria:
     """A ponte da luta, o lado da memoria (docs/TAREFA_V3_PONTE_LUTA.md, secoes 3.2 e 3.7; PL-2, PL-6, PL-7 e PL-9; etapa PE2). Ligada, o
     DigiBrain modular recebe o resumo da luta (`receber_luta`, irmao do `receber_acao_dono`), o entrega ao M-SENS na decisao seguinte (a
