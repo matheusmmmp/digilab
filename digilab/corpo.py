@@ -113,8 +113,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 
-from .config import (CONFIG_ENJOO_TELA, CONFIG_EVOLUCAO_PESQUISA, CONFIG_LUTA_CORPO, CONFIG_OLFATO, CONFIG_OUVIDO, CONFIG_PADRAO, CONFIG_TELA,
-                     TICKS_POR_DIA, Config, ConfigCorpo, ConfigEnjooTela, ConfigEvolucaoPesquisa, ConfigLutaCorpo, ConfigMundo, ConfigOlfato,
+from .config import (CONFIG_ACOPLAMENTO_CORPO, CONFIG_DIGESTAO_CORPO, CONFIG_ENJOO_TELA, CONFIG_EVOLUCAO_PESQUISA, CONFIG_LUTA_CORPO, CONFIG_OLFATO,
+                     CONFIG_OUVIDO, CONFIG_PADRAO, CONFIG_TELA, TICKS_POR_DIA, Config, ConfigAcoplamentoCorpo, ConfigCorpo, ConfigDigestaoCorpo, ConfigEnjooTela, ConfigEvolucaoPesquisa, ConfigLutaCorpo, ConfigMundo, ConfigOlfato,
                      ConfigOuvido, ConfigTela)
 from .corpo_grafo import Emissor, Grafo, Leitura, Orgao, Quimico, Reacao, ReceptorSoma, checar
 from .events import ACOES_PET_BANHEIRO, ACOES_PET_HOJE, FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario
@@ -480,7 +480,8 @@ RECEPTOR_DE = {**DRIVE_DO_QUIMICO, **{n: n for n in NOVOS + GESTOS + BANHEIRO}, 
 
 
 def grafo_do_corpo(cfg: Config, cc: ConfigCorpo, t: TaxasCorpo, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
-                   cfg_ouvido: ConfigOuvido | None = None, cfg_tela: ConfigTela | None = None) -> Grafo:
+                   cfg_ouvido: ConfigOuvido | None = None, cfg_tela: ConfigTela | None = None,
+                   cfg_acoplamento: ConfigAcoplamentoCorpo | None = None) -> Grafo:
     """A tabela unica do corpo com estas chaves (secao 18). Os numeros de hoje vem das taxas (`t`) e os da etapa 6 da ConfigCorpo; os
     estimulos que vem de fora com quantidade variavel (a bola, a fruta, o andar, a comida podre) guardam so o sinal. Com a digestao, a
     comida (a racao, o comer, a fruta) entra no estomago (`alimento`) e a reacao da digestao a tira, junto com a fome. Com os orgaos do
@@ -554,9 +555,11 @@ def grafo_do_corpo(cfg: Config, cc: ConfigCorpo, t: TaxasCorpo, com_mundo: bool 
         em.append(Emissor("vontade_desconforto", "acima", 2, (("desconforto", cc.vontade_desconforto),), (Leitura("vontade", 1, 1),),
                           cc.vontade_limiar))
     if cc.metabolismo:
-        # a falta de combustivel sobe o cansaco (ME-1, a unica ponte); um degrau, como o dano pela privacao
-        em.append(Emissor("falta_combustivel", "abaixo", 2, (("cansaco", cc.falta_cansaco),), (Leitura("combustivel", 1, 1, -1),),
-                          cc.falta_limiar))
+        # a falta de combustivel sobe o cansaco (ME-1, a unica ponte); um degrau, como o dano pela privacao. Com a ConfigAcoplamentoCorpo
+        # ligada (CORPO_ACOPLAMENTO, D-CA-2), a mesma ponte sobe a fome em vez do cansaco
+        ca = cfg_acoplamento or CONFIG_ACOPLAMENTO_CORPO
+        efeito = ("fome", ca.falta_fome) if ca.ligada else ("cansaco", cc.falta_cansaco)
+        em.append(Emissor("falta_combustivel", "abaixo", 2, (efeito,), (Leitura("combustivel", 1, 1, -1),), cc.falta_limiar))
     # os estimulos (fase 0): os de hoje pelas taxas, os do mundo e os da etapa 6
     for acao, efeitos in t.dono.items():
         em.append(Emissor(f"dono:{acao.value}", "estimulo", 0, comida(efeitos) if acao is AcaoUsuario.ALIMENTAR else tuple(efeitos.items())))
@@ -632,7 +635,8 @@ class Corpo:
     def __init__(self, q: dict[str, int], cfg: Config | None = None, cc: ConfigCorpo | None = None,
                  cfg_evo: ConfigEvolucaoPesquisa | None = None, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
                  cfg_ouvido: ConfigOuvido | None = None, cfg_luta: ConfigLutaCorpo | None = None,
-                 cfg_tela: ConfigTela | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None) -> None:
+                 cfg_tela: ConfigTela | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None,
+                 cfg_acoplamento: ConfigAcoplamentoCorpo | None = None, cfg_digestao: ConfigDigestaoCorpo | None = None) -> None:
         self.cfg = cfg or CONFIG_PADRAO
         self.cfg_evo = cfg_evo or CONFIG_EVOLUCAO_PESQUISA
         self.cc = cc or ConfigCorpo(ligada=True)
@@ -648,6 +652,16 @@ class Corpo:
             raise TypeError(f"cfg_enjoo_tela e uma ConfigEnjooTela: {self.ce!r}")
         if self.cl.ligada and not self.cc.gestos:
             raise ValueError("ConfigLutaCorpo.ligada exige ConfigCorpo.gestos (a dor da luta e o quimico dos gestos)")
+        self.ca = cfg_acoplamento or CONFIG_ACOPLAMENTO_CORPO   # CORPO_ACOPLAMENTO, a opcao D: a falta de combustivel vira fome
+        if not isinstance(self.ca, ConfigAcoplamentoCorpo):
+            raise TypeError(f"cfg_acoplamento e uma ConfigAcoplamentoCorpo: {self.ca!r}")
+        if self.ca.ligada and not self.cc.metabolismo:
+            raise ValueError("ConfigAcoplamentoCorpo.ligada exige ConfigCorpo.metabolismo (a ponte e a da falta de combustivel)")
+        self.cd = cfg_digestao or CONFIG_DIGESTAO_CORPO          # CORPO, a opcao E: a comida que sobra com a fome em 0 vira combustivel
+        if not isinstance(self.cd, ConfigDigestaoCorpo):
+            raise TypeError(f"cfg_digestao e uma ConfigDigestaoCorpo: {self.cd!r}")
+        if self.cd.inteira and not (self.cc.digestao and self.cc.metabolismo):
+            raise ValueError("ConfigDigestaoCorpo.inteira exige ConfigCorpo.digestao e ConfigCorpo.metabolismo (o excedente vira combustivel)")
         self.C = self.cc.escala
         self.S = self.cc.escala_receptor
         self.t = taxas_de(self.cfg, self.cc)
@@ -656,7 +670,7 @@ class Corpo:
         if self.cc.paladar and not com_mundo:
             raise ValueError("ConfigCorpo.paladar sem o mundo fisico: o perfil de gosto vem da comida do mapa (paladar, secao 3.1)")
         # secao 18: a tabela unica, conferida na carga (falha alto); a lista e a ordem dos quimicos saem dela
-        self.grafo = grafo_do_corpo(self.cfg, self.cc, self.t, com_mundo, self.co, self.cv, self.ct)
+        self.grafo = grafo_do_corpo(self.cfg, self.cc, self.t, com_mundo, self.co, self.cv, self.ct, self.ca)
         self.relato_grafo = checar(self.grafo)
         self.quimicos = self.grafo.nomes
         if self.quimicos != quimicos_de(self.cc, com_mundo, self.co, self.cv, self.ct):   # pragma: no cover - o grafo e montado de quimicos_de
@@ -750,7 +764,8 @@ class Corpo:
     def de_estado(cls, estado: Estado, cfg: Config | None = None, cc: ConfigCorpo | None = None,
                   cfg_evo: ConfigEvolucaoPesquisa | None = None, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
                   cfg_ouvido: ConfigOuvido | None = None, cfg_luta: ConfigLutaCorpo | None = None,
-                  cfg_tela: ConfigTela | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None) -> Corpo:
+                  cfg_tela: ConfigTela | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None,
+                  cfg_acoplamento: ConfigAcoplamentoCorpo | None = None, cfg_digestao: ConfigDigestaoCorpo | None = None) -> Corpo:
         """O corpo de um Estado de hoje (o do nascimento, por exemplo). Cada drive tem de cair na grade de C. A Vida e a do tick do
         Estado (C no nascimento). Os quimicos da etapa 6 comecam em 0 (`com_mundo`: a curiosidade existe)."""
         cc = cc or ConfigCorpo(ligada=True)
@@ -765,7 +780,7 @@ class Corpo:
             q["reserva"] = cc.reserva_inicial
         for nome in quimicos_de(cc, com_mundo, cfg_olfato, cfg_ouvido, cfg_tela):
             q.setdefault(nome, 0)                          # os drives novos, os gestos e a adaptacao dos orgaos: zero no nascimento
-        return cls(q, cfg, cc, cfg_evo, com_mundo, cfg_olfato, cfg_ouvido, cfg_luta, cfg_tela, cfg_enjoo_tela)
+        return cls(q, cfg, cc, cfg_evo, com_mundo, cfg_olfato, cfg_ouvido, cfg_luta, cfg_tela, cfg_enjoo_tela, cfg_acoplamento, cfg_digestao)
 
     # ---------------------------------------------------------- estimulos
 
@@ -994,8 +1009,27 @@ class Corpo:
                     self.contas_metabolismo["convertido"] += v
                     self.contas_metabolismo["descartado_teto"] += novo - self.q[nome]
         if self.q["fome"] == 0 and self.q["alimento"] > 0:
-            self.descartado_total += self.q["alimento"]
-            self.q["alimento"] = 0
+            if self.cd.inteira:
+                self._converter_excedente()
+            else:
+                self.descartado_total += self.q["alimento"]
+                self.q["alimento"] = 0
+
+    def _converter_excedente(self) -> None:
+        """CORPO, a opcao E (`ConfigDigestaoCorpo.inteira`): a comida que sobra no estomago com a fome em 0 vai ao combustivel de uma vez,
+        pela fracao do metabolismo (num/den, com o resto guardado), com o teto C; nada vai a fome, a vontade nem ao `descartado_total`"""
+        x = self.q["alimento"]
+        self.q["alimento"] = 0
+        for nome, num, den in self._fracoes:
+            if nome != "combustivel":
+                continue
+            resto = self.resto_combustivel + x * num
+            v, resto = divmod(resto, den)
+            self.resto_combustivel = resto
+            novo = self.q[nome] + v
+            self.q[nome] = min(self.C, novo)
+            self.contas_metabolismo["convertido"] += v
+            self.contas_metabolismo["descartado_teto"] += novo - self.q[nome]
 
     # ---------------------------------------------------------- os orgaos do Olfato e da Audicao (secao 5.6 dos dois pets)
 
