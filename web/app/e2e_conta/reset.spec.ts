@@ -42,6 +42,7 @@ async function servidorFalso(page: Page): Promise<Falso> {
     if (caminho === "/premios") { await json(200, PREMIOS); return; }
     if (caminho === "/tamers") { await json(200, TAMERS); return; }
     if (caminho === "/digimons") { await json(200, DIGIMONS); return; }
+    if (caminho === "/mural") { await json(200, { recordes: { torre: [], fabrica: [], salao: [] }, total: { torre: 0, fabrica: 0, salao: 0 }, titulos: [] }); return; }
     if (caminho === "/envios" && route.request().method() === "POST") { s.envios.push(route.request().postDataJSON()); await json(201, { resultado: "aceito", lutas: [], semanas: [], ms: {} }); return; }
     if (caminho === "/semanas/2026-11-23/tabelas") {
       await json(200, { semana: "2026-11-23", estado: "aberta", congela_em: "2026-11-30T04:00:00.000Z",
@@ -173,7 +174,9 @@ test("no celular (390 px), o cais com as abas e o Aposentar cabem sem rolar de l
   expect(await lado()).toBeLessThanOrEqual(0);
   await page.goto(APP + "?cameradev=1#/pet/estado");
   await expect(page.locator(".pet-tela")).toBeVisible();
-  await page.getByRole("button", { name: /Meus pets/ }).first().click();
+  /* abaixo de 900 px, Meus pets fica no leque do retrato (o mobile minimo) */
+  await page.locator(".mm-retrato").click();
+  await page.getByRole("button", { name: "Meus pets" }).click();
   await page.getByTestId("mp-aposentar").click();
   await expect(page.getByTestId("rs-sem-bonus")).toBeVisible();
   await page.screenshot({ path: info.outputPath("reset_sem_bonus_390.png") });

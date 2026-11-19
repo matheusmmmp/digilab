@@ -61,6 +61,7 @@
 
 /* de onde vem o Respeito */
 .rs-de{ border-top:1px solid var(--hx-borda); padding-top:4px }
+.rs-de ul{ margin:0; padding:0; list-style:none }
 .rs-de li{ display:grid; grid-template-columns:1fr auto; align-items:center; gap:8px; min-height:38px; padding:2px 10px; border-bottom:1px solid var(--hx-borda) }
 .rs-de li b{ display:block; font:600 14px/1.2 var(--hx-f) }
 .rs-de li small{ display:block; font:500 12px/1.2 var(--hx-f); color:var(--hx-sec) }
