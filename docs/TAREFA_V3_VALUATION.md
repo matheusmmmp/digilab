@@ -266,3 +266,12 @@ O Matheus reabriu a V4 em 2026-11-18 ("Então faz a validação contra o baselin
 - **No longe sorteado,** a TRIV fecha 0,815 contra 0,510 do CON.
 
 Status: o CHECKPOINT V4, com a leitura **indeterminado**. O conserto continua fora de qualquer pet, e as chaves, desligadas.
+
+### V4b, o plano do empate com precisão (2026-11-19, Claude Code, Opus 5.5)
+
+O Matheus pediu o plano de uma V4 maior ("Sim, escreve o plano"; D-VAL-35). O
+[PLANO_ANALISE_V3_VALUATION_V4B.md](PLANO_ANALISE_V3_VALUATION_V4B.md), PROPOSTO, mede de novo CON − TRIV no `longe_fixo` com N = 600,
+dimensionado pelo dp da V4 para a margem efetiva caber em δ = 0,032: 4 800 vidas na 107xxx, cerca de 50 min. Nenhum código, nenhuma
+vida.
+
+Status: o CHECKPOINT V4b-a, com as VB4B-1 a VB4B-5 para o Matheus.
