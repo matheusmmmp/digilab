@@ -26,8 +26,12 @@ A tarefa tem duas etapas, em ordem:
   vêm a ordem (INT-1), uma estrutura de traço só (INT-5), a calibração do `tau_c` no fim (INT-6) e a checagem descritiva com a config do
   v38 (INT-8).
 - **Para o R2:** o R1 na `main`, com os números do intervalo, e o plano de análise do R2 aprovado pelo Matheus antes de qualquer vida.
-- **A conversa com a CORPO** (`TAREFA_V3_CORPO.md`) antes do merge de qualquer código. A C3 dela mexe no corpo (a chave E, a digestão
-  inteira). O R2 credita o que o corpo faz no intervalo, então as duas frentes têm de saber o que a outra liga.
+- **A conversa com a CORPO** (`TAREFA_V3_CORPO.md`) antes do merge de qualquer código.
+  - A C3 dela não mexe na digestão: a chave E ficou fora pela D-C3-3 (`PLANO_ANALISE_V3_CORPO_C3.md`).
+  - O que ela muda, tick a tick, é a ponte da falta de combustível. Com a D, a falta sobe a fome em vez do cansaço, e um teto novo
+    (`ConfigTetoFomeCorpo`, desligado por padrão) para essa subida.
+  - Isso muda o que o corpo faz entre as decisões, no caminho da fome, e é exatamente o que o R2 credita. O R1 e o R2 têm de saber se o
+    corpo das vidas tem a C3 ligada ou não, e o plano do R2 diz qual dos dois corpos usa.
 
 ## 3. Mudança mínima
 
@@ -124,7 +128,8 @@ A tarefa tem duas etapas, em ordem:
 
 Fica fora de propósito, e cada item tem dono ou espera esta tarefa (D-CI-1):
 - **A digestão lenta** (`taxa_digestao`, `config.py:1554`): só depois do R2 validado. Sem o crédito do intervalo, ligar a digestão lenta
-  tira o alívio imediato de comer e põe o pet em privação. A chave E da CORPO (a digestão inteira) é outra coisa e é da CORPO.
+  tira o alívio imediato de comer e põe o pet em privação. A chave E da CORPO (a digestão inteira) é outra coisa, ficou fora da C3
+  (D-C3-3) e é da CORPO.
 - **A saciedade, o paladar e o banheiro no modular:** o R6 da análise, com uma tarefa de corpo própria.
   - A saciedade é um receptor novo, que integra o que foi comido.
   - O paladar entra no M-SENS por um caminho próprio, como a tela.
