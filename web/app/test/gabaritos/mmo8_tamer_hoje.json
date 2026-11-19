@@ -1,0 +1,92 @@
+{
+ "versao": 1,
+ "nota": "MMO8: os registros do Tamer de hoje (o texto gravado e o estado lido), gravados antes do evento reset e da versao 11",
+ "casos": [
+  {
+   "nome": "vazio",
+   "texto": "{\"versao\":10,\"log\":[]}",
+   "lido": {
+    "versao": 10,
+    "eventos": 0,
+    "medalhas": 0,
+    "titulo": false,
+    "bits": 0,
+    "marcos": []
+   }
+  },
+  {
+   "nome": "tres_medalhas",
+   "texto": "{\"versao\":10,\"log\":[[\"medalha\",{\"id\":\"campina\",\"n\":1,\"quando\":1763000000000,\"pet\":101,\"forma\":\"Tsunomon\",\"tick\":480}],[\"medalha\",{\"id\":\"torre\",\"n\":2,\"quando\":1763000000001,\"pet\":101,\"forma\":\"Tsunomon\",\"tick\":480}],[\"medalha\",{\"id\":\"floresta\",\"n\":3,\"quando\":1763000000002,\"pet\":202,\"forma\":\"Tsunomon\",\"tick\":480}]]}",
+   "lido": {
+    "versao": 10,
+    "eventos": 3,
+    "medalhas": 3,
+    "titulo": false,
+    "bits": 0,
+    "marcos": [
+     5,
+     7
+    ]
+   }
+  },
+  {
+   "nome": "liga_e_recorde",
+   "texto": "{\"versao\":10,\"log\":[[\"medalha\",{\"id\":\"campina\",\"n\":1,\"quando\":1763000000000,\"pet\":101,\"forma\":\"Tsunomon\",\"tick\":480}],[\"medalha\",{\"id\":\"torre\",\"n\":2,\"quando\":1763000000001,\"pet\":101,\"forma\":\"Tsunomon\",\"tick\":480}],[\"medalha\",{\"id\":\"floresta\",\"n\":3,\"quando\":1763000000002,\"pet\":101,\"forma\":\"Tsunomon\",\"tick\":480}],[\"medalha\",{\"id\":\"cidadela\",\"n\":4,\"quando\":1763000000003,\"pet\":101,\"forma\":\"Tsunomon\",\"tick\":480}],[\"medalha\",{\"id\":\"lago\",\"n\":5,\"quando\":1763000000004,\"pet\":101,\"forma\":\"Tsunomon\",\"tick\":480}],[\"medalha\",{\"id\":\"espiral\",\"n\":6,\"quando\":1763000000005,\"pet\":101,\"forma\":\"Tsunomon\",\"tick\":480}],[\"campeao\",{\"n\":1,\"quando\":1763000000010,\"pet\":101,\"forma\":\"Tsunomon\",\"tick\":480}],[\"recorde\",{\"inst\":\"torre_batalha\",\"valor\":3,\"quando\":1763000000011,\"pet\":101,\"forma\":\"Tsunomon\",\"tick\":480}]]}",
+   "lido": {
+    "versao": 10,
+    "eventos": 8,
+    "medalhas": 6,
+    "titulo": true,
+    "bits": 0,
+    "marcos": [
+     5,
+     7,
+     8,
+     9
+    ]
+   }
+  },
+  {
+   "nome": "bits",
+   "texto": "{\"versao\":10,\"log\":[[\"medalha\",{\"id\":\"campina\",\"n\":1,\"quando\":1763000000000,\"pet\":101,\"forma\":\"Tsunomon\",\"tick\":480}],[\"bits\",{\"id\":\"medalha:campina\",\"pet\":101,\"valor\":50,\"origem\":\"lider\",\"tick\":480,\"quando\":1763000000001}],[\"bits\",{\"id\":\"luta:0\",\"pet\":101,\"valor\":10,\"origem\":\"luta\",\"tick\":30,\"quando\":1763000000002}],[\"bits\",{\"id\":\"evolucao:crianca\",\"pet\":202,\"valor\":60,\"origem\":\"evolucao\",\"tick\":900,\"quando\":1763000000003}],[\"bits\",{\"id\":\"nivel:1\",\"pet\":0,\"valor\":30,\"origem\":\"nivel\",\"tick\":0,\"quando\":1763000000004}],[\"bits\",{\"id\":\"nivel:2\",\"pet\":0,\"valor\":30,\"origem\":\"nivel\",\"tick\":0,\"quando\":1763000000004}],[\"bits\",{\"id\":\"nivel:3\",\"pet\":0,\"valor\":30,\"origem\":\"nivel\",\"tick\":0,\"quando\":1763000000004}],[\"bits\",{\"id\":\"nivel:4\",\"pet\":0,\"valor\":30,\"origem\":\"nivel\",\"tick\":0,\"quando\":1763000000004}]]}",
+   "lido": {
+    "versao": 10,
+    "eventos": 8,
+    "medalhas": 1,
+    "titulo": false,
+    "bits": 240,
+    "marcos": [
+     5
+    ]
+   }
+  },
+  {
+   "nome": "marco_10",
+   "texto": "{\"versao\":10,\"log\":[[\"nivel\",{\"n\":10,\"quando\":1763000000005,\"pet\":101,\"forma\":\"WarGreymon\",\"tick\":9000}]]}",
+   "lido": {
+    "versao": 10,
+    "eventos": 1,
+    "medalhas": 0,
+    "titulo": false,
+    "bits": 0,
+    "marcos": [
+     10
+    ]
+   }
+  },
+  {
+   "nome": "registro_9",
+   "texto": "{\"versao\":10,\"log\":[[\"medalha\",{\"id\":\"campina\",\"n\":1,\"quando\":1763000000000,\"pet\":7,\"forma\":\"Agumon\",\"tick\":480}]]}",
+   "lido": {
+    "versao": 10,
+    "eventos": 1,
+    "medalhas": 1,
+    "titulo": false,
+    "bits": 0,
+    "marcos": [
+     5
+    ]
+   }
+  }
+ ]
+}
