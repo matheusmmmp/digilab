@@ -522,6 +522,17 @@ class Grupo:
         m.deixar_bola(x, y)
 
     # ------------------------------------------------------------ a perturbacao do experimento (docs/ESPEC_V3_SOCIAL_PAR_E1.md, 2.3)
+    def deixar_bola_intervencao(self, ident: str, x: int, y: int) -> None:
+        """A bola posta parada em (x, y) como intervencao do experimento (SOCIAL_PAR S, o braco B2: docs/PLANO_ANALISE_V3_SOCIAL_PAR_S.md,
+        secao 2): a mecanica e a do `deixar_bola` do dono, pelo motor de `ident`, mas no registro com a origem `intervencao`, e so com a
+        ConfigIntervencaoSocial ligada. O jogo nunca a grava; os registros de hoje nao mudam."""
+        if not self.ci.ligada:
+            raise ValueError("deixar_bola_intervencao so com a ConfigIntervencaoSocial ligada (Grupo(cfg_intervencao=)): e pesquisa")
+        m = self.motores[ident]
+        ev = evento_deixar_bola(self.tick, x, y)
+        self.registro.anexar(EventoGrupo(self.tick, ev.tipo, ev.valor, DESTINO_MUNDO, ident, ORIGEM_INTERVENCAO))
+        m.deixar_bola(x, y)
+
     def levar_pet(self, ident: str, x: int, y: int) -> None:
         """O pet `ident` e levado a (x, y) pelo `levar_pet` de hoje (o do dono, PP-1 a PP-4), mas como intervencao do experimento: no
         registro com a origem `intervencao`. So com a ConfigIntervencaoSocial ligada; o pet dormindo falha alto (PP-2), antes do registro."""
@@ -640,6 +651,8 @@ def reproduzir_grupo(registro: RegistroGrupo, fabricas: dict[str, tuple[Callable
             g.acao_dono(e.pet, AcaoUsuario(e.valor))
         elif e.tipo == "deixar_comida":
             g.deixar_comida(e.pet, *ler_deixar_comida(Evento(e.tick, e.tipo, e.valor)))
+        elif e.tipo == "deixar_bola" and e.origem == ORIGEM_INTERVENCAO and e.destino == DESTINO_MUNDO:
+            g.deixar_bola_intervencao(e.pet, *ler_deixar_bola(Evento(e.tick, e.tipo, e.valor)))
         elif e.tipo == "deixar_bola":
             g.deixar_bola(e.pet, *ler_deixar_bola(Evento(e.tick, e.tipo, e.valor)))
         elif e.tipo == TIPO_SENTIDO_TELA and e.destino == DESTINO_MUNDO and e.pet is None:

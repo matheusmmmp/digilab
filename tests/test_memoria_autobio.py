@@ -730,7 +730,11 @@ def test_g2_separado_nada_fora_do_pacote_le_a_chave():
                       # como o braco SEM da C4 (`controle_mem = "sem"`), sem valor novo
                       "experiments/run_v3_valuation.py",
                       # a VALUATION (o conserto): o orquestrador importa o da C4 pela vida do REL e pelas celulas; nao le a chave
-                      "experiments/run_v3_valuation_conserto.py"}
+                      "experiments/run_v3_valuation_conserto.py",
+                      # a VALUATION (a V4, a validacao contra a TRIV): importa o da C4 so pelas celulas e pela estimativa; nao le a chave
+                      "experiments/run_v3_valuation_validacao.py",
+                      # o PET_VIVO, a run do PV-2: importa o da C4 so pelas celulas e pelo EPISODIO; nao le a chave
+                      "experiments/run_v3_pet_vivo_pv2.py"}
     achados = set()
     for pasta in ("digilab", "experiments", "web", "tools", "servidor", "digilab_fala_livre"):
         if not (RAIZ / pasta).exists():

@@ -380,7 +380,7 @@ describe("baixar os meus dados", () => {
     const texto = await r.text();
     const d = JSON.parse(texto);
     expect(d.formato).toBe("digilab-conta-dados-v1");
-    expect(Object.keys(d)).toEqual(["formato", "gerado_em", "conta", "identidades", "consentimentos", "aparelhos", "sessoes", "envios", "sementes", "nao_guardamos"]);
+    expect(Object.keys(d)).toEqual(["formato", "gerado_em", "conta", "identidades", "consentimentos", "aparelhos", "sessoes", "envios", "sementes", "desafio", "nao_guardamos"]);
     expect(d.identidades).toEqual([{ provedor: "falso", id_provedor: "id-ana", criada_em: expect.any(String) }]);
     expect(d.aparelhos).toHaveLength(1);
     expect(d.sessoes).toEqual([{ aparelho_id: d.aparelhos[0].id, criada_em: expect.any(String), expira_em: expect.any(String) }]);

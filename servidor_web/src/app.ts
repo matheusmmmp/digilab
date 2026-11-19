@@ -9,6 +9,7 @@ import { Hono } from "hono";
 import { motivoDeDict, PedidoInvalido } from "./catalogo.ts";
 import type { ConfigConta } from "./conta/config.ts";
 import { montarRotasConta } from "./conta/rotas.ts";
+import { montarRotasDesafio } from "./desafio/desafio.ts";
 import { ConferidorEmWorker, type Conferidor } from "./envio/conferidor.ts";
 import { montarRotasEnvio } from "./envio/rotas.ts";
 import { montarRotasSemana } from "./envio/semanas.ts";
@@ -71,6 +72,7 @@ export function criarApp({ gerador, motivoInicial, conta, conferidor }: Opcoes):
     montarRotasEnvio(app, conta, guardas, conferidor ?? new ConferidorEmWorker().conferir);
     montarRotasSemente(app, conta, guardas);
     montarRotasSemana(app, conta, guardas);
+    montarRotasDesafio(app, conta, guardas);
   }
 
   app.notFound(c => json(c, 404, { erro: "rota desconhecida" }));

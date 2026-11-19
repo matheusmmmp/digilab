@@ -109,3 +109,41 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
 - **O que mostra** (`artifacts_v3_social_par_a0/piloto.json`): no A0, 96 % dos pares são elegíveis, todos com reencontro na janela, e o dp
   do D_A é 0,664. O N = 200 basta, com K = 42 por base. No B0, nenhum par é elegível: o B0 sai inconclusivo por premissa (D-SP-33).
 - **O que falta:** o Matheus decidir o N e o K. Depois, num commit que atualiza a seção 6 do plano e o `K_RUN`, a run.
+
+## A run do A0 e do B0 (2026-11-18, branch `v3-social-par-a0-run`)
+
+- **O que rodou:** a run única, em 2026-11-18, das 15:47 às 15:54, no commit 4a2bf0ea. Foram 210 pares e 1.050 vidas, com o G-INSTR e o
+  G1 em todos (D-SP-36).
+- **O resultado** (`docs/RESULTADO_V3_SOCIAL_PAR_A0.md`): o A0 é ≈ 0 (D_A = −0,119 decisão, IC95 [−0,300; +0,061], δ = 4), como previsto.
+  O B0 é inconclusivo por premissa, com 0 pares elegíveis. Nenhum secundário rejeita.
+
+## S0, a observação do que os dois pets fazem juntos (2026-11-18, branch `v3-social-par-s0`)
+
+- **O que é:** `docs/OBSERVACAO_V3_SOCIAL_PAR.md`, feita sem vida nova. As 210 VIVO da run do A0 foram refeitas e conferidas pelo sha256
+  (D-SP-37).
+- **O que mostra:** perto é o estado normal (64 % da vida). F volta sozinho, e P não muda o T\* em 193 de 201 pares. A bola quase nunca é
+  chutada, e a CO7 muda 7 de 201.600 decisões (D-SP-40).
+- **O que falta:** o checkpoint S1, a aprovação do Matheus. Depois vem o plano da S1, com a ordem proposta: B1 e depois B2.
+
+## S1, o plano do substrato (2026-11-18, branch `v3-social-par-s1`)
+
+- **O que é:** `docs/PLANO_ANALISE_V3_SOCIAL_PAR_S.md`, PROPOSTO. Tem os braços C, B1 (fora da casa) e B2 (a bola perto), e o G-DET com o
+  `SeguidorPuro` como controle positivo. K = 200 bases independentes, e a faixa 103001…103400 (D-SP-41 a D-SP-44).
+- **O que falta:** o checkpoint S2, a aprovação do Matheus, com as decisões S-1 a S-8. Depois vem o código da S2.
+
+## S2, o código do substrato (2026-11-18, branch `v3-social-par-s2`)
+
+- **O que entrou:**
+  - o `deixar_bola_intervencao` no grupo;
+  - a `IntervencaoT0` no `viver_par`;
+  - o orquestrador `experiments/run_v3_social_par_s.py`, com os braços C, B1 e B2 e o G-DET;
+  - a S0 refatorada (D-SP-48 e D-SP-49).
+- **O que passa:** `tests/test_social_par_s.py`, com 12 testes:
+  - "desliga não muda": as vidas da run do A0 se refazem com o mesmo sha256;
+  - "liga resolve", em cada braço;
+  - o determinismo;
+  - as travas;
+  - a fumaça.
+- **O risco:** o `SeguidorPuro` perde F de vista quando F anda para casa, e o G-DET pode falhar (D-SP-50).
+- **O que falta:** o checkpoint S3, a aprovação do substrato antes do merge. Depois vem a run da S3.
+- **O checkpoint S3 (2026-11-18):** "Aprovado, rodar como está" (D-SP-51). A run vem depois do merge da cadeia.
