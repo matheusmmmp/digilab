@@ -1,12 +1,13 @@
 /* O cais (MMO5 no jogo; a prancha docs/pranchas/ux-cais/, UX-CA-1 a 7 APROVADAS em 2026-11-17): a semana, as tabelas por estagio, os
-   estados, a semana fechada e "Conferir a semana". Uma tela so, sem abas (UX-CA-1), no painel dos lugares sem a viagem da camera
+   estados, a semana fechada e "Conferir a semana". Desde a MMO8, com as abas Semana, Tamers, Digimon e Mural (UX-RS-3, APROVADA em
+   2026-11-19, reve a UX-CA-1 "sem abas"; os rankings em Rankings.tsx), no painel dos lugares sem a viagem da camera
    (#/cais, fora dos destinos, como os Ajustes). O cais nao tem botao de luta: ele leva a Arena (UX-LR-1).
 
    A chave: so aparece com VITE_DIGILAB_API no build (o endereco do servidor_web). Sem ela, o cais continua sem menu.
 
    Tudo aqui e tela: o cais so le o servidor. As regras e as chamadas ficam em src/cais/cais.ts. */
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { ChevronLeft, ChevronRight, Copy, Info, KeyRound, RefreshCw, Swords, Trophy, UserRound } from "lucide-react";
+import { ChevronLeft, ChevronRight, Copy, Info, KeyRound, RefreshCw, Swords, UserRound } from "lucide-react";
 import { NIVEL_DO_ESTAGIO } from "../../../motor/index.ts";
 import { apiDoBuild } from "../../conta/apiDoBuild.ts";
 import {
@@ -16,6 +17,9 @@ import {
 } from "../../cais/cais.ts";
 import { abrirMural, diaCurto, estadoMural, fecharMural, INSTALACOES_MURAL, ouvirMural, revisaoMural, type Mural, type Premios } from "../../cais/premios.ts";
 import { useJogo } from "../../jogo.ts";
+import { abaDigimons, abaTamers } from "../../cais/pontuacoes.ts";
+import { enviarAposentados } from "../../reset.ts";
+import { AbasCais, RankingDoCais, tirarAbaPedida, type AbaCais } from "./Rankings.tsx";
 import "../../estilo/conta.css";
 import "../../estilo/cais.css";
 
@@ -188,10 +192,11 @@ function RecordesDoMural({ m }: { m: Mural }) {
   );
 }
 
-function MuralCais({ fechar }: { fechar: () => void }) {
+function MuralCais({ fechar, abas }: { fechar: () => void; abas: React.ReactNode }) {
   const e = estadoMural()!;
   return (
     <div className="ct ca" data-testid="ca-mural">
+      {abas}
       {e.passo === "buscando" && <p className="ct-chamada" role="status">Buscando o mural</p>}
       {e.passo === "sem_resposta" && <Destaque rot="Sem resposta" titulo="O mural não veio" alerta><p>Os seus prêmios continuam guardados no servidor.</p></Destaque>}
       {e.passo === "sem_conta" && <Destaque rot="Só com a conta" titulo="O mural pede a conta"><p>Ele mostra só os apelidos.</p></Destaque>}
@@ -211,16 +216,32 @@ export function TelaCais({ curto, irArena, fechar }: { curto: boolean; irArena: 
   const jogo = useJogo(), ligado = caisNoBuild();
   useSyncExternalStore(ouvirCais, revisaoCais);
   useSyncExternalStore(ouvirMural, revisaoMural);
-  /* o mural fecha quando o cais fecha */
-  useEffect(() => () => fecharMural(), []);
+  /* o mural e os rankings fecham quando o cais fecha */
+  useEffect(() => () => { fecharMural(); abaTamers.fechar(); abaDigimons.fechar(); }, []);
+  /* a aba (MMO8): o perfil pode pedir a dos Tamers; cada aba busca de novo ao abrir */
+  const [aba, setAba] = useState<AbaCais>(tirarAbaPedida);
+  const irAba = (a: AbaCais) => {
+    if (a === "mural") { setAba("mural"); agir(abrirMural); return; }
+    fecharMural(); setAba(a);
+    if (a === "tamers") agir(() => abaTamers.abrir());
+    if (a === "digimon") agir(() => abaDigimons.abrir());
+  };
   const seu = NIVEL_DO_ESTAGIO[jogo.motor.estagioAtual] ?? null, seuComTabela = seu !== null && ESTAGIOS.includes(seu) ? seu : null;
   /* cada abertura do cais busca de novo: a tabela muda no servidor */
-  useEffect(() => { if (ligado) agir(() => abrirCais(seuComTabela)); }, [ligado]);   // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!ligado) return;
+    agir(() => abrirCais(seuComTabela));
+    if (aba !== "semana") irAba(aba);
+    /* o registro do pet aposentado que ainda nao chegou ao servidor (UX-RS-4): tenta de novo a cada abertura do cais */
+    agir(async () => { await enviarAposentados(); });
+  }, [ligado]);   // eslint-disable-line react-hooks/exhaustive-deps
   /* o relogio da tela ("faltam 2 d 4 h" e a passagem para "fechando"), de minuto em minuto */
   const [agora, setAgora] = useState(() => Date.now());
   useEffect(() => { const r = setInterval(() => setAgora(Date.now()), 60_000); return () => clearInterval(r); }, []);
   if (!ligado) throw new Error("o cais abriu sem o endereço do servidor no build");
-  if (estadoMural()) return <MuralCais fechar={fechar} />;
+  const vista: AbaCais = estadoMural() ? "mural" : aba === "mural" ? "semana" : aba, abas = <AbasCais aba={vista} ir={irAba} />;
+  if (estadoMural()) return <MuralCais fechar={fechar} abas={abas} />;
+  if (vista === "tamers" || vista === "digimon") return <div className="ct ca" data-testid={`ca-${vista}`}>{abas}<RankingDoCais aba={vista} curto={curto} /></div>;
 
   const s = CA.semanas, semana = CA.semana, t = CA.tabelas, ocupado = CA.passo === "buscando";
   const cab = s && semana !== null ? <Semana s={s} semana={semana} agora={agora} ocupado={ocupado} /> : null;
@@ -248,6 +269,7 @@ export function TelaCais({ curto, irArena, fechar }: { curto: boolean; irArena: 
   const estado = estadoDaSemana(s, semana, agora), fechada = estado === "fechada", eu = t.estagios[CA.estagio].find(l => l.voce) ?? null;
   return (
     <div className="ct ca" data-testid="ca-pronto">
+      {abas}
       {cab}
       {estado === "fechando" && <Destaque rot="A semana acabou" titulo="Conferindo as últimas lutas">
         <p>A luta feita até 23:59 e ainda não enviada pode chegar até {horaDeBrasilia(t.congelaEm).split(", ")[1]}. Depois disso, vale como derrota.</p></Destaque>}
@@ -264,7 +286,6 @@ export function TelaCais({ curto, irArena, fechar }: { curto: boolean; irArena: 
         ? <button type="button" className="ca-conferir" onClick={() => agir(abrirSegredo)} data-testid="ca-conferir"><KeyRound aria-hidden="true" /><span>Conferir a semana</span><small>segredo publicado</small><ChevronRight aria-hidden="true" /></button>
         : <div className="ct-bts"><button type="button" className="hx-continuar" onClick={irArena} data-testid="ca-arena"><Swords aria-hidden="true" />Ir para a Arena</button>
             <button type="button" className="hx-btn" onClick={() => agir(atualizarCais)} data-testid="ca-atualizar"><RefreshCw aria-hidden="true" />Atualizar</button></div>}
-      <button type="button" className="ca-conferir" onClick={() => agir(abrirMural)} data-testid="ca-abrir-mural"><Trophy aria-hidden="true" /><span>Mural e prêmios</span><small>recordes e títulos</small><ChevronRight aria-hidden="true" /></button>
     </div>
   );
 }

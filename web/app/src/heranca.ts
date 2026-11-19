@@ -69,9 +69,10 @@ export function cruzar(i: number): Motor {
   if (RESET_LIGADO) void registrarResetDoCruzamento(ativo);
   return filho;
 }
-/** o pet vai para Geracoes (o cruzamento e o reset da MMO8): o save dele, a geracao, o filho (0 no reset) e a hora */
-export function aposentar(m: Motor, filho: number): void {
+/** o pet vai para Geracoes (o cruzamento e o reset da MMO8): o save dele (o `salvo` tirado antes, no reset), a geracao, o filho (0 no
+    reset) e a hora */
+export function aposentar(m: Motor, filho: number, salvo: string = textoSave(m)): void {
   const ap = lerAposentados();
-  ap.push({ ...JSON.parse(textoSave(m)), ger: geracao(m), filho, quando: Date.now() });
+  ap.push({ ...JSON.parse(salvo), ger: geracao(m), filho, quando: Date.now() });
   localStorage.setItem(CHAVE_GERACOES, JSON.stringify(ap));
 }
