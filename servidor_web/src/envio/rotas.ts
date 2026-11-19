@@ -23,6 +23,7 @@ import type { GuardasConta } from "../conta/rotas.ts";
 import { EnvioMalformado, hashRegistro, lerEnvio, type Conferencia } from "./conferir.ts";
 import type { Conferidor } from "./conferidor.ts";
 import { gravarFronteira } from "../premios/premios.ts";
+import { gravarPontuacoes } from "../premios/rankings.ts";
 import { fecharSemanas, gravarLutas } from "./semanas.ts";
 import { entreguesDoPet } from "./sementes.ts";
 
@@ -122,6 +123,8 @@ export function montarRotasEnvio(app: Hono, cfg: ConfigConta, g: GuardasConta, c
         if (aceito) gravarLutas(banco, s.conta_id, entregues, r.lutas, id);
         /* os recordes da Torre, da Fábrica e do Salão que a conferência refez vão para o mural (MMO7) */
         if (aceito) gravarFronteira(banco, s.conta_id, envio.pet.semente, r.fronteira, id, t);
+        /* os pontos do Digimon, os feitos do Tamer vistos e o reset conferido vão para os dois rankings (MMO8) */
+        if (aceito) gravarPontuacoes(banco, s.conta_id, envio.pet, r, id, t);
       });
       const linha = banco.prepare(`SELECT ${COLUNAS} FROM envios WHERE id = ?`).get(id) as unknown as LinhaEnvio;
       const base = envioParaDict(banco, linha);

@@ -53,13 +53,22 @@
    O nivel 10 no registro (docs/PLANO_V3_MMO.md, etapa MMO2; P-5 opcao T e MMO-13, APROVADAS): registro versao 10 (le 1 a 9). Evento
    "nivel": um marco do nivel do Tamer que o servidor precisa conferir. Hoje so o marco 10, o primeiro Mega de um pet do jogador (o pet, a
    forma e o tick da evolucao dele). Os marcos 1 a 9 continuam so na vista (src/nivel.ts, MMO-15). O servidor confere o evento refazendo o
-   log do pet (marcoConfere). Um registro de antes da 10 com o evento falha alto. */
+   log do pet (marcoConfere). Um registro de antes da 10 com o evento falha alto.
+
+   O reset (docs/PLANO_V3_MMO.md, etapa MMO8, secao 9; MMO-17 a MMO-19 APROVADAS): registro versao 11 (le 1 a 10), atras da chave
+   RESET_LIGADO (desligada: o jogo grava a 10, byte a byte como antes; test/mmo8_tamer_hoje.test.ts). Evento "reset": o pet ativo se
+   aposentou em Geracoes (pelo reset ou pelo cruzamento), com a semente dele, o hash do registro dele na hora (o SHA-256 do JSON do log, o
+   mesmo do pedido da semente), quantos eventos o registro tinha, o estagio, a forma, o nivel do reset (0 a 3, nivelDoReset em
+   src/ranking/pontos.ts), o tick e a hora. Um por pet. O servidor confere o nivel refazendo o log do aposentado. Os Bits do reset sao a
+   origem nova "reset" do evento "bits" (MMO-19, uma linha nova da M-2), um reset pago por semana de relogio (MMO-18). Um registro de antes
+   da 11 com o reset (ou com os Bits do reset) falha alto. */
 import {
   ARENA_POR_ID, CARTA_DA_REVANCHE, CIT, ESTAGIOS_SALAO, INSTALACOES, LUTAS_SERIE_FABRICA, TentativaFabrica, VERSAO_FABRICA_ATUAL, VERSOES_FABRICA, sementeFabrica, sementeSalao, ITEM_DA_MEDALHA, LUGARES_V6, MEDALHAS, MEDALHAS_LIGA, MEDALHA_POR_ID, Motor, NPC, PetMorto,
   cartaDe, ehInstalacao, itemDe, medalhaDoLider, nomeForma, temEfeito, type Estagio, type Evolucao, type IdInstalacao, type Medalha,
 } from "../motor/index.ts";
 import { CHAVE, type Armazenamento } from "./chave.ts";
 import { BITS, ORIGENS_BITS, ORIGENS_DO_TAMER, bitsDaMedalha, feitosDoPet, type OrigemBits } from "./bits.ts";
+import { BONUS_RESET, NIVEIS_RESET, semanaDe, type NivelReset } from "./ranking/pontos.ts";
 
 export const CHAVE_TAMER = CHAVE + "-tamer";
 /** aviso pendente de que os pets antigos foram descartados (sai quando o jogador le) */
@@ -78,9 +87,21 @@ export const CHAVE_AVISO_POC = CHAVE + "-aviso-poc";
     nele); 8 = so a Fabrica da luta da POC (v: 21; LUTA_POC, LP4); 9 = e os Bits (evento "bits", MOEDA, MO1); 10 = e o marco do nivel 10 (evento "nivel",
     MMO2). Grava a 10; le as dez (da 7 em diante so com as tentativas v: 21: as outras saem no descarte 8) */
 export const VERSAO_TAMER = 10;
-const VERSOES_TAMER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+/** 11 = e o reset (evento "reset" e os Bits de origem "reset", MMO8). So se grava com a chave RESET_LIGADO, ou quando o registro ja tem o
+    reset (versaoTamerDe) */
+export const VERSAO_TAMER_RESET = 11;
+export const VERSOES_TAMER: readonly number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 /** a versao do registro que traz o evento "nivel" */
 const VERSAO_TAMER_NIVEL = 10;
+/** a chave do reset (MMO8): desligada ate a tela, que espera a prancha (docs/PLANO_UX_RESET.md). Desligada, o registro do Tamer sai na versao
+    10, como antes; ligada, na 11 */
+export const RESET_LIGADO = false;
+/** o registro tem o reset (o evento ou os Bits dele): so cabe da versao 11 em diante */
+const temReset = (log: readonly EventoTamer[]): boolean =>
+  log.some(ev => Array.isArray(ev) && (ev[0] === "reset" || (ev[0] === "bits" && (ev[1] as BitsGanhos | undefined)?.origem === "reset")));
+/** a versao em que o registro se grava: a 11 com a chave ligada ou com o reset no registro; a 10, sem */
+export const versaoTamerDe = (log: readonly EventoTamer[], ligado: boolean = RESET_LIGADO): number =>
+  ligado || temReset(log) ? VERSAO_TAMER_RESET : VERSAO_TAMER;
 /** os marcos do nivel do Tamer que vao para o registro (o resto fica so na vista): o 10, o primeiro Mega (MMO-13) */
 export const MARCOS_NO_REGISTRO: readonly number[] = [10];
 /** o marco do primeiro Mega */
@@ -117,9 +138,12 @@ export interface TentativaSalao { n: number; quando: number; lutas: LutaSalao[] 
 /** um marco do nivel do Tamer no registro (MMO2): qual (hoje so o 10), a hora de parede e o pet que o fez (semente, forma e o tick da
     evolucao a Mega, que o servidor acha no log dele) */
 export interface MarcoNivel { n: number; quando: number; pet: number; forma: string; tick: number }
+/** o pet se aposentou (MMO8): a semente, o hash do registro dele (SHA-256 do JSON do log inteiro, hexadecimal), quantos eventos, o estagio
+    e a forma a que chegou, o nivel do reset (0 a 3), o tick do pet, a hora de parede e por onde: o reset ou o cruzamento (o pai ativo) */
+export interface ResetPet { pet: number; hash: string; eventos: number; est: Estagio; forma: string; nivel: NivelReset; tick: number; quando: number; por: "reset" | "cruzamento" }
 export type EventoTamer = ["medalha", MedalhaGanha] | ["item", ItemGanho] | ["carta_usada", CartaUsada] | ["campeao", Campeao] | ["recorde", Recorde]
   | ["fabrica", InicioFabrica] | ["fabrica_luta", EventoLutaFabrica] | ["fabrica_troca", TrocaFabrica] | ["salao", TentativaSalao] | ["bits", BitsGanhos]
-  | ["nivel", MarcoNivel];
+  | ["nivel", MarcoNivel] | ["reset", ResetPet];
 /** um recorde da Fabrica ou do Salao, tirado das tentativas: o valor, a tentativa que o fez (a primeira que chegou nele) e a hora de parede */
 export interface RecordeTentativa { valor: number; n: number; quando: number }
 const ESTAGIOS: readonly string[] = ["bebe", "crianca", "adolescente", "adulto", "mega"];
@@ -145,6 +169,8 @@ export class Tamer {
   private pagos = new Set<string>();
   /** os marcos do nivel que estao no registro (MMO2; hoje so o 10) */
   marcos: MarcoNivel[] = [];
+  /** os resets, na ordem (um por pet; MMO8) */
+  resets: ResetPet[] = [];
   /** o saldo de Bits: a soma do que se ganhou (o gasto chega na MO2) */
   get bits(): number { return this.ganhos.reduce((s, g) => s + g.valor, 0); }
   /** o feito ja foi pago: os do Tamer (a medalha, o nivel) pelo id; os do pet pelo pet e pelo id */
@@ -192,9 +218,10 @@ export class Tamer {
 
   /** um evento do registro (replay): confere tudo antes de aplicar */
   aplicar(ev: EventoTamer): void {
-    if (!Array.isArray(ev) || !["medalha", "item", "carta_usada", "campeao", "recorde", "fabrica", "fabrica_luta", "fabrica_troca", "salao", "bits", "nivel"].includes(ev[0]))
+    if (!Array.isArray(ev) || !["medalha", "item", "carta_usada", "campeao", "recorde", "fabrica", "fabrica_luta", "fabrica_troca", "salao", "bits", "nivel", "reset"].includes(ev[0]))
       throw new Error("tipo de evento desconhecido no registro do Tamer: " + JSON.stringify(Array.isArray(ev) ? ev[0] : ev));
     if (ev[0] === "nivel") { this._nivel(ev[1]); return; }
+    if (ev[0] === "reset") { this._reset(ev[1]); return; }
     if (ev[0] === "item") { this._item(ev[1]); return; }
     if (ev[0] === "bits") { this._bits(ev[1]); return; }
     if (ev[0] === "fabrica") { this._fabrica(ev[1]); return; }
@@ -249,6 +276,28 @@ export class Tamer {
     if (!Number.isInteger(x.pet) || !Number.isInteger(x.tick)) throw new Error(`marco ${x.n} com o pet ou o tick inválido no registro do Tamer`);
     if (this.marco(x.n)) throw new Error(`marco ${x.n} repetido no registro do Tamer`);
     this.marcos.push({ ...x });
+  }
+  private _reset(x: ResetPet): void {
+    this._campos(x, "Reset", ["pet", "eventos", "nivel", "tick", "quando"]);
+    if (!Number.isInteger(x.pet) || !Number.isInteger(x.eventos) || x.eventos < 0) throw new Error("reset com o pet ou os eventos inválidos no registro do Tamer");
+    if (typeof x.hash !== "string" || !/^[0-9a-f]{64}$/.test(x.hash)) throw new Error(`reset do pet ${x.pet} sem o hash do registro dele no registro do Tamer`);
+    if (!ESTAGIOS.includes(x.est) || typeof x.forma !== "string" || !x.forma) throw new Error(`reset do pet ${x.pet} sem o estágio e a forma no registro do Tamer`);
+    if (!NIVEIS_RESET.includes(x.nivel)) throw new Error(`reset do pet ${x.pet} com o nível ${JSON.stringify(x.nivel)}, desconhecido, no registro do Tamer`);
+    if (x.por !== "reset" && x.por !== "cruzamento") throw new Error(`reset do pet ${x.pet} por ${JSON.stringify(x.por)}, desconhecido, no registro do Tamer`);
+    if (this.resetDe(x.pet)) throw new Error(`reset repetido do pet ${x.pet} no registro do Tamer`);
+    this.resets.push({ ...x });
+  }
+  /** o reset do pet (null: ele nao se aposentou por aqui) */
+  resetDe(pet: number): ResetPet | null { return this.resets.find(x => x.pet === pet) ?? null; }
+  /** grava o reset do pet agora (quem chama confere o nivel: src/reset.ts) */
+  resetar(x: Omit<ResetPet, "quando">, quando: number = Date.now()): ResetPet {
+    this._gravar(["reset", { ...x, quando }]);
+    return this.resets[this.resets.length - 1];
+  }
+  /** a semana de relogio (Brasilia) ja tem um reset pago em Bits (MMO-18: um por semana) */
+  semanaDoResetPago(quando: number): boolean {
+    const s = semanaDe(quando);
+    return this.ganhos.some(g => g.origem === "reset" && semanaDe(g.quando) === s);
   }
   /** o marco n do nivel, se esta no registro */
   marco(n: number): MarcoNivel | null { return this.marcos.find(x => x.n === n) ?? null; }
@@ -424,6 +473,13 @@ export function conferirBitsDoNivel(t: Tamer, nivel: number, quando: number = Da
   return novos;
 }
 
+/** os Bits do reset (MMO-18 e MMO-19): o bonus do nivel, se a semana de relogio ainda nao tem um reset pago. Sem bonus (nivel 0) ou com a
+    semana ja paga, nada. Devolve o ganho novo (ja aplicado) ou null */
+export function pagarReset(t: Tamer, r: ResetPet, quando: number = Date.now()): BitsGanhos | null {
+  const valor = BONUS_RESET[r.nivel].bits;
+  if (valor < 1 || t.semanaDoResetPago(quando) || t.pago("reset", "reset:" + r.pet, r.pet)) return null;
+  return t.ganharBits({ id: "reset:" + r.pet, pet: r.pet, valor, origem: "reset", tick: r.tick }, quando);
+}
 /** le o registro do Tamer (sem a chave: um Tamer novo, sem medalhas). Registro que nao reproduz falha alto */
 export function lerTamer(armaz: Armazenamento): Tamer {
   const l = lerLogTamer(armaz);
@@ -439,6 +495,9 @@ function lerLogTamer(armaz: Armazenamento): { versao: number; log: EventoTamer[]
   /* o marco do nivel so existe da versao 10 em diante: num registro de antes, falha alto */
   if (l.versao < VERSAO_TAMER_NIVEL && l.log.some(ev => Array.isArray(ev) && ev[0] === "nivel"))
     throw new Error(`o registro ${l.versao} do Tamer tem o marco do nível, que só existe da versão ${VERSAO_TAMER_NIVEL} em diante`);
+  /* o reset so existe da versao 11 em diante (MMO8) */
+  if (l.versao < VERSAO_TAMER_RESET && temReset(l.log))
+    throw new Error(`o registro ${l.versao} do Tamer tem o reset, que só existe da versão ${VERSAO_TAMER_RESET} em diante`);
   if (l.versao >= 7) for (const ev of l.log)
     if (Array.isArray(ev) && ev[0] === "fabrica" && !VERSOES_FABRICA.includes((ev[1] as InicioFabrica).v as number))
       throw new Error(`o registro ${l.versao} do Tamer tem a tentativa ${(ev[1] as InicioFabrica).n} da Fábrica com as regras de antes (v ${JSON.stringify((ev[1] as InicioFabrica).v)})`);
@@ -462,7 +521,7 @@ export function semFabricaAntiga(log: readonly EventoTamer[]): { log: EventoTame
   if (!inicios.some(ev => !VERSOES_FABRICA.includes(ev[1].v as number))) return { log: [...log], tentativas: 0 };
   return { log: log.filter(ev => !EVENTOS_FABRICA.includes(ev[0])), tentativas: inicios.length };
 }
-export const textoTamer = (t: Tamer): string => JSON.stringify({ versao: VERSAO_TAMER, log: t.log });
+export const textoTamer = (t: Tamer): string => JSON.stringify({ versao: versaoTamerDe(t.log), log: t.log });
 export function gravarTamer(armaz: Armazenamento, t: Tamer): void { armaz.setItem(CHAVE_TAMER, textoTamer(t)); }
 
 /** medalhas que o pet acabou de ganhar para o Tamer: a primeira vitoria dele contra um lider cuja medalha o Tamer
