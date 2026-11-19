@@ -1,6 +1,6 @@
 # Plano de análise V3: CREDITO_INTERVALO, o R2 (o crédito do intervalo, com o ELOGIO)
 
-**Status: PROPOSTO.** Escrito em 2026-11-19 (Claude Code, Opus 5.5, worktree `v3-valuation`, branch `v3-credito-intervalo-plano`), a pedido
+**Status: APROVADO pelo Matheus em 2026-11-19,** com as CI-R2-1 a CI-R2-9 DECIDIDAS pela recomendação: "Aprovo todas", na sessão coordenadora, confirmado nesta sessão ("Sim, aprovei"). Os adendos 1 (a linha de base) e 2 (o corpo) seguem abertos, e nenhuma vida roda antes de eles fecharem. Escrito em 2026-11-19 (Claude Code, Opus 5.5, worktree `v3-valuation`, branch `v3-credito-intervalo-plano`), a pedido
 do Matheus na sessão coordenadora: "Manda o valuation, escrever o plano do R2". Só o plano: nenhum código e nenhuma vida antes da
 aprovação. A tarefa é a [TAREFA_V3_CREDITO_INTERVALO.md](TAREFA_V3_CREDITO_INTERVALO.md), da gerência. O orquestrador vai conferir este
 cabeçalho e recusar sem o APROVADO.
