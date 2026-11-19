@@ -10,6 +10,7 @@
    testes do Vitest (test/mmo8_reset.test.ts, a previa). */
 import { expect, test, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
+import { GrupoDoJogo, VERSAO_GRUPO } from "../motor/index.ts";
 import { APP, CAMINHO_API } from "./comum.ts";
 
 const CHAVE = "digilab-web-v21-sprites";
@@ -53,7 +54,13 @@ async function servidorFalso(page: Page): Promise<Falso> {
   });
   return s;
 }
-async function abrir(page: Page, w: number, h: number, rota = "#/pet/estado"): Promise<Falso> {
+/** o par dos dois pets (os ovos novos nascem em par): um grupo de hoje, com meia hora de vida */
+function savePar(): string {
+  const g = new GrupoDoJogo(424242, VERSAO_GRUPO);
+  g.avancar(30);
+  return JSON.stringify({ semente: g.semente, log: g.log, versao: g.versao, grupo: true, foco: g.ids[0] });
+}
+async function abrir(page: Page, w: number, h: number, rota = "#/pet/estado", save: string = JSON.stringify(CHAMPION)): Promise<Falso> {
   await page.setViewportSize({ width: w, height: h });
   await page.clock.setFixedTime(AGORA);
   const s = await servidorFalso(page);
@@ -63,7 +70,7 @@ async function abrir(page: Page, w: number, h: number, rota = "#/pet/estado"): P
     localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 10, log: [] }));
     localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-guardados", "[]"); localStorage.setItem(chave + "-dicas-ligadas", "0");
     localStorage.setItem(chave + "-nivel", nivel); localStorage.setItem(chave, save);
-  }, [CHAVE, JSON.stringify(CHAMPION), JSON.stringify({ marcos: ATE10, cartoes: ATE10 })] as const);
+  }, [CHAVE, save, JSON.stringify({ marcos: ATE10, cartoes: ATE10 })] as const);
   await page.goto(APP + "?cameradev=1" + rota);
   return s;
 }
@@ -124,6 +131,32 @@ test("o reset que espera o ovo sobrevive a recarregar: a escolha do brasão abre
   await page.reload();
   await expect(page.locator(".brasao-tela")).toBeVisible();
   await expect(page.locator(".brasao-tela").getByRole("button", { name: "Voltar" })).toHaveCount(0);
+});
+
+test("o par se aposenta junto, num reset só, e o ovo novo é outro par (1920 px)", async ({ page }, info) => {
+  const err = erros(page), par = JSON.parse(savePar());
+  await abrir(page, 1920, 950, "#/pet/estado", JSON.stringify(par));
+  await expect(page.locator(".pet-tela")).toBeVisible();
+  await page.getByRole("button", { name: /Meus pets/ }).first().click();
+  await page.getByTestId("mp-aposentar").click();
+  await expect(page.getByTestId("rs-sem-bonus")).toBeVisible();
+  await expect(page.getByTestId("rs-pet")).toHaveCount(2);
+  await page.screenshot({ path: info.outputPath("reset_par_1920.png") });
+  await page.getByTestId("rs-aposentar").click();
+  await page.getByTestId("rs-entendi").click();
+  await page.getByTestId("rs-aposentar-sempre").click();
+  await expect(page.getByTestId("rs-feito")).toContainText("foram para Gerações");
+  const salvo = await page.evaluate(chave => ({ tamer: JSON.parse(localStorage.getItem(chave + "-tamer")!), ger: JSON.parse(localStorage.getItem(chave + "-geracoes") || "[]") }), CHAVE);
+  expect(salvo.tamer.log.filter((e: unknown[]) => e[0] === "reset")).toHaveLength(1);
+  expect(salvo.ger).toHaveLength(1);
+  expect(salvo.ger[0]).toMatchObject({ semente: par.semente, grupo: true });
+  await page.getByTestId("rs-brasao").click();
+  await page.locator(".br-card").first().click();
+  await expect(page.locator(".brasao-tela")).toHaveCount(0);
+  const depois = await page.evaluate(chave => JSON.parse(localStorage.getItem(chave)!), CHAVE);
+  expect(depois.grupo).toBe(true);
+  expect(depois.semente).not.toBe(par.semente);
+  expect(err).toEqual([]);
 });
 
 test("as abas do cais: Tamers pelo Respeito e Digimon pelo total da vida (1920 px)", async ({ page }, info) => {

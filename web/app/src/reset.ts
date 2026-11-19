@@ -9,19 +9,21 @@
    do brasao, que fica sem "Voltar" enquanto o reset espera o ovo (CHAVE_RESET_PENDENTE, para sobreviver a um recarregar). Depois, o
    registro do aposentado vai sozinho ao servidor, com a conta (UX-RS-4, enviarAposentados): sem o envio, o servidor nao ve o reset.
 
-   Atras da chave RESET_LIGADO (tamer.ts). Os dois pets (o grupo, DOIS_OVOS_LIGADO): o reset do par ainda nao existe e falha alto
-   (D-CONTA-161), como o envio do grupo (D-CONTA-77) e o cruzamento do par (D-CO4d-5). O pet de exemplo e o laboratorio tambem nao resetam. */
+   Atras da chave RESET_LIGADO (tamer.ts). Os dois pets (o grupo, DOIS_OVOS_LIGADO): os dois se aposentam juntos, num reset so, com o
+   bonus do pet de nivel mais alto (Matheus, 2026-11-19, "Bonus do mais alto"; D-CONTA-161 e D-CONTA-179). O par vai inteiro para Geracoes,
+   e o reset no Tamer e o do pet mais alto. O servidor ainda nao confere o envio do grupo (D-CONTA-77): o Respeito do reset do par fica so
+   no jogo. O pet de exemplo e o laboratorio nao resetam. */
 import { useEffect, useState } from "react";
-import type { Especie, Motor, Ritmo } from "../motor/index.ts";
+import type { Especie, GrupoDoJogo, Motor, Ritmo } from "../motor/index.ts";
 import { nomeForma } from "../motor/index.ts";
 import { apiDoBuild } from "./conta/apiDoBuild.ts";
-import { aposentar, lerAposentados } from "./heranca.ts";
+import { aposentar, aposentarPar, lerAposentados } from "./heranca.ts";
 import { jogoAtual, mudarTamer, tamerAtual, type Jogo } from "./jogo.ts";
 import { chocarDoBrasao } from "./jornada.ts";
 import { hashAte } from "./ranking/pedido.ts";
 import { BONUS_RESET, nivelDoReset, type NivelReset } from "./ranking/pontos.ts";
 import { enviarRegistro, ligarRanqueada, ranqueadaLigada } from "./ranking/ranqueada.ts";
-import { CHAVE, textoSave } from "./save.ts";
+import { CHAVE, textoSave, textoSaveGrupo } from "./save.ts";
 import { RESET_LIGADO, pagarReset, versaoTamerDe, type BitsGanhos, type ResetPet, type Tamer } from "./tamer.ts";
 
 /** a semente do pet que se aposentou pelo reset e ainda espera o ovo novo (a escolha do brasao sem "Voltar") */
@@ -50,11 +52,17 @@ export function aplicarReset(t: Tamer, x: Omit<ResetPet, "quando">, quando: numb
   return { reset, bits: pagarReset(t, reset, quando) };
 }
 
-/** por que o pet ativo nao pode se aposentar pelo reset agora; null se pode */
+/** o pet do par que da o bonus: o de nivel do reset mais alto; no empate, o primeiro do grupo (D-CONTA-179) */
+export function petDoBonus(g: GrupoDoJogo): Motor {
+  return g.ids.map(i => g.motor(i)).reduce((a, b) => (nivelDoReset(b) > nivelDoReset(a) ? b : a));
+}
+/** o pet cujo reset conta: o ativo, ou, com os dois pets, o do bonus */
+export const petDoReset = (j: Jogo): Motor => (j.grupo ? petDoBonus(j.grupo) : j.motor);
+
+/** por que o pet ativo (ou o par) nao pode se aposentar pelo reset agora; null se pode */
 export function semReset(j: Jogo): string | null {
   if (!RESET_LIGADO) return "o reset está desligado (RESET_LIGADO)";
   if (j.emLab) return "o pet de teste do laboratório não se aposenta";
-  if (j.grupo) return "o reset dos dois pets ainda não existe (D-CONTA-161)";
   if (j.origem === "exemplo") return "o pet de exemplo não se aposenta";
   if (j.erroSave || j.erroTamer) return "o save ou o registro do Tamer não abriu";
   if (j.nascendo > 0) return "o ovo ainda não chocou";
@@ -63,26 +71,30 @@ export function semReset(j: Jogo): string | null {
 }
 
 /** o pet ativo se aposenta pelo reset: o save dele vai para Geracoes, o reset entra no Tamer (com os Bits, se for o caso) e o reset passa
-    a esperar o ovo novo. Falha alto com a chave desligada, com o par, com o pet de exemplo e no laboratorio */
+    a esperar o ovo novo. Com os dois pets, o par inteiro vai para Geracoes e o reset e o do pet do bonus. Falha alto com a chave desligada,
+    com o pet de exemplo e no laboratorio */
 export async function aposentarPorReset(): Promise<{ reset: ResetPet; bits: BitsGanhos | null }> {
   const j = jogoAtual(), nao = semReset(j);
   if (nao) throw new Error(nao);
-  const m = j.motor, salvo = textoSave(m), x = await eventoDoReset(m, "reset");
-  if (jogoAtual().motor !== m) throw new Error("o pet ativo mudou durante o reset");
-  if (JSON.parse(salvo).log.length !== x.eventos) throw new Error("o save e o evento do reset não têm o mesmo registro");
-  aposentar(m, 0, salvo);
+  const g = j.grupo, m = petDoReset(j), eventos = m.log.length;
+  const salvo = g ? textoSaveGrupo(g, j.foco) : textoSave(m), x = await eventoDoReset(m, "reset");
+  if (jogoAtual().motor !== j.motor || jogoAtual().grupo !== g) throw new Error("o pet ativo mudou durante o reset");
+  if (x.eventos !== eventos || (!g && JSON.parse(salvo).log.length !== x.eventos)) throw new Error("o save e o evento do reset não têm o mesmo registro");
+  if (g) aposentarPar(g, salvo); else aposentar(m, 0, salvo);
   const r = mudarTamer(t => aplicarReset(t, x));
   try { localStorage.setItem(CHAVE_RESET_PENDENTE, String(m.semente)); } catch { /* sem o armazenamento, a tela abre a escolha do brasao igual */ }
   void enviarAposentados().catch((err: unknown) => console.error(err));
   return r;
 }
 
-/** o pet ativo ja se aposentou pelo reset e espera o ovo novo */
+/** o pet ativo (ou o par) ja se aposentou pelo reset e espera o ovo novo */
 export function ovoDoResetPendente(j: Jogo): boolean {
-  if (!RESET_LIGADO || j.grupo) return false;
+  if (!RESET_LIGADO) return false;
   let s: string | null = null;
   try { s = localStorage.getItem(CHAVE_RESET_PENDENTE); } catch { return false; }
-  return s !== null && Number(s) === j.motor.semente && tamerAtual().resetDe(j.motor.semente) !== null;
+  if (s === null) return false;
+  const pets = j.grupo ? j.grupo.ids.map(i => j.grupo!.motor(i)) : [j.motor];
+  return pets.some(m => Number(s) === m.semente && tamerAtual().resetDe(m.semente) !== null);
 }
 
 /** o ovo novo do reset: o pet aposentado nao vai para os guardados (ele ja esta em Geracoes) */

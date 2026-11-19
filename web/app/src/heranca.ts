@@ -3,7 +3,7 @@
    o pai ativo se APOSENTA: sai do jogo e vai para Diario · Geracoes (so para ver); o filho (pet v4, evento de origem
    no comeco do registro) vira o ativo e choca. O outro pai continua onde estava. Nao da para desfazer. */
 import { useEffect, useState } from "react";
-import { CHE, EIXOS_TEMP, Motor, hashSemente, type EixoTemperamento, type Especie, type EventoRegistro } from "../motor/index.ts";
+import { CHE, EIXOS_TEMP, GrupoDoJogo, Motor, hashSemente, type EixoTemperamento, type Especie, type EventoRegistro } from "../motor/index.ts";
 import { QUADROS_CHOCANDO, jogoAtual, trocarMotor } from "./jogo.ts";
 import { ligarProduto } from "./produto.ts";
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados } from "./pets.ts";
@@ -48,8 +48,9 @@ export function previa(p: Motor, q: Motor): Previa {
   };
 }
 
-/** um pet aposentado em Geracoes: o save dele, a geracao, o filho (a semente do filho do cruzamento; 0 no reset, MMO8) e a hora */
-export interface Aposentado { semente: number; log: EventoRegistro[]; versao: number; ger: number; filho: number; quando: number }
+/** um pet aposentado em Geracoes: o save dele, a geracao, o filho (a semente do filho do cruzamento; 0 no reset, MMO8) e a hora. O par dos
+    dois pets aposentado pelo reset (MMO8, D-CONTA-179) guarda o save do grupo: `grupo` e `foco`, e o `log` e o do grupo */
+export interface Aposentado { semente: number; log: EventoRegistro[]; versao: number; ger: number; filho: number; quando: number; grupo?: true; foco?: string }
 export function lerAposentados(): Aposentado[] {
   try { return JSON.parse(localStorage.getItem(CHAVE_GERACOES) || "[]") as Aposentado[]; } catch { return []; }
 }
@@ -68,6 +69,18 @@ export function cruzar(i: number): Motor {
   /* o cruzamento conta como reset do pai ativo (MMO8, MMO-17), so com a chave do reset ligada: o hash do registro dele e assincrono */
   if (RESET_LIGADO) void registrarResetDoCruzamento(ativo);
   return filho;
+}
+/** o par dos dois pets vai inteiro para Geracoes (o reset do par, MMO8): o save do grupo tirado antes, a maior geracao dos dois e a hora */
+export function aposentarPar(g: GrupoDoJogo, salvo: string): void {
+  const ap = lerAposentados();
+  ap.push({ ...JSON.parse(salvo), ger: Math.max(...g.ids.map(i => geracao(g.motor(i)))), filho: 0, quando: Date.now() });
+  localStorage.setItem(CHAVE_GERACOES, JSON.stringify(ap));
+}
+/** os pets de um aposentado: o pet, ou os dois do par (cada um pelo replay do grupo) */
+export function petsDoAposentado(x: Aposentado): Motor[] {
+  if (!x.grupo) return [Motor.reproduzir(x.semente, x.log, x.versao)];
+  const g = GrupoDoJogo.reproduzir(x.semente, x.versao, x.log as unknown as Parameters<typeof GrupoDoJogo.reproduzir>[2]);
+  return g.ids.map(i => g.motor(i));
 }
 /** o pet vai para Geracoes (o cruzamento e o reset da MMO8): o save dele (o `salvo` tirado antes, no reset), a geracao, o filho (0 no
     reset) e a hora */

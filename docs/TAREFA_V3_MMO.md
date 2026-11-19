@@ -468,7 +468,9 @@ o código local (seção 25) já está na main (#1023). Branch `v3-mmo8-telas`.
     um reset pago por semana), o que vai e o que fica e "Como o reset funciona";
   - antes do Ultimate, "sem bônus" (o principal é continuar); sem conta, o Respeito fica "no seu perfil" e aparece "Entrar";
   - a confirmação em dois passos no molde de "Apagar a conta" (UX-RS-2) e o feito, com um caminho só: "Escolher o brasão";
-  - o par dos dois pets, o pet de exemplo e o laboratório dizem por que não se aposentam (o reset do par segue pendente, D-CONTA-161).
+  - o par dos dois pets se aposenta junto, num reset só, com o bônus do pet de nível mais alto (Matheus, "Bônus do mais alto",
+    D-CONTA-179); o par vai inteiro para Gerações, e o Respeito dele fica só no jogo enquanto o servidor não conferir o grupo;
+  - o pet de exemplo e o laboratório dizem por que não se aposentam.
 - **O reset em dois momentos** (`src/reset.ts`): `aposentarPorReset` grava o reset e põe o pet em Gerações; o ovo vem da escolha do brasão,
   que abre sem "Voltar" enquanto o reset espera o ovo, também depois de recarregar (`CHAVE_RESET_PENDENTE`). `chocarDoReset` não guarda o
   aposentado nos guardados.
@@ -484,7 +486,7 @@ o código local (seção 25) já está na main (#1023). Branch `v3-mmo8-telas`.
 - **O nível do 11 em diante não paga os Bits do nível** (UX-RS-6): nada a codificar, os Bits do nível só pagam os marcos 1 a 10
   (`conferirBitsDoNivel`), e o nível pelo Respeito não passa por eles.
 - **O e2e** (`e2e_conta/reset.spec.ts`): o Aposentar do Champion de ponta a ponta (o reset no Tamer, Gerações, o envio, o ovo novo), o
-  reset que sobrevive a recarregar, as abas Tamers e Digimon, o perfil e o celular sem rolar de lado.
-- **Desvios:** D-CONTA-171 a 178, no registro.
-- **Fora desta etapa:** o reset do par (D-CONTA-161, a decisão do bônus de dois pets), o legado de stats (CR-7 e CR-8 do
+  reset que sobrevive a recarregar, o reset do par, as abas Tamers e Digimon, o perfil e o celular sem rolar de lado.
+- **Desvios:** D-CONTA-171 a 179, no registro.
+- **Fora desta etapa:** a conferência do reset do par no servidor (o envio do grupo, D-CONTA-77), o legado de stats (CR-7 e CR-8 do
   `docs/PLANO_V3_CICLO.md`), "Ver todas" nos dois rankings e o deploy.
