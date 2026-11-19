@@ -135,7 +135,11 @@ FATO VERIFICADO (os `resumo.json`; quente, n = 114; em segundos):
 - **O custo do H com (0):** US$ 0,0476 em 121 chamadas (o acumulado de US$ 0,0953 no `H_verif_depois/gasto_fala_livre_acumulado.json`,
   menos os US$ 0,0477 da seção 2).
 
-**A decisão que fica (D-ES-5), PROPOSTA:** se a chave passa a vir ligada de fábrica. Hoje não há botão em Ajustes; ela só liga pelo
+**D-ES-5, DECIDIDA pelo Matheus em 2026-11-19:** a pergunta foi "D-ES-5: a chave da opção (0) passa a vir ligada de fábrica?", e a
+resposta, "Sim, ligar" (no chat da Gerente das cinco frentes). A chave agora vem ligada; `"0"` em `-fala-verif-depois` desliga. A
+medida desta seção foi feita antes, com a chave ligada à mão, e o código não mudou além do padrão.
+
+A pergunta, como foi levada: se a chave passa a vir ligada de fábrica. Hoje não há botão em Ajustes; ela só liga pelo
 `localStorage`.
 - RECOMENDAÇÃO: ligar de fábrica no caminho da rede. O ganho é de 3,3 s no G e de 5,0 s no H, e o aviso chega como antes.
 - O custo de errar: pequeno. O balão sai antes de a fala ser verificada, como já acontece fora da rede. O que se perde é só a

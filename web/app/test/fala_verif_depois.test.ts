@@ -1,6 +1,6 @@
 /* CONVERSA_PET, F2, D-ES-4 (a saida (0), Matheus, 2026-11-18): a chave `-fala-verif-depois` (desligada por padrao), lida na carga do modulo.
-   Ligada e pela rede, o pedido da voz leva `verificar_na_chamada: false`, e a verificacao de depois do balao continua. Desligada, ou fora da
-   rede, o pedido e o de hoje. Servidor falso. */
+   Ligada e pela rede, o pedido da voz leva `verificar_na_chamada: false`, e a verificacao de depois do balao continua. Desligada ("0"), ou
+   fora da rede, o pedido e o de antes. Ligada por padrao desde a D-ES-5 (Matheus, 2026-11-19). Servidor falso. */
 import { describe, expect, test, vi } from "vitest";
 import { TPD } from "../motor/constantes.ts";
 import { petDeTeste } from "../motor/pet_lab.ts";
@@ -53,7 +53,13 @@ describe("a chave da verificacao depois do balao (falaLivre.ts)", () => {
     expect(p.filter(x => x.rota === "/api/fala-livre/verificar")).toHaveLength(1);
   });
 
-  test.each([[null, true], ["0", true], ["1", false]])("chave %s, rede %s: o pedido e o de hoje, sem o campo", async (chave, rede) => {
+  test("sem a chave (o padrao, D-ES-5) e pela rede: o pedido leva `verificar_na_chamada: false`", async () => {
+    const voz = (await conversar(null, true)).filter(x => x.rota === "/api/fala-livre");
+    expect(voz).toHaveLength(1);
+    expect(voz[0].verificar_na_chamada).toBe(false);
+  });
+
+  test.each([["0", true], ["1", false], [null, false]])("chave %s, rede %s: o pedido e o de antes, sem o campo", async (chave, rede) => {
     const p = await conversar(chave, rede);
     const voz = p.filter(x => x.rota === "/api/fala-livre");
     expect(voz).toHaveLength(1);

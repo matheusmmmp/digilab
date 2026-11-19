@@ -726,4 +726,4 @@ gate.
 - **Os desvios:** D-ES-C e D-ES-D, em `docs/registro/2026-11.md`.
 - **O código da (0):** o pedido com `verificar_na_chamada: false`, atrás da chave `-fala-verif-depois` (desligada por padrão), com 8
   testes do servidor e 4 do jogo. **A medida de novo:** o T1 quente p50 de 8,60 s no G e de 2,93 s no H (seção 6 do resultado).
-- **A decisão pendente:** a D-ES-5, se a chave passa a vir ligada de fábrica.
+- **A D-ES-5, DECIDIDA pelo Matheus em 2026-11-19:** a chave vem ligada de fábrica ("Sim, ligar"); `"0"` a desliga.

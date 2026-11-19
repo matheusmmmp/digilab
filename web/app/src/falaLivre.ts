@@ -23,7 +23,8 @@ import { CHAVE } from "./save.ts";
 export const LOG_FALA = CHAVE + ".fala.jsonl";
 const LOG = LOG_FALA, MODO = CHAVE + "-modo-fala", CONVERSA_NOVA = CHAVE + "-conversa-nova", FALA_REDE = CHAVE + "-fala-rede";
 /* F2 da CONVERSA_PET, D-ES-4 (a saida (0)): com a chave, a voz da rede pede a fala sem a verificacao dentro da chamada; o aviso vem da
-   verificacao de depois do balao, a de sempre. Desligada por padrao: o pedido e o de hoje. */
+   verificacao de depois do balao, a de sempre. Ligada por padrao desde a D-ES-5 (Matheus, 2026-11-19, "Sim, ligar"); "0" desliga e
+   devolve o pedido de antes. */
 const VERIF_DEPOIS = CHAVE + "-fala-verif-depois";
 /* versao 2 (comando pelo chat): `comando` e `comando_executado`; a 1 continua sendo lida (campos ausentes = null/false) */
 export const VERSAO_LOG = 2;
@@ -75,8 +76,8 @@ const avisar = (): void => { for (const o of ouvintes) o(); };
 try { FL.modo = (localStorage.getItem(MODO) as ModoFala) || (FALA_LLM.on ? "moldura" : "template"); } catch { /* sem armazenamento */ }
 try { FL.conversaNova = localStorage.getItem(CONVERSA_NOVA) === "1"; } catch { /* sem armazenamento */ }
 try { FL.falaRede = localStorage.getItem(FALA_REDE) === "1"; } catch { /* sem armazenamento */ }
-let verifDepois = false;
-try { verifDepois = localStorage.getItem(VERIF_DEPOIS) === "1"; } catch { /* sem armazenamento */ }
+let verifDepois = true;
+try { verifDepois = localStorage.getItem(VERIF_DEPOIS) !== "0"; } catch { /* sem armazenamento */ }
 
 /* ------------------------------------------------ log de apresentacao (separado do registro do pet) */
 export function lerLog(): RegistroFala[] {

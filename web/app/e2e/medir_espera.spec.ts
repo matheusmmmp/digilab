@@ -20,7 +20,8 @@ const REPO = resolve(fileURLToPath(new URL("../../..", import.meta.url)));
 const PREFIXO = "/" + basename(REPO);
 const APP = `${PREFIXO}/web/dist/`, CHAVE = "digilab-web-v21-sprites";
 const BRACO = process.env.MEDIR_ESPERA_BRACO ?? "G";
-/* D-ES-4 (a saida (0)): MEDIR_ESPERA_VERIF_DEPOIS=1 liga a chave `-fala-verif-depois` (a voz sem a verificacao dentro da chamada) */
+/* D-ES-4 (a saida (0)): MEDIR_ESPERA_VERIF_DEPOIS=1 liga a chave `-fala-verif-depois` (a voz sem a verificacao dentro da chamada); sem
+   ela, a medida grava "0", porque desde a D-ES-5 a chave vem ligada de fabrica e os bracos G e H sao os de antes */
 const VERIF_DEPOIS = process.env.MEDIR_ESPERA_VERIF_DEPOIS === "1";
 const N_CONVERSAS = 20, N_TURNOS = 6, PAUSA_MS = 3000, TIMEOUT_TURNO_MS = 180_000;
 const MODELO = process.env.MEDIR_ESPERA_MODELO ?? "gemma2:9b";
@@ -61,7 +62,7 @@ async function semear(page: Page): Promise<void> {
     localStorage.setItem(chave + "-lab", JSON.stringify({ semente: 4242, log: [], versao: 16 }));            /* o pet de teste modular, sempre o mesmo save */
     localStorage.setItem(chave + "-modo-fala", "livre");                                                      /* falaLivre.ts: MODO */
     localStorage.setItem(chave + "-fala-rede", "1");                                                          /* falaLivre.ts: FALA_REDE */
-    if (verifDepois) localStorage.setItem(chave + "-fala-verif-depois", "1");                                 /* falaLivre.ts: VERIF_DEPOIS */
+    localStorage.setItem(chave + "-fala-verif-depois", verifDepois ? "1" : "0");                               /* falaLivre.ts: VERIF_DEPOIS */
   }, [CHAVE, VERIF_DEPOIS] as const);
 }
 
