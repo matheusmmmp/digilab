@@ -14,6 +14,11 @@ for m in ${1:-estencil zine arcade}; do
   for t in pet lugar celular folha; do cap "$OUT/${m}_${t}.png" "$B/${m}_${t}.html"; done
   for t in pet lugar; do cap "$OUT/${m}_${t}_limpa.png" "$B/${m}_${t}.html?sem"; done
 done
+# a rodada 2 (python gerar_r2.py): as outras telas, so nos dois modelos escolhidos (o Zine e o Estencil)
+for m in ${1:-zine estencil}; do
+  [ "$m" = arcade ] && continue
+  for t in ajustes lutar diario scan estados; do cap "$OUT/${m}_${t}.png" "$B/${m}_${t}.html"; done
+done
 # as capturas versionadas (jpg, em capturas/) e, por ultimo, a comparacao, que usa as _limpa
 python - "$OUT" <<'PY'
 import os, sys

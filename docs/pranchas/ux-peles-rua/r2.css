@@ -1,0 +1,71 @@
+/* Rodada 2 da prancha "peles de rua": o esqueleto das pecas novas (Ajustes, Arena, Registro, scan, chamado, estados), igual nos dois
+   modelos escolhidos. Entra depois do base.css e antes do arquivo do modelo. Nenhuma cor: so posicao e estrutura. PROPOSTO, SEM FONTE. */
+.lugar .lg-cab .tit small:empty{display:none}
+.frase{max-width:52ch}
+.nome-pet{margin-right:4px}
+.q{width:40px;height:40px;display:flex;justify-content:center;align-items:flex-end;overflow:hidden;flex:none}
+.q.grande{width:52px;height:52px}
+.bt.cheio{width:100%;min-height:54px}
+.aba .etq{margin-left:2px}
+
+/* ---- Ajustes: a lista, a parte, a linha e o volume */
+.aj-lista{display:flex;flex-direction:column;gap:8px}
+.aj{display:grid;grid-template-columns:24px 1fr auto;align-items:center;gap:12px;min-height:50px;padding:3px 10px 3px 12px;width:100%}
+.aj > .ic:first-child{width:22px;height:22px}
+.parte-cab{display:flex;align-items:center;gap:12px}
+.bt.voltar{padding:0 14px 0 8px}
+.bt.voltar .ic{transform:rotate(180deg)}
+.vol{display:grid;grid-template-columns:20px 64px 1fr 48px;align-items:center;gap:10px;min-height:44px;margin-left:36px}
+.vol > .ic{width:18px;height:18px}
+.vol .trilha{position:relative;display:block;height:6px}
+.vol .trilha i{position:absolute;inset:0 auto 0 0}
+.vol .trilha b{position:absolute;top:50%;width:18px;height:18px;transform:translate(-50%,-50%)}
+.vol .n{text-align:right}
+
+/* ---- as opcoes de uma so (o rival, o mapa) */
+.ops{display:grid;gap:8px;margin-top:8px}
+.ops.r3{grid-template-columns:repeat(3,1fr)} .ops.r2{grid-template-columns:1fr 1fr}
+.op{position:relative;display:flex;align-items:center;gap:10px;min-height:52px;padding:5px 10px 5px 6px;min-width:0}
+.op.mapa{flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;padding:7px 12px}
+
+/* ---- o Registro */
+.reg-topo{gap:20px}
+.par{display:flex;flex-direction:column;gap:4px}
+.banner{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;min-height:56px;padding:10px 12px;text-align:center}
+.filtros{display:flex;gap:6px;flex-wrap:wrap}
+.filtro{display:inline-flex;align-items:center;min-height:44px;padding:0 14px}
+.reg{display:flex;flex-direction:column}
+.reg-l{display:grid;grid-template-columns:76px 24px 1fr 20px;align-items:center;gap:10px;min-height:44px;padding:0 8px;width:100%}
+
+/* ---- o scan do DigiBrain e o chamado */
+.scan{position:absolute;z-index:16;right:20px;top:98px;width:430px;display:flex;flex-direction:column;gap:10px;padding:10px}
+.scan-cab{display:flex;align-items:center;gap:6px;padding-left:4px}
+.scan-cab > .ic{width:26px;height:26px}
+.scan-cab b{margin-left:4px}
+.vivo{width:11px;height:11px;border-radius:50%;margin-right:auto}
+.scan-tela{position:relative;display:block}
+.scan-tela img{display:block;width:100%;height:auto}
+.scan-faixa{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:8px 12px}
+.onda{width:100%;height:30px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linejoin:round}
+.estado{display:inline-flex;align-items:center;gap:6px}
+.estado .ic{width:18px;height:18px}
+.chamado{position:absolute;z-index:12;left:50%;top:96px;transform:translateX(-50%);width:340px;display:flex;flex-direction:column;gap:10px;padding:12px}
+.ch-t{display:flex;align-items:center;gap:12px}
+.ch-t > .ic{width:28px;height:28px}
+.ch-t .tit{display:flex;flex-direction:column;gap:3px;line-height:1.1}
+
+/* ---- a prancha dos estados */
+.est{position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,1fr);gap:22px 34px;padding:30px 40px;background:var(--chao);align-content:start;color:var(--hx-chao-ink)}
+.est-cab{grid-column:1/-1;display:flex;flex-direction:column;gap:6px}
+.est-cab .rot{color:inherit}
+.est-cab p{font:500 16px/1.4 var(--hx-f);max-width:120ch}
+.est h2{font:700 13px/1 var(--hx-f);letter-spacing:.16em;text-transform:uppercase;opacity:.75;margin-bottom:2px}
+.est-bloco{display:flex;flex-direction:column;gap:12px}
+.est-linha{display:grid;grid-template-columns:118px 1fr;align-items:center;gap:12px;min-height:50px}
+.est-linha > span:first-child{font:600 13px/1.2 var(--hx-f);opacity:.85}
+.est-peca{display:flex;align-items:center}
+.est-cx{display:inline-flex;padding:8px}
+.est .op{min-width:190px}
+.est .aj{width:250px}
+.est-abas{display:inline-flex;padding:0 !important;margin:0 !important}
+.s-foco{outline:3px solid var(--hx-foco);outline-offset:4px}

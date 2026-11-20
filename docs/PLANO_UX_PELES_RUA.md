@@ -1,6 +1,6 @@
 # Plano de UX das peles de rua: três modelos base (2026-11-20)
 
-**Status: PROPOSTO.** Sem código. A prancha está em `docs/pranchas/ux-peles-rua/` e espera a escolha do Matheus. As cores, as fontes e os
+**PR-1 DECIDIDA pelo Matheus em 2026-11-20** ("Zine e Estêncil", em resposta a "Qual modelo de pele segue adiante?"): o **Zine** é o principal e o **Estêncil** é a opção escura. O Arcade não segue e fica na pasta só como registro. Sem código. As PR-2 a PR-5 continuam abertas (seção 6). A prancha está em `docs/pranchas/ux-peles-rua/`. As cores, as fontes e os
 tamanhos são **PROPOSTO, SEM FONTE**. Autor: Gerente da UX_TELA_PET (Claude Code, Fable 5.2), branch `v3-ux-peles-rua`.
 
 **O pedido do Matheus (2026-11-20), com 15 imagens de referência:** "Eu quero que você olhe as [pranchas] que temos referente aos novos
@@ -82,7 +82,7 @@ Calculado pelos valores dos tokens (WCAG 2.x), não medido na tela. O mínimo do
 
 ## 6. Decisões para o Matheus
 
-- **PR-1. Qual modelo segue:** recomendo **o Zine como o principal e o Estêncil como a opção escura.** O Zine é o que mais responde ao
+- **PR-1. Qual modelo segue: DECIDIDA (2026-11-20), o Zine e o Estêncil.** A recomendação era: **o Zine como o principal e o Estêncil como a opção escura.** O Zine é o que mais responde ao
   pedido (traço de desenho, colagem, cor forte) e o que mais se separa do verde e do azul da ilha. O Estêncil é o mais barato e mantém
   uma pele escura para quem prefere. O Arcade é o que eu deixaria por último: o cobalto se mistura com o céu e o contraste é o mais
   apertado. É gosto, e a escolha é sua. Custo de errar: baixo; é desenho.
@@ -95,11 +95,57 @@ Calculado pelos valores dos tokens (WCAG 2.x), não medido na tela. O mínimo do
 - **PR-5. A pele nova ao lado das de hoje:** recomendo que ela **entre como mais uma opção em Ajustes › Visual,** com o Vidro continuando
   o padrão até você decidir trocar. A outra opção é substituir uma das duas. Custo de errar: baixo.
 
-## 7. O que não foi feito
+- **PR-6. O desenho do DigiBrain na pele clara** (da rodada 2): recomendo que **o desenho da rede fique escuro nas duas peles,** como
+  conteúdo (igual ao habitat), numa moldura da pele. No Zine ele vira uma foto escura colada no papel. A outra opção é redesenhar a rede
+  em tinta sobre papel. Custo de errar: médio; redesenhar a rede é trabalho no scan, não na pele.
 
-- Só duas telas por modelo. Lutar, o Diário, os Ajustes, as telas que abrem sozinhas (a evolução, o ovo, a luta) e a conta não foram
-  desenhados.
-- Os estados de foco, de passar o mouse e de pressionar.
+## 7. A rodada 2: as outras telas nos dois modelos escolhidos (2026-11-20)
+
+Depois da escolha ("Zine e Estêncil"), mais cinco telas em cada um dos dois, para o código ter de onde partir. O conteúdo vem de
+capturas do jogo de 2026-11-20.
+
+| a tela | o que testa |
+|---|---|
+| **Ajustes** e a parte **Exibir** | a linha com seta, a linha com chave, a marca de novo, o volume |
+| **Lutar › Arena** | duas escolhas de uma só (o rival, o mapa), a aba trancada, um botão principal |
+| **Diário › Registro** | a leitura de texto corrido: linhas finas com hora, ícone e seta; os filtros |
+| **o DigiBrain aberto e um chamado** | o conteúdo escuro dentro da pele; o cartão mais urgente da tela |
+| **os estados** | cada peça parada: normal, com o mouse, pressionada, com o foco, desligada, escolhida, trancada |
+
+**O que a rodada fixou no desenho:**
+- **O escolhido nunca depende só da cor.** No Zine ele vira anil, entorta e ganha o adesivo do visto; no Estêncil vira osso e ganha a
+  barra vermelha.
+- **A linha de quem fez:** no Registro, a linha do que o dono fez tem um fundo e uma marca; as do pet não.
+- **A marca de novo:** tracejada no Zine (como hoje); uma barra âmbar no Estêncil.
+- **Os estados:**
+  - no Zine, com o mouse o recorte sobe 2 px e a sombra cresce; pressionado, encosta no papel e a sombra some;
+  - no Estêncil, com o mouse o fundo clareia e entra um traço de osso; pressionado, o botão afunda 2 px;
+  - nada pisca nem gira; a troca leva 80 ms (o tempo do guia) e vira corte com o movimento reduzido.
+- **O foco:** um contorno de 3 px, anil no Zine e branco no Estêncil.
+
+**Um achado para o código (Estêncil):** as peças de canto cortado ou inclinadas são recortadas, e o recorte come o contorno de foco do
+navegador. No desenho o foco vai por dentro nas peças de canto cortado, e vira duas barras (em cima e embaixo) na aba. No código isso
+pede uma regra de foco por tipo de peça, e não uma só para tudo.
+
+## 8. As etapas de código (PROPOSTAS; começam depois das PR-2 a PR-6)
+
+Um PR por etapa. O custo é a leitura dos arquivos de pele de hoje, não uma medida.
+
+| etapa | o que entrega | custo |
+|---|---|---|
+| **PE1** | a porta: os dois ids novos em `pele.ts`, os blocos de tokens e os cartões de escolha em Ajustes › Visual. O Vidro segue o padrão | baixo |
+| **PE2** | o Estêncil inteiro (o arquivo de forma), com as capturas das telas e os estados | médio |
+| **PE3** | o Zine, parte 1: a pele clara. Os tokens e a revisão de todo trecho que supõe menu escuro | alto |
+| **PE4** | o Zine, parte 2: a forma (o traço, o giro, a fita, a retícula) e os estados | médio |
+
+O Estêncil vem primeiro porque é escuro como as peles de hoje e exercita a porta sem o risco da pele clara.
+
+## 9. O que não foi feito
+
+- Sete telas por modelo escolhido. Conversar, as outras abas dos lugares, as telas que abrem sozinhas (a evolução, o ovo, a luta) e a
+  conta não foram desenhados.
+- Os estados estão desenhados parados; o movimento entre eles não.
+- As telas da rodada 2 só a 1920; no celular, só a tela do pet e a folha de um lugar.
 - O celular foi desenhado a 390; a 360 não foi conferido.
 - Nenhum revisor viu a prancha, e o contraste foi calculado, não medido.
 - O custo do filtro do traço tremido do Zine no jogo, com a ilha 3D rodando.
