@@ -301,3 +301,18 @@ A seção 7 do [plano do R-a](PLANO_ANALISE_V3_PET_VIVO_RA.md), APROVADO ("Aprov
   base foi lida nelas. O tempo dela (14,5 s por vida) saiu com a run da C3 ocupando a máquina e não serve de projeção (D-RB-8).
 - **Desvios:** D-RB-5 a D-RB-8.
 - **Próximo:** o merge do #1030 e deste PR; com a C3 terminada, a fumaça de novo para o tempo, e o replay, uma vez.
+
+## O replay do R-a (2026-11-19, Claude Code, Fable 5.2, branch `v3-pet-vivo-ra-resultado`)
+
+O pedido do Matheus (2026-11-19): "Sim, merge e roda". O #1030 e o #1032 entraram na `main`, a run da C3 terminou, e o replay rodou
+uma vez, 33 min com 4 processos, sobre as mesmas 5 120 vidas do R1. O resultado está em
+[RESULTADO_V3_PET_VIVO_RA.md](RESULTADO_V3_PET_VIVO_RA.md).
+
+- **As conferências que falham alto passaram em todas as vidas** (C-FONTE, C-G1, C-FECHO, C-UMA-VEZ, C-IGUAL-R1).
+- **L-SONO: a FASE, a ESTADO e as MÓVEL com k 4, 16 e 96 "preservam o sono"** (o resto do dormir de +154 a +165 no HOJE).
+- **L-ALÉM: "só o sono"** (o η² entre as ações acordadas de 0,014 a 0,034; o maior limite de cima é 0,037, abaixo de 0,05).
+- **As hipóteses:** a H-ALÉM e a H-ESTADO saem como previsto; a H-MÓVEL não se confirma (a média móvel curta não apaga o sono).
+- **O que o plano do R2 recebe:** o R2 se reduz a ensinar o valor de dormir (a tarefa CREDITO_INTERVALO). O R-a não separa uma
+  linha de base melhor entre as cinco.
+- **Desvios:** D-RB-9 a D-RB-12.
+- **Próximo:** nada nesta frente. O TS do rastro, depois da LZ3.
