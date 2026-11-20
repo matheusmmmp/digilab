@@ -152,3 +152,118 @@ O Estêncil vem primeiro porque é escuro como as peles de hoje e exercita a por
 - Nenhum revisor viu a prancha, e o contraste foi calculado, não medido.
 - O custo do filtro do traço tremido do Zine no jogo, com a ilha 3D rodando.
 - O fundo da tela do lugar é o mesmo da tela do pet; no jogo a câmera vai ao saco de pancada.
+
+---
+
+## 10. A Estêncil no jogo, com a forma do desenho (2026-11-20, Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-peles-pe1`)
+
+**De onde vem:** a primeira versão no jogo trazia só as cores da pele. O Matheus viu e pediu (2026-11-20): "eu quero que você analise o
+desenho que você fez e tente replicar o mesmo desenho que você fez de layout no jogo, porque tem diferenças bem graves entre o que você
+considerou que os itens estavam no jogo e o que realmente está. Quero que seja bem similar." Depois da segunda tentativa, disse que
+parecia "literalmente os layouts que já tinha antes, só que com uma outra tonalidade", e pediu: "eu quero que você gere uma sessão
+revisora, e daí quando finalizar de desenhar, pede para a sessão revisora analisar se está igual à prancha." Perguntado se o incômodo
+era o jogo ou a prancha, respondeu: "O jogo não bate".
+
+Esta seção é a resposta: a forma do desenho escrita sobre a estrutura real do jogo, conferida por uma sessão revisora em rodadas. As
+etapas PE1 e PE2 da seção 8 saem juntas, num PR só.
+
+**O lado a lado** (o desenho em cima, o jogo embaixo) está em `docs/pranchas/ux-peles-rua/capturas_codigo/`: `lado_a_lado_*.jpg` (a
+tela do pet, um lugar, Lutar, Diário, Ajustes e o DigiBrain). As capturas do jogo estão na mesma pasta (`estencil_*.jpg`).
+
+### 10.1 O que entrou
+
+- **A porta:** o terceiro id de pele, `estencil` (`web/app/src/pele.ts`). Vale pelo endereço (`?pele=estencil`) e pelo terceiro cartão de
+  Ajustes › Visual, com a etiqueta "prévia". **O padrão continua sendo o Vidro.**
+- **Os tokens** (`estilo/tokens.css`, o bloco `:root[data-pele="estencil"]`): a tinta, o osso e o vermelhão; a letra vazada dos títulos
+  (`--hx-f-tit`, a Saira Stencil One, carregada no `index.html` junto das outras); a cor da sombra dura; os segmentos das barras; as
+  duas cores do mapa do minimapa; e as cores da rede do DigiBrain.
+- **A forma** (`estilo/pele-estencil.css`), peça por peça:
+  - **a caixa:** contorno de osso de 2 px, canto de cima à direita e de baixo à esquerda cortados, sombra dura. Vale no topo, no
+    trilho, nas janelas, no aviso, nas ações, no minimapa, no painel dos lugares, no DigiBrain e na placa do lugar;
+  - **o topo:** o nome do pet na letra vazada; o "agora" com o rótulo num bloco de vermelhão; a marca numa placa com a sombra de
+    vermelhão entre duas riscas, fixa no centro da tela; o dia pequeno em cima da hora grande;
+  - **as janelas:** o índice em vermelhão (01, 02…, a ordem delas na pilha), o título na letra vazada, as barras em segmentos;
+  - **o aviso do meio:** do tamanho do texto, com o ícone em traço e o "Estado" num paralelogramo. Quando o pet pede algo, a caixa vira
+    a cor da necessidade. O chamado é o cartão rosa com o botão de tinta;
+  - **as ações de baixo e os exercícios:** ícones em traço, na cor do texto;
+  - **o minimapa:** oito lados, com o mapa em esquema (a água some no fundo, a terra em tinta clara, a costa em osso);
+  - **os painéis:** o ícone num ladrilho de vermelhão, o título grande, as abas e os botões em paralelogramo, o botão principal com o
+    contorno de osso, os cartões de canto cortado (o escolhido em osso com a barra de vermelhão), a chave em retângulo, o volume com o
+    losango, a linha do dono no Registro com fundo e marca, o botão de perigo riscado;
+  - **os estados:** com o mouse o botão sobe e ganha a sombra, e a opção clareia e ganha um traço; pressionado, afunda e escurece; o
+    foco tem 3 px, por dentro nas peças de canto cortado e em duas barras na aba;
+  - **o celular:** o retrato, o relógio, os destinos e as ações na caixa pequena (corte de 9 px, sombra de 4 px), com as ações em
+    tinta; a folha de um lugar em duas colunas.
+
+### 10.2 O que mudou fora do CSS
+
+A regra das peles é não mudar a estrutura (o DOM). Entraram ganchos que não mudam nada nas outras peles:
+- `data-pede` e `data-acao` no aviso do meio; `data-acao` em cada ação de baixo; `data-ex` em cada cartão de exercício;
+- `data-tipo` em cada linha do Registro (a linha do dono depende dele);
+- o "%" do medidor num `span` próprio (`hx-medidor__pct`), que esta pele esconde nas necessidades.
+
+E dois trechos de tela que leem a pele:
+- **o Minimapa** pinta o mapa em esquema quando a pele define `--hx-mapa-terra` (só a Estêncil define). A conta é pura
+  (`esquemaDoMapa`, em `telas/pet/minimapaGeo.ts`, com teste); a vista publica a cor da água junto do mapa;
+- **o retrato da Arena** entrega o sprite recortado nesta pele, para encher o quadro; nas outras, o quadro inteiro, como antes.
+
+O motor, o save, as rotas e os gabaritos não mudaram.
+
+### 10.3 A revisão independente
+
+A sessão revisora ("Revisão da pele Estêncil contra a prancha") montou a lista de conferência **só pela prancha, antes de ver o jogo**
+(73 itens), e depois comparou as capturas do jogo com as da prancha, peça por peça, com recortes lado a lado e medidas de pixel. Ela
+não mexeu no repositório; eu corrigi o que ela apontou e pedi nova rodada.
+
+| | rodada 1 | rodada 2 | rodada 3 | rodada 4 | rodada 5 |
+|---|---|---|---|---|---|
+| igual | 22 | 52 | 60 | 59 | 62 |
+| parecido, a consertar | 23 | 11 | 5 (margens) | 4 (medidas) | 1 |
+| parecido, só por decisão do Matheus | 8 | 9 | 8 | 10 | 10 |
+| diferente | 11 | 1 | 0 | 0 | 0 |
+| não conferido | 9 | 0 | 0 | 0 | 0 |
+
+- **A rodada 1** confirmou o que o Matheus viu: no celular e nas telas sem prancha era "o layout de antes com outra tonalidade"; no
+  computador, nas telas com prancha, já era a prancha, com diferenças de medida e de acabamento.
+- **A rodada 3:** "nas telas que a prancha desenhou, o jogo agora bate com a prancha na forma de todas as peças". Sobraram cinco
+  margens, de 6 a 22 px.
+- **A rodada 4:** as cinco margens e o foco do fechar ficaram iguais. Ao medir a caixa de todas as peças, ela achou quatro sobras que
+  não tinham sido medidas (o DigiBrain 8 px à direita das janelas, a altura do chamado, as ações do celular e a largura dos Bits).
+- **A rodada 5:** as quatro sobras ficaram iguais: 62 de 73 itens iguais, 10 por decisão do Matheus e 1 a consertar (o espaçamento de dentro do DigiBrain). Esse último e o topo dos painéis alinhado com o trilho (uma recomendação dela) foram acertados depois da rodada e conferidos só por medida da autora, não por nova rodada.
+- **Os relatórios** (a lista, as três rodadas e os recortes) estão fora do git, em `D:\Trab\digilab\capturas_ux_peles_rua\revisao\`,
+  com um resumo no vault (`10 Auditoria/Revisão da pele Estêncil contra a prancha 2026-11-20`).
+- **O limite dela:** foi medida por pixel a caixa de fora de cada peça fixa da HUD; o espaçamento de dentro dos painéis foi julgado
+  pela forma, pela letra, pela cor e pela ordem das peças, não por pixel.
+
+### 10.4 As decisões que ficam com o Matheus
+
+A revisora separou dez itens que só não estão "iguais" porque o jogo tem uma peça ou um dado que a prancha não desenhou. Em todos
+ficou o que o jogo tem; ela recomenda manter os dez:
+- os ícones do jogo (trilho, janelas, Bits, abas) no lugar dos do kit da prancha;
+- o brasão no cartão do pet; o "Detalhes" na janela do Estado; a seta das janelas fechadas na ponta direita; o "Reserva" em Alimentar;
+- o "N" e os ícones dos lugares no minimapa;
+- a posição e a largura dos painéis dos lugares (à direita, o layout do jogo);
+- a Arena sem a etiqueta do nível ao lado do pet (o jogo não mostra o nível ali);
+- no celular, os Bits junto do relógio, e a necessidade como etiqueta em cima do pet (o jogo não tem o aviso do meio no celular).
+
+**Trocas que só valem nesta pele, feitas para seguir o desenho** (cada uma é uma regra; voltam com a retirada dela): os ícones em
+traço no lugar das figuras das ações, dos exercícios, do aviso e do chamado; o sol do relógio escondido e um quadrado no lugar da
+nuvem do "salvo"; o nome de todas as abas à vista no computador; o "%" das necessidades escondido; o rótulo "Arena" repetido fora da
+vista; e o rótulo "Treino" acima do estado, em Crescer.
+
+### 10.5 Como foi conferido
+
+- **Capturas do jogo a 1920 × 950** e no celular (390 × 844), e os estados (com o mouse, pressionado, com o foco) recortados em volta
+  de cada peça. As mesmas telas foram capturadas no Militar, do mesmo build, para a revisora separar o que é do jogo do que é da pele.
+- **Testes:** `npm run tipos` limpo; `npm test` com 212 arquivos, 2173 passam e 3 pulam; `npm run e2e` (porta 8811, 2 workers) na árvore com a `main` juntada: 145 passam e 2 falham, os dois antigos e sem relação com a pele (`jogo.spec.ts:339` e `:378` esperam a versão 9 do registro do Tamer e recebem a 11). Depois dele entraram só acertos de CSS da pele (as rodadas 4 e 5); no build final rodaram de novo os testes da pele (`e2e/pele_estencil.spec.ts`), que passam.
+
+### 10.6 O que não foi feito
+
+- **As telas que a prancha não desenhou** (Crescer › Aprendizado e Evolução, Conversar, o painel do porquê, Ajustes › Visual) têm a
+  moldura da pele, mas o miolo é o de antes nas cores novas. Para ficarem Estêncil precisam de desenho.
+- **Não olhadas com esta pele:** as outras abas (Itens, Exploração, Fronteira, Medalhas, Catálogo, Gerações, Cenários), as telas que
+  abrem sozinhas (as boas-vindas, o ovo, a evolução, a luta e o resultado), a conta e o "Meus pets".
+- O celular a 360 px. O Zine (PE3 e PE4).
+- O custo da sombra (um `drop-shadow` por caixa) não foi medido, nem no celular.
+- O portão das capturas de referência (`npm run capturas`) não foi rodado.
+- A etiqueta "prévia" do cartão continua: sai quando o Matheus disser que a pele está pronta.

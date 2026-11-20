@@ -54,6 +54,18 @@ sh docs/pranchas/ux-peles-rua/capturar.sh     # as capturas em capturas/ (e em D
 Precisa do Pillow, de `D:\Trab\digilab\Assets` (fora do git) e da rede, para as fontes. `?sem` tira as notas amarelas. O `gerar.py`
 imprime o contraste dos pares principais de cada modelo.
 
+## As capturas do jogo (`capturas_codigo/`)
+
+A pele Estêncil já está no jogo (`web/app/src/estilo/pele-estencil.css`; a seção 10 do `docs/PLANO_UX_PELES_RUA.md`). A pasta
+`capturas_codigo/` guarda as capturas do jogo com ela, de 2026-11-20:
+- `estencil_*.jpg`, a 1920 × 950: a tela do pet (parado, com fome, chamando e falando), o painel do porquê, Treinar, Lutar, Diário,
+  Ajustes, Visual, Exibir, o DigiBrain e Conversar; e `estencil_celular.jpg`, com cinco telas do celular a 390 × 844;
+- `lado_a_lado_*.jpg`: o desenho em cima e o jogo embaixo (a tela do pet, um lugar, Lutar, Diário, Ajustes e o DigiBrain).
+
+Não são geradas pelo `capturar.sh`: saíram de um teste temporário do Playwright sobre o jogo, com o save do
+`e2e/pele_estencil.spec.ts`. A conferência do jogo contra a prancha foi feita por uma sessão revisora; os relatórios dela estão fora
+do git, em `D:\Trab\digilab\capturas_ux_peles_ruaevisao\`.
+
 ## O que não foi feito
 
 - Conversar, as outras abas dos lugares, as telas que abrem sozinhas e a conta não foram desenhados.
