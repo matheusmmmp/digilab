@@ -32,6 +32,7 @@ link para o plano commitado.
 | [PR-COOP-A1](#pr-coop-a1--a-cooperação-com-o-irmão-aleatório) | a cooperação com o irmão aleatório | EMERGE e DOSE não confirmam; CUSTO confirma | não |
 | [PR-BASELINE](#pr-baseline--o-modular-contra-a-baseline-trivial) | o modular contra a baseline trivial | negativo ("< 0") | não |
 | [PR-ABLACAO](#pr-ablacao--a-ablação-do-aprendizado-no-jogo) | a ablação do aprendizado no jogo | "muda" | não |
+| [PR-CORPO-C3](#pr-corpo-c3--a-ponte-com-teto) | a ponte com teto (CORPO C3) | DTB "ganho", DTL "perda" | não |
 
 ## PR-C1 — o longe regular
 
@@ -183,6 +184,24 @@ link para o plano commitado.
 | resultado | [RESULTADO_V3_ABLACAO_APRENDIZADO.md](RESULTADO_V3_ABLACAO_APRENDIZADO.md): "muda", 9 das 15 no Holm; todas com \|A − B\| abaixo de 0,01; a distância de variação total das ações 0,0084 (descritivo), n = 200 |
 | artefatos | [`artifacts_v3_ablacao_aprendizado/run/`](../artifacts_v3_ablacao_aprendizado/run/): `resultado.json` `ced7c793…`, `medidas.json` `f2adac98…` |
 
+## PR-CORPO-C3 — a ponte com teto
+
+**Esta seção foi escrita depois da run** (2026-11-19, Claude Code, Fable 5.2): este índice entrou na `main` (#971) depois do commit em que
+a run rodou (`f720d684`). O que vale como registro anterior é o plano, no commit citado, na `main` desde o #1016, antes da primeira vida.
+
+| campo | valor |
+|---|---|
+| plano | [`PLANO_ANALISE_V3_CORPO_C3.md`](https://github.com/matheusmmmp/digilab/blob/cb922cf1b00eccd8782cf5568b7f34a97ba3a287/docs/PLANO_ANALISE_V3_CORPO_C3.md): PROPOSTO no commit `516f5548`, APROVADO no `cb922cf1b00eccd8782cf5568b7f34a97ba3a287` (2026-11-19 12:31), ancestral do `git_head` da run, `f720d684` (início 18:13:25, árvore limpa) |
+| hipótese | H1, o teto no limiar: "sai perto da D, o F sobe e a privação do comedouro sobe também. A previsão é "perda" pela mesma guarda". H2, o teto baixo: "a privação e a saúde dos donos que deixam faltar comida ficam perto do CTRL, e o F sobe menos que na D" (seção 1) |
+| células | as 12 da C4 (4 donos × comedouro, longe e `longe_fixo`); braços CTRL, D, DTL (teto 382 500) e DTB (teto 225 000, SEM FONTE); 14 dias, orçamento 16; bloco II com 100 pares por braço, 5 dias (seções 2 a 4) |
+| sementes | 106001…106200 (200 unidades, k = 1, 9 600 vidas) e 106301…106400 (os pares), da faixa 106001…106400 (seção 4) |
+| contraste primário | braço − CTRL na taxa por episódio de fome no `longe_fixo`, pareado por unidade, IC95 pelo t, p unilateral, Holm sobre o DTL e o DTB, α = 0,025; a D é a referência, fora do Holm (seção 5) |
+| regra de leitura | a tabela da seção 5, com as classes de A6.6 e δ = 0,032: "ganho" se o F é "> 0", o Holm rejeita, nenhuma das oito guardas do bem-estar reprova e o S2 passa; "perda" se alguma guarda reprova; "nulo" e "indeterminado" pelo F |
+| regra de parada | "A run roda uma vez" (seção 4); ganho de um braço com teto leva à C4, perda ou nulo dos dois volta ao Matheus (seção 8) |
+| o que refutaria | pela regra de leitura: o F fora do "> 0", ou alguma guarda do bem-estar reprovando, nos dois braços com teto |
+| resultado | [RESULTADO_V3_CORPO_C3.md](RESULTADO_V3_CORPO_C3.md): DTB +0,120 [+0,105; +0,135], n = 200, nenhuma guarda reprova, "ganho"; DTL +0,123 [+0,109; +0,138], três guardas reprovam, "perda". H1 se confirma; na H2, a privação e a saúde ficam perto do CTRL na média, e o F do DTB não se separa do da D (−0,004 [−0,015; +0,007]) |
+| artefatos | [`artifacts_v3_corpo/c3/`](../artifacts_v3_corpo/c3/): `resultado.json` `b3260812…`, `medidas.json.gz` `eeaebb24…` (descomprime no `825a122a…` do `meta.json`), `vidas.tar.gz` `03426106…`, `pares.tar.gz` `bdc7d30a…` |
+
 ## PR-REPLICACAO-C4 — a réplica da C4
 
 | campo | valor |
@@ -191,6 +210,24 @@ link para o plano commitado.
 | critério, escrito antes de rodar | o `docs/registro/2026-11.md`, D-EV-A3-2, no commit `9d9e8996` (2026-11-16), empurrado antes de a réplica começar: "confirmou byte a byte" se o sha256 do `resultado.json` da réplica for o do blob versionado (`6f8c91d8…`) e o do `medidas.json` for o do conteúdo do `medidas.json.gz` versionado (`869ff397…`); qualquer outra saída é "divergiu", reportada com os dois sha256, o ambiente e a causa. O `vidas.tar.gz` não entra (foi feito fora do orquestrador) |
 | comando | `python tools/replicar_run.py c4 a287ba20fafdc1fbbf9be7100f89d9c90f466948 --relatorio artifacts_v3_evidencia_a3/replica_c4.json` |
 | resultado | a seção "A réplica da C4" abaixo |
+
+## PR-PET-VIVO-RA — a linha de base do intervalo (replay)
+
+**Esta seção entrou depois do replay** (D-RB-13): o plano estava commitado e APROVADO antes, mas a seção do índice só foi escrita com
+o resultado. O texto que vale é o do plano, no commit citado.
+
+| campo | valor |
+|---|---|
+| plano | [`PLANO_ANALISE_V3_PET_VIVO_RA.md`](https://github.com/matheusmmmp/digilab/blob/4492a0f6070911602a8848043f8ad7c0f298643a/docs/PLANO_ANALISE_V3_PET_VIVO_RA.md), commit `4492a0f6070911602a8848043f8ad7c0f298643a` (2026-11-19 18:38, o APROVADO), ancestral do commit do replay `1688bca9` (2026-11-19 21:18) |
+| hipótese | as perguntas Q-SONO e Q-ALÉM; H-MÓVEL (a média móvel curta apaga o sono, a longa o preserva), H-ESTADO (o resto do ocioso encolhe com o estado do corpo) e H-ALÉM (o η² do acordado abaixo de 0,05 em toda linha de base). "O desfecho esperado é 'só o sono'" (seção 1) |
+| células | as mesmas 5 120 vidas do R1, rejogadas: o HOJE e o OLF-0 da run do PV-2 (3 lugares, n 200) e o HOJE da checagem do v38 (2 lugares, n 40); 7 linhas de base (GLOBAL, CTX, FASE, ESTADO, MÓVEL com k 4, 16 e 96) (seções 3 e 4) |
+| sementes | nenhuma nova e nenhuma faixa nova: as da run do PV-2 (bases 26101…26505, k 40) (seção 3) |
+| contraste primário | **nenhum:** "nenhuma medida é gate"; o IC95 por lugar contra os cortes da regra (seção 6) |
+| regra de leitura | L-SONO, por linha de base: o limite de baixo do resto do dormir > 0 nos 3 lugares, "preserva o sono"; o de cima ≤ 0 em algum, "apaga". L-ALÉM: o limite de baixo do η² do acordado > 0,05 em 2 lugares na ESTADO, "há o que creditar além do sono"; o de cima < 0,05 nos 3 lugares na GLOBAL, FASE, ESTADO e MÓVEL, "só o sono"; senão "indeterminado". O corte de 0,05 é SEM FONTE (seção 6) |
+| regra de parada | roda uma vez; as conferências (C-FONTE, C-G1, C-FECHO, C-UMA-VEZ, C-IGUAL-R1) falham alto antes de qualquer medida; com a projeção da fumaça acima de 2 h o replay não roda e o plano volta ao Matheus (seções 3 e 8) |
+| o que refutaria | pela regra de leitura: "há o que creditar além do sono" ou "indeterminado" na L-ALÉM contrariam o desfecho esperado; "apaga o sono" numa candidata a tira do R2 |
+| resultado | [RESULTADO_V3_PET_VIVO_RA.md](RESULTADO_V3_PET_VIVO_RA.md): L-SONO "preserva o sono" nas cinco candidatas; L-ALÉM "só o sono"; a H-MÓVEL não se confirma |
+| artefatos | [`artifacts_v3_pet_vivo/ra/run/`](../artifacts_v3_pet_vivo/ra/run/): `meta.json`, `resultado.json` `4c645a0a…`, `medidas.json.gz` `605d64c0…` |
 
 ## Como replicar uma run (`tools/replicar_run.py`)
 

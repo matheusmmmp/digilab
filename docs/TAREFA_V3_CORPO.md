@@ -161,3 +161,17 @@ Pelo `docs/PLANO_ANALISE_V3_CORPO_C3.md`, seção 7. Nenhuma vida da faixa rodou
   está no `meta.json` da C2). Ele reaproveita as vidas e a análise da C2, com os braços CTRL, D, DTL e DTB, as oito guardas do bem-estar
   (com a saúde), o S2 e o descritivo (braço − D, por dono, a decomposição da privação, os ticks no teto e o incoerente). As configs ficam
   em `experiments/configs/v3_corpo_c3/`.
+
+## 15. A run da C3, a ponte com teto (2026-11-19)
+
+A run única do `docs/PLANO_ANALISE_V3_CORPO_C3.md`, no commit `f720d684`: 9 600 vidas e 400 pares, em 3 h 4 min, com 4 processos. O relato
+é o `docs/RESULTADO_V3_CORPO_C3.md`.
+- **DTB, o teto em C/2: "ganho".** O F sobe +0,120 [+0,105; +0,135], nenhuma das oito guardas do bem-estar reprova, e o S2 passa.
+- **DTL, o teto no limiar: "perda".** O F sobe +0,123, e reprovam a privação do comedouro (+0,072) e as duas guardas da saúde (−0,040 e
+  −0,162). Ele sai quase igual à D, como o plano previa.
+- **A ressalva do DTB:** com o aleatório no comedouro, a saúde ainda cai −0,048. A guarda passa na média das seis células dos donos que
+  deixam faltar comida. O T_B = C/2 é SEM FONTE.
+- **O incoerente:** no comedouro, 799 de 800 vidas saem iguais às do atencioso. A leitura nas 11 células distintas é a mesma.
+
+**O programa para no CHECKPOINT da C3.** Pela seção 8 do plano, o ganho leva à C4, a validação; a decisão é do Matheus. Nenhum braço está
+ligado no jogo.

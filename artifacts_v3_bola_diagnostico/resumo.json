@@ -1,0 +1,2085 @@
+{
+ "c3_brincar_das_medidas": {
+  "CTRL|aleatorio|comedouro": {
+   "brincar": 4030,
+   "brincar_por_vida": 20.15,
+   "vidas": 200
+  },
+  "CTRL|aleatorio|longe": {
+   "brincar": 2549,
+   "brincar_por_vida": 12.745,
+   "vidas": 200
+  },
+  "CTRL|aleatorio|longe_fixo": {
+   "brincar": 3489,
+   "brincar_por_vida": 17.445,
+   "vidas": 200
+  },
+  "CTRL|atencioso|comedouro": {
+   "brincar": 5842,
+   "brincar_por_vida": 29.21,
+   "vidas": 200
+  },
+  "CTRL|atencioso|longe": {
+   "brincar": 9631,
+   "brincar_por_vida": 48.155,
+   "vidas": 200
+  },
+  "CTRL|atencioso|longe_fixo": {
+   "brincar": 8698,
+   "brincar_por_vida": 43.49,
+   "vidas": 200
+  },
+  "CTRL|incoerente|comedouro": {
+   "brincar": 5842,
+   "brincar_por_vida": 29.21,
+   "vidas": 200
+  },
+  "CTRL|incoerente|longe": {
+   "brincar": 9701,
+   "brincar_por_vida": 48.505,
+   "vidas": 200
+  },
+  "CTRL|incoerente|longe_fixo": {
+   "brincar": 8908,
+   "brincar_por_vida": 44.54,
+   "vidas": 200
+  },
+  "CTRL|relapso|comedouro": {
+   "brincar": 927,
+   "brincar_por_vida": 4.635,
+   "vidas": 200
+  },
+  "CTRL|relapso|longe": {
+   "brincar": 1208,
+   "brincar_por_vida": 6.04,
+   "vidas": 200
+  },
+  "CTRL|relapso|longe_fixo": {
+   "brincar": 2096,
+   "brincar_por_vida": 10.48,
+   "vidas": 200
+  },
+  "DTB|aleatorio|comedouro": {
+   "brincar": 3783,
+   "brincar_por_vida": 18.915,
+   "vidas": 200
+  },
+  "DTB|aleatorio|longe": {
+   "brincar": 2435,
+   "brincar_por_vida": 12.175,
+   "vidas": 200
+  },
+  "DTB|aleatorio|longe_fixo": {
+   "brincar": 3413,
+   "brincar_por_vida": 17.065,
+   "vidas": 200
+  },
+  "DTB|atencioso|comedouro": {
+   "brincar": 15896,
+   "brincar_por_vida": 79.48,
+   "vidas": 200
+  },
+  "DTB|atencioso|longe": {
+   "brincar": 15424,
+   "brincar_por_vida": 77.12,
+   "vidas": 200
+  },
+  "DTB|atencioso|longe_fixo": {
+   "brincar": 16714,
+   "brincar_por_vida": 83.57,
+   "vidas": 200
+  },
+  "DTB|incoerente|comedouro": {
+   "brincar": 15896,
+   "brincar_por_vida": 79.48,
+   "vidas": 200
+  },
+  "DTB|incoerente|longe": {
+   "brincar": 15492,
+   "brincar_por_vida": 77.46,
+   "vidas": 200
+  },
+  "DTB|incoerente|longe_fixo": {
+   "brincar": 16356,
+   "brincar_por_vida": 81.78,
+   "vidas": 200
+  },
+  "DTB|relapso|comedouro": {
+   "brincar": 678,
+   "brincar_por_vida": 3.39,
+   "vidas": 200
+  },
+  "DTB|relapso|longe": {
+   "brincar": 1270,
+   "brincar_por_vida": 6.35,
+   "vidas": 200
+  },
+  "DTB|relapso|longe_fixo": {
+   "brincar": 2292,
+   "brincar_por_vida": 11.46,
+   "vidas": 200
+  },
+  "DTL|aleatorio|comedouro": {
+   "brincar": 3532,
+   "brincar_por_vida": 17.66,
+   "vidas": 200
+  },
+  "DTL|aleatorio|longe": {
+   "brincar": 2176,
+   "brincar_por_vida": 10.88,
+   "vidas": 200
+  },
+  "DTL|aleatorio|longe_fixo": {
+   "brincar": 3153,
+   "brincar_por_vida": 15.765,
+   "vidas": 200
+  },
+  "DTL|atencioso|comedouro": {
+   "brincar": 15829,
+   "brincar_por_vida": 79.145,
+   "vidas": 200
+  },
+  "DTL|atencioso|longe": {
+   "brincar": 14762,
+   "brincar_por_vida": 73.81,
+   "vidas": 200
+  },
+  "DTL|atencioso|longe_fixo": {
+   "brincar": 16512,
+   "brincar_por_vida": 82.56,
+   "vidas": 200
+  },
+  "DTL|incoerente|comedouro": {
+   "brincar": 15829,
+   "brincar_por_vida": 79.145,
+   "vidas": 200
+  },
+  "DTL|incoerente|longe": {
+   "brincar": 14935,
+   "brincar_por_vida": 74.675,
+   "vidas": 200
+  },
+  "DTL|incoerente|longe_fixo": {
+   "brincar": 16300,
+   "brincar_por_vida": 81.5,
+   "vidas": 200
+  },
+  "DTL|relapso|comedouro": {
+   "brincar": 319,
+   "brincar_por_vida": 1.595,
+   "vidas": 200
+  },
+  "DTL|relapso|longe": {
+   "brincar": 911,
+   "brincar_por_vida": 4.555,
+   "vidas": 200
+  },
+  "DTL|relapso|longe_fixo": {
+   "brincar": 1852,
+   "brincar_por_vida": 9.26,
+   "vidas": 200
+  },
+  "D|aleatorio|comedouro": {
+   "brincar": 3481,
+   "brincar_por_vida": 17.405,
+   "vidas": 200
+  },
+  "D|aleatorio|longe": {
+   "brincar": 2075,
+   "brincar_por_vida": 10.375,
+   "vidas": 200
+  },
+  "D|aleatorio|longe_fixo": {
+   "brincar": 3161,
+   "brincar_por_vida": 15.805,
+   "vidas": 200
+  },
+  "D|atencioso|comedouro": {
+   "brincar": 15859,
+   "brincar_por_vida": 79.295,
+   "vidas": 200
+  },
+  "D|atencioso|longe": {
+   "brincar": 14926,
+   "brincar_por_vida": 74.63,
+   "vidas": 200
+  },
+  "D|atencioso|longe_fixo": {
+   "brincar": 16416,
+   "brincar_por_vida": 82.08,
+   "vidas": 200
+  },
+  "D|incoerente|comedouro": {
+   "brincar": 15859,
+   "brincar_por_vida": 79.295,
+   "vidas": 200
+  },
+  "D|incoerente|longe": {
+   "brincar": 14983,
+   "brincar_por_vida": 74.915,
+   "vidas": 200
+  },
+  "D|incoerente|longe_fixo": {
+   "brincar": 16326,
+   "brincar_por_vida": 81.63,
+   "vidas": 200
+  },
+  "D|relapso|comedouro": {
+   "brincar": 293,
+   "brincar_por_vida": 1.465,
+   "vidas": 200
+  },
+  "D|relapso|longe": {
+   "brincar": 855,
+   "brincar_por_vida": 4.275,
+   "vidas": 200
+  },
+  "D|relapso|longe_fixo": {
+   "brincar": 1863,
+   "brincar_por_vida": 9.315,
+   "vidas": 200
+  }
+ },
+ "c3_vida_por_dono": {
+  "aleatorio": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 31,
+    "chamar_atencao": 70,
+    "comer": 39,
+    "dormir": 230,
+    "emburrar": 4,
+    "explorar": 98
+   },
+   "alvo_do_brincar": {
+    "None": 407,
+    "bola": 31
+   },
+   "brincar": 438,
+   "brincar_bola_no_raio": 31,
+   "brincar_bola_no_raio_vidas_com": 14,
+   "brincar_com_alvo": 31,
+   "brincar_com_alvo_vidas_com": 14,
+   "brincar_por_distancia": {
+    "alem": 251,
+    "ate_2_visoes": 26,
+    "ate_4_visoes": 130,
+    "ate_pegar": 5,
+    "ate_um_passo": 21,
+    "ate_visao": 5
+   },
+   "brincar_por_regiao": {
+    "campo": 71,
+    "casa": 212,
+    "jardim": 128,
+    "mata": 27
+   },
+   "brincar_por_vida": 14.6,
+   "brincar_vidas_com": 30,
+   "chutes": 26,
+   "chutes_vidas_com": 14,
+   "d_min_celulas_mediana": 4.875,
+   "d_min_celulas_menor": 0.0,
+   "decisoes": 40320,
+   "decisoes_bola_no_raio": 472,
+   "decisoes_bola_no_raio_vidas_com": 18,
+   "decisoes_por_regiao": {
+    "campo": 5703,
+    "casa": 20110,
+    "jardim": 12295,
+    "mata": 2212
+   },
+   "decisoes_vidas_com": 30,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 3,
+    "dormir": 2
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 5,
+   "tentativa_sem_chute_vidas_com": 4,
+   "vidas_de_pet": 30,
+   "vidas_em_mundo_com_rolagem": 14,
+   "vidas_que_nunca_viram_a_bola": 12
+  },
+  "atencioso": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 45,
+    "chamar_atencao": 82,
+    "comer": 17,
+    "dormir": 162,
+    "emburrar": 10,
+    "explorar": 66,
+    "ocioso": 3
+   },
+   "alvo_do_brincar": {
+    "None": 1155,
+    "bola": 45
+   },
+   "brincar": 1200,
+   "brincar_bola_no_raio": 45,
+   "brincar_bola_no_raio_vidas_com": 9,
+   "brincar_com_alvo": 45,
+   "brincar_com_alvo_vidas_com": 9,
+   "brincar_por_distancia": {
+    "alem": 696,
+    "ate_2_visoes": 97,
+    "ate_4_visoes": 362,
+    "ate_pegar": 1,
+    "ate_um_passo": 32,
+    "ate_visao": 12
+   },
+   "brincar_por_regiao": {
+    "campo": 111,
+    "casa": 573,
+    "jardim": 482,
+    "mata": 34
+   },
+   "brincar_por_vida": 40.0,
+   "brincar_vidas_com": 30,
+   "chutes": 33,
+   "chutes_vidas_com": 9,
+   "d_min_celulas_mediana": 11.125,
+   "d_min_celulas_menor": 0.3125,
+   "decisoes": 40320,
+   "decisoes_bola_no_raio": 385,
+   "decisoes_bola_no_raio_vidas_com": 13,
+   "decisoes_por_regiao": {
+    "campo": 3220,
+    "casa": 22297,
+    "jardim": 13867,
+    "mata": 936
+   },
+   "decisoes_vidas_com": 30,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 4,
+    "chamar_atencao": 3,
+    "dormir": 5
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 12,
+   "tentativa_sem_chute_vidas_com": 6,
+   "vidas_de_pet": 30,
+   "vidas_em_mundo_com_rolagem": 9,
+   "vidas_que_nunca_viram_a_bola": 17
+  },
+  "incoerente": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 58,
+    "chamar_atencao": 106,
+    "comer": 34,
+    "dormir": 224,
+    "emburrar": 15,
+    "explorar": 88,
+    "ocioso": 3
+   },
+   "alvo_do_brincar": {
+    "None": 1144,
+    "bola": 55
+   },
+   "brincar": 1199,
+   "brincar_bola_no_raio": 58,
+   "brincar_bola_no_raio_vidas_com": 11,
+   "brincar_com_alvo": 55,
+   "brincar_com_alvo_vidas_com": 11,
+   "brincar_por_distancia": {
+    "alem": 753,
+    "ate_2_visoes": 105,
+    "ate_4_visoes": 283,
+    "ate_pegar": 2,
+    "ate_um_passo": 40,
+    "ate_visao": 16
+   },
+   "brincar_por_regiao": {
+    "campo": 209,
+    "casa": 594,
+    "jardim": 332,
+    "mata": 64
+   },
+   "brincar_por_vida": 39.96666666666667,
+   "brincar_vidas_com": 29,
+   "chutes": 42,
+   "chutes_vidas_com": 11,
+   "d_min_celulas_mediana": 11.8125,
+   "d_min_celulas_menor": 0.8125,
+   "decisoes": 40320,
+   "decisoes_bola_no_raio": 528,
+   "decisoes_bola_no_raio_vidas_com": 13,
+   "decisoes_por_regiao": {
+    "campo": 5627,
+    "casa": 23106,
+    "jardim": 10141,
+    "mata": 1446
+   },
+   "decisoes_vidas_com": 30,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 8,
+    "chamar_atencao": 1,
+    "dormir": 4
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 3,
+   "no_raio_sem_alvo_vidas_com": 2,
+   "tentativa_sem_chute": 13,
+   "tentativa_sem_chute_vidas_com": 6,
+   "vidas_de_pet": 30,
+   "vidas_em_mundo_com_rolagem": 11,
+   "vidas_que_nunca_viram_a_bola": 17
+  },
+  "relapso": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 37,
+    "chamar_atencao": 86,
+    "comer": 66,
+    "dormir": 362,
+    "emburrar": 4,
+    "explorar": 191,
+    "ocioso": 2
+   },
+   "alvo_do_brincar": {
+    "None": 146,
+    "bola": 37
+   },
+   "brincar": 183,
+   "brincar_bola_no_raio": 37,
+   "brincar_bola_no_raio_vidas_com": 15,
+   "brincar_com_alvo": 37,
+   "brincar_com_alvo_vidas_com": 15,
+   "brincar_por_distancia": {
+    "alem": 74,
+    "ate_2_visoes": 23,
+    "ate_4_visoes": 49,
+    "ate_pegar": 2,
+    "ate_um_passo": 26,
+    "ate_visao": 9
+   },
+   "brincar_por_regiao": {
+    "campo": 59,
+    "casa": 49,
+    "jardim": 61,
+    "mata": 14
+   },
+   "brincar_por_vida": 6.1,
+   "brincar_vidas_com": 30,
+   "chutes": 29,
+   "chutes_vidas_com": 15,
+   "d_min_celulas_mediana": 3.25,
+   "d_min_celulas_menor": 0.3125,
+   "decisoes": 40320,
+   "decisoes_bola_no_raio": 748,
+   "decisoes_bola_no_raio_vidas_com": 19,
+   "decisoes_por_regiao": {
+    "campo": 5917,
+    "casa": 17971,
+    "jardim": 13013,
+    "mata": 3419
+   },
+   "decisoes_vidas_com": 30,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 5,
+    "dormir": 3
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 8,
+   "tentativa_sem_chute_vidas_com": 7,
+   "vidas_de_pet": 30,
+   "vidas_em_mundo_com_rolagem": 15,
+   "vidas_que_nunca_viram_a_bola": 11
+  }
+ },
+ "c3_vida_por_dono_e_lugar": {
+  "aleatorio|comedouro": {
+   "acoes_com_bola_no_raio": {},
+   "alvo_do_brincar": {
+    "None": 170
+   },
+   "brincar": 170,
+   "brincar_bola_no_raio": 0,
+   "brincar_bola_no_raio_vidas_com": 0,
+   "brincar_com_alvo": 0,
+   "brincar_com_alvo_vidas_com": 0,
+   "brincar_por_distancia": {
+    "alem": 165,
+    "ate_4_visoes": 5
+   },
+   "brincar_por_regiao": {
+    "casa": 156,
+    "jardim": 14
+   },
+   "brincar_por_vida": 17.0,
+   "brincar_vidas_com": 10,
+   "chutes": 0,
+   "chutes_vidas_com": 0,
+   "d_min_celulas_mediana": 18.8125,
+   "d_min_celulas_menor": 11.9375,
+   "decisoes": 13440,
+   "decisoes_bola_no_raio": 0,
+   "decisoes_bola_no_raio_vidas_com": 0,
+   "decisoes_por_regiao": {
+    "casa": 12666,
+    "jardim": 774
+   },
+   "decisoes_vidas_com": 10,
+   "depois_da_tentativa_sem_chute": {},
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 0,
+   "tentativa_sem_chute_vidas_com": 0,
+   "vidas_de_pet": 10,
+   "vidas_em_mundo_com_rolagem": 0,
+   "vidas_que_nunca_viram_a_bola": 10
+  },
+  "aleatorio|longe": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 17,
+    "chamar_atencao": 41,
+    "comer": 15,
+    "dormir": 112,
+    "emburrar": 2,
+    "explorar": 46
+   },
+   "alvo_do_brincar": {
+    "None": 101,
+    "bola": 17
+   },
+   "brincar": 118,
+   "brincar_bola_no_raio": 17,
+   "brincar_bola_no_raio_vidas_com": 5,
+   "brincar_com_alvo": 17,
+   "brincar_com_alvo_vidas_com": 5,
+   "brincar_por_distancia": {
+    "alem": 72,
+    "ate_2_visoes": 2,
+    "ate_4_visoes": 27,
+    "ate_pegar": 1,
+    "ate_um_passo": 12,
+    "ate_visao": 4
+   },
+   "brincar_por_regiao": {
+    "campo": 14,
+    "casa": 54,
+    "jardim": 23,
+    "mata": 27
+   },
+   "brincar_por_vida": 11.8,
+   "brincar_vidas_com": 10,
+   "chutes": 13,
+   "chutes_vidas_com": 5,
+   "d_min_celulas_mediana": 4.875,
+   "d_min_celulas_menor": 0.0,
+   "decisoes": 13440,
+   "decisoes_bola_no_raio": 233,
+   "decisoes_bola_no_raio_vidas_com": 8,
+   "decisoes_por_regiao": {
+    "campo": 1866,
+    "casa": 6116,
+    "jardim": 3283,
+    "mata": 2175
+   },
+   "decisoes_vidas_com": 10,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 2,
+    "dormir": 2
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 4,
+   "tentativa_sem_chute_vidas_com": 3,
+   "vidas_de_pet": 10,
+   "vidas_em_mundo_com_rolagem": 5,
+   "vidas_que_nunca_viram_a_bola": 2
+  },
+  "aleatorio|longe_fixo": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 14,
+    "chamar_atencao": 29,
+    "comer": 24,
+    "dormir": 118,
+    "emburrar": 2,
+    "explorar": 52
+   },
+   "alvo_do_brincar": {
+    "None": 136,
+    "bola": 14
+   },
+   "brincar": 150,
+   "brincar_bola_no_raio": 14,
+   "brincar_bola_no_raio_vidas_com": 9,
+   "brincar_com_alvo": 14,
+   "brincar_com_alvo_vidas_com": 9,
+   "brincar_por_distancia": {
+    "alem": 14,
+    "ate_2_visoes": 24,
+    "ate_4_visoes": 98,
+    "ate_pegar": 4,
+    "ate_um_passo": 9,
+    "ate_visao": 1
+   },
+   "brincar_por_regiao": {
+    "campo": 57,
+    "casa": 2,
+    "jardim": 91
+   },
+   "brincar_por_vida": 15.0,
+   "brincar_vidas_com": 10,
+   "chutes": 13,
+   "chutes_vidas_com": 9,
+   "d_min_celulas_mediana": 2.1875,
+   "d_min_celulas_menor": 0.1875,
+   "decisoes": 13440,
+   "decisoes_bola_no_raio": 239,
+   "decisoes_bola_no_raio_vidas_com": 10,
+   "decisoes_por_regiao": {
+    "campo": 3837,
+    "casa": 1328,
+    "jardim": 8238,
+    "mata": 37
+   },
+   "decisoes_vidas_com": 10,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 1
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 1,
+   "tentativa_sem_chute_vidas_com": 1,
+   "vidas_de_pet": 10,
+   "vidas_em_mundo_com_rolagem": 9,
+   "vidas_que_nunca_viram_a_bola": 0
+  },
+  "atencioso|comedouro": {
+   "acoes_com_bola_no_raio": {},
+   "alvo_do_brincar": {
+    "None": 303
+   },
+   "brincar": 303,
+   "brincar_bola_no_raio": 0,
+   "brincar_bola_no_raio_vidas_com": 0,
+   "brincar_com_alvo": 0,
+   "brincar_com_alvo_vidas_com": 0,
+   "brincar_por_distancia": {
+    "alem": 292,
+    "ate_4_visoes": 11
+   },
+   "brincar_por_regiao": {
+    "casa": 286,
+    "jardim": 17
+   },
+   "brincar_por_vida": 30.3,
+   "brincar_vidas_com": 10,
+   "chutes": 0,
+   "chutes_vidas_com": 0,
+   "d_min_celulas_mediana": 17.25,
+   "d_min_celulas_menor": 11.8125,
+   "decisoes": 13440,
+   "decisoes_bola_no_raio": 0,
+   "decisoes_bola_no_raio_vidas_com": 0,
+   "decisoes_por_regiao": {
+    "casa": 12260,
+    "jardim": 1180
+   },
+   "decisoes_vidas_com": 10,
+   "depois_da_tentativa_sem_chute": {},
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 0,
+   "tentativa_sem_chute_vidas_com": 0,
+   "vidas_de_pet": 10,
+   "vidas_em_mundo_com_rolagem": 0,
+   "vidas_que_nunca_viram_a_bola": 10
+  },
+  "atencioso|longe": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 9,
+    "chamar_atencao": 48,
+    "comer": 10,
+    "dormir": 71,
+    "emburrar": 3,
+    "explorar": 20
+   },
+   "alvo_do_brincar": {
+    "None": 413,
+    "bola": 9
+   },
+   "brincar": 422,
+   "brincar_bola_no_raio": 9,
+   "brincar_bola_no_raio_vidas_com": 2,
+   "brincar_com_alvo": 9,
+   "brincar_com_alvo_vidas_com": 2,
+   "brincar_por_distancia": {
+    "alem": 307,
+    "ate_2_visoes": 23,
+    "ate_4_visoes": 83,
+    "ate_um_passo": 7,
+    "ate_visao": 2
+   },
+   "brincar_por_regiao": {
+    "campo": 25,
+    "casa": 279,
+    "jardim": 84,
+    "mata": 34
+   },
+   "brincar_por_vida": 42.2,
+   "brincar_vidas_com": 10,
+   "chutes": 7,
+   "chutes_vidas_com": 2,
+   "d_min_celulas_mediana": 11.125,
+   "d_min_celulas_menor": 0.75,
+   "decisoes": 13440,
+   "decisoes_bola_no_raio": 161,
+   "decisoes_bola_no_raio_vidas_com": 4,
+   "decisoes_por_regiao": {
+    "campo": 808,
+    "casa": 9175,
+    "jardim": 2544,
+    "mata": 913
+   },
+   "decisoes_vidas_com": 10,
+   "depois_da_tentativa_sem_chute": {
+    "dormir": 2
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 2,
+   "tentativa_sem_chute_vidas_com": 1,
+   "vidas_de_pet": 10,
+   "vidas_em_mundo_com_rolagem": 2,
+   "vidas_que_nunca_viram_a_bola": 6
+  },
+  "atencioso|longe_fixo": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 36,
+    "chamar_atencao": 34,
+    "comer": 7,
+    "dormir": 91,
+    "emburrar": 7,
+    "explorar": 46,
+    "ocioso": 3
+   },
+   "alvo_do_brincar": {
+    "None": 439,
+    "bola": 36
+   },
+   "brincar": 475,
+   "brincar_bola_no_raio": 36,
+   "brincar_bola_no_raio_vidas_com": 7,
+   "brincar_com_alvo": 36,
+   "brincar_com_alvo_vidas_com": 7,
+   "brincar_por_distancia": {
+    "alem": 97,
+    "ate_2_visoes": 74,
+    "ate_4_visoes": 268,
+    "ate_pegar": 1,
+    "ate_um_passo": 25,
+    "ate_visao": 10
+   },
+   "brincar_por_regiao": {
+    "campo": 86,
+    "casa": 8,
+    "jardim": 381
+   },
+   "brincar_por_vida": 47.5,
+   "brincar_vidas_com": 10,
+   "chutes": 26,
+   "chutes_vidas_com": 7,
+   "d_min_celulas_mediana": 2.1875,
+   "d_min_celulas_menor": 0.3125,
+   "decisoes": 13440,
+   "decisoes_bola_no_raio": 224,
+   "decisoes_bola_no_raio_vidas_com": 9,
+   "decisoes_por_regiao": {
+    "campo": 2412,
+    "casa": 862,
+    "jardim": 10143,
+    "mata": 23
+   },
+   "decisoes_vidas_com": 10,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 4,
+    "chamar_atencao": 3,
+    "dormir": 3
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 10,
+   "tentativa_sem_chute_vidas_com": 5,
+   "vidas_de_pet": 10,
+   "vidas_em_mundo_com_rolagem": 7,
+   "vidas_que_nunca_viram_a_bola": 1
+  },
+  "incoerente|comedouro": {
+   "acoes_com_bola_no_raio": {},
+   "alvo_do_brincar": {
+    "None": 303
+   },
+   "brincar": 303,
+   "brincar_bola_no_raio": 0,
+   "brincar_bola_no_raio_vidas_com": 0,
+   "brincar_com_alvo": 0,
+   "brincar_com_alvo_vidas_com": 0,
+   "brincar_por_distancia": {
+    "alem": 292,
+    "ate_4_visoes": 11
+   },
+   "brincar_por_regiao": {
+    "casa": 286,
+    "jardim": 17
+   },
+   "brincar_por_vida": 30.3,
+   "brincar_vidas_com": 10,
+   "chutes": 0,
+   "chutes_vidas_com": 0,
+   "d_min_celulas_mediana": 17.25,
+   "d_min_celulas_menor": 11.8125,
+   "decisoes": 13440,
+   "decisoes_bola_no_raio": 0,
+   "decisoes_bola_no_raio_vidas_com": 0,
+   "decisoes_por_regiao": {
+    "casa": 12260,
+    "jardim": 1180
+   },
+   "decisoes_vidas_com": 10,
+   "depois_da_tentativa_sem_chute": {},
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 0,
+   "tentativa_sem_chute_vidas_com": 0,
+   "vidas_de_pet": 10,
+   "vidas_em_mundo_com_rolagem": 0,
+   "vidas_que_nunca_viram_a_bola": 10
+  },
+  "incoerente|longe": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 10,
+    "chamar_atencao": 11,
+    "comer": 6,
+    "dormir": 21,
+    "explorar": 7
+   },
+   "alvo_do_brincar": {
+    "None": 482,
+    "bola": 10
+   },
+   "brincar": 492,
+   "brincar_bola_no_raio": 10,
+   "brincar_bola_no_raio_vidas_com": 2,
+   "brincar_com_alvo": 10,
+   "brincar_com_alvo_vidas_com": 2,
+   "brincar_por_distancia": {
+    "alem": 366,
+    "ate_2_visoes": 26,
+    "ate_4_visoes": 90,
+    "ate_pegar": 1,
+    "ate_um_passo": 6,
+    "ate_visao": 3
+   },
+   "brincar_por_regiao": {
+    "campo": 31,
+    "casa": 307,
+    "jardim": 90,
+    "mata": 64
+   },
+   "brincar_por_vida": 49.2,
+   "brincar_vidas_com": 10,
+   "chutes": 7,
+   "chutes_vidas_com": 2,
+   "d_min_celulas_mediana": 11.125,
+   "d_min_celulas_menor": 0.8125,
+   "decisoes": 13440,
+   "decisoes_bola_no_raio": 55,
+   "decisoes_bola_no_raio_vidas_com": 4,
+   "decisoes_por_regiao": {
+    "campo": 671,
+    "casa": 8857,
+    "jardim": 2478,
+    "mata": 1434
+   },
+   "decisoes_vidas_com": 10,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 2,
+    "dormir": 1
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 3,
+   "tentativa_sem_chute_vidas_com": 1,
+   "vidas_de_pet": 10,
+   "vidas_em_mundo_com_rolagem": 2,
+   "vidas_que_nunca_viram_a_bola": 6
+  },
+  "incoerente|longe_fixo": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 48,
+    "chamar_atencao": 95,
+    "comer": 28,
+    "dormir": 203,
+    "emburrar": 15,
+    "explorar": 81,
+    "ocioso": 3
+   },
+   "alvo_do_brincar": {
+    "None": 359,
+    "bola": 45
+   },
+   "brincar": 404,
+   "brincar_bola_no_raio": 48,
+   "brincar_bola_no_raio_vidas_com": 9,
+   "brincar_com_alvo": 45,
+   "brincar_com_alvo_vidas_com": 9,
+   "brincar_por_distancia": {
+    "alem": 95,
+    "ate_2_visoes": 79,
+    "ate_4_visoes": 182,
+    "ate_pegar": 1,
+    "ate_um_passo": 34,
+    "ate_visao": 13
+   },
+   "brincar_por_regiao": {
+    "campo": 178,
+    "casa": 1,
+    "jardim": 225
+   },
+   "brincar_por_vida": 40.4,
+   "brincar_vidas_com": 9,
+   "chutes": 35,
+   "chutes_vidas_com": 9,
+   "d_min_celulas_mediana": 1.9375,
+   "d_min_celulas_menor": 0.8125,
+   "decisoes": 13440,
+   "decisoes_bola_no_raio": 473,
+   "decisoes_bola_no_raio_vidas_com": 9,
+   "decisoes_por_regiao": {
+    "campo": 4956,
+    "casa": 1989,
+    "jardim": 6483,
+    "mata": 12
+   },
+   "decisoes_vidas_com": 10,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 6,
+    "chamar_atencao": 1,
+    "dormir": 3
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 3,
+   "no_raio_sem_alvo_vidas_com": 2,
+   "tentativa_sem_chute": 10,
+   "tentativa_sem_chute_vidas_com": 5,
+   "vidas_de_pet": 10,
+   "vidas_em_mundo_com_rolagem": 9,
+   "vidas_que_nunca_viram_a_bola": 1
+  },
+  "relapso|comedouro": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 1,
+    "chamar_atencao": 4,
+    "dormir": 8,
+    "explorar": 1
+   },
+   "alvo_do_brincar": {
+    "None": 42,
+    "bola": 1
+   },
+   "brincar": 43,
+   "brincar_bola_no_raio": 1,
+   "brincar_bola_no_raio_vidas_com": 1,
+   "brincar_com_alvo": 1,
+   "brincar_com_alvo_vidas_com": 1,
+   "brincar_por_distancia": {
+    "alem": 36,
+    "ate_4_visoes": 6,
+    "ate_um_passo": 1
+   },
+   "brincar_por_regiao": {
+    "campo": 1,
+    "casa": 33,
+    "jardim": 9
+   },
+   "brincar_por_vida": 4.3,
+   "brincar_vidas_com": 10,
+   "chutes": 1,
+   "chutes_vidas_com": 1,
+   "d_min_celulas_mediana": 12.375,
+   "d_min_celulas_menor": 3.4375,
+   "decisoes": 13440,
+   "decisoes_bola_no_raio": 14,
+   "decisoes_bola_no_raio_vidas_com": 1,
+   "decisoes_por_regiao": {
+    "campo": 21,
+    "casa": 11724,
+    "jardim": 1695
+   },
+   "decisoes_vidas_com": 10,
+   "depois_da_tentativa_sem_chute": {},
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 0,
+   "tentativa_sem_chute_vidas_com": 0,
+   "vidas_de_pet": 10,
+   "vidas_em_mundo_com_rolagem": 1,
+   "vidas_que_nunca_viram_a_bola": 9
+  },
+  "relapso|longe": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 9,
+    "chamar_atencao": 23,
+    "comer": 20,
+    "dormir": 129,
+    "emburrar": 1,
+    "explorar": 65
+   },
+   "alvo_do_brincar": {
+    "None": 47,
+    "bola": 9
+   },
+   "brincar": 56,
+   "brincar_bola_no_raio": 9,
+   "brincar_bola_no_raio_vidas_com": 4,
+   "brincar_com_alvo": 9,
+   "brincar_com_alvo_vidas_com": 4,
+   "brincar_por_distancia": {
+    "alem": 23,
+    "ate_2_visoes": 6,
+    "ate_4_visoes": 18,
+    "ate_um_passo": 6,
+    "ate_visao": 3
+   },
+   "brincar_por_regiao": {
+    "campo": 18,
+    "casa": 16,
+    "jardim": 9,
+    "mata": 13
+   },
+   "brincar_por_vida": 5.6,
+   "brincar_vidas_com": 10,
+   "chutes": 6,
+   "chutes_vidas_com": 4,
+   "d_min_celulas_mediana": 3.25,
+   "d_min_celulas_menor": 0.3125,
+   "decisoes": 13440,
+   "decisoes_bola_no_raio": 247,
+   "decisoes_bola_no_raio_vidas_com": 8,
+   "decisoes_por_regiao": {
+    "campo": 1945,
+    "casa": 4802,
+    "jardim": 3369,
+    "mata": 3324
+   },
+   "decisoes_vidas_com": 10,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 2,
+    "dormir": 1
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 3,
+   "tentativa_sem_chute_vidas_com": 3,
+   "vidas_de_pet": 10,
+   "vidas_em_mundo_com_rolagem": 4,
+   "vidas_que_nunca_viram_a_bola": 2
+  },
+  "relapso|longe_fixo": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 27,
+    "chamar_atencao": 59,
+    "comer": 46,
+    "dormir": 225,
+    "emburrar": 3,
+    "explorar": 125,
+    "ocioso": 2
+   },
+   "alvo_do_brincar": {
+    "None": 57,
+    "bola": 27
+   },
+   "brincar": 84,
+   "brincar_bola_no_raio": 27,
+   "brincar_bola_no_raio_vidas_com": 10,
+   "brincar_com_alvo": 27,
+   "brincar_com_alvo_vidas_com": 10,
+   "brincar_por_distancia": {
+    "alem": 15,
+    "ate_2_visoes": 17,
+    "ate_4_visoes": 25,
+    "ate_pegar": 2,
+    "ate_um_passo": 19,
+    "ate_visao": 6
+   },
+   "brincar_por_regiao": {
+    "campo": 40,
+    "jardim": 43,
+    "mata": 1
+   },
+   "brincar_por_vida": 8.4,
+   "brincar_vidas_com": 10,
+   "chutes": 22,
+   "chutes_vidas_com": 10,
+   "d_min_celulas_mediana": 1.25,
+   "d_min_celulas_menor": 0.4375,
+   "decisoes": 13440,
+   "decisoes_bola_no_raio": 487,
+   "decisoes_bola_no_raio_vidas_com": 10,
+   "decisoes_por_regiao": {
+    "campo": 3951,
+    "casa": 1445,
+    "jardim": 7949,
+    "mata": 95
+   },
+   "decisoes_vidas_com": 10,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 3,
+    "dormir": 2
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 5,
+   "tentativa_sem_chute_vidas_com": 4,
+   "vidas_de_pet": 10,
+   "vidas_em_mundo_com_rolagem": 10,
+   "vidas_que_nunca_viram_a_bola": 0
+  }
+ },
+ "c3_vida_por_lugar": {
+  "comedouro": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 1,
+    "chamar_atencao": 4,
+    "dormir": 8,
+    "explorar": 1
+   },
+   "alvo_do_brincar": {
+    "None": 818,
+    "bola": 1
+   },
+   "brincar": 819,
+   "brincar_bola_no_raio": 1,
+   "brincar_bola_no_raio_vidas_com": 1,
+   "brincar_com_alvo": 1,
+   "brincar_com_alvo_vidas_com": 1,
+   "brincar_por_distancia": {
+    "alem": 785,
+    "ate_4_visoes": 33,
+    "ate_um_passo": 1
+   },
+   "brincar_por_regiao": {
+    "campo": 1,
+    "casa": 761,
+    "jardim": 57
+   },
+   "brincar_por_vida": 20.475,
+   "brincar_vidas_com": 40,
+   "chutes": 1,
+   "chutes_vidas_com": 1,
+   "d_min_celulas_mediana": 16.8125,
+   "d_min_celulas_menor": 3.4375,
+   "decisoes": 53760,
+   "decisoes_bola_no_raio": 14,
+   "decisoes_bola_no_raio_vidas_com": 1,
+   "decisoes_por_regiao": {
+    "campo": 21,
+    "casa": 48910,
+    "jardim": 4829
+   },
+   "decisoes_vidas_com": 40,
+   "depois_da_tentativa_sem_chute": {},
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 0,
+   "tentativa_sem_chute_vidas_com": 0,
+   "vidas_de_pet": 40,
+   "vidas_em_mundo_com_rolagem": 1,
+   "vidas_que_nunca_viram_a_bola": 39
+  },
+  "longe": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 45,
+    "chamar_atencao": 123,
+    "comer": 51,
+    "dormir": 333,
+    "emburrar": 6,
+    "explorar": 138
+   },
+   "alvo_do_brincar": {
+    "None": 1043,
+    "bola": 45
+   },
+   "brincar": 1088,
+   "brincar_bola_no_raio": 45,
+   "brincar_bola_no_raio_vidas_com": 13,
+   "brincar_com_alvo": 45,
+   "brincar_com_alvo_vidas_com": 13,
+   "brincar_por_distancia": {
+    "alem": 768,
+    "ate_2_visoes": 57,
+    "ate_4_visoes": 218,
+    "ate_pegar": 2,
+    "ate_um_passo": 31,
+    "ate_visao": 12
+   },
+   "brincar_por_regiao": {
+    "campo": 88,
+    "casa": 656,
+    "jardim": 206,
+    "mata": 138
+   },
+   "brincar_por_vida": 27.2,
+   "brincar_vidas_com": 40,
+   "chutes": 33,
+   "chutes_vidas_com": 13,
+   "d_min_celulas_mediana": 5.1875,
+   "d_min_celulas_menor": 0.0,
+   "decisoes": 53760,
+   "decisoes_bola_no_raio": 696,
+   "decisoes_bola_no_raio_vidas_com": 24,
+   "decisoes_por_regiao": {
+    "campo": 5290,
+    "casa": 28950,
+    "jardim": 11674,
+    "mata": 7846
+   },
+   "decisoes_vidas_com": 40,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 6,
+    "dormir": 6
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 12,
+   "tentativa_sem_chute_vidas_com": 8,
+   "vidas_de_pet": 40,
+   "vidas_em_mundo_com_rolagem": 13,
+   "vidas_que_nunca_viram_a_bola": 16
+  },
+  "longe_fixo": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 125,
+    "chamar_atencao": 217,
+    "comer": 105,
+    "dormir": 637,
+    "emburrar": 27,
+    "explorar": 304,
+    "ocioso": 8
+   },
+   "alvo_do_brincar": {
+    "None": 991,
+    "bola": 122
+   },
+   "brincar": 1113,
+   "brincar_bola_no_raio": 125,
+   "brincar_bola_no_raio_vidas_com": 35,
+   "brincar_com_alvo": 122,
+   "brincar_com_alvo_vidas_com": 35,
+   "brincar_por_distancia": {
+    "alem": 221,
+    "ate_2_visoes": 194,
+    "ate_4_visoes": 573,
+    "ate_pegar": 8,
+    "ate_um_passo": 87,
+    "ate_visao": 30
+   },
+   "brincar_por_regiao": {
+    "campo": 361,
+    "casa": 11,
+    "jardim": 740,
+    "mata": 1
+   },
+   "brincar_por_vida": 27.825,
+   "brincar_vidas_com": 39,
+   "chutes": 96,
+   "chutes_vidas_com": 35,
+   "d_min_celulas_mediana": 1.5,
+   "d_min_celulas_menor": 0.1875,
+   "decisoes": 53760,
+   "decisoes_bola_no_raio": 1423,
+   "decisoes_bola_no_raio_vidas_com": 38,
+   "decisoes_por_regiao": {
+    "campo": 15156,
+    "casa": 5624,
+    "jardim": 32813,
+    "mata": 167
+   },
+   "decisoes_vidas_com": 40,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 14,
+    "chamar_atencao": 4,
+    "dormir": 8
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 3,
+   "no_raio_sem_alvo_vidas_com": 2,
+   "tentativa_sem_chute": 26,
+   "tentativa_sem_chute_vidas_com": 15,
+   "vidas_de_pet": 40,
+   "vidas_em_mundo_com_rolagem": 35,
+   "vidas_que_nunca_viram_a_bola": 2
+  }
+ },
+ "por_fonte": {
+  "a0": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 3,
+    "chamar_atencao": 3,
+    "dormir": 4,
+    "explorar": 1
+   },
+   "alvo_do_brincar": {
+    "None": 5003,
+    "bola": 3
+   },
+   "brincar": 5006,
+   "brincar_bola_no_raio": 3,
+   "brincar_bola_no_raio_vidas_com": 2,
+   "brincar_com_alvo": 3,
+   "brincar_com_alvo_vidas_com": 2,
+   "brincar_por_distancia": {
+    "alem": 4827,
+    "ate_2_visoes": 4,
+    "ate_4_visoes": 172,
+    "ate_um_passo": 2,
+    "ate_visao": 1
+   },
+   "brincar_por_regiao": {
+    "campo": 3,
+    "casa": 4758,
+    "jardim": 245
+   },
+   "brincar_por_vida": 11.91904761904762,
+   "brincar_vidas_com": 420,
+   "chutes": 2,
+   "chutes_vidas_com": 2,
+   "d_min_celulas_mediana": 19.8125,
+   "d_min_celulas_menor": 1.1875,
+   "decisoes": 201600,
+   "decisoes_bola_no_raio": 11,
+   "decisoes_bola_no_raio_vidas_com": 2,
+   "decisoes_por_regiao": {
+    "campo": 57,
+    "casa": 187065,
+    "jardim": 14478
+   },
+   "decisoes_vidas_com": 420,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 1
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 1,
+   "tentativa_sem_chute_vidas_com": 1,
+   "vidas_de_pet": 420,
+   "vidas_em_mundo_com_rolagem": 4,
+   "vidas_que_nunca_viram_a_bola": 418
+  },
+  "c3_par": {
+   "acoes_com_bola_no_raio": {},
+   "alvo_do_brincar": {
+    "None": 13716
+   },
+   "brincar": 13716,
+   "brincar_bola_no_raio": 0,
+   "brincar_bola_no_raio_vidas_com": 0,
+   "brincar_com_alvo": 0,
+   "brincar_com_alvo_vidas_com": 0,
+   "brincar_por_distancia": {
+    "alem": 13262,
+    "ate_4_visoes": 454
+   },
+   "brincar_por_regiao": {
+    "casa": 13087,
+    "jardim": 629
+   },
+   "brincar_por_vida": 17.145,
+   "brincar_vidas_com": 800,
+   "chutes": 0,
+   "chutes_vidas_com": 0,
+   "d_min_celulas_mediana": 19.4375,
+   "d_min_celulas_menor": 6.4375,
+   "decisoes": 384000,
+   "decisoes_bola_no_raio": 0,
+   "decisoes_bola_no_raio_vidas_com": 0,
+   "decisoes_por_regiao": {
+    "campo": 121,
+    "casa": 358080,
+    "jardim": 25799
+   },
+   "decisoes_vidas_com": 800,
+   "depois_da_tentativa_sem_chute": {},
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 0,
+   "tentativa_sem_chute_vidas_com": 0,
+   "vidas_de_pet": 800,
+   "vidas_em_mundo_com_rolagem": 0,
+   "vidas_que_nunca_viram_a_bola": 800
+  },
+  "c3_vida": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 171,
+    "chamar_atencao": 344,
+    "comer": 156,
+    "dormir": 978,
+    "emburrar": 33,
+    "explorar": 443,
+    "ocioso": 8
+   },
+   "alvo_do_brincar": {
+    "None": 2852,
+    "bola": 168
+   },
+   "brincar": 3020,
+   "brincar_bola_no_raio": 171,
+   "brincar_bola_no_raio_vidas_com": 49,
+   "brincar_com_alvo": 168,
+   "brincar_com_alvo_vidas_com": 49,
+   "brincar_por_distancia": {
+    "alem": 1774,
+    "ate_2_visoes": 251,
+    "ate_4_visoes": 824,
+    "ate_pegar": 10,
+    "ate_um_passo": 119,
+    "ate_visao": 42
+   },
+   "brincar_por_regiao": {
+    "campo": 450,
+    "casa": 1428,
+    "jardim": 1003,
+    "mata": 139
+   },
+   "brincar_por_vida": 25.166666666666668,
+   "brincar_vidas_com": 119,
+   "chutes": 130,
+   "chutes_vidas_com": 49,
+   "d_min_celulas_mediana": 5.25,
+   "d_min_celulas_menor": 0.0,
+   "decisoes": 161280,
+   "decisoes_bola_no_raio": 2133,
+   "decisoes_bola_no_raio_vidas_com": 63,
+   "decisoes_por_regiao": {
+    "campo": 20467,
+    "casa": 83484,
+    "jardim": 49316,
+    "mata": 8013
+   },
+   "decisoes_vidas_com": 120,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 20,
+    "chamar_atencao": 4,
+    "dormir": 14
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 3,
+   "no_raio_sem_alvo_vidas_com": 2,
+   "tentativa_sem_chute": 38,
+   "tentativa_sem_chute_vidas_com": 23,
+   "vidas_de_pet": 120,
+   "vidas_em_mundo_com_rolagem": 49,
+   "vidas_que_nunca_viram_a_bola": 57
+  }
+ },
+ "por_fonte_e_braco": {
+  "a0|VIVO": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 3,
+    "chamar_atencao": 3,
+    "dormir": 4,
+    "explorar": 1
+   },
+   "alvo_do_brincar": {
+    "None": 5003,
+    "bola": 3
+   },
+   "brincar": 5006,
+   "brincar_bola_no_raio": 3,
+   "brincar_bola_no_raio_vidas_com": 2,
+   "brincar_com_alvo": 3,
+   "brincar_com_alvo_vidas_com": 2,
+   "brincar_por_distancia": {
+    "alem": 4827,
+    "ate_2_visoes": 4,
+    "ate_4_visoes": 172,
+    "ate_um_passo": 2,
+    "ate_visao": 1
+   },
+   "brincar_por_regiao": {
+    "campo": 3,
+    "casa": 4758,
+    "jardim": 245
+   },
+   "brincar_por_vida": 11.91904761904762,
+   "brincar_vidas_com": 420,
+   "chutes": 2,
+   "chutes_vidas_com": 2,
+   "d_min_celulas_mediana": 19.8125,
+   "d_min_celulas_menor": 1.1875,
+   "decisoes": 201600,
+   "decisoes_bola_no_raio": 11,
+   "decisoes_bola_no_raio_vidas_com": 2,
+   "decisoes_por_regiao": {
+    "campo": 57,
+    "casa": 187065,
+    "jardim": 14478
+   },
+   "decisoes_vidas_com": 420,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 1
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 1,
+   "tentativa_sem_chute_vidas_com": 1,
+   "vidas_de_pet": 420,
+   "vidas_em_mundo_com_rolagem": 4,
+   "vidas_que_nunca_viram_a_bola": 418
+  },
+  "c3_par|CTRL": {
+   "acoes_com_bola_no_raio": {},
+   "alvo_do_brincar": {
+    "None": 2316
+   },
+   "brincar": 2316,
+   "brincar_bola_no_raio": 0,
+   "brincar_bola_no_raio_vidas_com": 0,
+   "brincar_com_alvo": 0,
+   "brincar_com_alvo_vidas_com": 0,
+   "brincar_por_distancia": {
+    "alem": 2250,
+    "ate_4_visoes": 66
+   },
+   "brincar_por_regiao": {
+    "casa": 2224,
+    "jardim": 92
+   },
+   "brincar_por_vida": 11.58,
+   "brincar_vidas_com": 200,
+   "chutes": 0,
+   "chutes_vidas_com": 0,
+   "d_min_celulas_mediana": 19.5,
+   "d_min_celulas_menor": 6.4375,
+   "decisoes": 96000,
+   "decisoes_bola_no_raio": 0,
+   "decisoes_bola_no_raio_vidas_com": 0,
+   "decisoes_por_regiao": {
+    "campo": 21,
+    "casa": 89107,
+    "jardim": 6872
+   },
+   "decisoes_vidas_com": 200,
+   "depois_da_tentativa_sem_chute": {},
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 0,
+   "tentativa_sem_chute_vidas_com": 0,
+   "vidas_de_pet": 200,
+   "vidas_em_mundo_com_rolagem": 0,
+   "vidas_que_nunca_viram_a_bola": 200
+  },
+  "c3_par|D": {
+   "acoes_com_bola_no_raio": {},
+   "alvo_do_brincar": {
+    "None": 3701
+   },
+   "brincar": 3701,
+   "brincar_bola_no_raio": 0,
+   "brincar_bola_no_raio_vidas_com": 0,
+   "brincar_com_alvo": 0,
+   "brincar_com_alvo_vidas_com": 0,
+   "brincar_por_distancia": {
+    "alem": 3572,
+    "ate_4_visoes": 129
+   },
+   "brincar_por_regiao": {
+    "casa": 3526,
+    "jardim": 175
+   },
+   "brincar_por_vida": 18.505,
+   "brincar_vidas_com": 200,
+   "chutes": 0,
+   "chutes_vidas_com": 0,
+   "d_min_celulas_mediana": 19.125,
+   "d_min_celulas_menor": 10.4375,
+   "decisoes": 96000,
+   "decisoes_bola_no_raio": 0,
+   "decisoes_bola_no_raio_vidas_com": 0,
+   "decisoes_por_regiao": {
+    "campo": 38,
+    "casa": 89561,
+    "jardim": 6401
+   },
+   "decisoes_vidas_com": 200,
+   "depois_da_tentativa_sem_chute": {},
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 0,
+   "tentativa_sem_chute_vidas_com": 0,
+   "vidas_de_pet": 200,
+   "vidas_em_mundo_com_rolagem": 0,
+   "vidas_que_nunca_viram_a_bola": 200
+  },
+  "c3_par|DTB": {
+   "acoes_com_bola_no_raio": {},
+   "alvo_do_brincar": {
+    "None": 3994
+   },
+   "brincar": 3994,
+   "brincar_bola_no_raio": 0,
+   "brincar_bola_no_raio_vidas_com": 0,
+   "brincar_com_alvo": 0,
+   "brincar_com_alvo_vidas_com": 0,
+   "brincar_por_distancia": {
+    "alem": 3867,
+    "ate_4_visoes": 127
+   },
+   "brincar_por_regiao": {
+    "casa": 3810,
+    "jardim": 184
+   },
+   "brincar_por_vida": 19.97,
+   "brincar_vidas_com": 200,
+   "chutes": 0,
+   "chutes_vidas_com": 0,
+   "d_min_celulas_mediana": 19.5625,
+   "d_min_celulas_menor": 6.875,
+   "decisoes": 96000,
+   "decisoes_bola_no_raio": 0,
+   "decisoes_bola_no_raio_vidas_com": 0,
+   "decisoes_por_regiao": {
+    "campo": 24,
+    "casa": 89879,
+    "jardim": 6097
+   },
+   "decisoes_vidas_com": 200,
+   "depois_da_tentativa_sem_chute": {},
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 0,
+   "tentativa_sem_chute_vidas_com": 0,
+   "vidas_de_pet": 200,
+   "vidas_em_mundo_com_rolagem": 0,
+   "vidas_que_nunca_viram_a_bola": 200
+  },
+  "c3_par|DTL": {
+   "acoes_com_bola_no_raio": {},
+   "alvo_do_brincar": {
+    "None": 3705
+   },
+   "brincar": 3705,
+   "brincar_bola_no_raio": 0,
+   "brincar_bola_no_raio_vidas_com": 0,
+   "brincar_com_alvo": 0,
+   "brincar_com_alvo_vidas_com": 0,
+   "brincar_por_distancia": {
+    "alem": 3573,
+    "ate_4_visoes": 132
+   },
+   "brincar_por_regiao": {
+    "casa": 3527,
+    "jardim": 178
+   },
+   "brincar_por_vida": 18.525,
+   "brincar_vidas_com": 200,
+   "chutes": 0,
+   "chutes_vidas_com": 0,
+   "d_min_celulas_mediana": 19.0625,
+   "d_min_celulas_menor": 8.3125,
+   "decisoes": 96000,
+   "decisoes_bola_no_raio": 0,
+   "decisoes_bola_no_raio_vidas_com": 0,
+   "decisoes_por_regiao": {
+    "campo": 38,
+    "casa": 89533,
+    "jardim": 6429
+   },
+   "decisoes_vidas_com": 200,
+   "depois_da_tentativa_sem_chute": {},
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 0,
+   "tentativa_sem_chute_vidas_com": 0,
+   "vidas_de_pet": 200,
+   "vidas_em_mundo_com_rolagem": 0,
+   "vidas_que_nunca_viram_a_bola": 200
+  },
+  "c3_vida|CTRL": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 171,
+    "chamar_atencao": 344,
+    "comer": 156,
+    "dormir": 978,
+    "emburrar": 33,
+    "explorar": 443,
+    "ocioso": 8
+   },
+   "alvo_do_brincar": {
+    "None": 2852,
+    "bola": 168
+   },
+   "brincar": 3020,
+   "brincar_bola_no_raio": 171,
+   "brincar_bola_no_raio_vidas_com": 49,
+   "brincar_com_alvo": 168,
+   "brincar_com_alvo_vidas_com": 49,
+   "brincar_por_distancia": {
+    "alem": 1774,
+    "ate_2_visoes": 251,
+    "ate_4_visoes": 824,
+    "ate_pegar": 10,
+    "ate_um_passo": 119,
+    "ate_visao": 42
+   },
+   "brincar_por_regiao": {
+    "campo": 450,
+    "casa": 1428,
+    "jardim": 1003,
+    "mata": 139
+   },
+   "brincar_por_vida": 25.166666666666668,
+   "brincar_vidas_com": 119,
+   "chutes": 130,
+   "chutes_vidas_com": 49,
+   "d_min_celulas_mediana": 5.25,
+   "d_min_celulas_menor": 0.0,
+   "decisoes": 161280,
+   "decisoes_bola_no_raio": 2133,
+   "decisoes_bola_no_raio_vidas_com": 63,
+   "decisoes_por_regiao": {
+    "campo": 20467,
+    "casa": 83484,
+    "jardim": 49316,
+    "mata": 8013
+   },
+   "decisoes_vidas_com": 120,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 20,
+    "chamar_atencao": 4,
+    "dormir": 14
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 3,
+   "no_raio_sem_alvo_vidas_com": 2,
+   "tentativa_sem_chute": 38,
+   "tentativa_sem_chute_vidas_com": 23,
+   "vidas_de_pet": 120,
+   "vidas_em_mundo_com_rolagem": 49,
+   "vidas_que_nunca_viram_a_bola": 57
+  }
+ },
+ "por_fonte_e_pet": {
+  "a0|A": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 2,
+    "chamar_atencao": 2,
+    "dormir": 1
+   },
+   "alvo_do_brincar": {
+    "None": 2525,
+    "bola": 2
+   },
+   "brincar": 2527,
+   "brincar_bola_no_raio": 2,
+   "brincar_bola_no_raio_vidas_com": 1,
+   "brincar_com_alvo": 2,
+   "brincar_com_alvo_vidas_com": 1,
+   "brincar_por_distancia": {
+    "alem": 2427,
+    "ate_2_visoes": 4,
+    "ate_4_visoes": 94,
+    "ate_um_passo": 1,
+    "ate_visao": 1
+   },
+   "brincar_por_regiao": {
+    "campo": 2,
+    "casa": 2389,
+    "jardim": 136
+   },
+   "brincar_por_vida": 12.033333333333333,
+   "brincar_vidas_com": 210,
+   "chutes": 1,
+   "chutes_vidas_com": 1,
+   "d_min_celulas_mediana": 19.1875,
+   "d_min_celulas_menor": 1.1875,
+   "decisoes": 100800,
+   "decisoes_bola_no_raio": 5,
+   "decisoes_bola_no_raio_vidas_com": 1,
+   "decisoes_por_regiao": {
+    "campo": 39,
+    "casa": 92945,
+    "jardim": 7816
+   },
+   "decisoes_vidas_com": 210,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 1
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 1,
+   "tentativa_sem_chute_vidas_com": 1,
+   "vidas_de_pet": 210,
+   "vidas_em_mundo_com_rolagem": 2,
+   "vidas_que_nunca_viram_a_bola": 209
+  },
+  "a0|B": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 1,
+    "chamar_atencao": 1,
+    "dormir": 3,
+    "explorar": 1
+   },
+   "alvo_do_brincar": {
+    "None": 2478,
+    "bola": 1
+   },
+   "brincar": 2479,
+   "brincar_bola_no_raio": 1,
+   "brincar_bola_no_raio_vidas_com": 1,
+   "brincar_com_alvo": 1,
+   "brincar_com_alvo_vidas_com": 1,
+   "brincar_por_distancia": {
+    "alem": 2400,
+    "ate_4_visoes": 78,
+    "ate_um_passo": 1
+   },
+   "brincar_por_regiao": {
+    "campo": 1,
+    "casa": 2369,
+    "jardim": 109
+   },
+   "brincar_por_vida": 11.804761904761905,
+   "brincar_vidas_com": 210,
+   "chutes": 1,
+   "chutes_vidas_com": 1,
+   "d_min_celulas_mediana": 20.3125,
+   "d_min_celulas_menor": 2.8125,
+   "decisoes": 100800,
+   "decisoes_bola_no_raio": 6,
+   "decisoes_bola_no_raio_vidas_com": 1,
+   "decisoes_por_regiao": {
+    "campo": 18,
+    "casa": 94120,
+    "jardim": 6662
+   },
+   "decisoes_vidas_com": 210,
+   "depois_da_tentativa_sem_chute": {},
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 0,
+   "tentativa_sem_chute_vidas_com": 0,
+   "vidas_de_pet": 210,
+   "vidas_em_mundo_com_rolagem": 2,
+   "vidas_que_nunca_viram_a_bola": 209
+  },
+  "c3_par|A": {
+   "acoes_com_bola_no_raio": {},
+   "alvo_do_brincar": {
+    "None": 6757
+   },
+   "brincar": 6757,
+   "brincar_bola_no_raio": 0,
+   "brincar_bola_no_raio_vidas_com": 0,
+   "brincar_com_alvo": 0,
+   "brincar_com_alvo_vidas_com": 0,
+   "brincar_por_distancia": {
+    "alem": 6535,
+    "ate_4_visoes": 222
+   },
+   "brincar_por_regiao": {
+    "casa": 6464,
+    "jardim": 293
+   },
+   "brincar_por_vida": 16.8925,
+   "brincar_vidas_com": 400,
+   "chutes": 0,
+   "chutes_vidas_com": 0,
+   "d_min_celulas_mediana": 18.75,
+   "d_min_celulas_menor": 6.875,
+   "decisoes": 192000,
+   "decisoes_bola_no_raio": 0,
+   "decisoes_bola_no_raio_vidas_com": 0,
+   "decisoes_por_regiao": {
+    "campo": 41,
+    "casa": 179086,
+    "jardim": 12873
+   },
+   "decisoes_vidas_com": 400,
+   "depois_da_tentativa_sem_chute": {},
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 0,
+   "tentativa_sem_chute_vidas_com": 0,
+   "vidas_de_pet": 400,
+   "vidas_em_mundo_com_rolagem": 0,
+   "vidas_que_nunca_viram_a_bola": 400
+  },
+  "c3_par|B": {
+   "acoes_com_bola_no_raio": {},
+   "alvo_do_brincar": {
+    "None": 6959
+   },
+   "brincar": 6959,
+   "brincar_bola_no_raio": 0,
+   "brincar_bola_no_raio_vidas_com": 0,
+   "brincar_com_alvo": 0,
+   "brincar_com_alvo_vidas_com": 0,
+   "brincar_por_distancia": {
+    "alem": 6727,
+    "ate_4_visoes": 232
+   },
+   "brincar_por_regiao": {
+    "casa": 6623,
+    "jardim": 336
+   },
+   "brincar_por_vida": 17.3975,
+   "brincar_vidas_com": 400,
+   "chutes": 0,
+   "chutes_vidas_com": 0,
+   "d_min_celulas_mediana": 19.75,
+   "d_min_celulas_menor": 6.4375,
+   "decisoes": 192000,
+   "decisoes_bola_no_raio": 0,
+   "decisoes_bola_no_raio_vidas_com": 0,
+   "decisoes_por_regiao": {
+    "campo": 80,
+    "casa": 178994,
+    "jardim": 12926
+   },
+   "decisoes_vidas_com": 400,
+   "depois_da_tentativa_sem_chute": {},
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 0,
+   "no_raio_sem_alvo_vidas_com": 0,
+   "tentativa_sem_chute": 0,
+   "tentativa_sem_chute_vidas_com": 0,
+   "vidas_de_pet": 400,
+   "vidas_em_mundo_com_rolagem": 0,
+   "vidas_que_nunca_viram_a_bola": 400
+  },
+  "c3_vida|unico": {
+   "acoes_com_bola_no_raio": {
+    "brincar": 171,
+    "chamar_atencao": 344,
+    "comer": 156,
+    "dormir": 978,
+    "emburrar": 33,
+    "explorar": 443,
+    "ocioso": 8
+   },
+   "alvo_do_brincar": {
+    "None": 2852,
+    "bola": 168
+   },
+   "brincar": 3020,
+   "brincar_bola_no_raio": 171,
+   "brincar_bola_no_raio_vidas_com": 49,
+   "brincar_com_alvo": 168,
+   "brincar_com_alvo_vidas_com": 49,
+   "brincar_por_distancia": {
+    "alem": 1774,
+    "ate_2_visoes": 251,
+    "ate_4_visoes": 824,
+    "ate_pegar": 10,
+    "ate_um_passo": 119,
+    "ate_visao": 42
+   },
+   "brincar_por_regiao": {
+    "campo": 450,
+    "casa": 1428,
+    "jardim": 1003,
+    "mata": 139
+   },
+   "brincar_por_vida": 25.166666666666668,
+   "brincar_vidas_com": 119,
+   "chutes": 130,
+   "chutes_vidas_com": 49,
+   "d_min_celulas_mediana": 5.25,
+   "d_min_celulas_menor": 0.0,
+   "decisoes": 161280,
+   "decisoes_bola_no_raio": 2133,
+   "decisoes_bola_no_raio_vidas_com": 63,
+   "decisoes_por_regiao": {
+    "campo": 20467,
+    "casa": 83484,
+    "jardim": 49316,
+    "mata": 8013
+   },
+   "decisoes_vidas_com": 120,
+   "depois_da_tentativa_sem_chute": {
+    "brincar": 20,
+    "chamar_atencao": 4,
+    "dormir": 14
+   },
+   "fora_do_raio_com_alvo": 0,
+   "fora_do_raio_com_alvo_vidas_com": 0,
+   "no_raio_sem_alvo": 3,
+   "no_raio_sem_alvo_vidas_com": 2,
+   "tentativa_sem_chute": 38,
+   "tentativa_sem_chute_vidas_com": 23,
+   "vidas_de_pet": 120,
+   "vidas_em_mundo_com_rolagem": 49,
+   "vidas_que_nunca_viram_a_bola": 57
+  }
+ },
+ "raios": {
+  "alcance": 60,
+  "pegar": 16,
+  "sub": 16,
+  "visao": 96
+ }
+}
