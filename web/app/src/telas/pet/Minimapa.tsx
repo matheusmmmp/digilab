@@ -52,7 +52,7 @@ function bitmapEsquema(img: ImageData, agua: readonly [number, number, number], 
 /** as cores dos tokens da pele de agora (lidas a cada redesenho: a pele pode mudar) */
 function lerTokens() {
   const cs = getComputedStyle(document.documentElement), t = (n: string) => cs.getPropertyValue(n).trim();
-  return { fundo: t("--hud-fundo-2"), miolo: t("--hx-miolo"), texto2: t("--hx-texto-2"), foco: t("--hx-foco"), terra: t("--hx-mapa-terra"), costa: t("--hx-mapa-costa") };
+  return { fundo: t("--hx-mapa-agua") || t("--hud-fundo-2"), miolo: t("--hx-miolo"), texto2: t("--hx-texto-2"), foco: t("--hx-foco"), terra: t("--hx-mapa-terra"), costa: t("--hx-mapa-costa") };
 }
 
 interface Estado { chama: boolean; solta: boolean; podeSoltar: boolean }

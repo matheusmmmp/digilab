@@ -1,0 +1,549 @@
+/* Pele Zine (id zine) dos menus: docs/PLANO_UX_PELES_RUA.md, modelo 2 (colagem de papel). Os tokens --hx-* e --hud-* da pele ficam em
+   tokens.css; aqui mora a FORMA do desenho aprovado (docs/pranchas/ux-peles-rua/zine.css e zine_r2.css), escrita sobre a estrutura real
+   do jogo. Tudo sob :root[data-pele="zine"]. Sem animacao. Nenhuma cor aqui fora dos tokens. Nada aqui toca o habitat nem o pet.
+   E A UNICA PELE CLARA. A regra dela: a cor de sentido (necessidade, aprendido, alerta, perigo, ok) e sempre um FUNDO com texto de tinta
+   por cima, nunca a cor do texto (sobre o papel claro, o rosa e o ciano como letra nao dariam contraste).
+   O recorte de papel: o papel, o traco de tinta de 3 px e a sombra dura sao o ::after da peca (por baixo do texto), e passam pelo filtro
+   "rabisco" (o corte a mao; o <filter> mora no index.html). A peca gira um pouco (--zn-giro); o giro tambem a faz bloco de referencia
+   do ::after. */
+
+/* ====================================================================== 1. o recorte (topo, janelas, aviso, acoes) */
+:root[data-pele="zine"] :is(.hud-caixa, .pet-hud .hud-painel, .topo-pet, .topo-relogio, .topo-bits, .pet-dock .dock),
+:root[data-pele="zine"] body .pet-tela .pet-alerta :is(.pet-prioridade, .chamado.dl-card){
+  border:3px solid transparent; background:none; clip-path:none; box-shadow:none; color:var(--hx-texto); rotate:var(--zn-giro, 0deg);
+}
+:root[data-pele="zine"] :is(.hud-caixa, .pet-hud .hud-painel, .topo-pet, .topo-relogio, .topo-bits, .pet-dock .dock)::after,
+:root[data-pele="zine"] body .pet-tela .pet-alerta :is(.pet-prioridade, .chamado.dl-card)::after{
+  content:""; position:absolute; inset:-3px; width:auto; height:auto; z-index:-1; pointer-events:none; background:var(--zn-miolo, var(--hx-miolo));
+  border:3px solid var(--hx-borda); box-shadow:var(--zn-sombra, 5px 5px 0) var(--hx-sombra-cor); filter:url(#rabisco);
+}
+/* o trecho de luz e o marcador das outras peles saem; onde ha fita, o ::before vira a fita (abaixo) */
+:root[data-pele="zine"] :is(.pet-hud .hud-painel, .pet-dock .dock)::before,
+:root[data-pele="zine"] body .pet-tela .pet-alerta .chamado.dl-card::before{ display:none }
+/* a fita adesiva: um retangulo amarelo meio transparente, torto, com as pontas picotadas */
+:root[data-pele="zine"] .topo-pet::before, :root[data-pele="zine"] .pet-hud .hud-painel:first-child::before, :root[data-pele="zine"] .minimapa-caixa::before,
+:root[data-pele="zine"] :is(.painel-tela, .pet-painel) > .hx-painel::before{
+  content:""; display:block; position:absolute; z-index:3; top:-16px; right:34px; left:auto; width:82px; height:24px; rotate:4deg; pointer-events:none;
+  background:color-mix(in srgb, var(--hx-btn-bg) 82%, transparent);
+  clip-path:polygon(0 0, 4% 25%, 0 50%, 4% 75%, 0 100%, 100% 100%, 96% 75%, 100% 50%, 96% 25%, 100% 0);
+}
+:root[data-pele="zine"] .topo-pet::before{ right:auto; left:70px; width:60px; rotate:-7deg }
+:root[data-pele="zine"] .minimapa-caixa::before{ right:auto; left:58px; rotate:-4deg }
+:root[data-pele="zine"] :is(.painel-tela, .pet-painel) > .hx-painel::before{ right:90px; width:110px }
+
+/* ====================================================================== 2. o topo */
+@media (min-width:900px){
+  :root[data-pele="zine"]{ --nav-larg:88px; --hud-larg:320px }
+  :root[data-pele="zine"] .topo-hab{ gap:18px; padding:16px 18px 0 16px }
+  :root[data-pele="zine"] :is(.topo-pet, .topo-relogio, .topo-bits){ min-height:58px }
+  :root[data-pele="zine"] .topo-pet{ padding-right:112px }
+  :root[data-pele="zine"] .tamer-nv--topo{ position:absolute; right:12px; top:50%; translate:0 -50%; margin:0 }
+  :root[data-pele="zine"] .topo-logo{ position:absolute; left:50%; top:22px; margin:0; translate:-50% 0 }
+  :root[data-pele="zine"] .topo-logo ~ .topo-relogio{ margin-left:auto }
+  :root[data-pele="zine"] .topo-agora > .pet-agora{ top:8px; min-height:44px; height:44px; max-width:clamp(180px, calc(50vw - 590px), 420px) }
+  :root[data-pele="zine"] .pet-agora .agora-meio{ flex:0 1 auto; overflow:hidden }
+  :root[data-pele="zine"] .pet-alerta{ top:calc(var(--casca-topo) + 34px) }
+  :root[data-pele="zine"] .pet-hud{ top:calc(var(--casca-topo) + 22px); right:10px; max-height:calc(100% - var(--casca-topo) - 104px) }
+  :root[data-pele="zine"] .scan{ top:calc(var(--casca-topo) + 36px); right:22px }
+  :root[data-pele="zine"] .pet-dock{ bottom:22px }
+}
+@media (min-width:900px) and (max-width:1699px){
+  :root[data-pele="zine"] .topo-logo-marca, :root[data-pele="zine"] .topo-logo::after{ display:none }
+  :root[data-pele="zine"] .pet-agora .agora-meio{ display:none }
+}
+@media (min-width:900px) and (max-width:1499px){ :root[data-pele="zine"] .topo-logo{ padding:6px 14px 5px; font-size:25px } }
+@media (min-width:900px) and (max-width:1249px){ :root[data-pele="zine"] .topo-logo{ display:none } }
+/* o cartao do pet: o retrato num quadro amarelo, o nome em Rubik italico, a etiqueta do Tamer como adesivo */
+:root[data-pele="zine"] .topo-pet{ --zn-giro:-1.2deg; gap:12px; padding:3px 14px 3px 5px }
+:root[data-pele="zine"] .topo-retrato{ width:46px; height:46px; border:0; background:var(--hx-btn-bg); box-shadow:inset 0 0 0 2.5px var(--hx-borda) }
+:root[data-pele="zine"] .topo-pet-txt{ gap:5px }
+:root[data-pele="zine"] .topo-pet-nome b{ max-width:220px; padding-right:3px; color:var(--hx-texto); font:900 italic 21px/1 var(--hx-f-tit); letter-spacing:-.01em; text-transform:uppercase }
+:root[data-pele="zine"] .topo-pet-sub{ gap:6px; color:var(--hx-sec); font:700 12px/1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase }
+:root[data-pele="zine"] .topo-pet-sub .dl-tag{ letter-spacing:inherit; text-transform:inherit }
+:root[data-pele="zine"] .tamer-nv--topo{ padding:3px 8px 2px; border:2px solid var(--hx-borda); background:var(--hx-alerta); color:var(--hx-texto); font:800 11px/1 var(--hx-f-tit);
+  letter-spacing:.03em; text-transform:uppercase }
+/* o "agora": o rotulo numa tira de tinta com a letra de papel */
+:root[data-pele="zine"] .pet-agora{ --zn-giro:.9deg; --zn-sombra:4px 4px 0; gap:11px; padding:0 12px 0 0 }
+:root[data-pele="zine"] .pet-agora .agora-rot{ align-self:stretch; display:flex; align-items:center; margin:0; padding:0 14px; background:var(--hx-borda); color:var(--hx-miolo);
+  font:900 italic 13px/1 var(--hx-f-tit); letter-spacing:.02em }
+:root[data-pele="zine"] .pet-agora .agora-acao{ color:var(--hx-texto); font:900 italic 18px/1 var(--hx-f-tit); text-transform:uppercase; padding-right:2px }
+:root[data-pele="zine"] .pet-agora .agora-ponto{ display:none }
+:root[data-pele="zine"] .pet-agora .agora-neutro{ color:var(--hx-sec); font:600 14px/1.1 var(--hx-f) }
+:root[data-pele="zine"] .pet-agora .agora-seta{ color:var(--hx-texto) }
+/* a marca: uma tira de tinta com a sombra amarela, torta, com duas fitas nas pontas */
+:root[data-pele="zine"] .topo-logo{ gap:0; padding:8px 20px 7px; rotate:-2deg; color:var(--hx-miolo); background:var(--hx-borda); box-shadow:5px 5px 0 var(--hx-btn-bg);
+  font:900 italic 32px/1 var(--hx-f-tit); letter-spacing:.02em }
+:root[data-pele="zine"] .topo-logo-marca, :root[data-pele="zine"] .topo-logo::after{ content:""; position:absolute; z-index:1; top:50%; width:48px; height:22px; margin-top:-11px;
+  background:color-mix(in srgb, var(--hx-btn-bg) 82%, transparent); clip-path:none; filter:none }
+:root[data-pele="zine"] .topo-logo-marca{ left:-30px; rotate:-10deg }
+:root[data-pele="zine"] .topo-logo::after{ right:-30px; rotate:14deg }
+/* o relogio e os Bits */
+:root[data-pele="zine"] .topo-relogio{ --zn-giro:1deg; gap:14px; padding:3px 14px 3px 12px }
+:root[data-pele="zine"] .topo-sol{ display:none }
+:root[data-pele="zine"] .topo-hora-txt{ gap:3px }
+:root[data-pele="zine"] .topo-dia{ color:var(--hx-sec); font:800 11px/1 var(--hx-f-tit); letter-spacing:.08em; text-transform:uppercase }
+:root[data-pele="zine"] .topo-hora{ color:var(--hx-texto); font:900 italic 30px/.95 var(--hx-f-num); padding-right:3px }
+:root[data-pele="zine"] .topo-relogio .pet-salvo{ gap:7px; padding-left:0; border-left:0; color:var(--hx-texto); font:800 12px/1 var(--hx-f-tit); text-transform:uppercase }
+:root[data-pele="zine"] .topo-relogio .pet-salvo svg{ display:none }
+:root[data-pele="zine"] .topo-relogio .pet-salvo::before{ content:""; box-sizing:border-box; width:13px; height:13px; flex:none; background:var(--hx-ok); border:2px solid var(--hx-borda) }
+:root[data-pele="zine"] .topo-relogio .pet-salvo.erro::before{ background:var(--hx-perigo) }
+:root[data-pele="zine"] .topo-bits{ --zn-giro:-2.5deg; --zn-miolo:var(--hx-btn-bg); gap:8px; padding:3px 14px 3px 12px }
+:root[data-pele="zine"] .topo-bits svg{ width:22px; height:22px; color:var(--hx-texto) }
+:root[data-pele="zine"] .topo-bits b{ color:var(--hx-texto); font:900 italic 24px/1 var(--hx-f-num); padding-right:3px }
+
+/* ====================================================================== 3. o trilho (>= 900 px) */
+@media (min-width:900px){
+  :root[data-pele="zine"] body .hx-nav{ top:calc(var(--casca-topo) + 36px); left:16px; gap:4px; padding:8px; rotate:-.7deg }
+  :root[data-pele="zine"] body .hx-nav::before{ border:3px solid var(--hx-borda); background:var(--hx-miolo); box-shadow:5px 5px 0 var(--hx-sombra-cor); clip-path:none; filter:url(#rabisco) }
+  :root[data-pele="zine"] body .hx-nav::after{ display:none }
+  :root[data-pele="zine"] body .hx-nav .hx-nav__bt{ min-height:56px; gap:7px; clip-path:none; color:var(--hx-texto); font:800 10px/1 var(--hx-f-tit); letter-spacing:.04em; text-transform:uppercase }
+  :root[data-pele="zine"] body .hx-nav .hx-nav__bt:hover{ background:color-mix(in srgb, var(--hx-btn-bg) 55%, var(--hx-miolo)); color:var(--hx-texto) }
+  :root[data-pele="zine"] body .hx-nav .hx-nav__rot{ font:inherit; letter-spacing:inherit }
+  :root[data-pele="zine"] body .hx-nav .hx-nav__ic{ width:22px; height:22px }
+  /* o destino aberto: um adesivo anil, torto */
+  :root[data-pele="zine"] body .hx-nav .hx-nav__bt[aria-current="page"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); outline:3px solid var(--hx-borda); box-shadow:4px 4px 0 var(--hx-sombra-cor);
+    rotate:-3deg; clip-path:none; z-index:1 }
+  :root[data-pele="zine"] body .hx-nav .hx-nav__bt:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:2px }
+}
+
+/* ====================================================================== 4. as janelas da direita: a tira preta do titulo dentro da moldura de papel */
+:root[data-pele="zine"] .pet-hud{ box-sizing:border-box; gap:15px; width:calc(var(--hud-larg) + 14px); padding:18px 10px 10px 4px; counter-reset:zn-janela }
+:root[data-pele="zine"] .pet-hud .hud-painel{ counter-increment:zn-janela; padding:6px }
+:root[data-pele="zine"] .pet-hud .hud-painel:nth-child(odd){ --zn-giro:-.8deg }
+:root[data-pele="zine"] .pet-hud .hud-painel:nth-child(even){ --zn-giro:.7deg }
+:root[data-pele="zine"] .hud-painel__bt, :root[data-pele="zine"] .hud-painel[data-aberto="true"] .hud-painel__bt{ gap:9px; min-height:46px; padding:4px 8px; background:var(--hx-borda); color:var(--hx-miolo) }
+/* o indice: um quadradinho amarelo torto */
+:root[data-pele="zine"] .hud-painel__bt::before{ content:counter(zn-janela, decimal-leading-zero); width:26px; height:26px; display:grid; place-items:center; flex:none; rotate:-8deg;
+  background:var(--hx-btn-bg); color:var(--hx-btn-ink); font:900 13px/1 var(--hx-f-tit) }
+:root[data-pele="zine"] .hud-painel__ic{ color:var(--hx-btn-bg) }
+:root[data-pele="zine"] .hud-painel__txt{ gap:3px }
+:root[data-pele="zine"] .hud-painel__tit{ padding-right:3px; color:var(--hx-miolo); font:900 italic 16px/1 var(--hx-f-tit); letter-spacing:0 }
+:root[data-pele="zine"] .hud-painel__resumo{ color:var(--hx-miolo-2); font:600 12px/1.15 var(--hx-f) }
+:root[data-pele="zine"] .hud-painel__bt .hud-risca{ display:none }
+:root[data-pele="zine"] .hud-painel__seta{ margin-left:auto; color:var(--hx-miolo); transform:none }
+:root[data-pele="zine"] .hud-painel[data-aberto="false"] .hud-painel__seta{ transform:rotate(-90deg) }
+:root[data-pele="zine"] .hud-painel.hud-painel--abre[data-aberto] .hud-painel__seta{ transform:none }
+:root[data-pele="zine"] .hud-painel__bt:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:2px }
+:root[data-pele="zine"] .hud-painel__corpo{ padding:12px 8px 8px; border-top:0 }
+/* as necessidades: a barra com traco de tinta, o miolo anil riscado, o numero em Rubik italico */
+:root[data-pele="zine"] :is(.app--pet, .app--habitat) :is(.pet-hud, .pet-painel) .necessidades4{ gap:9px }
+:root[data-pele="zine"] .nec-linha{ gap:9px }
+:root[data-pele="zine"] .nec-ic{ width:17px; height:17px; color:var(--hx-texto) }
+:root[data-pele="zine"] .nec-linha .hx-medidor{ gap:10px }
+:root[data-pele="zine"] .nec-linha .hx-medidor__rot{ min-width:66px; color:var(--hx-texto); font:800 12px/1 var(--hx-f-tit); letter-spacing:.03em }
+:root[data-pele="zine"] .nec-linha .hx-medidor__txt{ min-width:2.1em; padding-right:3px; color:var(--hx-texto); font:900 italic 17px/1 var(--hx-f-num) }
+:root[data-pele="zine"] .nec-linha .hx-medidor__pct{ display:none }
+:root[data-pele="zine"] .hx-medidor__trilho{ box-sizing:border-box; height:15px; border:2.5px solid var(--hx-borda); background:var(--hx-medidor-trilho) }
+:root[data-pele="zine"] .hx-medidor__barra{ -webkit-mask-image:none; mask-image:none;
+  background:repeating-linear-gradient(-45deg, transparent 0 5px, color-mix(in srgb, var(--hx-escolhido-ink) 30%, transparent) 5px 7px), var(--hx-medidor) }
+:root[data-pele="zine"] .hx-medidor--alerta .hx-medidor__barra{ background:var(--hx-alerta) }
+:root[data-pele="zine"] .hx-medidor--ok .hx-medidor__barra{ background:var(--hx-ok) }
+:root[data-pele="zine"] .hx-medidor--perigo .hx-medidor__barra{ background:var(--hx-perigo) }
+:root[data-pele="zine"] .hud-detalhes{ gap:4px; color:var(--hx-texto); font:800 12px/1 var(--hx-f-tit); letter-spacing:.03em; text-transform:uppercase }
+:root[data-pele="zine"] .det-estado-mais{ border-top:2.5px dashed var(--hx-borda) }
+
+/* ====================================================================== 5. o aviso, o chamado e a fala */
+@media (min-width:900px){ :root[data-pele="zine"] .pet-alerta{ width:max-content; max-width:min(400px, calc(100% - 24px)) } }
+:root[data-pele="zine"] .pet-alerta .pet-prioridade{ --zn-giro:-1.6deg; --zn-sombra:4px 4px 0; gap:10px; width:auto; max-width:100%; min-height:44px; padding:2px 5px 2px 12px }
+:root[data-pele="zine"] .pet-alerta .pet-prioridade[data-pede]{ --zn-miolo:var(--hx-necessidade) }
+:root[data-pele="zine"] .pet-alerta .pet-prioridade-txt b{ padding-right:3px; color:var(--hx-texto); font:900 italic 17px/1 var(--hx-f-tit); letter-spacing:0 }
+:root[data-pele="zine"] .pet-alerta .pet-prioridade-ver{ align-self:center; gap:4px; height:34px; margin-left:6px; padding:0 12px 0 14px; background:var(--hx-borda); color:var(--hx-miolo);
+  font:800 12px/1 var(--hx-f-tit); letter-spacing:.03em }
+:root[data-pele="zine"] .pet-alerta .pet-prioridade-ic{ width:22px; height:22px; border:0; background:none; font-size:0; color:var(--hx-texto) }
+:root[data-pele="zine"] .pet-alerta .pet-prioridade-ic > *{ display:none }
+:root[data-pele="zine"] .pet-alerta .pet-prioridade-ic::before{ content:""; width:22px; height:22px; background:currentColor; --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 7v5l3 2'/%3E%3C/svg%3E");
+  -webkit-mask:var(--zn-ic) center / contain no-repeat; mask:var(--zn-ic) center / contain no-repeat }
+:root[data-pele="zine"] .pet-alerta .pet-prioridade[data-pede] .pet-prioridade-ic::before{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3l10 18H2z'/%3E%3Cpath d='M12 10v5M12 18v.5'/%3E%3C/svg%3E") }
+:root[data-pele="zine"] .pet-alerta .pet-prioridade[data-acao="alimentar"] .pet-prioridade-ic::before{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15.4 15.6a5 5 0 1 0-7-7c-1.6 1.6-1.7 3.4-1.4 5l-2.8 2.8a2 2 0 1 0 2.4 2.4l2.8-2.8c1.6.3 3.4.2 5-1.4z'/%3E%3C/svg%3E") }
+:root[data-pele="zine"] .pet-alerta .pet-prioridade[data-acao="brincar"] .pet-prioridade-ic::before{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18V5l12-2v13'/%3E%3Ccircle cx='6' cy='18' r='3'/%3E%3Ccircle cx='18' cy='16' r='3'/%3E%3C/svg%3E") }
+:root[data-pele="zine"] .pet-alerta .pet-prioridade[data-acao="limpar"] .pet-prioridade-ic::before{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z'/%3E%3C/svg%3E") }
+:root[data-pele="zine"] .pet-alerta .pet-prioridade[data-acao="acariciar"] .pet-prioridade-ic::before{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 13V5a1.5 1.5 0 0 1 3 0v6M11 10V4a1.5 1.5 0 0 1 3 0v7M14 10V5a1.5 1.5 0 0 1 3 0v8c0 4-3 7-6 7s-5-2-6-4l-2-4a1.5 1.5 0 0 1 2.6-1.5L8 13'/%3E%3C/svg%3E") }
+:root[data-pele="zine"] .pet-alerta .pet-prioridade[data-acao="tratar_lesao"] .pet-prioridade-ic::before{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 9c0 5-8 11-8 11S4 14 4 9a4 4 0 0 1 8-1 4 4 0 0 1 8 1z'/%3E%3Cpath d='M3 12h5l2-3 3 6 2-3h6'/%3E%3C/svg%3E") }
+:root[data-pele="zine"] .pet-alerta .pet-prioridade:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:3px }
+/* o chamado: o recorte rosa, torto */
+@media (min-width:900px){ :root[data-pele="zine"] .pet-alerta:has(.chamado){ width:min(340px, calc(100% - 24px)) } }
+:root[data-pele="zine"] body .pet-tela .pet-alerta .chamado.dl-card{ --zn-giro:-1.2deg; gap:8px 12px; padding:12px 12px 12px }
+:root[data-pele="zine"] body .pet-tela .pet-alerta .chamado.dl-card:not(.chamado--morte){ --zn-miolo:var(--hx-necessidade) }
+:root[data-pele="zine"] .pet-alerta .chamado b{ padding-right:3px; color:var(--hx-texto); font:900 italic 19px/1 var(--hx-f-tit); letter-spacing:0 }
+:root[data-pele="zine"] .pet-alerta .chamado .dl-apoio{ color:var(--hx-texto); font:700 13px/1.2 var(--hx-f) }
+:root[data-pele="zine"] .pet-alerta .chamado-ic{ border-radius:0; box-shadow:none; font-size:0; color:var(--hx-texto) }
+:root[data-pele="zine"] .pet-alerta .chamado-ic > *{ display:none }
+:root[data-pele="zine"] .pet-alerta .chamado-ic::before{ content:""; width:28px; height:28px; background:currentColor; --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3l10 18H2z'/%3E%3Cpath d='M12 10v5M12 18v.5'/%3E%3C/svg%3E");
+  -webkit-mask:var(--zn-ic) center / contain no-repeat; mask:var(--zn-ic) center / contain no-repeat }
+:root[data-pele="zine"] .pet-alerta .chamado .hx-continuar{ min-height:50px }
+:root[data-pele="zine"] .pet-alerta .chamado .dl-seg i{ background:color-mix(in srgb, var(--hx-borda) 25%, transparent) }
+:root[data-pele="zine"] .pet-alerta .chamado .dl-seg i.on{ background:var(--hx-borda) }
+/* a fala: um recorte branco, torto, com o rabo embaixo a esquerda (o ::before e o rabo: a tinta, o miolo branco e o traco da esquerda) */
+:root[data-pele="zine"] .app--pet .pet-balcao .cena-fala.dl-balao{ --zn-miolo:var(--hx-escolhido-ink); margin-bottom:20px; padding:8px 16px 8px; border:3px solid transparent; background:none; clip-path:none;
+  box-shadow:none; color:var(--hx-texto); font:800 italic 18px/1.2 var(--hx-f-tit); rotate:1.5deg }
+:root[data-pele="zine"] .app--pet .pet-balcao .cena-fala.dl-balao::after{ content:""; position:absolute; inset:-3px; z-index:-1; pointer-events:none; background:var(--zn-miolo); border:3px solid var(--hx-borda);
+  box-shadow:4px 4px 0 var(--hx-sombra-cor); filter:url(#rabisco) }
+:root[data-pele="zine"] .app--pet .pet-balcao .cena-fala.dl-balao::before{ content:""; position:absolute; left:26px; top:100%; width:26px; height:22px; margin-top:0; pointer-events:none;
+  background:linear-gradient(var(--hx-borda), var(--hx-borda)) left / 4px 100% no-repeat,
+    linear-gradient(to bottom right, var(--zn-miolo) calc(50% - 3px), transparent calc(50% - 3px)), var(--hx-borda);
+  clip-path:polygon(0 0, 100% 0, 10% 100%) }
+:root[data-pele="zine"] .app--pet .pet-balcao .cena-fala.dl-balao--sombria{ --zn-miolo:var(--hx-sombrio) }
+:root[data-pele="zine"] .app--pet .pet-balcao .cena-fala .balao-txt{ font-size:18px }
+:root[data-pele="zine"] .app--pet .pet-balcao .cena-fala small{ color:var(--hx-sec); font:700 11px/1.2 var(--hx-f); letter-spacing:.06em; text-transform:uppercase }
+:root[data-pele="zine"] .app--pet .pet-balcao .cena-fala .dl-balao-tag{ color:var(--hx-texto); border-color:var(--hx-borda); border-radius:0 }
+:root[data-pele="zine"] .app--pet .pet-balcao .cena-fala .chip-causa{ border:2px solid var(--hx-borda); border-radius:0; background:var(--hx-necessidade); color:var(--hx-texto) }
+:root[data-pele="zine"] .app--pet .pet-balcao .cena-fala:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:4px }
+
+/* ====================================================================== 6. as acoes de baixo: o recorte de papel, com a linha de recorte entre uma e outra */
+:root[data-pele="zine"] .pet-dock .dock{ --zn-giro:.4deg; gap:0; padding:5px 10px }
+:root[data-pele="zine"] .pet-dock .dock .dock-bt{ position:relative; gap:5px; min-height:56px; padding:2px 10px; border:0; background:none; clip-path:none; color:var(--hx-texto);
+  font:800 11px/1 var(--hx-f-tit); letter-spacing:.03em; text-transform:uppercase }
+:root[data-pele="zine"] .pet-dock .dock .dock-bt:hover{ background:color-mix(in srgb, var(--hx-btn-bg) 55%, var(--hx-miolo)) }
+:root[data-pele="zine"] .pet-dock .dock .dock-bt:active{ translate:0 2px; background:var(--hx-btn-bg) }
+:root[data-pele="zine"] .pet-dock .dock .dock-bt:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:-3px }
+:root[data-pele="zine"] .pet-dock .dock .dock-bt + .dock-bt::after{ content:""; position:absolute; left:-1px; top:4px; bottom:4px; border-left:2.5px dashed var(--hx-borda); pointer-events:none }
+:root[data-pele="zine"] .pet-dock .dock .acao-reserva{ color:var(--hx-sec); font:700 9px/1 var(--hx-f); letter-spacing:.1em }
+:root[data-pele="zine"] .pet-dock .dock .acao-destaque--sugerida, :root[data-pele="zine"] .pet-dock .dock .acao-destaque--sugerida:hover{ background:var(--hx-btn-bg); color:var(--hx-btn-ink) }
+@media (min-width:1500px){ :root[data-pele="zine"] .pet-dock .dock .dock-bt{ min-width:108px } }
+:root[data-pele="zine"] .pet-dock .dock-bt:is([data-acao="alimentar"], [data-acao="brincar"], [data-acao="limpar"], [data-acao="acariciar"], [data-acao="tapa"], [data-acao="tratar_lesao"]) > :is(img, svg){ display:none }
+:root[data-pele="zine"] .pet-dock .dock-bt:is([data-acao="alimentar"], [data-acao="brincar"], [data-acao="limpar"], [data-acao="acariciar"], [data-acao="tapa"], [data-acao="tratar_lesao"])::before{ content:""; width:22px; height:22px; flex:none; background:currentColor;
+  -webkit-mask:var(--zn-ic) center / contain no-repeat; mask:var(--zn-ic) center / contain no-repeat }
+:root[data-pele="zine"] .pet-dock .dock-bt[data-acao="alimentar"]{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15.4 15.6a5 5 0 1 0-7-7c-1.6 1.6-1.7 3.4-1.4 5l-2.8 2.8a2 2 0 1 0 2.4 2.4l2.8-2.8c1.6.3 3.4.2 5-1.4z'/%3E%3C/svg%3E") }
+:root[data-pele="zine"] .pet-dock .dock-bt[data-acao="brincar"]{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 18V5l12-2v13'/%3E%3Ccircle cx='6' cy='18' r='3'/%3E%3Ccircle cx='18' cy='16' r='3'/%3E%3C/svg%3E") }
+:root[data-pele="zine"] .pet-dock .dock-bt[data-acao="limpar"]{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z'/%3E%3C/svg%3E") }
+:root[data-pele="zine"] .pet-dock .dock-bt[data-acao="acariciar"]{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 13V5a1.5 1.5 0 0 1 3 0v6M11 10V4a1.5 1.5 0 0 1 3 0v7M14 10V5a1.5 1.5 0 0 1 3 0v8c0 4-3 7-6 7s-5-2-6-4l-2-4a1.5 1.5 0 0 1 2.6-1.5L8 13'/%3E%3C/svg%3E") }
+:root[data-pele="zine"] .pet-dock .dock-bt[data-acao="tapa"]{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3l10 18H2z'/%3E%3Cpath d='M12 10v5M12 18v.5'/%3E%3C/svg%3E") }
+:root[data-pele="zine"] .pet-dock .dock-bt[data-acao="tratar_lesao"]{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 9c0 5-8 11-8 11S4 14 4 9a4 4 0 0 1 8-1 4 4 0 0 1 8 1z'/%3E%3Cpath d='M3 12h5l2-3 3 6 2-3h6'/%3E%3C/svg%3E") }
+
+/* ====================================================================== 7. o minimapa: um recorte quadrado, torto, com a fita; o mapa em esquema (agua anil, ilha de papel) */
+:root[data-pele="zine"] .minimapa-caixa{ border:3px solid var(--hx-borda); border-radius:0; overflow:visible; background:var(--hx-miolo); box-shadow:5px 5px 0 var(--hx-sombra-cor); rotate:2deg }
+@media (min-width:900px){ :root[data-pele="zine"] .minimapa-caixa{ right:22px; bottom:22px; zoom:1.114 } }
+/* a moldura de papel de 10 px por cima das bordas do mapa */
+:root[data-pele="zine"] .minimapa-caixa::after{ content:""; position:absolute; inset:0; pointer-events:none; border:9px solid var(--hx-miolo) }
+:root[data-pele="zine"] .minimapa-ic{ background:var(--hx-borda); border:0; color:var(--hx-miolo) }
+:root[data-pele="zine"] .minimapa-n{ top:12px; border:0; background:none; color:var(--hx-escolhido-ink); font:900 11px/1 var(--hx-f-tit) }
+:root[data-pele="zine"] .minimapa-pet{ width:14px; height:14px; margin:-7px 0 0 -7px; border-radius:0; background:var(--hx-btn-bg); border:3px solid var(--hx-borda) }
+:root[data-pele="zine"] .minimapa-pet.chama{ box-shadow:0 0 0 4px color-mix(in srgb, var(--hx-necessidade) 70%, transparent) }
+:root[data-pele="zine"] .minimapa:focus-visible{ outline:3px solid var(--hx-foco) }
+
+/* ====================================================================== 8. o painel dos lugares e dos destinos */
+:root[data-pele="zine"] :is(.painel-tela, .pet-painel) > .hx-painel{ position:relative; z-index:0; padding:6px; border:3px solid transparent; background:none; box-shadow:none }
+:root[data-pele="zine"] :is(.painel-tela, .pet-painel) > .hx-painel::after{ content:""; position:absolute; inset:-3px; z-index:-1; pointer-events:none; background:var(--hx-miolo); border:3px solid var(--hx-borda);
+  box-shadow:6px 6px 0 var(--hx-sombra-cor); filter:url(#rabisco) }
+:root[data-pele="zine"] .painel-tela--lugar-lado{ rotate:-.4deg }
+:root[data-pele="zine"] .painel-tela--lugar-folha > .hx-painel{ padding:6px 6px 0 }
+:root[data-pele="zine"] .painel-tela--lugar-folha > .hx-painel::after{ box-shadow:none; filter:none }
+:root[data-pele="zine"] .painel-tela--lugar-folha > .hx-painel::before{ display:none }
+:root[data-pele="zine"] :is(.painel-tela .painel-tela__folha, .pet-painel .pet-painel__folha){ background:none; color:var(--hx-texto) }
+@media (min-width:900px){
+  :root[data-pele="zine"] .painel-tela--lugar-lado, :root[data-pele="zine"] .painel-tela--lugar-lado.painel-tela--ajustes{ top:calc(var(--casca-topo) + 36px) }
+  :root[data-pele="zine"] .painel-tela--lugar-lado.painel-tela--d-crescer{ max-height:calc(100dvh - var(--casca-topo) - 50px) }
+  :root[data-pele="zine"] .painel-tela--lugar-lado:not(.painel-tela--d-crescer){ max-height:calc(100dvh - var(--casca-topo) - 54px) }
+  :root[data-pele="zine"] .painel-tela--lugar-lado.painel-tela--ajustes{ left:calc(var(--nav-larg, 0px) + 40px); width:min(440px, calc(46vw - 36px - var(--nav-larg, 0px))); max-height:calc(100dvh - var(--casca-topo) - 146px) }
+}
+/* o cabecalho: a tira de tinta com o icone num adesivo amarelo, o titulo grande em Rubik italico, o fechar amarelo */
+:root[data-pele="zine"] :is(.painel-tela, .pet-painel) .hx-painel__cab{ border-bottom:0; padding-top:0; background:var(--hx-borda); color:var(--hx-miolo) }
+:root[data-pele="zine"] :is(.painel-tela, .pet-painel) .hx-painel__cab::before{ display:none }
+:root[data-pele="zine"] .hx-painel__tit{ gap:13px; padding:10px 60px 10px 14px; color:var(--hx-btn-ink) }
+:root[data-pele="zine"] .hx-painel__tit > svg{ box-sizing:border-box; width:38px; height:38px; flex:none; padding:7px; background:var(--hx-btn-bg); rotate:-6deg }
+:root[data-pele="zine"] .hx-painel__tit-txt{ gap:5px; color:var(--hx-miolo) }
+:root[data-pele="zine"] :is(.painel-tela, .pet-painel) .hx-painel__titulo{ padding-right:4px; color:var(--hx-miolo); font:900 italic 30px/.95 var(--hx-f-tit); letter-spacing:-.01em }
+:root[data-pele="zine"] .hx-painel__tit-txt small{ color:var(--hx-btn-bg); font:700 12px/1 var(--hx-f); letter-spacing:.12em; text-transform:uppercase }
+:root[data-pele="zine"] :is(.painel-tela, .pet-painel) .hx-painel__cab > .hx-quad{ top:8px; right:8px; border:0; background:var(--hx-btn-bg); color:var(--hx-btn-ink) }
+:root[data-pele="zine"] :is(.painel-tela, .pet-painel) .hx-painel__cab > .hx-quad > span{ display:none }
+:root[data-pele="zine"] :is(.painel-tela, .pet-painel) .hx-painel__cab > .hx-quad::before{ content:""; width:18px; height:18px; background:currentColor; --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 6l12 12M18 6L6 18'/%3E%3C/svg%3E");
+  -webkit-mask:var(--zn-ic) center / contain no-repeat; mask:var(--zn-ic) center / contain no-repeat }
+:root[data-pele="zine"] :is(.painel-tela, .pet-painel) .hx-painel__cab > .hx-quad:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:2px }
+/* as abas: caixas de papel com traco de tinta sobre uma linha; a escolhida e amarela e mais alta. No computador todas mostram o nome */
+:root[data-pele="zine"] .painel-tela--lugar .hx-painel__cab > .hx-abas.lugar-abas{ align-items:flex-end; gap:4px; margin:0; padding:14px 10px 0; border-bottom:3px solid var(--hx-borda); background:var(--hx-miolo) }
+:root[data-pele="zine"] .lugar-abas .hx-aba{ gap:7px; height:38px; min-height:38px; padding:0 12px; border:3px solid var(--hx-borda); border-bottom:0; background:var(--hx-miolo-2); box-shadow:none; color:var(--hx-texto);
+  font:800 13px/1 var(--hx-f-tit); letter-spacing:0 }
+:root[data-pele="zine"] .lugar-abas .hx-aba:hover{ background:color-mix(in srgb, var(--hx-btn-bg) 55%, var(--hx-miolo)); color:var(--hx-texto) }
+:root[data-pele="zine"] .lugar-abas .hx-aba[aria-selected="true"]{ height:46px; min-height:46px; padding:0 12px; background:var(--hx-btn-bg); color:var(--hx-btn-ink) }
+:root[data-pele="zine"] .lugar-abas .hx-aba--trancada:not([aria-selected="true"]){ border-style:dashed; color:var(--hx-sec) }
+:root[data-pele="zine"] .lugar-abas .hx-aba:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:-6px }
+@media (min-width:900px){
+  :root[data-pele="zine"] .lugar-abas .hx-aba .hx-aba__dica, :root[data-pele="zine"] .lugar-abas .hx-aba:hover .hx-aba__dica, :root[data-pele="zine"] .lugar-abas .hx-aba:focus-visible .hx-aba__dica{
+    display:inline; position:static; transform:none; padding:0; border:0; background:none; box-shadow:none; color:inherit; font:inherit; letter-spacing:inherit; text-transform:inherit }
+  :root[data-pele="zine"] .lugar-abas .hx-aba .hx-aba__dica b{ display:inline; font:inherit }
+  :root[data-pele="zine"] .lugar-abas .hx-aba .hx-aba__dica small{ display:none; position:absolute; z-index:3; left:50%; top:50px; transform:translateX(-50%); padding:6px 10px; white-space:nowrap;
+    background:var(--hx-miolo); border:2.5px solid var(--hx-borda); color:var(--hx-texto); font:600 12px/1.25 var(--hx-f); letter-spacing:0; text-transform:none }
+  :root[data-pele="zine"] .lugar-abas .hx-aba:hover .hx-aba__dica small, :root[data-pele="zine"] .lugar-abas .hx-aba:focus-visible .hx-aba__dica small{ display:block }
+}
+:root[data-pele="zine"] .lugar-abas .hx-aba__nv{ display:inline-flex; align-items:center; gap:3px; padding:2px 4px 1px; border:2px solid var(--hx-borda); background:var(--hx-alerta); color:var(--hx-texto); font:800 10px/1 var(--hx-f-tit) }
+:root[data-pele="zine"] .lugar-abas .hx-aba__nv::before{ content:""; width:10px; height:10px; background:currentColor; --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='10' rx='1'/%3E%3Cpath d='M8 11V7a4 4 0 0 1 8 0v4'/%3E%3C/svg%3E");
+  -webkit-mask:var(--zn-ic) center / contain no-repeat; mask:var(--zn-ic) center / contain no-repeat }
+/* o miolo de um lugar: o destaque amarelo com reticula, os cartoes como recortes tortos, as barras com traco */
+:root[data-pele="zine"] .painel-tela--lugar .lg{ padding:14px 10px 12px }
+:root[data-pele="zine"] .lg-destaque{ position:relative; border:3px solid var(--hx-borda); background:var(--zn-reticula), var(--hx-btn-bg); box-shadow:4px 4px 0 var(--hx-sombra-cor); rotate:-.5deg; padding:12px 16px 12px 16px; color:var(--hx-texto) }
+:root[data-pele="zine"] .lg-destaque :is(.trn2-estado, .lg-grande){ padding-right:4px; color:var(--hx-texto); font:900 italic 32px/1 var(--hx-f-tit); text-transform:uppercase }
+:root[data-pele="zine"] .trn2-tela > .lg-destaque{ min-height:72px; padding-top:30px; padding-bottom:10px }
+:root[data-pele="zine"] .trn2-tela > .lg-destaque::before{ content:"Treino" / ""; position:absolute; left:16px; top:11px; color:var(--hx-texto); font:800 12px/1 var(--hx-f-tit); letter-spacing:.06em; text-transform:uppercase }
+:root[data-pele="zine"] .lg-sec{ color:var(--hx-sec); font:600 14px/1.2 var(--hx-f) }
+:root[data-pele="zine"] .lg-destaque .lg-sec{ color:var(--hx-texto); font:700 13px/1 var(--hx-f) }
+:root[data-pele="zine"] .lg-etq{ border:2px solid var(--hx-borda); background:var(--hx-miolo); color:var(--hx-texto); font:800 11px/1.1 var(--hx-f-tit); letter-spacing:.03em }
+:root[data-pele="zine"] .lg-etq--alerta{ background:var(--hx-alerta) }
+:root[data-pele="zine"] .lg-etq--apr{ border-style:dashed; background:var(--hx-aprendido) }
+:root[data-pele="zine"] .trn2-grade{ gap:12px }
+:root[data-pele="zine"] .trn2-grade .treino-ex{ gap:5px; padding:10px 10px 9px; border:2.5px solid var(--hx-borda); background:var(--hx-miolo); box-shadow:3px 3px 0 var(--hx-sombra-cor); color:var(--hx-texto); clip-path:none }
+:root[data-pele="zine"] .trn2-grade .treino-ex:nth-child(odd){ rotate:-.6deg }
+:root[data-pele="zine"] .trn2-grade .treino-ex:nth-child(even){ rotate:.5deg }
+:root[data-pele="zine"] .trn2-grade .treino-ex b{ padding-right:3px; font:900 italic 16px/1.1 var(--hx-f-tit); text-transform:uppercase }
+:root[data-pele="zine"] .trn2-grade .treino-ex small{ color:var(--hx-sec); font:600 13px/1.2 var(--hx-f) }
+:root[data-pele="zine"] .trn2-grade .lg-etq{ right:-9px; top:-11px; width:30px; height:30px; padding:0; justify-content:center; rotate:12deg; background:var(--hx-btn-bg) }
+:root[data-pele="zine"] .trn2-grade .lg-etq svg{ width:16px; height:16px; fill:var(--hx-borda) }
+:root[data-pele="zine"] .trn2-grade .treino-ex:is([data-ex="levantar_pedra"], [data-ex="corrida"], [data-ex="alvo"], [data-ex="esquiva"], [data-ex="meditar"], [data-ex="resistencia"]) > .treino-ic{ display:none }
+:root[data-pele="zine"] .trn2-grade .treino-ex:is([data-ex="levantar_pedra"], [data-ex="corrida"], [data-ex="alvo"], [data-ex="esquiva"], [data-ex="meditar"], [data-ex="resistencia"])::before{ content:""; width:26px; height:26px; flex:none; margin-bottom:4px; background:var(--hx-escolhido);
+  -webkit-mask:var(--zn-ic) center / contain no-repeat; mask:var(--zn-ic) center / contain no-repeat }
+:root[data-pele="zine"] .trn2-grade .treino-ex[data-ex="levantar_pedra"]{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12'/%3E%3C/svg%3E") }
+:root[data-pele="zine"] .trn2-grade .treino-ex[data-ex="corrida"]{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 4c2 0 3 2 3 5s-1 4-3 4-3-1-3-4 1-5 3-5zM17 10c2 0 3 2 3 5s-1 4-3 4-3-1-3-4 1-5 3-5z'/%3E%3C/svg%3E") }
+:root[data-pele="zine"] .trn2-grade .treino-ex[data-ex="alvo"]{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M12 2v4M12 18v4M2 12h4M18 12h4'/%3E%3C/svg%3E") }
+:root[data-pele="zine"] .trn2-grade .treino-ex[data-ex="esquiva"]{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8h11a3 3 0 1 0-3-3M3 12h15a3 3 0 1 1-3 3M3 16h7'/%3E%3C/svg%3E") }
+:root[data-pele="zine"] .trn2-grade .treino-ex[data-ex="meditar"]{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='9' r='3'/%3E%3Cpath d='M12 12v9M7 16c3 0 5 1 5 5M17 16c-3 0-5 1-5 5'/%3E%3C/svg%3E") }
+:root[data-pele="zine"] .trn2-grade .treino-ex[data-ex="resistencia"]{ --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3l8 3v6c0 5-4 8-8 9-4-1-8-4-8-9V6z'/%3E%3C/svg%3E") }
+:root[data-pele="zine"] .trn2-cansaco{ gap:14px !important }
+:root[data-pele="zine"] .trn2-med{ grid-template-columns:104px 1fr 40px }
+:root[data-pele="zine"] .trn2-med .lg-rot{ color:var(--hx-texto); font:800 12px/1 var(--hx-f-tit); letter-spacing:.03em; text-transform:uppercase }
+:root[data-pele="zine"] .trn2-med em{ padding-right:3px; color:var(--hx-texto); font:900 italic 17px/1 var(--hx-f-num) }
+:root[data-pele="zine"] .trn2-barra{ box-sizing:border-box; height:15px; border:2.5px solid var(--hx-borda); background:var(--hx-medidor-trilho) }
+:root[data-pele="zine"] .trn2-barra i{ background:repeating-linear-gradient(-45deg, transparent 0 5px, color-mix(in srgb, var(--hx-escolhido-ink) 30%, transparent) 5px 7px), var(--hx-medidor) }
+:root[data-pele="zine"] .trn2-barra--sombrio i{ background:var(--hx-sombrio) }
+:root[data-pele="zine"] .trn2-barra .lim{ z-index:1; top:-6px; bottom:-6px; width:2.5px; background:var(--hx-borda) }
+:root[data-pele="zine"] .trn2-tela .lg-sec .lg-num{ color:var(--hx-sec); font:600 14px/1.2 var(--hx-f-num) }
+:root[data-pele="zine"] .fechado-trancado{ gap:9px; padding:6px 14px; border:3px dashed var(--hx-borda); background:var(--hx-miolo-2); color:var(--hx-sec); font:900 italic 15px/1 var(--hx-f-tit); text-transform:uppercase }
+:root[data-pele="zine"] .fechado-trancado svg{ color:var(--hx-sec) }
+:root[data-pele="zine"] .nivel-nv{ border:2px solid var(--hx-borda); background:var(--hx-alerta); color:var(--hx-texto); font:800 11px/1.1 var(--hx-f-tit); letter-spacing:.03em }
+:root[data-pele="zine"] .nivel-nv svg{ color:inherit }
+:root[data-pele="zine"] .painel-tela .painel-tela__folha details.lg-como{ padding:4px 2px 0; border:0; border-top:2.5px dashed var(--hx-borda); background:none }
+:root[data-pele="zine"] .painel-tela .painel-tela__folha details.lg-como > summary{ color:var(--hx-texto); font:800 13px/1 var(--hx-f-tit); letter-spacing:0 }
+:root[data-pele="zine"] .painel-tela .painel-tela__folha details.lg-como > summary::before{ content:none }
+:root[data-pele="zine"] .lg-como p{ color:var(--hx-texto-2) }
+/* a placa do lugar: um adesivo amarelo torto; o fio ate o painel em tinta */
+:root[data-pele="zine"] .lugar-placa{ display:inline-flex; flex-direction:row; align-items:center; gap:8px; height:36px; padding:0 14px 0 10px; border:3px solid var(--hx-borda); border-radius:0; background:var(--hx-btn-bg);
+  box-shadow:4px 4px 0 var(--hx-sombra-cor); color:var(--hx-texto); font:900 italic 14px/1 var(--hx-f-tit); letter-spacing:0 }
+:root[data-pele="zine"] .lugar-placa svg{ width:18px; height:18px; color:var(--hx-texto) }
+:root[data-pele="zine"] .lugar-conector path{ stroke:var(--hx-borda); stroke-width:2.5 }
+:root[data-pele="zine"] .lugar-conector circle{ fill:var(--hx-borda) }
+:root[data-pele="zine"] :is(.obj-etq, .obj-selo, .obj-cartao){ border:2.5px solid var(--hx-borda); border-radius:0; background:var(--hx-miolo); box-shadow:3px 3px 0 var(--hx-sombra-cor); color:var(--hx-texto) }
+:root[data-pele="zine"] .obj-etq{ font:800 13px/1 var(--hx-f-tit); text-transform:uppercase }
+:root[data-pele="zine"] :is(.obj-etq, .obj-selo) svg{ color:var(--hx-escolhido) }
+:root[data-pele="zine"] :is(.obj-etq, .obj-selo) b{ color:var(--hx-texto) }
+:root[data-pele="zine"] :is(.obj-etq, .obj-selo)::after{ background:var(--hx-borda) }
+
+/* ====================================================================== 9. o conteudo das telas no painel: os --dl-* e --ui-* no papel e na tinta */
+:root[data-pele="zine"] :is(.painel-tela .painel-tela__folha, .pet-painel .pet-painel__folha, .scan--lab .scan-texto){
+  --dl-bg:var(--hx-miolo); --dl-hex:var(--hx-miolo-2); --dl-surface:var(--hx-miolo); --dl-surface-2:var(--hx-miolo-2);
+  --dl-border:var(--hx-borda); --dl-border-shadow:var(--hx-borda); --dl-navy:var(--hx-miolo-2); --dl-navy-deep:var(--hx-borda);
+  --dl-action:var(--hx-btn-bg); --dl-action-press:var(--hx-btn-bg-hover); --dl-action-ink:var(--hx-btn-ink); --dl-action-lite:var(--hx-btn-bg-hover);
+  --dl-text:var(--hx-texto); --dl-text-2:var(--hx-texto-2); --dl-muted:var(--hx-sec);
+  --dl-need:var(--hx-texto); --dl-need-hi:var(--hx-necessidade); --dl-ok:var(--hx-ok); --dl-ok-ink:var(--hx-texto); --dl-ok-edge:var(--hx-borda);
+  --dl-learned:var(--hx-texto); --dl-learned-bg:var(--hx-aprendido); --dl-learned-ink:var(--hx-texto); --dl-learned-sub:var(--hx-texto-2);
+  --dl-disabled:var(--hx-miolo-2); --dl-disabled-ink:var(--hx-sec); --dl-rim:var(--hx-miolo); --dl-plate:var(--hx-miolo-2); --dl-plate-hi:var(--hx-miolo);
+  --dl-sec-bg:var(--hx-miolo); --dl-sec-ink:var(--hx-texto); --dl-sec-edge:var(--hx-borda); --dl-sec-press:var(--hx-miolo-2); --dl-sec-shadow:var(--hx-borda);
+  --dl-none-ink:var(--hx-texto-2); --dl-none-edge:var(--hx-sec); --dl-none-bg:var(--hx-miolo);
+  --dl-erro:var(--hx-texto); --dl-rival:var(--hx-texto); --dl-rival-bg:color-mix(in srgb, var(--hx-perigo) 30%, var(--hx-miolo)); --dl-dano:var(--hx-texto);
+  --dl-palco-tit:color-mix(in srgb, var(--hx-borda) 75%, transparent);
+  --ui-border:var(--hx-borda); --ui-text:var(--hx-texto); --ui-text-2:var(--hx-texto-2); --ui-surface:var(--hx-miolo); --ui-surface-2:var(--hx-miolo-2);
+  --ui-primary:var(--hx-escolhido); --ui-primary-hover:var(--hx-escolhido); --ui-primary-ink:var(--hx-escolhido-ink); --ui-primary-soft:var(--hx-miolo-2);
+  --ui-primary-forte:var(--hx-btn-bg); --ui-primary-forte-hover:var(--hx-btn-bg-hover);
+  --ui-navy:var(--hx-borda); --ui-navy-2:var(--hx-miolo-2); --ui-navy-ink:var(--hx-miolo); --ui-bg:var(--hx-miolo); --ui-success:var(--hx-ok); --ui-warning:var(--hx-alerta); --ui-danger:var(--hx-perigo);
+  --ui-bar-track:var(--hx-medidor-trilho); --ui-foco:0 0 0 3px var(--hx-foco);
+}
+:root[data-pele="zine"] .painel-tela .painel-tela__folha h2{ color:var(--hx-texto); font:800 13px/1.1 var(--hx-f-tit); letter-spacing:.04em }
+:root[data-pele="zine"] .painel-tela .painel-tela__folha :where(.dl-card, .item-card, .evo-medalha, .itens-vagas, .evt-painel, .reg-linha, .treino-ex, .fr-titulo, .rivais-mais){ border:2.5px solid var(--hx-borda); background:var(--hx-miolo); color:var(--hx-texto) }
+:root[data-pele="zine"] .painel-tela .painel-tela__folha .dl-tag{ border:2px solid var(--hx-borda); background:var(--hx-miolo); color:var(--hx-texto); font-family:var(--hx-f-tit); font-weight:800; letter-spacing:.03em }
+:root[data-pele="zine"] .painel-tela .painel-tela__folha .dl-tag--ativo{ background:var(--hx-btn-bg); color:var(--hx-btn-ink) }
+:root[data-pele="zine"] .painel-tela .painel-tela__folha details:not(.lg-como, .codice){ border:2.5px solid var(--hx-borda); background:var(--hx-miolo) }
+:root[data-pele="zine"] .painel-tela .painel-tela__folha summary{ color:var(--hx-texto); font-family:var(--hx-f-tit); font-weight:800; letter-spacing:.02em }
+:root[data-pele="zine"] .painel-tela .painel-tela__folha :is(.lem, .lem-trilho, .lem-trilho i){ border-radius:0 }
+:root[data-pele="zine"] .painel-tela .painel-tela__folha .lem{ border-color:var(--hx-borda) }
+:root[data-pele="zine"] .painel-tela .painel-tela__folha .lem--vazio{ color:var(--hx-sec); border-color:var(--hx-sec) }
+:root[data-pele="zine"] .pet-painel__folha .db-emo{ background:var(--hx-sombrio); color:var(--hx-texto) }
+:root[data-pele="zine"] .pet-painel__folha .db-contra{ color:var(--hx-texto) }
+:root[data-pele="zine"] .pet-painel__folha .db-favor{ color:var(--hx-texto) }
+:root[data-pele="zine"] .res.ab-hx .res-faixa--vit{ background-color:var(--hx-btn-bg); color:var(--hx-btn-ink) }
+
+/* ====================================================================== 10. os botoes: recortes retos com traco de tinta e sombra dura */
+:root[data-pele="zine"] :where(.hx-continuar, .rg2-bt, .painel-tela .hx-btn:not(.dock-bt), .ab-hx .hx-btn, .scan .hx-btn){ position:relative; padding:0 20px; border:3px solid var(--hx-borda); background:var(--hx-miolo);
+  box-shadow:4px 4px 0 var(--hx-sombra-cor); clip-path:none; color:var(--hx-texto); font:900 italic 15px/1 var(--hx-f-tit); letter-spacing:0; text-transform:uppercase }
+:root[data-pele="zine"] :is(.hx-continuar, .rg2-bt--acao){ background:var(--hx-btn-bg); color:var(--hx-btn-ink) }
+:root[data-pele="zine"] .hx-continuar::before{ display:none }
+:root[data-pele="zine"] :is(.zona-risco .rg2-bt, .rg2-bt--perigo){ background:var(--hx-perigo); color:var(--hx-texto) }
+:root[data-pele="zine"] :is(.painel-tela, .ab-hx) .hx-btn:not(.dock-bt)[aria-pressed="true"]{ background:var(--hx-borda); color:var(--hx-miolo) }
+:root[data-pele="zine"] :is(.hx-continuar, .rg2-bt, .painel-tela .hx-btn:not(.dock-bt), .ab-hx .hx-btn):hover:not(:disabled){ translate:-2px -2px; box-shadow:6px 6px 0 var(--hx-sombra-cor) }
+:root[data-pele="zine"] :is(.hx-continuar, .rg2-bt--acao):hover:not(:disabled){ background:var(--hx-btn-bg-hover) }
+:root[data-pele="zine"] :is(.hx-continuar, .rg2-bt, .painel-tela .hx-btn:not(.dock-bt), .ab-hx .hx-btn):active:not(:disabled){ translate:4px 4px; box-shadow:none }
+:root[data-pele="zine"] :is(.hx-continuar, .rg2-bt, .painel-tela .hx-btn:not(.dock-bt), .ab-hx .hx-btn):disabled{ opacity:.45; box-shadow:none }
+:root[data-pele="zine"] :is(.hx-continuar, .rg2-bt, .painel-tela .hx-btn:not(.dock-bt), .ab-hx .hx-btn):focus-visible{ outline:3px solid var(--hx-foco); outline-offset:4px }
+:root[data-pele="zine"] .rg2-bt svg{ color:inherit }
+
+/* ====================================================================== 11. Lutar (a Arena): as opcoes como recortes; a escolhida vira anil, entorta e ganha o adesivo do visto */
+:root[data-pele="zine"] .painel-tela__folha .hx-painel.poc-lugar{ gap:14px; padding:2px 10px 0; border:0; background:none }
+:root[data-pele="zine"] .painel-tela .painel-tela__folha:has(> .poc-lugar){ padding-bottom:14px }
+:root[data-pele="zine"] .poc-lugar > h2{ position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap }
+:root[data-pele="zine"] .poc-lugar .poc-nota{ color:var(--hx-texto); font:600 16px/1.35 var(--hx-f) }
+:root[data-pele="zine"] .poc-pet{ gap:12px; color:var(--hx-texto); font:900 italic 20px/1 var(--hx-f-tit); text-transform:uppercase }
+:root[data-pele="zine"] .poc-ret{ border:2px solid var(--hx-borda); background:var(--hx-btn-bg); overflow:hidden }
+:root[data-pele="zine"] .poc-ret img{ width:34px; height:34px; max-width:none; max-height:none; object-fit:contain; object-position:center bottom }
+:root[data-pele="zine"] .poc-pet .poc-ret{ width:52px; height:52px }
+:root[data-pele="zine"] .poc-pet .poc-ret img{ width:46px; height:46px }
+:root[data-pele="zine"] .poc-grupo legend{ color:var(--hx-texto); font:800 12px/1 var(--hx-f-tit); letter-spacing:.06em }
+:root[data-pele="zine"] :is(.poc-rivais, .poc-mapas){ gap:10px }
+:root[data-pele="zine"] :is(.poc-rival, .poc-mapa, .mc-opcao){ position:relative; border:2.5px solid var(--hx-borda); background:var(--hx-miolo); box-shadow:3px 3px 0 var(--hx-sombra-cor); color:var(--hx-texto); clip-path:none }
+:root[data-pele="zine"] .poc-rival{ min-height:52px; gap:10px; font:900 italic 15px/1.1 var(--hx-f-tit); text-transform:uppercase }
+:root[data-pele="zine"] .poc-mapa{ padding:8px 12px; gap:4px }
+:root[data-pele="zine"] .poc-mapa b, :root[data-pele="zine"] .mc-opcao b{ font:900 italic 15px/1.1 var(--hx-f-tit); letter-spacing:0; text-transform:uppercase }
+:root[data-pele="zine"] .poc-mapa small, :root[data-pele="zine"] .mc-opcao small{ color:var(--hx-sec); font:600 13px/1.2 var(--hx-f) }
+:root[data-pele="zine"] :is(.poc-rival, .poc-mapa, .mc-opcao):hover:not(:disabled, [aria-checked="true"]){ translate:-2px -2px; box-shadow:5px 5px 0 var(--hx-sombra-cor); background:color-mix(in srgb, var(--hx-btn-bg) 40%, var(--hx-miolo)) }
+:root[data-pele="zine"] :is(.poc-rival, .poc-mapa, .mc-opcao)[aria-checked="true"]{ background:var(--hx-escolhido); color:var(--hx-escolhido-ink); rotate:-1.2deg; box-shadow:5px 5px 0 var(--hx-sombra-cor); z-index:1 }
+:root[data-pele="zine"] :is(.poc-mapa, .mc-opcao)[aria-checked="true"] small{ color:var(--hx-escolhido-ink) }
+:root[data-pele="zine"] :is(.poc-rival, .poc-mapa, .mc-opcao)[aria-checked="true"]::after{ content:""; position:absolute; z-index:1; right:-10px; top:-11px; width:24px; height:24px; box-sizing:border-box; background:var(--hx-btn-bg);
+  border:2.5px solid var(--hx-borda); rotate:10deg }
+:root[data-pele="zine"] :is(.poc-rival, .poc-mapa, .mc-opcao)[aria-checked="true"]::before{ content:""; position:absolute; z-index:2; right:-2px; top:-7px; width:7px; height:12px; border:solid var(--hx-borda); border-width:0 3px 3px 0; rotate:45deg }
+:root[data-pele="zine"] :is(.poc-rival, .poc-mapa, .mc-opcao):focus-visible{ outline:3px solid var(--hx-foco); outline-offset:3px }
+:root[data-pele="zine"] .poc-lugar .poc-lutar, :root[data-pele="zine"] .poc-lugar .poc-lutar:hover{ position:sticky; bottom:4px; min-height:50px; margin:0 4px 4px 0; font-size:17px }
+
+/* ====================================================================== 12. Diario (o Registro) */
+:root[data-pele="zine"] .rg2-par small{ color:var(--hx-texto); font:800 11px/1 var(--hx-f-tit); letter-spacing:.06em; text-transform:uppercase }
+:root[data-pele="zine"] .rg2-par .lg-num{ padding-right:3px; color:var(--hx-texto); font:900 italic 24px/1 var(--hx-f-num) }
+/* o codice: uma tira de tinta com a sombra anil */
+:root[data-pele="zine"] .painel-tela .painel-tela__folha details.codice{ padding:12px 14px; border:0; background:var(--hx-borda); color:var(--hx-miolo); box-shadow:4px 4px 0 var(--hx-escolhido); rotate:.5deg }
+:root[data-pele="zine"] .painel-tela .painel-tela__folha details.codice > summary{ align-items:center; gap:5px; color:var(--hx-miolo) }
+:root[data-pele="zine"] .painel-tela .painel-tela__folha details.codice > summary::before{ content:none }
+:root[data-pele="zine"] .codice-tit{ color:var(--hx-btn-bg); font:900 italic 20px/1 var(--hx-f-tit); letter-spacing:0 }
+:root[data-pele="zine"] .codice-cab small{ color:var(--hx-miolo); font:700 12px/1.2 var(--hx-f); letter-spacing:.06em }
+:root[data-pele="zine"] .codice-corpo{ color:var(--hx-miolo) }
+:root[data-pele="zine"] .rg2-filtros{ gap:6px }
+:root[data-pele="zine"] .rg2-filtro{ padding:0 14px; border:2.5px solid var(--hx-borda); background:var(--hx-miolo); color:var(--hx-texto); font:800 13px/1 var(--hx-f-tit); text-transform:uppercase }
+:root[data-pele="zine"] .rg2-filtro[aria-pressed="true"]{ background:var(--hx-borda); color:var(--hx-miolo) }
+:root[data-pele="zine"] .rg2-filtro:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:3px }
+:root[data-pele="zine"] .rg2-log{ border:0 }
+:root[data-pele="zine"] .rg2-linha{ border:0; border-bottom:2px dashed color-mix(in srgb, var(--hx-borda) 28%, transparent); background:none; color:var(--hx-texto) }
+:root[data-pele="zine"] .rg2-linha:hover{ background:color-mix(in srgb, var(--hx-btn-bg) 40%, var(--hx-miolo)) }
+:root[data-pele="zine"] .rg2-t{ color:var(--hx-texto); font:900 italic 13px/1 var(--hx-f-num) }
+:root[data-pele="zine"] .rg2-txt{ color:var(--hx-texto); font:600 15px/1.2 var(--hx-f) }
+:root[data-pele="zine"] .rg2-tipo{ color:var(--hx-sec) }
+:root[data-pele="zine"] .rg2-linha[data-tipo="voce"]{ background:color-mix(in srgb, var(--hx-btn-bg) 45%, var(--hx-miolo)) }
+:root[data-pele="zine"] .rg2-linha[data-tipo="voce"] .rg2-tipo{ color:var(--hx-texto) }
+:root[data-pele="zine"] .rg2-linha--recusa{ background:color-mix(in srgb, var(--hx-perigo) 26%, var(--hx-miolo)) }
+:root[data-pele="zine"] .rg2-linha--recusa .rg2-txt{ color:var(--hx-texto) }
+:root[data-pele="zine"] .rg2-seta{ color:var(--hx-texto) }
+
+/* ====================================================================== 13. Ajustes: cada linha e um recorte */
+:root[data-pele="zine"] .aj-lista{ gap:10px; padding:14px 12px 18px }
+:root[data-pele="zine"] .aj{ min-height:50px; padding:4px 10px 4px 12px; border:2.5px solid var(--hx-borda); background:var(--hx-miolo); box-shadow:3px 3px 0 var(--hx-sombra-cor); color:var(--hx-texto) }
+:root[data-pele="zine"] .aj-lista > :nth-child(odd):is(.aj), :root[data-pele="zine"] .aj-lista > :nth-child(odd) > .aj{ rotate:-.35deg }
+:root[data-pele="zine"] .aj-lista > :nth-child(even):is(.aj), :root[data-pele="zine"] .aj-lista > :nth-child(even) > .aj{ rotate:.3deg }
+:root[data-pele="zine"] .aj:not(.aj--volume):hover{ translate:-2px -2px; box-shadow:5px 5px 0 var(--hx-sombra-cor); background:color-mix(in srgb, var(--hx-btn-bg) 40%, var(--hx-miolo)) }
+:root[data-pele="zine"] .aj:focus-within, :root[data-pele="zine"] .aj:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:3px }
+:root[data-pele="zine"] .aj--novo{ border-style:dashed }
+:root[data-pele="zine"] .aj-ic{ color:var(--hx-escolhido) }
+:root[data-pele="zine"] .aj-nome b{ font:800 15px/1.1 var(--hx-f-tit); text-transform:uppercase }
+:root[data-pele="zine"] .aj-seta{ color:var(--hx-texto) }
+/* a chave: um retangulo de papel escuro com o botao de tinta; ligada, anil com o botao amarelo a direita */
+:root[data-pele="zine"] .aj input[type="checkbox"]{ -webkit-appearance:none; appearance:none; box-sizing:border-box; width:52px; height:28px; margin:8px 0; border:2.5px solid var(--hx-borda); border-radius:0;
+  background:linear-gradient(var(--hx-borda), var(--hx-borda)) left 3px center / 17px 17px no-repeat, var(--hx-miolo-2) }
+:root[data-pele="zine"] .aj input[type="checkbox"]:checked{
+  background:linear-gradient(var(--hx-btn-bg), var(--hx-btn-bg)) right 5px center / 13px 13px no-repeat, linear-gradient(var(--hx-borda), var(--hx-borda)) right 3px center / 17px 17px no-repeat, var(--hx-escolhido) }
+:root[data-pele="zine"] .aj input[type="checkbox"]:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:3px }
+/* os volumes: numa linha so, sem recorte; o trilho com traco de tinta, o miolo anil ate o cursor (um quadrado amarelo) */
+:root[data-pele="zine"] .aj--volume{ grid-template-columns:28px 72px minmax(0,1fr) max-content; column-gap:12px; min-height:0; margin-left:28px; padding:0 4px 0 6px; border:0; background:none; box-shadow:none; rotate:none !important }
+:root[data-pele="zine"] .aj--volume .aj-nome{ display:contents; color:var(--hx-texto); font:800 12px/1 var(--hx-f-tit); text-transform:uppercase }
+:root[data-pele="zine"] .aj--volume .aj-nome b{ order:3; min-width:3.2em; padding-right:3px; text-align:right; font:900 italic 15px/1 var(--hx-f-num) }
+:root[data-pele="zine"] .aj--volume input[type="range"]{ -webkit-appearance:none; appearance:none; order:2; grid-column:auto; min-height:40px; height:40px; margin:0; background:none; overflow:hidden }
+:root[data-pele="zine"] .aj--volume input[type="range"]::-webkit-slider-runnable-track{ box-sizing:border-box; height:12px; border:2.5px solid var(--hx-borda); background:var(--hx-medidor-trilho) }
+:root[data-pele="zine"] .aj--volume input[type="range"]::-moz-range-track{ box-sizing:border-box; height:12px; border:2.5px solid var(--hx-borda); background:var(--hx-medidor-trilho) }
+:root[data-pele="zine"] .aj--volume input[type="range"]::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; box-sizing:border-box; width:20px; height:20px; margin-top:-6.5px; border:2.5px solid var(--hx-borda); border-radius:0;
+  background:var(--hx-btn-bg); box-shadow:-400px 0 0 393.5px var(--hx-escolhido); clip-path:polygon(-400px 6.5px, 0 6.5px, 0 0, 100% 0, 100% 100%, 0 100%, 0 13.5px, -400px 13.5px) }
+:root[data-pele="zine"] .aj--volume input[type="range"]::-moz-range-thumb{ box-sizing:border-box; width:20px; height:20px; border:2.5px solid var(--hx-borda); border-radius:0; background:var(--hx-btn-bg) }
+:root[data-pele="zine"] .aj--volume input[type="range"]::-moz-range-progress{ height:7px; background:var(--hx-escolhido) }
+/* dentro de uma parte: o voltar como botao de papel, o nome da parte em Rubik italico */
+:root[data-pele="zine"] .mc-cfg > .mc-linha{ gap:14px }
+:root[data-pele="zine"] .mc-cfg > .mc-linha .mc-bloco__tit{ margin:0; padding-right:4px; color:var(--hx-texto); font:900 italic 22px/1 var(--hx-f-tit); text-transform:uppercase }
+:root[data-pele="zine"] .mc-cfg > .mc-linha .mc-voltar > span{ width:16px; height:16px; margin:0 2px 0 -6px; font-size:0; line-height:0; rotate:180deg; background:currentColor;
+  --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6l6 6-6 6'/%3E%3C/svg%3E"); -webkit-mask:var(--zn-ic) center / contain no-repeat; mask:var(--zn-ic) center / contain no-repeat }
+:root[data-pele="zine"] .mc-sec{ color:var(--hx-texto); font:800 12px/1 var(--hx-f-tit); letter-spacing:.06em }
+:root[data-pele="zine"] .mc-apoio{ color:var(--hx-texto-2) }
+:root[data-pele="zine"] .mc-opcoes{ gap:12px }
+:root[data-pele="zine"] .mc-etq{ border:2px solid var(--hx-borda); background:var(--hx-alerta); color:var(--hx-texto); font:800 11px/1.1 var(--hx-f-tit) }
+:root[data-pele="zine"] .painel-tela--ajustes .hx-painel__titulo{ position:relative; display:flex; align-items:center; gap:13px; padding:10px 60px 10px 14px }
+:root[data-pele="zine"] .painel-tela--ajustes .hx-painel__titulo::before{ content:""; width:38px; height:38px; flex:none; background:var(--hx-btn-bg); rotate:-6deg }
+:root[data-pele="zine"] .painel-tela--ajustes .hx-painel__titulo::after{ content:""; position:absolute; left:22px; top:50%; width:22px; height:22px; translate:0 -50%; rotate:-6deg; background:var(--hx-btn-ink);
+  --zn-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3Cpath d='M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1'/%3E%3C/svg%3E"); -webkit-mask:var(--zn-ic) center / contain no-repeat; mask:var(--zn-ic) center / contain no-repeat }
+
+/* ====================================================================== 14. o DigiBrain aberto: a moldura de papel; a rede fica escura, como uma foto colada (PR-6) */
+:root[data-pele="zine"] .scan .scan-cx{ border:3px solid var(--hx-borda); background:var(--hx-miolo); box-shadow:5px 5px 0 var(--hx-sombra-cor); color:var(--hx-texto) }
+:root[data-pele="zine"] .scan .scan-in.scan-cx{ padding:4px 10px 10px; rotate:.6deg }
+:root[data-pele="zine"] .scan .scan-topo{ gap:6px; margin-bottom:6px; padding:2px 0 0 4px }
+:root[data-pele="zine"] .scan .scan-tit{ color:var(--hx-texto) }
+:root[data-pele="zine"] .scan .scan-tit-nome{ padding-right:3px; color:var(--hx-texto); font:900 italic 20px/1 var(--hx-f-tit); text-transform:uppercase }
+:root[data-pele="zine"] .scan .scan-tit svg.lucide{ color:var(--hx-escolhido) }
+:root[data-pele="zine"] .scan .db-selo--vivo i{ box-sizing:border-box; width:14px; height:14px; border:2.5px solid var(--hx-borda); border-radius:0; background:var(--hx-ok) }
+:root[data-pele="zine"] .scan .scan-ic{ border:2.5px solid var(--hx-borda); background:var(--hx-miolo); color:var(--hx-texto) }
+:root[data-pele="zine"] .scan .scan-ic:hover, :root[data-pele="zine"] .scan .scan-ic[aria-expanded="true"], :root[data-pele="zine"] .scan .scan-ic[aria-pressed="true"]{ background:var(--hx-borda); color:var(--hx-miolo) }
+:root[data-pele="zine"] .scan .scan-fechar, :root[data-pele="zine"] .scan .scan-fechar:hover{ border:2.5px solid var(--hx-borda); background:var(--hx-btn-bg); color:var(--hx-btn-ink) }
+:root[data-pele="zine"] .scan .scan-corpo{ gap:12px }
+:root[data-pele="zine"] .scan .scan-moldura{ --scan-malha:var(--zn-rede-malha); --scan-grade:var(--zn-rede-grade); --hx-texto:var(--zn-rede-texto); --hx-num:var(--zn-rede-texto); --hx-sec:var(--zn-rede-texto);
+  border:3px solid var(--hx-borda); background-color:var(--zn-rede-fundo); box-shadow:4px 4px 0 var(--hx-sombra-cor); rotate:.4deg }
+:root[data-pele="zine"] .scan .scan-faixa{ border:0; background:var(--hx-borda); color:var(--hx-miolo); --hx-texto:var(--hx-miolo); --hx-num:var(--hx-miolo) }
+:root[data-pele="zine"] .scan .scan-estado{ border-left:0 }
+:root[data-pele="zine"] .scan .scan-estado-rot{ color:var(--hx-miolo-2) }
+:root[data-pele="zine"] .scan .scan-estado b{ padding:5px 8px; background:var(--hx-necessidade); color:var(--hx-btn-ink); font:900 italic 15px/1 var(--hx-f-tit) }
+:root[data-pele="zine"] .scan .scan-estado[data-tom="ok"] b{ background:var(--hx-ok) }
+:root[data-pele="zine"] .scan .scan-estado[data-tom="neutro"] b{ background:var(--hx-miolo) }
+:root[data-pele="zine"] .scan .scan-estado b svg.lucide{ color:var(--hx-btn-ink) }
+:root[data-pele="zine"] .scan .scan-onda{ color:var(--hx-miolo) }
+
+/* ====================================================================== 15. o celular (abaixo de 900 px): os recortes pequenos, tortos; o retrato e as acoes em amarelo, o destino atual em anil */
+@media (max-width:899px){
+  :root[data-pele="zine"] body .mm-topo :is(.mm-retrato, .mm-relogio), :root[data-pele="zine"] body .mm-coluna .mm-bt, :root[data-pele="zine"] body .mm-coluna .topo-bt.mm-bt, :root[data-pele="zine"] body .mm-agora,
+  :root[data-pele="zine"] body .pet-dock :is(.mm-acao, .mm-extra, .mm-mais .racao-bt), :root[data-pele="zine"] body .mm-aviso.hx-chip--necessidade{
+    border:3px solid var(--hx-borda); border-radius:0; background:var(--zn-miolo, var(--hx-miolo)); box-shadow:4px 4px 0 var(--hx-sombra-cor); color:var(--hx-texto) }
+  :root[data-pele="zine"] body .mm-topo .mm-retrato{ --zn-miolo:var(--hx-btn-bg); width:58px; height:58px; padding:3px; rotate:-2deg }
+  :root[data-pele="zine"] body .mm-topo .mm-retrato[aria-expanded="true"]{ --zn-miolo:var(--hx-escolhido) }
+  :root[data-pele="zine"] body .mm-topo .mm-relogio{ top:24px; left:86px; height:38px; overflow:visible; align-items:center; gap:8px; padding:0 12px; rotate:1deg }
+  :root[data-pele="zine"] .mm-relogio small{ color:var(--hx-sec); font:800 12px/1 var(--hx-f-tit) }
+  :root[data-pele="zine"] .mm-relogio > b{ padding-right:2px; color:var(--hx-texto); font:900 italic 22px/1 var(--hx-f-num) }
+  :root[data-pele="zine"] .mm-relogio .mm-bits{ border-left:2.5px dashed var(--hx-borda) }
+  :root[data-pele="zine"] .mm-relogio .mm-bits b, :root[data-pele="zine"] .mm-relogio .mm-bits svg{ color:var(--hx-texto) }
+  :root[data-pele="zine"] .mm-ponto{ border:2px solid var(--hx-borda); background:var(--hx-necessidade) }
+  :root[data-pele="zine"] body .mm-coluna, :root[data-pele="zine"] body .mm-coluna .mm-destinos{ gap:12px }
+  :root[data-pele="zine"] body .mm-coluna .mm-bt, :root[data-pele="zine"] body .mm-coluna .topo-bt.mm-bt{ width:50px; height:50px }
+  :root[data-pele="zine"] body .mm-coluna .mm-bt svg{ width:24px; height:24px }
+  :root[data-pele="zine"] body .mm-coluna .mm-item:nth-child(odd) .mm-bt, :root[data-pele="zine"] body .mm-coluna > .mm-item .mm-bt{ rotate:-3deg }
+  :root[data-pele="zine"] body .mm-coluna .mm-item:nth-child(even) .mm-bt{ rotate:2.5deg }
+  :root[data-pele="zine"] body .mm-coluna .mm-bt[aria-current="page"]{ --zn-miolo:var(--hx-escolhido); color:var(--hx-escolhido-ink) }
+  :root[data-pele="zine"] body .mm-agora::after{ background:var(--hx-borda) }
+  :root[data-pele="zine"] body .pet-dock .mm-acao{ --zn-miolo:var(--hx-btn-bg); width:64px; height:64px; color:var(--hx-btn-ink) }
+  :root[data-pele="zine"] body .pet-dock .mm-acao:nth-child(odd){ rotate:-3deg }
+  :root[data-pele="zine"] body .pet-dock .mm-acao:nth-child(even){ rotate:3deg }
+  :root[data-pele="zine"] body .pet-dock .mm-acao svg{ width:28px; height:28px }
+  :root[data-pele="zine"] body .pet-dock .mm-acao.acao-destaque--sugerida{ --zn-miolo:var(--hx-necessidade); width:64px; height:64px; color:var(--hx-texto); border-color:var(--hx-borda) }
+  :root[data-pele="zine"] body .pet-dock .mm-acao.acao-destaque--sugerida svg{ width:28px; height:28px }
+  :root[data-pele="zine"] body .pet-dock :is(.mm-acao, .mm-extra).acao-destaque--aprendida{ --zn-miolo:var(--hx-aprendido); border-style:dashed; border-color:var(--hx-borda); color:var(--hx-texto) }
+  :root[data-pele="zine"] body .pet-dock .mm-extra.mm-sug:not(.mm-sug--aprendida){ --zn-miolo:var(--hx-necessidade); border-color:var(--hx-borda); color:var(--hx-texto) }
+  :root[data-pele="zine"] body .pet-dock .acao-mais[aria-expanded="true"]{ --zn-miolo:var(--hx-borda); color:var(--hx-miolo); border-color:var(--hx-borda) }
+  :root[data-pele="zine"] body .mm-aviso.hx-chip--necessidade{ --zn-miolo:var(--hx-necessidade); padding:0 14px; rotate:-1.6deg; color:var(--hx-texto); font:900 italic 15px/1 var(--hx-f-tit) }
+  :root[data-pele="zine"] body .mm-bt:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:3px; box-shadow:4px 4px 0 var(--hx-sombra-cor) !important }
+  :root[data-pele="zine"] .app--pet .pet-dock{ bottom:calc(25px + env(safe-area-inset-bottom, 0px)) }
+  :root[data-pele="zine"] .lugar-alca{ background:var(--hx-borda) }
+  :root[data-pele="zine"] .painel-tela--lugar-folha .hx-painel__titulo{ font-size:24px }
+  :root[data-pele="zine"] .lugar-abas .hx-aba__nv{ display:none }
+  :root[data-pele="zine"] .painel-tela--lugar-folha .trn2-grade{ grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px }
+  :root[data-pele="zine"] .painel-tela--lugar-folha .trn2-grade .treino-ex{ min-height:54px; gap:3px; padding:8px 9px 7px }
+  :root[data-pele="zine"] .painel-tela--lugar-folha .trn2-grade .treino-ex::before{ display:none }
+  :root[data-pele="zine"] .painel-tela--lugar-folha .trn2-grade .treino-ex b{ font-size:14px }
+  :root[data-pele="zine"] .painel-tela--lugar-folha .trn2-grade .treino-ex small{ font-size:12px }
+  :root[data-pele="zine"] .painel-tela--lugar-folha .trn2-tela > .lg-destaque{ min-height:56px; padding-top:25px; padding-bottom:7px }
+  :root[data-pele="zine"] .painel-tela--lugar-folha .trn2-tela > .lg-destaque::before{ top:8px }
+  :root[data-pele="zine"] .painel-tela--lugar-folha .lg-destaque :is(.trn2-estado, .lg-grande){ font-size:24px }
+}
+
+/* ====================================================================== 16. acertos depois de olhar as primeiras capturas */
+/* a etiqueta do Tamer fica a direita do nome, sem cobri-lo */
+@media (min-width:900px){ :root[data-pele="zine"] .topo-pet{ padding-right:116px } }
+/* o painel do pet (o porque da fala): o titulo menor, para caber ao lado do fechar */
+:root[data-pele="zine"] .pet-painel{ width:min(340px, calc(100% - 78px)) }
+:root[data-pele="zine"] .pet-painel .hx-painel__titulo{ padding:14px 60px 12px 12px; font:900 italic 18px/1.05 var(--hx-f-tit) }
+:root[data-pele="zine"] .pet-painel .pet-painel__folha{ padding:10px 10px 12px }
+/* a Arena cabe inteira no painel (o botao Lutar nao cobre a ultima fileira de mapas) */
+:root[data-pele="zine"] .painel-tela__folha .hx-painel.poc-lugar{ gap:10px }
+:root[data-pele="zine"] :is(.poc-rivais, .poc-mapas){ gap:8px }
+:root[data-pele="zine"] .poc-rival{ min-height:46px }
+:root[data-pele="zine"] .poc-mapa{ padding:6px 12px }
+:root[data-pele="zine"] .poc-lugar .poc-nota{ font-size:15px }

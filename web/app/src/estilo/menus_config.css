@@ -69,6 +69,11 @@
 .mc-opcao--pele-estencil .mc-pele-prev i:nth-child(1){ height:5px; background:repeating-linear-gradient(-45deg, #F0EADB 0 2px, transparent 2px 4px) }
 .mc-opcao--pele-estencil .mc-pele-prev i:nth-child(2){ background:#F0EADB }
 .mc-opcao--pele-estencil .mc-pele-prev i:nth-child(3){ background:#FF4B2B; clip-path:polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%) }
+/* o Zine (PE3 das peles de rua): papel creme, traco de tinta, a tira de tinta, a barra anil e o adesivo amarelo torto */
+.mc-opcao--pele-zine .mc-pele-prev{ background:#F6F0E0; box-shadow:inset 0 0 0 2.5px #131313, 3px 3px 0 #131313; rotate:-2deg }
+.mc-opcao--pele-zine .mc-pele-prev i:nth-child(1){ height:6px; background:#131313 }
+.mc-opcao--pele-zine .mc-pele-prev i:nth-child(2){ background:#2B50FF; box-shadow:inset 0 0 0 2px #131313 }
+.mc-opcao--pele-zine .mc-pele-prev i:nth-child(3){ background:#FFD60A; box-shadow:inset 0 0 0 2px #131313; rotate:6deg }
 /* a etiqueta do cartao (a pele em previa): a cor e a do texto do cartao, escolhido ou nao */
 .mc-etq{ display:inline-flex; align-items:center; min-height:20px; padding:1px 7px; border:1px solid currentColor; font:700 11px/1.1 var(--hx-f); letter-spacing:.08em; text-transform:uppercase }
 

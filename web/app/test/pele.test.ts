@@ -25,10 +25,10 @@ describe("pele.ts", () => {
     expect(m.PELE_PADRAO).toBe("vidro");
     expect(m.peleAtual()).toBe("vidro");
     expect(html.dataset.pele).toBe("vidro");
-    expect(m.NOME_PELE).toEqual({ xcom: "Militar", vidro: "Sci-fi", estencil: "Estêncil" });
+    expect(m.NOME_PELE).toEqual({ xcom: "Militar", vidro: "Sci-fi", estencil: "Estêncil", zine: "Zine" });
     /* a ordem dos cartoes: o padrao primeiro; a Estencil (PE1 das peles de rua) por ultimo e em previa */
-    expect(m.PELES).toEqual(["vidro", "xcom", "estencil"]);
-    expect(m.PELES_EM_PREVIA).toEqual(["estencil"]);
+    expect(m.PELES).toEqual(["vidro", "xcom", "estencil", "zine"]);
+    expect(m.PELES_EM_PREVIA).toEqual(["estencil", "zine"]);
     expect(Object.values(m.NOME_PELE).join(" ")).not.toMatch(/xcom/i);
   });
   it("chave propria ao lado da do save; a escolha grava e vale ao recarregar", async () => {
@@ -84,7 +84,13 @@ describe("pele.ts", () => {
     const volta = await carregar("", esc.guardado);
     volta.m.iniciarPele();
     expect(volta.m.peleAtual()).toBe("estencil");
-    for (const ruim of ["?pele=zine", "?pele=", "?pele=Estencil"]) {
+    /* o Zine (a unica pele clara) entra do mesmo jeito */
+    const zn = await carregar("?pele=zine", {});
+    zn.m.iniciarPele();
+    expect(zn.m.peleAtual()).toBe("zine");
+    expect(html.dataset.pele).toBe("zine");
+    expect(zn.guardado).toEqual({});
+    for (const ruim of ["?pele=arcade", "?pele=", "?pele=Estencil", "?pele=Zine"]) {
       const r = await carregar(ruim, { "digilab-web-v21-sprites-pele": "arcade" });
       r.m.iniciarPele();
       expect(r.m.peleAtual(), ruim).toBe("vidro");

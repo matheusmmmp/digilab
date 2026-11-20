@@ -8,10 +8,12 @@
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&family=Rubik:ital,wght@1,800;1,900&family=DotGothic16&family=Pixelify+Sans:wght@700&family=Saira+Condensed:wght@400;500;600;700&family=Saira+Stencil+One&family=Barlow:wght@400;600;700&family=Rajdhani:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&family=Rubik:ital,wght@0,800;0,900;1,800;1,900&family=DotGothic16&family=Pixelify+Sans:wght@700&family=Saira+Condensed:wght@400;500;600;700&family=Saira+Stencil+One&family=Barlow:wght@400;600;700&family=Rajdhani:wght@700&display=swap">
 </head>
 <body class="dl">
 <div id="app"></div>
+<!-- o corte a mao da pele Zine (estilo/pele-zine.css): o traco e a sombra dos recortes passam por este filtro; fora dela ninguem o usa -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><filter id="rabisco" x="-4%" y="-8%" width="108%" height="116%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="11" result="r"/><feDisplacementMap in="SourceGraphic" in2="r" scale="4" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
 <noscript>O Digilab precisa de JavaScript.</noscript>
 <script type="module" src="./src/main.tsx"></script>
 </body>

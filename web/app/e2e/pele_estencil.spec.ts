@@ -75,7 +75,7 @@ test("Ajustes > Visual: tres cartoes de pele; escolher a Estencil vale na hora, 
   const antes = await registro(page);
   await page.goto(APP + "#/config/visual");
   const grupo = page.getByRole("radiogroup", { name: "Pele dos menus" });
-  await expect(grupo.getByRole("radio")).toHaveCount(3);
+  await expect(grupo.getByRole("radio")).toHaveCount(4);
   await expect(grupo.getByRole("radio", { name: /Sci-fi/ })).toBeChecked();
   const est = grupo.getByRole("radio", { name: /Estêncil/ });
   await expect(est).toContainText("prévia");

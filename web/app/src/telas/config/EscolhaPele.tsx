@@ -1,5 +1,5 @@
-/* T2 do tema dos menus (docs/TAREFA_V2_TEMA_MENUS.md §5): a escolha da pele em Ajustes > Aparencia, um cartao de previa por pele (tres desde a
-   PE1 das peles de rua, 2026-11-20; a pele ainda sem a forma inteira leva a etiqueta "prévia"), no molde
+/* T2 do tema dos menus (docs/TAREFA_V2_TEMA_MENUS.md §5): a escolha da pele em Ajustes > Aparencia, um cartao de previa por pele (quatro desde o
+   Zine das peles de rua, 2026-11-20, em duas colunas; a pele ainda sem a forma inteira leva a etiqueta "prévia"), no molde
    do tema do habitat (.mc-opcao--tema). Padrao radiogroup do WAI-ARIA: setas, Home e End movem e escolhem; so o cartao escolhido entra
    na ordem de Tab. A troca vale na hora (escolherPele muda o data-pele do <html>) e fica gravada; fora do save, do registro e do replay.
    Na tela so os nomes de NOME_PELE (TM2). A previa e desenhada em CSS (.mc-pele-prev, menus_config.css), com as cores fixas de cada pele. */
@@ -25,7 +25,7 @@ export function EscolhaPele() {
   return (
     <>
       <h3 className="mc-sec" id="cfg-pele">Pele dos menus</h3>
-      <div className="mc-opcoes mc-opcoes--3" role="radiogroup" aria-labelledby="cfg-pele">
+      <div className={`mc-opcoes mc-opcoes--${PELES.length === 4 ? 2 : 3}`} role="radiogroup" aria-labelledby="cfg-pele">
         {PELES.map((p, i) => (
           <button type="button" key={p} ref={el => { refs.current[i] = el; }} role="radio" aria-checked={pele === p} tabIndex={pele === p ? 0 : -1}
             className={`mc-opcao mc-opcao--tema mc-opcao--pele-${p}`} onClick={() => escolherPele(p)} onKeyDown={e => aoTecla(e, i)}>

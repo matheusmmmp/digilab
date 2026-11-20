@@ -41,6 +41,7 @@ import "./estilo/minimapa.css";
 /* as peles por ultimo: os seletores levam :root[data-pele="xcom|estencil|vidro"] e vencem tambem os CSS importados pelas telas */
 import "./estilo/pele-xcom.css";
 import "./estilo/pele-estencil.css";
+import "./estilo/pele-zine.css";
 import "./estilo/pele-vidro.css";
 
 iniciarTema();
