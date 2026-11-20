@@ -179,3 +179,19 @@ Em dois PRs: o servidor e o checklist da borda (este), e o cliente do jogo (o se
 - **O que falta:** o cliente do jogo (o segundo PR); a conferência do formato da assinatura e dos robôs na Cloudflare de verdade (CN5); a
   troca da regra que recusa os cabeçalhos da Cloudflare (CN5, o checklist seção 2); o Worker na frente do R2 se a regra de WAF não estiver
   no Free.
+
+### A CN4 no jogo (o segundo PR, branch `v3-cn4-cliente`)
+
+- **A chave:** `VITE_DIGILAB_PROTECAO=1` com o `VITE_DIGILAB_API`. Desligada, o atlas, a cena da evolução, os sons e a fala pedem o que
+  pediam: o gabarito `web/app/test/gabaritos/cn4_assets_desligados.json` (gravado no commit `8308121d`, antes do código) e
+  `web/app/test/assets_desligados.test.ts` conferem.
+- **Ligada:** `web/app/src/protecao/assets.ts` pede as URLs assinadas (juntando os pedidos, até 64 por vez, guardando cada uma até perto de
+  vencer) e vira visitante pelo Turnstile quando não há sessão (`src/protecao/turnstile.ts`, o script da Cloudflare só com a chave do site
+  vinda do servidor). A fala vai ao servidor da conta com o cookie.
+- **O Turnstile na criação da conta:** o widget no primeiro acesso quando o servidor manda a chave do site (sem ela, a tela é a de sempre);
+  o "Criar a conta" espera o token, e o token que não passa desenha o widget de novo.
+- **Os testes:** `web/app/test/protecao_cliente.test.ts` (11) e o gabarito; `npm test` do jogo, 2 174 passaram. No navegador, com o
+  `servidor_web` local e as chaves de teste oficiais do Turnstile: o atlas e os sons vieram por URL assinada como visitante (o desafio
+  resolvido no canto), o widget apareceu no primeiro acesso, passou, e a conta foi criada; a fala com a sessão mostrou a cota 0 de 30.
+- **O que falta:** os enfeites e os modelos 3D da ilha (`web/app/public/`) seguem fora da URL assinada (D-CONTA-222); o revisor de
+  acessibilidade do widget; o e2e no repositório.

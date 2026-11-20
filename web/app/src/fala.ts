@@ -4,6 +4,12 @@
 import { useEffect, useState } from "react";
 import { NOME_ESTAGIO_FALA, expressar, type Estagio, type Motivo, type MotivoVida, type Motor } from "../motor/index.ts";
 import { CHAVE } from "./save.ts";
+import { apiDoBuild, protecaoNoBuild } from "./conta/apiDoBuild.ts";
+
+/* com a proteção ligada (CN4), a fala vai ao servidor_web da conta, com o cookie (a cota é por conta); desligada, o /api/fala da mesma
+   origem, sem mudar nada no pedido */
+const pedirFala = (caminho: string, init: RequestInit): Promise<Response> =>
+  protecaoNoBuild() ? fetch(apiDoBuild().replace(/\/+$/, "") + caminho, { ...init, credentials: "include" }) : fetch(caminho, init);
 
 export const CHAVE_FALA_LLM = CHAVE + "-fala-llm";
 export interface RespostaFala { texto: string | null; fonte: string; detalhe?: string }
@@ -17,7 +23,7 @@ try { FALA_LLM.on = localStorage.getItem(CHAVE_FALA_LLM) === "1"; } catch { /* s
 
 export async function verificarLLM(): Promise<void> {
   try {
-    const r = await fetch("/api/fala/status", { cache: "no-store" }); if (!r.ok) throw new Error(String(r.status));
+    const r = await pedirFala("/api/fala/status", { cache: "no-store" }); if (!r.ok) throw new Error(String(r.status));
     const d = await r.json();
     FALA_LLM.ativo = !!d.ativo; FALA_LLM.provedor = d.provedor; FALA_LLM.modelo = d.modelo;
     FALA_LLM.semCusto = !!d.sem_custo; FALA_LLM.motivo = d.motivo || ""; FALA_LLM.gasto = d.gasto;
@@ -67,7 +73,7 @@ export function falaLLM(motApi: Record<string, unknown>, est: Estagio, humor: nu
   if (pronta) return pronta;
   if (!FALA_LLM.pendentes.has(chave)) {
     FALA_LLM.pendentes.add(chave);
-    fetch("/api/fala", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ motivo: motApi, estagio: est, humor }) })
+    pedirFala("/api/fala", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ motivo: motApi, estagio: est, humor }) })
       .then(r => r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status)))
       .then(d => { FALA_LLM.cache.set(chave, d); if (d.gasto) FALA_LLM.gasto = d.gasto; })
       .catch((err: Error) => { FALA_LLM.cache.set(chave, { texto: null, fonte: "template", detalhe: "servidor: " + err.message }); })
