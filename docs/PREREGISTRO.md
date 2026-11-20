@@ -229,6 +229,24 @@ o resultado. O texto que vale é o do plano, no commit citado.
 | resultado | [RESULTADO_V3_PET_VIVO_RA.md](RESULTADO_V3_PET_VIVO_RA.md): L-SONO "preserva o sono" nas cinco candidatas; L-ALÉM "só o sono"; a H-MÓVEL não se confirma |
 | artefatos | [`artifacts_v3_pet_vivo/ra/run/`](../artifacts_v3_pet_vivo/ra/run/): `meta.json`, `resultado.json` `4c645a0a…`, `medidas.json.gz` `605d64c0…` |
 
+## PR-PET-VIVO-SONO — o sono pelo reflexo ou pelo sorteio (replay)
+
+**Seção escrita antes da run** (2026-11-20). O plano foi APROVADO pelo Matheus em 2026-11-20 ("Aprovo todas"). As linhas "resultado"
+e "artefatos" entram só depois do replay.
+
+| campo | valor |
+|---|---|
+| plano | [`PLANO_ANALISE_V3_PET_VIVO_SONO.md`](https://github.com/matheusmmmp/digilab/blob/53612fa2dc10e9184fa0f9a63027b540353883a7/docs/PLANO_ANALISE_V3_PET_VIVO_SONO.md), commit `53612fa2dc10e9184fa0f9a63027b540353883a7` (2026-11-20, o APROVADO; o PROPOSTO é o `cd15ad7e`) |
+| hipótese | as perguntas Q-CAMINHO e Q-MARGEM. "O desfecho esperado é 'boa parte passa pelo sorteio'", pelas sementes dos testes (seções 1 e 2.2) |
+| células | as mesmas 5 120 vidas do R1 e do R-a, rejogadas: o HOJE e o OLF-0 da run do PV-2 (3 lugares, n 200) e o HOJE da checagem do v38 (2 lugares, n 40); os caminhos REFLEXO, SEGURA, SORTEIO e ÚNICO (seções 3 e 4) |
+| sementes | nenhuma nova e nenhuma faixa nova: as da run do PV-2 (bases 26101…26505, k 40) (seção 3) |
+| contraste primário | **nenhum:** "nenhuma medida é gate"; o IC95 da F_PESOS por lugar contra os cortes da regra (seção 6) |
+| regra de leitura | no HOJE: o limite de cima da F_PESOS < 0,10 nos 3 lugares, "quase tudo reflexo: a alavanca é o corpo"; o de baixo > 0,25 em pelo menos 2 lugares, "boa parte passa pelo sorteio: vale um teste de recompensa"; senão "misto". Os cortes são SEM FONTE (seção 6) |
+| regra de parada | roda uma vez; as conferências (C-FONTE, C-G1, C-FECHO, C-UMA-VEZ, C-REFLEXO, C-SOMA) falham alto antes de qualquer medida; com a projeção da fumaça acima de 2 h o replay não roda e o plano volta ao Matheus (seções 3 e 8) |
+| o que refutaria | pela regra de leitura: "quase tudo reflexo" ou "misto" contrariam o desfecho esperado |
+| resultado | ainda não rodou |
+| artefatos | ainda não há |
+
 ## Como replicar uma run (`tools/replicar_run.py`)
 
 ```bash
