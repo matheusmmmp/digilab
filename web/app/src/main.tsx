@@ -2,7 +2,7 @@
    escolhida ou a Holografica; ?pele=xcom|vidro sobrepoe do mesmo jeito (pele.ts). */
 import { createRoot } from "react-dom/client";
 import { App } from "./App.tsx";
-import { ATLAS_URL, CLIPES_UP, carregarAtlas } from "./atlas.ts";
+import { carregarAtlas } from "./atlas.ts";
 import { carregarDecoracao } from "./decoracao.ts";
 import { iniciarFalaLLM } from "./fala.ts";
 import { iniciarFalaLivre } from "./falaLivre.ts";
@@ -55,8 +55,8 @@ ligarEscala(new URLSearchParams(location.search).get("escala") !== "0");
    App; roda uma vez por versao do descarte (tamer.CHAVE_DESCARTE). Antes de abrir o save */
 try { descartarPetsAntigos(localStorage, CHAVE_GUARDADOS, lutaPocLigada()); } catch (err) { console.error("descarte dos pets antigos falhou", err); }
 iniciarJogo(localStorage);
-/* a constante CLIPES_UP (ligada desde a H1b da ilha) liga os clipes do UP; ?clipes_up=1 tambem os liga naquela aba, como antes */
-carregarAtlas(ATLAS_URL, CLIPES_UP || new URLSearchParams(location.search).get("clipes_up") === "1");
+/* os sprites vem so do atlas de clipes, e as pecas de interface do atlas de pecas (atlas.ts) */
+carregarAtlas();
 carregarDecoracao();
 ouvirOutrasAbas();
 iniciarTempo();

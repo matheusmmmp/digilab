@@ -29,7 +29,7 @@ senha (decisao do Matheus, 2026-09-24): o link aleatorio do tunel vira a unica p
     cloudflared tunnel --url http://127.0.0.1:8765
 - senha obrigatoria (HTTP Basic, qualquer usuario; variavel DIGILAB_SENHA, nunca na linha de comando);
 - so as rotas do jogo: /v1/web/*.html, o build do app em /v1/web/dist/ (so o que fica dentro dele),
-  /Assets/digilab_atlas.png, /Assets/digilab_atlas_up.{png,json}, a decoracao listada em web/app/decoracao_nomes.json, /Assets/sons/{mapa.json,*.mp3}, /Assets/arena_up/{dados,sprites,efeitos,mapas}/<nome simples>, /Assets/evolucao_up/{mapa.json,pacotes/<nome simples>.bin} e /api/fala*; o resto (repo, .git, v0, codigo do
+  /Assets/digilab_atlas.png, /Assets/digilab_atlas_up_pecas.{png,json}, a decoracao listada em web/app/decoracao_nomes.json, /Assets/sons/{mapa.json,*.mp3}, /Assets/arena_up/{dados,sprites,efeitos,mapas}/<nome simples>, /Assets/evolucao_up/{mapa.json,pacotes/<nome simples>.bin} e /api/fala*; o resto (repo, .git, v0, codigo do
   app, Assets inteiro, gasto) responde 404;
 - a API paga do Claude fica desligada, salvo --claude-remoto (quem tiver a senha gasta o credito,
   ate o teto de --limite-usd).
@@ -83,7 +83,7 @@ def _nomes_decoracao() -> list[str]:
 
 # modo remoto: so estas rotas (o resto da pasta servida nao sai do computador)
 ROTAS_REMOTAS = (f"{PREFIXO}/web/digilab_sprites.html", f"{PREFIXO}/web/digilab.html", "/Assets/digilab_atlas.png",
-                 "/Assets/digilab_atlas_up.png", "/Assets/digilab_atlas_up.json",
+                 "/Assets/digilab_atlas_up_pecas.png", "/Assets/digilab_atlas_up_pecas.json",
                  "/Assets/digilab_atlas_up_clipes.png", "/Assets/digilab_atlas_up_clipes.json",
                  "/api/fala", "/api/fala/status",
                  # decoracao do Digimon UP (Assets/gerar_decoracao_up.py): o JSON e so os PNGs listados no repositorio
