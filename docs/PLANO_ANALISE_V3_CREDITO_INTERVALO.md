@@ -1,6 +1,6 @@
 # Plano de análise V3: CREDITO_INTERVALO, o R2 (o crédito do intervalo, com o ELOGIO)
 
-**Status: APROVADO pelo Matheus em 2026-11-19,** com as CI-R2-1 a CI-R2-9 DECIDIDAS pela recomendação: "Aprovo todas", na sessão coordenadora, confirmado nesta sessão ("Sim, aprovei"). O adendo 1 (a linha de base) está escrito no fim, PROPOSTO, à espera do Matheus; o adendo 2 (o corpo) também, PROPOSTO, e nenhuma vida roda antes de os dois fecharem. Escrito em 2026-11-19 (Claude Code, Opus 5.5, worktree `v3-valuation`, branch `v3-credito-intervalo-plano`), a pedido
+**Status: APROVADO pelo Matheus em 2026-11-19,** com as CI-R2-1 a CI-R2-9 DECIDIDAS pela recomendação: "Aprovo todas", na sessão coordenadora, confirmado nesta sessão ("Sim, aprovei"). Os adendos 1 (a linha de base) e 2 (o corpo), no fim, foram APROVADOS pelo Matheus em 2026-11-20 ("Aprovo e confirmo"), com as AD1-1 a AD1-3 e a AD2-1 pela recomendação. O R2 espera a C4 da CORPO (AD2-1). Escrito em 2026-11-19 (Claude Code, Opus 5.5, worktree `v3-valuation`, branch `v3-credito-intervalo-plano`), a pedido
 do Matheus na sessão coordenadora: "Manda o valuation, escrever o plano do R2". Só o plano: nenhum código e nenhuma vida antes da
 aprovação. A tarefa é a [TAREFA_V3_CREDITO_INTERVALO.md](TAREFA_V3_CREDITO_INTERVALO.md), da gerência. O orquestrador vai conferir este
 cabeçalho e recusar sem o APROVADO.
@@ -342,11 +342,10 @@ forma; nenhum número se transfere. O "substituir em vez de somar" tem só a pis
 A recompensa homeostática é a de Keramati e Gutkin 2014 (`10.7554/eLife.04811`), que já é o r do modular. Os cortes e as margens são SEM
 FONTE.
 
-## Adendo 1: a linha de base, com o R-a (PROPOSTO, 2026-11-19)
+## Adendo 1: a linha de base, com o R-a (APROVADO, 2026-11-20)
 
-**Status: PROPOSTO.** Escrito em 2026-11-19 (Claude Code, Opus 5.5, branch `v3-credito-intervalo-adendo1`), depois de a sessão da cadeia
-avisar que o replay do R-a rodou. Nada do plano acima muda além do que este adendo diz. Nenhum código e nenhuma vida antes de o Matheus
-decidir as AD1-1 a AD1-3 e de o adendo 2 fechar.
+**Status: APROVADO pelo Matheus em 2026-11-20,** nesta sessão: "Aprovo e confirmo". As AD1-1 a AD1-3 ficam DECIDIDAS pela recomendação: a MÓVEL global, o `k_base` ∈ {16, 96} na grade da calibração (16 células), e seguir o R2 com o descritivo do sono. Escrito como PROPOSTO. Escrito em 2026-11-19 (Claude Code, Opus 5.5, branch `v3-credito-intervalo-adendo1`), depois de a sessão da cadeia
+avisar que o replay do R-a rodou. Nada do plano acima muda além do que este adendo diz. Nenhuma vida antes da C4 (o adendo 2).
 
 **A fonte:** o [RESULTADO_V3_PET_VIVO_RA.md](RESULTADO_V3_PET_VIVO_RA.md) e o `artifacts_v3_pet_vivo/ra/run/resultado.json`, no PR
 #1036 (branch `v3-pet-vivo-ra-resultado`, commit `4b639fd1`), **ainda sem merge.** Os números abaixo vêm daquele documento e não foram
@@ -408,9 +407,9 @@ mede se o mecanismo ensina a ação do meio.
 | AD1-2 | o `k_base`: (a) na grade, {16, 96}; (b) fixo em 16 | (a) | (a) custa ~1 h 45 a mais; (b) arrisca um k que encolhe o crédito do sono |
 | AD1-3 | "só o sono": (a) seguir, com o descritivo do sono; (b) parar o R2 | (a) | (a) gasta a calibração num crédito que talvez só mova o sono; (b) para o ELOGIO junto |
 
-## Adendo 2: o corpo, depois do CHECKPOINT da C3 (PROPOSTO, 2026-11-20)
+## Adendo 2: o corpo, depois do CHECKPOINT da C3 (APROVADO, 2026-11-20)
 
-**Status: PROPOSTO.** Escrito em 2026-11-20 (Claude Code, Opus 5.5, branch `v3-credito-intervalo-adendo1`). Nada do plano acima muda além
+**Status: APROVADO pelo Matheus em 2026-11-20,** nesta sessão: "Aprovo e confirmo". A AD2-1 fica DECIDIDA na opção (a), esperar a C4, e o CHECKPOINT "Levar o DTB à C4" fica confirmado aqui. Escrito como PROPOSTO. Escrito em 2026-11-20 (Claude Code, Opus 5.5, branch `v3-credito-intervalo-adendo1`). Nada do plano acima muda além
 do que este adendo diz.
 
 **A fonte:**
