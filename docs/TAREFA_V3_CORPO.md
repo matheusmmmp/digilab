@@ -179,9 +179,15 @@ ligado no jogo.
 ## 16. O plano da C4, a validação do teto baixo (2026-11-20)
 
 O CHECKPOINT da C3 chegou repassado pelo coordenador, com as palavras do Matheus: "Levar o DTB à C4". O plano é o
-`docs/PLANO_ANALISE_V3_CORPO_C4.md`, **PROPOSTO**. O Matheus respondeu "Aprovo todas" em 2026-11-20 e, em seguida, "Decidir a medida
-antes": a aprovação espera a decisão da medida primária de bem-estar. O plano propõe o CTRL e o DTB em sementes novas, nas 12 células × 200 unidades, com a regra de leitura da
-C3 e os quatro itens do planejamento de 2026-11-19 (o que as vidas gravadas respondem, a contagem dos eventos, a precisão e os donos
-distintos). **O que muda sobre a C3:** a saúde por célula entra como ressalva (D-C4-2), a bola sai dos pares e os chutes por vida viram
-descritivo (D-C4-4), o bloco II sobe para 500 pares (D-C4-5), e o relógio sai do `medidas.json` (D-C4-8). A faixa é pedida ao
-coordenador depois da aprovação. Nenhuma vida antes da medida decidida, do plano aprovado na `main` e do código.
+`docs/PLANO_ANALISE_V3_CORPO_C4.md`, **PROPOSTO**.
+- **A primeira versão** tinha a taxa por episódio como primária. O Matheus respondeu "Aprovo todas" e, em seguida, "Decidir a medida
+  antes". Aquela aprovação não vale mais.
+- **A primária nova, o "Tempo bem"** (decisão dele de 2026-11-20): a fração das decisões sem privação e sem exaustão, nos dias 1 a 14. A
+  métrica está em `digilab/metrics.py` (`tempo_bem_nas_decisoes`), com os limiares das duas medidas de hoje, e o teste em
+  `tests/test_corpo_tempo_bem.py`.
+- **O replay de conferência** (`experiments/run_v3_corpo_tempo_bem.py`, `artifacts_v3_corpo/c3_tempo_bem/`): as 4 800 vidas do CTRL e do
+  DTB da C3 refeitas e conferidas contra o log gravado, em 38 min, sem vida nova. A fração sai em todas, e nenhuma vida fica em 0 ou em
+  1. Nas 12 células, DTB − CTRL dá +0,062 [+0,058; +0,066]. Esse número não é a validação: a C3 escolheu o braço.
+- **O plano reescrito:** o CTRL e o DTB em sementes novas, nas 12 células × 200 unidades e 500 pares. A primária é o "Tempo bem" nas 12
+  e nas 11 células; as guardas são a saúde, a taxa por episódio, o "Tempo bem" por lugar e o S2; a saúde por célula entra como ressalva.
+  As D-C4-2 a D-C4-12 estão abertas. Nenhuma vida antes do plano aprovado na `main`, da faixa e do código.

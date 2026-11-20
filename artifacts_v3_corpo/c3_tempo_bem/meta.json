@@ -1,0 +1,31 @@
+{
+  "artefatos_sha256": {
+    "resumo.json": "45373085a8b78b2089918415bc2d47ec91c63f1e9987f1126d4ebcfa02f4595f",
+    "tempo_bem.json": "ef35e95731ec352e2a9cae5d67a112150f3e48d7b74196be88e01e7e21d9cc45"
+  },
+  "bracos": [
+    "CTRL",
+    "DTB"
+  ],
+  "comando": "python experiments/run_v3_corpo_tempo_bem.py --config experiments/configs/v3_corpo_c3/run.json --processos 4",
+  "config_arquivo": "experiments/configs/v3_corpo_c3/run.json",
+  "config_sha256": "d6a6f1ab219d11ae6945ec94ca5431a058d46167e9285b691bfa11fb9debab71",
+  "duracao_s": 2270.0359736,
+  "fonte": "artifacts_v3_corpo/c3",
+  "fonte_sha256": {
+    "medidas.json.gz": "eeaebb24f5daf0855cf3dcc92b84c738f5439706ec4fa0f1cf1794bf00169a43",
+    "meta.json": "3832cdf9e3d400bc5c19f514767ad89354a58ebf8ef83803aba7e1e35b42133f"
+  },
+  "git_head": "5811c97ba3df0e5a5224473c32dbb15e6aa9fed8",
+  "inicio": "2026-11-20T11:08:55",
+  "limiar_exaustao": 0.25,
+  "limiar_privacao": 0.15,
+  "margem": 0.032,
+  "metrics_sha256": "cc73af676f8c0692ff560066b78d8e9d64e061af8bb745f1663fae2138e70ad4",
+  "o_que_e": "replay de conferencia do Tempo bem sobre as vidas da C3 (sem vida nova)",
+  "orquestrador_c3_sha256": "e389360a7d1ce063de744618bbb41195184dca6ed814f67d5e830c84c3baaf76",
+  "processos": 4,
+  "python": "3.13.0",
+  "script_sha256": "b33d3f7fd2ba47276657914a8bcae4495ac98b465dbe23a81791c3966ec079fa",
+  "vidas": 4800
+}
