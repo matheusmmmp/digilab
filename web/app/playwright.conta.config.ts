@@ -25,7 +25,7 @@ export default defineConfig({
   webServer: {
     command: `"${PYTHON}" ../../servidor/servidor_local.py --porta ${PORTA} --provedor nenhum`,
     /* a pagina do build so existe depois da montagem; o servidor esta de pe quando serve o atlas */
-    url: `http://127.0.0.1:${PORTA}/Assets/digilab_atlas_up.json`,
+    url: `http://127.0.0.1:${PORTA}/Assets/digilab_atlas_up_pecas.json`,
     reuseExistingServer: false,
     timeout: 60_000,
   },

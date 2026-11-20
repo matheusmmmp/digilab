@@ -1,15 +1,16 @@
 /* Atlas do Digimon UP (Bandai; com o credito, autorizado pelo Matheus para este projeto: docs/UI_GUIDELINES.md, secao 5.1). Fica FORA do
-   repositorio, em D:\Trab\digilab\Assets, gerado por Assets\gerar_atlas_up.py. Mesmo caminho relativo do HTML: a pagina em /v1/web/dist/ pede
-   ../../../Assets/ (no modo dev, o vite.config serve so estes dois arquivos). Se nao carregar: aviso visivel. */
+   repositorio, em D:\Trab\digilab\Assets. Mesmo caminho relativo do HTML: a pagina em /v1/web/dist/ pede ../../../Assets/ (no modo dev, o
+   vite.config serve so os arquivos listados). Se nao carregar: aviso visivel.
+   Desde 2026-11-20 (decisao do Matheus: "Tira o atlas antigo e deixa so o de clipes") sao dois arquivos, e nenhum repete sprite:
+     - o atlas de clipes (Assets/gerar_atlas_up_clipes.py, a partir dos exports do Aseprite em remaster/export e remaster/acoes/export): TODOS
+       os sprites, com os clipes oficiais (Idle, Run, golpe, acoes, reacoes);
+     - o atlas de pecas (Assets/gerar_atlas_up_pecas.py): so as pecas de interface (ovos, fundos, ilhas, emojis, marcadores, icones, treinos).
+   O atlas antigo (digilab_atlas_up.json, ciclos de pose do extrator) nao e mais lido. Sprite que so existia nele (bot_oraculo, guia) fica sem
+   desenho ate ganhar export do Aseprite: o retrato do guia volta para o robozinho (Bit.tsx) e o do oraculo some (BalaoOraculo.tsx). */
 import { useEffect, useState } from "react";
 import { zoomAtual } from "./escala.ts";
 
-export const ATLAS_URL = "../../../Assets/digilab_atlas_up.json";
-/** Chave dos clipes oficiais do UP (TAREFA_V2_UP_ATLAS), LIGADA desde 2026-10-30 (decisao H-4 do Matheus, docs/TAREFA_V3_HABITAT_ILHA_3D.md,
-    H1b): o app carrega tambem o atlas de clipes (Assets\gerar_atlas_up_clipes.py), o Idle de cada sprite toca com a duracao real de cada quadro e
-    as vistas que andam usam o Run. Sem o atlas de clipes, o aviso de atlas que nao carregou (nunca cai calado no atlas atual). Desligada, o app
-    carrega so o atlas acima e desenha como antes. E do app, nao do motor: o log, o replay e a paridade nao mudam. */
-export const CLIPES_UP = true;
+export const ATLAS_PECAS_URL = "../../../Assets/digilab_atlas_up_pecas.json";
 export const ATLAS_CLIPES_URL = "../../../Assets/digilab_atlas_up_clipes.json";
 
 /** [x, y, largura, altura, deslocamento x, deslocamento y] de cada quadro dentro da caixa do sprite */
@@ -28,7 +29,7 @@ const SUFIXO_OBJETO = "_objeto";
 const ehForma = (chave: string): boolean => !chave.startsWith("npc_") && !chave.startsWith("bot_");
 /** um clipe: quadros, a duracao de cada um em ms e se repete; quadro vazio = [0,0,0,0,0,0] */
 export interface ClipeUp { quadros: Quadro[]; ms: number[]; loop: boolean }
-/** `clipes` so existe com a chave CLIPES_UP ligada; entao `quadros` e o Idle e a imagem e a do atlas de clipes */
+/** todo sprite vem do atlas de clipes: `quadros` e o Idle e a imagem e a do atlas de clipes */
 export interface SpriteUp { caixa: [number, number]; quadros: Quadro[]; clipes?: Partial<Record<Clipe, ClipeUp>> }
 export interface SpriteClipes { digimon: string; caixa: [number, number]; clipes: Partial<Record<Clipe, ClipeUp>> }
 export interface AtlasClipes { atlas: string; sprites: Record<string, SpriteClipes> }
@@ -40,7 +41,7 @@ export interface AtlasUp {
 }
 export type EstadoAtlas =
   | { tipo: "carregando" }
-  | { tipo: "ok"; dados: AtlasUp; img: HTMLImageElement; imgClipes?: HTMLImageElement }
+  | { tipo: "ok"; dados: AtlasUp; img: HTMLImageElement; imgClipes?: HTMLImageElement }   /* img: o atlas de pecas; imgClipes: o de clipes */
   | { tipo: "erro"; erro: string };
 
 let estado: EstadoAtlas = { tipo: "carregando" };
@@ -105,26 +106,28 @@ export function juntarClipes(base: AtlasUp, c: AtlasClipes): AtlasUp {
   }
   return { ...base, sprites };
 }
-export function carregarAtlas(url = ATLAS_URL, clipes = CLIPES_UP, urlClipes = ATLAS_CLIPES_URL): void {
+/** o atlas de pecas, como gravado pelo Assets/gerar_atlas_up_pecas.py */
+export interface AtlasPecas { atlas: string; ms_por_quadro: number; pecas: Record<string, [number, number, number, number]> }
+export function carregarAtlas(urlPecas = ATLAS_PECAS_URL, urlClipes = ATLAS_CLIPES_URL): void {
   const abs = (u: string): string => new URL(u, document.baseURI).href;
-  fetch(url)
-    .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status} em ${url}`); return r.json() as Promise<AtlasUp>; })
-    .then(async dados => {
-      const png = new URL(dados.atlas, abs(url)).href;
-      const img = await carregarImagem(png, "atlas");
-      aplicarFundos(dados, img);
-      if (!clipes) { avisar({ tipo: "ok", dados, img }); return; }
-      /* chave ligada: sem o atlas de clipes, aviso visivel; nunca cai calado no atlas atual */
-      const r = await fetch(urlClipes);
-      if (!r.ok) throw new Error(`atlas de clipes: HTTP ${r.status} em ${urlClipes}`);
-      const c = await r.json() as AtlasClipes;
-      const imgClipes = await carregarImagem(new URL(c.atlas, abs(urlClipes)).href, "atlas de clipes");
-      avisar({ tipo: "ok", dados: juntarClipes(dados, c), img, imgClipes });
-    })
-    .catch((err: unknown) => {
-      console.error("falha ao carregar o atlas", url, err);
-      avisar({ tipo: "erro", erro: err instanceof Error ? err.message : String(err) });
-    });
+  const json = async <T,>(u: string, rotulo: string): Promise<T> => {
+    const r = await fetch(u);
+    if (!r.ok) throw new Error(`${rotulo}: HTTP ${r.status} em ${u}`);
+    return await r.json() as T;
+  };
+  (async () => {
+    const p = await json<AtlasPecas>(urlPecas, "atlas de pecas");
+    const img = await carregarImagem(new URL(p.atlas, abs(urlPecas)).href, "atlas de pecas");
+    const base: AtlasUp = { atlas: p.atlas, ms_por_quadro: p.ms_por_quadro, sprites: {}, pecas: p.pecas };
+    aplicarFundos(base, img);
+    /* sem o atlas de clipes, aviso visivel: nao ha outra fonte de sprite */
+    const c = await json<AtlasClipes>(urlClipes, "atlas de clipes");
+    const imgClipes = await carregarImagem(new URL(c.atlas, abs(urlClipes)).href, "atlas de clipes");
+    avisar({ tipo: "ok", dados: juntarClipes(base, c), img, imgClipes });
+  })().catch((err: unknown) => {
+    console.error("falha ao carregar o atlas", urlPecas, urlClipes, err);
+    avisar({ tipo: "erro", erro: err instanceof Error ? err.message : String(err) });
+  });
 }
 export function useAtlas(): EstadoAtlas {
   const [, set] = useState(0);
@@ -210,7 +213,7 @@ export function desenharSprite(ctx: CanvasRenderingContext2D, e: AtlasOk, nome: 
   else ctx.drawImage(img, q[0], q[1], q[2], q[3], x + q[4] * escala, y + q[5] * escala, q[2] * escala, q[3] * escala);
   ctx.restore();
 }
-/** a caixa do Idle: o retangulo [x, y, w, h] que os quadros do Idle ocupam, juntos, dentro da caixa do sprite. Com a chave CLIPES_UP a caixa
+/** a caixa do Idle: o retangulo [x, y, w, h] que os quadros do Idle ocupam, juntos, dentro da caixa do sprite. Com os clipes a caixa
     do sprite e a comum a TODOS os clipes (o golpe, a corrida, a queda) e o corpo parado nao fica no meio dela nem encosta no pe dela: quem
     mostra o pet parado e sozinho (a Revelacao, o "de -> para") enquadra por aqui. Sem quadro desenhavel, a caixa inteira */
 export function caixaIdle(s: SpriteUp): [number, number, number, number] {

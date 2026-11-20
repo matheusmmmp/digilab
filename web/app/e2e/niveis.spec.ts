@@ -22,7 +22,7 @@ const TELAS = [["1920", 1920, 950], ["390", 390, 844]] as const;
 interface Semente { save?: object | null; tamer?: object; nivel?: { marcos: number[]; cartoes: number[] } | null; dicas?: boolean; boasVindas?: boolean }
 /** semeia por uma pagina da mesma origem que nao e o app (o app gravaria o pet dele ao fechar); sem a chave -nivel quando `nivel` falta (o piso entra) */
 async function semear(page: Page, o: Semente = {}): Promise<void> {
-  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.goto("/Assets/digilab_atlas_up_pecas.json");
   await page.evaluate(([chave, s, t, n, dicas, bv]) => {
     localStorage.clear(); localStorage.setItem(chave + "-tamer", t); localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-guardados", "[]");
     if (bv === "1") localStorage.setItem(chave + "-boas-vindas", "1");

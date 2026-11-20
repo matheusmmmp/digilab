@@ -23,7 +23,7 @@ function vigiarErros(page: Page): string[] {
 test("a arvore na frente do ninho fica transparente", async ({ browser }) => {
   const ctx = await browser.newContext({ baseURL: test.info().project.use.baseURL, viewport: { width: 1280, height: 800 } });
   const page = await ctx.newPage(), erros = vigiarErros(page);
-  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.goto("/Assets/digilab_atlas_up_pecas.json");
   await page.evaluate(c => { localStorage.clear(); localStorage.setItem(c + "-dicas-ligadas", "0"); }, CHAVE);
   await page.goto(APP + "#/inicio");
   await page.getByRole("button", { name: /começar/i }).click();

@@ -211,3 +211,21 @@ Pelo `docs/PLANO_ANALISE_V3_CORPO_C4.md`, seção 8. Nenhuma vida da faixa rodou
 - **Nada mudou no `digilab/` nem no web.**
 
 **O que falta:** o plano (#1039) e este código na `main`, o `pre_run` e a run, uma vez.
+
+## 18. A run da C4, a validação do teto baixo (2026-11-20)
+
+A run única do `docs/PLANO_ANALISE_V3_CORPO_C4.md`, no commit `64a25595`: 4 800 vidas e 1 000 pares, em 1 h 19 min, com 4 processos. O
+relato é o `docs/RESULTADO_V3_CORPO_C4.md`.
+- **A leitura: "confirma com ressalva",** como o plano previu.
+- **A primária passa:** DTB − CTRL no "Tempo bem" dá +0,062 [+0,058; +0,067] nas 12 células e +0,064 [+0,059; +0,068] nas 11 distintas.
+- **Nenhuma das sete guardas reprova:** a saúde (+0,056 nas 12 células; +0,013 nas 6 do relapso e do aleatório), a taxa por episódio no
+  `longe_fixo` (+0,126), o "Tempo bem" nos três lugares e o S2 (−3,30 decisões, com 500 pares).
+- **A ressalva:** com o aleatório no comedouro, a saúde do DTB cai −0,049 [−0,061; −0,038] (na C3, −0,048). Nessa célula o "Tempo bem" não
+  muda.
+- **As premissas se cumprem todas,** e cada medida repete a C3 dentro do intervalo.
+- **O replay da fome** (`experiments/run_v3_corpo_c4_fome.py`, com a métrica `fome_nas_decisoes`): um descritivo acrescentado depois da
+  aprovação, por escolha do Matheus ("Replay depois"). Está na fila, atrás da run de outra frente.
+
+**O programa para no CHECKPOINT da C4.** Pela seção 9 do plano, "confirma com ressalva" volta ao Matheus com a célula: aceitar a ressalva
+e seguir para a C5, pedir outra mudança, ou deixar o corpo como está. O T_B continua PROPOSTO e SEM FONTE. Nenhum braço está ligado no
+jogo.
