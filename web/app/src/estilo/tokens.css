@@ -178,3 +178,33 @@
     --hx-tecla:#0F2442; --hx-tecla-hover:#163256;
   }
 }
+
+/* Pele Estencil (id estencil; docs/PLANO_UX_PELES_RUA.md, modelo 1; PE1, 2026-11-20): cartaz de rua. Tinta quase preta e opaca, osso no
+   contorno e no texto, vermelhao na acao; os cantos cortados saem do chanfro que a HUD ja tem (--hud-ch). Sempre escura e sem variante
+   por tema, como as outras. AINDA EM PREVIA: aqui estao so os valores dos tokens; a forma inteira (a letra vazada, a sombra dura, o
+   contorno de 2 px, os paralelogramos, o foco por tipo de peca) e a PE2, em estilo/pele-estencil.css.
+   As cores de sentido (alerta, perigo, ok, necessidade, aprendido, sombrio) sao as do :root, sem mudanca.
+   Contraste (WCAG) contra a tinta #17191F e a tinta clara #262933, conferido em test/hx_pele.test.ts: texto 14,6 e 12,1; texto-2 11,8 e 9,8;
+   secundario 7,9 e 6,5; a acao (tinta sobre o vermelhao) 5,3; o escolhido (tinta sobre o osso) 14,6; a tinta sobre o rosa da necessidade 7,6.
+   Valores APROVADOS pelo Matheus como ponto de partida (PR-4 do plano, 2026-11-20: "Sim, aprovo"); PROPOSTOS, SEM FONTE. */
+:root[data-pele="estencil"]{
+  --hx-chao:#0E0F12; --hx-miolo:#17191F; --hx-miolo-2:#262933;
+  --hx-borda:#F0EADB; --hx-borda-topo:#F0EADB;
+  --hx-texto:#F0EADB; --hx-texto-2:#DAD4C4; --hx-sec:#B3AD9E; --hx-rotulo:#F0EADB;
+  --hx-escolhido:#F0EADB; --hx-escolhido-ink:#17191F; --hx-escolhido-borda:#F0EADB; --hx-escolhido-brilho:none;
+  --hx-hachura:repeating-linear-gradient(-45deg, rgba(240,234,219,.32) 0 4px, transparent 4px 8px);
+  --hx-hachura-verde:repeating-linear-gradient(-45deg, rgba(23,25,31,.28) 0 4px, transparent 4px 8px);
+  --hx-btn-bg:#FF4B2B; --hx-btn-ink:#17191F; --hx-btn-borda:#FF4B2B; --hx-btn-bg-hover:#FF6A4F;
+  --hx-medidor:#F0EADB; --hx-medidor-trilho:rgba(240,234,219,.2);
+  --hx-foco:#FFFFFF;
+  --hx-painel-fim:#17191F; --hx-sombra:5px 5px 0 #000000;
+  --hx-chanfro:14px; --hx-chanfro-p:9px;
+  --hx-tecla:rgba(240,234,219,.06); --hx-tecla-hover:rgba(240,234,219,.16);
+  --hud-fundo-1:#17191F; --hud-fundo-2:#17191F; --hud-desfoque:none;
+  --hud-ch:14px; --hud-ch-p:9px; --hud-brilho:none;
+  --hud-risca:repeating-linear-gradient(-45deg, #F0EADB 0 4px, transparent 4px 8px);
+  /* a forma (pele-estencil.css): a letra vazada dos titulos, a cor da sombra dura e os segmentos das barras */
+  --hx-f-tit:"Saira Stencil One", "Saira Condensed", "Rajdhani", system-ui, sans-serif;
+  --hx-sombra-cor:#000000;
+  --hx-mascara:repeating-linear-gradient(90deg, #000 0 9px, transparent 9px 12px);
+}

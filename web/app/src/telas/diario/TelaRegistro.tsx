@@ -77,7 +77,7 @@ export function TelaRegistro({ irPet }: { irPet: () => void }) {
         {vis.length ? vis.map((h, i) => {
           const [, rot] = TIPO_REG[h.quem], I = ICONE_TIPO[h.quem] ?? Hand;
           return (
-            <button type="button" className={`rg2-linha${h.quem === "recusa" ? " rg2-linha--recusa" : ""}`} key={i} onClick={() => setEvSel(i)}>
+            <button type="button" className={`rg2-linha${h.quem === "recusa" ? " rg2-linha--recusa" : ""}`} data-tipo={TIPO_REG[h.quem][0]} key={i} onClick={() => setEvSel(i)}>
               <span className="rg2-t">D{diaDe(h.t)} {hhmm(h.t)}</span>
               <span className={"rg2-tipo" + (h.quem === "gambit" ? " rg2-tipo--apr" : "")} role="img" aria-label={rot}><I aria-hidden="true" /></span>
               <span className="rg2-txt">{textoLinha(h)}</span>

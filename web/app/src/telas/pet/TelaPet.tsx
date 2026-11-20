@@ -387,7 +387,7 @@ function AvisoNec({ nec, abrirDetalhes }: { nec: NecMovel; abrirDetalhes?: () =>
 }
 function Resumo({ r, nascendo, abrirDetalhes }: { r: Resumo; nascendo: number; abrirDetalhes: () => void }) {
   return (
-    <button type="button" className="pet-prioridade" onClick={abrirDetalhes}>
+    <button type="button" className="pet-prioridade" data-pede={r.emote || r.acao ? "" : undefined} data-acao={r.acao ?? undefined} onClick={abrirDetalhes}>
       <span className="pet-prioridade-ic" aria-hidden="true">{r.emote ? <Peca nome={r.emote} escala={2} reserva="•" /> : nascendo > 0 ? "•" : <Peca nome="emoji_feliz" escala={2} reserva="•" />}</span>
       <span className="pet-prioridade-txt"><b>{r.texto}</b></span>
       <span className="pet-prioridade-ver">Estado<ChevronRight size={16} aria-hidden="true" /></span>
@@ -443,7 +443,7 @@ function DockLargo() {
   useEffect(() => { if (!temMais) setMais(false); }, [temMais]);
   /* v12: o Alimentar e a reserva temporaria do MVP (poe a racao no comedouro); a interacao planejada e por a racao no lugar (BarraRacao) */
   const reserva = (a: AcaoDono) => !!m.mundo && a === "alimentar";
-  const botao = (a: AcaoDono, cls: string) => <button type="button" key={a} className={`hx-btn dock-bt ${cls}`} onClick={() => { agir(a); setMais(false); }}
+  const botao = (a: AcaoDono, cls: string) => <button type="button" key={a} className={`hx-btn dock-bt ${cls}`} data-acao={a} onClick={() => { agir(a); setMais(false); }}
     aria-label={reserva(a) ? `${ROTULO_DONO[a]} (reserva: põe a ração no comedouro)` : undefined} title={reserva(a) ? "Reserva temporária: põe a ração no comedouro" : undefined}>
     <IconeAcao a={a} /><span>{ROTULO_DONO[a]}</span>{reserva(a) && <small className="acao-reserva" aria-hidden="true">reserva</small>}</button>;
   return (

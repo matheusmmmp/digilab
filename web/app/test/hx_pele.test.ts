@@ -4,6 +4,7 @@ import { createElement as h } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { CTR } from "../motor/constantes.ts";
 import { AbasHx, BotaoContinuar, BotaoHx, ChipHx, LinhaHx, MedidorHx, PainelHx, indiceAbaPorTecla } from "../src/componentes/hx/index.ts";
 
 const tokens = readFileSync(new URL("../src/estilo/tokens.css", import.meta.url), "utf8");
@@ -226,7 +227,8 @@ describe("MedidorHx", () => {
   it("em porcento o texto e N% (o HUD da tela Pet) e o max tem de ser 100", () => {
     const s = renderToStaticMarkup(h(MedidorHx, { valor: 42, max: 100, rotulo: "comida", porcento: true }));
     expect(s).toContain('aria-valuetext="42%"');
-    expect(s).toContain(">42%<");
+    /* o "%" vai num span proprio (uma pele pode esconde-lo); o texto lido continua "42%" */
+    expect(s).toContain('>42<span class="hx-medidor__pct">%</span><');
     expect(() => renderToStaticMarkup(h(MedidorHx, { valor: 2, max: 5, rotulo: "x", porcento: true }))).toThrow();
   });
 });
@@ -282,5 +284,110 @@ describe("itens trancados do nivel do Tamer", () => {
     const pior = sobre("rgba(170,225,255,.10)", sobre(tokenVidro("hx-miolo-2"), [161, 225, 113]));
     expect(contraste(tokenVidro("hx-sec"), hex(pior))).toBeGreaterThanOrEqual(4.5);
     expect(contraste(tokenVidro("hx-sec"), hex(pior))).toBeGreaterThanOrEqual(3);
+  });
+});
+
+/* As peles de rua (docs/PLANO_UX_PELES_RUA.md, 2026-11-20): a pele Estencil, os tokens e a forma do desenho aprovado. A pele e opaca: o
+   pior fundo e a propria tinta, sem o habitat por tras. As cores de sentido sao as do :root (o Militar), sem mudanca. */
+describe("pele Estencil (os tokens e a forma)", () => {
+  const estencilCss = readFileSync(new URL("../src/estilo/pele-estencil.css", import.meta.url), "utf8");
+  const mainTsx = readFileSync(new URL("../src/main.tsx", import.meta.url), "utf8");
+  const bloco = (() => { const i = tokens.indexOf(':root[data-pele="estencil"]{'); if (i < 0) throw new Error("sem o bloco da estencil"); return tokens.slice(i, tokens.indexOf("}", i)); })();
+  const tk = (nome: string) => { const m = bloco.match(new RegExp(`--${nome}:(#[0-9A-Fa-f]{6})`)); if (!m) throw new Error(`token ${nome} da estencil`); return m[1]; };
+  const fundos = () => [tk("hx-chao"), tk("hx-miolo"), tk("hx-miolo-2")];
+
+  it("todo texto passa 4,5:1 sobre a tinta, a tinta clara e o chao; o contorno e o foco passam 3:1", () => {
+    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo"]) for (const f of fundos()) expect(contraste(tk(t), f), `${t} sobre ${f}`).toBeGreaterThanOrEqual(4.5);
+    for (const f of fundos()) {
+      expect(contraste(tk("hx-borda"), f)).toBeGreaterThanOrEqual(3);
+      expect(contraste(tk("hx-borda-topo"), f)).toBeGreaterThanOrEqual(3);
+      expect(contraste(tk("hx-foco"), f)).toBeGreaterThanOrEqual(3);
+    }
+  });
+  it("as cores de sentido do :root continuam legiveis sobre a tinta, e nao sao redefinidas", () => {
+    for (const t of ["hx-alerta", "hx-perigo", "hx-ok", "hx-necessidade", "hx-aprendido", "hx-sombrio"]) {
+      expect(bloco, t).not.toContain(`--${t}:`);
+      for (const f of fundos()) expect(contraste(token(t), f), `${t} sobre ${f}`).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+  it("a acao e tinta sobre o vermelhao, o escolhido e tinta sobre o osso, e a necessidade leva a tinta: todos 4,5:1", () => {
+    expect(contraste(tk("hx-btn-ink"), tk("hx-btn-bg"))).toBeGreaterThanOrEqual(4.5);
+    expect(contraste(tk("hx-btn-ink"), tk("hx-btn-bg-hover"))).toBeGreaterThanOrEqual(4.5);
+    expect(contraste(tk("hx-escolhido-ink"), tk("hx-escolhido"))).toBeGreaterThanOrEqual(4.5);
+    expect(contraste(tk("hx-escolhido-ink"), token("hx-necessidade"))).toBeGreaterThanOrEqual(4.5);
+    /* o vermelhao como letra sobre a tinta (a etiqueta "ativo" do pele-estencil.css) */
+    expect(contraste(tk("hx-btn-bg"), tk("hx-miolo"))).toBeGreaterThanOrEqual(4.5);
+    expect(contraste(tk("hx-btn-borda"), tk("hx-miolo"))).toBeGreaterThanOrEqual(3);
+  });
+  it("opaca, sem vidro e sem variante por tema; os cantos cortados saem do chanfro da HUD", () => {
+    expect(bloco).not.toContain("data-tema");
+    expect(bloco).toMatch(/--hud-desfoque:none/);
+    expect(bloco).toMatch(/--hud-fundo-1:#17191F; --hud-fundo-2:#17191F/);
+    expect(bloco).toMatch(/--hud-ch:14px; --hud-ch-p:9px/);
+    expect(bloco).not.toMatch(/blur\(|rgba\([^)]*\)\s*;\s*--hx-miolo/);
+    /* o bloco vem depois do vidro e nao muda o padrao */
+    expect(tokens.indexOf(':root[data-pele="estencil"]{')).toBeGreaterThan(tokens.indexOf(':root[data-pele="vidro"]{'));
+  });
+  it("pele-estencil.css: toda regra sob :root[data-pele=\"estencil\"], sem animacao, importada antes do vidro (que segue por ultimo)", () => {
+    const semComentario = estencilCss.replace(/\/\*[\s\S]*?\*\//g, "");
+    const seletores = [...semComentario.matchAll(/(?:^|[}{])\s*([^{}@]+?)\s*\{/g)].map((m) => m[1]);
+    expect(seletores.length).toBeGreaterThanOrEqual(150);
+    /* parte a lista de seletores nas virgulas de fora dos parenteses (ha :is() com :not() dentro) */
+    const partes = (sel: string): string[] => {
+      const out: string[] = []; let fundo = 0, ini = 0;
+      for (let i = 0; i < sel.length; i++) {
+        if (sel[i] === "(") fundo++; else if (sel[i] === ")") fundo--;
+        else if (sel[i] === "," && fundo === 0) { out.push(sel.slice(ini, i)); ini = i + 1; }
+      }
+      return [...out, sel.slice(ini)];
+    };
+    for (const sel of seletores) for (const parte of partes(sel)) expect(parte.trim(), sel).toMatch(/^:root\[data-pele="estencil"\]/);
+    expect(semComentario).not.toMatch(/animation|transition/);
+    expect(semComentario).not.toMatch(/#[0-9A-Fa-f]{3,8}\b/);
+    const imports = [...mainTsx.matchAll(/^import "\.\/estilo\/([^"]+)";/gm)].map((m) => m[1]);
+    expect(imports.at(-1)).toBe("pele-vidro.css");
+    expect(imports.at(-2)).toBe("pele-estencil.css");
+    /* o texto da acao fora do botao: os dois lugares do jogo que o usam sobre fundo escuro estao cobertos */
+    expect(semComentario).toContain(".dl-tag--ativo{ color:var(--hx-btn-bg) }");
+    expect(semComentario).toContain(".res-faixa--vit{ background-color:var(--hx-btn-bg); color:var(--hx-btn-ink) }");
+  });
+  it("a letra vazada: Saira Stencil One carregada no index.html e usada so pelo token --hx-f-tit", () => {
+    expect(html).toContain("family=Saira+Stencil+One");
+    expect(bloco).toContain('--hx-f-tit:"Saira Stencil One", "Saira Condensed"');
+    expect(estencilCss).not.toContain("Saira");
+    expect(estencilCss).toContain("var(--hx-f-tit)");
+    /* a sombra dura e os segmentos das barras tambem sao tokens da pele */
+    expect(bloco).toMatch(/--hx-sombra-cor:#000000/);
+    expect(bloco).toMatch(/--hx-mascara:repeating-linear-gradient\(90deg, #000 0 9px, transparent 9px 12px\)/);
+  });
+  it("a caixa do desenho: o contorno no ::before, o miolo no ::after e a sombra dura na peca; nada de fora alem dos tracos embutidos", () => {
+    const s = estencilCss.replace(/\/\*[\s\S]*?\*\//g, "");
+    expect(s).toMatch(/\.topo-bits\)::before,[^{]*\{[^}]*background:var\(--hx-borda\);\s*clip-path:polygon\(/);
+    expect(s).toMatch(/\.topo-bits\)::after,[^{]*\{[^}]*background:var\(--hx-miolo\);\s*clip-path:polygon\(/);
+    expect(s).toMatch(/filter:drop-shadow\(5px 5px 0 var\(--hx-sombra-cor\)\)/);
+    /* o indice das janelas e a ordem delas na pilha (um contador), e o aviso muda de cor quando o pet pede algo */
+    expect(s).toContain("counter(es-janela, decimal-leading-zero)");
+    expect(s).toContain(".pet-prioridade[data-pede]::after{ background:var(--hx-necessidade) }");
+    /* nenhum arquivo de fora: so os tracos embutidos (svg em data:) */
+    expect(s).not.toMatch(/url\((?!"data:image\/svg\+xml,)/);
+    expect(s).not.toMatch(/https?:\/\/(?!www\.w3\.org\/2000\/svg)/);
+  });
+  it("os icones em traco: cada acao e cada exercicio da lista existe no jogo, e as telas poem o gancho que a pele le", () => {
+    const telaPet = readFileSync(new URL("../src/telas/pet/TelaPet.tsx", import.meta.url), "utf8");
+    const telaTreinar = readFileSync(new URL("../src/telas/crescer/TelaTreinar.tsx", import.meta.url), "utf8");
+    const acoes = [...new Set([...estencilCss.matchAll(/\[data-acao="([a-z_]+)"\]\{ --es-ic:url\("data:image\/svg\+xml,/g)].map((m) => m[1]))];
+    const exs = [...new Set([...estencilCss.matchAll(/\[data-ex="([a-z_]+)"\]\{ --es-ic:url\("data:image\/svg\+xml,/g)].map((m) => m[1]))];
+    const dock = telaPet.match(/const ORDEM_DOCK: AcaoDono\[\] = \[([^\]]+)\]/);
+    if (!dock) throw new Error("sem a ORDEM_DOCK na TelaPet");
+    expect(acoes.sort()).toEqual(dock[1].split(",").map((x) => x.trim().replace(/"/g, "")).sort());
+    expect(exs.sort()).toEqual(Object.keys(CTR.exercicios).sort());
+    expect(telaPet).toContain("className={`hx-btn dock-bt ${cls}`} data-acao={a}");
+    expect(telaPet).toContain('className="pet-prioridade" data-pede={r.emote || r.acao ? "" : undefined} data-acao={r.acao ?? undefined}');
+    expect(telaTreinar).toContain('data-ex={ex} disabled={des}');
+    /* a linha do dono no Registro e o "%" das necessidades (que a pele esconde) tambem sao ganchos */
+    expect(readFileSync(new URL("../src/telas/diario/TelaRegistro.tsx", import.meta.url), "utf8")).toContain("data-tipo={TIPO_REG[h.quem][0]}");
+    expect(readFileSync(new URL("../src/componentes/hx/MedidorHx.tsx", import.meta.url), "utf8")).toContain('<span className="hx-medidor__pct">%</span>');
+    expect(estencilCss).toContain('.rg2-linha[data-tipo="voce"]');
+    expect(estencilCss).toContain(".hx-medidor__pct{ display:none }");
   });
 });
