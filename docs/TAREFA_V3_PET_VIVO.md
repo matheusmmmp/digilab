@@ -367,3 +367,20 @@ replay rodou uma vez, 49 min com 4 processos, sobre as mesmas 5 120 vidas. O res
   de dormir passam pelo sorteio.
 - **Desvios:** D-SN-9 a D-SN-13.
 - **Próximo:** a decisão do Matheus sobre o teste de recompensa (outra run, com plano próprio).
+
+## O plano do teste de recompensa (2026-11-20, Claude Code, Fable 5.2, branch `v3-pet-vivo-recompensa-plano`)
+
+O pedido do Matheus (2026-11-20): "Sim, faz o plano do teste de recompensa". O plano está em
+[PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md](PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md), **PROPOSTO**. Nada rodou e nenhum código mudou.
+
+- **A pergunta:** se o dono acariciar o pet depois de cada decisão de comer ou de brincar, o pet passa mais tempo acordado?
+- **O mecanismo é o que já existe:** o carinho pelo corpo e o crédito da `ConfigElogio`. Nada novo no cérebro, no corpo nem no motor.
+- **Os braços:** R0 (o pet de hoje), R-CORPO (o carinho sem o crédito), R-CB (o carinho com o crédito, g = 2S, W = 1) e R-SORT (o
+  mesmo número de carinhos em passos sorteados).
+- **O pet:** o v38, com o sono que segura, nas 12 células da C4, 200 unidades, 9 600 vidas, cerca de 2,3 h com 4 processos.
+- **As medidas:** o T_ACORDADO responde a pergunta; o "Tempo bem" (D-MP-1) sai ao lado. Nenhuma é gate.
+- **O desfecho esperado, escrito antes:** "não: dorme mais ou fica igual". Nas sementes dos testes, o pet com o carinho ficou de
+  0,001 a 0,037 menos tempo acordado.
+- **O pré-registro** (`PR-PET-VIVO-RECOMPENSA`) entra com o plano, antes da run.
+- **Desvios:** D-RC-1 a D-RC-6.
+- **Próximo:** a decisão do Matheus sobre as RC-1 a RC-7; a faixa com o coordenador; depois o PR do código e a run, uma vez.

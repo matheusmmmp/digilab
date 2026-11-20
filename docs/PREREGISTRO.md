@@ -268,6 +268,24 @@ e "artefatos" entraram depois do replay (2026-11-20).
 | resultado | [RESULTADO_V3_PET_VIVO_SONO.md](RESULTADO_V3_PET_VIVO_SONO.md): "boa parte passa pelo sorteio: vale um teste de recompensa" (a F_PESOS de 0,376 a 0,543 no HOJE) |
 | artefatos | [`artifacts_v3_pet_vivo/sono/run/`](../artifacts_v3_pet_vivo/sono/run/): `meta.json`, `resultado.json` `6dfa6252…`, `medidas.json.gz` `f2fec4cd…`; o replay rodou em `682e7e5c` |
 
+## PR-PET-VIVO-RECOMPENSA — o carinho depois do comer e do brincar
+
+**Seção escrita antes da run** (2026-11-20). O plano está PROPOSTO: nenhuma vida roda antes do APROVADO do Matheus, da faixa
+reservada e do código na `main`. As linhas "resultado" e "artefatos" entram depois da run.
+
+| campo | valor |
+|---|---|
+| plano | [`PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md`](https://github.com/matheusmmmp/digilab/blob/ae8f1fb96b603b4847eac56f0486b24acfda27af/docs/PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md), commit `ae8f1fb96b603b4847eac56f0486b24acfda27af` (2026-11-20, o PROPOSTO) |
+| hipótese | as perguntas Q-ACORDADO, Q-PORQUÊ e Q-BEM. "O desfecho esperado é 'não: dorme mais ou fica igual'", pelas sementes dos testes (seções 1 e 2.2) |
+| células | 4 braços (R0, R-CORPO, R-CB, R-SORT) × 4 donos × 3 lugares, o pet do v38, 14 dias; g = 2S e W = 1 fixos, sem calibração (seções 3 e 4) |
+| sementes | 108001…108200, PROPOSTA (200 unidades, k = 1; 9 600 vidas); a reservar pelo coordenador antes de qualquer vida (seção 4) |
+| contraste primário | D1 = R-CB − R0 no T_ACORDADO (a fração das decisões sem dormir, dias 1 a 14), na média das 12 células por unidade, IC95 pelo t, n 200; δ_A = 0,02, SEM FONTE. Ao lado: D2 = R-CB − R-SORT, D3 = R-CB − R-CORPO e o D1 no "Tempo bem", com a margem 0,032 (seções 6 e 7) |
+| regra de leitura | L-ACORDADO, em ordem: o limite de cima do D1 < 0, "não: com a recompensa o pet dorme mais"; o IC dentro de ±δ_A, "não: fica igual"; o limite de baixo > δ_A, "sim, fica mais tempo acordado"; senão "inconclusivo". A L-PORQUÊ e a L-BEM, na seção 7. Nenhuma medida é gate |
+| regra de parada | roda uma vez; as conferências (C-G1, C-HOJE, C-CORPO, C-HORA, C-MESMO-N) falham alto antes de qualquer medida; as premissas (P-EVENTO, P-DOSE, P-SINAL) ficam registradas e não param; com a projeção da fumaça acima de 4 h a run não roda e o plano volta ao Matheus (seções 5 e 9) |
+| o que refutaria | pela regra de leitura: "sim, fica mais tempo acordado" contraria o desfecho esperado |
+| resultado | a run não rodou |
+| artefatos | nenhum ainda |
+
 ## PR-SOCIAL-PAR-S — o substrato do social
 
 **Esta seção entrou depois da run** (a regra do D-RB-13 chegou à `main` depois dela): o plano estava commitado e APROVADO antes. O texto
