@@ -365,5 +365,5 @@ replay rodou uma vez, 49 min com 4 processos, sobre as mesmas 5 120 vidas. O res
 - **Os achados:** a fração depende do dono (0,54 a 0,68 com o atencioso e o incoerente; 0,18 a 0,46 com o relapso e o aleatório); a
   parte aprendida do peso do dormir é 0 em todas as decisões de sorteio; no v38, com o sono que segura, só 11 % a 13 % das decisões
   de dormir passam pelo sorteio.
-- **Desvios:** D-SN-9 a D-SN-12.
+- **Desvios:** D-SN-9 a D-SN-13.
 - **Próximo:** a decisão do Matheus sobre o teste de recompensa (outra run, com plano próprio).
