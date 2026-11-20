@@ -215,13 +215,13 @@ A sessão revisora ("Revisão da pele Estêncil contra a prancha") montou a list
 (73 itens), e depois comparou as capturas do jogo com as da prancha, peça por peça, com recortes lado a lado e medidas de pixel. Ela
 não mexeu no repositório; eu corrigi o que ela apontou e pedi nova rodada.
 
-| | rodada 1 | rodada 2 | rodada 3 | rodada 4 | rodada 5 |
-|---|---|---|---|---|---|
-| igual | 22 | 52 | 60 | 59 | 62 |
-| parecido, a consertar | 23 | 11 | 5 (margens) | 4 (medidas) | 1 |
-| parecido, só por decisão do Matheus | 8 | 9 | 8 | 10 | 10 |
-| diferente | 11 | 1 | 0 | 0 | 0 |
-| não conferido | 9 | 0 | 0 | 0 | 0 |
+| | rodada 1 | rodada 2 | rodada 3 | rodada 4 | rodada 5 | rodada 6 |
+|---|---|---|---|---|---|---|
+| igual | 22 | 52 | 60 | 59 | 62 | 63 |
+| parecido, a consertar | 23 | 11 | 5 (margens) | 4 (medidas) | 1 | 0 |
+| parecido, só por decisão do Matheus | 8 | 9 | 8 | 10 | 10 | 10 |
+| diferente | 11 | 1 | 0 | 0 | 0 | 0 |
+| não conferido | 9 | 0 | 0 | 0 | 0 | 0 |
 
 - **A rodada 1** confirmou o que o Matheus viu: no celular e nas telas sem prancha era "o layout de antes com outra tonalidade"; no
   computador, nas telas com prancha, já era a prancha, com diferenças de medida e de acabamento.
@@ -229,8 +229,9 @@ não mexeu no repositório; eu corrigi o que ela apontou e pedi nova rodada.
   margens, de 6 a 22 px.
 - **A rodada 4:** as cinco margens e o foco do fechar ficaram iguais. Ao medir a caixa de todas as peças, ela achou quatro sobras que
   não tinham sido medidas (o DigiBrain 8 px à direita das janelas, a altura do chamado, as ações do celular e a largura dos Bits).
-- **A rodada 5:** as quatro sobras ficaram iguais: 62 de 73 itens iguais, 10 por decisão do Matheus e 1 a consertar (o espaçamento de dentro do DigiBrain). Esse último e o topo dos painéis alinhado com o trilho (uma recomendação dela) foram acertados depois da rodada e conferidos só por medida da autora, não por nova rodada.
-- **Os relatórios** (a lista, as cinco rodadas e os recortes) estão fora do git, em `D:\Trab\digilab\capturas_ux_peles_rua\revisao\`,
+- **A rodada 5:** as quatro sobras ficaram iguais: 62 de 73 itens iguais, 10 por decisão do Matheus e 1 a consertar (o espaçamento de dentro do DigiBrain). Esse último e o topo dos painéis alinhado com o trilho (uma recomendação dela) foram acertados depois da rodada.
+- **A rodada 6:** "os três pontos estão resolvidos, e não sobra nenhum conserto na lista": 63 de 73 itens iguais e 10 por decisão do Matheus.
+- **Os relatórios** (a lista, as seis rodadas e os recortes) estão fora do git, em `D:\Trab\digilab\capturas_ux_peles_rua\revisao\`,
   com um resumo no vault (`10 Auditoria/Revisão da pele Estêncil contra a prancha 2026-11-20`).
 - **O limite dela:** foi medida por pixel a caixa de fora de cada peça fixa da HUD; o espaçamento de dentro dos painéis foi julgado
   pela forma, pela letra, pela cor e pela ordem das peças, não por pixel.
