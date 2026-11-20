@@ -69,8 +69,8 @@ export function sequencia(mapa: MapaEvolucao, cena: NomeCena): PassoCena[] {
   return fora;
 }
 
-/** o quadro do sprite naquele clipe e instante: o Evol nao repete e segue no Idle, como no prototipo; sem o atlas de clipes
-    (chave CLIPES_UP desligada) so ha o Idle do atlas atual, a ms_por_quadro */
+/** o quadro do sprite naquele clipe e instante: o Evol nao repete e segue no Idle, como no prototipo; um sprite sem clipes
+    (nao acontece desde 2026-11-20: todo sprite vem do atlas de clipes) usaria o Idle a ms_por_quadro */
 export function quadroDigimon(a: AtlasOk, chave: string, clipe: "Idle" | "Evol", ms: number): { quadro: Quadro; img: HTMLImageElement } {
   const s = a.dados.sprites[chave];
   if (!s) throw new Error("sprite desconhecido na cena da evolucao: " + chave);

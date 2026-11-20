@@ -1,9 +1,9 @@
-// O enquadre do pet no cartao da evolucao (Revelacao.tsx, PetGrande). O defeito de 2026-11-11: com a chave CLIPES_UP a caixa do sprite passou
+// O enquadre do pet no cartao da evolucao (Revelacao.tsx, PetGrande). O defeito de 2026-11-11: com os clipes a caixa do sprite passou
 // a ser a comum a todos os clipes, o canvas do PetGrande seguiu sendo essa caixa e o corpo parado ficou fora do meio do anel e da plataforma
 // (o Koromon 19,5 px da caixa para a direita, o Gallantmon 36 para a esquerda, antes da escala). O canvas agora e a caixa do Idle.
 import { expect, test } from "vitest";
 import { existsSync, readFileSync } from "node:fs";
-import { caixaIdle, enquadrarIdle, juntarClipes, type AtlasClipes, type AtlasUp, type SpriteUp } from "../src/atlas.ts";
+import { caixaIdle, enquadrarIdle, juntarClipes, type AtlasClipes, type AtlasPecas, type AtlasUp, type SpriteUp } from "../src/atlas.ts";
 
 const ler = (caminho: string): string => readFileSync(new URL(caminho, import.meta.url), "utf8");
 /* o corpo parado no canto de baixo e a direita de uma caixa bem maior (o golpe estica a caixa para a esquerda e para cima) */
@@ -66,12 +66,14 @@ test("o pe do pet segue o meio da plataforma pelas mesmas variaveis dela, sem ma
 
 /* o atlas de verdade (fora do git): todas as formas, nos tres alvos da tela. Pula com aviso sem o Assets (CI, outra maquina) */
 const ASSETS = new URL("../../../../Assets/", import.meta.url);
-const CLIPES = new URL("digilab_atlas_up_clipes.json", ASSETS), BASE = new URL("digilab_atlas_up.json", ASSETS);
-const tem = existsSync(CLIPES) && existsSync(BASE);
+const CLIPES = new URL("digilab_atlas_up_clipes.json", ASSETS), PECAS = new URL("digilab_atlas_up_pecas.json", ASSETS);
+const tem = existsSync(CLIPES) && existsSync(PECAS);
+/* a base do juntarClipes, como o carregarAtlas a monta: as pecas do atlas de pecas e nenhum sprite */
+const baseDasPecas = (): AtlasUp => { const p = JSON.parse(readFileSync(PECAS, "utf8")) as AtlasPecas; return { atlas: p.atlas, ms_por_quadro: p.ms_por_quadro, sprites: {}, pecas: p.pecas }; };
 if (!tem) console.warn("evolucao_enquadre: sem o Assets, teste do atlas real pulado");
 
 test.skipIf(!tem)("no atlas real, toda forma fica no meio e com o pe na base, do In-Training ao Mega", () => {
-  const j = juntarClipes(JSON.parse(readFileSync(BASE, "utf8")) as AtlasUp, JSON.parse(readFileSync(CLIPES, "utf8")) as AtlasClipes);
+  const j = juntarClipes(baseDasPecas(), JSON.parse(readFileSync(CLIPES, "utf8")) as AtlasClipes);
   const formas = Object.keys(j.sprites).filter(k => j.sprites[k].clipes && !k.startsWith("npc_") && !k.startsWith("bot_"));
   expect(formas.length).toBe(60);
   let fora = 0;
