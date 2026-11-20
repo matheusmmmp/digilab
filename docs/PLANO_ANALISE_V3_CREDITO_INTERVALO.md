@@ -1,6 +1,6 @@
 # Plano de análise V3: CREDITO_INTERVALO, o R2 (o crédito do intervalo, com o ELOGIO)
 
-**Status: APROVADO pelo Matheus em 2026-11-19,** com as CI-R2-1 a CI-R2-9 DECIDIDAS pela recomendação: "Aprovo todas", na sessão coordenadora, confirmado nesta sessão ("Sim, aprovei"). Os adendos 1 (a linha de base) e 2 (o corpo) seguem abertos, e nenhuma vida roda antes de eles fecharem. Escrito em 2026-11-19 (Claude Code, Opus 5.5, worktree `v3-valuation`, branch `v3-credito-intervalo-plano`), a pedido
+**Status: APROVADO pelo Matheus em 2026-11-19,** com as CI-R2-1 a CI-R2-9 DECIDIDAS pela recomendação: "Aprovo todas", na sessão coordenadora, confirmado nesta sessão ("Sim, aprovei"). O adendo 1 (a linha de base) está escrito no fim, PROPOSTO, à espera do Matheus; o adendo 2 (o corpo) segue aberto, e nenhuma vida roda antes de os dois fecharem. Escrito em 2026-11-19 (Claude Code, Opus 5.5, worktree `v3-valuation`, branch `v3-credito-intervalo-plano`), a pedido
 do Matheus na sessão coordenadora: "Manda o valuation, escrever o plano do R2". Só o plano: nenhum código e nenhuma vida antes da
 aprovação. A tarefa é a [TAREFA_V3_CREDITO_INTERVALO.md](TAREFA_V3_CREDITO_INTERVALO.md), da gerência. O orquestrador vai conferir este
 cabeçalho e recusar sem o APROVADO.
@@ -341,3 +341,69 @@ As da seção 2 da análise da cadeia, sem nenhuma nova: o traço de elegibilida
 forma; nenhum número se transfere. O "substituir em vez de somar" tem só a pista do título de Singh e Sutton 1996 (`10.1007/bf00114726`).
 A recompensa homeostática é a de Keramati e Gutkin 2014 (`10.7554/eLife.04811`), que já é o r do modular. Os cortes e as margens são SEM
 FONTE.
+
+## Adendo 1: a linha de base, com o R-a (PROPOSTO, 2026-11-19)
+
+**Status: PROPOSTO.** Escrito em 2026-11-19 (Claude Code, Opus 5.5, branch `v3-credito-intervalo-adendo1`), depois de a sessão da cadeia
+avisar que o replay do R-a rodou. Nada do plano acima muda além do que este adendo diz. Nenhum código e nenhuma vida antes de o Matheus
+decidir as AD1-1 a AD1-3 e de o adendo 2 fechar.
+
+**A fonte:** o [RESULTADO_V3_PET_VIVO_RA.md](RESULTADO_V3_PET_VIVO_RA.md) e o `artifacts_v3_pet_vivo/ra/run/resultado.json`, no PR
+#1036 (branch `v3-pet-vivo-ra-resultado`, commit `4b639fd1`), **ainda sem merge.** Os números abaixo vêm daquele documento e não foram
+reconferidos aqui contra o `resultado.json`. Este adendo só vale depois do merge do #1036; se o resultado mudar antes, o adendo é
+refeito.
+
+### A1.1 O que o R-a deu (o HOJE, n 200 por lugar, IC95)
+
+- **L-SONO:** a FASE, a ESTADO e as MÓVEL com k 4, 16 e 96 "preservam o sono". O resto do dormir fica entre +153,7 e +165,5, com o
+  limite de baixo acima de 0 nos 3 lugares. A GLOBAL dá +156,1 a +159,4; só a CTX dá 0.
+- **L-ALÉM: "só o sono".** O η² do acordado fica entre 0,014 e 0,034; o maior limite de cima é 0,037 (MÓVEL-16, `comedouro`), abaixo
+  do corte de 0,05 (SEM FONTE) em todas.
+- **A H-MÓVEL não se confirma:** a MÓVEL-4 não apaga o sono. No HOJE ela dá o maior resto do dormir; na checagem do v38 (n 40,
+  descritivo), o menor, de +84 a +96.
+- **O R-a não separa uma linha de base melhor entre as cinco.** A FASE difere da GLOBAL em menos de 0,4 no resto do dormir.
+- O OLF-0 lê igual.
+
+### A1.2 A regra da seção 4, aplicada como escrita
+
+1. **Ficam as que preservam o sono:** a FASE, a ESTADO, a MÓVEL-4, a MÓVEL-16 e a MÓVEL-96. O passo 3 (parar o R2) não se aplica.
+2. **"Só o sono" → a de menos parâmetros, e no empate a MÓVEL.** Na forma causal da seção 4, cada uma vira uma média móvel por estrato:
+   - a FASE, 2 estratos (dia e noite);
+   - a ESTADO, 4 estratos, mais os 3 cortes dos quartis da carga, que o R-a tirou da vida inteira e o pet vivo não conhece;
+   - a MÓVEL, 1 estrato, global.
+
+   A MÓVEL é a de menos parâmetros e a única causal já no R-a. **Fica a MÓVEL global:** b é a média móvel exponencial dos `r_int_n`
+   anteriores, sem o intervalo atual, começando em 0 (D-RB-6). A GLOBAL do R-a, na forma causal, é esta mesma.
+
+### A1.3 O `k_base`: uma inconsistência do plano, a decidir (AD1-2)
+
+A seção 4 diz que o `k_base` sai "da calibração", e o RB-2 diz que o k do R-a não o escolhe. A grade da seção 8 não tem o `k_base`.
+As duas saídas:
+
+- **(a) recomendada:** pôr o `k_base` ∈ {16, 96} na grade da calibração, que passa de 8 para 16 células. O k 4 fica fora: no v38 ele é
+  o que mais encolhe o resto do dormir (descritivo, n 40), e o R-a usa o v38 só como checagem. O R-a delimita a faixa; não escolhe o
+  valor. O custo: a calibração passa de cerca de 10 400 para cerca de 20 800 vidas, de 1 h 45 para cerca de 3 h 30 (estimativa pela
+  seção 7, SEM FONTE). A regra de escolha da seção 8 não muda: no empate dentro de 0,01, o menor `eta_int` e, depois, o maior `k_base`
+  (a média mais lenta, mais perto da GLOBAL do R1).
+- **(b)** fixar `k_base` = 16, PROPOSTO, SEM FONTE. A calibração segue com 8 células. O custo de errar: um k que acompanha o bloco de
+  sono pode encolher o crédito do dormir no corpo de depois da C3, e o R2 não veria isso.
+
+### A1.4 O que "só o sono" muda no R2 (AD1-3)
+
+A seção 4 pede esta decisão. Nas vidas da C4 (M-G), o traço vai creditar quase só o dormir: o resto do dormir é de cerca de +155, e o
+das ações acordadas é quase igual entre elas. A T4 não depende disso: o M-T4 é um mundo de bancada com o emissor do humor atrasado, e
+mede se o mecanismo ensina a ação do meio.
+
+- **(a) recomendada:** seguir o R2 como está. Na M-G, a guarda de forrageio e a de exaustão viram o critério que mais pesa, porque um
+  crédito positivo ao dormir pode puxar o pet a dormir mais e a comer menos. A leitura "ensina com custo" da seção 10 já cobre esse
+  caso. Acrescenta-se só um descritivo, sem regra: a fração dos ticks dormindo, R2 − OFF, nas 12 células. Custo baixo: uma conta.
+- **(b)** parar o R2 aqui: o que sobra para ensinar é o sono, e o reflexo do sono já o decide no corpo de hoje. O custo de errar: o
+  ELOGIO (INT-5) espera o mesmo traço e fica parado junto.
+
+### A1.5 As decisões para o Matheus
+
+| id | o quê | recomendação | custo de errar |
+|---|---|---|---|
+| AD1-1 | a linha de base: a MÓVEL global, pela regra da seção 4 | sim | outra escolha contraria a regra escrita antes do R-a |
+| AD1-2 | o `k_base`: (a) na grade, {16, 96}; (b) fixo em 16 | (a) | (a) custa ~1 h 45 a mais; (b) arrisca um k que encolhe o crédito do sono |
+| AD1-3 | "só o sono": (a) seguir, com o descritivo do sono; (b) parar o R2 | (a) | (a) gasta a calibração num crédito que talvez só mova o sono; (b) para o ELOGIO junto |
