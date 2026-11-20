@@ -175,3 +175,13 @@ A run única do `docs/PLANO_ANALISE_V3_CORPO_C3.md`, no commit `f720d684`: 9 600
 
 **O programa para no CHECKPOINT da C3.** Pela seção 8 do plano, o ganho leva à C4, a validação; a decisão é do Matheus. Nenhum braço está
 ligado no jogo.
+
+## 16. O plano da C4, a validação do teto baixo (2026-11-20)
+
+O CHECKPOINT da C3 chegou repassado pelo coordenador, com as palavras do Matheus: "Levar o DTB à C4". O plano é o
+`docs/PLANO_ANALISE_V3_CORPO_C4.md`, APROVADO pelo Matheus em 2026-11-20 ("Aprovo todas", as D-C4-1 a D-C4-9; os pisos das premissas,
+a D-C4-10, ficam abertos): o CTRL e o DTB em sementes novas, nas 12 células × 200 unidades, com a regra de leitura da
+C3 e os quatro itens do planejamento de 2026-11-19 (o que as vidas gravadas respondem, a contagem dos eventos, a precisão e os donos
+distintos). **O que muda sobre a C3:** a saúde por célula entra como ressalva (D-C4-2), a bola sai dos pares e os chutes por vida viram
+descritivo (D-C4-4), o bloco II sobe para 500 pares (D-C4-5), e o relógio sai do `medidas.json` (D-C4-8). A faixa é pedida ao
+coordenador depois da aprovação. Nenhuma vida antes do plano na `main` e do código.
