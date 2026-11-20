@@ -157,3 +157,13 @@ prancha `docs/pranchas/ux-conta-nuvem/` (UX-NV-1 a 6 APROVADAS em 2026-11-20). B
 - **O que falta:** o registro no armazenamento de objetos e o deploy (CN5); o grupo dos dois pets sem teste próprio; o sprite e a abertura
   só-para-ver das histórias em Gerações; o revisor de acessibilidade; as capturas a 1920 e 390 das telas no jogo; a velocidade do tempo ao
   abrir noutro aparelho (D-CONTA-38).
+
+## A CN5 preparada: a hospedagem de teste, só documento (2026-11-20)
+
+Pedido pela sessão da conta: preparar a CN5 sem contratar nada e sem deploy. O plano é o `docs/PLANO_V3_CONTA_CN5.md`: a lista em ordem do
+que o Matheus cria ou contrata (onde, o que escolher, o que anotar e onde guardar, nunca no repositório), os preços conferidos em 2026-11-20
+(o Lightsail de 2 GB a US$ 12 na lista, sem preço por região; o `.com.br` a R$ 40 por ano; a Cloudflare Free com o AI Crawl Control; o
+Render a US$ 25 sem a América do Sul; a Magalu e o preço exato de São Paulo, não conferidos), o roteiro do deploy (a VPS, o Tunnel, o
+systemd, o Litestream, a restauração testada, o CI descrito e não criado, como desligar) e o que a CN4 entrega antes. Dois achados no
+código: o `servidor_web` recusa com 403 todo pedido vindo pela Cloudflare, e o jogo chama a fala no endereço da página; os dois pedem
+mudança antes do primeiro deploy. Os desvios são D-CONTA-197 a 202.
