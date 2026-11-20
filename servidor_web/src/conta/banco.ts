@@ -229,6 +229,65 @@ export const MIGRACOES: readonly string[] = [
   ) STRICT;
   CREATE INDEX tabelas_dia_conta ON tabelas_dia(conta_id);
   `,
+  /* 7: o mural (MMO7, servidor_web/src/premios/): o recorde de todos os tempos de cada conta na Torre, na Fábrica e no Salão, só do que a
+     conferência de um envio aceito refez (visto_em: a hora do servidor em que o valor foi visto pela primeira vez, o desempate do mural);
+     e as lutas do Salão que o replay de cada pet refez, para juntar a tentativa do Tamer, que tem um pet por estágio. Os títulos, os
+     selos e os enfeites não têm tabela: saem das tabelas congeladas da semana e do dia. Tudo pende da conta */
+  `
+  CREATE TABLE recordes (
+    conta_id  TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    inst      TEXT NOT NULL CHECK (inst IN ('torre', 'fabrica', 'salao')),
+    valor     INTEGER NOT NULL CHECK (valor >= 1),
+    visto_em  INTEGER NOT NULL,
+    envio_id  TEXT NOT NULL,
+    PRIMARY KEY (conta_id, inst)
+  ) STRICT;
+  CREATE INDEX recordes_inst ON recordes(inst, valor DESC, visto_em);
+  CREATE TABLE salao_vistas (
+    conta_id  TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    pet       INTEGER NOT NULL,
+    semente   INTEGER NOT NULL,
+    venceu    INTEGER NOT NULL CHECK (venceu IN (0, 1)),
+    PRIMARY KEY (conta_id, pet, semente)
+  ) STRICT;
+  `,
+  /* 8: as duas pontuações e o reset (MMO8, servidor_web/src/premios/rankings.ts): o máximo histórico dos Digimon (uma linha por pet, pelo
+     total da vida que a conferência refez; pontos_em: a hora do servidor em que o total chegou ao valor de hoje, o desempate; aposentado_em:
+     o envio que conferiu o reset dele); os resets conferidos (o nível refeito do registro final do pet); e os feitos do Tamer que o servidor
+     viu no replay do pet que os fez (a 1ª medalha de cada líder, "medalha:<id>", e o título da Liga, "liga"). Tudo pende da conta */
+  `
+  CREATE TABLE digimons (
+    conta_id       TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    pet            INTEGER NOT NULL,
+    versao_pet     INTEGER NOT NULL,
+    pontos         REAL NOT NULL CHECK (pontos >= 0),
+    estagio        TEXT NOT NULL,
+    forma          TEXT NOT NULL,
+    pontos_em      INTEGER NOT NULL,
+    aposentado_em  INTEGER,
+    envio_id       TEXT NOT NULL,
+    PRIMARY KEY (conta_id, pet, versao_pet)
+  ) STRICT;
+  CREATE INDEX digimons_pontos ON digimons(pontos DESC, pontos_em);
+  CREATE TABLE resets (
+    conta_id  TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    pet       INTEGER NOT NULL,
+    nivel     INTEGER NOT NULL CHECK (nivel BETWEEN 0 AND 3),
+    hash      TEXT NOT NULL,
+    por       TEXT NOT NULL CHECK (por IN ('reset', 'cruzamento')),
+    visto_em  INTEGER NOT NULL,
+    envio_id  TEXT NOT NULL,
+    PRIMARY KEY (conta_id, pet)
+  ) STRICT;
+  CREATE TABLE feitos_tamer (
+    conta_id  TEXT NOT NULL REFERENCES contas(id) ON DELETE CASCADE,
+    feito     TEXT NOT NULL,
+    pet       INTEGER NOT NULL,
+    visto_em  INTEGER NOT NULL,
+    envio_id  TEXT NOT NULL,
+    PRIMARY KEY (conta_id, feito)
+  ) STRICT;
+  `,
 ];
 
 export const VERSAO_BANCO = MIGRACOES.length;

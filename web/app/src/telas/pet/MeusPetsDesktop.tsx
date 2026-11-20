@@ -15,6 +15,8 @@ import { novoOvoGuardandoAtivo } from "../../jornada.ts";
 import { abrirImportar, exportarArquivo, nomeArquivo, useImportar } from "../../importar.ts";
 import { abrirGuardado, apagarGuardado, ativarGuardado, lerGuardados } from "../../pets.ts";
 import { abrirHeranca, podeSerPai } from "../../heranca.ts";
+import { abrirAposentar } from "../../reset.ts";
+import { RESET_LIGADO } from "../../tamer.ts";
 import { diaDe, hhmm } from "./TelaPet.tsx";
 
 type Sel = "ativo" | number;
@@ -88,6 +90,8 @@ export function MeusPetsDesktop({ fechar }: { fechar: () => void }) {
           {eAtivo ? <BotaoContinuar onClick={fechar}>Voltar ao pet</BotaoContinuar>
             : <BotaoContinuar onClick={() => agir(() => ativarGuardado(atual.k as number), fechar)}>Tornar ativo</BotaoContinuar>}
         </div>
+        {eAtivo && !ovoAtivo && RESET_LIGADO && <BotaoHx className="mc-largo" tom="perigo" onClick={abrirAposentar} data-testid="mp-aposentar"
+          title="o pet se aposenta em Gerações e um ovo novo choca; o bônus vem do ponto a que ele chegou">Aposentar</BotaoHx>}
         {podeCruzar && <BotaoHx className="mc-largo" onClick={() => abrirHeranca(atual.k as number)}
           title="o filho herda o temperamento dos dois e o brasão de um deles">Nova geração com {nomeForma(ativo.forma)}</BotaoHx>}
         {!eAtivo && (apagar

@@ -16,6 +16,7 @@ import math
 import re
 import random
 from bisect import bisect_left
+from fractions import Fraction
 from dataclasses import dataclass
 from typing import Iterable, Mapping, Sequence
 
@@ -3436,3 +3437,183 @@ def medidas_pv2(motivos: Sequence[dict], consumos: Sequence[dict], com_orgao: bo
                     "decisoes_com_cheiro": len(com_ch),
                     "saturacao": None if not com_ch else sum(1 for o in com_ch if o["nivel"] >= S) / len(com_ch)})
     return out
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------
+# O rastro da cadeia (docs/PLANO_ANALISE_V3_PET_VIVO_R1.md, secao 4): quanto do corpo fica fora do r do mesmo tick
+def _razao(num: int, den: int) -> float | None:
+    """a razao exata (Fraction) entregue como float; None sem denominador"""
+    return None if den == 0 else float(Fraction(num, den))
+
+
+def _eta2(grupos: Mapping[str, Sequence[Fraction]]) -> float | None:
+    """a fracao da soma dos quadrados dos valores (ja centrados pela linha de base) que fica entre os grupos: SQ_entre / SQ_total, com
+    SQ_entre = soma_g n_g x (media_g - media)^2 e SQ_total = soma (x - media)^2. Exata (Fraction); None com SQ_total 0"""
+    todos = [x for xs in grupos.values() for x in xs]
+    if not todos:
+        return None
+    media = sum(todos, Fraction(0)) / len(todos)
+    total = sum(((x - media) ** 2 for x in todos), Fraction(0))
+    if total == 0:
+        return None
+    entre = sum((len(xs) * (sum(xs, Fraction(0)) / len(xs) - media) ** 2 for xs in grupos.values() if xs), Fraction(0))
+    return float(entre / total)
+
+
+def medidas_rastro(motivos: Sequence[dict]) -> dict:
+    """As medidas de uma vida com o rastro ligado (o plano do R1, secao 4), so do `motivo["cadeia"]` e da sequencia das escolhas. A ultima
+    decisao da vida nao fecha e fica fora das medidas do intervalo; a decisao com o intervalo `ja_contado` (a opcao de fala) tambem.
+      - M-FORA: por receptor, F_r = soma|delta do intervalo| / (soma|delta do mesmo tick| + soma|delta do intervalo|), sobre a leitura;
+        no sinal, a mesma razao sobre os canais do r (a de cada canal e a de todos somados); ao lado, a soma do r e a do r do intervalo;
+      - M-ACAO: o contexto e "dormindo" na decisao de dormir e "acordado" nas outras; por comportamento, a media do r_n do intervalo e a
+        do resto (o r_n menos a media da vida, e menos a media do contexto na vida); o eta2 do resto global e o do resto por contexto
+        (`_eta2`, entre os comportamentos); a fracao das decisoes de dormir com o r do mesmo tick diferente de 0;
+      - M-DONO: a fracao dos intervalos com gesto do dono, a media do r_n do intervalo com e sem gesto, e por tipo de gesto;
+      - M-TROCA: sobre todas as decisoes, as corridas da mesma escolha (as intencoes), a duracao delas, a fracao das decisoes que trocam
+        de escolha, a fracao das trocas que caem numa decisao de reflexo, e os fins registrados, por motivo;
+      - M-MUDA: por receptor, a fracao das decisoes com o delta do mesmo tick diferente de 0, e a do intervalo.
+    Falha alto sem nenhuma decisao com o rastro."""
+    cadeias = [m["cadeia"] for m in motivos if "cadeia" in m and not m["cadeia"]["intervalo"]["ja_contado"]]
+    if not cadeias:
+        raise ValueError("medidas_rastro: a vida sem nenhuma decisao com o rastro (a ConfigRastro ligada?)")
+    n = len(cadeias)
+    receptores = list(cadeias[0]["mesmo_tick"]["delta"])
+    canais = list(cadeias[0]["intervalo"]["canais"])
+    # M-FORA e M-MUDA
+    fora_r, muda = {}, {}
+    for r in receptores:
+        t = sum(abs(c["mesmo_tick"]["delta"][r]) for c in cadeias)
+        i = sum(abs(c["intervalo"]["delta"][r]) for c in cadeias)
+        fora_r[r] = {"tick": t, "intervalo": i, "F": _razao(i, t + i)}
+        muda[r] = {"tick": _razao(sum(1 for c in cadeias if c["mesmo_tick"]["delta"][r] != 0), n),
+                   "intervalo": _razao(sum(1 for c in cadeias if c["intervalo"]["delta"][r] != 0), n)}
+    fora_c, st, si = {}, 0, 0
+    for d in canais:
+        t = sum(abs(c["mesmo_tick"]["canais"][d]) for c in cadeias)
+        i = sum(abs(c["intervalo"]["canais"][d]) for c in cadeias)
+        fora_c[d] = {"tick": t, "intervalo": i, "F": _razao(i, t + i)}
+        st, si = st + t, si + i
+    # M-ACAO
+    rn = [Fraction(c["intervalo"]["r_n"]) for c in cadeias]
+    comp = [motivos[c["id"]]["escolha"][0] for c in cadeias]
+    ctx = ["dormindo" if b == "dormir" else "acordado" for b in comp]
+    media = sum(rn, Fraction(0)) / n
+    media_ctx = {x: sum((v for v, y in zip(rn, ctx) if y == x), Fraction(0)) / ctx.count(x) for x in sorted(set(ctx))}
+    resto_g = [v - media for v in rn]
+    resto_c = [v - media_ctx[y] for v, y in zip(rn, ctx)]
+    por_comp = {}
+    for b in sorted(set(comp)):
+        idx = [j for j, x in enumerate(comp) if x == b]
+        por_comp[b] = {"n": len(idx), "r_int_n": float(sum((rn[j] for j in idx), Fraction(0)) / len(idx)),
+                       "resto_global": float(sum((resto_g[j] for j in idx), Fraction(0)) / len(idx)),
+                       "resto_contexto": float(sum((resto_c[j] for j in idx), Fraction(0)) / len(idx))}
+    dormir = [c for c, b in zip(cadeias, comp) if b == "dormir"]
+    acao = {"media_r_int_n": float(media), "media_contexto": {x: float(v) for x, v in media_ctx.items()},
+            "n_contexto": {x: ctx.count(x) for x in sorted(set(ctx))}, "por_comportamento": por_comp,
+            "eta2_global": _eta2({b: [resto_g[j] for j, x in enumerate(comp) if x == b] for b in sorted(set(comp))}),
+            "eta2_contexto": _eta2({b: [resto_c[j] for j, x in enumerate(comp) if x == b] for b in sorted(set(comp))}),
+            "dormir_r_tick_nao_zero": _razao(sum(1 for c in dormir if c["mesmo_tick"]["r"] != 0), len(dormir))}
+    # M-DONO
+    com = [c for c in cadeias if c["gestos"]]
+    sem = [c for c in cadeias if not c["gestos"]]
+    por_gesto = {}
+    for t in sorted({g[0] for c in com for g in c["gestos"]}):
+        do_tipo = [c for c in com if any(g[0] == t for g in c["gestos"])]
+        por_gesto[t] = {"n": len(do_tipo), "r_int_n": _razao(sum(c["intervalo"]["r_n"] for c in do_tipo), len(do_tipo))}
+    dono = {"fracao_com_gesto": _razao(len(com), n), "r_int_n_com": _razao(sum(c["intervalo"]["r_n"] for c in com), len(com)),
+            "r_int_n_sem": _razao(sum(c["intervalo"]["r_n"] for c in sem), len(sem)), "por_gesto": por_gesto}
+    # M-TROCA (todas as decisoes da vida, com a ultima)
+    escolhas = [tuple(str(x) for x in m["escolha"]) for m in motivos]
+    corridas, trocas, trocas_reflexo = [1], 0, 0
+    for j in range(1, len(escolhas)):
+        if escolhas[j] == escolhas[j - 1]:
+            corridas[-1] += 1
+        else:
+            corridas.append(1)
+            trocas += 1
+            trocas_reflexo += 1 if motivos[j]["reflexo"] else 0
+    fins: dict[str, int] = {}
+    for m in motivos:
+        for f in m["fins"]:
+            fins[f["motivo"]] = fins.get(f["motivo"], 0) + 1
+    nc = len(corridas)
+    troca = {"decisoes": len(escolhas), "intencoes": nc, "duracao_media": _razao(len(escolhas), nc),
+             "duracao": {"1": _razao(corridas.count(1), nc), "2": _razao(corridas.count(2), nc), "3": _razao(corridas.count(3), nc),
+                         "4+": _razao(sum(1 for x in corridas if x >= 4), nc)},
+             "fracao_trocas": _razao(trocas, len(escolhas) - 1), "trocas_pelo_reflexo": _razao(trocas_reflexo, trocas),
+             "fins": dict(sorted(fins.items()))}
+    return {"n": n, "fora": {"receptores": fora_r, "canais": fora_c, "F_sinal": _razao(si, st + si), "sinal_tick": st, "sinal_intervalo": si,
+                             "soma_r": sum(c["mesmo_tick"]["r"] for c in cadeias), "soma_r_int": sum(c["intervalo"]["r"] for c in cadeias)},
+            "acao": acao, "dono": dono, "troca": troca, "muda": muda}
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------
+# A linha de base do intervalo (docs/PLANO_ANALISE_V3_PET_VIVO_RA.md, secoes 4 e 5): que linha de base preserva o sono
+LINHAS_BASE_FIXAS = ("GLOBAL", "CTX", "FASE", "ESTADO")
+KS_MOVEL = (4, 16, 96)                         # RB-2: 1 h, 4 h e 1 dia de decisoes, so para ver a forma; SEM FONTE
+PISO_LINHA_BASE = 5                            # RB-3: decisoes de um comportamento numa vida para ele entrar no eta2 do acordado; SEM FONTE
+QUANTIS_ESTADO = 4                             # a secao 4: o quartil da carga do corpo na vida
+
+
+def medidas_linha_base(motivos: Sequence[dict], S: int, e_noite, ks: Sequence[int] = KS_MOVEL, piso: int = PISO_LINHA_BASE) -> dict:
+    """As medidas do R-a numa vida com o rastro ligado, so do `motivo["cadeia"]`. Para cada linha de base, o resto de cada decisao e o
+    r_n do intervalo menos a linha de base dela:
+      - GLOBAL: a media da vida (a do R1);
+      - CTX: a media do contexto (dormindo na decisao de dormir, acordado nas outras) na vida (a do R1; a unica que olha a acao);
+      - FASE: a media da fase do dia (noite ou dia, pelo tick do comeco do intervalo, com `e_noite(tick do dia)`) na vida;
+      - ESTADO: a media do quartil da carga do corpo na vida; a carga e a soma dos quadrados das faltas dos receptores logo depois da
+        acao (a leitura da decisao mais o delta do mesmo tick), e o quartil sai da ordem das decisoes pela carga (o empate pela ordem);
+      - MOVEL-k: a media movel exponencial dos r_n anteriores da vida, sem o atual (b <- b + (x - b) / k, de 0), em float.
+    Por linha de base: o resto medio do dormir, o eta2 entre todos os comportamentos, o eta2 so nas decisoes acordadas entre os
+    comportamentos acordados com `piso` decisoes ou mais na vida, e o resto medio por comportamento. As quatro primeiras sao exatas
+    (Fraction). Falha alto sem o rastro, sem o tick ou com um receptor desconhecido."""
+    from .digibrain.base import RECEPTORES_FALTA_INVERTIDA, RECEPTORES_HOJE, RECEPTORES_NOVOS
+    cadeias = [m["cadeia"] for m in motivos if "cadeia" in m and not m["cadeia"]["intervalo"]["ja_contado"]]
+    if not cadeias:
+        raise ValueError("medidas_linha_base: a vida sem nenhuma decisao com o rastro (a ConfigRastro ligada?)")
+    n = len(cadeias)
+    rn = [Fraction(c["intervalo"]["r_n"]) for c in cadeias]
+    comp = [motivos[c["id"]]["escolha"][0] for c in cadeias]
+
+    def falta(nome: str, leitura: int) -> int:
+        if nome in RECEPTORES_HOJE or nome in RECEPTORES_FALTA_INVERTIDA:
+            return S - leitura
+        if nome in RECEPTORES_NOVOS:
+            return leitura
+        raise KeyError(f"medidas_linha_base: receptor desconhecido: {nome!r}")
+    ticks = [c["intervalo"]["tick_de"] for c in cadeias]
+    if any(type(t) is not int for t in ticks):
+        raise ValueError("medidas_linha_base: decisao sem o tick (a memoria autobiografica ligada?)")
+    fase = ["noite" if e_noite(t % TICKS_POR_DIA) else "dia" for t in ticks]
+    carga = [sum(falta(r, c["leitura"][r] + c["mesmo_tick"]["delta"][r]) ** 2 for r in c["leitura"]) for c in cadeias]
+    ordem = sorted(range(n), key=lambda j: (carga[j], j))
+    quartil = [0] * n
+    for posto, j in enumerate(ordem):
+        quartil[j] = posto * QUANTIS_ESTADO // n
+    ctx = ["dormindo" if b == "dormir" else "acordado" for b in comp]
+
+    def por_grupo(chaves: list) -> list:
+        soma: dict = {}
+        for v, k in zip(rn, chaves):
+            s, q = soma.get(k, (Fraction(0), 0))
+            soma[k] = (s + v, q + 1)
+        return [v - soma[k][0] / soma[k][1] for v, k in zip(rn, chaves)]
+    restos: dict = {"GLOBAL": por_grupo([0] * n), "CTX": por_grupo(ctx), "FASE": por_grupo(fase), "ESTADO": por_grupo(quartil)}
+    for k in ks:
+        b, r = 0.0, []
+        for v in rn:
+            x = float(v)
+            r.append(x - b)
+            b += (x - b) / k
+        restos[f"MOVEL-{k}"] = r
+    nomes = sorted(set(comp))
+    contagem = {b: comp.count(b) for b in nomes}
+    acordados = [b for b in nomes if b != "dormir" and contagem[b] >= piso]
+    linhas = {}
+    for nome, resto in restos.items():
+        grupos = {b: [resto[j] for j in range(n) if comp[j] == b] for b in nomes}
+        linhas[nome] = {"resto_dormir": None if "dormir" not in grupos else float(sum(grupos["dormir"]) / len(grupos["dormir"])),
+                        "eta2_todas": _eta2(grupos), "eta2_acordado": _eta2({b: grupos[b] for b in acordados}),
+                        "resto": {b: float(sum(grupos[b]) / len(grupos[b])) for b in nomes}}
+    return {"n": n, "piso": piso, "contagem": contagem, "acordados_no_eta2": acordados,
+            "fase": {x: fase.count(x) for x in ("dia", "noite")}, "linhas": linhas}

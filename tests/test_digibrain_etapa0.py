@@ -112,7 +112,7 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              # ELOGIO, etapas 4 e 5: o orquestrador da calibracao e da validacao
                                                                              "experiments/run_v3_elogio.py",
                                                                              # SOCIAL_PAR, A0 (D-SP-29): o orquestrador monta o pet de hoje (o modular com a CO7)
-                                                                             "experiments/run_v3_social_par_a0.py",
+                                                                             "experiments/run_v3_social_par_a0.py", "experiments/run_v3_corpo.py", "experiments/run_v3_corpo_c3.py",
                                                                              # a SOCIAL_PAR MD1: o orquestrador da medida monta os bracos do M1 e do M2
                                                                              "experiments/run_v3_social_par_md.py",
                                                                              "experiments/run_v3_corpo_acoplamento.py"}
@@ -151,7 +151,7 @@ def test_os_ganchos_vazios():
 
 
 # ------------------------------------------------------------ o G-INT, a G-RECEPTOR, o G-SEM-DIRECAO e o preflight
-ARQUIVOS = {"__init__.py", "_comum.py", "adapt.py", "afeto.py", "arb.py", "base.py", "decodificador.py", "dever.py", "estado.py", "ganchos.py", "impulso.py", "mem.py", "pers.py", "plast.py",
+ARQUIVOS = {"__init__.py", "_comum.py", "adapt.py", "afeto.py", "arb.py", "base.py", "decodificador.py", "dever.py", "estado.py", "ganchos.py", "impulso.py", "mem.py", "pers.py", "plast.py", "rastro.py",
             "sens.py"}
 
 

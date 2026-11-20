@@ -1,5 +1,6 @@
 /* O cais (MMO5 no jogo; a prancha docs/pranchas/ux-cais/, UX-CA-1 a 7 APROVADAS em 2026-11-17): a semana, as tabelas por estagio, os
-   estados, a semana fechada e "Conferir a semana". Uma tela so, sem abas (UX-CA-1), no painel dos lugares sem a viagem da camera
+   estados, a semana fechada e "Conferir a semana". Desde a MMO8, com as abas Semana, Tamers, Digimon e Mural (UX-RS-3, APROVADA em
+   2026-11-19, reve a UX-CA-1 "sem abas"; os rankings em Rankings.tsx), no painel dos lugares sem a viagem da camera
    (#/cais, fora dos destinos, como os Ajustes). O cais nao tem botao de luta: ele leva a Arena (UX-LR-1).
 
    A chave: so aparece com VITE_DIGILAB_API no build (o endereco do servidor_web). Sem ela, o cais continua sem menu.
@@ -14,7 +15,11 @@ import {
   fecharSegredo, horaDeBrasilia, ligarCais, linhasDaTela, marcoDoCais, ouvirCais, revisaoCais, temSemana, textoDaSemana, verTodas,
   type EstadoDaSemana, type Linha, type Semanas, type Tabelas,
 } from "../../cais/cais.ts";
+import { abrirMural, diaCurto, estadoMural, fecharMural, INSTALACOES_MURAL, ouvirMural, revisaoMural, type Mural, type Premios } from "../../cais/premios.ts";
 import { useJogo } from "../../jogo.ts";
+import { abaDigimons, abaTamers } from "../../cais/pontuacoes.ts";
+import { enviarAposentados } from "../../reset.ts";
+import { AbasCais, RankingDoCais, tirarAbaPedida, type AbaCais } from "./Rankings.tsx";
 import "../../estilo/conta.css";
 import "../../estilo/cais.css";
 
@@ -140,18 +145,103 @@ function Segredo({ semana }: { semana: string }) {
   );
 }
 
+/* ------------------------------------------------------------ o mural e os premios (MMO7; a prancha esta pendente com o Matheus: so o
+   minimo, com as pecas do cais) */
+function SeusPremios({ p }: { p: Premios }) {
+  const t = p.tituloAtual[0] ?? null;
+  return (
+    <div data-testid="ca-premios">
+      <span className="ct-rot">Os seus prêmios</span>
+      {t && <Destaque rot="Título da semana" titulo={t.texto}><p>No perfil até {horaDeBrasilia(t.noPerfilAte)}.</p></Destaque>}
+      <table className="ca-tab"><caption className="sr-only">Os seus prêmios</caption><tbody>
+        <tr><th scope="row">Respeito conferido</th><td className="ca-pts" data-testid="ca-respeito">{p.respeito}</td></tr>
+        <tr><th scope="row">Títulos da semana</th><td>{p.titulos.length}</td></tr>
+        <tr><th scope="row">Selos Top do dia</th><td data-testid="ca-selos">{p.selos.length}{p.selos.length > 0 && <small> · o último em {diaCurto(p.selos[0]!.dia)}</small>}</td></tr>
+        <tr><th scope="row">Taças da temporada</th><td data-testid="ca-tacas">{p.enfeites.length ? p.enfeites.map(e => `T${e.temporada}`).join(", ") : "0"}</td></tr>
+      </tbody></table>
+      <p className="ct-sec">O Respeito conta só o que o servidor deu: 100 por título da semana e 20 por selo. A taça fica na ilha, perto do cais.</p>
+    </div>
+  );
+}
+
+function RecordesDoMural({ m }: { m: Mural }) {
+  return (
+    <>
+      {INSTALACOES_MURAL.map(([id, nome]) => (
+        <div key={id} data-testid={`ca-mural-${id}`}>
+          <span className="ct-rot">{nome} · recorde de todos os tempos</span>
+          {m.recordes[id].length === 0 ? <p className="ct-sec">Ninguém tem recorde conferido ainda.</p> : (
+            <table className="ca-tab"><caption className="sr-only">{nome}: {m.total[id]} Tamers</caption>
+              <thead><tr><th scope="col">#</th><th scope="col">Tamer</th><th scope="col">Recorde</th></tr></thead>
+              <tbody>{m.recordes[id].map(l => (
+                <tr key={l.posicao} className={l.voce ? "ca-eu" : undefined} aria-current={l.voce ? "true" : undefined}>
+                  <td className="ca-pos">{l.posicao}º</td><th scope="row"><span>{l.apelido}</span>{l.voce && <span className="ct-etq ok">você</span>}</th><td className="ca-pts">{l.valor}</td>
+                </tr>))}</tbody></table>
+          )}
+        </div>
+      ))}
+      <div data-testid="ca-mural-titulos">
+        <span className="ct-rot">Os campeões das semanas</span>
+        {m.titulos.length === 0 ? <p className="ct-sec">Nenhuma semana fechou com campeão ainda.</p> : (
+          <table className="ca-tab"><caption className="sr-only">Os títulos das semanas</caption><tbody>{m.titulos.map(t => (
+            <tr key={t.semana + t.estagio} className={t.voce ? "ca-eu" : undefined}><th scope="row">{t.texto}</th><td><span>{t.apelido}</span>{t.voce && <span className="ct-etq ok">você</span>}</td></tr>
+          ))}</tbody></table>
+        )}
+      </div>
+    </>
+  );
+}
+
+function MuralCais({ fechar, abas }: { fechar: () => void; abas: React.ReactNode }) {
+  const e = estadoMural()!;
+  return (
+    <div className="ct ca" data-testid="ca-mural">
+      {abas}
+      {e.passo === "buscando" && <p className="ct-chamada" role="status">Buscando o mural</p>}
+      {e.passo === "sem_resposta" && <Destaque rot="Sem resposta" titulo="O mural não veio" alerta><p>Os seus prêmios continuam guardados no servidor.</p></Destaque>}
+      {e.passo === "sem_conta" && <Destaque rot="Só com a conta" titulo="O mural pede a conta"><p>Ele mostra só os apelidos.</p></Destaque>}
+      {e.passo === "pronto" && <><SeusPremios p={e.premios} /><RecordesDoMural m={e.mural} /></>}
+      <div className="ct-bts">
+        {e.passo === "sem_resposta" && <button type="button" className="hx-continuar" onClick={() => agir(abrirMural)}>Tentar de novo</button>}
+        <button type="button" className="hx-btn" onClick={() => { fecharMural(); }} data-testid="ca-voltar-semana">Voltar à semana</button>
+        <button type="button" className="hx-btn" onClick={fechar}>Voltar à ilha</button>
+      </div>
+    </div>
+  );
+}
+
 /* ------------------------------------------------------------ a tela */
 /** `curto`: a folha do celular (6 linhas, sem a coluna das lutas); `irArena` leva a aba Arena do portao; `fechar` volta a ilha */
 export function TelaCais({ curto, irArena, fechar }: { curto: boolean; irArena: () => void; fechar: () => void }) {
   const jogo = useJogo(), ligado = caisNoBuild();
   useSyncExternalStore(ouvirCais, revisaoCais);
+  useSyncExternalStore(ouvirMural, revisaoMural);
+  /* o mural e os rankings fecham quando o cais fecha */
+  useEffect(() => () => { fecharMural(); abaTamers.fechar(); abaDigimons.fechar(); }, []);
+  /* a aba (MMO8): o perfil pode pedir a dos Tamers; cada aba busca de novo ao abrir */
+  const [aba, setAba] = useState<AbaCais>(tirarAbaPedida);
+  const irAba = (a: AbaCais) => {
+    if (a === "mural") { setAba("mural"); agir(abrirMural); return; }
+    fecharMural(); setAba(a);
+    if (a === "tamers") agir(() => abaTamers.abrir());
+    if (a === "digimon") agir(() => abaDigimons.abrir());
+  };
   const seu = NIVEL_DO_ESTAGIO[jogo.motor.estagioAtual] ?? null, seuComTabela = seu !== null && ESTAGIOS.includes(seu) ? seu : null;
   /* cada abertura do cais busca de novo: a tabela muda no servidor */
-  useEffect(() => { if (ligado) agir(() => abrirCais(seuComTabela)); }, [ligado]);   // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!ligado) return;
+    agir(() => abrirCais(seuComTabela));
+    if (aba !== "semana") irAba(aba);
+    /* o registro do pet aposentado que ainda nao chegou ao servidor (UX-RS-4): tenta de novo a cada abertura do cais */
+    agir(async () => { await enviarAposentados(); });
+  }, [ligado]);   // eslint-disable-line react-hooks/exhaustive-deps
   /* o relogio da tela ("faltam 2 d 4 h" e a passagem para "fechando"), de minuto em minuto */
   const [agora, setAgora] = useState(() => Date.now());
   useEffect(() => { const r = setInterval(() => setAgora(Date.now()), 60_000); return () => clearInterval(r); }, []);
   if (!ligado) throw new Error("o cais abriu sem o endereço do servidor no build");
+  const vista: AbaCais = estadoMural() ? "mural" : aba === "mural" ? "semana" : aba, abas = <AbasCais aba={vista} ir={irAba} />;
+  if (estadoMural()) return <MuralCais fechar={fechar} abas={abas} />;
+  if (vista === "tamers" || vista === "digimon") return <div className="ct ca" data-testid={`ca-${vista}`}>{abas}<RankingDoCais aba={vista} curto={curto} /></div>;
 
   const s = CA.semanas, semana = CA.semana, t = CA.tabelas, ocupado = CA.passo === "buscando";
   const cab = s && semana !== null ? <Semana s={s} semana={semana} agora={agora} ocupado={ocupado} /> : null;
@@ -179,6 +269,7 @@ export function TelaCais({ curto, irArena, fechar }: { curto: boolean; irArena: 
   const estado = estadoDaSemana(s, semana, agora), fechada = estado === "fechada", eu = t.estagios[CA.estagio].find(l => l.voce) ?? null;
   return (
     <div className="ct ca" data-testid="ca-pronto">
+      {abas}
       {cab}
       {estado === "fechando" && <Destaque rot="A semana acabou" titulo="Conferindo as últimas lutas">
         <p>A luta feita até 23:59 e ainda não enviada pode chegar até {horaDeBrasilia(t.congelaEm).split(", ")[1]}. Depois disso, vale como derrota.</p></Destaque>}

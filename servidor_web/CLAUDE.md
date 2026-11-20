@@ -50,7 +50,7 @@ O `servidor/` continua para o jogo local e a pesquisa.
   código do jogo é importado como está: o motor e o `engine.py` não mudam. O que se importa do `web/app` não pode chegar ao React (o CI do
   servidor não instala o `node_modules` do jogo); por isso o `tamer.ts` lê a chave do `src/chave.ts`, e não do `save.ts`.
 - **Recusa com o motivo, em 422:** `versao_pet_desconhecida` (fora de `VERSOES_PET`; o pet do laboratório não se envia),
-  `versao_tamer_desconhecida` (só a `VERSAO_TAMER` de hoje: atualize o jogo, MMO-14), `pet_nao_reproduz` e `tamer_nao_reproduz` (o texto do
+  `versao_tamer_desconhecida` (só a 10 e a 11, `VERSOES_TAMER_CONFERIDAS`: atualize o jogo, MMO-14), `pet_nao_reproduz` e `tamer_nao_reproduz` (o texto do
   erro do motor), `marco_nao_confere`. Nunca pela assinatura do pet, que difere entre o Chrome e o Node no último bit (MMO0).
 - **O que fica (MMO-4):** a linha de cada envio conferido (os hashes SHA-256 dos dois registros, o resultado e o motivo, o marco, os pontos,
   o tempo); os registros, só do envio aceito, até 30 dias depois do fim da semana de Brasília (`LOG_DIAS_DEPOIS_DA_SEMANA`, PROPOSTO). A
@@ -73,6 +73,14 @@ O `servidor/` continua para o jogo local e a pesquisa.
   (`TentativaFabrica.doDia`, a conta pura de `web/app/src/ranking/desafio.ts`), no processo. O segredo do dia nasce no banco, um por dia, e
   é publicado quando o dia congela (a mesma folga da semana); a tabela congela em `tabelas_dia`, com o selo do Top do dia (MMO-11). A
   trava do nível é a da luta ranqueada. Apagar a conta leva a tentativa, as sementes, os envios e as linhas da tabela.
+- **As recompensas e o mural (MMO7, `src/premios/premios.ts`):** o ranking paga prestígio, não Bits (MMO-12). Os recordes da Torre, da
+  Fábrica e do Salão vêm só do que a conferência do envio aceito refaz (a migração 7; o Salão junta as lutas vistas no replay de cada pet);
+  o título da semana, o selo e o enfeite da temporada saem das tabelas congeladas da semana e do dia; o Respeito conferido soma só o título
+  e o selo (o resto é da MMO8). `GET /premios` e `GET /mural` pedem a sessão.
+- **As duas pontuações e o reset (MMO8, `src/premios/rankings.ts`):** a conferência diz o Digimon (os pontos da vida), os feitos do Tamer que
+  o replay do pet mostra (a medalha e a Liga) e o reset no registro final do pet (o registro do Tamer na versão 11; `reset_nao_confere`).
+  O envio aceito grava o máximo histórico dos Digimon, os resets e os feitos (a migração 8). O Respeito conferido soma os feitos, os resets
+  (só com 200 pontos do Digimon conferidos) e os títulos e selos da MMO7. `GET /digimons` e `GET /tamers` pedem a sessão.
 - **A vida dos testes** é o gabarito `test/gabaritos/vida_101.json`, gravado por `node scripts/gerar_vida_teste.ts` (precisa do
   `node_modules` do `web/app`, porque o roteiro da MMO0 nasce o ovo pelo `src/produto.ts`).
 

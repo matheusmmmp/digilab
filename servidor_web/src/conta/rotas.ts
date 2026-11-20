@@ -28,6 +28,8 @@ import { ROOKIES, sortearApelido } from "./apelido.ts";
 import { enviosDaConta } from "../envio/rotas.ts";
 import { sementesDaConta } from "../envio/sementes.ts";
 import { desafiosDaConta } from "../desafio/desafio.ts";
+import { premiosDaConta } from "../premios/premios.ts";
+import { pontuacoesDaConta } from "../premios/rankings.ts";
 import { transacao } from "./banco.ts";
 import type { ConfigConta } from "./config.ts";
 import { paginaAutorizarFalso, paginaDevConta } from "./paginas.ts";
@@ -381,6 +383,10 @@ export function montarRotasConta(app: Hono, cfg: ConfigConta): GuardasConta {
       sementes: sementesDaConta(banco, s.conta_id),
       /* o desafio do dia (MMO6): as tentativas, os envios (sem o registro) e as linhas das tabelas fechadas, com o selo */
       desafio: desafiosDaConta(banco, s.conta_id),
+      /* o mural (MMO7): os recordes que o servidor viu e as lutas do Salão vistas (os títulos, os selos e os enfeites saem das tabelas) */
+      premios: premiosDaConta(banco, s.conta_id),
+      /* as duas pontuações (MMO8): os Digimon com os pontos da vida, os resets conferidos e os feitos do Tamer que o servidor viu */
+      pontuacoes: pontuacoesDaConta(banco, s.conta_id),
       nao_guardamos: ["o nome", "o e-mail", "o lugar", "a fala", "a senha (não há senha)"],
     };
     const arquivo = `digilab-conta-${conta.apelido.replace(/[^A-Za-z0-9_-]/g, "-")}.json`;

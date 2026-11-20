@@ -4,9 +4,14 @@
 
    A chave: so aparece com VITE_DIGILAB_API no build (o endereco do servidor_web). Sem ela, os Ajustes sao os de sempre.
 
-   Tudo aqui e tela: a conta nao toca o motor, o registro nem o save. As regras e as chamadas ficam em src/conta/conta.ts. */
+   O perfil abre pelas duas pontuacoes (MMO8; a prancha docs/pranchas/ux-reset/, tela 5; UX-RS-5 APROVADA em 2026-11-19): o Respeito do
+   Tamer, o conferido grande e o do jogo menor ao lado, com o nivel e a barra ate "Tamer Lendario"; os pontos do melhor Digimon da conta,
+   com a posicao; e "De onde vem o Respeito". Os aparelhos, os dados e apagar descem para uma linha que abre.
+
+   Tudo aqui e tela: a conta nao toca o motor, o registro nem o save. As regras e as chamadas ficam em src/conta/conta.ts e, as das
+   pontuacoes, em src/cais/pontuacoes.ts. */
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { Check, Download, LogOut, Monitor, Shuffle, Smartphone, Trash2, TriangleAlert, UserRound } from "lucide-react";
+import { Anchor, Check, ChevronRight, Crown, Download, Info, LogOut, Monitor, Shuffle, Smartphone, Trash2, Trophy, TriangleAlert, UserRound } from "lucide-react";
 import { DIGIMON_DA_FORMA } from "../../../motor/index.ts";
 import { apiDoBuild, enderecoDaPrivacidade, enderecoDosTermos } from "../../conta/apiDoBuild.ts";
 import {
@@ -14,6 +19,13 @@ import {
   entrarCom, ligarConta, ouvirConta, revisaoConta, sair, trocarApelido, voltaDaBusca, voltarAEntrar, type Conta, type Primeiro,
 } from "../../conta/conta.ts";
 import { Retrato } from "../lutar/palcoPoc/TelaLugaresPoc.tsx";
+import { caisNoBuild } from "../cais/TelaCais.tsx";
+import { pedirAbaDoCais } from "../cais/Rankings.tsx";
+import { linhaDoPet, melhorDigimon, milhares, ouvirPontuacoes, perfil, revisaoPontuacoes, type DadosPerfil } from "../../cais/pontuacoes.ts";
+import { jogoAtual, tamerAtual } from "../../jogo.ts";
+import { NIVEL_DO_PRIMEIRO_MEGA, RESPEITO_FEITO, RESPEITO_POR_NIVEL, TAMER_LENDARIO, respeitoLocal } from "../../ranking/pontos.ts";
+import { nomeForma } from "../../../motor/index.ts";
+import "../../estilo/reset.css";
 import "../../estilo/conta.css";
 
 let tentouLigar = false;
@@ -165,6 +177,64 @@ function TrocarApelido({ p, voltar }: { p: Primeiro; voltar: () => void }) {
   );
 }
 
+/* ------------------------------------------------------------ as duas pontuacoes (MMO8) */
+function Cartoes({ d }: { d: DadosPerfil }) {
+  const r = d.respeito, local = respeitoLocal(tamerAtual()).total, melhor = melhorDigimon(d.digimons), j = jogoAtual(), m = j.motor;
+  const ativo = j.grupo ? null : linhaDoPet(d.digimons, m.semente), pct = Math.min(100, r.conferido / TAMER_LENDARIO * 100);
+  const prox = r.nivel === null ? null : (r.nivel + 1 - NIVEL_DO_PRIMEIRO_MEGA) * RESPEITO_POR_NIVEL;
+  return (
+    <div className="rs-pont">
+      <section className="rs-pc" aria-labelledby="rs-r" data-testid="ct-respeito"><span className="ct-rot" id="rs-r"><Crown aria-hidden="true" />Respeito do Tamer</span>
+        <b className="rs-grande" data-testid="ct-respeito-conferido">{milhares(r.conferido)}</b>
+        <small>conferido · {milhares(local)} no jogo</small>
+        {r.nivel !== null && prox !== null && <span className="rs-linha"><span className="ct-etq" data-testid="ct-nivel">Nv {r.nivel}</span><small>Nv {r.nivel + 1} em {milhares(prox)}</small></span>}
+        <span className="rs-barra" role="img" aria-label={`${milhares(r.conferido)} de ${milhares(TAMER_LENDARIO)} até Tamer Lendário`}><i style={{ "--v": `${pct.toFixed(0)}%` } as React.CSSProperties} /></span>
+        {r.titulo ? <span className="rs-linha"><span className="ct-etq ok">{r.titulo}</span><small>a conta não para</small></span>
+          : <small>Tamer Lendário em {milhares(TAMER_LENDARIO)} · a conta não para</small>}</section>
+      <section className="rs-pc" aria-labelledby="rs-d" data-testid="ct-digimon"><span className="ct-rot" id="rs-d"><Trophy aria-hidden="true" />Pontos do Digimon</span>
+        {melhor ? <>
+          <span><b className="rs-grande" data-testid="ct-digimon-pontos">{milhares(melhor.pontos)}</b><small>{melhor.forma}{melhor.aposentado ? " · aposentado" : ""}</small></span>
+          <span className="rs-linha"><span className="ct-etq ok">{melhor.posicao}º</span><small>no ranking dos Digimon</small></span>
+          {melhor.pet !== m.semente && !j.grupo && <small>O ativo, {nomeForma(m.forma)}, tem {milhares(ativo?.pontos ?? 0)}. Cada pet começa do zero.</small>}
+        </> : <small data-testid="ct-digimon-vazio">Nenhum pet seu pontuou ainda: os pontos vêm das lutas ranqueadas.</small>}</section>
+    </div>
+  );
+}
+function DeOndeVem({ d }: { d: DadosPerfil }) {
+  const r = d.respeito, c = r.contagem;
+  const linhas: [string, string, number][] = [
+    ["1ª medalha de cada líder", `${c.lideres} · ${RESPEITO_FEITO.lider} cada`, r.lideres], ["título da Liga", c.liga ? "1" : "0", r.liga],
+    ["resets", String(c.resets), r.resets], ["títulos da semana", `${c.titulos} · ${RESPEITO_FEITO.titulo_semana} cada`, r.titulos],
+    ["selos Top do dia", `${c.selos} · ${RESPEITO_FEITO.selo_dia} cada`, r.selos],
+  ];
+  return (
+    <details className="rs-de" data-testid="ct-de-onde"><summary><Info aria-hidden="true" />De onde vem o Respeito</summary>
+      <ul>{linhas.map(([t, q, v]) => <li key={t}><span><b>{t}</b><small>{q}</small></span><span className="rs-v">+{milhares(v)}</span></li>)}</ul>
+      <p>O ranking conta só o que o servidor viu nos registros enviados. Um reset que o servidor ainda não viu fica só no jogo.</p>
+    </details>
+  );
+}
+function Pontuacoes() {
+  const ligado = caisNoBuild();
+  useSyncExternalStore(ouvirPontuacoes, revisaoPontuacoes);
+  useEffect(() => { if (ligado) void perfil.abrir(); return () => perfil.fechar(); }, [ligado]);
+  if (!ligado) return null;
+  const e = perfil.atual();
+  if (e === null || e.passo === "buscando") return <p className="ct-sec" role="status" data-testid="ct-pontuacoes-buscando">Buscando as pontuações</p>;
+  if (e.passo !== "pronto") return (
+    <div className="ct-destaque" role="status" data-testid="ct-pontuacoes-sem-resposta"><span className="ct-rot">Sem resposta</span><b>As pontuações não vieram</b>
+      <p>O Respeito do jogo é {milhares(respeitoLocal(tamerAtual()).total)}. O conferido continua guardado no servidor.</p>
+      <div className="ct-bts"><button type="button" className="hx-btn" onClick={() => void perfil.abrir()}>Tentar de novo</button></div></div>
+  );
+  return (
+    <>
+      <Cartoes d={e.dados} />
+      <DeOndeVem d={e.dados} />
+      <div className="ct-bts"><a className="hx-continuar" href="#/cais" onClick={() => pedirAbaDoCais("tamers")} data-testid="ct-ver-rankings"><Anchor aria-hidden="true" />Ver os rankings no cais</a></div>
+    </>
+  );
+}
+
 /* ------------------------------------------------------------ o perfil e apagar */
 function Perfil({ c }: { c: Conta }) {
   const [apagando, setApagando] = useState(false), agora = Date.now();
@@ -172,7 +242,9 @@ function Perfil({ c }: { c: Conta }) {
   return (
     <div className="ct" data-testid="ct-perfil">
       <Apelido apelido={c.apelido} sub={`${c.provedores.map(nomeProvedor).join(" e ")} · desde ${dia(c.criadaEm)}`} />
-      <div><span className="ct-rot">Aparelhos</span>
+      <Pontuacoes />
+      <details className="rs-de" data-testid="ct-mais" open={!caisNoBuild()}><summary><Monitor aria-hidden="true" />Aparelhos, dados e a conta<ChevronRight aria-hidden="true" /></summary>
+      <div className="ct"><div><span className="ct-rot">Aparelhos</span>
         <ul className="ct-ap">{c.aparelhos.map(a => (
           <li key={a.id}>{/celular|android|iphone|ipad/i.test(a.nome) ? <Smartphone aria-hidden="true" /> : <Monitor aria-hidden="true" />}
             <span><b>{a.nome}</b><small>{ultimaVez(a.vistoEm, agora)}</small></span>
@@ -188,7 +260,8 @@ function Perfil({ c }: { c: Conta }) {
       <div className="ct-bts ct-bts--fim">
         <button type="button" className="hx-btn" disabled={CT.ocupado} onClick={() => agir(sair)} data-testid="ct-sair"><LogOut aria-hidden="true" />Sair</button>
         <button type="button" className="hx-btn ct-perigo" disabled={CT.ocupado} onClick={() => setApagando(true)} data-testid="ct-apagar"><Trash2 aria-hidden="true" />Apagar a conta</button>
-      </div>
+      </div></div>
+      </details>
     </div>
   );
 }

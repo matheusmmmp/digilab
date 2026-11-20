@@ -77,7 +77,7 @@ beforeEach(async () => {
 
 describe("o banco e o dia", () => {
   it("a migração 6 é a do desafio, e as tabelas nascem vazias", () => {
-    expect(VERSAO_BANCO).toBe(6);
+    expect(VERSAO_BANCO).toBeGreaterThanOrEqual(6);
     expect(MIGRACOES[5]).toContain("segredos_dia");
     for (const t of ["desafios", "desafio_lutas", "desafio_envios", "tabelas_dia"]) expect(contar(M.banco, t)).toBe(0);
   });

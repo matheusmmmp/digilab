@@ -41,6 +41,28 @@ fechamento da V2, o `docs/FECHAMENTO_V2.md` (tag `v2-final`).
 | **infra · INFRA_AGENTES** (fora do plano, pedido do Matheus em 2026-11-06) | as regras não negociáveis impostas pela ferramenta (hooks, gate, CI) e revisores somente leitura com lente fixa | **na `main`** (2026-11-06): a especificação e as D-IA-1 a D-IA-7 DECIDIDAS (#601); os hooks restaurados (#590, UX A0), o H2 com replay, o H1b com as faixas queimadas, o H6 (o da UX A1, #592) e o H9 (#604); o `revisor-metodo`, o `revisor-determinismo` e o `auditor-numeros` (#610); o `tools/pre_run.py` e o H10 (#612); o `ux-browser-tester` (#593) como o testador único, com tipos e Vitest antes do e2e (#615); o job `web` do CI com tipos, Vitest e build (#616); o `auditor-numeros` com `Bash` só de leitura, pelo papel `auditor` do H8 (#622); as medições do combate (`web/app/scripts/equilibrio_tr/`) no `pre_run` e no H10, uma carga por vez (#623). o H11, que deixa o índice de desvios com quem faz o merge (2026-11-07). Ligados: H1, H1b, H2, H3, H4, H6, H9, H10 e H11; o H5 e o H8 (UX) fora do `settings.json` | `docs/TAREFA_V3_INFRA_AGENTES.md` |
 | **SOCIAL_PAR S** (fora do plano, pedido do Matheus) | tornar o pet-pet mensurável e observar o que os dois pets fazem juntos; a S0 a S4 | **na `main`**: o A0 e o B0 (#998: o D_A ≈ 0, o B0 inconclusivo por premissa); a S0, a observação (#1000); a S1, o plano com o adendo 1 (#1001); a S2, o substrato C, B1, B2 e o G-DET atrás da `ConfigIntervencaoSocial` (#1006). **A run da S3 rodou** (#1010, 2026-11-19): o G-DET passa nos três braços, o D_A dos pets de hoje dá ≈ 0 nos três e o B é inconclusivo por premissa. Pela regra escrita antes, o social não existe no pet de hoje, e o próximo passo é mecanismo. A S4, com a síntese e a espec do M1, espera o checkpoint S5 | `docs/TAREFA_V3_SOCIAL_PAR.md`, `docs/SINTESE_SOCIAL_PAR_S.md`, `docs/ESPEC_SOCIAL_PAR_M1.md` |
 
+## 1.1 A evidência desde o snapshot `f8fa9ad2` (2026-11-13), fase A4 da EVIDENCIA
+
+Uma linha por frente de pesquisa, dizendo o que mudou desde o snapshot auditado na A0. Atualizado em 2026-11-17 pela EVIDENCIA A4
+(Claude Code, Opus 5.5); as outras linhas deste painel são do Gerente e não mudaram aqui. A síntese está em `docs/SINTESE_EVIDENCIA.md`.
+
+| frente | o que mudou desde o snapshot | onde |
+|---|---|---|
+| **C1** longe regular | nada no resultado; a auditoria registrou que o comando não está no meta e que só houve repetição interna | `docs/AUDITORIA_EVIDENCIA.md`, 1.1 (#942) |
+| **C2** crédito na intenção | nada no resultado; o `vidas.tar.gz` segue sem leitor versionado | `docs/AUDITORIA_EVIDENCIA.md`, 1.2 |
+| **C3** redecidir por evento | nada no resultado; o `vidas.tar.gz` segue sem leitor versionado | `docs/AUDITORIA_EVIDENCIA.md`, 1.3 |
+| **C4** memória autobiográfica | **refeita do zero pela A3: "divergiu"**: o `resultado.json` igual byte a byte, o `medidas.json` não (causa provável os tempos por vida, não provada); e o REL **perde para a baseline trivial** na A1 | `docs/PREREGISTRO.md`, "A réplica da C4" (#971); `docs/RESULTADO_V3_BASELINE_TRIVIAL.md` (#943) |
+| **AN4** passeio | nada no resultado; o `vidas.tar.gz` segue sem leitor | `docs/AUDITORIA_EVIDENCIA.md`, 1.5 |
+| **GVN2** gosto visual | nada; o resultado segue em `docs/futuro/`, fora de um `RESULTADO_V3_*` | `docs/AUDITORIA_EVIDENCIA.md`, 1.6 |
+| **PET_VIVO** | nada; registrado que rodou de caminhos locais e não tem meta | `docs/AUDITORIA_EVIDENCIA.md`, 1.7 |
+| **COOP A1** | nada no resultado; registrado que não se refaz pelo repositório (as vidas fora do git) | `docs/AUDITORIA_EVIDENCIA.md`, 1.8 |
+| **EVIDENCIA A0** auditoria | **na `main`** (#942): os oito experimentos inventariados, nenhum plano depois da primeira vida | `docs/AUDITORIA_EVIDENCIA.md` |
+| **EVIDENCIA A1** baseline trivial | **na `main`** (#943): REL − TRIV "< 0", a baseline vence; o Matheus aceitou, e a poda (L5) ficou obrigatória (D-EV-A1-7) | `docs/RESULTADO_V3_BASELINE_TRIVIAL.md` |
+| **EVIDENCIA A2** ablação no jogo | **na `main`** (#952): "muda", 9 de 15 no Holm, todas as diferenças abaixo de 0,01; CHECKPOINT A3 "Sim, seguir A3" (D-EV-A2-9) | `docs/RESULTADO_V3_ABLACAO_APRENDIZADO.md` |
+| **EVIDENCIA A3** pré-registro e réplica | **PR aberto** (#971): o `PREREGISTRO.md`, o `tools/replicar_run.py`, o campo no template e a réplica da C4 ("divergiu") | `docs/PREREGISTRO.md` |
+| **EVIDENCIA A4** síntese | **PR aberto**: a síntese e esta seção; CHECKPOINT A4 com o Matheus | `docs/SINTESE_EVIDENCIA.md` |
+| **LEGIBILIDADE** | **na `main`** (#964): a auditoria de quem define o sucesso (o modular aprende pelo corpo, não pelo gesto do dono) e o plano do teste cego, PROPOSTO, com as LG-1 a LG-6 abertas | `docs/AUDITORIA_V3_SUCESSO_CORPO.md`, `docs/PLANO_ANALISE_V3_LEGIBILIDADE.md` |
+
 ## 2. Decisões abertas do Matheus
 
 - **A L4:** aprovar as capturas da ilha (390 e 1280; claro, escuro e noite) e medir a M3 com `?medir3d=1` no desktop e num celular.

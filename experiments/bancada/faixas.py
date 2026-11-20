@@ -30,7 +30,7 @@ BASES_COMPARACAO = {"calibracao": (28101, 28202, 28303, 28404, 28505), "validaca
 # PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO, secao 3)
 PREFIXOS_UNIDADES = ("experimento-maior", "n6", "n7", "comparacao-cerebros", "mundo", "corpo", "banheiro", "dois_pets", "rede_de_si",
                      "pet_que_pensa", "competicao", "digibrain_prototipo", "social_par", "social_par_piloto",
-                     "social_par_s", "social_par_s_det", "social_par_md", "social_par_md_det")
+                     "social_par_s", "social_par_s_det", "corpo_par", "social_par_md", "social_par_md_det")
 # faixas queimadas: continuam reservadas e nao podem ser usadas para nada (adendo 4.1 do PLANO_ANALISE_V2_EXPERIMENTO_MAIOR)
 FAIXAS_QUEIMADAS = ((15101, 15505, "a validacao antiga do experimento maior: run indevida parada em 2026-10-06 (PR #183)"),
                     (90101, 90505, "GOSTO_VISUAL, GV3b do adendo 1: a run parou na vida 213 de 216 por um erro do codigo, as duas TVs "
@@ -224,10 +224,20 @@ FAIXAS_RESERVADAS = (
                      "unidades (docs/PLANO_ANALISE_V3_CORPO_ACOPLAMENTO.md, secao 4; D-CA-10, aprovada pelo Matheus em 2026-11-18, "
                      "\"Aprovo, siga\" e \"Aprovo todas\"; bases 100101, 100202, 100303, 100404 e 100505, K = 40; conferida livre no faixas.py, nas configs, "
                      "nos planos, nas tarefas, nos resultados e nos orquestradores de todos os branches remotos em 2026-11-18)"),
+    (104001, 104400, "CORPO, a ablacao do corpo (C2): o bloco I nas bases 104001...104200 (k = 1, 200 sementes independentes, prefixo "
+                     "digibrain_prototipo) e o bloco II nas bases 104301...104400 (k = 1, prefixo corpo_par), os bracos CTRL, D, D + E e "
+                     "D + C5 (docs/PLANO_ANALISE_V3_CORPO.md, secoes 3 e 4; D-CO-5 e D-CO-7, decididas pelo Matheus em 2026-11-18, "
+                     "\"Confirmo, siga\"; a 104xxx conferida livre nos codigos, configs, planos, tarefas, resultados e registro de todos os "
+                     "branches remotos em 2026-11-18)"),
     (103001, 103400, "SOCIAL_PAR S, o substrato que deixa o social aparecer: a run 103001...103200 (200 bases, k = 1, prefixo social_par_s, "
                      "os mesmos nos tres bracos) e o G-DET 103301...103350 (prefixo social_par_s_det) (docs/PLANO_ANALISE_V3_SOCIAL_PAR_S.md, "
                      "secao 4; S-5, aprovada pelo Matheus em 2026-11-18, \"Aprovado\"; conferida livre no faixas.py, nos planos e nas "
                      "configs da origin/main e de todos os branches remotos em 2026-11-18)"),
+    (106001, 106400, "CORPO C3, a ponte com teto: o bloco I nas bases 106001...106200 (k = 1, 200 sementes independentes, prefixo "
+                     "digibrain_prototipo) e o bloco II nas bases 106301...106400 (k = 1, prefixo corpo_par), os bracos CTRL, D, DTL e DTB "
+                     "(docs/PLANO_ANALISE_V3_CORPO_C3.md, secao 4; D-C3-7, reservada pelo coordenador em 2026-11-19; nenhuma vida antes da "
+                     "aprovacao do plano pelo Matheus; a 106xxx conferida livre no faixas.py, nas configs e nos planos de todos os branches "
+                     "remotos em 2026-11-19)"),
     (105001, 105400, "SOCIAL_PAR MD, a medida do M1 e do M2: a run 105001...105200 (200 bases, k = 1, prefixo social_par_md, as mesmas "
                      "nas oito celulas) e o G-DET 105301...105350 (prefixo social_par_md_det) (docs/PLANO_ANALISE_V3_SOCIAL_PAR_MD.md, "
                      "secao 4; MD-5, aprovada pelo Matheus em 2026-11-19, \"Aprovado\"; a 104xxx ja e da CORPO; conferida livre no "

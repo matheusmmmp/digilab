@@ -52,7 +52,9 @@ import { PRESETS, Pos, SEM_CONTORNO } from "./pos.ts";
 import { SACO_NA_TELA, VIAGEM, ZOOM_LUGAR_MOVEL, lugarAberto, progressoViagem, type Lugar } from "../../../viagem.ts";
 import { LUGARES, ORDEM_LUGARES, chaoDoLugar, estadoDoLugar, gradeDosLugares, idaDoTreino, pontoDoLugar as pontoLugarDe, pontoDoPet, type BaseDoMundo } from "./lugares.ts";
 import { Apagador, montarMarcadores, type Marcadores } from "./marcadoresLugar.ts";
-import { CAIS, TRANCAS } from "../../../trancas.ts";
+import { CAIS, TACAS_DA_CONTA, TRANCAS } from "../../../trancas.ts";
+import { montarTacas } from "./premiosCena.ts";
+import { temporadasNaIlha } from "./premiosConta.ts";
 import { mitologiaLigada } from "../../../mitologia.ts";
 import { SinaisDaIlha } from "./mitologia.ts";
 import { cantinhoNaVista, montarCantinho, type Cantinho } from "./cantinhoTv.ts";
@@ -109,6 +111,10 @@ class VistaIlha {
   private versaoTrancas = -1;
   /** o cais (MMO5): a versao da tabela dele que a cena ja aplicou, o ponto dele (celulas: x, z e o chao) e onde ele cai na tela */
   private versaoCais = -1;
+  /** as tacas da temporada (MMO7): a versao da lista do servidor que a cena ja aplicou, o grupo na cena e o pedido em curso (o mais novo ganha) */
+  private versaoTacas = -1;
+  private tacas: THREE.Group | null = null;
+  private pedidoTacas = 0;
   private pontoCais: [number, number, number] | null = null;
   private readonly caisTela: [number, number, number] = [0, 0, 0];
   /** onde cada lugar cai na tela (o pe em px de CSS e a altura em px), reaproveitado a cada quadro; o retangulo do canvas e lido so em `ajustar` */
@@ -272,7 +278,7 @@ class VistaIlha {
     /* os modelos 3D dos lugares (lugares.ts) chegaram: o marcador provisorio de cada um sai, e as trancas se aplicam de novo (aos modelos e ao saco
        gerado, que entrou agora) */
     for (const id of o.lugaresRaiz?.keys() ?? []) if (id === "portao" || id === "barraca") this.marcadores.tirar(id);
-    this.versaoTrancas = -1; this.versaoCais = -1;
+    this.versaoTrancas = -1; this.versaoCais = -1; this.versaoTacas = -1;
     /* data-objetos: os kits e os itens ja estao na cena (as capturas dos itens esperam por ele, como o data-pronto) */
     this.renderer.domElement.parentElement?.setAttribute("data-objetos", "1");
     if (this.baixa) this.menosGrama();
@@ -834,6 +840,19 @@ class VistaIlha {
     }
   }
 
+  /** poe `n` tacas da temporada perto do cais, no lugar das de antes; o erro de carga fica no console e a ilha segue sem elas */
+  private trocarTacas(n: number): void {
+    const meu = ++this.pedidoTacas;
+    const tirar = () => { if (this.tacas) { this.cenaIlha.cena.remove(this.tacas); this.tacas = null; } };
+    if (n === 0) { tirar(); return; }
+    montarTacas(this.ilha, document.baseURI, n).then(g => {
+      if (meu !== this.pedidoTacas) return;
+      tirar();
+      this.tacas = g;
+      this.cenaIlha.cena.add(g);
+    }).catch(err => console.error("as taças da temporada não entraram na ilha:", err));
+  }
+
   /** o lugar trancado fica apagado e o destrancado volta ao normal; so quando a tabela de trancas mudou (trancas.ts, escrita pelo nivel do Tamer) */
   private aplicarTrancas(): void {
     /* o cais (MMO5): ligado e trancado, o modelo sai apagado como os outros; aberto ou desligado, fica como sempre foi */
@@ -841,6 +860,12 @@ class VistaIlha {
       this.versaoCais = CAIS.versao;
       const raiz = this.objetos?.lugaresRaiz?.get("cais");
       if (raiz) this.apagador.aplicar(raiz, CAIS.ligado && CAIS.trancado);
+    }
+    /* as tacas da temporada (MMO7): so com o cais ligado e os objetos na cena; a lista mudou, troca o grupo */
+    const chaveTacas = TACAS_DA_CONTA.versao * 2 + (CAIS.ligado ? 1 : 0);
+    if (this.objetos && this.versaoTacas !== chaveTacas) {
+      this.versaoTacas = chaveTacas;
+      this.trocarTacas(CAIS.ligado ? temporadasNaIlha(TACAS_DA_CONTA.temporadas).length : 0);
     }
     if (this.versaoTrancas === TRANCAS.versao) return;
     this.versaoTrancas = TRANCAS.versao;

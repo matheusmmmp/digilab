@@ -14,7 +14,7 @@
 
    A semana e o dia (secao 5): pelo relogio do servidor (`hora`, em milissegundos UTC), no horario de Brasilia (UTC-3, sem horario de
    verao); a semana vai de segunda 00:00 a domingo 23:59. */
-import { DIGIMON_DA_FORMA, Motor, NIVEL_DO_ESTAGIO, type EventoRegistro, type IdCena } from "../../motor/index.ts";
+import { DIGIMON_DA_FORMA, Motor, NIVEL_DO_ESTAGIO, RIVAL_SALAO, type EventoRegistro, type IdCena } from "../../motor/index.ts";
 
 /** os pontos da vitoria pela faixa do rival (PROPOSTO, SEM FONTE) */
 export const PONTOS_FAIXA: Readonly<Record<string, number>> = { Rookie: 10, Champion: 20, Ultimate: 40, Mega: 80 };
@@ -74,7 +74,10 @@ export function lutasRanqueadas(semente: number, versao: number, log: readonly E
 
 /** a mesma conta de lutasRanqueadas, devolvendo tambem o pet refeito (o servidor, MMO3, confere o marco nele, sem refazer o registro de novo).
     A luta e refeita pelo lutarPoc, que confere se ela era possivel; o resto, pelo aplicarEvento */
-export function refazerComLutas(semente: number, versao: number, log: readonly EventoRegistro[], entregues: readonly SementeEntregue[]): { lutas: LutaRanqueada[]; motor: Motor } {
+/** uma luta do Salao da Fronteira que o replay do pet refez (MMO7: o mural so conta o Salao que o servidor viu): a semente, o tick e se venceu */
+export interface LutaSalaoVista { s: number; tick: number; venceu: boolean }
+
+export function refazerComLutas(semente: number, versao: number, log: readonly EventoRegistro[], entregues: readonly SementeEntregue[]): { lutas: LutaRanqueada[]; motor: Motor; salao: LutaSalaoVista[] } {
   const vistas = new Set<number>();
   entregues.forEach((x, k) => {
     if (!Number.isInteger(x.semente) || !Number.isInteger(x.indice) || x.indice < 0 || !Number.isFinite(x.hora) || (x.rival === undefined && x.mapa != null))
@@ -87,7 +90,7 @@ export function refazerComLutas(semente: number, versao: number, log: readonly E
   const pedidos = new Map<number, SementeEntregue[]>();
   for (const x of entregues) pedidos.set(x.indice, [...(pedidos.get(x.indice) ?? []), x]);
   const noIndice = new Map<number, { estagio: string; venceu: boolean | null; rival: string | null; mapa: string | null; s: number | null; vida: number | null }>();
-  const m = new Motor(semente, versao);
+  const m = new Motor(semente, versao), salao: LutaSalaoVista[] = [];
   for (let i = 0; i <= log.length; i++) {
     let venceu: boolean | null = null, rival: string | null = null, mapa: string | null = null, s: number | null = null, vida: number | null = null;
     const estagio = NIVEL_DO_ESTAGIO[m.estagioAtual];
@@ -98,6 +101,7 @@ export function refazerComLutas(semente: number, versao: number, log: readonly E
         if (ev[0] !== m.e.tick) throw new Error(`registro fora de ordem no tick ${ev[0]}`);
         const r = m.lutarPoc(ev[2].r, ev[2].s, (ev[2].m ?? null) as IdCena | null);   // o mapa do registro; o lutarPoc o confere
         venceu = r.venceu; rival = ev[2].r; mapa = ev[2].m ?? null; s = ev[2].s; vida = r.serie.length ? r.serie[r.serie.length - 1].vidaA : null;
+        if (rival === RIVAL_SALAO) salao.push({ s: ev[2].s, tick: ev[0], venceu: r.venceu });
       } else m.aplicarEvento(ev);
     }
     if (pedidos.has(i)) noIndice.set(i, { estagio, venceu, rival, mapa, s, vida });
@@ -119,7 +123,7 @@ export function refazerComLutas(semente: number, versao: number, log: readonly E
     return { ...base, situacao: o.venceu ? "vitoria" as const : "derrota" as const, rival: o.rival, faixa, estagio: o.estagio, vidaFinal: o.vida };
   });
   pontuar(lutas);
-  return { lutas, motor: m };
+  return { lutas, motor: m, salao };
 }
 
 /** os pontos das lutas de um pet, na ordem do pedido: a vitoria pela faixa, com a metade para cada vitoria anterior contra o mesmo rival
@@ -169,3 +173,87 @@ export function ordenarTabela<T extends LinhaSemana>(linhas: readonly T[]): T[] 
   if (linhas.some(l => l.semana !== linhas[0].semana || l.estagio !== linhas[0].estagio)) throw new Error("tabela com semanas ou estágios misturados");
   return [...linhas].sort(compararLinhas);
 }
+
+/* ------------------------------------------------------------------------------------------------ MMO8: as duas pontuacoes e o reset
+   (docs/PLANO_V3_MMO.md, secoes 8 e 9; MMO-15 a MMO-19 APROVADAS em 2026-11-11). A conta pura, sem o Tamer nem o servidor: quem chama passa
+   o que viu. Todo numero daqui e PROPOSTO, SEM FONTE (os da tabela do plano).
+   - os pontos do Digimon: o total da vida do pet, a soma dos pontos das lutas ranqueadas dele (todas as semanas). Nao zera; o pet novo
+     comeca em 0;
+   - o Respeito do Tamer: os feitos unicos (a 1a medalha de cada lider, o titulo da Liga), os resets com bonus, os titulos da semana e os
+     selos Top do dia. So sobe;
+   - o nivel do reset: 1 o Ultimate, 2 o Mega, 3 o Mega com o titulo da Liga deste pet; antes do Ultimate, 0 (sem bonus). */
+
+/** o nivel do reset: 0 sem bonus, 1 o Ultimate, 2 o Mega, 3 o Mega e o titulo da Liga com este pet */
+export type NivelReset = 0 | 1 | 2 | 3;
+export const NIVEIS_RESET: readonly NivelReset[] = [0, 1, 2, 3];
+/** o bonus de cada nivel do reset (MMO-18; PROPOSTO, SEM FONTE): o Respeito e os Bits */
+export const BONUS_RESET: Readonly<Record<NivelReset, { respeito: number; bits: number }>> = {
+  0: { respeito: 0, bits: 0 }, 1: { respeito: 300, bits: 150 }, 2: { respeito: 600, bits: 400 }, 3: { respeito: 1000, bits: 800 },
+};
+/** o reset so da Respeito no ranking com este minimo de pontos do Digimon conferidos (MMO-18; PROPOSTO, SEM FONTE) */
+export const PONTOS_MINIMOS_RESET = 200;
+/** o Respeito de cada feito (a tabela da secao 8; PROPOSTO, SEM FONTE). O titulo da semana e o selo sao os da MMO7 (servidor) */
+export const RESPEITO_FEITO = { lider: 100, liga: 500, titulo_semana: 100, selo_dia: 20 } as const;
+/** o nivel do Tamer: o 10 e o primeiro Mega; do 11 em diante, um a cada RESPEITO_POR_NIVEL de Respeito (MMO-15; PROPOSTO, SEM FONTE) */
+export const NIVEL_DO_PRIMEIRO_MEGA = 10;
+export const RESPEITO_POR_NIVEL = 1000;
+/** "Tamer Lendario" a partir deste Respeito; a conta nao para (MMO-16; PROPOSTO, SEM FONTE) */
+export const TAMER_LENDARIO = 10000;
+
+const ORDEM_ESTAGIO = ["bebe", "crianca", "adolescente", "adulto", "mega"] as const;
+/** o maior estagio a que o pet chegou (pelas evolucoes; o bebe, sem nenhuma) */
+export function estagioMaximo(m: Motor): (typeof ORDEM_ESTAGIO)[number] {
+  let i = 0;
+  for (const ev of m.evolucoes) i = Math.max(i, ORDEM_ESTAGIO.indexOf(ev.estagio));
+  return ORDEM_ESTAGIO[i];
+}
+/** o nivel do reset do pet, refeito do registro dele: o maior estagio e o titulo da Liga do proprio pet (Motor.liga) */
+export function nivelDoReset(m: Motor): NivelReset {
+  const e = estagioMaximo(m);
+  if (e === "mega") return m.liga.titulos > 0 ? 3 : 2;
+  return e === "adulto" ? 1 : 0;
+}
+/** os pontos do Digimon: o total da vida, a soma das lutas ranqueadas dele */
+export const pontosDoDigimon = (lutas: readonly LutaRanqueada[]): number => lutas.reduce((s, l) => s + l.pontos, 0);
+/** o Respeito de um reset: o do nivel; com os pontos do Digimon conferidos (o servidor), so com o minimo (MMO-18). `pontos` null: a
+    conta do jogo, que nao sabe os pontos conferidos, conta o bonus inteiro (o Respeito local; secao 8) */
+export function respeitoDoReset(nivel: NivelReset, pontos: number | null): number {
+  if (!NIVEIS_RESET.includes(nivel)) throw new Error(`nível do reset desconhecido: ${JSON.stringify(nivel)}`);
+  if (pontos !== null && pontos < PONTOS_MINIMOS_RESET) return 0;
+  return BONUS_RESET[nivel].respeito;
+}
+/** o que vale Respeito, ja contado por quem chama */
+export interface FeitosRespeito {
+  /** quantos lideres deram a 1a medalha (no maximo 6) */
+  lideres: number;
+  /** o titulo da Liga do Tamer */
+  liga: boolean;
+  /** os resets: o nivel e os pontos do Digimon conferidos (null: a conta do jogo) */
+  resets: readonly { nivel: NivelReset; pontos: number | null }[];
+  titulosSemana: number;
+  selos: number;
+}
+export interface Respeito { total: number; lideres: number; liga: number; resets: number; titulos: number; selos: number }
+/** o Respeito do Tamer, por feito e no total */
+export function respeito(f: FeitosRespeito): Respeito {
+  for (const k of ["lideres", "titulosSemana", "selos"] as const)
+    if (!Number.isInteger(f[k]) || f[k] < 0) throw new Error(`contagem inválida no Respeito: ${k} = ${JSON.stringify(f[k])}`);
+  const r = {
+    lideres: f.lideres * RESPEITO_FEITO.lider, liga: f.liga ? RESPEITO_FEITO.liga : 0,
+    resets: f.resets.reduce((s, x) => s + respeitoDoReset(x.nivel, x.pontos), 0),
+    titulos: f.titulosSemana * RESPEITO_FEITO.titulo_semana, selos: f.selos * RESPEITO_FEITO.selo_dia,
+  };
+  return { total: r.lideres + r.liga + r.resets + r.titulos + r.selos, ...r };
+}
+/** o Respeito do jogo (secao 8: a tela pode mostrar um local maior): do registro do Tamer, as medalhas, o titulo e os resets com o bonus
+    inteiro. Os titulos da semana e os selos so o servidor da */
+export function respeitoLocal(t: { medalhas: readonly unknown[]; titulo: unknown; resets: readonly { nivel: NivelReset }[] }): Respeito {
+  return respeito({ lideres: t.medalhas.length, liga: !!t.titulo, resets: t.resets.map(x => ({ nivel: x.nivel, pontos: null })), titulosSemana: 0, selos: 0 });
+}
+/** o nivel do Tamer: abaixo do 10, o dos marcos (src/nivel.ts); com o 10, mais um a cada RESPEITO_POR_NIVEL de Respeito (MMO-15) */
+export function nivelPeloRespeito(nivelDosMarcos: number, resp: number): number {
+  if (!Number.isInteger(nivelDosMarcos) || nivelDosMarcos < 0 || !Number.isFinite(resp) || resp < 0) throw new Error(`nível ou Respeito inválido: ${nivelDosMarcos}, ${resp}`);
+  return nivelDosMarcos < NIVEL_DO_PRIMEIRO_MEGA ? nivelDosMarcos : NIVEL_DO_PRIMEIRO_MEGA + Math.floor(resp / RESPEITO_POR_NIVEL);
+}
+/** o titulo de faixa do Respeito: "Tamer Lendário" a partir de TAMER_LENDARIO (null abaixo); a conta nao para */
+export const tituloDoRespeito = (resp: number): string | null => (resp >= TAMER_LENDARIO ? "Tamer Lendário" : null);
