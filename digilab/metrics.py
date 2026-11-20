@@ -3633,3 +3633,102 @@ def medidas_linha_base(motivos: Sequence[dict], S: int, e_noite, ks: Sequence[in
                         "resto": {b: float(sum(grupos[b]) / len(grupos[b])) for b in nomes}}
     return {"n": n, "piso": piso, "contagem": contagem, "acordados_no_eta2": acordados,
             "fase": {x: fase.count(x) for x in ("dia", "noite")}, "linhas": linhas}
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------
+# O caminho do sono (docs/PLANO_ANALISE_V3_PET_VIVO_SONO.md, secoes 4 e 5): o dormir vem do reflexo ou dos pesos
+CAMINHOS_SONO = ("REFLEXO", "SEGURA", "SORTEIO", "UNICO")
+CAMINHOS_PESOS = ("SORTEIO", "UNICO")          # SN-2: o que a recompensa alcanca (a ativacao le o aprendido)
+ACOES_RECOMPENSA_SONO = ("comer", "brincar")   # a pergunta do plano: o dono que recompensa mais o comer e o brincar
+
+
+def _quartil(ordenados: Sequence[int], p: float):
+    """o quartil pelo posto mais proximo (sem interpolar), para a conta ficar em inteiros"""
+    return ordenados[max(0, -(-int(p * 100) * len(ordenados) // 100) - 1)]
+
+
+def medidas_caminho_sono(motivos: Sequence[dict], lambda_sono: int, passo: int) -> dict:
+    """As medidas do R-sono numa vida com o rastro ligado. Cada decisao de dormir cai num caminho (a secao 4 do plano):
+      - REFLEXO: `reflexo` e a leitura da energia abaixo de `lambda_sono`;
+      - SEGURA: `reflexo` e a energia em `lambda_sono` ou acima (o sono que segura);
+      - SORTEIO: sem `reflexo` e com o `u` do sorteio;
+      - UNICO: sem `reflexo` e sem `u` (o dormir era o unico candidato).
+    O episodio e a sequencia de decisoes de dormir seguidas, e o caminho dele e o da primeira. Toda decisao dura `passo` ticks (a
+    C-UMA-VEZ do R1 confere), entao os ticks sao as decisoes vezes o `passo`. A ultima decisao da vida nao fecha, nao tem o rastro e
+    fica de fora. A M-MARGEM le so as decisoes de dormir pelo SORTEIO; a M-ACORDADO, as acordadas com a energia em `lambda_sono` ou
+    acima. Falha alto sem o rastro, com o reflexo fora do dormir ou com o dormir sem a unidade dele."""
+    decisoes = [m for m in motivos if "cadeia" in m]
+    if not decisoes:
+        raise ValueError("medidas_caminho_sono: a vida sem nenhuma decisao com o rastro (a ConfigRastro ligada?)")
+    por_decisao = dict.fromkeys(CAMINHOS_SONO, 0)
+    por_episodio = dict.fromkeys(CAMINHOS_SONO, 0)
+    episodios = dict.fromkeys(CAMINHOS_SONO, 0)
+    sem_reflexo_exausto = 0
+    energias, chances, folgas, aprendidos = [], [], [], []
+    com_recompensa = 0
+    acordado_n, acordado_chance, acordado_candidato = 0, Fraction(0), 0
+    atual = None
+    for m in decisoes:
+        energia = m["cadeia"]["leitura"].get("energia")
+        if type(energia) is not int:
+            raise ValueError(f"medidas_caminho_sono: a decisao {m['k']} sem a leitura da energia")
+        comportamento = m["escolha"][0]
+        w_dormir = sum(x["w"] for x in m["unidades"] if x["chave"][0] == "dormir")
+        total = sum(x["w"] for x in m["unidades"])
+        if m["reflexo"] and comportamento != "dormir":
+            raise ValueError(f"medidas_caminho_sono: a decisao {m['k']} com o reflexo e a escolha {comportamento!r}")
+        if not m["reflexo"] and energia < lambda_sono:
+            sem_reflexo_exausto += 1
+        if comportamento != "dormir":
+            atual = None
+            if energia >= lambda_sono:
+                acordado_n += 1
+                acordado_candidato += w_dormir > 0
+                acordado_chance += Fraction(w_dormir, total) if total > 0 else 0
+            continue
+        if m["reflexo"]:
+            caminho = "REFLEXO" if energia < lambda_sono else "SEGURA"
+        else:
+            caminho = "SORTEIO" if m["u"] is not None else "UNICO"
+        por_decisao[caminho] += 1
+        if atual is None:
+            atual = caminho
+            episodios[caminho] += 1
+        por_episodio[atual] += 1
+        if caminho != "SORTEIO":
+            continue
+        unidade = [x for x in m["unidades"] if x["chave"][0] == "dormir"]
+        if len(unidade) != 1 or w_dormir <= 0:
+            raise ValueError(f"medidas_caminho_sono: a decisao {m['k']} dormiu pelo sorteio sem a unidade do dormir com peso")
+        outros = [x["w"] for x in m["unidades"] if x["chave"][0] != "dormir"]
+        energias.append(energia)
+        chances.append(Fraction(w_dormir, total))
+        folgas.append(w_dormir - max(outros))
+        aprendidos.append(sum(v for t, v in unidade[0]["termos"].items() if t != "inato"))
+        com_recompensa += any(x["w"] > 0 for x in m["unidades"] if x["chave"][0] in ACOES_RECOMPENSA_SONO)
+    dormir = sum(por_decisao.values())
+    pesos_ep = sum(por_episodio[c] for c in CAMINHOS_PESOS)
+    pesos_dec = sum(por_decisao[c] for c in CAMINHOS_PESOS)
+    n = len(energias)
+    ordenadas = sorted(energias)
+    margem = {"n": n,
+              "energia_media": None if n == 0 else sum(energias) / n,
+              "energia_q1": None if n == 0 else _quartil(ordenadas, 0.25),
+              "energia_mediana": None if n == 0 else _quartil(ordenadas, 0.50),
+              "energia_q3": None if n == 0 else _quartil(ordenadas, 0.75),
+              "chance_dormir": None if n == 0 else float(sum(chances) / n),
+              "folga_media": None if n == 0 else sum(folgas) / n,
+              "folga_negativa": None if n == 0 else sum(1 for f in folgas if f < 0) / n,
+              "comer_ou_brincar_candidato": None if n == 0 else com_recompensa / n,
+              "aprendido_medio": None if n == 0 else sum(aprendidos) / n}
+    return {"n": len(decisoes), "dormir": dormir, "passo": passo,
+            "decisoes": por_decisao, "episodios": episodios,
+            "ticks_decisao": {c: v * passo for c, v in por_decisao.items()},
+            "ticks_episodio": {c: v * passo for c, v in por_episodio.items()},
+            "F_PESOS": None if dormir == 0 else pesos_ep / dormir,
+            "F_PESOS_DEC": None if dormir == 0 else pesos_dec / dormir,
+            "sem_reflexo_exausto": sem_reflexo_exausto,
+            "margem": margem,
+            "acordado": {"n": acordado_n,
+                         "chance_dormir": None if acordado_n == 0 else float(acordado_chance / acordado_n),
+                         "dormir_candidato": None if acordado_n == 0 else acordado_candidato / acordado_n}}

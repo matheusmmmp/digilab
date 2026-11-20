@@ -1,0 +1,8 @@
+{
+  "descricao": "O replay do R-sono (docs/PLANO_ANALISE_V3_PET_VIVO_SONO.md, APROVADO): as mesmas vidas do R1 e do R-a (o HOJE e o OLF-0 da run do PV-2 e o HOJE da checagem do v38; 5 120 vidas), rejogadas pelo log com a ConfigRastro ligada, para medir por qual caminho o pet dorme (o reflexo ou os pesos). Nenhuma vida nova e nenhuma faixa nova: as bases sao as da run do PV-2, para a conferencia. Uma vez, ate 4 processos.",
+  "plano": "docs/PLANO_ANALISE_V3_PET_VIVO_SONO.md",
+  "fase": "sono",
+  "unidades": {"bases": [26101, 26202, 26303, 26404, 26505], "k": 40, "prefixo": "digibrain_prototipo"},
+  "dias": 14,
+  "orcamento_por_dia": 16
+}

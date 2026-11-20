@@ -147,3 +147,80 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
 - **O risco:** o `SeguidorPuro` perde F de vista quando F anda para casa, e o G-DET pode falhar (D-SP-50).
 - **O que falta:** o checkpoint S3, a aprovação do substrato antes do merge. Depois vem a run da S3.
 - **O checkpoint S3 (2026-11-18):** "Aprovado, rodar como está" (D-SP-51). A run vem depois do merge da cadeia.
+
+## S3: a run (2026-11-19)
+
+- **A run:** rodou no e9f4368e, com 750 pares, das 00:52 às 01:14. Os artefatos estão em `artifacts_v3_social_par_s/run/`, e o resultado
+  em `docs/RESULTADO_V3_SOCIAL_PAR_S.md`.
+- **O resultado:**
+  - o G-DET passa no C, no B1 e no B2;
+  - o D_A dá ≈ 0 nos três;
+  - o B é inconclusivo por premissa nos três.
+- **A leitura:** o social não existe no pet de hoje, e o próximo passo é mecanismo (D-SP-52 a D-SP-54).
+- **O que falta:** o "aprovado" do resultado. Depois vem a S4, com a síntese e a espec do M1.
+
+## S4: a síntese e a espec do M1 (2026-11-19)
+
+- **A síntese:** `docs/SINTESE_SOCIAL_PAR_S.md`.
+  - **Os bloqueios resolvidos:** o parceiro que não via (o C e o primário T\*c) e o teto da casa (o B1).
+  - **O que ficou em parte:** a bola (o B2). Os chutes subiram de ~0 para 0,5 por dia, mas não houve pares elegíveis.
+  - **O D_A** dá ≈ 0 com um instrumento que vê. O D_B segue sem leitura.
+- **A espec do M1:** `docs/ESPEC_SOCIAL_PAR_M1.md`. Ela leva o outro ao M-SENS e acrescenta as unidades `explorar/seguir:<id>` e
+  `explorar/onde_comeu:<id>`, atrás da `unidades_sociais`. O motor não muda.
+- **O painel:** uma linha no `docs/PAINEL_V3.md`.
+- **O que falta:** o checkpoint S5, com as decisões M1-1 a M1-5 da espec.
+
+## M1: o código do M1 (2026-11-19)
+
+- **O checkpoint S5:** o Matheus aprovou a síntese e a espec, com as cinco recomendações (D-SP-59).
+- **O gabarito, antes do código:** `tests/gabarito_social_m1.py` e `tests/gabaritos/social_m1_de_hoje.json`, num commit próprio.
+- **A subchave `ConfigDigibrain.unidades_sociais`, desligada:**
+  - **o M-SENS** lê da `PercepcaoSocial` só os `outros` e o `onde_comeu` (`Sens.ler_outros`);
+  - **o M-IMPULSO** põe as unidades `explorar/seguir:<id>` e `explorar/onde_comeu:<id>` no fim do explorar, com o inato e a novidade
+    sociais em 0 (`W0_TIPO_SOCIAL`, `NOV_SOCIAL`);
+  - **o M-ADAPT** acha o candidato do motor por tipo e ponto;
+  - **o M-PLAST** ganha as classes `seguir` e `onde_comeu` no desfecho, e o M-MEM as aceita no episódio.
+- **O motor não mudou:** o `engine.py`, o `mundo.py` e o `grupo.py` saem iguais.
+- **Os testes:** `tests/test_digibrain_m1_social.py`, com o G2, o G2b, as unidades, o alvo, dois na mesma célula, o P1, o prox, o
+  G-RECEPTOR-SOCIAL, as combinações, o determinismo e a escolha só com o outro à vista.
+- **O achado (D-SP-62):** cada unidade social leva o inato do explorar, e o sorteio é proporcional. O outro à vista aumenta a chance de ir
+  até ele antes de qualquer aprendizado. O Matheus escolheu a opção (a) (D-SP-63): o código fica, e o plano da medida ganha o braço de
+  controle M1 com o incentivo social em 0.
+- **O que falta:** o código do M2 (M1-5) e o plano da medida, com os braços M1 e M1+M2.
+
+## M2: a espec da companhia no corpo (2026-11-19)
+
+- **A espec:** `docs/ESPEC_SOCIAL_PAR_M2.md`. O emissor `companhia` baixa a solidão quando outro pet está em contato (até 1 célula),
+  lido só da posição, atrás da `ConfigCompanhia`, desligada.
+- **As decisões M2-1 a M2-6** ficam para o checkpoint do M2 (D-SP-65).
+- **O que falta:** o "aprovado" da espec; depois, o código do M2 e o plano da medida com os braços M1, M1-inc0 e M1+M2.
+
+## M2: o código da companhia (2026-11-19)
+
+- **O checkpoint do M2:** o Matheus aprovou a espec (D-SP-67). O gabarito foi gravado antes, em `tests/gabaritos/social_m2_de_hoje.json`.
+- **A `ConfigCompanhia`, desligada:** o emissor `companhia` no grafo, com um gatilho novo e sem ler químico. O `Corpo.passo(..., companhia=n)`,
+  o motor que recebe a contagem do grupo a cada tick, e o grupo que conta o contato com as posições do começo do tick.
+- **O achado e o conserto (D-SP-68):** a consequência chegava ao cérebro antes de a companhia agir. Pela opção (a), as unidades sociais
+  leem o corpo da decisão seguinte, como a fala.
+- **Os testes:** `tests/test_corpo_companhia.py`.
+- **O que falta:** o plano da medida, com os braços M1, M1-inc0 e M1+M2.
+
+## MD: o plano da medida do M1 e do M2 (2026-11-19)
+
+- **O plano:** `docs/PLANO_ANALISE_V3_SOCIAL_PAR_MD.md`, PROPOSTO. É o instrumento da S3 com os braços M1, M1-inc0, M1+M2 e M1-inc0+M2,
+  no B1 e no C, com o G-DET em cada célula e a premissa PM-1 (D-SP-70 a D-SP-72).
+- **O que falta:** o "aprovado" do plano (MD-1 a MD-8) e a faixa pelo coordenador; depois, o código da medida (MD1) e a run (MD2).
+
+## MD1: o código da medida (2026-11-19)
+
+- **O checkpoint:** o Matheus aprovou o plano da medida (D-SP-73). O gabarito foi gravado antes, em `tests/gabaritos/social_md_de_hoje.json`.
+- **A subchave `incentivo_social_zero`,** desligada: o incentivo das unidades sociais em 0, o controle do D-SP-63 e do MD-2.
+- **O orquestrador `experiments/run_v3_social_par_md.py`:** os quatro mecanismos × o B1 e o C, com o G-DET em cada célula, a PM-1, os
+  contrastes C-APR e C-APR1 e a regra de leitura da seção 7. As configs estão em `experiments/configs/v3_social_par_md/`, e a faixa
+  105001…105400 no `faixas.py` (D-SP-74).
+- **Os testes:** `tests/test_social_par_md.py`, com o G2, o incentivo em 0, as travas, o G-S3-IGUAL, o G-GRAV-COMP, o retrato e a PM-1, a
+  fumaça e o determinismo.
+- **O checkpoint:** o código foi APROVADO pelo Matheus em 2026-11-20 ("Aprovado", no #1034), com a leitura da PM-1 na VIVO, no
+  gancho do t0 (D-SP-74).
+- **O que falta:** a run (MD2), num PR próprio, uma vez. Ela espera a cadeia até a `main` (o `pre_run` exige o plano na `origin/main`)
+  e o ok do coordenador para a faixa.

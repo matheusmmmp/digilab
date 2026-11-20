@@ -113,8 +113,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 
-from .config import (CONFIG_ACOPLAMENTO_CORPO, CONFIG_DIGESTAO_CORPO, CONFIG_ENJOO_TELA, CONFIG_TETO_FOME_CORPO, CONFIG_EVOLUCAO_PESQUISA, CONFIG_LUTA_CORPO, CONFIG_OLFATO,
-                     CONFIG_OUVIDO, CONFIG_PADRAO, CONFIG_TELA, TICKS_POR_DIA, Config, ConfigAcoplamentoCorpo, ConfigCorpo, ConfigDigestaoCorpo, ConfigEnjooTela, ConfigEvolucaoPesquisa, ConfigLutaCorpo, ConfigMundo, ConfigOlfato,
+from .config import (CONFIG_ACOPLAMENTO_CORPO, CONFIG_COMPANHIA, CONFIG_DIGESTAO_CORPO, CONFIG_ENJOO_TELA, CONFIG_TETO_FOME_CORPO, CONFIG_EVOLUCAO_PESQUISA, CONFIG_LUTA_CORPO, CONFIG_OLFATO,
+                     CONFIG_OUVIDO, CONFIG_PADRAO, CONFIG_TELA, TICKS_POR_DIA, Config, ConfigAcoplamentoCorpo, ConfigCompanhia, ConfigCorpo, ConfigDigestaoCorpo, ConfigEnjooTela, ConfigEvolucaoPesquisa, ConfigLutaCorpo, ConfigMundo, ConfigOlfato,
                      ConfigOuvido, ConfigTela, ConfigTetoFomeCorpo)
 from .corpo_grafo import Emissor, Grafo, Leitura, Orgao, Quimico, Reacao, ReceptorSoma, checar
 from .events import ACOES_PET_BANHEIRO, ACOES_PET_HOJE, FRUTAS, TIPOS_COMIDA_MUNDO, AcaoPet, AcaoUsuario
@@ -481,7 +481,7 @@ RECEPTOR_DE = {**DRIVE_DO_QUIMICO, **{n: n for n in NOVOS + GESTOS + BANHEIRO}, 
 
 def grafo_do_corpo(cfg: Config, cc: ConfigCorpo, t: TaxasCorpo, com_mundo: bool = False, cfg_olfato: ConfigOlfato | None = None,
                    cfg_ouvido: ConfigOuvido | None = None, cfg_tela: ConfigTela | None = None,
-                   cfg_acoplamento: ConfigAcoplamentoCorpo | None = None) -> Grafo:
+                   cfg_acoplamento: ConfigAcoplamentoCorpo | None = None, cfg_companhia: ConfigCompanhia | None = None) -> Grafo:
     """A tabela unica do corpo com estas chaves (secao 18). Os numeros de hoje vem das taxas (`t`) e os da etapa 6 da ConfigCorpo; os
     estimulos que vem de fora com quantidade variavel (a bola, a fruta, o andar, a comida podre) guardam so o sinal. Com a digestao, a
     comida (a racao, o comer, a fruta) entra no estomago (`alimento`) e a reacao da digestao a tira, junto com a fome. Com os orgaos do
@@ -538,6 +538,11 @@ def grafo_do_corpo(cfg: Config, cc: ConfigCorpo, t: TaxasCorpo, com_mundo: bool 
         em.append(Emissor("vida_tick", "tick", 1, (("vida", -cc.vida_decaimento),)))
     sobe = {"tedio": cc.tedio_sobe, "curiosidade": cc.curiosidade_sobe, "solidao": cc.solidao_sobe}
     em += [Emissor(f"{n}_sobe", "acordado", 1, ((n, sobe[n]),)) for n in NOVOS if n in sobe and n in nomes]
+    ccp = cfg_companhia or CONFIG_COMPANHIA
+    if ccp.ligada:                                  # o SOCIAL_PAR M2: outro pet em contato baixa a solidao, sem ler quimico
+        if "solidao" not in nomes:
+            raise ValueError("a ConfigCompanhia ligada exige a solidao no corpo (ConfigCorpo.drives_novos)")
+        em.append(Emissor("companhia", "companhia", 1, (("solidao", -ccp.alivio_solidao),)))
     if cc.banheiro:
         em += [Emissor("vontade_sobe", "acordado", 1, (("vontade", cc.vontade_sobe),)),
                Emissor("necessidade_regiao", "necessidades", 1, (("desconforto", cc.necessidade_regiao),))]
@@ -637,8 +642,11 @@ class Corpo:
                  cfg_ouvido: ConfigOuvido | None = None, cfg_luta: ConfigLutaCorpo | None = None,
                  cfg_tela: ConfigTela | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None,
                  cfg_acoplamento: ConfigAcoplamentoCorpo | None = None, cfg_digestao: ConfigDigestaoCorpo | None = None,
-                 cfg_teto_fome: ConfigTetoFomeCorpo | None = None) -> None:
+                 cfg_companhia: ConfigCompanhia | None = None, cfg_teto_fome: ConfigTetoFomeCorpo | None = None) -> None:
         self.cfg = cfg or CONFIG_PADRAO
+        self.ccp = cfg_companhia or CONFIG_COMPANHIA     # o SOCIAL_PAR M2: a companhia no corpo (desligada: o corpo de hoje)
+        if not isinstance(self.ccp, ConfigCompanhia):
+            raise TypeError(f"cfg_companhia e uma ConfigCompanhia: {self.ccp!r}")
         self.cfg_evo = cfg_evo or CONFIG_EVOLUCAO_PESQUISA
         self.cc = cc or ConfigCorpo(ligada=True)
         if not self.cc.ligada:
@@ -679,7 +687,7 @@ class Corpo:
         if self.cc.paladar and not com_mundo:
             raise ValueError("ConfigCorpo.paladar sem o mundo fisico: o perfil de gosto vem da comida do mapa (paladar, secao 3.1)")
         # secao 18: a tabela unica, conferida na carga (falha alto); a lista e a ordem dos quimicos saem dela
-        self.grafo = grafo_do_corpo(self.cfg, self.cc, self.t, com_mundo, self.co, self.cv, self.ct, self.ca)
+        self.grafo = grafo_do_corpo(self.cfg, self.cc, self.t, com_mundo, self.co, self.cv, self.ct, self.ca, self.ccp)
         self.relato_grafo = checar(self.grafo)
         self.quimicos = self.grafo.nomes
         if self.quimicos != quimicos_de(self.cc, com_mundo, self.co, self.cv, self.ct):   # pragma: no cover - o grafo e montado de quimicos_de
@@ -775,7 +783,7 @@ class Corpo:
                   cfg_ouvido: ConfigOuvido | None = None, cfg_luta: ConfigLutaCorpo | None = None,
                   cfg_tela: ConfigTela | None = None, cfg_enjoo_tela: ConfigEnjooTela | None = None,
                   cfg_acoplamento: ConfigAcoplamentoCorpo | None = None, cfg_digestao: ConfigDigestaoCorpo | None = None,
-                  cfg_teto_fome: ConfigTetoFomeCorpo | None = None) -> Corpo:
+                  cfg_companhia: ConfigCompanhia | None = None, cfg_teto_fome: ConfigTetoFomeCorpo | None = None) -> Corpo:
         """O corpo de um Estado de hoje (o do nascimento, por exemplo). Cada drive tem de cair na grade de C. A Vida e a do tick do
         Estado (C no nascimento). Os quimicos da etapa 6 comecam em 0 (`com_mundo`: a curiosidade existe)."""
         cc = cc or ConfigCorpo(ligada=True)
@@ -791,7 +799,7 @@ class Corpo:
         for nome in quimicos_de(cc, com_mundo, cfg_olfato, cfg_ouvido, cfg_tela):
             q.setdefault(nome, 0)                          # os drives novos, os gestos e a adaptacao dos orgaos: zero no nascimento
         return cls(q, cfg, cc, cfg_evo, com_mundo, cfg_olfato, cfg_ouvido, cfg_luta, cfg_tela, cfg_enjoo_tela, cfg_acoplamento, cfg_digestao,
-                   cfg_teto_fome)
+                   cfg_companhia, cfg_teto_fome)
 
     # ---------------------------------------------------------- estimulos
 
@@ -1207,7 +1215,7 @@ class Corpo:
         g = e.gatilho
         if g in ("tick", "sujeira", "necessidades"):
             return True
-        if g == "acordado":
+        if g in ("acordado", "companhia"):          # a companhia so acordado (M2-5), como a subida da solidao
             return not antes.dormindo
         if g == "dormindo":
             return bool(antes.dormindo)
@@ -1217,7 +1225,7 @@ class Corpo:
             return not antes.dormindo and not noite
         raise ValueError(f"gatilho {g!r} fora da fase 1")      # pragma: no cover - checado na tabela
 
-    def passo(self, antes: Estado, necessidades: int = 0) -> None:
+    def passo(self, antes: Estado, necessidades: int = 0, companhia: int = 0) -> None:
         """Um tick, na ordem de state.avancar_um_tick, pelos emissores da tabela (secao 18). `antes` e o Estado no comeco do tick: a
         sujeira, o sono e a hora vem dele. 0) a digestao; 1) a fase 1: fome, desconforto (o tick e a sujeira), tristeza, cansaco (dormindo,
         noite ou dia), a Vida e as subidas dos drives novos, somados por quimico e cortados uma vez; 2) a fase 2, sobre os valores depois da
@@ -1225,7 +1233,13 @@ class Corpo:
         (fora daqui). Com o banheiro, `necessidades` e quantas necessidades estao na regiao do pet neste tick (o motor conta; ate
         necessidade_max_regiao), e a vontade acima do limiar sobe o desconforto (fase 2). Sem o banheiro, `necessidades` tem de ser 0.
         Com o metabolismo: a conversao vai na digestao, o gasto basal na fase 1, as transferencias com limiar (o armazenamento e a
-        mobilizacao) entre a fase 1 e a 2, e a falta de combustivel na fase 2."""
+        mobilizacao) entre a fase 1 e a 2, e a falta de combustivel na fase 2. Com a companhia (o SOCIAL_PAR M2), `companhia` e quantos
+        outros pets estao em contato neste tick (o grupo conta); acordado e com 1 ou mais, a solidao cai o alivio, uma vez so (M2-4).
+        Sem a ConfigCompanhia ligada, `companhia` tem de ser 0."""
+        if type(companhia) is not int or companhia < 0:
+            raise ValueError(f"companhia precisa ser inteiro >= 0: {companhia!r}")
+        if companhia and not self.ccp.ligada:
+            raise ValueError("companhia no tick sem a ConfigCompanhia ligada")
         if type(necessidades) is not int or necessidades < 0:
             raise ValueError(f"necessidades na regiao precisa ser inteiro >= 0: {necessidades!r}")
         if necessidades and not self.cc.banheiro:
@@ -1240,6 +1254,8 @@ class Corpo:
                     n = antes.sujeira
                 elif e.gatilho == "necessidades":
                     n = min(necessidades, self.cc.necessidade_max_regiao)
+                elif e.gatilho == "companhia":       # o SOCIAL_PAR M2: uma vez so, com um ou mais outros (M2-4)
+                    n = 1 if companhia else 0
                 else:
                     n = 1
                 for q, d in e.efeitos:

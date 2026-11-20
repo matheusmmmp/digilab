@@ -61,7 +61,7 @@ from __future__ import annotations
 
 from dataclasses import replace
 
-from ..config import CONFIG_DIGIBRAIN_INATOS, TICKS_POR_DIA, TIPOS_ALVO_DIGIBRAIN, ConfigDigibrainInatos, ConfigMundo
+from ..config import CONFIG_DIGIBRAIN_INATOS, TICKS_POR_DIA, TIPOS_ALVO_DIGIBRAIN, TIPOS_ALVO_SOCIAIS, ConfigDigibrainInatos, ConfigMundo
 from ..modelo_mundo import raiz_inteira
 from .base import div_arred
 from ._comum import chave_json, mul
@@ -148,7 +148,7 @@ class Memoria:
     """o M-MEM (docstring do modulo)"""
 
     def __init__(self, cfg_mundo: ConfigMundo, inatos: ConfigDigibrainInatos | None = None, autobio: bool = False,
-                 controle: str = "rel", rng_emb=None, luta: bool = False, olhar: bool = False) -> None:
+                 controle: str = "rel", rng_emb=None, luta: bool = False, olhar: bool = False, social: bool = False) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
         self.S = self.p.escala
         self.sub = cfg_mundo.sub
@@ -161,6 +161,9 @@ class Memoria:
         # o olhar (GOSTO_VISUAL, P1f, D-GV-P1f-1): o episodio completo de uma opcao de olhar tem a classe do objeto, `tela`; so com a
         # subchave `olhar` ela e aceita (a lista CLASSES_AUTOBIO e o decodificador nao mudam)
         self.classes_autobio = CLASSES_AUTOBIO + (("tela",) if olhar else ())
+        # o SOCIAL_PAR M1 (docs/ESPEC_SOCIAL_PAR_M1.md; D-SP-60): o evento de uma unidade social tem a classe do objeto, o tipo dela
+        # (`seguir`, `onde_comeu`); so com a subchave `unidades_sociais` ela e aceita, no fim
+        self.classes_autobio += TIPOS_ALVO_SOCIAIS if social else ()
         if luta and not autobio:
             raise ValueError("M-MEM: a origem luta so com a memoria_autobio")
         self.controle = controle
