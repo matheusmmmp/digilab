@@ -93,6 +93,13 @@ os conceitos de depois (os entregues para a decisao seguinte); depois do r_n, a 
 (`Sens.expor_conceitos`). O agrado do corpo (GV-16) segue so o da retina: o conceito nao mexe no corpo (OV1-8). O motivo do olhar e a
 consequencia ganham `conceitos` e `termo_conceitos`; com o mito, o motivo ganha `mito` (o termo na valencia da decisao, M-AFETO).
 
+**O outro** (SOCIAL_PAR M1; docs/ESPEC_SOCIAL_PAR_M1.md, secoes 3.2 a 3.5; a subchave `unidades_sociais`): o M-SENS le o outro da percepcao
+social, o M-IMPULSO poe as unidades `explorar/seguir:<id>` e `explorar/onde_comeu:<id>` no fim do explorar, e a intencao de uma delas guarda o
+tipo e o ponto do outro (o mesmo do candidato do motor). O `escolher_alvo` acha o candidato do motor por tipo e ponto (o `Alvo` do motor
+nao muda: o id do outro fica com o motor). Na consequencia, o P1 da classe do tipo (`consequencia_p1`, com a acao `explorar`), com o corpo
+de depois lido na decisao seguinte, como a fala (D-SP-68): o intervalo contem os ticks em que a companhia do corpo (SOCIAL_PAR M2) age, e o
+r_n, o V e o E da opcao social leem o mesmo corpo. Desligada, nenhum campo novo.
+
 **O registro** (secao 7): cada decisao guarda o seu motivo em `motivos` (derivado, nunca no log): as unidades com os termos, os pesos, o
 u, a escolha, o afeto, o estado, a memoria, as sondas e, no fechamento, a consequencia."""
 from __future__ import annotations
@@ -100,7 +107,7 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from ..config import (COMPORTAMENTO_OLHAR, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, CONFIG_EQUILIBRIO_CUIDADO, CONFIG_LANCE_DONO, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_OLHAR,
+from ..config import (COMPORTAMENTO_OLHAR, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS, TIPOS_ALVO_SOCIAIS, CONFIG_EQUILIBRIO_CUIDADO, CONFIG_LANCE_DONO, CONFIG_LUTA_MEMORIA, CONFIG_MUNDO_LIGADA, CONFIG_OLHAR,
                       CONFIG_PADRAO, CONTEUDOS_FALA, VERSAO_PET_DIGIBRAIN, Config, ConfigDigibrain, ConfigDigibrainInatos, ConfigElogio,
                       ConfigAblacaoValuation, ConfigConsertoValuation, ConfigEnjooTela, ConfigEquilibrioCuidado, ConfigFalaUnidades, ConfigLanceDono, ConfigLutaMemoria, ConfigMundo, ConfigOlfato, ConfigOlhar,
                       ConfigPV2, ConfigSonoSegura)
@@ -166,10 +173,10 @@ def montar_modulos(cfg: Config, cd: ConfigDigibrain, cm: ConfigMundo, inatos: Co
                    cfg_ablacao: ConfigAblacaoValuation | None = None,
                    cfg_conserto: ConfigConsertoValuation | None = None, cfg_pv2: ConfigPV2 | None = None) -> Modulos:
     dc = cfg_pv2 is not None and cfg_pv2.ligada
-    return Modulos(sens=Sens(cfg, cm, inatos, cfg_olhar, genoma, cfg_enjoo), afeto=Afeto(cfg, cd, inatos, serie_e_doadora),
+    return Modulos(sens=Sens(cfg, cm, inatos, cfg_olhar, genoma, cfg_enjoo, social=cd.unidades_sociais), afeto=Afeto(cfg, cd, inatos, serie_e_doadora),
                    estado=EstadoDinamico(cfg, cd, inatos), impulso=Impulso(inatos, cd, cfg_fala, cfg_olhar, cfg_lance, cfg_equilibrio, cfg_ablacao, cfg_pv2=cfg_pv2), mem=Memoria(cm, inatos, cd.memoria_autobio, cd.controle_mem,
                                  None if semente is None else random.Random(derivar_semente(semente, "mem_emb")),
-                                 luta, cd.olhar), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem, cfg_sono, cfg_ablacao, cfg_conserto), plast=Plasticidade(cd, inatos, dc_cheiro=dc),
+                                 luta, cd.olhar, social=cd.unidades_sociais), arb=Arbitragem(inatos, cd.memoria_autobio, cd.facetas_mem, cfg_sono, cfg_ablacao, cfg_conserto), plast=Plasticidade(cd, inatos, dc_cheiro=dc),
                    pers=Personalidade(inatos.eta_faceta, inatos.teto_faceta, True) if cd.facetas_mem else None)
 
 
@@ -184,6 +191,9 @@ def intencao_da_unidade(unidade: dict) -> Intencao:
         return Intencao(a, "ponto", None, tuple(ident), True)
     if a is AcaoPet.CHAMAR_ATENCAO:                   # a unidade de fala (DC3, 3.1): o conteudo fica so na chave; o mundo e o do chamar
         return Intencao(a, None, None)
+    if tipo in TIPOS_ALVO_SOCIAIS:                    # o SOCIAL_PAR M1: o tipo e o ponto do outro (o do candidato do motor)
+        o = unidade["objeto"]
+        return Intencao(a, tipo, None, (o["x"], o["y"]))
     return Intencao(a, tipo, ident if tipo in ("comida", "bola") else None)
 
 
@@ -628,6 +638,14 @@ class DigiBrain:
                 self.motivos[-1]["alvo"]["do_passeio"] = it.passeio
             p["alvo"] = alvo
             return alvo
+        if it.tipo_alvo in TIPOS_ALVO_SOCIAIS:        # o SOCIAL_PAR M1: o candidato do motor do mesmo tipo e no mesmo ponto
+            alvo = next((c for c in candidatos if c.tipo == it.tipo_alvo and (c.x, c.y) == it.ponto), None)
+            if alvo is None:
+                raise ValueError(f"o alvo social ({it.tipo_alvo}, {it.ponto}) nao esta entre os candidatos do motor: "
+                                 f"{[(c.tipo, c.x, c.y) for c in candidatos]}")
+            self.motivos[-1]["alvo"] = {**alvo.para_dict(), "do_mem": False}
+            p["alvo"] = alvo
+            return alvo
         if self.pv2 is not None and it.tipo_alvo == "cheiro":     # o PV-2: o executor da busca escolhe entre os candidatos do orgao
             alvo = self._executar_cheiro(candidatos, p["sens"]["olfato"]["dC"], u)
             self.motivos[-1]["alvo"] = {**alvo.para_dict(), "do_mem": False}
@@ -787,6 +805,8 @@ class DigiBrain:
             raise RuntimeError("sem a memoria_autobio, o M-MEM nao tem a recente")
         if not cd.passeio and (m.estado.passeios or any(x["chave"][1] == "passeio" for x in unidades)):
             raise RuntimeError("sem o passeio, o M-ESTADO nao abre passeio")
+        if not cd.unidades_sociais and any(x["tipo"] in TIPOS_ALVO_SOCIAIS for x in unidades):
+            raise RuntimeError("sem a unidades_sociais, nenhuma unidade com o outro como alvo")
         if not cd.olhar and any(x["acao"] == COMPORTAMENTO_OLHAR or "gosto" in x["termos"] for x in unidades):
             raise RuntimeError("sem a subchave olhar, nenhuma unidade de olhar nem termo gosto")
         fala = [x["chave"][1] for x in unidades if x["acao"] == "chamar_atencao"]
@@ -813,6 +833,8 @@ class DigiBrain:
             if p["unidade"]["chave"][1] not in CONTEUDOS_FALA:
                 raise RuntimeError(f"a fala da decisao {p['k']} sem conteudo com a fala_unidades ligada")
             pc1 = obs_seguinte.corpo
+        elif self.cd.unidades_sociais and p["unidade"]["tipo"] in TIPOS_ALVO_SOCIAIS:   # o SOCIAL_PAR M2 (D-SP-68): o intervalo inteiro
+            pc1 = obs_seguinte.corpo                  # a companhia anda tick a tick, depois da acao: o corpo da decisao seguinte
         pm1 = p["transicao"].observacao_seguinte.mundo
         if pc1 is None or pm1 is None:
             raise RuntimeError("a consequencia sem o corpo ou sem o mundo de depois")
@@ -866,6 +888,8 @@ class DigiBrain:
             p1 = m.plast.consequencia_p1("brincar", "bola" if ocorrido["brincou_com_bola"] else None, l0, l1, pos0, pos1, p["g_apr"])
         elif olhou:                                   # o olhar (P1d): o desfecho da classe `tela` (o quanto olhar muda cada receptor)
             p1 = m.plast.consequencia_olhar(l0, l1, p["g_apr"])
+        elif self.cd.unidades_sociais and p["unidade"]["tipo"] in TIPOS_ALVO_SOCIAIS:   # o SOCIAL_PAR M1: a classe e o tipo
+            p1 = m.plast.consequencia_p1("explorar", p["unidade"]["tipo"], l0, l1, pos0, pos1, p["g_apr"])
         chave = p["unidade"]["chave"]
         visto, d = True, None
         if chave[1] in ("comida", "bola"):
