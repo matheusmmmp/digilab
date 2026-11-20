@@ -1,6 +1,6 @@
 # Plano de análise V3: CREDITO_INTERVALO, o R2 (o crédito do intervalo, com o ELOGIO)
 
-**Status: APROVADO pelo Matheus em 2026-11-19,** com as CI-R2-1 a CI-R2-9 DECIDIDAS pela recomendação: "Aprovo todas", na sessão coordenadora, confirmado nesta sessão ("Sim, aprovei"). O adendo 1 (a linha de base) está escrito no fim, PROPOSTO, à espera do Matheus; o adendo 2 (o corpo) segue aberto, e nenhuma vida roda antes de os dois fecharem. Escrito em 2026-11-19 (Claude Code, Opus 5.5, worktree `v3-valuation`, branch `v3-credito-intervalo-plano`), a pedido
+**Status: APROVADO pelo Matheus em 2026-11-19,** com as CI-R2-1 a CI-R2-9 DECIDIDAS pela recomendação: "Aprovo todas", na sessão coordenadora, confirmado nesta sessão ("Sim, aprovei"). O adendo 1 (a linha de base) está escrito no fim, PROPOSTO, à espera do Matheus; o adendo 2 (o corpo) também, PROPOSTO, e nenhuma vida roda antes de os dois fecharem. Escrito em 2026-11-19 (Claude Code, Opus 5.5, worktree `v3-valuation`, branch `v3-credito-intervalo-plano`), a pedido
 do Matheus na sessão coordenadora: "Manda o valuation, escrever o plano do R2". Só o plano: nenhum código e nenhuma vida antes da
 aprovação. A tarefa é a [TAREFA_V3_CREDITO_INTERVALO.md](TAREFA_V3_CREDITO_INTERVALO.md), da gerência. O orquestrador vai conferir este
 cabeçalho e recusar sem o APROVADO.
@@ -407,3 +407,43 @@ mede se o mecanismo ensina a ação do meio.
 | AD1-1 | a linha de base: a MÓVEL global, pela regra da seção 4 | sim | outra escolha contraria a regra escrita antes do R-a |
 | AD1-2 | o `k_base`: (a) na grade, {16, 96}; (b) fixo em 16 | (a) | (a) custa ~1 h 45 a mais; (b) arrisca um k que encolhe o crédito do sono |
 | AD1-3 | "só o sono": (a) seguir, com o descritivo do sono; (b) parar o R2 | (a) | (a) gasta a calibração num crédito que talvez só mova o sono; (b) para o ELOGIO junto |
+
+## Adendo 2: o corpo, depois do CHECKPOINT da C3 (PROPOSTO, 2026-11-20)
+
+**Status: PROPOSTO.** Escrito em 2026-11-20 (Claude Code, Opus 5.5, branch `v3-credito-intervalo-adendo1`). Nada do plano acima muda além
+do que este adendo diz.
+
+**A fonte:**
+- o [RESULTADO_V3_CORPO_C3.md](RESULTADO_V3_CORPO_C3.md), no PR #1035 (branch `v3-corpo-c3-run`, commit `ff8f04cd`), **ainda sem merge**;
+- o CHECKPOINT da C3, decidido pelo Matheus na sessão coordenadora e repassado a esta sessão: "Levar o DTB à C4". Por ser repassado, ele
+  se confirma com o Matheus nesta sessão, junto com a AD2-1.
+
+### A2.1 O que a C3 deu e o que o Matheus decidiu
+
+- **O DTB (a D com o teto em C/2, PROPOSTO, SEM FONTE) saiu em "ganho"** (F +0,120 [+0,105; +0,135], nenhuma das oito guardas reprova).
+  **O DTL saiu em "perda".**
+- **O DTB não está validado:** a C3 é a run que escolheu o braço, e a validação é a C4, em sementes novas, com plano novo da sessão do
+  corpo. Nada foi ligado no jogo.
+- **O CHECKPOINT:** "Levar o DTB à C4". O corpo do pet fica, então, **em decisão até a C4.**
+
+### A2.2 A regra da seção 5.1, aplicada como escrita
+
+A seção 5.1 diz: "o R2 **não** roda num corpo que ainda está em decisão". Depois do CHECKPOINT, nem o CTRL nem o DTB são o corpo
+decidido: os dois dependem da C4. A regra, sozinha, faz o R2 esperar a C4:
+- **se a C4 validar o DTB** e o Matheus o escolher, o R2 usa o DTB, e o R-a se refaz sobre ele (as vidas da C4 existem). É outro replay,
+  de cerca de 40 min, com um adendo próprio. A contagem da premissa (seção 6) também se refaz nas sementes dos testes, com o DTB: cerca de
+  10 min, só leitura. O dp da guarda (seção 7.1) passa a sair da C4;
+- **se a C4 não validar o DTB,** o R2 usa o CTRL, e o adendo 1 vale como está.
+
+### A2.3 A decisão para o Matheus (AD2-1)
+
+- **(a) recomendada: esperar a C4.** O R2 roda no corpo que sair dela, pela regra acima. Custo: o R2 espera o plano e a run da C4 (cerca
+  de 2 a 3 h de máquina, estimativa pela C3), mais o replay do R-a se o DTB ficar.
+- **(b) rodar o R2 agora no CTRL.** Contraria a regra da seção 5.1 e pede a mudança dela. Custo de errar: se o DTB passar na C4, o R2
+  credita um caminho da fome que o pet não tem mais, e a calibração e a validação se refazem (de 3 a 6 h).
+- **(c) rodar o R2 nos dois corpos, o corpo como fator.** Também contraria a regra. Custo: a calibração e a validação dobram. Metade da
+  conta se perde quando a C4 decidir.
+
+| id | o quê | recomendação | custo de errar |
+|---|---|---|---|
+| AD2-1 | o corpo do R2 depois de "Levar o DTB à C4" | (a), esperar a C4 | (b) e (c) gastam horas num corpo que a C4 pode trocar; (a) só atrasa |
