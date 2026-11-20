@@ -157,3 +157,25 @@ prancha `docs/pranchas/ux-conta-nuvem/` (UX-NV-1 a 6 APROVADAS em 2026-11-20). B
 - **O que falta:** o registro no armazenamento de objetos e o deploy (CN5); o grupo dos dois pets sem teste próprio; o sprite e a abertura
   só-para-ver das histórias em Gerações; o revisor de acessibilidade; as capturas a 1920 e 390 das telas no jogo; a velocidade do tempo ao
   abrir noutro aparelho (D-CONTA-38).
+
+## A CN4: a proteção (2026-11-20)
+
+Pedido pela sessão da conta: a CN4 do `docs/PLANO_V3_CONTA.md` (seção 10; o desenho na seção 6), local e sem conta real. Branch `v3-cn4`.
+Em dois PRs: o servidor e o checklist da borda (este), e o cliente do jogo (o segundo). Os desvios são D-CONTA-210 a 221.
+
+- **O `robots.txt`:** o do jogo (`web/app/public/robots.txt`, gerado por `node servidor_web/scripts/gerar_robots.ts` da lista
+  `ROBOS_DE_IA` de `servidor_web/src/protecao/robots.ts`) recusa 28 robôs de IA em tudo e os outros só nas pastas de assets; o da API
+  (`GET /robots.txt`) recusa tudo.
+- **As URLs assinadas** (`servidor_web/src/protecao/assinatura.ts` e `rotas.ts`): o formato do token da Cloudflare (`?verify=<hora>-<mac>`,
+  D-CONTA-212), `POST /assets/assinar` com a sessão ou o cookie do visitante, o visitante pelo Turnstile (`POST /assets/visitante`), os
+  limites por pedido e por hora, e, no local, o `GET /assets/*` que confere antes de servir. Sem `DIGILAB_SEGREDO_ASSETS`, desligadas.
+- **O Turnstile** (`turnstile.ts`): na criação da conta e no visitante, com as chaves de teste oficiais e o fetch falso nos testes; fora do
+  local, sem as chaves o servidor não sobe (a não ser com `DIGILAB_TURNSTILE=0`).
+- **A cota da fala** (`cota.ts`, a migração 10): 30 falas pela LLM por conta por dia de Brasília (PROPOSTO), só a chamada que vai à LLM
+  conta; acabou, o template. Fora do local, a fala sem a sessão é só o template. A `/api/fala` ganhou o CORS da conta e recusa outra origem.
+- **A borda:** o checklist do WAF, do limite por IP, do cache e do R2 para a CN5 em `docs/PLANO_V3_CONTA_BORDA.md`. Nada configurado em
+  conta real.
+- **Os testes:** `servidor_web/test/protecao.test.ts` (19 testes); `npm test` do servidor, 218 passaram.
+- **O que falta:** o cliente do jogo (o segundo PR); a conferência do formato da assinatura e dos robôs na Cloudflare de verdade (CN5); a
+  troca da regra que recusa os cabeçalhos da Cloudflare (CN5, o checklist seção 2); o Worker na frente do R2 se a regra de WAF não estiver
+  no Free.

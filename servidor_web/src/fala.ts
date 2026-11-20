@@ -4,6 +4,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { CATALOGO, FalaReprovada, PedidoInvalido, compor, montarPedido, template, validarMoldura, type Motivo } from "./catalogo.ts";
 import { custoUsd, type ControleGasto } from "./gasto.ts";
+import type { CotaFala } from "./protecao/cota.ts";
 
 export interface RespostaProvedor {
   texto: string;              // o JSON devolvido pelo modelo
@@ -121,7 +122,8 @@ export class GeradorFala {
     return { texto, fonte: "template", detalhe };
   }
 
-  async gerar(m: Motivo, estagio: string, humor: number | null): Promise<Resultado> {
+  /** `cota`: a cota da conta (CN4, protecao/cota.ts); sem ela, só o teto total e o limite por minuto, como na CN1 */
+  async gerar(m: Motivo, estagio: string, humor: number | null, cota?: CotaFala): Promise<Resultado> {
     if (!CATALOGO.estagios.includes(estagio)) throw new PedidoInvalido(`estagio desconhecido: ${JSON.stringify(estagio)}`);
     if (!CATALOGO.estagios_llm.includes(estagio)) return this.doTemplate(m, estagio, humor, `estagio ${estagio} nao usa LLM`);
     const p = this.provedor;
@@ -129,12 +131,15 @@ export class GeradorFala {
     const chave = this.chave(m, estagio, humor);
     const pronta = this.cache.get(chave);
     if (pronta) { this.estatisticas.cache += 1; return pronta; }
+    if (cota !== undefined && !cota.resta()) return this.doTemplate(m, estagio, humor, cota.motivo);
     if (!this.podeChamar()) return this.doTemplate(m, estagio, humor, "limite de chamadas por minuto");
     const pedido = montarPedido(m, estagio, humor);
     const g = this.gasto!;
     const custoMax = p.custoMaximo(CATALOGO.sistema, pedido);
     if (!g.reservar(custoMax))
       return this.doTemplate(m, estagio, humor, `limite de gasto atingido (US$ ${g.gasto.toFixed(4)} de US$ ${g.limite.toFixed(2)})`);
+    /* a chamada vai sair: conta na cota, mesmo que a LLM falhe (o gasto também conta o pior caso) */
+    cota?.gastar();
     let r: RespostaProvedor;
     try {
       r = await p.gerar(CATALOGO.sistema, pedido, CATALOGO.esquema);
