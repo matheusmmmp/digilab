@@ -917,5 +917,6 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-20 — PET_VIVO: o código do R-sono (Claude Code, Fable 5.2, branch `v3-pet-vivo-sono-codigo`)](registro/2026-11.md)
 - [2026-11-19 — CREDITO_INTERVALO: o adendo 1, a linha de base (Claude Code, Opus 5.5, branch `v3-credito-intervalo-adendo1`)](registro/2026-11.md)
 - [2026-11-20 — CREDITO_INTERVALO: o adendo 2, o corpo (Claude Code, Opus 5.5, branch `v3-credito-intervalo-adendo1`)](registro/2026-11.md)
+- [2026-11-20 — PET_VIVO: o replay do R-sono (Claude Code, Fable 5.2, branch `v3-pet-vivo-sono-resultado`)](registro/2026-11.md)
 - [2026-11-20 — CORPO: o código da C4 (o orquestrador da validação)](registro/2026-11.md)
 - [2026-11-20 — UX_TELA_PET, a prancha das peles de rua: três modelos base (Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-peles-rua`)](registro/2026-11.md)
