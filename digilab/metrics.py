@@ -3732,3 +3732,37 @@ def medidas_caminho_sono(motivos: Sequence[dict], lambda_sono: int, passo: int) 
             "acordado": {"n": acordado_n,
                          "chance_dormir": None if acordado_n == 0 else float(acordado_chance / acordado_n),
                          "dormir_candidato": None if acordado_n == 0 else acordado_candidato / acordado_n}}
+
+
+# ================================================================== o teste de recompensa (docs/PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md, secao 6)
+def tempo_acordado(acoes: Sequence[str], inicio: int = 0, fim: int | None = None) -> dict:
+    """O T_ACORDADO: a fracao das decisoes [inicio, fim) em que o pet nao escolheu dormir (`acoes`: o comportamento escolhido em cada
+    decisao, na ordem). Falha alto sem decisao na janela."""
+    sel = list(acoes)[inicio:fim]
+    if not sel:
+        raise ValueError("tempo acordado sem decisao na janela")
+    if any(type(a) is not str for a in sel):
+        raise TypeError("tempo acordado: cada decisao e o nome do comportamento")
+    acordado = sum(1 for a in sel if a != "dormir")
+    return {"n": len(sel), "acordado": acordado, "frac": acordado / len(sel)}
+
+
+def medidas_carinho(elogios: Sequence[dict]) -> dict:
+    """Os carinhos creditados numa vida com a ConfigElogio ligada (`DigiBrain.elogios`): quantos, quantos com o sinal 0 e com o sinal
+    negativo, os creditos (um por decisao na janela) e os que mudaram a linha do habito (o P2 com `abs` > 0; a P-DOSE do plano). O
+    carinho antes da primeira decisao nao tem sinal nem credito e conta em `sem_decisao`."""
+    n = zero = negativo = sem_decisao = creditos = movem = 0
+    for e in elogios:
+        n += 1
+        if "f_n" not in e:
+            if e["creditos"]:
+                raise ValueError("carinho com credito e sem sinal")
+            sem_decisao += 1
+            continue
+        zero += e["f_n"] == 0
+        negativo += e["f_n"] < 0
+        for cr in e["creditos"]:
+            creditos += 1
+            movem += cr["p2"] is not None and cr["p2"]["abs"] > 0
+    return {"n": n, "sinal_zero": zero, "sinal_negativo": negativo, "sem_decisao": sem_decisao, "creditos": creditos,
+            "creditos_movem": movem, "fracao_movem": None if creditos == 0 else movem / creditos}

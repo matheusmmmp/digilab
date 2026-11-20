@@ -246,7 +246,11 @@ FAIXAS_RESERVADAS = (
     (105001, 105400, "SOCIAL_PAR MD, a medida do M1 e do M2: a run 105001...105200 (200 bases, k = 1, prefixo social_par_md, as mesmas "
                      "nas oito celulas) e o G-DET 105301...105350 (prefixo social_par_md_det) (docs/PLANO_ANALISE_V3_SOCIAL_PAR_MD.md, "
                      "secao 4; MD-5, aprovada pelo Matheus em 2026-11-19, \"Aprovado\"; a 104xxx ja e da CORPO; conferida livre no "
-                     "faixas.py, nas configs, nos planos, nas tarefas e nos resultados dos 1015 branches remotos em 2026-11-19)"),
+                     "faixas.py, nas configs, nos planos, nas tarefas e nos resultados dos 1015 branches remotos em 2026-11-19)"),    (108001, 108200, "PET_VIVO, o teste de recompensa: 200 bases (k = 1, sementes independentes, prefixo digibrain_prototipo), os "
+                     "bracos R0, R-CORPO, R-CB e R-SORT nas 12 celulas da C4, o pet do v38 "
+                     "(docs/PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md, secao 4; RC-6, o plano aprovado pelo Matheus em 2026-11-20, \"Aprovo "
+                     "todas\"; a 108xxx conferida livre no faixas.py da origin/main (3ed5fdd6) e nos PRs abertos em 2026-11-20; a "
+                     "confirmacao do coordenador foi pedida com o PR do codigo, e nenhuma vida roda antes dela)"),
 )
 
 
