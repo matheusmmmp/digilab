@@ -234,7 +234,7 @@ o resultado. O texto que vale é o do plano, no commit citado.
 ## PR-PET-VIVO-SONO — o sono pelo reflexo ou pelo sorteio (replay)
 
 **Seção escrita antes da run** (2026-11-20). O plano foi APROVADO pelo Matheus em 2026-11-20 ("Aprovo todas"). As linhas "resultado"
-e "artefatos" entram só depois do replay.
+e "artefatos" entraram depois do replay (2026-11-20).
 
 | campo | valor |
 |---|---|
@@ -246,8 +246,8 @@ e "artefatos" entram só depois do replay.
 | regra de leitura | no HOJE: o limite de cima da F_PESOS < 0,10 nos 3 lugares, "quase tudo reflexo: a alavanca é o corpo"; o de baixo > 0,25 em pelo menos 2 lugares, "boa parte passa pelo sorteio: vale um teste de recompensa"; senão "misto". Os cortes são SEM FONTE (seção 6) |
 | regra de parada | roda uma vez; as conferências (C-FONTE, C-G1, C-FECHO, C-UMA-VEZ, C-REFLEXO, C-SOMA) falham alto antes de qualquer medida; com a projeção da fumaça acima de 2 h o replay não roda e o plano volta ao Matheus (seções 3 e 8) |
 | o que refutaria | pela regra de leitura: "quase tudo reflexo" ou "misto" contrariam o desfecho esperado |
-| resultado | ainda não rodou |
-| artefatos | ainda não há |
+| resultado | [RESULTADO_V3_PET_VIVO_SONO.md](RESULTADO_V3_PET_VIVO_SONO.md): "boa parte passa pelo sorteio: vale um teste de recompensa" (a F_PESOS de 0,376 a 0,543 no HOJE) |
+| artefatos | [`artifacts_v3_pet_vivo/sono/run/`](../artifacts_v3_pet_vivo/sono/run/): `meta.json`, `resultado.json` `6dfa6252…`, `medidas.json.gz` `f2fec4cd…`; o replay rodou em `682e7e5c` |
 
 ## PR-SOCIAL-PAR-S — o substrato do social
 

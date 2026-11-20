@@ -1,0 +1,4679 @@
+{
+  "fase": "sono",
+  "leitura": {
+    "L-CAMINHO": {
+      "F_PESOS": {
+        "comedouro": 0.5428577896274224,
+        "longe": 0.3760101397148251,
+        "longe_fixo": 0.4949529208762977
+      },
+      "cortes": {
+        "lugares_sorteio": 2,
+        "reflexo": 0.1,
+        "sorteio": 0.25
+      },
+      "ic_inferior": {
+        "comedouro": 0.5375752522352039,
+        "longe": 0.36922610145492524,
+        "longe_fixo": 0.47961779552631817
+      },
+      "ic_superior": {
+        "comedouro": 0.5481403270196409,
+        "longe": 0.382794177974725,
+        "longe_fixo": 0.5102880462262772
+      },
+      "leitura": "boa parte passa pelo sorteio: vale um teste de recompensa"
+    },
+    "nao_demonstra": [
+      "nada sobre a recompensa: o replay diz por onde o pet dorme, e nao o que o dono mudaria",
+      "nada sobre o que e melhor para o pet: a medida primaria (Tempo bem) nao entra aqui",
+      "nada sobre o corpo depois da C3 ou da C4, nem sobre o jogo web, nem fora dos 14 dias e dos lugares da C4",
+      "o v38 e descritivo: 2 lugares, 40 unidades, com o sono que segura ligado",
+      "os cortes sao SEM FONTE"
+    ]
+  },
+  "plano": "docs/PLANO_ANALISE_V3_PET_VIVO_SONO.md",
+  "resumos": {
+    "run|HOJE|comedouro": {
+      "medidas": {
+        "F_PESOS": {
+          "dp": 0.037884384651352195,
+          "ic_inferior": 0.5375752522352039,
+          "ic_superior": 0.5481403270196409,
+          "media": 0.5428577896274224,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.3633360128646792,
+            "atencioso": 0.6745509320493395,
+            "incoerente": 0.6745509320493395,
+            "relapso": 0.4589932815463317
+          }
+        },
+        "F_PESOS_DEC": {
+          "dp": 0.030604890362208172,
+          "ic_inferior": 0.6690554807547718,
+          "ic_superior": 0.6775904736924144,
+          "media": 0.6733229772235931,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.5030575516365609,
+            "atencioso": 0.8035410835544551,
+            "incoerente": 0.8035410835544551,
+            "relapso": 0.5831521901489016
+          }
+        },
+        "acordado:chance_dormir": {
+          "dp": 0.0113204651980454,
+          "ic_inferior": 0.3097574197719946,
+          "ic_superior": 0.31291443452920004,
+          "media": 0.3113359271505973,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.26170586874185836,
+            "atencioso": 0.3499296855537088,
+            "incoerente": 0.3499296855537088,
+            "relapso": 0.28377846875311347
+          }
+        },
+        "acordado:dormir_candidato": {
+          "dp": 0.008087826130922241,
+          "ic_inferior": 0.9611855385433146,
+          "ic_superior": 0.9634410453623667,
+          "media": 0.9623132919528407,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.9665391243824969,
+            "atencioso": 0.9638404709776905,
+            "incoerente": 0.9638404709776905,
+            "relapso": 0.9550331014734849
+          }
+        },
+        "acordado:n": {
+          "dp": 6.443852978306547,
+          "ic_inferior": 713.1014795509778,
+          "ic_superior": 714.8985204490222,
+          "media": 714.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 713.305,
+            "atencioso": 716.05,
+            "incoerente": 716.05,
+            "relapso": 710.595
+          }
+        },
+        "decisoes:REFLEXO": {
+          "dp": 20.049615553840027,
+          "ic_inferior": 203.11056399803704,
+          "ic_superior": 208.70193600196296,
+          "media": 205.90625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 313.515,
+            "atencioso": 123.25,
+            "incoerente": 123.25,
+            "relapso": 263.61
+          }
+        },
+        "decisoes:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "decisoes:SORTEIO": {
+          "dp": 18.081743088071324,
+          "ic_inferior": 414.91746095549615,
+          "ic_superior": 419.9600390445039,
+          "media": 417.43875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 313.635,
+            "atencioso": 496.03,
+            "incoerente": 496.03,
+            "relapso": 364.06
+          }
+        },
+        "decisoes:UNICO": {
+          "dp": 2.39445024166279,
+          "ic_inferior": 5.321121726621766,
+          "ic_superior": 5.988878273378234,
+          "media": 5.655,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 2.545,
+            "atencioso": 7.67,
+            "incoerente": 7.67,
+            "relapso": 4.735
+          }
+        },
+        "dormir": {
+          "dp": 6.443852978306547,
+          "ic_inferior": 628.1014795509778,
+          "ic_superior": 629.8985204490222,
+          "media": 629.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 629.695,
+            "atencioso": 626.95,
+            "incoerente": 626.95,
+            "relapso": 632.405
+          }
+        },
+        "episodios:REFLEXO": {
+          "dp": 16.07970094091449,
+          "ic_inferior": 160.72162247812562,
+          "ic_superior": 165.20587752187438,
+          "media": 162.96375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 253.03,
+            "atencioso": 98.75,
+            "incoerente": 98.75,
+            "relapso": 201.325
+          }
+        },
+        "episodios:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "episodios:SORTEIO": {
+          "dp": 11.137096706627084,
+          "ic_inferior": 188.36081122760234,
+          "ic_superior": 191.46668877239765,
+          "media": 189.91375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 135.705,
+            "atencioso": 230.55,
+            "incoerente": 230.55,
+            "relapso": 162.85
+          }
+        },
+        "episodios:UNICO": {
+          "dp": 1.5375206825425898,
+          "ic_inferior": 3.575610599945414,
+          "ic_superior": 4.004389400054586,
+          "media": 3.79,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 1.685,
+            "atencioso": 5.17,
+            "incoerente": 5.17,
+            "relapso": 3.135
+          }
+        },
+        "fracao_decisoes:REFLEXO": {
+          "dp": 0.030604890362208172,
+          "ic_inferior": 0.32240952630758557,
+          "ic_superior": 0.33094451924522816,
+          "media": 0.32667702277640687,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.49694244836343915,
+            "atencioso": 0.19645891644554495,
+            "incoerente": 0.19645891644554495,
+            "relapso": 0.41684780985109837
+          }
+        },
+        "fracao_decisoes:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "fracao_decisoes:SORTEIO": {
+          "dp": 0.02959198105292457,
+          "ic_inferior": 0.6601914995150163,
+          "ic_superior": 0.6684440155772676,
+          "media": 0.664317757546142,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.4990019171127466,
+            "atencioso": 0.7913014971534956,
+            "incoerente": 0.7913014971534956,
+            "relapso": 0.5756661187648298
+          }
+        },
+        "fracao_decisoes:UNICO": {
+          "dp": 0.0038182242265718397,
+          "ic_inferior": 0.008472812659774601,
+          "ic_superior": 0.009537626695127843,
+          "media": 0.009005219677451222,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.004055634523814315,
+            "atencioso": 0.01223958640095938,
+            "incoerente": 0.01223958640095938,
+            "relapso": 0.0074860713840718095
+          }
+        },
+        "fracao_dormir": {
+          "dp": 0.00479810348347472,
+          "ic_inferior": 0.46768539058151737,
+          "ic_superior": 0.4690234701779763,
+          "media": 0.46835443037974683,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.4688719285182427,
+            "atencioso": 0.46682799702159344,
+            "incoerente": 0.46682799702159344,
+            "relapso": 0.4708897989575577
+          }
+        },
+        "fracao_ticks_episodio:REFLEXO": {
+          "dp": 0.037884384651352195,
+          "ic_inferior": 0.45185967298035906,
+          "ic_superior": 0.4624247477647961,
+          "media": 0.4571422103725776,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.6366639871353208,
+            "atencioso": 0.32544906795066053,
+            "incoerente": 0.32544906795066053,
+            "relapso": 0.5410067184536683
+          }
+        },
+        "fracao_ticks_episodio:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "fracao_ticks_episodio:SORTEIO": {
+          "dp": 0.03573518950635821,
+          "ic_inferior": 0.5176986193575085,
+          "ic_superior": 0.5276643335441115,
+          "media": 0.52268147645081,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.35439919636066086,
+            "atencioso": 0.6470902972573002,
+            "incoerente": 0.6470902972573002,
+            "relapso": 0.44214611492797906
+          }
+        },
+        "fracao_ticks_episodio:UNICO": {
+          "dp": 0.007997958155552242,
+          "ic_inferior": 0.019061090812387042,
+          "ic_superior": 0.02129153554083775,
+          "media": 0.020176313176612396,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.008936816504018362,
+            "atencioso": 0.027460634792039307,
+            "incoerente": 0.027460634792039307,
+            "relapso": 0.016847166618352605
+          }
+        },
+        "margem:aprendido_medio": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "margem:chance_dormir": {
+          "dp": 0.013811773476816343,
+          "ic_inferior": 0.4570653840649057,
+          "ic_superior": 0.46091716682530115,
+          "media": 0.45899127544510343,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.399306480362247,
+            "atencioso": 0.4942486024019928,
+            "incoerente": 0.4942486024019928,
+            "relapso": 0.44816141661418135
+          }
+        },
+        "margem:comer_ou_brincar_candidato": {
+          "dp": 0.03910893312354758,
+          "ic_inferior": 0.424956261388844,
+          "ic_superior": 0.43586283429460393,
+          "media": 0.43040954784172397,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.3862407413830043,
+            "atencioso": 0.5632574545231364,
+            "incoerente": 0.5632574545231364,
+            "relapso": 0.208882540937619
+          }
+        },
+        "margem:energia_media": {
+          "dp": 7.938318027520342,
+          "ic_inferior": 394.5373935101148,
+          "ic_superior": 396.75120599236146,
+          "media": 395.6442997512381,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 382.95494050331143,
+            "atencioso": 398.5686476818911,
+            "incoerente": 398.5686476818911,
+            "relapso": 402.48496313785915
+          }
+        },
+        "margem:energia_mediana": {
+          "dp": 8.972003846135788,
+          "ic_inferior": 363.371458278285,
+          "ic_superior": 365.873541721715,
+          "media": 364.6225,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 342.87,
+            "atencioso": 372.05,
+            "incoerente": 372.05,
+            "relapso": 371.52
+          }
+        },
+        "margem:energia_q1": {
+          "dp": 5.302175527708712,
+          "ic_inferior": 306.73567321026877,
+          "ic_superior": 308.2143267897313,
+          "media": 307.475,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 293.055,
+            "atencioso": 315.6,
+            "incoerente": 315.6,
+            "relapso": 305.645
+          }
+        },
+        "margem:energia_q3": {
+          "dp": 11.495304304050135,
+          "ic_inferior": 440.1858633389147,
+          "ic_superior": 443.3916366610853,
+          "media": 441.78875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 424.45,
+            "atencioso": 444.12,
+            "incoerente": 444.12,
+            "relapso": 454.465
+          }
+        },
+        "margem:folga_media": {
+          "dp": 64.16509059130439,
+          "ic_inferior": 343.56898542707313,
+          "ic_superior": 361.4631385692203,
+          "media": 352.5160619981467,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": -13.707977582526977,
+            "atencioso": 670.071947111281,
+            "incoerente": 670.071947111281,
+            "relapso": 83.62833135255156
+          }
+        },
+        "margem:folga_negativa": {
+          "dp": 0.031993359989747915,
+          "ic_inferior": 0.2901774156152068,
+          "ic_superior": 0.29909962047633387,
+          "media": 0.29463851804577035,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.45986176577513704,
+            "atencioso": 0.14936258321627782,
+            "incoerente": 0.14936258321627782,
+            "relapso": 0.4199671399753887
+          }
+        },
+        "margem:n": {
+          "dp": 18.081743088071324,
+          "ic_inferior": 414.91746095549615,
+          "ic_superior": 419.9600390445039,
+          "media": 417.43875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 313.635,
+            "atencioso": 496.03,
+            "incoerente": 496.03,
+            "relapso": 364.06
+          }
+        },
+        "ticks_decisao:REFLEXO": {
+          "dp": 300.7442333076004,
+          "ic_inferior": 3046.6584599705557,
+          "ic_superior": 3130.5290400294443,
+          "media": 3088.59375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 4702.725,
+            "atencioso": 1848.75,
+            "incoerente": 1848.75,
+            "relapso": 3954.15
+          }
+        },
+        "ticks_decisao:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "ticks_decisao:SORTEIO": {
+          "dp": 271.22614632106985,
+          "ic_inferior": 6223.761914332442,
+          "ic_superior": 6299.4005856675585,
+          "media": 6261.58125,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 4704.525,
+            "atencioso": 7440.45,
+            "incoerente": 7440.45,
+            "relapso": 5460.9
+          }
+        },
+        "ticks_decisao:UNICO": {
+          "dp": 35.916753624941855,
+          "ic_inferior": 79.81682589932649,
+          "ic_superior": 89.83317410067352,
+          "media": 84.825,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 38.175,
+            "atencioso": 115.05,
+            "incoerente": 115.05,
+            "relapso": 71.025
+          }
+        },
+        "ticks_episodio:REFLEXO": {
+          "dp": 376.09246225063623,
+          "ic_inferior": 4267.877024654474,
+          "ic_superior": 4372.760475345527,
+          "media": 4320.31875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 6023.475,
+            "atencioso": 3062.775,
+            "incoerente": 3062.775,
+            "relapso": 5132.25
+          }
+        },
+        "ticks_episodio:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "ticks_episodio:SORTEIO": {
+          "dp": 325.0549373745272,
+          "ic_inferior": 4879.324864670267,
+          "ic_superior": 4969.975135329732,
+          "media": 4924.65,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 3337.8,
+            "atencioso": 6083.4,
+            "incoerente": 6083.4,
+            "relapso": 4194.0
+          }
+        },
+        "ticks_episodio:UNICO": {
+          "dp": 75.13267551864803,
+          "ic_inferior": 179.55487110517973,
+          "ic_superior": 200.50762889482027,
+          "media": 190.03125,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 84.15,
+            "atencioso": 258.075,
+            "incoerente": 258.075,
+            "relapso": 159.825
+          }
+        }
+      },
+      "unidades": 200,
+      "vidas": 800
+    },
+    "run|HOJE|longe": {
+      "medidas": {
+        "F_PESOS": {
+          "dp": 0.04865258792226,
+          "ic_inferior": 0.36922610145492524,
+          "ic_superior": 0.382794177974725,
+          "media": 0.3760101397148251,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.18219606313284578,
+            "atencioso": 0.5395064707234005,
+            "incoerente": 0.5607794663798971,
+            "relapso": 0.22155855862315704
+          }
+        },
+        "F_PESOS_DEC": {
+          "dp": 0.0472732275882065,
+          "ic_inferior": 0.4717903279865246,
+          "ic_superior": 0.48497373295317453,
+          "media": 0.47838203046984956,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.3091966302549117,
+            "atencioso": 0.6207881068510642,
+            "incoerente": 0.6420745102646722,
+            "relapso": 0.3414688745087501
+          }
+        },
+        "acordado:chance_dormir": {
+          "dp": 0.014099658756657526,
+          "ic_inferior": 0.22882323772335258,
+          "ic_superior": 0.2327553050004124,
+          "media": 0.2307892713618825,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.19720390249261688,
+            "atencioso": 0.2575078299013965,
+            "incoerente": 0.2626832832041974,
+            "relapso": 0.20576206984931913
+          }
+        },
+        "acordado:dormir_candidato": {
+          "dp": 0.008441574230745654,
+          "ic_inferior": 0.9559388727123049,
+          "ic_superior": 0.9582930316584507,
+          "media": 0.9571159521853778,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.9720711462813657,
+            "atencioso": 0.944626580971956,
+            "incoerente": 0.9441568019468298,
+            "relapso": 0.9676092795413597
+          }
+        },
+        "acordado:n": {
+          "dp": 8.268263532733682,
+          "ic_inferior": 715.0758366906683,
+          "ic_superior": 717.3816633093317,
+          "media": 716.22875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 680.59,
+            "atencioso": 749.09,
+            "incoerente": 752.445,
+            "relapso": 682.79
+          }
+        },
+        "decisoes:REFLEXO": {
+          "dp": 31.487793135119848,
+          "ic_inferior": 328.9406429948846,
+          "ic_superior": 337.7218570051154,
+          "media": 333.33125,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 458.185,
+            "atencioso": 226.75,
+            "incoerente": 213.11,
+            "relapso": 435.28
+          }
+        },
+        "decisoes:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "decisoes:SORTEIO": {
+          "dp": 25.010341579627582,
+          "ic_inferior": 283.61759837522993,
+          "ic_superior": 290.5924016247701,
+          "media": 287.105,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 202.34,
+            "atencioso": 357.59,
+            "incoerente": 367.37,
+            "relapso": 221.12
+          }
+        },
+        "decisoes:UNICO": {
+          "dp": 1.6473749485486076,
+          "ic_inferior": 6.105292698566995,
+          "ic_superior": 6.564707301433005,
+          "media": 6.335,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 1.885,
+            "atencioso": 9.57,
+            "incoerente": 10.075,
+            "relapso": 3.81
+          }
+        },
+        "dormir": {
+          "dp": 8.268263532733682,
+          "ic_inferior": 625.6183366906683,
+          "ic_superior": 627.9241633093317,
+          "media": 626.77125,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 662.41,
+            "atencioso": 593.91,
+            "incoerente": 590.555,
+            "relapso": 660.21
+          }
+        },
+        "episodios:REFLEXO": {
+          "dp": 26.71694536428126,
+          "ic_inferior": 266.2671323005767,
+          "ic_superior": 273.7178676994233,
+          "media": 269.9925,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 364.665,
+            "atencioso": 194.525,
+            "incoerente": 182.94,
+            "relapso": 337.84
+          }
+        },
+        "episodios:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "episodios:SORTEIO": {
+          "dp": 14.3512246579662,
+          "ic_inferior": 124.92013841860523,
+          "ic_superior": 128.92236158139477,
+          "media": 126.92125,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 73.835,
+            "atencioso": 170.825,
+            "incoerente": 176.55,
+            "relapso": 86.475
+          }
+        },
+        "episodios:UNICO": {
+          "dp": 1.1237772528710268,
+          "ic_inferior": 4.154552315361643,
+          "ic_superior": 4.467947684638357,
+          "media": 4.31125,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 1.21,
+            "atencioso": 6.7,
+            "incoerente": 6.995,
+            "relapso": 2.34
+          }
+        },
+        "fracao_decisoes:REFLEXO": {
+          "dp": 0.04727322758820649,
+          "ic_inferior": 0.5150262670468254,
+          "ic_superior": 0.5282096720134754,
+          "media": 0.5216179695301504,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.6908033697450884,
+            "atencioso": 0.3792118931489357,
+            "incoerente": 0.35792548973532773,
+            "relapso": 0.6585311254912498
+          }
+        },
+        "fracao_decisoes:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "fracao_decisoes:SORTEIO": {
+          "dp": 0.046479443676629525,
+          "ic_inferior": 0.4614223953076083,
+          "ic_superior": 0.47438443238176975,
+          "media": 0.46790341384468903,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.30633206542639163,
+            "atencioso": 0.6046283451692885,
+            "incoerente": 0.6249758061478569,
+            "relapso": 0.33567743863521904
+          }
+        },
+        "fracao_decisoes:UNICO": {
+          "dp": 0.0027247272115453673,
+          "ic_inferior": 0.010098685064676045,
+          "ic_superior": 0.010858548185645068,
+          "media": 0.010478616625160557,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0028645648285200755,
+            "atencioso": 0.0161597616817757,
+            "incoerente": 0.017098704116815442,
+            "relapso": 0.005791435873531016
+          }
+        },
+        "fracao_dormir": {
+          "dp": 0.006156562570911157,
+          "ic_inferior": 0.465836438340036,
+          "ic_superior": 0.4675533606175217,
+          "media": 0.46669489947877885,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.4932315711094564,
+            "atencioso": 0.44222635889798956,
+            "incoerente": 0.4397282204020849,
+            "relapso": 0.49159344750558454
+          }
+        },
+        "fracao_ticks_episodio:REFLEXO": {
+          "dp": 0.04865258792226,
+          "ic_inferior": 0.617205822025275,
+          "ic_superior": 0.6307738985450748,
+          "media": 0.6239898602851749,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.8178039368671542,
+            "atencioso": 0.46049352927659953,
+            "incoerente": 0.43922053362010294,
+            "relapso": 0.778441441376843
+          }
+        },
+        "fracao_ticks_episodio:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "fracao_ticks_episodio:SORTEIO": {
+          "dp": 0.047242186337290853,
+          "ic_inferior": 0.3479248853939403,
+          "ic_superior": 0.3610996336768314,
+          "media": 0.35451225953538584,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.17631369354499463,
+            "atencioso": 0.5057317359615289,
+            "incoerente": 0.5260731018056675,
+            "relapso": 0.2099305068293524
+          }
+        },
+        "fracao_ticks_episodio:UNICO": {
+          "dp": 0.00589825039915739,
+          "ic_inferior": 0.020675437672613303,
+          "ic_superior": 0.022320322686265208,
+          "media": 0.021497880179439256,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.005882369587851152,
+            "atencioso": 0.033774734761871573,
+            "incoerente": 0.03470636457422965,
+            "relapso": 0.011628051793804639
+          }
+        },
+        "margem:aprendido_medio": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "margem:chance_dormir": {
+          "dp": 0.018205591586481166,
+          "ic_inferior": 0.3983907820659346,
+          "ic_superior": 0.40346789862401566,
+          "media": 0.4009293403449751,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.3279196656686187,
+            "atencioso": 0.4565814377453532,
+            "incoerente": 0.46000086957004027,
+            "relapso": 0.3592153883958884
+          }
+        },
+        "margem:comer_ou_brincar_candidato": {
+          "dp": 0.03501322055483668,
+          "ic_inferior": 0.5610207128865241,
+          "ic_superior": 0.5707850867046595,
+          "media": 0.5659028997955918,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.4839179152133428,
+            "atencioso": 0.6577023517012175,
+            "incoerente": 0.6548294840118514,
+            "relapso": 0.46716184825595547
+          }
+        },
+        "margem:energia_media": {
+          "dp": 9.443544301962543,
+          "ic_inferior": 411.59019575543783,
+          "ic_superior": 414.22378087760814,
+          "media": 412.906988316523,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 369.0343788221901,
+            "atencioso": 451.07593177124625,
+            "incoerente": 451.9474059177786,
+            "relapso": 379.570236754877
+          }
+        },
+        "margem:energia_mediana": {
+          "dp": 10.216876864498348,
+          "ic_inferior": 374.015375195741,
+          "ic_superior": 376.864624804259,
+          "media": 375.44,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 314.19,
+            "atencioso": 428.39,
+            "incoerente": 429.605,
+            "relapso": 329.575
+          }
+        },
+        "margem:energia_q1": {
+          "dp": 7.9146796854081884,
+          "ic_inferior": 311.9288898511122,
+          "ic_superior": 314.13611014888784,
+          "media": 313.0325,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 282.295,
+            "atencioso": 339.705,
+            "incoerente": 343.065,
+            "relapso": 287.065
+          }
+        },
+        "margem:energia_q3": {
+          "dp": 17.336883555213582,
+          "ic_inferior": 462.8150729654108,
+          "ic_superior": 467.6499270345892,
+          "media": 465.2325,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 393.59,
+            "atencioso": 524.275,
+            "incoerente": 526.095,
+            "relapso": 416.97
+          }
+        },
+        "margem:folga_media": {
+          "dp": 95.90451018624321,
+          "ic_inferior": -27.21436909542592,
+          "ic_superior": -0.4688291689565851,
+          "media": -13.841599132191252,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": -343.79661260284695,
+            "atencioso": 232.0278537979101,
+            "incoerente": 247.22268730666423,
+            "relapso": -190.82032503049243
+          }
+        },
+        "margem:folga_negativa": {
+          "dp": 0.04258676235056346,
+          "ic_inferior": 0.4063069252768862,
+          "ic_superior": 0.41818338396036364,
+          "media": 0.41224515461862493,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.5904458072953304,
+            "atencioso": 0.2694808950310545,
+            "incoerente": 0.26309983460834446,
+            "relapso": 0.5259540815397706
+          }
+        },
+        "margem:n": {
+          "dp": 25.010341579627582,
+          "ic_inferior": 283.61759837522993,
+          "ic_superior": 290.5924016247701,
+          "media": 287.105,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 202.34,
+            "atencioso": 357.59,
+            "incoerente": 367.37,
+            "relapso": 221.12
+          }
+        },
+        "ticks_decisao:REFLEXO": {
+          "dp": 472.3168970267977,
+          "ic_inferior": 4934.109644923269,
+          "ic_superior": 5065.827855076731,
+          "media": 4999.96875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 6872.775,
+            "atencioso": 3401.25,
+            "incoerente": 3196.65,
+            "relapso": 6529.2
+          }
+        },
+        "ticks_decisao:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "ticks_decisao:SORTEIO": {
+          "dp": 375.1551236944137,
+          "ic_inferior": 4254.263975628449,
+          "ic_superior": 4358.886024371551,
+          "media": 4306.575,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 3035.1,
+            "atencioso": 5363.85,
+            "incoerente": 5510.55,
+            "relapso": 3316.8
+          }
+        },
+        "ticks_decisao:UNICO": {
+          "dp": 24.710624228229115,
+          "ic_inferior": 91.57939047850493,
+          "ic_superior": 98.47060952149508,
+          "media": 95.025,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 28.275,
+            "atencioso": 143.55,
+            "incoerente": 151.125,
+            "relapso": 57.15
+          }
+        },
+        "ticks_episodio:REFLEXO": {
+          "dp": 492.0549669013222,
+          "ic_inferior": 5905.513650347517,
+          "ic_superior": 6042.736349652483,
+          "media": 5974.125,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 8134.35,
+            "atencioso": 4127.025,
+            "incoerente": 3918.675,
+            "relapso": 7716.45
+          }
+        },
+        "ticks_episodio:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "ticks_episodio:SORTEIO": {
+          "dp": 388.2170440163096,
+          "ic_inferior": 3178.423892560759,
+          "ic_superior": 3286.688607439241,
+          "media": 3232.55625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 1743.75,
+            "atencioso": 4481.4,
+            "incoerente": 4633.125,
+            "relapso": 2071.95
+          }
+        },
+        "ticks_episodio:UNICO": {
+          "dp": 53.443042227803744,
+          "ic_inferior": 187.4354885308838,
+          "ic_superior": 202.3395114691162,
+          "media": 194.8875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 58.05,
+            "atencioso": 300.225,
+            "incoerente": 306.525,
+            "relapso": 114.75
+          }
+        }
+      },
+      "unidades": 200,
+      "vidas": 800
+    },
+    "run|HOJE|longe_fixo": {
+      "medidas": {
+        "F_PESOS": {
+          "dp": 0.10997778989527221,
+          "ic_inferior": 0.47961779552631817,
+          "ic_superior": 0.5102880462262772,
+          "media": 0.4949529208762977,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.28888837713948556,
+            "atencioso": 0.6649198049941498,
+            "incoerente": 0.6550459727667619,
+            "relapso": 0.37095752860479353
+          }
+        },
+        "F_PESOS_DEC": {
+          "dp": 0.10125537881891876,
+          "ic_inferior": 0.5856902183884742,
+          "ic_superior": 0.6139279912701883,
+          "media": 0.5998091048293313,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.42272810336642275,
+            "atencioso": 0.7475121886109649,
+            "incoerente": 0.737135382341655,
+            "relapso": 0.49186074499828236
+          }
+        },
+        "acordado:chance_dormir": {
+          "dp": 0.026295231053887546,
+          "ic_inferior": 0.2637521821330602,
+          "ic_superior": 0.27108531120761303,
+          "media": 0.2674187466703366,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.23497180165021217,
+            "atencioso": 0.29286240517621676,
+            "incoerente": 0.2895555339623822,
+            "relapso": 0.25228524589253537
+          }
+        },
+        "acordado:dormir_candidato": {
+          "dp": 0.011177939028464149,
+          "ic_inferior": 0.955030521918314,
+          "ic_superior": 0.9581477894378587,
+          "media": 0.9565891556780863,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.9687063263500062,
+            "atencioso": 0.9466895741130575,
+            "incoerente": 0.948786951888763,
+            "relapso": 0.9621737703605183
+          }
+        },
+        "acordado:n": {
+          "dp": 13.845027725272631,
+          "ic_inferior": 721.7969717011209,
+          "ic_superior": 725.658028298879,
+          "media": 723.7275,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 699.465,
+            "atencioso": 747.175,
+            "incoerente": 744.865,
+            "relapso": 703.405
+          }
+        },
+        "decisoes:REFLEXO": {
+          "dp": 68.0598770034602,
+          "ic_inferior": 244.89609070378086,
+          "ic_superior": 263.8764092962191,
+          "media": 254.38625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 372.685,
+            "atencioso": 155.74,
+            "incoerente": 163.49,
+            "relapso": 325.63
+          }
+        },
+        "decisoes:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "decisoes:SORTEIO": {
+          "dp": 53.25066610513622,
+          "ic_inferior": 348.1310631466381,
+          "ic_superior": 362.98143685336186,
+          "media": 355.55625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 267.49,
+            "atencioso": 426.28,
+            "incoerente": 421.28,
+            "relapso": 307.175
+          }
+        },
+        "decisoes:UNICO": {
+          "dp": 3.387065257014748,
+          "ic_inferior": 8.857713092485826,
+          "ic_superior": 9.802286907514175,
+          "media": 9.33,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 3.36,
+            "atencioso": 13.805,
+            "incoerente": 13.365,
+            "relapso": 6.79
+          }
+        },
+        "dormir": {
+          "dp": 13.845027725272631,
+          "ic_inferior": 617.341971701121,
+          "ic_superior": 621.2030282988791,
+          "media": 619.2725,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 643.535,
+            "atencioso": 595.825,
+            "incoerente": 598.135,
+            "relapso": 639.595
+          }
+        },
+        "episodios:REFLEXO": {
+          "dp": 58.07435187307205,
+          "ic_inferior": 197.79470619599246,
+          "ic_superior": 213.99029380400756,
+          "media": 205.8925,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 299.37,
+            "atencioso": 131.81,
+            "incoerente": 139.16,
+            "relapso": 253.23
+          }
+        },
+        "episodios:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "episodios:SORTEIO": {
+          "dp": 30.74746782481756,
+          "ic_inferior": 157.01512276013142,
+          "ic_superior": 165.5898772398686,
+          "media": 161.3025,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 109.005,
+            "atencioso": 203.655,
+            "incoerente": 200.07,
+            "relapso": 132.48
+          }
+        },
+        "episodios:UNICO": {
+          "dp": 2.140920996573166,
+          "ic_inferior": 5.7764734349715825,
+          "ic_superior": 6.373526565028418,
+          "media": 6.075,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 2.22,
+            "atencioso": 9.06,
+            "incoerente": 8.73,
+            "relapso": 4.29
+          }
+        },
+        "fracao_decisoes:REFLEXO": {
+          "dp": 0.10125537881891876,
+          "ic_inferior": 0.38607200872981173,
+          "ic_superior": 0.41430978161152576,
+          "media": 0.40019089517066875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.5772718966335773,
+            "atencioso": 0.25248781138903503,
+            "incoerente": 0.26286461765834507,
+            "relapso": 0.5081392550017176
+          }
+        },
+        "fracao_decisoes:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "fracao_decisoes:SORTEIO": {
+          "dp": 0.09709679943793745,
+          "ic_inferior": 0.5706878201421369,
+          "ic_superior": 0.5977658618427476,
+          "media": 0.5842268409924423,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.41744050789818277,
+            "atencioso": 0.7239547075146973,
+            "incoerente": 0.7143156976374214,
+            "relapso": 0.48119645091946767
+          }
+        },
+        "fracao_decisoes:UNICO": {
+          "dp": 0.005742621229425713,
+          "ic_inferior": 0.01478152201006595,
+          "ic_superior": 0.01638300566371196,
+          "media": 0.015582263836888955,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.005287595468239996,
+            "atencioso": 0.0235574810962676,
+            "incoerente": 0.02281968470423355,
+            "relapso": 0.010664294078814673
+          }
+        },
+        "fracao_dormir": {
+          "dp": 0.010309030324104714,
+          "ic_inferior": 0.4596738434111102,
+          "ic_superior": 0.46254879247868885,
+          "media": 0.4611113179448995,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.47917721518987344,
+            "atencioso": 0.44365227103499627,
+            "incoerente": 0.4453723008190618,
+            "relapso": 0.4762434847356664
+          }
+        },
+        "fracao_ticks_episodio:REFLEXO": {
+          "dp": 0.10997778989527222,
+          "ic_inferior": 0.48971195377372273,
+          "ic_superior": 0.5203822044736818,
+          "media": 0.5050470791237023,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.7111116228605144,
+            "atencioso": 0.33508019500585023,
+            "incoerente": 0.3449540272332381,
+            "relapso": 0.6290424713952065
+          }
+        },
+        "fracao_ticks_episodio:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "fracao_ticks_episodio:SORTEIO": {
+          "dp": 0.10116288889956923,
+          "ic_inferior": 0.4485126406014823,
+          "ic_superior": 0.47672462019332973,
+          "media": 0.462618630397406,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.27742894435109045,
+            "atencioso": 0.6156431920697719,
+            "incoerente": 0.6081998346410454,
+            "relapso": 0.34920255052771637
+          }
+        },
+        "fracao_ticks_episodio:UNICO": {
+          "dp": 0.011822075932044788,
+          "ic_inferior": 0.030685839309910007,
+          "ic_superior": 0.03398274164787336,
+          "media": 0.032334290478891685,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.011459432788395112,
+            "atencioso": 0.04927661292437788,
+            "incoerente": 0.046846138125716585,
+            "relapso": 0.021754978077077176
+          }
+        },
+        "margem:aprendido_medio": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "margem:chance_dormir": {
+          "dp": 0.03817796653356806,
+          "ic_inferior": 0.42786611100832156,
+          "ic_superior": 0.43851305895948706,
+          "media": 0.4331895849839043,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.37923168423074755,
+            "atencioso": 0.47006212815376386,
+            "incoerente": 0.4644772858326193,
+            "relapso": 0.4189872417184864
+          }
+        },
+        "margem:comer_ou_brincar_candidato": {
+          "dp": 0.04903931307590396,
+          "ic_inferior": 0.49228321056464763,
+          "ic_superior": 0.5059591357457592,
+          "media": 0.49912117315520343,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.4373286852492086,
+            "atencioso": 0.5916471548793504,
+            "incoerente": 0.5919086752830366,
+            "relapso": 0.3756001772092181
+          }
+        },
+        "margem:energia_media": {
+          "dp": 18.274931586052205,
+          "ic_inferior": 412.67015713562876,
+          "ic_superior": 417.76661100874776,
+          "media": 415.21838407218826,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 382.17597734344287,
+            "atencioso": 442.26452906381843,
+            "incoerente": 437.97269211991,
+            "relapso": 398.46033776158197
+          }
+        },
+        "margem:energia_mediana": {
+          "dp": 22.036038286277126,
+          "ic_inferior": 378.68108042136237,
+          "ic_superior": 384.8264195786377,
+          "media": 381.75375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 336.98,
+            "atencioso": 416.135,
+            "incoerente": 411.03,
+            "relapso": 362.87
+          }
+        },
+        "margem:energia_q1": {
+          "dp": 14.29136369697082,
+          "ic_inferior": 316.1284853342989,
+          "ic_superior": 320.11401466570106,
+          "media": 318.12125,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 290.055,
+            "atencioso": 342.465,
+            "incoerente": 340.48,
+            "relapso": 299.485
+          }
+        },
+        "margem:energia_q3": {
+          "dp": 29.21369025803591,
+          "ic_inferior": 465.3764902261714,
+          "ic_superior": 473.52350977382855,
+          "media": 469.45,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 422.68,
+            "atencioso": 505.045,
+            "incoerente": 496.79,
+            "relapso": 453.285
+          }
+        },
+        "margem:folga_media": {
+          "dp": 246.89759991294503,
+          "ic_inferior": 86.50004352459078,
+          "ic_superior": 155.35404844466734,
+          "media": 120.92704598462906,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": -101.5721901313663,
+            "atencioso": 296.6390290129875,
+            "incoerente": 251.59870266528742,
+            "relapso": 37.04264239160761
+          }
+        },
+        "margem:folga_negativa": {
+          "dp": 0.09317686311572765,
+          "ic_inferior": 0.34728342949541446,
+          "ic_superior": 0.3732682920200795,
+          "media": 0.360275860757747,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.4915205916216043,
+            "atencioso": 0.25051239598423813,
+            "incoerente": 0.2639684108244238,
+            "relapso": 0.4351020446007217
+          }
+        },
+        "margem:n": {
+          "dp": 53.25066610513622,
+          "ic_inferior": 348.1310631466381,
+          "ic_superior": 362.98143685336186,
+          "media": 355.55625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 267.49,
+            "atencioso": 426.28,
+            "incoerente": 421.28,
+            "relapso": 307.175
+          }
+        },
+        "ticks_decisao:REFLEXO": {
+          "dp": 1020.898155051903,
+          "ic_inferior": 3673.441360556713,
+          "ic_superior": 3958.1461394432868,
+          "media": 3815.79375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 5590.275,
+            "atencioso": 2336.1,
+            "incoerente": 2452.35,
+            "relapso": 4884.45
+          }
+        },
+        "ticks_decisao:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "ticks_decisao:SORTEIO": {
+          "dp": 798.7599915770434,
+          "ic_inferior": 5221.965947199572,
+          "ic_superior": 5444.721552800428,
+          "media": 5333.34375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 4012.35,
+            "atencioso": 6394.2,
+            "incoerente": 6319.2,
+            "relapso": 4607.625
+          }
+        },
+        "ticks_decisao:UNICO": {
+          "dp": 50.80597885522122,
+          "ic_inferior": 132.86569638728736,
+          "ic_superior": 147.03430361271262,
+          "media": 139.95,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 50.4,
+            "atencioso": 207.075,
+            "incoerente": 200.475,
+            "relapso": 101.85
+          }
+        },
+        "ticks_episodio:REFLEXO": {
+          "dp": 1119.7473885640368,
+          "ic_inferior": 4645.964233130221,
+          "ic_superior": 4958.23576686978,
+          "media": 4802.1,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 6883.5,
+            "atencioso": 3081.3,
+            "incoerente": 3198.45,
+            "relapso": 6045.15
+          }
+        },
+        "ticks_episodio:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "ticks_episodio:SORTEIO": {
+          "dp": 855.7241707644996,
+          "ic_inferior": 4077.2854540813228,
+          "ic_superior": 4315.927045918676,
+          "media": 4196.60625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 2660.475,
+            "atencioso": 5422.95,
+            "incoerente": 5361.9,
+            "relapso": 3341.1
+          }
+        },
+        "ticks_episodio:UNICO": {
+          "dp": 104.21881255507303,
+          "ic_inferior": 275.84914714650586,
+          "ic_superior": 304.9133528534942,
+          "media": 290.38125,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 109.05,
+            "atencioso": 433.125,
+            "incoerente": 411.675,
+            "relapso": 207.675
+          }
+        }
+      },
+      "unidades": 200,
+      "vidas": 800
+    },
+    "run|OLF-0|comedouro": {
+      "medidas": {
+        "F_PESOS": {
+          "dp": 0.05695686357705169,
+          "ic_inferior": 0.44679840120251246,
+          "ic_superior": 0.4626823472852173,
+          "media": 0.4547403742438649,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.33413201059849185,
+            "atencioso": 0.5338398804566215,
+            "incoerente": 0.5338398804566215,
+            "relapso": 0.4171497254637248
+          }
+        },
+        "F_PESOS_DEC": {
+          "dp": 0.05196585478637227,
+          "ic_inferior": 0.5719675879175466,
+          "ic_superior": 0.58645965759501,
+          "media": 0.5792136227562783,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.4808463231881695,
+            "atencioso": 0.637071134049176,
+            "incoerente": 0.637071134049176,
+            "relapso": 0.5618658997385914
+          }
+        },
+        "acordado:chance_dormir": {
+          "dp": 0.015326572568156357,
+          "ic_inferior": 0.27185574814898644,
+          "ic_superior": 0.2761299731855516,
+          "media": 0.273992860667269,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.25803380581909585,
+            "atencioso": 0.2749356798646061,
+            "incoerente": 0.2749356798646061,
+            "relapso": 0.28806627712076815
+          }
+        },
+        "acordado:dormir_candidato": {
+          "dp": 0.008535840015833305,
+          "ic_inferior": 0.9634321874986121,
+          "ic_superior": 0.9658126349823236,
+          "media": 0.9646224112404679,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.970579475298064,
+            "atencioso": 0.9609370570269007,
+            "incoerente": 0.9609370570269007,
+            "relapso": 0.9660360556100059
+          }
+        },
+        "acordado:n": {
+          "dp": 8.677108088174847,
+          "ic_inferior": 723.6875780663605,
+          "ic_superior": 726.1074219336396,
+          "media": 724.8975,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 709.465,
+            "atencioso": 742.9,
+            "incoerente": 742.9,
+            "relapso": 704.325
+          }
+        },
+        "decisoes:REFLEXO": {
+          "dp": 34.15224844897628,
+          "ic_inferior": 257.05536565044247,
+          "ic_superior": 266.5796343495575,
+          "media": 261.8175,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 329.975,
+            "atencioso": 218.56,
+            "incoerente": 218.56,
+            "relapso": 280.175
+          }
+        },
+        "decisoes:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "decisoes:SORTEIO": {
+          "dp": 27.858810817014266,
+          "ic_inferior": 346.9591624265717,
+          "ic_superior": 354.7283375734283,
+          "media": 350.84375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 301.96,
+            "atencioso": 372.7,
+            "incoerente": 372.7,
+            "relapso": 356.015
+          }
+        },
+        "decisoes:UNICO": {
+          "dp": 2.715229880511059,
+          "ic_inferior": 5.062642732011638,
+          "ic_superior": 5.819857267988362,
+          "media": 5.44125,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 1.6,
+            "atencioso": 8.84,
+            "incoerente": 8.84,
+            "relapso": 2.485
+          }
+        },
+        "dormir": {
+          "dp": 8.677108088174847,
+          "ic_inferior": 616.8925780663604,
+          "ic_superior": 619.3124219336395,
+          "media": 618.1025,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 633.535,
+            "atencioso": 600.1,
+            "incoerente": 600.1,
+            "relapso": 638.675
+          }
+        },
+        "episodios:REFLEXO": {
+          "dp": 28.818273506178063,
+          "ic_inferior": 208.13537649924072,
+          "ic_superior": 216.17212350075928,
+          "media": 212.15375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 265.31,
+            "atencioso": 183.895,
+            "incoerente": 183.895,
+            "relapso": 215.515
+          }
+        },
+        "episodios:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "episodios:SORTEIO": {
+          "dp": 17.047042508642292,
+          "ic_inferior": 155.75798793269624,
+          "ic_superior": 160.51201206730374,
+          "media": 158.135,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 126.97,
+            "atencioso": 175.16,
+            "incoerente": 175.16,
+            "relapso": 155.25
+          }
+        },
+        "episodios:UNICO": {
+          "dp": 1.6664344478089201,
+          "ic_inferior": 3.0201350727814336,
+          "ic_superior": 3.4848649272185663,
+          "media": 3.2525,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.965,
+            "atencioso": 5.275,
+            "incoerente": 5.275,
+            "relapso": 1.495
+          }
+        },
+        "fracao_decisoes:REFLEXO": {
+          "dp": 0.05196585478637227,
+          "ic_inferior": 0.41354034240499005,
+          "ic_superior": 0.42803241208245335,
+          "media": 0.4207863772437217,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.5191536768118304,
+            "atencioso": 0.3629288659508239,
+            "incoerente": 0.3629288659508239,
+            "relapso": 0.43813410026140864
+          }
+        },
+        "fracao_decisoes:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "fracao_decisoes:SORTEIO": {
+          "dp": 0.050240427052602045,
+          "ic_inferior": 0.5631842122848475,
+          "ic_superior": 0.5771951002508963,
+          "media": 0.5701896562678719,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.4783029165213268,
+            "atencioso": 0.6222485415268809,
+            "incoerente": 0.6222485415268809,
+            "relapso": 0.557958625496399
+          }
+        },
+        "fracao_decisoes:UNICO": {
+          "dp": 0.004655026955067725,
+          "ic_inferior": 0.008374877050152765,
+          "ic_superior": 0.00967305592666001,
+          "media": 0.009023966488406388,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.002543406666842714,
+            "atencioso": 0.014822592522295236,
+            "incoerente": 0.014822592522295236,
+            "relapso": 0.003907274242192365
+          }
+        },
+        "fracao_dormir": {
+          "dp": 0.006460988896630562,
+          "ic_inferior": 0.4593392241745053,
+          "ic_superior": 0.4611410438820845,
+          "media": 0.4602401340282949,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.4717311988086374,
+            "atencioso": 0.4468354430379747,
+            "incoerente": 0.4468354430379747,
+            "relapso": 0.4755584512285927
+          }
+        },
+        "fracao_ticks_episodio:REFLEXO": {
+          "dp": 0.05695686357705169,
+          "ic_inferior": 0.5373176527147826,
+          "ic_superior": 0.5532015987974875,
+          "media": 0.5452596257561351,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.6658679894015082,
+            "atencioso": 0.46616011954337855,
+            "incoerente": 0.46616011954337855,
+            "relapso": 0.5828502745362752
+          }
+        },
+        "fracao_ticks_episodio:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "fracao_ticks_episodio:SORTEIO": {
+          "dp": 0.05346013234079289,
+          "ic_inferior": 0.42914790123688346,
+          "ic_superior": 0.44405669021060695,
+          "media": 0.4366022957237452,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.32873769478165593,
+            "atencioso": 0.5044810702351161,
+            "incoerente": 0.5044810702351161,
+            "relapso": 0.4087093476430924
+          }
+        },
+        "fracao_ticks_episodio:UNICO": {
+          "dp": 0.009852004165573528,
+          "ic_inferior": 0.016764330975534012,
+          "ic_superior": 0.019511826064705386,
+          "media": 0.0181380785201197,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0053943158168359585,
+            "atencioso": 0.029358810221505237,
+            "incoerente": 0.029358810221505237,
+            "relapso": 0.008440377820632365
+          }
+        },
+        "margem:aprendido_medio": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "margem:chance_dormir": {
+          "dp": 0.016915274627427753,
+          "ic_inferior": 0.42729787793331053,
+          "ic_superior": 0.4320151550669563,
+          "media": 0.4296565165001334,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.3873415543286952,
+            "atencioso": 0.45080441865348336,
+            "incoerente": 0.45080441865348336,
+            "relapso": 0.4296756743648718
+          }
+        },
+        "margem:comer_ou_brincar_candidato": {
+          "dp": 0.04285666957237772,
+          "ic_inferior": 0.43945730080369877,
+          "ic_superior": 0.4514090303411064,
+          "media": 0.4454331655724026,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.37145807723107466,
+            "atencioso": 0.5948598465106014,
+            "incoerente": 0.5948598465106014,
+            "relapso": 0.22055489203733278
+          }
+        },
+        "margem:energia_media": {
+          "dp": 10.90195238608847,
+          "ic_inferior": 396.1436492387723,
+          "ic_superior": 399.18395049522377,
+          "media": 397.66379986699803,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 374.9700106362741,
+            "atencioso": 415.19663757715176,
+            "incoerente": 415.19663757715176,
+            "relapso": 385.2919136774144
+          }
+        },
+        "margem:energia_mediana": {
+          "dp": 12.591212687214579,
+          "ic_inferior": 364.63680164444514,
+          "ic_superior": 368.1481983555548,
+          "media": 366.3925,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 336.555,
+            "atencioso": 387.405,
+            "incoerente": 387.405,
+            "relapso": 354.205
+          }
+        },
+        "margem:energia_q1": {
+          "dp": 7.940465902182226,
+          "ic_inferior": 305.54029426270375,
+          "ic_superior": 307.7547057372962,
+          "media": 306.6475,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 290.73,
+            "atencioso": 318.595,
+            "incoerente": 318.595,
+            "relapso": 298.67
+          }
+        },
+        "margem:energia_q3": {
+          "dp": 16.915272482383084,
+          "ic_inferior": 444.13011173227864,
+          "ic_superior": 448.8473882677213,
+          "media": 446.48875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 413.315,
+            "atencioso": 471.19,
+            "incoerente": 471.19,
+            "relapso": 430.26
+          }
+        },
+        "margem:folga_media": {
+          "dp": 92.3493296222459,
+          "ic_inferior": 110.1950007951977,
+          "ic_superior": 135.94908345301985,
+          "media": 123.07204212410878,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": -123.84736498039769,
+            "atencioso": 317.70297151203863,
+            "incoerente": 317.70297151203863,
+            "relapso": -19.270409547244476
+          }
+        },
+        "margem:folga_negativa": {
+          "dp": 0.043123718196409866,
+          "ic_inferior": 0.3858601012906551,
+          "ic_superior": 0.39788630448547974,
+          "media": 0.39187320288806743,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.513513058563445,
+            "atencioso": 0.2893861525459916,
+            "incoerente": 0.2893861525459916,
+            "relapso": 0.4752074478968417
+          }
+        },
+        "margem:n": {
+          "dp": 27.858810817014266,
+          "ic_inferior": 346.9591624265717,
+          "ic_superior": 354.7283375734283,
+          "media": 350.84375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 301.96,
+            "atencioso": 372.7,
+            "incoerente": 372.7,
+            "relapso": 356.015
+          }
+        },
+        "ticks_decisao:REFLEXO": {
+          "dp": 512.2837267346442,
+          "ic_inferior": 3855.830484756637,
+          "ic_superior": 3998.6945152433627,
+          "media": 3927.2625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 4949.625,
+            "atencioso": 3278.4,
+            "incoerente": 3278.4,
+            "relapso": 4202.625
+          }
+        },
+        "ticks_decisao:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "ticks_decisao:SORTEIO": {
+          "dp": 417.882162255214,
+          "ic_inferior": 5204.387436398576,
+          "ic_superior": 5320.925063601424,
+          "media": 5262.65625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 4529.4,
+            "atencioso": 5590.5,
+            "incoerente": 5590.5,
+            "relapso": 5340.225
+          }
+        },
+        "ticks_decisao:UNICO": {
+          "dp": 40.728448207665885,
+          "ic_inferior": 75.93964098017457,
+          "ic_superior": 87.29785901982544,
+          "media": 81.61875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 24.0,
+            "atencioso": 132.6,
+            "incoerente": 132.6,
+            "relapso": 37.275
+          }
+        },
+        "ticks_episodio:REFLEXO": {
+          "dp": 572.6930122457629,
+          "ic_inferior": 5008.6321115783085,
+          "ic_superior": 5168.342888421692,
+          "media": 5088.4875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 6345.9,
+            "atencioso": 4208.775,
+            "incoerente": 4208.775,
+            "relapso": 5590.5
+          }
+        },
+        "ticks_episodio:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "ticks_episodio:SORTEIO": {
+          "dp": 456.62742146481474,
+          "ic_inferior": 3955.1848600487283,
+          "ic_superior": 4082.5276399512713,
+          "media": 4018.85625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 3106.2,
+            "atencioso": 4530.075,
+            "incoerente": 4530.075,
+            "relapso": 3909.075
+          }
+        },
+        "ticks_episodio:UNICO": {
+          "dp": 86.7405029249651,
+          "ic_inferior": 152.09879440449944,
+          "ic_superior": 176.28870559550055,
+          "media": 164.19375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 50.925,
+            "atencioso": 262.65,
+            "incoerente": 262.65,
+            "relapso": 80.55
+          }
+        }
+      },
+      "unidades": 200,
+      "vidas": 800
+    },
+    "run|OLF-0|longe": {
+      "medidas": {
+        "F_PESOS": {
+          "dp": 0.043173633711846335,
+          "ic_inferior": 0.3123575214557281,
+          "ic_superior": 0.32439764492821715,
+          "media": 0.3183775831919726,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.10864634412752464,
+            "atencioso": 0.5243024004702402,
+            "incoerente": 0.5287928478738751,
+            "relapso": 0.1117687402962504
+          }
+        },
+        "F_PESOS_DEC": {
+          "dp": 0.04201109551351317,
+          "ic_inferior": 0.43122150086657957,
+          "ic_superior": 0.44293741944256076,
+          "media": 0.43707946015457017,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.2597360585648249,
+            "atencioso": 0.6116953317765518,
+            "incoerente": 0.6152663435944884,
+            "relapso": 0.2616201066824158
+          }
+        },
+        "acordado:chance_dormir": {
+          "dp": 0.01166140187721205,
+          "ic_inferior": 0.22296495443660636,
+          "ic_superior": 0.2262170485133072,
+          "media": 0.22459100147495678,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.19413507823290405,
+            "atencioso": 0.2545922423253859,
+            "incoerente": 0.2545796203242768,
+            "relapso": 0.19505706501726042
+          }
+        },
+        "acordado:dormir_candidato": {
+          "dp": 0.008201591303074868,
+          "ic_inferior": 0.957095813919479,
+          "ic_superior": 0.9593830472021576,
+          "media": 0.9582394305608183,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.9768209531484026,
+            "atencioso": 0.9415877031077603,
+            "incoerente": 0.9391960720869044,
+            "relapso": 0.9753529939002062
+          }
+        },
+        "acordado:n": {
+          "dp": 7.801533861392404,
+          "ic_inferior": 706.3409167220219,
+          "ic_superior": 708.5165832779782,
+          "media": 707.42875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 661.165,
+            "atencioso": 755.89,
+            "incoerente": 755.665,
+            "relapso": 656.995
+          }
+        },
+        "decisoes:REFLEXO": {
+          "dp": 28.182409135369653,
+          "ic_inferior": 363.2377903998448,
+          "ic_superior": 371.0972096001552,
+          "media": 367.1675,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 504.995,
+            "atencioso": 229.455,
+            "incoerente": 227.4,
+            "relapso": 506.82
+          }
+        },
+        "decisoes:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "decisoes:SORTEIO": {
+          "dp": 22.46303045279322,
+          "ic_inferior": 262.0215413234843,
+          "ic_superior": 268.2859586765157,
+          "media": 265.15375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 176.56,
+            "atencioso": 351.535,
+            "incoerente": 354.085,
+            "relapso": 178.435
+          }
+        },
+        "decisoes:UNICO": {
+          "dp": 1.2440814657679524,
+          "ic_inferior": 3.0765272902710152,
+          "ic_superior": 3.4234727097289848,
+          "media": 3.25,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.28,
+            "atencioso": 6.12,
+            "incoerente": 5.85,
+            "relapso": 0.75
+          }
+        },
+        "dormir": {
+          "dp": 7.801533861392404,
+          "ic_inferior": 634.4834167220218,
+          "ic_superior": 636.6590832779781,
+          "media": 635.57125,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 681.835,
+            "atencioso": 587.11,
+            "incoerente": 587.335,
+            "relapso": 686.005
+          }
+        },
+        "episodios:REFLEXO": {
+          "dp": 23.75536751698096,
+          "ic_inferior": 295.38133993107033,
+          "ic_superior": 302.0061600689297,
+          "media": 298.69375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 403.975,
+            "atencioso": 197.005,
+            "incoerente": 195.045,
+            "relapso": 398.75
+          }
+        },
+        "episodios:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "episodios:SORTEIO": {
+          "dp": 13.148275963183162,
+          "ic_inferior": 105.87662564119952,
+          "ic_superior": 109.54337435880046,
+          "media": 107.71,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 49.43,
+            "atencioso": 164.97,
+            "incoerente": 166.28,
+            "relapso": 50.16
+          }
+        },
+        "episodios:UNICO": {
+          "dp": 0.7715486856782657,
+          "ic_inferior": 1.9411664977332683,
+          "ic_superior": 2.156333502266732,
+          "media": 2.04875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.16,
+            "atencioso": 3.8,
+            "incoerente": 3.83,
+            "relapso": 0.405
+          }
+        },
+        "fracao_decisoes:REFLEXO": {
+          "dp": 0.04201109551351317,
+          "ic_inferior": 0.5570625805574392,
+          "ic_superior": 0.5687784991334204,
+          "media": 0.5629205398454298,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.740263941435175,
+            "atencioso": 0.3883046682234482,
+            "incoerente": 0.38473365640551166,
+            "relapso": 0.7383798933175842
+          }
+        },
+        "fracao_decisoes:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "fracao_decisoes:SORTEIO": {
+          "dp": 0.04180387709894297,
+          "ic_inferior": 0.42575960691894543,
+          "ic_superior": 0.4374177370930087,
+          "media": 0.43158867200597706,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.25932217352327774,
+            "atencioso": 0.6012346344269331,
+            "incoerente": 0.6052826207988045,
+            "relapso": 0.26051525927489294
+          }
+        },
+        "fracao_decisoes:UNICO": {
+          "dp": 0.002088612023934792,
+          "ic_inferior": 0.005199555462202407,
+          "ic_superior": 0.005782020834983851,
+          "media": 0.005490788148593129,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0004138850415471191,
+            "atencioso": 0.010460697349618606,
+            "incoerente": 0.00998372279568391,
+            "relapso": 0.0011048474075228834
+          }
+        },
+        "fracao_dormir": {
+          "dp": 0.0058090348930695465,
+          "ic_inferior": 0.47243739145347863,
+          "ic_superior": 0.4740573963350544,
+          "media": 0.4732473938942665,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.5076954579300075,
+            "atencioso": 0.437163067758749,
+            "incoerente": 0.4373306031273269,
+            "relapso": 0.5108004467609829
+          }
+        },
+        "fracao_ticks_episodio:REFLEXO": {
+          "dp": 0.043173633711846335,
+          "ic_inferior": 0.6756023550717829,
+          "ic_superior": 0.6876424785442719,
+          "media": 0.6816224168080274,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.8913536558724754,
+            "atencioso": 0.4756975995297597,
+            "incoerente": 0.4712071521261248,
+            "relapso": 0.8882312597037496
+          }
+        },
+        "fracao_ticks_episodio:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "fracao_ticks_episodio:SORTEIO": {
+          "dp": 0.042513166672021534,
+          "ic_inferior": 0.300208959420634,
+          "ic_superior": 0.3120648939790725,
+          "media": 0.30613692669985326,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.10777617146452968,
+            "atencioso": 0.5010885580584651,
+            "incoerente": 0.5060432183423641,
+            "relapso": 0.10963975893405425
+          }
+        },
+        "fracao_ticks_episodio:UNICO": {
+          "dp": 0.004823754226509278,
+          "ic_inferior": 0.011568039995720814,
+          "ic_superior": 0.012913272988517906,
+          "media": 0.01224065649211936,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0008701726629949718,
+            "atencioso": 0.023213842411775175,
+            "incoerente": 0.022749629531511148,
+            "relapso": 0.0021289813621961336
+          }
+        },
+        "margem:aprendido_medio": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "margem:chance_dormir": {
+          "dp": 0.01477510507777203,
+          "ic_inferior": 0.3604821032362462,
+          "ic_superior": 0.36460253680092347,
+          "media": 0.36254232001858483,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.2684885881524426,
+            "atencioso": 0.45166637012475114,
+            "incoerente": 0.4534467651530561,
+            "relapso": 0.2765675566440895
+          }
+        },
+        "margem:comer_ou_brincar_candidato": {
+          "dp": 0.03368137114085202,
+          "ic_inferior": 0.3859067299041037,
+          "ic_superior": 0.395299681860967,
+          "media": 0.39060320588253533,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.19384354074924975,
+            "atencioso": 0.6495085242374817,
+            "incoerente": 0.6418278573637036,
+            "relapso": 0.07723290117970617
+          }
+        },
+        "margem:energia_media": {
+          "dp": 7.9419958834701,
+          "ic_inferior": 394.672772578653,
+          "ic_superior": 396.88761072948347,
+          "media": 395.78019165406823,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 341.86472840288513,
+            "atencioso": 447.52156403602714,
+            "incoerente": 449.5820843575074,
+            "relapso": 344.1523898198535
+          }
+        },
+        "margem:energia_mediana": {
+          "dp": 7.881179377440726,
+          "ic_inferior": 357.95481107993425,
+          "ic_superior": 360.1526889200657,
+          "media": 359.05375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 293.65,
+            "atencioso": 423.085,
+            "incoerente": 424.62,
+            "relapso": 294.86
+          }
+        },
+        "margem:energia_q1": {
+          "dp": 7.281145196800049,
+          "ic_inferior": 305.2347288767063,
+          "ic_superior": 307.2652711232937,
+          "media": 306.25,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 274.7,
+            "atencioso": 336.265,
+            "incoerente": 338.745,
+            "relapso": 275.29
+          }
+        },
+        "margem:energia_q3": {
+          "dp": 13.291256997094521,
+          "ic_inferior": 427.6016885968219,
+          "ic_superior": 431.3083114031781,
+          "media": 429.455,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 334.58,
+            "atencioso": 519.165,
+            "incoerente": 522.05,
+            "relapso": 342.025
+          }
+        },
+        "margem:folga_media": {
+          "dp": 82.30003281385365,
+          "ic_inferior": -308.7443867760764,
+          "ic_superior": -285.7928195421884,
+          "media": -297.2686031591324,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": -799.8749905922149,
+            "atencioso": 154.66905155055053,
+            "incoerente": 160.9820442537471,
+            "relapso": -704.8505178486124
+          }
+        },
+        "margem:folga_negativa": {
+          "dp": 0.03497023884747395,
+          "ic_inferior": 0.5691969090217652,
+          "ic_superior": 0.5789492962402283,
+          "media": 0.5740731026309968,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.8250407998187964,
+            "atencioso": 0.3255849890677254,
+            "incoerente": 0.3272525672307238,
+            "relapso": 0.8184140544067411
+          }
+        },
+        "margem:n": {
+          "dp": 22.46303045279322,
+          "ic_inferior": 262.0215413234843,
+          "ic_superior": 268.2859586765157,
+          "media": 265.15375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 176.56,
+            "atencioso": 351.535,
+            "incoerente": 354.085,
+            "relapso": 178.435
+          }
+        },
+        "ticks_decisao:REFLEXO": {
+          "dp": 422.7361370305448,
+          "ic_inferior": 5448.566855997672,
+          "ic_superior": 5566.458144002328,
+          "media": 5507.5125,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 7574.925,
+            "atencioso": 3441.825,
+            "incoerente": 3411.0,
+            "relapso": 7602.3
+          }
+        },
+        "ticks_decisao:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "ticks_decisao:SORTEIO": {
+          "dp": 336.9454567918983,
+          "ic_inferior": 3930.323119852265,
+          "ic_superior": 4024.2893801477353,
+          "media": 3977.30625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 2648.4,
+            "atencioso": 5273.025,
+            "incoerente": 5311.275,
+            "relapso": 2676.525
+          }
+        },
+        "ticks_decisao:UNICO": {
+          "dp": 18.661221986519283,
+          "ic_inferior": 46.14790935406523,
+          "ic_superior": 51.35209064593477,
+          "media": 48.75,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 4.2,
+            "atencioso": 91.8,
+            "incoerente": 87.75,
+            "relapso": 11.25
+          }
+        },
+        "ticks_episodio:REFLEXO": {
+          "dp": 443.8851675021277,
+          "ic_inferior": 6601.367869355723,
+          "ic_superior": 6725.157130644277,
+          "media": 6663.2625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 9121.275,
+            "atencioso": 4213.125,
+            "incoerente": 4174.05,
+            "relapso": 9144.6
+          }
+        },
+        "ticks_episodio:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "ticks_episodio:SORTEIO": {
+          "dp": 349.3113243836374,
+          "ic_inferior": 2713.1113432527695,
+          "ic_superior": 2810.5261567472303,
+          "media": 2761.81875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 1097.4,
+            "atencioso": 4389.9,
+            "incoerente": 4436.175,
+            "relapso": 1123.8
+          }
+        },
+        "ticks_episodio:UNICO": {
+          "dp": 42.580213617460196,
+          "ic_inferior": 102.5501838030255,
+          "ic_superior": 114.42481619697449,
+          "media": 108.4875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 8.85,
+            "atencioso": 203.625,
+            "incoerente": 199.8,
+            "relapso": 21.675
+          }
+        }
+      },
+      "unidades": 200,
+      "vidas": 800
+    },
+    "run|OLF-0|longe_fixo": {
+      "medidas": {
+        "F_PESOS": {
+          "dp": 0.10330662782717814,
+          "ic_inferior": 0.26483983347442797,
+          "ic_superior": 0.29364965205183446,
+          "media": 0.2792447427631312,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.1367750058819258,
+            "atencioso": 0.4186860820273518,
+            "incoerente": 0.42106822667435995,
+            "relapso": 0.14044965646888743
+          }
+        },
+        "F_PESOS_DEC": {
+          "dp": 0.096606634617899,
+          "ic_inferior": 0.3950756770510077,
+          "ic_superior": 0.42201702317036344,
+          "media": 0.4085463501106856,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.29866933546577945,
+            "atencioso": 0.5152660794604931,
+            "incoerente": 0.5173643346681399,
+            "relapso": 0.30288565084832997
+          }
+        },
+        "acordado:chance_dormir": {
+          "dp": 0.023825819531847214,
+          "ic_inferior": 0.2179272112750582,
+          "ic_superior": 0.22457167884318807,
+          "media": 0.22124944505912314,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.21228584132640718,
+            "atencioso": 0.22898575607500807,
+            "incoerente": 0.22832226171449854,
+            "relapso": 0.21540392112057868
+          }
+        },
+        "acordado:dormir_candidato": {
+          "dp": 0.010551169789267187,
+          "ic_inferior": 0.9638606360735177,
+          "ic_superior": 0.966803112212771,
+          "media": 0.9653318741431444,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.9770975388841255,
+            "atencioso": 0.9534409891941666,
+            "incoerente": 0.9545201891797299,
+            "relapso": 0.9762687793145554
+          }
+        },
+        "acordado:n": {
+          "dp": 16.31957159625911,
+          "ic_inferior": 696.984425301464,
+          "ic_superior": 701.535574698536,
+          "media": 699.26,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 665.195,
+            "atencioso": 735.285,
+            "incoerente": 735.73,
+            "relapso": 660.83
+          }
+        },
+        "decisoes:REFLEXO": {
+          "dp": 67.17300021756243,
+          "ic_inferior": 379.22725537002555,
+          "ic_superior": 397.96024462997445,
+          "media": 388.59375,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 476.025,
+            "atencioso": 301.08,
+            "incoerente": 301.25,
+            "relapso": 476.02
+          }
+        },
+        "decisoes:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "decisoes:SORTEIO": {
+          "dp": 49.77224823543285,
+          "ic_inferior": 244.1210881148822,
+          "ic_superior": 258.0014118851178,
+          "media": 251.06125,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 201.425,
+            "atencioso": 299.02,
+            "incoerente": 298.39,
+            "relapso": 205.41
+          }
+        },
+        "decisoes:UNICO": {
+          "dp": 2.5458656996793882,
+          "ic_inferior": 3.73000859977297,
+          "ic_superior": 4.43999140022703,
+          "media": 4.085,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.355,
+            "atencioso": 7.615,
+            "incoerente": 7.63,
+            "relapso": 0.74
+          }
+        },
+        "dormir": {
+          "dp": 16.31957159625911,
+          "ic_inferior": 641.464425301464,
+          "ic_superior": 646.015574698536,
+          "media": 643.74,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 677.805,
+            "atencioso": 607.715,
+            "incoerente": 607.27,
+            "relapso": 682.17
+          }
+        },
+        "episodios:REFLEXO": {
+          "dp": 58.428334090236575,
+          "ic_inferior": 310.62909748750184,
+          "ic_superior": 326.92340251249817,
+          "media": 318.77625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 381.64,
+            "atencioso": 258.895,
+            "incoerente": 259.205,
+            "relapso": 375.365
+          }
+        },
+        "episodios:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "episodios:SORTEIO": {
+          "dp": 28.976576026657174,
+          "ic_inferior": 92.64580305152843,
+          "ic_superior": 100.72669694847157,
+          "media": 96.68625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 60.4,
+            "atencioso": 132.395,
+            "incoerente": 132.425,
+            "relapso": 61.525
+          }
+        },
+        "episodios:UNICO": {
+          "dp": 1.5416490673086622,
+          "ic_inferior": 2.251284944643185,
+          "ic_superior": 2.681215055356815,
+          "media": 2.46625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.235,
+            "atencioso": 4.515,
+            "incoerente": 4.66,
+            "relapso": 0.455
+          }
+        },
+        "fracao_decisoes:REFLEXO": {
+          "dp": 0.096606634617899,
+          "ic_inferior": 0.5779829768296365,
+          "ic_superior": 0.6049243229489922,
+          "media": 0.5914536498893144,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.7013306645342205,
+            "atencioso": 0.484733920539507,
+            "incoerente": 0.48263566533186003,
+            "relapso": 0.69711434915167
+          }
+        },
+        "fracao_decisoes:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "fracao_decisoes:SORTEIO": {
+          "dp": 0.0929607146827662,
+          "ic_inferior": 0.3886507392193873,
+          "ic_superior": 0.4145753229674589,
+          "media": 0.4016130310934231,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.2981304136909175,
+            "atencioso": 0.502308839490159,
+            "incoerente": 0.5042267923271916,
+            "relapso": 0.30178607886542447
+          }
+        },
+        "fracao_decisoes:UNICO": {
+          "dp": 0.004439439208229734,
+          "ic_inferior": 0.006314290786138275,
+          "ic_superior": 0.0075523472483866325,
+          "media": 0.006933319017262454,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0005389217748619884,
+            "atencioso": 0.012957239970333932,
+            "incoerente": 0.013137542340948412,
+            "relapso": 0.001099571982905484
+          }
+        },
+        "fracao_dormir": {
+          "dp": 0.012151579744049972,
+          "ic_inferior": 0.4776354618774862,
+          "ic_superior": 0.48102425517389136,
+          "media": 0.47932985852568877,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.5046947133283693,
+            "atencioso": 0.4525055845122859,
+            "incoerente": 0.4521742367833209,
+            "relapso": 0.5079448994787789
+          }
+        },
+        "fracao_ticks_episodio:REFLEXO": {
+          "dp": 0.10330662782717814,
+          "ic_inferior": 0.7063503479481655,
+          "ic_superior": 0.7351601665255721,
+          "media": 0.7207552572368688,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.8632249941180743,
+            "atencioso": 0.5813139179726482,
+            "incoerente": 0.57893177332564,
+            "relapso": 0.8595503435311126
+          }
+        },
+        "fracao_ticks_episodio:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "fracao_ticks_episodio:SORTEIO": {
+          "dp": 0.0955601619996606,
+          "ic_inferior": 0.2512716333961969,
+          "ic_superior": 0.27792114261300543,
+          "media": 0.26459638800460117,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.13554205581722878,
+            "atencioso": 0.3917298199637387,
+            "incoerente": 0.39314281967645487,
+            "relapso": 0.13797085656098243
+          }
+        },
+        "fracao_ticks_episodio:UNICO": {
+          "dp": 0.009538188978882036,
+          "ic_inferior": 0.01331836509659707,
+          "ic_superior": 0.015978344420463027,
+          "media": 0.014648354758530048,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0012329500646969937,
+            "atencioso": 0.026956262063613127,
+            "incoerente": 0.027925406997905085,
+            "relapso": 0.002478799907904987
+          }
+        },
+        "margem:aprendido_medio": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "margem:chance_dormir": {
+          "dp": 0.04323560902823587,
+          "ic_inferior": 0.3434275136736367,
+          "ic_superior": 0.35548492062211384,
+          "media": 0.3494562171478753,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.29075989378281547,
+            "atencioso": 0.40505677742074125,
+            "incoerente": 0.3988710354963681,
+            "relapso": 0.3031371618915761
+          }
+        },
+        "margem:comer_ou_brincar_candidato": {
+          "dp": 0.07204176562848351,
+          "ic_inferior": 0.3437428375082955,
+          "ic_superior": 0.3638336123347159,
+          "media": 0.3537882249215057,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.1802750048279117,
+            "atencioso": 0.5703879116691587,
+            "incoerente": 0.5702651939550474,
+            "relapso": 0.094224789233905
+          }
+        },
+        "margem:energia_media": {
+          "dp": 19.128596347192016,
+          "ic_inferior": 379.99862901483493,
+          "ic_superior": 385.3331501582892,
+          "media": 382.66588958656206,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 342.86515463098755,
+            "atencioso": 422.18054958133996,
+            "incoerente": 419.7719171165412,
+            "relapso": 345.8459370173795
+          }
+        },
+        "margem:energia_mediana": {
+          "dp": 23.788523239993243,
+          "ic_inferior": 339.6804667506177,
+          "ic_superior": 346.3145332493823,
+          "media": 342.9975,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 298.445,
+            "atencioso": 388.345,
+            "incoerente": 385.61,
+            "relapso": 299.59
+          }
+        },
+        "margem:energia_q1": {
+          "dp": 14.173379869392852,
+          "ic_inferior": 295.8299368086093,
+          "ic_superior": 299.78256319139064,
+          "media": 297.80625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 276.585,
+            "atencioso": 318.92,
+            "incoerente": 318.845,
+            "relapso": 276.875
+          }
+        },
+        "margem:energia_q3": {
+          "dp": 33.063038213647054,
+          "ic_inferior": 407.83599336599906,
+          "ic_superior": 417.056506634001,
+          "media": 412.44625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 345.845,
+            "atencioso": 477.67,
+            "incoerente": 473.185,
+            "relapso": 353.085
+          }
+        },
+        "margem:folga_media": {
+          "dp": 308.61783921065756,
+          "ic_inferior": -482.8513078149215,
+          "ic_superior": -396.7849619819667,
+          "media": -439.8181348984441,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": -737.8758354164836,
+            "atencioso": -170.05946923952447,
+            "incoerente": -213.4263765697475,
+            "relapso": -637.9108583680209
+          }
+        },
+        "margem:folga_negativa": {
+          "dp": 0.10891106280159017,
+          "ic_inferior": 0.6097574200884275,
+          "ic_superior": 0.6401301853831713,
+          "media": 0.6249438027357994,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.8043296897662714,
+            "atencioso": 0.4415464102350799,
+            "incoerente": 0.45565904953852493,
+            "relapso": 0.7982400614033215
+          }
+        },
+        "margem:n": {
+          "dp": 49.77224823543285,
+          "ic_inferior": 244.1210881148822,
+          "ic_superior": 258.0014118851178,
+          "media": 251.06125,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 201.425,
+            "atencioso": 299.02,
+            "incoerente": 298.39,
+            "relapso": 205.41
+          }
+        },
+        "ticks_decisao:REFLEXO": {
+          "dp": 1007.5950032634365,
+          "ic_inferior": 5688.408830550384,
+          "ic_superior": 5969.403669449616,
+          "media": 5828.90625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 7140.375,
+            "atencioso": 4516.2,
+            "incoerente": 4518.75,
+            "relapso": 7140.3
+          }
+        },
+        "ticks_decisao:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "ticks_decisao:SORTEIO": {
+          "dp": 746.5837235314926,
+          "ic_inferior": 3661.816321723233,
+          "ic_superior": 3870.0211782767665,
+          "media": 3765.91875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 3021.375,
+            "atencioso": 4485.3,
+            "incoerente": 4475.85,
+            "relapso": 3081.15
+          }
+        },
+        "ticks_decisao:UNICO": {
+          "dp": 38.18798549519082,
+          "ic_inferior": 55.95012899659455,
+          "ic_superior": 66.59987100340544,
+          "media": 61.275,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 5.325,
+            "atencioso": 114.225,
+            "incoerente": 114.45,
+            "relapso": 11.1
+          }
+        },
+        "ticks_episodio:REFLEXO": {
+          "dp": 1095.6215407595448,
+          "ic_inferior": 6947.684552371918,
+          "ic_superior": 7253.227947628083,
+          "media": 7100.45625,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 8788.725,
+            "atencioso": 5403.9,
+            "incoerente": 5405.1,
+            "relapso": 8804.1
+          }
+        },
+        "ticks_episodio:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "ticks_episodio:SORTEIO": {
+          "dp": 796.3902681045239,
+          "ic_inferior": 2315.0713776122075,
+          "ic_superior": 2537.1661223877927,
+          "media": 2426.11875,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 1366.125,
+            "atencioso": 3474.3,
+            "incoerente": 3460.575,
+            "relapso": 1403.475
+          }
+        },
+        "ticks_episodio:UNICO": {
+          "dp": 82.27685674464536,
+          "ic_inferior": 118.05244801670464,
+          "ic_superior": 140.99755198329538,
+          "media": 129.525,
+          "motivo": null,
+          "n": 200,
+          "por_dono": {
+            "aleatorio": 12.225,
+            "atencioso": 237.525,
+            "incoerente": 243.375,
+            "relapso": 24.975
+          }
+        }
+      },
+      "unidades": 200,
+      "vidas": 800
+    },
+    "v38|HOJE|longe": {
+      "medidas": {
+        "F_PESOS": {
+          "dp": 0.05961246395557776,
+          "ic_inferior": 0.44360415420871946,
+          "ic_superior": 0.48173413598822756,
+          "media": 0.4626691450984735,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.20883491023197295,
+            "atencioso": 0.6654976113185034,
+            "incoerente": 0.722876409108479,
+            "relapso": 0.25346764973493874
+          }
+        },
+        "F_PESOS_DEC": {
+          "dp": 0.008459513803695954,
+          "ic_inferior": 0.11177515118230306,
+          "ic_superior": 0.11718611871819944,
+          "media": 0.11448063495025125,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.08257256983391105,
+            "atencioso": 0.1433183246287762,
+            "incoerente": 0.15023834532632793,
+            "relapso": 0.08179330001198984
+          }
+        },
+        "acordado:chance_dormir": {
+          "dp": 0.003458718511401565,
+          "ic_inferior": 0.06895601226789334,
+          "ic_superior": 0.0711683159552307,
+          "media": 0.07006216411156202,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.06454137167484494,
+            "atencioso": 0.07730098202380986,
+            "incoerente": 0.07790397562787418,
+            "relapso": 0.06050232711971907
+          }
+        },
+        "acordado:dormir_candidato": {
+          "dp": 0.02436381562822265,
+          "ic_inferior": 0.600940015832909,
+          "ic_superior": 0.6165238683419363,
+          "media": 0.6087319420874227,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.6670623726968388,
+            "atencioso": 0.5783998319484984,
+            "incoerente": 0.5628299684595517,
+            "relapso": 0.6266355952448016
+          }
+        },
+        "acordado:n": {
+          "dp": 7.215445949933397,
+          "ic_inferior": 719.3548884340111,
+          "ic_superior": 723.970111565989,
+          "media": 721.6625,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 674.75,
+            "atencioso": 765.25,
+            "incoerente": 767.25,
+            "relapso": 679.4
+          }
+        },
+        "decisoes:REFLEXO": {
+          "dp": 37.300976133511845,
+          "ic_inferior": 213.24556908947318,
+          "ic_superior": 237.10443091052684,
+          "media": 225.175,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 349.575,
+            "atencioso": 134.05,
+            "incoerente": 108.6,
+            "relapso": 308.475
+          }
+        },
+        "decisoes:SEGURA": {
+          "dp": 30.528766908841224,
+          "ic_inferior": 316.7989266736869,
+          "ic_superior": 336.3260733263131,
+          "media": 326.5625,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 263.5,
+            "atencioso": 361.125,
+            "incoerente": 380.775,
+            "relapso": 300.85
+          }
+        },
+        "decisoes:SORTEIO": {
+          "dp": 4.901906353393126,
+          "ic_inferior": 67.66979429269173,
+          "ic_superior": 70.80520570730826,
+          "media": 69.2375,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 54.65,
+            "atencioso": 82.25,
+            "incoerente": 86.25,
+            "relapso": 53.8
+          }
+        },
+        "decisoes:UNICO": {
+          "dp": 0.314958279695451,
+          "ic_inferior": 0.2617714554204476,
+          "ic_superior": 0.46322854457955237,
+          "media": 0.3625,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.525,
+            "atencioso": 0.325,
+            "incoerente": 0.125,
+            "relapso": 0.475
+          }
+        },
+        "dormir": {
+          "dp": 7.215445949933397,
+          "ic_inferior": 619.029888434011,
+          "ic_superior": 623.6451115659889,
+          "media": 621.3375,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 668.25,
+            "atencioso": 577.75,
+            "incoerente": 575.75,
+            "relapso": 663.6
+          }
+        },
+        "episodios:REFLEXO": {
+          "dp": 30.696795096013958,
+          "ic_inferior": 170.9264386523889,
+          "ic_superior": 190.56106134761112,
+          "media": 180.74375,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 273.625,
+            "atencioso": 117.525,
+            "incoerente": 96.0,
+            "relapso": 235.825
+          }
+        },
+        "episodios:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "episodios:SORTEIO": {
+          "dp": 4.901906353393126,
+          "ic_inferior": 42.69479429269174,
+          "ic_superior": 45.83020570730827,
+          "media": 44.2625,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 23.0,
+            "atencioso": 61.6,
+            "incoerente": 65.75,
+            "relapso": 26.7
+          }
+        },
+        "episodios:UNICO": {
+          "dp": 0.314958279695451,
+          "ic_inferior": 0.2617714554204476,
+          "ic_superior": 0.46322854457955237,
+          "media": 0.3625,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.525,
+            "atencioso": 0.325,
+            "incoerente": 0.125,
+            "relapso": 0.475
+          }
+        },
+        "fracao_decisoes:REFLEXO": {
+          "dp": 0.05901224880065847,
+          "ic_inferior": 0.33174192330404856,
+          "ic_superior": 0.36948798884520234,
+          "media": 0.35061495607462545,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.5220047719381475,
+            "atencioso": 0.2292806211917801,
+            "incoerente": 0.18724993780850888,
+            "relapso": 0.46392449336006536
+          }
+        },
+        "fracao_decisoes:SEGURA": {
+          "dp": 0.054666744255270586,
+          "ic_inferior": 0.5174211359808063,
+          "ic_superior": 0.5523876819694402,
+          "media": 0.5349044089751233,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.39542265822794137,
+            "atencioso": 0.6274010541794437,
+            "incoerente": 0.6625117168651632,
+            "relapso": 0.4542822066279449
+          }
+        },
+        "fracao_decisoes:SORTEIO": {
+          "dp": 0.008459337513863413,
+          "ic_inferior": 0.11120431158366563,
+          "ic_superior": 0.11661516635911466,
+          "media": 0.11390973897139015,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.08178240442776044,
+            "atencioso": 0.14275812409608585,
+            "incoerente": 0.15001995314167535,
+            "relapso": 0.08107847422003889
+          }
+        },
+        "fracao_decisoes:UNICO": {
+          "dp": 0.000505921525683646,
+          "ic_inferior": 0.0004090944253256604,
+          "ic_superior": 0.000732697532396583,
+          "media": 0.0005708959788611217,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.000790165406150604,
+            "atencioso": 0.0005602005326903609,
+            "incoerente": 0.00021839218465257343,
+            "relapso": 0.0007148257919509484
+          }
+        },
+        "fracao_dormir": {
+          "dp": 0.005372632874112727,
+          "ic_inferior": 0.4609306689754363,
+          "ic_superior": 0.46436717167981306,
+          "media": 0.46264892032762467,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.49758004467609834,
+            "atencioso": 0.43019359642591215,
+            "incoerente": 0.4287043931496649,
+            "relapso": 0.49411764705882355
+          }
+        },
+        "fracao_ticks_episodio:REFLEXO": {
+          "dp": 0.05961246395557776,
+          "ic_inferior": 0.5182658640117725,
+          "ic_superior": 0.5563958457912805,
+          "media": 0.5373308549015265,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.791165089768027,
+            "atencioso": 0.33450238868149657,
+            "incoerente": 0.27712359089152105,
+            "relapso": 0.7465323502650613
+          }
+        },
+        "fracao_ticks_episodio:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "fracao_ticks_episodio:SORTEIO": {
+          "dp": 0.058499812446548435,
+          "ic_inferior": 0.4388544719290709,
+          "ic_superior": 0.4762727672767306,
+          "media": 0.45756361960290076,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.20229414215495764,
+            "atencioso": 0.6601549107306902,
+            "incoerente": 0.7209996984008314,
+            "relapso": 0.24680572712512375
+          }
+        },
+        "fracao_ticks_episodio:UNICO": {
+          "dp": 0.004663969285327476,
+          "ic_inferior": 0.0036139157543427875,
+          "ic_superior": 0.006597135236802751,
+          "media": 0.005105525495572769,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.0065407680770153106,
+            "atencioso": 0.005342700587813221,
+            "incoerente": 0.001876710707647523,
+            "relapso": 0.006661922609815023
+          }
+        },
+        "margem:aprendido_medio": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "margem:chance_dormir": {
+          "dp": 0.0184323454898577,
+          "ic_inferior": 0.2499200744155141,
+          "ic_superior": 0.2617099745646776,
+          "media": 0.25581502449009585,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.20361870394251064,
+            "atencioso": 0.2991685833953866,
+            "incoerente": 0.308390013602664,
+            "relapso": 0.2120827970198222
+          }
+        },
+        "margem:comer_ou_brincar_candidato": {
+          "dp": 0.04651666850539119,
+          "ic_inferior": 0.6475031012776339,
+          "ic_superior": 0.6772566059117603,
+          "media": 0.6623798535946971,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.5280051846136151,
+            "atencioso": 0.7512263186445783,
+            "incoerente": 0.7626117130328656,
+            "relapso": 0.6076761980877292
+          }
+        },
+        "margem:energia_media": {
+          "dp": 25.307942953138618,
+          "ic_inferior": 514.4728968729966,
+          "ic_superior": 530.6606425162416,
+          "media": 522.5667696946191,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 413.19246714897054,
+            "atencioso": 613.9900542164617,
+            "incoerente": 618.8239439964615,
+            "relapso": 444.2606134165829
+          }
+        },
+        "margem:energia_mediana": {
+          "dp": 24.05427889863534,
+          "ic_inferior": 449.78206839422336,
+          "ic_superior": 465.1679316057767,
+          "media": 457.475,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 298.625,
+            "atencioso": 597.65,
+            "incoerente": 602.575,
+            "relapso": 331.05
+          }
+        },
+        "margem:energia_q1": {
+          "dp": 24.15183010531288,
+          "ic_inferior": 341.0258700047728,
+          "ic_superior": 356.4741299952272,
+          "media": 348.75,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 275.7,
+            "atencioso": 411.25,
+            "incoerente": 428.825,
+            "relapso": 279.225
+          }
+        },
+        "margem:energia_q3": {
+          "dp": 54.249363401676696,
+          "ic_inferior": 636.137711878532,
+          "ic_superior": 670.837288121468,
+          "media": 653.4875,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 448.95,
+            "atencioso": 806.775,
+            "incoerente": 809.3,
+            "relapso": 548.925
+          }
+        },
+        "margem:folga_media": {
+          "dp": 134.67303449994853,
+          "ic_inferior": -824.503595630898,
+          "ic_superior": -738.3625437277142,
+          "media": -781.4330696793061,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": -1181.4674289819338,
+            "atencioso": -470.01046773850067,
+            "incoerente": -400.8440816364907,
+            "relapso": -1073.410300360299
+          }
+        },
+        "margem:folga_negativa": {
+          "dp": 0.03499292722684534,
+          "ic_inferior": 0.7111189443206851,
+          "ic_superior": 0.7335015064400021,
+          "media": 0.7223102253803436,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.827295589235835,
+            "atencioso": 0.6313203848513418,
+            "incoerente": 0.6139304071371767,
+            "relapso": 0.8166945202970208
+          }
+        },
+        "margem:n": {
+          "dp": 4.901906353393126,
+          "ic_inferior": 67.66979429269173,
+          "ic_superior": 70.80520570730826,
+          "media": 69.2375,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 54.65,
+            "atencioso": 82.25,
+            "incoerente": 86.25,
+            "relapso": 53.8
+          }
+        },
+        "ticks_decisao:REFLEXO": {
+          "dp": 559.5146420026778,
+          "ic_inferior": 3198.6835363420973,
+          "ic_superior": 3556.5664636579027,
+          "media": 3377.625,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 5243.625,
+            "atencioso": 2010.75,
+            "incoerente": 1629.0,
+            "relapso": 4627.125
+          }
+        },
+        "ticks_decisao:SEGURA": {
+          "dp": 457.9315036326184,
+          "ic_inferior": 4751.983900105303,
+          "ic_superior": 5044.891099894697,
+          "media": 4898.4375,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 3952.5,
+            "atencioso": 5416.875,
+            "incoerente": 5711.625,
+            "relapso": 4512.75
+          }
+        },
+        "ticks_decisao:SORTEIO": {
+          "dp": 73.5285953008969,
+          "ic_inferior": 1015.0469143903761,
+          "ic_superior": 1062.078085609624,
+          "media": 1038.5625,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 819.75,
+            "atencioso": 1233.75,
+            "incoerente": 1293.75,
+            "relapso": 807.0
+          }
+        },
+        "ticks_decisao:UNICO": {
+          "dp": 4.724374195431765,
+          "ic_inferior": 3.926571831306714,
+          "ic_superior": 6.948428168693286,
+          "media": 5.4375,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 7.875,
+            "atencioso": 4.875,
+            "incoerente": 1.875,
+            "relapso": 7.125
+          }
+        },
+        "ticks_episodio:REFLEXO": {
+          "dp": 567.8140015750012,
+          "ic_inferior": 4995.279272382214,
+          "ic_superior": 5358.470727617786,
+          "media": 5176.875,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 7936.875,
+            "atencioso": 2926.125,
+            "incoerente": 2406.75,
+            "relapso": 7437.75
+          }
+        },
+        "ticks_episodio:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "ticks_episodio:SORTEIO": {
+          "dp": 486.7226050131319,
+          "ic_inferior": 3938.963559175686,
+          "ic_superior": 4250.286440824314,
+          "media": 4094.625,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 2021.625,
+            "atencioso": 5693.625,
+            "incoerente": 6213.375,
+            "relapso": 2449.875
+          }
+        },
+        "ticks_episodio:UNICO": {
+          "dp": 43.83055770192228,
+          "ic_inferior": 34.54480759421916,
+          "ic_superior": 62.58019240578084,
+          "media": 48.5625,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 65.25,
+            "atencioso": 46.5,
+            "incoerente": 16.125,
+            "relapso": 66.375
+          }
+        }
+      },
+      "unidades": 40,
+      "vidas": 160
+    },
+    "v38|HOJE|longe_fixo": {
+      "medidas": {
+        "F_PESOS": {
+          "dp": 0.11571516068086868,
+          "ic_inferior": 0.5400211624621236,
+          "ic_superior": 0.6140361699891113,
+          "media": 0.5770286662256174,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.32215017973698207,
+            "atencioso": 0.7652257565866533,
+            "incoerente": 0.8067787808155827,
+            "relapso": 0.41395994776325146
+          }
+        },
+        "F_PESOS_DEC": {
+          "dp": 0.011580394441160772,
+          "ic_inferior": 0.12413865030583472,
+          "ic_superior": 0.13154582994145622,
+          "media": 0.12784224012364548,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.10091905222532219,
+            "atencioso": 0.14955596461616366,
+            "incoerente": 0.15866545024754014,
+            "relapso": 0.10222849340555595
+          }
+        },
+        "acordado:chance_dormir": {
+          "dp": 0.0046791709346771454,
+          "ic_inferior": 0.07532734174429484,
+          "ic_superior": 0.07832028467340102,
+          "media": 0.07682381320884793,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.07204807434548563,
+            "atencioso": 0.08234130722013082,
+            "incoerente": 0.08349227771259563,
+            "relapso": 0.0694135935571796
+          }
+        },
+        "acordado:dormir_candidato": {
+          "dp": 0.047455555497590736,
+          "ic_inferior": 0.573855204947502,
+          "ic_superior": 0.6042092508364282,
+          "media": 0.5890322278919651,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.6290483395851054,
+            "atencioso": 0.5761743626361597,
+            "incoerente": 0.5666559612356771,
+            "relapso": 0.5842502481109179
+          }
+        },
+        "acordado:n": {
+          "dp": 10.802124672299309,
+          "ic_inferior": 718.0453129295101,
+          "ic_superior": 724.9546870704899,
+          "media": 721.5,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 691.025,
+            "atencioso": 746.725,
+            "incoerente": 751.95,
+            "relapso": 696.3
+          }
+        },
+        "decisoes:REFLEXO": {
+          "dp": 72.811190837796,
+          "ic_inferior": 130.45760146855957,
+          "ic_superior": 177.02989853144044,
+          "media": 153.74375,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 269.6,
+            "atencioso": 79.2,
+            "incoerente": 73.15,
+            "relapso": 193.025
+          }
+        },
+        "decisoes:SEGURA": {
+          "dp": 61.33408638142081,
+          "ic_inferior": 369.6406575466409,
+          "ic_superior": 408.87184245335914,
+          "media": 389.25625,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 316.625,
+            "atencioso": 428.225,
+            "incoerente": 424.625,
+            "relapso": 387.55
+          }
+        },
+        "decisoes:SORTEIO": {
+          "dp": 6.453777342547501,
+          "ic_inferior": 75.96723187231689,
+          "ic_superior": 80.09526812768311,
+          "media": 78.03125,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 65.325,
+            "atencioso": 88.325,
+            "incoerente": 92.9,
+            "relapso": 65.575
+          }
+        },
+        "decisoes:UNICO": {
+          "dp": 0.3110543484542656,
+          "ic_inferior": 0.3692699932027961,
+          "ic_superior": 0.5682300067972039,
+          "media": 0.46875,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.425,
+            "atencioso": 0.525,
+            "incoerente": 0.375,
+            "relapso": 0.55
+          }
+        },
+        "dormir": {
+          "dp": 10.802124672299309,
+          "ic_inferior": 618.0453129295101,
+          "ic_superior": 624.9546870704899,
+          "media": 621.5,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 651.975,
+            "atencioso": 596.275,
+            "incoerente": 591.05,
+            "relapso": 646.7
+          }
+        },
+        "episodios:REFLEXO": {
+          "dp": 61.46325251934208,
+          "ic_inferior": 104.29309821165735,
+          "ic_superior": 143.60690178834264,
+          "media": 123.95,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 213.35,
+            "atencioso": 69.4,
+            "incoerente": 63.025,
+            "relapso": 150.025
+          }
+        },
+        "episodios:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "episodios:SORTEIO": {
+          "dp": 9.027371128250985,
+          "ic_inferior": 50.50040664907284,
+          "ic_superior": 56.27459335092716,
+          "media": 53.3875,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 33.725,
+            "atencioso": 67.35,
+            "incoerente": 71.6,
+            "relapso": 40.875
+          }
+        },
+        "episodios:UNICO": {
+          "dp": 0.3110543484542656,
+          "ic_inferior": 0.3692699932027961,
+          "ic_superior": 0.5682300067972039,
+          "media": 0.46875,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.425,
+            "atencioso": 0.525,
+            "incoerente": 0.375,
+            "relapso": 0.55
+          }
+        },
+        "fracao_decisoes:REFLEXO": {
+          "dp": 0.11139218352564974,
+          "ic_inferior": 0.20199509007651645,
+          "ic_superior": 0.27324498726878355,
+          "media": 0.23762003867265,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.4119122655081905,
+            "atencioso": 0.125217852694512,
+            "incoerente": 0.11631719596583803,
+            "relapso": 0.29703284052205947
+          }
+        },
+        "fracao_decisoes:SEGURA": {
+          "dp": 0.10541637084023563,
+          "ic_inferior": 0.6008239302220455,
+          "ic_superior": 0.6682515121853634,
+          "media": 0.6345377212037044,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.48716868226648735,
+            "atencioso": 0.7252261826893244,
+            "incoerente": 0.7250173537866218,
+            "relapso": 0.6007386660723846
+          }
+        },
+        "fracao_decisoes:SORTEIO": {
+          "dp": 0.011519502540244413,
+          "ic_inferior": 0.12339890476728024,
+          "ic_superior": 0.13076713605353993,
+          "media": 0.12708302041041009,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.10026224566896995,
+            "atencioso": 0.1486707425015033,
+            "incoerente": 0.15802346543174883,
+            "relapso": 0.10137562803941827
+          }
+        },
+        "fracao_decisoes:UNICO": {
+          "dp": 0.000506039333264662,
+          "ic_inferior": 0.000597380483007689,
+          "ic_superior": 0.0009210589434631147,
+          "media": 0.0007592197132354018,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.0006568065563522386,
+            "atencioso": 0.0008852221146603657,
+            "incoerente": 0.0006419848157913191,
+            "relapso": 0.0008528653661376843
+          }
+        },
+        "fracao_dormir": {
+          "dp": 0.008043279726209461,
+          "ic_inferior": 0.4601975524419287,
+          "ic_superior": 0.46534228374571096,
+          "media": 0.46276991809381984,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.4854616530156366,
+            "atencioso": 0.44398734177215193,
+            "incoerente": 0.44009679821295605,
+            "relapso": 0.4815338793745346
+          }
+        },
+        "fracao_ticks_episodio:REFLEXO": {
+          "dp": 0.11571516068086868,
+          "ic_inferior": 0.38596383001088874,
+          "ic_superior": 0.4599788375378765,
+          "media": 0.4229713337743826,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.6778498202630179,
+            "atencioso": 0.2347742434133467,
+            "incoerente": 0.19322121918441726,
+            "relapso": 0.5860400522367485
+          }
+        },
+        "fracao_ticks_episodio:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "fracao_ticks_episodio:SORTEIO": {
+          "dp": 0.11398954021645735,
+          "ic_inferior": 0.5335187098517076,
+          "ic_superior": 0.6064299569819538,
+          "media": 0.5699743334168307,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.31678753775942947,
+            "atencioso": 0.7560893263905604,
+            "incoerente": 0.8007351708637713,
+            "relapso": 0.40628529865356156
+          }
+        },
+        "fracao_ticks_episodio:UNICO": {
+          "dp": 0.0045119603075999045,
+          "ic_inferior": 0.005611337897128236,
+          "ic_superior": 0.00849732772044522,
+          "media": 0.0070543328087867285,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.005362641977552618,
+            "atencioso": 0.009136430196092957,
+            "incoerente": 0.006043609951811415,
+            "relapso": 0.007674649109689924
+          }
+        },
+        "margem:aprendido_medio": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "margem:chance_dormir": {
+          "dp": 0.022959453114371683,
+          "ic_inferior": 0.2659472824287688,
+          "ic_superior": 0.28063286109518376,
+          "media": 0.2732900717619763,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.23161519426664778,
+            "atencioso": 0.2989495678071571,
+            "incoerente": 0.30870707830065186,
+            "relapso": 0.2538884466734485
+          }
+        },
+        "margem:comer_ou_brincar_candidato": {
+          "dp": 0.09715331421298136,
+          "ic_inferior": 0.6023212029383052,
+          "ic_superior": 0.6644634774720386,
+          "media": 0.6333923402051719,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.4681405254625665,
+            "atencioso": 0.7809872874038359,
+            "incoerente": 0.783117443130463,
+            "relapso": 0.5013241048238218
+          }
+        },
+        "margem:energia_media": {
+          "dp": 39.555921346717994,
+          "ic_inferior": 524.398011841422,
+          "ic_superior": 549.6992065940151,
+          "media": 537.0486092177185,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 446.30612296938807,
+            "atencioso": 607.4317093291679,
+            "incoerente": 614.8002765895675,
+            "relapso": 479.65632798275067
+          }
+        },
+        "margem:energia_mediana": {
+          "dp": 53.17417407408919,
+          "ic_inferior": 452.68157410758687,
+          "ic_superior": 486.69342589241313,
+          "media": 469.6875,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 333.675,
+            "atencioso": 575.4,
+            "incoerente": 579.875,
+            "relapso": 389.8
+          }
+        },
+        "margem:energia_q1": {
+          "dp": 33.5978473201972,
+          "ic_inferior": 351.52363713983993,
+          "ic_superior": 373.0138628601601,
+          "media": 362.26875,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 280.625,
+            "atencioso": 431.875,
+            "incoerente": 441.9,
+            "relapso": 294.675
+          }
+        },
+        "margem:energia_q3": {
+          "dp": 71.99017666917463,
+          "ic_inferior": 658.5701745381242,
+          "ic_superior": 704.6173254618758,
+          "media": 681.59375,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 548.925,
+            "atencioso": 773.2,
+            "incoerente": 784.85,
+            "relapso": 619.4
+          }
+        },
+        "margem:folga_media": {
+          "dp": 228.66896953545762,
+          "ic_inferior": -694.3904422070057,
+          "ic_superior": -548.126673468588,
+          "media": -621.2585578377968,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": -1006.6278689770736,
+            "atencioso": -352.3089356551845,
+            "incoerente": -311.2812245361306,
+            "relapso": -814.8162021827984
+          }
+        },
+        "margem:folga_negativa": {
+          "dp": 0.05179471261578234,
+          "ic_inferior": 0.6816665588159375,
+          "ic_superior": 0.714796064245982,
+          "media": 0.6982313115309597,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.8028812893317347,
+            "atencioso": 0.6035134536457265,
+            "incoerente": 0.6041305003857831,
+            "relapso": 0.7824000027605943
+          }
+        },
+        "margem:n": {
+          "dp": 6.453777342547501,
+          "ic_inferior": 75.96723187231689,
+          "ic_superior": 80.09526812768311,
+          "media": 78.03125,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 65.325,
+            "atencioso": 88.325,
+            "incoerente": 92.9,
+            "relapso": 65.575
+          }
+        },
+        "ticks_decisao:REFLEXO": {
+          "dp": 1092.1678625669401,
+          "ic_inferior": 1956.8640220283935,
+          "ic_superior": 2655.4484779716067,
+          "media": 2306.15625,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 4044.0,
+            "atencioso": 1188.0,
+            "incoerente": 1097.25,
+            "relapso": 2895.375
+          }
+        },
+        "ticks_decisao:SEGURA": {
+          "dp": 920.0112957213122,
+          "ic_inferior": 5544.609863199613,
+          "ic_superior": 6133.077636800387,
+          "media": 5838.84375,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 4749.375,
+            "atencioso": 6423.375,
+            "incoerente": 6369.375,
+            "relapso": 5813.25
+          }
+        },
+        "ticks_decisao:SORTEIO": {
+          "dp": 96.80666013821252,
+          "ic_inferior": 1139.5084780847533,
+          "ic_superior": 1201.4290219152467,
+          "media": 1170.46875,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 979.875,
+            "atencioso": 1324.875,
+            "incoerente": 1393.5,
+            "relapso": 983.625
+          }
+        },
+        "ticks_decisao:UNICO": {
+          "dp": 4.665815226813984,
+          "ic_inferior": 5.539049898041942,
+          "ic_superior": 8.523450101958058,
+          "media": 7.03125,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 6.375,
+            "atencioso": 7.875,
+            "incoerente": 5.625,
+            "relapso": 8.25
+          }
+        },
+        "ticks_episodio:REFLEXO": {
+          "dp": 1148.2704646973002,
+          "ic_inferior": 3706.20278940758,
+          "ic_superior": 4440.67221059242,
+          "media": 4073.4375,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 6642.75,
+            "atencioso": 2170.5,
+            "incoerente": 1782.75,
+            "relapso": 5697.75
+          }
+        },
+        "ticks_episodio:SEGURA": {
+          "dp": 0.0,
+          "ic_inferior": 0.0,
+          "ic_superior": 0.0,
+          "media": 0.0,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 0.0,
+            "atencioso": 0.0,
+            "incoerente": 0.0,
+            "relapso": 0.0
+          }
+        },
+        "ticks_episodio:SORTEIO": {
+          "dp": 995.5890774701602,
+          "ic_inferior": 4865.501415969797,
+          "ic_superior": 5502.311084030203,
+          "media": 5183.90625,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 3084.75,
+            "atencioso": 6692.25,
+            "incoerente": 7030.125,
+            "relapso": 3928.5
+          }
+        },
+        "ticks_episodio:UNICO": {
+          "dp": 41.28658779471572,
+          "ic_inferior": 51.952158641490804,
+          "ic_superior": 78.3603413585092,
+          "media": 65.15625,
+          "motivo": null,
+          "n": 40,
+          "por_dono": {
+            "aleatorio": 52.125,
+            "atencioso": 81.375,
+            "incoerente": 52.875,
+            "relapso": 74.25
+          }
+        }
+      },
+      "unidades": 40,
+      "vidas": 160
+    }
+  },
+  "vidas": 5120
+}

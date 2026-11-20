@@ -351,3 +351,19 @@ O código da seção 7 do [plano do R-sono](PLANO_ANALISE_V3_PET_VIVO_SONO.md), 
   do corte de 2 h). Nenhuma medida do caminho do sono foi lida nelas.
 - **Desvios:** D-SN-5 a D-SN-8.
 - **Próximo:** o merge do #1040 e deste PR; com o `pre_run` liberando, o replay, uma vez.
+
+## O replay do R-sono (2026-11-20, Claude Code, Fable 5.2, branch `v3-pet-vivo-sono-resultado`)
+
+O pedido do Matheus (2026-11-20): "Sim, merge e roda". O #1040 e o #1041 entraram na `main`, a conferência da CORPO terminou, e o
+replay rodou uma vez, 49 min com 4 processos, sobre as mesmas 5 120 vidas. O resultado está em
+[RESULTADO_V3_PET_VIVO_SONO.md](RESULTADO_V3_PET_VIVO_SONO.md).
+
+- **As conferências que falham alto passaram em todas as vidas** (C-FONTE, C-G1, C-FECHO, C-UMA-VEZ, C-REFLEXO, C-SOMA).
+- **L-CAMINHO: "boa parte passa pelo sorteio: vale um teste de recompensa"** (a F_PESOS de 0,543, 0,376 e 0,495 no HOJE; o limite
+  de baixo passa de 0,25 nos 3 lugares). É o desfecho esperado.
+- **Por decisão** (a F_PESOS-DEC), de 0,48 a 0,67: adormecer pela exaustão e continuar pelo sorteio é comum.
+- **Os achados:** a fração depende do dono (0,54 a 0,68 com o atencioso e o incoerente; 0,18 a 0,46 com o relapso e o aleatório); a
+  parte aprendida do peso do dormir é 0 em todas as decisões de sorteio; no v38, com o sono que segura, só 11 % a 13 % das decisões
+  de dormir passam pelo sorteio.
+- **Desvios:** D-SN-9 a D-SN-12.
+- **Próximo:** a decisão do Matheus sobre o teste de recompensa (outra run, com plano próprio).
