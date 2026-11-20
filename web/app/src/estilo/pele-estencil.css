@@ -757,3 +757,20 @@
 :root[data-pele="estencil"] .painel-tela .painel-tela__folha:has(> .poc-lugar){ padding-bottom:14px }
 /* o fechar tem o canto cortado: o foco vai por dentro (a revisora viu o contorno por fora no celular) */
 :root[data-pele="estencil"] :is(.painel-tela, .pet-painel) .hx-painel__cab > .hx-quad:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:-5px }
+
+/* ############################################################################################################################
+   21. A REVISAO 4 (sessao revisora, 2026-11-20): as cinco margens iguais; a medida de todas as caixas mostrou quatro sobras.
+   ############################################################################################################################ */
+@media (min-width:900px){
+  /* o DigiBrain aberto alinhado com a pilha das janelas (acaba em x 1899) e com 430 px */
+  :root[data-pele="estencil"] .scan{ right:20px; --scan-larg:min(430px, calc(100vw - 24px), calc((100dvh - var(--scan-fora)) * 880 / 552 + 16px)) }
+  /* os Bits com 86 px, acabando onde a prancha acaba */
+  :root[data-pele="estencil"] .topo-hab{ padding-right:18px }
+  :root[data-pele="estencil"] .topo-bits{ gap:7px; padding:4px 13px 4px 12px }
+  /* o painel de Ajustes 10 px para a direita, como na prancha */
+  :root[data-pele="estencil"] .painel-tela--lugar-lado.painel-tela--ajustes{ left:calc(var(--nav-larg, 0px) + 34px) }
+}
+/* o chamado com 116 px: menos folga embaixo e em cima do botao */
+:root[data-pele="estencil"] .pet-alerta .chamado.dl-card{ gap:8px 12px; padding:14px 14px 10px }
+/* no celular, as acoes 5 px mais baixas */
+@media (max-width:899px){ :root[data-pele="estencil"] .app--pet .pet-dock{ bottom:calc(25px + env(safe-area-inset-bottom, 0px)) } }

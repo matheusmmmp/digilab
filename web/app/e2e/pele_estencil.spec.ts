@@ -15,7 +15,7 @@ const TINTA = "rgb(23, 25, 31)", OSSO = "rgb(240, 234, 219)";
 async function abrir(browser: Browser): Promise<{ page: Page; erros: string[]; fechar: () => Promise<void> }> {
   const ctx = await browser.newContext({ baseURL: test.info().project.use.baseURL, viewport: { width: 1920, height: 950 } });
   const page = await ctx.newPage();
-  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.goto("/Assets/digilab_atlas_up_pecas.json");
   await page.evaluate(([chave, s]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 1, log: [] }));
     localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
