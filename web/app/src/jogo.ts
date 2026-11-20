@@ -40,6 +40,17 @@ export interface Jogo {
 }
 
 let jogo: Jogo | null = null;
+/** a trava do "só ver" (CN3, UX-NV-5): com outro aparelho na vez ou com a escolha da história pendente, o pet aparece e nenhuma ação entra no
+    registro. Só o cliente da nuvem liga (src/nuvem/cliente.ts); sem a nuvem, fica sempre desligada e nada aqui muda */
+let travado = false;
+/** a acao pedida com o pet so para ver (quem chama a acao explicita recebe este erro; o tempo e as acoes do dono so nao entram) */
+export class SoParaVer extends Error { constructor() { super("o pet está só para ver neste aparelho"); } }
+export const acoesTravadas = (): boolean => travado;
+export function travarAcoes(sim: boolean): void {
+  if (travado === sim) return;
+  travado = sim;
+  if (jogo) { jogo.revisao++; avisar(); }
+}
 const ouvintes = new Set<() => void>();
 let armazenamento: Armazenamento | null = null;
 let ultimoGravado = 0, pendente = false;
@@ -100,6 +111,7 @@ function exemploIntocado(m: Motor): boolean {
     registro do Tamer que nao abriu, falha (o app nao grava por cima dele) */
 export function mudarTamer<T>(f: (t: Tamer) => T): T {
   const j = jogoAtual();
+  if (travado) throw new SoParaVer();
   if (!armazenamento || j.erroTamer) throw new Error("o registro do Tamer não abriu: " + (j.erroTamer ?? "sem armazenamento"));
   const r = f(tamer);
   gravarTamer(armazenamento, tamer);
@@ -110,6 +122,7 @@ export function mudarTamer<T>(f: (t: Tamer) => T): T {
     pagar, ou com o registro do Tamer que nao abriu, nao faz nada (a vista chama a cada confirmacao) */
 export function pagarNivel(nivel: number): void {
   const j = jogoAtual();
+  if (travado) return;
   if (!armazenamento || j.erroTamer || j.emLab) return;
   if (!conferirBitsDoNivel(tamer, nivel).length) return;
   gravarTamer(armazenamento, tamer);
@@ -120,6 +133,7 @@ export function pagarNivel(nivel: number): void {
     Tamer que nao abriu, nao faz nada */
 export function registrarMarcoMega(pets: readonly Motor[]): void {
   const j = jogoAtual();
+  if (travado) return;
   if (!armazenamento || j.erroTamer || j.emLab) return;
   if (!conferirMarcoMega(tamer, pets)) return;
   gravarTamer(armazenamento, tamer);
@@ -144,7 +158,7 @@ const textoDoSave = (j: Jogo): string => (j.grupo ? textoSaveGrupo(j.grupo, j.fo
 
 function gravar(): void {
   const j = jogoAtual();
-  if (j.erroSave || !armazenamento) return;
+  if (j.erroSave || !armazenamento || travado) return;
   if (j.emLab) armazenamento.setItem(CHAVE_LAB, textoSave(j.motor));   // o pet de teste vai para o espaco dele, nunca para o save de hoje
   else if (j.grupo) armazenamento.setItem(CHAVE, textoDoSave(j));      // os dois pets: o registro do grupo
   else gravarSave(armazenamento, j.motor);
@@ -157,6 +171,8 @@ export function gravarPendente(): void { if (pendente) gravar(); }
     passando grava no maximo a cada 2 s (como o HTML), e o resto sai ao esconder ou fechar a aba. */
 export function mudarMotor(f: (m: Motor) => void, quando: "agora" | "adiado" = "agora"): void {
   const j = jogoAtual();
+  /* so para ver (UX-NV-5): nem o tempo nem a acao do dono entram no registro deste aparelho */
+  if (travado) return;
   /* os dois pets (CO4c): a mudanca vai ao grupo pelo pet em foco, e o que ele grava entra no registro do grupo; o avancar dele anda os dois.
      Com o pet de teste na tela, o grupo fica parado, como o pet de hoje */
   try { if (j.grupo && !j.emLab) j.grupo.agir(j.foco, f); else f(j.motor); } catch (err) {
@@ -175,6 +191,7 @@ export function mudarMotor(f: (m: Motor) => void, quando: "agora" | "adiado" = "
     grupo, ou com o pet de teste na tela, falha alto */
 export function mudarGrupo(f: (g: GrupoDoJogo) => void, quando: "agora" | "adiado" = "agora"): void {
   const j = jogoAtual();
+  if (travado) return;
   if (!j.grupo || j.emLab) throw new Error("mudarGrupo so com os dois pets na tela");
   try { f(j.grupo); } catch (err) {
     if (err instanceof PetMorto) avisar();
@@ -188,6 +205,7 @@ export function mudarGrupo(f: (g: GrupoDoJogo) => void, quando: "agora" | "adiad
 }
 /** troca o pet inteiro (ovo novo, pet anterior, save mudado em outra aba) */
 export function trocarMotor(m: Motor, origem: Origem, nascendo = 0): void {
+  if (travado) throw new SoParaVer();
   sairDoLab();            // trocar o pet e sempre sobre o pet de hoje: o pet de teste sai da tela, com o save dele intacto
   const j = jogoAtual();
   passarParaIlhaComAgua(m);        // o pet v21 guardado ou importado chega a ilha com agua ao abrir (IA4); o gravar abaixo o salva
@@ -201,6 +219,7 @@ export function trocarMotor(m: Motor, origem: Origem, nascendo = 0): void {
 }
 /** os dois ovos chocando (CO4c): o grupo inteiro passa a ser o de hoje, com o primeiro pet em foco */
 export function trocarGrupo(g: GrupoDoJogo, origem: Origem, nascendo = 0): void {
+  if (travado) throw new SoParaVer();
   sairDoLab();
   const j = jogoAtual();
   j.grupo = g; j.foco = g.ids[0]; j.motor = g.motor(j.foco);
@@ -221,6 +240,7 @@ export function trocarGrupoDoSave(d: { semente?: unknown; log?: unknown; versao?
 /** muda o pet em foco do grupo (quem a tela mostra e quem recebe a acao do dono; CO-6). Sem grupo, falha */
 export function focar(ident: string): void {
   const j = jogoAtual();
+  if (travado) throw new SoParaVer();
   if (!j.grupo) throw new Error("so os dois pets tem foco");
   if (j.emLab) throw new Error("volte ao seu pet antes de trocar o foco");
   j.motor = j.grupo.motor(ident); j.foco = ident; j.revisao++;
@@ -310,6 +330,23 @@ export function passarQuadroOvo(): void {
   const j = jogoAtual();
   /* o ovo chocou: a camera do primeiro dia fica pedida (abertura.ts; AB-2, uma vez por pet) */
   if (j.nascendo > 0) { j.nascendo--; if (j.nascendo === 0) { pedirAbertura(j.motor.semente); avisar(); } }
+}
+
+/** a nuvem gravou no armazenamento o save e as outras chaves (CN3, src/nuvem/cliente.ts): relê o Tamer e o pet, como quando outra aba
+    muda o save. O pet de teste do laboratorio sai da tela (o de hoje mudou por baixo dele) */
+export function recarregarDoArmazenamento(): void {
+  if (!armazenamento || !jogo) return;
+  if (jogo.emLab) { jogo.motor = jogo.emLab; jogo.emLab = null; }
+  try { tamer = lerTamer(armazenamento); jogo.erroTamer = null; } catch (err) { tamer = new Tamer(); jogo.erroTamer = "o registro do Tamer da nuvem não abre: " + (err instanceof Error ? err.message : String(err)); }
+  const l = lerSave(armazenamento);
+  let passou = false;
+  if (l.tipo === "ok") {
+    passou = passarParaIlhaComAgua(l.motor);
+    jogo.motor = l.motor; jogo.grupo = l.grupo; jogo.foco = l.grupo ? focoDoMotor(l.grupo, l.motor) : "A";
+    jogo.origem = "save"; jogo.erroSave = null; jogo.nascendo = 0;
+  } else if (l.tipo === "erro") jogo.erroSave = { erro: "o save da nuvem não abre: " + l.erro, bruto: l.bruto };
+  pendente = passou;
+  jogo.revisao++; avisar();
 }
 
 /** outra aba mudou o save: relê em vez de gravar por cima depois */

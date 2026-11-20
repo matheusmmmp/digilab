@@ -1,7 +1,7 @@
 /* Diario · Geracoes (prancha HerGeracoes): os pets por geracao. Aposentados (sairam ao cruzar), o ativo (AGORA) e os
    em espera. Cada filho confere a origem: a impressao do registro de cada pai tem que bater com um log que esteja
    neste aparelho; sem o log, a origem fica sem conferir (importar o arquivo resolve). So leitura. */
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Motor, chaveSprite, hashSemente, nomeEstagio, nomeForma } from "../../../motor/index.ts";
 import { dimSprite, imagemAtlas, useAtlas } from "../../atlas.ts";
 import { Deco } from "../../componentes/Deco.tsx";
@@ -10,6 +10,8 @@ import { CHAVE_GERACOES, geracao, lerAposentados, petsDoAposentado } from "../..
 import { useJogo } from "../../jogo.ts";
 import { CHAVE_GUARDADOS, abrirGuardado, lerGuardados } from "../../pets.ts";
 import { diaDe } from "../pet/TelaPet.tsx";
+import { listarHistorias, type Historia } from "../../nuvem/cliente.ts";
+import { useNuvem } from "../../nuvem/NuvemRaiz.tsx";
 
 interface Item { m: Motor; papel: "aposentado" | "ativo" | "espera" }
 
@@ -57,6 +59,26 @@ export function TelaGeracoes() {
       ))}
       {faltando.length > 0 && <p className="ger-aviso">{faltando.join(". ")}. Importe o arquivo do pai para conferir a origem.</p>}
       <p className="dl-apoio">Um pet aposentado saiu do jogo ao cruzar: ele fica aqui, só para ver. Nada se perde.</p>
+      {/* as histórias que não ficaram na escolha da nuvem (CN3, plano 5.3): só para ver; sem a chave, nada */}
+      <HistoriasDaNuvem />
     </div>
+  );
+}
+
+/** as histórias não escolhidas na divergência da nuvem (CN3): a forma, o dia do jogo e o aparelho; só para ver */
+function HistoriasDaNuvem() {
+  const nv = useNuvem(), [lista, setLista] = useState<Historia[]>([]);
+  useEffect(() => { if (nv) listarHistorias().then(setLista, (err: unknown) => console.error(err)); }, [nv !== null, nv?.divergencia?.id]);
+  if (!nv || !lista.length) return null;
+  return (
+    <section className="ger-linha" aria-labelledby="ger-nuvem" data-testid="ger-historias">
+      <h3 id="ger-nuvem">OUTRAS HISTÓRIAS</h3>
+      <div className="ger-cards">{lista.map(h => (
+        <div key={h.id} className="ger-card">
+          <span className="ger-txt"><span className="ger-nome"><b>{h.forma}</b></span>
+            <small>outra história · do {h.aparelho} · {diaDe(h.tick)} d</small>
+            <span className="ger-tags"><span className="ger-ok">só para ver</span></span></span>
+        </div>))}</div>
+    </section>
   );
 }

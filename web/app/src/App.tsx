@@ -23,6 +23,7 @@ import { TelaItens } from "./telas/crescer/TelaItens.tsx";
 import { TelaMedalhas } from "./telas/lutar/TelaMedalhas.tsx";
 import { TelaFronteira } from "./telas/lutar/TelaFronteira.tsx";
 import { AvisoSom } from "./componentes/AvisoSom.tsx";
+import { NuvemRaiz } from "./nuvem/NuvemRaiz.tsx";
 import { AvisoPetsDescartados } from "./componentes/Medalha.tsx";
 import { AvisoCombateTR, avisoTRPendente } from "./componentes/AvisoCombateTR.tsx";
 import { AvisoLutaPoc, avisoPocPendente } from "./componentes/AvisoLutaPoc.tsx";
@@ -295,6 +296,8 @@ export function App() {
     <div className={"app app--habitat " + (lugar ? "app--painel app--lugar" : painel ? "app--painel" : "app--pet")}>
       <div className="avisos">
       <AvisoSom />
+      {/* o save na nuvem (CN3): so com a chave no build; sem ela, nada */}
+      <NuvemRaiz />
       {jogo.erroSave && (
         <div className="aviso" role="alert">
           O save deste navegador não abriu, e o app não vai gravar por cima dele.

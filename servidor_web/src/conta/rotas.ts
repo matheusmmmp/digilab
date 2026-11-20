@@ -30,6 +30,7 @@ import { sementesDaConta } from "../envio/sementes.ts";
 import { desafiosDaConta } from "../desafio/desafio.ts";
 import { premiosDaConta } from "../premios/premios.ts";
 import { pontuacoesDaConta } from "../premios/rankings.ts";
+import { nuvemDaConta } from "../nuvem/nuvem.ts";
 import { transacao } from "./banco.ts";
 import type { ConfigConta } from "./config.ts";
 import { paginaAutorizarFalso, paginaDevConta } from "./paginas.ts";
@@ -387,6 +388,8 @@ export function montarRotasConta(app: Hono, cfg: ConfigConta): GuardasConta {
       premios: premiosDaConta(banco, s.conta_id),
       /* as duas pontuações (MMO8): os Digimon com os pontos da vida, os resets conferidos e os feitos do Tamer que o servidor viu */
       pontuacoes: pontuacoesDaConta(banco, s.conta_id),
+      /* o save na nuvem (CN3): o pet sem o registro, as cópias, as histórias não escolhidas e as divergências, só as linhas */
+      nuvem: nuvemDaConta(banco, s.conta_id),
       nao_guardamos: ["o nome", "o e-mail", "o lugar", "a fala", "a senha (não há senha)"],
     };
     const arquivo = `digilab-conta-${conta.apelido.replace(/[^A-Za-z0-9_-]/g, "-")}.json`;
