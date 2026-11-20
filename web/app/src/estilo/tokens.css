@@ -212,3 +212,32 @@
   /* a rede do DigiBrain fica como e (PR-6): escura, nas cores do scan de hoje */
   --es-rede-malha:#5FD4FF; --es-rede-grade:rgba(95,190,255,.16); --es-rede-fundo:#07162B;
 }
+
+/* Pele Zine (id zine; docs/PLANO_UX_PELES_RUA.md, modelo 2, colagem de papel; PE3 e PE4, 2026-11-20). E A UNICA PELE CLARA: papel creme,
+   traco e texto de tinta, anil no escolhido e nos medidores, amarelo-fita na acao. As cores de sentido sao proprias dela e valem como
+   FUNDO com texto de tinta, nunca como cor de letra. Valores da prancha aprovada (PR-1 e PR-4, Matheus, 2026-11-20); PROPOSTO, SEM FONTE.
+   A forma fica em pele-zine.css. */
+:root[data-pele="zine"]{
+  --hx-chao:#E6DCC3; --hx-miolo:#F6F0E0; --hx-miolo-2:#EBE2CB;
+  --hx-borda:#131313; --hx-borda-topo:#131313;
+  --hx-texto:#131313; --hx-texto-2:#2B2924; --hx-sec:#5A5446; --hx-rotulo:#131313; --hx-num:#131313;
+  --hx-escolhido:#2B50FF; --hx-escolhido-ink:#FFFFFF; --hx-escolhido-borda:#131313; --hx-escolhido-brilho:none;
+  --hx-hachura:none; --hx-hachura-verde:none;
+  --hx-btn-bg:#FFD60A; --hx-btn-ink:#131313; --hx-btn-borda:#131313; --hx-btn-bg-hover:#FFE14D;
+  --hx-medidor:#2B50FF; --hx-medidor-trilho:#DCD2B8; --hx-medidor-alt:15px; --hx-mascara:none;
+  --hx-alerta:#FF9F1C; --hx-perigo:#F0483E; --hx-ok:#3DCB6C; --hx-necessidade:#FF6FB5; --hx-aprendido:#4FD8F0; --hx-sombrio:#B58CF2;
+  --hx-foco:#2B50FF;
+  --hx-painel-fim:#F6F0E0; --hx-sombra:5px 5px 0 #131313; --hx-sombra-cor:#131313;
+  --hx-chanfro:0px; --hx-chanfro-p:0px;
+  --hx-tecla:rgba(19,19,19,.05); --hx-tecla-hover:rgba(19,19,19,.12);
+  --hud-fundo-1:#F6F0E0; --hud-fundo-2:#F6F0E0; --hud-desfoque:none;
+  --hud-ch:0px; --hud-ch-p:0px; --hud-brilho:none; --hud-risca:none;
+  --hx-f:"Barlow", system-ui, sans-serif;
+  --hx-f-tit:"Rubik", "Barlow", system-ui, sans-serif;
+  --hx-f-num:"Rubik", system-ui, sans-serif;
+  /* a reticula do destaque e o mapa do minimapa em esquema (a agua anil, a ilha de papel, a costa de tinta) */
+  --zn-reticula:radial-gradient(circle at 2px 2px, rgba(19,19,19,.24) 1.2px, transparent 1.6px) 0 0 / 7px 7px;
+  --hx-mapa-terra:#F6F0E0; --hx-mapa-costa:#131313; --hx-mapa-agua:#2B50FF;
+  /* a rede do DigiBrain fica escura, como uma foto colada (PR-6) */
+  --zn-rede-malha:#5FD4FF; --zn-rede-grade:rgba(95,190,255,.16); --zn-rede-fundo:#07162B; --zn-rede-texto:#EAF5FF;
+}

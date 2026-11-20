@@ -1,20 +1,19 @@
 /* Pele dos menus (docs/TAREFA_V2_TEMA_MENUS.md §4): Militar (id xcom) ou Sci-fi (id vidro, o padrao, TM1;
    "Holografico" ate 2026-10-31), e desde a PE1 das peles de rua (docs/PLANO_UX_PELES_RUA.md, 2026-11-20) a Estencil (id estencil), ainda
-   em previa: so os tokens, a forma inteira vem na PE2. Vale so nos menus
-   e e sempre escura; o tema claro/escuro (tema.ts) segue no habitat. A escolha e uma preferencia de tela, numa chave propria (a chave
-   do save nao muda; fora do registro e do replay); ?pele=xcom|vidro|estencil no endereco sobrepoe sem gravar (conferencia e capturas).
+   e o Zine (id zine, a unica pele clara), as duas ainda em previa. Vale so nos menus; o tema claro/escuro (tema.ts) segue no habitat. A escolha e uma preferencia de tela, numa chave propria (a chave
+   do save nao muda; fora do registro e do replay); ?pele=xcom|vidro|estencil|zine no endereco sobrepoe sem gravar (conferencia e capturas).
    data-pele fica sempre no <html>, para o CSS nao depender de ausencia de atributo. */
 import { useEffect, useState } from "react";
 import { CHAVE } from "./save.ts";
 
-export type Pele = "xcom" | "vidro" | "estencil";
+export type Pele = "xcom" | "vidro" | "estencil" | "zine";
 /** as peles, na ordem dos cartoes de Ajustes > Visual: o padrao primeiro */
-export const PELES: readonly Pele[] = ["vidro", "xcom", "estencil"];
+export const PELES: readonly Pele[] = ["vidro", "xcom", "estencil", "zine"];
 /** as peles ainda sem a forma inteira: o cartao delas leva a etiqueta "prévia" */
-export const PELES_EM_PREVIA: readonly Pele[] = ["estencil"];
+export const PELES_EM_PREVIA: readonly Pele[] = ["estencil", "zine"];
 export const CHAVE_PELE = CHAVE + "-pele";
 export const PELE_PADRAO: Pele = "vidro";
-export const NOME_PELE: Record<Pele, string> = { xcom: "Militar", vidro: "Sci-fi", estencil: "Estêncil" };
+export const NOME_PELE: Record<Pele, string> = { xcom: "Militar", vidro: "Sci-fi", estencil: "Estêncil", zine: "Zine" };
 const ehPele = (v: string | null): v is Pele => v !== null && (PELES as readonly string[]).includes(v);
 
 let pele: Pele = PELE_PADRAO;

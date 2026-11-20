@@ -32,8 +32,10 @@ describe("EscolhaPele", () => {
     /* a Estencil (PE1 das peles de rua): o terceiro cartao, com a etiqueta de previa; as outras duas sem etiqueta */
     expect(s).toMatch(/role="radio" aria-checked="false" tabindex="-1" class="[^"]*mc-opcao--pele-estencil"/);
     expect(s).toContain('<b>Estêncil</b><span class="mc-etq">prévia</span>');
-    expect(s.match(/class="mc-etq"/g)).toHaveLength(1);
-    expect(s).toContain('class="mc-opcoes mc-opcoes--3"');
+    expect(s.match(/class="mc-etq"/g)).toHaveLength(2);
+    /* quatro peles desde o Zine: os cartoes vao em duas colunas, e as duas peles de rua levam a etiqueta de previa */
+    expect(s).toContain('class="mc-opcoes mc-opcoes--2"');
+    expect(s).toContain('<b>Zine</b><span class="mc-etq">prévia</span>');
     expect(s.replace(/class="[^"]*"/g, "")).not.toMatch(/xcom/i);
   });
   it("escolher a Militar marca o cartao dela e muda o data-pele na hora", () => {

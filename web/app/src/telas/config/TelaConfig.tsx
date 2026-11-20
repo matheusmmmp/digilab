@@ -138,6 +138,8 @@ function Exibir() {
 
 function Visual() {
   const { motor: m } = useJogo(), tema = useTema(), opcoes: [Tema, string][] = [["claro", "Claro"], ["escuro", "Escuro"], ["sistema", "Sistema"]];
+  /* o Zine e a unica pele clara: nela a frase "os menus sao sempre escuros" nao vale */
+  const peleClara = usePele() === "zine";
   return (
     <>
       <EscolhaPele />
@@ -149,7 +151,7 @@ function Visual() {
           </button>
         ))}
       </div>
-      <p className="mc-apoio">Sistema segue o claro ou escuro do aparelho. Os menus são sempre escuros; o tema vale para o habitat, o balão, o retrato e o relógio.</p>
+      <p className="mc-apoio">Sistema segue o claro ou escuro do aparelho. {peleClara ? "Os menus seguem a pele" : "Os menus são sempre escuros"}; o tema vale para o habitat, o balão, o retrato e o relógio.</p>
       <EscolhaHabitat temMundo={!!m.mundo} />
       <VoltarPaineis />
     </>
@@ -292,7 +294,7 @@ function Sobre() {
 function Volume({ rotulo, nome, v, mudar }: { rotulo: string; nome: string; v: number; mudar: (v: number) => void }) {
   return (
     <label className="aj aj--volume"><Volume1 className="aj-ic" aria-hidden="true" /><span className="aj-nome">{nome} <b>{Math.round(v * 100)}%</b></span>
-      <input type="range" min={0} max={1} step={0.05} value={v} aria-label={rotulo} aria-valuetext={`${Math.round(v * 100)}%`} onChange={e => mudar(Number((e.target as HTMLInputElement).value))} /></label>
+      <input type="range" min={0} max={1} step={0.05} value={v} style={{ ["--vol" as string]: `${Math.round(v * 100)}%` }} aria-label={rotulo} aria-valuetext={`${Math.round(v * 100)}%`} onChange={e => mudar(Number((e.target as HTMLInputElement).value))} /></label>
   );
 }
 

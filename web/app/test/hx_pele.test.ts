@@ -346,7 +346,8 @@ describe("pele Estencil (os tokens e a forma)", () => {
     expect(semComentario).not.toMatch(/#[0-9A-Fa-f]{3,8}\b/);
     const imports = [...mainTsx.matchAll(/^import "\.\/estilo\/([^"]+)";/gm)].map((m) => m[1]);
     expect(imports.at(-1)).toBe("pele-vidro.css");
-    expect(imports.at(-2)).toBe("pele-estencil.css");
+    expect(imports.indexOf("pele-estencil.css")).toBeGreaterThan(imports.indexOf("pele-xcom.css"));
+    expect(imports.indexOf("pele-estencil.css")).toBeLessThan(imports.indexOf("pele-vidro.css"));
     /* o texto da acao fora do botao: os dois lugares do jogo que o usam sobre fundo escuro estao cobertos */
     expect(semComentario).toContain(".dl-tag--ativo{ color:var(--hx-btn-bg) }");
     expect(semComentario).toContain(".res-faixa--vit{ background-color:var(--hx-btn-bg); color:var(--hx-btn-ink) }");
@@ -393,5 +394,76 @@ describe("pele Estencil (os tokens e a forma)", () => {
     expect(readFileSync(new URL("../src/componentes/hx/MedidorHx.tsx", import.meta.url), "utf8")).toContain('<span className="hx-medidor__pct">%</span>');
     expect(estencilCss).toContain('.rg2-linha[data-tipo="voce"]');
     expect(estencilCss).toContain(".hx-medidor__pct{ display:none }");
+  });
+});
+
+/* As peles de rua (docs/PLANO_UX_PELES_RUA.md, 2026-11-20): a pele Zine, a unica clara. O pior fundo e o proprio papel; as cores de
+   sentido sao dela e valem como FUNDO com texto de tinta por cima, nunca como cor de letra. */
+describe("pele Zine (os tokens e a forma)", () => {
+  const zineCss = readFileSync(new URL("../src/estilo/pele-zine.css", import.meta.url), "utf8");
+  const mainTsx = readFileSync(new URL("../src/main.tsx", import.meta.url), "utf8");
+  const bloco = (() => { const i = tokens.indexOf(':root[data-pele="zine"]{'); if (i < 0) throw new Error("sem o bloco do zine"); return tokens.slice(i, tokens.indexOf("}", i)); })();
+  const tk = (nome: string) => { const m = bloco.match(new RegExp(`--${nome}:(#[0-9A-Fa-f]{6})`)); if (!m) throw new Error(`token ${nome} do zine`); return m[1]; };
+  const papeis = () => [tk("hx-chao"), tk("hx-miolo"), tk("hx-miolo-2")];
+
+  it("o texto de tinta passa 4,5:1 sobre os tres papeis; o traco e o foco passam 3:1", () => {
+    for (const t of ["hx-texto", "hx-texto-2", "hx-sec", "hx-rotulo"]) for (const f of papeis()) expect(contraste(tk(t), f), `${t} sobre ${f}`).toBeGreaterThanOrEqual(4.5);
+    for (const f of papeis()) {
+      expect(contraste(tk("hx-borda"), f)).toBeGreaterThanOrEqual(3);
+      expect(contraste(tk("hx-foco"), f)).toBeGreaterThanOrEqual(3);
+    }
+  });
+  it("a cor de sentido e fundo com texto de tinta: a tinta passa 4,5:1 sobre cada uma, e sobre o amarelo da acao; o branco passa sobre o anil", () => {
+    for (const t of ["hx-alerta", "hx-perigo", "hx-ok", "hx-necessidade", "hx-aprendido", "hx-sombrio", "hx-btn-bg", "hx-btn-bg-hover"]) {
+      expect(contraste(tk("hx-texto"), tk(t)), `tinta sobre ${t}`).toBeGreaterThanOrEqual(4.5);
+    }
+    expect(contraste(tk("hx-escolhido-ink"), tk("hx-escolhido"))).toBeGreaterThanOrEqual(4.5);
+    expect(contraste(tk("hx-btn-ink"), tk("hx-btn-bg"))).toBeGreaterThanOrEqual(4.5);
+    /* o papel sobre a tira de tinta (os titulos das janelas e dos paineis) */
+    expect(contraste(tk("hx-miolo"), tk("hx-borda"))).toBeGreaterThanOrEqual(4.5);
+  });
+  it("clara, opaca, sem vidro; Rubik nos titulos e nos numeros, Barlow no texto, carregadas no index.html", () => {
+    expect(bloco).not.toContain("data-tema");
+    expect(bloco).toMatch(/--hud-desfoque:none/);
+    expect(bloco).toMatch(/--hud-fundo-1:#F6F0E0; --hud-fundo-2:#F6F0E0/);
+    expect(bloco).toContain('--hx-f-tit:"Rubik"');
+    expect(bloco).toContain('--hx-f:"Barlow"');
+    expect(html).toContain("family=Rubik:ital,wght@0,800;0,900;1,800;1,900");
+    /* as fontes so pelos tokens (os comentarios do arquivo citam a Rubik; as regras, nao) */
+    expect(zineCss.replace(/\/\*[\s\S]*?\*\//g, "")).not.toMatch(/Rubik|Barlow/);
+    /* o mapa do minimapa em esquema e a rede do DigiBrain escura (PR-6) saem de tokens da pele */
+    expect(bloco).toMatch(/--hx-mapa-terra:#F6F0E0; --hx-mapa-costa:#131313; --hx-mapa-agua:#2B50FF/);
+    expect(bloco).toMatch(/--zn-rede-fundo:#07162B/);
+  });
+  it("pele-zine.css: toda regra sob :root[data-pele=\"zine\"], sem animacao, sem cor fora dos tokens, importada antes do vidro", () => {
+    const semComentario = zineCss.replace(/\/\*[\s\S]*?\*\//g, "");
+    const seletores = [...semComentario.matchAll(/(?:^|[}{])\s*([^{}@]+?)\s*\{/g)].map((m) => m[1]);
+    expect(seletores.length).toBeGreaterThanOrEqual(200);
+    const partes = (sel: string): string[] => {
+      const out: string[] = []; let fundo = 0, ini = 0;
+      for (let i = 0; i < sel.length; i++) {
+        if (sel[i] === "(") fundo++; else if (sel[i] === ")") fundo--;
+        else if (sel[i] === "," && fundo === 0) { out.push(sel.slice(ini, i)); ini = i + 1; }
+      }
+      return [...out, sel.slice(ini)];
+    };
+    for (const sel of seletores) for (const parte of partes(sel)) expect(parte.trim(), sel).toMatch(/^:root\[data-pele="zine"\]/);
+    expect(semComentario).not.toMatch(/animation|transition/);
+    expect(semComentario).not.toMatch(/#[0-9A-Fa-f]{3,8}\b(?!\))/);
+    expect(semComentario).not.toMatch(/https?:\/\/(?!www\.w3\.org\/2000\/svg)/);
+    const imports = [...mainTsx.matchAll(/^import "\.\/estilo\/([^"]+)";/gm)].map((m) => m[1]);
+    expect(imports.at(-1)).toBe("pele-vidro.css");
+    expect(imports.at(-2)).toBe("pele-zine.css");
+    expect(imports.at(-3)).toBe("pele-estencil.css");
+  });
+  it("o recorte: o papel, o traco de 3 px e a sombra dura no ::after, pelo filtro do corte a mao, que mora no index.html", () => {
+    const s = zineCss.replace(/\/\*[\s\S]*?\*\//g, "");
+    expect(s).toMatch(/\.pet-dock \.dock\)::after,[^{]*\{[^}]*border:3px solid var\(--hx-borda\); box-shadow:var\(--zn-sombra, 5px 5px 0\) var\(--hx-sombra-cor\); filter:url\(#rabisco\)/);
+    expect(html).toMatch(/<filter id="rabisco"[^>]*><feTurbulence[^>]*\/><feDisplacementMap[^>]*\/><\/filter>/);
+    /* as mesmas listas de icones em traco da Estencil: toda acao e todo exercicio do jogo */
+    const acoes = [...new Set([...zineCss.matchAll(/\[data-acao="([a-z_]+)"\]\{ --zn-ic:url\("data:image\/svg\+xml,/g)].map((m) => m[1]))];
+    const exs = [...new Set([...zineCss.matchAll(/\[data-ex="([a-z_]+)"\]\{ --zn-ic:url\("data:image\/svg\+xml,/g)].map((m) => m[1]))];
+    expect(acoes).toHaveLength(6);
+    expect(exs.sort()).toEqual(Object.keys(CTR.exercicios).sort());
   });
 });

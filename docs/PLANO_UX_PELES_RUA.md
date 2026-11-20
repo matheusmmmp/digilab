@@ -268,3 +268,113 @@ vista; e o rótulo "Treino" acima do estado, em Crescer.
 - O custo da sombra (um `drop-shadow` por caixa) não foi medido, nem no celular.
 - O portão das capturas de referência (`npm run capturas`) não foi rodado.
 - A etiqueta "prévia" do cartão continua: sai quando o Matheus disser que a pele está pronta.
+
+---
+
+## 11. O Zine no jogo (PE3 e PE4), e a conferência do Vidro e do Militar (2026-11-20, Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-peles-pe3`)
+
+**De onde vem:** com a Estêncil no PR #1054, o Matheus pediu (2026-11-20): "Agora eu quero que você revise tanto as pranchas que eram
+do vidro quanto as que eram do militar [...] e veja se está alinhado com o que está no jogo, o que estava proposto nas pranchas. E
+também já aplique um novo template também chamado Zine, aquele lá em cima das pranchas, né? Desenvolva as pranchas para ele também e
+passe pelo revisor para bater frente a frente com as pranchas."
+
+**O lado a lado** (o desenho em cima, o jogo embaixo) está em `docs/pranchas/ux-peles-rua/capturas_codigo/`:
+`lado_a_lado_zine_*.jpg` (a tela do pet, um lugar, Lutar, Diário e Ajustes), com as capturas do jogo (`zine_*.jpg`).
+
+### 11.1 O que entrou
+
+- **A porta:** o quarto id de pele, `zine` (`web/app/src/pele.ts`), por `?pele=zine` e pelo quarto cartão de Ajustes › Visual, com a
+  etiqueta "prévia". Os cartões de pele passam a duas colunas. **O padrão continua sendo o Vidro.**
+- **Os tokens** (`estilo/tokens.css`, o bloco `:root[data-pele="zine"]`): o papel creme, a tinta no traço e no texto, o anil no
+  escolhido e nos medidores, o amarelo-fita na ação; as cores de sentido próprias da pele; Barlow no texto e Rubik nos títulos e nos
+  números (a Rubik reta 800 e 900 passa a ser carregada junto da itálica).
+- **A forma** (`estilo/pele-zine.css`):
+  - **o recorte:** o papel, o traço de tinta de 3 px e a sombra dura são o `::after` de cada peça, pelo filtro do corte à mão (o
+    `<filter id="rabisco">`, que entrou no `index.html`); cada peça gira um pouco, com o giro da prancha;
+  - **a fita amarela** no cartão do pet, na primeira janela, no minimapa, nos painéis e no DigiBrain;
+  - **o topo, o trilho e as janelas:** a marca numa tira de tinta com a sombra amarela; o destino atual num adesivo anil; as janelas
+    com a tira preta do título e o índice num quadradinho amarelo torto; as barras com traço e o miolo anil riscado;
+  - **os painéis:** a tira preta do cabeçalho, as abas de fichário (a escolhida amarela e mais alta), o destaque amarelo com
+    retícula, os cartões como recortes tortos, os botões retos com sombra, a opção escolhida em anil com o adesivo do visto;
+  - **o minimapa** quadrado, com o mapa em esquema (a água anil, a ilha de papel, a costa de tinta);
+  - **o DigiBrain:** a moldura de papel, com a rede escura por dentro, como uma foto colada (PR-6);
+  - **o celular:** o retrato e as ações em amarelo, os destinos como recortes tortos, o atual em anil.
+- **A regra da pele clara:** a cor de sentido (necessidade, aprendido, alerta, perigo, ok) é sempre um fundo com texto de tinta, nunca
+  a cor da letra. O teste confere o contraste da tinta sobre cada uma.
+
+### 11.2 O que mudou fora do CSS
+
+- o filtro `rabisco`, um `<svg>` sem tamanho no `index.html` (só o Zine o usa);
+- o Minimapa lê mais um token, `--hx-mapa-agua` (a cor do fundo do mapa em esquema);
+- o retrato da Arena recortado vale também para o Zine;
+- o volume de Ajustes passa a porcentagem num atributo de estilo (`--vol`), para a pele pintar o trilho até o cursor;
+- em Ajustes › Visual, a frase "Os menus são sempre escuros" vira "Os menus seguem a pele" quando a pele é o Zine.
+
+### 11.3 A revisão independente do Zine
+
+A mesma sessão revisora, do zero: 75 itens tirados só da prancha (os 73 da Estêncil mais o giro e o traço, e a leitura na pele
+clara), antes de ver o jogo.
+
+| | rodada 1 | rodada 2 | rodada 3 |
+|---|---|---|---|
+| igual | 52 | 65 | 66 |
+| parecido, a consertar | 16 | 2 (leves) | 0 |
+| parecido, só por decisão do Matheus | 7 | 8 | 9 |
+| diferente | 0 | 0 | 0 |
+
+- **A rodada 1:** "o jogo é a prancha, mas ainda não está igual". O mais grave: o traço e a sombra do minimapa em anil, as abas de
+  Lutar saindo do painel, e, no celular, a etiqueta da causa fora do balão. Os estados passaram todos, e ela não achou texto claro
+  sobre o papel nem cor de sentido usada como letra, fora uma frase errada ("Os menus são sempre escuros").
+- **A rodada 2:** os 16 consertos resolvidos; os 17 giros medidos batem com a prancha. Sobraram dois acertos leves (a moldura do
+  minimapa 7 px maior e um contorno nos botões do DigiBrain).
+- **A rodada 3:** "não sobra nenhum conserto na lista do Zine": 66 de 75 itens iguais e 9 por decisão do Matheus. Os botões do
+  DigiBrain passaram a igual; no minimapa a caixa bate, e dele sobra só a decisão sobre o desenho do mapa.
+- **As nove decisões do Matheus,** as mesmas da Estêncil (seção 10.4): os ícones do jogo, o brasão, o "Detalhes", o "Reserva", o mapa
+  com o "N" e os ícones dos lugares, a posição e a largura dos painéis, a etiqueta do nível na Arena, os Bits junto do relógio no
+  celular e o celular sem o aviso do meio. Em todas ficou o que o jogo tem.
+- **Os relatórios** estão fora do git, em `D:\Trab\digilab\capturas_ux_peles_rua\revisao_zine\`, com um resumo no vault
+  (`10 Auditoria/Revisão da pele Zine contra a prancha 2026-11-20`).
+
+### 11.4 A conferência do Vidro e do Militar contra as pranchas
+
+As pranchas das duas peles antigas estão fora do git, num canvas privado do Matheus (a série D; `docs/TAREFA_V2_LAYOUT_HABITAT.md`,
+seção 1). A revisora leu o canvas, montou uma lista por pele e comparou com capturas do jogo a 1536 × 1024.
+
+| | Vidro | Militar |
+|---|---|---|
+| igual | 6 | 3 |
+| parecido | 15 | 18 |
+| diferente | 22 | 22 |
+| não conferido | 13 | 13 |
+| itens em que a diferença é mudança de propósito, com decisão registrada | 28 | 32 |
+| itens com algum desalinhamento | 9 | 8 |
+
+- **A pele das duas bate com a prancha;** a cor mudou na refeitura das peles, aprovada em 2026-10-31.
+- **A estrutura das telas é outra, de propósito:** o HUD da tela Pet, os menus como lugares da ilha, o celular mínimo e a luta em
+  tempo real vieram depois da série D. A referência de hoje para as telas são as pranchas novas do repositório.
+- **Os desalinhamentos** (sem decisão achada), do mais grave ao menos: Conversar (os modos no corpo, sem a coluna de apoio); a cor das
+  barras e dos ícones das necessidades (por estado, e não por necessidade; os dois documentos do repositório se contradizem); as cinco
+  ações de Gerações fora da aba; o botão principal (Vidro) e o fechar (Militar); a chave dos Ajustes como caixa de marcar; e o filtro
+  "falas" do Registro, que a prancha propôs e o jogo não tem.
+- **Nada disso foi corrigido neste PR:** é uma decisão do Matheus. Os de pele (as necessidades, o botão e o fechar, a chave) cabem num
+  PR pequeno por pele; os de tela (Conversar, Gerações, o filtro) mexem no que o jogo mostra.
+- **O limite:** o jogo não foi conferido contra as pranchas novas do repositório; 13 itens por pele ficaram sem conferir (o menu Mais,
+  Itens e Fronteira trancados no save, dois modos do Conversar e as nove telas que abrem sozinhas).
+- **Os relatórios** estão fora do git, em `D:\Trab\digilab\capturas_ux_peles_rua\pranchas_d\`, com um resumo no vault
+  (`10 Auditoria/Conferência do Vidro e do Militar contra as pranchas D 2026-11-20`).
+
+### 11.5 Como foi conferido
+
+- **Capturas do jogo** a 1920 × 950 e a 390 × 844, e os estados recortados em volta de cada peça.
+- **Testes:** `npm run tipos` limpo; `npm test` com 212 arquivos, 2178 passam e 3 pulam; o e2e inteiro no build final (porta 8811, 2 workers): 147 passam e 2 falham, os dois antigos e sem relação com a pele (`jogo.spec.ts:339` e `:378` esperam a versão 9 do registro do Tamer e recebem a 11).
+
+### 11.6 O que não foi feito
+
+- **As pranchas do Zine são as nove que já existiam** (o pet, um lugar, o celular, a folha, Ajustes, Lutar, Diário, o DigiBrain e os
+  estados). Nenhuma prancha nova foi desenhada: as telas sem prancha (Crescer › Aprendizado e Evolução, Conversar, o painel do porquê,
+  Ajustes › Visual) pegaram o papel, a tira do cabeçalho e as cores, e leem bem, mas o miolo é o de antes.
+- **Não olhadas com esta pele:** as outras abas (Itens, Exploração, Fronteira, Medalhas, Catálogo, Gerações, Cenários), as telas que
+  abrem sozinhas, a conta e o "Meus pets". Numa pele clara, é onde pode haver texto claro sobre papel.
+- O custo do filtro do corte à mão com a ilha 3D rodando não foi medido. O celular a 360 px.
+- O portão das capturas de referência (`npm run capturas`) não foi rodado.
+- As etiquetas "prévia" das duas peles continuam.

@@ -29,8 +29,8 @@ export function lutarNoPalco(rival: string, mapa: IdCena | null, contexto: strin
 }
 
 export function Retrato({ k }: { k: string }) {
-  /* na pele Estencil o retrato enche o quadro: vai o sprite recortado (sem a folga do quadro do atlas); nas outras, o quadro inteiro, como sempre */
-  const a = useAtlas(), recortado = usePele() === "estencil";
+  /* nas peles de rua (Estencil e Zine) o retrato enche o quadro: vai o sprite recortado (sem a folga do quadro do atlas); nas outras, o quadro inteiro, como sempre */
+  const a = useAtlas(), p = usePele(), recortado = p === "estencil" || p === "zine";
   const img = a.tipo === "ok" ? (recortado ? recorteAtlas(a, spriteDaChave(k)) : imagemAtlas(a, spriteDaChave(k))) : null;
   return <span className="poc-ret" aria-hidden="true">{img && <img className="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>;
 }
