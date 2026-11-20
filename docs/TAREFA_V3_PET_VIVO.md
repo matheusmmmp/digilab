@@ -316,3 +316,38 @@ uma vez, 33 min com 4 processos, sobre as mesmas 5 120 vidas do R1. O resultado 
   linha de base melhor entre as cinco.
 - **Desvios:** D-RB-9 a D-RB-13.
 - **Próximo:** nada nesta frente. O TS do rastro, depois da LZ3.
+
+## O plano do R-sono, o sono pelo reflexo ou pelo sorteio (2026-11-20, Claude Code, Fable 5.2, branch `v3-pet-vivo-sono-plano`)
+
+O pedido do Matheus à gerência da V3 (2026-11-20, "Sim, pede o replay do sono"), repassado pela sessão coordenadora: antes do R2,
+medir nas vidas gravadas por qual caminho o pet dorme. O plano está em
+[PLANO_ANALISE_V3_PET_VIVO_SONO.md](PLANO_ANALISE_V3_PET_VIVO_SONO.md), **APROVADO pelo Matheus em 2026-11-20** ("Aprovo todas", D-SN-4). Nada rodou e
+nenhum código mudou.
+
+- **O fato do código, conferido:** abaixo de `lambda_sono` (S/4) o reflexo escolhe o dormir sem sorteio e sem ler nenhum peso; só o
+  dormir que passa pelos pesos é alcançável pela recompensa.
+- **A medida da regra:** a F_PESOS, a fração dos ticks de sono em episódios que os pesos começaram. Abaixo de 0,10 nos 3 lugares,
+  "quase tudo reflexo: a alavanca é o corpo"; acima de 0,25 em 2 lugares, "boa parte passa pelo sorteio: vale um teste de recompensa".
+- **A fonte:** as mesmas 5 120 vidas do R1 e do R-a, rejogadas. Nenhuma vida nova e nenhuma faixa nova.
+- **O desfecho esperado, escrito antes:** "boa parte passa pelo sorteio" (de 0,56 a 0,69 nas sementes dos testes).
+- **O pré-registro** (`PR-PET-VIVO-SONO`) entra com o plano, antes da run.
+- **Desvios:** D-SN-1 a D-SN-4.
+- **Próximo:** o PR do código e o replay, uma vez.
+
+## O código do R-sono (2026-11-20, Claude Code, Fable 5.2, branch `v3-pet-vivo-sono-codigo`, empilhado no #1040)
+
+O código da seção 7 do [plano do R-sono](PLANO_ANALISE_V3_PET_VIVO_SONO.md), APROVADO pelo Matheus em 2026-11-20 ("Aprovo todas").
+**O replay não rodou.**
+
+- **A medida:** `metrics.medidas_caminho_sono` lê o que o `motivo` já grava (o `reflexo`, o `u`, os pesos das unidades e a leitura
+  da energia do rastro) e dá, por vida, as decisões e os ticks de sono por caminho (REFLEXO, SEGURA, SORTEIO, ÚNICO), por caminho do
+  episódio, a F_PESOS, a margem no sorteio e a chance do dormir nas decisões acordadas. Nada muda no cérebro, no corpo nem no motor.
+- **O orquestrador:** `experiments/run_v3_pet_vivo_sono.py`, com a config `experiments/configs/v3_pet_vivo/sono.json`. Reusa a fonte
+  e as conferências do R1 e acrescenta a C-REFLEXO e a C-SOMA. Recusa rodar sem o plano APROVADO, com a pasta de saída existente,
+  sem o `pre_run` e com menos de 10 GB livres.
+- **Os testes:** `tests/test_caminho_sono.py`, 11 testes: os quatro caminhos e o episódio conferidos à mão, a margem à mão, as
+  conferências numa vida das sementes dos testes, as falhas altas e a regra de leitura.
+- **A fumaça:** 2 vidas reais do HOJE da run do PV-2 passam em todas as conferências, a 1,7 s por vida (a projeção de 0,60 h, abaixo
+  do corte de 2 h). Nenhuma medida do caminho do sono foi lida nelas.
+- **Desvios:** D-SN-5 a D-SN-8.
+- **Próximo:** o merge do #1040 e deste PR; com o `pre_run` liberando, o replay, uma vez.
