@@ -599,3 +599,12 @@
 :root[data-pele="zine"] .painel-tela .painel-tela__folha details.zona-risco > summary{ color:var(--hx-texto) }
 :root[data-pele="zine"] .fala-status{ border:2px solid var(--hx-borda); border-radius:0; background:var(--hx-miolo); color:var(--hx-texto) }
 :root[data-pele="zine"] .evl-nome > b{ padding-right:3px; font:900 italic 24px/1 var(--hx-f-tit); text-transform:uppercase }
+
+/* ############################################################################################################################
+   18. A REVISAO 2 do Zine (sessao revisora, 2026-11-20): 65 de 75 iguais; dois acertos leves, nascidos dos consertos.
+   ############################################################################################################################ */
+/* o minimapa: o traco de tinta por dentro da caixa de 196 px (por cima da borda do mapa), e o papel logo depois dele */
+:root[data-pele="zine"] .minimapa-caixa{ outline:0; box-shadow:5px 5px 0 var(--hx-sombra-cor) }
+:root[data-pele="zine"] .minimapa-caixa::after{ border:3px solid var(--hx-borda); box-shadow:inset 0 0 0 9px var(--hx-miolo) }
+/* os tres botoes do DigiBrain: ladrilhos amarelos lisos, sem contorno */
+:root[data-pele="zine"] .scan .scan-ic, :root[data-pele="zine"] .scan .scan-fechar, :root[data-pele="zine"] .scan .scan-fechar:hover{ border:0 }
