@@ -38,6 +38,8 @@ export interface MapaDaIlha {
   imagem: ImageData;
   /** a primeira celula da imagem e o tamanho (celulas), e a area andavel do motor */
   x0: number; z0: number; larg: number; prof: number; area: { w: number; h: number };
+  /** a cor da agua na imagem (RGB), para quem separa a agua da terra (o mapa em esquema de uma pele, no Minimapa) */
+  agua?: readonly [number, number, number];
 }
 export interface VistaPublicada {
   /** o ponto olhado, o pet e a bola desenhados (celulas) */

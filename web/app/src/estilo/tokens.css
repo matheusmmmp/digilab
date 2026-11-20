@@ -207,4 +207,8 @@
   --hx-f-tit:"Saira Stencil One", "Saira Condensed", "Rajdhani", system-ui, sans-serif;
   --hx-sombra-cor:#000000;
   --hx-mascara:repeating-linear-gradient(90deg, #000 0 9px, transparent 9px 12px);
+  /* o mapa do minimapa em esquema (Minimapa.tsx): a agua some no fundo de tinta, a terra em tinta clara e a costa em osso */
+  --hx-mapa-terra:#262933; --hx-mapa-costa:#F0EADB;
+  /* a rede do DigiBrain fica como e (PR-6): escura, nas cores do scan de hoje */
+  --es-rede-malha:#5FD4FF; --es-rede-grade:rgba(95,190,255,.16); --es-rede-fundo:#07162B;
 }

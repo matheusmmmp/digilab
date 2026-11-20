@@ -1,7 +1,7 @@
 /* O minimapa (L1 de "Lugares da ilha"): so as contas puras de minimapaGeo.ts. */
 import { describe, expect, test } from "vitest";
 import {
-  ESCALA_B, MINIMAPA_PX, PASSO_SETA, celulaParaPx, centroDaJanela, corComAlfa, corDoNumero, dentroDoCirculo, escalaA, janelaDe, limitarZoom,
+  ESCALA_B, MINIMAPA_PX, PASSO_SETA, celulaParaPx, centroDaJanela, corComAlfa, corDoNumero, dentroDoCirculo, escalaA, esquemaDoMapa, janelaDe, limitarZoom,
   passoDaSeta, passoNoChao, pontasDoCone, pxParaCelula, pxPorCelula,
 } from "../src/telas/pet/minimapaGeo.ts";
 
@@ -84,5 +84,31 @@ describe("o cone e as cores", () => {
     expect(corComAlfa("rgba(19, 21, 24, 0.97)", 0.5)).toBe("rgba(19, 21, 24, 0.5)");
     expect(() => corComAlfa("azul", 1)).toThrow();
     expect(corDoNumero(0xff7fc0)).toBe("rgb(255, 127, 192)");
+  });
+});
+
+/* o mapa em esquema da pele Estencil (docs/PLANO_UX_PELES_RUA.md, secao 10): a agua, a terra e a costa de cada pixel */
+describe("o mapa em esquema", () => {
+  const AGUA = [140, 224, 247] as const, GRAMA = [143, 209, 106], AREIA = [243, 226, 176];
+  /** uma ilha de 5 x 4: agua em volta, terra no meio (3 x 2), com um pixel de areia */
+  const linhas = ["aaaaa", "aggga", "agsga", "aaaaa"];
+  const dados = linhas.flatMap(l => [...l].flatMap(c => [...(c === "a" ? AGUA : c === "g" ? GRAMA : AREIA), 255]));
+  test("0 = agua (a cor exata), 2 = costa (terra com agua ao lado), 1 = terra de dentro", () => {
+    const t = esquemaDoMapa(dados, 5, 4, AGUA);
+    expect([...t]).toEqual([0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0]);
+    /* uma ilha maior tem miolo: 5 x 5 de terra dentro de 7 x 7 */
+    const g = Array.from({ length: 49 }, (_, i) => { const x = i % 7, z = Math.floor(i / 7); return x === 0 || z === 0 || x === 6 || z === 6 ? "a" : "g"; });
+    const tg = esquemaDoMapa(g.flatMap(c => [...(c === "a" ? AGUA : GRAMA), 255]), 7, 7, AGUA);
+    expect(tg[3 * 7 + 3]).toBe(1);
+    expect(tg[1 * 7 + 1]).toBe(2);
+    expect(tg[0]).toBe(0);
+    expect([...tg].filter(v => v === 1)).toHaveLength(9);
+  });
+  test("terra na beira da imagem tambem e costa; uma cor quase igual a da agua nao e agua; tamanho errado levanta erro", () => {
+    const so = esquemaDoMapa([...GRAMA, 255, ...GRAMA, 255, ...GRAMA, 255, ...GRAMA, 255], 2, 2, AGUA);
+    expect([...so]).toEqual([2, 2, 2, 2]);
+    const quase = esquemaDoMapa([140, 224, 246, 255], 1, 1, AGUA);
+    expect([...quase]).toEqual([2]);
+    expect(() => esquemaDoMapa(dados, 4, 4, AGUA)).toThrow(/esquemaDoMapa/);
   });
 });

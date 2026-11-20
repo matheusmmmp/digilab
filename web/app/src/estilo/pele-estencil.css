@@ -628,11 +628,11 @@
 /* ---------- 18.13 o celular (abaixo de 900 px): a caixa pequena da prancha (corte de 9 px, contorno de osso de 2 px, sombra de 4 px) no
    retrato, no relogio, nos destinos, no "agora" e nas acoes; as acoes saem do vermelhao para a tinta, com o icone em osso */
 @media (max-width:899px){
-  :root[data-pele="estencil"] body .mm-topo :is(.mm-retrato, .mm-relogio), :root[data-pele="estencil"] body .mm-coluna .mm-bt, :root[data-pele="estencil"] body .mm-agora,
+  :root[data-pele="estencil"] body .mm-topo :is(.mm-retrato, .mm-relogio), :root[data-pele="estencil"] body .mm-coluna .mm-bt, :root[data-pele="estencil"] body .mm-coluna .topo-bt.mm-bt, :root[data-pele="estencil"] body .mm-agora,
   :root[data-pele="estencil"] body .pet-dock :is(.mm-acao, .mm-extra, .mm-mais .racao-bt), :root[data-pele="estencil"] body .mm-aviso.hx-chip--necessidade{
     --ch:9px; --es-miolo:var(--hx-miolo); --es-contorno:var(--hx-borda); border:0; border-radius:0; background:none; box-shadow:none; color:var(--hx-texto);
     filter:drop-shadow(4px 4px 0 var(--hx-sombra-cor)) }
-  :root[data-pele="estencil"] body .mm-topo :is(.mm-retrato, .mm-relogio)::before, :root[data-pele="estencil"] body .mm-coluna .mm-bt::before, :root[data-pele="estencil"] body .mm-agora::before,
+  :root[data-pele="estencil"] body .mm-topo :is(.mm-retrato, .mm-relogio)::before, :root[data-pele="estencil"] body .mm-coluna .mm-bt::before, :root[data-pele="estencil"] body .mm-coluna .topo-bt.mm-bt::before, :root[data-pele="estencil"] body .mm-agora::before,
   :root[data-pele="estencil"] body .pet-dock :is(.mm-acao, .mm-extra, .mm-mais .racao-bt)::before, :root[data-pele="estencil"] body .mm-aviso.hx-chip--necessidade::before{
     content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
     background:
@@ -652,7 +652,7 @@
   /* os destinos de 50 px, 12 px de vao; o atual com o miolo de osso */
   :root[data-pele="estencil"] body .mm-coluna{ gap:12px }
   :root[data-pele="estencil"] body .mm-coluna .mm-destinos{ gap:12px }
-  :root[data-pele="estencil"] body .mm-coluna .mm-bt{ width:50px; height:50px }
+  :root[data-pele="estencil"] body .mm-coluna .mm-bt, :root[data-pele="estencil"] body .mm-coluna .topo-bt.mm-bt{ width:50px; height:50px }
   :root[data-pele="estencil"] body .mm-coluna .mm-bt svg{ width:24px; height:24px }
   :root[data-pele="estencil"] body .mm-coluna .mm-bt[aria-current="page"]{ --es-miolo:var(--hx-escolhido); color:var(--hx-escolhido-ink) }
   /* as acoes de 64 px: tinta, contorno de osso, icone em osso; a sugerida leva o contorno da necessidade */
@@ -685,3 +685,55 @@
 :root[data-pele="estencil"] .poc-ret img{ scale:1.7; transform-origin:50% 55% }
 :root[data-pele="estencil"] :is(.painel-tela, .ab-hx) .hx-btn:not(.dock-bt)[aria-pressed="true"]{ color:var(--hx-escolhido-ink) }
 :root[data-pele="estencil"] :is(.painel-tela, .ab-hx) .hx-btn:not(.dock-bt)[aria-pressed="true"]::after{ background:var(--hx-escolhido) }
+
+/* ############################################################################################################################
+   19. A REVISAO 2 (sessao revisora, 2026-11-20): 52 de 73 iguais; aqui vao os 11 consertos e a peca diferente que ela apontou.
+   ############################################################################################################################ */
+
+/* ---------- 19.1 Lutar > Arena: o botao Lutar inteiro a vista (o painel desce mais, o rotulo repetido "Arena" sai da vista e o botao
+   fica preso a base enquanto a lista rola); os retratos enchem o quadro (a tela entrega o sprite recortado nesta pele) */
+:root[data-pele="estencil"] .painel-tela--lugar-lado:not(.painel-tela--d-crescer){ max-height:calc(100dvh - var(--casca-topo) - 36px) }
+:root[data-pele="estencil"] .poc-lugar > h2{ position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap }
+:root[data-pele="estencil"] .poc-lugar .poc-lutar, :root[data-pele="estencil"] .poc-lugar .poc-lutar:hover{ position:sticky; bottom:0; background:var(--hx-miolo) }
+:root[data-pele="estencil"] .poc-ret img{ scale:none; width:36px; height:36px; object-fit:contain; object-position:center bottom }
+:root[data-pele="estencil"] .poc-pet .poc-ret{ background:none }
+:root[data-pele="estencil"] .poc-pet .poc-ret img{ width:50px; height:50px }
+
+/* ---------- 19.2 o minimapa: o mapa em esquema (a agua some no fundo de tinta, a terra em tinta clara, a costa em osso). Quem pinta e
+   o Minimapa.tsx, pelos tokens --hx-mapa-terra e --hx-mapa-costa; o filtro cinza sai */
+:root[data-pele="estencil"] .minimapa-caixa .minimapa{ filter:none }
+
+/* ---------- 19.3 o botao de perigo (o "Novo ovo" da zona de risco): contorno e texto na cor do perigo, o miolo riscado */
+:root[data-pele="estencil"] :is(.zona-risco .rg2-bt, .rg2-bt--perigo):not(.rg2-bt--acao){ color:var(--hx-perigo) }
+:root[data-pele="estencil"] :is(.zona-risco .rg2-bt, .rg2-bt--perigo):not(.rg2-bt--acao)::before{ background:var(--hx-perigo) }
+:root[data-pele="estencil"] :is(.zona-risco .rg2-bt, .rg2-bt--perigo):not(.rg2-bt--acao)::after,
+:root[data-pele="estencil"] :is(.zona-risco .rg2-bt, .rg2-bt--perigo):not(.rg2-bt--acao):hover::after{
+  background:repeating-linear-gradient(-45deg, transparent 0 6px, color-mix(in srgb, var(--hx-perigo) 16%, transparent) 6px 9px), var(--hx-miolo) }
+
+/* ---------- 19.4 os estados que faltavam: a aba clareia com o mouse e o foco dela sao duas barras de 5 px cortadas na inclinacao (as
+   barras vao no ::before, que e o paralelogramo); o botao principal pressionado escurece */
+:root[data-pele="estencil"] .lugar-abas .hx-aba:hover:not([aria-selected="true"])::before{ background:linear-gradient(var(--hx-tecla-hover), var(--hx-tecla-hover)), var(--hx-miolo-2) }
+:root[data-pele="estencil"] .lugar-abas .hx-aba:focus-visible{ outline:0; box-shadow:none }
+:root[data-pele="estencil"] .lugar-abas .hx-aba:focus-visible::before{ box-shadow:inset 0 5px 0 var(--hx-foco), inset 0 -5px 0 var(--hx-foco) }
+:root[data-pele="estencil"] :is(.hx-continuar, .rg2-bt--acao):active:not(:disabled)::after{ background:var(--hx-btn-bg); filter:brightness(.86) }
+
+/* ---------- 19.5 o chamado: o arco que sobrava em cima do icone (a sombra interna da caixinha do icone de antes) */
+:root[data-pele="estencil"] .pet-alerta .chamado-ic{ border-radius:0; box-shadow:none }
+
+/* ---------- 19.6 Ajustes: os tres volumes comecam no mesmo x (o nome numa coluna fixa); a seta do voltar em traco de 16 px; o painel
+   com 440 px, para nao encostar nas acoes de baixo */
+:root[data-pele="estencil"] .aj--volume{ grid-template-columns:28px 72px minmax(0,1fr) max-content }
+:root[data-pele="estencil"] .mc-cfg > .mc-linha .mc-voltar > span{ width:16px; height:16px; margin:0 2px 0 -4px; font-size:0; line-height:0; rotate:180deg; background:currentColor;
+  --es-ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 6l6 6-6 6'/%3E%3C/svg%3E"); -webkit-mask:var(--es-ic) center / contain no-repeat; mask:var(--es-ic) center / contain no-repeat }
+@media (min-width:900px){ :root[data-pele="estencil"] .painel-tela--lugar-lado.painel-tela--ajustes{ width:min(440px, calc(46vw - 36px - var(--nav-larg, 0px))) } }
+
+/* ---------- 19.7 o DigiBrain: a rede fica como e (PR-6: escura, nas cores do scan de hoje), dentro da moldura da pele */
+:root[data-pele="estencil"] .scan .scan-moldura{ --scan-malha:var(--es-rede-malha); --scan-grade:var(--es-rede-grade); background-color:var(--es-rede-fundo) }
+:root[data-pele="estencil"] .scan .scan-canto{ display:block; border-color:var(--es-rede-malha) }
+
+/* ---------- 19.8 o celular: o destaque da folha com 56 px e a palavra a 24 px */
+@media (max-width:899px){
+  :root[data-pele="estencil"] .painel-tela--lugar-folha .trn2-tela > .lg-destaque{ min-height:56px; padding-top:25px; padding-bottom:7px }
+  :root[data-pele="estencil"] .painel-tela--lugar-folha .trn2-tela > .lg-destaque::before{ top:9px }
+  :root[data-pele="estencil"] .painel-tela--lugar-folha .lg-destaque :is(.trn2-estado, .lg-grande){ font-size:24px }
+}

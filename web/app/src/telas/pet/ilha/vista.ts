@@ -47,7 +47,7 @@ import { CONSULTA_SOLTA, TRANSICAO_MS, VISTA, despublicarVista, focoDoQuadro, li
 import { CAMERA_DEV, ligarCameraDev } from "../cameraDev.ts";
 import { ABERTURA_PROPOSTA, inclinar, ligarAberturaDev, quadroDaAbertura, quadroDaSaida, tempoDaAbertura, zerarRelogioAbertura, type Ponto, type Proposta, type QuadroAbertura } from "./aberturaConta.ts";
 import { PROPOSTA_ESCOLHIDA, aberturaPendente, marcarAberturaTocada } from "../../../abertura.ts";
-import { pixelsDoMapa } from "./minimapa.ts";
+import { AGUA_MAPA, pixelsDoMapa } from "./minimapa.ts";
 import { PRESETS, Pos, SEM_CONTORNO } from "./pos.ts";
 import { SACO_NA_TELA, VIAGEM, ZOOM_LUGAR_MOVEL, lugarAberto, progressoViagem, type Lugar } from "../../../viagem.ts";
 import { LUGARES, ORDEM_LUGARES, chaoDoLugar, estadoDoLugar, gradeDosLugares, idaDoTreino, pontoDoLugar as pontoLugarDe, pontoDoPet, type BaseDoMundo } from "./lugares.ts";
@@ -240,7 +240,7 @@ class VistaIlha {
     }
     CURVA.uVento.value = 1;
     const il = this.ilha;
-    this.mapa = { imagem: new ImageData(pixelsDoMapa(il, this.estilo.paleta), il.larg, il.prof), x0: il.x0, z0: il.z0, larg: il.larg, prof: il.prof, area: il.area };
+    this.mapa = { imagem: new ImageData(pixelsDoMapa(il, this.estilo.paleta), il.larg, il.prof), x0: il.x0, z0: il.z0, larg: il.larg, prof: il.prof, area: il.area, agua: AGUA_MAPA };
     this.limites = { x0: il.x0, z0: il.z0, x1: il.x0 + il.larg, z1: il.z0 + il.prof };
   }
 

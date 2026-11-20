@@ -358,6 +358,10 @@ describe("pele Estencil (os tokens e a forma)", () => {
     expect(estencilCss).toContain("var(--hx-f-tit)");
     /* a sombra dura e os segmentos das barras tambem sao tokens da pele */
     expect(bloco).toMatch(/--hx-sombra-cor:#000000/);
+    /* o mapa em esquema do minimapa e a rede do DigiBrain (que fica como e, PR-6) tambem saem de tokens da pele */
+    expect(bloco).toMatch(/--hx-mapa-terra:#262933; --hx-mapa-costa:#F0EADB/);
+    expect(bloco).toMatch(/--es-rede-malha:#5FD4FF/);
+    expect(tokens.slice(0, tokens.indexOf(':root[data-pele="vidro"]{'))).not.toContain("--hx-mapa-terra");
     expect(bloco).toMatch(/--hx-mascara:repeating-linear-gradient\(90deg, #000 0 9px, transparent 9px 12px\)/);
   });
   it("a caixa do desenho: o contorno no ::before, o miolo no ::after e a sombra dura na peca; nada de fora alem dos tracos embutidos", () => {

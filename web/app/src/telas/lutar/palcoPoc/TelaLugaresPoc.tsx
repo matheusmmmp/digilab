@@ -5,7 +5,8 @@ import { useState } from "react";
 import { Swords } from "lucide-react";
 import { CENAS, FALA_PIEDMON_ANTES, IDS_CENA, NOME_ORACULO, NPC, ehPiedmon, hashSemente, mapaDoLugar, type IdCena } from "../../../../motor/index.ts";
 import { useMitologia } from "../../../mitologia.ts";
-import { imagemAtlas, useAtlas } from "../../../atlas.ts";
+import { imagemAtlas, recorteAtlas, useAtlas } from "../../../atlas.ts";
+import { usePele } from "../../../pele.ts";
 import { mudarMotor, useJogo } from "../../../jogo.ts";
 import { assistirPoc, fimDoPet, ladoDesenho, lutasDoResultado, nomeDaChave, spriteDaChave, useLutaPoc } from "../../../lutaPocTela.ts";
 import type { Motor, ResultadoLutaPoc } from "../../../../motor/index.ts";
@@ -28,7 +29,9 @@ export function lutarNoPalco(rival: string, mapa: IdCena | null, contexto: strin
 }
 
 export function Retrato({ k }: { k: string }) {
-  const a = useAtlas(), img = a.tipo === "ok" ? imagemAtlas(a, spriteDaChave(k)) : null;
+  /* na pele Estencil o retrato enche o quadro: vai o sprite recortado (sem a folga do quadro do atlas); nas outras, o quadro inteiro, como sempre */
+  const a = useAtlas(), recortado = usePele() === "estencil";
+  const img = a.tipo === "ok" ? (recortado ? recorteAtlas(a, spriteDaChave(k)) : imagemAtlas(a, spriteDaChave(k))) : null;
   return <span className="poc-ret" aria-hidden="true">{img && <img className="dl-pix" src={img.url} width={img.w} height={img.h} alt="" />}</span>;
 }
 
