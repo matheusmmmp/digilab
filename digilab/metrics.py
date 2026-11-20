@@ -2104,6 +2104,22 @@ def exaustao_nas_decisoes(decisoes: Sequence[tuple[int, float]], janela: tuple[i
     return {"n": len(sel), "frac": sum(1 for e in sel if e < limiar) / len(sel)}
 
 
+def tempo_bem_nas_decisoes(decisoes: Sequence[tuple[int, float, float, float]], janela: tuple[int, int],
+                           limiar_privacao: float = 0.15, limiar_exaustao: float = 0.25) -> dict:
+    """O "Tempo bem" (a primaria de bem-estar decidida pelo Matheus em 2026-11-20; docs/PLANO_ANALISE_V3_CORPO_C4.md, secao 6):
+    `decisoes` = (tick, fome, higiene, energia) no tick de cada decisao, na escala 0-1 da `Observacao`. A fracao das decisoes da janela
+    sem privacao (a regra do `privacao_nas_decisoes`: min(fome, higiene, energia) >= `limiar_privacao`) e sem exaustao (a do
+    `exaustao_nas_decisoes`: energia >= `limiar_exaustao`). Os dois limiares sao os das duas medidas de hoje. Falha alto sem decisao."""
+    ini, fim = _checar_janela(janela)
+    sel = [(_escala01("fome", f), _escala01("higiene", h), _escala01("energia", e)) for t, f, h, e in decisoes if ini <= t < fim]
+    if not sel:
+        raise ValueError("tempo bem sem decisao na janela")
+    privacao = sum(1 for f, h, e in sel if min(f, h, e) < limiar_privacao)
+    exaustao = sum(1 for _, _, e in sel if e < limiar_exaustao)
+    bem = sum(1 for f, h, e in sel if min(f, h, e) >= limiar_privacao and e >= limiar_exaustao)
+    return {"n": len(sel), "frac": bem / len(sel), "frac_privacao": privacao / len(sel), "frac_exaustao": exaustao / len(sel)}
+
+
 # --- o prototipo do DigiBrain modular (docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md, secao 4; PROPOSTAS na etapa 1a)
 MODULOS_SONDA = ("incentivo", "habito", "memoria", "persistencia", "afeto")    # as sondas "quem decidiu" da espec, secao 7
 
