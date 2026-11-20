@@ -113,6 +113,8 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              "experiments/run_v3_elogio.py",
                                                                              # SOCIAL_PAR, A0 (D-SP-29): o orquestrador monta o pet de hoje (o modular com a CO7)
                                                                              "experiments/run_v3_social_par_a0.py",
+                                                                             # a SOCIAL_PAR MD1: o orquestrador da medida monta os bracos do M1 e do M2
+                                                                             "experiments/run_v3_social_par_md.py",
                                                                              "experiments/run_v3_corpo_acoplamento.py"}
 
 

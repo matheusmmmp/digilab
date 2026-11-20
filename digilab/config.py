@@ -2873,13 +2873,23 @@ class ConfigDigibrain:
     fala_unidades: bool = False              # PROPOSTO, SEM FONTE como valor (DC3, docs/PLANO_ANALISE_V3_CONVERSA_DC3.md, 3.1): o chamar com conteudo
     olhar: bool = False                      # PROPOSTO, SEM FONTE como valor (GOSTO_VISUAL, P1d; docs/ESPEC_GOSTO_VISUAL_P1.md, secoes 5 e 6,
                                              # GV-19): o comportamento `olhar`, a classe `tela` do M-SENS e o canal `gosto_visual` (ConfigOlhar)
+    unidades_sociais: bool = False           # PROPOSTO, SEM FONTE como valor (SOCIAL_PAR M1; docs/ESPEC_SOCIAL_PAR_M1.md, secao 2, M1-1 aprovada
+                                             # em 2026-11-19): o outro no M-SENS e as unidades explorar/seguir e explorar/onde_comeu
+    incentivo_social_zero: bool = False      # PROPOSTO, SEM FONTE como valor (SOCIAL_PAR MD, o braco de controle do D-SP-63 e o MD-2;
+                                             # docs/PLANO_ANALISE_V3_SOCIAL_PAR_MD.md, secao 2): o incentivo das unidades sociais vale 0
+                                             # na decisao, e o P1 segue aprendendo o desfecho; so com a `unidades_sociais`
 
     def __post_init__(self) -> None:
         for nome in ("ligada", "modula_g_apr", "p2", "m_mem", "persistencia", "p1", "cheiro_inato", "intencao_cheiro",
                      "intencao_suspensa", "credito_corrida", "redecidir_evento", "memoria_autobio", "facetas_mem", "passeio",
-                     "fala_unidades", "olhar"):
+                     "fala_unidades", "olhar", "unidades_sociais", "incentivo_social_zero"):
             if type(getattr(self, nome)) is not bool:
                 raise TypeError(f"ConfigDigibrain.{nome} e bool: {getattr(self, nome)!r}")
+        if self.incentivo_social_zero and not self.unidades_sociais:
+            raise ValueError("incentivo_social_zero so vale com a unidades_sociais (docs/PLANO_ANALISE_V3_SOCIAL_PAR_MD.md, secao 2)")
+        if self.unidades_sociais and (self.fala_unidades or self.olhar or self.passeio):
+            raise ValueError("unidades_sociais nao se combina com a fala_unidades, o olhar nem o passeio "
+                             "(docs/ESPEC_SOCIAL_PAR_M1.md, secao 2: PROPOSTO, sem teste da combinacao)")
         if self.olhar and self.fala_unidades:
             raise ValueError("olhar nao se combina com a fala_unidades (GOSTO_VISUAL, P1d: PROPOSTO, sem teste da combinacao)")
         if self.fala_unidades and (self.passeio or self.credito_corrida or self.intencao_suspensa or self.redecidir_evento
@@ -2945,6 +2955,18 @@ CARACTERISTICAS_DIGIBRAIN = (("vies",) + tuple(f"u_{r}" for r in RECEPTORES_DIGI
                                 "cuidado_humor", "F", "V", "E"))
 # os tipos de alvo das unidades (secao 4.5): as classes do objeto visto e os alvos sem objeto (o cheiro, o vagar, o lugar lembrado)
 TIPOS_ALVO_DIGIBRAIN = ("racao", "a", "b", "c", "podre", "bola", "cheiro", "vagar", "ponto")
+# o SOCIAL_PAR M1 (docs/ESPEC_SOCIAL_PAR_M1.md, secao 3.1; so com a subchave `unidades_sociais`): os tipos das unidades com o outro como alvo,
+# no explorar, os mesmos do motor (mundo.CANDIDATOS_SOCIAIS, conferido por teste). Ficam fora do TIPOS_ALVO_DIGIBRAIN, que o M-MEM percorre
+TIPOS_ALVO_SOCIAIS = ("seguir", "onde_comeu")
+# o inato e a novidade das unidades sociais (secao 3.3): o pet nao nasce querendo seguir o outro, e o valor vem so do P1 (M1-2); o outro
+# nao tem novidade no M1, que pediria uma memoria do outro, o M3 (M1-3). DECIDIDOS pelo Matheus em 2026-11-19 (checkpoint S5, "Aprovado",
+# D-SP-59), pela recomendacao da espec; SEM FONTE
+W0_TIPO_SOCIAL = 0
+NOV_SOCIAL = 0
+PARAMETROS_SOCIAL_M1: dict[str, tuple[str, str]] = {
+    "W0_TIPO_SOCIAL": ("DECIDIDO", "M1-2 (2026-11-19, docs/ESPEC_SOCIAL_PAR_M1.md, secao 9): 0, o valor vem do P1; SEM FONTE"),
+    "NOV_SOCIAL": ("DECIDIDO", "M1-3 (2026-11-19, docs/ESPEC_SOCIAL_PAR_M1.md, secao 9): 0 no M1, a novidade do outro e do M3; SEM FONTE"),
+}
 COMPORTAMENTOS_DIGIBRAIN = ("ocioso", "dormir", "comer", "brincar", "chamar_atencao", "explorar", "emburrar")   # a ordem de ACOES_PET_HOJE
 # o comportamento `olhar` (GOSTO_VISUAL, P1d; GV-19): so com a subchave `olhar`, no fim da lista (a ordem das unidades de hoje nao muda)
 COMPORTAMENTO_OLHAR = "olhar"
@@ -4093,3 +4115,33 @@ class ConfigVozV4B:
 
 CONFIG_VOZ_V4B = ConfigVozV4B()
 PARAMETROS_VOZ_V4B = {f.name: ("PROPOSTO", "SEM FONTE; a Gerente da CONVERSA_PET, 2026-11-11 (D-DC5B-5)") for f in fields(ConfigVozV4B)}
+
+
+# =====================================================================
+# SOCIAL_PAR M2, a companhia no corpo (docs/ESPEC_SOCIAL_PAR_M2.md; M2-1 a M2-6 APROVADAS pelo Matheus em 2026-11-19, D-SP-67). Desligada,
+# a vida de hoje sai byte a byte (o G2 contra tests/gabaritos/social_m2_de_hoje.json). Ligada, o corpo ganha o emissor `companhia`: com o
+# pet acordado e outro pet em contato (as celulas a ate `raio_celulas` em Chebyshev, com as posicoes do comeco do tick, que o grupo conta),
+# a solidao cai `alivio_solidao` no tick, uma vez so, qualquer que seja o numero de outros. O emissor so le a posicao do outro, nenhum quimico
+# dele (sem laco entre os corpos). Exige a solidao no corpo (`ConfigCorpo.drives_novos`). Os pets de um grupo vem com a mesma config.
+@dataclass(frozen=True)
+class ConfigCompanhia:
+    ligada: bool = False
+    raio_celulas: int = 1          # M2-1: o contato, o raio do toque (ConfigGrupo.raio_toque_celulas) e o do primario da S
+    alivio_solidao: int = 900      # M2-2: 2 x a subida da solidao do corpo da S (ConfigCorpo.solidao_sobe = 450 nele), em unidades de C
+
+    def __post_init__(self) -> None:
+        if type(self.ligada) is not bool:
+            raise TypeError(f"ConfigCompanhia.ligada e bool: {self.ligada!r}")
+        if type(self.raio_celulas) is not int or self.raio_celulas < 0:
+            raise ValueError(f"ConfigCompanhia.raio_celulas e inteiro >= 0: {self.raio_celulas!r}")
+        if type(self.alivio_solidao) is not int or self.alivio_solidao <= 0:
+            raise ValueError(f"ConfigCompanhia.alivio_solidao e inteiro > 0: {self.alivio_solidao!r}")
+
+
+CONFIG_COMPANHIA = ConfigCompanhia()
+CONFIG_COMPANHIA_LIGADA = ConfigCompanhia(ligada=True)
+PARAMETROS_COMPANHIA: dict[str, tuple[str, str]] = {
+    "ligada": ("DECIDIDO", "docs/ESPEC_SOCIAL_PAR_M2.md, secao 2 (2026-11-19, D-SP-67): desligada por padrao"),
+    "raio_celulas": ("DECIDIDO", "M2-1 (2026-11-19, D-SP-67): o contato, 1 celula em Chebyshev, o raio do toque; SEM FONTE"),
+    "alivio_solidao": ("DECIDIDO", "M2-2 (2026-11-19, D-SP-67): 900 = 2 x a solidao_sobe do corpo da S; SEM FONTE"),
+}
