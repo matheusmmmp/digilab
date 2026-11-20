@@ -67,7 +67,7 @@ async function servidorFalso(page: Page): Promise<Falso> {
 
 /** semeia por uma pagina da mesma origem que nao e o app (o app gravaria o pet dele ao fechar) */
 async function semear(page: Page, marcos: number[], o: { cartoes?: number[]; dicas?: boolean } = {}): Promise<void> {
-  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.goto("/Assets/digilab_atlas_up_pecas.json");
   await page.evaluate(([chave, save, nivel, dicas]) => {
     localStorage.clear();
     localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 7, log: [] }));

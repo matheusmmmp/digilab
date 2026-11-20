@@ -29,7 +29,7 @@ interface Medida { tela: string; texto: string; ret: number[]; seletor: string; 
 
 async function semear(page: Page, save: object | null, tamer: object = { versao: 1, log: [] }, boasVindas = true): Promise<void> {
   await page.unrouteAll();
-  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.goto("/Assets/digilab_atlas_up_pecas.json");
   await page.evaluate(([chave, s, t, bv]) => {
     localStorage.clear(); if (bv) localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", t);
     localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");

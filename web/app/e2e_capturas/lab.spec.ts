@@ -39,7 +39,7 @@ function petDeTesteVivo(): string {
 
 async function semear(page: Page, comPet: boolean): Promise<void> {
   const hoje = petDeHoje(), teste = comPet ? petDeTesteVivo() : null;
-  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.goto("/Assets/digilab_atlas_up_pecas.json");
   await page.evaluate(([chave, h, t]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", JSON.stringify({ versao: 1, log: [] }));
     localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");

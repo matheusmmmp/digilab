@@ -71,7 +71,7 @@ async function aparelho(browser: Browser, s: Servidor, ua: string, primeiro: boo
   page.on("pageerror", e => { throw e; });
   page.on("console", m => { if (m.type() === "error") console.log(`[${ua === UA_CEL ? "celular" : "pc"}] ${m.text()}`); });
   /* semeia por uma página da mesma origem que não é o app (o app gravaria o pet dele ao fechar) */
-  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.goto("/Assets/digilab_atlas_up_pecas.json");
   await page.evaluate(([chave, txt]) => {
     localStorage.clear();
     localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-descarte", "8"); localStorage.setItem(chave + "-dicas-ligadas", "0");

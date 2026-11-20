@@ -37,7 +37,7 @@ const TELAS: [string, string, object, object?][] = [
 
 /** semeia o save por uma página da mesma origem que não é o app (como em e2e/jogo.spec.ts) */
 async function semear(page: Page, save: object, tamer: object = { versao: 1, log: [] }): Promise<void> {
-  await page.goto("/Assets/digilab_atlas_up.json");
+  await page.goto("/Assets/digilab_atlas_up_pecas.json");
   await page.evaluate(([chave, s, t]) => {
     localStorage.clear(); localStorage.setItem(chave + "-boas-vindas", "1"); localStorage.setItem(chave + "-tamer", t);
     localStorage.setItem(chave + "-descarte", "5"); localStorage.setItem(chave + "-dicas-ligadas", "0"); localStorage.setItem(chave + "-guardados", "[]");
