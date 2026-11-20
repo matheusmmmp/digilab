@@ -3,8 +3,10 @@
      GET  /saude             {"ok": true, "servico": "digilab-servidor-web"}
      GET  /api/fala/status   {"ativo", "provedor", "modelo", "sem_custo", "motivo", "gasto", "estatisticas"}
      POST /api/fala          {"motivo": {...}, "estagio": "...", "humor": 0.5} -> {"texto", "fonte": "llm"|"template", "detalhe", "gasto"}
-   Pedido vindo por tunel ou proxy (cabecalhos da Cloudflare e o X-Forwarded-For) leva 403, como no servidor local sem --remoto: o acesso
-   de fora e da CN5 (a borda, a conta e a cota). */
+   A borda (CN5, docs/infra/DEPLOY_CN5.md): no local (o padrao), pedido vindo por tunel ou proxy (cabecalhos da Cloudflare e o
+   X-Forwarded-For) leva 403, como no servidor local sem --remoto. Na borda "cloudflare" (a VPS, D-CONTA-197), o servidor continua so em
+   127.0.0.1 e o pedido so chega pelo Cloudflare Tunnel: o que vem sem o Cf-Ray e o Cf-Connecting-Ip leva 403, e a conta tem de ser a de
+   fora (https, sem o provedor falso). */
 import { Hono } from "hono";
 import { motivoDeDict, PedidoInvalido } from "./catalogo.ts";
 import type { ConfigConta } from "./conta/config.ts";
@@ -21,18 +23,29 @@ import { montarRotasNuvem } from "./nuvem/nuvem.ts";
 
 export const LIMITE_CORPO = 16 * 1024;
 const CABECALHOS_DE_FORA = ["cf-ray", "cf-connecting-ip", "x-forwarded-for"];
+/** os cabecalhos que o Cloudflare Tunnel sempre poe no pedido que passou pela borda */
+const CABECALHOS_DA_BORDA = ["cf-ray", "cf-connecting-ip"];
+
+/** "local": so a maquina (o padrao, a regra do servidor_web/CLAUDE.md); "cloudflare": so pelo Cloudflare Tunnel, na VPS (CN5) */
+export type Borda = "local" | "cloudflare";
+export const BORDAS: readonly Borda[] = ["local", "cloudflare"];
 
 /** `conta`: a conta (CN2, src/conta/rotas.ts) e o envio dos logs (MMO3, src/envio/rotas.ts); sem ela, o servidor é o da CN1 (a /saude e a fala) */
 /** `conferidor`: quem confere os envios (src/envio/conferidor.ts); por padrão, um worker só deste app */
-export interface Opcoes { gerador: GeradorFala; motivoInicial: string; conta?: ConfigConta; conferidor?: Conferidor }
+/** `borda`: de onde o pedido pode vir (Borda); por padrão, "local" */
+export interface Opcoes { gerador: GeradorFala; motivoInicial: string; conta?: ConfigConta; conferidor?: Conferidor; borda?: Borda }
 
-export function criarApp({ gerador, motivoInicial, conta, conferidor }: Opcoes): Hono {
+export function criarApp({ gerador, motivoInicial, conta, conferidor, borda = "local" }: Opcoes): Hono {
+  if (!BORDAS.includes(borda)) throw new Error(`borda desconhecida: ${borda} (${BORDAS.join(" ou ")})`);
+  /* o provedor falso e a /dev/conta só existem na conta local: pela borda, ficariam abertos para fora */
+  if (borda === "cloudflare" && conta?.local) throw new Error("a borda cloudflare pede a conta de fora (DIGILAB_URL_API em https://)");
   const app = new Hono();
   const json = (c: { json: (d: unknown, s?: number, h?: Record<string, string>) => Response }, codigo: number, dados: unknown) =>
     c.json(dados, codigo, { "Cache-Control": "no-store" });
 
   app.use("*", async (c, next) => {
-    if (CABECALHOS_DE_FORA.some(h => c.req.header(h))) return json(c, 403, { erro: "acesso externo so com --remoto" });
+    if (borda === "local" && CABECALHOS_DE_FORA.some(h => c.req.header(h))) return json(c, 403, { erro: "acesso externo so com --remoto" });
+    if (borda === "cloudflare" && !CABECALHOS_DA_BORDA.every(h => c.req.header(h))) return json(c, 403, { erro: "so pela borda" });
     await next();
   });
 

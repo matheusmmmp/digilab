@@ -9,9 +9,10 @@
    desenho ate ganhar export do Aseprite: o retrato do guia volta para o robozinho (Bit.tsx) e o do oraculo some (BalaoOraculo.tsx). */
 import { useEffect, useState } from "react";
 import { zoomAtual } from "./escala.ts";
+import { BASE_ASSETS } from "./baseAssets.ts";
 
-export const ATLAS_PECAS_URL = "../../../Assets/digilab_atlas_up_pecas.json";
-export const ATLAS_CLIPES_URL = "../../../Assets/digilab_atlas_up_clipes.json";
+export const ATLAS_PECAS_URL = `${BASE_ASSETS}digilab_atlas_up_pecas.json`;
+export const ATLAS_CLIPES_URL = `${BASE_ASSETS}digilab_atlas_up_clipes.json`;
 
 /** [x, y, largura, altura, deslocamento x, deslocamento y] de cada quadro dentro da caixa do sprite */
 export type Quadro = [number, number, number, number, number, number];

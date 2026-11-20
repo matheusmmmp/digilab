@@ -5,12 +5,13 @@
    fundo e a frente, no osso AAA_Digimon da cena. So apresentacao: nada daqui entra no motor, no log ou no save. */
 import type { AtlasOk, Clipe, Quadro } from "./atlas.ts";
 import { quadroDoClipe } from "./atlas.ts";
+import { BASE_ASSETS } from "./baseAssets.ts";
 
 /** Chave da cena oficial (TAREFA_V2_UP_EVOLUCAO), LIGADA pelo Matheus em 2026-11-10 ("aplica no jogo"); desligada, a Revelacao de hoje.
     E do app, nao do motor. Sem os assets (o CI), a Revelacao mostra o aviso e segue no cartao. */
 export const CENA_EVOLUCAO_UP = true;
 /** a mesma convencao do atlas: relativo a pagina em /v1/web/dist/ (no servidor local cai em /Assets/evolucao_up/) */
-export const EVOLUCAO_URL = "../../../Assets/evolucao_up/";
+export const EVOLUCAO_URL = `${BASE_ASSETS}evolucao_up/`;
 
 export type NomeCena = "adventure" | "zero2" | "tamers" | "tamers_mega" | "jogress" | "dramon";
 /** o Digimon num quadro: o de antes, o novo, nenhum; "herda" (so na revelacao) = o que a Summon deixou, continuando */

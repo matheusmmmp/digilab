@@ -5,8 +5,9 @@
    entra na lista do aviso visivel e aquele lugar fica com o visual de antes. */
 import { useEffect, useState } from "react";
 import NOMES from "../decoracao_nomes.json";
+import { BASE_ASSETS } from "./baseAssets.ts";
 
-export const DECORACAO_URL = "../../../Assets/digilab_decoracao_up.json";
+export const DECORACAO_URL = `${BASE_ASSETS}digilab_decoracao_up.json`;
 export type NomeDeco = string;
 interface PecaDeco { arquivo: string; tamanho: [number, number]; sha256: string }
 interface DecoracaoUp { versao: number; pecas: Record<NomeDeco, PecaDeco> }

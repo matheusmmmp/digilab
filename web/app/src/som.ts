@@ -8,6 +8,7 @@
 import { useSyncExternalStore } from "react";
 import { CHAVE } from "./save.ts";
 import type { EfeitoSom } from "./somEventos.ts";
+import { BASE_ASSETS } from "./baseAssets.ts";
 
 export const CHAVE_SOM = CHAVE + "-som";
 export const CHAVE_SOM_VOLUME = CHAVE + "-som-volume";
@@ -15,7 +16,7 @@ export const CHAVE_SOM_VOLUME = CHAVE + "-som-volume";
 export const CHAVE_SOM_VOL_MUSICA = CHAVE + "-som-vol-musica";
 export const CHAVE_SOM_VOL_EFEITOS = CHAVE + "-som-vol-efeitos";
 /** a mesma convencao do atlas: relativo a pagina em /v1/web/dist/ (no servidor local cai em /Assets/sons/) */
-export const SONS_URL = "../../../Assets/sons/";
+export const SONS_URL = `${BASE_ASSETS}sons/`;
 /** volume padrao ao ligar pela primeira vez (PROPOSTO, SEM FONTE) */
 export const VOLUME_PADRAO = 0.6;
 /** a musica de fundo nasce mais baixa que os efeitos (SD-6: baixa, para nao cansar). PROPOSTOS, SEM FONTE */

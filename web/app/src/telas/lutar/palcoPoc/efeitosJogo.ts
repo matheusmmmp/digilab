@@ -3,8 +3,9 @@
    (fora do repositorio): dados/efeitos.json (a grade e o tempo de cada camada) e efeitos/<Digimon>.png (a folha). O caminho relativo e o do
    atlas: a pagina em /v1/web/dist/ pede ../../../Assets/arena_up/; no dev, o vite.config.ts serve so estes arquivos.
    Se nao carregar: o palco desenha so o efeito do elemento (E2) e mostra o aviso (falhar alto, nunca calado). */
+import { BASE_ASSETS } from "../../../baseAssets.ts";
 
-export const ARENA_UP_URL = "../../../Assets/arena_up/";
+export const ARENA_UP_URL = `${BASE_ASSETS}arena_up/`;
 
 /** uma camada de um efeito: o retangulo na folha, a grade (tx x ty quadros), quantos quadros, o tempo de cada um e se repete */
 export interface CamadaEfeito { camada: string; r: [number, number, number, number]; tx: number; ty: number; n: number; ms: number; loop: boolean }
