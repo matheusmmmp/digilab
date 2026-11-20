@@ -921,3 +921,4 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-20 — CORPO: o código da C4 (o orquestrador da validação)](registro/2026-11.md)
 - [2026-11-20 — CORPO: a run da C4 (a validação do teto baixo)](registro/2026-11.md)
 - [2026-11-20 — PRODUTO: o atlas antigo sai, os sprites só do atlas de clipes (Gerente da V3, Claude Code, Opus 5.5, branch `v3-atlas-so-clipes`)](registro/2026-11.md)
+- [2026-11-20 — PET_VIVO: o plano do teste de recompensa (Claude Code, Fable 5.2, branch `v3-pet-vivo-recompensa-plano`)](registro/2026-11.md)
