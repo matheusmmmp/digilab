@@ -180,3 +180,5 @@ artifacts_v3_valuation/**/vidas/
 !artifacts_v3_social_par_e1/
 !artifacts_v3_social_par_a0/
 !artifacts_v3_social_par_s/
+# BOLA_DIAGNOSTICO (o replay R-b): as contagens da cadeia do brincar (docs/RESULTADO_V3_BOLA_DIAGNOSTICO.md)
+!artifacts_v3_bola_diagnostico/
