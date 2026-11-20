@@ -905,5 +905,6 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-19 — CORPO: a run da C3 rodada (a ponte com teto)](registro/2026-11.md)
 - [2026-11-19 — BOLA_DIAGNOSTICO: o replay R-b, por que o brincar não vira chute (Claude Code, Fable 5.2, branch `v3-bola-diagnostico`)](registro/2026-11.md)
 - [2026-11-20 — PET_VIVO: o plano do R-sono (Claude Code, Fable 5.2, branch `v3-pet-vivo-sono-plano`)](registro/2026-11.md)
+- [2026-11-20 — PET_VIVO: o código do R-sono (Claude Code, Fable 5.2, branch `v3-pet-vivo-sono-codigo`)](registro/2026-11.md)
 - [2026-11-19 — CREDITO_INTERVALO: o adendo 1, a linha de base (Claude Code, Opus 5.5, branch `v3-credito-intervalo-adendo1`)](registro/2026-11.md)
 - [2026-11-20 — CREDITO_INTERVALO: o adendo 2, o corpo (Claude Code, Opus 5.5, branch `v3-credito-intervalo-adendo1`)](registro/2026-11.md)
