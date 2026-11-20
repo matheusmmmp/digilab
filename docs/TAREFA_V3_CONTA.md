@@ -157,3 +157,20 @@ prancha `docs/pranchas/ux-conta-nuvem/` (UX-NV-1 a 6 APROVADAS em 2026-11-20). B
 - **O que falta:** o registro no armazenamento de objetos e o deploy (CN5); o grupo dos dois pets sem teste próprio; o sprite e a abertura
   só-para-ver das histórias em Gerações; o revisor de acessibilidade; as capturas a 1920 e 390 das telas no jogo; a velocidade do tempo ao
   abrir noutro aparelho (D-CONTA-38).
+
+## A CN5: a hospedagem de teste, a parte do código (2026-11-20)
+
+O código e o roteiro, sem contratar nada (a seção 6: contratar é do Matheus). O roteiro, com a ordem do que contratar, os segredos, a VPS, o
+backup, os assets, o deploy e os preços do dia, está em `docs/infra/DEPLOY_CN5.md`. As decisões D-CONTA-197 a 205 estão em
+`docs/registro/2026-11.md`, todas PROPOSTAS.
+
+- **O servidor:** a borda `cloudflare` (`--borda`, `DIGILAB_BORDA`): só em `127.0.0.1`, só o pedido que passou pelo Cloudflare Tunnel, e a
+  conta local não sobe (`servidor_web/src/app.ts`, `test/borda.test.ts`). Sem a opção, a regra de sempre.
+- **A VPS** (`servidor_web/deploy/`): o systemd do servidor e do Litestream, a `litestream.yml` para o R2, os modelos dos `.env` (só os
+  nomes), o `instalar.sh` (o Node e o Litestream conferidos por sha256, o `cloudflared`, o `ufw`), o `publicar.sh` (volta a versão se a
+  `/saude` não responder) e o `restaurar.sh` (o ensaio e a restauração de verdade).
+- **O jogo:** os assets por `src/baseAssets.ts` (`VITE_DIGILAB_ASSETS`; sem ela, o de sempre) e o envio ao R2 pela máquina do Matheus
+  (`web/app/scripts/publicar_assets.ts`, com a assinatura SigV4 em `scripts/r2.ts`, conferida com o exemplo da AWS).
+- **O CI:** `.github/workflows/publicar.yml`, desligado até a variável `DIGILAB_PUBLICAR = sim`: o servidor pelo SSH, depois o jogo no Pages.
+- **O que falta:** o Matheus contratar e configurar (seção 2 do roteiro); o ensaio da restauração antes do primeiro convidado; o aviso da
+  RC-7; as URLs assinadas (CN4); o Sentry (D-CONTA-200).
