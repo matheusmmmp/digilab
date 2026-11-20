@@ -51,7 +51,8 @@ from dataclasses import dataclass
 GATILHOS_TICK = ("tick", "acordado", "dormindo", "noite_acordado", "dia_acordado", "sujeira", "privacao", "sem_privacao", "limiar",
                  "necessidades", "acima",      # banheiro: por necessidade na regiao (fase 1); um quimico acima do limiar (fase 2)
                  "abaixo",                     # metabolismo: um quimico abaixo do limiar (fase 2), o espelho do "acima"
-                 "tela_acima")                 # a tela (P1b): o estimulo da tela acima do corte (fase 2), sem ler quimico
+                 "tela_acima",                 # a tela (P1b): o estimulo da tela acima do corte (fase 2), sem ler quimico
+                 "companhia")                  # o SOCIAL_PAR M2: acordado e com outro pet em contato (fase 1), sem ler quimico
 LADOS_REACAO = ("acima", "abaixo")           # o lado do limiar de uma reacao com limiar (a transferencia do metabolismo)
 GATILHOS = GATILHOS_TICK + ("estimulo",)
 LEITURAS_RECEPTOR = ("drive", "falta")       # drive: S - div_arred(q S, C) (os drives de hoje); falta: div_arred(q S, C)
@@ -222,6 +223,8 @@ def _forma(g: Grafo) -> None:
             raise GrafoInvalido(f"{e.nome}: efeitos {e.efeitos!r}")
         if e.gatilho == "limiar" and not (e.le and e.divisor > 1):
             raise GrafoInvalido(f"{e.nome}: o gatilho limiar precisa de leituras e de divisor > 1")
+        if e.gatilho == "companhia" and not (not e.le and e.fase == 1 and not e.variavel):     # o SOCIAL_PAR M2: sem ler quimico
+            raise GrafoInvalido(f"{e.nome}: a companhia e da fase 1 e nao le quimico (sem laco entre os corpos)")
         if e.gatilho == "acima" and not (len(e.le) == 1 and e.divisor == 1 and e.fase == 2):
             raise GrafoInvalido(f"{e.nome}: o gatilho acima le um quimico so, sem divisor, na fase 2")
         for le in e.le:

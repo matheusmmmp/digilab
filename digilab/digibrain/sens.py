@@ -48,13 +48,24 @@ receptor, se o corpo o manda, fica fora dos `receptores` e ninguem o le (como o 
     `tau_hab_subida` quando o alvo sobe e da `tau_hab_volta` quando cai (o conceito apagado tem alvo 0);
   - o gosto por conceito (OV1-9), todo aprendido, em [-teto, teto]: so quando o pet olhou, a exposicao `mul(k_expo, mul(a_c, nov_c))` e a
     consequencia `mul(k_consequencia, mul(a_c, r_n))` (`expor_conceitos`);
-  - o termo no agrado, `termo_conceitos(conceitos) = sum_c div_arred(a_c x g_c x nov_c, S x S)` (o M-ADAPT o soma ao agrado da retina)."""
+  - o termo no agrado, `termo_conceitos(conceitos) = sum_c div_arred(a_c x g_c x nov_c, S x S)` (o M-ADAPT o soma ao agrado da retina).
+
+**O outro** (SOCIAL_PAR M1; docs/ESPEC_SOCIAL_PAR_M1.md, secao 3.2; so com a subchave `unidades_sociais`, `Sens(..., social=True)`): da
+percepcao social (`obs.social`, a `PercepcaoSocial` do grupo) o M-SENS le so os `outros` e o `onde_comeu` (o G-RECEPTOR-SOCIAL: nada da
+reputacao, do peso dos deveres, dos sentidos nem do motor do outro), em duas listas:
+  - `outros`: um por outro a vista, na ordem da percepcao (d, depois id): o id, a posicao absoluta (a do pet mais o dx, dy, a mesma conta do
+    candidato `seguir` do motor), o d, a proximidade da linha de objeto e a acao visivel;
+  - `onde_comeu`: um por outro visto comendo, na ordem de id: o id, o ponto (o do candidato `onde_comeu` do motor), o d ate ele (a mesma
+    distancia do motor, a raiz inteira), a proximidade e a idade.
+A classe de cada linha e o tipo da unidade (`seguir`, `onde_comeu`). O pet sozinho (`obs.social` None): as duas listas vazias. Desligada,
+nenhum campo novo. Sem estado."""
 from __future__ import annotations
 
 from dataclasses import fields
 
 from ..config import (CANAIS_TELA, CONFIG_DIGIBRAIN_INATOS, RECEPTORES_DIGIBRAIN, TICKS_POR_DIA, Config, ConfigDigibrainInatos,
                       ConfigEnjooTela, ConfigMundo, ConfigOlhar)
+from ..modelo_mundo import raiz_inteira
 from .. import orgao as _orgao
 from ..genoma_visao import GenomaVisao
 from .base import div_arred, falta_receptor, leitura_receptor
@@ -96,8 +107,12 @@ class Sens:
     """o M-SENS (docstring do modulo)"""
 
     def __init__(self, cfg: Config, cfg_mundo: ConfigMundo, inatos: ConfigDigibrainInatos | None = None,
-                 olhar: ConfigOlhar | None = None, genoma: GenomaVisao | None = None, enjoo: ConfigEnjooTela | None = None) -> None:
+                 olhar: ConfigOlhar | None = None, genoma: GenomaVisao | None = None, enjoo: ConfigEnjooTela | None = None,
+                 social: bool = False) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
+        if type(social) is not bool:
+            raise TypeError(f"M-SENS: social e bool: {social!r}")
+        self.le_outro = social                        # o SOCIAL_PAR M1: so com a subchave `unidades_sociais`
         self.S = self.p.escala
         self.cfg = cfg
         self.raio = cfg_mundo.raio_visao_celulas * cfg_mundo.sub
@@ -333,6 +348,33 @@ class Sens:
             out.append({"rival": r["rival"], "resultado": r["resultado"], "vida_perdida_s": r["vida_perdida_s"], "tick": r["tick"]})
         return out
 
+    def ler_outros(self, ps, pos: tuple) -> tuple[list[dict], list[dict]]:
+        """o outro (SOCIAL_PAR M1; a docstring do modulo): as listas `outros` e `onde_comeu` da percepcao social `ps` (None: o pet
+        sozinho), com o pet em `pos`. So le `ps.outros` e `ps.onde_comeu` (o G-RECEPTOR-SOCIAL, conferido pela AST)"""
+        if ps is None:
+            return [], []
+        x, y = pos
+        outros = []
+        for item in ps.outros:
+            if type(item) not in (tuple, list) or len(item) != 5:
+                raise ValueError(f"M-SENS: outro malformado (id, dx, dy, d, acao): {item!r}")
+            ident, dx, dy, d, acao = item
+            if type(ident) is not str or any(type(v) is not int for v in (dx, dy, d)) or d < 0 or type(acao) is not str:
+                raise ValueError(f"M-SENS: outro malformado (id, dx, dy, d, acao): {item!r}")
+            outros.append({"id": ident, "classe": "seguir", "x": x + dx, "y": y + dy, "d": d, "prox": self.proximidade(d), "acao": acao})
+        comeu = []
+        for item in ps.onde_comeu:
+            if type(item) not in (tuple, list) or len(item) != 4:
+                raise ValueError(f"M-SENS: onde_comeu malformado (id, x, y, idade): {item!r}")
+            ident, cx, cy, idade = item
+            if type(ident) is not str or any(type(v) is not int for v in (cx, cy, idade)) or idade < 0:
+                raise ValueError(f"M-SENS: onde_comeu malformado (id, x, y, idade): {item!r}")
+            d = raiz_inteira((cx - x) * (cx - x) + (cy - y) * (cy - y))
+            comeu.append({"id": ident, "classe": "onde_comeu", "x": cx, "y": cy, "d": d, "prox": self.proximidade(d), "idade": idade})
+        if len({o["id"] for o in outros}) != len(outros) or len({o["id"] for o in comeu}) != len(comeu):
+            raise ValueError(f"M-SENS: dois itens do mesmo outro na percepcao social: {ps.outros!r} {ps.onde_comeu!r}")
+        return outros, comeu
+
     def ligar_dever(self, cfg, sub: int) -> None:
         """a CO7 (docs/ESPEC_V3_COOPERACAO_CO7.md): a percepcao social em posicoes absolutas vai ao `sens["social"]` (digibrain/dever.py), com
         a posicao em que o pet viu cada outro na decisao anterior em que o via (o estado novo)"""
@@ -404,6 +446,8 @@ class Sens:
                 raise RuntimeError("M-SENS: o PV-2 ligado e o mundo mandando a direcao do cheiro (o motor sem a ConfigOlfato da comida?)")
             out["olfato"] = self._ler_olfato(pc)
             out["ha_cheiro"] = out["olfato"]["ha"]
+        if self.le_outro:                              # o SOCIAL_PAR M1: desligada, nenhum campo novo
+            out["outros"], out["onde_comeu"] = self.ler_outros(getattr(obs, "social", None), (pm.x, pm.y))
         if lutas is not None:                          # a ponte da luta (PE2): desligada, nenhum campo novo
             out["lutas"] = self.resumir_lutas(lutas)
         if self.dever is not None:                     # a CO7: desligada, nenhum campo novo

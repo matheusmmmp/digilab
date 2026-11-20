@@ -77,7 +77,7 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 
 from .config import CONFIG_CORPO, CONFIG_LUTA_CORPO, CONFIG_OLFATO, CONFIG_OUVIDO, ConfigCorpo, ConfigLutaCorpo, ConfigOlfato, ConfigOuvido
-from .config import (CONFIG_ACOPLAMENTO_CORPO, CONFIG_DIGESTAO_CORPO, CONFIG_ENJOO_TELA, CONFIG_TELA, CONFIG_TETO_FOME_CORPO, ConfigTetoFomeCorpo, ConfigAcoplamentoCorpo, ConfigDigestaoCorpo,
+from .config import (CONFIG_ACOPLAMENTO_CORPO, CONFIG_COMPANHIA, CONFIG_DIGESTAO_CORPO, CONFIG_ENJOO_TELA, CONFIG_TELA, CONFIG_TETO_FOME_CORPO, ConfigTetoFomeCorpo, ConfigAcoplamentoCorpo, ConfigCompanhia, ConfigDigestaoCorpo,
                      ConfigEnjooTela, ConfigTela)
 from .corpo import ATIVIDADE_TELA, DRIVE_DO_QUIMICO, RECEPTOR_NOVIDADE_TELA, Corpo, grafo_do_corpo, taxas_de
 from .corpo_grafo import checar
@@ -166,10 +166,16 @@ class MotorCorpo:
                  cfg_ouvido: ConfigOuvido | None = None, troca_digestao: tuple[int, int] | None = None,
                  cfg_luta_corpo: ConfigLutaCorpo | None = None, cfg_tela: ConfigTela | None = None,
                  cfg_enjoo_tela: ConfigEnjooTela | None = None, cfg_acoplamento_corpo: ConfigAcoplamentoCorpo | None = None,
-                 cfg_digestao_corpo: ConfigDigestaoCorpo | None = None, cfg_teto_fome_corpo: ConfigTetoFomeCorpo | None = None,
-                 **kw) -> None:
+                 cfg_digestao_corpo: ConfigDigestaoCorpo | None = None, cfg_companhia: ConfigCompanhia | None = None,
+                 cfg_teto_fome_corpo: ConfigTetoFomeCorpo | None = None, **kw) -> None:
         super().__init__(*a, **kw)
         self.cc = cfg_corpo or CONFIG_CORPO
+        self.ccp = cfg_companhia or CONFIG_COMPANHIA   # o SOCIAL_PAR M2: a companhia no corpo; o grupo conta o contato a cada tick
+        if not isinstance(self.ccp, ConfigCompanhia):
+            raise TypeError(f"cfg_companhia e uma ConfigCompanhia: {self.ccp!r}")
+        if self.ccp.ligada and not (self.cc.ligada and self.cc.drives_novos):
+            raise ValueError("ConfigCompanhia.ligada sem o corpo com a solidao (ConfigCorpo.ligada e drives_novos)")
+        self._companhia: int | None = None            # a contagem do tick, entregue pelo grupo (None: nao entregue)
         self.cac = cfg_acoplamento_corpo or CONFIG_ACOPLAMENTO_CORPO   # CORPO_ACOPLAMENTO, a opcao D; o Corpo confere
         if not isinstance(self.cac, ConfigAcoplamentoCorpo):
             raise TypeError(f"cfg_acoplamento_corpo e uma ConfigAcoplamentoCorpo: {self.cac!r}")
@@ -212,11 +218,11 @@ class MotorCorpo:
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=True, cfg_olfato=self.co,
                                          cfg_ouvido=self.cv, cfg_luta=self.cll, cfg_tela=self.ctl, cfg_enjoo_tela=self.cet,
                                          cfg_acoplamento=self.cac, cfg_digestao=self.cdgc,
-                                         cfg_teto_fome=self.ctfc)
+                                         cfg_companhia=self.ccp, cfg_teto_fome=self.ctfc)
         elif self.cc.drives_novos or self.cc.paladar:  # etapa 6: a curiosidade so existe com o mundo fisico (CD-8); o paladar exige o mundo
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, com_mundo=self._mundo_ligado(),
                                          cfg_luta=self.cll, cfg_tela=self.ctl, cfg_enjoo_tela=self.cet, cfg_acoplamento=self.cac, cfg_digestao=self.cdgc,
-                                         cfg_teto_fome=self.ctfc)
+                                         cfg_companhia=self.ccp, cfg_teto_fome=self.ctfc)
         else:
             self.corpo = Corpo.de_estado(self._estado, self.cfg, self.cc, self._cfg_evo, cfg_luta=self.cll, cfg_tela=self.ctl, cfg_enjoo_tela=self.cet,
                                          cfg_acoplamento=self.cac, cfg_digestao=self.cdgc,
@@ -318,12 +324,24 @@ class MotorCorpo:
         antiga = self.cc.taxa_digestao
         cc = replace(self.cc, taxa_digestao=nova)
         corpo = self.corpo
-        grafo = grafo_do_corpo(corpo.cfg, cc, taxas_de(corpo.cfg, cc), corpo.com_mundo, corpo.co, corpo.cv, corpo.ct, corpo.ca)
+        grafo = grafo_do_corpo(corpo.cfg, cc, taxas_de(corpo.cfg, cc), corpo.com_mundo, corpo.co, corpo.cv, corpo.ct, corpo.ca, corpo.ccp)
         if grafo.nomes != corpo.quimicos:             # pragma: no cover - a taxa nao muda os quimicos
             raise RuntimeError("a troca da digestao mudou os quimicos do corpo")
         corpo.cc, corpo.t, corpo.grafo, corpo.relato_grafo = cc, taxas_de(corpo.cfg, cc), grafo, checar(grafo)
         self.cc = cc
         self.troca_digestao = {"tick": self._estado.tick, "tick_pedido": tick_pedido, "de": antiga, "para": nova}
+
+    def _companhia_do_tick(self) -> int:
+        """a contagem da companhia deste tick (o SOCIAL_PAR M2), entregue pelo grupo e zerada depois de usada. Sem o grupo (o pet
+        sozinho), 0. Num grupo, um tick sem a entrega falha alto (um erro de ordem)."""
+        n, self._companhia = self._companhia, None
+        if getattr(self, "_grupo", None) is None:
+            if n is not None:
+                raise RuntimeError("a companhia entregue a um pet fora do grupo")
+            return 0
+        if n is None:
+            raise RuntimeError("o tick do corpo num grupo sem a contagem da companhia (a ConfigCompanhia ligada)")
+        return n
 
     def _orgaos_ligados(self) -> bool:
         return self.co.ligada or self.cv.ligada
@@ -417,10 +435,11 @@ class MotorCorpo:
             self._sentir()                            # os orgaos: o estimulo deste tick (a adaptacao anda para ele no passo)
             if self._tela_ligada():
                 self._novidade_tela()                 # a TV (P1c, GV-23): a novidade pelo corte, com o estimulo deste tick
+            kw_comp = {"companhia": self._companhia_do_tick()} if self.ccp.ligada else {}     # o SOCIAL_PAR M2 (desligada: nada)
             if self.cc.banheiro:
-                self.corpo.passo(antes, necessidades=self.necessidades_na_zona())   # o banheiro: as necessidades na zona do pet
+                self.corpo.passo(antes, necessidades=self.necessidades_na_zona(), **kw_comp)   # o banheiro: as necessidades na zona
             else:
-                self.corpo.passo(antes)
+                self.corpo.passo(antes, **kw_comp)
             # o tick e a sujeira de hoje (a mesma rng, na mesma ordem); os drives float dele sao trocados pela leitura
             self._estado = self.corpo.no_estado(avancar_um_tick(antes, self.cfg, self._rng_ambiente))
             if self.cc.vida and self._cfg_evo is not None:

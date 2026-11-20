@@ -1,0 +1,70 @@
+{
+ "par|B1|101": {
+  "cerebros": {
+   "A": "9ebda533163bec10973ac01ad72a3160e9bdf0b55a9d32b3371aa3dd942d97ca",
+   "B": "11bf1e63f8550f8f22a6be8297333226184b32f3a553bbfed96b1df916e3d164"
+  },
+  "decisoes": {
+   "A": 480,
+   "B": 480
+  },
+  "posicoes": "ca239c3eaf611905db88d83824a5ab308e2527af56e07949279915d885ea9707",
+  "registro": "4555c81cfba85f8a1895325b385e8f0364dea296b513b4ae6c6048c252c3ce02",
+  "t0": 1560,
+  "tick": 7200
+ },
+ "par|B1|202": {
+  "cerebros": {
+   "A": "d12c98ed6dd4d04d66979f625b9b080819ce002c2026c29d46a537f0aa3dda9c",
+   "B": "ee5c90d7e2440c8394722f820df07bc3dcb23c564bacc487c93f0bf4a5467a9a"
+  },
+  "decisoes": {
+   "A": 480,
+   "B": 480
+  },
+  "posicoes": "54f9fad962aa0d2ee1456c38102ced2ada4cc7a573a5793fba44a6e559ddf272",
+  "registro": "c6a480384317d16f74f3dc4f714d284efd922b2925fec3ded8c22a0838c1fd75",
+  "t0": 2280,
+  "tick": 7200
+ },
+ "par|C|101": {
+  "cerebros": {
+   "A": "3d434707eaa9633e12bd27410369319411f0d9f234c9d516442f78dc2685afe4",
+   "B": "869284cd5d526689c379da256f3255ba17e53f55bd808c3ca3b554d1bee01f4e"
+  },
+  "decisoes": {
+   "A": 480,
+   "B": 480
+  },
+  "posicoes": "811b6e8696394e255e61932b6fbcba6e3e8befb98c56bde7bc7bcc98557a4990",
+  "registro": "ff51fe780bcb2be96a49d8985fef3dbfa171384e8ed8d461b71aed9786888778",
+  "t0": 1560,
+  "tick": 7200
+ },
+ "par|C|202": {
+  "cerebros": {
+   "A": "757497dc029056862d6e78742756dc538461085d550c8c7b285da9f6d5f9fd97",
+   "B": "262c4b76abb45916d9f1977f4a009d0d0d15c4676e18057ea5c81206fcb64f7b"
+  },
+  "decisoes": {
+   "A": 480,
+   "B": 480
+  },
+  "posicoes": "14e9e92b5a1b21cbf46ff5c48f455cf130fad7e0c197e916551a487342ef8c68",
+  "registro": "7ff4ac40be07fcc61ee460ce1467d09be29e5bb564cf19fc040efec6ff6cd982",
+  "t0": 2280,
+  "tick": 7200
+ },
+ "sozinho|101": {
+  "cerebro": "eeb2e7dd12a9a202638548215262456de4d4b44b6239de1ee4ed91c33524ecb1",
+  "decisoes": 288,
+  "estado": "5da2836bb665c46bedb07cbefaa5e38bc6b0477f5d30117692c38a023b7e874f",
+  "log": "a1bf36cdfcae94a7e4e5fbb6627be8ae4fd5a9baeb3cececb6adde1f91c84301"
+ },
+ "sozinho|202": {
+  "cerebro": "74e14e4f5208045d0a94be6f2905457f0e2e8d935ae3e084fb8dfdf5b88cdff8",
+  "decisoes": 288,
+  "estado": "20d32e9afc0c0e79ca99606f5e77ecdfd10fe3d75dfe1affbcf247ab324298ff",
+  "log": "5302a8c26c1b5809cd835369ff5d1f89e0d84fae62cc3bc7d5012652347fd77b"
+ }
+}

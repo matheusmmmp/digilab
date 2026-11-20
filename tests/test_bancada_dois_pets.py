@@ -90,6 +90,9 @@ BASES = {
     # a SOCIAL_PAR S (PLANO_ANALISE_V3_SOCIAL_PAR_S, secao 4; experiments/run_v3_social_par_s.py)
     "social_par_s": {"run": tuple(range(103001, 103201))},
     "social_par_s_det": {"det": tuple(range(103301, 103351))},
+    # a SOCIAL_PAR MD (PLANO_ANALISE_V3_SOCIAL_PAR_MD, secao 5; experiments/run_v3_social_par_md.py)
+    "social_par_md": {"run": tuple(range(105001, 105201))},
+    "social_par_md_det": {"det": tuple(range(105301, 105351))},
 }
 NOVAS = {(43101, 43505): "calibracao e piloto", (44101, 44505): "validacao"}
 K_UNIDADES = 40

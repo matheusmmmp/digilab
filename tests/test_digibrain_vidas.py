@@ -180,6 +180,8 @@ def test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain():
                                                                              "experiments/run_v3_conversa_dc3.py", "experiments/exportar_gabarito_fala_unidades.py",
                                                                              # a SOCIAL_PAR A0 (o plano, 3.1): o pet de hoje, o modular com a CO7, montado pelo orquestrador
                                                                              "experiments/run_v3_social_par_a0.py", "experiments/run_v3_corpo.py", "experiments/run_v3_corpo_c3.py", "experiments/run_v3_corpo_acoplamento.py",
+                                                                             # a SOCIAL_PAR MD1: o orquestrador da medida monta os bracos do M1 e do M2
+                                                                             "experiments/run_v3_social_par_md.py",
                                                                              # os que ja citavam o pacote e faltavam aqui (o teste falhava na main, D-CO6b-4): o GOSTO_VISUAL
                                                                              # (P1e, P1f) e a DC4a
                                                                              "experiments/run_v3_gosto_visual.py", "experiments/exportar_gosto_visual.py", "experiments/exportar_gabarito_corpo_chaves.py",
