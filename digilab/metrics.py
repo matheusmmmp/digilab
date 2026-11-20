@@ -2120,6 +2120,21 @@ def tempo_bem_nas_decisoes(decisoes: Sequence[tuple[int, float, float, float]], 
     return {"n": len(sel), "frac": bem / len(sel), "frac_privacao": privacao / len(sel), "frac_exaustao": exaustao / len(sel)}
 
 
+def fome_nas_decisoes(decisoes: Sequence[tuple[int, float]], janela: tuple[int, int], limiar: float = 0.5) -> dict:
+    """A fome do pet nas decisoes da janela (o descritivo da C4 acrescentado depois da aprovacao; docs/RESULTADO_V3_CORPO_C4.md):
+    `decisoes` = (tick, fome) no tick de cada decisao, na escala 0-1 da `Observacao`, em que 1 e saciado. A fome aqui e o
+    complemento, 1 - fome da `Observacao` (a fracao do quimico da fome sobre a capacidade). Devolve a fome media e a fracao das
+    decisoes com a fome acima de `limiar` (0,5 = o teto C/2 do braco DTB), isto e, com a `Observacao` abaixo de 1 - `limiar`.
+    Falha alto sem decisao."""
+    ini, fim = _checar_janela(janela)
+    if not 0.0 <= limiar <= 1.0:
+        raise ValueError(f"limiar fora de [0, 1]: {limiar!r}")
+    sel = [_escala01("fome", f) for t, f in decisoes if ini <= t < fim]
+    if not sel:
+        raise ValueError("fome sem decisao na janela")
+    return {"n": len(sel), "media": 1.0 - sum(sel) / len(sel), "frac_acima": sum(1 for f in sel if f < 1.0 - limiar) / len(sel)}
+
+
 # --- o prototipo do DigiBrain modular (docs/PLANO_ANALISE_V2_DIGIBRAIN_MODULAR_PROTOTIPO.md, secao 4; PROPOSTAS na etapa 1a)
 MODULOS_SONDA = ("incentivo", "habito", "memoria", "persistencia", "afeto")    # as sondas "quem decidiu" da espec, secao 7
 

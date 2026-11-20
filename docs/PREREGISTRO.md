@@ -33,7 +33,7 @@ link para o plano commitado.
 | [PR-BASELINE](#pr-baseline--o-modular-contra-a-baseline-trivial) | o modular contra a baseline trivial | negativo ("< 0") | não |
 | [PR-ABLACAO](#pr-ablacao--a-ablação-do-aprendizado-no-jogo) | a ablação do aprendizado no jogo | "muda" | não |
 | [PR-CORPO-C3](#pr-corpo-c3--a-ponte-com-teto) | a ponte com teto (CORPO C3) | DTB "ganho", DTL "perda" | não |
-| [PR-CORPO-C4](#pr-corpo-c4--a-validação-do-teto-baixo) | a validação do teto baixo (CORPO C4) | ainda não rodou | não |
+| [PR-CORPO-C4](#pr-corpo-c4--a-validação-do-teto-baixo) | a validação do teto baixo (CORPO C4) | "confirma com ressalva" (a célula do aleatório no comedouro) | não |
 | [PR-SOCIAL-PAR-S](#pr-social-par-s--o-substrato-do-social) | o substrato do social (S3) | "nulo com um instrumento que vê" nos três braços | não |
 | [PR-SOCIAL-PAR-MD](#pr-social-par-md--a-medida-do-m1-e-do-m2) | a medida do M1 e do M2 | a rodar | não |
 
@@ -207,7 +207,7 @@ a run rodou (`f720d684`). O que vale como registro anterior é o plano, no commi
 
 ## PR-CORPO-C4 — a validação do teto baixo
 
-Escrita antes da run (2026-11-20, Claude Code, Fable 5.2). O resultado e os artefatos entram aqui depois dela.
+Escrita antes da run (2026-11-20, Claude Code, Fable 5.2). As linhas "resultado" e "artefatos" entraram depois dela, no mesmo dia; as outras não mudaram.
 
 | campo | valor |
 |---|---|
@@ -220,8 +220,8 @@ Escrita antes da run (2026-11-20, Claude Code, Fable 5.2). O resultado e os arte
 | regra de parada | "A run roda uma vez. Nada se ajusta olhando para ela" (seção 4); "não confirma" ou "indeterminado" fica registrado e a run não se repete (seção 9) |
 | o que refutaria | pela regra de leitura: a primária "≈ 0" ou "< 0" nas 12 ou nas 11 células, ou "> 0" sem o p; ou alguma guarda reprovando |
 | já visto antes da run | o "Tempo bem" nas vidas da C3, que escolheu o braço: DTB − CTRL +0,062 [+0,058; +0,066] nas 12 células ([`artifacts_v3_corpo/c3_tempo_bem/`](../artifacts_v3_corpo/c3_tempo_bem/)); e a contagem nas sementes dos testes (seção 5.2) |
-| resultado | a run ainda não rodou |
-| artefatos | `artifacts_v3_corpo/c4/`, depois da run |
+| resultado | [RESULTADO_V3_CORPO_C4.md](RESULTADO_V3_CORPO_C4.md): **"confirma com ressalva"**. A primária "> 0" nas 12 células (+0,062 [+0,058; +0,067]) e nas 11 (+0,064 [+0,059; +0,068]), com p ≤ 0,025; nenhuma das sete guardas reprova; todas as premissas se cumprem; a saúde cai na célula do aleatório no comedouro (−0,049 [−0,061; −0,038]). As três hipóteses confirmam. O replay da fome (`artifacts_v3_corpo/c4_fome/`) é um descritivo acrescentado depois da aprovação e fora desta regra de leitura |
+| artefatos | [`artifacts_v3_corpo/c4/`](../artifacts_v3_corpo/c4/): `meta.json`, `resultado.json` `136c3048…`, `medidas.json` `c20881a8…`, `pares.json` `7cae1e19…`, `custos.json`, `vidas.tar.gz` `aabebacc…`, `pares.tar.gz` `35fc3804…`; run no commit `64a25595` |
 
 ## PR-REPLICACAO-C4 — a réplica da C4
 
