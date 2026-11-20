@@ -774,3 +774,19 @@
 :root[data-pele="estencil"] .pet-alerta .chamado.dl-card{ gap:8px 12px; padding:14px 14px 10px }
 /* no celular, as acoes 5 px mais baixas */
 @media (max-width:899px){ :root[data-pele="estencil"] .app--pet .pet-dock{ bottom:calc(25px + env(safe-area-inset-bottom, 0px)) } }
+
+/* ############################################################################################################################
+   22. A REVISAO 5 (sessao revisora, 2026-11-20): 62 de 73 iguais; sobrou o espacamento de dentro do DigiBrain. E o topo dos
+   paineis alinhado com o trilho (y 98), que ela recomendou.
+   ############################################################################################################################ */
+:root[data-pele="estencil"] .scan .scan-in.scan-cx{ padding:4px 10px 10px }
+:root[data-pele="estencil"] .scan .scan-topo{ margin-bottom:7px }
+:root[data-pele="estencil"] .scan .scan-corpo{ gap:10px }
+:root[data-pele="estencil"] .scan .scan-faixa{ height:51px }
+@media (min-width:900px){
+  :root[data-pele="estencil"] .painel-tela--lugar-lado, :root[data-pele="estencil"] .painel-tela--lugar-lado.painel-tela--ajustes{ top:calc(var(--casca-topo) + 34px) }
+  :root[data-pele="estencil"] .painel-tela--lugar-lado.painel-tela--d-crescer{ max-height:calc(100dvh - var(--casca-topo) - 46px) }
+  :root[data-pele="estencil"] .painel-tela--lugar-lado:not(.painel-tela--d-crescer){ max-height:calc(100dvh - var(--casca-topo) - 50px) }
+  /* Ajustes acaba 14 px acima das acoes de baixo, e a lista rola por dentro */
+  :root[data-pele="estencil"] .painel-tela--lugar-lado.painel-tela--ajustes{ max-height:calc(100dvh - var(--casca-topo) - 140px) }
+}
