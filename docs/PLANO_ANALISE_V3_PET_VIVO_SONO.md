@@ -1,8 +1,9 @@
 # PLANO DE ANÁLISE V3 — PET_VIVO, R-sono: o sono vem do reflexo ou do sorteio? (2026-11-20, Claude Code, Fable 5.2)
 
-**Status: PROPOSTO.** As decisões SN-1 a SN-5 da seção 9 estão abertas. Os cortes são PROPOSTOS e SEM FONTE. **Nenhum replay e
-nenhuma conta deste plano rodam antes de quatro coisas:**
-1. a marca "APROVADO pelo Matheus" neste cabeçalho;
+**Status: APROVADO pelo Matheus em 2026-11-20.** À pergunta "Aprova o plano do R-sono e as SN-1 a SN-5 pela recomendação?", nesta
+sessão, a resposta foi "Aprovo todas" (D-SN-4). As decisões SN-1 a SN-5 da seção 9 estão DECIDIDAS pela recomendação. Os cortes
+seguem SEM FONTE. **Nenhum replay e nenhuma conta deste plano rodam antes de quatro coisas:**
+1. a marca "APROVADO pelo Matheus" neste cabeçalho (feita acima);
 2. o código da seção 7 na `main`, com os testes dele;
 3. o `pre_run` respondendo "pode rodar" (uma run por vez: a CORPO pode rodar a conferência do "Tempo bem" nas vidas da C3);
 4. as conferências da seção 3, que falham alto antes de qualquer medida.
@@ -161,7 +162,7 @@ descritiva: uma folga pequena sugere que pouca recompensa basta, mas só o teste
 - **A vez:** uma run por vez, até 4 processos (V3-D8). O `pre_run` é o gate; o R-sono não roda junto com a conferência do "Tempo
   bem" da CORPO.
 
-## 9. As decisões com o Matheus (PROPOSTAS)
+## 9. As decisões com o Matheus (DECIDIDAS pela recomendação em 2026-11-20, "Aprovo todas"; D-SN-4)
 
 | nº | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|

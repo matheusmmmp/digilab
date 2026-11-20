@@ -321,7 +321,8 @@ uma vez, 33 min com 4 processos, sobre as mesmas 5 120 vidas do R1. O resultado 
 
 O pedido do Matheus à gerência da V3 (2026-11-20, "Sim, pede o replay do sono"), repassado pela sessão coordenadora: antes do R2,
 medir nas vidas gravadas por qual caminho o pet dorme. O plano está em
-[PLANO_ANALISE_V3_PET_VIVO_SONO.md](PLANO_ANALISE_V3_PET_VIVO_SONO.md), **PROPOSTO**. Nada rodou e nenhum código mudou.
+[PLANO_ANALISE_V3_PET_VIVO_SONO.md](PLANO_ANALISE_V3_PET_VIVO_SONO.md), **APROVADO pelo Matheus em 2026-11-20** ("Aprovo todas", D-SN-4). Nada rodou e
+nenhum código mudou.
 
 - **O fato do código, conferido:** abaixo de `lambda_sono` (S/4) o reflexo escolhe o dormir sem sorteio e sem ler nenhum peso; só o
   dormir que passa pelos pesos é alcançável pela recompensa.
@@ -330,5 +331,5 @@ medir nas vidas gravadas por qual caminho o pet dorme. O plano está em
 - **A fonte:** as mesmas 5 120 vidas do R1 e do R-a, rejogadas. Nenhuma vida nova e nenhuma faixa nova.
 - **O desfecho esperado, escrito antes:** "boa parte passa pelo sorteio" (de 0,56 a 0,69 nas sementes dos testes).
 - **O pré-registro** (`PR-PET-VIVO-SONO`) entra com o plano, antes da run.
-- **Desvios:** D-SN-1 a D-SN-3.
-- **Próximo:** a decisão do Matheus sobre o plano e as SN-1 a SN-5; depois o PR do código e o replay, uma vez.
+- **Desvios:** D-SN-1 a D-SN-4.
+- **Próximo:** o PR do código e o replay, uma vez.
