@@ -314,5 +314,5 @@ uma vez, 33 min com 4 processos, sobre as mesmas 5 120 vidas do R1. O resultado 
 - **As hipóteses:** a H-ALÉM e a H-ESTADO saem como previsto; a H-MÓVEL não se confirma (a média móvel curta não apaga o sono).
 - **O que o plano do R2 recebe:** o R2 se reduz a ensinar o valor de dormir (a tarefa CREDITO_INTERVALO). O R-a não separa uma
   linha de base melhor entre as cinco.
-- **Desvios:** D-RB-9 a D-RB-12.
+- **Desvios:** D-RB-9 a D-RB-13.
 - **Próximo:** nada nesta frente. O TS do rastro, depois da LZ3.
