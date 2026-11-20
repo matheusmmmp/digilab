@@ -737,3 +737,23 @@
   :root[data-pele="estencil"] .painel-tela--lugar-folha .trn2-tela > .lg-destaque::before{ top:9px }
   :root[data-pele="estencil"] .painel-tela--lugar-folha .lg-destaque :is(.trn2-estado, .lg-grande){ font-size:24px }
 }
+
+/* ############################################################################################################################
+   20. A REVISAO 3 (sessao revisora, 2026-11-20): 60 de 73 iguais, nenhuma peca diferente; sobraram cinco margens (6 a 22 px).
+   ############################################################################################################################ */
+@media (min-width:900px){
+  /* a pilha das janelas 8 px para a esquerda (16 px da sombra ate a borda da tela, como na prancha) */
+  :root[data-pele="estencil"] .pet-hud{ right:13px }
+  /* as acoes de baixo 8 px para cima */
+  :root[data-pele="estencil"] .pet-dock{ bottom:20px }
+  /* o minimapa 6 px para a esquerda e para cima (a medida e a da peca, que cresce 1,114 vez) */
+  :root[data-pele="estencil"] .minimapa-caixa{ right:16.4px; bottom:16.4px }
+}
+/* a risca a direita da marca encosta na sombra de vermelhao */
+:root[data-pele="estencil"] .topo-logo::after{ left:calc(100% + 10px) }
+/* Lutar > Arena: a folga embaixo do botao Lutar, de 37 para 15 px */
+:root[data-pele="estencil"] .painel-tela__folha .hx-painel.poc-lugar{ padding-bottom:0 }
+:root[data-pele="estencil"] .poc-lugar .poc-lutar{ margin-bottom:0 }
+:root[data-pele="estencil"] .painel-tela .painel-tela__folha:has(> .poc-lugar){ padding-bottom:14px }
+/* o fechar tem o canto cortado: o foco vai por dentro (a revisora viu o contorno por fora no celular) */
+:root[data-pele="estencil"] :is(.painel-tela, .pet-painel) .hx-painel__cab > .hx-quad:focus-visible{ outline:3px solid var(--hx-foco); outline-offset:-5px }
