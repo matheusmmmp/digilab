@@ -210,3 +210,17 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
 - **O plano:** `docs/PLANO_ANALISE_V3_SOCIAL_PAR_MD.md`, PROPOSTO. É o instrumento da S3 com os braços M1, M1-inc0, M1+M2 e M1-inc0+M2,
   no B1 e no C, com o G-DET em cada célula e a premissa PM-1 (D-SP-70 a D-SP-72).
 - **O que falta:** o "aprovado" do plano (MD-1 a MD-8) e a faixa pelo coordenador; depois, o código da medida (MD1) e a run (MD2).
+
+## MD1: o código da medida (2026-11-19)
+
+- **O checkpoint:** o Matheus aprovou o plano da medida (D-SP-73). O gabarito foi gravado antes, em `tests/gabaritos/social_md_de_hoje.json`.
+- **A subchave `incentivo_social_zero`,** desligada: o incentivo das unidades sociais em 0, o controle do D-SP-63 e do MD-2.
+- **O orquestrador `experiments/run_v3_social_par_md.py`:** os quatro mecanismos × o B1 e o C, com o G-DET em cada célula, a PM-1, os
+  contrastes C-APR e C-APR1 e a regra de leitura da seção 7. As configs estão em `experiments/configs/v3_social_par_md/`, e a faixa
+  105001…105400 no `faixas.py` (D-SP-74).
+- **Os testes:** `tests/test_social_par_md.py`, com o G2, o incentivo em 0, as travas, o G-S3-IGUAL, o G-GRAV-COMP, o retrato e a PM-1, a
+  fumaça e o determinismo.
+- **O checkpoint:** o código foi APROVADO pelo Matheus em 2026-11-20 ("Aprovado", no #1034), com a leitura da PM-1 na VIVO, no
+  gancho do t0 (D-SP-74).
+- **O que falta:** a run (MD2), num PR próprio, uma vez. Ela espera a cadeia até a `main` (o `pre_run` exige o plano na `origin/main`)
+  e o ok do coordenador para a faixa.

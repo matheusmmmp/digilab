@@ -47,7 +47,8 @@ unidades do comer). Fica fora do z. Desligada, nenhum termo.
 por outro visto comendo, na ordem das listas do M-SENS. Os termos sao os de hoje, sem termo novo: o inato do explorar mais o W0_TIPO_SOCIAL
 (0, M1-2), a proximidade pelo w0_prox do explorar, a novidade pelo NOV_SOCIAL (0, M1-3), o incentivo da classe do tipo (P1) vezes a
 proximidade, o habito da linha do explorar e a persistencia. Sem ninguem a vista e sem onde_comeu, nenhuma unidade nova (a ordem e o indice
-das de hoje nao mudam). Desligada, nenhuma unidade nova.
+das de hoje nao mudam). Desligada, nenhuma unidade nova. Com a `incentivo_social_zero` (SOCIAL_PAR MD, o MD-2), o incentivo das unidades
+sociais vale 0, e o resto fica.
 Sem estado e sem rng."""
 from __future__ import annotations
 
@@ -255,7 +256,7 @@ class Impulso:
                 termos["nov"] = mul(self.w0_nov.get(b, 0), NOV_SOCIAL, S)
                 if u["tipo"] not in incentivos:
                     incentivos[u["tipo"]] = plast.incentivo(sens["pc"], u["tipo"], drives)
-                termos["incentivo"] = mul(incentivos[u["tipo"]], o["prox"], S)
+                termos["incentivo"] = 0 if self.cd.incentivo_social_zero else mul(incentivos[u["tipo"]], o["prox"], S)   # o MD-2
             elif b == COMPORTAMENTO_OLHAR:              # o olhar (P1d): a linha da TV, o incentivo da classe `tela` e o gosto
                 termos["prox"] = mul(self.co.w0_prox, o["prox"], S)
                 termos["nov"] = mul(self.co.w0_nov, o["nov"], S)
