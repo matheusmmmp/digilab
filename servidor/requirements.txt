@@ -1,2 +1,0 @@
-# dependencias so do servidor local (digilab/ continua so stdlib)
-anthropic>=1.8

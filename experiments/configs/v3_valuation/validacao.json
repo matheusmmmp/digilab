@@ -1,8 +1,0 @@
-{
-  "descricao": "A validacao contra a baseline trivial (docs/PLANO_ANALISE_V3_VALUATION_VALIDACAO.md; so roda com o APROVADO, a faixa em FAIXAS_RESERVADAS e o pre_run): TRIV (o ponto da calibracao da A1), REL e CON nas 12 celulas da C4, bases 69101...69505, K = 40 (200 unidades), 14 dias: 7 200 vidas, uma vez, ate 4 processos.",
-  "plano": "docs/PLANO_ANALISE_V3_VALUATION_VALIDACAO.md",
-  "fase": "validacao",
-  "unidades": {"bases": [69101, 69202, 69303, 69404, 69505], "k": 40, "prefixo": "digibrain_prototipo"},
-  "dias": 14,
-  "orcamento_por_dia": 16
-}

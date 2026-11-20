@@ -1,8 +1,0 @@
-{
-  "descricao": "A fumaca da run do PV-2: as sementes dos testes (bases 101 e 202, K = 1), 2 dias; nao e resultado.",
-  "plano": "docs/PLANO_ANALISE_V3_PET_VIVO_PV2.md",
-  "fase": "pv2",
-  "unidades": {"bases": [101, 202], "k": 1, "prefixo": "digibrain_prototipo"},
-  "dias": 2,
-  "orcamento_por_dia": 16
-}
