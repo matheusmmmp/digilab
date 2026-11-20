@@ -17,6 +17,7 @@ import { montarRotasSemente } from "./envio/sementes.ts";
 import type { GeradorFala } from "./fala.ts";
 import { montarRotasPremios } from "./premios/premios.ts";
 import { montarRotasRankings } from "./premios/rankings.ts";
+import { montarRotasNuvem } from "./nuvem/nuvem.ts";
 
 export const LIMITE_CORPO = 16 * 1024;
 const CABECALHOS_DE_FORA = ["cf-ray", "cf-connecting-ip", "x-forwarded-for"];
@@ -77,6 +78,7 @@ export function criarApp({ gerador, motivoInicial, conta, conferidor }: Opcoes):
     montarRotasDesafio(app, conta, guardas);
     montarRotasPremios(app, conta, guardas);
     montarRotasRankings(app, conta, guardas);
+    montarRotasNuvem(app, conta, guardas);
   }
 
   app.notFound(c => json(c, 404, { erro: "rota desconhecida" }));

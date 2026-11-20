@@ -14,3 +14,6 @@ export const APP = `${PREFIXO}/web/${PASTA_BUILD}/`;
 /** o endereco que o build recebe em VITE_DIGILAB_API: um caminho da propria origem, que so o `page.route` responde */
 export const CAMINHO_API = "/api_falsa";
 export const API = `http://127.0.0.1:${PORTA}${CAMINHO_API}`;
+/** o build com a nuvem ligada (CN3: VITE_DIGILAB_NUVEM=1), numa pasta própria: o cais, o mural e o reset seguem no build sem a nuvem */
+export const PASTA_BUILD_NUVEM = "dist_nuvem";
+export const APP_NUVEM = `${PREFIXO}/web/${PASTA_BUILD_NUVEM}/`;

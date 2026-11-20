@@ -3,6 +3,7 @@
    relogio e o visual deles seguiam nos tokens --dl-*; desde o HUD (docs/TAREFA_V3_LAYOUT_HUD.md) a plaquinha e o relogio sao caixas
    escuras chanfradas (estilo/pet_hud.css), no mesmo sistema dos menus. Com a camera solta da ilha (telas/pet/cameraLivre.ts), o retrato
    volta a camera ao pet. */
+import { ChipNuvem, useNuvem } from "../nuvem/NuvemRaiz.tsx";
 import { BookOpen, Cloud, CloudOff, Coins, Lock, MessageCircle, Moon, Settings, Sprout, Sun, Swords, type LucideIcon } from "lucide-react";
 import { DO_ESP, NOME_ESP, NOME_EST, TPD, eNoite, nomeEstagio, nomeForma } from "../../motor/index.ts";
 import { BRASAO } from "../decoracao.ts";
@@ -62,7 +63,7 @@ function IrmaoNoTopo({ classe }: { classe: string }) {
    hora; no canto de cima à direita a coluna Conversar, Crescer, Lutar e Diário, só ícone. Sem barra de abas: a tela Pet é a casa. O nome e o estágio do
    pet ficam no Meus pets e na Evolução; o "salvo" fica escondido e só o erro de gravação aparece (M1-12). */
 function TopoMovel({ irConversar, irDestino, lugar }: PropsTopo) {
-  const { motor: m, nascendo, erroSave } = useJogo(), ovo = nascendo > 0, e = m.e, aberto = useLeque() === "paineis", nec = necessidadeMovel(m, nascendo), nivel = useNivel();
+  const { motor: m, nascendo, erroSave } = useJogo(), ovo = nascendo > 0, e = m.e, aberto = useLeque() === "paineis", nec = necessidadeMovel(m, nascendo), nivel = useNivel(), nuvem = useNuvem();
   /* o menu trancado (docs/PLANO_V3_PROGRESSAO_TUTORIAL.md, 3.4): o icone apagado, o cadeado com o "Nv N" ao lado e o marco no nome acessivel; o toque abre o cartao do motivo */
   const trancada = (d: Destino): Peca | null => { const p = pecaDoDestino(d); return p && !pecaAberta(nivel, p) ? p : null; };
   const rotuloTrancado = (d: Destino, p: Peca): string => `${NOME_DESTINO[d]}, trancado, Nv ${nivelDaPeca(p)}: ${PECAS[p].motivo}`;
@@ -78,6 +79,7 @@ function TopoMovel({ irConversar, irDestino, lugar }: PropsTopo) {
       <span className="mm-caixa mm-pilula mm-relogio" role="group" aria-label={`${hhmm(e.tick)}, dia ${diaDe(e.tick)}${erroSave ? ", não salva" : ""}`}>
         <small aria-hidden="true">D{diaDe(e.tick)}</small><b aria-hidden="true">{hhmm(e.tick)}</b>
         {erroSave && <CloudOff className="mm-salvo-erro" aria-hidden="true" />}
+        {!erroSave && nuvem && <ChipNuvem soIcone />}
         <SaldoBits classe="mm-bits" />
       </span>
       <div className="mm-coluna">
@@ -104,7 +106,7 @@ function TopoMovel({ irConversar, irDestino, lugar }: PropsTopo) {
 }
 
 function TopoLargo({ abrirMeusPets, irConversar, abrirConfig }: PropsTopo) {
-  const { motor: m, nascendo, erroSave, emLab } = useJogo(), ovo = nascendo > 0, e = m.e, noite = eNoite(e.tick % TPD), cam = useCameraLivre(), nivelTamer = nivelDe(useNivel());
+  const { motor: m, nascendo, erroSave, emLab } = useJogo(), ovo = nascendo > 0, e = m.e, noite = eNoite(e.tick % TPD), cam = useCameraLivre(), nivelTamer = nivelDe(useNivel()), nuvem = useNuvem();
   return (
     <header className="topo-hab">
       <div className="topo-pet">
@@ -128,7 +130,8 @@ function TopoLargo({ abrirMeusPets, irConversar, abrirConfig }: PropsTopo) {
       <span className="topo-relogio" role="group" aria-label={`${hhmm(e.tick)}, dia ${diaDe(e.tick)}`}>
         {noite ? <Moon className="topo-sol" aria-hidden="true" /> : <Sun className="topo-sol" aria-hidden="true" />}
         <span className="topo-hora-txt"><span className="topo-dia">dia {diaDe(e.tick)}</span><span className="topo-hora">{hhmm(e.tick)}</span></span>
-        <span className={`pet-salvo${erroSave ? " erro" : ""}`}>{erroSave ? <CloudOff aria-hidden="true" /> : <Cloud aria-hidden="true" />}{erroSave ? "não salva" : "salvo"}</span>
+        {/* o estado da nuvem no lugar do "salvo" (CN3, UX-NV-3); sem a chave, ou com o save que nao abriu, o "salvo" de sempre */}
+        {nuvem && !erroSave ? <ChipNuvem /> : <span className={`pet-salvo${erroSave ? " erro" : ""}`}>{erroSave ? <CloudOff aria-hidden="true" /> : <Cloud aria-hidden="true" />}{erroSave ? "não salva" : "salvo"}</span>}
       </span>
       <SaldoBits classe="topo-bits" />
       <span className="topo-bts">
