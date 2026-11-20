@@ -783,6 +783,7 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-12 — CONTA: a integração das telas e o plano de desenvolvimento no roadmap (Claude Code, Opus 5.5, branch `v3-conta-roadmap-dev`)](registro/2026-11.md)
 - [2026-11-12 — GOSTO_VISUAL: o porquê das GV3 negativas e a OV0 (Claude Code, Opus 5.5, branch `v3-gosto-visual-porque`)](registro/2026-11.md)
 - [2026-11-12 — INDIVIDUALIDADE, o adendo 4 do I7 (Claude Code, Opus 5.5, branch `v3-individualidade-ad4`)](registro/2026-11.md)
+- [2026-11-12 — UX_TELA_PET, a prancha do save na nuvem: levar o pet e os estados (Gerente da UX_TELA_PET, Claude Code, Fable 5.2, branch `v3-ux-conta-nuvem`)](registro/2026-11.md)
 - [2026-11-12 — MMO2: o nível 10 no registro do Tamer (Gerente da frente MMO, Claude Code, Opus 5.5, branch `v3-mmo2`)](registro/2026-11.md)
 - [2026-11-12 — CONTA: as RC-5 a RC-8 do roadmap decididas pela recomendação (Claude Code, Opus 5.5, branch `v3-conta-roadmap-dev`)](registro/2026-11.md)
 - [2026-11-12 — EQUILIBRIO_CUIDADO (E2 e E3): a validação única e a versão nova (Claude Code, Opus 5.5, branch `v3-equilibrio-e2`)](registro/2026-11.md)
@@ -901,3 +902,5 @@ de base em `docs/historico/registro_lotes.json`.
 - [2026-11-19 — PET_VIVO: o plano do R-a, a linha de base do intervalo (Claude Code, Fable 5.2, branch `v3-pet-vivo-ra-plano`)](registro/2026-11.md)
 - [2026-11-19 — PET_VIVO: o código do R-a (Claude Code, Fable 5.2, branch `v3-pet-vivo-ra-codigo`)](registro/2026-11.md)
 - [2026-11-19 — PET_VIVO: o replay do R-a (Claude Code, Fable 5.2, branch `v3-pet-vivo-ra-resultado`)](registro/2026-11.md)
+- [2026-11-19 — CORPO: a run da C3 rodada (a ponte com teto)](registro/2026-11.md)
+- [2026-11-19 — BOLA_DIAGNOSTICO: o replay R-b, por que o brincar não vira chute (Claude Code, Fable 5.2, branch `v3-bola-diagnostico`)](registro/2026-11.md)

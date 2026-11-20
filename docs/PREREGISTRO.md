@@ -32,6 +32,7 @@ link para o plano commitado.
 | [PR-COOP-A1](#pr-coop-a1--a-cooperação-com-o-irmão-aleatório) | a cooperação com o irmão aleatório | EMERGE e DOSE não confirmam; CUSTO confirma | não |
 | [PR-BASELINE](#pr-baseline--o-modular-contra-a-baseline-trivial) | o modular contra a baseline trivial | negativo ("< 0") | não |
 | [PR-ABLACAO](#pr-ablacao--a-ablação-do-aprendizado-no-jogo) | a ablação do aprendizado no jogo | "muda" | não |
+| [PR-CORPO-C3](#pr-corpo-c3--a-ponte-com-teto) | a ponte com teto (CORPO C3) | DTB "ganho", DTL "perda" | não |
 | [PR-SOCIAL-PAR-S](#pr-social-par-s--o-substrato-do-social) | o substrato do social (S3) | "nulo com um instrumento que vê" nos três braços | não |
 | [PR-SOCIAL-PAR-MD](#pr-social-par-md--a-medida-do-m1-e-do-m2) | a medida do M1 e do M2 | a rodar | não |
 
@@ -184,6 +185,24 @@ link para o plano commitado.
 | o que refutaria | o plano, 5.3: as distribuições iguais, com o IC95 de toda diferença A − B incluindo o 0 ("nula") |
 | resultado | [RESULTADO_V3_ABLACAO_APRENDIZADO.md](RESULTADO_V3_ABLACAO_APRENDIZADO.md): "muda", 9 das 15 no Holm; todas com \|A − B\| abaixo de 0,01; a distância de variação total das ações 0,0084 (descritivo), n = 200 |
 | artefatos | [`artifacts_v3_ablacao_aprendizado/run/`](../artifacts_v3_ablacao_aprendizado/run/): `resultado.json` `ced7c793…`, `medidas.json` `f2adac98…` |
+
+## PR-CORPO-C3 — a ponte com teto
+
+**Esta seção foi escrita depois da run** (2026-11-19, Claude Code, Fable 5.2): este índice entrou na `main` (#971) depois do commit em que
+a run rodou (`f720d684`). O que vale como registro anterior é o plano, no commit citado, na `main` desde o #1016, antes da primeira vida.
+
+| campo | valor |
+|---|---|
+| plano | [`PLANO_ANALISE_V3_CORPO_C3.md`](https://github.com/matheusmmmp/digilab/blob/cb922cf1b00eccd8782cf5568b7f34a97ba3a287/docs/PLANO_ANALISE_V3_CORPO_C3.md): PROPOSTO no commit `516f5548`, APROVADO no `cb922cf1b00eccd8782cf5568b7f34a97ba3a287` (2026-11-19 12:31), ancestral do `git_head` da run, `f720d684` (início 18:13:25, árvore limpa) |
+| hipótese | H1, o teto no limiar: "sai perto da D, o F sobe e a privação do comedouro sobe também. A previsão é "perda" pela mesma guarda". H2, o teto baixo: "a privação e a saúde dos donos que deixam faltar comida ficam perto do CTRL, e o F sobe menos que na D" (seção 1) |
+| células | as 12 da C4 (4 donos × comedouro, longe e `longe_fixo`); braços CTRL, D, DTL (teto 382 500) e DTB (teto 225 000, SEM FONTE); 14 dias, orçamento 16; bloco II com 100 pares por braço, 5 dias (seções 2 a 4) |
+| sementes | 106001…106200 (200 unidades, k = 1, 9 600 vidas) e 106301…106400 (os pares), da faixa 106001…106400 (seção 4) |
+| contraste primário | braço − CTRL na taxa por episódio de fome no `longe_fixo`, pareado por unidade, IC95 pelo t, p unilateral, Holm sobre o DTL e o DTB, α = 0,025; a D é a referência, fora do Holm (seção 5) |
+| regra de leitura | a tabela da seção 5, com as classes de A6.6 e δ = 0,032: "ganho" se o F é "> 0", o Holm rejeita, nenhuma das oito guardas do bem-estar reprova e o S2 passa; "perda" se alguma guarda reprova; "nulo" e "indeterminado" pelo F |
+| regra de parada | "A run roda uma vez" (seção 4); ganho de um braço com teto leva à C4, perda ou nulo dos dois volta ao Matheus (seção 8) |
+| o que refutaria | pela regra de leitura: o F fora do "> 0", ou alguma guarda do bem-estar reprovando, nos dois braços com teto |
+| resultado | [RESULTADO_V3_CORPO_C3.md](RESULTADO_V3_CORPO_C3.md): DTB +0,120 [+0,105; +0,135], n = 200, nenhuma guarda reprova, "ganho"; DTL +0,123 [+0,109; +0,138], três guardas reprovam, "perda". H1 se confirma; na H2, a privação e a saúde ficam perto do CTRL na média, e o F do DTB não se separa do da D (−0,004 [−0,015; +0,007]) |
+| artefatos | [`artifacts_v3_corpo/c3/`](../artifacts_v3_corpo/c3/): `resultado.json` `b3260812…`, `medidas.json.gz` `eeaebb24…` (descomprime no `825a122a…` do `meta.json`), `vidas.tar.gz` `03426106…`, `pares.tar.gz` `bdc7d30a…` |
 
 ## PR-REPLICACAO-C4 — a réplica da C4
 
