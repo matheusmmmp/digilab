@@ -1,9 +1,10 @@
 # PLANO DE ANÁLISE V3 — PET_VIVO, o teste de recompensa: o carinho depois do comer e do brincar deixa o pet mais tempo acordado? (2026-11-20, Claude Code, Fable 5.2)
 
-**Status: PROPOSTO.** O Matheus pediu este plano em 2026-11-20 ("Sim, faz o plano do teste de recompensa"). O pedido não é a
-aprovação: as decisões RC-1 a RC-7 da seção 10 estão ABERTAS, e todos os números novos são PROPOSTOS e SEM FONTE. **Nenhuma vida e
-nenhuma conta deste plano rodam antes de cinco coisas:**
-1. a marca "APROVADO pelo Matheus" neste cabeçalho;
+**Status: APROVADO pelo Matheus em 2026-11-20.** À pergunta "Aprova o plano do teste de recompensa e as RC-1 a RC-7 pela
+recomendação?", nesta sessão, a resposta foi "Aprovo todas" (D-RC-7). As decisões RC-1 a RC-7 da seção 10 estão DECIDIDAS pela
+recomendação. Os números seguem SEM FONTE. O pedido do plano foi dele, no mesmo dia ("Sim, faz o plano do teste de recompensa").
+**Nenhuma vida e nenhuma conta deste plano rodam antes de cinco coisas:**
+1. a marca "APROVADO pelo Matheus" neste cabeçalho (feita acima);
 2. a faixa de sementes reservada pelo coordenador no `experiments/bancada/faixas.py` (a seção 4);
 3. o código da seção 8 na `main`, com os testes dele;
 4. o `pre_run` respondendo "pode rodar" (uma run por vez; a C4 da CORPO também espera a máquina);
@@ -223,7 +224,7 @@ As guardas (a saúde dos dias 8 a 14, a taxa por episódio e o "Tempo bem" por l
   livres.
 - **A vez:** uma run por vez, até 4 processos (V3-D8). A C4 da CORPO também espera a máquina; a ordem entre as duas é do Matheus.
 
-## 10. As decisões com o Matheus (ABERTAS)
+## 10. As decisões com o Matheus (DECIDIDAS pela recomendação em 2026-11-20, "Aprovo todas"; D-RC-7)
 
 | nº | a decisão | a recomendação | o custo de errar |
 |---|---|---|---|
