@@ -270,12 +270,12 @@ e "artefatos" entraram depois do replay (2026-11-20).
 
 ## PR-PET-VIVO-RECOMPENSA — o carinho depois do comer e do brincar
 
-**Seção escrita antes da run** (2026-11-20). O plano está PROPOSTO: nenhuma vida roda antes do APROVADO do Matheus, da faixa
+**Seção escrita antes da run** (2026-11-20). O plano foi APROVADO pelo Matheus em 2026-11-20 ("Aprovo todas"). Nenhuma vida roda antes da faixa
 reservada e do código na `main`. As linhas "resultado" e "artefatos" entram depois da run.
 
 | campo | valor |
 |---|---|
-| plano | [`PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md`](https://github.com/matheusmmmp/digilab/blob/ae8f1fb96b603b4847eac56f0486b24acfda27af/docs/PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md), commit `ae8f1fb96b603b4847eac56f0486b24acfda27af` (2026-11-20, o PROPOSTO) |
+| plano | [`PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md`](https://github.com/matheusmmmp/digilab/blob/5e83e59e2ed10bb72f26a078ca25047c5adea298/docs/PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md), commit `5e83e59e2ed10bb72f26a078ca25047c5adea298` (2026-11-20, o APROVADO; o PROPOSTO é o `ae8f1fb9`) |
 | hipótese | as perguntas Q-ACORDADO, Q-PORQUÊ e Q-BEM. "O desfecho esperado é 'não: dorme mais ou fica igual'", pelas sementes dos testes (seções 1 e 2.2) |
 | células | 4 braços (R0, R-CORPO, R-CB, R-SORT) × 4 donos × 3 lugares, o pet do v38, 14 dias; g = 2S e W = 1 fixos, sem calibração (seções 3 e 4) |
 | sementes | 108001…108200, PROPOSTA (200 unidades, k = 1; 9 600 vidas); a reservar pelo coordenador antes de qualquer vida (seção 4) |
