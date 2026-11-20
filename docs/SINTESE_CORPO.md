@@ -136,8 +136,10 @@ Nenhum mecanismo social entrou no programa. O que foi medido é o substrato: o q
 
 ## 6. O que ficou sem explicação
 
-- **Os episódios de fome a mais do DTB** (+3,8 por vida). O replay da fome, acrescentado depois da aprovação da C4, pode ajudar; ele
-  ainda não tinha rodado quando esta síntese foi escrita.
+- **Os episódios de fome a mais do DTB** (+3,8 por vida). O replay da fome rodou depois desta síntese (#1053; a seção 3.6 do
+  `docs/RESULTADO_V3_CORPO_C4.md`; o `artifacts_v3_corpo/c4_fome/resumo.json`, sha256
+  `215533cc7b831737e0aa98109cb41c6d71d4881125261187f57f2aca38f3c6c3`). Ele não explica os episódios: nas 12 células a fome média
+  desce com o DTB (de 0,500 para 0,469), e sobe só no comedouro, com o relapso e o aleatório. A duração dos episódios não foi medida.
 - **Por que a saúde cai no aleatório do comedouro** e não no aleatório do longe. O mecanismo da D (a fome só cai comendo) explica a
   direção. O tamanho por lugar não foi investigado.
 - **O teto.** C/2 é um número só. Nada diz se ele é o melhor, nem onde o dano começa entre C/2 e o limiar.
@@ -167,7 +169,8 @@ diferença, e nada sobre o pet do jogo (seção 8).
 
 - **O pet do jogo.** As vidas de um pet da C2, da C3 e da C4 usam o pet da bancada: o modular com a memória e o corpo v11, sem o "sono
   que segura", sem o lance do dono e sem o equilíbrio do cuidado, que o pet v38 do jogo tem (`experiments/run_v3_corpo_c3.py`,
-  `fabricas`). O efeito do DTB no pet v38 não foi medido. É o primeiro passo da especificação.
+  `fabricas`). O efeito do DTB no pet v38 não foi medido. É o primeiro passo da especificação. Os pares usam o pet de hoje da
+  SOCIAL_PAR A0 (o modular com a CO7), que também não tem o "sono que segura" nem o equilíbrio do cuidado.
 - **O jogo web.** A paridade do corpo com o teto existe (inteiro a inteiro, no gabarito). Nenhuma vida do jogo rodou com a chave
   ligada, e nenhuma versão de pet a liga.
 - **O modular contra a baseline trivial** com o corpo consertado (seção 3).

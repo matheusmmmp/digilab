@@ -1,6 +1,6 @@
 # ESPEC — CORPO V1: o teto baixo num pet do jogo (C5, 2026-11-20, Claude Code, Fable 5.2)
 
-**Status: PROPOSTA.** Nada aqui está implementado nem decidido. As decisões são do Matheus (seção 8). A síntese que sustenta esta
+**Status: PROPOSTA, com a D-EC-1 DECIDIDA** (Matheus, 2026-11-20: "Medir no v38 antes"). Nada aqui está implementado. As outras decisões são do Matheus (seção 8). A síntese que sustenta esta
 especificação é a [SINTESE_CORPO.md](SINTESE_CORPO.md); as fontes e os sha256 estão na seção 0 dela.
 
 **A primeira mudança:** um pet do jogo que nasce com o DTB, isto é, com a ponte da falta de combustível na fome e o teto em C/2. Os pets
@@ -63,7 +63,8 @@ poupa a V1-b.
 - **o que é novo no descritivo:** a fração dos ticks dormindo e a duração dos sonos (o "sono que segura" faz o pet dormir até
   recuperar), e as medidas da rodada do cuidado que dependem da fome e do sono. O plano diz quais, a partir do
   `docs/PLANO_V3_EQUILIBRIO_CUIDADO.md`;
-- **o bloco dos pares:** o plano decide se entra. Os pares da C4 já usam o pet de hoje da SOCIAL_PAR A0, e o S2 passou.
+- **o bloco dos pares:** o plano decide se entra. Os pares da C4 usam o pet de hoje da SOCIAL_PAR A0 (o modular com a CO7), e o S2
+  passou. Esse pet também não tem o "sono que segura" nem o equilíbrio do cuidado.
 
 **O que ela não faz:** não muda o `digilab/`, não muda o web, não liga nada no jogo.
 
@@ -160,7 +161,7 @@ export const VERSAO_GRUPO = VERSAO_Vyy;     // era VERSAO_V39
 
 ## 8. As decisões do Matheus
 
-- **D-EC-1 (PROPOSTA), o caminho até o jogo.**
+- **D-EC-1 (DECIDIDA pelo Matheus em 2026-11-20: "Medir no v38 antes", a opção 1), o caminho até o jogo.**
   1. **Medir antes no pet do jogo (recomendada):** V1-a, depois V1-b, depois V1-c.
   2. **Ligar direto:** só V1-b e V1-c, com a C4 como a evidência.
   3. **Não levar ao jogo agora:** o DTB fica como chave de pesquisa.
