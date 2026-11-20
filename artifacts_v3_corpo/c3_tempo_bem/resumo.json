@@ -1,0 +1,475 @@
+{
+  "por_celula": {
+    "aleatorio|comedouro": {
+      "classe": {
+        "classe": "≈ 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.021550688769043105,
+      "ic95": {
+        "ic_inferior": -0.0040057372736729486,
+        "ic_superior": 0.002004249178434856
+      },
+      "lugar": "aleatorio|comedouro",
+      "media": -0.0010007440476190463,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.4907700892857143,
+        "DTB": 0.48976934523809523
+      }
+    },
+    "aleatorio|longe": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.06023488723980781,
+      "ic95": {
+        "ic_inferior": 0.01944692677773342,
+        "ic_superior": 0.03624503750798087
+      },
+      "lugar": "aleatorio|longe",
+      "media": 0.027845982142857145,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.33518973214285713,
+        "DTB": 0.3630357142857143
+      }
+    },
+    "aleatorio|longe_fixo": {
+      "classe": {
+        "classe": "≈ 0",
+        "motivo": null,
+        "sinal": "+"
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.04940746692603639,
+      "ic95": {
+        "ic_inferior": 0.010878559774204462,
+        "ic_superior": 0.024657154511509828
+      },
+      "lugar": "aleatorio|longe_fixo",
+      "media": 0.017767857142857144,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.409468005952381,
+        "DTB": 0.4272358630952381
+      }
+    },
+    "atencioso|comedouro": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.025210179247922283,
+      "ic95": {
+        "ic_inferior": 0.046157352381226785,
+        "ic_superior": 0.0531878857140113
+      },
+      "lugar": "atencioso|comedouro",
+      "media": 0.04967261904761904,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.899330357142857,
+        "DTB": 0.9490029761904762
+      }
+    },
+    "atencioso|longe": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.14267301178890265,
+      "ic95": {
+        "ic_inferior": 0.08621825691993851,
+        "ic_superior": 0.12600644546101386
+      },
+      "lugar": "atencioso|longe",
+      "media": 0.10611235119047618,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.6482254464285714,
+        "DTB": 0.7543377976190476
+      }
+    },
+    "atencioso|longe_fixo": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.16354894738721967,
+      "ic95": {
+        "ic_inferior": 0.11171880851925634,
+        "ic_superior": 0.1573288105283627
+      },
+      "lugar": "atencioso|longe_fixo",
+      "media": 0.13452380952380952,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.708627232142857,
+        "DTB": 0.8431510416666668
+      }
+    },
+    "incoerente|comedouro": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.025210179247922283,
+      "ic95": {
+        "ic_inferior": 0.046157352381226785,
+        "ic_superior": 0.0531878857140113
+      },
+      "lugar": "incoerente|comedouro",
+      "media": 0.04967261904761904,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.899330357142857,
+        "DTB": 0.9490029761904762
+      }
+    },
+    "incoerente|longe": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.1490450546444064,
+      "ic95": {
+        "ic_inferior": 0.08230147574890431,
+        "ic_superior": 0.12386667901300044
+      },
+      "lugar": "incoerente|longe",
+      "media": 0.10308407738095238,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.6626376488095238,
+        "DTB": 0.7657217261904762
+      }
+    },
+    "incoerente|longe_fixo": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.16791773308583033,
+      "ic95": {
+        "ic_inferior": 0.11309251900413209,
+        "ic_superior": 0.15992087385301074
+      },
+      "lugar": "incoerente|longe_fixo",
+      "media": 0.1365066964285714,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.6949627976190476,
+        "DTB": 0.8314694940476189
+      }
+    },
+    "relapso|comedouro": {
+      "classe": {
+        "classe": "≈ 0",
+        "motivo": null,
+        "sinal": "+"
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.020943864426204262,
+      "ic95": {
+        "ic_inferior": 0.01767113923710818,
+        "ic_superior": 0.02351189647717755
+      },
+      "lugar": "relapso|comedouro",
+      "media": 0.020591517857142864,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.7383891369047619,
+        "DTB": 0.7589806547619048
+      }
+    },
+    "relapso|longe": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.07457679285345083,
+      "ic95": {
+        "ic_inferior": 0.045635358676442875,
+        "ic_superior": 0.06643309370450949
+      },
+      "lugar": "relapso|longe",
+      "media": 0.05603422619047618,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.4525074404761905,
+        "DTB": 0.5085416666666667
+      }
+    },
+    "relapso|longe_fixo": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.05407828371602487,
+      "ic95": {
+        "ic_inferior": 0.03587086981735472,
+        "ic_superior": 0.05095204684931195
+      },
+      "lugar": "relapso|longe_fixo",
+      "media": 0.04341145833333333,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.5828013392857143,
+        "DTB": 0.6262127976190476
+      }
+    }
+  },
+  "tempo_bem": {
+    "as 11 celulas": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.0326174453938229,
+      "ic95": {
+        "ic_inferior": 0.05859277167169491,
+        "ic_superior": 0.06768901945384623
+      },
+      "lugar": "as 11 celulas",
+      "media": 0.06314089556277057,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.602082656926407,
+        "DTB": 0.6652235524891774
+      }
+    },
+    "as 12 celulas": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.030372159313666415,
+      "ic95": {
+        "ic_inferior": 0.05778349435911005,
+        "ic_superior": 0.06625358401390581
+      },
+      "lugar": "as 12 celulas",
+      "media": 0.06201853918650793,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.6268532986111112,
+        "DTB": 0.6888718377976191
+      }
+    },
+    "comedouro": {
+      "classe": {
+        "classe": "≈ 0",
+        "motivo": null,
+        "sinal": "+"
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.014810467225632345,
+      "ic95": {
+        "ic_inferior": 0.027668855353082993,
+        "ic_superior": 0.031799150599297964
+      },
+      "lugar": "comedouro",
+      "media": 0.029734002976190478,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.7569549851190476,
+        "DTB": 0.7866889880952381
+      }
+    },
+    "longe": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.057163611988904246,
+      "ic95": {
+        "ic_inferior": 0.06529835752029872,
+        "ic_superior": 0.08123996093208222
+      },
+      "lugar": "longe",
+      "media": 0.07326915922619047,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.5246400669642857,
+        "DTB": 0.5979092261904762
+      }
+    },
+    "longe_fixo": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.06748573458259129,
+      "ic95": {
+        "ic_inferior": 0.07364235355254227,
+        "ic_superior": 0.09246255716174347
+      },
+      "lugar": "longe_fixo",
+      "media": 0.08305245535714287,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.59896484375,
+        "DTB": 0.6820172991071429
+      }
+    }
+  },
+  "tempo_bem_8_14": {
+    "as 11 celulas": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.047846823338577045,
+      "ic95": {
+        "ic_inferior": 0.0697325370311284,
+        "ic_superior": 0.08307590452731316
+      },
+      "lugar": "as 11 celulas",
+      "media": 0.07640422077922078,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.5231973755411256,
+        "DTB": 0.5996015963203464
+      }
+    },
+    "as 12 celulas": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.04460426713665356,
+      "ic95": {
+        "ic_inferior": 0.0686496246772235,
+        "ic_superior": 0.08108871857674475
+      },
+      "lugar": "as 12 celulas",
+      "media": 0.07486917162698413,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.5537326388888889,
+        "DTB": 0.6286018105158729
+      }
+    },
+    "comedouro": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.02479536723538728,
+      "ic95": {
+        "ic_inferior": 0.03137330321715878,
+        "ic_superior": 0.038288155116174546
+      },
+      "lugar": "comedouro",
+      "media": 0.034830729166666664,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.7336030505952381,
+        "DTB": 0.7684337797619049
+      }
+    },
+    "longe": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.09910705413815156,
+      "ic95": {
+        "ic_inferior": 0.0864541099819345,
+        "ic_superior": 0.11409276501806552
+      },
+      "lugar": "longe",
+      "media": 0.1002734375,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.3811644345238095,
+        "DTB": 0.4814378720238095
+      }
+    },
+    "longe_fixo": {
+      "classe": {
+        "classe": "> 0",
+        "motivo": null,
+        "sinal": null
+      },
+      "contraste": "DTB - CTRL",
+      "dp": 0.08627630439235427,
+      "ic95": {
+        "ic_inferior": 0.07747311971224323,
+        "ic_superior": 0.10153357671632819
+      },
+      "lugar": "longe_fixo",
+      "media": 0.08950334821428571,
+      "motivo": null,
+      "n": 200,
+      "niveis": {
+        "CTRL": 0.546430431547619,
+        "DTB": 0.6359337797619048
+      }
+    }
+  },
+  "vidas": 4800,
+  "vidas_no_piso_ou_teto": {
+    "tempo_bem_0": 0,
+    "tempo_bem_1": 0
+  }
+}
