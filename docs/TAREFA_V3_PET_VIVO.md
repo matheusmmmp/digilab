@@ -398,12 +398,11 @@ O código da seção 8 do [plano do teste de recompensa](PLANO_ANALISE_V3_PET_VI
 - **O orquestrador:** `experiments/run_v3_pet_vivo_recompensa.py`, com as configs `recompensa.json` e `recompensa_fumaca.json`. Faz
   as conferências da seção 5 (C-G1, C-HOJE, C-CORPO, C-HORA, C-MESMO-N), as premissas e as três regras de leitura. Recusa rodar sem
   o plano APROVADO, sem a faixa na tabela, com a pasta de saída existente, sem o `pre_run` e com menos de 10 GB livres.
-- **A faixa:** a 108001…108200 entrou no `experiments/bancada/faixas.py`. A confirmação do coordenador foi pedida; nenhuma vida da
-  faixa roda antes dela.
+- **A faixa:** a 108001…108200 entrou no `experiments/bancada/faixas.py`. A coordenadora a confirmou em 2026-11-20 (D-RC-14).
 - **Os testes:** `tests/test_recompensa.py`, 19 testes: o carinho na hora conferido numa vida curta, o crédito na decisão
   recompensada, o R0 igual ao v38 de hoje, o R-SORT com o mesmo número, o replay, as medidas à mão, as falhas altas e as regras de
   leitura.
 - **A fumaça:** 48 vidas de 14 dias de uma semente dos testes passam em todas as conferências. A projeção é de 2,4 h com 4
   processos, abaixo do corte de 4 h. Nenhuma medida foi lida nelas.
-- **Desvios:** D-RC-8 a D-RC-13.
-- **Próximo:** o merge do #1048 e deste PR; a confirmação da faixa; com o `pre_run` liberando, a run, uma vez.
+- **Desvios:** D-RC-8 a D-RC-14.
+- **Próximo:** o merge do #1048 e deste PR; com o `pre_run` liberando, a run, uma vez.

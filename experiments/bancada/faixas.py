@@ -250,7 +250,7 @@ FAIXAS_RESERVADAS = (
                      "bracos R0, R-CORPO, R-CB e R-SORT nas 12 celulas da C4, o pet do v38 "
                      "(docs/PLANO_ANALISE_V3_PET_VIVO_RECOMPENSA.md, secao 4; RC-6, o plano aprovado pelo Matheus em 2026-11-20, \"Aprovo "
                      "todas\"; a 108xxx conferida livre no faixas.py da origin/main (3ed5fdd6) e nos PRs abertos em 2026-11-20; a "
-                     "confirmacao do coordenador foi pedida com o PR do codigo, e nenhuma vida roda antes dela)"),
+                     "faixa confirmada pela coordenadora em 2026-11-20, conferida livre na origin/main (72e7bf65) e nos PRs abertos)"),
 )
 
 
