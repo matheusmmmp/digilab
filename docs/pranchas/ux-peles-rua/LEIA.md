@@ -1,6 +1,6 @@
 # Prancha: peles de rua, três modelos base
 
-**PR-1 DECIDIDA pelo Matheus em 2026-11-20** ("Zine e Estêncil", em resposta a "Qual modelo de pele segue adiante?"): o **Zine** é o principal e o **Estêncil** é a opção escura. O Arcade não segue e fica na pasta só como registro. O plano é o `docs/PLANO_UX_PELES_RUA.md`; as PR-2 a PR-5 continuam abertas.
+**PR-1 DECIDIDA pelo Matheus em 2026-11-20** ("Zine e Estêncil", em resposta a "Qual modelo de pele segue adiante?"): o **Zine** é o principal e o **Estêncil** é a opção escura. O Arcade não segue e fica na pasta só como registro. **PR-2 a PR-6 DECIDIDAS pelo Matheus em 2026-11-20, pela recomendação** ("Sim, aprovo", em resposta a "Aprova as PR-2 a PR-6 pela recomendação para eu começar o código pelo Estêncil?"). O plano é o `docs/PLANO_UX_PELES_RUA.md`.
 
 É só desenho: HTML estático, sem código do jogo. Três modelos de pele para os menus, no lugar ou ao lado do Vidro e do Militar de hoje:
 **1 · Estêncil** (cartaz de rua), **2 · Zine** (colagem de papel) e **3 · Arcade** (adesivo e pixel).

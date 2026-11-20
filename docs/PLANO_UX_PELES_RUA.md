@@ -1,6 +1,6 @@
 # Plano de UX das peles de rua: três modelos base (2026-11-20)
 
-**PR-1 DECIDIDA pelo Matheus em 2026-11-20** ("Zine e Estêncil", em resposta a "Qual modelo de pele segue adiante?"): o **Zine** é o principal e o **Estêncil** é a opção escura. O Arcade não segue e fica na pasta só como registro. Sem código. As PR-2 a PR-5 continuam abertas (seção 6). A prancha está em `docs/pranchas/ux-peles-rua/`. As cores, as fontes e os
+**PR-1 DECIDIDA pelo Matheus em 2026-11-20** ("Zine e Estêncil", em resposta a "Qual modelo de pele segue adiante?"): o **Zine** é o principal e o **Estêncil** é a opção escura. O Arcade não segue e fica na pasta só como registro. **PR-2 a PR-6 DECIDIDAS pelo Matheus em 2026-11-20, pela recomendação** ("Sim, aprovo", em resposta a "Aprova as PR-2 a PR-6 pela recomendação para eu começar o código pelo Estêncil?"). O código segue as etapas PE1 a PE4 (seção 8), começando pelo Estêncil. A prancha está em `docs/pranchas/ux-peles-rua/`. As cores, as fontes e os
 tamanhos são **PROPOSTO, SEM FONTE**. Autor: Gerente da UX_TELA_PET (Claude Code, Fable 5.2), branch `v3-ux-peles-rua`.
 
 **O pedido do Matheus (2026-11-20), com 15 imagens de referência:** "Eu quero que você olhe as [pranchas] que temos referente aos novos
@@ -82,6 +82,8 @@ Calculado pelos valores dos tokens (WCAG 2.x), não medido na tela. O mínimo do
 
 ## 6. Decisões para o Matheus
 
+**Todas DECIDIDAS em 2026-11-20:** a PR-1 pela escolha ("Zine e Estêncil") e as PR-2 a PR-6 pela recomendação ("Sim, aprovo").
+
 - **PR-1. Qual modelo segue: DECIDIDA (2026-11-20), o Zine e o Estêncil.** A recomendação era: **o Zine como o principal e o Estêncil como a opção escura.** O Zine é o que mais responde ao
   pedido (traço de desenho, colagem, cor forte) e o que mais se separa do verde e do azul da ilha. O Estêncil é o mais barato e mantém
   uma pele escura para quem prefere. O Arcade é o que eu deixaria por último: o cobalto se mistura com o céu e o contraste é o mais
@@ -127,7 +129,7 @@ capturas do jogo de 2026-11-20.
 navegador. No desenho o foco vai por dentro nas peças de canto cortado, e vira duas barras (em cima e embaixo) na aba. No código isso
 pede uma regra de foco por tipo de peça, e não uma só para tudo.
 
-## 8. As etapas de código (PROPOSTAS; começam depois das PR-2 a PR-6)
+## 8. As etapas de código (PROPOSTAS; liberadas com as PR-2 a PR-6, em 2026-11-20)
 
 Um PR por etapa. O custo é a leitura dos arquivos de pele de hoje, não uma medida.
 
