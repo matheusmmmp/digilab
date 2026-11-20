@@ -117,7 +117,10 @@ describe("a chave ligada", () => {
     await conversar("e agora?");
     const [p1, p2] = fala() as [Record<string, any>, Record<string, any>];
     expect(fl.FL.redeSemDecisao).toBe(false);
-    expect(Object.keys(p1).sort()).toEqual(["comando", "conceitos", "estado", "fala_jogador", "historico", "rota", "semente", "situacao"]);
+    /* `verificar_na_chamada` (so um booleano, sem dado do pet) vai desde a D-ES-5, a chave `-fala-verif-depois` ligada de fabrica */
+    expect(Object.keys(p1).sort()).toEqual(["comando", "conceitos", "estado", "fala_jogador", "historico", "rota", "semente", "situacao",
+      "verificar_na_chamada"]);
+    expect(p1.verificar_na_chamada).toBe(false);
     expect(p1.conceitos.versao).toBe("dec-v2");
     expect(Object.keys(p1.estado)).toEqual(["identidade"]);
     expect(Object.keys(p1.estado.identidade).sort()).toEqual(["estagio", "forma"]);

@@ -37,7 +37,8 @@ from digilab.combate_v2.v21.partida import Lutador, jogar  # noqa: E402
 from digilab.config import (CONFIG_CATALOGO, CONFIG_EDUCACAO_LIGADA, CONFIG_EQUILIBRIO, CONFIG_EVOLUCAO_PESQUISA,  # noqa: E402
                             CONFIG_LESOES_LIGADA, CONFIG_PADRAO, CONFIG_SOMBRIO, CONFIG_SPARRING, ConfigArenaPesquisa)
 from digilab.donos_educacao import simular_vida_educacao  # noqa: E402
-from digilab.educacao import epsilon_disciplina, fabricas_educacao, politica_no_tick_educacao, reproduzir_educacao  # noqa: E402
+from digilab.educacao import epsilon_disciplina, politica_no_tick_educacao, reproduzir_educacao  # noqa: E402
+from digilab.obediencia import fabricas_educacao  # noqa: E402
 from digilab.events import LogDeEventos  # noqa: E402
 from digilab.evolucao import carater, condicao_na_arena, fracao_cuidado_bebe, ovo  # noqa: E402
 from digilab.protocol import (ENGINE_SHA256_V0, PROTOCOLO_ARENA_V1, derivar_semente, hash_parametros_educacao,  # noqa: E402

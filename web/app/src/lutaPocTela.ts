@@ -39,7 +39,10 @@ export interface PalcoPoc {
 export const LUTA_POC = { palco: null as PalcoPoc | null, lutando: false, pausado: false, rapido: false, replay: false };
 /** o tempo do pet nao anda com o palco na tela (a luta, o resultado e o replay), como no palco de antes: o que passou ali e descartado, como
     na Pausa (src/tempo.ts) */
-export const lutaSeguraTempo = (): boolean => LUTA_POC.palco !== null;
+export const lutaSeguraTempo = (): boolean => LUTA_POC.palco !== null || pedidoSegura;
+/** o pedido da semente da luta ranqueada (MMO4) segura o tempo como o palco: a luta entra no registro na posicao que o pedido prometeu */
+let pedidoSegura = false;
+export function segurarTempoDoPedido(b: boolean): void { pedidoSegura = b; avisar(); }
 /** as lutas da tela de agora, para o Ver replay e o Ver de novo */
 let atual: { lutas: readonly LutaNaTela[]; contexto: string; fim: (L: LutaPoc) => FimPoc } | null = null;
 
@@ -100,6 +103,7 @@ export function pularAnimacaoPoc(): void { if (LUTA_POC.lutando && pular) pular(
 export function alternarPausaPoc(): void { LUTA_POC.pausado = !LUTA_POC.pausado; avisar(); }
 export function alternarRapidoPoc(): void { LUTA_POC.rapido = !LUTA_POC.rapido; avisar(); }
 /** Ver replay (no resultado) e Ver de novo (no fim do replay): as mesmas lutas outra vez no palco, da mesma entrada; nada grava */
+export const temReplayPoc = (): boolean => atual !== null;
 export function verReplayPoc(): void {
   if (!atual) throw new Error("palco: nenhuma luta para rever");
   const a = atual;

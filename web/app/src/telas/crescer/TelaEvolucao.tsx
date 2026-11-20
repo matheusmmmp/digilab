@@ -211,7 +211,7 @@ export function TelaEvolucao() {
       </div>
       <ComoFunciona>
         Cada evolução é decidida pelo que o pet viveu: cuidado, caráter e lutas de treino. Uma moeda por transição (os contadores zeram a cada evolução).
-        <b> In-Training → Rookie</b> ({m.dur.bebe / 60} h): o <b>cuidado</b> decide o ramo; o In-Training chama em horário fixo (fome a cada 30 min, higiene a cada 60, carinho a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco.
+        <b> In-Training → Rookie</b> ({m.dur.bebe / 60} h): o <b>cuidado</b> decide o ramo; o In-Training chama em horário fixo (fome a cada 30 min, higiene a cada 60, atenção a cada 45) e atender pelo menos 80% dos chamados em até 15 min dá Sereno, menos dá Arisco.
         <b> Rookie → Champion</b> ({m.dur.crianca / 60} h): o <b>caráter dominante</b> decide a linha e a técnica.
         <b> Champion → Ultimate</b> ({m.dur.adolescente / 60} h e 10 lutas de treino na arena): o <b>eixo complementar</b> da linha decide o arquétipo e a passiva (as duas formas da linha são o mesmo Ultimate).
         <b> Ultimate → Mega</b> ({m.dur.adulto / 60} h, {CAT.sparring} lutas com {pctVit}% ou mais de vitórias e vínculo {virgula(CMG.vinculo)} ou mais): o mesmo arquétipo, mais forte. A forma sombria não chega ao Mega.

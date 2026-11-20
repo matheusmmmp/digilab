@@ -49,7 +49,7 @@ describe("a leitura do gosto", () => {
     expect(igual).toMatch(/^cor: de nascença, /); expect(igual).toContain("hoje, quase igual");
     e.exposicao.cor = 0.2; e.carinho.cor = 0.1;
     const mudou = descricaoDaLinha(linhasDoGosto(ina, e)[0]!);
-    expect(mudou).toContain("mudou de tanto ver e com o carinho");
+    expect(mudou).toContain("mudou de tanto ver e com o elogio");
     expect(mudou).not.toMatch(/\d/);
   });
   test("a segunda linha (de nascença) só existe quando o gosto em palavras mudou", () => {

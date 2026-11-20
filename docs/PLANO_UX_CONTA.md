@@ -95,5 +95,5 @@ pet fica à vista. O primeiro acesso cabe sem rolar a 390 e a 360.
 ## 9. As telas da CN3: levar o pet e os estados (2026-11-12, branch `v3-ux-conta-nuvem`)
 
 A prancha das telas 3 e 5 do `docs/PLANO_V3_CONTA.md` está em `docs/pranchas/ux-conta-nuvem/`, no mesmo molde desta. **Status:
-PROPOSTA.** Ela levanta as decisões UX-NV-1 a UX-NV-6, que estão no `LEIA.md` de lá, cada uma com a recomendação e o custo de errar. A
+APROVADA** pelo Matheus em 2026-11-20 ("Aprovo todas"), com as UX-NV-1 a UX-NV-6 pela recomendação. Ela levanta as decisões UX-NV-1 a UX-NV-6, que estão no `LEIA.md` de lá, cada uma com a recomendação e o custo de errar. A
 linha "Cópias do save" entra na tela Conta (seção 3, tela 6), em "Seus dados".

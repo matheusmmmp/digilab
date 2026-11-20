@@ -2,7 +2,8 @@
 
 **O contexto z** (CARACTERISTICAS_DIGIBRAIN, ~20): o vies (S), as urgencias dos onze receptores (0 nos ausentes), o contexto e as
 conjuncoes do M-SENS, duas conjuncoes com a urgencia (`fome_sem_comida = mul(u_fome, sem_comida)`, `cuidado_humor = mul(sem_cuidado,
-u_humor)`), a frustracao F do M-ESTADO e a valencia V e a excitacao E do M-AFETO. Entra em todos os comportamentos.
+u_humor)`), a frustracao F do M-ESTADO e a valencia V e a excitacao E do M-AFETO. Entra em todos os comportamentos. Com a ablacao `ve_z` da
+VALUATION (`ConfigAblacaoValuation`, so de pesquisa; docs/PLANO_ANALISE_V3_VALUATION.md, secao 3), o V e o E entram como 0.
 
 **As unidades (b, o)**, as sete acoes de ACOES_PET_HOJE (sem acao nova), na ordem do enum e, dentro de cada uma, na dos `vistos`:
   - comer: uma por comida vista (a podre tambem, pelo W0 da classe); o cheiro, se ha cheiro;
@@ -38,14 +39,18 @@ monta) soma mul(w_bola_do_dono, bola_do_dono) ao inato do brincar (todas as unid
 Fica fora do z (CARACTERISTICAS_DIGIBRAIN e o W0 nao mudam). Desligada, nenhum termo.
 **O enjoo** (D-GV-ENJOO-CER; so com o olhar e a `ConfigEnjooTela` ligada): todas as unidades ganham o termo `enjoo` (0 fora das unidades
 de olhar), que o M-ADAPT entrega pronto por TV: -mul(w_enjoo, o enjoo lembrado da TV). Desligado, nenhum termo novo.
+**O bebe que come com a fome dele** (docs/PLANO_V3_EQUILIBRIO_CUIDADO.md, EQ-7; a `ConfigEquilibrioCuidado.comer_bebe` ligada): a entrada
+`bebe` (0 ou S, o M-ADAPT a monta do gancho `estagio_bebe` do motor do jogo) soma mul(w_comer_bebe, bebe) ao inato do comer (todas as
+unidades do comer). Fica fora do z. Desligada, nenhum termo.
 Sem estado e sem rng."""
 from __future__ import annotations
 
 from ..config import (CARACTERISTICAS_DIGIBRAIN, COMPORTAMENTO_OLHAR, COMPORTAMENTOS_DIGIBRAIN, CONFIG_DIGIBRAIN, CONFIG_DIGIBRAIN_INATOS,
-                      CONFIG_FALA_UNIDADES, CONFIG_LANCE_DONO, CONFIG_OLHAR, CONTEUDOS_FALA, RECEPTORES_DIGIBRAIN, TERMO_DO_CONTEUDO, ConfigDigibrain,
-                      ConfigDigibrainInatos, ConfigFalaUnidades, ConfigLanceDono, ConfigOlhar)
+                      CONFIG_ABLACAO_VALUATION, CONFIG_EQUILIBRIO_CUIDADO, CONFIG_FALA_UNIDADES, CONFIG_LANCE_DONO, CONFIG_OLHAR, CONTEUDOS_FALA, RECEPTORES_DIGIBRAIN, TERMO_DO_CONTEUDO, ConfigAblacaoValuation,
+                      ConfigDigibrain, ConfigDigibrainInatos, ConfigEquilibrioCuidado, ConfigFalaUnidades, ConfigLanceDono, ConfigOlhar, ConfigPV2)
 from ..modelo_mundo import raiz_inteira
-from ._comum import chave_unidade, mul, phi
+from .base import div_arred
+from ._comum import chave_unidade, clamp, mul, phi
 from .plast import linha_da_opcao
 
 TERMOS = ("inato", "prox", "nov", "incentivo", "habito", "memoria", "persistencia")
@@ -57,8 +62,21 @@ class Impulso:
 
     def __init__(self, inatos: ConfigDigibrainInatos | None = None, cfg_digibrain: ConfigDigibrain | None = None,
                  cfg_fala: ConfigFalaUnidades | None = None, cfg_olhar: ConfigOlhar | None = None,
-                 cfg_lance: ConfigLanceDono | None = None) -> None:
+                 cfg_lance: ConfigLanceDono | None = None, cfg_equilibrio: ConfigEquilibrioCuidado | None = None,
+                 cfg_ablacao: ConfigAblacaoValuation | None = None, cfg_pv2: ConfigPV2 | None = None) -> None:
         self.p = inatos or CONFIG_DIGIBRAIN_INATOS
+        self.ab = cfg_ablacao or CONFIG_ABLACAO_VALUATION
+        if not isinstance(self.ab, ConfigAblacaoValuation):
+            raise TypeError(f"M-IMPULSO: cfg_ablacao e uma ConfigAblacaoValuation: {self.ab!r}")
+        # o PV-2 (ConfigPV2 ligada): o dC no fim do z (a caracteristica `dc_cheiro`, W0 0 em toda linha), o w0_dc no inato da unidade
+        # comer/cheiro e o nivel do cheiro como a proximidade das unidades do cheiro. Desligado (None), nada muda
+        if cfg_pv2 is not None and not isinstance(cfg_pv2, ConfigPV2):
+            raise TypeError(f"M-IMPULSO: cfg_pv2 e uma ConfigPV2: {cfg_pv2!r}")
+        self.pv2 = cfg_pv2 if cfg_pv2 is not None and cfg_pv2.ligada else None
+        self.n_z = len(CARACTERISTICAS_DIGIBRAIN) + (1 if self.pv2 is not None else 0)
+        self.ceq = cfg_equilibrio or CONFIG_EQUILIBRIO_CUIDADO
+        if not isinstance(self.ceq, ConfigEquilibrioCuidado):
+            raise TypeError(f"M-IMPULSO: cfg_equilibrio e uma ConfigEquilibrioCuidado: {self.ceq!r}")
         self.cl = cfg_lance or CONFIG_LANCE_DONO
         if not isinstance(self.cl, ConfigLanceDono):
             raise TypeError(f"M-IMPULSO: cfg_lance e uma ConfigLanceDono: {self.cl!r}")
@@ -72,7 +90,7 @@ class Impulso:
         self.w0 = {}
         linhas = self.p.w0 + (((COMPORTAMENTO_OLHAR, self.co.w0_olhar),) if self.co is not None else ())
         for b, linha in linhas:
-            w = [0] * len(CARACTERISTICAS_DIGIBRAIN)
+            w = [0] * self.n_z
             for c, v in linha:
                 w[idx[c]] = v
             self.w0[b] = w
@@ -102,10 +120,21 @@ class Impulso:
         z = [S] + [u.get(r, 0) for r in RECEPTORES_DIGIBRAIN]
         z += [cs["noite"], cs["dormindo"], cs["sem_cuidado"], cj["comida_vista"], cj["sem_comida"], cj["bola_vista"],
               mul(u.get("fome", 0), cj["sem_comida"], S), mul(cs["sem_cuidado"], u.get("humor", 0), S),
-              contexto["F"], afeto["V"], afeto["E"]]
-        if len(z) != len(CARACTERISTICAS_DIGIBRAIN):          # pragma: no cover - conferido pela config
+              contexto["F"], 0 if self.ab.ve_z else afeto["V"], 0 if self.ab.ve_z else afeto["E"]]   # a ablacao F (VALUATION)
+        if self.pv2 is not None:                      # o PV-2: a variacao do cheiro, no fim (CARACTERISTICA_DC)
+            z.append(sens["olfato"]["dC"])
+        if len(z) != self.n_z:                        # pragma: no cover - conferido pela config
             raise RuntimeError("M-IMPULSO: z fora de CARACTERISTICAS_DIGIBRAIN")
         return z
+
+    def nivel_cheiro(self, sens: dict, afeto: dict) -> int:
+        """o nivel do cheiro da decisao (o PV-2): o `c` do M-SENS; no OLF-G, com o ganho da fome, clamp(div_arred(c x (g0 + u_fome), g0), 0, S)
+        (PV2-5)"""
+        c = sens["olfato"]["c"]
+        if self.pv2.braco != "OLF-G":
+            return c
+        g0 = self.pv2.g0
+        return clamp(div_arred(c * (g0 + afeto["urgencias"].get("fome", 0)), g0), 0, self.S)
 
     @staticmethod
     def alvos(sens: dict, memoria: dict | None, passeio: tuple | None = None, fala: bool = False) -> list[dict]:
@@ -134,7 +163,7 @@ class Impulso:
                     px, py = passeio[2]
                     d = raiz_inteira((px - x) * (px - x) + (py - y) * (py - y))
                     out.append({"chave": passeio, "acao": b, "tipo": "vagar", "objeto": None, "d": d})
-                if sens["ha_cheiro"]:
+                if sens["olfato"]["forte"] if "olfato" in sens else sens["ha_cheiro"]:     # o PV-2: o cheiro forte, a regra do motor
                     out.append({"chave": chave_unidade(b, "cheiro"), "acao": b, "tipo": "cheiro", "objeto": None, "d": None})
                 if memoria is not None and memoria["recuperado"] is not None:
                     px, py = memoria["ponto"]
@@ -149,14 +178,15 @@ class Impulso:
 
     def unidades(self, sens: dict, afeto: dict, contexto: dict, plast, memoria: dict | None, drives: tuple,
                  lembranca: tuple | None = None, facetas: tuple | None = None, gosto: dict | None = None,
-                 bola_do_dono: int | None = None, enjoo: dict | None = None) -> tuple[list[dict], list]:
+                 bola_do_dono: int | None = None, enjoo: dict | None = None, bebe: int | None = None) -> tuple[list[dict], list]:
         """as unidades da decisao com os termos e a ativacao, e o z. `lembranca` = (o termo da M4, o `casa` do M-MEM) ou None; so com a
         `memoria_autobio` as unidades ganham o termo `lembranca` (L nas que casam com o episodio lembrado, 0 nas outras). `facetas` = (os
         valores das tres facetas, as classes de comida que ja tem episodio positivo); so com a `facetas_mem` as unidades ganham o termo
         `faceta` (6.2: cautela no `comer` de classe sem episodio positivo, apego no `chamar_atencao`, ousadia no `explorar` com alvo fora
         da vista: o lugar lembrado e o cheiro). `gosto` (so com a subchave `olhar`) = {id da TV: o termo `gosto` da unidade de olhar dela}
         (vazio se o pet nao olhava); com a subchave, todas as unidades ganham o termo `gosto` e as de olhar vem no fim. `bola_do_dono` (so
-        com a `ConfigLanceDono` ligada, BB-4) = a entrada do convite, 0 ou S: soma mul(w_bola_do_dono, bola_do_dono) ao inato do brincar"""
+        com a `ConfigLanceDono` ligada, BB-4) = a entrada do convite, 0 ou S: soma mul(w_bola_do_dono, bola_do_dono) ao inato do brincar. `bebe`
+        (so com a `ConfigEquilibrioCuidado.comer_bebe`, EQ-7) = 0 ou S: soma mul(w_comer_bebe, bebe) ao inato do comer"""
         S, a_max = self.S, self.p.a_max
         if (gosto is not None) != (self.co is not None):
             raise RuntimeError("M-IMPULSO: o termo gosto vem so com a subchave olhar, e com ela sempre")
@@ -170,6 +200,12 @@ class Impulso:
             if bola_do_dono not in (0, S):
                 raise ValueError(f"M-IMPULSO: bola_do_dono e 0 ou S: {bola_do_dono!r}")
             inato_b["brincar"] += mul(self.cl.w_bola_do_dono, bola_do_dono, S)
+        if (bebe is not None) != self.ceq.comer_bebe:
+            raise RuntimeError("M-IMPULSO: a entrada bebe vem so com a ConfigEquilibrioCuidado.comer_bebe ligada, e com ela sempre")
+        if bebe is not None:                          # o bebe que come com a fome dele (EQ-7): so o inato do comer
+            if bebe not in (0, S):
+                raise ValueError(f"M-IMPULSO: bebe e 0 ou S: {bebe!r}")
+            inato_b["comer"] += mul(self.ceq.w_comer_bebe, bebe, S)
         habito_b = {b: plast.habito(b, z) for b in COMPORTAMENTOS_DIGIBRAIN if not (self.cd.fala_unidades and b == FALA)}
         fala = self.cd.fala_unidades
         if fala:
@@ -215,6 +251,10 @@ class Impulso:
                     if c not in incentivos:
                         incentivos[c] = plast.incentivo(sens["pc"], c, drives)
                     termos["incentivo"] = mul(incentivos[c], o["prox"], S)
+            if self.pv2 is not None and u["tipo"] == "cheiro":   # o PV-2: o nivel (com o ganho da fome no OLF-G) e o dC no comer
+                termos["prox"] = mul(self.w0_prox.get(b, 0), self.nivel_cheiro(sens, afeto), S)
+                if b == "comer":
+                    termos["inato"] += mul(self.pv2.w0_dc, sens["olfato"]["dC"], S)
             termos["habito"] = habito_b[linha_da_opcao(u["chave"], fala)]
             if u["tipo"] == "ponto":
                 termos["memoria"] = memoria["M"]

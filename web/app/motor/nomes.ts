@@ -19,7 +19,7 @@ export const NOME_PET: Record<AcaoPet, string> = { ocioso: "à toa", dormir: "do
 export const NOME_DONO: Record<string, string> = { atencioso: "atencioso", relapso: "relapso", aleatorio: "aleatório", incoerente: "incoerente" };
 export const NOME_COMB: Record<TracoCombate, string> = { golpe: "Golpe", bloqueio: "Bloqueio", agarrao: "Agarrão", finta: "Finta", carga: "Carga" };
 export const NOME_EXERCICIO: Record<Exercicio, string> = { levantar_pedra: "Levantar pedra", corrida: "Corrida", alvo: "Alvo", esquiva: "Esquiva", meditar: "Meditar", resistencia: "Resistência" };
-export const NOME_CHAMADO: Record<Chamado, string> = { fome: "fome", higiene: "higiene", carinho: "carinho" };
+export const NOME_CHAMADO: Record<Chamado, string> = { fome: "fome", higiene: "higiene", carinho: "atenção" };
 export const OVO: Record<Especie, string> = { brasa: "ovo0", cirro: "ovo1", ferrugem: "ovo2", limo: "ovo3" };
 export const NOME_V2: Record<string, string> = {
   avancar: "avançar", recuar: "recuar", golpe_rapido: "golpe rápido", preparar_pesado: "preparar pesado",

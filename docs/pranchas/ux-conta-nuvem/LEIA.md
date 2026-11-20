@@ -33,6 +33,9 @@ os tokens da prancha dos lugares. O que é novo está em `nuvem.css`. Não há c
 
 ## O que a prancha pede ao Matheus
 
+**APROVADAS pelo Matheus em 2026-11-20, todas pela recomendação** ("Aprovo todas", na sessão da conta). A prancha está aprovada; o
+código é da CN3, com a trava do "só ver" (UX-NV-5).
+
 - **UX-NV-1, a resposta marcada quando a conta já tem pets:** **"Guardar os dois" vem marcada.** É a única que não tira nada de lugar.
   A outra opção é nenhuma marcada. Custo de errar: baixo.
 - **UX-NV-2, o destino do que não foi escolhido na tela 3:** o plano não diz. **Proponho as cópias, por 30 dias,** o mesmo prazo da

@@ -54,7 +54,8 @@ from digilab.metrics import (  # noqa: E402
 )
 from digilab.memoria import PoliticaBanditMemoria  # noqa: E402
 from digilab.memoria_espacos import PoliticaBanditEspacos  # noqa: E402
-from digilab.obediencia import MotorPersonalidade, PoliticaBanditPersonalidade  # noqa: E402
+from digilab.obediencia import PoliticaBanditPersonalidade  # noqa: E402
+from digilab.personalidade import MotorPersonalidade  # noqa: E402
 from digilab.temperamento import NEUTRO, sortear  # noqa: E402
 from digilab.policies import PoliticaBandit  # noqa: E402
 from digilab.policy import PoliticaInstinto  # noqa: E402

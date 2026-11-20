@@ -168,7 +168,7 @@ def test_t_ponto_2_o_motor_valida_o_ponto():
 def test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain():
     """o G2 das 196 vidas e o tests/test_gabarito_digibrain.py, que passa sem mudanca; aqui, o resto: nenhum modulo do motor, da bancada
     nem das ferramentas cita o pacote (e o explorar do motor nao ganha candidato)"""
-    nomes = re.compile(r"digilab\.digibrain|from \.digibrain|from \.\.digibrain|import digibrain")
+    nomes = re.compile(r"digilab\.digibrain(?!\.base\b)|from \.digibrain(?!\.base\b)|from \.\.digibrain(?!\.base\b)|import digibrain")
     citam = {p.relative_to(RAIZ).as_posix() for pasta in ("digilab", "experiments", "tools") for p in (RAIZ / pasta).rglob("*.py")
              if nomes.search(p.read_text(encoding="utf-8"))}
     assert {c for c in citam if not c.startswith("digilab/digibrain/")} == {"experiments/run_v2_digibrain_prototipo.py",
@@ -178,9 +178,11 @@ def test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain():
                                                                              "experiments/exportar_decodificador.py",
                                                                              # a DC3 (#672, #686): o orquestrador da run unica e o exportador do gabarito da fala_unidades
                                                                              "experiments/run_v3_conversa_dc3.py", "experiments/exportar_gabarito_fala_unidades.py",
+                                                                             # a SOCIAL_PAR A0 (o plano, 3.1): o pet de hoje, o modular com a CO7, montado pelo orquestrador
+                                                                             "experiments/run_v3_social_par_a0.py", "experiments/run_v3_corpo.py", "experiments/run_v3_corpo_c3.py", "experiments/run_v3_corpo_acoplamento.py",
                                                                              # os que ja citavam o pacote e faltavam aqui (o teste falhava na main, D-CO6b-4): o GOSTO_VISUAL
                                                                              # (P1e, P1f) e a DC4a
-                                                                             "experiments/run_v3_gosto_visual.py", "experiments/exportar_gosto_visual.py",
+                                                                             "experiments/run_v3_gosto_visual.py", "experiments/exportar_gosto_visual.py", "experiments/exportar_gabarito_corpo_chaves.py",
                                                                              "experiments/entradas_dc4.py",
                                                                              # COOPERACAO, CO6a: o gabarito das vidas do grupo com o modular
                                                                              "experiments/exportar_gabarito_co6.py",
@@ -189,7 +191,20 @@ def test_t_ponto_3_so_o_orquestrador_do_prototipo_monta_o_digibrain():
                                                                              # GOSTO_VISUAL, a TV no jogo (#883): o exportador do gabarito, que faltava aqui (D-CO7b-9)
                                                                              "experiments/exportar_tv_jogo.py",
                                                                              # COOPERACAO, CB1: a bancada da cooperacao (o modular nos dois pets do grupo)
-                                                                             "experiments/run_v3_cooperacao_bancada.py"}
+                                                                             "experiments/run_v3_cooperacao_bancada.py",
+                                                                             # GOSTO_VISUAL, a fala do assistir (FA-2): o gabarito do dec-v4, que faltava aqui
+                                                                             # (ja estava no test_digibrain_etapa0.py; D-EQ2-12)
+                                                                             "experiments/exportar_decodificador_v4.py",
+                                                                             # VALUATION, a ablacao do Valuation (V2): os bracos montam o REL da C4
+                                                                             # com uma mudanca so (docs/PLANO_ANALISE_V3_VALUATION.md, secao 3)
+                                                                             "experiments/run_v3_valuation.py",
+                                                                             # VALUATION, o conserto (V3): o REL da C4 com a guarda da fome no reflexo
+                                                                             # (docs/PLANO_ANALISE_V3_VALUATION_CONSERTO.md, secao 2)
+                                                                             "experiments/run_v3_valuation_conserto.py",
+                                                                             # ELOGIO, etapa 2: as vidas dos bracos (o modular REL com a ConfigElogio)
+                                                                             "experiments/elogio.py",
+                                                                             # PET_VIVO, o codigo do PV-2: as vidas dos bracos (o REL com a ConfigPV2 e o orgao)
+                                                                             "experiments/pv2.py"}
     assert "lembranca" not in (RAIZ / "digilab" / "mundo.py").read_text(encoding="utf-8")
 
 

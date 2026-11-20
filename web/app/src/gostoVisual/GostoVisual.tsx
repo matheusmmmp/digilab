@@ -14,6 +14,7 @@ import { gostoVisualLigado } from "./chave.ts";
 import { fecharJanelaDaTv, useJanelaDaTv } from "./janelaPequena.ts";
 import { JanelaDaTv } from "./JanelaTv.tsx";
 import { fraseDaReacao } from "./leituraGosto.ts";
+import { passandoEmPalavras } from "./PainelTv.tsx";
 import { pararTv, usarPet, useSessaoTv } from "./sessaoTv.ts";
 import { agir } from "../acoes.ts";
 import { nomeForma } from "../../motor/index.ts";
@@ -39,10 +40,10 @@ function useAnuncio(chave: string, texto: string): string {
 }
 
 /** o selo da captura (UX-GV-6): fixo no topo enquanto a tela do dono é lida, com o Parar */
-export function SeloCaptura({ parar }: { parar: () => void }) {
+export function SeloCaptura({ parar, video = false }: { parar: () => void; video?: boolean }) {
   return (
-    <div className="tv-selo" role="group" aria-label="O pet está vendo a sua tela" data-testid="tv-selo">
-      <i aria-hidden="true" /><span>Vendo a sua tela</span>
+    <div className="tv-selo" role="group" aria-label={video ? "O pet está vendo um vídeo seu" : "O pet está vendo a sua tela"} data-testid="tv-selo">
+      <i aria-hidden="true" /><span>{video ? "Vendo um vídeo seu" : "Vendo a sua tela"}</span>
       <button type="button" className="hx-btn tv-selo__bt" onClick={parar}><Square aria-hidden="true" />Parar</button>
     </div>
   );
@@ -75,7 +76,8 @@ function GostoVisualLigado() {
     return () => clearInterval(t);
   }, [janela]);
   const reacao = s.inato && s.leitura ? fraseDaReacao(s.inato, s.estado, s.sentido, s.leitura.reacao) : "";
-  const tv = s.origem === "tela" ? "O pet está vendo a sua tela." : s.origem === "jogo" ? "A TV do jogo está ligada." : "";
+  /* o canal entra na frase dita (D-GV-CANAL-6): a troca de canal é anunciada ao leitor de tela, sem o nome da janela */
+  const tv = s.origem === "tela" ? `O pet está vendo ${passandoEmPalavras(s)}.` : s.origem === "jogo" ? "A TV do jogo está ligada." : "";
   const dito = useAnuncio(s.origem !== null ? s.leitura?.reacao ?? "" : "", reacao), ligou = useRef(false);
   /* a TV ligando e desligando é dita uma vez, numa região só dela (a reação tem a sua): "A TV foi desligada." fica ANUNCIO_MS e sai */
   const [ditoTv, setDitoTv] = useState("");
@@ -107,7 +109,7 @@ function GostoVisualLigado() {
   return (
     <>
       <ToqueTv />
-      {s.origem === "tela" && <SeloCaptura parar={pararPeloSelo} />}
+      {s.origem === "tela" && <SeloCaptura parar={pararPeloSelo} video={s.canal?.tipo === "video"} />}
       <p className="sr-only" role="status" data-testid="tv-anuncio">{ditoTv}</p>
       <p className="sr-only" role="status" data-testid="tv-anuncio-reacao">{s.origem !== null ? dito : ""}</p>
       {janela && s.inato && s.origem !== null && createPortal(

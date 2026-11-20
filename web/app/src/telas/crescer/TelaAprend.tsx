@@ -12,7 +12,7 @@ import { AMPULHETA } from "../../grades.ts";
 import { useJogo } from "../../jogo.ts";
 import { diaDe, hhmm, lutasDaCausa } from "../pet/TelaPet.tsx";
 
-const NOME_MEM: Record<string, string> = { demora: "Você me deixou esperando", bronca: "Broncas", elogio: "Elogios", carinho: "Carinho" };
+const NOME_MEM: Record<string, string> = { demora: "Você me deixou esperando", bronca: "Broncas", elogio: "Elogios", carinho: "Atenção" };
 const EMOTE_MEM: Record<string, string> = { elogio: "emoji_joinha", carinho: "emoji_coracao", bronca: "emoji_exclam" };
 const EMOTE_EMOCAO: Record<string, string> = { alegria: "emoji_feliz", euforia: "emoji_feliz", orgulho: "emoji_feliz", ternura: "emoji_coracao" };
 const CORES_AMPULHETA = { k: "#173A8A", w: "#FFFFFF", y: "#F0B429" };

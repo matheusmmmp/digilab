@@ -16,7 +16,7 @@ import { ToqueObjetos } from "./ObjetosDaIlha.tsx";
 import { ToquePet } from "../telas/pet/ToquePet.tsx";
 import { Deco } from "./Deco.tsx";
 
-export function Habitat({ escurecer, irLugar }: { escurecer: boolean; irLugar: (d: Destino) => void }) {
+export function Habitat({ escurecer, irLugar, irCais }: { escurecer: boolean; irLugar: (d: Destino) => void; irCais?: () => void }) {
   const { motor: m, nascendo } = useJogo(), cena = useRef<HTMLElement>(null);
   /* a cena sabe que esta coberta pelo veu (a ilha desenha mais devagar por tras dele) */
   useEffect(() => { CENA.coberto = escurecer; return () => { CENA.coberto = false; }; }, [escurecer]);
@@ -33,7 +33,7 @@ export function Habitat({ escurecer, irLugar }: { escurecer: boolean; irLugar: (
         {/* pegar o pet e solta-lo no chao (o evento "lp", pets v19); depois do ToquePet, que larga o toque com o pet na mao (PegarPet.tsx) */}
         {m.mundo && <PegarPet alvo={cena} />}
         {/* o portao abre o Lutar e a barraca o Diario (ToqueLugar.tsx; so na ilha 3D, que conta onde os lugares estao) */}
-        {m.mundo && <ToqueLugar alvo={cena} ir={irLugar} />}
+        {m.mundo && <ToqueLugar alvo={cena} ir={irLugar} irCais={irCais} />}
         {/* tocar na tigela ou na bola abre o cartao dela, e o mouse sobre um objeto mostra a etiqueta (ObjetosDaIlha.tsx, a direcao A da ilha) */}
         {m.mundo && <ToqueObjetos alvo={cena} />}
       </section>

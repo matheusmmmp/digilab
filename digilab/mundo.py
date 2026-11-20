@@ -140,7 +140,10 @@ from .config import AGUA_DOCE, AGUA_MAR, AGUA_POR_LAYOUT, ARVORE_FECHADA, MARCO_
 from .config import CONFIG_BOLA_NO_GOLPE, CONFIG_DECISAO_NA_COMIDA, ConfigBolaNoGolpe, ConfigDecisaoNaComida
 from .config import CONFIG_FRUTA_COMO_COMIDA, CONFIG_SACUDIR, ConfigFrutaComoComida, ConfigSacudir
 from .config import CONFIG_TV, CONFIG_TVJOGO, ConfigTV, ConfigTVJogo
+from .config import ConfigIntervencaoSocial
 from .config import CONFIG_LANCE_DONO, ConfigLanceDono
+from .config import CONFIG_ORGAO, ConfigOrgao
+from . import orgao as _orgao
 from . import contrato as ct
 from .config import ConfigOlfato, ConfigOuvido, ConfigSentidos
 from .corpo import CANAIS_TELA, leitura_orgao
@@ -162,6 +165,8 @@ from .events import deixar_comida as evento_deixar_comida
 from .events import ler_sacudir_arvore
 from .events import sacudir_arvore as evento_sacudir_arvore
 from .events import TIPO_SENTIDO_TELA, TIPO_TROCAR_CANAL, ler_sentido_tela, ler_trocar_canal
+from .events import TIPO_PERCEPCAO_TELA, ler_percepcao_tela
+from .events import percepcao_tela as evento_percepcao_tela
 from .events import sentido_tela as evento_sentido_tela
 from .events import sentido_tela_desligada as evento_sentido_tela_desligada
 from .events import trocar_canal as evento_trocar_canal
@@ -1404,8 +1409,13 @@ class MotorMundo(MotorFrutas):
                  cfg_contrato: ConfigContrato | None = None, cfg_decisao_comida: ConfigDecisaoNaComida | None = None,
                  cfg_bola_golpe: ConfigBolaNoGolpe | None = None, cfg_sacudir: ConfigSacudir | None = None,
                  cfg_fruta_comida: ConfigFrutaComoComida | None = None, cfg_tv: ConfigTV | None = None,
-                 cfg_tv_jogo: ConfigTVJogo | None = None, cfg_lance_dono: ConfigLanceDono | None = None, **kw) -> None:
+                 cfg_tv_jogo: ConfigTVJogo | None = None, cfg_lance_dono: ConfigLanceDono | None = None,
+                 cfg_orgao: ConfigOrgao | None = None, **kw) -> None:
         super().__init__(*a, **kw)
+        # o orgao da visao (GOSTO_VISUAL, OV2; docs/ESPEC_V3_ORGAO_VISAO.md): so com a TV ligada e um pet so; desligado, nada muda
+        self.cor = cfg_orgao or CONFIG_ORGAO
+        if not isinstance(self.cor, ConfigOrgao):
+            raise TypeError(f"cfg_orgao e uma ConfigOrgao: {self.cor!r}")
         self.cld = cfg_lance_dono or CONFIG_LANCE_DONO
         if not isinstance(self.cld, ConfigLanceDono):
             raise TypeError(f"cfg_lance_dono e uma ConfigLanceDono: {self.cld!r}")
@@ -1510,6 +1520,8 @@ class MotorMundo(MotorFrutas):
         self.consumos_mundo: list[dict] = []
         self.deixadas: list[dict] = []
         self.levadas: list[dict] = []           # cada vez que o dono levou o pet (levar_pet): tick, de, o ponto pedido e onde ele caiu
+        # o parceiro gravado (docs/ESPEC_V3_SOCIAL_PAR_E1.md, 2.2): so a bancada o liga, por `aceitar_ponto_gravado`; desligado, nada muda
+        self._ponto_gravado = False
         self.decisoes_mundo: list[dict] = []
         self.regioes: list[dict] = []
         self.visitas: list[dict] = []
@@ -1552,8 +1564,12 @@ class MotorMundo(MotorFrutas):
                 raise TVSemChave("a TV exige o corpo na frente do motor (com_corpo(MotorMundo)) com a ConfigTela ligada")
             if mundo is None:
                 self.mundo.ligar_tv(self.ctv)
+                if self.cor.ligada:                 # o orgao da visao (OV2): os conceitos da TV, pela rng propria `tv-conceitos`
+                    self.mundo.tv.ligar_orgao(self.cor, self.semente)
             elif self.mundo.tv is None or self.mundo.tv.cfg != self.ctv:
                 raise TVSemChave("a TV (ConfigTV) no grupo e do mundo comum: o Grupo a liga com a mesma ConfigTV (Grupo(cfg_tv=))")
+        if self.cor.ligada and (not self.ctv.ligada or mundo is not None):
+            raise TVSemChave("o orgao da visao (ConfigOrgao) exige a TV ligada e um pet so (o grupo fica fora da primeira versao)")
 
         self._lance_tick: int | None = None       # o lance do dono (BB-4): o tick do pet do ultimo lance deste pet (None: nenhum)
         if self.cld.ligada:
@@ -1726,6 +1742,10 @@ class MotorMundo(MotorFrutas):
             ver = getattr(self._pm_cerebro(), "ver_tela", None)
             if ver is not None:
                 ver(self._linhas_tela())
+            if self.cor.ligada:                             # o orgao (OV2): o que o pet ve na TV que olha, ao cerebro que tem o gancho
+                ver_c = getattr(self._pm_cerebro(), "ver_conceitos", None)
+                if ver_c is not None:
+                    ver_c(self._conceitos_da_tela())
         if self._grupo is not None:
             self._social = self.percepcao_social()
             if self._grupo.cs.ligada:
@@ -1904,10 +1924,18 @@ class MotorMundo(MotorFrutas):
             return next(a for a in cands if a.tipo == "aqui")
         return alvo_padrao_de(acao, cands, self._percepcao, self.cmf)
 
+    def aceitar_ponto_gravado(self, ci: ConfigIntervencaoSocial) -> None:
+        """O parceiro gravado da bancada (docs/ESPEC_V3_SOCIAL_PAR_E1.md, 2.2; E1-2): o cerebro pode devolver um ponto em toda acao com
+        alvo (comer e brincar tambem), para a reexecucao ir ao ponto gravado sem ler onde o outro esta agora. Chegar a um ponto nao come nem
+        chuta (o comer e o brincar pedem o objeto). So com a ConfigIntervencaoSocial ligada; o jogo nunca chama isto."""
+        if not isinstance(ci, ConfigIntervencaoSocial) or not ci.ligada:
+            raise ValueError(f"aceitar_ponto_gravado so com a ConfigIntervencaoSocial ligada: {ci!r}")
+        self._ponto_gravado = True
+
     def _validar_alvo(self, acao: AcaoPet, alvo: Alvo, cands: list[Alvo]) -> None:
         if alvo in cands:
             return
-        if acao is AcaoPet.EXPLORAR and alvo.tipo == "ponto" and alvo.id is None and alvo.de is None:
+        if (acao is AcaoPet.EXPLORAR or self._ponto_gravado) and alvo.tipo == "ponto" and alvo.id is None and alvo.de is None:
             if type(alvo.x) is int and type(alvo.y) is int and no_mapa(alvo.x, alvo.y, self.cmf) == (alvo.x, alvo.y):
                 return
             raise ValueError(f"ponto fora do mapa ou nao inteiro: ({alvo.x!r}, {alvo.y!r})")
@@ -2510,6 +2538,15 @@ class MotorMundo(MotorFrutas):
             return dict(passa)
         return {c: 0 for c in CANAIS_TELA}
 
+    def _conceitos_da_tela(self) -> tuple[tuple[str, int], ...]:
+        """o orgao (OV2): os conceitos da TV que o pet olha agora (pares canonicos), ou nenhum se ele nao olha. As duas TVs da sonda (P1e)
+        nao passam conceito"""
+        tv = self._exigir_tv("os conceitos da tela")
+        if self.mundo.duas_tvs is not None:
+            return ()
+        t = self._tm(self._estado.tick)
+        return tv.conceitos_em(t) if self._olhando_tv(tv.em(t)) else ()
+
     def ligar_duas_tvs(self, cfg: ConfigDuasTVs, perfis: tuple, replica: int) -> dict:
         """As duas TVs da sonda (GOSTO_VISUAL, P1e; docs/ESPEC_GOSTO_VISUAL_P1.md, secao 7). So numa copia do pet: a vida nunca chama isto,
         e nada vai ao log. Com a ConfigDuasTVs ligada, a TV do jogo ligada (a fonte "grade"), um cerebro com o gancho `olhando_tela` (o
@@ -2590,6 +2627,24 @@ class MotorMundo(MotorFrutas):
         if niveis is None and not self.ctj.desligar:
             raise TVSemChave("a TV desligada (sentido_tela `fonte|desligada`) exige a ConfigTVJogo.desligar")
         tv.sentir(fonte, niveis, self._tm(self._estado.tick))
+        self._n_eventos += 1                     # e um evento do log, mas NAO e contato
+
+    def percepcao_tela(self, fonte: str, pares) -> None:
+        """O orgao da visao no modo livre gravado (OV2): o que ele reconheceu, a partir de agora. Valida o evento antes do log."""
+        self._exigir_orgao()
+        evento = evento_percepcao_tela(self._estado.tick, fonte, _orgao.VERSAO_LISTA, _orgao.canonico(pares, fonte))
+        self._aplicar_percepcao_tela(*ler_percepcao_tela(evento))
+        self._log.anexar(evento)
+
+    def _exigir_orgao(self) -> None:
+        if not self.cor.ligada:
+            raise TVSemChave("percepcao_tela sem a ConfigOrgao ligada (o orgao da visao, OV2)")
+        self._exigir_tv("percepcao_tela")
+
+    def _aplicar_percepcao_tela(self, fonte: str, lista: str, pares: tuple) -> None:
+        """So a TV muda (o replay le o evento e nao chama ninguem). Nao e contato nem cuidado."""
+        self._exigir_orgao()
+        self.mundo.tv.perceber(fonte, lista, pares, self._tm(self._estado.tick))
         self._n_eventos += 1                     # e um evento do log, mas NAO e contato
 
     def no_galho(self) -> dict[str, int]:
@@ -2757,6 +2812,8 @@ def reproduzir_mundo(log: LogDeEventos, politica_fabrica: Callable, cfg: Config 
             motor._aplicar_trocar_canal(ler_trocar_canal(evento))
         elif evento.tipo == TIPO_SENTIDO_TELA:
             motor._aplicar_sentido_tela(*ler_sentido_tela(evento))
+        elif evento.tipo == TIPO_PERCEPCAO_TELA:
+            motor._aplicar_percepcao_tela(*ler_percepcao_tela(evento))
         elif evento.tipo == "lt":
             motor._aplicar_resumo_luta(*ler_resumo_luta(evento))
         else:
@@ -2799,13 +2856,17 @@ class DeixarBola:
 
 
 ESTILOS_LUGAR_V2 = ("comedouro", "perto", "longe")          # os estilos das runs ate a C1 (as runs de antes iteram estes, nao os novos)
-ESTILOS_LUGAR = ESTILOS_LUGAR_V2 + ("longe_fixo",)
+ESTILOS_LUGAR = ESTILOS_LUGAR_V2 + ("longe_fixo", "longe_ancora")    # o `longe_ancora`: LONGE_GEOMETRIA (PLANO_ANALISE_V3_LONGE_GEOMETRIA, 3.2)
 
 
 class DonoComLugar:
     """Embrulha um dono sintetico (secao 4): o `alimentar` vira `deixar_comida("racao", x, y)` no lugar do estilo. A rng do lugar e
     `derivar_semente("dono-lugar", semente, rotulo_dono)`, sem o braco: P0 e P1 sorteiam os mesmos desvios. Um sorteio fixo por
-    `alimentar` em cada estilo (perto e longe: direcao e distancia; comedouro: nenhum)."""
+    `alimentar` em cada estilo (perto e longe: direcao e distancia; comedouro: nenhum).
+
+    O `longe_ancora` (LONGE_GEOMETRIA, docs/PLANO_ANALISE_V3_LONGE_GEOMETRIA.md, secao 3.2): cada racao cai num ponto novo, sorteado como
+    um ponto do `longe_fixo` (as mesmas direcoes viaveis, a mesma faixa de distancia ao comedouro, o mesmo teste de corte e as mesmas 1 000
+    tentativas), com a rng propria `derivar_semente("dono-lugar-ancora", semente, rotulo_dono)`. So a repeticao dos lugares muda."""
 
     def __init__(self, base, estilo: str, semente: int, rotulo_dono: str, cfg_mundo: ConfigMundo | None = None,
                  n_pontos: int = N_PONTOS_LONGE_FIXO) -> None:
@@ -2822,36 +2883,50 @@ class DonoComLugar:
         self.lugares: list[dict] = []
         self.pontos_fixos: tuple[tuple[int, int], ...] = ()
         self._rng_fixo: random.Random | None = None
+        self._rng_ancora: random.Random | None = None
+        self._viaveis_ancora: tuple[int, ...] = ()
         if estilo == "longe_fixo":                         # rng propria: os outros estilos nao consomem nenhum sorteio novo
             self._rng_fixo = random.Random(derivar_semente("dono-lugar-fixo", semente, rotulo_dono))
             self.pontos_fixos = self._sortear_pontos_fixos()
+        elif estilo == "longe_ancora":                     # idem, com a rng dele; as direcoes viaveis sao as do longe_fixo
+            self._rng_ancora = random.Random(derivar_semente("dono-lugar-ancora", semente, rotulo_dono))
+            self._viaveis_ancora = tuple(self._direcoes_viaveis())
+            if not self._viaveis_ancora:
+                raise ValueError(f"longe_ancora: nenhuma direcao cabe no mapa a {self.cmf.longe_min_celulas} celulas do comedouro")
+
+    def _cabe_inteiro(self, direcao: int, r: int) -> bool:
+        """o ponto a r subunidades do comedouro na direcao cai dentro do mapa sem corte (a distancia fica na faixa, a menos de 1 subunidade)"""
+        cm = self.cmf
+        cx, cy = centro_da_celula(cm.layout.comedouro, cm)
+        x, y = deslocar(cx, cy, direcao, r, cm)
+        return distancia(x - cx, y - cy) >= r - 1
+
+    def _direcoes_viaveis(self) -> list[int]:
+        """as direcoes das 16 em que o ponto a `longe_min_celulas` do comedouro cabe sem corte (o `longe_fixo` e o `longe_ancora`)"""
+        cm = self.cmf
+        return [d for d in range(16) if self._cabe_inteiro(d, cm.longe_min_celulas * cm.sub)]
+
+    def _ponto_na_direcao(self, rng: random.Random, direcao: int) -> tuple[int, int]:
+        """um ponto na direcao, a uma distancia uniforme em `longe_min_celulas`...`longe_max_celulas` do comedouro que caiba sem corte;
+        em 1 000 sorteios sem nenhuma que caiba, falha alto"""
+        cm = self.cmf
+        cx, cy = centro_da_celula(cm.layout.comedouro, cm)
+        rmin, rmax = cm.longe_min_celulas * cm.sub, cm.longe_max_celulas * cm.sub
+        for _ in range(1000):
+            r = rng.randint(rmin, rmax)
+            if self._cabe_inteiro(direcao, r):
+                return deslocar(cx, cy, direcao, r, cm)
+        raise RuntimeError(f"{self.estilo}: nenhuma distancia da direcao {direcao} cabe no mapa em 1000 sorteios")
 
     def _sortear_pontos_fixos(self) -> tuple[tuple[int, int], ...]:
         """Os `n_pontos` lugares da vida (C1, secao 3.1): cada um a `longe_min_celulas`...`longe_max_celulas` do comedouro (LR-2),
         em direcoes distintas das 16. O corte do mapa nao pode encurtar a distancia: so valem as direcoes e distancias cujo ponto cai
         dentro do mapa sem corte (a distancia fica na faixa, a menos do arredondamento de 1 subunidade); sem direcoes bastantes, falha alto."""
-        cm = self.cmf
-        cx, cy = centro_da_celula(cm.layout.comedouro, cm)
-        rmin, rmax = cm.longe_min_celulas * cm.sub, cm.longe_max_celulas * cm.sub
-
-        def inteiro(direcao: int, r: int) -> bool:
-            x, y = deslocar(cx, cy, direcao, r, cm)
-            return distancia(x - cx, y - cy) >= r - 1
-
-        viaveis = [d for d in range(16) if inteiro(d, rmin)]
+        viaveis = self._direcoes_viaveis()
         if len(viaveis) < self.n_pontos:
-            raise ValueError(f"longe_fixo: so {len(viaveis)} direcoes cabem no mapa a {cm.longe_min_celulas} celulas do comedouro, "
+            raise ValueError(f"longe_fixo: so {len(viaveis)} direcoes cabem no mapa a {self.cmf.longe_min_celulas} celulas do comedouro, "
                              f"e o n_pontos pede {self.n_pontos}")
-        pontos = []
-        for direcao in self._rng_fixo.sample(viaveis, self.n_pontos):
-            for _ in range(1000):
-                r = self._rng_fixo.randint(rmin, rmax)
-                if inteiro(direcao, r):
-                    pontos.append(deslocar(cx, cy, direcao, r, cm))
-                    break
-            else:
-                raise RuntimeError(f"longe_fixo: nenhuma distancia da direcao {direcao} cabe no mapa em 1000 sorteios")
-        return tuple(pontos)
+        return tuple(self._ponto_na_direcao(self._rng_fixo, direcao) for direcao in self._rng_fixo.sample(viaveis, self.n_pontos))
 
     def lugar(self, estado: dict) -> tuple[int, int]:
         m = estado.get("mundo")
@@ -2862,6 +2937,8 @@ class DonoComLugar:
             return centro_da_celula(cm.layout.comedouro, cm)
         if self.estilo == "longe_fixo":
             return self.pontos_fixos[self._rng_fixo.randrange(len(self.pontos_fixos))]
+        if self.estilo == "longe_ancora":
+            return self._ponto_na_direcao(self._rng_ancora, self._viaveis_ancora[self._rng_ancora.randrange(len(self._viaveis_ancora))])
         px, py = m["pet"]
         direcao = self._rng.randrange(16)
         if self.estilo == "perto":

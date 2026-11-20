@@ -54,17 +54,17 @@ describe("a janela pequena: só o pet, a reação, uma linha e dois botões (se�
     expect(t).toMatch(/class="jtv-balao" aria-hidden="true"/);
     expect(t).toContain('role="status" data-testid="janela-tv-status">Não curtiu: a imagem é clara demais para ele.</p>');
   });
-  test("dois botões, Carinho e Parar; sem barras, sem o porquê e sem contagem de carinhos", () => {
+  test("dois botões, Elogiar e Parar; sem barras, sem o porquê e sem contagem de carinhos", () => {
     const t = html();
     expect(t.match(/<button /g)).toHaveLength(2);
-    expect(t).toMatch(/data-janela-tv-carinho=""[^>]*>.*Carinho<\/button>/);
+    expect(t).toMatch(/data-janela-tv-carinho=""[^>]*>.*Elogiar<\/button>/);
     expect(t).toMatch(/Parar<\/button>/);
     expect(t).not.toMatch(/Por quê|De nascença|tvp-|gv-|carinhos|Assistiram/);
   });
   test("onde o jogo não aceita o carinho, o botão fica desligado e uma linha diz por quê", () => {
     const t = html({ podeCarinho: false });
     expect(t).toMatch(/data-janela-tv-carinho="" disabled="" aria-describedby="jtv-sem-carinho"/);
-    expect(t).toContain('id="jtv-sem-carinho" data-testid="janela-tv-sem-carinho">O carinho volta quando o jogo estiver na tela do pet.</p>');
+    expect(t).toContain('id="jtv-sem-carinho" data-testid="janela-tv-sem-carinho">O elogio volta quando o jogo estiver na tela do pet.</p>');
     expect(html()).not.toMatch(/disabled|janela-tv-sem-carinho/);
   });
   test("o pet tem o nome da forma como texto alternativo, com e sem o quadro", () => {

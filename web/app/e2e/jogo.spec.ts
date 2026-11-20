@@ -87,7 +87,7 @@ for (const [versao, save] of Object.entries(SAVES)) {
     /* a tela Pet no habitat (M3): o dock tem as seis acoes no desktop (o Mais so tem o Por racao dos pets com mundo) */
     /* o Alimentar dos pets v12 em diante poe a racao no comedouro (o evento "dc"); os pets v13 nao tem elogio */
     const dc0 = await numLog(page, "dc");
-    for (const a of ["Alimentar", "Limpar", "Brincar", "Carinho"]) await page.locator(".acoes-pet button", { hasText: a }).click();
+    for (const a of ["Alimentar", "Limpar", "Brincar", "Elogiar"]) await page.locator(".acoes-pet button", { hasText: a }).click();
     expect(await numLog(page, "d") + await numLog(page, "dc")).toBe(d0 + dc0 + 4);
 
     /* treinar ate o FORCAR (fadiga 60) e forcar (com a confirmacao) */
@@ -1407,7 +1407,7 @@ test("Brincar joga a bola e o pet chuta", async ({ page }) => {
      Antes de cada lance e enquanto a janela corre, o dono atende os chamados abertos pela acao deles (o carinho pelo Carinho), no foco de cada
      um, e volta ao A; assim o tempo segue a 10 min/s */
   type Grupo = { foco: string; ids: string[]; chamados: string[][] };
-  const ROTULO: Record<string, string> = { carinho: "Carinho", higiene: "Limpar", fome: "Alimentar" };
+  const ROTULO: Record<string, string> = { carinho: "Elogiar", higiene: "Limpar", fome: "Alimentar" };
   async function atenderChamados(): Promise<void> {
     const g = await page.evaluate(() => (window as any).__digilab.grupo() as Grupo);
     for (const [k, id] of g.ids.entries()) {

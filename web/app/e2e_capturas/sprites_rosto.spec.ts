@@ -17,9 +17,9 @@ const TELAS: [number, number][] = [[390, 844], [1280, 800]];
 const DIGIMON = ["Agumon", "Gabumon"];
 /* a reacao, e o que o dono faz para chegar nela (o rotulo do botao da tela do Pet) */
 const REACOES: { reacao: string; acoes: string[] }[] = [
-  { reacao: "Triste", acoes: ["Tapa"] },
-  { reacao: "Medo", acoes: ["Tapa", "Tapa"] },
-  { reacao: "Carinho", acoes: ["Carinho"] },
+  { reacao: "Triste", acoes: ["Repreender"] },
+  { reacao: "Medo", acoes: ["Repreender", "Repreender"] },
+  { reacao: "Carinho", acoes: ["Elogiar"] },
 ];
 test.skip(!process.env.DIGILAB_CAPTURAS_ROSTO, "so com DIGILAB_CAPTURAS_ROSTO=1");
 

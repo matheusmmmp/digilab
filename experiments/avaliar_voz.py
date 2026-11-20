@@ -53,7 +53,8 @@ import run_educacao as RE  # noqa: E402
 from digilab.combate_v2.v21.catalogo import SOMBRIA_DA_LINHA, forma_adulta  # noqa: E402
 from digilab.config import CONFIG_LESOES_LIGADA, CONFIG_MENTIRA_LIGADA, CONFIG_PADRAO, TICKS_POR_DIA  # noqa: E402
 from digilab.donos_educacao import simular_vida_educacao  # noqa: E402
-from digilab.educacao import fabricas_educacao, politica_no_tick_educacao, reproduzir_educacao  # noqa: E402
+from digilab.educacao import politica_no_tick_educacao, reproduzir_educacao  # noqa: E402
+from digilab.obediencia import fabricas_educacao  # noqa: E402
 from digilab.evolucao import carater, ovo  # noqa: E402
 from digilab.historia import (RegistroVida, desvio_por_acao, escolher_assunto, extrair, registro_de_motor,
                               selecionar)  # noqa: E402

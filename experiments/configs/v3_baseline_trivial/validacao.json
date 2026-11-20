@@ -1,0 +1,19 @@
+{
+  "descricao": "A validacao da baseline trivial (docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md, secao 5; so roda com o APROVADO, a faixa em FAIXAS_RESERVADAS e a calibracao feita): o REL da C4 e a baseline nas 12 celulas da C4, bases 97101...97505, K = 40 (200 unidades), 14 dias: 4 800 vidas, uma vez, ate 4 processos.",
+  "plano": "docs/PLANO_ANALISE_V3_BASELINE_TRIVIAL.md",
+  "fase": "baseline_trivial",
+  "etapa": "validacao",
+  "unidades": {
+    "bases": [
+      97101,
+      97202,
+      97303,
+      97404,
+      97505
+    ],
+    "k": 40,
+    "prefixo": "digibrain_prototipo"
+  },
+  "dias": 14,
+  "orcamento_por_dia": 16
+}

@@ -15,11 +15,12 @@ DOI_RUIM = "10.1234/nao.verificado"
 
 
 def corpo(categoria: str, extra: str = "", evidencias: str = "- Testes rodados: nenhum, só documentação.", decisoes: str = "nenhuma",
-          tarefa: str = "`docs/TAREFA_V2_X.md`") -> str:
+          tarefa: str = "`docs/TAREFA_V2_X.md`", preregistro: str = "Pré-registro: `docs/PREREGISTRO.md`, seção `PR-X`") -> str:
     return f"""Tarefa: {tarefa}
 Categoria: {categoria}
 Executor: Claude Code (sessão de teste)
 Branch: `v2-x`. Commit base: `abc1234`
+{preregistro}
 
 <!-- comentário do modelo, que some -->
 
@@ -57,6 +58,7 @@ def raiz_minima(tmp: Path) -> Path:
     (tmp / "docs" / "referencias").mkdir(parents=True)
     (tmp / "tests").mkdir()
     (tmp / "docs" / "TAREFA_V2_X.md").write_text("# TAREFA V2 — X\n", encoding="utf-8")
+    (tmp / "docs" / "PREREGISTRO.md").write_text("# Pré-registro\n\n## PR-X — o experimento X\n\n## PR-Y-2 — outro\n", encoding="utf-8")
     (tmp / "docs" / "referencias" / "v9_referencias_verificadas.csv").write_text(
         f"referencia,verificada,doi_ou_id\nLehman 2020,VERIFICADA,{DOI_BOM}\nOutro,NÃO VERIFICADA,{DOI_RUIM}\n", encoding="utf-8")
     (tmp / "docs" / "referencias" / "v9_referencias.bib").write_text(f"@article{{x, doi = {{{DOI_RUIM}}}}}\n", encoding="utf-8")
@@ -151,6 +153,9 @@ def test_implementacao_aceita_teste_do_web_app_com_alerta(tmp_path):
     ("web/app/poc/mundo3d/fisica.test.ts", True),
     ("web/app/node_modules/x/y.test.ts", False),
     ("web/app/src/x.ts", False),
+    ("servidor_web/test/conta.test.ts", True),  # D-CONTA-69: o Vitest do servidor do jogo web
+    ("servidor_web/node_modules/x/y.test.ts", False),
+    ("servidor_web/src/app.ts", False),
 ])
 def test_caminhos_de_teste_do_web_app(caminho, conta):
     assert bool(vr.CAMINHO_TESTE_WEB.fullmatch(caminho)) is conta
@@ -303,3 +308,25 @@ def test_experimento_aceita_plano_v3(tmp_path):
     itens = vr.verificar(corpo("experimento", exp), ["artifacts_v2_x/metrics.json"], raiz)
     assert falhas(itens) == []
     assert any(i.regra == "plano de análise citado" and "PLANO_ANALISE_V3_X" in i.detalhe for i in itens)
+
+
+def test_experimento_exige_o_pre_registro(tmp_path):
+    """EVIDENCIA A3: o experimento cita a seção dele no docs/PREREGISTRO.md, e a seção existe; as outras categorias não precisam."""
+    raiz = _repo_experimento(tmp_path, plano_primeiro=True)
+    mud = ["artifacts_v2_x/metrics.json"]
+    regras = lambda c: [i.regra for i in falhas(vr.verificar(c, mud, raiz))]  # noqa: E731
+    assert regras(corpo("experimento", EXP, preregistro="Pré-registro: docs/PREREGISTRO.md, PR-Y-2")) == []
+    assert regras(corpo("experimento", EXP, preregistro="")) == ["campo Pré-registro"]
+    assert regras(corpo("experimento", EXP, preregistro="Pré-registro: `docs/PREREGISTRO.md`, seção `PR-<id>`")) == ["a seção do pré-registro"]
+    assert regras(corpo("experimento", EXP, preregistro="Pré-registro: `docs/PREREGISTRO.md`, seção `PR-Z`")) == [
+        "a seção do pré-registro existe"]
+    assert regras(corpo("experimento", EXP, preregistro="Pré-registro: o plano")) == ["o pré-registro existe"]
+    assert regras(corpo("experimento", EXP, preregistro="Pré-registro: `docs/PREREGISTRO.md`")) == ["a seção do pré-registro"]
+    assert falhas(vr.verificar(corpo("documentacao", preregistro=""), [], raiz)) == []
+
+
+def test_o_template_e_o_preregistro_do_repo():
+    modelo = (RAIZ / ".github" / "pull_request_template.md").read_text(encoding="utf-8")
+    assert vr.campo(modelo, "Pré-registro") is not None and vr.PREREGISTRO in modelo
+    secoes = vr.secoes_do_preregistro(RAIZ)
+    assert {"PR-C1", "PR-C2", "PR-C3", "PR-C4", "PR-AN4", "PR-GVN2", "PR-PET-VIVO", "PR-COOP-A1", "PR-BASELINE", "PR-ABLACAO"} <= secoes

@@ -1,0 +1,24 @@
+{
+ "codigo": "0b33fb86",
+ "registro": "0d101300 (#923, D-CB-24)",
+ "mundo": "irmao_aleatorio",
+ "vidas": 560,
+ "sementes": [
+  92201,
+  92280
+ ],
+ "bracos": [
+  "B0",
+  "B1",
+  "B1A",
+  "B1E",
+  "B1U",
+  "D0",
+  "DM"
+ ],
+ "dias": 8,
+ "processos": 4,
+ "segundos_total_vidas": 1065.4,
+ "principal_jsonl_sha256": "d9c0b5c40eab4f6f8ca16543eff195f799a1f587f2ee70f5125185384ec1ed9c",
+ "principal_jsonl": "experiments/runs/cooperacao_bancada/principal_ad1.jsonl (fora do git)"
+}

@@ -34,7 +34,7 @@ from digilab.events import AcaoPet, AcaoUsuario  # noqa: E402
 from digilab.frutas import MotorFrutas, OfertasFrutas, PoliticaInstintoFrutas, simular_vida_frutas  # noqa: E402
 from digilab.motor_corpo import ForaDoCorpo, MotorCorpo, PercepcaoCorpo, com_corpo  # noqa: E402
 from digilab.mundo import MotorMundo  # noqa: E402
-from digilab.obediencia import MotorPersonalidade  # noqa: E402
+from digilab.personalidade import MotorPersonalidade  # noqa: E402
 from digilab.policies import lobos  # noqa: E402
 from digilab.policies.lobos import PoliticaLobos  # noqa: E402
 from digilab.policy import PoliticaInstinto  # noqa: E402
@@ -50,13 +50,15 @@ SEMENTES = (101, 202, 303)                 # so dos testes
 TOL = 1e-9                                  # secao 12, G-HOJE (a)
 DRIVES = ("fome", "higiene", "energia", "humor")
 # as classes do meio e o estado nao mudam na etapa 2 (G-ENGINE). Quem mudar estes arquivos depois atualiza a constante, com o motivo.
+# a LZ2b da LIMPEZA (docs/TAREFA_V3_LIMPEZA.md, 3.3; D-LZ-13) moveu codigo do educacao, do obediencia e do treino_vida sem mudar
+# nenhuma vida (os gabaritos limpeza_*): os tres sha256 sao os de depois dela
 SHA = {
     "digilab/ambiente.py": "e21799de3c2c24266fc4239ba76217f16488a4e393ed3d8ce263150dabeec3dd",
     "digilab/frutas.py": "d0b248d2bbbd1e64ec4901aa74b84610763064c266a1a839214ed7bd88bdc808",
-    "digilab/educacao.py": "14e26d8224c60b097693c4fa96b44fe367a1b1dbeef303fe6859a5217a05aa2c",
-    "digilab/obediencia.py": "43375b86cd78bedb7084f9a582771ed13032851e6e8581a0af0aed26b0777fda",
+    "digilab/educacao.py": "ed2c2aad8339d22b51527f22cd51500a81925859ce835d2455deec6b21d68c1f",
+    "digilab/obediencia.py": "d73004fa4bd317a0700adccfad440dbdac00091e98ad0563630acb5b7c8638e8",
     "digilab/treino.py": "19e101d69efffa24e6451fcd5f814403fe87e11b7ce8057ff0b636492bfc638c",
-    "digilab/treino_vida.py": "096da0a013fd3bfbac1b382accfd49750e35da0e24e6a45ea21015b4ca3c8e3f",
+    "digilab/treino_vida.py": "597bb4e0d0507665620bc5dcafcaebfd611517ca790f3a485b04d8d0e6ab03f2",
     "digilab/state.py": "dc016fda76d5e4a6a21f265450e9f02faaa9b6344fd081366b5f817596a6b9af",
 }
 

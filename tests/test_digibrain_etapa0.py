@@ -60,7 +60,10 @@ def test_a_chave_desligada_por_padrao_com_as_subchaves():
 def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
     """o G2: a chave nao chega ao motor, a bancada nem as ferramentas; so o config, o pacote, o orquestrador do prototipo e o exportador
     do gabarito do modular para a web (LM0, #543: monta a config do braco REL pelo orquestrador; desvio de 2026-11-03)"""
-    nomes = re.compile(r"\b(ConfigDigibrain\w*|CONFIG_DIGIBRAIN\w*)\b|digilab\.digibrain|from \.digibrain|from \.\.digibrain")
+    # a base neutra (digilab/digibrain/base.py, LIMPEZA LZ2: as contas inteiras e a interface do corpo) nao e a chave: importar so ela
+    # nao conta
+    nomes = re.compile(r"\b(ConfigDigibrain\w*|CONFIG_DIGIBRAIN\w*)\b|digilab\.digibrain(?!\.base\b)|from \.digibrain(?!\.base\b)|"
+                       r"from \.\.digibrain(?!\.base\b)")
     citam = {p.relative_to(RAIZ).as_posix() for pasta in ("digilab", "experiments", "tools") for p in (RAIZ / pasta).rglob("*.py")
              if nomes.search(p.read_text(encoding="utf-8"))}
     assert {c for c in citam if not c.startswith("digilab/digibrain/")} == {"digilab/config.py",
@@ -75,7 +78,7 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              "experiments/run_v3_conversa_dc3.py", "experiments/calibrar_ganho_conteudo_dc3.py",
                                                                              "experiments/exportar_gabarito_fala_unidades.py",
                                                                              # GOSTO_VISUAL, P1f: o exportador do gabarito do olhar para a web (o laboratorio com o olhar)
-                                                                             "experiments/exportar_gosto_visual.py",
+                                                                             "experiments/exportar_gosto_visual.py", "experiments/exportar_gabarito_corpo_chaves.py",
                                                                              # GOSTO_VISUAL, P1e: o orquestrador da GV3 (o laboratorio com o olhar)
                                                                              "experiments/run_v3_gosto_visual.py",
                                                                              # a DC4a (e6da35cc): as entradas da avaliacao da voz so importam o decodificador; nenhuma vida
@@ -87,7 +90,30 @@ def test_nada_fora_do_pacote_e_do_orquestrador_le_a_chave():
                                                                              # GOSTO_VISUAL, a TV no jogo (#883): o exportador do gabarito, que faltava aqui (D-CO7b-9)
                                                                              "experiments/exportar_tv_jogo.py",
                                                                              # COOPERACAO, CB1: a bancada da cooperacao (o modular nos dois pets do grupo)
-                                                                             "experiments/run_v3_cooperacao_bancada.py"}
+                                                                             "experiments/run_v3_cooperacao_bancada.py",
+                                                                             # GOSTO_VISUAL, a fala do assistir (FA-2): o gabarito do dec-v4 (vidas curtas da GV3b
+                                                                             # nas sementes dos testes, pelo orquestrador da GV3; o decodificador so le)
+                                                                             "experiments/exportar_decodificador_v4.py",
+                                                                             # VALUATION, a ablacao do Valuation (V2): os bracos montam o REL da C4
+                                                                             # com uma mudanca so (docs/PLANO_ANALISE_V3_VALUATION.md, secao 3)
+                                                                             "experiments/run_v3_valuation.py",
+                                                                             # VALUATION, o conserto (V3): o REL da C4 com a guarda da fome no reflexo
+                                                                             # (docs/PLANO_ANALISE_V3_VALUATION_CONSERTO.md, secao 2)
+                                                                             "experiments/run_v3_valuation_conserto.py",
+                                                                             # ELOGIO, etapa 2: as vidas dos bracos (o modular REL com a ConfigElogio)
+                                                                             "experiments/elogio.py",
+                                                                             # PET_VIVO, o codigo do PV-2: as vidas dos bracos (o REL com a ConfigPV2 e o orgao)
+                                                                             "experiments/pv2.py",
+                                                                             # PET_VIVO, o codigo do PV-2: a medicao nas sementes dos testes (le o CONFIG_DIGIBRAIN_INATOS)
+                                                                             "experiments/medir_pv2.py",
+                                                                             # a run do PV-2 (o adendo 2): so le a escala dos inatos e o
+                                                                             # DigiBrain das vidas do pv2.py (D-PV2R-1)
+                                                                             "experiments/run_v3_pet_vivo_pv2.py",
+                                                                             # ELOGIO, etapas 4 e 5: o orquestrador da calibracao e da validacao
+                                                                             "experiments/run_v3_elogio.py",
+                                                                             # SOCIAL_PAR, A0 (D-SP-29): o orquestrador monta o pet de hoje (o modular com a CO7)
+                                                                             "experiments/run_v3_social_par_a0.py", "experiments/run_v3_corpo.py", "experiments/run_v3_corpo_c3.py",
+                                                                             "experiments/run_v3_corpo_acoplamento.py"}
 
 
 def test_o_digibrain_so_existe_com_a_chave_ligada_e_e_a_v13():
@@ -123,7 +149,7 @@ def test_os_ganchos_vazios():
 
 
 # ------------------------------------------------------------ o G-INT, a G-RECEPTOR, o G-SEM-DIRECAO e o preflight
-ARQUIVOS = {"__init__.py", "_comum.py", "adapt.py", "afeto.py", "arb.py", "decodificador.py", "dever.py", "estado.py", "ganchos.py", "impulso.py", "mem.py", "pers.py", "plast.py",
+ARQUIVOS = {"__init__.py", "_comum.py", "adapt.py", "afeto.py", "arb.py", "base.py", "decodificador.py", "dever.py", "estado.py", "ganchos.py", "impulso.py", "mem.py", "pers.py", "plast.py", "rastro.py",
             "sens.py"}
 
 
@@ -158,16 +184,20 @@ def test_g_receptor_nenhum_arquivo_importa_o_corpo():
 
 def test_g_sem_direcao_a_direcao_do_cheiro_fica_no_motor():
     """o pacote so pergunta se ha cheiro (`direcao_cheiro != 0`); nunca le a intensidade, o campo, as fontes nem as comidas do mundo, e do
-    mundo so importa o `Alvo` e as acoes com alvo"""
+    mundo so importa o `Alvo`, as acoes com alvo e os nomes dos candidatos do orgao. Com o PV-2 (a leitura da PV2-3, DECIDIDA em
+    2026-11-09: o cerebro le o nivel e a variacao do que as narinas sentem, nunca a direcao), as narinas so se leem pelos nomes de
+    RECEPTORES_OLFATO_COMIDA, no M-SENS (o nivel, a media) e no M-ADAPT (se ha cheiro depois, o maximo); a troca das narinas nao muda o
+    que o M-SENS entrega (tests/test_pv2_codigo.py)"""
     proibidos = {"cheiro", "fontes_de_cheiro", "comidas", "direcao_do_cheiro", "direcao_do_campo", "cheiro_em", "campo_em",
                  "alvos_do_olfato", "leitura_do_olfato", "direcao_em_8", "direcao_em_16", "olfato_comida", "olfato_comida_esq",
                  "olfato_comida_dir"}
     usos = 0
+    leem_narinas = []
     for nome, arvore in _arvores():
         pais = {filho: pai for pai in ast.walk(arvore) for filho in ast.iter_child_nodes(pai)}
         for no in ast.walk(arvore):
             if isinstance(no, ast.ImportFrom) and no.level == 2 and no.module == "mundo":
-                assert {a.name for a in no.names} <= {"Alvo", "ACOES_COM_ALVO"}, nome
+                assert {a.name for a in no.names} <= {"Alvo", "ACOES_COM_ALVO", "CANDIDATOS_CHEIRO_ORGAO"}, nome
             if isinstance(no, ast.Attribute):
                 assert no.attr not in proibidos, f"{nome}: .{no.attr}"
                 if no.attr == "direcao_cheiro":
@@ -176,7 +206,16 @@ def test_g_sem_direcao_a_direcao_do_cheiro_fica_no_motor():
                     usos += 1
             if isinstance(no, ast.Name):
                 assert no.id not in proibidos - {"cheiro", "comidas"}, f"{nome}: {no.id}"
-    assert usos == 2                                    # o M-SENS na decisao e o M-ADAPT na consequencia
+                if no.id == "RECEPTORES_OLFATO_COMIDA" and isinstance(no.ctx, ast.Load):
+                    funcao = pais[no]
+                    while not isinstance(funcao, (ast.FunctionDef, ast.Module)):
+                        funcao = pais[funcao]
+                    leem_narinas.append((nome, getattr(funcao, "name", None)))
+            if isinstance(no, ast.Constant) and no.value in ("olfato_comida_esq", "olfato_comida_dir"):
+                assert nome == "sens.py", f"{nome}: o nome de uma narina fora do M-SENS"
+    # o M-SENS na decisao, a conferencia do PV-2 no M-SENS (o mundo nao manda a direcao com o orgao) e o M-ADAPT na consequencia
+    assert usos == 3
+    assert sorted(set(leem_narinas)) == [("adapt.py", "_ha_cheiro_depois"), ("sens.py", "_ler_olfato"), ("sens.py", "_receptores")]
 
 
 def test_o_engine_intacto_e_o_pacote_so_com_a_biblioteca_padrao():

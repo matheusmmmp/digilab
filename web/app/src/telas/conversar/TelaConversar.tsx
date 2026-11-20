@@ -22,7 +22,7 @@ const COMO_FALA: Record<string, string> = { bebe: "só emotes", crianca: "ícone
 const MODOS: [ModoFala, string][] = [["template", "Frases prontas"], ["moldura", "Moldura"], ["livre", "Livre"]];
 const NOME_MODO: Record<ModoFala, string> = { template: "Frases prontas", moldura: "Moldura por LLM", livre: "Fala livre no aparelho" };
 /* pets v11: sem elogio nem bronca; o carinho e o tapa sao gestos no corpo */
-const ATALHOS_V11: [AcaoDono, string, string | null][] = [["acariciar", "Carinho", "emoji_coracao"], ["tapa", "Tapa", null]];
+const ATALHOS_V11: [AcaoDono, string, string | null][] = [["acariciar", "Elogiar", "emoji_coracao"], ["tapa", "Repreender", null]];
 const MAX_BALOES = 30;
 
 function RetratoPequeno() {

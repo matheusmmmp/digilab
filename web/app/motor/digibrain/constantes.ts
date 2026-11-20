@@ -155,6 +155,14 @@ export const CONFIG_DECODIFICADOR = {
   p_curiosidade_urgencia: 1, p_curiosidade_tedio: 1, p_curiosidade_g_exp: 1, p_curiosidade_fracao: 1,
 } as const;
 export type ConfigDecodificador = typeof CONFIG_DECODIFICADOR;
+/** A ConfigFalaAssistir (digilab/config.py; a fala do assistir, FA-2 a FA-5): os limiares do `dec-v4`, calibrados nas vidas gravadas da GV3 e
+ *  da GV3b (artifacts_v3_gosto_visual/fala_limiares/), e os intervalos da FA-5 em segundos reais. PROPOSTOS, SEM FONTE. Conferida contra
+ *  test/gabaritos/decodificador_v4_python.json.gz por test/decodificador_v4.test.ts. */
+export const CONFIG_FALA_ASSISTIR = {
+  limiar_ativo: 512, limiar_confianca: 512, gostei_agrado: 665, susto_subida: 73, chato_enjoo: 612, chato_tedio: 240, o_que_e_agrado: 376,
+  o_que_e_enjoo: 522, intervalo_comentario_s: 300, intervalo_susto_s: 60,
+} as const;
+export type ConfigFalaAssistir = { readonly [K in keyof typeof CONFIG_FALA_ASSISTIR]: number };
 
 /** o alcance da memoria de lugar na ilha grande (docs/TAREFA_V3_ILHA_AGUA.md, secoes 12.14 a 12.16; a IG-6; o D_MAX_ILHA_GRANDE do
     Python): o `d_max` na proporcao do mapa de 128 x 60 celulas (2 048 subunidades = 128 celulas; o de sempre, 1 024, e a largura do mapa de
@@ -196,6 +204,29 @@ export function validarLanceDono(cl: ConfigLanceDono): ConfigLanceDono {
     throw new Error(`ConfigLanceDono: lance_min_celulas > lance_max_celulas (${cl.lance_min_celulas} > ${cl.lance_max_celulas})`);
   return cl;
 }
+
+/** as duas regras novas do E1 da rodada de equilibrio do cuidado (docs/PLANO_V3_EQUILIBRIO_CUIDADO.md, EQ-7; a ConfigEquilibrioCuidado do
+    Python, numa config propria para o dump do modular nao mudar), so no modular, cada uma com a sua chave: `guarda_fome_brincar`, com a fome
+    urgente (a urgencia da fome acima do `urgencia_lambda`) o M-ARB poe o peso 0 em todas as unidades do brincar, no sorteio e nas sondas;
+    `comer_bebe`, o motor do jogo diz ao cerebro antes de cada decisao se o pet e um bebe (o In-Training da tela; o gancho `estagioBebe`) e o
+    M-IMPULSO soma mul(w_comer_bebe, bebe) ao inato do comer. Desligada (o padrao), a vida de hoje sai byte a byte. Nenhuma versao de pet a
+    liga: a versao nova e o E3 (EQ-6). PROPOSTO, SEM FONTE; conferida contra o gabarito
+    test/gabaritos/digibrain_modular_equilibrio_cuidado.json.gz por test/equilibrio_cuidado_paridade.test.ts */
+export interface ConfigEquilibrioCuidado { readonly guarda_fome_brincar: boolean; readonly comer_bebe: boolean; readonly w_comer_bebe: number }
+export const CONFIG_EQUILIBRIO_CUIDADO: ConfigEquilibrioCuidado = { guarda_fome_brincar: false, comer_bebe: false, w_comer_bebe: 512 };
+
+/** o `ConfigEquilibrioCuidado.__post_init__` do Python (falha alto) */
+export function validarEquilibrioCuidado(c: ConfigEquilibrioCuidado): ConfigEquilibrioCuidado {
+  const nomes = ["comer_bebe", "guarda_fome_brincar", "w_comer_bebe"];
+  if (c === null || typeof c !== "object" || Object.keys(c).sort().join() !== nomes.join())
+    throw new Error(`ConfigEquilibrioCuidado com os campos ${nomes.join(", ")}: ${JSON.stringify(c)}`);
+  for (const k of ["guarda_fome_brincar", "comer_bebe"] as const)
+    if (typeof c[k] !== "boolean") throw new Error(`ConfigEquilibrioCuidado.${k} e bool: ${String(c[k])}`);
+  if (!Number.isSafeInteger(c.w_comer_bebe) || c.w_comer_bebe <= 0) throw new Error(`ConfigEquilibrioCuidado.w_comer_bebe e inteiro positivo: ${String(c.w_comer_bebe)}`);
+  return c;
+}
+/** alguma das duas regras ligada (a `ligada` do Python) */
+export const equilibrioLigado = (c: ConfigEquilibrioCuidado): boolean => c.guarda_fome_brincar || c.comer_bebe;
 
 /** duas ConfigLanceDono iguais, campo a campo (o `!=` do dataclass do Python) */
 export const mesmoLanceDono = (a: ConfigLanceDono, b: ConfigLanceDono): boolean =>

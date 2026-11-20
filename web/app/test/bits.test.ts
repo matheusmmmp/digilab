@@ -7,6 +7,9 @@ import { BITS, bitsDaMedalha, feitosDoPet } from "../src/bits.ts";
 import { CHAVE, petExemplo, textoSave, type Armazenamento } from "../src/save.ts";
 import { iniciarJogo, mudarMotor, pagarNivel, tamerAtual, trocarMotor } from "../src/jogo.ts";
 import { CHAVE_TAMER, Tamer, conferirBits, conferirBitsDoNivel, gravarTamer, lerTamer, type EventoTamer } from "../src/tamer.ts";
+import { versaoTamerDe } from "../src/tamer.ts";
+/** a versao que o jogo grava hoje: a 11 com a chave do reset ligada (MMO8), a 10 sem ela */
+const GRAVA = versaoTamerDe([]);
 
 const armaz = (dados: Record<string, string> = {}) => {
   const a: Armazenamento & { dados: Record<string, string>; removeItem(k: string): void } = {
@@ -104,7 +107,7 @@ describe("o evento \"bits\" no registro do Tamer (versao 9)", () => {
     expect(novos.some(g => g.origem === "evolucao" && g.id === "evolucao:crianca")).toBe(true);
     expect(conferirBits(t, m, 2000)).toEqual([]);
     gravarTamer(a, t);
-    expect(JSON.parse(a.dados[CHAVE_TAMER]).versao).toBe(9);
+    expect(JSON.parse(a.dados[CHAVE_TAMER]).versao).toBe(GRAVA);
     const r = lerTamer(a);
     expect(r.bits).toBe(t.bits);
     expect(r.bits).toBe(novos.reduce((s, g) => s + g.valor, 0));

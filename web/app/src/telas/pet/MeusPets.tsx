@@ -11,6 +11,8 @@ import { trocarGrupoDoSave, trocarMotor, useJogo } from "../../jogo.ts";
 import { CHAVE } from "../../save.ts";
 import { abrirGuardado, ativarGuardado, lerGuardados } from "../../pets.ts";
 import { abrirHeranca, podeSerPai } from "../../heranca.ts";
+import { abrirAposentar } from "../../reset.ts";
+import { RESET_LIGADO } from "../../tamer.ts";
 import { abrirImportar, exportarArquivo, nomeArquivo } from "../../importar.ts";
 import { dec } from "../../componentes/Barras.tsx";
 import { diaDe } from "./TelaPet.tsx";
@@ -102,6 +104,7 @@ export function MeusPets({ fechar, irRegistro }: { fechar: () => void; irRegistr
             <span><b>Pet anterior guardado</b><span>ficou salvo quando você usou o Laboratório</span></span></div>}
           {anterior && <BotaoHx className="mc-largo" onClick={() => { setMsg(voltarAoAnterior()); ref.current?.close(); }}>Voltar ao pet anterior</BotaoHx>}
           <BotaoHx className="mc-largo" onClick={() => { ref.current?.close(); irRegistro(); }}>Registro e novo ovo</BotaoHx>
+          {RESET_LIGADO && !ovo && <BotaoHx className="mc-largo" tom="perigo" onClick={() => { ref.current?.close(); abrirAposentar(); }} data-testid="mp-aposentar">Aposentar</BotaoHx>}
           <BotaoHx className="mc-largo" onClick={exportar}>Exportar registro</BotaoHx>
           <BotaoHx className="mc-largo" onClick={() => { ref.current?.close(); abrirImportar(); }}>Importar pet</BotaoHx>
           <p className="mc-apoio" aria-live="polite">{msg}</p>

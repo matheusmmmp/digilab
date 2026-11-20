@@ -60,7 +60,7 @@ export class GrupoDoJogo {
     if (co6 && !medir) throw new Error("a CO6 so com a medida da cooperacao ligada");
     if (co7 && !co6) throw new Error("a CO7 so com a CO6 ligada");
     if (!Number.isInteger(semente) || semente < 0 || semente > 0xffffffff) throw new Error(`semente do grupo fora dos 32 bits: ${semente}`);
-    if (!ehDoGrupo(versao)) throw new Error(`o grupo do jogo e de pets v26, v28, v29, v31, v36 ou v37, nao v${versao}`);
+    if (!ehDoGrupo(versao)) throw new Error(`o grupo do jogo e de pets v26, v28, v29, v31, v36, v37 ou v39, nao v${versao}`);
     this.semente = semente;
     this.versao = versao;
     this.grupo = new Grupo(mundoDaVersao(versao), semente, CONFIG_GRUPO_LIGADA,
