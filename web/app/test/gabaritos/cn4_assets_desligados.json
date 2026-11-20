@@ -1,0 +1,59 @@
+{
+ "base": "http://127.0.0.1:8765/v1/web/dist/",
+ "pedidos": [
+  {
+   "tipo": "fetch",
+   "url": "../../../Assets/digilab_atlas_up_pecas.json"
+  },
+  {
+   "tipo": "imagem",
+   "url": "http://127.0.0.1:8765/Assets/digilab_atlas_up_pecas.png"
+  },
+  {
+   "tipo": "fetch",
+   "url": "../../../Assets/digilab_atlas_up_clipes.json"
+  },
+  {
+   "tipo": "imagem",
+   "url": "http://127.0.0.1:8765/Assets/digilab_atlas_up_clipes.png"
+  },
+  {
+   "tipo": "fetch",
+   "url": "../../../Assets/evolucao_up/mapa.json"
+  },
+  {
+   "tipo": "fetch",
+   "url": "../../../Assets/evolucao_up/pacotes/adventure.bin"
+  },
+  {
+   "tipo": "fetch",
+   "url": "../../../Assets/evolucao_up/pacotes/zero2.bin"
+  },
+  {
+   "tipo": "fetch",
+   "url": "../../../Assets/sons/mapa.json"
+  },
+  {
+   "tipo": "fetch",
+   "url": "../../../Assets/sons/bgm/ilha.ogg"
+  },
+  {
+   "tipo": "fetch",
+   "url": "/api/fala/status",
+   "init": {
+    "cache": "no-store"
+   }
+  },
+  {
+   "tipo": "fetch",
+   "url": "/api/fala",
+   "init": {
+    "method": "POST",
+    "headers": {
+     "Content-Type": "application/json"
+    },
+    "body": "{\"motivo\":{\"origem\":\"vida\",\"acao\":\"comer\",\"fatores\":[\"fome\"],\"evento_ref\":[3],\"intensidade\":0.7,\"exploracao\":false,\"tick\":1},\"estagio\":\"adulto\",\"humor\":0.5}"
+   }
+  }
+ ]
+}

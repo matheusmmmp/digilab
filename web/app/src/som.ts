@@ -84,9 +84,12 @@ export interface Dependencias {
 }
 export interface EstadoSom { ligado: boolean; volume: number; volMusica: number; volEfeitos: number; aviso: string | null }
 
+/** o fetch dos sons (o mapa e os arquivos); o ponto em que a CN4 pede a URL assinada */
+export const buscarAsset = (url: string): Promise<Response> => fetch(url);
+
 const depsPadrao = (): Dependencias => ({
   criarContexto: () => new (window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)() as unknown as ContextoAudio,
-  buscar: url => fetch(url),
+  buscar: buscarAsset,
   aleatorio: Math.random,
   armazenamento: (() => { try { return localStorage; } catch { return null; } })(),
   aoGesto: f => { const g = (): void => { removeEventListener("pointerdown", g); removeEventListener("keydown", g); f(); }; addEventListener("pointerdown", g); addEventListener("keydown", g); },
