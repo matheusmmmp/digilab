@@ -224,3 +224,13 @@ As SP-1 a SP-8 (investigação, seção 9) e as E1-1 a E1-6 (espec, seção 8), 
   gancho do t0 (D-SP-74).
 - **O que falta:** a run (MD2), num PR próprio, uma vez. Ela espera a cadeia até a `main` (o `pre_run` exige o plano na `origin/main`)
   e o ok do coordenador para a faixa.
+
+## MD2: a run da medida (2026-11-20)
+
+- **Rodou uma vez,** de 13:58 a 15:12, 2.000 pares, sobre a `main` 3ed5fdd6. O resultado está em `docs/RESULTADO_V3_SOCIAL_PAR_MD.md`.
+- **No B1:** o G-DET passa, e o D_A < 0 nas quatro células (−6,5 a −9,2). O C-APR e o C-APR1 dão ≈ 0. A PM-1 passa (0,98).
+- **No C:** o G-DET falha nas quatro células: "o substrato não deixa ver".
+- **O conjunto:** "a resposta vem das unidades a mais ou da companhia no corpo, não do aprendizado". Como o M1 sozinho e com o
+  incentivo zerado já responde, a resposta vem das unidades a mais.
+- **Ressalva:** `git_limpo: false`, pela linha `plano` que faltava no `run.json` (D-SP-75).
+- **Falta:** o "aprovado" do resultado e a decisão sobre a ressalva. Nenhum mecanismo novo sem plano.
