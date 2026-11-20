@@ -229,3 +229,20 @@ relato é o `docs/RESULTADO_V3_CORPO_C4.md`.
 **O programa para no CHECKPOINT da C4.** Pela seção 9 do plano, "confirma com ressalva" volta ao Matheus com a célula: aceitar a ressalva
 e seguir para a C5, pedir outra mudança, ou deixar o corpo como está. O T_B continua PROPOSTO e SEM FONTE. Nenhum braço está ligado no
 jogo.
+
+## 19. A síntese e a especificação (C5, 2026-11-20)
+
+O CHECKPOINT da C4 foi decidido pelo Matheus em 2026-11-20: "Aceito, seguir à C5". A ressalva aceita é a célula do aleatório no
+comedouro. A C5 é só papel, sem run e sem código.
+- **A síntese,** `docs/SINTESE_CORPO.md`: a causa (a ponte da falta de combustível no cansaço, confirmada por intervenção; e o dano em
+  degrau, que derrubou a D sozinha), o conserto (o DTB), o efeito no forrageio, no bem-estar e no substrato social, o que ficou sem
+  explicação e o que não foi demonstrado. Cada número aponta para o resultado e para o artefato com o sha256.
+- **O limite principal:** as runs da C2 à C4 usaram o pet da bancada, sem o "sono que segura", o lance do dono e o equilíbrio do
+  cuidado do pet v38 do jogo. O DTB não foi medido no pet do jogo.
+- **A especificação,** `docs/ESPEC_CORPO_V1.md`, PROPOSTA: um pet do jogo que nasce com o DTB, em três etapas. A V1-a mede o DTB no
+  pet v38, no Python, com plano próprio. A V1-b cria a versão nova do pet, com a paridade, sem nenhum ovo chocar com ela. A V1-c faz
+  os ovos novos nascerem com ela. As decisões D-EC-1 a D-EC-5 são do Matheus.
+- **O pré-registro:** a seção `PR-CORPO-C2`, da ablação, escrita depois da run e dizendo isso. A da C3 e a da C4 já existiam.
+- **O painel:** a linha do `docs/PAINEL_V3.md` é do coordenador; a proposta vai no corpo do PR.
+
+**O programa para no CHECKPOINT da C5.** Nenhum braço está ligado no jogo, e o T_B continua PROPOSTO e SEM FONTE.
