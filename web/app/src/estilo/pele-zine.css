@@ -547,3 +547,55 @@
 :root[data-pele="zine"] .poc-rival{ min-height:46px }
 :root[data-pele="zine"] .poc-mapa{ padding:6px 12px }
 :root[data-pele="zine"] .poc-lugar .poc-nota{ font-size:15px }
+
+/* ############################################################################################################################
+   17. A REVISAO 1 do Zine (sessao revisora, 2026-11-20): 52 de 75 iguais, 16 a consertar, nenhuma peca diferente.
+   ############################################################################################################################ */
+/* o minimapa: o traco e a sombra em tinta. O desenho do mapa tem o tamanho da caixa inteira e cobria a borda de dentro: o traco passa a
+   ser um contorno por fora, e a sombra cresce junto */
+:root[data-pele="zine"] .minimapa-caixa{ border:0; outline:3px solid var(--hx-borda); box-shadow:5px 5px 0 3px var(--hx-sombra-cor) }
+@media (min-width:900px){
+  /* o trilho com 58 px por destino; a pilha das janelas 6 px para cima */
+  :root[data-pele="zine"] body .hx-nav .hx-nav__bt{ min-height:58px }
+  :root[data-pele="zine"] .pet-hud{ top:calc(var(--casca-topo) + 16px) }
+  /* o DigiBrain aberto alinhado com as janelas (x 1470 a 1899) e com 430 px */
+  :root[data-pele="zine"] .scan{ right:20px; --scan-larg:min(430px, calc(100vw - 24px), calc((100dvh - var(--scan-fora)) * 880 / 552 + 16px)) }
+  /* o painel de Ajustes em x 122 */
+  :root[data-pele="zine"] .painel-tela--lugar-lado.painel-tela--ajustes{ left:calc(var(--nav-larg, 0px) + 34px) }
+}
+/* Lutar: as quatro abas cabem no painel; o nome do rival inteiro; o botao com 54 px */
+:root[data-pele="zine"] .painel-tela--lugar .hx-painel__cab > .hx-abas.lugar-abas{ gap:3px; padding:14px 6px 0 }
+:root[data-pele="zine"] .lugar-abas .hx-aba, :root[data-pele="zine"] .lugar-abas .hx-aba[aria-selected="true"]{ gap:5px; padding:0 8px; font-size:12.5px }
+:root[data-pele="zine"] .poc-rival{ gap:7px; padding:4px 6px; font-size:13px; letter-spacing:-.01em }
+:root[data-pele="zine"] .poc-lugar .poc-lutar, :root[data-pele="zine"] .poc-lugar .poc-lutar:hover{ min-height:54px }
+/* o Codice gira +0,5 grau (o destaque, que ele tambem e, girava para o outro lado) */
+:root[data-pele="zine"] .painel-tela .painel-tela__folha details.lg-destaque.codice{ rotate:.5deg }
+/* Ajustes: as linhas a 12 px da moldura e 14 px abaixo do cabecalho; o alto-falante em tinta; o cursor do volume torto (+8 graus), com
+   o trilho anil ate ele (a tela diz a porcentagem em --vol) */
+:root[data-pele="zine"] .painel-tela--ajustes .painel-tela__folha{ padding-top:0 }
+:root[data-pele="zine"] .aj-lista{ margin:0 -9px; padding:14px 0 18px }
+:root[data-pele="zine"] .aj--volume .aj-ic{ color:var(--hx-texto) }
+:root[data-pele="zine"] .aj--volume input[type="range"]{ overflow:visible }
+:root[data-pele="zine"] .aj--volume input[type="range"]::-webkit-slider-runnable-track{ background:linear-gradient(90deg, var(--hx-escolhido) var(--vol, 0%), var(--hx-medidor-trilho) var(--vol, 0%)) }
+:root[data-pele="zine"] .aj--volume input[type="range"]::-moz-range-track{ background:linear-gradient(90deg, var(--hx-escolhido) var(--vol, 0%), var(--hx-medidor-trilho) var(--vol, 0%)) }
+:root[data-pele="zine"] .aj--volume input[type="range"]::-webkit-slider-thumb{ box-shadow:none; clip-path:none; rotate:8deg }
+:root[data-pele="zine"] .aj--volume input[type="range"]::-moz-range-thumb{ rotate:8deg }
+:root[data-pele="zine"] .aj--volume input[type="range"]::-moz-range-progress{ background:none }
+/* o DigiBrain aberto: a fita, os tres botoes amarelos, o "vivo" numa bolinha com contorno */
+:root[data-pele="zine"] .scan .scan-in.scan-cx::before{ content:""; display:block; position:absolute; z-index:3; top:-16px; left:150px; width:82px; height:24px; rotate:4deg; pointer-events:none;
+  background:color-mix(in srgb, var(--hx-btn-bg) 82%, transparent);
+  clip-path:polygon(0 0, 4% 25%, 0 50%, 4% 75%, 0 100%, 100% 100%, 96% 75%, 100% 50%, 96% 25%, 100% 0) }
+:root[data-pele="zine"] .scan .scan-ic{ background:var(--hx-btn-bg); color:var(--hx-btn-ink) }
+:root[data-pele="zine"] .scan .db-selo--vivo i{ border-radius:50% }
+/* a placa do lugar torta (-2 graus) */
+:root[data-pele="zine"] .lugar-placa{ rotate:-2deg }
+/* no celular, o chip da causa fica dentro do balao (quebra a linha), e o balao nao entra debaixo da coluna dos destinos */
+@media (max-width:899px){
+  :root[data-pele="zine"] .app--pet .pet-balcao .cena-fala.dl-balao{ right:80px; max-width:calc(100% - 100px) }
+  :root[data-pele="zine"] .app--pet .pet-balcao .cena-fala .chip-causa{ max-width:100%; white-space:normal; text-align:left }
+}
+/* fora da lista: a zona de risco e a etiqueta do modo da fala com o canto reto; o nome do pet na Evolucao na letra dos titulos */
+:root[data-pele="zine"] .painel-tela .painel-tela__folha details.zona-risco{ border:2.5px dashed var(--hx-borda); border-radius:0; background:color-mix(in srgb, var(--hx-perigo) 16%, var(--hx-miolo)) }
+:root[data-pele="zine"] .painel-tela .painel-tela__folha details.zona-risco > summary{ color:var(--hx-texto) }
+:root[data-pele="zine"] .fala-status{ border:2px solid var(--hx-borda); border-radius:0; background:var(--hx-miolo); color:var(--hx-texto) }
+:root[data-pele="zine"] .evl-nome > b{ padding-right:3px; font:900 italic 24px/1 var(--hx-f-tit); text-transform:uppercase }
